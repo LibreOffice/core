@@ -73,7 +73,6 @@ private:
     VCL_DLLPRIVATE void     InitData( bool _bRadioBtn, const Control* pControlForSettings );
 public:
                             // include creating default images (CheckBox or RadioButton)
-                            SvLBoxButtonData( const Control* pControlForSettings );
                             SvLBoxButtonData( const Control* pControlForSettings, bool _bRadioBtn );
 
                             ~SvLBoxButtonData();

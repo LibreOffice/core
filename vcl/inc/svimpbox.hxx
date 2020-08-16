@@ -307,7 +307,6 @@ public:
     bool                GetUpdateMode() const { return m_bUpdateMode; }
     tools::Rectangle    GetClipRegionRect() const;
     bool                HasHorScrollBar() const { return m_aHorSBar->IsVisible(); }
-    void                ShowFocusRect( const SvTreeListEntry* pEntry );
     void                CallEventListeners( VclEventId nEvent, void* pData = nullptr );
 
     bool                IsSelectable( const SvTreeListEntry* pEntry );

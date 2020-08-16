@@ -22,7 +22,6 @@
 #include "cachedcontentresultset.hxx"
 #include <osl/diagnose.h>
 #include <cppuhelper/queryinterface.hxx>
-#include <ucbhelper/getcomponentcontext.hxx>
 #include <ucbhelper/macros.hxx>
 
 using namespace com::sun::star::lang;

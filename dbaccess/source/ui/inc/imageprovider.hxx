@@ -116,18 +116,6 @@ namespace dbaui
         */
         static OUString getDefaultImageResourceID(sal_Int32 _nDatabaseObjectType);
 
-        /** retrieves the image to be used for folders of database objects
-            @param  _nDatabaseObjectType
-                the type of the object. Must be one of the css.sdb.application.DatabaseObject
-                constants.
-            @param  _rName
-                the name of the object
-            @return
-                the image to be used for folders of the given type
-        */
-        static Image getFolderImage(
-            sal_Int32 _nDatabaseObjectType
-        );
         static OUString getFolderImageId(
             sal_Int32 _nDatabaseObjectType
         );

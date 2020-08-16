@@ -32,7 +32,6 @@
 #include <com/sun/star/util/theOfficeInstallationDirectories.hpp>
 #include <cppuhelper/queryinterface.hxx>
 #include <ucbhelper/contentidentifier.hxx>
-#include <ucbhelper/getcomponentcontext.hxx>
 #include <ucbhelper/macros.hxx>
 #include "hierarchyprovider.hxx"
 #include "hierarchycontent.hxx"

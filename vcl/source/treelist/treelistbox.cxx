@@ -786,11 +786,6 @@ SvTreeListEntry* SvTreeListBox::GetParent( SvTreeListEntry* pEntry ) const
     return pModel->GetParent(pEntry);
 }
 
-SvTreeListEntry* SvTreeListBox::GetRootLevelParent( SvTreeListEntry* pEntry ) const
-{
-    return pModel->GetRootLevelParent(pEntry);
-}
-
 sal_uLong SvTreeListBox::GetChildCount( SvTreeListEntry const * pParent ) const
 {
     return pModel->GetChildCount(pParent);
@@ -3339,11 +3334,6 @@ void SvTreeListBox::ModelNotification( SvListAction nActionId, SvTreeListEntry* 
     }
 }
 
-void SvTreeListBox::EndSelection()
-{
-    pImpl->EndSelection();
-}
-
 SvTreeListEntry* SvTreeListBox::GetFirstEntryInView() const
 {
     return GetEntry( Point() );
@@ -3362,11 +3352,6 @@ SvTreeListEntry* SvTreeListBox::GetNextEntryInView(SvTreeListEntry* pEntry ) con
     return pNext;
 }
 
-
-void SvTreeListBox::ShowFocusRect( const SvTreeListEntry* pEntry )
-{
-    pImpl->ShowFocusRect( pEntry );
-}
 
 void SvTreeListBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -3427,12 +3412,6 @@ void SvTreeListBox::InitSettings()
 VclPtr<PopupMenu> SvTreeListBox::CreateContextMenu()
 {
     return nullptr;
-}
-
-void SvTreeListBox::EnableContextMenuHandling()
-{
-    assert(pImpl && "-SvTreeListBox::EnableContextMenuHandling(): No implementation!");
-    pImpl->m_bContextMenuHandling = true;
 }
 
 css::uno::Reference< XAccessible > SvTreeListBox::CreateAccessible()

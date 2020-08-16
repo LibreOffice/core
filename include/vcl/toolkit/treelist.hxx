@@ -162,9 +162,6 @@ public:
     bool Remove( const SvTreeListEntry* pEntry );
     void                Clear();
 
-    bool HasChildren( const SvTreeListEntry* pEntry ) const;
-    bool HasParent( const SvTreeListEntry* pEntry ) const;
-
     bool                IsChild(const SvTreeListEntry* pParent, const SvTreeListEntry* pChild) const;
     SvTreeListEntry*        GetEntry( SvTreeListEntry* pParent, sal_uLong nPos ) const;
     SvTreeListEntry*        GetEntry( sal_uLong nRootPos ) const;

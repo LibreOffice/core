@@ -384,7 +384,6 @@ public:
 
     using Window::GetParent;
     SvTreeListEntry* GetParent( SvTreeListEntry* pEntry ) const;
-    SvTreeListEntry*    GetRootLevelParent(SvTreeListEntry* pEntry ) const;
 
     using Window::GetChildCount;
     sal_uLong           GetChildCount( SvTreeListEntry const * pParent ) const;
@@ -665,17 +664,11 @@ public:
     virtual void    ModelNotification( SvListAction nActionId, SvTreeListEntry* pEntry1,
                         SvTreeListEntry* pEntry2, sal_uLong nPos ) override;
 
-    void            EndSelection();
-
     SvTreeListEntry*    GetFirstEntryInView() const;
     SvTreeListEntry*    GetNextEntryInView(SvTreeListEntry*) const;
     void            ScrollToAbsPos( long nPos );
 
-    void            ShowFocusRect( const SvTreeListEntry* pEntry );
-
     static VclPtr<PopupMenu> CreateContextMenu();
-
-    void            EnableContextMenuHandling();
 
     long            getPreferredDimensions(std::vector<long> &rWidths) const;
 

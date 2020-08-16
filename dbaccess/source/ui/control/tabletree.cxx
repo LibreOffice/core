@@ -447,22 +447,9 @@ void TableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConne
     m_xTreeView->make_sorted();
 }
 
-bool OTableTreeListBox::isWildcardChecked(const weld::TreeIter& rEntry)
-{
-    return m_xTreeView->get_text_emphasis(rEntry, 0);
-}
-
 bool TableTreeListBox::isWildcardChecked(const weld::TreeIter& rEntry)
 {
     return m_xTreeView->get_text_emphasis(rEntry, 0);
-}
-
-void OTableTreeListBox::checkWildcard(weld::TreeIter& rEntry)
-{
-    if (!m_bShowToggles)
-        return;
-    m_xTreeView->set_toggle(rEntry, TRISTATE_TRUE);
-    checkedButton_noBroadcast(rEntry);
 }
 
 void TableTreeListBox::checkWildcard(weld::TreeIter& rEntry)

@@ -50,12 +50,6 @@ void SvLBoxButtonData::InitData( bool _bRadioBtn, const Control* pCtrl )
     SetDefaultImages( pCtrl );
 }
 
-SvLBoxButtonData::SvLBoxButtonData( const Control* pControlForSettings )
-    : pImpl( new SvLBoxButtonData_Impl )
-{
-    InitData( false, pControlForSettings );
-}
-
 SvLBoxButtonData::SvLBoxButtonData( const Control* pControlForSettings, bool _bRadioBtn )
     : pImpl( new SvLBoxButtonData_Impl )
 {

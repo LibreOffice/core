@@ -1493,19 +1493,6 @@ void SvTreeList::GetInsertionPos( SvTreeListEntry const * pEntry, SvTreeListEntr
         rPos = k;
 }
 
-bool SvTreeList::HasChildren( const SvTreeListEntry* pEntry ) const
-{
-    if ( !pEntry )
-        pEntry = pRootItem.get();
-
-    return !pEntry->m_Children.empty();
-}
-
-bool SvTreeList::HasParent( const SvTreeListEntry* pEntry ) const
-{
-    return pEntry->pParent != pRootItem.get();
-}
-
 SvTreeListEntry* SvTreeList::GetEntry( SvTreeListEntry* pParent, sal_uLong nPos ) const
 {   if ( !pParent )
         pParent = pRootItem.get();

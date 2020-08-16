@@ -3126,7 +3126,6 @@ dbaccess/source/ui/control/ColumnControlWindow.cxx
 dbaccess/source/ui/control/FieldControls.cxx
 dbaccess/source/ui/control/FieldDescControl.cxx
 dbaccess/source/ui/control/RelationControl.cxx
-dbaccess/source/ui/control/ScrollHelper.cxx
 dbaccess/source/ui/control/SqlNameEdit.cxx
 dbaccess/source/ui/control/TableGrantCtrl.cxx
 dbaccess/source/ui/control/VertSplitView.cxx
@@ -7152,7 +7151,6 @@ include/ucbhelper/content.hxx
 include/ucbhelper/contenthelper.hxx
 include/ucbhelper/contentidentifier.hxx
 include/ucbhelper/fd_inputstream.hxx
-include/ucbhelper/getcomponentcontext.hxx
 include/ucbhelper/interactionrequest.hxx
 include/ucbhelper/interceptedinteraction.hxx
 include/ucbhelper/macros.hxx
@@ -16185,7 +16183,6 @@ ucbhelper/source/provider/contentidentifier.cxx
 ucbhelper/source/provider/contentinfo.cxx
 ucbhelper/source/provider/contentinfo.hxx
 ucbhelper/source/provider/fd_inputstream.cxx
-ucbhelper/source/provider/getcomponentcontext.cxx
 ucbhelper/source/provider/interactionrequest.cxx
 ucbhelper/source/provider/propertyvalueset.cxx
 ucbhelper/source/provider/providerhelper.cxx

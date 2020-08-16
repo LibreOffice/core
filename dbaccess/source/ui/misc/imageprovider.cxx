@@ -203,34 +203,6 @@ namespace dbaui
         return sImageResourceID;
     }
 
-    Image ImageProvider::getFolderImage( sal_Int32 _nDatabaseObjectType )
-    {
-        OUString sImageResourceID;
-        switch ( _nDatabaseObjectType )
-        {
-        case DatabaseObject::QUERY:
-            sImageResourceID = QUERYFOLDER_TREE_ICON;
-            break;
-        case DatabaseObject::FORM:
-            sImageResourceID = FORMFOLDER_TREE_ICON;
-            break;
-        case DatabaseObject::REPORT:
-            sImageResourceID = REPORTFOLDER_TREE_ICON;
-            break;
-        case DatabaseObject::TABLE:
-            sImageResourceID = TABLEFOLDER_TREE_ICON;
-            break;
-        default:
-            OSL_FAIL( "ImageProvider::getDefaultImage: invalid database object type!" );
-            break;
-        }
-
-        Image aFolderImage;
-        if (!sImageResourceID.isEmpty())
-            aFolderImage = Image(StockImage::Yes, sImageResourceID);
-        return aFolderImage;
-    }
-
     OUString ImageProvider::getFolderImageId( sal_Int32 _nDatabaseObjectType )
     {
         OUString sImageResourceID;

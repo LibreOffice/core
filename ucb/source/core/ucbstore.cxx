@@ -45,7 +45,6 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <ucbhelper/getcomponentcontext.hxx>
 #include <ucbhelper/macros.hxx>
 #include <tools/diagnose_ex.h>
 #include "ucbstore.hxx"

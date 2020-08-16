@@ -18,7 +18,6 @@
  */
 
 #include <ucbhelper/contentidentifier.hxx>
-#include <ucbhelper/getcomponentcontext.hxx>
 #include <ucbhelper/macros.hxx>
 #include "webdavprovider.hxx"
 #include "webdavcontent.hxx"
