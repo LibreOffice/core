@@ -76,6 +76,7 @@
 #include <comphelper/string.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <VectorGraphicSearchContext.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -113,11 +114,6 @@ public:
     /** This method is called when the OutlinerView is no longer used.
     */
     void ReleaseOutlinerView();
-
-    /** Search in vector graphic
-     */
-    bool mbCurrentIsVectorGraphic;
-    std::unique_ptr<VectorGraphicSearch> mpVectorGraphicSearch;
 
 private:
     /** Flag that specifies whether we own the outline view pointed to by
@@ -757,9 +753,10 @@ void SdOutliner::sendLOKSearchResultCallback(std::shared_ptr<sd::ViewShell> & pV
                                              std::vector<sd::SearchSelection>* pSelections)
 {
     std::vector<::tools::Rectangle> aLogicRects;
-    if (mpImpl->mbCurrentIsVectorGraphic)
+    auto& rVectorGraphicSearchContext = pViewShell->GetView()->getVectorGraphicSearchContext();
+    if (rVectorGraphicSearchContext.mbCurrentIsVectorGraphic)
     {
-        basegfx::B2DRectangle aSelectionHMM = getPDFSelection(mpImpl->mpVectorGraphicSearch, mpObj);
+        basegfx::B2DRectangle aSelectionHMM = getPDFSelection(rVectorGraphicSearchContext.mpVectorGraphicSearch, mpObj);
 
         tools::Rectangle aSelection(Point(aSelectionHMM.getMinX(), aSelectionHMM.getMinY()),
                                     Size(aSelectionHMM.getWidth(), aSelectionHMM.getHeight()));
@@ -815,7 +812,7 @@ void SdOutliner::sendLOKSearchResultCallback(std::shared_ptr<sd::ViewShell> & pV
         aPayload = aStream.str().c_str();
         rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload.getStr());
 
-        if (mpImpl->mbCurrentIsVectorGraphic)
+        if (rVectorGraphicSearchContext.mbCurrentIsVectorGraphic)
         {
             rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRectangles.getStr());
         }
@@ -847,12 +844,12 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
         mpView = pViewShell->GetView();
         mpWindow = pViewShell->GetActiveWindow();
         pOutlinerView->SetWindow(mpWindow);
-
+        auto& rVectorGraphicSearchContext = mpView->getVectorGraphicSearchContext();
         if (nullptr != dynamic_cast<const sd::DrawViewShell*>(pViewShell.get()))
         {
             sal_uLong nMatchCount = 0;
 
-            if (mpImpl->mbCurrentIsVectorGraphic)
+            if (rVectorGraphicSearchContext.mbCurrentIsVectorGraphic)
             {
                 OUString const & rString = mpSearchItem->GetSearchString();
                 bool bBackwards = mpSearchItem->GetBackward();
@@ -862,14 +859,14 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
                 aOptions.mbMatchCase = mpSearchItem->GetExact();
                 aOptions.mbMatchWholeWord = mpSearchItem->GetWordOnly();
 
-                bool bResult = mpImpl->mpVectorGraphicSearch->search(rString, aOptions);
+                bool bResult = rVectorGraphicSearchContext.mpVectorGraphicSearch->search(rString, aOptions);
 
                 if (bResult)
                 {
                     if (bBackwards)
-                        bResult = mpImpl->mpVectorGraphicSearch->previous();
+                        bResult = rVectorGraphicSearchContext.mpVectorGraphicSearch->previous();
                     else
-                        bResult = mpImpl->mpVectorGraphicSearch->next();
+                        bResult = rVectorGraphicSearchContext.mpVectorGraphicSearch->next();
                 }
 
                 if (bResult)
@@ -880,15 +877,14 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
                     mpView->UnmarkAllObj(pPageView);
 
                     std::vector<basegfx::B2DRectangle> aSubSelections;
-                    basegfx::B2DRectangle aSubSelection = getPDFSelection(mpImpl->mpVectorGraphicSearch, mpObj);
+                    basegfx::B2DRectangle aSubSelection = getPDFSelection(rVectorGraphicSearchContext.mpVectorGraphicSearch, mpObj);
                     if (!aSubSelection.isEmpty())
                         aSubSelections.push_back(aSubSelection);
                     mpView->MarkObj(mpObj, pPageView, false, false, aSubSelections);
                 }
                 else
                 {
-                    mpImpl->mbCurrentIsVectorGraphic = false;
-                    mpImpl->mpVectorGraphicSearch.reset();
+                    rVectorGraphicSearchContext.reset();
                 }
             }
             else
@@ -917,7 +913,7 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
             {
                 ProvideNextTextObject ();
 
-                if (!mbEndOfSearch && !mpImpl->mbCurrentIsVectorGraphic)
+                if (!mbEndOfSearch && !rVectorGraphicSearchContext.mbCurrentIsVectorGraphic)
                 {
                     // Remember the current position as the last one with a
                     // text object.
@@ -1205,8 +1201,8 @@ void SdOutliner::ProvideNextTextObject()
     mbFoundObject = false;
 
     // reset the vector search
-    mpImpl->mbCurrentIsVectorGraphic = false;
-    mpImpl->mpVectorGraphicSearch.reset();
+    auto& rVectorGraphicSearchContext = mpView->getVectorGraphicSearchContext();
+    rVectorGraphicSearchContext.reset();
 
     mpView->UnmarkAllObj (mpView->GetSdrPageView());
     try
@@ -1240,8 +1236,7 @@ void SdOutliner::ProvideNextTextObject()
             // LOK: do not descent to notes or master pages when searching
             bool bForbiddenPage = comphelper::LibreOfficeKit::isActive() && (maCurrentPosition.mePageKind != PageKind::Standard || maCurrentPosition.meEditMode != EditMode::Page);
 
-            mpImpl->mbCurrentIsVectorGraphic = false;
-            mpImpl->mpVectorGraphicSearch.reset();
+            rVectorGraphicSearchContext.reset();
 
             if (!bForbiddenPage)
             {
@@ -1258,7 +1253,7 @@ void SdOutliner::ProvideNextTextObject()
                 else if (meMode == SEARCH && isValidVectorGraphicObject(maCurrentPosition))
                 {
                     mpObj = maCurrentPosition.mxObject.get();
-                    mpImpl->mbCurrentIsVectorGraphic = true;
+                    rVectorGraphicSearchContext.mbCurrentIsVectorGraphic = true;
                 }
             }
 
@@ -1267,7 +1262,7 @@ void SdOutliner::ProvideNextTextObject()
 
             if (mpObj)
             {
-                if (mpImpl->mbCurrentIsVectorGraphic)
+                if (rVectorGraphicSearchContext.mbCurrentIsVectorGraphic)
                 {
                     // We know here the object is a SdrGrafObj and that it
                     // contains a vector graphic
@@ -1280,15 +1275,15 @@ void SdOutliner::ProvideNextTextObject()
                     aOptions.mbMatchCase = mpSearchItem->GetExact();
                     aOptions.mbMatchWholeWord = mpSearchItem->GetWordOnly();
 
-                    mpImpl->mpVectorGraphicSearch = std::make_unique<VectorGraphicSearch>(pGraphicObject->GetGraphic());
+                    rVectorGraphicSearchContext.mpVectorGraphicSearch = std::make_unique<VectorGraphicSearch>(pGraphicObject->GetGraphic());
 
-                    bool bResult = mpImpl->mpVectorGraphicSearch->search(rString, aOptions);
+                    bool bResult = rVectorGraphicSearchContext.mpVectorGraphicSearch->search(rString, aOptions);
                     if (bResult)
                     {
                         if (bBackwards)
-                            bResult = mpImpl->mpVectorGraphicSearch->previous();
+                            bResult = rVectorGraphicSearchContext.mpVectorGraphicSearch->previous();
                         else
-                            bResult = mpImpl->mpVectorGraphicSearch->next();
+                            bResult = rVectorGraphicSearchContext.mpVectorGraphicSearch->next();
                     }
 
                     if (bResult)
@@ -1303,7 +1298,7 @@ void SdOutliner::ProvideNextTextObject()
                         mpView->UnmarkAllObj(pPageView);
 
                         std::vector<basegfx::B2DRectangle> aSubSelections;
-                        basegfx::B2DRectangle aSubSelection = getPDFSelection(mpImpl->mpVectorGraphicSearch, mpObj);
+                        basegfx::B2DRectangle aSubSelection = getPDFSelection(rVectorGraphicSearchContext.mpVectorGraphicSearch, mpObj);
                         if (!aSubSelection.isEmpty())
                             aSubSelections.push_back(aSubSelection);
 
@@ -1313,8 +1308,7 @@ void SdOutliner::ProvideNextTextObject()
                     }
                     else
                     {
-                        mpImpl->mbCurrentIsVectorGraphic = false;
-                        mpImpl->mpVectorGraphicSearch.reset();
+                        rVectorGraphicSearchContext.reset();
                     }
                 }
                 else
@@ -1342,8 +1336,7 @@ void SdOutliner::ProvideNextTextObject()
         }
         else
         {
-            mpImpl->mbCurrentIsVectorGraphic = false;
-            mpImpl->mpVectorGraphicSearch.reset();
+            rVectorGraphicSearchContext.reset();
 
             if (meMode == SEARCH)
                 // Instead of doing a full-blown SetObject(), which would do the same -- but would also possibly switch pages.
@@ -1954,7 +1947,6 @@ VclPtr<vcl::Window> SdOutliner::GetMessageBoxParent()
 
 SdOutliner::Implementation::Implementation()
     : meOriginalEditMode(EditMode::Page),
-      mbCurrentIsVectorGraphic(false),
       mbOwnOutlineView(false),
       mpOutlineView(nullptr)
 {
