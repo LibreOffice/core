@@ -62,6 +62,7 @@ for callInfo, callValues in callDict.iteritems():
     if srcloc.startswith("Widgets/"): continue
     if srcloc.startswith("Core/"): continue
     if srcloc.startswith("/Qt"): continue
+    if srcloc.startswith("Qt"): continue
     functionSig = callInfo[0]
     tmp1list.append((srcloc, functionSig, callValue))
 
@@ -94,6 +95,7 @@ for name, bitfield in tmp2dict.iteritems():
     if srcloc.startswith("Widgets/"): continue
     if srcloc.startswith("Core/"): continue
     if srcloc.startswith("/Qt"): continue
+    if srcloc.startswith("Qt"): continue
     # ignore external stuff
     if srcloc.startswith("workdir/"): continue
     # referenced by generated code in workdir/

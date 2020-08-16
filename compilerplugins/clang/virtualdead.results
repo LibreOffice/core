@@ -64,8 +64,8 @@ include/unotools/desktopterminationobserver.hxx:36
 include/vbahelper/vbahelperinterface.hxx:74
     int InheritedHelperInterfaceImpl::getCreator()
     1400204879
-include/vcl/treelistbox.hxx:502
-    void SvTreeListBox::NotifyEndScroll()
+include/vcl/toolkit/treelistbox.hxx:512
+    void SvTreeListBox::PreparePaint(class OutputDevice &,class SvTreeListEntry &,)
     empty
 sc/source/core/opencl/formulagroupcl.cxx:1069
     void sc::opencl::(anonymous namespace)::DynamicKernelSlidingArgument::GenSlidingWindowFunction(class std::__cxx11::basic_stringstream<char> &,)
@@ -79,7 +79,7 @@ sc/source/ui/vba/vbasheetobject.hxx:117
 sc/source/ui/vba/vbasheetobjects.cxx:142
     class rtl::OUString ScVbaObjectContainer::implGetShapeServiceName()const
     "com.sun.star.drawing.ControlShape"
-slideshow/source/engine/animationfactory.cxx:434
+slideshow/source/engine/animationfactory.cxx:593
     void slideshow::internal::(anonymous namespace)::GenericAnimation::prefetch()
     empty
 vcl/inc/qt5/Qt5FilePicker.hxx:172
