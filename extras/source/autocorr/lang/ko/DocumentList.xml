@@ -2359,6 +2359,7 @@
   <block-list:block block-list:abbreviated-name="삭월세" block-list:name="사글세"/>
   <block-list:block block-list:abbreviated-name="살려줏메" block-list:name="살려주셈"/>
   <block-list:block block-list:abbreviated-name="생ㅇ리" block-list:name="생일"/>
+  <block-list:block block-list:abbreviated-name="성공율" block-list:name="성공률"/>
   <block-list:block block-list:abbreviated-name="수퀑" block-list:name="수꿩"/>
   <block-list:block block-list:abbreviated-name="숫나사" block-list:name="수나사"/>
   <block-list:block block-list:abbreviated-name="숫은행나무" block-list:name="수은행나무"/>
@@ -2374,6 +2375,7 @@
   <block-list:block block-list:abbreviated-name="웃중방" block-list:name="윗중방"/>
   <block-list:block block-list:abbreviated-name="이어싿" block-list:name="이었다"/>
   <block-list:block block-list:abbreviated-name="있읍" block-list:name="있습"/>
+  <block-list:block block-list:abbreviated-name="외형율" block-list:name="외형률"/>
   <block-list:block block-list:abbreviated-name="처삼춘" block-list:name="처삼촌"/>
   <block-list:block block-list:abbreviated-name="켸켸묵다" block-list:name="케케묵다"/>
   <block-list:block block-list:abbreviated-name="파괘한다" block-list:name="파괴한다"/>
