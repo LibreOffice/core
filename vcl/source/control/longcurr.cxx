@@ -263,7 +263,7 @@ bool ImplLongCurrencyReformat( const OUString& rStr, BigInt const & nMin, BigInt
         else if ( nTempVal < nMin )
             nTempVal = nMin;
 
-        rOutStr = ImplGetCurr( rLocaleDataWrapper, nTempVal, nDecDigits, rFormatter.GetCurrencySymbol(), rFormatter.IsUseThousandSep() );
+        rOutStr = ImplGetCurr( rLocaleDataWrapper, nTempVal, nDecDigits, rFormatter.GetCurrencySymbol(), /*IsUseThousandSep*/true );
         return true;
     }
 }
@@ -275,7 +275,6 @@ void LongCurrencyFormatter::ImpInit()
     mnMax               = 0x7FFFFFFF;
     mnMax              *= 0x7FFFFFFF;
     mnDecimalDigits     = 0;
-    mbThousandSep       = true;
     SetDecimalDigits( 0 );
 }
 
@@ -311,7 +310,7 @@ void LongCurrencyFormatter::SetUserValue( BigInt nNewValue )
     if ( !GetField() )
         return;
 
-    OUString aStr = ImplGetCurr( GetLocaleDataWrapper(), nNewValue, GetDecimalDigits(), GetCurrencySymbol(), IsUseThousandSep() );
+    OUString aStr = ImplGetCurr( GetLocaleDataWrapper(), nNewValue, GetDecimalDigits(), GetCurrencySymbol(), /*UseThousandSep*/true );
     if ( GetField()->HasFocus() )
     {
         Selection aSelection = GetField()->GetSelection();

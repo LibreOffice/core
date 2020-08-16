@@ -36,19 +36,11 @@ namespace dbaui
 
     OJoinExchObj::OJoinExchObj()
         : m_bFirstEntry(false)
-        , m_pDragListener(nullptr)
     {
     }
 
     OJoinExchObj::~OJoinExchObj()
     {
-    }
-
-    void OJoinExchObj::DragFinished( sal_Int8 /*nDropAction*/ )
-    {
-        if (m_pDragListener)
-            m_pDragListener->dragFinished();
-        m_pDragListener = nullptr;
     }
 
     bool OJoinExchObj::isFormatAvailable( const DataFlavorExVector& _rFormats ,SotClipboardFormatId _nSlotID)

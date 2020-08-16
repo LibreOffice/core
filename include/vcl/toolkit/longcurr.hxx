@@ -38,8 +38,6 @@ public:
     virtual void            Reformat() override;
     virtual void            ReformatAll() override;
 
-    bool                    IsUseThousandSep() const { return mbThousandSep; }
-
     OUString const &        GetCurrencySymbol() const;
 
     void                    SetDecimalDigits( sal_uInt16 nDigits );
@@ -59,7 +57,6 @@ private:
     SAL_DLLPRIVATE void        ImpInit();
 
     sal_uInt16              mnDecimalDigits;
-    bool                    mbThousandSep;
 
 };
 

@@ -35,7 +35,6 @@ namespace dbaui
         bool                m_bFirstEntry;
 
         OJoinExchangeData           m_jxdSourceDescription;
-        IDragTransferableListener*  m_pDragListener;
 
         virtual ~OJoinExchObj() override;
 
@@ -58,7 +57,6 @@ namespace dbaui
     private:
         virtual void                AddSupportedFormats() override;
         virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
-        virtual void                DragFinished( sal_Int8 nDropAction ) override;
     };
 }
 #endif
