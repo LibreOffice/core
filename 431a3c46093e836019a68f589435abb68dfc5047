@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a61ec82_0ce4ff1f",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-08-16T10:55:52Z",
+      "side": 1,
+      "message": "Are all these string conversions really needed? You have OUString in the beginning, and you get again OUString in the end. If you are doing it for the substr() function, you could use the copy() function of OUString as well.\n\nAlso, cutting the name at 30 chars, without any clue of it is being cut doesn\u0027t feel proper. Maybe check to see if it is longer than 30 chars, then if so, cut it at 27 and also add ... to give a hint to the user?",
+      "range": {
+        "startLine": 604,
+        "startChar": 4,
+        "endLine": 607,
+        "endChar": 77
+      },
+      "revId": "431a3c46093e836019a68f589435abb68dfc5047",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
