@@ -106,7 +106,7 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxContext 
     Reference< XNameAccess > xTypes( rxContext->getServiceManager()->createInstanceWithContext(
         "com.sun.star.document.TypeDetection", rxContext ), UNO_QUERY_THROW );
 
-    for( const auto& rFilterEntry : aFilterEntryList )
+    for (auto& rFilterEntry : aFilterEntryList)
     {
         Sequence< PropertyValue > aTypeProperties;
         try
@@ -120,10 +120,12 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxContext 
                     pProp->Value >>= aExtensions;
                 if ( aExtensions.hasElements() )
                 {
-                    // The filter title must be formed in the same way it is
-                    // currently done in the internal implementation:
+                    // The filter title must be formed in the same way it is currently done in the
+                    // internal implementation (see sfx2::appendFiltersForSave). And we will look
+                    // for the same string returned from the dialog, so save it to maUIName:
                     OUString aTitle(
                         rFilterEntry.maUIName + " (." + aExtensions[0] + ")");
+                    rFilterEntry.maUIName = aTitle;
                     OUString aFilter("*." + aExtensions[0]);
                     mxFilePicker->appendFilter(aTitle, aFilter);
                     if ( rFilterEntry.maFlags & 0x100 )
