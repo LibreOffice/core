@@ -89,6 +89,9 @@
 #include <tuple>
 #include <memory>
 
+#include <editsh.hxx>
+#include <viewopt.hxx>
+#include <wrtsh.hxx>
 
 using namespace ::com::sun::star::i18n;
 
@@ -2431,6 +2434,27 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
 bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
         SwMoveFlags eMvFlags )
 {
+    std::vector<SwNode*> aFoldedOutlineNdsArray;
+    SwWrtShell* pWrtShell = dynamic_cast<SwWrtShell*>(m_rDoc.GetEditShell());
+    if (pWrtShell && pWrtShell->GetViewOptions() && pWrtShell->GetViewOptions()->IsShowOutlineContentVisibilityButton())
+    {
+        // unfold all folded outline content
+        SwOutlineNodes rOutlineNds = m_rDoc.GetNodes().GetOutLineNds();
+        for (SwOutlineNodes::size_type nPos = 0; nPos < rOutlineNds.size(); ++nPos)
+        {
+            SwNode* pNd = rOutlineNds[nPos];
+            if (pNd->IsTextNode()) // should always be true
+            {
+                bool bOutlineContentVisibleAttr = true;
+                pNd->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
+                if (!bOutlineContentVisibleAttr)
+                {
+                    aFoldedOutlineNdsArray.push_back(pNd);
+                    pWrtShell->ToggleOutlineContentVisibility(nPos);
+                }
+            }
+        }
+    }
     // Moves all Nodes to the new position.
     // Bookmarks are moved too (currently without Undo support).
 
@@ -2554,6 +2578,13 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
         }
 
         m_rDoc.GetFootnoteIdxs().UpdateAllFootnote();
+    }
+
+    if (pWrtShell && pWrtShell->GetViewOptions() && pWrtShell->GetViewOptions()->IsShowOutlineContentVisibilityButton())
+    {
+        // fold all outlines that were folded before move
+        for (SwNode* pNd : aFoldedOutlineNdsArray)
+            pWrtShell->ToggleOutlineContentVisibility(pNd, true);
     }
 
     m_rDoc.getIDocumentState().SetModified();
