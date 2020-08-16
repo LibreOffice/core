@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d352e7ae_3ff8caa2",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-08-16T13:51:49Z",
+      "side": 1,
+      "message": "Why changing it from 30 to 27 now?",
+      "range": {
+        "startLine": 606,
+        "startChar": 39,
+        "endLine": 606,
+        "endChar": 41
+      },
+      "revId": "b3a6a542195d58c72ec827dd3a41275d53cea2e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed5860c0_08727e1b",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-08-16T13:51:49Z",
+      "side": 1,
+      "message": "If not planning to change this value, please make it const.",
+      "range": {
+        "startLine": 606,
+        "startChar": 4,
+        "endLine": 606,
+        "endChar": 13
+      },
+      "revId": "b3a6a542195d58c72ec827dd3a41275d53cea2e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "432aebc5_e1ad3674",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-08-16T13:51:49Z",
+      "side": 1,
+      "message": "So if the length is 27, you hit the if-check, and get the first 27 chars (which is the whole string), and add \"...\" to the end unnecessarily. Does that look/sound right? :)\n\nPLEASE re-read the first comment on the patch. It is simple and clear. And check to see if you really need createFromAscii. (Again, check the previous reply to your question: You do not need any methods to initialize an OUString by using a simple string literal)",
+      "range": {
+        "startLine": 608,
+        "startChar": 3,
+        "endLine": 616,
+        "endChar": 5
+      },
+      "revId": "b3a6a542195d58c72ec827dd3a41275d53cea2e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
