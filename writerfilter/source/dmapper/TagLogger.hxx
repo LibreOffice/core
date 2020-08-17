@@ -32,8 +32,6 @@ namespace writerfilter
     class TagLogger
     {
     private:
-        static tools::SvRef<TagLogger> instance;
-
         xmlTextWriterPtr pWriter;
         const char* pName;
 

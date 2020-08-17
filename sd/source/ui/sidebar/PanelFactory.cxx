@@ -44,8 +44,6 @@ using namespace ::sd::framework;
 
 namespace sd::sidebar {
 
-static Reference<lang::XEventListener> mxControllerDisposeListener;
-
 //----- PanelFactory --------------------------------------------------------
 
 PanelFactory::PanelFactory()

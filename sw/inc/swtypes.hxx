@@ -96,10 +96,6 @@ const sal_uInt8 MAXLEVEL = 10;
 
 const sal_uInt8 NO_NUMLEVEL  = 0x20;    // "or" with the levels.
 
-// pPathFinder is initialized by the UI.
-// The class delivers all paths needed.
-extern SwPathFinder *pPathFinder;
-
 //  Values for indents at numbering and bullet lists.
 //  (For more levels the values have to be multiplied with the levels+1;
 //  levels 0 ..4!)

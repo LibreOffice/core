@@ -136,7 +136,6 @@ public:
         wildcards we introduce an integer evaluation for matches.
     */
     const static sal_Int32 NoMatch;
-    const static sal_Int32 OptimalMatch;
 
     static Application GetApplicationEnum (const OUString& rsApplicationName);
     static const OUString& GetApplicationName (const Application eApplication);

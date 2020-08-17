@@ -40,7 +40,6 @@ class MetaAction;
 class EDITENG_DLLPUBLIC SvxFieldData
 {
 public:
-    static const sal_Int32 UNKNOWN_FIELD;
 
     static SvxFieldData* Create(const css::uno::Reference<css::text::XTextContent>& xContent);
 
