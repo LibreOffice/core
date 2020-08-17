@@ -11489,6 +11489,49 @@ if test "$ENABLE_SKIA" = TRUE -a "$COM_IS_CLANG" != TRUE; then
         CXX="$save_CXX"
     fi
 fi
+#
+# prefix CLANG_CC/CLANG_CXX with ccache if needed
+#
+if test "$CCACHE" != "" -a -n "$CLANG_CC" -a -n "$CLANG_CXX"; then
+    AC_MSG_CHECKING([whether $CLANG_CC is already ccached])
+    AC_LANG_PUSH([C])
+    save_CC="$CC"
+    CC="$CLANG_CC"
+    save_CFLAGS=$CFLAGS
+    CFLAGS="$CFLAGS --ccache-skip -O2"
+    dnl an empty program will do, we're checking the compiler flags
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],
+                      [use_ccache=yes], [use_ccache=no])
+    if test $use_ccache = yes; then
+        AC_MSG_RESULT([yes])
+    else
+        CLANG_CC="$CCACHE $CLANG_CC"
+        AC_MSG_RESULT([no])
+    fi
+    CFLAGS=$save_CFLAGS
+    CC=$save_CC
+    AC_LANG_POP([C])
+
+    AC_MSG_CHECKING([whether $CLANG_CXX is already ccached])
+    AC_LANG_PUSH([C++])
+    save_CXX="$CXX"
+    CXX="$CLANG_CXX"
+    save_CXXFLAGS=$CXXFLAGS
+    CXXFLAGS="$CXXFLAGS --ccache-skip -O2"
+    dnl an empty program will do, we're checking the compiler flags
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],
+                      [use_ccache=yes], [use_ccache=no])
+    if test $use_ccache = yes; then
+        AC_MSG_RESULT([yes])
+    else
+        CLANG_CXX="$CCACHE $CLANG_CXX"
+        AC_MSG_RESULT([no])
+    fi
+    CXXFLAGS=$save_CXXFLAGS
+    CXX=$save_CXX
+    AC_LANG_POP([C++])
+fi
+
 AC_SUBST(CLANG_CC)
 AC_SUBST(CLANG_CXX)
 AC_SUBST(CLANG_CXXFLAGS_INTRINSICS_SSE2)
