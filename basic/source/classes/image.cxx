@@ -269,7 +269,7 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                     nCount = nMaxRecords;
                 }
 
-                // User defined types
+                // User defined types; ref.: SbiParser::DefType
                 for (sal_uInt16 i = 0; i < nCount; i++)
                 {
                     OUString aTypeName = r.ReadUniOrByteString(eCharSet);
@@ -324,7 +324,8 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                             else
                             {
                                 // an array
-                                SbxDimArray* pArray = new SbxDimArray();
+                                SbxDimArray* pArray = new SbxDimArray(
+                                    static_cast<SbxDataType>(aMemberType & 0x0FFF));
 
                                 sal_Int16 isFixedSize;
                                 r.ReadInt16(isFixedSize);
@@ -341,7 +342,12 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                                     pArray->unoAddDim32(lBound, uBound);
                                 }
 
+                                const SbxFlagBits nSavFlags = pTypeElem->GetFlags();
+                                // need to reset the FIXED flag
+                                // when calling PutObject ( because the type will not match Object )
+                                pTypeElem->ResetFlag(SbxFlagBits::Fixed);
                                 pTypeElem->PutObject( pArray );
+                                pTypeElem->SetFlags(nSavFlags);
                             }
                         }
 
@@ -542,7 +548,7 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
                             sal_Int32 nDims = pArray->GetDims32();
                             r.WriteInt32(nDims);
 
-                            for (sal_Int32 d = 0; d < nDims; d++)
+                            for (sal_Int32 d = 1; d <= nDims; d++)
                             {
                                 sal_Int32 lBound;
                                 sal_Int32 uBound;
