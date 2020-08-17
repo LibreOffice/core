@@ -176,6 +176,8 @@ public:
     virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) override;
 
     virtual std::unique_ptr<GenPspGraphics> CreatePrintGraphics() override;
+
+    virtual const cairo_font_options_t* GetCairoFontOptions() override;
 };
 
 inline void SvpSalInstance::registerFrame( SalFrame* pFrame )
