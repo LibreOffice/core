@@ -23,7 +23,7 @@
 
 // #i73788#
 
-SwRetrievedInputStreamDataManager::tDataKey SwRetrievedInputStreamDataManager::mnNextKeyValue = 1;
+SwRetrievedInputStreamDataManager::tDataKey SwRetrievedInputStreamDataManager::snNextKeyValue = 1;
 
 namespace
 {
@@ -44,18 +44,18 @@ SwRetrievedInputStreamDataManager::tDataKey SwRetrievedInputStreamDataManager::R
     osl::MutexGuard aGuard(maMutex);
 
     // create empty data container for given thread Consumer
-    tDataKey nDataKey( mnNextKeyValue );
+    tDataKey nDataKey( snNextKeyValue );
     tData aNewEntry( pThreadConsumer );
     maInputStreamData[ nDataKey ] = aNewEntry;
 
     // prepare next data key value
-    if ( mnNextKeyValue < SAL_MAX_UINT64 )
+    if ( snNextKeyValue < SAL_MAX_UINT64 )
     {
-        ++mnNextKeyValue;
+        ++snNextKeyValue;
     }
     else
     {
-        mnNextKeyValue = 1;
+        snNextKeyValue = 1;
     }
 
     return nDataKey;
