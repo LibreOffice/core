@@ -94,6 +94,7 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/controls/grid/gridcontrol \
     toolkit/source/controls/roadmapcontrol \
     toolkit/source/controls/roadmapentry \
+    toolkit/source/controls/svmedit \
     toolkit/source/controls/tabpagecontainer \
     toolkit/source/controls/tabpagemodel \
     toolkit/source/controls/stdtabcontroller \

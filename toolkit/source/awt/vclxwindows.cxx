@@ -19,6 +19,7 @@
 
 #include <toolkit/awt/vclxwindows.hxx>
 #include <toolkit/helper/accessiblefactory.hxx>
+#include <com/sun/star/awt/LineEndFormat.hpp>
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
@@ -41,6 +42,7 @@
 #include <sal/log.hxx>
 
 #include <controls/filectrl.hxx>
+#include <controls/svmedit.hxx>
 #include <svl/zforlist.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/fmtfield.hxx>
@@ -7868,6 +7870,373 @@ void SVTXDateField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
                      BASEPROPERTY_TEXTLINECOLOR,
                      0);
     VCLXDateField::ImplGetPropertyIds( rIds );
+}
+
+VCLXMultiLineEdit::VCLXMultiLineEdit()
+    :maTextListeners( *this )
+    ,meLineEndType( LINEEND_LF )    // default behavior before introducing this property: LF (unix-like)
+{
+}
+
+VCLXMultiLineEdit::~VCLXMultiLineEdit()
+{
+}
+
+css::uno::Any VCLXMultiLineEdit::queryInterface( const css::uno::Type & rType )
+{
+    css::uno::Any aRet = ::cppu::queryInterface( rType,
+                                        static_cast< css::awt::XTextComponent* >(this),
+                                        static_cast< css::awt::XTextArea* >(this),
+                                        static_cast< css::awt::XTextLayoutConstrains* >(this),
+                                        static_cast< css::lang::XTypeProvider* >(this) );
+    return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
+}
+
+IMPL_IMPLEMENTATION_ID( VCLXMultiLineEdit )
+
+// css::lang::XTypeProvider
+css::uno::Sequence< css::uno::Type > VCLXMultiLineEdit::getTypes()
+{
+    static const ::cppu::OTypeCollection aTypeList(
+        cppu::UnoType<css::lang::XTypeProvider>::get(),
+        cppu::UnoType<css::awt::XTextComponent>::get(),
+        cppu::UnoType<css::awt::XTextArea>::get(),
+        cppu::UnoType<css::awt::XTextLayoutConstrains>::get(),
+        VCLXWindow::getTypes()
+    );
+    return aTypeList.getTypes();
+}
+
+void VCLXMultiLineEdit::addTextListener( const css::uno::Reference< css::awt::XTextListener > & l )
+{
+    maTextListeners.addInterface( l );
+}
+
+void VCLXMultiLineEdit::removeTextListener( const css::uno::Reference< css::awt::XTextListener > & l )
+{
+    maTextListeners.removeInterface( l );
+}
+
+void VCLXMultiLineEdit::setText( const OUString& aText )
+{
+    SolarMutexGuard aGuard;
+
+    VclPtr< MultiLineEdit > pEdit = GetAs< MultiLineEdit >();
+    if ( pEdit )
+    {
+        pEdit->SetText( aText );
+
+        // #107218# Call same listeners like VCL would do after user interaction
+        SetSynthesizingVCLEvent( true );
+        pEdit->SetModifyFlag();
+        pEdit->Modify();
+        SetSynthesizingVCLEvent( false );
+    }
+}
+
+void VCLXMultiLineEdit::insertText( const css::awt::Selection& rSel, const OUString& aText )
+{
+    SolarMutexGuard aGuard;
+
+    VclPtr< MultiLineEdit > pEdit = GetAs< MultiLineEdit >();
+    if ( pEdit )
+    {
+        setSelection( rSel );
+        pEdit->ReplaceSelected( aText );
+    }
+}
+
+OUString VCLXMultiLineEdit::getText()
+{
+    SolarMutexGuard aGuard;
+
+    OUString aText;
+    VclPtr< MultiLineEdit > pEdit = GetAs< MultiLineEdit >();
+    if ( pEdit )
+        aText = pEdit->GetText( meLineEndType );
+    return aText;
+}
+
+OUString VCLXMultiLineEdit::getSelectedText()
+{
+    SolarMutexGuard aGuard;
+
+    OUString aText;
+    VclPtr< MultiLineEdit > pMultiLineEdit = GetAs< MultiLineEdit >();
+    if ( pMultiLineEdit)
+        aText = pMultiLineEdit->GetSelected( meLineEndType );
+    return aText;
+
+}
+
+void VCLXMultiLineEdit::setSelection( const css::awt::Selection& aSelection )
+{
+    SolarMutexGuard aGuard;
+
+    VclPtr< MultiLineEdit > pMultiLineEdit = GetAs< MultiLineEdit >();
+    if ( pMultiLineEdit )
+    {
+        pMultiLineEdit->SetSelection( Selection( aSelection.Min, aSelection.Max ) );
+    }
+}
+
+css::awt::Selection VCLXMultiLineEdit::getSelection()
+{
+    SolarMutexGuard aGuard;
+
+    css::awt::Selection aSel;
+    VclPtr< MultiLineEdit > pMultiLineEdit = GetAs< MultiLineEdit >();
+    if ( pMultiLineEdit )
+    {
+        aSel.Min = pMultiLineEdit->GetSelection().Min();
+        aSel.Max = pMultiLineEdit->GetSelection().Max();
+    }
+    return aSel;
+}
+
+sal_Bool VCLXMultiLineEdit::isEditable()
+{
+    SolarMutexGuard aGuard;
+
+    VclPtr< MultiLineEdit > pMultiLineEdit = GetAs< MultiLineEdit >();
+    return pMultiLineEdit && !pMultiLineEdit->IsReadOnly() && pMultiLineEdit->IsEnabled();
+}
+
+void VCLXMultiLineEdit::setEditable( sal_Bool bEditable )
+{
+    SolarMutexGuard aGuard;
+
+    VclPtr< MultiLineEdit > pMultiLineEdit = GetAs< MultiLineEdit >();
+    if ( pMultiLineEdit )
+        pMultiLineEdit->SetReadOnly( !bEditable );
+}
+
+void VCLXMultiLineEdit::setMaxTextLen( sal_Int16 nLen )
+{
+    SolarMutexGuard aGuard;
+
+    VclPtr< MultiLineEdit > pMultiLineEdit = GetAs< MultiLineEdit >();
+    if ( pMultiLineEdit )
+        pMultiLineEdit->SetMaxTextLen( nLen );
+}
+
+sal_Int16 VCLXMultiLineEdit::getMaxTextLen()
+{
+    SolarMutexGuard aGuard;
+
+    VclPtr< MultiLineEdit > pMultiLineEdit = GetAs< MultiLineEdit >();
+    return pMultiLineEdit ? static_cast<sal_Int16>(pMultiLineEdit->GetMaxTextLen()) : sal_Int16(0);
+}
+
+OUString VCLXMultiLineEdit::getTextLines()
+{
+    SolarMutexGuard aGuard;
+
+    OUString aText;
+    VclPtr< MultiLineEdit > pEdit = GetAs< MultiLineEdit >();
+    if ( pEdit )
+        aText = pEdit->GetTextLines( meLineEndType );
+    return aText;
+}
+
+css::awt::Size VCLXMultiLineEdit::getMinimumSize()
+{
+    SolarMutexGuard aGuard;
+
+    css::awt::Size aSz;
+    VclPtr< MultiLineEdit > pEdit = GetAs< MultiLineEdit >();
+    if ( pEdit )
+        aSz = AWTSize(pEdit->CalcMinimumSize());
+    return aSz;
+}
+
+css::awt::Size VCLXMultiLineEdit::getPreferredSize()
+{
+    return getMinimumSize();
+}
+
+css::awt::Size VCLXMultiLineEdit::calcAdjustedSize( const css::awt::Size& rNewSize )
+{
+    SolarMutexGuard aGuard;
+
+    css::awt::Size aSz = rNewSize;
+    VclPtr< MultiLineEdit > pEdit = GetAs< MultiLineEdit >();
+    if ( pEdit )
+        aSz = AWTSize(pEdit->CalcAdjustedSize( VCLSize(rNewSize )));
+    return aSz;
+}
+
+css::awt::Size VCLXMultiLineEdit::getMinimumSize( sal_Int16 nCols, sal_Int16 nLines )
+{
+    SolarMutexGuard aGuard;
+
+    css::awt::Size aSz;
+    VclPtr< MultiLineEdit > pEdit = GetAs< MultiLineEdit >();
+    if ( pEdit )
+        aSz = AWTSize(pEdit->CalcBlockSize( nCols, nLines ));
+    return aSz;
+}
+
+void VCLXMultiLineEdit::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines )
+{
+    SolarMutexGuard aGuard;
+
+    nCols = nLines = 0;
+    VclPtr< MultiLineEdit > pEdit = GetAs< MultiLineEdit >();
+    if ( pEdit )
+    {
+        sal_uInt16 nC, nL;
+        pEdit->GetMaxVisColumnsAndLines( nC, nL );
+        nCols = nC;
+        nLines = nL;
+    }
+}
+
+void VCLXMultiLineEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
+{
+    switch ( rVclWindowEvent.GetId() )
+    {
+        case VclEventId::EditModify:
+        {
+            if ( maTextListeners.getLength() )
+            {
+                css::awt::TextEvent aEvent;
+                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                maTextListeners.textChanged( aEvent );
+            }
+        }
+        break;
+        default:
+        {
+            VCLXWindow::ProcessWindowEvent( rVclWindowEvent );
+        }
+        break;
+    }
+}
+
+void VCLXMultiLineEdit::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
+{
+    SolarMutexGuard aGuard;
+
+    VclPtr< MultiLineEdit > pMultiLineEdit = GetAs< MultiLineEdit >();
+    if ( !pMultiLineEdit )
+        return;
+
+    sal_uInt16 nPropType = GetPropertyId( PropertyName );
+    switch ( nPropType )
+    {
+        case BASEPROPERTY_LINE_END_FORMAT:
+        {
+            sal_Int16 nLineEndType = css::awt::LineEndFormat::LINE_FEED;
+            OSL_VERIFY( Value >>= nLineEndType );
+            switch ( nLineEndType )
+            {
+            case css::awt::LineEndFormat::CARRIAGE_RETURN:           meLineEndType = LINEEND_CR; break;
+            case css::awt::LineEndFormat::LINE_FEED:                 meLineEndType = LINEEND_LF; break;
+            case css::awt::LineEndFormat::CARRIAGE_RETURN_LINE_FEED: meLineEndType = LINEEND_CRLF; break;
+            default: OSL_FAIL( "VCLXMultiLineEdit::setProperty: invalid line end value!" ); break;
+            }
+        }
+        break;
+
+        case BASEPROPERTY_READONLY:
+        {
+            bool b;
+            if ( Value >>= b )
+                pMultiLineEdit->SetReadOnly( b );
+        }
+        break;
+        case BASEPROPERTY_MAXTEXTLEN:
+        {
+            sal_Int16 n = sal_Int16();
+            if ( Value >>= n )
+                pMultiLineEdit->SetMaxTextLen( n );
+        }
+        break;
+        case BASEPROPERTY_HIDEINACTIVESELECTION:
+        {
+            bool b;
+            if ( Value >>= b )
+            {
+                pMultiLineEdit->EnableFocusSelectionHide( b );
+                lcl_setWinBits( pMultiLineEdit, WB_NOHIDESELECTION, !b );
+            }
+        }
+        break;
+        default:
+        {
+            VCLXWindow::setProperty( PropertyName, Value );
+        }
+    }
+}
+
+css::uno::Any VCLXMultiLineEdit::getProperty( const OUString& PropertyName )
+{
+    SolarMutexGuard aGuard;
+
+    css::uno::Any aProp;
+    VclPtr< MultiLineEdit > pMultiLineEdit = GetAs< MultiLineEdit >();
+    if ( pMultiLineEdit )
+    {
+        sal_uInt16 nPropType = GetPropertyId( PropertyName );
+        switch ( nPropType )
+        {
+            case BASEPROPERTY_LINE_END_FORMAT:
+            {
+                sal_Int16 nLineEndType = css::awt::LineEndFormat::LINE_FEED;
+                switch ( meLineEndType )
+                {
+                case LINEEND_CR:   nLineEndType = css::awt::LineEndFormat::CARRIAGE_RETURN; break;
+                case LINEEND_LF:   nLineEndType = css::awt::LineEndFormat::LINE_FEED; break;
+                case LINEEND_CRLF: nLineEndType = css::awt::LineEndFormat::CARRIAGE_RETURN_LINE_FEED; break;
+                default: OSL_FAIL( "VCLXMultiLineEdit::getProperty: invalid line end value!" ); break;
+                }
+                aProp <<= nLineEndType;
+            }
+            break;
+
+            case BASEPROPERTY_READONLY:
+            {
+                aProp <<= pMultiLineEdit->IsReadOnly();
+            }
+            break;
+            case BASEPROPERTY_MAXTEXTLEN:
+            {
+                aProp <<= static_cast<sal_Int16>(pMultiLineEdit->GetMaxTextLen());
+            }
+            break;
+            default:
+            {
+                aProp = VCLXWindow::getProperty( PropertyName );
+            }
+        }
+    }
+    return aProp;
+}
+
+void SAL_CALL VCLXMultiLineEdit::setFocus(  )
+{
+    SolarMutexGuard aGuard;
+
+    // don't grab the focus if we already have it. Reason is that the only thing which the edit
+    // does is forwarding the focus to its text window. This text window then does a "select all".
+    // So if the text window already has the focus, and we give the focus to the multi line
+    // edit, then all which happens is that everything is selected.
+    // #i27072#
+    if ( GetWindow() && !GetWindow()->HasChildPathFocus() )
+        GetWindow()->GrabFocus();
+}
+
+void VCLXMultiLineEdit::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
+{
+    PushPropertyIds( rIds,
+                     // FIXME: elide duplication ?
+                     BASEPROPERTY_LINE_END_FORMAT,
+                     BASEPROPERTY_READONLY,
+                     BASEPROPERTY_MAXTEXTLEN,
+                     BASEPROPERTY_HIDEINACTIVESELECTION,
+                     0);
+    VCLXWindow::ImplGetPropertyIds( rIds, true );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
