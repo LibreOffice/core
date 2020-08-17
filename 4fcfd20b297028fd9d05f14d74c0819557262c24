@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "609f48de_85bdb867",
+        "filename": "sw/source/core/txtnode/ndtxt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2094,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-08-17T09:41:43Z",
+      "side": 1,
+      "message": "well the comment even says that it wouldn\u0027t work...",
+      "revId": "4fcfd20b297028fd9d05f14d74c0819557262c24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
