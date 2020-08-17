@@ -1413,6 +1413,9 @@ bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
                     break;
                 case 1:
                     aData.pObj = SbxBase::Load( r );
+                    // if necessary increment Ref-Count
+                    if (aData.pObj)
+                        aData.pObj->AddFirstRef();
                     return ( aData.pObj != nullptr );
                 case 2:
                     aData.pObj = this;
