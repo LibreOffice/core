@@ -41,7 +41,7 @@ namespace dbaui
         OTableSubscriptionDialog*      m_pTablesDlg;
 
         std::unique_ptr<weld::Widget>  m_xTables;
-        std::unique_ptr<TableTreeListBox> m_xTablesList;
+        std::unique_ptr<OTableTreeListBox> m_xTablesList;
 
     public:
         virtual bool            FillItemSet(SfxItemSet* _rCoreAttrs) override;

@@ -366,10 +366,16 @@ void OApplicationView::getSelectionElementNames( std::vector< OUString>& _rNames
     getDetailView()->getSelectionElementNames( _rNames );
 }
 
-void OApplicationView::describeCurrentSelectionForControl( const Control& _rControl, Sequence< NamedDatabaseObject >& _out_rSelectedObjects )
+void OApplicationView::describeCurrentSelectionForControl(const weld::TreeView& rControl, Sequence<NamedDatabaseObject>& out_rSelectedObjects)
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
-    getDetailView()->describeCurrentSelectionForControl( _rControl, _out_rSelectedObjects );
+    getDetailView()->describeCurrentSelectionForControl(rControl, out_rSelectedObjects);
+}
+
+vcl::Window* OApplicationView::getMenuParent(weld::TreeView& rControl) const
+{
+    OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
+    return getDetailView()->getMenuParent(rControl);
 }
 
 void OApplicationView::describeCurrentSelectionForType( const ElementType _eType, Sequence< NamedDatabaseObject >& _out_rSelectedObjects )

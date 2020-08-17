@@ -26,21 +26,24 @@
 
 namespace com::sun::star::ucb { class XContent; }
 
-
 namespace svx
 {
-
-
     //= OComponentTransferable
-
-    class SAL_WARN_UNUSED SVX_DLLPUBLIC OComponentTransferable final : public TransferableHelper
+    class SAL_WARN_UNUSED SVX_DLLPUBLIC OComponentTransferable final : public TransferDataContainer
     {
     public:
         /** construct the transferable
         */
         OComponentTransferable(
-            const OUString&  _rDatasourceOrLocation
-            ,const css::uno::Reference< css::ucb::XContent>& _xContent
+            const OUString& rDatasourceOrLocation,
+            const css::uno::Reference< css::ucb::XContent>& xContent
+        );
+
+        OComponentTransferable();
+
+        void Update(
+            const OUString&  rDatasourceOrLocation,
+            const css::uno::Reference< css::ucb::XContent>& xContent
         );
 
         /** checks whether or not a component descriptor can be extracted from the data flavor vector given
@@ -63,10 +66,7 @@ namespace svx
 
         ODataAccessDescriptor   m_aDescriptor;
     };
-
-
 }
-
 
 #endif // INCLUDED_SVX_DBAOBJECTEX_HXX
 

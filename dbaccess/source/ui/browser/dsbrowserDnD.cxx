@@ -181,7 +181,7 @@ namespace dbaui
         if (!isObject(eEntryType))
             return false;
 
-        ODataClipboard& rExchange = m_pTreeView->GetDataTransfer();
+        ODataClipboard& rExchange = static_cast<ODataClipboard&>(m_pTreeView->GetDataTransfer());
         return implCopyObject(rExchange, rEntry, (etTableOrView == eEntryType) ? CommandType::TABLE : CommandType::QUERY);
     }
 

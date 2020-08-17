@@ -469,14 +469,19 @@ void OApplicationDetailView::getSelectionElementNames( std::vector< OUString>& _
     m_pControlHelper->getSelectionElementNames( _rNames );
 }
 
-void OApplicationDetailView::describeCurrentSelectionForControl( const Control& _rControl, Sequence< NamedDatabaseObject >& _out_rSelectedObjects )
+void OApplicationDetailView::describeCurrentSelectionForControl(const weld::TreeView& rControl, Sequence< NamedDatabaseObject >& out_rSelectedObjects)
 {
-    m_pControlHelper->describeCurrentSelectionForControl( _rControl, _out_rSelectedObjects );
+    m_pControlHelper->describeCurrentSelectionForControl(rControl, out_rSelectedObjects);
 }
 
 void OApplicationDetailView::describeCurrentSelectionForType( const ElementType _eType, Sequence< NamedDatabaseObject >& _out_rSelectedObjects )
 {
     m_pControlHelper->describeCurrentSelectionForType( _eType, _out_rSelectedObjects );
+}
+
+vcl::Window* OApplicationDetailView::getMenuParent(weld::TreeView& rControl) const
+{
+    return m_pControlHelper->getMenuParent(rControl);
 }
 
 void OApplicationDetailView::selectElements(const Sequence< OUString>& _aNames)
@@ -556,9 +561,12 @@ bool OApplicationDetailView::isSortUp() const
     return m_pControlHelper->isSortUp();
 }
 
-vcl::Window* OApplicationDetailView::getTreeWindow() const
+TreeListBox* OApplicationDetailView::getTreeWindow() const
 {
-    return m_pControlHelper->getCurrentView();
+    DBTreeViewBase* pCurrent = m_pControlHelper->getCurrentView();
+    if (!pCurrent)
+        return nullptr;
+    return &pCurrent->getListBox();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
