@@ -275,7 +275,7 @@ Sub test2()
     MsgBox d
 End Sub
 
-Sub testBolean()
+Sub testBoolean()
     Dim a As String
     Dim b As Boolean
     Dim c As Boolean
