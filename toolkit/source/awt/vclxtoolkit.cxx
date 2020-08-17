@@ -79,6 +79,7 @@
 
 #include <toolkit/helper/convert.hxx>
 #include <controls/filectrl.hxx>
+#include <controls/svmedit.hxx>
 #include <controls/treecontrolpeer.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/calendar.hxx>
@@ -1465,6 +1466,10 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 pNewWindow = VclPtr<DockingAreaWindow>::Create( pParent );
             break;
             case WindowType::MULTILINEEDIT:
+                pNewWindow = VclPtr<MultiLineEdit>::Create(pParent, nWinBits|WB_IGNORETAB);
+                static_cast<MultiLineEdit*>(pNewWindow.get())->DisableSelectionOnFocus();
+                *ppNewComp = new VCLXMultiLineEdit;
+            break;
             case WindowType::EDIT:
                 pNewWindow = VclPtr<Edit>::Create( pParent, nWinBits );
                 *ppNewComp = new VCLXEdit;
