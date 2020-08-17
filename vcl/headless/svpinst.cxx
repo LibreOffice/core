@@ -44,11 +44,12 @@
 #include <headless/svpdummies.hxx>
 #include <headless/svpvd.hxx>
 #ifdef IOS
-#include <quartz/salbmp.h>
-#include <quartz/salgdi.h>
-#include <quartz/salvd.h>
+#  include <quartz/salbmp.h>
+#  include <quartz/salgdi.h>
+#  include <quartz/salvd.h>
 #else
-#include <headless/svpgdi.hxx>
+#  include <cairo.h>
+#  include <headless/svpgdi.hxx>
 #endif
 #include <headless/svpbmp.hxx>
 
@@ -265,6 +266,24 @@ std::unique_ptr<SalVirtualDevice> SvpSalInstance::CreateVirtualDevice(SalGraphic
 cairo_surface_t* get_underlying_cairo_surface(const VirtualDevice& rDevice)
 {
     return static_cast<SvpSalVirtualDevice*>(rDevice.mpVirDev.get())->GetSurface();
+}
+
+const cairo_font_options_t* SvpSalInstance::GetCairoFontOptions()
+{
+    static cairo_font_options_t *gOptions = nullptr;
+    if (!gOptions)
+    {
+        gOptions = cairo_font_options_create();
+        cairo_font_options_set_antialias(gOptions, CAIRO_ANTIALIAS_GRAY);
+    }
+    return gOptions;
+}
+
+#else // IOS
+
+const cairo_font_options_t* SvpSalInstance::GetCairoFontOptions()
+{
+    return nullptr;
 }
 
 #endif
@@ -609,7 +628,6 @@ OpenGLContext* SvpSalInstance::CreateOpenGLContext()
 {
     return nullptr;
 }
-
 
 #endif
 
