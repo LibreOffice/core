@@ -125,6 +125,7 @@
 #include <docstat.hxx>
 #include <wordcountdialog.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
+#include <sfx2/sidebar/SidebarController.hxx>
 
 #include <vcl/GraphicNativeTransform.hxx>
 #include <vcl/GraphicNativeMetadata.hxx>
@@ -534,6 +535,14 @@ void SwView::Execute(SfxRequest &rReq)
     bool bIgnore = false;
     switch( nSlot )
     {
+        case SID_INSPECTOR_DECK:
+        {
+            OUString deckId;
+            if (nSlot == SID_INSPECTOR_DECK)
+                deckId = "InspectorDeck";
+            ::sfx2::sidebar::Sidebar::ToggleDeck(deckId, GetViewFrame());
+        }
+        break;
         case SID_CREATE_SW_DRAWVIEW:
             m_pWrtShell->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
             break;

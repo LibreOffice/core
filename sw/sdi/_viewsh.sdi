@@ -65,6 +65,10 @@ interface BaseTextEditView
     [
         ExecMethod = Execute;
     ]
+    SID_INSPECTOR_DECK
+    [
+        ExecMethod = Execute;
+    ]
     FN_PAGEDOWN // status(final|play)
     [
         ExecMethod = Execute ;
