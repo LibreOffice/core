@@ -202,15 +202,6 @@ public:
      */
     Box2DBodySharedPtr makeShapeDynamic(const slideshow::internal::ShapeSharedPtr& pShape);
 
-    /** Make the Box2D body a dynamic one
-
-        A dynamic body will be affected by other bodies and the gravity.
-
-        @param pBox2DBody
-        Pointer to the Box2D body
-     */
-    Box2DBodySharedPtr makeBodyDynamic(const Box2DBodySharedPtr& pBox2DBody);
-
     /** Make the Box2D body corresponding to the given shape a static one
 
         A static body will not be affected by other bodies and the gravity.
@@ -219,15 +210,6 @@ public:
         Pointer to the shape to alter the corresponding Box2D body of
      */
     Box2DBodySharedPtr makeShapeStatic(const slideshow::internal::ShapeSharedPtr& pShape);
-
-    /** Make the Box2D body a dynamic one
-
-        A static body will not be affected by other bodies and the gravity.
-
-        @param pBox2DBody
-        Pointer to the Box2D body
-     */
-    Box2DBodySharedPtr makeBodyStatic(const Box2DBodySharedPtr& pBox2DBody);
 
     /// Create a static body from the given shape's bounding box
     Box2DBodySharedPtr
@@ -322,6 +304,24 @@ public:
     /// @return type of the body
     box2DBodyType getType();
 };
+
+/** Make the Box2D body a dynamic one
+
+    A dynamic body will be affected by other bodies and the gravity.
+
+    @param pBox2DBody
+    Pointer to the Box2D body
+ */
+Box2DBodySharedPtr makeBodyDynamic(const Box2DBodySharedPtr& pBox2DBody);
+
+/** Make the Box2D body a static one
+
+    A static body will not be affected by other bodies and the gravity.
+
+    @param pBox2DBody
+    Pointer to the Box2D body
+ */
+Box2DBodySharedPtr makeBodyStatic(const Box2DBodySharedPtr& pBox2DBody);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
