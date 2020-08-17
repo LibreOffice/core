@@ -113,7 +113,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/dialogs/ServerDetailsControls \
     svtools/source/edit/editsyntaxhighlighter \
     svtools/source/edit/svmedit \
-    svtools/source/edit/svmedit2 \
     svtools/source/edit/textwindowpeer \
     svtools/source/filter/SvFilterOptionsDialog \
     svtools/source/filter/DocumentToGraphicRenderer \
