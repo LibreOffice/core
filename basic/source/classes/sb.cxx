@@ -1767,7 +1767,7 @@ bool StarBASIC::LoadData( SvStream& r, sal_uInt16 nVer )
         return false;
     }
     // #95459 Delete dialogs, otherwise endless recursion
-    // in SbxVarable::GetType() if dialogs are accessed
+    // in SbxVariable::GetType() if dialogs are accessed
     sal_uInt32 nObjCount = pObjs->Count32();
     std::unique_ptr<SbxVariable*[]> ppDeleteTab(new SbxVariable*[ nObjCount ]);
     sal_uInt32 nObj;

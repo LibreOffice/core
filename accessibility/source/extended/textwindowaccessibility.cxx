@@ -889,7 +889,7 @@ Document::retrieveCharacterBounds(Paragraph const * pParagraph,
             // XXX  numeric overflow (2x)
         // FIXME  If the vertical extends of the two cursors do not match, assume
         // nIndex is the last character on the line; the bounding box will then
-        // extend to m_rEnginge.GetMaxTextWidth():
+        // extend to m_rEngine.GetMaxTextWidth():
         ::sal_Int32 nWidth = (aLeft.Top() == aRight.Top()
                             && aLeft.Bottom() == aRight.Bottom())
             ? static_cast< ::sal_Int32 >(aRight.Left() - aLeft.Left())
