@@ -22,6 +22,30 @@
       "revId": "6c022bc6475882fc9a3e6e2363f4589770fbf7a0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c66ffe3_c3753202",
+        "filename": "sw/source/core/text/portxt.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-08-17T09:57:41Z",
+      "side": 1,
+      "message": "i would look to SwFieldPortion::Format for inspiration, it also calls SwTextPortion::Format...\n\nthe most important thing is SwFieldSlot aDiffText( \u0026rInf, this ); ... this overrides the text in the rInf to be the expand text.\n\nthere\u0027s some complications with follow flags there; in case of a line break you\u0027d get multiple portions and the 2nd one shouldn\u0027t start at the 1st character of the expand text but continue the previous one... not sure how that works but SwFieldPortion already does it.\n\nlots of stuff in SwFieldPortion can probably be ignored, e.g. i\u0027d expect that the field name will not have script breaks inside it, that should be needed only for the field result.",
+      "parentUuid": "85105d25_d831573d",
+      "range": {
+        "startLine": 688,
+        "startChar": 4,
+        "endLine": 688,
+        "endChar": 28
+      },
+      "revId": "6c022bc6475882fc9a3e6e2363f4589770fbf7a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
