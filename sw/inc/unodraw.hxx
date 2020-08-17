@@ -80,9 +80,9 @@ typedef cppu::WeakAggImplHelper4
 SwXDrawPageBaseClass;
 class SwXDrawPage final : public SwXDrawPageBaseClass
 {
-    SwDoc*          pDoc;
-    css::uno::Reference< css::uno::XAggregation >     xPageAgg;
-    SwFmDrawPage*   pDrawPage;
+    SwDoc*          m_pDoc;
+    css::uno::Reference< css::uno::XAggregation >     m_xPageAgg;
+    SwFmDrawPage*   m_pDrawPage;
 public:
     SwXDrawPage(SwDoc* pDoc);
     virtual ~SwXDrawPage() override;
@@ -139,7 +139,7 @@ class SwXShape : public SwXShapeBaseClass, public SvtListener
     const SwFmDrawPage* m_pPage;
     SwFrameFormat* m_pFormat;
 
-    css::uno::Reference< css::uno::XAggregation > xShapeAgg;
+    css::uno::Reference< css::uno::XAggregation > m_xShapeAgg;
     // reference to <XShape>, determined in the
     // constructor by <queryAggregation> at <xShapeAgg>.
     css::uno::Reference< css::drawing::XShape > mxShape;
@@ -147,7 +147,7 @@ class SwXShape : public SwXShapeBaseClass, public SvtListener
     const SfxItemPropertySet*           m_pPropSet;
     const SfxItemPropertyMapEntry*      m_pPropertyMapEntries;
 
-    std::unique_ptr<SwShapeDescriptor_Impl>  pImpl;
+    std::unique_ptr<SwShapeDescriptor_Impl>  m_pImpl;
 
     bool                        m_bDescriptor;
 
@@ -255,9 +255,9 @@ public:
     virtual void SAL_CALL setSize( const css::awt::Size& aSize ) override;
     virtual OUString SAL_CALL getShapeType(  ) override;
 
-    SwShapeDescriptor_Impl*     GetDescImpl() {return pImpl.get();}
+    SwShapeDescriptor_Impl*     GetDescImpl() {return m_pImpl.get();}
     SwFrameFormat* GetFrameFormat() const { return m_pFormat; }
-    const css::uno::Reference< css::uno::XAggregation >& GetAggregationInterface() const {return xShapeAgg;}
+    const css::uno::Reference< css::uno::XAggregation >& GetAggregationInterface() const {return m_xShapeAgg;}
 
     // helper
     static void AddExistingShapeToFormat( SdrObject const & _rObj );

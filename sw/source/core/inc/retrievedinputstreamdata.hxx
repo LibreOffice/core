@@ -78,7 +78,7 @@ class SwRetrievedInputStreamDataManager
 
     private:
 
-        static tDataKey mnNextKeyValue;
+        static tDataKey snNextKeyValue;
 
         osl::Mutex maMutex;
 
