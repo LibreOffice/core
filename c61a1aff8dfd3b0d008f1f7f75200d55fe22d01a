@@ -16,6 +16,24 @@
       "revId": "c61a1aff8dfd3b0d008f1f7f75200d55fe22d01a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b90b79c_693808ef",
+        "filename": "canvas/source/cairo/cairo_canvashelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1190,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-08-17T13:05:52Z",
+      "side": 1,
+      "message": "Definitely. :-) I just don\u0027t know how to trigger the bModulateColors path, and I don\u0027t want to add it blindly.",
+      "parentUuid": "8edac3e7_1acbe147",
+      "revId": "c61a1aff8dfd3b0d008f1f7f75200d55fe22d01a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
