@@ -17,22 +17,42 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svtools/svtresid.hxx>
-#include "templwin.hxx"
-#include <templwin.hrc>
+#pragma once
 
-namespace SvtDocInfoTable_Impl
-{
-    OUString GetString(int nId)
-    {
-        for (size_t i = 0; i < SAL_N_ELEMENTS(STRARY_SVT_DOCINFO); ++i)
-        {
-            if (STRARY_SVT_DOCINFO[i].second == nId)
-                return SvtResId(STRARY_SVT_DOCINFO[i].first);
-        }
+#include <sal/config.h>
+#include <svx/weldeditview.hxx>
 
-        return OUString();
-    }
+namespace com :: sun :: star :: uno { template <typename > class Reference; }
+
+class ExtMultiLineEdit;
+
+namespace com::sun::star {
+    namespace document { class XDocumentProperties; }
+    namespace util { struct DateTime; }
+}
+
+namespace dbaui {
+
+class ODocumentInfoPreview final : public WeldEditView {
+public:
+    ODocumentInfoPreview();
+
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
+
+    virtual ~ODocumentInfoPreview() override;
+
+    void clear();
+
+    void fill(css::uno::Reference< css::document::XDocumentProperties > const & xDocProps);
+
+private:
+    void insertEntry(OUString const & title, OUString const & value);
+
+    void insertNonempty(long id, OUString const & value);
+
+    void insertDateTime(long id, css::util::DateTime const & value);
+};
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

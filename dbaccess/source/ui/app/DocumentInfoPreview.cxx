@@ -26,12 +26,13 @@
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/wghtitem.hxx>
 #include <rtl/ustring.hxx>
-#include <svtools/DocumentInfoPreview.hxx>
-#include <svmedit2.hxx>
-#include <vcl/txtattr.hxx>
+#include "DocumentInfoPreview.hxx"
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <svl/itemset.hxx>
 #include <tools/datetime.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/localedatawrapper.hxx>
@@ -39,42 +40,31 @@
 #include <templwin.hrc>
 #include "templwin.hxx"
 
-namespace svtools {
+namespace dbaui {
 
-ODocumentInfoPreview::ODocumentInfoPreview(vcl::Window * pParent, WinBits nBits)
-    : Window(pParent, WB_DIALOGCONTROL)
-    , m_pEditWin( VclPtr<ExtMultiLineEdit>::Create(this, nBits) )
+ODocumentInfoPreview::ODocumentInfoPreview()
 {
-    m_pEditWin->SetLeftMargin(10);
-    m_pEditWin->Show();
-    m_pEditWin->EnableCursor(false);
+}
+
+void ODocumentInfoPreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+{
+    WeldEditView::SetDrawingArea(pDrawingArea);
+    m_xEditView->HideCursor();
+    m_xEditView->SetReadOnly(true);
 }
 
 ODocumentInfoPreview::~ODocumentInfoPreview()
 {
-    disposeOnce();
-}
-
-void ODocumentInfoPreview::dispose()
-{
-    m_pEditWin.disposeAndClear();
-    Window::dispose();
-}
-
-void ODocumentInfoPreview::Resize() {
-    m_pEditWin->SetPosSizePixel(Point(0, 0), GetOutputSize());
 }
 
 void ODocumentInfoPreview::clear() {
-    m_pEditWin->SetText(OUString());
+    m_xEditEngine->SetText(OUString());
 }
 
 void ODocumentInfoPreview::fill(
     css::uno::Reference< css::document::XDocumentProperties > const & xDocProps)
 {
     assert(xDocProps.is());
-
-    m_pEditWin->SetAutoScroll(false);
 
     insertNonempty(DI_TITLE, xDocProps->getTitle());
     insertNonempty(DI_FROM, xDocProps->getAuthor());
@@ -113,22 +103,37 @@ void ODocumentInfoPreview::fill(
         }
     }
 
-    m_pEditWin->SetSelection(Selection(0, 0));
-    m_pEditWin->SetAutoScroll(true);
+    m_xEditView->SetSelection(ESelection(0, 0, 0, 0));
+}
+
+namespace
+{
+    ESelection InsertAtEnd(const EditEngine& rEditEngine)
+    {
+        const sal_uInt32 nPara = rEditEngine.GetParagraphCount() -1;
+        sal_Int32 nLastLen = rEditEngine.GetText(nPara).getLength();
+        return ESelection(nPara, nLastLen, nPara, nLastLen);
+    }
 }
 
 void ODocumentInfoPreview::insertEntry(
     OUString const & title, OUString const & value)
 {
-    if (!m_pEditWin->GetText().isEmpty()) {
-        m_pEditWin->InsertText("\n\n");
+    if (!m_xEditEngine->GetText().isEmpty()) {
+        m_xEditEngine->QuickInsertText("\n\n", InsertAtEnd(*m_xEditEngine));
     }
+
     OUString caption(title + ":\n");
-    m_pEditWin->InsertText(caption);
-    m_pEditWin->SetAttrib(
-        TextAttribFontWeight(WEIGHT_BOLD), m_pEditWin->GetParagraphCount() - 2,
-        0, caption.getLength() - 1);
-    m_pEditWin->InsertText(value);
+    m_xEditEngine->QuickInsertText(caption, InsertAtEnd(*m_xEditEngine));
+
+    SfxItemSet aSet(m_xEditEngine->GetEmptyItemSet());
+    aSet.Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT));
+    aSet.Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT_CJK));
+    aSet.Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT_CTL));
+    int nCaptionPara = m_xEditEngine->GetParagraphCount() - 2;
+    m_xEditEngine->QuickSetAttribs(aSet, ESelection(nCaptionPara, 0, nCaptionPara, caption.getLength() - 1));
+
+    m_xEditEngine->QuickInsertText(value, InsertAtEnd(*m_xEditEngine));
 }
 
 void ODocumentInfoPreview::insertNonempty(long id, OUString const & value)

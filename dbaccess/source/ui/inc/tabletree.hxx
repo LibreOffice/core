@@ -32,7 +32,7 @@ namespace dbaui
 {
 
 // OTableTreeListBox
-class OTableTreeListBox final : public InterimDBTreeListBox
+class OTableTreeListBox : public TreeListBox
 {
     css::uno::Reference< css::sdbc::XConnection >
                     m_xConnection;      // the connection we're working for, set in implOnNewConnection, called by UpdateTableList
@@ -43,11 +43,14 @@ class OTableTreeListBox final : public InterimDBTreeListBox
     bool            m_bShowToggles;     // show toggle buttons
 
 public:
-    OTableTreeListBox(vcl::Window* pParent, bool bShowToggles);
-    virtual ~OTableTreeListBox();
+    OTableTreeListBox(std::unique_ptr<weld::TreeView> xTreeView, bool bShowToggles);
+
+    void init() { m_bVirtualRoot = true; }
 
     typedef std::pair< OUString, bool > TTableViewName;
     typedef std::vector< TTableViewName >         TNames;
+
+    void    SuppressEmptyFolders() { m_bNoEmptyFolders = true; }
 
     /** determines whether the given entry denotes a tables folder
     */
@@ -76,107 +79,13 @@ public:
                 const css::uno::Sequence< OUString>& _rViews
             );
 
-    std::unique_ptr<weld::TreeIter>    getAllObjectsEntry() const;
-
-    void            CheckButtons();     // make the button states consistent (bottom-up)
-
-private:
-    void implEmphasize(const weld::TreeIter& rEntry, bool _bChecked, bool _bUpdateDescendants = true, bool _bUpdateAncestors = true);
-
-    /** adds the given entry to our list
-        @precond
-            our image provider must already have been reset to the connection to which the meta data
-            belong.
-    */
-    std::unique_ptr<weld::TreeIter> implAddEntry(
-            const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rxMeta,
-            const OUString& _rTableName, bool _bCheckName = true
-        );
-
-    void    implOnNewConnection( const css::uno::Reference< css::sdbc::XConnection >& _rxConnection );
-
-    bool    impl_getAndAssertMetaData( css::uno::Reference< css::sdbc::XDatabaseMetaData >& _out_rMetaData ) const;
-
-    bool haveVirtualRoot() const { return m_bVirtualRoot; }
-
-public:
-    /** fill the table list with the tables and views determined by the two given containers
-        @param      _rxConnection   the connection where you got the object names from. Must not be NULL.
-                                    Used to split the full qualified names into its parts.
-        @param      _rTables        table/view sequence, the second argument is <TRUE/> if it is a table, otherwise it is a view.
-    */
-    void    UpdateTableList(
-                const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
-                const TNames& _rTables
-            );
-
-    /** returns a NamedDatabaseObject record which describes the given entry
-    */
-    css::sdb::application::NamedDatabaseObject
-            describeObject(weld::TreeIter& rEntry);
-
     /** to be used if a foreign instance added a table
     */
-    std::unique_ptr<weld::TreeIter> addedTable(const OUString& rName);
+    std::unique_ptr<weld::TreeIter> addedTable( const OUString& _rName );
 
     /** to be used if a foreign instance removed a table
     */
     void    removedTable( const OUString& _rName );
-
-    TriState implDetermineState(weld::TreeIter& rEntry);
-        // determines the check state of the given entry, by analyzing the states of all descendants
-
-    /** returns the fully qualified name of a table entry
-        @param _pEntry
-            the entry whose name is to be obtained. Must not denote a folder entry.
-    */
-    OUString getQualifiedTableName(weld::TreeIter& rEntry) const;
-
-    std::unique_ptr<weld::TreeIter> getEntryByQualifiedName(const OUString& rName);
-};
-
-class TableTreeListBox : public TreeListBox
-{
-    css::uno::Reference< css::sdbc::XConnection >
-                    m_xConnection;      // the connection we're working for, set in implOnNewConnection, called by UpdateTableList
-    std::unique_ptr< ImageProvider >
-                    m_xImageProvider;   // provider for our images
-    bool            m_bVirtualRoot;     // should the first entry be visible
-    bool            m_bNoEmptyFolders;  // should empty catalogs/schematas be prevented from being displayed?
-    bool            m_bShowToggles;     // show toggle buttons
-
-public:
-    TableTreeListBox(std::unique_ptr<weld::TreeView> xTreeView, bool bShowToggles);
-
-    void init() { m_bVirtualRoot = true; }
-
-    typedef std::pair< OUString, bool > TTableViewName;
-    typedef std::vector< TTableViewName >         TNames;
-
-    void    SuppressEmptyFolders() { m_bNoEmptyFolders = true; }
-
-    /** fill the table list with the tables belonging to the connection described by the parameters
-        @param _rxConnection
-            the connection, which must support the service com.sun.star.sdb.Connection
-        @throws
-            <type scope="css::sdbc">SQLException</type> if no connection could be created
-    */
-    void    UpdateTableList(
-                const css::uno::Reference< css::sdbc::XConnection >& _rxConnection
-            );
-
-    /** fill the table list with the tables and views determined by the two given containers.
-        The views sequence is used to determine which table is of type view.
-        @param      _rxConnection   the connection where you got the object names from. Must not be NULL.
-                                    Used to split the full qualified names into its parts.
-        @param      _rTables        table/view sequence
-        @param      _rViews         view sequence
-    */
-    void    UpdateTableList(
-                const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
-                const css::uno::Sequence< OUString>& _rTables,
-                const css::uno::Sequence< OUString>& _rViews
-            );
 
     std::unique_ptr<weld::TreeIter>    getAllObjectsEntry() const;
 
@@ -205,13 +114,15 @@ private:
             our image provider must already have been reset to the connection to which the meta data
             belong.
     */
-    void implAddEntry(
+    std::unique_ptr<weld::TreeIter> implAddEntry(
             const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rxMeta,
             const OUString& _rTableName,
             bool _bCheckName = true
         );
 
     void    implOnNewConnection( const css::uno::Reference< css::sdbc::XConnection >& _rxConnection );
+
+    bool    impl_getAndAssertMetaData( css::uno::Reference< css::sdbc::XDatabaseMetaData >& _out_rMetaData ) const;
 
     bool haveVirtualRoot() const { return m_bVirtualRoot; }
 
@@ -225,6 +136,19 @@ public:
                 const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
                 const TNames& _rTables
             );
+
+    /** returns a NamedDatabaseObject record which describes the given entry
+    */
+    css::sdb::application::NamedDatabaseObject
+            describeObject(weld::TreeIter& rEntry);
+
+    /** returns the fully qualified name of a table entry
+        @param _pEntry
+            the entry whose name is to be obtained. Must not denote a folder entry.
+    */
+    OUString getQualifiedTableName(weld::TreeIter& rEntry) const;
+
+    std::unique_ptr<weld::TreeIter> getEntryByQualifiedName(const OUString& rName);
 };
 
 }   // namespace dbaui

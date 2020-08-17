@@ -77,7 +77,7 @@ namespace dbaui
 
     private:
         Timer                       m_aTimer; // is needed for table updates
-        rtl::Reference<ODataClipboard> m_xHelper;
+        rtl::Reference<TransferDataContainer> m_xHelper;
 
         Link<LinkParamNone*,void>   m_aSelChangeHdl;        // handler to be called (asynchronously) when the selection changes in any way
         Link<LinkParamNone*,void>   m_aCopyHandler;         // called when someone press CTRL+C
@@ -91,10 +91,9 @@ namespace dbaui
         void implStartSelectionTimer();
 
         virtual bool DoChildKeyInput(const KeyEvent& rKEvt);
-        virtual bool DoContextMenu(const CommandEvent& rCEvt);
 
     public:
-        TreeListBox(std::unique_ptr<weld::TreeView> xTreeView);
+        TreeListBox(std::unique_ptr<weld::TreeView> xTreeView, bool bSQLType);
         virtual ~TreeListBox();
 
         std::unique_ptr<weld::TreeIter> GetEntryPosByName(const OUString& rName,
@@ -109,7 +108,7 @@ namespace dbaui
         weld::TreeView& GetWidget() { return *m_xTreeView; }
         const weld::TreeView& GetWidget() const { return *m_xTreeView; }
 
-        ODataClipboard& GetDataTransfer() { return *m_xHelper; }
+        TransferDataContainer& GetDataTransfer() { return *m_xHelper; }
 
         sal_Int8 AcceptDrop(const AcceptDropEvent& rEvt);
         sal_Int8 ExecuteDrop(const ExecuteDropEvent& rEvt);
@@ -124,12 +123,43 @@ namespace dbaui
                                , public TreeListBox
     {
     public:
-        InterimDBTreeListBox(vcl::Window* pParent);
+        InterimDBTreeListBox(vcl::Window* pParent, bool bSQLType);
         virtual void dispose() override;
         virtual ~InterimDBTreeListBox() override;
     protected:
         virtual bool DoChildKeyInput(const KeyEvent& rKEvt) override;
-        virtual bool DoContextMenu(const CommandEvent& rCEvt) override;
+    };
+
+    class DBTreeViewBase
+    {
+    protected:
+        std::unique_ptr<weld::Builder> m_xBuilder;
+        std::unique_ptr<weld::Container> m_xContainer;
+        std::unique_ptr<TreeListBox> m_xTreeListBox;
+    public:
+        DBTreeViewBase(weld::Container* pContainer);
+        virtual ~DBTreeViewBase();
+
+        weld::TreeView& GetWidget() { return m_xTreeListBox->GetWidget(); }
+        const weld::TreeView& GetWidget() const { return m_xTreeListBox->GetWidget(); }
+
+        TreeListBox& getListBox() const { return *m_xTreeListBox; }
+
+        void hide() { m_xContainer->hide(); }
+        void show() { m_xContainer->show(); }
+        bool get_visible() const { return m_xContainer->get_visible(); }
+    };
+
+    class DBTreeView final : public DBTreeViewBase
+    {
+    public:
+        DBTreeView(weld::Container* pContainer, bool bSQLType);
+    };
+
+    class DBTableTreeView final : public DBTreeViewBase
+    {
+    public:
+        DBTableTreeView(weld::Container* pContainer, bool bShowToggles);
     };
 }
 

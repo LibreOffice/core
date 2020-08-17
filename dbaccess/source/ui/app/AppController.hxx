@@ -55,6 +55,11 @@ namespace com::sun::star {
     }
 }
 
+namespace svx
+{
+    class OComponentTransferable;
+}
+
 namespace weld
 {
     class TreeView;
@@ -62,6 +67,7 @@ namespace weld
 
 namespace dbaui
 {
+    class ODataClipboard;
     class TreeListBox;
     class SubComponentManager;
     class OApplicationController;
@@ -216,7 +222,13 @@ namespace dbaui
         void deleteTables(const std::vector< OUString>& _rList);
 
         /// copies the current object into clipboard
-        TransferableHelper* copyObject();
+        rtl::Reference<TransferableHelper> copyObject();
+
+        /// fills rExchange with current object if its a Table or Query
+        bool copySQLObject(ODataClipboard& rExchange);
+
+        /// fills rExchange with current object if its a Form or Report
+        bool copyDocObject(svx::OComponentTransferable& rExchange);
 
         /// returns the nameaccess
         css::uno::Reference< css::container::XNameAccess > getElements(ElementType _eType);
@@ -494,8 +506,8 @@ namespace dbaui
         virtual IController&      getCommandController() override;
         virtual ::comphelper::OInterfaceContainerHelper2*
                                 getContextMenuInterceptors() override;
-        virtual css::uno::Any
-                                getCurrentSelection( Control& _rControl ) const override;
+        virtual css::uno::Any getCurrentSelection(weld::TreeView& rControl) const override;
+        virtual vcl::Window* getMenuParent(weld::TreeView& rControl) const override;
 
         void OnInvalidateClipboard();
         DECL_LINK( OnClipboardChanged, TransferableDataHelper*, void );
