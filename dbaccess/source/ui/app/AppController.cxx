@@ -2261,11 +2261,16 @@ IController& OApplicationController::getCommandController()
     return &m_aContextMenuInterceptors;
 }
 
-Any OApplicationController::getCurrentSelection( Control& _rControl ) const
+Any OApplicationController::getCurrentSelection(weld::TreeView& rControl) const
 {
     Sequence< NamedDatabaseObject > aSelection;
-    getContainer()->describeCurrentSelectionForControl( _rControl, aSelection );
+    getContainer()->describeCurrentSelectionForControl(rControl, aSelection);
     return makeAny( aSelection );
+}
+
+vcl::Window* OApplicationController::getMenuParent(weld::TreeView& rControl) const
+{
+    return getContainer()->getMenuParent(rControl);
 }
 
 bool OApplicationController::requestQuickHelp(const void* /*pUserData*/, OUString& /*rText*/) const
@@ -2275,6 +2280,7 @@ bool OApplicationController::requestQuickHelp(const void* /*pUserData*/, OUStrin
 
 bool OApplicationController::requestDrag(const weld::TreeIter& /*rEntry*/)
 {
+    bool bSuccess = false;
     rtl::Reference<TransferableHelper> pTransfer;
 
     OApplicationView* pContainer = getContainer();
@@ -2282,12 +2288,21 @@ bool OApplicationController::requestDrag(const weld::TreeIter& /*rEntry*/)
     {
         try
         {
-            pTransfer = copyObject( );
-
-            if ( pTransfer && getContainer()->getDetailView() )
+            if (getContainer()->getDetailView())
             {
+                TreeListBox* pTreeListBox = getContainer()->getDetailView()->getTreeWindow();
+
                 ElementType eType = getContainer()->getElementType();
-                pTransfer->StartDrag( getContainer()->getDetailView()->getTreeWindow(), ((eType == E_FORM || eType == E_REPORT) ? DND_ACTION_COPYMOVE : DND_ACTION_COPY) );
+                if (eType == E_TABLE || eType == E_QUERY)
+                {
+                    ODataClipboard& rExchange = static_cast<ODataClipboard&>(pTreeListBox->GetDataTransfer());
+                    bSuccess = copySQLObject(rExchange);
+                }
+                else
+                {
+                    svx::OComponentTransferable& rExchange = static_cast<svx::OComponentTransferable&>(pTreeListBox->GetDataTransfer());
+                    bSuccess = copyDocObject(rExchange);
+                }
             }
         }
         catch(const Exception& )
@@ -2296,7 +2311,7 @@ bool OApplicationController::requestDrag(const weld::TreeIter& /*rEntry*/)
         }
     }
 
-    return pTransfer.is();
+    return bSuccess;
 }
 
 sal_Int8 OApplicationController::queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors )

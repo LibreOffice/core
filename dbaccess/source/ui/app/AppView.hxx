@@ -197,7 +197,7 @@ namespace dbaui
         /** describes the current selection for the given control
         */
         void    describeCurrentSelectionForControl(
-                    const Control& _rControl,
+                    const weld::TreeView& rControl,
                     css::uno::Sequence< css::sdb::application::NamedDatabaseObject >& _out_rSelectedObjects
                 );
 
@@ -207,6 +207,10 @@ namespace dbaui
                     const ElementType _eType,
                     css::uno::Sequence< css::sdb::application::NamedDatabaseObject >& _out_rSelectedObjects
                 );
+
+        /** get the menu parent window for the given control
+        */
+        vcl::Window* getMenuParent(weld::TreeView& rControl) const;
 
         /** select all names on the currently selected container. Non existence names where ignored.
         *

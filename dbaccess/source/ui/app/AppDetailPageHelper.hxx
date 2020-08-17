@@ -27,12 +27,15 @@
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <AppElementType.hxx>
-#include <svtools/DocumentInfoPreview.hxx>
+#include <sfx2/weldutils.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/GraphicObject.hxx>
+#include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
+#include "DocumentInfoPreview.hxx"
 
 namespace com::sun::star::awt   { class XWindow; }
 namespace com::sun::star::frame { class XFrame2; }
@@ -43,15 +46,18 @@ namespace com::sun::star::io    { class XPersist; }
 namespace dbaui
 {
     class OAppBorderWindow;
-    class InterimDBTreeListBox;
+    class ODocumentInfoPreview;
+    class DBTreeViewBase;
     class TreeListBox;
 
-    class OPreviewWindow : public vcl::Window
+    class OPreviewWindow final : public weld::CustomWidgetController
     {
         GraphicObject       m_aGraphicObj;
-        tools::Rectangle           m_aPreviewRect;
+        tools::Rectangle    m_aPreviewRect;
 
         /** gets the graphic center rect
+            @param  rRenderContext
+                the context to which we are drawing
             @param  rGraphic
                 the graphic
             @param  rResultRect
@@ -60,32 +66,34 @@ namespace dbaui
             @return
                 <TRUE/> when successful
         */
-        bool ImplGetGraphicCenterRect( const Graphic& rGraphic, tools::Rectangle& rResultRect ) const;
-        void ImplInitSettings();
-    protected:
-        virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
-    public:
-        explicit OPreviewWindow(vcl::Window* _pParent);
+        bool ImplGetGraphicCenterRect(const vcl::RenderContext& rRenderContext, const Graphic& rGraphic, tools::Rectangle& rResultRect) const;
 
-        // Window overrides
-        virtual void Paint(vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& rRect) override;
+    public:
+        OPreviewWindow();
+
+        virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
 
         void setGraphic(const Graphic& _rGraphic ) { m_aGraphicObj.SetGraphic(_rGraphic); }
     };
 
     // A helper class for the controls in the detail page.
     // Combines general functionality.
-    class OAppDetailPageHelper : public vcl::Window
+    class OAppDetailPageHelper final : public InterimItemWindow
     {
-        VclPtr<InterimDBTreeListBox> m_pLists[ELEMENT_COUNT];
+        std::unique_ptr<DBTreeViewBase> m_aLists[ELEMENT_COUNT];
         OAppBorderWindow&         m_rBorderWin;
-        VclPtr<FixedLine>         m_aFL;
-        VclPtr<ToolBox>           m_aTBPreview;
-        VclPtr<Window>            m_aBorder;
-        VclPtr<OPreviewWindow>    m_aPreview;
-        VclPtr< ::svtools::ODocumentInfoPreview>
-                                  m_aDocumentInfo;
-        VclPtr<vcl::Window>       m_pTablePreview;
+        std::unique_ptr<weld::Container> m_xBox;
+        std::unique_ptr<weld::Widget> m_xFL;
+        std::unique_ptr<weld::MenuButton> m_xMBPreview;
+
+        std::unique_ptr<OPreviewWindow> m_xPreview;
+        std::unique_ptr<weld::CustomWeld> m_xPreviewWin;
+
+        std::unique_ptr<ODocumentInfoPreview> m_xDocumentInfo;
+        std::unique_ptr<weld::CustomWeld> m_xDocumentInfoWin;
+
+        std::unique_ptr<weld::Container> m_xTablePreview;
+
         PreviewMode               m_ePreviewMode;
         css::uno::Reference < css::frame::XFrame2 >
                                   m_xFrame;
@@ -123,26 +131,26 @@ namespace dbaui
                         weld::TreeIter* _pParent );
 
         /** sets the detail page
-            @param  _pWindow
+            @param  rTreeView
                 The control which should be visible.
         */
-        void setDetailPage(vcl::Window* _pWindow);
+        void setDetailPage(DBTreeViewBase& rTreeView);
 
         /** sets all HandleCallbacks
-            @param  _pTreeView
-                The newly created DBTreeListBox
-            @return
-                The new tree.
+            @param  rTreeView
+                The newly created DBTreeViewBase
         */
-        InterimDBTreeListBox* createTree(InterimDBTreeListBox* pTreeView);
+        void setupTree(DBTreeViewBase& rTreeView);
 
         /** creates the tree and sets all HandleCallbacks
-            @param  _nHelpId
+            @param  nHelpId
                 The help id of the control
+            @param  eType
+                The element type of the control
             @return
                 The new tree.
         */
-        InterimDBTreeListBox* createSimpleTree(const OString& rHelpId);
+        std::unique_ptr<DBTreeViewBase> createSimpleTree(const OString& rHelpId, ElementType eType);
 
         DECL_LINK( OnEntryDoubleClick,    weld::TreeView&, bool );
         DECL_LINK( OnEntrySelChange,      LinkParamNone*, void );
@@ -151,11 +159,10 @@ namespace dbaui
         DECL_LINK( OnPasteEntry,          LinkParamNone*, void );
         DECL_LINK( OnDeleteEntry,         LinkParamNone*, void );
 
-        // click a TB slot
-        DECL_LINK(OnDropdownClickHdl, ToolBox*, void);
+        DECL_LINK(OnDropdownClickHdl, weld::ToggleButton&, void);
+        DECL_LINK(MenuSelectHdl, const OString&, void);
 
         OAppBorderWindow& getBorderWin() const { return m_rBorderWin; }
-        void ImplInitSettings();
 
     public:
         OAppDetailPageHelper(vcl::Window* _pParent,OAppBorderWindow& _rBorderWin,PreviewMode _ePreviewMode);
@@ -163,8 +170,9 @@ namespace dbaui
         virtual void dispose() override;
 
         // Window overrides
-        virtual void Resize() override;
         virtual void KeyInput( const KeyEvent& rKEvt ) override;
+
+        virtual void GetFocus() override;
 
         /** creates the tables page
             @param  _xConnection
@@ -182,10 +190,10 @@ namespace dbaui
 
         /** returns the current visible tree list box
         */
-        InterimDBTreeListBox* getCurrentView() const
+        DBTreeViewBase* getCurrentView() const
         {
             ElementType eType = getElementType();
-            return (eType != E_NONE ) ? m_pLists[static_cast<sal_Int32>(eType)].get() : nullptr;
+            return (eType != E_NONE ) ? m_aLists[static_cast<sal_Int32>(eType)].get() : nullptr;
         }
 
         /// select all entries in the visible control
@@ -209,7 +217,7 @@ namespace dbaui
         /** describes the current selection for the given control
         */
         void    describeCurrentSelectionForControl(
-                    const Control& _rControl,
+                    const weld::TreeView& rControl,
                     css::uno::Sequence< css::sdb::application::NamedDatabaseObject >& _out_rSelectedObjects
                 );
 
@@ -219,6 +227,10 @@ namespace dbaui
                     const ElementType _eType,
                     css::uno::Sequence< css::sdb::application::NamedDatabaseObject >& _out_rSelectedObjects
                 );
+
+        /** get the menu parent window for the given control
+        */
+        vcl::Window* getMenuParent(weld::TreeView& rControl) const;
 
         /** select all names on the currently selected container. Non existence names where ignored.
         *
@@ -339,9 +351,6 @@ namespace dbaui
         void showPreview(   const OUString& _sDataSourceName,
                             const OUString& _sName,
                             bool _bTable);
-
-    protected:
-        void DataChanged( const DataChangedEvent& rDCEvt ) override;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_APP_APPDETAILPAGEHELPER_HXX

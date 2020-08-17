@@ -46,6 +46,20 @@ namespace svx
         m_aDescriptor[DataAccessDescriptorProperty::Component] <<= _xContent;
     }
 
+    OComponentTransferable::OComponentTransferable()
+    {
+    }
+
+    void OComponentTransferable::Update(const OUString& rDatasourceOrLocation
+            ,const Reference< XContent>& xContent)
+    {
+        ClearFormats();
+
+        m_aDescriptor.setDataSource(rDatasourceOrLocation);
+        m_aDescriptor[DataAccessDescriptorProperty::Component] <<= xContent;
+
+        AddSupportedFormats();
+    }
 
     SotClipboardFormatId OComponentTransferable::getDescriptorFormatId(bool _bExtractForm)
     {

@@ -17,14 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_DOCUMENTINFOPREVIEW_HXX
-#define INCLUDED_SVTOOLS_DOCUMENTINFOPREVIEW_HXX
+#pragma once
 
 #include <sal/config.h>
-
-#include <svtools/svtdllapi.h>
-#include <tools/wintypes.hxx>
-#include <vcl/window.hxx>
+#include <svx/weldeditview.hxx>
 
 namespace com :: sun :: star :: uno { template <typename > class Reference; }
 
@@ -35,24 +31,21 @@ namespace com::sun::star {
     namespace util { struct DateTime; }
 }
 
-namespace svtools {
+namespace dbaui {
 
-class SVT_DLLPUBLIC ODocumentInfoPreview final : public vcl::Window {
+class ODocumentInfoPreview final : public WeldEditView {
 public:
-    ODocumentInfoPreview(vcl::Window * pParent, WinBits nBits);
+    ODocumentInfoPreview();
+
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
     virtual ~ODocumentInfoPreview() override;
-    virtual void dispose() override;
-
-    virtual void Resize() override;
 
     void clear();
 
     void fill(css::uno::Reference< css::document::XDocumentProperties > const & xDocProps);
 
 private:
-    VclPtr<ExtMultiLineEdit> m_pEditWin;
-
     void insertEntry(OUString const & title, OUString const & value);
 
     void insertNonempty(long id, OUString const & value);
@@ -61,7 +54,5 @@ private:
 };
 
 }
-
-#endif // INCLUDED_SVTOOLS_DOCUMENTINFOPREVIEW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
