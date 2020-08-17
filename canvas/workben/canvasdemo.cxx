@@ -510,7 +510,7 @@ class DemoRenderer
             rendering::RenderState maOldRenderState = maRenderState; // push
             translate( maBox.Width() * 1.0, maBox.Height() * 2.0 );
 
-            drawTitle( OString( "Polgyons" ) );
+            drawTitle( OString( "Polygons" ) );
 
             int sides= 3;
             for (int i= 1; i <= 4; i++)
