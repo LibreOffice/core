@@ -190,8 +190,6 @@
 
 extern const XMLPropertyMapEntry aXMLPageMasterStyleMap[];
 extern const XMLPropertyMapEntry g_XMLPageMasterDrawingPageStyleMap[];
-extern const XMLPropertyMapEntry aXMLPageMasterHeaderImportStyleMap[];
-extern const XMLPropertyMapEntry aXMLPageMasterFooterImportStyleMap[];
 
 #endif
 

@@ -822,7 +822,6 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                     for (const PropertyIds& rBorder : pBorders)
                     {
                         std::optional<PropertyMap::Property> oStyleCellBorder = pStyleProps->getProperty(rBorder);
-                        std::optional<PropertyMap::Property> oRowCellBorder;
                         std::optional<PropertyMap::Property> oDirectCellBorder = (*aCellIterator)->getProperty(rBorder);
                         if (oStyleCellBorder && oDirectCellBorder)
                         {

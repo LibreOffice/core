@@ -25,8 +25,6 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/prhdlfac.hxx>
 
-extern const XMLPropertyMapEntry aXMLChartPropMap[];
-
 class SvXMLExport;
 
 class XMLChartPropHdlFactory final : public XMLPropertyHandlerFactory

@@ -85,7 +85,6 @@ extern const char sCalc_Tan[];
 extern const char sCalc_Asin[];
 extern const char sCalc_Acos[];
 extern const char sCalc_Atan[];
-extern const char sCalc_Tdif[];
 extern const char sCalc_Round[];
 extern const char sCalc_Date[];
 
