@@ -431,6 +431,21 @@ SfxVoidItem SwBackspace FN_BACKSPACE
     GroupId = SfxGroupId::Edit;
 ]
 
+SfxVoidItem InspectorDeck SID_INSPECTOR_DECK
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    AccelConfig = TRUE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = ;
+]
+
 SfxVoidItem BorderDialog FN_FORMAT_BORDER_DLG
 ()
 [
