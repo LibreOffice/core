@@ -76,8 +76,6 @@ public:
     void RemoveEventListener (const Link<MasterPageObserverEvent&,void>& rEventListener);
 
 private:
-    static ::osl::Mutex maMutex;
-
     class Implementation;
     ::std::unique_ptr<Implementation> mpImpl;
 

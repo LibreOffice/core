@@ -22,16 +22,6 @@
 #include <swdllapi.h>
 #include <rtl/ustring.hxx>
 
-/*
- * Forward Declarations
- */
-class SwThesaurus;
-
-/*
- * Extern Definitions
- */
-extern  SwThesaurus*    pThes;
-
 SW_DLLPUBLIC const OUString& GetCurrGlosGroup();
 SW_DLLPUBLIC void SetCurrGlosGroup(const OUString& sStr);
 

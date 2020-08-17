@@ -164,7 +164,6 @@ class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
 
 protected:
     static ShellResource*      mpShellRes;      ///< Resources for the Shell.
-    static vcl::DeleteOnDeinit< VclPtr<vcl::Window> > mpCareWindow;    ///< Avoid this window.
     static vcl::DeleteOnDeinit< std::shared_ptr<weld::Window> > mpCareDialog;    ///< Avoid this window.
 
     SwRect                  maVisArea;       ///< The modern version of VisArea.

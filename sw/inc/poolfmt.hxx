@@ -61,7 +61,6 @@ const sal_uInt16 POOLGRP_NOCOLLID       =  (1 << 10);
 /// POLLCOLL-groups:
 
 const sal_uInt16 USER_FMT               =  (1 << 15);
-const sal_uInt16 POOL_FMT               =  (0 << 15);
 
 const sal_uInt16 COLL_TEXT_BITS         =  (1 << 11);
 const sal_uInt16 COLL_LISTS_BITS        =  (2 << 11);

@@ -30,10 +30,6 @@ private:
 
     virtual ~UnxSplashScreen() override;
 
-    static  UnxSplashScreen *m_pINSTANCE;
-
-    static osl::Mutex m_aMutex;
-
     FILE *m_pOutFd;
 
 public:

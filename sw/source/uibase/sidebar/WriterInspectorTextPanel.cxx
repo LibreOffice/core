@@ -323,7 +323,6 @@ static svx::sidebar::TreeNode BorderToTreeNode(const OUString& rName, const css:
 {
     table::BorderLine2 aBorder;
     rVal >>= aBorder;
-    svx::sidebar::TreeNode aChild;
     svx::sidebar::TreeNode aCurNode;
     aCurNode.sNodeName = PropertyNametoRID(rName);
     aCurNode.NodeType = svx::sidebar::TreeNode::ComplexProperty;

@@ -84,8 +84,6 @@ public:
 
 class SvtMatchContext_Impl: public salhelper::Thread
 {
-    static ::osl::Mutex*            pDirMutex;
-
     std::vector<OUString>           aPickList;
     std::vector<OUString>           aCompletions;
     std::vector<OUString>           aURLs;

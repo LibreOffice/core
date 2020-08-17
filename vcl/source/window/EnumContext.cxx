@@ -40,7 +40,6 @@ o3tl::enumarray<EnumContext::Context, OUString> maContextVector;
 }
 
 const sal_Int32 EnumContext::NoMatch = 4;
-const sal_Int32 EnumContext::OptimalMatch = 0;  // Neither application nor context name is "any".
 
 EnumContext::EnumContext()
     : meApplication(Application::NONE),

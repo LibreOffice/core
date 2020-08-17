@@ -93,7 +93,6 @@ struct DriverInfo
     /* versions are assumed to be A.B.C.D packed as 0xAAAABBBBCCCCDDDD */
     uint64_t mnDriverVersion;
     uint64_t mnDriverVersionMax;
-    static uint64_t allDriverVersions;
 
     OUString maSuggestedVersion;
     OUString maMsg;
