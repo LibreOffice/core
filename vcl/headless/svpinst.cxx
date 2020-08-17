@@ -59,6 +59,8 @@
 #include <unx/salunxtime.h>
 #include <comphelper/lok.hxx>
 
+#include <cairo.h>
+
 SvpSalInstance* SvpSalInstance::s_pDefaultInstance = nullptr;
 
 #if !defined(ANDROID) && !defined(IOS)
@@ -610,8 +612,18 @@ OpenGLContext* SvpSalInstance::CreateOpenGLContext()
     return nullptr;
 }
 
-
 #endif
+
+const cairo_font_options_t* SvpSalInstance::GetCairoFontOptions()
+{
+    static cairo_font_options_t *gOptions = nullptr;
+    if (!gOptions)
+    {
+        gOptions = cairo_font_options_create();
+        cairo_font_options_set_antialias(gOptions, CAIRO_ANTIALIAS_GRAY);
+    }
+    return gOptions;
+}
 
 SvpSalTimer::~SvpSalTimer()
 {
