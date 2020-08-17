@@ -39,6 +39,7 @@
 #include <ndtxt.hxx>
 #include <ndole.hxx>
 #include <frameformats.hxx>
+#include <svx/svdobj.hxx>
 
 SwUndoFlyBase::SwUndoFlyBase( SwFrameFormat* pFormat, SwUndoId nUndoId )
     : SwUndo(nUndoId, pFormat->GetDoc())
@@ -141,6 +142,18 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrame)
         // recklessly assume that this thing will live longer than the
         // SwUndoFlyBase - not sure what could be done if that isn't the case...
         m_pFrameFormat->GetOtherTextBoxFormat()->SetOtherTextBoxFormat(m_pFrameFormat);
+
+        if (m_pFrameFormat->GetOtherTextBoxFormat()->Which() == RES_DRAWFRMFMT)
+        {
+            SdrObject* pSdrObject = m_pFrameFormat->GetOtherTextBoxFormat()->FindSdrObject();
+            if (pSdrObject)
+            {
+                // Make sure the old UNO wrapper is no longer cached after changing the shape +
+                // textframe pair. Otherwise we would have a wrapper which doesn't know about its
+                // textframe, even if it's there.
+                pSdrObject->setUnoShape(nullptr);
+            }
+        }
     }
 
     m_pFrameFormat->MakeFrames();
