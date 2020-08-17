@@ -37,7 +37,13 @@
             "subdir": "src",
             "config-opts": [
                 "--disable-static",
-                "--disable-rpath"
+                "--disable-rpath",
+                "--sbindir=/app/bin"
+            ],
+            "cleanup": [
+                "/include",
+                "/lib/pkgconfig",
+                "/var"
             ],
             "sources": [
                 {
