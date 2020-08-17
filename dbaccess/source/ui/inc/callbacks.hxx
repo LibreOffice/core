@@ -30,9 +30,15 @@ struct ExecuteDropEvent;
 
 namespace comphelper { class OInterfaceContainerHelper2; }
 
+namespace vcl
+{
+    class Window;
+}
+
 namespace weld
 {
     class TreeIter;
+    class TreeView;
 }
 
 namespace dbaui
@@ -91,7 +97,9 @@ namespace dbaui
             This selection is used for filling a ContextMenuExecuteEvent event for the given
             control.
         */
-        virtual css::uno::Any  getCurrentSelection( Control& _rControl ) const = 0;
+        virtual css::uno::Any  getCurrentSelection(weld::TreeView& rControl) const = 0;
+
+        virtual vcl::Window* getMenuParent(weld::TreeView& rControl) const = 0;
 
     protected:
         ~IContextMenuProvider() {}

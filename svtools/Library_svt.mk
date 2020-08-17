@@ -88,9 +88,7 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/config/slidesorterbaropt \
     svtools/source/config/optionsdrawinglayer \
     svtools/source/config/printoptions \
-    svtools/source/contnr/DocumentInfoPreview \
     svtools/source/contnr/querydelete \
-    svtools/source/contnr/templwin \
     svtools/source/control/accessibleruler \
     svtools/source/control/asynclink \
     svtools/source/control/collatorres \

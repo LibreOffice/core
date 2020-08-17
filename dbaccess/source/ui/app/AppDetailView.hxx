@@ -39,6 +39,7 @@ namespace dbaui
     class OApplicationDetailView;
     class OAppDetailPageHelper;
     class OTasksWindow;
+    class TreeListBox;
 
     struct TaskEntry
     {
@@ -209,7 +210,7 @@ namespace dbaui
         /** describes the current selection for the given control
         */
         void    describeCurrentSelectionForControl(
-                    const Control& _rControl,
+                    const weld::TreeView& rControl,
                     css::uno::Sequence< css::sdb::application::NamedDatabaseObject >& _out_rSelectedObjects
                 );
 
@@ -219,6 +220,10 @@ namespace dbaui
                     const ElementType _eType,
                     css::uno::Sequence< css::sdb::application::NamedDatabaseObject >& _out_rSelectedObjects
                 );
+
+        /** get the menu parent window for the given control
+        */
+        vcl::Window* getMenuParent(weld::TreeView& rControl) const;
 
         /** select all names on the currently selected container. Non existence names where ignored.
         *
@@ -300,7 +305,7 @@ namespace dbaui
 
         std::unique_ptr<weld::TreeIter> getEntry(const Point& rPosPixel) const;
 
-        vcl::Window* getTreeWindow() const;
+        TreeListBox* getTreeWindow() const;
     private:
         void                impl_createPage(
                                 ElementType _eType,

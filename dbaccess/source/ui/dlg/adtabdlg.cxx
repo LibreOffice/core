@@ -53,14 +53,14 @@ class TableListFacade : public ::cppu::BaseMutex
                     ,   public TableObjectListFacade
                     ,   public ::comphelper::OContainerListener
 {
-    TableTreeListBox&           m_rTableList;
+    OTableTreeListBox&           m_rTableList;
     Reference< XConnection >    m_xConnection;
     ::rtl::Reference< comphelper::OContainerListenerAdapter>
                                 m_pContainerListener;
     bool                        m_bAllowViews;
 
 public:
-    TableListFacade( TableTreeListBox& _rTableList, const Reference< XConnection >& _rxConnection )
+    TableListFacade(OTableTreeListBox& _rTableList, const Reference< XConnection >& _rxConnection)
         : ::comphelper::OContainerListener(m_aMutex)
         ,m_rTableList( _rTableList )
         ,m_xConnection( _rxConnection )
@@ -336,7 +336,7 @@ OAddTableDlg::OAddTableDlg(weld::Window* pParent, IAddTableDialogContext& _rCont
    , m_xCaseTables(m_xBuilder->weld_radio_button("tables"))
    , m_xCaseQueries(m_xBuilder->weld_radio_button("queries"))
    // false means: do not show any buttons
-   , m_xTableList(new TableTreeListBox(m_xBuilder->weld_tree_view("tablelist"), false))
+   , m_xTableList(new OTableTreeListBox(m_xBuilder->weld_tree_view("tablelist"), false))
    , m_xQueryList(m_xBuilder->weld_tree_view("querylist"))
    , m_xAddButton(m_xBuilder->weld_button("add"))
    , m_xCloseButton(m_xBuilder->weld_button("close"))

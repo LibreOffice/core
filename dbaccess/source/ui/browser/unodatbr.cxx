@@ -296,7 +296,7 @@ bool SbaTableQueryBrowser::Construct(vcl::Window* pParent)
         m_pSplitter->SetPosSizePixel( ::Point(0,0), ::Size(nFrameWidth,0) );
         m_pSplitter->SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
 
-        m_pTreeView = VclPtr<InterimDBTreeListBox>::Create(getBrowserView());
+        m_pTreeView = VclPtr<InterimDBTreeListBox>::Create(getBrowserView(), E_TABLE);
         m_pTreeView->SetHelpId(HID_TLB_TREELISTBOX);
 
         m_pTreeView->GetWidget().connect_expanding(LINK(this, SbaTableQueryBrowser, OnExpandEntry));
@@ -3512,15 +3512,16 @@ IController& SbaTableQueryBrowser::getCommandController()
     return &m_aContextMenuInterceptors;
 }
 
-Any SbaTableQueryBrowser::getCurrentSelection( Control& _rControl ) const
+Any SbaTableQueryBrowser::getCurrentSelection(weld::TreeView& rControl) const
 {
-    OSL_PRECOND( m_pTreeView == &_rControl,
+    weld::TreeView& rTreeView = m_pTreeView->GetWidget();
+
+    OSL_PRECOND( &rTreeView == &rControl,
         "SbaTableQueryBrowser::getCurrentSelection: where does this come from?" );
 
-    if ( m_pTreeView != &_rControl )
+    if (&rTreeView != &rControl)
         return Any();
 
-    weld::TreeView& rTreeView = m_pTreeView->GetWidget();
     std::unique_ptr<weld::TreeIter> xSelected(rTreeView.make_iterator());
     if (!rTreeView.get_selected(xSelected.get()))
         return Any();
@@ -3548,6 +3549,16 @@ Any SbaTableQueryBrowser::getCurrentSelection( Control& _rControl ) const
     }
 
     return makeAny( aSelectedObject );
+}
+
+vcl::Window* SbaTableQueryBrowser::getMenuParent(weld::TreeView& rControl) const
+{
+    weld::TreeView& rTreeView = m_pTreeView->GetWidget();
+
+    OSL_PRECOND( &rTreeView == &rControl,
+        "SbaTableQueryBrowser::getCurrentSelection: where does this come from?" );
+
+    return m_pTreeView;
 }
 
 bool SbaTableQueryBrowser::implGetQuerySignature( OUString& _rCommand, bool& _bEscapeProcessing )

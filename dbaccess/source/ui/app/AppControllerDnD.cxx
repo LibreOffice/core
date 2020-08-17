@@ -482,15 +482,15 @@ std::unique_ptr< OLinkedDocumentsAccess > OApplicationController::getDocumentsAc
     return pDocuments;
 }
 
-TransferableHelper* OApplicationController::copyObject()
+bool OApplicationController::copySQLObject(ODataClipboard& rExchange)
 {
+    bool bSuccess = false;
     try
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( getMutex() );
 
         ElementType eType = getContainer()->getElementType();
-        TransferableHelper* pData = nullptr;
         switch( eType )
         {
             case E_TABLE:
@@ -508,15 +508,42 @@ TransferableHelper* OApplicationController::copyObject()
 
                     if ( eType == E_TABLE )
                     {
-                        pData = new ODataClipboard(sDataSource, CommandType::TABLE, sName, xConnection, getNumberFormatter(xConnection, getORB()), getORB());
+                        rExchange.Update(sDataSource, CommandType::TABLE, sName, xConnection, getNumberFormatter(xConnection, getORB()), getORB());
                     }
                     else
                     {
-                        pData = new ODataClipboard(sDataSource, CommandType::QUERY, sName, getNumberFormatter(xConnection, getORB()), getORB());
+                        rExchange.Update(sDataSource, CommandType::QUERY, sName, getNumberFormatter(xConnection, getORB()), getORB());
                     }
+                    bSuccess = true;
                 }
-            }
                 break;
+            }
+            default:
+                break;
+        }
+    }
+    catch(const SQLException&)
+    {
+        showError( SQLExceptionInfo( ::cppu::getCaughtException() ) );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
+    }
+    return bSuccess;
+}
+
+bool OApplicationController::copyDocObject(svx::OComponentTransferable& rExchange)
+{
+    bool bSuccess = false;
+    try
+    {
+        SolarMutexGuard aSolarGuard;
+        ::osl::MutexGuard aGuard( getMutex() );
+
+        ElementType eType = getContainer()->getElementType();
+        switch( eType )
+        {
             case E_FORM:
             case E_REPORT:
             {
@@ -526,16 +553,56 @@ TransferableHelper* OApplicationController::copyObject()
                 if ( xElements.is() && !aList.empty() )
                 {
                     Reference< XContent> xContent(xElements->getByHierarchicalName(*aList.begin()),UNO_QUERY);
-                    pData = new OComponentTransferable( getDatabaseName(), xContent );
+                    rExchange.Update(getDatabaseName(), xContent);
+                    bSuccess = true;
                 }
+                break;
+            }
+            default:
+                break;
+        }
+    }
+    catch(const SQLException&)
+    {
+        showError( SQLExceptionInfo( ::cppu::getCaughtException() ) );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
+    }
+    return bSuccess;
+}
+
+rtl::Reference<TransferableHelper> OApplicationController::copyObject()
+{
+    try
+    {
+        SolarMutexGuard aSolarGuard;
+        ::osl::MutexGuard aGuard( getMutex() );
+
+        ElementType eType = getContainer()->getElementType();
+        switch( eType )
+        {
+            case E_TABLE:
+            case E_QUERY:
+            {
+                rtl::Reference<ODataClipboard> xExchange(new ODataClipboard);
+                if (copySQLObject(*xExchange))
+                    return rtl::Reference<TransferableHelper>(xExchange.get());
+                break;
+            }
+            case E_FORM:
+            case E_REPORT:
+            {
+                rtl::Reference<svx::OComponentTransferable> xExchange(new svx::OComponentTransferable);
+                if (copyDocObject(*xExchange))
+                    return rtl::Reference<TransferableHelper>(xExchange.get());
+                break;
             }
             break;
             default:
                 break;
         }
-
-        // the ownership goes to ODataClipboards
-        return pData;
     }
     catch(const SQLException&)
     {
