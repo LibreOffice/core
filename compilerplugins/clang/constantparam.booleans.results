@@ -3398,10 +3398,6 @@ svl/source/passwordcontainer/passwordcontainer.hxx:151
     void NamePassRecord::RemovePasswords(signed char)
     signed char nStatus
     1
-svtools/inc/svmedit2.hxx:36
-    void ExtMultiLineEdit::SetAttrib(const class TextAttrib &,unsigned int,int,int)
-    int nStart
-    0
 svtools/source/control/valueimp.hxx:213
     void ValueItemAcc::FireAccessibleEvent(short,const class com::sun::star::uno::Any &,const class com::sun::star::uno::Any &)
     short nEventId
