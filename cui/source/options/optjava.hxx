@@ -98,6 +98,7 @@ private:
     void                    LoadJREs();
     void                    AddJRE( JavaInfo const * _pInfo );
     void                    HandleCheckEntry(int nCheckedRow);
+    void                    UpdateJavaPathText();
     void                    AddFolder( const OUString& _rFolder );
     void                    RequestRestart( svtools::RestartReason eReason );
 
