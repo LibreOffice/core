@@ -264,6 +264,8 @@ basctl/source/basicide/moduldlg.hxx
 basctl/source/basicide/register.cxx
 basctl/source/basicide/sbxitem.cxx
 basctl/source/basicide/scriptdocument.cxx
+basctl/source/basicide/textwindowpeer.hxx
+basctl/source/basicide/textwindowpeer.cxx
 basctl/source/basicide/unomodel.cxx
 basctl/source/basicide/unomodel.hxx
 basctl/source/dlged/dlged.cxx
@@ -6617,7 +6619,6 @@ include/svtools/svparser.hxx
 include/svtools/svtdllapi.h
 include/svtools/tabbar.hxx
 include/svtools/templatefoldercache.hxx
-include/svtools/textwindowpeer.hxx
 include/svtools/toolbarmenu.hxx
 include/svtools/toolboxcontroller.hxx
 include/svtools/unitconv.hxx
@@ -13021,7 +13022,6 @@ svtools/source/dialogs/insdlg.cxx
 svtools/source/dialogs/prnsetup.cxx
 svtools/source/dialogs/restartdialog.cxx
 svtools/source/edit/editsyntaxhighlighter.cxx
-svtools/source/edit/textwindowpeer.cxx
 svtools/source/filter/DocumentToGraphicRenderer.cxx
 svtools/source/filter/SvFilterOptionsDialog.cxx
 svtools/source/filter/exportdialog.cxx
