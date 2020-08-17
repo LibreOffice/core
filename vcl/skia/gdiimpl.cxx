@@ -392,6 +392,8 @@ void SkiaSalGraphicsImpl::checkSurface()
 
 void SkiaSalGraphicsImpl::flushDrawing()
 {
+    if (!mSurface)
+        return;
     checkPendingDrawing();
     if (mXorMode)
         applyXor();
