@@ -24,8 +24,6 @@
 
 namespace com :: sun :: star :: uno { template <typename > class Reference; }
 
-class ExtMultiLineEdit;
-
 namespace com::sun::star {
     namespace document { class XDocumentProperties; }
     namespace util { struct DateTime; }
