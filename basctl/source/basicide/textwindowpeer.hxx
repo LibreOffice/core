@@ -23,16 +23,15 @@
 #include <sal/config.h>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <svtools/svtdllapi.h>
 
 namespace com::sun::star::awt {
     class XWindowPeer;
 }
 class TextView;
 
-namespace svt {
+namespace basctl {
 
-css::uno::Reference<css::awt::XWindowPeer> SVT_DLLPUBLIC createTextWindowPeer(
+css::uno::Reference<css::awt::XWindowPeer> createTextWindowPeer(
     TextView & view);
 
 }
