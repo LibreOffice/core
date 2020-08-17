@@ -48,7 +48,7 @@ Function verify_testPartition() as String
     verify_testPartition = result
     Exit Function
 errorHandler:
-    TestLog_ASSERT (false), "verify_testPartion failed, hit error handler"
+    TestLog_ASSERT (false), "verify_testPartition failed, hit error handler"
 End Function
 
 Sub TestLog_ASSERT(assertion As Boolean, Optional testId As String, Optional testComment As String)

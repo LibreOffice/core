@@ -1545,7 +1545,7 @@ static Any invokeAutomationMethod( const OUString& Name, Sequence< Any > const &
     return aRetAny;
 }
 
-// Debugging help method to readout the imlemented interfaces of an object
+// Debugging help method to readout the implemented interfaces of an object
 static OUString Impl_GetInterfaceInfo( const Reference< XInterface >& x, const Reference< XIdlClass >& xClass, sal_uInt16 nRekLevel )
 {
     Type aIfaceType = cppu::UnoType<XInterface>::get();
@@ -1734,7 +1734,7 @@ bool checkUnoObjectType(SbUnoObject& rUnoObj, const OUString& rClass)
     return bResult;
 }
 
-// Debugging help method to readout the imlemented interfaces of an object
+// Debugging help method to readout the implemented interfaces of an object
 static OUString Impl_GetSupportedInterfaces(SbUnoObject& rUnoObj)
 {
     Any aToInspectObj = rUnoObj.getUnoAny();

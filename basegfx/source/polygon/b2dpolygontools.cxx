@@ -171,7 +171,7 @@ namespace basegfx::utils
                     B2DCubicBezier aBezier;
                     aBezier.setStartPoint(rCandidate.getB2DPoint(0));
 
-                    // perf: try to avoid too many realloctions by guessing the result's pointcount
+                    // perf: try to avoid too many reallocations by guessing the result's pointcount
                     aRetval.reserve(nPointCount*4);
 
                     // add start point (always)
@@ -254,7 +254,7 @@ namespace basegfx::utils
                     B2DCubicBezier aBezier;
                     aBezier.setStartPoint(rCandidate.getB2DPoint(0));
 
-                    // perf: try to avoid too many realloctions by guessing the result's pointcount
+                    // perf: try to avoid too many reallocations by guessing the result's pointcount
                     aRetval.reserve(nPointCount*4);
 
                     // add start point (always)
