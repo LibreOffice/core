@@ -194,20 +194,6 @@ using namespace ::com::sun::star::uno;
 
 +(void)applyAttributesFrom:(Sequence < PropertyValue > const &)attributes toString:(NSMutableAttributedString *)string forRange:(NSRange)range fontDescriptor:(AquaA11yFontDescriptor*)fontDescriptor {
     NSAutoreleasePool * pool = [ [ NSAutoreleasePool alloc ] init ];
-    // constants
-    static const OUString attrUnderline("CharUnderline");
-    static const OUString attrBold("CharWeight");
-    static const OUString attrFontname("CharFontName");
-    static const OUString attrItalic("CharPosture");
-    static const OUString attrHeight("CharHeight");
-    static const OUString attrStrikethrough("CharStrikeout");
-    static const OUString attrShadow("CharShadowed");
-    static const OUString attrUnderlineColor("CharUnderlineColor");
-    static const OUString attrUnderlineHasColor("CharUnderlineHasColor");
-    static const OUString attrForegroundColor("CharColor");
-    static const OUString attrBackgroundColor("CharBackColor");
-    static const OUString attrSuperscript("CharEscapement");
-    static const OUString attrTextAlignment("ParaAdjust");
     // vars
     sal_Int32 underlineColor = 0;
     bool underlineHasColor = false;
@@ -216,40 +202,40 @@ using namespace ::com::sun::star::uno;
         // TODO: NSAccessibilityMisspelledTextAttribute, NSAccessibilityAttachmentTextAttribute, NSAccessibilityLinkTextAttribute
         // NSAccessibilityStrikethroughColorTextAttribute is unsupported by UNP-API
         if ( property.Value.hasValue() ) {
-            if ( property.Name.equals ( attrUnderline ) ) {
+            if ( property.Name == "CharUnderline" ) {
                 int style = [ AquaA11yTextAttributesWrapper convertUnderlineStyle: property ];
                 if ( style != NSUnderlineStyleNone ) {
                     [ string addAttribute: NSAccessibilityUnderlineTextAttribute value: [ NSNumber numberWithInt: style ] range: range ];
                 }
-            } else if ( property.Name.equals ( attrFontname ) ) {
+            } else if ( property.Name == "CharFontName" ) {
                 OUString fontname;
                 property.Value >>= fontname;
                 [fontDescriptor setName:CreateNSString(fontname)];
-            } else if ( property.Name.equals ( attrBold ) ) {
+            } else if ( property.Name == "CharWeight" ) {
                 [fontDescriptor setBold:[AquaA11yTextAttributesWrapper convertBoldStyle:property]];
-            } else if ( property.Name.equals ( attrItalic ) ) {
+            } else if ( property.Name == "CharPosture" ) {
                 [fontDescriptor setItalic:[AquaA11yTextAttributesWrapper convertItalicStyle:property]];
-            } else if ( property.Name.equals ( attrHeight ) ) {
+            } else if ( property.Name == "CharHeight" ) {
                 float size;
                 property.Value >>= size;
                 [fontDescriptor setSize:size];
-            } else if ( property.Name.equals ( attrStrikethrough ) ) {
+            } else if ( property.Name == "CharStrikeout" ) {
                 if ( [ AquaA11yTextAttributesWrapper isStrikethrough: property ] ) {
                     [ string addAttribute: NSAccessibilityStrikethroughTextAttribute value: [ NSNumber numberWithBool: YES ] range: range ];
                 }
-            } else if ( property.Name.equals ( attrShadow ) ) {
+            } else if ( property.Name == "CharShadowed" ) {
                 if ( [ AquaA11yTextAttributesWrapper convertBoolean: property ] ) {
                     [ string addAttribute: NSAccessibilityShadowTextAttribute value: [ NSNumber numberWithBool: YES ] range: range ];
                 }
-            } else if ( property.Name.equals ( attrUnderlineColor ) ) {
+            } else if ( property.Name == "CharUnderlineColor" ) {
                 property.Value >>= underlineColor;
-            } else if ( property.Name.equals ( attrUnderlineHasColor ) ) {
+            } else if ( property.Name == "CharUnderlineHasColor" ) {
                 underlineHasColor = [ AquaA11yTextAttributesWrapper convertBoolean: property ];
-            } else if ( property.Name.equals ( attrForegroundColor ) ) {
+            } else if ( property.Name == "CharColor" ) {
                 [ AquaA11yTextAttributesWrapper addColor: property.Value.get<sal_Int32>() forAttribute: NSAccessibilityForegroundColorTextAttribute andRange: range toString: string ];
-            } else if ( property.Name.equals ( attrBackgroundColor ) ) {
+            } else if ( property.Name == "CharBackColor" ) {
                 [ AquaA11yTextAttributesWrapper addColor: property.Value.get<sal_Int32>() forAttribute: NSAccessibilityBackgroundColorTextAttribute andRange: range toString: string ];
-            } else if ( property.Name.equals ( attrSuperscript ) ) {
+            } else if ( property.Name == "CharEscapement" ) {
                 // values < zero mean subscript
                 // values > zero mean superscript
                 // this is true for both NSAccessibility-API and UNO-API
@@ -257,7 +243,7 @@ using namespace ::com::sun::star::uno;
                 if ( [ number shortValue ] != 0 ) {
                     [ string addAttribute: NSAccessibilitySuperscriptTextAttribute value: number range: range ];
                 }
-            } else if ( property.Name.equals ( attrTextAlignment ) ) {
+            } else if ( property.Name == "ParaAdjust" ) {
                 sal_Int32 alignment;
                 property.Value >>= alignment;
                 NSNumber *textAlignment = nil;
