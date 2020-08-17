@@ -12957,7 +12957,6 @@ svl/source/uno/pathservice.cxx
 svl/unx/source/svdde/ddedummy.cxx
 svtools/inc/strings.hxx
 svtools/inc/svmedit.hxx
-svtools/inc/svmedit2.hxx
 svtools/inc/table/defaultinputhandler.hxx
 svtools/inc/table/gridtablerenderer.hxx
 svtools/inc/table/tablecontrol.hxx
@@ -13024,7 +13023,6 @@ svtools/source/dialogs/prnsetup.cxx
 svtools/source/dialogs/restartdialog.cxx
 svtools/source/edit/editsyntaxhighlighter.cxx
 svtools/source/edit/svmedit.cxx
-svtools/source/edit/svmedit2.cxx
 svtools/source/edit/textwindowpeer.cxx
 svtools/source/filter/DocumentToGraphicRenderer.cxx
 svtools/source/filter/SvFilterOptionsDialog.cxx
