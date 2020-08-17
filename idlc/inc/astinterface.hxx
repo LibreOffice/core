@@ -32,8 +32,6 @@ class AstInterface : public AstType
 public:
     typedef std::vector< InheritedInterface > InheritedInterfaces;
 
-    typedef std::vector< AstInterface const * > DoubleInterfaceDeclarations;
-
     struct DoubleMemberDeclaration {
         AstDeclaration const * first;
         AstDeclaration const * second;
@@ -42,7 +40,7 @@ public:
     typedef std::vector< DoubleMemberDeclaration > DoubleMemberDeclarations;
 
     struct DoubleDeclarations {
-        DoubleInterfaceDeclarations interfaces;
+        std::vector< AstInterface const * > interfaces;
         DoubleMemberDeclarations members;
     };
 

@@ -133,14 +133,11 @@ Connection::~Connection()
         m_settings.pConnection = nullptr;
     }
 }
-typedef std::vector< css::uno::Reference< css::sdbc::XCloseable > > CloseableVector;
-
-typedef std::vector< css::uno::Reference< css::lang::XComponent > > DisposeableVector;
 
 void Connection::close()
 {
-    CloseableVector vectorCloseable;
-    DisposeableVector vectorDispose;
+    std::vector< css::uno::Reference< css::sdbc::XCloseable > > vectorCloseable;
+    std::vector< css::uno::Reference< css::lang::XComponent > > vectorDispose;
     {
         MutexGuard guard( m_xMutex->GetMutex() );
         // silently ignore, if the connection has been closed already

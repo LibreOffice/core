@@ -102,8 +102,6 @@ using namespace css::io;
 using namespace css::uno;
 using namespace css::embed;
 
-typedef std::vector<ColumnDefinition> ColumnTypeVector;
-
 SchemaParser::SchemaParser(Reference<XStorage>& rStorage)
     : m_rStorage(rStorage)
 {

@@ -196,9 +196,6 @@ struct BulletListItemInfo
 
 class SVGTextWriter final
 {
-  public:
-    typedef std::unordered_map< OUString, BulletListItemInfo >         BulletListItemInfoMap;
-
   private:
     SVGExport&                                  mrExport;
     SVGAttributeWriter&                         mrAttributeWriter;
@@ -224,7 +221,7 @@ class SVGTextWriter final
     bool                                        mbIsNewListItem;
     sal_Int16                                   meNumberingType;
     sal_Unicode                                 mcBulletChar;
-    BulletListItemInfoMap                       maBulletListItemMap;
+    std::unordered_map< OUString, BulletListItemInfo > maBulletListItemMap;
     bool                                        mbIsListLevelStyleImage;
     bool                                        mbLineBreak;
     bool                                        mbIsURLField;

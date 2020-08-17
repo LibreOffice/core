@@ -40,9 +40,6 @@ struct PassFragment
 class ScRetypePassDlg : public weld::GenericDialogController
 {
 public:
-    typedef std::shared_ptr<ScDocProtection>    DocProtectionPtr;
-    typedef std::shared_ptr<ScTableProtection>  TabProtectionPtr;
-
     explicit ScRetypePassDlg(weld::Window* pParent);
     virtual ~ScRetypePassDlg() override;
 
@@ -79,11 +76,11 @@ private:
     struct TableItem
     {
         OUString       maName;
-        TabProtectionPtr    mpProtect;
+        std::shared_ptr<ScTableProtection> mpProtect;
     };
     ::std::vector<TableItem> maTableItems;
 
-    DocProtectionPtr    mpDocItem;
+    std::shared_ptr<ScDocProtection> mpDocItem;
     ScPasswordHash      meDesiredHash;
 
     std::unique_ptr<weld::Button> mxBtnOk;
