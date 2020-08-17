@@ -174,9 +174,6 @@ public:
     const SvTreeListEntries& GetChildList( SvTreeListEntry* pParent ) const;
     SvTreeListEntries& GetChildList( SvTreeListEntry* pParent );
 
-    std::pair<SvTreeListEntries::iterator, SvTreeListEntries::iterator>
-        GetChildIterators(SvTreeListEntry* pParent);
-
     sal_uLong GetAbsPos( const SvTreeListEntry* pEntry ) const;
     static sal_uLong GetRelPos( const SvTreeListEntry* pChild );
 

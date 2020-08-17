@@ -1027,28 +1027,6 @@ SvTreeListEntry* SvTreeList::GetRootLevelParent( SvTreeListEntry* pEntry ) const
     return pCurParent;
 }
 
-std::pair<SvTreeListEntries::iterator, SvTreeListEntries::iterator>
-    SvTreeList::GetChildIterators(SvTreeListEntry* pParent)
-{
-    typedef std::pair<SvTreeListEntries::iterator, SvTreeListEntries::iterator> IteratorPair;
-
-    static SvTreeListEntries dummy; // prevent singular iterator asserts
-    IteratorPair aRet(dummy.begin(), dummy.end());
-
-    if (!pParent)
-        pParent = pRootItem.get();
-
-    if (pParent->m_Children.empty())
-        // This entry has no children.
-        return aRet;
-
-    aRet.first = pParent->m_Children.begin();
-    aRet.second = pParent->m_Children.end();
-
-    return aRet;
-}
-
-
 SvListView::SvListView()
     : m_pImpl(new Impl(*this))
 {

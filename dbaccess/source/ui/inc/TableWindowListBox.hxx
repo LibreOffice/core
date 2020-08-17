@@ -50,7 +50,6 @@ namespace dbaui
 
     class OTableWindowListBox
             : public InterimItemWindow
-            , public IDragTransferableListener
     {
         std::unique_ptr<weld::TreeView> m_xTreeView;
         std::unique_ptr<TableWindowListBoxHelper> m_xDragDropTargetHelper;
@@ -71,8 +70,6 @@ namespace dbaui
     protected:
         virtual void LoseFocus() override;
         virtual void GetFocus() override;
-
-        virtual void dragFinished( ) override;
 
     public:
         OTableWindowListBox(OTableWindow* pParent);

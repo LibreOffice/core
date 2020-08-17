@@ -3090,12 +3090,6 @@ SvLBoxTab* SvImpLBox::NextTab( SvLBoxTab const * pTab )
     return nullptr;
 }
 
-void SvImpLBox::EndSelection()
-{
-    DestroyAnchor();
-    m_nFlags &=  ~LBoxFlags::StartEditTimer;
-}
-
 void SvImpLBox::SetUpdateMode( bool bMode )
 {
     if( m_bUpdateMode != bMode )
