@@ -1095,6 +1095,25 @@ void XclObjAny::WriteFromTo( XclExpXmlStream& rStrm, const Reference< XShape >& 
 
     awt::Point  aTopLeft    = rShape->getPosition();
     awt::Size   aSize       = rShape->getSize();
+
+    uno::Reference< beans::XPropertySet > xShapeProperties(rShape, uno::UNO_QUERY_THROW);
+    uno::Any nRotProp = xShapeProperties->getPropertyValue("RotateAngle");
+    sal_Int32 nRot = nRotProp.get<sal_Int32>();
+
+    if ((nRot >= 45 * 100 && nRot < 135 * 100) || (nRot >= 225 * 100 && nRot < 315 * 100))
+    {
+        // MSO changes the anchor positions at these angles and that does an extra 90 degrees
+        // rotation on our shapes, so we output it in such position that MSO
+        // can draw this shape correctly.
+
+        sal_Int16 nHalfWidth = aSize.Width / 2;
+        sal_Int16 nHalfHeight = aSize.Height / 2;
+        aTopLeft.X = aTopLeft.X - nHalfHeight + nHalfWidth;
+        aTopLeft.Y = aTopLeft.Y - nHalfWidth + nHalfHeight;
+
+        std::swap(aSize.Width, aSize.Height);
+    }
+
     tools::Rectangle   aLocation( aTopLeft.X, aTopLeft.Y, aTopLeft.X + aSize.Width, aTopLeft.Y + aSize.Height );
     ScRange     aRange      = rStrm.GetRoot().GetDoc().GetRange( nTab, aLocation );
     tools::Rectangle   aRangeRect  = rStrm.GetRoot().GetDoc().GetMMRect( aRange.aStart.Col(), aRange.aStart.Row(),
