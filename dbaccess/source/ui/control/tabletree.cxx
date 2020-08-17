@@ -480,54 +480,6 @@ std::unique_ptr<weld::TreeIter> TableTreeListBox::getAllObjectsEntry() const
     return xRet;
 }
 
-void OTableTreeListBox::checkedButton_noBroadcast(const weld::TreeIter& rEntry)
-{
-    if (!m_bShowToggles)
-        return;
-    TriState eState = m_xTreeView->get_toggle(rEntry);
-    OSL_ENSURE(TRISTATE_INDET != eState, "OTableTreeListBox::CheckButtonHdl: user action which lead to TRISTATE?");
-
-    if (m_xTreeView->iter_has_child(rEntry)) // if it has children, check those too
-    {
-        std::unique_ptr<weld::TreeIter> xChildEntry(m_xTreeView->make_iterator(&rEntry));
-        std::unique_ptr<weld::TreeIter> xSiblingEntry(m_xTreeView->make_iterator(&rEntry));
-        bool bChildEntry = m_xTreeView->iter_next(*xChildEntry);
-        bool bSiblingEntry = m_xTreeView->iter_next_sibling(*xSiblingEntry);
-        while (bChildEntry && (!bSiblingEntry || !xChildEntry->equal(*xSiblingEntry)))
-        {
-            m_xTreeView->set_toggle(*xChildEntry, eState);
-            bChildEntry = m_xTreeView->iter_next(*xChildEntry);
-        }
-    }
-
-    if (m_xTreeView->is_selected(rEntry))
-    {
-        m_xTreeView->selected_foreach([this, eState](weld::TreeIter& rSelected){
-            m_xTreeView->set_toggle(rSelected, eState);
-            if (m_xTreeView->iter_has_child(rSelected)) // if it has children, check those too
-            {
-                std::unique_ptr<weld::TreeIter> xChildEntry(m_xTreeView->make_iterator(&rSelected));
-                std::unique_ptr<weld::TreeIter> xSiblingEntry(m_xTreeView->make_iterator(&rSelected));
-                bool bChildEntry = m_xTreeView->iter_next(*xChildEntry);
-                bool bSiblingEntry = m_xTreeView->iter_next_sibling(*xSiblingEntry);
-                while (bChildEntry && (!bSiblingEntry || !xChildEntry->equal(*xSiblingEntry)))
-                {
-                    m_xTreeView->set_toggle(*xChildEntry, eState);
-                    bChildEntry = m_xTreeView->iter_next(*xChildEntry);
-                }
-            }
-            return false;
-        });
-    }
-
-    CheckButtons();
-
-    // if an entry has children, it makes a difference if the entry is checked
-    // because all children are checked or if the user checked it explicitly.
-    // So we track explicit (un)checking
-    implEmphasize(rEntry, eState == TRISTATE_TRUE);
-}
-
 TriState OTableTreeListBox::implDetermineState(weld::TreeIter& rEntry)
 {
     if (!m_bShowToggles)

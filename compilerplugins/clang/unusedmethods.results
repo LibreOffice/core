@@ -104,8 +104,6 @@ connectivity/source/inc/OTypeInfo.hxx:47
     _Bool connectivity::OTypeInfo::operator!=(const struct connectivity::OTypeInfo &) const
 cui/source/dialogs/SpellAttrib.hxx:72
     _Bool svx::SpellErrorDescription::operator==(const struct svx::SpellErrorDescription &) const
-cui/source/inc/AdditionsDialog.hxx:150
-    void SearchAndParseThread::AppendAllExtensions()
 cui/source/inc/cfg.hxx:336
     class rtl::OUString SvxMenuEntriesListBox::get_text(int)
 cui/source/inc/cfg.hxx:337
@@ -138,6 +136,8 @@ dbaccess/source/filter/hsqldb/fbalterparser.hxx:20
     void dbahsql::FbAlterStmtParser::ensureProperTableLengths() const
 dbaccess/source/filter/hsqldb/parseschema.hxx:81
     const class std::__debug::map<class rtl::OUString, class std::__debug::vector<class rtl::OUString, class std::allocator<class rtl::OUString> >, struct std::less<class rtl::OUString>, class std::allocator<struct std::pair<const class rtl::OUString, class std::__debug::vector<class rtl::OUString, class std::allocator<class rtl::OUString> > > > > & dbahsql::SchemaParser::getPrimaryKeys() const
+dbaccess/source/ui/inc/callbacks.hxx:105
+    void dbaui::IDragTransferableListener::dragFinished()
 dbaccess/source/ui/inc/dsmeta.hxx:89
     class __gnu_debug::_Safe_iterator<struct std::_Rb_tree_const_iterator<int>, class std::__debug::set<int, struct std::less<int>, class std::allocator<int> >, struct std::bidirectional_iterator_tag> dbaui::FeatureSet::begin() const
 dbaccess/source/ui/inc/dsmeta.hxx:90
@@ -154,8 +154,6 @@ dbaccess/source/ui/inc/indexcollection.hxx:62
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const struct dbaui::OIndex *, class std::__cxx1998::vector<struct dbaui::OIndex, class std::allocator<struct dbaui::OIndex> > >, class std::__debug::vector<struct dbaui::OIndex, class std::allocator<struct dbaui::OIndex> >, struct std::random_access_iterator_tag> dbaui::OIndexCollection::find(const class rtl::OUString &) const
 dbaccess/source/ui/inc/indexcollection.hxx:64
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const struct dbaui::OIndex *, class std::__cxx1998::vector<struct dbaui::OIndex, class std::allocator<struct dbaui::OIndex> > >, class std::__debug::vector<struct dbaui::OIndex, class std::allocator<struct dbaui::OIndex> >, struct std::random_access_iterator_tag> dbaui::OIndexCollection::findOriginal(const class rtl::OUString &) const
-dbaccess/source/ui/inc/JoinExchange.hxx:55
-    void dbaui::OJoinExchObj::StartDrag(class vcl::Window *,signed char,class dbaui::IDragTransferableListener *)
 dbaccess/source/ui/inc/opendoccontrols.hxx:45
     _Bool dbaui::OpenDocumentButton::get_sensitive() const
 dbaccess/source/ui/inc/opendoccontrols.hxx:68
@@ -166,8 +164,8 @@ dbaccess/source/ui/inc/sbamultiplex.hxx:385
     class cppu::OInterfaceContainerHelper * dbaui::SbaXVetoableChangeMultiplexer::getContainer(const class rtl::OUString &)
 dbaccess/source/ui/inc/SqlNameEdit.hxx:113
     void dbaui::OSQLNameEntry::set_sensitive(_Bool)
-dbaccess/source/ui/inc/TableWindow.hxx:102
-    _Bool dbaui::OTableWindow::HandleKeyInput(const class KeyEvent &)
+dbaccess/source/ui/inc/tabletree.hxx:84
+    void dbaui::OTableTreeListBox::checkedButton_noBroadcast(const class weld::TreeIter &)
 dbaccess/source/ui/inc/WTypeSelect.hxx:76
     void dbaui::OWizTypeSelectList::show()
 desktop/source/lib/lokclipboard.hxx:96
@@ -670,9 +668,9 @@ include/svtools/ctrlbox.hxx:384
     class vcl::Font FontNameBox::get_font()
 include/svtools/DocumentToGraphicRenderer.hxx:106
     _Bool DocumentToGraphicRenderer::isImpress() const
-include/svtools/toolbarmenu.hxx:112
+include/svtools/toolbarmenu.hxx:80
     class weld::Container * ToolbarPopupContainer::getContainer()
-include/svtools/toolbarmenu.hxx:129
+include/svtools/toolbarmenu.hxx:98
     class weld::Container * InterimToolbarPopup::getContainer()
 include/svx/autoformathelper.hxx:145
     _Bool AutoFormatBase::operator==(const class AutoFormatBase &) const
@@ -870,18 +868,6 @@ include/vcl/ITiledRenderable.hxx:214
     enum PointerStyle vcl::ITiledRenderable::getPointer()
 include/vcl/lok.hxx:22
     void vcl::lok::unregisterPollCallbacks()
-include/vcl/menu.hxx:456
-    unsigned short MenuBar::AddMenuBarButton(const class Image &,const class Link<struct MenuBar::MenuBarButtonCallbackArg &, _Bool> &,const class rtl::OUString &)
-include/vcl/menu.hxx:460
-    void MenuBar::SetMenuBarButtonHighlightHdl(unsigned short,const class Link<struct MenuBar::MenuBarButtonCallbackArg &, _Bool> &)
-include/vcl/menu.hxx:464
-    class tools::Rectangle MenuBar::GetMenuBarButtonRectPixel(unsigned short)
-include/vcl/menu.hxx:465
-    void MenuBar::RemoveMenuBarButton(unsigned short)
-include/vcl/mnemonicengine.hxx:126
-     vcl::MnemonicEngine::MnemonicEngine(class vcl::IMnemonicEntryList &)
-include/vcl/mnemonicengine.hxx:144
-    _Bool vcl::MnemonicEngine::HandleKeyEvent(const class KeyEvent &)
 include/vcl/NotebookBarAddonsMerger.hxx:63
      NotebookBarAddonsMerger::NotebookBarAddonsMerger()
 include/vcl/opengl/OpenGLHelper.hxx:67
@@ -930,23 +916,23 @@ include/vcl/TaskStopwatch.hxx:118
     void TaskStopwatch::setTimeSlice(unsigned int)
 include/vcl/textrectinfo.hxx:45
     _Bool TextRectInfo::operator!=(const class TextRectInfo &) const
-include/vcl/toolkit/longcurr.hxx:49
+include/vcl/toolkit/longcurr.hxx:47
     class BigInt LongCurrencyFormatter::GetValue() const
-include/vcl/treelist.hxx:170
+include/vcl/toolkit/treelist.hxx:170
     const class SvTreeListEntry * SvTreeList::GetParent(const class SvTreeListEntry *) const
-include/vcl/treelistbox.hxx:366
+include/vcl/toolkit/treelist.hxx:178
+    struct std::pair<class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class std::unique_ptr<class SvTreeListEntry, struct std::default_delete<class SvTreeListEntry> > *, class std::__cxx1998::vector<class std::unique_ptr<class SvTreeListEntry, struct std::default_delete<class SvTreeListEntry> >, class std::allocator<class std::unique_ptr<class SvTreeListEntry, struct std::default_delete<class SvTreeListEntry> > > > >, class std::__debug::vector<class std::unique_ptr<class SvTreeListEntry, struct std::default_delete<class SvTreeListEntry> >, class std::allocator<class std::unique_ptr<class SvTreeListEntry, struct std::default_delete<class SvTreeListEntry> > > >, struct std::random_access_iterator_tag>, class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class std::unique_ptr<class SvTreeListEntry, struct std::default_delete<class SvTreeListEntry> > *, class std::__cxx1998::vector<class std::unique_ptr<class SvTreeListEntry, struct std::default_delete<class SvTreeListEntry> >, class std::allocator<class std::unique_ptr<class SvTreeListEntry, struct std::default_delete<class SvTreeListEntry> > > > >, class std::__debug::vector<class std::unique_ptr<class SvTreeListEntry, struct std::default_delete<class SvTreeListEntry> >, class std::allocator<class std::unique_ptr<class SvTreeListEntry, struct std::default_delete<class SvTreeListEntry> > > >, struct std::random_access_iterator_tag> > SvTreeList::GetChildIterators(class SvTreeListEntry *)
+include/vcl/toolkit/treelistbox.hxx:369
     void SvTreeListBox::RemoveSelection()
-include/vcl/treelistbox.hxx:673
-    void SvTreeListBox::ShowFocusRect(const class SvTreeListEntry *)
 include/vcl/txtattr.hxx:56
     _Bool TextAttrib::operator!=(const class TextAttrib &) const
-include/vcl/uitest/uiobject.hxx:282
+include/vcl/uitest/uiobject.hxx:281
      TabPageUIObject::TabPageUIObject(const class VclPtr<class TabPage> &)
-include/vcl/uitest/uiobject.hxx:290
+include/vcl/uitest/uiobject.hxx:289
     class std::unique_ptr<class UIObject, struct std::default_delete<class UIObject> > TabPageUIObject::create(class vcl::Window *)
-include/vcl/uitest/uiobject.hxx:353
+include/vcl/uitest/uiobject.hxx:352
      SpinUIObject::SpinUIObject(const class VclPtr<class SpinButton> &)
-include/vcl/uitest/uiobject.hxx:361
+include/vcl/uitest/uiobject.hxx:360
     class std::unique_ptr<class UIObject, struct std::default_delete<class UIObject> > SpinUIObject::create(class vcl::Window *)
 include/vcl/weld.hxx:127
     _Bool weld::Widget::get_hexpand() const
@@ -970,77 +956,61 @@ include/vcl/weld.hxx:324
     int weld::ScrolledWindow::get_hscroll_height() const
 include/vcl/weld.hxx:450
     struct SystemEnvData weld::Window::get_system_data() const
-include/vcl/weld.hxx:526
-    void weld::AboutDialog::set_version(const class rtl::OUString &)
-include/vcl/weld.hxx:527
-    void weld::AboutDialog::set_copyright(const class rtl::OUString &)
-include/vcl/weld.hxx:528
-    void weld::AboutDialog::set_website(const class rtl::OUString &)
-include/vcl/weld.hxx:529
-    void weld::AboutDialog::set_website_label(const class rtl::OUString &)
-include/vcl/weld.hxx:530
-    class rtl::OUString weld::AboutDialog::get_website_label() const
-include/vcl/weld.hxx:531
-    void weld::AboutDialog::set_logo(const class com::sun::star::uno::Reference<class com::sun::star::graphic::XGraphic> &)
-include/vcl/weld.hxx:532
-    void weld::AboutDialog::set_background(const class com::sun::star::uno::Reference<class com::sun::star::graphic::XGraphic> &)
-include/vcl/weld.hxx:546
+include/vcl/weld.hxx:534
     class rtl::OString weld::Assistant::get_current_page_ident() const
-include/vcl/weld.hxx:552
+include/vcl/weld.hxx:540
     class rtl::OUString weld::Assistant::get_page_title(const class rtl::OString &) const
-include/vcl/weld.hxx:882
+include/vcl/weld.hxx:870
     void weld::TreeView::append(const class weld::TreeIter *,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &)
-include/vcl/weld.hxx:891
+include/vcl/weld.hxx:879
     void weld::TreeView::append(const class rtl::OUString &,const class rtl::OUString &,class VirtualDevice &)
-include/vcl/weld.hxx:997
+include/vcl/weld.hxx:987
     _Bool weld::TreeView::iter_next_visible(class weld::TreeIter &) const
-include/vcl/weld.hxx:1040
+include/vcl/weld.hxx:1030
     void weld::TreeView::set_text_align(const class weld::TreeIter &,double,int)
-include/vcl/weld.hxx:1119
-    void weld::TreeView::select_all()
-include/vcl/weld.hxx:1166
+include/vcl/weld.hxx:1158
     const class rtl::OUString & weld::TreeView::get_saved_value() const
-include/vcl/weld.hxx:1233
+include/vcl/weld.hxx:1225
     class rtl::OUString weld::IconView::get_selected_id() const
-include/vcl/weld.hxx:1248
+include/vcl/weld.hxx:1240
     _Bool weld::IconView::get_cursor(class weld::TreeIter *) const
-include/vcl/weld.hxx:1258
+include/vcl/weld.hxx:1250
     void weld::IconView::select_all()
-include/vcl/weld.hxx:1264
+include/vcl/weld.hxx:1256
     void weld::IconView::save_value()
-include/vcl/weld.hxx:1265
+include/vcl/weld.hxx:1257
     const class rtl::OUString & weld::IconView::get_saved_value() const
-include/vcl/weld.hxx:1266
+include/vcl/weld.hxx:1258
     _Bool weld::IconView::get_value_changed_from_saved() const
-include/vcl/weld.hxx:1364
+include/vcl/weld.hxx:1356
     void weld::MenuButton::append_item(const class rtl::OUString &,const class rtl::OUString &)
-include/vcl/weld.hxx:1372
+include/vcl/weld.hxx:1364
     void weld::MenuButton::append_item_radio(const class rtl::OUString &,const class rtl::OUString &)
-include/vcl/weld.hxx:1380
+include/vcl/weld.hxx:1372
     void weld::MenuButton::append_item(const class rtl::OUString &,const class rtl::OUString &,class VirtualDevice &)
-include/vcl/weld.hxx:1385
+include/vcl/weld.hxx:1377
     void weld::MenuButton::append_separator(const class rtl::OUString &)
-include/vcl/weld.hxx:1436
+include/vcl/weld.hxx:1428
     void weld::Scale::get_increments(int &,int &) const
-include/vcl/weld.hxx:1453
+include/vcl/weld.hxx:1445
     class rtl::OUString weld::ProgressBar::get_text() const
-include/vcl/weld.hxx:1472
+include/vcl/weld.hxx:1464
     void weld::Entry::signal_insert_text(class rtl::OUString &)
-include/vcl/weld.hxx:1488
+include/vcl/weld.hxx:1480
     int weld::Entry::get_position() const
-include/vcl/weld.hxx:1662
+include/vcl/weld.hxx:1654
     void weld::EntryTreeView::EntryModifyHdl(const class weld::Entry &)
-include/vcl/weld.hxx:1898
+include/vcl/weld.hxx:1890
     class Size weld::MetricSpinButton::get_size_request() const
-include/vcl/weld.hxx:1910
+include/vcl/weld.hxx:1902
     void weld::MetricSpinButton::set_position(int)
-include/vcl/weld.hxx:1991
+include/vcl/weld.hxx:1983
     int weld::TextView::vadjustment_get_lower() const
-include/vcl/weld.hxx:2148
+include/vcl/weld.hxx:2140
     class rtl::OUString weld::Toolbar::get_item_label(const class rtl::OString &) const
-include/vcl/weld.hxx:2158
+include/vcl/weld.hxx:2150
     void weld::Toolbar::append_separator(const class rtl::OUString &)
-include/vcl/weld.hxx:2201
+include/vcl/weld.hxx:2193
     class std::unique_ptr<class weld::Window, struct std::default_delete<class weld::Window> > weld::Builder::weld_window(const class rtl::OString &,_Bool)
 include/vcl/weldutils.hxx:304
     void weld::DateFormatter::CursorChangedHdl(class weld::Entry &)
@@ -1202,25 +1172,25 @@ sc/qa/unit/helper/qahelper.hxx:155
     class std::__cxx11::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > print(const class ScAddress &)
 sc/qa/unit/screenshots/screenshots.cxx:326
     int main()
-sc/qa/unit/ucalc.hxx:150
+sc/qa/unit/ucalc.hxx:151
     void Test::testFormulaHashAndTag()
-sc/qa/unit/ucalc.hxx:189
+sc/qa/unit/ucalc.hxx:190
     void Test::testSingleCellCopyColumnLabel()
-sc/qa/unit/ucalc.hxx:248
+sc/qa/unit/ucalc.hxx:249
     void Test::testExternalRefUnresolved()
-sc/qa/unit/ucalc.hxx:387
+sc/qa/unit/ucalc.hxx:388
     void Test::testCopyPasteSkipEmptyConditionalFormatting()
-sc/qa/unit/ucalc.hxx:414
+sc/qa/unit/ucalc.hxx:415
     void Test::testSharedFormulaMoveBlock()
-sc/qa/unit/ucalc.hxx:531
-    void Test::testCondFormatUpdateMoveTab()
 sc/qa/unit/ucalc.hxx:532
-    void Test::testCondFormatUpdateDeleteTab()
+    void Test::testCondFormatUpdateMoveTab()
 sc/qa/unit/ucalc.hxx:533
-    void Test::testCondFormatUpdateInsertTab()
+    void Test::testCondFormatUpdateDeleteTab()
 sc/qa/unit/ucalc.hxx:534
+    void Test::testCondFormatUpdateInsertTab()
+sc/qa/unit/ucalc.hxx:535
     void Test::testCondFormatUpdateReference()
-sc/qa/unit/ucalc.hxx:544
+sc/qa/unit/ucalc.hxx:545
     void Test::testCondFormatListenToOwnRange()
 sc/source/core/inc/interpre.hxx:73
     basic_ostream<type-parameter-?-?, type-parameter-?-?> & sc::operator<<(basic_ostream<type-parameter-?-?, type-parameter-?-?> &,const struct sc::ParamIfsResult &)
@@ -1368,7 +1338,7 @@ sfx2/source/appl/shutdownicon.hxx:112
     class rtl::OUString ShutdownIcon::GetUrlDescription(const class rtl::OUString &)
 sfx2/source/appl/shutdownicon.hxx:114
     void ShutdownIcon::SetVeto(_Bool)
-sfx2/source/inc/templdgi.hxx:247
+sfx2/source/inc/templdgi.hxx:246
     class weld::Widget * SfxCommonTemplateDialog_Impl::GetFrameWeld()
 shell/inc/xml_parser.hxx:46
      xml_parser::xml_parser()
@@ -1398,46 +1368,20 @@ slideshow/source/engine/activities/activitiesfactory.cxx:566
     void slideshow::internal::(anonymous namespace)::ValuesActivity::perform(unsigned int,unsigned int) const
 slideshow/source/engine/activities/activitiesfactory.cxx:581
     void slideshow::internal::(anonymous namespace)::ValuesActivity::performEnd()
-slideshow/source/engine/animationfactory.cxx:434
+slideshow/source/engine/animationfactory.cxx:593
     void slideshow::internal::(anonymous namespace)::GenericAnimation::prefetch()
-slideshow/source/engine/animationfactory.cxx:437
+slideshow/source/engine/animationfactory.cxx:596
     void slideshow::internal::(anonymous namespace)::GenericAnimation::start(const class std::shared_ptr<class slideshow::internal::AnimatableShape> &,const class std::shared_ptr<class slideshow::internal::ShapeAttributeLayer> &)
-slideshow/source/engine/animationfactory.cxx:510
+slideshow/source/engine/animationfactory.cxx:674
     _Bool slideshow::internal::(anonymous namespace)::GenericAnimation::operator()(const typename type-parameter-?-?::ValueType &)
-slideshow/source/engine/animationfactory.cxx:525
+slideshow/source/engine/animationfactory.cxx:689
     _Bool slideshow::internal::(anonymous namespace)::GenericAnimation::operator()(typename type-parameter-?-?::ValueType)
-slideshow/source/engine/animationfactory.cxx:538
+slideshow/source/engine/animationfactory.cxx:707
     typename type-parameter-?-?::ValueType slideshow::internal::(anonymous namespace)::GenericAnimation::getUnderlyingValue() const
 slideshow/source/engine/opengl/TransitionImpl.hxx:184
     void OGLTransitionImpl::cleanup()
-slideshow/source/inc/box2dtools.hxx:159
-     box2d::utils::box2DWorld::box2DWorld(const class basegfx::B2DVector &)
-slideshow/source/inc/box2dtools.hxx:162
-    _Bool box2d::utils::box2DWorld::initiateWorld(const class basegfx::B2DVector &)
-slideshow/source/inc/box2dtools.hxx:172
-    double box2d::utils::box2DWorld::stepAmount(const double,const float,const int,const int)
-slideshow/source/inc/box2dtools.hxx:176
-    _Bool box2d::utils::box2DWorld::shapesInitialized()
-slideshow/source/inc/box2dtools.hxx:178
-    _Bool box2d::utils::box2DWorld::isInitialized()
-slideshow/source/inc/box2dtools.hxx:187
-    class std::shared_ptr<class box2d::utils::box2DBody> box2d::utils::box2DWorld::makeShapeDynamic(const class std::shared_ptr<class slideshow::internal::Shape>)
-slideshow/source/inc/box2dtools.hxx:205
-    class std::shared_ptr<class box2d::utils::box2DBody> box2d::utils::box2DWorld::makeShapeStatic(const class std::shared_ptr<class slideshow::internal::Shape>)
-slideshow/source/inc/box2dtools.hxx:223
-    void box2d::utils::box2DWorld::initateAllShapesAsStaticBodies(const class std::shared_ptr<class slideshow::internal::ShapeManager>)
-slideshow/source/inc/box2dtools.hxx:226
-    _Bool box2d::utils::box2DWorld::hasWorldStepper()
-slideshow/source/inc/box2dtools.hxx:229
-    void box2d::utils::box2DWorld::setHasWorldStepper(const _Bool)
-slideshow/source/inc/box2dtools.hxx:232
-    void box2d::utils::box2DWorld::queuePositionUpdate(class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape>,const class basegfx::B2DPoint &)
-slideshow/source/inc/box2dtools.hxx:237
-    void box2d::utils::box2DWorld::queueLinearVelocityUpdate(class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape>,const class basegfx::B2DVector &)
-slideshow/source/inc/box2dtools.hxx:241
-    void box2d::utils::box2DWorld::queueRotationUpdate(class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape>,const double)
-slideshow/source/inc/box2dtools.hxx:246
-    void box2d::utils::box2DWorld::queueAngularVelocityUpdate(class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape>,const double)
+slideshow/source/inc/box2dtools.hxx:221
+    class std::shared_ptr<class box2d::utils::box2DBody> box2d::utils::box2DWorld::makeShapeStatic(const class std::shared_ptr<class slideshow::internal::Shape> &)
 slideshow/source/inc/listenercontainer.hxx:44
     _Bool slideshow::internal::FunctionApply::apply(type-parameter-?-?,const class std::shared_ptr<class slideshow::internal::AnimationEventHandler> &)
 slideshow/source/inc/listenercontainer.hxx:44
@@ -1463,11 +1407,11 @@ svgio/inc/svgstyleattributes.hxx:346
 svgio/inc/svgstyleattributes.hxx:370
     enum svgio::svgreader::FontStretch svgio::svgreader::SvgStyleAttributes::getFontStretch() const
 svl/source/misc/gridprinter.cxx:47
+    void rtl::mdds_mtv_prepend_values(struct mdds::mtv::base_element_block &,const class rtl::OUString &,const type-parameter-?-? &,const type-parameter-?-? &)
+svl/source/misc/gridprinter.cxx:47
     void rtl::mdds_mtv_get_empty_value(class rtl::OUString &)
 svl/source/misc/gridprinter.cxx:47
     struct mdds::mtv::base_element_block * rtl::mdds_mtv_create_new_block(const class rtl::OUString &,const type-parameter-?-? &,const type-parameter-?-? &)
-svl/source/misc/gridprinter.cxx:47
-    void rtl::mdds_mtv_prepend_values(struct mdds::mtv::base_element_block &,const class rtl::OUString &,const type-parameter-?-? &,const type-parameter-?-? &)
 svl/source/misc/gridprinter.cxx:47
     void rtl::mdds_mtv_assign_values(struct mdds::mtv::base_element_block &,const class rtl::OUString &,const type-parameter-?-? &,const type-parameter-?-? &)
 svl/source/misc/gridprinter.cxx:47
@@ -1480,8 +1424,6 @@ svl/source/misc/gridprinter.cxx:47
     void rtl::mdds_mtv_append_values(struct mdds::mtv::base_element_block &,const class rtl::OUString &,const type-parameter-?-? &,const type-parameter-?-? &)
 svx/inc/sdr/contact/viewcontactofgraphic.hxx:52
     class SdrGrafObj & sdr::contact::ViewContactOfGraphic::GetGrafObject()
-svx/source/inc/fmexch.hxx:65
-    void svxform::OLocalExchange::startDrag(class vcl::Window *,signed char,const class svxform::OLocalExchange::GrantAccess &)
 svx/source/tbxctrls/tbcontrl.cxx:151
     void (anonymous namespace)::SvxStyleBox_Base::set_sensitive(_Bool)
 sw/inc/calbck.hxx:307
@@ -1668,7 +1610,7 @@ sw/source/uibase/inc/bookmark.hxx:45
     void BookmarkTable::remove(const class weld::TreeIter &)
 sw/source/uibase/inc/condedit.hxx:53
     _Bool ConditionEdit::get_sensitive() const
-sw/source/uibase/inc/conttree.hxx:346
+sw/source/uibase/inc/conttree.hxx:348
     int SwGlobalTree::count_selected_rows() const
 sw/source/uibase/inc/numfmtlb.hxx:130
     _Bool SwNumFormatTreeView::get_value_changed_from_saved() const
@@ -1760,9 +1702,9 @@ vcl/inc/qt5/Qt5DragAndDrop.hxx:80
     void Qt5DropTarget::deinitialize()
 vcl/inc/qt5/Qt5FontFace.hxx:38
     class Qt5FontFace * Qt5FontFace::fromQFont(const class QFont &)
-vcl/inc/qt5/Qt5FontFace.hxx:48
+vcl/inc/qt5/Qt5FontFace.hxx:49
     int Qt5FontFace::GetFontTable(const char *,unsigned char *) const
-vcl/inc/qt5/Qt5FontFace.hxx:52
+vcl/inc/qt5/Qt5FontFace.hxx:53
     _Bool Qt5FontFace::HasChar(unsigned int) const
 vcl/inc/qt5/Qt5Frame.hxx:161
     void Qt5Frame::deregisterDragSource(const class Qt5DragSource *)
@@ -1808,6 +1750,8 @@ vcl/inc/skia/utils.hxx:62
     void SkiaHelper::dump(const class SkBitmap &,const char *)
 vcl/inc/skia/zone.hxx:22
     void SkiaZone::relaxWatchdogTimings()
+vcl/inc/svimpbox.hxx:304
+    void SvImpLBox::EndSelection()
 vcl/inc/unx/gtk/gtkframe.hxx:217
     void ensure_dbus_setup(struct _GdkWindow *,class GtkSalFrame *)
 vcl/inc/unx/printergfx.hxx:94

@@ -1473,10 +1473,6 @@ sal_Int8 OJoinTableView::ExecuteDrop( const ExecuteDropEvent& /*_rEvt*/ )
     return DND_ACTION_NONE;
 }
 
-void OJoinTableView::dragFinished( )
-{
-}
-
 void OJoinTableView::clearLayoutInformation()
 {
     m_pLastFocusTabWin  = nullptr;

@@ -75,7 +75,6 @@ namespace dbaui
 
 
     class OJoinTableView : public vcl::Window,
-                           public IDragTransferableListener,
                            public DropTargetHelper
     {
         friend class OJoinMoveTabWinUndoAct;
@@ -275,7 +274,6 @@ namespace dbaui
 
         virtual void Resize() override;
 
-        virtual void dragFinished( ) override;
         /// @note here the physical position (that can be changed while
         ///     resizing) is used, as no scrolling can take place while resizing
         virtual void Command(const CommandEvent& rEvt) override;

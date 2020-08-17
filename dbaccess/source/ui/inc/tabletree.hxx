@@ -81,8 +81,6 @@ public:
     void            CheckButtons();     // make the button states consistent (bottom-up)
 
 private:
-    void checkedButton_noBroadcast(const weld::TreeIter& rEntry);
-
     void implEmphasize(const weld::TreeIter& rEntry, bool _bChecked, bool _bUpdateDescendants = true, bool _bUpdateAncestors = true);
 
     /** adds the given entry to our list
