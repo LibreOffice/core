@@ -257,6 +257,7 @@ public:
     void testTdf134817_HeaderFooterTextWith2SectionXLSX();
     void testTdf121718_UseFirstPageNumberXLSX();
     void testHeaderFontStyleXLSX();
+    void testTdf135828_Shape_Rect();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -412,6 +413,7 @@ public:
     CPPUNIT_TEST(testTdf134817_HeaderFooterTextWith2SectionXLSX);
     CPPUNIT_TEST(testTdf121718_UseFirstPageNumberXLSX);
     CPPUNIT_TEST(testHeaderFontStyleXLSX);
+    CPPUNIT_TEST(testTdf135828_Shape_Rect);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5275,6 +5277,28 @@ void ScExportTest::testHeaderFontStyleXLSX()
     CPPUNIT_ASSERT_MESSAGE("Second line should be italic.", bHasItalic);
 
     xShell->DoClose();
+}
+
+void ScExportTest::testTdf135828_Shape_Rect()
+{
+    // tdf#135828 Check that the width and the height of rectangle of the shape
+    // is correct.
+    // Since the export of positioning the shape is very bad at the moment,
+    // we just want to know if the frame rect is wider than taller.
+    ScDocShellRef xShell = loadDoc("tdf135828_Shape_Rect.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    uno::Reference< frame::XModel > xModel = xShell->GetModel();
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(xModel, UNO_QUERY_THROW);
+    uno::Reference< container::XIndexAccess > xIA(xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier(xIA->getByIndex(0), UNO_QUERY_THROW);
+    uno::Reference< container::XIndexAccess > xDraws(xDrawPageSupplier->getDrawPage(), UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xImage(xDraws->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySet > XPropSet(xImage, uno::UNO_QUERY_THROW);
+
+    uno::Any nRect = XPropSet->getPropertyValue("FrameRect");
+    awt::Rectangle nRectangle = nRect.get<awt::Rectangle>();
+    CPPUNIT_ASSERT(nRectangle.Height < nRectangle.Width);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
