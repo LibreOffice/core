@@ -46,9 +46,8 @@ namespace com::sun::star::container { class XNameContainer; }
 
 namespace dbaui
 {
-
-    class DBTreeView;
     struct DBTreeEditedEntry;
+    struct DBTreeListUserData;
     class ImageProvider;
 
     typedef ::cppu::ImplHelper5 <   css::frame::XStatusListener
@@ -218,7 +217,8 @@ namespace dbaui
         virtual IController&      getCommandController() override;
         virtual ::comphelper::OInterfaceContainerHelper2*
                                   getContextMenuInterceptors() override;
-        virtual css::uno::Any     getCurrentSelection( Control& _rControl ) const override;
+        virtual css::uno::Any     getCurrentSelection(weld::TreeView& rControl) const override;
+        virtual vcl::Window* getMenuParent(weld::TreeView& rControl) const override;
 
         virtual void impl_initialize() override;
 
@@ -283,7 +283,7 @@ namespace dbaui
         void unloadAndCleanup( bool _bDisposeConnection = true );
 
         // disposes the connection associated with the given entry (which must represent a data source)
-        void        disposeConnection(weld::TreeIter* xpDSEntry);
+        void        disposeConnection(DBTreeListUserData* pTreeListData);
 
         /// flushes and disposes the given connection, and de-registers as listener
         void        impl_releaseConnection( SharedConnection& _rxConnection );

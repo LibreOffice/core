@@ -3104,8 +3104,12 @@ dbaccess/source/ui/app/AppTitleWindow.cxx
 dbaccess/source/ui/app/AppTitleWindow.hxx
 dbaccess/source/ui/app/AppView.cxx
 dbaccess/source/ui/app/AppView.hxx
+dbaccess/source/ui/app/DocumentInfoPreview.cxx
+dbaccess/source/ui/app/DocumentInfoPreview.hxx
 dbaccess/source/ui/app/subcomponentmanager.cxx
 dbaccess/source/ui/app/subcomponentmanager.hxx
+dbaccess/source/ui/app/templwin.cxx
+dbaccess/source/ui/app/templwin.hxx
 dbaccess/source/ui/browser/AsynchronousLink.cxx
 dbaccess/source/ui/browser/brwctrlr.cxx
 dbaccess/source/ui/browser/brwview.cxx
@@ -6541,7 +6545,6 @@ include/svl/visitem.hxx
 include/svl/whiter.hxx
 include/svl/zforlist.hxx
 include/svl/zformat.hxx
-include/svtools/DocumentInfoPreview.hxx
 include/svtools/DocumentToGraphicRenderer.hxx
 include/svtools/PlaceEditDialog.hxx
 include/svtools/acceleratorexecute.hxx
@@ -12994,9 +12997,6 @@ svtools/source/config/optionsdrawinglayer.cxx
 svtools/source/config/printoptions.cxx
 svtools/source/config/slidesorterbaropt.cxx
 svtools/source/config/test/test.cxx
-svtools/source/contnr/DocumentInfoPreview.cxx
-svtools/source/contnr/templwin.cxx
-svtools/source/contnr/templwin.hxx
 svtools/source/control/accessibleruler.cxx
 svtools/source/control/accessibleruler.hxx
 svtools/source/control/asynclink.cxx

@@ -296,7 +296,7 @@ bool SbaTableQueryBrowser::Construct(vcl::Window* pParent)
         m_pSplitter->SetPosSizePixel( ::Point(0,0), ::Size(nFrameWidth,0) );
         m_pSplitter->SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
 
-        m_pTreeView = VclPtr<InterimDBTreeListBox>::Create(getBrowserView());
+        m_pTreeView = VclPtr<InterimDBTreeListBox>::Create(getBrowserView(), E_TABLE);
         m_pTreeView->SetHelpId(HID_TLB_TREELISTBOX);
 
         m_pTreeView->GetWidget().connect_expanding(LINK(this, SbaTableQueryBrowser, OnExpandEntry));
@@ -2954,18 +2954,14 @@ void SbaTableQueryBrowser::impl_releaseConnection( SharedConnection& _rxConnecti
         // will implicitly dispose if we have the ownership, since xConnection is a SharedConnection
 }
 
-void SbaTableQueryBrowser::disposeConnection(weld::TreeIter* pDSEntry)
+void SbaTableQueryBrowser::disposeConnection(DBTreeListUserData* pTreeListData)
 {
-    OSL_ENSURE( pDSEntry, "SbaTableQueryBrowser::disposeConnection: invalid entry (NULL)!" );
-    OSL_ENSURE( impl_isDataSourceEntry( pDSEntry ), "SbaTableQueryBrowser::disposeConnection: invalid entry (not top-level)!" );
+    OSL_ENSURE( pTreeListData, "SbaTableQueryBrowser::disposeConnection: invalid entry (NULL)!" );
 
-    if (pDSEntry)
-    {
-        weld::TreeView& rTreeView = m_pTreeView->GetWidget();
-        DBTreeListUserData* pTreeListData = reinterpret_cast<DBTreeListUserData*>(rTreeView.get_id(*pDSEntry).toUInt64());
-        if (pTreeListData)
-            impl_releaseConnection(pTreeListData->xConnection);
-    }
+    if (!pTreeListData)
+        return;
+
+    impl_releaseConnection(pTreeListData->xConnection);
 }
 
 void SbaTableQueryBrowser::closeConnection(weld::TreeIter& rDSEntry, bool _bDisposeConnection)
@@ -2974,6 +2970,8 @@ void SbaTableQueryBrowser::closeConnection(weld::TreeIter& rDSEntry, bool _bDisp
 
     weld::TreeView& rTreeView = m_pTreeView->GetWidget();
 
+    DBTreeListUserData* pTreeListData = reinterpret_cast<DBTreeListUserData*>(rTreeView.get_id(rDSEntry).toUInt64());
+
     // if one of the entries of the given DS is displayed currently, unload the form
     if (m_xCurrentlyDisplayed)
     {
@@ -2981,6 +2979,9 @@ void SbaTableQueryBrowser::closeConnection(weld::TreeIter& rDSEntry, bool _bDisp
         if (rTreeView.iter_compare(*xRoot, rDSEntry) == 0)
             unloadAndCleanup(_bDisposeConnection);
     }
+
+    // collapse the entry itself
+    rTreeView.collapse_row(rDSEntry);
 
     // collapse the query/table container
     std::unique_ptr<weld::TreeIter> xContainers(rTreeView.make_iterator());
@@ -3008,12 +3009,9 @@ void SbaTableQueryBrowser::closeConnection(weld::TreeIter& rDSEntry, bool _bDisp
         while (rTreeView.iter_next_sibling(*xContainers));
     }
 
-    // collapse the entry itself
-    rTreeView.collapse_row(rDSEntry);
-
     // dispose/reset the connection
     if ( _bDisposeConnection )
-        disposeConnection(&rDSEntry);
+        disposeConnection(pTreeListData);
 }
 
 void SbaTableQueryBrowser::unloadAndCleanup( bool _bDisposeConnection )
@@ -3043,7 +3041,13 @@ void SbaTableQueryBrowser::unloadAndCleanup( bool _bDisposeConnection )
 
         // dispose the connection
         if(_bDisposeConnection)
-            disposeConnection(xDSEntry.get());
+        {
+            weld::TreeView& rTreeView = m_pTreeView->GetWidget();
+            DBTreeListUserData* pTreeListData = xDSEntry
+                ?  reinterpret_cast<DBTreeListUserData*>(rTreeView.get_id(*xDSEntry).toUInt64())
+                : nullptr;
+            disposeConnection(pTreeListData);
+        }
     }
     catch(SQLException& e)
     {
@@ -3512,15 +3516,16 @@ IController& SbaTableQueryBrowser::getCommandController()
     return &m_aContextMenuInterceptors;
 }
 
-Any SbaTableQueryBrowser::getCurrentSelection( Control& _rControl ) const
+Any SbaTableQueryBrowser::getCurrentSelection(weld::TreeView& rControl) const
 {
-    OSL_PRECOND( m_pTreeView == &_rControl,
+    weld::TreeView& rTreeView = m_pTreeView->GetWidget();
+
+    OSL_PRECOND( &rTreeView == &rControl,
         "SbaTableQueryBrowser::getCurrentSelection: where does this come from?" );
 
-    if ( m_pTreeView != &_rControl )
+    if (&rTreeView != &rControl)
         return Any();
 
-    weld::TreeView& rTreeView = m_pTreeView->GetWidget();
     std::unique_ptr<weld::TreeIter> xSelected(rTreeView.make_iterator());
     if (!rTreeView.get_selected(xSelected.get()))
         return Any();
@@ -3548,6 +3553,16 @@ Any SbaTableQueryBrowser::getCurrentSelection( Control& _rControl ) const
     }
 
     return makeAny( aSelectedObject );
+}
+
+vcl::Window* SbaTableQueryBrowser::getMenuParent(weld::TreeView& rControl) const
+{
+    weld::TreeView& rTreeView = m_pTreeView->GetWidget();
+
+    OSL_PRECOND( &rTreeView == &rControl,
+        "SbaTableQueryBrowser::getCurrentSelection: where does this come from?" );
+
+    return m_pTreeView;
 }
 
 bool SbaTableQueryBrowser::implGetQuerySignature( OUString& _rCommand, bool& _bEscapeProcessing )
