@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "207336f7_207eaffc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2020-08-17T13:53:41Z",
+      "side": 1,
+      "message": "typo:\nsuapping-\u003eswapping",
+      "revId": "73bb031812142f166d55c1700fb9f701898588d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
