@@ -257,6 +257,7 @@ public:
     void testTdf134817_HeaderFooterTextWith2SectionXLSX();
     void testTdf121718_UseFirstPageNumberXLSX();
     void testHeaderFontStyleXLSX();
+    void testTdf135828_Shape_Rect();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -412,6 +413,7 @@ public:
     CPPUNIT_TEST(testTdf134817_HeaderFooterTextWith2SectionXLSX);
     CPPUNIT_TEST(testTdf121718_UseFirstPageNumberXLSX);
     CPPUNIT_TEST(testHeaderFontStyleXLSX);
+    CPPUNIT_TEST(testTdf135828_Shape_Rect);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5275,6 +5277,24 @@ void ScExportTest::testHeaderFontStyleXLSX()
     CPPUNIT_ASSERT_MESSAGE("Second line should be italic.", bHasItalic);
 
     xShell->DoClose();
+}
+
+void ScExportTest::testTdf135828_Shape_Rect()
+{
+    // tdf#135828 Check that the width and the height of rectangle of the shape
+    // is correct.
+    ScDocShellRef xShell = loadDoc("tdf135828_Shape_Rect.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+    xmlDocUniquePtr pDrawing = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/drawing1.xml");
+    CPPUNIT_ASSERT(pDrawing);
+
+    assertXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:spPr/a:xfrm/a:ext", "cx", "294480"); // width
+    assertXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:spPr/a:xfrm/a:ext", "cy", "1990440"); // height
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
