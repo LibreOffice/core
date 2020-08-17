@@ -48,6 +48,7 @@ private:
     void testUnloadedGraphicSizeUnit();
     void testSwapping();
     void testSwappingVectorGraphic();
+    void testSwappingPageNumber();
 
     CPPUNIT_TEST_SUITE(GraphicTest);
     CPPUNIT_TEST(testUnloadedGraphic);
@@ -57,6 +58,7 @@ private:
     CPPUNIT_TEST(testUnloadedGraphicSizeUnit);
     CPPUNIT_TEST(testSwapping);
     CPPUNIT_TEST(testSwappingVectorGraphic);
+    CPPUNIT_TEST(testSwappingPageNumber);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -174,6 +176,7 @@ bool checkBitmap(Graphic& rGraphic)
 }
 
 char const DATA_DIRECTORY[] = "/vcl/qa/cppunit/data/";
+char const PDFEXPORT_DATA_DIRECTORY[] = "/vcl/qa/cppunit/pdfexport/data/";
 
 void GraphicTest::testUnloadedGraphic()
 {
@@ -424,6 +427,45 @@ void GraphicTest::testSwappingVectorGraphic()
 
     // File shouldn't be available anymore
     CPPUNIT_ASSERT_EQUAL(false, comphelper::DirectoryHelper::fileExists(rSwapFileURL));
+}
+
+void GraphicTest::testSwappingPageNumber()
+{
+    test::Directories aDirectories;
+    OUString aURL = aDirectories.getURLFromSrc(PDFEXPORT_DATA_DIRECTORY) + "SimpleMultiPagePDF.pdf";
+    SvFileStream aStream(aURL, StreamMode::READ);
+    GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
+    Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
+
+    CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+
+    // Load the vector graphic
+    CPPUNIT_ASSERT_EQUAL(true, bool(aGraphic.getVectorGraphicData()));
+    // Set the page index
+    aGraphic.getVectorGraphicData()->setPageIndex(1);
+
+    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
+                         aGraphic.getVectorGraphicData()->getVectorGraphicDataType());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(17693),
+                         aGraphic.getVectorGraphicData()->getVectorGraphicDataArrayLength());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aGraphic.getVectorGraphicData()->getPageIndex());
+
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.ImplGetImpGraphic()->isSwappedOut());
+
+    // Swapping out
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->swapOut());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->isSwappedOut());
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+
+    // Let's swap in
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.makeAvailable());
+    CPPUNIT_ASSERT_EQUAL(true, aGraphic.isAvailable());
+    CPPUNIT_ASSERT_EQUAL(false, aGraphic.ImplGetImpGraphic()->isSwappedOut());
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aGraphic.getVectorGraphicData()->getPageIndex());
 }
 
 } // namespace
