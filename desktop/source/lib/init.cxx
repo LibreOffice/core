@@ -1546,10 +1546,15 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             case LOK_CALLBACK_CALC_FUNCTION_LIST:
             case LOK_CALLBACK_JSDIALOG:
             {
+                // deleting the duplicate of visible cursor message can cause hyperlink popup not to show up on second/or more click on the same place.
+                // If the hyperlink is not empty we can bypass that to show the popup
+                const bool hyperLinkException = type == LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR &&
+                    payload.find("\"hyperlink\":\"\"") == std::string::npos &&
+                    payload.find("\"hyperlink\": {}") == std::string::npos;
                 const int nViewId = lcl_getViewId(payload);
                 removeAll(
-                    [type, nViewId] (const queue_type::value_type& elem) {
-                        return (elem.Type == type && nViewId == lcl_getViewId(elem));
+                    [type, nViewId, hyperLinkException] (const queue_type::value_type& elem) {
+                        return (elem.Type == type && nViewId == lcl_getViewId(elem) && !hyperLinkException);
                     }
                 );
             }
