@@ -367,9 +367,8 @@ Box2DBodySharedPtr box2DWorld::makeShapeDynamic(const slideshow::internal::Shape
     return makeBodyDynamic(pBox2DBody);
 }
 
-Box2DBodySharedPtr box2DWorld::makeBodyDynamic(const Box2DBodySharedPtr& pBox2DBody)
+Box2DBodySharedPtr makeBodyDynamic(const Box2DBodySharedPtr& pBox2DBody)
 {
-    assert(mpBox2DWorld);
     if (pBox2DBody->getType() != BOX2D_DYNAMIC_BODY)
     {
         pBox2DBody->setType(BOX2D_DYNAMIC_BODY);
@@ -384,9 +383,8 @@ Box2DBodySharedPtr box2DWorld::makeShapeStatic(const slideshow::internal::ShapeS
     return makeBodyStatic(pBox2DBody);
 }
 
-Box2DBodySharedPtr box2DWorld::makeBodyStatic(const Box2DBodySharedPtr& pBox2DBody)
+Box2DBodySharedPtr makeBodyStatic(const Box2DBodySharedPtr& pBox2DBody)
 {
-    assert(mpBox2DWorld);
     if (pBox2DBody->getType() != BOX2D_STATIC_BODY)
     {
         pBox2DBody->setType(BOX2D_STATIC_BODY);

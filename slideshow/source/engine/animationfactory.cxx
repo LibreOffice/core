@@ -434,7 +434,7 @@ namespace slideshow::internal
                         mbAnimationStarted = false;
 
                         // Animation have ended for this body, make it static
-                        mpBox2DWorld->makeBodyStatic( mpBox2DBody );
+                        box2d::utils::makeBodyStatic( mpBox2DBody );
 
                         if( !(mnFlags & AnimationFactory::FLAG_NO_SPRITE) )
                             mpShapeManager->leaveAnimationMode( mpShape );
