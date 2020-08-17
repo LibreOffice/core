@@ -43,6 +43,7 @@ public:
     void testRowColumn();
     void testTdf131562();
     void testPasswordProtectedUnicodeString();
+    void testPasswordProtectedArrayInUserType();
     void testTdf107902();
     void testTdf131296_legacy();
     void testTdf131296_new();
@@ -58,6 +59,7 @@ public:
     CPPUNIT_TEST(testRowColumn);
     CPPUNIT_TEST(testTdf131562);
     CPPUNIT_TEST(testPasswordProtectedUnicodeString);
+    CPPUNIT_TEST(testPasswordProtectedArrayInUserType);
     CPPUNIT_TEST(testTdf107902);
     CPPUNIT_TEST(testTdf131296_legacy);
     CPPUNIT_TEST(testTdf131296_new);
@@ -143,7 +145,7 @@ void ScMacrosTest::testPasswordProtectedStarBasic()
 
     SfxObjectShell::CallXScript(
         xComponent,
-        "vnd.sun.Star.script:MyLibrary.Module1.Main?language=Basic&location=document",
+        "vnd.sun.Star.script:Standard.Module1.LoadAndExecuteTest?language=Basic&location=document",
         aParams, aRet, aOutParamIndex, aOutParam);
 
     OUString aValue = rDoc.GetString(0,0,0);
@@ -544,6 +546,65 @@ void ScMacrosTest::testPasswordProtectedUnicodeString()
         OUString aReturnValue;
         aRet >>= aReturnValue;
         CPPUNIT_ASSERT_EQUAL(sCorrectString, aReturnValue);
+    }
+
+    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
+    xCloseable->close(true);
+}
+
+void ScMacrosTest::testPasswordProtectedArrayInUserType()
+{
+    const OUString sMacroURL(
+        "vnd.sun.Star.script:Protected.Module1.TestMyType?language=Basic&location=document");
+    const OUString sLibName("Protected");
+
+    OUString aFileName;
+    createFileURL("ProtectedArrayInCustomType.ods", aFileName);
+    auto xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    CPPUNIT_ASSERT(xComponent);
+
+    // Check that loading password-protected macro image correctly loads array bounds
+    {
+        Any aRet;
+        Sequence<sal_Int16> aOutParamIndex;
+        Sequence<Any> aOutParam;
+        Sequence<uno::Any> aParams;
+
+        SfxObjectShell::CallXScript(xComponent, sMacroURL, aParams, aRet, aOutParamIndex,
+            aOutParam);
+
+        sal_Int16 nReturnValue;
+        aRet >>= nReturnValue;
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(1), nReturnValue);
+    }
+
+    // Unlock and load the library, to regenerate the image on save
+    css::uno::Reference<css::document::XEmbeddedScripts> xES(xComponent, UNO_QUERY_THROW);
+    css::uno::Reference<css::script::XLibraryContainer> xLC(xES->getBasicLibraries(),
+        UNO_QUERY_THROW);
+    css::uno::Reference<css::script::XLibraryContainerPassword> xPasswd(xLC, UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xPasswd->isLibraryPasswordProtected(sLibName));
+    CPPUNIT_ASSERT(!xPasswd->isLibraryPasswordVerified(sLibName));
+    CPPUNIT_ASSERT(xPasswd->verifyLibraryPassword(sLibName, "password"));
+    xLC->loadLibrary(sLibName);
+    CPPUNIT_ASSERT(xLC->isLibraryLoaded(sLibName));
+
+    // Now check that saving stores array bounds correctly
+    saveAndReload(xComponent, "calc8");
+    CPPUNIT_ASSERT(xComponent);
+
+    {
+        Any aRet;
+        Sequence<sal_Int16> aOutParamIndex;
+        Sequence<Any> aOutParam;
+        Sequence<uno::Any> aParams;
+
+        SfxObjectShell::CallXScript(xComponent, sMacroURL, aParams, aRet, aOutParamIndex,
+            aOutParam);
+
+        sal_Int16 nReturnValue;
+        aRet >>= nReturnValue;
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(1), nReturnValue);
     }
 
     css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
