@@ -41,9 +41,6 @@
 bool    IsConvDic( const OUString &rFileURL, LanguageType &nLang, sal_Int16 &nConvType );
 
 typedef std::unordered_multimap<OUString, OUString> ConvMap;
-
-typedef std::set<OUString> ConvMapKeySet;
-
 typedef std::unordered_multimap<OUString, sal_Int16> PropTypeMap;
 
 class ConvDic :

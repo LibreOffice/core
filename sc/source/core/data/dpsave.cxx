@@ -610,11 +610,10 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
 
 void ScDPSaveDimension::UpdateMemberVisibility(const std::unordered_map<OUString, bool>& rData)
 {
-    typedef std::unordered_map<OUString, bool> DataMap;
     for (ScDPSaveMember* pMem : maMemberList)
     {
         const OUString& rMemName = pMem->GetName();
-        DataMap::const_iterator itr = rData.find(rMemName);
+        auto itr = rData.find(rMemName);
         if (itr != rData.end())
             pMem->SetIsVisible(itr->second);
     }

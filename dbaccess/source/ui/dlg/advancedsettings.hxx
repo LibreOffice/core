@@ -27,7 +27,6 @@
 namespace dbaui
 {
     struct BooleanSettingDesc;
-    typedef std::vector< BooleanSettingDesc > BooleanSettingDescs;
 
     // SpecialSettingsPage
     // implements the "Special Settings" page of the advanced database settings
@@ -58,7 +57,7 @@ namespace dbaui
 
         std::map<weld::ToggleButton*, TriState> m_aTriStates;
 
-        BooleanSettingDescs m_aBooleanSettings;
+        std::vector< BooleanSettingDesc > m_aBooleanSettings;
 
         bool                m_bHasBooleanComparisonMode;
         bool                m_bHasMaxRowScan;

@@ -294,7 +294,7 @@ ErrCode ConvDicXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum /*eClass
 void ConvDicXMLExport::ExportContent_()
 {
     // acquire sorted list of all keys
-    ConvMapKeySet   aKeySet;
+    std::set<OUString>   aKeySet;
     for (auto const& elem : rDic.aFromLeft)
         aKeySet.insert( elem.first );
 

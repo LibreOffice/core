@@ -42,7 +42,6 @@ struct EventDisplayName
     {
     }
 };
-typedef std::vector< EventDisplayName >   EventDisplayNames;
 
 class SvxMacroTabPage_;
 class SvTabListBox;
@@ -66,7 +65,7 @@ protected:
     EventsHash m_appEventsHash;
     EventsHash m_docEventsHash;
     bool bDocModified, bAppEvents, bInitialized;
-    EventDisplayNames aDisplayNames;
+    std::vector< EventDisplayName > aDisplayNames;
 
     SvxMacroTabPage_(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OString& rID, const SfxItemSet& rItemSet);
 

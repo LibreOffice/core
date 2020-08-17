@@ -130,12 +130,9 @@ namespace connectivity::hsqldb
 
         class MethodGuard : public ::osl::MutexGuard
         {
-        private:
-            typedef ::osl::MutexGuard   BaseGuard;
-
         public:
             MethodGuard( const IMethodGuardAccess& _rComponent )
-                :BaseGuard( _rComponent.getMutex() )
+                : ::osl::MutexGuard( _rComponent.getMutex() )
             {
                 _rComponent.checkDisposed();
             }

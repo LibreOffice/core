@@ -126,25 +126,13 @@ private:
             css::util::ChangesEvent const & theEvent);
     };
 
-    typedef std::vector< DisposeNotification > DisposeNotifications;
-
-    typedef std::vector< ContainerNotification > ContainerNotifications;
-
-    typedef std::vector< PropertyChangeNotification >
-        PropertyChangeNotifications;
-
-    typedef std::vector< PropertiesChangeNotification >
-        PropertiesChangeNotifications;
-
-    typedef std::vector< ChangesNotification > ChangesNotifications;
-
-    DisposeNotifications disposeNotifications_;
-    ContainerNotifications containerElementInsertedNotifications_;
-    ContainerNotifications containerElementRemovedNotifications_;
-    ContainerNotifications containerElementReplacedNotifications_;
-    PropertyChangeNotifications propertyChangeNotifications_;
-    PropertiesChangeNotifications propertiesChangeNotifications_;
-    ChangesNotifications changesNotifications_;
+    std::vector< DisposeNotification > disposeNotifications_;
+    std::vector< ContainerNotification > containerElementInsertedNotifications_;
+    std::vector< ContainerNotification > containerElementRemovedNotifications_;
+    std::vector< ContainerNotification > containerElementReplacedNotifications_;
+    std::vector< PropertyChangeNotification > propertyChangeNotifications_;
+    std::vector< PropertiesChangeNotification > propertiesChangeNotifications_;
+    std::vector< ChangesNotification > changesNotifications_;
 };
 
 }

@@ -41,7 +41,6 @@ namespace sd
 {
 
 class ViewShellBase;
-typedef std::vector< rtl::Reference< AnnotationTag > > AnnotationTagVector;
 
 namespace tools {
 class EventMultiplexerEvent;
@@ -123,7 +122,7 @@ private:
     ViewShellBase& mrBase;
     SdDrawDocument* mpDoc;
 
-    AnnotationTagVector maTagVector;
+    std::vector< rtl::Reference< AnnotationTag > > maTagVector;
 
     css::uno::Reference< css::drawing::XDrawView > mxView;
     css::uno::Reference< css::office::XAnnotationAccess > mxCurrentPage;

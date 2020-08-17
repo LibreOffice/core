@@ -22,8 +22,6 @@
 
 namespace dbahsql
 {
-using ColumnTypeVector = std::vector<ColumnDefinition>;
-
 HsqlBinaryNode::HsqlBinaryNode(sal_Int32 nPos)
     : m_nPos(nPos)
 {
