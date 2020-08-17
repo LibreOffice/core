@@ -90,7 +90,7 @@ widgets_ignored = widgets_toplevel + [
     'GtkSearchBar',
     'GtkHeaderBar',
     'GtkStack',
-    'GtkStackSwticher',
+    'GtkStackSwitcher',
     'GtkPopover',
     'GtkPopoverMenu',
     'GtkActionBar',
