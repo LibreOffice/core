@@ -355,6 +355,8 @@ OUString getPropertyName( PropertyIds eId )
         case PROP_DATATABLE_NAME: sName = "DataTableName"; break;
         case PROP_DATACOLUMN_NAME: sName = "DataColumnName"; break;
         case PROP_CHAR_TRANSPARENCE: sName = "CharTransparence"; break;
+        case PROP_CELL_FORMULA: sName = "CellFormula"; break;
+        case PROP_CELL_FORMULA_CONVERTED: sName = "CellFormulaConverted"; break;
     }
     assert(sName.getLength()>0);
     return sName;

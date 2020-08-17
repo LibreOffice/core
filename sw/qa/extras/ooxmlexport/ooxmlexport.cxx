@@ -1009,6 +1009,52 @@ DECLARE_OOXMLEXPORT_TEST(testTdf133163, "tdf133163.fodt")
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r[2]/w:instrText", " = SUM(A1:A3)");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf133647, "tdf133647.docx")
+{
+    xmlDocUniquePtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+
+    // Keep original formula during round-trip
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc[4]/w:p/w:r[2]/w:instrText", " = SUM(A1,B1)");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc[4]/w:p/w:r[2]/w:instrText", " = SUM(C1:D1)");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc[4]/w:p/w:r[2]/w:instrText", " = SUM(A1,5,B1:C1,6)");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[7]/w:tc[4]/w:p/w:r[2]/w:instrText", " = (1+2)*SUM(C1,D1)");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[8]/w:tc[4]/w:p/w:r[2]/w:instrText", " = 3*(2+SUM(A1:C1)+7)");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[9]/w:tc[4]/w:p/w:r[2]/w:instrText", " = 1+(SUM(1,2))");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[10]/w:tc[4]/w:p/w:r[2]/w:instrText", " = (SUM(C1,5)*(2+7))*(3+SUM(1,B1))");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[11]/w:tc[4]/w:p/w:r[2]/w:instrText", " = sum(a1,b1)");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf123386, "tdf123386.docx")
+{
+    xmlDocUniquePtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+
+    // Keep original formula during round-trip
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc[4]/w:p/w:r[2]/w:instrText", " = A1 < 2");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc[4]/w:p/w:r[2]/w:instrText", " = B1 > 1");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[5]/w:tc[4]/w:p/w:r[2]/w:instrText", " = C1=3");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc[4]/w:p/w:r[2]/w:instrText", " = D1 <> 3");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[7]/w:tc[4]/w:p/w:r[2]/w:instrText", " = AND(A1=1,B1=2)");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[8]/w:tc[4]/w:p/w:r[2]/w:instrText", " = AND((A1<1),(B1<>2))");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[9]/w:tc[4]/w:p/w:r[2]/w:instrText", " = OR(A1=1,B1=2)");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[10]/w:tc[4]/w:p/w:r[2]/w:instrText", " = OR(TRUE,FALSE)");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[11]/w:tc[4]/w:p/w:r[2]/w:instrText", " = NOT(TRUE)");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[12]/w:tc[4]/w:p/w:r[2]/w:instrText", " = AND(1,DEFINED(ABC1))");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf123389, "tdf123389.docx")
+{
+    xmlDocUniquePtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+
+    // Keep original formula during round-trip
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc[4]/w:p/w:r[2]/w:instrText", " = ROUND(2.345,1)");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc[4]/w:p/w:r[2]/w:instrText", " = ROUND(A1,2)");
+}
 
 DECLARE_OOXMLEXPORT_TEST(testTdf106953, "tdf106953.docx")
 {

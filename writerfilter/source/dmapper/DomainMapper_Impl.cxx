@@ -4286,6 +4286,14 @@ void DomainMapper_Impl::handleFieldFormula
     // we don't copy the = symbol from the command
     OUString formula = convertFieldFormula(command.copy(1));
 
+    // grab-bag the original and converted formula
+    if (getTableManager().isInTable())
+    {
+        TablePropertyMapPtr pPropMap(new TablePropertyMap());
+        pPropMap->Insert(PROP_CELL_FORMULA, uno::makeAny(command.copy(1)), true, CELL_GRAB_BAG);
+        pPropMap->Insert(PROP_CELL_FORMULA_CONVERTED, uno::makeAny(formula), true, CELL_GRAB_BAG);
+        getTableManager().cellProps(pPropMap);
+    }
     xFieldProperties->setPropertyValue(getPropertyName(PROP_CONTENT), uno::makeAny(formula));
     xFieldProperties->setPropertyValue(getPropertyName(PROP_NUMBER_FORMAT), uno::makeAny(sal_Int32(0)));
     xFieldProperties->setPropertyValue("IsShowFormula", uno::makeAny(false));
