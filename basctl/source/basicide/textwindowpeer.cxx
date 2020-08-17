@@ -25,14 +25,14 @@
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <svtools/textwindowpeer.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <vcl/texteng.hxx>
 #include <vcl/textview.hxx>
+#include "textwindowpeer.hxx"
 
 namespace {
 
-class TextWindowPeer: public VCLXWindow {
+class TextWindowPeer final : public VCLXWindow {
 public:
     explicit TextWindowPeer(TextView & view);
 
@@ -62,7 +62,7 @@ TextWindowPeer::CreateAccessibleContext() {
 
 }
 
-css::uno::Reference<css::awt::XWindowPeer> svt::createTextWindowPeer(
+css::uno::Reference<css::awt::XWindowPeer> basctl::createTextWindowPeer(
     TextView & view)
 {
     return new TextWindowPeer(view);

@@ -55,15 +55,14 @@
 #include <vcl/ptrstyle.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/textwindowpeer.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/help.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <vector>
 #include <com/sun/star/reflection/theCoreReflection.hpp>
 #include <unotools/charclass.hxx>
+#include "textwindowpeer.hxx"
 #include "uiobject.hxx"
-
 
 namespace basctl
 {
@@ -2053,7 +2052,7 @@ EditorWindow::GetComponentInterface(bool bCreate)
         if (!pEditEngine)
             CreateEditEngine();
 
-        xPeer = svt::createTextWindowPeer(*GetEditView());
+        xPeer = createTextWindowPeer(*GetEditView());
         SetComponentInterface(xPeer);
     }
     return xPeer;
