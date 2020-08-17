@@ -930,6 +930,7 @@ void VclMetafileProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimi
                 static_cast<const primitive2d::ObjectInfoPrimitive2D&>(rCandidate));
             break;
         }
+        case PRIMITIVE2D_ID_SHADOWPRIMITIVE2D:
         case PRIMITIVE2D_ID_GLOWPRIMITIVE2D:
         case PRIMITIVE2D_ID_SOFTEDGEPRIMITIVE2D:
         {
