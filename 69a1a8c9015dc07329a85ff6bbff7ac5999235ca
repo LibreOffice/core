@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "17a1ca0b_ea95952c",
+        "filename": "bin/update_pch",
+        "patchSetId": 1
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-08-17T17:46:05Z",
+      "side": 1,
+      "message": "I don\u0027t see the file in LO code so don\u0027t know if it\u0027s still right.",
+      "range": {
+        "startLine": 380,
+        "startChar": 66,
+        "endLine": 380,
+        "endChar": 77
+      },
+      "revId": "69a1a8c9015dc07329a85ff6bbff7ac5999235ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
