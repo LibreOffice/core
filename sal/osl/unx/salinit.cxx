@@ -23,7 +23,6 @@
 #include <sal/config.h>
 
 #if defined MACOSX
-#include <algorithm>
 #include <cassert>
 #include <limits>
 #include <unistd.h>
@@ -69,14 +68,14 @@ void sal_detail_initialize(int argc, char ** argv) {
     // macOS appears to have no better interface to close all fds (like
     // closefrom):
     long openMax = sysconf(_SC_OPEN_MAX);
-    if (openMax == -1) {
-        // Some random value, but hopefully sysconf never returns -1 anyway:
-        openMax = 1024;
-    }
     // When LibreOffice restarts itself on macOS 11 beta on arm64, for
     // some reason sysconf(_SC_OPEN_MAX) returns 0x7FFFFFFFFFFFFFFF,
     // so use a sanity limit here.
-    for (int fd = 3; fd < std::min(100000l, openMax); ++fd) {
+    if (openMax == -1 || openMax == std::numeric_limits<long>::max()) {
+        openMax = 100000;
+    }
+    assert(openMax >= 0 && openMax <= std::numeric_limits< int >::max());
+    for (int fd = 3; fd < int(openMax); ++fd) {
         struct stat s;
         if (fstat(fd, &s) != -1 && S_ISREG(s.st_mode))
             close(fd);
