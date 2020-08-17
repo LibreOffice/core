@@ -75,10 +75,10 @@ void OTasksWindow::updateHelpText()
 
 IMPL_LINK(OTasksWindow, onSelected, weld::TreeView&, rTreeView, bool)
 {
-    int nCurEntry = rTreeView.get_cursor_index();
-    assert(nCurEntry != -1 && "OTasksWindow::onSelected: invalid entry!");
+    m_nCursorIndex = rTreeView.get_cursor_index();
+    assert(m_nCursorIndex != -1 && "OTasksWindow::onSelected: invalid entry!");
     URL aCommand;
-    aCommand.Complete = reinterpret_cast<TaskEntry*>(rTreeView.get_id(nCurEntry).toUInt64())->sUNOCommand;
+    aCommand.Complete = reinterpret_cast<TaskEntry*>(rTreeView.get_id(m_nCursorIndex).toUInt64())->sUNOCommand;
     getDetailView()->getBorderWin().getView()->getAppController().executeChecked( aCommand, Sequence< PropertyValue >() );
 
     return true;
@@ -105,6 +105,7 @@ IMPL_LINK_NOARG(OTasksWindow, FocusOutHdl, weld::Widget&, void)
 
 IMPL_LINK_NOARG(OTasksWindow, OnEntrySelectHdl, weld::TreeView&, void)
 {
+    m_nCursorIndex = m_xTreeView->get_cursor_index();
     updateHelpText();
 }
 
