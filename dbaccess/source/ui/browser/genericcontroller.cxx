@@ -872,7 +872,7 @@ sal_Bool SAL_CALL OGenericUnoController::supportsService(const OUString& Service
 
 void OGenericUnoController::startConnectionListening(const Reference< XConnection >& _rxConnection)
 {
-    // we have to remove ourself before dispoing the connection
+    // we have to remove ourself before disposing the connection
     Reference< XComponent >  xComponent(_rxConnection, UNO_QUERY);
     if (xComponent.is())
         xComponent->addEventListener(static_cast<XFrameActionListener*>(this));
@@ -880,7 +880,7 @@ void OGenericUnoController::startConnectionListening(const Reference< XConnectio
 
 void OGenericUnoController::stopConnectionListening(const Reference< XConnection >& _rxConnection)
 {
-    // we have to remove ourself before dispoing the connection
+    // we have to remove ourself before disposing the connection
     Reference< XComponent >  xComponent(_rxConnection, UNO_QUERY);
     if (xComponent.is())
         xComponent->removeEventListener(static_cast<XFrameActionListener*>(this));

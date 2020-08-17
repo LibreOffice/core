@@ -240,7 +240,7 @@ void SAL_CALL SbaTableQueryBrowser::disposing()
 
     if (getBrowserView())
     {
-        // Need to do some cleaup of the data pointed to the tree view entries before we remove the treeview
+        // Need to do some cleanup of the data pointed to the tree view entries before we remove the treeview
         clearTreeModel();
         m_pTreeView = nullptr;
         getBrowserView()->setTreeView(nullptr);
@@ -3389,7 +3389,7 @@ int SbaTableQueryBrowser::OnTreeEntryCompare(const weld::TreeIter& rLHS, const w
     // we want the table entry and the end so we have to do a check
     if (isContainer(rRHS))
     {
-        // don't use getEntryType (directly or indirecly) for the LHS:
+        // don't use getEntryType (directly or indirectly) for the LHS:
         // LHS is currently being inserted, so it is not "completely valid" at the moment
 
         const EntryType eRight = getEntryType(rRHS);

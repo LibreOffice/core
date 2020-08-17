@@ -681,7 +681,7 @@ VclMetafileProcessor2D::~VclMetafileProcessor2D()
     Only used in goodies\source\filter.vcl\ieps\ieps.cxx and svx\source\xml\xmlgrhlp.cxx to
     hold the original EPS which was imported in the same MetaFile as first 2 entries. Only
     used to export the original again (if exists).
-    Not necessary to support with MetaFuleRenderer.
+    Not necessary to support with MetaFileRenderer.
 
     XTEXT_SCROLLRECT, XTEXT_PAINTRECT
     Currently used to get extra MetaFile infos using GraphicExporter which again uses
