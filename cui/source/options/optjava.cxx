@@ -20,6 +20,7 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
+#include <cassert>
 #include <memory>
 
 #include <config_java.h>
@@ -145,11 +146,7 @@ IMPL_LINK(SvxJavaOptionsPage, CheckHdl_Impl, const weld::TreeView::iter_col&, rR
 
 IMPL_LINK_NOARG(SvxJavaOptionsPage, SelectHdl_Impl, weld::TreeView&, void)
 {
-    // set installation directory info
-    OUString sLocation = m_xJavaList->get_selected_id();
-    // tdf#80646 insert LTR mark after label
-    OUString sInfo = m_sInstallText + u"\u200E" + sLocation;
-    m_xJavaPathText->set_label(sInfo);
+    UpdateJavaPathText();
 }
 
 IMPL_LINK_NOARG(SvxJavaOptionsPage, AddHdl_Impl, weld::Button&, void)
@@ -337,6 +334,7 @@ void SvxJavaOptionsPage::LoadJREs()
         if ( jfw_areEqualJavaInfo( pCmpInfo.get(), pSelectedJava.get() ) )
         {
             HandleCheckEntry(i);
+            UpdateJavaPathText();
             break;
         }
         ++i;
@@ -373,6 +371,16 @@ void SvxJavaOptionsPage::HandleCheckEntry(int nCheckedRow)
         // we have radio button behavior -> so uncheck the other entries
         m_xJavaList->set_toggle(i, i == nCheckedRow ? TRISTATE_TRUE : TRISTATE_FALSE);
     }
+}
+
+void SvxJavaOptionsPage::UpdateJavaPathText()
+{
+    assert(m_xJavaList->get_selected_index() != -1);
+    // set installation directory info
+    OUString sLocation = m_xJavaList->get_selected_id();
+    // tdf#80646 insert LTR mark after label
+    OUString sInfo = m_sInstallText + u"\u200E" + sLocation;
+    m_xJavaPathText->set_label(sInfo);
 }
 
 void SvxJavaOptionsPage::AddFolder( const OUString& _rFolder )
@@ -417,6 +425,7 @@ void SvxJavaOptionsPage::AddFolder( const OUString& _rFolder )
         }
 
         HandleCheckEntry(nPos);
+        UpdateJavaPathText();
         bStartAgain = false;
     }
     else if ( JFW_E_NOT_RECOGNIZED == eErr )
