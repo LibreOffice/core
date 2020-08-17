@@ -38,6 +38,11 @@ interface Window
         ExecMethod = ChildWindowExecute ;
         StateMethod = ChildWindowState ;
     ]
+    SID_INSPECTOR_DECK
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
     SID_SIDEBAR // status(final|play)
     [
         ExecMethod = ChildWindowExecute ;

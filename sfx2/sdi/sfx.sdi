@@ -1011,7 +1011,23 @@ SfxVoidItem DesignerDialog SID_STYLE_DESIGNER
     GroupId = SfxGroupId::Format;
 ]
 
+SfxBoolItem InspectorDeck SID_INSPECTOR_DECK
 
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = TRUE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Sidebar;
+]
 
 SfxVoidItem DragHierarchy SID_STYLE_DRAGHIERARCHIE
 ()

@@ -628,6 +628,12 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="en-US" install:module="unxwnt">.uno:NumberFormatPercent</value>
           </prop>
         </node>
+        <node oor:name="5_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US"><div class="uno:InspectorDeck"></div></value>
+          </prop>
+        </node>
         <node oor:name="5_SHIFT_MOD3" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -2039,6 +2045,12 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="de">.uno:Shrink</value>
           </prop>
         </node>
+        <node oor:name="5_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US"><div class="uno:InspectorDeck"></div></value>
+          </prop>
+        </node>
         <node oor:name="9_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -2833,6 +2845,12 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="de">.uno:Shrink</value>
           </prop>
         </node>
+        <node oor:name="5_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US"><div class="uno:InspectorDeck"></div></value>
+          </prop>
+        </node>
         <node oor:name="9_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -3453,6 +3471,12 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="sv">.uno:Shrink</value>
             <value xml:lang="de">.uno:Shrink</value>
+          </prop>
+        </node>
+        <node oor:name="5_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US"><div class="uno:InspectorDeck"></div></value>
           </prop>
         </node>
         <node oor:name="9_MOD1" oor:op="replace">
@@ -5040,6 +5064,12 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="en-US">.uno:CalculateSel</value>
           </prop>
         </node>
+        <node oor:name="5_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US"><div class="uno:InspectorDeck"></div></value>
+          </prop>
+        </node>
         <node oor:name="A_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -5807,6 +5837,12 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="sv">.uno:Shrink</value>
             <value xml:lang="de">.uno:Shrink</value>
+          </prop>
+        </node>
+        <node oor:name="5_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US"><div class="uno:InspectorDeck"></div></value>
           </prop>
         </node>
         <node oor:name="9_MOD1" oor:op="replace">
@@ -6620,6 +6656,12 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="sv">.uno:Shrink</value>
             <value xml:lang="de">.uno:Shrink</value>
+          </prop>
+        </node>
+        <node oor:name="5_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US"><div class="uno:InspectorDeck"></div></value>
           </prop>
         </node>
         <node oor:name="9_MOD1" oor:op="replace">
@@ -7578,6 +7620,12 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="en-US">.uno:Undo</value>
           </prop>
         </node>
+        <node oor:name="5_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US"><div class="uno:InspectorDeck"></div></value>
+          </prop>
+        </node>
         <node oor:name="COPY" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -7682,6 +7730,12 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Undo</value>
+          </prop>
+        </node>
+        <node oor:name="5_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US"><div class="uno:InspectorDeck"></div></value>
           </prop>
         </node>
         <node oor:name="COPY" oor:op="replace">
