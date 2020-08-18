@@ -11,8 +11,10 @@
 #include <unotest/macros_test.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 
 using namespace ::com::sun::star;
@@ -107,6 +109,36 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testShapeNonAutosizeWithText)
     // - Expected: 5398
     // because the width was determined using its text size, not using the explicit size.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5398), xShape->getSize().Width);
+}
+
+CPPUNIT_TEST_FIXTURE(OoxVmlTest, testGraphicStroke)
+{
+    load("graphic-stroke.pptx");
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+
+    uno::Reference<beans::XPropertySet> xShape;
+    for (sal_Int32 i = 0; i < xDrawPage->getCount(); ++i)
+    {
+        uno::Reference<lang::XServiceInfo> xInfo(xDrawPage->getByIndex(i), uno::UNO_QUERY);
+        if (!xInfo->supportsService("com.sun.star.drawing.GraphicObjectShape"))
+        {
+            continue;
+        }
+
+        xShape.set(xInfo, uno::UNO_QUERY);
+        break;
+    }
+    CPPUNIT_ASSERT(xShape.is());
+
+    drawing::LineStyle eLineStyle{};
+    xShape->getPropertyValue("LineStyle") >>= eLineStyle;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. line style was NONE, not SOLID.
+    CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_SOLID, eLineStyle);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
