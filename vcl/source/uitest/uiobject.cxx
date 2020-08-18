@@ -27,7 +27,7 @@
 #include <vcl/toolkit/field.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/menubtn.hxx>
-#include <vcl/vclmedit.hxx>
+#include <vcl/toolkit/vclmedit.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <uiobject-internal.hxx>
 #include <verticaltabctrl.hxx>
