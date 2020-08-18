@@ -1173,12 +1173,20 @@ bool ImpGraphic::swapInContent(SvStream& rStream)
         sal_Int32 nMapMode, nScaleNumX, nScaleDenomX;
         sal_Int32 nScaleNumY, nScaleDenomY, nOffsX, nOffsY;
 
-        rStream.SeekRel( -4 );
+        rStream.SeekRel(-4);
 
         sal_Int32 nLen;
-        rStream.ReadInt32( nType ).ReadInt32( nLen ).ReadInt32( nWidth ).ReadInt32( nHeight );
-        rStream.ReadInt32( nMapMode ).ReadInt32( nScaleNumX ).ReadInt32( nScaleDenomX ).ReadInt32( nScaleNumY );
-        rStream.ReadInt32( nScaleDenomY ).ReadInt32( nOffsX ).ReadInt32( nOffsY );
+        rStream.ReadInt32(nType);
+        rStream.ReadInt32(nLen);
+        rStream.ReadInt32(nWidth);
+        rStream.ReadInt32(nHeight);
+        rStream.ReadInt32(nMapMode);
+        rStream.ReadInt32(nScaleNumX);
+        rStream.ReadInt32(nScaleDenomX);
+        rStream.ReadInt32(nScaleNumY);
+        rStream.ReadInt32(nScaleDenomY);
+        rStream.ReadInt32(nOffsX);
+        rStream.ReadInt32(nOffsY);
 
         // swapped
         if( nType > 100 )
