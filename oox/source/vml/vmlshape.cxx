@@ -292,7 +292,15 @@ void ShapeBase::finalizeFragmentImport()
     if (aType[ 0 ] == '#')
         aType = aType.copy(1);
     if( const ShapeType* pShapeType = mrDrawing.getShapes().getShapeTypeById( aType ) )
+    {
+        // Make sure that the stroke props from maTypeModel have priority over the stroke props from
+        // the shape type.
+        StrokeModel aMergedStrokeModel;
+        aMergedStrokeModel.assignUsed(pShapeType->getTypeModel().maStrokeModel);
+        aMergedStrokeModel.assignUsed(maTypeModel.maStrokeModel);
         maTypeModel.assignUsed( pShapeType->getTypeModel() );
+        maTypeModel.maStrokeModel = aMergedStrokeModel;
+    }
     else {
         // Temporary fix, shapetype not found if referenced from different substream
         // FIXME: extend scope of ShapeContainer to store all shapetypes from the document
@@ -1346,6 +1354,13 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
         // AS_CHARACTER shape: vertical orientation default is bottom, MSO default is top.
         if ( maTypeModel.maPosition != "absolute" && maTypeModel.maPosition != "relative" )
             PropertySet( xShape ).setAnyProperty( PROP_VertOrient, makeAny(text::VertOrientation::TOP));
+
+        // Apply stroke props from the type model.
+        oox::drawingml::ShapePropertyMap aPropMap(mrDrawing.getFilter().getModelObjectHelper());
+        const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
+        maTypeModel.maStrokeModel.pushToPropMap(aPropMap, rGraphicHelper);
+        PropertySet(xShape).setProperties(aPropMap);
+
         return xShape;
     }
 
