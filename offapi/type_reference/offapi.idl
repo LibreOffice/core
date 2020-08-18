@@ -3024,6 +3024,7 @@ module com {
      [property, optional] ::com::sun::star::util::Color CharHighlight;
      [property, optional] sequence< ::com::sun::star::beans::PropertyValue > CharInteropGrabBag;
      [property, optional] short RubyPosition;
+     [property, optional] short CharTransparence;
     };
    };
    module chart {
@@ -3347,6 +3348,7 @@ module com {
      const long BOTTOM_LEFT = 5;
      const long BOTTOM_RIGHT = 7;
      const long CENTER = 1;
+     const long CUSTOM = 13;
      const long INSIDE = 10;
      const long LEFT = 4;
      const long NEAR_ORIGIN = 12;
@@ -4961,19 +4963,7 @@ module com {
    };
    module xml {
     module sax {
-     published interface XAttributeList;
-     published interface XLocator;
-     published interface XDocumentHandler {
-      interface ::com::sun::star::uno::XInterface;
-      void startDocument() raises (::com::sun::star::xml::sax::SAXException);
-      void endDocument() raises (::com::sun::star::xml::sax::SAXException);
-      void startElement([in] string aName, [in] ::com::sun::star::xml::sax::XAttributeList xAttribs) raises (::com::sun::star::xml::sax::SAXException);
-      void endElement([in] string aName) raises (::com::sun::star::xml::sax::SAXException);
-      void characters([in] string aChars) raises (::com::sun::star::xml::sax::SAXException);
-      void ignorableWhitespace([in] string aWhitespaces) raises (::com::sun::star::xml::sax::SAXException);
-      void processingInstruction([in] string aTarget, [in] string aData) raises (::com::sun::star::xml::sax::SAXException);
-      void setDocumentLocator([in] ::com::sun::star::xml::sax::XLocator xLocator) raises (::com::sun::star::xml::sax::SAXException);
-     };
+     published interface XDocumentHandler;
     };
    };
    module document {
@@ -13457,6 +13447,10 @@ module com {
      const short AIU_FULLWIDTH_JA = 21;
      const short AIU_HALFWIDTH_JA = 22;
      const short ARABIC = 4;
+     const short ARABIC_ZERO = 64;
+     const short ARABIC_ZERO3 = 65;
+     const short ARABIC_ZERO4 = 66;
+     const short ARABIC_ZERO5 = 67;
      const short BITMAP = 8;
      const short CHARS_ARABIC = 31;
      const short CHARS_ARABIC_ABJAD = 54;
@@ -13566,6 +13560,11 @@ module com {
      sequence< ::com::sun::star::beans::PropertyValue > getStyleLoaderOptions();
     };
    };
+   module xml {
+    module sax {
+     published interface XDocumentHandler;
+    };
+   };
    module svg {
     /** @deprecated */ published interface XSVGPrinter {
      interface ::com::sun::star::uno::XInterface;
@@ -13573,6 +13572,13 @@ module com {
      void printPage([in] sequence< byte > aPrintPage);
      void endJob();
     };
+   };
+   module xml {
+    module sax {
+     published interface XDocumentHandler;
+    };
+   };
+   module svg {
     /** @deprecated */ published interface XSVGWriter {
      interface ::com::sun::star::uno::XInterface;
      void write([in] ::com::sun::star::xml::sax::XDocumentHandler aHandler, [in] sequence< byte > aMtf);
@@ -14806,6 +14812,7 @@ module com {
      const short PAGE_FRAME = 7;
      const short PAGE_LEFT = 3;
      const short PAGE_PRINT_AREA = 8;
+     const short PAGE_PRINT_AREA_BOTTOM = 10;
      const short PAGE_RIGHT = 4;
      const short PRINT_AREA = 1;
      const short TEXT_LINE = 9;
@@ -15337,6 +15344,7 @@ module com {
      [property, optional] boolean HideWhitespace;
      [property, optional] boolean ShowInlineTooltips;
      [property, optional] boolean UseHeaderFooterMenu;
+     [property, optional] boolean ShowBookmarks;
     };
     published constants WritingMode2 {
      const short BT_LR = 5;
@@ -17622,6 +17630,21 @@ module com {
     published interface XExportFilter {
      interface ::com::sun::star::uno::XInterface;
      boolean exporter([in] sequence< ::com::sun::star::beans::PropertyValue > aSourceData, [in] sequence< string > msUserData) raises (::com::sun::star::lang::IllegalArgumentException);
+    };
+    module sax {
+     published interface XAttributeList;
+     published interface XLocator;
+     published interface XDocumentHandler {
+      interface ::com::sun::star::uno::XInterface;
+      void startDocument() raises (::com::sun::star::xml::sax::SAXException);
+      void endDocument() raises (::com::sun::star::xml::sax::SAXException);
+      void startElement([in] string aName, [in] ::com::sun::star::xml::sax::XAttributeList xAttribs) raises (::com::sun::star::xml::sax::SAXException);
+      void endElement([in] string aName) raises (::com::sun::star::xml::sax::SAXException);
+      void characters([in] string aChars) raises (::com::sun::star::xml::sax::SAXException);
+      void ignorableWhitespace([in] string aWhitespaces) raises (::com::sun::star::xml::sax::SAXException);
+      void processingInstruction([in] string aTarget, [in] string aData) raises (::com::sun::star::xml::sax::SAXException);
+      void setDocumentLocator([in] ::com::sun::star::xml::sax::XLocator xLocator) raises (::com::sun::star::xml::sax::SAXException);
+     };
     };
     published service ExportFilter {
      interface ::com::sun::star::xml::sax::XDocumentHandler;
