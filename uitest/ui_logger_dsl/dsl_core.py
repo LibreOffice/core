@@ -110,6 +110,7 @@ class ul_Compiler:
                 "calc_switch_sheet": self.handle_calc_switch_sheet,
                 "calc_Type_command": self.handle_calc_Type_command,
                 "calc_AutoFill_filter": self.handle_calc_AutoFill_filter,
+                "calc_SelectMenu_filter": self.handle_calc_SelectMenu_filter,
                 "impress_Type_command": self.handle_impress_Type_command,
                 "math_element_selector": self.handle_math_element_selector,
                 "math_Type_command": self.handle_math_Type_command,
@@ -725,6 +726,25 @@ class ul_Compiler:
 
         self.variables.append(line)
         self.prev_command = calc_AutoFill_filter
+
+    def handle_calc_SelectMenu_filter(self, calc_SelectMenu_filter):
+
+        self.init_app()
+
+        line = (
+            double_tab
+            + self.current_app
+            + '.executeAction("LAUNCH", mkPropertyValues'
+            + '({"SELECTMENU": "", "COL": "'
+            + str(calc_SelectMenu_filter.col_num)
+            + '"'
+            + ', "ROW": "'
+            + str(calc_SelectMenu_filter.row_num)
+            + '"}))\n'
+        )
+
+        self.variables.append(line)
+        self.prev_command = calc_SelectMenu_filter
 
     def handle_impress_Type_command(self, impress_Type_command):
 
