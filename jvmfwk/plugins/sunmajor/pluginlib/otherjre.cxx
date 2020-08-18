@@ -90,7 +90,7 @@ char const* const* OtherInfo::getLibraryPaths(int* size)
         "/lib/" JFW_PLUGIN_ARCH "/classic",
         "/lib/" JFW_PLUGIN_ARCH "/jrockit",
         "/lib/" JFW_PLUGIN_ARCH "/native_threads",
-        "/lib/" JFW_PLUGIN_ARCH
+        ("/lib/" JFW_PLUGIN_ARCH)
     };
 
     *size = SAL_N_ELEMENTS(ar);
