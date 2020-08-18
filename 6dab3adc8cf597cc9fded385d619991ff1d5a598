@@ -1,0 +1,322 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1657d836_57413a14",
+        "filename": "formula/source/core/api/FormulaCompiler.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 2336,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-08-18T22:31:54Z",
+      "side": 1,
+      "message": "This is wrong. Even if the resulting reference string is only \"#REF!\" the formula string must be completely constructed. Together with overwriting the buffered string in ConventionXL_OOX::makeRefStr() this results in only \"#REF!\" which is the case that was to be avoided in a previous attempt of these patches. Any formula expression like \u003dFOO(#REF!,23) is to be preserved.",
+      "revId": "6dab3adc8cf597cc9fded385d619991ff1d5a598",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28564291_97e9e7b8",
+        "filename": "formula/source/core/api/FormulaCompiler.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 2343,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-08-18T22:31:54Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "6dab3adc8cf597cc9fded385d619991ff1d5a598",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43eb0875_d3a5f7d1",
+        "filename": "include/formula/FormulaCompiler.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-08-18T22:31:54Z",
+      "side": 1,
+      "message": "Unnecessary changes then.",
+      "revId": "6dab3adc8cf597cc9fded385d619991ff1d5a598",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a611f64_b1d6a5e8",
+        "filename": "sc/inc/compiler.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-08-18T22:31:54Z",
+      "side": 1,
+      "message": "Unnecessary change then.",
+      "revId": "6dab3adc8cf597cc9fded385d619991ff1d5a598",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "852eddec_c0779c87",
+        "filename": "sc/inc/compiler.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-08-18T22:31:54Z",
+      "side": 1,
+      "message": "Unnecessary changes then.",
+      "revId": "6dab3adc8cf597cc9fded385d619991ff1d5a598",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d620afc_814b4410",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 867,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-08-18T22:31:54Z",
+      "side": 1,
+      "message": "Unnecessary change then.",
+      "revId": "6dab3adc8cf597cc9fded385d619991ff1d5a598",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8ec60d4_13780061",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1032,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-08-18T22:31:54Z",
+      "side": 1,
+      "message": "Unnecessary change then.",
+      "revId": "6dab3adc8cf597cc9fded385d619991ff1d5a598",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd7db7d1_cf306ea7",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1283,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-08-18T22:31:54Z",
+      "side": 1,
+      "message": "Unnecessary change then.",
+      "revId": "6dab3adc8cf597cc9fded385d619991ff1d5a598",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22b41768_085b470a",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1312,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-08-18T22:31:54Z",
+      "side": 1,
+      "message": "This still does not handle the case that only the sheetname is a \"#REF!\" string, or even worse, a translated UI string, when called from ConventionXL_OOX.",
+      "revId": "6dab3adc8cf597cc9fded385d619991ff1d5a598",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98f62ba6_950866aa",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1364,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-08-18T22:31:54Z",
+      "side": 1,
+      "message": "Why private? It was public before, no unrelated changes please. (this is a struct, not a class).",
+      "range": {
+        "startLine": 1364,
+        "startChar": 0,
+        "endLine": 1364,
+        "endChar": 7
+      },
+      "revId": "6dab3adc8cf597cc9fded385d619991ff1d5a598",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d517e2db_531fc875",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1448,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-08-18T22:31:54Z",
+      "side": 1,
+      "message": "Unnecessary change then.",
+      "revId": "6dab3adc8cf597cc9fded385d619991ff1d5a598",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c21d2877_6fbc5874",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1450,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-08-18T22:31:54Z",
+      "side": 1,
+      "message": "Why?",
+      "range": {
+        "startLine": 1450,
+        "startChar": 54,
+        "endLine": 1450,
+        "endChar": 63
+      },
+      "revId": "6dab3adc8cf597cc9fded385d619991ff1d5a598",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a019d75_7a70460f",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1476,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-08-18T22:31:54Z",
+      "side": 1,
+      "message": "Do not overwrite the so far existing formula.",
+      "revId": "6dab3adc8cf597cc9fded385d619991ff1d5a598",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9cdc59e2_139a34de",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1482,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-08-18T22:31:54Z",
+      "side": 1,
+      "message": "Do not overwrite the so far existing formula.",
+      "revId": "6dab3adc8cf597cc9fded385d619991ff1d5a598",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "852e8c45_e03ecee9",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1628,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-08-18T22:31:54Z",
+      "side": 1,
+      "message": "Unnecessary change then.",
+      "revId": "6dab3adc8cf597cc9fded385d619991ff1d5a598",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05e3f89b_2831205f",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 5161,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-08-18T22:31:54Z",
+      "side": 1,
+      "message": "Unnecessary change then.",
+      "revId": "6dab3adc8cf597cc9fded385d619991ff1d5a598",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf5d1d0a_b80597ac",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 5221,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-08-18T22:31:54Z",
+      "side": 1,
+      "message": "Unnecessary change then.",
+      "revId": "6dab3adc8cf597cc9fded385d619991ff1d5a598",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18baad57_905ce111",
+        "filename": "sc/source/filter/excel/xecontent.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1780,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-08-18T22:31:54Z",
+      "side": 1,
+      "message": "Why this? It\u0027s the default value.",
+      "revId": "6dab3adc8cf597cc9fded385d619991ff1d5a598",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
