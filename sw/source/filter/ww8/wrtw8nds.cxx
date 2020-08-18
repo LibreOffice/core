@@ -3095,6 +3095,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
             aParagraphMarkerProperties.Put(*pSet);
             bCharFormatOnly = false;
             // TODO: still need to check for a RES_TXTATR_CHARFMT hint...
+            // ^
         }
         if (const SwpHints* pTextAttrs = rNode.GetpSwpHints())
         {
