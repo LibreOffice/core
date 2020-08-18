@@ -638,7 +638,6 @@ void OptimizerDialog::UpdateControlStatesPage4()
 
     // taking care of deleted slides
     sal_Int32 nDeletedSlides = 0;
-    OUString aCustomShowName;
     if ( getControlProperty( "CheckBox3Pg3", "State" ) >>= nInt16 )
     {
         if ( nInt16 )
@@ -661,44 +660,20 @@ void OptimizerDialog::UpdateControlStatesPage4()
             }
         }
     }
-    if ( !aCustomShowName.isEmpty() )
-    {
-        std::vector< Reference< XDrawPage > > vNonUsedPageList;
-        PageCollector::CollectNonCustomShowPages( mxController->getModel(), aCustomShowName, vNonUsedPageList );
-        nDeletedSlides += vNonUsedPageList.size();
-    }
     if ( GetConfigProperty( TK_DeleteHiddenSlides, false ) )
     {
-        if ( !aCustomShowName.isEmpty() )
+        Reference< XDrawPagesSupplier > xDrawPagesSupplier( mxController->getModel(), UNO_QUERY_THROW );
+        Reference< XDrawPages > xDrawPages( xDrawPagesSupplier->getDrawPages(), UNO_SET_THROW );
+        for( sal_Int32 i = 0; i < xDrawPages->getCount(); i++ )
         {
-            std::vector< Reference< XDrawPage > > vUsedPageList;
-            PageCollector::CollectCustomShowPages( mxController->getModel(), aCustomShowName, vUsedPageList );
-            for( const auto& rxPage : vUsedPageList )
-            {
-                Reference< XPropertySet > xPropSet( rxPage, UNO_QUERY_THROW );
-                bool bVisible = true;
-                if ( xPropSet->getPropertyValue( "Visible" ) >>= bVisible )
-                {
-                    if (!bVisible )
-                        nDeletedSlides++;
-                }
-            }
-        }
-        else
-        {
-            Reference< XDrawPagesSupplier > xDrawPagesSupplier( mxController->getModel(), UNO_QUERY_THROW );
-            Reference< XDrawPages > xDrawPages( xDrawPagesSupplier->getDrawPages(), UNO_SET_THROW );
-            for( sal_Int32 i = 0; i < xDrawPages->getCount(); i++ )
-            {
-                Reference< XDrawPage > xDrawPage( xDrawPages->getByIndex( i ), UNO_QUERY_THROW );
-                Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY_THROW );
+            Reference< XDrawPage > xDrawPage( xDrawPages->getByIndex( i ), UNO_QUERY_THROW );
+            Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY_THROW );
 
-                bool bVisible = true;
-                if ( xPropSet->getPropertyValue( "Visible" ) >>= bVisible )
-                {
-                    if (!bVisible )
-                        nDeletedSlides++;
-                }
+            bool bVisible = true;
+            if ( xPropSet->getPropertyValue( "Visible" ) >>= bVisible )
+            {
+                if (!bVisible )
+                    nDeletedSlides++;
             }
         }
     }
