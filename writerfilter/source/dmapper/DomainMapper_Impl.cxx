@@ -1622,9 +1622,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 {
                     // this condition isn't ideal but as it happens all
                     // RES_CHRATR_* have names that start with "Char"
-                    if (it->Name.startsWith("Char")
-// TODO testParagraphMark *wants* this but it's some effort to create a real SwFormatCharFormat...
-                        && !it->Name.startsWith("CharStyleName"))
+                    if (it->Name.startsWith("Char"))
                     {
                         charProperties.emplace_back(it->Name, it->Value);
                         // as testN793262 demonstrates, font size in rPr must
