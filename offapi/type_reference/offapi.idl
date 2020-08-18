@@ -668,7 +668,6 @@ module com {
      void setType([in] long nType);
      long getType();
     };
-    published interface XWindowPeer;
    };
    module graphic {
     published interface XGraphic;
@@ -887,7 +886,6 @@ module com {
      ::com::sun::star::datatransfer::dnd::XDropTarget getDropTarget([in] ::com::sun::star::awt::XWindow window);
      ::com::sun::star::datatransfer::clipboard::XClipboard getClipboard([in] string clipboardName);
     };
-    published interface XFocusListener;
     published interface XKeyHandler;
     published interface XTopWindow;
     published interface XTopWindowListener;
@@ -906,7 +904,6 @@ module com {
      void fireFocusLost([in] ::com::sun::star::uno::XInterface source);
     };
     published interface XMessageBox;
-    published interface XWindowPeer;
     published interface XMessageBoxFactory {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::awt::XMessageBox createMessageBox([in] ::com::sun::star::awt::XWindowPeer aParent, [in] ::com::sun::star::awt::MessageBoxType eType, [in] long nButtons, [in] string sTitle, [in] string sMessage);
@@ -915,7 +912,6 @@ module com {
      interface ::com::sun::star::uno::XInterface;
      void reschedule();
     };
-    published interface XWindowPeer;
     published interface XSystemChildFactory {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::awt::XWindowPeer createSystemChild([in] any Parent, [in] sequence< byte > ProcessId, [in] short SystemType);
@@ -926,7 +922,6 @@ module com {
      CONTAINER = 2,
      SIMPLE = 3
     };
-    published interface XWindowPeer;
     published struct WindowDescriptor {
      ::com::sun::star::awt::WindowClass Type;
      string WindowServiceName;
@@ -937,7 +932,6 @@ module com {
     };
     published interface XDevice;
     published interface XRegion;
-    published interface XWindowPeer;
     published interface XToolkit {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::awt::XWindowPeer getDesktopWindow();
@@ -982,9 +976,6 @@ module com {
      MIDDLE = 1,
      BOTTOM = 2
     };
-   };
-   module graphic {
-    published interface XGraphic;
    };
    module awt {
     published service UnoControlButtonModel {
@@ -1031,11 +1022,6 @@ module com {
      interface ::com::sun::star::awt::XCheckBox;
      interface ::com::sun::star::awt::XLayoutConstrains;
     };
-   };
-   module graphic {
-    published interface XGraphic;
-   };
-   module awt {
     published service UnoControlCheckBoxModel {
      service ::com::sun::star::awt::UnoControlModel;
      [property, optional] short Align;
@@ -1088,8 +1074,6 @@ module com {
      interface ::com::sun::star::awt::XLayoutConstrains;
      interface ::com::sun::star::awt::XTextLayoutConstrains;
     };
-    published interface XActionListener;
-    published interface XItemListener;
     published interface XComboBox {
      interface ::com::sun::star::uno::XInterface;
      void addItemListener([in] ::com::sun::star::awt::XItemListener l);
@@ -1336,7 +1320,6 @@ module com {
      void endDialog([in] long Result);
      void setHelpId([in] string Id);
     };
-    published interface XTopWindowListener;
     published interface XTopWindow {
      interface ::com::sun::star::uno::XInterface;
      void addTopWindowListener([in] ::com::sun::star::awt::XTopWindowListener xListener);
@@ -1353,11 +1336,6 @@ module com {
      interface ::com::sun::star::awt::XDialog2;
     };
     published service UnoControlDialog: ::com::sun::star::awt::XUnoControlDialog;
-   };
-   module graphic {
-    published interface XGraphic;
-   };
-   module awt {
     published service UnoControlDialogModel {
      service ::com::sun::star::awt::UnoControlModel;
      interface ::com::sun::star::lang::XMultiServiceFactory;
@@ -1549,11 +1527,6 @@ module com {
      service ::com::sun::star::awt::UnoControl;
      interface ::com::sun::star::awt::XLayoutConstrains;
     };
-   };
-   module graphic {
-    published interface XGraphic;
-   };
-   module awt {
     published service UnoControlImageControlModel {
      service ::com::sun::star::awt::UnoControlModel;
      [property] ::com::sun::star::util::Color BackgroundColor;
@@ -1569,8 +1542,6 @@ module com {
      [property, optional] short ScaleMode;
      [property, optional] boolean Tabstop;
     };
-    published interface XActionListener;
-    published interface XItemListener;
     published interface XListBox {
      interface ::com::sun::star::uno::XInterface;
      void addItemListener([in] ::com::sun::star::awt::XItemListener l);
@@ -1751,7 +1722,6 @@ module com {
      [property] long ProgressValueMax;
      [property] long ProgressValueMin;
     };
-    published interface XItemListener;
     published interface XRadioButton {
      interface ::com::sun::star::uno::XInterface;
      void addItemListener([in] ::com::sun::star::awt::XItemListener l);
@@ -1765,11 +1735,6 @@ module com {
      interface ::com::sun::star::awt::XRadioButton;
      interface ::com::sun::star::awt::XLayoutConstrains;
     };
-   };
-   module graphic {
-    published interface XGraphic;
-   };
-   module awt {
     published service UnoControlRadioButtonModel {
      service ::com::sun::star::awt::UnoControlModel;
      [property, optional] short Align;
@@ -1975,7 +1940,6 @@ module com {
     };
     published interface XDisplayBitmap;
     published interface XFont;
-    published interface XGraphics;
     published interface XDevice {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::awt::XGraphics createGraphics();
@@ -2030,7 +1994,6 @@ module com {
      long getStringWidthArray([in] string str, [out] sequence< long > aDXArray);
      void getKernPairs([out] sequence< char > Chars1, [out] sequence< char > Chars2, [out] sequence< short > Kerns);
     };
-    published interface XRegion;
     published interface XGraphics {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::awt::XDevice getDevice();
@@ -2063,11 +2026,6 @@ module com {
      void drawText([in] long X, [in] long Y, [in] string Text);
      void drawTextArray([in] long X, [in] long Y, [in] string Text, [in] sequence< long > Longs);
     };
-   };
-   module graphic {
-    published interface XGraphic;
-   };
-   module awt {
     published interface XGraphics2 {
      interface ::com::sun::star::awt::XGraphics;
      void clear([in] ::com::sun::star::awt::Rectangle aRect);
@@ -2542,11 +2500,6 @@ module com {
      [property] boolean HasXAxisHelpGrid;
      [property] boolean HasXAxisTitle;
     };
-   };
-   module drawing {
-    published interface XShape;
-   };
-   module chart {
     published interface XAxisZSupplier {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::drawing::XShape getZAxisTitle();
@@ -2598,11 +2551,6 @@ module com {
      [property, optional] string ErrorBarRangePositive;
      [property, optional] string ErrorBarRangeNegative;
     };
-   };
-   module drawing {
-    published interface XShape;
-   };
-   module chart {
     published interface XAxisYSupplier {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::drawing::XShape getYAxisTitle();
@@ -3132,11 +3080,6 @@ module com {
      double LowError;
     };
     /** @deprecated */ published typedef sequence< ::com::sun::star::chart::ChartDataValue > ChartDataPoint;
-   };
-   module graphic {
-    published interface XGraphic;
-   };
-   module chart {
     published service ChartDataPointProperties {
      service ::com::sun::star::drawing::LineProperties;
      service ::com::sun::star::style::CharacterProperties;
@@ -3377,11 +3320,6 @@ module com {
      service ::com::sun::star::chart::ChartAxisYSupplier;
      service ::com::sun::star::chart::StackableDiagram;
     };
-   };
-   module graphic {
-    published interface XGraphic;
-   };
-   module chart {
     published service LineDiagram {
      service ::com::sun::star::chart::Diagram;
      service ::com::sun::star::chart::ChartStatistics;
@@ -3599,11 +3537,6 @@ module com {
      char DecimalChar;
      char FillChar;
     };
-   };
-   module graphic {
-    published interface XGraphic;
-   };
-   module style {
     published service ParagraphProperties {
      [property] ::com::sun::star::style::ParagraphAdjust ParaAdjust;
      [property, optional] ::com::sun::star::style::LineSpacing ParaLineSpacing;
@@ -3996,7 +3929,6 @@ module com {
      published exception MalformedDataException: ::com::sun::star::uno::Exception {
       any ErrorDetails;
      };
-     published interface XLayer;
      published interface XLayerImporter {
       interface ::com::sun::star::uno::XInterface;
       ::com::sun::star::configuration::backend::XBackend getTargetBackend();
@@ -4041,7 +3973,6 @@ module com {
       interface ::com::sun::star::uno::XInterface;
       void readData([in] ::com::sun::star::configuration::backend::XLayerHandler aHandler) raises (::com::sun::star::lang::NullPointerException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::configuration::backend::MalformedDataException);
      };
-     published interface XLayerHandler;
      published interface XCompositeLayer {
       interface ::com::sun::star::configuration::backend::XLayer;
       sequence< string > listSubLayerIds() raises (::com::sun::star::lang::WrappedTargetException);
@@ -4113,7 +4044,6 @@ module com {
      published service LdapSingleBackend {
       service ::com::sun::star::configuration::backend::SingleBackend;
      };
-     published interface XUpdatableLayer;
      published interface XSingleLayerStratum {
       interface ::com::sun::star::uno::XInterface;
       ::com::sun::star::configuration::backend::XLayer getLayer([in] string aComponent, [in] string aTimestamp) raises (::com::sun::star::configuration::backend::BackendAccessException, ::com::sun::star::lang::IllegalArgumentException);
@@ -4301,7 +4231,6 @@ module com {
      published struct ClipboardEvent: ::com::sun::star::lang::EventObject {
       ::com::sun::star::datatransfer::XTransferable Contents;
      };
-     published interface XClipboard;
      published interface XClipboardManager {
       interface ::com::sun::star::uno::XInterface;
       ::com::sun::star::datatransfer::clipboard::XClipboard getClipboard([in] string aName) raises (::com::sun::star::container::NoSuchElementException);
@@ -4374,7 +4303,6 @@ module com {
       const byte ACTION_NONE = 0;
       const byte ACTION_REFERENCE = 4;
      };
-     published interface XDragSource;
      published struct DragGestureEvent: ::com::sun::star::lang::EventObject {
       byte DragAction;
       long DragOriginX;
@@ -4382,7 +4310,6 @@ module com {
       ::com::sun::star::datatransfer::dnd::XDragSource DragSource;
       any Event;
      };
-     published interface XDragSource;
      published interface XDragSourceContext;
      published struct DragSourceEvent: ::com::sun::star::lang::EventObject {
       ::com::sun::star::datatransfer::dnd::XDragSourceContext DragSourceContext;
@@ -4960,13 +4887,6 @@ module com {
     published service XMLBasicExporter: ::com::sun::star::document::XXMLBasicExporter {
      createWithHandler([in] ::com::sun::star::xml::sax::XDocumentHandler DocumentHandler);
     };
-   };
-   module xml {
-    module sax {
-     published interface XDocumentHandler;
-    };
-   };
-   module document {
     published service XMLOasisBasicExporter: ::com::sun::star::document::XXMLBasicExporter {
      createWithHandler([in] ::com::sun::star::xml::sax::XDocumentHandler DocumentHandler);
     };
@@ -5333,14 +5253,12 @@ module com {
      ::com::sun::star::drawing::XShape bind([in] ::com::sun::star::drawing::XShapes xShapes);
      void unbind([in] ::com::sun::star::drawing::XShape xShape);
     };
-    published interface XShapes;
     published interface XShapeCombiner {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::drawing::XShape combine([in] ::com::sun::star::drawing::XShapes xShapes);
      void split([in] ::com::sun::star::drawing::XShape Group);
     };
     published interface XShapeGroup;
-    published interface XShapes;
     published interface XShapeGrouper {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::drawing::XShapeGroup group([in] ::com::sun::star::drawing::XShapes xShapes);
@@ -5378,7 +5296,6 @@ module com {
      [property, optional, readonly] boolean IsBackgroundDark;
      [property, optional] ::com::sun::star::container::XIndexAccess NavigationOrder;
     };
-    published interface XDrawPage;
     published interface XMasterPageTarget {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::drawing::XDrawPage getMasterPage();
@@ -5397,19 +5314,15 @@ module com {
      interface ::com::sun::star::drawing::XMasterPageTarget;
      [optional] interface ::com::sun::star::form::XFormsSupplier;
     };
-    published interface XDrawPage;
     published interface XDrawPages;
     /** @deprecated */ published interface XDrawPageExpander {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::drawing::XDrawPages expand([in] ::com::sun::star::drawing::XDrawPage xPage);
     };
-    published interface XDrawPage;
-    published interface XDrawPages;
     /** @deprecated */ published interface XDrawPageSummarizer {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::drawing::XDrawPage summarize([in] ::com::sun::star::drawing::XDrawPages xPages);
     };
-    published interface XDrawPage;
     published interface XDrawPages {
      interface ::com::sun::star::container::XIndexAccess;
      ::com::sun::star::drawing::XDrawPage insertNewByIndex([in] long nIndex);
@@ -5425,7 +5338,6 @@ module com {
      NOTES = 1,
      HANDOUT = 2
     };
-    published interface XDrawPage;
     published interface XDrawPageDuplicator {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::drawing::XDrawPage duplicate([in] ::com::sun::star::drawing::XDrawPage xPage);
@@ -5442,7 +5354,6 @@ module com {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::drawing::XDrawPages getMasterPages();
     };
-    published interface XDrawPage;
     published interface XDrawView {
      interface ::com::sun::star::uno::XInterface;
      void setCurrentPage([in] ::com::sun::star::drawing::XDrawPage xPage);
@@ -5529,7 +5440,6 @@ module com {
     };
    };
    module drawing {
-    published interface XDrawPage;
     published service DrawingDocumentDrawView {
      service ::com::sun::star::frame::Controller;
      interface ::com::sun::star::drawing::XDrawView;
@@ -5605,11 +5515,6 @@ module com {
      long ErrorCorrection;
      long Border;
     };
-   };
-   module graphic {
-    published interface XGraphic;
-   };
-   module drawing {
     published service GraphicObjectShape {
      service ::com::sun::star::drawing::Shape;
      service ::com::sun::star::drawing::Text;
@@ -5988,11 +5893,6 @@ module com {
      [property, readonly] long OpenMode;
      [property, optional, readonly] string URL;
     };
-   };
-   module frame {
-    published interface XFrame;
-   };
-   module embed {
     published service DocumentCloser: ::com::sun::star::lang::XComponent {
      DocumentCloserCtor1([in] ::com::sun::star::frame::XFrame xFrame) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::frame::DoubleInitializationException, ::com::sun::star::uno::Exception);
     };
@@ -6934,10 +6834,6 @@ module com {
      void moveToInsertRow() raises (::com::sun::star::sdbc::SQLException);
      void moveToCurrentRow() raises (::com::sun::star::sdbc::SQLException);
     };
-    published interface XArray;
-    published interface XBlob;
-    published interface XClob;
-    published interface XRef;
     published interface XRow {
      interface ::com::sun::star::uno::XInterface;
      boolean wasNull() raises (::com::sun::star::sdbc::SQLException);
@@ -7225,7 +7121,6 @@ module com {
     };
    };
    module frame {
-    published interface XDispatchProviderInterceptor;
     published interface XDispatchProviderInterception {
      interface ::com::sun::star::uno::XInterface;
      void registerDispatchProviderInterceptor([in] ::com::sun::star::frame::XDispatchProviderInterceptor Interceptor);
@@ -7431,7 +7326,6 @@ module com {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::lang::XComponent loadComponentFromURL([in] string URL, [in] string TargetFrameName, [in] long SearchFlags, [in] sequence< ::com::sun::star::beans::PropertyValue > Arguments) raises (::com::sun::star::io::IOException, ::com::sun::star::lang::IllegalArgumentException);
     };
-    published interface XFrame;
     published interface XTerminateListener;
     published interface XDesktop {
      interface ::com::sun::star::uno::XInterface;
@@ -8935,7 +8829,6 @@ module com {
      boolean addDictionaryEventListener([in] ::com::sun::star::linguistic2::XDictionaryEventListener xListener);
      boolean removeDictionaryEventListener([in] ::com::sun::star::linguistic2::XDictionaryEventListener xListener);
     };
-    published interface XDictionaryEntry;
     published struct DictionaryEvent: ::com::sun::star::lang::EventObject {
      short nEvent;
      ::com::sun::star::linguistic2::XDictionaryEntry xDictionaryEntry;
@@ -8964,7 +8857,6 @@ module com {
      short flushEvents();
      ::com::sun::star::linguistic2::XDictionary createDictionary([in] string aName, [in] ::com::sun::star::lang::Locale aLocale, [in] ::com::sun::star::linguistic2::DictionaryType eDicType, [in] string aURL);
     };
-    published interface XDictionaryEntry;
     published interface XSearchableDictionaryList {
      interface ::com::sun::star::linguistic2::XDictionaryList;
      ::com::sun::star::linguistic2::XDictionaryEntry queryDictionaryEntry([in] string aWord, [in] ::com::sun::star::lang::Locale aLocale, [in] boolean bSearchPosDics, [in] boolean bSpellEntry);
@@ -8992,7 +8884,6 @@ module com {
      sequence< ::com::sun::star::lang::Locale > getLocales();
      boolean hasLocale([in] ::com::sun::star::lang::Locale aLocale);
     };
-    published interface XHyphenatedWord;
     published interface XPossibleHyphens;
     published interface XHyphenator {
      interface ::com::sun::star::linguistic2::XSupportedLocales;
@@ -9094,8 +8985,6 @@ module com {
      interface ::com::sun::star::lang::XComponent;
      interface ::com::sun::star::lang::XServiceDisplayName;
     };
-    published interface XDictionaryEntry;
-    published interface XDictionaryEventListener;
     /** @deprecated */ published interface XDictionary1 {
      interface ::com::sun::star::container::XNamed;
      ::com::sun::star::linguistic2::DictionaryType getDictionaryType();
@@ -9950,7 +9839,6 @@ module com {
      void clearBatch() raises (::com::sun::star::sdbc::SQLException);
      sequence< long > executeBatch() raises (::com::sun::star::sdbc::SQLException);
     };
-    published interface XConnection;
     published interface XPreparedStatement {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::sdbc::XResultSet executeQuery() raises (::com::sun::star::sdbc::SQLException);
@@ -10169,14 +10057,6 @@ module com {
      [property, readonly] string SchemaName;
      [property, readonly] string CatalogName;
     };
-   };
-   module sdbc {
-    published interface XArray;
-    published interface XBlob;
-    published interface XClob;
-    published interface XRef;
-   };
-   module sdb {
     published interface XColumn {
      interface ::com::sun::star::uno::XInterface;
      boolean wasNull() raises (::com::sun::star::sdbc::SQLException);
@@ -11627,7 +11507,6 @@ module com {
      long ItemCount;
      string DataField;
     };
-    published interface XDataPilotField;
     published struct DataPilotFieldGroupInfo {
      boolean HasAutoStart;
      boolean HasAutoEnd;
@@ -11794,7 +11673,6 @@ module com {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::table::XCellRange getReferredCells();
     };
-    published interface XSheetFilterDescriptor;
     published interface XSubTotalDescriptor;
     published interface XDatabaseRange {
      interface ::com::sun::star::uno::XInterface;
@@ -12150,7 +12028,6 @@ module com {
      ::com::sun::star::sheet::XSheetCellRanges queryRowDifferences([in] ::com::sun::star::table::CellAddress aCompare);
      ::com::sun::star::sheet::XSheetCellRanges queryIntersection([in] ::com::sun::star::table::CellRangeAddress aRange);
     };
-    published interface XSheetCellRanges;
     published interface XFormulaQuery {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::sheet::XSheetCellRanges queryDependents([in] boolean bRecursive);
@@ -12333,7 +12210,6 @@ module com {
      ::com::sun::star::uno::XInterface findNext([in] ::com::sun::star::uno::XInterface xStartAt, [in] ::com::sun::star::util::XSearchDescriptor xDesc);
     };
     published interface XReplaceDescriptor;
-    published interface XSearchDescriptor;
     published interface XReplaceable {
      interface ::com::sun::star::util::XSearchable;
      ::com::sun::star::util::XReplaceDescriptor createReplaceDescriptor();
@@ -12420,18 +12296,15 @@ module com {
     };
    };
    module sheet {
-    published interface XSpreadsheet;
     published interface XSheetCellRange {
      interface ::com::sun::star::table::XCellRange;
      ::com::sun::star::sheet::XSpreadsheet getSpreadsheet();
     };
-    published interface XSheetFilterDescriptor;
     published interface XSheetFilterable {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::sheet::XSheetFilterDescriptor createFilterDescriptor([in] boolean bEmpty);
      void filter([in] ::com::sun::star::sheet::XSheetFilterDescriptor xDescriptor);
     };
-    published interface XSheetFilterDescriptor;
     published interface XSheetFilterableEx {
      interface ::com::sun::star::sheet::XSheetFilterable;
      ::com::sun::star::sheet::XSheetFilterDescriptor createFilterDescriptorByObject([in] ::com::sun::star::sheet::XSheetFilterable xObject);
@@ -12441,7 +12314,6 @@ module com {
      double computeFunction([in] ::com::sun::star::sheet::GeneralFunction nFunction) raises (::com::sun::star::uno::Exception);
      void clearContents([in] long nContentFlags);
     };
-    published interface XSubTotalDescriptor;
     published interface XSubTotalCalculatable {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::sheet::XSubTotalDescriptor createSubTotalDescriptor([in] boolean bEmpty);
@@ -12481,7 +12353,6 @@ module com {
     };
    };
    module sheet {
-    published interface XSheetConditionalEntries;
     published service SheetCellRange {
      service ::com::sun::star::table::CellRange;
      service ::com::sun::star::style::CharacterProperties;
@@ -12567,7 +12438,6 @@ module com {
      void addRangeAddresses([in] sequence< ::com::sun::star::table::CellRangeAddress > aCellRangeAddresses, [in] boolean bMergeRanges);
      void removeRangeAddresses([in] sequence< ::com::sun::star::table::CellRangeAddress > aCellRangeAddresses) raises (::com::sun::star::container::NoSuchElementException);
     };
-    published interface XSheetConditionalEntries;
     published service SheetCellRanges {
      service ::com::sun::star::table::CellProperties;
      service ::com::sun::star::style::CharacterProperties;
@@ -13560,11 +13430,6 @@ module com {
      sequence< ::com::sun::star::beans::PropertyValue > getStyleLoaderOptions();
     };
    };
-   module xml {
-    module sax {
-     published interface XDocumentHandler;
-    };
-   };
    module svg {
     /** @deprecated */ published interface XSVGPrinter {
      interface ::com::sun::star::uno::XInterface;
@@ -13572,13 +13437,6 @@ module com {
      void printPage([in] sequence< byte > aPrintPage);
      void endJob();
     };
-   };
-   module xml {
-    module sax {
-     published interface XDocumentHandler;
-    };
-   };
-   module svg {
     /** @deprecated */ published interface XSVGWriter {
      interface ::com::sun::star::uno::XInterface;
      void write([in] ::com::sun::star::xml::sax::XDocumentHandler aHandler, [in] sequence< byte > aMtf);
@@ -13974,7 +13832,6 @@ module com {
      string getServiceName();
      void update();
     };
-    published interface XTextColumns;
     published interface XTextSection;
     published service BaseIndex {
      interface ::com::sun::star::text::XDocumentIndex;
@@ -14079,7 +13936,6 @@ module com {
      interface ::com::sun::star::container::XNameAccess;
      interface ::com::sun::star::container::XIndexAccess;
     };
-    published interface XTextSection;
     published service CellProperties {
      service ::com::sun::star::xml::UserDefinedAttributesSupplier;
      interface ::com::sun::star::beans::XPropertySet;
@@ -15248,7 +15104,6 @@ module com {
      const short TITLE = 8;
      const short ZIP = 6;
     };
-    published interface XDocumentIndexMark;
     published service UserDefinedIndex {
      service ::com::sun::star::text::BaseIndex;
      [property, optional] ::com::sun::star::container::XIndexReplace LevelParagraphStyles;
@@ -15841,7 +15696,6 @@ module com {
      boolean HasAccount;
      string Account;
     };
-    published interface XContentIdentifier;
     published interface XContentAccess {
      interface ::com::sun::star::uno::XInterface;
      string queryContentIdentifierString();
@@ -15918,7 +15772,6 @@ module com {
      interface ::com::sun::star::ucb::XDynamicResultSet;
      interface ::com::sun::star::ucb::XSourceInitialization;
     };
-    published interface XContentIdentifierMapping;
     published interface XCachedDynamicResultSetFactory {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::ucb::XDynamicResultSet createCachedDynamicResultSet([in] ::com::sun::star::ucb::XDynamicResultSet SourceStub, [in] ::com::sun::star::ucb::XContentIdentifierMapping ContentIdentifierMapping);
@@ -15940,13 +15793,11 @@ module com {
     published service CachedDynamicResultSetStubFactory: ::com::sun::star::ucb::XCachedDynamicResultSetStubFactory;
     published exception IllegalIdentifierException: ::com::sun::star::uno::Exception {
     };
-    published interface XContentIdentifier;
     published interface XContentProvider {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::ucb::XContent queryContent([in] ::com::sun::star::ucb::XContentIdentifier Identifier) raises (::com::sun::star::ucb::IllegalIdentifierException);
      long compareContentIds([in] ::com::sun::star::ucb::XContentIdentifier Id1, [in] ::com::sun::star::ucb::XContentIdentifier Id2);
     };
-    published interface XProgressHandler;
     published service CommandEnvironment: ::com::sun::star::ucb::XCommandEnvironment {
      create([in] ::com::sun::star::task::XInteractionHandler InteractionHandler, [in] ::com::sun::star::ucb::XProgressHandler ProgressHandler);
     };
@@ -15975,7 +15826,6 @@ module com {
      const long REMOVED = 1;
      /** @deprecated */ const long SEARCH_MATCHED = 128;
     };
-    published interface XContentIdentifier;
     published struct ContentEvent: ::com::sun::star::lang::EventObject {
      long Action;
      ::com::sun::star::ucb::XContent Content;
@@ -15988,7 +15838,6 @@ module com {
      const short KIND_LINK = 8;
      const short NONE = 0;
     };
-    published interface XContentIdentifier;
     published interface XContentIdentifierFactory {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::ucb::XContentIdentifier createContentIdentifier([in] string ContentId);
