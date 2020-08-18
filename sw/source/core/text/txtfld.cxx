@@ -426,7 +426,7 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
 
     // TODO remove this fallback (for WW8/RTF)
     bool isDOCX = pIDSA->get(DocumentSettingId::ADD_VERTICAL_FLY_OFFSETS);
-    if (!isDOCX && !pSet)
+    if (0)//!isDOCX && !pSet)   // Disabled fallback for debug
     {
         TextFrameIndex const nTextLen(rInf.GetTextFrame()->GetText().getLength());
         SwTextNode const* pNode(nullptr);

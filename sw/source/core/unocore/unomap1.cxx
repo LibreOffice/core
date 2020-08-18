@@ -258,6 +258,7 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetAutoCharStyleProper
         { OUString(UNO_NAME_CHAR_ESCAPEMENT_HEIGHT), RES_CHRATR_ESCAPEMENT,     cppu::UnoType<sal_Int8>::get()  ,          PROPERTY_NONE, MID_ESC_HEIGHT},
         { OUString(UNO_NAME_CHAR_FLASH), RES_CHRATR_BLINK   ,   cppu::UnoType<bool>::get()  ,       PROPERTY_NONE,     0},
         { OUString(UNO_NAME_CHAR_HIDDEN), RES_CHRATR_HIDDEN, cppu::UnoType<bool>::get()  ,       PROPERTY_NONE,     0},
+        { OUString(UNO_NAME_CHAR_STYLE_NAME), RES_TXTATR_CHARFMT,     cppu::UnoType<OUString>::get(),  PropertyAttribute::MAYBEVOID,     0},
         STANDARD_FONT_PROPERTIES
         CJK_FONT_PROPERTIES
         CTL_FONT_PROPERTIES

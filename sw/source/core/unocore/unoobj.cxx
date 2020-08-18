@@ -535,7 +535,14 @@ SwUnoCursorHelper::SetCursorPropertyValue(
                             throw beans::PropertyVetoException(
                                 "Property is read-only: " + prop.Name);
                         }
-                        rPropSet.setPropertyValue(*pEntry, prop.Value, items);
+                        if (prop.Name == UNO_NAME_CHAR_STYLE_NAME)
+                        {
+                            //Pam.GetDoc()->GetStylePool
+                        }
+                        else
+                        {
+                            rPropSet.setPropertyValue(*pEntry, prop.Value, items);
+                        }
                     }
 
                     SwFormatAutoFormat item(RES_PARATR_LIST_AUTOFMT);
