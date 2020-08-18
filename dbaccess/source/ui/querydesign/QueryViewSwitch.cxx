@@ -33,7 +33,7 @@ OQueryViewSwitch::OQueryViewSwitch(OQueryContainerWindow* _pParent, OQueryContro
 : m_bAddTableDialogWasVisible(false)
 {
 
-    m_pTextView     = VclPtr<OQueryTextView>::Create(_pParent);
+    m_pTextView     = VclPtr<OQueryTextView>::Create(_pParent, _rController);
     m_pDesignView   = VclPtr<OQueryDesignView>::Create( _pParent, _rController, _rxContext );
 }
 
@@ -154,7 +154,7 @@ void OQueryViewSwitch::impl_forceSQLView()
 
     // tell the views they're in/active
     m_pDesignView->stopTimer();
-    m_pTextView->getSqlEdit()->startTimer();
+    m_pTextView->startTimer();
 
     // set the most recent statement at the text view
     m_pTextView->clear();
@@ -170,7 +170,7 @@ void OQueryViewSwitch::forceInitialView()
     else
     {
         // tell the text view it's inactive now
-        m_pTextView->getSqlEdit()->stopTimer();
+        m_pTextView->stopTimer();
 
         // update the "Add Table" dialog
         OAddTableDlg* pAddTabDialog( getAddTableDialog() );
@@ -199,7 +199,7 @@ bool OQueryViewSwitch::switchView( ::dbtools::SQLExceptionInfo* _pErrorInfo )
     else
     {
         // tell the text view it's inactive now
-        m_pTextView->getSqlEdit()->stopTimer();
+        m_pTextView->stopTimer();
 
         // update the "Add Table" dialog
         OAddTableDlg* pAddTabDialog( getAddTableDialog() );

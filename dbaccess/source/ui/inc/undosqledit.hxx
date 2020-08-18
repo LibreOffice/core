@@ -20,17 +20,16 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_UNDOSQLEDIT_HXX
 
 #include "GeneralUndo.hxx"
-#include "sqledit.hxx"
-#include <vcl/vclptr.hxx>
 #include <strings.hrc>
 
 namespace dbaui
 {
-    class OSqlEdit;
+    class OQueryTextView;
+
     // OSqlEditUndoAct - Undo-class for changing sql text
     class OSqlEditUndoAct final : public OCommentUndoAction
     {
-        VclPtr<OSqlEdit>   m_pOwner;
+        OQueryTextView& m_rOwner;
         OUString    m_strNextText;
 
         virtual void    Undo() override { ToggleText(); }
@@ -38,9 +37,9 @@ namespace dbaui
 
         void ToggleText();
     public:
-        OSqlEditUndoAct(OSqlEdit* pEdit) : OCommentUndoAction(STR_QUERY_UNDO_MODIFYSQLEDIT), m_pOwner(pEdit) { }
+        OSqlEditUndoAct(OQueryTextView& rEdit) : OCommentUndoAction(STR_QUERY_UNDO_MODIFYSQLEDIT), m_rOwner(rEdit) { }
 
-        void SetOriginalText(const OUString& strText) { m_strNextText =strText; }
+        void SetOriginalText(const OUString& strText) { m_strNextText = strText; }
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_UNDOSQLEDIT_HXX

@@ -24,72 +24,65 @@
 #include <comphelper/syntaxhighlight.hxx>
 #include <rtl/ref.hxx>
 #include <svtools/colorcfg.hxx>
-#include <vcl/vclmedit.hxx>
+#include <svx/weldeditview.hxx>
+#include <vcl/timer.hxx>
 
 namespace com::sun::star::beans { class XMultiPropertySet; }
 
 namespace dbaui
 {
-    class OQueryTextView;
-    class OSqlEdit final : public VclMultiLineEdit, public utl::ConfigurationListener
+    class SQLEditView final : public WeldEditView, public utl::ConfigurationListener
     {
     private:
         class ChangesListener;
         friend class ChangesListener;
 
-        SyntaxHighlighter    aHighlighter;
-        svtools::ColorConfig m_aColorConfig;
+        Link<LinkParamNone*,void> m_aModifyLink;
+        const svtools::ColorConfig m_aColorConfig;
+        Timer m_aUpdateDataTimer;
+        const SyntaxHighlighter m_aHighlighter;
+        svtools::ColorConfig m_ColorConfig;
+        SfxItemPool* m_pItemPool;
 
-        Timer                   m_timerInvalidate;
-        Timer                   m_timerUndoActionCreation;
-        OUString                m_strOrigText;      // is restored on undo
-        VclPtr<OQueryTextView>  m_pView;
-        bool                    m_bAccelAction;     // is set on cut, copy, paste
-        bool                    m_bStopTimer;
-        svtools::ColorConfig    m_ColorConfig;
+        rtl::Reference<ChangesListener> m_listener;
+        osl::Mutex m_mutex;
+        css::uno::Reference<css::beans::XMultiPropertySet> m_notifier;
 
-        rtl::Reference< ChangesListener > m_listener;
-        osl::Mutex              m_mutex;
-        css::uno::Reference<  css::beans::XMultiPropertySet > m_notifier;
+        bool m_bInUpdate;
+        bool m_bDisableInternalUndo;
 
-        DECL_LINK(OnUndoActionTimer, Timer*, void);
-        DECL_LINK(OnInvalidateTimer, Timer*, void);
-
-        void ImplSetFont();
-        void DoBracketHilight(sal_uInt16 aKey);
-
-        virtual bool PreNotify( NotifyEvent& rNEvt ) override;
-        virtual void KeyInput( const KeyEvent& rKEvt ) override;
-        virtual void GetFocus() override;
-
-        DECL_LINK(ModifyHdl, Edit&, void);
-
-    public:
-        OSqlEdit( OQueryTextView* pParent);
-        virtual ~OSqlEdit() override;
-        virtual void dispose() override;
-
-        // Edit overridables
-        virtual void SetText(const OUString& rNewText) override;
-        virtual void SetText( const OUString& rStr, const Selection& rNewSelection ) override
-                    { SetText( rStr ); SetSelection( rNewSelection ); }
-
-        virtual void UpdateData() override;
-
-        static Color GetSyntaxHighlightColor(const svtools::ColorConfig& rColorConfig, HighlighterLanguage eLanguage, TokenType aToken);
+        DECL_LINK(ModifyHdl, LinkParamNone*, void);
+        DECL_LINK(ImplUpdateDataHdl, Timer*, void);
 
         Color GetColorValue(TokenType aToken);
 
-        // own functionality
-        // Cut, Copy, Paste by Accel. runs the action in the Edit but also the
-        // corresponding slot in the View. Therefore, the action occurs twice.
-        // To prevent this, SlotExec in View can call this function.
-        bool IsInAccelAct() const { return m_bAccelAction; }
+        void ImplSetFont();
 
-        void stopTimer();
-        void startTimer();
+        void DoBracketHilight(sal_uInt16 nKey);
 
-        virtual void    ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints ) override;
+        static void SetItemPoolFont(SfxItemPool* pItemPool);
+
+        void UpdateData();
+    public:
+        SQLEditView();
+        virtual void makeEditEngine() override;
+        virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
+        virtual ~SQLEditView() override;
+
+        virtual bool KeyInput(const KeyEvent& rKEvt) override;
+
+        void SetTextAndUpdate(const OUString& rNewText);
+
+        void SetModifyHdl(const Link<LinkParamNone*,void>& rLink)
+        {
+            m_aModifyLink = rLink;
+        }
+
+        void DisableInternalUndo();
+
+        static Color GetSyntaxHighlightColor(const svtools::ColorConfig& rColorConfig, HighlighterLanguage eLanguage, TokenType aToken);
+
+        virtual void ConfigurationChanged(utl::ConfigurationBroadcaster*, ConfigurationHints) override;
     };
 }
 
