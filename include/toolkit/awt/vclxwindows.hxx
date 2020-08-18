@@ -48,8 +48,6 @@
 #include <com/sun/star/awt/XItemListListener.hpp>
 #include <com/sun/star/awt/XSimpleTabController.hpp>
 #include <com/sun/star/awt/XTextArea.hpp>
-#include <com/sun/star/awt/XTextComponent.hpp>
-#include <com/sun/star/awt/XTextLayoutConstrains.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <cppuhelper/implbase.hxx>
