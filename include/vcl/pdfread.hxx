@@ -42,7 +42,7 @@ struct PDFGraphicAnnotation
     css::util::DateTime maDateTime;
 };
 
-struct PDFGraphicResult
+class PDFGraphicResult
 {
     Graphic maGraphic;
     // Size in HMM
@@ -50,13 +50,18 @@ struct PDFGraphicResult
 
     std::vector<PDFGraphicAnnotation> maAnnotations;
 
-    PDFGraphicResult(Graphic const& rGraphic, Size const& rSize,
-                     std::vector<PDFGraphicAnnotation> const& aAnnotations)
-        : maGraphic(rGraphic)
+public:
+    PDFGraphicResult(Graphic aGraphic, Size const& rSize,
+                     std::vector<PDFGraphicAnnotation> aAnnotations)
+        : maGraphic(std::move(aGraphic))
         , maSize(rSize)
-        , maAnnotations(aAnnotations)
+        , maAnnotations(std::move(aAnnotations))
     {
     }
+
+    const Graphic& GetGraphic() const { return maGraphic; }
+    const Size& GetSize() const { return maSize; }
+    const std::vector<PDFGraphicAnnotation>& GetAnnotations() const { return maAnnotations; }
 };
 
 /// Import PDF as Graphic images (1 per page), but not loaded yet.

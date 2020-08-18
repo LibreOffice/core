@@ -64,8 +64,8 @@ bool SdPdfFilter::Import()
 
     for (vcl::PDFGraphicResult const& rPDFGraphicResult : aGraphics)
     {
-        const Graphic& rGraphic = rPDFGraphicResult.maGraphic;
-        const Size& aSizeHMM = rPDFGraphicResult.maSize;
+        const Graphic& rGraphic = rPDFGraphicResult.GetGraphic();
+        const Size& aSizeHMM = rPDFGraphicResult.GetSize();
 
         const sal_Int32 nPageNumber = rGraphic.getPageNumber();
         assert(nPageNumber >= 0 && o3tl::make_unsigned(nPageNumber) < aGraphics.size());
@@ -80,7 +80,7 @@ bool SdPdfFilter::Import()
                                                  tools::Rectangle(Point(), aSizeHMM));
         pPage->InsertObject(pSdrGrafObj);
 
-        for (auto const& rPDFAnnotation : rPDFGraphicResult.maAnnotations)
+        for (auto const& rPDFAnnotation : rPDFGraphicResult.GetAnnotations())
         {
             uno::Reference<office::XAnnotation> xAnnotation;
             pPage->createAnnotation(xAnnotation);
