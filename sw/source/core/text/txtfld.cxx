@@ -53,6 +53,7 @@
 #include <redline.hxx>
 #include <sfx2/docfile.hxx>
 #include <svl/itemiter.hxx>
+#include <svl/whiter.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/crossedoutitem.hxx>
@@ -462,9 +463,34 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
     {
         std::unique_ptr<SfxItemSet> const pCleanedSet = pSet->Clone();
 
+        if (pCleanedSet->HasItem(RES_TXTATR_CHARFMT))
+        {
+            // Insert attributes of referenced char format into current set
+            const SwFormatCharFormat& rCharFormat = pCleanedSet->Get(RES_TXTATR_CHARFMT);
+            const SwAttrSet& rStyleAttrs = static_cast<const SwCharFormat *>(rCharFormat.GetRegisteredIn())->GetAttrSet();
+            SfxWhichIter aIter(rStyleAttrs);
+            sal_uInt16 nWhich = aIter.FirstWhich();
+            while (nWhich)
+            {
+                if (!SwTextNode::IsIgnoredCharFormatForNumbering(nWhich)
+                    && !pCleanedSet->HasItem(nWhich)
+                    && !(pFormat && pFormat->HasItem(nWhich)) )
+                {
+                    // Copy from parent sets only allowed items which will not overwrite
+                    // values explicitly defined in current set (pCleanedSet) or in pFormat
+                    const SfxPoolItem* pItem = rStyleAttrs.GetItem(nWhich, true);
+                    pCleanedSet->Put(*pItem);
+                }
+                nWhich = aIter.NextWhich();
+            }
+
+            // It is not required here anymore, all referenced items are inserted
+            pCleanedSet->ClearItem(RES_TXTATR_CHARFMT);
+        };
+
         SfxItemIter aIter(*pSet);
         const SfxPoolItem* pItem = aIter.GetCurItem();
-        do
+        while (pItem)
         {
             if (pItem->Which() != RES_CHRATR_BACKGROUND)
             {
@@ -473,9 +499,8 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
                 else if (pFormat && pFormat->HasItem(pItem->Which()))
                     pCleanedSet->ClearItem(pItem->Which());
             }
-
             pItem = aIter.NextItem();
-        } while (pItem);
+        };
         pNumFnt->SetDiffFnt(pCleanedSet.get(), pIDSA);
     }
 }
