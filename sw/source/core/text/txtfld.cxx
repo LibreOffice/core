@@ -461,9 +461,18 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
     {
         std::unique_ptr<SfxItemSet> const pCleanedSet = pSet->Clone();
 
+        if (pCleanedSet->HasItem(RES_TXTATR_CHARFMT))
+        {
+            // There is a parent style reference. Set it as parent
+            const SwFormatCharFormat& aCharFormat = pCleanedSet->Get(RES_TXTATR_CHARFMT);
+            const SwCharFormat* aStyleCharFormat = static_cast<const SwCharFormat *>(aCharFormat.GetRegisteredIn());
+            pCleanedSet->SetParent(&aStyleCharFormat->GetAttrSet());
+            pCleanedSet->ClearItem(RES_TXTATR_CHARFMT);
+        };
+
         SfxItemIter aIter(*pSet);
         const SfxPoolItem* pItem = aIter.GetCurItem();
-        do
+        while (pItem)
         {
             if (pItem->Which() != RES_CHRATR_BACKGROUND)
             {
@@ -472,9 +481,8 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
                 else if (pFormat && pFormat->HasItem(pItem->Which()))
                     pCleanedSet->ClearItem(pItem->Which());
             }
-
             pItem = aIter.NextItem();
-        } while (pItem);
+        };
         pNumFnt->SetDiffFnt(pCleanedSet.get(), pIDSA);
     }
 }
