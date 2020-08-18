@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "86dfc73e_ce948480",
+        "filename": "include/xmloff/XMLTextShapeStyleContext.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-08-18T15:05:54Z",
+      "side": 1,
+      "message": "No nElement here?",
+      "revId": "b5837e2b51afa0ff94d28aa6befb540b3bd98f5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5726a6f5_31e333f1",
+        "filename": "include/xmloff/prstylei.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-08-18T15:05:54Z",
+      "side": 1,
+      "message": "No nElement here?",
+      "revId": "b5837e2b51afa0ff94d28aa6befb540b3bd98f5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b77c1259_e6295d59",
+        "filename": "include/xmloff/table/XMLTableImport.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-08-18T15:05:54Z",
+      "side": 1,
+      "message": "Just replace nPrefix + the local name with the nElement here?",
+      "revId": "b5837e2b51afa0ff94d28aa6befb540b3bd98f5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c61f8c9_d32642c5",
+        "filename": "include/xmloff/txtstyli.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-08-18T15:05:54Z",
+      "side": 1,
+      "message": "Again, just replace prefix + local name with nElement here and avoid other changes?",
+      "revId": "b5837e2b51afa0ff94d28aa6befb540b3bd98f5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
