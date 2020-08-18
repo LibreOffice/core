@@ -200,7 +200,7 @@ ifeq ($(HAVE_GNUMAKE_FILE_FUNC),)
 	printf 'UpdateUserAgent=<PRODUCT> ($${buildid}; $${_OS}; $${_ARCH}; <OPTIONAL_OS_HW_DATA>)\n' >> $@ && \
 	printf 'Vendor=$(OOO_VENDOR)\n' >> $@
 else
-	$(file > $@, $(call instsetoo_native_genversionini))
+	$(file > $@,$(call instsetoo_native_genversionini))
 endif
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),ECH)
 
