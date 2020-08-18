@@ -197,7 +197,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
     * outline levels
     **************************************************************************/
     OUString aName(STR_LAYOUT_OUTLINE);
-    OUString aHelpFile;
+    const OUString aHelpFile;
 
     SvxLRSpaceItem aSvxLRSpaceItem( EE_PARA_LRSPACE );
     SvxULSpaceItem aSvxULSpaceItem( EE_PARA_ULSPACE );
@@ -820,7 +820,7 @@ void SdStyleSheetPool::CreateLayoutSheetList(const OUString& rLayoutName, SdStyl
 void SdStyleSheetPool::CreatePseudosIfNecessary()
 {
     OUString aName;
-    OUString aHelpFile;
+    const OUString aHelpFile;
     SfxStyleSheetBase* pSheet = nullptr;
     SfxStyleSheetBase* pParent = nullptr;
 

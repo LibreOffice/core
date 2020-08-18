@@ -124,7 +124,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 {
     SdStyleSheetPool*       pSSPool = static_cast<SdStyleSheetPool*>(GetStyleSheetPool());
     SfxStyleSheetBase*      pSheet = nullptr;
-    OUString                aHelpFile;
+    const OUString          aHelpFile;
     OUString                aStdName(SdResId(STR_STANDARD_STYLESHEET_NAME));
 
     // Default style

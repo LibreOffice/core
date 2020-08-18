@@ -243,6 +243,8 @@ bool UnusedVarsGlobal::VisitVarDecl(const VarDecl* varDecl)
         return true;
     if (varDecl->isConstexpr())
         return true;
+    if (varDecl->isExceptionVariable())
+        return true;
     if (!varDecl->getLocation().isValid() || ignoreLocation(varDecl))
         return true;
     // ignore stuff that forms part of the stable URE interface
@@ -266,6 +268,8 @@ bool UnusedVarsGlobal::VisitDeclRefExpr(const DeclRefExpr* declRefExpr)
     if (isa<ParmVarDecl>(varDecl))
         return true;
     if (varDecl->isConstexpr())
+        return true;
+    if (varDecl->isExceptionVariable())
         return true;
     varDecl = varDecl->getCanonicalDecl();
     if (!varDecl->getLocation().isValid() || ignoreLocation(varDecl))

@@ -311,10 +311,10 @@ OUString ObjectIdentifier::createClassifiedIdentifierForObject(
     OUString aRet;
 
     enum ObjectType eObjectType = OBJECTTYPE_UNKNOWN;
-    OUString aObjectID;
+    const OUString aObjectID;
     OUString aParentParticle;
-    OUString aDragMethodServiceName;
-    OUString aDragParameterString;
+    const OUString aDragMethodServiceName;
+    const OUString aDragParameterString;
 
     try
     {
@@ -393,10 +393,10 @@ OUString ObjectIdentifier::createClassifiedIdentifierForObject(
     OUString aRet;
 
     enum ObjectType eObjectType = OBJECTTYPE_UNKNOWN;
-    OUString aObjectID;
+    const OUString aObjectID;
     OUString aParentParticle;
-    OUString aDragMethodServiceName;
-    OUString aDragParameterString;
+    const OUString aDragMethodServiceName;
+    const OUString aDragParameterString;
 
     try
     {

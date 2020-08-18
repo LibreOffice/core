@@ -624,9 +624,8 @@ const OUString& SfxClassificationHelper::GetAbbreviatedBACName(const OUString& s
 
 OUString SfxClassificationHelper::GetBACNameForIdentifier(const OUString& sIdentifier)
 {
-    OUString aRet;
     if (sIdentifier.isEmpty())
-        return aRet;
+        return "";
 
     for (const auto& category : m_pImpl->m_aCategories)
     {
@@ -634,7 +633,7 @@ OUString SfxClassificationHelper::GetBACNameForIdentifier(const OUString& sIdent
             return category.m_aName;
     }
 
-    return aRet;
+    return "";
 }
 
 OUString SfxClassificationHelper::GetHigherClass(const OUString& first, const OUString& second)

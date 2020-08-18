@@ -3773,7 +3773,8 @@ void SwHTMLParser::NewFontAttr( HtmlTokenId nToken )
 
     OSL_ENSURE( !nSize == !nFontHeight, "HTML-Font-Size != Font-Height" );
 
-    OUString aFontName, aStyleName;
+    OUString aFontName;
+    const OUString aStyleName;
     FontFamily eFamily = FAMILY_DONTKNOW;   // family and pitch,
     FontPitch ePitch = PITCH_DONTKNOW;      // if not found
     rtl_TextEncoding eEnc = osl_getThreadTextEncoding();

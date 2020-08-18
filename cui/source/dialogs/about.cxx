@@ -158,7 +158,7 @@ OUString AboutDialog::GetVersionString() {
 
 OUString AboutDialog::GetBuildString() {
 
-  OUString sDefault;
+  const OUString sDefault;
   OUString sBuildId(utl::Bootstrap::getBuildVersion(sDefault));
   if (sBuildId.isEmpty())
     sBuildId = utl::Bootstrap::getBuildIdData(sDefault);

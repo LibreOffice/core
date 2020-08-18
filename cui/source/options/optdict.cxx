@@ -585,10 +585,8 @@ bool SvxEditDictionaryDialog::NewDelHdl(const weld::Widget* pBtn)
 {
     if (pBtn == m_xDeletePB.get())
     {
-        OUString aStr;
-
-        m_xWordED->set_text(aStr);
-        m_xReplaceED->set_text(aStr);
+        m_xWordED->set_text("");
+        m_xReplaceED->set_text("");
         m_xDeletePB->set_sensitive(false);
 
         int nEntry = m_pWordsLB->get_selected_index();
