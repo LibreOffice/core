@@ -224,10 +224,10 @@ namespace dbaui
         /// copies the current object into clipboard
         rtl::Reference<TransferableHelper> copyObject();
 
-        /// fills rExchange with current object if its a Table or Query
+        /// fills rExchange with current object if it's a Table or Query
         bool copySQLObject(ODataClipboard& rExchange);
 
-        /// fills rExchange with current object if its a Form or Report
+        /// fills rExchange with current object if it's a Form or Report
         bool copyDocObject(svx::OComponentTransferable& rExchange);
 
         /// returns the nameaccess

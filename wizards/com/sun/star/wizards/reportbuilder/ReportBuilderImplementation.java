@@ -207,8 +207,8 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
     }
 
     /**
-     * Returns the Frame of the underlieing Document
-     * @return Returns the Frame of the parent (underlieing) Document
+     * Returns the Frame of the underlying Document
+     * @return Returns the Frame of the parent (underlying) Document
      */
     public XFrame getFrame()
     {

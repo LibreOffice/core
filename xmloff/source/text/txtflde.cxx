@@ -1342,7 +1342,7 @@ void XMLTextFieldExport::ExportFieldHelper(
 
             if (xPropSetInfo->hasPropertyByName(gsPropertySubType))
             {
-                // property SubType used in MapPageNumebrName
+                // property SubType used in MapPageNumberName
                 ProcessString(XML_SELECT_PAGE,
                               MapPageNumberName(rPropSet, nAdjust));
             }

@@ -496,7 +496,7 @@ bool GIFReader::ReadLocalHeader()
 
         // if we could read everything, we will create the local image;
         // if the global colour table is valid for the image, we will
-        // consider the BackGroudColorIndex.
+        // consider the BackGroundColorIndex.
         if( NO_PENDING( rIStm ) )
         {
             CreateBitmaps( nImageWidth, nImageHeight, pPal, bGlobalPalette && ( pPal == &aGPalette ) );
