@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-08-12 11:04:38 using:
+ Generated on 2020-08-18 21:26:00 using:
  ./bin/update_pch dbaccess dbu --cutoff=12 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -33,6 +33,7 @@
 #include <new>
 #include <optional>
 #include <ostream>
+#include <set>
 #include <string_view>
 #include <type_traits>
 #include <utility>
@@ -175,17 +176,20 @@
 #include <sot/formats.hxx>
 #include <sot/sotdllapi.h>
 #include <svl/hint.hxx>
+#include <svl/itemset.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
 #include <svtools/svtdllapi.h>
+#include <svx/dataaccessdescriptor.hxx>
 #include <svx/svxdllapi.h>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>
+#include <tools/lineend.hxx>
 #include <tools/link.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
@@ -210,6 +214,7 @@
 #include <UITools.hxx>
 #include <browserids.hxx>
 #include <callbacks.hxx>
+#include <commontypes.hxx>
 #include <dbaccess/AsynchronousLink.hxx>
 #include <dbaccess/IController.hxx>
 #include <dbaccess/controllerframe.hxx>
