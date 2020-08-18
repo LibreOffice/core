@@ -37,7 +37,6 @@
 #define BOOTSTRAP_ITEM_PRODUCT_KEY          "ProductKey"
 #define BOOTSTRAP_ITEM_VERSIONFILE          "Location"
 #define BOOTSTRAP_ITEM_BUILDID              "buildid"
-#define BOOTSTRAP_ITEM_BUILDVERSION         "BuildVersion"
 
 #define BOOTSTRAP_ITEM_BASEINSTALLATION     "BRAND_BASE_DIR"
 #define BOOTSTRAP_ITEM_USERINSTALLATION     "UserInstallation"
@@ -540,14 +539,6 @@ OUString Bootstrap::getProductKey()
 OUString Bootstrap::getProductKey(OUString const& _sDefault)
 {
     return data().getBootstrapValue( BOOTSTRAP_ITEM_PRODUCT_KEY, _sDefault );
-}
-
-OUString Bootstrap::getBuildVersion(OUString const& _sDefault)
-{
-    OUString sBuildVersion;
-    // read BuildVersion from version.ini (versionrc)
-    utl::Bootstrap::Impl::getVersionValue( BOOTSTRAP_ITEM_BUILDVERSION, sBuildVersion, _sDefault );
-    return sBuildVersion;
 }
 
 OUString Bootstrap::getBuildIdData(OUString const& _sDefault)
