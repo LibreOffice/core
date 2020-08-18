@@ -519,7 +519,10 @@ SwUnoCursorHelper::SetCursorPropertyValue(
                     // TODO create own map for this, it contains UNO_NAME_DISPLAY_NAME? or make property readable so ODF export can map it to a automatic style?
                     SfxItemPropertySet const& rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_CHAR_AUTO_STYLE));
                     SfxItemPropertyMap const& rMap(rPropSet.getPropertyMap());
-                    SfxItemSet items{rPam.GetDoc()->GetAttrPool(), aCharAutoFormatSetRange};
+                    SfxItemSet items( rPam.GetDoc()->GetAttrPool(),
+                        svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END-1,
+                            RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
+                            RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1>{} );
 
                     for (beans::NamedValue const & prop : std::as_const(props))
                     {
@@ -527,6 +530,11 @@ SwUnoCursorHelper::SetCursorPropertyValue(
                             rMap.getByName(prop.Name);
                         if (!pEntry)
                         {
+                            if (prop.Name == "CharStyleName")
+                            {
+                                lcl_setCharStyle(rPam.GetDoc(), prop.Value, items);
+                                continue;
+                            }
                             throw beans::UnknownPropertyException(
                                 "Unknown property: " + prop.Name);
                         }
@@ -540,6 +548,7 @@ SwUnoCursorHelper::SetCursorPropertyValue(
 
                     SwFormatAutoFormat item(RES_PARATR_LIST_AUTOFMT);
                     // TODO: for ODF export we'd need to add it to the autostyle pool
+                    // note: paragraph auto styles have ParaStyleName property for the parent style; character auto styles currently do not because there's a separate hint, but for this it would be a good way to add it in order to export it as style:parent-style-name, see XMLTextParagraphExport::Add()
                     item.SetStyleHandle(std::make_shared<SfxItemSet>(items));
                     pTextNd->SetAttr(item);
                 }
