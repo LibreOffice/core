@@ -2983,13 +2983,13 @@ void SbaTableQueryBrowser::closeConnection(weld::TreeIter& rDSEntry, bool _bDisp
     }
 
     // collapse the query/table container
-    std::unique_ptr<weld::TreeIter> xContainers(rTreeView.make_iterator());
-    if (rTreeView.get_iter_first(*xContainers))
+    std::unique_ptr<weld::TreeIter> xContainers(rTreeView.make_iterator(&rDSEntry));
+    if (rTreeView.iter_children(*xContainers))
     {
         do
         {
             std::unique_ptr<weld::TreeIter> xElements(rTreeView.make_iterator(xContainers.get()));
-            if (rTreeView.get_iter_first(*xElements))
+            if (rTreeView.iter_children(*xElements))
             {
                 rTreeView.collapse_row(*xContainers);
                 // and delete their children (they are connection-relative)
