@@ -552,16 +552,9 @@ OUString Bootstrap::getBuildVersion(OUString const& _sDefault)
 
 OUString Bootstrap::getBuildIdData(OUString const& _sDefault)
 {
-    OUString const csBuildIdItem(BOOTSTRAP_ITEM_BUILDID);
-
     OUString sBuildId;
-    // read buildid from version.ini (versionrc), if it doesn't exist or buildid is empty
-    if ( !utl::Bootstrap::Impl::getVersionValue( csBuildIdItem, sBuildId, _sDefault )
-            || sBuildId.isEmpty() )
-    {
-         // read buildid from bootstrap.ini (bootstraprc)
-        sBuildId = data().getBootstrapValue( csBuildIdItem, _sDefault );
-    }
+    // read buildid from version.ini (versionrc)
+    utl::Bootstrap::Impl::getVersionValue( BOOTSTRAP_ITEM_BUILDID, sBuildId, _sDefault );
     return sBuildId;
 }
 
