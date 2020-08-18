@@ -120,7 +120,6 @@ SvtURLBox* SfxURLToolBoxControl_Impl::GetURLBox() const
 void SfxURLToolBoxControl_Impl::OpenURL( const OUString& rName ) const
 {
     OUString aName;
-    OUString aFilter;
 
     INetURLObject aObj( rName );
     if ( aObj.GetProtocol() == INetProtocol::NotValid )
@@ -150,15 +149,6 @@ void SfxURLToolBoxControl_Impl::OpenURL( const OUString& rName ) const
     aArgs[0].Value <<= OUString( "private:user" );
     aArgs[1].Name = "FileName";
     aArgs[1].Value <<= aName;
-
-    if ( !aFilter.isEmpty() )
-    {
-        aArgs.realloc( 4 );
-        aArgs[2].Name = "FilterOptions";
-        aArgs[2].Value <<= OUString();
-        aArgs[3].Name = "FilterName";
-        aArgs[3].Value <<= aFilter;
-    }
 
     SfxURLToolBoxControl_Impl::ExecuteInfo* pExecuteInfo = new SfxURLToolBoxControl_Impl::ExecuteInfo;
     pExecuteInfo->xDispatch     = xDispatch;
