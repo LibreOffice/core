@@ -53,6 +53,7 @@
 #include <redline.hxx>
 #include <sfx2/docfile.hxx>
 #include <svl/itemiter.hxx>
+#include <svl/whiter.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/crossedoutitem.hxx>
@@ -462,9 +463,32 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
 
     std::unique_ptr<SfxItemSet> const pCleanedSet = pSet->Clone();
 
+    if (pCleanedSet->HasItem(RES_TXTATR_CHARFMT))
+    {
+        // Insert attributes of referenced char format into current set
+        const SwFormatCharFormat& aCharFormat = pCleanedSet->Get(RES_TXTATR_CHARFMT);
+        const SwAttrSet& aStyleAttrs = static_cast<const SwCharFormat *>(aCharFormat.GetRegisteredIn())->GetAttrSet();
+        SfxWhichIter aIter(aStyleAttrs);
+        sal_uInt16 nWhich = aIter.FirstWhich();
+        while (nWhich)
+        {
+            if (!SwTextNode::IsIgnoredCharFormatForNumbering(nWhich)
+                && !pCleanedSet->HasItem(nWhich))
+            {
+                // Copy only allowed items and do not overwrite inline definitions by values from style
+                const SfxPoolItem* pItem = aStyleAttrs.GetItem(nWhich, true);
+                pCleanedSet->Put(*pItem->Clone());
+            }
+            nWhich = aIter.NextWhich();
+        }
+
+        // It is not required here anymore, all referenced items are inserted
+        pCleanedSet->ClearItem(RES_TXTATR_CHARFMT);
+    };
+
     SfxItemIter aIter(*pSet);
     const SfxPoolItem* pItem = aIter.GetCurItem();
-    do
+    while (pItem)
     {
         if (pItem->Which() != RES_CHRATR_BACKGROUND)
         {
@@ -473,9 +497,8 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
             else if (pFormat && pFormat->HasItem(pItem->Which()))
                 pCleanedSet->ClearItem(pItem->Which());
         }
-
         pItem = aIter.NextItem();
-    } while (pItem);
+    };
     pNumFnt->SetDiffFnt(pCleanedSet.get(), pIDSA);
 }
 
