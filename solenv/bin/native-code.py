@@ -809,6 +809,7 @@ print ("""/*
 #include <config_features.h>
 #include <config_fuzzers.h>
 #include <config_gpgme.h>
+#include <config_locales.h>
 #include <osl/detail/component-mapping.h>
 #include <string.h>
 
