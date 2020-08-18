@@ -4259,8 +4259,12 @@ OUString DomainMapper_Impl::convertFieldFormula(const OUString& input) {
     usInput = rmatch4.replaceAll(icu::UnicodeString("<$1:$2>"), status);
 
     /* Fix up user defined names */
-    icu::RegexMatcher rmatch5("DEFINED\\s*\\(<([A-Z]+[0-9]+)>\\)", usInput, rMatcherFlags, status);
+    icu::RegexMatcher rmatch5("\\bDEFINED\\s*\\(<([A-Z]+[0-9]+)>\\)", usInput, rMatcherFlags, status);
     usInput = rmatch5.replaceAll(icu::UnicodeString("DEFINED($1)"), status);
+
+    /* Fix up ABS(x) using SQRT(x POW 2) - it supports only 1-level nesting */
+    icu::RegexMatcher rmatch6("\\bABS\\s*(\\(([^()]*|([^()])*\\([^()]*\\)[^()]*)*\\))", usInput, rMatcherFlags, status);
+    usInput = rmatch6.replaceAll(icu::UnicodeString("SQRT($1 POW 2)"), status);
 
     return OUString(usInput.getTerminatedBuffer());
 }
@@ -4286,6 +4290,10 @@ void DomainMapper_Impl::handleFieldFormula
     // we don't copy the = symbol from the command
     OUString formula = convertFieldFormula(command.copy(1));
 
+    xFieldProperties->setPropertyValue(getPropertyName(PROP_CONTENT), uno::makeAny(formula));
+    xFieldProperties->setPropertyValue(getPropertyName(PROP_NUMBER_FORMAT), uno::makeAny(sal_Int32(0)));
+    xFieldProperties->setPropertyValue("IsShowFormula", uno::makeAny(false));
+
     // grab-bag the original and converted formula
     if (getTableManager().isInTable())
     {
@@ -4294,9 +4302,6 @@ void DomainMapper_Impl::handleFieldFormula
         pPropMap->Insert(PROP_CELL_FORMULA_CONVERTED, uno::makeAny(formula), true, CELL_GRAB_BAG);
         getTableManager().cellProps(pPropMap);
     }
-    xFieldProperties->setPropertyValue(getPropertyName(PROP_CONTENT), uno::makeAny(formula));
-    xFieldProperties->setPropertyValue(getPropertyName(PROP_NUMBER_FORMAT), uno::makeAny(sal_Int32(0)));
-    xFieldProperties->setPropertyValue("IsShowFormula", uno::makeAny(false));
 }
 
 void  DomainMapper_Impl::handleRubyEQField( const FieldContextPtr& pContext)
