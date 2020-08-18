@@ -434,13 +434,13 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStylesElemTokenMap()
         static const SvXMLTokenMapEntry aStylesElemMap[] =
         {
             //  style elements
-            { XML_NAMESPACE_NUMBER, XML_NUMBER_STYLE,      XML_TOK_STYLES_NUMBER_STYLE      },
-            { XML_NAMESPACE_NUMBER, XML_CURRENCY_STYLE,    XML_TOK_STYLES_CURRENCY_STYLE    },
-            { XML_NAMESPACE_NUMBER, XML_PERCENTAGE_STYLE,  XML_TOK_STYLES_PERCENTAGE_STYLE  },
-            { XML_NAMESPACE_NUMBER, XML_DATE_STYLE,        XML_TOK_STYLES_DATE_STYLE        },
-            { XML_NAMESPACE_NUMBER, XML_TIME_STYLE,        XML_TOK_STYLES_TIME_STYLE        },
-            { XML_NAMESPACE_NUMBER, XML_BOOLEAN_STYLE,     XML_TOK_STYLES_BOOLEAN_STYLE     },
-            { XML_NAMESPACE_NUMBER, XML_TEXT_STYLE,        XML_TOK_STYLES_TEXT_STYLE        },
+            { XML_NAMESPACE_NUMBER, XML_NUMBER_STYLE,      static_cast<sal_uInt16>(SvXMLStylesTokens::NUMBER_STYLE)      },
+            { XML_NAMESPACE_NUMBER, XML_CURRENCY_STYLE,    static_cast<sal_uInt16>(SvXMLStylesTokens::CURRENCY_STYLE)    },
+            { XML_NAMESPACE_NUMBER, XML_PERCENTAGE_STYLE,  static_cast<sal_uInt16>(SvXMLStylesTokens::PERCENTAGE_STYLE)  },
+            { XML_NAMESPACE_NUMBER, XML_DATE_STYLE,        static_cast<sal_uInt16>(SvXMLStylesTokens::DATE_STYLE)        },
+            { XML_NAMESPACE_NUMBER, XML_TIME_STYLE,        static_cast<sal_uInt16>(SvXMLStylesTokens::TIME_STYLE)        },
+            { XML_NAMESPACE_NUMBER, XML_BOOLEAN_STYLE,     static_cast<sal_uInt16>(SvXMLStylesTokens::BOOLEAN_STYLE)     },
+            { XML_NAMESPACE_NUMBER, XML_TEXT_STYLE,        static_cast<sal_uInt16>(SvXMLStylesTokens::TEXT_STYLE)        },
             XML_TOKEN_MAP_END
         };
 
@@ -700,14 +700,14 @@ void SvXMLNumFmtEmbeddedTextContext::EndElement()
 
 static bool lcl_ValidChar( sal_Unicode cChar, const SvXMLNumFormatContext& rParent )
 {
-    sal_uInt16 nFormatType = rParent.GetType();
+    SvXMLStylesTokens nFormatType = rParent.GetType();
 
     // Treat space equal to non-breaking space separator.
     const sal_Unicode cNBSP = 0x00A0;
     sal_Unicode cTS;
-    if ( ( nFormatType == XML_TOK_STYLES_NUMBER_STYLE ||
-           nFormatType == XML_TOK_STYLES_CURRENCY_STYLE ||
-           nFormatType == XML_TOK_STYLES_PERCENTAGE_STYLE ) &&
+    if ( ( nFormatType == SvXMLStylesTokens::NUMBER_STYLE ||
+           nFormatType == SvXMLStylesTokens::CURRENCY_STYLE ||
+           nFormatType == SvXMLStylesTokens::PERCENTAGE_STYLE ) &&
             (cChar == (cTS = rParent.GetLocaleData().getNumThousandSep()[0]) ||
              (cChar == ' ' && cTS == cNBSP)) )
     {
@@ -729,19 +729,19 @@ static bool lcl_ValidChar( sal_Unicode cChar, const SvXMLNumFormatContext& rPare
            cChar == ',' ||
            cChar == ':' ||
            cChar == '\''   ) &&
-         ( nFormatType == XML_TOK_STYLES_CURRENCY_STYLE ||
-           nFormatType == XML_TOK_STYLES_DATE_STYLE ||
-           nFormatType == XML_TOK_STYLES_TIME_STYLE ) ) // other formats do not require delimiter tdf#97837
+         ( nFormatType == SvXMLStylesTokens::CURRENCY_STYLE ||
+           nFormatType == SvXMLStylesTokens::DATE_STYLE ||
+           nFormatType == SvXMLStylesTokens::TIME_STYLE ) ) // other formats do not require delimiter tdf#97837
         return true;
 
     //  percent sign must be used without quotes for percentage styles only
-    if ( nFormatType == XML_TOK_STYLES_PERCENTAGE_STYLE && cChar == '%' )
+    if ( nFormatType == SvXMLStylesTokens::PERCENTAGE_STYLE && cChar == '%' )
         return true;
 
     //  don't put quotes around single parentheses (often used for negative numbers)
-    if ( ( nFormatType == XML_TOK_STYLES_NUMBER_STYLE ||
-           nFormatType == XML_TOK_STYLES_CURRENCY_STYLE ||
-           nFormatType == XML_TOK_STYLES_PERCENTAGE_STYLE ) &&
+    if ( ( nFormatType == SvXMLStylesTokens::NUMBER_STYLE ||
+           nFormatType == SvXMLStylesTokens::CURRENCY_STYLE ||
+           nFormatType == SvXMLStylesTokens::PERCENTAGE_STYLE ) &&
          ( cChar == '(' || cChar == ')' ) )
         return true;
 
@@ -765,7 +765,7 @@ static void lcl_EnquoteIfNecessary( OUStringBuffer& rContent, const SvXMLNumForm
         //  the difference of quotes.
         bQuote = false;
     }
-    else if ( rParent.GetType() == XML_TOK_STYLES_PERCENTAGE_STYLE && nLength > 1 )
+    else if ( rParent.GetType() == SvXMLStylesTokens::PERCENTAGE_STYLE && nLength > 1 )
     {
         //  the percent character in percentage styles must be left out of quoting
         //  (one occurrence is enough even if there are several percent characters in the string)
@@ -1329,7 +1329,7 @@ sal_uInt16 SvXMLNumFmtDefaults::GetDefaultDateFormat( SvXMLDateElementAttributes
 
 SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
                                     sal_uInt16 nPrfx, const OUString& rLName,
-                                    SvXMLNumImpData* pNewData, sal_uInt16 nNewType,
+                                    SvXMLNumImpData* pNewData, SvXMLStylesTokens nNewType,
                                     const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                                     SvXMLStylesContext& rStyles ) :
     SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList ),
@@ -1476,7 +1476,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
     pData( nullptr ),
     pStyles( &rStyles ),
     aMyConditions(),
-    nType( 0 ),
+    nType( SvXMLStylesTokens::NUMBER_STYLE ),
     nKey(nTempKey),
     nFormatLang( nLang ),
     bAutoOrder( false ),
@@ -1668,7 +1668,7 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
         //  #99391# adjust only if the format contains no text elements, no conditions
         //  and no color definition (detected by the '[' at the start)
 
-        if ( nType == XML_TOK_STYLES_NUMBER_STYLE && !bHasExtraText &&
+        if ( nType == SvXMLStylesTokens::NUMBER_STYLE && !bHasExtraText &&
                 aMyConditions.empty() && sFormat.toChar() != '[' )
             nIndex = pFormatter->GetStandardIndex( nFormatLang );
     }
@@ -1676,18 +1676,18 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
     {
         //! only if two decimal places was set?
 
-        if ( nType == XML_TOK_STYLES_NUMBER_STYLE && !bHasExtraText &&
+        if ( nType == SvXMLStylesTokens::NUMBER_STYLE && !bHasExtraText &&
                 aMyConditions.empty() && sFormat.toChar() != '[' )
             nIndex = pFormatter->GetFormatIndex( NF_NUMBER_SYSTEM, nFormatLang );
     }
 
     //  boolean is always the builtin boolean format
     //  (no other boolean formats are implemented)
-    if ( nType == XML_TOK_STYLES_BOOLEAN_STYLE )
+    if ( nType == SvXMLStylesTokens::BOOLEAN_STYLE )
         nIndex = pFormatter->GetFormatIndex( NF_BOOLEAN, nFormatLang );
 
     //  check for default date formats
-    if ( nType == XML_TOK_STYLES_DATE_STYLE && bAutoOrder && !bDateNoDefault )
+    if ( nType == SvXMLStylesTokens::DATE_STYLE && bAutoOrder && !bDateNoDefault )
     {
         NfIndexTableOffset eFormat = static_cast<NfIndexTableOffset>(SvXMLNumFmtDefaults::GetDefaultDateFormat(
             eDateDOW, eDateDay, eDateMonth, eDateYear,
@@ -1817,7 +1817,7 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
 
     if ( bAutoDec )
     {
-        if ( nType == XML_TOK_STYLES_CURRENCY_STYLE )
+        if ( nType == SvXMLStylesTokens::CURRENCY_STYLE )
         {
             //  for currency formats, "automatic decimals" is used for the automatic
             //  currency format with (fixed) decimals from the locale settings
@@ -2151,7 +2151,7 @@ void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex )
     if ( aConditions.isEmpty() && aMyConditions.size() == 1 && sRealCond == ">=0" )
         bDefaultCond = true;
 
-    if ( nType == XML_TOK_STYLES_TEXT_STYLE && static_cast<size_t>(nIndex) == aMyConditions.size() - 1 )
+    if ( nType == SvXMLStylesTokens::TEXT_STYLE && static_cast<size_t>(nIndex) == aMyConditions.size() - 1 )
     {
         //  The last condition in a number format with a text part can only
         //  be "all other numbers", the condition string must be empty.
@@ -2278,16 +2278,16 @@ SvXMLStyleContext*  SvXMLNumFmtHelper::CreateChildContext( SvXMLImport& rImport,
     SvXMLStyleContext* pContext = nullptr;
 
     const SvXMLTokenMap& rTokenMap = pData->GetStylesElemTokenMap();
-    sal_uInt16 nToken = rTokenMap.Get( nPrefix, rLocalName );
+    SvXMLStylesTokens nToken = static_cast<SvXMLStylesTokens>(rTokenMap.Get( nPrefix, rLocalName ));
     switch (nToken)
     {
-        case XML_TOK_STYLES_NUMBER_STYLE:
-        case XML_TOK_STYLES_CURRENCY_STYLE:
-        case XML_TOK_STYLES_PERCENTAGE_STYLE:
-        case XML_TOK_STYLES_DATE_STYLE:
-        case XML_TOK_STYLES_TIME_STYLE:
-        case XML_TOK_STYLES_BOOLEAN_STYLE:
-        case XML_TOK_STYLES_TEXT_STYLE:
+        case SvXMLStylesTokens::NUMBER_STYLE:
+        case SvXMLStylesTokens::CURRENCY_STYLE:
+        case SvXMLStylesTokens::PERCENTAGE_STYLE:
+        case SvXMLStylesTokens::DATE_STYLE:
+        case SvXMLStylesTokens::TIME_STYLE:
+        case SvXMLStylesTokens::BOOLEAN_STYLE:
+        case SvXMLStylesTokens::TEXT_STYLE:
             pContext = new SvXMLNumFormatContext( rImport, nPrefix, rLocalName,
                                                     pData.get(), nToken, xAttrList, rStyles );
             break;
