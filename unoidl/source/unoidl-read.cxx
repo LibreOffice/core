@@ -135,11 +135,12 @@ OUString decomposeType(
 
 struct Entity {
     enum class Sorted { NO, ACTIVE, YES };
+    enum class Written { NO, DECLARATION, DEFINITION };
 
     explicit Entity(
         rtl::Reference<unoidl::Entity> const & theEntity, bool theRelevant):
         entity(theEntity), relevant(theRelevant), sorted(Sorted::NO),
-        written(false)
+        written(Written::NO)
     {}
 
     rtl::Reference<unoidl::Entity> const entity;
@@ -147,7 +148,7 @@ struct Entity {
     std::set<OUString> interfaceDependencies;
     bool relevant;
     Sorted sorted;
-    bool written;
+    Written written;
 };
 
 void insertEntityDependency(
@@ -549,11 +550,12 @@ void writeEntity(
 {
     std::map<OUString, Entity>::iterator i(entities.find(name));
     if (i != entities.end() && i->second.relevant) {
-        assert(!i->second.written);
-        i->second.written = true;
+        assert(i->second.written != Entity::Written::DEFINITION);
+        i->second.written = Entity::Written::DEFINITION;
         for (auto & j: i->second.interfaceDependencies) {
             std::map<OUString, Entity>::iterator k(entities.find(j));
-            if (k != entities.end() && !k->second.written) {
+            if (k != entities.end() && k->second.written == Entity::Written::NO) {
+                k->second.written = Entity::Written::DECLARATION;
                 OUString id(openModulesFor(modules, j));
                 if (k->second.entity->getSort()
                     != unoidl::Entity::SORT_INTERFACE_TYPE)
