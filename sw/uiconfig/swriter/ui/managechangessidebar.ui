@@ -183,6 +183,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="managechangessidebar|writerauthor">Author</property>
                 <property name="use_underline">True</property>
+                <property name="group">writersort0</property>
               </object>
             </child>
             <child>
@@ -191,6 +192,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="managechangessidebar|writerdate">Date</property>
                 <property name="use_underline">True</property>
+                <property name="group">writersort0</property>
               </object>
             </child>
             <child>
@@ -199,6 +201,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="managechangessidebar|writerdesc">Comment</property>
                 <property name="use_underline">True</property>
+                <property name="group">writersort0</property>
               </object>
             </child>
             <child>
@@ -207,6 +210,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="managechangessidebar|writerposition">Document Position</property>
                 <property name="use_underline">True</property>
+                <property name="group">writersort0</property>
               </object>
             </child>
           </object>
