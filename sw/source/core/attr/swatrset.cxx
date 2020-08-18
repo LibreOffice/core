@@ -21,6 +21,7 @@
 
 #include <cellatr.hxx>
 #include <charfmt.hxx>
+#include <fchrfmt.hxx>
 #include <doc.hxx>
 #include <IDocumentListsAccess.hxx>
 #include <editeng/editeng.hxx>
@@ -402,6 +403,15 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                 SfxItemSet const& rAutoStyle(*static_cast<SwFormatAutoFormat const&>(*pItem).GetStyleHandle());
                 std::shared_ptr<SfxItemSet> const pNewSet(
                     rAutoStyle.SfxItemSet::Clone(true, &pDstDoc->GetAttrPool()));
+
+                // fix up character style, it contains pointers to pSrcDoc
+                if (SfxItemState::SET == pNewSet->GetItemState(RES_TXTATR_CHARFMT, false, &pItem))
+                {
+                    auto const* pChar(static_cast<SwFormatCharFormat const*>(pItem));
+                    SwCharFormat *const pCopy(pDstDoc->CopyCharFormat(*pChar->GetCharFormat()));
+                    const_cast<SwFormatCharFormat*>(pChar)->SetCharFormat(pCopy);
+                }
+
                 SwFormatAutoFormat item(RES_PARATR_LIST_AUTOFMT);
                 // TODO: for ODF export we'd need to add it to the autostyle pool
                 item.SetStyleHandle(pNewSet);
