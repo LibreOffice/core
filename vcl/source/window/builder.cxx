@@ -47,7 +47,7 @@
 #include <vcl/toolkit/throbber.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/toolkit/treelistentry.hxx>
-#include <vcl/vclmedit.hxx>
+#include <vcl/toolkit/vclmedit.hxx>
 #include <vcl/settings.hxx>
 #include <slider.hxx>
 #include <vcl/weld.hxx>

@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <vcl/vclmedit.hxx>
+#include <vcl/toolkit/vclmedit.hxx>
 
 class MultiLineEdit : public VclMultiLineEdit
 {
