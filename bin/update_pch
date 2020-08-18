@@ -377,7 +377,6 @@ def filter_ignore(line, module):
 
     if module == 'accessibility':
         ignore_list += [
-            # STR_SVT_ACC_LISTENTRY_SELCTED_STATE redefined from svtools.hrc
             'accessibility/extended/textwindowaccessibility.hxx',
             ]
     if module == 'basic':
