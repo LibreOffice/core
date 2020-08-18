@@ -46,9 +46,6 @@ namespace utl
         /// retrieve the BUILDID information item; uses the given default, if not found
         static OUString getBuildIdData(OUString const& _sDefault);
 
-        /// retrieve the BuildVersion information item; uses the given default, if not found
-        static OUString getBuildVersion(OUString const& _sDefault);
-
         /// reload cached data
         static void reloadData();
 
