@@ -26,6 +26,7 @@
 #include <editeng/wghtitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <osl/mutex.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <svl/itemset.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/event.hxx>
@@ -37,88 +38,6 @@
 
 namespace dbaui
 {
-    SQLEditView::SQLEditView()
-    {
-    }
-
-    void SQLEditView::DoBracketHilight(sal_uInt16 nKey)
-    {
-        ESelection aCurrentPos = m_xEditView->GetSelection();
-        sal_Int32 nStartPos = aCurrentPos.nStartPos;
-        const sal_uInt32 nStartPara = aCurrentPos.nStartPara;
-        sal_uInt16 nCount = 0;
-        int nChar = -1;
-
-        switch (nKey)
-        {
-            case '\'':  // no break
-            case '"':
-            {
-                nChar = nKey;
-                break;
-            }
-            case '}' :
-            {
-                nChar = '{';
-                break;
-            }
-            case ')':
-            {
-                nChar = '(';
-                break;
-            }
-            case ']':
-            {
-                nChar = '[';
-                break;
-            }
-        }
-
-        if (nChar == -1)
-            return;
-
-        sal_uInt32 nPara = nStartPara;
-        do
-        {
-            if (nPara == nStartPara && nStartPos == 0)
-                continue;
-
-            OUString aLine( m_xEditEngine->GetText( nPara ) );
-
-            if (aLine.isEmpty())
-                continue;
-
-            for (sal_Int32 i = (nPara==nStartPara) ? nStartPos-1 : aLine.getLength()-1; i>0; --i)
-            {
-                if (aLine[i] == nChar)
-                {
-                    if (!nCount)
-                    {
-                        SfxItemSet aSet(m_xEditEngine->GetEmptyItemSet());
-                        aSet.Put(SvxColorItem(Color(0,0,0), EE_CHAR_COLOR));
-                        aSet.Put(SvxWeightItem(WEIGHT_ULTRABOLD, EE_CHAR_WEIGHT));
-                        aSet.Put(SvxWeightItem(WEIGHT_ULTRABOLD, EE_CHAR_WEIGHT_CJK));
-                        aSet.Put(SvxWeightItem(WEIGHT_ULTRABOLD, EE_CHAR_WEIGHT_CTL));
-
-                        m_xEditEngine->QuickSetAttribs(aSet, ESelection(nPara, i, nPara, i + 1));
-                        m_xEditEngine->QuickSetAttribs(aSet, ESelection(nStartPara, nStartPos, nStartPara, nStartPos));
-                        return;
-                    }
-                    else
-                        --nCount;
-                }
-                if (aLine[i] == nKey)
-                    ++nCount;
-            }
-        } while (nPara--);
-    }
-
-    bool SQLEditView::KeyInput(const KeyEvent& rKEvt)
-    {
-        DoBracketHilight(rKEvt.GetCharCode());
-        return WeldEditView::KeyInput(rKEvt);
-    }
-
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::lang;
@@ -136,9 +55,7 @@ namespace dbaui
         , m_xClose(m_xBuilder->weld_button("close"))
         , m_xSQL(new SQLEditView)
         , m_xSQLEd(new weld::CustomWeld(*m_xBuilder, "sql", *m_xSQL))
-        , m_aHighlighter(HighlighterLanguage::SQL)
         , m_nStatusCount(1)
-        , m_bInUpdate(false)
         , m_xConnection(_rxConn)
         , m_pClosingEvent(nullptr)
     {
@@ -163,9 +80,6 @@ namespace dbaui
 
         m_xSQL->SetModifyHdl(LINK(this, DirectSQLDialog, OnStatementModified));
         OnStatementModified(nullptr);
-
-        m_aUpdateDataTimer.SetTimeout(300);
-        m_aUpdateDataTimer.SetInvokeHandler(LINK(this, DirectSQLDialog, ImplUpdateDataHdl));
     }
 
     DirectSQLDialog::~DirectSQLDialog()
@@ -402,8 +316,7 @@ namespace dbaui
         {
             // set the text in the statement editor
             OUString sStatement = m_aStatementHistory[_nHistoryPos];
-            m_xSQL->SetText(sStatement);
-            UpdateData();
+            m_xSQL->SetTextAndUpdate(sStatement);
             OnStatementModified(nullptr);
 
             m_xSQL->GrabFocus();
@@ -414,11 +327,7 @@ namespace dbaui
 
     IMPL_LINK_NOARG( DirectSQLDialog, OnStatementModified, LinkParamNone*, void )
     {
-        if (m_bInUpdate)
-            return;
-
         m_xExecute->set_sensitive(!m_xSQL->GetText().isEmpty());
-        m_aUpdateDataTimer.Start();
     }
 
     IMPL_LINK_NOARG( DirectSQLDialog, OnCloseClick, weld::Button&, void )
@@ -445,46 +354,6 @@ namespace dbaui
         const sal_Int32 nSelected = m_xSQLHistory->get_active();
         if (nSelected != -1)
             switchToHistory(nSelected);
-    }
-
-    Color DirectSQLDialog::GetColorValue(TokenType aToken)
-    {
-        return OSqlEdit::GetSyntaxHighlightColor(m_aColorConfig, m_aHighlighter.GetLanguage(), aToken);
-    }
-
-    IMPL_LINK_NOARG(DirectSQLDialog, ImplUpdateDataHdl, Timer*, void)
-    {
-        UpdateData();
-    }
-
-    void DirectSQLDialog::UpdateData()
-    {
-        m_bInUpdate = true;
-        EditEngine& rEditEngine = m_xSQL->GetEditEngine();
-        // syntax highlighting
-        bool bOrigModified = rEditEngine.IsModified();
-        for (sal_Int32 nLine=0; nLine < rEditEngine.GetParagraphCount(); ++nLine)
-        {
-            OUString aLine( rEditEngine.GetText( nLine ) );
-
-            ESelection aAllLine(nLine, 0, nLine, EE_TEXTPOS_ALL);
-            rEditEngine.RemoveAttribs(aAllLine, false, EE_CHAR_COLOR);
-            rEditEngine.RemoveAttribs(aAllLine, false, EE_CHAR_WEIGHT);
-            rEditEngine.RemoveAttribs(aAllLine, false, EE_CHAR_WEIGHT_CJK);
-            rEditEngine.RemoveAttribs(aAllLine, false, EE_CHAR_WEIGHT_CTL);
-
-            std::vector<HighlightPortion> aPortions;
-            m_aHighlighter.getHighlightPortions( aLine, aPortions );
-            for (auto const& portion : aPortions)
-            {
-                SfxItemSet aSet(rEditEngine.GetEmptyItemSet());
-                aSet.Put(SvxColorItem(GetColorValue(portion.tokenType), EE_CHAR_COLOR));
-                rEditEngine.QuickSetAttribs(aSet, ESelection(nLine, portion.nBegin, nLine, portion.nEnd));
-            }
-        }
-        if (!bOrigModified)
-            rEditEngine.ClearModifyFlag();
-        m_bInUpdate = false;
     }
 
 }   // namespace dbaui

@@ -19,19 +19,36 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYTEXTVIEW_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYTEXTVIEW_HXX
 
+#include <vcl/InterimItemWindow.hxx>
 #include "querycontainerwindow.hxx"
+#include "sqledit.hxx"
 
 namespace dbaui
 {
-    class OSqlEdit;
-    class OQueryTextView : public vcl::Window
+    class OQueryTextView final : public InterimItemWindow
     {
         friend class OQueryViewSwitch;
-        VclPtr<OSqlEdit>   m_pEdit;
+
+        OQueryController& m_rController;
+        std::unique_ptr<SQLEditView> m_xSQL;
+        std::unique_ptr<weld::CustomWeld> m_xSQLEd;
+
+        Timer m_timerUndoActionCreation;
+        OUString m_strOrigText;      // is restored on undo
+        Timer m_timerInvalidate;
+        bool m_bStopTimer;
+
+        DECL_LINK(OnUndoActionTimer, Timer*, void);
+        DECL_LINK(OnInvalidateTimer, Timer*, void);
+        DECL_LINK(ModifyHdl, LinkParamNone*, void);
+
     public:
-        OQueryTextView( OQueryContainerWindow* pParent );
+        OQueryTextView(OQueryContainerWindow* pParent, OQueryController& rController);
         virtual ~OQueryTextView() override;
         virtual void dispose() override;
+
+        void SetSQLText(const OUString& rNewText);
+        OUString GetSQLText() const;
 
         virtual void GetFocus() override;
 
@@ -44,15 +61,14 @@ namespace dbaui
         // set the statement for representation
         void setStatement(const OUString& _rsStatement);
         OUString getStatement() const;
-        // allow access to our edit
-        OSqlEdit* getSqlEdit() const { return m_pEdit; }
+
+        void stopTimer();
+        void startTimer();
 
         OQueryContainerWindow*  getContainerWindow() { return static_cast< OQueryContainerWindow* >( GetParent() ); }
-    protected:
-        virtual void Resize() override;
     };
 }
-#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYTEXTVIEW_HXX
 
+#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYTEXTVIEW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

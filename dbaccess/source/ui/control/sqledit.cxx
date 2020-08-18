@@ -25,6 +25,11 @@
 #include <com/sun/star/beans/XPropertiesChangeListener.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <officecfg/Office/Common.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/wghtitem.hxx>
 #include <sqledit.hxx>
 #include <QueryTextView.hxx>
 #include <querycontainerwindow.hxx>
@@ -34,6 +39,7 @@
 #include <svx/svxids.hrc>
 #include <cppuhelper/implbase.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <svl/itemset.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -43,11 +49,11 @@
 
 using namespace dbaui;
 
-class OSqlEdit::ChangesListener:
+class SQLEditView::ChangesListener:
     public cppu::WeakImplHelper< css::beans::XPropertiesChangeListener >
 {
 public:
-    explicit ChangesListener(OSqlEdit & editor): editor_(editor) {}
+    explicit ChangesListener(SQLEditView& editor): editor_(editor) {}
 
 private:
     virtual ~ChangesListener() override {}
@@ -65,29 +71,76 @@ private:
         editor_.ImplSetFont();
     }
 
-    OSqlEdit & editor_;
+    SQLEditView& editor_;
 };
 
-OSqlEdit::OSqlEdit(OQueryTextView* pParent)
-    : VclMultiLineEdit(pParent, WB_LEFT | WB_VSCROLL | WB_BORDER)
-    , aHighlighter(HighlighterLanguage::SQL)
-    , m_pView(pParent)
-    , m_bAccelAction( false )
-    , m_bStopTimer(false )
+SQLEditView::SQLEditView()
+    : m_aHighlighter(HighlighterLanguage::SQL)
+    , m_pItemPool(nullptr)
+    , m_bInUpdate(false)
+    , m_bDisableInternalUndo(false)
 {
-    EnableUpdateData(300);
+}
 
-    SetHelpId( HID_CTL_QRYSQLEDIT );
-    SetModifyHdl( LINK(this, OSqlEdit, ModifyHdl) );
+void SQLEditView::DisableInternalUndo()
+{
+    GetEditEngine().EnableUndo(false);
+    m_bDisableInternalUndo = true;
+}
 
-    m_timerUndoActionCreation.SetTimeout(1000);
-    m_timerUndoActionCreation.SetInvokeHandler(LINK(this, OSqlEdit, OnUndoActionTimer));
+void SQLEditView::SetItemPoolFont(SfxItemPool* pItemPool)
+{
+    StyleSettings aStyleSettings = Application::GetSettings().GetStyleSettings();
+    OUString sFontName(officecfg::Office::Common::Font::SourceViewFont::FontName::get().value_or(OUString()));
+    if (sFontName.isEmpty())
+    {
+        vcl::Font aTmpFont(OutputDevice::GetDefaultFont(DefaultFontType::FIXED, Application::GetSettings().GetUILanguageTag().getLanguageType(), GetDefaultFontFlags::NONE));
+        sFontName = aTmpFont.GetFamilyName();
+    }
 
-    m_timerInvalidate.SetTimeout(200);
-    m_timerInvalidate.SetInvokeHandler(LINK(this, OSqlEdit, OnInvalidateTimer));
-    m_timerInvalidate.Start();
+    Size aFontSize(0, officecfg::Office::Common::Font::SourceViewFont::FontHeight::get());
+    vcl::Font aAppFont(sFontName, aFontSize);
+
+    pItemPool->SetPoolDefaultItem(SvxFontItem(aAppFont.GetFamilyType(), aAppFont.GetFamilyName(),
+                                              "", PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW,
+                                              EE_CHAR_FONTINFO));
+    pItemPool->SetPoolDefaultItem(SvxFontItem(aAppFont.GetFamilyType(), aAppFont.GetFamilyName(),
+                                              "", PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW,
+                                              EE_CHAR_FONTINFO_CJK));
+    pItemPool->SetPoolDefaultItem(SvxFontItem(aAppFont.GetFamilyType(), aAppFont.GetFamilyName(),
+                                              "", PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW,
+                                              EE_CHAR_FONTINFO_CTL));
+
+    pItemPool->SetPoolDefaultItem(
+        SvxFontHeightItem(aAppFont.GetFontHeight() * 20, 100, EE_CHAR_FONTHEIGHT));
+    pItemPool->SetPoolDefaultItem(
+        SvxFontHeightItem(aAppFont.GetFontHeight() * 20, 100, EE_CHAR_FONTHEIGHT_CJK));
+    pItemPool->SetPoolDefaultItem(
+        SvxFontHeightItem(aAppFont.GetFontHeight() * 20, 100, EE_CHAR_FONTHEIGHT_CTL));
+}
+
+void SQLEditView::makeEditEngine()
+{
+    assert(!m_pItemPool);
+    m_pItemPool = EditEngine::CreatePool();
+    SetItemPoolFont(m_pItemPool);
+    m_xEditEngine.reset(new EditEngine(m_pItemPool));
+}
+
+void SQLEditView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+{
+    WeldEditView::SetDrawingArea(pDrawingArea);
+
+    EditEngine& rEditEngine = GetEditEngine();
+
+    rEditEngine.SetDefaultHorizontalTextDirection(EEHorizontalTextDirection::L2R);
+    rEditEngine.SetModifyHdl(LINK(this, SQLEditView, ModifyHdl));
+
+    m_aUpdateDataTimer.SetTimeout(300);
+    m_aUpdateDataTimer.SetInvokeHandler(LINK(this, SQLEditView, ImplUpdateDataHdl));
 
     ImplSetFont();
+
     // Listen for change of Font and Color Settings:
     // Using "this" in ctor is a little fishy, but should work here at least as
     // long as there are no derivations:
@@ -104,16 +157,83 @@ OSqlEdit::OSqlEdit(OQueryTextView* pParent)
     s[1] = "FontName";
     n->addPropertiesChangeListener(s, m_listener.get());
     m_ColorConfig.AddListener(this);
-
-    //#i97044#
-    EnableFocusSelectionHide( false );
 }
 
-void OSqlEdit::DoBracketHilight(sal_uInt16 nKey)
+SQLEditView::~SQLEditView()
 {
-    TextSelection aCurrentPos = GetTextView()->GetSelection();
-    sal_Int32 nStartPos = aCurrentPos.GetStart().GetIndex();
-    const sal_uInt32 nStartPara = aCurrentPos.GetStart().GetPara();
+    css::uno::Reference< css::beans::XMultiPropertySet > n;
+    {
+        osl::MutexGuard g(m_mutex);
+        n = m_notifier;
+    }
+    if (n.is()) {
+        n->removePropertiesChangeListener(m_listener.get());
+    }
+    m_ColorConfig.RemoveListener(this);
+}
+
+void SQLEditView::SetTextAndUpdate(const OUString& rNewText)
+{
+    SetText(rNewText);
+    UpdateData();
+}
+
+IMPL_LINK_NOARG(SQLEditView, ModifyHdl, LinkParamNone*, void)
+{
+    if (m_bInUpdate)
+        return;
+
+    m_aModifyLink.Call(nullptr);
+    m_aUpdateDataTimer.Start();
+}
+
+IMPL_LINK_NOARG(SQLEditView, ImplUpdateDataHdl, Timer*, void)
+{
+    UpdateData();
+}
+
+Color SQLEditView::GetColorValue(TokenType aToken)
+{
+    return GetSyntaxHighlightColor(m_aColorConfig, m_aHighlighter.GetLanguage(), aToken);
+}
+
+void SQLEditView::UpdateData()
+{
+    m_bInUpdate = true;
+    EditEngine& rEditEngine = GetEditEngine();
+    // syntax highlighting
+    bool bOrigModified = rEditEngine.IsModified();
+    for (sal_Int32 nLine=0; nLine < rEditEngine.GetParagraphCount(); ++nLine)
+    {
+        OUString aLine( rEditEngine.GetText( nLine ) );
+
+        ESelection aAllLine(nLine, 0, nLine, EE_TEXTPOS_ALL);
+        rEditEngine.RemoveAttribs(aAllLine, false, EE_CHAR_COLOR);
+        rEditEngine.RemoveAttribs(aAllLine, false, EE_CHAR_WEIGHT);
+        rEditEngine.RemoveAttribs(aAllLine, false, EE_CHAR_WEIGHT_CJK);
+        rEditEngine.RemoveAttribs(aAllLine, false, EE_CHAR_WEIGHT_CTL);
+
+        std::vector<HighlightPortion> aPortions;
+        m_aHighlighter.getHighlightPortions( aLine, aPortions );
+        for (auto const& portion : aPortions)
+        {
+            SfxItemSet aSet(rEditEngine.GetEmptyItemSet());
+            aSet.Put(SvxColorItem(GetColorValue(portion.tokenType), EE_CHAR_COLOR));
+            rEditEngine.QuickSetAttribs(aSet, ESelection(nLine, portion.nBegin, nLine, portion.nEnd));
+        }
+    }
+    if (!bOrigModified)
+        rEditEngine.ClearModifyFlag();
+    m_bInUpdate = false;
+
+    Invalidate();
+}
+
+void SQLEditView::DoBracketHilight(sal_uInt16 nKey)
+{
+    ESelection aCurrentPos = m_xEditView->GetSelection();
+    sal_Int32 nStartPos = aCurrentPos.nStartPos;
+    const sal_uInt32 nStartPara = aCurrentPos.nStartPara;
     sal_uInt16 nCount = 0;
     int nChar = -1;
 
@@ -151,7 +271,7 @@ void OSqlEdit::DoBracketHilight(sal_uInt16 nKey)
         if (nPara == nStartPara && nStartPos == 0)
             continue;
 
-        OUString aLine( GetTextEngine()->GetText( nPara ) );
+        OUString aLine( m_xEditEngine->GetText( nPara ) );
 
         if (aLine.isEmpty())
             continue;
@@ -162,10 +282,14 @@ void OSqlEdit::DoBracketHilight(sal_uInt16 nKey)
             {
                 if (!nCount)
                 {
-                    GetTextEngine()->SetAttrib( TextAttribFontWeight( WEIGHT_ULTRABOLD ), nPara, i, i+1 );
-                    GetTextEngine()->SetAttrib( TextAttribFontColor( Color(0,0,0) ), nPara, i, i+1 );
-                    GetTextEngine()->SetAttrib( TextAttribFontWeight( WEIGHT_ULTRABOLD ), nStartPara, nStartPos, nStartPos );
-                    GetTextEngine()->SetAttrib( TextAttribFontColor( Color(0,0,0) ), nStartPara, nStartPos, nStartPos );
+                    SfxItemSet aSet(m_xEditEngine->GetEmptyItemSet());
+                    aSet.Put(SvxColorItem(Color(0,0,0), EE_CHAR_COLOR));
+                    aSet.Put(SvxWeightItem(WEIGHT_ULTRABOLD, EE_CHAR_WEIGHT));
+                    aSet.Put(SvxWeightItem(WEIGHT_ULTRABOLD, EE_CHAR_WEIGHT_CJK));
+                    aSet.Put(SvxWeightItem(WEIGHT_ULTRABOLD, EE_CHAR_WEIGHT_CTL));
+
+                    m_xEditEngine->QuickSetAttribs(aSet, ESelection(nPara, i, nPara, i + 1));
+                    m_xEditEngine->QuickSetAttribs(aSet, ESelection(nStartPara, nStartPos, nStartPara, nStartPos));
                     return;
                 }
                 else
@@ -177,15 +301,7 @@ void OSqlEdit::DoBracketHilight(sal_uInt16 nKey)
     } while (nPara--);
 }
 
-bool OSqlEdit::PreNotify( NotifyEvent& rNEvt )
-{
-    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
-        DoBracketHilight(rNEvt.GetKeyEvent()->GetCharCode());
-
-    return VclMultiLineEdit::PreNotify(rNEvt);
-}
-
-Color OSqlEdit::GetSyntaxHighlightColor(const svtools::ColorConfig& rColorConfig, HighlighterLanguage eLanguage, TokenType aToken)
+Color SQLEditView::GetSyntaxHighlightColor(const svtools::ColorConfig& rColorConfig, HighlighterLanguage eLanguage, TokenType aToken)
 {
     Color aColor;
     switch (eLanguage)
@@ -226,172 +342,34 @@ Color OSqlEdit::GetSyntaxHighlightColor(const svtools::ColorConfig& rColorConfig
     return aColor;
 }
 
-Color OSqlEdit::GetColorValue(TokenType aToken)
+bool SQLEditView::KeyInput(const KeyEvent& rKEvt)
 {
-    return GetSyntaxHighlightColor(m_aColorConfig, aHighlighter.GetLanguage(), aToken);
-}
+    DoBracketHilight(rKEvt.GetCharCode());
 
-void OSqlEdit::UpdateData()
-{
-    // syntax highlighting
-    // this must be possible improved by using notifychange correctly
-    bool bTempModified = GetTextEngine()->IsModified();
-    for (sal_uInt32 nLine=0; nLine < GetTextEngine()->GetParagraphCount(); ++nLine)
+    if (m_bDisableInternalUndo)
     {
-        OUString aLine( GetTextEngine()->GetText( nLine ) );
-        GetTextEngine()->RemoveAttribs( nLine );
-        std::vector<HighlightPortion> aPortions;
-        aHighlighter.getHighlightPortions( aLine, aPortions );
-        for (auto const& portion : aPortions)
-        {
-            GetTextEngine()->SetAttrib( TextAttribFontColor( GetColorValue(portion.tokenType) ), nLine, portion.nBegin, portion.nEnd );
-        }
-    }
-    GetTextView()->ShowCursor( false );
-    GetTextEngine()->SetModified(bTempModified);
-}
-
-OSqlEdit::~OSqlEdit()
-{
-    disposeOnce();
-}
-
-void OSqlEdit::dispose()
-{
-    if (m_timerUndoActionCreation.IsActive())
-        m_timerUndoActionCreation.Stop();
-    css::uno::Reference< css::beans::XMultiPropertySet > n;
-    {
-        osl::MutexGuard g(m_mutex);
-        n = m_notifier;
-    }
-    if (n.is()) {
-        n->removePropertiesChangeListener(m_listener.get());
-    }
-    m_ColorConfig.RemoveListener(this);
-    m_pView.clear();
-    VclMultiLineEdit::dispose();
-}
-
-void OSqlEdit::KeyInput( const KeyEvent& rKEvt )
-{
-    OJoinController& rController = m_pView->getContainerWindow()->getDesignView()->getController();
-    rController.InvalidateFeature(SID_CUT);
-    rController.InvalidateFeature(SID_COPY);
-
-    // Is this a cut, copy, paste event?
-    KeyFuncType aKeyFunc = rKEvt.GetKeyCode().GetFunction();
-    if( (aKeyFunc==KeyFuncType::CUT)||(aKeyFunc==KeyFuncType::COPY)||(aKeyFunc==KeyFuncType::PASTE) )
-        m_bAccelAction = true;
-
-    VclMultiLineEdit::KeyInput( rKEvt );
-
-    if( m_bAccelAction )
-        m_bAccelAction = false;
-}
-
-void OSqlEdit::GetFocus()
-{
-    m_strOrigText  =GetText();
-    VclMultiLineEdit::GetFocus();
-}
-
-IMPL_LINK_NOARG(OSqlEdit, OnUndoActionTimer, Timer *, void)
-{
-    OUString aText = GetText();
-    if(aText == m_strOrigText)
-        return;
-
-    OJoinController& rController = m_pView->getContainerWindow()->getDesignView()->getController();
-    SfxUndoManager& rUndoMgr = rController.GetUndoManager();
-    std::unique_ptr<OSqlEditUndoAct> pUndoAct(new OSqlEditUndoAct( this ));
-
-    pUndoAct->SetOriginalText( m_strOrigText );
-    rUndoMgr.AddUndoAction( std::move(pUndoAct) );
-
-    rController.InvalidateFeature(SID_UNDO);
-    rController.InvalidateFeature(SID_REDO);
-
-    m_strOrigText  =aText;
-}
-
-IMPL_LINK_NOARG(OSqlEdit, OnInvalidateTimer, Timer *, void)
-{
-    OJoinController& rController = m_pView->getContainerWindow()->getDesignView()->getController();
-    rController.InvalidateFeature(SID_CUT);
-    rController.InvalidateFeature(SID_COPY);
-    if(!m_bStopTimer)
-        m_timerInvalidate.Start();
-}
-
-IMPL_LINK_NOARG(OSqlEdit, ModifyHdl, Edit&, void)
-{
-    if (m_timerUndoActionCreation.IsActive())
-        m_timerUndoActionCreation.Stop();
-    m_timerUndoActionCreation.Start();
-
-    OJoinController& rController = m_pView->getContainerWindow()->getDesignView()->getController();
-    if (!rController.isModified())
-        rController.setModified( true );
-
-    rController.InvalidateFeature(SID_SBA_QRY_EXECUTE);
-    rController.InvalidateFeature(SID_CUT);
-    rController.InvalidateFeature(SID_COPY);
-}
-
-void OSqlEdit::SetText(const OUString& rNewText)
-{
-    if (m_timerUndoActionCreation.IsActive())
-    {   // create the trailing undo-actions
-        m_timerUndoActionCreation.Stop();
-        LINK(this, OSqlEdit, OnUndoActionTimer).Call(nullptr);
+        KeyFuncType eFunc = rKEvt.GetKeyCode().GetFunction();
+        if (eFunc == KeyFuncType::UNDO || eFunc == KeyFuncType::REDO)
+            return false;
     }
 
-    VclMultiLineEdit::SetText(rNewText);
+    return WeldEditView::KeyInput(rKEvt);
+}
+
+void SQLEditView::ConfigurationChanged(utl::ConfigurationBroadcaster*, ConfigurationHints)
+{
     UpdateData();
-
-    m_strOrigText  =rNewText;
 }
 
-void OSqlEdit::stopTimer()
+void SQLEditView::ImplSetFont()
 {
-    m_bStopTimer = true;
-    if (m_timerInvalidate.IsActive())
-        m_timerInvalidate.Stop();
-}
-
-void OSqlEdit::startTimer()
-{
-    m_bStopTimer = false;
-    if (!m_timerInvalidate.IsActive())
-        m_timerInvalidate.Start();
-}
-
-void OSqlEdit::ConfigurationChanged( utl::ConfigurationBroadcaster* pOption, ConfigurationHints )
-{
-    assert( pOption == &m_ColorConfig );
-    (void) pOption; // avoid warnings
-    VclMultiLineEdit::UpdateData();
-}
-
-void OSqlEdit::ImplSetFont()
-{
-    AllSettings aSettings = GetSettings();
-    StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-    OUString sFontName(
-        officecfg::Office::Common::Font::SourceViewFont::FontName::get().
-        value_or( OUString() ) );
-    if ( sFontName.isEmpty() )
-    {
-        vcl::Font aTmpFont( OutputDevice::GetDefaultFont( DefaultFontType::FIXED, Application::GetSettings().GetUILanguageTag().getLanguageType(), GetDefaultFontFlags::NONE, this ) );
-        sFontName = aTmpFont.GetFamilyName();
-    }
-    Size aFontSize(
-        0, officecfg::Office::Common::Font::SourceViewFont::FontHeight::get() );
-    vcl::Font aFont( sFontName, aFontSize );
-    aStyleSettings.SetFieldFont(aFont);
-    aSettings.SetStyleSettings(aStyleSettings);
-    SetSettings(aSettings);
+    // see SmEditWindow::DataChanged for a similar case
+    SetItemPoolFont(m_pItemPool); // change default font
+    // re-create with the new font
+    EditEngine& rEditEngine = GetEditEngine();
+    OUString aTxt(rEditEngine.GetText());
+    rEditEngine.Clear();
+    SetTextAndUpdate(aTxt);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
