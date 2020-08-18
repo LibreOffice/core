@@ -430,8 +430,11 @@ void UITestLogger::logEvent(const EventDescription& rDescription)
         }
         else if (rDescription.aAction == "LAUNCH")
         {
-            aLogLine = "Launch AutoFilter from Col "
-                       + GetValueInMapWithIndex(rDescription.aParameters, 2) + " and Row "
+            aLogLine = "Launch"
+                       + GetKeyInMapWithIndex(rDescription.aParameters, 2)
+                       + " from Col "
+                       + GetValueInMapWithIndex(rDescription.aParameters, 2)
+                       + " and Row "
                        + GetValueInMapWithIndex(rDescription.aParameters, 1);
         }
         else if (rDescription.aAction == "DELETE_CONTENT")

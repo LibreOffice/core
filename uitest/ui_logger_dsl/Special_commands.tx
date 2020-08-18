@@ -60,22 +60,23 @@ writer_Insert_BreakPage:
     1)  select sheet
     2)  Select cell or range
     3)  launch AutoFill
-    4)  Delete Cells
-    5)  Remove Content of a cell
-    6)  Insert new Cells
-    7)  Cut Cells
-    8)  Copy Cells
-    9)  Paste Cells
-    10) Merge Cells
-    11) Unmerge Cells
+    4)  launch SELECTMENU
+    5)  Delete Cells
+    6)  Remove Content of a cell
+    7)  Insert new Cells
+    8)  Cut Cells
+    9)  Copy Cells
+    10)  Paste Cells
+    11) Merge Cells
+    12) Unmerge Cells
 
   then we can add whatever we need in the future
 */
 calc_command:
   calc_Type_command | calc_switch_sheet | calc_Select_cell | calc_AutoFill_filter |
-  calc_Delete_Cells | calc_Remove_Content | calc_insert_cells | calc_Cut_Cells | 
-  calc_Copy_Cells | calc_Paste_Cells | calc_UNMerge_Cells | calc_Merge_Cells |
-  calc_Rename_Sheet | calc_Insert_sheet
+  calc_SelectMenu_filter | calc_Delete_Cells | calc_Remove_Content | calc_insert_cells |
+  calc_Cut_Cells | calc_Copy_Cells | calc_Paste_Cells | calc_UNMerge_Cells | 
+  calc_Merge_Cells | calc_Rename_Sheet | calc_Insert_sheet
 ;
 calc_Type_command:
   'Type on current cell' what_to_type=Type_options
@@ -88,6 +89,9 @@ calc_Select_cell:
 ;
 calc_AutoFill_filter:
   'Launch AutoFilter from Col' col_num=INT 'and Row' row_num=INT
+;
+calc_SelectMenu_filter:
+  'Launch SELECTMENU from Col' col_num=INT 'and Row' row_num=INT
 ;
 range_of_cells:
     '{' '"RANGE":' input_range=STRING '}'
