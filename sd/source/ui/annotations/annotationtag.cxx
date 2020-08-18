@@ -20,6 +20,8 @@
 #include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/office/XAnnotation.hpp>
 
+#include <rtl/ustrbuf.hxx>
+
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
