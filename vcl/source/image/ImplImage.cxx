@@ -78,6 +78,12 @@ bool ImplImage::loadStockAtScale(double fScale, BitmapEx &rBitmapEx)
                 return false;
             }
         }
+        else
+        {
+            SAL_WARN("vcl", "Failed to load scaled image from " << maStockName <<
+                     " at " << fScale);
+            return false;
+        }
     }
     if (maPreferedSizePixel != Size())
     {
