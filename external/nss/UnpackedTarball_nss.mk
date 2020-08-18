@@ -24,6 +24,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
     external/nss/nss.vs2015.patch \
     external/nss/nss.vs2015.pdb.patch \
     external/nss/nss.bzmozilla1238154.patch \
+	external/nss/nss-bz1646594.patch.1 \
     external/nss/macos-dlopen.patch.0 \
 	external/nss/nss.getopt.patch.0 \
     $(if $(filter iOS,$(OS)), \
