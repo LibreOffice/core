@@ -49,7 +49,7 @@ privateSnippetExecutor:
         sd	$a5,56($sp)
         sd	$a6,64($sp)
         sd	$a7,72($sp)
-        // Load arguemtns
+        // Load arguments
         // a0=index
         move	$a0,$v0
         // a1=offset
