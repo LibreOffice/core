@@ -77,6 +77,9 @@ namespace dbaui
         if (nChar == -1)
             return;
 
+        bool bUndoEnabled = m_xEditEngine->IsUndoEnabled();
+        m_xEditEngine->EnableUndo(false);
+
         sal_uInt32 nPara = nStartPara;
         do
         {
@@ -111,6 +114,8 @@ namespace dbaui
                     ++nCount;
             }
         } while (nPara--);
+
+        m_xEditEngine->EnableUndo(bUndoEnabled);
     }
 
     bool SQLEditView::KeyInput(const KeyEvent& rKEvt)
@@ -461,6 +466,10 @@ namespace dbaui
     {
         m_bInUpdate = true;
         EditEngine& rEditEngine = m_xSQL->GetEditEngine();
+
+        bool bUndoEnabled = rEditEngine.IsUndoEnabled();
+        rEditEngine.EnableUndo(false);
+
         // syntax highlighting
         bool bOrigModified = rEditEngine.IsModified();
         for (sal_Int32 nLine=0; nLine < rEditEngine.GetParagraphCount(); ++nLine)
@@ -484,6 +493,9 @@ namespace dbaui
         }
         if (!bOrigModified)
             rEditEngine.ClearModifyFlag();
+
+        rEditEngine.EnableUndo(bUndoEnabled);
+
         m_bInUpdate = false;
     }
 
