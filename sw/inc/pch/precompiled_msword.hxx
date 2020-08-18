@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-08-12 11:06:17 using:
+ Generated on 2020-08-18 21:27:37 using:
  ./bin/update_pch sw msword --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -263,6 +263,7 @@
 #include <com/sun/star/uno/genfunc.hxx>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <comphelper/comphelperdllapi.h>
@@ -380,6 +381,8 @@
 #include <svl/languageoptions.hxx>
 #include <svl/lstner.hxx>
 #include <svl/metitem.hxx>
+#include <svl/nfkeytab.hxx>
+#include <svl/ondemand.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/style.hxx>

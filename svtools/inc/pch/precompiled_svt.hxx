@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-08-12 11:05:52 using:
+ Generated on 2020-08-18 21:27:12 using:
  ./bin/update_pch svtools svt --cutoff=4 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -106,8 +106,6 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/dndhelp.hxx>
-#include <vcl/dockwin.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/event.hxx>
 #include <vcl/floatwin.hxx>
@@ -134,7 +132,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/task.hxx>
-#include <vcl/textfilter.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/vclenum.hxx>
@@ -232,7 +229,6 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
-#include <com/sun/star/frame/XToolbarController.hpp>
 #include <com/sun/star/i18n/Calendar2.hpp>
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
 #include <com/sun/star/i18n/LanguageCountryInfo.hpp>
@@ -273,7 +269,6 @@
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/view/PrintableState.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <comphelper/broadcasthelper.hxx>
@@ -281,7 +276,6 @@
 #include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propagg.hxx>
-#include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/propertycontainerhelper.hxx>
 #include <comphelper/propstate.hxx>
@@ -323,7 +317,6 @@
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <sot/sotdllapi.h>
-#include <svl/SfxBroadcaster.hxx>
 #include <svl/hint.hxx>
 #include <svl/macitem.hxx>
 #include <svl/poolitem.hxx>
