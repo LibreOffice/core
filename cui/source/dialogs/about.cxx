@@ -162,9 +162,6 @@ OUString AboutDialog::GetBuildString() {
   OUString sBuildId(utl::Bootstrap::getBuildVersion(sDefault));
   if (sBuildId.isEmpty())
     sBuildId = utl::Bootstrap::getBuildIdData(sDefault);
-  if (sBuildId.isEmpty()) {
-    sBuildId = sBuildId.getToken(0, '-');
-  }
   OSL_ENSURE(!sBuildId.isEmpty(), "No BUILDID in bootstrap file");
 
   return sBuildId;
