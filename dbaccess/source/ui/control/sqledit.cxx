@@ -32,11 +32,14 @@
 #include <undosqledit.hxx>
 #include <QueryDesignView.hxx>
 #include <svx/svxids.hrc>
-#include <vcl/settings.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/event.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/txtattr.hxx>
+#include <vcl/textview.hxx>
+#include <vcl/xtextedt.hxx>
 
 using namespace dbaui;
 
@@ -65,12 +68,15 @@ private:
     OSqlEdit & editor_;
 };
 
-OSqlEdit::OSqlEdit( OQueryTextView* pParent ) :
-    MultiLineEditSyntaxHighlight( pParent, WB_LEFT | WB_VSCROLL | WB_BORDER )
-    ,m_pView(pParent)
-    ,m_bAccelAction( false )
-    ,m_bStopTimer(false )
+OSqlEdit::OSqlEdit(OQueryTextView* pParent)
+    : VclMultiLineEdit(pParent, WB_LEFT | WB_VSCROLL | WB_BORDER)
+    , aHighlighter(HighlighterLanguage::SQL)
+    , m_pView(pParent)
+    , m_bAccelAction( false )
+    , m_bStopTimer(false )
 {
+    EnableUpdateData(300);
+
     SetHelpId( HID_CTL_QRYSQLEDIT );
     SetModifyHdl( LINK(this, OSqlEdit, ModifyHdl) );
 
@@ -103,6 +109,148 @@ OSqlEdit::OSqlEdit( OQueryTextView* pParent ) :
     EnableFocusSelectionHide( false );
 }
 
+void OSqlEdit::DoBracketHilight(sal_uInt16 nKey)
+{
+    TextSelection aCurrentPos = GetTextView()->GetSelection();
+    sal_Int32 nStartPos = aCurrentPos.GetStart().GetIndex();
+    const sal_uInt32 nStartPara = aCurrentPos.GetStart().GetPara();
+    sal_uInt16 nCount = 0;
+    int nChar = -1;
+
+    switch (nKey)
+    {
+        case '\'':  // no break
+        case '"':
+        {
+            nChar = nKey;
+            break;
+        }
+        case '}' :
+        {
+            nChar = '{';
+            break;
+        }
+        case ')':
+        {
+            nChar = '(';
+            break;
+        }
+        case ']':
+        {
+            nChar = '[';
+            break;
+        }
+    }
+
+    if (nChar == -1)
+        return;
+
+    sal_uInt32 nPara = nStartPara;
+    do
+    {
+        if (nPara == nStartPara && nStartPos == 0)
+            continue;
+
+        OUString aLine( GetTextEngine()->GetText( nPara ) );
+
+        if (aLine.isEmpty())
+            continue;
+
+        for (sal_Int32 i = (nPara==nStartPara) ? nStartPos-1 : aLine.getLength()-1; i>0; --i)
+        {
+            if (aLine[i] == nChar)
+            {
+                if (!nCount)
+                {
+                    GetTextEngine()->SetAttrib( TextAttribFontWeight( WEIGHT_ULTRABOLD ), nPara, i, i+1 );
+                    GetTextEngine()->SetAttrib( TextAttribFontColor( Color(0,0,0) ), nPara, i, i+1 );
+                    GetTextEngine()->SetAttrib( TextAttribFontWeight( WEIGHT_ULTRABOLD ), nStartPara, nStartPos, nStartPos );
+                    GetTextEngine()->SetAttrib( TextAttribFontColor( Color(0,0,0) ), nStartPara, nStartPos, nStartPos );
+                    return;
+                }
+                else
+                    --nCount;
+            }
+            if (aLine[i] == nKey)
+                ++nCount;
+        }
+    } while (nPara--);
+}
+
+bool OSqlEdit::PreNotify( NotifyEvent& rNEvt )
+{
+    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
+        DoBracketHilight(rNEvt.GetKeyEvent()->GetCharCode());
+
+    return VclMultiLineEdit::PreNotify(rNEvt);
+}
+
+Color OSqlEdit::GetSyntaxHighlightColor(const svtools::ColorConfig& rColorConfig, HighlighterLanguage eLanguage, TokenType aToken)
+{
+    Color aColor;
+    switch (eLanguage)
+    {
+        case HighlighterLanguage::SQL:
+        {
+            switch (aToken)
+            {
+                case TokenType::Identifier: aColor = rColorConfig.GetColorValue(svtools::SQLIDENTIFIER).nColor; break;
+                case TokenType::Number:     aColor = rColorConfig.GetColorValue(svtools::SQLNUMBER).nColor; break;
+                case TokenType::String:     aColor = rColorConfig.GetColorValue(svtools::SQLSTRING).nColor; break;
+                case TokenType::Operator:   aColor = rColorConfig.GetColorValue(svtools::SQLOPERATOR).nColor; break;
+                case TokenType::Keywords:   aColor = rColorConfig.GetColorValue(svtools::SQLKEYWORD).nColor; break;
+                case TokenType::Parameter:  aColor = rColorConfig.GetColorValue(svtools::SQLPARAMETER).nColor; break;
+                case TokenType::Comment:    aColor = rColorConfig.GetColorValue(svtools::SQLCOMMENT).nColor; break;
+                default:            aColor = Color(0,0,0);
+            }
+            break;
+        }
+        case HighlighterLanguage::Basic:
+        {
+            switch (aToken)
+            {
+                case TokenType::Identifier: aColor = Color(255,0,0); break;
+                case TokenType::Comment:    aColor = Color(0,0,45); break;
+                case TokenType::Number:     aColor = Color(204,102,204); break;
+                case TokenType::String:     aColor = Color(0,255,45); break;
+                case TokenType::Operator:   aColor = Color(0,0,100); break;
+                case TokenType::Keywords:   aColor = Color(0,0,255); break;
+                case TokenType::Error :     aColor = Color(0,255,255); break;
+                default:            aColor = Color(0,0,0);
+            }
+            break;
+        }
+        default: aColor = Color(0,0,0);
+
+    }
+    return aColor;
+}
+
+Color OSqlEdit::GetColorValue(TokenType aToken)
+{
+    return GetSyntaxHighlightColor(m_aColorConfig, aHighlighter.GetLanguage(), aToken);
+}
+
+void OSqlEdit::UpdateData()
+{
+    // syntax highlighting
+    // this must be possible improved by using notifychange correctly
+    bool bTempModified = GetTextEngine()->IsModified();
+    for (sal_uInt32 nLine=0; nLine < GetTextEngine()->GetParagraphCount(); ++nLine)
+    {
+        OUString aLine( GetTextEngine()->GetText( nLine ) );
+        GetTextEngine()->RemoveAttribs( nLine );
+        std::vector<HighlightPortion> aPortions;
+        aHighlighter.getHighlightPortions( aLine, aPortions );
+        for (auto const& portion : aPortions)
+        {
+            GetTextEngine()->SetAttrib( TextAttribFontColor( GetColorValue(portion.tokenType) ), nLine, portion.nBegin, portion.nEnd );
+        }
+    }
+    GetTextView()->ShowCursor( false );
+    GetTextEngine()->SetModified(bTempModified);
+}
+
 OSqlEdit::~OSqlEdit()
 {
     disposeOnce();
@@ -122,7 +270,7 @@ void OSqlEdit::dispose()
     }
     m_ColorConfig.RemoveListener(this);
     m_pView.clear();
-    MultiLineEditSyntaxHighlight::dispose();
+    VclMultiLineEdit::dispose();
 }
 
 void OSqlEdit::KeyInput( const KeyEvent& rKEvt )
@@ -136,17 +284,16 @@ void OSqlEdit::KeyInput( const KeyEvent& rKEvt )
     if( (aKeyFunc==KeyFuncType::CUT)||(aKeyFunc==KeyFuncType::COPY)||(aKeyFunc==KeyFuncType::PASTE) )
         m_bAccelAction = true;
 
-    MultiLineEditSyntaxHighlight::KeyInput( rKEvt );
+    VclMultiLineEdit::KeyInput( rKEvt );
 
     if( m_bAccelAction )
         m_bAccelAction = false;
 }
 
-
 void OSqlEdit::GetFocus()
 {
     m_strOrigText  =GetText();
-    MultiLineEditSyntaxHighlight::GetFocus();
+    VclMultiLineEdit::GetFocus();
 }
 
 IMPL_LINK_NOARG(OSqlEdit, OnUndoActionTimer, Timer *, void)
@@ -200,7 +347,9 @@ void OSqlEdit::SetText(const OUString& rNewText)
         LINK(this, OSqlEdit, OnUndoActionTimer).Call(nullptr);
     }
 
-    MultiLineEditSyntaxHighlight::SetText(rNewText);
+    VclMultiLineEdit::SetText(rNewText);
+    UpdateData();
+
     m_strOrigText  =rNewText;
 }
 
@@ -222,7 +371,7 @@ void OSqlEdit::ConfigurationChanged( utl::ConfigurationBroadcaster* pOption, Con
 {
     assert( pOption == &m_ColorConfig );
     (void) pOption; // avoid warnings
-    MultiLineEditSyntaxHighlight::UpdateData();
+    VclMultiLineEdit::UpdateData();
 }
 
 void OSqlEdit::ImplSetFont()

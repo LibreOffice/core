@@ -21,20 +21,24 @@
 
 #include <sal/config.h>
 
+#include <comphelper/syntaxhighlight.hxx>
 #include <rtl/ref.hxx>
-#include <svtools/editsyntaxhighlighter.hxx>
 #include <svtools/colorcfg.hxx>
+#include <vcl/vclmedit.hxx>
 
 namespace com::sun::star::beans { class XMultiPropertySet; }
 
 namespace dbaui
 {
     class OQueryTextView;
-    class OSqlEdit final : public MultiLineEditSyntaxHighlight, public utl::ConfigurationListener
+    class OSqlEdit final : public VclMultiLineEdit, public utl::ConfigurationListener
     {
     private:
         class ChangesListener;
         friend class ChangesListener;
+
+        SyntaxHighlighter    aHighlighter;
+        svtools::ColorConfig m_aColorConfig;
 
         Timer                   m_timerInvalidate;
         Timer                   m_timerUndoActionCreation;
@@ -51,8 +55,10 @@ namespace dbaui
         DECL_LINK(OnUndoActionTimer, Timer*, void);
         DECL_LINK(OnInvalidateTimer, Timer*, void);
 
-        void            ImplSetFont();
+        void ImplSetFont();
+        void DoBracketHilight(sal_uInt16 aKey);
 
+        virtual bool PreNotify( NotifyEvent& rNEvt ) override;
         virtual void KeyInput( const KeyEvent& rKEvt ) override;
         virtual void GetFocus() override;
 
@@ -65,12 +71,19 @@ namespace dbaui
 
         // Edit overridables
         virtual void SetText(const OUString& rNewText) override;
-        using MultiLineEditSyntaxHighlight::SetText;
+        virtual void SetText( const OUString& rStr, const Selection& rNewSelection ) override
+                    { SetText( rStr ); SetSelection( rNewSelection ); }
+
+        virtual void UpdateData() override;
+
+        static Color GetSyntaxHighlightColor(const svtools::ColorConfig& rColorConfig, HighlighterLanguage eLanguage, TokenType aToken);
+
+        Color GetColorValue(TokenType aToken);
 
         // own functionality
         // Cut, Copy, Paste by Accel. runs the action in the Edit but also the
         // corresponding slot in the View. Therefore, the action occurs twice.
-       // To prevent this, SlotExec in View can call this function.
+        // To prevent this, SlotExec in View can call this function.
         bool IsInAccelAct() const { return m_bAccelAction; }
 
         void stopTimer();
