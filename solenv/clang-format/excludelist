@@ -6567,7 +6567,6 @@ include/svtools/ctrlbox.hxx
 include/svtools/ctrltool.hxx
 include/svtools/dialogclosedlistener.hxx
 include/svtools/editbrowsebox.hxx
-include/svtools/editsyntaxhighlighter.hxx
 include/svtools/ehdl.hxx
 include/svtools/embedhlp.hxx
 include/svtools/embedtransfer.hxx
@@ -13021,7 +13020,6 @@ svtools/source/dialogs/colrdlg.cxx
 svtools/source/dialogs/insdlg.cxx
 svtools/source/dialogs/prnsetup.cxx
 svtools/source/dialogs/restartdialog.cxx
-svtools/source/edit/editsyntaxhighlighter.cxx
 svtools/source/filter/DocumentToGraphicRenderer.cxx
 svtools/source/filter/SvFilterOptionsDialog.cxx
 svtools/source/filter/exportdialog.cxx

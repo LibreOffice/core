@@ -19,6 +19,7 @@
 
 #include <core_resource.hxx>
 #include <directsql.hxx>
+#include <sqledit.hxx>
 #include <strings.hrc>
 #include <comphelper/types.hxx>
 #include <editeng/colritem.hxx>
@@ -26,7 +27,6 @@
 #include <editeng/eeitem.hxx>
 #include <osl/mutex.hxx>
 #include <svl/itemset.hxx>
-#include <svtools/editsyntaxhighlighter.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
@@ -449,7 +449,7 @@ namespace dbaui
 
     Color DirectSQLDialog::GetColorValue(TokenType aToken)
     {
-        return MultiLineEditSyntaxHighlight::GetSyntaxHighlightColor(m_aColorConfig, m_aHighlighter.GetLanguage(), aToken);
+        return OSqlEdit::GetSyntaxHighlightColor(m_aColorConfig, m_aHighlighter.GetLanguage(), aToken);
     }
 
     IMPL_LINK_NOARG(DirectSQLDialog, ImplUpdateDataHdl, Timer*, void)
