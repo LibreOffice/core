@@ -201,6 +201,10 @@ void SQLEditView::UpdateData()
 {
     m_bInUpdate = true;
     EditEngine& rEditEngine = GetEditEngine();
+
+    bool bUndoEnabled = rEditEngine.IsUndoEnabled();
+    rEditEngine.EnableUndo(false);
+
     // syntax highlighting
     bool bOrigModified = rEditEngine.IsModified();
     for (sal_Int32 nLine=0; nLine < rEditEngine.GetParagraphCount(); ++nLine)
@@ -225,6 +229,8 @@ void SQLEditView::UpdateData()
     if (!bOrigModified)
         rEditEngine.ClearModifyFlag();
     m_bInUpdate = false;
+
+    rEditEngine.EnableUndo(bUndoEnabled);
 
     Invalidate();
 }
@@ -265,6 +271,9 @@ void SQLEditView::DoBracketHilight(sal_uInt16 nKey)
     if (nChar == -1)
         return;
 
+    bool bUndoEnabled = m_xEditEngine->IsUndoEnabled();
+    m_xEditEngine->EnableUndo(false);
+
     sal_uInt32 nPara = nStartPara;
     do
     {
@@ -299,6 +308,8 @@ void SQLEditView::DoBracketHilight(sal_uInt16 nKey)
                 ++nCount;
         }
     } while (nPara--);
+
+    m_xEditEngine->EnableUndo(bUndoEnabled);
 }
 
 Color SQLEditView::GetSyntaxHighlightColor(const svtools::ColorConfig& rColorConfig, HighlighterLanguage eLanguage, TokenType aToken)
