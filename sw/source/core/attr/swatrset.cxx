@@ -404,6 +404,7 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                 SfxItemSet const& rAutoStyle(*static_cast<SwFormatAutoFormat const&>(*pItem).GetStyleHandle());
                 std::shared_ptr<SfxItemSet> const pNewSet(
                     rAutoStyle.SfxItemSet::Clone(true, &pDstDoc->GetAttrPool()));
+                // TODO: does character style need copying? it might not exist in pDstDoc?
                 SwFormatAutoFormat item(RES_PARATR_LIST_AUTOFMT);
                 // TODO: for ODF export we'd need to add it to the autostyle pool
                 item.SetStyleHandle(pNewSet);

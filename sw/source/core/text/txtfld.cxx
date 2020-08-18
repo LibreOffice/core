@@ -461,9 +461,26 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
     {
         std::unique_ptr<SfxItemSet> const pCleanedSet = pSet->Clone();
 
+        if (pCleanedSet->HasItem(RES_TXTATR_CHARFMT))
+        {
+            // Insert attributes of referenced char format into current set
+            const SwFormatCharFormat& aCharFormat = pCleanedSet->Get(RES_TXTATR_CHARFMT);
+            const SwCharFormat* aStyleCharFormat = static_cast<const SwCharFormat *>(aCharFormat.GetRegisteredIn());
+            SfxItemIter aIter(aStyleCharFormat->GetAttrSet());
+            const SfxPoolItem* pItem = aIter.GetCurItem();
+            while (pItem)
+            {
+                if (!SwTextNode::IsIgnoredCharFormatForNumbering(pItem->Which()))
+                {
+                    pCleanedSet->Put(*pItem->Clone());
+                }
+                pItem = aIter.NextItem();
+            };
+        };
+
         SfxItemIter aIter(*pSet);
         const SfxPoolItem* pItem = aIter.GetCurItem();
-        do
+        while (pItem)
         {
             if (pItem->Which() != RES_CHRATR_BACKGROUND)
             {
@@ -472,9 +489,8 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
                 else if (pFormat && pFormat->HasItem(pItem->Which()))
                     pCleanedSet->ClearItem(pItem->Which());
             }
-
             pItem = aIter.NextItem();
-        } while (pItem);
+        };
         pNumFnt->SetDiffFnt(pCleanedSet.get(), pIDSA);
     }
 }
