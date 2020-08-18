@@ -682,7 +682,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
         OString sSymbol = OUStringToOString(
             sSymbolCreateJava, osl_getThreadTextEncoding());
         fprintf(stderr,"[Java framework]sunjavaplugin" SAL_DLLEXTENSION
-                "Java runtime library: %s does not export symbol %s !\n",
+                ": Java runtime library: %s does not export symbol %s !\n",
                 sLib.getStr(), sSymbol.getStr());
         return javaPluginError::VmCreationFailed;
     }
@@ -796,13 +796,13 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
         if( err < 0)
         {
             fprintf(stderr,"[Java framework] sunjavaplugin" SAL_DLLEXTENSION
-                    "Can not create Java Virtual Machine, %" SAL_PRIdINT32 "\n", sal_Int32(err));
+                    ": Can not create Java Virtual Machine, %" SAL_PRIdINT32 "\n", sal_Int32(err));
             errorcode = javaPluginError::VmCreationFailed;
         }
         else if( err > 0)
         {
             fprintf(stderr,"[Java framework] sunjavaplugin" SAL_DLLEXTENSION
-                    "Can not create JavaVirtualMachine, abort handler was called.\n");
+                    ": Can not create JavaVirtualMachine, abort handler was called.\n");
             errorcode = javaPluginError::VmCreationFailed;
         }
     }
