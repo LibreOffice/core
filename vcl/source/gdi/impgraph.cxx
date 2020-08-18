@@ -1133,7 +1133,7 @@ void ImpGraphic::ImplSetContext( const std::shared_ptr<GraphicReader>& pReader )
     mbDummyContext = false;
 }
 
-bool ImpGraphic::swapInContent(SvStream& rIStm)
+bool ImpGraphic::swapInContent(SvStream& rStream)
 {
     ensureAvailable();
 
@@ -1142,28 +1142,28 @@ bool ImpGraphic::swapInContent(SvStream& rIStm)
     sal_uInt32      nId;
     sal_Int32       nType;
     sal_Int32       nPageIndex = -1;
-    const SvStreamEndian nOldFormat = rIStm.GetEndian();
+    const SvStreamEndian nOldFormat = rStream.GetEndian();
     bool            bRet = false;
 
-    rIStm.SetEndian( SvStreamEndian::LITTLE );
-    rIStm.ReadUInt32( nId );
+    rStream.SetEndian( SvStreamEndian::LITTLE );
+    rStream.ReadUInt32( nId );
 
     // check version
     if( GRAPHIC_FORMAT_50 == nId )
     {
         // read new style header
-        VersionCompat aCompat( rIStm, StreamMode::READ );
+        VersionCompat aCompat( rStream, StreamMode::READ );
 
-        rIStm.ReadInt32( nType );
+        rStream.ReadInt32( nType );
         sal_Int32 nLen;
-        rIStm.ReadInt32( nLen );
-        TypeSerializer aSerializer(rIStm);
+        rStream.ReadInt32( nLen );
+        TypeSerializer aSerializer(rStream);
         aSerializer.readSize(aSize);
-        ReadMapMode( rIStm, aMapMode );
+        ReadMapMode( rStream, aMapMode );
 
         if (aCompat.GetVersion() >= 2)
         {
-            rIStm.ReadInt32(nPageIndex);
+            rStream.ReadInt32(nPageIndex);
         }
     }
     else
@@ -1173,12 +1173,12 @@ bool ImpGraphic::swapInContent(SvStream& rIStm)
         sal_Int32 nMapMode, nScaleNumX, nScaleDenomX;
         sal_Int32 nScaleNumY, nScaleDenomY, nOffsX, nOffsY;
 
-        rIStm.SeekRel( -4 );
+        rStream.SeekRel( -4 );
 
         sal_Int32 nLen;
-        rIStm.ReadInt32( nType ).ReadInt32( nLen ).ReadInt32( nWidth ).ReadInt32( nHeight );
-        rIStm.ReadInt32( nMapMode ).ReadInt32( nScaleNumX ).ReadInt32( nScaleDenomX ).ReadInt32( nScaleNumY );
-        rIStm.ReadInt32( nScaleDenomY ).ReadInt32( nOffsX ).ReadInt32( nOffsY );
+        rStream.ReadInt32( nType ).ReadInt32( nLen ).ReadInt32( nWidth ).ReadInt32( nHeight );
+        rStream.ReadInt32( nMapMode ).ReadInt32( nScaleNumX ).ReadInt32( nScaleDenomX ).ReadInt32( nScaleNumY );
+        rStream.ReadInt32( nScaleDenomY ).ReadInt32( nOffsX ).ReadInt32( nOffsY );
 
         // swapped
         if( nType > 100 )
@@ -1229,8 +1229,8 @@ bool ImpGraphic::swapInContent(SvStream& rIStm)
 
         if( meType == GraphicType::Bitmap || meType == GraphicType::GdiMetafile )
         {
-            ReadImpGraphic( rIStm, *this );
-            bRet = rIStm.GetError() == ERRCODE_NONE;
+            ReadImpGraphic(rStream, *this);
+            bRet = rStream.GetError() == ERRCODE_NONE;
         }
         else if( sal::static_int_cast<sal_uLong>(meType) >= SYS_WINMETAFILE
                  && sal::static_int_cast<sal_uLong>(meType) <= SYS_MACMETAFILE )
@@ -1250,10 +1250,10 @@ bool ImpGraphic::swapInContent(SvStream& rIStm)
                 break;
             }
 
-            if( nType && GraphicConverter::Import( rIStm, aSysGraphic, nCvtType ) == ERRCODE_NONE )
+            if( nType && GraphicConverter::Import(rStream, aSysGraphic, nCvtType) == ERRCODE_NONE )
             {
                 *this = ImpGraphic( aSysGraphic.GetGDIMetaFile() );
-                bRet = rIStm.GetError() == ERRCODE_NONE;
+                bRet = rStream.GetError() == ERRCODE_NONE;
             }
             else
                 meType = GraphicType::Default;
@@ -1270,7 +1270,7 @@ bool ImpGraphic::swapInContent(SvStream& rIStm)
     else
         bRet = true;
 
-    rIStm.SetEndian( nOldFormat );
+    rStream.SetEndian( nOldFormat );
 
     return bRet;
 }
@@ -1459,22 +1459,22 @@ bool ImpGraphic::swapIn()
 
         if( !aSwapURL.isEmpty() )
         {
-            std::unique_ptr<SvStream> xIStm;
+            std::unique_ptr<SvStream> xStream;
             try
             {
-                xIStm = ::utl::UcbStreamHelper::CreateStream( aSwapURL, StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE );
+                xStream = ::utl::UcbStreamHelper::CreateStream( aSwapURL, StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE );
             }
             catch( const css::uno::Exception& )
             {
             }
 
-            if( xIStm )
+            if (xStream)
             {
-                xIStm->SetVersion( SOFFICE_FILEFORMAT_50 );
-                xIStm->SetCompressMode( SvStreamCompressFlags::NATIVE );
+                xStream->SetVersion( SOFFICE_FILEFORMAT_50 );
+                xStream->SetCompressMode( SvStreamCompressFlags::NATIVE );
 
-                bRet = swapInFromStream(*xIStm);
-                xIStm.reset();
+                bRet = swapInFromStream(*xStream);
+                xStream.reset();
                 if (mpSwapFile)
                     setOriginURL(mpSwapFile->getOriginURL());
                 mpSwapFile.reset();
