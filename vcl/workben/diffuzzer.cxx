@@ -26,6 +26,7 @@ void* com_sun_star_i18n_Collator_get_implementation(void*, void*);
 void* com_sun_star_i18n_NativeNumberSupplier_get_implementation(void*, void*);
 void* com_sun_star_i18n_NumberFormatCodeMapper_get_implementation(void*, void*);
 void* com_sun_star_i18n_Transliteration_get_implementation(void*, void*);
+void* i18npool_CalendarImpl_get_implementation(void*, void*);
 }
 
 const lib_to_factory_mapping* lo_get_factory_map(void)
@@ -59,6 +60,8 @@ const lib_to_constructor_mapping* lo_get_constructor_map(void)
               com_sun_star_i18n_NumberFormatCodeMapper_get_implementation },
             { "com_sun_star_i18n_Transliteration_get_implementation",
               com_sun_star_i18n_Transliteration_get_implementation },
+            { "i18npool_CalendarImpl_get_implementation",
+              i18npool_CalendarImpl_get_implementation },
             { 0, 0 } };
 
     return map;
