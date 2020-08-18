@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b2beed9a_d5eac3a3",
+        "filename": "cui/source/dialogs/about.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-18T16:02:43Z",
+      "side": 1,
+      "message": "What could this possibly mean??? lol",
+      "range": {
+        "startLine": 165,
+        "startChar": 2,
+        "endLine": 167,
+        "endChar": 3
+      },
+      "revId": "65ae6af9f460b1a28f3e07480347ff7f90adae38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
