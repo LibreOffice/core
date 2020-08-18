@@ -54,7 +54,7 @@ import java.util.StringTokenizer;
 
 /**
  * The <code>ParcelContainer</code> object is used to store the
- * ScripingFramework specific Libraries.
+ * ScriptingFramework specific Libraries.
  */
 public class ParcelContainer implements XNameAccess {
 

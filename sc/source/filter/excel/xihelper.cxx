@@ -375,7 +375,7 @@ void XclImpHFConverter::ParseString( const OUString& rHFString )
                         mxFontData->mnEscapem = (mxFontData->mnEscapem == EXC_FONTESC_SUPER) ?
                             EXC_FONTESC_NONE : EXC_FONTESC_SUPER;
                     break;
-                    case 'Y':           // subsrcipt
+                    case 'Y':           // subscript
                         SetAttribs();
                         mxFontData->mnEscapem = (mxFontData->mnEscapem == EXC_FONTESC_SUB) ?
                             EXC_FONTESC_NONE : EXC_FONTESC_SUB;
@@ -828,7 +828,7 @@ XclImpCachedMatrix::XclImpCachedMatrix( XclImpStream& rStrm ) :
     }
     else
     {
-        // in BIFF8: columns and rows decreaed by 1
+        // in BIFF8: columns and rows decreased by 1
         ++mnScCols;
         ++mnScRows;
     }
