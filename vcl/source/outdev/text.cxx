@@ -530,7 +530,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                             sal_Int32 nWordLen = nWordEnd - nWordStart;
                             if ( ( nWordEnd >= nSoftBreak ) && ( nWordLen > 3 ) )
                             {
-                                // #104415# May happen, because getLineBreak may differ from getWordBoudary with DICTIONARY_WORD
+                                // #104415# May happen, because getLineBreak may differ from getWordBoundary with DICTIONARY_WORD
                                 // SAL_WARN_IF( nWordEnd < nMaxBreakPos, "vcl", "Hyph: Break?" );
                                 OUString aWord = rStr.copy( nWordStart, nWordLen );
                                 sal_Int32 nMinTrail = nWordEnd-nSoftBreak+1;  //+1: Before the "broken off" char

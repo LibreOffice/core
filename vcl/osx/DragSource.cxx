@@ -306,7 +306,7 @@ unsigned int DragSource::getSupportedDragOperations(bool isLocal) const
     {
       // Support NSDragOperation generic which means we can
       // decide which D&D operation to choose. We map
-      // NSDragOperationGenric to DNDConstants::ACTION_DEFAULT
+      // NSDragOperationGeneric to DNDConstants::ACTION_DEFAULT
       // in SystemToOfficeDragActions to signal this and
       // use it in DropTarget::determineDropAction
       srcActions |= NSDragOperationGeneric;
