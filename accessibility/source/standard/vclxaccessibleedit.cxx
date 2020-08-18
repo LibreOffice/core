@@ -34,7 +34,7 @@
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/edit.hxx>
-#include <vcl/vclmedit.hxx>
+#include <vcl/toolkit/vclmedit.hxx>
 #include <vcl/textdata.hxx>
 #include <vcl/txtattr.hxx>
 #include <vcl/xtextedt.hxx>

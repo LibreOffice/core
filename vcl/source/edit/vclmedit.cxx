@@ -25,7 +25,7 @@
 #include <vcl/event.hxx>
 #include <vcl/specialchars.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/vclmedit.hxx>
+#include <vcl/toolkit/vclmedit.hxx>
 #include <vcl/xtextedt.hxx>
 #include <vcl/textview.hxx>
 #include <vcl/ptrstyle.hxx>

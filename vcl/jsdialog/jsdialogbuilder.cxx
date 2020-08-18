@@ -20,7 +20,7 @@
 #include <o3tl/deleter.hxx>
 #include <memory>
 #include <vcl/toolbox.hxx>
-#include <vcl/vclmedit.hxx>
+#include <vcl/toolkit/vclmedit.hxx>
 #include <boost/property_tree/json_parser.hpp>
 
 JSDialogNotifyIdle::JSDialogNotifyIdle(VclPtr<vcl::Window> aWindow)
