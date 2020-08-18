@@ -82,7 +82,7 @@ char const* const* SunInfo::getLibraryPaths(int* size)
         "/lib/" JFW_PLUGIN_ARCH "/client",
         "/lib/" JFW_PLUGIN_ARCH "/server",
         "/lib/" JFW_PLUGIN_ARCH "/native_threads",
-        "/lib/" JFW_PLUGIN_ARCH
+        ("/lib/" JFW_PLUGIN_ARCH)
     };
     *size = SAL_N_ELEMENTS(ar);
     return ar;
