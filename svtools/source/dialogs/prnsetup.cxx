@@ -260,7 +260,7 @@ void PrinterSetupDialog::ImplSetInfo()
     }
     else
     {
-        OUString aTempStr;
+        const OUString aTempStr;
         m_xFiType->set_label( aTempStr );
         m_xFiLocation->set_label( aTempStr );
         m_xFiComment->set_label( aTempStr );

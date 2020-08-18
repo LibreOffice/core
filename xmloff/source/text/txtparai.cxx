@@ -1882,7 +1882,7 @@ XMLParaContext::XMLParaContext(
         GetImport().GetTextImport()->GetTextPAttrTokenMap();
 
     bool bHaveXmlId( false );
-    OUString aCondStyleName, sClassNames;
+    OUString aCondStyleName;
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -1967,8 +1967,6 @@ XMLParaContext::XMLParaContext(
 
     if( !aCondStyleName.isEmpty() )
         sStyleName = aCondStyleName;
-    else if( !sClassNames.isEmpty() )
-        sStyleName = sClassNames.getToken( 0, ' ' );
 }
 
 void XMLParaContext::EndElement()

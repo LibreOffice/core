@@ -720,22 +720,21 @@ std::string extractPrivateKey(const std::string & privateKey)
 
 OUString lcl_getCurrentDocumentMimeType(LibLODocument_Impl* pDocument)
 {
-    OUString aMimeType;
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(pDocument->mxComponent.get());
     if (!pBaseModel)
-        return aMimeType;
+        return "";
 
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
     if (!pObjectShell)
-        return aMimeType;
+        return "";
 
     SfxMedium* pMedium = pObjectShell->GetMedium();
     if (!pMedium)
-        return aMimeType;
+        return "";
 
     auto pFilter = pMedium->GetFilter();
     if (!pFilter)
-        return aMimeType;
+        return "";
 
     return pFilter->GetMimeType();
 }

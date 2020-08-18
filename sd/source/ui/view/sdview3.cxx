@@ -1341,7 +1341,6 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
             if( eFill == drawing::FillStyle_SOLID || eFill == drawing::FillStyle_NONE )
             {
-                OUString                aName;
                 SfxItemSet              aSet( mrDoc.GetPool() );
                 bool                    bClosed = pPickObj->IsClosedObj();
                 ::sd::Window* pWin = mpViewSh->GetActiveWindow();
@@ -1367,12 +1366,12 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 {
                     // area fill
                     if(eFill == drawing::FillStyle_SOLID )
-                        aSet.Put(XFillColorItem(aName, aColor));
+                        aSet.Put(XFillColorItem("", aColor));
 
                     aSet.Put( XFillStyleItem( eFill ) );
                 }
                 else
-                    aSet.Put( XLineColorItem( aName, aColor ) );
+                    aSet.Put( XLineColorItem( "", aColor ) );
 
                 // add text color
                 pPickObj->SetMergedItemSetAndBroadcast( aSet );

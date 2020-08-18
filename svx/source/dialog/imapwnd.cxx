@@ -551,8 +551,7 @@ sal_Int8 IMapWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
     if (mxDropTargetHelper->IsDropFormatSupported(SotClipboardFormatId::NETSCAPE_BOOKMARK))
     {
-        const OUString  aString;
-        INetBookmark    aBookMark( aString, aString );
+        INetBookmark    aBookMark( "", "" );
         SdrObject*      pSdrObj = GetHitSdrObj( rEvt.maPosPixel );
 
         if( pSdrObj && TransferableDataHelper( rEvt.maDropEvent.Transferable ).GetINetBookmark( SotClipboardFormatId::NETSCAPE_BOOKMARK, aBookMark ) )

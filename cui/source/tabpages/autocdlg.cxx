@@ -1404,9 +1404,8 @@ void OfaAutocorrExceptPage::RefillReplaceBoxes(bool bFromReset,
     }
     m_xDoubleCapsLB->clear();
     m_xAbbrevLB->clear();
-    OUString sTemp;
-    m_xAbbrevED->set_text(sTemp);
-    m_xDoubleCapsED->set_text(sTemp);
+    m_xAbbrevED->set_text("");
+    m_xDoubleCapsED->set_text("");
 
     if(aStringsTable.find(eLang) != aStringsTable.end())
     {

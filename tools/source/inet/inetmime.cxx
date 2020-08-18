@@ -1103,7 +1103,6 @@ OUString INetMIME::decodeHeaderFieldBody(const OString& rBody)
 
     for (const char * p = pBegin; p != pEnd;)
     {
-        OUString sEncodedText;
         if (*p == '=' /* && bStartEncodedWord */)
         {
             const char * q = p + 1;
@@ -1361,9 +1360,6 @@ OUString INetMIME::decodeHeaderFieldBody(const OString& rBody)
                 continue;
             }
         }
-
-        if (!sEncodedText.isEmpty())
-            sDecoded.append(sEncodedText);
 
         if (p == pEnd)
             break;
