@@ -201,6 +201,10 @@ void SQLEditView::UpdateData()
 {
     m_bInUpdate = true;
     EditEngine& rEditEngine = GetEditEngine();
+
+    bool bUndoEnabled = rEditEngine.IsUndoEnabled();
+    rEditEngine.EnableUndo(false);
+
     // syntax highlighting
     bool bOrigModified = rEditEngine.IsModified();
     for (sal_Int32 nLine=0; nLine < rEditEngine.GetParagraphCount(); ++nLine)
@@ -225,6 +229,8 @@ void SQLEditView::UpdateData()
     if (!bOrigModified)
         rEditEngine.ClearModifyFlag();
     m_bInUpdate = false;
+
+    rEditEngine.EnableUndo(bUndoEnabled);
 
     Invalidate();
 }
