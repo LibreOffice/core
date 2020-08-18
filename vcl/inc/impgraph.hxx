@@ -168,15 +168,16 @@ private:
     sal_uInt32          ImplGetAnimationLoopCount() const;
 
 private:
+    // swapping methods
+    bool swapInFromStream(SvStream& rStream);
+
+    bool swapInContent(SvStream& rStream);
+    bool swapOutContent(SvStream& rStream);
+    // end swapping
 
     std::shared_ptr<GraphicReader>& ImplGetContext() { return mpContext;}
     void                ImplSetContext( const std::shared_ptr<GraphicReader>& pReader );
     void                ImplSetDummyContext( bool value ) { mbDummyContext = value; }
-    bool                ImplReadEmbedded( SvStream& rIStream );
-    bool                ImplWriteEmbedded( SvStream& rOStream );
-
-    bool                swapInFromStream(SvStream* pIStm);
-
     bool                ImplIsDummyContext() const { return mbDummyContext; }
     void                ImplSetLink( const std::shared_ptr<GfxLink>& );
     std::shared_ptr<GfxLink> ImplGetSharedGfxLink() const;

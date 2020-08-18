@@ -1133,7 +1133,7 @@ void ImpGraphic::ImplSetContext( const std::shared_ptr<GraphicReader>& pReader )
     mbDummyContext = false;
 }
 
-bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
+bool ImpGraphic::swapInContent(SvStream& rIStm)
 {
     ensureAvailable();
 
@@ -1275,7 +1275,7 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
     return bRet;
 }
 
-bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
+bool ImpGraphic::swapOutContent(SvStream& rOStm)
 {
     ensureAvailable();
 
@@ -1381,7 +1381,7 @@ bool ImpGraphic::swapOut()
         xOutputStream->SetCompressMode(SvStreamCompressFlags::NATIVE);
         xOutputStream->SetBufferSize(GRAPHIC_STREAMBUFSIZE);
 
-        if (!xOutputStream->GetError() && ImplWriteEmbedded(*xOutputStream))
+        if (!xOutputStream->GetError() && swapOutContent(*xOutputStream))
         {
             xOutputStream->Flush();
             bResult = !xOutputStream->GetError();
@@ -1473,7 +1473,7 @@ bool ImpGraphic::swapIn()
                 xIStm->SetVersion( SOFFICE_FILEFORMAT_50 );
                 xIStm->SetCompressMode( SvStreamCompressFlags::NATIVE );
 
-                bRet = swapInFromStream(xIStm.get());
+                bRet = swapInFromStream(*xIStm);
                 xIStm.reset();
                 if (mpSwapFile)
                     setOriginURL(mpSwapFile->getOriginURL());
@@ -1488,16 +1488,13 @@ bool ImpGraphic::swapIn()
     return bRet;
 }
 
-bool ImpGraphic::swapInFromStream(SvStream* xIStm)
+bool ImpGraphic::swapInFromStream(SvStream& rStream)
 {
     bool bRet = false;
 
-    if( !xIStm )
-        return false;
+    rStream.SetBufferSize(GRAPHIC_STREAMBUFSIZE);
 
-    xIStm->SetBufferSize( GRAPHIC_STREAMBUFSIZE );
-
-    if( xIStm->GetError() )
+    if (rStream.GetError())
         return false;
 
     //keep the swap file alive, because its quite possibly the backing storage
@@ -1511,7 +1508,7 @@ bool ImpGraphic::swapInFromStream(SvStream* xIStm)
     bool bDummyContext = mbDummyContext;
     mbDummyContext = false;
 
-    bRet = ImplReadEmbedded( *xIStm );
+    bRet = swapInContent(rStream);
 
     //restore ownership of the swap file and context
     mpSwapFile = std::move(xSwapFile);
