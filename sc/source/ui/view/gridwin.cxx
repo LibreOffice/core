@@ -630,12 +630,12 @@ public:
     }
 };
 
-void collectUIInformation(const OUString& aRow, const OUString& aCol)
+void collectUIInformation(const OUString& aRow, const OUString& aCol , const OUString& aevent)
 {
     EventDescription aDescription;
     aDescription.aAction = "LAUNCH";
     aDescription.aID = "grid_window";
-    aDescription.aParameters = {{"AUTOFILTER", ""},
+    aDescription.aParameters = {{aevent, ""},
         {"ROW", aRow}, {"COL", aCol}};
     aDescription.aParent = "MainWindow";
     aDescription.aKeyWord = "ScGridWinUIObject";
@@ -751,7 +751,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     // remember filter rules before modification
     rControl.getResult(aSaveAutoFilterResult);
 
-    collectUIInformation(OUString::number(nRow), OUString::number(nCol));
+    collectUIInformation(OUString::number(nRow), OUString::number(nCol),"AUTOFILTER");
 }
 
 void ScGridWindow::RefreshAutoFilterButton(const ScAddress& rPos)
@@ -1222,6 +1222,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
 
         mpFilterBox->EndInit();
     }
+    collectUIInformation(OUString::number(nRow), OUString::number(nCol),"SELECTMENU");
 }
 
 void ScGridWindow::FilterSelect( sal_uLong nSel )
