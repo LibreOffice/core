@@ -204,15 +204,14 @@ ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const un
 
     // create control
     uno::Sequence< beans::PropertyValue > aProps;
-    OUString sHelpUrl;
     sal_uInt16 nItemType = 0;
     if( m_bIsMenu )
     {
-        aProps = CreateMenuItemData( sCommandUrl, sHelpUrl, sLabel, nItemType, aSubMenu, true, true );
+        aProps = CreateMenuItemData( sCommandUrl, "", sLabel, nItemType, aSubMenu, true, true );
     }
     else
     {
-        aProps = CreateToolbarItemData( sCommandUrl, sHelpUrl, sLabel, nItemType, aSubMenu, true/*isVisible*/, 0/*nStyle*/ );
+        aProps = CreateToolbarItemData( sCommandUrl, "", sLabel, nItemType, aSubMenu, true/*isVisible*/, 0/*nStyle*/ );
     }
 
 

@@ -65,7 +65,13 @@ for d in definitionSet:
         continue
     if vartype in ["OpenCLInitialZone", "pyuno::PyThreadDetach", "SortRefUpdateSetter", "oglcanvas::TransformationPreserver"]:
         continue
-    if vartype in ["StackHack"]:
+    if vartype in ["StackHack", "osl::MutexGuard", "accessibility::SolarMethodGuard"]:
+        continue
+    if vartype in ["osl::ClearableMutexGuard", "comphelper::OExternalLockGuard", "osl::Guard< ::osl::Mutex>"]:
+        continue
+    if vartype in ["comphelper::OContextEntryGuard", "Guard<class osl::Mutex>", "basic::LibraryContainerMethodGuard"]:
+        continue
+    if vartype in ["canvas::CanvasBase::MutexType"]:
         continue
     definitionSet2.add(d)
 
@@ -83,11 +89,34 @@ writeonlySet = set()
 for d in definitionSet2:
     if d in readFromSet or d in untouchedSet:
         continue
+    varname = d[1]
+    vartype = defToTypeMap[d]
+    if "Alive" in varname:
+        continue
+    if "Keep" in varname:
+        continue
+    if vartype.endswith(" &"):
+        continue
     writeonlySet.add(d)
 
 readonlySet = set()
 for d in definitionSet2:
     if d in writeToSet or d in untouchedSet:
+        continue
+    varname = d[1]
+    vartype = defToTypeMap[d]
+    if "Dummy" in varname:
+        continue
+    if "Empty" in varname:
+        continue
+    if varname in ["aOldValue", "aNewValue"]:
+        continue
+    if "Exception" in vartype and vartype.endswith(" &"):
+        continue
+    if "exception" in vartype and vartype.endswith(" &"):
+        continue
+    # TODO for now, focus on the simple stuff
+    if not (vartype in ["rtl::OUString", "Bool"]):
         continue
     readonlySet.add(d)
 

@@ -3690,9 +3690,7 @@ SbUnoServiceCtor::~SbUnoServiceCtor()
 
 SbxInfo* SbUnoServiceCtor::GetInfo()
 {
-    SbxInfo* pRet = nullptr;
-
-    return pRet;
+    return nullptr;
 }
 
 

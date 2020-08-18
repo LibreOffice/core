@@ -212,7 +212,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     Color           aColBlack   ( COL_BLACK );
     OUString        aStr;
     sal_Int32       nStrLen;
-    OUString        aHelpFile;//which text???
+    const OUString  aHelpFile;//which text???
     SfxItemSet*     pSet            = nullptr;
     SfxItemSet*     pHFSet          = nullptr;
     SvxSetItem*     pHFSetItem      = nullptr;

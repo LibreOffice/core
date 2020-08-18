@@ -790,12 +790,11 @@ void GalleryBrowser2::ImplUpdateViews( sal_uInt16 nSelectionId )
 
         mxListView->freeze();
 
-        OUString sCreateOnDemand;
         sal_uInt32 nCount = mpCurTheme->GetObjectCount();
         for (sal_uInt32 i = 0; i < nCount; ++i)
         {
             mxIconView->InsertItem(i + 1); // skip reserved id 0
-            mxListView->append(OUString::number(i), sCreateOnDemand); // create on-demand in VisRowsScrolledHdl
+            mxListView->append(OUString::number(i), ""); // create on-demand in VisRowsScrolledHdl
 
             if (i == nAlwaysUpToDate) // fill in the first block
                 UpdateRows(false);

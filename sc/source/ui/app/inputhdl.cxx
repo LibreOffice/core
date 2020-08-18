@@ -3887,15 +3887,14 @@ void ScInputHandler::InputCommand( const CommandEvent& rCEvt )
                 if (eMode==SC_INPUT_NONE)
                     if (pTableView || pTopView)
                     {
-                        OUString aStrLoP;
                         if (pTableView)
                         {
-                            pTableView->GetEditEngine()->SetText( aStrLoP );
+                            pTableView->GetEditEngine()->SetText( "" );
                             pTableView->SetSelection( ESelection(0,0, 0,0) );
                         }
                         if (pTopView)
                         {
-                            pTopView->GetEditEngine()->SetText( aStrLoP );
+                            pTopView->GetEditEngine()->SetText( "" );
                             pTopView->SetSelection( ESelection(0,0, 0,0) );
                         }
                     }

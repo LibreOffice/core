@@ -450,10 +450,9 @@ IMPL_LINK(ScPrintAreasDlg, Impl_BtnHdl, weld::Button&, rBtn, void)
     {
         if ( Impl_CheckRefStrings() )
         {
-            OUString        aStr;
-            SfxStringItem   aPrintArea( SID_CHANGE_PRINTAREA, aStr );
-            SfxStringItem   aRepeatRow( FN_PARAM_2, aStr );
-            SfxStringItem   aRepeatCol( FN_PARAM_3, aStr );
+            SfxStringItem   aPrintArea( SID_CHANGE_PRINTAREA, "" );
+            SfxStringItem   aRepeatRow( FN_PARAM_2, "" );
+            SfxStringItem   aRepeatCol( FN_PARAM_3, "" );
 
             // Printing area changed?
 

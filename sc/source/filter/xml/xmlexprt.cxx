@@ -2142,7 +2142,7 @@ void ScXMLExport::AddStyleFromColumn(const uno::Reference<beans::XPropertySet>& 
         aItr->maValue >>= rIsVisible;
     }
 
-    OUString sParent;
+    const OUString sParent;
     if (pOldName)
     {
         if (GetAutoStylePool()->AddNamed(*pOldName, XmlStyleFamily::TABLE_COLUMN, sParent, aPropStates))
@@ -2171,7 +2171,7 @@ void ScXMLExport::AddStyleFromRow(const uno::Reference<beans::XPropertySet>& xRo
     if(aPropStates.empty())
         return;
 
-    OUString sParent;
+    const OUString sParent;
     if (pOldName)
     {
         if (GetAutoStylePool()->AddNamed(*pOldName, XmlStyleFamily::TABLE_ROW, sParent, aPropStates))
