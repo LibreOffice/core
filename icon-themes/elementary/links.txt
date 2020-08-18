@@ -1989,24 +1989,16 @@ res/lx03227.png res/odg_32_8.png
 res/lx03228.png res/otg_32_8.png
 res/lx03239.png cmd/32/dbrelationdesign.png
 res/lx03243.png res/lx03123.png
-res/lx03245.png res/odb_24_8.png
 res/lx03245_32.png res/odb_32_8.png
-res/lx03246.png res/odg_24_8.png
 res/lx03246_32.png res/odg_32_8.png
-res/lx03247.png res/odf_24_8.png
 res/lx03247_32.png res/odf_32_8.png
-res/lx03248.png res/odm_24_8.png
 res/lx03248_32.png res/odm_32_8.png
-res/lx03249.png res/odp_24_8.png
 res/lx03249_32.png res/odp_32_8.png
-res/lx03250.png res/ods_24_8.png
 res/lx03250_32.png res/ods_32_8.png
-res/lx03251.png res/odt_24_8.png
 res/lx03251_32.png res/odt_32_8.png
 res/lx03252.png res/otg_32_8.png
 res/lx03253.png res/otp_32_8.png
 res/lx03254.png res/ots_32_8.png
-res/lx03255.png res/ott_24_8.png
 res/lx03255_32.png res/ott_32_8.png
 res/lx03256.png cmd/lc_insertplugin.png
 res/mainapp_32.png res/mainapp_32_8.png
@@ -2466,7 +2458,7 @@ cmd/32/addtextbox.png cmd/32/insertfixedtext.png
 cmd/lc_addtextbox.png cmd/lc_insertfixedtext.png
 cmd/sc_addtextbox.png cmd/sc_insertfixedtext.png
 
-# Edit menu
+# Edit menu 
 # ===============================================
 cmd/32/authoritiesentrydialog.png cmd/32/dbviewaliases.png
 cmd/32/changesmenu.png cmd/32/accepttrackedchange.png
