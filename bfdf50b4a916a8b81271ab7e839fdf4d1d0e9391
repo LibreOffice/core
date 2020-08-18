@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0e68696f_ba7422ba",
+        "filename": "cui/source/dialogs/about.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-18T21:00:24Z",
+      "side": 1,
+      "message": "this obsolete comment should be removed",
+      "range": {
+        "startLine": 37,
+        "startChar": 34,
+        "endLine": 37,
+        "endChar": 67
+      },
+      "revId": "bfdf50b4a916a8b81271ab7e839fdf4d1d0e9391",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
