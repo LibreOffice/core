@@ -125,11 +125,6 @@
 using namespace ::com::sun::star;
 using namespace sw;
 
-#define DB_SEP_SPACE    0
-#define DB_SEP_TAB      1
-#define DB_SEP_RETURN   2
-#define DB_SEP_NEWLINE  3
-
 namespace {
 
 void lcl_emitEvent(SfxEventHintId nEventId, sal_Int32 nStrId, SfxObjectShell* pDocShell)
@@ -595,37 +590,6 @@ void SwDBManager::ImportFromConnection(  SwWrtShell* pSh )
     pSh->EndAllAction();
 }
 
-static OUString  lcl_FindColumn(const OUString& sFormatStr,sal_uInt16  &nUsedPos, sal_uInt8 &nSeparator)
-{
-    OUStringBuffer sReturn;
-    sal_uInt16 nLen = sFormatStr.getLength();
-    nSeparator = 0xff;
-    while(nUsedPos < nLen && nSeparator == 0xff)
-    {
-        sal_Unicode cCurrent = sFormatStr[nUsedPos];
-        switch(cCurrent)
-        {
-            case ',':
-                nSeparator = DB_SEP_SPACE;
-            break;
-            case ';':
-                nSeparator = DB_SEP_RETURN;
-            break;
-            case ':':
-                nSeparator = DB_SEP_TAB;
-            break;
-            case '#':
-                nSeparator = DB_SEP_NEWLINE;
-            break;
-            default:
-                sReturn.append(cCurrent);
-        }
-        nUsedPos++;
-
-    }
-    return sReturn.makeStringAndClear();
-}
-
 void SwDBManager::ImportDBEntry(SwWrtShell* pSh)
 {
     if(!m_pImpl->pMergeData || m_pImpl->pMergeData->bEndOfDB)
@@ -633,65 +597,22 @@ void SwDBManager::ImportDBEntry(SwWrtShell* pSh)
 
     uno::Reference< sdbcx::XColumnsSupplier > xColsSupp( m_pImpl->pMergeData->xResultSet, uno::UNO_QUERY );
     uno::Reference<container::XNameAccess> xCols = xColsSupp->getColumns();
-    OUString sFormatStr;
-    sal_uInt16 nFormatLen = sFormatStr.getLength();
-    if( nFormatLen )
+    OUStringBuffer sStr;
+    uno::Sequence<OUString> aColNames = xCols->getElementNames();
+    const OUString* pColNames = aColNames.getConstArray();
+    long nLength = aColNames.getLength();
+    for(long i = 0; i < nLength; i++)
     {
-        const char cSpace = ' ';
-        const char cTab = '\t';
-        sal_uInt16 nUsedPos = 0;
-        sal_uInt8   nSeparator;
-        OUString sColumn = lcl_FindColumn(sFormatStr, nUsedPos, nSeparator);
-        while( !sColumn.isEmpty() )
-        {
-            if(!xCols->hasByName(sColumn))
-                return;
-            uno::Any aCol = xCols->getByName(sColumn);
-            uno::Reference< beans::XPropertySet > xColumnProp;
-            aCol >>= xColumnProp;
-            if(xColumnProp.is())
-            {
-                SwDBFormatData aDBFormat;
-                OUString sInsert = GetDBField( xColumnProp,   aDBFormat);
-                if( DB_SEP_SPACE == nSeparator )
-                        sInsert += OUStringChar(cSpace);
-                else if( DB_SEP_TAB == nSeparator)
-                        sInsert += OUStringChar(cTab);
-                pSh->Insert(sInsert);
-                if( DB_SEP_RETURN == nSeparator)
-                    pSh->SplitNode();
-                else if(DB_SEP_NEWLINE == nSeparator)
-                        pSh->InsertLineBreak();
-            }
-            else
-            {
-                // column not found -> show error
-                OUString sInsert = "?" + sColumn + "?";
-                pSh->Insert(sInsert);
-            }
-            sColumn = lcl_FindColumn(sFormatStr, nUsedPos, nSeparator);
-        }
-        pSh->SplitNode();
+        uno::Any aCol = xCols->getByName(pColNames[i]);
+        uno::Reference< beans::XPropertySet > xColumnProp;
+        aCol >>= xColumnProp;
+        SwDBFormatData aDBFormat;
+        sStr.append(GetDBField( xColumnProp, aDBFormat));
+        if (i < nLength - 1)
+            sStr.append("\t");
     }
-    else
-    {
-        OUStringBuffer sStr;
-        uno::Sequence<OUString> aColNames = xCols->getElementNames();
-        const OUString* pColNames = aColNames.getConstArray();
-        long nLength = aColNames.getLength();
-        for(long i = 0; i < nLength; i++)
-        {
-            uno::Any aCol = xCols->getByName(pColNames[i]);
-            uno::Reference< beans::XPropertySet > xColumnProp;
-            aCol >>= xColumnProp;
-            SwDBFormatData aDBFormat;
-            sStr.append(GetDBField( xColumnProp, aDBFormat));
-            if (i < nLength - 1)
-                sStr.append("\t");
-        }
-        pSh->SwEditShell::Insert2(sStr.makeStringAndClear());
-        pSh->SwFEShell::SplitNode();    // line feed
-    }
+    pSh->SwEditShell::Insert2(sStr.makeStringAndClear());
+    pSh->SwFEShell::SplitNode();    // line feed
 }
 
 bool SwDBManager::GetTableNames(weld::ComboBox& rBox, const OUString& rDBName)
