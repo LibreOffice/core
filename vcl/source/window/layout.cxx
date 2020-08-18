@@ -29,7 +29,7 @@
 #include <window.h>
 #include <boost/multi_array.hpp>
 #include <boost/property_tree/ptree.hpp>
-#include <vcl/vclmedit.hxx>
+#include <vcl/toolkit/vclmedit.hxx>
 #include <sal/log.hxx>
 #include <tools/json_writer.hxx>
 

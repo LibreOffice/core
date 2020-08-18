@@ -64,7 +64,7 @@
 
 #include <vcl/sysdata.hxx>
 #include <vcl/textrectinfo.hxx>
-#include <vcl/vclmedit.hxx>
+#include <vcl/toolkit/vclmedit.hxx>
 
 #include <toolkit/awt/vclxwindows.hxx>
 #include <awt/vclxsystemdependentwindow.hxx>

@@ -7445,6 +7445,7 @@ include/vcl/toolkit/treelist.hxx
 include/vcl/toolkit/treelistbox.hxx
 include/vcl/toolkit/treelistentry.hxx
 include/vcl/toolkit/unowrap.hxx
+include/vcl/toolkit/vclmedit.hxx
 include/vcl/toolkit/viewdataentry.hxx
 include/vcl/transfer.hxx
 include/vcl/txtattr.hxx
@@ -7457,7 +7458,6 @@ include/vcl/vclenum.hxx
 include/vcl/vclevent.hxx
 include/vcl/vcllayout.hxx
 include/vcl/vclmain.hxx
-include/vcl/vclmedit.hxx
 include/vcl/vclptr.hxx
 include/vcl/vclreferencebase.hxx
 include/vcl/vectorgraphicdata.hxx
