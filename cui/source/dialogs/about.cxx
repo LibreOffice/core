@@ -19,7 +19,6 @@
 
 #include <about.hxx>
 
-#include <osl/diagnose.h>    //OSL_ENSURE
 #include <osl/process.h>     //osl_getProcessLocale
 #include <rtl/character.hxx> //rtl::isAsciiHexDigit
 #include <sal/log.hxx>       //SAL_WARN
@@ -34,7 +33,7 @@
 #include <sfx2/app.hxx> //SfxApplication::loadBrandSvg
 #include <strings.hrc>
 #include <svtools/langhelp.hxx>
-#include <unotools/bootstrap.hxx> //utl::Bootstrap::getBuildVersion
+#include <unotools/bootstrap.hxx> //utl::Bootstrap::getBuildIdData
 #include <unotools/configmgr.hxx> //ConfigManager::
 
 #include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
@@ -155,16 +154,10 @@ OUString AboutDialog::GetVersionString() {
   return sVersion;
 }
 
-OUString AboutDialog::GetBuildString() {
-
-  OUString sDefault;
-  OUString sBuildId(utl::Bootstrap::getBuildVersion(sDefault));
-  if (sBuildId.isEmpty())
-    sBuildId = utl::Bootstrap::getBuildIdData(sDefault);
-  if (sBuildId.isEmpty()) {
-    sBuildId = sBuildId.getToken(0, '-');
-  }
-  OSL_ENSURE(!sBuildId.isEmpty(), "No BUILDID in bootstrap file");
+OUString AboutDialog::GetBuildString()
+{
+  OUString sBuildId(utl::Bootstrap::getBuildIdData(""));
+  SAL_WARN_IF(!sBuildId.isEmpty(), "cui.dialogs", "No BUILDID in bootstrap file");
 
   return sBuildId;
 }
