@@ -268,19 +268,16 @@ void AnnotationWindow::InitControls()
     mpTextWindow->SetPointer(PointerStyle::Text);
 
     // window control for author and date
-    mpMeta = VclPtr<VclMultiLineEdit>::Create(this,0);
-    mpMeta->SetReadOnly();
-    mpMeta->SetRightToLeft(AllSettings::GetLayoutRTL());
-    mpMeta->AlwaysDisableInput(true);
+    mpMeta = VclPtr<FixedText>::Create(this);
     mpMeta->SetCallHandlersOnInputDisabled(true);
 
     // we should leave this setting alone, but for this we need a better layout algo
     // with variable meta size height
     AllSettings aSettings = mpMeta->GetSettings();
     StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-    vcl::Font aFont = aStyleSettings.GetFieldFont();
+    vcl::Font aFont = aStyleSettings.GetLabelFont();
     aFont.SetFontHeight(8);
-    aStyleSettings.SetFieldFont(aFont);
+    aStyleSettings.SetLabelFont(aFont);
     aSettings.SetStyleSettings(aStyleSettings);
     mpMeta->SetSettings(aSettings);
 
@@ -343,7 +340,7 @@ void AnnotationWindow::Rescale()
     mpTextWindow->SetMapMode( aMode );
     if ( mpMeta )
     {
-        vcl::Font aFont( mpMeta->GetSettings().GetStyleSettings().GetFieldFont() );
+        vcl::Font aFont( mpMeta->GetSettings().GetStyleSettings().GetLabelFont() );
         sal_Int32 nHeight = long(aFont.GetFontHeight() * aMode.GetScaleY());
         aFont.SetFontHeight( nHeight );
         mpMeta->SetControlFont( aFont );
@@ -541,7 +538,7 @@ void AnnotationWindow::SetColor()
     mpMeta->SetControlBackground(maColor);
     AllSettings aSettings = mpMeta->GetSettings();
     StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-    aStyleSettings.SetFieldTextColor( bHighContrast ? maColorLight : maColorDark);
+    aStyleSettings.SetLabelTextColor( bHighContrast ? maColorLight : maColorDark);
     aSettings.SetStyleSettings(aStyleSettings);
     mpMeta->SetSettings(aSettings);
 

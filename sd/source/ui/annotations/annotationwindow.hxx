@@ -22,7 +22,7 @@
 
 #include <vcl/ctrl.hxx>
 #include <vcl/floatwin.hxx>
-#include <vcl/vclmedit.hxx>
+#include <vcl/fixed.hxx>
 #include <vcl/scrbar.hxx>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -81,7 +81,7 @@ class AnnotationWindow : public FloatingWindow
         bool                    mbProtected;
         bool                    mbMouseOverButton;
         VclPtr<AnnotationTextWindow>   mpTextWindow;
-        VclPtr<VclMultiLineEdit> mpMeta;
+        VclPtr<FixedText> mpMeta;
         ::tools::Rectangle               maRectMetaButton;
         basegfx::B2DPolygon     maPopupTriangle;
 
