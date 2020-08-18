@@ -18,14 +18,14 @@
  */
 
 #include <undosqledit.hxx>
-#include <sqledit.hxx>
+#include <QueryTextView.hxx>
 
 namespace dbaui
 {
 void OSqlEditUndoAct::ToggleText()
 {
-    OUString strNext = m_pOwner->GetText();
-    m_pOwner->SetText(m_strNextText);
+    OUString strNext = m_rOwner.GetSQLText();
+    m_rOwner.SetSQLText(m_strNextText);
     m_strNextText = strNext;
 }
 

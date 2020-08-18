@@ -33,21 +33,12 @@
 #include <unotools/eventlisteneradapter.hxx>
 #include <osl/mutex.hxx>
 
-#include <svx/weldeditview.hxx>
+#include "sqledit.hxx"
 
 struct ImplSVEvent;
 
 namespace dbaui
 {
-    class SQLEditView : public WeldEditView
-    {
-    private:
-        void DoBracketHilight(sal_uInt16 nKey);
-    public:
-        SQLEditView();
-        virtual bool KeyInput(const KeyEvent& rKEvt) override;
-    };
-
     // DirectSQLDialog
     class DirectSQLDialog final
             : public weld::GenericDialogController
@@ -64,16 +55,11 @@ namespace dbaui
         std::unique_ptr<SQLEditView> m_xSQL;
         std::unique_ptr<weld::CustomWeld> m_xSQLEd;
 
-        Timer m_aUpdateDataTimer;
-        const SyntaxHighlighter m_aHighlighter;
-        const svtools::ColorConfig m_aColorConfig;
-
         typedef std::deque< OUString >  StringQueue;
         StringQueue     m_aStatementHistory;    // previous statements
         StringQueue     m_aNormalizedHistory;   // previous statements, normalized to be used in the list box
 
         sal_Int32       m_nStatusCount;
-        bool            m_bInUpdate;
 
         css::uno::Reference< css::sdbc::XConnection >
                         m_xConnection;
@@ -93,10 +79,6 @@ namespace dbaui
         void executeCurrent();
         void switchToHistory(sal_Int32 _nHistoryPos);
 
-        Color GetColorValue(TokenType aToken);
-
-        void UpdateData();
-
         // OEventListenerAdapter
         virtual void _disposing( const css::lang::EventObject& _rSource ) override;
 
@@ -105,7 +87,6 @@ namespace dbaui
         DECL_LINK( OnCloseClick, weld::Button&, void );
         DECL_LINK( OnListEntrySelected, weld::ComboBox&, void );
         DECL_LINK( OnStatementModified, LinkParamNone*, void );
-        DECL_LINK( ImplUpdateDataHdl, Timer*, void );
 
         /// adds a statement to the statement history
         void implAddToStatementHistory(const OUString& _rStatement);
