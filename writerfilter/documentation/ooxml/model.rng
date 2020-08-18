@@ -291,7 +291,7 @@ documentation for that file. The schema has two parts:
 
       - Properties: this maps elements/attributes to SPRM/attribute tokens
       - Stream: If the element itself does not require any special handling,
-        but the subelemenents are interesting, use this resource.  If no
+        but the subelements are interesting, use this resource.  If no
         explicit resource element is available, then a null context will be
         created and the element and all its subelements will be ignored.
       -->
