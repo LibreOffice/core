@@ -938,20 +938,20 @@ SvXMLStyleContext* SdXMLStylesContext::CreateStyleChildContext(
     if(!pContext)
     {
         const SvXMLTokenMap& rTokenMap = mpNumFmtHelper->GetStylesElemTokenMap();
-        sal_uInt16 nToken = rTokenMap.Get( nPrefix, rLocalName );
+        SvXMLStylesTokens nToken = static_cast<SvXMLStylesTokens>(rTokenMap.Get( nPrefix, rLocalName ));
         switch (nToken)
         {
-            case XML_TOK_STYLES_DATE_STYLE:
-            case XML_TOK_STYLES_TIME_STYLE:
+            case SvXMLStylesTokens::DATE_STYLE:
+            case SvXMLStylesTokens::TIME_STYLE:
                 // number:date-style or number:time-style
                 pContext = new SdXMLNumberFormatImportContext( GetSdImport(), nPrefix, rLocalName, mpNumFmtHelper->getData(), nToken, xAttrList, *this );
                 break;
 
-            case XML_TOK_STYLES_NUMBER_STYLE:
-            case XML_TOK_STYLES_CURRENCY_STYLE:
-            case XML_TOK_STYLES_PERCENTAGE_STYLE:
-            case XML_TOK_STYLES_BOOLEAN_STYLE:
-            case XML_TOK_STYLES_TEXT_STYLE:
+            case SvXMLStylesTokens::NUMBER_STYLE:
+            case SvXMLStylesTokens::CURRENCY_STYLE:
+            case SvXMLStylesTokens::PERCENTAGE_STYLE:
+            case SvXMLStylesTokens::BOOLEAN_STYLE:
+            case SvXMLStylesTokens::TEXT_STYLE:
                 pContext = new SvXMLNumFormatContext( GetSdImport(), nPrefix, rLocalName,
                                                         mpNumFmtHelper->getData(), nToken, xAttrList, *this );
                 break;

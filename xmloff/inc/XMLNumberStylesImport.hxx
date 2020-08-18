@@ -47,7 +47,7 @@ public:
     SdXMLNumberFormatImportContext( SdXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLocalName,
-        SvXMLNumImpData* pNewData, sal_uInt16 nNewType,
+        SvXMLNumImpData* pNewData,  SvXMLStylesTokens nNewType,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         SvXMLStylesContext& rStyles);
     virtual ~SdXMLNumberFormatImportContext() override;
