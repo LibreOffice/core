@@ -129,7 +129,7 @@ cmd/32/inserttextframe.png cmd/32/insertframe.png
 cmd/32/inserttimefield.png cmd/32/timefield.png
 cmd/32/inserttimefieldfix.png cmd/32/timefield.png
 cmd/32/insobjctrl.png cmd/32/adddirect.png
-cmd/32/linenumberingdialog.png cmd/32/linenumberdialog.png
+cmd/32/linenumberdialog.png cmd/32/linenumberingdialog.png
 cmd/32/numberingmenu.png cmd/32/outlinebullet.png
 cmd/32/paragraphmenu.png cmd/32/paragraphdialog.png
 cmd/32/shapesmenu.png cmd/32/basicshapes.pentagon.png
@@ -186,7 +186,7 @@ cmd/lc_inserttextframe.png cmd/lc_insertframe.png
 cmd/lc_inserttimefield.png cmd/lc_timefield.png
 cmd/lc_inserttimefieldfix.png cmd/lc_timefield.png
 cmd/lc_insobjctrl.png cmd/lc_adddirect.png
-cmd/lc_linenumberingdialog.png cmd/lc_linenumberdialog.png
+cmd/lc_linenumberdialog.png cmd/lc_linenumberingdialog.png
 cmd/lc_numberingmenu.png cmd/lc_outlinebullet.png
 cmd/lc_paragraphmenu.png cmd/lc_paragraphdialog.png
 cmd/lc_shapesmenu.png cmd/lc_basicshapes.pentagon.png
@@ -241,7 +241,7 @@ cmd/sc_inserttextframe.png cmd/sc_insertframe.png
 cmd/sc_inserttimefield.png cmd/sc_timefield.png
 cmd/sc_inserttimefieldfix.png cmd/sc_timefield.png
 cmd/sc_insobjctrl.png cmd/sc_adddirect.png
-cmd/sc_linenumberingdialog.png cmd/sc_linenumberdialog.png
+cmd/sc_linenumberdialog.png cmd/sc_linenumberingdialog.png
 cmd/sc_numberingmenu.png cmd/sc_outlinebullet.png
 cmd/sc_paragraphmenu.png cmd/sc_paragraphdialog.png
 cmd/sc_shapesmenu.png cmd/sc_basicshapes.pentagon.png
