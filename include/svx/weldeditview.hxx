@@ -37,6 +37,12 @@ public:
 
     EditEngine& GetEditEngine() { return *m_xEditEngine; }
 
+    bool HasSelection() const { return m_xEditView->HasSelection(); }
+
+    void Cut() { m_xEditView->Cut(); }
+    void Copy() { m_xEditView->Copy(); }
+    void Paste() { m_xEditView->Paste(); }
+
     virtual ~WeldEditView() override;
 
 protected:
