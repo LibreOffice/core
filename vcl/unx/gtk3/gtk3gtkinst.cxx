@@ -4130,12 +4130,6 @@ public:
 
         Point aOffset = get_csd_offset(GTK_WIDGET(m_pWindow));
 
-#if defined(GDK_WINDOWING_X11)
-        GdkDisplay *pDisplay = gtk_widget_get_display(GTK_WIDGET(m_pWindow));
-        if (DLSYM_GDK_IS_X11_DISPLAY(pDisplay))
-            assert(aOffset.X() == 0 && aOffset.Y() == 0 && "expected offset of 0 under X");
-#endif
-
         cairo_translate(cr, -aOffset.X(), -aOffset.Y());
 
         gtk_widget_draw(GTK_WIDGET(m_pWindow), cr);
