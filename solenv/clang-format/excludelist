@@ -6448,6 +6448,7 @@ include/sfx2/templatedlg.hxx
 include/sfx2/templatelocalview.hxx
 include/sfx2/templateproperties.hxx
 include/sfx2/thumbnailview.hxx
+include/sfx2/thumbnailviewitem.hxx
 include/sfx2/titledockwin.hxx
 include/sfx2/tplpitem.hxx
 include/sfx2/userinputinterception.hxx
@@ -11932,7 +11933,6 @@ sfx2/inc/strings.hxx
 sfx2/inc/templatecontaineritem.hxx
 sfx2/inc/templatedefaultview.hxx
 sfx2/inc/templateviewitem.hxx
-sfx2/inc/thumbnailviewitem.hxx
 sfx2/inc/unoctitm.hxx
 sfx2/qa/cppunit/test_classification.cxx
 sfx2/qa/cppunit/test_controlleritem.cxx
