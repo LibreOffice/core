@@ -1914,6 +1914,7 @@ enum class LabelType
     Normal,
     Warning,
     Error,
+    Title, // this is intended to be used against the background set by set_title_background
 };
 
 class VCL_DLLPUBLIC Label : virtual public Widget
