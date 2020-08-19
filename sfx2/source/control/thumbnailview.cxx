@@ -1221,6 +1221,8 @@ BitmapEx ThumbnailView::readThumbnail(const OUString &msURL)
 SfxThumbnailView::SfxThumbnailView(std::unique_ptr<weld::ScrolledWindow> xWindow, std::unique_ptr<weld::Menu> xMenu)
     : mnThumbnailHeight(0)
     , mnDisplayHeight(0)
+    , mnVItemSpace(-1)
+    , mbAllowVScrollBar(xWindow->get_vpolicy() != VclPolicyType::NEVER)
     , mpItemAttrs(new ThumbnailItemAttributes)
     , mxScrolledWindow(std::move(xWindow))
     , mxContextMenu(std::move(xMenu))
@@ -1314,6 +1316,7 @@ void SfxThumbnailView::ImplInit()
     mbScroll = false;
     mbHasVisibleItems = false;
     mbShowTooltips = false;
+    mbDrawMnemonics = false;
     mbIsMultiSelectionEnabled = true;
     maFilterFunc = ViewFilterAll();
 
@@ -1418,7 +1421,7 @@ void SfxThumbnailView::CalculateItemPositions(bool bScrollBarUsed)
         nScrollRatio = 0;
 
     // calculate ScrollBar width
-    long nScrBarWidth = mxScrolledWindow->get_vscroll_width();
+    long nScrBarWidth = mbAllowVScrollBar ? mxScrolledWindow->get_vscroll_width() : 0;
 
     // calculate maximum number of visible columns
     mnCols = static_cast<sal_uInt16>((aWinSize.Width()-nScrBarWidth) / mnItemWidth);
@@ -1433,7 +1436,9 @@ void SfxThumbnailView::CalculateItemPositions(bool bScrollBarUsed)
     long nHSpace = aWinSize.Width()-nScrBarWidth - mnCols*mnItemWidth;
     long nVSpace = aWinSize.Height() - mnVisLines*mnItemHeight;
     long nHItemSpace = nHSpace / (mnCols+1);
-    long nVItemSpace = nVSpace / (mnVisLines+1);
+    long nVItemSpace = mnVItemSpace;
+    if (nVItemSpace == -1) // auto, split up extra space to use as vertical spacing
+        nVItemSpace = nVSpace / (mnVisLines+1);
 
     // calculate maximum number of rows
     // Floor( (M+N-1)/N )==Ceiling( M/N )
@@ -1545,7 +1550,8 @@ void SfxThumbnailView::CalculateItemPositions(bool bScrollBarUsed)
     if ( nPageSize < 1 )
         nPageSize = 1;
     mxScrolledWindow->vadjustment_set_page_increment(nPageSize);
-    mxScrolledWindow->set_vpolicy(mbScroll ? VclPolicyType::ALWAYS : VclPolicyType::NEVER);
+    if (mbAllowVScrollBar)
+        mxScrolledWindow->set_vpolicy(mbScroll ? VclPolicyType::ALWAYS : VclPolicyType::NEVER);
 }
 
 size_t SfxThumbnailView::ImplGetItem( const Point& rPos ) const
@@ -2235,6 +2241,11 @@ void SfxThumbnailView::deselectItems()
 void SfxThumbnailView::ShowTooltips( bool bShowTooltips )
 {
     mbShowTooltips = bShowTooltips;
+}
+
+void SfxThumbnailView::DrawMnemonics( bool bDrawMnemonics )
+{
+    mbDrawMnemonics = bDrawMnemonics;
 }
 
 void SfxThumbnailView::SetMultiSelectionEnabled( bool bIsMultiSelectionEnabled )

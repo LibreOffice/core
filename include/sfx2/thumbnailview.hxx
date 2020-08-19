@@ -176,6 +176,8 @@ public:
 
     virtual bool renameItem(ThumbnailViewItem* pItem, const OUString& sNewTitle);
 
+    virtual bool isDrawMnemonic() const = 0;
+
     virtual ~ThumbnailViewBase();
 };
 
@@ -204,6 +206,8 @@ public:
     sal_uInt16 GetItemId( const Point& rPos ) const;
 
     sal_uInt16 getNextItemId () const;
+
+    virtual bool isDrawMnemonic() const override { return false; }
 
     void setItemMaxTextLength (sal_uInt32 nLength);
 
@@ -340,6 +344,8 @@ public:
 
     sal_uInt16 getNextItemId () const;
 
+    virtual bool isDrawMnemonic() const override { return mbDrawMnemonics; }
+
     void setItemMaxTextLength (sal_uInt32 nLength);
 
     void setItemDimensions (long ItemWidth, long ThumbnailHeight,
@@ -358,6 +364,8 @@ public:
     void deselectItems ();
 
     void ShowTooltips( bool bShowTooltips );
+
+    void DrawMnemonics( bool bDrawMnemonics );
 
     void SetMultiSelectionEnabled( bool bIsMultiSelectionEnabled );
 
@@ -437,14 +445,17 @@ protected:
     long mnItemPadding;
     long mnThumbnailHeight;     // Maximum height of the thumbnail
     long mnDisplayHeight;       // Height of the data display box (name, etc)
+    long mnVItemSpace;          // Vertical spacing between rows, -1 to use excess unused height split up between items
     long mnVisLines;
     long mnLines;
 
     sal_uInt16 mnCols;
     sal_uInt16 mnFirstLine;
-    bool mbScroll : 1;
+    bool mbScroll : 1;          // Whether we need to scroll
+    bool mbAllowVScrollBar : 1; // Whether to show a visible scrollbar
     bool mbHasVisibleItems : 1;
     bool mbShowTooltips : 1;
+    bool mbDrawMnemonics : 1;
     bool mbIsMultiSelectionEnabled: 1;
     Color maFillColor;              ///< Background color of the thumbnail view widget.
     Color maTextColor;              ///< Text color.
