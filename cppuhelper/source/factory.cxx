@@ -688,7 +688,7 @@ Reference< XInterface > ORegistryFactoryHelper::createInstanceWithArgumentsAndCo
     }
     if( xModuleFactoryDepr.is() )
     {
-        SAL_INFO_IF(xContext.is(), "cppuhelper", "ignoring context calling ORegistryFactoryHelper::createInstaceWithArgumentsAndContext()!");
+        SAL_INFO_IF(xContext.is(), "cppuhelper", "ignoring context calling ORegistryFactoryHelper::createInstanceWithArgumentsAndContext()!");
         return xModuleFactoryDepr->createInstanceWithArguments( rArguments );
     }
 

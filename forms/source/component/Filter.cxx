@@ -297,7 +297,7 @@ namespace frm
                     OUString sText( aText.makeStringAndClear() );
                     sal_Int32 nMarkerPos( sText.indexOf( sExpressionMarker ) );
                     OSL_ENSURE( nMarkerPos == 0, "OFilterControl::itemStateChanged: unsupported boolean comparison mode!" );
-                    // If this assertion fails, then getBoleanComparisonPredicate created a predicate which
+                    // If this assertion fails, then getBooleanComparisonPredicate created a predicate which
                     // does not start with the expression we gave it. The only known case is when
                     // the comparison mode is ACCESS_COMPAT, and the value is TRUE. In this case,
                     // the expression is rather complex.

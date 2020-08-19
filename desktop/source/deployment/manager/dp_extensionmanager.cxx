@@ -862,7 +862,7 @@ void ExtensionManager::removeExtension(
     } catch (...) {
         excOccurred1 = ::cppu::getCaughtException();
         css::deployment::DeploymentException exc(
-            "Extension Manager: exception during removeEtension",
+            "Extension Manager: exception during removeExtension",
             static_cast<OWeakObject*>(this), excOccurred1);
         excOccurred1 <<= exc;
     }
