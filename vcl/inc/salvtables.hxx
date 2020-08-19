@@ -379,6 +379,8 @@ public:
 
     virtual void set_stack_background() override;
 
+    virtual void set_title_background() override;
+
     virtual void set_toolbar_background() override;
 
     virtual void set_highlight_background() override;

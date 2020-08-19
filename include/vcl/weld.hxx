@@ -249,6 +249,8 @@ public:
     virtual void set_stack_background() = 0;
     //make this widget look like it has a highlighted background
     virtual void set_highlight_background() = 0;
+    //make this widget suitable as parent for a title
+    virtual void set_title_background() = 0;
     //make this widget suitable for use in a toolbar
     virtual void set_toolbar_background() = 0;
 

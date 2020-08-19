@@ -2921,6 +2921,12 @@ public:
         set_background(&sColor);
     }
 
+    virtual void set_title_background() override
+    {
+        OUString sColor = Application::GetSettings().GetStyleSettings().GetShadowColor().AsRGBHexString();
+        set_background(&sColor);
+    }
+
     virtual void set_highlight_background() override
     {
         OUString sColor = Application::GetSettings().GetStyleSettings().GetHighlightColor().AsRGBHexString();
