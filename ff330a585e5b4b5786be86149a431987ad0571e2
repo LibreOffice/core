@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a604358e_fbfd6180",
+        "filename": "bin/update_pch",
+        "patchSetId": 1
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-08-19T06:28:49Z",
+      "side": 0,
+      "message": "since this macro doesn\u0027t appear at all anymore, presumably we can remove this  addition to the ignore_list",
+      "revId": "ff330a585e5b4b5786be86149a431987ad0571e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
