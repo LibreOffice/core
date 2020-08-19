@@ -170,7 +170,7 @@ public:
     SAL_DLLPRIVATE void ReleaseObjectShell_Impl();
 
     SAL_DLLPRIVATE void GetState_Impl( SfxItemSet &rSet );
-    SAL_DLLPRIVATE void ExecReload_Impl( SfxRequest &rReq );
+    void ExecReload_Impl(SfxRequest& rReq);
     SAL_DLLPRIVATE void StateReload_Impl( SfxItemSet &rSet );
     SAL_DLLPRIVATE void ExecView_Impl( SfxRequest &rReq );
     SAL_DLLPRIVATE void StateView_Impl( SfxItemSet &rSet );

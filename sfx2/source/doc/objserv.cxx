@@ -35,6 +35,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <com/sun/star/security/CertificateValidity.hpp>
+#include <com/sun/star/drawing/XDrawView.hpp>
 
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
@@ -47,6 +48,7 @@
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <sal/log.hxx>
+#include <sfx2/app.hxx>
 
 #include <comphelper/string.hxx>
 #include <basic/sbxcore.hxx>
@@ -468,7 +470,21 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     SfxViewFrame* pFrame = GetFrame();
                     if (pFrame)
                     {
-                        pFrame->GetDispatcher()->Execute(SID_RELOAD);
+                        // Store current page before reload.
+                        SfxAllItemSet aSet(SfxGetpApp()->GetPool());
+                        uno::Reference<drawing::XDrawView> xController(
+                            GetBaseModel()->getCurrentController(), uno::UNO_QUERY);
+                        uno::Reference<beans::XPropertySet> xPage(xController->getCurrentPage(),
+                                                                  uno::UNO_QUERY);
+                        sal_Int32 nPage{};
+                        xPage->getPropertyValue("Number") >>= nPage;
+                        if (nPage > 0)
+                        {
+                            // nPage is 1-based.
+                            aSet.Put(SfxInt32Item(SID_PAGE_NUMBER, nPage - 1));
+                        }
+                        SfxRequest aReq(SID_RELOAD, SfxCallMode::SLOT, aSet);
+                        pFrame->ExecReload_Impl(aReq);
                     }
                 }
                 else
