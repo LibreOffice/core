@@ -1474,9 +1474,9 @@ void ScInterpreter::ScConcat_MS()
                         SetError(FormulaError::IllegalArgument);
                     else
                     {
-                        for ( SCSIZE j = 0; j < nC; j++ )
+                        for (SCSIZE k = 0; k < nR; ++k)
                         {
-                            for (SCSIZE k = 0; k < nR; k++ )
+                            for (SCSIZE j = 0; j < nC; ++j)
                             {
                                 if ( pMat->IsStringOrEmpty( j, k ) )
                                 {
@@ -1514,8 +1514,126 @@ void ScInterpreter::ScTextJoin_MS()
 
     if ( MustHaveParamCountMin( nParamCount, 3 ) )
     {
+<<<<<<< HEAD   (9c7dd0 tdf#134583 remove glow effect from verticall scroll gallery )
         //reverse order of parameter stack to simplify processing
         ReverseStack( nParamCount );
+=======
+        case svString:
+        case svDouble:
+            aDelimiters.push_back( GetString().getString() );
+            break;
+        case svSingleRef :
+        {
+            ScAddress aAdr;
+            PopSingleRef( aAdr );
+            if ( nGlobalError != FormulaError::NONE )
+                break;
+            ScRefCellValue aCell( *pDok, aAdr );
+            if ( !aCell.isEmpty() )
+            {
+                if ( !aCell.hasEmptyValue() )
+                {
+                    svl::SharedString aSS;
+                    GetCellString( aSS, aCell);
+                    aDelimiters.push_back( aSS.getString());
+                }
+            }
+        }
+        break;
+        case svDoubleRef :
+        case svRefList :
+        {
+            ScRange aRange;
+            PopDoubleRef( aRange, nParamCount, nRefInList);
+            if ( nGlobalError != FormulaError::NONE )
+                break;
+            // we need to read row for row, so we can't use ScCellIterator
+            SCCOL nCol1, nCol2;
+            SCROW nRow1, nRow2;
+            SCTAB nTab1, nTab2;
+            aRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+            if ( nTab1 != nTab2 )
+            {
+                SetError( FormulaError::IllegalParameter);
+                break;
+            }
+            if ( nRow1 > nRow2 )
+                std::swap( nRow1, nRow2 );
+            if ( nCol1 > nCol2 )
+                std::swap( nCol1, nCol2 );
+            ScAddress aAdr;
+            aAdr.SetTab( nTab1 );
+            for ( SCROW nRow = nRow1; nRow <= nRow2; nRow++ )
+            {
+                for ( SCCOL nCol = nCol1; nCol <= nCol2; nCol++ )
+                {
+                    aAdr.SetRow( nRow );
+                    aAdr.SetCol( nCol );
+                    ScRefCellValue aCell( *pDok, aAdr );
+                    if ( !aCell.isEmpty() )
+                    {
+                        if ( !aCell.hasEmptyValue() )
+                        {
+                            svl::SharedString aSS;
+                            GetCellString( aSS, aCell);
+                            aDelimiters.push_back( aSS.getString());
+                        }
+                    }
+                    else
+                        aDelimiters.emplace_back("" );
+                }
+            }
+        }
+        break;
+        case svMatrix :
+        case svExternalSingleRef:
+        case svExternalDoubleRef:
+        {
+            ScMatrixRef pMat = GetMatrix();
+            if (pMat)
+            {
+                SCSIZE nC, nR;
+                pMat->GetDimensions(nC, nR);
+                if (nC == 0 || nR == 0)
+                    SetError(FormulaError::IllegalArgument);
+                else
+                {
+                    for (SCSIZE k = 0; k < nR; ++k)
+                    {
+                        for (SCSIZE j = 0; j < nC; ++j)
+                        {
+                            if ( !pMat->IsEmpty( j, k ) )
+                            {
+                                if ( pMat->IsStringOrEmpty( j, k ) )
+                                    aDelimiters.push_back( pMat->GetString( j, k ).getString() );
+                                else
+                                {
+                                    if ( pMat->IsValue( j, k ) )
+                                        aDelimiters.push_back( pMat->GetString( *pFormatter, j, k ).getString() );
+                                }
+                            }
+                            else
+                                aDelimiters.emplace_back("" );
+                        }
+                    }
+                }
+            }
+        }
+        break;
+        default:
+            PopError();
+            SetError( FormulaError::IllegalArgument);
+            break;
+    }
+    if ( aDelimiters.empty() )
+    {
+        PushIllegalArgument();
+        return;
+    }
+    SCSIZE nSize = aDelimiters.size();
+    bool bSkipEmpty = static_cast< bool >( GetDouble() );
+    nParamCount -= 2;
+>>>>>>> CHANGE (ff3955 Resolves: tdf#109409 TEXTJOIN() CONCAT() handle array/matrix)
 
         // get aDelimiters and bSkipEmpty
         std::vector< OUString > aDelimiters;
@@ -1602,9 +1720,14 @@ void ScInterpreter::ScTextJoin_MS()
                         SetError(FormulaError::IllegalArgument);
                     else
                     {
+<<<<<<< HEAD   (9c7dd0 tdf#134583 remove glow effect from verticall scroll gallery )
                         for ( SCSIZE j = 0; j < nC; j++ )
+=======
+                        OUString aStr;
+                        for (SCSIZE k = 0; k < nR; ++k)
+>>>>>>> CHANGE (ff3955 Resolves: tdf#109409 TEXTJOIN() CONCAT() handle array/matrix)
                         {
-                            for (SCSIZE k = 0; k < nR; k++ )
+                            for (SCSIZE j = 0; j < nC; ++j)
                             {
                                 if ( !pMat->IsEmpty( j, k ) )
                                 {
