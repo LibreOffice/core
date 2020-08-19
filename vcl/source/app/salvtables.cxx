@@ -5486,17 +5486,17 @@ void SalInstanceLabel::set_mnemonic_widget(Widget* pTarget)
     pLabel->set_mnemonic_widget(pTargetWidget ? pTargetWidget->getWidget() : nullptr);
 }
 
-void SalInstanceLabel::set_message_type(weld::EntryMessageType eType)
+void SalInstanceLabel::set_label_type(weld::LabelType eType)
 {
     switch (eType)
     {
-        case weld::EntryMessageType::Normal:
+        case weld::LabelType::Normal:
             m_xLabel->SetControlBackground();
             break;
-        case weld::EntryMessageType::Warning:
+        case weld::LabelType::Warning:
             m_xLabel->SetControlBackground(COL_YELLOW);
             break;
-        case weld::EntryMessageType::Error:
+        case weld::LabelType::Error:
             m_xLabel->SetControlBackground(
                 m_xLabel->GetSettings().GetStyleSettings().GetHighlightColor());
             break;
