@@ -129,7 +129,7 @@ using namespace ::com::sun::star;
 
 // The following order is mandatory. Please add properties at the end!
 #define PROPERTYCOUNT_IMAGES                            8
-#define PROPERTYCOUNT_EMBEDDED_IMAGES                   4
+#define PROPERTYCOUNT_EMBEDDED_IMAGES                   2
 #define OFFSET_IMAGES_SMALL                             0
 #define OFFSET_IMAGES_BIG                               1
 #define OFFSET_IMAGES_SMALLHC                           2
@@ -1642,7 +1642,7 @@ std::unique_ptr<AddonsOptions_Impl::ImageEntry> AddonsOptions_Impl::ReadImageDat
                 pEntry->addImage(i == OFFSET_IMAGES_SMALL ? IMGSIZE_SMALL : IMGSIZE_BIG, aImage, "");
             }
         }
-        else
+        else if ( i == OFFSET_IMAGES_SMALL_URL || i == OFFSET_IMAGES_BIG_URL )
         {
             if(!pEntry)
                 pEntry.reset(new ImageEntry());
@@ -1653,7 +1653,7 @@ std::unique_ptr<AddonsOptions_Impl::ImageEntry> AddonsOptions_Impl::ReadImageDat
 
             SubstituteVariables( aImageURL );
 
-            pEntry->addImage(IMGSIZE_BIG, BitmapEx(), aImageURL);
+            pEntry->addImage(i == OFFSET_IMAGES_SMALL_URL ? IMGSIZE_SMALL : IMGSIZE_BIG, BitmapEx(), aImageURL);
         }
     }
 
