@@ -401,20 +401,6 @@ namespace drawinglayer::primitive2d
             aRetval.SetPitch(rFontAttribute.getMonospaced() ? PITCH_FIXED : PITCH_VARIABLE);
             aRetval.SetLanguage(LanguageTag::convertToLanguageType( rLocale, false));
 
-#ifdef _WIN32
-            // for WIN32 systems, correct the FontWidth if FontScaling is used
-            if(bFontIsScaled && nHeight > 0)
-            {
-                const FontMetric aUnscaledFontMetric(Application::GetDefaultDevice()->GetFontMetric(aRetval));
-
-                if(aUnscaledFontMetric.GetAverageFontWidth() > 0)
-                {
-                    const double fScaleFactor(static_cast<double>(nWidth) / static_cast<double>(nHeight));
-                    const sal_uInt32 nScaledWidth(basegfx::fround(static_cast<double>(aUnscaledFontMetric.GetAverageFontWidth()) * fScaleFactor));
-                    aRetval.SetAverageFontWidth(nScaledWidth);
-                }
-            }
-#endif
             // handle FontRotation (if defined)
             if(!basegfx::fTools::equalZero(fFontRotation))
             {
