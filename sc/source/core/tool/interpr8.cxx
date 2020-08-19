@@ -1474,9 +1474,9 @@ void ScInterpreter::ScConcat_MS()
                         SetError(FormulaError::IllegalArgument);
                     else
                     {
-                        for ( SCSIZE j = 0; j < nC; j++ )
+                        for (SCSIZE k = 0; k < nR; ++k)
                         {
-                            for (SCSIZE k = 0; k < nR; k++ )
+                            for (SCSIZE j = 0; j < nC; ++j)
                             {
                                 if ( pMat->IsStringOrEmpty( j, k ) )
                                 {
@@ -1602,9 +1602,9 @@ void ScInterpreter::ScTextJoin_MS()
                         SetError(FormulaError::IllegalArgument);
                     else
                     {
-                        for ( SCSIZE j = 0; j < nC; j++ )
+                        for (SCSIZE k = 0; k < nR; ++k)
                         {
-                            for (SCSIZE k = 0; k < nR; k++ )
+                            for (SCSIZE j = 0; j < nC; ++j)
                             {
                                 if ( !pMat->IsEmpty( j, k ) )
                                 {
@@ -1782,9 +1782,9 @@ void ScInterpreter::ScTextJoin_MS()
                         else
                         {
                             OUString aStr;
-                            for ( SCSIZE j = 0; j < nC; j++ )
+                            for (SCSIZE k = 0; k < nR; ++k)
                             {
-                                for (SCSIZE k = 0; k < nR; k++ )
+                                for (SCSIZE j = 0; j < nC; ++j)
                                 {
                                     if ( !pMat->IsEmpty( j, k ) )
                                     {
