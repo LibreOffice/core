@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "thumbnailviewitem.hxx"
+#include <sfx2/thumbnailviewitem.hxx>
 
 class TemplateViewItem : public ThumbnailViewItem
 {
