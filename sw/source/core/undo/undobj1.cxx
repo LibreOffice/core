@@ -269,26 +269,10 @@ SwUndoInsLayFormat::SwUndoInsLayFormat( SwFrameFormat* pFormat, sal_uLong nNodeI
     const SwFormatAnchor& rAnchor = m_pFrameFormat->GetAnchor();
     m_nRndId = rAnchor.GetAnchorId();
     m_bDelFormat = false;
-    switch( m_nRndId )
-    {
-    case RndStdIds::FLY_AT_PAGE:
-        m_nNodePagePos = rAnchor.GetPageNum();
-        break;
-    case RndStdIds::FLY_AT_PARA:
-    case RndStdIds::FLY_AT_FLY:
-        m_nNodePagePos = rAnchor.GetContentAnchor()->nNode.GetIndex();
-        break;
-    case RndStdIds::FLY_AS_CHAR:
-    case RndStdIds::FLY_AT_CHAR:
-        {
-            const SwPosition* pPos = rAnchor.GetContentAnchor();
-            m_nContentPos = pPos->nContent.GetIndex();
-            m_nNodePagePos = pPos->nNode.GetIndex();
-        }
-        break;
-    default:
-        OSL_FAIL( "Which FlyFrame?" );
-    }
+    // note: SwUndoInsLayFormat is called with the content being fully inserted
+    // from most places but with only an empty content section from
+    // CopyLayoutFormat(); it's not necessary here to init m_nNodePagePos
+    // because Undo will do it.
 }
 
 SwUndoInsLayFormat::~SwUndoInsLayFormat()
