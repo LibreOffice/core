@@ -130,7 +130,7 @@ public:
     void setMemberSize(size_t n);
     void addDateMember(const OUString& rName, double nVal, bool bVisible);
     void addMember(const OUString& rName, bool bVisible);
-    size_t initMembers();
+    size_t initMembers(int nMaxMemberWidth = -1);
     void setConfig(const Config& rConfig);
 
     bool isAllSelected() const;
@@ -164,6 +164,8 @@ public:
     void setPopupEndAction(Action* p);
 
     void setHasDates(bool bHasDates);
+    int GetTextWidth(const OUString& rsName) const;
+    int IncreaseWindowWidthToFitText(int nMaxTextWidth);
 
 private:
 
