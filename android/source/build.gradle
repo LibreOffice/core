@@ -284,7 +284,6 @@ task createRCfiles {
         versionrc.text = '''\
             [Version]
             AllLanguages=en-US
-            BuildVersion=
             buildid=''' + "${liboGitFullCommit}" + '''
             ReferenceOOoMajorMinor=4.1
             '''.stripIndent()
