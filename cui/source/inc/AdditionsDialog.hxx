@@ -91,6 +91,9 @@ public:
     getInstalledExtensions();
     void SetProgress(const OUString& rProgress);
     void ClearList();
+
+    static bool InfoSortByComment(AdditionInfo& a, AdditionInfo& b);
+    static bool InfoSortByRating(AdditionInfo& a, AdditionInfo& b);
 };
 
 class AdditionsItem
@@ -114,7 +117,12 @@ public:
     std::unique_ptr<weld::Label> m_xLabelVersion;
     std::unique_ptr<weld::Label> m_xLabelComments;
     std::unique_ptr<weld::LinkButton> m_xLinkButtonComments;
-    std::unique_ptr<weld::Image> m_xImageVoting;
+    std::unique_ptr<weld::Image> m_xImageVoting1;
+    std::unique_ptr<weld::Image> m_xImageVoting2;
+    std::unique_ptr<weld::Image> m_xImageVoting3;
+    std::unique_ptr<weld::Image> m_xImageVoting4;
+    std::unique_ptr<weld::Image> m_xImageVoting5;
+    std::unique_ptr<weld::Label> m_xLabelNoVoting;
     std::unique_ptr<weld::Image> m_xImageDownloadNumber;
     std::unique_ptr<weld::Label> m_xLabelDownloadNumber;
     std::unique_ptr<weld::Button> m_xButtonShowMore;
