@@ -196,7 +196,7 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) AddonsOptions
 
         /*-****************************************************************************************************
             @short      Retrieves all available merge instructions for the Office menu bar
-            @return     The filled MergeMenuDefinitionContaier
+            @return     The filled MergeMenuDefinitionContainer
 
             @onerror    We return sal_False
         *//*-*****************************************************************************************************/

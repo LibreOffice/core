@@ -176,7 +176,7 @@ private:
     */
     std::optional< ::std::vector< OUString> > m_vmParameters;
     /** User configurable option. /java/jreLocations
-        If /java/jreLocaltions@xsi:nil == true then the value is uninitialized
+        If /java/jreLocations@xsi:nil == true then the value is uninitialized
         after a call to load.
     */
     std::optional< ::std::vector< OUString> > m_JRELocations;

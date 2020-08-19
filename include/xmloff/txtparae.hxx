@@ -330,7 +330,7 @@ protected:
                            const XMLTextNumRuleInfo& rNextInfo );
 
     /// check if current section or current list has changed;
-    /// calls exortListChange as appropriate
+    /// calls exportListChange as appropriate
     void exportListAndSectionChange(
         css::uno::Reference< css::text::XTextSection > & rOldSection,
         const css::uno::Reference< css::text::XTextSection > & rNewSection,

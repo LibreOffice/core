@@ -201,7 +201,7 @@ namespace basegfx
 
             @param nCount
             The number of points to append from rPoly, starting
-            from nIndex. If zero, as much as possibel is appended
+            from nIndex. If zero, as much as possible is appended
         */
         void append(const B2DPolygon& rPoly, sal_uInt32 nIndex = 0, sal_uInt32 nCount = 0);
 

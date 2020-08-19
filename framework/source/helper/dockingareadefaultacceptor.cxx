@@ -78,7 +78,7 @@ sal_Bool SAL_CALL DockingAreaDefaultAcceptor::requestDockingAreaSpace( const css
             css::awt::Size       aSize       (  aRectangle.Width  - aInfo.LeftInset - aInfo.RightInset  ,
                                                 aRectangle.Height - aInfo.TopInset  - aInfo.BottomInset );
 
-            css::awt::Size aMinSize( 0, 0 ); // = xLayoutContrains->getMinimumSize();
+            css::awt::Size aMinSize( 0, 0 ); // = xLayoutConstraints->getMinimumSize();
 
             // Check if request border space would decrease component window size below minimum size
             if ((( aSize.Width - RequestedSpace.X - RequestedSpace.Width ) < aMinSize.Width ) ||
@@ -113,7 +113,7 @@ void SAL_CALL DockingAreaDefaultAcceptor::setDockingAreaSpace( const css::awt::R
     css::awt::DeviceInfo aInfo       = xDevice->getInfo();
     css::awt::Size       aSize       (  aRectangle.Width  - aInfo.LeftInset - aInfo.RightInset  ,
                                         aRectangle.Height - aInfo.TopInset  - aInfo.BottomInset );
-    css::awt::Size aMinSize( 0, 0 );// = xLayoutContrains->getMinimumSize();
+    css::awt::Size aMinSize( 0, 0 );// = xLayoutConstraints->getMinimumSize();
 
     // Check if request border space would decrease component window size below minimum size
     sal_Int32 nWidth     = aSize.Width - BorderSpace.X - BorderSpace.Width;

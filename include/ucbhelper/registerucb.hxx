@@ -63,7 +63,7 @@ typedef std::vector< ContentProviderData > ContentProviderDataList;
 
     @param rManager  A content provider manager (normally, this would be a
     UCB).  May be null, which is only useful if the content provider is an
-    XParamterizedContentProviders.
+    XParameterizedContentProviders.
 
     @param rServiceFactory  A factory through which to obtain the required
     services.
