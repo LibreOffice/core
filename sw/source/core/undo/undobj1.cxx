@@ -301,6 +301,7 @@ void SwUndoInsLayFormat::UndoImpl(::sw::UndoRedoContext & rContext)
     const SwFormatContent& rContent = m_pFrameFormat->GetContent();
     if( rContent.GetContentIdx() )  // no content
     {
+        assert(&rContent.GetContentIdx()->GetNodes() == &rDoc.GetNodes());
         bool bRemoveIdx = true;
         if( mnCursorSaveIndexPara > 0 )
         {
