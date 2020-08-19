@@ -652,8 +652,30 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     bool bLOKActive = comphelper::LibreOfficeKit::isActive();
 
     mpAutoFilterPopup.disposeAndClear();
+
+    // Estimate the width (in pixels) of the longest text in the list
+    ScFilterEntries aFilterEntries;
+    pDoc->GetFilterEntries(nCol, nRow, nTab, aFilterEntries);
+    auto pDev = pDoc->GetRefDevice();
+    int maxTextWidth = 0;
+    for (const auto& rEntry : aFilterEntries)
+    {
+        const OUString& aVal = rEntry.GetString();
+        maxTextWidth = std::max<int>(maxTextWidth, pDev->GetTextWidth(aVal) + aVal.getLength());
+    }
     int nColWidth = ScViewData::ToPixel(pDoc->GetColWidth(nCol, nTab), pViewData->GetPPTX());
-    mpAutoFilterPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, pDoc, false, nColWidth));
+    int nWindowWidth = nColWidth;
+    // If the text is too short, then the selection line would be much shorter then the window, so the text is minimised to 118 pixel.
+    // window should be at least as wide as the column, or the longest text + checkbox, scrollbar ... (it is estimated with 70 pixel now)
+    // window should be maximum 1024 pixel wide.
+    maxTextWidth = std::max<int>(maxTextWidth, 118);
+    if (nColWidth > maxTextWidth + 70)
+        maxTextWidth = nColWidth - 70;
+    else
+        nWindowWidth = maxTextWidth + 70;
+    nWindowWidth = std::min<int>(nWindowWidth, 1024);
+    mpAutoFilterPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, pDoc, false, nWindowWidth));
+
     ScCheckListMenuControl& rControl = mpAutoFilterPopup->get_widget();
 
     if (bLOKActive)
@@ -703,8 +725,6 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     }
 
     // Populate the check box list.
-    ScFilterEntries aFilterEntries;
-    pDoc->GetFilterEntries(nCol, nRow, nTab, aFilterEntries);
 
     rControl.setHasDates(aFilterEntries.mbHasDates);
     rControl.setMemberSize(aFilterEntries.size());
@@ -738,7 +758,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     rControl.addMenuItem(
         ScResId(SCSTR_STDFILTER), new AutoFilterAction(this, AutoFilterMode::Custom));
 
-    rControl.initMembers();
+    rControl.initMembers(maxTextWidth + 20); // 20 pixel estimated for the checkbox
 
     ScCheckListMenuControl::Config aConfig;
     aConfig.mbAllowEmptySet = false;
