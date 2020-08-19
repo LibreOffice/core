@@ -58,6 +58,16 @@ OTableWindowListBox::OTableWindowListBox( OTableWindow* pParent )
     m_xTreeView->connect_drag_begin(LINK(this, OTableWindowListBox, DragBeginHdl));
 }
 
+void OTableWindowListBox::dragFinished( )
+{
+    // first show the error msg when existing
+    m_pTabWin->getDesignView()->getController().showError(m_pTabWin->getDesignView()->getController().clearOccurredError());
+    // second look for ui activities which should happen after d&d
+    if (m_nUiEvent)
+        Application::RemoveUserEvent(m_nUiEvent);
+    m_nUiEvent = Application::PostUserEvent(LINK(this, OTableWindowListBox, LookForUiHdl), nullptr, true);
+}
+
 OTableWindowListBox::~OTableWindowListBox()
 {
     disposeOnce();
@@ -203,7 +213,9 @@ sal_Int8 OTableWindowListBox::ExecuteDrop( const ExecuteDropEvent& _rEvt )
             Application::RemoveUserEvent(m_nDropEvent);
         m_nDropEvent = Application::PostUserEvent(LINK(this, OTableWindowListBox, DropHdl), nullptr, true);
 
-        return DND_ACTION_LINK;
+        dragFinished();
+
+        return DND_ACTION_NONE;
     }
     return DND_ACTION_NONE;
 }
