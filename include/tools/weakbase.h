@@ -43,7 +43,7 @@
     {
         tools::WeakReference< ImplClass > mxWeakRef;
 
-        UserClass( ImplClass* pOjbect ) : mxWeakRef( pObject ) {}
+        UserClass( ImplClass* pObject ) : mxWeakRef( pObject ) {}
 
         DoSomething()
         {
