@@ -19,29 +19,32 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_APP_APPTITLEWINDOW_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_APP_APPTITLEWINDOW_HXX
 
-#include <vcl/fixed.hxx>
+#include <vcl/InterimItemWindow.hxx>
 
 namespace dbaui
 {
-    class OTitleWindow : public vcl::Window
+    class OTitleWindow final : public InterimItemWindow
     {
-        VclPtr<vcl::Window> m_aTitleFrame;
-        VclPtr<FixedText>   m_aTitle;
-        VclPtr<vcl::Window> m_pChild;
-        bool                m_bShift;
+        std::unique_ptr<weld::Container> m_xTitleFrame;
+        std::unique_ptr<weld::Label> m_xTitle;
+        std::unique_ptr<weld::Container> m_xChildContainer;
+        css::uno::Reference<css::awt::XWindow> m_xChildParent;
+        VclPtr<vcl::Window> m_xChild;
         void ImplInitSettings();
-    protected:
+
         virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
     public:
-        OTitleWindow(vcl::Window* _pParent, const char* pTitleId, WinBits _nBits, bool _bShift = true);
+        OTitleWindow(vcl::Window* pParent, const char* pTitleId);
         virtual ~OTitleWindow() override;
         virtual void dispose() override;
 
         // Window overrides
-        virtual void Resize() override;
         virtual void GetFocus() override;
 
         virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
+
+        /** gets the window which should be used as a child's parent */
+        vcl::Window* getChildContainer();
 
         /** sets the child window which should be displayed below the title. It will be destroyed at the end.
             @param  _pChild
@@ -54,7 +57,7 @@ namespace dbaui
             @return
                 The child window.
         */
-        vcl::Window* getChildWindow() const { return m_pChild; }
+        vcl::Window* getChildWindow() const { return m_xChild; }
 
         /** sets the title text out of the resource
             @param  pTitleId
