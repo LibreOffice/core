@@ -31,18 +31,28 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 
-OApplicationSwapWindow::OApplicationSwapWindow( vcl::Window* _pParent, OAppBorderWindow& _rBorderWindow )
-    :Window(_pParent,WB_DIALOGCONTROL )
-    ,m_aIconControl(VclPtr<OApplicationIconControl>::Create(this))
-    ,m_eLastType(E_NONE)
-    ,m_rBorderWin( _rBorderWindow )
+OApplicationSwapWindow::OApplicationSwapWindow(vcl::Window* pParent, OAppBorderWindow& rBorderWindow)
+    : InterimItemWindow(pParent, "dbaccess/ui/appswapwindow.ui", "AppSwapWindow")
+    , m_xIconControl(new OApplicationIconControl(m_xBuilder->weld_scrolled_window("scroll")))
+    , m_xIconControlWin(new weld::CustomWeld(*m_xBuilder, "valueset", *m_xIconControl))
+    , m_eLastType(E_NONE)
+    , m_rBorderWin(rBorderWindow)
 {
+    m_xContainer->set_stack_background();
+
     ImplInitSettings();
 
-    m_aIconControl->SetClickHdl(LINK(this, OApplicationSwapWindow, OnContainerSelectHdl));
-    m_aIconControl->setControlActionListener( &m_rBorderWin.getView()->getAppController() );
-    m_aIconControl->SetHelpId(HID_APP_SWAP_ICONCONTROL);
-    m_aIconControl->Show();
+    m_xIconControl->SetHelpId(HID_APP_SWAP_ICONCONTROL);
+    m_xIconControl->Fill();
+    m_xIconControl->setItemStateHdl(LINK(this, OApplicationSwapWindow, OnContainerSelectHdl));
+    m_xIconControl->setControlActionListener( &m_rBorderWin.getView()->getAppController() );
+}
+
+void OApplicationSwapWindow::GetFocus()
+{
+    if (m_xIconControl)
+        m_xIconControl->GrabFocus();
+    InterimItemWindow::GetFocus();
 }
 
 OApplicationSwapWindow::~OApplicationSwapWindow()
@@ -52,21 +62,9 @@ OApplicationSwapWindow::~OApplicationSwapWindow()
 
 void OApplicationSwapWindow::dispose()
 {
-    m_aIconControl.disposeAndClear();
-    vcl::Window::dispose();
-}
-
-void OApplicationSwapWindow::Resize()
-{
-    Size aFLSize = LogicToPixel(Size(8, 0), MapMode(MapUnit::MapAppFont));
-    long nX = 0;
-    if ( m_aIconControl->GetEntryCount() != 0 )
-        nX = m_aIconControl->GetBoundingBox( m_aIconControl->GetEntry(0) ).GetWidth() + aFLSize.Width();
-
-    Size aOutputSize = GetOutputSize();
-
-    m_aIconControl->SetPosSizePixel( Point(static_cast<long>((aOutputSize.Width() - nX)*0.5), 0)  ,Size(nX,aOutputSize.Height()));
-    m_aIconControl->ArrangeIcons();
+    m_xIconControlWin.reset();
+    m_xIconControl.reset();
+    InterimItemWindow::dispose();
 }
 
 void OApplicationSwapWindow::ImplInitSettings()
@@ -99,32 +97,27 @@ void OApplicationSwapWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
 void OApplicationSwapWindow::clearSelection()
 {
-    m_aIconControl->SetNoSelection();
-    SvxIconChoiceCtrlEntry* pEntry = m_aIconControl->GetSelectedEntry();
-    if ( pEntry )
-        m_aIconControl->InvalidateEntry(pEntry);
-    m_aIconControl->GetClickHdl().Call(m_aIconControl.get());
+    m_xIconControl->deselectItems();
+    onContainerSelected(E_NONE);
 }
 
-void OApplicationSwapWindow::createIconAutoMnemonics( MnemonicGenerator& _rMnemonics )
+void OApplicationSwapWindow::createIconAutoMnemonics(MnemonicGenerator& rMnemonics)
 {
-    m_aIconControl->CreateAutoMnemonics( _rMnemonics );
+    m_xIconControl->createIconAutoMnemonics(rMnemonics);
 }
 
 bool OApplicationSwapWindow::interceptKeyInput( const KeyEvent& _rEvent )
 {
     const vcl::KeyCode& rKeyCode = _rEvent.GetKeyCode();
     if ( rKeyCode.GetModifier() == KEY_MOD2 )
-        return m_aIconControl->DoKeyInput( _rEvent );
-
+        return m_xIconControl->DoKeyShortCut( _rEvent );
     // not handled
     return false;
 }
 
 ElementType OApplicationSwapWindow::getElementType() const
 {
-    SvxIconChoiceCtrlEntry* pEntry = m_aIconControl->GetSelectedEntry();
-    return pEntry ? *static_cast<ElementType*>(pEntry->GetUserData()) : E_NONE;
+    return m_xIconControl->GetSelectedItem();
 }
 
 bool OApplicationSwapWindow::onContainerSelected( ElementType _eType )
@@ -143,13 +136,11 @@ bool OApplicationSwapWindow::onContainerSelected( ElementType _eType )
     return false;
 }
 
-IMPL_LINK(OApplicationSwapWindow, OnContainerSelectHdl, SvtIconChoiceCtrl*, _pControl, void)
+IMPL_LINK(OApplicationSwapWindow, OnContainerSelectHdl, const ThumbnailViewItem*, pEntry, void)
 {
-    SvxIconChoiceCtrlEntry* pEntry = _pControl->GetSelectedEntry();
-    ElementType eType = E_NONE;
-    if ( pEntry )
+    if (pEntry->mbSelected)
     {
-        eType = *static_cast<ElementType*>(pEntry->GetUserData());
+        ElementType eType = static_cast<ElementType>(pEntry->mnId - 1);
         onContainerSelected( eType ); // i87582
     }
 }
@@ -159,22 +150,10 @@ IMPL_LINK_NOARG(OApplicationSwapWindow, ChangeToLastSelected, void*, void)
     selectContainer(m_eLastType);
 }
 
-void OApplicationSwapWindow::selectContainer(ElementType _eType)
+void OApplicationSwapWindow::selectContainer(ElementType eType)
 {
-    sal_Int32 nCount = m_aIconControl->GetEntryCount();
-    SvxIconChoiceCtrlEntry* pEntry = nullptr;
-    for (sal_Int32 i=0; i < nCount; ++i)
-    {
-        pEntry = m_aIconControl->GetEntry(i);
-        if ( pEntry && *static_cast<ElementType*>(pEntry->GetUserData()) == _eType )
-            break;
-        pEntry = nullptr;
-    }
-
-    if ( pEntry )
-        m_aIconControl->SetCursor(pEntry); // this call also initiates a onContainerSelected call
-    else
-        onContainerSelected( _eType );
+    m_xIconControl->deselectItems();
+    m_xIconControl->SelectItem(eType + 1); // will trigger onContainerSelected
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
