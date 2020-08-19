@@ -789,7 +789,7 @@ void DXFDimensionEntity::EvaluateGroup(DXFGroupReader & rDGR)
     }
 }
 
-//---------------------------- DXFEntites --------------------------------------
+//---------------------------- DXFEntities --------------------------------------
 
 void DXFEntities::Read(DXFGroupReader & rDGR)
 {

@@ -691,7 +691,7 @@ bool BackendImpl::PackageImpl::checkLicense(
         return 0;
 
     //always return LICENSE as long as the user did not accept the license
-    //so that XExtensonManager::checkPrerequisitesAndEnable will again
+    //so that XExtensionManager::checkPrerequisitesAndEnable will again
     //check the license
     if (!checkPlatform(xCmdEnv))
         return deployment::Prerequisites::PLATFORM |

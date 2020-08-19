@@ -1927,7 +1927,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
             sal_Int32 nWordLen = nWordEnd - nWordStart;
             if ( ( nWordEnd >= nMaxBreakPos ) && ( nWordLen > 3 ) )
             {
-                // May happen, because getLineBreak may differ from getWordBoudary with DICTIONARY_WORD
+                // May happen, because getLineBreak may differ from getWordBoundary with DICTIONARY_WORD
                 const OUString aWord = pNode->GetString().copy(nWordStart, nWordLen);
                 sal_Int32 nMinTrail = nWordEnd-nMaxBreakPos+1; //+1: Before the dickey letter
                 Reference< XHyphenatedWord > xHyphWord;

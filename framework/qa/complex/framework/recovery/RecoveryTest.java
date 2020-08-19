@@ -170,7 +170,7 @@ public class RecoveryTest extends ComplexTestCase {
     }
 
     /**
-     * This function starts an office instance. It uses the AppExecutionCommad parameter.
+     * This function starts an office instance. It uses the AppExecutionCommand parameter.
      * @return TRUE if office is connected otherwise FALSE
      */
     private boolean connect(){

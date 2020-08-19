@@ -715,7 +715,7 @@
                             <xsl:if test="office:annotation/@office:display = 'true'">
                                 <xsl:attribute name="ss:ShowAlways">1</xsl:attribute>
                             </xsl:if>
-                            <!-- ss:Data is oblicatory, but not the same as the ss:Cell ss:Data child, as it has no attributes  -->
+                            <!-- ss:Data is obligatory, but not the same as the ss:Cell ss:Data child, as it has no attributes  -->
                             <ss:Data xmlns="http://www.w3.org/TR/REC-html40">
                                 <xsl:for-each select="office:annotation/text:p">
                                     <xsl:choose>

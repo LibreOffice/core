@@ -81,7 +81,7 @@ class PresetHandler
                     where the current configuration set exists.
 
             @descr  Note: If this preset handler works in document mode
-                    this member is meaned relative to the document root ...
+                    this member is meant relative to the document root...
                     not to the share layer root!
 
                     Further is defined, that m_xWorkingStorageUser
@@ -97,7 +97,7 @@ class PresetHandler
                     where the current configuration set exists.
 
             @descr  Note: If this preset handler works in document mode
-                    this member is meaned relative to the document root ...
+                    this member is meant relative to the document root...
                     not to the user layer root!
 
                     Further is defined, that m_xWorkingStorageUser

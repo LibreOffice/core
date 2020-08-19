@@ -1739,7 +1739,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             aProp.Value <<= fSecondLightLevel;
             aExtrusionPropVec.push_back( aProp );
         }
-        // "FirtstLightDirection"
+        // "FirstLightDirection"
         if ( IsProperty( DFF_Prop_c3DKeyX ) || IsProperty( DFF_Prop_c3DKeyY ) || IsProperty( DFF_Prop_c3DKeyZ ) )
         {
             double fLightX = static_cast<double>(static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_c3DKeyX, 50000 )));
