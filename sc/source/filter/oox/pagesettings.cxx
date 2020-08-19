@@ -623,7 +623,7 @@ double HeaderFooterParser::parse( const Reference<sheet::XHeaderFooterContent>& 
                         setAttributes();
                         maFontModel.mnEscapement = (maFontModel.mnEscapement == XML_superscript) ? XML_baseline : XML_superscript;
                     break;
-                    case 'Y':   // subsrcipt
+                    case 'Y':   // subscript
                         setAttributes();
                         maFontModel.mnEscapement = (maFontModel.mnEscapement == XML_subscript) ? XML_baseline : XML_subscript;
                     break;

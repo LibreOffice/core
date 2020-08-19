@@ -378,7 +378,7 @@ void PivotTableField::importPTReferenceItem( SequenceInputStream& rStrm )
 void PivotTableField::finalizeImport( const Reference< XDataPilotDescriptor >& rxDPDesc )
 {
     /*  Process all fields based on source data, other fields (e.g. group
-        fields) are processed from here. PivotCacahe::getDatabaseIndex()
+        fields) are processed from here. PivotCache::getCacheDatabaseIndex()
         returns -1 for all fields not based on source data. */
     Reference< XDataPilotField > xDPField;
     sal_Int32 nDatabaseIdx = mrPivotTable.getCacheDatabaseIndex( mnFieldIndex );

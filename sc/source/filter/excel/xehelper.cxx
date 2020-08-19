@@ -1027,7 +1027,7 @@ void XclExpCachedMatrix::Save( XclExpStream& rStrm ) const
         // in BIFF2-BIFF7: 256 columns represented by 0 columns
         rStrm << static_cast< sal_uInt8 >( nCols ) << static_cast< sal_uInt16 >( nRows );
     else
-        // in BIFF8: columns and rows decreaed by 1
+        // in BIFF8: columns and rows decreased by 1
         rStrm << static_cast< sal_uInt8 >( nCols - 1 ) << static_cast< sal_uInt16 >( nRows - 1 );
 
     for( SCSIZE nRow = 0; nRow < nRows; ++nRow )

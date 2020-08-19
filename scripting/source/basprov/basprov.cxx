@@ -213,7 +213,6 @@ namespace basprov
             if ( m_sScriptingContext.startsWith( "vnd.sun.star.tdoc"  ) )
             {
                 xModel = MiscUtils::tDocUrlToModel(  m_sScriptingContext );
-                // TODO: use ScriptingContantsPool for SCRIPTING_DOC_REF
             }
         }
 

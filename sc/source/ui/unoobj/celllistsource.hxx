@@ -130,7 +130,7 @@ namespace calc
         css::table::CellRangeAddress
                 getRangeAddress( ) const;
 
-        /** retrievs the text of a cell within our range
+        /** retrieves the text of a cell within our range
             @param _nRangeRelativeRow
                 the relative row index of the cell within our range
             @param pAny
