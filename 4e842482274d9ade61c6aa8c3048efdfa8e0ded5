@@ -22,6 +22,30 @@
       "revId": "4e842482274d9ade61c6aa8c3048efdfa8e0ded5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0cf648d4_062ffc11",
+        "filename": "instsetoo_native/CustomTarget_setup.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-19T07:17:01Z",
+      "side": 1,
+      "message": "AFAIU, the HAVE_GNUMAKE_FILE_FUNC case avoids an issue on Windows (so we presumably insist on using a new-enough Make on Windows to avoid that issue; see \u003chttps://git.libreoffice.org/core/+/7f1f1f53206c85fb0e2290e5fb2e20dcedfa2610%5E!/\u003e \"tdf#118303 - Wrong converting of the Vendor-String\").",
+      "parentUuid": "90048820_a5a3580a",
+      "range": {
+        "startLine": 191,
+        "startChar": 0,
+        "endLine": 202,
+        "endChar": 4
+      },
+      "revId": "4e842482274d9ade61c6aa8c3048efdfa8e0ded5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
