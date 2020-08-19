@@ -22,6 +22,30 @@
       "revId": "bfdf50b4a916a8b81271ab7e839fdf4d1d0e9391",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0f4bacc_2224f93d",
+        "filename": "cui/source/dialogs/about.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-19T06:09:30Z",
+      "side": 1,
+      "message": "I have fixed it (for consistency, although maybe removing it would be better... I need to care of consistency less :-))",
+      "parentUuid": "0e68696f_ba7422ba",
+      "range": {
+        "startLine": 37,
+        "startChar": 34,
+        "endLine": 37,
+        "endChar": 67
+      },
+      "revId": "bfdf50b4a916a8b81271ab7e839fdf4d1d0e9391",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
