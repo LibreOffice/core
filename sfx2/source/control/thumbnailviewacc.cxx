@@ -21,7 +21,7 @@
 
 #include <comphelper/servicehelper.hxx>
 #include <sfx2/thumbnailview.hxx>
-#include <thumbnailviewitem.hxx>
+#include <sfx2/thumbnailviewitem.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
