@@ -2804,7 +2804,6 @@ static void doc_iniUnoCommands ()
         OUString(".uno:AcceptTrackedChange"),
         OUString(".uno:RejectTrackedChange"),
         OUString(".uno:ShowResolvedAnnotations"),
-        OUString(".uno:FreezePanesColumn"),
         OUString(".uno:InsertBreak"),
         OUString(".uno:InsertEndnote"),
         OUString(".uno:InsertFootnote"),
@@ -2831,9 +2830,11 @@ static void doc_iniUnoCommands ()
         OUString(".uno:Substract"),
         OUString(".uno:DistributeSelection"),
         OUString(".uno:Intersect"),
-        OUString(".uno:FreezePanesRow"),
         OUString(".uno:BorderInner"),
-        OUString(".uno:BorderOuter")
+        OUString(".uno:BorderOuter"),
+        OUString(".uno:FreezePanes"),
+        OUString(".uno:FreezePanesColumn"),
+        OUString(".uno:FreezePanesRow")
     };
 
     util::URL aCommandURL;
