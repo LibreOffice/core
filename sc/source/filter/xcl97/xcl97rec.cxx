@@ -203,11 +203,6 @@ bool IsValidObject( const XclObj& rObj )
             return false;
 
         const uno::Sequence<uno::Reference<chart2::XCoordinateSystem>> xCooSysSeq = xCooSysContainer->getCoordinateSystems();
-
-        // tdf#123647 Save empty charts too.
-        // if (!xCooSysSeq.hasElements())
-        //     return false;
-
         for (const auto& rCooSys : xCooSysSeq)
         {
             Reference<chart2::XChartTypeContainer> xChartTypeCont(rCooSys, uno::UNO_QUERY);
