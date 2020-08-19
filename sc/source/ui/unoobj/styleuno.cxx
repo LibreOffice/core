@@ -1744,7 +1744,7 @@ void ScStyleObj::setPropertyValue_Impl( const OUString& rPropertyName, const Sfx
     ScDocument& rDoc = pDocShell->GetDocument();
     if ( eFamily == SfxStyleFamily::Para )
     {
-        // If we are loading, we can delay line height calculcation, because we are going to re-calc all of those
+        // If we are loading, we can delay line height calculation, because we are going to re-calc all of those
         // after load.
         if (pDocShell && !pDocShell->IsLoading())
         {

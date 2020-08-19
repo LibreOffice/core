@@ -1474,7 +1474,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     pDispat->SetReadOnly_Impl( bIsReadOnly );
 
                     // Only force and Dispatcher-Update, if it is done next
-                    // anyway, otherwise flickering or GPF is possibel since
+                    // anyway, otherwise flickering or GPF is possible since
                     // the Writer for example prefers in Resize perform some
                     // actions which has a SetReadOnlyUI in Dispatcher as a
                     // result!
