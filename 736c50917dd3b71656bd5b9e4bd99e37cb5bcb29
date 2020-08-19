@@ -34,6 +34,24 @@
       "revId": "736c50917dd3b71656bd5b9e4bd99e37cb5bcb29",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4a8162a_5e0f6090",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2275,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2020-08-19T09:35:28Z",
+      "side": 1,
+      "message": "I didn\u0027t mean that it should be removed, I think it still makes sense. I was just pointing out to Laszlo Nemeth that it was not strictly necessary. :)",
+      "parentUuid": "5d8e1ba9_593295e6",
+      "revId": "736c50917dd3b71656bd5b9e4bd99e37cb5bcb29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
