@@ -656,6 +656,21 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     mpAutoFilterPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, pDoc, false, nColWidth));
     ScCheckListMenuControl& rControl = mpAutoFilterPopup->get_widget();
 
+    // Estimate the width (in pixels) of the longest text in the list
+    ScFilterEntries aFilterEntries;
+    pDoc->GetFilterEntries(nCol, nRow, nTab, aFilterEntries);
+    int maxTextWidth = 0;
+    for (const auto& rEntry : aFilterEntries)
+    {
+        const OUString& aVal = rEntry.GetString();
+        maxTextWidth = std::max<int>(maxTextWidth, rControl.GetTextWidth(aVal) + aVal.getLength() * 2);
+    }
+    // window should be at least as wide as the column, or the longest text + checkbox, scrollbar ... (it is estimated with 70 pixel now)
+    // window should be maximum 1024 pixel wide.
+    int nWindowWidth = std::min<int>(1024, maxTextWidth + 70);
+    nWindowWidth = rControl.IncreaseWindowWidthToFitText(nWindowWidth);
+    maxTextWidth = std::max<int>(maxTextWidth, nWindowWidth - 70);
+
     if (bLOKActive)
         mpAutoFilterPopup->SetLOKNotifier(SfxViewShell::Current());
     rControl.setOKAction(new AutoFilterAction(this, AutoFilterMode::Normal));
@@ -703,8 +718,6 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     }
 
     // Populate the check box list.
-    ScFilterEntries aFilterEntries;
-    pDoc->GetFilterEntries(nCol, nRow, nTab, aFilterEntries);
 
     rControl.setHasDates(aFilterEntries.mbHasDates);
     rControl.setMemberSize(aFilterEntries.size());
@@ -738,7 +751,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     rControl.addMenuItem(
         ScResId(SCSTR_STDFILTER), new AutoFilterAction(this, AutoFilterMode::Custom));
 
-    rControl.initMembers();
+    rControl.initMembers(maxTextWidth + 20); // 20 pixel estimated for the checkbox
 
     ScCheckListMenuControl::Config aConfig;
     aConfig.mbAllowEmptySet = false;
