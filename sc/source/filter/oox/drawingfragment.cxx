@@ -295,9 +295,11 @@ void DrawingFragment::onEndElement()
                     }
 
                     // TODO: DrawingML implementation expects 32-bit coordinates for EMU rectangles (change that to EmuRectangle)
+                    // tdf#135918: Negative X,Y position has to be allowed to avoid shape displacement on rotation.
+                    // The negative values can exist because of previous lines where the anchor rectangle must be mirrored in some ranges.
                     Rectangle aShapeRectEmu32(
-                        getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.X, 0, SAL_MAX_INT32 ),
-                        getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Y, 0, SAL_MAX_INT32 ),
+                        getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.X, SAL_MIN_INT32, SAL_MAX_INT32 ),
+                        getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Y, SAL_MIN_INT32, SAL_MAX_INT32 ),
                         getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Width, 0, SAL_MAX_INT32 ),
                         getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Height, 0, SAL_MAX_INT32 ) );
 
@@ -314,7 +316,7 @@ void DrawingFragment::onEndElement()
                     /*  Collect all shape positions in the WorksheetHelper base
                         class. But first, scale EMUs to 1/100 mm. */
                     Rectangle aShapeRectHmm(
-                        convertEmuToHmm(aShapeRectEmu32.X ), convertEmuToHmm(aShapeRectEmu32.Y ),
+                        convertEmuToHmm(aShapeRectEmu32.X > 0 ? aShapeRectEmu32.X : 0), convertEmuToHmm(aShapeRectEmu32.Y > 0 ? aShapeRectEmu32.Y : 0),
                         convertEmuToHmm(aShapeRectEmu32.Width ), convertEmuToHmm(aShapeRectEmu32.Height ) );
                     extendShapeBoundingBox( aShapeRectHmm );
                     // set cell Anchoring
