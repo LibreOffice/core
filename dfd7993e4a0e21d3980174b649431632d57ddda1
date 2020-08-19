@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6b60e836_353d92c6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-08-19T03:21:56Z",
+      "side": 1,
+      "message": "Last occurence of un-renamed animateSimulation ;)",
+      "revId": "dfd7993e4a0e21d3980174b649431632d57ddda1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c10aff4e_2d30c207",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/Effects.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 1040,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-08-19T03:21:56Z",
+      "side": 1,
+      "message": "Mmmh - perhaps a more layperson term would be better? How about \"Simulated falling object\" or something more descriptive of how the effect looks on screen?",
+      "revId": "dfd7993e4a0e21d3980174b649431632d57ddda1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
