@@ -2800,10 +2800,7 @@ static void doc_iniUnoCommands ()
         OUString(".uno:ParaspaceDecrease"),
         OUString(".uno:AcceptTrackedChange"),
         OUString(".uno:RejectTrackedChange"),
-        OUString(".uno:FreezePanesColumn"),
-        OUString(".uno:FreezePanesRow"),
         OUString(".uno:ShowResolvedAnnotations"),
-        OUString(".uno:FreezePanesColumn"),
         OUString(".uno:InsertBreak"),
         OUString(".uno:InsertEndnote"),
         OUString(".uno:InsertFootnote"),
@@ -2824,9 +2821,11 @@ static void doc_iniUnoCommands ()
         OUString(".uno:AlignMiddle"),
         OUString(".uno:AlignDown"),
         OUString(".uno:TraceChangeMode"),
-        OUString(".uno:FreezePanesRow"),
         OUString(".uno:BorderInner"),
-        OUString(".uno:BorderOuter")
+        OUString(".uno:BorderOuter"),
+        OUString(".uno:FreezePanes"),
+        OUString(".uno:FreezePanesColumn"),
+        OUString(".uno:FreezePanesRow")
     };
 
     util::URL aCommandURL;
