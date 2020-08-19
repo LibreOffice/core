@@ -25,8 +25,7 @@ namespace dbaui
 {
     class OTitleWindow : public vcl::Window
     {
-        VclPtr<FixedText>   m_aSpace1;
-        VclPtr<FixedText>   m_aSpace2;
+        VclPtr<vcl::Window> m_aTitleFrame;
         VclPtr<FixedText>   m_aTitle;
         VclPtr<vcl::Window> m_pChild;
         bool                m_bShift;

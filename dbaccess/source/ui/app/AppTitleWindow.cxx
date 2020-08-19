@@ -27,28 +27,24 @@ namespace dbaui
 {
 
 OTitleWindow::OTitleWindow(vcl::Window* _pParent, const char* pTitleId, WinBits _nBits, bool _bShift)
-: Window(_pParent,_nBits | WB_DIALOGCONTROL)
-, m_aSpace1(VclPtr<FixedText>::Create(this))
-, m_aSpace2(VclPtr<FixedText>::Create(this))
-, m_aTitle(VclPtr<FixedText>::Create(this))
-, m_pChild(nullptr)
-, m_bShift(_bShift)
+    : Window(_pParent,_nBits | WB_DIALOGCONTROL)
+    , m_aTitleFrame(VclPtr<vcl::Window>::Create(this))
+    , m_aTitle(VclPtr<FixedText>::Create(m_aTitleFrame, WB_VCENTER))
+    , m_pChild(nullptr)
+    , m_bShift(_bShift)
 {
     setTitle(pTitleId);
     SetBorderStyle(WindowBorderStyle::MONO);
     ImplInitSettings();
 
     const StyleSettings& rStyle = Application::GetSettings().GetStyleSettings();
-    vcl::Window* pWindows[] = { m_aSpace1.get(), m_aSpace2.get(), m_aTitle.get() };
-    for (vcl::Window* pWindow : pWindows)
-    {
-        vcl::Font aFont = pWindow->GetControlFont();
-        aFont.SetWeight(WEIGHT_BOLD);
-        pWindow->SetControlFont(aFont);
-        pWindow->SetControlForeground(rStyle.GetLightColor());
-        pWindow->SetControlBackground(rStyle.GetShadowColor());
-        pWindow->Show();
-    }
+    vcl::Font aFont = m_aTitle->GetControlFont();
+    aFont.SetWeight(WEIGHT_BOLD);
+    m_aTitle->SetControlFont(aFont);
+    m_aTitle->SetControlForeground(rStyle.GetLightColor());
+    m_aTitleFrame->SetBackground(rStyle.GetShadowColor());
+    m_aTitleFrame->Show();
+    m_aTitle->Show();
 }
 
 OTitleWindow::~OTitleWindow()
@@ -63,9 +59,8 @@ void OTitleWindow::dispose()
         m_pChild->Hide();
     }
     m_pChild.disposeAndClear();
-    m_aSpace1.disposeAndClear();
-    m_aSpace2.disposeAndClear();
     m_aTitle.disposeAndClear();
+    m_aTitleFrame.disposeAndClear();
     vcl::Window::dispose();
 }
 
@@ -87,12 +82,10 @@ void OTitleWindow::Resize()
     sal_Int32 nYOffset = aTextSize.Height();
     sal_Int32 nHeight = GetTextHeight() + 2*nYOffset;
 
-    m_aSpace1->SetPosSizePixel(  Point(SPACE_BORDER, SPACE_BORDER ),
-                                Size(nXOffset , nHeight - SPACE_BORDER) );
-    m_aSpace2->SetPosSizePixel(  Point(nXOffset + SPACE_BORDER, SPACE_BORDER ),
-                                Size(nOutputWidth - nXOffset - 2*SPACE_BORDER, nYOffset) );
-    m_aTitle->SetPosSizePixel(   Point(nXOffset + SPACE_BORDER, nYOffset + SPACE_BORDER),
-                                Size(nOutputWidth - nXOffset - 2*SPACE_BORDER, nHeight - nYOffset - SPACE_BORDER) );
+    m_aTitleFrame->SetPosSizePixel(Point(SPACE_BORDER, SPACE_BORDER),
+                                   Size(nOutputWidth - 2*SPACE_BORDER, nHeight - SPACE_BORDER));
+    m_aTitle->SetPosSizePixel(Point(nXOffset, 0),
+                              Size(nOutputWidth - nXOffset - 2*SPACE_BORDER, nHeight - SPACE_BORDER));
     if ( m_pChild )
     {
         m_pChild->SetPosSizePixel(  Point(m_bShift ? (nXOffset+SPACE_BORDER) : sal_Int32(SPACE_BORDER), nHeight + nXOffset + SPACE_BORDER),
