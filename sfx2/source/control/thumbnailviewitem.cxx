@@ -43,6 +43,7 @@ ThumbnailViewItem::ThumbnailViewItem(ThumbnailViewBase &rView, sal_uInt16 nId)
     : mrParent(rView)
     , mnId(nId)
     , mbVisible(true)
+    , mbBorder(true)
     , mbSelected(false)
     , mbHover(false)
     , mxAcc()
@@ -176,20 +177,23 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
                                                             false)
                                         ));
 
-    // draw thumbnail borders
-    float fWidth = aImageSize.Width() - 1;
-    float fHeight = aImageSize.Height() - 1;
-    float fPosX = maPrev1Pos.getX();
-    float fPosY = maPrev1Pos.getY();
+    if (mbBorder)
+    {
+        // draw thumbnail borders
+        float fWidth = aImageSize.Width() - 1;
+        float fHeight = aImageSize.Height() - 1;
+        float fPosX = maPrev1Pos.getX();
+        float fPosY = maPrev1Pos.getY();
 
-    B2DPolygon aBounds;
-    aBounds.append(B2DPoint(fPosX,fPosY));
-    aBounds.append(B2DPoint(fPosX+fWidth,fPosY));
-    aBounds.append(B2DPoint(fPosX+fWidth,fPosY+fHeight));
-    aBounds.append(B2DPoint(fPosX,fPosY+fHeight));
-    aBounds.setClosed(true);
+        B2DPolygon aBounds;
+        aBounds.append(B2DPoint(fPosX,fPosY));
+        aBounds.append(B2DPoint(fPosX+fWidth,fPosY));
+        aBounds.append(B2DPoint(fPosX+fWidth,fPosY+fHeight));
+        aBounds.append(B2DPoint(fPosX,fPosY+fHeight));
+        aBounds.setClosed(true);
 
-    aSeq[nPrimitive++] = drawinglayer::primitive2d::Primitive2DReference(createBorderLine(aBounds));
+        aSeq[nPrimitive++] = drawinglayer::primitive2d::Primitive2DReference(createBorderLine(aBounds));
+    }
 
     // Draw text below thumbnail
     addTextPrimitives(maTitle, pAttrs, maTextPos, aSeq);
