@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c3afdb1d_820e2c54",
+        "filename": "slideshow/source/engine/box2dtools.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-08-19T03:29:24Z",
+      "side": 1,
+      "message": "be good to assert() here that rPolygon has no bezier curves anymore",
+      "revId": "c271de75fe2ec4624c31af905040a68cfe24ed72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f7ab14a_6f728964",
+        "filename": "slideshow/source/engine/box2dtools.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-08-19T03:29:24Z",
+      "side": 1,
+      "message": "nIndex \u003d\u003d 0 is of course implied?",
+      "revId": "c271de75fe2ec4624c31af905040a68cfe24ed72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
