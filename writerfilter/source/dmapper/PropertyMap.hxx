@@ -33,6 +33,7 @@
 #include <optional>
 #include <map>
 #include <vector>
+#include <set>
 
 namespace com::sun::star {
     namespace beans {
@@ -594,6 +595,7 @@ struct TableParagraph
     css::uno::Reference<css::text::XTextRange> m_rEndParagraph;
     PropertyMapPtr m_pPropertyMap;
     css::uno::Reference<css::beans::XPropertySet> m_rPropertySet;
+    std::set<OUString> m_aParaOverrideApplied;
 };
 
 typedef std::shared_ptr< std::vector<TableParagraph> > TableParagraphVectorPtr;
