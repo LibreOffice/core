@@ -249,10 +249,13 @@ void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const Thumbnai
 
         // setup color
         BColor aTextColor = pAttrs->aTextColor;
-        if( mbSelected && mbHover)
-            aTextColor = pAttrs->aSelectHighlightTextColor;
-        else if (mbSelected || mbHover)
-            aTextColor = pAttrs->aHighlightTextColor;
+        if(mbSelected)
+        {
+            if (mbHover)
+                aTextColor = pAttrs->aSelectHighlightTextColor;
+            else
+                aTextColor = pAttrs->aHighlightTextColor;
+        }
 
         rSeq[nPrimitives++] = drawinglayer::primitive2d::Primitive2DReference(
                     new TextSimplePortionPrimitive2D(aTextMatrix,

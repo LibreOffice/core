@@ -137,7 +137,7 @@ void ThumbnailView::ImplInit()
     maFillColor = GetSettings().GetStyleSettings().GetFieldColor();
     maTextColor = GetSettings().GetStyleSettings().GetWindowTextColor();
     maHighlightColor = GetSettings().GetStyleSettings().GetHighlightColor();
-    maHighlightTextColor = GetSettings().GetStyleSettings().GetWindowTextColor();
+    maHighlightTextColor = GetSettings().GetStyleSettings().GetHighlightTextColor();
     maSelectHighlightColor = GetSettings().GetStyleSettings().GetActiveColor();
     maSelectHighlightTextColor = GetSettings().GetStyleSettings().GetActiveTextColor();
 
@@ -1321,7 +1321,7 @@ void SfxThumbnailView::ImplInit()
     maFillColor = rSettings.GetFieldColor();
     maTextColor = rSettings.GetWindowTextColor();
     maHighlightColor = rSettings.GetHighlightColor();
-    maHighlightTextColor = rSettings.GetWindowTextColor();
+    maHighlightTextColor = rSettings.GetHighlightTextColor();
     maSelectHighlightColor = rSettings.GetActiveColor();
     maSelectHighlightTextColor = rSettings.GetActiveTextColor();
 
