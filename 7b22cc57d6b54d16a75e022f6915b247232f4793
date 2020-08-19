@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0d5bddb4_2cfb613a",
+        "filename": "xmloff/source/style/PageMasterExportPropMapper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-08-19T16:47:40Z",
+      "side": 1,
+      "message": "eeek? trying to win obfuscated C++ contest?",
+      "revId": "7b22cc57d6b54d16a75e022f6915b247232f4793",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
