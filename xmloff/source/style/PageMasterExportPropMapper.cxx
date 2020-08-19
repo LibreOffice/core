@@ -350,7 +350,11 @@ void XMLPageMasterExportPropMapper::ContextFilter(
 
         // tdf#103602 don't export draw:fill attributes on page-layout-properties in strict ODF
         if (!isDrawingPageExport
-            && aPropMapper->GetEntryAPIName(rProp.mnIndex).startsWith("Fill")
+            && [](OUString const& rName) -> bool {
+                return rName.startsWith("Fill")
+                    || rName.startsWith("HeaderFill")
+                    || rName.startsWith("FooterFill");
+                } (aPropMapper->GetEntryAPIName(rProp.mnIndex))
             && ((aBackgroundImageExport.GetExport().getSaneDefaultVersion()
                 & SvtSaveOptions::ODFSVER_EXTENDED) == 0))
         {
