@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f26bc5e_e02b0a1f",
+        "filename": "slideshow/source/engine/activitiesqueue.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-08-19T03:45:37Z",
+      "side": 1,
+      "message": "didn\u0027t debug this, but assuming \u003e1 physics activities running concurrently would still do the right thing here?",
+      "revId": "781f3fb4c81f733d2b6396c7329e9e95864a121f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1b37c64_e871bdb8",
+        "filename": "slideshow/source/engine/animationnodes/animationbasenode.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-08-19T03:45:37Z",
+      "side": 1,
+      "message": "type switching is not super-nice - can you push this down into a polymorphic AnimationNode method?",
+      "revId": "781f3fb4c81f733d2b6396c7329e9e95864a121f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30b1b065_c0659d4e",
+        "filename": "slideshow/source/engine/animationnodes/animationbasenode.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-08-19T03:45:37Z",
+      "side": 1,
+      "message": "better use a separate method name - a boolean parameter has ~no self-documentation value, when you read the code (always needs going to the header file/doxygen documentation to figure out what it means).\n\nHow about addTailActivity() or something?",
+      "revId": "781f3fb4c81f733d2b6396c7329e9e95864a121f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87657539_a0ebebd8",
+        "filename": "slideshow/source/inc/activitiesqueue.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-08-19T03:45:37Z",
+      "side": 1,
+      "message": "that\u0027s not ideal. see callsite of addActivity for the why.",
+      "revId": "781f3fb4c81f733d2b6396c7329e9e95864a121f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4759769a_0450d36e",
+        "filename": "slideshow/source/inc/activitiesqueue.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-08-19T03:45:37Z",
+      "side": 1,
+      "message": "bit of a mouthful - maCurrentTailActivitiesWaiting would be my suggestion, though it\u0027s also not very descriptive..",
+      "revId": "781f3fb4c81f733d2b6396c7329e9e95864a121f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
