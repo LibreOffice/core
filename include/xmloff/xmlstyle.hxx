@@ -98,10 +98,19 @@ public:
             XmlStyleFamily nFamily=XmlStyleFamily::DATA_STYLE,
             bool bDefaultStyle = false );
 
+    // Fast-parser constructor
+    SvXMLStyleContext( SvXMLImport& rImport,
+              XmlStyleFamily nFamily=XmlStyleFamily::DATA_STYLE,
+              bool bDefaultStyle = false );
+
     virtual ~SvXMLStyleContext() override;
 
     virtual void StartElement(
         const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) final override;
+
+    virtual void SAL_CALL startFastElement(
+            sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override;
 
     const OUString&  GetName() const { return maName; }
     const OUString&  GetDisplayName() const { return maDisplayName.getLength() ? maDisplayName : maName; }

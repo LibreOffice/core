@@ -164,6 +164,19 @@ SvXMLStyleContext::SvXMLStyleContext(
 {
 }
 
+// fast-parser constructor
+SvXMLStyleContext::SvXMLStyleContext(
+        SvXMLImport& rImp,
+        XmlStyleFamily nFam, bool bDefault ) :
+    SvXMLImportContext( rImp ),
+    mbHidden( false ),
+    mnFamily( nFam ),
+    mbValid( true ),
+    mbNew( true ),
+    mbDefaultStyle( bDefault )
+{
+}
+
 SvXMLStyleContext::~SvXMLStyleContext()
 {
 }
@@ -179,6 +192,25 @@ void SvXMLStyleContext::StartElement( const uno::Reference< xml::sax::XAttribute
         const OUString& rValue = xAttrList->getValueByIndex( i );
 
         SetAttribute( nPrefix, aLocalName, rValue );
+    }
+}
+
+void SvXMLStyleContext::startFastElement(
+    sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+{
+    // Fall back from fastparser to slowparser code
+    for( auto &it : sax_fastparser::castToFastAttributeList( xAttrList ) )
+    {
+        sal_Int32 nToken = it.getToken();
+        const OUString& rAttrNamespacePrefix = SvXMLImport::getNamespacePrefixFromToken(nToken, &GetImport().GetNamespaceMap());
+        OUString sAttrName = SvXMLImport::getNameFromToken( nToken );
+        if ( !rAttrNamespacePrefix.isEmpty() )
+            sAttrName = rAttrNamespacePrefix + SvXMLImport::aNamespaceSeparator + sAttrName;
+        OUString aLocalName;
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+
+        SetAttribute( nPrefix, aLocalName, it.toString() );
     }
 }
 
