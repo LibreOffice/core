@@ -68,6 +68,7 @@ public:
     ThumbnailViewBase &mrParent;
     sal_uInt16 mnId;
     bool mbVisible;
+    bool mbBorder;
     bool mbSelected;
     bool mbHover;
     BitmapEx maPreview1;
