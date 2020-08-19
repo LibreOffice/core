@@ -8702,9 +8702,16 @@ namespace
         }
     }
 
-    gboolean filter_pango_attrs(PangoAttribute *attr, gpointer /*data*/)
+    gboolean filter_pango_attrs(PangoAttribute *attr, gpointer data)
     {
-        return attr->klass->type == PANGO_ATTR_FOREGROUND;
+        PangoAttrType* pFilterAttrs = static_cast<PangoAttrType*>(data);
+        while (*pFilterAttrs)
+        {
+            if (attr->klass->type == *pFilterAttrs)
+                return true;
+            ++pFilterAttrs;
+        }
+        return false;
     }
 
 class GtkInstanceEntry : public GtkInstanceWidget, public virtual weld::Entry
@@ -8920,7 +8927,13 @@ public:
         if (rColor == COL_AUTO && !pOrigList) // nothing to do
             return;
 
-        PangoAttrList* pAttrList = pOrigList ? pango_attr_list_filter(pOrigList, filter_pango_attrs, nullptr) : pango_attr_list_new();
+        PangoAttrType aFilterAttrs[] = {PANGO_ATTR_FOREGROUND, PANGO_ATTR_INVALID};
+
+        PangoAttrList* pAttrList = pOrigList
+            ? pango_attr_list_filter(pOrigList, filter_pango_attrs, &aFilterAttrs)
+            : nullptr;
+        if (!pAttrList)
+            pAttrList = pango_attr_list_new();
 
         if (rColor != COL_AUTO)
             pango_attr_list_insert(pAttrList, pango_attr_foreground_new(rColor.GetRed()/255.0, rColor.GetGreen()/255.0, rColor.GetBlue()/255.0));
@@ -12518,14 +12531,41 @@ class GtkInstanceLabel : public GtkInstanceWidget, public virtual weld::Label
 private:
     GtkLabel* m_pLabel;
 
-    void set_text_color(const Color& rColor)
+    void set_text_background_color(const Color& rColor)
     {
         guint16 nRed = rColor.GetRed() << 8;
         guint16 nGreen = rColor.GetRed() << 8;
         guint16 nBlue = rColor.GetBlue() << 8;
 
-        PangoAttrList* pAttrs = pango_attr_list_new();
+        PangoAttrType aFilterAttrs[] = {PANGO_ATTR_BACKGROUND, PANGO_ATTR_INVALID};
+
+        PangoAttrList* pOrigList = gtk_label_get_attributes(m_pLabel);
+        PangoAttrList* pAttrs = pOrigList
+            ? pango_attr_list_filter(pOrigList, filter_pango_attrs, &aFilterAttrs)
+            : nullptr;
+        if (!pAttrs)
+            pAttrs = pango_attr_list_new();
         pango_attr_list_insert(pAttrs, pango_attr_background_new(nRed, nGreen, nBlue));
+        gtk_label_set_attributes(m_pLabel, pAttrs);
+        pango_attr_list_unref(pAttrs);
+    }
+
+    void set_bold_text_foreground_color(const Color& rColor)
+    {
+        guint16 nRed = rColor.GetRed() << 8;
+        guint16 nGreen = rColor.GetRed() << 8;
+        guint16 nBlue = rColor.GetBlue() << 8;
+
+        PangoAttrType aFilterAttrs[] = {PANGO_ATTR_FOREGROUND, PANGO_ATTR_WEIGHT, PANGO_ATTR_INVALID};
+
+        PangoAttrList* pOrigList = gtk_label_get_attributes(m_pLabel);
+        PangoAttrList* pAttrs = pOrigList
+            ? pango_attr_list_filter(pOrigList, filter_pango_attrs, &aFilterAttrs)
+            : nullptr;
+        if (!pAttrs)
+            pAttrs = pango_attr_list_new();
+        pango_attr_list_insert(pAttrs, pango_attr_foreground_new(nRed, nGreen, nBlue));
+        pango_attr_list_insert(pAttrs, pango_attr_weight_new(PANGO_WEIGHT_BOLD));
         gtk_label_set_attributes(m_pLabel, pAttrs);
         pango_attr_list_unref(pAttrs);
     }
@@ -12562,10 +12602,13 @@ public:
                 gtk_label_set_attributes(m_pLabel, nullptr);
                 break;
             case weld::LabelType::Warning:
-                set_text_color(COL_YELLOW);
+                set_text_background_color(COL_YELLOW);
                 break;
             case weld::LabelType::Error:
-                set_text_color(Application::GetSettings().GetStyleSettings().GetHighlightColor());
+                set_text_background_color(Application::GetSettings().GetStyleSettings().GetHighlightColor());
+                break;
+            case weld::LabelType::Title:
+                set_bold_text_foreground_color(Application::GetSettings().GetStyleSettings().GetLightColor());
                 break;
         }
     }
