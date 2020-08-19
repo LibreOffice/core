@@ -81,7 +81,7 @@ bool StringStatic::VisitVarDecl(VarDecl const* varDecl)
     if (ignoreLocation(varDecl))
         return true;
     QualType qt = varDecl->getType();
-    if (!varDecl->hasGlobalStorage() && !varDecl->isStaticLocal())
+    if (!varDecl->hasGlobalStorage())
         return true;
     if (!varDecl->isThisDeclarationADefinition()
         || !qt.isConstQualified())
