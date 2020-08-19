@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "0a11d936_0a71f255",
+        "filename": "slideshow/source/engine/activitiesqueue.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1002376
+      },
+      "writtenOn": "2020-08-19T14:40:51Z",
+      "side": 1,
+      "message": "as longs as active (stepper) physics animation activity comes after the other non-physics animation activities, there are no problems. Order of the physics animation activities among themselves doesn\u0027t really matter. so yeah, they would do the right thing AFAIK.",
+      "parentUuid": "7f26bc5e_e02b0a1f",
+      "revId": "781f3fb4c81f733d2b6396c7329e9e95864a121f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a1b37c64_e871bdb8",
         "filename": "slideshow/source/engine/animationnodes/animationbasenode.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2020-08-19T03:45:37Z",
       "side": 1,
       "message": "type switching is not super-nice - can you push this down into a polymorphic AnimationNode method?",
+      "revId": "781f3fb4c81f733d2b6396c7329e9e95864a121f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f69640ab_9457f41e",
+        "filename": "slideshow/source/engine/animationnodes/animationbasenode.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1002376
+      },
+      "writtenOn": "2020-08-19T14:40:51Z",
+      "side": 1,
+      "message": "Should I add a function that does the comparing and returns a bool? I\u0027m not really sure what should I do here and how would I avoid the type switching, could you please guide me a little more",
+      "parentUuid": "a1b37c64_e871bdb8",
       "revId": "781f3fb4c81f733d2b6396c7329e9e95864a121f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
@@ -50,6 +86,24 @@
       "revId": "781f3fb4c81f733d2b6396c7329e9e95864a121f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a647280_1b38e2d8",
+        "filename": "slideshow/source/engine/animationnodes/animationbasenode.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1002376
+      },
+      "writtenOn": "2020-08-19T14:40:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "30b1b065_c0659d4e",
+      "revId": "781f3fb4c81f733d2b6396c7329e9e95864a121f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
