@@ -65,7 +65,7 @@ public: //methods
      */
     basegfx::B2IRectangle getCurrentRectangle() const;
 
-    void    reduceToMimimumSize();
+    void    reduceToMinimumSize();
 
     ::basegfx::B2IRectangle    adjustPosAndSize( const css::awt::Point& rPos
                                     , const css::awt::Size& rAvailableSize );

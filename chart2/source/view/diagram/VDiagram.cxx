@@ -667,7 +667,7 @@ basegfx::B2IRectangle VDiagram::getCurrentRectangle() const
     return BaseGFXHelper::makeRectangle(m_aCurrentPosWithoutAxes,m_aCurrentSizeWithoutAxes);
 }
 
-void VDiagram::reduceToMimimumSize()
+void VDiagram::reduceToMinimumSize()
 {
     if( !m_xOuterGroupShape.is() )
         return;

@@ -1486,7 +1486,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
         xSeriesTargetInFrontOfAxis = aVDiagram.getCoordinateRegion();
         // It is preferable to use full size than minimum for pie charts
         if (!rParam.mbUseFixedInnerSize)
-            aVDiagram.reduceToMimimumSize();
+            aVDiagram.reduceToMinimumSize();
     }
 
     uno::Reference< drawing::XShapes > xTextTargetShapes =
