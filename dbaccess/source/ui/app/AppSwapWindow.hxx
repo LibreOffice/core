@@ -20,6 +20,7 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_APP_APPSWAPWINDOW_HXX
 
 #include <IClipBoardTest.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <vcl/vclptr.hxx>
 #include "AppIconControl.hxx"
 #include <AppElementType.hxx>
@@ -27,25 +28,25 @@
 namespace dbaui
 {
     class OAppBorderWindow;
-    class OApplicationSwapWindow :  public vcl::Window,
-                                    public IClipboardTest
+    class OApplicationSwapWindow : public InterimItemWindow
+                                 , public IClipboardTest
     {
-        VclPtr<OApplicationIconControl>     m_aIconControl;
+        std::unique_ptr<OApplicationIconControl> m_xIconControl;
+        std::unique_ptr<weld::CustomWeld>   m_xIconControlWin;
         ElementType                         m_eLastType;
         OAppBorderWindow&                   m_rBorderWin;
 
         void ImplInitSettings();
 
-        DECL_LINK( OnContainerSelectHdl, SvtIconChoiceCtrl*, void );
+        DECL_LINK( OnContainerSelectHdl, const ThumbnailViewItem*, void );
         DECL_LINK( ChangeToLastSelected, void*, void );
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
     public:
-        OApplicationSwapWindow( vcl::Window* _pParent, OAppBorderWindow& _rBorderWindow );
+        OApplicationSwapWindow(vcl::Window* pParent, OAppBorderWindow& rBorderWindow);
         virtual ~OApplicationSwapWindow() override;
         // Window overrides
         virtual void dispose() override;
-        virtual void Resize() override;
 
         bool isCutAllowed() override      { return false; }
         bool isCopyAllowed() override     { return false; }
@@ -54,13 +55,15 @@ namespace dbaui
         void cut() override   { }
         void paste() override { }
 
-        sal_Int32                GetEntryCount() const { return m_aIconControl->GetEntryCount(); }
-        SvxIconChoiceCtrlEntry*  GetEntry( sal_uLong nPos ) const { return m_aIconControl->GetEntry(nPos); }
-        tools::Rectangle                GetBoundingBox( SvxIconChoiceCtrlEntry* pEntry ) const { return m_aIconControl->GetBoundingBox(pEntry); }
+#if 0
+        sal_Int32                GetEntryCount() const { return m_xIconControl->GetEntryCount(); }
+        SvxIconChoiceCtrlEntry*  GetEntry( sal_uLong nPos ) const { return m_xIconControl->GetEntry(nPos); }
+        tools::Rectangle                GetBoundingBox( SvxIconChoiceCtrlEntry* pEntry ) const { return m_xIconControl->GetBoundingBox(pEntry); }
+#endif
 
         /** automatically creates mnemonics for the icon/texts in our left hand side panel
         */
-        void    createIconAutoMnemonics( MnemonicGenerator& _rMnemonics );
+//TODO        void    createIconAutoMnemonics( MnemonicGenerator& _rMnemonics );
 
         /** called to give the window the chance to intercept key events, while it has not
             the focus

@@ -13,6 +13,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/admindialog \
     dbaccess/uiconfig/ui/advancedsettingsdialog \
     dbaccess/uiconfig/ui/applycolpage \
+    dbaccess/uiconfig/ui/appswapwindow \
     dbaccess/uiconfig/ui/authentificationpage \
     dbaccess/uiconfig/ui/autocharsetpage \
     dbaccess/uiconfig/ui/choosedatasourcedialog \

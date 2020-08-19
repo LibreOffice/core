@@ -21,18 +21,27 @@
 #include <core_resource.hxx>
 #include <strings.hrc>
 #include <bitmaps.hlst>
-#include <vcl/image.hxx>
+#include <vcl/bitmapex.hxx>
 #include <callbacks.hxx>
 #include <AppElementType.hxx>
 
 using namespace ::dbaui;
-OApplicationIconControl::OApplicationIconControl(vcl::Window* _pParent)
-    : SvtIconChoiceCtrl(_pParent,WB_ICON | WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME | /*!WB_NOSELECTION |*/
-                                WB_TABSTOP | WB_CLIPCHILDREN | WB_NOVSCROLL | WB_SMART_ARRANGE | WB_NOHSCROLL | WB_CENTER)
-    ,DropTargetHelper(this)
-    ,m_pActionListener(nullptr)
-{
 
+OApplicationIconControl::OApplicationIconControl(std::unique_ptr<weld::ScrolledWindow> xScroll)
+    : SfxThumbnailView(std::move(xScroll), nullptr)
+//    , DropTargetHelper(nullptr)
+    , m_pActionListener(nullptr)
+    , m_nMaxWidth(0)
+    , m_nMaxHeight(0)
+{
+#if 0
+    SetChoiceWithCursor();
+    SetSelectionMode(SelectionMode::Single);
+#endif
+}
+
+void OApplicationIconControl::Fill()
+{
     static const struct CategoryDescriptor
     {
         const char* pLabelResId;
@@ -44,26 +53,31 @@ OApplicationIconControl::OApplicationIconControl(vcl::Window* _pParent)
         { RID_STR_FORMS_CONTAINER,      E_FORM,     BMP_FORMFOLDER_TREE_L   },
         { RID_STR_REPORTS_CONTAINER,    E_REPORT,   BMP_REPORTFOLDER_TREE_L }
     };
+
     for (const CategoryDescriptor& aCategorie : aCategories)
     {
-        SvxIconChoiceCtrlEntry* pEntry = InsertEntry(
-            DBA_RES(aCategorie.pLabelResId) ,
-            Image(StockImage::Yes, OUString::createFromAscii(aCategorie.aImageResId)));
-        if ( pEntry )
-            pEntry->SetUserData( new ElementType( aCategorie.eType ) );
+        std::unique_ptr<ThumbnailViewItem> xItem(new ThumbnailViewItem(*this, aCategorie.eType));
+        xItem->mbBorder = false;
+        xItem->maPreview1 = BitmapEx(OUString::createFromAscii(aCategorie.aImageResId));
+        const Size& rSize = xItem->maPreview1.GetSizePixel();
+        m_nMaxWidth = std::max(m_nMaxWidth, rSize.Width());
+        m_nMaxHeight = std::max(m_nMaxHeight, rSize.Height());
+        xItem->maTitle = DBA_RES(aCategorie.pLabelResId);
+        AppendItem(std::move(xItem));
     }
 
-    SetChoiceWithCursor();
-    SetSelectionMode(SelectionMode::Single);
+    setItemDimensions(m_nMaxWidth, m_nMaxHeight, m_nMaxHeight, 0);
+}
+
+void OApplicationIconControl::Resize()
+{
+    setItemDimensions(GetOutputSizePixel().Width(), m_nMaxHeight, m_nMaxHeight, 0);
+    SfxThumbnailView::Resize();
 }
 
 OApplicationIconControl::~OApplicationIconControl()
 {
-    disposeOnce();
-}
-
-void OApplicationIconControl::dispose()
-{
+#if 0
     sal_Int32 nCount = GetEntryCount();
     for ( sal_Int32 i = 0; i < nCount; ++i )
     {
@@ -75,9 +89,10 @@ void OApplicationIconControl::dispose()
         }
     }
     DropTargetHelper::dispose();
-    SvtIconChoiceCtrl::dispose();
+#endif
 }
 
+#if 0
 sal_Int8 OApplicationIconControl::AcceptDrop( const AcceptDropEvent& _rEvt )
 {
     sal_Int8 nDropOption = DND_ACTION_NONE;
@@ -91,7 +106,6 @@ sal_Int8 OApplicationIconControl::AcceptDrop( const AcceptDropEvent& _rEvt )
             nDropOption = m_pActionListener->queryDrop( _rEvt, GetDataFlavorExVector() );
         }
     }
-
     return nDropOption;
 }
 
@@ -102,5 +116,6 @@ sal_Int8 OApplicationIconControl::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 
     return DND_ACTION_NONE;
 }
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
