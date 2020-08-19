@@ -765,7 +765,7 @@ DeactivateRC SvxSecurityTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 namespace
 {
-    bool CheckAndSave( SvtSecurityOptions& _rOpt, SvtSecurityOptions::EOption _eOpt, const bool _bIsChecked, bool& _rModfied )
+    bool CheckAndSave( SvtSecurityOptions& _rOpt, SvtSecurityOptions::EOption _eOpt, const bool _bIsChecked, bool& _rModified )
     {
         bool bModified = false;
         if ( _rOpt.IsOptionEnabled( _eOpt ) )
@@ -774,7 +774,7 @@ namespace
             if ( bModified )
             {
                 _rOpt.SetOption( _eOpt, _bIsChecked );
-                _rModfied = true;
+                _rModified = true;
             }
         }
 
