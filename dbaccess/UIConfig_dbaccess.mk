@@ -80,6 +80,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/taskwindow \
     dbaccess/uiconfig/ui/textconnectionsettings \
     dbaccess/uiconfig/ui/textpage \
+    dbaccess/uiconfig/ui/titlewindow \
     dbaccess/uiconfig/ui/typeselectpage \
     dbaccess/uiconfig/ui/useradmindialog \
     dbaccess/uiconfig/ui/useradminpage \

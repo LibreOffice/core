@@ -50,9 +50,9 @@ OAppBorderWindow::OAppBorderWindow(OApplicationView* _pParent,PreviewMode _ePrev
 
     SetBorderStyle(WindowBorderStyle::MONO);
 
-    m_pPanel = VclPtr<OTitleWindow>::Create(this,STR_DATABASE,WB_BORDER | WB_DIALOGCONTROL, false);
+    m_pPanel = VclPtr<OTitleWindow>::Create(this, STR_DATABASE);
     m_pPanel->SetBorderStyle(WindowBorderStyle::MONO);
-    VclPtrInstance<OApplicationSwapWindow> pSwap( m_pPanel, *this );
+    VclPtrInstance<OApplicationSwapWindow> pSwap( m_pPanel->getChildContainer(), *this );
     pSwap->Show();
 
     m_pPanel->setChildWindow(pSwap);
