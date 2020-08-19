@@ -599,15 +599,6 @@ ProfileItem gid_Brand_Profileitem_Version_Vendor
     Value = "<vendor>";
 End
 
-ProfileItem gid_Brand_Profileitem_Version_BuildVersion
-    ProfileID = gid_Brand_Profile_Version_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "Version";
-    Order = 17;
-    Key = "BuildVersion";
-    Value = "<buildversion>";
-End
-
 ProfileItem gid_Brand_Profileitem_Version_Extensionupdateurl
     ProfileID = gid_Brand_Profile_Version_Ini;
     ModuleID = gid_Module_Root_Brand;
