@@ -132,7 +132,7 @@ bool ScNameDefDlg::IsNameValid()
     }
 
     ScRangeData::IsNameValidType eType;
-    m_xFtInfo->set_message_type(weld::EntryMessageType::Normal);
+    m_xFtInfo->set_label_type(weld::LabelType::Normal);
     if ( aName.isEmpty() )
     {
         m_xBtnAdd->set_sensitive(false);
@@ -141,7 +141,7 @@ bool ScNameDefDlg::IsNameValid()
     }
     else if ((eType = ScRangeData::IsNameValid( aName, &mrDoc )) != ScRangeData::NAME_VALID)
     {
-        m_xFtInfo->set_message_type(weld::EntryMessageType::Error);
+        m_xFtInfo->set_label_type(weld::LabelType::Error);
         if (eType == ScRangeData::NAME_INVALID_BAD_STRING)
         {
             m_xFtInfo->set_label(maErrInvalidNameStr);
@@ -155,7 +155,7 @@ bool ScNameDefDlg::IsNameValid()
     }
     else if (pRangeName->findByUpperName(ScGlobal::getCharClassPtr()->uppercase(aName)))
     {
-        m_xFtInfo->set_message_type(weld::EntryMessageType::Error);
+        m_xFtInfo->set_label_type(weld::LabelType::Error);
         m_xFtInfo->set_label(maErrNameInUse);
         m_xBtnAdd->set_sensitive(false);
         return false;
@@ -163,7 +163,7 @@ bool ScNameDefDlg::IsNameValid()
 
     if (!IsFormulaValid())
     {
-        m_xFtInfo->set_message_type(weld::EntryMessageType::Error);
+        m_xFtInfo->set_label_type(weld::LabelType::Error);
         m_xBtnAdd->set_sensitive(false);
         return false;
     }

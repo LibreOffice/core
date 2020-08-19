@@ -1909,13 +1909,20 @@ public:
     weld::SpinButton& get_widget() { return *m_xSpinButton; }
 };
 
+enum class LabelType
+{
+    Normal,
+    Warning,
+    Error,
+};
+
 class VCL_DLLPUBLIC Label : virtual public Widget
 {
 public:
     virtual void set_label(const OUString& rText) = 0;
     virtual OUString get_label() const = 0;
     virtual void set_mnemonic_widget(Widget* pTarget) = 0;
-    virtual void set_message_type(EntryMessageType eType) = 0;
+    virtual void set_label_type(LabelType eType) = 0;
     // font size is in points, not pixels, e.g. see Window::[G]etPointFont
     virtual void set_font(const vcl::Font& rFont) = 0;
 };
