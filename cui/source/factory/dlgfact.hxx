@@ -803,10 +803,10 @@ public:
     virtual VclPtr<AbstractSvxDistributeDialog>
                                           CreateSvxDistributeDialog(weld::Window* pParent, const SfxItemSet& rAttr) override;
     virtual VclPtr<SfxAbstractInsertObjectDialog>
-                                           CreateInsertObjectDialog(weld::Window* pParent, const OUString& rCommmand,
+                                           CreateInsertObjectDialog(weld::Window* pParent, const OUString& rCommand,
                                             const css::uno::Reference < css::embed::XStorage >& xStor,
                                             const SvObjectServerList* pList ) override;
-    virtual VclPtr<VclAbstractDialog>      CreateEditObjectDialog(weld::Window* pParent, const OUString& rCommmand,
+    virtual VclPtr<VclAbstractDialog>      CreateEditObjectDialog(weld::Window* pParent, const OUString& rCommand,
                                             const css::uno::Reference < css::embed::XEmbeddedObject >& xObj ) override;
     virtual VclPtr<SfxAbstractPasteDialog> CreatePasteDialog(weld::Window* pParent) override;
     virtual VclPtr<SfxAbstractLinksDialog> CreateLinksDialog(weld::Window* pParent, sfx2::LinkManager* pMgr, bool bHTML = false, sfx2::SvBaseLink* p=nullptr) override;
