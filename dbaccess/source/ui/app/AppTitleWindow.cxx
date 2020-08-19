@@ -17,34 +17,30 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "AppTitleWindow.hxx"
+#include <com/sun/star/awt/XWindow.hpp>
 #include <core_resource.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/event.hxx>
+#include "AppTitleWindow.hxx"
 
 namespace dbaui
 {
 
-OTitleWindow::OTitleWindow(vcl::Window* _pParent, const char* pTitleId, WinBits _nBits, bool _bShift)
-    : Window(_pParent,_nBits | WB_DIALOGCONTROL)
-    , m_aTitleFrame(VclPtr<vcl::Window>::Create(this))
-    , m_aTitle(VclPtr<FixedText>::Create(m_aTitleFrame, WB_VCENTER))
-    , m_pChild(nullptr)
-    , m_bShift(_bShift)
+OTitleWindow::OTitleWindow(vcl::Window* pParent, const char* pTitleId)
+    : InterimItemWindow(pParent, "dbaccess/ui/titlewindow.ui", "TitleWindow")
+    , m_xTitleFrame(m_xBuilder->weld_container("titleparent"))
+    , m_xTitle(m_xBuilder->weld_label("title"))
+    , m_xChildContainer(m_xBuilder->weld_container("box"))
+    , m_xChildParent(m_xChildContainer->CreateChildFrame())
+    , m_xChild(nullptr)
 {
     setTitle(pTitleId);
-    SetBorderStyle(WindowBorderStyle::MONO);
     ImplInitSettings();
 
-    const StyleSettings& rStyle = Application::GetSettings().GetStyleSettings();
-    vcl::Font aFont = m_aTitle->GetControlFont();
-    aFont.SetWeight(WEIGHT_BOLD);
-    m_aTitle->SetControlFont(aFont);
-    m_aTitle->SetControlForeground(rStyle.GetLightColor());
-    m_aTitleFrame->SetBackground(rStyle.GetShadowColor());
-    m_aTitleFrame->Show();
-    m_aTitle->Show();
+    m_xTitleFrame->set_title_background();
+    m_xTitle->set_label_type(weld::LabelType::Title);
 }
 
 OTitleWindow::~OTitleWindow()
@@ -54,64 +50,45 @@ OTitleWindow::~OTitleWindow()
 
 void OTitleWindow::dispose()
 {
-    if ( m_pChild )
-    {
-        m_pChild->Hide();
-    }
-    m_pChild.disposeAndClear();
-    m_aTitle.disposeAndClear();
-    m_aTitleFrame.disposeAndClear();
-    vcl::Window::dispose();
+    if (m_xChild)
+        m_xChild->Hide();
+    m_xChild.disposeAndClear();
+    m_xChildParent->dispose();
+    m_xChildParent.clear();
+    m_xChildContainer.reset();
+    m_xTitle.reset();
+    m_xTitleFrame.reset();
+    InterimItemWindow::dispose();
 }
 
-void OTitleWindow::setChildWindow(vcl::Window* _pChild)
+vcl::Window* OTitleWindow::getChildContainer()
 {
-    m_pChild = _pChild;
+    return VCLUnoHelper::GetWindow(m_xChildParent);
 }
 
-#define SPACE_BORDER    1
-void OTitleWindow::Resize()
+void OTitleWindow::setChildWindow(vcl::Window* pChild)
 {
-    // parent window dimension
-    Size aOutputSize( GetOutputSize() );
-    long nOutputWidth   = aOutputSize.Width();
-    long nOutputHeight  = aOutputSize.Height();
-
-    Size aTextSize = LogicToPixel(Size(6, 3), MapMode(MapUnit::MapAppFont));
-    sal_Int32 nXOffset = aTextSize.Width();
-    sal_Int32 nYOffset = aTextSize.Height();
-    sal_Int32 nHeight = GetTextHeight() + 2*nYOffset;
-
-    m_aTitleFrame->SetPosSizePixel(Point(SPACE_BORDER, SPACE_BORDER),
-                                   Size(nOutputWidth - 2*SPACE_BORDER, nHeight - SPACE_BORDER));
-    m_aTitle->SetPosSizePixel(Point(nXOffset, 0),
-                              Size(nOutputWidth - nXOffset - 2*SPACE_BORDER, nHeight - SPACE_BORDER));
-    if ( m_pChild )
-    {
-        m_pChild->SetPosSizePixel(  Point(m_bShift ? (nXOffset+SPACE_BORDER) : sal_Int32(SPACE_BORDER), nHeight + nXOffset + SPACE_BORDER),
-                                    Size(nOutputWidth - ( m_bShift ? (2*nXOffset - 2*SPACE_BORDER) : sal_Int32(SPACE_BORDER) ), nOutputHeight - nHeight - 2*nXOffset - 2*SPACE_BORDER) );
-    }
+    m_xChild = pChild;
 }
 
 void OTitleWindow::setTitle(const char* pTitleId)
 {
-    if (pTitleId)
-    {
-        m_aTitle->SetText(DBA_RES(pTitleId));
-    }
+    if (!pTitleId)
+        return;
+    m_xTitle->set_label(DBA_RES(pTitleId));
 }
 
 void OTitleWindow::GetFocus()
 {
-    Window::GetFocus();
-    if ( m_pChild )
-        m_pChild->GrabFocus();
+    InterimItemWindow::GetFocus();
+    if (m_xChild)
+        m_xChild->GrabFocus();
 }
 
 long OTitleWindow::GetWidthPixel() const
 {
     Size aTextSize = LogicToPixel(Size(12, 0), MapMode(MapUnit::MapAppFont));
-    sal_Int32 nWidth = GetTextWidth(m_aTitle->GetText()) + 2*aTextSize.Width();
+    sal_Int32 nWidth = GetTextWidth(m_xTitle->get_label()) + 2*aTextSize.Width();
 
     return nWidth;
 }

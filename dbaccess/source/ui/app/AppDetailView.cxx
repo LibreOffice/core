@@ -228,17 +228,17 @@ void OTasksWindow::Clear()
 
 OApplicationDetailView::OApplicationDetailView(OAppBorderWindow& _rParent,PreviewMode _ePreviewMode) : OSplitterView(&_rParent )
     ,m_aHorzSplitter(VclPtr<Splitter>::Create(this))
-    ,m_aTasks(VclPtr<dbaui::OTitleWindow>::Create(this, STR_TASKS, WB_BORDER | WB_DIALOGCONTROL))
-    ,m_aContainer(VclPtr<dbaui::OTitleWindow>::Create(this, nullptr, WB_BORDER | WB_DIALOGCONTROL))
+    ,m_aTasks(VclPtr<dbaui::OTitleWindow>::Create(this, STR_TASKS))
+    ,m_aContainer(VclPtr<dbaui::OTitleWindow>::Create(this, nullptr))
     ,m_rBorderWin(_rParent)
 {
     ImplInitSettings();
 
-    m_pControlHelper = VclPtr<OAppDetailPageHelper>::Create(m_aContainer.get(),m_rBorderWin,_ePreviewMode);
+    m_pControlHelper = VclPtr<OAppDetailPageHelper>::Create(m_aContainer->getChildContainer(),m_rBorderWin,_ePreviewMode);
     m_pControlHelper->Show();
     m_aContainer->setChildWindow(m_pControlHelper);
 
-    VclPtrInstance<OTasksWindow> pTasks(m_aTasks.get(),this);
+    VclPtrInstance<OTasksWindow> pTasks(m_aTasks->getChildContainer(),this);
     pTasks->Show();
     pTasks->Disable(m_rBorderWin.getView()->getCommandController().isDataSourceReadOnly());
     m_aTasks->setChildWindow(pTasks);
