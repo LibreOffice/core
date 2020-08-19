@@ -1856,7 +1856,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     xParaCursor->gotoStartOfParagraph(false);
                     if (m_nTableDepth > 0)
                     {
-                        TableParagraph aPending{xParaCursor, xCur, pParaContext, xParaProps};
+                        TableParagraph aPending{xParaCursor, xCur, pParaContext, xParaProps, std::set<OUString>()};
                         getTableManager().getCurrentParagraphs()->push_back(aPending);
                     }
 
@@ -1974,6 +1974,8 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                         {
                             uno::Reference<beans::XPropertySet> xRunPropertySet(xCur, uno::UNO_QUERY);
                             xParaProps->setPropertyValue( rParaProp.Name, xRunPropertySet->getPropertyValue(rParaProp.Name) );
+                            // remember this for table style handling
+                            getTableManager().getCurrentParagraphs()->back().m_aParaOverrideApplied.insert(rParaProp.Name);
                         }
                     }
 
