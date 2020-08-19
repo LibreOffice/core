@@ -4873,7 +4873,7 @@ HwpImportFilter::HwpImportFilter(const Reference< XComponentContext >& rxContext
 
 sal_Bool HwpImportFilter::filter( const Sequence< PropertyValue >& aDescriptor )
 {
-    // delegate to IchitaroImpoter
+    // delegate to IchitaroImporter
     return rFilter->filter( aDescriptor );
 }
 

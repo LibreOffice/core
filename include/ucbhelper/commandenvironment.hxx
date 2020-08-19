@@ -61,7 +61,7 @@ public:
       */
     virtual ~CommandEnvironment() override;
 
-     // XCommandEnvironemnt
+     // XCommandEnvironment
     virtual css::uno::Reference< css::task::XInteractionHandler > SAL_CALL getInteractionHandler() override;
 
     virtual css::uno::Reference< css::ucb::XProgressHandler > SAL_CALL getProgressHandler() override;

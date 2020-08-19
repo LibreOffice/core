@@ -1351,7 +1351,7 @@ public:
                                     ImplLayoutArgs& rLayoutArgs) const;
 
 
-    // Enabling/disabling RTL only makes sense for OutputDevices that use a mirroring SalGraphisLayout
+    // Enabling/disabling RTL only makes sense for OutputDevices that use a mirroring SalGraphicsLayout
     virtual void                EnableRTL( bool bEnable = true);
     bool                        IsRTLEnabled() const { return mbEnableRTL; }
 
