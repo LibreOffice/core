@@ -1562,9 +1562,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
         rWrtSh.StartUndo(SwUndoId::UI_REPLACE, &aRewriter);
         rWrtSh.StartAction();
-        rWrtSh.DelLeft();
 
-        rWrtSh.Insert( aTmp );
+        rWrtSh.Replace(aTmp, false);
 
         /* #102505# EndAction/EndUndo moved down since insertion
            of temporary auto correction is now undoable two and
