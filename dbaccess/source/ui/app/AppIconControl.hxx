@@ -19,28 +19,48 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_APP_APPICONCONTROL_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_APP_APPICONCONTROL_HXX
 
-#include <vcl/ivctrl.hxx>
+#include <sfx2/thumbnailview.hxx>
+#include <sfx2/thumbnailviewitem.hxx>
 #include <vcl/transfer.hxx>
+#include <vcl/customweld.hxx>
+#include <vcl/weld.hxx>
+#include <AppElementType.hxx>
+
+class MnemonicGenerator;
 
 namespace dbaui
 {
     class IControlActionListener;
-    class OApplicationIconControl   :public SvtIconChoiceCtrl
-                                    ,public DropTargetHelper
+    class IconControl;
+    class OApplicationIconControlDropTarget;
+
+    class OApplicationIconControl final : public SfxThumbnailView
     {
-        IControlActionListener*     m_pActionListener;
+        std::unique_ptr<OApplicationIconControlDropTarget> m_xDropTarget;
+        IControlActionListener* m_pActionListener;
+
+        long m_nMaxWidth;
+        long m_nMaxHeight;
+
+        bool IsMnemonicChar(sal_Unicode cChar, ElementType& rType) const;
 
     public:
-        explicit OApplicationIconControl(vcl::Window* _pParent);
+        explicit OApplicationIconControl(std::unique_ptr<weld::ScrolledWindow> xScroll);
+        virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
+        virtual void Resize() override;
+        bool DoKeyShortCut(const KeyEvent& rKEvt);
+        virtual bool KeyInput(const KeyEvent& rKEvt) override;
         virtual ~OApplicationIconControl() override;
-        virtual void dispose() override;
 
-        void                    setControlActionListener( IControlActionListener* _pListener ) { m_pActionListener = _pListener; }
+        ElementType GetSelectedItem() const;
 
-    protected:
-        // DropTargetHelper overridables
-        virtual sal_Int8    AcceptDrop( const AcceptDropEvent& _rEvt ) override;
-        virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& _rEvt ) override;
+        void setControlActionListener( IControlActionListener* _pListener ) { m_pActionListener = _pListener; }
+        void Fill();
+
+        void createIconAutoMnemonics(MnemonicGenerator& rMnemonics);
+
+        sal_Int8 AcceptDrop(const AcceptDropEvent& rEvt);
+        sal_Int8 ExecuteDrop(const ExecuteDropEvent& rEvt);
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_APP_APPICONCONTROL_HXX

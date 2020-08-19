@@ -93,7 +93,7 @@ namespace dbaui
         int GetEntryFromText( const OUString& rEntryText );
     };
 
-    class TableWindowListBoxHelper : public DropTargetHelper
+    class TableWindowListBoxHelper final : public DropTargetHelper
     {
     private:
         OTableWindowListBox& m_rParent;
