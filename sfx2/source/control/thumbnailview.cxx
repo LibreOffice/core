@@ -1314,6 +1314,7 @@ void SfxThumbnailView::ImplInit()
     mbScroll = false;
     mbHasVisibleItems = false;
     mbShowTooltips = false;
+    mbDrawMnemonics = false;
     mbIsMultiSelectionEnabled = true;
     maFilterFunc = ViewFilterAll();
 
@@ -2235,6 +2236,11 @@ void SfxThumbnailView::deselectItems()
 void SfxThumbnailView::ShowTooltips( bool bShowTooltips )
 {
     mbShowTooltips = bShowTooltips;
+}
+
+void SfxThumbnailView::DrawMnemonics( bool bDrawMnemonics )
+{
+    mbDrawMnemonics = bDrawMnemonics;
 }
 
 void SfxThumbnailView::SetMultiSelectionEnabled( bool bIsMultiSelectionEnabled )
