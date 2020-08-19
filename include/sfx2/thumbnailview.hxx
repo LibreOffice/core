@@ -176,6 +176,8 @@ public:
 
     virtual bool renameItem(ThumbnailViewItem* pItem, const OUString& sNewTitle);
 
+    virtual bool isDrawMnemonic() const = 0;
+
     virtual ~ThumbnailViewBase();
 };
 
@@ -204,6 +206,8 @@ public:
     sal_uInt16 GetItemId( const Point& rPos ) const;
 
     sal_uInt16 getNextItemId () const;
+
+    virtual bool isDrawMnemonic() const override { return false; }
 
     void setItemMaxTextLength (sal_uInt32 nLength);
 
@@ -340,6 +344,8 @@ public:
 
     sal_uInt16 getNextItemId () const;
 
+    virtual bool isDrawMnemonic() const override { return mbDrawMnemonics; }
+
     void setItemMaxTextLength (sal_uInt32 nLength);
 
     void setItemDimensions (long ItemWidth, long ThumbnailHeight,
@@ -358,6 +364,8 @@ public:
     void deselectItems ();
 
     void ShowTooltips( bool bShowTooltips );
+
+    void DrawMnemonics( bool bDrawMnemonics );
 
     void SetMultiSelectionEnabled( bool bIsMultiSelectionEnabled );
 
@@ -445,6 +453,7 @@ protected:
     bool mbScroll : 1;
     bool mbHasVisibleItems : 1;
     bool mbShowTooltips : 1;
+    bool mbDrawMnemonics : 1;
     bool mbIsMultiSelectionEnabled: 1;
     Color maFillColor;              ///< Background color of the thumbnail view widget.
     Color maTextColor;              ///< Text color.

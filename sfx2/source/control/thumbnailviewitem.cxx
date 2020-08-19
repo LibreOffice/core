@@ -27,6 +27,7 @@
 #include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonSelectionPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
@@ -213,27 +214,30 @@ void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const Thumbnai
 
     aPos.setY(aPos.getY() + aTextDev.getTextHeight());
 
-    OUString aText (rText);
+    sal_Int32 nMnemonicPos = -1;
+    OUString aOrigText(mrParent.isDrawMnemonic() ? OutputDevice::GetNonMnemonicString(rText, nMnemonicPos) : rText);
 
     TextEngine aTextEngine;
     aTextEngine.SetFont(getVclFontFromFontAttribute(pAttrs->aFontAttr,
                               pAttrs->aFontSize.getX(), pAttrs->aFontSize.getY(), 0,
                               css::lang::Locale()));
     aTextEngine.SetMaxTextWidth(maDrawArea.getWidth());
-    aTextEngine.SetText(rText);
+    aTextEngine.SetText(aOrigText);
 
     sal_Int32 nPrimitives = rSeq.size();
-    rSeq.resize(nPrimitives + aTextEngine.GetLineCount(0));
+    sal_Int32 nFinalPrimCount = nPrimitives + aTextEngine.GetLineCount(0);
+    rSeq.resize(nFinalPrimCount);
 
     // Create the text primitives
     sal_uInt16 nLineStart = 0;
+    OUString aText(aOrigText);
     for (sal_uInt16 i=0; i < aTextEngine.GetLineCount(0); ++i)
     {
         sal_Int32 nLineLength = aTextEngine.GetLineLen(0, i);
         double nLineWidth = aTextDev.getTextWidth (aText, nLineStart, nLineLength);
 
         bool bTooLong = (aPos.getY() + aTextEngine.GetCharHeight()) > maDrawArea.Bottom();
-        if (bTooLong && (nLineLength + nLineStart) < rText.getLength())
+        if (bTooLong && (nLineLength + nLineStart) < aOrigText.getLength())
         {
             // Add the '...' to the last line to show, even though it may require to shorten the line
             double nDotsWidth = aTextDev.getTextWidth("...",0,3);
@@ -271,6 +275,31 @@ void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const Thumbnai
                                                      pAttrs->aFontAttr,
                                                      css::lang::Locale(),
                                                      aTextColor));
+
+        if (nMnemonicPos != -1 && nMnemonicPos >= nLineStart && nMnemonicPos < nLineStart + nLineLength)
+        {
+            rSeq.resize(nFinalPrimCount + 1);
+
+            auto aCaretPositions = aTextDev.getCaretPositions(aText, nLineStart, nLineLength);
+
+            auto lc_x1 = aCaretPositions[2*(nMnemonicPos - nLineStart)];
+            auto lc_x2 = aCaretPositions[2*(nMnemonicPos - nLineStart)+1];
+            auto fMnemonicWidth = std::abs(lc_x1 - lc_x2);
+            auto fMnemonicHeight = aTextDev.getUnderlineHeight();
+
+            auto fPosX = nLineX + std::min(lc_x1, lc_x2);
+            auto fPosY = aPos.Y() + aTextDev.getUnderlineOffset();
+
+            B2DPolygon aLine;
+            aLine.append(B2DPoint(fPosX, fPosY));
+            aLine.append(B2DPoint(fPosX + fMnemonicWidth, fPosY));
+
+            drawinglayer::attribute::LineAttribute aLineAttribute(Color(aTextColor).getBColor(), fMnemonicHeight);
+
+            rSeq[nPrimitives++] = drawinglayer::primitive2d::Primitive2DReference(
+                        new PolygonStrokePrimitive2D(aLine, aLineAttribute));
+        }
+
         nLineStart += nLineLength;
         aPos.setY(aPos.getY() + aTextEngine.GetCharHeight());
 
