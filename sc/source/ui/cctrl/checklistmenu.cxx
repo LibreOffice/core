@@ -1159,14 +1159,17 @@ namespace
     }
 }
 
-size_t ScCheckListMenuControl::initMembers()
+size_t ScCheckListMenuControl::initMembers(int nMaxMemberWidth)
 {
     size_t n = maMembers.size();
     size_t nVisMemCount = 0;
 
+    if (nMaxMemberWidth == -1)
+        nMaxMemberWidth = mnCheckWidthReq;
+
     if (!mxChecks->n_children() && !mbHasDates)
     {
-        std::vector<int> aFixedWidths { mnCheckWidthReq };
+        std::vector<int> aFixedWidths { nMaxMemberWidth };
         // tdf#134038 insert in the fastest order, this might be backwards so only do it for
         // the !mbHasDates case where no entry depends on another to exist before getting
         // inserted. We cannot retain pre-existing treeview content, only clear and fill it.
@@ -1346,6 +1349,24 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, PopupModeEndHdl, FloatingWindow*, void)
     clearSelectedMenuItem();
     if (mxPopupEndAction)
         mxPopupEndAction->execute();
+}
+
+int ScCheckListMenuControl::GetTextWidth(const OUString& rsName) const
+{
+    return mxDropDown->GetTextWidth(rsName);
+}
+
+int ScCheckListMenuControl::IncreaseWindowWidthToFitText(int nMaxTextWidth)
+{
+    int nBorder = mxFrame->get_border_width() * 2 + 4;
+    int nNewWidth = nMaxTextWidth - nBorder;
+    if (nNewWidth > mnCheckWidthReq)
+    {
+        mnCheckWidthReq = nNewWidth;
+        int nChecksHeight = mxChecks->get_height_rows(9);
+        mxChecks->set_size_request(mnCheckWidthReq, nChecksHeight);
+    }
+    return mnCheckWidthReq + nBorder;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
