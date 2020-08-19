@@ -99,9 +99,11 @@ void OAppBorderWindow::Resize()
     Size aFLSize = LogicToPixel(Size(3, 8), MapMode(MapUnit::MapAppFont));
     if ( m_pPanel )
     {
+#if 0
         OApplicationSwapWindow* pSwap = getPanel();
         if ( pSwap && pSwap->GetEntryCount() != 0 )
             nX = pSwap->GetBoundingBox( pSwap->GetEntry(0) ).GetWidth() + aFLSize.Height();
+#endif
         nX = std::max(m_pPanel->GetWidthPixel() ,nX);
         m_pPanel->SetPosSizePixel(Point(0,0),Size(nX,nOutputHeight));
     }
@@ -178,8 +180,10 @@ void OApplicationView::dispose()
 
 void OApplicationView::createIconAutoMnemonics( MnemonicGenerator& _rMnemonics )
 {
+#if 0
     if ( m_pWin && m_pWin->getPanel() )
         m_pWin->getPanel()->createIconAutoMnemonics( _rMnemonics );
+#endif
 }
 
 void OApplicationView::setTaskExternalMnemonics( MnemonicGenerator const & _rMnemonics )
