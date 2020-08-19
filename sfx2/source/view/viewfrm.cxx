@@ -66,6 +66,8 @@
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
+#include <com/sun/star/drawing/XDrawView.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
@@ -851,6 +853,20 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                             xClose->close( true );
                         }
                         aViewFrames.clear();
+                    }
+
+                    const SfxInt32Item* pPageNumber = rReq.GetArg<SfxInt32Item>(SID_PAGE_NUMBER);
+                    if (pPageNumber && pPageNumber->GetValue() >= 0)
+                    {
+                        // Restore current page after reload.
+                        uno::Reference<drawing::XDrawView> xController(
+                            xNewObj->GetModel()->getCurrentController(), uno::UNO_QUERY);
+                        uno::Reference<drawing::XDrawPagesSupplier> xSupplier(xNewObj->GetModel(),
+                                                                              uno::UNO_QUERY);
+                        uno::Reference<drawing::XDrawPages> xDrawPages = xSupplier->getDrawPages();
+                        uno::Reference<drawing::XDrawPage> xDrawPage(
+                            xDrawPages->getByIndex(pPageNumber->GetValue()), uno::UNO_QUERY);
+                        xController->setCurrentPage(xDrawPage);
                     }
 
                     // Propagate document closure.

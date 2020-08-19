@@ -311,6 +311,7 @@ class SvxSearchItem;
 #define SID_POSTDATA                        (SID_SFX_START + 1536)
 #define SID_DONELINK                        (SID_SFX_START + 646)
 #define SID_REFERER                         (SID_SFX_START + 654)
+#define SID_PAGE_NUMBER                     (SID_SFX_START + 655)
 #define SID_MODIFIER                        (SID_SFX_START + 669)
 #define SID_SETOPTIONS                      (SID_SFX_START + 670)
 #define SID_SOURCEVIEW                      (SID_SFX_START + 675)
