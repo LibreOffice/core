@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 
 // expected-error@+1 {{rather declare this using OUStringLiteral/OStringLiteral/char[] [loplugin:stringstatic]}}
