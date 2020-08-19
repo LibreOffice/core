@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <thumbnailviewitem.hxx>
-
+#include <sfx2/thumbnailviewitem.hxx>
 #include <sfx2/thumbnailview.hxx>
 #include "thumbnailviewacc.hxx"
 

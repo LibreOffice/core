@@ -8,7 +8,7 @@
  */
 
 #include <sfx2/thumbnailview.hxx>
-#include <thumbnailviewitem.hxx>
+#include <sfx2/thumbnailviewitem.hxx>
 
 #include <utility>
 
