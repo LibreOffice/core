@@ -272,6 +272,7 @@ public:
     void testXLSDefColWidth();
     void testPreviewMissingObjLink();
     void testShapeRotationImport();
+    void testShapeDisplacementOnRotationImport();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -434,6 +435,7 @@ public:
     CPPUNIT_TEST(testXLSDefColWidth);
     CPPUNIT_TEST(testPreviewMissingObjLink);
     CPPUNIT_TEST(testShapeRotationImport);
+    CPPUNIT_TEST(testShapeDisplacementOnRotationImport);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -4737,6 +4739,23 @@ void ScFiltersTest::testShapeRotationImport()
         CPPUNIT_ASSERT_EQUAL(aExpectedValues[nRot]["width"],  aSize.Width);
         CPPUNIT_ASSERT_EQUAL(aExpectedValues[nRot]["height"], aSize.Height);
     }
+}
+
+void ScFiltersTest::testShapeDisplacementOnRotationImport()
+{
+    // tdf#135918 shape is displaced on rotation if it is placed next to the sheets upper/left edges
+    ScDocShellRef xDocSh = loadDoc("testShapeDisplacementOnRotationImport.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load testShapeDisplacementOnRotationImport.xlsx", xDocSh.is());
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocSh->GetModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+
+    uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY_THROW);
+    uno::Any aRectProp = xShapeProperties->getPropertyValue("FrameRect");
+    awt::Rectangle aRectangle = aRectProp.get<awt::Rectangle>();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aRectangle.X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aRectangle.Y);
 }
 
 ScFiltersTest::ScFiltersTest()
