@@ -4744,7 +4744,28 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OStorage::getAllRel
     if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException( THROW_WHERE );
 
-    return m_pImpl->GetAllRelationshipsIfAny();
+    uno::Sequence< uno::Sequence< beans::StringPair > > aRet;
+    try
+    {
+        aRet = m_pImpl->GetAllRelationshipsIfAny();
+    }
+    catch (const io::IOException&)
+    {
+        throw;
+    }
+    catch (const uno::RuntimeException&)
+    {
+        throw;
+    }
+    catch (const uno::Exception &)
+    {
+        uno::Any aCaught( ::cppu::getCaughtException() );
+        throw lang::WrappedTargetRuntimeException(THROW_WHERE "Can't getAllRelationships!",
+                                                 uno::Reference< uno::XInterface >(),
+                                                 aCaught);
+    }
+
+    return aRet;
 }
 
 void SAL_CALL OStorage::insertRelationshipByID(  const OUString& sID, const uno::Sequence< beans::StringPair >& aEntry, sal_Bool bReplace  )
