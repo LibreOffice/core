@@ -519,6 +519,11 @@ void SalInstanceWidget::set_stack_background()
     set_background(m_xWidget->GetSettings().GetStyleSettings().GetWindowColor());
 }
 
+void SalInstanceWidget::set_title_background()
+{
+    set_background(m_xWidget->GetSettings().GetStyleSettings().GetShadowColor());
+}
+
 void SalInstanceWidget::set_toolbar_background()
 {
     m_xWidget->SetBackground();
