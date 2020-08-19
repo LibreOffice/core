@@ -592,7 +592,12 @@ AdditionsItem::AdditionsItem(weld::Widget* pParent, AdditionsDialog* pParentDial
     , m_xLabelVersion(m_xBuilder->weld_label("labelVersion"))
     , m_xLabelComments(m_xBuilder->weld_label("labelComments")) // no change
     , m_xLinkButtonComments(m_xBuilder->weld_link_button("linkButtonComments"))
-    , m_xImageVoting(m_xBuilder->weld_image("imageVoting"))
+    , m_xImageVoting1(m_xBuilder->weld_image("imageVoting1"))
+    , m_xImageVoting2(m_xBuilder->weld_image("imageVoting2"))
+    , m_xImageVoting3(m_xBuilder->weld_image("imageVoting3"))
+    , m_xImageVoting4(m_xBuilder->weld_image("imageVoting4"))
+    , m_xImageVoting5(m_xBuilder->weld_image("imageVoting5"))
+    , m_xLabelNoVoting(m_xBuilder->weld_label("votingLabel"))
     , m_xImageDownloadNumber(m_xBuilder->weld_image("imageDownloadNumber"))
     , m_xLabelDownloadNumber(m_xBuilder->weld_label("labelDownloadNumber"))
     , m_xButtonShowMore(m_xBuilder->weld_button("buttonShowMore"))
@@ -621,6 +626,29 @@ AdditionsItem::AdditionsItem(weld::Widget* pParent, AdditionsDialog* pParentDial
     }
 
     m_xLinkButtonName->set_label(sExtensionName);
+
+    double aExtensionRating = additionInfo.sRating.toDouble();
+    switch (int(aExtensionRating))
+    {
+        case 5:
+            m_xImageVoting5->show();
+            [[fallthrough]];
+        case 4:
+            m_xImageVoting4->show();
+            [[fallthrough]];
+        case 3:
+            m_xImageVoting3->show();
+            [[fallthrough]];
+        case 2:
+            m_xImageVoting2->show();
+            [[fallthrough]];
+        case 1:
+            m_xImageVoting1->show();
+            break;
+        case 0:
+            m_xLabelNoVoting->show();
+            break;
+    }
 
     m_xLinkButtonName->set_uri(additionInfo.sExtensionURL);
     m_xLabelDescription->set_label(additionInfo.sIntroduction);

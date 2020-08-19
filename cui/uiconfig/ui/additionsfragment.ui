@@ -132,7 +132,6 @@
                 <property name="max_width_chars">50</property>
                 <accessibility>
                   <relation type="label-for" target="imageScreenshot"/>
-                  <relation type="label-for" target="imageVoting"/>
                 </accessibility>
               </object>
               <packing>
@@ -209,14 +208,102 @@
               </packing>
             </child>
             <child>
-              <object class="GtkImage" id="imageVoting">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
-                <property name="stock">gtk-about</property>
-                <accessibility>
-                  <relation type="labelled-by" target="labelDescription"/>
-                </accessibility>
+                <child>
+                  <object class="GtkImage" id="imageVoting1">
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="stock">gtk-about</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="votingLabel"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkImage" id="imageVoting2">
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="stock">gtk-about</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="votingLabel"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkImage" id="imageVoting4">
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="stock">gtk-about</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="votingLabel"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkImage" id="imageVoting3">
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="stock">gtk-about</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="votingLabel"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkImage" id="imageVoting5">
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="stock">gtk-about</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="votingLabel"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="votingLabel">
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes" context="additionsEntry|votingLabel">No Voting</property>
+                    <accessibility>
+                      <relation type="label-for" target="imageVoting1"/>
+                      <relation type="label-for" target="imageVoting2"/>
+                      <relation type="label-for" target="imageVoting4"/>
+                      <relation type="label-for" target="imageVoting3"/>
+                      <relation type="label-for" target="imageVoting5"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">5</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
