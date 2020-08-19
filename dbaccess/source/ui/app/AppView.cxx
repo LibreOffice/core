@@ -100,8 +100,8 @@ void OAppBorderWindow::Resize()
     if ( m_pPanel )
     {
         OApplicationSwapWindow* pSwap = getPanel();
-        if ( pSwap && pSwap->GetEntryCount() != 0 )
-            nX = pSwap->GetBoundingBox( pSwap->GetEntry(0) ).GetWidth() + aFLSize.Height();
+        if (pSwap)
+            nX = pSwap->get_preferred_size().Width();
         nX = std::max(m_pPanel->GetWidthPixel() ,nX);
         m_pPanel->SetPosSizePixel(Point(0,0),Size(nX,nOutputHeight));
     }
