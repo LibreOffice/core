@@ -3590,7 +3590,6 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
 
     SwTextBoxHelper::SavedLink aOldTextBoxes;
     SwTextBoxHelper::saveLinks(*m_rDoc.GetSpzFrameFormats(), aOldTextBoxes);
-    SwTextBoxHelper::SavedContent aOldContent;
 
     for ( size_t n = 0; n < nArrLen; ++n )
     {
@@ -3657,9 +3656,6 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
         }
         if( bAdd )
         {
-            // Make sure draw formats don't refer to content, so that such
-            // content can be removed without problems.
-            SwTextBoxHelper::resetLink(pFormat, aOldContent);
             aSet.insert( ZSortFly( pFormat, pAnchor, nArrLen + aSet.size() ));
         }
     }
@@ -3829,7 +3825,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
         // Re-create content property of draw formats, knowing how old shapes
         // were paired with old fly formats (aOldTextBoxes) and that aSet is
         // parallel with aVecSwFrameFormat.
-        SwTextBoxHelper::restoreLinks(aSet, aVecSwFrameFormat, aOldTextBoxes, aOldContent);
+        SwTextBoxHelper::restoreLinks(aSet, aVecSwFrameFormat, aOldTextBoxes);
     }
 }
 
