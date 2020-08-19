@@ -1309,7 +1309,7 @@ namespace wmfemfhelper
     }
 
     /** helper which takes complete care for creating the needed textLine primitives */
-    static void proccessMetaTextLineAction(
+    static void processMetaTextLineAction(
         const MetaTextLineAction& rAction,
         TargetHolder& rTarget,
         PropertyHolder const & rProperty)
@@ -2786,7 +2786,7 @@ namespace wmfemfhelper
                     // Font.
                     const MetaTextLineAction* pA = static_cast<const MetaTextLineAction*>(pAction);
 
-                    proccessMetaTextLineAction(
+                    processMetaTextLineAction(
                         *pA,
                         rTargetHolders.Current(),
                         rPropertyHolders.Current());
