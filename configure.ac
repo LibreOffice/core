@@ -13570,6 +13570,15 @@ fi
 
 AC_SUBST(LO_PATH)
 
+# Allow to pass LO_ELFCHECK_ALLOWLIST from autogen.input to bin/check-elf-dynamic-objects:
+if test "$LO_ELFCHECK_ALLOWLIST" = x || test "${LO_ELFCHECK_ALLOWLIST-x}" != x; then
+    x_LO_ELFCHECK_ALLOWLIST=
+else
+    x_LO_ELFCHECK_ALLOWLIST=[\#]
+fi
+AC_SUBST(x_LO_ELFCHECK_ALLOWLIST)
+AC_SUBST(LO_ELFCHECK_ALLOWLIST)
+
 libo_FUZZ_SUMMARY
 
 # Generate a configuration sha256 we can use for deps
