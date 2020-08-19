@@ -326,6 +326,11 @@ SvXMLStylesContext_Impl::SvXMLStylesContext_Impl( bool bAuto ) :
 
 inline void SvXMLStylesContext_Impl::AddStyle( SvXMLStyleContext *pStyle )
 {
+#if OSL_DEBUG_LEVEL > 0
+//    for (auto const & xStyle : aStyles)
+//        if (xStyle->GetFamily() == pStyle->GetFamily() && xStyle->GetName() == pStyle->GetName())
+//            assert(false && "duplicate style");
+#endif
     aStyles.emplace_back(pStyle );
 
     FlushIndex();
@@ -395,17 +400,26 @@ bool SvXMLStylesContext::IsAutomaticStyle() const
     return mpImpl->IsAutomaticStyle();
 }
 
-SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext( sal_uInt16 p_nPrefix,
-                                                                const OUString& rLocalName,
-                                                                const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     SvXMLStyleContext *pStyle = nullptr;
 
     if(GetImport().GetDataStylesImport())
     {
-        pStyle = GetImport().GetDataStylesImport()->CreateChildContext(GetImport(), p_nPrefix,
-                                               rLocalName, xAttrList, *this);
+        pStyle = GetImport().GetDataStylesImport()->CreateChildContext(GetImport(), nElement,
+                                               xAttrList, *this);
     }
+
+    return pStyle;
+}
+
+SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext( sal_uInt16 p_nPrefix,
+                                                                const OUString& rLocalName,
+                                                                const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+{
+    SvXMLStyleContext *pStyle = nullptr;
 
     if (!pStyle)
     {
@@ -807,8 +821,17 @@ SvXMLStylesContext::~SvXMLStylesContext()
 }
 
 css::uno::Reference< css::xml::sax::XFastContextHandler > SvXMLStylesContext::createFastChildContext(
-        sal_Int32 /*nElement*/, const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
+    SvXMLStyleContext *pStyle =
+        CreateStyleChildContext( nElement, xAttrList );
+    if( pStyle )
+    {
+        if( !pStyle->IsTransient() )
+            mpImpl->AddStyle( pStyle );
+        return pStyle;
+    }
+
     return nullptr;
 }
 
