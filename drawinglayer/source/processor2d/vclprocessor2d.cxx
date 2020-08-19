@@ -790,22 +790,13 @@ void VclProcessor2D::RenderMaskPrimitive2DPixel(const primitive2d::MaskPrimitive
     if (!basegfx::utils::isRectangle(aMask))
     {
         // draw mask
-        if (getOptionsDrawinglayer().IsAntiAliasing())
-        {
-            // with AA, use 8bit AlphaMask to get nice borders
-            VirtualDevice& rTransparence = aBufferDevice.getTransparence();
-            rTransparence.SetLineColor();
-            rTransparence.SetFillColor(COL_BLACK);
-            rTransparence.DrawPolyPolygon(aMask);
-        }
-        else
-        {
-            // No AA, use 1bit mask
-            VirtualDevice& rMask = aBufferDevice.getMask();
-            rMask.SetLineColor();
-            rMask.SetFillColor(COL_BLACK);
-            rMask.DrawPolyPolygon(aMask);
-        }
+        // with AA, use 8bit AlphaMask to get nice borders; no AA -> use 1bit mask
+        VirtualDevice& rMask = getOptionsDrawinglayer().IsAntiAliasing()
+                                   ? aBufferDevice.getTransparence()
+                                   : aBufferDevice.getMask();
+        rMask.SetLineColor();
+        rMask.SetFillColor(COL_BLACK);
+        rMask.DrawPolyPolygon(aMask);
     }
 
     // dump buffer to outdev
