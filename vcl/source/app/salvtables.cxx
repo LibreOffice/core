@@ -3153,27 +3153,27 @@ bool SalInstanceEntry::get_overwrite_mode() const
 
 void SalInstanceEntry::set_message_type(weld::EntryMessageType eType)
 {
-    if (eType == weld::EntryMessageType::Error)
+    switch (eType)
     {
-        // tdf#114603: enable setting the background to a different color;
-        // relevant for GTK; see also #i75179#
-        m_xEntry->SetForceControlBackground(true);
-        m_xEntry->SetControlForeground(COL_WHITE);
-        m_xEntry->SetControlBackground(0xff6563);
-    }
-    else if (eType == weld::EntryMessageType::Warning)
-    {
-        // tdf#114603: enable setting the background to a different color;
-        // relevant for GTK; see also #i75179#
-        m_xEntry->SetForceControlBackground(true);
-        m_xEntry->SetControlForeground();
-        m_xEntry->SetControlBackground(COL_YELLOW);
-    }
-    else
-    {
-        m_xEntry->SetForceControlBackground(false);
-        m_xEntry->SetControlForeground();
-        m_xEntry->SetControlBackground();
+        case weld::EntryMessageType::Normal:
+            m_xEntry->SetForceControlBackground(false);
+            m_xEntry->SetControlForeground();
+            m_xEntry->SetControlBackground();
+            break;
+        case weld::EntryMessageType::Warning:
+            // tdf#114603: enable setting the background to a different color;
+            // relevant for GTK; see also #i75179#
+            m_xEntry->SetForceControlBackground(true);
+            m_xEntry->SetControlForeground();
+            m_xEntry->SetControlBackground(COL_YELLOW);
+            break;
+        case weld::EntryMessageType::Error:
+            // tdf#114603: enable setting the background to a different color;
+            // relevant for GTK; see also #i75179#
+            m_xEntry->SetForceControlBackground(true);
+            m_xEntry->SetControlForeground(COL_WHITE);
+            m_xEntry->SetControlBackground(0xff6563);
+            break;
     }
 }
 
@@ -5488,13 +5488,19 @@ void SalInstanceLabel::set_mnemonic_widget(Widget* pTarget)
 
 void SalInstanceLabel::set_message_type(weld::EntryMessageType eType)
 {
-    if (eType == weld::EntryMessageType::Error)
-        m_xLabel->SetControlBackground(
-            m_xLabel->GetSettings().GetStyleSettings().GetHighlightColor());
-    else if (eType == weld::EntryMessageType::Warning)
-        m_xLabel->SetControlBackground(COL_YELLOW);
-    else
-        m_xLabel->SetControlBackground();
+    switch (eType)
+    {
+        case weld::EntryMessageType::Normal:
+            m_xLabel->SetControlBackground();
+            break;
+        case weld::EntryMessageType::Warning:
+            m_xLabel->SetControlBackground(COL_YELLOW);
+            break;
+        case weld::EntryMessageType::Error:
+            m_xLabel->SetControlBackground(
+                m_xLabel->GetSettings().GetStyleSettings().GetHighlightColor());
+            break;
+    }
 }
 
 void SalInstanceLabel::set_font(const vcl::Font& rFont)
@@ -6050,12 +6056,18 @@ bool SalInstanceComboBoxWithEdit::changed_by_direct_pick() const
 
 void SalInstanceComboBoxWithEdit::set_entry_message_type(weld::EntryMessageType eType)
 {
-    if (eType == weld::EntryMessageType::Error)
-        m_xComboBox->SetControlForeground(Color(0xf0, 0, 0));
-    else if (eType == weld::EntryMessageType::Warning)
-        m_xComboBox->SetControlForeground(COL_YELLOW);
-    else
-        m_xComboBox->SetControlForeground();
+    switch (eType)
+    {
+        case weld::EntryMessageType::Normal:
+            m_xComboBox->SetControlForeground();
+            break;
+        case weld::EntryMessageType::Warning:
+            m_xComboBox->SetControlForeground(COL_YELLOW);
+            break;
+        case weld::EntryMessageType::Error:
+            m_xComboBox->SetControlForeground(Color(0xf0, 0, 0));
+            break;
+    }
 }
 
 OUString SalInstanceComboBoxWithEdit::get_active_text() const { return m_xComboBox->GetText(); }

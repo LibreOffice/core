@@ -8694,12 +8694,18 @@ namespace
 {
     void set_entry_message_type(GtkEntry* pEntry, weld::EntryMessageType eType)
     {
-        if (eType == weld::EntryMessageType::Error)
-            gtk_entry_set_icon_from_icon_name(pEntry, GTK_ENTRY_ICON_SECONDARY, "dialog-error");
-        else if (eType == weld::EntryMessageType::Warning)
-            gtk_entry_set_icon_from_icon_name(pEntry, GTK_ENTRY_ICON_SECONDARY, "dialog-warning");
-        else
-            gtk_entry_set_icon_from_icon_name(pEntry, GTK_ENTRY_ICON_SECONDARY, nullptr);
+        switch (eType)
+        {
+            case weld::EntryMessageType::Normal:
+                gtk_entry_set_icon_from_icon_name(pEntry, GTK_ENTRY_ICON_SECONDARY, nullptr);
+                break;
+            case weld::EntryMessageType::Warning:
+                gtk_entry_set_icon_from_icon_name(pEntry, GTK_ENTRY_ICON_SECONDARY, "dialog-warning");
+                break;
+            case weld::EntryMessageType::Error:
+                gtk_entry_set_icon_from_icon_name(pEntry, GTK_ENTRY_ICON_SECONDARY, "dialog-error");
+                break;
+        }
     }
 
     gboolean filter_pango_attrs(PangoAttribute *attr, gpointer /*data*/)
@@ -12556,12 +12562,18 @@ public:
 
     virtual void set_message_type(weld::EntryMessageType eType) override
     {
-        if (eType == weld::EntryMessageType::Error)
-            set_text_color(Application::GetSettings().GetStyleSettings().GetHighlightColor());
-        else if (eType == weld::EntryMessageType::Warning)
-            set_text_color(COL_YELLOW);
-        else
-            gtk_label_set_attributes(m_pLabel, nullptr);
+        switch (eType)
+        {
+            case weld::EntryMessageType::Normal:
+                gtk_label_set_attributes(m_pLabel, nullptr);
+                break;
+            case weld::EntryMessageType::Warning:
+                set_text_color(COL_YELLOW);
+                break;
+            case weld::EntryMessageType::Error:
+                set_text_color(Application::GetSettings().GetStyleSettings().GetHighlightColor());
+                break;
+        }
     }
 
     virtual void set_font(const vcl::Font& rFont) override
