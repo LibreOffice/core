@@ -1905,13 +1905,51 @@ void ScCheckListMenuWindow::setHasDates(bool bHasDates)
         maChecks->SetStyle(WB_HASBUTTONS);
 }
 
+<<<<<<< HEAD   (abafb6 Weekly version bump)
 size_t ScCheckListMenuWindow::initMembers()
+=======
+namespace
+{
+    void insertMember(weld::TreeView& rView, weld::TreeIter& rIter, const ScCheckListMember& rMember)
+    {
+        OUString aLabel = rMember.maName;
+        if (aLabel.isEmpty())
+            aLabel = ScResId(STR_EMPTYDATA);
+        rView.set_toggle(rIter, rMember.mbVisible ? TRISTATE_TRUE : TRISTATE_FALSE);
+        rView.set_text(rIter, aLabel, 0);
+    }
+}
+
+size_t ScCheckListMenuControl::initMembers(int nMaxMemberWidth)
+>>>>>>> CHANGE (2d43c4 tdf#133160 sc: fix width of Autofilter popup window)
 {
     size_t n = maMembers.size();
     size_t nVisMemCount = 0;
 
+<<<<<<< HEAD   (abafb6 Weekly version bump)
     maChecks->SetUpdateMode(false);
     maChecks->GetModel()->EnableInvalidate(false);
+=======
+    if (nMaxMemberWidth == -1)
+        nMaxMemberWidth = mnCheckWidthReq;
+
+    if (!mxChecks->n_children() && !mbHasDates)
+    {
+        std::vector<int> aFixedWidths { nMaxMemberWidth };
+        // tdf#134038 insert in the fastest order, this might be backwards so only do it for
+        // the !mbHasDates case where no entry depends on another to exist before getting
+        // inserted. We cannot retain pre-existing treeview content, only clear and fill it.
+        mxChecks->bulk_insert_for_each(n, [this, &nVisMemCount](weld::TreeIter& rIter, int i) {
+            assert(!maMembers[i].mbDate);
+            insertMember(*mxChecks, rIter, maMembers[i]);
+            if (maMembers[i].mbVisible)
+                ++nVisMemCount;
+        }, &aFixedWidths);
+    }
+    else
+    {
+        mxChecks->freeze();
+>>>>>>> CHANGE (2d43c4 tdf#133160 sc: fix width of Autofilter popup window)
 
     for (size_t i = 0; i < n; ++i)
     {
@@ -2071,6 +2109,24 @@ void ScCheckListMenuWindow::handlePopupEnd()
     clearSelectedMenuItem();
     if (mpPopupEndAction)
         mpPopupEndAction->execute();
+}
+
+int ScCheckListMenuControl::GetTextWidth(const OUString& rsName) const
+{
+    return mxDropDown->GetTextWidth(rsName);
+}
+
+int ScCheckListMenuControl::IncreaseWindowWidthToFitText(int nMaxTextWidth)
+{
+    int nBorder = mxFrame->get_border_width() * 2 + 4;
+    int nNewWidth = nMaxTextWidth - nBorder;
+    if (nNewWidth > mnCheckWidthReq)
+    {
+        mnCheckWidthReq = nNewWidth;
+        int nChecksHeight = mxChecks->get_height_rows(9);
+        mxChecks->set_size_request(mnCheckWidthReq, nChecksHeight);
+    }
+    return mnCheckWidthReq + nBorder;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

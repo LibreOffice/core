@@ -6,6 +6,7 @@
 #
 
 from uitest.framework import UITestCase
+from uitest.uihelper.common import get_state_as_dict
 from uitest.path import get_srcdir_url
 
 from uitest.uihelper.common import get_state_as_dict
@@ -71,6 +72,7 @@ class AutofilterTest(UITestCase):
         self.assertTrue(is_row_hidden(doc, 3))
         self.assertFalse(is_row_hidden(doc, 4))
 
+<<<<<<< HEAD   (abafb6 Weekly version bump)
     def test_tdf134351(self):
         doc = self.ui_test.load_file(get_url_for_data_file("autofilter.ods"))
 
@@ -128,4 +130,50 @@ class AutofilterTest(UITestCase):
         xOkBtn.executeAction("CLICK", tuple())
 
         self.ui_test.close_doc()
+=======
+    def test_tdf133160(self):
+        doc = self.ui_test.load_file(get_url_for_data_file("tdf133160.ods"))
+
+        xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
+        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "1", "ROW": "3"}))
+        xFloatWindow = self.xUITest.getFloatWindow()
+        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+        xTreeList = xCheckListMenu.getChild("check_list_box")
+        size1 = int(get_state_as_dict(xTreeList)["Size"].split('x')[0])
+        xOkBtn = xFloatWindow.getChild("cancel")
+        xOkBtn.executeAction("CLICK", tuple())
+
+        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "2", "ROW": "3"}))
+        xFloatWindow = self.xUITest.getFloatWindow()
+        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+        xTreeList = xCheckListMenu.getChild("check_list_box")
+        size2 = int(get_state_as_dict(xTreeList)["Size"].split('x')[0])
+        xOkBtn = xFloatWindow.getChild("cancel")
+        xOkBtn.executeAction("CLICK", tuple())
+
+        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "3", "ROW": "3"}))
+        xFloatWindow = self.xUITest.getFloatWindow()
+        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+        xTreeList = xCheckListMenu.getChild("check_list_box")
+        size3 = int(get_state_as_dict(xTreeList)["Size"].split('x')[0])
+        xOkBtn = xFloatWindow.getChild("cancel")
+        xOkBtn.executeAction("CLICK", tuple())
+
+        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "4", "ROW": "3"}))
+        xFloatWindow = self.xUITest.getFloatWindow()
+        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+        xTreeList = xCheckListMenu.getChild("check_list_box")
+        size4 = int(get_state_as_dict(xTreeList)["Size"].split('x')[0])
+
+        xOkBtn = xFloatWindow.getChild("cancel")
+        xOkBtn.executeAction("CLICK", tuple())
+
+        self.assertTrue(size1 < size2) # for me they were size1=176 size2=212 size3=459 size4=1012
+        self.assertTrue(size2 < size3) # size1 is the minimum window width,  size2 based on its column width
+        self.assertTrue(size3 < size4) # size3 is a long text width
+        self.assertTrue(size4 < 1500)  # size4 is the maximum window width with a really long text
+
+        self.ui_test.close_doc()
+
+>>>>>>> CHANGE (2d43c4 tdf#133160 sc: fix width of Autofilter popup window)
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

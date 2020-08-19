@@ -346,7 +346,7 @@ public:
     void setHasDates(bool bHasDates);
     void addDateMember(const OUString& rName, double nVal, bool bVisible);
     void addMember(const OUString& rName, bool bVisible);
-    size_t initMembers();
+    size_t initMembers(int nMaxMemberWidth = -1);
     void setConfig(const Config& rConfig);
 
     bool isAllSelected() const;
@@ -369,8 +369,14 @@ public:
     void setOKAction(Action* p);
     void setPopupEndAction(Action* p);
 
+<<<<<<< HEAD   (abafb6 Weekly version bump)
 protected:
     virtual void handlePopupEnd() override;
+=======
+    void setHasDates(bool bHasDates);
+    int GetTextWidth(const OUString& rsName) const;
+    int IncreaseWindowWidthToFitText(int nMaxTextWidth);
+>>>>>>> CHANGE (2d43c4 tdf#133160 sc: fix width of Autofilter popup window)
 
 private:
 
