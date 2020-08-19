@@ -99,7 +99,6 @@ public: // construction and initialization
 
     // access helper
     OUString getBootstrapValue(OUString const& _sName, OUString const& _sDefault) const;
-    static bool getVersionValue(OUString const& _sName, OUString& _rValue, OUString const& _sDefault);
 
     const OUString& getImplName() const { return m_aImplName; }
 
@@ -543,9 +542,17 @@ OUString Bootstrap::getProductKey(OUString const& _sDefault)
 
 OUString Bootstrap::getBuildIdData(OUString const& _sDefault)
 {
+    // try to open version.ini (versionrc)
+    OUString uri;
+    rtl::Bootstrap::get( "BRAND_BASE_DIR", uri);
+    rtl::Bootstrap aData( uri + "/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") );
+    if ( aData.getHandle() == nullptr )
+        // version.ini (versionrc) doesn't exist
+        return _sDefault;
+
+    // read value
     OUString sBuildId;
-    // read buildid from version.ini (versionrc)
-    utl::Bootstrap::Impl::getVersionValue( BOOTSTRAP_ITEM_BUILDID, sBuildId, _sDefault );
+    aData.getFrom(BOOTSTRAP_ITEM_BUILDID,sBuildId,_sDefault);
     return sBuildId;
 }
 
@@ -701,21 +708,6 @@ OUString Bootstrap::Impl::getBootstrapValue(OUString const& _sName, OUString con
     OUString sResult;
     aData.getFrom(_sName,sResult,_sDefault);
     return sResult;
-}
-
-bool Bootstrap::Impl::getVersionValue(OUString const& _sName, OUString& _rValue, OUString const& _sDefault)
-{
-    // try to open version.ini (versionrc)
-    OUString uri;
-    rtl::Bootstrap::get( "BRAND_BASE_DIR", uri);
-    rtl::Bootstrap aData( uri + "/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") );
-    if ( aData.getHandle() == nullptr )
-        // version.ini (versionrc) doesn't exist
-        return false;
-
-    // read value
-    aData.getFrom(_sName,_rValue,_sDefault);
-    return true;
 }
 
 } // namespace utl
