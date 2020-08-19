@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfd5d003_773b8670",
+        "filename": "sc/source/filter/xcl97/xcl97rec.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-08-19T08:48:15Z",
+      "side": 1,
+      "message": "Couldn\u0027t it be just removed?",
+      "range": {
+        "startLine": 207,
+        "startChar": 0,
+        "endLine": 209,
+        "endChar": 28
+      },
+      "revId": "a8950d08a33e7aded31d4591c98a03d1edf8c5a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
