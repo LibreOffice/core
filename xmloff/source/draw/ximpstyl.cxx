@@ -1512,9 +1512,60 @@ SdXMLHeaderFooterDeclContext::SdXMLHeaderFooterDeclContext(SvXMLImport& rImport,
     }
 }
 
+SdXMLHeaderFooterDeclContext::SdXMLHeaderFooterDeclContext(SvXMLImport& rImport,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+    : SvXMLStyleContext( rImport )
+    , mbFixed(false)
+{
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
+    {
+        OUString sValue = aIter.toString();
+        if( aIter.getToken() == XML_ELEMENT(PRESENTATION, XML_NAME) )
+        {
+            maStrName = sValue;
+        }
+        else if( aIter.getToken() == XML_ELEMENT(PRESENTATION, XML_SOURCE) )
+        {
+            mbFixed = IsXMLToken( sValue, XML_FIXED );
+        }
+        else if( aIter.getToken() == XML_ELEMENT(STYLE, XML_DATA_STYLE_NAME) )
+        {
+            maStrDateTimeFormat = sValue;
+        }
+        else
+        {
+            SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
+            assert(false);
+        }
+    }
+}
+
 bool SdXMLHeaderFooterDeclContext::IsTransient() const
 {
     return true;
+}
+
+void SdXMLHeaderFooterDeclContext::endFastElement(sal_Int32 nToken)
+{
+    SdXMLImport& rImport = dynamic_cast<SdXMLImport&>(GetImport());
+    auto nElement = nToken & TOKEN_MASK;
+    if( nElement == XML_HEADER_DECL )
+    {
+        rImport.AddHeaderDecl( maStrName, maStrText );
+    }
+    else if( nElement == XML_FOOTER_DECL )
+    {
+        rImport.AddFooterDecl( maStrName, maStrText );
+    }
+    else if( nElement == XML_DATE_TIME_DECL )
+    {
+        rImport.AddDateTimeDecl( maStrName, maStrText, mbFixed, maStrDateTimeFormat );
+    }
+    else
+    {
+        SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nToken));
+        assert(false);
+    }
 }
 
 void SdXMLHeaderFooterDeclContext::EndElement()
@@ -1535,6 +1586,11 @@ void SdXMLHeaderFooterDeclContext::EndElement()
 }
 
 void SdXMLHeaderFooterDeclContext::Characters( const OUString& rChars )
+{
+    maStrText += rChars;
+}
+
+void SdXMLHeaderFooterDeclContext::characters( const OUString& rChars )
 {
     maStrText += rChars;
 }
