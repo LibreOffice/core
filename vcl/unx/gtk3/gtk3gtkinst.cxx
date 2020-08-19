@@ -12554,17 +12554,17 @@ public:
         gtk_label_set_mnemonic_widget(m_pLabel, pTargetWidget ? pTargetWidget->getWidget() : nullptr);
     }
 
-    virtual void set_message_type(weld::EntryMessageType eType) override
+    virtual void set_label_type(weld::LabelType eType) override
     {
         switch (eType)
         {
-            case weld::EntryMessageType::Normal:
+            case weld::LabelType::Normal:
                 gtk_label_set_attributes(m_pLabel, nullptr);
                 break;
-            case weld::EntryMessageType::Warning:
+            case weld::LabelType::Warning:
                 set_text_color(COL_YELLOW);
                 break;
-            case weld::EntryMessageType::Error:
+            case weld::LabelType::Error:
                 set_text_color(Application::GetSettings().GetStyleSettings().GetHighlightColor());
                 break;
         }

@@ -407,7 +407,7 @@ public:
 
     virtual void set_mnemonic_widget(Widget* pTarget) override;
 
-    virtual void set_message_type(weld::EntryMessageType eType) override;
+    virtual void set_label_type(weld::LabelType eType) override;
 
     virtual void set_font(const vcl::Font& rFont) override;
 };
