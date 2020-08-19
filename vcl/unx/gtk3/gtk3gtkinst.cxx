@@ -12567,6 +12567,9 @@ public:
             case weld::LabelType::Error:
                 set_text_color(Application::GetSettings().GetStyleSettings().GetHighlightColor());
                 break;
+            case weld::LabelType::Title:
+                set_text_color(Application::GetSettings().GetStyleSettings().GetLightColor());
+                break;
         }
     }
 
