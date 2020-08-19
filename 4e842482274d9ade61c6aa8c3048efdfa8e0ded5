@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "90048820_a5a3580a",
+        "filename": "instsetoo_native/CustomTarget_setup.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-19T07:02:08Z",
+      "side": 1,
+      "message": "Is there a reason to do this differently for HAVE_GNUMAKE_FILE_FUNC case?",
+      "range": {
+        "startLine": 191,
+        "startChar": 0,
+        "endLine": 202,
+        "endChar": 4
+      },
+      "revId": "4e842482274d9ade61c6aa8c3048efdfa8e0ded5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
