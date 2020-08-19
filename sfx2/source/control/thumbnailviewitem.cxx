@@ -27,6 +27,7 @@
 #include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonSelectionPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
@@ -220,7 +221,7 @@ void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const Thumbnai
     aTextEngine.SetText(rText);
 
     sal_Int32 nPrimitives = rSeq.size();
-    rSeq.resize(nPrimitives + aTextEngine.GetLineCount(0));
+    rSeq.resize(nPrimitives + aTextEngine.GetLineCount(0) + 1);
 
     // Create the text primitives
     sal_uInt16 nLineStart = 0;
@@ -268,6 +269,32 @@ void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const Thumbnai
                                                      pAttrs->aFontAttr,
                                                      css::lang::Locale(),
                                                      aTextColor));
+
+#if 1
+        auto nExtra = aTextDev.getTextWidth(aText,nLineStart + 1, 1);
+
+        basegfx::B2DHomMatrix aTextMatrix2( createScaleTranslateB2DHomMatrix(
+                    pAttrs->aFontSize.getX(), pAttrs->aFontSize.getY(),
+                    nLineX + nExtra, double( aPos.Y() ) ) );
+
+        rSeq[nPrimitives++] = drawinglayer::primitive2d::Primitive2DReference(
+                    new TextDecoratedPortionPrimitive2D(
+
+                // attributes for TextSimplePortionPrimitive2D
+                aTextMatrix2, aText, nLineStart + 1, 1,
+                std::vector<double>(),
+                pAttrs->aFontAttr,
+                css::lang::Locale(),
+                aTextColor,
+                COL_TRANSPARENT,
+
+                // attributes for TextDecoratedPortionPrimitive2D
+                aTextColor,
+                aTextColor,
+                TEXT_LINE_NONE,
+                TEXT_LINE_SINGLE));
+#endif
+
         nLineStart += nLineLength;
         aPos.setY(aPos.getY() + aTextEngine.GetCharHeight());
 
