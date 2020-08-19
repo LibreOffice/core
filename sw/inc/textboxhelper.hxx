@@ -111,12 +111,9 @@ public:
     /// Saves the current shape -> textbox links in a map, so they can be restored later.
     static void saveLinks(const SwFrameFormats& rFormats,
                           std::map<const SwFrameFormat*, const SwFrameFormat*>& rLinks);
-    /// Reset the shape -> textbox link on the shape, and save it to the map, so it can be restored later.
-    static void resetLink(SwFrameFormat* pShape,
-                          std::map<const SwFrameFormat*, SwFormatContent>& rOldContent);
     /// Undo the effect of saveLinks() + individual resetLink() calls.
     static void restoreLinks(std::set<ZSortFly>& rOld, std::vector<SwFrameFormat*>& rNew,
-                             SavedLink& rSavedLinks, SavedContent& rResetContent);
+                             SavedLink& rSavedLinks);
 };
 
 #endif // INCLUDED_SW_INC_TEXTBOXHELPER_HXX

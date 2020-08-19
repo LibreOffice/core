@@ -684,19 +684,8 @@ void SwTextBoxHelper::saveLinks(const SwFrameFormats& rFormats,
     }
 }
 
-void SwTextBoxHelper::resetLink(SwFrameFormat* pShape,
-                                std::map<const SwFrameFormat*, SwFormatContent>& rOldContent)
-{
-    if (pShape->Which() == RES_DRAWFRMFMT)
-    {
-        if (pShape->GetContent().GetContentIdx())
-            rOldContent.insert(std::make_pair(pShape, pShape->GetContent()));
-        pShape->ResetFormatAttr(RES_CNTNT);
-    }
-}
-
 void SwTextBoxHelper::restoreLinks(std::set<ZSortFly>& rOld, std::vector<SwFrameFormat*>& rNew,
-                                   SavedLink& rSavedLinks, SavedContent& rResetContent)
+                                   SavedLink& rSavedLinks)
 {
     std::size_t i = 0;
     for (const auto& rIt : rOld)
@@ -712,9 +701,6 @@ void SwTextBoxHelper::restoreLinks(std::set<ZSortFly>& rOld, std::vector<SwFrame
                 ++j;
             }
         }
-        if (rResetContent.find(rIt.GetFormat()) != rResetContent.end())
-            const_cast<SwFrameFormat*>(rIt.GetFormat())
-                ->SetFormatAttr(rResetContent[rIt.GetFormat()]);
         ++i;
     }
 }
