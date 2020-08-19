@@ -649,6 +649,10 @@ void SkiaSalGraphicsImpl::privateDrawAlphaRect(long nX, long nY, long nWidth, lo
     {
         paint.setColor(toSkColorWithTransparency(mFillColor, fTransparency));
         paint.setStyle(SkPaint::kFill_Style);
+        // HACK: If the polygon is just a line, it still should be drawn. But when filling
+        // Skia doesn't draw empty polygons, so in that case ensure the line is drawn.
+        if (mLineColor == SALCOLOR_NONE && SkSize::Make(nWidth, nHeight).isEmpty())
+            paint.setStyle(SkPaint::kStroke_Style);
         canvas->drawIRect(SkIRect::MakeXYWH(nX, nY, nWidth, nHeight), paint);
     }
     if (mLineColor != SALCOLOR_NONE)
@@ -657,7 +661,7 @@ void SkiaSalGraphicsImpl::privateDrawAlphaRect(long nX, long nY, long nWidth, lo
         paint.setStyle(SkPaint::kStroke_Style);
         // The obnoxious "-1 DrawRect()" hack that I don't understand the purpose of (and I'm not sure
         // if anybody does), but without it some cases do not work. The max() is needed because Skia
-        // will not drawn anything if width or height is 0.
+        // will not draw anything if width or height is 0.
         canvas->drawIRect(
             SkIRect::MakeXYWH(nX, nY, std::max(1L, nWidth - 1), std::max(1L, nHeight - 1)), paint);
     }
@@ -759,9 +763,13 @@ void SkiaSalGraphicsImpl::performDrawPolyPolygon(const basegfx::B2DPolyPolygon& 
     const SkScalar posFix = useAA ? toSkXYFix : 0;
     if (mFillColor != SALCOLOR_NONE)
     {
+        aPath.offset(toSkX(0) + posFix, toSkY(0) + posFix, nullptr);
         aPaint.setColor(toSkColorWithTransparency(mFillColor, fTransparency));
         aPaint.setStyle(SkPaint::kFill_Style);
-        aPath.offset(toSkX(0) + posFix, toSkY(0) + posFix, nullptr);
+        // HACK: If the polygon is just a line, it still should be drawn. But when filling
+        // Skia doesn't draw empty polygons, so in that case ensure the line is drawn.
+        if (mLineColor == SALCOLOR_NONE && aPath.getBounds().isEmpty())
+            aPaint.setStyle(SkPaint::kStroke_Style);
         getDrawCanvas()->drawPath(aPath, aPaint);
     }
     if (mLineColor != SALCOLOR_NONE)
