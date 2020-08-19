@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0765b91f_79f5d5d2",
+        "filename": "sc/source/filter/oox/pivottablebuffer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-08-19T08:58:06Z",
+      "side": 1,
+      "message": "This function is nowhere to be seen, perhaps \"getCacheDatabaseIndex\"?",
+      "range": {
+        "startLine": 381,
+        "startChar": 53,
+        "endLine": 381,
+        "endChar": 69
+      },
+      "revId": "5ee9cd4968e8facd7ffd012ed9855a2b97922e51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16a87b39_18159489",
+        "filename": "scripting/source/basprov/basprov.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-08-19T08:58:06Z",
+      "side": 1,
+      "message": "Neither ScriptingConstantsPool nor SCRIPTING_DOC_REF are present in LO code, I think you may just remove the entire line",
+      "range": {
+        "startLine": 216,
+        "startChar": 19,
+        "endLine": 216,
+        "endChar": 73
+      },
+      "revId": "5ee9cd4968e8facd7ffd012ed9855a2b97922e51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
