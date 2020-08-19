@@ -1094,7 +1094,8 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
     {
         // apply paragraph and character properties of the table style on table paragraphs
         // if there is no direct paragraph formatting
-        if ( !rParaProp.m_pPropertyMap->isSet(eId) )
+        bool bIsParaLevel = rParaProp.m_pPropertyMap->isSet(eId);
+        if ( !bIsParaLevel || isCharacterProperty(eId) )
         {
             if ( (eId == PROP_PARA_LEFT_MARGIN || eId == PROP_PARA_FIRST_LINE_INDENT) &&
                     rParaProp.m_pPropertyMap->isSet(PROP_NUMBERING_RULES) )
@@ -1104,6 +1105,15 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
             }
 
             OUString sPropertyName = getPropertyName(eId);
+
+            if ( bIsParaLevel && ( rParaProp.m_aParaOverrideApplied.find(sPropertyName) != rParaProp.m_aParaOverrideApplied.end() ||
+                sPropertyName.startsWith("CharFontName") ) )
+            {
+                // don't apply table style, if this character property was applied on paragraph level
+                // (or in the case of paragraph level font name settings to avoid regressions)
+                continue;
+            }
+
             auto pCellProp = std::find_if(rCellProperties.begin(), rCellProperties.end(),
                 [&](const beans::PropertyValue& rProp) { return rProp.Name == sPropertyName; });
             // this cell applies the table style property
