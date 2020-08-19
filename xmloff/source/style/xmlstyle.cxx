@@ -395,17 +395,26 @@ bool SvXMLStylesContext::IsAutomaticStyle() const
     return mpImpl->IsAutomaticStyle();
 }
 
-SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext( sal_uInt16 p_nPrefix,
-                                                                const OUString& rLocalName,
-                                                                const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     SvXMLStyleContext *pStyle = nullptr;
 
     if(GetImport().GetDataStylesImport())
     {
-        pStyle = GetImport().GetDataStylesImport()->CreateChildContext(GetImport(), p_nPrefix,
-                                               rLocalName, xAttrList, *this);
+        pStyle = GetImport().GetDataStylesImport()->CreateChildContext(GetImport(), nElement,
+                                               xAttrList, *this);
     }
+
+    return pStyle;
+}
+
+SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext( sal_uInt16 p_nPrefix,
+                                                                const OUString& rLocalName,
+                                                                const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+{
+    SvXMLStyleContext *pStyle = nullptr;
 
     if (!pStyle)
     {
@@ -807,9 +816,20 @@ SvXMLStylesContext::~SvXMLStylesContext()
 }
 
 css::uno::Reference< css::xml::sax::XFastContextHandler > SvXMLStylesContext::createFastChildContext(
-        sal_Int32 /*nElement*/, const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    return nullptr;
+    SvXMLImportContext *pContext = nullptr;
+
+    SvXMLStyleContext *pStyle =
+        CreateStyleChildContext( nElement, xAttrList );
+    if( pStyle )
+    {
+        if( !pStyle->IsTransient() )
+            mpImpl->AddStyle( pStyle );
+        pContext = pStyle;
+    }
+
+    return pContext;
 }
 
 SvXMLImportContextRef SvXMLStylesContext::CreateChildContext( sal_uInt16 nPrefix,
