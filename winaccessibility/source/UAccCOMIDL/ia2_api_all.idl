@@ -1351,7 +1351,7 @@ IA2_STATE_PINNED =                  0x80000
  @ref _indexes\n
  @ref _enumBase\n
  @ref _specialOffsets\n
- @ref _dicoveringInterfaces\n
+ @ref _discoveringInterfaces\n
  @ref _changingInterfaces\n
  @ref _applicationInfo\n
  @ref _childIDs\n
@@ -1441,7 +1441,7 @@ IA2_STATE_PINNED =                  0x80000
    Since the same offset is associated with two different lines a special means is needed
    to fetch text from the line where the caret is physically located.
 
- @section _dicoveringInterfaces Discovery of Interfaces
+ @section _discoveringInterfaces Discovery of Interfaces
   In general AT (Assistive Technology) should try IAccessible2 interfaces, followed by using
   the MSAA (Microsoft&reg; Active Accessibility&reg;) interfaces.  (In cases where the an application
   is known to have custom interfaces which provide information not supplied by IAccessible2
