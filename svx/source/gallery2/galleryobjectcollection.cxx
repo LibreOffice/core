@@ -27,7 +27,7 @@ void GalleryObjectCollection::clear() { m_aObjectList.clear(); }
 const GalleryObject* GalleryObjectCollection::searchObjectWithURL(const INetURLObject& rURL)
 {
     for (auto const& i : m_aObjectList)
-        if (i->aURL == rURL)
+        if (i->getURL() == rURL)
             return i.get();
     return nullptr;
 }
@@ -45,6 +45,14 @@ const GalleryObject* GalleryObjectCollection::getForPosition(sal_uInt32 nPos) co
     if (nPos < size())
         return get(nPos).get();
     return nullptr;
+}
+
+const INetURLObject& GalleryObjectCollection::getURLForPosition(sal_uInt32 nPos) const
+{
+    if (nPos < size())
+        return get(nPos).get()->getURL();
+    INetURLObject* aInvalidURL = new INetURLObject();
+    return *aInvalidURL;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
