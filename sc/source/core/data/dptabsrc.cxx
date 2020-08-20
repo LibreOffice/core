@@ -69,9 +69,9 @@ SC_SIMPLE_SERVICE_INFO( ScDPSource,      "ScDPSource",      "com.sun.star.sheet.
 SC_SIMPLE_SERVICE_INFO( ScDPDimensions,  "ScDPDimensions",  "com.sun.star.sheet.DataPilotSourceDimensions" )
 SC_SIMPLE_SERVICE_INFO( ScDPDimension,   "ScDPDimension",   "com.sun.star.sheet.DataPilotSourceDimension" )
 SC_SIMPLE_SERVICE_INFO_COMPAT( ScDPHierarchies, "ScDPHierarchies",
-        "com.sun.star.sheet.DataPilotSourceHierarchies", "com.sun.star.sheet.DataPilotSourceHierarcies" )
+        "com.sun.star.sheet.DataPilotSourceHierarchies", "com.sun.star.sheet.DataPilotSourceHierarchies" )
 SC_SIMPLE_SERVICE_INFO_COMPAT( ScDPHierarchy,   "ScDPHierarchy",
-        "com.sun.star.sheet.DataPilotSourceHierarchy", "com.sun.star.sheet.DataPilotSourceHierarcy" )
+        "com.sun.star.sheet.DataPilotSourceHierarchy", "com.sun.star.sheet.DataPilotSourceHierarchy" )
 SC_SIMPLE_SERVICE_INFO( ScDPLevels,      "ScDPLevels",      "com.sun.star.sheet.DataPilotSourceLevels" )
 SC_SIMPLE_SERVICE_INFO( ScDPLevel,       "ScDPLevel",       "com.sun.star.sheet.DataPilotSourceLevel" )
 SC_SIMPLE_SERVICE_INFO( ScDPMembers,     "ScDPMembers",     "com.sun.star.sheet.DataPilotSourceMembers" )
