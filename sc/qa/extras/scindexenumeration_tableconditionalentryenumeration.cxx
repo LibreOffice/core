@@ -82,7 +82,7 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_TableConditionalEntryEnumerat
     aConditions[2].Value <<= OUString("");
     aConditions[3].Name = "Operator";
     aConditions[3].Value <<= sheet::ConditionOperator_EQUAL;
-    aConditions[4].Name = "SoucePosition";
+    aConditions[4].Name = "SourcePosition";
     aConditions[4].Value <<= table::CellAddress(0, 1, 5);
 
     uno::Reference<beans::XPropertySet> xPropertySet(xSheet0, uno::UNO_QUERY_THROW);
