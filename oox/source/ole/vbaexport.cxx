@@ -1150,9 +1150,9 @@ bool VbaExport::containsVBAProject()
     if (!xVbaCompatibility.is())
         return false;
 
-    bool bVBACompatibilty = xVbaCompatibility->getVBACompatibilityMode();
+    bool bVBACompatibility = xVbaCompatibility->getVBACompatibilityMode();
 
-    return bVBACompatibilty;
+    return bVBACompatibility;
 }
 
 OUString VbaExport::getProjectName() const
