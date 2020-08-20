@@ -993,7 +993,7 @@ public:
 
     SwXMLMasterStylesContext_Impl( SwXMLImport& rImport );
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 }
@@ -1018,7 +1018,7 @@ bool SwXMLMasterStylesContext_Impl::InsertStyleFamily( XmlStyleFamily nFamily ) 
     return bIns;
 }
 
-void SwXMLMasterStylesContext_Impl::EndElement()
+void SwXMLMasterStylesContext_Impl::endFastElement(sal_Int32 )
 {
     FinishStyles( !GetSwImport().IsInsertMode() );
     GetSwImport().FinishStyles();
