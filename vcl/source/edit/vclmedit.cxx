@@ -878,7 +878,6 @@ VclMultiLineEdit::VclMultiLineEdit( vcl::Window* pParent, WinBits nWinStyle )
     SetType( WindowType::MULTILINEEDIT );
     pImpVclMEdit.reset(new ImpVclMEdit( this, nWinStyle ));
     ImplInitSettings( true );
-    pUpdateDataTimer = nullptr;
 
     SetCompoundControl( true );
     SetStyle( ImplInitStyle( nWinStyle ) );
@@ -892,7 +891,6 @@ VclMultiLineEdit::~VclMultiLineEdit()
 void VclMultiLineEdit::dispose()
 {
     pImpVclMEdit.reset();
-    pUpdateDataTimer.reset();
     Edit::dispose();
 }
 
@@ -1013,9 +1011,6 @@ void VclMultiLineEdit::Modify()
     aModifyHdlLink.Call( *this );
 
     CallEventListeners( VclEventId::EditModify );
-
-    if ( pUpdateDataTimer )
-        pUpdateDataTimer->Start();
 }
 
 void VclMultiLineEdit::SelectionChanged()
@@ -1028,15 +1023,6 @@ void VclMultiLineEdit::CaretChanged()
     CallEventListeners(VclEventId::EditCaretChanged);
 }
 
-IMPL_LINK_NOARG(VclMultiLineEdit, ImpUpdateDataHdl, Timer *, void)
-{
-    UpdateData();
-}
-
-void VclMultiLineEdit::UpdateData()
-{
-}
-
 void VclMultiLineEdit::SetModifyFlag()
 {
     pImpVclMEdit->SetModified( true );
@@ -1045,21 +1031,6 @@ void VclMultiLineEdit::SetModifyFlag()
 void VclMultiLineEdit::ClearModifyFlag()
 {
     pImpVclMEdit->SetModified( false );
-}
-
-void VclMultiLineEdit::EnableUpdateData( sal_uLong nTimeout )
-{
-    if ( !nTimeout )
-        DisableUpdateData();
-    else
-    {
-        if ( !pUpdateDataTimer )
-        {
-            pUpdateDataTimer.reset(new Timer("MultiLineEditTimer"));
-            pUpdateDataTimer->SetInvokeHandler( LINK( this, VclMultiLineEdit, ImpUpdateDataHdl ) );
-        }
-        pUpdateDataTimer->SetTimeout( nTimeout );
-    }
 }
 
 void VclMultiLineEdit::SetReadOnly( bool bReadOnly )

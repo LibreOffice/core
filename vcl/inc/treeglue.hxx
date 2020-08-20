@@ -37,12 +37,9 @@ public:
         m_aEditedEntryHdl = rLink;
     }
 
-    virtual DragDropMode NotifyStartDrag(TransferDataContainer&, SvTreeListEntry*) override
-    {
-        return GetDragDropMode();
-    }
+    virtual DragDropMode NotifyStartDrag() override { return GetDragDropMode(); }
 
-    virtual bool EditingEntry(SvTreeListEntry* pEntry, Selection&) override
+    virtual bool EditingEntry(SvTreeListEntry* pEntry) override
     {
         return m_aEditingEntryHdl.Call(pEntry);
     }
@@ -79,10 +76,7 @@ public:
         m_aEditedEntryHdl = rLink;
     }
 
-    virtual DragDropMode NotifyStartDrag(TransferDataContainer&, SvTreeListEntry*) override
-    {
-        return GetDragDropMode();
-    }
+    virtual DragDropMode NotifyStartDrag() override { return GetDragDropMode(); }
 
     virtual void StartDrag(sal_Int8 nAction, const Point& rPosPixel) override
     {
@@ -160,7 +154,7 @@ public:
         return GetTargetAtPoint(rPos, true);
     }
 
-    virtual bool EditingEntry(SvTreeListEntry* pEntry, Selection&) override
+    virtual bool EditingEntry(SvTreeListEntry* pEntry) override
     {
         return m_aEditingEntryHdl.Call(pEntry);
     }

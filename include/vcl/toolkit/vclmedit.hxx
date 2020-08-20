@@ -84,8 +84,6 @@ private:
 
     Link<Edit&,void>  aModifyHdlLink;
 
-    std::unique_ptr<Timer> pUpdateDataTimer;
-
 protected:
 
     DECL_LINK( ImpUpdateDataHdl, Timer*, void );
@@ -113,10 +111,6 @@ public:
 
     virtual void    SetModifyFlag() override;
     virtual void    ClearModifyFlag() override;
-
-    void            EnableUpdateData( sal_uLong nTimeout );
-    virtual void    UpdateData();
-    void            DisableUpdateData() { pUpdateDataTimer.reset(); }
 
     virtual void    SetReadOnly( bool bReadOnly = true ) override;
     virtual bool    IsReadOnly() const override;

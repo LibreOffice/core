@@ -1134,7 +1134,7 @@ void SvTreeListBox::StartDrag( sal_Int8, const Point& rPosPixel )
                                     "unused", SAL_N_ELEMENTS("unused") );
     }
 
-    nDragDropMode = NotifyStartDrag( *xContainer, pEntry );
+    nDragDropMode = NotifyStartDrag();
     if( nDragDropMode == DragDropMode::NONE || 0 == GetSelectionCount() )
     {
         nDragDropMode = nOldDragMode;
@@ -1196,7 +1196,7 @@ void SvTreeListBox::UnsetDropTarget()
     }
 }
 
-DragDropMode SvTreeListBox::NotifyStartDrag( TransferDataContainer&, SvTreeListEntry* )
+DragDropMode SvTreeListBox::NotifyStartDrag()
 {
     return DragDropMode(0xffff);
 }
@@ -1839,7 +1839,7 @@ void SvTreeListBox::SetNodeBitmaps( const Image& rCollapsedNodeBmp, const Image&
     SetTabs();
 }
 
-bool SvTreeListBox::EditingEntry( SvTreeListEntry*, Selection& )
+bool SvTreeListBox::EditingEntry( SvTreeListEntry* )
 {
     return true;
 }
@@ -2446,9 +2446,9 @@ void SvTreeListBox::ImplEditEntry( SvTreeListEntry* pEntry )
         }
     }
 
-    Selection aSel( SELECTION_MIN, SELECTION_MAX );
-    if( pItem && EditingEntry( pEntry, aSel ) )
+    if( pItem && EditingEntry( pEntry ) )
     {
+        Selection aSel( SELECTION_MIN, SELECTION_MAX );
         SelectAll( false );
         MakeVisible( pEntry );
         EditItemText( pEntry, pItem, aSel );

@@ -427,8 +427,7 @@ public:
     virtual sal_Int8         AcceptDrop( const AcceptDropEvent& rEvt ) override;
     virtual sal_Int8         ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
     virtual void             StartDrag( sal_Int8 nAction, const Point& rPosPixel ) override;
-    virtual DragDropMode     NotifyStartDrag( TransferDataContainer& rData,
-                                         SvTreeListEntry* );
+    virtual DragDropMode     NotifyStartDrag();
     virtual void             DragFinished( sal_Int8 nDropAction );
 
     SvTreeListEntry*         CloneEntry( SvTreeListEntry* pSource );
@@ -586,7 +585,7 @@ public:
     void            EnableInplaceEditing( bool bEnable );
     // Edits the Entry's first StringItem, 0 == Cursor
     void            EditEntry( SvTreeListEntry* pEntry );
-    virtual bool    EditingEntry( SvTreeListEntry* pEntry, Selection& );
+    virtual bool    EditingEntry( SvTreeListEntry* pEntry );
     virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
 
     virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
