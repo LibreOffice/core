@@ -2585,5 +2585,18 @@ DECLARE_ODFEXPORT_TEST(tdf124470, "tdf124470TableAndEmbeddedUsedFonts.odt")
     assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:family='paragraph']", 1);
 }
 
+DECLARE_ODFEXPORT_TEST(tdf135942, "nestedTableInFooter.odt")
+{
+    // All table autostyles should be collected, including nested, and must not crash.
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
+    if (!pXmlDoc)
+        return;
+
+    assertXPath(pXmlDoc, "/office:document-styles/office:automatic-styles/style:style[@style:family='table']", 2);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
