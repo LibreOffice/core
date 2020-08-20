@@ -320,7 +320,7 @@ namespace
                 nW,
                 nH);
 
-            // did a version to scale self first that worked well, but wouuld've
+            // made a version to scale self first that worked well, but would've
             // been hard to support CAIRO_FORMAT_A1 including bit shifting, so
             // I decided to go with cairo itself - use CAIRO_FILTER_FAST or
             // CAIRO_FILTER_GOOD though. Please modify as needed for

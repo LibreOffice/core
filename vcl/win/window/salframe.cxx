@@ -5298,7 +5298,7 @@ ImplHandleGetObject(HWND hWnd, LPARAM lParam, WPARAM wParam, LRESULT & nRet)
         MiscSettings aMisc = aSettings.GetMiscSettings();
         aMisc.SetEnableATToolSupport(true);
         // The above is enough, since aMisc changes the same shared ImplMiscData as used in global
-        // gettings, so no need to call aSettings.SetMiscSettings and Application::SetSettings
+        // settings, so no need to call aSettings.SetMiscSettings and Application::SetSettings
 
         if (!Application::GetSettings().GetMiscSettings().GetEnableATToolSupport())
             return false; // locked down somehow ?
