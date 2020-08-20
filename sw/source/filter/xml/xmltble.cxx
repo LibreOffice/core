@@ -1157,7 +1157,8 @@ void SwXMLExport::ExportTable( const SwTableNode& rTableNd )
 }
 
 void SwXMLTextParagraphExport::exportTableAutoStyles() {
-    for (const auto* pTableNode : maTableNodes)
+    auto aTableNodes(maTableNodes); // tdf#135942 make a copy
+    for (const auto* pTableNode : aTableNodes)
     {
         static_cast<SwXMLExport&>(GetExport()).ExportTableAutoStyles(*pTableNode);
     }
