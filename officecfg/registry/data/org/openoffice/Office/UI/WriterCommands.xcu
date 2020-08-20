@@ -2916,6 +2916,78 @@
           <value>9</value>
         </prop>
       </node>
+      <node oor:name=".uno:LibreLogo-goforward" oor:op="replace" install:module="librelogo">
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$goforward?language=Python&amp;location=share</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:LibreLogo-gobackward" oor:op="replace" install:module="librelogo">
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$gobackward?language=Python&amp;location=share</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:LibreLogo-left" oor:op="replace" install:module="librelogo">
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$left?language=Python&amp;location=share</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:LibreLogo-right" oor:op="replace" install:module="librelogo">
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$right?language=Python&amp;location=share</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:LibreLogo-run" oor:op="replace" install:module="librelogo">
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$run?language=Python&amp;location=share</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:LibreLogo-stop" oor:op="replace" install:module="librelogo">
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$stop?language=Python&amp;location=share</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:LibreLogo-home" oor:op="replace" install:module="librelogo">
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$home?language=Python&amp;location=share</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:LibreLogo-clearscreen" oor:op="replace" install:module="librelogo">
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$clearscreen?language=Python&amp;location=share</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:LibreLogo-translate" oor:op="replace" install:module="librelogo">
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$__translate__?language=Python&amp;location=share</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="Popups">
       <node oor:name=".uno:CharacterMenu" oor:op="replace">
