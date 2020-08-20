@@ -445,6 +445,8 @@ void SearchAndParseThread::execute()
     {
         std::string sResponse = curlGet(m_pAdditionsDialog->m_sURL);
         parseResponse(sResponse, m_pAdditionsDialog->m_aAllExtensionsVector);
+        std::sort(m_pAdditionsDialog->m_aAllExtensionsVector.begin(),
+                  m_pAdditionsDialog->m_aAllExtensionsVector.end(), AdditionsDialog::sortByRating);
         Search();
     }
     else // Searching
@@ -471,6 +473,9 @@ AdditionsDialog::AdditionsDialog(weld::Window* pParent, const OUString& sAdditio
     , m_xLabelProgress(m_xBuilder->weld_label("labelProgress"))
     , m_xGearBtn(m_xBuilder->weld_menu_button("buttonGear"))
 {
+    m_xGearBtn->connect_selected(LINK(this, AdditionsDialog, GearHdl));
+    m_xGearBtn->set_item_active("gear_sort_voting", true);
+
     m_aSearchDataTimer.SetInvokeHandler(LINK(this, AdditionsDialog, ImplUpdateDataHdl));
     m_aSearchDataTimer.SetDebugName("AdditionsDialog SearchDataTimer");
     m_aSearchDataTimer.SetTimeout(EDIT_UPDATEDATA_TIMEOUT);
@@ -577,6 +582,32 @@ void AdditionsDialog::ClearList()
         item->m_xContainer->hide();
     }
     this->m_aAdditionsItems.clear();
+}
+
+void AdditionsDialog::RefreshUI()
+{
+    if (m_pSearchThread.is())
+        m_pSearchThread->StopExecution();
+    ClearList();
+    m_nCurrentListItemCount = 0;
+    m_nMaxItemCount = PAGE_SIZE;
+    m_pSearchThread = new SearchAndParseThread(this, false);
+    m_pSearchThread->launch();
+}
+
+bool AdditionsDialog::sortByRating(const AdditionInfo& a, const AdditionInfo& b)
+{
+    return a.sRating.toDouble() > b.sRating.toDouble();
+}
+
+bool AdditionsDialog::sortByComment(const AdditionInfo& a, const AdditionInfo& b)
+{
+    return a.sCommentNumber.toUInt32() > b.sCommentNumber.toUInt32();
+}
+
+bool AdditionsDialog::sortByDownload(const AdditionInfo& a, const AdditionInfo& b)
+{
+    return a.sDownloadNumber.toUInt32() > b.sDownloadNumber.toUInt32();
 }
 
 AdditionsItem::AdditionsItem(weld::Widget* pParent, AdditionsDialog* pParentDialog,
@@ -700,16 +731,7 @@ bool AdditionsItem::getExtensionFile(OUString& sExtensionFile)
     return true;
 }
 
-IMPL_LINK_NOARG(AdditionsDialog, ImplUpdateDataHdl, Timer*, void)
-{
-    if (m_pSearchThread.is())
-        m_pSearchThread->StopExecution();
-    ClearList();
-    m_nCurrentListItemCount = 0;
-    m_nMaxItemCount = PAGE_SIZE;
-    m_pSearchThread = new SearchAndParseThread(this, false);
-    m_pSearchThread->launch();
-}
+IMPL_LINK_NOARG(AdditionsDialog, ImplUpdateDataHdl, Timer*, void) { RefreshUI(); }
 
 IMPL_LINK_NOARG(AdditionsDialog, SearchUpdateHdl, weld::Entry&, void)
 {
@@ -848,4 +870,21 @@ void TmpRepositoryCommandEnv::update(uno::Any const& /*Status */) {}
 
 void TmpRepositoryCommandEnv::pop() {}
 
+IMPL_LINK(AdditionsDialog, GearHdl, const OString&, rIdent, void)
+{
+    if (rIdent == "gear_sort_voting")
+    {
+        std::sort(m_aAllExtensionsVector.begin(), m_aAllExtensionsVector.end(), sortByRating);
+    }
+    else if (rIdent == "gear_sort_comments")
+    {
+        std::sort(m_aAllExtensionsVector.begin(), m_aAllExtensionsVector.end(), sortByComment);
+    }
+    else if (rIdent == "gear_sort_downloads")
+    {
+        std::sort(m_aAllExtensionsVector.begin(), m_aAllExtensionsVector.end(), sortByDownload);
+    }
+    // After the sorting, UI will be refreshed to update extension list.
+    RefreshUI();
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -68,6 +68,7 @@ class AdditionsDialog : public weld::GenericDialogController
 private:
     Timer m_aSearchDataTimer;
 
+    DECL_LINK(GearHdl, const OString&, void);
     DECL_LINK(SearchUpdateHdl, weld::Entry&, void);
     DECL_LINK(ImplUpdateDataHdl, Timer*, void);
     DECL_LINK(FocusOut_Impl, weld::Widget&, void);
@@ -102,6 +103,11 @@ public:
     getInstalledExtensions();
     void SetProgress(const OUString& rProgress);
     void ClearList();
+    void RefreshUI();
+
+    static bool sortByComment(const AdditionInfo& a, const AdditionInfo& b);
+    static bool sortByRating(const AdditionInfo& a, const AdditionInfo& b);
+    static bool sortByDownload(const AdditionInfo& a, const AdditionInfo& b);
 };
 
 class AdditionsItem
