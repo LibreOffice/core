@@ -212,7 +212,7 @@ $(eval $(call gb_Library_add_cxxflags,gcc3_uno,\
 	$(if $(filter armeabi-v7a,$(ANDROID_APP_ABI)),-I$(ANDROID_BINUTILS_PREBUILT_ROOT)/lib/gcc/arm-linux-androideabi/4.9.x/include) \
 	-fno-omit-frame-pointer \
 	-fno-strict-aliasing \
-	$(if $(filter TRUE,$(ENABLE_LTO)),-fno-lto) \
+	-fno-lto \
 	$(if $(filter TRUE,$(HAVE_GCC_AVX)),-mno-avx) \
 ))
 
