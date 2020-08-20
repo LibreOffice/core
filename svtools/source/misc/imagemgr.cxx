@@ -711,11 +711,11 @@ static OUString GetImageNameFromList_Impl( SvImageId nImageId, vcl::ImageType eI
     return OUString();
 }
 
-static Image GetImageFromList_Impl( SvImageId nImageId, vcl::ImageType eImageType, Size aSize = Size())
+static Image GetImageFromList_Impl( SvImageId nImageId, vcl::ImageType eImageType)
 {
     OUString sImageName(GetImageNameFromList_Impl(nImageId, eImageType));
     if (!sImageName.isEmpty())
-        return Image(StockImage::Yes, sImageName, aSize);
+        return Image(StockImage::Yes, sImageName, Size());
     return Image();
 }
 
@@ -788,11 +788,11 @@ OUString SvFileInformationManager::GetImageId(const INetURLObject& rObject, bool
     return GetImageNameFromList_Impl(nImage, bBig ? vcl::ImageType::Size26 : vcl::ImageType::Size16);
 }
 
-Image SvFileInformationManager::GetImage(const INetURLObject& rObject, bool bBig, Size const & rPreferredSize)
+Image SvFileInformationManager::GetImage(const INetURLObject& rObject, bool bBig)
 {
     SvImageId nImage = GetImageId_Impl( rObject, true );
     DBG_ASSERT( nImage != SvImageId::NONE, "invalid ImageId" );
-    return GetImageFromList_Impl(nImage, bBig ? vcl::ImageType::Size26 : vcl::ImageType::Size16, rPreferredSize);
+    return GetImageFromList_Impl(nImage, bBig ? vcl::ImageType::Size26 : vcl::ImageType::Size16);
 }
 
 OUString SvFileInformationManager::GetFileImageId(const INetURLObject& rObject)

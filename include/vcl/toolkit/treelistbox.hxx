@@ -629,7 +629,7 @@ public:
     void            SetFont( const vcl::Font& rFont );
 
     using Window::SetCursor;
-    void            SetCursor( SvTreeListEntry* pEntry, bool bForceNoSelect = false );
+    void            SetCursor( SvTreeListEntry* pEntry );
 
     SvTreeListEntry*    GetEntry( const Point& rPos, bool bHit = false ) const;
 

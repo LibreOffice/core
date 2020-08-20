@@ -34,7 +34,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
 SvxFmAbsRecWin::SvxFmAbsRecWin(vcl::Window* pParent, SfxToolBoxControl* pController)
-    : RecordItemWindow(pParent, true)
+    : RecordItemWindow(pParent)
     , m_pController(pController)
 {
 }

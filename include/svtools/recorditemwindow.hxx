@@ -42,7 +42,7 @@ private:
 class SVT_DLLPUBLIC RecordItemWindow : public InterimItemWindow, public RecordItemWindowBase
 {
 public:
-    RecordItemWindow(vcl::Window* pParent, bool bHasFrame);
+    RecordItemWindow(vcl::Window* pParent);
     virtual void dispose() override;
     virtual ~RecordItemWindow() override;
 

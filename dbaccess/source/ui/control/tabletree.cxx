@@ -701,10 +701,10 @@ TriState OTableTreeListBox::implDetermineState(weld::TreeIter& rEntry)
     return eState;
 }
 
-DBTableTreeView::DBTableTreeView(weld::Container* pContainer, bool bShowToggles)
+DBTableTreeView::DBTableTreeView(weld::Container* pContainer)
     : DBTreeViewBase(pContainer)
 {
-    m_xTreeListBox.reset(new OTableTreeListBox(m_xBuilder->weld_tree_view("treeview"), bShowToggles));
+    m_xTreeListBox.reset(new OTableTreeListBox(m_xBuilder->weld_tree_view("treeview"), /*bShowToggles*/false));
 }
 
 }   // namespace dbaui

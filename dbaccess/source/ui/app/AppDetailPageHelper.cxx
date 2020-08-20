@@ -513,7 +513,7 @@ void OAppDetailPageHelper::createTablesPage(const Reference< XConnection>& _xCon
 
     if ( !m_aLists[E_TABLE] )
     {
-        m_aLists[E_TABLE].reset(new DBTableTreeView(m_xBox.get(), false)); // false means: do not show any buttons
+        m_aLists[E_TABLE].reset(new DBTableTreeView(m_xBox.get()));
         setupTree(*m_aLists[E_TABLE]);
         m_aLists[E_TABLE]->GetWidget().set_help_id(HID_APP_TABLE_TREE);
     }

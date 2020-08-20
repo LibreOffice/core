@@ -159,7 +159,7 @@ namespace dbaui
     class DBTableTreeView final : public DBTreeViewBase
     {
     public:
-        DBTableTreeView(weld::Container* pContainer, bool bShowToggles);
+        DBTableTreeView(weld::Container* pContainer);
     };
 }
 
