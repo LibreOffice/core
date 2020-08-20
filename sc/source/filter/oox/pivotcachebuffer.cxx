@@ -93,7 +93,7 @@ const sal_uInt8 BIFF12_PCDEFINITION_OPTIMIZEMEMORY  = 0x08;
 const sal_uInt8 BIFF12_PCDEFINITION_ENABLEREFRESH   = 0x10;
 const sal_uInt8 BIFF12_PCDEFINITION_BACKGROUNDQUERY = 0x20;
 const sal_uInt8 BIFF12_PCDEFINITION_UPGRADEONREFR   = 0x40;
-const sal_uInt8 BIFF12_PCDEFINITION_TUPELCACHE      = 0x80;
+const sal_uInt8 BIFF12_PCDEFINITION_TUPLECACHE      = 0x80;
 
 const sal_uInt8 BIFF12_PCDEFINITION_HASUSERNAME     = 0x01;
 const sal_uInt8 BIFF12_PCDEFINITION_HASRELID        = 0x02;
@@ -935,7 +935,7 @@ void PivotCache::importPCDefinition( SequenceInputStream& rStrm )
     maDefModel.mbEnableRefresh    = getFlag( nFlags1, BIFF12_PCDEFINITION_ENABLEREFRESH );
     maDefModel.mbBackgroundQuery  = getFlag( nFlags1, BIFF12_PCDEFINITION_BACKGROUNDQUERY );
     maDefModel.mbUpgradeOnRefresh = getFlag( nFlags1, BIFF12_PCDEFINITION_UPGRADEONREFR );
-    maDefModel.mbTupleCache       = getFlag( nFlags1, BIFF12_PCDEFINITION_TUPELCACHE );
+    maDefModel.mbTupleCache       = getFlag( nFlags1, BIFF12_PCDEFINITION_TUPLECACHE );
     maDefModel.mbSupportSubquery  = getFlag( nFlags2, BIFF12_PCDEFINITION_SUPPORTSUBQUERY );
     maDefModel.mbSupportDrill     = getFlag( nFlags2, BIFF12_PCDEFINITION_SUPPORTDRILL );
 }
