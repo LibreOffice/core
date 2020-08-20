@@ -100,7 +100,7 @@ public:
         const OUString& rsTitle,
         const OUString& rsAccessibleTitle,
         const bool bIsOpaque,
-        const ViewInitializationFunction& rViewIntialization);
+        const ViewInitializationFunction& rViewInitialization);
 
     SharedPaneDescriptor StorePane (
         const rtl::Reference<PresenterPaneBase>& rxPane);
