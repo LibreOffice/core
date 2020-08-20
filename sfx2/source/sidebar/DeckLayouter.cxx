@@ -94,7 +94,7 @@ namespace {
         const LayoutMode eMode,
         vcl::Window& rScrollContainer);
     tools::Rectangle PlaceDeckTitle (
-        vcl::Window& rTittleBar,
+        vcl::Window& rTitleBar,
         const tools::Rectangle& rAvailableSpace);
     tools::Rectangle PlaceVerticalScrollBar (
         ScrollBar& rVerticalScrollBar,
