@@ -41,7 +41,7 @@ struct SC_DLLPUBLIC ScSubTotalParam
     void Clear();
     void SetSubTotals( sal_uInt16 nGroup,
                        const SCCOL* ptrSubTotals,
-                       const ScSubTotalFunc* ptrFuncions,
+                       const ScSubTotalFunc* ptrFunctions,
                        sal_uInt16 nCount );
 };
 
