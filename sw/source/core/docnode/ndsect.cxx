@@ -188,6 +188,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
     }
 
     SwSectionFormat* const pFormat = MakeSectionFormat();
+    pFormat->SetName(rNewData.GetSectionName());
     if ( pAttr )
     {
         pFormat->SetFormatAttr( *pAttr );
