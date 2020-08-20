@@ -694,7 +694,7 @@ void EscherPropertyContainer::CreateTextProperties(
 
     uno::Any aTextWrap;
 
-    EscherPropertyValueHelper::GetPropertyValue(aTextWrap, rXPropSet, "TextWrap", true);
+    (void)EscherPropertyValueHelper::GetPropertyValue(aTextWrap, rXPropSet, "TextWrap", true);
 
     if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "TextWritingMode", true ) )
         aAny >>= eWM;
