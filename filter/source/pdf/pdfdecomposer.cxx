@@ -68,7 +68,10 @@ uno::Sequence<uno::Reference<graphic::XPrimitive2D>> SAL_CALL XPdfDecomposer::ge
         nPageIndex = 0;
 
     std::vector<Bitmap> aBitmaps;
-    vcl::RenderPDFBitmaps(xPdfData.getConstArray(), xPdfData.getLength(), aBitmaps, nPageIndex, 1);
+    int rv = vcl::RenderPDFBitmaps(xPdfData.getConstArray(), xPdfData.getLength(), aBitmaps,
+                                   nPageIndex, 1);
+    if (rv == 0)
+        return {}; // happens if we do not have PDFium
 
     BitmapEx aReplacement(aBitmaps[0]);
 
