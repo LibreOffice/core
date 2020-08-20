@@ -21,6 +21,7 @@
 
 #include <o3tl/safeint.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
+#include <algorithm>
 
 using namespace ::com::sun::star;
 using css::uno::Reference;
@@ -64,25 +65,41 @@ bool UnoInterfaceToUniqueIdentifierMapper::registerReference( const OUString& rI
     {
         return rIdentifier != (*aIter).first;
     }
-    else if( findIdentifier( rIdentifier, aIter ) )
+    else if( findIdentifier( rIdentifier, aIter ) || findReserved( rIdentifier ) )
     {
         return false;
     }
     else
     {
-        insertReference( rIdentifier, xRef );
+        maEntries.insert( IdMap_t::value_type( rIdentifier, xRef ) );
+
+        // see if this is a reference like something we would generate in the future
+        const sal_Unicode *p = rIdentifier.getStr();
+        sal_Int32 nLength = rIdentifier.getLength();
+
+        // see if the identifier is 'id' followed by a pure integer value
+        if( nLength < 2 || p[0] != 'i' || p[1] != 'd' )
+            return true;
+
+        nLength -= 2;
+        p += 2;
+
+        while(nLength--)
+        {
+            if( (*p < '0') || (*p > '9') )
+                return true; // a custom id, that will never conflict with genereated id's
+            p++;
+        }
+
+        // the identifier is a pure integer value
+        // so we make sure we will never generate
+        // an integer value like this one
+        sal_Int32 nId = rIdentifier.copy(2).toInt32();
+        if (nId > 0 && mnNextId <= o3tl::make_unsigned(nId))
+            mnNextId = nId + 1;
+
+        return true;
     }
-
-    return true;
-}
-
-void UnoInterfaceToUniqueIdentifierMapper::registerReferenceAlways( const OUString& rIdentifier, const Reference< XInterface >& rInterface )
-{
-    // Be certain that the references we store in our table are to the
-    // leading / primary XInterface - cf. findReference
-    uno::Reference< uno::XInterface > xRef( rInterface, uno::UNO_QUERY );
-
-    insertReference( rIdentifier, xRef );
 }
 
 const OUString& UnoInterfaceToUniqueIdentifierMapper::getIdentifier( const Reference< XInterface >& rInterface ) const
@@ -135,38 +152,42 @@ bool UnoInterfaceToUniqueIdentifierMapper::findIdentifier( const OUString& rIden
     return rIter != maEntries.end();
 }
 
-void UnoInterfaceToUniqueIdentifierMapper::insertReference( const OUString& rIdentifier, const Reference< XInterface >& rInterface )
+bool UnoInterfaceToUniqueIdentifierMapper::reserveIdentifier( const OUString& rIdentifier )
 {
-    maEntries[rIdentifier] = rInterface;
+    if ( findReserved( rIdentifier ) )
+        return false;
 
-    // see if this is a reference like something we would generate in the future
-    const sal_Unicode *p = rIdentifier.getStr();
-    sal_Int32 nLength = rIdentifier.getLength();
+    maReserved.push_back( rIdentifier );
+    return true;
+}
 
-    // see if the identifier is 'id' followed by a pure integer value
-    if( nLength < 2 || p[0] != 'i' || p[1] != 'd' )
-        return;
+bool UnoInterfaceToUniqueIdentifierMapper::registerReservedReference(
+        const OUString& rIdentifier,
+        const css::uno::Reference< css::uno::XInterface >& rInterface )
+{
+    Reserved_t::const_iterator aIt;
+    if ( !findReserved( rIdentifier, aIt ) )
+        return false;
 
-    nLength -= 2;
-    p += 2;
+    Reserved_t::iterator aRemoveIt( maReserved.begin() + ( aIt - maReserved.begin() ) );
+    maReserved.erase( aRemoveIt );
+    registerReference( rIdentifier, rInterface );
 
-    while(nLength--)
-    {
-        if( (*p < '0') || (*p > '9') )
-            return; // a custom id, that will never conflict with generated id's
+    return true;
+}
 
-        p++;
-    }
+bool UnoInterfaceToUniqueIdentifierMapper::findReserved( const OUString& rIdentifier ) const
+{
+    Reserved_t::const_iterator aDummy;
+    return findReserved( rIdentifier, aDummy );
+}
 
-    // the identifier is a pure integer value
-    // so we make sure we will never generate
-    // an integer value like this one
-    sal_Int32 nId = rIdentifier.copy(2).toInt32();
-    if (nId > 0 && mnNextId <= o3tl::make_unsigned(nId))
-    {
-        mnNextId = nId;
-        ++mnNextId;
-    }
+bool UnoInterfaceToUniqueIdentifierMapper::findReserved(
+        const OUString& rIdentifier,
+        Reserved_t::const_iterator& rIter ) const
+{
+    rIter = std::find( maReserved.begin(), maReserved.end(), rIdentifier );
+    return rIter != maReserved.end();
 }
 
 }
