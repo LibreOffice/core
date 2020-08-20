@@ -4264,9 +4264,13 @@ OUString DomainMapper_Impl::convertFieldFormula(const OUString& input) {
     icu::RegexMatcher rmatch5("\\bDEFINED\\s*\\(<([A-Z]+[0-9]+)>\\)", usInput, rMatcherFlags, status);
     usInput = rmatch5.replaceAll(icu::UnicodeString("DEFINED($1)"), status);
 
-    /* Fix up ABS(x) using SQRT(x POW 2) - it supports only 1-level nesting */
+    /* Fix up ABS(x) using SQRT(x POW 2) (it supports only 1-level nesting) */
     icu::RegexMatcher rmatch6("\\bABS\\s*(\\(([^()]*|([^()])*\\([^()]*\\)[^()]*)*\\))", usInput, rMatcherFlags, status);
     usInput = rmatch6.replaceAll(icu::UnicodeString("SQRT($1 POW 2)"), status);
+
+    /* Fix up SIGN(x) using (0 < x) - (x < 0) (it supports only 1-level nesting) */
+    icu::RegexMatcher rmatch7("\\bSIGN\\s*(\\(([^()]*|([^()])*\\([^()]*\\)[^()]*)*\\))", usInput, rMatcherFlags, status);
+    usInput = rmatch7.replaceAll(icu::UnicodeString("((0 L $1) - ($1 L 0))"), status);
 
     return OUString(usInput.getTerminatedBuffer());
 }
