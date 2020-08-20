@@ -31,7 +31,6 @@
 #include <memory>
 #include <vector>
 
-struct GalleryObject;
 class GalleryBinaryEngineEntry;
 class GalleryStorageLocations;
 

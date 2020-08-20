@@ -556,7 +556,7 @@ INetURLObject ImplGetURL(const GalleryObject* pObject)
     INetURLObject aURL;
 
     if (pObject)
-        aURL = pObject->aURL;
+        aURL = pObject->getURL();
 
     return aURL;
 }
