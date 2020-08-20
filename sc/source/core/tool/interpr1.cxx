@@ -5171,6 +5171,22 @@ void ScInterpreter::ScCountEmptyCells()
             }
         }
         break;
+        case svMatrix:
+        case svExternalSingleRef:
+        case svExternalDoubleRef:
+        {
+            ScMatrixRef xMat = GetMatrix();
+            if (!xMat)
+                SetError( FormulaError::IllegalParameter);
+            else
+            {
+                SCSIZE nC, nR;
+                xMat->GetDimensions( nC, nR);
+                nMaxCount = nC * nR;
+                nCount = xMat->Count( true, true);  // numbers (implicit), strings and error values
+            }
+        }
+        break;
         default : SetError(FormulaError::IllegalParameter); break;
     }
     if (xResMat)
