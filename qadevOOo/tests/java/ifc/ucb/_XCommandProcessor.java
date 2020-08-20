@@ -78,7 +78,7 @@ public class _XCommandProcessor extends MultiMethodTest {
     /**
      * Tests <code>createCommandIdentifier()</code>. Calls it for two times
      * and checks returned values. <p>
-     * Has <b>OK</b> status if values are unique correct idenifiers: not 0.
+     * Has <b>OK</b> status if values are unique correct identifiers: not 0.
      */
     public void _createCommandIdentifier() {
         log.println("creating a command line identifier");

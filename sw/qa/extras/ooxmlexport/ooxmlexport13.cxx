@@ -345,7 +345,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf99602_charStyleSubscript, "tdf99602_charStyleSub
     uno::Reference<text::XTextRange> xPara = getParagraph(1);
     // The word "Base" should not be subscripted.
     CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.f, getProperty<float>(getRun(xPara, 1, "Base"), "CharEscapement"), 0);
-    // The word "Subscript" should be 48pt, automatically subscripted, and automatic propertioned.
+    // The word "Subscript" should be 48pt, automatically subscripted, and automatic proportioned.
     CPPUNIT_ASSERT_EQUAL( sal_Int16(DFLT_ESC_AUTO_SUB), getProperty<sal_Int16>(getRun(xPara, 2, "Subscript"), "CharEscapement") );
     CPPUNIT_ASSERT_EQUAL( sal_Int16(DFLT_ESC_PROP), getProperty<sal_Int16>(getRun(xPara, 2), "CharEscapementHeight") );
 }

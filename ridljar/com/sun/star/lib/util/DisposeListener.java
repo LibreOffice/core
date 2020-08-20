@@ -27,7 +27,7 @@ public interface DisposeListener {
     /**
      * Callback fired by a <code>DisposeNotifier</code> once it is disposed.
      *
-     * @param source the <code>DisposeNotifer</code> that fires the callback;
+     * @param source the <code>DisposeNotifier</code> that fires the callback;
      * will never be <code>null</code>
      */
     void notifyDispose(DisposeNotifier source);

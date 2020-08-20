@@ -32,7 +32,7 @@
 #     
 #**************************************************************************
 
-# Builds the ProtoclHandlerAddon Java component example of the SDK.
+# Builds the ProtocolHandlerAddon Java component example of the SDK.
 
 PRJ=../../../../..
 SETTINGS=$(PRJ)/settings

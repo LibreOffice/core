@@ -867,7 +867,7 @@ Sequence< OUString > OServiceManager::getAvailableServiceNames()
     return getUniqueAvailableServiceNames( aNameSet );
 }
 
-// XMultibleServiceFactory
+// XMultipleServiceFactory
 Reference<XInterface > OServiceManager::createInstance(
     const OUString& rServiceSpecifier )
 {
@@ -875,7 +875,7 @@ Reference<XInterface > OServiceManager::createInstance(
         rServiceSpecifier, m_xContext );
 }
 
-// XMultibleServiceFactory
+// XMultipleServiceFactory
 Reference<XInterface > OServiceManager::createInstanceWithArguments(
     const OUString& rServiceSpecifier,
     const Sequence<Any >& rArguments )

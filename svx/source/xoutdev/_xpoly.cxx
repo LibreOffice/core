@@ -815,7 +815,7 @@ void XPolygon::Distort(const tools::Rectangle& rRefRect,
 basegfx::B2DPolygon XPolygon::getB2DPolygon() const
 {
     // #i74631# use tools Polygon class for conversion to not have the code doubled
-    // here. This needs one more conversion but avoids different convertors in
+    // here. This needs one more conversion but avoids different converters in
     // the long run
     const tools::Polygon aSource(GetPointCount(), pImpXPolygon->pPointAry.get(), pImpXPolygon->pFlagAry.get());
 
@@ -826,7 +826,7 @@ XPolygon::XPolygon(const basegfx::B2DPolygon& rPolygon)
     : pImpXPolygon( tools::Polygon( rPolygon ).GetSize() )
 {
     // #i74631# use tools Polygon class for conversion to not have the code doubled
-    // here. This needs one more conversion but avoids different convertors in
+    // here. This needs one more conversion but avoids different converters in
     // the long run
 
     const tools::Polygon aSource(rPolygon);
