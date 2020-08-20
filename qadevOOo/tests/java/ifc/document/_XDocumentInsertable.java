@@ -164,7 +164,7 @@ public class _XDocumentInsertable extends MultiMethodTest {
         if (result) {
             try {
                 PropertyValue [] szEmptyArgs = new PropertyValue [0];
-                String docURL = "file:///c:/ThisIsAnInvaldURL";
+                String docURL = "file:///c:/ThisIsAnInvalidURL";
                 log.println("Inserting document from URL '" + docURL + "'");
                 oObj.insertDocumentFromURL(docURL, szEmptyArgs);
 
