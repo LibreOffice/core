@@ -3675,6 +3675,8 @@ void XMLTextParagraphExport::exportTableAutoStyles() {}
 
 void XMLTextParagraphExport::exportTextAutoStyles()
 {
+    // tdf#135942: do not collect styles during their export: this may modify iterated containers
+    mbCollected = true;
     exportTableAutoStyles();
 
     GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_PARAGRAPH );
