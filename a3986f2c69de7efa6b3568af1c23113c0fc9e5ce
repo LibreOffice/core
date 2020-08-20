@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7d171901_d9e701b6",
+        "filename": "sw/qa/extras/rtfexport/rtfexport5.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1149,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-08-20T10:47:21Z",
+      "side": 1,
+      "message": "-\u003e sal_Int32(560)",
+      "revId": "a3986f2c69de7efa6b3568af1c23113c0fc9e5ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "184dc89a_66daa139",
+        "filename": "sw/qa/extras/rtfexport/rtfexport5.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1151,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-08-20T10:47:21Z",
+      "side": 1,
+      "message": "-\u003e xmlDocPtr",
+      "revId": "a3986f2c69de7efa6b3568af1c23113c0fc9e5ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
