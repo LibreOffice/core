@@ -58,6 +58,7 @@ private:
     Timer m_aSearchDataTimer;
     css::uno::Reference<css::deployment::XExtensionManager> m_xExtensionManager;
 
+    DECL_LINK(GearHdl, const OString&, void);
     DECL_LINK(SearchUpdateHdl, weld::Entry&, void);
     DECL_LINK(ImplUpdateDataHdl, Timer*, void);
     DECL_LINK(FocusOut_Impl, weld::Widget&, void);
@@ -91,6 +92,10 @@ public:
     getInstalledExtensions();
     void SetProgress(const OUString& rProgress);
     void ClearList();
+
+    static bool InfoSortByComment(AdditionInfo& a, AdditionInfo& b);
+    static bool InfoSortByRating(AdditionInfo& a, AdditionInfo& b);
+    static bool InfoSortByDownload(AdditionInfo& a, AdditionInfo& b);
 };
 
 class AdditionsItem
