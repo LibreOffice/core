@@ -29,7 +29,7 @@ import util.utils;
 *  <li><code> Border</code></li>
 *  <li><code> HelpText</code></li>
 *  <li><code> HelpURL</code></li>
-*  <li><code> FontEmphsisMark</code></li>
+*  <li><code> FontEmphasisMark</code></li>
 *  <li><code> FontRelief</code></li>
 *  <li><code> Enabled</code></li>
 *  <li><code> FontDescriptor</code></li>
