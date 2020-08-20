@@ -361,7 +361,7 @@ public class QueryWizard extends DatabaseObjectWizard
                     {
                         m_DBMetaData.setNonAggregateFieldNames();
                         m_groupFieldSelection.initialize(m_DBMetaData.getUniqueAggregateFieldNames(), false, m_DBMetaData.xDBMetaData.getMaxColumnsInGroupBy());
-                        m_groupFieldSelection.intializeSelectedFields(m_DBMetaData.NonAggregateFieldNames);
+                        m_groupFieldSelection.initializeSelectedFields(m_DBMetaData.NonAggregateFieldNames);
                         m_groupFieldSelection.setMultipleMode(false);
                         setStepEnabled(SOGROUPFILTER_PAGE, m_aggregateComponent.isGroupingpossible() && m_DBMetaData.NonAggregateFieldNames.length > 0);
                     }

@@ -474,7 +474,7 @@ public class FieldSelection
 
 
 
-    public void intializeSelectedFields(String[] _SelectedFieldNames)
+    public void initializeSelectedFields(String[] _SelectedFieldNames)
     {
         xSelectedFieldsListBox.addItems(_SelectedFieldNames, xSelectedFieldsListBox.getItemCount());
     }
