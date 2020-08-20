@@ -502,7 +502,7 @@ lcl_CursorIsInSection(
 bool SwXParagraphEnumerationImpl::IgnoreLastElement(SwUnoCursor& rCursor, bool bMovedFromTable)
 {
     // Ignore the last element of a selection enumeration if this is a stub
-    // paragraph (directly after table, selection ends at paragaph start).
+    // paragraph (directly after table, selection ends at paragraph start).
 
     if (rCursor.Start()->nNode.GetIndex() != m_nEndIndex)
         return false;

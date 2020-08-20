@@ -2740,7 +2740,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
             // printers paper size here.
             // Sometimes 'getRenderer' is only called to get "ExtraPrintUIOptions", in this
             // case we won't get an OutputDevice here, but then the caller also has no need
-            // for the correct PageSisze right now...
+            // for the correct PageSize right now...
             VclPtr< Printer > pPrinter = dynamic_cast< Printer * >(lcl_GetOutputDevice( *m_pPrintUIOptions ).get());
             if (pPrinter)
             {
@@ -3001,7 +3001,7 @@ void SAL_CALL SwXTextDocument::render(
 
                     // First, we have to export hyperlinks, notes, and outline to pdf.
                     // During this process, additional information required for tagging
-                    // the pdf file are collected, which are evaulated during painting.
+                    // the pdf file are collected, which are evaluated during painting.
 
                     SwWrtShell* pWrtShell = pSwView ? pSwView->GetWrtShellPtr() : nullptr;
 

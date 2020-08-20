@@ -16,7 +16,7 @@ except ImportError:
     raise
 
 def mkPropertyValue(name, value):
-    """ Create a UNO ProertyValue from two input values.
+    """ Create a UNO PropertyValue from two input values.
     """
     return uno.createUnoStruct("com.sun.star.beans.PropertyValue",
             name, 0, value, 0)

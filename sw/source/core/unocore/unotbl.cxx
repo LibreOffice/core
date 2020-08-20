@@ -3054,7 +3054,7 @@ void SwXTextTable::setName(const OUString& rName)
                 static_cast<SwOLENode*>(pNd)->SetChartTableName( rName );
 
                 SwTable* pTable = SwTable::FindTable( pFormat );
-                //TL_CHART2: chart needs to be notfied about name changes
+                //TL_CHART2: chart needs to be notified about name changes
                 pFormat->GetDoc()->UpdateCharts( pTable->GetFrameFormat()->GetName() );
             }
             aIdx.Assign( *pStNd->EndOfSectionNode(), + 1 );

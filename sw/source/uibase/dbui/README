@@ -3,7 +3,7 @@ user via different GUIs. The modes are:
 
 1. FILE    = saves the result as documents
 2. PRINTER = directly prints resulting documents
-3. EMAIL   = sends results as inidividual emails
+3. EMAIL   = sends results as individual emails
 4. SHELL   = returns an internal document shell for further programming
 
 There is one property, which changes the overall behaviour of these modes:

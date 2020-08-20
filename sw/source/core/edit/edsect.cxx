@@ -306,7 +306,7 @@ static const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
     const SwNode& rCurrentNode = pCurrentPos->nNode.GetNode();
 
     // find innermost section or table.  At the end of this scope,
-    // pInntermostNode contain the section/table before/after which we should
+    // pInnermostNode contains the section/table before/after which we should
     // insert our empty paragraph, or it will be NULL if none is found.
     const SwNode* pInnermostNode = nullptr;
     {
