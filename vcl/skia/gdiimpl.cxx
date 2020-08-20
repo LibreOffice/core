@@ -414,8 +414,8 @@ bool SkiaSalGraphicsImpl::setClipRegion(const vcl::Region& region)
         return true;
     SkiaZone zone;
     checkPendingDrawing();
-    mClipRegion = region;
     checkSurface();
+    mClipRegion = region;
     SAL_INFO("vcl.skia.trace", "setclipregion(" << this << "): " << region);
     SkCanvas* canvas = mSurface->getCanvas();
     // SkCanvas::clipRegion() can only further reduce the clip region,
