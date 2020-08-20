@@ -1190,7 +1190,7 @@ void SwXMLTextParagraphExport::exportTable(
             OSL_ENSURE( pTable, "table missing" );
             const SwTableNode *pTableNd = pTable->GetTableNode();
             OSL_ENSURE( pTableNd, "table node missing" );
-            if( bAutoStyles )
+            if (bAutoStyles /*&& !isAutoStylesCollected()*/)
             {
                 SwNodeIndex aIdx( *pTableNd );
                 // AUTOSTYLES: Optimization: Do not export table autostyle if
@@ -1200,7 +1200,25 @@ void SwXMLTextParagraphExport::exportTable(
                 // ALL flags are set at the same time.
                 const bool bExportStyles = bool( GetExport().getExportFlags() & SvXMLExportFlags::STYLES );
                 if ( bExportStyles || !pFormat->GetDoc()->IsInHeaderFooter( aIdx ) )
+                {
                     maTableNodes.push_back(pTableNd);
+                    // Collect all tables inside cells of this table, too
+//                    const auto aCellNames = pXTable->getCellNames();
+//                    for (const OUString& rCellName : aCellNames)
+//                    {
+//                        css::uno::Reference<css::container::XEnumerationAccess> xCell(
+//                            pXTable->getCellByName(rCellName), css::uno::UNO_QUERY);
+//                        if (!xCell)
+//                            continue;
+//                        auto xEnumeration = xCell->createEnumeration();
+//                        while (xEnumeration->hasMoreElements())
+//                        {
+//                            if (css::uno::Reference<css::text::XTextTable> xInnerTable{
+//                                    xEnumeration->nextElement(), css::uno::UNO_QUERY })
+//                                exportTable(xInnerTable, bAutoStyles, _bProgress);
+//                        }
+//                    }
+                }
             }
             else
             {
