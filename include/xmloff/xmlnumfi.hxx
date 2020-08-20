@@ -83,9 +83,8 @@ public:
     ~SvXMLNumFmtHelper();
 
     SvXMLStyleContext*  CreateChildContext( SvXMLImport& rImport,
-                sal_uInt16 nPrefix,
-                const OUString& rLocalName,
-                const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
+                sal_Int32 nElement,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
                 SvXMLStylesContext& rStyles);
 
     SvXMLNumImpData* getData() { return pData.get(); }
@@ -154,11 +153,17 @@ class XMLOFF_DLLPUBLIC SvXMLNumFormatContext : public SvXMLStyleContext
 
 public:
                 SvXMLNumFormatContext( SvXMLImport& rImport,
-                sal_uInt16 nPrfx,
+                                    sal_uInt16 nPrfx,
                                     const OUString& rLName,
                                     SvXMLNumImpData* pNewData,
                                     SvXMLStylesTokens nNewType,
                                     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
+                                    SvXMLStylesContext& rStyles );
+                SvXMLNumFormatContext( SvXMLImport& rImport,
+                                    sal_Int32 nElement,
+                                    SvXMLNumImpData* pNewData,
+                                    SvXMLStylesTokens nNewType,
+                                    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
                                     SvXMLStylesContext& rStyles );
                 SvXMLNumFormatContext( SvXMLImport& rImport,
                                     sal_uInt16 nPrfx,
