@@ -1478,6 +1478,7 @@ TrueTypeFont::TrueTypeFont(const char* pFileName)
     , ntables(0)
     , cmap(nullptr)
     , cmapType(0)
+    , mapper(nullptr)
 {
 }
 
