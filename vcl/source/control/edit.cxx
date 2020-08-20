@@ -2585,10 +2585,6 @@ void Edit::SetModifyFlag()
 {
 }
 
-void Edit::ClearModifyFlag()
-{
-}
-
 void Edit::SetSubEdit(Edit* pEdit)
 {
     mpSubEdit.disposeAndClear();

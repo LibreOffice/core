@@ -1028,11 +1028,6 @@ void VclMultiLineEdit::SetModifyFlag()
     pImpVclMEdit->SetModified( true );
 }
 
-void VclMultiLineEdit::ClearModifyFlag()
-{
-    pImpVclMEdit->SetModified( false );
-}
-
 void VclMultiLineEdit::SetReadOnly( bool bReadOnly )
 {
     pImpVclMEdit->SetReadOnly( bReadOnly );

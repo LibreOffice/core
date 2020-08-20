@@ -62,36 +62,6 @@ namespace dbaui
     {
     }
 
-    ODataClipboard::ODataClipboard(
-                    const OUString&  _rDatasource,
-                    const sal_Int32         _nCommandType,
-                    const OUString&  _rCommand,
-                    const Reference< XConnection >& _rxConnection,
-                    const Reference< XNumberFormatter >& _rxFormatter,
-                    const Reference< XComponentContext >& _rxORB)
-                    :ODataAccessObjectTransferable( _rDatasource, _nCommandType, _rCommand, _rxConnection )
-    {
-        osl_atomic_increment( &m_refCount );
-        lcl_setListener( _rxConnection, this, true );
-
-        m_pHtml.set( new OHTMLImportExport( getDescriptor(), _rxORB, _rxFormatter ) );
-        m_pRtf.set( new ORTFImportExport( getDescriptor(), _rxORB, _rxFormatter ) );
-
-        osl_atomic_decrement( &m_refCount );
-    }
-
-    ODataClipboard::ODataClipboard(
-                    const OUString&  _rDatasource,
-                    const sal_Int32         _nCommandType,
-                    const OUString&  _rCommand,
-                    const Reference< XNumberFormatter >& _rxFormatter,
-                    const Reference< XComponentContext >& _rxORB)
-        :ODataAccessObjectTransferable( _rDatasource, _nCommandType, _rCommand)
-    {
-        m_pHtml.set( new OHTMLImportExport( getDescriptor(),_rxORB, _rxFormatter ) );
-        m_pRtf.set( new ORTFImportExport( getDescriptor(),_rxORB, _rxFormatter ) );
-    }
-
     void ODataClipboard::Update(
                     const OUString&  rDatasource,
                     const sal_Int32  nCommandType,

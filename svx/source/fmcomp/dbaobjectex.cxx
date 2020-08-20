@@ -39,13 +39,6 @@ namespace svx
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::datatransfer;
 
-    OComponentTransferable::OComponentTransferable(const OUString& _rDatasourceOrLocation
-            ,const Reference< XContent>& _xContent)
-    {
-        m_aDescriptor.setDataSource(_rDatasourceOrLocation);
-        m_aDescriptor[DataAccessDescriptorProperty::Component] <<= _xContent;
-    }
-
     OComponentTransferable::OComponentTransferable()
     {
     }

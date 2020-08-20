@@ -110,7 +110,6 @@ public:
     virtual void    Modify() override;
 
     virtual void    SetModifyFlag() override;
-    virtual void    ClearModifyFlag() override;
 
     virtual void    SetReadOnly( bool bReadOnly = true ) override;
     virtual bool    IsReadOnly() const override;

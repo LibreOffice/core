@@ -164,7 +164,6 @@ public:
     static bool         IsCharInput( const KeyEvent& rKEvt );
 
     virtual void        SetModifyFlag();
-    virtual void        ClearModifyFlag();
 
     void                SetEchoChar( sal_Unicode c );
     sal_Unicode         GetEchoChar() const { return mcEchoChar; }
