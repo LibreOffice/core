@@ -36,7 +36,7 @@
 
 //refer to ms-help://MS.VSCC/MS.MSDNVS.2052/com/stgasstg_7agk.htm
 //FMTID_SummaryInformation
-//GUID CLSID_SummaryInforation = {
+//GUID CLSID_SummaryInformation = {
 //    0xF29F85E0,
 //    0x4FF9,
 //    0x1068,

@@ -31,7 +31,7 @@
 #include <ole2.h>
 #include <ntquery.h>
 //+-------------------------------------------------------------------------
-//  Declare:    CLSID_SummaryInforation, GUID
+//  Declare:    CLSID_SummaryInformation, GUID
 //              CLSID_Storage, GUID
 //  Contents:   Definitions of OpenOffice.org Document properties
 
