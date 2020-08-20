@@ -32,6 +32,7 @@
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <comphelper/lok.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <basegfx/range/b2irectangle.hxx>
 
 using namespace ::com::sun::star;
