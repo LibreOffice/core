@@ -392,11 +392,12 @@ FuInsertMedia::FuInsertMedia( ScTabViewShell&   rViewSh,
     }
 
     bool bLink(true);
-    if (!bAPI
+    bool bInsertMedia = bAPI;
 #if HAVE_FEATURE_AVMEDIA
-        || !::avmedia::MediaWindow::executeMediaURLDialog(pWin ? pWin->GetFrameWeld() : nullptr, aURL, &bLink)
+    if (!bInsertMedia)
+        bInsertMedia = ::avmedia::MediaWindow::executeMediaURLDialog(pWin ? pWin->GetFrameWeld() : nullptr, aURL, &bLink);
 #endif
-       )
+    if (!bInsertMedia)
         return;
 
     Size aPrefSize;
