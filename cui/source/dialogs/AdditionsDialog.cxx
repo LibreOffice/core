@@ -268,6 +268,7 @@ bool getPreviewFile(const AdditionInfo& aAdditionInfo, OUString& sPreviewFile)
 {
     uno::Reference<ucb::XSimpleFileAccess3> xFileAccess
         = ucb::SimpleFileAccess::create(comphelper::getProcessComponentContext());
+    Reference<XComponentContext> xContext(::comphelper::getProcessComponentContext());
 
     // copy the images to the user's additions folder
     OUString userFolder = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER
@@ -444,6 +445,9 @@ void SearchAndParseThread::execute()
     {
         std::string sResponse = curlGet(m_pAdditionsDialog->m_sURL);
         parseResponse(sResponse, m_pAdditionsDialog->m_aAllExtensionsVector);
+        std::sort(m_pAdditionsDialog->m_aAllExtensionsVector.begin(),
+                  m_pAdditionsDialog->m_aAllExtensionsVector.end(),
+                  AdditionsDialog::InfoSortByRating);
         Search();
     }
     else // Searching
@@ -470,6 +474,9 @@ AdditionsDialog::AdditionsDialog(weld::Window* pParent, const OUString& sAdditio
     , m_xLabelProgress(m_xBuilder->weld_label("labelProgress"))
     , m_xGearBtn(m_xBuilder->weld_menu_button("buttonGear"))
 {
+    m_xGearBtn->connect_selected(LINK(this, AdditionsDialog, GearHdl));
+    m_xGearBtn->set_item_active("gear_sort_voting", true);
+
     m_aSearchDataTimer.SetInvokeHandler(LINK(this, AdditionsDialog, ImplUpdateDataHdl));
     m_aSearchDataTimer.SetDebugName("AdditionsDialog SearchDataTimer");
     m_aSearchDataTimer.SetTimeout(EDIT_UPDATEDATA_TIMEOUT);
@@ -576,6 +583,21 @@ void AdditionsDialog::ClearList()
         item->m_xContainer->hide();
     }
     this->m_aAdditionsItems.clear();
+}
+
+bool AdditionsDialog::InfoSortByRating(AdditionInfo& a, AdditionInfo& b)
+{
+    return a.sRating.toDouble() > b.sRating.toDouble();
+}
+
+bool AdditionsDialog::InfoSortByComment(AdditionInfo& a, AdditionInfo& b)
+{
+    return a.sCommentNumber.toUInt32() > b.sCommentNumber.toUInt32();
+}
+
+bool AdditionsDialog::InfoSortByDownload(AdditionInfo& a, AdditionInfo& b)
+{
+    return a.sDownloadNumber.toUInt32() > b.sDownloadNumber.toUInt32();
 }
 
 AdditionsItem::AdditionsItem(weld::Widget* pParent, AdditionsDialog* pParentDialog,
@@ -799,52 +821,19 @@ IMPL_LINK_NOARG(AdditionsItem, InstallHdl, weld::Button&, void)
     }
 }
 
-// TmpRepositoryCommandEnv
-
-TmpRepositoryCommandEnv::TmpRepositoryCommandEnv() {}
-
-TmpRepositoryCommandEnv::~TmpRepositoryCommandEnv() {}
-// XCommandEnvironment
-
-uno::Reference<task::XInteractionHandler> TmpRepositoryCommandEnv::getInteractionHandler()
+IMPL_LINK(AdditionsDialog, GearHdl, const OString&, rIdent, void)
 {
-    return this;
-}
-
-uno::Reference<ucb::XProgressHandler> TmpRepositoryCommandEnv::getProgressHandler() { return this; }
-
-// XInteractionHandler
-void TmpRepositoryCommandEnv::handle(uno::Reference<task::XInteractionRequest> const& xRequest)
-{
-    OSL_ASSERT(xRequest->getRequest().getValueTypeClass() == uno::TypeClass_EXCEPTION);
-
-    bool approve = true;
-
-    // select:
-    uno::Sequence<Reference<task::XInteractionContinuation>> conts(xRequest->getContinuations());
-    Reference<task::XInteractionContinuation> const* pConts = conts.getConstArray();
-    sal_Int32 len = conts.getLength();
-    for (sal_Int32 pos = 0; pos < len; ++pos)
+    if (rIdent == "gear_sort_voting")
     {
-        if (approve)
-        {
-            uno::Reference<task::XInteractionApprove> xInteractionApprove(pConts[pos],
-                                                                          uno::UNO_QUERY);
-            if (xInteractionApprove.is())
-            {
-                xInteractionApprove->select();
-                // don't query again for ongoing continuations:
-                approve = false;
-            }
-        }
+        std::sort(m_aAllExtensionsVector.begin(), m_aAllExtensionsVector.end(), InfoSortByRating);
+    }
+    else if (rIdent == "gear_sort_comments")
+    {
+        std::sort(m_aAllExtensionsVector.begin(), m_aAllExtensionsVector.end(), InfoSortByComment);
+    }
+    else if (rIdent == "gear_sort_downloads")
+    {
+        std::sort(m_aAllExtensionsVector.begin(), m_aAllExtensionsVector.end(), InfoSortByDownload);
     }
 }
-
-// XProgressHandler
-void TmpRepositoryCommandEnv::push(uno::Any const& /*Status*/) {}
-
-void TmpRepositoryCommandEnv::update(uno::Any const& /*Status */) {}
-
-void TmpRepositoryCommandEnv::pop() {}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
