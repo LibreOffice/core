@@ -1778,7 +1778,7 @@ SwTextField* SwTextNode::GetFieldTextAttrAt(
             dynamic_cast<SwTextField*>( GetTextAttrAt(
                 nIndex,
                 RES_TXTATR_INPUTFIELD,
-                bIncludeInputFieldAtStart ? DEFAULT : PARENT ));
+                bIncludeInputFieldAtStart ? DEFAULT : EXPAND ));
     }
 
     return pTextField;

@@ -927,7 +927,7 @@ bool SwCursorShell::CursorInsideInputField() const
 {
     for(SwPaM& rCursor : GetCursor()->GetRingContainer())
     {
-        if (dynamic_cast<const SwTextInputField*>(GetTextFieldAtCursor(&rCursor, false)))
+        if (dynamic_cast<const SwTextInputField*>(GetTextFieldAtCursor(&rCursor, true)))
             return true;
     }
     return false;
