@@ -1830,6 +1830,8 @@ void SfxThumbnailView::MakeItemVisible( sal_uInt16 nItemId )
 
 bool SfxThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
 {
+    GrabFocus();
+
     if (!rMEvt.IsLeft())
     {
         return CustomWidgetController::MouseButtonDown( rMEvt );
