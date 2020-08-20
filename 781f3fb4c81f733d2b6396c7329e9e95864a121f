@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "a8085c97_6f9c48c7",
+        "filename": "slideshow/source/engine/animationnodes/animationbasenode.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-08-20T07:28:29Z",
+      "side": 1,
+      "message": "I\u0027d push this into the AnimationNode itself - the node \u0027knows\u0027 what it is, and you have already derived a subclass AnimationPhysicsNode. So I\u0027d add a enqueueActivity() virtual function to BaseNode, with a default of just calling addActivity(), and an override for the physics node. gets this here back to one line.",
+      "parentUuid": "f69640ab_9457f41e",
+      "revId": "781f3fb4c81f733d2b6396c7329e9e95864a121f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "30b1b065_c0659d4e",
         "filename": "slideshow/source/engine/animationnodes/animationbasenode.cxx",
         "patchSetId": 1
