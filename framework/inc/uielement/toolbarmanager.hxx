@@ -57,7 +57,7 @@ typedef ::cppu::WeakImplHelper<
            css::ui::XUIConfigurationListener
         > ToolbarManager_Base;
 
-class ToolBarManager : public ToolbarManager_Base
+class ToolBarManager final : public ToolbarManager_Base
 {
     public:
         ToolBarManager( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
@@ -85,8 +85,9 @@ class ToolBarManager : public ToolbarManager_Base
         void SAL_CALL removeEventListener( const css::uno::Reference< XEventListener >& xListener ) override;
 
         void CheckAndUpdateImages();
-        virtual void RefreshImages();
+        void RequestImages();
         void FillToolbar( const css::uno::Reference< css::container::XIndexAccess >& rToolBarData );
+        void FillAddonToolbar( const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& rAddonToolbar );
         void FillOverflowToolbar( ToolBox const * pParent );
         void notifyRegisteredControllers( const OUString& aUIElementName, const OUString& aCommand );
         void Destroy();
@@ -107,7 +108,7 @@ class ToolBarManager : public ToolbarManager_Base
             css::uno::Reference< css::awt::XWindow >            xWindow;
         };
 
-    protected:
+    private:
         DECL_LINK(Click, ToolBox *, void);
         DECL_LINK(DropdownClick, ToolBox *, void);
         DECL_LINK(DoubleClick, ToolBox *, void);
@@ -123,8 +124,6 @@ class ToolBarManager : public ToolbarManager_Base
         DECL_LINK( OverflowEventListener, VclWindowEvent&, void );
         DECL_STATIC_LINK( ToolBarManager, ExecuteHdl_Impl, void*, void );
 
-        virtual bool MenuItemAllowed( sal_uInt16 ) const;
-
         void AddCustomizeMenuItems(ToolBox const * pToolBar);
         void InitImageManager();
         void RemoveControllers();
@@ -134,7 +133,7 @@ class ToolBarManager : public ToolbarManager_Base
         void UpdateController( const css::uno::Reference< css::frame::XToolbarController >& xController);
         //end
         void AddFrameActionListener();
-        void RequestImages();
+        void RefreshImages();
         ToolBoxItemBits ConvertStyleToToolboxItemBits( sal_Int32 nStyle );
         css::uno::Reference< css::frame::XModel > GetModelFromFrame() const;
         bool IsPluginMode() const;
@@ -142,7 +141,6 @@ class ToolBarManager : public ToolbarManager_Base
         void setToolBarImage(const Image& _aImage,const CommandToInfoMap::const_iterator& _pIter);
         void impl_elementChanged(bool _bRemove,const css::ui::ConfigurationEvent& Event );
 
-    protected:
         typedef std::unordered_map< sal_uInt16, css::uno::Reference< css::frame::XStatusListener > >  ToolBarControllerMap;
         typedef ::std::vector< css::uno::Reference< css::frame::XSubToolbarController > >             SubToolBarControllerVector;
         typedef std::unordered_map<OUString, SubToolBarControllerVector>                                                SubToolBarToSubToolBarControllerMap;
