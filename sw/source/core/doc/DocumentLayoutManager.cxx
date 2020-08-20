@@ -484,6 +484,14 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
         pDestTextBox->SetOtherTextBoxFormat(pDest);
     }
 
+    if (pDest->GetName().isEmpty())
+    {
+        // Format name should have unique name. Let's use object name as a fallback
+        SdrObject *pObj = pDest->FindSdrObject();
+        if (pObj)
+            pDest->SetName(pObj->GetName());
+    }
+
     return pDest;
 }
 
