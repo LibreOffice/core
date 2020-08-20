@@ -2315,9 +2315,9 @@ void SvTreeListBox::SetSpaceBetweenEntries( short nOffsLogic )
     }
 }
 
-void SvTreeListBox::SetCursor( SvTreeListEntry* pEntry, bool bForceNoSelect )
+void SvTreeListBox::SetCursor( SvTreeListEntry* pEntry )
 {
-    pImpl->SetCursor(pEntry, bForceNoSelect);
+    pImpl->SetCursor(pEntry, /*bForceNoSelect*/false);
 }
 
 void SvTreeListBox::SetCurEntry( SvTreeListEntry* pEntry )

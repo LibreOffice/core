@@ -883,19 +883,16 @@ void ExecuteOrientationChange()
         mxUndoManager->leaveUndoContext();
 }
 
-void setupSidebar(bool bShow, const OUString& sidebarDeckId = "")
+void setupSidebar(const OUString& sidebarDeckId = "")
 {
     SfxViewShell* pViewShell = SfxViewShell::Current();
     SfxViewFrame* pViewFrame = pViewShell ? pViewShell->GetViewFrame() : nullptr;
     if (pViewFrame)
     {
-        if (bShow && !pViewFrame->GetChildWindow(SID_SIDEBAR))
+        if (!pViewFrame->GetChildWindow(SID_SIDEBAR))
             pViewFrame->SetChildWindow(SID_SIDEBAR, false /* create it */, true /* focus */);
 
-        pViewFrame->ShowChildWindow(SID_SIDEBAR, bShow);
-
-        if (!bShow)
-            return;
+        pViewFrame->ShowChildWindow(SID_SIDEBAR, true);
 
         // Force synchronous population of panels
         SfxChildWindow *pChild = pViewFrame->GetChildWindow(SID_SIDEBAR);
@@ -944,7 +941,7 @@ VclPtr<Window> getSidebarWindow()
 {
     VclPtr<Window> xRet;
 
-    setupSidebar(true);
+    setupSidebar();
     SfxViewShell* pViewShell = SfxViewShell::Current();
     SfxViewFrame* pViewFrame = pViewShell? pViewShell->GetViewFrame(): nullptr;
     if (!pViewFrame)
@@ -3945,12 +3942,12 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     }
     else if (gImpl && aCommand == ".uno:LOKSidebarWriterPage")
     {
-        setupSidebar(true, "WriterPageDeck");
+        setupSidebar("WriterPageDeck");
         return;
     }
     else if (gImpl && aCommand == ".uno:SidebarShow")
     {
-        setupSidebar(true);
+        setupSidebar();
         return;
     }
     else if (gImpl && aCommand == ".uno:SidebarHide")

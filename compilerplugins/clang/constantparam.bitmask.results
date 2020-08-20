@@ -13,13 +13,13 @@ include/basegfx/polygon/b2dpolygontools.hxx:145
 include/framework/framelistanalyzer.hxx:185
     void framework::FrameListAnalyzer::FrameListAnalyzer(const class com::sun::star::uno::Reference<class com::sun::star::frame::XFramesSupplier> &,const class com::sun::star::uno::Reference<class com::sun::star::frame::XFrame> &,enum FrameAnalyzerFlags)
     enum FrameAnalyzerFlags eDetectMode setBits=0x4
-include/sfx2/objsh.hxx:464
+include/sfx2/objsh.hxx:471
     void SfxObjectShell::FinishedLoading(enum SfxLoadedFlags)
     enum SfxLoadedFlags nWhich setBits=0x1
 include/svtools/brwbox.hxx:511
     void BrowseBox::InsertDataColumn(unsigned short,const class rtl::OUString &,long,enum HeaderBarItemBits,unsigned short)
     enum HeaderBarItemBits nBits setBits=0x400 clearBits=0x3ec
-include/vcl/wizardmachine.hxx:140
+include/vcl/wizardmachine.hxx:139
     void vcl::WizardMachine::WizardMachine(class weld::Window *,enum WizardButtonFlags)
     enum WizardButtonFlags _nButtonFlags setBits=0xf
 sc/inc/rangelst.hxx:48
