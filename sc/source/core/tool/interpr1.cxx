@@ -5170,6 +5170,26 @@ void ScInterpreter::ScCountEmptyCells()
                 }
             }
             break;
+            case svMatrix:
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
+            {
+                ScMatrixRef xMat = GetMatrix();
+                if (!xMat)
+                    SetError( FormulaError::IllegalParameter);
+                else
+                {
+                    SCSIZE nC, nR;
+                    xMat->GetDimensions( nC, nR);
+                    nMaxCount = nC * nR;
+                    // Numbers (implicit), strings and error values, ignore empty
+                    // strings as those if not entered in an inline array are the
+                    // result of a formula, to be par with a reference to formula
+                    // cell as *visual* blank, see isCellContentEmpty() above.
+                    nCount = xMat->Count( true, true, true);
+                }
+            }
+            break;
             default : SetError(FormulaError::IllegalParameter); break;
         }
         if (xResMat)
