@@ -163,21 +163,40 @@ rtl::Reference< sdr::overlay::OverlayManager > const & SdrPageWindow::GetOverlay
     return GetPaintWindow().GetOverlayManager();
 }
 
-void SdrPageWindow::patchPaintWindow(SdrPaintWindow& rPaintWindow)
+SdrPaintWindow* SdrPageWindow::patchPaintWindow(SdrPaintWindow& rPaintWindow)
 {
-    mpImpl->mpOriginalPaintWindow = mpImpl->mpPaintWindow;
-    mpImpl->mpPaintWindow = &rPaintWindow;
-    mpImpl->mpOriginalPaintWindow->setPatched(&rPaintWindow);
+    if (!mpImpl->mpOriginalPaintWindow)
+    {
+        // first patch
+        mpImpl->mpOriginalPaintWindow = mpImpl->mpPaintWindow;
+        mpImpl->mpPaintWindow = &rPaintWindow;
+        mpImpl->mpOriginalPaintWindow->setPatched(&rPaintWindow);
+        return mpImpl->mpOriginalPaintWindow;
+    }
+    else
+    {
+        // second or more patch
+        auto pPreviousPaintWindow = mpImpl->mpPaintWindow;
+        mpImpl->mpPaintWindow = &rPaintWindow;
+        mpImpl->mpOriginalPaintWindow->setPatched(&rPaintWindow);
+        return pPreviousPaintWindow;
+    }
 }
 
-void SdrPageWindow::unpatchPaintWindow()
+void SdrPageWindow::unpatchPaintWindow(SdrPaintWindow* pPreviousPaintWindow)
 {
-    DBG_ASSERT(mpImpl->mpOriginalPaintWindow, "SdrPageWindow::unpatchPaintWindow: paint window not patched!" );
-    if (mpImpl->mpOriginalPaintWindow)
+    if (pPreviousPaintWindow == mpImpl->mpOriginalPaintWindow)
     {
+        // first patch
         mpImpl->mpPaintWindow = mpImpl->mpOriginalPaintWindow;
         mpImpl->mpOriginalPaintWindow->setPatched(nullptr);
         mpImpl->mpOriginalPaintWindow = nullptr;
+    }
+    else
+    {
+        // second or more patch
+        mpImpl->mpPaintWindow = pPreviousPaintWindow;
+        mpImpl->mpOriginalPaintWindow->setPatched(pPreviousPaintWindow);
     }
 }
 
