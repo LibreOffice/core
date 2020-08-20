@@ -1188,8 +1188,8 @@ DECLARE_OOXMLEXPORT_TEST(tdf122201_editUnprotectedText, "tdf122201_editUnprotect
     SwNodeIndex aDocStart(*aDocEnd.GetNode().StartOfSectionNode(), 3);
 
     // check protected area
-    SwPaM aPaMPortected(aDocStart);
-    CPPUNIT_ASSERT(aPaMPortected.HasReadonlySel(false));
+    SwPaM aPaMProtected(aDocStart);
+    CPPUNIT_ASSERT(aPaMProtected.HasReadonlySel(false));
 
     // check unprotected area
     SwPaM aPaMUnprotected(aDocEnd);
