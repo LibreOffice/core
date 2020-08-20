@@ -131,6 +131,20 @@ sal_Int16 getCurrentImageType()
     return nImageType;
 }
 
+bool IsCorrectContext( const OUString& rModuleIdentifier, const OUString& aContextList )
+{
+    if ( aContextList.isEmpty() )
+        return true;
+
+    if ( !rModuleIdentifier.isEmpty() )
+    {
+        sal_Int32 nIndex = aContextList.indexOf( rModuleIdentifier );
+        return ( nIndex >= 0 );
+    }
+
+    return false;
+}
+
 } // end anonymous namespace
 
 //  XInterface, XTypeProvider, XServiceInfo
@@ -726,7 +740,18 @@ void ToolBarManager::CreateControllers()
             pController = CreateToolBoxController( m_xFrame, m_pToolBar, nId, aCommandURL );
             if ( !pController )
             {
-                if ( m_pToolBar->GetItemData( nId ) != nullptr )
+
+                if ( aCommandURL.startsWith( ".uno:StyleApply?" ) )
+                {
+                    xController.set( new StyleToolbarController( m_xContext, m_xFrame, aCommandURL ));
+                    m_pToolBar->SetItemBits( nId, m_pToolBar->GetItemBits( nId ) | ToolBoxItemBits::CHECKABLE );
+                }
+                else if ( aCommandURL.startsWith( "private:resource/" ) )
+                {
+                    xController.set( m_xContext->getServiceManager()->createInstanceWithContext(
+                        "com.sun.star.comp.framework.GenericPopupToolbarController", m_xContext ), UNO_QUERY );
+                }
+                else if ( m_pToolBar->GetItemData( nId ) != nullptr )
                 {
                     // retrieve additional parameters
                     OUString aControlType = static_cast< AddonsParams* >( m_pToolBar->GetItemData( nId ))->aControlType;
@@ -742,16 +767,6 @@ void ToolBarManager::CreateControllers()
                                                          aControlType ), UNO_QUERY );
 
                     xController = xStatusListener;
-                }
-                else if ( aCommandURL.startsWith( ".uno:StyleApply?" ) )
-                {
-                    xController.set( new StyleToolbarController( m_xContext, m_xFrame, aCommandURL ));
-                    m_pToolBar->SetItemBits( nId, m_pToolBar->GetItemBits( nId ) | ToolBoxItemBits::CHECKABLE );
-                }
-                else if ( aCommandURL.startsWith( "private:resource/menubar/" ) )
-                {
-                    xController.set( m_xContext->getServiceManager()->createInstanceWithContext(
-                        "com.sun.star.comp.framework.GenericPopupToolbarController", m_xContext ), UNO_QUERY );
                 }
                 else
                 {
@@ -1162,6 +1177,86 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
     }
 }
 
+void ToolBarManager::FillAddonToolbar( const Sequence< Sequence< PropertyValue > >& rAddonToolbar )
+{
+    SolarMutexGuard g;
+
+    if ( m_bDisposed )
+        return;
+
+    InitImageManager();
+
+    RemoveControllers();
+
+    // reset and fill command map
+    m_pToolBar->Clear();
+    m_aControllerMap.clear();
+    m_aCommandMap.clear();
+
+    sal_uInt16 nId( 1 );
+    CommandInfo aCmdInfo;
+    for ( const Sequence< PropertyValue >& rSeq : rAddonToolbar )
+    {
+        OUString   aURL;
+        OUString   aTitle;
+        OUString   aImageId;
+        OUString   aContext;
+        OUString   aTarget;
+        OUString   aControlType;
+        sal_uInt16 nWidth( 0 );
+
+        ToolBarMerger::ConvertSequenceToValues( rSeq, aURL, aTitle, aImageId, aTarget, aContext, aControlType, nWidth );
+
+        if ( IsCorrectContext( m_aModuleIdentifier, aContext ) )
+        {
+            if ( aURL == "private:separator" )
+            {
+                ToolBox::ImplToolItems::size_type nCount = m_pToolBar->GetItemCount();
+                if ( nCount > 0 && m_pToolBar->GetItemType( nCount-1 ) != ToolBoxItemType::SEPARATOR )
+                    m_pToolBar->InsertSeparator();
+            }
+            else
+            {
+                m_pToolBar->InsertItem( nId, aTitle );
+
+                OUString aShortcut(vcl::CommandInfoProvider::GetCommandShortcut(aURL, m_xFrame));
+                if (!aShortcut.isEmpty())
+                    m_pToolBar->SetQuickHelpText(nId, aTitle + " (" + aShortcut + ")");
+
+                // Create AddonsParams to hold additional information we will need in the future
+                AddonsParams* pRuntimeItemData = new AddonsParams;
+                pRuntimeItemData->aImageId = aImageId;
+                pRuntimeItemData->aControlType = aControlType;
+                pRuntimeItemData->nWidth = nWidth;
+                m_pToolBar->SetItemData( nId, pRuntimeItemData );
+                m_pToolBar->SetItemCommand( nId, aURL );
+
+                // Fill command map. It stores all our commands and from what
+                // image manager we got our image. So we can decide if we have to use an
+                // image from a notification message.
+                auto pIter = m_aCommandMap.emplace( aURL, aCmdInfo );
+                if ( pIter.second )
+                {
+                    aCmdInfo.nId = nId;
+                    pIter.first->second.nId = nId;
+                }
+                else
+                {
+                    pIter.first->second.aIds.push_back( nId );
+                }
+                ++nId;
+            }
+        }
+    }
+
+    // Don't setup images yet, AddonsToolbarWrapper::populateImages does that.
+    // (But some controllers might need an image at the toolbar at creation time!)
+    CreateControllers();
+
+    // Notify controllers that they are now correctly initialized and can start listening.
+    UpdateControllers();
+}
+
 void ToolBarManager::FillOverflowToolbar( ToolBox const * pParent )
 {
     CommandInfo aCmdInfo;
@@ -1385,11 +1480,6 @@ bool ToolBarManager::IsPluginMode() const
     return bPluginMode;
 }
 
-bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
-{
-    return true;
-}
-
 void ToolBarManager::AddCustomizeMenuItems(ToolBox const * pToolBar)
 {
     // No config menu entries if command ".uno:ConfigureDialog" is not enabled
@@ -1420,56 +1510,35 @@ void ToolBarManager::AddCustomizeMenuItems(ToolBox const * pToolBar)
 
     VclPtr<PopupMenu> xVisibleItemsPopupMenu;
 
-    if (MenuItemAllowed(MENUITEM_TOOLBAR_VISIBLEBUTTON))
+    if (!m_aResourceName.startsWith("private:resource/toolbar/addon_"))
     {
         pMenu->InsertItem(MENUITEM_TOOLBAR_VISIBLEBUTTON, FwkResId(STR_TOOLBAR_VISIBLE_BUTTONS));
         xVisibleItemsPopupMenu = VclPtr<PopupMenu>::Create();
         pMenu->SetPopupMenu(MENUITEM_TOOLBAR_VISIBLEBUTTON, xVisibleItemsPopupMenu);
-    }
 
-    if (MenuItemAllowed(MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR) && m_pToolBar->IsCustomize())
-    {
-        pMenu->InsertItem(MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR, FwkResId(STR_TOOLBAR_CUSTOMIZE_TOOLBAR));
-        pMenu->SetItemCommand(MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR, ".uno:ConfigureToolboxVisible");
-    }
-
-    if (nGroupLen != pMenu->GetItemCount())
-    {
+        if (m_pToolBar->IsCustomize())
+        {
+            pMenu->InsertItem(MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR, FwkResId(STR_TOOLBAR_CUSTOMIZE_TOOLBAR));
+            pMenu->SetItemCommand(MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR, ".uno:ConfigureToolboxVisible");
+        }
         pMenu->InsertSeparator();
-        nGroupLen = pMenu->GetItemCount();
     }
 
     if (pToolBar->IsFloatingMode())
     {
-        if (MenuItemAllowed(MENUITEM_TOOLBAR_DOCKTOOLBAR))
-        {
-            pMenu->InsertItem(MENUITEM_TOOLBAR_DOCKTOOLBAR, FwkResId(STR_TOOLBAR_DOCK_TOOLBAR));
-            pMenu->SetAccelKey(MENUITEM_TOOLBAR_DOCKTOOLBAR, vcl::KeyCode(KEY_F10, true, true, false, false));
-        }
+        pMenu->InsertItem(MENUITEM_TOOLBAR_DOCKTOOLBAR, FwkResId(STR_TOOLBAR_DOCK_TOOLBAR));
+        pMenu->SetAccelKey(MENUITEM_TOOLBAR_DOCKTOOLBAR, vcl::KeyCode(KEY_F10, true, true, false, false));
     }
     else
     {
-        if (MenuItemAllowed(MENUITEM_TOOLBAR_UNDOCKTOOLBAR))
-        {
-            pMenu->InsertItem(MENUITEM_TOOLBAR_UNDOCKTOOLBAR, FwkResId(STR_TOOLBAR_UNDOCK_TOOLBAR));
-            pMenu->SetAccelKey(MENUITEM_TOOLBAR_UNDOCKTOOLBAR, vcl::KeyCode(KEY_F10, true, true, false, false));
-        }
+        pMenu->InsertItem(MENUITEM_TOOLBAR_UNDOCKTOOLBAR, FwkResId(STR_TOOLBAR_UNDOCK_TOOLBAR));
+        pMenu->SetAccelKey(MENUITEM_TOOLBAR_UNDOCKTOOLBAR, vcl::KeyCode(KEY_F10, true, true, false, false));
     }
 
-    if (MenuItemAllowed(MENUITEM_TOOLBAR_DOCKALLTOOLBAR))
-        pMenu->InsertItem(MENUITEM_TOOLBAR_DOCKALLTOOLBAR, FwkResId(STR_TOOLBAR_DOCK_ALL_TOOLBARS));
-
-    if (nGroupLen != pMenu->GetItemCount())
-    {
-        pMenu->InsertSeparator();
-        nGroupLen = pMenu->GetItemCount();
-    }
-
-    if (MenuItemAllowed(MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION))
-        pMenu->InsertItem(MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION, FwkResId(STR_TOOLBAR_LOCK_TOOLBAR));
-
-    if (MenuItemAllowed(MENUITEM_TOOLBAR_CLOSE))
-        pMenu->InsertItem(MENUITEM_TOOLBAR_CLOSE, FwkResId(STR_TOOLBAR_CLOSE_TOOLBAR));
+    pMenu->InsertItem(MENUITEM_TOOLBAR_DOCKALLTOOLBAR, FwkResId(STR_TOOLBAR_DOCK_ALL_TOOLBARS));
+    pMenu->InsertSeparator();
+    pMenu->InsertItem(MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION, FwkResId(STR_TOOLBAR_LOCK_TOOLBAR));
+    pMenu->InsertItem(MENUITEM_TOOLBAR_CLOSE, FwkResId(STR_TOOLBAR_CLOSE_TOOLBAR));
 
     if (m_pToolBar->IsCustomize())
     {

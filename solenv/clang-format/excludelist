@@ -4914,7 +4914,6 @@ framework/inc/uiconfiguration/imagemanager.hxx
 framework/inc/uiconfiguration/imagetype.hxx
 framework/inc/uiconfiguration/moduleimagemanager.hxx
 framework/inc/uiconfiguration/windowstateproperties.hxx
-framework/inc/uielement/addonstoolbarmanager.hxx
 framework/inc/uielement/addonstoolbarwrapper.hxx
 framework/inc/uielement/buttontoolbarcontroller.hxx
 framework/inc/uielement/comboboxtoolbarcontroller.hxx
@@ -5101,7 +5100,6 @@ framework/source/uiconfiguration/moduleuiconfigurationmanager.cxx
 framework/source/uiconfiguration/uicategorydescription.cxx
 framework/source/uiconfiguration/uiconfigurationmanager.cxx
 framework/source/uiconfiguration/windowstateconfiguration.cxx
-framework/source/uielement/addonstoolbarmanager.cxx
 framework/source/uielement/addonstoolbarwrapper.cxx
 framework/source/uielement/buttontoolbarcontroller.cxx
 framework/source/uielement/comboboxtoolbarcontroller.cxx
