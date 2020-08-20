@@ -5183,7 +5183,11 @@ void ScInterpreter::ScCountEmptyCells()
                 SCSIZE nC, nR;
                 xMat->GetDimensions( nC, nR);
                 nMaxCount = nC * nR;
-                nCount = xMat->Count( true, true);  // numbers (implicit), strings and error values
+                // Numbers (implicit), strings and error values, ignore empty
+                // strings as those if not entered in an inline array are the
+                // result of a formula, to be par with a reference to formula
+                // cell as *visual* blank, see isCellContentEmpty() above.
+                nCount = xMat->Count( true, true, true);
             }
         }
         break;

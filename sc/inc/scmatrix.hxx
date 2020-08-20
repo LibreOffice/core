@@ -365,7 +365,7 @@ public:
     IterateResult Sum( bool bTextAsZero, bool bIgnoreErrorValues = false ) const ;
     IterateResult SumSquare( bool bTextAsZero, bool bIgnoreErrorValues = false ) const ;
     IterateResult Product( bool bTextAsZero, bool bIgnoreErrorValues = false ) const ;
-    size_t Count(bool bCountStrings, bool bCountErrors) const ;
+    size_t Count(bool bCountStrings, bool bCountErrors, bool bIgnoreEmptyStrings = false) const ;
     size_t MatchDoubleInColumns(double fValue, size_t nCol1, size_t nCol2) const ;
     size_t MatchStringInColumns(const svl::SharedString& rStr, size_t nCol1, size_t nCol2) const ;
 
