@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f1312501_e95904e3",
+        "filename": "sw/source/core/text/portxt.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 687,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-08-20T08:10:06Z",
+      "side": 1,
+      "message": "The problem was that this calls GetExpText() which returns the field string without its control characters (if mbShowFieldName is false).\n\nSo we just do this FieldSlot thing when mbShowFieldName is true and everything seems to work now.",
+      "range": {
+        "startLine": 687,
+        "startChar": 4,
+        "endLine": 687,
+        "endChar": 37
+      },
+      "revId": "ad0bbab0c0e6000d160d5b896b196f256eb66cbe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
