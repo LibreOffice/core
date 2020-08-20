@@ -32,13 +32,6 @@ namespace svx
     class SAL_WARN_UNUSED SVX_DLLPUBLIC OComponentTransferable final : public TransferDataContainer
     {
     public:
-        /** construct the transferable
-        */
-        OComponentTransferable(
-            const OUString& rDatasourceOrLocation,
-            const css::uno::Reference< css::ucb::XContent>& xContent
-        );
-
         OComponentTransferable();
 
         void Update(

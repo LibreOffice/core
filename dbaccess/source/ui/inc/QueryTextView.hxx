@@ -64,8 +64,6 @@ namespace dbaui
 
         void stopTimer();
         void startTimer();
-
-        OQueryContainerWindow*  getContainerWindow() { return static_cast< OQueryContainerWindow* >( GetParent() ); }
     };
 }
 
