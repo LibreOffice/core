@@ -130,13 +130,10 @@ include/vcl/dndhelp.hxx:62
 include/vcl/opengl/OpenGLContext.hxx:141
     struct SystemWindowData OpenGLContext::generateWinData(class vcl::Window *,_Bool,)
     10
-include/vcl/toolkit/treelistbox.hxx:431
+include/vcl/toolkit/treelistbox.hxx:430
     enum DragDropMode SvTreeListBox::NotifyStartDrag(class TransferDataContainer &,class SvTreeListEntry *,)
     00
-include/vcl/toolkit/treelistbox.hxx:512
-    void SvTreeListBox::PreparePaint(class OutputDevice &,class SvTreeListEntry &,)
-    00
-include/vcl/toolkit/treelistbox.hxx:591
+include/vcl/toolkit/treelistbox.hxx:589
     _Bool SvTreeListBox::EditingEntry(class SvTreeListEntry *,class Selection &,)
     10
 sc/inc/filter.hxx:82
