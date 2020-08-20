@@ -535,7 +535,7 @@ void SwNumberTreeNode::AddChild( SwNumberTreeNode * pChild,
                         break;
                     }
                 }
-                // assure that unnessary created phantoms at <pChild> are deleted.
+                // assure that unnecessary created phantoms at <pChild> are deleted.
                 pChild->ClearObsoletePhantoms();
 
                 if ((*aPredIt)->IsValid())

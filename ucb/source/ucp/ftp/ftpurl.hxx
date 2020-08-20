@@ -92,7 +92,7 @@ namespace ftp {
         const OUString& username() const { return m_aUsername; }
 
         /** This returns the URL, but cleaned from
-         *  unnessary ellipses.
+         *  unnecessary ellipses.
          */
 
         OUString ident(bool withslash,bool internal) const;

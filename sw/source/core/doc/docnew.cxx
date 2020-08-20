@@ -1029,7 +1029,7 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
         {
             // #i72517# put the styles to the target document
             // if the source uses headers or footers the target document
-            // needs inidividual page styles
+            // needs individual page styles
             const SwWrtShell *pSourceShell = rSource.GetDocShell()->GetWrtShell();
             const SwPageDesc& rSourcePageDesc = pSourceShell->GetPageDesc(
                                                     pSourceShell->GetCurPageDesc());

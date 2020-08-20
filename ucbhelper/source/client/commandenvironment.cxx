@@ -65,7 +65,7 @@ CommandEnvironment::~CommandEnvironment()
 {
 }
 
-// XCommandEnvironemnt methods.
+// XCommandEnvironment methods.
 
 // virtual
 Reference< XInteractionHandler > SAL_CALL CommandEnvironment::getInteractionHandler()
