@@ -24,6 +24,7 @@
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
 
+#include <deque>
 #include <map>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -35,6 +36,8 @@ typedef ::std::map< OUString, css::uno::Reference< css::uno::XInterface > > IdMa
 
 class XMLOFF_DLLPUBLIC UnoInterfaceToUniqueIdentifierMapper
 {
+    typedef std::deque< OUString > Reserved_t;
+
 public:
     UnoInterfaceToUniqueIdentifierMapper();
 
@@ -50,12 +53,16 @@ public:
     */
     bool registerReference( const OUString& rIdentifier, const css::uno::Reference< css::uno::XInterface >& rInterface );
 
-    /** always registers the given uno object with the given identifier.
+    /** reserves an identifier for later registration.
 
-        In contrast to registerReference(), this here overwrites any
-        earlier registration of the same identifier
-    */
-    void registerReferenceAlways( const OUString& rIdentifier, const css::uno::Reference< css::uno::XInterface >& rInterface );
+        @returns
+            false, if the identifier already exists
+      */
+    bool reserveIdentifier( const OUString& rIdentifier );
+
+    /** registers the given uno object with reserved identifier.
+      */
+    bool registerReservedReference( const OUString& rIdentifier, const css::uno::Reference< css::uno::XInterface >& rInterface );
 
     /** @returns
             the identifier for the given uno object. If this uno object is not already
@@ -72,10 +79,12 @@ public:
 private:
     bool findReference( const css::uno::Reference< css::uno::XInterface >& rInterface, IdMap_t::const_iterator& rIter ) const;
     bool findIdentifier( const OUString& rIdentifier, IdMap_t::const_iterator& rIter ) const;
-    void insertReference( const OUString& rIdentifier, const css::uno::Reference< css::uno::XInterface >& rInterface );
+    bool findReserved( const OUString& rIdentifier ) const;
+    bool findReserved( const OUString& rIdentifier, Reserved_t::const_iterator& rIter ) const;
 
     IdMap_t maEntries;
     sal_uInt32 mnNextId;
+    Reserved_t maReserved;
 };
 
 }

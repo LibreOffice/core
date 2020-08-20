@@ -81,6 +81,7 @@ public:
     void testSoftEdges();
     void testShadowBlur();
     void testTdf115753();
+    void testRhbz1870501();
 
     CPPUNIT_TEST_SUITE(SdExportTest);
 
@@ -119,6 +120,7 @@ public:
     CPPUNIT_TEST(testSoftEdges);
     CPPUNIT_TEST(testShadowBlur);
     CPPUNIT_TEST(testTdf115753);
+    CPPUNIT_TEST(testRhbz1870501);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1375,6 +1377,13 @@ void SdExportTest::testShadowBlur()
             "shadow-blur", "0.388cm");
 
     xDocShRef->DoClose();
+}
+
+void SdExportTest::testRhbz1870501()
+{
+    //Without the fix in place, it would crash at export time
+    ::sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc("/sd/qa/unit/data/odg/rhbz1870501.odg"), ODG);
+    xDocShRef = saveAndReload( xDocShRef.get(), ODG );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdExportTest);
