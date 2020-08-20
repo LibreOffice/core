@@ -268,6 +268,8 @@ cairo_surface_t* get_underlying_cairo_surface(const VirtualDevice& rDevice)
     return static_cast<SvpSalVirtualDevice*>(rDevice.mpVirDev.get())->GetSurface();
 }
 
+#endif
+
 const cairo_font_options_t* SvpSalInstance::GetCairoFontOptions()
 {
     static cairo_font_options_t *gOptions = nullptr;
@@ -280,8 +282,6 @@ const cairo_font_options_t* SvpSalInstance::GetCairoFontOptions()
 #endif
     return gOptions;
 }
-
-#endif
 
 SalTimer* SvpSalInstance::CreateSalTimer()
 {
