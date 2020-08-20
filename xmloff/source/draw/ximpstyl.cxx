@@ -1076,7 +1076,7 @@ rtl::Reference< SvXMLImportPropertyMapper > SdXMLStylesContext::GetImportPropert
 
 // Process all style and object info
 
-void SdXMLStylesContext::EndElement()
+void SdXMLStylesContext::endFastElement(sal_Int32 )
 {
     if(mbIsAutoStyle)
     {
