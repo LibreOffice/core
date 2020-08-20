@@ -111,6 +111,7 @@ $(eval $(call gb_Configuration_add_spool_modules,registry,officecfg/registry/dat
 	org/openoffice/Office/Embedding-base.xcu \
 	org/openoffice/Office/Embedding-reportbuilder.xcu \
 	org/openoffice/Office/Embedding-writer.xcu \
+	org/openoffice/Office/UI/WriterCommands-librelogo.xcu \
 	org/openoffice/Office/UI/WriterWindowState-librelogo.xcu \
 	org/openoffice/Office/UI/Controller-reportbuilder.xcu \
 	org/openoffice/TypeDetection/UISort-writer.xcu \

@@ -14,25 +14,4 @@ $(eval $(call gb_Package_add_files,librelogo,$(LIBO_SHARE_FOLDER)/Scripts/python
     pythonpath/LibreLogo_en_US.properties \
 ))
 
-$(eval $(call gb_Package_add_files,librelogo,$(LIBO_SHARE_FOLDER)/Scripts/python/LibreLogo/icons,\
-    icons/lc_arrowshapes.circular-arrow.png \
-    icons/lc_arrowshapes.circular-leftarrow.png \
-    icons/lc_arrowshapes.down-arrow.png \
-    icons/lc_arrowshapes.up-arrow.png \
-    icons/lc_basicstop.png \
-    icons/lc_editglossary.png \
-    icons/lc_navigationbarleft.png \
-    icons/lc_newdoc.png \
-    icons/lc_runbasic.png \
-    icons/sc_arrowshapes.circular-arrow.png \
-    icons/sc_arrowshapes.circular-leftarrow.png \
-    icons/sc_arrowshapes.down-arrow.png \
-    icons/sc_arrowshapes.up-arrow.png \
-    icons/sc_basicstop.png \
-    icons/sc_editglossary.png \
-    icons/sc_navigationbarleft.png \
-    icons/sc_newdoc.png \
-    icons/sc_runbasic.png \
-))
-
 # vim:set noet sw=4 ts=4:
