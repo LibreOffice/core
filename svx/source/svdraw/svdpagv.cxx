@@ -32,6 +32,7 @@
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <comphelper/lok.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <basegfx/range/b2irectangle.hxx>
 
 using namespace ::com::sun::star;
@@ -258,8 +259,39 @@ void SdrPageView::DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget,
 
             if(pKnownTarget)
             {
+<<<<<<< HEAD   (eee1cf CppunitTest_sw_htmlexport: The actual PNG data does not matt)
                 // paint known target
                 pKnownTarget->RedrawLayer(&nID, pRedirector, nullptr);
+=======
+                // if we have a prepared target, do not use a new SdrPageWindow since this
+                // works but is expensive. Just use a temporary PaintWindow
+                SdrPaintWindow aTemporaryPaintWindow(mrView, *pGivenTarget);
+
+                // Copy existing paint region to use the same as prepared in BeginDrawLayer
+                SdrPaintWindow& rExistingPaintWindow = pPreparedTarget->GetPaintWindow();
+                const vcl::Region& rExistingRegion = rExistingPaintWindow.GetRedrawRegion();
+                bool bUseRect(false);
+                if (!rRect.IsEmpty())
+                {
+                    vcl::Region r(rExistingRegion);
+                    r.Intersect(rRect);
+                    // fdo#74435: FIXME: visibility check broken if empty
+                    if (!r.IsEmpty())
+                        bUseRect = true;
+                }
+                if (!bUseRect)
+                    aTemporaryPaintWindow.SetRedrawRegion(rExistingRegion);
+                else
+                    aTemporaryPaintWindow.SetRedrawRegion(vcl::Region(rRect));
+
+                // patch the ExistingPageWindow
+                auto pPreviousWindow = pPreparedTarget->patchPaintWindow(aTemporaryPaintWindow);
+                // unpatch window when leaving the scope
+                const ::comphelper::ScopeGuard aGuard(
+                    [&pPreviousWindow, &pPreparedTarget]() { pPreparedTarget->unpatchPaintWindow(pPreviousWindow); } );
+                // redraw the layer
+                pPreparedTarget->RedrawLayer(&nID, pRedirector, pPageFrame);
+>>>>>>> CHANGE (445cf4 tdf#132940 Crash in mergedlo!vcl::Region::operator=)
             }
             else
             {

@@ -1716,6 +1716,7 @@ class RenderContextGuard
 {
     std::unique_ptr<SdrPaintWindow> m_TemporaryPaintWindow;
     SdrPageWindow* m_pPatchedPageWindow;
+    SdrPaintWindow* m_pPreviousPaintWindow = nullptr;
 
 public:
     RenderContextGuard(VclPtr<vcl::RenderContext>& pRef, vcl::RenderContext* pValue, SwViewShell* pShell)
@@ -1729,6 +1730,7 @@ public:
 
             if (nullptr != pDrawView)
             {
+<<<<<<< HEAD   (eee1cf CppunitTest_sw_htmlexport: The actual PNG data does not matt)
                 SdrPageView* pSdrPageView(pDrawView->GetSdrPageView());
 
                 if (nullptr != pSdrPageView)
@@ -1741,6 +1743,10 @@ public:
                         m_pPatchedPageWindow->patchPaintWindow(*m_TemporaryPaintWindow);
                     }
                 }
+=======
+                m_TemporaryPaintWindow.reset(new SdrPaintWindow(*pDrawView, *pValue));
+                m_pPreviousPaintWindow = m_pPatchedPageWindow->patchPaintWindow(*m_TemporaryPaintWindow);
+>>>>>>> CHANGE (445cf4 tdf#132940 Crash in mergedlo!vcl::Region::operator=)
             }
         }
     }
@@ -1749,7 +1755,7 @@ public:
     {
         if(nullptr != m_pPatchedPageWindow)
         {
-            m_pPatchedPageWindow->unpatchPaintWindow();
+            m_pPatchedPageWindow->unpatchPaintWindow(m_pPreviousPaintWindow);
         }
     }
 };
