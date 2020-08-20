@@ -1468,6 +1468,143 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
 }
 
 SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
+                                    sal_Int32 /*nElement*/,
+                                    SvXMLNumImpData* pNewData, SvXMLStylesTokens nNewType,
+                                    const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
+                                    SvXMLStylesContext& rStyles ) :
+    SvXMLStyleContext( rImport ),
+    pData( pNewData ),
+    pStyles( &rStyles ),
+    aMyConditions(),
+    nType( nNewType ),
+    nKey(-1),
+    nFormatLang( LANGUAGE_SYSTEM ),
+    bAutoOrder( false ),
+    bFromSystem( false ),
+    bTruncate( true ),
+    bAutoDec( false ),
+    bAutoInt( false ),
+    bHasExtraText( false ),
+    bHasLongDoW( false ),
+    bHasEra( false ),
+    bHasDateTime( false ),
+    bRemoveAfterUse( false ),
+    eDateDOW( XML_DEA_NONE ),
+    eDateDay( XML_DEA_NONE ),
+    eDateMonth( XML_DEA_NONE ),
+    eDateYear( XML_DEA_NONE ),
+    eDateHours( XML_DEA_NONE ),
+    eDateMins( XML_DEA_NONE ),
+    eDateSecs( XML_DEA_NONE ),
+    bDateNoDefault( false )
+{
+    LanguageTagODF aLanguageTagODF;
+    css::i18n::NativeNumberXmlAttributes aNatNumAttr;
+    OUString aSpellout;
+    bool bAttrBool(false);
+
+    for( auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ) )
+    {
+        OUString sValue = aIter.toString();
+        switch (aIter.getToken())
+        {
+        //  attributes for a style
+            case XML_ELEMENT(STYLE, XML_NAME):
+                break;
+            case XML_ELEMENT(NUMBER, XML_RFC_LANGUAGE_TAG):
+                aLanguageTagODF.maRfcLanguageTag = sValue;
+                break;
+            case XML_ELEMENT(NUMBER, XML_LANGUAGE):
+                aLanguageTagODF.maLanguage = sValue;
+                break;
+            case XML_ELEMENT(NUMBER, XML_SCRIPT):
+                aLanguageTagODF.maScript = sValue;
+                break;
+            case XML_ELEMENT(NUMBER, XML_COUNTRY):
+                aLanguageTagODF.maCountry = sValue;
+                break;
+            case XML_ELEMENT(NUMBER, XML_TITLE):
+                sFormatTitle = sValue;
+                break;
+            case XML_ELEMENT(NUMBER, XML_AUTOMATIC_ORDER):
+                if (::sax::Converter::convertBool( bAttrBool, sValue ))
+                    bAutoOrder = bAttrBool;
+                break;
+            case XML_ELEMENT(NUMBER, XML_FORMAT_SOURCE):
+                SvXMLUnitConverter::convertEnum( bFromSystem, sValue, aFormatSourceMap );
+                break;
+            case XML_ELEMENT(NUMBER, XML_TRUNCATE_ON_OVERFLOW):
+                if (::sax::Converter::convertBool( bAttrBool, sValue ))
+                    bTruncate = bAttrBool;
+                break;
+            case XML_ELEMENT(STYLE, XML_VOLATILE):
+                //  volatile formats can be removed after importing
+                //  if not used in other styles
+                if (::sax::Converter::convertBool( bAttrBool, sValue ))
+                    bRemoveAfterUse = bAttrBool;
+                break;
+            case XML_ELEMENT(NUMBER, XML_TRANSLITERATION_FORMAT):
+                aNatNumAttr.Format = sValue;
+                break;
+            case XML_ELEMENT(LO_EXT, XML_TRANSLITERATION_SPELLOUT):
+            case XML_ELEMENT(NUMBER, XML_TRANSLITERATION_SPELLOUT):
+                aSpellout = sValue;
+                break;
+            case XML_ELEMENT(NUMBER, XML_TRANSLITERATION_LANGUAGE):
+                aNatNumAttr.Locale.Language = sValue;
+                break;
+            case XML_ELEMENT(NUMBER, XML_TRANSLITERATION_COUNTRY):
+                aNatNumAttr.Locale.Country = sValue;
+                break;
+            case XML_ELEMENT(NUMBER, XML_TRANSLITERATION_STYLE):
+                aNatNumAttr.Style = sValue;
+                break;
+            default:
+                SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
+        }
+    }
+
+    if (!aLanguageTagODF.isEmpty())
+    {
+        nFormatLang = aLanguageTagODF.getLanguageTag().getLanguageType( false);
+        if ( nFormatLang == LANGUAGE_DONTKNOW )
+            nFormatLang = LANGUAGE_SYSTEM;          //! error handling for unknown locales?
+    }
+
+    if (aNatNumAttr.Format.isEmpty() && aSpellout.isEmpty())
+        return;
+
+    LanguageTag aLanguageTag( OUString(), aNatNumAttr.Locale.Language,
+                OUString(), aNatNumAttr.Locale.Country);
+    aNatNumAttr.Locale = aLanguageTag.getLocale( false);
+
+    // NatNum12 spell out formula (cardinal, ordinal, ordinal-feminine etc.)
+    if ( !aSpellout.isEmpty() )
+    {
+        aFormatCode.append( "[NatNum12 " );
+        aFormatCode.append( aSpellout );
+    } else {
+        SvNumberFormatter* pFormatter = pData->GetNumberFormatter();
+        if ( !pFormatter ) return;
+
+        sal_Int32 nNatNum = pFormatter->GetNatNum()->convertFromXmlAttributes( aNatNumAttr );
+        aFormatCode.append( "[NatNum" );
+        aFormatCode.append( nNatNum );
+    }
+
+    LanguageType eLang = aLanguageTag.getLanguageType( false );
+    if ( eLang == LANGUAGE_DONTKNOW )
+        eLang = LANGUAGE_SYSTEM;            //! error handling for unknown locales?
+    if ( eLang != nFormatLang && eLang != LANGUAGE_SYSTEM )
+    {
+        aFormatCode.append( "][$-" );
+        // language code in upper hex:
+        aFormatCode.append(OUString::number(static_cast<sal_uInt16>(eLang), 16).toAsciiUpperCase());
+    }
+    aFormatCode.append( ']' );
+}
+
+SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
                                     sal_uInt16 nPrfx, const OUString& rLName,
                                     const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                                     const sal_Int32 nTempKey, LanguageType nLang,
@@ -2270,31 +2407,42 @@ SvXMLNumFmtHelper::~SvXMLNumFmtHelper()
     pData->RemoveVolatileFormats();
 }
 
+
 SvXMLStyleContext*  SvXMLNumFmtHelper::CreateChildContext( SvXMLImport& rImport,
-                sal_uInt16 nPrefix, const OUString& rLocalName,
-                const uno::Reference<xml::sax::XAttributeList>& xAttrList,
+                sal_Int32 nElement,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
                 SvXMLStylesContext& rStyles )
 {
-    SvXMLStyleContext* pContext = nullptr;
-
-    const SvXMLTokenMap& rTokenMap = pData->GetStylesElemTokenMap();
-    SvXMLStylesTokens nToken = static_cast<SvXMLStylesTokens>(rTokenMap.Get( nPrefix, rLocalName ));
-    switch (nToken)
+    SvXMLStylesTokens nStyleToken;
+    switch (nElement)
     {
-        case SvXMLStylesTokens::NUMBER_STYLE:
-        case SvXMLStylesTokens::CURRENCY_STYLE:
-        case SvXMLStylesTokens::PERCENTAGE_STYLE:
-        case SvXMLStylesTokens::DATE_STYLE:
-        case SvXMLStylesTokens::TIME_STYLE:
-        case SvXMLStylesTokens::BOOLEAN_STYLE:
-        case SvXMLStylesTokens::TEXT_STYLE:
-            pContext = new SvXMLNumFormatContext( rImport, nPrefix, rLocalName,
-                                                    pData.get(), nToken, xAttrList, rStyles );
+        case XML_ELEMENT(NUMBER, XML_NUMBER_STYLE):
+            nStyleToken = SvXMLStylesTokens::NUMBER_STYLE;
             break;
+        case XML_ELEMENT(NUMBER, XML_CURRENCY_STYLE):
+            nStyleToken = SvXMLStylesTokens::CURRENCY_STYLE;
+            break;
+        case XML_ELEMENT(NUMBER, XML_PERCENTAGE_STYLE):
+            nStyleToken = SvXMLStylesTokens::PERCENTAGE_STYLE;
+            break;
+        case XML_ELEMENT(NUMBER, XML_DATE_STYLE):
+            nStyleToken = SvXMLStylesTokens::DATE_STYLE;
+            break;
+        case XML_ELEMENT(NUMBER, XML_TIME_STYLE):
+            nStyleToken = SvXMLStylesTokens::TIME_STYLE;
+            break;
+        case XML_ELEMENT(NUMBER, XML_BOOLEAN_STYLE):
+            nStyleToken = SvXMLStylesTokens::BOOLEAN_STYLE;
+            break;
+        case XML_ELEMENT(NUMBER, XML_TEXT_STYLE):
+            nStyleToken = SvXMLStylesTokens::TEXT_STYLE;
+            break;
+        default:
+            // return NULL if not a data style, caller must handle other elements
+            return nullptr;
     }
-
-    // return NULL if not a data style, caller must handle other elements
-    return pContext;
+    return new SvXMLNumFormatContext( rImport, nElement,
+                                      pData.get(), nStyleToken, xAttrList, rStyles );
 }
 
 const SvXMLTokenMap& SvXMLNumFmtHelper::GetStylesElemTokenMap()

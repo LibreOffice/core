@@ -187,6 +187,7 @@ class SdXMLStylesContext : public SvXMLStylesContext
         XmlStyleFamily nFamily, const OUString& rPrefix) const;
 
 protected:
+    using SvXMLStylesContext::CreateStyleChildContext;
     virtual SvXMLStyleContext* CreateStyleChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,

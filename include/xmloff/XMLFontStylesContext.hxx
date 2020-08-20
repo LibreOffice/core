@@ -45,6 +45,7 @@ class XMLOFF_DLLPUBLIC XMLFontStylesContext final : public SvXMLStylesContext
 
     rtl_TextEncoding        eDfltEncoding;
 
+    using SvXMLStylesContext::CreateStyleChildContext;
     virtual SvXMLStyleContext *CreateStyleChildContext( sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
