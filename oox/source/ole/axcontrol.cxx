@@ -2519,7 +2519,7 @@ void AxMultiPageModel::importPageAndMultiPageProperties( BinaryInputStream& rInS
     {
         AxBinaryPropertyReader aReader( rInStrm );
         aReader.skipUndefinedProperty();
-        aReader.skipIntProperty< sal_uInt32 >(); // TransistionEffect
+        aReader.skipIntProperty< sal_uInt32 >(); // TransitionEffect
         aReader.skipIntProperty< sal_uInt32 >(); // TransitionPeriod
     }
     // MultiPageProperties

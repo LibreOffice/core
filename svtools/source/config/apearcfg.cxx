@@ -74,8 +74,8 @@ SvtTabAppearanceCfg::SvtTabAppearanceCfg()
                     break;
                 }
                 case  3: { short nTmp = 0; *pValues >>= nTmp; nMiddleMouse = static_cast<MouseMiddleButtonAction>(nTmp); break; } //"Dialog/MiddleMouseButton",
-                case  4: bFontAntialiasing = *o3tl::doAccess<bool>(*pValues); break;    // "FontAntialising/Enabled",
-                case  5: *pValues >>= nAAMinPixelHeight; break;                         // "FontAntialising/MinPixelHeight",
+                case  4: bFontAntialiasing = *o3tl::doAccess<bool>(*pValues); break;    // "FontAntialiasing/Enabled",
+                case  5: *pValues >>= nAAMinPixelHeight; break;                         // "FontAntialiasing/MinPixelHeight",
             }
         }
     }
@@ -113,8 +113,8 @@ void  SvtTabAppearanceCfg::ImplCommit()
             case  1: pValues[nProp] <<= bMenuMouseFollow; break;        // "Menu/FollowMouse",
             case  2: pValues[nProp] <<= static_cast<short>(nSnapMode); break;        // "Dialog/MousePositioning",
             case  3: pValues[nProp] <<= static_cast<short>(nMiddleMouse); break; // "Dialog/MiddleMouseButton",
-            case  4: pValues[nProp] <<= bFontAntialiasing; break;       // "FontAntialising/Enabled",
-            case  5: pValues[nProp] <<= nAAMinPixelHeight; break;       // "FontAntialising/MinPixelHeight",
+            case  4: pValues[nProp] <<= bFontAntialiasing; break;       // "FontAntialiasing/Enabled",
+            case  5: pValues[nProp] <<= nAAMinPixelHeight; break;       // "FontAntialiasing/MinPixelHeight",
         }
     }
     PutProperties(rNames, aValues);

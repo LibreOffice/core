@@ -33,7 +33,7 @@ module com {  module sun {  module star {  module xml {  module sax {
     </p>
     <ul>
         <li>as the argument of XParser::parseStream()</li>
-        <li>as the return value of XEntityReslover::resolveEntity().
+        <li>as the return value of XEntityResolver::resolveEntity().
     </li>
     </ul>
  */

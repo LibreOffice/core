@@ -70,7 +70,7 @@
 
 /**
  * @brief
- * Padings for paragraph,frame,...
+ * Paddings for paragraph,frame, ...
  */
 class XFPadding
 {

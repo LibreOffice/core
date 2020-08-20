@@ -42,7 +42,7 @@ public class _XCloseable extends MultiMethodTest {
 
     /**
     * Closes row set. If the component implements the interface
-    * <code>com.sun.star.sdbc.XResutlSet</code> then tries to move
+    * <code>com.sun.star.sdbc.XResultSet</code> then tries to move
     * the cursor to the first row in the result set.
     * Has OK status if no exceptions were thrown during first call and
     * if expected SQL exception was thrown during cursor moving.

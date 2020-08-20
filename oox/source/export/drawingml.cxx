@@ -2384,7 +2384,7 @@ void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropS
 
             // Our numbullet dialog has set the wrong textencoding for our "StarSymbol" font,
             // instead of a Unicode encoding the encoding RTL_TEXTENCODING_SYMBOL was used.
-            // Because there might exist a lot of damaged documemts I added this two lines
+            // Because there might exist a lot of damaged documents I added this two lines
             // which fixes the bullet problem for the export.
             if ( aFontDesc.Name.equalsIgnoreAsciiCase("StarSymbol") )
                 aFontDesc.CharSet = RTL_TEXTENCODING_MS_1252;

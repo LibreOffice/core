@@ -42,7 +42,7 @@ struct Symbol
     com::sun::star::drawing::PolyPolygonBezierCoords    PolygonCoords;
 
     /** Use the nth standard symbol, if #Style is set
-        to SymbolStlye::STANDARD.
+        to SymbolStyle::STANDARD.
 
         <p>If n is the number of standard symbols available in an
         implementation, the symbol number is

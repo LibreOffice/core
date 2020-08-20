@@ -146,7 +146,7 @@ public class SvxUnoText extends TestCase {
         tEnv.addObjRelation("RangeForMove", aRange);
         tEnv.addObjRelation("XTextRange", oObj);
 
-        // adding relation for XTextRangeComapre
+        // adding relation for XTextRangeCompare
         tEnv.addObjRelation("TEXT", UnoRuntime.queryInterface(XText.class, oShape)) ;
 
         return tEnv;

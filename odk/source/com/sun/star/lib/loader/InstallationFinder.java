@@ -375,7 +375,7 @@ final class InstallationFinder {
     }
 
     /**
-     * Gets the installation path from the .sverionrc file in the user's home
+     * Gets the installation path from the .sversionrc file in the user's home
      * directory.
      *
      * <p>This method is called on Unix/Linux platforms only.

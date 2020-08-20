@@ -16,7 +16,7 @@ excludelist:
     pyuno/source/loader/pyuno_loader.cxx:
     # Don't replace with URE impl. detail
     - osl/file.hxx
-    # Needed for direct memmber access
+    # Needed for direct member access
     - com/sun/star/uno/XComponentContext.hpp
     pyuno/source/module/pyuno_module.cxx:
     # Needed on MACOSX

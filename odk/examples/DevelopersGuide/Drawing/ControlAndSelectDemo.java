@@ -126,7 +126,7 @@ public class ControlAndSelectDemo
             XController xController = xModel.getCurrentController();
             XSelectionSupplier xSelectionSupplier =UnoRuntime.queryInterface( XSelectionSupplier.class, xController );
             // take care to use the global service factory only and not the one
-            // that is provided by the component if you create the ShapeColletion
+            // that is provided by the component if you create the ShapeCollection
             XShapes xSelection = UnoRuntime.queryInterface( XShapes.class,
                 xOfficeContext.getServiceManager().createInstanceWithContext(
                     "com.sun.star.drawing.ShapeCollection", xOfficeContext ) );

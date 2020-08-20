@@ -59,7 +59,7 @@ public:
       parameters the second one is suppressed {0,2,3}. For VAR_ARGS
       parameters only one element is added to the end of the sequence.
 
-      @param _rArgumens
+      @param _rArguments
       Vector, which the indices are written to
     */
     virtual void fillVisibleArgumentMapping(::std::vector<sal_uInt16>& _rArguments) const override ;

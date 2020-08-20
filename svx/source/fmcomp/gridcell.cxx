@@ -2131,7 +2131,7 @@ VclPtr<Control> DbDateField::createField(BrowserDataWin* pParent, bool bSpinButt
                         ||  getBOOL( rxModel->getPropertyValue( FM_PROP_DROPDOWN ) );
     // given the apparent inability to set a custom up/down action for a gtk
     // spinbutton to have different up/down dates depending on the zone the
-    // mouse is in, show the dropdown calender for both the spin or dropdown case
+    // mouse is in, show the dropdown calendar for both the spin or dropdown case
     return VclPtr<DateControl>::Create(pParent, bSpinButton || bDropDown);
 }
 

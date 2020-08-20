@@ -32,7 +32,7 @@
 #     
 #**************************************************************************
 
-# Builds the OfficeDevDestopEnvironment example of the Developers Guide.
+# Builds the OfficeDevDesktopEnvironment example of the Developers Guide.
 
 PRJ=../../../..
 SETTINGS=$(PRJ)/settings

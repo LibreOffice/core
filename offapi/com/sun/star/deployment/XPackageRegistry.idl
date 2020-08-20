@@ -49,7 +49,7 @@ interface XPackageRegistry
         actual extension files do not exist anymore. The registration data must
         then be cleaned of all the remains of that extension. To do that one
         creates an XPackage object on behalf of that extension and
-        calls XPackage::revokePakage(). The parameter
+        calls XPackage::revokePackage(). The parameter
         <code>removed</code> indicates this case. The returned object may not
         rely on the file or folder to which refers <code>url</code>. Instead it
         must use previously saved data to successfully carry out the revocation
