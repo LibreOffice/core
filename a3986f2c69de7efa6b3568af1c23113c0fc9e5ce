@@ -33,6 +33,24 @@
       "revId": "a3986f2c69de7efa6b3568af1c23113c0fc9e5ce",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df0c6079_ad70cabf",
+        "filename": "sw/qa/extras/rtfexport/rtfexport5.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1151,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2020-08-20T10:49:11Z",
+      "side": 1,
+      "message": "Oh... this one forgotten. Usual things for backports w/o local compiling",
+      "parentUuid": "184dc89a_66daa139",
+      "revId": "a3986f2c69de7efa6b3568af1c23113c0fc9e5ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
