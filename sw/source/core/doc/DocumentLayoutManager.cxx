@@ -41,6 +41,7 @@
 #include <pam.hxx>
 #include <frameformats.hxx>
 #include <com/sun/star/embed/EmbedStates.hpp>
+#include <svx/svdobj.hxx>
 
 using namespace ::com::sun::star;
 
@@ -483,6 +484,14 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
         // Link FLY and DRAW formats, so it becomes a text box
         pDest->SetOtherTextBoxFormat(pDestTextBox);
         pDestTextBox->SetOtherTextBoxFormat(pDest);
+    }
+
+    if (pDest->GetName().isEmpty())
+    {
+        // Format name should have unique name. Let's use object name as a fallback
+        SdrObject *pObj = pDest->FindSdrObject();
+        if (pObj)
+            pDest->SetName(pObj->GetName());
     }
 
     return pDest;
