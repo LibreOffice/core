@@ -148,7 +148,7 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
                     : pField->ExpandField(bInClipboard, pFrame->getRootFrame()) );
                 pRet = new SwFieldPortion( aStr );
             }
-            static_cast<SwFieldPortion*>(pRet)->m_nAttrFieldType= ATTR_PAGECOOUNTFLD;
+            static_cast<SwFieldPortion*>(pRet)->m_nAttrFieldType= ATTR_PAGECOUNTFLD;
             break;
 
         case SwFieldIds::PageNumber:
