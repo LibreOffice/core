@@ -633,8 +633,8 @@ void BaseNode::notifyDeactivating( const AnimationNodeSharedPtr& rNotifier )
 void BaseNode::notifyEndListeners() const
 {
     // notify all listeners
-    for( const auto& rListner : maDeactivatingListeners )
-        rListner->notifyDeactivating( mpSelf );
+    for( const auto& rListener : maDeactivatingListeners )
+        rListener->notifyDeactivating( mpSelf );
 
     // notify state change
     maContext.mrEventMultiplexer.notifyAnimationEnd( mpSelf );
