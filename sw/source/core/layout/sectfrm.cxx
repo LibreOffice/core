@@ -2764,7 +2764,7 @@ SwFootnoteContFrame* SwSectionFrame::ContainsFootnoteCont( const SwFootnoteContF
     if( pCont )
     {
         pLay = pCont->FindFootnoteBossFrame();
-        OSL_ENSURE( IsAnLower( pLay ), "ConatainsFootnoteCont: Wrong FootnoteContainer" );
+        OSL_ENSURE( IsAnLower( pLay ), "ContainsFootnoteCont: Wrong FootnoteContainer" );
         pLay = static_cast<const SwLayoutFrame*>(pLay->GetNext());
     }
     else if( Lower() && Lower()->IsColumnFrame() )
