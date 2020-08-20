@@ -311,7 +311,7 @@ public:
     ScMatrix::IterateResult Sum( bool bTextAsZero, bool bIgnoreErrorValues ) const;
     ScMatrix::IterateResult SumSquare( bool bTextAsZero, bool bIgnoreErrorValues ) const;
     ScMatrix::IterateResult Product( bool bTextAsZero, bool bIgnoreErrorValues ) const;
-    size_t Count(bool bCountStrings, bool bCountErrors) const;
+    size_t Count(bool bCountStrings, bool bCountErrors, bool bIgnoreEmptyStrings) const;
     size_t MatchDoubleInColumns(double fValue, size_t nCol1, size_t nCol2) const;
     size_t MatchStringInColumns(const svl::SharedString& rStr, size_t nCol1, size_t nCol2) const;
 
@@ -1297,9 +1297,11 @@ class CountElements
     size_t mnCount;
     bool mbCountString;
     bool mbCountErrors;
+    bool mbIgnoreEmptyStrings;
 public:
-    explicit CountElements(bool bCountString, bool bCountErrors) :
-        mnCount(0), mbCountString(bCountString), mbCountErrors(bCountErrors) {}
+    explicit CountElements(bool bCountString, bool bCountErrors, bool bIgnoreEmptyStrings) :
+        mnCount(0), mbCountString(bCountString), mbCountErrors(bCountErrors),
+        mbIgnoreEmptyStrings(bIgnoreEmptyStrings) {}
 
     size_t getCount() const { return mnCount; }
 
@@ -1327,7 +1329,21 @@ public:
             break;
             case mdds::mtm::element_string:
                 if (mbCountString)
+                {
                     mnCount += node.size;
+                    if (mbIgnoreEmptyStrings)
+                    {
+                        typedef MatrixImplType::string_block_type block_type;
+
+                        block_type::const_iterator it = block_type::begin(*node.data);
+                        block_type::const_iterator itEnd = block_type::end(*node.data);
+                        for (; it != itEnd; ++it)
+                        {
+                            if (it->isEmpty())
+                                --mnCount;
+                        }
+                    }
+                }
             break;
             case mdds::mtm::element_empty:
             default:
@@ -2117,9 +2133,9 @@ ScMatrix::IterateResult ScMatrixImpl::Product(bool bTextAsZero, bool bIgnoreErro
     return GetValueWithCount<sc::op::Product>(bTextAsZero, bIgnoreErrorValues, maMat);
 }
 
-size_t ScMatrixImpl::Count(bool bCountStrings, bool bCountErrors) const
+size_t ScMatrixImpl::Count(bool bCountStrings, bool bCountErrors, bool bIgnoreEmptyStrings) const
 {
-    CountElements aFunc(bCountStrings, bCountErrors);
+    CountElements aFunc(bCountStrings, bCountErrors, bIgnoreEmptyStrings);
     aFunc = maMat.walk(aFunc);
     return aFunc.getCount();
 }
@@ -3235,9 +3251,9 @@ ScMatrix::IterateResult ScMatrix::Product(bool bTextAsZero, bool bIgnoreErrorVal
     return pImpl->Product(bTextAsZero, bIgnoreErrorValues);
 }
 
-size_t ScMatrix::Count(bool bCountStrings, bool bCountErrors) const
+size_t ScMatrix::Count(bool bCountStrings, bool bCountErrors, bool bIgnoreEmptyStrings) const
 {
-    return pImpl->Count(bCountStrings, bCountErrors);
+    return pImpl->Count(bCountStrings, bCountErrors, bIgnoreEmptyStrings);
 }
 
 size_t ScMatrix::MatchDoubleInColumns(double fValue, size_t nCol1, size_t nCol2) const
