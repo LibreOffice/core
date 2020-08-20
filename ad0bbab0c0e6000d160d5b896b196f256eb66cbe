@@ -22,6 +22,30 @@
       "revId": "ad0bbab0c0e6000d160d5b896b196f256eb66cbe",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e65a099b_cde50907",
+        "filename": "sw/source/core/text/portxt.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 687,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-08-20T16:51:44Z",
+      "side": 1,
+      "message": "\u003e So we just do this FieldSlot thing when mbShowFieldName is true\n\nthat is definitely better!",
+      "parentUuid": "f1312501_e95904e3",
+      "range": {
+        "startLine": 687,
+        "startChar": 4,
+        "endLine": 687,
+        "endChar": 37
+      },
+      "revId": "ad0bbab0c0e6000d160d5b896b196f256eb66cbe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
