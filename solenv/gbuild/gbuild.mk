@@ -251,7 +251,6 @@ endif
 gb_GLOBALDEFS += \
 	$(call gb_Helper_define_if_set,\
 		DISABLE_DYNLOADING \
-		ENABLE_LTO \
 	)
 
 gb_GLOBALDEFS := $(sort $(gb_GLOBALDEFS))

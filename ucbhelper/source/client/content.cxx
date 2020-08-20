@@ -21,6 +21,7 @@
 
 #include <cassert>
 
+#include <o3tl/unreachable.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <sal/log.hxx>
@@ -1013,11 +1014,7 @@ bool Content::isFolder()
                     get() ) ),
          m_xImpl->getEnvironment() );
 
-#if !(defined(_MSC_VER) && defined(ENABLE_LTO))
-    // Unreachable - cancelCommandExecution always throws an exception.
-    // But some compilers complain...
-    return false;
-#endif
+    O3TL_UNREACHABLE;
 }
 
 
