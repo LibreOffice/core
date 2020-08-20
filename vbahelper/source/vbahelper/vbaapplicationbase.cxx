@@ -82,7 +82,7 @@ public:
         return static_cast<double>(nDiffDays) + static_cast<double>(nDiffSeconds)/double(24*3600);
     }
 
-    static sal_Int32 GetTimerMiliseconds( double nFrom, double nTo )
+    static sal_Int32 GetTimerMilliseconds( double nFrom, double nTo )
     {
         double nResult = nTo - nFrom;
         if ( nResult > 0 )
@@ -101,7 +101,7 @@ public:
         m_xBase = xBase;
         m_aTimerInfo = VbaTimerInfo( aFunction, ::std::pair< double, double >( nFrom, nTo ) );
         m_aTimer.SetInvokeHandler( LINK( this, VbaTimer, MacroCallHdl ) );
-        m_aTimer.SetTimeout( GetTimerMiliseconds( GetNow(), nFrom ) );
+        m_aTimer.SetTimeout( GetTimerMilliseconds( GetNow(), nFrom ) );
         m_aTimer.Start();
     }
 
