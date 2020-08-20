@@ -28,7 +28,6 @@
 namespace framework
 {
 
-class AddonsToolBarManager;
 class AddonsToolBarWrapper final : public UIElementWrapperBase
 {
     public:

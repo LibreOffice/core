@@ -18,7 +18,7 @@
  */
 
 #include <uielement/addonstoolbarwrapper.hxx>
-#include <uielement/addonstoolbarmanager.hxx>
+#include <uielement/toolbarmanager.hxx>
 
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
@@ -97,7 +97,7 @@ void SAL_CALL AddonsToolBarWrapper::initialize( const Sequence< Any >& aArgument
 
     // Create VCL based toolbar which will be filled with settings data
     VclPtr<ToolBox> pToolBar;
-    AddonsToolBarManager* pToolBarManager = nullptr;
+    ToolBarManager* pToolBarManager = nullptr;
     {
         SolarMutexGuard aSolarMutexGuard;
         VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
@@ -107,7 +107,7 @@ void SAL_CALL AddonsToolBarWrapper::initialize( const Sequence< Any >& aArgument
 
             pToolBar = VclPtr<ToolBox>::Create( pWindow, nStyles );
             pToolBar->SetLineSpacing(true);
-            pToolBarManager = new AddonsToolBarManager( m_xContext, xFrame, m_aResourceURL, pToolBar );
+            pToolBarManager = new ToolBarManager( m_xContext, xFrame, m_aResourceURL, pToolBar );
             m_xToolBarManager.set( static_cast< OWeakObject *>( pToolBarManager ), UNO_QUERY );
         }
     }
@@ -117,7 +117,7 @@ void SAL_CALL AddonsToolBarWrapper::initialize( const Sequence< Any >& aArgument
         if ( m_aConfigData.hasElements() && pToolBar && pToolBarManager )
         {
             // Fill toolbar with container contents
-            pToolBarManager->FillToolbar( m_aConfigData );
+            pToolBarManager->FillAddonToolbar( m_aConfigData );
             pToolBar->SetOutStyle( SvtMiscOptions().GetToolboxStyle() );
             pToolBar->EnableCustomize();
             ::Size aActSize( pToolBar->GetSizePixel() );
@@ -138,7 +138,7 @@ Reference< XInterface > SAL_CALL AddonsToolBarWrapper::getRealInterface()
 
     if ( m_xToolBarManager.is() )
     {
-        AddonsToolBarManager* pToolBarManager = static_cast< AddonsToolBarManager *>( m_xToolBarManager.get() );
+        ToolBarManager* pToolBarManager = static_cast< ToolBarManager *>( m_xToolBarManager.get() );
         if ( pToolBarManager )
         {
             vcl::Window* pWindow = pToolBarManager->GetToolBar();
@@ -159,10 +159,10 @@ void AddonsToolBarWrapper::populateImages()
 
     if ( m_xToolBarManager.is() )
     {
-        AddonsToolBarManager* pToolBarManager = static_cast< AddonsToolBarManager *>( m_xToolBarManager.get() );
+        ToolBarManager* pToolBarManager = static_cast< ToolBarManager *>( m_xToolBarManager.get() );
         if (pToolBarManager)
         {
-            pToolBarManager->RefreshImages();
+            pToolBarManager->RequestImages();
             m_bCreatedImages = true;
         }
     }

@@ -175,7 +175,6 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/uiconfiguration/uicategorydescription \
     framework/source/uiconfiguration/uiconfigurationmanager \
     framework/source/uiconfiguration/windowstateconfiguration \
-    framework/source/uielement/addonstoolbarmanager \
     framework/source/uielement/addonstoolbarwrapper \
     framework/source/uielement/buttontoolbarcontroller \
     framework/source/uielement/comboboxtoolbarcontroller \
