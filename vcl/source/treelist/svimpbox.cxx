@@ -106,7 +106,7 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvTreeList* pLBTree, WinBits nWinS
     m_bInVScrollHdl = false;
     m_nFlags |= LBoxFlags::Filling;
 
-    m_bSubLstOpLR = m_bContextMenuHandling = false;
+    m_bSubLstOpLR = false;
 }
 
 SvImpLBox::~SvImpLBox()
@@ -2856,119 +2856,9 @@ void SvImpLBox::Command( const CommandEvent& rCEvt )
             return;
     }
 
-    if( m_bContextMenuHandling && nCommand == CommandEventId::ContextMenu )
-    {
-        Point   aPopupPos;
-        bool    bClickedIsFreePlace = false;
-        std::stack<SvTreeListEntry*> aSelRestore;
-
-        if( rCEvt.IsMouseEvent() )
-        {   // change selection, if mouse position doesn't fit to selection
-
-            aPopupPos = rCEvt.GetMousePosPixel();
-
-            SvTreeListEntry*    pClickedEntry = GetEntry( aPopupPos );
-            if( pClickedEntry )
-            {   // mouse in non empty area
-                bool                bClickedIsSelected = false;
-
-                // collect the currently selected entries
-                SvTreeListEntry*        pSelected = m_pView->FirstSelected();
-                while( pSelected )
-                {
-                    bClickedIsSelected |= ( pClickedEntry == pSelected );
-                    pSelected = m_pView->NextSelected( pSelected );
-                }
-
-                // if the entry which the user clicked at is not selected
-                if( !bClickedIsSelected )
-                {   // deselect all other and select the clicked one
-                    m_pView->SelectAll( false );
-                    m_pView->SetCursor( pClickedEntry );
-                }
-            }
-            else if( m_aSelEng.GetSelectionMode() == SelectionMode::Single )
-            {
-                bClickedIsFreePlace = true;
-                sal_Int32               nSelectedEntries = m_pView->GetSelectionCount();
-                SvTreeListEntry*        pSelected = m_pView->FirstSelected();
-                for(sal_Int32 nSel = 0; nSel < nSelectedEntries; nSel++ )
-                {
-                    aSelRestore.push(pSelected);
-                    pSelected = m_pView->NextSelected( pSelected );
-                }
-                m_pView->SelectAll( false );
-            }
-            else
-            {   // deselect all
-                m_pView->SelectAll( false );
-            }
-
-
-        }
-        else
-        {   // key event (or at least no mouse event)
-            sal_Int32   nSelectionCount = m_pView->GetSelectionCount();
-
-            if( nSelectionCount )
-            {   // now always take first visible as base for positioning the menu
-                SvTreeListEntry*    pSelected = m_pView->FirstSelected();
-                while( pSelected )
-                {
-                    if( IsEntryInView( pSelected ) )
-                        break;
-
-                    pSelected = m_pView->NextSelected( pSelected );
-                }
-
-                if( !pSelected )
-                {
-                    // no one was visible
-                    pSelected = m_pView->FirstSelected();
-                    m_pView->MakeVisible( pSelected );
-                }
-
-                aPopupPos = m_pView->GetFocusRect( pSelected, m_pView->GetEntryPosition( pSelected ).Y() ).Center();
-            }
-            else
-                aPopupPos = Point( 0, 0 );
-        }
-
-        {
-            VclPtr<PopupMenu> pPopup = SvTreeListBox::CreateContextMenu();
-            if (pPopup)
-            {
-                // do action for selected entry in popup menu
-                pPopup->Execute( m_pView, aPopupPos );
-                pPopup.disposeAndClear();
-            }
-        }
-
-        if( bClickedIsFreePlace )
-        {
-            while(!aSelRestore.empty())
-            {
-                SvTreeListEntry* pEntry = aSelRestore.top();
-                //#i19717# the entry is maybe already deleted
-                bool bFound = false;
-                for(sal_uLong nEntry = 0; nEntry < m_pView->GetEntryCount(); nEntry++)
-                    if(pEntry == m_pView->GetEntry(nEntry))
-                    {
-                        bFound = true;
-                        break;
-                    }
-                if(bFound)
-                    SetCurEntry( pEntry );
-                aSelRestore.pop();
-            }
-        }
-    }
-    else
-    {
-        const Point& rPos = rCEvt.GetMousePosPixel();
-        if( rPos.X() < m_aOutputSize.Width() && rPos.Y() < m_aOutputSize.Height() )
-            m_aSelEng.Command( rCEvt );
-    }
+    const Point& rPos = rCEvt.GetMousePosPixel();
+    if( rPos.X() < m_aOutputSize.Width() && rPos.Y() < m_aOutputSize.Height() )
+        m_aSelEng.Command( rCEvt );
 }
 
 tools::Rectangle SvImpLBox::GetVisibleArea() const

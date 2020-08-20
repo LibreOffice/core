@@ -130,12 +130,9 @@ cui/source/options/optgdlg.cxx:1127
 cui/source/options/optjava.hxx:59
     SvxJavaOptionsPage m_aResetIdle
     cui options SvxJavaOptionsPage Reset
-dbaccess/source/ui/inc/directsql.hxx:68
-    dbaui::DirectSQLDialog m_aHighlighter
+dbaccess/source/ui/inc/sqledit.hxx:43
+    dbaui::SQLEditView m_aHighlighter
     1
-dbaccess/source/ui/inc/JoinExchange.hxx:38
-    dbaui::OJoinExchObj m_pDragListener
-    0
 desktop/source/app/app.cxx:480
     desktop::Desktop::Init bTryHardOfficeconfigBroken
     0
@@ -151,16 +148,16 @@ drawinglayer/source/primitive2d/sceneprimitive2d.cxx:481
 drawinglayer/source/processor2d/vclhelperbufferdevice.cxx:340
     drawinglayer::impBufferDevice::paint bDoSaveForVisualControl
     0
-drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx:953
+drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx:954
     drawinglayer::processor2d::VclMetafileProcessor2D::processGraphicPrimitive2D bSuppressPDFExtOutDevDataSupport
     0
-drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx:1307
+drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx:1308
     drawinglayer::processor2d::VclMetafileProcessor2D::processTextHierarchyParagraphPrimitive2D bSuppressPDFExtOutDevDataSupport
     0
-drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx:2069
+drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx:2070
     drawinglayer::processor2d::VclMetafileProcessor2D::processUnifiedTransparencePrimitive2D bForceToMetafile
     0
-drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx:2170
+drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx:2171
     drawinglayer::processor2d::VclMetafileProcessor2D::processTransparencePrimitive2D bForceToBigTransparentVDev
     0
 drawinglayer/source/tools/converters.cxx:91
@@ -349,9 +346,6 @@ include/vcl/settings.hxx:146
 include/vcl/settings.hxx:147
     DialogStyle action_area_border
     5
-include/vcl/toolkit/longcurr.hxx:62
-    LongCurrencyFormatter mbThousandSep
-    1
 include/vcl/toolkit/treelistbox.hxx:213
     SvTreeListBox nIndent
     20
@@ -559,10 +553,10 @@ sd/source/ui/inc/DrawController.hxx:292
 sd/source/ui/inc/pubdlg.hxx:151
     SdPublishingDlg aAssistentFunc
     6
-sd/source/ui/inc/View.hxx:237
+sd/source/ui/inc/View.hxx:240
     sd::View maDropErrorIdle
     sd View DropError
-sd/source/ui/inc/View.hxx:238
+sd/source/ui/inc/View.hxx:241
     sd::View maDropInsertFileIdle
     sd View DropInsertFile
 sd/source/ui/inc/ViewTabBar.hxx:146
@@ -985,6 +979,9 @@ vcl/inc/salwtype.hxx:162
 vcl/inc/svdata.hxx:315
     ImplSVNWFData mbMenuBarDockingAreaCommonBG
     0
+vcl/inc/svimpbox.hxx:128
+    SvImpLBox m_bContextMenuHandling
+    0
 vcl/source/bitmap/bitmap.cxx:140
     Bitmap::~Bitmap save
     0
@@ -1084,10 +1081,10 @@ vcl/source/outdev/bitmap.cxx:1243
 vcl/unx/gtk3/a11y/gtk3atkutil.cxx:694
     ooo_atk_util_ensure_event_listener bInited
     1
-vcl/unx/gtk3/gtk3gtkinst.cxx:15444
+vcl/unx/gtk3/gtk3gtkinst.cxx:15466
     (anonymous namespace)::ensure_intercept_drawing_area_accessibility bDone
     1
-vcl/unx/gtk3/gtk3gtkinst.cxx:15472
+vcl/unx/gtk3/gtk3gtkinst.cxx:15494
     (anonymous namespace)::ensure_disable_ctrl_page_up_down_bindings bDone
     1
 workdir/LexTarget/l10ntools/source/xrmlex.cxx:706
@@ -1096,7 +1093,7 @@ workdir/LexTarget/l10ntools/source/xrmlex.cxx:706
 writerfilter/source/dmapper/DomainMapper_Impl.hxx:148
     writerfilter::dmapper::FieldParagraph m_bRemove
     0
-writerfilter/source/dmapper/SettingsTable.cxx:269
+writerfilter/source/dmapper/SettingsTable.cxx:271
     writerfilter::dmapper::SettingsTable_Impl m_pThemeFontLangProps
     3
 writerfilter/source/rtftok/rtfdocumentimpl.hxx:873
