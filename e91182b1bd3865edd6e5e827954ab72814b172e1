@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d7fc13e9_c84d4370",
+        "filename": "sw/source/core/text/txtfld.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-08-20T16:35:13Z",
+      "side": 1,
+      "message": "at this point pCleanedSet contains the items of the auto-format... so this would override the auto-format with the char-format which is the wrong way around.\n\nbut with a check first if pCleanedSet already contains the item it should work.",
+      "revId": "e91182b1bd3865edd6e5e827954ab72814b172e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11bb1d98_9ce23d0b",
+        "filename": "sw/source/core/text/txtfld.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-08-20T16:35:13Z",
+      "side": 1,
+      "message": "hmm this is:\n\n  const SwAttrSet* pFormat \u003d rNumFormat.GetCharFormat() ?\n                                    \u0026rNumFormat.GetCharFormat()-\u003eGetAttrSet()\n\nso if it overrides auto-format then it should most likely override char-format too? i.e. add a check to the other loop.",
+      "revId": "e91182b1bd3865edd6e5e827954ab72814b172e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
