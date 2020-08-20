@@ -66,8 +66,8 @@ public:
     rtl::Reference< sdr::overlay::OverlayManager > const & GetOverlayManager() const;
 
     // #i72752# allow patcing SdrPaintWindow from SdrPageView::DrawLayer if needed
-    void patchPaintWindow(SdrPaintWindow& rPaintWindow);
-    void unpatchPaintWindow();
+    [[nodiscard]] SdrPaintWindow* patchPaintWindow(SdrPaintWindow& rPaintWindow);
+    void unpatchPaintWindow(SdrPaintWindow* pPreviousPaintWindow);
 
     // the repaint method. For migration from pPaintProc, use one more parameter
     void PrePaint();
