@@ -722,9 +722,8 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
 
             m_pSh->StartUndo(SwUndoId::UI_REPLACE, &aRewriter);
             m_pSh->StartAction();
-            m_pSh->DelLeft();
 
-            m_pSh->Insert( aTmp );
+            m_pSh->Replace(aTmp, false);
 
             /* #102505# EndAction/EndUndo moved down since insertion
                of temporary auto correction is now undoable two and
