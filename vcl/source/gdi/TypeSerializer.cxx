@@ -220,11 +220,11 @@ void TypeSerializer::readGraphic(Graphic& rGraphic)
         {
             sal_uInt32 nMagic1 = 0;
             sal_uInt32 nMagic2 = 0;
-            sal_uInt64 nBeginPoisition = mrStream.Tell();
+            sal_uInt64 nBeginPosition = mrStream.Tell();
 
             mrStream.ReadUInt32(nMagic1);
             mrStream.ReadUInt32(nMagic2);
-            mrStream.Seek(nBeginPoisition);
+            mrStream.Seek(nBeginPosition);
 
             if (!mrStream.GetError())
             {
