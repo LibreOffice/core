@@ -64,7 +64,7 @@ public:
 
     inline XMLTextNumRuleInfo& operator=( const XMLTextNumRuleInfo& rInfo );
 
-    void Set( const css::uno::Reference < css::text::XTextContent > & rTextContnt,
+    void Set( const css::uno::Reference < css::text::XTextContent > & rTextContent,
               const bool bOutlineStyleAsNormalListStyle,
               const XMLTextListAutoStylePool& rListAutoPool,
               const bool bExportTextNumberElement );
