@@ -96,7 +96,7 @@ public:
         css::uno::Reference<css::text::XTextRange> const & rRange, // the actual XTextRange
         // text range is (from an XML view) outside of a paragraph
         // (i.e. before a table)
-        bool bIsOusideOfParagraph);
+        bool bIsOutsideOfParagraph);
 
     /**
      * Adjust the start (end) position for a redline that begins in a
