@@ -3677,7 +3677,7 @@
      <table:table-cell table:style-name="Default"/>
      <table:table-cell table:number-columns-repeated="9"/>
      <table:table-cell table:style-name="ce73" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="2" table:number-rows-spanned="1">
-      <text:p>Non-exaustive list…</text:p>
+      <text:p>Non-exhaustive list…</text:p>
      </table:table-cell>
      <table:covered-table-cell/>
      <table:table-cell/>
