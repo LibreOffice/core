@@ -26,6 +26,7 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
+#include <sal/log.hxx>
 #include <sax/tools/converter.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -38,6 +39,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 
 using ::com::sun::star::xml::sax::XAttributeList;
+using ::com::sun::star::xml::sax::XFastAttributeList;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::lang::XMultiServiceFactory;
@@ -56,10 +58,9 @@ const OUStringLiteral gsLocale("Locale");
 
 XMLIndexBibliographyConfigurationContext::XMLIndexBibliographyConfigurationContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
-    const Reference<XAttributeList> & xAttrList) :
-        SvXMLStyleContext(rImport, nPrfx, rLocalName, xAttrList, XmlStyleFamily::TEXT_BIBLIOGRAPHYCONFIG),
+    sal_Int32 nElement,
+    const Reference<XFastAttributeList> & xAttrList) :
+        SvXMLStyleContext(rImport, nElement, xAttrList, XmlStyleFamily::TEXT_BIBLIOGRAPHYCONFIG),
         sSuffix(),
         sPrefix(),
         sAlgorithm(),
@@ -133,41 +134,33 @@ void XMLIndexBibliographyConfigurationContext::SetAttribute(
     }
 }
 
-SvXMLImportContextRef XMLIndexBibliographyConfigurationContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList> & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexBibliographyConfigurationContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // process children here and use default context!
-    if ( ( nPrefix == XML_NAMESPACE_TEXT ) &&
-         IsXMLToken( rLocalName, XML_SORT_KEY ) )
+    if ( nElement == XML_ELEMENT(TEXT, XML_SORT_KEY) )
     {
         OUString sKey;
         bool bSort(true);
 
-        sal_Int16 nLength = xAttrList->getLength();
-        for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
+        for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
         {
-            OUString sLocalName;
-            sal_uInt16 nPrfx = GetImport().GetNamespaceMap().
-                GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
-                                  &sLocalName );
-
-            if (nPrfx == XML_NAMESPACE_TEXT)
+            switch (aIter.getToken())
             {
-                if ( IsXMLToken( sLocalName, XML_KEY ) )
-                {
-                    sKey = xAttrList->getValueByIndex(nAttr);
-                }
-                else if ( IsXMLToken( sLocalName, XML_SORT_ASCENDING ) )
+                case XML_ELEMENT(TEXT, XML_KEY):
+                    sKey = aIter.toString();
+                    break;
+                case XML_ELEMENT(TEXT, XML_SORT_ASCENDING):
                 {
                     bool bTmp(false);
-                    if (::sax::Converter::convertBool(
-                        bTmp, xAttrList->getValueByIndex(nAttr)))
-                    {
+                    if (::sax::Converter::convertBool(bTmp, aIter.toString()))
                         bSort = bTmp;
-                    }
+                    break;
                 }
+                default:
+                    SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
+                    break;
             }
         }
 
