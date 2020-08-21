@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7e2b8e1d_d5965ebb",
+        "filename": "icon-themes/colibre/links.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 2724,
+      "author": {
+        "id": 1001872
+      },
+      "writtenOn": "2020-08-21T02:24:42Z",
+      "side": 1,
+      "message": "Where is lc_arrowshapes.circular-leftarrow.png?\n\nfor librelogo-home.png, we have already res/lc06303.png and res/sc06303.png, these ones more accurate than navigationbar.png I think.",
+      "range": {
+        "startLine": 2724,
+        "startChar": 2,
+        "endLine": 2724,
+        "endChar": 11
+      },
+      "revId": "33c202fcf9d11936245ce8fe930576705d25e134",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
