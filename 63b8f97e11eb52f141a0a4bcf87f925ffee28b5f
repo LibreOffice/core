@@ -16,6 +16,24 @@
       "revId": "63b8f97e11eb52f141a0a4bcf87f925ffee28b5f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d5581c3_9a05f74b",
+        "filename": "slideshow/source/engine/shapes/shapeimporter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1002376
+      },
+      "writtenOn": "2020-08-21T15:31:17Z",
+      "side": 0,
+      "message": "this is only a small part of that patch - isForeground() is still used to classify whether a shape belongs to the master slide and or is a background shape. If it makes sense to revert and commit a new one instead I can prepare one.",
+      "parentUuid": "07dd4f63_03f27352",
+      "revId": "63b8f97e11eb52f141a0a4bcf87f925ffee28b5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
