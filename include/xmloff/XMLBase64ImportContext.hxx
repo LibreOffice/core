@@ -40,10 +40,17 @@ public:
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
         const css::uno::Reference< css::io::XOutputStream >& rOut );
 
+    XMLBase64ImportContext( SvXMLImport& rImport,
+        const css::uno::Reference< css::io::XOutputStream >& rOut );
+
     virtual ~XMLBase64ImportContext() override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
+    virtual void SAL_CALL endFastElement(sal_Int32) override;
+    virtual void SAL_CALL characters( const OUString& rChars ) override;
 
+    virtual void EndElement() override;
     virtual void Characters( const OUString& rChars ) override;
 
 };
