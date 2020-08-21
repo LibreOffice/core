@@ -34,6 +34,24 @@
       "revId": "63b8f97e11eb52f141a0a4bcf87f925ffee28b5f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c49320de_1bccab93",
+        "filename": "slideshow/source/engine/shapes/shapeimporter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-08-21T16:14:40Z",
+      "side": 0,
+      "message": "Ah gotcha - true that, taking remark back.",
+      "parentUuid": "6d5581c3_9a05f74b",
+      "revId": "63b8f97e11eb52f141a0a4bcf87f925ffee28b5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
