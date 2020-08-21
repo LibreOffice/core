@@ -4135,6 +4135,13 @@ bool ScViewData::SetLOKSheetFreezeIndex(const SCCOLROW nFreezeIndex, bool bIsCol
         pDoc->SetLOKFreezeRow(static_cast<SCROW>(nFreezeIndex), nForTab);
 }
 
+bool ScViewData::RemoveLOKFreeze()
+{
+    bool colUnfreezed = SetLOKSheetFreezeIndex(0, true);
+    bool rowUnfreezed = SetLOKSheetFreezeIndex(0, false);
+    return colUnfreezed || rowUnfreezed;
+}
+
 void ScViewData::DeriveLOKFreezeAllSheets()
 {
     SCTAB nMaxTab = static_cast<SCTAB>(maTabData.size()) - 1;
