@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "07dd4f63_03f27352",
+        "filename": "slideshow/source/engine/shapes/shapeimporter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-08-21T15:15:47Z",
+      "side": 0,
+      "message": "Then we can presumably revert ~all of e13dd9546e27bdc3b894718fc2993f99722ea9f1 ?",
+      "revId": "63b8f97e11eb52f141a0a4bcf87f925ffee28b5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
