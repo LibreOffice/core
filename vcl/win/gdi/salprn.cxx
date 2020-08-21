@@ -1470,7 +1470,7 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
 
     // bring up a file chooser if printing to file port but no file name given
     OUString aOutFileName;
-    if( mpInfoPrinter->maPortName.equalsIgnoreAsciiCase( "FILE:" ) && !(pFileName && !pFileName->isEmpty()) )
+    if( mpInfoPrinter->maPortName.equalsIgnoreAsciiCase( "FILE:" ) && (!pFileName || pFileName->isEmpty()) )
     {
 
         uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
