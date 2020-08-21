@@ -412,9 +412,18 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                 break;
 
             case SID_WINDOW_FIX:
-                rSet.Put(SfxBoolItem(nWhich,
-                            rViewData.GetHSplitMode() == SC_SPLIT_FIX ||
-                            rViewData.GetVSplitMode() == SC_SPLIT_FIX ));
+                if(!comphelper::LibreOfficeKit::isActive())
+                {
+                    rSet.Put(SfxBoolItem(nWhich,
+                                rViewData.GetHSplitMode() == SC_SPLIT_FIX ||
+                                rViewData.GetVSplitMode() == SC_SPLIT_FIX ));
+                }
+                else
+                {
+                    rSet.Put(SfxBoolItem(nWhich,
+                            rViewData.GetLOKSheetFreezeIndex(true) > 0 ||
+                            rViewData.GetLOKSheetFreezeIndex(false) > 0 ));
+                }
                 break;
 
             case SID_WINDOW_FIX_COL:
