@@ -28,7 +28,7 @@ class SvXMLImport;
 class SvXMLExport;
 namespace com::sun::star {
     namespace uno { template<class A> class Reference; }
-    namespace xml::sax { class XAttributeList; }
+    namespace xml::sax { class XFastAttributeList; }
     namespace uno { class Any; }
 }
 
@@ -42,7 +42,7 @@ public:
     ~XMLDashStyleImport();
 
     void importXML(
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
         css::uno::Any& rValue,
         OUString& rStrName );
 };
