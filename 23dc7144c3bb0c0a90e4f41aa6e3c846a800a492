@@ -16,6 +16,24 @@
       "revId": "23dc7144c3bb0c0a90e4f41aa6e3c846a800a492",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7cd7a05e_b04332f3",
+        "filename": "xmloff/source/text/txtparae.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3712,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-21T09:45:09Z",
+      "side": 1,
+      "message": "Thanks! Done.",
+      "parentUuid": "a2010fbf_483fc021",
+      "revId": "23dc7144c3bb0c0a90e4f41aa6e3c846a800a492",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
