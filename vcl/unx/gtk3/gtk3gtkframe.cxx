@@ -1040,6 +1040,12 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
     else
     {
         m_pWindow = gtk_window_new(eWinType);
+
+        // hook up F1 to show help for embedded native gtk widgets
+        GtkAccelGroup *pGroup = gtk_accel_group_new();
+        GClosure* closure = g_cclosure_new(G_CALLBACK(GtkSalFrame::NativeWidgetHelpPressed), GTK_WINDOW(m_pWindow), nullptr);
+        gtk_accel_group_connect(pGroup, GDK_KEY_F1, static_cast<GdkModifierType>(0), GTK_ACCEL_LOCKED, closure);
+        gtk_window_add_accel_group(GTK_WINDOW(m_pWindow), pGroup);
     }
 
     g_object_set_data( G_OBJECT( m_pWindow ), "SalFrame", this );
