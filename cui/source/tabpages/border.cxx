@@ -846,59 +846,45 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
 
     if (m_aFrameSel.IsBorderEnabled(svx::FrameBorderType::TLBR))
     {
-        sal_uInt16 nBorderDiagId = pPool->GetWhich(SID_ATTR_BORDER_DIAG_TLBR);
-        if (const SfxPoolItem* pItem = rCoreAttrs->GetItem(nBorderDiagId))
-        {
-            SvxLineItem aLineItem(*static_cast<const SvxLineItem*>(pItem));
-            aLineItem.SetLine(m_aFrameSel.GetFrameBorderStyle(svx::FrameBorderType::TLBR));
-            rCoreAttrs->Put(aLineItem);
-            bAttrsChanged = true;
-        }
+        SvxLineItem aLineItem(*static_cast<const SvxLineItem*>(GetOldItem(*rCoreAttrs, SID_ATTR_BORDER_DIAG_TLBR)));
+        aLineItem.SetLine(m_aFrameSel.GetFrameBorderStyle(svx::FrameBorderType::TLBR));
+        rCoreAttrs->Put(aLineItem);
+        bAttrsChanged = true;
     }
 
     if (m_aFrameSel.IsBorderEnabled(svx::FrameBorderType::BLTR))
     {
-        sal_uInt16 nBorderDiagId = pPool->GetWhich(SID_ATTR_BORDER_DIAG_BLTR);
-        if (const SfxPoolItem* pItem = rCoreAttrs->GetItem(nBorderDiagId))
-        {
-            SvxLineItem aLineItem(*static_cast<const SvxLineItem*>(pItem));
-            aLineItem.SetLine(m_aFrameSel.GetFrameBorderStyle(svx::FrameBorderType::BLTR));
-            rCoreAttrs->Put(aLineItem);
-            bAttrsChanged = true;
-        }
+        SvxLineItem aLineItem(*static_cast<const SvxLineItem*>(GetOldItem(*rCoreAttrs, SID_ATTR_BORDER_DIAG_BLTR)));
+        aLineItem.SetLine(m_aFrameSel.GetFrameBorderStyle(svx::FrameBorderType::BLTR));
+        rCoreAttrs->Put(aLineItem);
+        bAttrsChanged = true;
     }
 
     if (m_xShadowControls && m_xShadowControls->get_value_changed_from_saved())
     {
-        sal_uInt16 nShadowId = pPool->GetWhich(mnShadowSlot);
-        if (const SfxPoolItem* pItem = rCoreAttrs->GetItem(nShadowId))
-        {
-            const SvxShadowItem& rOldShadowItem = *static_cast<const SvxShadowItem*>(pItem);
-            rCoreAttrs->Put(m_xShadowControls->GetControlValue(rOldShadowItem));
-            bAttrsChanged = true;
-        }
+        const SvxShadowItem& rOldShadowItem = *static_cast<const SvxShadowItem*>(GetOldItem(*rCoreAttrs, mnShadowSlot));
+        rCoreAttrs->Put(m_xShadowControls->GetControlValue(rOldShadowItem));
+        bAttrsChanged = true;
     }
 
     if (m_xMarginControls && m_xMarginControls->get_value_changed_from_saved())
     {
-        sal_uInt16 nAlignMarginId = pPool->GetWhich(SID_ATTR_ALIGN_MARGIN);
-        if (const SfxPoolItem* pItem = rCoreAttrs->GetItem(nAlignMarginId))
-        {
-            const SvxMarginItem& rOldMarginItem = *static_cast<const SvxMarginItem*>(pItem);
-            rCoreAttrs->Put(m_xMarginControls->GetControlValue(rOldMarginItem));
-            bAttrsChanged = true;
-        }
+        const SvxMarginItem& rOldMarginItem = *static_cast<const SvxMarginItem*>(GetOldItem(*rCoreAttrs, SID_ATTR_ALIGN_MARGIN));
+        rCoreAttrs->Put(m_xMarginControls->GetControlValue(rOldMarginItem));
+        bAttrsChanged = true;
     }
 
     if (m_xMergeAdjacentBordersCB->get_state_changed_from_saved())
     {
-        sal_uInt16 nMergeAdjacentBordersId = pPool->GetWhich(SID_SW_COLLAPSING_BORDERS);
         auto nState = m_xMergeAdjacentBordersCB->get_state();
         if (nState == TRISTATE_INDET)
+        {
+            sal_uInt16 nMergeAdjacentBordersId = pPool->GetWhich(SID_SW_COLLAPSING_BORDERS);
             rCoreAttrs->ClearItem(nMergeAdjacentBordersId);
+        }
         else
         {
-            std::unique_ptr<SfxBoolItem> xNewItem(static_cast<SfxBoolItem*>(rCoreAttrs->Get(nMergeAdjacentBordersId).Clone()));
+            std::unique_ptr<SfxBoolItem> xNewItem(static_cast<SfxBoolItem*>(GetOldItem(*rCoreAttrs, SID_SW_COLLAPSING_BORDERS)->Clone()));
             xNewItem->SetValue(static_cast<bool>(nState));
             rCoreAttrs->Put(std::move(xNewItem));
         }
@@ -907,13 +893,15 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
 
     if (m_xMergeWithNextCB->get_state_changed_from_saved())
     {
-        sal_uInt16 nMergeWithNextId = pPool->GetWhich(SID_ATTR_BORDER_CONNECT);
         auto nState = m_xMergeWithNextCB->get_state();
         if (nState == TRISTATE_INDET)
+        {
+            sal_uInt16 nMergeWithNextId = pPool->GetWhich(SID_ATTR_BORDER_CONNECT);
             rCoreAttrs->ClearItem(nMergeWithNextId);
+        }
         else
         {
-            std::unique_ptr<SfxBoolItem> xNewItem(static_cast<SfxBoolItem*>(rCoreAttrs->Get(nMergeWithNextId).Clone()));
+            std::unique_ptr<SfxBoolItem> xNewItem(static_cast<SfxBoolItem*>(GetOldItem(*rCoreAttrs, SID_ATTR_BORDER_CONNECT)->Clone()));
             xNewItem->SetValue(static_cast<bool>(nState));
             rCoreAttrs->Put(std::move(xNewItem));
         }
