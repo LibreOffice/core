@@ -205,7 +205,7 @@ box2DWorld::box2DWorld(const ::basegfx::B2DVector& rSlideSize)
     , mbShapesInitialized(false)
     , mbHasWorldStepper(false)
     , mpXShapeToBodyMap()
-    , maShapeUpdateQueue()
+    , maShapeParallelUpdateQueue()
 {
 }
 
@@ -307,9 +307,9 @@ void box2DWorld::setShapeCollision(
 
 void box2DWorld::processUpdateQueue(const double fPassedTime)
 {
-    while (!maShapeUpdateQueue.empty())
+    while (!maShapeParallelUpdateQueue.empty())
     {
-        Box2DShapeUpdateInformation& aQueueElement = maShapeUpdateQueue.front();
+        Box2DDynamicUpdateInformation& aQueueElement = maShapeParallelUpdateQueue.front();
 
         if (aQueueElement.mnDelayForSteps > 0)
         {
@@ -340,7 +340,7 @@ void box2DWorld::processUpdateQueue(const double fPassedTime)
                 case BOX2D_UPDATE_ANGULAR_VELOCITY:
                     setShapeAngularVelocity(aQueueElement.mxShape, aQueueElement.mfAngularVelocity);
             }
-            maShapeUpdateQueue.pop();
+            maShapeParallelUpdateQueue.pop();
         }
     }
 }
@@ -378,47 +378,47 @@ void box2DWorld::setHasWorldStepper(const bool bHasWorldStepper)
     mbHasWorldStepper = bHasWorldStepper;
 }
 
-void box2DWorld::queuePositionUpdate(
+void box2DWorld::queueDynamicPositionUpdate(
     const css::uno::Reference<com::sun::star::drawing::XShape>& xShape,
     const basegfx::B2DPoint& rOutPos)
 {
-    Box2DShapeUpdateInformation aQueueElement = { xShape, {}, BOX2D_UPDATE_POSITION };
+    Box2DDynamicUpdateInformation aQueueElement = { xShape, {}, BOX2D_UPDATE_POSITION };
     aQueueElement.maPosition = rOutPos;
-    maShapeUpdateQueue.push(aQueueElement);
+    maShapeParallelUpdateQueue.push(aQueueElement);
 }
 
 void box2DWorld::queueLinearVelocityUpdate(
     const css::uno::Reference<com::sun::star::drawing::XShape>& xShape,
     const basegfx::B2DVector& rVelocity)
 {
-    Box2DShapeUpdateInformation aQueueElement = { xShape, {}, BOX2D_UPDATE_LINEAR_VELOCITY, 1 };
+    Box2DDynamicUpdateInformation aQueueElement = { xShape, {}, BOX2D_UPDATE_LINEAR_VELOCITY, 1 };
     aQueueElement.maVelocity = rVelocity;
-    maShapeUpdateQueue.push(aQueueElement);
+    maShapeParallelUpdateQueue.push(aQueueElement);
 }
 
-void box2DWorld::queueRotationUpdate(
+void box2DWorld::queueDynamicRotationUpdate(
     const css::uno::Reference<com::sun::star::drawing::XShape>& xShape, const double fAngle)
 {
-    Box2DShapeUpdateInformation aQueueElement = { xShape, {}, BOX2D_UPDATE_ANGLE };
+    Box2DDynamicUpdateInformation aQueueElement = { xShape, {}, BOX2D_UPDATE_ANGLE };
     aQueueElement.mfAngle = fAngle;
-    maShapeUpdateQueue.push(aQueueElement);
+    maShapeParallelUpdateQueue.push(aQueueElement);
 }
 
 void box2DWorld::queueAngularVelocityUpdate(
     const css::uno::Reference<com::sun::star::drawing::XShape>& xShape,
     const double fAngularVelocity)
 {
-    Box2DShapeUpdateInformation aQueueElement = { xShape, {}, BOX2D_UPDATE_ANGULAR_VELOCITY, 1 };
+    Box2DDynamicUpdateInformation aQueueElement = { xShape, {}, BOX2D_UPDATE_ANGULAR_VELOCITY, 1 };
     aQueueElement.mfAngularVelocity = fAngularVelocity;
-    maShapeUpdateQueue.push(aQueueElement);
+    maShapeParallelUpdateQueue.push(aQueueElement);
 }
 
 void box2DWorld::queueShapeVisibilityUpdate(
     const css::uno::Reference<com::sun::star::drawing::XShape>& xShape, const bool bVisibility)
 {
-    Box2DShapeUpdateInformation aQueueElement = { xShape, {}, BOX2D_UPDATE_VISIBILITY };
+    Box2DDynamicUpdateInformation aQueueElement = { xShape, {}, BOX2D_UPDATE_VISIBILITY };
     aQueueElement.mbVisibility = bVisibility;
-    maShapeUpdateQueue.push(aQueueElement);
+    maShapeParallelUpdateQueue.push(aQueueElement);
 }
 
 void box2DWorld::queueShapeAnimationUpdate(
@@ -432,11 +432,11 @@ void box2DWorld::queueShapeAnimationUpdate(
             queueShapeVisibilityUpdate(xShape, pAttrLayer->getVisibility());
             return;
         case slideshow::internal::AttributeType::Rotate:
-            queueRotationUpdate(xShape, pAttrLayer->getRotationAngle());
+            queueDynamicRotationUpdate(xShape, pAttrLayer->getRotationAngle());
             return;
         case slideshow::internal::AttributeType::PosX:
         case slideshow::internal::AttributeType::PosY:
-            queuePositionUpdate(xShape, { pAttrLayer->getPosX(), pAttrLayer->getPosY() });
+            queueDynamicPositionUpdate(xShape, { pAttrLayer->getPosX(), pAttrLayer->getPosY() });
             return;
         default:
             return;
