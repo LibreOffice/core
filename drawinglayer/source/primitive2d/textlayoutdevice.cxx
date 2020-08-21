@@ -369,8 +369,6 @@ namespace drawinglayer::primitive2d
         {
             // detect FontScaling
             const sal_uInt32 nHeight(basegfx::fround(fabs(fFontScaleY)));
-            const sal_uInt32 nWidth(basegfx::fround(fabs(fFontScaleX)));
-            const bool bFontIsScaled(nHeight != nWidth);
 
 #ifdef _WIN32
             // for WIN32 systems, start with creating an unscaled font. If FontScaling
@@ -380,12 +378,15 @@ namespace drawinglayer::primitive2d
                 rFontAttribute.getFamilyName(),
                 rFontAttribute.getStyleName(),
                 Size(0, nHeight));
+            (void)fFontScaleX;
 #else
             // for non-WIN32 systems things are easier since these accept a Font creation
             // with initially nWidth != nHeight for FontScaling. Despite that, use zero for
             // FontWidth when no scaling is used to explicitly have that zero when e.g. the
             // Font would be recorded in a MetaFile (The MetaFile FontAction WILL record a
             // set FontWidth; import that in a WIN32 system, and trouble is there)
+            const sal_uInt32 nWidth(basegfx::fround(fabs(fFontScaleX)));
+            const bool bFontIsScaled(nHeight != nWidth);
             vcl::Font aRetval(
                 rFontAttribute.getFamilyName(),
                 rFontAttribute.getStyleName(),
