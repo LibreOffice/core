@@ -76,12 +76,12 @@ public:
             const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
 
 protected:
-    void importColor( const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName );
-    void importMarker( const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName );
-    void importDash( const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName );
-    void importHatch( const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName );
-    void importGradient( const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName );
-    void importBitmap( const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName );
+    static void importColor( const uno::Reference< XFastAttributeList >& xAttrList, Any& rAny, OUString& rName );
+    void importMarker( const uno::Reference< XFastAttributeList >& xAttrList, Any& rAny, OUString& rName );
+    void importDash( const uno::Reference< XFastAttributeList >& xAttrList, Any& rAny, OUString& rName );
+    void importHatch( const uno::Reference< XFastAttributeList >& xAttrList, Any& rAny, OUString& rName );
+    void importGradient( const uno::Reference< XFastAttributeList >& xAttrList, Any& rAny, OUString& rName );
+    void importBitmap( const uno::Reference< XFastAttributeList >& xAttrList, Any& rAny, OUString& rName );
 
 private:
     uno::Reference< XNameContainer > mxTable;
@@ -101,132 +101,123 @@ css::uno::Reference< css::xml::sax::XFastContextHandler >
         SvxXMLTableImportContext::createFastChildContext(sal_Int32 nElement,
             const css::uno::Reference< css::xml::sax::XFastAttributeList > & rAttrList)
 {
-    if( IsTokenInNamespace(nElement, XML_NAMESPACE_DRAW) ||
-        IsTokenInNamespace(nElement, XML_NAMESPACE_DRAW_OOO) )
+    if( !(IsTokenInNamespace(nElement, XML_NAMESPACE_DRAW) ||
+          IsTokenInNamespace(nElement, XML_NAMESPACE_DRAW_OOO) ))
+            return nullptr;
+
+    std::vector<std::pair<sal_Int32, OString>> aTmpAttrList;
+    for (auto& aIter : sax_fastparser::castToFastAttributeList( rAttrList ))
+        aTmpAttrList.push_back({aIter.getToken(), OString(aIter.toCString())});
+    if( mbOOoFormat &&
+         (SvxXMLTableImportContextEnum::Dash == meContext || SvxXMLTableImportContextEnum::Hatch == meContext ||
+         SvxXMLTableImportContextEnum::Bitmap == meContext) )
     {
-        SvXMLAttributeList *pAttrList = new SvXMLAttributeList;
-        for (auto& aIter : sax_fastparser::castToFastAttributeList( rAttrList ))
-            pAttrList->AddAttribute(
-                SvXMLImport::getNamespacePrefixFromToken(aIter.getToken(), nullptr) + ":" +
-                GetXMLToken(static_cast<XMLTokenEnum>(aIter.getToken() & TOKEN_MASK)),
-                aIter.toString());
-        if( mbOOoFormat &&
-             (SvxXMLTableImportContextEnum::Dash == meContext || SvxXMLTableImportContextEnum::Hatch == meContext ||
-             SvxXMLTableImportContextEnum::Bitmap == meContext) )
+        for( auto & aIter : aTmpAttrList )
         {
-            sal_Int16 nAttrCount = pAttrList->getLength();
-            for( sal_Int16 i=0; i < nAttrCount; i++ )
+            sal_Int32 aLocalAttr = aIter.first & TOKEN_MASK;
+            if( aIter.first == XML_ELEMENT(XLINK, XML_HREF) &&
+                SvxXMLTableImportContextEnum::Bitmap == meContext )
             {
-                const OUString& rAttrName = pAttrList->getNameByIndex( i );
-                OUString aLocalName;
-                sal_uInt16 nPrefix_ =
-                    GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                                &aLocalName );
-                if( XML_NAMESPACE_XLINK == nPrefix_ &&
-                    SvxXMLTableImportContextEnum::Bitmap == meContext &&
-                    IsXMLToken( aLocalName, XML_HREF ) )
+                OString rValue = aIter.second;
+                if( !rValue.isEmpty() && '#' == rValue[0] )
+                    rValue = rValue.copy( 1 );
+            }
+            else if( (IsTokenInNamespace(aIter.first, XML_NAMESPACE_DRAW) || IsTokenInNamespace(aIter.first, XML_NAMESPACE_DRAW_OOO)) &&
+                      ( ( SvxXMLTableImportContextEnum::Dash == meContext &&
+                          ( aLocalAttr == XML_DOTS1_LENGTH ||
+                            aLocalAttr == XML_DOTS2_LENGTH ||
+                            aLocalAttr == XML_DISTANCE ) ) ||
+                        ( SvxXMLTableImportContextEnum::Hatch == meContext &&
+                          ( aLocalAttr == XML_DISTANCE ) ) ) )
+            {
+                OString& rValue = aIter.second;
+                sal_Int32 nPos = rValue.getLength();
+                while( nPos && rValue[nPos-1] <= ' ' )
+                    --nPos;
+                if( nPos > 2 &&
+                    ('c'==rValue[nPos-2] || 'C'==rValue[nPos-2]) &&
+                    ('h'==rValue[nPos-1] || 'H'==rValue[nPos-1]) )
                 {
-                    const OUString rValue = pAttrList->getValueByIndex( i );
-                    if( !rValue.isEmpty() && '#' == rValue[0] )
-                        pAttrList->SetValueByIndex( i, rValue.copy( 1 ) );
-                }
-                else if( (XML_NAMESPACE_DRAW == nPrefix_ || XML_NAMESPACE_DRAW_OOO == nPrefix_) &&
-                          ( ( SvxXMLTableImportContextEnum::Dash == meContext &&
-                              (IsXMLToken( aLocalName, XML_DOTS1_LENGTH ) ||
-                               IsXMLToken( aLocalName, XML_DOTS2_LENGTH ) ||
-                               IsXMLToken( aLocalName, XML_DISTANCE )) ) ||
-                            ( SvxXMLTableImportContextEnum::Hatch == meContext &&
-                              IsXMLToken( aLocalName, XML_DISTANCE ) ) ) )
-                {
-                    const OUString rValue = pAttrList->getValueByIndex( i );
-                    sal_Int32 nPos = rValue.getLength();
-                    while( nPos && rValue[nPos-1] <= ' ' )
-                        --nPos;
-                    if( nPos > 2 &&
-                        ('c'==rValue[nPos-2] || 'C'==rValue[nPos-2]) &&
-                        ('h'==rValue[nPos-1] || 'H'==rValue[nPos-1]) )
-                    {
-                        pAttrList->SetValueByIndex( i, rValue.copy( 0, nPos-2 ) );
-                    }
+                    rValue = rValue.copy( 0, nPos-2 );
                 }
             }
         }
-        try
-        {
-            Any aAny;
-            OUString aName;
-
-            switch( meContext )
-            {
-            case SvxXMLTableImportContextEnum::Color:
-                importColor( pAttrList, aAny, aName );
-                break;
-            case SvxXMLTableImportContextEnum::Marker:
-                importMarker( pAttrList, aAny, aName  );
-                break;
-            case SvxXMLTableImportContextEnum::Dash:
-                importDash( pAttrList, aAny, aName  );
-                break;
-            case SvxXMLTableImportContextEnum::Hatch:
-                importHatch( pAttrList, aAny, aName  );
-                break;
-            case SvxXMLTableImportContextEnum::Gradient:
-                importGradient( pAttrList, aAny, aName  );
-                break;
-            case SvxXMLTableImportContextEnum::Bitmap:
-                importBitmap( pAttrList, aAny, aName  );
-                break;
-            }
-
-            if( !aName.isEmpty() && aAny.hasValue() )
-            {
-                if( mxTable->hasByName( aName ) )
-                {
-                    mxTable->replaceByName( aName, aAny );
-                }
-                else
-                {
-                    mxTable->insertByName( aName, aAny );
-                }
-            }
-        }
-        catch (const uno::Exception&)
-        {
-            DBG_UNHANDLED_EXCEPTION("svx");
-        }
-        return new SvXMLImportContext( GetImport() );
     }
-    return nullptr;
+    try
+    {
+        rtl::Reference<sax_fastparser::FastAttributeList> xFastList = new sax_fastparser::FastAttributeList(nullptr);
+        for (auto& aIter : aTmpAttrList)
+            xFastList->add(aIter.first, aIter.second);
+
+        Any aAny;
+        OUString aName;
+
+        switch( meContext )
+        {
+        case SvxXMLTableImportContextEnum::Color:
+            importColor( xFastList.get(), aAny, aName );
+            break;
+        case SvxXMLTableImportContextEnum::Marker:
+            importMarker( xFastList.get(), aAny, aName  );
+            break;
+        case SvxXMLTableImportContextEnum::Dash:
+            importDash( xFastList.get(), aAny, aName  );
+            break;
+        case SvxXMLTableImportContextEnum::Hatch:
+            importHatch( xFastList.get(), aAny, aName  );
+            break;
+        case SvxXMLTableImportContextEnum::Gradient:
+            importGradient( xFastList.get(), aAny, aName  );
+            break;
+        case SvxXMLTableImportContextEnum::Bitmap:
+            importBitmap( xFastList.get(), aAny, aName  );
+            break;
+        }
+
+        if( !aName.isEmpty() && aAny.hasValue() )
+        {
+            if( mxTable->hasByName( aName ) )
+            {
+                mxTable->replaceByName( aName, aAny );
+            }
+            else
+            {
+                mxTable->insertByName( aName, aAny );
+            }
+        }
+    }
+    catch (const uno::Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("svx");
+    }
+    return new SvXMLImportContext( GetImport() );
 }
 
-void SvxXMLTableImportContext::importColor( const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
+void SvxXMLTableImportContext::importColor( const uno::Reference< XFastAttributeList >& xAttrList, Any& rAny, OUString& rName )
 {
-    const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for (auto& aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        const OUString& rFullAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( rFullAttrName, &aLocalName );
-
-
-        if( XML_NAMESPACE_DRAW == nPrefix || XML_NAMESPACE_DRAW_OOO == nPrefix )
+        switch (aIter.getToken())
         {
-            if( aLocalName == GetXMLToken(XML_NAME) )
-            {
-                rName = xAttrList->getValueByIndex( i );
-            }
-            else if( aLocalName == GetXMLToken(XML_COLOR) )
+            case XML_ELEMENT(DRAW, XML_NAME):
+            case XML_ELEMENT(DRAW_OOO, XML_NAME):
+                rName = aIter.toString();
+                break;
+            case XML_ELEMENT(DRAW, XML_COLOR):
+            case XML_ELEMENT(DRAW_OOO, XML_COLOR):
             {
                 sal_Int32 nColor(0);
-                ::sax::Converter::convertColor(nColor,
-                        xAttrList->getValueByIndex( i ));
+                ::sax::Converter::convertColor(nColor, aIter.toString());
                 rAny <<= nColor;
+                break;
             }
+            default:
+                SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
         }
     }
 }
 
-void SvxXMLTableImportContext::importMarker( const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
+void SvxXMLTableImportContext::importMarker( const uno::Reference< XFastAttributeList >& xAttrList, Any& rAny, OUString& rName )
 {
     try
     {
@@ -239,7 +230,7 @@ void SvxXMLTableImportContext::importMarker( const uno::Reference< XAttributeLis
     }
 }
 
-void SvxXMLTableImportContext::importDash( const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
+void SvxXMLTableImportContext::importDash( const uno::Reference< XFastAttributeList >& xAttrList, Any& rAny, OUString& rName )
 {
     try
     {
@@ -252,7 +243,7 @@ void SvxXMLTableImportContext::importDash( const uno::Reference< XAttributeList 
     }
 }
 
-void SvxXMLTableImportContext::importHatch( const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
+void SvxXMLTableImportContext::importHatch( const uno::Reference< XFastAttributeList >& xAttrList, Any& rAny, OUString& rName )
 {
     try
     {
@@ -265,7 +256,7 @@ void SvxXMLTableImportContext::importHatch( const uno::Reference< XAttributeList
     }
 }
 
-void SvxXMLTableImportContext::importGradient( const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
+void SvxXMLTableImportContext::importGradient( const uno::Reference< XFastAttributeList >& xAttrList, Any& rAny, OUString& rName )
 {
     try
     {
@@ -278,7 +269,7 @@ void SvxXMLTableImportContext::importGradient( const uno::Reference< XAttributeL
     }
 }
 
-void SvxXMLTableImportContext::importBitmap( const uno::Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
+void SvxXMLTableImportContext::importBitmap( const uno::Reference< XFastAttributeList >& xAttrList, Any& rAny, OUString& rName )
 {
     try
     {

@@ -429,6 +429,38 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext(
                 GetImport(), nElement, xAttrList);
             break;
 
+        // FillStyles
+
+        case XML_ELEMENT(DRAW, XML_GRADIENT):
+        {
+            pStyle = new XMLGradientStyleContext( GetImport(), nElement, xAttrList );
+            break;
+        }
+        case XML_ELEMENT(DRAW, XML_HATCH):
+        {
+            pStyle = new XMLHatchStyleContext( GetImport(), nElement, xAttrList );
+            break;
+        }
+        case XML_ELEMENT(DRAW, XML_FILL_IMAGE):
+        {
+            pStyle = new XMLBitmapStyleContext( GetImport(), nElement, xAttrList );
+            break;
+        }
+        case XML_ELEMENT(DRAW, XML_OPACITY):
+        {
+            pStyle = new XMLTransGradientStyleContext( GetImport(), nElement, xAttrList );
+            break;
+        }
+        case XML_ELEMENT(DRAW, XML_MARKER):
+        {
+            pStyle = new XMLMarkerStyleContext( GetImport(), nElement, xAttrList );
+            break;
+        }
+        case XML_ELEMENT(DRAW, XML_STROKE_DASH):
+        {
+            pStyle = new XMLDashStyleContext( GetImport(), nElement, xAttrList );
+            break;
+        }
     }
 
     return pStyle;
@@ -492,38 +524,6 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext( sal_uInt16 p_nPr
                 break;
 
 
-            // FillStyles
-
-            case XML_TOK_STYLES_GRADIENTSTYLES:
-            {
-                pStyle = new XMLGradientStyleContext( GetImport(), p_nPrefix, rLocalName, xAttrList );
-                break;
-            }
-            case XML_TOK_STYLES_HATCHSTYLES:
-            {
-                pStyle = new XMLHatchStyleContext( GetImport(), p_nPrefix, rLocalName, xAttrList );
-                break;
-            }
-            case XML_TOK_STYLES_BITMAPSTYLES:
-            {
-                pStyle = new XMLBitmapStyleContext( GetImport(), p_nPrefix, rLocalName, xAttrList );
-                break;
-            }
-            case XML_TOK_STYLES_TRANSGRADIENTSTYLES:
-            {
-                pStyle = new XMLTransGradientStyleContext( GetImport(), p_nPrefix, rLocalName, xAttrList );
-                break;
-            }
-            case XML_TOK_STYLES_MARKERSTYLES:
-            {
-                pStyle = new XMLMarkerStyleContext( GetImport(), p_nPrefix, rLocalName, xAttrList );
-                break;
-            }
-            case XML_TOK_STYLES_DASHSTYLES:
-            {
-                pStyle = new XMLDashStyleContext( GetImport(), p_nPrefix, rLocalName, xAttrList );
-                break;
-            }
         }
     }
 

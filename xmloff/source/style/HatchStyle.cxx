@@ -74,21 +74,10 @@ XMLHatchStyleImport::~XMLHatchStyleImport()
 }
 
 void XMLHatchStyleImport::importXML(
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
     uno::Any& rValue,
     OUString& rStrName )
 {
-    static const SvXMLTokenMapEntry aHatchAttrTokenMap[] =
-    {
-        { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_HATCH_NAME },
-        { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_HATCH_DISPLAY_NAME },
-        { XML_NAMESPACE_DRAW, XML_STYLE, XML_TOK_HATCH_STYLE },
-        { XML_NAMESPACE_DRAW, XML_COLOR, XML_TOK_HATCH_COLOR },
-        { XML_NAMESPACE_DRAW, XML_DISTANCE, XML_TOK_HATCH_DISTANCE },
-        { XML_NAMESPACE_DRAW, XML_ROTATION, XML_TOK_HATCH_ROTATION },
-        XML_TOKEN_MAP_END
-    };
-
     OUString aDisplayName;
 
     drawing::Hatch aHatch;
@@ -97,44 +86,43 @@ void XMLHatchStyleImport::importXML(
     aHatch.Distance = 0;
     aHatch.Angle = 0;
 
-    static const SvXMLTokenMap aTokenMap( aHatchAttrTokenMap );
-    const SvXMLNamespaceMap& rNamespaceMap = rImport.GetNamespaceMap();
     SvXMLUnitConverter& rUnitConverter = rImport.GetMM100UnitConverter();
 
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        const OUString& rFullAttrName = xAttrList->getNameByIndex( i );
-        OUString aStrAttrName;
-        sal_uInt16 nPrefix = rNamespaceMap.GetKeyByAttrName( rFullAttrName, &aStrAttrName );
-        const OUString& rStrValue = xAttrList->getValueByIndex( i );
-
-        switch( aTokenMap.Get( nPrefix, aStrAttrName ) )
+        const OUString aStrValue = aIter.toString();
+        switch( aIter.getToken() )
         {
-            case XML_TOK_HATCH_NAME:
-                rStrName = rStrValue;
+            case XML_ELEMENT(DRAW, XML_NAME):
+            case XML_ELEMENT(DRAW_OOO, XML_NAME):
+                rStrName = aStrValue;
                 break;
-            case XML_TOK_HATCH_DISPLAY_NAME:
-                aDisplayName = rStrValue;
+            case XML_ELEMENT(DRAW, XML_DISPLAY_NAME):
+            case XML_ELEMENT(DRAW_OOO, XML_DISPLAY_NAME):
+                aDisplayName = aStrValue;
                 break;
-            case XML_TOK_HATCH_STYLE:
-                SvXMLUnitConverter::convertEnum( aHatch.Style, rStrValue, pXML_HatchStyle_Enum );
+            case XML_ELEMENT(DRAW, XML_STYLE):
+            case XML_ELEMENT(DRAW_OOO, XML_STYLE):
+                SvXMLUnitConverter::convertEnum( aHatch.Style, aStrValue, pXML_HatchStyle_Enum );
                 break;
-            case XML_TOK_HATCH_COLOR:
-                ::sax::Converter::convertColor(aHatch.Color, rStrValue);
+            case XML_ELEMENT(DRAW, XML_COLOR):
+            case XML_ELEMENT(DRAW_OOO, XML_COLOR):
+                ::sax::Converter::convertColor(aHatch.Color, aStrValue);
                 break;
-            case XML_TOK_HATCH_DISTANCE:
-                rUnitConverter.convertMeasureToCore(aHatch.Distance, rStrValue);
+            case XML_ELEMENT(DRAW, XML_DISTANCE):
+            case XML_ELEMENT(DRAW_OOO, XML_DISTANCE):
+                rUnitConverter.convertMeasureToCore(aHatch.Distance, aStrValue);
                 break;
-            case XML_TOK_HATCH_ROTATION:
+            case XML_ELEMENT(DRAW, XML_ROTATION):
+            case XML_ELEMENT(DRAW_OOO, XML_ROTATION):
             {
                 sal_Int32 nValue;
-                if (::sax::Converter::convertNumber(nValue, rStrValue, 0, 3600))
+                if (::sax::Converter::convertNumber(nValue, aStrValue, 0, 3600))
                     aHatch.Angle = sal_Int16(nValue);
                 break;
             }
             default:
-                SAL_INFO("xmloff.style", "Unknown token at import hatch style");
+                SAL_WARN("xmloff.style", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aStrValue);
         }
     }
 

@@ -89,7 +89,7 @@ XMLDashStyleImport::~XMLDashStyleImport()
 }
 
 void XMLDashStyleImport::importXML(
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
     uno::Any& rValue,
     OUString& rStrName )
 {
@@ -104,90 +104,83 @@ void XMLDashStyleImport::importXML(
 
     bool bIsRel = false;
 
-    SvXMLNamespaceMap& rNamespaceMap = rImport.GetNamespaceMap();
     SvXMLUnitConverter& rUnitConverter = rImport.GetMM100UnitConverter();
 
-    static const SvXMLTokenMap aTokenMap( aDashStyleAttrTokenMap );
-
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        const OUString& rFullAttrName = xAttrList->getNameByIndex( i );
-        OUString aStrAttrName;
-        sal_uInt16 nPrefix = rNamespaceMap.GetKeyByAttrName( rFullAttrName, &aStrAttrName );
-        const OUString& rStrValue = xAttrList->getValueByIndex( i );
+        const OUString aStrValue = aIter.toString();
 
-        switch( aTokenMap.Get( nPrefix, aStrAttrName ) )
+        switch( aIter.getToken() )
         {
-        case XML_TOK_DASH_NAME:
+        case XML_ELEMENT(DRAW, XML_NAME):
             {
-                rStrName = rStrValue;
+                rStrName = aStrValue;
             }
             break;
-        case XML_TOK_DASH_DISPLAY_NAME:
+        case XML_ELEMENT(DRAW, XML_DISPLAY_NAME):
             {
-                aDisplayName = rStrValue;
+                aDisplayName = aStrValue;
             }
             break;
-        case XML_TOK_DASH_STYLE:
+        case XML_ELEMENT(DRAW, XML_STYLE):
             {
-                SvXMLUnitConverter::convertEnum( aLineDash.Style, rStrValue, pXML_DashStyle_Enum );
+                SvXMLUnitConverter::convertEnum( aLineDash.Style, aStrValue, pXML_DashStyle_Enum );
             }
             break;
-        case XML_TOK_DASH_DOTS1:
-            aLineDash.Dots = static_cast<sal_Int16>(rStrValue.toInt32());
+        case XML_ELEMENT(DRAW, XML_DOTS1):
+            aLineDash.Dots = static_cast<sal_Int16>(aStrValue.toInt32());
             break;
 
-        case XML_TOK_DASH_DOTS1LEN:
+        case XML_ELEMENT(DRAW, XML_DOTS1_LENGTH):
             {
-                if( rStrValue.indexOf( '%' ) != -1 ) // it's a percentage
+                if( aStrValue.indexOf( '%' ) != -1 ) // it's a percentage
                 {
                     bIsRel = true;
-                    ::sax::Converter::convertPercent(aLineDash.DotLen, rStrValue);
+                    ::sax::Converter::convertPercent(aLineDash.DotLen, aStrValue);
                 }
                 else
                 {
                     rUnitConverter.convertMeasureToCore( aLineDash.DotLen,
-                            rStrValue );
+                            aStrValue );
                 }
             }
             break;
 
-        case XML_TOK_DASH_DOTS2:
-            aLineDash.Dashes = static_cast<sal_Int16>(rStrValue.toInt32());
+        case XML_ELEMENT(DRAW, XML_DOTS2):
+            aLineDash.Dashes = static_cast<sal_Int16>(aStrValue.toInt32());
             break;
 
-        case XML_TOK_DASH_DOTS2LEN:
+        case XML_ELEMENT(DRAW, XML_DOTS2_LENGTH):
             {
-                if( rStrValue.indexOf( '%' ) != -1 ) // it's a percentage
+                if( aStrValue.indexOf( '%' ) != -1 ) // it's a percentage
                 {
                     bIsRel = true;
-                    ::sax::Converter::convertPercent(aLineDash.DashLen, rStrValue);
+                    ::sax::Converter::convertPercent(aLineDash.DashLen, aStrValue);
                 }
                 else
                 {
                     rUnitConverter.convertMeasureToCore( aLineDash.DashLen,
-                            rStrValue );
+                            aStrValue );
                 }
             }
             break;
 
-        case XML_TOK_DASH_DISTANCE:
+        case XML_ELEMENT(DRAW, XML_DISTANCE):
             {
-                if( rStrValue.indexOf( '%' ) != -1 ) // it's a percentage
+                if( aStrValue.indexOf( '%' ) != -1 ) // it's a percentage
                 {
                     bIsRel = true;
-                    ::sax::Converter::convertPercent(aLineDash.Distance, rStrValue);
+                    ::sax::Converter::convertPercent(aLineDash.Distance, aStrValue);
                 }
                 else
                 {
                     rUnitConverter.convertMeasureToCore( aLineDash.Distance,
-                            rStrValue );
+                            aStrValue );
                 }
             }
             break;
         default:
-            SAL_INFO("xmloff.style", "Unknown token at import dash style");
+            SAL_WARN("xmloff.style", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aStrValue);
         }
     }
 
