@@ -656,6 +656,7 @@ public:
 
     SCCOLROW        GetLOKSheetFreezeIndex(bool bIsCol) const;
     bool            SetLOKSheetFreezeIndex(const SCCOLROW nFreezeIndex, bool bIsCol, SCTAB nForTab = -1);
+    bool            RemoveLOKFreeze();
     void            DeriveLOKFreezeAllSheets();
     void            DeriveLOKFreezeIfNeeded(SCTAB nForTab);
     void            OverrideWithLOKFreeze(ScSplitMode& eExHSplitMode, ScSplitMode& eExVSplitMode,
