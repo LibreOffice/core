@@ -50,7 +50,7 @@ enum box2DNonsimulatedShapeUpdateType
 
 /// Holds required information to perform an update to box2d
 /// body of a shape that was altered by an animation effect
-struct Box2DShapeUpdateInformation
+struct Box2DDynamicUpdateInformation
 {
     css::uno::Reference<css::drawing::XShape> mxShape;
     union {
@@ -82,7 +82,7 @@ private:
     std::unordered_map<css::uno::Reference<css::drawing::XShape>, Box2DBodySharedPtr>
         mpXShapeToBodyMap;
     /// Holds any information needed to keep LO animations and Box2D world in sync
-    std::queue<Box2DShapeUpdateInformation> maShapeUpdateQueue;
+    std::queue<Box2DDynamicUpdateInformation> maShapeParallelUpdateQueue;
 
     /// Creates a static frame in Box2D world that corresponds to the slide borders
     void createStaticFrameAroundSlide(const ::basegfx::B2DVector& rSlideSize);
@@ -157,8 +157,9 @@ private:
               const int nPositionIterations = 2);
 
     /// Queue a rotation update on the next step of the box2DWorld for the corresponding body
-    void queueRotationUpdate(const css::uno::Reference<com::sun::star::drawing::XShape>& xShape,
-                             const double fAngle);
+    void
+    queueDynamicRotationUpdate(const css::uno::Reference<com::sun::star::drawing::XShape>& xShape,
+                               const double fAngle);
 
     /// Queue an angular velocity update for the corresponding body
     /// to take place after the next step of the box2DWorld
@@ -226,8 +227,8 @@ public:
     void setHasWorldStepper(const bool bHasWorldStepper);
 
     /// Queue a position update the next step of the box2DWorld for the corresponding body
-    void queuePositionUpdate(const css::uno::Reference<css::drawing::XShape>& xShape,
-                             const ::basegfx::B2DPoint& rOutPos);
+    void queueDynamicPositionUpdate(const css::uno::Reference<css::drawing::XShape>& xShape,
+                                    const ::basegfx::B2DPoint& rOutPos);
 
     /// Queue a linear velocity update for the corresponding body
     /// to take place after the next step of the box2DWorld
