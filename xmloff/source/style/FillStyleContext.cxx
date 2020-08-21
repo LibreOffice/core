@@ -128,10 +128,11 @@ XMLBitmapStyleContext::~XMLBitmapStyleContext()
 {
 }
 
-SvXMLImportContextRef XMLBitmapStyleContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLBitmapStyleContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
-    SvXMLImportContext *pContext = nullptr;
-    if( (XML_NAMESPACE_OFFICE == nPrefix) && xmloff::token::IsXMLToken( rLocalName, xmloff::token::XML_BINARY_DATA ) )
+    if( nElement == XML_ELEMENT(OFFICE, xmloff::token::XML_BINARY_DATA) )
     {
         OUString sURL;
         maAny >>= sURL;
@@ -139,13 +140,11 @@ SvXMLImportContextRef XMLBitmapStyleContext::CreateChildContext( sal_uInt16 nPre
         {
             mxBase64Stream = GetImport().GetStreamForGraphicObjectURLFromBase64();
             if( mxBase64Stream.is() )
-                pContext = new XMLBase64ImportContext( GetImport(), nPrefix,
-                                                    rLocalName, xAttrList,
-                                                    mxBase64Stream );
+                return new XMLBase64ImportContext( GetImport(), mxBase64Stream );
         }
     }
 
-    return pContext;
+    return nullptr;
 }
 
 void XMLBitmapStyleContext::endFastElement(sal_Int32 )
