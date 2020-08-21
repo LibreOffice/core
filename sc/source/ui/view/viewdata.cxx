@@ -4128,9 +4128,31 @@ bool ScViewData::SetLOKSheetFreezeIndex(const SCCOLROW nFreezeIndex, bool bIsCol
         return false;
     }
 
+    if(bIsCol)
+    {
+        if(nFreezeIndex > 0)
+            SetHSplitMode(SC_SPLIT_FIX);
+        else
+            SetHSplitMode(SC_SPLIT_NONE);
+    }
+    else
+    {
+        if(nFreezeIndex > 0)
+            SetVSplitMode(SC_SPLIT_FIX);
+        else
+            SetVSplitMode(SC_SPLIT_NONE);
+    }
+
     return bIsCol ?
         pDoc->SetLOKFreezeCol(static_cast<SCCOL>(nFreezeIndex), nForTab) :
         pDoc->SetLOKFreezeRow(static_cast<SCROW>(nFreezeIndex), nForTab);
+}
+
+bool ScViewData::RemoveFreeze()
+{
+    bool colUnfreezed = SetLOKSheetFreezeIndex(0, true);
+    bool rowUnfreezed = SetLOKSheetFreezeIndex(0, false);
+    return colUnfreezed || rowUnfreezed;
 }
 
 void ScViewData::DeriveLOKFreezeAllSheets()
