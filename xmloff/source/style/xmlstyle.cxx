@@ -410,6 +410,16 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext(
     {
         pStyle = GetImport().GetDataStylesImport()->CreateChildContext(GetImport(), nElement,
                                                xAttrList, *this);
+        if (pStyle)
+            return pStyle;
+    }
+
+    switch (nElement)
+    {
+        case XML_ELEMENT(TEXT, XML_BIBLIOGRAPHY_CONFIGURATION):
+            pStyle = new XMLIndexBibliographyConfigurationContext(
+                GetImport(), nElement, xAttrList);
+            break;
     }
 
     return pStyle;
@@ -476,11 +486,6 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext( sal_uInt16 p_nPr
                                                                    p_nPrefix,
                                                                    rLocalName,
                                                                    xAttrList);
-                break;
-
-            case XML_TOK_TEXT_BIBLIOGRAPHY_CONFIG:
-                pStyle = new XMLIndexBibliographyConfigurationContext(
-                    GetImport(), p_nPrefix, rLocalName, xAttrList);
                 break;
 
             case XML_TOK_TEXT_LINENUMBERING_CONFIG:

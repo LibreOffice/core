@@ -56,9 +56,8 @@ public:
 
     XMLIndexBibliographyConfigurationContext(
         SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList> & xAttrList);
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList> & xAttrList);
 
     virtual ~XMLIndexBibliographyConfigurationContext() override;
 
@@ -70,10 +69,8 @@ private:
 
     virtual void CreateAndInsert( bool bOverwrite ) override;
 
-    virtual SvXMLImportContextRef CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList> & xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
 
 #endif
