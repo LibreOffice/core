@@ -52,6 +52,24 @@
       "revId": "0d1dace8fccd3b5fcbee3aded05e4281bd45aef5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78d085e9_1d22a502",
+        "filename": "sw/source/core/text/txtfld.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-08-21T10:12:05Z",
+      "side": 1,
+      "message": "yes; effectively a loop with SfxWhichIter and GetItem(...true...) can do the flattening of parents which SfxItemIter doesn\u0027t do.",
+      "parentUuid": "55d6758c_bc4ffb0c",
+      "revId": "0d1dace8fccd3b5fcbee3aded05e4281bd45aef5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
