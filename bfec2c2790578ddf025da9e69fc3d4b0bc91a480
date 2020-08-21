@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fff341e0_7c313916",
+        "filename": "vcl/win/window/salframe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5301,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-08-21T07:21:25Z",
+      "side": 1,
+      "message": "I really don\u0027t know if we want to talk about gettings or settings here so can\u0027t help here.",
+      "range": {
+        "startLine": 5301,
+        "startChar": 11,
+        "endLine": 5301,
+        "endChar": 19
+      },
+      "revId": "bfec2c2790578ddf025da9e69fc3d4b0bc91a480",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
