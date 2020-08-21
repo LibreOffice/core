@@ -47,12 +47,6 @@ const Type       CPPUTYPE_OUSTRING   = cppu::UnoType<OUString>::get();
 const Type       CPPUTYPE_SEQSALINT8 = cppu::UnoType<Sequence< sal_Int8>>::get();
 const sal_Int32  MAX_CLIPFORMAT_NAME = 256;
 
-const OUString TEXT_PLAIN_CHARSET   ("text/plain;charset=");
-const OUString HPNAME_OEM_ANSI_TEXT ("OEM/ANSI Text");
-
-const OUString HTML_FORMAT_NAME_WINDOWS ("HTML Format");
-const OUString HTML_FORMAT_NAME_SOFFICE ("HTML (HyperText Markup Language)");
-
 CDataFormatTranslator::CDataFormatTranslator( const Reference< XComponentContext >& rxContext )
 {
     m_XDataFormatTranslator = DataFormatTranslator::create( rxContext );
@@ -111,10 +105,10 @@ DataFlavor CDataFormatTranslator::getDataFlavorFromFormatEtc( const FORMATETC& a
 
         if ( isOemOrAnsiTextFormat( aClipformat ) )
         {
-            aFlavor.MimeType             = TEXT_PLAIN_CHARSET;
+            aFlavor.MimeType             = "text/plain;charset=";
             aFlavor.MimeType            += getTextCharsetFromLCID( lcid, aClipformat );
 
-            aFlavor.HumanPresentableName = HPNAME_OEM_ANSI_TEXT;
+            aFlavor.HumanPresentableName = "OEM/ANSI Text";
             aFlavor.DataType             = CPPUTYPE_SEQSALINT8;
         }
         else if ( CF_INVALID != aClipformat )
@@ -222,13 +216,13 @@ bool CDataFormatTranslator::isTextFormat( CLIPFORMAT cf )
 bool CDataFormatTranslator::isHTMLFormat( CLIPFORMAT cf )
 {
     OUString clipFormatName = getClipboardFormatName( cf );
-    return ( clipFormatName == HTML_FORMAT_NAME_WINDOWS );
+    return ( clipFormatName == "HTML Format" );
 }
 
 bool CDataFormatTranslator::isTextHtmlFormat( CLIPFORMAT cf )
 {
     OUString clipFormatName = getClipboardFormatName( cf );
-    return clipFormatName.equalsIgnoreAsciiCase( HTML_FORMAT_NAME_SOFFICE );
+    return clipFormatName.equalsIgnoreAsciiCase( "HTML (HyperText Markup Language)" );
 }
 
 OUString CDataFormatTranslator::getTextCharsetFromLCID( LCID lcid, CLIPFORMAT aClipformat )
