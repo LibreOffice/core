@@ -32,6 +32,8 @@
 #include <document.hxx>
 #include <documentimport.hxx>
 #include <biffhelper.hxx>
+#include <globstr.hrc>
+#include <scresid.hxx>
 
 namespace oox::xls {
 
@@ -186,7 +188,7 @@ WorksheetBuffer::IndexNamePair WorksheetBuffer::createSheet( const OUString& rPr
         Reference< XSpreadsheets > xSheets( getDocument()->getSheets(), UNO_SET_THROW );
         Reference< XIndexAccess > xSheetsIA( xSheets, UNO_QUERY_THROW );
         sal_Int16 nCalcSheet = -1;
-        OUString aSheetName = rPreferredName.isEmpty() ? "Sheet" : rPreferredName;
+        OUString aSheetName = rPreferredName.isEmpty() ? ScResId(STR_TABLE_DEF) : rPreferredName;
         if( nSheetPos < xSheetsIA->getCount() )
         {
             nCalcSheet = static_cast< sal_Int16 >( nSheetPos );
