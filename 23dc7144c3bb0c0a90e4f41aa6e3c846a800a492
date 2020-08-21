@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a2010fbf_483fc021",
+        "filename": "xmloff/source/text/txtparae.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3712,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-08-21T09:43:20Z",
+      "side": 1,
+      "message": "looks like there should be a bugzilla id here",
+      "revId": "23dc7144c3bb0c0a90e4f41aa6e3c846a800a492",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
