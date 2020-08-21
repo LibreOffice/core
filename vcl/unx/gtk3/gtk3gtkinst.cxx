@@ -15777,6 +15777,12 @@ public:
         g_slist_foreach(m_pObjectList, postprocess, this);
 
         GenerateMissingMnemonics();
+
+        if (m_xInterimGlue)
+        {
+            assert(m_pParentWidget);
+            g_object_set_data(G_OBJECT(m_pParentWidget), "InterimWindowGlue", m_xInterimGlue.get());
+        }
     }
 
     void GenerateMissingMnemonics()
@@ -15836,7 +15842,13 @@ public:
     {
         g_slist_free(m_pObjectList);
         g_object_unref(m_pBuilder);
-        m_xInterimGlue.disposeAndClear();
+
+        if (m_xInterimGlue)
+        {
+            assert(m_pParentWidget);
+            g_object_set_data(G_OBJECT(m_pParentWidget), "InterimWindowGlue", nullptr);
+            m_xInterimGlue.disposeAndClear();
+        }
     }
 
     //ideally we would have/use weld::Container add and explicitly
@@ -16326,6 +16338,58 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         return SalInstance::CreateBuilder(pParent, rUIRoot, rUIFile);
     GtkWidget* pBuilderParent = pParentWidget ? pParentWidget->getWidget() : nullptr;
     return new GtkInstanceBuilder(pBuilderParent, rUIRoot, rUIFile, nullptr);
+}
+
+// tdf#135965 for the case of native widgets inside a GtkSalFrame and F1 pressed, run help
+// on gtk widget help ids until we hit a vcl parent and then use vcl window help ids
+void GtkSalFrame::NativeWidgetHelpPressed(GtkAccelGroup*, GObject*, guint, GdkModifierType, gpointer pFrame)
+{
+    Help* pHelp = Application::GetHelp();
+    if (!pHelp)
+        return;
+
+    GtkWindow* pWindow = static_cast<GtkWindow*>(pFrame);
+
+    vcl::Window* pChildWindow = nullptr;
+
+    //show help for widget with keyboard focus
+    GtkWidget* pWidget = gtk_window_get_focus(pWindow);
+    if (!pWidget)
+        pWidget = GTK_WIDGET(pWindow);
+    OString sHelpId = ::get_help_id(pWidget);
+    while (sHelpId.isEmpty())
+    {
+        pWidget = gtk_widget_get_parent(pWidget);
+        if (!pWidget)
+            break;
+        pChildWindow = static_cast<vcl::Window*>(g_object_get_data(G_OBJECT(pWidget), "InterimWindowGlue"));
+        if (pChildWindow)
+        {
+            sHelpId = pChildWindow->GetHelpId();
+            break;
+        }
+        sHelpId = ::get_help_id(pWidget);
+    }
+
+    if (pChildWindow)
+    {
+        while (sHelpId.isEmpty())
+        {
+            pChildWindow = pChildWindow->GetParent();
+            if (!pChildWindow)
+                break;
+            sHelpId = pChildWindow->GetHelpId();
+        }
+        if (!pChildWindow)
+            return;
+        pHelp->Start(OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), pChildWindow);
+        return;
+    }
+
+    if (!pWidget)
+        return;
+    std::unique_ptr<weld::Widget> xTemp(new GtkInstanceWidget(pWidget, nullptr, false));
+    pHelp->Start(OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), xTemp.get());
 }
 
 weld::Builder* GtkInstance::CreateInterimBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile, sal_uInt64)
