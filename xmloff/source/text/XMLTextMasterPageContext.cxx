@@ -235,11 +235,6 @@ SvXMLImportContextRef XMLTextMasterPageContext::CreateChildContext(
                                                     xAttrList,
                                                     bFooter, bLeft, bFirst );
     }
-    else
-    {
-        xContext = SvXMLStyleContext::CreateChildContext( nPrefix, rLocalName,
-                                                          xAttrList );
-    }
 
     return xContext;
 }

@@ -430,10 +430,6 @@ SvXMLImportContextRef SdXMLPageMasterContext::CreateChildContext(
         xContext = mxPageMasterStyle.get();
     }
 
-    // call base class
-    if (!xContext)
-        xContext = SvXMLStyleContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
-
     return xContext;
 }
 
@@ -466,10 +462,6 @@ SvXMLImportContextRef SdXMLPresentationPageLayoutContext::CreateChildContext(
         // remember SdXMLPresentationPlaceholderContext for later evaluation
         maList.push_back(xLclContext);
     }
-
-    // call base class
-    if (!xContext)
-        xContext = SvXMLStyleContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
 
     return xContext;
 }

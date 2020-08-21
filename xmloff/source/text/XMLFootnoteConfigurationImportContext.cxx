@@ -277,7 +277,7 @@ void XMLFootnoteConfigurationImportContext::SetAttribute( sal_uInt16 nPrefixKey,
 SvXMLImportContextRef XMLFootnoteConfigurationImportContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    const Reference<XAttributeList> & xAttrList )
+    const Reference<XAttributeList> &  )
 {
     SvXMLImportContextRef xContext;
 
@@ -302,15 +302,6 @@ SvXMLImportContextRef XMLFootnoteConfigurationImportContext::CreateChildContext(
             // else: default context
         }
         // else: unknown namespace -> default context
-    }
-    // else: endnote -> default context
-
-    if (!xContext)
-    {
-        // default: delegate to super class
-        xContext = SvXMLStyleContext::CreateChildContext(nPrefix,
-                                                         rLocalName,
-                                                         xAttrList);
     }
 
     return xContext;
