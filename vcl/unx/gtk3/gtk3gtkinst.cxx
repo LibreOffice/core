@@ -15842,13 +15842,7 @@ public:
     {
         g_slist_free(m_pObjectList);
         g_object_unref(m_pBuilder);
-
-        if (m_xInterimGlue)
-        {
-            assert(m_pParentWidget);
-            g_object_set_data(G_OBJECT(m_pParentWidget), "InterimWindowGlue", nullptr);
-            m_xInterimGlue.disposeAndClear();
-        }
+        m_xInterimGlue.disposeAndClear();
     }
 
     //ideally we would have/use weld::Container add and explicitly
