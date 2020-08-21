@@ -931,13 +931,46 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             {
                 ScSplitMode eHSplit = GetViewData().GetHSplitMode();
                 ScSplitMode eVSplit = GetViewData().GetVSplitMode();
-                if ( eHSplit == SC_SPLIT_FIX || eVSplit == SC_SPLIT_FIX )           // remove
-                    RemoveSplit();
-                else
-                    FreezeSplitters( true, SC_SPLIT_METHOD_CURSOR);        // create or fixate
 
-                rReq.Done();
-                InvalidateSplit();
+                if (!comphelper::LibreOfficeKit::isActive())
+                {
+                    if ( eHSplit == SC_SPLIT_FIX || eVSplit == SC_SPLIT_FIX )           // remove
+                        RemoveSplit();
+                    else
+                        FreezeSplitters( true, SC_SPLIT_METHOD_CURSOR);                 // create or fixate
+                    rReq.Done();
+                    InvalidateSplit();
+                }
+                else
+                {
+                    ScViewData& rViewData = GetViewData();
+                    SCTAB nThisTab = rViewData.GetTabNo();
+                    bool bChangedX, bChangedY;
+                    if ( eHSplit == SC_SPLIT_FIX || eVSplit == SC_SPLIT_FIX )           // remove freeze
+                    {
+                        bChangedX = rViewData.RemoveFreeze();
+                    }                                                                   // create or fixate
+                    else
+                    {
+                        bChangedX = rViewData.SetLOKSheetFreezeIndex(rViewData.GetCurX(), true);   // Freeze column
+                        bChangedY = rViewData.SetLOKSheetFreezeIndex(rViewData.GetCurY(), false);    // Freeze row
+                    }
+
+                    rReq.Done();
+                    if (bChangedX || bChangedY)
+                    {
+                        InvalidateSplit();
+                        // Invalidate the slot for all views on the same tab of the document.
+                        SfxLokHelper::forEachOtherView(this, [nSlot, nThisTab](ScTabViewShell* pOther) {
+                            ScViewData& rOtherViewData = pOther->GetViewData();
+                            if (rOtherViewData.GetTabNo() != nThisTab)
+                                return;
+
+                            SfxBindings& rOtherBind = rOtherViewData.GetBindings();
+                            rOtherBind.Invalidate(nSlot);
+                        });
+                    }
+                }
             }
             break;
 
@@ -961,7 +994,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     rReq.Done();
                     if (bChanged)
                     {
-                        rBindings.Invalidate(nSlot);
+                        InvalidateSplit();
                         // Invalidate the slot for all views on the same tab of the document.
                         SfxLokHelper::forEachOtherView(this, [nSlot, nThisTab](ScTabViewShell* pOther) {
                             ScViewData& rOtherViewData = pOther->GetViewData();
