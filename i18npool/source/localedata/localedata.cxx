@@ -201,6 +201,7 @@ const struct {
     { "zh_SG",  lcl_DATA_OTHERS },
     { "zh_TW",  lcl_DATA_OTHERS },
     { "zh_MO",  lcl_DATA_OTHERS },
+    { "en_HK",  lcl_DATA_OTHERS },  // needs to be in OTHERS instead of EN because currency inherited from zh_HK
 
     { "ar_EG",  lcl_DATA_OTHERS },
     { "ar_DZ",  lcl_DATA_OTHERS },
