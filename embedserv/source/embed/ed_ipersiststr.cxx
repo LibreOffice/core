@@ -56,8 +56,8 @@ const sal_Int32 nConstBufferSize = 32000;
 
 using namespace ::com::sun::star;
 
-const OUString aOfficeEmbedStreamName( "package_stream" );
-const OUString aExtentStreamName( "properties_stream" );
+const wchar_t aOfficeEmbedStreamName[] = L"package_stream";
+const wchar_t aExtentStreamName[] = L"properties_stream";
 
 static uno::Reference< io::XInputStream > createTempXInStreamFromIStream(
                                         uno::Reference< lang::XMultiServiceFactory > const & xFactory,
@@ -430,7 +430,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::InitNew( IStorage *pStg )
 
                     if ( hr == S_OK )
                     {
-                        hr = pStg->CreateStream( o3tl::toW(aOfficeEmbedStreamName.getStr()),
+                        hr = pStg->CreateStream( aOfficeEmbedStreamName,
                                                  STGM_CREATE | ( nStreamMode & 0x73 ),
                                                  0,
                                                  0,
@@ -438,7 +438,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::InitNew( IStorage *pStg )
 
                         if ( hr == S_OK && m_pOwnStream )
                         {
-                            hr = pStg->CreateStream( o3tl::toW(aExtentStreamName.getStr()),
+                            hr = pStg->CreateStream( aExtentStreamName,
                                                      STGM_CREATE | ( nStreamMode & 0x73 ),
                                                      0,
                                                      0,
@@ -484,7 +484,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::Load( IStorage *pStg )
     if ( FAILED( hr ) ) return E_FAIL;
 
     DWORD nStreamMode = aStat.grfMode;
-    hr = pStg->OpenStream( o3tl::toW(aOfficeEmbedStreamName.getStr()),
+    hr = pStg->OpenStream( aOfficeEmbedStreamName,
                             nullptr,
                             nStreamMode & 0x73,
                             0,
@@ -493,7 +493,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::Load( IStorage *pStg )
 
     if ( SUCCEEDED( hr ) )
     {
-        hr = pStg->OpenStream( o3tl::toW(aExtentStreamName.getStr()),
+        hr = pStg->OpenStream( aExtentStreamName,
                                 nullptr,
                                 nStreamMode & 0x73,
                                 0,
@@ -566,8 +566,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::Load( IStorage *pStg )
     {
         m_pOwnStream = CComPtr< IStream >();
         m_pExtStream = CComPtr< IStream >();
-        hr = pStg->DestroyElement( o3tl::toW(aOfficeEmbedStreamName.getStr()) );
-        hr = pStg->DestroyElement( o3tl::toW(aExtentStreamName.getStr()) );
+        hr = pStg->DestroyElement( aOfficeEmbedStreamName );
+        hr = pStg->DestroyElement( aExtentStreamName );
 
         OSL_ENSURE( SUCCEEDED( hr ), "Can not destroy created stream!" );
         if ( FAILED( hr ) )
@@ -596,14 +596,14 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::Save( IStorage *pStgSave, 
         if ( FAILED( hr ) ) return E_FAIL;
 
         DWORD nStreamMode = aStat.grfMode;
-        hr = pStgSave->CreateStream( o3tl::toW(aOfficeEmbedStreamName.getStr()),
+        hr = pStgSave->CreateStream( aOfficeEmbedStreamName,
                                  STGM_CREATE | ( nStreamMode & 0x73 ),
                                 0,
                                  0,
                                  &pTargetStream );
         if ( FAILED( hr ) || !pTargetStream ) return E_FAIL;
 
-        hr = pStgSave->CreateStream( o3tl::toW(aExtentStreamName.getStr()),
+        hr = pStgSave->CreateStream( aExtentStreamName,
                                  STGM_CREATE | ( nStreamMode & 0x73 ),
                                 0,
                                  0,
@@ -691,14 +691,14 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::SaveCompleted( IStorage *p
     if ( FAILED( hr ) ) return E_OUTOFMEMORY;
 
     DWORD nStreamMode = aStat.grfMode;
-    hr = m_pMasterStorage->OpenStream( o3tl::toW(aOfficeEmbedStreamName.getStr()),
+    hr = m_pMasterStorage->OpenStream( aOfficeEmbedStreamName,
                                         nullptr,
                                         nStreamMode & 0x73,
                                         0,
                                         &m_pOwnStream );
     if ( FAILED( hr ) || !m_pOwnStream ) return E_OUTOFMEMORY;
 
-    hr = m_pMasterStorage->OpenStream( o3tl::toW(aExtentStreamName.getStr()),
+    hr = m_pMasterStorage->OpenStream( aExtentStreamName,
                                         nullptr,
                                         nStreamMode & 0x73,
                                         0,
@@ -752,14 +752,14 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileNam
     hr = m_pMasterStorage->SetClass( m_guid );
     if ( FAILED( hr ) ) return E_FAIL;
 
-    hr = m_pMasterStorage->CreateStream( o3tl::toW(aOfficeEmbedStreamName.getStr()),
+    hr = m_pMasterStorage->CreateStream( aOfficeEmbedStreamName,
                             STGM_CREATE | ( nStreamMode & 0x73 ),
                             0,
                             0,
                             &m_pOwnStream );
     if ( FAILED( hr ) || !m_pOwnStream ) return E_FAIL;
 
-    hr = m_pMasterStorage->CreateStream( o3tl::toW(aExtentStreamName.getStr()),
+    hr = m_pMasterStorage->CreateStream( aExtentStreamName,
                             STGM_CREATE | ( nStreamMode & 0x73 ),
                             0,
                             0,

@@ -30,9 +30,7 @@ using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Sequence;
 
-const OUString TILDE( "~" );
 const sal_Unicode   TILDE_SIGN = L'~';
-const OUString AMPERSAND( "&" );
 const sal_Unicode   AMPERSAND_SIGN = L'&';
 
 // OS NAME          Platform                    Major   Minor
@@ -113,7 +111,7 @@ OUString SOfficeToWindowsLabel( const OUString& aSOLabel )
 {
     OUString aWinLabel = aSOLabel;
 
-    if ( (aWinLabel.indexOf( TILDE ) > -1) || (aWinLabel.indexOf( AMPERSAND ) > -1) )
+    if ( (aWinLabel.indexOf( TILDE_SIGN ) > -1) || (aWinLabel.indexOf( AMPERSAND_SIGN ) > -1) )
     {
         sal_Int32 nStrLen = aWinLabel.getLength( );
 
@@ -142,7 +140,7 @@ OUString WindowsToSOfficeLabel( const OUString& aWinLabel )
 {
     OUString aSOLabel = aWinLabel;
 
-    if ( (aSOLabel.indexOf( TILDE ) > -1) || (aSOLabel.indexOf( AMPERSAND ) > -1) )
+    if ( (aSOLabel.indexOf( TILDE_SIGN ) > -1) || (aSOLabel.indexOf( AMPERSAND_SIGN ) > -1) )
     {
         sal_Int32 nStrLen = aSOLabel.getLength( );
 

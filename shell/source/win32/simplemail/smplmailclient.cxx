@@ -56,19 +56,6 @@ using css::system::XSimpleMailMessage2;
 using css::system::SimpleMailClientFlags::NO_USER_INTERFACE;
 using css::system::SimpleMailClientFlags::NO_LOGON_DIALOG;
 
-const OUString TO("--to");
-const OUString CC("--cc");
-const OUString BCC("--bcc");
-const OUString FROM("--from");
-const OUString SUBJECT("--subject");
-const OUString BODY("--body");
-const OUString ATTACH("--attach");
-const OUString ATTACH_NAME("--attach-name");
-const OUString FLAG_MAPI_DIALOG("--mapi-dialog");
-const OUString FLAG_MAPI_LOGON_UI("--mapi-logon-ui");
-const OUString FLAG_LANGTAG("--langtag");
-const OUString FLAG_BOOTSTRAP("--bootstrap");
-
 namespace /* private */
 {
     /** @internal
@@ -263,7 +250,7 @@ void CSmplMailClient::assembleCommandLine(
         OUString body = xMessage->getBody();
         if (body.getLength()>0)
         {
-            rCommandArgs.push_back(BODY);
+            rCommandArgs.push_back("--body");
             rCommandArgs.push_back(body);
         }
     }
@@ -271,35 +258,35 @@ void CSmplMailClient::assembleCommandLine(
     OUString to = xSimpleMailMessage->getRecipient();
     if (to.getLength() > 0)
     {
-        rCommandArgs.push_back(TO);
+        rCommandArgs.push_back("--to");
         rCommandArgs.push_back(to);
     }
 
     const Sequence<OUString> ccRecipients = xSimpleMailMessage->getCcRecipient();
     for (OUString const & s : ccRecipients)
     {
-        rCommandArgs.push_back(CC);
+        rCommandArgs.push_back("--cc");
         rCommandArgs.push_back(s);
     }
 
     const Sequence<OUString> bccRecipients = xSimpleMailMessage->getBccRecipient();
     for (OUString const & s : bccRecipients)
     {
-        rCommandArgs.push_back(BCC);
+        rCommandArgs.push_back("--bcc");
         rCommandArgs.push_back(s);
     }
 
     OUString from = xSimpleMailMessage->getOriginator();
     if (from.getLength() > 0)
     {
-        rCommandArgs.push_back(FROM);
+        rCommandArgs.push_back("--from");
         rCommandArgs.push_back(from);
     }
 
     OUString subject = xSimpleMailMessage->getSubject();
     if (subject.getLength() > 0)
     {
-        rCommandArgs.push_back(SUBJECT);
+        rCommandArgs.push_back("--subject");
         rCommandArgs.push_back(subject);
     }
 
@@ -316,22 +303,22 @@ void CSmplMailClient::assembleCommandLine(
                 static_cast<XSimpleMailClient*>(this),
                 1);
 
-        rCommandArgs.push_back(ATTACH);
+        rCommandArgs.push_back("--attach");
         rCommandArgs.push_back(sysPath);
         if (!sDisplayName.isEmpty())
         {
-            rCommandArgs.push_back(ATTACH_NAME);
+            rCommandArgs.push_back("--attach-name");
             rCommandArgs.push_back(sDisplayName);
         }
     }
 
     if (!(aFlag & NO_USER_INTERFACE))
-        rCommandArgs.push_back(FLAG_MAPI_DIALOG);
+        rCommandArgs.push_back("--mapi-dialog");
 
     if (!(aFlag & NO_LOGON_DIALOG))
-        rCommandArgs.push_back(FLAG_MAPI_LOGON_UI);
+        rCommandArgs.push_back("--mapi-logon-ui");
 
-    rCommandArgs.push_back(FLAG_LANGTAG);
+    rCommandArgs.push_back("--langtag");
     rCommandArgs.push_back(SvtSysLocale().GetUILanguageTag().getBcp47());
 
     rtl::Bootstrap aBootstrap;
@@ -339,7 +326,7 @@ void CSmplMailClient::assembleCommandLine(
     aBootstrap.getIniName(sBootstrapPath);
     if (!sBootstrapPath.isEmpty())
     {
-        rCommandArgs.push_back(FLAG_BOOTSTRAP);
+        rCommandArgs.push_back("--bootstrap");
         rCommandArgs.push_back(sBootstrapPath);
     }
 
