@@ -220,10 +220,6 @@ SvXMLImportContextRef XMLPropStyleContext::CreateChildContext(
                                                     xImpPrMap );
     }
 
-    if (!xContext)
-        xContext = SvXMLStyleContext::CreateChildContext( nPrefix, rLocalName,
-                                                          xAttrList );
-
     return xContext;
 }
 

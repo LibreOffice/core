@@ -651,10 +651,6 @@ SvXMLImportContextRef SwXMLItemSetStyleContext_Impl::CreateChildContext(
         }
     }
 
-    if (!xContext)
-        xContext = SvXMLStyleContext::CreateChildContext( nPrefix, rLocalName,
-                                                          xAttrList );
-
     return xContext;
 }
 

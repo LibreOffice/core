@@ -179,11 +179,11 @@ void XMLFontStyleContextFontFace::FillProperties(
 SvXMLImportContextRef XMLFontStyleContextFontFace::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList )
+        const css::uno::Reference< css::xml::sax::XAttributeList > &  )
 {
     if( nPrefix == XML_NAMESPACE_SVG && IsXMLToken( rLocalName, XML_FONT_FACE_SRC ))
         return new XMLFontStyleContextFontFaceSrc( GetImport(), nPrefix, rLocalName, *this );
-    return SvXMLStyleContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
+    return nullptr;
 }
 
 OUString XMLFontStyleContextFontFace::familyName() const
