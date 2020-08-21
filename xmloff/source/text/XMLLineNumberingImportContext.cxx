@@ -40,6 +40,7 @@ using namespace ::xmloff::token;
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::xml::sax::XAttributeList;
+using ::com::sun::star::xml::sax::XFastAttributeList;
 using ::com::sun::star::text::XLineNumberingProperties;
 
 
@@ -57,10 +58,9 @@ const OUStringLiteral gsSeparatorInterval("SeparatorInterval");
 
 XMLLineNumberingImportContext::XMLLineNumberingImportContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
-    const Reference<XAttributeList> & xAttrList)
-:   SvXMLStyleContext(rImport, nPrfx, rLocalName, xAttrList, XmlStyleFamily::TEXT_LINENUMBERINGCONFIG)
+    sal_Int32 nElement,
+    const Reference<XFastAttributeList> & xAttrList)
+:   SvXMLStyleContext(rImport, nElement, xAttrList, XmlStyleFamily::TEXT_LINENUMBERINGCONFIG)
 ,   sNumFormat(GetXMLToken(XML_1))
 ,   sNumLetterSync(GetXMLToken(XML_FALSE))
 ,   nOffset(-1)
@@ -244,18 +244,12 @@ void XMLLineNumberingImportContext::CreateAndInsert(bool)
     xLineNumbering->setPropertyValue(gsNumberingType, Any(nNumType));
 }
 
-SvXMLImportContextRef XMLLineNumberingImportContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList> & /*xAttrList*/ )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLLineNumberingImportContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
-    if ( (nPrefix == XML_NAMESPACE_TEXT) &&
-         IsXMLToken(rLocalName, XML_LINENUMBERING_SEPARATOR) )
-    {
-        return new XMLLineNumberingSeparatorImportContext(GetImport(),
-                                                          nPrefix, rLocalName,
-                                                          *this);
-    }
+    if ( nElement == XML_ELEMENT(TEXT, XML_LINENUMBERING_SEPARATOR) )
+        return new XMLLineNumberingSeparatorImportContext(GetImport(), *this);
     return nullptr;
 }
 

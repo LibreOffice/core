@@ -424,6 +424,11 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext(
             pStyle = new XMLFootnoteConfigurationImportContext(
                 GetImport(), nElement, xAttrList);
             break;
+        case XML_ELEMENT(TEXT, XML_LINENUMBERING_CONFIGURATION):
+            pStyle = new XMLLineNumberingImportContext(
+                GetImport(), nElement, xAttrList);
+            break;
+
     }
 
     return pStyle;
@@ -484,11 +489,6 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext( sal_uInt16 p_nPr
             case XML_TOK_TEXT_OUTLINE:
                 pStyle = new SvxXMLListStyleContext( GetImport(), p_nPrefix,
                                                     rLocalName, xAttrList, true );
-                break;
-
-            case XML_TOK_TEXT_LINENUMBERING_CONFIG:
-                pStyle = new XMLLineNumberingImportContext(
-                    GetImport(), p_nPrefix, rLocalName, xAttrList);
                 break;
 
 

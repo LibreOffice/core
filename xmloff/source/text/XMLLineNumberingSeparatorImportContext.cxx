@@ -37,10 +37,8 @@ using ::xmloff::token::XML_INCREMENT;
 
 XMLLineNumberingSeparatorImportContext::XMLLineNumberingSeparatorImportContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
     XMLLineNumberingImportContext& rLineNumbering) :
-        SvXMLImportContext(rImport, nPrfx, rLocalName),
+        SvXMLImportContext(rImport),
         rLineNumberingContext(rLineNumbering)
 {
 }
@@ -49,22 +47,16 @@ XMLLineNumberingSeparatorImportContext::~XMLLineNumberingSeparatorImportContext(
 {
 }
 
-void XMLLineNumberingSeparatorImportContext::StartElement(
-    const Reference<XAttributeList> & xAttrList)
+void XMLLineNumberingSeparatorImportContext::startFastElement(
+    sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 i=0; i<nLength; i++)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(i), &sLocalName );
-
-        if ( (nPrefix == XML_NAMESPACE_TEXT) &&
-             IsXMLToken(sLocalName, XML_INCREMENT) )
+        if ( aIter.getToken() == XML_ELEMENT(TEXT, XML_INCREMENT) )
         {
             sal_Int32 nTmp;
-            if (::sax::Converter::convertNumber(
-                nTmp, xAttrList->getValueByIndex(i), 0))
+            if (::sax::Converter::convertNumber(nTmp, aIter.toString(), 0))
             {
                 rLineNumberingContext.SetSeparatorIncrement(static_cast<sal_Int16>(nTmp));
             }
@@ -74,13 +66,13 @@ void XMLLineNumberingSeparatorImportContext::StartElement(
     }
 }
 
-void XMLLineNumberingSeparatorImportContext::Characters(
+void XMLLineNumberingSeparatorImportContext::characters(
     const OUString& rChars )
 {
     sSeparatorBuf.append(rChars);
 }
 
-void XMLLineNumberingSeparatorImportContext::EndElement()
+void XMLLineNumberingSeparatorImportContext::endFastElement(sal_Int32 )
 {
     rLineNumberingContext.SetSeparatorText(sSeparatorBuf.makeStringAndClear());
 }

@@ -43,21 +43,18 @@ public:
 
     XMLLineNumberingSeparatorImportContext(
         SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName,
         XMLLineNumberingImportContext& rLineNumbering);
 
     virtual ~XMLLineNumberingSeparatorImportContext() override;
 
 protected:
 
-    virtual void StartElement(
-        const css::uno::Reference<
-            css::xml::sax::XAttributeList> & xAttrList) override;
+    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override;
 
-    virtual void Characters( const OUString& rChars ) override;
+    virtual void SAL_CALL characters( const OUString& rChars ) override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 #endif
