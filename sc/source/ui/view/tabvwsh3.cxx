@@ -27,6 +27,8 @@
 #include <tools/urlobj.hxx>
 #include <sfx2/objface.hxx>
 #include <vcl/vclenum.hxx>
+#include <vcl/uitest/logger.hxx>
+#include <vcl/uitest/eventdescription.hxx>
 
 #include <globstr.hrc>
 #include <strings.hrc>
@@ -57,6 +59,17 @@
 
 namespace
 {
+    void collectUIInformation(const OUString& aZoom)
+    {
+        EventDescription aDescription;
+        aDescription.aID = "grid_window";
+        aDescription.aParameters = {{"ZOOM", aZoom}};
+        aDescription.aAction = "SET";
+        aDescription.aKeyWord = "ScGridWinUIObject";
+        aDescription.aParent = "MainWindow";
+        UITestLogger::getInstance().logEvent(aDescription);
+    }
+
     enum class DetectFlags
     {
         NONE,
@@ -793,6 +806,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         {
                             ScAppOptions aNewOpt = pScMod->GetAppOptions();
                             aNewOpt.SetZoom( nCurrentZoom );
+                            collectUIInformation(OUString::number(nCurrentZoom));
                             aNewOpt.SetZoomType( GetZoomType() );
                             pScMod->SetAppOptions( aNewOpt );
                         }
