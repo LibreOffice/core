@@ -49,7 +49,7 @@ public:
     SvXMLImportContext* CreateTableContext( sal_uInt16 nPrfx, const OUString& rLName,
                                             css::uno::Reference< css::table::XColumnRowRange > const & xColumnRowRange );
 
-    SvXMLStyleContext* CreateTableTemplateContext( sal_uInt16 nPrfx, const OUString& rLName, const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
+    SvXMLStyleContext* CreateTableTemplateContext( sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
 
     const rtl::Reference< SvXMLImportPropertyMapper >& GetCellImportPropertySetMapper() const { return mxCellImportPropertySetMapper; }
     const rtl::Reference< SvXMLImportPropertyMapper >& GetRowImportPropertySetMapper() const { return mxRowImportPropertySetMapper; }
