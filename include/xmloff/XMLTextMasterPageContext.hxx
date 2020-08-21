@@ -52,11 +52,13 @@ protected:
 public:
 
 
-    XMLTextMasterPageContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-            const OUString& rLName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
+    XMLTextMasterPageContext( SvXMLImport& rImport, sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
             bool bOverwrite );
     virtual ~XMLTextMasterPageContext() override;
+
+    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
 
     virtual SvXMLImportContextRef CreateChildContext(
             sal_uInt16 nPrefix,
