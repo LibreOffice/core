@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7e85e05c_990d8777",
+        "filename": "sc/source/ui/inc/viewdata.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2020-08-21T04:18:04Z",
+      "side": 1,
+      "message": "Best to call this RemoveLOKFreeze() to avoid confusion since this is LOK specific.",
+      "revId": "d2d3cd4d2a9f8c2492df1c2ba82eac71865baf97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "017abdc1_4eb896d1",
+        "filename": "sc/source/ui/view/tabvwsh3.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 944,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2020-08-21T04:18:04Z",
+      "side": 1,
+      "message": "We shouldn\u0027t use Set*SplitMode() or InvalidateSplit() in lok mode, because they are not yet specialized for lok case. The lok case is different mainly because we don\u0027t want any gridwindow/tile invalidations due to split/freeze pos changes and avoid other costly operations.\n\nInstead use the following (pseudo code) as the check for the existence of splits/freezes in lok mode:\n\nScDocument::GetLOKFreezeCol(\u003ctable index\u003e) \u003e 0 || ScDocument::GetLOKFreezeRow(\u003ctable index\u003e) \u003e 0\n\n(Best to put this under ScViewData::IsLOKFreezeActive() or similar and call everywhere.)",
+      "range": {
+        "startLine": 944,
+        "startChar": 16,
+        "endLine": 944,
+        "endChar": 20
+      },
+      "revId": "d2d3cd4d2a9f8c2492df1c2ba82eac71865baf97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8bedc7c0_e9b0c7a9",
+        "filename": "sc/source/ui/view/tabvwsh3.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2020-08-21T04:18:04Z",
+      "side": 1,
+      "message": "Also call rOtherBind.Invalidate() for the slot(s) corresponding to SID_WINDOW_FIX_[ROW|COL] based on what changed (bChange[X|Y]).",
+      "range": {
+        "startLine": 970,
+        "startChar": 28,
+        "endLine": 970,
+        "endChar": 57
+      },
+      "revId": "d2d3cd4d2a9f8c2492df1c2ba82eac71865baf97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99811fa7_1029e0fd",
+        "filename": "sc/source/ui/view/tabvwsh3.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 997,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2020-08-21T04:18:04Z",
+      "side": 1,
+      "message": "refer previous comments.\n\n(Note: the rBindings.Invalidate(nSlot) is still needed.)",
+      "range": {
+        "startLine": 997,
+        "startChar": 24,
+        "endLine": 997,
+        "endChar": 42
+      },
+      "revId": "d2d3cd4d2a9f8c2492df1c2ba82eac71865baf97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a51f80ea_857fd60e",
+        "filename": "sc/source/ui/view/viewdata.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4144,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2020-08-21T04:18:04Z",
+      "side": 1,
+      "message": "refer previous comments about Set*SplitMode().",
+      "range": {
+        "startLine": 4131,
+        "startChar": 4,
+        "endLine": 4144,
+        "endChar": 5
+      },
+      "revId": "d2d3cd4d2a9f8c2492df1c2ba82eac71865baf97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
