@@ -943,15 +943,52 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
         case SID_WINDOW_FIX:
             {
-                ScSplitMode eHSplit = GetViewData().GetHSplitMode();
-                ScSplitMode eVSplit = GetViewData().GetVSplitMode();
-                if ( eHSplit == SC_SPLIT_FIX || eVSplit == SC_SPLIT_FIX )           // remove
-                    RemoveSplit();
+                if (!comphelper::LibreOfficeKit::isActive())
+                {
+                    ScSplitMode eHSplit = GetViewData().GetHSplitMode();
+                    ScSplitMode eVSplit = GetViewData().GetVSplitMode();
+                    if ( eHSplit == SC_SPLIT_FIX || eVSplit == SC_SPLIT_FIX )           // remove
+                        RemoveSplit();
+                    else
+                        FreezeSplitters( true, SC_SPLIT_METHOD_CURSOR);                 // create or fixate
+                    rReq.Done();
+                    InvalidateSplit();
+                }
                 else
-                    FreezeSplitters( true, SC_SPLIT_METHOD_CURSOR);        // create or fixate
+                {
+                    ScViewData& rViewData = GetViewData();
+                    SCTAB nThisTab = rViewData.GetTabNo();
+                    bool bChangedX = false, bChangedY = false;
+                    if (rViewData.GetLOKSheetFreezeIndex(true) > 0 ||
+                        rViewData.GetLOKSheetFreezeIndex(false) > 0 )                             // remove freeze
+                    {
+                        bChangedX = rViewData.RemoveLOKFreeze();
+                    }                                                                            // create or fixate
+                    else
+                    {
+                        bChangedX = rViewData.SetLOKSheetFreezeIndex(rViewData.GetCurX(), true);    // Freeze column
+                        bChangedY = rViewData.SetLOKSheetFreezeIndex(rViewData.GetCurY(), false);   // Freeze row
+                    }
 
-                rReq.Done();
-                InvalidateSplit();
+                    rReq.Done();
+                    if (bChangedX || bChangedY)
+                    {
+                        rBindings.Invalidate( SID_WINDOW_FIX );
+                        rBindings.Invalidate( SID_WINDOW_FIX_COL );
+                        rBindings.Invalidate( SID_WINDOW_FIX_ROW );
+                        // Invalidate the slot for all views on the same tab of the document.
+                        SfxLokHelper::forEachOtherView(this, [nThisTab](ScTabViewShell* pOther) {
+                            ScViewData& rOtherViewData = pOther->GetViewData();
+                            if (rOtherViewData.GetTabNo() != nThisTab)
+                                return;
+
+                            SfxBindings& rOtherBind = rOtherViewData.GetBindings();
+                            rOtherBind.Invalidate( SID_WINDOW_FIX );
+                            rOtherBind.Invalidate( SID_WINDOW_FIX_COL );
+                            rOtherBind.Invalidate( SID_WINDOW_FIX_ROW );
+                        });
+                    }
+                }
             }
             break;
 
@@ -975,6 +1012,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     rReq.Done();
                     if (bChanged)
                     {
+                        rBindings.Invalidate( SID_WINDOW_FIX );
                         rBindings.Invalidate(nSlot);
                         // Invalidate the slot for all views on the same tab of the document.
                         SfxLokHelper::forEachOtherView(this, [nSlot, nThisTab](ScTabViewShell* pOther) {
@@ -983,6 +1021,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                                 return;
 
                             SfxBindings& rOtherBind = rOtherViewData.GetBindings();
+                            rOtherBind.Invalidate( SID_WINDOW_FIX );
                             rOtherBind.Invalidate(nSlot);
                         });
                     }
