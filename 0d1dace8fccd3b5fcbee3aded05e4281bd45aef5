@@ -34,6 +34,24 @@
       "revId": "0d1dace8fccd3b5fcbee3aded05e4281bd45aef5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55d6758c_bc4ffb0c",
+        "filename": "sw/source/core/text/txtfld.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2020-08-21T10:07:49Z",
+      "side": 1,
+      "message": "Ah, I thought it is rather easy and good approach to support chain of styles.\n\nBut right now I see, that we need to filter out some style properties, like background color and so on. So no other option but flatten resolved styles chain and filter everything unnecessary.",
+      "parentUuid": "55bac813_80acaefc",
+      "revId": "0d1dace8fccd3b5fcbee3aded05e4281bd45aef5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
