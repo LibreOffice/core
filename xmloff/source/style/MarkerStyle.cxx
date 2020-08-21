@@ -26,6 +26,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlimp.hxx>
+#include <sal/log.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -48,7 +49,7 @@ XMLMarkerStyleImport::~XMLMarkerStyleImport()
 }
 
 void XMLMarkerStyleImport::importXML(
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
     uno::Any& rValue,
     OUString& rStrName )
 {
@@ -58,37 +59,32 @@ void XMLMarkerStyleImport::importXML(
 
     std::unique_ptr<SdXMLImExViewBox> xViewBox;
 
-    SvXMLNamespaceMap& rNamespaceMap = rImport.GetNamespaceMap();
     SvXMLUnitConverter& rUnitConverter = rImport.GetMM100UnitConverter();
 
     OUString strPathData;
 
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i = 0; i < nAttrCount; i++ )
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        OUString aStrFullAttrName = xAttrList->getNameByIndex( i );
-        OUString aStrAttrName;
-        rNamespaceMap.GetKeyByAttrName( aStrFullAttrName, &aStrAttrName );
-        OUString aStrValue = xAttrList->getValueByIndex( i );
+        OUString aStrValue = aIter.toString();
 
-        if( IsXMLToken( aStrAttrName, XML_NAME ) )
+        switch (aIter.getToken() & TOKEN_MASK)
         {
-            rStrName = aStrValue;
-        }
-        else if( IsXMLToken( aStrAttrName, XML_DISPLAY_NAME ) )
-        {
-            aDisplayName = aStrValue;
-        }
-        else if( IsXMLToken( aStrAttrName, XML_VIEWBOX ) )
-        {
-            xViewBox.reset(new SdXMLImExViewBox(aStrValue, rUnitConverter));
-            bHasViewBox = true;
-
-        }
-        else if( IsXMLToken( aStrAttrName, XML_D ) )
-        {
-            strPathData = aStrValue;
-            bHasPathData = true;
+            case XML_NAME:
+                rStrName = aStrValue;
+                break;
+            case XML_DISPLAY_NAME:
+                aDisplayName = aStrValue;
+                break;
+            case XML_VIEWBOX:
+                xViewBox.reset(new SdXMLImExViewBox(aStrValue, rUnitConverter));
+                bHasViewBox = true;
+                break;
+            case XML_D:
+                strPathData = aStrValue;
+                bHasPathData = true;
+                break;
+            default:
+                SAL_WARN("xmloff.style", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aStrValue);
         }
     }
 
