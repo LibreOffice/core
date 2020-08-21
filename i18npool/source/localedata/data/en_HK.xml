@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.0">
+  <LC_INFO>
+    <Language>
+      <LangID>en</LangID>
+      <DefaultName>English</DefaultName>
+    </Language>
+    <Country>
+      <CountryID>HK</CountryID>
+      <DefaultName>Hong Kong</DefaultName>
+    </Country>
+  </LC_INFO>
+  <LC_CTYPE ref="en_GB" />
+  <LC_FORMAT ref="en_GB" replaceFrom="[CURRENCY]" replaceTo="[$HK$-3C09]"/>
+  <LC_COLLATION ref="en_GB" />
+  <LC_SEARCH ref="en_GB" />
+  <LC_INDEX ref="en_GB" />
+  <LC_CALENDAR ref="en_GB" />
+  <LC_CURRENCY ref="zh_HK" />
+  <LC_TRANSLITERATION ref="en_GB" />
+  <LC_MISC ref="en_GB" />
+  <LC_NumberingLevel ref="en_GB" />
+  <LC_OutLineNumberingLevel ref="en_GB"/>
+</Locale>
+<!--Version 1.0  -->
