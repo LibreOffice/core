@@ -1344,8 +1344,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
         if (bGotVisibleBottom)
         {
             Point aCursorPos( nX, nY );
-            const long nAdd = m_pWrtShell->GetViewOptions()->getBrowseMode() ? DOCUMENTBORDER : DOCUMENTBORDER*2;
-            if (nBottom <= (m_pWrtShell->GetDocSize().Height()+nAdd) )
+
             {
                 m_pWrtShell->EnableSmooth( false );
                 const tools::Rectangle aVis( nLeft, nTop, nRight, nBottom );
