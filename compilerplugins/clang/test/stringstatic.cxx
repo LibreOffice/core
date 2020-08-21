@@ -9,8 +9,12 @@
 
 #include <rtl/ustring.hxx>
 
+#include "stringstatic.hxx"
+
 // expected-error@+1 {{rather declare this using OUStringLiteral/OStringLiteral/char[] [loplugin:stringstatic]}}
 static const OUString TEST1 = "xxx";
+
+void f(rtl_uString const*);
 
 void test2()
 {
@@ -20,4 +24,6 @@ void test2()
     static const OUString XXX2 = "xxx";
     (void)XXX;
     (void)XXX2;
+    static const OUString DATA = "xxx";
+    f(DATA.pData);
 }

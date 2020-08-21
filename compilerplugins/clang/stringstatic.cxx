@@ -38,6 +38,7 @@ public:
     bool VisitVarDecl(VarDecl const*);
     bool VisitReturnStmt(ReturnStmt const*);
     bool VisitDeclRefExpr(DeclRefExpr const*);
+    bool VisitMemberExpr(MemberExpr const*);
 
 private:
     std::unordered_set<VarDecl const *> potentialVars;
@@ -83,6 +84,13 @@ bool StringStatic::VisitVarDecl(VarDecl const* varDecl)
     QualType qt = varDecl->getType();
     if (!varDecl->hasGlobalStorage())
         return true;
+    if (varDecl->hasGlobalStorage() && !varDecl->isStaticLocal()) {
+        //TODO: For a non-public static member variable from an included file, we could still
+        // examine it further if all its uses must be seen in that included file:
+        if (!compiler.getSourceManager().isInMainFile(varDecl->getLocation())) {
+            return true;
+        }
+    }
     if (!varDecl->isThisDeclarationADefinition()
         || !qt.isConstQualified())
         return true;
@@ -163,6 +171,26 @@ bool StringStatic::VisitDeclRefExpr(DeclRefExpr const * declRef)
         if (name.startswith("CPPUNIT_ASSERT"))
             excludeVars.insert(varDecl);
     }
+    return true;
+}
+
+bool StringStatic::VisitMemberExpr(MemberExpr const * expr)
+{
+    if (ignoreLocation(expr))
+        return true;
+    auto const declRef = dyn_cast<DeclRefExpr>(expr->getBase());
+    if (declRef == nullptr) {
+        return true;
+    }
+    VarDecl const * varDecl = dyn_cast<VarDecl>(declRef->getDecl());
+    if (!varDecl)
+        return true;
+    if (potentialVars.count(varDecl) == 0)
+        return true;
+    if (expr->getMemberDecl()->getName() != "pData") {
+        return true;
+    }
+    excludeVars.insert(varDecl);
     return true;
 }
 
