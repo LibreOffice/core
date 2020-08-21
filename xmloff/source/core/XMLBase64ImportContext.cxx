@@ -38,11 +38,24 @@ XMLBase64ImportContext::XMLBase64ImportContext(
 {
 }
 
+XMLBase64ImportContext::XMLBase64ImportContext(
+        SvXMLImport& rImport,
+        const Reference< XOutputStream >& rOut ) :
+    SvXMLImportContext( rImport ),
+    xOut( rOut )
+{
+}
+
 XMLBase64ImportContext::~XMLBase64ImportContext()
 {
 }
 
 void XMLBase64ImportContext::EndElement()
+{
+    endFastElement(0);
+}
+
+void XMLBase64ImportContext::endFastElement(sal_Int32 )
 {
     OUString sChars = maCharBuffer.makeStringAndClear().trim();
     if( !sChars.isEmpty() )
@@ -55,6 +68,11 @@ void XMLBase64ImportContext::EndElement()
 }
 
 void XMLBase64ImportContext::Characters( const OUString& rChars )
+{
+    characters(rChars);
+}
+
+void XMLBase64ImportContext::characters( const OUString& rChars )
 {
     maCharBuffer.append(rChars);
 }
