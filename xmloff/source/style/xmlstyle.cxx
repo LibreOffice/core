@@ -420,6 +420,10 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext(
             pStyle = new XMLIndexBibliographyConfigurationContext(
                 GetImport(), nElement, xAttrList);
             break;
+        case XML_ELEMENT(TEXT, XML_NOTES_CONFIGURATION):
+            pStyle = new XMLFootnoteConfigurationImportContext(
+                GetImport(), nElement, xAttrList);
+            break;
     }
 
     return pStyle;
@@ -480,12 +484,6 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext( sal_uInt16 p_nPr
             case XML_TOK_TEXT_OUTLINE:
                 pStyle = new SvxXMLListStyleContext( GetImport(), p_nPrefix,
                                                     rLocalName, xAttrList, true );
-                break;
-            case XML_TOK_TEXT_NOTE_CONFIG:
-                pStyle = new XMLFootnoteConfigurationImportContext(GetImport(),
-                                                                   p_nPrefix,
-                                                                   rLocalName,
-                                                                   xAttrList);
                 break;
 
             case XML_TOK_TEXT_LINENUMBERING_CONFIG:

@@ -65,32 +65,30 @@ public:
 
     XMLFootnoteConfigHelper(
         SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLName,
         XMLFootnoteConfigurationImportContext& rConfigImport,
         bool bBegin);
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
-    virtual void Characters( const OUString& rChars ) override;
+    virtual void SAL_CALL characters( const OUString& rChars ) override;
 };
 
 }
 
 XMLFootnoteConfigHelper::XMLFootnoteConfigHelper(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLName,
     XMLFootnoteConfigurationImportContext& rConfigImport,
     bool bBegin)
-:   SvXMLImportContext(rImport, nPrfx, rLName)
+:   SvXMLImportContext(rImport)
 ,   sBuffer()
 ,   rConfig(rConfigImport)
 ,   bIsBegin(bBegin)
 {
 }
 
-void XMLFootnoteConfigHelper::EndElement()
+void XMLFootnoteConfigHelper::endFastElement(sal_Int32 )
 {
     if (bIsBegin)
     {
@@ -103,7 +101,7 @@ void XMLFootnoteConfigHelper::EndElement()
 //  rConfig = NULL; // import contexts are ref-counted
 }
 
-void XMLFootnoteConfigHelper::Characters( const OUString& rChars )
+void XMLFootnoteConfigHelper::characters( const OUString& rChars )
 {
     sBuffer.append(rChars);
 }
@@ -126,10 +124,9 @@ const OUStringLiteral gsPropertyBeginNotice("BeginNotice");
 
 XMLFootnoteConfigurationImportContext::XMLFootnoteConfigurationImportContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
-    const Reference<XAttributeList> & xAttrList)
-:   SvXMLStyleContext(rImport, nPrfx, rLocalName, xAttrList, XmlStyleFamily::TEXT_FOOTNOTECONFIG)
+    sal_Int32 nElement,
+    const Reference<XFastAttributeList> & xAttrList)
+:   SvXMLStyleContext(rImport, nElement, xAttrList, XmlStyleFamily::TEXT_FOOTNOTECONFIG)
 ,   sNumFormat("1")
 ,   sNumSync("false")
 ,   nOffset(0)
@@ -137,18 +134,11 @@ XMLFootnoteConfigurationImportContext::XMLFootnoteConfigurationImportContext(
 ,   bPosition(false)
 ,   bIsEndnote(false)
 {
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
-                              &sLocalName );
-        if( XML_NAMESPACE_TEXT == nPrefix && IsXMLToken( sLocalName,
-                                                        XML_NOTE_CLASS ) )
+        if( aIter.getToken() == XML_ELEMENT(TEXT, XML_NOTE_CLASS) )
         {
-            const OUString& rValue = xAttrList->getValueByIndex( nAttr );
-            if( IsXMLToken( rValue, XML_ENDNOTE ) )
+            if( IsXMLToken(aIter.toString(), XML_ENDNOTE ) )
             {
                 bIsEndnote = true;
                 SetFamily( XmlStyleFamily::TEXT_FOOTNOTECONFIG );
@@ -274,34 +264,23 @@ void XMLFootnoteConfigurationImportContext::SetAttribute( sal_uInt16 nPrefixKey,
     }
 }
 
-SvXMLImportContextRef XMLFootnoteConfigurationImportContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList> &  )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLFootnoteConfigurationImportContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
-    SvXMLImportContextRef xContext;
+    css::uno::Reference< css::xml::sax::XFastContextHandler > xContext;
 
-    if (!bIsEndnote)
+    if (bIsEndnote)
+        return nullptr;
+
+    switch (nElement)
     {
-        if (XML_NAMESPACE_TEXT == nPrefix)
-        {
-            if ( IsXMLToken( rLocalName,
-                             XML_FOOTNOTE_CONTINUATION_NOTICE_FORWARD ) )
-            {
-                xContext = new XMLFootnoteConfigHelper(GetImport(),
-                                                       nPrefix, rLocalName,
-                                                       *this, false);
-            }
-            else if ( IsXMLToken( rLocalName,
-                                  XML_FOOTNOTE_CONTINUATION_NOTICE_BACKWARD ) )
-            {
-                xContext = new XMLFootnoteConfigHelper(GetImport(),
-                                                       nPrefix, rLocalName,
-                                                       *this, true);
-            }
-            // else: default context
-        }
-        // else: unknown namespace -> default context
+        case XML_ELEMENT(TEXT, XML_FOOTNOTE_CONTINUATION_NOTICE_FORWARD):
+            xContext = new XMLFootnoteConfigHelper(GetImport(), *this, false);
+            break;
+        case XML_ELEMENT(TEXT, XML_FOOTNOTE_CONTINUATION_NOTICE_BACKWARD):
+            xContext = new XMLFootnoteConfigHelper(GetImport(), *this, true);
+            break;
     }
 
     return xContext;
