@@ -2,6 +2,57 @@
   "comments": [
     {
       "key": {
+        "uuid": "0dc1d515_00b08527",
+        "filename": "cui/uiconfig/ui/optfltrpage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2020-08-21T12:57:28Z",
+      "side": 1,
+      "message": "$[officename] only replaced once",
+      "revId": "b5e0e9877f95aa0e08950ccbcc94610d23c3d388",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "263cdfa4_b4f1538a",
+        "filename": "cui/uiconfig/ui/optfltrpage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2020-08-21T12:57:28Z",
+      "side": 1,
+      "message": "$[officename] only replaced once",
+      "revId": "b5e0e9877f95aa0e08950ccbcc94610d23c3d388",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68bed98c_854f4719",
+        "filename": "cui/uiconfig/ui/optfltrpage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2020-08-21T12:57:28Z",
+      "side": 1,
+      "message": "$[officename] only replaced once",
+      "revId": "b5e0e9877f95aa0e08950ccbcc94610d23c3d388",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f5763959_bb42250e",
         "filename": "sc/uiconfig/scalc/ui/tpviewpage.ui",
         "patchSetId": 2
