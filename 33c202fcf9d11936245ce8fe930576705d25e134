@@ -22,6 +22,30 @@
       "revId": "33c202fcf9d11936245ce8fe930576705d25e134",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30379e96_8391cdaa",
+        "filename": "icon-themes/colibre/links.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 2724,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-08-21T09:45:02Z",
+      "side": 1,
+      "message": "\u003e Where is lc_arrowshapes.circular-leftarrow.png?\n\nThere is no such command, and I think it never existed. For this initial patch I just created a mirrored version of lc_arrowshapes.circular-arrow.png using \"convert -flop\" as lc_librelogo-left.png. (And it might be that the LibreLogo author actually did the same for this icon.)\n\n\u003e for librelogo-home.png, we have already res/lc06303.png and res/sc06303.png,\n\nOK, but then we\u0027ll need also a 32x32 version of this icon.",
+      "parentUuid": "7e2b8e1d_d5965ebb",
+      "range": {
+        "startLine": 2724,
+        "startChar": 2,
+        "endLine": 2724,
+        "endChar": 11
+      },
+      "revId": "33c202fcf9d11936245ce8fe930576705d25e134",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
