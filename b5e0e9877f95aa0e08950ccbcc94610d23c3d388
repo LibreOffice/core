@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f5763959_bb42250e",
+        "filename": "sc/uiconfig/scalc/ui/tpviewpage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2020-08-21T12:53:19Z",
+      "side": 1,
+      "message": "first switchinline content got lost. If you have defined an [outline], ....",
+      "revId": "b5e0e9877f95aa0e08950ccbcc94610d23c3d388",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75a711ac_fe057f01",
+        "filename": "sd/uiconfig/simpress/ui/optimpressgeneralpage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2020-08-21T12:53:19Z",
+      "side": 1,
+      "message": "bad handling of switchinline, both mac-case and default are used. ..holding down the [Ctrl] key.",
+      "revId": "b5e0e9877f95aa0e08950ccbcc94610d23c3d388",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
