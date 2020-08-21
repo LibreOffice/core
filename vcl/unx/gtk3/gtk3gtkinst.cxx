@@ -3865,10 +3865,11 @@ private:
     rtl::Reference<SalGtkXWindow> m_xWindow; //uno api
     gulong m_nToplevelFocusChangedSignalId;
 
-    static void help_pressed(GtkAccelGroup*, GObject*, guint, GdkModifierType, gpointer widget)
+    static gboolean help_pressed(GtkAccelGroup*, GObject*, guint, GdkModifierType, gpointer widget)
     {
         GtkInstanceWindow* pThis = static_cast<GtkInstanceWindow*>(widget);
         pThis->help();
+        return true;
     }
 
     static void signalToplevelFocusChanged(GtkWindow*, GParamSpec*, gpointer widget)
@@ -3885,11 +3886,15 @@ public:
         , m_pWindow(pWindow)
         , m_nToplevelFocusChangedSignalId(0)
     {
-        //hook up F1 to show help
-        GtkAccelGroup *pGroup = gtk_accel_group_new();
-        GClosure* closure = g_cclosure_new(G_CALLBACK(help_pressed), this, nullptr);
-        gtk_accel_group_connect(pGroup, GDK_KEY_F1, static_cast<GdkModifierType>(0), GTK_ACCEL_LOCKED, closure);
-        gtk_window_add_accel_group(pWindow, pGroup);
+        const bool bIsFrameWeld = pBuilder == nullptr;
+        if (!bIsFrameWeld)
+        {
+            //hook up F1 to show help
+            GtkAccelGroup *pGroup = gtk_accel_group_new();
+            GClosure* closure = g_cclosure_new(G_CALLBACK(help_pressed), this, nullptr);
+            gtk_accel_group_connect(pGroup, GDK_KEY_F1, static_cast<GdkModifierType>(0), GTK_ACCEL_LOCKED, closure);
+            gtk_window_add_accel_group(pWindow, pGroup);
+        }
     }
 
     virtual void set_title(const OUString& rTitle) override
@@ -15244,6 +15249,12 @@ public:
         g_slist_foreach(m_pObjectList, postprocess, this);
 
         GenerateMissingMnemonics();
+
+        if (m_xInterimGlue)
+        {
+            assert(m_pParentWidget);
+            g_object_set_data(G_OBJECT(m_pParentWidget), "InterimWindowGlue", m_xInterimGlue.get());
+        }
     }
 
     void GenerateMissingMnemonics()
@@ -15799,6 +15810,59 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         return SalInstance::CreateBuilder(pParent, rUIRoot, rUIFile);
     GtkWidget* pBuilderParent = pParentWidget ? pParentWidget->getWidget() : nullptr;
     return new GtkInstanceBuilder(pBuilderParent, rUIRoot, rUIFile, nullptr);
+}
+
+// tdf#135965 for the case of native widgets inside a GtkSalFrame and F1 pressed, run help
+// on gtk widget help ids until we hit a vcl parent and then use vcl window help ids
+gboolean GtkSalFrame::NativeWidgetHelpPressed(GtkAccelGroup*, GObject*, guint, GdkModifierType, gpointer pFrame)
+{
+    Help* pHelp = Application::GetHelp();
+    if (!pHelp)
+        return true;
+
+    GtkWindow* pWindow = static_cast<GtkWindow*>(pFrame);
+
+    vcl::Window* pChildWindow = nullptr;
+
+    //show help for widget with keyboard focus
+    GtkWidget* pWidget = gtk_window_get_focus(pWindow);
+    if (!pWidget)
+        pWidget = GTK_WIDGET(pWindow);
+    OString sHelpId = ::get_help_id(pWidget);
+    while (sHelpId.isEmpty())
+    {
+        pWidget = gtk_widget_get_parent(pWidget);
+        if (!pWidget)
+            break;
+        pChildWindow = static_cast<vcl::Window*>(g_object_get_data(G_OBJECT(pWidget), "InterimWindowGlue"));
+        if (pChildWindow)
+        {
+            sHelpId = pChildWindow->GetHelpId();
+            break;
+        }
+        sHelpId = ::get_help_id(pWidget);
+    }
+
+    if (pChildWindow)
+    {
+        while (sHelpId.isEmpty())
+        {
+            pChildWindow = pChildWindow->GetParent();
+            if (!pChildWindow)
+                break;
+            sHelpId = pChildWindow->GetHelpId();
+        }
+        if (!pChildWindow)
+            return true;
+        pHelp->Start(OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), pChildWindow);
+        return true;
+    }
+
+    if (!pWidget)
+        return true;
+    std::unique_ptr<weld::Widget> xTemp(new GtkInstanceWidget(pWidget, nullptr, false));
+    pHelp->Start(OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), xTemp.get());
+    return true;
 }
 
 weld::Builder* GtkInstance::CreateInterimBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile)
