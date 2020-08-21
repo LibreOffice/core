@@ -42,6 +42,29 @@
     },
     {
       "key": {
+        "uuid": "9600c538_3adee0d6",
+        "filename": "sc/source/ui/view/tabvwsh3.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 962,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2020-08-21T04:22:03Z",
+      "side": 1,
+      "message": "rBindings.Invalidate(nSlot);",
+      "range": {
+        "startLine": 962,
+        "startChar": 24,
+        "endLine": 962,
+        "endChar": 42
+      },
+      "revId": "d2d3cd4d2a9f8c2492df1c2ba82eac71865baf97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8bedc7c0_e9b0c7a9",
         "filename": "sc/source/ui/view/tabvwsh3.cxx",
         "patchSetId": 3
