@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ee03b781_e41aadca",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 4829,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-08-21T23:45:35Z",
+      "side": 1,
+      "message": "This does not test the bug scenario. Of course a sheet name (\"Sheet 5\" or \"sheet5\") that does not exist produces #REF!, but that is not the bug scenario. The bug scenario involves copying from sheet two to another document that has only one sheet where a reference to the second sheet results in an invalid reference, regardless of name.",
+      "revId": "353ee124b59b40dab61c99839972e01dfc5cf4d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5151193_2c5b60c6",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1479,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-08-21T23:45:35Z",
+      "side": 1,
+      "message": "How is this supposed to fix things? ScSheetLimits does not know anything about the number of sheets in a document.",
+      "revId": "353ee124b59b40dab61c99839972e01dfc5cf4d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
