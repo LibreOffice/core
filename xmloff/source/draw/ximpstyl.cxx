@@ -904,6 +904,22 @@ SdXMLStylesContext::SdXMLStylesContext(
 }
 
 SvXMLStyleContext* SdXMLStylesContext::CreateStyleChildContext(
+    sal_Int32 nElement,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList)
+{
+    SvXMLStyleContext* pContext = nullptr;
+    if( nElement == XML_ELEMENT(TABLE, XML_TABLE_TEMPLATE) )
+    {
+        pContext = GetImport().GetShapeImport()->GetShapeTableImport()->CreateTableTemplateContext(nElement, xAttrList );
+        if (pContext)
+            return pContext;
+    }
+
+    // call base class
+    return SvXMLStylesContext::CreateStyleChildContext(nElement, xAttrList);
+}
+
+SvXMLStyleContext* SdXMLStylesContext::CreateStyleChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList)
@@ -958,11 +974,6 @@ SvXMLStyleContext* SdXMLStylesContext::CreateStyleChildContext(
         {
             pContext = new SdXMLHeaderFooterDeclContext( GetImport(), nPrefix, rLocalName, xAttrList );
         }
-    }
-
-    if(!pContext && (nPrefix == XML_NAMESPACE_TABLE) && IsXMLToken( rLocalName, XML_TABLE_TEMPLATE ) )
-    {
-        pContext = GetImport().GetShapeImport()->GetShapeTableImport()->CreateTableTemplateContext(nPrefix, rLocalName, xAttrList );
     }
 
     // call base class

@@ -157,11 +157,13 @@ public:
 class XMLTableTemplateContext : public SvXMLStyleContext
 {
 public:
-    XMLTableTemplateContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const Reference< XAttributeList >& xAttrList );
+    XMLTableTemplateContext( SvXMLImport& rImport, sal_Int32 nElement, const Reference< XFastAttributeList >& xAttrList );
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList ) override;
+    // Create child element.
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     virtual void CreateAndInsert( bool bOverwrite ) override;
 protected:
@@ -234,9 +236,9 @@ SvXMLImportContext* XMLTableImport::CreateTableContext( sal_uInt16 nPrfx, const 
     return new XMLTableImportContext( xThis, nPrfx, rLName, xColumnRowRange );
 }
 
-SvXMLStyleContext* XMLTableImport::CreateTableTemplateContext( sal_uInt16 nPrfx, const OUString& rLName, const Reference< XAttributeList >& xAttrList )
+SvXMLStyleContext* XMLTableImport::CreateTableTemplateContext( sal_Int32 nElement, const Reference< XFastAttributeList >& xAttrList )
 {
-    return new XMLTableTemplateContext( mrImport, nPrfx, rLName, xAttrList );
+    return new XMLTableTemplateContext( mrImport, nElement, xAttrList );
 }
 
 void XMLTableImport::addTableTemplate( const OUString& rsStyleName, XMLTableTemplate& xTableTemplate )
@@ -745,8 +747,8 @@ void XMLCellImportContext::EndElement()
 }
 
 
-XMLTableTemplateContext::XMLTableTemplateContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const Reference< XAttributeList >& xAttrList )
-: SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, XmlStyleFamily::TABLE_TEMPLATE_ID, false )
+XMLTableTemplateContext::XMLTableTemplateContext( SvXMLImport& rImport, sal_Int32 nElement, const Reference< XFastAttributeList >& xAttrList )
+: SvXMLStyleContext( rImport, nElement, xAttrList, XmlStyleFamily::TABLE_TEMPLATE_ID, false )
 {
 }
 
@@ -762,7 +764,7 @@ void XMLTableTemplateContext::SetAttribute( sal_uInt16 nPrefixKey,
     }
 }
 
-void XMLTableTemplateContext::EndElement()
+void XMLTableTemplateContext::endFastElement(sal_Int32 )
 {
     rtl::Reference< XMLTableImport > xTableImport( GetImport().GetShapeImport()->GetShapeTableImport() );
     if( xTableImport.is() )
@@ -776,47 +778,51 @@ void XMLTableTemplateContext::CreateAndInsert(bool bOverwrite)
        xTableImport->insertTabletemplate(msTemplateStyleName, bOverwrite);
 }
 
-SvXMLImportContextRef XMLTableTemplateContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTableTemplateContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    if( nPrefix == XML_NAMESPACE_TABLE )
+    if( IsTokenInNamespace(nElement, XML_NAMESPACE_TABLE) )
     {
         const TableStyleElement* pElements = getTableStyleMap();
-        while( (pElements->meElement != XML_TOKEN_END) && !IsXMLToken( rLocalName, pElements->meElement ) )
+        sal_Int32 nLocalName = nElement & TOKEN_MASK;
+        while( (pElements->meElement != XML_TOKEN_END) && pElements->meElement != nLocalName)
             pElements++;
 
         if( pElements->meElement != XML_TOKEN_END )
         {
-            sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-            for(sal_Int16 i=0; i < nAttrCount; i++)
+            for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
             {
-                OUString sAttrName;
-                sal_uInt16 nAttrPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( i ), &sAttrName );
-                if( (nAttrPrefix == XML_NAMESPACE_TEXT || nAttrPrefix == XML_NAMESPACE_TABLE) &&
-                    IsXMLToken( sAttrName, XML_STYLE_NAME ) )
+                switch (aIter.getToken())
                 {
-                    maTableTemplate[pElements->msStyleName] = xAttrList->getValueByIndex( i );
-                    break;
+                    case XML_ELEMENT(TEXT, XML_STYLE_NAME):
+                    case XML_ELEMENT(TABLE, XML_STYLE_NAME):
+                        maTableTemplate[pElements->msStyleName] = aIter.toString();
+                        break;
+                    default:
+                        SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
                 }
             }
         }
-    } else if (nPrefix == XML_NAMESPACE_LO_EXT) // Writer specific cell styles
+    } else if (IsTokenInNamespace(nElement, XML_NAMESPACE_LO_EXT)) // Writer specific cell styles
     {
         const TableStyleElement* pElements = getWriterSpecificTableStyleMap();
-        while ((pElements->meElement != XML_TOKEN_END) && !IsXMLToken(rLocalName, pElements->meElement ))
+        sal_Int32 nLocalName = nElement & TOKEN_MASK;
+        while( (pElements->meElement != XML_TOKEN_END) && pElements->meElement != nLocalName)
             pElements++;
 
         if (pElements->meElement != XML_TOKEN_END)
         {
-            sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-            for (sal_Int16 i=0; i < nAttrCount; i++)
+            for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
             {
-                OUString sAttrName;
-                sal_uInt16 nAttrPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName(xAttrList->getNameByIndex( i ), &sAttrName);
-                if( (nAttrPrefix == XML_NAMESPACE_TEXT || nAttrPrefix == XML_NAMESPACE_TABLE) &&
-                    IsXMLToken( sAttrName, XML_STYLE_NAME ) )
+                switch (aIter.getToken())
                 {
-                    maTableTemplate[pElements->msStyleName] = xAttrList->getValueByIndex(i);
-                    break;
+                    case XML_ELEMENT(TEXT, XML_STYLE_NAME):
+                    case XML_ELEMENT(TABLE, XML_STYLE_NAME):
+                        maTableTemplate[pElements->msStyleName] = aIter.toString();
+                        break;
+                    default:
+                        SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
                 }
             }
         }
