@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bbdeec33_5fc93d40",
+        "filename": "sw/source/core/text/txtfld.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-08-21T09:37:42Z",
+      "side": 1,
+      "message": "this doesn\u0027t quite work in all cases... and the previous version didn\u0027t either...\n\nthe problem is, SfxItemIter only iterates the items directly in the set, not in parents.\n\n... i found some code that almost does the right thing in SfxItemSet::Clone():\n\n            SfxWhichIter aIter(*pNewSet);\n            sal_uInt16 nWhich \u003d aIter.FirstWhich();\n            while ( nWhich )\n            {\n                const SfxPoolItem* pItem;\n                if ( SfxItemState::SET \u003d\u003d GetItemState( nWhich, false, \u0026pItem ) )\n                    pNewSet-\u003ePut( *pItem, pItem-\u003eWhich() );\n                nWhich \u003d aIter.NextWhich();\n            }\n\nwith just a small change to GetItemState(..., true, ...) it should iterate all items in parent too.\n\nperhaps best to test this with a document that has one of the \"ignored\" items in a style.",
+      "revId": "0d1dace8fccd3b5fcbee3aded05e4281bd45aef5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
