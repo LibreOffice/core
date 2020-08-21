@@ -88,65 +88,48 @@ void XMLImageStyle::exportXML(OUString const & rStrName, uno::Any const & rValue
     }
 }
 
-bool XMLImageStyle::importXML(uno::Reference<xml::sax::XAttributeList> const & xAttrList,
+bool XMLImageStyle::importXML(uno::Reference<xml::sax::XFastAttributeList> const & xAttrList,
                               uno::Any& rValue, OUString& rStrName, SvXMLImport& rImport)
 {
-    static const SvXMLTokenMapEntry aHatchAttrTokenMap[] =
-    {
-        { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_IMAGE_NAME },
-        { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_IMAGE_DISPLAY_NAME },
-        { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_IMAGE_URL },
-        { XML_NAMESPACE_XLINK, XML_TYPE, XML_TOK_IMAGE_TYPE },
-        { XML_NAMESPACE_XLINK, XML_SHOW, XML_TOK_IMAGE_SHOW },
-        { XML_NAMESPACE_XLINK, XML_ACTUATE, XML_TOK_IMAGE_ACTUATE },
-        XML_TOKEN_MAP_END
-    };
-
     bool bHasHRef = false;
     bool bHasName = false;
     OUString aDisplayName;
     uno::Reference<graphic::XGraphic> xGraphic;
 
-    static const SvXMLTokenMap aTokenMap( aHatchAttrTokenMap );
-
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        const OUString& rFullAttrName = xAttrList->getNameByIndex( i );
-        OUString aStrAttrName;
-        sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName( rFullAttrName, &aStrAttrName );
-        const OUString& rStrValue = xAttrList->getValueByIndex( i );
+        const OUString aStrValue = aIter.toString();
 
-        switch( aTokenMap.Get( nPrefix, aStrAttrName ) )
+        switch( aIter.getToken() )
         {
-            case XML_TOK_IMAGE_NAME:
+            case XML_ELEMENT(DRAW, XML_NAME):
                 {
-                    rStrName = rStrValue;
+                    rStrName = aStrValue;
                     bHasName = true;
                 }
                 break;
-            case XML_TOK_IMAGE_DISPLAY_NAME:
+            case XML_ELEMENT(DRAW, XML_DISPLAY_NAME):
                 {
-                    aDisplayName = rStrValue;
+                    aDisplayName = aStrValue;
                 }
                 break;
-            case XML_TOK_IMAGE_URL:
+            case XML_ELEMENT(XLINK, XML_HREF):
                 {
-                    xGraphic = rImport.loadGraphicByURL(rStrValue);
+                    xGraphic = rImport.loadGraphicByURL(aStrValue);
                     bHasHRef = true;
                 }
                 break;
-            case XML_TOK_IMAGE_TYPE:
+            case XML_ELEMENT(XLINK, XML_TYPE):
                 // ignore
                 break;
-            case XML_TOK_IMAGE_SHOW:
+            case XML_ELEMENT(XLINK, XML_SHOW):
                 // ignore
                 break;
-            case XML_TOK_IMAGE_ACTUATE:
+            case XML_ELEMENT(XLINK, XML_ACTUATE):
                 // ignore
                 break;
             default:
-                SAL_WARN("xmloff.style", "Unknown token at import fill bitmap style");
+                SAL_WARN("xmloff.style", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aStrValue);
         }
     }
 
