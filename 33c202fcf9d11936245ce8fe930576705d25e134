@@ -46,6 +46,30 @@
       "revId": "33c202fcf9d11936245ce8fe930576705d25e134",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8fb4c9a8_8af00860",
+        "filename": "icon-themes/colibre/links.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 2724,
+      "author": {
+        "id": 1001872
+      },
+      "writtenOn": "2020-08-21T10:21:36Z",
+      "side": 1,
+      "message": "OK then flipping lc_arrowshapes.circular-arrow.png is enough. Just want to make sure we are not loose anything\n\nLet me draw the 32x32 version",
+      "parentUuid": "30379e96_8391cdaa",
+      "range": {
+        "startLine": 2724,
+        "startChar": 2,
+        "endLine": 2724,
+        "endChar": 11
+      },
+      "revId": "33c202fcf9d11936245ce8fe930576705d25e134",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
