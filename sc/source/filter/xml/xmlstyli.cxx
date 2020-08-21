@@ -916,17 +916,15 @@ ScXMLMasterStylesContext::~ScXMLMasterStylesContext()
 }
 
 SvXMLStyleContext *ScXMLMasterStylesContext::CreateStyleChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const uno::Reference< XAttributeList > & xAttrList )
+        sal_Int32 nElement,
+        const uno::Reference< XFastAttributeList > & xAttrList )
 {
     SvXMLStyleContext *pContext(nullptr);
 
-    if( (XML_NAMESPACE_STYLE == nPrefix) &&
-        IsXMLToken(rLocalName, XML_MASTER_PAGE) &&
+    if( nElement == XML_ELEMENT(STYLE, XML_MASTER_PAGE) &&
          InsertStyleFamily( XmlStyleFamily::MASTER_PAGE ) )
         pContext = new ScMasterPageContext(
-                        GetImport(), nPrefix, rLocalName, xAttrList,
+                        GetImport(), nElement, xAttrList,
                         !GetImport().GetTextImport()->IsInsertMode() );
 
     // any other style will be ignored here!
@@ -950,10 +948,10 @@ void ScXMLMasterStylesContext::endFastElement(sal_Int32 )
 
 
 ScMasterPageContext::ScMasterPageContext( SvXMLImport& rImport,
-        sal_uInt16 nPrfx, const OUString& rLName,
-        const uno::Reference< XAttributeList > & xAttrList,
+        sal_Int32 nElement,
+        const uno::Reference< XFastAttributeList > & xAttrList,
         bool bOverwrite ) :
-    XMLTextMasterPageContext( rImport, nPrfx, rLName, xAttrList, bOverwrite ),
+    XMLTextMasterPageContext( rImport, nElement, xAttrList, bOverwrite ),
     bContainsRightHeader(false),
     bContainsRightFooter(false)
 {

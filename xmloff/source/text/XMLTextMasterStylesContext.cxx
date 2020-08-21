@@ -47,18 +47,16 @@ XMLTextMasterStylesContext::~XMLTextMasterStylesContext()
 }
 
 SvXMLStyleContext *XMLTextMasterStylesContext::CreateStyleChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< XAttributeList > & xAttrList )
+        sal_Int32 nElement,
+        const Reference< XFastAttributeList > & xAttrList )
 {
     SvXMLStyleContext *pContext = nullptr;
 
-    if( XML_NAMESPACE_STYLE == nPrefix &&
-        IsXMLToken( rLocalName, XML_MASTER_PAGE ) &&
+    if( nElement == XML_ELEMENT(STYLE, XML_MASTER_PAGE) &&
          InsertStyleFamily( XmlStyleFamily::MASTER_PAGE ) )
         pContext = new XMLTextMasterPageContext(
-                        GetImport(), nPrefix, rLocalName,
-                          xAttrList,
+                        GetImport(), nElement,
+                         xAttrList,
                         !GetImport().GetTextImport()->IsInsertMode() );
 
     // any other style will be ignored here!
