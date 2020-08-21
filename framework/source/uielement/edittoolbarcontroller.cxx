@@ -65,6 +65,10 @@ EditControl::EditControl(vcl::Window* pParent, EditToolbarController* pEditToolb
     , m_xWidget(m_xBuilder->weld_entry("entry"))
     , m_pEditToolbarController(pEditToolbarController)
 {
+    OString sEmpty;
+    m_xWidget->set_help_id(sEmpty);
+    m_xContainer->set_help_id(sEmpty);
+
     m_xWidget->connect_focus_in(LINK(this, EditControl, FocusInHdl));
     m_xWidget->connect_focus_out(LINK(this, EditControl, FocusOutHdl));
     m_xWidget->connect_changed(LINK(this, EditControl, ModifyHdl));
