@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c87917ca_6013566d",
+        "filename": "offapi/com/sun/star/animations/XAnimatePhysics.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-08-21T12:06:13Z",
+      "side": 1,
+      "message": "Please add appropriate @since markup :)",
+      "revId": "5944b9b930361f6f387850b5476ebdc3d25a72ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65d72337_8ed2efb6",
+        "filename": "slideshow/source/engine/animationnodes/animationphysicsnode.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-08-21T12:06:13Z",
+      "side": 1,
+      "message": "lets avoid preprocessor stuff if at all possible - see e.g. include/editeng/eeitem.hxx how to use constexpr to define constants.",
+      "revId": "5944b9b930361f6f387850b5476ebdc3d25a72ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
