@@ -83,7 +83,7 @@ private:
     std::vector<long> mvRight;
     long            nLeftPosition;
     long            mnScale;
-    SCCOL           nColNumberButttonDown;
+    SCCOL           nColNumberButtonDown;
     Point           aButtonDownChangePoint;
     Point           aButtonDownPt;
     Point           aButtonUpPt;
