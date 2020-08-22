@@ -3097,6 +3097,12 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
         ::Color aHighlightTextColor = getColor( text_color );
         aStyleSet.SetHighlightColor( aHighlightColor );
         aStyleSet.SetHighlightTextColor( aHighlightTextColor );
+        // make active like highlight, except with a small contrast. Note, see
+        // a GtkListBoxRow in a GtkStackSidebar for a gtk widget with a
+        // difference between highlighted and highlighted with focus.
+        aHighlightColor.IncreaseLuminance(16);
+        aStyleSet.SetActiveColor( aHighlightColor );
+        aStyleSet.SetActiveTextColor( aHighlightTextColor );
 
         // field background color
         GdkRGBA field_background_color;
