@@ -209,7 +209,7 @@ LwpNumericFormat::GetDecimalPlaces()
         return cDecimalPlaces;
     return GetDefaultDecimalPlaces(cFormat);
 }
-void LwpNumericFormat::GetCurrencyStr(LwpNumericFormatSubset aNumber, OUString& aPrefix, OUString& aSuffix, bool bNegtive)
+void LwpNumericFormat::GetCurrencyStr(LwpNumericFormatSubset aNumber, OUString& aPrefix, OUString& aSuffix, bool bNegative)
 {
     aPrefix = aNumber.GetPrefix();
     aSuffix = aNumber.GetSuffix();
@@ -220,7 +220,7 @@ void LwpNumericFormat::GetCurrencyStr(LwpNumericFormatSubset aNumber, OUString& 
     bool bShowSpace = m_aCurrencyInfo.IsShowSpace(cFormat);
     if ( aNumber.IsDefaultPrefix())
     {
-        if (bNegtive)
+        if (bNegative)
         {
             aPrefix = "(";
         }
@@ -246,7 +246,7 @@ void LwpNumericFormat::GetCurrencyStr(LwpNumericFormatSubset aNumber, OUString& 
 
     }
 
-    if (bNegtive)
+    if (bNegative)
     {
         aSuffix += ")";
     }
