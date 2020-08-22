@@ -166,30 +166,36 @@ void DrawDocShell::Execute( SfxRequest& rReq )
 
         case FID_SEARCH_OFF:
         {
-            if( dynamic_cast< FuSearch* >(mxDocShellFunction.get()) )
+            sd::View* pView = mpViewShell->GetView();
+            if (pView)
             {
-                // End Search&Replace in all docshells
-                SfxObjectShell* pFirstShell = SfxObjectShell::GetFirst();
-                SfxObjectShell* pShell = pFirstShell;
+                rtl::Reference<FuSearch> xFuSearch(pView->getSearchContext().maFunctionSearch);
 
-                while (pShell)
+                if (xFuSearch)
                 {
-                    if( dynamic_cast< const DrawDocShell *>( pShell ) !=  nullptr)
+                    // End Search&Replace in all docshells
+                    SfxObjectShell* pFirstShell = SfxObjectShell::GetFirst();
+                    SfxObjectShell* pShell = pFirstShell;
+
+                    while (pShell)
                     {
-                        static_cast<DrawDocShell*>(pShell)->CancelSearching();
+                        if( dynamic_cast< const DrawDocShell *>( pShell ) !=  nullptr)
+                        {
+                            static_cast<DrawDocShell*>(pShell)->CancelSearching();
+                        }
+
+                        pShell = SfxObjectShell::GetNext(*pShell);
+
+                        if (pShell == pFirstShell)
+                        {
+                            pShell = nullptr;
+                        }
                     }
 
-                    pShell = SfxObjectShell::GetNext(*pShell);
-
-                    if (pShell == pFirstShell)
-                    {
-                        pShell = nullptr;
-                    }
+                    pView->getSearchContext().resetSearchFunction();
+                    Invalidate();
+                    rReq.Done();
                 }
-
-                SetDocShellFunction(nullptr);
-                Invalidate();
-                rReq.Done();
             }
         }
         break;
@@ -200,21 +206,28 @@ void DrawDocShell::Execute( SfxRequest& rReq )
 
             if ( pReqArgs )
             {
-                rtl::Reference< FuSearch > xFuSearch( dynamic_cast< FuSearch* >( GetDocShellFunction().get() ) );
-
-                if( !xFuSearch.is() && mpViewShell )
+                sd::View* pView = mpViewShell->GetView();
+                if (pView)
                 {
-                    ::sd::View* pView = mpViewShell->GetView();
-                    SetDocShellFunction( FuSearch::Create( mpViewShell, mpViewShell->GetActiveWindow(), pView, mpDoc, rReq ) );
-                    xFuSearch.set( dynamic_cast< FuSearch* >( GetDocShellFunction().get() ) );
-                }
+                    rtl::Reference<FuSearch> xFuSearch(pView->getSearchContext().maFunctionSearch);
 
-                if( xFuSearch.is() )
-                {
-                    const SvxSearchItem& rSearchItem = pReqArgs->Get(SID_SEARCH_ITEM);
+                    if (!xFuSearch.is() && mpViewShell )
+                    {
+                        xFuSearch = rtl::Reference<FuSearch>(
+                            FuSearch::createPtr(mpViewShell,
+                                                mpViewShell->GetActiveWindow(),
+                                                pView, mpDoc, rReq));
 
-                    SD_MOD()->SetSearchItem(std::unique_ptr<SvxSearchItem>(rSearchItem.Clone()));
-                    xFuSearch->SearchAndReplace(&rSearchItem);
+                        pView->getSearchContext().setSearchFunction(xFuSearch);
+                    }
+
+                    if (xFuSearch.is())
+                    {
+                        const SvxSearchItem& rSearchItem = pReqArgs->Get(SID_SEARCH_ITEM);
+
+                        SD_MOD()->SetSearchItem(std::unique_ptr<SvxSearchItem>(rSearchItem.Clone()));
+                        xFuSearch->SearchAndReplace(&rSearchItem);
+                    }
                 }
             }
 
@@ -423,14 +436,6 @@ void DrawDocShell::Execute( SfxRequest& rReq )
         default:
         break;
     }
-}
-
-void DrawDocShell::SetDocShellFunction( const rtl::Reference<FuPoor>& xFunction )
-{
-    if( mxDocShellFunction.is() )
-        mxDocShellFunction->Dispose();
-
-    mxDocShellFunction = xFunction;
 }
 
 } // end of namespace sd

@@ -27,9 +27,9 @@
 #include <svx/fmview.hxx>
 #include <svx/svdpage.hxx>
 #include <vcl/idle.hxx>
-#include <VectorGraphicSearchContext.hxx>
 
 #include "smarttag.hxx"
+#include "fusearch.hxx"
 
 class SdDrawDocument;
 class SdPage;
@@ -65,6 +65,23 @@ public:
     }
     void Start(SdrOutliner *pOutl);
     void End();
+};
+
+struct SearchContext
+{
+    rtl::Reference<FuSearch> maFunctionSearch;
+
+    void setSearchFunction(rtl::Reference<FuSearch> const & xFunction)
+    {
+        resetSearchFunction();
+        maFunctionSearch = xFunction;
+    }
+
+    void resetSearchFunction()
+    {
+        if (maFunctionSearch.is())
+            maFunctionSearch->Dispose();
+    }
 };
 
 class SAL_DLLPUBLIC_RTTI View : public FmFormView
@@ -218,8 +235,7 @@ public:
     void SetAuthor(const OUString& rAuthor) { m_sAuthor = rAuthor; }
     const OUString& GetAuthor() const { return m_sAuthor; }
 
-    VectorGraphicSearchContext& getVectorGraphicSearchContext() { return aVectorGraphicSearchContext; }
-
+    SearchContext& getSearchContext() { return maSearchContext; }
 protected:
     DECL_LINK( OnParagraphInsertedHdl, ::Outliner::ParagraphHdlParam, void );
     DECL_LINK( OnParagraphRemovingHdl, ::Outliner::ParagraphHdlParam, void );
@@ -253,8 +269,7 @@ protected:
 private:
     ::std::unique_ptr<ViewClipboard> mpClipboard;
     OutlinerMasterViewFilter maMasterViewFilter;
-
-    VectorGraphicSearchContext aVectorGraphicSearchContext;
+    SearchContext maSearchContext;
 
     OUString m_sAuthor;
 };

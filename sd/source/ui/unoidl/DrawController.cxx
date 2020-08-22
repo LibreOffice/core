@@ -142,9 +142,9 @@ void SAL_CALL DrawController::dispose()
     if ( pViewShell )
     {
         pViewShell->DeactivateCurrentFunction();
-        DrawDocShell* pDocShell = pViewShell->GetDocSh();
-        if ( pDocShell != nullptr )
-            pDocShell->SetDocShellFunction(nullptr);
+        auto* pView = pViewShell->GetView();
+        if (pView)
+            pView->getSearchContext().resetSearchFunction();
     }
     pViewShell.reset();
 

@@ -32,6 +32,8 @@ class FuSearch final : public FuPoor
 public:
 
     static rtl::Reference<FuPoor> Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
+    static FuSearch* createPtr(ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq);
+
     virtual void DoExecute( SfxRequest& rReq ) override;
 
     void SearchAndReplace( const SvxSearchItem* pSearchItem );
