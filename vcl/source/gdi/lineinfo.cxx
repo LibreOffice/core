@@ -229,12 +229,12 @@ void LineInfo::applyToB2DPolyPolygon(
 
             for(auto const& rPolygon : io_rLinePolyPolygon)
             {
-                basegfx::B2DPolyPolygon aLineTraget;
+                basegfx::B2DPolyPolygon aLineTarget;
                 basegfx::utils::applyLineDashing(
                     rPolygon,
                     fDotDashArray,
-                    &aLineTraget);
-                aResult.append(aLineTraget);
+                    &aLineTarget);
+                aResult.append(aLineTarget);
             }
 
             io_rLinePolyPolygon = aResult;
