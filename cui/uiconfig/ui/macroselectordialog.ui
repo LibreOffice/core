@@ -21,6 +21,11 @@
     </columns>
   </object>
   <object class="GtkDialog" id="MacroSelectorDialog">
+    <child internal-child="accessible">
+      <object class="AtkObject" id="MacroSelectorDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="macroselectordialog|extended_tip|MacroSelectorDialog"/>
+      </object>
+    </child>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="macroselectordialog|MacroSelectorDialog">Macro Selector</property>
@@ -192,6 +197,11 @@
                             <property name="shadow_type">in</property>
                             <child>
                               <object class="GtkTreeView" id="categories">
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="categories-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="macroselectordialog|extended_tip|categories"/>
+                                  </object>
+                                </child>
                                 <property name="width_request">-1</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
@@ -295,6 +305,11 @@
                             <property name="shadow_type">in</property>
                             <child>
                               <object class="GtkTreeView" id="commands">
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="commands-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="macroselectordialog|extended_tip|commands"/>
+                                  </object>
+                                </child>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
@@ -399,6 +414,11 @@
                         <property name="shadow_type">in</property>
                         <child>
                           <object class="GtkTextView" id="description">
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="description-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="macroselectordialog|extended_tip|description"/>
+                              </object>
+                            </child>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>

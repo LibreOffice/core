@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -65,6 +65,11 @@
                         <property name="xalign">0</property>
                         <property name="inconsistent">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="TSB_AUTOGROW_WIDTH-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="textattrtabpage|extended_tip|TSB_AUTOGROW_WIDTH">Expands the width of the object to the width of the text, if the object is smaller than the text.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -81,6 +86,11 @@
                         <property name="xalign">0</property>
                         <property name="inconsistent">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="TSB_AUTOGROW_HEIGHT-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="textattrtabpage|extended_tip|TSB_AUTOGROW_HEIGHT">Expands the height of the object to the height of the text, if the object is smaller than the text.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -97,6 +107,11 @@
                         <property name="xalign">0</property>
                         <property name="inconsistent">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="TSB_FIT_TO_SIZE-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="textattrtabpage|extended_tip|TSB_FIT_TO_SIZE">Resizes the text to fit the entire area of the drawing or text object.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -113,6 +128,11 @@
                         <property name="xalign">0</property>
                         <property name="inconsistent">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="TSB_CONTOUR-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="textattrtabpage|extended_tip|TSB_CONTOUR">Adapts the text flow so that it matches the contours of the selected drawing object.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -168,6 +188,11 @@
                         <property name="xalign">0</property>
                         <property name="inconsistent">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="TSB_WORDWRAP_TEXT-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="textattrtabpage|extended_tip|TSB_WORDWRAP_TEXT">Wraps the text that you add after double-clicking a custom shape to fit inside the shape.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -184,6 +209,11 @@
                         <property name="xalign">0</property>
                         <property name="inconsistent">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="TSB_AUTOGROW_SIZE-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="textattrtabpage|extended_tip|TSB_AUTOGROW_SIZE">Resizes a custom shape to fit the text that you enter after double-clicking the shape.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -304,6 +334,11 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="digits">2</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="MTR_FLD_LEFT-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="textattrtabpage|extended_tip|MTR_FLD_LEFT">Enter the amount of space to leave between the left edge of the drawing or text object and the left border of the text.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -317,6 +352,11 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment2</property>
                         <property name="digits">2</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="MTR_FLD_RIGHT-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="textattrtabpage|extended_tip|MTR_FLD_RIGHT">Enter the amount of space to leave between the right edge of the drawing or text object and the right border of the text.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -330,6 +370,11 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment3</property>
                         <property name="digits">2</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="MTR_FLD_TOP-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="textattrtabpage|extended_tip|MTR_FLD_TOP">Enter the amount of space to leave between the top edge of the drawing or text object and the upper border of the text.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -343,6 +388,11 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment4</property>
                         <property name="digits">2</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="MTR_FLD_BOTTOM-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="textattrtabpage|extended_tip|MTR_FLD_BOTTOM">Enter the amount of space to leave between the bottom edge of the drawing or text object and the lower border of the text.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -407,6 +457,11 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="CTL_POSITION-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="textattrtabpage|extended_tip|CTL_POSITION">Click where you want to place the anchor for the text.</property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>
@@ -428,6 +483,11 @@
                         <property name="xalign">0</property>
                         <property name="inconsistent">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="TSB_FULL_WIDTH-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="textattrtabpage|extended_tip|TSB_FULL_WIDTH">Anchors the text to the full width of the drawing object or text object.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -462,6 +522,11 @@
         <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="TextAttributesPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="textattrtabpage|extended_tip|TextAttributesPage">Sets the layout and anchoring properties for text in the selected drawing or text object.</property>
+      </object>
     </child>
   </object>
 </interface>

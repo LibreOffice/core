@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="dba">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="QueryFilterDialog">
@@ -10,9 +10,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -136,6 +133,11 @@
                         <items>
                           <item translatable="yes" context="queryfilterdialog|field1">- none -</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="field1-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="queryfilterdialog|extended_tip|field1">Specifies the field names from the current table to set them in the argument.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -160,6 +162,11 @@
                           <item translatable="yes" context="queryfilterdialog|cond1">null</item>
                           <item translatable="yes" context="queryfilterdialog|cond1">not null</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="cond1-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="queryfilterdialog|extended_tip|cond1">Specifies the comparative operators through which the entries in the Field name and Value fields can be linked.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -174,6 +181,11 @@
                         <items>
                           <item translatable="yes" context="queryfilterdialog|field2">- none -</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="field2-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="queryfilterdialog|extended_tip|field2">Specifies the field names from the current table to set them in the argument.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -188,6 +200,11 @@
                         <items>
                           <item translatable="yes" context="queryfilterdialog|field3">- none -</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="field3-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="queryfilterdialog|extended_tip|field3">Specifies the field names from the current table to set them in the argument.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -200,6 +217,11 @@
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                         <property name="active">0</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="cond2-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="queryfilterdialog|extended_tip|cond2">Specifies the comparative operators through which the entries in the Field name and Value fields can be linked.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -212,6 +234,11 @@
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                         <property name="active">0</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="cond3-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="queryfilterdialog|extended_tip|cond3">Specifies the comparative operators through which the entries in the Field name and Value fields can be linked.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -235,6 +262,11 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="value1-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="queryfilterdialog|extended_tip|value1">Specifies a value to filter the field.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -247,6 +279,11 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="value2-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="queryfilterdialog|extended_tip|value2">Specifies a value to filter the field.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -259,6 +296,11 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="value3-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="queryfilterdialog|extended_tip|value3">Specifies a value to filter the field.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -274,6 +316,11 @@
                           <item translatable="yes" context="queryfilterdialog|op2">AND</item>
                           <item translatable="yes" context="queryfilterdialog|op2">OR</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="op2-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="queryfilterdialog|extended_tip|op2">For the following arguments, you can choose between the logical operators AND / OR.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -289,6 +336,11 @@
                           <item translatable="yes" context="queryfilterdialog|op3">AND</item>
                           <item translatable="yes" context="queryfilterdialog|op3">OR</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="op3-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="queryfilterdialog|extended_tip|op3">For the following arguments, you can choose between the logical operators AND / OR.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -326,5 +378,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="QueryFilterDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="queryfilterdialog|extended_tip|QueryFilterDialog">Allows you to set the filtering options.</property>
+      </object>
+    </child>
   </object>
 </interface>

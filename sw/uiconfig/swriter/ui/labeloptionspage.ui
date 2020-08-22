@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -52,6 +52,11 @@
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="entirepage-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="labeloptionspage|extended_tip|entirepage">Creates a full page of labels or business cards.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -70,6 +75,11 @@
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">entirepage</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="singlelabel-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="labeloptionspage|extended_tip|singlelabel">Prints a single label or business card on a page.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -106,6 +116,11 @@
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment1</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="cols-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="labeloptionspage|extended_tip|cols">Enter the number of labels or business cards that you want to have in a row on your page.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -143,6 +158,11 @@
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment2</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="rows-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="labeloptionspage|extended_tip|rows">Enter the number of rows of labels or business cards that you want to have on your page.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -170,6 +190,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="synchronize-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="labeloptionspage|extended_tip|synchronize">Allows you to edit a single label or business card and updates the contents of the remaining labels or business cards on the page when you click the Synchronize Labels button.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -225,6 +250,11 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="setup-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="labeloptionspage|extended_tip|setup">Opens the Printer Setup dialog.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -266,6 +296,11 @@
         <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="LabelOptionsPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="labeloptionspage|extended_tip|LabelOptionsPage">Sets additional options for your labels or business cards, including text synchronization and printer settings.</property>
+      </object>
     </child>
   </object>
 </interface>

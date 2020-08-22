@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sfx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkGrid" id="DocumentFontsPage">
@@ -34,6 +34,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="embedFonts-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="documentfontspage|extended_tip|embedFonts">Mark this box to embed document fonts into the document file, for portability between different computer systems.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -161,6 +166,11 @@
         <property name="left_attach">0</property>
         <property name="top_attach">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="DocumentFontsPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="documentfontspage|extended_tip|DocumentFontsPage">Embed document fonts in the current file.</property>
+      </object>
     </child>
   </object>
 </interface>

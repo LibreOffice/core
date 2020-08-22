@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -20,9 +20,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -103,6 +100,11 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="edname-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="insertfloatingframe|extended_tip|edname">Enter a name for the floating frame. The name cannot contain spaces, special characters, or begin with an underscore (_).</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -118,6 +120,11 @@
                     <property name="margin_right">12</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="edurl-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="insertfloatingframe|extended_tip|edurl">Enter the path and the name of the file that you want to display in the floating frame. You can also click the Browse button and locate the file that you want to display.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -157,6 +164,11 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="halign">end</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="buttonbrowse-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="insertfloatingframe|extended_tip|buttonbrowse">Locate the file that you want to display in the selected floating frame, and then click Open.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -203,6 +215,11 @@
                                 <property name="xalign">0</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="scrollbaron-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertfloatingframe|extended_tip|scrollbaron">Displays the scrollbar for the floating frame.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -220,6 +237,11 @@
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">scrollbaron</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="scrollbaroff-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertfloatingframe|extended_tip|scrollbaroff">Hides the scrollbar for the floating frame.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -237,6 +259,11 @@
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">scrollbaron</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="scrollbarauto-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertfloatingframe|extended_tip|scrollbarauto">Mark this option if the currently active floating frame can have a scrollbar when needed.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -293,6 +320,11 @@
                                 <property name="xalign">0</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="borderon-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertfloatingframe|extended_tip|borderon">Displays the border of the floating frame.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -310,6 +342,11 @@
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">borderon</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="borderoff-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertfloatingframe|extended_tip|borderoff">Hides the border of the floating frame.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -392,6 +429,11 @@
                                 <property name="margin_right">12</property>
                                 <property name="activates_default">True</property>
                                 <property name="adjustment">adjustment1</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="width-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertfloatingframe|extended_tip|width">Enter the amount of horizontal space that you want to leave between the right and the left edges of the floating frame and the contents of the frame. Both documents inside and outside the floating frame must be HTML documents.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -405,6 +447,11 @@
                                 <property name="margin_right">12</property>
                                 <property name="activates_default">True</property>
                                 <property name="adjustment">adjustment2</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="height-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertfloatingframe|extended_tip|height">Enter the amount of vertical space that you want to leave between the top and bottom edges of the floating frame and the contents of the frame. Both documents inside and outside the floating frame must be HTML documents.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -420,6 +467,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="defaultwidth-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertfloatingframe|extended_tip|defaultwidth">Applies the default horizontal spacing.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">2</property>
@@ -435,6 +487,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="defaultheight-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertfloatingframe|extended_tip|defaultheight">Applies the default vertical spacing.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">2</property>
@@ -484,5 +541,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="InsertFloatingFrameDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="insertfloatingframe|extended_tip|InsertFloatingFrameDialog">Changes the properties of the selected floating frame. Floating frames work best when they contain an html document, and when they are inserted in another html document.</property>
+      </object>
+    </child>
   </object>
 </interface>

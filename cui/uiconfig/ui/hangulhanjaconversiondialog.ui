@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore2">
@@ -18,9 +18,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">normal</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -117,6 +114,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="originalword-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaconversiondialog|extended_tip|originalword">Displays the current selection.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -147,6 +149,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="wordinput-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaconversiondialog|extended_tip|wordinput">Displays the first replacement suggestion from the dictionary.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -161,6 +168,11 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="find-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaconversiondialog|extended_tip|find">Finds your Hangul input in the dictionary and replaces it with the corresponding Hanja.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -296,6 +308,11 @@
                         <property name="always_show_image">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">simpleconversion</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="hanja_above-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaconversiondialog|extended_tip|hanja_above">The Hangul part will be displayed as ruby text above the Hanja part.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -312,6 +329,11 @@
                         <property name="always_show_image">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">simpleconversion</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="hanja_below-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaconversiondialog|extended_tip|hanja_below">The Hangul part will be displayed as ruby text below the Hanja part.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -328,6 +350,11 @@
                         <property name="always_show_image">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">simpleconversion</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="hangul_above-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaconversiondialog|extended_tip|hangul_above">The Hanja part will be displayed as ruby text above the Hangul part.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -344,6 +371,11 @@
                         <property name="always_show_image">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">simpleconversion</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="hangul_below-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaconversiondialog|extended_tip|hangul_below">The Hanja part will be displayed as ruby text below the Hangul part.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -361,6 +393,11 @@
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">simpleconversion</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="simpleconversion-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaconversiondialog|extended_tip|simpleconversion">The original characters are replaced by the suggested characters.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -377,6 +414,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">simpleconversion</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="hangulbracket-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaconversiondialog|extended_tip|hangulbracket">The Hangul part will be displayed in brackets after the Hanja part.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -393,6 +435,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">simpleconversion</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="hanjabracket-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaconversiondialog|extended_tip|hanjabracket">The Hanja part will be displayed in brackets after the Hangul part.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -439,6 +486,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="hangulonly-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaconversiondialog|extended_tip|hangulonly">Check to convert only Hangul. Do not convert Hanja.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -455,6 +507,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="hanjaonly-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaconversiondialog|extended_tip|hanjaonly">Check to convert only Hanja. Do not convert Hangul.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -492,6 +549,11 @@
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="ignore-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaconversiondialog|extended_tip|ignore">No changes will be made to the current selection. The next word or character will be selected for conversion.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -506,6 +568,11 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="ignoreall-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaconversiondialog|extended_tip|ignoreall">No changes will be made to the current selection, and every time the same selection is detected it will be skipped automatically.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -520,6 +587,11 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="replace-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaconversiondialog|extended_tip|replace">Replaces the selection with the suggested characters or word according to the format options.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -534,6 +606,11 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="replaceall-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaconversiondialog|extended_tip|replaceall">Replaces the selection with the suggested characters or word according to the format options. Every time the same selection is detected it will be replaced automatically.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -550,6 +627,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="replacebychar-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaconversiondialog|extended_tip|replacebychar">Check to move character-by-character through the selected text. If not checked, full words are replaced.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -563,6 +645,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="options-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaconversiondialog|extended_tip|options">Opens the Hangul/Hanja Options dialog.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -591,5 +678,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="HangulHanjaConversionDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaconversiondialog|extended_tip|HangulHanjaConversionDialog">Converts the selected Korean text from Hangul to Hanja or from Hanja to Hangul.</property>
+      </object>
+    </child>
   </object>
 </interface>

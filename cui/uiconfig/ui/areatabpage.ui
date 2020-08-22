@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkBox" id="AreaTabPage">
@@ -34,6 +34,11 @@
                   <item id="rowid" translatable="yes" context="areatabpage|tablelb">Row</item>
                   <item id="tableid" translatable="yes" context="areatabpage|tablelb">Table</item>
                 </items>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="tablelb-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="areatabpage|extended_tip|tablelb">Set the fill options for the selected drawing object or document element.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -47,6 +52,11 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="btnnone-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="areatabpage|extended_tip|btnnone">Do not fill the selected object.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -60,6 +70,11 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="btncolor-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="areatabpage|extended_tip|btncolor">Fills the object with a gradient selected on this page.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -73,6 +88,11 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="btngradient-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="areatabpage|extended_tip|btngradient">Fills the object with a gradient selected on this page.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -86,6 +106,11 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="btnbitmap-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="areatabpage|extended_tip|btnbitmap">Fills the object with a hatching pattern selected on this page.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -99,6 +124,11 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="btnpattern-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="areatabpage|extended_tip|btnpattern">Fills the object with a hatching pattern selected on this page.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -112,6 +142,11 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="btnhatch-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="areatabpage|extended_tip|btnhatch">Fills the object with a hatching pattern selected on this page.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -160,6 +195,11 @@
         <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="AreaTabPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="areatabpage|extended_tip|AreaTabPage">Set the fill options for the selected drawing object or document element.</property>
+      </object>
     </child>
   </object>
 </interface>

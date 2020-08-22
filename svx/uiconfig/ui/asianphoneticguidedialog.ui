@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="AsianPhoneticGuideDialog">
@@ -9,9 +9,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -150,6 +147,7 @@
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="Left2ED-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="asianphoneticguidedialog|Left2ED-atkobject">Base text</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="asianphoneticguidedialog|extended_tip|Left2ED">Displays the base text that you selected in the current file. If you want, you can modify the base text by entering new text here.</property>
                                   </object>
                                 </child>
                               </object>
@@ -163,6 +161,11 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="activates_default">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="Left1ED-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="asianphoneticguidedialog|extended_tip|Left1ED">Displays the base text that you selected in the current file. If you want, you can modify the base text by entering new text here.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -175,6 +178,11 @@
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
                                 <property name="activates_default">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="Right1ED-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="asianphoneticguidedialog|extended_tip|Right1ED">Enter the text that you want to use as a pronunciation guide for the base text.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -189,6 +197,7 @@
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="Right2ED-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="asianphoneticguidedialog|Right2ED-atkobject">Ruby text</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="asianphoneticguidedialog|extended_tip|Right2ED">Enter the text that you want to use as a pronunciation guide for the base text.</property>
                                   </object>
                                 </child>
                               </object>
@@ -205,6 +214,7 @@
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="Left3ED-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="asianphoneticguidedialog|Left3ED-atkobject">Base text</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="asianphoneticguidedialog|extended_tip|Left3ED">Displays the base text that you selected in the current file. If you want, you can modify the base text by entering new text here.</property>
                                   </object>
                                 </child>
                               </object>
@@ -221,6 +231,7 @@
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="Right3ED-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="asianphoneticguidedialog|Right3ED-atkobject">Ruby text</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="asianphoneticguidedialog|extended_tip|Right3ED">Enter the text that you want to use as a pronunciation guide for the base text.</property>
                                   </object>
                                 </child>
                               </object>
@@ -237,6 +248,7 @@
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="Right4ED-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="asianphoneticguidedialog|Right4ED-atkobject">Ruby text</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="asianphoneticguidedialog|extended_tip|Right4ED">Enter the text that you want to use as a pronunciation guide for the base text.</property>
                                   </object>
                                 </child>
                               </object>
@@ -253,6 +265,7 @@
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="Left4ED-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="asianphoneticguidedialog|Left4ED-atkobject">Base text</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="asianphoneticguidedialog|extended_tip|Left4ED">Displays the base text that you selected in the current file. If you want, you can modify the base text by entering new text here.</property>
                                   </object>
                                 </child>
                               </object>
@@ -332,6 +345,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="stylelb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="asianphoneticguidedialog|extended_tip|stylelb">Select a character style for the ruby text.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -345,6 +363,11 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="styles-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="asianphoneticguidedialog|extended_tip|styles">Opens the Styles deck of the Sidebar where you can select a character style for the ruby text.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -362,6 +385,11 @@
                       <item translatable="yes" context="asianphoneticguidedialog|adjustlb">0 1 0</item>
                       <item translatable="yes" context="asianphoneticguidedialog|adjustlb">1 2 1</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="adjustlb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="asianphoneticguidedialog|extended_tip|adjustlb">Select the horizontal alignment for the Ruby text.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -377,6 +405,11 @@
                       <item translatable="yes" context="asianphoneticguidedialog|positionlb">Bottom</item>
                       <item translatable="yes" context="asianphoneticguidedialog|positionlb">Right</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="positionlb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="asianphoneticguidedialog|extended_tip|positionlb">Select where you want to place the ruby text.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -453,5 +486,13 @@
       <action-widget response="-7">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="AsianPhoneticGuideDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="asianphoneticguidedialog|extended_tip|AsianPhoneticGuideDialog">Allows you to add comments next to Asian characters to serve as a pronunciation guide.</property>
+      </object>
+    </child>
   </object>
 </interface>

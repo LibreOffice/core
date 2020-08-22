@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -117,6 +117,11 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_stock">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="add-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="gradientpage|extended_tip|add">Adds a custom gradient to the current list. Specify the properties of your gradient, and then click this button</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -131,6 +136,11 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="modify-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="gradientpage|extended_tip|modify">Applies the current gradient properties to the selected gradient. If you want, you can save the gradient under a different name.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -224,6 +234,11 @@
                           <item translatable="yes" context="gradientpage|gradienttypelb">Quadratic</item>
                           <item translatable="yes" context="gradientpage|gradienttypelb">Square</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="gradienttypelb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="gradientpage|extended_tip|gradienttypelb">Select the gradient that you want to apply.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -327,6 +342,11 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="adjustment">percentadjustment3</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="centerxmtr-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="gradientpage|extended_tip|centerxmtr">Enter the horizontal offset for the gradient, where 0% corresponds to the current horizontal location of the endpoint color in the gradient. The endpoint color is the color that is selected in the To Color box.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">True</property>
@@ -340,6 +360,11 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="adjustment">percentadjustment4</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="centerymtr-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="gradientpage|extended_tip|centerymtr">Enter the vertical offset for the gradient, where 0% corresponds to the current vertical location of the endpoint color in the gradient. The endpoint color is the color that is selected in the To Color box.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">True</property>
@@ -402,6 +427,11 @@
                         <property name="can_focus">True</property>
                         <property name="halign">end</property>
                         <property name="adjustment">percentadjustment</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="bordermtr-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="gradientpage|extended_tip|bordermtr">Enter the amount by which you want to adjust the area of the endpoint color on the gradient. The endpoint color is the color that is selected in the To Color box.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -413,6 +443,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="adjustment">angleadjustment</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="anglemtr-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="gradientpage|extended_tip|anglemtr">Enter a rotation angle for the selected gradient.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -440,6 +475,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="adjustment">percentadjustment2</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="colortomtr-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="gradientpage|extended_tip|colortomtr">Enter the intensity for the color in the To Color box, where 0% corresponds to black, and 100 % to the selected color.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -453,9 +493,13 @@
                         <property name="receives_default">False</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
-                        <property name="label" translatable="no"></property>
                         <child>
                           <placeholder/>
+                        </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="colortolb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="gradientpage|extended_tip|colortolb">Select a color for the endpoint of the gradient.</property>
+                          </object>
                         </child>
                       </object>
                       <packing>
@@ -485,9 +529,13 @@
                         <property name="receives_default">False</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
-                        <property name="label" translatable="no"></property>
                         <child>
                           <placeholder/>
+                        </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="colorfromlb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="gradientpage|extended_tip|colorfromlb">Select a color for the beginning point of the gradient.</property>
+                          </object>
                         </child>
                       </object>
                       <packing>
@@ -500,6 +548,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="adjustment">percentadjustment1</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="colorfrommtr-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="gradientpage|extended_tip|colorfrommtr">Enter the intensity for the color in the From Color box, where 0% corresponds to black, and 100 % to the selected color.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -699,6 +752,11 @@
         <property name="pack_type">end</property>
         <property name="position">2</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="GradientPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="gradientpage|extended_tip|GradientPage">Select a gradient, modify the properties of a gradient, or save a new gradient.</property>
+      </object>
     </child>
   </object>
 </interface>

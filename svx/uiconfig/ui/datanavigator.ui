@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.2 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkMenu" id="instancesmenu">
@@ -11,6 +11,11 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="datanavigator|instancesadd">_Add...</property>
         <property name="use_underline">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="instancesadd-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="datanavigator|extended_tip|instancesadd">Opens a dialog where you can add a new instance.</property>
+          </object>
+        </child>
       </object>
     </child>
     <child>
@@ -19,6 +24,11 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="datanavigator|instancesedit">_Edit...</property>
         <property name="use_underline">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="instancesedit-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="datanavigator|extended_tip|instancesedit">Opens a dialog where you can modify the current instance.</property>
+          </object>
+        </child>
       </object>
     </child>
     <child>
@@ -27,6 +37,11 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="datanavigator|instancesremove">_Remove...</property>
         <property name="use_underline">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="instancesremove-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="datanavigator|extended_tip|instancesremove">Deletes the current instance. You cannot delete the last instance.</property>
+          </object>
+        </child>
       </object>
     </child>
     <child>
@@ -41,6 +56,11 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="datanavigator|instancesdetails">_Show Details</property>
         <property name="use_underline">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="instancesdetails-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="datanavigator|extended_tip|instancesdetails">Switches the display to show or hide details.</property>
+          </object>
+        </child>
       </object>
     </child>
   </object>
@@ -53,6 +73,11 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="datanavigator|modelsadd">_Add...</property>
         <property name="use_underline">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="modelsadd-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="datanavigator|extended_tip|modelsadd">Opens the Add Model dialog where you can add an XForm model.</property>
+          </object>
+        </child>
       </object>
     </child>
     <child>
@@ -61,6 +86,11 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="datanavigator|modelsedit">_Edit...</property>
         <property name="use_underline">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="modelsedit-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="datanavigator|extended_tip|modelsedit">Renames the selected Xform model.</property>
+          </object>
+        </child>
       </object>
     </child>
     <child>
@@ -69,6 +99,11 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="datanavigator|modelsremove">_Remove</property>
         <property name="use_underline">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="modelsremove-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="datanavigator|extended_tip|modelsremove">Deletes the selected XForm model. You cannot delete the last model.</property>
+          </object>
+        </child>
       </object>
     </child>
   </object>
@@ -96,6 +131,11 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="modelslist-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="datanavigator|extended_tip|modelslist">Selects the XForms model that you want to use.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -115,6 +155,11 @@
                 <property name="use_popover">False</property>
                 <child>
                   <placeholder/>
+                </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="modelsbutton-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="datanavigator|extended_tip|modelsbutton">Adds, renames, and removes XForms models.</property>
+                  </object>
                 </child>
               </object>
               <packing>
@@ -295,6 +340,11 @@
             <child>
               <placeholder/>
             </child>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="instances-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="datanavigator|extended_tip|instances">This button has submenus to add, edit or remove instances.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -308,6 +358,11 @@
         <property name="fill">True</property>
         <property name="position">0</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="DataNavigator-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="datanavigator|extended_tip|DataNavigator">Specifies the data structure of the current XForms document.</property>
+      </object>
     </child>
   </object>
 </interface>

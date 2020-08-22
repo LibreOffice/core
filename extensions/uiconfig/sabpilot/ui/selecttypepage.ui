@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="pcr">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkGrid" id="SelectTypePage">
@@ -21,7 +21,7 @@ This wizard helps you create the data source.</property>
         <property name="yalign">0</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="label2-atkobject">
-            <property name="AtkObject::accessible-role" translatable="no">static</property>
+            <property name="AtkObject::accessible-role">static</property>
           </object>
         </child>
       </object>
@@ -45,6 +45,11 @@ This wizard helps you create the data source.</property>
             <property name="xalign">0</property>
             <property name="active">True</property>
             <property name="draw_indicator">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="evolution-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="selecttypepage|extended_tip|evolution">Select this option if you already use an address book in Evolution.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -61,6 +66,11 @@ This wizard helps you create the data source.</property>
             <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
             <property name="group">evolution</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="groupwise-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="selecttypepage|extended_tip|groupwise">Select this option if you already use an address book in Groupwise.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -77,6 +87,11 @@ This wizard helps you create the data source.</property>
             <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
             <property name="group">evolution</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="evoldap-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="selecttypepage|extended_tip|evoldap">Select this option if you already use an address book in Evolution LDAP.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -93,6 +108,11 @@ This wizard helps you create the data source.</property>
             <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
             <property name="group">evolution</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="firefox-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="selecttypepage|extended_tip|firefox">Select this option if you already use an address book in Firefox or Iceweasel.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -109,6 +129,11 @@ This wizard helps you create the data source.</property>
             <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
             <property name="group">evolution</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="thunderbird-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="selecttypepage|extended_tip|thunderbird">Select this option if you already use an address book in Thunderbird or Icedove.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -125,6 +150,11 @@ This wizard helps you create the data source.</property>
             <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
             <property name="group">evolution</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="kde-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="selecttypepage|extended_tip|kde">Select this option if you already use an address book in KDE Address book.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -141,6 +171,11 @@ This wizard helps you create the data source.</property>
             <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
             <property name="group">evolution</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="macosx-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="selecttypepage|extended_tip|macosx">Select this option if you already use an address book in macOS Address book.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -157,6 +192,11 @@ This wizard helps you create the data source.</property>
             <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
             <property name="group">evolution</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="other-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="selecttypepage|extended_tip|other">Select this option if you want to register another data source as address book in %PRODUCTNAME.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -170,7 +210,7 @@ This wizard helps you create the data source.</property>
             <property name="label" translatable="yes" context="selecttypepage|label1">Select the type of your external address book:</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="label1-atkobject">
-                <property name="AtkObject::accessible-role" translatable="no">static</property>
+                <property name="AtkObject::accessible-role">static</property>
               </object>
             </child>
           </object>
@@ -184,6 +224,11 @@ This wizard helps you create the data source.</property>
         <property name="left_attach">0</property>
         <property name="top_attach">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="SelectTypePage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="selecttypepage|extended_tip|SelectTypePage">This wizard registers an existing address book as a data source in %PRODUCTNAME.</property>
+      </object>
     </child>
   </object>
 </interface>

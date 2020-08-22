@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -67,6 +67,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="BTN_IMPORT-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="bitmaptabpage|extended_tip|BTN_IMPORT">Locate the bitmap that you want to import, and then click Open. The bitmap is added to the end of the list of available bitmaps.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -596,6 +601,11 @@
         <property name="pack_type">end</property>
         <property name="position">2</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="BitmapTabPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="bitmaptabpage|extended_tip|BitmapTabPage">Select a bitmap that you want to use as a fill image, or add your own bitmap pattern.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup">

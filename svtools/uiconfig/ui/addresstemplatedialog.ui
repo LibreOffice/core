@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="svt">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="AddressTemplateDialog">
@@ -11,9 +11,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -142,6 +139,11 @@
                                 <property name="activates_default">True</property>
                               </object>
                             </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="datasource-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="addresstemplatedialog|extended_tip|datasource">Select the data source for your address book.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -160,6 +162,11 @@
                                 <property name="activates_default">True</property>
                               </object>
                             </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="datatable-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="addresstemplatedialog|extended_tip|datatable">Select the data table for your address book.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -173,6 +180,11 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="use_underline">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="admin-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="addresstemplatedialog|extended_tip|admin">Add a new data source to the Address Book Source list.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -253,7 +265,7 @@
                                           <object class="GtkLabel" id="label0">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="label" translatable="no">label</property>
+                                            <property name="label">label</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">box0</property>
                                             <property name="xalign">1</property>
@@ -278,7 +290,7 @@
                                           <object class="GtkLabel" id="label2">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="label" translatable="no">label</property>
+                                            <property name="label">label</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">box2</property>
                                             <property name="xalign">1</property>
@@ -292,7 +304,7 @@
                                           <object class="GtkLabel" id="label4">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="label" translatable="no">label</property>
+                                            <property name="label">label</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">box4</property>
                                             <property name="xalign">1</property>
@@ -306,7 +318,7 @@
                                           <object class="GtkLabel" id="label6">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="label" translatable="no">label</property>
+                                            <property name="label">label</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">box6</property>
                                             <property name="xalign">1</property>
@@ -320,7 +332,7 @@
                                           <object class="GtkLabel" id="label8">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="label" translatable="no">label</property>
+                                            <property name="label">label</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">box8</property>
                                             <property name="xalign">1</property>
@@ -392,7 +404,7 @@
                                           <object class="GtkLabel" id="label1">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="label" translatable="no">label</property>
+                                            <property name="label">label</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">box1</property>
                                             <property name="xalign">1</property>
@@ -417,7 +429,7 @@
                                           <object class="GtkLabel" id="label3">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="label" translatable="no">label</property>
+                                            <property name="label">label</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">box3</property>
                                             <property name="xalign">1</property>
@@ -431,7 +443,7 @@
                                           <object class="GtkLabel" id="label5">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="label" translatable="no">label</property>
+                                            <property name="label">label</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">box5</property>
                                             <property name="xalign">1</property>
@@ -445,7 +457,7 @@
                                           <object class="GtkLabel" id="label7">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="label" translatable="no">label</property>
+                                            <property name="label">label</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">box7</property>
                                             <property name="xalign">1</property>
@@ -459,7 +471,7 @@
                                           <object class="GtkLabel" id="label9">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="label" translatable="no">label</property>
+                                            <property name="label">label</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">box9</property>
                                             <property name="xalign">1</property>
@@ -543,6 +555,11 @@
                     </attributes>
                   </object>
                 </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="assign-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="addresstemplatedialog|extended_tip|assign">Select the field in the data table that corresponds to the address book entry.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -563,5 +580,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="AddressTemplateDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="addresstemplatedialog|extended_tip|AddressTemplateDialog">Edit the field assignments and the data source for your address book.</property>
+      </object>
+    </child>
   </object>
 </interface>

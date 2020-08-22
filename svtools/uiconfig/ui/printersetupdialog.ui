@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="svt">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="PrinterSetupDialog">
@@ -41,6 +41,11 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="options-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="printersetupdialog|extended_tip|options">Opens the Printer Options dialog where you can override the global printer options set on the Tools - Options - %PRODUCTNAME Writer/Web - Print panel for the current document.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -221,6 +226,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="properties-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="printersetupdialog|extended_tip|properties">Changes the printer settings of your operating system for the current document.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -232,6 +242,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="name-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="printersetupdialog|extended_tip|name">Lists the installed printers on your operating system. To change the default printer, select a printer name from the list.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -266,8 +281,13 @@
       <action-widget response="-5">ok</action-widget>
       <action-widget response="-6">cancel</action-widget>
     </action-widgets>
-    <child>
+    <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="PrinterSetupDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="printersetupdialog|extended_tip|PrinterSetupDialog">Select the default printer for the current document.</property>
+      </object>
     </child>
   </object>
 </interface>

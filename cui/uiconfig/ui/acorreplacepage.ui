@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -34,6 +34,11 @@
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="use_stock">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="new-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="acorreplacepage|extended_tip|new">Adds or replaces an entry in the replacement table.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -49,6 +54,11 @@
             <property name="receives_default">True</property>
             <property name="no_show_all">True</property>
             <property name="use_underline">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="replace-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="acorreplacepage|extended_tip|replace">Adds or replaces an entry in the replacement table.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -63,6 +73,11 @@
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="use_stock">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="delete-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="acorreplacepage|extended_tip|delete">Deletes the selected element or elements without requiring confirmation.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -125,6 +140,11 @@
                 </child>
               </object>
             </child>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="tabview-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="acorreplacepage|extended_tip|tabview">Lists the entries for automatically replacing words, abbreviations or word parts while you type. To add an entry, enter text in the Replace and With boxes, and then click New. To edit an entry, select it, change the text in the With box, and then click Replace. To delete an entry, select it, and then click Delete.</property>
+              </object>
+            </child>
           </object>
         </child>
       </object>
@@ -140,6 +160,11 @@
         <property name="can_focus">True</property>
         <property name="hexpand">True</property>
         <property name="width_chars">25</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="newtext-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="acorreplacepage|extended_tip|newtext">Enter the replacement text, graphic, frame, or OLE object that you want to replace the text in the Replace box. If you have selected text, a graphic, a frame, or an OLE object in your document, the relevant information is already entered here.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -152,6 +177,11 @@
         <property name="can_focus">True</property>
         <property name="hexpand">True</property>
         <property name="width_chars">25</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="origtext-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="acorreplacepage|extended_tip|origtext">Enter the word, abbreviation or word part that you want to replace while you type. Wildcard character sequence .* in the end of word results the replacement of the word before arbitrary suffixes, too. Wildcard character sequence .* before the word results the replacement after arbitrary prefixes, too. For example, the pattern "i18n.*" with the replacement text "internationalization" finds and replaces "i18ns" with "internationalizations", or the pattern ".*..." with the replacement text "…" finds and replaces three dots in "word..." with the typographically correct precomposed Unicode horizontal ellipsis ("word…").</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -201,6 +231,11 @@
         <property name="use_underline">True</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="textonly-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="acorreplacepage|extended_tip|textonly">Saves the entry in the With box without formatting. When the replacement is made, the text uses the same format as the document text.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -209,6 +244,11 @@
     </child>
     <child>
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="AcorReplacePage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="acorreplacepage|extended_tip|AcorReplacePage">Edits the replacement table for automatically correcting or replacing words or abbreviations in your document.</property>
+      </object>
     </child>
   </object>
 </interface>

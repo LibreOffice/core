@@ -278,6 +278,11 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="delete-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="optsortlists|extended_tip|delete">Deletes the selected element or elements without requiring confirmation.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>

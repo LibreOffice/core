@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="PasswordDialog">
@@ -122,6 +122,11 @@
                             <property name="visibility">False</property>
                             <property name="activates_default">True</property>
                             <property name="input_purpose">password</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="oldpassEntry-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="passwd|extended_tip|oldpassEntry">Enter the current password for the selected library.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -179,6 +184,11 @@
                             <property name="visibility">False</property>
                             <property name="activates_default">True</property>
                             <property name="input_purpose">password</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="newpassEntry-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="passwd|extended_tip|newpassEntry">Enter a new password for the selected library.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -193,6 +203,11 @@
                             <property name="visibility">False</property>
                             <property name="activates_default">True</property>
                             <property name="input_purpose">password</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="confirmpassEntry-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="passwd|extended_tip|confirmpassEntry">Reenter the new password for the selected library.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -262,8 +277,13 @@
       <action-widget response="-5">ok</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
+    <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="PasswordDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="passwd|extended_tip|PasswordDialog">Protects the selected library with a password.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

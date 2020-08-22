@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustmentIndent">
@@ -78,6 +78,11 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentSpinDegrees</property>
                         <property name="wrap">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="spinDegrees-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="cellalignment|extended_tip|spinDegrees">Enter the rotation angle from 0 to 360 for the text in the selected cell(s).</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -90,6 +95,11 @@
                         <property name="can_focus">False</property>
                         <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
                         <property name="halign">start</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="references-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="cellalignment|extended_tip|references">Specify the cell edge from which to write the rotated text.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -117,6 +127,11 @@
                         <property name="xalign">0.019999999552965164</property>
                         <property name="inconsistent">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="checkVertStack-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="cellalignment|extended_tip|checkVertStack">Aligns text vertically.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -134,6 +149,11 @@
                         <property name="xalign">0.5</property>
                         <property name="inconsistent">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="checkAsianMode-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="cellalignment|extended_tip|checkAsianMode">Aligns Asian characters one below the other in the selected cell(s). If the cell contains more than one line of text, the lines are converted to text columns that are arranged from right to left. Western characters in the converted text are rotated 90 degrees to the right. Asian characters are not rotated.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -153,6 +173,11 @@
                     <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="dialcontrol-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="cellalignment|extended_tip|dialcontrol">Click in the dial to set the text orientation.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -213,6 +238,11 @@
                     <property name="xalign">0</property>
                     <property name="inconsistent">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="checkWrapTextAuto-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="cellalignment|extended_tip|checkWrapTextAuto">Wraps text onto another line at the cell border. The number of lines depends on the width of the cell.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -229,6 +259,11 @@
                     <property name="xalign">0</property>
                     <property name="inconsistent">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="checkShrinkFitCellSize-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="cellalignment|extended_tip|checkShrinkFitCellSize">Reduces the apparent size of the font so that the contents of the cell fit into the current cell width. You cannot apply this command to a cell that contains line breaks.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -247,6 +282,11 @@
                     <property name="xalign">0</property>
                     <property name="inconsistent">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="checkHyphActive-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="cellalignment|extended_tip|checkHyphActive">Enables word hyphenation for text wrapping to the next line.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -334,6 +374,11 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustmentIndent</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="spinIndentFrom-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="cellalignment|extended_tip|spinIndentFrom">Indents from the left edge of the cell by the amount that you enter.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -395,6 +440,11 @@
                       <item id="5" translatable="yes" context="cellalignment|liststoreHorzAlign">Filled</item>
                       <item id="6" translatable="yes" context="cellalignment|liststoreHorzAlign">Distributed</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="comboboxHorzAlign-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="cellalignment|extended_tip|comboboxHorzAlign">Select the horizontal alignment option that you want to apply to the cell contents.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -413,6 +463,11 @@
                       <item id="4" translatable="yes" context="cellalignment|liststoreVertAlign">Justified</item>
                       <item id="5" translatable="yes" context="cellalignment|liststoreVertAlign">Distributed</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="comboboxVertAlign-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="cellalignment|extended_tip|comboboxVertAlign">Select the vertical alignment option that you want to apply to the cell contents.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -499,6 +554,11 @@
         <property name="left_attach">0</property>
         <property name="top_attach">3</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="CellAlignPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="cellalignment|extended_tip|CellAlignPage">Sets the alignment options for the contents of the current cell, or the selected cells.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroupLabel">

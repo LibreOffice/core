@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.2 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTextBuffer" id="textbuffer1">
@@ -106,6 +106,11 @@
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
                 <property name="width_chars">55</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="object_title_entry-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="objecttitledescdialog|extended_tip|object_title_entry">Enter a title text. This short name is visible as an alternative tag in HTML format. Accessibility tools can read this text.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -138,6 +143,11 @@
                     <property name="can_focus">True</property>
                     <property name="wrap_mode">word</property>
                     <property name="buffer">textbuffer1</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="desc_entry-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="objecttitledescdialog|extended_tip|desc_entry">Enter a description text. The long description text can be entered to describe a complex object or group of objects to users with screen reader software. The description is visible as an alternative tag for accessibility tools.</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -161,8 +171,13 @@
       <action-widget response="-5">ok</action-widget>
       <action-widget response="-6">cancel</action-widget>
     </action-widgets>
-    <child>
+    <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="ObjectTitleDescDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="objecttitledescdialog|extended_tip|ObjectTitleDescDialog">Assigns a title and a description to the selected object. These are accessible for accessibility tools and as alternative tags when you export the document.</property>
+      </object>
     </child>
   </object>
 </interface>

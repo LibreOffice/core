@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="vcl">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="MoreOptionsDialog">
@@ -10,9 +10,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="box">
         <property name="can_focus">False</property>
@@ -74,6 +71,11 @@
                 <property name="receives_default">False</property>
                 <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="singlejobs-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="moreoptionsdialog|extended_tip|singlejobs">Check to not rely on the printer to create collated copies but create a print job for each copy instead.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -89,6 +91,9 @@
           </packing>
         </child>
       </object>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
     </child>
   </object>
 </interface>

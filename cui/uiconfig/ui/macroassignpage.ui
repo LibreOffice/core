@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore3">
@@ -94,6 +94,11 @@
                         </child>
                       </object>
                     </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="assignments-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="macroassignpage|extended_tip|assignments">The big list box lists the events and the assigned macros. After you selected the location in the Save In list box, select an event in the big list box. Then click Assign Macro.</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -142,6 +147,11 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="assign-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="macroassignpage|extended_tip|assign">Opens the Macro Selector to assign a macro to the selected event.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -170,6 +180,11 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="delete-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="macroassignpage|extended_tip|delete">Deletes the macro or component assignment for the selected event.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -196,6 +211,11 @@
         <property name="left_attach">1</property>
         <property name="top_attach">0</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="MacroAssignPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="macroassignpage|extended_tip|MacroAssignPage">Assigns macros to program events. The assigned macro runs automatically every time the selected event occurs.</property>
+      </object>
     </child>
   </object>
 </interface>
