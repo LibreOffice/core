@@ -79,7 +79,7 @@ void LwpDocData::Read()
     m_DocOptions.encrypt1password.Read(m_pObjStrm.get());
     //cEncrypt2Password
     m_DocOptions.encrypt2password.Read(m_pObjStrm.get());
-    //cCharecterSet
+    //cCharacterSet
     m_DocOptions.characterSet.Read(m_pObjStrm.get());
     //cGrammerSet
     m_DocOptions.grammerSet.Read(m_pObjStrm.get());
