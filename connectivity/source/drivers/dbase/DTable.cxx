@@ -2271,13 +2271,13 @@ void SAL_CALL ODbaseTable::rename( const OUString& newName )
 }
 namespace
 {
-    void renameFile(file::OConnection const * _pConenction,const OUString& oldName,
+    void renameFile(file::OConnection const * _pConnection,const OUString& oldName,
                     const OUString& newName,const OUString& _sExtension)
     {
-        OUString aName = ODbaseTable::getEntry(_pConenction,oldName);
+        OUString aName = ODbaseTable::getEntry(_pConnection,oldName);
         if(aName.isEmpty())
         {
-            OUString aIdent = _pConenction->getContent()->getIdentifier()->getContentIdentifier();
+            OUString aIdent = _pConnection->getContent()->getIdentifier()->getContentIdentifier();
             if ( aIdent.lastIndexOf('/') != (aIdent.getLength()-1) )
                 aIdent += "/";
             aIdent += oldName;
