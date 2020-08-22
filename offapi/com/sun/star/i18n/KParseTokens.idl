@@ -136,8 +136,8 @@ published constants KParseTokens
     const long UNI_OTHER            = 0x20000000;
 
     /** Only valid for <em>nStartCharFlags</em> parameter to
-        ChararacterClassification::parseAnyToken() and
-        ChararacterClassification::parsePredefinedToken(),
+        CharacterClassification::parseAnyToken() and
+        CharacterClassification::parsePredefinedToken(),
         ignored on <em>nContCharFlags</em> parameter.
         <strong>Not</strong> set in ParseResult. */
     const long IGNORE_LEADING_WS    = 0x40000000;
