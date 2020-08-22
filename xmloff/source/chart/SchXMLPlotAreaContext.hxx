@@ -166,8 +166,15 @@ class SchXMLDataLabelContext: public SvXMLImportContext
 {
 private:
     ::std::vector<OUString>& mrLabels;
+    DataRowPointStyle& mrDataLabelStyle; // for the style associated with element <chart:data-label>
 public:
-    SchXMLDataLabelContext( SvXMLImport& rImport, const OUString& rLocalName, ::std::vector<OUString>& rLabels);
+    SchXMLDataLabelContext(SvXMLImport& rImport, const OUString& rLocalName,
+                            ::std::vector<OUString>& rLabels,
+                            DataRowPointStyle& rDataLabelStyle);
+
+    virtual void SchXMLDataLabelContext::StartElement(
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList) override;
+
     virtual SvXMLImportContextRef CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
@@ -182,6 +189,9 @@ private:
     bool mbHasLabelParagraph = false;
     sal_Int32& mrIndex;
     DataRowPointStyle mDataPoint;
+    // There exists no distinct service for data labels, but all properties for data label belong to
+    // to the data point. They will be merged in SchXMLSeries2Context::setStylesToDataPoints
+    DataRowPointStyle mDataLabelStyle; // for style of <chart:data-label> element
 
 public:
     SchXMLDataPointContext(  SchXMLImportHelper& rImportHelper,
