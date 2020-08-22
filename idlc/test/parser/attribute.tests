@@ -182,7 +182,7 @@ interface I1 {
 
 EXPECT FAILURE "attribute.tests 21":
 interface I1 {
-    [attribute, maybeambigious] long a;
+    [attribute, maybeambiguous] long a;
 };
 
 

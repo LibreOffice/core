@@ -293,8 +293,8 @@ static const char* parseStateToMessage(ParseState state)
         return "Illegal syntax after CONSTRAINED keyword";
     case PS_TransientSeen:
         return "Illegal syntax after TRANSIENT keyword";
-    case PS_MayBeAmbigiousSeen:
-        return "Illegal syntax after MAYBEAMBIGIOUS keyword";
+    case PS_MayBeAmbiguousSeen:
+        return "Illegal syntax after MAYBEAMBIGUOUS keyword";
     case PS_MayBeDefaultSeen:
         return "Illegal syntax after MAYBEDEFAULT keyword";
     case PS_RemoveableSeen:

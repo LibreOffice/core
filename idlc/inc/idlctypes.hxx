@@ -154,7 +154,7 @@ enum ParseState
     PS_BoundSeen,           // Seen BOUND  keyword
     PS_ConstrainedSeen,     // Seen CONSTRAINED keyword
     PS_TransientSeen,       // Seen TRANSIENT keyword
-    PS_MayBeAmbigiousSeen,  // Seen MAYBEAMBIGIOUS keyword
+    PS_MayBeAmbiguousSeen,  // Seen MAYBEAMBIGUOUS keyword
     PS_MayBeDefaultSeen,    // Seen MAYBEDEFAULT keyword
     PS_RemoveableSeen,      // Seen REMOVABLE keyword
 

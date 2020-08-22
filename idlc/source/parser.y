@@ -805,7 +805,7 @@ opt_attrflag :
     }
     | IDL_MAYBEAMBIGUOUS
     {
-        idlc()->setParseState(PS_MayBeAmbigiousSeen);
+        idlc()->setParseState(PS_MayBeAmbiguousSeen);
         $$ = AF_MAYBEAMBIGUOUS;
     }
     | IDL_MAYBEDEFAULT
