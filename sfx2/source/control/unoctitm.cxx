@@ -1017,7 +1017,8 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
         aEvent.FeatureURL.Path == "AlignDown" ||
         aEvent.FeatureURL.Path == "TraceChangeMode" ||
         aEvent.FeatureURL.Path == "FormatPaintbrush" ||
-        aEvent.FeatureURL.Path == "FreezePanes")
+        aEvent.FeatureURL.Path == "FreezePanes" ||
+        aEvent.FeatureURL.Path == "Sidebar")
     {
         bool bTemp = false;
         aEvent.State >>= bTemp;
