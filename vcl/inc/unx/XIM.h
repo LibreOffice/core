@@ -104,7 +104,7 @@ typedef struct {
 
 /* XIC attributes for multilingual IM extension */
 
-#define XNUnicodeCharacterSubset "UnicodeChararcterSubset"
+#define XNUnicodeCharacterSubset "UnicodeCharacterSubset"
 
 #endif
 
