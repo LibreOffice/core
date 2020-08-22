@@ -37,7 +37,7 @@ NumberFormatPropertyPanel::NumberFormatPropertyPanel(
     : PanelLayout(pParent,"NumberFormatPropertyPanel", "modules/scalc/ui/sidebarnumberformat.ui", rxFrame)
     , mxLbCategory(m_xBuilder->weld_combo_box("numberformatcombobox"))
     , mxTBCategory(m_xBuilder->weld_toolbar("numberformat"))
-    , mxCatagoryDispatch(new ToolbarUnoDispatcher(*mxTBCategory, *m_xBuilder, rxFrame))
+    , mxCategoryDispatch(new ToolbarUnoDispatcher(*mxTBCategory, *m_xBuilder, rxFrame))
     , mxFtDecimals(m_xBuilder->weld_label("decimalplaceslabel"))
     , mxEdDecimals(m_xBuilder->weld_spin_button("decimalplaces"))
     , mxFtDenominator(m_xBuilder->weld_label("denominatorplaceslabel"))
@@ -64,7 +64,7 @@ NumberFormatPropertyPanel::~NumberFormatPropertyPanel()
 void NumberFormatPropertyPanel::dispose()
 {
     mxLbCategory.reset();
-    mxCatagoryDispatch.reset();
+    mxCategoryDispatch.reset();
     mxTBCategory.reset();
     mxFtDecimals.reset();
     mxEdDecimals.reset();

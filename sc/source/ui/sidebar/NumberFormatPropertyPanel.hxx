@@ -67,7 +67,7 @@ private:
     //ui controls
     std::unique_ptr<weld::ComboBox> mxLbCategory;
     std::unique_ptr<weld::Toolbar> mxTBCategory;
-    std::unique_ptr<ToolbarUnoDispatcher> mxCatagoryDispatch;
+    std::unique_ptr<ToolbarUnoDispatcher> mxCategoryDispatch;
     std::unique_ptr<weld::Label> mxFtDecimals;
     std::unique_ptr<weld::SpinButton> mxEdDecimals;
     std::unique_ptr<weld::Label> mxFtDenominator;
