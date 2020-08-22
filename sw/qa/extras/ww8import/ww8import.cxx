@@ -123,12 +123,12 @@ DECLARE_WW8IMPORT_TEST(testTdf112535, "tdf112535.doc")
     CPPUNIT_ASSERT(!pFormat->GetSurround().IsContour());
 }
 
-DECLARE_WW8IMPORT_TEST(testTdf106291, "tdf106291.doc")
+DECLARE_WW8EXPORT_TEST(testTdf106291, "tdf106291.doc")
 {
     // Table cell was merged vertically instead of horizontally -> had incorrect dimensions
     OUString cellWidth = parseDump("/root/page[1]/body/tab/row/cell[1]/infos/bounds", "width");
     OUString cellHeight = parseDump("/root/page[1]/body/tab/row/cell[1]/infos/bounds", "height");
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(8660), cellWidth.toInt32());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8650), cellWidth.toInt32());
     CPPUNIT_ASSERT(cellHeight.toInt32() > 200); // height might depend on font size
 }
 
@@ -218,7 +218,7 @@ DECLARE_WW8IMPORT_TEST(testTdf106799, "tdf106799.doc")
     CPPUNIT_ASSERT(pViewShell);
     pViewShell->Reformat();
 
-    sal_Int32 const nCellWidths[3][4] = { { 9530, 0, 0, 0 },{ 2382, 2382, 2382, 2384 },{ 2382, 2382, 2382, 2384 } };
+    sal_Int32 const nCellWidths[3][4] = { { 9528, 0, 0, 0 },{ 2382, 2382, 2382, 2382 },{ 2382, 2382, 2382, 2382 } };
     sal_Int32 const nCellTxtLns[3][4] = { { 1, 0, 0, 0 },{ 1, 0, 0, 0},{ 1, 1, 1, 1 } };
     // Table was distorted because of missing sprmPFInnerTableCell at paragraph marks (0x0D) with sprmPFInnerTtp
     for (sal_Int32 nRow : { 0, 1, 2 })

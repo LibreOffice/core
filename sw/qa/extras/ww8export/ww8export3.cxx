@@ -233,7 +233,7 @@ DECLARE_WW8EXPORT_TEST(testTdf135672_tableGrows, "tdf135672_tableGrows.doc")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-101), getProperty<sal_Int32>(xTable, "LeftMargin"));
 
     // This would grow every round-trip. First time was 11118, next 11435
-    //CPPUNIT_ASSERT_EQUAL(sal_Int32(10800), getProperty<sal_Int32>(xTable, "Width"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10800), getProperty<sal_Int32>(xTable, "Width"));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf79435_legacyInputFields, "tdf79435_legacyInputFields.docx")
