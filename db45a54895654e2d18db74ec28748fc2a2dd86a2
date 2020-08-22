@@ -45,6 +45,30 @@
       "revId": "db45a54895654e2d18db74ec28748fc2a2dd86a2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34a2aa4a_35e04ebe",
+        "filename": "oox/source/drawingml/chart/chartspaceconverter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-08-22T16:11:11Z",
+      "side": 1,
+      "message": "(I have just recognized, that \"mon\" came from member+optional+numerical, according to axismodel.hxx.)",
+      "parentUuid": "9d8d2f85_872fc325",
+      "range": {
+        "startLine": 212,
+        "startChar": 13,
+        "endLine": 212,
+        "endChar": 29
+      },
+      "revId": "db45a54895654e2d18db74ec28748fc2a2dd86a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
