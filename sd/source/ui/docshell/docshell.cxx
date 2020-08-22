@@ -178,7 +178,15 @@ DrawDocShell::~DrawDocShell()
 
     mbInDestruction = true;
 
-    SetDocShellFunction(nullptr);
+    if (mpViewShell)
+    {
+        auto* pView = mpViewShell->GetView();
+        if (pView)
+        {
+            auto & pSearchContext = pView->getSearchContext();
+            pSearchContext.resetSearchFunction();
+        }
+    }
 
     mpFontList.reset();
 
@@ -387,9 +395,14 @@ void DrawDocShell::UpdateTablePointers()
 
 void DrawDocShell::CancelSearching()
 {
-    if( dynamic_cast<FuSearch*>( mxDocShellFunction.get() ) )
+    if (mpViewShell)
     {
-        SetDocShellFunction(nullptr);
+        auto* pView = mpViewShell->GetView();
+        if (pView)
+        {
+            auto & pSearchContext = pView->getSearchContext();
+            pSearchContext.resetSearchFunction();
+        }
     }
 }
 
