@@ -882,13 +882,13 @@ void ORowSetCache::moveWindow()
             ORowSetMatrix::iterator aNewEnd (aEnd + nStartPosOffset);
             // *m_pMatrix now looks like:
             //   [0; nOverlapSize) i.e. [begin(); aEnd): data kept
-            //   [nOverlapSize; nOverlapSize + nStartPosOffet) i.e. [aEnd, aNewEnd): new data of positions < old m_nStartPos
-            //   [nOverlapSize + nStartPosOffet; size()) i.e. [aNewEnd, end()): unused
-            // Note that nOverlapSize + nStartPosOffet == m_nEndPos - m_nStartPos (new values)
+            //   [nOverlapSize; nOverlapSize + nStartPosOffset) i.e. [aEnd, aNewEnd): new data of positions < old m_nStartPos
+            //   [nOverlapSize + nStartPosOffset; size()) i.e. [aNewEnd, end()): unused
+            // Note that nOverlapSize + nStartPosOffset == m_nEndPos - m_nStartPos (new values)
             // When we are finished:
             //   [0; nStartPosOffset) i.e. [begin(); aEnd): new data of positions < old m_nStartPos
-            //   [nStartPosOffset; nOverlapSize + nStartPosOffet) i.e. [aEnd, aNewEnd): kept
-            //   [nOverlapSize + nStartPosOffet; size()) i.e. [aNewEnd, end()): unused
+            //   [nStartPosOffset; nOverlapSize + nStartPosOffset) i.e. [aEnd, aNewEnd): kept
+            //   [nOverlapSize + nStartPosOffset; size()) i.e. [aNewEnd, end()): unused
 
             if ( bCheck )
             {
