@@ -1772,7 +1772,6 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
     m_nDefaultSwCols(0),
     m_nBands(0),
     m_nMinLeft(0),
-    m_nConvertedLeft(0),
     m_nMaxRight(0),
     m_nSwWidth(0),
     m_nPreferredWidth(0),
@@ -2231,9 +2230,7 @@ void WW8TabDesc::CalcDefaults()
     // Non existent cells can reduce the number of columns.
 
     // 3. pass: Replace border with defaults if needed
-    m_nConvertedLeft = m_nMinLeft;
-
-    short nLeftMaxThickness = 0, nRightMaxThickness=0;
+    short nRightMaxThickness=0;
     for( pR = m_pFirstBand ; pR; pR = pR->pNextBand )
     {
         if( !pR->pTCs )
@@ -2292,26 +2289,10 @@ void WW8TabDesc::CalcDefaults()
                 if (nThickness > nRightMaxThickness)
                     nRightMaxThickness = nThickness;
             }
-
-            /*
-            The left space of the table is in nMinLeft, but again this
-            does not consider the margin thickness to its left in the
-            placement value, so get the thickness of the left border,
-            half is placed to the left of the nominal left side, and
-            half to the right.
-            */
-            if ( ! pR->pTCs[0].rgbrc[1].fShadow() )
-            {
-                short nThickness = pR->pTCs[0].rgbrc[1].
-                    DetermineBorderProperties();
-                if (nThickness > nLeftMaxThickness)
-                    nLeftMaxThickness = nThickness;
-            }
         }
     }
     m_nSwWidth = m_nSwWidth + nRightMaxThickness;
     m_nMaxRight = m_nMaxRight + nRightMaxThickness;
-    m_nConvertedLeft = m_nMinLeft-(nLeftMaxThickness/2);
 
     for( pR = m_pFirstBand; pR; pR = pR->pNextBand )
     {
