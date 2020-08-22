@@ -512,14 +512,14 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
 {
     SolarMutexGuard g;
 
-    uno::Any anyAtrribute;
+    uno::Any anyAttribute;
     SwDoc *pDoc = GetMap() ? GetShell()->GetDoc() : nullptr;
 
     if (!pDoc)
-        return anyAtrribute;
+        return anyAttribute;
     SwCursorShell* pCursorShell = GetCursorShell();
     if( !pCursorShell )
-        return anyAtrribute;
+        return anyAttribute;
 
     SwFEShell* pFEShell = dynamic_cast<const SwFEShell*>( pCursorShell) !=  nullptr
                                 ? static_cast<SwFEShell*>( pCursorShell )
@@ -705,9 +705,9 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
                 OUString::number( nSctColCount ) + ";";
         }
 
-        anyAtrribute <<= sValue;
+        anyAttribute <<= sValue;
     }
-    return anyAtrribute;
+    return anyAttribute;
 }
 
 sal_Int32 SAL_CALL SwAccessibleDocument::getBackground()
