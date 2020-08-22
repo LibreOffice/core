@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79f3b872_bb66f62a",
+        "filename": "sc/qa/unit/subsequent_filters-test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4757,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-08-22T15:58:47Z",
+      "side": 1,
+      "message": "We must use portable sal types, i.e. sal_Int32.",
+      "range": {
+        "startLine": 4757,
+        "startChar": 25,
+        "endLine": 4757,
+        "endChar": 27
+      },
+      "revId": "e2850a8e3280e4e4db5cfd5f09b585113d1f1567",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
