@@ -9,7 +9,7 @@
 
 <xs:annotation>
   <xs:documentation>
-  This is an XML Schema module for the "sematics" element of content MathML.
+  This is an XML Schema module for the "semantics" element of content MathML.
   Author: St&#233;phane Dalmas, INRIA.
   </xs:documentation>
 </xs:annotation>
