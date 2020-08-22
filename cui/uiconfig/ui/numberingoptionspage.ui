@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
-    <property name="upper">19.989999999999998</property>
-    <property name="step_increment">0.050000000000000003</property>
+    <property name="upper">19.99</property>
+    <property name="step_increment">0.05</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkAdjustment" id="adjustment2">
@@ -28,8 +28,8 @@
     <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment5">
-    <property name="upper">19.989999999999998</property>
-    <property name="step_increment">0.050000000000000003</property>
+    <property name="upper">19.99</property>
+    <property name="step_increment">0.05</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkMenu" id="bitmapmenu">
@@ -111,6 +111,11 @@
                         </child>
                       </object>
                     </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="levellb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|levellb">Select the level(s) that you want to define the formatting options for.</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -182,6 +187,11 @@
                           <object class="GtkComboBoxText" id="charstyle">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="charstyle-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|charstyle">Select the Character Style that you want to use in the numbered list.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -195,6 +205,11 @@
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment3</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="sublevels-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|sublevels">Enter the number of previous levels to include in the numbering style. For example, if you enter "2" and the previous level uses the "A, B, C..." numbering style, the numbering scheme for the current level becomes: "A.1".</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -207,6 +222,11 @@
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment2</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="startat-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|startat">Enter a new starting number for the current level.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -231,6 +251,11 @@
                           <object class="GtkComboBoxText" id="numfmtlb">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="numfmtlb-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|numfmtlb">Select a numbering style for the selected levels.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -272,6 +297,11 @@
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment1</property>
                             <property name="digits">2</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="widthmf-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|widthmf">Enter a width for the graphic.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -300,6 +330,11 @@
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment5</property>
                             <property name="digits">2</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="heightmf-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|heightmf">Enter a height for the graphic.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -315,6 +350,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="keepratio-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|keepratio">Maintains the size proportions of the graphic.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -351,6 +391,11 @@
                               <item translatable="yes" context="numberingoptionspage|orientlb">Center of line</item>
                               <item translatable="yes" context="numberingoptionspage|orientlb">Bottom of line</item>
                             </items>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="orientlb-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|orientlb">Select the alignment option for the graphic.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -363,10 +408,15 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="popup">bitmapmenu</property>
                             <property name="draw_indicator">True</property>
+                            <property name="popup">bitmapmenu</property>
                             <child>
                               <placeholder/>
+                            </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="bitmap-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|bitmap">Select the graphic, or locate the graphic file that you want to use as a bullet.</property>
+                              </object>
                             </child>
                           </object>
                           <packing>
@@ -381,9 +431,13 @@
                             <property name="receives_default">False</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
-                            <property name="label" translatable="no"></property>
                             <child>
                               <placeholder/>
+                            </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="color-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|color">Select a color for the current numbering style.</property>
+                              </object>
                             </child>
                           </object>
                           <packing>
@@ -397,6 +451,11 @@
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment4</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="relsize-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|relsize">Enter the amount by which you want to resize the bullet character with respect to the font height of the current paragraph.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -409,6 +468,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="bullet-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|bullet">Select the graphic, or locate the graphic file that you want to use as a bullet.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -460,6 +524,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="suffix-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|suffix">Enter a character or the text to display behind the number in the list. If you want to create a numbered list that uses the style "1.)", enter ".)" in this box.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -471,6 +540,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="prefix-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|prefix">Enter a character or the text to display in front of the number in the list.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -624,6 +698,11 @@
                     <property name="xalign">0</property>
                     <property name="yalign">0.44999998807907104</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="allsame-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|allsame">Increases the numbering by one as you go down each level in the list hierarchy.</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -20,9 +20,6 @@
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="publishingdialog|PublishingDialog">HTML Export</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -73,14 +70,17 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="nextPageButton">
-                <property name="label" translatable="yes" context="publishingdialog|nextPageButton">Ne_xt &gt;</property>
+              <object class="GtkButton" id="finishButton">
+                <property name="label" translatable="yes" context="publishingdialog|finishButton">_Create</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="finishButton-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|finishButton">Creates new documents according to your selections and saves the documents.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -89,10 +89,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="finishButton">
-                <property name="label" translatable="yes" context="publishingdialog|finishButton">_Create</property>
+              <object class="GtkButton" id="nextPageButton">
+                <property name="label" translatable="yes" context="publishingdialog|nextPageButton">Ne_xt &gt;</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
               </object>
@@ -144,6 +146,11 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="newDesignRadiobutton-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|newDesignRadiobutton">Creates a new design in the next pages of the Wizard.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -161,6 +168,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">newDesignRadiobutton</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="oldDesignRadiobutton-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|oldDesignRadiobutton">Loads an existing design from the design list to use as a starting point for the steps to follow on the next pages of the Wizard.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -213,6 +225,11 @@
                                         </child>
                                       </object>
                                     </child>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="designsTreeview-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|designsTreeview">Displays all existing designs.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
                               </object>
@@ -260,6 +277,11 @@
                             <property name="halign">end</property>
                             <property name="valign">center</property>
                             <property name="hexpand">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="delDesingButton-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|delDesingButton">Deletes the selected design from the design list.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -287,6 +309,11 @@
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
+              </object>
+            </child>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="page1-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|page1">Determines the settings for publishing %PRODUCTNAME Draw or %PRODUCTNAME Impress documents in HTML format.</property>
               </object>
             </child>
           </object>
@@ -336,6 +363,11 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="ASPRadiobutton-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|ASPRadiobutton">When you select the ASP option, the WebCast export creates ASP pages. Note that the HTML presentation can only be offered by a web server supporting ASP.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -353,6 +385,11 @@
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">ASPRadiobutton</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="perlRadiobutton-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|perlRadiobutton">Used by WebCast export to create HTML pages and Perl scripts.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -392,6 +429,11 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="activates_default">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="indexEntry-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|indexEntry">Specifies the URL (absolute or relative) to be entered by the viewer in order to see the presentation.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -419,6 +461,11 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="activates_default">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="URLEntry-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|URLEntry">Specifies the URL (absolute or relative), where the created HTML presentation on the web server has been saved.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -446,6 +493,11 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="activates_default">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="CGIEntry-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|CGIEntry">Specifies the URL (absolute or relative) for the generated Perl scripts.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -514,6 +566,11 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="chgDefaultRadiobutton-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|chgDefaultRadiobutton">The slide transition depends on the timing that you set for each slide in the presentation. If you set a manual page transition, the HTML presentation introduces a new page by pressing any key from your keyboard.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -531,6 +588,11 @@
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">chgDefaultRadiobutton</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="chgAutoRadiobutton-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|chgAutoRadiobutton">The page transition takes place automatically after the specified period of time elapses and does not depend on the presentation's contents</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -575,6 +637,11 @@
                                         <property name="can_focus">True</property>
                                         <property name="activates_default">True</property>
                                         <property name="adjustment">adjustment1</property>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="durationSpinbutton-atkobject">
+                                            <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|durationSpinbutton">Defines the amount of time for each slide display.</property>
+                                          </object>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -599,6 +666,11 @@
                                     <property name="xalign">0</property>
                                     <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="endlessCheckbutton-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|endlessCheckbutton">Automatically restarts the HTML presentation after the last slide has been displayed.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -669,6 +741,11 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="contentCheckbutton-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|contentCheckbutton">Creates a title page for your document.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -686,6 +763,11 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="notesCheckbutton-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|notesCheckbutton">Specifies that your notes are also displayed.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -800,6 +882,11 @@
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">standardRadiobutton</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="webCastRadiobutton-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|webCastRadiobutton">In a WebCast export, automatic scripts will be generated with Perl or ASP support.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -816,6 +903,11 @@
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">standardRadiobutton</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="kioskRadiobutton-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|kioskRadiobutton">Creates a default HTML presentation as a kiosk export, in which the slides are automatically advanced after a specified amount of time.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -848,6 +940,11 @@
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">standardRadiobutton</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="framesRadiobutton-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|framesRadiobutton">Creates standard HTML pages with frames. The exported page will be placed in the main frame, and the frame to the left will display a table of contents in the form of hyperlinks.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -864,6 +961,11 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="standardRadiobutton-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|standardRadiobutton">Creates standard HTML pages from export pages.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -944,6 +1046,11 @@
                                 <property name="xalign">0</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="pngRadiobutton-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|pngRadiobutton">The files are exported as PNG files. PNG files are compressed without loss of data, and can contain more than 256 colors.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -961,6 +1068,11 @@
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">pngRadiobutton</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="gifRadiobutton-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|gifRadiobutton">The files are exported as GIF files. GIF files are compressed without loss of data, and have a maximum of 256 colors.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -978,6 +1090,11 @@
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">pngRadiobutton</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="jpgRadiobutton-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|jpgRadiobutton">The files are exported as JPEG files. JPEG files are compressed, with adjustable compression and can contain more than 256 colors.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -1016,6 +1133,11 @@
                                       <object class="GtkEntry" id="combobox-entry">
                                         <property name="can_focus">True</property>
                                         <property name="activates_default">True</property>
+                                      </object>
+                                    </child>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="qualityCombobox-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|qualityCombobox">Specifies the compression factor of the JPEG graphic. A 100% value offers the best quality for a large data range. The 25% factor indicates small files with inferior image quality.</property>
                                       </object>
                                     </child>
                                   </object>
@@ -1082,6 +1204,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="resolution1Radiobutton-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|resolution1Radiobutton">Select the low resolution to keep the file size small, even for presentations with many slides.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -1099,6 +1226,11 @@
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">resolution1Radiobutton</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="resolution2Radiobutton-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|resolution2Radiobutton">Select the medium resolution for a medium-sized presentation.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -1118,6 +1250,11 @@
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">resolution1Radiobutton</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="resolution3Radiobutton-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|resolution3Radiobutton">Select a high resolution for a high quality slide display.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -1181,6 +1318,11 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="sldSoundCheckbutton-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|sldSoundCheckbutton">Specifies that the sound files that are defined as an effect for slide transitions are exported.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1275,6 +1417,11 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="authorEntry-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|authorEntry">Specifies the name of the publication's author.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -1330,6 +1477,11 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="emailEntry-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|emailEntry">Specifies the email address.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -1342,6 +1494,11 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="wwwEntry-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|wwwEntry">Specifies your homepage. A hyperlink will be inserted in the publication.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -1357,6 +1514,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="downloadCheckbutton-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|downloadCheckbutton">Inserts a hyperlink to download a copy of the presentation file.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -1377,6 +1539,11 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="miscTextview-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|miscTextview">Specifies additional text to appear on the title page.</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -1440,6 +1607,11 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="textOnlyCheckbutton-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|textOnlyCheckbutton">Inserts only text hyperlinks instead of buttons.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1730,9 +1902,12 @@
       <action-widget response="-11">help</action-widget>
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="101">lastPageButton</action-widget>
-      <action-widget response="102">nextPageButton</action-widget>
       <action-widget response="103">finishButton</action-widget>
+      <action-widget response="102">nextPageButton</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <property name="mode">both</property>

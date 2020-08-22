@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.2 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -679,6 +679,11 @@
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes" context="navigatorpanel|edit|tooltip_text">Edit</property>
                 <property name="icon_name">sw/res/sc20245.png</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="edit-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|edit">Edit the contents of the component selected in the Navigator list. If the selection is a file, the file is opened for editing. If the selection is an index, the Index dialog is opened.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -691,6 +696,11 @@
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes" context="navigatorpanel|update|tooltip_text">Update</property>
                 <property name="icon_name">sw/res/sc20246.png</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="update-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|update">Click and choose the contents that you want to update.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -703,6 +713,11 @@
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes" context="navigatorpanel|insert|tooltip_text">Insert</property>
                 <property name="icon_name">sw/res/sc20247.png</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="insert-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|insert">Inserts a file, an index, or a new document into the master document.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -725,6 +740,11 @@
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes" context="navigatorpanel|save|tooltip_text">Save Contents as well</property>
                 <property name="icon_name">sw/res/sc20248.png</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="save-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|save">Saves a copy of the contents of the linked files in the master document. This ensures that the current contents are available when the linked files cannot be accessed.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -747,6 +767,11 @@
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes" context="navigatorpanel|moveup|tooltip_text">Move Up</property>
                 <property name="icon_name">sw/res/sc20174.png</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="moveup-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|moveup">Moves the selection up one position in the Navigator list.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -759,6 +784,11 @@
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes" context="navigatorpanel|movedown|tooltip_text">Move Down</property>
                 <property name="icon_name">sw/res/sc20171.png</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="movedown-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|movedown">Moves the selection down one position in the Navigator list.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>

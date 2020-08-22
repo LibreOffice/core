@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="AddConditionDialog">
@@ -11,9 +11,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -111,6 +108,11 @@
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
                     <property name="wrap_mode">word</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="condition-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="addconditiondialog|extended_tip|condition">Enter a condition.</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -155,6 +157,11 @@
                 <property name="receives_default">True</property>
                 <property name="halign">end</property>
                 <property name="use_underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="edit-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="addconditiondialog|extended_tip|edit">Opens the Form Namespaces dialog where you can add, edit, or delete namespaces.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -177,6 +184,11 @@
                     <property name="editable">False</property>
                     <property name="wrap_mode">word</property>
                     <property name="cursor_visible">False</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="result-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="addconditiondialog|extended_tip|result">Displays a preview of the result.</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -199,5 +211,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="AddConditionDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="addconditiondialog|extended_tip|AddConditionDialog">Add a condition in this subdialog of the Add Item / Edit Item dialog of the Data Navigator.</property>
+      </object>
+    </child>
   </object>
 </interface>

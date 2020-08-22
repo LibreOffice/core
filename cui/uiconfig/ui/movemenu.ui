@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkImage" id="image1">
@@ -24,11 +24,8 @@
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="movemenu|MoveMenuDialog">New Menu</property>
-    <property name="type_hint">dialog</property>
     <property name="modal">True</property>
-    <child>
-      <placeholder/>
-    </child>
+    <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -127,6 +124,11 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="menuname-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="movemenu|extended_tip|menuname">Enter a name for the menu. To specify a letter in the name as an accelerator key, enter a tilde (~) before the letter.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -181,8 +183,8 @@
                           <object class="GtkTreeView" id="menulist">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="vexpand">True</property>
                             <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
                             <property name="model">liststore1</property>
                             <property name="headers_visible">False</property>
                             <property name="headers_clickable">False</property>
@@ -290,5 +292,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="MoveMenuDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="movemenu|extended_tip|MoveMenuDialog">Moves the selected menu entry up one position or down one position in the menu when you click an arrow button.</property>
+      </object>
+    </child>
   </object>
 </interface>

@@ -544,5 +544,10 @@
         </attributes>
       </object>
     </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="BusinessDataPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="businessdatapage|extended_tip|BusinessDataPage">Contains contact information for business cards that use a layout from a 'Business Card, Work' category. Business card layouts are selected on the Business Cards tab.</property>
+      </object>
+    </child>
   </object>
 </interface>

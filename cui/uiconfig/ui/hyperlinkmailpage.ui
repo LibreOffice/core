@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkImage" id="image1">
@@ -58,6 +58,11 @@
                     <property name="tooltip_text" translatable="yes" context="hyperlinkmailpage|adressbook|tooltip_text">Data Sources...</property>
                     <property name="image">image1</property>
                     <property name="always_show_image">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="adressbook-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkmailpage|extended_tip|adressbook">Hides or shows the data source browser.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -86,6 +91,11 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="subject-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkmailpage|extended_tip|subject">Specifies the subject that is inserted in the subject line of the new message document.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -102,6 +112,11 @@
                       <object class="GtkEntry">
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
+                      </object>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="receiver-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkmailpage|extended_tip|receiver">Assigns the specified email address to the hyperlink.</property>
                       </object>
                     </child>
                   </object>
@@ -214,6 +229,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="indication-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkmailpage|extended_tip|indication">Specifies the visible text or button caption for the hyperlink.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -225,6 +245,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="name-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkmailpage|extended_tip|name">Enter a name for the hyperlink.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -257,6 +282,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="form-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkmailpage|extended_tip|form">Specifies whether the hyperlink is inserted as text or as a button.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -270,6 +300,11 @@
                         <property name="receives_default">True</property>
                         <property name="tooltip_text" translatable="yes" context="hyperlinkmailpage|script|tooltip_text">Events</property>
                         <property name="always_show_image">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="script-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkmailpage|extended_tip|script">Opens the Assign Macro dialog, in which you can give events such as "mouse over object" or "trigger hyperlink" their own program codes.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -286,6 +321,11 @@
                           <object class="GtkEntry" id="combobox-entry">
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
+                          </object>
+                        </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="frame-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkmailpage|extended_tip|frame">Enter the name of the frame that you want the linked file to open in, or select a predefined frame from the list. If you leave this box blank, the linked file opens in the current browser window.</property>
                           </object>
                         </child>
                       </object>
@@ -320,6 +360,11 @@
         <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="HyperlinkMailPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkmailpage|extended_tip|HyperlinkMailPage">On the Mail page in the Hyperlink dialog you can edit hyperlinks for email addresses.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

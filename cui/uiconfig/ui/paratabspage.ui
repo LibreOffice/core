@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="lower">-56</property>
+    <property name="upper">56</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkTreeStore" id="liststore1">
     <columns>
       <!-- column-name text -->
@@ -9,12 +15,6 @@
       <!-- column-name id -->
       <column type="gchararray"/>
     </columns>
-  </object>
-  <object class="GtkAdjustment" id="adjustment1">
-    <property name="lower">-56</property>
-    <property name="upper">56</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
   </object>
   <object class="GtkBox" id="ParagraphTabsPage">
     <property name="visible">True</property>
@@ -88,8 +88,8 @@
                   <object class="GtkEntry" id="ED_TABPOS">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="activates_default">True</property>
                     <property name="hexpand">True</property>
+                    <property name="activates_default">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -544,6 +544,11 @@
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="use_stock">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="buttonBTN_DEL-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="paratabspage|extended_tip|buttonBTN_DEL">Deletes the selected element or elements after confirmation.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>

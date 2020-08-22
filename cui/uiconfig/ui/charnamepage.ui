@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -176,7 +176,7 @@
               <object class="GtkLabel" id="westfontnameft-nocjk">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="no" context="charnamepage|westfontnameft-nocjk">Family:</property>
+                <property name="label" context="charnamepage|westfontnameft-nocjk">Family:</property>
               </object>
             </child>
           </object>
@@ -238,6 +238,11 @@
                                 </child>
                               </object>
                             </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="weststylelb-nocjk-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="charnamepage|extended_tip|weststylelb-nocjk">Select the formatting that you want to apply.</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -266,7 +271,7 @@
               <object class="GtkLabel" id="weststyleft-nocjk">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="no" context="charnamepage|weststyleft-nocjk">Style:</property>
+                <property name="label" context="charnamepage|weststyleft-nocjk">Style:</property>
               </object>
             </child>
           </object>
@@ -327,6 +332,11 @@
                                     <attribute name="text">0</attribute>
                                   </attributes>
                                 </child>
+                              </object>
+                            </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="westsizelb-nocjk-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="charnamepage|extended_tip|westsizelb-nocjk">Enter or select the font size that you want to apply. For scalable fonts, you can also enter decimal values.</property>
                               </object>
                             </child>
                           </object>
@@ -416,6 +426,11 @@
                         <property name="activates_default">True</property>
                       </object>
                     </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="westlanglb-nocjk-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="charnamepage|extended_tip|westlanglb-nocjk">Sets the language that the spellchecker uses for the selected text or the text that you type. Available language modules have a check mark in front of them.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -483,7 +498,7 @@
                   <object class="GtkLabel" id="westfontnameft-cjk">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="no" context="charnamepage|westfontnameft-cjk">Family:</property>
+                    <property name="label" context="charnamepage|westfontnameft-cjk">Family:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">westfontnamelb-cjk</property>
                     <property name="xalign">0</property>
@@ -497,7 +512,7 @@
                   <object class="GtkLabel" id="weststyleft-cjk">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="no" context="charnamepage|weststyleft-cjk">Style:</property>
+                    <property name="label" context="charnamepage|weststyleft-cjk">Style:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">weststylelb-cjk</property>
                     <property name="xalign">0</property>
@@ -564,6 +579,11 @@
                         <property name="activates_default">True</property>
                       </object>
                     </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="weststylelb-cjk-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="charnamepage|extended_tip|weststylelb-cjk">Select the formatting that you want to apply.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -579,6 +599,11 @@
                       <object class="GtkEntry">
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
+                      </object>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="westsizelb-cjk-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="charnamepage|extended_tip|westsizelb-cjk">Enter or select the font size that you want to apply. For scalable fonts, you can also enter decimal values.</property>
                       </object>
                     </child>
                   </object>
@@ -605,6 +630,11 @@
                       <object class="GtkEntry">
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
+                      </object>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="westlanglb-cjk-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="charnamepage|extended_tip|westlanglb-cjk">Sets the language that the spellchecker uses for the selected text or the text that you type. Available language modules have a check mark in front of them.</property>
                       </object>
                     </child>
                   </object>
@@ -695,7 +725,7 @@
                   <object class="GtkLabel" id="eastfontnameft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="no" context="charnamepage|eastfontnameft">Family:</property>
+                    <property name="label" context="charnamepage|eastfontnameft">Family:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">eastfontnamelb</property>
                     <property name="xalign">0</property>
@@ -709,7 +739,7 @@
                   <object class="GtkLabel" id="eaststyleft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="no" context="charnamepage|eaststyleft">Style:</property>
+                    <property name="label" context="charnamepage|eaststyleft">Style:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">eaststylelb</property>
                     <property name="xalign">0</property>
@@ -776,6 +806,11 @@
                         <property name="activates_default">True</property>
                       </object>
                     </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="eaststylelb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="charnamepage|extended_tip|eaststylelb">Select the formatting that you want to apply.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -791,6 +826,11 @@
                       <object class="GtkEntry">
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
+                      </object>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="eastsizelb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="charnamepage|extended_tip|eastsizelb">Enter or select the font size that you want to apply. For scalable fonts, you can also enter decimal values.</property>
                       </object>
                     </child>
                   </object>
@@ -817,6 +857,11 @@
                       <attributes>
                         <attribute name="pixbuf">2</attribute>
                       </attributes>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="eastlanglb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="charnamepage|extended_tip|eastlanglb">Sets the language that the spellchecker uses for the selected text or the text that you type. Available language modules have a check mark in front of them.</property>
+                      </object>
                     </child>
                   </object>
                   <packing>
@@ -905,7 +950,7 @@
                   <object class="GtkLabel" id="ctlfontnameft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="no" context="charnamepage|ctlfontnameft">Family:</property>
+                    <property name="label" context="charnamepage|ctlfontnameft">Family:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">ctlfontnamelb</property>
                     <property name="xalign">0</property>
@@ -919,7 +964,7 @@
                   <object class="GtkLabel" id="ctlstyleft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="no" context="charnamepage|ctlstyleft">Style:</property>
+                    <property name="label" context="charnamepage|ctlstyleft">Style:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">ctlstylelb</property>
                     <property name="xalign">0</property>
@@ -986,6 +1031,11 @@
                         <property name="activates_default">True</property>
                       </object>
                     </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="ctlstylelb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="charnamepage|extended_tip|ctlstylelb">Select the formatting that you want to apply.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -1001,6 +1051,11 @@
                       <object class="GtkEntry">
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
+                      </object>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="ctlsizelb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="charnamepage|extended_tip|ctlsizelb">Enter or select the font size that you want to apply. For scalable fonts, you can also enter decimal values.</property>
                       </object>
                     </child>
                   </object>
@@ -1027,6 +1082,11 @@
                       <attributes>
                         <attribute name="pixbuf">2</attribute>
                       </attributes>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="ctllanglb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="charnamepage|extended_tip|ctllanglb">Sets the language that the spellchecker uses for the selected text or the text that you type. Available language modules have a check mark in front of them.</property>
+                      </object>
                     </child>
                   </object>
                   <packing>
@@ -1133,6 +1193,11 @@
         <property name="pack_type">end</property>
         <property name="position">4</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="CharNamePage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="charnamepage|extended_tip|CharNamePage">Specify the formatting and the font that you want to apply.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

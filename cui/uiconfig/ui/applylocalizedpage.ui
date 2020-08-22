@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.2 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -132,6 +132,11 @@
                         </child>
                       </object>
                     </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="list-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="applylocalizedpage|extended_tip|list">Select to apply the replacements while you type [T], or when you modify existing text [M].</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -188,6 +193,11 @@
                         </child>
                       </object>
                     </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="checklist-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="applylocalizedpage|extended_tip|checklist">Select to apply the replacements while you type [T], or when you modify existing text [M].</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -235,6 +245,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="singlereplace-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="applylocalizedpage|extended_tip|singlereplace">Automatically replaces the default system symbol for the given type of quotation marks with the special character that you specify.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -271,6 +286,7 @@
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="startsingle-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="applylocalizedpage|startsingle-atkobject">Start quote of single quotes</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="applylocalizedpage|extended_tip|startsingle">Select the special character that will automatically replace the current opening quotation mark in your document when you choose Tools - AutoCorrect - Apply.</property>
                                   </object>
                                 </child>
                               </object>
@@ -308,6 +324,7 @@
                             <child internal-child="accessible">
                               <object class="AtkObject" id="defaultsingle-atkobject">
                                 <property name="AtkObject::accessible-name" translatable="yes" context="applylocalizedpage|defaultsingle-atkobject">Single quotes default</property>
+                                <property name="AtkObject::accessible-description" translatable="yes" context="applylocalizedpage|extended_tip|defaultsingle">Resets the quotation marks to the default symbols.</property>
                               </object>
                             </child>
                           </object>
@@ -345,6 +362,7 @@
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="endsingle-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="applylocalizedpage|endsingle-atkobject">End quote of single quotes</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="applylocalizedpage|extended_tip|endsingle">Select the special character that will automatically replace the current closing quotation mark in your document when you choose Tools - AutoCorrect - Apply.</property>
                                   </object>
                                 </child>
                               </object>
@@ -420,6 +438,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="doublereplace-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="applylocalizedpage|extended_tip|doublereplace">Automatically replaces the default system symbol for the given type of quotation marks with the special character that you specify.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -456,6 +479,7 @@
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="startdouble-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="applylocalizedpage|startdouble-atkobject">Start quote of double quotes</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="applylocalizedpage|extended_tip|startdouble">Select the special character that will automatically replace the current opening quotation mark in your document when you choose Tools - AutoCorrect - Apply.</property>
                                   </object>
                                 </child>
                               </object>
@@ -493,6 +517,7 @@
                             <child internal-child="accessible">
                               <object class="AtkObject" id="defaultdouble-atkobject">
                                 <property name="AtkObject::accessible-name" translatable="yes" context="applylocalizedpage|defaultdouble-atkobject">Double quotes default</property>
+                                <property name="AtkObject::accessible-description" translatable="yes" context="applylocalizedpage|extended_tip|defaultdouble">Resets the quotation marks to the default symbols.</property>
                               </object>
                             </child>
                           </object>
@@ -530,6 +555,7 @@
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="enddouble-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="applylocalizedpage|enddouble-atkobject">End quote of double quotes</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="applylocalizedpage|extended_tip|enddouble">Select the special character that will automatically replace the current closing quotation mark in your document when you choose Tools - AutoCorrect - Apply.</property>
                                   </object>
                                 </child>
                               </object>
@@ -591,6 +617,11 @@
         <property name="fill">True</property>
         <property name="position">0</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="ApplyLocalizedPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="applylocalizedpage|extended_tip|ApplyLocalizedPage">Specify the AutoCorrect options for quotation marks and for options that are specific to the language of the text.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

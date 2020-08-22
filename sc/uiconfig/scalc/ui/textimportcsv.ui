@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -27,9 +27,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -164,6 +161,11 @@
                           <object class="GtkComboBoxText" id="charset">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="charset-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="textimportcsv|extended_tip|charset">Specifies the character set to be used in the imported file.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -174,6 +176,11 @@
                           <object class="GtkComboBoxText" id="language">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="language-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="textimportcsv|extended_tip|language">Determines how the number strings are imported.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -187,6 +194,11 @@
                             <property name="halign">start</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment1</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="fromrow-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="textimportcsv|extended_tip|fromrow">Specifies the row where you want to start the import.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -251,6 +263,11 @@
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">toseparatedby</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="tofixedwidth-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="textimportcsv|extended_tip|tofixedwidth">Separates fixed-width data (equal number of characters) into columns.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -268,6 +285,11 @@
                                 <property name="xalign">0</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="toseparatedby-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="textimportcsv|extended_tip|toseparatedby">Select the separator used in your data.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -305,6 +327,11 @@
                                     <property name="use_underline">True</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="tab-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="textimportcsv|extended_tip|tab">Separates data delimited by tabs into columns.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -322,6 +349,11 @@
                                     <property name="use_underline">True</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="mergedelimiters-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="textimportcsv|extended_tip|mergedelimiters">Combines consecutive delimiters and removes blank data fields.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -340,6 +372,11 @@
                                     <property name="use_underline">True</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="removespace-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="textimportcsv|extended_tip|removespace">Removes starting and trailing spaces from data fields.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="left_attach">2</property>
@@ -357,6 +394,11 @@
                                     <property name="use_underline">True</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="comma-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="textimportcsv|extended_tip|comma">Separates data delimited by commas into columns.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -373,6 +415,11 @@
                                     <property name="use_underline">True</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="semicolon-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="textimportcsv|extended_tip|semicolon">Separates data delimited by semicolons into columns.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="left_attach">2</property>
@@ -389,6 +436,11 @@
                                     <property name="use_underline">True</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="space-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="textimportcsv|extended_tip|space">Separates data delimited by spaces into columns.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="left_attach">3</property>
@@ -413,6 +465,11 @@
                                         <accessibility>
                                           <relation type="label-for" target="inputother"/>
                                         </accessibility>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="other-atkobject">
+                                            <property name="AtkObject::accessible-description" translatable="yes" context="textimportcsv|extended_tip|other">Separates data into columns using the custom separator that you specify. Note: The custom separator must also be contained in your data.</property>
+                                          </object>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="left_attach">0</property>
@@ -433,6 +490,7 @@
                                         <child internal-child="accessible">
                                           <object class="AtkObject" id="inputother-atkobject">
                                             <property name="AtkObject::accessible-name" translatable="yes" context="textimportcsv|inputother-atkobject">Other</property>
+                                            <property name="AtkObject::accessible-description" translatable="yes" context="textimportcsv|extended_tip|inputother">Separates data into columns using the custom separator that you specify. Note: The custom separator must also be contained in your data.</property>
                                           </object>
                                         </child>
                                       </object>
@@ -478,6 +536,11 @@
                                             <property name="can_focus">True</property>
                                             <property name="activates_default">True</property>
                                             <property name="width_chars">1</property>
+                                          </object>
+                                        </child>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="textdelimiter-atkobject">
+                                            <property name="AtkObject::accessible-description" translatable="yes" context="textimportcsv|extended_tip|textdelimiter">Select a character to delimit text data. You can also enter a character in the text box.</property>
                                           </object>
                                         </child>
                                       </object>
@@ -548,8 +611,13 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="use_underline">True</property>
-                            <property name="xalign">0.0099999997764825821</property>
+                            <property name="xalign">0.009999999776482582</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="quotedfieldastext-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="textimportcsv|extended_tip|quotedfieldastext">When this option is enabled, fields or cells whose values are quoted in their entirety (the first and last characters of the value equal the text delimiter) are imported as text.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -566,6 +634,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="detectspecialnumbers-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="textimportcsv|extended_tip|detectspecialnumbers">When this option is enabled, Calc will automatically detect all number formats, including special number formats such as dates, time, and scientific notation.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -583,6 +656,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="skipemptycells-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="textimportcsv|extended_tip|skipemptycells">When this option is enabled, Calc preserves previous content of cells when pasting empty ones. Otherwise, Calc deletes content of previous cells.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -654,6 +732,11 @@
                               <object class="GtkComboBoxText" id="columntype">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="columntype-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="textimportcsv|extended_tip|columntype">Choose a column in the preview window and select the data type to be applied the imported data.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -773,6 +856,14 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="TextImportCsvDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="textimportcsv|extended_tip|TextImportCsvDialog">Sets the import options for delimited data.</property>
+      </object>
+    </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <widgets>

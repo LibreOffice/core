@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="AddDataItemDialog">
@@ -9,9 +9,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -100,6 +97,11 @@
                         <property name="valign">center</property>
                         <property name="activates_default">True</property>
                         <property name="width_chars">46</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="name-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="adddataitemdialog|extended_tip|name">Enter the name of the item.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -156,6 +158,11 @@
                         <property name="valign">center</property>
                         <property name="activates_default">True</property>
                         <property name="width_chars">46</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="value-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="adddataitemdialog|extended_tip|value">Enter a default value for the selected item.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -223,6 +230,11 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="valign">center</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="datatype-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="adddataitemdialog|extended_tip|datatype">Select the data type for the selected item.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -238,6 +250,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="required-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="adddataitemdialog|extended_tip|required">Specifies if the item must be included on the XForm.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -252,6 +269,11 @@
                         <property name="receives_default">True</property>
                         <property name="halign">start</property>
                         <property name="use_underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="requiredcond-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="adddataitemdialog|extended_tip|requiredcond">The Condition button opens the Add Condition dialog where you can enter used namespaces and full XPath expressions.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -267,6 +289,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="relevant-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="adddataitemdialog|extended_tip|relevant">Declares the item as relevant.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -281,6 +308,11 @@
                         <property name="receives_default">True</property>
                         <property name="halign">start</property>
                         <property name="use_underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="relevantcond-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="adddataitemdialog|extended_tip|relevantcond">Declares the item as a constraint.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -296,6 +328,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="constraint-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="adddataitemdialog|extended_tip|constraint">Declares the item as a constraint.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -311,6 +348,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="readonly-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="adddataitemdialog|extended_tip|readonly">Declares the item as read-only.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -326,6 +368,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="calculate-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="adddataitemdialog|extended_tip|calculate">Declares that the item is calculated.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -340,6 +387,11 @@
                         <property name="receives_default">True</property>
                         <property name="halign">start</property>
                         <property name="use_underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="constraintcond-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="adddataitemdialog|extended_tip|constraintcond">The Condition button opens the Add Condition dialog where you can specify the constraint condition.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -354,6 +406,11 @@
                         <property name="receives_default">True</property>
                         <property name="halign">start</property>
                         <property name="use_underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="readonlycond-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="adddataitemdialog|extended_tip|readonlycond">Declares that the item is calculated.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -368,6 +425,11 @@
                         <property name="receives_default">True</property>
                         <property name="halign">start</property>
                         <property name="use_underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="calculatecond-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="adddataitemdialog|extended_tip|calculatecond">The Condition button opens the Add Condition dialog where you can enter the calculation.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -402,5 +464,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="AddDataItemDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="adddataitemdialog|extended_tip|AddDataItemDialog">Adds a new item or edits the selected item in the XForms Data Navigator.</property>
+      </object>
+    </child>
   </object>
 </interface>

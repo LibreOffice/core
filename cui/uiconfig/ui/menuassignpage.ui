@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkImage" id="image1">
@@ -285,6 +285,11 @@
                 <accessibility>
                   <relation type="labelled-by" target="descriptionlabel"/>
                 </accessibility>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="desc-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="menuassignpage|extended_tip|desc">The text box contains a short description of the selected command.</property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
@@ -330,7 +335,6 @@
                 <property name="headers_visible">False</property>
                 <property name="search_column">1</property>
                 <property name="enable_tree_lines">True</property>
-                <property name="show_expanders">True</property>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection" id="Macro Library List-selection1"/>
                 </child>
@@ -349,6 +353,11 @@
                         <attribute name="text">1</attribute>
                       </attributes>
                     </child>
+                  </object>
+                </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="functions-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="menuassignpage|extended_tip|functions">Displays the results of the combination of the search string and category of the desired function.</property>
                   </object>
                 </child>
               </object>
@@ -379,6 +388,11 @@
             <property name="can_focus">False</property>
             <property name="margin_bottom">4</property>
             <property name="hexpand">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="commandcategorylist-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="menuassignpage|extended_tip|commandcategorylist">Select the menu command category in the drop-down list to restrict the search of commands or scroll the list below. Macros and styles commands are in the bottom of the list.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -406,6 +420,11 @@
             <property name="can_focus">True</property>
             <property name="margin_bottom">4</property>
             <property name="placeholder_text" translatable="yes" context="menuassignpage|searchEntry">Type to search</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="searchEntry-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="menuassignpage|extended_tip|searchEntry">Enter a string in the text box to narrow the search of commands.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -424,6 +443,11 @@
                 <property name="can_focus">False</property>
                 <property name="margin_right">5</property>
                 <property name="hexpand">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="savein-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="menuassignpage|extended_tip|savein">Select the location where the menu is to be attached. If attached to a %PRODUCTNAME module, the menu is available for all files opened in that module. If attached to the file, the menu will be available only when that file is opened and active.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -461,6 +485,11 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="toplevellist-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="menuassignpage|extended_tip|toplevellist">Select the menu where the customization is to be applied. The current set of functions is displayed in the box below.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -756,6 +785,11 @@
                     <property name="vexpand">True</property>
                     <property name="image">image3</property>
                     <property name="always_show_image">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="add-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="menuassignpage|extended_tip|add">Click on the right arrow button to select a function on the left display box and copy to the right display box. This will add the function to the selected menu.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -786,6 +820,11 @@
                     <property name="vexpand">True</property>
                     <property name="image">image4</property>
                     <property name="always_show_image">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="remove-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="menuassignpage|extended_tip|remove">Click on the left arrow button to remove the selected command from the current menu.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -817,6 +856,11 @@
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes" context="menuassignpage|moveupbtn">Move up</property>
                 <property name="image">image1</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="up-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="menuassignpage|extended_tip|up">Click on the Up or Down arrows on the right to move the selected command upward or downward in the list of displayed menu commands.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -830,6 +874,11 @@
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes" context="menuassignpage|movedownbtn">Move down</property>
                 <property name="image">image2</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="down-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="menuassignpage|extended_tip|down">Click on the Up or Down arrows on the right to move the selected command upward or downward in the list of displayed menu commands.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -942,6 +991,11 @@
         <property name="fill">True</property>
         <property name="position">0</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="MenuAssignPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="menuassignpage|extended_tip|MenuAssignPage">Lets you customize %PRODUCTNAME menus for all modules.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegrp2">

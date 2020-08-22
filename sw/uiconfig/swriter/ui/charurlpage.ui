@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkBox" id="CharURLPage">
@@ -89,6 +89,11 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="valign">center</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="eventpb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="charurlpage|extended_tip|eventpb">Specify an event that triggers when you click the hyperlink.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -101,6 +106,11 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="width_chars">32</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="urled-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="charurlpage|extended_tip|urled">Enter a URL for the file that you want to open when you click the hyperlink.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -113,6 +123,11 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="width_chars">32</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="nameed-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="charurlpage|extended_tip|nameed">Enter a name for the hyperlink.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -125,6 +140,11 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="width_chars">32</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="texted-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="charurlpage|extended_tip|texted">Enter the text that you want to display for the hyperlink.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -138,6 +158,11 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="valign">center</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="urlpb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="charurlpage|extended_tip|urlpb">Locate the file that you want to link to, and then click Open.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -153,6 +178,11 @@
                       <object class="GtkEntry" id="comboboxtext-entry">
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
+                      </object>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="targetfrmlb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="charurlpage|extended_tip|targetfrmlb">Enter the name of the frame that you want the linked file to open in, or select a predefined frame from the list.</property>
                       </object>
                     </child>
                   </object>
@@ -247,6 +277,11 @@
                   <object class="GtkComboBoxText" id="visitedlb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="visitedlb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="charurlpage|extended_tip|visitedlb">Select a formatting style to use for visited links from the list. To add or modify a style in this list, close this dialog, and click the Styles icon on the Formatting toolbar.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -257,6 +292,11 @@
                   <object class="GtkComboBoxText" id="unvisitedlb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="unvisitedlb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="charurlpage|extended_tip|unvisitedlb">Select a formatting style to use for unvisited links from the list. To add or modify a style in this list, close this dialog, and click the Styles icon on the Formatting toolbar.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -283,6 +323,11 @@
         <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="CharURLPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="charurlpage|extended_tip|CharURLPage">Assigns a new hyperlink or edits the selected hyperlink.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

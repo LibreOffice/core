@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -18,9 +18,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -154,6 +151,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="asshown-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="imoptdialog|extended_tip|asshown">Enabled by default, data will be saved as displayed, including applied number formats. If this checkbox is not marked, raw data content will be saved, as in older versions of the software.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -186,6 +188,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="quoteall-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="imoptdialog|extended_tip|quoteall">Exports all text cells with leading and trailing quote characters as set in the Text delimiter box. If not checked, only those text cells get quoted that contain the Field delimiter character.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -202,6 +209,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="fixedwidth-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="imoptdialog|extended_tip|fixedwidth">Exports all data fields with a fixed width.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -218,6 +230,11 @@
                           <object class="GtkEntry" id="comboboxtext-entry">
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
+                          </object>
+                        </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="field-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="imoptdialog|extended_tip|field">Choose or enter the field delimiter, which separates data fields.</property>
                           </object>
                         </child>
                       </object>
@@ -237,6 +254,11 @@
                             <property name="activates_default">True</property>
                           </object>
                         </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="text-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="imoptdialog|extended_tip|text">Choose or enter the text delimiter, which encloses every data field.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -253,6 +275,11 @@
                             <property name="can_focus">False</property>
                             <property name="no_show_all">True</property>
                             <property name="hexpand">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="charsetdropdown-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="imoptdialog|extended_tip|charsetdropdown">Specifies the character set for text export.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -291,6 +318,11 @@
                                         <attribute name="text">0</attribute>
                                       </attributes>
                                     </child>
+                                  </object>
+                                </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="charsetlist-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="imoptdialog|extended_tip|charsetlist">Select the character set from the options used for import/export.</property>
                                   </object>
                                 </child>
                               </object>
@@ -336,5 +368,8 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>

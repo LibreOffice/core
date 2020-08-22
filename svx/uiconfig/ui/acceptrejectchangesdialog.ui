@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="AcceptRejectChangesDialog">
@@ -9,9 +9,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -28,6 +25,11 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="accept-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="acceptrejectchangesdialog|extended_tip|accept">Accepts the selected change and removes the highlighting from the change in the document.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -43,6 +45,11 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="reject-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="acceptrejectchangesdialog|extended_tip|reject">Rejects the selected change and removes the highlighting from the change in the document.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -58,6 +65,11 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="acceptall-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="acceptrejectchangesdialog|extended_tip|acceptall">Accepts all of the changes and removes the highlighting from the document.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -73,6 +85,11 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="rejectall-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="acceptrejectchangesdialog|extended_tip|rejectall">Rejects all of the changes and removes the highlighting from the document.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -88,6 +105,11 @@
                 <property name="receives_default">True</property>
                 <property name="no_show_all">True</property>
                 <property name="use_stock">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="undo-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="acceptrejectchangesdialog|extended_tip|undo">Reverse the last Accept or Reject command.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -133,6 +155,9 @@
       <action-widget response="101">undo</action-widget>
       <action-widget response="-7">close</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkMenu" id="calcmenu">
     <property name="visible">True</property>

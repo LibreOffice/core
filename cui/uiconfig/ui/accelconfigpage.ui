@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -119,6 +119,11 @@
                             </child>
                           </object>
                         </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="shortcuts-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|shortcuts">Lists the shortcut keys and the associated commands. To assign or modify the shortcut key for the command selected in the Function list, click a shortcut in this list, and then click Modify.</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -163,6 +168,11 @@
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="office-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|office">Displays shortcut keys that are common to all %PRODUCTNAME applications.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -180,6 +190,11 @@
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">office</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="module-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|module">Displays shortcut keys for the current %PRODUCTNAME application.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -209,6 +224,11 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="change-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|change">Assigns the key combination selected in the Shortcut keys list to the command selected in the Function list.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -223,6 +243,11 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_stock">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="delete-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|delete">Deletes the selected element or elements without requiring confirmation.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -237,6 +262,11 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="load-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|load">Replaces the shortcut key configuration with one that was previously saved.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -252,6 +282,11 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="save-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|save">Saves the current shortcut key configuration, so that you can load it later.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -268,6 +303,11 @@
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
                     <property name="use_stock">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="reset-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|reset">Resets modified values back to the default values.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -397,7 +437,6 @@
                             <property name="model">liststore1</property>
                             <property name="headers_visible">False</property>
                             <property name="search_column">0</property>
-                            <property name="show_expanders">True</property>
                             <child internal-child="selection">
                               <object class="GtkTreeSelection" id="Macro Library List-selection1"/>
                             </child>
@@ -411,6 +450,11 @@
                                     <attribute name="text">0</attribute>
                                   </attributes>
                                 </child>
+                              </object>
+                            </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="category-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|category">Lists the available function categories. To assign shortcuts to Styles, open the "Styles" category.</property>
                               </object>
                             </child>
                           </object>
@@ -453,6 +497,11 @@
                                     <attribute name="text">0</attribute>
                                   </attributes>
                                 </child>
+                              </object>
+                            </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="function-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|function">Select a function that you want to assign a shortcut key to, click a key combination in the Shortcut keys list, and then click Modify. If the selected function already has a shortcut key, it is displayed in the Keys list.</property>
                               </object>
                             </child>
                           </object>
@@ -529,6 +578,11 @@
         <property name="left_attach">0</property>
         <property name="top_attach">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="AccelConfigPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|AccelConfigPage">Assigns or edits the shortcut keys for %PRODUCTNAME commands, or %PRODUCTNAME Basic macros.</property>
+      </object>
     </child>
   </object>
 </interface>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="flt">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -50,6 +50,11 @@
                         <property name="xalign">0</property>
                         <property name="image_position">right</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="center-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfuserinterfacepage|extended_tip|center">Select to generate a PDF file that is shown in a reader window centered on screen.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -66,6 +71,11 @@
                         <property name="xalign">0</property>
                         <property name="image_position">right</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="resize-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfuserinterfacepage|extended_tip|resize">Select to generate a PDF file that is shown in a window displaying the whole initial page.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -82,6 +92,11 @@
                         <property name="xalign">0</property>
                         <property name="image_position">right</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="open-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfuserinterfacepage|extended_tip|open">Select to generate a PDF file that is shown in a full screen reader window in front of all other windows.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -98,6 +113,11 @@
                         <property name="xalign">0</property>
                         <property name="image_position">right</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="display-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfuserinterfacepage|extended_tip|display">Select to generate a PDF file that is shown with the document title in the reader's title bar.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -151,6 +171,11 @@
                         <property name="xalign">0</property>
                         <property name="image_position">right</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="toolbar-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfuserinterfacepage|extended_tip|toolbar">Select to hide the reader's toolbar when the document is active.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -167,6 +192,11 @@
                         <property name="xalign">0</property>
                         <property name="image_position">right</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="menubar-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfuserinterfacepage|extended_tip|menubar">Select to hide the reader's menu bar when the document is active.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -183,6 +213,11 @@
                         <property name="xalign">0</property>
                         <property name="image_position">right</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="window-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfuserinterfacepage|extended_tip|window">Select to hide the reader's controls when the document is active.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -235,6 +270,11 @@
                         <property name="xalign">0</property>
                         <property name="image_position">right</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="effects-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfuserinterfacepage|extended_tip|effects">Select to export Impress slide transition effects to respective PDF effects.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -289,6 +329,11 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="allbookmarks-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfuserinterfacepage|extended_tip|allbookmarks">Select to show all bookmark levels when the reader opens the PDF file.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -309,6 +354,11 @@
                         <accessibility>
                           <relation type="label-for" target="visiblelevel"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="visiblebookmark-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfuserinterfacepage|extended_tip|visiblebookmark">Select to show bookmark levels down to the selected level when the reader opens the PDF file.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -323,6 +373,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="visiblebookmark"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="visiblelevel-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfuserinterfacepage|extended_tip|visiblelevel">Select to show bookmark levels down to the selected level when the reader opens the PDF file.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>

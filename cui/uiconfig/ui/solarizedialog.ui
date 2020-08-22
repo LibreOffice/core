@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -16,9 +16,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -143,6 +140,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="adjustment">adjustment1</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="value-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="solarizedialog|extended_tip|value">Specifies the number of colors to which the image is to be reduced.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -172,6 +174,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="invert-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="solarizedialog|extended_tip|invert">Specifies to also invert all pixels.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -212,5 +219,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="SolarizeDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="solarizedialog|extended_tip|SolarizeDialog">Opens a dialog for defining solarization. Solarization refers to an effect that looks like what can happen when there is too much light during photo development. The colors become partly inverted.</property>
+      </object>
+    </child>
   </object>
 </interface>

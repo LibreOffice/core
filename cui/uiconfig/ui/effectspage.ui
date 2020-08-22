@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustmentPercent">
@@ -115,6 +115,11 @@
                       <item translatable="yes" context="effectspage|liststore1">Capitalize Every Word</item>
                       <item translatable="yes" context="effectspage|liststore1">Small capitals</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="effectslb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="effectspage|extended_tip|effectslb">Select the font effects that you want to apply.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -130,6 +135,11 @@
                       <item translatable="yes" context="effectspage|liststore2">Embossed</item>
                       <item translatable="yes" context="effectspage|liststore2">Engraved</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="relieflb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="effectspage|extended_tip|relieflb">Select a relief effect to apply to the selected text. The embossed relief makes the characters appear as if they are raised above the page. The engraved relief makes the characters appear as if they are pressed into the page.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -147,6 +157,11 @@
                       <item translatable="yes" context="effectspage|liststore3">Disc</item>
                       <item translatable="yes" context="effectspage|liststore3">Accent</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="emphasislb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="effectspage|extended_tip|emphasislb">Select a character to display over or below the entire length of the selected text.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -161,6 +176,11 @@
                       <item id="0" translatable="yes" context="effectspage|liststore4">Above text</item>
                       <item id="1" translatable="yes" context="effectspage|liststore4">Below text</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="positionlb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="effectspage|extended_tip|positionlb">Specify where to display the emphasis marks.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -205,6 +225,11 @@
                     <property name="xalign">0</property>
                     <property name="inconsistent">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="outlinecb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="effectspage|extended_tip|outlinecb">Displays the outline of the selected characters. This effect does not work with every font.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -221,6 +246,11 @@
                     <property name="xalign">0</property>
                     <property name="inconsistent">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="shadowcb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="effectspage|extended_tip|shadowcb">Adds a shadow that casts below and to the right of the selected characters.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -237,6 +267,11 @@
                     <property name="xalign">0</property>
                     <property name="inconsistent">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="hiddencb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="effectspage|extended_tip|hiddencb">Hides the selected characters.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -364,6 +399,11 @@
                       <item id="18" translatable="yes" context="effectspage|liststore6">Wave (Bold)</item>
                       <item id="11" translatable="yes" context="effectspage|liststore6">Double Wave</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="overlinelb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="effectspage|extended_tip|overlinelb">Select the overlining style that you want to apply. To apply the overlining to words only, select the Individual Words box.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -393,6 +433,11 @@
                       <item id="18" translatable="yes" context="effectspage|liststore6">Wave (Bold)</item>
                       <item id="11" translatable="yes" context="effectspage|liststore6">Double Wave</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="underlinelb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="effectspage|extended_tip|underlinelb">Select the underlining style that you want to apply. To apply the underlining to words only, select the Individual Words box.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -411,6 +456,11 @@
                       <item id="5" translatable="yes" context="effectspage|liststore5">With /</item>
                       <item id="6" translatable="yes" context="effectspage|liststore5">With X</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="strikeoutlb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="effectspage|extended_tip|strikeoutlb">Select a strikethrough style for the selected text.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -423,9 +473,13 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="draw_indicator">True</property>
-                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="underlinecolorlb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="effectspage|extended_tip|underlinecolorlb">Select the color for the underlining.</property>
+                      </object>
                     </child>
                   </object>
                   <packing>
@@ -439,9 +493,13 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="draw_indicator">True</property>
-                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="overlinecolorlb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="effectspage|extended_tip|overlinecolorlb">Select the color for the overlining.</property>
+                      </object>
                     </child>
                   </object>
                   <packing>
@@ -458,6 +516,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="individualwordscb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="effectspage|extended_tip|individualwordscb">Applies the selected effect only to words and ignores spaces.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -553,9 +616,13 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="draw_indicator">True</property>
-                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="fontcolorlb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="effectspage|extended_tip|fontcolorlb">Sets the color for the selected text. If you select Automatic, the text color is set to black for light backgrounds and to white for dark backgrounds.</property>
+                      </object>
                     </child>
                   </object>
                   <packing>
@@ -626,6 +693,11 @@
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="EffectsPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="effectspage|extended_tip|EffectsPage">Specify the font effects that you want to use.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
