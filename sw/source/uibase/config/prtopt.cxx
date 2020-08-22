@@ -114,7 +114,7 @@ SwPrintOptions::SwPrintOptions(bool bWeb) :
 
     // currently there is just one checkbox for print drawings and print graphics
     // In the UI. (File/Print dialog and Tools/Options/.../Print)
-    // And since print graphics is the only available in Writer and WrtierWeb ...
+    // And since print graphics is the only available in Writer and WriterWeb...
 
     m_bPrintDraw = m_bPrintGraphic;
 }
@@ -159,7 +159,7 @@ void SwPrintOptions::ImplCommit()
 
     // currently there is just one checkbox for print drawings and print graphics
     // In the UI. (File/Print dialog and Tools/Options/.../Print)
-    // And since print graphics is the only available in Writer and WrtierWeb ...
+    // And since print graphics is the only available in Writer and WriterWeb...
     m_bPrintDraw = m_bPrintGraphic;
 
     PutProperties(aNames, aValues);

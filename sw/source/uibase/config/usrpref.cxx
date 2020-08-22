@@ -172,7 +172,7 @@ void SwContentViewConfig::ImplCommit()
             case 19: bVal = rParent.IsUpdateCharts(); break;// "Update/Chart"
             case 20: bVal = rParent.IsShowInlineTooltips(); break;// "Display/ShowInlineTooltips"
             case 21: bVal = rParent.IsUseHeaderFooterMenu(); break;// "Display/UseHeaderFooterMenu"
-            case 22: bVal = rParent.IsShowOutlineContentVisibilityButton(); break;// "Display/ShowOutlineContnetVisibilityButton"
+            case 22: bVal = rParent.IsShowOutlineContentVisibilityButton(); break;// "Display/ShowOutlineContentVisibilityButton"
         }
         if (nProp != g_UpdateLinkIndex)
             pValues[nProp] <<= bVal;

@@ -882,7 +882,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testMultiSelect)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xSelection->getCount());
     css::uno::Reference<css::text::XTextRange> xTextRange(xSelection->getByIndex(0),
                                                           css::uno::UNO_QUERY_THROW);
-    // For #0, result was empty (cursor was put before the last occurence without selection)
+    // For #0, result was empty (cursor was put before the last occurrence without selection)
     CPPUNIT_ASSERT_EQUAL(OUString("abC"), xTextRange->getString());
     xTextRange.set(xSelection->getByIndex(1), css::uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("aBc"), xTextRange->getString());
