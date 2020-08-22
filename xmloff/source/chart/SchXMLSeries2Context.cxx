@@ -54,6 +54,8 @@
 #include <xmloff/prstylei.hxx>
 #include <tools/diagnose_ex.h>
 
+#include <algorithm> // std::find_if
+
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
@@ -289,7 +291,9 @@ SchXMLSeries2Context::SchXMLSeries2Context(
         mrLSequencesPerIndex( rLSequencesPerIndex ),
         mrGlobalChartTypeUsedBySeries( rGlobalChartTypeUsedBySeries ),
         mbSymbolSizeIsMissingInFile(false),
-        maChartSize( rChartSize )
+        maChartSize( rChartSize ),
+        // A series manages the DataRowPointStyle-struct of a data-label child element.
+        mDataLabel(DataRowPointStyle::DATA_LABEL_SERIES, OUString{})
 {
     if( aGlobalChartTypeName == "com.sun.star.chart2.DonutChartType" )
     {
@@ -635,6 +639,15 @@ void SchXMLSeries2Context::EndElement()
             aStyle.mbSymbolSizeForSeriesIsMissingInFile=mbSymbolSizeIsMissingInFile;
             mrStyleVector.push_back( aStyle );
         }
+        // And styles for a data-label child element too. In contrast to data-labels as child of data points,
+        // an information about absolute position is useless here. We need only style information.
+        if (!mDataLabel.msStyleName.isEmpty())
+        {
+            mDataLabel.msStyleNameOfParent = msAutoStyleName;
+            mDataLabel.m_xSeries = m_xSeries;
+            mDataLabel.mnAttachedAxis = mnAttachedAxis; // not needed, but be consistent with its parent
+            mrStyleVector.push_back(mDataLabel);
+        }
     }
 
     for( std::vector< DomainInfo >::reverse_iterator aIt( aDomainInfos.rbegin() ); aIt!= aDomainInfos.rend(); ++aIt )
@@ -711,6 +724,13 @@ SvXMLImportContextRef SchXMLSeries2Context::CreateChildContext(
             pContext = new SchXMLDataPointContext( mrImportHelper, GetImport(), rLocalName,
                                                    mrStyleVector, m_xSeries, mnDataPointIndex, mbSymbolSizeIsMissingInFile );
             break;
+        case XML_TOK_SERIES_DATA_LABEL:
+            // CustomLabels are useless for a data label element as child of a series, because it serves as default
+            // for all data labels. But the ctor expects it, so use that of the mDataLabel struct as ersatz.
+            pContext = new SchXMLDataLabelContext(GetImport(), rLocalName,
+                                                  mDataLabel.mCustomLabels, mDataLabel);
+            break;
+
         case XML_TOK_SERIES_PROPERTY_MAPPING:
             pContext = new SchXMLPropertyMappingContext( mrImportHelper,
                     GetImport(), rLocalName,
@@ -796,6 +816,28 @@ void SchXMLSeries2Context::setDefaultsToSeries( SeriesDefaultsAndStyles& rSeries
     }
 }
 
+// ODF has the line and fill properties in a <style:style> element, which is referenced by the
+// <chart:data-label> element. But LibreOffice has them as special label properties of the series
+// or point respectively. The following array maps the API name of the ODF property to the name of
+// the internal property. Those are of kind "LabelFoo".
+// The array is used in methods setStylesToSeries and setStylesToDataPoints.
+const std::pair<OUString, OUString> aApiToLabelFooPairs[] =
+{
+    {"LineStyle", "LabelBorderStyle"},
+    {"LineWidth", "LabelBorderWidth"},
+    {"LineColor", "LabelBorderColor"},
+    // The name "LaberBorderDash" ist defined, but the associated API name "LineDash" belongs to
+    // the <draw:stroke-dash> element and is not used directly as line property.
+    //{"LineDash", "LabelBorderDash"}, 
+    {"LineDashName", "LabelBorderDashName"},
+    {"LineTransparence", "LabelBorderTransparency"},
+    {"FillStyle", "LabelFillStyle"},
+    {"FillBackground","LabelFillBackground"},
+    {"FillHatchName", "LabelFillHatchName"},
+    {"FillColor", "LabelFillColor"}
+};
+
+
 //static
 void SchXMLSeries2Context::setStylesToSeries( SeriesDefaultsAndStyles& rSeriesDefaultsAndStyles
         , const SvXMLStylesContext* pStylesCtxt
@@ -809,78 +851,107 @@ void SchXMLSeries2Context::setStylesToSeries( SeriesDefaultsAndStyles& rSeriesDe
     // iterate over series
     for (const auto & seriesStyle : rSeriesDefaultsAndStyles.maSeriesStyleVector)
     {
-        if( seriesStyle.meType == DataRowPointStyle::DATA_SERIES )
+        if( seriesStyle.meType != DataRowPointStyle::DATA_SERIES )
+            continue;
+        try
         {
-            try
+            uno::Reference< beans::XPropertySet > xSeriesProp( seriesStyle.m_xOldAPISeries );
+            if( !xSeriesProp.is() )
+                continue;
+
+            if( seriesStyle.mnAttachedAxis != 1 )
             {
-                uno::Reference< beans::XPropertySet > xSeriesProp( seriesStyle.m_xOldAPISeries );
-                if( !xSeriesProp.is() )
+                xSeriesProp->setPropertyValue("Axis"
+                    , uno::makeAny(chart::ChartAxisAssign::SECONDARY_Y) );
+            }
+
+            if( seriesStyle.msStyleName.isEmpty())
+                continue;
+
+            if( rCurrStyleName != seriesStyle.msStyleName )
+            {
+                rCurrStyleName = seriesStyle.msStyleName;
+                rpStyle = pStylesCtxt->FindStyleChildContext(
+                SchXMLImportHelper::GetChartFamilyID(), rCurrStyleName );
+            }
+
+            //set style to series
+            // note: SvXMLStyleContext::FillPropertySet is not const
+            XMLPropStyleContext * pPropStyleContext =
+                const_cast< XMLPropStyleContext * >(
+                    dynamic_cast< const XMLPropStyleContext * >( rpStyle ));
+
+            if (!pPropStyleContext)
+                continue;
+
+            // error bar style must be set before the other error
+            // bar properties (which may be alphabetically before
+            // this property)
+            bool bHasErrorBarRangesFromData = false;
+            {
+                const OUString aErrorBarStylePropName( "ErrorBarStyle");
+                uno::Any aErrorBarStyle(
+                    SchXMLTools::getPropertyFromContext( aErrorBarStylePropName, pPropStyleContext, pStylesCtxt ));
+                if( aErrorBarStyle.hasValue())
+                {
+                    xSeriesProp->setPropertyValue( aErrorBarStylePropName, aErrorBarStyle );
+                    sal_Int32 eEBStyle = chart::ErrorBarStyle::NONE;
+                    bHasErrorBarRangesFromData =
+                        ( ( aErrorBarStyle >>= eEBStyle ) &&
+                         eEBStyle == chart::ErrorBarStyle::FROM_DATA );
+                }
+            }
+
+            //don't set the style to the min max line series of a stock chart
+            //otherwise the min max line properties gets overwritten and the series becomes invisible typically
+            if (bIsStockChart)
+            {
+                if (SchXMLSeriesHelper::isCandleStickSeries(
+                        seriesStyle.m_xSeries,
+                        rImportHelper.GetChartDocument()))
                     continue;
-
-                if( seriesStyle.mnAttachedAxis != 1 )
-                {
-                    xSeriesProp->setPropertyValue("Axis"
-                        , uno::makeAny(chart::ChartAxisAssign::SECONDARY_Y) );
-                }
-
-                if( !seriesStyle.msStyleName.isEmpty())
-                {
-                    if( rCurrStyleName != seriesStyle.msStyleName )
-                    {
-                        rCurrStyleName = seriesStyle.msStyleName;
-                        rpStyle = pStylesCtxt->FindStyleChildContext(
-                            SchXMLImportHelper::GetChartFamilyID(), rCurrStyleName );
-                    }
-
-                    //set style to series
-                    // note: SvXMLStyleContext::FillPropertySet is not const
-                    XMLPropStyleContext * pPropStyleContext =
-                        const_cast< XMLPropStyleContext * >(
-                            dynamic_cast< const XMLPropStyleContext * >( rpStyle ));
-                    if( pPropStyleContext )
-                    {
-                        // error bar style must be set before the other error
-                        // bar properties (which may be alphabetically before
-                        // this property)
-                        bool bHasErrorBarRangesFromData = false;
-                        {
-                            const OUString aErrorBarStylePropName( "ErrorBarStyle");
-                            uno::Any aErrorBarStyle(
-                                SchXMLTools::getPropertyFromContext( aErrorBarStylePropName, pPropStyleContext, pStylesCtxt ));
-                            if( aErrorBarStyle.hasValue())
-                            {
-                                xSeriesProp->setPropertyValue( aErrorBarStylePropName, aErrorBarStyle );
-                                sal_Int32 eEBStyle = chart::ErrorBarStyle::NONE;
-                                bHasErrorBarRangesFromData =
-                                    ( ( aErrorBarStyle >>= eEBStyle ) &&
-                                      eEBStyle == chart::ErrorBarStyle::FROM_DATA );
-                            }
-                        }
-
-                        //don't set the style to the min max line series of a stock chart
-                        //otherwise the min max line properties gets overwritten and the series becomes invisible typically
-                        bool bIsMinMaxSeries = false;
-                        if( bIsStockChart )
-                        {
-                            if( SchXMLSeriesHelper::isCandleStickSeries( seriesStyle.m_xSeries
-                                    , rImportHelper.GetChartDocument() ) )
-                                bIsMinMaxSeries = true;
-                        }
-                        if( !bIsMinMaxSeries )
-                        {
-                            pPropStyleContext->FillPropertySet( xSeriesProp );
-                            if( seriesStyle.mbSymbolSizeForSeriesIsMissingInFile )
-                                lcl_setSymbolSizeIfNeeded( xSeriesProp, rImport );
-                            if( bHasErrorBarRangesFromData )
-                                lcl_insertErrorBarLSequencesToMap( rInOutLSequencesPerIndex, xSeriesProp );
-                        }
-                    }
-                }
             }
-            catch( const uno::Exception & )
+
+            // Has the series a data-label child element?
+            auto pItLabel = std::find_if(rSeriesDefaultsAndStyles.maSeriesStyleVector.begin(),
+                                rSeriesDefaultsAndStyles.maSeriesStyleVector.end(),
+                            [seriesStyle] (const DataRowPointStyle& rStyle)
+                            {return rStyle.meType == DataRowPointStyle::DATA_LABEL_SERIES
+                                    && rStyle.msStyleNameOfParent == seriesStyle.msStyleName;});
+            if (pItLabel != rSeriesDefaultsAndStyles.maSeriesStyleVector.end())
             {
-                TOOLS_INFO_EXCEPTION("xmloff.chart", "Exception caught during setting styles to series" );
+                // Bring the information from the data-label to the series
+                const SvXMLStyleContext* pLabelStyleContext(pStylesCtxt->FindStyleChildContext(
+                        SchXMLImportHelper::GetChartFamilyID(), (*pItLabel).msStyleName));
+                // note: SvXMLStyleContext::FillPropertySet is not const
+                XMLPropStyleContext * pLabelPropStyleContext =
+                const_cast< XMLPropStyleContext * >(
+                    dynamic_cast< const XMLPropStyleContext * >(pLabelStyleContext));
+                if (pLabelPropStyleContext)
+                {
+                    // Test each to be mapped property whether the data-label has a value for it.
+                    // If found, set it at series.
+                    uno::Reference< beans::XPropertySetInfo> xSeriesPropInfo(xSeriesProp->getPropertySetInfo());
+                    for (const auto& rPropPair : aApiToLabelFooPairs)
+                    {
+                        uno::Any aPropValue(SchXMLTools::getPropertyFromContext(
+                                rPropPair.first, pLabelPropStyleContext, pStylesCtxt));
+                        if (aPropValue.hasValue() && xSeriesPropInfo->hasPropertyByName(rPropPair.second))
+                            xSeriesProp->setPropertyValue(rPropPair.second, aPropValue);
+                    }
+                }
             }
+
+            pPropStyleContext->FillPropertySet( xSeriesProp );
+            if( seriesStyle.mbSymbolSizeForSeriesIsMissingInFile )
+                lcl_setSymbolSizeIfNeeded( xSeriesProp, rImport );
+            if( bHasErrorBarRangesFromData )
+                lcl_insertErrorBarLSequencesToMap( rInOutLSequencesPerIndex, xSeriesProp );
+
+        }
+        catch( const uno::Exception & )
+        {
+                TOOLS_INFO_EXCEPTION("xmloff.chart", "Exception caught during setting styles to series" );
         }
     }
 }
@@ -1029,7 +1100,7 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
         , const SvXMLImport& rImport
         , bool bIsStockChart, bool bIsDonutChart, bool bSwitchOffLinesForScatter )
 {
-    for (auto const& seriesStyle : rSeriesDefaultsAndStyles.maSeriesStyleVector)
+    for (auto & seriesStyle : rSeriesDefaultsAndStyles.maSeriesStyleVector)
     {
         if( seriesStyle.meType != DataRowPointStyle::DATA_POINT )
             continue;
@@ -1102,6 +1173,36 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
                         dynamic_cast< const XMLPropStyleContext * >( rpStyle ));
                 if( pPropStyleContext )
                 {
+                    // Has the point a data-label child element?
+                    auto pItLabel = std::find_if(rSeriesDefaultsAndStyles.maSeriesStyleVector.begin(),
+                                rSeriesDefaultsAndStyles.maSeriesStyleVector.end(),
+                            [seriesStyle] (const DataRowPointStyle& rStyle)
+                            {return rStyle.meType == DataRowPointStyle::DATA_LABEL_POINT
+                                    && rStyle.msStyleNameOfParent == seriesStyle.msStyleName;});
+                    if (pItLabel != rSeriesDefaultsAndStyles.maSeriesStyleVector.end())
+                    {
+                        // Bring the information from the data-label to the point
+                        const SvXMLStyleContext* pLabelStyleContext(pStylesCtxt->FindStyleChildContext(
+                                SchXMLImportHelper::GetChartFamilyID(), (*pItLabel).msStyleName));
+                        // note: SvXMLStyleContext::FillPropertySet is not const
+                        XMLPropStyleContext * pLabelPropStyleContext =
+                            const_cast< XMLPropStyleContext * >(
+                            dynamic_cast< const XMLPropStyleContext * >(pLabelStyleContext));
+                        if (pLabelPropStyleContext)
+                        {
+                            // Test each to be mapped property whether the data-label has a value for it.
+                            // If found, set it at the point.
+                            uno::Reference< beans::XPropertySetInfo> xPointPropInfo(xPointProp->getPropertySetInfo());
+                            for (const auto& rPropPair : aApiToLabelFooPairs)
+                            {
+                                uno::Any aPropValue(SchXMLTools::getPropertyFromContext(
+                                        rPropPair.first, pLabelPropStyleContext, pStylesCtxt));
+                                if (aPropValue.hasValue() && xPointPropInfo->hasPropertyByName(rPropPair.second))
+                                    xPointProp->setPropertyValue(rPropPair.second, aPropValue);
+                            }
+                        }
+                    }
+
                     pPropStyleContext->FillPropertySet( xPointProp );
                     if( seriesStyle.mbSymbolSizeForSeriesIsMissingInFile )
                         lcl_resetSymbolSizeForPointsIfNecessary( xPointProp, rImport, pPropStyleContext, pStylesCtxt );

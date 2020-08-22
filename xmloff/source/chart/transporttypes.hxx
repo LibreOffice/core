@@ -24,6 +24,7 @@
 
 #include <vector>
 #include <map>
+#include <optional>
 
 enum SchXMLCellType
 {
@@ -156,7 +157,9 @@ struct DataRowPointStyle
         DATA_POINT,
         DATA_SERIES,
         MEAN_VALUE,
-        ERROR_INDICATOR
+        ERROR_INDICATOR,
+        DATA_LABEL_POINT,
+        DATA_LABEL_SERIES
     };
 
     StyleType meType;
@@ -171,8 +174,12 @@ struct DataRowPointStyle
     sal_Int32 m_nPointIndex;
     sal_Int32 m_nPointRepeat;
     OUString msStyleName;
+    OUString msStyleNameOfParent; // e.g. target of line and fill styles of data-labels
     ::std::vector<OUString> mCustomLabels;
     double mCustomLabelPos[2] = { 0.0, 0.0 };
+    // for svg:x and svg:y attribute (in core unit), of element <chart:data-label>
+    std::optional<sal_Int32> mo_nLabelAbsolutePosX;
+    std::optional<sal_Int32> mo_nLabelAbsolutePosY;
     OUString msSeriesStyleNameForDonuts;
 
     sal_Int32 mnAttachedAxis;
@@ -192,6 +199,17 @@ struct DataRowPointStyle
             mnAttachedAxis( nAttachedAxis ),
             mbSymbolSizeForSeriesIsMissingInFile( false )
         {}
+
+    // ctor for use in import of <chart:data-label> as child of <chart:series>
+    DataRowPointStyle( StyleType eType
+                        , const OUString& sStyleName
+                        , sal_Int32 nAttachedAxis = 0 ) :
+            meType( eType ),
+            msStyleName( sStyleName ),
+            mnAttachedAxis( nAttachedAxis ),
+            mbSymbolSizeForSeriesIsMissingInFile( false )
+        {}
+
 };
 
 typedef ::std::multimap< OUString, css::uno::Reference<
