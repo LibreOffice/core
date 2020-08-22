@@ -197,7 +197,7 @@ static bool checkAttribute(
         /* com::sun::star::beans::PropertyValue::CONSTRAINED */ 4,
         /* com::sun::star::beans::PropertyValue::TRANSIENT */ 8,
         /* com::sun::star::beans::PropertyValue::READONLY */ 16,
-        /* com::sun::star::beans::PropertyValue::MAYBEAMBIGIOUS */ 32,
+        /* com::sun::star::beans::PropertyValue::MAYBEAMBIGUOUS */ 32,
         /* com::sun::star::beans::PropertyValue::MAYBEDEFAULT */ 64,
         /* com::sun::star::beans::PropertyValue::REMOVABLE */ 128,
         /* com::sun::star::beans::PropertyValue::OPTIONAL */ 256 };
@@ -227,7 +227,7 @@ static bool checkAttribute(
                 attributeValue.append("PropertyAttribute.READONLY");
                 break;
             case 32:
-                attributeValue.append("PropertyAttribute.MAYBEAMBIGIOUS");
+                attributeValue.append("PropertyAttribute.MAYBEAMBIGUOUS");
                 break;
             case 64:
                 attributeValue.append("PropertyAttribute.MAYBEDEFAULT");
