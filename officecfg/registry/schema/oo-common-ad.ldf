@@ -107,7 +107,7 @@ schemaUpdateNow: 1
 dn: CN=Group, CN=Schema, CN=Configuration,DC=sun, DC=com
 changetype: modify
 add: auxiliaryClass
-auxilaryClass: oo-prioritised-role
+auxiliaryClass: oo-prioritised-role
 -
 
 dn: CN=oo-registry-object, CN=Schema,CN=Configuration,DC=sun, DC=com
