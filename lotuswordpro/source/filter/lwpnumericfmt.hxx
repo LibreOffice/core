@@ -269,7 +269,7 @@ private:
     static sal_uInt16 GetDefaultDecimalPlaces(sal_uInt16 Format);
     static LwpCurrencyPool m_aCurrencyInfo;
 
-    void GetCurrencyStr(LwpNumericFormatSubset aNumber, OUString& aPrefix, OUString& aSuffix, bool bNegtive=false);
+    void GetCurrencyStr(LwpNumericFormatSubset aNumber, OUString& aPrefix, OUString& aSuffix, bool bNegative=false);
     void SetNumberType(XFNumberStyle* pStyle);
     static OUString reencode(const OUString& sCode);
 };
