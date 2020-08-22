@@ -133,7 +133,7 @@ public class GenericModelTest extends TestCase {
     private static final String m_TestDB = "TestDB";
     private DBTools m_dbTools = null;
 
-    private boolean m_ConnectionColsed = false;
+    private boolean m_ConnectionClosed = false;
 
     /**
      * describes the kind of the shape which should be created.
@@ -217,7 +217,7 @@ public class GenericModelTest extends TestCase {
     protected void initialize(TestParameters tParam, PrintWriter log) throws Exception {
         log.println("creating a textdocument");
         m_xTextDoc = WriterTools.createTextDoc(tParam.getMSF());
-        m_ConnectionColsed = false;
+        m_ConnectionClosed = false;
         debug = tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE);
         m_propertiesToSet.clear();
     }
@@ -237,7 +237,7 @@ public class GenericModelTest extends TestCase {
         // some interface tests call cleanup to reset the environment. If such
         // a test is the last one cleanup was called twice. The second call
         // causes then nasty exceptions...
-        if (m_ConnectionColsed) return;
+        if (m_ConnectionClosed) return;
 
         try {
             XIndexAccess forms = UnoRuntime.queryInterface( XIndexAccess.class,
@@ -329,7 +329,7 @@ public class GenericModelTest extends TestCase {
             log.println("ERROR: Error while object test cleaning up: " + e.toString());
         }
 
-        m_ConnectionColsed = true;
+        m_ConnectionClosed = true;
     }
 
     /**
