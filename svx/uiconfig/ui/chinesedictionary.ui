@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore2">
@@ -34,9 +34,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -122,6 +119,11 @@
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">simpletotrad</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="tradtosimple-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="chinesedictionary|extended_tip|tradtosimple">Converts traditional Chinese to simplified Chinese.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -138,6 +140,11 @@
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">tradtosimple</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="simpletotrad-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="chinesedictionary|extended_tip|simpletotrad">Converts simplified Chinese to traditional Chinese.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -153,6 +160,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="reverse-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="chinesedictionary|extended_tip|reverse">Automatically adds the reverse mapping direction to the list for each modification that you enter.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -215,6 +227,11 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_stock">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="add-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="chinesedictionary|extended_tip|add">Adds the term to the conversion dictionary. If the term is already in the dictionary, the new term receives precedence.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -229,6 +246,11 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="modify-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="chinesedictionary|extended_tip|modify">Saves the modified entry to the database file.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -243,6 +265,11 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_stock">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="delete-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="chinesedictionary|extended_tip|delete">Removes the selected user-defined entry from the dictionary.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -292,6 +319,11 @@
                       <item translatable="yes" context="chinesedictionary|property">Verb</item>
                       <item translatable="yes" context="chinesedictionary|property">Brand name</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="property-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="chinesedictionary|extended_tip|property">Defines the class of the selected term.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -304,6 +336,11 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="mapping-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="chinesedictionary|extended_tip|mapping">Enter the text that you want to replace the Term with.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -316,6 +353,11 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="term-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="chinesedictionary|extended_tip|term">Enter the text that you want to replace with the Mapping term.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -501,6 +543,14 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="ChineseDictionaryDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="chinesedictionary|extended_tip|ChineseDictionaryDialog">Edit the Chinese conversion terms.</property>
+      </object>
+    </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <property name="mode">both</property>

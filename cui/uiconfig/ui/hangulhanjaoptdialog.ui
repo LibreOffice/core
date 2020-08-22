@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore2">
@@ -24,9 +24,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -129,6 +126,11 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="use_underline">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="new-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaoptdialog|extended_tip|new">Opens the New dictionary dialog box, where you can create a new dictionary.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -142,6 +144,11 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="edit-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaoptdialog|extended_tip|edit">Opens the Edit Custom Dictionary dialog where you can edit any user-defined dictionary.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -156,6 +163,11 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="use_stock">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="delete-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaoptdialog|extended_tip|delete">Deletes the selected user-defined dictionary.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -216,6 +228,11 @@
                                     </child>
                                   </object>
                                 </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="dicts-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaoptdialog|extended_tip|dicts">Lists all user-defined dictionaries. Select the check box next to the dictionary that you want to use. Clear the check box next to the dictionary that you do not want to use.</property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>
@@ -270,6 +287,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="ignorepost-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaoptdialog|extended_tip|ignorepost">Ignores positional characters at the end of Korean words when you search a dictionary.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -285,6 +307,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="showrecentfirst-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaoptdialog|extended_tip|showrecentfirst">Shows the replacement suggestion that you selected the last time as the first entry on the list.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -300,6 +327,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="autoreplaceunique-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaoptdialog|extended_tip|autoreplaceunique">Automatically replaces words that only have one suggested word replacement.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -340,5 +372,8 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="SignSignatureLineDialog">
@@ -10,9 +10,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox">
         <property name="can_focus">False</property>
@@ -111,6 +108,11 @@
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
                             <property name="placeholder_text" translatable="yes" context="signsignatureline|edit_name">Type your name here</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="edit_name-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="signsignatureline|extended_tip|edit_name">Enter your name as signer of the document. Your name will be inserted above the signature horizontal line.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -151,6 +153,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="btn_select_certificate-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="signsignatureline|extended_tip|btn_select_certificate">Click on the Select Certificate button to open the Select Certificate dialog box, where your certificates are listed. Select the certificate suitable for signing the document.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -294,6 +301,11 @@
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
                                 <property name="vexpand">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="edit_comment-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="signsignatureline|extended_tip|edit_comment">Enter comments about the signature. The comments are displayed in the Description field of the certificate.</property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>
@@ -326,6 +338,11 @@
                             <attributes>
                               <attribute name="style" value="oblique"/>
                             </attributes>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="label_hint_text-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="signsignatureline|extended_tip|label_hint_text">This area displays the instructions entered by the document creator when adding the signature line.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -366,5 +383,8 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-5">ok</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>

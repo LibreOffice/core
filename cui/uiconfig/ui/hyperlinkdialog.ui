@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="HyperlinkDialog">
@@ -11,9 +11,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -31,6 +28,11 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="reset-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkdialog|extended_tip|reset">Resets the entries in the dialog to their original state.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -44,6 +46,11 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="apply-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkdialog|extended_tip|apply">Applies the data to your document.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -74,6 +81,11 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="cancel-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkdialog|extended_tip|cancel">Closes the dialog without saving.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -415,5 +427,8 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>

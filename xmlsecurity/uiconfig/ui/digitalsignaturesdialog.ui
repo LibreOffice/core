@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="xsc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore3">
@@ -26,9 +26,6 @@
     <property name="title" translatable="yes" context="digitalsignaturesdialog|DigitalSignaturesDialog">Digital Signatures</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -113,7 +110,6 @@
                     <property name="model">liststore3</property>
                     <property name="search_column">0</property>
                     <property name="show_expanders">False</property>
-                    <property name="headers_visible">True</property>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
                     </child>
@@ -194,6 +190,11 @@
                         </child>
                       </object>
                     </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="signatures-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="digitalsignaturesdialog|extended_tip|signatures">Lists the digital signatures for the current document.</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -215,6 +216,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="view-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="digitalsignaturesdialog|extended_tip|view">Opens the View Certificate dialog.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -229,6 +235,11 @@
                     <property name="can_focus">True</property>
                     <property name="can_default">True</property>
                     <property name="receives_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="sign-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="digitalsignaturesdialog|extended_tip|sign">Opens the Select Certificate dialog.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -242,6 +253,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="remove-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="digitalsignaturesdialog|extended_tip|remove">Removes the selected signature from the list. Removes all subsequent signatures as well, in case of PDF.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -474,6 +490,11 @@
                 <property name="use_underline">True</property>
                 <property name="xalign">0.5</property>
                 <property name="draw_indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="adescompliant-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="digitalsignaturesdialog|extended_tip|adescompliant">Prefers creating XAdES signatures for ODF and OOXML, PAdES signatures for PDF.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -493,5 +514,13 @@
       <action-widget response="-11">help</action-widget>
       <action-widget response="-7">close</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="DigitalSignaturesDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="digitalsignaturesdialog|extended_tip|DigitalSignaturesDialog">Adds and removes digital signatures to and from your document. You can also use the dialog to view certificates.</property>
+      </object>
+    </child>
   </object>
 </interface>

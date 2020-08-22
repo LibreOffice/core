@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustmentAMOUNT">
@@ -73,6 +73,11 @@
                       <item id="3" translatable="yes" context="textanimtabpage|liststoreEFFECT">Scroll Back and Forth</item>
                       <item id="4" translatable="yes" context="textanimtabpage|liststoreEFFECT">Scroll In</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="LB_EFFECT-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="textanimtabpage|extended_tip|LB_EFFECT">Select the animation effect that you want to apply to the text in the selected drawing object. To remove an animation effect, select No Effect.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -118,6 +123,7 @@
                             <child internal-child="accessible">
                               <object class="AtkObject" id="BTN_UP-atkobject">
                                 <property name="AtkObject::accessible-name" translatable="yes" context="textanimtabpage|BTN_UP-atkobject">Up</property>
+                                <property name="AtkObject::accessible-description" translatable="yes" context="textanimtabpage|extended_tip|BTN_UP">Scrolls text from bottom to top.</property>
                               </object>
                             </child>
                           </object>
@@ -139,6 +145,7 @@
                             <child internal-child="accessible">
                               <object class="AtkObject" id="BTN_RIGHT-atkobject">
                                 <property name="AtkObject::accessible-name" translatable="yes" context="textanimtabpage|BTN_RIGHT-atkobject">Right</property>
+                                <property name="AtkObject::accessible-description" translatable="yes" context="textanimtabpage|extended_tip|BTN_RIGHT">Scrolls text from left to right.</property>
                               </object>
                             </child>
                           </object>
@@ -160,6 +167,7 @@
                             <child internal-child="accessible">
                               <object class="AtkObject" id="BTN_LEFT-atkobject">
                                 <property name="AtkObject::accessible-name" translatable="yes" context="textanimtabpage|BTN_LEFT-atkobject">Left</property>
+                                <property name="AtkObject::accessible-description" translatable="yes" context="textanimtabpage|extended_tip|BTN_LEFT">Scrolls text from right to left.</property>
                               </object>
                             </child>
                           </object>
@@ -181,6 +189,7 @@
                             <child internal-child="accessible">
                               <object class="AtkObject" id="BTN_DOWN-atkobject">
                                 <property name="AtkObject::accessible-name" translatable="yes" context="textanimtabpage|BTN_DOWN-atkobject">Down</property>
+                                <property name="AtkObject::accessible-description" translatable="yes" context="textanimtabpage|extended_tip|BTN_DOWN">Scrolls text from top to bottom.</property>
                               </object>
                             </child>
                           </object>
@@ -269,6 +278,11 @@
                     <property name="xalign">0</property>
                     <property name="inconsistent">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="TSB_START_INSIDE-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="textanimtabpage|extended_tip|TSB_START_INSIDE">Text is visible and inside the drawing object when the effect is applied.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -286,6 +300,11 @@
                     <property name="xalign">0</property>
                     <property name="inconsistent">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="TSB_STOP_INSIDE-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="textanimtabpage|extended_tip|TSB_STOP_INSIDE">Text remains visible after the effect is applied.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -325,6 +344,11 @@
                         <accessibility>
                           <relation type="label-for" target="NUM_FLD_COUNT"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="TSB_ENDLESS-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="textanimtabpage|extended_tip|TSB_ENDLESS">Plays the animation effect continuously. To specify the number of times to play the effect, clear this checkbox, and enter a number in the Continuous box.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -341,6 +365,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="TSB_ENDLESS"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="NUM_FLD_COUNT-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="textanimtabpage|extended_tip|NUM_FLD_COUNT">Enter the number of times that you want the animation effect to repeat.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -386,6 +415,11 @@
                         <accessibility>
                           <relation type="label-for" target="MTR_FLD_AMOUNT"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="TSB_PIXEL-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="textanimtabpage|extended_tip|TSB_PIXEL">Measures increment value in pixels.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -402,6 +436,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="TSB_PIXEL"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="MTR_FLD_AMOUNT-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="textanimtabpage|extended_tip|MTR_FLD_AMOUNT">Enter the number of increments by which to scroll the text.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -447,6 +486,11 @@
                         <accessibility>
                           <relation type="label-for" target="MTR_FLD_DELAY"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="TSB_AUTO-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="textanimtabpage|extended_tip|TSB_AUTO">%PRODUCTNAME automatically determines the amount of time to wait before repeating the effect. To manually assign the delay period, clear this checkbox, and then enter a value in the Automatic box.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -463,6 +507,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="TSB_AUTO"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="MTR_FLD_DELAY-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="textanimtabpage|extended_tip|MTR_FLD_DELAY">Enter the amount of time to wait before repeating the effect.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -497,6 +546,11 @@
         <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="TextAnimation-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="textanimtabpage|extended_tip|TextAnimation">Adds an animation effect to the text in the selected drawing object.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup">

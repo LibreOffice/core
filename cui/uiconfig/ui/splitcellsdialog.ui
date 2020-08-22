@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.2 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -270,8 +270,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
+    <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="SplitCellsDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="splitcellsdialog|extended_tip|SplitCellsDialog">Splits the cell or group of cells horizontally or vertically into the number of cells that you enter.</property>
+      </object>
     </child>
   </object>
 </interface>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.0 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkMessageDialog" id="CheckWarningDialog">
@@ -77,8 +77,8 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
-            <property name="use_underline">True</property>
             <property name="halign">start</property>
+            <property name="use_underline">True</property>
             <property name="active">True</property>
             <property name="draw_indicator">True</property>
           </object>
@@ -95,7 +95,7 @@
       <action-widget response="-9">no</action-widget>
       <action-widget response="-8">yes</action-widget>
     </action-widgets>
-    <child>
+    <child type="titlebar">
       <placeholder/>
     </child>
   </object>

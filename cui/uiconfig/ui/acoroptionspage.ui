@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore2">
@@ -78,6 +78,11 @@
         <property name="fill">True</property>
         <property name="position">0</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="AutocorrectOptionsPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="acoroptionspage|extended_tip|AutocorrectOptionsPage">Select the options for automatically correcting errors as you type, and then click OK.</property>
+      </object>
     </child>
   </object>
 </interface>

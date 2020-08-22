@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkImage" id="image1">
@@ -118,9 +118,6 @@
                         </child>
                         <child>
                           <object class="GtkCellRendererPixbuf" id="cellrenderertext4"/>
-                          <attributes>
-                            <attribute name="surface">3</attribute>
-                          </attributes>
                         </child>
                       </object>
                       <packing>
@@ -194,6 +191,11 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_stock">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="BTN_DELETE-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="lineendstabpage|extended_tip|BTN_DELETE">Deletes the selected element or elements after confirmation.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>

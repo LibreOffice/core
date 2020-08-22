@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="pcr">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkGrid" id="InvokeAdminPage">
@@ -21,7 +21,7 @@ Click the following button to open another dialog in which you then enter the ne
         <property name="yalign">0</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="label2-atkobject">
-            <property name="AtkObject::accessible-role" translatable="no">static</property>
+            <property name="AtkObject::accessible-role">static</property>
           </object>
         </child>
       </object>
@@ -37,6 +37,11 @@ Click the following button to open another dialog in which you then enter the ne
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
         <property name="halign">center</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="settings-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="invokeadminpage|extended_tip|settings">Calls a dialog in which you can enter additional settings.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -56,7 +61,7 @@ Before you proceed, please check the settings made, or (on the previous page) ch
         <property name="yalign">0</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="warning-atkobject">
-            <property name="AtkObject::accessible-role" translatable="no">static</property>
+            <property name="AtkObject::accessible-role">static</property>
           </object>
         </child>
       </object>
@@ -64,6 +69,11 @@ Before you proceed, please check the settings made, or (on the previous page) ch
         <property name="left_attach">0</property>
         <property name="top_attach">2</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="InvokeAdminPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="invokeadminpage|extended_tip|InvokeAdminPage">Allows you to enter additional settings for LDAP address data and other external data sources.</property>
+      </object>
     </child>
   </object>
 </interface>

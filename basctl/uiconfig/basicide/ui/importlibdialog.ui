@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="basctl">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -25,9 +25,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -123,6 +120,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="ref-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="importlibdialog|extended_tip|ref">Adds the selected library as a read-only file. The library is reloaded each time you start %PRODUCTNAME.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -138,6 +140,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="replace-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="importlibdialog|extended_tip|replace">Replaces a library that has the same name with the current library.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -262,5 +269,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="ImportLibDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="importlibdialog|extended_tip|ImportLibDialog">Enter a name or the path to the library that you want to append. You can also select a library from the list.</property>
+      </object>
+    </child>
   </object>
 </interface>

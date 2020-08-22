@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sfx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="categorylist">
@@ -118,6 +118,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="name_entry-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="saveastemplatedlg|extended_tip|name_entry">Enter a name for the template.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -189,6 +194,11 @@
                             </child>
                           </object>
                         </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="categorylb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="saveastemplatedlg|extended_tip|categorylb">Select a category in which to save the new template.</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -213,6 +223,11 @@
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="defaultcb-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="saveastemplatedlg|extended_tip|defaultcb">The new template will be used as the default template.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -233,5 +248,13 @@
       <action-widget response="-5">ok</action-widget>
       <action-widget response="-6">cancel</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="SaveAsTemplateDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="saveastemplatedlg|extended_tip|SaveAsTemplateDialog">Saves the current document as a template.</property>
+      </object>
+    </child>
   </object>
 </interface>

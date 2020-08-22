@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="IMapDialog">
@@ -10,9 +10,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -112,6 +109,11 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="urlentry-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="cuiimapdlg|extended_tip|urlentry">Enter the URL for the file that you want to open when you click the selected hotspot.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -160,6 +162,11 @@
                         <property name="activates_default">True</property>
                       </object>
                     </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="frameCB-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="cuiimapdlg|extended_tip|frameCB">Enter the name of the target frame that you want to open the URL in. You can also select a standard frame name that is recognized by all browsers from the list.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -202,6 +209,11 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="nameentry-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="cuiimapdlg|extended_tip|nameentry">Enter a name for the image.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -244,6 +256,11 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="textentry-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="cuiimapdlg|extended_tip|textentry">Enter the text that you want to display when the mouse rests on the hotspot in a browser.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -296,6 +313,11 @@
                         <property name="hscroll_policy">natural</property>
                         <property name="vscroll_policy">natural</property>
                         <property name="wrap_mode">word</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="descTV-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="cuiimapdlg|extended_tip|descTV">Enter a description for the hotspot.</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -326,5 +348,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="IMapDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="cuiimapdlg|extended_tip|IMapDialog">Lists the properties for the selected hotspot.</property>
+      </object>
+    </child>
   </object>
 </interface>

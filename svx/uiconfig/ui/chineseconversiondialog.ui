@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="ChineseConversionDialog">
@@ -10,9 +10,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -114,6 +111,11 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="tosimplified-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="chineseconversiondialog|extended_tip|tosimplified">Converts traditional Chinese text characters to simplified Chinese text characters. Click OK to convert the selected text. If no text is selected, the whole document is converted.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -130,6 +132,11 @@
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">tosimplified</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="totraditional-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="chineseconversiondialog|extended_tip|totraditional">Converts simplified Chinese text characters to traditional Chinese text characters. Click OK to convert the selected text. If no text is selected, the whole document is converted.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -189,6 +196,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="commonterms-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="chineseconversiondialog|extended_tip|commonterms">Converts words with two or more characters that are in the list of common terms. After the list is scanned, the remaining text is converted character by character.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -202,6 +214,11 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="use_underline">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="editterms-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="chineseconversiondialog|extended_tip|editterms">Opens the Edit Dictionary dialog where you can edit the list of conversion terms.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -242,5 +259,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="ChineseConversionDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="chineseconversiondialog|extended_tip|ChineseConversionDialog">Converts the selected Chinese text from one Chinese writing system to the other. If no text is selected, the entire document is converted.</property>
+      </object>
+    </child>
   </object>
 </interface>

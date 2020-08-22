@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -40,6 +40,11 @@
         <property name="use_underline">True</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="date-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="redlinefilterpage|extended_tip|date">Filters the list of changes according to the date and the time that you specify.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -55,6 +60,11 @@
         <property name="use_underline">True</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="author-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="redlinefilterpage|extended_tip|author">Filters the list of changes according to the name of the author that you select from the list.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -73,6 +83,11 @@
         <accessibility>
           <relation type="label-for" target="commentedit"/>
         </accessibility>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="comment-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="redlinefilterpage|extended_tip|comment">Filters the comments of the changes according to the keyword(s) that you enter.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -90,6 +105,7 @@
         <child internal-child="accessible">
           <object class="AtkObject" id="commentedit-atkobject">
             <property name="AtkObject::accessible-name" translatable="yes" context="redlinefilterpage|commentedit-atkobject">Comment</property>
+            <property name="AtkObject::accessible-description" translatable="yes" context="redlinefilterpage|extended_tip|commentedit">Filters the comments of the changes according to the keyword(s) that you enter.</property>
           </object>
         </child>
       </object>
@@ -107,6 +123,11 @@
         <property name="use_underline">True</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="range-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="redlinefilterpage|extended_tip|range">Filters the list of changes according to the range of cells that you specify. To select a range of cells in your sheet, click the Set Reference button (...).</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -126,6 +147,7 @@
         <child internal-child="accessible">
           <object class="AtkObject" id="actionlist-atkobject">
             <property name="AtkObject::accessible-name" translatable="yes" context="redlinefilterpage|actionlist-atkobject">Action</property>
+            <property name="AtkObject::accessible-description" translatable="yes" context="redlinefilterpage|extended_tip|actionlist">Filters the list of changes according to the type of change that you select in the Action box.</property>
           </object>
         </child>
       </object>
@@ -143,6 +165,11 @@
         <property name="use_underline">True</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="action-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="redlinefilterpage|extended_tip|action">Filters the list of changes according to the type of change that you select in the Action box.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -162,6 +189,7 @@
         <child internal-child="accessible">
           <object class="AtkObject" id="authorlist-atkobject">
             <property name="AtkObject::accessible-name" translatable="yes" context="redlinefilterpage|authorlist-atkobject">Author</property>
+            <property name="AtkObject::accessible-description" translatable="yes" context="redlinefilterpage|extended_tip|authorlist">Filters the list of changes according to the name of the author that you select from the list.</property>
           </object>
         </child>
       </object>
@@ -189,6 +217,7 @@
             <child internal-child="accessible">
               <object class="AtkObject" id="rangeedit-atkobject">
                 <property name="AtkObject::accessible-name" translatable="yes" context="redlinefilterpage|rangeedit-atkobject">Range</property>
+                <property name="AtkObject::accessible-description" translatable="yes" context="redlinefilterpage|extended_tip|rangeedit">Filters the list of changes according to the range of cells that you specify. To select a range of cells in your sheet, click the Set Reference button (...).</property>
               </object>
             </child>
           </object>
@@ -246,6 +275,7 @@
             <child internal-child="accessible">
               <object class="AtkObject" id="datecond-atkobject">
                 <property name="AtkObject::accessible-name" translatable="yes" context="redlinefilterpage|datecond-atkobject">Date Condition</property>
+                <property name="AtkObject::accessible-description" translatable="yes" context="redlinefilterpage|extended_tip|datecond">Filters the list of changes according to the date and the time that you specify.</property>
               </object>
             </child>
           </object>
@@ -282,13 +312,13 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="draw_indicator">True</property>
-                <property name="label" translatable="no"></property>
                 <child>
                   <placeholder/>
                 </child>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="startdate-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="redlinefilterpage|startdate-atkobject">Start Date</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="redlinefilterpage|extended_tip|startdate">Filters the list of changes according to the date and the time that you specify.</property>
                   </object>
                 </child>
               </object>
@@ -309,6 +339,7 @@
                 <child internal-child="accessible">
                   <object class="AtkObject" id="starttime-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="redlinefilterpage|starttime-atkobject">Start Time</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="redlinefilterpage|extended_tip|starttime">Filters the list of changes according to the date and the time that you specify.</property>
                   </object>
                 </child>
               </object>
@@ -337,13 +368,13 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="draw_indicator">True</property>
-                <property name="label" translatable="no"></property>
                 <child>
                   <placeholder/>
                 </child>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="enddate-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="redlinefilterpage|enddate-atkobject">End Date</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="redlinefilterpage|extended_tip|enddate">Filters the list of changes according to the date and the time that you specify.</property>
                   </object>
                 </child>
               </object>
@@ -364,6 +395,7 @@
                 <child internal-child="accessible">
                   <object class="AtkObject" id="endtime-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="redlinefilterpage|endtime-atkobject">End Time</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="redlinefilterpage|extended_tip|endtime">Filters the list of changes according to the date and the time that you specify.</property>
                   </object>
                 </child>
               </object>
@@ -401,6 +433,11 @@
         <property name="left_attach">0</property>
         <property name="top_attach">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="RedlineFilterPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="redlinefilterpage|extended_tip|RedlineFilterPage">Filters the list of changes according to the date and the time that you specify.</property>
+      </object>
     </child>
   </object>
 </interface>

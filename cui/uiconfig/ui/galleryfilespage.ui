@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -46,15 +46,20 @@
             </child>
             <child>
               <object class="GtkComboBoxText" id="filetype">
+                <property name="width_request">0</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="has_entry">True</property>
-                <property name="width_request">0</property>
                 <child internal-child="entry">
                   <object class="GtkEntry" id="comboboxtext-entry">
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
+                  </object>
+                </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="filetype-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="galleryfilespage|extended_tip|filetype">Select the type of file that you want to add.</property>
                   </object>
                 </child>
               </object>
@@ -103,8 +108,9 @@
                   </object>
                 </child>
                 <child internal-child="accessible">
-                  <object class="AtkObject" id="types-atkobject">
+                  <object class="AtkObject" id="files-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="galleryfilespage|files-atkobject">Files Found</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="galleryfilespage|extended_tip|files">Lists the available files. Select the file(s) that you want to add, and then click Add. To add all of the files in the list, click Add All.</property>
                   </object>
                 </child>
               </object>
@@ -140,6 +146,11 @@
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="preview-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="galleryfilespage|extended_tip|preview">Displays or hides a preview of the selected file.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -196,6 +207,11 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="findfiles-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="galleryfilespage|extended_tip|findfiles">Locate the directory containing the files that you want to add, and then click OK.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -210,6 +226,11 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="add-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="galleryfilespage|extended_tip|add">Adds the selected file(s) to the current theme.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -224,6 +245,11 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="addall-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="galleryfilespage|extended_tip|addall">Adds all of the files in the list to the current theme.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
