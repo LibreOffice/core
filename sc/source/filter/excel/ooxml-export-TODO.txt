@@ -75,7 +75,7 @@ Elements:
         - firstHeader (§3.3.1.39)       [ HeaderFooter 89Ch ]
         - formula (§3.3.1.40)           [ CF 1B1h ]
         - iconSet (§3.3.1.46)           [ CF12 87Ah ct=CFMultistate ]
-        - ignoredError (§3.3.1.47)      [ Feat/FeatForumulaErr2/FFErrorCheck 868h ]
+        - ignoredError (§3.3.1.47)      [ Feat/FeatFormulaErr2/FFErrorCheck 868h ]
         - ignoredErrors (§3.3.1.48)     [ Feat 868h ]
         - legacyDrawing (§3.3.1.51)     [ MsoDrawing ECh ]
         - legacyDrawingHF (§3.3.1.52)   [ ??? ]
