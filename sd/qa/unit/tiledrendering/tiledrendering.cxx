@@ -297,16 +297,19 @@ void SdTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
     {
         OUString aPayload = OUString::createFromAscii(pPayload);
         m_aSelection.clear();
-        for (const OUString& rString : lcl_convertSeparated(aPayload, u';'))
+        if (pPayload != "EMPTY")
         {
-            ::tools::Rectangle aRectangle;
-            lcl_convertRectangle(rString, aRectangle);
-            m_aSelection.push_back(aRectangle);
+            for (const OUString& rString : lcl_convertSeparated(aPayload, u';'))
+            {
+                ::tools::Rectangle aRectangle;
+                lcl_convertRectangle(rString, aRectangle);
+                m_aSelection.push_back(aRectangle);
+            }
+            if (m_aSearchResultSelection.empty())
+                ++m_nSelectionBeforeSearchResult;
+            else
+                ++m_nSelectionAfterSearchResult;
         }
-        if (m_aSearchResultSelection.empty())
-            ++m_nSelectionBeforeSearchResult;
-        else
-            ++m_nSelectionAfterSearchResult;
     }
     break;
     case LOK_CALLBACK_SEARCH_NOT_FOUND:
@@ -2328,6 +2331,10 @@ void SdTiledRenderingTest::testCutSelectionChange()
     // Select first text object
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
+    Scheduler::ProcessEventsToIdle();
+
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_F2);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_F2);
     Scheduler::ProcessEventsToIdle();
 
     // step into text editing
