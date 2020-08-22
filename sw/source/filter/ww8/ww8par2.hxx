@@ -220,7 +220,6 @@ class WW8TabDesc
     short m_nDefaultSwCols;
     short m_nBands;
     short m_nMinLeft;
-    short m_nConvertedLeft;
     short m_nMaxRight;
     short m_nSwWidth;
     short m_nPreferredWidth;
@@ -278,7 +277,7 @@ public:
     void ParkPaM();
     void FinishSwTable();
     void MergeCells();
-    short GetMinLeft() const { return m_nConvertedLeft; }
+    short GetMinLeft() const { return m_nMinLeft; }
     ~WW8TabDesc();
 
     const WW8_TCell* GetCurrentWWCell() const { return m_pCurrentWWCell; }
