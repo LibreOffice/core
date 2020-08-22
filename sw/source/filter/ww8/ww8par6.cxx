@@ -2957,8 +2957,8 @@ SwWW8StyInf *SwWW8ImplReader::GetStyle(sal_uInt16 nColl) const
 // contour and shadow
 void SwWW8ImplReader::Read_BoldUsw( sal_uInt16 nId, const sal_uInt8* pData, short nLen )
 {
-    const int nContigiousWestern = 8;
-    const int nWestern = nContigiousWestern + 1;
+    const int nContiguousWestern = 8;
+    const int nWestern = nContiguousWestern + 1;
     const int nEastern = 2;
     const int nCTL = 2;
     const int nIds = nWestern + nEastern + nCTL;
@@ -2981,7 +2981,7 @@ void SwWW8ImplReader::Read_BoldUsw( sal_uInt16 nId, const sal_uInt8* pData, shor
     sal_uInt8 nI;
     // the attribute number for "double strike-through" breaks rank
     if (NS_sprm::CFDStrike::val == nId)
-        nI = nContigiousWestern;               // The out of sequence western id
+        nI = nContiguousWestern;               // The out of sequence western id
     else
     {
         // The contiguous western ids
