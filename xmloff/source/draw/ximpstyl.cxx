@@ -1527,7 +1527,6 @@ SdXMLHeaderFooterDeclContext::SdXMLHeaderFooterDeclContext(SvXMLImport& rImport,
         else
         {
             SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
-            assert(false);
         }
     }
 }
@@ -1556,7 +1555,6 @@ void SdXMLHeaderFooterDeclContext::endFastElement(sal_Int32 nToken)
     else
     {
         SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nToken));
-        assert(false);
     }
 }
 
