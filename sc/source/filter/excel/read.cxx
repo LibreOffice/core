@@ -1013,7 +1013,7 @@ ErrCode ImportExcel8::Read()
                         }
                         break;
                     case 0x12:  DocProtect(); break;    // PROTECT      [    5678]
-                    case 0x13:  DocPasssword(); break;
+                    case 0x13:  DocPassword(); break;
                     case 0x19:  WinProtection(); break;
                     case 0x2F:                          // FILEPASS     [ 2345   ]
                         eLastErr = XclImpDecryptHelper::ReadFilepass( maStrm );

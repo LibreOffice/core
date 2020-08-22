@@ -139,7 +139,7 @@ protected:
     void                    Eof();                    // 0x0A
     void                    DocProtect();             // 0x12
     void                    SheetProtect();           // 0x12 Sheet Protection
-    void                    DocPasssword();           // 0x13 document password
+    void                    DocPassword();            // 0x13 document password
     void                    SheetPassword();               // 0x13 sheet password
     void                    Externsheet();            // 0x17
     void                    WinProtection();          // 0x19

@@ -614,7 +614,7 @@ void ImportExcel::DocProtect()
     GetRoot().GetDocProtectBuffer().ReadDocProtect( aIn );
 }
 
-void ImportExcel::DocPasssword()
+void ImportExcel::DocPassword()
 {
     if (GetRoot().GetBiff() != EXC_BIFF8)
         return;
