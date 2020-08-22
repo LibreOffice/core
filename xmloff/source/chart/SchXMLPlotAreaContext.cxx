@@ -616,10 +616,14 @@ SvXMLImportContextRef SchXMLDataLabelParaContext::CreateChildContext(
     return xContext;
 }
 
-SchXMLDataLabelContext::SchXMLDataLabelContext( SvXMLImport& rImport, const OUString& rLocalName, ::std::vector<OUString>& rLabels):
+SchXMLDataLabelContext::SchXMLDataLabelContext(SvXMLImport& rImport, const OUString& rLocalName,
+                                               ::std::vector<OUString>& rLabels,
+                                               DataRowPointStyle& rDataLabelStyle):
     SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName),
-    mrLabels(rLabels)
+    mrLabels(rLabels),
+    mrDataLabelStyle(rDataLabelStyle)
 {
+    
 }
 
 SvXMLImportContextRef SchXMLDataLabelContext::CreateChildContext(
@@ -634,6 +638,42 @@ SvXMLImportContextRef SchXMLDataLabelContext::CreateChildContext(
     return xContext;
 }
 
+void SchXMLDataLabelContext::StartElement(const uno::Reference< xml::sax::XAttributeList >& xAttrList)
+{
+    const SvXMLNamespaceMap& rMap = GetImport().GetNamespaceMap();
+    const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for (sal_Int16 i = 0; i < nAttrCount; i++)
+    {
+        const OUString& rAttrName = xAttrList->getNameByIndex(i);
+        OUString aLocalName;
+        sal_uInt16 nPrefix = rMap.GetKeyByAttrName(rAttrName, &aLocalName);
+        const OUString sValue(xAttrList->getValueByIndex(i));
+
+        if (nPrefix == XML_NAMESPACE_SVG)
+        {
+            if (IsXMLToken(aLocalName, XML_X))
+            {
+                sal_Int32 nResultValue;
+                GetImport().GetMM100UnitConverter().convertMeasureToCore(nResultValue, sValue);
+                    mrDataLabelStyle.mo_nLabelAbsolutePosX = nResultValue;
+            }
+            else if (IsXMLToken(aLocalName, XML_Y))
+            {
+                sal_Int32 nResultValue;
+                GetImport().GetMM100UnitConverter().convertMeasureToCore(nResultValue, sValue);
+                    mrDataLabelStyle.mo_nLabelAbsolutePosY = nResultValue;
+            }
+        }
+        else if (nPrefix == XML_NAMESPACE_CHART)
+        {
+            if (IsXMLToken(aLocalName, XML_STYLE_NAME))
+            {
+                mrDataLabelStyle.msStyleName = sValue;
+            }
+        }
+    }    
+}
+
 
 SchXMLDataPointContext::SchXMLDataPointContext(  SchXMLImportHelper& rImportHelper,
                                                  SvXMLImport& rImport, const OUString& rLocalName,
@@ -645,7 +685,8 @@ SchXMLDataPointContext::SchXMLDataPointContext(  SchXMLImportHelper& rImportHelp
         mrImportHelper( rImportHelper ),
         mrStyleVector( rStyleVector ),
         mrIndex( rIndex ),
-        mDataPoint(DataRowPointStyle::DATA_POINT, xSeries, rIndex, 1, OUString{})
+        mDataPoint(DataRowPointStyle::DATA_POINT, xSeries, rIndex, 1, OUString{}),
+        mDataLabelStyle(DataRowPointStyle::DATA_LABEL_POINT, xSeries, rIndex, 1, OUString{})
 {
     mDataPoint.mbSymbolSizeForSeriesIsMissingInFile = bSymbolSizeForSeriesIsMissingInFile;
 }
@@ -662,7 +703,8 @@ SvXMLImportContextRef SchXMLDataPointContext::CreateChildContext(
     {
         case XML_TOK_SERIES_DATA_LABEL:
             mbHasLabelParagraph = true;
-            pContext = new SchXMLDataLabelContext( GetImport(), rLocalName, mDataPoint.mCustomLabels);
+            pContext = new SchXMLDataLabelContext(GetImport(), rLocalName, mDataPoint.mCustomLabels,
+                                                  mDataLabelStyle);
             break;
     }
     return pContext;
@@ -744,6 +786,12 @@ void SchXMLDataPointContext::EndElement()
     if( !mDataPoint.msStyleName.isEmpty() || mDataPoint.mCustomLabels.size() > 0)
     {
         mrStyleVector.push_back( mDataPoint );
+    }
+    if (!mDataLabelStyle.msStyleName.isEmpty()
+        || mDataLabelStyle.mo_nLabelAbsolutePosX.has_value()
+        || mDataLabelStyle.mo_nLabelAbsolutePosY.has_value())
+    {
+        mrStyleVector.push_back(mDataLabelStyle);
     }
 }
 

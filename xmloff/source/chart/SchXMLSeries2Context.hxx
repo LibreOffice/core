@@ -45,6 +45,7 @@ private:
     css::uno::Reference< css::chart2::XChartDocument > mxNewDoc;
     ::std::vector< SchXMLAxis >& mrAxes;
     ::std::vector< DataRowPointStyle >& mrStyleVector;
+    DataRowPointStyle mDataLabelStyle; // for styles of a child element <chart:data-label>
     ::std::vector< RegressionStyle >& mrRegressionStyleVector;
 
     css::uno::Reference< css::chart2::XDataSeries > m_xSeries;

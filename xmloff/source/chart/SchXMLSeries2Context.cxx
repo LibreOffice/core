@@ -276,6 +276,7 @@ SchXMLSeries2Context::SchXMLSeries2Context(
         mxNewDoc( xNewDoc ),
         mrAxes( rAxes ),
         mrStyleVector( rStyleVector ),
+        mDataLabelStyle(DataRowPointStyle::DATA_LABEL_SERIES, m_xSeries, -1, 1, OUString{}),
         mrRegressionStyleVector( rRegressionStyleVector ),
         mnSeriesIndex( nSeriesIndex ),
         mnDataPointIndex( 0 ),
@@ -635,6 +636,15 @@ void SchXMLSeries2Context::EndElement()
             aStyle.mbSymbolSizeForSeriesIsMissingInFile=mbSymbolSizeIsMissingInFile;
             mrStyleVector.push_back( aStyle );
         }
+        if (!mDataLabelStyle.msStyleName.isEmpty()
+            || mDataLabelStyle.mo_nLabelAbsolutePosX.has_value()
+            || mDataLabelStyle.mo_nLabelAbsolutePosY.has_value())
+        {
+            // This will be used for series properties, so needs same information as 'aStyle' above.
+            mDataLabelStyle.m_xSeries = m_xSeries;
+            mDataLabelStyle.mnAttachedAxis = mnAttachedAxis;
+            mrStyleVector.push_back(mDataLabelStyle);
+        }
     }
 
     for( std::vector< DomainInfo >::reverse_iterator aIt( aDomainInfos.rbegin() ); aIt!= aDomainInfos.rend(); ++aIt )
@@ -711,6 +721,11 @@ SvXMLImportContextRef SchXMLSeries2Context::CreateChildContext(
             pContext = new SchXMLDataPointContext( mrImportHelper, GetImport(), rLocalName,
                                                    mrStyleVector, m_xSeries, mnDataPointIndex, mbSymbolSizeIsMissingInFile );
             break;
+        case XML_TOK_SERIES_DATA_LABEL:
+            pContext = new SchXMLDataLabelContext(GetImport(), rLocalName,
+                                                  mDataLabelStyle.mCustomLabels, mDataLabelStyle);
+            break;
+
         case XML_TOK_SERIES_PROPERTY_MAPPING:
             pContext = new SchXMLPropertyMappingContext( mrImportHelper,
                     GetImport(), rLocalName,
@@ -757,8 +772,8 @@ void SchXMLSeries2Context::setDefaultsToSeries( SeriesDefaultsAndStyles& rSeries
 
     for (const auto & seriesStyle : rSeriesDefaultsAndStyles.maSeriesStyleVector)
     {
-        if( seriesStyle.meType != DataRowPointStyle::DATA_SERIES )
-            continue;
+//        if( seriesStyle.meType != DataRowPointStyle::DATA_SERIES )
+//            continue;
 
         try
         {
@@ -807,8 +822,23 @@ void SchXMLSeries2Context::setStylesToSeries( SeriesDefaultsAndStyles& rSeriesDe
         , tSchXMLLSequencesPerIndex & rInOutLSequencesPerIndex )
 {
     // iterate over series
-    for (const auto & seriesStyle : rSeriesDefaultsAndStyles.maSeriesStyleVector)
+    for (auto & seriesStyle : rSeriesDefaultsAndStyles.maSeriesStyleVector)
     {
+        if (seriesStyle.meType == DataRowPointStyle::DATA_LABEL_SERIES)
+        {
+            // There exist no service for data labels, but attributes and styles
+            // are at the series as default for data points. We need to transform
+            // the ODF values, which were for a data label, to those of the series.
+            // The DataRowPointStyle was so created, that it referes already to the data series.
+            seriesStyle.meType = DataRowPointStyle::DATA_SERIES;
+
+            // ! Do not merge without solving the ToDo. In the current state, the label fill and
+            // line style will overwrite those of the series style.
+            // ToDo: Translate shape fill and line styles to "LabelFoo" properties of the series.
+            // e.g. "FillStyle" to "LabelFillStyle"
+            // or "LineColor" to "LabelBorderColor"
+
+        }
         if( seriesStyle.meType == DataRowPointStyle::DATA_SERIES )
         {
             try
@@ -1029,8 +1059,24 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
         , const SvXMLImport& rImport
         , bool bIsStockChart, bool bIsDonutChart, bool bSwitchOffLinesForScatter )
 {
-    for (auto const& seriesStyle : rSeriesDefaultsAndStyles.maSeriesStyleVector)
+    for (auto & seriesStyle : rSeriesDefaultsAndStyles.maSeriesStyleVector)
     {
+        if (seriesStyle.meType == DataRowPointStyle::DATA_LABEL_POINT)
+        {
+            // There exist no service for data labels, but attributes and styles
+            // are at the data point in LO. We need to transform the ODF values, which are
+            // for a data label to LO properties of the data point.
+            // The DataRowPointStyle was so created, that it referes already to the
+            // data point.
+            seriesStyle.meType = DataRowPointStyle::DATA_POINT;
+            // ! Do not merge without solving the ToDo. In the current state the label fill and
+            // line style will overwrite those of the point style.
+            // ToDo: Translate shape fill and line styles to "LabelFoo" properties of the data
+            // point.
+            // e.g. "FillStyle" to "LabelFillStyle"
+            // or "LineColor" to "LabelBorderColor"
+
+        }
         if( seriesStyle.meType != DataRowPointStyle::DATA_POINT )
             continue;
 

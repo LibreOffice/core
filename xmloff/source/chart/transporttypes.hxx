@@ -24,6 +24,7 @@
 
 #include <vector>
 #include <map>
+#include <optional>
 
 enum SchXMLCellType
 {
@@ -156,7 +157,9 @@ struct DataRowPointStyle
         DATA_POINT,
         DATA_SERIES,
         MEAN_VALUE,
-        ERROR_INDICATOR
+        ERROR_INDICATOR,
+        DATA_LABEL_POINT,
+        DATA_LABEL_SERIES
     };
 
     StyleType meType;
@@ -173,6 +176,9 @@ struct DataRowPointStyle
     OUString msStyleName;
     ::std::vector<OUString> mCustomLabels;
     double mCustomLabelPos[2] = { 0.0, 0.0 };
+    // for svg:x and svg:y attribute of element <chart:data-label> in core unit
+    std::optional<sal_Int32> mo_nLabelAbsolutePosX;
+    std::optional<sal_Int32> mo_nLabelAbsolutePosY;
     OUString msSeriesStyleNameForDonuts;
 
     sal_Int32 mnAttachedAxis;
