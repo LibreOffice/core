@@ -92,7 +92,7 @@ public class QueryWizard extends DatabaseObjectWizard
             if (m_DBMetaData.getConnection(m_wizardContext))
             {
                 reslblFields = m_oResource.getResText("RID_QUERY_4");
-                reslblFieldHeader = m_oResource.getResText("RID_QUERY_19"); //Fielnames in  AliasComponent
+                reslblFieldHeader = m_oResource.getResText("RID_QUERY_19"); //Fieldnames in  AliasComponent
                 reslblAliasHeader = m_oResource.getResText("RID_QUERY_20"); //Fieldtitles header in  AliasComponent
                 reslblSelFields = m_oResource.getResText("RID_QUERY_50");
                 reslblTables = m_oResource.getResText("RID_QUERY_3");
