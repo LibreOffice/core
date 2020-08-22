@@ -2330,6 +2330,10 @@ void SdTiledRenderingTest::testCutSelectionChange()
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
     Scheduler::ProcessEventsToIdle();
 
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_F2);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_F2);
+    Scheduler::ProcessEventsToIdle();
+
     // step into text editing
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '1', 0);
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, '1', 0);
