@@ -88,13 +88,13 @@ Size PriorityHBox::calculateRequisition() const
         ++nVisibleChildren;
         Size aChildSize = getLayoutRequisition(*pChild);
 
-        bool bAllwaysExpanded = true;
+        bool bAlwaysExpanded = true;
 
         vcl::IPrioritable* pPrioritable = dynamic_cast<vcl::IPrioritable*>(pChild);
         if (pPrioritable && pPrioritable->GetPriority() != VCL_PRIORITY_DEFAULT)
-            bAllwaysExpanded = false;
+            bAlwaysExpanded = false;
 
-        if (bAllwaysExpanded)
+        if (bAlwaysExpanded)
         {
             long nPrimaryDimension = getPrimaryDimension(aChildSize);
             nPrimaryDimension += pChild->get_padding() * 2;
