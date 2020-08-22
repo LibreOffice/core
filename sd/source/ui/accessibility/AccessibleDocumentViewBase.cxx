@@ -653,7 +653,7 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
 {
     ::osl::MutexGuard aGuard (maMutex);
 
-    uno::Any anyAtrribute;
+    uno::Any anyAttribute;
     OUStringBuffer sValue;
     if (nullptr != dynamic_cast<const ::sd::DrawViewShell* > (mpViewShell))
     {
@@ -760,8 +760,8 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
         }
     }
     if (sValue.getLength())
-        anyAtrribute <<= sValue.makeStringAndClear();
-    return anyAtrribute;
+        anyAttribute <<= sValue.makeStringAndClear();
+    return anyAttribute;
 }
 
 sal_Int32 SAL_CALL AccessibleDocumentViewBase::getForeground(  )
