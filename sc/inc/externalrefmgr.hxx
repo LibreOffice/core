@@ -64,7 +64,7 @@ public:
         const OUString& rMimeType, const css::uno::Any & rValue) override;
     virtual void Edit(weld::Window* pParent, const Link<SvBaseLink&,void>& rEndEditHdl) override;
 
-    void SetDoReferesh(bool b);
+    void SetDoRefresh(bool b);
 
 private:
     ScExternalRefLink() = delete;
