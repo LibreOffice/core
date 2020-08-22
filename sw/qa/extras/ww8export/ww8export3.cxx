@@ -225,6 +225,17 @@ DECLARE_WW8EXPORT_TEST(testTdf73056_cellMargins, "tdf73056_cellMargins.doc")
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "bottom cell spacing to contents",
         sal_Int32(101), getProperty<sal_Int32>(xPropSet, "BottomBorderDistance" ) );
 }
+
+DECLARE_OOXMLEXPORT_TEST(testTdf135672_tableGrows, "tdf135672_tableGrows.doc")
+{
+    auto const xTable(getParagraphOrTable(1));
+    // This would shift left every round-trip.  First time was -259, next -418.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-101), getProperty<sal_Int32>(xTable, "LeftMargin"));
+
+    // This would grow every round-trip. First time was 11118, next 11435
+    //CPPUNIT_ASSERT_EQUAL(sal_Int32(10800), getProperty<sal_Int32>(xTable, "Width"));
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf79435_legacyInputFields, "tdf79435_legacyInputFields.docx")
 {
     //using .docx input file to verify cross-format compatibility.
