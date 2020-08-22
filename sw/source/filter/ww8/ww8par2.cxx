@@ -2230,7 +2230,6 @@ void WW8TabDesc::CalcDefaults()
     // Non existent cells can reduce the number of columns.
 
     // 3. pass: Replace border with defaults if needed
-    short nRightMaxThickness=0;
     for( pR = m_pFirstBand ; pR; pR = pR->pNextBand )
     {
         if( !pR->pTCs )
@@ -2270,35 +2269,13 @@ void WW8TabDesc::CalcDefaults()
                 }
             }
         }
-        if (pR->nWwCols)
-        {
-            /*
-            Similar to graphics and other elements word does not totally
-            factor the width of the border into its calculations of size, we
-            do so we must adjust out widths and other dimensions to fit.  It
-            appears that what occurs is that the last cell's right margin if
-            the margin width that is not calculated into winwords table
-            dimensions, so in that case increase the table to include the
-            extra width of the right margin.
-            */
-            if ( ! pR->pTCs[pR->nWwCols-1].rgbrc[3].fShadow() )
-            {
-                short nThickness = pR->pTCs[pR->nWwCols-1].rgbrc[3].
-                    DetermineBorderProperties();
-                pR->nCenter[pR->nWwCols] = pR->nCenter[pR->nWwCols] + nThickness;
-                if (nThickness > nRightMaxThickness)
-                    nRightMaxThickness = nThickness;
-            }
-        }
     }
-    m_nSwWidth = m_nSwWidth + nRightMaxThickness;
-    m_nMaxRight = m_nMaxRight + nRightMaxThickness;
 
     for( pR = m_pFirstBand; pR; pR = pR->pNextBand )
     {
         pR->nSwCols = pR->nWwCols;
         pR->bLEmptyCol = pR->nCenter[0] - m_nMinLeft >= MINLAY;
-        pR->bREmptyCol = (m_nMaxRight - pR->nCenter[pR->nWwCols] - nRightMaxThickness) >= MINLAY;
+        pR->bREmptyCol = (m_nMaxRight - pR->nCenter[pR->nWwCols]) >= MINLAY;
 
         short nAddCols = short(pR->bLEmptyCol) + short(pR->bREmptyCol);
         sal_uInt16 i;
