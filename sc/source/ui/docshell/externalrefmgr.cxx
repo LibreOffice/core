@@ -1468,7 +1468,7 @@ void ScExternalRefLink::Edit(weld::Window* pParent, const Link<SvBaseLink&,void>
     SvBaseLink::Edit(pParent, Link<SvBaseLink&,void>());
 }
 
-void ScExternalRefLink::SetDoReferesh(bool b)
+void ScExternalRefLink::SetDoRefresh(bool b)
 {
     mbDoRefresh = b;
 }
@@ -2625,9 +2625,9 @@ void ScExternalRefManager::maybeLinkExternalFile( sal_uInt16 nFileId, bool bDefe
     pLinkMgr->InsertFileLink(*pLink, sfx2::SvBaseLinkObjectType::ClientFile, *pFileName,
             (aFilter.isEmpty() && bDeferFilterDetection ? nullptr : &aFilter));
 
-    pLink->SetDoReferesh(false);
+    pLink->SetDoRefresh(false);
     pLink->Update();
-    pLink->SetDoReferesh(true);
+    pLink->SetDoRefresh(true);
 
     maLinkedDocs.emplace(nFileId, true);
 }
