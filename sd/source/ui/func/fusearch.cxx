@@ -63,11 +63,16 @@ FuSearch::FuSearch (
 {
 }
 
-rtl::Reference<FuPoor> FuSearch::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+FuSearch* FuSearch::createPtr(ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq)
 {
-    rtl::Reference<FuPoor> xFunc( new FuSearch( pViewSh, pWin, pView, pDoc, rReq ) );
+    FuSearch* xFunc( new FuSearch( pViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
+}
+
+rtl::Reference<FuPoor> FuSearch::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+{
+    return rtl::Reference<FuPoor>(createPtr(pViewSh, pWin, pView, pDoc, rReq));
 }
 
 void FuSearch::DoExecute( SfxRequest& )
