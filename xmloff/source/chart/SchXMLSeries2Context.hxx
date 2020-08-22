@@ -46,7 +46,6 @@ private:
     ::std::vector< SchXMLAxis >& mrAxes;
     ::std::vector< DataRowPointStyle >& mrStyleVector;
     ::std::vector< RegressionStyle >& mrRegressionStyleVector;
-
     css::uno::Reference< css::chart2::XDataSeries > m_xSeries;
     sal_Int32 mnSeriesIndex;
     sal_Int32 mnDataPointIndex;
@@ -67,6 +66,8 @@ private:
     bool& mrGlobalChartTypeUsedBySeries;
     bool mbSymbolSizeIsMissingInFile;
     css::awt::Size maChartSize;
+    // We let the series manage the DataRowPointStyle-struct of its data label
+    DataRowPointStyle mDataLabel;
 
 public:
     SchXMLSeries2Context( SchXMLImportHelper& rImpHelper,

@@ -11,10 +11,14 @@
 
 #include <test/xmltesttools.hxx>
 
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
+#include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
-#include <com/sun/star/drawing/LineStyle.hpp>
 
 #include <unotools/ucbstreamhelper.hxx>
 
@@ -46,6 +50,8 @@ public:
     void testTdf128345ChartWall_CS_TG_import();
     void testTdf128345Legend_CS_TG_axial_export();
     void testTdf128345Legend_CS_TG_axial_import();
+    void testTdf135366LabelOnSeries();
+    void testTdf135366LabelOnPoint();
 
     CPPUNIT_TEST_SUITE(Chart2GeometryTest);
     CPPUNIT_TEST(testTdf135184RoundLineCap);
@@ -58,6 +64,8 @@ public:
     CPPUNIT_TEST(testTdf128345ChartWall_CS_TG_import);
     CPPUNIT_TEST(testTdf128345Legend_CS_TG_axial_export);
     CPPUNIT_TEST(testTdf128345Legend_CS_TG_axial_import);
+    CPPUNIT_TEST(testTdf135366LabelOnSeries);
+    CPPUNIT_TEST(testTdf135366LabelOnPoint);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -71,12 +79,12 @@ protected:
     xmlDocUniquePtr parseExport(const OUString& rDir, const OUString& rFilterFormat);
 };
 
-// This is copied from Chart2ExportTest. It allows to access the chart form a MS Office document
+namespace
+{
+// This is copied from Chart2ExportTest. It allows to access the chart from a MS Office document
 // without knowing whether the file is a chart1.xml or chart2.xml... As of August 2020, Calc
 // and Impress use a static variable for the number and therefore the number depends on whether
 // there had already been savings before.
-namespace
-{
 struct CheckForChartName
 {
 private:
@@ -408,6 +416,90 @@ void Chart2GeometryTest::testTdf128345Legend_CS_TG_axial_import()
     assertXPath(pXmlDoc2, sStart + " and @draw:style='axial']");
     assertXPath(pXmlDoc2, sStart + " and @draw:start='0%']");
     assertXPath(pXmlDoc2, sStart + " and @draw:end='100%']");
+}
+
+void Chart2GeometryTest::testTdf135366LabelOnSeries()
+{
+    // Error was, that the fill and line properties of a <chart:data-label> were not
+    // imported at all. Here they should be at the series.
+    load("/chart2/qa/extras/data/ods/", "tdf135366_data_label_series.ods");
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT(xChartDoc.is());
+    Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
+    CPPUNIT_ASSERT(xDataSeries.is());
+    Reference<beans::XPropertySet> xPropSet(xDataSeries, UNO_QUERY_THROW);
+    uno::Any aAny;
+
+    aAny = xPropSet->getPropertyValue("LabelBorderStyle");
+    drawing::LineStyle eLineStyle;
+    CPPUNIT_ASSERT_MESSAGE("No LabelBorderStyle set.", aAny >>= eLineStyle);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("solid line expected", drawing::LineStyle_SOLID, eLineStyle);
+
+    sal_Int32 nBorderWidth;
+    sal_Int32 nExpectedWidth = 95;
+    xPropSet->getPropertyValue("LabelBorderWidth") >>= nBorderWidth;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("LabelBorderWidth", nExpectedWidth, nBorderWidth);
+
+    sal_Int32 nLineColor;
+    sal_Int32 nExpectedLineColor = 255;
+    xPropSet->getPropertyValue("LabelBorderColor") >>= nLineColor;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("line color blue, 255=#0000FF", nExpectedLineColor, nLineColor);
+
+    aAny = xPropSet->getPropertyValue("LabelFillStyle");
+    drawing::FillStyle eFillStyle;
+    CPPUNIT_ASSERT_MESSAGE("No LabelFillStyle set", aAny >>= eFillStyle);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("solid fill expected", drawing::FillStyle_SOLID, eFillStyle);
+
+    sal_Int32 nFillColor;
+    sal_Int32 nExpectedFillColor = 65280;
+    xPropSet->getPropertyValue("LabelFillColor") >>= nFillColor;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("fill color green, 65280=#00FF00", nExpectedFillColor, nFillColor);
+}
+
+void Chart2GeometryTest::testTdf135366LabelOnPoint()
+{
+    // Error was, that the fill and line properties of a <chart:data-label> were not
+    // imported at all. Here they should be at point 2.
+    load("/chart2/qa/extras/data/odt/", "tdf135366_data_label_point.odt");
+    uno::Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+    Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
+    CPPUNIT_ASSERT(xDataSeries.is());
+    Reference<beans::XPropertySet> xPropSet(xDataSeries->getDataPointByIndex(2),
+                                            uno::UNO_SET_THROW);
+    uno::Any aAny;
+
+    aAny = xPropSet->getPropertyValue("LabelBorderStyle");
+    drawing::LineStyle eLineStyle;
+    CPPUNIT_ASSERT_MESSAGE("No LabelBorderStyle set.", aAny >>= eLineStyle);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("solid line expected", drawing::LineStyle_SOLID, eLineStyle);
+
+    sal_Int32 nBorderWidth;
+    sal_Int32 nExpectedWidth = 381;
+    xPropSet->getPropertyValue("LabelBorderWidth") >>= nBorderWidth;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("LabelBorderWidth", nExpectedWidth, nBorderWidth);
+
+    sal_Int32 nLineTransparency;
+    sal_Int32 nExpectedTransparency = 30;
+    xPropSet->getPropertyValue("LabelBorderTransparency") >>= nLineTransparency;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("line transparency", nExpectedTransparency, nLineTransparency);
+
+    sal_Int32 nLineColor;
+    sal_Int32 nExpectedLineColor = 10206041;
+    xPropSet->getPropertyValue("LabelBorderColor") >>= nLineColor;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("line color greenish, 10206041=#9BBB59", nExpectedLineColor,
+                                 nLineColor);
+
+    aAny = xPropSet->getPropertyValue("LabelFillStyle");
+    drawing::FillStyle eFillStyle;
+    CPPUNIT_ASSERT_MESSAGE("No LabelFillStyle set", aAny >>= eFillStyle);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("solid fill expected", drawing::FillStyle_SOLID, eFillStyle);
+
+    sal_Int32 nFillColor;
+    sal_Int32 nExpectedFillColor = 14277081;
+    xPropSet->getPropertyValue("LabelFillColor") >>= nFillColor;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("fill color gray, 14277081=#d9d9d9", nExpectedFillColor,
+                                 nFillColor);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2GeometryTest);
