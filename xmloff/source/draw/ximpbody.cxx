@@ -339,7 +339,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLBodyContext::crea
             break;
         }
         default:
-            assert(false);
+            SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
     }
     return nullptr;
 }
