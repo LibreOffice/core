@@ -542,12 +542,12 @@ tools::Polygon OutputDevice::ImplLogicToDevicePixel( const tools::Polygon& rLogi
     {
         for ( i = 0; i < nPoints; i++ )
         {
-            const Point* pPt = &(pPointAry[i]);
+            const Point& rPt = pPointAry[i];
             Point aPt;
-            aPt.setX( ImplLogicToPixel( pPt->X()+maMapRes.mnMapOfsX, mnDPIX,
+            aPt.setX( ImplLogicToPixel( rPt.X()+maMapRes.mnMapOfsX, mnDPIX,
                                         maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX,
                                         maThresRes.mnThresLogToPixX )+mnOutOffX+mnOutOffOrigX );
-            aPt.setY( ImplLogicToPixel( pPt->Y()+maMapRes.mnMapOfsY, mnDPIY,
+            aPt.setY( ImplLogicToPixel( rPt.Y()+maMapRes.mnMapOfsY, mnDPIY,
                                         maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY,
                                         maThresRes.mnThresLogToPixY )+mnOutOffY+mnOutOffOrigY );
             aPoly[i] = aPt;
