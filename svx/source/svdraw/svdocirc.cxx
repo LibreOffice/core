@@ -230,12 +230,12 @@ bool SdrCircObj::PaintNeedsXPolyCirc() const
     return bNeed;
 }
 
-basegfx::B2DPolygon SdrCircObj::ImpCalcXPolyCirc(const SdrCircKind eCicrleKind, const tools::Rectangle& rRect1, long nStart, long nEnd) const
+basegfx::B2DPolygon SdrCircObj::ImpCalcXPolyCirc(const SdrCircKind eCircleKind, const tools::Rectangle& rRect1, long nStart, long nEnd) const
 {
     const basegfx::B2DRange aRange = vcl::unotools::b2DRectangleFromRectangle(rRect1);
     basegfx::B2DPolygon aCircPolygon;
 
-    if(SdrCircKind::Full == eCicrleKind)
+    if(SdrCircKind::Full == eCircleKind)
     {
         // create full circle. Do not use createPolygonFromEllipse; it's necessary
         // to get the start point to the bottom of the circle to keep compatible to
@@ -263,8 +263,8 @@ basegfx::B2DPolygon SdrCircObj::ImpCalcXPolyCirc(const SdrCircKind eCicrleKind, 
             fStart, fEnd);
 
         // check closing states
-        const bool bCloseSegment(SdrCircKind::Arc != eCicrleKind);
-        const bool bCloseUsingCenter(SdrCircKind::Section == eCicrleKind);
+        const bool bCloseSegment(SdrCircKind::Arc != eCircleKind);
+        const bool bCloseUsingCenter(SdrCircKind::Section == eCircleKind);
 
         if(bCloseSegment)
         {
