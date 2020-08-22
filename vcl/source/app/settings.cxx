@@ -681,8 +681,6 @@ void ImplStyleData::SetStandardStyles()
     maFieldColor                = COL_WHITE;
     maFieldTextColor            = COL_BLACK;
     maFieldRolloverTextColor    = COL_BLACK;
-    maActiveColor               = COL_BLUE;
-    maActiveTextColor           = COL_WHITE;
     maActiveBorderColor         = COL_LIGHTGRAY;
     maDeactiveColor             = COL_GRAY;
     maDeactiveTextColor         = COL_LIGHTGRAY;
@@ -699,6 +697,10 @@ void ImplStyleData::SetStandardStyles()
     maMenuHighlightTextColor    = COL_WHITE;
     maHighlightColor            = COL_BLUE;
     maHighlightTextColor        = COL_WHITE;
+    // make active like highlight, except with a small contrast
+    maActiveColor               = maHighlightColor;
+    maActiveColor.IncreaseLuminance(32);
+    maActiveTextColor           = maHighlightTextColor;
     maActiveTabColor            = COL_WHITE;
     maInactiveTabColor          = COL_LIGHTGRAY;
     maTabTextColor              = COL_BLACK;

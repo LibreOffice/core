@@ -150,10 +150,11 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
     if( mbSelected && mbHover)
         aFillColor = pAttrs->aSelectHighlightColor;
     else if (mbSelected || mbHover)
+    {
         aFillColor = pAttrs->aHighlightColor;
-
-    if (mbHover)
-        fTransparence = pAttrs->fHighlightTransparence;
+        if (mbHover)
+            fTransparence = pAttrs->fHighlightTransparence;
+    }
 
     sal_uInt32 nPrimitive = 0;
     aSeq[nPrimitive++] = drawinglayer::primitive2d::Primitive2DReference(
