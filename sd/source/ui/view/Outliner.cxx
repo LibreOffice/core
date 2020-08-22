@@ -115,6 +115,8 @@ public:
     */
     void ReleaseOutlinerView();
 
+    sd::VectorGraphicSearchContext& getVectorGraphicSearchContext() { return maVectorGraphicSearchContext; }
+
 private:
     /** Flag that specifies whether we own the outline view pointed to by
         <member>mpOutlineView</member> and thus have to
@@ -128,6 +130,8 @@ private:
         <member>mbOwnOutlineView</member> distinguishes between both cases.
     */
     OutlinerView* mpOutlineView;
+
+    sd::VectorGraphicSearchContext maVectorGraphicSearchContext;
 };
 
 namespace
@@ -636,6 +640,8 @@ bool SdOutliner::SearchAndReplaceAll()
             mnStartPageIndex = sal_uInt16(-1);
             return true;
         }
+        // Reset the iterator back to the beginning
+        maObjectIterator = sd::outliner::OutlinerContainer(this).begin();
 
         // Search/replace until the end of the document is reached.
         bool bFoundMatch;
@@ -753,7 +759,7 @@ void SdOutliner::sendLOKSearchResultCallback(std::shared_ptr<sd::ViewShell> & pV
                                              std::vector<sd::SearchSelection>* pSelections)
 {
     std::vector<::tools::Rectangle> aLogicRects;
-    auto& rVectorGraphicSearchContext = pViewShell->GetView()->getVectorGraphicSearchContext();
+    auto& rVectorGraphicSearchContext = mpImpl->getVectorGraphicSearchContext();
     if (rVectorGraphicSearchContext.mbCurrentIsVectorGraphic)
     {
         basegfx::B2DRectangle aSelectionHMM = getPDFSelection(rVectorGraphicSearchContext.mpVectorGraphicSearch, mpObj);
@@ -844,7 +850,7 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
         mpView = pViewShell->GetView();
         mpWindow = pViewShell->GetActiveWindow();
         pOutlinerView->SetWindow(mpWindow);
-        auto& rVectorGraphicSearchContext = mpView->getVectorGraphicSearchContext();
+        auto& rVectorGraphicSearchContext = mpImpl->getVectorGraphicSearchContext();
         if (nullptr != dynamic_cast<const sd::DrawViewShell*>(pViewShell.get()))
         {
             sal_uLong nMatchCount = 0;
@@ -1201,7 +1207,7 @@ void SdOutliner::ProvideNextTextObject()
     mbFoundObject = false;
 
     // reset the vector search
-    auto& rVectorGraphicSearchContext = mpView->getVectorGraphicSearchContext();
+    auto& rVectorGraphicSearchContext = mpImpl->getVectorGraphicSearchContext();
     rVectorGraphicSearchContext.reset();
 
     mpView->UnmarkAllObj (mpView->GetSdrPageView());
