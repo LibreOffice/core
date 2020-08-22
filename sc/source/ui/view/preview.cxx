@@ -119,7 +119,7 @@ ScPreview::ScPreview( vcl::Window* pParent, ScDocShell* pDocSh, ScPreviewShell* 
     mbHasEmptyRangeTable(false),
     nLeftPosition( 0 ),
     mnScale( 0 ),
-    nColNumberButttonDown( 0 ),
+    nColNumberButtonDown( 0 ),
     nHeaderHeight ( 0 ),
     nFooterHeight ( 0 )
 {
@@ -1016,7 +1016,7 @@ void ScPreview::MouseButtonDown( const MouseEvent& rMEvt )
     {
         if( aNowPt.X() < mvRight[i] + 2 && aNowPt.X() > mvRight[i] - 2 )
         {
-            nColNumberButttonDown = i;
+            nColNumberButtonDown = i;
             break;
         }
     }
@@ -1024,10 +1024,10 @@ void ScPreview::MouseButtonDown( const MouseEvent& rMEvt )
         return;
 
     SetMapMode( aMMMode );
-    if( nColNumberButttonDown == aPageArea.aStart.Col() )
+    if( nColNumberButtonDown == aPageArea.aStart.Col() )
         DrawInvert( PixelToLogic( Point( nLeftPosition, 0 ),aMMMode ).X() ,PointerStyle::HSplit );
     else
-        DrawInvert( PixelToLogic( Point( mvRight[ nColNumberButttonDown-1 ], 0 ),aMMMode ).X() ,PointerStyle::HSplit );
+        DrawInvert( PixelToLogic( Point( mvRight[ nColNumberButtonDown-1 ], 0 ),aMMMode ).X() ,PointerStyle::HSplit );
 
     DrawInvert( aButtonDownChangePoint.X(), PointerStyle::HSplit );
     bColRulerMove = true;
@@ -1241,27 +1241,27 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
             if( aButtonDownPt.X() == aButtonUpPt.X() )
             {
                 bMoveRulerAction = false;
-                if( nColNumberButttonDown == aPageArea.aStart.Col() )
+                if( nColNumberButtonDown == aPageArea.aStart.Col() )
                     DrawInvert( PixelToLogic( Point( nLeftPosition, 0 ),aMMMode ).X() ,PointerStyle::HSplit );
                 else
-                    DrawInvert( PixelToLogic( Point( mvRight[ nColNumberButttonDown-1 ], 0 ),aMMMode ).X() ,PointerStyle::HSplit );
+                    DrawInvert( PixelToLogic( Point( mvRight[ nColNumberButtonDown-1 ], 0 ),aMMMode ).X() ,PointerStyle::HSplit );
                 DrawInvert( aButtonUpPt.X(), PointerStyle::HSplit );
             }
             if( bMoveRulerAction )
             {
                 long  nNewColWidth = 0;
-                std::vector<sc::ColRowSpan> aCols(1, sc::ColRowSpan(nColNumberButttonDown,nColNumberButttonDown));
+                std::vector<sc::ColRowSpan> aCols(1, sc::ColRowSpan(nColNumberButtonDown,nColNumberButtonDown));
 
                 if( !bLayoutRTL )
                 {
-                    nNewColWidth = static_cast<long>( PixelToLogic( Point( rMEvt.GetPosPixel().X() - mvRight[ nColNumberButttonDown ], 0), aMMMode ).X() / HMM_PER_TWIPS ) * 100 / mnScale;
-                    nNewColWidth += pDocShell->GetDocument().GetColWidth( nColNumberButttonDown, nTab );
+                    nNewColWidth = static_cast<long>( PixelToLogic( Point( rMEvt.GetPosPixel().X() - mvRight[ nColNumberButtonDown ], 0), aMMMode ).X() / HMM_PER_TWIPS ) * 100 / mnScale;
+                    nNewColWidth += pDocShell->GetDocument().GetColWidth( nColNumberButtonDown, nTab );
                 }
                 else
                 {
 
-                    nNewColWidth = static_cast<long>( PixelToLogic( Point( mvRight[ nColNumberButttonDown ] - rMEvt.GetPosPixel().X(), 0), aMMMode ).X() / HMM_PER_TWIPS ) * 100 / mnScale;
-                    nNewColWidth += pDocShell->GetDocument().GetColWidth( nColNumberButttonDown, nTab );
+                    nNewColWidth = static_cast<long>( PixelToLogic( Point( mvRight[ nColNumberButtonDown ] - rMEvt.GetPosPixel().X(), 0), aMMMode ).X() / HMM_PER_TWIPS ) * 100 / mnScale;
+                    nNewColWidth += pDocShell->GetDocument().GetColWidth( nColNumberButtonDown, nTab );
                 }
 
                 if( nNewColWidth >= 0 )
@@ -1349,7 +1349,7 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
         {
             bOnColRulerChange = true;
             if( !rMEvt.GetButtons() && GetPointer() == PointerStyle::HSplit )
-                nColNumberButttonDown = i;
+                nColNumberButtonDown = i;
             break;
         }
     }
