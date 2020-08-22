@@ -543,13 +543,12 @@ tools::Polygon OutputDevice::ImplLogicToDevicePixel( const tools::Polygon& rLogi
         for ( i = 0; i < nPoints; i++ )
         {
             const Point& rPt = pPointAry[i];
-            Point aPt;
-            aPt.setX( ImplLogicToPixel( rPt.X()+maMapRes.mnMapOfsX, mnDPIX,
+            Point aPt(ImplLogicToPixel( rPt.X()+maMapRes.mnMapOfsX, mnDPIX,
                                         maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX,
-                                        maThresRes.mnThresLogToPixX )+mnOutOffX+mnOutOffOrigX );
-            aPt.setY( ImplLogicToPixel( rPt.Y()+maMapRes.mnMapOfsY, mnDPIY,
+                                        maThresRes.mnThresLogToPixX )+mnOutOffX+mnOutOffOrigX,
+                      ImplLogicToPixel( rPt.Y()+maMapRes.mnMapOfsY, mnDPIY,
                                         maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY,
-                                        maThresRes.mnThresLogToPixY )+mnOutOffY+mnOutOffOrigY );
+                                        maThresRes.mnThresLogToPixY )+mnOutOffY+mnOutOffOrigY);
             aPoly[i] = aPt;
         }
     }
