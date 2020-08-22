@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="pcr">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkGrid" id="FieldAssignPage">
@@ -22,8 +22,8 @@ Click the button below to open another dialog where you can enter the settings f
         <property name="xalign">0</property>
         <property name="yalign">0</property>
         <child internal-child="accessible">
-          <object class="AtkObject" id="label-atkobject">
-            <property name="AtkObject::accessible-role" translatable="no">static</property>
+          <object class="AtkObject" id="label2-atkobject">
+            <property name="AtkObject::accessible-role">static</property>
           </object>
         </child>
       </object>
@@ -40,6 +40,11 @@ Click the button below to open another dialog where you can enter the settings f
         <property name="receives_default">True</property>
         <property name="halign">center</property>
         <property name="use_underline">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="assign-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="fieldassignpage|extended_tip|assign">Opens the Templates: Address Book Assignment dialog.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -57,7 +62,7 @@ Click the button below to open another dialog where you can enter the settings f
         <property name="yalign">0</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="hint-atkobject">
-            <property name="AtkObject::accessible-role" translatable="no">static</property>
+            <property name="AtkObject::accessible-role">static</property>
           </object>
         </child>
       </object>
@@ -65,6 +70,11 @@ Click the button below to open another dialog where you can enter the settings f
         <property name="left_attach">0</property>
         <property name="top_attach">2</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="FieldAssignPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="fieldassignpage|extended_tip|FieldAssignPage">Opens a dialog that allows you to specify the field assignment.</property>
+      </object>
     </child>
   </object>
 </interface>

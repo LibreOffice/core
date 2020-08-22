@@ -47,6 +47,11 @@
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="ok-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="catalogdialog|extended_tip|ok">Saves all changes and closes dialog.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -195,6 +200,11 @@
                         <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="preview-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="catalogdialog|extended_tip|preview">Displays a preview of the current selection.</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>

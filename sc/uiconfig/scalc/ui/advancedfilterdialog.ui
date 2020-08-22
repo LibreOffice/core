@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="AdvancedFilterDialog">
@@ -10,9 +10,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="visible">True</property>
@@ -36,6 +33,11 @@
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="ok-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="advancedfilterdialog|extended_tip|ok">Saves all changes and closes dialog.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -51,6 +53,11 @@
                 <property name="can_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="cancel-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="advancedfilterdialog|extended_tip|cancel">Closes dialog and discards all changes.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -111,6 +118,11 @@
                         <property name="receives_default">True</property>
                         <child>
                           <placeholder/>
+                        </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="rbfilterarea-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="advancedfilterdialog|extended_tip|rbfilterarea">Click the Shrink icon to reduce the dialog to the size of the input field. It is then easier to mark the required reference in the sheet. The icons then automatically convert to the Maximize icon. Click it to restore the dialog to its original size.</property>
+                          </object>
                         </child>
                       </object>
                       <packing>
@@ -348,6 +360,11 @@
                         <child>
                           <placeholder/>
                         </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="rbcopyarea-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="advancedfilterdialog|extended_tip|rbcopyarea">Click the Shrink icon to reduce the dialog to the size of the input field. It is then easier to mark the required reference in the sheet. The icons then automatically convert to the Maximize icon. Click it to restore the dialog to its original size.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -420,5 +437,8 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>

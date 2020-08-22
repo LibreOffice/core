@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -98,10 +98,10 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
-                    <property name="label" translatable="no"></property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="cbx2-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="dockingcolorreplace|cbx2-atkobject" comments="This string is used by the eyedropper dialog to denote a color in an image that will be replaced by another color.">Source Color 2</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" comments="This string is used by the eyedropper dialog to denote a color in an image that will be replaced by another color." context="dockingcolorreplace|cbx2-atkobject">Source Color 2</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="dockingcolorreplace|extended_tip|cbx2">Select this checkbox to replace the current Source color with the color that you specify in the Replace with box.</property>
                       </object>
                     </child>
                   </object>
@@ -118,10 +118,10 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
-                    <property name="label" translatable="no"></property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="cbx3-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="dockingcolorreplace|cbx3-atkobject" comments="This string is used by the eyedropper dialog to denote a color in an image that will be replaced by another color.">Source Color 3</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" comments="This string is used by the eyedropper dialog to denote a color in an image that will be replaced by another color." context="dockingcolorreplace|cbx3-atkobject">Source Color 3</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="dockingcolorreplace|extended_tip|cbx3">Select this checkbox to replace the current Source color with the color that you specify in the Replace with box.</property>
                       </object>
                     </child>
                   </object>
@@ -138,10 +138,10 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
-                    <property name="label" translatable="no"></property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="cbx4-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="dockingcolorreplace|cbx4-atkobject" comments="This string is used by the eyedropper dialog to denote a color in an image that will be replaced by another color.">Source Color 4</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" comments="This string is used by the eyedropper dialog to denote a color in an image that will be replaced by another color." context="dockingcolorreplace|cbx4-atkobject">Source Color 4</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="dockingcolorreplace|extended_tip|cbx4">Select this checkbox to replace the current Source color with the color that you specify in the Replace with box.</property>
                       </object>
                     </child>
                   </object>
@@ -158,10 +158,10 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
-                    <property name="label" translatable="no"></property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="cbx1-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="dockingcolorreplace|cbx1-atkobject" comments="This string is used by the eyedropper dialog to denote a color in an image that will be replaced by another color.">Source Color 1</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" comments="This string is used by the eyedropper dialog to denote a color in an image that will be replaced by another color." context="dockingcolorreplace|cbx1-atkobject">Source Color 1</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="dockingcolorreplace|extended_tip|cbx1">Select this checkbox to replace the current Source color with the color that you specify in the Replace with box.</property>
                       </object>
                     </child>
                   </object>
@@ -182,6 +182,11 @@
                     <accessibility>
                       <relation type="label-for" target="color5"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="cbx5-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="dockingcolorreplace|extended_tip|cbx5">Replaces transparent areas in the current image with the color that you select.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -197,6 +202,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject" id="tol1-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="dockingcolorreplace|tol1-atkobject">Tolerance 1</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="dockingcolorreplace|extended_tip|tol1">Set the tolerance for replacing a source color in the source image. To replace colors that are similar to the color that you selected, enter a low value. To replace a wider range of colors, enter a higher value.</property>
                       </object>
                     </child>
                   </object>
@@ -215,6 +221,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject" id="tol2-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="dockingcolorreplace|tol2-atkobject">Tolerance 2</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="dockingcolorreplace|extended_tip|tol2">Set the tolerance for replacing a source color in the source image. To replace colors that are similar to the color that you selected, enter a low value. To replace a wider range of colors, enter a higher value.</property>
                       </object>
                     </child>
                   </object>
@@ -233,6 +240,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject" id="tol3-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="dockingcolorreplace|tol3-atkobject">Tolerance 3</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="dockingcolorreplace|extended_tip|tol3">Set the tolerance for replacing a source color in the source image. To replace colors that are similar to the color that you selected, enter a low value. To replace a wider range of colors, enter a higher value.</property>
                       </object>
                     </child>
                   </object>
@@ -251,6 +259,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject" id="tol4-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="dockingcolorreplace|tol4-atkobject">Tolerance 4</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="dockingcolorreplace|extended_tip|tol4">Set the tolerance for replacing a source color in the source image. To replace colors that are similar to the color that you selected, enter a low value. To replace a wider range of colors, enter a higher value.</property>
                       </object>
                     </child>
                   </object>
@@ -266,13 +275,13 @@
                     <property name="receives_default">False</property>
                     <property name="hexpand">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="color1-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="dockingcolorreplace|color1-atkobject">Replace with 1</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="dockingcolorreplace|extended_tip|color1">Lists the available replacement colors. To modify the current list of colors, deselect the image, choose Format - Area, and then click the Colors tab.</property>
                       </object>
                     </child>
                   </object>
@@ -288,13 +297,13 @@
                     <property name="receives_default">False</property>
                     <property name="hexpand">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="color2-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="dockingcolorreplace|color2-atkobject">Replace with 2</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="dockingcolorreplace|extended_tip|color2">Lists the available replacement colors. To modify the current list of colors, deselect the image, choose Format - Area, and then click the Colors tab.</property>
                       </object>
                     </child>
                   </object>
@@ -310,13 +319,13 @@
                     <property name="receives_default">False</property>
                     <property name="hexpand">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="color3-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="dockingcolorreplace|color3-atkobject">Replace with 3</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="dockingcolorreplace|extended_tip|color3">Lists the available replacement colors. To modify the current list of colors, deselect the image, choose Format - Area, and then click the Colors tab.</property>
                       </object>
                     </child>
                   </object>
@@ -332,13 +341,13 @@
                     <property name="receives_default">False</property>
                     <property name="hexpand">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="color4-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="dockingcolorreplace|color4-atkobject">Replace with 4</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="dockingcolorreplace|extended_tip|color4">Lists the available replacement colors. To modify the current list of colors, deselect the image, choose Format - Area, and then click the Colors tab.</property>
                       </object>
                     </child>
                   </object>
@@ -353,13 +362,17 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="draw_indicator">True</property>
-                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>
                     <accessibility>
                       <relation type="labelled-by" target="cbx5"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="color5-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="dockingcolorreplace|extended_tip|color5">Select the color to replace the transparent areas in the current image.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -454,6 +467,11 @@
             <property name="valign">center</property>
             <property name="hexpand">True</property>
             <property name="use_underline">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="replace-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="dockingcolorreplace|extended_tip|replace">Replaces the selected source colors in the current image with the colors that you specify in the Replace with boxes.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -480,6 +498,11 @@
                     <property name="label" translatable="yes" context="dockingcolorreplace|pipette">Pipette</property>
                     <property name="use_underline">True</property>
                     <property name="icon_name">res/sc10350.png</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="pipette-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="dockingcolorreplace|extended_tip|pipette">Select one of the four source color boxes. Move the mouse pointer over the selected image, and then click the color that you want to replace.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -519,6 +542,11 @@
                 <property name="top_attach">0</property>
               </packing>
             </child>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="toolgrid-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="dockingcolorreplace|extended_tip|toolgrid">Displays the color in the selected image that directly underlies the current mouse pointer position. This features only works if the Color Replacer tool is selected.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -530,6 +558,11 @@
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="DockingColorReplace-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="dockingcolorreplace|extended_tip|DockingColorReplace">Opens the Color Replacer dialog, where you can replace colors in bitmap and meta file graphics.</property>
+      </object>
     </child>
   </object>
 </interface>

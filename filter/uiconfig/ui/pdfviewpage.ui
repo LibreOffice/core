@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="flt">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -56,6 +56,11 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="pageonly-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfviewpage|extended_tip|pageonly">Select to generate a PDF file that shows only the page contents.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -72,6 +77,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">pageonly</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="outline-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfviewpage|extended_tip|outline">Select to generate a PDF file that shows a bookmarks palette and the page contents.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -88,6 +98,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">pageonly</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="thumbs-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfviewpage|extended_tip|thumbs">Select to generate a PDF file that shows a thumbnails palette and the page contents.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -119,6 +134,11 @@
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment1</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="page-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="pdfviewpage|extended_tip|page">Select to show the given page when the reader opens the PDF file.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -179,6 +199,11 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="fitdefault-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfviewpage|extended_tip|fitdefault">Select to generate a PDF file that shows the page contents without zooming. If the reader software is configured to use a zoom factor by default, the page shows with that zoom factor.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -195,6 +220,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">fitdefault</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="fitwin-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfviewpage|extended_tip|fitwin">Select to generate a PDF file that shows the page zoomed to fit entirely into the reader's window.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -211,6 +241,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">fitdefault</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="fitwidth-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfviewpage|extended_tip|fitwidth">Select to generate a PDF file that shows the page zoomed to fit the width of the reader's window.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -227,6 +262,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">fitdefault</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="fitvis-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfviewpage|extended_tip|fitvis">Select to generate a PDF file that shows the text and graphics on the page zoomed to fit the width of the reader's window.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -251,6 +291,11 @@
                             <accessibility>
                               <relation type="label-for" target="zoom"/>
                             </accessibility>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="fitzoom-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="pdfviewpage|extended_tip|fitzoom">Select a given zoom factor when the reader opens the PDF file.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -266,6 +311,11 @@
                             <accessibility>
                               <relation type="labelled-by" target="fitzoom"/>
                             </accessibility>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="zoom-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="pdfviewpage|extended_tip|zoom">Select a given zoom factor when the reader opens the PDF file.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -333,6 +383,11 @@
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="defaultlayout-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfviewpage|extended_tip|defaultlayout">Select to generate a PDF file that shows the pages according to the layout setting of the reader software.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -349,6 +404,11 @@
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">defaultlayout</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="singlelayout-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfviewpage|extended_tip|singlelayout">Select to generate a PDF file that shows one page at a time.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -365,6 +425,11 @@
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">defaultlayout</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="contlayout-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfviewpage|extended_tip|contlayout">Select to generate a PDF file that shows pages in a continuous vertical column.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -381,6 +446,11 @@
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">defaultlayout</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="contfacinglayout-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfviewpage|extended_tip|contfacinglayout">Select to generate a PDF file that shows pages side by side in a continuous column. For more than two pages, the first page is displayed on the right.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -397,6 +467,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="firstonleft-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfviewpage|extended_tip|firstonleft">Select to generate a PDF file that shows pages side by side in a continuous column. For more than two pages, the first page is displayed on the left. You must enable support for complex text layout on Language settings - Languages in the Options dialog box.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>

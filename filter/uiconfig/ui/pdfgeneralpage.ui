@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="flt">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkSizeGroup"/>
@@ -50,6 +50,11 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="all-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|all">Exports all defined print ranges. If no print range is defined, exports the entire document.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -72,6 +77,11 @@
                         <accessibility>
                           <relation type="label-for" target="pages"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="range-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|range">Exports the pages you type in the box.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -89,6 +99,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">all</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="selection-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|selection">Exports the current selection.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -105,6 +120,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="range"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="pages-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|pages">Exports the pages you type in the box.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -201,6 +221,11 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="losslesscompress-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|losslesscompress">Selects a lossless compression of images. All pixels are preserved.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -221,6 +246,11 @@
                         <accessibility>
                           <relation type="label-for" target="resolution"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="reduceresolution-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|reduceresolution">Select to resample or down-size the images to a lower number of pixels per inch.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -249,6 +279,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="reduceresolution"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="resolution-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|resolution">Select the target resolution for the images.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -266,6 +301,11 @@
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment1</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="quality-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|quality">Enter the quality level for JPEG compression.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -293,6 +333,11 @@
                             <property name="use_underline">True</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">losslesscompress</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="jpegcompress-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|jpegcompress">Select a JPEG compression level. With a high quality level, almost all pixels are preserved. With a low quality level, some pixels are lost and artifacts are introduced, but file sizes are reduced.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -468,6 +513,11 @@
                         <property name="halign">start</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="embed-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|embed">This setting enables you to export the document as a .pdf file containing two file formats: PDF and ODF.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -484,6 +534,11 @@
                         <property name="halign">start</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="tagged-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|tagged">Select to write PDF tags. This can increase file size by huge amounts.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -500,6 +555,11 @@
                         <property name="halign">start</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="forms-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|forms">Choose to create a PDF form. This can be filled out and printed by the user of the PDF document.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -526,6 +586,11 @@
                                 <property name="halign">start</property>
                                 <property name="use_underline">True</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="allowdups-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|allowdups">Allows you to use the same field name for multiple fields in the generated PDF file. If disabled, field names will be exported using generated unique names.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -543,6 +608,11 @@
                                   <item translatable="yes" context="pdfgeneralpage|format">HTML</item>
                                   <item translatable="yes" context="pdfgeneralpage|format">XML</item>
                                 </items>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="format-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|format">Select the format of submitting forms from within the PDF file.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -602,6 +672,11 @@
                             <property name="halign">start</property>
                             <property name="use_underline">True</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="pdfa-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|pdfa">Converts to the PDF/A-2b or PDF/A-1b format. This is defined as an electronic document file format for long term preservation. All fonts that were used in the source document will be embedded into the generated PDF file. PDF tags will be written.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -743,6 +818,11 @@
                         <property name="halign">start</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="bookmarks-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|bookmarks">Select to export bookmarks of Writer documents as PDF bookmarks. Bookmarks are created for all outline paragraphs (Tools - Chapter Numbering) and for all table of contents entries for which you did assign hyperlinks in the source document.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -773,6 +853,11 @@
                         <property name="halign">start</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="comments-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|comments">Select to export comments of Writer and Calc documents as PDF annotations.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -788,6 +873,11 @@
                         <property name="halign">start</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="emptypages-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|emptypages">If switched on, automatically inserted blank pages are exported to the PDF file. This is best if you are printing the pdf file double-sided. Example: In a book a chapter paragraph style is set to always start with an odd numbered page. If the previous chapter ends on an odd page, %PRODUCTNAME inserts an even numbered blank page. This option controls whether to export that even numbered page or not.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>

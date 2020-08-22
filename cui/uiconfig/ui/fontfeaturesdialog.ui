@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="FontFeaturesDialog">
@@ -12,9 +12,6 @@
     <property name="default_width">1</property>
     <property name="default_height">1</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox">
         <property name="can_focus">False</property>
@@ -194,5 +191,13 @@
       <action-widget response="-5">ok</action-widget>
       <action-widget response="-6">cancel</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="FontFeaturesDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="fontfeaturesdialog|extended_tip|FontFeaturesDialog">Select and apply font typographical features to characters.</property>
+      </object>
+    </child>
   </object>
 </interface>

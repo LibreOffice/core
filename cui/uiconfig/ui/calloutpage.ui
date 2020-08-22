@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -30,6 +30,11 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="valueset-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="calloutpage|extended_tip|valueset">Click the Callout style that you want to apply to the selected callout.</property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
@@ -77,6 +82,11 @@
                   <item id="1" translatable="yes" context="calloutpage|liststore1">Horizontal</item>
                   <item id="2" translatable="yes" context="calloutpage|liststore1">Vertical</item>
                 </items>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="extension-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="calloutpage|extended_tip|extension">Select where you want to extend the callout line from, in relation to the callout box.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -102,6 +112,11 @@
                 <property name="text">0.00</property>
                 <property name="adjustment">adjustment1</property>
                 <property name="digits">2</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="length-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="calloutpage|extended_tip|length">Enter the length of the callout line segment that extends from the callout box to the inflection point of the line.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -137,6 +152,11 @@
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="optimal-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="calloutpage|extended_tip|optimal">Click here to display a single-angled line in an optimal way.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -189,6 +209,11 @@
                   <item translatable="yes" context="calloutpage|position">Center</item>
                   <item translatable="yes" context="calloutpage|position">Right</item>
                 </items>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="position-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="calloutpage|extended_tip|position">Select where you want to extend the callout line from, in relation to the callout box.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -203,6 +228,11 @@
                 <property name="text">0.00</property>
                 <property name="adjustment">adjustment1</property>
                 <property name="digits">2</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="by-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="calloutpage|extended_tip|by">Select where you want to extend the callout line from, in relation to the callout box.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -242,6 +272,11 @@
                 <property name="text">0.00</property>
                 <property name="adjustment">adjustment1</property>
                 <property name="digits">2</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="spacing-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="calloutpage|extended_tip|spacing">Enter the amount of space that you want to leave between the end of the callout line, and the callout box.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -275,6 +310,11 @@
         <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="CalloutPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="calloutpage|extended_tip|CalloutPage">Click the Callout style that you want to apply to the selected callout.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

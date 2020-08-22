@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -83,6 +83,11 @@
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="formatted-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|formatted">Displays the number format code for the selected format. You can also enter a custom format.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -97,6 +102,11 @@
                     <property name="tooltip_text" translatable="yes" context="numberingformatpage|add|tooltip_text">Add</property>
                     <property name="valign">center</property>
                     <property name="image">image2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="add-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|add">Adds the number format code that you entered to the user-defined category.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -111,6 +121,11 @@
                     <property name="tooltip_text" translatable="yes" context="numberingformatpage|edit|tooltip_text">Edit Comment</property>
                     <property name="valign">center</property>
                     <property name="image">image3</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="edit-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|edit">Enter a comment for the selected number format, and then click outside this box.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -125,6 +140,11 @@
                     <property name="tooltip_text" translatable="yes" context="numberingformatpage|delete|tooltip_text">Remove</property>
                     <property name="valign">center</property>
                     <property name="image">image1</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="delete-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|delete">Deletes the selected number format.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -148,6 +168,11 @@
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
                     <property name="tooltip_text" translatable="yes" context="numberingformatpage|commented|tooltip_text">Comment</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="commented-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|commented">Adds a comment to the selected number format.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -203,10 +228,15 @@
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="GtkSpinButton" id="denominatored">
+                      <object class="GtkSpinButton" id="decimalsed">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="adjustment">adjustment2</property>
+                        <property name="adjustment">adjustment1</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="decimalsed-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|decimalsed">Enter the number of decimal places that you want to display.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -215,10 +245,15 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="decimalsed">
+                      <object class="GtkSpinButton" id="denominatored">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="adjustment">adjustment1</property>
+                        <property name="adjustment">adjustment2</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="denominatored-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|denominatored">With fraction format, enter the number of places for the denominator that you want to display.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -237,6 +272,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">adjustment3</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="leadzerosed-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|leadzerosed">Enter the maximum number of zeroes to display in front of the decimal point.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -252,11 +292,12 @@
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="GtkLabel" id="denominatorft">
+                      <object class="GtkLabel" id="decimalsft">
+                        <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="numberingformatpage|denominatorft">Den_ominator places:</property>
+                        <property name="label" translatable="yes" context="numberingformatpage|decimalsft">_Decimal places:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">denominatored</property>
+                        <property name="mnemonic_widget">decimalsed</property>
                         <property name="xalign">1</property>
                       </object>
                       <packing>
@@ -266,12 +307,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="decimalsft">
-                        <property name="visible">True</property>
+                      <object class="GtkLabel" id="denominatorft">
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="numberingformatpage|decimalsft">_Decimal places:</property>
+                        <property name="label" translatable="yes" context="numberingformatpage|denominatorft">Den_ominator places:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">decimalsed</property>
+                        <property name="mnemonic_widget">denominatored</property>
                         <property name="xalign">1</property>
                       </object>
                       <packing>
@@ -309,6 +349,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="negnumred-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|negnumred">Changes the font color of negative numbers to red.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -330,6 +375,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="engineering-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|engineering">With scientific format, Engineering notation ensures that exponent is a multiple of 3.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -346,6 +396,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="thousands-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|thousands">Inserts a separator between thousands. The type of separator that is used depends on your language settings.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -430,6 +485,11 @@
                             </child>
                           </object>
                         </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="categorylb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|categorylb">Select a category from the list, and then select a formatting style in the Format box.</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -486,6 +546,11 @@
                         <items>
                           <item translatable="yes" context="numberingformatpage|liststore2">Automatically</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="currencylb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|currencylb">Select a currency, and then scroll to the top of the Format list to view the formatting options for the currency.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -520,6 +585,11 @@
                                     <attribute name="foreground-rgba">2</attribute>
                                   </attributes>
                                 </child>
+                              </object>
+                            </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="formatlb-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|formatlb">Select how you want the contents of the selected field to be displayed.</property>
                               </object>
                             </child>
                           </object>
@@ -576,6 +646,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">start</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="languagelb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|languagelb">Specifies the language setting for the selected field.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -591,6 +666,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="sourceformat-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|sourceformat">Uses the same number format as the cells containing the data for the chart.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -650,6 +730,11 @@
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="NumberingFormatPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|NumberingFormatPage">Specify the formatting options for the selected cell(s).</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

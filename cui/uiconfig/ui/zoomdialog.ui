@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -117,6 +117,11 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="optimal-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|optimal">Resizes the display to fit the width of the text in the document at the moment the command is started.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -134,6 +139,11 @@
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">optimal</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="fitwandh-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|fitwandh">Displays the entire page on your screen.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -151,6 +161,11 @@
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">optimal</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="fitw-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|fitw">Displays the complete width of the document page. The top and bottom edges of the page may not be visible.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -168,6 +183,11 @@
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">optimal</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="100pc-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|100pc">Displays the document at its actual size.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -193,6 +213,11 @@
                                 <accessibility>
                                   <relation type="label-for" target="zoomsb"/>
                                 </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="variable-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|variable">Enter the zoom factor at which you want to display the document. Enter a percentage in the box.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -212,6 +237,7 @@
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="zoomsb-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="zoomdialog|zoomsb-atkobject">Variable</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|zoomsb">Enter the zoom factor at which you want to display the document. Enter a percentage in the box.</property>
                                   </object>
                                 </child>
                               </object>
@@ -276,6 +302,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="automatic-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|automatic">The automatic view layout displays pages side by side, as many as the zoom factor allows.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -293,6 +324,11 @@
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">automatic</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="singlepage-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|singlepage">The single page view layout displays pages beneath each other, but never side by side.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -319,6 +355,11 @@
                                   <relation type="label-for" target="columnssb"/>
                                   <relation type="label-for" target="bookmode"/>
                                 </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="columns-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|columns">In columns view layout you see pages in a given number of columns side by side. Enter the number of columns.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -339,6 +380,7 @@
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="columnssb-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="zoomdialog|columnssb-atkobject">Columns</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|columnssb">In columns view layout you see pages in a given number of columns side by side. Enter the number of columns.</property>
                                   </object>
                                 </child>
                               </object>
@@ -373,6 +415,11 @@
                                   <relation type="labelled-by" target="columns"/>
                                   <relation type="member-of" target="columns"/>
                                 </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="bookmode-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|bookmode">In book mode view layout you see two pages side by side as in an open book. The first page is a right page with an odd page number.</property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>
@@ -417,8 +464,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
+    <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="ZoomDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|ZoomDialog">Reduces or enlarges the screen display of %PRODUCTNAME.</property>
+      </object>
     </child>
   </object>
 </interface>

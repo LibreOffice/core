@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -111,6 +111,11 @@
                     <property name="can_focus">False</property>
                     <property name="wrap">True</property>
                     <property name="max_width_chars">72</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="source-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|source">Displays the source of the clipboard contents.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -171,6 +176,11 @@
                                 </child>
                               </object>
                             </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="list-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|list">Select a format for the clipboard contents that you want to paste. The available format depends on the copied or cut source format.</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -208,8 +218,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
+    <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="PasteSpecialDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|PasteSpecialDialog">Inserts the contents of the clipboard into the current file in a format that you can specify.</property>
+      </object>
     </child>
   </object>
 </interface>

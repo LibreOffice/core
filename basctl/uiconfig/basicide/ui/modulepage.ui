@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="basctl">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -63,7 +63,6 @@
                     <property name="model">liststore1</property>
                     <property name="headers_visible">False</property>
                     <property name="reorderable">True</property>
-                    <property name="show_expanders">True</property>
                     <property name="search_column">1</property>
                     <property name="enable_tree_lines">True</property>
                     <child internal-child="selection">
@@ -86,6 +85,11 @@
                             <attribute name="text">1</attribute>
                           </attributes>
                         </child>
+                      </object>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="library-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="modulepage|extended_tip|library">Lists the existing macro libraries for the current application and any open documents.</property>
                       </object>
                     </child>
                   </object>
@@ -117,6 +121,11 @@
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
                 <property name="use_stock">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="edit-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="modulepage|extended_tip|edit">Opens the %PRODUCTNAME Basic editor so that you can modify the selected library.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -131,6 +140,11 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="newmodule-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="modulepage|extended_tip|newmodule">Opens the editor and creates a new module.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -177,6 +191,11 @@
                 <property name="receives_default">True</property>
                 <property name="no_show_all">True</property>
                 <property name="use_underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="password-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="modulepage|extended_tip|password">Assigns or edits the password for the selected library.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -191,6 +210,11 @@
                 <property name="receives_default">True</property>
                 <property name="no_show_all">True</property>
                 <property name="use_underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="import-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="modulepage|extended_tip|import">Locate that %PRODUCTNAME Basic library that you want to add to the current list, and then click Open.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -223,6 +247,11 @@
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="ModulePage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="modulepage|extended_tip|ModulePage">Lists the existing modules or dialogs.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

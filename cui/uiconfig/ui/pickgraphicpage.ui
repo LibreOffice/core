@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkFrame" id="PickGraphicPage">
@@ -44,6 +44,11 @@
                         <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="valueset-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pickgraphicpage|extended_tip|valueset">Click the graphics that you want to use as bullets.</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -100,6 +105,11 @@
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>
+      </object>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="PickGraphicPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="pickgraphicpage|extended_tip|PickGraphicPage">Displays the different graphics that you can use as bullets in a bulleted list.</property>
       </object>
     </child>
   </object>

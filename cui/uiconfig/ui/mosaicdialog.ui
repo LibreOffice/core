@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -24,9 +24,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -158,6 +155,11 @@
                                 <property name="text">2</property>
                                 <property name="adjustment">adjustment1</property>
                                 <property name="value">2</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="width-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="mosaicdialog|extended_tip|width">Defines the width of the individual tiles.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -196,6 +198,11 @@
                                 <property name="text" translatable="yes" context="mosaicdialog|height">2</property>
                                 <property name="adjustment">adjustment2</property>
                                 <property name="value">2</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="height-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="mosaicdialog|extended_tip|height">Defines the height of the individual tiles.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -231,6 +238,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="edges-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="mosaicdialog|extended_tip|edges">Enhances, or sharpens, the edges of the object.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -271,5 +283,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="MosaicDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="mosaicdialog|extended_tip|MosaicDialog">Joins small groups of pixels into rectangular areas of the same color.</property>
+      </object>
+    </child>
   </object>
 </interface>

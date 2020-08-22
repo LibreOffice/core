@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -176,6 +176,11 @@
             <property name="receives_default">True</property>
             <property name="halign">end</property>
             <property name="use_underline">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="save-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="labelformatpage|extended_tip|save">Saves the current label or business card format.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -189,6 +194,11 @@
             <property name="can_focus">True</property>
             <property name="activates_default">True</property>
             <property name="digits">2</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="hori-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="labelformatpage|extended_tip|hori">Displays the distance between the left edges of adjacent labels or business cards. If you are defining a custom format, enter a value here.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -201,6 +211,11 @@
             <property name="can_focus">True</property>
             <property name="activates_default">True</property>
             <property name="digits">2</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="vert-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="labelformatpage|extended_tip|vert">Displays the distance between the upper edge of a label or a business card and the upper edge of the label or the business card directly below. If you are defining a custom format, enter a value here.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -213,6 +228,11 @@
             <property name="can_focus">True</property>
             <property name="activates_default">True</property>
             <property name="digits">2</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="width-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="labelformatpage|extended_tip|width">Displays the width for the label or the business card. If you are defining a custom format, enter a value here.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -225,6 +245,11 @@
             <property name="can_focus">True</property>
             <property name="activates_default">True</property>
             <property name="digits">2</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="height-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="labelformatpage|extended_tip|height">Displays the height for the label or business card. If you are defining a custom format, enter a value here.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -237,6 +262,11 @@
             <property name="can_focus">True</property>
             <property name="activates_default">True</property>
             <property name="digits">2</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="left-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="labelformatpage|extended_tip|left">Displays the distance from the left edge of the page to the left edge of the first label or business card. If you are defining a custom format, enter a value here.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -249,6 +279,11 @@
             <property name="can_focus">True</property>
             <property name="activates_default">True</property>
             <property name="digits">2</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="top-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="labelformatpage|extended_tip|top">Displays distance from the top edge of the page to the top of the first label or business card. If you are defining a custom format, enter a value here.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -261,6 +296,11 @@
             <property name="can_focus">True</property>
             <property name="activates_default">True</property>
             <property name="adjustment">adjustment1</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="cols-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="labelformatpage|extended_tip|cols">Enter the number of labels or business cards that you want to span the width of the page.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -273,6 +313,11 @@
             <property name="can_focus">True</property>
             <property name="activates_default">True</property>
             <property name="adjustment">adjustment2</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="rows-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="labelformatpage|extended_tip|rows">Enter the number of labels or business cards that you want to span the height of the page.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -352,6 +397,11 @@
             <property name="mnemonic_widget">top</property>
             <property name="max_width_chars">32</property>
             <property name="xalign">0</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="type-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="labelformatpage|extended_tip|type">Enter or select a label type.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -364,6 +414,11 @@
         <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="LabelFormatPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="labelformatpage|extended_tip|LabelFormatPage">Set paper formatting options.</property>
+      </object>
     </child>
   </object>
 </interface>

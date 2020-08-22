@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -24,9 +24,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -58,6 +55,11 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="CHANGE_SOURCE-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="baselinksdialog|extended_tip|CHANGE_SOURCE">Change the source file for the selected link.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -72,6 +74,11 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="BREAK_LINK-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="baselinksdialog|extended_tip|BREAK_LINK">Breaks the link between the source file and the current document. The most recently updated contents of the source file are kept in the current document.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -86,6 +93,11 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="UPDATE_NOW-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="baselinksdialog|extended_tip|UPDATE_NOW">Updates the selected link so that the most recently saved version of the linked file is displayed in the current document.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -202,6 +214,11 @@
                                 <attribute name="text">3</attribute>
                               </attributes>
                             </child>
+                          </object>
+                        </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="TB_LINKS-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="baselinksdialog|extended_tip|TB_LINKS">Double-click a link in the list to open a file dialog where you can select another object for this link.</property>
                           </object>
                         </child>
                       </object>
@@ -342,6 +359,11 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="AUTOMATIC-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="baselinksdialog|extended_tip|AUTOMATIC">Automatically updates the contents of the link when you open the file. Any changes made in the source file are then displayed in the file containing the link. Linked graphic files can only be updated manually.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -358,6 +380,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">AUTOMATIC</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="MANUAL-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="baselinksdialog|extended_tip|MANUAL">Only updates the link when you click the Update button.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -390,5 +417,13 @@
       <action-widget response="-11">help</action-widget>
       <action-widget response="-7">close</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="BaseLinksDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="baselinksdialog|extended_tip|BaseLinksDialog">Lets you edit the properties of each link in the current document, including the path to the source file. This command is not available if the current document does not contain links to other files.</property>
+      </object>
+    </child>
   </object>
 </interface>

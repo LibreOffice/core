@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="flt">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkBox" id="PdfSecurityPage">
@@ -35,6 +35,11 @@
                     <property name="receives_default">True</property>
                     <property name="halign">start</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="setpassword-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfsecuritypage|extended_tip|setpassword">Click to open a dialog where you enter the passwords.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -297,6 +302,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">printhigh</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="printnone-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfsecuritypage|extended_tip|printnone">Printing the document is not permitted.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -313,6 +323,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">printhigh</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="printlow-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfsecuritypage|extended_tip|printlow">The document can only be printed in low resolution (150 dpi). Not all PDF readers honor this setting.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -329,6 +344,11 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="printhigh-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfsecuritypage|extended_tip|printhigh">The document can be printed in high resolution.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -383,6 +403,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">changeany</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="changenone-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfsecuritypage|extended_tip|changenone">No changes of the content are permitted.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -399,6 +424,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">changeany</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="changeinsdel-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfsecuritypage|extended_tip|changeinsdel">Only inserting, deleting, and rotating pages is permitted.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -415,6 +445,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">changeany</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="changeform-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfsecuritypage|extended_tip|changeform">Only filling in form fields is permitted.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -431,6 +466,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">changeany</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="changecomment-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfsecuritypage|extended_tip|changecomment">Only commenting and filling in form fields is permitted.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -447,6 +487,11 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="changeany-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfsecuritypage|extended_tip|changeany">All changes are permitted, except extracting pages.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -501,6 +546,11 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="enablecopy-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfsecuritypage|extended_tip|enablecopy">Select to enable copying of content to the clipboard.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -517,6 +567,11 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="enablea11y-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfsecuritypage|extended_tip|enablea11y">Select to enable text access for accessibility tools.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>

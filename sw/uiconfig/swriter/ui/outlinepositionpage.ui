@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -88,6 +88,11 @@
                         </child>
                       </object>
                     </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="levellb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinepositionpage|extended_tip|levellb">Select the level(s) that you want to modify.</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -157,6 +162,11 @@
                       <item translatable="yes" context="outlinepositionpage|liststore1">Centered</item>
                       <item translatable="yes" context="outlinepositionpage|liststore1">Right</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="numalignlb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinepositionpage|extended_tip|numalignlb">Set the alignment of the numbering symbols. Select "Left" to align the numbering symbol to start directly at the "Aligned at" position. Select "Right" to align the symbol to end directly before the "Aligned at" position. Select "Centered" to center the symbol around the "Aligned at" position.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -285,6 +295,11 @@ numbering and text:</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment6</property>
                     <property name="digits">2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="indentatmf-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinepositionpage|extended_tip|indentatmf">Enter the distance from the left page margin to the start of all lines in the numbered paragraph that follow the first line.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -310,6 +325,11 @@ numbering and text:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="num2alignlb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinepositionpage|extended_tip|num2alignlb">Set the alignment of the numbering symbols. Select "Left" to align the numbering symbol to start directly at the "Aligned at" position. Select "Right" to align the symbol to end directly before the "Aligned at" position. Select "Centered" to center the symbol around the "Aligned at" position.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -338,6 +358,11 @@ numbering and text:</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment4</property>
                     <property name="digits">2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="alignedatmf-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinepositionpage|extended_tip|alignedatmf">Enter the distance from the left page margin at which the numbering symbol will be aligned.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -366,6 +391,11 @@ numbering and text:</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment5</property>
                     <property name="digits">2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="atmf-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinepositionpage|extended_tip|atmf">If you select a tab stop to follow the numbering, you can enter a non-negative value as the tab stop position.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -383,6 +413,11 @@ numbering and text:</property>
                       <item translatable="yes" context="outlinepositionpage|liststore2">Nothing</item>
                       <item translatable="yes" context="outlinepositionpage|liststore2">New Line</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="numfollowedbylb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinepositionpage|extended_tip|numfollowedbylb">Enter the distance from the left page margin at which the numbering symbol will be aligned.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -413,6 +448,11 @@ numbering and text:</property>
                     <accessibility>
                       <relation type="member-of" target="label10"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="standard-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinepositionpage|extended_tip|standard">Resets the indent and the spacing values to the default values.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.2 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore2">
@@ -38,6 +38,11 @@
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="main-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="smarttagoptionspage|extended_tip|main">Enables Smart Tags to be evaluated and shown in your text document.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -75,6 +80,11 @@
                         <property name="receives_default">True</property>
                         <property name="valign">start</property>
                         <property name="use_underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="properties-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="smarttagoptionspage|extended_tip|properties">To configure a Smart Tag, select the name of the Smart Tag, then click Properties. Not all Smart Tags can be configured.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -161,6 +171,11 @@
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="SmartTagOptionsPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="smarttagoptionspage|extended_tip|SmartTagOptionsPage">When you have installed at least one Smart Tag extension, you see the Smart Tags page.</property>
+      </object>
     </child>
   </object>
 </interface>

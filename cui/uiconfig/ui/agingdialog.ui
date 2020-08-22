@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -18,9 +18,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -145,6 +142,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="adjustment">adjustment1</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="value-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="agingdialog|extended_tip|value">Specifies the number of colors to which the image is to be reduced.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -199,5 +201,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="AgingDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="agingdialog|extended_tip|AgingDialog">All pixels are set to their gray values, and then the green and blue color channels are reduced by the amount you specify. The red color channel is not changed.</property>
+      </object>
+    </child>
   </object>
 </interface>

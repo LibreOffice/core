@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkFrame" id="PickBulletPage">
@@ -38,6 +38,11 @@
                     <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="valueset-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pickbulletpage|extended_tip|valueset">Click the bullet style that you want to use.</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -54,6 +59,11 @@
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>
+      </object>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="PickBulletPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="pickbulletpage|extended_tip|PickBulletPage">Displays the different bullet styles that you can apply.</property>
       </object>
     </child>
   </object>

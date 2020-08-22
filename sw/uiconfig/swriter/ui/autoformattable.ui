@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.2 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -34,6 +34,11 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="use_stock">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="cancel-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="autoformattable|extended_tip|cancel">Closes dialog and discards all changes.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -50,6 +55,11 @@
                 <property name="has_default">True</property>
                 <property name="receives_default">False</property>
                 <property name="use_stock">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="ok-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="autoformattable|extended_tip|ok">Saves all changes and closes dialog.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -118,6 +128,11 @@
                                 <property name="can_focus">False</property>
                                 <property name="hexpand">True</property>
                                 <property name="vexpand">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="preview-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="autoformattable|extended_tip|preview">Displays a preview of the current selection.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -197,6 +212,11 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="use_stock">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="remove-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="autoformattable|extended_tip|remove">Deletes the selected element or elements after confirmation.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -376,7 +396,7 @@
       <action-widget response="-5">ok</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
+    <child type="titlebar">
       <placeholder/>
     </child>
   </object>
