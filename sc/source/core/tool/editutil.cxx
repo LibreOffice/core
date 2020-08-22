@@ -597,7 +597,7 @@ void ScEditEngineDefaulter::SetText( const OUString& rText )
 {
     bool bUpdateMode = GetUpdateMode();
     if ( bUpdateMode )
-        SetUpdateMode( false );
+        SetUpdateMode( false, true );
     EditEngine::SetText( rText );
     if ( pDefaults )
         SetDefaults( *pDefaults, false );
