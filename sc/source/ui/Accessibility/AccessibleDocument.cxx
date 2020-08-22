@@ -2210,19 +2210,19 @@ uno::Any SAL_CALL ScAccessibleDocument::getExtendedAttributes()
 {
     SolarMutexGuard g;
 
-    uno::Any anyAtrribute;
+    uno::Any anyAttribute;
 
     sal_uInt16 sheetIndex;
     OUString sSheetName;
     sheetIndex = getVisibleTable();
     if(GetDocument()==nullptr)
-        return anyAtrribute;
+        return anyAttribute;
     GetDocument()->GetName(sheetIndex,sSheetName);
     OUString sValue = "page-name:" + sSheetName +
         ";page-number:" + OUString::number(sheetIndex+1) +
         ";total-pages:" + OUString::number(GetDocument()->GetTableCount()) + ";";
-    anyAtrribute <<= sValue;
-    return anyAtrribute;
+    anyAttribute <<= sValue;
+    return anyAttribute;
 }
 
 sal_Int32 SAL_CALL ScAccessibleDocument::getForeground(  )
