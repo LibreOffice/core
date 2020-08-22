@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="basctl">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -26,9 +26,6 @@
     <property name="title" translatable="yes" context="basicmacrodialog|BasicMacroDialog">Basic Macros</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -50,6 +47,11 @@
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="ok-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="basicmacrodialog|extended_tip|ok">Runs or saves the current macro.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -153,6 +155,11 @@
                                     </child>
                                   </object>
                                 </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="macros-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="basicmacrodialog|extended_tip|macros">Lists the macros that are contained in the module selected in the Macro from list.</property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>
@@ -230,6 +237,11 @@
                                     </child>
                                   </object>
                                 </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="libraries-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="basicmacrodialog|extended_tip|libraries">Lists the libraries and the modules where you can open or save your macros. To save a macro with a particular document, open the document, and then open this dialog.</property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>
@@ -300,6 +312,11 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="macronameedit-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="basicmacrodialog|extended_tip|macronameedit">Displays the name of the selected macro. To create or to change the name of a macro, enter a name here.</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -336,6 +353,11 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="assign-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="basicmacrodialog|extended_tip|assign">Opens the Customize dialog, where you can assign the selected macro to a menu command, a toolbar, or an event.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -350,6 +372,11 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="edit-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="basicmacrodialog|extended_tip|edit">Starts the %PRODUCTNAME Basic editor and opens the selected macro or dialog for editing.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -364,6 +391,11 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="delete-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="basicmacrodialog|extended_tip|delete">Creates a new macro, creates a new module or deletes the selected macro or selected module.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -392,6 +424,11 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="organize-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="basicmacrodialog|extended_tip|organize">Opens the Macro Organizer dialog, where you can add, edit, or delete existing macro modules, dialogs, and libraries.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -406,6 +443,11 @@
                         <property name="receives_default">True</property>
                         <property name="no_show_all">True</property>
                         <property name="use_underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="newlibrary-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="basicmacrodialog|extended_tip|newlibrary">Saves the recorded macro in a new library.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -420,6 +462,11 @@
                         <property name="receives_default">True</property>
                         <property name="no_show_all">True</property>
                         <property name="use_underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="newmodule-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="basicmacrodialog|extended_tip|newmodule">Saves the recorded macro in a new module.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -460,5 +507,13 @@
       <action-widget response="-7">close</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="BasicMacroDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="basicmacrodialog|extended_tip|BasicMacroDialog">Opens a dialog to organize macros.</property>
+      </object>
+    </child>
   </object>
 </interface>

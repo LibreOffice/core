@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="pcr">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkToolbar" id="toolbar">
@@ -109,11 +109,21 @@
         <property name="action_name">.uno:Bib/Mapping</property>
         <property name="label" translatable="yes" context="toolbar|TBC_BT_COL_ASSIGN">Column Arrangement</property>
         <property name="use_underline">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="TBC_BT_COL_ASSIGN-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="toolbar|extended_tip|TBC_BT_COL_ASSIGN">Lets you map the column headings to data fields from a different data source. To define a different data source for your bibliography, click the Data Source button on the record's Object bar.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="expand">False</property>
         <property name="homogeneous">True</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="toolbar-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="toolbar|extended_tip|toolbar">Insert, delete, edit, and organize records in the bibliography database.</property>
+      </object>
     </child>
   </object>
 </interface>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkMenu" id="addmenu">
@@ -32,9 +32,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -66,6 +63,11 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="options-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|options">Opens a dialog, where you can select the user-defined dictionaries, and set the rules for the spellchecking.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -81,6 +83,11 @@
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
                 <property name="use_stock">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="undo-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|undo">Click to undo the last change in the current sentence. Click again to undo the previous change in the same sentence.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -161,6 +168,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="sentence-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|sentence">Displays the sentence with the misspelled word highlighted. Edit the word or the sentence, or click one of the suggestions in the text box below.</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -216,6 +228,11 @@
                         </child>
                       </object>
                     </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="suggestionslb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|suggestionslb">Lists suggested words to replace the misspelled word. Select the word that you want to use, and then click Correct or Correct All.</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -233,6 +250,11 @@
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="checkgrammar-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|checkgrammar">Enable Check grammar to work first on all spelling errors, then on all grammar errors.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -344,6 +366,11 @@
                         <attribute name="pixbuf">2</attribute>
                       </attributes>
                     </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="languagelb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|languagelb">Specifies the language to use to check the spelling.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -419,6 +446,11 @@
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="change-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|change">Replaces the unknown word with the current suggestion. If you changed more than just the misspelled word, the entire sentence is replaced.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -434,6 +466,11 @@
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="changeall-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|changeall">Replaces all occurrences of the unknown word with the current suggestion.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -449,6 +486,11 @@
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="autocorrect-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|autocorrect">Adds the current combination of the incorrect word and the replacement word to the AutoCorrect replacements table.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -476,6 +518,11 @@
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="ignore-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|ignore">Skips the unknown word and continues with the spellcheck.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -491,6 +538,11 @@
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="ignoreall-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|ignoreall">Skips all occurrences of the unknown word until the end of the current %PRODUCTNAME session and continues with the spellcheck.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -506,6 +558,11 @@
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="ignorerule-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|ignorerule">While performing a grammar check, click Ignore Rule to ignore the rule that is currently flagged as a grammar error.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -541,6 +598,11 @@
                     <child>
                       <placeholder/>
                     </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="addmb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|addmb">Adds the unknown word to a user-defined dictionary.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -574,5 +636,13 @@
       <action-widget response="102">undo</action-widget>
       <action-widget response="-7">close</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="SpellingDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|SpellingDialog">Checks the document or the current selection for spelling errors. If a grammar checking extension is installed, the dialog also checks for grammar errors.</property>
+      </object>
+    </child>
   </object>
 </interface>

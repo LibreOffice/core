@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sfx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="VersionCommentDialog">
@@ -156,8 +156,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
+    <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="VersionCommentDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="versioncommentdialog|extended_tip|VersionCommentDialog">Enter a comment here when you are saving a new version. If you clicked Show to open this dialog, you cannot edit the comment.</property>
+      </object>
     </child>
   </object>
 </interface>

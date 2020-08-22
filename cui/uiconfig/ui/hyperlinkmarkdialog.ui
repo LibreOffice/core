@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -19,9 +19,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -54,6 +51,11 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="close-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkmarkdialog|extended_tip|close">Once the hyperlink has been completely entered, click on Close to set the link and leave the dialog.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -94,7 +96,6 @@
                     <property name="model">liststore1</property>
                     <property name="headers_visible">False</property>
                     <property name="search_column">1</property>
-                    <property name="show_expanders">True</property>
                     <property name="enable_tree_lines">True</property>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection" id="Macro Library List-selection1"/>
@@ -117,8 +118,9 @@
                       </object>
                     </child>
                     <child internal-child="accessible">
-                      <object class="AtkObject">
+                      <object class="AtkObject" id="TreeListBox-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="hyperlinkmarkdialog|TreeListBox-atkobject">Mark Tree</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkmarkdialog|extended_tip|TreeListBox">Specifies the position in the target document where you wish to jump to.</property>
                       </object>
                     </child>
                   </object>
@@ -156,5 +158,8 @@
       <action-widget response="101">ok</action-widget>
       <action-widget response="-6">close</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>

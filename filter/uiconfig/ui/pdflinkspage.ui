@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="flt">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkBox" id="PdfLinksPage">
@@ -37,6 +37,11 @@
                     <property name="xalign">0</property>
                     <property name="image_position">right</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="export-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdflinkspage|extended_tip|export">Exports the current file in PDF format.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -53,6 +58,11 @@
                     <property name="xalign">0</property>
                     <property name="image_position">right</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="convert-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdflinkspage|extended_tip|convert">Enable this checkbox to convert the URLs referencing other ODF files to PDF files with the same name. In the referencing URLs the extensions .odt, .odp, .ods, .odg, and .odm are converted to the extension .pdf.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -69,6 +79,11 @@
                     <property name="xalign">0</property>
                     <property name="image_position">right</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="exporturl-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdflinkspage|extended_tip|exporturl">Enable this checkbox to export URLs to other documents as relative URLs in the file system. See "relative hyperlinks" in the Help.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -123,6 +138,11 @@
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="default-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdflinkspage|extended_tip|default">Links from your PDF document to other documents will be handled as it is specified in your operating system.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -139,6 +159,11 @@
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">default</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="openpdf-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdflinkspage|extended_tip|openpdf">Cross-document links are opened with the PDF reader application that currently shows the document. The PDF reader application must be able to handle the specified file type inside the hyperlink.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -155,6 +180,11 @@
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">default</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="openinternet-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdflinkspage|extended_tip|openinternet">Cross-document links are opened with the Internet browser. The Internet browser must be able to handle the specified file type inside the hyperlink.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>

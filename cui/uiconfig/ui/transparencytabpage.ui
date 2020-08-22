@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustmentDegrees">
@@ -82,6 +82,11 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="RBT_TRANS_OFF-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="transparencytabpage|extended_tip|RBT_TRANS_OFF">Turns off color transparency.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -101,6 +106,11 @@
                         <accessibility>
                           <relation type="label-for" target="MTR_TRANSPARENT"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="RBT_TRANS_LINEAR-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="transparencytabpage|extended_tip|RBT_TRANS_LINEAR">Turns on color transparency. Select this option, and then enter a number in the box, where 0% is fully opaque and 100% is fully transparent.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -117,6 +127,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">RBT_TRANS_OFF</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="RBT_TRANS_GRADIENT-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="transparencytabpage|extended_tip|RBT_TRANS_GRADIENT">Applies a transparency gradient to the current fill color. Select this option, and then set the gradient properties.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -132,6 +147,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="RBT_TRANS_LINEAR"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="MTR_TRANSPARENT-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="transparencytabpage|extended_tip|MTR_TRANSPARENT">Adjusts the transparency of the current fill color. Enter a number between 0% (opaque) and 100% (transparent).</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -163,6 +183,11 @@
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentPercent5</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="MTR_TRGR_END_VALUE-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="transparencytabpage|extended_tip|MTR_TRGR_END_VALUE">Enter a transparency value for the endpoint of the gradient, where 0% is fully opaque and 100% is fully transparent.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -175,6 +200,11 @@
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentPercent4</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="MTR_TRGR_START_VALUE-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="transparencytabpage|extended_tip|MTR_TRGR_START_VALUE">Enter a transparency value for the beginning point of the gradient, where 0% is fully opaque and 100% is fully transparent.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -187,6 +217,11 @@
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentPercent3</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="MTR_TRGR_BORDER-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="transparencytabpage|extended_tip|MTR_TRGR_BORDER">Enter the amount by which you want to adjust the transparent area of the gradient. The default value is 0%.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -199,6 +234,11 @@
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentDegrees</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="MTR_TRGR_ANGLE-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="transparencytabpage|extended_tip|MTR_TRGR_ANGLE">Enter a rotation angle for the gradient.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -211,6 +251,11 @@
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentPercent2</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="MTR_TRGR_CENTER_Y-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="transparencytabpage|extended_tip|MTR_TRGR_CENTER_Y">Enter the vertical offset for the gradient.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -223,6 +268,11 @@
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentPercent1</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="MTR_TRGR_CENTER_X-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="transparencytabpage|extended_tip|MTR_TRGR_CENTER_X">Enter the horizontal offset for the gradient.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -241,6 +291,11 @@
                           <item translatable="yes" context="transparencytabpage|liststoreTYPE">Quadratic</item>
                           <item translatable="yes" context="transparencytabpage|liststoreTYPE">Square</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="LB_TRGR_GRADIENT_TYPES-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="transparencytabpage|extended_tip|LB_TRGR_GRADIENT_TYPES">Select the type of transparency gradient that you want to apply.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -523,6 +578,11 @@
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>
+      </object>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="TransparencyTabPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="transparencytabpage|extended_tip|TransparencyTabPage">Set the transparency options for the fill that you apply to the selected object.</property>
       </object>
     </child>
   </object>

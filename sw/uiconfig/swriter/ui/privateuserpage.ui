@@ -592,5 +592,10 @@
         </attributes>
       </object>
     </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="PrivateUserPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="privateuserpage|extended_tip|PrivateUserPage">Contains personal contact information for business cards. Business card layouts are selected on the Business Cards tab.</property>
+      </object>
+    </child>
   </object>
 </interface>

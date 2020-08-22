@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -74,6 +74,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="enablewordcomplete-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="wordcompletionpage|extended_tip|enablewordcomplete">Stores frequently used words, and automatically completes a word after you type three letters that match the first three letters of a stored word.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -99,6 +104,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="appendspace-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="wordcompletionpage|extended_tip|appendspace">If you do not add punctuation after the word, %PRODUCTNAME adds a space.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -114,6 +124,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="showastip-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="wordcompletionpage|extended_tip|showastip">Displays the completed word as a Help Tip.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -167,6 +182,11 @@
                         <property name="text">100</property>
                         <property name="adjustment">adjustment2</property>
                         <property name="value">100</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="minwordlen-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="wordcompletionpage|extended_tip|minwordlen">Enter the minimum word length for a word to become eligible for the word completion feature.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -194,6 +214,11 @@
                         <property name="text">500</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="value">500</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="maxentries-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="wordcompletionpage|extended_tip|maxentries">Enter the maximum number of words that you want to store in the Word Completion list.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -218,6 +243,11 @@
                       <object class="GtkComboBoxText" id="acceptwith">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="acceptwith-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="wordcompletionpage|extended_tip|acceptwith">Select the key that you want to use to accept the automatic word completion.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -294,6 +324,11 @@
                         </child>
                       </object>
                     </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="entries-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="wordcompletionpage|extended_tip|entries">Lists the collected words. The list is valid until you close the current document. To make the list available to other documents in the current session, disable "When closing a document, remove the words collected from it from the list".</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -312,6 +347,11 @@
                 <property name="xalign">0</property>
                 <property name="yalign">0</property>
                 <property name="draw_indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="whenclosing-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="wordcompletionpage|extended_tip|whenclosing">When enabled, the list gets cleared when closing the current document. When disabled, makes the current Word Completion list available to other documents after you close the current document. The list remains available until you exit %PRODUCTNAME.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -331,6 +371,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="collectwords-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="wordcompletionpage|extended_tip|collectwords">Adds the frequently used words to a list. To remove a word from the Word Completion list, select the word, and then click Delete Entry.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -347,6 +392,11 @@
                     <property name="halign">end</property>
                     <property name="hexpand">True</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="delete-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="wordcompletionpage|extended_tip|delete">Removes the selected word or words from the Word Completion list.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -372,6 +422,11 @@
         <property name="fill">True</property>
         <property name="position">0</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="WordCompletionPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="wordcompletionpage|extended_tip|WordCompletionPage">Stores frequently used words, and automatically completes a word after you type three letters that match the first three letters of a stored word.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

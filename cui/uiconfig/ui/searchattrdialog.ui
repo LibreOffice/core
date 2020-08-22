@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.2 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -23,9 +23,6 @@
     <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -150,5 +147,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="SearchAttrDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="searchattrdialog|extended_tip|SearchAttrDialog">Choose the text attributes that you want to search for. For example, if you search for the Font attribute, all instances of text that do not use the default font are found. All text that has a directly coded font attribute, and all text where a style switches the font attribute, are found.</property>
+      </object>
+    </child>
   </object>
 </interface>

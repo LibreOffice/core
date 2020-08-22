@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="HangulHanjaEditDictDialog">
@@ -10,9 +10,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -93,6 +90,11 @@
                           <object class="GtkComboBoxText" id="book">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="book-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaeditdictdialog|extended_tip|book">Select the user-defined dictionary that you want to edit.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">True</property>
@@ -157,6 +159,11 @@
                                 <property name="caps_lock_warning">False</property>
                               </object>
                             </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="original-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaeditdictdialog|extended_tip|original">Select the entry in the current dictionary that you want to edit. If you want, you can also type a new entry in this box.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -178,6 +185,11 @@
                                 <property name="receives_default">True</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="new-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaeditdictdialog|extended_tip|new">Adds the current replacement definition to the dictionary.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -193,6 +205,11 @@
                                 <property name="receives_default">True</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="delete-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaeditdictdialog|extended_tip|delete">Deletes the selected entry.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -269,6 +286,11 @@
                                     <property name="hexpand">True</property>
                                     <property name="activates_default">True</property>
                                     <property name="width_chars">40</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="edit1-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaeditdictdialog|extended_tip|edit1">Type a suggested replacement for the entry that is selected in the Original text box. The replacement word can contain a maximum of eight characters.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
@@ -282,6 +304,11 @@
                                     <property name="can_focus">True</property>
                                     <property name="hexpand">True</property>
                                     <property name="activates_default">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="edit2-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaeditdictdialog|extended_tip|edit2">Type a suggested replacement for the entry that is selected in the Original text box. The replacement word can contain a maximum of eight characters.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
@@ -295,6 +322,11 @@
                                     <property name="can_focus">True</property>
                                     <property name="hexpand">True</property>
                                     <property name="activates_default">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="edit3-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaeditdictdialog|extended_tip|edit3">Type a suggested replacement for the entry that is selected in the Original text box. The replacement word can contain a maximum of eight characters.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
@@ -308,6 +340,11 @@
                                     <property name="can_focus">True</property>
                                     <property name="hexpand">True</property>
                                     <property name="activates_default">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="edit4-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaeditdictdialog|extended_tip|edit4">Type a suggested replacement for the entry that is selected in the Original text box. The replacement word can contain a maximum of eight characters.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
@@ -356,5 +393,8 @@
       <action-widget response="-7">close</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>

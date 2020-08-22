@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.2 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="SignatureLineDialog">
@@ -109,6 +109,11 @@
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
                             <property name="placeholder_text" translatable="yes" context="signatureline|edit_name">John Doe</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="edit_name-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="signatureline|extended_tip|edit_name">Enter your name as signer of the document. Your name will be inserted above the signature horizontal line.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -122,6 +127,11 @@
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
                             <property name="placeholder_text" translatable="yes" context="signatureline|edit_title">Director</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="edit_title-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="signatureline|extended_tip|edit_title">Enter the title of the signer. The title is displayed in the signature line graphic box.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -135,6 +145,11 @@
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
                             <property name="placeholder_text" translatable="yes" context="signatureline|edit_email">john.doe@example.org</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="edit_email-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="signatureline|extended_tip|edit_email">Enter the email of the signer. The email is not displayed in the signature line graphic box, but is used for the digital signature.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -229,9 +244,14 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_underline">True</property>
                             <property name="halign">start</property>
+                            <property name="use_underline">True</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="checkbox_can_add_comments-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="signatureline|extended_tip|checkbox_can_add_comments">Enable signer to insert comments in the Sign Signature Line dialog at time of signature.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -244,9 +264,14 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_underline">True</property>
                             <property name="halign">start</property>
+                            <property name="use_underline">True</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="checkbox_show_sign_date-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="signatureline|extended_tip|checkbox_show_sign_date">Mark this checkbox to display the date of the signature, at the time when the document is digitally signed.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -281,6 +306,11 @@
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
                                 <property name="vexpand">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="edit_instructions-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="signatureline|extended_tip|edit_instructions">Insert instructions for the signer. The instructions appears in the Sign Signature Line dialog box, at the time of signature.</property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>
@@ -323,5 +353,8 @@
       <action-widget response="-5">ok</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>

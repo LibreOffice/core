@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -34,7 +34,6 @@
     <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment6">
-    <property name="lower">0</property>
     <property name="upper">90</property>
     <property name="step_increment">5</property>
     <property name="page_increment">10</property>
@@ -348,6 +347,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">adjustment1</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="diagonal-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|diagonal">Enter the amount by which you want to round the corners of the selected 3D object.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -360,6 +364,11 @@
                     <property name="can_focus">True</property>
                     <property name="text">0</property>
                     <property name="adjustment">adjustment2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="scaleddepth-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|scaleddepth">Enter the amount by which to increase or decrease the area of the front side of the selected 3D object.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -373,6 +382,11 @@
                     <property name="text">0</property>
                     <property name="adjustment">adjustment3</property>
                     <property name="digits">1</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="angle-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|angle">Enter the angle in degrees to rotate the selected 3D rotation object.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -386,6 +400,11 @@
                     <property name="text">0</property>
                     <property name="adjustment">adjustment4</property>
                     <property name="digits">2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="depth-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|depth">Enter the extrusion depth for the selected 3D object. This option is not valid for 3D rotation objects.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -457,6 +476,11 @@
                         <property name="can_focus">True</property>
                         <property name="text">0</property>
                         <property name="adjustment">adjustment5</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="hori-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|hori">Enter the number of horizontal segments to use in the selected 3D rotation object.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -496,6 +520,11 @@
                         <property name="can_focus">True</property>
                         <property name="text">0</property>
                         <property name="adjustment">adjustment9</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="veri-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|veri">Enter the number of vertical segments to use in the selected 3D rotation object</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -571,6 +600,11 @@
                             <property name="tooltip_text" translatable="yes" context="docking3deffects|objspecific|tooltip_text">Object-Specific</property>
                             <property name="valign">center</property>
                             <property name="image">image8</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="objspecific-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|objspecific">Renders the 3D surface according to the shape of the object. For example, a circular shape is rendered with a spherical surface.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -585,6 +619,11 @@
                             <property name="tooltip_text" translatable="yes" context="docking3deffects|flat|tooltip_text">Flat</property>
                             <property name="valign">center</property>
                             <property name="image">image9</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="flat-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|flat">Renders the 3D surface as polygons.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -599,6 +638,11 @@
                             <property name="tooltip_text" translatable="yes" context="docking3deffects|spherical|tooltip_text">Spherical</property>
                             <property name="valign">center</property>
                             <property name="image">image10</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="spherical-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|spherical">Renders a smooth 3D surface.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -613,6 +657,11 @@
                             <property name="tooltip_text" translatable="yes" context="docking3deffects|invertnormals|tooltip_text">Invert Normals</property>
                             <property name="valign">center</property>
                             <property name="image">image11</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="invertnormals-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|invertnormals">Inverts the light source.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -627,6 +676,11 @@
                             <property name="tooltip_text" translatable="yes" context="docking3deffects|doublesidedillum|tooltip_text">Double-Sided Illumination</property>
                             <property name="valign">center</property>
                             <property name="image">image12</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="doublesidedillum-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|doublesidedillum">Lights the object from the outside and the inside. To use an ambient light source, click this button, and then click the Invert Normals button.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -641,6 +695,11 @@
                             <property name="tooltip_text" translatable="yes" context="docking3deffects|doublesided|tooltip_text">Double-Sided</property>
                             <property name="valign">center</property>
                             <property name="image">image13</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="doublesided-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|doublesided">Closes the shape of a 3D object that was created by extruding a freeform line (Convert - To 3D).</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -698,6 +757,11 @@
                         <property name="receives_default">True</property>
                         <property name="tooltip_text" translatable="yes" context="docking3deffects|to3d|tooltip_text">Convert to 3D</property>
                         <property name="image">image14</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="to3d-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|to3d">Use this icon to convert a selected 2D object to a 3D object.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -711,6 +775,11 @@
                         <property name="receives_default">True</property>
                         <property name="tooltip_text" translatable="yes" context="docking3deffects|tolathe|tooltip_text">Convert to Rotation Object</property>
                         <property name="image">image15</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="tolathe-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|tolathe">Click here to convert a selected 2D object to a 3D rotation object.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -909,6 +978,11 @@
                       <item translatable="yes" context="docking3deffects|mode">Phong</item>
                       <item translatable="yes" context="docking3deffects|mode">Gouraud</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="mode-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|mode">Select the shading method that you want to use. Flat shading assigns a single color to a single polygon on the surface of the object. Gouraud shading blends colors across the polygons. Phong shading averages the color of each pixel based on the pixels that surround it, and requires the most processing power.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -974,6 +1048,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">adjustment6</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="slant-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|slant">Enter an angle from 0 to 90 degrees for casting the shadow.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -987,6 +1066,11 @@
                     <property name="receives_default">True</property>
                     <property name="tooltip_text" translatable="yes" context="docking3deffects|shadow|tooltip_text">3D Shadowing On/Off</property>
                     <property name="image">image17</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="shadow-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|shadow">Adds or removes a shadow from the selected 3D object.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -1038,6 +1122,11 @@
                     <property name="can_focus">True</property>
                     <property name="adjustment">adjustment10</property>
                     <property name="digits">2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="focal-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|focal">Enter the focal length of the camera, where a small value corresponds to a "fisheye" lens, and a large value to a telephoto lens.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -1050,6 +1139,11 @@
                     <property name="can_focus">True</property>
                     <property name="adjustment">adjustment7</property>
                     <property name="digits">2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="distance-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|distance">Enter the distance to leave between the camera and the center of the selected object.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -1154,6 +1248,11 @@
                     <property name="tooltip_text" translatable="yes" context="docking3deffects|colorbutton1|tooltip_text">Colors Dialog</property>
                     <property name="valign">start</property>
                     <property name="image">image19</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="colorbutton1-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|colorbutton1">Select a color for the ambient light.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -1168,9 +1267,13 @@
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="ambientcolor-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|ambientcolor">Select a color for the ambient light.</property>
+                      </object>
                     </child>
                   </object>
                   <packing>
@@ -1222,6 +1325,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="label17"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="light1-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|light1">Click twice to turn the light source on, and then select a color for the light from the list. If you want, you can also set the color of the surrounding light, by selecting a color from the Ambient light box.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -1238,6 +1346,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="label17"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="light2-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|light2">Click twice to turn the light source on, and then select a color for the light from the list. If you want, you can also set the color of the surrounding light, by selecting a color from the Ambient light box.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -1254,6 +1367,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="label17"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="light3-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|light3">Click twice to turn the light source on, and then select a color for the light from the list. If you want, you can also set the color of the surrounding light, by selecting a color from the Ambient light box.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -1270,6 +1388,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="label17"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="light4-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|light4">Click twice to turn the light source on, and then select a color for the light from the list. If you want, you can also set the color of the surrounding light, by selecting a color from the Ambient light box.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -1286,6 +1409,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="label17"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="light5-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|light5">Click twice to turn the light source on, and then select a color for the light from the list. If you want, you can also set the color of the surrounding light, by selecting a color from the Ambient light box.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -1302,6 +1430,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="label17"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="light6-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|light6">Click twice to turn the light source on, and then select a color for the light from the list. If you want, you can also set the color of the surrounding light, by selecting a color from the Ambient light box.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -1318,6 +1451,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="label17"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="light7-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|light7">Click twice to turn the light source on, and then select a color for the light from the list. If you want, you can also set the color of the surrounding light, by selecting a color from the Ambient light box.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -1334,6 +1472,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="label17"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="light8-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|light8">Click twice to turn the light source on, and then select a color for the light from the list. If you want, you can also set the color of the surrounding light, by selecting a color from the Ambient light box.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -1356,13 +1499,17 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="valign">start</property>
-                        <property name="draw_indicator">True</property>
-                        <property name="label" translatable="no"></property>
                         <property name="tooltip_text" translatable="yes" context="docking3deffects|lightcolor1|tooltip_text">Light 1 color</property>
+                        <property name="valign">start</property>
+                        <property name="hexpand">True</property>
+                        <property name="draw_indicator">True</property>
                         <child>
                           <placeholder/>
+                        </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="lightcolor1-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|lightcolor1">Select a color for the current light source.</property>
+                          </object>
                         </child>
                       </object>
                       <packing>
@@ -1373,14 +1520,12 @@
                     </child>
                     <child>
                       <object class="GtkMenuButton" id="lightcolor2">
-                        <property name="visible">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="valign">start</property>
-                        <property name="draw_indicator">True</property>
-                        <property name="label" translatable="no"></property>
                         <property name="tooltip_text" translatable="yes" context="docking3deffects|lightcolor2|tooltip_text">Light 2 color</property>
+                        <property name="valign">start</property>
+                        <property name="hexpand">True</property>
+                        <property name="draw_indicator">True</property>
                         <child>
                           <placeholder/>
                         </child>
@@ -1393,14 +1538,12 @@
                     </child>
                     <child>
                       <object class="GtkMenuButton" id="lightcolor3">
-                        <property name="visible">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="valign">start</property>
-                        <property name="draw_indicator">True</property>
-                        <property name="label" translatable="no"></property>
                         <property name="tooltip_text" translatable="yes" context="docking3deffects|lightcolor3|tooltip_text">Light 3 color</property>
+                        <property name="valign">start</property>
+                        <property name="hexpand">True</property>
+                        <property name="draw_indicator">True</property>
                         <child>
                           <placeholder/>
                         </child>
@@ -1413,14 +1556,12 @@
                     </child>
                     <child>
                       <object class="GtkMenuButton" id="lightcolor4">
-                        <property name="visible">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="valign">start</property>
-                        <property name="draw_indicator">True</property>
-                        <property name="label" translatable="no"></property>
                         <property name="tooltip_text" translatable="yes" context="docking3deffects|lightcolor4|tooltip_text">Light 4 color</property>
+                        <property name="valign">start</property>
+                        <property name="hexpand">True</property>
+                        <property name="draw_indicator">True</property>
                         <child>
                           <placeholder/>
                         </child>
@@ -1433,14 +1574,12 @@
                     </child>
                     <child>
                       <object class="GtkMenuButton" id="lightcolor5">
-                        <property name="visible">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="valign">start</property>
-                        <property name="draw_indicator">True</property>
-                        <property name="label" translatable="no"></property>
                         <property name="tooltip_text" translatable="yes" context="docking3deffects|lightcolor5|tooltip_text">Light 5 color</property>
+                        <property name="valign">start</property>
+                        <property name="hexpand">True</property>
+                        <property name="draw_indicator">True</property>
                         <child>
                           <placeholder/>
                         </child>
@@ -1453,14 +1592,12 @@
                     </child>
                     <child>
                       <object class="GtkMenuButton" id="lightcolor6">
-                        <property name="visible">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="valign">start</property>
-                        <property name="draw_indicator">True</property>
-                        <property name="label" translatable="no"></property>
                         <property name="tooltip_text" translatable="yes" context="docking3deffects|lightcolor6|tooltip_text">Light 6 color</property>
+                        <property name="valign">start</property>
+                        <property name="hexpand">True</property>
+                        <property name="draw_indicator">True</property>
                         <child>
                           <placeholder/>
                         </child>
@@ -1473,14 +1610,12 @@
                     </child>
                     <child>
                       <object class="GtkMenuButton" id="lightcolor7">
-                        <property name="visible">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="valign">start</property>
-                        <property name="draw_indicator">True</property>
-                        <property name="label" translatable="no"></property>
                         <property name="tooltip_text" translatable="yes" context="docking3deffects|lightcolor7|tooltip_text">Light 7 color</property>
+                        <property name="valign">start</property>
+                        <property name="hexpand">True</property>
+                        <property name="draw_indicator">True</property>
                         <child>
                           <placeholder/>
                         </child>
@@ -1493,14 +1628,12 @@
                     </child>
                     <child>
                       <object class="GtkMenuButton" id="lightcolor8">
-                        <property name="visible">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="valign">start</property>
-                        <property name="draw_indicator">True</property>
-                        <property name="label" translatable="no"></property>
                         <property name="tooltip_text" translatable="yes" context="docking3deffects|lightcolor8|tooltip_text">Light 8 color</property>
+                        <property name="valign">start</property>
+                        <property name="hexpand">True</property>
+                        <property name="draw_indicator">True</property>
                         <child>
                           <placeholder/>
                         </child>
@@ -1653,6 +1786,11 @@
                     <accessibility>
                       <relation type="labelled-by" target="label20"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="textype-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|textype">Converts the texture to black and white.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -1670,6 +1808,11 @@
                     <accessibility>
                       <relation type="labelled-by" target="label20"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="texcolor-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|texcolor">Converts the texture to color.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -1687,6 +1830,11 @@
                     <accessibility>
                       <relation type="labelled-by" target="label22"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="texreplace-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|texreplace">Applies the texture without shading.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -1704,6 +1852,11 @@
                     <accessibility>
                       <relation type="labelled-by" target="label22"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="texmodulate-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|texmodulate">Applies the texture with shading. To define the shading options for the texture, click the Shading button in this dialog.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -1739,6 +1892,11 @@
                     <accessibility>
                       <relation type="labelled-by" target="label23"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="texobjx-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|texobjx">Automatically adjusts the texture based on the shape and size of the object.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -1756,6 +1914,11 @@
                     <accessibility>
                       <relation type="labelled-by" target="label23"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="texparallelx-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|texparallelx">Applies the texture parallel to the horizontal axis.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -1774,6 +1937,11 @@
                     <accessibility>
                       <relation type="labelled-by" target="label23"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="texcirclex-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|texcirclex">Wraps the horizontal axis of the texture pattern around a sphere.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -1791,6 +1959,11 @@
                     <accessibility>
                       <relation type="labelled-by" target="label24"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="texobjy-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|texobjy">Automatically adjusts the texture based on the shape and size of the object.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -1808,6 +1981,11 @@
                     <accessibility>
                       <relation type="labelled-by" target="label24"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="texparallely-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|texparallely">Applies the texture parallel to the vertical axis.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -1825,6 +2003,11 @@
                     <accessibility>
                       <relation type="labelled-by" target="label24"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="texcircley-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|texcircley">Wraps the vertical axis of the texture pattern around a sphere.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -1842,6 +2025,11 @@
                     <accessibility>
                       <relation type="labelled-by" target="label25"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="texfilter-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|texfilter">Blurs the texture slightly to remove unwanted speckles.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -1944,12 +2132,16 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="hexpand">True</property>
                     <property name="valign">center</property>
+                    <property name="hexpand">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="objcolor-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|objcolor">Select the color that you want to apply to the object.</property>
+                      </object>
                     </child>
                   </object>
                   <packing>
@@ -1962,12 +2154,16 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="hexpand">True</property>
                     <property name="valign">center</property>
+                    <property name="hexpand">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="illumcolor-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|illumcolor">Select the color to illuminate the object.</property>
+                      </object>
                     </child>
                   </object>
                   <packing>
@@ -1990,6 +2186,11 @@
                     <accessibility>
                       <relation type="labelled-by" target="label26"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="favorites-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|favorites">Select a predefined color scheme, or select User-defined to define a custom color scheme.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -2004,6 +2205,11 @@
                     <property name="receives_default">True</property>
                     <property name="tooltip_text" translatable="yes" context="docking3deffects|colorbutton3|tooltip_text">Colors Dialog</property>
                     <property name="image">image39</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="colorbutton3-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|colorbutton3">Select the color to illuminate the object.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -2094,12 +2300,16 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="hexpand">True</property>
                     <property name="valign">center</property>
+                    <property name="hexpand">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="speccolor-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|speccolor">Select the color that you want the object to reflect.</property>
+                      </object>
                     </child>
                   </object>
                   <packing>
@@ -2114,6 +2324,11 @@
                     <property name="receives_default">True</property>
                     <property name="tooltip_text" translatable="yes" context="docking3deffects|colorbutton5|tooltip_text">Colors Dialog</property>
                     <property name="image">image41</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="colorbutton5-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|colorbutton5">Enter the intensity of the specular effect.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -2125,6 +2340,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">adjustment8</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="intensity-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|intensity">Enter the intensity of the specular effect.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -2192,6 +2412,11 @@
             <property name="receives_default">True</property>
             <property name="tooltip_text" translatable="yes" context="docking3deffects|material|tooltip_text">Material</property>
             <property name="image">image5</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="material-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|material">Changes the coloring of the selected 3D object.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">4</property>
@@ -2205,6 +2430,11 @@
             <property name="receives_default">True</property>
             <property name="tooltip_text" translatable="yes" context="docking3deffects|texture|tooltip_text">Textures</property>
             <property name="image">image4</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="texture-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|texture">Sets the properties of the surface texture for the selected 3D object. This feature is only available after you apply a surface texture to the selected object. To quickly apply a surface texture, open the Gallery, hold down Shift+Ctrl, and then drag an image onto the selected 3D object.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">3</property>
@@ -2218,6 +2448,11 @@
             <property name="receives_default">True</property>
             <property name="tooltip_text" translatable="yes" context="docking3deffects|light|tooltip_text">Illumination</property>
             <property name="image">image3</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="light-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|light">Define the light source for the selected 3D object.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">2</property>
@@ -2231,6 +2466,11 @@
             <property name="receives_default">True</property>
             <property name="tooltip_text" translatable="yes" context="docking3deffects|representation|tooltip_text">Shading</property>
             <property name="image">image2</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="representation-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|representation">Sets the shading and shadow options for the selected 3D object.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -2244,6 +2484,11 @@
             <property name="receives_default">True</property>
             <property name="tooltip_text" translatable="yes" context="docking3deffects|geometry|tooltip_text">Geometry</property>
             <property name="image">image1</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="geometry-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|geometry">Adjusts the shape of the selected 3D object. You can only modify the shape of a 3D object that was created by converting a 2D object. To convert a 2D object to 3D, select the object, right-click, and then choose Convert - To 3D, or Convert - To 3D Rotation Object.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -2255,6 +2500,11 @@
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="Docking3DEffects-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|Docking3DEffects">Specifies the properties of 3D object(s) in the current document or converts a 2D object to 3D.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

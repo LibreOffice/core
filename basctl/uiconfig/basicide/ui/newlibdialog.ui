@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.2 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="basctl">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="NewLibDialog">
@@ -118,8 +118,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
+    <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="NewLibDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="newlibdialog|extended_tip|NewLibDialog">Enter a name for the new library or module.</property>
+      </object>
     </child>
   </object>
 </interface>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sfx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkGrid" id="CustomInfoPage">
@@ -17,6 +17,11 @@
         <property name="receives_default">True</property>
         <property name="halign">end</property>
         <property name="use_underline">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="add-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="custominfopage|extended_tip|add">Click to add a new row to the Properties list.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -105,6 +110,11 @@
                     <child>
                       <placeholder/>
                     </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="properties-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="custominfopage|extended_tip|properties">Enter your custom contents. You can change the name, type, and contents of each row. You can add or remove rows. The items will be exported as metadata to other file formats.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -121,6 +131,11 @@
         <property name="left_attach">0</property>
         <property name="top_attach">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="CustomInfoPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="custominfopage|extended_tip|CustomInfoPage">Allows you to assign custom information fields to your document.</property>
+      </object>
     </child>
   </object>
 </interface>

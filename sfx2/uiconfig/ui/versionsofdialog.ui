@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sfx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore3">
@@ -19,9 +19,6 @@
     <property name="border_width">6</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -52,6 +49,11 @@
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
                 <property name="use_stock">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="delete-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="versionsofdialog|extended_tip|delete">Deletes the selected version.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -66,6 +68,11 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="compare-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="versionsofdialog|extended_tip|compare">Compare the changes that were made in each version.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -80,6 +87,11 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="show-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="versionsofdialog|extended_tip|show">Displays the entire comment for the selected version.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -110,6 +122,11 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="open-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="versionsofdialog|extended_tip|open">Opens the selected version in a read-only window.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -172,6 +189,11 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="use_underline">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="save-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="versionsofdialog|extended_tip|save">Saves the current state of the document as a new version. If you want, you can also enter comments in the Insert Version Comment dialog before you save the new version.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -187,6 +209,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="always-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="versionsofdialog|extended_tip|always">If you have made changes to your document, %PRODUCTNAME automatically saves a new version when you close the document.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -251,7 +278,6 @@
                                 <property name="vexpand">True</property>
                                 <property name="model">liststore3</property>
                                 <property name="rules_hint">True</property>
-                                <property name="headers_visible">True</property>
                                 <property name="search_column">0</property>
                                 <property name="show_expanders">False</property>
                                 <child internal-child="selection">
@@ -294,6 +320,11 @@
                                         <attribute name="text">2</attribute>
                                       </attributes>
                                     </child>
+                                  </object>
+                                </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="versions-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="versionsofdialog|extended_tip|versions">Lists the existing versions of the current document, the date and the time they were created, the author and the associated comments.</property>
                                   </object>
                                 </child>
                               </object>
@@ -342,5 +373,13 @@
       <action-widget response="-5">open</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="VersionsOfDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="versionsofdialog|extended_tip|VersionsOfDialog">Saves and organizes multiple versions of the current document in the same file. You can also open, delete and compare previous versions.</property>
+      </object>
+    </child>
   </object>
 </interface>

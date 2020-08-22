@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="RecordSearchDialog">
@@ -10,9 +10,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox3">
         <property name="can_focus">False</property>
@@ -31,6 +28,11 @@
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="pbSearchAgain-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="fmsearchdialog|extended_tip|pbSearchAgain">Starts or cancels the search.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -46,6 +48,11 @@
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
                 <property name="image_position">top</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="close-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="fmsearchdialog|extended_tip|close">Closes the dialog. The settings of the last search will be saved until you quit %PRODUCTNAME.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -135,6 +142,11 @@
                                             <property name="activates_default">True</property>
                                           </object>
                                         </child>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="cmbSearchText-atkobject">
+                                            <property name="AtkObject::accessible-description" translatable="yes" context="fmsearchdialog|extended_tip|cmbSearchText">Enter the search term in the box or select it from the list.</property>
+                                          </object>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -151,6 +163,11 @@
                                         <property name="xalign">0</property>
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="rbSearchForText-atkobject">
+                                            <property name="AtkObject::accessible-description" translatable="yes" context="fmsearchdialog|extended_tip|rbSearchForText">Enter the search term in the box or select it from the list.</property>
+                                          </object>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="left_attach">0</property>
@@ -175,6 +192,11 @@
                                     <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
                                     <property name="group">rbSearchForText</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="rbSearchForNull-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="fmsearchdialog|extended_tip|rbSearchForNull">Specifies that fields will be found that contain no data.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -193,6 +215,11 @@
                                     <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
                                     <property name="group">rbSearchForText</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="rbSearchForNotNull-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="fmsearchdialog|extended_tip|rbSearchForNotNull">Specifies that fields will be found that contain data.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -278,6 +305,11 @@
                                             <property name="xalign">0</property>
                                             <property name="active">True</property>
                                             <property name="draw_indicator">True</property>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="rbSingleField-atkobject">
+                                                <property name="AtkObject::accessible-description" translatable="yes" context="fmsearchdialog|extended_tip|rbSingleField">Searches through a specified data field.</property>
+                                              </object>
+                                            </child>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -291,6 +323,11 @@
                                             <property name="can_focus">False</property>
                                             <property name="halign">start</property>
                                             <property name="hexpand">True</property>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="lbField-atkobject">
+                                                <property name="AtkObject::accessible-description" translatable="yes" context="fmsearchdialog|extended_tip|lbField">Searches through a specified data field.</property>
+                                              </object>
+                                            </child>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -315,6 +352,11 @@
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
                                         <property name="group">rbSingleField</property>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="rbAllFields-atkobject">
+                                            <property name="AtkObject::accessible-description" translatable="yes" context="fmsearchdialog|extended_tip|rbAllFields">Searches through all fields.</property>
+                                          </object>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="left_attach">0</property>
@@ -345,6 +387,11 @@
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="halign">start</property>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="lbForm-atkobject">
+                                                <property name="AtkObject::accessible-description" translatable="yes" context="fmsearchdialog|extended_tip|lbForm">Specifies the logical form in which you want the search to take place.</property>
+                                              </object>
+                                            </child>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -471,6 +518,11 @@
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="hexpand">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="lbPosition-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="fmsearchdialog|extended_tip|lbPosition">Specifies the relationship of the search term and the field contents.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -499,6 +551,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="HalfFullFormsCJK-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="fmsearchdialog|extended_tip|HalfFullFormsCJK">Distinguishes between half-width and full-width character forms.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -519,6 +576,11 @@
                                     <property name="use_underline">True</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="SoundsLikeCJK-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="fmsearchdialog|extended_tip|SoundsLikeCJK">Lets you specify the search options for similar notation used in Japanese text. Select this checkbox, and then click the Sounds button to specify the search options.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -533,6 +595,11 @@
                                     <property name="receives_default">True</property>
                                     <property name="halign">center</property>
                                     <property name="valign">end</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="SoundsLikeCJKSettings-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="fmsearchdialog|extended_tip|SoundsLikeCJKSettings">Sets the search options for similar notation used in Japanese text.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -559,6 +626,11 @@
                                     <property name="use_underline">True</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="cbApprox-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="fmsearchdialog|extended_tip|cbApprox">Find terms that are similar to the Find text. Select this checkbox, and then click the Similarities button to define the similarity options.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -574,6 +646,11 @@
                                     <property name="halign">center</property>
                                     <property name="valign">end</property>
                                     <property name="yalign">0.41999998688697815</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="pbApproxSettings-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="fmsearchdialog|extended_tip|pbApproxSettings">Find terms that are similar to the Find text. Select this checkbox, and then click the Similarities button to define the similarity options.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -595,6 +672,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="cbCase-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="fmsearchdialog|extended_tip|cbCase">Specifies that upper and lower case are taken into consideration during the search.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -610,6 +692,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="cbStartOver-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="fmsearchdialog|extended_tip|cbStartOver">Restarts the search. A forward search restarts with the first record. A backwards search restarts with the last record.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -625,6 +712,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="cbRegular-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="fmsearchdialog|extended_tip|cbRegular">Searches with regular expressions.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">2</property>
@@ -640,6 +732,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="cbUseFormat-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="fmsearchdialog|extended_tip|cbUseFormat">Specifies that all field formats are considered when searching in the current document.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -655,6 +752,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="cbBackwards-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="fmsearchdialog|extended_tip|cbBackwards">Specifies that the search process will run in reverse direction, from the last to the first record.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -670,6 +772,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="cbWildCard-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="fmsearchdialog|extended_tip|cbWildCard">Allows a search with a * or ? wildcard.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">2</property>
@@ -790,6 +897,14 @@
       <action-widget response="-7">close</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="RecordSearchDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="fmsearchdialog|extended_tip|RecordSearchDialog">Searches database tables and forms.</property>
+      </object>
+    </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <widgets>

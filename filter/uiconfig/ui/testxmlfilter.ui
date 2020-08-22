@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="flt">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="TestXMLFilterDialog">
@@ -115,6 +115,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="exportbrowse-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="testxmlfilter|extended_tip|exportbrowse">Locate the file that you want to apply the XML export filter to. The XML code of the transformed file is opened in your default XML editor after transformation.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -127,6 +132,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="currentdocument-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="testxmlfilter|extended_tip|currentdocument">The front-most open file that matches the XML filter criteria will be used to test the filter. The current XML export filter transforms the file and the resulting XML code is displayed in the XML Filter output window.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -138,6 +148,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="exportxsltfile-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="testxmlfilter|extended_tip|exportxsltfile">Displays the file name of the XSLT filter that you entered on the Transformation tab page.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -150,6 +165,11 @@
                             <property name="can_focus">False</property>
                             <property name="width_chars">52</property>
                             <property name="xalign">1</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="currentfilename-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="testxmlfilter|extended_tip|currentfilename">Displays the file name of the document that you want to use to test the XSLT filter.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -218,6 +238,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="importbrowse-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="testxmlfilter|extended_tip|importbrowse">Opens a file selection dialog. The selected file is opened using the current XML import filter.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -230,6 +255,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="recentfile-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="testxmlfilter|extended_tip|recentfile">Re-opens the document that was last opened with this dialog.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -254,6 +284,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="importxsltfile-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="testxmlfilter|extended_tip|importxsltfile">Displays the file name of the XSLT filter that you entered on the Transformation tab page.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -269,6 +304,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="displaysource-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="testxmlfilter|extended_tip|displaysource">Opens the XML source of the selected document in your default XML editor after importing.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -293,6 +333,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="importxslttemplate-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="testxmlfilter|extended_tip|importxslttemplate">Displays the file name of the template that you entered on the Transformation tab page.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -305,6 +350,11 @@
                             <property name="can_focus">False</property>
                             <property name="width_chars">52</property>
                             <property name="xalign">1</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="recentfilename-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="testxmlfilter|extended_tip|recentfilename">Re-opens the document that was last opened with this dialog.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -352,8 +402,13 @@
       <action-widget response="-7">close</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
+    <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="TestXMLFilterDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="testxmlfilter|extended_tip|TestXMLFilterDialog">Tests the XSLT stylesheets used by the selected XML filter.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

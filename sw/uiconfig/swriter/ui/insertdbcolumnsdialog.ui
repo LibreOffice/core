@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkImage" id="image1">
@@ -60,9 +60,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -167,6 +164,11 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="astable-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|astable">Inserts data selected from the data source browser into the document as a table.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -183,6 +185,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">astable</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="asfields-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|asfields">Inserts data selected from the data source browser into the document as fields.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -199,6 +206,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">astable</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="astext-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|astext">Inserts data selected from the data source browser into the document as text.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -281,6 +293,11 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="image">image1</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="allright-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|allright">Moves all listed database fields into the Table column(s) list box.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -294,6 +311,11 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="image">image2</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="oneright-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|oneright">Moves the selected database field into the Table column(s) list box.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -307,6 +329,11 @@
                                 <property name="receives_default">True</property>
                                 <property name="no_show_all">True</property>
                                 <property name="image">image5</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="toedit-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|toedit">Moves the fields that you selected in the Database columns list box into the selection field.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -320,6 +347,11 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="image">image3</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="oneleft-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|oneleft">Removes the selected database field from the Table column(s) list box</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -334,6 +366,11 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="image">image4</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="allleft-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|allleft">Removes all database fields from the Table column(s) list box.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -386,6 +423,11 @@
                                         </child>
                                       </object>
                                     </child>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="tablecols-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|tablecols">Lists all database columns to be inserted into the document.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
                               </object>
@@ -408,6 +450,11 @@
                                     <property name="can_focus">True</property>
                                     <property name="hexpand">True</property>
                                     <property name="vexpand">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="textview-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|textview">Lists the database columns that you selected to be inserted into the document. You can also enter text here. This text will be also inserted into the document.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
                               </object>
@@ -461,6 +508,11 @@
                                         </child>
                                       </object>
                                     </child>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="tabledbcols-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|tabledbcols">Specifies the database columns to be inserted into the text table.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
                               </object>
@@ -499,6 +551,11 @@
                                             <attribute name="text">0</attribute>
                                           </attributes>
                                         </child>
+                                      </object>
+                                    </child>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="tabletxtcols-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|tabletxtcols">Select the database columns that you want to insert it in the document.</property>
                                       </object>
                                     </child>
                                   </object>
@@ -574,6 +631,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="tableheading-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|tableheading">Specifies whether to insert a heading line for the columns in the text table.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -590,6 +652,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="columnname-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|columnname">Uses the field names of the database table as headings for each of the text table columns.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -607,6 +674,11 @@
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">columnname</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="rowonly-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|rowonly">Inserts an empty heading line into the text table.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -620,6 +692,11 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="use_underline">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="tableformat-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|tableformat">Opens the Table Format dialog, which enables you to define the table properties such as borders, background, and column width.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -633,6 +710,11 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="use_underline">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="autoformat-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|autoformat">Opens the AutoFormat dialog, in which you can select format styles that are immediately applied when inserting the table.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -661,6 +743,11 @@
                                 <accessibility>
                                   <relation type="labelled-by" target="userdefined"/>
                                 </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="parastyle-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|parastyle">This is where you can select other Paragraph Styles to apply to the paragraph you want to insert into the document.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -691,6 +778,11 @@
                                 <property name="xalign">0</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="fromdatabase-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|fromdatabase">Accepts the database formats.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -710,6 +802,11 @@
                                 <accessibility>
                                   <relation type="label-for" target="numformat"/>
                                 </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="userdefined-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|userdefined">Specifies a format from the list, if the format information of certain data fields is not accepted.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -770,6 +867,9 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <property name="mode">vertical</property>

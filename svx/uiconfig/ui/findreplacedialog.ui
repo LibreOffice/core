@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="FindReplaceDialog">
@@ -10,9 +10,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox3">
         <property name="can_focus">False</property>
@@ -108,6 +105,11 @@
                                     <property name="activates_default">True</property>
                                   </object>
                                 </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="searchterm-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="findreplacedialog|extended_tip|searchterm">Enter the text that you want to find, or select a previous search from the list.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -119,6 +121,11 @@
                                 <property name="can_focus">False</property>
                                 <property name="no_show_all">True</property>
                                 <property name="hexpand">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="searchlist-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="findreplacedialog|extended_tip|searchlist">Enter the text that you want to find, or select a previous search from the list.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -141,7 +148,7 @@
                             <property name="label" translatable="yes" context="findreplacedialog|label4">_Find:</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
-                            <property name="yalign">0.40000000596046448</property>
+                            <property name="yalign">0.4000000059604645</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
@@ -159,7 +166,7 @@
                             <property name="wrap">True</property>
                             <property name="ellipsize">end</property>
                             <property name="xalign">0</property>
-                            <property name="yalign">0.55000001192092896</property>
+                            <property name="yalign">0.550000011920929</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -176,7 +183,7 @@
                             <property name="xalign">0</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="searchlabel-atkobject">
-                                <property name="AtkObject::accessible-role" translatable="no">static</property>
+                                <property name="AtkObject::accessible-role">static</property>
                               </object>
                             </child>
                           </object>
@@ -199,6 +206,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="matchcase-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="findreplacedialog|extended_tip|matchcase">Distinguishes between uppercase and lowercase characters.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -215,6 +227,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="searchformatted-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="findreplacedialog|extended_tip|searchformatted">Includes number formatting characters in the search.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -235,6 +252,11 @@
                                     <property name="use_underline">True</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="wholewords-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="findreplacedialog|extended_tip|wholewords">Searches for whole words or cells that are identical to the search text.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -358,6 +380,11 @@
                                     <property name="activates_default">True</property>
                                   </object>
                                 </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="replaceterm-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="findreplacedialog|extended_tip|replaceterm">Enter the replacement text, or select a recent replacement text or style from the list.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -369,6 +396,11 @@
                                 <property name="can_focus">False</property>
                                 <property name="no_show_all">True</property>
                                 <property name="hexpand">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="replacelist-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="findreplacedialog|extended_tip|replacelist">Enter the replacement text, or select a recent replacement text or style from the list.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -459,6 +491,11 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="searchall-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="findreplacedialog|extended_tip|searchall">Finds and selects all instances of the text or the format that you are searching for in the document (only in Writer and Calc documents).</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -473,6 +510,11 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="backsearch-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="findreplacedialog|extended_tip|backsearch">Finds and selects the previous occurrence of the text or format that you are searching for in the document.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -489,6 +531,11 @@
                     <property name="has_default">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="search-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="findreplacedialog|extended_tip|search">Finds and selects the next occurrence of the text or format that you are searching for in the document.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -503,6 +550,11 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="replace-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="findreplacedialog|extended_tip|replace">Replaces the selected text or format that you searched for, and then searches for the next occurrence.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -517,6 +569,11 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="replaceall-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="findreplacedialog|extended_tip|replaceall">Replaces all of the occurrences of the text or format that you want to replace.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -554,7 +611,7 @@
                         <child>
                           <object class="GtkLabel" id="label7">
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="no">Component Label</property>
+                            <property name="label">Component Label</property>
                             <property name="use_underline">True</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
@@ -573,7 +630,7 @@
                             <property name="spacing">12</property>
                             <child>
                               <object class="GtkButton" id="component1">
-                                <property name="label" translatable="no">component button 1</property>
+                                <property name="label">component button 1</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="no_show_all">True</property>
@@ -586,7 +643,7 @@
                             </child>
                             <child>
                               <object class="GtkButton" id="component2">
-                                <property name="label" translatable="no">component button 2</property>
+                                <property name="label">component button 2</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="no_show_all">True</property>
@@ -611,7 +668,7 @@
                 <child type="label">
                   <object class="GtkLabel" id="label6">
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="no">Component Label</property>
+                    <property name="label">Component Label</property>
                     <property name="use_underline">True</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
@@ -670,6 +727,11 @@
                                     <property name="use_underline">True</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="selection-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="findreplacedialog|extended_tip|selection">Searches only the selected text or cells.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -719,6 +781,11 @@
                                         <property name="receives_default">True</property>
                                         <property name="no_show_all">True</property>
                                         <property name="use_underline">True</property>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="format-atkobject">
+                                            <property name="AtkObject::accessible-description" translatable="yes" context="findreplacedialog|extended_tip|format">Finds specific text formatting features, such as font types, font effects, and text flow characteristics.</property>
+                                          </object>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -756,6 +823,11 @@
                                     <property name="use_underline">True</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="layout-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="findreplacedialog|extended_tip|layout">Searches for text formatted with the style that you specify. Select this checkbox, and then select a style from the Find list. To specify a replacement style, select a style from the Replace list.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -801,6 +873,11 @@
                                     <property name="use_underline">True</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="matchcharwidth-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="findreplacedialog|extended_tip|matchcharwidth">Distinguishes between half-width and full-width character forms.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -821,6 +898,11 @@
                                         <property name="use_underline">True</property>
                                         <property name="xalign">0</property>
                                         <property name="draw_indicator">True</property>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="similarity-atkobject">
+                                            <property name="AtkObject::accessible-description" translatable="yes" context="findreplacedialog|extended_tip|similarity">Find terms that are similar to the Find text. Select this checkbox, and then click the Similarities button to define the similarity options.</property>
+                                          </object>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -837,6 +919,11 @@
                                         <property name="halign">end</property>
                                         <property name="hexpand">True</property>
                                         <property name="use_underline">True</property>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="similaritybtn-atkobject">
+                                            <property name="AtkObject::accessible-description" translatable="yes" context="findreplacedialog|extended_tip|similaritybtn">Set the options for the similarity search.</property>
+                                          </object>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -864,6 +951,11 @@
                                         <property name="use_underline">True</property>
                                         <property name="xalign">0</property>
                                         <property name="draw_indicator">True</property>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="soundslike-atkobject">
+                                            <property name="AtkObject::accessible-description" translatable="yes" context="findreplacedialog|extended_tip|soundslike">Lets you specify the search options for similar notation used in Japanese text. Select this checkbox, and then click the Sounds button to specify the search options.</property>
+                                          </object>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -880,6 +972,11 @@
                                         <property name="halign">end</property>
                                         <property name="hexpand">True</property>
                                         <property name="use_underline">True</property>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="soundslikebtn-atkobject">
+                                            <property name="AtkObject::accessible-description" translatable="yes" context="findreplacedialog|extended_tip|soundslikebtn">Sets the search options for similar notation used in Japanese text.</property>
+                                          </object>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -922,6 +1019,11 @@
                                         <property name="use_underline">True</property>
                                         <property name="xalign">0</property>
                                         <property name="draw_indicator">True</property>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="notes-atkobject">
+                                            <property name="AtkObject::accessible-description" translatable="yes" context="findreplacedialog|extended_tip|notes">In Writer, you can select to include the comment texts in your searches.</property>
+                                          </object>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -944,6 +1046,11 @@
                                     <property name="use_underline">True</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="replace_backwards-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="findreplacedialog|extended_tip|replace_backwards">Search starts at the current cursor position and goes backwards to the beginning of the file.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -1104,6 +1211,11 @@
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="label3-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="findreplacedialog|extended_tip|label3">Shows more or fewer search options. Click this label again to hide the extended search options.</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -1132,6 +1244,14 @@
       <action-widget response="-11">help</action-widget>
       <action-widget response="-7">close</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="FindReplaceDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="findreplacedialog|extended_tip|FindReplaceDialog">Finds or replaces text or formats in the current document.</property>
+      </object>
+    </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup2">
     <property name="ignore_hidden">True</property>
