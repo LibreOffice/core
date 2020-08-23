@@ -1079,7 +1079,9 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
 
         if( pImpRec->nShapeId )
         {
-            auto pImpRecTmp = pImpRec.get();
+            auto nShapeId = pImpRec->nShapeId;
+            auto nShapeOrder = (static_cast<sal_uLong>(pImpRec->aTextId.nTxBxS) << 16)
+                                    + pImpRec->aTextId.nSequence;
             // Complement Import Record List
             pImpRec->pObj = pObj;
             rImportData.insert(std::move(pImpRec));
@@ -1091,9 +1093,9 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                 ( (rObjData.nSpFlags & ShapeFlag::Group)
                  && (rObjData.nCalledByGroup < 2) )
               )
-                StoreShapeOrder( pImpRecTmp->nShapeId,
-                                ( static_cast<sal_uLong>(pImpRecTmp->aTextId.nTxBxS) << 16 )
-                                    + pImpRecTmp->aTextId.nSequence, pObj );
+            {
+                StoreShapeOrder(nShapeId, nShapeOrder, pObj);
+            }
         }
         else
             pImpRec.reset();
