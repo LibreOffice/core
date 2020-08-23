@@ -1726,34 +1726,12 @@ void MenuBarManager::FillMenuImages(Reference< XFrame > const & _xFrame, Menu* _
 
             if ( bTmpShowMenuImages )
             {
-                bool        bImageSet = false;
-                OUString aImageId;
+                OUString aMenuItemCommand = _pMenu->GetItemCommand( nId );
+                Image aImage = vcl::CommandInfoProvider::GetImageForCommand(aMenuItemCommand, _xFrame);
+                if ( !aImage )
+                    aImage = Image(aAddonOptions.GetImageFromURL(aMenuItemCommand, false));
 
-                ::framework::MenuAttributes* pMenuAttributes =
-                    static_cast< ::framework::MenuAttributes*>(_pMenu->GetUserValue( nId ));
-
-                if ( pMenuAttributes )
-                    aImageId = pMenuAttributes->aImageId; // Retrieve image id from menu attributes
-
-                if ( !aImageId.isEmpty() )
-                {
-                    Image aImage = vcl::CommandInfoProvider::GetImageForCommand(aImageId, _xFrame);
-                    if ( !!aImage )
-                    {
-                        bImageSet = true;
-                        _pMenu->SetItemImage( nId, aImage );
-                    }
-                }
-
-                if ( !bImageSet )
-                {
-                    OUString aMenuItemCommand = _pMenu->GetItemCommand( nId );
-                    Image aImage = vcl::CommandInfoProvider::GetImageForCommand(aMenuItemCommand, _xFrame);
-                    if ( !aImage )
-                        aImage = Image(aAddonOptions.GetImageFromURL(aMenuItemCommand, false));
-
-                    _pMenu->SetItemImage( nId, aImage );
-                }
+                _pMenu->SetItemImage( nId, aImage );
             }
             else
                 _pMenu->SetItemImage( nId, Image() );

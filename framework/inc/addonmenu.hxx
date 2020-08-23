@@ -74,7 +74,6 @@ class AddonMenuManager
                                         OUString& rTitle,
                                         OUString& rURL,
                                         OUString& rTarget,
-                                        OUString& rImageId,
                                         OUString& rContext,
                                         css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& rAddonSubMenu );
 };

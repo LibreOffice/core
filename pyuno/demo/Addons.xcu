@@ -26,9 +26,6 @@
    <prop oor:name="URL" oor:type="xs:string">
      <value>service:org.openoffice.comp.pyuno.demo.HelloWorld?insert</value>
    </prop>
-   <prop oor:name="ImageIdentifier" oor:type="xs:string">
-    <value>private:image/3216</value>
-   </prop>
    <prop oor:name="Title" oor:type="xs:string">
    <value xml:lang="x-no-translate">Insert Hello World</value>
    <value xml:lang="en-US">Insert Hello World</value>

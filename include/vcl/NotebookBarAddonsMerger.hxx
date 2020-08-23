@@ -38,18 +38,10 @@ struct NotebookBarAddonsItem
     std::vector<css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>>> aAddonValues;
 };
 
-struct AddonsParams
-{
-    OUString sImageId;
-    OUString sControlType;
-    sal_uInt16 nWidth;
-};
-
 struct AddonNotebookBarItem
 {
     OUString sCommandURL;
     OUString sLabel;
-    OUString sImageIdentifier;
     OUString sTarget;
     OUString sContext;
     OUString sControlType;
