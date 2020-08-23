@@ -155,7 +155,7 @@ XMLCrossedOutStylePropHdl::~XMLCrossedOutStylePropHdl()
 
 bool XMLCrossedOutStylePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_uInt16 eNewStrikeout;
+    sal_uInt16 eNewStrikeout(0);
     bool bRet = SvXMLUnitConverter::convertEnum(
         eNewStrikeout, rStrImpValue, pXML_CrossedoutStyle_Enum );
     if( bRet )
