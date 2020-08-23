@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c26f2530_3613a4a7",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-08-23T13:54:52Z",
+      "side": 1,
+      "message": "repetition",
+      "range": {
+        "startLine": 70,
+        "startChar": 0,
+        "endLine": 70,
+        "endChar": 20
+      },
+      "revId": "37388f5c81590d4953a0f71ad0bc6ae00d1d8ad4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b075ff4b_72b7cc5d",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-08-23T13:54:52Z",
+      "side": 1,
+      "message": "repetition",
+      "range": {
+        "startLine": 80,
+        "startChar": 0,
+        "endLine": 80,
+        "endChar": 20
+      },
+      "revId": "37388f5c81590d4953a0f71ad0bc6ae00d1d8ad4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "252c91c1_abeaa167",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-08-23T13:54:52Z",
+      "side": 1,
+      "message": "Is this really necessary?\n\nIf you are doing a signle call, you can just do comphelper:: instead at the call place.",
+      "range": {
+        "startLine": 82,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 27
+      },
+      "revId": "37388f5c81590d4953a0f71ad0bc6ae00d1d8ad4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f7621b5_4ca7e744",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-08-23T13:54:52Z",
+      "side": 1,
+      "message": "Why you have this here, and not at the line above?",
+      "range": {
+        "startLine": 653,
+        "startChar": 42,
+        "endLine": 653,
+        "endChar": 44
+      },
+      "revId": "37388f5c81590d4953a0f71ad0bc6ae00d1d8ad4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
