@@ -1029,6 +1029,8 @@ Reference< XShape > const & Shape::createAndInsert(
         // applying properties
         aShapeProps.assignUsed( getShapeProperties() );
         aShapeProps.assignUsed( maDefaultShapeProperties );
+        if(mnRotation != 0 && bIsCustomShape)
+            aShapeProps.setProperty( PROP_RotateAngle, sal_Int32( NormAngle36000( mnRotation / -600 ) ));
         if ( bIsEmbMedia || aServiceName == "com.sun.star.drawing.GraphicObjectShape" || aServiceName == "com.sun.star.drawing.OLE2Shape" || bIsCustomShape )
             mpGraphicPropertiesPtr->pushToPropMap( aShapeProps, rGraphicHelper );
         if ( mpTablePropertiesPtr && aServiceName == "com.sun.star.drawing.TableShape" )
