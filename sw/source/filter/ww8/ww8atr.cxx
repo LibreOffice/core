@@ -3530,110 +3530,108 @@ void WW8AttributeOutput::CharTwoLines( const SvxTwoLinesItem& rTwoLines )
 void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
 {
     const SwTextNode* pTextNd = nullptr;
-    sal_uInt16 nNumId;
-    sal_uInt8 nLvl = 0;
-    if (!rNumRule.GetValue().isEmpty())
+    if (rNumRule.GetValue().isEmpty())
     {
-        const SwNumRule* pRule = GetExport().m_pDoc->FindNumRulePtr(
-                                        rNumRule.GetValue() );
-        nNumId = pRule ? GetExport().GetNumberingId(*pRule) : USHRT_MAX;
-        if (USHRT_MAX != nNumId)
+        ParaNumRule_Impl(pTextNd, 0, 0);
+        return;
+    }
+    const SwNumRule* pRule = GetExport().m_pDoc->FindNumRulePtr(
+                                    rNumRule.GetValue() );
+    if (!pRule)
+        return;
+
+    sal_uInt16 nNumId = GetExport().GetNumberingId(*pRule) + 1;
+    sal_uInt8 nLvl = 0;
+
+    if (!GetExport().m_pOutFormatNode)
+    {
+        ParaNumRule_Impl(pTextNd, nLvl, nNumId);
+        return;
+    }
+
+    if ( dynamic_cast< const SwContentNode *>( GetExport().m_pOutFormatNode ) != nullptr  )
+    {
+        pTextNd = static_cast<const SwTextNode*>(GetExport().m_pOutFormatNode);
+
+        if( pTextNd->IsCountedInList())
         {
-            ++nNumId;
-            if ( GetExport().m_pOutFormatNode )
+            int nLevel = pTextNd->GetActualListLevel();
+
+            if (nLevel < 0)
+                nLevel = 0;
+
+            if (nLevel >= MAXLEVEL)
+                nLevel = MAXLEVEL - 1;
+
+            nLvl = static_cast< sal_uInt8 >(nLevel);
+
+            if (GetExport().GetExportFormat() == MSWordExportBase::DOCX) // FIXME
             {
-                if ( dynamic_cast< const SwContentNode *>( GetExport().m_pOutFormatNode ) != nullptr  )
+                // tdf#95848 find the abstract list definition
+                OUString const listId(pTextNd->GetListId());
+                if (!listId.isEmpty()
+                    && (listId != pRule->GetDefaultListId() // default list id uses the 1:1 mapping
+                        || pTextNd->IsListRestart())    // or restarting previous list
+                    )
                 {
-                    pTextNd = static_cast<const SwTextNode*>(GetExport().m_pOutFormatNode);
-
-                    if( pTextNd->IsCountedInList())
+                    SwList const*const pList(
+                        GetExport().m_pDoc->getIDocumentListsAccess().getListByName(listId));
+                    if (pList)
                     {
-                        int nLevel = pTextNd->GetActualListLevel();
-
-                        if (nLevel < 0)
-                            nLevel = 0;
-
-                        if (nLevel >= MAXLEVEL)
-                            nLevel = MAXLEVEL - 1;
-
-                        nLvl = static_cast< sal_uInt8 >(nLevel);
-
-                        if (GetExport().GetExportFormat() == MSWordExportBase::DOCX) // FIXME
+                        SwNumRule const*const pAbstractRule(
+                            GetExport().m_pDoc->FindNumRulePtr(
+                                pList->GetDefaultListStyleName()));
+                        assert(pAbstractRule);
+                        if (pAbstractRule == pRule && !pTextNd->IsListRestart())
                         {
-                            // tdf#95848 find the abstract list definition
-                            OUString const listId(pTextNd->GetListId());
-                            if (!listId.isEmpty()
-                                && (listId != pRule->GetDefaultListId() // default list id uses the 1:1 mapping
-                                    || pTextNd->IsListRestart())    // or restarting previous list
-                                )
-                            {
-                                SwList const*const pList(
-                                    GetExport().m_pDoc->getIDocumentListsAccess().getListByName(listId));
-                                if (pList)
-                                {
-                                    SwNumRule const*const pAbstractRule(
-                                        GetExport().m_pDoc->FindNumRulePtr(
-                                            pList->GetDefaultListStyleName()));
-                                    assert(pAbstractRule);
-                                    if (pAbstractRule == pRule && !pTextNd->IsListRestart())
-                                    {
-                                        // different list, but no override
-                                        nNumId = GetExport().DuplicateAbsNum(listId, *pAbstractRule);
-                                    }
-                                    else
-                                    {
-                                        nNumId = GetExport().OverrideNumRule(
-                                                *pRule, listId, *pAbstractRule);
+                            // different list, but no override
+                            nNumId = GetExport().DuplicateAbsNum(listId, *pAbstractRule) + 1;
+                        }
+                        else
+                        {
+                            nNumId = GetExport().OverrideNumRule(
+                                    *pRule, listId, *pAbstractRule) + 1;
 
-                                        if (pTextNd->IsListRestart())
-                                        {
-                                            // For restarted lists we should also keep value for
-                                            // future w:lvlOverride / w:startOverride
-                                            GetExport().AddListLevelOverride(nNumId, pTextNd->GetActualListLevel(),
-                                                pTextNd->GetActualListStartValue());
-                                        }
-                                    }
-                                    assert(nNumId != USHRT_MAX);
-                                    ++nNumId;
-                                }
+                            if (pTextNd->IsListRestart())
+                            {
+                                // For restarted lists we should also keep value for
+                                // future w:lvlOverride / w:startOverride
+                                GetExport().AddListLevelOverride(nNumId-1, pTextNd->GetActualListLevel(),
+                                    pTextNd->GetActualListStartValue());
                             }
                         }
                     }
-                    else
-                    {
-                        // #i44815# adjust numbering for numbered paragraphs
-                        // without number (NO_NUMLEVEL). These paragraphs
-                        // will receive a list id 0, which WW interprets as
-                        // 'no number'.
-                        nNumId = 0;
-                    }
-                }
-                else if ( dynamic_cast< const SwTextFormatColl *>( GetExport().m_pOutFormatNode ) != nullptr  )
-                {
-                    const SwTextFormatColl* pC = static_cast<const SwTextFormatColl*>(GetExport().m_pOutFormatNode);
-                    if ( pC && pC->IsAssignedToListLevelOfOutlineStyle() )
-                        nLvl = static_cast< sal_uInt8 >( pC->GetAssignedOutlineStyleLevel() );
                 }
             }
         }
         else
-            nNumId = USHRT_MAX;
+        {
+            // #i44815# adjust numbering for numbered paragraphs
+            // without number (NO_NUMLEVEL). These paragraphs
+            // will receive a list id 0, which WW interprets as
+            // 'no number'.
+            nNumId = 0;
+        }
     }
-    else
-        nNumId = 0;
-
-    if ( USHRT_MAX != nNumId )
+    else if ( dynamic_cast< const SwTextFormatColl *>( GetExport().m_pOutFormatNode ) != nullptr  )
     {
-        if ( nLvl >= WW8ListManager::nMaxLevel )
-            nLvl = WW8ListManager::nMaxLevel - 1;
-
-        ParaNumRule_Impl( pTextNd, nLvl, nNumId );
+        const SwTextFormatColl* pC = static_cast<const SwTextFormatColl*>(GetExport().m_pOutFormatNode);
+        if ( pC && pC->IsAssignedToListLevelOfOutlineStyle() )
+            nLvl = static_cast< sal_uInt8 >( pC->GetAssignedOutlineStyleLevel() );
     }
+
+    if ( nLvl >= WW8ListManager::nMaxLevel )
+        nLvl = WW8ListManager::nMaxLevel - 1;
+
+    ParaNumRule_Impl( pTextNd, nLvl, nNumId);
 }
 
 void WW8AttributeOutput::ParaNumRule_Impl(const SwTextNode* /*pTextNd*/,
         sal_Int32 const nLvl, sal_Int32 const nNumId)
 {
+    if (USHRT_MAX == nNumId)
+        return;
+
     // write sprmPIlvl and sprmPIlfo
     SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::PIlvl::val );
     m_rWW8Export.pO->push_back( ::sal::static_int_cast<sal_uInt8>(nLvl) );

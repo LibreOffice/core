@@ -455,8 +455,6 @@ public:
     std::unique_ptr<SwNumRuleTable> m_pUsedNumTable;  // all used NumRules
     /// overriding numdef index -> (existing numdef index, abstractnumdef index)
     std::map<size_t, std::pair<size_t, size_t>> m_OverridingNums;
-    /// same in reverse
-    std::map<std::pair<size_t, size_t>, size_t> m_OverridingNumsR;
     /// list-id -> abstractnumdef index
     std::map<OUString, size_t> m_Lists;
 
@@ -465,7 +463,6 @@ public:
     std::map < size_t, std::map<size_t, size_t> > m_ListLevelOverrides;
 
     const SwTextNode *m_pTopNodeOfHdFtPage; ///< Top node of host page when in hd/ft
-    std::map< sal_uInt16, sal_uInt16 > m_aRuleDuplicates; //map to Duplicated numrules
     std::stack< sal_Int32 > m_aCurrentCharPropStarts; ///< To remember the position in a run.
     WW8_WrtBookmarks* m_pBkmks;
     WW8_WrtRedlineAuthor* m_pRedlAuthors;
