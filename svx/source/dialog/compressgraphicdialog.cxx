@@ -346,6 +346,12 @@ IMPL_LINK_NOARG( CompressGraphicsDialog, ToggleReduceResolutionRB, weld::ToggleB
 
 IMPL_LINK_NOARG( CompressGraphicsDialog, CalculateClickHdl, weld::Button&, void )
 {
+    OUString old_size = m_xFixedText5->get_label(); //Old size
+    OString OStr12 = OUStringToOString(old_size, RTL_TEXTENCODING_ASCII_US); //Old size
+
+    printf("Old size : %s\n", OStr12.pData->buffer); //printing old size to soffice.bin
+    double old1 = OStr12.toDouble(); // converting old size from string to integer
+
     sal_Int32 aSize = 0;
 
     if ( m_dResolution > 0.0  )
@@ -364,6 +370,13 @@ IMPL_LINK_NOARG( CompressGraphicsDialog, CalculateClickHdl, weld::Button&, void 
         aNewSizeString = aNewSizeString.replaceAll("$(CAPACITY)", aSizeAsString);
         m_xFixedText6->set_label(aNewSizeString);
     }
+
+    OUString new_size = m_xFixedText6->get_label(); //new size
+    OString OStr3 = OUStringToOString(new_size, RTL_TEXTENCODING_ASCII_US); //new size
+    printf("New size : %s\n", OStr3.pData->buffer); //printing new size to soffice.bin
+    double new1 = OStr3.toDouble(); //converting new size to double
+    double percent_change = ((new1 - old1) / old1) * 100; // calculating percent change
+    printf("percent_change  %f\n", percent_change); //printing percent change to soffice.bin
 }
 
 tools::Rectangle CompressGraphicsDialog::GetScaledCropRectangle() const
