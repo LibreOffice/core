@@ -418,38 +418,38 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLPageMasterContext
 
 SdXMLPresentationPageLayoutContext::SdXMLPresentationPageLayoutContext(
     SdXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLName,
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList)
-:   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList, XmlStyleFamily::SD_PRESENTATIONPAGELAYOUT_ID),
+    sal_Int32 nElement,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList)
+:   SvXMLStyleContext(rImport, nElement, xAttrList, XmlStyleFamily::SD_PRESENTATIONPAGELAYOUT_ID),
     mnTypeId( AUTOLAYOUT_NONE )
 {
     // set family to something special at SvXMLStyleContext
     // for differences in search-methods
 }
 
-SvXMLImportContextRef SdXMLPresentationPageLayoutContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLPresentationPageLayoutContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContextRef xContext;
 
-    if(nPrefix == XML_NAMESPACE_PRESENTATION && IsXMLToken( rLocalName, XML_PLACEHOLDER ) )
+    if(nElement == XML_ELEMENT(PRESENTATION, XML_PLACEHOLDER))
     {
         const rtl::Reference< SdXMLPresentationPlaceholderContext > xLclContext{
-            new SdXMLPresentationPlaceholderContext(GetSdImport(), nPrefix, rLocalName, xAttrList)};
+            new SdXMLPresentationPlaceholderContext(GetSdImport(), nElement, xAttrList)};
         // presentation:placeholder inside style:presentation-page-layout context
         xContext = xLclContext.get();
 
         // remember SdXMLPresentationPlaceholderContext for later evaluation
         maList.push_back(xLclContext);
     }
+    else
+        SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
 
-    return xContext;
+    return xContext.get();
 }
 
-void SdXMLPresentationPageLayoutContext::EndElement()
+void SdXMLPresentationPageLayoutContext::endFastElement(sal_Int32 )
 {
     // build presentation page layout type here
     // calc mnTpeId due to content of maList
@@ -657,46 +657,41 @@ void SdXMLPresentationPageLayoutContext::EndElement()
 
 SdXMLPresentationPlaceholderContext::SdXMLPresentationPlaceholderContext(
     SdXMLImport& rImport,
-    sal_uInt16 nPrfx, const
-    OUString& rLName,
-    const uno::Reference< xml::sax::XAttributeList>& xAttrList)
-:   SvXMLImportContext( rImport, nPrfx, rLName),
+    sal_Int32 /*nElement*/,
+    const uno::Reference< xml::sax::XFastAttributeList>& xAttrList)
+:   SvXMLImportContext( rImport ),
     mnX(0)
 {
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for(sal_Int16 i=0; i < nAttrCount; i++)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        OUString sAttrName = xAttrList->getNameByIndex(i);
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetSdImport().GetNamespaceMap().GetKeyByAttrName(sAttrName, &aLocalName);
-        OUString sValue = xAttrList->getValueByIndex(i);
-        const SvXMLTokenMap& rAttrTokenMap = GetSdImport().GetPresentationPlaceholderAttrTokenMap();
-
-        switch(rAttrTokenMap.Get(nPrefix, aLocalName))
+        OUString sValue = aIter.toString();
+        switch(aIter.getToken())
         {
-            case XML_TOK_PRESENTATIONPLACEHOLDER_OBJECTNAME:
+            case XML_ELEMENT(PRESENTATION, XML_OBJECT):
             {
                 msName = sValue;
                 break;
             }
-            case XML_TOK_PRESENTATIONPLACEHOLDER_X:
+            case XML_ELEMENT(SVG, XML_X):
             {
                 GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
                         mnX, sValue);
                 break;
             }
-            case XML_TOK_PRESENTATIONPLACEHOLDER_Y:
+            case XML_ELEMENT(SVG, XML_Y):
             {
                 break;
             }
-            case XML_TOK_PRESENTATIONPLACEHOLDER_WIDTH:
+            case XML_ELEMENT(SVG, XML_WIDTH):
             {
                 break;
             }
-            case XML_TOK_PRESENTATIONPLACEHOLDER_HEIGHT:
+            case XML_ELEMENT(SVG, XML_HEIGHT):
             {
                 break;
             }
+            default:
+                SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
         }
     }
 }
@@ -902,6 +897,11 @@ SvXMLStyleContext* SdXMLStylesContext::CreateStyleChildContext(
         // style:page-master inside office:styles context
         return new SdXMLPageMasterContext(GetSdImport(), nElement, xAttrList);
     }
+    else if (nElement == XML_ELEMENT(STYLE, XML_PRESENTATION_PAGE_LAYOUT))
+    {
+        // style:presentation-page-layout inside office:styles context
+        pContext = new SdXMLPresentationPageLayoutContext(GetSdImport(), nElement, xAttrList);
+    }
 
     // call base class
     return SvXMLStylesContext::CreateStyleChildContext(nElement, xAttrList);
@@ -913,17 +913,6 @@ SvXMLStyleContext* SdXMLStylesContext::CreateStyleChildContext(
     const uno::Reference< xml::sax::XAttributeList >& xAttrList)
 {
     SvXMLStyleContext* pContext = nullptr;
-    const SvXMLTokenMap& rStyleTokenMap = GetSdImport().GetStylesElemTokenMap();
-
-    switch(rStyleTokenMap.Get(nPrefix, rLocalName))
-    {
-        case XML_TOK_STYLES_PRESENTATION_PAGE_LAYOUT:
-        {
-            // style:presentation-page-layout inside office:styles context
-            pContext = new SdXMLPresentationPageLayoutContext(GetSdImport(), nPrefix, rLocalName, xAttrList);
-            break;
-        }
-    }
 
     if(!pContext)
     {
