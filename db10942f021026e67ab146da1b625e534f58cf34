@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "92a6ebb2_9b81189e",
+        "filename": "sw/source/uibase/config/StoredChapterNumbering.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-08-23T20:14:27Z",
+      "side": 1,
+      "message": "line 344 has the same condition. I imagine this block should have replaced that block ?\nhttps://gerrit.libreoffice.org/c/core/+/101250 to that if its the right solution",
+      "revId": "db10942f021026e67ab146da1b625e534f58cf34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
