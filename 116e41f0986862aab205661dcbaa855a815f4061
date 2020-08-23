@@ -22,6 +22,30 @@
       "revId": "116e41f0986862aab205661dcbaa855a815f4061",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f922905c_fb15c221",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 741,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-08-23T14:37:24Z",
+      "side": 1,
+      "message": "Is catch(Exception e) unnecessary? I added it for unknown errors but I\u0027m not sure.",
+      "parentUuid": "4d232c7c_51c6c914",
+      "range": {
+        "startLine": 740,
+        "startChar": 4,
+        "endLine": 741,
+        "endChar": 92
+      },
+      "revId": "116e41f0986862aab205661dcbaa855a815f4061",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
