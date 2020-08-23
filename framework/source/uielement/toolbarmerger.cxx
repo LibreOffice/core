@@ -35,7 +35,6 @@ namespace framework
 
 const char MERGE_TOOLBAR_URL[]             = "URL";
 const char MERGE_TOOLBAR_TITLE[]           = "Title";
-const char MERGE_TOOLBAR_IMAGEID[]         = "ImageIdentifier";
 const char MERGE_TOOLBAR_CONTEXT[]         = "Context";
 const char MERGE_TOOLBAR_TARGET[]          = "Target";
 const char MERGE_TOOLBAR_CONTROLTYPE[]     = "ControlType";
@@ -121,7 +120,6 @@ void ToolBarMerger::ConvertSeqSeqToVector(
         ConvertSequenceToValues( rSequence[i],
                                  aAddonToolbarItem.aCommandURL,
                                  aAddonToolbarItem.aLabel,
-                                 aAddonToolbarItem.aImageIdentifier,
                                  aAddonToolbarItem.aTarget,
                                  aAddonToolbarItem.aContext,
                                  aAddonToolbarItem.aControlType,
@@ -152,12 +150,6 @@ void ToolBarMerger::ConvertSeqSeqToVector(
      Name="Title"
 
  @param
-     rImageIdentifier
-
-     Contains the value of the property with
-     Name="ImageIdentifier"
-
- @param
      rTarget
 
      Contains the value of the property with
@@ -184,7 +176,6 @@ void ToolBarMerger::ConvertSequenceToValues(
     const uno::Sequence< beans::PropertyValue >& rSequence,
     OUString& rCommandURL,
     OUString& rLabel,
-    OUString& rImageIdentifier,
     OUString& rTarget,
     OUString& rContext,
     OUString& rControlType,
@@ -196,8 +187,6 @@ void ToolBarMerger::ConvertSequenceToValues(
             prop.Value >>= rCommandURL;
         else if ( prop.Name == MERGE_TOOLBAR_TITLE )
             prop.Value >>= rLabel;
-        else if ( prop.Name == MERGE_TOOLBAR_IMAGEID )
-            prop.Value >>= rImageIdentifier;
         else if ( prop.Name == MERGE_TOOLBAR_CONTEXT )
             prop.Value >>= rContext;
         else if ( prop.Name == MERGE_TOOLBAR_TARGET )

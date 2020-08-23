@@ -41,7 +41,6 @@ using namespace css;
 #define MENUBAR_STR "private:resource/menubar/menubar"
 
 const char MERGE_NOTEBOOKBAR_URL[] = "URL";
-const char MERGE_NOTEBOOKBAR_IMAGEID[] = "ImageIdentifier";
 
 bool SfxNotebookBar::m_bLock = false;
 bool SfxNotebookBar::m_bHide = false;
@@ -65,22 +64,10 @@ static void NotebookbarAddonValues(
             for (const auto& rProp : rExtensionVal)
             {
                 OUString sImage;
-                if (rProp.Name == MERGE_NOTEBOOKBAR_IMAGEID)
+                if (rProp.Name == MERGE_NOTEBOOKBAR_URL)
                 {
                     rProp.Value >>= sImage;
                     aImage = Image(framework::AddonsOptions().GetImageFromURL(sImage, isBigImage));
-                }
-            }
-            if(!aImage)
-            {
-                for (const auto& rProp : rExtensionVal)
-                {
-                    OUString sImage;
-                    if (rProp.Name == MERGE_NOTEBOOKBAR_URL)
-                    {
-                        rProp.Value >>= sImage;
-                        aImage = Image(framework::AddonsOptions().GetImageFromURL(sImage, isBigImage));
-                    }
                 }
             }
             aImageValues.push_back(aImage);

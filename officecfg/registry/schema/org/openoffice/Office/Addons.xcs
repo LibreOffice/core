@@ -38,7 +38,9 @@
       </prop>
       <prop oor:name="ImageIdentifier" oor:type="xs:string">
         <info>
-          <desc>A private URL used to reference an optional internal menu image. Example: private:image/3216 addresses the internal Office image with id=3216.</desc>
+          <desc>A base name for an image to be used for the given URL. _26.bmp and _16.bmp are
+                appended to that base name for large or small size icons respectively. Has higher
+                priority than images defined in the Images set.</desc>
         </info>
       </prop>
       <prop oor:name="Target" oor:type="xs:string">
@@ -168,7 +170,9 @@
       </prop>
       <prop oor:name="ImageIdentifier" oor:type="xs:string">
         <info>
-          <desc>A private URL used to reference an optional internal menu image. Example: private:image/3216 addresses the internal Office image with id=3216.</desc>
+          <desc>A base name for an image to be used for the given URL. _26.bmp and _16.bmp are
+                appended to that base name for large or small size icons respectively. Has higher
+                priority than images defined in the Images set.</desc>
         </info>
       </prop>
       <prop oor:name="Target" oor:type="xs:string">
@@ -351,7 +355,9 @@
       </prop>
       <prop oor:name="ImageIdentifier" oor:type="xs:string">
         <info>
-          <desc>A private URL used to reference an optional internal menu image. Example: private:image/3216 addresses the internal Office image with id=3216.</desc>
+          <desc>A base name for an image to be used for the given URL. _26.bmp and _16.bmp are
+                appended to that base name for large or small size icons respectively. Has higher
+                priority than images defined in the Images set.</desc>
         </info>
       </prop>
       <prop oor:name="Target" oor:type="xs:string">

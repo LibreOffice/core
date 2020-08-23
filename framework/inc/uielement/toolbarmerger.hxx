@@ -42,7 +42,6 @@ struct AddonToolbarItem
 {
     OUString aCommandURL;
     OUString aLabel;
-    OUString aImageIdentifier;
     OUString aTarget;
     OUString aContext;
     OUString aControlType;
@@ -68,7 +67,6 @@ class ToolBarMerger
         static void       ConvertSequenceToValues( const css::uno::Sequence< css::beans::PropertyValue >& rSequence,
                                                    OUString& rCommandURL,
                                                    OUString& rLabel,
-                                                   OUString& rImageIdentifier,
                                                    OUString& rTarget,
                                                    OUString& rContext,
                                                    OUString& rControlType,

@@ -1185,13 +1185,12 @@ void ToolBarManager::FillAddonToolbar( const Sequence< Sequence< PropertyValue >
     {
         OUString   aURL;
         OUString   aTitle;
-        OUString   aImageId;
         OUString   aContext;
         OUString   aTarget;
         OUString   aControlType;
         sal_uInt16 nWidth( 0 );
 
-        ToolBarMerger::ConvertSequenceToValues( rSeq, aURL, aTitle, aImageId, aTarget, aContext, aControlType, nWidth );
+        ToolBarMerger::ConvertSequenceToValues( rSeq, aURL, aTitle, aTarget, aContext, aControlType, nWidth );
 
         if ( ToolBarMerger::IsCorrectContext( aContext, m_aModuleIdentifier ) )
         {

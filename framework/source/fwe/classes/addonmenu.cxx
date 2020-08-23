@@ -144,7 +144,6 @@ void AddonMenuManager::MergeAddonPopupMenus( const Reference< XFrame >& rFrame,
     OUString                              aTitle;
     OUString                              aURL;
     OUString                              aTarget;
-    OUString                              aImageId;
     OUString                              aContext;
     Sequence< Sequence< PropertyValue > > aAddonSubMenu;
     sal_uInt16                            nUniqueMenuId = ADDONMENU_ITEMID_START;
@@ -158,7 +157,6 @@ void AddonMenuManager::MergeAddonPopupMenus( const Reference< XFrame >& rFrame,
                                         aTitle,
                                         aURL,
                                         aTarget,
-                                        aImageId,
                                         aContext,
                                         aAddonSubMenu );
         if ( !aTitle.isEmpty() &&
@@ -202,12 +200,11 @@ void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrent
     OUString aTitle;
     OUString aURL;
     OUString aTarget;
-    OUString aImageId;
     OUString aContext;
 
     for ( i = 0; i < nCount; ++i )
     {
-        GetMenuEntry( aAddonMenuDefinition[i], aTitle, aURL, aTarget, aImageId, aContext, aAddonSubMenu );
+        GetMenuEntry( aAddonMenuDefinition[i], aTitle, aURL, aTarget, aContext, aAddonSubMenu );
 
         if ( !IsCorrectContext( rModuleIdentifier, aContext ) || ( aTitle.isEmpty() && aURL.isEmpty() ))
             continue;
@@ -248,7 +245,7 @@ void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrent
 
             // Store values from configuration to the New and Wizard menu entries to enable
             // sfx2 based code to support high contrast mode correctly!
-            void* nAttributePtr = MenuAttributes::CreateAttribute(aTarget, aImageId);
+            void* nAttributePtr = MenuAttributes::CreateAttribute(aTarget, OUString());
             pCurrentMenu->SetUserValue(nId, nAttributePtr, MenuAttributes::ReleaseAttribute);
             pCurrentMenu->SetItemCommand( nId, aURL );
 
@@ -263,7 +260,6 @@ void AddonMenuManager::GetMenuEntry( const Sequence< PropertyValue >& rAddonMenu
                                      OUString& rTitle,
                                      OUString& rURL,
                                      OUString& rTarget,
-                                     OUString& rImageId,
                                      OUString& rContext,
                                      Sequence< Sequence< PropertyValue > >& rAddonSubMenu )
 {
@@ -279,8 +275,6 @@ void AddonMenuManager::GetMenuEntry( const Sequence< PropertyValue >& rAddonMenu
             rEntry.Value >>= rTitle;
         else if ( aMenuEntryPropName == ADDONSMENUITEM_STRING_TARGET )
             rEntry.Value >>= rTarget;
-        else if ( aMenuEntryPropName == ADDONSMENUITEM_STRING_IMAGEIDENTIFIER )
-            rEntry.Value >>= rImageId;
         else if ( aMenuEntryPropName == ADDONSMENUITEM_STRING_SUBMENU )
             rEntry.Value >>= rAddonSubMenu;
         else if ( aMenuEntryPropName == ADDONSMENUITEM_STRING_CONTEXT )

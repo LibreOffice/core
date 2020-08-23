@@ -29,11 +29,6 @@
 
                 </prop>
 
-                <prop oor:name="ImageIdentifier" oor:type="xs:string">
-                         <value>private:image/3216</value>
-
-                </prop>
-
                 <prop oor:name="Title" oor:type="xs:string">
                     <!-- The x-no-translate entry is a marker to prevent l10n tooling from translation. If it is not necessary. -->
                         <value xml:lang="x-no-translate"></value>
@@ -53,11 +48,6 @@
 
                 </prop>
 
-                <prop oor:name="ImageIdentifier" oor:type="xs:string">
-                         <value>private:image/3216</value>
-
-                </prop>
-
                 <prop oor:name="Title" oor:type="xs:string">
                         <!-- The x-no-translate entry is a marker to prevent l10n tooling from translation. If it is not necessary. -->
                         <value xml:lang="x-no-translate"></value>
@@ -74,11 +64,6 @@
                 <prop oor:name="URL" oor:type="xs:string">
 
                    <value>vnd.sun.star.job:service=com.sun.star.comp.framework.java.services.AsyncJob</value>
-
-                </prop>
-
-                <prop oor:name="ImageIdentifier" oor:type="xs:string">
-                         <value>private:image/3216</value>
 
                 </prop>
 

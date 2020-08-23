@@ -33,7 +33,6 @@ const char STYLE_ICON[] = "Icon";
 
 const char MERGE_NOTEBOOKBAR_URL[] = "URL";
 const char MERGE_NOTEBOOKBAR_TITLE[] = "Title";
-const char MERGE_NOTEBOOKBAR_IMAGEID[] = "ImageIdentifier";
 const char MERGE_NOTEBOOKBAR_CONTEXT[] = "Context";
 const char MERGE_NOTEBOOKBAR_TARGET[] = "Target";
 const char MERGE_NOTEBOOKBAR_CONTROLTYPE[] = "ControlType";
@@ -49,8 +48,6 @@ static void GetAddonNotebookBarItem(const css::uno::Sequence<css::beans::Propert
             i.Value >>= aAddonNotebookBarItem.sCommandURL;
         else if (i.Name == MERGE_NOTEBOOKBAR_TITLE)
             i.Value >>= aAddonNotebookBarItem.sLabel;
-        else if (i.Name == MERGE_NOTEBOOKBAR_IMAGEID)
-            i.Value >>= aAddonNotebookBarItem.sImageIdentifier;
         else if (i.Name == MERGE_NOTEBOOKBAR_CONTEXT)
             i.Value >>= aAddonNotebookBarItem.sContext;
         else if (i.Name == MERGE_NOTEBOOKBAR_TARGET)
@@ -90,7 +87,7 @@ static void CreateNotebookBarToolBox(vcl::Window* pNotebookbarToolBox,
         if (!sImage)
         {
             sImage = vcl::CommandInfoProvider::GetImageForCommand(
-                aAddonNotebookBarItem.sImageIdentifier, m_xFrame);
+                aAddonNotebookBarItem.sCommandURL, m_xFrame);
         }
     }
 
