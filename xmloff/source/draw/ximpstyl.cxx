@@ -889,22 +889,43 @@ SvXMLStyleContext* SdXMLStylesContext::CreateStyleChildContext(
     sal_Int32 nElement,
     const uno::Reference< xml::sax::XFastAttributeList >& xAttrList)
 {
-    if( nElement == XML_ELEMENT(TABLE, XML_TABLE_TEMPLATE) )
+    switch (nElement)
     {
-        auto pContext = GetImport().GetShapeImport()->GetShapeTableImport()->CreateTableTemplateContext(nElement, xAttrList );
-        if (pContext)
-            return pContext;
-    }
-    else if (nElement == XML_ELEMENT(STYLE, XML_PAGE_LAYOUT))
-    {
-        // style:page-master inside office:styles context
-        return new SdXMLPageMasterContext(GetSdImport(), nElement, xAttrList);
-    }
-    else if (nElement == XML_ELEMENT(STYLE, XML_PRESENTATION_PAGE_LAYOUT))
-    {
-        // style:presentation-page-layout inside office:styles context
-        return new SdXMLPresentationPageLayoutContext(GetSdImport(), nElement, xAttrList);
-    }
+        case XML_ELEMENT(TABLE, XML_TABLE_TEMPLATE):
+        {
+            auto pContext = GetImport().GetShapeImport()->GetShapeTableImport()->CreateTableTemplateContext(nElement, xAttrList );
+            if (pContext)
+                return pContext;
+            break;
+        }
+        case XML_ELEMENT(STYLE, XML_PAGE_LAYOUT):
+            // style:page-master inside office:styles context
+            return new SdXMLPageMasterContext(GetSdImport(), nElement, xAttrList);
+        case XML_ELEMENT(STYLE, XML_PRESENTATION_PAGE_LAYOUT):
+            // style:presentation-page-layout inside office:styles context
+            return new SdXMLPresentationPageLayoutContext(GetSdImport(), nElement, xAttrList);
+        case XML_ELEMENT(NUMBER, XML_DATE_STYLE):
+            // number:date-style or number:time-style
+            return new SdXMLNumberFormatImportContext( GetSdImport(), nElement, mpNumFmtHelper->getData(), SvXMLStylesTokens::DATE_STYLE, xAttrList, *this );
+        case XML_ELEMENT(NUMBER, XML_TIME_STYLE):
+            // number:date-style or number:time-style
+            return new SdXMLNumberFormatImportContext( GetSdImport(), nElement, mpNumFmtHelper->getData(), SvXMLStylesTokens::TIME_STYLE, xAttrList, *this );
+        case XML_ELEMENT(NUMBER, XML_NUMBER_STYLE):
+            return new SvXMLNumFormatContext( GetSdImport(), nElement,
+                                            mpNumFmtHelper->getData(), SvXMLStylesTokens::NUMBER_STYLE, xAttrList, *this );
+        case XML_ELEMENT(NUMBER, XML_CURRENCY_STYLE):
+            return new SvXMLNumFormatContext( GetSdImport(), nElement,
+                                            mpNumFmtHelper->getData(), SvXMLStylesTokens::CURRENCY_STYLE, xAttrList, *this );
+        case XML_ELEMENT(NUMBER, XML_PERCENTAGE_STYLE):
+            return new SvXMLNumFormatContext( GetSdImport(), nElement,
+                                            mpNumFmtHelper->getData(), SvXMLStylesTokens::PERCENTAGE_STYLE, xAttrList, *this );
+        case XML_ELEMENT(NUMBER, XML_BOOLEAN_STYLE):
+            return new SvXMLNumFormatContext( GetSdImport(), nElement,
+                                            mpNumFmtHelper->getData(), SvXMLStylesTokens::BOOLEAN_STYLE, xAttrList, *this );
+        case XML_ELEMENT(NUMBER, XML_TEXT_STYLE):
+            return new SvXMLNumFormatContext( GetSdImport(), nElement,
+                                            mpNumFmtHelper->getData(), SvXMLStylesTokens::TEXT_STYLE, xAttrList, *this );
+     }
 
     // call base class
     return SvXMLStylesContext::CreateStyleChildContext(nElement, xAttrList);
@@ -917,30 +938,7 @@ SvXMLStyleContext* SdXMLStylesContext::CreateStyleChildContext(
 {
     SvXMLStyleContext* pContext = nullptr;
 
-    if(!pContext)
-    {
-        const SvXMLTokenMap& rTokenMap = mpNumFmtHelper->GetStylesElemTokenMap();
-        SvXMLStylesTokens nToken = static_cast<SvXMLStylesTokens>(rTokenMap.Get( nPrefix, rLocalName ));
-        switch (nToken)
-        {
-            case SvXMLStylesTokens::DATE_STYLE:
-            case SvXMLStylesTokens::TIME_STYLE:
-                // number:date-style or number:time-style
-                pContext = new SdXMLNumberFormatImportContext( GetSdImport(), nPrefix, rLocalName, mpNumFmtHelper->getData(), nToken, xAttrList, *this );
-                break;
-
-            case SvXMLStylesTokens::NUMBER_STYLE:
-            case SvXMLStylesTokens::CURRENCY_STYLE:
-            case SvXMLStylesTokens::PERCENTAGE_STYLE:
-            case SvXMLStylesTokens::BOOLEAN_STYLE:
-            case SvXMLStylesTokens::TEXT_STYLE:
-                pContext = new SvXMLNumFormatContext( GetSdImport(), nPrefix, rLocalName,
-                                                        mpNumFmtHelper->getData(), nToken, xAttrList, *this );
-                break;
-        }
-    }
-
-    if(!pContext && nPrefix == XML_NAMESPACE_PRESENTATION )
+    if(nPrefix == XML_NAMESPACE_PRESENTATION )
     {
         if( IsXMLToken( rLocalName, XML_HEADER_DECL ) ||
             IsXMLToken( rLocalName, XML_FOOTER_DECL ) ||
