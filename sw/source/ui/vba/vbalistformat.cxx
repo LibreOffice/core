@@ -28,6 +28,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/text/PositionAndSpaceMode.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/util/Color.hpp>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -98,6 +99,35 @@ void SAL_CALL SwVbaListFormat::ApplyListTemplate( const css::uno::Reference< wor
     while( xEnum->hasMoreElements() );
 }
 
+template <class Ref>
+static void addParagraphsToList(const Ref& a,
+                                std::vector<css::uno::Reference<css::beans::XPropertySet>>& rList)
+{
+    if (css::uno::Reference<css::lang::XServiceInfo> xInfo{ a, css::uno::UNO_QUERY })
+    {
+        if (xInfo->supportsService("com.sun.star.text.Paragraph"))
+        {
+            rList.emplace_back(xInfo, css::uno::UNO_QUERY_THROW);
+        }
+        else if (xInfo->supportsService("com.sun.star.text.TextTable"))
+        {
+            css::uno::Reference<css::text::XTextTable> xTable(xInfo, css::uno::UNO_QUERY_THROW);
+            const auto aNames = xTable->getCellNames();
+            for (const auto& rName : aNames)
+            {
+                addParagraphsToList(xTable->getCellByName(rName), rList);
+            }
+        }
+    }
+    if (css::uno::Reference<css::container::XEnumerationAccess> xEnumAccess{ a,
+                                                                             css::uno::UNO_QUERY })
+    {
+        auto xEnum = xEnumAccess->createEnumeration();
+        while (xEnum->hasMoreElements())
+            addParagraphsToList(xEnum->nextElement(), rList);
+    }
+}
+
 void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  )
 {
     css::uno::Reference<css::frame::XModel> xModel(getThisWordDoc(mxContext));
@@ -111,15 +141,8 @@ void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  )
         xUndoManager->leaveUndoContext();
     });
 
-    css::uno::Reference<css::container::XEnumerationAccess> xEnumAccess(mxTextRange,
-                                                                        css::uno::UNO_QUERY_THROW);
-    auto xEnum = xEnumAccess->createEnumeration();
-    if (!xEnum->hasMoreElements())
-        return;
-
     std::vector<css::uno::Reference<css::beans::XPropertySet>> aParagraphs;
-    while (xEnum->hasMoreElements())
-        aParagraphs.emplace_back(xEnum->nextElement(), css::uno::UNO_QUERY_THROW);
+    addParagraphsToList(mxTextRange, aParagraphs);
 
     // in reverse order, to get proper label strings
     for (auto it = aParagraphs.rbegin(); it != aParagraphs.rend(); ++it)
@@ -243,7 +266,7 @@ void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  )
                     css::uno::Sequence<css::style::TabStop> stops;
                     (*it)->getPropertyValue("ParaTabStops") >>= stops;
                     css::style::TabStop tabStop{};
-                    tabStop.Position = nListtabStopPosition - nIndentAt;
+                    tabStop.Position = nListtabStopPosition;
                     tabStop.Alignment = com::sun::star::style::TabAlign::TabAlign_LEFT;
                     tabStop.FillChar = ' ';
                     (*it)->setPropertyValue(
@@ -257,7 +280,9 @@ void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  )
                 // TODO: css::text::PositionAndSpaceMode::LABEL_WIDTH_AND_POSITION
                 continue; // for now, keep such lists as is
             }
-            (*it)->setPropertyValue("NumberingRules", css::uno::Any());
+            // In case of higher outline levels, each assignment of empty value just sets level 1
+            while ((*it)->getPropertyValue("NumberingRules") != css::uno::Any())
+                (*it)->setPropertyValue("NumberingRules", css::uno::Any());
         }
     }
 }
