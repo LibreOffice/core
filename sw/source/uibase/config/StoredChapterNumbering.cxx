@@ -341,11 +341,7 @@ public:
                 sal_Int32 Element,
                 const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override
     {
-        if (Element == XML_ELEMENT(TEXT, XML_OUTLINE_STYLE))
-        {
-            // handled in CreateChildContext
-        }
-        else if (Element == XML_ELEMENT(STYLE, XML_STYLE))
+        if (Element == XML_ELEMENT(STYLE, XML_STYLE))
         {
             return new StoredChapterNumberingDummyStyleContext(GetImport(), xAttrList);
         }
