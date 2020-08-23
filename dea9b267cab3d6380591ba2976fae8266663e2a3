@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a181e42a_61b39242",
+        "filename": "svx/source/dialog/compressgraphicdialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-08-23T19:06:57Z",
+      "side": 1,
+      "message": "Also please check how variables are named in LO Codebase, look for the conventions wrt data types. perhaps sNewSize?",
+      "range": {
+        "startLine": 374,
+        "startChar": 13,
+        "endLine": 374,
+        "endChar": 21
+      },
+      "revId": "dea9b267cab3d6380591ba2976fae8266663e2a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
