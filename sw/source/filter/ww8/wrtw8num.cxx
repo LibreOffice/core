@@ -86,22 +86,19 @@ sal_uInt16 MSWordExportBase::OverrideNumRule(
         OUString const& rListId,
         SwNumRule const& rAbstractRule)
 {
-    auto const numdef = GetNumberingId(rExistingRule);
-    auto const absnumdef = rListId == rAbstractRule.GetDefaultListId()
+    const sal_uInt16 numdef = GetNumberingId(rExistingRule);
+
+    const sal_uInt16 absnumdef = rListId == rAbstractRule.GetDefaultListId()
         ? GetNumberingId(rAbstractRule)
         : DuplicateAbsNum(rListId, rAbstractRule);
     auto const mapping = std::make_pair(numdef, absnumdef);
 
-    auto it = m_OverridingNumsR.find(mapping);
-    if (it == m_OverridingNumsR.end())
-    {
-        it = m_OverridingNumsR.insert(std::make_pair(mapping, m_pUsedNumTable->size())).first;
-        m_OverridingNums.insert(std::make_pair(m_pUsedNumTable->size(), mapping));
+    auto it = m_OverridingNums.insert(std::make_pair(m_pUsedNumTable->size(), mapping));
 
-        m_pUsedNumTable->push_back(nullptr); // dummy, it's unique_ptr...
-        ++m_nUniqueList; // counter for DuplicateNumRule...
-    }
-    return it->second;
+    m_pUsedNumTable->push_back(nullptr); // dummy, it's unique_ptr...
+    ++m_nUniqueList; // counter for DuplicateNumRule...
+
+    return it.first->first;
 }
 
 void MSWordExportBase::AddListLevelOverride(sal_uInt16 nListId,
@@ -142,17 +139,6 @@ sal_uInt16 MSWordExportBase::GetNumberingId( const SwNumRule& rNumRule )
     }
     SwNumRule* p = const_cast<SwNumRule*>(&rNumRule);
     sal_uInt16 nRet = static_cast<sal_uInt16>(m_pUsedNumTable->GetPos(p));
-
-    // Is this list now duplicated into a new list which we should use
-    // #i77812# - perform 'deep' search in duplication map
-    std::map<sal_uInt16,sal_uInt16>::const_iterator aResult = m_aRuleDuplicates.end();
-    do {
-        aResult = m_aRuleDuplicates.find(nRet);
-        if ( aResult != m_aRuleDuplicates.end() )
-        {
-            nRet = (*aResult).second;
-        }
-    } while ( aResult != m_aRuleDuplicates.end() );
 
     return nRet;
 }

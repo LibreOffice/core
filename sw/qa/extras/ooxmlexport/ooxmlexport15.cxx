@@ -196,6 +196,27 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135343_columnSectionBreak_c14, "tdf135343_column
     //CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf135973, "tdf135973.odt")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    {
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(2), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString("1."), getProperty<OUString>(xPara, "ListLabelString"));
+    }
+    {
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(3), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString("2."), getProperty<OUString>(xPara, "ListLabelString"));
+    }
+    {
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(5), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString("1."), getProperty<OUString>(xPara, "ListLabelString"));
+    }
+    {
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(6), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString("2."), getProperty<OUString>(xPara, "ListLabelString"));
+    }
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf135343_columnSectionBreak_c14v2, "tdf135343_columnSectionBreak_c14v2.docx")
 {
     // In this Word 2010 v2, section three was changed to start with a nextColumn break instead of a continuous break.
