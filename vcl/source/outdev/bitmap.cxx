@@ -1050,7 +1050,6 @@ bool OutputDevice::DrawTransformBitmapExDirect(
     const basegfx::B2DPoint aTopX(aFullTransform * basegfx::B2DPoint(1.0, 0.0));
     const basegfx::B2DPoint aTopY(aFullTransform * basegfx::B2DPoint(0.0, 1.0));
     SalBitmap* pSalSrcBmp = rBitmapEx.GetBitmap().ImplGetSalBitmap().get();
-    SalBitmap* pSalAlphaBmp = nullptr;
     Bitmap aAlphaBitmap;
 
     if(rBitmapEx.IsTransparent())
@@ -1063,14 +1062,14 @@ bool OutputDevice::DrawTransformBitmapExDirect(
         {
             aAlphaBitmap = rBitmapEx.GetMask();
         }
-        if (!mpAlphaVDev)
-            pSalAlphaBmp = aAlphaBitmap.ImplGetSalBitmap().get();
     }
     else if (mpAlphaVDev)
     {
         aAlphaBitmap = Bitmap(rBitmapEx.GetSizePixel(), 1);
         aAlphaBitmap.Erase(COL_BLACK);
     }
+
+    SalBitmap* pSalAlphaBmp = aAlphaBitmap.ImplGetSalBitmap().get();
 
     bDone = mpGraphics->DrawTransformedBitmap(
         aNull,
@@ -1081,7 +1080,12 @@ bool OutputDevice::DrawTransformBitmapExDirect(
         this);
 
     if (mpAlphaVDev)
-        mpAlphaVDev->DrawTransformBitmapExDirect(aFullTransform, BitmapEx(aAlphaBitmap));
+    {
+        // Merge bitmap alpha to alpha device
+        Bitmap aBlack(rBitmapEx.GetSizePixel(), 1);
+        aBlack.Erase(COL_BLACK);
+        mpAlphaVDev->DrawTransformBitmapExDirect(aFullTransform, BitmapEx(aBlack, aAlphaBitmap));
+    }
 
     return bDone;
 };
