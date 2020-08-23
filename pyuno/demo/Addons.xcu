@@ -27,7 +27,7 @@
      <value>service:org.openoffice.comp.pyuno.demo.HelloWorld?insert</value>
    </prop>
    <prop oor:name="ImageIdentifier" oor:type="xs:string">
-    <value>private:image/3216</value>
+    <value/>
    </prop>
    <prop oor:name="Title" oor:type="xs:string">
    <value xml:lang="x-no-translate">Insert Hello World</value>

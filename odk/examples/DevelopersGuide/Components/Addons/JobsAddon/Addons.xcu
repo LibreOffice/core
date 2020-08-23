@@ -30,7 +30,7 @@
                 </prop>
 
                 <prop oor:name="ImageIdentifier" oor:type="xs:string">
-                         <value>private:image/3216</value>
+                         <value/>
 
                 </prop>
 
@@ -54,7 +54,7 @@
                 </prop>
 
                 <prop oor:name="ImageIdentifier" oor:type="xs:string">
-                         <value>private:image/3216</value>
+                         <value/>
 
                 </prop>
 
@@ -78,7 +78,7 @@
                 </prop>
 
                 <prop oor:name="ImageIdentifier" oor:type="xs:string">
-                         <value>private:image/3216</value>
+                         <value/>
 
                 </prop>
 
