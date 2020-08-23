@@ -1997,6 +1997,13 @@ void GtkSalFrame::SetPointer( PointerStyle ePointerStyle )
 
 void GtkSalFrame::grabPointer( bool bGrab, bool bKeyboardAlso, bool bOwnerEvents )
 {
+    if (bGrab)
+    {
+        // tdf#135779 move focus back inside usual input window out of any
+        // other gtk widgets before grabbing the pointer
+        GrabFocus();
+    }
+
     static const char* pEnv = getenv( "SAL_NO_MOUSEGRABS" );
     if (pEnv && *pEnv)
         return;
@@ -2533,8 +2540,10 @@ void GtkSalFrame::GrabFocus()
         pGrabWidget = GTK_WIDGET(m_pWindow);
     else
         pGrabWidget = GTK_WIDGET(m_pFixedContainer);
-    gtk_widget_set_can_focus(pGrabWidget, true);
-    gtk_widget_grab_focus(pGrabWidget);
+    if (!gtk_widget_get_can_focus(pGrabWidget))
+        gtk_widget_set_can_focus(pGrabWidget, true);
+    if (!gtk_widget_has_focus(pGrabWidget))
+        gtk_widget_grab_focus(pGrabWidget);
 }
 
 gboolean GtkSalFrame::signalButton(GtkWidget*, GdkEventButton* pEvent, gpointer frame)
