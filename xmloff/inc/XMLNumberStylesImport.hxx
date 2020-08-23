@@ -45,14 +45,13 @@ class SdXMLNumberFormatImportContext final : public SvXMLNumFormatContext
 public:
 
     SdXMLNumberFormatImportContext( SdXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName,
+        sal_Int32 nElement,
         SvXMLNumImpData* pNewData,  SvXMLStylesTokens nNewType,
-        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
         SvXMLStylesContext& rStyles);
     virtual ~SdXMLNumberFormatImportContext() override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;

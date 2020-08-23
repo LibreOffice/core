@@ -576,29 +576,21 @@ void SdXMLNumberFormatMemberImportContext::Characters( const OUString& rChars )
 }
 
 
-SdXMLNumberFormatImportContext::SdXMLNumberFormatImportContext( SdXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, SvXMLNumImpData* pNewData, SvXMLStylesTokens nNewType, const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList, SvXMLStylesContext& rStyles)
-:   SvXMLNumFormatContext(rImport, nPrfx, rLocalName, pNewData, nNewType, xAttrList, rStyles),
+SdXMLNumberFormatImportContext::SdXMLNumberFormatImportContext( SdXMLImport& rImport, sal_Int32 nElement, SvXMLNumImpData* pNewData, SvXMLStylesTokens nNewType, const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList, SvXMLStylesContext& rStyles)
+:   SvXMLNumFormatContext(rImport, nElement, pNewData, nNewType, xAttrList, rStyles),
     mbAutomatic( false ),
     mnIndex(0),
     mnKey( -1 )
 {
-    mbTimeStyle = IsXMLToken( rLocalName, XML_TIME_STYLE );
+    mbTimeStyle = (nElement & TOKEN_MASK) == XML_TIME_STYLE;
 
-    const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for(sal_Int16 i=0; i < nAttrCount; i++)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-        OUString sValue = xAttrList->getValueByIndex( i );
-
-        if( nPrefix == XML_NAMESPACE_NUMBER )
-        {
-            if( IsXMLToken( aLocalName, XML_AUTOMATIC_ORDER ) )
-            {
+        OUString sValue = aIter.toString();
+        if( aIter.getToken() == XML_ELEMENT(NUMBER, XML_AUTOMATIC_ORDER) )
                 mbAutomatic = IsXMLToken( sValue, XML_TRUE );
-            }
-        }
+        else
+            SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
     }
 }
 
@@ -642,7 +634,7 @@ bool SdXMLNumberFormatImportContext::compareStyle( const SdXMLFixedDataStyle* pS
     return true;
 }
 
-void SdXMLNumberFormatImportContext::EndElement()
+void SdXMLNumberFormatImportContext::endFastElement(sal_Int32 )
 {
     SvXMLNumFormatContext::EndElement();
 
