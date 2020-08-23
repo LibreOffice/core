@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4d232c7c_51c6c914",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 741,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-08-23T14:21:03Z",
+      "side": 1,
+      "message": "And what if an exception occurs here?\n\nSee here for the exception types this method can raise: https://www.openoffice.org/api/docs/common/ref/com/sun/star/deployment/XExtensionManager.html#addExtension\n\nAnd see here for some example catch blocks: desktop/source/pkgchk/unopkg/unopkg_app.cxx:598+",
+      "range": {
+        "startLine": 740,
+        "startChar": 4,
+        "endLine": 741,
+        "endChar": 92
+      },
+      "revId": "116e41f0986862aab205661dcbaa855a815f4061",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
