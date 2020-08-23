@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7ee6bb35_efcba3d5",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-08-23T14:14:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c26f2530_3613a4a7",
+      "range": {
+        "startLine": 70,
+        "startChar": 0,
+        "endLine": 70,
+        "endChar": 20
+      },
+      "revId": "37388f5c81590d4953a0f71ad0bc6ae00d1d8ad4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b075ff4b_72b7cc5d",
         "filename": "cui/source/dialogs/AdditionsDialog.cxx",
         "patchSetId": 5
@@ -45,6 +69,30 @@
       "revId": "37388f5c81590d4953a0f71ad0bc6ae00d1d8ad4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32c63676_7cdbeb09",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-08-23T14:14:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b075ff4b_72b7cc5d",
+      "range": {
+        "startLine": 80,
+        "startChar": 0,
+        "endLine": 80,
+        "endChar": 20
+      },
+      "revId": "37388f5c81590d4953a0f71ad0bc6ae00d1d8ad4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "3b48f51d_fcc60a3e",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-08-23T14:14:34Z",
+      "side": 1,
+      "message": "It was unnecessary, I deleted it.",
+      "parentUuid": "252c91c1_abeaa167",
+      "range": {
+        "startLine": 82,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 27
+      },
+      "revId": "37388f5c81590d4953a0f71ad0bc6ae00d1d8ad4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f7621b5_4ca7e744",
         "filename": "cui/source/dialogs/AdditionsDialog.cxx",
         "patchSetId": 5
@@ -91,6 +163,30 @@
       "revId": "37388f5c81590d4953a0f71ad0bc6ae00d1d8ad4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "771d9bf2_95c96cf6",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-08-23T14:14:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f7621b5_4ca7e744",
+      "range": {
+        "startLine": 653,
+        "startChar": 42,
+        "endLine": 653,
+        "endChar": 44
+      },
+      "revId": "37388f5c81590d4953a0f71ad0bc6ae00d1d8ad4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
