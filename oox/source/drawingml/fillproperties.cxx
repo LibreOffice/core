@@ -22,6 +22,7 @@
 #include <iterator>
 
 #include <drawingml/graphicproperties.hxx>
+#include <vcl/graph.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
@@ -69,6 +70,22 @@ Reference< XGraphic > lclCheckAndApplyDuotoneTransform(const BlipFillProperties&
             return xTransformer->applyDuotone(xGraphic, sal_Int32(nColor1), sal_Int32(nColor2));
     }
     return xGraphic;
+}
+
+Reference< XGraphic > lclRotateGraphic(uno::Reference<graphic::XGraphic> const & xGraphic, long nRotation)
+{
+    ::Graphic aGraphic(xGraphic);
+    ::Graphic aReturnGraphic;
+
+    assert (aGraphic.GetType() == GraphicType::Bitmap);
+
+    BitmapEx aBitmapEx(aGraphic.GetBitmapEx());
+    const ::Color& aColor = ::Color(0x00);
+    aBitmapEx.Rotate(nRotation, aColor);
+    aReturnGraphic = ::Graphic(aBitmapEx);
+    aReturnGraphic.setOriginURL(aGraphic.getOriginURL());
+
+    return aReturnGraphic.GetXGraphic();
 }
 
 Reference< XGraphic > lclCheckAndApplyChangeColorTransform(const BlipFillProperties &aBlipProps, uno::Reference<graphic::XGraphic> const & xGraphic,
@@ -748,6 +765,15 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
             // it is a cropped graphic.
             rPropMap.setProperty(PROP_FillStyle, FillStyle_BITMAP);
             rPropMap.setProperty(PROP_FillBitmapMode, BitmapMode_STRETCH);
+
+            // It is a bitmap filled and rotated graphic.
+            // When custom shape is rotated, bitmap have to be rotated too.
+            if(rPropMap.hasProperty(PROP_RotateAngle))
+            {
+                long nAngle = rPropMap.getProperty(PROP_RotateAngle).get<long>();
+                xGraphic = lclRotateGraphic(xGraphic, nAngle/10 );
+            }
+
             rPropMap.setProperty(PROP_FillBitmap, xGraphic);
         }
         else
