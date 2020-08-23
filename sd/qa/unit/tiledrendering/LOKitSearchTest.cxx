@@ -62,6 +62,9 @@ public:
     void testSearchInPDFInMultiplePagesBackwards();
     void testSearchIn2MixedObjects();
     void testSearchIn6MixedObjects();
+    void testReplace();
+    void testReplaceAll();
+    void testReplaceCombined();
 
     CPPUNIT_TEST_SUITE(LOKitSearchTest);
     CPPUNIT_TEST(testSearch);
@@ -77,6 +80,9 @@ public:
     CPPUNIT_TEST(testSearchInPDFInMultiplePagesBackwards);
     CPPUNIT_TEST(testSearchIn2MixedObjects);
     CPPUNIT_TEST(testSearchIn6MixedObjects);
+    CPPUNIT_TEST(testReplace);
+    CPPUNIT_TEST(testReplaceAll);
+    CPPUNIT_TEST(testReplaceCombined);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -137,6 +143,22 @@ void lcl_search(const OUString& rKey, bool bFindAll = false, bool bBackwards = f
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
         { "SearchItem.SearchString", uno::makeAny(rKey) },
         { "SearchItem.Backward", uno::makeAny(bBackwards) },
+        { "SearchItem.Command", uno::makeAny(sal_uInt16(eSearch)) },
+    }));
+
+    comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
+}
+
+void lcl_replace(const OUString& rKey, const OUString& rReplace, bool bAll = false)
+{
+    Scheduler::ProcessEventsToIdle();
+
+    SvxSearchCmd eSearch = bAll ? SvxSearchCmd::REPLACE_ALL : SvxSearchCmd::REPLACE;
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
+        { "SearchItem.SearchString", uno::makeAny(rKey) },
+        { "SearchItem.ReplaceString", uno::makeAny(rReplace) },
         { "SearchItem.Command", uno::makeAny(sal_uInt16(eSearch)) },
     }));
 
@@ -825,6 +847,99 @@ void LOKitSearchTest::testSearchIn6MixedObjects()
     CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
     CPPUNIT_ASSERT_EQUAL(pPage->GetObj(0), lclGetSelectedObject(pViewShell));
 #endif
+}
+namespace
+{
+OUString getShapeText(SdXImpressDocument* pXImpressDocument, sal_uInt32 nPage, sal_uInt32 nShape)
+{
+    uno::Reference<container::XIndexAccess> xDrawPage;
+    xDrawPage.set(pXImpressDocument->getDrawPages()->getByIndex(nPage), uno::UNO_QUERY);
+
+    uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(nShape), uno::UNO_QUERY);
+    return xShape->getString();
+}
+}
+
+void LOKitSearchTest::testReplace()
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("ReplaceTest.odp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    mpCallbackRecorder->registerCallbacksFor(pViewShell->GetViewShellBase());
+
+    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), getShapeText(pXImpressDocument, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Bbb bbb bbb bbb"), getShapeText(pXImpressDocument, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), getShapeText(pXImpressDocument, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), getShapeText(pXImpressDocument, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), getShapeText(pXImpressDocument, 4, 0));
+
+    lcl_replace("bbb", "aaa", false); // select
+
+    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), getShapeText(pXImpressDocument, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Bbb bbb bbb bbb"), getShapeText(pXImpressDocument, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), getShapeText(pXImpressDocument, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), getShapeText(pXImpressDocument, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), getShapeText(pXImpressDocument, 4, 0));
+
+    lcl_replace("bbb", "aaa", false); // replace
+
+    CPPUNIT_ASSERT_EQUAL(OUString("aaa"), getShapeText(pXImpressDocument, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Bbb bbb bbb bbb"), getShapeText(pXImpressDocument, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), getShapeText(pXImpressDocument, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), getShapeText(pXImpressDocument, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), getShapeText(pXImpressDocument, 4, 0));
+}
+
+void LOKitSearchTest::testReplaceAll()
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("ReplaceTest.odp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    mpCallbackRecorder->registerCallbacksFor(pViewShell->GetViewShellBase());
+
+    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), getShapeText(pXImpressDocument, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Bbb bbb bbb bbb"), getShapeText(pXImpressDocument, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), getShapeText(pXImpressDocument, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), getShapeText(pXImpressDocument, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), getShapeText(pXImpressDocument, 4, 0));
+
+    lcl_replace("bbb", "ccc", true);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("ccc"), getShapeText(pXImpressDocument, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("ccc ccc ccc ccc"), getShapeText(pXImpressDocument, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("ccc"), getShapeText(pXImpressDocument, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("ccc"), getShapeText(pXImpressDocument, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("ccc"), getShapeText(pXImpressDocument, 4, 0));
+
+    lcl_replace("ccc", "bbb", true);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), getShapeText(pXImpressDocument, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("bbb bbb bbb bbb"), getShapeText(pXImpressDocument, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), getShapeText(pXImpressDocument, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), getShapeText(pXImpressDocument, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), getShapeText(pXImpressDocument, 4, 0));
+}
+
+void LOKitSearchTest::testReplaceCombined()
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("ReplaceTest.odp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    mpCallbackRecorder->registerCallbacksFor(pViewShell->GetViewShellBase());
+
+    lcl_replace("bbb", "aaa", false); // select
+    lcl_replace("bbb", "aaa", false); // replace
+
+    CPPUNIT_ASSERT_EQUAL(OUString("aaa"), getShapeText(pXImpressDocument, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Bbb bbb bbb bbb"), getShapeText(pXImpressDocument, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), getShapeText(pXImpressDocument, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), getShapeText(pXImpressDocument, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), getShapeText(pXImpressDocument, 4, 0));
+
+    lcl_replace("bbb", "ccc", true);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("aaa"), getShapeText(pXImpressDocument, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("ccc ccc ccc ccc"), getShapeText(pXImpressDocument, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("ccc"), getShapeText(pXImpressDocument, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("ccc"), getShapeText(pXImpressDocument, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("ccc"), getShapeText(pXImpressDocument, 4, 0));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(LOKitSearchTest);
