@@ -3185,6 +3185,8 @@ gboolean GtkSalFrame::signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointe
         GtkWidget* pFocusWindow = gtk_window_get_focus(GTK_WINDOW(pThis->m_pWindow));
         if (pFocusWindow && pFocusWindow != GTK_WIDGET(pThis->m_pFixedContainer))
         {
+            if (!gtk_widget_get_realized(pFocusWindow))
+                return true;
             gpointer pClass = g_type_class_ref(GTK_TYPE_WINDOW);
             GtkWidgetClass* pWindowClass = GTK_WIDGET_CLASS(pClass);
             // if the focus is not in our main widget, see if there is a handler
