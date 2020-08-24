@@ -108,10 +108,9 @@ ScAcceptChgDlg::ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Windo
     pTPFilter = m_xAcceptChgCtr->GetFilterPage();
     pTPView = m_xAcceptChgCtr->GetViewPage();
 
-    // set wider window for the optional extending button labels
-    // eg. "Reject/Clear formatting" instead of "Reject"
-    pTPView->EnableClearFormat(true);
-    pTPView->EnableClearFormatAll(true);
+    // tdf#136062 Don't use "Reject/Clear formatting" instead of "Reject" buttons in Calc
+    pTPView->EnableClearFormat(false);
+    pTPView->EnableClearFormatAll(false);
 
     pTheView = pTPView->GetTableControl();
     pTheView->SetCalcView();
