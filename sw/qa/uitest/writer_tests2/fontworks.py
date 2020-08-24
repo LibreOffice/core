@@ -24,13 +24,13 @@ class fontWorksDialog(UITestCase):
 
         FontWorkSelector = xDialog.getChild("ctlFavorites")
         # Select element with id (3)
-        FontWorkSelector.executeAction("SELECT", mkPropertyValues({"POS": "3"}))
+        FontWorkSelector.executeAction("CHOOSE", mkPropertyValues({"POS": "3"}))
         self.assertEqual(get_state_as_dict(FontWorkSelector)["SelectedItemPos"], "2")
         self.assertEqual(get_state_as_dict(FontWorkSelector)["SelectedItemId"], "3")
         self.assertEqual(get_state_as_dict(FontWorkSelector)["ItemsCount"], "36")
 
         # Select element with id (7)
-        FontWorkSelector.executeAction("SELECT", mkPropertyValues({"POS": "7"}))
+        FontWorkSelector.executeAction("CHOOSE", mkPropertyValues({"POS": "7"}))
         self.assertEqual(get_state_as_dict(FontWorkSelector)["SelectedItemPos"], "6")
         self.assertEqual(get_state_as_dict(FontWorkSelector)["SelectedItemId"], "7")
 
