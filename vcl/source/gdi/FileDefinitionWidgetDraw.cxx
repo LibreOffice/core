@@ -540,7 +540,8 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
                                                  const tools::Rectangle& rControlRegion,
                                                  ControlState eState,
                                                  const ImplControlValue& rValue,
-                                                 const OUString& /*aCaptions*/)
+                                                 const OUString& /*aCaptions*/,
+                                                 const Color& /*rBackgroundColor*/)
 {
     bool bOldAA = m_rGraphics.getAntiAliasB2DDraw();
     m_rGraphics.setAntiAliasB2DDraw(true);
