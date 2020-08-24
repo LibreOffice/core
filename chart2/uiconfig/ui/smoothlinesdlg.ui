@@ -24,9 +24,14 @@
     <property name="default_width">-1</property>
     <property name="default_height">-1</property>
     <property name="type_hint">dialog</property>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
+        <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child internal-child="action_area">
@@ -92,11 +97,15 @@
           <object class="GtkBox" id="box1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
             <property name="orientation">vertical</property>
+            <property name="spacing">6</property>
             <child>
               <object class="GtkBox" id="box2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
                 <property name="spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="TypeLabel">
@@ -116,6 +125,7 @@
                   <object class="GtkComboBoxText" id="SplineTypeComboBox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
                     <property name="active">0</property>
                     <items>
                       <item translatable="yes" context="smoothlinesdlg|SplineTypeComboBox">Cubic spline</item>
@@ -150,8 +160,8 @@
                   <object class="GtkGrid" id="grid2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="row_spacing">6</property>
-                    <property name="column_spacing">12</property>
+                    <property name="row_spacing">3</property>
+                    <property name="column_spacing">6</property>
                     <child>
                       <object class="GtkLabel" id="ResolutionLabel">
                         <property name="visible">True</property>
@@ -184,7 +194,6 @@
                       <object class="GtkSpinButton" id="ResolutionSpinbutton">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="halign">start</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">ResolutionAdjustment</property>
                         <child internal-child="accessible">
@@ -202,7 +211,6 @@
                       <object class="GtkSpinButton" id="PolynomialsSpinButton">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="halign">start</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">PolynomialsAdjustment</property>
                         <child internal-child="accessible">
@@ -239,9 +247,6 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="SmoothLinesDialog-atkobject">
         <property name="AtkObject::accessible-description" translatable="yes" context="smoothlinesdlg|extended_tip|SmoothLinesDialog">Apply a line curve model.</property>
