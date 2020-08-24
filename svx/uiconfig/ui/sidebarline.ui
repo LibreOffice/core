@@ -23,7 +23,7 @@
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
             <property name="orientation">vertical</property>
-            <property name="spacing">6</property>
+            <property name="spacing">3</property>
             <child>
               <object class="GtkBox" id="box3">
                 <property name="visible">True</property>
@@ -96,7 +96,6 @@
                 <property name="can_focus">True</property>
                 <property name="row_spacing">3</property>
                 <property name="column_spacing">6</property>
-                <property name="column_homogeneous">True</property>
                 <child>
                   <object class="GtkLabel" id="widthlabel">
                     <property name="visible">True</property>
@@ -223,17 +222,6 @@
               </packing>
             </child>
             <child>
-              <object class="GtkSeparator">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkBox" id="arrowproperties">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -242,9 +230,8 @@
                   <object class="GtkGrid" id="grid5">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="row_spacing">6</property>
+                    <property name="row_spacing">3</property>
                     <property name="column_spacing">6</property>
-                    <property name="column_homogeneous">True</property>
                     <child>
                       <object class="GtkLabel" id="cornerlabel">
                         <property name="visible">True</property>
@@ -264,6 +251,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="tooltip_text" translatable="yes" context="sidebarline|edgestyle|tooltip_text">Select the style of the edge connections.</property>
+                        <property name="hexpand">True</property>
                         <items>
                           <item translatable="yes" context="sidebarline|edgestyle">Rounded</item>
                           <item translatable="yes" context="sidebarline|edgestyle">- none -</item>
@@ -277,8 +265,8 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
                       </packing>
                     </child>
                     <child>
@@ -291,8 +279,8 @@
                         <property name="xalign">0</property>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
                       </packing>
                     </child>
                     <child>
@@ -300,6 +288,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="tooltip_text" translatable="yes" context="sidebarline|linecapstyle|tooltip_text">Select the style of the line caps.</property>
+                        <property name="hexpand">True</property>
                         <items>
                           <item translatable="yes" context="sidebarline|linecapstyle">Flat</item>
                           <item translatable="yes" context="sidebarline|linecapstyle">Round</item>
@@ -327,7 +316,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">3</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </object>
@@ -355,6 +344,8 @@
       <widget name="widthlabel"/>
       <widget name="colorlabel"/>
       <widget name="translabel"/>
+      <widget name="cornerlabel"/>
+      <widget name="caplabel"/>
     </widgets>
   </object>
   <object class="GtkListStore" id="liststore5">
