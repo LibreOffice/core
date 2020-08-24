@@ -11,12 +11,14 @@ import type_options
         7)  SpinUIObject		( Increase event - Decrease event )
         8)  TabControlUIObject ( Change tab event )
         9)  ToolBoxUIObject ( Click on item event )
+        10) ValueSetUIObject (Choose item)
 */
 
 UIObjectCommand:
   ButtonUIObject | CheckBoxUIObject | EditUIObject | 
   RadioButtonUIObject | ListBoxUIObject | ComboBoxUIObject | 
-  SpinFieldUIObject | TabControlUIObject | ToolBoxUIObject
+  SpinFieldUIObject | TabControlUIObject | ToolBoxUIObject |
+  ValueSetUIObject
 ;
 
 ButtonUIObject:
@@ -45,6 +47,9 @@ ListBoxUIObject:
 ;
 ToolBoxUIObject:
    'Click on item number' POS=INT 'in' toolbox_id=ID
+;
+ValueSetUIObject:
+   'Choose element with position ' POS=INT 'in' value_set_id=STRING 'from' parent_id=STRING
 ;
 //=============================================================
 //helper grammar for EditUIObject

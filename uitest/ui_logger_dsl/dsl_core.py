@@ -104,6 +104,7 @@ class ul_Compiler:
                 "SpinFieldUIObject": self.handle_spin_field,
                 "EditUIObject": self.handle_Edit_uiObject,
                 "ToolBoxUIObject": self.handle_ToolBox_uiObject,
+                "ValueSetUIObject": self.handle_ValueSet_uiObject,
                 "writer_Type_command": self.handle_writer_type,
                 "writer_Select_command": self.handle_writer_select,
                 "writer_GOTO_command": self.handle_writer_goto,
@@ -626,6 +627,38 @@ class ul_Compiler:
         )
 
         self.prev_command = ToolBoxUIObject
+
+    def handle_ValueSet_uiObject(self, ValueSetUIObject):
+
+        name_of_obj = ""
+        if keyword.iskeyword(ValueSetUIObject.value_set_id):
+            name_of_obj = "x" + ValueSetUIObject.value_set_id
+        else:
+            name_of_obj = ValueSetUIObject.value_set_id
+
+        parent_txt = ValueSetUIObject.parent_id.split("/")
+        parent = parent_txt[len(parent_txt)-2]
+        if( parent.upper() != self.last_parent[self.parent_hierarchy_count].upper()):
+            self.init_Object(
+                parent,
+                parent,
+                self.last_parent[self.parent_hierarchy_count],
+            )
+
+            self.init_Object(
+                name_of_obj, ValueSetUIObject.value_set_id, parent
+            )
+
+        else:
+            self.init_Object(
+                name_of_obj, ValueSetUIObject.value_set_id, self.last_parent[self.parent_hierarchy_count]
+            )
+
+        self.write_line_with_one_parameters(
+            name_of_obj, "CHOOSE", "POS", ValueSetUIObject.POS
+        )
+
+        self.prev_command = ValueSetUIObject
 
     def handle_writer_type(self, writer_Type_command):
 
