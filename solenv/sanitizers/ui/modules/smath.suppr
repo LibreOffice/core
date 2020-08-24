@@ -1,11 +1,7 @@
 starmath/uiconfig/smath/ui/catalogdialog.ui://GtkLabel[@id='label1'] orphan-label
-starmath/uiconfig/smath/ui/catalogdialog.ui://GtkComboBoxText[@id='symbolset'] no-labelled-by
 starmath/uiconfig/smath/ui/catalogdialog.ui://GtkLabel[@id='symbolname'] orphan-label
 starmath/uiconfig/smath/ui/catalogdialog.ui://GtkDrawingArea[@id='symbolsetdisplay'] no-labelled-by
-starmath/uiconfig/smath/ui/catalogdialog.ui://GtkDrawingArea[@id='preview'] no-labelled-by
-starmath/uiconfig/smath/ui/fontdialog.ui://GtkEntry[@id='font'] no-labelled-by
 starmath/uiconfig/smath/ui/printeroptions.ui://GtkSpinButton[@id='scalingspin'] no-labelled-by
-starmath/uiconfig/smath/ui/smathsettings.ui://GtkSpinButton[@id='zoom'] no-labelled-by
 starmath/uiconfig/smath/ui/spacingdialog.ui://GtkLabel[@id='1label1'] orphan-label
 starmath/uiconfig/smath/ui/spacingdialog.ui://GtkLabel[@id='1label2'] orphan-label
 starmath/uiconfig/smath/ui/spacingdialog.ui://GtkLabel[@id='1label3'] orphan-label
