@@ -119,7 +119,7 @@ public:
 
     /* The help id of the widget used to identify help for this widget.
      *
-     * By default the help id of a a widget is a path-like sequence of
+     * By default the help id of a widget is a path-like sequence of
      * buildable-names from the widgets UI definition ancestor to this
      * widget, e.g. grandparent/parent/widget.
      *
