@@ -389,6 +389,11 @@ void UITestLogger::logEvent(const EventDescription& rDescription)
     {
         aLogLine = "From SIDEBAR Choose " + aParameterString;
     }
+    else if (rDescription.aKeyWord == "ValueSet")
+    {
+        aLogLine = "Choose element with position " + GetValueInMapWithIndex(rDescription.aParameters, 0) +
+                 " in '" + rDescription.aID +"' from '" + rDescription.aParent + "'";
+    }
     else if (rDescription.aAction == "SELECT" && rDescription.aID.isEmpty())
     {
         aLogLine = "Select " + aParameterString;
