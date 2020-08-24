@@ -49,7 +49,7 @@ DECLARE_HTMLEXPORT_TEST(testTdf131812, "tdf131812.odt")
     sal_uInt64 nLength = pStream->TellEnd();
     OString aStream(read_uInt8s_ToOString(*pStream, nLength));
     CPPUNIT_ASSERT(
-        aStream.indexOf(".P1 { font-size:12pt; font-family:Liberation Serif; "
+        aStream.indexOf(".P1 { font-size:12pt; font-family:\"Liberation Serif\"; "
                         "writing-mode:horizontal-tb; direction:rtl; text-align:right ! important;}")
         != -1);
 }
