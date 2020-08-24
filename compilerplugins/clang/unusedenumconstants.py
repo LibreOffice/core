@@ -183,7 +183,6 @@ def is_ignore(srcLoc):
         # represents constants from an external API
          "opencl/inc/opencl_device_selection.h",
          "vcl/inc/sft.hxx",
-         "vcl/inc/unx/XIM.h",
          "vcl/unx/gtk/xid_fullscreen_on_all_monitors.c",
          "vcl/unx/gtk/salnativewidgets-gtk.cxx",
          "sc/inc/callform.hxx", # ParamType
