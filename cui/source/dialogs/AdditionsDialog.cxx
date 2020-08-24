@@ -741,31 +741,31 @@ IMPL_LINK_NOARG(AdditionsItem, InstallHdl, weld::Button&, void)
     }
     catch (const ucb::CommandFailedException)
     {
-        SAL_WARN("cui.dialogs", "Additions: addExtension CommandFailedException occured.");
+        SAL_WARN("cui.dialogs", "Additions: addExtension CommandFailedException occurred.");
         m_xButtonInstall->set_label("Install");
         m_xButtonInstall->set_sensitive(true);
     }
     catch (const ucb::CommandAbortedException)
     {
-        SAL_WARN("cui.dialogs", "Additions: addExtension CommandAbortedException occured.");
+        SAL_WARN("cui.dialogs", "Additions: addExtension CommandAbortedException occurred.");
         m_xButtonInstall->set_label("Install");
         m_xButtonInstall->set_sensitive(true);
     }
     catch (const deployment::DeploymentException)
     {
-        SAL_WARN("cui.dialogs", "Additions: addExtension DeploymentException occured.");
+        SAL_WARN("cui.dialogs", "Additions: addExtension DeploymentException occurred.");
         m_xButtonInstall->set_label("Install");
         m_xButtonInstall->set_sensitive(true);
     }
     catch (const lang::IllegalArgumentException)
     {
-        SAL_WARN("cui.dialogs", "Additions: addExtension IllegalArgumentException occured.");
+        SAL_WARN("cui.dialogs", "Additions: addExtension IllegalArgumentException occurred.");
         m_xButtonInstall->set_label("Install");
         m_xButtonInstall->set_sensitive(true);
     }
     catch (const css::uno::Exception)
     {
-        SAL_WARN("cui.dialogs", "Additions: addExtension Exception occured.");
+        SAL_WARN("cui.dialogs", "Additions: addExtension Exception occurred.");
         m_xButtonInstall->set_label("Install");
         m_xButtonInstall->set_sensitive(true);
     }
