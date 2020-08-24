@@ -373,16 +373,22 @@ void Edit::ApplySettings(vcl::RenderContext& rRenderContext)
     Color aTextColor = rStyleSettings.GetFieldTextColor();
     ApplyControlForeground(rRenderContext, aTextColor);
 
-    if (ImplUseNativeBorder(rRenderContext, GetStyle()))
+    if (IsControlBackground())
+    {
+        rRenderContext.SetBackground(GetControlBackground());
+        rRenderContext.SetFillColor(GetControlBackground());
+
+        if (ImplUseNativeBorder(rRenderContext, GetStyle()))
+        {
+            // indicates that no non-native drawing of background should take place
+            mpWindowImpl->mnNativeBackground = ControlPart::Entire;
+        }
+    }
+    else if (ImplUseNativeBorder(rRenderContext, GetStyle()))
     {
         // Transparent background
         rRenderContext.SetBackground();
         rRenderContext.SetFillColor();
-    }
-    else if (IsControlBackground())
-    {
-        rRenderContext.SetBackground(GetControlBackground());
-        rRenderContext.SetFillColor(GetControlBackground());
     }
     else
     {

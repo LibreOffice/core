@@ -50,7 +50,8 @@ public:
                               bool& rIsInside) override;
     bool drawNativeControl(ControlType nType, ControlPart nPart,
                            const tools::Rectangle& rControlRegion, ControlState nState,
-                           const ImplControlValue& aValue, const OUString& aCaption) override;
+                           const ImplControlValue& aValue, const OUString& aCaption,
+                           const Color& rBackgroundColor) override;
     bool getNativeControlRegion(ControlType nType, ControlPart nPart,
                                 const tools::Rectangle& rControlRegion, ControlState nState,
                                 const ImplControlValue& aValue, const OUString& aCaption,

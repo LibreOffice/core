@@ -1603,7 +1603,13 @@ void Window::Erase(vcl::RenderContext& rRenderContext)
     bool bNativeOK = false;
 
     ControlPart aCtrlPart = ImplGetWindowImpl()->mnNativeBackground;
-    if (aCtrlPart != ControlPart::NONE && ! IsControlBackground())
+
+    if (aCtrlPart == ControlPart::Entire && IsControlBackground())
+    {
+        // nothing to do here; background is drawn in corresponding drawNativeControl implementation
+        bNativeOK = true;
+    }
+    else if (aCtrlPart != ControlPart::NONE && ! IsControlBackground())
     {
         tools::Rectangle aCtrlRegion(Point(), GetOutputSizePixel());
         ControlState nState = ControlState::NONE;
