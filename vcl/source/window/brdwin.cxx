@@ -701,7 +701,10 @@ void ImplSmallBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, c
             aCtrlRegion=aContentRgn;
         }
 
-        bNativeOK = rRenderContext.DrawNativeControl(aCtrlType, aCtrlPart, aCtrlRegion, nState, aControlValue, OUString());
+        Color aBackgroundColor = COL_AUTO;
+        if (pCtrl->IsControlBackground())
+            aBackgroundColor = pCtrl->GetBackgroundColor();
+        bNativeOK = rRenderContext.DrawNativeControl(aCtrlType, aCtrlPart, aCtrlRegion, nState, aControlValue, OUString(), aBackgroundColor);
 
         // if the native theme draws the spinbuttons in one call, make sure the proper settings
         // are passed, this might force a redraw though... (TODO: improve)

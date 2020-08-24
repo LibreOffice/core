@@ -759,7 +759,8 @@ void SalGraphics::mirror( ImplControlValue& rVal, const OutputDevice* pOutDev ) 
 
 bool SalGraphics::DrawNativeControl( ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion,
                                                 ControlState nState, const ImplControlValue& aValue,
-                                                const OUString& aCaption, const OutputDevice *pOutDev)
+                                                const OUString& aCaption, const OutputDevice *pOutDev,
+                                                const Color& rBackgroundColor)
 {
     bool bRet = false;
     tools::Rectangle aControlRegion(rControlRegion);
@@ -771,10 +772,10 @@ bool SalGraphics::DrawNativeControl( ControlType nType, ControlPart nPart, const
         mirror(aControlRegion, pOutDev);
         std::unique_ptr< ImplControlValue > mirrorValue( aValue.clone());
         mirror( *mirrorValue, pOutDev );
-        bRet = forWidget()->drawNativeControl(nType, nPart, aControlRegion, nState, *mirrorValue, aCaption);
+        bRet = forWidget()->drawNativeControl(nType, nPart, aControlRegion, nState, *mirrorValue, aCaption, rBackgroundColor);
     }
     else
-        bRet = forWidget()->drawNativeControl(nType, nPart, aControlRegion, nState, aValue, aCaption);
+        bRet = forWidget()->drawNativeControl(nType, nPart, aControlRegion, nState, aValue, aCaption, rBackgroundColor);
 
     if (bRet && m_pWidgetDraw)
         handleDamage(aControlRegion);
