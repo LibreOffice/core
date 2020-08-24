@@ -255,7 +255,8 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                                         const tools::Rectangle &rControlRegion,
                                         ControlState nState,
                                         const ImplControlValue &aValue,
-                                        const OUString &)
+                                        const OUString &,
+                                        const Color&)
 {
     bool bOK = false;
     if (!CheckContext())
