@@ -214,12 +214,11 @@
     <xsl:template match="@style:font-name">
         <xsl:param name="globalData" />
 
-        <xsl:text>font-family:"</xsl:text>
+        <xsl:text>font-family:</xsl:text>
         <xsl:variable name="content" select="."/>
-        <xsl:variable name="quote">'</xsl:variable>
         <xsl:variable name="fontName" select="$globalData/office:font-face-decls/style:font-face[@style:name=$content]/@svg:font-family" />
-        <xsl:value-of select="translate($fontName, $quote, '')"/>
-        <xsl:text>"; </xsl:text>
+        <xsl:value-of select="$fontName"/>
+        <xsl:text>; </xsl:text>
     </xsl:template>
 
     <xsl:template match="@style:row-height">
