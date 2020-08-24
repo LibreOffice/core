@@ -43,6 +43,7 @@ $(eval $(call gb_StaticLibrary_add_exception_objects,fuzzerstubs,\
     vcl/workben/localestub/localedata_en_ZA \
     vcl/workben/localestub/localedata_en_ZM \
     vcl/workben/localestub/localedata_en_ZW \
+    vcl/workben/localestub/localedata_zh_HK \
 ))
 
 # vim: set noet sw=4 ts=4:
