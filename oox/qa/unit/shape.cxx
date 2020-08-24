@@ -9,9 +9,12 @@
 
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
+#include <unotools/mediadescriptor.hxx>
+#include <unotools/tempfile.hxx>
 
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 
 using namespace ::com::sun::star;
 
@@ -63,6 +66,28 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testMultipleGroupShapes)
     // - Actual  : 1
     // i.e. the 2 group shapes from the document were imported as a single one.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xDrawPage->getCount());
+}
+
+CPPUNIT_TEST_FIXTURE(OoxShapeTest, testOOXMLChartExport)
+{
+    load("chart-export.odp");
+
+    // adapted from SwModelTestBase::reload
+    uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY);
+    utl::TempFile aTempFile;
+    utl::MediaDescriptor aMediaDescriptor;
+    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    uno::Reference<lang::XComponent> xComponent(xStorable, uno::UNO_QUERY);
+    xComponent->dispose();
+
+    uno::Reference<lang::XComponent> xCompReloaded
+        = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xCompReloaded, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(1),
+                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.presentation.ChartShape"), xShape->getShapeType());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
