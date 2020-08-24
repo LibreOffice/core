@@ -77,7 +77,9 @@
         <xsl:param name="globalData" />
 
         <xsl:element name="style">
-            <xsl:attribute name="type">text/css</xsl:attribute>
+          <!-- https://validator.w3.org/unicorn:
+               The “type” attribute for the “style” element is not needed and should be omitted.
+            <xsl:attribute name="type">text/css</xsl:attribute> -->
 <xsl:text>
     </xsl:text>
     <xsl:call-template name='create-page-layout'>
