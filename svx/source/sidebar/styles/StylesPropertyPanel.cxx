@@ -27,6 +27,10 @@ StylesPropertyPanel::StylesPropertyPanel ( vcl::Window* pParent, const css::uno:
     , m_xFontStyleDispatch(new ToolbarUnoDispatcher(*m_xFontStyle, *m_xBuilder, rxFrame))
     , m_xStyle(m_xBuilder->weld_toolbar("style"))
     , m_xStyleDispatch(new ToolbarUnoDispatcher(*m_xStyle, *m_xBuilder, rxFrame))
+    , m_xParagraphStyle(m_xBuilder->weld_toolbar("paragraphstyle"))
+    , m_xParagraphStyleDispatch(new ToolbarUnoDispatcher(*m_xParagraphStyle, *m_xBuilder, rxFrame))
+    , m_xCharacterStyle(m_xBuilder->weld_toolbar("characterstyle"))
+    , m_xCharacterStyleDispatch(new ToolbarUnoDispatcher(*m_xCharacterStyle, *m_xBuilder, rxFrame))
 {
 }
 
@@ -39,6 +43,10 @@ void StylesPropertyPanel::dispose()
 {
     m_xStyleDispatch.reset();
     m_xStyle.reset();
+    m_xParagraphStyleDispatch.reset();
+    m_xParagraphStyle.reset();
+    m_xCharacterStyleDispatch.reset();
+    m_xCharacterStyle.reset();
     m_xFontStyleDispatch.reset();
     m_xFontStyle.reset();
 
