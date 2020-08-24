@@ -925,34 +925,16 @@ SvXMLStyleContext* SdXMLStylesContext::CreateStyleChildContext(
         case XML_ELEMENT(NUMBER, XML_TEXT_STYLE):
             return new SvXMLNumFormatContext( GetSdImport(), nElement,
                                             mpNumFmtHelper->getData(), SvXMLStylesTokens::TEXT_STYLE, xAttrList, *this );
-     }
-
-    // call base class
-    return SvXMLStylesContext::CreateStyleChildContext(nElement, xAttrList);
-}
-
-SvXMLStyleContext* SdXMLStylesContext::CreateStyleChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList)
-{
-    SvXMLStyleContext* pContext = nullptr;
-
-    if(nPrefix == XML_NAMESPACE_PRESENTATION )
-    {
-        if( IsXMLToken( rLocalName, XML_HEADER_DECL ) ||
-            IsXMLToken( rLocalName, XML_FOOTER_DECL ) ||
-            IsXMLToken( rLocalName, XML_DATE_TIME_DECL ) )
-        {
-            pContext = new SdXMLHeaderFooterDeclContext( GetImport(), nPrefix, rLocalName, xAttrList );
-        }
+        case XML_ELEMENT(PRESENTATION, XML_HEADER_DECL):
+        case XML_ELEMENT(PRESENTATION, XML_FOOTER_DECL):
+        case XML_ELEMENT(PRESENTATION, XML_DATE_TIME_DECL):
+            return new SdXMLHeaderFooterDeclContext( GetImport(), xAttrList );
+        default:
+            SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
     }
 
     // call base class
-    if(!pContext)
-        pContext = SvXMLStylesContext::CreateStyleChildContext(nPrefix, rLocalName, xAttrList);
-
-    return pContext;
+    return SvXMLStylesContext::CreateStyleChildContext(nElement, xAttrList);
 }
 
 SvXMLStyleContext* SdXMLStylesContext::CreateStyleStyleChildContext(
