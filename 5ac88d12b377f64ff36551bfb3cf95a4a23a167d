@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "d8503d1b_e00affb3",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport7.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-24T06:51:34Z",
+      "side": 1,
+      "message": "You are working on a unit test handling the specific document. It\u0027s not a question of \"could an arbitrary document in existence not have header XMLs\", it\u0027s the question of \"is it OK to not have header XMLs for this document\".\n\nDo you think that if some change removes the header from this file, it would be fine? Or if a change makes it be \"header2.xml\", and thus make this unit test to do nothing, it would also be fine? In first case, it\u0027s an important breakage, and failing the unit test then here is absolutely legitimate and expected (doing the opposite is wrong, actually). In the second case, fixing the unit test to continue doing useful work is also correct, so breaking the test is OK (doing otherwise would make the test useless).",
+      "parentUuid": "560b644f_7d1de223",
+      "range": {
+        "startLine": 108,
+        "startChar": 4,
+        "endLine": 109,
+        "endChar": 15
+      },
+      "revId": "5ac88d12b377f64ff36551bfb3cf95a4a23a167d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "057e5472_02e587c4",
         "filename": "sw/qa/extras/ooxmlexport/ooxmlexport7.cxx",
         "patchSetId": 6
