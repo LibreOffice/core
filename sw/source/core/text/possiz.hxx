@@ -42,7 +42,7 @@ public:
     ~SwPosSize() COVERITY_NOEXCEPT_FALSE {}
 #endif
     sal_uInt16 Height() const { return nHeight; }
-    void Height( const sal_uInt16 nNew ) { nHeight = nNew; }
+    virtual void Height(const sal_uInt16 nNew, const bool = true) { nHeight = nNew; }
     sal_uInt16 Width() const { return nWidth; }
     void Width( const sal_uInt16 nNew ) { nWidth = nNew; }
     Size SvLSize() const { return Size( nWidth, nHeight ); }
