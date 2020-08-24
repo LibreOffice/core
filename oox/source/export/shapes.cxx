@@ -1490,6 +1490,7 @@ static const NameToConvertMapType& lcl_GetConverters()
 
         { "com.sun.star.presentation.GraphicObjectShape"   , &ShapeExport::WriteGraphicObjectShape },
         { "com.sun.star.presentation.MediaShape"           , &ShapeExport::WriteGraphicObjectShape },
+        { "com.sun.star.presentation.ChartShape"           , &ShapeExport::WriteOLE2Shape },
         { "com.sun.star.presentation.OLE2Shape"            , &ShapeExport::WriteOLE2Shape },
         { "com.sun.star.presentation.TableShape"           , &ShapeExport::WriteTableShape },
         { "com.sun.star.presentation.TextShape"            , &ShapeExport::WriteTextShape },
