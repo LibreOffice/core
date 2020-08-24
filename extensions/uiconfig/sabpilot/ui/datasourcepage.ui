@@ -21,7 +21,7 @@ Now, just enter the name under which you want to register the data source in %PR
         <property name="yalign">0</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="label2-atkobject">
-            <property name="AtkObject::accessible-role">static</property>
+            <property name="AtkObject::accessible-role" translatable="no">static</property>
           </object>
         </child>
       </object>
@@ -205,7 +205,7 @@ Now, just enter the name under which you want to register the data source in %PR
                     <property name="yalign">0</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="warning-atkobject">
-                        <property name="AtkObject::accessible-role">static</property>
+                        <property name="AtkObject::accessible-role" translatable="no">static</property>
                       </object>
                     </child>
                   </object>

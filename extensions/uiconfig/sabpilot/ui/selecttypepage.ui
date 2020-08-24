@@ -21,7 +21,7 @@ This wizard helps you create the data source.</property>
         <property name="yalign">0</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="label2-atkobject">
-            <property name="AtkObject::accessible-role">static</property>
+            <property name="AtkObject::accessible-role" translatable="no">static</property>
           </object>
         </child>
       </object>
@@ -210,7 +210,7 @@ This wizard helps you create the data source.</property>
             <property name="label" translatable="yes" context="selecttypepage|label1">Select the type of your external address book:</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="label1-atkobject">
-                <property name="AtkObject::accessible-role">static</property>
+                <property name="AtkObject::accessible-role" translatable="no">static</property>
               </object>
             </child>
           </object>
