@@ -191,6 +191,13 @@ void SwLineLayout::DeleteNext()
         delete a;
 }
 
+void SwLineLayout::Height(const sal_uInt16 nNew, const bool bText)
+{
+    SwPosSize::Height(nNew);
+    if (bText)
+        m_nTextHeight = nNew;
+}
+
 // class SwLineLayout: This is the layout of a single line, which is made
 // up of its dimension, the character count and the word spacing in the line.
 // Line objects are managed in an own pool, in order to store them continuously
@@ -380,7 +387,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                     if( !pPos->GetNextPortion() )
                     {
                         if( !Height() )
-                            Height( pPos->Height() );
+                            Height( pPos->Height(), false );
                         if( !GetAscent() )
                             SetAscent( pPos->GetAscent() );
                     }
@@ -467,7 +474,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                                 if( nTmp > nPosHeight )
                                     nPosHeight = nTmp;
                             }
-                            Height( nPosHeight );
+                            Height( nPosHeight, false );
                             nAscent = nPosAscent;
                             nMaxDescent = nPosHeight - nPosAscent;
                         }
@@ -477,12 +484,12 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                         if( Height() < nPosHeight )
                         {
                             // Height is set to 0 when Init() is called.
-                            if (bIgnoreBlanksAndTabsForLineHeightCalculation && pPos->GetWhichPor() == PortionType::FlyCnt)
+                            if (bIgnoreBlanksAndTabsForLineHeightCalculation && pPos->IsFlyCntPortion())
                                 // Compat flag set: take the line height, if it's larger.
-                                Height(std::max(nPosHeight, nLineHeight));
+                                Height(std::max(nPosHeight, nLineHeight), false);
                             else
                                 // Just care about the portion height.
-                                Height(nPosHeight);
+                                Height(nPosHeight, pPos->IsTextPortion());
                         }
                         SwFlyCntPortion* pAsFly(nullptr);
                         if(pPos->IsFlyCntPortion())
@@ -547,12 +554,12 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
             {
                 nAscent = nFlyAscent;
                 if( nFlyDescent > nFlyHeight - nFlyAscent )
-                    Height( nFlyHeight + nFlyDescent );
+                    Height( nFlyHeight + nFlyDescent, false );
                 else
-                    Height( nFlyHeight );
+                    Height( nFlyHeight, false );
             }
             else if( nMaxDescent > Height() - nAscent )
-                Height( nMaxDescent + nAscent );
+                Height( nMaxDescent + nAscent, false );
 
             if( bOnlyPostIts && !( bHasBlankPortion && bHasOnlyBlankPortions ) )
             {
@@ -580,7 +587,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
         sal_uInt16 nTmpHeight = Height();
         rLine.GetAttrHandler().GetDefaultAscentAndHeight( rInf.GetVsh(), *rInf.GetOut(), nTmpAscent, nTmpHeight );
         SetAscent( nTmpAscent );
-        Height( nTmpHeight );
+        Height( nTmpHeight, false );
     }
 
     // Robust:
@@ -658,7 +665,9 @@ void SwLineLayout::ResetFlags()
 }
 
 SwLineLayout::SwLineLayout()
-    : m_pNext( nullptr ), m_nRealHeight( 0 ),
+    : m_pNext( nullptr ),
+      m_nRealHeight( 0 ),
+      m_nTextHeight( 0 ),
       m_bUnderscore( false )
 {
     ResetFlags();
@@ -2406,7 +2415,7 @@ const SwDropPortion *SwParaPortion::FindDropPortion() const
 
 void SwLineLayout::Init( SwLinePortion* pNextPortion )
 {
-    Height( 0 );
+    Height( 0, false );
     Width( 0 );
     SetLen(TextFrameIndex(0));
     SetAscent( 0 );
