@@ -1017,7 +1017,7 @@ Dim sObject As String
 	_hasProperty = False
 	If Not Utils._CheckArgument(pvProperty, 1, vbString) Then Goto Exit_Function
 	
-	_hasProperty = Utils._InList(pvProperty, pvPropertiesList(), , True)
+	_hasProperty = Utils._InList(pvProperty, pvPropertiesList(), False, True)
 
 Exit_Function:
 	Utils._ResetCalledSub(sObject &amp; &quot;.hasProperty&quot;)
