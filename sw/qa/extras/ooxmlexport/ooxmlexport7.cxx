@@ -86,8 +86,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testAnchorIdForWP14AndW14, "AnchorId.docx")
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[3]/mc:AlternateContent/mc:Choice/w:drawing/wp:inline", "anchorId", "78735EFD");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[3]/mc:AlternateContent/mc:Fallback/w:pict/v:rect", "anchorId", "78735EFD");
-
-
 }
 
 DECLARE_OOXMLEXPORT_TEST(testDkVert, "dkvert.docx")
@@ -105,8 +103,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTextWatermark, "textWatermark.docx")
     //and Word uses the object ID to identify if it is a watermark.
     //It has to have the 'PowerPlusWaterMarkObject' string in it
     xmlDocUniquePtr pXmlHeader1 = parseExport("word/header1.xml");
-    if (!pXmlHeader1)
-        return;
 
     assertXPath(pXmlHeader1, "/w:hdr[1]/w:p[1]/w:r[1]/w:pict[1]/v:shape[1]","id","PowerPlusWaterMarkObject93701316");
 
@@ -122,8 +118,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testPictureWatermark, "pictureWatermark.docx
     //It has to have the 'WordPictureWaterMarkObject' string in it
 
     xmlDocUniquePtr pXmlHeader1 = parseExport("word/header1.xml");
-    if (!pXmlHeader1)
-        return;
 
     // Check the watermark ID
     assertXPath(pXmlHeader1, "/w:hdr[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Fallback[1]/w:pict[1]/v:shape[1]","id","WordPictureWatermark11962361");
