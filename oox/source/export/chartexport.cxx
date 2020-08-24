@@ -1589,7 +1589,7 @@ void ChartExport::exportFill( const Reference< XPropertySet >& xPropSet )
     }
     OUString sFillTransparenceGradientName;
     if (aFillStyle == FillStyle_SOLID
-        && (xPropSet->getPropertyValue("FillTransparenceGradientName") >>= sFillTransparenceGradientName)
+        && GetProperty(xPropSet, "FillTransparenceGradientName") && (mAny >>= sFillTransparenceGradientName)
         && !sFillTransparenceGradientName.isEmpty())
     {
         awt::Gradient aTransparenceGradient;
@@ -1644,7 +1644,8 @@ void ChartExport::exportSolidFill(const Reference< XPropertySet >& xPropSet)
     awt::Gradient aTransparenceGradient;
     bool bNeedGradientFill(false);
     OUString sFillTransparenceGradientName;
-    if ((xPropSet->getPropertyValue("FillTransparenceGradientName") >>= sFillTransparenceGradientName)
+    if (GetProperty(xPropSet, "FillTransparenceGradientName")
+        && (mAny >>= sFillTransparenceGradientName)
         && !sFillTransparenceGradientName.isEmpty())
     {
         uno::Reference< lang::XMultiServiceFactory > xFact( getModel(), uno::UNO_QUERY );
