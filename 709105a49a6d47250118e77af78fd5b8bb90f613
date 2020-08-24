@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ab62bdc4_b3ed4369",
+        "filename": "svx/source/fmcomp/gridcell.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4041,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-08-24T10:19:03Z",
+      "side": 1,
+      "message": "this is the wrong mutex, if this is accessing VCL widgets it most likely needs to lock SolarMutex instead.\n\nbut it was like this before 0677d46bcc56c1f6c27b9331662990b38fd452d6 so no reason to hold it up because of that...",
+      "revId": "709105a49a6d47250118e77af78fd5b8bb90f613",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
