@@ -673,20 +673,24 @@ SdXMLPresentationPlaceholderContext::SdXMLPresentationPlaceholderContext(
                 break;
             }
             case XML_ELEMENT(SVG, XML_X):
+            case XML_ELEMENT(SVG_COMPAT, XML_X):
             {
                 GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
                         mnX, sValue);
                 break;
             }
             case XML_ELEMENT(SVG, XML_Y):
+            case XML_ELEMENT(SVG_COMPAT, XML_Y):
             {
                 break;
             }
             case XML_ELEMENT(SVG, XML_WIDTH):
+            case XML_ELEMENT(SVG_COMPAT, XML_WIDTH):
             {
                 break;
             }
             case XML_ELEMENT(SVG, XML_HEIGHT):
+            case XML_ELEMENT(SVG_COMPAT, XML_HEIGHT):
             {
                 break;
             }
@@ -885,10 +889,9 @@ SvXMLStyleContext* SdXMLStylesContext::CreateStyleChildContext(
     sal_Int32 nElement,
     const uno::Reference< xml::sax::XFastAttributeList >& xAttrList)
 {
-    SvXMLStyleContext* pContext = nullptr;
     if( nElement == XML_ELEMENT(TABLE, XML_TABLE_TEMPLATE) )
     {
-        pContext = GetImport().GetShapeImport()->GetShapeTableImport()->CreateTableTemplateContext(nElement, xAttrList );
+        auto pContext = GetImport().GetShapeImport()->GetShapeTableImport()->CreateTableTemplateContext(nElement, xAttrList );
         if (pContext)
             return pContext;
     }
@@ -900,7 +903,7 @@ SvXMLStyleContext* SdXMLStylesContext::CreateStyleChildContext(
     else if (nElement == XML_ELEMENT(STYLE, XML_PRESENTATION_PAGE_LAYOUT))
     {
         // style:presentation-page-layout inside office:styles context
-        pContext = new SdXMLPresentationPageLayoutContext(GetSdImport(), nElement, xAttrList);
+        return new SdXMLPresentationPageLayoutContext(GetSdImport(), nElement, xAttrList);
     }
 
     // call base class
