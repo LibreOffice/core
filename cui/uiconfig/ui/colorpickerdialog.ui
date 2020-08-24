@@ -291,8 +291,8 @@
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
-                            <property name="row_spacing">6</property>
-                            <property name="column_spacing">12</property>
+                            <property name="row_spacing">3</property>
+                            <property name="column_spacing">6</property>
                             <child>
                               <object class="GtkRadioButton" id="redRadiobutton">
                                 <property name="label" translatable="yes" context="colorpickerdialog|redRadiobutton">_Red:</property>
@@ -484,8 +484,8 @@
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
-                            <property name="row_spacing">6</property>
-                            <property name="column_spacing">12</property>
+                            <property name="row_spacing">3</property>
+                            <property name="column_spacing">6</property>
                             <child>
                               <object class="GtkRadioButton" id="hueRadiobutton">
                                 <property name="label" translatable="yes" context="colorpickerdialog|hueRadiobutton">H_ue:</property>
@@ -644,8 +644,8 @@
                           <object class="GtkGrid" id="grid4">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="row_spacing">6</property>
-                            <property name="column_spacing">12</property>
+                            <property name="row_spacing">3</property>
+                            <property name="column_spacing">6</property>
                             <child>
                               <object class="GtkLabel" id="label5">
                                 <property name="visible">True</property>
