@@ -33,7 +33,7 @@ typedef sal_Sequence uno_Sequence;
 
 /** Assigns a sequence.
 
-    @param ppDest       destinstaion sequence
+    @param ppDest       destination sequence
     @param pSource      source sequence
     @param pTypeDescr   type description of the sequence and NOT of an element
     @param release      function called each time an interface needs to
@@ -47,7 +47,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_sequence_assign(
     SAL_THROW_EXTERN_C();
 /** Assigns a sequence.
 
-    @param ppDest       destinstaion sequence
+    @param ppDest       destination sequence
     @param pSource      source sequence
     @param pType        type of the sequence and NOT of an element
     @param release      function called each time an interface needs to

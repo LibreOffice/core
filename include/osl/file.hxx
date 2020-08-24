@@ -1170,7 +1170,7 @@ public:
         @retval E_BADF bad file
         @retval E_FAULT bad address
         @retval E_INTR function call was interrupted
-        @retval E_IO on I/O errosr
+        @retval E_IO on I/O errors
         @retval E_NOLCK no record locks available
         @retval E_NOLINK link has been severed
         @retval E_NOSPC no space left on device

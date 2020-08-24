@@ -80,7 +80,7 @@ protected:
     // a Continue is called with passed on token. The file can then be picked
     // up by FinishFileDownload. To cancel the download should a shell be
     // left. It can only exist a single download at the same time, For every
-    // started download FinshFileDownload must be called.
+    // started download FinishFileDownload must be called.
     void StartFileDownload(const OUString& rURL);
 
     // End of an asynchronous file download. Returns TRUE if the download

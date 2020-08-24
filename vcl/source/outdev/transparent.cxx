@@ -249,7 +249,7 @@ void OutputDevice::DrawTransparent(
         // create ObjectToDevice transformation
         const basegfx::B2DHomMatrix aFullTransform(ImplGetDeviceTransformation() * rObjectTransform);
         // TODO: this must not drop transparency for mpAlphaVDev case, but instead use premultiplied
-        // aplha... but that requires using premultiplied alpha also for already drawn data
+        // alpha... but that requires using premultiplied alpha also for already drawn data
         const double fAdjustedTransparency = mpAlphaVDev ? 0 : fTransparency;
         bool bDrawnOk(true);
 

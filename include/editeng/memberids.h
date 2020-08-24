@@ -73,7 +73,7 @@
 #define MID_ROTATE              0
 #define MID_FITTOLINE           1
 
-//SvxExcapementItem
+//SvxEscapementItem
 #define MID_ESC          0
 #define MID_ESC_HEIGHT   1
 #define MID_AUTO_ESC     2

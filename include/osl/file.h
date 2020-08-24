@@ -981,7 +981,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_isEndOfFile(
     @retval osl_File_E_BADF bad file
     @retval osl_File_E_FAULT bad address
     @retval osl_File_E_INTR function call was interrupted
-    @retval osl_File_E_IO on I/O errosr
+    @retval osl_File_E_IO on I/O errors
     @retval osl_File_E_NOLCK no record locks available
     @retval osl_File_E_NOLINK link has been severed
     @retval osl_File_E_NOSPC no space left on device
@@ -1060,7 +1060,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_readFileAt(
     @retval osl_File_E_BADF bad file
     @retval osl_File_E_FAULT bad address
     @retval osl_File_E_INTR function call was interrupted
-    @retval osl_File_E_IO on I/O errosr
+    @retval osl_File_E_IO on I/O errors
     @retval osl_File_E_NOLCK no record locks available
     @retval osl_File_E_NOLINK link has been severed
     @retval osl_File_E_NOSPC no space left on device
