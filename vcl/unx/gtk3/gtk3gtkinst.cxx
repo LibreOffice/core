@@ -7328,7 +7328,7 @@ public:
         gtk_style_context_get_style(pContext, "image-spacing", &nImageSpacing, nullptr);
         m_pBox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, nImageSpacing));
 
-        gtk_box_pack_start(m_pBox, m_pLabel, true, false, 0);
+        gtk_box_pack_start(m_pBox, m_pLabel, true, true, 0);
         g_object_unref(m_pLabel);
 
         if (gtk_toggle_button_get_mode(GTK_TOGGLE_BUTTON(m_pMenuButton)))

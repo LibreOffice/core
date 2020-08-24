@@ -1165,6 +1165,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="xalign">0</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="draw_indicator">True</property>
@@ -1357,6 +1358,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="hexpand">True</property>
+                        <property name="xalign">0</property>
                         <property name="valign">start</property>
                         <property name="draw_indicator">True</property>
                         <property name="label" translatable="no"></property>
@@ -1376,6 +1378,7 @@
                         <property name="visible">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="xalign">0</property>
                         <property name="hexpand">True</property>
                         <property name="valign">start</property>
                         <property name="draw_indicator">True</property>
@@ -1397,6 +1400,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="hexpand">True</property>
+                        <property name="xalign">0</property>
                         <property name="valign">start</property>
                         <property name="draw_indicator">True</property>
                         <property name="label" translatable="no"></property>
@@ -1416,6 +1420,7 @@
                         <property name="visible">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="xalign">0</property>
                         <property name="hexpand">True</property>
                         <property name="valign">start</property>
                         <property name="draw_indicator">True</property>
@@ -1436,6 +1441,7 @@
                         <property name="visible">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="xalign">0</property>
                         <property name="hexpand">True</property>
                         <property name="valign">start</property>
                         <property name="draw_indicator">True</property>
@@ -1457,6 +1463,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="hexpand">True</property>
+                        <property name="xalign">0</property>
                         <property name="valign">start</property>
                         <property name="draw_indicator">True</property>
                         <property name="label" translatable="no"></property>
@@ -1477,6 +1484,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="hexpand">True</property>
+                        <property name="xalign">0</property>
                         <property name="valign">start</property>
                         <property name="draw_indicator">True</property>
                         <property name="label" translatable="no"></property>
@@ -1497,6 +1505,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="hexpand">True</property>
+                        <property name="xalign">0</property>
                         <property name="valign">start</property>
                         <property name="draw_indicator">True</property>
                         <property name="label" translatable="no"></property>
@@ -1945,6 +1954,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="hexpand">True</property>
+                    <property name="xalign">0</property>
                     <property name="valign">center</property>
                     <property name="draw_indicator">True</property>
                     <property name="label" translatable="no"></property>
@@ -1963,6 +1973,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="hexpand">True</property>
+                    <property name="xalign">0</property>
                     <property name="valign">center</property>
                     <property name="draw_indicator">True</property>
                     <property name="label" translatable="no"></property>
@@ -2095,6 +2106,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="hexpand">True</property>
+                    <property name="xalign">0</property>
                     <property name="valign">center</property>
                     <property name="draw_indicator">True</property>
                     <property name="label" translatable="no"></property>
