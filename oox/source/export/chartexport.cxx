@@ -1583,7 +1583,7 @@ void ChartExport::exportFill( const Reference< XPropertySet >& xPropSet )
     if (aFillStyle == FillStyle_SOLID && GetProperty( xPropSet, "FillTransparence" ))
     {
         sal_Int16 nVal = 0;
-        xPropSet->getPropertyValue( "FillTransparence" ) >>= nVal;
+        mAny >>= nVal;
         if ( nVal == 100 )
             aFillStyle = FillStyle_NONE;
     }
