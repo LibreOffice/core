@@ -248,6 +248,8 @@ void OutputDevice::DrawTransparent(
 
         // create ObjectToDevice transformation
         const basegfx::B2DHomMatrix aFullTransform(ImplGetDeviceTransformation() * rObjectTransform);
+        // TODO: this must not drop transparency for mpAlphaVDev case, but instead use premultiplied
+        // aplha... but that requires using premultiplied alpha also for already drawn data
         const double fAdjustedTransparency = mpAlphaVDev ? 0 : fTransparency;
         bool bDrawnOk(true);
 
@@ -294,19 +296,7 @@ void OutputDevice::DrawTransparent(
             }
 
             if (mpAlphaVDev)
-            {
-                const Color aFillCol(mpAlphaVDev->GetFillColor());
-                const Color aLineColor(mpAlphaVDev->GetLineColor());
-                const auto nGreyScale = static_cast<sal_uInt8>(std::round(255 * fTransparency));
-                const Color aNewColor(nGreyScale, nGreyScale, nGreyScale);
-                mpAlphaVDev->SetFillColor(aNewColor);
-                mpAlphaVDev->SetLineColor(aNewColor);
-
                 mpAlphaVDev->DrawTransparent(rObjectTransform, rB2DPolyPoly, fTransparency);
-
-                mpAlphaVDev->SetFillColor(aFillCol);
-                mpAlphaVDev->SetLineColor(aLineColor);
-            }
 
             return;
         }
