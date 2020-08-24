@@ -82,6 +82,7 @@ private:
     std::unique_ptr<std::vector<long>> m_pLLSpaceAdd;     // Used for justified alignment
     std::unique_ptr<std::deque<sal_uInt16>> m_pKanaComp;  // Used for Kana compression
     sal_uInt16 m_nRealHeight;             // The height resulting from line spacing and register
+    sal_uInt16 m_nTextHeight;             // The max height of all non-FlyCnt portions in this Line
     bool m_bFormatAdj : 1;
     bool m_bDummy     : 1;
     bool m_bEndHyph   : 1;
@@ -100,6 +101,10 @@ private:
 
     void DeleteNext();
 public:
+    // From SwPosSize
+    using SwPosSize::Height;
+    virtual void Height(const sal_uInt16 nNew, const bool bText = true) override;
+
     // From SwLinePortion
     virtual SwLinePortion *Insert( SwLinePortion *pPortion ) override;
     virtual SwLinePortion *Append( SwLinePortion *pPortion ) override;
@@ -151,6 +156,8 @@ public:
 
     void SetRealHeight( sal_uInt16 nNew ) { m_nRealHeight = nNew; }
     sal_uInt16 GetRealHeight() const { return m_nRealHeight; }
+
+    sal_uInt16 GetTextHeight() const { return m_nTextHeight; }
 
     // Creates the glue chain for short lines
     SwMarginPortion *CalcLeftMargin();

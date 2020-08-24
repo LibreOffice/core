@@ -324,7 +324,7 @@ void SwTextFormatter::InsertPortion( SwTextFormatInfo &rInf,
 
         // Adjust maxima
         if( m_pCurr->Height() < pPor->Height() )
-            m_pCurr->Height( pPor->Height() );
+            m_pCurr->Height( pPor->Height(), pPor->IsTextPortion() );
         if( m_pCurr->GetAscent() < pPor->GetAscent() )
             m_pCurr->SetAscent( pPor->GetAscent() );
 
@@ -776,7 +776,7 @@ void SwTextFormatter::CalcAscent( SwTextFormatInfo &rInf, SwLinePortion *pPor )
         // height (example: n758883.docx)
         SwLinePortion const*const pLast = rInf.GetLast();
         assert(pLast);
-        pPor->Height( pLast->Height() );
+        pPor->Height( pLast->Height(), false );
         pPor->SetAscent( pLast->GetAscent() );
     }
     else
@@ -1523,7 +1523,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
     if( !m_pCurr->Height() )
     {
         OSL_ENSURE( m_pCurr->Height(), "SwTextFormatter::NewPortion: limbo dance" );
-        m_pCurr->Height( pPor->Height() );
+        m_pCurr->Height( pPor->Height(), false );
         m_pCurr->SetAscent( pPor->GetAscent() );
     }
 
@@ -1613,7 +1613,7 @@ TextFrameIndex SwTextFormatter::FormatLine(TextFrameIndex const nStartPos)
         if( GetInfo().IsStop() )
         {
             m_pCurr->SetLen(TextFrameIndex(0));
-            m_pCurr->Height( GetFrameRstHeight() + 1 );
+            m_pCurr->Height( GetFrameRstHeight() + 1, false );
             m_pCurr->SetRealHeight( GetFrameRstHeight() + 1 );
             m_pCurr->Width(0);
             m_pCurr->Truncate();
@@ -1770,7 +1770,7 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                        ( nLineHeight - m_pCurr->Height() + nRubyHeight ) / 2 :
                        ( nLineHeight - m_pCurr->Height() - nRubyHeight ) / 2 );
 
-        m_pCurr->Height( nLineHeight );
+        m_pCurr->Height( nLineHeight, false );
         m_pCurr->SetAscent( nAsc );
         m_pInf->GetParaPortion()->SetFixLineHeight();
 
@@ -1831,7 +1831,7 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                                 pCurr->SetClipping( true );
 #endif
                             m_pCurr->SetAscent( nAsc );
-                            m_pCurr->Height( nLineHeight );
+                            m_pCurr->Height( nLineHeight, false );
                             m_pInf->GetParaPortion()->SetFixLineHeight();
                         }
                     }
@@ -1849,7 +1849,7 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                     if( nAsc < m_pCurr->GetAscent() ||
                         nLineHeight - nAsc < m_pCurr->Height() - m_pCurr->GetAscent() )
                         m_pCurr->SetClipping( true );
-                    m_pCurr->Height( nLineHeight );
+                    m_pCurr->Height( nLineHeight, false );
                     m_pCurr->SetAscent( nAsc );
                     m_pInf->GetParaPortion()->SetFixLineHeight();
                 }
@@ -1871,10 +1871,13 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                         if( nTmp < 50 )
                             nTmp = nTmp ? 50 : 100;
 
-                        nTmp *= nLineHeight;
+                        // extend line height by (nPropLineSpace - 100) percent of the font height
+                        nTmp -= 100;
+                        nTmp *= m_pCurr->GetTextHeight();
                         nTmp /= 100;
-                        if( !nTmp )
-                            ++nTmp;
+                        nTmp += nLineHeight;
+                        if (nTmp < 1)
+                            nTmp = 1;
                         nLineHeight = static_cast<sal_uInt16>(nTmp);
                         break;
                     }
