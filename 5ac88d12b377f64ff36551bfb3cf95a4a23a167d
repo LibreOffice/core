@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "1cbededf_0d06e631",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport7.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2020-08-24T07:02:28Z",
+      "side": 1,
+      "message": "Come to think of it you wrote the same thing in the description of the ticket, so these two remaining ifs must have been plain oversight.\n\nWill fix soon.",
+      "parentUuid": "d8503d1b_e00affb3",
+      "range": {
+        "startLine": 108,
+        "startChar": 4,
+        "endLine": 109,
+        "endChar": 15
+      },
+      "revId": "5ac88d12b377f64ff36551bfb3cf95a4a23a167d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "057e5472_02e587c4",
         "filename": "sw/qa/extras/ooxmlexport/ooxmlexport7.cxx",
         "patchSetId": 6
