@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3faa2540_557f1046",
+        "filename": "oox/source/drawingml/fillproperties.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-08-24T07:33:46Z",
+      "side": 1,
+      "message": "if we have anything other than a bitmap here, we are going to return an empty graphic - is that desired?",
+      "revId": "30d118183d8a5ccbdfe43ae66da1ccdae128de01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
