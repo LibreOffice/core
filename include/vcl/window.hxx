@@ -412,6 +412,7 @@ const char* ImplDbgCheckWindow( const void* pObj );
 namespace vcl { class Window; }
 namespace vcl { class Cursor; }
 class Dialog;
+class Edit;
 class WindowImpl;
 class PaintHelper;
 class VclSizeGroup;
@@ -477,6 +478,7 @@ class VCL_DLLPUBLIC Window : public ::OutputDevice
     friend class ::SystemWindow;
     friend class ::WorkWindow;
     friend class ::Dialog;
+    friend class ::Edit;
     friend class ::MessBox;
     friend class ::MessageDialog;
     friend class ::DockingWindow;

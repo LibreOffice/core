@@ -1979,7 +1979,8 @@ public:
                                     const tools::Rectangle& rControlRegion,
                                     ControlState nState,
                                     const ImplControlValue& aValue,
-                                    const OUString& aCaption );
+                                    const OUString& aCaption,
+                                    const Color& rBackgroundColor = COL_AUTO );
 
     /** Query the native control's actual drawing region (including adornment)
      */
