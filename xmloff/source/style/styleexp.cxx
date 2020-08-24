@@ -130,6 +130,9 @@ bool XMLStyleExport::exportStyle(
         const OUString* pPrefix )
 {
     Reference< XPropertySet > xPropSet( rStyle, UNO_QUERY );
+    if (!xPropSet)
+        return false;
+
     Reference< XPropertySetInfo > xPropSetInfo =
             xPropSet->getPropertySetInfo();
     Any aAny;
