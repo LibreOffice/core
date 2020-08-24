@@ -35,4 +35,3 @@ xmlsecurity/uiconfig/ui/securitytrustpage.ui://GtkImage[@id='lockfileimg'] no-la
 xmlsecurity/uiconfig/ui/selectcertificatedialog.ui://GtkLabel[@id='sign'] orphan-label
 xmlsecurity/uiconfig/ui/selectcertificatedialog.ui://GtkLabel[@id='encrypt'] orphan-label
 xmlsecurity/uiconfig/ui/selectcertificatedialog.ui://GtkLabel[@id='description-label'] orphan-label
-xmlsecurity/uiconfig/ui/selectcertificatedialog.ui://GtkEntry[@id='description'] no-labelled-by

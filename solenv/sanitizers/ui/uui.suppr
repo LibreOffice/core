@@ -1,5 +1,4 @@
 uui/uiconfig/ui/filterselect.ui://GtkLabel[@id='url'] orphan-label
-uui/uiconfig/ui/filterselect.ui://GtkTreeView[@id='filters'] no-labelled-by
 uui/uiconfig/ui/authfallback.ui://GtkLabel[@id='google_prefix_label'] orphan-label
 uui/uiconfig/ui/authfallback.ui://GtkEntry[@id='google_code'] no-labelled-by
 uui/uiconfig/ui/authfallback.ui://GtkLabel[@id='label1'] orphan-label

@@ -7,7 +7,6 @@ vcl/uiconfig/ui/combobox.ui://GtkEntry[@id='entry'] no-labelled-by
 vcl/uiconfig/ui/combobox.ui://GtkToggleButton[@id='button'] button-no-label
 vcl/uiconfig/ui/combobox.ui://GtkMenuButton[@id='overlaybutton'] button-no-label
 vcl/uiconfig/ui/cupspassworddialog.ui://GtkLabel[@id='text'] orphan-label
-vcl/uiconfig/ui/printdialog.ui://GtkEntry[@id='pageedit'] no-labelled-by
 vcl/uiconfig/ui/printdialog.ui://GtkLabel[@id='totalnumpages'] orphan-label
 vcl/uiconfig/ui/printdialog.ui://GtkImage[@id='collateimage'] no-labelled-by
 vcl/uiconfig/ui/printdialog.ui://GtkLabel[@id='pagemargintxt2'] orphan-label
