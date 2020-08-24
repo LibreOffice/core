@@ -113,9 +113,20 @@ public:
     virtual float get_approximate_digit_width() const = 0;
     virtual int get_text_height() const = 0;
     virtual Size get_pixel_size(const OUString& rText) const = 0;
+
+    // The name of the widget in the GtkBuilder UI definition used to construct it.
     virtual OString get_buildable_name() const = 0;
-    virtual void set_help_id(const OString& rName) = 0;
+
+    /* The help id of the widget used to identify help for this widget.
+     *
+     * By default the help id of a a widget is a path-like sequence of
+     * buildable-names from the widgets UI definition ancestor to this
+     * widget, e.g. grandparent/parent/widget.
+     *
+     * The default can be overwritten with set_help_id
+     */
     virtual OString get_help_id() const = 0;
+    virtual void set_help_id(const OString& rName) = 0;
 
     virtual void set_grid_left_attach(int nAttach) = 0;
     virtual int get_grid_left_attach() const = 0;
