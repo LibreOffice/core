@@ -248,7 +248,7 @@
                           <object class="GtkLabel" id="hexulabel">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label">U+</property>
+                            <property name="label" translatable="no">U+</property>
                             <property name="width_chars">3</property>
                             <property name="single_line_mode">True</property>
                             <property name="max_width_chars">3</property>
@@ -266,7 +266,7 @@
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
                             <property name="width_chars">8</property>
-                            <property name="text">A2</property>
+                            <property name="text" translatable="no">A2</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>

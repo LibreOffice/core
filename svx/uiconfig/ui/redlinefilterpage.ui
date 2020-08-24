@@ -312,6 +312,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="draw_indicator">True</property>
+                <property name="label" translatable="no"></property>
                 <child>
                   <placeholder/>
                 </child>
@@ -368,6 +369,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="draw_indicator">True</property>
+                <property name="label" translatable="no"></property>
                 <child>
                   <placeholder/>
                 </child>

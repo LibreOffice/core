@@ -23,7 +23,7 @@ Click the button below to open another dialog where you can enter the settings f
         <property name="yalign">0</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="label2-atkobject">
-            <property name="AtkObject::accessible-role">static</property>
+            <property name="AtkObject::accessible-role" translatable="no">static</property>
           </object>
         </child>
       </object>
@@ -62,7 +62,7 @@ Click the button below to open another dialog where you can enter the settings f
         <property name="yalign">0</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="hint-atkobject">
-            <property name="AtkObject::accessible-role">static</property>
+            <property name="AtkObject::accessible-role" translatable="no">static</property>
           </object>
         </child>
       </object>

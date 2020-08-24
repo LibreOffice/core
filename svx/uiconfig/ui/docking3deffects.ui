@@ -1267,6 +1267,7 @@
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="draw_indicator">True</property>
+                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>
@@ -1503,6 +1504,7 @@
                         <property name="valign">start</property>
                         <property name="hexpand">True</property>
                         <property name="draw_indicator">True</property>
+                        <property name="label" translatable="no"></property>
                         <child>
                           <placeholder/>
                         </child>
@@ -1526,6 +1528,7 @@
                         <property name="valign">start</property>
                         <property name="hexpand">True</property>
                         <property name="draw_indicator">True</property>
+                        <property name="label" translatable="no"></property>
                         <child>
                           <placeholder/>
                         </child>
@@ -1544,6 +1547,7 @@
                         <property name="valign">start</property>
                         <property name="hexpand">True</property>
                         <property name="draw_indicator">True</property>
+                        <property name="label" translatable="no"></property>
                         <child>
                           <placeholder/>
                         </child>
@@ -1562,6 +1566,7 @@
                         <property name="valign">start</property>
                         <property name="hexpand">True</property>
                         <property name="draw_indicator">True</property>
+                        <property name="label" translatable="no"></property>
                         <child>
                           <placeholder/>
                         </child>
@@ -1580,6 +1585,7 @@
                         <property name="valign">start</property>
                         <property name="hexpand">True</property>
                         <property name="draw_indicator">True</property>
+                        <property name="label" translatable="no"></property>
                         <child>
                           <placeholder/>
                         </child>
@@ -1598,6 +1604,7 @@
                         <property name="valign">start</property>
                         <property name="hexpand">True</property>
                         <property name="draw_indicator">True</property>
+                        <property name="label" translatable="no"></property>
                         <child>
                           <placeholder/>
                         </child>
@@ -1616,6 +1623,7 @@
                         <property name="valign">start</property>
                         <property name="hexpand">True</property>
                         <property name="draw_indicator">True</property>
+                        <property name="label" translatable="no"></property>
                         <child>
                           <placeholder/>
                         </child>
@@ -1634,6 +1642,7 @@
                         <property name="valign">start</property>
                         <property name="hexpand">True</property>
                         <property name="draw_indicator">True</property>
+                        <property name="label" translatable="no"></property>
                         <child>
                           <placeholder/>
                         </child>
@@ -2135,6 +2144,7 @@
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="draw_indicator">True</property>
+                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>
@@ -2157,6 +2167,7 @@
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="draw_indicator">True</property>
+                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>
@@ -2303,6 +2314,7 @@
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="draw_indicator">True</property>
+                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>
