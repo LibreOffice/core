@@ -261,7 +261,7 @@ void SvxCharacterMap::updateRecentCharControl()
 {
     int i = 0;
     for ( std::deque< OUString >::iterator it = maRecentCharList.begin(), it2 = maRecentCharFontList.begin();
-        it != maRecentCharList.end() || it2 != maRecentCharFontList.end();
+        it != maRecentCharList.end() && it2 != maRecentCharFontList.end();
         ++it, ++it2, i++)
     {
         m_aRecentCharView[i].SetText(*it);
@@ -360,7 +360,7 @@ void SvxCharacterMap::updateFavCharControl()
 {
     int i = 0;
     for ( std::deque< OUString >::iterator it = maFavCharList.begin(), it2 = maFavCharFontList.begin();
-        it != maFavCharList.end() || it2 != maFavCharFontList.end();
+        it != maFavCharList.end() && it2 != maFavCharFontList.end();
         ++it, ++it2, i++)
     {
         m_aFavCharView[i].SetText(*it);
