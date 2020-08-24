@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "560b644f_7d1de223",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport7.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2020-08-24T06:45:31Z",
+      "side": 1,
+      "message": "word/header1.xml is not a file that is necessarily expected to exist in the OOXML input AFAIK. That is why the check was left in place.\n\nDo you think it should go anyways?",
+      "parentUuid": "44dd8972_55b63ed2",
+      "range": {
+        "startLine": 108,
+        "startChar": 4,
+        "endLine": 109,
+        "endChar": 15
+      },
+      "revId": "5ac88d12b377f64ff36551bfb3cf95a4a23a167d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "057e5472_02e587c4",
         "filename": "sw/qa/extras/ooxmlexport/ooxmlexport7.cxx",
         "patchSetId": 6
