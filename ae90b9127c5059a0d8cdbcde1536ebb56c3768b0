@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e8aa4018_28d7a017",
+        "filename": "basic/source/runtime/methods1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-24T12:33:45Z",
+      "side": 0,
+      "message": "Is this comment obsolete? I.e., does IsBaseIndexOne return correct result in runtime? (Tests seem to suggest so...)",
+      "range": {
+        "startLine": 719,
+        "startChar": 34,
+        "endLine": 719,
+        "endChar": 74
+      },
+      "revId": "ae90b9127c5059a0d8cdbcde1536ebb56c3768b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

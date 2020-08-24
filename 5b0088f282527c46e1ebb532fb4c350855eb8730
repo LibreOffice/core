@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ee7d8d5_abfcb7c1",
+        "filename": "basic/qa/basic_coverage/test_option_base.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-24T12:33:45Z",
+      "side": 1,
+      "message": "I suppose that you should also check LBound *before* assigning a new value on the next line, not only results of runtime functions.",
+      "range": {
+        "startLine": 23,
+        "startChar": 4,
+        "endLine": 23,
+        "endChar": 29
+      },
+      "revId": "5b0088f282527c46e1ebb532fb4c350855eb8730",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ce0c2ef_c18cc7a1",
+        "filename": "basic/qa/basic_coverage/test_option_base.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-24T12:33:45Z",
+      "side": 1,
+      "message": "And checking LBound here would be important, too. And then, ReDim with no lower bound. And for second dimension, too.",
+      "range": {
+        "startLine": 31,
+        "startChar": 4,
+        "endLine": 31,
+        "endChar": 27
+      },
+      "revId": "5b0088f282527c46e1ebb532fb4c350855eb8730",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
