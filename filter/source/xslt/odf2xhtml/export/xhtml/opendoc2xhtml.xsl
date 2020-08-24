@@ -145,7 +145,18 @@
     <xsl:template name="start-main">
         <xsl:param name="globalData" />
 
+        <xsl:variable name="lang">
+             <xsl:choose>
+                 <xsl:when test="$globalData/meta-file/*/office:meta/dc:language">
+                     <xsl:value-of select="$globalData/meta-file/*/office:meta/dc:language" />
+                 </xsl:when>
+                 <xsl:otherwise>en-US</xsl:otherwise>
+             </xsl:choose>
+        </xsl:variable>
+
         <xsl:element name="html">
+
+            <xsl:attribute name="lang"><xsl:value-of select="$lang"/></xsl:attribute>
             <xsl:comment>This file was converted to xhtml by LibreOffice - see https://cgit.freedesktop.org/libreoffice/core/tree/filter/source/xslt for the code.</xsl:comment>
             <xsl:call-template name='create-header'>
                 <xsl:with-param name="globalData" select="$globalData" />
