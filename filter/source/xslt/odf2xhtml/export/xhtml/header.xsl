@@ -167,20 +167,23 @@
          <!-- Find the according style:page-layout and store the properties in a variable  -->
         <xsl:variable name="pageProperties" select="key('pageLayoutElements', $pageLayoutName)/style:page-layout-properties"/>
 
+        <xsl:variable name="pageSize">
+            <xsl:call-template name="page-size">
+                <xsl:with-param name="globalData"       select="$globalData" />
+                <xsl:with-param name="pageProperties"   select="$pageProperties" />
+            </xsl:call-template>
+            <xsl:call-template name="page-margin">
+                <xsl:with-param name="globalData"       select="$globalData" />
+                <xsl:with-param name="pageProperties"   select="$pageProperties" />
+            </xsl:call-template>
+        </xsl:variable>
+
+        <xsl:if test="$pageSize and $pageSize!=''">
 <xsl:text>@page { </xsl:text>
-
-        <xsl:call-template name="page-size">
-            <xsl:with-param name="globalData"       select="$globalData" />
-            <xsl:with-param name="pageProperties"   select="$pageProperties" />
-        </xsl:call-template>
-        <xsl:call-template name="page-margin">
-            <xsl:with-param name="globalData"       select="$globalData" />
-            <xsl:with-param name="pageProperties"   select="$pageProperties" />
-        </xsl:call-template>
-
+<xsl:value-of select="$pageSize"/>
 <xsl:text> }
     </xsl:text>
-
+        </xsl:if>
     </xsl:template>
 
 
