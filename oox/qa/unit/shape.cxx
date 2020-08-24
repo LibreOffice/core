@@ -9,9 +9,12 @@
 
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
+#include <unotools/mediadescriptor.hxx>
+#include <unotools/tempfile.hxx>
 
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 
 using namespace ::com::sun::star;
 
