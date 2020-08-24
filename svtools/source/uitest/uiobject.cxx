@@ -20,7 +20,7 @@ ValueSetUIObject::ValueSetUIObject(const VclPtr<vcl::Window>& xSetWin, ValueSet*
 
 void ValueSetUIObject::execute(const OUString& rAction, const StringMap& rParameters)
 {
-    if (rAction == "SELECT")
+    if (rAction == "CHOOSE")
     {
         if (rParameters.find("POS") != rParameters.end())
         {
