@@ -84,7 +84,7 @@ struct HashImpl
         HASH_Begin(mpContext);
 #elif USE_TLS_OPENSSL
         mpContext = EVP_MD_CTX_create();
-        EVP_DigestInit_ex(mpContext, getOpenSSLType(), NULL);
+        EVP_DigestInit_ex(mpContext, getOpenSSLType(), nullptr);
 #endif
     }
 
