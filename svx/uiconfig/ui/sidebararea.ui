@@ -32,6 +32,7 @@
   <object class="GtkGrid" id="AreaPropertyPanel">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="hexpand">True</property>
     <child>
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
@@ -214,9 +215,6 @@
                 </child>
                 <child>
                   <object class="GtkCellRendererPixbuf" id="cellrenderertext4"/>
-                  <attributes>
-                    <attribute name="surface">3</attribute>
-                  </attributes>
                 </child>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="fillattrhb-atkobject">
@@ -260,7 +258,6 @@
           <object class="GtkSpinButton" id="gradangle">
             <property name="can_focus">True</property>
             <property name="tooltip_text" translatable="yes" context="sidebararea|gradangle|tooltip_text">Select the gradient angle.</property>
-            <property name="hexpand">True</property>
             <property name="adjustment">adjustment2</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="gradangle-atkobject">
@@ -335,7 +332,6 @@
           <object class="GtkToolbar" id="selectgradient">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="halign">start</property>
             <property name="toolbar_style">icons</property>
             <property name="show_arrow">False</property>
             <property name="icon_size">2</property>
@@ -347,7 +343,7 @@
                 <property name="use_underline">True</property>
               </object>
               <packing>
-                <property name="expand">False</property>
+                <property name="expand">True</property>
                 <property name="homogeneous">False</property>
               </packing>
             </child>
