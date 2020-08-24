@@ -105,6 +105,11 @@ namespace drawinglayer::primitive2d
                 const OUString& rText,
                 sal_uInt32 nIndex,
                 sal_uInt32 nLength) const;
+
+            ::std::vector< double > getCaretPositions(
+                const OUString& rText,
+                sal_uInt32 nIndex,
+                sal_uInt32 nLength) const;
         };
 
         // helper methods for vcl font handling
