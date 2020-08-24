@@ -422,6 +422,7 @@ void SearchAndParseThread::CheckInstalledExtensions()
                     else
                     {
                         rInfo->m_xButtonInstall->set_sensitive(false);
+                        rInfo->m_xButtonInstall->set_label("Installed");
                     }
                 }
             }
