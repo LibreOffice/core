@@ -2076,6 +2076,22 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineSections)
     CheckRedlineSectionsHidden();
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TDF69647_images)
+{
+    createDoc("tdf69647_images.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of pages does not match!", 2, getPages());
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TDF69647_text)
+{
+    createDoc("tdf69647_text.docx");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of pages does not match!", 2, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineTables)
 {
     createDoc("redline_table.fodt");
@@ -3756,7 +3772,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf123651)
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // Without the accompanying fix in place, this test would have failed with 'Expected: 7639;
     // Actual: 12926'. The shape was below the second "Lorem ipsum" text, not above it.
-    assertXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "top", "7639");
+    const sal_Int32 nTopValue = getXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "top").toInt32();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(7639, nTopValue, 10);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf116501)
