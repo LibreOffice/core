@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f3a39bb1_9004e0a9",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-08-24T10:43:18Z",
+      "side": 1,
+      "message": "Unnecessary...",
+      "parentUuid": "c4de0552_0d4ed9f8",
+      "range": {
+        "startLine": 271,
+        "startChar": 33,
+        "endLine": 271,
+        "endChar": 41
+      },
+      "revId": "02925f9164ad2fc61a8192d66b8f73d8521d39b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "41ea0088_df1ffd97",
         "filename": "cui/source/dialogs/AdditionsDialog.cxx",
         "patchSetId": 9
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "d692d328_376f5454",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-08-24T10:43:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "41ea0088_df1ffd97",
+      "range": {
+        "startLine": 650,
+        "startChar": 33,
+        "endLine": 650,
+        "endChar": 41
+      },
+      "revId": "02925f9164ad2fc61a8192d66b8f73d8521d39b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a736bfbd_a41cf2dd",
         "filename": "cui/source/dialogs/AdditionsDialog.cxx",
         "patchSetId": 9
@@ -68,6 +116,30 @@
       "revId": "02925f9164ad2fc61a8192d66b8f73d8521d39b1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04ecb7e4_58ba3c94",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 733,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-08-24T10:43:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a736bfbd_a41cf2dd",
+      "range": {
+        "startLine": 733,
+        "startChar": 43,
+        "endLine": 733,
+        "endChar": 51
+      },
+      "revId": "02925f9164ad2fc61a8192d66b8f73d8521d39b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
