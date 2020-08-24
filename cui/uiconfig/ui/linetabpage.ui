@@ -768,6 +768,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="popup">menuSELECT</property>
                         <property name="use_popover">False</property>

@@ -1264,6 +1264,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="xalign">0</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="draw_indicator">True</property>
@@ -1501,6 +1502,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="tooltip_text" translatable="yes" context="docking3deffects|lightcolor1|tooltip_text">Light 1 color</property>
+                        <property name="xalign">0</property>
                         <property name="valign">start</property>
                         <property name="hexpand">True</property>
                         <property name="draw_indicator">True</property>
@@ -1525,6 +1527,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="tooltip_text" translatable="yes" context="docking3deffects|lightcolor2|tooltip_text">Light 2 color</property>
+                        <property name="xalign">0</property>
                         <property name="valign">start</property>
                         <property name="hexpand">True</property>
                         <property name="draw_indicator">True</property>
@@ -1544,6 +1547,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="tooltip_text" translatable="yes" context="docking3deffects|lightcolor3|tooltip_text">Light 3 color</property>
+                        <property name="xalign">0</property>
                         <property name="valign">start</property>
                         <property name="hexpand">True</property>
                         <property name="draw_indicator">True</property>
@@ -1563,6 +1567,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="tooltip_text" translatable="yes" context="docking3deffects|lightcolor4|tooltip_text">Light 4 color</property>
+                        <property name="xalign">0</property>
                         <property name="valign">start</property>
                         <property name="hexpand">True</property>
                         <property name="draw_indicator">True</property>
@@ -1582,6 +1587,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="tooltip_text" translatable="yes" context="docking3deffects|lightcolor5|tooltip_text">Light 5 color</property>
+                        <property name="xalign">0</property>
                         <property name="valign">start</property>
                         <property name="hexpand">True</property>
                         <property name="draw_indicator">True</property>
@@ -1601,6 +1607,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="tooltip_text" translatable="yes" context="docking3deffects|lightcolor6|tooltip_text">Light 6 color</property>
+                        <property name="xalign">0</property>
                         <property name="valign">start</property>
                         <property name="hexpand">True</property>
                         <property name="draw_indicator">True</property>
@@ -1620,6 +1627,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="tooltip_text" translatable="yes" context="docking3deffects|lightcolor7|tooltip_text">Light 7 color</property>
+                        <property name="xalign">0</property>
                         <property name="valign">start</property>
                         <property name="hexpand">True</property>
                         <property name="draw_indicator">True</property>
@@ -1639,6 +1647,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="tooltip_text" translatable="yes" context="docking3deffects|lightcolor8|tooltip_text">Light 8 color</property>
+                        <property name="xalign">0</property>
                         <property name="valign">start</property>
                         <property name="hexpand">True</property>
                         <property name="draw_indicator">True</property>
@@ -2141,6 +2150,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="xalign">0</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="draw_indicator">True</property>
@@ -2164,6 +2174,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="xalign">0</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="draw_indicator">True</property>
@@ -2311,6 +2322,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="xalign">0</property>
                     <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="draw_indicator">True</property>
