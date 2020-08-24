@@ -140,24 +140,38 @@ void UpdateFramesForAddDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
     // no need to call UpdateFootnoteNums for FTNNUM_PAGE:
     // the AppendFootnote/RemoveFootnote will do it by itself!
     rDoc.GetFootnoteIdxs().UpdateFootnote(rPam.Start()->nNode);
-    SwTextNode *const pStartNode(rPam.Start()->nNode.GetNode().GetTextNode());
-    if (!pStartNode)
+    SwPosition currentStart(*rPam.Start());
+    SwTextNode * pStartNode(rPam.Start()->nNode.GetNode().GetTextNode());
+    while (!pStartNode)
     {
-        SwTableNode *const pTableNode(rPam.Start()->nNode.GetNode().GetTableNode());
-        assert(pTableNode); // known pathology
-        for (sal_uLong j = pTableNode->GetIndex(); j <= pTableNode->EndOfSectionIndex(); ++j)
+        SwStartNode *const pTableOrSectionNode(
+            currentStart.nNode.GetNode().IsTableNode()
+                ? static_cast<SwStartNode*>(currentStart.nNode.GetNode().GetTableNode())
+                : static_cast<SwStartNode*>(currentStart.nNode.GetNode().GetSectionNode()));
+        assert(pTableOrSectionNode); // known pathology
+        for (sal_uLong j = pTableOrSectionNode->GetIndex(); j <= pTableOrSectionNode->EndOfSectionIndex(); ++j)
         {
-            pTableNode->GetNodes()[j]->SetRedlineMergeFlag(SwNode::Merge::Hidden);
+            pTableOrSectionNode->GetNodes()[j]->SetRedlineMergeFlag(SwNode::Merge::Hidden);
         }
         for (SwRootFrame const*const pLayout : rDoc.GetAllLayouts())
         {
             if (pLayout->IsHideRedlines())
             {
-                pTableNode->DelFrames(pLayout);
+                if (pTableOrSectionNode->IsTableNode())
+                {
+                    static_cast<SwTableNode*>(pTableOrSectionNode)->DelFrames(pLayout);
+                }
+                else
+                {
+                    static_cast<SwSectionNode*>(pTableOrSectionNode)->DelFrames(pLayout);
+                }
             }
         }
+        currentStart.nNode = pTableOrSectionNode->EndOfSectionIndex() + 1;
+        currentStart.nContent.Assign(currentStart.nNode.GetNode().GetContentNode(), 0);
+        pStartNode = currentStart.nNode.GetNode().GetTextNode();
     }
-    else
+    if (currentStart < *rPam.End())
     {
         SwTextNode * pNode(pStartNode);
         do
@@ -221,24 +235,32 @@ void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
 {
     bool isAppendObjsCalled(false);
     rDoc.GetFootnoteIdxs().UpdateFootnote(rPam.Start()->nNode);
-    SwTextNode *const pStartNode(rPam.Start()->nNode.GetNode().GetTextNode());
-    if (!pStartNode)
+    SwPosition currentStart(*rPam.Start());
+    SwTextNode * pStartNode(rPam.Start()->nNode.GetNode().GetTextNode());
+    while (!pStartNode)
     {
-        SwTableNode const*const pTableNode(rPam.Start()->nNode.GetNode().GetTableNode());
-        assert(pTableNode); // known pathology
-        for (sal_uLong j = pTableNode->GetIndex(); j <= pTableNode->EndOfSectionIndex(); ++j)
+        SwStartNode const*const pTableOrSectionNode(
+            currentStart.nNode.GetNode().IsTableNode()
+                ? static_cast<SwStartNode*>(currentStart.nNode.GetNode().GetTableNode())
+                : static_cast<SwStartNode*>(currentStart.nNode.GetNode().GetSectionNode()));
+        assert(pTableOrSectionNode); // known pathology
+        for (sal_uLong j = pTableOrSectionNode->GetIndex(); j <= pTableOrSectionNode->EndOfSectionIndex(); ++j)
         {
-            pTableNode->GetNodes()[j]->SetRedlineMergeFlag(SwNode::Merge::None);
+            pTableOrSectionNode->GetNodes()[j]->SetRedlineMergeFlag(SwNode::Merge::None);
         }
         if (rDoc.getIDocumentLayoutAccess().GetCurrentLayout()->IsHideRedlines())
         {
             // note: this will also create frames for all currently hidden flys
             // because it calls AppendAllObjs
-            ::MakeFrames(&rDoc, rPam.Start()->nNode, rPam.End()->nNode);
+            SwNodeIndex const end(*pTableOrSectionNode->EndOfSectionNode());
+            ::MakeFrames(&rDoc, currentStart.nNode, end);
             isAppendObjsCalled = true;
         }
+        currentStart.nNode = pTableOrSectionNode->EndOfSectionIndex() + 1;
+        currentStart.nContent.Assign(currentStart.nNode.GetNode().GetContentNode(), 0);
+        pStartNode = currentStart.nNode.GetNode().GetTextNode();
     }
-    else
+    if (currentStart < *rPam.End())
     {
         SwTextNode * pNode(pStartNode);
         do
