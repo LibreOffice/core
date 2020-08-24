@@ -22,6 +22,30 @@
       "revId": "ae90b9127c5059a0d8cdbcde1536ebb56c3768b0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4909fd5e_bfa77ed3",
+        "filename": "basic/source/runtime/methods1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-08-24T12:58:11Z",
+      "side": 0,
+      "message": "I am not 100% sure, but I have testet it and it returned the correct result.",
+      "parentUuid": "e8aa4018_28d7a017",
+      "range": {
+        "startLine": 719,
+        "startChar": 34,
+        "endLine": 719,
+        "endChar": 74
+      },
+      "revId": "ae90b9127c5059a0d8cdbcde1536ebb56c3768b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
