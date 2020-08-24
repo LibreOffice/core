@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c4de0552_0d4ed9f8",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-08-24T08:12:04Z",
+      "side": 1,
+      "message": "Where do you use this?",
+      "range": {
+        "startLine": 271,
+        "startChar": 33,
+        "endLine": 271,
+        "endChar": 41
+      },
+      "revId": "02925f9164ad2fc61a8192d66b8f73d8521d39b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41ea0088_df1ffd97",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-08-24T08:12:04Z",
+      "side": 1,
+      "message": "Where do you use this?",
+      "range": {
+        "startLine": 650,
+        "startChar": 33,
+        "endLine": 650,
+        "endChar": 41
+      },
+      "revId": "02925f9164ad2fc61a8192d66b8f73d8521d39b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a736bfbd_a41cf2dd",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 733,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-08-24T08:12:04Z",
+      "side": 1,
+      "message": "Where do you use this?",
+      "range": {
+        "startLine": 733,
+        "startChar": 43,
+        "endLine": 733,
+        "endChar": 51
+      },
+      "revId": "02925f9164ad2fc61a8192d66b8f73d8521d39b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
