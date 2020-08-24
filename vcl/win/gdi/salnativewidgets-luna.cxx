@@ -1154,7 +1154,8 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
                                         const tools::Rectangle& rControlRegion,
                                         ControlState nState,
                                         const ImplControlValue& aValue,
-                                        const OUString& aCaption )
+                                        const OUString& aCaption,
+                                        const Color& /*rBackgroundColor*/ )
 {
     bool bOk = false;
     HTHEME hTheme = nullptr;

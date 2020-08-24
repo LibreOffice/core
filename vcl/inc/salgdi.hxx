@@ -362,7 +362,8 @@ public:
                                     ControlState nState,
                                     const ImplControlValue& aValue,
                                     const OUString& aCaption,
-                                    const OutputDevice *pOutDev );
+                                    const OutputDevice *pOutDev,
+                                    const Color& rBackgroundColor = COL_AUTO );
 
     /**
      * @see WidgetDrawInterface::getNativeControlRegion

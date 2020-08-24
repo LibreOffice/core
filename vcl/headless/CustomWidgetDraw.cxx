@@ -70,7 +70,8 @@ bool CustomWidgetDraw::hitTestNativeControl(ControlType /*eType*/, ControlPart /
 bool CustomWidgetDraw::drawNativeControl(ControlType eType, ControlPart ePart,
                                          const tools::Rectangle& rControlRegion,
                                          ControlState eState, const ImplControlValue& rValue,
-                                         const OUString& /*aCaptions*/)
+                                         const OUString& /*aCaptions*/,
+                                         const Color& /*rBackgroundColor*/)
 {
     if (!s_pWidgetImplementation)
         return false;

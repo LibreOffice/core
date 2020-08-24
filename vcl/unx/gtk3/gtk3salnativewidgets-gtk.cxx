@@ -2317,7 +2317,7 @@ void GtkSalGraphics::handleDamage(const tools::Rectangle& rDamagedRegion)
 
 bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion,
                                             ControlState nState, const ImplControlValue& rValue,
-                                            const OUString&)
+                                            const OUString&, const Color& rBackgroundColor)
 {
     RenderType renderType = nPart == ControlPart::Focus ? RenderType::Focus : RenderType::BackgroundAndFrame;
     GtkStyleContext *context = nullptr;
@@ -2568,6 +2568,20 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         gtk_style_context_add_class(context, styleClass);
     }
 
+    // apply background in style, if explicitly set
+    // note: for more complex controls that use multiple styles for their elements,
+    // background may have to be applied for more of those as well (s. case RenderType::Combobox below)
+    GtkCssProvider* pBgCssProvider = nullptr;
+    if (rBackgroundColor != COL_AUTO)
+    {
+        const OUString sColorCss = "* { background-color: #" + rBackgroundColor.AsRGBHexString() + "; }";
+        const OString aResult = OUStringToOString(sColorCss, RTL_TEXTENCODING_UTF8);
+        pBgCssProvider =  gtk_css_provider_new();
+        gtk_css_provider_load_from_data(pBgCssProvider, aResult.getStr(), aResult.getLength(), nullptr);
+        gtk_style_context_add_provider(context, GTK_STYLE_PROVIDER(pBgCssProvider),
+                                       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    }
+
     switch(renderType)
     {
     case RenderType::Background:
@@ -2619,7 +2633,16 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         PaintSpinButton(flags, cr, rControlRegion, nPart, rValue);
         break;
     case RenderType::Combobox:
+        if (pBgCssProvider)
+        {
+            gtk_style_context_add_provider(mpComboboxEntryStyle, GTK_STYLE_PROVIDER(pBgCssProvider),
+                                           GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        }
         PaintCombobox(flags, cr, rControlRegion, nType, nPart);
+        if (pBgCssProvider)
+        {
+            gtk_style_context_remove_provider(mpComboboxEntryStyle, GTK_STYLE_PROVIDER(pBgCssProvider));
+        }
         break;
     case RenderType::Icon:
         gtk_style_context_save (context);
@@ -2697,6 +2720,10 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     if (styleClass)
     {
         gtk_style_context_remove_class(context, styleClass);
+    }
+    if (pBgCssProvider)
+    {
+        gtk_style_context_remove_provider(context, GTK_STYLE_PROVIDER(pBgCssProvider));
     }
     aContextState.restore();
 

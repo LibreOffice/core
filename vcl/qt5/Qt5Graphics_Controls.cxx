@@ -224,7 +224,8 @@ void Qt5Graphics_Controls::fullQStyleOptionTabWidgetFrame(QStyleOptionTabWidgetF
 bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
                                              const tools::Rectangle& rControlRegion,
                                              ControlState nControlState,
-                                             const ImplControlValue& value, const OUString&)
+                                             const ImplControlValue& value, const OUString&,
+                                             const Color& /*rBackgroundColor*/)
 {
     bool nativeSupport = isNativeControlSupported(type, part);
     if (!nativeSupport)

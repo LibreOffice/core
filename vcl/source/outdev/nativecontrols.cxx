@@ -289,7 +289,8 @@ bool OutputDevice::DrawNativeControl( ControlType nType,
                             const tools::Rectangle& rControlRegion,
                             ControlState nState,
                             const ImplControlValue& aValue,
-                            const OUString& aCaption )
+                            const OUString& aCaption,
+                            const Color& rBackgroundColor )
 {
     assert(!is_double_buffered_window());
 
@@ -315,7 +316,7 @@ bool OutputDevice::DrawNativeControl( ControlType nType,
     std::shared_ptr< ImplControlValue > aScreenCtrlValue( TransformControlValue( aValue, *this ) );
     tools::Rectangle screenRegion( ImplLogicToDevicePixel( rControlRegion ) );
 
-    bool bRet = mpGraphics->DrawNativeControl(nType, nPart, screenRegion, nState, *aScreenCtrlValue, aCaption, this );
+    bool bRet = mpGraphics->DrawNativeControl(nType, nPart, screenRegion, nState, *aScreenCtrlValue, aCaption, this, rBackgroundColor );
 
     return bRet;
 }

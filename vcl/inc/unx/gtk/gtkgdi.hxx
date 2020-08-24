@@ -105,7 +105,8 @@ protected:
     virtual bool        drawNativeControl( ControlType nType, ControlPart nPart,
                                                const tools::Rectangle& rControlRegion,
                                                ControlState nState, const ImplControlValue& aValue,
-                                               const OUString& rCaption ) override;
+                                               const OUString& rCaption,
+                                               const Color& rBackgroundColor ) override;
     virtual bool        getNativeControlRegion( ControlType nType, ControlPart nPart,
                                                     const tools::Rectangle& rControlRegion,
                                                     ControlState nState,
@@ -274,7 +275,7 @@ protected:
                                               const Point& aPos, bool& rIsInside ) override;
     virtual bool        drawNativeControl( ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion,
                                            ControlState nState, const ImplControlValue& aValue,
-                                           const OUString& rCaption ) override;
+                                           const OUString& rCaption, const Color& rBackgroundColor ) override;
     virtual bool        getNativeControlRegion( ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion, ControlState nState,
                                                 const ImplControlValue& aValue, const OUString& rCaption,
                                                 tools::Rectangle &rNativeBoundingRegion, tools::Rectangle &rNativeContentRegion ) override;
