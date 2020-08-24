@@ -156,6 +156,7 @@ public:
     void testTdf119029();
     void testTdf108022();
     void testTdf121744();
+    void testTdf121189();
     void testTdf122031();
     void testTdf115012();
     void testTdf134118();
@@ -295,6 +296,7 @@ public:
     CPPUNIT_TEST(testTdf119029);
     CPPUNIT_TEST(testTdf108022);
     CPPUNIT_TEST(testTdf121744);
+    CPPUNIT_TEST(testTdf121189);
     CPPUNIT_TEST(testTdf122031);
     CPPUNIT_TEST(testTdf115012);
     CPPUNIT_TEST(testTdf134118);
@@ -2575,6 +2577,18 @@ void Chart2ExportTest::testTdf121744()
 
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:axId[1]", "val", XValueId );
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:axId[2]", "val", YValueId );
+}
+
+void Chart2ExportTest::testTdf121189()
+{
+    load("/chart2/qa/extras/data/odp/", "tdf121189.odp");
+    reload("Impress Office Open XML");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xPage->getCount());
+    uno::Reference<drawing::XShape> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.OLE2Shape"), xShape->getShapeType());
 }
 
 void Chart2ExportTest::testTdf122031()
