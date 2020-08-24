@@ -69,6 +69,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
                 <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkScrolledWindow" id="subtypewin">
@@ -107,12 +108,12 @@
                   <object class="GtkGrid" id="3dblock">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="row_spacing">6</property>
+                    <property name="row_spacing">3</property>
                     <child>
                       <object class="GtkGrid" id="grid9">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="column_spacing">12</property>
+                        <property name="column_spacing">6</property>
                         <child>
                           <object class="GtkCheckButton" id="3dlook">
                             <property name="label" translatable="yes" context="tp_ChartType|3dlook">_3D Look</property>
@@ -138,6 +139,7 @@
                         <child>
                           <object class="GtkComboBoxText" id="3dscheme">
                             <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
                             <items>
                               <item translatable="yes" context="tp_ChartType|3dscheme">Simple</item>
                               <item translatable="yes" context="tp_ChartType|3dscheme">Realistic</item>
@@ -164,7 +166,6 @@
                     </child>
                     <child>
                       <object class="GtkLabel" id="shapeft">
-                        <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="tp_ChartType|shapeft">Sh_ape</property>
                         <property name="use_underline">True</property>
@@ -181,6 +182,7 @@
                       <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
                         <property name="shadow_type">in</property>
                         <child>
@@ -229,7 +231,7 @@
                   <object class="GtkGrid" id="stackblock">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="row_spacing">6</property>
+                    <property name="row_spacing">3</property>
                     <child>
                       <object class="GtkCheckButton" id="stack">
                         <property name="label" translatable="yes" context="tp_ChartType|stack">_Stack series</property>
@@ -258,7 +260,7 @@
                           <object class="GtkGrid" id="grid6">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="row_spacing">6</property>
+                            <property name="row_spacing">3</property>
                             <child>
                               <object class="GtkRadioButton" id="ontop">
                                 <property name="label" translatable="yes" context="tp_ChartType|ontop">On top</property>
@@ -326,7 +328,7 @@
                       <object class="GtkGrid" id="grid7">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="column_spacing">12</property>
+                        <property name="column_spacing">6</property>
                         <child>
                           <object class="GtkLabel" id="linetypeft">
                             <property name="can_focus">False</property>
@@ -405,7 +407,7 @@
                       <object class="GtkGrid" id="grid8">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="column_spacing">12</property>
+                        <property name="column_spacing">6</property>
                         <child>
                           <object class="GtkLabel" id="nolinesft">
                             <property name="can_focus">False</property>
