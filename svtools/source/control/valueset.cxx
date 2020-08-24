@@ -44,6 +44,8 @@
 #include <boost/property_tree/ptree.hpp>
 
 #include <uiobject.hxx>
+#include <vcl/uitest/logger.hxx>
+#include <vcl/uitest/eventdescription.hxx>
 
 using namespace css::uno;
 using namespace css::lang;
@@ -51,6 +53,16 @@ using namespace css::accessibility;
 
 namespace
 {
+void collectUIInformation( const OUString& aID , const OUString& aParentID , const OUString& aPos )
+{
+    EventDescription aDescription;
+    aDescription.aID = aID ;
+    aDescription.aParameters = {{"POS", aPos }};
+    aDescription.aAction = "SELECT";
+    aDescription.aKeyWord = "ValueSet";
+    aDescription.aParent = aParentID;
+    UITestLogger::getInstance().logEvent(aDescription);
+}
 
 enum
 {
@@ -155,6 +167,7 @@ void ValueSet::ImplDeleteItems()
 void ValueSet::Select()
 {
     maSelectHdl.Call( this );
+    collectUIInformation(OStringToOUString(GetDrawingArea()->get_buildable_name(),RTL_TEXTENCODING_UTF8) , OStringToOUString(GetDrawingArea()->get_help_id(),RTL_TEXTENCODING_UTF8) , OUString::number(GetSelectedItemId()));
 }
 
 void ValueSet::UserDraw( const UserDrawEvent& )
