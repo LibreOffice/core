@@ -16,6 +16,29 @@
       "revId": "30d118183d8a5ccbdfe43ae66da1ccdae128de01",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d05ba531_49c77b1a",
+        "filename": "oox/source/drawingml/fillproperties.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 738,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2020-08-24T07:46:50Z",
+      "side": 1,
+      "message": "I am using lclRotateGraphic function only when we have a bitmap in a custom shape. The case you wrote never happened i think.",
+      "range": {
+        "startLine": 738,
+        "startChar": 12,
+        "endLine": 738,
+        "endChar": 67
+      },
+      "revId": "30d118183d8a5ccbdfe43ae66da1ccdae128de01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
