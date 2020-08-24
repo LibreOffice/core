@@ -1871,10 +1871,13 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                         if( nTmp < 50 )
                             nTmp = nTmp ? 50 : 100;
 
-                        nTmp *= nLineHeight;
+                        // extend line height by (nPropLineSpace - 100) percent of the font height
+                        nTmp -= 100;
+                        nTmp *= GetInfo().GetTextHeight();
                         nTmp /= 100;
-                        if( !nTmp )
-                            ++nTmp;
+                        nTmp += nLineHeight;
+                        if (nTmp < 1)
+                            nTmp = 1;
                         nLineHeight = static_cast<sal_uInt16>(nTmp);
                         break;
                     }
