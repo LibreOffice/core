@@ -4186,7 +4186,7 @@ void SbRtl_StrConv(StarBASIC *, SbxArray & rPar, bool)
         const char* pChar = aOStr.getStr();
         sal_Int32 nArraySize = aOStr.getLength();
         SbxDimArray* pArray = new SbxDimArray(SbxBYTE);
-        bool bIncIndex = (IsBaseIndexOne() && SbiRuntime::isVBAEnabled() );
+        bool bIncIndex = IsBaseIndexOne();
         if(nArraySize)
         {
             if( bIncIndex )

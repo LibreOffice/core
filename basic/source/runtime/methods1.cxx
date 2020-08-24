@@ -715,9 +715,7 @@ void SbRtl_Array(StarBASIC *, SbxArray & rPar, bool)
 {
     SbxDimArray* pArray = new SbxDimArray( SbxVARIANT );
     sal_uInt32 nArraySize = rPar.Count32() - 1;
-
-    // ignore Option Base so far (unfortunately only known by the compiler)
-    bool bIncIndex = (IsBaseIndexOne() && SbiRuntime::isVBAEnabled() );
+    bool bIncIndex = IsBaseIndexOne();
     if( nArraySize )
     {
         if ( bIncIndex )

@@ -273,7 +273,7 @@ SbxArray* StringToByteArray(const OUString& rStr)
 #if !HAVE_FEATURE_SCRIPTING
         bool bIncIndex = false;
 #else
-        bool bIncIndex = ( IsBaseIndexOne() && SbiRuntime::isVBAEnabled() );
+        bool bIncIndex = IsBaseIndexOne();
 #endif
         if( bIncIndex )
             pArray->AddDim32( 1, nArraySize );
