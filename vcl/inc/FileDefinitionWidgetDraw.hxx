@@ -42,7 +42,8 @@ public:
 
     bool drawNativeControl(ControlType eType, ControlPart ePart,
                            const tools::Rectangle& rBoundingControlRegion, ControlState eState,
-                           const ImplControlValue& aValue, const OUString& aCaptions) override;
+                           const ImplControlValue& aValue, const OUString& aCaptions,
+                           const Color& rBackgroundColor) override;
 
     bool getNativeControlRegion(ControlType eType, ControlPart ePart,
                                 const tools::Rectangle& rBoundingControlRegion, ControlState eState,

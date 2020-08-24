@@ -58,12 +58,13 @@ public:
      * @param [in] eState The general state of the control (enabled, focused, etc.).
      * @param [in] aValue Addition control specific information.
      * @param [in] aCaption  A caption or title string (like button text etc.).
+     * @param [in] rBackgroundColor Background color for the control (may be COL_AUTO)
      * @return true, if the control could be drawn.
      */
     virtual inline bool drawNativeControl(ControlType eType, ControlPart ePart,
                                           const tools::Rectangle& rBoundingControlRegion,
                                           ControlState eState, const ImplControlValue& aValue,
-                                          const OUString& aCaptions);
+                                          const OUString& aCaptions, const Color& rBackgroundColor);
 
     /**
      * Get the native control regions for the control part.
@@ -103,7 +104,8 @@ bool WidgetDrawInterface::hitTestNativeControl(ControlType, ControlPart, const t
 }
 
 bool WidgetDrawInterface::drawNativeControl(ControlType, ControlPart, const tools::Rectangle&,
-                                            ControlState, const ImplControlValue&, const OUString&)
+                                            ControlState, const ImplControlValue&, const OUString&,
+                                            const Color& /*rBackgroundColor*/)
 {
     return false;
 }
