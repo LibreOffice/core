@@ -39,6 +39,30 @@
       "revId": "30d118183d8a5ccbdfe43ae66da1ccdae128de01",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae8ad822_8e1ea8fe",
+        "filename": "oox/source/drawingml/fillproperties.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 738,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-08-24T07:58:09Z",
+      "side": 1,
+      "message": "then please rather make the code look something like:\n\n    assert (aGraphic.GetType() \u003d\u003d GraphicType::Bitmap);\n\n    BitmapEx aBitmapEx(aGraphic.GetBitmapEx());\n    const ::Color\u0026 aColor \u003d ::Color(0x00);\n    aBitmapEx.Rotate(nRotation, aColor);\n\n    aReturnGraphic \u003d ::Graphic(aBitmapEx);\n \nCode is both instructions for the machine, and also communication to other programmers - the way code is written tells people what assumptions the code needs to make, so putting an \"if\" block implies that there is a choice here - but what you are saying is that there is no choice - so we should write the code like that :-)",
+      "parentUuid": "d05ba531_49c77b1a",
+      "range": {
+        "startLine": 738,
+        "startChar": 12,
+        "endLine": 738,
+        "endChar": 67
+      },
+      "revId": "30d118183d8a5ccbdfe43ae66da1ccdae128de01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
