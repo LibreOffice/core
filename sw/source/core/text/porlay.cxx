@@ -193,6 +193,13 @@ void SwLineLayout::DeleteNext()
         delete a;
 }
 
+void SwLineLayout::Height(const sal_uInt16 nNew, const bool bText)
+{
+    SwPosSize::Height(nNew);
+    if (bText)
+        m_nTextHeight = nNew;
+}
+
 // class SwLineLayout: This is the layout of a single line, which is made
 // up of its dimension, the character count and the word spacing in the line.
 // Line objects are managed in an own pool, in order to store them continuously
@@ -479,12 +486,12 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                         if( Height() < nPosHeight )
                         {
                             // Height is set to 0 when Init() is called.
-                            if (bIgnoreBlanksAndTabsForLineHeightCalculation && pPos->GetWhichPor() == PortionType::FlyCnt)
+                            if (bIgnoreBlanksAndTabsForLineHeightCalculation && pPos->IsFlyCntPortion())
                                 // Compat flag set: take the line height, if it's larger.
                                 Height(std::max(nPosHeight, nLineHeight));
                             else
                                 // Just care about the portion height.
-                                Height(nPosHeight);
+                                Height(nPosHeight, !pPos->IsFlyCntPortion());
                         }
                         SwFlyCntPortion* pAsFly(nullptr);
                         if(pPos->IsFlyCntPortion())
@@ -660,7 +667,9 @@ void SwLineLayout::ResetFlags()
 }
 
 SwLineLayout::SwLineLayout()
-    : m_pNext( nullptr ), m_nRealHeight( 0 ),
+    : m_pNext( nullptr ),
+      m_nRealHeight( 0 ),
+      m_nTextHeight( 0 ),
       m_bUnderscore( false )
 {
     ResetFlags();
