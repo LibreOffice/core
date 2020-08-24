@@ -2076,6 +2076,14 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineSections)
     CheckRedlineSectionsHidden();
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TDF69647)
+{
+    createDoc("tdf69647.docx");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of pages do not match!", 1, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineTables)
 {
     createDoc("redline_table.fodt");
