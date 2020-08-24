@@ -473,6 +473,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="draw_indicator">True</property>
+                    <property name="xalign">0</property>
                     <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
@@ -494,6 +495,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="draw_indicator">True</property>
+                    <property name="xalign">0</property>
                     <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
@@ -618,6 +620,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="draw_indicator">True</property>
+                    <property name="xalign">0</property>
                     <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
