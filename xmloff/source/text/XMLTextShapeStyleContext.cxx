@@ -152,6 +152,16 @@ XMLTextShapeStyleContext::XMLTextShapeStyleContext( SvXMLImport& rImport,
 {
 }
 
+XMLTextShapeStyleContext::XMLTextShapeStyleContext( SvXMLImport& rImport,
+        sal_Int32 nElement,
+        const Reference< XFastAttributeList > & xAttrList,
+        SvXMLStylesContext& rStyles, XmlStyleFamily nFamily ) :
+    XMLShapeStyleContext( rImport, nElement, xAttrList, rStyles,
+                          nFamily ),
+    bAutoUpdate( false )
+{
+}
+
 XMLTextShapeStyleContext::~XMLTextShapeStyleContext()
 {
 }
