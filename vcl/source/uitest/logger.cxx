@@ -498,6 +498,18 @@ void UITestLogger::logEvent(const EventDescription& rDescription)
         {
             aLogLine = "Insert New Tab ";
         }
+        else if (rDescription.aAction == "COMMENT")
+        {
+            OUString type = GetKeyInMapWithIndex(rDescription.aParameters, 0);
+            if(type == "OPEN")
+            {
+                aLogLine = "Open Comment";
+            }
+            else if(type == "CLOSE")
+            {
+                aLogLine = "Close Comment";
+            }
+        }
     }
     else if (rDescription.aID == "impress_win_or_draw_win")
     {

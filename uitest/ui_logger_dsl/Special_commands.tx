@@ -69,6 +69,8 @@ writer_Insert_BreakPage:
     10)  Paste Cells
     11) Merge Cells
     12) Unmerge Cells
+    13) Open Comment
+    14) Close Comment
 
   then we can add whatever we need in the future
 */
@@ -76,7 +78,8 @@ calc_command:
   calc_Type_command | calc_switch_sheet | calc_Select_cell | calc_AutoFill_filter |
   calc_SelectMenu_filter | calc_Delete_Cells | calc_Remove_Content | calc_insert_cells |
   calc_Cut_Cells | calc_Copy_Cells | calc_Paste_Cells | calc_UNMerge_Cells | 
-  calc_Merge_Cells | calc_Rename_Sheet | calc_Insert_sheet
+  calc_Merge_Cells | calc_Rename_Sheet | calc_Insert_sheet | calc_Open_Comment |
+  calc_Close_Comment
 ;
 calc_Type_command:
   'Type on current cell' what_to_type=Type_options
@@ -129,6 +132,13 @@ calc_Rename_Sheet:
 calc_Insert_sheet:
     'Insert New Tab '
 ;
+calc_Open_Comment:
+    'Open Comment' (txt=STRING)?
+;
+calc_Close_Comment:
+    'Close Comment' (txt=STRING)?
+;
+
 //this is the select options
 select_options:
     one_cell | range_of_cells

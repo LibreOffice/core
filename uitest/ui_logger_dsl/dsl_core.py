@@ -113,6 +113,8 @@ class ul_Compiler:
                 "calc_Type_command": self.handle_calc_Type_command,
                 "calc_AutoFill_filter": self.handle_calc_AutoFill_filter,
                 "calc_SelectMenu_filter": self.handle_calc_SelectMenu_filter,
+                "calc_Open_Comment": self.handle_calc_Open_Comment,
+                "calc_Close_Comment": self.handle_calc_Close_Comment,
                 "impress_Type_command": self.handle_impress_Type_command,
                 "math_element_selector": self.handle_math_element_selector,
                 "math_Type_command": self.handle_math_Type_command,
@@ -779,6 +781,32 @@ class ul_Compiler:
 
         self.variables.append(line)
         self.prev_command = calc_AutoFill_filter
+
+    def handle_calc_Open_Comment(self, calc_Open_Comment):
+
+        line = (
+            double_tab
+            + self.current_app
+            + '.executeAction("COMMENT", mkPropertyValues'
+            + '({"OPEN": " "}))\n'
+        )
+
+        self.variables.append(line)
+
+        self.prev_command = calc_Open_Comment
+
+    def handle_calc_Close_Comment(self, calc_Close_Comment):
+
+        line = (
+            double_tab
+            + self.current_app
+            + '.executeAction("COMMENT", mkPropertyValues'
+            + '({"CLOSE": " "}))\n'
+        )
+
+        self.variables.append(line)
+
+        self.prev_command = calc_Close_Comment
 
     def handle_calc_SelectMenu_filter(self, calc_SelectMenu_filter):
 
