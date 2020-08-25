@@ -290,7 +290,8 @@ public:
     }
 #endif
 
-#ifdef RTL_STRING_UNITTEST
+#if defined LIBO_INTERNAL_ONLY && defined RTL_STRING_UNITTEST
+    /// @cond INTERNAL
     /**
      * Only used by unittests to detect incorrect conversions.
      * @internal
@@ -313,6 +314,7 @@ public:
         rtl_uString_newFromLiteral( &pData, "!!br0ken!!", 10, 0 ); // set to garbage
         rtl_string_unittest_invalid_conversion = true;
     }
+    /// @endcond
 #endif
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
