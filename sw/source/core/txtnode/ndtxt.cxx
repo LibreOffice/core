@@ -880,7 +880,10 @@ void CheckResetRedlineMergeFlag(SwTextNode & rNode, Recreate const eRecreateMerg
     if (eRecreateMerged != sw::Recreate::No)
     {
         SwTextNode * pMergeNode(&rNode);
-        if (eRecreateMerged == sw::Recreate::Predecessor)
+        if (eRecreateMerged == sw::Recreate::Predecessor
+            // tdf#135018 check that there is a predecessor node, i.e. rNode
+            // isn't the first node after the body start node
+            && rNode.GetNodes()[rNode.GetIndex() - 1]->StartOfSectionIndex() != 0)
         {
             for (sal_uLong i = rNode.GetIndex() - 1; ; --i)
             {
