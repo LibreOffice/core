@@ -84,6 +84,7 @@ const char sCalc_Atan[] =   "atan";
 const char sCalc_Round[]=   "round";
 const char sCalc_Date[] =   "date";
 const char sCalc_Product[] = "product";
+const char sCalc_Average[] = "average";
 
 // ATTENTION: sorted list of all operators
 struct CalcOp
@@ -101,6 +102,7 @@ CalcOp const aOpTable[] = {
 /* AND */     {{sCalc_And},        CALC_AND},   // log. AND
 /* ASIN */    {{sCalc_Asin},       CALC_ASIN},  // Arc sine
 /* ATAN */    {{sCalc_Atan},       CALC_ATAN},  // Arc tangent
+/* AVERAGE */ {{sCalc_Average},    CALC_MEAN},  // Mean (since LibreOffice 7.1)
 /* COS */     {{sCalc_Cos},        CALC_COS},   // Cosine
 /* DATE */    {{sCalc_Date},       CALC_DATE},  // Date
 /* DIV */     {{sCalc_Div},        CALC_DIV},   // Division
@@ -118,7 +120,7 @@ CalcOp const aOpTable[] = {
 /* OR */      {{sCalc_Or},         CALC_OR},    // log. OR
 /* PHD */     {{sCalc_Phd},        CALC_PHD},   // Percentage
 /* POW */     {{sCalc_Pow},        CALC_POW},   // Exponentiation
-/* PRODUCT */ {{sCalc_Product},    CALC_PRODUCT}, // Product
+/* PRODUCT */ {{sCalc_Product},    CALC_PRODUCT}, // Product (since LibreOffice 7.1)
 /* ROUND */   {{sCalc_Round},      CALC_ROUND}, // Rounding
 /* SIN */     {{sCalc_Sin},        CALC_SIN},   // Sine
 /* SQRT */    {{sCalc_Sqrt},       CALC_SQRT},  // Square root
