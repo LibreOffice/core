@@ -1577,7 +1577,7 @@ void ChartExport::exportFill( const Reference< XPropertySet >& xPropSet )
     if (!GetProperty( xPropSet, "FillStyle" ))
         return;
     FillStyle aFillStyle(FillStyle_NONE);
-    xPropSet->getPropertyValue("FillStyle") >>= aFillStyle;
+    mAny >>= aFillStyle;
 
     // map full transparent background to no fill
     if (aFillStyle == FillStyle_SOLID && GetProperty( xPropSet, "FillTransparence" ))
