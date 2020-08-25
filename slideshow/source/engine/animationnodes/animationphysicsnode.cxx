@@ -41,39 +41,31 @@ AnimationActivitySharedPtr AnimationPhysicsNode::createActivity() const
                     "Couldn't get the animation duration.");
 
     ::css::uno::Any aTemp;
-    double fStartVelocityX;
+    double fStartVelocityX = fDefaultStartVelocityX;
     aTemp = mxPhysicsMotionNode->getStartVelocityX();
     if (aTemp.hasValue())
         aTemp >>= fStartVelocityX;
-    else
-        fStartVelocityX = fDefaultStartVelocityX;
 
-    double fStartVelocityY;
+    double fStartVelocityY = fDefaultStartVelocityY;
     aTemp = mxPhysicsMotionNode->getStartVelocityY();
     if (aTemp.hasValue())
         aTemp >>= fStartVelocityY;
-    else
-        fStartVelocityY = fDefaultStartVelocityY;
 
-    double fDensity;
+    double fDensity = fDefaultDensity;
     aTemp = mxPhysicsMotionNode->getDensity();
     if (aTemp.hasValue())
     {
         aTemp >>= fDensity;
         fDensity = (fDensity < 0.0) ? 0.0 : fDensity;
     }
-    else
-        fDensity = fDefaultDensity;
 
-    double fBounciness;
+    double fBounciness = fDefaultBounciness;
     aTemp = mxPhysicsMotionNode->getBounciness();
     if (aTemp.hasValue())
     {
         aTemp >>= fBounciness;
         fBounciness = std::clamp(fBounciness, 0.0, 1.0);
     }
-    else
-        fBounciness = fDefaultBounciness;
 
     ActivitiesFactory::CommonParameters const aParms(fillCommonParameters());
     return ActivitiesFactory::createSimpleActivity(
