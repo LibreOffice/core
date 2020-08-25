@@ -521,7 +521,7 @@ public:
     static sal_uInt16           GetKeyModCode(guint nState);
     static GdkEvent*            makeFakeKeyPress(GtkWidget* pWidget);
     static SalWheelMouseEvent   GetWheelEvent(GdkEventScroll& rEvent);
-    static void                 NativeWidgetHelpPressed(GtkAccelGroup*, GObject*, guint,
+    static gboolean             NativeWidgetHelpPressed(GtkAccelGroup*, GObject*, guint,
         GdkModifierType, gpointer pFrame);
 };
 

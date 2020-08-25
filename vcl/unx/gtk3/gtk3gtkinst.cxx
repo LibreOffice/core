@@ -3902,10 +3902,11 @@ private:
     rtl::Reference<SalGtkXWindow> m_xWindow; //uno api
     gulong m_nToplevelFocusChangedSignalId;
 
-    static void help_pressed(GtkAccelGroup*, GObject*, guint, GdkModifierType, gpointer widget)
+    static gboolean help_pressed(GtkAccelGroup*, GObject*, guint, GdkModifierType, gpointer widget)
     {
         GtkInstanceWindow* pThis = static_cast<GtkInstanceWindow*>(widget);
         pThis->help();
+        return true;
     }
 
     static void signalToplevelFocusChanged(GtkWindow*, GParamSpec*, gpointer widget)
@@ -16336,11 +16337,11 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
 
 // tdf#135965 for the case of native widgets inside a GtkSalFrame and F1 pressed, run help
 // on gtk widget help ids until we hit a vcl parent and then use vcl window help ids
-void GtkSalFrame::NativeWidgetHelpPressed(GtkAccelGroup*, GObject*, guint, GdkModifierType, gpointer pFrame)
+gboolean GtkSalFrame::NativeWidgetHelpPressed(GtkAccelGroup*, GObject*, guint, GdkModifierType, gpointer pFrame)
 {
     Help* pHelp = Application::GetHelp();
     if (!pHelp)
-        return;
+        return true;
 
     GtkWindow* pWindow = static_cast<GtkWindow*>(pFrame);
 
@@ -16375,15 +16376,16 @@ void GtkSalFrame::NativeWidgetHelpPressed(GtkAccelGroup*, GObject*, guint, GdkMo
             sHelpId = pChildWindow->GetHelpId();
         }
         if (!pChildWindow)
-            return;
+            return true;
         pHelp->Start(OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), pChildWindow);
-        return;
+        return true;
     }
 
     if (!pWidget)
-        return;
+        return true;
     std::unique_ptr<weld::Widget> xTemp(new GtkInstanceWidget(pWidget, nullptr, false));
     pHelp->Start(OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), xTemp.get());
+    return true;
 }
 
 weld::Builder* GtkInstance::CreateInterimBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile, sal_uInt64)
