@@ -1628,7 +1628,7 @@
         <xsl:param name="globalData"/>
         <xsl:param name="isListNumberingReset"/>
         <xsl:param name="isNextLevelNumberingReset"/>
-        <xsl:param name="listLevel" select="1"/>
+        <xsl:param name="listLevel" select="count(ancestor::text:list) + 1"/>
         <xsl:param name="listRestart" select="false()"/>
         <xsl:param name="itemLabel" select="''"/>
         <xsl:param name="listStyle"/>
@@ -1976,6 +1976,7 @@
                     </xsl:with-param>
                     <xsl:with-param name="listLevel" select="$listLevel"/>
                     <xsl:with-param name="listLevelStyle" select="$listLevelStyle"/>
+                    <xsl:with-param name="listStyleName" select="$listStyleName"/>
                 </xsl:call-template>
             </xsl:if>
         </xsl:variable>
@@ -2007,20 +2008,13 @@
                                                 <xsl:value-of select="$minLabelWidth"/>
                                             </xsl:when>
                                             <xsl:otherwise>
-                                                <xsl:choose>
-                                                    <xsl:when test="$minLabelDist &gt; 0">
-                                                <xsl:value-of select="$minLabelDist"/>
-                                                    </xsl:when>
-                                                    <xsl:otherwise>
-                                                        <xsl:variable name="listLevelLabelAlignment" select="$listLevelStyle/style:list-level-properties/style:list-level-label-alignment"/>
-                                                        <xsl:variable name="listLevelTextIndent">
-                                                            <xsl:call-template name="convert2cm">
-                                                                <xsl:with-param name="value" select="string($listLevelLabelAlignment/@fo:text-indent)"/>
-                                                            </xsl:call-template>
-                                                        </xsl:variable>
-                                                        <xsl:value-of select="-$listLevelTextIndent"/>
-                                                    </xsl:otherwise>
-                                                </xsl:choose>
+                                                <xsl:variable name="listLevelLabelAlignment" select="$listLevelStyle/style:list-level-properties/style:list-level-label-alignment"/>
+                                                <xsl:variable name="listLevelTextIndent">
+                                                    <xsl:call-template name="convert2cm">
+                                                        <xsl:with-param name="value" select="string($listLevelLabelAlignment/@fo:text-indent)"/>
+                                                    </xsl:call-template>
+                                                </xsl:variable>
+                                                <xsl:value-of select="-$listLevelTextIndent"/>
                                             </xsl:otherwise>
                                         </xsl:choose>
                                     </xsl:variable>
@@ -2049,6 +2043,9 @@
                                                 <xsl:otherwise>0</xsl:otherwise>
                                             </xsl:choose>
                                             <xsl:text>cm;</xsl:text>
+                                            <xsl:if test="$minLabelDist &gt; 0">
+                                                <xsl:text>padding-right:</xsl:text><xsl:value-of select="$minLabelDist"/><xsl:text>cm;</xsl:text>
+                                            </xsl:if>
                                         </xsl:attribute>
                                         <xsl:variable name="labelContent">
                                             <xsl:choose>
@@ -2086,16 +2083,6 @@
                             </xsl:choose>
                         </xsl:with-param>
                         <xsl:with-param name="listLabelEmptyElement">
-                            <xsl:variable name="listLabelWidth">
-                                <xsl:choose>
-                                    <xsl:when test="$minLabelWidth &gt; $minLabelDist">
-                                        <xsl:value-of select="$minLabelWidth"/>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:value-of select="$minLabelDist"/>
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                            </xsl:variable>
                             <xsl:element name="span">
                                 <xsl:if test="$listLevelStyle/@text:style-name">
                                     <xsl:attribute name="class">
@@ -2110,12 +2097,15 @@
                                     </xsl:call-template>
                                     <xsl:text>;min-width:</xsl:text>
                                     <xsl:choose>
-                                        <xsl:when test="$listLabelWidth and not($listLabelWidth='') and not($listLabelWidth='NaN')">
-                                            <xsl:value-of select="translate($listLabelWidth,',','.')"/>
+                                        <xsl:when test="$minLabelWidth and not($minLabelWidth='') and not($minLabelWidth='NaN')">
+                                            <xsl:value-of select="translate($minLabelWidth,',','.')"/>
                                         </xsl:when>
                                         <xsl:otherwise>0</xsl:otherwise>
                                     </xsl:choose>
                                     <xsl:text>cm</xsl:text>
+                                    <xsl:if test="$minLabelDist &gt; 0">
+                                        <xsl:text>padding-right:</xsl:text><xsl:value-of select="$minLabelDist"/><xsl:text>cm;</xsl:text>
+                                    </xsl:if>
                                 </xsl:attribute>
                                 <xsl:comment>&#160;</xsl:comment>
                             </xsl:element>
@@ -2191,6 +2181,7 @@
         <xsl:param name="listStyle"/>
         <xsl:param name="listStyleName"/>
         <xsl:param name="minLabelWidth"/>
+        <xsl:param name="minLabelDist"/>
 
         <xsl:apply-templates mode="list-item-children" select="following-sibling::*[1]">
             <xsl:with-param name="globalData" select="$globalData"/>
@@ -2206,6 +2197,7 @@
             <xsl:with-param name="listStyleName" select="$listStyleName"/>
             <xsl:with-param name="listIndent" select="$listIndent"/>
             <xsl:with-param name="minLabelWidth" select="$minLabelWidth"/>
+            <xsl:with-param name="minLabelDist" select="$minLabelDist"/>
         </xsl:apply-templates>
     </xsl:template>
 
@@ -2540,6 +2532,7 @@
         <xsl:param name="listRestart"/>
         <xsl:param name="listStyle"/>
         <xsl:param name="listStyleName"/>
+        <xsl:param name="minLabelDist"/>
         <xsl:param name="minLabelWidth"/>
 
         <!-- 2DO page alignment fix - PART1 -->
@@ -2588,6 +2581,7 @@
             <xsl:with-param name="listStyle" select="$listStyle"/>
             <xsl:with-param name="listStyleName" select="$listStyleName"/>
             <xsl:with-param name="listIndent" select="$listIndent"/>
+            <xsl:with-param name="minLabelDist" select="$minLabelDist"/>
             <xsl:with-param name="minLabelWidth" select="$minLabelWidth"/>
         </xsl:apply-templates>
     </xsl:template>
