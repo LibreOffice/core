@@ -350,6 +350,21 @@ void PieChart::createTextLabelShape(
 
     // set the maximum text width to be used when text wrapping is enabled
     double fTextMaximumFrameWidth = 0.8 * fPieRadius;
+    if( nLabelPlacement == css::chart::DataLabelPlacement::OUTSIDE && m_aAvailableOuterRect.getWidth() )
+    {
+        double fAngleDegree = rParam.mfUnitCircleStartAngleDegree + rParam.mfUnitCircleWidthAngleDegree / 2.0;
+        while (fAngleDegree > 360.0)
+            fAngleDegree -= 360.0;
+        while (fAngleDegree < 0.0)
+            fAngleDegree += 360.0;
+
+        if (fAngleDegree < 67.5 || fAngleDegree >= 292.5)
+            fTextMaximumFrameWidth = m_aAvailableOuterRect.getMaxX() - aPieLabelInfo.aFirstPosition.getX();
+        else if (fAngleDegree < 112.5 || fAngleDegree >= 247.5)
+            fTextMaximumFrameWidth = m_aAvailableOuterRect.getWidth();
+        else
+            fTextMaximumFrameWidth = aPieLabelInfo.aFirstPosition.getX() - m_aAvailableOuterRect.getMinX();
+    }
     sal_Int32 nTextMaximumFrameWidth = ceil(fTextMaximumFrameWidth);
 
     ///the text shape for the label is created

@@ -162,6 +162,7 @@ public:
     void testStockChartShiftedCategoryPosition();
     void testTdf133376();
     void testTdf134225();
+    void testTdf136105();
     void testTdf91250();
     void testTdf134111();
 
@@ -274,6 +275,7 @@ public:
     CPPUNIT_TEST(testStockChartShiftedCategoryPosition);
     CPPUNIT_TEST(testTdf133376);
     CPPUNIT_TEST(testTdf134225);
+    CPPUNIT_TEST(testTdf136105);
     CPPUNIT_TEST(testTdf91250);
     CPPUNIT_TEST(testTdf134111);
 
@@ -2525,8 +2527,8 @@ void Chart2ImportTest::testTdf133376()
     CPPUNIT_ASSERT(xDataPointLabel.is());
     // Check the position of the 3rd data point label, which is out from the pie slice
     awt::Point aLabelPosition = xDataPointLabel->getPosition();
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1071, aLabelPosition.X, 30);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(5269, aLabelPosition.Y, 30);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(482, aLabelPosition.X, 30);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(5427, aLabelPosition.Y, 30);
 }
 
 void Chart2ImportTest::testTdf134225()
@@ -2555,6 +2557,45 @@ void Chart2ImportTest::testTdf134225()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1800, sal_Int32(aLabelPosition2.X - aLabelPosition1.X), 30);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2123, sal_Int32(aLabelPosition2.Y - aLabelPosition1.Y), 30);
 #endif
+}
+
+void Chart2ImportTest::testTdf136105()
+{
+    load("/chart2/qa/extras/data/xlsx/", "tdf136105.xlsx");
+    // 1st chart with fix inner position and size
+    {
+        Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
+            UNO_QUERY_THROW);
+
+        Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
+        Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
+        Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
+        Reference<drawing::XShape> xDataPointLabel(getShapeByName(xShapes,
+            "CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=0"), UNO_SET_THROW);
+
+        CPPUNIT_ASSERT(xDataPointLabel.is());
+        // Check the position of the 1st data point label, which is out from the pie slice
+        awt::Point aLabelPosition = xDataPointLabel->getPosition();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(8797, aLabelPosition.X, 500);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1374, aLabelPosition.Y, 500);
+    }
+    // 2nd chart with auto inner position and size
+    {
+        Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(1, mxComponent),
+            UNO_QUERY_THROW);
+
+        Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
+        Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
+        Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
+        Reference<drawing::XShape> xDataPointLabel(getShapeByName(xShapes,
+            "CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=0"), UNO_SET_THROW);
+
+        CPPUNIT_ASSERT(xDataPointLabel.is());
+        // Check the position of the 1st data point label, which is out from the pie slice
+        awt::Point aLabelPosition = xDataPointLabel->getPosition();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(8610, aLabelPosition.X, 500);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1684, aLabelPosition.Y, 500);
+    }
 }
 
 void Chart2ImportTest::testTdf91250()
