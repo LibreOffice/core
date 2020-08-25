@@ -120,6 +120,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_core_unocore \
     CppunitTest_sw_core_crsr \
     CppunitTest_sw_core_undo \
+    CppunitTest_sw_updateall_object_replacements \
 ))
 
 ifneq ($(DISABLE_GUI),TRUE)
