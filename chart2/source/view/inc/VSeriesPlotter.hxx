@@ -242,6 +242,7 @@ public:
     void setCoordinateSystemResolution( const css::uno::Sequence< sal_Int32 >& rCoordinateSystemResolution );
     bool PointsWereSkipped() const { return m_bPointsWereSkipped;}
     void setPieLabelsAllowToMove( bool bIsPieOrDonut ) { m_bPieLabelsAllowToMove = bIsPieOrDonut; };
+    void setAvailableOuterRect( basegfx::B2IRectangle& aAvailableOuterRect ) { m_aAvailableOuterRect = aAvailableOuterRect; };
 
     //return the depth for a logic 1
     double  getTransformedDepth() const;
@@ -424,6 +425,7 @@ protected:
     css::uno::Sequence< sal_Int32 >    m_aCoordinateSystemResolution;
     bool m_bPointsWereSkipped;
     bool m_bPieLabelsAllowToMove;
+    basegfx::B2IRectangle m_aAvailableOuterRect;
 
 private:
     typedef std::map< sal_Int32 , ExplicitScaleData > tSecondaryValueScales;

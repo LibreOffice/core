@@ -1591,6 +1591,11 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
         }
         // Do not allow to move data labels in case of pie or donut chart, yet!
         pSeriesPlotter->setPieLabelsAllowToMove(!bIsPieOrDonut);
+        // use the pagesize as remaining space if we have a fixed inner size
+        if( rParam.mbUseFixedInnerSize )
+            aAvailableOuterRect = BaseGFXHelper::makeRectangle(awt::Rectangle(0, 0, rPageSize.Width, rPageSize.Height));
+        // set the available space for data labels to avoid moving out from chart area
+        pSeriesPlotter->setAvailableOuterRect(aAvailableOuterRect);
         pSeriesPlotter->createShapes();
         m_bPointsWereSkipped = m_bPointsWereSkipped || pSeriesPlotter->PointsWereSkipped();
     }
