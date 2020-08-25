@@ -156,6 +156,16 @@ XMLPropStyleContext::XMLPropStyleContext( SvXMLImport& rImport,
 {
 }
 
+XMLPropStyleContext::XMLPropStyleContext( SvXMLImport& rImport,
+        sal_Int32 nElement,
+        const Reference< XFastAttributeList > & xAttrList,
+        SvXMLStylesContext& rStyles, XmlStyleFamily nFamily,
+        bool bDefault )
+:   SvXMLStyleContext( rImport, nElement, xAttrList, nFamily, bDefault )
+,   mxStyles( &rStyles )
+{
+}
+
 XMLPropStyleContext::~XMLPropStyleContext()
 {
 }

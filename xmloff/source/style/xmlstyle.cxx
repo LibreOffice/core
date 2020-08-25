@@ -428,6 +428,14 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext(
             pStyle = new XMLLineNumberingImportContext(
                 GetImport(), nElement, xAttrList);
             break;
+        case XML_ELEMENT(STYLE, XML_PAGE_LAYOUT):
+        case XML_ELEMENT(STYLE, XML_DEFAULT_PAGE_LAYOUT):
+        {
+            //there is not page family in ODF now, so I specify one for it
+            bool bDefaultStyle  = XML_ELEMENT(STYLE, XML_DEFAULT_PAGE_LAYOUT) == nElement;
+            pStyle = new PageStyleContext( GetImport(), nElement, xAttrList, *this, bDefaultStyle );
+        }
+        break;
 
         // FillStyles
 
@@ -503,15 +511,6 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext( sal_uInt16 p_nPr
                                                     rLocalName, xAttrList )
                     : CreateDefaultStyleStyleChildContext( nFamily, p_nPrefix,
                                                     rLocalName, xAttrList );
-            }
-            break;
-            case XML_TOK_STYLE_PAGE_MASTER:
-            case XML_TOK_STYLE_DEFAULT_PAGE_LAYOUT:
-            {
-                //there is not page family in ODF now, so I specify one for it
-                bool bDefaultStyle  = XML_TOK_STYLE_DEFAULT_PAGE_LAYOUT == nToken;
-                pStyle = new PageStyleContext( GetImport(), p_nPrefix,
-                                                    rLocalName, xAttrList, *this, bDefaultStyle );
             }
             break;
             case XML_TOK_TEXT_LIST_STYLE:
