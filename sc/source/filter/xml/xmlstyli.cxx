@@ -928,9 +928,8 @@ SvXMLStyleContext *ScXMLMasterStylesContext::CreateStyleChildContext(
 
 SvXMLStyleContext *ScXMLMasterStylesContext::CreateStyleStyleChildContext(
         XmlStyleFamily /* nFamily */,
-        sal_uInt16 /* nPrefix */,
-        const OUString& /* rLocalName */,
-        const uno::Reference< XAttributeList > & /* xAttrList */ )
+        sal_Int32 /* nElement */,
+        const uno::Reference< XFastAttributeList > & /* xAttrList */ )
 {
     return nullptr;
 }

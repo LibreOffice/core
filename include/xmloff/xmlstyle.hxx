@@ -187,26 +187,13 @@ protected:
     SvXMLStyleContext *GetStyle( sal_uInt32 i );
     const SvXMLStyleContext *GetStyle( sal_uInt32 i ) const;
 
-    virtual SvXMLStyleContext *CreateStyleChildContext( sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
-
     virtual SvXMLStyleContext *CreateStyleChildContext(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
 
     virtual SvXMLStyleContext *CreateStyleStyleChildContext( XmlStyleFamily nFamily,
-        sal_uInt16 nPrefix, const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
-
-    virtual SvXMLStyleContext *CreateStyleStyleChildContext( XmlStyleFamily nFamily,
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
-
-    virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
-        XmlStyleFamily nFamily, sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
 
     virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
         XmlStyleFamily nFamily, sal_Int32 nElement,
@@ -227,14 +214,6 @@ public:
     // Create child element.
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
-
-    // Create child element.
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
-
-    // Override this method to insert styles into the document.
-    virtual void EndElement() override;
 
     // This allows to add an SvXMLStyleContext to this context from extern
     void AddStyle(SvXMLStyleContext& rNew);
