@@ -217,7 +217,8 @@ namespace dbaui
         virtual ::comphelper::OInterfaceContainerHelper2*
                                   getContextMenuInterceptors() override;
         virtual css::uno::Any     getCurrentSelection(weld::TreeView& rControl) const override;
-        virtual vcl::Window* getMenuParent(weld::TreeView& rControl) const override;
+        virtual vcl::Window* getMenuParent() const override;
+        virtual void adjustMenuPosition(const weld::TreeView& rControl, ::Point& rPos) const override;
 
         virtual void impl_initialize() override;
 

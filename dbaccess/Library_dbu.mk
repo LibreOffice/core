@@ -78,6 +78,7 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/ui/app/AppSwapWindow \
     dbaccess/source/ui/app/AppTitleWindow \
     dbaccess/source/ui/app/AppView \
+    dbaccess/source/ui/app/ChildWindow \
     dbaccess/source/ui/app/DocumentInfoPreview \
     dbaccess/source/ui/app/subcomponentmanager \
     dbaccess/source/ui/app/templwin \

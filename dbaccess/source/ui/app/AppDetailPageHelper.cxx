@@ -121,8 +121,8 @@ namespace
     }
 }
 
-OAppDetailPageHelper::OAppDetailPageHelper(vcl::Window* pParent, OAppBorderWindow& rBorderWin, PreviewMode ePreviewMode)
-    : InterimItemWindow(pParent, "dbaccess/ui/detailwindow.ui", "DetailWindow")
+OAppDetailPageHelper::OAppDetailPageHelper(weld::Container* pParent, OAppBorderWindow& rBorderWin, PreviewMode ePreviewMode)
+    : OChildWindow(pParent, "dbaccess/ui/detailwindow.ui", "DetailWindow")
     , m_rBorderWin(rBorderWin)
     , m_xBox(m_xBuilder->weld_container("box"))
     , m_xFL(m_xBuilder->weld_widget("separator"))
@@ -150,16 +150,9 @@ OAppDetailPageHelper::OAppDetailPageHelper(vcl::Window* pParent, OAppBorderWindo
     m_xDocumentInfo->SetHelpId(HID_APP_VIEW_PREVIEW_3);
 
     m_xWindow = m_xTablePreview->CreateChildFrame();
-
-    ImplInitSettings();
 }
 
 OAppDetailPageHelper::~OAppDetailPageHelper()
-{
-    disposeOnce();
-}
-
-void OAppDetailPageHelper::dispose()
 {
     try
     {
@@ -191,8 +184,6 @@ void OAppDetailPageHelper::dispose()
     m_xMBPreview.reset();
     m_xFL.reset();
     m_xBox.reset();
-
-    InterimItemWindow::dispose();
 }
 
 int OAppDetailPageHelper::getVisibleControlIndex() const
@@ -215,14 +206,21 @@ void OAppDetailPageHelper::selectAll()
     }
 }
 
-void OAppDetailPageHelper::GetFocus()
+void OAppDetailPageHelper::GrabFocus()
 {
     int nPos = getVisibleControlIndex();
     if (nPos < E_ELEMENT_TYPE_COUNT)
         m_aLists[nPos]->GetWidget().grab_focus();
     else if (m_xMBPreview && m_xMBPreview->get_visible())
         m_xMBPreview->grab_focus();
-    InterimItemWindow::GetFocus();
+}
+
+bool OAppDetailPageHelper::HasChildPathFocus() const
+{
+    int nPos = getVisibleControlIndex();
+    if (nPos < E_ELEMENT_TYPE_COUNT && m_aLists[nPos]->GetWidget().has_focus())
+        return true;
+    return m_xMBPreview && m_xMBPreview->has_focus();
 }
 
 void OAppDetailPageHelper::sort(int nPos, bool bAscending)
@@ -368,9 +366,19 @@ void OAppDetailPageHelper::describeCurrentSelectionForType(const ElementType eTy
     _out_rSelectedObjects = comphelper::containerToSequence(aSelected);
 }
 
-vcl::Window* OAppDetailPageHelper::getMenuParent(weld::TreeView& /*rControl*/) const
+vcl::Window* OAppDetailPageHelper::getMenuParent() const
 {
-    return const_cast<dbaui::OAppDetailPageHelper*>(this);
+    return &m_rBorderWin;
+}
+
+void OAppDetailPageHelper::adjustMenuPosition(const weld::TreeView& rControl, ::Point& rPos) const
+{
+    int x, y, width, height;
+    if (rControl.get_extents_relative_to(m_rBorderWin.getTopLevel(), x, y, width, height))
+    {
+        rPos.AdjustX(x);
+        rPos.AdjustY(y);
+    }
 }
 
 void OAppDetailPageHelper::selectElements(const Sequence< OUString>& _aNames)
@@ -679,7 +687,7 @@ std::unique_ptr<DBTreeViewBase> OAppDetailPageHelper::createSimpleTree(const OSt
 
 void OAppDetailPageHelper::setupTree(DBTreeViewBase& rDBTreeView)
 {
-    weld::WaitObject aWaitCursor(GetFrameWeld());
+    weld::WaitObject aWaitCursor(m_rBorderWin.GetFrameWeld());
 
     rDBTreeView.getListBox().setCopyHandler(LINK(this, OAppDetailPageHelper, OnCopyEntry));
     rDBTreeView.getListBox().setPasteHandler(LINK(this, OAppDetailPageHelper, OnPasteEntry));
@@ -688,6 +696,8 @@ void OAppDetailPageHelper::setupTree(DBTreeViewBase& rDBTreeView)
     weld::TreeView& rTreeView = rDBTreeView.GetWidget();
     rTreeView.make_sorted();
     rTreeView.set_selection_mode(SelectionMode::Multiple);
+    // an arbitrary small size it's allowed to shrink to
+    rTreeView.set_size_request(42, 42);
 
     rTreeView.connect_row_activated(LINK(this, OAppDetailPageHelper, OnEntryDoubleClick));
 
@@ -937,7 +947,7 @@ void OAppDetailPageHelper::showPreview(const Reference< XContent >& _xContent)
 
     m_xTablePreview->hide();
 
-    weld::WaitObject aWaitCursor(GetFrameWeld());
+    weld::WaitObject aWaitCursor(m_rBorderWin.GetFrameWeld());
     try
     {
         Reference<XCommandProcessor> xContent(_xContent,UNO_QUERY);
@@ -998,7 +1008,7 @@ void OAppDetailPageHelper::showPreview( const OUString& _sDataSourceName,
     if ( !isPreviewEnabled() )
         return;
 
-    weld::WaitObject aWaitCursor(GetFrameWeld());
+    weld::WaitObject aWaitCursor(m_rBorderWin.GetFrameWeld());
     m_xPreview->Hide();
     m_xDocumentInfo->Hide();
     m_xTablePreview->show();
@@ -1159,21 +1169,6 @@ IMPL_LINK(OAppDetailPageHelper, MenuSelectHdl, const OString&, rIdent, void)
     xDisp->dispatch(aURL, css::uno::Sequence<css::beans::PropertyValue>());
 
     m_xMBPreview->set_label(stripTrailingDots(m_xMBPreview->get_item_label(rIdent)));
-}
-
-void OAppDetailPageHelper::KeyInput( const KeyEvent& rKEvt )
-{
-    DBTreeViewBase* pCurrentView = getCurrentView();
-    OSL_PRECOND( pCurrentView, "OAppDetailPageHelper::KeyInput: how this?" );
-
-    sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
-    if (KEY_RETURN == nCode && pCurrentView)
-    {
-        getBorderWin().getView()->getAppController().onEntryDoubleClick(pCurrentView->GetWidget());
-        return;
-    }
-
-    InterimItemWindow::KeyInput(rKEvt);
 }
 
 OPreviewWindow::OPreviewWindow()

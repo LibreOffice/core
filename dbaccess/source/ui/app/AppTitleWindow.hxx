@@ -19,58 +19,48 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_APP_APPTITLEWINDOW_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_APP_APPTITLEWINDOW_HXX
 
-#include <vcl/InterimItemWindow.hxx>
+#include "ChildWindow.hxx"
 
 namespace dbaui
 {
-    class OTitleWindow final : public InterimItemWindow
+    class OTitleWindow final
     {
+        std::unique_ptr<weld::Builder> m_xBuilder;
+        std::unique_ptr<weld::Container> m_xContainer;
         std::unique_ptr<weld::Container> m_xTitleFrame;
         std::unique_ptr<weld::Label> m_xTitle;
         std::unique_ptr<weld::Container> m_xChildContainer;
-        css::uno::Reference<css::awt::XWindow> m_xChildParent;
-        VclPtr<vcl::Window> m_xChild;
-        void ImplInitSettings();
+        std::shared_ptr<OChildWindow> m_xChild;
 
-        virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
     public:
-        OTitleWindow(vcl::Window* pParent, const char* pTitleId);
-        virtual ~OTitleWindow() override;
-        virtual void dispose() override;
+        OTitleWindow(weld::Container* pParent, const char* pTitleId);
+        ~OTitleWindow();
 
-        // Window overrides
-        virtual void GetFocus() override;
+        void GrabFocus();
 
-        virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
+        bool HasChildPathFocus() const;
 
         /** gets the window which should be used as a child's parent */
-        vcl::Window* getChildContainer();
+        weld::Container* getChildContainer();
 
         /** sets the child window which should be displayed below the title. It will be destroyed at the end.
             @param  _pChild
                 The child window.
         */
-        void setChildWindow(vcl::Window* _pChild);
+        void setChildWindow(std::shared_ptr<OChildWindow>& rChild);
 
         /** gets the child window.
 
             @return
                 The child window.
         */
-        vcl::Window* getChildWindow() const { return m_xChild; }
+        OChildWindow* getChildWindow() const { return m_xChild.get(); }
 
         /** sets the title text out of the resource
             @param  pTitleId
                 The resource id of the title text.
         */
         void setTitle(const char* pTitleId);
-
-        /** Gets the min Width in Pixel which is needed to display the whole
-
-            @return
-                the min width
-        */
-        long GetWidthPixel() const;
     };
 } // namespace dbaui
 #endif // INCLUDED_DBACCESS_SOURCE_UI_APP_APPTITLEWINDOW_HXX

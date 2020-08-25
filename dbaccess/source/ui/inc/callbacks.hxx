@@ -99,7 +99,12 @@ namespace dbaui
         */
         virtual css::uno::Any  getCurrentSelection(weld::TreeView& rControl) const = 0;
 
-        virtual vcl::Window* getMenuParent(weld::TreeView& rControl) const = 0;
+        virtual vcl::Window* getMenuParent() const = 0;
+
+        /** adjust rPos which is initially relative to rControl to be relative to
+            the window of getMenuParent
+        */
+        virtual void adjustMenuPosition(const weld::TreeView& rControl, ::Point& rPos) const = 0;
 
     protected:
         ~IContextMenuProvider() {}
