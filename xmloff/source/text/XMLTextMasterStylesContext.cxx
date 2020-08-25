@@ -64,13 +64,4 @@ SvXMLStyleContext *XMLTextMasterStylesContext::CreateStyleChildContext(
     return pContext;
 }
 
-SvXMLStyleContext *XMLTextMasterStylesContext::CreateStyleStyleChildContext(
-        XmlStyleFamily /*nFamily*/,
-        sal_uInt16 /*nPrefix*/,
-        const OUString& /*rLocalName*/,
-        const Reference< XAttributeList > & /*xAttrList*/ )
-{
-    return nullptr;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

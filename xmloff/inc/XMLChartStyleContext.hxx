@@ -36,9 +36,8 @@ private:
 public:
 
     XMLChartStyleContext(
-        SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
+        SvXMLImport& rImport, sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles, XmlStyleFamily nFamily );
     virtual ~XMLChartStyleContext() override;
 
