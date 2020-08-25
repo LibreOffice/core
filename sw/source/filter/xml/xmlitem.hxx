@@ -21,6 +21,7 @@
 #define INCLUDED_SW_SOURCE_FILTER_XML_XMLITEM_HXX
 
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
+#include <svl/itemset.hxx>
 #include <xmloff/xmlictxt.hxx>
 
 class SfxItemSet;
@@ -28,12 +29,12 @@ class SvXMLImportItemMapper;
 class SvXMLUnitConverter;
 struct SvXMLItemMapEntry;
 
-class SvXMLItemSetContext : public SvXMLImportContext
+class SvXMLItemSetContext final : public SvXMLImportContext
 {
-protected:
     SfxItemSet                  &rItemSet;
     const SvXMLImportItemMapper &rIMapper;
     const SvXMLUnitConverter    &rUnitConv;
+    SvXMLImportContextRef xBackground;
 
 public:
 
@@ -50,16 +51,14 @@ public:
                                      const OUString& rLocalName,
                                      const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
+private:
     // This method is called from this instance implementation of
     // CreateChildContext if the element matches an entry in the
     // SvXMLImportItemMapper with the mid flag MID_SW_FLAG_ELEMENT_ITEM_IMPORT
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
+    SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
                                    const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
-                                    SfxItemSet&  rItemSet,
-                                   const SvXMLItemMapEntry& rEntry,
-                                   const SvXMLUnitConverter& rUnitConv );
-
+                                   const SvXMLItemMapEntry& rEntry );
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_XML_XMLITEM_HXX

@@ -20,6 +20,8 @@
 #include <xmloff/xmlimp.hxx>
 #include "xmlimpit.hxx"
 #include "xmlitem.hxx"
+#include "xmlbrshi.hxx"
+#include <hintids.hxx>
 
 using namespace ::com::sun::star;
 
@@ -40,6 +42,12 @@ SvXMLItemSetContext::SvXMLItemSetContext( SvXMLImport& rImp, sal_uInt16 nPrfx,
 
 SvXMLItemSetContext::~SvXMLItemSetContext()
 {
+    if( xBackground.is() )
+    {
+        const SvxBrushItem& rItem =
+            static_cast<SwXMLBrushItemImportContext*>(xBackground.get())->GetItem();
+        rItemSet.Put( rItem );
+    }
 }
 
 SvXMLImportContextRef SvXMLItemSetContext::CreateChildContext( sal_uInt16 nPrefix,
@@ -52,7 +60,7 @@ SvXMLImportContextRef SvXMLItemSetContext::CreateChildContext( sal_uInt16 nPrefi
     if( pEntry && 0 != (pEntry->nMemberId & MID_SW_FLAG_ELEMENT_ITEM_IMPORT) )
     {
         return CreateChildContext( nPrefix, rLocalName, xAttrList,
-                                   rItemSet, *pEntry, rUnitConv );
+                                   *pEntry );
     }
     return nullptr;
 }
@@ -61,14 +69,37 @@ SvXMLImportContextRef SvXMLItemSetContext::CreateChildContext( sal_uInt16 nPrefi
     CreateChildContext if the element matches an entry in the
     SvXMLImportItemMapper with the mid flag MID_SW_FLAG_ELEMENT
 */
-SvXMLImportContextRef SvXMLItemSetContext::CreateChildContext( sal_uInt16 /*nPrefix*/,
-                                   const OUString& /*rLocalName*/,
-                                   const uno::Reference< xml::sax::XAttributeList >& /*xAttrList*/,
-                                    SfxItemSet&  /*rItemSet*/,
-                                   const SvXMLItemMapEntry& /*rEntry*/,
-                                   const SvXMLUnitConverter& /*rUnitConv*/ )
+SvXMLImportContextRef SvXMLItemSetContext::CreateChildContext( sal_uInt16 nPrefix,
+                                   const OUString& rLocalName,
+                                   const uno::Reference< xml::sax::XAttributeList >& xAttrList,
+                                   const SvXMLItemMapEntry& rEntry )
 {
-    return nullptr;
+    SvXMLImportContextRef xContext;
+
+    switch( rEntry.nWhichId )
+    {
+    case RES_BACKGROUND:
+        {
+            const SfxPoolItem *pItem;
+            if( SfxItemState::SET == rItemSet.GetItemState( RES_BACKGROUND,
+                                                       false, &pItem ) )
+            {
+                xContext = new SwXMLBrushItemImportContext(
+                                GetImport(), nPrefix, rLocalName, xAttrList,
+                                rUnitConv, *static_cast<const SvxBrushItem *>(pItem) );
+            }
+            else
+            {
+                xContext = new SwXMLBrushItemImportContext(
+                                GetImport(), nPrefix, rLocalName, xAttrList,
+                                rUnitConv, RES_BACKGROUND );
+            }
+            xBackground = xContext;
+        }
+        break;
+    }
+
+    return xContext;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
