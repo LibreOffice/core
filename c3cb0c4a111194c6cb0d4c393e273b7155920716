@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0c40c6b2_debedc71",
+        "filename": "cui/source/inc/AdditionsDialog.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-08-25T09:29:47Z",
+      "side": 1,
+      "message": "Since these are not modified inside the method, why not make them const?",
+      "range": {
+        "startLine": 107,
+        "startChar": 34,
+        "endLine": 107,
+        "endChar": 66
+      },
+      "revId": "c3cb0c4a111194c6cb0d4c393e273b7155920716",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce6a7889_04ab550a",
+        "filename": "cui/source/inc/AdditionsDialog.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-08-25T09:29:47Z",
+      "side": 1,
+      "message": "This looks like unnecessary noise. Maybe rename it to just sortByComment?",
+      "range": {
+        "startLine": 107,
+        "startChar": 16,
+        "endLine": 107,
+        "endChar": 20
+      },
+      "revId": "c3cb0c4a111194c6cb0d4c393e273b7155920716",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b9dc224_e9528a97",
+        "filename": "cui/source/inc/AdditionsDialog.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-08-25T09:29:47Z",
+      "side": 1,
+      "message": "Since these are not modified inside the method, why not make them const?",
+      "range": {
+        "startLine": 108,
+        "startChar": 33,
+        "endLine": 108,
+        "endChar": 65
+      },
+      "revId": "c3cb0c4a111194c6cb0d4c393e273b7155920716",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3bf3e43f_7c07afa1",
+        "filename": "cui/source/inc/AdditionsDialog.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-08-25T09:29:47Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 108,
+        "startChar": 16,
+        "endLine": 108,
+        "endChar": 20
+      },
+      "revId": "c3cb0c4a111194c6cb0d4c393e273b7155920716",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97b2d22a_0f184d38",
+        "filename": "cui/source/inc/AdditionsDialog.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-08-25T09:29:47Z",
+      "side": 1,
+      "message": "Same.",
+      "range": {
+        "startLine": 109,
+        "startChar": 16,
+        "endLine": 109,
+        "endChar": 20
+      },
+      "revId": "c3cb0c4a111194c6cb0d4c393e273b7155920716",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fa8bfb8_75db8f66",
+        "filename": "cui/source/inc/AdditionsDialog.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-08-25T09:29:47Z",
+      "side": 1,
+      "message": "Since these are not modified inside the method, why not make them const?",
+      "range": {
+        "startLine": 109,
+        "startChar": 35,
+        "endLine": 109,
+        "endChar": 67
+      },
+      "revId": "c3cb0c4a111194c6cb0d4c393e273b7155920716",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
