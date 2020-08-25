@@ -35,6 +35,7 @@
 #include <vcl/GraphicObject.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
+#include "ChildWindow.hxx"
 #include "DocumentInfoPreview.hxx"
 
 namespace com::sun::star::awt   { class XWindow; }
@@ -78,7 +79,7 @@ namespace dbaui
 
     // A helper class for the controls in the detail page.
     // Combines general functionality.
-    class OAppDetailPageHelper final : public InterimItemWindow
+    class OAppDetailPageHelper final : public OChildWindow
     {
         std::unique_ptr<DBTreeViewBase> m_aLists[ELEMENT_COUNT];
         OAppBorderWindow&         m_rBorderWin;
@@ -165,14 +166,11 @@ namespace dbaui
         OAppBorderWindow& getBorderWin() const { return m_rBorderWin; }
 
     public:
-        OAppDetailPageHelper(vcl::Window* _pParent,OAppBorderWindow& _rBorderWin,PreviewMode _ePreviewMode);
+        OAppDetailPageHelper(weld::Container* pParent, OAppBorderWindow& rBorderWin, PreviewMode ePreviewMode);
         virtual ~OAppDetailPageHelper() override;
-        virtual void dispose() override;
 
-        // Window overrides
-        virtual void KeyInput( const KeyEvent& rKEvt ) override;
-
-        virtual void GetFocus() override;
+        virtual void GrabFocus() override;
+        virtual bool HasChildPathFocus() const override;
 
         /** creates the tables page
             @param  _xConnection
@@ -230,7 +228,8 @@ namespace dbaui
 
         /** get the menu parent window for the given control
         */
-        vcl::Window* getMenuParent(weld::TreeView& rControl) const;
+        vcl::Window* getMenuParent() const;
+        void adjustMenuPosition(const weld::TreeView& rControl, ::Point& rPos) const;
 
         /** select all names on the currently selected container. Non existence names where ignored.
         *
