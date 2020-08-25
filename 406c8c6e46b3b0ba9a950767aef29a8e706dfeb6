@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c01ac57c_ad0d552c",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 10059,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-25T19:25:24Z",
+      "side": 1,
+      "message": "but that file is only compiled (via bean/Module_bean.mk -\u003e bean/Library_officebean.mk) when ENABLE_JAVA, so that should arguably be reflected here",
+      "revId": "406c8c6e46b3b0ba9a950767aef29a8e706dfeb6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
