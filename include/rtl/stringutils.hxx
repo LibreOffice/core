@@ -272,6 +272,8 @@ template<typename T> struct ConstCharArrayDetector<
 };
 #endif
 
+#if defined LIBO_INTERNAL_ONLY && defined RTL_STRING_UNITTEST
+
 // this one is used to rule out only const char[N]
 template< typename T >
 struct ExceptConstCharArrayDetector
@@ -282,14 +284,12 @@ template< int N >
 struct ExceptConstCharArrayDetector< const char[ N ] >
 {
 };
-#if defined LIBO_INTERNAL_ONLY
 template<std::size_t N>
 struct ExceptConstCharArrayDetector<sal_Unicode const[N]> {};
 template<> struct ExceptConstCharArrayDetector<
     OUStringChar
     >
 {};
-#endif
 
 // this one is used to rule out only const char[N]
 // (const will be brought in by 'const T&' in the function call)
@@ -308,10 +308,10 @@ template< int N >
 struct ExceptCharArrayDetector< const char[ N ] >
 {
 };
-#if defined LIBO_INTERNAL_ONLY
 template<std::size_t N> struct ExceptCharArrayDetector<sal_Unicode[N]> {};
 template<std::size_t N> struct ExceptCharArrayDetector<sal_Unicode const[N]> {};
 template<> struct ExceptCharArrayDetector<OUStringChar_> {};
+
 #endif
 
 template< typename T1, typename T2 = void >
