@@ -660,6 +660,11 @@ namespace
                         {
                             aPam.GetBound().nContent.Assign( nullptr, 0 );
                             aPam.GetBound( false ).nContent.Assign( nullptr, 0 );
+                            if (aPam.End()->nNode.GetNode().IsStartNode())
+                            {   // end node will be deleted too! see nNodeDiff+1
+                                --aPam.End()->nNode;
+                            }
+                            assert(!aPam.End()->nNode.GetNode().IsStartNode());
                             rDoc.getIDocumentContentOperations().DelFullPara( aPam );
                         }
                     else
