@@ -1422,10 +1422,11 @@ void SvxCharEffectsPage::Initialize()
 
     m_xEffectsLB->set_active( 0 );
 
+    m_xHiddenBtn->connect_toggled(LINK(this, SvxCharEffectsPage, HiddenBtnClickHdl));
     m_xIndividualWordsBtn->connect_toggled(LINK(this, SvxCharEffectsPage, CbClickHdl_Impl));
-    Link<weld::ToggleButton&,void> aLink2 = LINK(this, SvxCharEffectsPage, TristClickHdl_Impl);
-    m_xOutlineBtn->connect_toggled(aLink2);
-    m_xShadowBtn->connect_toggled(aLink2);
+    m_xOutlineBtn->connect_toggled(LINK(this, SvxCharEffectsPage, OutlineBtnClickHdl));
+    m_xShadowBtn->connect_toggled(LINK(this, SvxCharEffectsPage, ShadowBtnClickHdl));
+    m_xBlinkingBtn->connect_toggled(LINK(this, SvxCharEffectsPage, BlinkingBtnClickHdl));
 
     if ( !SvtLanguageOptions().IsAsianTypographyEnabled() )
     {
@@ -1501,7 +1502,7 @@ void SvxCharEffectsPage::UpdatePreview_Impl()
         rCTLFont.SetCaseMap( eCaps == SvxCaseMap::SmallCaps ? SvxCaseMap::NotMapped : eCaps );
     }
 
-    bool bWordLine = m_xIndividualWordsBtn->get_active();
+    bool bWordLine = StateToAttr( m_xIndividualWordsBtn->get_state() );
     rFont.SetWordLineMode( bWordLine );
     rCJKFont.SetWordLineMode( bWordLine );
     rCTLFont.SetWordLineMode( bWordLine );
@@ -1671,13 +1672,10 @@ IMPL_LINK_NOARG(SvxCharEffectsPage, UpdatePreview_Impl, weld::ComboBox&, void)
     UpdatePreview_Impl();
 }
 
-IMPL_LINK_NOARG(SvxCharEffectsPage, CbClickHdl_Impl, weld::ToggleButton&, void)
+IMPL_LINK(SvxCharEffectsPage, CbClickHdl_Impl, weld::ToggleButton&, rToggle, void)
 {
+    m_aIndividualWordsState.ButtonToggled(rToggle);
     UpdatePreview_Impl();
-}
-
-IMPL_LINK_NOARG(SvxCharEffectsPage, TristClickHdl_Impl, weld::ToggleButton&, void)
-{
     UpdatePreview_Impl();
 }
 
@@ -1833,15 +1831,18 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
     switch ( eState )
     {
         case SfxItemState::UNKNOWN:
+            m_aIndividualWordsState.bTriStateEnabled = false;
             m_xIndividualWordsBtn->hide();
             break;
 
         case SfxItemState::DISABLED:
         case SfxItemState::READONLY:
+            m_aIndividualWordsState.bTriStateEnabled = false;
             m_xIndividualWordsBtn->set_sensitive(false);
             break;
 
         case SfxItemState::DONTCARE:
+            m_aIndividualWordsState.bTriStateEnabled = true;
             m_xIndividualWordsBtn->set_state( TRISTATE_INDET );
             break;
 
@@ -1853,6 +1854,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
             rCJKFont.SetWordLineMode( rItem.GetValue() );
             rCTLFont.SetWordLineMode( rItem.GetValue() );
 
+            m_aIndividualWordsState.bTriStateEnabled = false;
             m_xIndividualWordsBtn->set_active(rItem.GetValue());
             m_xIndividualWordsBtn->set_sensitive(bEnable);
             break;
@@ -1967,15 +1969,18 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
     switch ( eState )
     {
         case SfxItemState::UNKNOWN:
+            m_aOutlineState.bTriStateEnabled = false;
             m_xOutlineBtn->hide();
             break;
 
         case SfxItemState::DISABLED:
         case SfxItemState::READONLY:
+            m_aOutlineState.bTriStateEnabled = false;
             m_xOutlineBtn->set_sensitive(false);
             break;
 
         case SfxItemState::DONTCARE:
+            m_aOutlineState.bTriStateEnabled = true;
             m_xOutlineBtn->set_state(TRISTATE_INDET);
             break;
 
@@ -1983,6 +1988,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
         case SfxItemState::SET:
         {
             const SvxContourItem& rItem = static_cast<const SvxContourItem&>(rSet->Get( nWhich ));
+            m_aOutlineState.bTriStateEnabled = false;
             m_xOutlineBtn->set_state(static_cast<TriState>(rItem.GetValue()));
             break;
         }
@@ -1995,15 +2001,18 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
     switch ( eState )
     {
         case SfxItemState::UNKNOWN:
+            m_aShadowState.bTriStateEnabled = false;
             m_xShadowBtn->hide();
             break;
 
         case SfxItemState::DISABLED:
         case SfxItemState::READONLY:
+            m_aShadowState.bTriStateEnabled = false;
             m_xShadowBtn->set_sensitive(false);
             break;
 
         case SfxItemState::DONTCARE:
+            m_aShadowState.bTriStateEnabled = true;
             m_xShadowBtn->set_state( TRISTATE_INDET );
             break;
 
@@ -2011,6 +2020,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
         case SfxItemState::SET:
         {
             const SvxShadowedItem& rItem = static_cast<const SvxShadowedItem&>(rSet->Get( nWhich ));
+            m_aShadowState.bTriStateEnabled = false;
             m_xShadowBtn->set_state( static_cast<TriState>(rItem.GetValue()) );
             break;
         }
@@ -2023,15 +2033,18 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
     switch ( eState )
     {
         case SfxItemState::UNKNOWN:
+            m_aBlinkingState.bTriStateEnabled = false;
             m_xBlinkingBtn->hide();
             break;
 
         case SfxItemState::DISABLED:
         case SfxItemState::READONLY:
+            m_aBlinkingState.bTriStateEnabled = false;
             m_xBlinkingBtn->set_sensitive(false);
             break;
 
         case SfxItemState::DONTCARE:
+            m_aBlinkingState.bTriStateEnabled = true;
             m_xBlinkingBtn->set_state( TRISTATE_INDET );
             break;
 
@@ -2039,6 +2052,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
         case SfxItemState::SET:
         {
             const SvxBlinkItem& rItem = static_cast<const SvxBlinkItem&>(rSet->Get( nWhich ));
+            m_aBlinkingState.bTriStateEnabled = false;
             m_xBlinkingBtn->set_state( static_cast<TriState>(rItem.GetValue()) );
             break;
         }
@@ -2050,15 +2064,18 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
     switch ( eState )
     {
         case SfxItemState::UNKNOWN:
+            m_aHiddenState.bTriStateEnabled = false;
             m_xHiddenBtn->hide();
             break;
 
         case SfxItemState::DISABLED:
         case SfxItemState::READONLY:
+            m_aHiddenState.bTriStateEnabled = false;
             m_xHiddenBtn->set_sensitive(false);
             break;
 
         case SfxItemState::DONTCARE:
+            m_aHiddenState.bTriStateEnabled = true;
             m_xHiddenBtn->set_state(TRISTATE_INDET);
             break;
 
@@ -2066,6 +2083,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
         case SfxItemState::SET:
         {
             const SvxCharHiddenItem& rItem = static_cast<const SvxCharHiddenItem&>(rSet->Get( nWhich ));
+            m_aHiddenState.bTriStateEnabled = false;
             m_xHiddenBtn->set_state(static_cast<TriState>(rItem.GetValue()));
             break;
         }
@@ -2079,6 +2097,28 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
 
     // save this settings
     ChangesApplied();
+}
+
+IMPL_LINK(SvxCharEffectsPage, HiddenBtnClickHdl, weld::ToggleButton&, rToggle, void)
+{
+    m_aHiddenState.ButtonToggled(rToggle);
+}
+
+IMPL_LINK(SvxCharEffectsPage, OutlineBtnClickHdl, weld::ToggleButton&, rToggle, void)
+{
+    m_aOutlineState.ButtonToggled(rToggle);
+    UpdatePreview_Impl();
+}
+
+IMPL_LINK(SvxCharEffectsPage, ShadowBtnClickHdl, weld::ToggleButton&, rToggle, void)
+{
+    m_aShadowState.ButtonToggled(rToggle);
+    UpdatePreview_Impl();
+}
+
+IMPL_LINK(SvxCharEffectsPage, BlinkingBtnClickHdl, weld::ToggleButton&, rToggle, void)
+{
+    m_aBlinkingState.ButtonToggled(rToggle);
 }
 
 void SvxCharEffectsPage::ChangesApplied()
@@ -2205,23 +2245,26 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
     bChanged = true;
 
     // Individual words
+    const SfxItemSet* pExampleSet = GetDialogExampleSet();
     nWhich = GetWhich( SID_ATTR_CHAR_WORDLINEMODE );
     pOld = GetOldItem( *rSet, SID_ATTR_CHAR_WORDLINEMODE );
+    TriState eState = m_xIndividualWordsBtn->get_state();
+    const SfxPoolItem* pItem;
 
     if ( pOld )
     {
         const SvxWordLineModeItem& rItem = *static_cast<const SvxWordLineModeItem*>(pOld);
-        if ( rItem.GetValue() == m_xIndividualWordsBtn->get_active() )
+        if ( rItem.GetValue() == StateToAttr( eState ) && m_xIndividualWordsBtn->get_saved_state() == eState )
             bChanged = false;
     }
 
-    if ( rOldSet.GetItemState( nWhich ) == SfxItemState::DONTCARE &&
-         ! m_xIndividualWordsBtn->get_state_changed_from_saved() )
-        bChanged = false;
+    if ( !bChanged && pExampleSet && pExampleSet->GetItemState( nWhich, false, &pItem ) == SfxItemState::SET &&
+         !StateToAttr( eState ) && static_cast<const SvxWordLineModeItem*>(pItem)->GetValue() )
+        bChanged = true;
 
-    if ( bChanged )
+    if ( bChanged && eState != TRISTATE_INDET )
     {
-        rSet->Put( SvxWordLineModeItem( m_xIndividualWordsBtn->get_active(), nWhich ) );
+        rSet->Put( SvxWordLineModeItem( StateToAttr( eState ), nWhich ) );
         bModified = true;
     }
     else if ( SfxItemState::DEFAULT == rOldSet.GetItemState( nWhich, false ) )
@@ -2314,11 +2357,9 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
     }
 
     // Outline
-    const SfxItemSet* pExampleSet = GetDialogExampleSet();
     nWhich = GetWhich( SID_ATTR_CHAR_CONTOUR );
     pOld = GetOldItem( *rSet, SID_ATTR_CHAR_CONTOUR );
-    TriState eState = m_xOutlineBtn->get_state();
-    const SfxPoolItem* pItem;
+    eState = m_xOutlineBtn->get_state();
 
     if ( pOld )
     {

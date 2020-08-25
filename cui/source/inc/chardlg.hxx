@@ -169,6 +169,12 @@ private:
     sal_uInt16                 m_nHtmlMode;
     bool                       m_bUnderlineColorDisabled;
 
+    weld::TriStateEnabled m_aOutlineState;
+    weld::TriStateEnabled m_aShadowState;
+    weld::TriStateEnabled m_aBlinkingState;
+    weld::TriStateEnabled m_aHiddenState;
+    weld::TriStateEnabled m_aIndividualWordsState;
+
     std::unique_ptr<weld::Label> m_xFontColorFT;
     std::unique_ptr<ColorListBox> m_xFontColorLB;
     std::unique_ptr<weld::Label> m_xFontTransparencyFT;
@@ -205,8 +211,11 @@ private:
 
     void SelectHdl_Impl(const weld::ComboBox*);
     DECL_LINK(SelectListBoxHdl_Impl, weld::ComboBox&, void);
+    DECL_LINK(OutlineBtnClickHdl, weld::ToggleButton&, void);
+    DECL_LINK(ShadowBtnClickHdl, weld::ToggleButton&, void);
+    DECL_LINK(BlinkingBtnClickHdl, weld::ToggleButton&, void);
+    DECL_LINK(HiddenBtnClickHdl, weld::ToggleButton&, void);
     DECL_LINK(CbClickHdl_Impl, weld::ToggleButton&, void);
-    DECL_LINK(TristClickHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(UpdatePreview_Impl, weld::ComboBox&, void);
     DECL_LINK(ColorBoxSelectHdl_Impl, ColorListBox&, void);
     DECL_LINK(ModifyFontTransparencyHdl_Impl, weld::MetricSpinButton&, void);
