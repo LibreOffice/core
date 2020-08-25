@@ -59,6 +59,10 @@ public:
             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
             SvXMLStylesContext& rStyles, XmlStyleFamily nFamily,
             bool bDefaultStyle = false );
+    XMLTextStyleContext( SvXMLImport& rImport, sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
+            SvXMLStylesContext& rStyles, XmlStyleFamily nFamily,
+            bool bDefaultStyle = false );
     ~XMLTextStyleContext() override;
 
     XMLTextStyleContext(const XMLTextStyleContext &) = delete;
