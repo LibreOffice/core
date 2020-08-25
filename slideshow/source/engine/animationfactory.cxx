@@ -406,22 +406,17 @@ namespace slideshow::internal
                     mpShape = rShape;
                     mpAttrLayer = rAttrLayer;
 
-                    if( !(mpBox2DWorld->isInitialized()) )
-                        mpBox2DWorld->initiateWorld(maPageSize);
-
-                    if( !(mpBox2DWorld->shapesInitialized()) )
-                        mpBox2DWorld->initateAllShapesAsStaticBodies( mpShapeManager );
-
                     ENSURE_OR_THROW( rShape,
                                      "PhysicsAnimation::start(): Invalid shape" );
                     ENSURE_OR_THROW( rAttrLayer,
                                      "PhysicsAnimation::start(): Invalid attribute layer" );
 
-                    mpBox2DBody = mpBox2DWorld->makeShapeDynamic( rShape->getXShape(), maStartVelocity, mfDensity, mfBounciness );
-
                     if( !mbAnimationStarted )
                     {
                         mbAnimationStarted = true;
+
+                        mpBox2DWorld->alertPhysicsAnimationStart(maPageSize, mpShapeManager);
+                        mpBox2DBody = mpBox2DWorld->makeShapeDynamic( mpShape->getXShape(), maStartVelocity, mfDensity, mfBounciness );
 
                         if( !(mnFlags & AnimationFactory::FLAG_NO_SPRITE) )
                             mpShapeManager->enterAnimationMode( mpShape );
@@ -441,15 +436,22 @@ namespace slideshow::internal
                     {
                         mbAnimationStarted = false;
 
-                        // Animation have ended for this body, make it static
-                        box2d::utils::makeBodyStatic( mpBox2DBody );
-
                         if( !(mnFlags & AnimationFactory::FLAG_NO_SPRITE) )
                             mpShapeManager->leaveAnimationMode( mpShape );
 
                         if( mpShape->isContentChanged() )
                             mpShapeManager->notifyShapeUpdate( mpShape );
+
+                        mpBox2DWorld->alertPhysicsAnimationEnd(mpShape);
+                        // if this was the only physics animation effect going on
+                        // all box2d bodies were destroyed on alertPhysicsAnimationEnd
+                        // except the one owned by the animation.
+                        // Try to destroy the remaining body - if it is unique
+                        // (it being unique means all physics animation effects have ended
+                        // since otherwise mpBox2DWorld would own a copy of the shared_ptr )
+                        mpBox2DBody.reset();
                     }
+
                 }
 
                 // NumberAnimation interface
