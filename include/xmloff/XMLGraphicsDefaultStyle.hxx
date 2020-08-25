@@ -33,6 +33,10 @@ public:
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
         SvXMLStylesContext& rStyles);
 
+    XMLGraphicsDefaultStyle( SvXMLImport& rImport, sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        SvXMLStylesContext& rStyles);
+
     virtual ~XMLGraphicsDefaultStyle() override;
 
     virtual SvXMLImportContextRef CreateChildContext(
