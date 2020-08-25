@@ -69,6 +69,10 @@ public:
     void Disable() const { m_pDrawingArea->set_sensitive(false); }
     bool IsActive() const { return m_pDrawingArea->is_active(); }
     int GetTextHeight() const { return m_pDrawingArea->get_text_height(); }
+    int GetTextWidth(const OUString& rText) const
+    {
+        return m_pDrawingArea->get_pixel_size(rText).Width();
+    }
     OUString GetAccessibleName() const { return m_pDrawingArea->get_accessible_name(); }
     OUString GetAccessibleDescription() const
     {
