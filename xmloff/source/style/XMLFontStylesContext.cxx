@@ -85,10 +85,10 @@ static const SvXMLTokenMapEntry* lcl_getFontStyleAttrTokenMap()
 
 
 XMLFontStyleContextFontFace::XMLFontStyleContextFontFace( SvXMLImport& rImport,
-        sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< XAttributeList > & xAttrList,
+        sal_Int32 nElement,
+        const Reference< XFastAttributeList > & xAttrList,
         XMLFontStylesContext& rStyles ) :
-    SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, XML_STYLE_FAMILY_FONT ),
+    SvXMLStyleContext( rImport, nElement, xAttrList, XML_STYLE_FAMILY_FONT ),
     xStyles( &rStyles )
 {
     aFamilyName <<= OUString();
@@ -176,13 +176,15 @@ void XMLFontStyleContextFontFace::FillProperties(
     }
 }
 
-SvXMLImportContextRef XMLFontStyleContextFontFace::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList > &  )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLFontStyleContextFontFace::createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > &  )
 {
-    if( nPrefix == XML_NAMESPACE_SVG && IsXMLToken( rLocalName, XML_FONT_FACE_SRC ))
-        return new XMLFontStyleContextFontFaceSrc( GetImport(), nPrefix, rLocalName, *this );
+    if( nElement == XML_ELEMENT(SVG, XML_FONT_FACE_SRC) ||
+        nElement == XML_ELEMENT(SVG_COMPAT, XML_FONT_FACE_SRC) )
+        return new XMLFontStyleContextFontFaceSrc( GetImport(), *this );
+    else
+        SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
     return nullptr;
 }
 
@@ -195,10 +197,10 @@ OUString XMLFontStyleContextFontFace::familyName() const
 
 
 XMLFontStyleContextFontFaceFormat::XMLFontStyleContextFontFaceFormat( SvXMLImport& rImport,
-        sal_uInt16 nPrfx, const OUString& rLName,
-        const css::uno::Reference< css::xml::sax::XAttributeList > &xAttrList,
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > &xAttrList,
         XMLFontStyleContextFontFaceUri& _uri )
-    : SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList)
+    : SvXMLStyleContext( rImport, nElement, xAttrList)
     , uri(_uri)
 {
 }
@@ -214,46 +216,51 @@ void XMLFontStyleContextFontFaceFormat::SetAttribute( sal_uInt16 nPrefixKey, con
 
 
 XMLFontStyleContextFontFaceSrc::XMLFontStyleContextFontFaceSrc( SvXMLImport& rImport,
-        sal_uInt16 nPrfx, const OUString& rLName,
         const XMLFontStyleContextFontFace& _font )
-    : SvXMLImportContext( rImport, nPrfx, rLName )
+    : SvXMLImportContext( rImport )
     , font( _font )
 {
 }
 
-SvXMLImportContextRef XMLFontStyleContextFontFaceSrc::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLFontStyleContextFontFaceSrc::createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList )
 {
-    if( nPrefix == XML_NAMESPACE_SVG && IsXMLToken( rLocalName, XML_FONT_FACE_URI ))
-        return new XMLFontStyleContextFontFaceUri( GetImport(), nPrefix, rLocalName, xAttrList, font );
+    if( nElement == XML_ELEMENT(SVG, XML_FONT_FACE_URI) ||
+        nElement == XML_ELEMENT(SVG_COMPAT, XML_FONT_FACE_URI) )
+        return new XMLFontStyleContextFontFaceUri( GetImport(), nElement, xAttrList, font );
+    SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
     return nullptr;
 }
 
 
 XMLFontStyleContextFontFaceUri::XMLFontStyleContextFontFaceUri( SvXMLImport& rImport,
-        sal_uInt16 nPrfx, const OUString& rLName,
-        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
         const XMLFontStyleContextFontFace& _font )
-    : SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList )
+    : SvXMLStyleContext( rImport, nElement, xAttrList )
     , font( _font )
 {
 }
 
-SvXMLImportContextRef XMLFontStyleContextFontFaceUri::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLFontStyleContextFontFaceUri::createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList )
 {
-    if( nPrefix == XML_NAMESPACE_SVG && IsXMLToken( rLocalName, XML_FONT_FACE_FORMAT ))
-        return new XMLFontStyleContextFontFaceFormat( GetImport(), nPrefix, rLocalName, xAttrList, *this );
-    if( linkPath.isEmpty() && ( nPrefix == XML_NAMESPACE_OFFICE ) && IsXMLToken( rLocalName, XML_BINARY_DATA ) )
+    if( nElement == XML_ELEMENT(SVG, XML_FONT_FACE_FORMAT) )
+        return new XMLFontStyleContextFontFaceFormat( GetImport(), nElement, xAttrList, *this );
+    else if( nElement == XML_ELEMENT(OFFICE, XML_BINARY_DATA) )
     {
-        mxBase64Stream.set( new comphelper::OSequenceOutputStream( maFontData ) );
-        if( mxBase64Stream.is() )
-            return new XMLBase64ImportContext( GetImport(), nPrefix, rLocalName, xAttrList, mxBase64Stream );
+        assert(linkPath.isEmpty());
+        if( linkPath.isEmpty() )
+        {
+            mxBase64Stream.set( new comphelper::OSequenceOutputStream( maFontData ) );
+            if( mxBase64Stream.is() )
+                return new XMLBase64ImportContext( GetImport(), mxBase64Stream );
+        }
     }
+    else
+        SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
     return nullptr;
 }
 
@@ -277,7 +284,7 @@ const char OPENTYPE_FORMAT[] = "opentype";
 const char TRUETYPE_FORMAT[] = "truetype";
 const char EOT_FORMAT[]      = "embedded-opentype";
 
-void XMLFontStyleContextFontFaceUri::EndElement()
+void XMLFontStyleContextFontFaceUri::endFastElement(sal_Int32 )
 {
     if( ( linkPath.getLength() == 0 ) && ( !maFontData.hasElements() ) )
     {
@@ -344,24 +351,14 @@ void XMLFontStyleContextFontFaceUri::handleEmbeddedFont( const ::css::uno::Seque
 }
 
 SvXMLStyleContext *XMLFontStylesContext::CreateStyleChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList )
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList )
 {
-    SvXMLStyleContext *pStyle;
-    if( XML_NAMESPACE_STYLE == nPrefix &&
-        IsXMLToken( rLocalName, XML_FONT_FACE ) )
+    if( nElement == XML_ELEMENT(STYLE, XML_FONT_FACE) )
     {
-        pStyle = new XMLFontStyleContextFontFace( GetImport(), nPrefix,
-                                               rLocalName, xAttrList, *this );
+        return new XMLFontStyleContextFontFace( GetImport(), nElement, xAttrList, *this );
     }
-    else
-    {
-        pStyle = SvXMLStylesContext::CreateStyleChildContext( nPrefix,
-                                               rLocalName, xAttrList );
-    }
-
-    return pStyle;
+    return SvXMLStylesContext::CreateStyleChildContext( nElement, xAttrList );
 }
 
 
