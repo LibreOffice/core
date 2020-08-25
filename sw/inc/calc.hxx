@@ -54,7 +54,7 @@ enum SwCalcOper
     CALC_COS=274,           CALC_TAN=275,           CALC_ASIN=276,
     CALC_ACOS=278,          CALC_ATAN=279,          CALC_TDIF=280,
     CALC_ROUND=281,         CALC_DATE=282,          CALC_MONTH=283,
-    CALC_DAY=284
+    CALC_DAY=284,           CALC_PRODUCT=285
 };
 
 // Calculate Operations Strings
@@ -77,6 +77,7 @@ extern const char sCalc_L[];
 extern const char sCalc_G[];
 extern const char sCalc_Sum[];
 extern const char sCalc_Mean[];
+extern const char sCalc_Product[];
 extern const char sCalc_Min[];
 extern const char sCalc_Max[];
 extern const char sCalc_Sin[];
