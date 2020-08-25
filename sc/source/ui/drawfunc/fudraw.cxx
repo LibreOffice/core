@@ -26,6 +26,8 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <vcl/uitest/logger.hxx>
+#include <vcl/uitest/eventdescription.hxx>
 
 #include <sc.hrc>
 #include <fudraw.hxx>
@@ -36,6 +38,22 @@
 #include <docsh.hxx>
 #include <drawview.hxx>
 #include <comphelper/lok.hxx>
+
+namespace
+{
+
+void collectUIInformation( const OUString& aevent )
+{
+    EventDescription aDescription;
+    aDescription.aID =  "grid_window";
+    aDescription.aParameters = {{ aevent ,  ""}};
+    aDescription.aAction = "COMMENT";
+    aDescription.aParent = "MainWindow";
+    aDescription.aKeyWord = "ScGridWinUIObject";
+    UITestLogger::getInstance().logEvent(aDescription);
+}
+
+}
 
 // base class for draw module specific functions
 FuDraw::FuDraw(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP,
@@ -179,6 +197,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
         case KEY_ESCAPE:
             if ( rViewShell.IsDrawTextShell() || aSfxRequest.GetSlot() == SID_DRAW_NOTEEDIT )
             {
+                collectUIInformation("CLOSE");
                 // if object selected -> normal draw-shell, else turn off drawing
                 rViewData.GetDispatcher().Execute(aSfxRequest.GetSlot(), SfxCallMode::SLOT | SfxCallMode::RECORD);
                 bReturn = true;
