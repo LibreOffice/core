@@ -186,6 +186,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135343_columnSectionBreak_c15, "tdf135343_column
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Fits on two pages", 2, getPages());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf132149_pgBreak, "tdf132149_pgBreak.odt")
+{
+    xmlDocUniquePtr pDump = parseLayoutDump();
+    CPPUNIT_ASSERT(getXPathContent(pDump, "//page[3]/body/txt").startsWith("Lorem ipsum"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf129452_excessBorder, "tdf129452_excessBorder.docx")
 {
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
