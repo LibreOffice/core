@@ -4237,6 +4237,24 @@ void SwUiWriterTest::testDde()
 #endif
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf132160)
+{
+    load(DATA_DIRECTORY, "tdf132160.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // this would crash due to delete redline starting with ToX
+    lcl_dispatchCommand(mxComponent, ".uno:RejectAllTrackedChanges", {});
+
+    // this would crash due to insert redline ending on table node
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+}
+
 //IdleTask class to add a low priority Idle task
 class IdleTask
 {
