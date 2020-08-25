@@ -1722,6 +1722,24 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf122942)
     CPPUNIT_ASSERT(rOutRect2.Top() > rOutRect1.Top() && rOutRect2.Top() < rOutRect1.Bottom());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf132160)
+{
+    load(DATA_DIRECTORY, "tdf132160.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // this would crash due to delete redline starting with ToX
+    dispatchCommand(mxComponent, ".uno:RejectAllTrackedChanges", {});
+
+    // this would crash due to insert redline ending on table node
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf52391)
 {
     load(DATA_DIRECTORY, "tdf52391.fodt");
