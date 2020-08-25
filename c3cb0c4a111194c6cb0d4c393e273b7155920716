@@ -48,6 +48,54 @@
     },
     {
       "key": {
+        "uuid": "1510ef27_7f753158",
+        "filename": "cui/source/inc/AdditionsDialog.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-08-25T12:33:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce6a7889_04ab550a",
+      "range": {
+        "startLine": 107,
+        "startChar": 16,
+        "endLine": 107,
+        "endChar": 20
+      },
+      "revId": "c3cb0c4a111194c6cb0d4c393e273b7155920716",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "964fb9ac_03f6cd75",
+        "filename": "cui/source/inc/AdditionsDialog.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-08-25T12:33:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0c40c6b2_debedc71",
+      "range": {
+        "startLine": 107,
+        "startChar": 34,
+        "endLine": 107,
+        "endChar": 66
+      },
+      "revId": "c3cb0c4a111194c6cb0d4c393e273b7155920716",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9b9dc224_e9528a97",
         "filename": "cui/source/inc/AdditionsDialog.hxx",
         "patchSetId": 4
@@ -94,6 +142,54 @@
     },
     {
       "key": {
+        "uuid": "f7e27a59_0e6c4c9c",
+        "filename": "cui/source/inc/AdditionsDialog.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-08-25T12:33:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b9dc224_e9528a97",
+      "range": {
+        "startLine": 108,
+        "startChar": 33,
+        "endLine": 108,
+        "endChar": 65
+      },
+      "revId": "c3cb0c4a111194c6cb0d4c393e273b7155920716",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f18684bd_813c9c4a",
+        "filename": "cui/source/inc/AdditionsDialog.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-08-25T12:33:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3bf3e43f_7c07afa1",
+      "range": {
+        "startLine": 108,
+        "startChar": 16,
+        "endLine": 108,
+        "endChar": 20
+      },
+      "revId": "c3cb0c4a111194c6cb0d4c393e273b7155920716",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "97b2d22a_0f184d38",
         "filename": "cui/source/inc/AdditionsDialog.hxx",
         "patchSetId": 4
@@ -137,6 +233,54 @@
       "revId": "c3cb0c4a111194c6cb0d4c393e273b7155920716",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3e2f3e7_152f667f",
+        "filename": "cui/source/inc/AdditionsDialog.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-08-25T12:33:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1fa8bfb8_75db8f66",
+      "range": {
+        "startLine": 109,
+        "startChar": 35,
+        "endLine": 109,
+        "endChar": 67
+      },
+      "revId": "c3cb0c4a111194c6cb0d4c393e273b7155920716",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a9d30e6_f67d7666",
+        "filename": "cui/source/inc/AdditionsDialog.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-08-25T12:33:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97b2d22a_0f184d38",
+      "range": {
+        "startLine": 109,
+        "startChar": 16,
+        "endLine": 109,
+        "endChar": 20
+      },
+      "revId": "c3cb0c4a111194c6cb0d4c393e273b7155920716",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
