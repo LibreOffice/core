@@ -1,0 +1,37 @@
+diff --git a/src/shaders/SkImageShader.cpp b/src/shaders/SkImageShader.cpp
+index 52dda13e29..cafe2e672a 100755
+--- a/src/shaders/SkImageShader.cpp
++++ b/src/shaders/SkImageShader.cpp
+@@ -322,6 +322,18 @@ sk_sp<SkShader> SkImageShader::Make(sk_sp<SkImage> image, SkTileMode tmx, SkTile
+ #include "src/gpu/effects/GrBlendFragmentProcessor.h"
+ #include "src/gpu/effects/GrTextureEffect.h"
+ 
++namespace {
++template<typename T>
++constexpr T skia_max( std::initializer_list<T> list )
++{
++T max = *list.begin();
++for(auto i: list)
++    if( max < i )
++        max = i;
++return max;
++}
++}
++
+ std::unique_ptr<GrFragmentProcessor> SkImageShader::asFragmentProcessor(
+         const GrFPArgs& args) const {
+     const auto lm = this->totalLocalMatrix(args.fPreLocalMatrix);
+@@ -331,11 +343,11 @@ std::unique_ptr<GrFragmentProcessor> SkImageShader::asFragmentProcessor(
+     }
+ 
+     // This would all be much nicer with std::variant.
+-    static constexpr size_t kSize = std::max({sizeof(GrYUVAImageTextureMaker),
++    static constexpr size_t kSize = skia_max({sizeof(GrYUVAImageTextureMaker),
+                                               sizeof(GrTextureAdjuster      ),
+                                               sizeof(GrImageTextureMaker    ),
+                                               sizeof(GrBitmapTextureMaker   )});
+-    static constexpr size_t kAlign = std::max({alignof(GrYUVAImageTextureMaker),
++    static constexpr size_t kAlign = skia_max({alignof(GrYUVAImageTextureMaker),
+                                                alignof(GrTextureAdjuster      ),
+                                                alignof(GrImageTextureMaker    ),
+                                                alignof(GrBitmapTextureMaker   )});

@@ -282,7 +282,7 @@ void SkiaSalGraphicsImpl::createOffscreenSurface()
     {
         case SkiaHelper::RenderVulkan:
         {
-            if (SkiaHelper::getSharedGrContext())
+            if (SkiaHelper::getSharedGrDirectContext())
             {
                 mSurface = SkiaHelper::createSkSurface(width, height);
                 assert(mSurface);

@@ -70,7 +70,7 @@ X11SkiaSalGraphicsImpl::createWindowContext(Display* display, Drawable drawable,
     winInfo.fWidth = width;
     winInfo.fHeight = height;
 #ifdef DBG_UTIL
-    // Our patched Skia has VulkanWindowContext that shares GrContext, which requires
+    // Our patched Skia has VulkanWindowContext that shares grDirectContext, which requires
     // that the X11 visual is always the same. Ensure it is so.
     static VisualID checkVisualID = -1U;
     // Exception is for the temporary case during startup, when SkiaHelper's

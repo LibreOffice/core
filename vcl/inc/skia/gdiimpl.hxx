@@ -309,7 +309,6 @@ protected:
     // The Skia surface that is target of all the rendering.
     sk_sp<SkSurface> mSurface;
     bool mIsGPU; // whether the surface is GPU-backed
-    // Keep reference to shared GrContext.
     vcl::Region mClipRegion;
     Color mLineColor;
     Color mFillColor;
