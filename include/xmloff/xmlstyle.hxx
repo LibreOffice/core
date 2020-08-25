@@ -199,10 +199,18 @@ protected:
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
 
+    virtual SvXMLStyleContext *CreateStyleStyleChildContext( XmlStyleFamily nFamily,
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
+
     virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
         XmlStyleFamily nFamily, sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
+
+    virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
+        XmlStyleFamily nFamily, sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
 
     virtual bool InsertStyleFamily( XmlStyleFamily nFamily ) const;
 
