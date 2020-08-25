@@ -3191,7 +3191,9 @@ gboolean GtkSalFrame::signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointe
             GtkWidgetClass* pWindowClass = GTK_WIDGET_CLASS(pClass);
             // if the focus is not in our main widget, see if there is a handler
             // for this key stroke in GtkWindow first
-            bool bHandled = pWindowClass->key_press_event(pThis->m_pWindow, pEvent);
+            bool bHandled = pEvent->type == GDK_KEY_PRESS
+                ? pWindowClass->key_press_event(pThis->m_pWindow, pEvent)
+                : pWindowClass->key_release_event(pThis->m_pWindow, pEvent);
             g_type_class_unref(pClass);
             if (bHandled)
                 return true;
