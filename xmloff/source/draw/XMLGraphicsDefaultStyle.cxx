@@ -54,6 +54,11 @@ XMLGraphicsDefaultStyle::XMLGraphicsDefaultStyle( SvXMLImport& rImport, sal_uInt
 {
 }
 
+XMLGraphicsDefaultStyle::XMLGraphicsDefaultStyle( SvXMLImport& rImport, sal_Int32 nElement, const Reference< XFastAttributeList >& xAttrList, SvXMLStylesContext& rStyles )
+: XMLPropStyleContext( rImport, nElement, xAttrList, rStyles, XmlStyleFamily::SD_GRAPHICS_ID, true )
+{
+}
+
 XMLGraphicsDefaultStyle::~XMLGraphicsDefaultStyle()
 {
 }
