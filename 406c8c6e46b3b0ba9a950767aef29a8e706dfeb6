@@ -16,6 +16,24 @@
       "revId": "406c8c6e46b3b0ba9a950767aef29a8e706dfeb6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdf185d7_8218b4fc",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 10059,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-25T21:54:29Z",
+      "side": 1,
+      "message": "Thanks Stephan; addressed at https://gerrit.libreoffice.org/c/core/+/101374",
+      "parentUuid": "c01ac57c_ad0d552c",
+      "revId": "406c8c6e46b3b0ba9a950767aef29a8e706dfeb6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
