@@ -93,6 +93,10 @@ public:
             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
             SvXMLStylesContext& rStyles, XmlStyleFamily nFamily,
             bool bDefaultStyle=false );
+    XMLPropStyleContext( SvXMLImport& rImport, sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
+            SvXMLStylesContext& rStyles, XmlStyleFamily nFamily,
+            bool bDefaultStyle=false );
     virtual ~XMLPropStyleContext() override;
 
     virtual SvXMLImportContextRef CreateChildContext(
