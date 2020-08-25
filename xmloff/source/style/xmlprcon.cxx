@@ -48,6 +48,26 @@ SvXMLPropertySetContext::SvXMLPropertySetContext(
                         mnStartIdx, mnEndIdx );
 }
 
+SvXMLPropertySetContext::SvXMLPropertySetContext(
+    SvXMLImport& rImp, sal_Int32 /*nElement*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+    sal_uInt32 nFam,
+    vector< XMLPropertyState > &rProps,
+    const rtl::Reference < SvXMLImportPropertyMapper >  &rMap,
+    sal_Int32 nSIdx, sal_Int32 nEIdx )
+:   SvXMLImportContext( rImp )
+,   mnStartIdx( nSIdx )
+,   mnEndIdx( nEIdx )
+,   mnFamily( nFam )
+,   mrProperties( rProps )
+,   mxMapper( rMap )
+{
+    mxMapper->importXML( mrProperties, xAttrList,
+                        GetImport().GetMM100UnitConverter(),
+                        GetImport().GetNamespaceMap(), mnFamily,
+                        mnStartIdx, mnEndIdx );
+}
+
 SvXMLPropertySetContext::~SvXMLPropertySetContext()
 {
 }

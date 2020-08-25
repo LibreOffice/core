@@ -436,6 +436,12 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext(
             pStyle = new PageStyleContext( GetImport(), nElement, xAttrList, *this, bDefaultStyle );
         }
         break;
+        case XML_ELEMENT(TEXT, XML_LIST_STYLE):
+            pStyle = new SvxXMLListStyleContext( GetImport(), nElement, xAttrList );
+            break;
+        case XML_ELEMENT(TEXT, XML_OUTLINE_STYLE):
+            pStyle = new SvxXMLListStyleContext( GetImport(), nElement, xAttrList, true );
+            break;
 
         // FillStyles
 
@@ -513,16 +519,6 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext( sal_uInt16 p_nPr
                                                     rLocalName, xAttrList );
             }
             break;
-            case XML_TOK_TEXT_LIST_STYLE:
-                pStyle = new SvxXMLListStyleContext( GetImport(), p_nPrefix,
-                                                    rLocalName, xAttrList );
-                break;
-            case XML_TOK_TEXT_OUTLINE:
-                pStyle = new SvxXMLListStyleContext( GetImport(), p_nPrefix,
-                                                    rLocalName, xAttrList, true );
-                break;
-
-
         }
     }
 

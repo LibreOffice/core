@@ -47,7 +47,18 @@ public:
             const rtl::Reference < SvXMLImportPropertyMapper > &rMap,
               sal_Int32 nStartIdx = -1, sal_Int32 nEndIdx = -1 );
 
+    SvXMLPropertySetContext(
+            SvXMLImport& rImport, sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+            sal_uInt32 nFamily,
+            ::std::vector< XMLPropertyState > &rProps,
+            const rtl::Reference < SvXMLImportPropertyMapper > &rMap,
+              sal_Int32 nStartIdx = -1, sal_Int32 nEndIdx = -1 );
+
     virtual ~SvXMLPropertySetContext() override;
+
+    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
 
     virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,

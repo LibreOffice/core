@@ -31,15 +31,14 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
 PagePropertySetContext::PagePropertySetContext(
-                 SvXMLImport& rImport, sal_uInt16 nPrfx,
-                 const OUString& rLName,
-                 const Reference< xml::sax::XAttributeList > & xAttrList,
+                 SvXMLImport& rImport, sal_Int32 nElement,
+                 const Reference< xml::sax::XFastAttributeList > & xAttrList,
                  sal_uInt32 nFam,
                  ::std::vector< XMLPropertyState > &rProps,
                  const rtl::Reference < SvXMLImportPropertyMapper > &rMap,
                  sal_Int32 nStartIndex, sal_Int32 nEndIndex,
                  const PageContextType aTempType ) :
-    SvXMLPropertySetContext( rImport, nPrfx, rLName, xAttrList, nFam,
+    SvXMLPropertySetContext( rImport, nElement, xAttrList, nFam,
                              rProps, rMap, nStartIndex, nEndIndex )
 {
     aType = aTempType;

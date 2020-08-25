@@ -23,20 +23,18 @@
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/xmlimppr.hxx>
 #include "PagePropertySetContext.hxx"
+#include <sal/log.hxx>
 
 using namespace com::sun::star;
 using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_HEADER_FOOTER_PROPERTIES;
 
 PageHeaderFooterContext::PageHeaderFooterContext( SvXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
-                                      const OUString& rLName,
-                                      const css::uno::Reference< css::xml::sax::XAttributeList>&,
                                       ::std::vector< XMLPropertyState > & rTempProperties,
                                       const rtl::Reference < SvXMLImportPropertyMapper > &rTempMap,
                                       sal_Int32 nStart, sal_Int32 nEnd,
                                       const bool bTempHeader ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    SvXMLImportContext( rImport ),
     rProperties(rTempProperties),
     nStartIndex(nStart),
     nEndIndex(nEnd),
@@ -49,29 +47,25 @@ PageHeaderFooterContext::~PageHeaderFooterContext()
 {
 }
 
-SvXMLImportContextRef PageHeaderFooterContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const OUString& rLName,
-                                            const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > PageHeaderFooterContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    SvXMLImportContextRef xContext;
-
-    if( XML_NAMESPACE_STYLE == nPrefix && IsXMLToken( rLName, XML_HEADER_FOOTER_PROPERTIES ) )
+    if( nElement == XML_ELEMENT(STYLE, XML_HEADER_FOOTER_PROPERTIES) )
     {
         PageContextType aType = Header;
         if (!bHeader)
             aType = Footer;
-        xContext = new PagePropertySetContext( GetImport(), nPrefix,
-                                                rLName, xAttrList,
-                                                XML_TYPE_PROP_HEADER_FOOTER,
-                                                rProperties,
-                                                rMap,  nStartIndex, nEndIndex, aType);
+        return new PagePropertySetContext( GetImport(), nElement,
+                                           xAttrList,
+                                           XML_TYPE_PROP_HEADER_FOOTER,
+                                           rProperties,
+                                           rMap,  nStartIndex, nEndIndex, aType);
     }
+    else
+        SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
 
-    return xContext;
-}
-
-void PageHeaderFooterContext::EndElement()
-{
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
