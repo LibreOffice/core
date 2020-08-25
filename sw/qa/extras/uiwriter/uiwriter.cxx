@@ -257,6 +257,7 @@ public:
     void testDocModState();
     void testTdf135056();
     void testTdf94804();
+    void testTdf132160();
     void testTdf34957();
     void testTdf89954();
     void testTdf89720();
@@ -470,6 +471,7 @@ public:
     CPPUNIT_TEST(testDocModState);
     CPPUNIT_TEST(testTdf135056);
     CPPUNIT_TEST(testTdf94804);
+    CPPUNIT_TEST(testTdf132160);
     CPPUNIT_TEST(testTdf34957);
     CPPUNIT_TEST(testTdf89954);
     CPPUNIT_TEST(testTdf89720);
@@ -4226,6 +4228,7 @@ void SwUiWriterTest::testTdf127635()
 }
 
 #endif
+
 //IdleTask class to add a low priority Idle task
 class IdleTask
 {
@@ -4311,6 +4314,24 @@ void SwUiWriterTest::testTdf135056()
     lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
 
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pWrtShell->GetTOXCount());
+}
+
+void SwUiWriterTest::testTdf132160()
+{
+    load(DATA_DIRECTORY, "tdf132160.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // this would crash due to delete redline starting with ToX
+    lcl_dispatchCommand(mxComponent, ".uno:RejectAllTrackedChanges", {});
+
+    // this would crash due to insert redline ending on table node
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
 }
 
 void SwUiWriterTest::testTdf94804()
