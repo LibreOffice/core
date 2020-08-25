@@ -406,22 +406,17 @@ namespace slideshow::internal
                     mpShape = rShape;
                     mpAttrLayer = rAttrLayer;
 
-                    if( !(mpBox2DWorld->isInitialized()) )
-                        mpBox2DWorld->initiateWorld(maPageSize);
-
-                    if( !(mpBox2DWorld->shapesInitialized()) )
-                        mpBox2DWorld->initateAllShapesAsStaticBodies( mpShapeManager );
-
                     ENSURE_OR_THROW( rShape,
                                      "PhysicsAnimation::start(): Invalid shape" );
                     ENSURE_OR_THROW( rAttrLayer,
                                      "PhysicsAnimation::start(): Invalid attribute layer" );
 
-                    mpBox2DBody = mpBox2DWorld->makeShapeDynamic( rShape->getXShape(), maStartVelocity, mfDensity, mfBounciness );
-
                     if( !mbAnimationStarted )
                     {
                         mbAnimationStarted = true;
+
+                        mpBox2DWorld->alertPhysicsAnimationStart(maPageSize, mpShapeManager);
+                        mpBox2DBody = mpBox2DWorld->makeShapeDynamic( mpShape->getXShape(), maStartVelocity, mfDensity, mfBounciness );
 
                         if( !(mnFlags & AnimationFactory::FLAG_NO_SPRITE) )
                             mpShapeManager->enterAnimationMode( mpShape );
@@ -449,7 +444,11 @@ namespace slideshow::internal
 
                         if( mpShape->isContentChanged() )
                             mpShapeManager->notifyShapeUpdate( mpShape );
+
+                        mpBox2DWorld->alertPhysicsAnimationEnd();
+                        mpBox2DBody.reset();
                     }
+
                 }
 
                 // NumberAnimation interface
