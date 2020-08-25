@@ -83,6 +83,7 @@ const char sCalc_Acos[] =   "acos";
 const char sCalc_Atan[] =   "atan";
 const char sCalc_Round[]=   "round";
 const char sCalc_Date[] =   "date";
+const char sCalc_Product[] = "product";
 
 // ATTENTION: sorted list of all operators
 struct CalcOp
@@ -117,6 +118,7 @@ CalcOp const aOpTable[] = {
 /* OR */      {{sCalc_Or},         CALC_OR},    // log. OR
 /* PHD */     {{sCalc_Phd},        CALC_PHD},   // Percentage
 /* POW */     {{sCalc_Pow},        CALC_POW},   // Exponentiation
+/* PRODUCT */ {{sCalc_Product},    CALC_PRODUCT}, // Product
 /* ROUND */   {{sCalc_Round},      CALC_ROUND}, // Rounding
 /* SIN */     {{sCalc_Sin},        CALC_SIN},   // Sine
 /* SQRT */    {{sCalc_Sqrt},       CALC_SQRT},  // Square root
@@ -675,6 +677,9 @@ SwCalcOper SwCalc::GetToken()
                 case CALC_DATE:
                     m_eCurrListOper = CALC_MONTH;
                     break;
+                case CALC_PRODUCT:
+                    m_eCurrListOper = CALC_MUL;
+                    break;
                 default:
                     break;
                 }
@@ -1192,11 +1197,12 @@ SwSbxValue SwCalc::PrimFunc(bool &rChkPow)
             break;
         }
         case CALC_SUM:
+        case CALC_PRODUCT:
         case CALC_DATE:
         case CALC_MIN:
         case CALC_MAX:
         {
-            SAL_INFO("sw.calc", "sum/date/min/max");
+            SAL_INFO("sw.calc", "sum/product/date/min/max");
             GetToken();
             SwSbxValue nErg = Expr();
             return nErg;

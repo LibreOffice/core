@@ -133,6 +133,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123356, "tdf123356.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("3"), xEnumerationAccess3->getPresentation(false).trim());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf123388, "tdf123388.docx")
+{
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    // Tests new cell formula PRODUCT
+    uno::Reference<text::XTextField> xEnumerationAccess1(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("PRODUCT(<B2:B3>)"), xEnumerationAccess1->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("640"), xEnumerationAccess1->getPresentation(false).trim());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf98000_changePageStyle, "tdf98000_changePageStyle.odt")
 {
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
