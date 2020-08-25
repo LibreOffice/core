@@ -185,6 +185,13 @@ const OldFillStyleDefinitionSet& XMLPropStyleContext::getFooterSet()
     return theFooterSet::get();
 }
 
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLPropStyleContext::createFastChildContext(
+    sal_Int32 /*nElement*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
+{
+    return nullptr;
+}
+
 SvXMLImportContextRef XMLPropStyleContext::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,

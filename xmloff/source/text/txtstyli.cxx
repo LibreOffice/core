@@ -141,6 +141,21 @@ XMLTextStyleContext::XMLTextStyleContext( SvXMLImport& rImport,
 {
 }
 
+XMLTextStyleContext::XMLTextStyleContext( SvXMLImport& rImport,
+        sal_Int32 nElement,
+        const Reference< XFastAttributeList > & xAttrList,
+        SvXMLStylesContext& rStyles, XmlStyleFamily nFamily,
+        bool bDefaultStyle )
+:   XMLPropStyleContext( rImport, nElement, xAttrList, rStyles, nFamily, bDefaultStyle )
+,   m_nOutlineLevel( -1 )
+,   m_isAutoUpdate( false )
+,   m_bHasMasterPageName( false )
+,   m_bHasCombinedCharactersLetter( false )
+// Inherited paragraph style lost information about unset numbering (#i69523#)
+,   m_bListStyleSet( false )
+{
+}
+
 XMLTextStyleContext::~XMLTextStyleContext()
 {}
 
