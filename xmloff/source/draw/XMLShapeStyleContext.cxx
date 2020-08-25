@@ -60,6 +60,17 @@ XMLShapeStyleContext::XMLShapeStyleContext(
 {
 }
 
+XMLShapeStyleContext::XMLShapeStyleContext(
+    SvXMLImport& rImport,
+    sal_Int32 nElement,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+    SvXMLStylesContext& rStyles,
+    XmlStyleFamily nFamily)
+:   XMLPropStyleContext(rImport, nElement, xAttrList, rStyles, nFamily ),
+    m_bIsNumRuleAlreadyConverted( false )
+{
+}
+
 XMLShapeStyleContext::~XMLShapeStyleContext()
 {
 }

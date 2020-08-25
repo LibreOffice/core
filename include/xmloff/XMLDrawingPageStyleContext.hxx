@@ -32,6 +32,11 @@ public:
                                SvXMLStylesContext& rStyles,
                                ContextID_Index_Pair const pContextIDs[],
                                XmlStyleFamily const pFamilies[]);
+    XMLDrawingPageStyleContext(
+        SvXMLImport& rImport, sal_Int32 nElement,
+        css::uno::Reference<css::xml::sax::XFastAttributeList> const& xAttrList,
+        SvXMLStylesContext& rStyles, ContextID_Index_Pair const pContextIDs[],
+        XmlStyleFamily const pFamilies[]);
 
     virtual void
     FillPropertySet(css::uno::Reference<css::beans::XPropertySet> const& rPropSet) override;

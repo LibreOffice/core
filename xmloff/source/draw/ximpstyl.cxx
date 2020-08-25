@@ -137,9 +137,8 @@ public:
 
     SdXMLDrawingPageStyleContext(
         SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
         SvXMLStylesContext& rStyles);
 
     SvXMLImportContextRef CreateChildContext(
@@ -192,13 +191,28 @@ XMLDrawingPageStyleContext::XMLDrawingPageStyleContext(
     std::memcpy(m_pContextIDs.get(), pContextIDs, size * sizeof(ContextID_Index_Pair));
 }
 
+XMLDrawingPageStyleContext::XMLDrawingPageStyleContext(
+    SvXMLImport& rImport,
+    sal_Int32 nElement,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+    SvXMLStylesContext& rStyles,
+    ContextID_Index_Pair const pContextIDs[],
+    XmlStyleFamily const pFamilies[])
+    : XMLPropStyleContext(rImport, nElement, xAttrList, rStyles, XmlStyleFamily::SD_DRAWINGPAGE_ID)
+    , m_pFamilies(pFamilies)
+{
+    size_t size(1); // for the -1 entry
+    for (ContextID_Index_Pair const* pTemp(pContextIDs); pTemp->nContextID != -1; ++size, ++pTemp);
+    m_pContextIDs.reset(new ContextID_Index_Pair[size]);
+    std::memcpy(m_pContextIDs.get(), pContextIDs, size * sizeof(ContextID_Index_Pair));
+}
+
 SdXMLDrawingPageStyleContext::SdXMLDrawingPageStyleContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLName,
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList,
+    sal_Int32 nElement,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
     SvXMLStylesContext& rStyles)
-    : XMLDrawingPageStyleContext(rImport, nPrfx, rLName, xAttrList, rStyles,
+    : XMLDrawingPageStyleContext(rImport, nElement, xAttrList, rStyles,
             g_ContextIDs, g_Families)
 {
 }
@@ -939,53 +953,41 @@ SvXMLStyleContext* SdXMLStylesContext::CreateStyleChildContext(
 
 SvXMLStyleContext* SdXMLStylesContext::CreateStyleStyleChildContext(
     XmlStyleFamily nFamily,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< css::xml::sax::XAttributeList >& xAttrList)
+    sal_Int32 nElement,
+    const uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
-    SvXMLStyleContext* pContext = nullptr;
-
     switch( nFamily )
     {
     case XmlStyleFamily::SD_DRAWINGPAGE_ID:
-        pContext = new SdXMLDrawingPageStyleContext(GetSdImport(), nPrefix, rLocalName, xAttrList, *this );
+        return new SdXMLDrawingPageStyleContext(GetSdImport(), nElement, xAttrList, *this );
         break;
     case XmlStyleFamily::TABLE_CELL:
     case XmlStyleFamily::TABLE_COLUMN:
     case XmlStyleFamily::TABLE_ROW:
-        pContext = new XMLShapeStyleContext( GetSdImport(), nPrefix, rLocalName, xAttrList, *this, nFamily );
+        return new XMLShapeStyleContext( GetSdImport(), nElement, xAttrList, *this, nFamily );
         break;
     default: break;
     }
 
     // call base class
-    if(!pContext)
-        pContext = SvXMLStylesContext::CreateStyleStyleChildContext(nFamily, nPrefix, rLocalName, xAttrList);
-
-    return pContext;
+    return SvXMLStylesContext::CreateStyleStyleChildContext(nFamily, nElement, xAttrList);
 }
 
 SvXMLStyleContext* SdXMLStylesContext::CreateDefaultStyleStyleChildContext(
     XmlStyleFamily nFamily,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference< XAttributeList > & xAttrList )
+    sal_Int32  nElement,
+    const Reference< XFastAttributeList > & xAttrList )
 {
-    SvXMLStyleContext* pContext = nullptr;
-
     switch( nFamily )
     {
     case XmlStyleFamily::SD_GRAPHICS_ID:
-        pContext = new XMLGraphicsDefaultStyle(GetSdImport(), nPrefix, rLocalName, xAttrList, *this );
+        return new XMLGraphicsDefaultStyle(GetSdImport(), nElement, xAttrList, *this );
         break;
     default: break;
     }
 
     // call base class
-    if(!pContext)
-        pContext = SvXMLStylesContext::CreateDefaultStyleStyleChildContext(nFamily, nPrefix, rLocalName, xAttrList);
-
-    return pContext;
+    return SvXMLStylesContext::CreateDefaultStyleStyleChildContext(nFamily, nElement, xAttrList);
 }
 
 rtl::Reference< SvXMLImportPropertyMapper > SdXMLStylesContext::GetImportPropertyMapper(
