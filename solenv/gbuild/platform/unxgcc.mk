@@ -288,7 +288,7 @@ gb_CppunitTest_CPPTESTPRECOMMAND := \
     $(call gb_Helper_extend_ld_path,$(WORKDIR)/UnpackedTarball/cppunit/src/cppunit/.libs)
 gb_CppunitTest_get_filename = libtest_$(1).so
 gb_CppunitTest_get_ilibfilename = $(gb_CppunitTest_get_filename)
-gb_CppunitTest_malloc_check := MALLOC_CHECK_=2 MALLOC_PERTURB_=153
+gb_CppunitTest_malloc_check := -ex 'set environment MALLOC_CHECK_=2; set environment MALLOC_PERTURB_=153'
 
 define gb_CppunitTest_CppunitTest_platform
 $(call gb_LinkTarget_get_target,$(2)) : RPATH := $(call gb_Library__get_rpath,$(call gb_LinkTarget__get_rpath_for_layer,NONE))
