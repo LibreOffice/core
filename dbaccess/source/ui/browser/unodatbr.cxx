@@ -3551,14 +3551,13 @@ Any SbaTableQueryBrowser::getCurrentSelection(weld::TreeView& rControl) const
     return makeAny( aSelectedObject );
 }
 
-vcl::Window* SbaTableQueryBrowser::getMenuParent(weld::TreeView& rControl) const
+vcl::Window* SbaTableQueryBrowser::getMenuParent() const
 {
-    weld::TreeView& rTreeView = m_pTreeView->GetWidget();
-
-    OSL_PRECOND( &rTreeView == &rControl,
-        "SbaTableQueryBrowser::getCurrentSelection: where does this come from?" );
-
     return m_pTreeView;
+}
+
+void SbaTableQueryBrowser::adjustMenuPosition(const weld::TreeView&, ::Point&) const
+{
 }
 
 bool SbaTableQueryBrowser::implGetQuerySignature( OUString& _rCommand, bool& _bEscapeProcessing )

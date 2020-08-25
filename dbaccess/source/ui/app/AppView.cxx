@@ -42,24 +42,20 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using ::com::sun::star::sdb::application::NamedDatabaseObject;
 
-OAppBorderWindow::OAppBorderWindow(OApplicationView* _pParent,PreviewMode _ePreviewMode) : Window(_pParent,WB_DIALOGCONTROL)
-    ,m_pPanel(nullptr)
-    ,m_pDetailView(nullptr)
-    ,m_pView(_pParent)
+OAppBorderWindow::OAppBorderWindow(OApplicationView* pParent, PreviewMode ePreviewMode)
+    : InterimItemWindow(pParent, "dbaccess/ui/appborderwindow.ui", "AppBorderWindow", false)
+    , m_xPanelParent(m_xBuilder->weld_container("panel"))
+    , m_xDetailViewParent(m_xBuilder->weld_container("detail"))
+    , m_xView(pParent)
 {
+    SetStyle(GetStyle() | WB_DIALOGCONTROL);
 
-    SetBorderStyle(WindowBorderStyle::MONO);
+    m_xPanel.reset(new OTitleWindow(m_xPanelParent.get(), STR_DATABASE));
+    std::shared_ptr<OChildWindow> xSwap = std::make_shared<OApplicationSwapWindow>(m_xPanel->getChildContainer(), *this);
 
-    m_pPanel = VclPtr<OTitleWindow>::Create(this, STR_DATABASE);
-    m_pPanel->SetBorderStyle(WindowBorderStyle::MONO);
-    VclPtrInstance<OApplicationSwapWindow> pSwap( m_pPanel->getChildContainer(), *this );
-    pSwap->Show();
+    m_xPanel->setChildWindow(xSwap);
 
-    m_pPanel->setChildWindow(pSwap);
-    m_pPanel->Show();
-
-    m_pDetailView = VclPtr<OApplicationDetailView>::Create(*this,_ePreviewMode);
-    m_pDetailView->Show();
+    m_xDetailView.reset(new OApplicationDetailView(m_xDetailViewParent.get(), *this, ePreviewMode));
 
     ImplInitSettings();
 }
@@ -72,80 +68,24 @@ OAppBorderWindow::~OAppBorderWindow()
 void OAppBorderWindow::dispose()
 {
     // destroy children
-    if ( m_pPanel )
-        m_pPanel->Hide();
-    m_pPanel.disposeAndClear();
-    if ( m_pDetailView )
-        m_pDetailView->Hide();
-    m_pDetailView.disposeAndClear();
-    m_pView.clear();
-    vcl::Window::dispose();
+    m_xPanel.reset();
+    m_xDetailView.reset();
+    m_xPanelParent.reset();
+    m_xDetailViewParent.reset();
+    m_xView.clear();
+    InterimItemWindow::dispose();
 }
 
 void OAppBorderWindow::GetFocus()
 {
-    if ( m_pPanel )
-        m_pPanel->GrabFocus();
+    if (m_xPanel)
+        m_xPanel->GrabFocus();
 }
-
-void OAppBorderWindow::Resize()
-{
-    // parent window dimension
-    Size aOutputSize( GetOutputSize() );
-    long nOutputWidth   = aOutputSize.Width();
-    long nOutputHeight  = aOutputSize.Height();
-    long nX = 0;
-
-    Size aFLSize = LogicToPixel(Size(3, 8), MapMode(MapUnit::MapAppFont));
-    if ( m_pPanel )
-    {
-        OApplicationSwapWindow* pSwap = getPanel();
-        if (pSwap)
-            nX = pSwap->get_preferred_size().Width();
-        nX = std::max(m_pPanel->GetWidthPixel() ,nX);
-        m_pPanel->SetPosSizePixel(Point(0,0),Size(nX,nOutputHeight));
-    }
-
-    if ( m_pDetailView )
-        m_pDetailView->SetPosSizePixel(Point(nX + aFLSize.Width(),0),Size(nOutputWidth - nX - aFLSize.Width(),nOutputHeight));
-}
-
-void OAppBorderWindow::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    Window::DataChanged( rDCEvt );
-
-    if ( (rDCEvt.GetType() == DataChangedEventType::FONTS) ||
-        (rDCEvt.GetType() == DataChangedEventType::DISPLAY) ||
-        (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION) ||
-        ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-        (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
-    {
-        ImplInitSettings();
-        Invalidate();
-    }
-}
-
-void OAppBorderWindow::ImplInitSettings()
-{
-    // FIXME RenderContext
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-
-    vcl::Font aFont = rStyleSettings.GetFieldFont();
-    aFont.SetColor( rStyleSettings.GetWindowTextColor() );
-    SetPointFont(*this, aFont);
-
-    SetTextColor( rStyleSettings.GetFieldTextColor() );
-    SetTextFillColor();
-
-    SetBackground( rStyleSettings.GetDialogColor() );
-}
-
 
 OApplicationSwapWindow* OAppBorderWindow::getPanel() const
 {
-    return static_cast< OApplicationSwapWindow* >( m_pPanel->getChildWindow() );
+    return static_cast<OApplicationSwapWindow*>(m_xPanel->getChildWindow());
 }
-
 
 OApplicationView::OApplicationView( vcl::Window* pParent
                                     ,const Reference< XComponentContext >& _rxOrb
@@ -154,7 +94,6 @@ OApplicationView::OApplicationView( vcl::Window* pParent
                                    ) :
     ODataView( pParent, _rAppController, _rxOrb, WB_DIALOGCONTROL )
     ,m_rAppController( _rAppController )
-    ,m_eChildFocus(NONE)
 {
     m_pWin = VclPtr<OAppBorderWindow>::Create(this,_ePreviewMode);
     m_pWin->Show();
@@ -219,18 +158,22 @@ void OApplicationView::resizeDocumentView(tools::Rectangle& _rPlayground)
     _rPlayground.SetSize( Size( 0, 0 ) );
 }
 
+OApplicationView::ChildFocusState OApplicationView::getChildFocus() const
+{
+    ChildFocusState eChildFocus;
+    if( m_pWin && getPanel() && getPanel()->HasChildPathFocus() )
+        eChildFocus = PANELSWAP;
+    else if ( m_pWin && getDetailView() && getDetailView()->HasChildPathFocus() )
+        eChildFocus = DETAIL;
+    else
+        eChildFocus = NONE;
+    return eChildFocus;
+}
+
 bool OApplicationView::PreNotify( NotifyEvent& rNEvt )
 {
     switch(rNEvt.GetType())
     {
-        case MouseNotifyEvent::GETFOCUS:
-            if( m_pWin && getPanel() && getPanel()->HasChildPathFocus() )
-                m_eChildFocus = PANELSWAP;
-            else if ( m_pWin && getDetailView() && getDetailView()->HasChildPathFocus() )
-                m_eChildFocus = DETAIL;
-            else
-                m_eChildFocus = NONE;
-            break;
         case MouseNotifyEvent::KEYINPUT:
         {
             const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
@@ -250,7 +193,7 @@ bool OApplicationView::PreNotify( NotifyEvent& rNEvt )
 IClipboardTest* OApplicationView::getActiveChild() const
 {
     IClipboardTest* pTest = nullptr;
-    if ( DETAIL == m_eChildFocus )
+    if (getChildFocus() == DETAIL)
         pTest = getDetailView();
     return pTest;
 }
@@ -372,10 +315,16 @@ void OApplicationView::describeCurrentSelectionForControl(const weld::TreeView& 
     getDetailView()->describeCurrentSelectionForControl(rControl, out_rSelectedObjects);
 }
 
-vcl::Window* OApplicationView::getMenuParent(weld::TreeView& rControl) const
+vcl::Window* OApplicationView::getMenuParent() const
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
-    return getDetailView()->getMenuParent(rControl);
+    return getDetailView()->getMenuParent();
+}
+
+void OApplicationView::adjustMenuPosition(const weld::TreeView& rControl, ::Point& rPos) const
+{
+    OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
+    return getDetailView()->adjustMenuPosition(rControl, rPos);
 }
 
 void OApplicationView::describeCurrentSelectionForType( const ElementType _eType, Sequence< NamedDatabaseObject >& _out_rSelectedObjects )
@@ -496,10 +445,8 @@ void OApplicationView::showPreview( const OUString& _sDataSourceName,
 
 void OApplicationView::GetFocus()
 {
-    if ( m_eChildFocus == NONE && m_pWin )
-    {
+    if (m_pWin && getChildFocus() == NONE)
         m_pWin->GrabFocus();
-    }
 }
 
 void OApplicationView::_disposing( const css::lang::EventObject& /*_rSource*/ )

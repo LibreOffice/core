@@ -31,6 +31,7 @@
 #include <com/sun/star/util/URL.hpp>
 #include <core_resource.hxx>
 #include <vcl/event.hxx>
+#include <vcl/svapp.hxx>
 #include "AppDetailPageHelper.hxx"
 #include <dbaccess/IController.hxx>
 #include <algorithm>
@@ -59,11 +60,6 @@ TaskEntry::TaskEntry( const char* _pAsciiUNOCommand, const char* _pHelpID, const
 {
 }
 
-IMPL_LINK(OTasksWindow, KeyInputHdl, const KeyEvent&, rKEvt, bool)
-{
-    return ChildKeyInput(rKEvt);
-}
-
 void OTasksWindow::updateHelpText()
 {
     const char* pHelpTextId = nullptr;
@@ -84,12 +80,17 @@ IMPL_LINK(OTasksWindow, onSelected, weld::TreeView&, rTreeView, bool)
     return true;
 }
 
-void OTasksWindow::GetFocus()
+void OTasksWindow::GrabFocus()
 {
-    InterimItemWindow::GetFocus();
     if (!m_xTreeView)
         return;
+    m_xTreeView->grab_focus();
     FocusInHdl(*m_xTreeView);
+}
+
+bool OTasksWindow::HasChildPathFocus() const
+{
+    return m_xTreeView && m_xTreeView->has_focus();
 }
 
 IMPL_LINK_NOARG(OTasksWindow, FocusInHdl, weld::Widget&, void)
@@ -109,64 +110,39 @@ IMPL_LINK_NOARG(OTasksWindow, OnEntrySelectHdl, weld::TreeView&, void)
     updateHelpText();
 }
 
-OTasksWindow::OTasksWindow(vcl::Window* pParent,OApplicationDetailView* _pDetailView)
-    : InterimItemWindow(pParent, "dbaccess/ui/taskwindow.ui", "TaskWindow")
+OTasksWindow::OTasksWindow(weld::Container* pParent, OApplicationDetailView* pDetailView)
+    : OChildWindow(pParent, "dbaccess/ui/taskwindow.ui", "TaskWindow")
     , m_xTreeView(m_xBuilder->weld_tree_view("treeview"))
     , m_xDescription(m_xBuilder->weld_label("description"))
-    , m_xHelpText(m_xBuilder->weld_label("helptext"))
-    , m_pDetailView(_pDetailView)
+    , m_xHelpText(m_xBuilder->weld_text_view("helptext"))
+    , m_pDetailView(pDetailView)
     , m_nCursorIndex(-1)
 {
     m_xContainer->set_stack_background();
 
-    InitControlBase(m_xTreeView.get());
-
     m_xTreeView->set_help_id(HID_APP_CREATION_LIST);
     m_xTreeView->connect_row_activated(LINK(this, OTasksWindow, onSelected));
     m_xTreeView->connect_changed(LINK(this, OTasksWindow, OnEntrySelectHdl));
-    m_xTreeView->connect_key_press(LINK(this, OTasksWindow, KeyInputHdl));
     m_xTreeView->connect_focus_in(LINK(this, OTasksWindow, FocusInHdl));
     m_xTreeView->connect_focus_out(LINK(this, OTasksWindow, FocusOutHdl));
+    // an arbitrary small size it's allowed to shrink to
+    m_xTreeView->set_size_request(42, 42);
 
     m_xHelpText->set_help_id(HID_APP_HELP_TEXT);
     m_xDescription->set_help_id(HID_APP_DESCRIPTION_TEXT);
-
-    ImplInitSettings();
 }
 
 OTasksWindow::~OTasksWindow()
 {
-    disposeOnce();
-}
-
-void OTasksWindow::dispose()
-{
     Clear();
-    m_xTreeView.reset();
-    m_xDescription.reset();
-    m_xHelpText.reset();
-    m_pDetailView.clear();
-    InterimItemWindow::dispose();
-}
-
-void OTasksWindow::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    Window::DataChanged( rDCEvt );
-
-    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
-    {
-        ImplInitSettings();
-        Invalidate();
-    }
 }
 
 void OTasksWindow::setHelpText(const char* pId)
 {
     if (pId)
-        m_xHelpText->set_label(DBA_RES(pId));
+        m_xHelpText->set_text(DBA_RES(pId));
     else
-        m_xHelpText->set_label(OUString());
+        m_xHelpText->set_text(OUString());
 }
 
 void OTasksWindow::fillTaskEntryList( const TaskEntryList& _rList )
@@ -226,87 +202,32 @@ void OTasksWindow::Clear()
     m_xTreeView->clear();
 }
 
-OApplicationDetailView::OApplicationDetailView(OAppBorderWindow& _rParent,PreviewMode _ePreviewMode) : OSplitterView(&_rParent )
-    ,m_aHorzSplitter(VclPtr<Splitter>::Create(this))
-    ,m_aTasks(VclPtr<dbaui::OTitleWindow>::Create(this, STR_TASKS))
-    ,m_aContainer(VclPtr<dbaui::OTitleWindow>::Create(this, nullptr))
-    ,m_rBorderWin(_rParent)
+OApplicationDetailView::OApplicationDetailView(weld::Container* pParent, OAppBorderWindow& rBorder,
+                                               PreviewMode ePreviewMode)
+    : m_xBuilder(Application::CreateBuilder(pParent, "dbaccess/ui/appdetailwindow.ui"))
+    , m_xContainer(m_xBuilder->weld_container("AppDetailWindow"))
+    , m_xHorzSplitter(m_xBuilder->weld_paned("splitter"))
+    , m_xTasksParent(m_xBuilder->weld_container("tasks"))
+    , m_xContainerParent(m_xBuilder->weld_container("container"))
+    , m_xTasks(new dbaui::OTitleWindow(m_xTasksParent.get(), STR_TASKS))
+    , m_xTitleContainer(new dbaui::OTitleWindow(m_xContainerParent.get(), nullptr))
+    , m_rBorderWin(rBorder)
 {
-    ImplInitSettings();
+    m_xControlHelper = std::make_shared<OAppDetailPageHelper>(m_xTitleContainer->getChildContainer(), m_rBorderWin, ePreviewMode);
+    m_xTitleContainer->setChildWindow(m_xControlHelper);
 
-    m_pControlHelper = VclPtr<OAppDetailPageHelper>::Create(m_aContainer->getChildContainer(),m_rBorderWin,_ePreviewMode);
-    m_pControlHelper->Show();
-    m_aContainer->setChildWindow(m_pControlHelper);
-
-    VclPtrInstance<OTasksWindow> pTasks(m_aTasks->getChildContainer(),this);
-    pTasks->Show();
-    pTasks->Disable(m_rBorderWin.getView()->getCommandController().isDataSourceReadOnly());
-    m_aTasks->setChildWindow(pTasks);
-    m_aTasks->Show();
-
-    m_aContainer->Show();
-
-    const long  nFrameWidth = LogicToPixel(Size(3, 0), MapMode(MapUnit::MapAppFont)).Width();
-    m_aHorzSplitter->SetPosSizePixel( Point(0,50), Size(0,nFrameWidth) );
-    // now set the components at the base class
-    set(m_aContainer.get(),m_aTasks.get());
-
-    m_aHorzSplitter->Show();
-    setSplitter(m_aHorzSplitter.get());
+    std::shared_ptr<OChildWindow> xTasks = std::make_shared<OTasksWindow>(m_xTasks->getChildContainer(), this);
+    xTasks->Enable(!m_rBorderWin.getView()->getCommandController().isDataSourceReadOnly());
+    m_xTasks->setChildWindow(xTasks);
 }
 
 OApplicationDetailView::~OApplicationDetailView()
 {
-    disposeOnce();
 }
 
-void OApplicationDetailView::dispose()
+void OApplicationDetailView::setTaskExternalMnemonics( MnemonicGenerator const & rMnemonics )
 {
-    set(nullptr);
-    setSplitter(nullptr);
-    m_aHorzSplitter.disposeAndClear();
-    m_aTasks.disposeAndClear();
-    m_aContainer.disposeAndClear();
-    m_pControlHelper.clear();
-    OSplitterView::dispose();
-}
-
-void OApplicationDetailView::ImplInitSettings()
-{
-    // FIXME RenderContext
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    vcl::Font aFont = rStyleSettings.GetFieldFont();
-    aFont.SetColor( rStyleSettings.GetWindowTextColor() );
-    SetPointFont(*this, aFont);
-
-    SetTextColor( rStyleSettings.GetFieldTextColor() );
-    SetTextFillColor();
-
-    SetBackground( rStyleSettings.GetFieldColor() );
-
-    m_aHorzSplitter->SetBackground( rStyleSettings.GetDialogColor() );
-    m_aHorzSplitter->SetFillColor( rStyleSettings.GetDialogColor() );
-    m_aHorzSplitter->SetTextFillColor(rStyleSettings.GetDialogColor() );
-}
-
-void OApplicationDetailView::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    OSplitterView::DataChanged( rDCEvt );
-
-    if ( (rDCEvt.GetType() == DataChangedEventType::FONTS) ||
-        (rDCEvt.GetType() == DataChangedEventType::DISPLAY) ||
-        (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION) ||
-        ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-        (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
-    {
-        ImplInitSettings();
-        Invalidate();
-    }
-}
-
-void OApplicationDetailView::setTaskExternalMnemonics( MnemonicGenerator const & _rMnemonics )
-{
-    m_aExternalMnemonics = _rMnemonics;
+    m_aExternalMnemonics = rMnemonics;
 }
 
 void OApplicationDetailView::createTablesPage(const Reference< XConnection >& _xConnection )
@@ -331,16 +252,13 @@ void OApplicationDetailView::impl_createPage( ElementType _eType, const Referenc
     bool bEnabled = !rData.aTasks.empty()
                 && getBorderWin().getView()->getCommandController().isCommandEnabled( rData.aTasks[0].sUNOCommand );
     getTasksWindow().Enable( bEnabled );
-    m_aContainer->setTitle(rData.pTitleId);
+    m_xTitleContainer->setTitle(rData.pTitleId);
 
     // let our helper create the object list
     if ( _eType == E_TABLE )
-        m_pControlHelper->createTablesPage( _rxConnection );
+        GetControlHelper()->createTablesPage( _rxConnection );
     else
-        m_pControlHelper->createPage( _eType, _rxNonTableElements );
-
-    // resize for proper window arrangements
-    Resize();
+        GetControlHelper()->createPage( _eType, _rxNonTableElements );
 }
 
 void OApplicationDetailView::impl_fillTaskPaneData(ElementType _eType, TaskPaneData& _rData) const
@@ -409,7 +327,7 @@ const TaskPaneData& OApplicationDetailView::impl_getTaskPaneData( ElementType _e
 
 OUString OApplicationDetailView::getQualifiedName(weld::TreeIter* _pEntry) const
 {
-    return m_pControlHelper->getQualifiedName( _pEntry );
+    return GetControlHelper()->getQualifiedName( _pEntry );
 }
 
 bool OApplicationDetailView::isLeaf(const weld::TreeView& rTreeView, const weld::TreeIter& rEntry)
@@ -419,79 +337,84 @@ bool OApplicationDetailView::isLeaf(const weld::TreeView& rTreeView, const weld:
 
 bool OApplicationDetailView::isALeafSelected() const
 {
-    return m_pControlHelper->isALeafSelected();
+    return GetControlHelper()->isALeafSelected();
 }
 
 void OApplicationDetailView::selectAll()
 {
-    m_pControlHelper->selectAll();
+    GetControlHelper()->selectAll();
 }
 
 void OApplicationDetailView::sortDown()
 {
-    m_pControlHelper->sortDown();
+    GetControlHelper()->sortDown();
 }
 
 void OApplicationDetailView::sortUp()
 {
-    m_pControlHelper->sortUp();
+    GetControlHelper()->sortUp();
 }
 
 bool OApplicationDetailView::isFilled() const
 {
-    return m_pControlHelper->isFilled();
+    return GetControlHelper()->isFilled();
 }
 
 ElementType OApplicationDetailView::getElementType() const
 {
-    return m_pControlHelper->getElementType();
+    return GetControlHelper()->getElementType();
 }
 
 void OApplicationDetailView::clearPages(bool _bTaskAlso)
 {
     if ( _bTaskAlso )
         getTasksWindow().Clear();
-    m_pControlHelper->clearPages();
+    GetControlHelper()->clearPages();
 }
 
 sal_Int32 OApplicationDetailView::getSelectionCount()
 {
-    return m_pControlHelper->getSelectionCount();
+    return GetControlHelper()->getSelectionCount();
 }
 
 sal_Int32 OApplicationDetailView::getElementCount() const
 {
-    return m_pControlHelper->getElementCount();
+    return GetControlHelper()->getElementCount();
 }
 
 void OApplicationDetailView::getSelectionElementNames( std::vector< OUString>& _rNames ) const
 {
-    m_pControlHelper->getSelectionElementNames( _rNames );
+    GetControlHelper()->getSelectionElementNames( _rNames );
 }
 
 void OApplicationDetailView::describeCurrentSelectionForControl(const weld::TreeView& rControl, Sequence< NamedDatabaseObject >& out_rSelectedObjects)
 {
-    m_pControlHelper->describeCurrentSelectionForControl(rControl, out_rSelectedObjects);
+    GetControlHelper()->describeCurrentSelectionForControl(rControl, out_rSelectedObjects);
 }
 
 void OApplicationDetailView::describeCurrentSelectionForType( const ElementType _eType, Sequence< NamedDatabaseObject >& _out_rSelectedObjects )
 {
-    m_pControlHelper->describeCurrentSelectionForType( _eType, _out_rSelectedObjects );
+    GetControlHelper()->describeCurrentSelectionForType( _eType, _out_rSelectedObjects );
 }
 
-vcl::Window* OApplicationDetailView::getMenuParent(weld::TreeView& rControl) const
+vcl::Window* OApplicationDetailView::getMenuParent() const
 {
-    return m_pControlHelper->getMenuParent(rControl);
+    return GetControlHelper()->getMenuParent();
+}
+
+void OApplicationDetailView::adjustMenuPosition(const weld::TreeView& rControl, ::Point& rPos) const
+{
+    return GetControlHelper()->adjustMenuPosition(rControl, rPos);
 }
 
 void OApplicationDetailView::selectElements(const Sequence< OUString>& _aNames)
 {
-    m_pControlHelper->selectElements( _aNames );
+    GetControlHelper()->selectElements( _aNames );
 }
 
 std::unique_ptr<weld::TreeIter> OApplicationDetailView::getEntry(const Point& rPoint) const
 {
-    return m_pControlHelper->getEntry(rPoint);
+    return GetControlHelper()->getEntry(rPoint);
 }
 
 bool OApplicationDetailView::isCutAllowed()
@@ -514,59 +437,76 @@ void OApplicationDetailView::paste() { }
 
 std::unique_ptr<weld::TreeIter> OApplicationDetailView::elementAdded(ElementType _eType,const OUString& _rName, const Any& _rObject )
 {
-    return m_pControlHelper->elementAdded(_eType, _rName, _rObject);
+    return GetControlHelper()->elementAdded(_eType, _rName, _rObject);
 }
 
 void OApplicationDetailView::elementRemoved(ElementType _eType,const OUString& _rName )
 {
-    m_pControlHelper->elementRemoved(_eType,_rName );
+    GetControlHelper()->elementRemoved(_eType,_rName );
 }
 
 void OApplicationDetailView::elementReplaced(ElementType _eType
                                                     ,const OUString& _rOldName
                                                     ,const OUString& _rNewName )
 {
-    m_pControlHelper->elementReplaced( _eType, _rOldName, _rNewName );
+    GetControlHelper()->elementReplaced( _eType, _rOldName, _rNewName );
 }
 
 PreviewMode OApplicationDetailView::getPreviewMode() const
 {
-    return m_pControlHelper->getPreviewMode();
+    return GetControlHelper()->getPreviewMode();
 }
 
 bool OApplicationDetailView::isPreviewEnabled() const
 {
-    return m_pControlHelper->isPreviewEnabled();
+    return GetControlHelper()->isPreviewEnabled();
 }
 
 void OApplicationDetailView::switchPreview(PreviewMode _eMode)
 {
-    m_pControlHelper->switchPreview(_eMode);
+    GetControlHelper()->switchPreview(_eMode);
 }
 
 void OApplicationDetailView::showPreview(const Reference< XContent >& _xContent)
 {
-    m_pControlHelper->showPreview(_xContent);
+    GetControlHelper()->showPreview(_xContent);
 }
 
 void OApplicationDetailView::showPreview(   const OUString& _sDataSourceName,
                                             const OUString& _sName,
                                             bool _bTable)
 {
-    m_pControlHelper->showPreview(_sDataSourceName,_sName,_bTable);
+    GetControlHelper()->showPreview(_sDataSourceName,_sName,_bTable);
 }
 
 bool OApplicationDetailView::isSortUp() const
 {
-    return m_pControlHelper->isSortUp();
+    return GetControlHelper()->isSortUp();
 }
 
 TreeListBox* OApplicationDetailView::getTreeWindow() const
 {
-    DBTreeViewBase* pCurrent = m_pControlHelper->getCurrentView();
+    DBTreeViewBase* pCurrent = GetControlHelper()->getCurrentView();
     if (!pCurrent)
         return nullptr;
     return &pCurrent->getListBox();
+}
+
+OAppDetailPageHelper* OApplicationDetailView::GetControlHelper()
+{
+    return static_cast<OAppDetailPageHelper*>(m_xControlHelper.get());
+}
+
+const OAppDetailPageHelper* OApplicationDetailView::GetControlHelper() const
+{
+    return static_cast<const OAppDetailPageHelper*>(m_xControlHelper.get());
+}
+
+bool OApplicationDetailView::HasChildPathFocus() const
+{
+    return m_xHorzSplitter->has_focus() ||
+           m_xTasks->HasChildPathFocus() ||
+           m_xTitleContainer->HasChildPathFocus();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

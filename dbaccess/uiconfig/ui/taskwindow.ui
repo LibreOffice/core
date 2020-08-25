@@ -118,17 +118,28 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="helptext">
+                  <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-                    <property name="wrap">True</property>
-                    <property name="xalign">0</property>
-                    <property name="yalign">0</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="helptext-atkobject">
-                        <property name="AtkObject::accessible-role" translatable="no">static</property>
+                    <property name="hscrollbar_policy">external</property>
+                    <property name="vscrollbar_policy">external</property>
+                    <child>
+                      <object class="GtkTextView" id="helptext">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                        <property name="editable">False</property>
+                        <property name="wrap_mode">word</property>
+                        <property name="cursor_visible">False</property>
+                        <property name="accepts_tab">False</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="helptext-atkobject">
+                            <property name="AtkObject::accessible-role">static</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
