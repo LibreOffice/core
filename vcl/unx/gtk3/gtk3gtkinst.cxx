@@ -3923,11 +3923,15 @@ public:
         , m_pWindow(pWindow)
         , m_nToplevelFocusChangedSignalId(0)
     {
-        //hook up F1 to show help
-        GtkAccelGroup *pGroup = gtk_accel_group_new();
-        GClosure* closure = g_cclosure_new(G_CALLBACK(help_pressed), this, nullptr);
-        gtk_accel_group_connect(pGroup, GDK_KEY_F1, static_cast<GdkModifierType>(0), GTK_ACCEL_LOCKED, closure);
-        gtk_window_add_accel_group(pWindow, pGroup);
+        const bool bIsFrameWeld = pBuilder == nullptr;
+        if (!bIsFrameWeld)
+        {
+            //hook up F1 to show help
+            GtkAccelGroup *pGroup = gtk_accel_group_new();
+            GClosure* closure = g_cclosure_new(G_CALLBACK(help_pressed), this, nullptr);
+            gtk_accel_group_connect(pGroup, GDK_KEY_F1, static_cast<GdkModifierType>(0), GTK_ACCEL_LOCKED, closure);
+            gtk_window_add_accel_group(pWindow, pGroup);
+        }
     }
 
     virtual void set_title(const OUString& rTitle) override
