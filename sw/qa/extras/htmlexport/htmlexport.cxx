@@ -357,6 +357,8 @@ DECLARE_HTMLEXPORT_TEST(testNormalImageExport, "textAndImage.docx")
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "/html/body", 1);
+
+    // the HTML export normally does not embed the images
     OUString imgSrc = getXPath(pDoc, "/html/body/p/img", "src");
     CPPUNIT_ASSERT(imgSrc.endsWith(".png"));
 }
@@ -367,7 +369,13 @@ DECLARE_HTMLEXPORT_TEST(testEmbedImagesEnabled, "textAndImage.docx")
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "/html/body", 1);
-    assertXPath(pDoc, "/html/body/p/img", "src", "data:image/png;base64,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");
+
+    // the HTML export normally does not embed the images, but here the test
+    // name triggers setting of the "EmbedImages" filter option, meaning the
+    // image will not be a separate PNG, but an embedded base64 encoded
+    // version of that
+    OUString imgSrc = getXPath(pDoc, "/html/body/p/img", "src");
+    CPPUNIT_ASSERT(imgSrc.startsWith("data:image/png;base64,"));
 }
 
 DECLARE_HTMLEXPORT_TEST(testXHTML, "hello.html")
