@@ -24,6 +24,8 @@
 #include <svl/stritem.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
+#include <vcl/uitest/logger.hxx>
+#include <vcl/uitest/eventdescription.hxx>
 #include <editeng/editview.hxx>
 #include <sal/log.hxx>
 
@@ -45,6 +47,22 @@
 #include <postit.hxx>
 
 #include <vector>
+
+namespace
+{
+
+void collectUIInformation( const OUString& aevent )
+{
+    EventDescription aDescription;
+    aDescription.aID =  "grid_window";
+    aDescription.aParameters = {{ aevent ,  ""}};
+    aDescription.aAction = "COMMENT";
+    aDescription.aParent = "MainWindow";
+    aDescription.aKeyWord = "ScGridWinUIObject";
+    UITestLogger::getInstance().logEvent(aDescription);
+}
+
+}
 
 using ::std::vector;
 
@@ -520,6 +538,7 @@ void ScViewFunc::EditNote()
 
         ScTabView::OnLOKNoteStateChanged( pNote );
     }
+    collectUIInformation("OPEN");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
