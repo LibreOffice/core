@@ -261,7 +261,7 @@ gb_CppunitTest_CPPTESTPRECOMMAND := \
 	$(call gb_Helper_extend_ld_path,$(gb_Library_DLLDIR):$(WORKDIR)/UnpackedTarball/cppunit/src/cppunit/.libs)
 gb_CppunitTest_get_filename = libtest_$(1).dylib
 gb_CppunitTest_get_ilibfilename = $(gb_CppunitTest_get_filename)
-gb_CppunitTest_malloc_check := MallocScribble=1 MallocPreScribble=1
+gb_CppunitTest_malloc_check := -Q 'env MallocScribble=1' -Q 'env MallocPreScribble=1'
 
 define gb_CppunitTest_CppunitTest_platform
 $(call gb_LinkTarget_get_target,$(2)) : RPATH :=
