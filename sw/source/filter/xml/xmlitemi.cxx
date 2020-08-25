@@ -224,96 +224,6 @@ void SwXMLImportTableItemMapper_Impl::finished(
     }
 }
 
-namespace {
-
-class SwXMLItemSetContext_Impl : public SvXMLItemSetContext
-{
-    SvXMLImportContextRef xBackground;
-
-    using SvXMLItemSetContext::CreateChildContext;
-
-public:
-    SwXMLItemSetContext_Impl( SwXMLImport& rImport, sal_uInt16 nPrfx,
-                  const OUString& rLName,
-                  const Reference< xml::sax::XAttributeList > & xAttrList,
-                  SfxItemSet&  rItemSet,
-                  SvXMLImportItemMapper & rIMapper,
-                  const SvXMLUnitConverter& rUnitConv );
-    virtual ~SwXMLItemSetContext_Impl() override;
-
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                   const OUString& rLocalName,
-                   const ::uno::Reference< xml::sax::XAttributeList > & xAttrList,
-                   SfxItemSet&  rItemSet,
-                   const SvXMLItemMapEntry& rEntry,
-                   const SvXMLUnitConverter& rUnitConv ) override;
-};
-
-}
-
-SwXMLItemSetContext_Impl::SwXMLItemSetContext_Impl(
-                 SwXMLImport& rImport, sal_uInt16 nPrfx,
-                 const OUString& rLName,
-                 const Reference< xml::sax::XAttributeList > & xAttrList,
-                 SfxItemSet&  _rItemSet,
-                 SvXMLImportItemMapper & _rIMapper,
-                 const SvXMLUnitConverter& _rUnitConv ) :
-    SvXMLItemSetContext( rImport, nPrfx, rLName, xAttrList,
-                         _rItemSet, _rIMapper, _rUnitConv )
-{
-}
-
-SwXMLItemSetContext_Impl::~SwXMLItemSetContext_Impl()
-{
-    if( xBackground.is() )
-    {
-        const SvxBrushItem& rItem =
-            static_cast<SwXMLBrushItemImportContext*>(xBackground.get())->GetItem();
-        rItemSet.Put( rItem );
-    }
-}
-
-SvXMLImportContextRef SwXMLItemSetContext_Impl::CreateChildContext(
-                   sal_uInt16 nPrefix,
-                   const OUString& rLocalName,
-                   const Reference< xml::sax::XAttributeList > & xAttrList,
-                   SfxItemSet&  _rItemSet,
-                   const SvXMLItemMapEntry& rEntry,
-                   const SvXMLUnitConverter& _rUnitConv )
-{
-    SvXMLImportContextRef xContext;
-
-    switch( rEntry.nWhichId )
-    {
-    case RES_BACKGROUND:
-        {
-            const SfxPoolItem *pItem;
-            if( SfxItemState::SET == _rItemSet.GetItemState( RES_BACKGROUND,
-                                                       false, &pItem ) )
-            {
-                xContext = new SwXMLBrushItemImportContext(
-                                GetImport(), nPrefix, rLocalName, xAttrList,
-                                _rUnitConv, *static_cast<const SvxBrushItem *>(pItem) );
-            }
-            else
-            {
-                xContext = new SwXMLBrushItemImportContext(
-                                GetImport(), nPrefix, rLocalName, xAttrList,
-                                _rUnitConv, RES_BACKGROUND );
-            }
-            xBackground = xContext;
-        }
-        break;
-    }
-
-    if (!xContext)
-        xContext = SvXMLItemSetContext::CreateChildContext( nPrefix, rLocalName,
-                                                            xAttrList, _rItemSet,
-                                                            rEntry, _rUnitConv );
-
-    return xContext;
-}
-
 void SwXMLImport::InitItemImport()
 {
     m_pTwipUnitConv.reset( new SvXMLUnitConverter( GetComponentContext(),
@@ -361,7 +271,7 @@ SvXMLImportContext *SwXMLImport::CreateTableItemImportContext(
 
     m_pTableItemMapper->setMapEntries( xItemMap );
 
-    return new SwXMLItemSetContext_Impl( *this, nPrefix, rLocalName,
+    return new SwXMLItemSetContext( *this, nPrefix, rLocalName,
                                             xAttrList, rItemSet,
                                             GetTableItemMapper(),
                                             *m_pTwipUnitConv );
