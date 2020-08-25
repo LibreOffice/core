@@ -1382,8 +1382,8 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
             nResizeRefX=maRef1.X();
             nResizeRefY=maRef1.Y();
         }
-        aRetSet.Put(SfxUInt32Item(SID_ATTR_TRANSFORM_WIDTH,aRect.Right()-aRect.Left()));
-        aRetSet.Put(SfxUInt32Item(SID_ATTR_TRANSFORM_HEIGHT,aRect.Bottom()-aRect.Top()));
+        //aRetSet.Put(SfxUInt32Item(SID_ATTR_TRANSFORM_WIDTH,aRect.Right()-aRect.Left()));
+        //aRetSet.Put(SfxUInt32Item(SID_ATTR_TRANSFORM_HEIGHT,aRect.Bottom()-aRect.Top()));
         aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_RESIZE_REF_X,nResizeRefX));
         aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_RESIZE_REF_Y,nResizeRefY));
 
@@ -1507,6 +1507,22 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
 
             aRetSet.Put(AffineMatrixItem(&aAffineMatrix2D));
         }
+
+        // Logic rect is the rect of the unrotated shape, that gives us the exact
+        // width and height.
+        tools::Rectangle aLogicRect = pObj->GetLogicRect();
+
+        //// size
+        //long nResizeRefX = aLogicRect.Left();
+        //long nResizeRefY = aLogicRect.Top();
+        //if (meDragMode == SdrDragMode::Rotate) { // use rotation axis as a reference for resizing, too
+            //nResizeRefX = maRef1.X();
+            //nResizeRefY = maRef1.Y();
+        //}
+        aRetSet.Put(SfxUInt32Item(SID_ATTR_TRANSFORM_WIDTH, aLogicRect.Right() - aLogicRect.Left()));
+        aRetSet.Put(SfxUInt32Item(SID_ATTR_TRANSFORM_HEIGHT, aLogicRect.Bottom() - aLogicRect.Top()));
+        //aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_RESIZE_REF_X, nResizeRefX));
+        //aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_RESIZE_REF_Y, nResizeRefY));
     }
 
     return aRetSet;
