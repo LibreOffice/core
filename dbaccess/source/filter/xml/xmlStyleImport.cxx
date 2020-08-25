@@ -41,10 +41,10 @@ using namespace xmloff::token;
 
 
 OTableStyleContext::OTableStyleContext( ODBFilter& rImport,
-        sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< XAttributeList > & xAttrList,
+        sal_Int32 nElement,
+        const Reference< XFastAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles, XmlStyleFamily nFamily )
-    :XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily, false )
+    :XMLPropStyleContext( rImport, nElement, xAttrList, rStyles, nFamily, false )
     ,pStyles(&rStyles)
     ,m_nNumberFormat(-1)
 {
@@ -191,27 +191,26 @@ rtl::Reference < SvXMLImportPropertyMapper >
 }
 
 SvXMLStyleContext *OTableStylesContext::CreateStyleStyleChildContext(
-        XmlStyleFamily nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & xAttrList )
+        XmlStyleFamily nFamily, sal_Int32 nElement,
+        const Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
-    SvXMLStyleContext *pStyle = SvXMLStylesContext::CreateStyleStyleChildContext( nFamily, nPrefix,
-                                                            rLocalName,
+    SvXMLStyleContext *pStyle = SvXMLStylesContext::CreateStyleStyleChildContext( nFamily, nElement,
                                                             xAttrList );
-    if (!pStyle)
+    if (pStyle)
+        return pStyle;
+
+    switch( nFamily )
     {
-        switch( nFamily )
-        {
-        case XmlStyleFamily::TABLE_TABLE:
-        case XmlStyleFamily::TABLE_COLUMN:
-        case XmlStyleFamily::TABLE_CELL:
-            pStyle = new OTableStyleContext( GetOwnImport(), nPrefix, rLocalName,
-                                               xAttrList, *this, nFamily );
-            break;
-        default: break;
-        }
+    case XmlStyleFamily::TABLE_TABLE:
+    case XmlStyleFamily::TABLE_COLUMN:
+    case XmlStyleFamily::TABLE_CELL:
+        return new OTableStyleContext( GetOwnImport(), nElement,
+                                           xAttrList, *this, nFamily );
+        break;
+    default: break;
     }
 
-    return pStyle;
+    return nullptr;
 }
 
 OUString OTableStylesContext::GetServiceName( XmlStyleFamily nFamily ) const
