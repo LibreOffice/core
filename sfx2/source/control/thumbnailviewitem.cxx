@@ -216,6 +216,9 @@ void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const Thumbnai
     OUString aText (rText);
 
     TextEngine aTextEngine;
+    aTextEngine.SetFont(getVclFontFromFontAttribute(pAttrs->aFontAttr,
+                              pAttrs->aFontSize.getX(), pAttrs->aFontSize.getY(), 0,
+                              css::lang::Locale()));
     aTextEngine.SetMaxTextWidth(maDrawArea.getWidth());
     aTextEngine.SetText(rText);
 
