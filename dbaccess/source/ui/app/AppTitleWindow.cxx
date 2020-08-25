@@ -28,16 +28,14 @@
 namespace dbaui
 {
 
-OTitleWindow::OTitleWindow(vcl::Window* pParent, const char* pTitleId)
-    : InterimItemWindow(pParent, "dbaccess/ui/titlewindow.ui", "TitleWindow")
+OTitleWindow::OTitleWindow(weld::Container* pParent, const char* pTitleId)
+    : m_xBuilder(Application::CreateBuilder(pParent, "dbaccess/ui/titlewindow.ui"))
+    , m_xContainer(m_xBuilder->weld_container("TitleWindow"))
     , m_xTitleFrame(m_xBuilder->weld_container("titleparent"))
     , m_xTitle(m_xBuilder->weld_label("title"))
     , m_xChildContainer(m_xBuilder->weld_container("box"))
-    , m_xChildParent(m_xChildContainer->CreateChildFrame())
-    , m_xChild(nullptr)
 {
     setTitle(pTitleId);
-    ImplInitSettings();
 
     m_xTitleFrame->set_title_background();
     m_xTitle->set_label_type(weld::LabelType::Title);
@@ -45,30 +43,16 @@ OTitleWindow::OTitleWindow(vcl::Window* pParent, const char* pTitleId)
 
 OTitleWindow::~OTitleWindow()
 {
-    disposeOnce();
 }
 
-void OTitleWindow::dispose()
+weld::Container* OTitleWindow::getChildContainer()
 {
-    if (m_xChild)
-        m_xChild->Hide();
-    m_xChild.disposeAndClear();
-    m_xChildParent->dispose();
-    m_xChildParent.clear();
-    m_xChildContainer.reset();
-    m_xTitle.reset();
-    m_xTitleFrame.reset();
-    InterimItemWindow::dispose();
+    return m_xChildContainer.get();
 }
 
-vcl::Window* OTitleWindow::getChildContainer()
+void OTitleWindow::setChildWindow(std::shared_ptr<OChildWindow>& rChild)
 {
-    return VCLUnoHelper::GetWindow(m_xChildParent);
-}
-
-void OTitleWindow::setChildWindow(vcl::Window* pChild)
-{
-    m_xChild = pChild;
+    m_xChild = rChild;
 }
 
 void OTitleWindow::setTitle(const char* pTitleId)
@@ -78,13 +62,16 @@ void OTitleWindow::setTitle(const char* pTitleId)
     m_xTitle->set_label(DBA_RES(pTitleId));
 }
 
+#if 0
 void OTitleWindow::GetFocus()
 {
     InterimItemWindow::GetFocus();
     if (m_xChild)
         m_xChild->GrabFocus();
 }
+#endif
 
+#if 0
 long OTitleWindow::GetWidthPixel() const
 {
     Size aTextSize = LogicToPixel(Size(12, 0), MapMode(MapUnit::MapAppFont));
@@ -92,61 +79,7 @@ long OTitleWindow::GetWidthPixel() const
 
     return nWidth;
 }
-
-void OTitleWindow::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    Window::DataChanged( rDCEvt );
-
-    if ( (rDCEvt.GetType() == DataChangedEventType::FONTS) ||
-        (rDCEvt.GetType() == DataChangedEventType::DISPLAY) ||
-        (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION) ||
-        ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-        (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
-    {
-        ImplInitSettings();
-        Invalidate();
-    }
-}
-
-void OTitleWindow::ImplInitSettings()
-{
-    // FIXME RenderContext
-    AllSettings aAllSettings = GetSettings();
-    StyleSettings aStyle = aAllSettings.GetStyleSettings();
-    aStyle.SetMonoColor(aStyle.GetActiveBorderColor());//GetMenuBorderColor());
-    aAllSettings.SetStyleSettings(aStyle);
-    SetSettings(aAllSettings);
-
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    vcl::Font aFont = rStyleSettings.GetFieldFont();
-    aFont.SetColor( rStyleSettings.GetWindowTextColor() );
-    SetPointFont(*this, aFont);
-
-    SetTextColor( rStyleSettings.GetFieldTextColor() );
-    SetTextFillColor();
-
-    SetBackground( rStyleSettings.GetFieldColor() );
-}
-
-void OTitleWindow::ApplySettings(vcl::RenderContext& rRenderContext)
-{
-    // FIXME RenderContext
-    AllSettings aAllSettings = rRenderContext.GetSettings();
-    StyleSettings aStyle = aAllSettings.GetStyleSettings();
-    aStyle.SetMonoColor(aStyle.GetActiveBorderColor());//GetMenuBorderColor());
-    aAllSettings.SetStyleSettings(aStyle);
-    rRenderContext.SetSettings(aAllSettings);
-
-    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-    vcl::Font aFont = rStyleSettings.GetFieldFont();
-    aFont.SetColor(rStyleSettings.GetWindowTextColor());
-    SetPointFont(*this, aFont);
-
-    rRenderContext.SetTextColor(rStyleSettings.GetFieldTextColor());
-    rRenderContext.SetTextFillColor();
-
-    rRenderContext.SetBackground(rStyleSettings.GetFieldColor());
-}
+#endif
 
 } // namespace dbaui
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

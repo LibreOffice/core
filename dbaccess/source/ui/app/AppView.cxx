@@ -42,24 +42,33 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using ::com::sun::star::sdb::application::NamedDatabaseObject;
 
-OAppBorderWindow::OAppBorderWindow(OApplicationView* _pParent,PreviewMode _ePreviewMode) : Window(_pParent,WB_DIALOGCONTROL)
-    ,m_pPanel(nullptr)
-    ,m_pDetailView(nullptr)
-    ,m_pView(_pParent)
+OAppBorderWindow::OAppBorderWindow(OApplicationView* pParent, PreviewMode ePreviewMode)
+    : InterimItemWindow(pParent, "dbaccess/ui/appborderwindow.ui", "AppBorderWindow")
+    , m_xPanelParent(m_xBuilder->weld_container("panel"))
+    , m_xDetailViewParent(m_xBuilder->weld_container("detail"))
+    , m_xView(pParent)
 {
-
     SetBorderStyle(WindowBorderStyle::MONO);
 
-    m_pPanel = VclPtr<OTitleWindow>::Create(this, STR_DATABASE);
-    m_pPanel->SetBorderStyle(WindowBorderStyle::MONO);
-    VclPtrInstance<OApplicationSwapWindow> pSwap( m_pPanel->getChildContainer(), *this );
+    m_xPanel.reset(new OTitleWindow(m_xPanelParent.get(), STR_DATABASE));
+#if 0
+    m_xPanel->SetBorderStyle(WindowBorderStyle::MONO);
+#endif
+    std::shared_ptr<OChildWindow> xSwap = std::make_shared<OApplicationSwapWindow>(m_xPanel->getChildContainer(), *this);
+#if 0
     pSwap->Show();
+#endif
 
-    m_pPanel->setChildWindow(pSwap);
-    m_pPanel->Show();
+    m_xPanel->setChildWindow(xSwap);
+#if 0
+    m_xPanel->Show();
+#endif
 
-    m_pDetailView = VclPtr<OApplicationDetailView>::Create(*this,_ePreviewMode);
-    m_pDetailView->Show();
+    m_xDetailView.reset(new OApplicationDetailView(m_xDetailViewParent.get(), *this, ePreviewMode));
+
+#if 0
+    m_xDetailView->Show();
+#endif
 
     ImplInitSettings();
 }
@@ -72,43 +81,23 @@ OAppBorderWindow::~OAppBorderWindow()
 void OAppBorderWindow::dispose()
 {
     // destroy children
-    if ( m_pPanel )
-        m_pPanel->Hide();
-    m_pPanel.disposeAndClear();
-    if ( m_pDetailView )
-        m_pDetailView->Hide();
-    m_pDetailView.disposeAndClear();
-    m_pView.clear();
-    vcl::Window::dispose();
+    m_xPanel.reset();
+    m_xDetailView.reset();
+    m_xPanelParent.reset();
+    m_xDetailViewParent.reset();
+    m_xView.clear();
+    InterimItemWindow::dispose();
 }
 
 void OAppBorderWindow::GetFocus()
 {
-    if ( m_pPanel )
-        m_pPanel->GrabFocus();
+#if 0
+    if ( m_xPanel )
+        m_xPanel->GrabFocus();
+#endif
 }
 
-void OAppBorderWindow::Resize()
-{
-    // parent window dimension
-    Size aOutputSize( GetOutputSize() );
-    long nOutputWidth   = aOutputSize.Width();
-    long nOutputHeight  = aOutputSize.Height();
-    long nX = 0;
-
-    Size aFLSize = LogicToPixel(Size(3, 8), MapMode(MapUnit::MapAppFont));
-    if ( m_pPanel )
-    {
-        OApplicationSwapWindow* pSwap = getPanel();
-        if (pSwap)
-            nX = pSwap->get_preferred_size().Width();
-        nX = std::max(m_pPanel->GetWidthPixel() ,nX);
-        m_pPanel->SetPosSizePixel(Point(0,0),Size(nX,nOutputHeight));
-    }
-
-    if ( m_pDetailView )
-        m_pDetailView->SetPosSizePixel(Point(nX + aFLSize.Width(),0),Size(nOutputWidth - nX - aFLSize.Width(),nOutputHeight));
-}
+#if 0
 
 void OAppBorderWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -139,13 +128,12 @@ void OAppBorderWindow::ImplInitSettings()
 
     SetBackground( rStyleSettings.GetDialogColor() );
 }
-
+#endif
 
 OApplicationSwapWindow* OAppBorderWindow::getPanel() const
 {
-    return static_cast< OApplicationSwapWindow* >( m_pPanel->getChildWindow() );
+    return static_cast<OApplicationSwapWindow*>(m_xPanel->getChildWindow());
 }
-
 
 OApplicationView::OApplicationView( vcl::Window* pParent
                                     ,const Reference< XComponentContext >& _rxOrb
@@ -223,6 +211,7 @@ bool OApplicationView::PreNotify( NotifyEvent& rNEvt )
 {
     switch(rNEvt.GetType())
     {
+#if 0
         case MouseNotifyEvent::GETFOCUS:
             if( m_pWin && getPanel() && getPanel()->HasChildPathFocus() )
                 m_eChildFocus = PANELSWAP;
@@ -231,6 +220,7 @@ bool OApplicationView::PreNotify( NotifyEvent& rNEvt )
             else
                 m_eChildFocus = NONE;
             break;
+#endif
         case MouseNotifyEvent::KEYINPUT:
         {
             const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
@@ -345,7 +335,11 @@ bool OApplicationView::isFilled() const
 ElementType OApplicationView::getElementType() const
 {
     OSL_ENSURE(m_pWin && getDetailView() && getPanel(),"Detail view is NULL! -> GPF");
+#if 0
     return getDetailView()->HasChildPathFocus() ? getDetailView()->getElementType() : getPanel()->getElementType();
+#else
+    return getDetailView()->getElementType();
+#endif
 }
 
 sal_Int32 OApplicationView::getSelectionCount() const

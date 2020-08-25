@@ -24,17 +24,14 @@
 #include <com/sun/star/sdb/application/NamedDatabaseObject.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <unotools/eventlisteneradapter.hxx>
+#include <vcl/InterimItemWindow.hxx>
+#include <vcl/weld.hxx>
 #include <IClipBoardTest.hxx>
 #include <AppElementType.hxx>
 
 namespace com::sun::star::beans    { class XPropertySet; }
 
 class Control;
-namespace weld
-{
-    class TreeIter;
-    class TreeView;
-}
 class MnemonicGenerator;
 
 namespace dbaui
@@ -45,28 +42,25 @@ namespace dbaui
     class OTitleWindow;
     class OApplicationController;
 
-    class OAppBorderWindow : public vcl::Window
+    class OAppBorderWindow final : public InterimItemWindow
     {
-        VclPtr<OTitleWindow>                m_pPanel;
-        VclPtr<OApplicationDetailView>      m_pDetailView;
-        VclPtr<OApplicationView>            m_pView;
+        std::unique_ptr<weld::Container> m_xPanelParent;
+        std::unique_ptr<weld::Container> m_xDetailViewParent;
+        std::unique_ptr<OTitleWindow> m_xPanel;
+        std::unique_ptr<OApplicationDetailView> m_xDetailView;
+        VclPtr<OApplicationView>            m_xView;
 
-        void ImplInitSettings();
-    protected:
-        // Window
-        virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
     public:
-        OAppBorderWindow(OApplicationView* _pParent,PreviewMode _ePreviewMode);
+        OAppBorderWindow(OApplicationView* pParent, PreviewMode ePreviewMode);
         virtual ~OAppBorderWindow() override;
         virtual void dispose() override;
 
         // Window overrides
         virtual void GetFocus() override;
-        virtual void Resize() override;
 
-        OApplicationView*       getView() const { return m_pView;}
+        OApplicationView*       getView() const { return m_xView.get(); }
         OApplicationSwapWindow* getPanel() const;
-        OApplicationDetailView* getDetailView() const { return m_pDetailView;}
+        OApplicationDetailView* getDetailView() const { return m_xDetailView.get(); }
     };
 
     class OApplicationView : public ODataView

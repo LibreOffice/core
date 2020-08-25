@@ -63,30 +63,30 @@ namespace dbaui
         const char*     pTitleId;
     };
 
-    class OTasksWindow final : public InterimItemWindow
+    class OTasksWindow final : public OChildWindow
     {
         std::unique_ptr<weld::TreeView> m_xTreeView;
         std::unique_ptr<weld::Label> m_xDescription;
         std::unique_ptr<weld::Label> m_xHelpText;
-        VclPtr<OApplicationDetailView> m_pDetailView;
+        OApplicationDetailView* m_pDetailView;
 
         int m_nCursorIndex;
 
         DECL_LINK(onSelected, weld::TreeView&, bool);
         DECL_LINK(OnEntrySelectHdl, weld::TreeView&, void);
-        DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+//TODO        DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
         DECL_LINK(FocusInHdl, weld::Widget&, void);
         DECL_LINK(FocusOutHdl, weld::Widget&, void);
 
         void updateHelpText();
 
-        virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
     public:
-        OTasksWindow(vcl::Window* _pParent,OApplicationDetailView* _pDetailView);
-        virtual ~OTasksWindow() override;
-        virtual void dispose() override;
+        OTasksWindow(weld::Container* pParent, OApplicationDetailView* pDetailView);
+        ~OTasksWindow();
 
+#if 0
         virtual void GetFocus() override;
+#endif
 
         OApplicationDetailView* getDetailView() const { return m_pDetailView; }
 
@@ -97,27 +97,26 @@ namespace dbaui
         void setHelpText(const char* pId);
     };
 
-    class OApplicationDetailView : public OSplitterView
-                                 , public IClipboardTest
+    class OApplicationDetailView final : public IClipboardTest
     {
-        VclPtr<Splitter>                    m_aHorzSplitter;
-        VclPtr<OTitleWindow>                m_aTasks;
-        VclPtr<OTitleWindow>                m_aContainer;
+        std::unique_ptr<weld::Builder>      m_xBuilder;
+        std::unique_ptr<weld::Container>    m_xContainer;
+        std::unique_ptr<weld::Paned>        m_xHorzSplitter;
+        std::unique_ptr<weld::Container>    m_xTasksParent;
+        std::unique_ptr<weld::Container>    m_xContainerParent;
+        std::unique_ptr<OTitleWindow>       m_xTasks;
+        std::unique_ptr<OTitleWindow>       m_xTitleContainer;
         OAppBorderWindow&                   m_rBorderWin;       // my parent
-        VclPtr<OAppDetailPageHelper>        m_pControlHelper;
-        std::vector< TaskPaneData >       m_aTaskPaneData;
+        std::shared_ptr<OChildWindow>       m_xControlHelper;
+        std::vector< TaskPaneData >         m_aTaskPaneData;
         MnemonicGenerator                   m_aExternalMnemonics;
 
-        void ImplInitSettings();
-
-    protected:
-        virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
+        const OAppDetailPageHelper* GetControlHelper() const;
+        OAppDetailPageHelper* GetControlHelper();
 
     public:
-        OApplicationDetailView(OAppBorderWindow& _rParent,PreviewMode _ePreviewMode);
-        virtual ~OApplicationDetailView() override;
-        // Window overrides
-        virtual void dispose() override;
+        OApplicationDetailView(weld::Container* pParent, OAppBorderWindow& rBorder, PreviewMode ePreviewMode);
+        ~OApplicationDetailView();
 
         /** creates the tables page
             @param  _xConnection
@@ -136,7 +135,7 @@ namespace dbaui
         void setTaskExternalMnemonics( MnemonicGenerator const & _rMnemonics );
 
         OAppBorderWindow& getBorderWin() const { return m_rBorderWin; }
-        OTasksWindow& getTasksWindow() const { return *static_cast< OTasksWindow* >( m_aTasks->getChildWindow() ); }
+        OTasksWindow& getTasksWindow() const { return *static_cast< OTasksWindow* >( m_xTasks->getChildWindow() ); }
 
         bool isCutAllowed() override ;
         bool isCopyAllowed() override    ;

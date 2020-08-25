@@ -35,6 +35,7 @@
 #include <vcl/GraphicObject.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
+#include "ChildWindow.hxx"
 #include "DocumentInfoPreview.hxx"
 
 namespace com::sun::star::awt   { class XWindow; }
@@ -78,7 +79,7 @@ namespace dbaui
 
     // A helper class for the controls in the detail page.
     // Combines general functionality.
-    class OAppDetailPageHelper final : public InterimItemWindow
+    class OAppDetailPageHelper final : public OChildWindow
     {
         std::unique_ptr<DBTreeViewBase> m_aLists[ELEMENT_COUNT];
         OAppBorderWindow&         m_rBorderWin;
@@ -165,14 +166,17 @@ namespace dbaui
         OAppBorderWindow& getBorderWin() const { return m_rBorderWin; }
 
     public:
-        OAppDetailPageHelper(vcl::Window* _pParent,OAppBorderWindow& _rBorderWin,PreviewMode _ePreviewMode);
+        OAppDetailPageHelper(weld::Container* pParent, OAppBorderWindow& rBorderWin, PreviewMode ePreviewMode);
         virtual ~OAppDetailPageHelper() override;
+
+#if 0
         virtual void dispose() override;
 
         // Window overrides
         virtual void KeyInput( const KeyEvent& rKEvt ) override;
 
         virtual void GetFocus() override;
+#endif
 
         /** creates the tables page
             @param  _xConnection
