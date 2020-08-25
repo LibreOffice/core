@@ -430,7 +430,7 @@
         <xsl:choose>
             <xsl:when test="$repetition &lt;= $thresholdmax">
                 <xsl:copy-of select="$tableRow" />
-                <xsl:if test="$repetition &lt;= $thresholdmin">
+                <xsl:if test="$repetition &gt;= $thresholdmin">
                     <xsl:call-template name="optimized-row-repeating">
                         <xsl:with-param name="repetition" select="$repetition - 1"/>
                         <xsl:with-param name="tableRow" select="$tableRow" />
