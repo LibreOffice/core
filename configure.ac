@@ -10055,7 +10055,9 @@ if test "$USING_X11" = TRUE; then
     AC_CHECK_HEADERS(X11/SM/SMlib.h,[],[AC_MSG_ERROR([libSM headers not found])])
     AC_CHECK_LIB([SM], [SmcOpenConnection], [:],
         [AC_MSG_ERROR(SM library not found)])
+fi
 
+if test "$USING_X11" = TRUE -a "$ENABLE_JAVA" != ""; then
     # bean/native/unix/com_sun_star_comp_beans_LocalOfficeWindow.c needs Xt
     AC_CHECK_HEADERS(X11/Intrinsic.h,[],[AC_MSG_ERROR([libXt headers not found])])
 fi
