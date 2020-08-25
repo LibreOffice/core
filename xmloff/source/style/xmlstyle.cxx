@@ -416,6 +416,23 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext(
 
     switch (nElement)
     {
+        case XML_ELEMENT(STYLE, XML_STYLE):
+        case XML_ELEMENT(STYLE, XML_DEFAULT_STYLE):
+        {
+            XmlStyleFamily nFamily = XmlStyleFamily::DATA_STYLE;
+            for( auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ) )
+            {
+                if( aIter.getToken() == XML_ELEMENT(STYLE, XML_FAMILY) )
+                {
+                    nFamily = GetFamily( aIter.toString() );
+                    break;
+                }
+            }
+            pStyle = XML_ELEMENT(STYLE, XML_STYLE)==nElement
+                ? CreateStyleStyleChildContext( nFamily, nElement, xAttrList )
+                : CreateDefaultStyleStyleChildContext( nFamily, nElement, xAttrList );
+            break;
+        }
         case XML_ELEMENT(TEXT, XML_BIBLIOGRAPHY_CONFIGURATION):
             pStyle = new XMLIndexBibliographyConfigurationContext(
                 GetImport(), nElement, xAttrList);
@@ -476,6 +493,9 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext(
             break;
         }
     }
+
+    if (!pStyle)
+        SAL_WARN("xmloff", "Unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
 
     return pStyle;
 }
@@ -561,9 +581,23 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleStyleChildContext(
     return pStyle;
 }
 
+SvXMLStyleContext *SvXMLStylesContext::CreateStyleStyleChildContext(
+        XmlStyleFamily /*nFamily*/, sal_Int32 /*nElement*/,
+        const uno::Reference< xml::sax::XFastAttributeList > & /*xAttrList*/ )
+{
+    return nullptr;
+}
+
 SvXMLStyleContext *SvXMLStylesContext::CreateDefaultStyleStyleChildContext(
         XmlStyleFamily /*nFamily*/, sal_uInt16 /*nPrefix*/, const OUString& /*rLocalName*/,
         const uno::Reference< xml::sax::XAttributeList > & )
+{
+    return nullptr;
+}
+
+SvXMLStyleContext *SvXMLStylesContext::CreateDefaultStyleStyleChildContext(
+        XmlStyleFamily /*nFamily*/, sal_Int32 /*nElement*/,
+        const uno::Reference< xml::sax::XFastAttributeList > & )
 {
     return nullptr;
 }

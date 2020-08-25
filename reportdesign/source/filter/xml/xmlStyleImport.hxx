@@ -46,9 +46,8 @@ namespace rptxml
 
     public:
 
-        OControlStyleContext( ORptFilter& rImport, sal_uInt16 nPrfx,
-                const OUString& rLName,
-                const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
+        OControlStyleContext( ORptFilter& rImport, sal_Int32 nElement,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
                 SvXMLStylesContext& rStyles, XmlStyleFamily nFamily );
 
         virtual ~OControlStyleContext() override;
@@ -86,16 +85,16 @@ namespace rptxml
     protected:
 
         // Create a style context.
+        using SvXMLStylesContext::CreateStyleStyleChildContext;
         virtual SvXMLStyleContext *CreateStyleStyleChildContext(
                 XmlStyleFamily nFamily,
-                sal_uInt16 nPrefix,
-                const OUString& rLocalName,
-                const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
+                sal_Int32 nElement,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 
+        using SvXMLStylesContext::CreateDefaultStyleStyleChildContext;
         virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
-                XmlStyleFamily nFamily, sal_uInt16 nPrefix,
-                const OUString& rLocalName,
-                const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
+                XmlStyleFamily nFamily, sal_Int32 nElement,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 
     public:
 

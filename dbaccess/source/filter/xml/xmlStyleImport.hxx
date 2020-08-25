@@ -77,6 +77,7 @@ namespace dbaxml
     protected:
 
         // Create a style context.
+        using SvXMLStylesContext::CreateStyleStyleChildContext;
         virtual SvXMLStyleContext *CreateStyleStyleChildContext(
                 XmlStyleFamily nFamily,
                 sal_uInt16 nPrefix,

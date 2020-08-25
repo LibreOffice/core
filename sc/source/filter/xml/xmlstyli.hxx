@@ -139,12 +139,14 @@ class XMLTableStylesContext : public SvXMLStylesContext
 protected:
 
     // Create a style context.
+    using SvXMLStylesContext::CreateStyleStyleChildContext;
     virtual SvXMLStyleContext *CreateStyleStyleChildContext(
             XmlStyleFamily nFamily,
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
+    using SvXMLStylesContext::CreateDefaultStyleStyleChildContext;
     virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
         XmlStyleFamily nFamily, sal_uInt16 nPrefix,
         const OUString& rLocalName,
@@ -173,6 +175,7 @@ protected:
     virtual SvXMLStyleContext *CreateStyleChildContext( sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 
+    using SvXMLStylesContext::CreateStyleStyleChildContext;
     virtual SvXMLStyleContext *CreateStyleStyleChildContext( XmlStyleFamily nFamily,
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
