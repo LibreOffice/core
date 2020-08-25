@@ -344,10 +344,10 @@ IMPL_LINK(TreeListBox, CommandHdl, const CommandEvent&, rCEvt, bool)
     if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
         return false;
 
-    const ::Point& rPos = rCEvt.GetMousePosPixel();
+    ::Point aPos = rCEvt.GetMousePosPixel();
 
     std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
-    if (m_xTreeView->get_dest_row_at_pos(rPos, xIter.get(), false) && !m_xTreeView->is_selected(*xIter))
+    if (m_xTreeView->get_dest_row_at_pos(aPos, xIter.get(), false) && !m_xTreeView->is_selected(*xIter))
     {
         m_xTreeView->unselect_all();
         m_xTreeView->set_cursor(*xIter);
@@ -375,7 +375,7 @@ IMPL_LINK(TreeListBox, CommandHdl, const CommandEvent&, rCEvt, bool)
     if (!xMenuController.is())
         return false;
 
-    VclPtr<vcl::Window> xMenuParent = m_pContextMenuProvider->getMenuParent(*m_xTreeView);
+    VclPtr<vcl::Window> xMenuParent = m_pContextMenuProvider->getMenuParent();
 
     rtl::Reference xPopupMenu( new VCLXPopupMenu );
     xMenuController->setPopupMenu( xPopupMenu.get() );
@@ -445,8 +445,11 @@ IMPL_LINK(TreeListBox, CommandHdl, const CommandEvent&, rCEvt, bool)
         }
     }
 
+    // adjust pos relative to m_xTreeView to relative to xMenuParent
+    m_pContextMenuProvider->adjustMenuPosition(*m_xTreeView, aPos);
+
     // do action for selected entry in popup menu
-    pContextMenu->Execute(xMenuParent, rPos);
+    pContextMenu->Execute(xMenuParent, aPos);
     pContextMenu.disposeAndClear();
 
     css::uno::Reference<css::lang::XComponent> xComponent(xMenuController, css::uno::UNO_QUERY);

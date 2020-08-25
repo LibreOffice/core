@@ -2268,9 +2268,14 @@ Any OApplicationController::getCurrentSelection(weld::TreeView& rControl) const
     return makeAny( aSelection );
 }
 
-vcl::Window* OApplicationController::getMenuParent(weld::TreeView& rControl) const
+vcl::Window* OApplicationController::getMenuParent() const
 {
-    return getContainer()->getMenuParent(rControl);
+    return getContainer()->getMenuParent();
+}
+
+void OApplicationController::adjustMenuPosition(const weld::TreeView& rControl, ::Point& rPos) const
+{
+    getContainer()->adjustMenuPosition(rControl, rPos);
 }
 
 bool OApplicationController::requestQuickHelp(const void* /*pUserData*/, OUString& /*rText*/) const
