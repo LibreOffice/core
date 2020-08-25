@@ -277,9 +277,14 @@ protected:
 public:
 
 
-    SwXMLTextStyleContext_Impl( SwXMLImport& rImport, sal_uInt16 nPrfx,
+    SwXMLTextStyleContext_Impl( SwXMLImport& rImport, sal_uInt16 nElement,
             const OUString& rLName,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList,
+            XmlStyleFamily nFamily,
+            SvXMLStylesContext& rStyles );
+
+    SwXMLTextStyleContext_Impl( SwXMLImport& rImport, sal_Int32 nElement,
+            const uno::Reference< xml::sax::XFastAttributeList > & xAttrList,
             XmlStyleFamily nFamily,
             SvXMLStylesContext& rStyles );
 
@@ -367,6 +372,15 @@ SwXMLTextStyleContext_Impl::SwXMLTextStyleContext_Impl( SwXMLImport& rImport,
 {
 }
 
+SwXMLTextStyleContext_Impl::SwXMLTextStyleContext_Impl( SwXMLImport& rImport,
+        sal_Int32 nElement,
+        const uno::Reference< xml::sax::XFastAttributeList > & xAttrList,
+        XmlStyleFamily nFamily,
+        SvXMLStylesContext& rStyles ) :
+    XMLTextStyleContext( rImport, nElement, xAttrList, rStyles, nFamily )
+{
+}
+
 SvXMLImportContextRef SwXMLTextStyleContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
@@ -437,9 +451,8 @@ public:
 
 
     SwXMLItemSetStyleContext_Impl(
-            SwXMLImport& rImport, sal_uInt16 nPrfx,
-            const OUString& rLName,
-            const uno::Reference< xml::sax::XAttributeList > & xAttrList,
+            SwXMLImport& rImport, sal_Int32 nElement,
+            const uno::Reference< xml::sax::XFastAttributeList > & xAttrList,
             SvXMLStylesContext& rStylesC,
             XmlStyleFamily nFamily);
 
@@ -597,11 +610,11 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateItemSetContext(
 
 
 SwXMLItemSetStyleContext_Impl::SwXMLItemSetStyleContext_Impl( SwXMLImport& rImport,
-        sal_uInt16 nPrfx, const OUString& rLName,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList,
+        sal_Int32 nElement,
+        const uno::Reference< xml::sax::XFastAttributeList > & xAttrList,
         SvXMLStylesContext& rStylesC,
         XmlStyleFamily nFamily ) :
-    SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, nFamily ),
+    SvXMLStyleContext( rImport, nElement, xAttrList, nFamily ),
     pTextStyle( nullptr ),
     rStyles( rStylesC ),
     bHasMasterPageName( false ),
@@ -756,12 +769,12 @@ protected:
 
     using SvXMLStylesContext::CreateStyleStyleChildContext;
     virtual SvXMLStyleContext *CreateStyleStyleChildContext( XmlStyleFamily nFamily,
-        sal_uInt16 nPrefix, const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList ) override;
+        sal_Int32 nElement,
+        const uno::Reference< xml::sax::XFastAttributeList > & xAttrList ) override;
     using SvXMLStylesContext::CreateDefaultStyleStyleChildContext;
     virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
-        XmlStyleFamily nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList ) override;
+        XmlStyleFamily nFamily, sal_Int32 nElement,
+        const uno::Reference< xml::sax::XFastAttributeList > & xAttrList ) override;
     // HACK
     virtual rtl::Reference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
         XmlStyleFamily nFamily ) const override;
@@ -803,16 +816,16 @@ SvXMLStyleContext *SwXMLStylesContext_Impl::CreateStyleChildContext(
 }
 
 SvXMLStyleContext *SwXMLStylesContext_Impl::CreateStyleStyleChildContext(
-        XmlStyleFamily nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+        XmlStyleFamily nFamily, sal_Int32 nElement,
+        const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
     SvXMLStyleContext *pStyle = nullptr;
 
     switch( nFamily )
     {
     case XmlStyleFamily::TEXT_PARAGRAPH:
-        pStyle = new SwXMLTextStyleContext_Impl( GetSwImport(), nPrefix,
-                            rLocalName, xAttrList, nFamily, *this );
+        pStyle = new SwXMLTextStyleContext_Impl( GetSwImport(), nElement,
+                            xAttrList, nFamily, *this );
         break;
     case XmlStyleFamily::TABLE_TABLE:
     case XmlStyleFamily::TABLE_COLUMN:
@@ -820,26 +833,25 @@ SvXMLStyleContext *SwXMLStylesContext_Impl::CreateStyleStyleChildContext(
     case XmlStyleFamily::TABLE_CELL:
         // Distinguish real and automatic styles.
         if (IsAutomaticStyle())
-            pStyle = new SwXMLItemSetStyleContext_Impl(GetSwImport(), nPrefix, rLocalName, xAttrList, *this, nFamily);
+            pStyle = new SwXMLItemSetStyleContext_Impl(GetSwImport(), nElement, xAttrList, *this, nFamily);
         else if (nFamily == XmlStyleFamily::TABLE_CELL) // Real cell styles are used for table-template import.
-            pStyle = new SwXMLCellStyleContext(GetSwImport(), nPrefix, rLocalName, xAttrList, *this, nFamily);
+            pStyle = new SwXMLCellStyleContext(GetSwImport(), nElement, xAttrList, *this, nFamily);
         else
             SAL_WARN("sw.xml", "Context does not exists for non automatic table, column or row style.");
         break;
     case XmlStyleFamily::SD_GRAPHICS_ID:
         // As long as there are no element items, we can use the text
         // style class.
-        pStyle = new XMLTextShapeStyleContext( GetImport(), nPrefix,
-                            rLocalName, xAttrList, *this, nFamily );
+        pStyle = new XMLTextShapeStyleContext( GetImport(), nElement,
+                            xAttrList, *this, nFamily );
         break;
     case XmlStyleFamily::SD_DRAWINGPAGE_ID:
-        pStyle = new XMLDrawingPageStyleContext(GetImport(), nPrefix, rLocalName,
+        pStyle = new XMLDrawingPageStyleContext(GetImport(), nElement,
                 xAttrList, *this, g_MasterPageContextIDs, g_MasterPageFamilies);
         break;
     default:
         pStyle = SvXMLStylesContext::CreateStyleStyleChildContext( nFamily,
-                                                                   nPrefix,
-                                                              rLocalName,
+                                                                   nElement,
                                                               xAttrList );
         break;
     }
@@ -848,8 +860,8 @@ SvXMLStyleContext *SwXMLStylesContext_Impl::CreateStyleStyleChildContext(
 }
 
 SvXMLStyleContext *SwXMLStylesContext_Impl::CreateDefaultStyleStyleChildContext(
-        XmlStyleFamily nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+        XmlStyleFamily nFamily, sal_Int32 nElement,
+        const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
     SvXMLStyleContext *pStyle = nullptr;
 
@@ -858,20 +870,19 @@ SvXMLStyleContext *SwXMLStylesContext_Impl::CreateDefaultStyleStyleChildContext(
     case XmlStyleFamily::TEXT_PARAGRAPH:
     case XmlStyleFamily::TABLE_TABLE:
     case XmlStyleFamily::TABLE_ROW:
-        pStyle = new XMLTextStyleContext( GetImport(), nPrefix, rLocalName,
+        pStyle = new XMLTextStyleContext( GetImport(), nElement,
                                           xAttrList, *this, nFamily,
                                           true );
         break;
     case XmlStyleFamily::SD_GRAPHICS_ID:
         // There are no writer specific defaults for graphic styles!
-        pStyle = new XMLGraphicsDefaultStyle( GetImport(), nPrefix,
-                            rLocalName, xAttrList, *this );
+        pStyle = new XMLGraphicsDefaultStyle( GetImport(), nElement,
+                            xAttrList, *this );
         break;
     default:
         pStyle = SvXMLStylesContext::CreateDefaultStyleStyleChildContext( nFamily,
-                                                                   nPrefix,
-                                                              rLocalName,
-                                                              xAttrList );
+                                                                   nElement,
+                                                                   xAttrList );
         break;
     }
 
