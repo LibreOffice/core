@@ -1246,7 +1246,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
         case AnimationNodeType::ANIMATEPHYSICS:
         {
             eElementToken = XML_ANIMATEPHYSICS;
-            double fTemp;
+            double fTemp = 0;
 
             Reference< XAnimatePhysics > xAnimatePhysics( xAnimate, UNO_QUERY_THROW );
             aTemp = xAnimatePhysics->getStartVelocityX();

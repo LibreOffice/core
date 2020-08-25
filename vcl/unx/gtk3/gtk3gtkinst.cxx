@@ -8981,7 +8981,7 @@ public:
 
     virtual void set_alignment(TxtAlign eXAlign) override
     {
-        gfloat xalign;
+        gfloat xalign = 0;
         switch (eXAlign)
         {
             case TxtAlign::Left:
@@ -12879,7 +12879,7 @@ public:
 
     virtual void set_alignment(TxtAlign eXAlign) override
     {
-        GtkJustification eJust;
+        GtkJustification eJust = GTK_JUSTIFY_LEFT;
         switch (eXAlign)
         {
             case TxtAlign::Left:
