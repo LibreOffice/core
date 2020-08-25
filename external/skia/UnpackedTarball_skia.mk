@@ -23,7 +23,6 @@ skia_patches := \
     libvulkan-name.patch.1 \
     share-grcontext.patch.1 \
     Wdeprecated-copy-dtor.patch.0 \
-    fix-msvc.patch.1 \
     fix-gcc-x86.patch.1	\
     fix-sse.patch.1 \
     clang11-flax-vector-conversion.patch.0 \
@@ -32,14 +31,13 @@ skia_patches := \
     windows-do-not-modify-logfont.patch.0 \
     windows-text-gamma.patch.0 \
     windows-force-unicode-api.patch.0 \
-    operator-eq-bool.patch.1 \
     fix-without-gl.patch.0 \
     windows-typeface-directwrite.patch.0 \
     windows-raster-surface-no-copies.patch.1 \
     fix-windows-dwrite.patch.1 \
     public-make-from-backend-texture.patch.1 \
     c++20.patch.0 \
-    missing-include.patch.1 \
+    constexpr-debug-std-max.patch.1 \
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 

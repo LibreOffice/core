@@ -37,6 +37,7 @@ bool isVCLSkiaEnabled() { return false; }
 #include <SkPaint.h>
 #include <SkSurface.h>
 #include <SkGraphics.h>
+#include <GrDirectContext.h>
 #include <skia_compiler.hxx>
 #include <skia_opts.hxx>
 
@@ -140,7 +141,7 @@ static void writeSkiaRasterInfo()
     writeToLog(logFile, "Compiler", skia_compiler_name());
 }
 
-static sk_app::VulkanWindowContext::SharedGrContext getTemporaryGrContext();
+static sk_app::VulkanWindowContext::SharedGrDirectContext getTemporaryGrDirectContext();
 
 static void checkDeviceDenylisted(bool blockDisable = false)
 {
@@ -154,23 +155,23 @@ static void checkDeviceDenylisted(bool blockDisable = false)
     {
         case RenderVulkan:
         {
-            // First try if a GrContext already exists.
-            sk_app::VulkanWindowContext::SharedGrContext grContext
-                = sk_app::VulkanWindowContext::getSharedGrContext();
-            if (!grContext.getGrContext())
+            // First try if a GrDirectContext already exists.
+            sk_app::VulkanWindowContext::SharedGrDirectContext grDirectContext
+                = sk_app::VulkanWindowContext::getSharedGrDirectContext();
+            if (!grDirectContext.getGrDirectContext())
             {
                 // This function is called from isVclSkiaEnabled(), which
                 // may be called when deciding which X11 visual to use,
                 // and that visual is normally needed when creating
-                // Skia's VulkanWindowContext, which is needed for the GrContext.
-                // Avoid the loop by creating a temporary GrContext
+                // Skia's VulkanWindowContext, which is needed for the GrDirectContext.
+                // Avoid the loop by creating a temporary GrDirectContext
                 // that will use the default X11 visual (that shouldn't matter
                 // for just finding out information about Vulkan) and destroying
                 // the temporary context will clean up again.
-                grContext = getTemporaryGrContext();
+                grDirectContext = getTemporaryGrDirectContext();
             }
             bool denylisted = true; // assume the worst
-            if (grContext.getGrContext()) // Vulkan was initialized properly
+            if (grDirectContext.getGrDirectContext()) // Vulkan was initialized properly
             {
                 denylisted
                     = isVulkanDenylisted(sk_app::VulkanWindowContext::getPhysDeviceProperties());
@@ -324,7 +325,7 @@ void disableRenderMethod(RenderMethod method)
     methodToUse = RenderRaster;
 }
 
-static sk_app::VulkanWindowContext::SharedGrContext* sharedGrContext;
+static sk_app::VulkanWindowContext::SharedGrDirectContext* sharedGrDirectContext;
 
 static std::unique_ptr<sk_app::WindowContext> (*createVulkanWindowContextFunction)(bool) = nullptr;
 static void setCreateVulkanWindowContext(std::unique_ptr<sk_app::WindowContext> (*function)(bool))
@@ -332,22 +333,22 @@ static void setCreateVulkanWindowContext(std::unique_ptr<sk_app::WindowContext> 
     createVulkanWindowContextFunction = function;
 }
 
-GrContext* getSharedGrContext()
+GrDirectContext* getSharedGrDirectContext()
 {
     SkiaZone zone;
     assert(renderMethodToUse() == RenderVulkan);
-    if (sharedGrContext)
-        return sharedGrContext->getGrContext();
+    if (sharedGrDirectContext)
+        return sharedGrDirectContext->getGrDirectContext();
     // TODO mutex?
-    // Set up the shared GrContext from Skia's (patched) VulkanWindowContext, if it's been
+    // Set up the shared GrDirectContext from Skia's (patched) VulkanWindowContext, if it's been
     // already set up.
-    sk_app::VulkanWindowContext::SharedGrContext context
-        = sk_app::VulkanWindowContext::getSharedGrContext();
-    GrContext* grContext = context.getGrContext();
-    if (grContext)
+    sk_app::VulkanWindowContext::SharedGrDirectContext context
+        = sk_app::VulkanWindowContext::getSharedGrDirectContext();
+    GrDirectContext* grDirectContext = context.getGrDirectContext();
+    if (grDirectContext)
     {
-        sharedGrContext = new sk_app::VulkanWindowContext::SharedGrContext(context);
-        return grContext;
+        sharedGrDirectContext = new sk_app::VulkanWindowContext::SharedGrDirectContext(context);
+        return grDirectContext;
     }
     static bool done = false;
     if (done)
@@ -357,24 +358,24 @@ GrContext* getSharedGrContext()
         return nullptr; // not initialized properly (e.g. used from a VCL backend with no Skia support)
     std::unique_ptr<sk_app::WindowContext> tmpContext = createVulkanWindowContextFunction(false);
     // Set up using the shared context created by the call above, if successful.
-    context = sk_app::VulkanWindowContext::getSharedGrContext();
-    grContext = context.getGrContext();
-    if (grContext)
+    context = sk_app::VulkanWindowContext::getSharedGrDirectContext();
+    grDirectContext = context.getGrDirectContext();
+    if (grDirectContext)
     {
-        sharedGrContext = new sk_app::VulkanWindowContext::SharedGrContext(context);
-        return grContext;
+        sharedGrDirectContext = new sk_app::VulkanWindowContext::SharedGrDirectContext(context);
+        return grDirectContext;
     }
     disableRenderMethod(RenderVulkan);
     return nullptr;
 }
 
-static sk_app::VulkanWindowContext::SharedGrContext getTemporaryGrContext()
+static sk_app::VulkanWindowContext::SharedGrDirectContext getTemporaryGrDirectContext()
 {
     if (createVulkanWindowContextFunction == nullptr)
-        return sk_app::VulkanWindowContext::SharedGrContext();
+        return sk_app::VulkanWindowContext::SharedGrDirectContext();
     std::unique_ptr<sk_app::WindowContext> tmpContext = createVulkanWindowContextFunction(true);
     // Set up using the shared context created by the call above, if successful.
-    return sk_app::VulkanWindowContext::getSharedGrContext();
+    return sk_app::VulkanWindowContext::getSharedGrDirectContext();
 }
 
 sk_sp<SkSurface> createSkSurface(int width, int height, SkColorType type)
@@ -386,10 +387,10 @@ sk_sp<SkSurface> createSkSurface(int width, int height, SkColorType type)
     {
         case SkiaHelper::RenderVulkan:
         {
-            if (GrContext* grContext = getSharedGrContext())
+            if (GrDirectContext* grDirectContext = getSharedGrDirectContext())
             {
                 surface = SkSurface::MakeRenderTarget(
-                    grContext, SkBudgeted::kNo,
+                    grDirectContext, SkBudgeted::kNo,
                     SkImageInfo::Make(width, height, type, kPremul_SkAlphaType));
                 assert(surface);
 #ifdef DBG_UTIL
@@ -419,10 +420,11 @@ sk_sp<SkImage> createSkImage(const SkBitmap& bitmap)
     {
         case SkiaHelper::RenderVulkan:
         {
-            if (GrContext* grContext = getSharedGrContext())
+            if (GrDirectContext* grDirectContext = getSharedGrDirectContext())
             {
-                sk_sp<SkSurface> surface = SkSurface::MakeRenderTarget(
-                    grContext, SkBudgeted::kNo, bitmap.info().makeAlphaType(kPremul_SkAlphaType));
+                sk_sp<SkSurface> surface
+                    = SkSurface::MakeRenderTarget(grDirectContext, SkBudgeted::kNo,
+                                                  bitmap.info().makeAlphaType(kPremul_SkAlphaType));
                 assert(surface);
                 SkPaint paint;
                 paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
@@ -519,8 +521,8 @@ void removeCachedImage(sk_sp<SkImage> image)
 
 void cleanup()
 {
-    delete sharedGrContext;
-    sharedGrContext = nullptr;
+    delete sharedGrDirectContext;
+    sharedGrDirectContext = nullptr;
     delete imageCache;
     imageCache = nullptr;
     imageCacheSize = 0;

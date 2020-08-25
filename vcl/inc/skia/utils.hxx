@@ -30,8 +30,8 @@
 
 namespace SkiaHelper
 {
-// Get the one shared GrContext instance.
-GrContext* getSharedGrContext();
+// Get the one shared GrDirectContext instance.
+GrDirectContext* getSharedGrDirectContext();
 
 void disableRenderMethod(RenderMethod method);
 
