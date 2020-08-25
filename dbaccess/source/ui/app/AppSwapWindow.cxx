@@ -23,6 +23,7 @@
 #include <vcl/event.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include "AppController.hxx"
 
 using namespace ::dbaui;
@@ -31,8 +32,8 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 
-OApplicationSwapWindow::OApplicationSwapWindow(vcl::Window* pParent, OAppBorderWindow& rBorderWindow)
-    : InterimItemWindow(pParent, "dbaccess/ui/appswapwindow.ui", "AppSwapWindow")
+OApplicationSwapWindow::OApplicationSwapWindow(weld::Container* pParent, OAppBorderWindow& rBorderWindow)
+    : OChildWindow(pParent, "dbaccess/ui/appswapwindow.ui", "AppSwapWindow")
     , m_xIconControl(new OApplicationIconControl(m_xBuilder->weld_scrolled_window("scroll")))
     , m_xIconControlWin(new weld::CustomWeld(*m_xBuilder, "valueset", *m_xIconControl))
     , m_eLastType(E_NONE)
@@ -40,59 +41,23 @@ OApplicationSwapWindow::OApplicationSwapWindow(vcl::Window* pParent, OAppBorderW
 {
     m_xContainer->set_stack_background();
 
-    ImplInitSettings();
-
     m_xIconControl->SetHelpId(HID_APP_SWAP_ICONCONTROL);
     m_xIconControl->Fill();
     m_xIconControl->setItemStateHdl(LINK(this, OApplicationSwapWindow, OnContainerSelectHdl));
     m_xIconControl->setControlActionListener( &m_rBorderWin.getView()->getAppController() );
 }
 
+#if 0
 void OApplicationSwapWindow::GetFocus()
 {
     if (m_xIconControl)
         m_xIconControl->GrabFocus();
     InterimItemWindow::GetFocus();
 }
+#endif
 
 OApplicationSwapWindow::~OApplicationSwapWindow()
 {
-    disposeOnce();
-}
-
-void OApplicationSwapWindow::dispose()
-{
-    m_xIconControlWin.reset();
-    m_xIconControl.reset();
-    InterimItemWindow::dispose();
-}
-
-void OApplicationSwapWindow::ImplInitSettings()
-{
-    // FIXME RenderContext
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    vcl::Font aFont = rStyleSettings.GetFieldFont();
-    aFont.SetColor( rStyleSettings.GetWindowTextColor() );
-    SetPointFont(*this, aFont);
-
-    SetTextColor( rStyleSettings.GetFieldTextColor() );
-    SetTextFillColor();
-
-    SetBackground( rStyleSettings.GetFieldColor() );
-}
-
-void OApplicationSwapWindow::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    Window::DataChanged( rDCEvt );
-    if ( (rDCEvt.GetType() == DataChangedEventType::FONTS) ||
-        (rDCEvt.GetType() == DataChangedEventType::DISPLAY) ||
-        (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION) ||
-        ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-        (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
-    {
-        ImplInitSettings();
-        Invalidate();
-    }
 }
 
 void OApplicationSwapWindow::clearSelection()
@@ -132,7 +97,8 @@ bool OApplicationSwapWindow::onContainerSelected( ElementType _eType )
         return true;
     }
 
-    PostUserEvent( LINK( this, OApplicationSwapWindow, ChangeToLastSelected ), nullptr, true );
+//TODO    PostUserEvent( LINK( this, OApplicationSwapWindow, ChangeToLastSelected ), nullptr, true );
+    Application::PostUserEvent(LINK(this, OApplicationSwapWindow, ChangeToLastSelected));
     return false;
 }
 

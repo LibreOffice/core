@@ -24,13 +24,14 @@
 #include <vcl/vclptr.hxx>
 #include "AppIconControl.hxx"
 #include <AppElementType.hxx>
+#include "ChildWindow.hxx"
 
 class MnemonicGenerator;
 
 namespace dbaui
 {
     class OAppBorderWindow;
-    class OApplicationSwapWindow : public InterimItemWindow
+    class OApplicationSwapWindow : public OChildWindow
                                  , public IClipboardTest
     {
         std::unique_ptr<OApplicationIconControl> m_xIconControl;
@@ -38,18 +39,14 @@ namespace dbaui
         ElementType                         m_eLastType;
         OAppBorderWindow&                   m_rBorderWin;
 
-        void ImplInitSettings();
-
         DECL_LINK( OnContainerSelectHdl, const ThumbnailViewItem*, void );
         DECL_LINK( ChangeToLastSelected, void*, void );
-    protected:
-        virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
+
     public:
-        OApplicationSwapWindow(vcl::Window* pParent, OAppBorderWindow& rBorderWindow);
+        OApplicationSwapWindow(weld::Container* pParent, OAppBorderWindow& rBorderWindow);
         virtual ~OApplicationSwapWindow() override;
-        // Window overrides
-        virtual void dispose() override;
-        virtual void GetFocus() override;
+
+//TODO        virtual void GetFocus() override;
 
         bool isCutAllowed() override      { return false; }
         bool isCopyAllowed() override     { return false; }
