@@ -1097,21 +1097,25 @@ void XclObjAny::WriteFromTo( XclExpXmlStream& rStrm, const Reference< XShape >& 
     awt::Size   aSize       = rShape->getSize();
 
     uno::Reference< beans::XPropertySet > xShapeProperties(rShape, uno::UNO_QUERY_THROW);
-    uno::Any nRotProp = xShapeProperties->getPropertyValue("RotateAngle");
-    sal_Int32 nRot = nRotProp.get<sal_Int32>();
-
-    if ((nRot >= 45 * 100 && nRot < 135 * 100) || (nRot >= 225 * 100 && nRot < 315 * 100))
+    uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xShapeProperties->getPropertySetInfo();
+    if (xPropertySetInfo->hasPropertyByName("RotateAngle"))
     {
-        // MSO changes the anchor positions at these angles and that does an extra 90 degrees
-        // rotation on our shapes, so we output it in such position that MSO
-        // can draw this shape correctly.
+        uno::Any nRotProp = xShapeProperties->getPropertyValue("RotateAngle");
+        sal_Int32 nRot = nRotProp.get<sal_Int32>();
 
-        sal_Int16 nHalfWidth = aSize.Width / 2;
-        sal_Int16 nHalfHeight = aSize.Height / 2;
-        aTopLeft.X = aTopLeft.X - nHalfHeight + nHalfWidth;
-        aTopLeft.Y = aTopLeft.Y - nHalfWidth + nHalfHeight;
+        if ((nRot >= 45 * 100 && nRot < 135 * 100) || (nRot >= 225 * 100 && nRot < 315 * 100))
+        {
+            // MSO changes the anchor positions at these angles and that does an extra 90 degrees
+            // rotation on our shapes, so we output it in such position that MSO
+            // can draw this shape correctly.
 
-        std::swap(aSize.Width, aSize.Height);
+            sal_Int16 nHalfWidth = aSize.Width / 2;
+            sal_Int16 nHalfHeight = aSize.Height / 2;
+            aTopLeft.X = aTopLeft.X - nHalfHeight + nHalfWidth;
+            aTopLeft.Y = aTopLeft.Y - nHalfWidth + nHalfHeight;
+
+            std::swap(aSize.Width, aSize.Height);
+        }
     }
 
     tools::Rectangle   aLocation( aTopLeft.X, aTopLeft.Y, aTopLeft.X + aSize.Width, aTopLeft.Y + aSize.Height );
