@@ -675,8 +675,8 @@ void VDiagram::reduceToMinimumSize()
     awt::Size aMaxSize( m_aAvailableSizeIncludingAxes );
     awt::Point aMaxPos( m_aAvailablePosIncludingAxes );
 
-    sal_Int32 nNewWidth = aMaxSize.Width/3;
-    sal_Int32 nNewHeight = aMaxSize.Height/3;
+    sal_Int32 nNewWidth = std::round(aMaxSize.Width/2.2);
+    sal_Int32 nNewHeight = std::round(aMaxSize.Height/2.2);
     awt::Size aNewSize( nNewWidth, nNewHeight );
     awt::Point aNewPos( aMaxPos );
     aNewPos.X += nNewWidth;

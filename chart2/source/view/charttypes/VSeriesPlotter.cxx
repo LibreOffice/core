@@ -151,6 +151,7 @@ VSeriesPlotter::VSeriesPlotter( const uno::Reference<XChartType>& xChartTypeMode
         , m_pExplicitCategoriesProvider(nullptr)
         , m_bPointsWereSkipped(false)
         , m_bPieLabelsAllowToMove(false)
+        , m_aAvailableOuterRect(0, 0, 0, 0)
 {
     SAL_WARN_IF(!m_xChartTypeModel.is(),"chart2","no XChartType available in view, fallback to default values may be wrong");
 }
