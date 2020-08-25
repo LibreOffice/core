@@ -59,18 +59,18 @@ You can also use 'visualbackendtest' to visually check some operations. Use some
 SAL_SKIA=raster SAL_ENABLESKIA=1 SAL_USE_VCLPLUGIN=gen [srcdir]/bin/run visualbackendtest
 
 
-GrContext sharing:
-==================
+GrDirectContext sharing:
+========================
 
 We use Skia's sk_app::WindowContext class for creating surfaces for windows, that class
 takes care of the internals. But of offscreen drawing, we need an instance of class
-GrContext. There is sk_app::WindowContext::getGrContext(), but each instance creates
-its own GrContext, and apparently it does not work to mix them. Which means that
+GrDirectContext. There is sk_app::WindowContext::getGrDirectContext(), but each instance creates
+its own GrDirectContext, and apparently it does not work to mix them. Which means that
 for offscreen drawing we would need to know which window (and only that window)
 the contents will be eventually painted to, which is not possible (it may not even
 be known at the time).
 
-To solve this problem we patch sk_app::WindowContext to create just one GrContext object
-and share it between instances. Additionally, using sk_app::WindowContext::SharedGrContext
+To solve this problem we patch sk_app::WindowContext to create just one GrDirectContext object
+and share it between instances. Additionally, using sk_app::WindowContext::SharedGrDirectContext
 it is possible to share it also for offscreen drawing, including keeping proper reference
 count.

@@ -8,14 +8,3 @@
  
    GrDriverBugWorkarounds& operator=(const GrDriverBugWorkarounds&) = default;
  
---- tools/sk_app/VulkanWindowContext.h
-+++ tools/sk_app/VulkanWindowContext.h
-@@ -33,6 +33,8 @@
-         SharedGrContext() {}
-         GrContext* getGrContext() { return shared ? shared->fContext.get() : nullptr; }
-         ~SharedGrContext() { shared.reset(); checkDestroyShared(); }
-+        SharedGrContext(SharedGrContext const &) = default;
-+        SharedGrContext & operator =(SharedGrContext const &) = default;
-         bool operator!() const { return !shared; }
-         void reset() { shared.reset(); }
-     private:
