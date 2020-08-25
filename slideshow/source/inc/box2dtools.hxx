@@ -65,13 +65,6 @@ struct Box2DDynamicUpdateInformation
     int mnDelayForSteps = 0;
 };
 
-union Box2DStaticUpdateInformation {
-    ::basegfx::B2DPoint maPosition;
-    bool mbVisibility;
-    double mfAngle;
-    Box2DStaticUpdateInformation() {}
-};
-
 /** Class that manages the Box2D World
 
     This class is used when there's a simulated animation going on,
@@ -89,16 +82,12 @@ private:
     /// Holds whether or not there is a Physics Animation node that
     /// is stepping the Box2D World
     bool mbHasWorldStepper;
+    int mnPhysicsAnimationCounter;
     std::unordered_map<css::uno::Reference<css::drawing::XShape>, Box2DBodySharedPtr>
         mpXShapeToBodyMap;
     /// Holds any information needed to keep LO animations and Box2D world in sync
     /// if they are going in parallel
     std::queue<Box2DDynamicUpdateInformation> maShapeParallelUpdateQueue;
-    /// Holds necessary information to update a shape's body that was altered by an
-    /// animation effect while there was no Physics Animation going in parallel
-    std::map<std::pair<css::uno::Reference<css::drawing::XShape>, box2DNonsimulatedShapeUpdateType>,
-             Box2DStaticUpdateInformation>
-        maShapeSequentialUpdate;
 
     /// Creates a static frame in Box2D world that corresponds to the slide borders
     void createStaticFrameAroundSlide(const ::basegfx::B2DVector& rSlideSize);
@@ -270,7 +259,11 @@ public:
     void queueShapeAnimationEndUpdate(const css::uno::Reference<css::drawing::XShape>& xShape,
                                       const slideshow::internal::AttributeType eAttrType);
 
-    void alertAnimationEndForShape(const slideshow::internal::ShapeSharedPtr& pShape);
+    void alertPhysicsAnimationEnd(const slideshow::internal::ShapeSharedPtr& pShape);
+
+    void
+    alertPhysicsAnimationStart(const ::basegfx::B2DVector& rSlideSize,
+                               const slideshow::internal::ShapeManagerSharedPtr& pShapeManager);
 };
 
 /// Class that manages a single box2D Body

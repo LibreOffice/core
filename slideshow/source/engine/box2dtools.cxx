@@ -11,6 +11,7 @@
 #include <Box2D/Box2D.h>
 
 #include <shapemanager.hxx>
+#include <attributableshape.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
@@ -208,9 +209,9 @@ box2DWorld::box2DWorld(const ::basegfx::B2DVector& rSlideSize)
     , mfScaleFactor(calculateScaleFactor(rSlideSize))
     , mbShapesInitialized(false)
     , mbHasWorldStepper(false)
+    , mnPhysicsAnimationCounter(0)
     , mpXShapeToBodyMap()
     , maShapeParallelUpdateQueue()
-    , maShapeSequentialUpdate()
 {
 }
 
@@ -326,75 +327,41 @@ void box2DWorld::setShapeCollision(
 
 void box2DWorld::processUpdateQueue(const double fPassedTime)
 {
-    if (maShapeSequentialUpdate.empty())
+    while (!maShapeParallelUpdateQueue.empty())
     {
-        while (!maShapeParallelUpdateQueue.empty())
-        {
-            Box2DDynamicUpdateInformation& aQueueElement = maShapeParallelUpdateQueue.front();
+        Box2DDynamicUpdateInformation& aQueueElement = maShapeParallelUpdateQueue.front();
 
-            if (aQueueElement.mnDelayForSteps > 0)
-            {
-                // it was queued as a delayed action, skip it, don't pop
-                aQueueElement.mnDelayForSteps--;
-            }
-            else
-            {
-                switch (aQueueElement.meUpdateType)
-                {
-                    default:
-                    case BOX2D_UPDATE_POSITION:
-                        setShapePositionByLinearVelocity(aQueueElement.mxShape,
-                                                         aQueueElement.maPosition, fPassedTime);
-                        break;
-                    case BOX2D_UPDATE_ANGLE:
-                        setShapeAngleByAngularVelocity(aQueueElement.mxShape, aQueueElement.mfAngle,
-                                                       fPassedTime);
-                        break;
-                    case BOX2D_UPDATE_SIZE:
-                        break;
-                    case BOX2D_UPDATE_VISIBILITY:
-                        setShapeCollision(aQueueElement.mxShape, aQueueElement.mbVisibility);
-                        break;
-                    case BOX2D_UPDATE_LINEAR_VELOCITY:
-                        setShapeLinearVelocity(aQueueElement.mxShape, aQueueElement.maVelocity);
-                        break;
-                    case BOX2D_UPDATE_ANGULAR_VELOCITY:
-                        setShapeAngularVelocity(aQueueElement.mxShape,
-                                                aQueueElement.mfAngularVelocity);
-                }
-                maShapeParallelUpdateQueue.pop();
-            }
+        if (aQueueElement.mnDelayForSteps > 0)
+        {
+            // it was queued as a delayed action, skip it, don't pop
+            aQueueElement.mnDelayForSteps--;
         }
-    }
-    else
-    {
-        // clear the Parallel Update Queue since the updates in it
-        // are not relevant now - if there's any
-        maShapeParallelUpdateQueue = {};
-
-        for (auto& aIt : maShapeSequentialUpdate)
+        else
         {
-            const css::uno::Reference<css::drawing::XShape>& xShape = aIt.first.first;
-            const box2DNonsimulatedShapeUpdateType eUpdateType = aIt.first.second;
-            const Box2DStaticUpdateInformation& rUpdateInformation = aIt.second;
-
-            switch (eUpdateType)
+            switch (aQueueElement.meUpdateType)
             {
                 default:
                 case BOX2D_UPDATE_POSITION:
-                    setShapePosition(xShape, rUpdateInformation.maPosition);
+                    setShapePositionByLinearVelocity(aQueueElement.mxShape,
+                                                     aQueueElement.maPosition, fPassedTime);
                     break;
                 case BOX2D_UPDATE_ANGLE:
-                    setShapeAngle(xShape, rUpdateInformation.mfAngle);
+                    setShapeAngleByAngularVelocity(aQueueElement.mxShape, aQueueElement.mfAngle,
+                                                   fPassedTime);
+                    break;
+                case BOX2D_UPDATE_SIZE:
                     break;
                 case BOX2D_UPDATE_VISIBILITY:
-                    setShapeCollision(xShape, rUpdateInformation.mbVisibility);
+                    setShapeCollision(aQueueElement.mxShape, aQueueElement.mbVisibility);
                     break;
+                case BOX2D_UPDATE_LINEAR_VELOCITY:
+                    setShapeLinearVelocity(aQueueElement.mxShape, aQueueElement.maVelocity);
+                    break;
+                case BOX2D_UPDATE_ANGULAR_VELOCITY:
+                    setShapeAngularVelocity(aQueueElement.mxShape, aQueueElement.mfAngularVelocity);
             }
+            maShapeParallelUpdateQueue.pop();
         }
-
-        // After applying all required updates empty map
-        maShapeSequentialUpdate.clear();
     }
 }
 
@@ -514,50 +481,20 @@ void box2DWorld::queueShapeAnimationUpdate(
     const slideshow::internal::ShapeAttributeLayerSharedPtr& pAttrLayer,
     const slideshow::internal::AttributeType eAttrType)
 {
-    if (mbHasWorldStepper) // if there's a physics animation going on
+    switch (eAttrType)
     {
-        switch (eAttrType)
-        {
-            case slideshow::internal::AttributeType::Visibility:
-                queueShapeVisibilityUpdate(xShape, pAttrLayer->getVisibility());
-                return;
-            case slideshow::internal::AttributeType::Rotate:
-                queueDynamicRotationUpdate(xShape, pAttrLayer->getRotationAngle());
-                return;
-            case slideshow::internal::AttributeType::PosX:
-            case slideshow::internal::AttributeType::PosY:
-                queueDynamicPositionUpdate(xShape,
-                                           { pAttrLayer->getPosX(), pAttrLayer->getPosY() });
-                return;
-            default:
-                return;
-        }
-    }
-    else
-    {
-        Box2DStaticUpdateInformation aStaticUpdateInformation;
-        switch (eAttrType)
-        {
-            case slideshow::internal::AttributeType::Visibility:
-                aStaticUpdateInformation.mbVisibility = pAttrLayer->getVisibility();
-                maShapeSequentialUpdate[std::make_pair(xShape, BOX2D_UPDATE_VISIBILITY)]
-                    = aStaticUpdateInformation;
-                return;
-            case slideshow::internal::AttributeType::Rotate:
-                aStaticUpdateInformation.mfAngle = pAttrLayer->getRotationAngle();
-                maShapeSequentialUpdate[std::make_pair(xShape, BOX2D_UPDATE_ANGLE)]
-                    = aStaticUpdateInformation;
-                return;
-            case slideshow::internal::AttributeType::PosX:
-            case slideshow::internal::AttributeType::PosY:
-                aStaticUpdateInformation.maPosition
-                    = basegfx::B2DPoint(pAttrLayer->getPosX(), pAttrLayer->getPosY());
-                maShapeSequentialUpdate[std::make_pair(xShape, BOX2D_UPDATE_POSITION)]
-                    = aStaticUpdateInformation;
-                return;
-            default:
-                return;
-        }
+        case slideshow::internal::AttributeType::Visibility:
+            queueShapeVisibilityUpdate(xShape, pAttrLayer->getVisibility());
+            return;
+        case slideshow::internal::AttributeType::Rotate:
+            queueDynamicRotationUpdate(xShape, pAttrLayer->getRotationAngle());
+            return;
+        case slideshow::internal::AttributeType::PosX:
+        case slideshow::internal::AttributeType::PosY:
+            queueDynamicPositionUpdate(xShape, { pAttrLayer->getPosX(), pAttrLayer->getPosY() });
+            return;
+        default:
+            return;
     }
 }
 
@@ -579,11 +516,30 @@ void box2DWorld::queueShapeAnimationEndUpdate(
     }
 }
 
-void box2DWorld::alertAnimationEndForShape(const slideshow::internal::ShapeSharedPtr& pShape)
+void box2DWorld::alertPhysicsAnimationEnd(const slideshow::internal::ShapeSharedPtr& pShape)
 {
     Box2DBodySharedPtr pBox2DBody = mpXShapeToBodyMap.find(pShape->getXShape())->second;
     makeBodyStatic(pBox2DBody);
     pBox2DBody->setRestitution(fDefaultStaticBodyBounciness);
+    if (--mnPhysicsAnimationCounter == 0)
+    {
+        maShapeParallelUpdateQueue = {};
+        mbShapesInitialized = false;
+        mpXShapeToBodyMap.clear();
+    }
+}
+
+void box2DWorld::alertPhysicsAnimationStart(
+    const ::basegfx::B2DVector& rSlideSize,
+    const slideshow::internal::ShapeManagerSharedPtr& pShapeManager)
+{
+    if (!mpBox2DWorld)
+        initiateWorld(rSlideSize);
+
+    if (!mbShapesInitialized)
+        initateAllShapesAsStaticBodies(pShapeManager);
+
+    mnPhysicsAnimationCounter++;
 }
 
 void box2DWorld::step(const float fTimeStep, const int nVelocityIterations,
@@ -668,6 +624,14 @@ Box2DBodySharedPtr box2DWorld::createStaticBody(const slideshow::internal::Shape
     b2BodyDef aBodyDef;
     aBodyDef.type = b2_staticBody;
     aBodyDef.position = convertB2DPointToBox2DVec2(aShapeBounds.getCenter(), mfScaleFactor);
+
+    slideshow::internal::ShapeAttributeLayerSharedPtr pShapeAttributeLayer
+        = static_cast<slideshow::internal::AttributableShape*>(rShape.get())
+              ->getTopmostAttributeLayer();
+    if (pShapeAttributeLayer && pShapeAttributeLayer->isRotationAngleValid())
+    {
+        aBodyDef.angle = ::basegfx::deg2rad(-pShapeAttributeLayer->getRotationAngle());
+    }
 
     std::shared_ptr<b2Body> pBody(mpBox2DWorld->CreateBody(&aBodyDef), [](b2Body* pB2Body) {
         pB2Body->GetWorld()->DestroyBody(pB2Body);
