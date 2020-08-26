@@ -114,7 +114,7 @@ SlideBitmapSharedPtr SlideChangeBase::createBitmap( const UnoViewSharedPtr&     
                           "SlideChangeBase::createBitmap(): "
                           "Cannot create page bitmap canvas" );
 
-        // set transformation to identitiy (->device pixel)
+        // set transformation to identity (->device pixel)
         pBitmapCanvas->setTransformation( ::basegfx::B2DHomMatrix() );
 
         // clear bitmap to black

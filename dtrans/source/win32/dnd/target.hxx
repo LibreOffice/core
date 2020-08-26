@@ -44,7 +44,7 @@ using namespace ::com::sun::star::datatransfer::dnd;
 // has to call XComponent::dispose. The thread that calls initialize
 // must also execute the destruction of the instance. This is because
 // initialize calls OleInitialize and the destructor calls OleUninitialize.
-// If the service calls OleInitialize then it also calls OleUnitialize when
+// If the service calls OleInitialize then it also calls OleInitialize when
 // it is destroyed. Therefore no second instance may exist which was
 // created in the same thread and still needs OLE.
 class DropTarget: public MutexDummy,

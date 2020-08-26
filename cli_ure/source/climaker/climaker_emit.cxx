@@ -837,7 +837,7 @@ Assembly ^ TypeEmitter::type_resolve(
                     m_incomplete_ifaces[basetype_name] );
                 if (nullptr != base_entry)
                 {
-                // complete uncompleted base type first
+                // complete incompleted base type first
                     complete_iface_type( base_entry );
                 }
             }

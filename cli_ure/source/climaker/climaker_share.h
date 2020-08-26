@@ -242,7 +242,7 @@ public:
     TypeEmitter(
         ::System::Reflection::Emit::ModuleBuilder ^ module_builder,
         array< ::System::Reflection::Assembly^>^ assemblies );
-    // must be called to finish up uncompleted types
+    // must be called to finish up incompleted types
     ~TypeEmitter();
 
     ::System::Reflection::Assembly ^ type_resolve(

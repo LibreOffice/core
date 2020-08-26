@@ -1344,7 +1344,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
         break;
         }
 
-        if( eElementToken == XML_ANIMATEPHYSICS ) // not a standart should use the extension namespace
+        if( eElementToken == XML_ANIMATEPHYSICS ) // not a standard should use the extension namespace
         {
             SvXMLElementExport aElement( *mxExport, XML_NAMESPACE_LO_EXT, eElementToken, true, true );
         }
