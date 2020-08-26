@@ -116,10 +116,8 @@
 +	a \leslant b
 +	a \geslant b
 +	
-+	Unsupported in WikiMedia:
++	Unsupported in MediaWiki:
 +	
-+	\oiint x
-+	\oiiint x
 +	ƛ
 +	\adots
 +	
@@ -747,13 +745,9 @@
  		<xsl:when test="starts-with($content,'&#x0222C;')"><xsl:value-of select="'\iint '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x0222C;')"/></xsl:call-template></xsl:when>		<!--double integral operator --> <!-- Required amsmath -->
  		<xsl:when test="starts-with($content,'&#x0222D;')"><xsl:value-of select="'\iiint '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x0222D;')"/></xsl:call-template></xsl:when>		<!--/iiint triple integral operator -->	<!-- Required amsmath -->
  		<xsl:when test="starts-with($content,'&#x0222E;')"><xsl:value-of select="'\oint '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x0222E;')"/></xsl:call-template></xsl:when>		<!--/oint L: contour integral operator -->
--<!--		<xsl:when test="starts-with($content,'&#x0222F;')"><xsl:value-of select="' '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x0222F;')"/></xsl:call-template></xsl:when>-->
--<!--		<xsl:when test="starts-with($content,'&#x02230;')"><xsl:value-of select="' '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02230;')"/></xsl:call-template></xsl:when>-->
 -<!--		<xsl:when test="starts-with($content,'&#x02231;')"><xsl:value-of select="' '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02231;')"/></xsl:call-template></xsl:when>-->
 -<!--		<xsl:when test="starts-with($content,'&#x02232;')"><xsl:value-of select="' '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02232;')"/></xsl:call-template></xsl:when>-->
 -<!--		<xsl:when test="starts-with($content,'&#x02233;')"><xsl:value-of select="' '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02233;')"/></xsl:call-template></xsl:when>-->
-+		<xsl:when test="starts-with($content,'&#x0222F;')"><xsl:value-of select="'\backslash oiint '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x0222F;')"/></xsl:call-template></xsl:when>        <!-- \surfintegral -->
-+		<xsl:when test="starts-with($content,'&#x02230;')"><xsl:value-of select="'\backslash oiiint '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02230;')"/></xsl:call-template></xsl:when>			<!-- \volintegral -->
 +		<xsl:when test="starts-with($content,'&#x02231;')"><xsl:value-of select="'\clwintegral '" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02231;')"/></xsl:call-template></xsl:when>
 +		<xsl:when test="starts-with($content,'&#x02232;')"><xsl:value-of select="'\ElsevierGlyph{2232}'" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02232;')"/></xsl:call-template></xsl:when>
 +		<xsl:when test="starts-with($content,'&#x02233;')"><xsl:value-of select="'\ElsevierGlyph{2233}'" /><xsl:call-template name="replaceEntities"><xsl:with-param name="content" select="substring-after($content, '&#x02233;')"/></xsl:call-template></xsl:when>
@@ -1118,7 +1112,7 @@
  <xsl:template match="m:mphantom">
 -	<xsl:text>\phantom{</xsl:text>
 -	<xsl:apply-templates/>
-+<!-- Not supported by MediaWiki. -->
++<!-- Not supported by MediaWiki, see https://phabricator.wikimedia.org/T261215 -->
 +<!-- 
 + 	<xsl:text>\phantom{</xsl:text>
 + -->
