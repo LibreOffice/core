@@ -86,6 +86,7 @@ const char sCalc_Date[] =   "date";
 const char sCalc_Product[] = "product";
 const char sCalc_Average[] = "average";
 const char sCalc_Count[]=   "count";
+const char sCalc_Sign[]=   "sign";
 
 // ATTENTION: sorted list of all operators
 struct CalcOp
@@ -124,6 +125,7 @@ CalcOp const aOpTable[] = {
 /* POW */     {{sCalc_Pow},        CALC_POW},   // Exponentiation
 /* PRODUCT */ {{sCalc_Product},    CALC_PRODUCT}, // Product (since LibreOffice 7.1)
 /* ROUND */   {{sCalc_Round},      CALC_ROUND}, // Rounding
+/* SIGN */    {{sCalc_Sign},       CALC_SIGN},  // Sign (since LibreOffice 7.1)
 /* SIN */     {{sCalc_Sin},        CALC_SIN},   // Sine
 /* SQRT */    {{sCalc_Sqrt},       CALC_SQRT},  // Square root
 /* SUB */     {{sCalc_Sub},        CALC_MINUS}, // Subtraction
@@ -1070,6 +1072,16 @@ SwSbxValue SwCalc::PrimFunc(bool &rChkPow)
             SAL_INFO("sw.calc", "acos");
             return StdFunc(&acos, true);
             break;
+        case CALC_SIGN:
+        {
+            SAL_INFO("sw.calc", "sign");
+            SwSbxValue nErg;
+            GetToken();
+            double nVal = Prim().GetDouble();
+            nErg.PutDouble( int(0 < nVal) - int(nVal < 0) );
+            return nErg;
+            break;
+        }
         case CALC_NOT:
         {
             SAL_INFO("sw.calc", "not");
