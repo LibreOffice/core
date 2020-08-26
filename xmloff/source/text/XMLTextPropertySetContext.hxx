@@ -39,6 +39,13 @@ public:
                 const rtl::Reference < SvXMLImportPropertyMapper > &rMap,
                 OUString& rDopCapTextStyleName );
 
+    XMLTextPropertySetContext( SvXMLImport& rImport, sal_Int32 nElement,
+                const css::uno::Reference<css::xml::sax::XFastAttributeList >& xAttrList,
+                sal_uInt32 nFamily,
+                ::std::vector< XMLPropertyState > &rProps,
+                const rtl::Reference < SvXMLImportPropertyMapper > &rMap,
+                OUString& rDopCapTextStyleName );
+
     virtual ~XMLTextPropertySetContext() override;
 
     using SvXMLPropertySetContext::CreateChildContext;

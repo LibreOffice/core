@@ -36,6 +36,11 @@ public:
                  sal_uInt32 nFam,
                  ::std::vector< XMLPropertyState > &rProps,
                  const rtl::Reference < SvXMLImportPropertyMapper > &rMap );
+    XMLShapePropertySetContext( SvXMLImport& rImport, sal_Int32 nElement,
+                 const css::uno::Reference<css::xml::sax::XFastAttributeList >& xAttrList,
+                 sal_uInt32 nFam,
+                 ::std::vector< XMLPropertyState > &rProps,
+                 const rtl::Reference < SvXMLImportPropertyMapper > &rMap );
 
     virtual ~XMLShapePropertySetContext() override;
 

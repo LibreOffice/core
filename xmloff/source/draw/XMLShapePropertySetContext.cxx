@@ -44,6 +44,18 @@ XMLShapePropertySetContext::XMLShapePropertySetContext(
 {
 }
 
+XMLShapePropertySetContext::XMLShapePropertySetContext(
+                 SvXMLImport& rImport, sal_Int32 nElement,
+                 const Reference< xml::sax::XFastAttributeList > & xAttrList,
+                 sal_uInt32 nFam,
+                 ::std::vector< XMLPropertyState > &rProps,
+                 const rtl::Reference < SvXMLImportPropertyMapper > &rMap ) :
+    SvXMLPropertySetContext( rImport, nElement, xAttrList, nFam,
+                             rProps, rMap ),
+    mnBulletIndex(-1)
+{
+}
+
 XMLShapePropertySetContext::~XMLShapePropertySetContext()
 {
 }
