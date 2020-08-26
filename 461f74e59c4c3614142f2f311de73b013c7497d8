@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b22b47bd_a89b1a4d",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-08-26T16:12:32Z",
+      "side": 1,
+      "message": "nMaxTextWidth, see https://wiki.documentfoundation.org/Development/GeneralProgrammingGuidelines#Code_Conventions",
+      "range": {
+        "startLine": 662,
+        "startChar": 8,
+        "endLine": 662,
+        "endChar": 20
+      },
+      "revId": "461f74e59c4c3614142f2f311de73b013c7497d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60df5250_242ca273",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-08-26T16:12:32Z",
+      "side": 1,
+      "message": "Rendering is very expensive. We must call it only on the max character width string. On 15000 list items, I\u0027ve measured 375 ms -\u003e 2 ms speed up with this optimization:\n\ndiff --git a/sc/source/ui/view/gridwin.cxx b/sc/source/ui/view/gridwin.cxx\nindex 67ca1cf6a60b..0b9091362f36 100644\n--- a/sc/source/ui/view/gridwin.cxx\n+++ b/sc/source/ui/view/gridwin.cxx\n@@ -660,11 +660,18 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)\n     ScFilterEntries aFilterEntries;\n     pDoc-\u003eGetFilterEntries(nCol, nRow, nTab, aFilterEntries);\n     int maxTextWidth \u003d 0;\n-    for (const auto\u0026 rEntry : aFilterEntries)\n+    auto itMax \u003d aFilterEntries.begin();\n+    for (auto it \u003d itMax; it !\u003d aFilterEntries.end(); ++it)\n     {\n-        const OUString\u0026 aVal \u003d rEntry.GetString();\n-        maxTextWidth \u003d std::max\u003cint\u003e(maxTextWidth, rControl.GetTextWidth(aVal) + aVal.getLength() * 2);\n+        int nTextWidth \u003d it-\u003eGetString().getLength();\n+        if (maxTextWidth \u003c nTextWidth)\n+        {\n+            maxTextWidth \u003d nTextWidth;\n+            itMax \u003d it;\n+        }\n     }\n+    maxTextWidth \u003d rControl.GetTextWidth(itMax-\u003eGetString()) + maxTextWidth * 2;\n+\n     // window should be at least as wide as the column, or the longest text + checkbox, scrollbar ... (it is estimated with 70 pixel now)\n     // window should be maximum 1024 pixel wide.\n     int nWindowWidth \u003d std::min\u003cint\u003e(1024, maxTextWidth + 70);",
+      "range": {
+        "startLine": 666,
+        "startChar": 51,
+        "endLine": 666,
+        "endChar": 72
+      },
+      "revId": "461f74e59c4c3614142f2f311de73b013c7497d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
