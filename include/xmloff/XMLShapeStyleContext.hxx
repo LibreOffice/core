@@ -44,13 +44,6 @@ public:
 
     XMLShapeStyleContext(
         SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
-        SvXMLStylesContext& rStyles,
-        XmlStyleFamily nFamily);
-    XMLShapeStyleContext(
-        SvXMLImport& rImport,
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
         SvXMLStylesContext& rStyles,
