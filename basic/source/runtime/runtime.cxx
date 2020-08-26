@@ -4110,6 +4110,8 @@ void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
                 const SbxParamInfo* pParam = pInfo->GetParam( nIdx );
                 if( pParam && ( pParam->nFlags & SbxFlagBits::Optional ) )
                 {
+                    // tdf#136143 - reset SbxFlagBits::Fixed in order to prevent type conversion errors
+                    pVar->ResetFlag( SbxFlagBits::Fixed );
                     // Default value?
                     sal_uInt16 nDefaultId = static_cast<sal_uInt16>(pParam->nUserData & 0x0ffff);
                     if( nDefaultId > 0 )
