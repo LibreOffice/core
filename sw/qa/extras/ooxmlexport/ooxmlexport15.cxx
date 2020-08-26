@@ -113,26 +113,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123390, "tdf123390.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("1"), xEnumerationAccess2->getPresentation(false).trim());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf123356, "tdf123356.docx")
-{
-    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
-    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
-
-    uno::Reference<text::XTextField> xEnumerationAccess1(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("-11"), xEnumerationAccess1->getPresentation(true).trim());
-    CPPUNIT_ASSERT_EQUAL(OUString("-11"), xEnumerationAccess1->getPresentation(false).trim());
-
-    // Tests cell formula COUNT(x) to SUM(x)/MEAN(x) conversion
-    uno::Reference<text::XTextField> xEnumerationAccess4(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("(SUM(<A1:C1>|<A2:B2>)/MEAN(<A1:C1>|<A2:B2>))"), xEnumerationAccess4->getPresentation(true).trim());
-    CPPUNIT_ASSERT_EQUAL(OUString("5"), xEnumerationAccess4->getPresentation(false).trim());
-
-    uno::Reference<text::XTextField> xEnumerationAccess3(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("(SUM(<A1:C1>)/MEAN(<A1:C1>))"), xEnumerationAccess3->getPresentation(true).trim());
-    CPPUNIT_ASSERT_EQUAL(OUString("3"), xEnumerationAccess3->getPresentation(false).trim());
-}
-
 DECLARE_OOXMLEXPORT_TEST(testTdf123388, "tdf123388.docx")
 {
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);

@@ -4272,10 +4272,6 @@ OUString DomainMapper_Impl::convertFieldFormula(const OUString& input) {
     icu::RegexMatcher rmatch7("\\bSIGN\\s*(\\(([^()]*|([^()])*\\([^()]*\\)[^()]*)*\\))", usInput, rMatcherFlags, status);
     usInput = rmatch7.replaceAll(icu::UnicodeString("((0 L $1) - ($1 L 0))"), status);
 
-    /* Fix up COUNT(x) using SUM(x)/MEAN(x) (it supports only 1-level nesting) */
-    icu::RegexMatcher rmatch8("\\bCOUNT\\s*(\\(([^()]*|([^()])*\\([^()]*\\)[^()]*)*\\))", usInput, rMatcherFlags, status);
-    usInput = rmatch8.replaceAll(icu::UnicodeString("(SUM$1/MEAN$1)"), status);
-
     return OUString(usInput.getTerminatedBuffer());
 }
 
