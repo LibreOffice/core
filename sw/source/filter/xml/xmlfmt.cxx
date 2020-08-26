@@ -435,9 +435,8 @@ class SwXMLItemSetStyleContext_Impl : public SvXMLStyleContext
     bool                bDataStyleIsResolved;
 
     SvXMLImportContext *CreateItemSetContext(
-            sal_uInt16 nPrefix,
-            const OUString& rLName,
-            const uno::Reference< xml::sax::XAttributeList > & xAttrList);
+            sal_Int32 nElement,
+            const uno::Reference< xml::sax::XFastAttributeList > & xAttrList);
 
 protected:
 
@@ -458,10 +457,12 @@ public:
 
     virtual void CreateAndInsert( bool bOverwrite ) override;
 
-    virtual SvXMLImportContextRef CreateChildContext(
-            sal_uInt16 nPrefix,
-            const OUString& rLocalName,
-            const uno::Reference< xml::sax::XAttributeList > & xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+
+    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
+                                   const OUString& rLocalName,
+                                   const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
     // The item set may be empty!
     SfxItemSet *GetItemSet() { return pItemSet.get(); }
@@ -566,8 +567,8 @@ void SwXMLItemSetStyleContext_Impl::SetAttribute( sal_uInt16 nPrefixKey,
 }
 
 SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateItemSetContext(
-        sal_uInt16 nPrefix, const OUString& rLName,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+        sal_Int32 nElement,
+        const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
     OSL_ENSURE( !pItemSet,
             "SwXMLItemSetStyleContext_Impl::CreateItemSetContext: item set exists" );
@@ -598,7 +599,7 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateItemSetContext(
     }
     if( pItemSet )
         pContext = GetSwImport().CreateTableItemImportContext(
-                                nPrefix, rLName, xAttrList, GetFamily(),
+                                nElement, xAttrList, GetFamily(),
                                 *pItemSet );
     if( !pContext )
     {
@@ -630,22 +631,15 @@ void SwXMLItemSetStyleContext_Impl::CreateAndInsert( bool bOverwrite )
 }
 
 SvXMLImportContextRef SwXMLItemSetStyleContext_Impl::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+    sal_uInt16 nPrefix,
+   const OUString& rLocalName,
+   const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList )
 {
     SvXMLImportContextRef xContext;
 
     if( XML_NAMESPACE_STYLE == nPrefix )
     {
-        if( IsXMLToken( rLocalName, XML_TABLE_PROPERTIES ) ||
-            IsXMLToken( rLocalName, XML_TABLE_COLUMN_PROPERTIES ) ||
-            IsXMLToken( rLocalName, XML_TABLE_ROW_PROPERTIES ) ||
-            IsXMLToken( rLocalName, XML_TABLE_CELL_PROPERTIES ) )
-        {
-            xContext = CreateItemSetContext( nPrefix, rLocalName, xAttrList );
-        }
-        else if( IsXMLToken( rLocalName, XML_TEXT_PROPERTIES ) ||
+        if( IsXMLToken( rLocalName, XML_TEXT_PROPERTIES ) ||
                  IsXMLToken( rLocalName, XML_PARAGRAPH_PROPERTIES ))
         {
             if( !pTextStyle )
@@ -665,6 +659,29 @@ SvXMLImportContextRef SwXMLItemSetStyleContext_Impl::CreateChildContext(
     }
 
     return xContext;
+}
+
+css::uno::Reference< css::xml::sax::XFastContextHandler > SwXMLItemSetStyleContext_Impl::createFastChildContext(
+    sal_Int32 nElement,
+    const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
+{
+    switch (nElement)
+    {
+        case XML_ELEMENT(STYLE, XML_TABLE_PROPERTIES):
+        case XML_ELEMENT(STYLE, XML_TABLE_COLUMN_PROPERTIES):
+        case XML_ELEMENT(STYLE, XML_TABLE_ROW_PROPERTIES):
+        case XML_ELEMENT(STYLE, XML_TABLE_CELL_PROPERTIES):
+            return CreateItemSetContext( nElement, xAttrList );
+            break;
+        case XML_ELEMENT(STYLE, XML_TEXT_PROPERTIES):
+        case XML_ELEMENT(STYLE, XML_PARAGRAPH_PROPERTIES):
+            // handled in CreateChildContext
+            break;
+        default:
+            SAL_WARN("sw", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
+    }
+
+    return nullptr;
 }
 
 void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()

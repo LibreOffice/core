@@ -19,6 +19,7 @@
 
 #include <rtl/ustring.hxx>
 #include "xmlitmap.hxx"
+#include <xmloff/xmlimp.hxx>
 
 using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_TOKEN_INVALID;
@@ -48,14 +49,13 @@ SvXMLItemMapEntries::~SvXMLItemMapEntries()
 {
 }
 
-SvXMLItemMapEntry const * SvXMLItemMapEntries::getByName(  sal_uInt16 nNameSpace,
-                                                    const OUString& rString  ) const
+SvXMLItemMapEntry const * SvXMLItemMapEntries::getByName(  sal_Int32 nElement  ) const
 {
     SvXMLItemMapEntry const * pMap = mpImpl->mpEntries;
     while( pMap && (pMap->eLocalName != XML_TOKEN_INVALID) )
     {
-        if( pMap->nNameSpace == nNameSpace &&
-            IsXMLToken( rString, pMap->eLocalName ) )
+        if( IsTokenInNamespace(nElement, pMap->nNameSpace) &&
+            (nElement & TOKEN_MASK) == pMap->eLocalName )
             break;
         pMap++;
     }

@@ -18,6 +18,7 @@
  */
 
 #include <editeng/brushitem.hxx>
+#include <sal/log.hxx>
 #include <xmloff/xmlimp.hxx>
 #include "xmlimpit.hxx"
 #include "xmlitem.hxx"
@@ -26,13 +27,12 @@
 
 using namespace ::com::sun::star;
 
-SwXMLItemSetContext::SwXMLItemSetContext( SvXMLImport& rImp, sal_uInt16 nPrfx,
-                                          const OUString& rLName,
-                                          const uno::Reference< xml::sax::XAttributeList >& xAttrList,
+SwXMLItemSetContext::SwXMLItemSetContext( SvXMLImport& rImp, sal_Int32 /*nElement*/,
+                                          const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
                                           SfxItemSet& rISet,
                                           SvXMLImportItemMapper& rIMap,
                                           const SvXMLUnitConverter& rUnitConverter ):
-    SvXMLImportContext( rImp, nPrfx, rLName ),
+    SvXMLImportContext( rImp ),
     rItemSet( rISet ),
     rIMapper( rIMap ),
     rUnitConv( rUnitConverter )
@@ -51,18 +51,19 @@ SwXMLItemSetContext::~SwXMLItemSetContext()
     }
 }
 
-SvXMLImportContextRef SwXMLItemSetContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const OUString& rLocalName,
-                                            const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SwXMLItemSetContext::createFastChildContext(
+    sal_Int32 nElement,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLItemMapEntriesRef xMapEntries = rIMapper.getMapEntries();
-    SvXMLItemMapEntry const * pEntry = xMapEntries->getByName( nPrefix, rLocalName );
+    SvXMLItemMapEntry const * pEntry = xMapEntries->getByName( nElement );
 
     if( pEntry && 0 != (pEntry->nMemberId & MID_SW_FLAG_ELEMENT_ITEM_IMPORT) )
     {
-        return CreateChildContext( nPrefix, rLocalName, xAttrList,
-                                   *pEntry );
+        return createFastChildContext( nElement, xAttrList, *pEntry ).get();
     }
+    else
+        SAL_WARN("sw", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
     return nullptr;
 }
 
@@ -70,9 +71,8 @@ SvXMLImportContextRef SwXMLItemSetContext::CreateChildContext( sal_uInt16 nPrefi
     CreateChildContext if the element matches an entry in the
     SvXMLImportItemMapper with the mid flag MID_SW_FLAG_ELEMENT
 */
-SvXMLImportContextRef SwXMLItemSetContext::CreateChildContext( sal_uInt16 nPrefix,
-                                   const OUString& rLocalName,
-                                   const uno::Reference< xml::sax::XAttributeList >& xAttrList,
+SvXMLImportContextRef SwXMLItemSetContext::createFastChildContext( sal_Int32 nElement,
+                                   const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
                                    const SvXMLItemMapEntry& rEntry )
 {
     SvXMLImportContextRef xContext;
@@ -86,13 +86,13 @@ SvXMLImportContextRef SwXMLItemSetContext::CreateChildContext( sal_uInt16 nPrefi
                                                        false, &pItem ) )
             {
                 xContext = new SwXMLBrushItemImportContext(
-                                GetImport(), nPrefix, rLocalName, xAttrList,
+                                GetImport(), nElement, xAttrList,
                                 rUnitConv, *static_cast<const SvxBrushItem *>(pItem) );
             }
             else
             {
                 xContext = new SwXMLBrushItemImportContext(
-                                GetImport(), nPrefix, rLocalName, xAttrList,
+                                GetImport(), nElement, xAttrList,
                                 rUnitConv, RES_BACKGROUND );
             }
             xBackground = xContext;

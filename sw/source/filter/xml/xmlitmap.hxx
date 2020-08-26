@@ -70,8 +70,7 @@ public:
     explicit SvXMLItemMapEntries(SvXMLItemMapEntry const * pEntrys);
     virtual ~SvXMLItemMapEntries() override;
 
-    SvXMLItemMapEntry const * getByName( sal_uInt16 nNameSpace,
-                                  const OUString& rString ) const;
+    SvXMLItemMapEntry const * getByName( sal_Int32 nElement ) const;
     SvXMLItemMapEntry const & getByIndex( sal_uInt16 nIndex ) const;
 
     sal_uInt16 getCount() const;

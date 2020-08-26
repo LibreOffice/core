@@ -48,6 +48,8 @@
 #include <xmloff/prhdlfac.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/xmlprhdl.hxx>
+#include <xmloff/xmlimp.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include "xmlithlp.hxx"
 #include <com/sun/star/uno/Any.hxx>
 
@@ -76,27 +78,25 @@ SvXMLImportItemMapper::setMapEntries( SvXMLItemMapEntriesRef rMapEntries )
 
 // fills the given itemset with the attributes in the given list
 void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
-                                      uno::Reference< xml::sax::XAttributeList > const & xAttrList,
+                                      uno::Reference< xml::sax::XFastAttributeList > const & xAttrList,
                                       const SvXMLUnitConverter& rUnitConverter,
                                       const SvXMLNamespaceMap& rNamespaceMap )
 {
-    sal_Int16 nAttr = xAttrList->getLength();
-
     std::unique_ptr<SvXMLAttrContainerItem> pUnknownItem;
-    for( sal_Int16 i=0; i < nAttr; i++ )
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName, aPrefix, aNamespace;
-        sal_uInt16 nPrefix =
-            rNamespaceMap.GetKeyByAttrName( rAttrName, &aPrefix, &aLocalName,
-                                            &aNamespace );
-        if( XML_NAMESPACE_XMLNS == nPrefix )
+        if( IsTokenInNamespace(aIter.getToken(), XML_NAMESPACE_XMLNS) )
             continue;
 
-        const OUString& rValue = xAttrList->getValueByIndex( i );
+        sal_Int32 nToken = aIter.getToken();
+        const OUString sValue = aIter.toString();
 
         // find a map entry for this attribute
-        SvXMLItemMapEntry const * pEntry = mrMapEntries->getByName( nPrefix, aLocalName );
+        sal_Int32 nLookupToken = nToken;
+        // compatiblity namespaces need to be tranformed into current namespace before looking up
+        if (IsTokenInNamespace(nLookupToken, XML_NAMESPACE_FO_COMPAT))
+            nLookupToken = XML_ELEMENT(FO, (nLookupToken & TOKEN_MASK));
+        SvXMLItemMapEntry const * pEntry = mrMapEntries->getByName( nLookupToken );
 
         if( pEntry )
         {
@@ -121,7 +121,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
 
                     if( 0 == (pEntry->nMemberId&MID_SW_FLAG_SPECIAL_ITEM_IMPORT) )
                     {
-                        bPut = PutXMLValue( *pNewItem, rValue,
+                        bPut = PutXMLValue( *pNewItem, sValue,
                                             static_cast<sal_uInt16>( pEntry->nMemberId & MID_SW_FLAG_MASK ),
                                             rUnitConverter );
 
@@ -129,7 +129,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
                     else
                     {
                         bPut = handleSpecialItem( *pEntry, *pNewItem, rSet,
-                                                  rValue, rUnitConverter );
+                                                  sValue, rUnitConverter );
                     }
 
                     if( bPut )
@@ -142,11 +142,11 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
             }
             else if( 0 != (pEntry->nMemberId & MID_SW_FLAG_NO_ITEM_IMPORT) )
             {
-                handleNoItem( *pEntry, rSet, rValue, rUnitConverter,
+                handleNoItem( *pEntry, rSet, sValue, rUnitConverter,
                               rNamespaceMap );
             }
         }
-        else if (!aLocalName.isEmpty())
+        else
         {
             if( !pUnknownItem )
             {
@@ -163,11 +163,63 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
             }
             if( pUnknownItem )
             {
-                if( XML_NAMESPACE_NONE == nPrefix )
-                    pUnknownItem->AddAttr( aLocalName, rValue );
+                if( IsTokenInNamespace(nToken, XML_NAMESPACE_NONE) )
+                    pUnknownItem->AddAttr( SvXMLImport::getNameFromToken( nToken ), sValue );
                 else
-                    pUnknownItem->AddAttr( aPrefix, aNamespace, aLocalName,
-                                           rValue );
+                {
+                    const OUString& rAttrNamespacePrefix = SvXMLImport::getNamespacePrefixFromToken(nToken, &rNamespaceMap);
+                    OUString sAttrName = SvXMLImport::getNameFromToken( nToken );
+                    if ( !rAttrNamespacePrefix.isEmpty() )
+                        sAttrName = rAttrNamespacePrefix + SvXMLImport::aNamespaceSeparator + sAttrName;
+                    OUString aLocalName, aPrefix, aNamespace;
+                    rNamespaceMap.GetKeyByAttrName( sAttrName, &aPrefix, &aLocalName,
+                                                        &aNamespace );
+                    pUnknownItem->AddAttr( rAttrNamespacePrefix, aNamespace, aLocalName,
+                                           sValue );
+                }
+            }
+        }
+    }
+
+    importXMLUnknownAttributes(rSet, xAttrList, rUnitConverter, pUnknownItem);
+
+    if( pUnknownItem )
+    {
+        rSet.Put( *pUnknownItem );
+    }
+
+    finished(rSet, rUnitConverter);
+}
+
+void SvXMLImportItemMapper::importXMLUnknownAttributes( SfxItemSet& rSet,
+                                      uno::Reference< xml::sax::XFastAttributeList > const & xAttrList,
+                                      const SvXMLUnitConverter& rUnitConverter,
+                                      std::unique_ptr<SvXMLAttrContainerItem>& pUnknownItem)
+{
+    const css::uno::Sequence< css::xml::Attribute > unknownAttributes = xAttrList->getUnknownAttributes();
+    for (const auto & rAttribute : unknownAttributes)
+    {
+        if( !pUnknownItem )
+        {
+            const SfxPoolItem* pItem = nullptr;
+            if( SfxItemState::SET == rSet.GetItemState( nUnknownWhich, true,
+                                                   &pItem ) )
+            {
+                pUnknownItem.reset( static_cast<SvXMLAttrContainerItem*>( pItem->Clone() ) );
+            }
+            else
+            {
+                pUnknownItem.reset( new SvXMLAttrContainerItem( nUnknownWhich ) );
+            }
+        }
+        if( pUnknownItem )
+        {
+            if( rAttribute.NamespaceURL.isEmpty() )
+                pUnknownItem->AddAttr( rAttribute.Name, rAttribute.Value );
+            else
+            {
+                pUnknownItem->AddAttr( rAttribute.Name, rAttribute.NamespaceURL, rAttribute.Name,
+                                       rAttribute.Value );
             }
         }
     }

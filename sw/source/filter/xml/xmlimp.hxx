@@ -146,9 +146,8 @@ public:
 
     inline const SvXMLImportItemMapper& GetTableItemMapper() const;
     inline       SvXMLImportItemMapper& GetTableItemMapper();
-    SvXMLImportContext *CreateTableItemImportContext( sal_uInt16 nPrefix,
-                const OUString& rLocalName,
-                const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
+    SvXMLImportContext *CreateTableItemImportContext( sal_Int32 nElement,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
                 XmlStyleFamily nSubFamily, SfxItemSet& rItemSet );
 
     const SvXMLTokenMap& GetDocElemTokenMap();
