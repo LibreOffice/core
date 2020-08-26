@@ -1244,6 +1244,10 @@
               Writer,   Graphic, visible ;
               Writer,   OLE,     visible ;
               Writer,   Frame,   visible ;
+              Writer,   Draw,    visible ;
+              Writer,   Form,    visible ;
+              Writer,   Frame,   visible ;
+              Writer,   Media,   visible ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
