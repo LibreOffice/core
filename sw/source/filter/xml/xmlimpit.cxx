@@ -56,7 +56,7 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 using uno::Any;
 
-const sal_uInt16 nUnknownWhich = RES_UNKNOWNATR_CONTAINER;
+constexpr sal_uInt16 nUnknownWhich = RES_UNKNOWNATR_CONTAINER;
 
 SvXMLImportItemMapper::SvXMLImportItemMapper(
                                 SvXMLItemMapEntriesRef const & rMapEntries ) :
@@ -146,7 +146,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
                               rNamespaceMap );
             }
         }
-        else if (USHRT_MAX != nUnknownWhich && !aLocalName.isEmpty())
+        else if (!aLocalName.isEmpty())
         {
             if( !pUnknownItem )
             {
