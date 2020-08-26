@@ -51,7 +51,6 @@
 #include <unotools/pathoptions.hxx>
 #include <rtl/byteseq.hxx>
 #include <rtl/ustring.hxx>
-#include <o3tl/safeint.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <osl/process.h>
 #include <osl/file.hxx>
@@ -781,12 +780,12 @@ bool rewriteFlatpakHelpRootUrl(OUString * helpRootUrl) {
                 std::string_view const line(
                     reinterpret_cast<char const *>(bytes.getConstArray()), bytes.getLength());
                 if (instance) {
-                    static constexpr auto keyPath = OUStringLiteral("app-path=");
-                    static constexpr auto keyExtensions = OUStringLiteral("app-extensions=");
-                    if (!havePath && line.length() >= o3tl::make_unsigned(keyPath.size)
-                        && line.substr(0, keyPath.size) == keyPath.data)
+                    static constexpr auto keyPath = std::string_view("app-path=");
+                    static constexpr auto keyExtensions = std::string_view("app-extensions=");
+                    if (!havePath && line.length() >= keyPath.size()
+                        && line.substr(0, keyPath.size()) == keyPath.data())
                     {
-                        auto const value = line.substr(keyPath.size);
+                        auto const value = line.substr(keyPath.size());
                         if (!rtl_convertStringToUString(
                                 &path.pData, value.data(), value.length(),
                                 osl_getThreadTextEncoding(),
@@ -801,10 +800,10 @@ bool rewriteFlatpakHelpRootUrl(OUString * helpRootUrl) {
                             throw Failure();
                         }
                         havePath = true;
-                    } else if (!haveExtensions && line.length() >= o3tl::make_unsigned(keyExtensions.size)
-                               && line.substr(0, keyExtensions.size) == keyExtensions.data)
+                    } else if (!haveExtensions && line.length() >= keyExtensions.size()
+                               && line.substr(0, keyExtensions.size()) == keyExtensions.data())
                     {
-                        auto const value = line.substr(keyExtensions.size);
+                        auto const value = line.substr(keyExtensions.size());
                         if (!rtl_convertStringToUString(
                                 &extensions.pData, value.data(), value.length(),
                                 osl_getThreadTextEncoding(),
