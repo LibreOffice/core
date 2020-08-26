@@ -338,7 +338,7 @@ private:
     void checkTextRange(uno::Reference<text::XTextRange> const& xTextRange,
                         uno::Reference<text::XTextContent> const& xParagraph, SwTextNode* pTextNode)
     {
-        sal_Int32 nParaBackColor = {}; // spurious -Werror=maybe-uninitialized
+        sal_Int32 nParaBackColor(COL_AUTO); // spurious -Werror=maybe-uninitialized
         uno::Reference<beans::XPropertySet> xParagraphProperties(xParagraph, uno::UNO_QUERY);
         if (!(xParagraphProperties->getPropertyValue("ParaBackColor") >>= nParaBackColor))
         {
@@ -367,7 +367,7 @@ private:
 
         const XFillStyleItem* pXFillStyleItem(
             rPageSet.GetItem<XFillStyleItem>(XATTR_FILLSTYLE, false));
-        Color aPageBackground;
+        Color aPageBackground(COL_AUTO);
 
         if (pXFillStyleItem && pXFillStyleItem->GetValue() == css::drawing::FillStyle_SOLID)
         {
