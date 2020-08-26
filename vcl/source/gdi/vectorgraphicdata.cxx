@@ -151,7 +151,8 @@ void VectorGraphicData::ensurePdfReplacement()
     if (mnPageIndex >= 0)
         nUsePageIndex = mnPageIndex;
     vcl::RenderPDFBitmaps(maVectorGraphicDataArray.getConstArray(), maVectorGraphicDataArray.getLength(), aBitmaps, nUsePageIndex, 1/*, fResolutionDPI*/);
-    maReplacement = aBitmaps[0];
+    if (!aBitmaps.empty())
+        maReplacement = aBitmaps[0];
 }
 
 void VectorGraphicData::ensureReplacement()
