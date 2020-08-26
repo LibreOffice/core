@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba8cd43c_446b3b3c",
+        "filename": "sw/source/core/access/AccessibilityCheck.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-26T16:06:58Z",
+      "side": 1,
+      "message": "This comment is obsolete now with this change; please drop it.",
+      "range": {
+        "startLine": 341,
+        "startChar": 44,
+        "endLine": 341,
+        "endChar": 83
+      },
+      "revId": "04c880eb5881a984f37c1ec2543e075459ead1d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a55e921_10d39219",
+        "filename": "sw/source/core/access/AccessibilityCheck.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-26T16:06:58Z",
+      "side": 1,
+      "message": "Character background is also white by default; I think it\u0027s strange to initialize it to black here. Please change it uniformly; and the comment then should go, too :-)",
+      "range": {
+        "startLine": 379,
+        "startChar": 35,
+        "endLine": 379,
+        "endChar": 78
+      },
+      "revId": "04c880eb5881a984f37c1ec2543e075459ead1d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
