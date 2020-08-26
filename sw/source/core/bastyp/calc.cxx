@@ -85,6 +85,7 @@ const char sCalc_Round[]=   "round";
 const char sCalc_Date[] =   "date";
 const char sCalc_Product[] = "product";
 const char sCalc_Average[] = "average";
+const char sCalc_Count[]=   "count";
 
 // ATTENTION: sorted list of all operators
 struct CalcOp
@@ -104,6 +105,7 @@ CalcOp const aOpTable[] = {
 /* ATAN */    {{sCalc_Atan},       CALC_ATAN},  // Arc tangent
 /* AVERAGE */ {{sCalc_Average},    CALC_MEAN},  // Mean (since LibreOffice 7.1)
 /* COS */     {{sCalc_Cos},        CALC_COS},   // Cosine
+/* COUNT */   {{sCalc_Count},      CALC_COUNT}, // Count (since LibreOffice 7.1)
 /* DATE */    {{sCalc_Date},       CALC_DATE},  // Date
 /* DIV */     {{sCalc_Div},        CALC_DIV},   // Division
 /* EQ */      {{sCalc_Eq},         CALC_EQ},    // Equality
@@ -668,6 +670,7 @@ SwCalcOper SwCalc::GetToken()
                 {
                 case CALC_SUM:
                 case CALC_MEAN:
+                case CALC_COUNT:
                     m_eCurrListOper = CALC_PLUS;
                     break;
                 case CALC_MIN:
@@ -1183,6 +1186,16 @@ SwSbxValue SwCalc::PrimFunc(bool &rChkPow)
             double aTmp = nErg.GetDouble();
             aTmp /= m_nListPor;
             nErg.PutDouble( aTmp );
+            return nErg;
+            break;
+        }
+        case CALC_COUNT:
+        {
+            SAL_INFO("sw.calc", "count");
+            m_nListPor = 1;
+            GetToken();
+            SwSbxValue nErg = Expr();
+            nErg.PutDouble( m_nListPor );
             return nErg;
             break;
         }

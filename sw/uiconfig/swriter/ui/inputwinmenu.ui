@@ -188,6 +188,14 @@
               </object>
             </child>
             <child>
+              <object class="GtkMenuItem" id="count">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="inputwinmenu|count">Count</property>
+                <property name="use_underline">True</property>
+              </object>
+            </child>
+            <child>
               <object class="GtkMenuItem" id="product">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>

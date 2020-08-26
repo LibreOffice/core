@@ -147,6 +147,22 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123401, "tdf123401.fodt")
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r[2]/w:instrText", " = AVERAGE(A1:A3)");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf123356, "tdf123356.fodt")
+{
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    // Tests new cell formula COUNT
+    uno::Reference<text::XTextField> xEnumerationAccess1(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("COUNT(<A1>)"), xEnumerationAccess1->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), xEnumerationAccess1->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess2(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("COUNT(<A1:B2>)"), xEnumerationAccess2->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("4"), xEnumerationAccess2->getPresentation(false).trim());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf98000_changePageStyle, "tdf98000_changePageStyle.odt")
 {
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
