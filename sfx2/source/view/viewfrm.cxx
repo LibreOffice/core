@@ -1331,11 +1331,14 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
                     VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar("getinvolved", "", SfxResId(STR_GET_INVOLVED_TEXT), InfobarType::INFO);
 
-                    VclPtrInstance<PushButton> xGetInvolvedButton(&GetWindow());
-                    xGetInvolvedButton->SetText(SfxResId(STR_GET_INVOLVED_BUTTON));
-                    xGetInvolvedButton->SetSizePixel(xGetInvolvedButton->GetOptimalSize());
-                    xGetInvolvedButton->SetClickHdl(LINK(this, SfxViewFrame, GetInvolvedHandler));
-                    pInfoBar->addButton(xGetInvolvedButton);
+                    if (pInfoBar)
+                    {
+                        VclPtrInstance<PushButton> xGetInvolvedButton(&GetWindow());
+                        xGetInvolvedButton->SetText(SfxResId(STR_GET_INVOLVED_BUTTON));
+                        xGetInvolvedButton->SetSizePixel(xGetInvolvedButton->GetOptimalSize());
+                        xGetInvolvedButton->SetClickHdl(LINK(this, SfxViewFrame, GetInvolvedHandler));
+                        pInfoBar->addButton(xGetInvolvedButton);
+                    }
                 }
 
                 if (bUpdateLastTimeGetInvolvedShown
@@ -1357,12 +1360,14 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     bUpdateLastTimeDonateShown = true;
 
                     VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar("donate", "", SfxResId(STR_DONATE_TEXT), InfobarType::INFO);
-
-                    VclPtrInstance<PushButton> xDonateButton(&GetWindow());
-                    xDonateButton->SetText(SfxResId(STR_DONATE_BUTTON));
-                    xDonateButton->SetSizePixel(xDonateButton->GetOptimalSize());
-                    xDonateButton->SetClickHdl(LINK(this, SfxViewFrame, DonationHandler));
-                    pInfoBar->addButton(xDonateButton);
+                    if (pInfoBar)
+                    {
+                        VclPtrInstance<PushButton> xDonateButton(&GetWindow());
+                        xDonateButton->SetText(SfxResId(STR_DONATE_BUTTON));
+                        xDonateButton->SetSizePixel(xDonateButton->GetOptimalSize());
+                        xDonateButton->SetClickHdl(LINK(this, SfxViewFrame, DonationHandler));
+                        pInfoBar->addButton(xDonateButton);
+                    }
                 }
 
                 if (bUpdateLastTimeDonateShown
