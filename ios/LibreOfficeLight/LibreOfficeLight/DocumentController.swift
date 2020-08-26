@@ -422,7 +422,7 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
         self.documentOverlaysView = overlay
 
         // button view - used for spreadsheet tabs
-        if doc.isSpeadsheet
+        if doc.isSpreadsheet
         {
             buttonScrollView.isHidden = false
             buttonScrollView.setButtonLabels(labels: doc.partNames)
