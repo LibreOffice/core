@@ -55,7 +55,7 @@ enum SwCalcOper
     CALC_ACOS=278,          CALC_ATAN=279,          CALC_TDIF=280,
     CALC_ROUND=281,         CALC_DATE=282,          CALC_MONTH=283,
     CALC_DAY=284,           CALC_PRODUCT=285,       CALC_AVERAGE=286,
-    CALC_COUNT=287,         CALC_SIGN=288
+    CALC_COUNT=287,         CALC_SIGN=288,          CALC_ABS=289
 };
 
 // Calculate Operations Strings
@@ -92,6 +92,7 @@ extern const char sCalc_Atan[];
 extern const char sCalc_Round[];
 extern const char sCalc_Date[];
 extern const char sCalc_Sign[];
+extern const char sCalc_Abs[];
 
 //  Calculate ErrorCodes
 enum class SwCalcError
