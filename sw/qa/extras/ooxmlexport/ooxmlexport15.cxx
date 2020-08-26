@@ -329,6 +329,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135343_columnSectionBreak_c15, "tdf135343_column
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Fits on two pages", 2, getPages());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf132149_pgBreak, "tdf132149_pgBreak.odt")
+{
+    xmlDocUniquePtr pDump = parseLayoutDump();
+
+    // No header on pages 1,2,3 (and currently 4).
+    assertXPath(pDump, "//page[2]/header", 0);
+
+    //Page break is not lost. This SHOULD be on page 4, but sadly it is not.
+    //assertXPathContent(pDump, "//page[5]/header", "First Page Style");
+    //CPPUNIT_ASSERT(getXPathContent(pDump, "//page[5]/body/txt").startsWith("Lorem ipsum"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf129452_excessBorder, "tdf129452_excessBorder.docx")
 {
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);

@@ -2717,24 +2717,9 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
         // if paragraph is split, put the section break between the parts
         if( bNeedParaSplit && *aBreakIt != rNode.GetText().getLength() )
         {
-            SwNodeIndex aNextIndex( rNode, 1 );
-            const SwNode& pNextNode = aNextIndex.GetNode();
-            // if there is a next node, use its attributes to create the new
-            // section
-            if( pNextNode.IsTextNode() )
-            {
-                const SwTextNode& rNextNode = *static_cast<SwTextNode*>(
-                        &aNextIndex.GetNode() );
-                OutputSectionBreaks(rNextNode.GetpSwAttrSet(), rNextNode);
-            }
-            else if (pNextNode.IsEndNode() )
-            {
-                // In this case the same paragraph holds the next page style
-                // too.
                 const SwPageDesc* pNextPageDesc = m_pCurrentPageDesc->GetFollow();
                 assert(pNextPageDesc);
                 PrepareNewPageDesc( rNode.GetpSwAttrSet(), rNode, nullptr , pNextPageDesc);
-            }
         }
         else if (!bNeedParaSplit)
         {
