@@ -341,9 +341,12 @@ void box2DWorld::processUpdateQueue(const double fPassedTime)
             switch (aQueueElement.meUpdateType)
             {
                 default:
-                case BOX2D_UPDATE_POSITION:
+                case BOX2D_UPDATE_POSITION_CHANGE:
                     setShapePositionByLinearVelocity(aQueueElement.mxShape,
                                                      aQueueElement.maPosition, fPassedTime);
+                    break;
+                case BOX2D_UPDATE_POSITION:
+                    setShapePosition(aQueueElement.mxShape, aQueueElement.maPosition);
                     break;
                 case BOX2D_UPDATE_ANGLE:
                     setShapeAngleByAngularVelocity(aQueueElement.mxShape, aQueueElement.mfAngle,
@@ -426,7 +429,7 @@ void box2DWorld::queueDynamicPositionUpdate(
     const css::uno::Reference<com::sun::star::drawing::XShape>& xShape,
     const basegfx::B2DPoint& rOutPos)
 {
-    Box2DDynamicUpdateInformation aQueueElement = { xShape, {}, BOX2D_UPDATE_POSITION };
+    Box2DDynamicUpdateInformation aQueueElement = { xShape, {}, BOX2D_UPDATE_POSITION_CHANGE };
     aQueueElement.maPosition = rOutPos;
     maShapeParallelUpdateQueue.push(aQueueElement);
 }
@@ -467,19 +470,29 @@ void box2DWorld::queueShapeVisibilityUpdate(
     maShapeParallelUpdateQueue.push(aQueueElement);
 }
 
+void box2DWorld::queueShapePositionUpdate(
+    const css::uno::Reference<com::sun::star::drawing::XShape>& xShape,
+    const basegfx::B2DPoint& rOutPos)
+{
+    Box2DDynamicUpdateInformation aQueueElement = { xShape, {}, BOX2D_UPDATE_POSITION };
+    aQueueElement.maPosition = rOutPos;
+    maShapeParallelUpdateQueue.push(aQueueElement);
+}
+
 void box2DWorld::queueShapePathAnimationUpdate(
     const css::uno::Reference<com::sun::star::drawing::XShape>& xShape,
-    const slideshow::internal::ShapeAttributeLayerSharedPtr& pAttrLayer)
+    const slideshow::internal::ShapeAttributeLayerSharedPtr& pAttrLayer, const bool bIsFirstUpdate)
 {
     // Workaround for PathAnimations since they do not have their own AttributeType
     // - using PosX makes it register a DynamicPositionUpdate -
-    queueShapeAnimationUpdate(xShape, pAttrLayer, slideshow::internal::AttributeType::PosX);
+    queueShapeAnimationUpdate(xShape, pAttrLayer, slideshow::internal::AttributeType::PosX,
+                              bIsFirstUpdate);
 }
 
 void box2DWorld::queueShapeAnimationUpdate(
     const css::uno::Reference<com::sun::star::drawing::XShape>& xShape,
     const slideshow::internal::ShapeAttributeLayerSharedPtr& pAttrLayer,
-    const slideshow::internal::AttributeType eAttrType)
+    const slideshow::internal::AttributeType eAttrType, const bool bIsFirstUpdate)
 {
     switch (eAttrType)
     {
@@ -491,7 +504,11 @@ void box2DWorld::queueShapeAnimationUpdate(
             return;
         case slideshow::internal::AttributeType::PosX:
         case slideshow::internal::AttributeType::PosY:
-            queueDynamicPositionUpdate(xShape, { pAttrLayer->getPosX(), pAttrLayer->getPosY() });
+            if (bIsFirstUpdate)
+                queueShapePositionUpdate(xShape, { pAttrLayer->getPosX(), pAttrLayer->getPosY() });
+            else
+                queueDynamicPositionUpdate(xShape,
+                                           { pAttrLayer->getPosX(), pAttrLayer->getPosY() });
             return;
         default:
             return;

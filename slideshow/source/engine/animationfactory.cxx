@@ -214,6 +214,7 @@ namespace slideshow::internal
                     maShapeOrig(),
                     mnFlags( nFlags ),
                     mbAnimationStarted( false ),
+                    mbAnimationFirstUpdate( true ),
                     mnAdditive( nAdditive ),
                     mpBox2DWorld( pBox2DWorld )
                 {
@@ -324,9 +325,13 @@ namespace slideshow::internal
                         mpShapeManager->notifyShapeUpdate( mpShape );
                         if ( mpBox2DWorld->isInitialized() )
                         {
-                            mpBox2DWorld->queueShapePathAnimationUpdate( mpShape->getXShape(), mpAttrLayer );
+                            mpBox2DWorld->queueShapePathAnimationUpdate( mpShape->getXShape(),
+                                                                         mpAttrLayer,
+                                                                         mbAnimationFirstUpdate );
                         }
                     }
+
+                    if( mbAnimationFirstUpdate ) mbAnimationFirstUpdate = false;
 
                     return true;
                 }
@@ -351,6 +356,7 @@ namespace slideshow::internal
                 ::basegfx::B2DPoint                maShapeOrig;
                 const int                          mnFlags;
                 bool                               mbAnimationStarted;
+                bool                               mbAnimationFirstUpdate;
                 sal_Int16                          mnAdditive;
                 box2d::utils::Box2DWorldSharedPtr  mpBox2DWorld;
             };
@@ -587,6 +593,7 @@ namespace slideshow::internal
                     mnFlags( nFlags ),
                     maDefaultValue(rDefaultValue),
                     mbAnimationStarted( false ),
+                    mbAnimationFirstUpdate( true ),
                     meAttrType( eAttrType ),
                     mpBox2DWorld ( pBox2DWorld )
                 {
@@ -694,6 +701,8 @@ namespace slideshow::internal
                     if( mpShape->isContentChanged() )
                         mpShapeManager->notifyShapeUpdate( mpShape );
 
+                    if( mbAnimationFirstUpdate ) mbAnimationFirstUpdate = false;
+
                     return true;
                 }
 
@@ -708,11 +717,13 @@ namespace slideshow::internal
 
                     if( mpBox2DWorld && mpBox2DWorld->isInitialized() )
                     {
-                        mpBox2DWorld->queueShapeAnimationUpdate( mpShape->getXShape(), mpAttrLayer, meAttrType );
+                        mpBox2DWorld->queueShapeAnimationUpdate( mpShape->getXShape(), mpAttrLayer, meAttrType, mbAnimationFirstUpdate );
                     }
 
                     if( mpShape->isContentChanged() )
                         mpShapeManager->notifyShapeUpdate( mpShape );
+
+                    if( mbAnimationFirstUpdate ) mbAnimationFirstUpdate = false;
 
                     return true;
                 }
@@ -746,6 +757,7 @@ namespace slideshow::internal
 
                 const ValueT                       maDefaultValue;
                 bool                               mbAnimationStarted;
+                bool                               mbAnimationFirstUpdate;
 
                 const AttributeType                meAttrType;
                 const box2d::utils::Box2DWorldSharedPtr mpBox2DWorld;
