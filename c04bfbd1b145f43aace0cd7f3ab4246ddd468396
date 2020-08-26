@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0ca0cdb4_0b0e076a",
+        "filename": "dtrans/source/win32/dnd/target.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-08-26T14:19:15Z",
+      "side": 1,
+      "message": "No, see https://docs.microsoft.com/en-us/windows/win32/api/ole2/nf-ole2-oleuninitialize",
+      "range": {
+        "startLine": 47,
+        "startChar": 57,
+        "endLine": 47,
+        "endChar": 70
+      },
+      "revId": "c04bfbd1b145f43aace0cd7f3ab4246ddd468396",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
