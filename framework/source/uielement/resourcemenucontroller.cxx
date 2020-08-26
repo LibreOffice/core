@@ -94,10 +94,7 @@ ResourceMenuController::ResourceMenuController( const css::uno::Reference< css::
                     m_aMenuURL = "private:resource/popupmenu/" + aMenuName;
             }
             else if ( aPropValue.Name == "ResourceURL" )
-            {
-                if ( m_aMenuURL.isEmpty() )
-                    aPropValue.Value >>= m_aMenuURL;
-            }
+                aPropValue.Value >>= m_aMenuURL;
             else if ( aPropValue.Name == "Frame" )
                 aPropValue.Value >>= m_xFrame;
             else if ( aPropValue.Name == "ModuleIdentifier" )

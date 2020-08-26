@@ -242,8 +242,7 @@ void PopupMenuToolbarController::createPopupMenuController()
         css::uno::Sequence<css::uno::Any> aArgs {
             css::uno::makeAny(comphelper::makePropertyValue("Frame", m_xFrame)),
             css::uno::makeAny(comphelper::makePropertyValue("ModuleIdentifier", m_sModuleName)),
-            css::uno::makeAny(comphelper::makePropertyValue("InToolbar", true)),
-            css::uno::makeAny(comphelper::makePropertyValue("ResourceURL", m_aPopupCommand))
+            css::uno::makeAny(comphelper::makePropertyValue("InToolbar", true))
         };
 
         try
@@ -255,6 +254,10 @@ void PopupMenuToolbarController::createPopupMenuController()
 
             if (m_bResourceURL)
             {
+                sal_Int32 nAppendIndex = aArgs.getLength();
+                aArgs.realloc(nAppendIndex + 1);
+                aArgs[nAppendIndex] <<= comphelper::makePropertyValue("ResourceURL", m_aPopupCommand);
+
                 m_xPopupMenuController.set( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                     "com.sun.star.comp.framework.ResourceMenuController", aArgs, m_xContext), css::uno::UNO_QUERY_THROW );
             }
