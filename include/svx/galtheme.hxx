@@ -57,7 +57,7 @@ class SVXCORE_DLLPUBLIC GalleryTheme : public SfxBroadcaster
 
 private:
 
-    std::unique_ptr<GalleryBinaryEngine>     mpGalleryBinaryEngine;
+    std::unique_ptr<GalleryBinaryEngine>     mpGalleryStorageEngine;
     GalleryObjectCollection     maGalleryObjectCollection;
     Gallery*                    pParent;
     GalleryThemeEntry*          pThm;
@@ -67,8 +67,8 @@ private:
     bool                        bDragging;
     bool                        bAbortActualize;
 
-    std::unique_ptr<GalleryBinaryEngine> createGalleryBinaryEngine(bool bReadOnly);
-    const std::unique_ptr<GalleryBinaryEngine>& getGalleryBinaryEngine() const { return mpGalleryBinaryEngine; }
+    std::unique_ptr<GalleryBinaryEngine> createGalleryStorageEngine(bool bReadOnly);
+    const std::unique_ptr<GalleryBinaryEngine>& getGalleryStorageEngine() const { return mpGalleryStorageEngine; }
 
     SAL_DLLPRIVATE void         ImplSetModified( bool bModified );
     SAL_DLLPRIVATE void         ImplBroadcast(sal_uInt32 nUpdatePos);

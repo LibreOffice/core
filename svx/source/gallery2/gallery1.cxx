@@ -593,7 +593,7 @@ void Gallery::RenameTheme( const OUString& rOldName, const OUString& rNewName )
     {
         pThemeEntry->SetName( rNewName );
         if (pThm->pThm->IsModified())
-            if (!pThm->mpGalleryBinaryEngine->implWrite(*pThm, pThm->pThm))
+            if (!pThm->mpGalleryStorageEngine->implWrite(*pThm, pThm->pThm))
                 pThm->ImplSetModified(false);
 
         Broadcast( GalleryHint( GalleryHintType::THEME_RENAMED, rOldName, pThm->GetName() ) );
