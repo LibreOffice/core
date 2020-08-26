@@ -69,13 +69,13 @@ GalleryTheme::GalleryTheme( Gallery* pGallery, GalleryThemeEntry* pThemeEntry )
     , bDragging(false)
     , bAbortActualize(false)
 {
-    mpGalleryBinaryEngine = createGalleryBinaryEngine(IsReadOnly());
+    mpGalleryStorageEngine = createGalleryStorageEngine(IsReadOnly());
 }
 
 GalleryTheme::~GalleryTheme()
 {
     if(pThm->IsModified())
-        if(!mpGalleryBinaryEngine->implWrite(*this, pThm))
+        if(!mpGalleryStorageEngine->implWrite(*this, pThm))
             ImplSetModified(false);
 
     for (auto & pEntry : maGalleryObjectCollection.getObjectList())
@@ -84,15 +84,15 @@ GalleryTheme::~GalleryTheme()
         pEntry.reset();
     }
     maGalleryObjectCollection.clear();
-    mpGalleryBinaryEngine->clearSotStorage();
+    mpGalleryStorageEngine->clearSotStorage();
 }
 
 void GalleryTheme::SetDestDir(const OUString& rDestDir, bool bRelative)
 {
-    mpGalleryBinaryEngine->setDestDir(rDestDir, bRelative);
+    mpGalleryStorageEngine->setDestDir(rDestDir, bRelative);
 }
 
-std::unique_ptr<GalleryBinaryEngine> GalleryTheme::createGalleryBinaryEngine(bool bReadOnly)
+std::unique_ptr<GalleryBinaryEngine> GalleryTheme::createGalleryStorageEngine(bool bReadOnly)
 {
     std::unique_ptr<GalleryBinaryEngine> pGalleryBinaryEngine = std::make_unique<GalleryBinaryEngine>(pThm->getGalleryStorageLocations(), maGalleryObjectCollection, bReadOnly);
     return pGalleryBinaryEngine;
@@ -148,7 +148,7 @@ bool GalleryTheme::InsertObject(const SgaObject& rObj, sal_uInt32 nInsertPos)
         }
     }
 
-    mpGalleryBinaryEngine->insertObject(rObj, pFoundEntry, nInsertPos);
+    mpGalleryStorageEngine->insertObject(rObj, pFoundEntry, nInsertPos);
 
     ImplSetModified(true);
     ImplBroadcast(pFoundEntry? iFoundPos: nInsertPos);
@@ -158,7 +158,7 @@ bool GalleryTheme::InsertObject(const SgaObject& rObj, sal_uInt32 nInsertPos)
 
 std::unique_ptr<SgaObject> GalleryTheme::AcquireObject(sal_uInt32 nPos)
 {
-    return mpGalleryBinaryEngine->implReadSgaObject(maGalleryObjectCollection.getForPosition(nPos));
+    return mpGalleryStorageEngine->implReadSgaObject(maGalleryObjectCollection.getForPosition(nPos));
 }
 
 void GalleryTheme::GetPreviewBitmapExAndStrings(sal_uInt32 nPos, BitmapEx& rBitmapEx, Size& rSize, OUString& rTitle, OUString& rPath)
@@ -187,7 +187,7 @@ void GalleryTheme::RemoveObject(sal_uInt32 nPos)
     std::unique_ptr<GalleryObject> pEntry = std::move(*it);
     maGalleryObjectCollection.getObjectList().erase( it );
 
-    mpGalleryBinaryEngine->removeObject(pEntry);
+    mpGalleryStorageEngine->removeObject(pEntry);
 
     Broadcast( GalleryHint( GalleryHintType::CLOSE_OBJECT, GetName(), pEntry.get() ) );
     pEntry.reset();
@@ -281,9 +281,9 @@ void GalleryTheme::Actualize( const Link<const INetURLObject&, void>& rActualize
         else
         {
             //update SvDraw object
-            if ( mpGalleryBinaryEngine->GetSvDrawStorage().is() )
+            if ( mpGalleryStorageEngine->GetSvDrawStorage().is() )
             {
-                SgaObjectSvDraw aNewObj = mpGalleryBinaryEngine->updateSvDrawObject(pEntry);
+                SgaObjectSvDraw aNewObj = mpGalleryStorageEngine->updateSvDrawObject(pEntry);
                 if (aNewObj.IsValid() && !InsertObject(aNewObj))
                     pEntry->mbDelete = true;
             }
@@ -303,10 +303,10 @@ void GalleryTheme::Actualize( const Link<const INetURLObject&, void>& rActualize
     }
 
     // update theme
-    mpGalleryBinaryEngine->updateTheme();
+    mpGalleryStorageEngine->updateTheme();
     ImplSetModified( true );
     if (pThm->IsModified())
-        if (!mpGalleryBinaryEngine->implWrite(*this, pThm))
+        if (!mpGalleryStorageEngine->implWrite(*this, pThm))
             ImplSetModified(false);
     UnlockBroadcaster();
 }
@@ -441,7 +441,7 @@ bool GalleryTheme::InsertGraphic(const Graphic& rGraphic, sal_uInt32 nInsertPos)
                 nExportFormat = ConvertDataFormat::SVM;
         }
 
-        const SgaObjectBmp aObjBmp = mpGalleryBinaryEngine->insertGraphic(rGraphic, aGfxLink, nExportFormat, GetParent()->GetUserURL());
+        const SgaObjectBmp aObjBmp = mpGalleryStorageEngine->insertGraphic(rGraphic, aGfxLink, nExportFormat, GetParent()->GetUserURL());
 
         if (aObjBmp.IsValid())
             bRet = InsertObject(aObjBmp, nInsertPos);
@@ -457,7 +457,7 @@ bool GalleryTheme::GetModel(sal_uInt32 nPos, SdrModel& rModel)
 
     if( pObject && ( SgaObjKind::SvDraw == pObject->eObjKind ) )
     {
-        bRet = mpGalleryBinaryEngine->readModel(pObject, rModel);
+        bRet = mpGalleryStorageEngine->readModel(pObject, rModel);
     }
 
     return bRet;
@@ -466,7 +466,7 @@ bool GalleryTheme::GetModel(sal_uInt32 nPos, SdrModel& rModel)
 bool GalleryTheme::InsertModel(const FmFormModel& rModel, sal_uInt32 nInsertPos)
 {
     bool bRet = false;
-    SgaObjectSvDraw aObjSvDraw = mpGalleryBinaryEngine->insertModel(rModel, GetParent()->GetUserURL());
+    SgaObjectSvDraw aObjSvDraw = mpGalleryStorageEngine->insertModel(rModel, GetParent()->GetUserURL());
     if(aObjSvDraw.IsValid())
         bRet = InsertObject( aObjSvDraw, nInsertPos );
     return bRet;
@@ -479,7 +479,7 @@ bool GalleryTheme::GetModelStream(sal_uInt32 nPos, tools::SvRef<SotStorageStream
 
     if( pObject && ( SgaObjKind::SvDraw == pObject->eObjKind ) )
     {
-        bRet = mpGalleryBinaryEngine->readModelStream(pObject, rxModelStream);
+        bRet = mpGalleryStorageEngine->readModelStream(pObject, rxModelStream);
     }
 
     return bRet;
@@ -489,7 +489,7 @@ bool GalleryTheme::InsertModelStream(const tools::SvRef<SotStorageStream>& rxMod
 {
     bool            bRet = false;
 
-    const SgaObjectSvDraw aObjSvDraw = mpGalleryBinaryEngine->insertModelStream(rxModelStream, GetParent()->GetUserURL());
+    const SgaObjectSvDraw aObjSvDraw = mpGalleryStorageEngine->insertModelStream(rxModelStream, GetParent()->GetUserURL());
     if(aObjSvDraw.IsValid())
         bRet = InsertObject( aObjSvDraw, nInsertPos );
 
