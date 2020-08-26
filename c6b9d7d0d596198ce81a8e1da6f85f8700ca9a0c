@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f9a94f8b_49d208d5",
+        "filename": "sw/source/core/text/txtfld.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-08-26T09:09:08Z",
+      "side": 1,
+      "message": "please use \"r\" prefix for C++ reference not \"a\" :)",
+      "revId": "c6b9d7d0d596198ce81a8e1da6f85f8700ca9a0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db804bdb_00319938",
+        "filename": "sw/source/core/text/txtfld.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-08-26T09:09:08Z",
+      "side": 1,
+      "message": "i think the Clone here is superfluous because Put will clone itself if necessary",
+      "revId": "c6b9d7d0d596198ce81a8e1da6f85f8700ca9a0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a7bbf3f_e01aa128",
+        "filename": "sw/source/core/text/txtfld.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 497,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-08-26T09:09:08Z",
+      "side": 1,
+      "message": "hmm... aIter iterates the original pSet, not pCleanedSet, so it can happen that the style contains an item for which pFormat-\u003eHasItem(pItem-\u003eWhich() is true, and it will be missed here... so probably add this check in the style loop above?",
+      "revId": "c6b9d7d0d596198ce81a8e1da6f85f8700ca9a0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
