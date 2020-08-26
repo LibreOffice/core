@@ -305,6 +305,8 @@ private:
         return mpEditViewCallbacks;
     }
 
+    void lokSelectionCallback(std::unique_ptr<tools::PolyPolygon> &pPolyPoly, bool bStartHandleVisible, bool bEndHandleVisible);
+
     void setEditViewCallbacks(const EditViewCallbacks* pEditViewCallbacks)
     {
         mpEditViewCallbacks = pEditViewCallbacks;
