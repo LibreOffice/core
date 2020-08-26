@@ -149,7 +149,6 @@ SvxShadowTabPage::SvxShadowTabPage(weld::Container* pPage, weld::DialogControlle
     }
 
     m_rXFSet.Put( XFillStyleItem( eXFS ) );
-    m_aCtlXRectPreview.SetRectangleAttributes(m_aXFillAttr.GetItemSet());
 
     m_xTsbShowShadow->connect_toggled(LINK( this, SvxShadowTabPage, ClickShadowHdl_Impl));
     m_xLbShadowColor->SetSelectHdl( LINK( this, SvxShadowTabPage, SelectShadowHdl_Impl ) );
@@ -205,7 +204,6 @@ void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
         SdrOnOffItem aItem( makeSdrShadowItem( false ));
         rAttribs.Put( aItem );
 
-        m_aCtlXRectPreview.SetRectangleAttributes( rAttribs );
         ModifyShadowHdl_Impl( *m_xMtrTransparent );
     }
     m_nPageType = PageType::Shadow;
@@ -491,10 +489,10 @@ IMPL_LINK_NOARG(SvxShadowTabPage, ModifyShadowHdl_Impl, weld::MetricSpinButton&,
         case RectPoint::MM: break;
     }
 
-    m_aCtlXRectPreview.SetShadowPosition(Point(nX, nY));
-
-    m_aCtlXRectPreview.SetShadowAttributes(m_aXFillAttr.GetItemSet());
-    m_aCtlXRectPreview.Invalidate();
+    m_aCtlXRectPreview.SetShadowPosition(nX, nY);
+    m_aCtlXRectPreview.SetShadowColor( m_xLbShadowColor->GetSelectEntryColor() );
+    m_aCtlXRectPreview.SetShadowBlur(m_xLbShadowBlurMetric->get_value(FieldUnit::MM_100TH));
+    m_aCtlXRectPreview.SetShadowTransparence( m_xMtrTransparent->get_value(FieldUnit::PERCENT));
 }
 
 void SvxShadowTabPage::PointChanged( weld::DrawingArea*, RectPoint )

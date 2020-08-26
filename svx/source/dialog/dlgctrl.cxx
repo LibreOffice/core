@@ -39,7 +39,14 @@
 #include <svx/svdopath.hxx>
 #include <sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
+#include <svx/unopage.hxx>
 #include <vcl/BitmapTools.hxx>
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+
 
 #define OUTPUT_DRAWMODE_COLOR       (DrawModeFlags::Default)
 #define OUTPUT_DRAWMODE_CONTRAST    (DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill | DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient)
@@ -1184,56 +1191,41 @@ void SvxXLinePreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
     LocalPostPaint(rRenderContext);
 }
 
+
 SvxXShadowPreview::SvxXShadowPreview()
-    : mpRectangleObject(nullptr)
-    , mpRectangleShadow(nullptr)
-{
-}
+    : maShadowOffsetX(0),
+    maShadowOffsetY(0),
+    fShadowBlur(0),
+    fShadowTransparence(0)
+{}
+
+SvxXShadowPreview::~SvxXShadowPreview() {}
 
 void SvxXShadowPreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     SvxPreviewBase::SetDrawingArea(pDrawingArea);
     InitSettings();
-
-    // prepare size
-    Size aSize = GetPreviewSize().GetSize();
-    aSize.setWidth( aSize.Width() / 3 );
-    aSize.setHeight( aSize.Height() / 3 );
-
-    // create RectangleObject
-    const tools::Rectangle aObjectSize( Point( aSize.Width(), aSize.Height() ), aSize );
-    mpRectangleObject = new SdrRectObj(
-        getModel(),
-        aObjectSize);
-
-    // create ShadowObject
-    const tools::Rectangle aShadowSize( Point( aSize.Width(), aSize.Height() ), aSize );
-    mpRectangleShadow = new SdrRectObj(
-        getModel(),
-        aShadowSize);
 }
 
-SvxXShadowPreview::~SvxXShadowPreview()
+void SvxXShadowPreview::SetShadowColor(const Color& rColor)
 {
-    SdrObject::Free(mpRectangleObject);
-    SdrObject::Free(mpRectangleShadow);
+    rShadowColor = rColor;
 }
 
-void SvxXShadowPreview::SetRectangleAttributes(const SfxItemSet& rItemSet)
+void SvxXShadowPreview::SetShadowBlur(const sal_uInt32& fBlur)
 {
-    mpRectangleObject->SetMergedItemSet(rItemSet, true);
-    mpRectangleObject->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
+    fShadowBlur = fBlur;
 }
 
-void SvxXShadowPreview::SetShadowAttributes(const SfxItemSet& rItemSet)
+void SvxXShadowPreview::SetShadowTransparence(const sal_uInt32& fTransparence)
 {
-    mpRectangleShadow->SetMergedItemSet(rItemSet, true);
-    mpRectangleShadow->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
+    fShadowTransparence = fTransparence;
 }
 
-void SvxXShadowPreview::SetShadowPosition(const Point& rPos)
+void SvxXShadowPreview::SetShadowPosition(const sal_uInt32 rOffsetX, const sal_uInt32 rOffsetY)
 {
-    maShadowOffset = rPos;
+    maShadowOffsetX = rOffsetX;
+    maShadowOffsetY = rOffsetY;
 }
 
 void SvxXShadowPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
@@ -1248,21 +1240,38 @@ void SvxXShadowPreview::Paint(vcl::RenderContext& rRenderContext, const tools::R
     aSize.setWidth( aSize.Width() / 3 );
     aSize.setHeight( aSize.Height() / 3 );
 
-    tools::Rectangle aObjectRect(Point(aSize.Width(), aSize.Height()), aSize);
-    mpRectangleObject->SetSnapRect(aObjectRect);
-    aObjectRect.Move(maShadowOffset.X(), maShadowOffset.Y());
-    mpRectangleShadow->SetSnapRect(aObjectRect);
 
-    sdr::contact::SdrObjectVector aObjectVector;
+    uno::Reference<frame::XDesktop2> xDesktop = css::frame::Desktop::create(comphelper::getProcessComponentContext());
+    uno::Reference<lang::XComponent> maComponent = xDesktop->loadComponentFromURL("private:factory/sdraw", "default", 1, {});
 
-    aObjectVector.push_back(mpRectangleShadow);
-    aObjectVector.push_back(mpRectangleObject);
+    uno::Reference<lang::XMultiServiceFactory> xFactory(maComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(
+            xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+    xShape->setSize(awt::Size(aSize.Width(),  aSize.Height()));
+    xShape->setPosition(awt::Point(3500, 2000));
 
-    sdr::contact::ObjectContactOfObjListPainter aPainter(getBufferDevice(), aObjectVector, nullptr);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(maComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    xDrawPage->add(xShape);
+
+    uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
+    xShapeProperties->setPropertyValue("Shadow",uno::makeAny(true));
+    xShapeProperties->setPropertyValue("ShadowXDistance", uno::makeAny(maShadowOffsetX));
+    xShapeProperties->setPropertyValue("ShadowYDistance", uno::makeAny(maShadowOffsetY));
+    xShapeProperties->setPropertyValue("ShadowColor", uno::makeAny(rShadowColor));
+    xShapeProperties->setPropertyValue("ShadowBlur", uno::makeAny(fShadowBlur));
+    xShapeProperties->setPropertyValue("ShadowTransparence", uno::makeAny(fShadowTransparence));
+
+
+    auto pDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
+    SdrPage* pSdrPage = pDrawPage->GetSdrPage();
+    sdr::contact::ObjectContactOfObjListPainter aObjectContact(getBufferDevice(),
+                                                               { pSdrPage->GetObj(0) }, nullptr);
     sdr::contact::DisplayInfo aDisplayInfo;
 
-    aPainter.ProcessDisplay(aDisplayInfo);
-
+    aObjectContact.ProcessDisplay(aDisplayInfo);
+    maComponent->dispose();
     LocalPostPaint(rRenderContext);
 
     rRenderContext.Pop();

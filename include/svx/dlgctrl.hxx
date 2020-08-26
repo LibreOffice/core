@@ -372,28 +372,24 @@ public:
     virtual void Resize() override;
 };
 
-/*************************************************************************
-|*
-|* SvxXShadowPreview
-|*
-\************************************************************************/
-
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxXShadowPreview final : public SvxPreviewBase
 {
 private:
-    Point maShadowOffset;
-
-    SdrObject* mpRectangleObject;
-    SdrObject* mpRectangleShadow;
+    sal_uInt32 maShadowOffsetX;
+    sal_uInt32 maShadowOffsetY;
+    Color rShadowColor;
+    sal_uInt32 fShadowBlur;
+    sal_uInt32 fShadowTransparence;
 
 public:
     SvxXShadowPreview();
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     virtual ~SvxXShadowPreview() override;
 
-    void SetRectangleAttributes(const SfxItemSet& rItemSet);
-    void SetShadowAttributes(const SfxItemSet& rItemSet);
-    void SetShadowPosition(const Point& rPos);
+    void SetShadowColor(const Color& rColor);
+    void SetShadowBlur(const sal_uInt32& fBlur);
+    void SetShadowTransparence(const sal_uInt32& fTransparence);
+    void SetShadowPosition(const sal_uInt32 rOffsetX, const sal_uInt32 rOffsetY);
 
     virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
 };
