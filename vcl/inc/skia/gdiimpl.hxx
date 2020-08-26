@@ -282,7 +282,7 @@ protected:
     // and anything that means the next operation cannot be another one in a series (e.g.
     // changing colors).
     void checkPendingDrawing();
-    bool mergePolyPolygonToPrevious(const basegfx::B2DPolyPolygon& polygon, double transparency);
+    bool delayDrawPolyPolygon(const basegfx::B2DPolyPolygon& polygon, double transparency);
     void performDrawPolyPolygon(const basegfx::B2DPolyPolygon& polygon, double transparency,
                                 bool useAA);
 
@@ -314,7 +314,8 @@ protected:
     // Info about pending polygons to draw (we try to merge adjacent polygons into one).
     struct LastPolyPolygonInfo
     {
-        basegfx::B2DPolyPolygon polygon;
+        basegfx::B2DPolyPolygonVector polygons;
+        basegfx::B2DRange bounds;
         double transparency;
     };
     LastPolyPolygonInfo mLastPolyPolygonInfo;
