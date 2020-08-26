@@ -704,13 +704,19 @@
                                         <xsl:with-param name="globalData" select="$globalData"/>
                                     </xsl:apply-templates>
                                 </xsl:when>
-                                <xsl:otherwise>
+                                <!-- inbetween paragraphs with border/margin -->
+                                <xsl:when test="$isPrecedingBorderParagraph and $isFollowingBorderParagraph">
                                     <xsl:attribute name="class">
-                                        <xsl:value-of select="translate(@text:style-name, '.,;: %()[]/\+', '_____________')"/>
+                                        <xsl:value-of select="concat(translate(@text:style-name, '.,;: %()[]/\+', '_____________'), '_borderSides')"/>
                                     </xsl:attribute>
                                     <xsl:apply-templates>
                                         <xsl:with-param name="globalData" select="$globalData"/>
                                     </xsl:apply-templates>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:call-template name="write-paragraph">
+                                        <xsl:with-param name="globalData" select="$globalData"/>
+                                    </xsl:call-template>
                                 </xsl:otherwise>
                             </xsl:choose>
                         </xsl:when>
@@ -1610,14 +1616,27 @@
         ============
 
         The indent of a list label is not only calculated by using the text:space-before of the list level (listLevelStyle), but
-        as well taking the left margin of the first paragraph (or heading) of the list into account as loy match="" name="" use=""/>ng it is not negative.
+        as well taking the left margin of the first paragraph (or heading) of the list into account as long it is not negative.
 
-        |           MARGIN LEFT                 |        LABEL           |
+        |           MARGIN LEFT                  |                    LABEL                     |        CONTENT-PADDING
+            @text:space-before (1)               |            @text:min-label-width (1)         |  @text:min-label-distance (1)
+        | + @fo:left-margin (firstParagraph)     |                                              |
 
-        |   text:space-before (listlevelstyle)  | text:min-label-width   |
-        | + fo:left-margin (firstParagraph)     |                        |
 
-        Further details beyond text:list-list...
+        (1) all attributes belong to: text:list-style/$listLevelStyle/style:list-level-properties/@*
+            $listLevelStyle might be one of three choices:
+                1) <text:list-level-style-number>
+                2) <text:list-level-style-bullet>
+                3) <text:list-level-style-image>
+
+    For example:
+    <text:list-style style:name="Appendix">
+        <text:list-level-style-number text:level="1" text:style-name="Zeichenformat" style:num-prefix="Appendix " style:num-suffix=". " style:num-format="A" style:num-letter-sync="true">
+            <style:list-level-properties text:min-label-width="0.762cm" text:min-label-distance="0.127cm"/>
+        </text:list-level-style-number>
+        <text:list-level-style-number text:level="2" text:style-name="Zeichenformat" style:num-suffix="." style:num-format="1" text:display-levels="2">
+             <style:list-level-properties text:min-label-width="1.016cm"/>
+        </text:list-level-style-number>
     -->
     <xsl:key name="listStyles" match=" /*/office:styles/text:list-style | /*/office:automatic-styles/text:list-style | /*/office:styles/style:graphic-properties/text:list-style | /*/office:automatic-styles/style:graphic-properties/text:list-style | /*/office:styles/text:list-style | /*/office:automatic-styles/text:list-style | /*/office:styles/style:graphic-properties/text:list-style | /*/office:automatic-styles/style:graphic-properties/text:list-style" use="@style:name"/>
 
@@ -2004,7 +2023,7 @@
                                 <xsl:otherwise>
                                     <xsl:variable name="listLabelWidth">
                                         <xsl:choose>
-                                            <xsl:when test="$minLabelWidth &gt; $minLabelDist">
+                                            <xsl:when test="$minLabelWidth">
                                                 <xsl:value-of select="$minLabelWidth"/>
                                             </xsl:when>
                                             <xsl:otherwise>
