@@ -735,7 +735,7 @@ bool SkiaSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectTo
     SAL_INFO("vcl.skia.trace", "drawpolypolygon(" << this << "): " << aPolyPolygon << ":"
                                                   << mLineColor << ":" << mFillColor);
 
-    if (mergePolyPolygonToPrevious(aPolyPolygon, fTransparency))
+    if (delayDrawPolyPolygon(aPolyPolygon, fTransparency))
     {
         scheduleFlush();
         return true;
@@ -790,8 +790,8 @@ void SkiaSalGraphicsImpl::performDrawPolyPolygon(const basegfx::B2DPolyPolygon& 
 #endif
 }
 
-bool SkiaSalGraphicsImpl::mergePolyPolygonToPrevious(const basegfx::B2DPolyPolygon& aPolyPolygon,
-                                                     double fTransparency)
+bool SkiaSalGraphicsImpl::delayDrawPolyPolygon(const basegfx::B2DPolyPolygon& aPolyPolygon,
+                                               double fTransparency)
 {
     // There is some code that needlessly subdivides areas into adjacent rectangles,
     // but Skia doesn't line them up perfectly if AA is enabled (e.g. Cairo, Qt5 do,
@@ -819,39 +819,30 @@ bool SkiaSalGraphicsImpl::mergePolyPolygonToPrevious(const basegfx::B2DPolyPolyg
     if (aPolyPolygon.count() != 1)
         return false;
 
-    if (mLastPolyPolygonInfo.polygon.count() != 0
+    if (mLastPolyPolygonInfo.polygons.size() != 0
         && (mLastPolyPolygonInfo.transparency != fTransparency
-            || !mLastPolyPolygonInfo.polygon.getB2DRange().overlaps(aPolyPolygon.getB2DRange())))
+            || !mLastPolyPolygonInfo.bounds.overlaps(aPolyPolygon.getB2DRange())))
     {
         checkPendingDrawing(); // Cannot be parts of the same larger polygon, draw the last and reset.
     }
-    if (mLastPolyPolygonInfo.polygon.count() == 0)
-    {
-        mLastPolyPolygonInfo.polygon = aPolyPolygon;
-        mLastPolyPolygonInfo.transparency = fTransparency;
-        return true;
-    }
-    basegfx::B2DPolyPolygon merged
-        = basegfx::utils::mergeToSinglePolyPolygon({ mLastPolyPolygonInfo.polygon, aPolyPolygon });
-    if (merged.count() == 0) // it wasn't actually merged
-    {
-        checkPendingDrawing();
-        mLastPolyPolygonInfo.polygon = aPolyPolygon;
-        mLastPolyPolygonInfo.transparency = fTransparency;
-        return true;
-    }
-    mLastPolyPolygonInfo.polygon = std::move(merged);
+    // Collect the polygons that can be possibly merged. Do the merging only once at the end,
+    // because it's not a cheap operation.
+    mLastPolyPolygonInfo.polygons.push_back(aPolyPolygon);
+    mLastPolyPolygonInfo.bounds.expand(aPolyPolygon.getB2DRange());
+    mLastPolyPolygonInfo.transparency = fTransparency;
     return true;
 }
 
 void SkiaSalGraphicsImpl::checkPendingDrawing()
 {
-    if (mLastPolyPolygonInfo.polygon.count() != 0)
+    if (mLastPolyPolygonInfo.polygons.size() != 0)
     { // Flush any pending polygon drawing.
-        basegfx::B2DPolyPolygon polygon;
-        std::swap(polygon, mLastPolyPolygonInfo.polygon);
+        basegfx::B2DPolyPolygonVector polygons;
+        std::swap(polygons, mLastPolyPolygonInfo.polygons);
         double transparency = mLastPolyPolygonInfo.transparency;
-        performDrawPolyPolygon(polygon, transparency, true);
+        mLastPolyPolygonInfo.bounds.reset();
+        basegfx::B2DPolyPolygon merged = basegfx::utils::mergeToSinglePolyPolygon(polygons);
+        performDrawPolyPolygon(merged, transparency, true);
     }
 }
 
