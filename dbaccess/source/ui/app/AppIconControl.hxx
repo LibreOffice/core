@@ -48,6 +48,9 @@ namespace dbaui
         explicit OApplicationIconControl(std::unique_ptr<weld::ScrolledWindow> xScroll);
         virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
         virtual void Resize() override;
+        virtual tools::Rectangle GetFocusRect() override;
+        virtual void GetFocus() override;
+        virtual void LoseFocus() override;
         bool DoKeyShortCut(const KeyEvent& rKEvt);
         virtual bool KeyInput(const KeyEvent& rKEvt) override;
         virtual ~OApplicationIconControl() override;
