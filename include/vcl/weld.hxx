@@ -160,8 +160,8 @@ public:
      * either widget was not realized, or there was no common ancestor.
      * Otherwise true.
      */
-    virtual bool get_extents_relative_to(Widget& rRelative, int& x, int& y, int& width, int& height)
-        = 0;
+    virtual bool get_extents_relative_to(const Widget& rRelative, int& x, int& y, int& width,
+                                         int& height) const = 0;
 
     virtual void set_accessible_name(const OUString& rName) = 0;
     virtual OUString get_accessible_name() const = 0;

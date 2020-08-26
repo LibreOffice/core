@@ -469,13 +469,11 @@ namespace svt::table
         }
     }
 
-
     void TableControl::commitCellEventIfAccessibleAlive( sal_Int16 const i_eventID, const Any& i_newValue, const Any& i_oldValue )
     {
         if ( m_pImpl->isAccessibleAlive() )
             m_pImpl->commitCellEvent( i_eventID, i_newValue, i_oldValue );
     }
-
 
     void TableControl::commitTableEventIfAccessibleAlive( sal_Int16 const i_eventID, const Any& i_newValue, const Any& i_oldValue )
     {
@@ -483,30 +481,25 @@ namespace svt::table
             m_pImpl->commitTableEvent( i_eventID, i_newValue, i_oldValue );
     }
 
-
-    tools::Rectangle TableControl::GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const
+    tools::Rectangle TableControl::GetWindowExtentsRelative(const vcl::Window *pRelativeWindow) const
     {
         return Control::GetWindowExtentsRelative( pRelativeWindow );
     }
-
 
     void TableControl::GrabFocus()
     {
         Control::GrabFocus();
     }
 
-
     Reference< XAccessible > TableControl::GetAccessible()
     {
         return Control::GetAccessible();
     }
 
-
     vcl::Window* TableControl::GetAccessibleParentWindow() const
     {
         return Control::GetAccessibleParentWindow();
     }
-
 
     vcl::Window* TableControl::GetWindowInstance()
     {

@@ -1348,7 +1348,7 @@ sal_uInt16 ListBox::GetDisplayLineCount() const
 
 tools::Rectangle ListBox::GetDropDownPosSizePixel() const
 {
-    return mpFloatWin ? mpFloatWin->GetWindowExtentsRelative( const_cast<ListBox*>(this) ) : tools::Rectangle();
+    return mpFloatWin ? mpFloatWin->GetWindowExtentsRelative(this) : tools::Rectangle();
 }
 
 const Wallpaper& ListBox::GetDisplayBackground() const

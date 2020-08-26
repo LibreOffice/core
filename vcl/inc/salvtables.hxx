@@ -338,8 +338,8 @@ public:
 
     virtual void connect_key_release(const Link<const KeyEvent&, bool>& rLink) override;
 
-    virtual bool get_extents_relative_to(Widget& rRelative, int& x, int& y, int& width,
-                                         int& height) override;
+    virtual bool get_extents_relative_to(const Widget& rRelative, int& x, int& y, int& width,
+                                         int& height) const override;
 
     virtual void grab_add() override;
 
@@ -359,7 +359,7 @@ public:
 
     virtual ~SalInstanceWidget() override;
 
-    vcl::Window* getWidget();
+    vcl::Window* getWidget() const;
 
     void disable_notify_events();
 

@@ -443,11 +443,11 @@ void SalInstanceWidget::connect_key_release(const Link<const KeyEvent&, bool>& r
     weld::Widget::connect_key_release(rLink);
 }
 
-bool SalInstanceWidget::get_extents_relative_to(Widget& rRelative, int& x, int& y, int& width,
-                                                int& height)
+bool SalInstanceWidget::get_extents_relative_to(const Widget& rRelative, int& x, int& y, int& width,
+                                                int& height) const
 {
     tools::Rectangle aRect(m_xWidget->GetWindowExtentsRelative(
-        dynamic_cast<SalInstanceWidget&>(rRelative).getWidget()));
+        dynamic_cast<const SalInstanceWidget&>(rRelative).getWidget()));
     x = aRect.Left();
     y = aRect.Top();
     width = aRect.GetWidth();
@@ -483,7 +483,7 @@ SalInstanceWidget::~SalInstanceWidget()
         m_xWidget.disposeAndClear();
 }
 
-vcl::Window* SalInstanceWidget::getWidget() { return m_xWidget; }
+vcl::Window* SalInstanceWidget::getWidget() const { return m_xWidget; }
 
 void SalInstanceWidget::disable_notify_events() { ++m_nBlockNotify; }
 
