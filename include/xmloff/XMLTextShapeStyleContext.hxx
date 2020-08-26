@@ -36,10 +36,6 @@ class XMLOFF_DLLPUBLIC XMLTextShapeStyleContext final : public XMLShapeStyleCont
 public:
 
 
-    XMLTextShapeStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-            const OUString& rLName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
-            SvXMLStylesContext& rStyles, XmlStyleFamily nFamily );
     XMLTextShapeStyleContext( SvXMLImport& rImport, sal_Int32 nElement,
             const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
             SvXMLStylesContext& rStyles, XmlStyleFamily nFamily );

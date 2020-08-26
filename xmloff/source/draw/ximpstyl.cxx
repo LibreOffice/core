@@ -825,48 +825,29 @@ void SdXMLMasterPageContext::endFastElement(sal_Int32 nElement)
     GetImport().GetShapeImport()->endPage(GetLocalShapesContext());
 }
 
-SvXMLImportContextRef SdXMLMasterPageContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList>& xAttrList )
-{
-    SvXMLImportContextRef xContext;
-    const SvXMLTokenMap& rTokenMap = GetSdImport().GetMasterPageElemTokenMap();
-
-    // some special objects inside style:masterpage context
-    switch(rTokenMap.Get(nPrefix, rLocalName))
-    {
-        case XML_TOK_MASTERPAGE_STYLE:
-        {
-            if(GetSdImport().GetShapeImport()->GetStylesContext())
-            {
-                // style:style inside master-page context -> presentation style
-                XMLShapeStyleContext* pNew = new XMLShapeStyleContext(
-                    GetSdImport(), nPrefix, rLocalName, xAttrList,
-                    *GetSdImport().GetShapeImport()->GetStylesContext(),
-                    XmlStyleFamily::SD_PRESENTATION_ID);
-
-                // add this style to the outer StylesContext class for later processing
-                xContext = pNew;
-                GetSdImport().GetShapeImport()->GetStylesContext()->AddStyle(*pNew);
-            }
-            break;
-        }
-    }
-
-    // call base class
-    if (!xContext)
-        xContext = SdXMLGenericPageContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
-
-    return xContext;
-}
-
 css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLMasterPageContext::createFastChildContext(
     sal_Int32 nElement,
     const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     switch (nElement)
     {
+        // some special objects inside style:masterpage context
+        case XML_ELEMENT(STYLE, XML_STYLE):
+        {
+            if(GetSdImport().GetShapeImport()->GetStylesContext())
+            {
+                // style:style inside master-page context -> presentation style
+                XMLShapeStyleContext* pNew = new XMLShapeStyleContext(
+                    GetSdImport(), nElement, xAttrList,
+                    *GetSdImport().GetShapeImport()->GetStylesContext(),
+                    XmlStyleFamily::SD_PRESENTATION_ID);
+
+                // add this style to the outer StylesContext class for later processing
+                GetSdImport().GetShapeImport()->GetStylesContext()->AddStyle(*pNew);
+                return pNew;
+            }
+            break;
+        }
         case XML_ELEMENT(PRESENTATION, XML_NOTES):
         {
             if( GetSdImport().IsImpress() )
