@@ -1827,7 +1827,7 @@ public:
 #if defined LIBO_INTERNAL_ONLY
     /** @overload @since LibreOffice 5.3 */
     template<typename T> friend typename libreoffice_internal::ConstCharArrayDetector<T, bool>::TypeUtf16
-    operator ==(OUString & string, T & literal) {
+    operator ==(OUString const & string, T & literal) {
         return
             rtl_ustr_reverseCompare_WithLength(
                 string.pData->buffer, string.pData->length,
@@ -1838,7 +1838,7 @@ public:
     }
     /** @overload @since LibreOffice 5.3 */
     template<typename T> friend typename libreoffice_internal::ConstCharArrayDetector<T, bool>::TypeUtf16
-    operator ==(T & literal, OUString & string) {
+    operator ==(T & literal, OUString const & string) {
         return
             rtl_ustr_reverseCompare_WithLength(
                 libreoffice_internal::ConstCharArrayDetector<T>::toPointer(
@@ -1849,7 +1849,7 @@ public:
     }
     /** @overload @since LibreOffice 5.3 */
     template<typename T> friend typename libreoffice_internal::ConstCharArrayDetector<T, bool>::TypeUtf16
-    operator !=(OUString & string, T & literal) {
+    operator !=(OUString const & string, T & literal) {
         return
             rtl_ustr_reverseCompare_WithLength(
                 string.pData->buffer, string.pData->length,
@@ -1860,7 +1860,7 @@ public:
     }
     /** @overload @since LibreOffice 5.3 */
     template<typename T> friend typename libreoffice_internal::ConstCharArrayDetector<T, bool>::TypeUtf16
-    operator !=(T & literal, OUString & string) {
+    operator !=(T & literal, OUString const & string) {
         return
             rtl_ustr_reverseCompare_WithLength(
                 libreoffice_internal::ConstCharArrayDetector<T>::toPointer(
