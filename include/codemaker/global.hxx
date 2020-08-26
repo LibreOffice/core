@@ -28,7 +28,6 @@
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
 
-typedef ::std::list< ::rtl::OString >               StringList;
 typedef ::std::vector< ::rtl::OString >             StringVector;
 typedef ::std::set< ::rtl::OString >    StringSet;
 
