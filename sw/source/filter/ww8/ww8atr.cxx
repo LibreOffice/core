@@ -350,6 +350,10 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFormat, b
             std::unique_ptr<SvxBrushItem> aBrush(getSvxBrushItemFromSourceSet(rSet, RES_BACKGROUND));
             AttrOutput().OutputItem(*aBrush);
         }
+        else
+        {
+            AttrOutput().MaybeOutputBrushItem(rSet);
+        }
     }
     m_pISet = nullptr;                      // for double attributes
 }
