@@ -2933,13 +2933,13 @@ tools::Rectangle Window::ImplOutputToUnmirroredAbsoluteScreenPixel( const tools:
     return tools::Rectangle( p1, p2 );
 }
 
-tools::Rectangle Window::GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const
+tools::Rectangle Window::GetWindowExtentsRelative(const vcl::Window *pRelativeWindow) const
 {
     // with decoration
     return ImplGetWindowExtentsRelative( pRelativeWindow );
 }
 
-tools::Rectangle Window::ImplGetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const
+tools::Rectangle Window::ImplGetWindowExtentsRelative(const vcl::Window *pRelativeWindow) const
 {
     SalFrameGeometry g = mpWindowImpl->mpFrame->GetGeometry();
     // make sure we use the extent of our border window,
@@ -2961,7 +2961,7 @@ tools::Rectangle Window::ImplGetWindowExtentsRelative( vcl::Window *pRelativeWin
     if( pRelativeWindow )
     {
         // #106399# express coordinates relative to borderwindow
-        vcl::Window *pRelWin = pRelativeWindow->mpWindowImpl->mpBorderWindow ? pRelativeWindow->mpWindowImpl->mpBorderWindow.get() : pRelativeWindow;
+        const vcl::Window *pRelWin = pRelativeWindow->mpWindowImpl->mpBorderWindow ? pRelativeWindow->mpWindowImpl->mpBorderWindow.get() : pRelativeWindow;
         aPos = pRelWin->AbsoluteScreenToOutputPixel( aPos );
     }
     return tools::Rectangle( aPos, aSize );

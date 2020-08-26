@@ -1332,7 +1332,7 @@ sal_Int32 ComboBox::GetTopEntry() const
 tools::Rectangle ComboBox::GetDropDownPosSizePixel() const
 {
     return m_pImpl->m_pFloatWin
-        ? m_pImpl->m_pFloatWin->GetWindowExtentsRelative(const_cast<ComboBox*>(this))
+        ? m_pImpl->m_pFloatWin->GetWindowExtentsRelative(this)
         : tools::Rectangle();
 }
 

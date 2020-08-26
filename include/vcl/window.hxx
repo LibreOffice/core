@@ -718,7 +718,7 @@ private:
 
     SAL_DLLPRIVATE vcl::Window*         ImplGetTopmostFrameWindow();
 
-    SAL_DLLPRIVATE tools::Rectangle     ImplGetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const;
+    SAL_DLLPRIVATE tools::Rectangle     ImplGetWindowExtentsRelative(const vcl::Window *pRelativeWindow) const;
 
     SAL_DLLPRIVATE bool                 ImplStopDnd();
     SAL_DLLPRIVATE void                 ImplStartDnd();
@@ -1042,9 +1042,9 @@ public:
     Point                               NormalizedScreenToOutputPixel( const Point& rPos ) const;
     Point                               OutputToAbsoluteScreenPixel( const Point& rPos ) const;
     Point                               AbsoluteScreenToOutputPixel( const Point& rPos ) const;
-    tools::Rectangle                           GetDesktopRectPixel() const;
+    tools::Rectangle                    GetDesktopRectPixel() const;
     //  window extents including border and decoration
-    tools::Rectangle                           GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const;
+    tools::Rectangle                    GetWindowExtentsRelative(const vcl::Window *pRelativeWindow) const;
 
     bool                                IsScrollable() const;
     virtual void                        Scroll( long nHorzScroll, long nVertScroll,

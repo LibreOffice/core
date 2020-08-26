@@ -2756,13 +2756,13 @@ public:
         g_object_unref(pRelationSet);
     }
 
-    virtual bool get_extents_relative_to(weld::Widget& rRelative, int& x, int &y, int& width, int &height) override
+    virtual bool get_extents_relative_to(const weld::Widget& rRelative, int& x, int &y, int& width, int &height) const override
     {
         //for toplevel windows this is sadly futile under wayland, so we can't tell where a dialog is in order to allow
         //the document underneath to auto-scroll to place content in a visible location
         bool ret = gtk_widget_translate_coordinates(m_pWidget,
-                                                        dynamic_cast<GtkInstanceWidget&>(rRelative).getWidget(),
-                                                        0, 0, &x, &y);
+                                                    dynamic_cast<const GtkInstanceWidget&>(rRelative).getWidget(),
+                                                    0, 0, &x, &y);
         width = gtk_widget_get_allocated_width(m_pWidget);
         height = gtk_widget_get_allocated_height(m_pWidget);
         return ret;
@@ -2800,7 +2800,7 @@ public:
         return sRet;
     }
 
-    GtkWidget* getWidget()
+    GtkWidget* getWidget() const
     {
         return m_pWidget;
     }
