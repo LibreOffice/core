@@ -357,8 +357,10 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
     m_pImpl->setParagraphHasDrawing(true);
     m_pImpl->getSerializer()->startElementNS(XML_w, XML_drawing);
 
-    const SvxLRSpaceItem aLRSpaceItem = pFrameFormat->GetLRSpace(false);
-    const SvxULSpaceItem aULSpaceItem = pFrameFormat->GetULSpace(false);
+    // tdf#135047: It must be allowed to find in parents too, but default value of bInP parameter
+    // for GetLRSpace() and GetULSpace() is true, so no direct setting is required.
+    const SvxLRSpaceItem& aLRSpaceItem = pFrameFormat->GetLRSpace();
+    const SvxULSpaceItem& aULSpaceItem = pFrameFormat->GetULSpace();
 
     bool isAnchor;
 
