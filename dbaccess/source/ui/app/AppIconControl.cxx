@@ -201,6 +201,40 @@ OApplicationIconControl::~OApplicationIconControl()
 {
 }
 
+void OApplicationIconControl::GetFocus()
+{
+    SfxThumbnailView::GetFocus();
+    Invalidate(); // redraw focus rect
+}
+
+void OApplicationIconControl::LoseFocus()
+{
+    SfxThumbnailView::LoseFocus();
+    Invalidate(); // redraw focus rect
+}
+
+tools::Rectangle OApplicationIconControl::GetFocusRect()
+{
+    if (HasFocus())
+    {
+        // Get the last selected item in the list
+        for (long i = mFilteredItemList.size() - 1; i >= 0; --i)
+        {
+            ThumbnailViewItem* pItem = mFilteredItemList[i];
+            if (pItem->isSelected())
+            {
+                tools::Rectangle aRet(pItem->getDrawArea());
+                aRet.AdjustLeft(THUMBNAILVIEW_ITEM_CORNER);
+                aRet.AdjustTop(1);
+                aRet.AdjustRight(-THUMBNAILVIEW_ITEM_CORNER);
+                aRet.AdjustBottom(-2);
+                return aRet;
+            }
+        }
+    }
+    return tools::Rectangle();
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
