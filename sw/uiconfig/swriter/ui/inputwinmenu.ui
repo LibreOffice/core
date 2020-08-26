@@ -266,6 +266,20 @@
               </object>
             </child>
             <child>
+              <object class="GtkSeparatorMenuItem" id="separator2">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="abs">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="inputwinmenu|abs">Abs</property>
+                <property name="use_underline">True</property>
+              </object>
+            </child>
+            <child>
               <object class="GtkMenuItem" id="sign">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>

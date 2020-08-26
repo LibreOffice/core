@@ -86,7 +86,8 @@ const char sCalc_Date[] =   "date";
 const char sCalc_Product[] = "product";
 const char sCalc_Average[] = "average";
 const char sCalc_Count[]=   "count";
-const char sCalc_Sign[]=   "sign";
+const char sCalc_Sign[] =   "sign";
+const char sCalc_Abs[]  =   "abs";
 
 // ATTENTION: sorted list of all operators
 struct CalcOp
@@ -99,6 +100,7 @@ struct CalcOp
 };
 
 CalcOp const aOpTable[] = {
+/* ABS */     {{sCalc_Abs},        CALC_ABS},   // Abs (since LibreOffice 7.1)
 /* ACOS */    {{sCalc_Acos},       CALC_ACOS},  // Arc cosine
 /* ADD */     {{sCalc_Add},        CALC_PLUS},  // Addition
 /* AND */     {{sCalc_And},        CALC_AND},   // log. AND
@@ -1071,6 +1073,10 @@ SwSbxValue SwCalc::PrimFunc(bool &rChkPow)
         case CALC_ACOS:
             SAL_INFO("sw.calc", "acos");
             return StdFunc(&acos, true);
+            break;
+        case CALC_ABS:
+            SAL_INFO("sw.calc", "abs");
+            return StdFunc(&abs, false);
             break;
         case CALC_SIGN:
         {
