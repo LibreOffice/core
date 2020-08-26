@@ -668,6 +668,8 @@ public:
     ( ww8::WW8TableNodeInfoInner const * pTableTextNodeInfoInner,
       long& rPageSize, bool& rRelBoxSize );
 
+    virtual void MaybeOutputBrushItem(SfxItemSet const&) { }
+
     /// Exports the definition (image, size) of a single numbering picture bullet.
     virtual void BulletDefinition(int /*nId*/, const Graphic& /*rGraphic*/, Size /*aSize*/) {}
 
