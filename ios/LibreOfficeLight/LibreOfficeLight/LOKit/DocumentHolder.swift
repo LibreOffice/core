@@ -69,7 +69,7 @@ public class DocumentHolder
     {
         return documentType == LOK_DOCTYPE_DRAWING
     }
-    public var isSpeadsheet: Bool
+    public var isSpreadsheet: Bool
     {
         return documentType == LOK_DOCTYPE_SPREADSHEET
     }
