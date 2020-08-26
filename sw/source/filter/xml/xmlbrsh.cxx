@@ -20,6 +20,7 @@
 #include <editeng/memberids.h>
 #include <vcl/graph.hxx>
 
+#include <sal/log.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -67,66 +68,61 @@ const SvXMLTokenMapEntry aBGImgAttributesAttrTokenMap[] =
 
 
 void SwXMLBrushItemImportContext::ProcessAttrs(
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
         const SvXMLUnitConverter& rUnitConv )
 {
     SvXMLTokenMap aTokenMap( aBGImgAttributesAttrTokenMap );
 
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for( auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ) )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        const sal_uInt16 nPrefix =
-            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                            &aLocalName );
-        const OUString& rValue = xAttrList->getValueByIndex( i );
+        const OUString sValue = aIter.toString();
 
-        switch( aTokenMap.Get( nPrefix, aLocalName ) )
+        switch( aIter.getToken() )
         {
-        case XML_TOK_BGIMG_HREF:
-            m_xGraphic = GetImport().loadGraphicByURL(rValue);
+        case XML_ELEMENT(XLINK, XML_HREF):
+            m_xGraphic = GetImport().loadGraphicByURL(sValue);
             break;
-        case XML_TOK_BGIMG_TYPE:
-        case XML_TOK_BGIMG_ACTUATE:
-        case XML_TOK_BGIMG_SHOW:
+        case XML_ELEMENT(XLINK, XML_TYPE):
+        case XML_ELEMENT(XLINK, XML_ACTUATE):
+        case XML_ELEMENT(XLINK, XML_SHOW):
             break;
-        case XML_TOK_BGIMG_POSITION:
+        case XML_ELEMENT(STYLE, XML_POSITION):
             SvXMLImportItemMapper::PutXMLValue(
-                *pItem, rValue, MID_GRAPHIC_POSITION, rUnitConv );
+                *pItem, sValue, MID_GRAPHIC_POSITION, rUnitConv );
             break;
-        case XML_TOK_BGIMG_REPEAT:
+        case XML_ELEMENT(STYLE, XML_REPEAT):
             SvXMLImportItemMapper::PutXMLValue(
-                *pItem, rValue, MID_GRAPHIC_REPEAT, rUnitConv );
+                *pItem, sValue, MID_GRAPHIC_REPEAT, rUnitConv );
             break;
-        case XML_TOK_BGIMG_FILTER:
+        case XML_ELEMENT(STYLE, XML_FILTER_NAME):
             SvXMLImportItemMapper::PutXMLValue(
-                *pItem, rValue, MID_GRAPHIC_FILTER, rUnitConv );
+                *pItem, sValue, MID_GRAPHIC_FILTER, rUnitConv );
             break;
+        default:
+            SAL_WARN("sw", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
         }
     }
 
 }
 
-SvXMLImportContextRef SwXMLBrushItemImportContext::CreateChildContext(
-        sal_uInt16 nPrefix, const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SwXMLBrushItemImportContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
-    SvXMLImportContext *pContext = nullptr;
-    if (xmloff::token::IsXMLToken(rLocalName, xmloff::token::XML_BINARY_DATA))
+    if ((nElement & TOKEN_MASK) == xmloff::token::XML_BINARY_DATA)
     {
         if (!m_xBase64Stream.is())
         {
             m_xBase64Stream = GetImport().GetStreamForGraphicObjectURLFromBase64();
             if (m_xBase64Stream.is())
-                pContext = new XMLBase64ImportContext(GetImport(), nPrefix, rLocalName, xAttrList, m_xBase64Stream);
+                return new XMLBase64ImportContext(GetImport(), m_xBase64Stream);
         }
     }
-
-    return pContext;
+    SAL_WARN("sw", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
+    return nullptr;
 }
 
-void SwXMLBrushItemImportContext::EndElement()
+void SwXMLBrushItemImportContext::endFastElement(sal_Int32 )
 {
     if (m_xBase64Stream.is())
     {
@@ -150,12 +146,11 @@ void SwXMLBrushItemImportContext::EndElement()
 }
 
 SwXMLBrushItemImportContext::SwXMLBrushItemImportContext(
-        SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const uno::Reference< xml::sax::XAttributeList >& xAttrList,
+        SvXMLImport& rImport, sal_Int32 /*nElement*/,
+        const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
         const SvXMLUnitConverter& rUnitConv,
         const SvxBrushItem& rItem ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    SvXMLImportContext( rImport ),
     pItem( new SvxBrushItem( rItem ) )
 {
     // delete any graphic that is existing
@@ -165,12 +160,11 @@ SwXMLBrushItemImportContext::SwXMLBrushItemImportContext(
 }
 
 SwXMLBrushItemImportContext::SwXMLBrushItemImportContext(
-        SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList,
+        SvXMLImport& rImport, sal_Int32 /*nElement*/,
+        const uno::Reference< xml::sax::XFastAttributeList > & xAttrList,
         const SvXMLUnitConverter& rUnitConv,
         sal_uInt16 nWhich ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    SvXMLImportContext( rImport ),
     pItem( new SvxBrushItem( nWhich ) )
 {
     ProcessAttrs( xAttrList, rUnitConv );
