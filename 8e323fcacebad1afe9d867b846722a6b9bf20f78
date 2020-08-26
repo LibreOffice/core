@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "943ce777_8c4051ed",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 4044,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-26T12:23:44Z",
+      "side": 1,
+      "message": "In view of tdf#136063 and tdf#136143, it seems that we should also set it to be not fixed here?",
+      "range": {
+        "startLine": 4044,
+        "startChar": 12,
+        "endLine": 4044,
+        "endChar": 32
+      },
+      "revId": "8e323fcacebad1afe9d867b846722a6b9bf20f78",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
