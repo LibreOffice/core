@@ -244,9 +244,8 @@ void SwXMLImport::FinitItemImport()
 }
 
 SvXMLImportContext *SwXMLImport::CreateTableItemImportContext(
-                  sal_uInt16 nPrefix,
-                  const OUString& rLocalName,
-                  const Reference< xml::sax::XAttributeList > & xAttrList,
+                  sal_Int32 nElement,
+                  const Reference< xml::sax::XFastAttributeList > & xAttrList,
                   XmlStyleFamily nFamily,
                   SfxItemSet& rItemSet )
 {
@@ -271,10 +270,10 @@ SvXMLImportContext *SwXMLImport::CreateTableItemImportContext(
 
     m_pTableItemMapper->setMapEntries( xItemMap );
 
-    return new SwXMLItemSetContext( *this, nPrefix, rLocalName,
-                                            xAttrList, rItemSet,
-                                            GetTableItemMapper(),
-                                            *m_pTwipUnitConv );
+    return new SwXMLItemSetContext( *this, nElement,
+                                    xAttrList, rItemSet,
+                                    GetTableItemMapper(),
+                                    *m_pTwipUnitConv );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
