@@ -52,8 +52,6 @@ class SysCredentialsConfigItem : public utl::ConfigItem
         SysCredentialsConfig * m_pOwner;
 };
 
-typedef std::set< OUString > StringSet;
-
 class SysCredentialsConfig
 {
     public:
@@ -71,8 +69,8 @@ class SysCredentialsConfig
         void writeCfg();
 
         ::osl::Mutex m_aMutex;
-        StringSet    m_aMemContainer;
-        StringSet    m_aCfgContainer;
+        std::set< OUString >     m_aMemContainer;
+        std::set< OUString >     m_aCfgContainer;
         SysCredentialsConfigItem m_aConfigItem;
         bool         m_bCfgInited;
 };

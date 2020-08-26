@@ -29,7 +29,6 @@
 #include <rtl/strbuf.hxx>
 
 typedef ::std::vector< ::rtl::OString >             StringVector;
-typedef ::std::set< ::rtl::OString >    StringSet;
 
 
 // FileStream
