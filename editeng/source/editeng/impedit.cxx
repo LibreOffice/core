@@ -314,6 +314,142 @@ void ImpEditView::SelectionChanged()
     }
 }
 
+// This function is also called when a text's font || size is changed. Because its highlight rectangle must be updated.
+void ImpEditView::lokSelectionCallback(std::unique_ptr<tools::PolyPolygon> &pPolyPoly, bool bStartHandleVisible, bool bEndHandleVisible) {
+    VclPtr<vcl::Window> pParent = pOutWin->GetParentWithLOKNotifier();
+    vcl::Region pRegion = vcl::Region( *pPolyPoly );
+
+    if (pParent && pParent->GetLOKWindowId() != 0)
+    {
+        const long nX = pOutWin->GetOutOffXPixel() - pParent->GetOutOffXPixel();
+        const long nY = pOutWin->GetOutOffYPixel() - pParent->GetOutOffYPixel();
+
+        std::vector<tools::Rectangle> aRectangles;
+        pRegion.GetRegionRectangles(aRectangles);
+
+        std::vector<OString> v;
+        for (tools::Rectangle & rRectangle : aRectangles)
+        {
+            rRectangle = pOutWin->LogicToPixel(rRectangle);
+            rRectangle.Move(nX, nY);
+            v.emplace_back(rRectangle.toString().getStr());
+        }
+        OString sRectangle = comphelper::string::join("; ", v);
+
+        const vcl::ILibreOfficeKitNotifier* pNotifier = pParent->GetLOKNotifier();
+        const OUString rAction("text_selection");
+        std::vector<vcl::LOKPayloadItem> aItems;
+        aItems.emplace_back("rectangles", sRectangle);
+        aItems.emplace_back("startHandleVisible", OString::boolean(bStartHandleVisible));
+        aItems.emplace_back("endHandleVisible", OString::boolean(bEndHandleVisible));
+        pNotifier->notifyWindow(pParent->GetLOKWindowId(), rAction, aItems);
+    }
+    else
+    {
+        pOutWin->Push(PushFlags::MAPMODE);
+        if (pOutWin->GetMapMode().GetMapUnit() == MapUnit::MapTwip)
+        {
+            // Find the parent that is not right
+            // on top of us to use its offset.
+            vcl::Window* parent = pOutWin->GetParent();
+            while (parent &&
+                    parent->GetOutOffXPixel() == pOutWin->GetOutOffXPixel() &&
+                    parent->GetOutOffYPixel() == pOutWin->GetOutOffYPixel())
+            {
+                parent = parent->GetParent();
+            }
+
+            if (parent)
+            {
+                lcl_translateTwips(*parent, *pOutWin);
+            }
+        }
+
+        bool bMm100ToTwip = !mpLOKSpecialPositioning &&
+                (pOutWin->GetMapMode().GetMapUnit() == MapUnit::Map100thMM);
+
+        Point aOrigin;
+        if (pOutWin->GetMapMode().GetMapUnit() == MapUnit::MapTwip)
+            // Writer comments: they use editeng, but are separate widgets.
+            aOrigin = pOutWin->GetMapMode().GetOrigin();
+
+        OString sRectangle;
+        OString sRefPoint;
+        if (mpLOKSpecialPositioning)
+            sRefPoint = mpLOKSpecialPositioning->GetRefPoint().toString();
+        // If we are not in selection mode, then the exported own selection should be empty.
+        // This is needed always in Online, regardless whether in "selection mode" (whatever
+        // that is) or not, for tdf#125568, but I don't have the clout to make this completely
+        // unconditional also for desktop LO.
+
+        // Caller function looks for active LOKit,
+        // There was an if statement (below) looking for the same condition with "OR".
+        // So i removed that if statement, since it would always evaluate true.
+        std::vector<tools::Rectangle> aRectangles;
+        pRegion.GetRegionRectangles(aRectangles);
+
+        if (!aRectangles.empty())
+        {
+            if (pOutWin->IsChart())
+            {
+                const vcl::Window* pViewShellWindow = mpViewShell->GetEditWindowForActiveOLEObj();
+                if (pViewShellWindow && pViewShellWindow->IsAncestorOf(*pOutWin))
+                {
+                    Point aOffsetPx = pOutWin->GetOffsetPixelFrom(*pViewShellWindow);
+                    Point aLogicOffset = pOutWin->PixelToLogic(aOffsetPx);
+                    for (tools::Rectangle& rRect : aRectangles)
+                        rRect.Move(aLogicOffset.getX(), aLogicOffset.getY());
+                }
+            }
+
+            std::vector<OString> v;
+            for (tools::Rectangle & rRectangle : aRectangles)
+            {
+                if (bMm100ToTwip)
+                    rRectangle = OutputDevice::LogicToLogic(rRectangle, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+                rRectangle.Move(aOrigin.getX(), aOrigin.getY());
+                v.emplace_back(rRectangle.toString().getStr());
+            }
+            sRectangle = comphelper::string::join("; ", v);
+
+            if (mpLOKSpecialPositioning && !sRectangle.isEmpty())
+                sRectangle += ":: " + sRefPoint;
+
+            tools::Rectangle& rStart = aRectangles.front();
+            tools::Rectangle aStart(rStart.Left(), rStart.Top(), rStart.Left() + 1, rStart.Bottom());
+
+            OString aPayload = aStart.toString();
+            if (mpLOKSpecialPositioning)
+                aPayload += ":: " + sRefPoint;
+
+            mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_START, aPayload.getStr());
+
+            tools::Rectangle& rEnd = aRectangles.back();
+            tools::Rectangle aEnd(rEnd.Right() - 1, rEnd.Top(), rEnd.Right(), rEnd.Bottom());
+
+            aPayload = aEnd.toString();
+            if (mpLOKSpecialPositioning)
+                aPayload += ":: " + sRefPoint;
+
+            mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_END, aPayload.getStr());
+        }
+
+        if (mpOtherShell)
+        {
+            // Another shell wants to know about our existing selection.
+            if (mpViewShell != mpOtherShell)
+                mpViewShell->NotifyOtherView(mpOtherShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRectangle);
+        }
+        else
+        {
+            mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRectangle.getStr());
+            mpViewShell->NotifyOtherViews(LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRectangle);
+        }
+
+        pOutWin->Pop();
+    }
+}
+
 // renamed from DrawSelection to DrawSelectionXOR to better reflect what this
 // method was used for: Paint Selection in XOR, change it and again paint it in XOR.
 // This can be safely assumed due to the EditView only being capable of painting the
@@ -346,11 +482,6 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
 
     // pRegion: When not NULL, then only calculate Region.
 
-    vcl::Region* pOldRegion = pRegion;
-    vcl::Region aRegion;
-    if (comphelper::LibreOfficeKit::isActive() && !pRegion)
-        pRegion = &aRegion;
-
     OutputDevice* pTarget;
     if (pTargetDevice)
         pTarget = pTargetDevice;
@@ -361,7 +492,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
 
     std::unique_ptr<tools::PolyPolygon> pPolyPoly;
 
-    if ( !pRegion )
+    if ( !pRegion && !comphelper::LibreOfficeKit::isActive())
     {
         if ( !pEditEngine->pImpEditEngine->GetUpdateMode() )
             return;
@@ -381,10 +512,9 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
         if (pOutWin && pOutWin->GetCursor())
             pOutWin->GetCursor()->Hide();
     }
-    else
-    {
+
+    if (comphelper::LibreOfficeKit::isActive() || pRegion)
         pPolyPoly.reset(new tools::PolyPolygon);
-    }
 
     DBG_ASSERT( !pEditEngine->IsIdleFormatterActive(), "DrawSelectionXOR: Not formatted!" );
     aTmpSel.Adjust( pEditEngine->GetEditDoc() );
@@ -495,157 +625,19 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
                     Point aPt2( std::max( nX1, nX2 ), aBottomRight.Y() );
 
                     ImplDrawHighlightRect( pTarget, aPt1, aPt2, pPolyPoly.get() );
-
                     nTmpStartIndex = nTmpEndIndex;
                 }
             }
-
         }
     }
 
-    if ( pRegion )
+    if (comphelper::LibreOfficeKit::isActive() && mpViewShell && pOutWin)
+        lokSelectionCallback(pPolyPoly, bStartHandleVisible, bEndHandleVisible);
+
+    if (pRegion || comphelper::LibreOfficeKit::isActive())
     {
-        *pRegion = vcl::Region( *pPolyPoly );
-
-        if (comphelper::LibreOfficeKit::isActive() && mpViewShell && !pOldRegion && pOutWin)
-        {
-            VclPtr<vcl::Window> pParent = pOutWin->GetParentWithLOKNotifier();
-            if (pParent && pParent->GetLOKWindowId() != 0)
-            {
-                const long nX = pOutWin->GetOutOffXPixel() - pParent->GetOutOffXPixel();
-                const long nY = pOutWin->GetOutOffYPixel() - pParent->GetOutOffYPixel();
-
-                std::vector<tools::Rectangle> aRectangles;
-                pRegion->GetRegionRectangles(aRectangles);
-
-                std::vector<OString> v;
-                for (tools::Rectangle & rRectangle : aRectangles)
-                {
-                    rRectangle = pOutWin->LogicToPixel(rRectangle);
-                    rRectangle.Move(nX, nY);
-                    v.emplace_back(rRectangle.toString().getStr());
-                }
-                OString sRectangle = comphelper::string::join("; ", v);
-
-                const vcl::ILibreOfficeKitNotifier* pNotifier = pParent->GetLOKNotifier();
-                const OUString rAction("text_selection");
-                std::vector<vcl::LOKPayloadItem> aItems;
-                aItems.emplace_back("rectangles", sRectangle);
-                aItems.emplace_back("startHandleVisible", OString::boolean(bStartHandleVisible));
-                aItems.emplace_back("endHandleVisible", OString::boolean(bEndHandleVisible));
-                pNotifier->notifyWindow(pParent->GetLOKWindowId(), rAction, aItems);
-                pPolyPoly.reset();
-                return;
-            }
-
-            pOutWin->Push(PushFlags::MAPMODE);
-            if (pOutWin->GetMapMode().GetMapUnit() == MapUnit::MapTwip)
-            {
-                // Find the parent that is not right
-                // on top of us to use its offset.
-                vcl::Window* parent = pOutWin->GetParent();
-                while (parent &&
-                       parent->GetOutOffXPixel() == pOutWin->GetOutOffXPixel() &&
-                       parent->GetOutOffYPixel() == pOutWin->GetOutOffYPixel())
-                {
-                    parent = parent->GetParent();
-                }
-
-                if (parent)
-                {
-                    lcl_translateTwips(*parent, *pOutWin);
-                }
-            }
-
-            bool bMm100ToTwip = !mpLOKSpecialPositioning &&
-                    (pOutWin->GetMapMode().GetMapUnit() == MapUnit::Map100thMM);
-
-            Point aOrigin;
-            if (pOutWin->GetMapMode().GetMapUnit() == MapUnit::MapTwip)
-                // Writer comments: they use editeng, but are separate widgets.
-                aOrigin = pOutWin->GetMapMode().GetOrigin();
-
-            OString sRectangle;
-            OString sRefPoint;
-            if (mpLOKSpecialPositioning)
-                sRefPoint = mpLOKSpecialPositioning->GetRefPoint().toString();
-            // If we are not in selection mode, then the exported own selection should be empty.
-            // This is needed always in Online, regardless whether in "selection mode" (whatever
-            // that is) or not, for tdf#125568, but I don't have the clout to make this completely
-            // unconditional also for desktop LO.
-            if (comphelper::LibreOfficeKit::isActive() || pEditEngine->pImpEditEngine->IsInSelectionMode() || mpOtherShell)
-            {
-                std::vector<tools::Rectangle> aRectangles;
-                pRegion->GetRegionRectangles(aRectangles);
-
-                if (pOutWin->IsChart())
-                {
-                    const vcl::Window* pViewShellWindow = mpViewShell->GetEditWindowForActiveOLEObj();
-                    if (pViewShellWindow && pViewShellWindow->IsAncestorOf(*pOutWin))
-                    {
-                        Point aOffsetPx = pOutWin->GetOffsetPixelFrom(*pViewShellWindow);
-                        Point aLogicOffset = pOutWin->PixelToLogic(aOffsetPx);
-                        for (tools::Rectangle& rRect : aRectangles)
-                            rRect.Move(aLogicOffset.getX(), aLogicOffset.getY());
-                    }
-                }
-
-                if (!aRectangles.empty())
-                {
-                    tools::Rectangle& rStart = aRectangles.front();
-                    tools::Rectangle aStart(rStart.Left(), rStart.Top(), rStart.Left() + 1, rStart.Bottom());
-                    if (bMm100ToTwip)
-                        aStart = OutputDevice::LogicToLogic(aStart, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
-                    aStart.Move(aOrigin.getX(), aOrigin.getY());
-
-                    OString aPayload = aStart.toString();
-                    if (mpLOKSpecialPositioning)
-                        aPayload += ":: " + sRefPoint;
-
-                    mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_START, aPayload.getStr());
-
-                    tools::Rectangle& rEnd = aRectangles.back();
-                    tools::Rectangle aEnd(rEnd.Right() - 1, rEnd.Top(), rEnd.Right(), rEnd.Bottom());
-                    if (bMm100ToTwip)
-                        aEnd = OutputDevice::LogicToLogic(aEnd, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
-                    aEnd.Move(aOrigin.getX(), aOrigin.getY());
-
-                    aPayload = aEnd.toString();
-                    if (mpLOKSpecialPositioning)
-                        aPayload += ":: " + sRefPoint;
-
-                    mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_END, aPayload.getStr());
-                }
-
-                std::vector<OString> v;
-                for (tools::Rectangle & rRectangle : aRectangles)
-                {
-                    if (bMm100ToTwip)
-                        rRectangle = OutputDevice::LogicToLogic(rRectangle, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
-                    rRectangle.Move(aOrigin.getX(), aOrigin.getY());
-                    v.emplace_back(rRectangle.toString().getStr());
-                }
-                sRectangle = comphelper::string::join("; ", v);
-            }
-
-            if (mpLOKSpecialPositioning && !sRectangle.isEmpty())
-                sRectangle += ":: " + sRefPoint;
-
-            if (mpOtherShell)
-            {
-                // Another shell wants to know about our existing selection.
-                if (mpViewShell != mpOtherShell)
-                    mpViewShell->NotifyOtherView(mpOtherShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRectangle);
-            }
-            else
-            {
-                mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRectangle.getStr());
-                mpViewShell->NotifyOtherViews(LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRectangle);
-            }
-
-            pOutWin->Pop();
-        }
-
+        if (pRegion)
+            *pRegion = vcl::Region( *pPolyPoly );
         pPolyPoly.reset();
     }
     else

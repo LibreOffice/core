@@ -244,8 +244,8 @@ void LOKitSearchTest::testSearchAllSelections()
     lcl_search("third", /*bFindAll=*/true);
     // Make sure this is found on the 3rd slide.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), mpCallbackRecorder->m_nPart);
-    // This was 1: only the first match was highlighted.
-    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(2), mpCallbackRecorder->m_aSelection.size());
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), mpCallbackRecorder->m_aSelection.size());
 }
 
 void LOKitSearchTest::testSearchAllNotifications()
