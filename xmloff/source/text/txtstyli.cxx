@@ -125,22 +125,6 @@ void XMLTextStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
     }
 }
 
-
-XMLTextStyleContext::XMLTextStyleContext( SvXMLImport& rImport,
-        sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< XAttributeList > & xAttrList,
-        SvXMLStylesContext& rStyles, XmlStyleFamily nFamily,
-        bool bDefaultStyle )
-:   XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily, bDefaultStyle )
-,   m_nOutlineLevel( -1 )
-,   m_isAutoUpdate( false )
-,   m_bHasMasterPageName( false )
-,   m_bHasCombinedCharactersLetter( false )
-// Inherited paragraph style lost information about unset numbering (#i69523#)
-,   m_bListStyleSet( false )
-{
-}
-
 XMLTextStyleContext::XMLTextStyleContext( SvXMLImport& rImport,
         sal_Int32 nElement,
         const Reference< XFastAttributeList > & xAttrList,
@@ -159,54 +143,45 @@ XMLTextStyleContext::XMLTextStyleContext( SvXMLImport& rImport,
 XMLTextStyleContext::~XMLTextStyleContext()
 {}
 
-SvXMLImportContextRef XMLTextStyleContext::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextStyleContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    SvXMLImportContextRef xContext;
-
-    if( XML_NAMESPACE_STYLE == nPrefix )
+    if( IsTokenInNamespace(nElement, XML_NAMESPACE_STYLE) )
     {
+        sal_Int32 nLocalName = nElement & TOKEN_MASK;
         sal_uInt32 nFamily = 0;
-        if( IsXMLToken( rLocalName, XML_TEXT_PROPERTIES ) )
+        if( nLocalName == XML_TEXT_PROPERTIES )
             nFamily = XML_TYPE_PROP_TEXT;
-        else if( IsXMLToken( rLocalName, XML_PARAGRAPH_PROPERTIES ) )
+        else if( nLocalName == XML_PARAGRAPH_PROPERTIES )
             nFamily = XML_TYPE_PROP_PARAGRAPH;
-        else if( IsXMLToken( rLocalName, XML_SECTION_PROPERTIES ) )
+        else if( nLocalName == XML_SECTION_PROPERTIES )
             nFamily = XML_TYPE_PROP_SECTION;
-        else if( IsDefaultStyle() && IsXMLToken( rLocalName, XML_TABLE_PROPERTIES ) )
+        else if( IsDefaultStyle() && nLocalName == XML_TABLE_PROPERTIES )
             nFamily = XML_TYPE_PROP_TABLE;
-        else if( IsDefaultStyle() && IsXMLToken( rLocalName, XML_TABLE_ROW_PROPERTIES ) )
+        else if( IsDefaultStyle() && nLocalName == XML_TABLE_ROW_PROPERTIES )
             nFamily = XML_TYPE_PROP_TABLE_ROW;
         if( nFamily )
         {
             rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
                 GetStyles()->GetImportPropertyMapper( GetFamily() );
             if( xImpPrMap.is() )
-                xContext = new XMLTextPropertySetContext( GetImport(), nPrefix,
-                                                        rLocalName, xAttrList,
+                return new XMLTextPropertySetContext( GetImport(), nElement, xAttrList,
                                                         nFamily,
                                                         GetProperties(),
                                                         xImpPrMap,
                                                         m_sDropCapTextStyleName);
         }
     }
-    else if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
-              IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) )
+    else if ( nElement == XML_ELEMENT(OFFICE, XML_EVENT_LISTENERS) )
     {
         // create and remember events import context
         // (for delayed processing of events)
-        m_xEventContext.set(new XMLEventsImportContext( GetImport(), nPrefix,
-                                                   rLocalName));
-        xContext = m_xEventContext.get();
+        m_xEventContext.set(new XMLEventsImportContext( GetImport() ));
+        return m_xEventContext.get();
     }
 
-    if (!xContext)
-        xContext = XMLPropStyleContext::CreateChildContext( nPrefix, rLocalName,
-                                                          xAttrList );
-
-    return xContext;
+    return XMLPropStyleContext::createFastChildContext( nElement, xAttrList );
 }
 
 void XMLTextStyleContext::CreateAndInsert( bool bOverwrite )

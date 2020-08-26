@@ -27,11 +27,6 @@
 class XMLOFF_DLLPUBLIC XMLDrawingPageStyleContext : public XMLPropStyleContext
 {
 public:
-    XMLDrawingPageStyleContext(SvXMLImport& rImport, sal_uInt16 nPrefix, OUString const& rLocalName,
-                               css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrList,
-                               SvXMLStylesContext& rStyles,
-                               ContextID_Index_Pair const pContextIDs[],
-                               XmlStyleFamily const pFamilies[]);
     XMLDrawingPageStyleContext(
         SvXMLImport& rImport, sal_Int32 nElement,
         css::uno::Reference<css::xml::sax::XFastAttributeList> const& xAttrList,

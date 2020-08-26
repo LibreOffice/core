@@ -46,6 +46,19 @@ XMLTextPropertySetContext::XMLTextPropertySetContext(
 {
 }
 
+XMLTextPropertySetContext::XMLTextPropertySetContext(
+                 SvXMLImport& rImport, sal_Int32 nElement,
+                 const Reference< xml::sax::XFastAttributeList > & xAttrList,
+                 sal_uInt32 nFamily,
+                 ::std::vector< XMLPropertyState > &rProps,
+                 const rtl::Reference < SvXMLImportPropertyMapper > &rMap,
+                 OUString& rDCTextStyleName ) :
+    SvXMLPropertySetContext( rImport, nElement, xAttrList, nFamily,
+                             rProps, rMap ),
+    rDropCapTextStyleName( rDCTextStyleName )
+{
+}
+
 XMLTextPropertySetContext::~XMLTextPropertySetContext()
 {
 }

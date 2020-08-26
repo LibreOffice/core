@@ -147,16 +147,6 @@ const OUStringLiteral gsIsPhysical(  "IsPhysical"  );
 const OUStringLiteral gsFollowStyle(  "FollowStyle"  );
 
 XMLPropStyleContext::XMLPropStyleContext( SvXMLImport& rImport,
-        sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< XAttributeList > & xAttrList,
-        SvXMLStylesContext& rStyles, XmlStyleFamily nFamily,
-        bool bDefault )
-:   SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, nFamily, bDefault )
-,   mxStyles( &rStyles )
-{
-}
-
-XMLPropStyleContext::XMLPropStyleContext( SvXMLImport& rImport,
         sal_Int32 nElement,
         const Reference< XFastAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles, XmlStyleFamily nFamily,
@@ -186,43 +176,35 @@ const OldFillStyleDefinitionSet& XMLPropStyleContext::getFooterSet()
 }
 
 css::uno::Reference< css::xml::sax::XFastContextHandler > XMLPropStyleContext::createFastChildContext(
-    sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    return nullptr;
-}
-
-SvXMLImportContextRef XMLPropStyleContext::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< XAttributeList > & xAttrList )
-{
-    SvXMLImportContextRef xContext;
-
     sal_uInt32 nFamily = 0;
-    if( XML_NAMESPACE_STYLE == nPrefix || XML_NAMESPACE_LO_EXT == nPrefix )
+    if( IsTokenInNamespace(nElement, XML_NAMESPACE_STYLE) ||
+        IsTokenInNamespace(nElement, XML_NAMESPACE_LO_EXT) )
     {
-        if( IsXMLToken( rLocalName, XML_GRAPHIC_PROPERTIES ) )
+        sal_Int32 nLocalName = nElement & TOKEN_MASK;
+        if( nLocalName == XML_GRAPHIC_PROPERTIES )
             nFamily = XML_TYPE_PROP_GRAPHIC;
-        else if( IsXMLToken( rLocalName, XML_DRAWING_PAGE_PROPERTIES )  )
+        else if( nLocalName == XML_DRAWING_PAGE_PROPERTIES )
             nFamily = XML_TYPE_PROP_DRAWING_PAGE;
-        else if( IsXMLToken( rLocalName, XML_TEXT_PROPERTIES )  )
+        else if( nLocalName == XML_TEXT_PROPERTIES )
             nFamily = XML_TYPE_PROP_TEXT;
-        else if( IsXMLToken( rLocalName, XML_PARAGRAPH_PROPERTIES )  )
+        else if( nLocalName == XML_PARAGRAPH_PROPERTIES )
             nFamily = XML_TYPE_PROP_PARAGRAPH;
-        else if( IsXMLToken( rLocalName, XML_RUBY_PROPERTIES )  )
+        else if( nLocalName == XML_RUBY_PROPERTIES )
             nFamily = XML_TYPE_PROP_RUBY;
-        else if( IsXMLToken( rLocalName, XML_SECTION_PROPERTIES )  )
+        else if( nLocalName == XML_SECTION_PROPERTIES )
             nFamily = XML_TYPE_PROP_SECTION;
-        else if( IsXMLToken( rLocalName, XML_TABLE_PROPERTIES )  )
+        else if( nLocalName == XML_TABLE_PROPERTIES )
             nFamily = XML_TYPE_PROP_TABLE;
-        else if( IsXMLToken( rLocalName, XML_TABLE_COLUMN_PROPERTIES )  )
+        else if( nLocalName == XML_TABLE_COLUMN_PROPERTIES  )
             nFamily = XML_TYPE_PROP_TABLE_COLUMN;
-        else if( IsXMLToken( rLocalName, XML_TABLE_ROW_PROPERTIES )  )
+        else if( nLocalName ==XML_TABLE_ROW_PROPERTIES  )
             nFamily = XML_TYPE_PROP_TABLE_ROW;
-        else if( IsXMLToken( rLocalName, XML_TABLE_CELL_PROPERTIES )  )
+        else if( nLocalName == XML_TABLE_CELL_PROPERTIES  )
             nFamily = XML_TYPE_PROP_TABLE_CELL;
-        else if( IsXMLToken( rLocalName, XML_CHART_PROPERTIES ) )
+        else if( nLocalName == XML_CHART_PROPERTIES )
             nFamily = XML_TYPE_PROP_CHART;
     }
     if( nFamily )
@@ -230,14 +212,14 @@ SvXMLImportContextRef XMLPropStyleContext::CreateChildContext(
         rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
             mxStyles->GetImportPropertyMapper( GetFamily() );
         if( xImpPrMap.is() )
-            xContext = new SvXMLPropertySetContext( GetImport(), nPrefix,
-                                                    rLocalName, xAttrList,
+            return new SvXMLPropertySetContext( GetImport(), nElement,
+                                                    xAttrList,
                                                     nFamily,
                                                     maProperties,
                                                     xImpPrMap );
     }
-
-    return xContext;
+    SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
+    return nullptr;
 }
 
 void XMLPropStyleContext::FillPropertySet(

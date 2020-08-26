@@ -33,6 +33,7 @@ namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::beans { class XPropertySetInfo; }
 namespace com::sun::star::beans { class XTolerantMultiPropertySet; }
 namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::container { class XNameContainer; }
 namespace com::sun::star::uno { class Any; }
 namespace com::sun::star::uno { template <typename > class Reference; }
 namespace com::sun::star::uno { template <typename > class Sequence; }
@@ -186,6 +187,20 @@ public:
         ContextID_Index_Pair* pSpecialContextIds,
         css::uno::Sequence< OUString >& rNames,
         css::uno::Sequence< css::uno::Any >& rValues);
+
+private:
+    void importXMLAttribute(
+        std::vector< XMLPropertyState >& rProperties,
+        const SvXMLUnitConverter& rUnitConverter,
+        const SvXMLNamespaceMap& rNamespaceMap,
+        sal_uInt32 nPropType,
+        sal_Int32 nStartIdx,
+        sal_Int32 nEndIdx,
+        css::uno::Reference< css::container::XNameContainer >& xAttrContainer,
+        const OUString& aPrefix,
+        const OUString& sAttrName,
+        const OUString& aNamespaceURI,
+        const OUString& sValue) const;
 };
 
 
