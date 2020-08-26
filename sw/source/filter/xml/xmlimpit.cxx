@@ -48,6 +48,7 @@
 #include <xmloff/prhdlfac.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/xmlprhdl.hxx>
+#include <xmloff/xmlimp.hxx>
 #include "xmlithlp.hxx"
 #include <com/sun/star/uno/Any.hxx>
 
@@ -76,27 +77,29 @@ SvXMLImportItemMapper::setMapEntries( SvXMLItemMapEntriesRef rMapEntries )
 
 // fills the given itemset with the attributes in the given list
 void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
-                                      uno::Reference< xml::sax::XAttributeList > const & xAttrList,
+                                      uno::Reference< xml::sax::XFastAttributeList > const & xAttrList,
                                       const SvXMLUnitConverter& rUnitConverter,
                                       const SvXMLNamespaceMap& rNamespaceMap )
 {
-    sal_Int16 nAttr = xAttrList->getLength();
-
     std::unique_ptr<SvXMLAttrContainerItem> pUnknownItem;
-    for( sal_Int16 i=0; i < nAttr; i++ )
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName, aPrefix, aNamespace;
-        sal_uInt16 nPrefix =
-            rNamespaceMap.GetKeyByAttrName( rAttrName, &aPrefix, &aLocalName,
-                                            &aNamespace );
-        if( XML_NAMESPACE_XMLNS == nPrefix )
+        if( IsTokenInNamespace(aIter.getToken(), XML_NAMESPACE_XMLNS) )
             continue;
 
-        const OUString& rValue = xAttrList->getValueByIndex( i );
+        sal_Int32 nToken = aIter.getToken();
+        const OUString& rAttrNamespacePrefix = SvXMLImport::getNamespacePrefixFromToken(nToken, &rNamespaceMap);
+        OUString sAttrName = SvXMLImport::getNameFromToken( nToken );
+        if ( !rAttrNamespacePrefix.isEmpty() )
+            sAttrName = rAttrNamespacePrefix + SvXMLImport::aNamespaceSeparator + sAttrName;
+        OUString aLocalName, aPrefix, aNamespace;
+        sal_uInt16 nPrefix = rNamespaceMap.GetKeyByAttrName( sAttrName, &aPrefix, &aLocalName,
+                                            &aNamespace );
+
+        const OUString sValue = aIter.toString();
 
         // find a map entry for this attribute
-        SvXMLItemMapEntry const * pEntry = mrMapEntries->getByName( nPrefix, aLocalName );
+        SvXMLItemMapEntry const * pEntry = mrMapEntries->getByName( nToken );
 
         if( pEntry )
         {
@@ -121,7 +124,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
 
                     if( 0 == (pEntry->nMemberId&MID_SW_FLAG_SPECIAL_ITEM_IMPORT) )
                     {
-                        bPut = PutXMLValue( *pNewItem, rValue,
+                        bPut = PutXMLValue( *pNewItem, sValue,
                                             static_cast<sal_uInt16>( pEntry->nMemberId & MID_SW_FLAG_MASK ),
                                             rUnitConverter );
 
@@ -129,7 +132,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
                     else
                     {
                         bPut = handleSpecialItem( *pEntry, *pNewItem, rSet,
-                                                  rValue, rUnitConverter );
+                                                  sValue, rUnitConverter );
                     }
 
                     if( bPut )
@@ -142,7 +145,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
             }
             else if( 0 != (pEntry->nMemberId & MID_SW_FLAG_NO_ITEM_IMPORT) )
             {
-                handleNoItem( *pEntry, rSet, rValue, rUnitConverter,
+                handleNoItem( *pEntry, rSet, sValue, rUnitConverter,
                               rNamespaceMap );
             }
         }
@@ -164,10 +167,10 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
             if( pUnknownItem )
             {
                 if( XML_NAMESPACE_NONE == nPrefix )
-                    pUnknownItem->AddAttr( aLocalName, rValue );
+                    pUnknownItem->AddAttr( aLocalName, sValue );
                 else
                     pUnknownItem->AddAttr( aPrefix, aNamespace, aLocalName,
-                                           rValue );
+                                           sValue );
             }
         }
     }
