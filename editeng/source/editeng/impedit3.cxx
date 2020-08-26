@@ -3900,10 +3900,7 @@ void ImpEditEngine::Paint( ImpEditView* pView, const tools::Rectangle& rRect, Ou
     else
         pTarget->SetClipRegion();
 
-    // In case of tiled rendering pass a region to DrawSelectionXOR(), so that
-    // selection callbacks are not emitted during every repaint.
-    vcl::Region aRegion;
-    pView->DrawSelectionXOR(pView->GetEditSelection(), comphelper::LibreOfficeKit::isActive() ? &aRegion : nullptr, pTarget);
+    pView->DrawSelectionXOR(pView->GetEditSelection(), nullptr, pTarget);
 }
 
 void ImpEditEngine::InsertContent( ContentNode* pNode, sal_Int32 nPos )
