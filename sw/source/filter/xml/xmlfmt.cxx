@@ -209,9 +209,8 @@ class SwXMLConditionContext_Impl : public SvXMLImportContext
 public:
 
     SwXMLConditionContext_Impl(
-            SvXMLImport& rImport, sal_uInt16 nPrfx,
-            const OUString& rLName,
-            const uno::Reference< xml::sax::XAttributeList > & xAttrList );
+            SvXMLImport& rImport, sal_Int32 nElement,
+            const uno::Reference< xml::sax::XFastAttributeList > & xAttrList );
 
     bool IsValid() const { return Master_CollCondition::NONE != nCondition; }
 
@@ -223,39 +222,32 @@ public:
 }
 
 SwXMLConditionContext_Impl::SwXMLConditionContext_Impl(
-            SvXMLImport& rImport, sal_uInt16 nPrfx,
-            const OUString& rLName,
-            const uno::Reference< xml::sax::XAttributeList > & xAttrList ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+            SvXMLImport& rImport, sal_Int32 /*nElement*/,
+            const uno::Reference< xml::sax::XFastAttributeList > & xAttrList ) :
+    SvXMLImportContext( rImport ),
     nCondition( Master_CollCondition::NONE ),
     nSubCondition( 0 )
 {
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        const sal_uInt16 nPrefix =
-            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                            &aLocalName );
-        const OUString& rValue = xAttrList->getValueByIndex( i );
-
-        // TODO: use a map here
-        if( XML_NAMESPACE_STYLE == nPrefix )
+        OUString sValue = aIter.toString();
+        switch (aIter.getToken())
         {
-            if( IsXMLToken( aLocalName, XML_CONDITION ) )
+            case XML_ELEMENT(STYLE, XML_CONDITION):
             {
-                SwXMLConditionParser_Impl aCondParser( rValue );
+                SwXMLConditionParser_Impl aCondParser( sValue );
                 if( aCondParser.IsValid() )
                 {
                     nCondition = aCondParser.GetCondition();
                     nSubCondition = aCondParser.GetSubCondition();
                 }
+                break;
             }
-            else if( IsXMLToken( aLocalName, XML_APPLY_STYLE_NAME ) )
-            {
-                sApplyStyle = rValue;
-            }
+            case XML_ELEMENT(STYLE, XML_APPLY_STYLE_NAME):
+                sApplyStyle = sValue;
+                break;
+            default:
+                SAL_WARN("sw", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
         }
     }
 }
@@ -277,21 +269,13 @@ protected:
 public:
 
 
-    SwXMLTextStyleContext_Impl( SwXMLImport& rImport, sal_uInt16 nElement,
-            const OUString& rLName,
-            const uno::Reference< xml::sax::XAttributeList > & xAttrList,
-            XmlStyleFamily nFamily,
-            SvXMLStylesContext& rStyles );
-
     SwXMLTextStyleContext_Impl( SwXMLImport& rImport, sal_Int32 nElement,
             const uno::Reference< xml::sax::XFastAttributeList > & xAttrList,
             XmlStyleFamily nFamily,
             SvXMLStylesContext& rStyles );
 
-    virtual SvXMLImportContextRef CreateChildContext(
-            sal_uInt16 nPrefix,
-            const OUString& rLocalName,
-            const uno::Reference< xml::sax::XAttributeList > & xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
 
 }
@@ -364,15 +348,6 @@ SwXMLTextStyleContext_Impl::Finish( bool bOverwrite )
 }
 
 SwXMLTextStyleContext_Impl::SwXMLTextStyleContext_Impl( SwXMLImport& rImport,
-        sal_uInt16 nPrfx, const OUString& rLName,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList,
-        XmlStyleFamily nFamily,
-        SvXMLStylesContext& rStyles ) :
-    XMLTextStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily )
-{
-}
-
-SwXMLTextStyleContext_Impl::SwXMLTextStyleContext_Impl( SwXMLImport& rImport,
         sal_Int32 nElement,
         const uno::Reference< xml::sax::XFastAttributeList > & xAttrList,
         XmlStyleFamily nFamily,
@@ -381,32 +356,24 @@ SwXMLTextStyleContext_Impl::SwXMLTextStyleContext_Impl( SwXMLImport& rImport,
 {
 }
 
-SvXMLImportContextRef SwXMLTextStyleContext_Impl::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SwXMLTextStyleContext_Impl::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    SvXMLImportContextRef xContext;
-
-    if( XML_NAMESPACE_STYLE == nPrefix && IsXMLToken( rLocalName, XML_MAP ) )
+    if( nElement == XML_ELEMENT(STYLE, XML_MAP) )
     {
         rtl::Reference<SwXMLConditionContext_Impl> xCond{
-            new SwXMLConditionContext_Impl( GetImport(), nPrefix,
-                                            rLocalName, xAttrList )};
+            new SwXMLConditionContext_Impl( GetImport(), nElement, xAttrList )};
         if( xCond->IsValid() )
         {
             if( !pConditions )
                pConditions = std::make_unique<SwXMLConditions_Impl>();
             pConditions->push_back( xCond );
         }
-        xContext = xCond.get();
+        return xCond.get();
     }
 
-    if (!xContext)
-        xContext = XMLTextStyleContext::CreateChildContext( nPrefix, rLocalName,
-                                                          xAttrList );
-
-    return xContext;
+    return XMLTextStyleContext::createFastChildContext( nElement, xAttrList );
 }
 
 namespace {
@@ -459,10 +426,6 @@ public:
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
-
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                                   const OUString& rLocalName,
-                                   const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
     // The item set may be empty!
     SfxItemSet *GetItemSet() { return pItemSet.get(); }
@@ -630,37 +593,6 @@ void SwXMLItemSetStyleContext_Impl::CreateAndInsert( bool bOverwrite )
         pTextStyle->CreateAndInsert( bOverwrite );
 }
 
-SvXMLImportContextRef SwXMLItemSetStyleContext_Impl::CreateChildContext(
-    sal_uInt16 nPrefix,
-   const OUString& rLocalName,
-   const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList )
-{
-    SvXMLImportContextRef xContext;
-
-    if( XML_NAMESPACE_STYLE == nPrefix )
-    {
-        if( IsXMLToken( rLocalName, XML_TEXT_PROPERTIES ) ||
-                 IsXMLToken( rLocalName, XML_PARAGRAPH_PROPERTIES ))
-        {
-            if( !pTextStyle )
-            {
-                SvXMLAttributeList *pTmp = new SvXMLAttributeList;
-                const OUString aStr = GetImport().GetNamespaceMap().GetQNameByKey(
-                    nPrefix, GetXMLToken(XML_NAME) );
-                pTmp->AddAttribute( aStr, GetName() );
-                uno::Reference <xml::sax::XAttributeList> xTmpAttrList = pTmp;
-                pTextStyle = new SwXMLTextStyleContext_Impl( GetSwImport(), nPrefix,
-                                 rLocalName, xTmpAttrList, XmlStyleFamily::TEXT_PARAGRAPH, rStyles );
-                pTextStyle->StartElement( xTmpAttrList );
-                rStyles.AddStyle( *pTextStyle );
-            }
-            xContext = pTextStyle->CreateChildContext( nPrefix, rLocalName, xAttrList );
-        }
-    }
-
-    return xContext;
-}
-
 css::uno::Reference< css::xml::sax::XFastContextHandler > SwXMLItemSetStyleContext_Impl::createFastChildContext(
     sal_Int32 nElement,
     const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
@@ -675,8 +607,18 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SwXMLItemSetStyleConte
             break;
         case XML_ELEMENT(STYLE, XML_TEXT_PROPERTIES):
         case XML_ELEMENT(STYLE, XML_PARAGRAPH_PROPERTIES):
-            // handled in CreateChildContext
-            break;
+        {
+            if( !pTextStyle )
+            {
+                rtl::Reference<sax_fastparser::FastAttributeList> xTmpAttrList = new sax_fastparser::FastAttributeList(nullptr);
+                xTmpAttrList->add(XML_ELEMENT(STYLE, XML_NAME), GetName().toUtf8() );
+                pTextStyle = new SwXMLTextStyleContext_Impl( GetSwImport(), nElement,
+                                 xTmpAttrList.get(), XmlStyleFamily::TEXT_PARAGRAPH, rStyles );
+                pTextStyle->startFastElement( nElement, xTmpAttrList.get() );
+                rStyles.AddStyle( *pTextStyle );
+            }
+            return pTextStyle->createFastChildContext( nElement, xAttrList );
+        }
         default:
             SAL_WARN("sw", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
     }

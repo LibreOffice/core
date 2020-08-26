@@ -25,9 +25,8 @@ class XMLChartPropertyContext : public SvXMLPropertySetContext
 {
 public:
 
-    XMLChartPropertyContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                             const OUString& rLName,
-                             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
+    XMLChartPropertyContext( SvXMLImport& rImport, sal_Int32 nElement,
+                             const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
                              sal_uInt32 nFamily,
                              ::std::vector< XMLPropertyState >& rProps,
                              const rtl::Reference< SvXMLImportPropertyMapper >& rMapper );
