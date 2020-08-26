@@ -29,8 +29,6 @@ namespace com::sun::star::io { class XInputStream; }
 namespace com::sun::star::io { class XOutputStream; }
 namespace com::sun::star::uno { class XComponentContext; }
 
-const sal_uInt16 START_ITEMID_WINDOWLIST    = 4600;
-const sal_uInt16 END_ITEMID_WINDOWLIST      = 4699;
 const sal_uInt16 ITEMID_ADDONLIST           = 6678; // used to be a SID in sfx2, now just a unique id...
 
 namespace framework
