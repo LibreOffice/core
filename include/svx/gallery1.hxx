@@ -38,7 +38,7 @@ class GalleryThemeEntry
 {
 private:
 
-    std::unique_ptr<GalleryBinaryEngineEntry>     mpGalleryBinaryEngineEntry;
+    std::unique_ptr<GalleryBinaryEngineEntry>     mpGalleryStorageEngineEntry;
     GalleryStorageLocations maGalleryStorageLocations;
     OUString                aName;
     sal_uInt32              nId;
@@ -53,17 +53,17 @@ public:
                                                bool bReadOnly, bool bNewFile,
                                                sal_uInt32 nId, bool bThemeNameFromResource );
 
-    std::unique_ptr<GalleryBinaryEngineEntry> createGalleryBinaryEngineEntry();
-    const std::unique_ptr<GalleryBinaryEngineEntry>& getGalleryBinaryEngineEntry() const { return mpGalleryBinaryEngineEntry; }
+    std::unique_ptr<GalleryBinaryEngineEntry> createGalleryStorageEngineEntry();
+    const std::unique_ptr<GalleryBinaryEngineEntry>& getGalleryStorageEngineEntry() const { return mpGalleryStorageEngineEntry; }
 
     const GalleryStorageLocations& getGalleryStorageLocations() const { return maGalleryStorageLocations; }
 
     const OUString&         GetThemeName() const { return aName; }
 
-    const INetURLObject&    GetThmURL() const { return mpGalleryBinaryEngineEntry->GetThmURL(); }
-    const INetURLObject&    GetSdgURL() const { return mpGalleryBinaryEngineEntry->GetSdgURL(); }
-    const INetURLObject&    GetSdvURL() const { return mpGalleryBinaryEngineEntry->GetSdvURL(); }
-    const INetURLObject&    GetStrURL() const { return mpGalleryBinaryEngineEntry->GetStrURL(); }
+    const INetURLObject&    GetThmURL() const { return mpGalleryStorageEngineEntry->GetThmURL(); }
+    const INetURLObject&    GetSdgURL() const { return mpGalleryStorageEngineEntry->GetSdgURL(); }
+    const INetURLObject&    GetSdvURL() const { return mpGalleryStorageEngineEntry->GetSdvURL(); }
+    const INetURLObject&    GetStrURL() const { return mpGalleryStorageEngineEntry->GetStrURL(); }
 
     bool                    IsReadOnly() const { return bReadOnly; }
     bool                    IsDefault() const;
