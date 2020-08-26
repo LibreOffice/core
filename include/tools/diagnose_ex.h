@@ -58,11 +58,11 @@ inline css::uno::Any DbgGetCaughtException()
     This takes two optional parameters: area and explanatory
 */
 #define DBG_UNHANDLED_EXCEPTION_0_ARGS() \
-    DbgUnhandledException( DbgGetCaughtException(), OSL_THIS_FUNC, SAL_DETAIL_WHERE );
+    DbgUnhandledException( DbgGetCaughtException(), __func__, SAL_DETAIL_WHERE );
 #define DBG_UNHANDLED_EXCEPTION_1_ARGS(area) \
-    DbgUnhandledException( DbgGetCaughtException(), OSL_THIS_FUNC, SAL_DETAIL_WHERE, area );
+    DbgUnhandledException( DbgGetCaughtException(), __func__, SAL_DETAIL_WHERE, area );
 #define DBG_UNHANDLED_EXCEPTION_2_ARGS(area, explanatory) \
-    DbgUnhandledException( DbgGetCaughtException(), OSL_THIS_FUNC, SAL_DETAIL_WHERE, area, explanatory );
+    DbgUnhandledException( DbgGetCaughtException(), __func__, SAL_DETAIL_WHERE, area, explanatory );
 
 #define DBG_UNHANDLED_FUNC_CHOOSER(_f1, _f2, _f3, ...) _f3
 #define DBG_UNHANDLED_FUNC_RECOMPOSER(argsWithParentheses) DBG_UNHANDLED_FUNC_CHOOSER argsWithParentheses
@@ -78,14 +78,14 @@ inline css::uno::Any DbgGetCaughtException()
 #define ENSURE_ARG_OR_THROW(c, m) if( !(c) ) { \
                                      OSL_ENSURE(c, m); \
                                      throw css::lang::IllegalArgumentException( \
-                                     OUStringLiteral(OSL_THIS_FUNC) \
+                                     OUStringLiteral(__func__) \
                                      + ",\n" m, \
                                      css::uno::Reference< css::uno::XInterface >(), \
                                      0 ); }
 #define ENSURE_ARG_OR_THROW2(c, m, ifc, arg) if( !(c) ) { \
                                                OSL_ENSURE(c, m); \
                                                throw css::lang::IllegalArgumentException( \
-                                               OUStringLiteral(OSL_THIS_FUNC) \
+                                               OUStringLiteral(__func__) \
                                                + ",\n" m, \
                                                ifc, \
                                                arg ); }
@@ -97,14 +97,14 @@ inline css::uno::Any DbgGetCaughtException()
     if( !(c) ){ \
         OSL_ENSURE(c, m); \
         throw css::uno::RuntimeException( \
-        OUStringLiteral(OSL_THIS_FUNC) + ",\n" m, \
+        OUStringLiteral(__func__) + ",\n" m, \
         css::uno::Reference< css::uno::XInterface >() ); }
 
 #define ENSURE_OR_THROW2(c, m, ifc) \
     if( !(c) ) { \
         OSL_ENSURE(c, m); \
         throw css::uno::RuntimeException( \
-        OUStringLiteral(OSL_THIS_FUNC) + ",\n" m, \
+        OUStringLiteral(__func__) + ",\n" m, \
         ifc ); }
 
 /** This macro asserts the given condition (in debug mode), and

@@ -125,10 +125,10 @@ inline EventSharedPtr makeDelay_(
 }
 
 #define makeDelay(f, t, d) makeDelay_(f, t,                   \
-        OSL_THIS_FUNC, __FILE__, __LINE__,           \
+        __func__, __FILE__, __LINE__,           \
         d)
 #define makeEvent(f, d) makeDelay_(f, 0.0,                  \
-        OSL_THIS_FUNC, __FILE__, __LINE__,         \
+        __func__, __FILE__, __LINE__,         \
         d)
 
 #endif // OSL_DEBUG_LEVEL <= 1

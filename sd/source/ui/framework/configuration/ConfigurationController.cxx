@@ -117,14 +117,14 @@ void SAL_CALL ConfigurationController::disposing()
     if (mpImplementation == nullptr)
         return;
 
-    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ConfigurationController::disposing");
-    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ":     requesting empty configuration");
+    SAL_INFO("sd.fwk", __func__ << ": ConfigurationController::disposing");
+    SAL_INFO("sd.fwk", __func__ << ":     requesting empty configuration");
     // To destroy all resources an empty configuration is requested and then,
     // synchronously, all resulting requests are processed.
     mpImplementation->mpQueueProcessor->Clear();
     restoreConfiguration(new Configuration(this,false));
     mpImplementation->mpQueueProcessor->ProcessUntilEmpty();
-    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ":     all requests processed");
+    SAL_INFO("sd.fwk", __func__ << ":     all requests processed");
 
     // Now that all resources have been deactivated, mark the controller as
     // disposed.
@@ -238,12 +238,12 @@ void SAL_CALL ConfigurationController::requestResourceActivation (
     // we just return silently during that stage.
     if (rBHelper.bInDispose)
     {
-        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ConfigurationController::requestResourceActivation(): ignoring " <<
+        SAL_INFO("sd.fwk", __func__ << ": ConfigurationController::requestResourceActivation(): ignoring " <<
                 FrameworkHelper::ResourceIdToString(rxResourceId));
         return;
     }
 
-    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ConfigurationController::requestResourceActivation() " <<
+    SAL_INFO("sd.fwk", __func__ << ": ConfigurationController::requestResourceActivation() " <<
             FrameworkHelper::ResourceIdToString(rxResourceId));
 
     if (!rxResourceId.is())
@@ -286,7 +286,7 @@ void SAL_CALL ConfigurationController::requestResourceDeactivation (
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
 
-    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ConfigurationController::requestResourceDeactivation() " <<
+    SAL_INFO("sd.fwk", __func__ << ": ConfigurationController::requestResourceDeactivation() " <<
                 FrameworkHelper::ResourceIdToString(rxResourceId));
 
     if (!rxResourceId.is())
@@ -404,7 +404,7 @@ void SAL_CALL ConfigurationController::restoreConfiguration (
     // Get lists of resources that are to be activated or deactivated.
     Reference<XConfiguration> xCurrentConfiguration (mpImplementation->mxRequestedConfiguration);
 #if OSL_DEBUG_LEVEL >=1
-    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ConfigurationController::restoreConfiguration(");
+    SAL_INFO("sd.fwk", __func__ << ": ConfigurationController::restoreConfiguration(");
     ConfigurationTracer::TraceConfiguration(rxNewConfiguration, "requested configuration");
     ConfigurationTracer::TraceConfiguration(xCurrentConfiguration, "current configuration");
 #endif

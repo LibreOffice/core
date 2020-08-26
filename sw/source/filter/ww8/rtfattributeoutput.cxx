@@ -388,7 +388,7 @@ void RtfAttributeOutput::EndParagraphProperties(
 void RtfAttributeOutput::StartRun(const SwRedlineData* pRedlineData, sal_Int32 /*nPos*/,
                                   bool bSingleEmptyRun)
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC << ", bSingleEmptyRun: " << bSingleEmptyRun);
+    SAL_INFO("sw.rtf", __func__ << ", bSingleEmptyRun: " << bSingleEmptyRun);
 
     m_bInRun = true;
     m_bSingleEmptyRun = bSingleEmptyRun;
@@ -492,7 +492,7 @@ OString RtfAttributeOutput::MoveCharacterProperties(bool aAutoWriteRtlLtr)
 
 void RtfAttributeOutput::RunText(const OUString& rText, rtl_TextEncoding /*eCharSet*/)
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC << ", rText: " << rText);
+    SAL_INFO("sw.rtf", __func__ << ", rText: " << rText);
     RawText(rText, m_rExport.GetCurrentEncoding());
 }
 
@@ -588,7 +588,7 @@ bool RtfAttributeOutput::EndURL(bool const isAtEndOfParagraph)
 
 void RtfAttributeOutput::FieldVanish(const OUString& /*rText*/, ww::eField /*eType*/)
 {
-    SAL_INFO("sw.rtf", "TODO: " << OSL_THIS_FUNC);
+    SAL_INFO("sw.rtf", "TODO: " << __func__);
 }
 
 void RtfAttributeOutput::Redline(const SwRedlineData* pRedline)
@@ -621,7 +621,7 @@ void RtfAttributeOutput::FormatDrop(const SwTextNode& /*rNode*/,
                                     ww8::WW8TableNodeInfo::Pointer_t /*pTextNodeInfo*/,
                                     ww8::WW8TableNodeInfoInner::Pointer_t /*pTextNodeInfoInner*/)
 {
-    SAL_INFO("sw.rtf", "TODO: " << OSL_THIS_FUNC);
+    SAL_INFO("sw.rtf", "TODO: " << __func__);
 }
 
 void RtfAttributeOutput::ParagraphStyle(sal_uInt16 nStyle)
@@ -947,7 +947,7 @@ void RtfAttributeOutput::TableOrientation(
 void RtfAttributeOutput::TableSpacing(
     ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/)
 {
-    SAL_INFO("sw.rtf", "TODO: " << OSL_THIS_FUNC);
+    SAL_INFO("sw.rtf", "TODO: " << __func__);
 }
 
 void RtfAttributeOutput::TableRowEnd(sal_uInt32 /*nDepth*/) { /* noop, see EndTableRow() */}
@@ -990,7 +990,7 @@ void RtfAttributeOutput::StartTableRow(
     const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner)
 {
     sal_uInt32 nCurrentDepth = pTableTextNodeInfoInner->getDepth();
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC << ", (depth is " << nCurrentDepth << ")");
+    SAL_INFO("sw.rtf", __func__ << ", (depth is " << nCurrentDepth << ")");
     m_bTableRowEnded = false;
 
     TableDefinition(pTableTextNodeInfoInner);
@@ -1019,7 +1019,7 @@ void RtfAttributeOutput::TableCellProperties(
 
 void RtfAttributeOutput::EndTableCell()
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC << ", (depth is " << m_nTableDepth << ")");
+    SAL_INFO("sw.rtf", __func__ << ", (depth is " << m_nTableDepth << ")");
 
     if (!m_bWroteCellInfo)
     {
@@ -1041,7 +1041,7 @@ void RtfAttributeOutput::EndTableCell()
 
 void RtfAttributeOutput::EndTableRow()
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC << ", (depth is " << m_nTableDepth << ")");
+    SAL_INFO("sw.rtf", __func__ << ", (depth is " << m_nTableDepth << ")");
 
     // Trying to end the row without writing the required number of cells? Fill with empty ones.
     for (sal_uInt32 i = 0; i < m_aCells[m_nTableDepth]; i++)
@@ -1140,7 +1140,7 @@ void RtfAttributeOutput::StartStyle(const OUString& rName, StyleType eType, sal_
                                     sal_uInt16 nNext, sal_uInt16 /*nWwId*/, sal_uInt16 nId,
                                     bool bAutoUpdate)
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC << ", rName = '" << rName << "'");
+    SAL_INFO("sw.rtf", __func__ << ", rName = '" << rName << "'");
 
     m_aStylesheet.append('{');
     if (eType == STYLE_TYPE_PARA)
@@ -1332,7 +1332,7 @@ void RtfAttributeOutput::SectionPageNumbering(sal_uInt16 nNumType,
 
 void RtfAttributeOutput::SectionType(sal_uInt8 nBreakCode)
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC << ", nBreakCode = " << int(nBreakCode));
+    SAL_INFO("sw.rtf", __func__ << ", nBreakCode = " << int(nBreakCode));
 
     /*
      * break code:   0 No break, 1 New column
@@ -2315,9 +2315,8 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                             m_aRun->append("}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " ");
                         }
                         else
-                            SAL_INFO("sw.rtf", OSL_THIS_FUNC << " unhandled form control: '"
-                                                             << xInfo->getImplementationName()
-                                                             << "'");
+                            SAL_INFO("sw.rtf", __func__ << " unhandled form control: '"
+                                                        << xInfo->getImplementationName() << "'");
                         m_aRun->append('}');
                     }
                 }
@@ -2340,8 +2339,8 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
         }
         break;
         default:
-            SAL_INFO("sw.rtf", OSL_THIS_FUNC << ": unknown type ("
-                                             << static_cast<int>(rFrame.GetWriterType()) << ")");
+            SAL_INFO("sw.rtf", __func__ << ": unknown type ("
+                                        << static_cast<int>(rFrame.GetWriterType()) << ")");
             break;
     }
 }
@@ -2843,7 +2842,7 @@ void RtfAttributeOutput::WriteTextFootnoteNumStr(const SwFormatFootnote& rFootno
 
 void RtfAttributeOutput::TextFootnote_Impl(const SwFormatFootnote& rFootnote)
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC << " start");
+    SAL_INFO("sw.rtf", __func__ << " start");
 
     m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_SUPER " ");
     EndRunProperties(nullptr);
@@ -2879,7 +2878,7 @@ void RtfAttributeOutput::TextFootnote_Impl(const SwFormatFootnote& rFootnote)
     m_aRun->append("}");
     m_aRun->append("}");
 
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC << " end");
+    SAL_INFO("sw.rtf", __func__ << " end");
 }
 
 void RtfAttributeOutput::ParaLineSpacing_Impl(short nSpace, short nMulti)
@@ -3084,12 +3083,12 @@ void RtfAttributeOutput::ParaScriptSpace(const SfxBoolItem& rScriptSpace)
 
 void RtfAttributeOutput::ParaHangingPunctuation(const SfxBoolItem& /*rItem*/)
 {
-    SAL_INFO("sw.rtf", "TODO: " << OSL_THIS_FUNC);
+    SAL_INFO("sw.rtf", "TODO: " << __func__);
 }
 
 void RtfAttributeOutput::ParaForbiddenRules(const SfxBoolItem& /*rItem*/)
 {
-    SAL_INFO("sw.rtf", "TODO: " << OSL_THIS_FUNC);
+    SAL_INFO("sw.rtf", "TODO: " << __func__);
 }
 
 void RtfAttributeOutput::ParaVerticalAlign(const SvxParaVertAlignItem& rAlign)
@@ -3119,7 +3118,7 @@ void RtfAttributeOutput::ParaVerticalAlign(const SvxParaVertAlignItem& rAlign)
 
 void RtfAttributeOutput::ParaSnapToGrid(const SvxParaGridItem& /*rGrid*/)
 {
-    SAL_INFO("sw.rtf", "TODO: " << OSL_THIS_FUNC);
+    SAL_INFO("sw.rtf", "TODO: " << __func__);
 }
 
 void RtfAttributeOutput::FormatFrameSize(const SwFormatFrameSize& rSize)
@@ -3137,7 +3136,7 @@ void RtfAttributeOutput::FormatFrameSize(const SwFormatFrameSize& rSize)
 
 void RtfAttributeOutput::FormatPaperBin(const SvxPaperBinItem& /*rItem*/)
 {
-    SAL_INFO("sw.rtf", "TODO: " << OSL_THIS_FUNC);
+    SAL_INFO("sw.rtf", "TODO: " << __func__);
 }
 
 void RtfAttributeOutput::FormatLRSpace(const SvxLRSpaceItem& rLRSpace)
@@ -3621,7 +3620,7 @@ void RtfAttributeOutput::FormatKeep(const SvxFormatKeepItem& rItem)
 
 void RtfAttributeOutput::FormatTextGrid(const SwTextGridItem& /*rGrid*/)
 {
-    SAL_INFO("sw.rtf", "TODO: " << OSL_THIS_FUNC);
+    SAL_INFO("sw.rtf", "TODO: " << __func__);
 }
 
 void RtfAttributeOutput::FormatLineNumbering(const SwFormatLineNumber& rNumbering)
@@ -3711,18 +3710,18 @@ void RtfAttributeOutput::WriteExpand(const SwField* pField)
 
 void RtfAttributeOutput::RefField(const SwField& /*rField*/, const OUString& /*rRef*/)
 {
-    SAL_INFO("sw.rtf", "TODO: " << OSL_THIS_FUNC);
+    SAL_INFO("sw.rtf", "TODO: " << __func__);
 }
 
 void RtfAttributeOutput::HiddenField(const SwField& /*rField*/)
 {
-    SAL_INFO("sw.rtf", "TODO: " << OSL_THIS_FUNC);
+    SAL_INFO("sw.rtf", "TODO: " << __func__);
 }
 
 void RtfAttributeOutput::SetField(const SwField& /*rField*/, ww::eField /*eType*/,
                                   const OUString& /*rCmd*/)
 {
-    SAL_INFO("sw.rtf", "TODO: " << OSL_THIS_FUNC);
+    SAL_INFO("sw.rtf", "TODO: " << __func__);
 }
 
 void RtfAttributeOutput::PostitField(const SwField* pField)

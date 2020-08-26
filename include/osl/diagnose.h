@@ -116,25 +116,6 @@
 
 /** @} */
 
-/* the macro OSL_THIS_FUNC is intended to be an office internal macro for now */
-/* copied from boost/current_function.hpp to make it usable from C
- * sources as well
- *
- * Copyright (c) 2002 Peter Dimov and Multi Media Ltd.
- *
- * Distributed under the Boost Software License, Version 1.0. (See
- * accompanying file LICENSE_1_0.txt or copy at
- * http://www.boost.org/LICENSE_1_0.txt) */
-#if defined(__GNUC__)
-#define OSL_THIS_FUNC __PRETTY_FUNCTION__
-#elif defined(__FUNCSIG__)
-#define OSL_THIS_FUNC __FUNCSIG__
-#elif defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901)
-#define OSL_THIS_FUNC __func__
-#else
-#define OSL_THIS_FUNC ""
-#endif
-
 #endif // INCLUDED_OSL_DIAGNOSE_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

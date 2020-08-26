@@ -684,14 +684,14 @@ Reference<XAccessibleContext> SAL_CALL PresenterAccessible::getAccessibleContext
 
 void SAL_CALL PresenterAccessible::focusGained (const css::awt::FocusEvent&)
 {
-    SAL_INFO("sdext.presenter", OSL_THIS_FUNC << ": PresenterAccessible::focusGained at " << this
+    SAL_INFO("sdext.presenter", __func__ << ": PresenterAccessible::focusGained at " << this
         << " and window " << mxMainWindow.get());
     AccessibleFocusManager::Instance()->FocusObject(mpAccessibleConsole);
 }
 
 void SAL_CALL PresenterAccessible::focusLost (const css::awt::FocusEvent&)
 {
-    SAL_INFO("sdext.presenter", OSL_THIS_FUNC << ": PresenterAccessible::focusLost at " << this);
+    SAL_INFO("sdext.presenter", __func__ << ": PresenterAccessible::focusLost at " << this);
     AccessibleFocusManager::Instance()->FocusObject(nullptr);
 }
 
@@ -1410,7 +1410,7 @@ Sequence<css::beans::PropertyValue> SAL_CALL
     ThrowIfDisposed();
 
 #if OSL_DEBUG_LEVEL > 0
-    SAL_INFO( "sdext.presenter", OSL_THIS_FUNC << " at " << this << ", " << nIndex << " returns empty set" );
+    SAL_INFO( "sdext.presenter", __func__ << " at " << this << ", " << nIndex << " returns empty set" );
     for (sal_Int32 nAttributeIndex(0), nAttributeCount(rRequestedAttributes.getLength());
          nAttributeIndex < nAttributeCount;
          ++nAttributeIndex)

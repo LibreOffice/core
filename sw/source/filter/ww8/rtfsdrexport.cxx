@@ -386,7 +386,7 @@ void RtfSdrExport::Commit(EscherPropertyContainer& rProps, const tools::Rectangl
                 else
                     SAL_INFO(
                         "sw.rtf",
-                        OSL_THIS_FUNC
+                        __func__
                             << ": unhandled shape path, missing either pVertices or pSegmentInfo");
             }
             break;
@@ -449,8 +449,8 @@ void RtfSdrExport::Commit(EscherPropertyContainer& rProps, const tools::Rectangl
             }
             break;
             default:
-                SAL_INFO("sw.rtf", OSL_THIS_FUNC << ": unhandled property: " << nId
-                                                 << " (value: " << rOpt.nPropValue << ")");
+                SAL_INFO("sw.rtf", __func__ << ": unhandled property: " << nId
+                                            << " (value: " << rOpt.nPropValue << ")");
                 break;
         }
     }
@@ -682,7 +682,7 @@ sal_Int32 RtfSdrExport::StartShape()
 
 void RtfSdrExport::WriteOutliner(const OutlinerParaObject& rParaObj, TextTypes eType)
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC << " start");
+    SAL_INFO("sw.rtf", __func__ << " start");
 
     const EditTextObject& rEditObj = rParaObj.GetTextObject();
     MSWord_SdrAttrIter aAttrIter(m_rExport, rEditObj, eType);
@@ -734,7 +734,7 @@ void RtfSdrExport::WriteOutliner(const OutlinerParaObject& rParaObj, TextTypes e
     if (bShape)
         m_rAttrOutput.RunText().append('}');
 
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC << " end");
+    SAL_INFO("sw.rtf", __func__ << " end");
 }
 
 void RtfSdrExport::EndShape(sal_Int32 nShapeElement)

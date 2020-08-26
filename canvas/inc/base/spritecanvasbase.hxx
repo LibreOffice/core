@@ -95,7 +95,7 @@ namespace canvas
         virtual css::uno::Reference< css::rendering::XAnimatedSprite > SAL_CALL createSpriteFromAnimation( const css::uno::Reference< css::rendering::XAnimation >& animation ) override
         {
             tools::verifyArgs(animation,
-                              OSL_THIS_FUNC,
+                              __func__,
                               static_cast< typename BaseType::UnambiguousBaseType* >(this));
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
@@ -107,7 +107,7 @@ namespace canvas
                                                                                                                                    sal_Int8                                                                                                           interpolationMode ) override
         {
             tools::verifyArgs(animationBitmaps,
-                              OSL_THIS_FUNC,
+                              __func__,
                               static_cast< typename BaseType::UnambiguousBaseType* >(this));
             tools::verifyRange( interpolationMode,
                                 css::rendering::InterpolationMode::NEAREST_NEIGHBOR,
@@ -121,7 +121,7 @@ namespace canvas
         virtual css::uno::Reference< css::rendering::XCustomSprite > SAL_CALL createCustomSprite( const css::geometry::RealSize2D& spriteSize ) override
         {
             tools::verifySpriteSize(spriteSize,
-                                    OSL_THIS_FUNC,
+                                    __func__,
                                     static_cast< typename BaseType::UnambiguousBaseType* >(this));
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
@@ -132,7 +132,7 @@ namespace canvas
         virtual css::uno::Reference< css::rendering::XSprite > SAL_CALL createClonedSprite( const css::uno::Reference< css::rendering::XSprite >& original ) override
         {
             tools::verifyArgs(original,
-                              OSL_THIS_FUNC,
+                              __func__,
                               static_cast< typename BaseType::UnambiguousBaseType* >(this));
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );

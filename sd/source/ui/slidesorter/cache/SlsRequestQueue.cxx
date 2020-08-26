@@ -136,7 +136,7 @@ void RequestQueue::AddRequest (
     }
 
 #if OSL_DEBUG_LEVEL >=2
-    SAL_INFO("sd.sls", OSL_THIS_FUNC << ": " << (bRemoved?"replaced":"added")
+    SAL_INFO("sd.sls", __func__ << ": " << (bRemoved?"replaced":"added")
         << " request for page " << ((aKey->GetPageNum()-1)/2)
         << " with priority class " << static_cast<int>(eRequestClass));
 #endif

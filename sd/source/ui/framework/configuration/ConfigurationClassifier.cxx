@@ -68,9 +68,9 @@ void ConfigurationClassifier::PartitionResources (
         aC2minusC1,
         aC1andC2);
 
-    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": copying resource ids to C1-C2");
+    SAL_INFO("sd.fwk", __func__ << ": copying resource ids to C1-C2");
     CopyResources(aC1minusC2, mxConfiguration1, maC1minusC2);
-    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": copying resource ids to C2-C1");
+    SAL_INFO("sd.fwk", __func__ << ": copying resource ids to C2-C1");
     CopyResources(aC2minusC1, mxConfiguration2, maC2minusC1);
 
     // Process the unique resources that belong to both configurations.
@@ -135,13 +135,13 @@ void ConfigurationClassifier::CopyResources (
         rTarget.reserve(rTarget.size() + 1 + nL);
         rTarget.push_back(rxResource);
 
-        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ":    copying " <<
+        SAL_INFO("sd.fwk", __func__ << ":    copying " <<
             FrameworkHelper::ResourceIdToString(rxResource));
 
         for (const Reference<XResourceId>& rBoundResource : aBoundResources)
         {
             rTarget.push_back(rBoundResource);
-            SAL_INFO("sd.fwk", OSL_THIS_FUNC << ":    copying " <<
+            SAL_INFO("sd.fwk", __func__ << ":    copying " <<
                 FrameworkHelper::ResourceIdToString(rBoundResource));
         }
     }
@@ -154,11 +154,11 @@ void ConfigurationClassifier::TraceResourceIdVector (
     const ResourceIdVector& rResources)
 {
 
-    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": " << pMessage);
+    SAL_INFO("sd.fwk", __func__ << ": " << pMessage);
     for (const auto& rxResource : rResources)
     {
         OUString sResource (FrameworkHelper::ResourceIdToString(rxResource));
-        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": " << sResource);
+        SAL_INFO("sd.fwk", __func__ << ": " << sResource);
     }
 }
 

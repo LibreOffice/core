@@ -69,7 +69,7 @@ namespace oglcanvas
                                             const rendering::RenderState& renderState )
     {
         canvas::tools::verifyArgs(aNewPos, viewState, renderState,
-                                  OSL_THIS_FUNC,
+                                  __func__,
                                   static_cast< ::cppu::OWeakObject* >(this));
 
         ::osl::MutexGuard aGuard( m_aMutex );

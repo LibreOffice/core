@@ -107,7 +107,7 @@ void ConfigurationControllerResourceManager::ActivateResource (
        return;
     }
 
-    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": activating resource " <<
+    SAL_INFO("sd.fwk", __func__ << ": activating resource " <<
         FrameworkHelper::ResourceIdToString(rxResourceId));
 
     // 1. Get the factory.
@@ -115,7 +115,7 @@ void ConfigurationControllerResourceManager::ActivateResource (
     Reference<XResourceFactory> xFactory (mpResourceFactoryContainer->GetFactory(sResourceURL));
     if ( ! xFactory.is())
     {
-        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ":    no factory found for " << sResourceURL);
+        SAL_INFO("sd.fwk", __func__ << ":    no factory found for " << sResourceURL);
         return;
     }
 
@@ -137,7 +137,7 @@ void ConfigurationControllerResourceManager::ActivateResource (
 
         if (xResource.is())
         {
-            SAL_INFO("sd.fwk", OSL_THIS_FUNC << ":    successfully created");
+            SAL_INFO("sd.fwk", __func__ << ":    successfully created");
             // 3. Add resource to URL->Object map.
             AddResource(xResource, xFactory);
 
@@ -152,7 +152,7 @@ void ConfigurationControllerResourceManager::ActivateResource (
         }
         else
         {
-            SAL_INFO("sd.fwk", OSL_THIS_FUNC << ":    resource creation failed");
+            SAL_INFO("sd.fwk", __func__ << ":    resource creation failed");
         }
     }
     catch (RuntimeException&)
@@ -230,10 +230,10 @@ void ConfigurationControllerResourceManager::DeactivateResource (
 
 #if OSL_DEBUG_LEVEL >= 1
     if (bSuccess)
-        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": successfully deactivated " <<
+        SAL_INFO("sd.fwk", __func__ << ": successfully deactivated " <<
             FrameworkHelper::ResourceIdToString(rxResourceId));
     else
-        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": activating resource " <<
+        SAL_INFO("sd.fwk", __func__ << ": activating resource " <<
             FrameworkHelper::ResourceIdToString(rxResourceId)
             << " failed");
 #endif
@@ -256,7 +256,7 @@ void ConfigurationControllerResourceManager::AddResource (
     maResourceMap[rxResource->getResourceId()] = aDescriptor;
 
 #if OSL_DEBUG_LEVEL >= 2
-    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ConfigurationControllerResourceManager::AddResource(): added " <<
+    SAL_INFO("sd.fwk", __func__ << ": ConfigurationControllerResourceManager::AddResource(): added " <<
             FrameworkHelper::ResourceIdToString(rxResource->getResourceId()) <<
             " -> " << rxResource.get());
 #endif
@@ -272,7 +272,7 @@ ConfigurationControllerResourceManager::ResourceDescriptor
     if (iResource != maResourceMap.end())
     {
 #if OSL_DEBUG_LEVEL >= 2
-        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ConfigurationControllerResourceManager::RemoveResource(): removing " <<
+        SAL_INFO("sd.fwk", __func__ << ": ConfigurationControllerResourceManager::RemoveResource(): removing " <<
                 FrameworkHelper::ResourceIdToString(rxResourceId) <<
                 " -> " << &iResource);
 #endif

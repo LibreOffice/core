@@ -222,7 +222,7 @@ void RtfExport::BuildNumbering()
 
 void RtfExport::WriteNumbering()
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC << " start");
+    SAL_INFO("sw.rtf", __func__ << " start");
 
     if (!m_pUsedNumTable)
         return; // no numbering is used
@@ -249,7 +249,7 @@ void RtfExport::WriteNumbering()
     NumberingDefinitions();
     Strm().WriteChar('}');
 
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC << " end");
+    SAL_INFO("sw.rtf", __func__ << " end");
 }
 
 void RtfExport::WriteRevTab()
@@ -318,12 +318,12 @@ void RtfExport::OutputField(const SwField* pField, ww::eField eFieldType, const 
 
 void RtfExport::WriteFormData(const ::sw::mark::IFieldmark& /*rFieldmark*/)
 {
-    SAL_INFO("sw.rtf", "TODO: " << OSL_THIS_FUNC);
+    SAL_INFO("sw.rtf", "TODO: " << __func__);
 }
 
 void RtfExport::WriteHyperlinkData(const ::sw::mark::IFieldmark& /*rFieldmark*/)
 {
-    SAL_INFO("sw.rtf", "TODO: " << OSL_THIS_FUNC);
+    SAL_INFO("sw.rtf", "TODO: " << __func__);
 }
 
 void RtfExport::DoComboBox(const OUString& /*rName*/, const OUString& /*rHelp*/,
@@ -396,9 +396,9 @@ void RtfExport::WriteFonts()
 
 void RtfExport::WriteStyles()
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC << " start");
+    SAL_INFO("sw.rtf", __func__ << " start");
     m_pStyles->OutputStylesTable();
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC << " end");
+    SAL_INFO("sw.rtf", __func__ << " end");
 }
 
 void RtfExport::WriteFootnoteSettings()
@@ -418,7 +418,7 @@ void RtfExport::WriteFootnoteSettings()
 
 void RtfExport::WriteMainText()
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC << " start");
+    SAL_INFO("sw.rtf", __func__ << " start");
 
     if (std::unique_ptr<SvxBrushItem> oBrush = getBackground(); oBrush)
     {
@@ -459,7 +459,7 @@ void RtfExport::WriteMainText()
 
     WriteText();
 
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC << " end");
+    SAL_INFO("sw.rtf", __func__ << " end");
 }
 
 void RtfExport::WriteInfo()
@@ -1108,9 +1108,9 @@ sal_uInt16 RtfExport::GetColor(const Color& rColor) const
     for (const auto& rEntry : m_aColTable)
         if (rEntry.second == rColor)
         {
-            SAL_INFO("sw.rtf", OSL_THIS_FUNC << " returning " << rEntry.first << " ("
-                                             << rColor.GetRed() << "," << rColor.GetGreen() << ","
-                                             << rColor.GetBlue() << ")");
+            SAL_INFO("sw.rtf", __func__ << " returning " << rEntry.first << " (" << rColor.GetRed()
+                                        << "," << rColor.GetGreen() << "," << rColor.GetBlue()
+                                        << ")");
             return rEntry.first;
         }
     OSL_FAIL("No such Color in m_aColTable!");
@@ -1343,7 +1343,7 @@ const OUString* RtfExport::GetRedline(sal_uInt16 nId)
 
 void RtfExport::OutPageDescription(const SwPageDesc& rPgDsc, bool bCheckForFirstPage)
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC << " start");
+    SAL_INFO("sw.rtf", __func__ << " start");
     const SwPageDesc* pSave = m_pCurrentPageDesc;
 
     m_pCurrentPageDesc = &rPgDsc;
@@ -1389,7 +1389,7 @@ void RtfExport::OutPageDescription(const SwPageDesc& rPgDsc, bool bCheckForFirst
                                       std::nullopt);
 
     m_pCurrentPageDesc = pSave;
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC << " end");
+    SAL_INFO("sw.rtf", __func__ << " end");
 }
 
 void RtfExport::WriteHeaderFooter(const SfxPoolItem& rItem, bool bHeader)
@@ -1407,7 +1407,7 @@ void RtfExport::WriteHeaderFooter(const SfxPoolItem& rItem, bool bHeader)
             return;
     }
 
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC << " start");
+    SAL_INFO("sw.rtf", __func__ << " start");
 
     const char* pStr = (bHeader ? OOO_STRING_SVTOOLS_RTF_HEADER : OOO_STRING_SVTOOLS_RTF_FOOTER);
     /* is this a title page? */
@@ -1420,17 +1420,17 @@ void RtfExport::WriteHeaderFooter(const SfxPoolItem& rItem, bool bHeader)
     WriteHeaderFooterText(m_pCurrentPageDesc->GetMaster(), bHeader);
     Strm().WriteChar('}');
 
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC << " end");
+    SAL_INFO("sw.rtf", __func__ << " end");
 }
 
 void RtfExport::WriteHeaderFooter(const SwFrameFormat& rFormat, bool bHeader, const char* pStr,
                                   bool bTitlepg)
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC << " start");
+    SAL_INFO("sw.rtf", __func__ << " start");
 
     m_pAttrOutput->WriteHeaderFooter_Impl(rFormat, bHeader, pStr, bTitlepg);
 
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC << " end");
+    SAL_INFO("sw.rtf", __func__ << " end");
 }
 
 namespace

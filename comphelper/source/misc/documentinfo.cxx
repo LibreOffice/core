@@ -152,7 +152,7 @@ namespace comphelper {
             caught >>= exception;
             SAL_WARN( "comphelper", "caught an exception!\ntype   : " << caught.getValueTypeName()
                                     << "\nmessage: " << exception
-                                    << "\nin function:\n" << OSL_THIS_FUNC);
+                                    << "\nin function:\n" << __func__);
         }
 
         return sTitle;

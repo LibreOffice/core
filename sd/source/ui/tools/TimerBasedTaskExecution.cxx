@@ -110,17 +110,17 @@ IMPL_LINK_NOARG(TimerBasedTaskExecution, TimerCallback, Timer *, void)
         // mnMaxTimePerStep.  Note that the last step may take longer
         // than allowed.
         sal_uInt32 nStartTime (::tools::Time( ::tools::Time::SYSTEM ).GetMSFromTime());
-        SAL_INFO("sd.tools", OSL_THIS_FUNC << ": starting TimerBasedTaskExecution at " << nStartTime);
+        SAL_INFO("sd.tools", __func__ << ": starting TimerBasedTaskExecution at " << nStartTime);
         do
         {
             mpTask->RunNextStep();
             sal_uInt32 nDuration (::tools::Time( ::tools::Time::SYSTEM ).GetMSFromTime()-nStartTime);
-            SAL_INFO("sd.tools", OSL_THIS_FUNC << ": executed step in " << nDuration);
+            SAL_INFO("sd.tools", __func__ << ": executed step in " << nDuration);
             if (nDuration > mnMaxTimePerStep)
                 break;
         }
         while (mpTask->HasNextStep());
-        SAL_INFO("sd.tools", OSL_THIS_FUNC << ": TimerBasedTaskExecution sleeping");
+        SAL_INFO("sd.tools", __func__ << ": TimerBasedTaskExecution sleeping");
         maTimer.Start();
     }
     else
