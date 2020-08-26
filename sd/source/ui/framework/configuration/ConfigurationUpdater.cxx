@@ -98,7 +98,7 @@ void ConfigurationUpdater::RequestUpdate (
     // Find out whether we really can update the configuration.
     if (IsUpdatePossible())
     {
-        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": UpdateConfiguration start");
+        SAL_INFO("sd.fwk", __func__ << ": UpdateConfiguration start");
 
         // Call UpdateConfiguration while that is possible and while someone
         // set mbUpdatePending to true in the middle of it.
@@ -111,7 +111,7 @@ void ConfigurationUpdater::RequestUpdate (
     else
     {
         mbUpdatePending = true;
-        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": scheduling update for later");
+        SAL_INFO("sd.fwk", __func__ << ": scheduling update for later");
     }
 }
 
@@ -126,7 +126,7 @@ bool ConfigurationUpdater::IsUpdatePossible() const
 
 void ConfigurationUpdater::UpdateConfiguration()
 {
-    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": UpdateConfiguration update");
+    SAL_INFO("sd.fwk", __func__ << ": UpdateConfiguration update");
     SetUpdateBeingProcessed(true);
     comphelper::ScopeGuard aScopeGuard (
         [this] () { return this->SetUpdateBeingProcessed(false); });
@@ -140,7 +140,7 @@ void ConfigurationUpdater::UpdateConfiguration()
         if (aClassifier.Partition())
         {
 #if DEBUG_SD_CONFIGURATION_TRACE
-            SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ConfigurationUpdater::UpdateConfiguration(");
+            SAL_INFO("sd.fwk", __func__ << ": ConfigurationUpdater::UpdateConfiguration(");
             ConfigurationTracer::TraceConfiguration(
                 mxRequestedConfiguration, "requested configuration");
             ConfigurationTracer::TraceConfiguration(
@@ -171,7 +171,7 @@ void ConfigurationUpdater::UpdateConfiguration()
         }
         else
         {
-            SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": nothing to do");
+            SAL_INFO("sd.fwk", __func__ << ": nothing to do");
 #if DEBUG_SD_CONFIGURATION_TRACE
             ConfigurationTracer::TraceConfiguration(
                 mxRequestedConfiguration, "requested configuration");
@@ -185,8 +185,8 @@ void ConfigurationUpdater::UpdateConfiguration()
         DBG_UNHANDLED_EXCEPTION("sd");
     }
 
-    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ConfigurationUpdater::UpdateConfiguration)");
-    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": UpdateConfiguration end");
+    SAL_INFO("sd.fwk", __func__ << ": ConfigurationUpdater::UpdateConfiguration)");
+    SAL_INFO("sd.fwk", __func__ << ": UpdateConfiguration end");
 }
 
 void ConfigurationUpdater::CleanRequestedConfiguration()
@@ -250,7 +250,7 @@ void ConfigurationUpdater::UpdateCore (const ConfigurationClassifier& rClassifie
         mpResourceManager->ActivateResources(rClassifier.GetC1minusC2(), mxCurrentConfiguration);
 
 #if DEBUG_SD_CONFIGURATION_TRACE
-        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ConfigurationController::UpdateConfiguration)");
+        SAL_INFO("sd.fwk", __func__ << ": ConfigurationController::UpdateConfiguration)");
         ConfigurationTracer::TraceConfiguration(
             mxRequestedConfiguration, "requested configuration");
         ConfigurationTracer::TraceConfiguration(
@@ -322,7 +322,7 @@ void ConfigurationUpdater::CheckPureAnchors (
 
         if (bDeactiveCurrentResource)
         {
-            SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": deactivating pure anchor " <<
+            SAL_INFO("sd.fwk", __func__ << ": deactivating pure anchor " <<
                     FrameworkHelper::ResourceIdToString(xResourceId) <<
                     "because it has no children");
             // Erase element from current configuration.

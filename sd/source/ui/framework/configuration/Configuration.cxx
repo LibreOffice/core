@@ -102,7 +102,7 @@ void SAL_CALL Configuration::addResource (const Reference<XResourceId>& rxResour
 
     if (mpResourceContainer->insert(rxResourceId).second)
     {
-        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": Configuration::addResource() " <<
+        SAL_INFO("sd.fwk", __func__ << ": Configuration::addResource() " <<
                 FrameworkHelper::ResourceIdToString(rxResourceId));
         PostEvent(rxResourceId, true);
     }
@@ -118,7 +118,7 @@ void SAL_CALL Configuration::removeResource (const Reference<XResourceId>& rxRes
     ResourceContainer::iterator iResource (mpResourceContainer->find(rxResourceId));
     if (iResource != mpResourceContainer->end())
     {
-        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": Configuration::removeResource() " <<
+        SAL_INFO("sd.fwk", __func__ << ": Configuration::removeResource() " <<
                 FrameworkHelper::ResourceIdToString(rxResourceId));
         PostEvent(rxResourceId,false);
         mpResourceContainer->erase(iResource);

@@ -45,7 +45,7 @@ namespace canvas
                                                                               const css::geometry::IntegerRectangle2D& rect ) override
         {
             tools::verifyArgs(rect,
-                              OSL_THIS_FUNC,
+                              __func__,
                               static_cast< typename Base::UnambiguousBaseType* >(this));
             tools::verifyIndexRange(rect, Base::getSize() );
 
@@ -60,7 +60,7 @@ namespace canvas
                                        const css::geometry::IntegerRectangle2D&   rect ) override
         {
             tools::verifyArgs(bitmapLayout, rect,
-                              OSL_THIS_FUNC,
+                              __func__,
                               static_cast< typename Base::UnambiguousBaseType* >(this));
             tools::verifyIndexRange(rect, Base::getSize() );
 
@@ -74,7 +74,7 @@ namespace canvas
                                         const css::geometry::IntegerPoint2D&       pos ) override
         {
             tools::verifyArgs(bitmapLayout, pos,
-                              OSL_THIS_FUNC,
+                              __func__,
                               static_cast< typename Base::UnambiguousBaseType* >(this));
             tools::verifyIndexRange(pos, Base::getSize() );
 
@@ -87,7 +87,7 @@ namespace canvas
                                                                   const css::geometry::IntegerPoint2D& pos ) override
         {
             tools::verifyArgs(pos,
-                              OSL_THIS_FUNC,
+                              __func__,
                               static_cast< typename Base::UnambiguousBaseType* >(this));
             tools::verifyIndexRange(pos, Base::getSize() );
 

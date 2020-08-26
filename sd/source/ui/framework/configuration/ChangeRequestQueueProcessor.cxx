@@ -41,7 +41,7 @@ void TraceRequest (const Reference<XConfigurationChangeRequest>& rxRequest)
 {
     Reference<container::XNamed> xNamed (rxRequest, UNO_QUERY);
     if (xNamed.is())
-        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ":    " << xNamed->getName());
+        SAL_INFO("sd.fwk", __func__ << ":    " << xNamed->getName());
 }
 
 #endif
@@ -83,11 +83,11 @@ void ChangeRequestQueueProcessor::AddRequest (
 #if DEBUG_SD_CONFIGURATION_TRACE
     if (maQueue.empty())
     {
-        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": Adding requests to empty queue");
+        SAL_INFO("sd.fwk", __func__ << ": Adding requests to empty queue");
         ConfigurationTracer::TraceConfiguration(
             mxConfiguration, "current configuration of queue processor");
     }
-    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": Adding request");
+    SAL_INFO("sd.fwk", __func__ << ": Adding request");
     TraceRequest(rxRequest);
 #endif
 
@@ -103,7 +103,7 @@ void ChangeRequestQueueProcessor::StartProcessing()
         && mxConfiguration.is()
         && ! maQueue.empty())
     {
-        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ChangeRequestQueueProcessor scheduling processing");
+        SAL_INFO("sd.fwk", __func__ << ": ChangeRequestQueueProcessor scheduling processing");
         mnUserEventId = Application::PostUserEvent(
             LINK(this,ChangeRequestQueueProcessor,ProcessEvent));
     }
@@ -128,7 +128,7 @@ void ChangeRequestQueueProcessor::ProcessOneEvent()
 {
     ::osl::MutexGuard aGuard (maMutex);
 
-    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ProcessOneEvent");
+    SAL_INFO("sd.fwk", __func__ << ": ProcessOneEvent");
 
     if (!mxConfiguration.is() || maQueue.empty())
         return;
@@ -149,7 +149,7 @@ void ChangeRequestQueueProcessor::ProcessOneEvent()
     if (!maQueue.empty())
         return;
 
-    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": All requests are processed");
+    SAL_INFO("sd.fwk", __func__ << ": All requests are processed");
     // The queue is empty so tell the ConfigurationManager to update
     // its state.
     if (mpConfigurationUpdater != nullptr)

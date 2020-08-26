@@ -116,7 +116,7 @@ namespace cairocanvas
                       const rendering::RenderState& renderState )
     {
         ::canvas::tools::verifyInput( renderState,
-                                      OSL_THIS_FUNC,
+                                      __func__,
                                       const_cast<rendering::XCanvas*>(pOwner), // only for refcount
                                       2,
                                       3 /* text */ );

@@ -651,7 +651,7 @@ namespace vclcanvas
                              "bitmap is NULL");
 
         ::canvas::tools::verifyInput( renderState,
-                                      OSL_THIS_FUNC,
+                                      __func__,
                                       mpDevice,
                                       4,
                                       bModulateColors ? 3 : 0 );
@@ -995,7 +995,7 @@ namespace vclcanvas
                          "outdev null. Are we disposed?" );
 
         ::canvas::tools::verifyInput( renderState,
-                                      OSL_THIS_FUNC,
+                                      __func__,
                                       mpDevice,
                                       2,
                                       eColorType == IGNORE_COLOR ? 0 : 3 );

@@ -342,7 +342,7 @@ void BitmapCache::ReCalculateTotalCacheSize()
     }
     mbIsFull = (mnNormalCacheSize  >= mnMaximalNormalCacheSize);
 
-    SAL_INFO("sd.sls", OSL_THIS_FUNC << ": cache size is " << mnNormalCacheSize << "/" << mnPreciousCacheSize);
+    SAL_INFO("sd.sls", __func__ << ": cache size is " << mnNormalCacheSize << "/" << mnPreciousCacheSize);
 }
 
 void BitmapCache::Recycle (const BitmapCache& rCache)
@@ -426,7 +426,7 @@ void BitmapCache::UpdateCacheSize (const CacheEntry& rEntry, CacheOperation eOpe
             if ( ! rEntry.IsPrecious() && mnNormalCacheSize>mnMaximalNormalCacheSize)
             {
                 mbIsFull = true;
-                SAL_INFO("sd.sls", OSL_THIS_FUNC << ": cache size is " << mnNormalCacheSize << " > " << mnMaximalNormalCacheSize);
+                SAL_INFO("sd.sls", __func__ << ": cache size is " << mnNormalCacheSize << " > " << mnMaximalNormalCacheSize);
                 mpCacheCompactor->RequestCompaction();
             }
             break;
@@ -507,7 +507,7 @@ void BitmapCache::CacheEntry::Compress (const std::shared_ptr<BitmapCompressor>&
         if (nOldSize == 0)
             nOldSize = 1;
         sal_Int32 nRatio (100L * nNewSize / nOldSize);
-        SAL_INFO("sd.sls", OSL_THIS_FUNC << ": compressing bitmap for " << %x << " from " << nOldSize << " to " << nNewSize << " bytes (" << nRatio << "%)");
+        SAL_INFO("sd.sls", __func__ << ": compressing bitmap for " << %x << " from " << nOldSize << " to " << nNewSize << " bytes (" << nRatio << "%)");
 #endif
 
         mpCompressor = rpCompressor;

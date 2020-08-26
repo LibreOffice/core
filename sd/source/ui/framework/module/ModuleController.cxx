@@ -128,13 +128,13 @@ void ModuleController::ProcessFactory (const ::std::vector<Any>& rValues)
         "URL",
         aURLs);
 
-    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ModuleController::adding factory " << sServiceName);
+    SAL_INFO("sd.fwk", __func__ << ": ModuleController::adding factory " << sServiceName);
 
     // Add the resource URLs to the map.
     for (const auto& rResource : aURLs)
     {
         (*mpResourceToFactoryMap)[rResource] = sServiceName;
-        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ":    " << rResource);
+        SAL_INFO("sd.fwk", __func__ << ":    " << rResource);
     }
 }
 
@@ -186,7 +186,7 @@ void ModuleController::ProcessStartupService (const ::std::vector<Any>& rValues)
         // at the configuration controller.
         xContext->getServiceManager()->createInstanceWithArgumentsAndContext(sServiceName, aArguments, xContext);
 
-        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ModuleController::created startup service " << sServiceName);
+        SAL_INFO("sd.fwk", __func__ << ": ModuleController::created startup service " << sServiceName);
     }
     catch (Exception&)
     {

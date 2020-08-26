@@ -141,17 +141,7 @@ bool StringConcatLiterals::isStringLiteral(Expr const * expr) {
     if (!isa<clang::StringLiteral>(expr)) {
         return false;
     }
-    // OSL_THIS_FUNC may be defined as "" in include/osl/diagnose.h, so don't
-    // warn about expressions like 'SAL_INFO(..., OSL_THIS_FUNC << ":")' or
-    // 'OUString(OSL_THIS_FUNC) + ":"':
-    auto loc = compat::getBeginLoc(expr);
-    while (compiler.getSourceManager().isMacroArgExpansion(loc)) {
-        loc = compiler.getSourceManager().getImmediateMacroCallerLoc(loc);
-    }
-    return !compiler.getSourceManager().isMacroBodyExpansion(loc)
-        || (Lexer::getImmediateMacroName(
-                loc, compiler.getSourceManager(), compiler.getLangOpts())
-            != "OSL_THIS_FUNC");
+    return true;
 }
 
 loplugin::Plugin::Registration<StringConcatLiterals> stringconcatliterals("stringconcatliterals");

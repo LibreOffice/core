@@ -641,8 +641,7 @@ void RTFDocumentImpl::parBreak()
 
 void RTFDocumentImpl::sectBreak(bool bFinal)
 {
-    SAL_INFO("writerfilter.rtf",
-             OSL_THIS_FUNC << ": final? " << bFinal << ", needed? " << m_bNeedSect);
+    SAL_INFO("writerfilter.rtf", __func__ << ": final? " << bFinal << ", needed? " << m_bNeedSect);
     bool bNeedSect = m_bNeedSect;
     RTFValue::Pointer_t pBreak
         = m_aStates.top().getSectionSprms().find(NS_ooxml::LN_EG_SectPrContents_type);
@@ -1963,7 +1962,7 @@ RTFError RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int n
 
 RTFError RTFDocumentImpl::pushState()
 {
-    //SAL_INFO("writerfilter.rtf", OSL_THIS_FUNC << " before push: " << m_pTokenizer->getGroup());
+    //SAL_INFO("writerfilter.rtf", __func__ << " before push: " << m_pTokenizer->getGroup());
 
     checkUnicode(/*bUnicode =*/true, /*bHex =*/true);
     m_nGroupStartPos = Strm().Tell();
@@ -3449,7 +3448,7 @@ void RTFDocumentImpl::afterPopState(RTFParserState& rState)
 
 RTFError RTFDocumentImpl::popState()
 {
-    //SAL_INFO("writerfilter", OSL_THIS_FUNC << " before pop: m_pTokenizer->getGroup() " << m_pTokenizer->getGroup() <<
+    //SAL_INFO("writerfilter", __func__ << " before pop: m_pTokenizer->getGroup() " << m_pTokenizer->getGroup() <<
     //                         ", dest state: " << m_aStates.top().eDestination);
 
     checkUnicode(/*bUnicode =*/true, /*bHex =*/true);

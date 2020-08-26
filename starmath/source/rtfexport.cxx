@@ -269,7 +269,7 @@ void SmRtfExport::HandleOperator(const SmOperNode* pNode, int nLevel)
             m_pBuffer->append("}"); // mfunc
             break;
         default:
-            SAL_INFO("starmath.rtf", "TODO: " << OSL_THIS_FUNC << " unhandled oper type");
+            SAL_INFO("starmath.rtf", "TODO: " << __func__ << " unhandled oper type");
             break;
     }
 }
@@ -383,7 +383,7 @@ void SmRtfExport::HandleSubSupScriptInternal(const SmSubSupNode* pNode, int nLev
         m_pBuffer->append("}"); // mlimUpp
     }
     else
-        SAL_INFO("starmath.rtf", "TODO: " << OSL_THIS_FUNC << " unhandled subsup type");
+        SAL_INFO("starmath.rtf", "TODO: " << __func__ << " unhandled subsup type");
 }
 
 void SmRtfExport::HandleMatrix(const SmMatrixNode* pNode, int nLevel)
@@ -490,7 +490,7 @@ void SmRtfExport::HandleVerticalBrace(const SmVerticalBraceNode* pNode, int nLev
             break;
         }
         default:
-            SAL_INFO("starmath.rtf", "TODO: " << OSL_THIS_FUNC << " unhandled vertical brace type");
+            SAL_INFO("starmath.rtf", "TODO: " << __func__ << " unhandled vertical brace type");
             break;
     }
 }

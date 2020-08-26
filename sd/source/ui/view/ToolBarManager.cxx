@@ -606,7 +606,7 @@ void ToolBarManager::Implementation::ResetToolBars (ToolBarGroup eGroup)
 
 void ToolBarManager::Implementation::ResetAllToolBars()
 {
-    SAL_INFO("sd.view", OSL_THIS_FUNC << ": resetting all tool bars");
+    SAL_INFO("sd.view", __func__ << ": resetting all tool bars");
     for (auto i : o3tl::enumrange<ToolBarGroup>())
         ResetToolBars(i);
 }
@@ -679,7 +679,7 @@ void ToolBarManager::Implementation::PreUpdate()
 
     mbPreUpdatePending = false;
 
-    SAL_INFO("sd.view", OSL_THIS_FUNC << ": ToolBarManager::PreUpdate [");
+    SAL_INFO("sd.view", __func__ << ": ToolBarManager::PreUpdate [");
 
     // Get the list of tool bars that are not used anymore and are to be
     // deactivated.
@@ -690,12 +690,12 @@ void ToolBarManager::Implementation::PreUpdate()
     for (const auto& aToolBar : aToolBars)
     {
         OUString sFullName (GetToolBarResourceName(aToolBar));
-        SAL_INFO("sd.view", OSL_THIS_FUNC << ":    turning off tool bar " << sFullName);
+        SAL_INFO("sd.view", __func__ << ":    turning off tool bar " << sFullName);
         mxLayouter->destroyElement(sFullName);
         maToolBarList.MarkToolBarAsNotActive(aToolBar);
     }
 
-    SAL_INFO("sd.view", OSL_THIS_FUNC << ": ToolBarManager::PreUpdate ]");
+    SAL_INFO("sd.view", __func__ << ": ToolBarManager::PreUpdate ]");
 }
 
 void ToolBarManager::Implementation::PostUpdate()
@@ -713,18 +713,18 @@ void ToolBarManager::Implementation::PostUpdate()
     std::vector<OUString> aToolBars;
     maToolBarList.GetToolBarsToActivate(aToolBars);
 
-    SAL_INFO("sd.view", OSL_THIS_FUNC << ": ToolBarManager::PostUpdate [");
+    SAL_INFO("sd.view", __func__ << ": ToolBarManager::PostUpdate [");
 
     // Turn on the tool bars that are visible in the new context.
     for (const auto& aToolBar : aToolBars)
     {
         OUString sFullName (GetToolBarResourceName(aToolBar));
-        SAL_INFO("sd.view", OSL_THIS_FUNC << ":    turning on tool bar " << sFullName);
+        SAL_INFO("sd.view", __func__ << ":    turning on tool bar " << sFullName);
         mxLayouter->requestElement(sFullName);
         maToolBarList.MarkToolBarAsActive(aToolBar);
     }
 
-    SAL_INFO("sd.view", OSL_THIS_FUNC << ": ToolBarManager::PostUpdate ]");
+    SAL_INFO("sd.view", __func__ << ": ToolBarManager::PostUpdate ]");
 }
 
 void ToolBarManager::Implementation::LockViewShellManager()
@@ -736,7 +736,7 @@ void ToolBarManager::Implementation::LockViewShellManager()
 
 void ToolBarManager::Implementation::LockUpdate()
 {
-    SAL_INFO("sd.view", OSL_THIS_FUNC << ": LockUpdate " << mnLockCount);
+    SAL_INFO("sd.view", __func__ << ": LockUpdate " << mnLockCount);
     ::osl::MutexGuard aGuard(maMutex);
 
     DBG_ASSERT(mnLockCount<100, "ToolBarManager lock count unusually high");
@@ -751,7 +751,7 @@ void ToolBarManager::Implementation::LockUpdate()
 
 void ToolBarManager::Implementation::UnlockUpdate()
 {
-    SAL_INFO("sd.view", OSL_THIS_FUNC << ": UnlockUpdate " << mnLockCount);
+    SAL_INFO("sd.view", __func__ << ": UnlockUpdate " << mnLockCount);
     ::osl::MutexGuard aGuard(maMutex);
 
     OSL_ASSERT(mnLockCount>0);
@@ -922,14 +922,14 @@ using namespace ::sd;
 LayouterLock::LayouterLock (const Reference<frame::XLayoutManager>& rxLayouter)
     : mxLayouter(rxLayouter)
 {
-    SAL_INFO("sd.view", OSL_THIS_FUNC << ": LayouterLock " << (mxLayouter.is() ? 1 :0));
+    SAL_INFO("sd.view", __func__ << ": LayouterLock " << (mxLayouter.is() ? 1 :0));
     if (mxLayouter.is())
         mxLayouter->lock();
 }
 
 LayouterLock::~LayouterLock()
 {
-    SAL_INFO("sd.view", OSL_THIS_FUNC << ": ~LayouterLock " << (mxLayouter.is() ? 1 :0));
+    SAL_INFO("sd.view", __func__ << ": ~LayouterLock " << (mxLayouter.is() ? 1 :0));
     if (mxLayouter.is())
         mxLayouter->unlock();
 }
@@ -1374,7 +1374,7 @@ void ToolBarShellList::UpdateShells (
         std::insert_iterator<GroupedShellList>(aList,aList.begin()));
     for (const auto& rShell : aList)
     {
-        SAL_INFO("sd.view", OSL_THIS_FUNC << ": deactivating tool bar shell " << static_cast<sal_uInt32>(rShell.mnId));
+        SAL_INFO("sd.view", __func__ << ": deactivating tool bar shell " << static_cast<sal_uInt32>(rShell.mnId));
         rpManager->DeactivateSubShell(*rpMainViewShell, rShell.mnId);
     }
 
@@ -1386,7 +1386,7 @@ void ToolBarShellList::UpdateShells (
         std::insert_iterator<GroupedShellList>(aList,aList.begin()));
     for (const auto& rShell : aList)
     {
-        SAL_INFO("sd.view", OSL_THIS_FUNC << ": activating tool bar shell " << static_cast<sal_uInt32>(rShell.mnId));
+        SAL_INFO("sd.view", __func__ << ": activating tool bar shell " << static_cast<sal_uInt32>(rShell.mnId));
         rpManager->ActivateSubShell(*rpMainViewShell, rShell.mnId);
     }
 

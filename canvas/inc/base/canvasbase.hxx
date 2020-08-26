@@ -146,7 +146,7 @@ namespace canvas
                                         const css::rendering::RenderState&    renderState) override
         {
             tools::verifyArgs(aPoint, viewState, renderState,
-                              OSL_THIS_FUNC,
+                              __func__,
                               static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
@@ -160,7 +160,7 @@ namespace canvas
                                        const css::rendering::RenderState& renderState) override
         {
             tools::verifyArgs(aStartPoint, aEndPoint, viewState, renderState,
-                              OSL_THIS_FUNC,
+                              __func__,
                               static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
@@ -176,7 +176,7 @@ namespace canvas
                                           const css::rendering::RenderState&           renderState ) override
         {
             tools::verifyArgs(aBezierSegment, aEndPoint, viewState, renderState,
-                              OSL_THIS_FUNC,
+                              __func__,
                               static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
@@ -192,7 +192,7 @@ namespace canvas
                             const css::rendering::RenderState&                           renderState) override
         {
             tools::verifyArgs(xPolyPolygon, viewState, renderState,
-                              OSL_THIS_FUNC,
+                              __func__,
                               static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
@@ -209,7 +209,7 @@ namespace canvas
                               const css::rendering::StrokeAttributes&                        strokeAttributes) override
         {
             tools::verifyArgs(xPolyPolygon, viewState, renderState, strokeAttributes,
-                              OSL_THIS_FUNC,
+                              __func__,
                               static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
@@ -227,7 +227,7 @@ namespace canvas
                                        const css::rendering::StrokeAttributes&                        strokeAttributes ) override
         {
             tools::verifyArgs(xPolyPolygon, viewState, renderState, strokeAttributes,
-                              OSL_THIS_FUNC,
+                              __func__,
                               static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
@@ -246,7 +246,7 @@ namespace canvas
                                             const css::rendering::StrokeAttributes&                       strokeAttributes ) override
         {
             tools::verifyArgs(xPolyPolygon, viewState, renderState, textures, xMapping, strokeAttributes,
-                              OSL_THIS_FUNC,
+                              __func__,
                               static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
@@ -263,7 +263,7 @@ namespace canvas
                                const css::rendering::StrokeAttributes&                                     strokeAttributes ) override
         {
             tools::verifyArgs(xPolyPolygon, viewState, renderState, strokeAttributes,
-                              OSL_THIS_FUNC,
+                              __func__,
                               static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
@@ -279,7 +279,7 @@ namespace canvas
                              const css::rendering::RenderState&                                        renderState) override
         {
             tools::verifyArgs(xPolyPolygon, viewState, renderState,
-                              OSL_THIS_FUNC,
+                              __func__,
                               static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
@@ -296,7 +296,7 @@ namespace canvas
                                     const css::uno::Sequence< css::rendering::Texture >&         textures) override
         {
             tools::verifyArgs(xPolyPolygon, viewState, renderState, textures,
-                              OSL_THIS_FUNC,
+                              __func__,
                               static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
@@ -314,7 +314,7 @@ namespace canvas
                                           const css::uno::Reference< css::geometry::XMapping2D >&         xMapping ) override
         {
             tools::verifyArgs(xPolyPolygon, viewState, renderState, textures, xMapping,
-                              OSL_THIS_FUNC,
+                              __func__,
                               static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
@@ -334,7 +334,7 @@ namespace canvas
                               // dummy, to keep argPos in sync
                               fontRequest,
                               fontMatrix,
-                              OSL_THIS_FUNC,
+                              __func__,
                               static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
@@ -348,7 +348,7 @@ namespace canvas
                                  const css::uno::Sequence< css::beans::PropertyValue >&   aFontProperties ) override
         {
             tools::verifyArgs(aFilter,
-                              OSL_THIS_FUNC,
+                              __func__,
                               static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
@@ -365,7 +365,7 @@ namespace canvas
                      sal_Int8                                                                 textDirection) override
         {
             tools::verifyArgs(xFont, viewState, renderState,
-                              OSL_THIS_FUNC,
+                              __func__,
                               static_cast< UnambiguousBaseType* >(this));
             tools::verifyRange( textDirection,
                                 css::rendering::TextDirection::WEAK_LEFT_TO_RIGHT,
@@ -385,7 +385,7 @@ namespace canvas
                             const css::rendering::RenderState&                                     renderState) override
         {
             tools::verifyArgs(laidOutText, viewState, renderState,
-                              OSL_THIS_FUNC,
+                              __func__,
                               static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
@@ -402,7 +402,7 @@ namespace canvas
                         const css::rendering::RenderState&                                 renderState ) override
         {
             tools::verifyArgs(xBitmap, viewState, renderState,
-                              OSL_THIS_FUNC,
+                              __func__,
                               static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );
@@ -418,7 +418,7 @@ namespace canvas
                                  const css::rendering::RenderState&                                    renderState ) override
         {
             tools::verifyArgs(xBitmap, viewState, renderState,
-                              OSL_THIS_FUNC,
+                              __func__,
                               static_cast< UnambiguousBaseType* >(this));
 
             MutexType aGuard( BaseType::m_aMutex );

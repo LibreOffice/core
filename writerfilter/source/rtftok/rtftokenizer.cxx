@@ -60,7 +60,7 @@ RTFTokenizer::~RTFTokenizer() = default;
 
 RTFError RTFTokenizer::resolveParse()
 {
-    SAL_INFO("writerfilter.rtf", OSL_THIS_FUNC);
+    SAL_INFO("writerfilter.rtf", __func__);
     char ch;
     RTFError ret;
     // for hex chars
@@ -84,7 +84,7 @@ RTFError RTFTokenizer::resolveParse()
 
     while (Strm().ReadChar(ch), !Strm().eof())
     {
-        //SAL_INFO("writerfilter", OSL_THIS_FUNC << ": parsing character '" << ch << "'");
+        //SAL_INFO("writerfilter", __func__ << ": parsing character '" << ch << "'");
 
         sal_uInt64 const nCurrentPos = Strm().Tell();
         if (m_xStatusIndicator.is() && nCurrentPos > (nLastPos + nPercentSize))
@@ -144,7 +144,7 @@ RTFError RTFTokenizer::resolveParse()
                     }
                     else
                     {
-                        SAL_INFO("writerfilter.rtf", OSL_THIS_FUNC << ": hex internal state");
+                        SAL_INFO("writerfilter.rtf", __func__ << ": hex internal state");
                         b = b << 4;
                         sal_Int8 parsed = msfilter::rtfutil::AsHex(ch);
                         if (parsed == -1)
@@ -266,13 +266,13 @@ RTFError RTFTokenizer::dispatchKeyword(OString const& rKeyword, bool bParam, int
             Strm().SeekRel(nParam);
         return RTFError::OK;
     }
-    SAL_INFO("writerfilter.rtf", OSL_THIS_FUNC << ": keyword '\\" << rKeyword << "' with param? "
-                                               << (bParam ? 1 : 0) << " param val: '"
-                                               << (bParam ? nParam : 0) << "'");
+    SAL_INFO("writerfilter.rtf", __func__ << ": keyword '\\" << rKeyword << "' with param? "
+                                          << (bParam ? 1 : 0) << " param val: '"
+                                          << (bParam ? nParam : 0) << "'");
     auto findIt = s_aRTFControlWords.find(rKeyword);
     if (findIt == s_aRTFControlWords.end())
     {
-        SAL_INFO("writerfilter.rtf", OSL_THIS_FUNC << ": unknown keyword '\\" << rKeyword << "'");
+        SAL_INFO("writerfilter.rtf", __func__ << ": unknown keyword '\\" << rKeyword << "'");
         RTFSkipDestination aSkip(m_rImport);
         aSkip.setParsed(false);
         return RTFError::OK;

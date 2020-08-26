@@ -777,7 +777,7 @@ void AquaSalFrame::doShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
         return;
     }
 
-    SAL_INFO("vcl.osx", OSL_THIS_FUNC << ": mbFullScreen=" << mbFullScreen << ", bFullScreen=" << bFullScreen);
+    SAL_INFO("vcl.osx", __func__ << ": mbFullScreen=" << mbFullScreen << ", bFullScreen=" << bFullScreen);
 
     if( mbFullScreen == bFullScreen )
         return;

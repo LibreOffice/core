@@ -289,7 +289,7 @@ namespace slideshow
                 bool const bRet = css::uno::fromAny(a, &rValue);
 #if OSL_DEBUG_LEVEL > 0
                 if( !bRet )
-                    SAL_INFO("slideshow", OSL_THIS_FUNC << ": while retrieving property " << propName << ", cannot extract Any of type "
+                    SAL_INFO("slideshow", __func__ << ": while retrieving property " << propName << ", cannot extract Any of type "
                                << a.getValueTypeRef()->pTypeName);
 #endif
                 return bRet;
@@ -318,7 +318,7 @@ namespace slideshow
                 bool const bRet = rIfc.is();
 #if OSL_DEBUG_LEVEL > 0
                 if( !bRet )
-                    SAL_INFO("slideshow", OSL_THIS_FUNC << ": while retrieving property " << propName << ", cannot extract Any of type "
+                    SAL_INFO("slideshow", __func__ << ": while retrieving property " << propName << ", cannot extract Any of type "
                                << a.getValueTypeRef()->pTypeName << " to interface");
 #endif
                 return bRet;

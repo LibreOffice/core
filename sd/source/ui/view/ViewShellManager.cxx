@@ -732,9 +732,9 @@ void ViewShellManager::Implementation::UpdateShellStack()
         aSfxShellStack.push_back(mrBase.GetSubShell(nIndex));
 
 #if OSL_DEBUG_LEVEL >= 2
-    SAL_INFO("sd.view", OSL_THIS_FUNC << ": Current SFX Stack");
+    SAL_INFO("sd.view", __func__ << ": Current SFX Stack");
     DumpShellStack(aSfxShellStack);
-    SAL_INFO("sd.view", OSL_THIS_FUNC << ": Target Stack");
+    SAL_INFO("sd.view", __func__ << ": Target Stack");
     DumpShellStack(aTargetStack);
 #endif
 
@@ -750,7 +750,7 @@ void ViewShellManager::Implementation::UpdateShellStack()
             i != iLast; ++i)
     {
         SfxShell* const pShell = *i;
-        SAL_INFO("sd.view", OSL_THIS_FUNC << ": removing shell " << pShell << " from stack");
+        SAL_INFO("sd.view", __func__ << ": removing shell " << pShell << " from stack");
         mrBase.RemoveSubShell(pShell);
     }
     aSfxShellStack.erase(iSfxShell, aSfxShellStack.end());
@@ -759,7 +759,7 @@ void ViewShellManager::Implementation::UpdateShellStack()
     mbShellStackIsUpToDate = false;
     while (iTargetShell != aTargetStack.end())
     {
-        SAL_INFO("sd.view", OSL_THIS_FUNC << ": pushing shell " << *iTargetShell << " on stack");
+        SAL_INFO("sd.view", __func__ << ": pushing shell " << *iTargetShell << " on stack");
         mrBase.AddSubShell(**iTargetShell);
         ++iTargetShell;
 
@@ -783,7 +783,7 @@ void ViewShellManager::Implementation::UpdateShellStack()
     mbShellStackIsUpToDate = true;
 
 #if OSL_DEBUG_LEVEL >= 2
-    SAL_INFO("sd.view", OSL_THIS_FUNC << ": New current stack");
+    SAL_INFO("sd.view", __func__ << ": New current stack");
     DumpSfxShellStack();
 #endif
 }
@@ -799,7 +799,7 @@ void ViewShellManager::Implementation::TakeShellsFromStack (const SfxShell* pShe
         : nullptr;
 
 #if OSL_DEBUG_LEVEL >= 2
-    SAL_INFO("sd.view", OSL_THIS_FUNC << "TakeShellsFromStack( " << pShell << ")");
+    SAL_INFO("sd.view", __func__ << "TakeShellsFromStack( " << pShell << ")");
     DumpSfxShellStack();
 #endif
 
@@ -836,7 +836,7 @@ void ViewShellManager::Implementation::TakeShellsFromStack (const SfxShell* pShe
     while (true)
     {
         SfxShell* pShellOnStack = mrBase.GetSubShell(0);
-        SAL_INFO("sd.view", OSL_THIS_FUNC << "removing shell " << pShellOnStack << " from stack");
+        SAL_INFO("sd.view", __func__ << "removing shell " << pShellOnStack << " from stack");
         mrBase.RemoveSubShell(pShellOnStack);
         if (pShellOnStack == pShell)
             break;
@@ -853,7 +853,7 @@ void ViewShellManager::Implementation::TakeShellsFromStack (const SfxShell* pShe
         mpTopShell->SetUndoManager(pUndoManager);
 
 #if OSL_DEBUG_LEVEL >= 2
-    SAL_INFO("sd.view", OSL_THIS_FUNC << "Sfx shell stack is:");
+    SAL_INFO("sd.view", __func__ << "Sfx shell stack is:");
     DumpSfxShellStack();
 #endif
 }
@@ -1081,11 +1081,11 @@ void ViewShellManager::Implementation::DumpShellStack (const ShellStack& rStack)
     ShellStack::const_reverse_iterator iEntry;
     for (iEntry=rStack.rbegin(); iEntry!=rStack.rend(); ++iEntry)
         if (*iEntry != NULL)
-            SAL_INFO("sd.view", OSL_THIS_FUNC << ":    " <<
+            SAL_INFO("sd.view", __func__ << ":    " <<
                 *iEntry << " : " <<
                 (*iEntry)->GetName());
         else
-            SAL_INFO("sd.view", OSL_THIS_FUNC << "     null");
+            SAL_INFO("sd.view", __func__ << "     null");
 }
 
 void ViewShellManager::Implementation::DumpSfxShellStack()
