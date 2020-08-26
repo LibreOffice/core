@@ -42,21 +42,6 @@ namespace o3tl
     template<> struct typed_flags<DrawSymbolFlags> : is_typed_flags<DrawSymbolFlags, 0x03> {};
 }
 
-// Flags for DrawFrame()
-enum class DrawFrameFlags
-{
-    NONE                     = 0x0000,
-    Menu                     = 0x0010,
-    WindowBorder             = 0x0020,
-    BorderWindowBorder       = 0x0040,
-    Mono                     = 0x1000,
-    NoDraw                   = 0x8000,
-};
-namespace o3tl
-{
-    template<> struct typed_flags<DrawFrameFlags> : is_typed_flags<DrawFrameFlags, 0x9070> {};
-}
-
 // Flags for DrawHighlightFrame()
 enum class DrawHighlightFrameStyle
 {
