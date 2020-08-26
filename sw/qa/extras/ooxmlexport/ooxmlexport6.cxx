@@ -148,6 +148,29 @@ DECLARE_OOXMLEXPORT_TEST(testDMLSolidfillAlpha, "dml-solidfill-alpha.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(20), getProperty<sal_Int16>(xShape, "FillTransparence"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testDMLTextFrameNoFill, "frame.fodt")
+{
+    // Problem is that default text frame background is white in Writer and transparent in Word
+    uno::Reference<beans::XPropertySet> xShape1(getShape(1), uno::UNO_QUERY);
+// it is re-imported as solid
+//    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xShape1, "FillStyle"));
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xShape1, "FillStyle"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xShape1, "FillTransparence"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), getProperty<sal_Int32>(xShape1, "FillColor"));
+
+    uno::Reference<beans::XPropertySet> xShape2(getShape(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xShape2, "FillStyle"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xShape2, "FillTransparence"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xE8F2A1), getProperty<sal_Int32>(xShape2, "FillColor"));
+
+    uno::Reference<beans::XPropertySet> xShape3(getShape(3), uno::UNO_QUERY);
+// it is re-imported as solid
+//    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xShape3, "FillStyle"));
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xShape3, "FillStyle"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), getProperty<sal_Int32>(xShape3, "FillColor"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(xShape3, "FillTransparence"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testDMLCustomGeometry, "dml-customgeometry-cubicbezier.docx")
 {
 

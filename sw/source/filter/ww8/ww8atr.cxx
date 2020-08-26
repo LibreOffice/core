@@ -332,6 +332,8 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFormat, b
         ExportPoolItemsToCHP(aItems, nScript, nullptr);
     if ( bPapFormat )
     {
+        AttrOutput().MaybeOutputBrushItem(rSet);
+
         for ( const auto& rItem : aItems )
         {
             pItem = rItem.second;
@@ -350,6 +352,13 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFormat, b
             std::unique_ptr<SvxBrushItem> aBrush(getSvxBrushItemFromSourceSet(rSet, RES_BACKGROUND));
             AttrOutput().OutputItem(*aBrush);
         }
+#if 0
+        else
+        {
+            // note: *does not work* due to undocumented Word behavior: must be before a:ln element at least
+            AttrOutput().MaybeOutputBrushItem(rSet);
+        }
+#endif
     }
     m_pISet = nullptr;                      // for double attributes
 }

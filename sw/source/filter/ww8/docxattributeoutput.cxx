@@ -89,8 +89,10 @@
 #include <editeng/editobj.hxx>
 #include <editeng/keepitem.hxx>
 #include <svx/xfillit0.hxx>
+#include <svx/xflclit.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/svdouno.hxx>
+#include <svx/unobrushitemhelper.hxx>
 #include <svl/grabbagitem.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <tools/datetimeutils.hxx>
@@ -6003,6 +6005,27 @@ oox::drawingml::DrawingML& DocxAttributeOutput::GetDrawingML()
     return m_rDrawingML;
 }
 
+void DocxAttributeOutput::MaybeOutputBrushItem(SfxItemSet const& rSet)
+{
+    const XFillStyleItem* pXFillStyleItem(rSet.GetItem<XFillStyleItem>(XATTR_FILLSTYLE));
+
+    if ((pXFillStyleItem && pXFillStyleItem->GetValue() != drawing::FillStyle_NONE)
+        || !m_rExport.SdrExporter().getDMLTextFrameSyntax())
+    {
+        return;
+    }
+
+    // sw text frames are opaque by default, even with fill none!
+    std::unique_ptr<SfxItemSet> const pClone(rSet.Clone());
+    XFillColorItem const aColor(OUString(), COL_WHITE);
+    pClone->Put(aColor);
+    // call getSvxBrushItemForSolid - this also takes XFillTransparenceItem into account
+    XFillStyleItem const aSolid(drawing::FillStyle_SOLID);
+    pClone->Put(aSolid);
+    std::unique_ptr<SvxBrushItem> const pBrush(getSvxBrushItemFromSourceSet(*pClone, RES_BACKGROUND));
+    FormatBackground(*pBrush);
+}
+
 namespace {
 
 /// Functor to do case-insensitive ordering of OUString instances.
@@ -8843,6 +8866,7 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
 {
     if (m_rExport.SdrExporter().getDMLTextFrameSyntax())
     {
+        // ugh, exporting fill here is quite some hack... this OutputItemSet abstraction is quite leaky
         // <a:gradFill> should be before <a:ln>.
         const SfxPoolItem* pItem = GetExport().HasItem(XATTR_FILLSTYLE);
         if (pItem)
