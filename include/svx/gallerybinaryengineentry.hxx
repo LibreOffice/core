@@ -24,10 +24,11 @@
 #include <svx/galtheme.hxx>
 #include <svx/gallerybinaryengine.hxx>
 #include <svx/gallerystoragelocations.hxx>
+#include <svx/galleryfilestorageentry.hxx>
 
 class GalleryStorageLocations;
 
-class GalleryBinaryEngineEntry
+class GalleryBinaryEngineEntry : public GalleryFileStorageEntry
 {
 private:
     GalleryStorageLocations& m_rGalleryStorageLocations;
