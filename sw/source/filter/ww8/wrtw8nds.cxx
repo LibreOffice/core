@@ -2721,10 +2721,20 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 assert(pNextPageDesc);
                 PrepareNewPageDesc( rNode.GetpSwAttrSet(), rNode, nullptr , pNextPageDesc);
         }
-        else if (!bNeedParaSplit)
+        else
         {
             // else check if section break needed after the paragraph
-            AttrOutput().SectionBreaks(rNode);
+            bool bCheckSectionBreak = true;
+            // only try to sectionBreak after a split para if the next node specifies a break
+            if ( bNeedParaSplit )
+            {
+                SwNodeIndex aNextIndex( rNode, 1 );
+                const SwTextNode* pNextNode = aNextIndex.GetNode().GetTextNode();
+                bCheckSectionBreak = pNextNode && !NoPageBreakSection( pNextNode->GetpSwAttrSet() );
+            }
+
+            if ( bCheckSectionBreak )
+                AttrOutput().SectionBreaks(rNode);
         }
 
         AttrOutput().StartParagraphProperties();
