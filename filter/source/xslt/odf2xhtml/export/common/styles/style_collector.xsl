@@ -514,9 +514,17 @@
                 <xsl:copy-of select="." />
             </xsl:for-each>
 
+            <!-- split border into border parts for better activation-check on style:joint-border feature -->
+            <xsl:if test="*/@fo:border">
+                <xsl:attribute name="fo:border-top" select="*/@fo:border" />
+                <xsl:attribute name="fo:border-left" select="*/@fo:border" />
+                <xsl:attribute name="fo:border-bottom" select="*/@fo:border" />
+                <xsl:attribute name="fo:border-right" select="*/@fo:border" />
+            </xsl:if>
+
            <!--All current attributes will override already inserted attributes of the same name
                XSLT Spec: "Adding an attribute to an element replaces any existing attribute of that element with the same expanded-name." -->
-            <xsl:for-each select="*/@*[name() != 'style:font-size-rel']">
+            <xsl:for-each select="*/@*[name() != 'style:font-size-rel'][name() != 'fo:border']">
                 <xsl:copy-of select="." />
             </xsl:for-each>
 
@@ -702,40 +710,28 @@
     <xsl:template name="writeUsedStyles2">
         <xsl:param name="globalData" />
         <xsl:param name="style"/>
+        <!-- activation-check on style:joint-border feature -->
         <xsl:choose>
             <xsl:when test="
                 $style/@style:family='paragraph'
                 and
-            (
-                (
                     (
                         $style/*/@fo:border-top
-                        or $style/*/@fo:border-bottom
-                        or ($style/*/@fo:border
-                        and
-                        not($style/*/@fo:border='none')
-                        )
+                        or
+                        $style/*/@fo:border-bottom
                     )
-                    and
+                and
                     (
-                        not($style/*/@style:join-border)
-                        or  $style/*/@style:join-border = 'true'
+                        not($style/*/@fo:border-top='none' and
+                            $style/*/@fo:border-left='none' and
+                            $style/*/@fo:border-right='none' and
+                            $style/*/@fo:border-bottom='none')
                     )
-                )
-                or
-                (
-                    (
-                        $style/*/@fo:margin-top
-                        or $style/*/@fo:margin-bottom
-                        or $style/*/@fo:margin
-                    )
-                    and
-                    (     $style/*/@fo:background-color
-                    and
-                        not($style/*/@fo:background-color='transparent')
-                    )
-                )
-            )">
+                and
+                   (
+                         not($style/*/@style:join-border)
+                    or  $style/*/@style:join-border = 'true'
+                   )">
                 <xsl:element name="style" namespace="">
                     <xsl:copy-of select="$style/@style:family" />
                     <xsl:attribute name="style:name"><xsl:value-of select="concat($style/@style:name, '_borderStart')" /></xsl:attribute>
@@ -751,8 +747,7 @@
                 </xsl:element>
                 <xsl:element name="style" namespace="">
                     <xsl:copy-of select="$style/@style:family" />
-                    <xsl:copy-of select="$style/@style:name" />
-                    <xsl:attribute name="mergedBorders"><xsl:value-of select="true()" /></xsl:attribute>
+                    <xsl:attribute name="style:name"><xsl:value-of select="concat($style/@style:name, '_borderSides')" /></xsl:attribute>
                     <xsl:element name="final-properties" namespace="">
                         <xsl:apply-templates select="$style/*/@*[not(name() = 'fo:border-top') and not(name() = 'fo:border-bottom')][not(name() = 'fo:padding-top') and not(name() = 'fo:padding-bottom')][not(name() = 'fo:margin-top') and not(name() = 'fo:margin-bottom')][not(name() = 'fo:margin')]">
                             <xsl:with-param name="globalData" select="$globalData" />
@@ -774,6 +769,17 @@
                             <xsl:with-param name="globalData" select="$globalData" />
                         </xsl:apply-templates>
                         <xsl:text> border-top-style:none;</xsl:text>
+                    </xsl:element>
+                </xsl:element>
+                <xsl:element name="style" namespace="">
+                    <xsl:copy-of select="$style/@style:family" />
+                    <xsl:copy-of select="$style/@style:name" />
+                    <!-- the original name bears the trigger: 'mergedBorder' flag-->
+                    <xsl:attribute name="mergedBorders"><xsl:value-of select="true()" /></xsl:attribute>
+                    <xsl:element name="final-properties" namespace="">
+                        <xsl:apply-templates select="$style/*/@*">
+                            <xsl:with-param name="globalData" select="$globalData" />
+                        </xsl:apply-templates>
                     </xsl:element>
                 </xsl:element>
             </xsl:when>
