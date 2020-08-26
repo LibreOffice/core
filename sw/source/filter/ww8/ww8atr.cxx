@@ -3223,7 +3223,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
     case SwFieldIds::Table:
         {
             ww::eField eField = ww::eEquals;
-            OUString aExpand = FieldString(eField) + pField->GetFieldName();
+            OUString aExpand = " =" + pField->GetFieldName().trim();
             GetExport().OutputField(pField, eField, aExpand);
         }
         break;

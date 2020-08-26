@@ -101,8 +101,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123401, "tdf123401.fodt")
     xmlDocUniquePtr pXmlDoc = parseExport();
 
     // MEAN converted to AVERAGE
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:r[2]/w:instrText", " = AVERAGE(A1:A2)");
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r[2]/w:instrText", " = AVERAGE(A1:A3)");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:r[2]/w:instrText", " =AVERAGE(A1:A2)");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r[2]/w:instrText", " =AVERAGE(A1:A3)");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf123356, "tdf123356.fodt")
