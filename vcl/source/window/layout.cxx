@@ -1791,11 +1791,18 @@ VclScrolledWindow::VclScrolledWindow(vcl::Window *pParent)
     : VclBin(pParent, WB_HIDE | WB_CLIPCHILDREN | WB_AUTOHSCROLL | WB_AUTOVSCROLL | WB_TABSTOP)
     , m_bUserManagedScrolling(false)
     , m_eDrawFrameStyle(DrawFrameStyle::NONE)
+    , m_eDrawFrameFlags(DrawFrameFlags::NONE)
     , m_pVScroll(VclPtr<ScrollBar>::Create(this, WB_HIDE | WB_VERT))
     , m_pHScroll(VclPtr<ScrollBar>::Create(this, WB_HIDE | WB_HORZ))
     , m_aScrollBarBox(VclPtr<ScrollBarBox>::Create(this, WB_HIDE))
 {
     SetType(WindowType::SCROLLWINDOW);
+
+    AllSettings aAllSettings = GetSettings();
+    StyleSettings aStyle = aAllSettings.GetStyleSettings();
+    aStyle.SetMonoColor(aStyle.GetActiveBorderColor());
+    aAllSettings.SetStyleSettings(aStyle);
+    SetSettings(aAllSettings);
 
     Link<ScrollBar*,void> aLink( LINK( this, VclScrolledWindow, ScrollBarHdl ) );
     m_pVScroll->SetScrollHdl(aLink);
@@ -2013,6 +2020,10 @@ bool VclScrolledWindow::set_property(const OString &rKey, const OUString &rValue
             m_eDrawFrameStyle = DrawFrameStyle::NONE;
         return true;
     }
+    else if (rKey == "name")
+    {
+        m_eDrawFrameFlags = rValue == "monoborder" ? DrawFrameFlags::Mono : DrawFrameFlags::NONE;
+    }
 
     bool bRet = VclBin::set_property(rKey, rValue);
     m_pVScroll->Show((GetStyle() & WB_VSCROLL) != 0);
@@ -2043,7 +2054,7 @@ void VclScrolledWindow::Paint(vcl::RenderContext& rRenderContext, const tools::R
 {
     VclBin::Paint(rRenderContext, rRect);
     DecorationView aDecoView(&rRenderContext);
-    aDecoView.DrawFrame(tools::Rectangle(Point(0,0), GetSizePixel()), m_eDrawFrameStyle);
+    aDecoView.DrawFrame(tools::Rectangle(Point(0,0), GetSizePixel()), m_eDrawFrameStyle, m_eDrawFrameFlags);
 }
 
 void VclViewport::setAllocation(const Size &rAllocation)
