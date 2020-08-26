@@ -306,7 +306,7 @@ private:
     MapUnit             m_ePoolUnit;
 
     SvxRectCtl m_aCtlPosition;
-    SvxXShadowPreview  m_aCtlXRectPreview;
+    SvxXShdwPreview  m_aCtlXRectPreview;
     std::unique_ptr<weld::CheckButton> m_xTsbShowShadow;
     std::unique_ptr<weld::Widget> m_xGridShadow;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrDistance;

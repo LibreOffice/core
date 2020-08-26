@@ -399,6 +399,34 @@ public:
 
     virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
 };
+/*************************************************************************
+|*
+|* New SvxShdwPreview that support draw shadow blur
+|*
+\************************************************************************/
+
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxXShdwPreview final : public SvxPreviewBase
+{
+private:
+
+sal_uInt32 maShadowOffsetX;
+sal_uInt32 maShadowOffsetY;
+Color rShadowColor;
+sal_uInt32 fShadowBlur;
+sal_uInt32 fShadowTransparence;
+
+public:
+    SvxXShdwPreview();
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
+    virtual ~SvxXShdwPreview() override;
+
+    void SetShadowColor(const Color& rColor);
+    void SetShadowBlur(const sal_uInt32& fBlur);
+    void SetShadowTransparence(const sal_uInt32& fTransparence);
+    void SetShadowPosition(const sal_uInt32 rOffsetX, const sal_uInt32 rOffsetY);
+
+    virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+};
 
 class SvxRelativeField;
 

@@ -43,6 +43,21 @@
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <vcl/BitmapTools.hxx>
 
+#include <test/bootstrapfixture.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <rtl/ustring.hxx>
+#include <svx/sdr/contact/viewcontact.hxx>
+#include <svx/sdr/contact/viewobjectcontact.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/unopage.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+
 #define OUTPUT_DRAWMODE_COLOR       (DrawModeFlags::Default)
 #define OUTPUT_DRAWMODE_CONTRAST    (DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill | DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient)
 
@@ -1268,6 +1283,85 @@ void SvxXShadowPreview::Paint(vcl::RenderContext& rRenderContext, const tools::R
     LocalPostPaint(rRenderContext);
 
     rRenderContext.Pop();
+}
+
+SvxXShdwPreview::SvxXShdwPreview(){}
+SvxXShdwPreview::~SvxXShdwPreview() {}
+
+void SvxXShdwPreview::SetDrawingArea(weld::DrawingArea* pDrawingArea) {
+    SvxPreviewBase::SetDrawingArea(pDrawingArea);
+    InitSettings();
+}
+
+void SvxXShdwPreview::SetShadowColor(const Color& rColor)
+{
+    rShadowColor = rColor;
+}
+
+void SvxXShdwPreview::SetShadowBlur(const sal_uInt32& fBlur)
+{
+    fShadowBlur = fBlur;
+}
+
+void SvxXShdwPreview::SetShadowTransparence(const sal_uInt32& fTransparence)
+{
+    fShadowTransparence = fTransparence;
+}
+
+void SvxXShdwPreview::SetShadowPosition(const sal_uInt32 rOffsetX, const sal_uInt32 rOffsetY)
+{
+    maShadowOffsetX = rOffsetX;
+    maShadowOffsetY = rOffsetY;
+}
+
+void SvxXShdwPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+{
+    rRenderContext.Push(PushFlags::MAPMODE);
+    rRenderContext.SetMapMode(MapMode(MapUnit::Map100thMM));
+
+    LocalPrePaint(rRenderContext);
+
+    // prepare size
+    Size aSize = rRenderContext.GetOutputSize();
+    aSize.setWidth( aSize.Width() / 3 );
+    aSize.setHeight( aSize.Height() / 3 );
+
+
+    uno::Reference<frame::XDesktop2> xDesktop = css::frame::Desktop::create(comphelper::getProcessComponentContext());
+    uno::Reference<lang::XComponent> maComponent = xDesktop->loadComponentFromURL("private:factory/sdraw", "default", 1, {});
+
+    uno::Reference<lang::XMultiServiceFactory> xFactory(maComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(
+            xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+    xShape->setSize(awt::Size(aSize.Width(),  aSize.Height()));
+    xShape->setPosition(awt::Point(3500, 2000));
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(maComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    xDrawPage->add(xShape);
+
+    uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
+    xShapeProperties->setPropertyValue("Shadow",uno::makeAny(true));
+    xShapeProperties->setPropertyValue("ShadowXDistance", uno::makeAny(maShadowOffsetX));
+    xShapeProperties->setPropertyValue("ShadowYDistance", uno::makeAny(maShadowOffsetY));
+    xShapeProperties->setPropertyValue("ShadowColor", uno::makeAny(rShadowColor));
+    xShapeProperties->setPropertyValue("ShadowBlur", uno::makeAny(fShadowBlur));
+    xShapeProperties->setPropertyValue("ShadowTransparence", uno::makeAny(fShadowTransparence));
+
+
+    auto pDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
+    SdrPage* pSdrPage = pDrawPage->GetSdrPage();
+    sdr::contact::ObjectContactOfObjListPainter aObjectContact(getBufferDevice(),
+                                                               { pSdrPage->GetObj(0) }, nullptr);
+    sdr::contact::DisplayInfo aDisplayInfo;
+
+    aObjectContact.ProcessDisplay(aDisplayInfo);
+    maComponent->dispose();
+    LocalPostPaint(rRenderContext);
+
+    rRenderContext.Pop();
+
 }
 
 void SvxPreviewBase::InitSettings()
