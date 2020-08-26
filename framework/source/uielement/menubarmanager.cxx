@@ -28,7 +28,6 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XCurrentContext.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
@@ -51,10 +50,8 @@
 #include <uno/current_context.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
-#include <vcl/window.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandinfoprovider.hxx>
@@ -615,9 +612,6 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu, bool )
 
         m_bActive = true;
 
-        if ( m_aMenuItemCommand == aSpecialWindowCommand )
-            UpdateSpecialWindowMenu( pMenu, m_xContext );
-
         // Check if some modes have changed so we have to update our menu images
         OUString sIconTheme = SvtMiscOptions().GetIconTheme();
 
@@ -687,64 +681,57 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu, bool )
                     if ( !menuItemHandler->xMenuItemDispatch.is() &&
                          !menuItemHandler->xSubMenuManager.is()      )
                     {
-                        // There is no dispatch mechanism for the special window list menu items,
-                        // because they are handled directly through XFrame->activate!!!
-                        // Don't update dispatches for special file menu items.
-                        if ( menuItemHandler->nItemId < START_ITEMID_WINDOWLIST ||
-                             menuItemHandler->nItemId >= END_ITEMID_WINDOWLIST )
+                        Reference< XDispatch > xMenuItemDispatch;
+
+                        aTargetURL.Complete = menuItemHandler->aMenuItemURL;
+
+                        m_xURLTransformer->parseStrict( aTargetURL );
+
+                        if ( bHasDisabledEntries )
                         {
-                            Reference< XDispatch > xMenuItemDispatch;
-
-                            aTargetURL.Complete = menuItemHandler->aMenuItemURL;
-
-                            m_xURLTransformer->parseStrict( aTargetURL );
-
-                            if ( bHasDisabledEntries )
-                            {
-                                if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, aTargetURL.Path ))
-                                    pMenu->HideItem( menuItemHandler->nItemId );
-                            }
-
-                            if ( aTargetURL.Complete.startsWith( ".uno:StyleApply?" ) )
-                                xMenuItemDispatch = new StyleDispatcher( m_xFrame, m_xURLTransformer, aTargetURL );
-                            else if ( m_bIsBookmarkMenu )
-                                xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, menuItemHandler->aTargetFrame, 0 );
-                            else
-                                xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
-
-                            bool bPopupMenu( false );
-                            if ( !menuItemHandler->xPopupMenuController.is() &&
-                                 m_xPopupMenuControllerFactory->hasController( menuItemHandler->aMenuItemURL, m_aModuleIdentifier ) )
-                            {
-                                if( xMenuItemDispatch.is() || menuItemHandler->aMenuItemURL != ".uno:RecentFileList" )
-                                    bPopupMenu = CreatePopupMenuController(menuItemHandler.get());
-                            }
-                            else if ( menuItemHandler->xPopupMenuController.is() )
-                            {
-                                // Force update of popup menu
-                                menuItemHandler->xPopupMenuController->updatePopupMenu();
-                                bPopupMenu = true;
-                                if (PopupMenu*  pThisPopup = pMenu->GetPopupMenu( menuItemHandler->nItemId ))
-                                    pMenu->EnableItem( menuItemHandler->nItemId, pThisPopup->GetItemCount() != 0 );
-                            }
-                            lcl_CheckForChildren(pMenu, menuItemHandler->nItemId);
-
-                            if ( xMenuItemDispatch.is() )
-                            {
-                                menuItemHandler->xMenuItemDispatch = xMenuItemDispatch;
-                                menuItemHandler->aParsedItemURL    = aTargetURL.Complete;
-
-                                if ( !bPopupMenu )
-                                {
-                                    xMenuItemDispatch->addStatusListener( static_cast< XStatusListener* >( this ), aTargetURL );
-                                    // For the menubar, we have to keep status listening to support Ubuntu's HUD.
-                                    if ( !m_bHasMenuBar )
-                                        xMenuItemDispatch->removeStatusListener( static_cast< XStatusListener* >( this ), aTargetURL );
-                                }
-                            }
-                            else if ( !bPopupMenu )
-                                pMenu->EnableItem( menuItemHandler->nItemId, false );
+                            if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, aTargetURL.Path ))
+                                pMenu->HideItem( menuItemHandler->nItemId );
                         }
+
+                        if ( aTargetURL.Complete.startsWith( ".uno:StyleApply?" ) )
+                            xMenuItemDispatch = new StyleDispatcher( m_xFrame, m_xURLTransformer, aTargetURL );
+                        else if ( m_bIsBookmarkMenu )
+                            xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, menuItemHandler->aTargetFrame, 0 );
+                        else
+                            xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
+
+                        bool bPopupMenu( false );
+                        if ( !menuItemHandler->xPopupMenuController.is() &&
+                             m_xPopupMenuControllerFactory->hasController( menuItemHandler->aMenuItemURL, m_aModuleIdentifier ) )
+                        {
+                            if( xMenuItemDispatch.is() || menuItemHandler->aMenuItemURL != ".uno:RecentFileList" )
+                                bPopupMenu = CreatePopupMenuController(menuItemHandler.get());
+                        }
+                        else if ( menuItemHandler->xPopupMenuController.is() )
+                        {
+                            // Force update of popup menu
+                            menuItemHandler->xPopupMenuController->updatePopupMenu();
+                            bPopupMenu = true;
+                            if (PopupMenu*  pThisPopup = pMenu->GetPopupMenu( menuItemHandler->nItemId ))
+                                pMenu->EnableItem( menuItemHandler->nItemId, pThisPopup->GetItemCount() != 0 );
+                        }
+                        lcl_CheckForChildren(pMenu, menuItemHandler->nItemId);
+
+                        if ( xMenuItemDispatch.is() )
+                        {
+                            menuItemHandler->xMenuItemDispatch = xMenuItemDispatch;
+                            menuItemHandler->aParsedItemURL    = aTargetURL.Complete;
+
+                            if ( !bPopupMenu )
+                            {
+                                xMenuItemDispatch->addStatusListener( static_cast< XStatusListener* >( this ), aTargetURL );
+                                // For the menubar, we have to keep status listening to support Ubuntu's HUD.
+                                if ( !m_bHasMenuBar )
+                                    xMenuItemDispatch->removeStatusListener( static_cast< XStatusListener* >( this ), aTargetURL );
+                            }
+                        }
+                        else if ( !bPopupMenu )
+                            pMenu->EnableItem( menuItemHandler->nItemId, false );
                     }
                     else if ( menuItemHandler->xPopupMenuController.is() )
                     {
@@ -826,49 +813,21 @@ IMPL_LINK( MenuBarManager, Select, Menu *, pMenu, bool )
         if ( pMenu == m_pVCLMenu &&
              pMenu->GetItemType( nCurPos ) != MenuItemType::SEPARATOR )
         {
-            if ( nCurItemId >= START_ITEMID_WINDOWLIST &&
-                 nCurItemId <= END_ITEMID_WINDOWLIST )
+            MenuItemHandler* pMenuItemHandler = GetMenuItemHandler( nCurItemId );
+            if ( pMenuItemHandler && pMenuItemHandler->xMenuItemDispatch.is() )
             {
-                // window list menu item selected
+                aTargetURL.Complete = pMenuItemHandler->aMenuItemURL;
+                m_xURLTransformer->parseStrict( aTargetURL );
 
-                Reference< XDesktop2 > xDesktop = css::frame::Desktop::create( m_xContext );
-
-                sal_uInt16 nTaskId = START_ITEMID_WINDOWLIST;
-                Reference< XIndexAccess > xList = xDesktop->getFrames();
-                sal_Int32 nCount = xList->getCount();
-                for ( sal_Int32 i=0; i<nCount; ++i )
+                if ( m_bIsBookmarkMenu )
                 {
-                    Reference< XFrame > xFrame;
-                    xList->getByIndex(i) >>= xFrame;
-                    if ( xFrame.is() && nTaskId == nCurItemId )
-                    {
-                        VclPtr<vcl::Window> pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
-                        pWin->GrabFocus();
-                        pWin->ToTop( ToTopFlags::RestoreWhenMin );
-                        break;
-                    }
-
-                    nTaskId++;
+                    // bookmark menu item selected
+                    aArgs.realloc( 1 );
+                    aArgs[0].Name = "Referer";
+                    aArgs[0].Value <<= OUString( "private:user" );
                 }
-            }
-            else
-            {
-                MenuItemHandler* pMenuItemHandler = GetMenuItemHandler( nCurItemId );
-                if ( pMenuItemHandler && pMenuItemHandler->xMenuItemDispatch.is() )
-                {
-                    aTargetURL.Complete = pMenuItemHandler->aMenuItemURL;
-                    m_xURLTransformer->parseStrict( aTargetURL );
 
-                    if ( m_bIsBookmarkMenu )
-                    {
-                        // bookmark menu item selected
-                        aArgs.realloc( 1 );
-                        aArgs[0].Name = "Referer";
-                        aArgs[0].Value <<= OUString( "private:user" );
-                    }
-
-                    xDispatch = pMenuItemHandler->xMenuItemDispatch;
-                }
+                xDispatch = pMenuItemHandler->xMenuItemDispatch;
             }
         }
     }
@@ -1058,23 +1017,19 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
             }
 
             if ( m_xPopupMenuControllerFactory.is() &&
-                 pPopup->GetItemCount() == 0 &&
                  m_xPopupMenuControllerFactory->hasController( aItemCommand, m_aModuleIdentifier )
                   )
             {
                 // Check if we have to create a popup menu for a uno based popup menu controller.
                 // We have to set an empty popup menu into our menu structure so the controller also
-                // works with inplace OLE. Remove old dummy popup menu!
+                // works with inplace OLE.
                 MenuItemHandler* pItemHandler = new MenuItemHandler( nItemId, xStatusListener, xDispatch );
-                VCLXPopupMenu* pVCLXPopupMenu = new VCLXPopupMenu;
-                PopupMenu* pNewPopupMenu = static_cast<PopupMenu *>(pVCLXPopupMenu->GetMenu());
-                pMenu->SetPopupMenu( nItemId, pNewPopupMenu );
+                VCLXPopupMenu* pVCLXPopupMenu = new VCLXPopupMenu(pPopup);
                 pItemHandler->xPopupMenu = pVCLXPopupMenu;
                 pItemHandler->aMenuItemURL = aItemCommand;
                 m_aMenuItemHandlerVector.push_back( std::unique_ptr<MenuItemHandler>(pItemHandler) );
-                pPopup.disposeAndClear();
 
-                if ( bAccessibilityEnabled )
+                if ( bAccessibilityEnabled || pMenu->IsMenuBar())
                 {
                     if ( CreatePopupMenuController( pItemHandler ))
                         pItemHandler->xPopupMenuController->updatePopupMenu();
@@ -1759,78 +1714,6 @@ void MenuBarManager::SetHdl()
 
     if ( !m_xURLTransformer.is() && m_xContext.is() )
         m_xURLTransformer.set( URLTransformer::create( m_xContext) );
-}
-
-void MenuBarManager::UpdateSpecialWindowMenu( Menu* pMenu,const Reference< XComponentContext >& xContext )
-{
-    // update window list
-    ::std::vector< OUString > aNewWindowListVector;
-
-    Reference< XDesktop2 > xDesktop = css::frame::Desktop::create( xContext );
-
-    sal_uInt16  nActiveItemId = 0;
-    sal_uInt16  nItemId = START_ITEMID_WINDOWLIST;
-
-    Reference< XFrame > xCurrentFrame = xDesktop->getCurrentFrame();
-    Reference< XIndexAccess > xList = xDesktop->getFrames();
-    sal_Int32 nFrameCount = xList->getCount();
-    aNewWindowListVector.reserve(nFrameCount);
-    for (sal_Int32 i=0; i<nFrameCount; ++i )
-    {
-        Reference< XFrame > xFrame;
-        xList->getByIndex(i) >>= xFrame;
-
-        if (xFrame.is())
-        {
-            if ( xFrame == xCurrentFrame )
-                nActiveItemId = nItemId;
-
-            VclPtr<vcl::Window> pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
-            OUString sWindowTitle;
-            if ( pWin && pWin->IsVisible() )
-                sWindowTitle = pWin->GetText();
-
-            // tdf#101658 In case the frame is embedded somewhere, LO has no control over it.
-            // So we just skip it.
-            if ( sWindowTitle.isEmpty() )
-                continue;
-
-            aNewWindowListVector.push_back( sWindowTitle );
-            ++nItemId;
-        }
-    }
-
-    {
-        SolarMutexGuard g;
-
-        int nItemCount = pMenu->GetItemCount();
-
-        if ( nItemCount > 0 )
-        {
-            // remove all old window list entries from menu
-            sal_uInt16 nPos = pMenu->GetItemPos( START_ITEMID_WINDOWLIST );
-            for ( sal_uInt16 n = nPos; n < pMenu->GetItemCount(); )
-                pMenu->RemoveItem( n );
-
-            if ( pMenu->GetItemType( pMenu->GetItemCount()-1 ) == MenuItemType::SEPARATOR )
-                pMenu->RemoveItem( pMenu->GetItemCount()-1 );
-        }
-
-        if ( !aNewWindowListVector.empty() )
-        {
-            // append new window list entries to menu
-            pMenu->InsertSeparator();
-            nItemId = START_ITEMID_WINDOWLIST;
-            const sal_uInt32 nCount = aNewWindowListVector.size();
-            for ( sal_uInt32 i = 0; i < nCount; i++ )
-            {
-                pMenu->InsertItem( nItemId, aNewWindowListVector.at( i ), MenuItemBits::RADIOCHECK );
-                if ( nItemId == nActiveItemId )
-                    pMenu->CheckItem( nItemId );
-                ++nItemId;
-            }
-        }
-    }
 }
 
 void MenuBarManager::FillMenuImages(Reference< XFrame > const & _xFrame, Menu* _pMenu,bool bShowMenuImages)

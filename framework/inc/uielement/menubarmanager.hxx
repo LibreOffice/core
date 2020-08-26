@@ -162,7 +162,6 @@ class MenuBarManager final :
         };
 
         void             RetrieveShortcuts( std::vector< std::unique_ptr<MenuItemHandler> >& aMenuShortCuts );
-        static void      UpdateSpecialWindowMenu( Menu* pMenu, const css::uno::Reference< css::uno::XComponentContext >& xContext );
         static void      FillMenuImages( css::uno::Reference< css::frame::XFrame > const & xFrame, Menu* _pMenu, bool bShowMenuImages );
         static void      impl_RetrieveShortcutsFromConfiguration( const css::uno::Reference< css::ui::XAcceleratorConfiguration >& rAccelCfg,
                                                                   const css::uno::Sequence< OUString >& rCommands,
