@@ -260,6 +260,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         case SID_DRAW_TEXT_VERTICAL:
         case SID_DRAW_TEXT_MARQUEE:
         case SID_DRAW_NOTEEDIT:
+            bCreateDirectly = comphelper::LibreOfficeKit::isActive();
             pTabView->SetDrawFuncPtr(new FuText(*this, pWin, pView, pDoc, aNewReq));
             break;
 
