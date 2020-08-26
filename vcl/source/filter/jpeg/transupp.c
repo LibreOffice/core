@@ -1286,7 +1286,7 @@ jtransform_adjust_parameters (j_decompress_ptr srcinfo,
   if (info->force_grayscale) {
     /* First, ensure we have YCbCr or grayscale data, and that the source's
      * Y channel is full resolution.  (No reasonable person would make Y
-     * be less than full resolution, so actually coping with that case
+     * be less than full resolution, so actually copying with that case
      * isn't worth extra code space.  But we check it to avoid crashing.)
      */
     if (((dstinfo->jpeg_color_space == JCS_YCbCr &&

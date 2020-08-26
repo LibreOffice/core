@@ -69,7 +69,7 @@
         to get the adequate column styles during later cell creation,
         or hiding the cell when @table:visibility is not set to 'visible'.
 
-        The position is archieved by adding up all table:number-columns-repeated of the preceding cells.
+        The position is archived by adding up all table:number-columns-repeated of the preceding cells.
             Step1: creating '$precedingCells/quantity/@table:number-columns-repeated').
             Step2: sum(xxx:nodeset($precedingCells)/quantity) + 1        -->
         <xsl:variable name="precedingCells">

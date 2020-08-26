@@ -153,7 +153,7 @@ public:
 };
 
 /* Through the PROTOCOL_ENTER macro a SwEnterLeave object gets created. If the
- * current function should be logged a SwImplEnterLeace object gets created.
+ * current function should be logged as SwImplEnterLeace object gets created.
  * The funny thing here is, that the Ctor of the Impl object is automatically
  * called at the beginning of the function and the Dtor is automatically called
  * when leaving the function. In the base implementation the Ctor calls only
