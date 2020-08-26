@@ -232,8 +232,7 @@ void SAL_CALL MenuBarManager::elementInserted( const css::ui::ConfigurationEvent
         return;
 
     sal_Int16 nImageType = sal_Int16();
-    if (( Event.aInfo >>= nImageType ) &&
-        ( nImageType == css::ui::ImageType::SIZE_LARGE ))
+    if (( Event.aInfo >>= nImageType ) && nImageType == 0 )
         RequestImages();
 }
 
