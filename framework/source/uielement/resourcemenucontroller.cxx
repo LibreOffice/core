@@ -5,6 +5,16 @@
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
 #include <uielement/menubarmanager.hxx>
@@ -12,11 +22,14 @@
 #include <cppuhelper/implbase.hxx>
 #include <svtools/popupmenucontrollerbase.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
 #include <sal/log.hxx>
 
 #include <com/sun/star/embed/VerbAttributes.hpp>
 #include <com/sun/star/embed/VerbDescriptor.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
@@ -61,10 +74,12 @@ private:
     sal_uInt16 m_nNewMenuId;
     rtl::Reference< framework::MenuBarManager > m_xMenuBarManager;
     css::uno::Reference< css::container::XIndexAccess > m_xMenuContainer;
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::ui::XUIConfigurationManager > m_xConfigManager, m_xModuleConfigManager;
     void addVerbs( const css::uno::Sequence< css::embed::VerbDescriptor >& rVerbs );
     virtual void SAL_CALL disposing() override;
+
+protected:
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
 };
 
 ResourceMenuController::ResourceMenuController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
@@ -386,6 +401,142 @@ OUString SaveAsMenuController::getImplementationName()
     return "com.sun.star.comp.framework.SaveAsMenuController";
 }
 
+class WindowListMenuController : public ResourceMenuController
+{
+public:
+    using ResourceMenuController::ResourceMenuController;
+
+    // XMenuListener
+    void SAL_CALL itemActivated( const css::awt::MenuEvent& rEvent ) override;
+    void SAL_CALL itemSelected( const css::awt::MenuEvent& rEvent ) override;
+
+    // XServiceInfo
+    OUString SAL_CALL getImplementationName() override;
+
+private:
+    void impl_setPopupMenu() override;
+};
+
+constexpr sal_uInt16 START_ITEMID_WINDOWLIST    = 4600;
+constexpr sal_uInt16 END_ITEMID_WINDOWLIST      = 4699;
+
+void WindowListMenuController::itemActivated( const css::awt::MenuEvent& rEvent )
+{
+    ResourceMenuController::itemActivated( rEvent );
+
+    // update window list
+    ::std::vector< OUString > aNewWindowListVector;
+
+    css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( m_xContext );
+
+    sal_uInt16  nActiveItemId = 0;
+    sal_uInt16  nItemId = START_ITEMID_WINDOWLIST;
+
+    css::uno::Reference< css::frame::XFrame > xCurrentFrame = xDesktop->getCurrentFrame();
+    css::uno::Reference< css::container::XIndexAccess > xList = xDesktop->getFrames();
+    sal_Int32 nFrameCount = xList->getCount();
+    aNewWindowListVector.reserve(nFrameCount);
+    for (sal_Int32 i=0; i<nFrameCount; ++i )
+    {
+        css::uno::Reference< css::frame::XFrame > xFrame;
+        xList->getByIndex(i) >>= xFrame;
+
+        if (xFrame.is())
+        {
+            if ( xFrame == xCurrentFrame )
+                nActiveItemId = nItemId;
+
+            VclPtr<vcl::Window> pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+            OUString sWindowTitle;
+            if ( pWin && pWin->IsVisible() )
+                sWindowTitle = pWin->GetText();
+
+            // tdf#101658 In case the frame is embedded somewhere, LO has no control over it.
+            // So we just skip it.
+            if ( sWindowTitle.isEmpty() )
+                continue;
+
+            aNewWindowListVector.push_back( sWindowTitle );
+            ++nItemId;
+        }
+    }
+
+    {
+        SolarMutexGuard g;
+
+        VCLXMenu* pAwtMenu = comphelper::getUnoTunnelImplementation<VCLXMenu>( m_xPopupMenu );
+        Menu* pVCLMenu = pAwtMenu->GetMenu();
+        int nItemCount = pVCLMenu->GetItemCount();
+
+        if ( nItemCount > 0 )
+        {
+            // remove all old window list entries from menu
+            sal_uInt16 nPos = pVCLMenu->GetItemPos( START_ITEMID_WINDOWLIST );
+            for ( sal_uInt16 n = nPos; n < pVCLMenu->GetItemCount(); )
+                pVCLMenu->RemoveItem( n );
+
+            if ( pVCLMenu->GetItemType( pVCLMenu->GetItemCount()-1 ) == MenuItemType::SEPARATOR )
+                pVCLMenu->RemoveItem( pVCLMenu->GetItemCount()-1 );
+        }
+
+        if ( !aNewWindowListVector.empty() )
+        {
+            // append new window list entries to menu
+            pVCLMenu->InsertSeparator();
+            nItemId = START_ITEMID_WINDOWLIST;
+            const sal_uInt32 nCount = aNewWindowListVector.size();
+            for ( sal_uInt32 i = 0; i < nCount; i++ )
+            {
+                pVCLMenu->InsertItem( nItemId, aNewWindowListVector.at( i ), MenuItemBits::RADIOCHECK );
+                if ( nItemId == nActiveItemId )
+                    pVCLMenu->CheckItem( nItemId );
+                ++nItemId;
+            }
+        }
+    }
+}
+
+void WindowListMenuController::itemSelected( const css::awt::MenuEvent& rEvent )
+{
+    if ( rEvent.MenuId >= START_ITEMID_WINDOWLIST &&
+         rEvent.MenuId <= END_ITEMID_WINDOWLIST )
+    {
+        // window list menu item selected
+        css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( m_xContext );
+
+        sal_uInt16 nTaskId = START_ITEMID_WINDOWLIST;
+        css::uno::Reference< css::container::XIndexAccess > xList = xDesktop->getFrames();
+        sal_Int32 nCount = xList->getCount();
+        for ( sal_Int32 i=0; i<nCount; ++i )
+        {
+            css::uno::Reference< css::frame::XFrame > xFrame;
+            xList->getByIndex(i) >>= xFrame;
+            if ( xFrame.is() && nTaskId == rEvent.MenuId )
+            {
+                VclPtr<vcl::Window> pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+                pWin->GrabFocus();
+                pWin->ToTop( ToTopFlags::RestoreWhenMin );
+                break;
+            }
+
+            nTaskId++;
+        }
+    }
+}
+
+void WindowListMenuController::impl_setPopupMenu()
+{
+    // Make this controller work also with initially empty
+    // menu, which PopupMenu::ImplExecute doesn't allow.
+    if (m_xPopupMenu.is() && !m_xPopupMenu->getItemCount())
+        m_xPopupMenu->insertSeparator(0);
+}
+
+OUString WindowListMenuController::getImplementationName()
+{
+    return "com.sun.star.comp.framework.WindowListMenuController";
+}
+
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -402,6 +553,14 @@ com_sun_star_comp_framework_ToolbarAsMenuController_get_implementation(
     css::uno::Sequence< css::uno::Any > const & args )
 {
     return cppu::acquire( new ResourceMenuController( context, args, true ) );
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
+com_sun_star_comp_framework_WindowListMenuController_get_implementation(
+    css::uno::XComponentContext* context,
+    css::uno::Sequence< css::uno::Any > const & args )
+{
+    return cppu::acquire( new WindowListMenuController( context, args, false ) );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
