@@ -41,6 +41,7 @@ enum box2DBodyType
 
 enum box2DNonsimulatedShapeUpdateType
 {
+    BOX2D_UPDATE_POSITION_CHANGE,
     BOX2D_UPDATE_POSITION,
     BOX2D_UPDATE_ANGLE,
     BOX2D_UPDATE_SIZE,
@@ -181,6 +182,9 @@ private:
     void queueShapeVisibilityUpdate(const css::uno::Reference<css::drawing::XShape>& xShape,
                                     const bool bVisibility);
 
+    void queueShapePositionUpdate(const css::uno::Reference<css::drawing::XShape>& xShape,
+                                  const ::basegfx::B2DPoint& rOutPos);
+
 public:
     box2DWorld(const ::basegfx::B2DVector& rSlideSize);
     ~box2DWorld();
@@ -250,11 +254,13 @@ public:
     void
     queueShapeAnimationUpdate(const css::uno::Reference<css::drawing::XShape>& xShape,
                               const slideshow::internal::ShapeAttributeLayerSharedPtr& pAttrLayer,
-                              const slideshow::internal::AttributeType eAttrType);
+                              const slideshow::internal::AttributeType eAttrType,
+                              const bool bIsFirstUpdate);
 
     void queueShapePathAnimationUpdate(
         const css::uno::Reference<com::sun::star::drawing::XShape>& xShape,
-        const slideshow::internal::ShapeAttributeLayerSharedPtr& pAttrLayer);
+        const slideshow::internal::ShapeAttributeLayerSharedPtr& pAttrLayer,
+        const bool bIsFirstUpdate);
 
     void queueShapeAnimationEndUpdate(const css::uno::Reference<css::drawing::XShape>& xShape,
                                       const slideshow::internal::AttributeType eAttrType);
