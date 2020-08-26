@@ -525,8 +525,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf132149_pgBreak, "tdf132149_pgBreak.odt")
     assertXPath(pDump, "//page[2]/header", 0);
 
     //Page break is not lost. This SHOULD be on page 4, but sadly it is not.
-    //assertXPathContent(pDump, "//page[5]/header", "First Page Style");
-    //CPPUNIT_ASSERT(getXPathContent(pDump, "//page[5]/body/txt").startsWith("Lorem ipsum"));
+    assertXPathContent(pDump, "//page[5]/header/txt", "First Page Style");
+    CPPUNIT_ASSERT(getXPathContent(pDump, "//page[5]/body/txt").startsWith("Lorem ipsum"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf135949_anchoredBeforeBreak, "tdf135949_anchoredBeforeBreak.docx")
