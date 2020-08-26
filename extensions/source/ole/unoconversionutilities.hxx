@@ -559,7 +559,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, Any& rAny,
             throw IllegalArgumentException(
                 "[automation bridge]UnoConversionUtilities<T>:variantToAny\n"
                 "The provided VARIANT of type\" " + OUString::number(static_cast<sal_Int32>(var.vt)) +
-                "\" is unappropriate for conversion!", Reference<XInterface>(), -1);
+                "\" is inappropriate for conversion!", Reference<XInterface>(), -1);
     }
     catch (const CannotConvertException &)
     {
@@ -967,7 +967,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& rAny)
             throw IllegalArgumentException(
                       "[automation bridge]UnoConversionUtilities<T>::anyToVariant\n"
                       "The provided any of type\" " + rAny.getValueType().getTypeName() +
-                "\" is unappropriate for conversion!", Reference<XInterface>(), -1);
+                "\" is inappropriate for conversion!", Reference<XInterface>(), -1);
 
         }
     }

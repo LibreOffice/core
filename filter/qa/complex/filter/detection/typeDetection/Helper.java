@@ -365,7 +365,7 @@ public class Helper  {
 
     /**
      *  Fills the Hashtable m_hFileURLs with all file names and their URL
-     *  and the Hashtable m_hFilesTypes with all file names and their file
+     *  and the Hashtable m_hFileTypes with all file names and their file
      *  type name. This information is extracted from "files.csv"
      *  This is for faster access to get fileURL and fileType of fileAlias
      */

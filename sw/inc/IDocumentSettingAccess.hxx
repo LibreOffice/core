@@ -228,19 +228,19 @@ enum class DocumentSettingId
     */
     virtual void setCharacterCompressionType( /*[in]*/CharCompressType nType ) = 0;
 
-    /** Get the n32DummyCompatabilityOptions1
+    /** Get the n32DummyCompatibilityOptions1
     */
     virtual sal_uInt32 Getn32DummyCompatibilityOptions1() const = 0;
 
-    /** Set the n32DummyCompatabilityOptions1
+    /** Set the n32DummyCompatibilityOptions1
     */
     virtual void Setn32DummyCompatibilityOptions1( const sal_uInt32 CompatibilityOptions1 ) = 0;
 
-    /** Get the n32DummyCompatabilityOptions2
+    /** Get the n32DummyCompatibilityOptions2
     */
     virtual sal_uInt32 Getn32DummyCompatibilityOptions2() const = 0;
 
-    /** Set the n32DummyCompatabilityOptions2
+    /** Set the n32DummyCompatibilityOptions2
     */
     virtual void Setn32DummyCompatibilityOptions2( const sal_uInt32 CompatibilityOptions2 ) = 0;
 

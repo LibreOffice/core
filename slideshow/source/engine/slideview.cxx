@@ -157,7 +157,7 @@ void clearRect( ::cppcanvas::CanvasSharedPtr const& pCanvas,
         pCanvas->setClip( aClipPoly );
     }
 
-    // set transformation to identitiy (->device pixel)
+    // set transformation to identity (->device pixel)
     pCanvas->setTransformation( ::basegfx::B2DHomMatrix() );
 
     // #i42440# Fill the _full_ background in
