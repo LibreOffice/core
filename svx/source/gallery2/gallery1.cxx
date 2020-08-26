@@ -122,12 +122,12 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
     {
         GalleryBinaryEngineEntry::CreateUniqueURL(rBaseURL,aURL);
     }
-    mpGalleryBinaryEngineEntry = createGalleryBinaryEngineEntry();
+    mpGalleryStorageEngineEntry = createGalleryStorageEngineEntry();
     maGalleryStorageLocations.SetStorageLocations(aURL);
 
     SetModified( _bNewFile );
 
-    aName = mpGalleryBinaryEngineEntry->ReadStrFromIni( "name" );
+    aName = mpGalleryStorageEngineEntry->ReadStrFromIni( "name" );
 
     // This is awful - we shouldn't use these resources if we
     // possibly can avoid them
@@ -161,7 +161,7 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
         aName = rName;
 }
 
-std::unique_ptr<GalleryBinaryEngineEntry> GalleryThemeEntry::createGalleryBinaryEngineEntry()
+std::unique_ptr<GalleryBinaryEngineEntry> GalleryThemeEntry::createGalleryStorageEngineEntry()
 {
     std::unique_ptr<GalleryBinaryEngineEntry> pGalleryBinaryEngineEntry = std::make_unique<GalleryBinaryEngineEntry>(maGalleryStorageLocations);
     return pGalleryBinaryEngineEntry;
