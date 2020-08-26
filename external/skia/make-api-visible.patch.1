@@ -1,3 +1,18 @@
+--- a/tools/sk_app/WindowContext.h
++++ b/tools/sk_app/WindowContext.h
+@@ -17,7 +17,11 @@
+ 
+ namespace sk_app {
+ 
+-class WindowContext {
++class
++#if defined __clang__ && !defined _MSC_VER
++__attribute__((type_visibility("default")))
++#endif
++WindowContext {
+ public:
+     WindowContext(const DisplayParams&);
+ 
 diff --git a/tools/sk_app/unix/WindowContextFactory_unix.h b/tools/sk_app/unix/WindowContextFactory_unix.h
 index 11bd2d2ac2..09c92dc417 100644
 --- a/tools/sk_app/unix/WindowContextFactory_unix.h
