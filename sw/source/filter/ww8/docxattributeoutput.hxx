@@ -1018,6 +1018,7 @@ public:
     virtual OUString FindRelId(BitmapChecksum nChecksum) override;
     virtual void CacheRelId(BitmapChecksum nChecksum, const OUString& rRelId) override;
     virtual oox::drawingml::DrawingML& GetDrawingML() override;
+    virtual void MaybeOutputBrushItem(SfxItemSet const&) override;
 
     void BulletDefinition(int nId, const Graphic& rGraphic, Size aSize) override;
 
