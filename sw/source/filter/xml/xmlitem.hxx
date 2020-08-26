@@ -38,26 +38,26 @@ class SwXMLItemSetContext final : public SvXMLImportContext
 
 public:
 
-    SwXMLItemSetContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                         const OUString& rLName,
-                         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
+    SwXMLItemSetContext( SvXMLImport& rImport, sal_Int32 nElement,
+                         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
                          SfxItemSet&  rItemSet,
                          SvXMLImportItemMapper& rIMap,
                          const SvXMLUnitConverter& rUnitConv );
 
     virtual ~SwXMLItemSetContext() override;
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                                     const OUString& rLocalName,
-                                     const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
 private:
     // This method is called from this instance implementation of
-    // CreateChildContext if the element matches an entry in the
+    // createFastChildContext if the element matches an entry in the
     // SvXMLImportItemMapper with the mid flag MID_SW_FLAG_ELEMENT_ITEM_IMPORT
-    SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                                   const OUString& rLocalName,
-                                   const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
+    SvXMLImportContextRef createFastChildContext( sal_Int32 nElement,
+                                   const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
                                    const SvXMLItemMapEntry& rEntry );
 };
 

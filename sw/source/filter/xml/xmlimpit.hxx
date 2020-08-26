@@ -39,7 +39,7 @@ public:
 
     /** fills the given itemset with the attributes in the given list */
     void importXML( SfxItemSet& rSet,
-                    css::uno::Reference< css::xml::sax::XAttributeList > const & xAttrList,
+                    css::uno::Reference< css::xml::sax::XFastAttributeList > const & xAttrList,
                     const SvXMLUnitConverter& rUnitConverter,
                     const SvXMLNamespaceMap& rNamespaceMap );
 
