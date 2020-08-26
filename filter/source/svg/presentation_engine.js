@@ -9661,6 +9661,7 @@ function NodeContext( aSlideShowContext )
     this.aSourceEventElementMap = null;
     this.nStartDelay = 0.0;
     this.bFirstRun = undefined;
+    this.bIsInvalid = false;
     this.aSlideHeight = HEIGHT;
     this.aSlideWidth = WIDTH;
 }
@@ -9933,7 +9934,7 @@ BaseNode.prototype.init = function()
 
 BaseNode.prototype.resolve = function()
 {
-    if( ! this.checkValidNode() )
+    if( this.aNodeContext.bIsInvalid || ! this.checkValidNode() )
         return false;
 
     this.DBG( this.callInfo( 'resolve' ) );
@@ -15226,7 +15227,8 @@ SlideAnimations.prototype.start = function()
         this.aContext.bFirstRun = false;
 
     // init all nodes
-    if( !this.aRootNode.init() )
+    this.aContext.bIsInvalid = !this.aRootNode.init();
+    if( this.aContext.bIsInvalid )
         return false;
 
     // resolve root node
@@ -15254,6 +15256,7 @@ SlideAnimations.prototype.end = function( bLeftEffectsSkipped )
         this.aContext.bFirstRun = false;
     }
 
+    this.aContext.bIsInvalid = false;
 };
 
 SlideAnimations.prototype.dispose = function()
