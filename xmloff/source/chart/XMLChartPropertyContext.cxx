@@ -30,13 +30,12 @@ using namespace ::com::sun::star;
 
 XMLChartPropertyContext::XMLChartPropertyContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLName,
-    const uno::Reference< xml::sax::XAttributeList > & xAttrList,
+    sal_Int32 nElement,
+    const uno::Reference< xml::sax::XFastAttributeList > & xAttrList,
     sal_uInt32 nFamily,
     ::std::vector< XMLPropertyState >& rProps,
     const rtl::Reference< SvXMLImportPropertyMapper >& rMapper ) :
-        SvXMLPropertySetContext( rImport, nPrfx, rLName, xAttrList, nFamily, rProps, rMapper )
+        SvXMLPropertySetContext( rImport, nElement, xAttrList, nFamily, rProps, rMapper )
 {
 }
 

@@ -62,10 +62,8 @@ class SdXMLDrawingPagePropertySetContext : public SvXMLPropertySetContext
 {
 public:
 
-
-    SdXMLDrawingPagePropertySetContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                const OUString& rLName,
-                 const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
+    SdXMLDrawingPagePropertySetContext( SvXMLImport& rImport, sal_Int32 nElement,
+                 const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
                  ::std::vector< XMLPropertyState > &rProps,
                  const rtl::Reference < SvXMLImportPropertyMapper > &rMap );
 
@@ -80,12 +78,11 @@ public:
 }
 
 SdXMLDrawingPagePropertySetContext::SdXMLDrawingPagePropertySetContext(
-                 SvXMLImport& rImport, sal_uInt16 nPrfx,
-                 const OUString& rLName,
-                 const uno::Reference< xml::sax::XAttributeList > & xAttrList,
+                 SvXMLImport& rImport, sal_Int32 nElement,
+                 const uno::Reference< xml::sax::XFastAttributeList > & xAttrList,
                  ::std::vector< XMLPropertyState > &rProps,
                  const rtl::Reference < SvXMLImportPropertyMapper > &rMap ) :
-    SvXMLPropertySetContext( rImport, nPrfx, rLName, xAttrList,
+    SvXMLPropertySetContext( rImport, nElement, xAttrList,
                              XML_TYPE_PROP_DRAWING_PAGE, rProps, rMap )
 {
 }
@@ -141,10 +138,8 @@ public:
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
         SvXMLStylesContext& rStyles);
 
-    SvXMLImportContextRef CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     virtual void Finish( bool bOverwrite ) override;
 };
@@ -176,23 +171,6 @@ XmlStyleFamily const g_Families[MAX_SPECIAL_DRAW_STYLES] =
 
 XMLDrawingPageStyleContext::XMLDrawingPageStyleContext(
     SvXMLImport& rImport,
-    sal_uInt16 const nPrefix,
-    const OUString& rLName,
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList,
-    SvXMLStylesContext& rStyles,
-    ContextID_Index_Pair const pContextIDs[],
-    XmlStyleFamily const pFamilies[])
-    : XMLPropStyleContext(rImport, nPrefix, rLName, xAttrList, rStyles, XmlStyleFamily::SD_DRAWINGPAGE_ID)
-    , m_pFamilies(pFamilies)
-{
-    size_t size(1); // for the -1 entry
-    for (ContextID_Index_Pair const* pTemp(pContextIDs); pTemp->nContextID != -1; ++size, ++pTemp);
-    m_pContextIDs.reset(new ContextID_Index_Pair[size]);
-    std::memcpy(m_pContextIDs.get(), pContextIDs, size * sizeof(ContextID_Index_Pair));
-}
-
-XMLDrawingPageStyleContext::XMLDrawingPageStyleContext(
-    SvXMLImport& rImport,
     sal_Int32 nElement,
     const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
     SvXMLStylesContext& rStyles,
@@ -217,30 +195,22 @@ SdXMLDrawingPageStyleContext::SdXMLDrawingPageStyleContext(
 {
 }
 
-SvXMLImportContextRef SdXMLDrawingPageStyleContext::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLDrawingPageStyleContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    SvXMLImportContextRef xContext;
-
-    if( XML_NAMESPACE_STYLE == nPrefix &&
-        IsXMLToken( rLocalName, XML_DRAWING_PAGE_PROPERTIES ) )
+    if( nElement == XML_ELEMENT(STYLE, XML_DRAWING_PAGE_PROPERTIES) )
     {
         rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
             GetStyles()->GetImportPropertyMapper( GetFamily() );
         if( xImpPrMap.is() )
-            xContext = new SdXMLDrawingPagePropertySetContext( GetImport(), nPrefix,
-                                                    rLocalName, xAttrList,
+            return new SdXMLDrawingPagePropertySetContext( GetImport(), nElement,
+                                                    xAttrList,
                                                     GetProperties(),
                                                     xImpPrMap );
     }
 
-    if (!xContext)
-        xContext = XMLPropStyleContext::CreateChildContext( nPrefix, rLocalName,
-                                                          xAttrList );
-
-    return xContext;
+    return XMLPropStyleContext::createFastChildContext( nElement, xAttrList );
 }
 
 void SdXMLDrawingPageStyleContext::Finish( bool bOverwrite )

@@ -88,11 +88,6 @@ protected:
 public:
 
 
-    XMLPropStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-            const OUString& rLName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
-            SvXMLStylesContext& rStyles, XmlStyleFamily nFamily,
-            bool bDefaultStyle=false );
     XMLPropStyleContext( SvXMLImport& rImport, sal_Int32 nElement,
             const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
             SvXMLStylesContext& rStyles, XmlStyleFamily nFamily,
@@ -101,11 +96,6 @@ public:
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
-
-    virtual SvXMLImportContextRef CreateChildContext(
-            sal_uInt16 nPrefix,
-            const OUString& rLocalName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
     virtual void FillPropertySet(
             const css::uno::Reference< css::beans::XPropertySet > & rPropSet );

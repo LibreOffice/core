@@ -28,21 +28,14 @@ class XMLOFF_DLLPUBLIC XMLGraphicsDefaultStyle final : public XMLPropStyleContex
 {
 public:
 
-    XMLGraphicsDefaultStyle( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
-        SvXMLStylesContext& rStyles);
-
     XMLGraphicsDefaultStyle( SvXMLImport& rImport, sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
         SvXMLStylesContext& rStyles);
 
     virtual ~XMLGraphicsDefaultStyle() override;
 
-    virtual SvXMLImportContextRef CreateChildContext(
-            sal_uInt16 nPrefix,
-            const OUString& rLocalName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     // This method is called for every default style
     virtual void SetDefaults() override;
