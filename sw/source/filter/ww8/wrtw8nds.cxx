@@ -2236,7 +2236,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
             {
                 SwTableBoxFormula* pFormula = pBox->GetFrameFormat()->GetTableBoxFormula().Clone();
                 pFormula->PtrToBoxNm( &pTableNode->GetTable() );
-                OutputField( nullptr, ww::eEquals, " = " + pFormula->GetFormula(),
+                OutputField( nullptr, ww::eEquals, " =" + pFormula->GetFormula(),
                     FieldFlags::Start | FieldFlags::CmdStart | FieldFlags::CmdEnd | FieldFlags::Close );
             }
 

@@ -2167,7 +2167,7 @@ void DocxAttributeOutput::CmdField_Impl( const SwTextNode* pNode, sal_Int32 nPos
                             aStoredFormula = rGrabBag.find("CellFormula");
                             if ( aStoredFormula != rGrabBag.end() )
                             {
-                                sToken = " = " + aStoredFormula->second.get<OUString>();
+                                sToken = " =" + aStoredFormula->second.get<OUString>();
                                 bIsChanged = false;
                             }
                         }
