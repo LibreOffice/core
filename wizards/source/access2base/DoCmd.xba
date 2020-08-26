@@ -226,7 +226,7 @@ Const cstProgressMeterLimit = 100
 			Set oSourceDatabase = oDatabase
 			bSameDatabase = True
 		Else
-			Set oSourceDatabase = Application.OpenDatabase(ConvertToUrl(pvSourceDatabase), , , True)
+			Set oSourceDatabase = Application.OpenDatabase(ConvertToUrl(pvSourceDatabase), &quot;&quot;, &quot;&quot;, True)
 			If IsNull(oSourceDatabase) Then Goto Exit_Function
 		End If
 	Else
@@ -1861,7 +1861,7 @@ Public Function SendObject(ByVal Optional pvObjectType As Variant _
 	If IsMissing(pvEditMessage) Then pvEditMessage = True
 	If Not Utils._CheckArgument(pvEditMessage, 9, vbBoolean) Then Goto Exit_Function
 	If IsMissing(pvTemplateFile) Then pvTemplateFile = &quot;&quot;
-	If Not Utils._CheckArgument(pvTemplateFile,10, vbString, &quot;&quot;) Then Goto Exit_Function
+	If Not Utils._CheckArgument(pvTemplateFile, 10, vbString, &quot;&quot;) Then Goto Exit_Function
 
 Dim vTo() As Variant, vCc() As Variant, vBcc() As Variant, oWindow As Object
 Dim sDirectory As String, sOutputFile As String, sSuffix As String, sOutputFormat As String

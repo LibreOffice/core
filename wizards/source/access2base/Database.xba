@@ -588,25 +588,35 @@ Const cstNull = -1
 Dim lCommandType As Long, sCommand As String, oObject As Object
 Dim sSource As String, i As Integer, iCount As Integer
 Dim sObjects() As String, bFound As Boolean, oTables As Object, oQueries As Object
+Dim iType As Integer, iOptions As Integer, iLockEdit As Integer
 
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 	Set oObject = Nothing
 	If IsMissing(pvSource) Then Call _TraceArguments()
 	If pvSource = &quot;&quot; Then Call _TraceArguments()
-	If IsMissing(pvType) Then
-		pvType = cstNull
+	If VarType(pvType) = vbError Then
+		iType = cstNull
+	ElseIf IsMissing(pvType) Then
+		iType = cstNull
 	Else
 		If Not Utils._CheckArgument(pvType, 2, Utils._AddNumeric(), Array(cstNull, dbOpenForwardOnly)) Then Goto Exit_Function
+		iType = pvType
 	End If
-	If IsMissing(pvOptions) Then
-		pvOptions = cstNull
+	If VarType(pvOptions) = vbError Then
+		iOptions = cstNull
+	ElseIf IsMissing(pvOptions) Then
+		iOptions = cstNull
 	Else
 		If Not Utils._CheckArgument(pvOptions, 3, Utils._AddNumeric(), Array(cstNull, dbSQLPassThrough)) Then Goto Exit_Function
+		iOptions = pvOptions
 	End If
-	If IsMissing(pvLockEdit) Then
-		pvLockEdit = cstNull
+	If VarType(pvLockEdit) = vbError Then
+		iLockEdit = cstNull
+	ElseIf IsMissing(pvLockEdit) Then
+		iLockEdit = cstNull
 	Else
 		If Not Utils._CheckArgument(pvLockEdit, 4, Utils._AddNumeric(), Array(cstNull, dbReadOnly)) Then Goto Exit_Function
+		iLockEdit = pvLockEdit
 	End If
 
 	sSource = Split(UCase(Trim(pvSource)), &quot; &quot;)(0)
@@ -651,9 +661,9 @@ Dim sObjects() As String, bFound As Boolean, oTables As Object, oQueries As Obje
 		._Command = sCommand
 		._ParentName = Title
 		._ParentType = _Type
-		._ForwardOnly = ( pvType = dbOpenForwardOnly )
-		._PassThrough = ( pvOptions = dbSQLPassThrough )
-		._ReadOnly = ( (pvLockEdit = dbReadOnly) Or _ReadOnly )
+		._ForwardOnly = ( iType = dbOpenForwardOnly )
+		._PassThrough = ( iOptions = dbSQLPassThrough )
+		._ReadOnly = ( (iLockEdit = dbReadOnly) Or _ReadOnly )
 		Set ._This = oObject
 		Set ._ParentDatabase = _This
 		Call ._Initialize()

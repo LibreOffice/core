@@ -955,10 +955,18 @@ REM ----------------------------------------------------------------------------
 Public Sub _Initialize(ByVal Optional pvFilter As Variant, Optional poRowSet As Object)
 &apos;	Initialize new recordset
 
+Dim sFilter As String
+
 	If _Command = &quot;&quot; Then Exit Sub
 	
 	If _ErrorHandler() Then On Local Error Goto Error_Sub
-	If IsMissing(pvFilter) Then pvFilter = &quot;&quot;
+	If VarType(pvFilter) = vbError Then
+		sFilter = &quot;&quot;
+	ElseIf IsMissing(pvFilter) Then
+		sFilter = &quot;&quot;
+	Else
+		sFilter = pvFilter
+	End If
 	If Not IsMissing(poRowSet) Then		&apos;	Clone
 		Set RowSet = poRowSet.createResultSet()
 		_IsClone = True
@@ -983,11 +991,9 @@ Public Sub _Initialize(ByVal Optional pvFilter As Variant, Optional poRowSet As 
 			End If
 		End With
 
-		If Not IsMissing(pvFilter) Then			&apos;	Filter must be set before execute()
-			If pvFilter &lt;&gt; &quot;&quot; Then
-				RowSet.Filter = pvFilter
-				RowSet.ApplyFilter = True
-			End If
+		If sFilter &lt;&gt; &quot;&quot; Then			&apos;	Filter must be set before execute()
+			RowSet.Filter = sFilter
+			RowSet.ApplyFilter = True
 		End If
 		On Local Error Goto SQL_Error
 		RowSet.execute()

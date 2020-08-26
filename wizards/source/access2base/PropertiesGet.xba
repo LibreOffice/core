@@ -1005,7 +1005,7 @@ Error_Function:
 End Function		&apos;	_getProperty	V0.9.1
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Public Function _hasProperty(ByVal psObject As String, ByVal pvPropertiesList() As Variant, ByVal pvProperty As Variant) As Boolean
+Public Function _hasProperty(ByVal psObject As String, ByVal pvPropertiesList() As Variant, Optional ByVal pvProperty As Variant) As Boolean
 &apos;	Return True if object has a valid property called pvProperty (case-insensitive comparison !)
 &apos;	Generic hasProperty function called from all class modules
 

@@ -155,7 +155,7 @@ Public Sub TraceError(ByVal psErrorLevel As String _
 	On Local Error Resume Next
 	If IsEmpty(_A2B_) Then Call Application._RootInit()	&apos;	First use of Access2Base in current LibO/AOO session
 
-Dim sErrorText As String, sErrorDesc As String, oDb As Object
+Dim sErrorText As String, sErrorDesc As String, oDb As Object, bMsgBox As Boolean
 	sErrorDesc = _ErrorMessage(piErrorCode, pvArgs)
 	sErrorText = _GetLabel(&quot;ERR#&quot;) &amp; CStr(piErrorCode) _
 							&amp; &quot; (&quot; &amp; sErrorDesc &amp; &quot;) &quot; &amp; _GetLabel(&quot;ERROCCUR&quot;) _
@@ -168,8 +168,14 @@ Dim sErrorText As String, sErrorDesc As String, oDb As Object
 		.ErrorLongText = sErrorText
 		.CalledSub = &quot;&quot;
 	End With
-	If IsMissing(pvMsgBox) Then pvMsgBox = ( psErrorLevel = TRACEERRORS Or psErrorLevel = TRACEFATAL Or psErrorLevel = TRACEABORT )
-	TraceLog(psErrorLevel, sErrorText, pvMsgBox)
+	If VarType(pvMsgBox) = vbError Then
+		bMsgBox = ( psErrorLevel = TRACEERRORS Or psErrorLevel = TRACEFATAL Or psErrorLevel = TRACEABORT )
+	ElseIf IsMissing(pvMsgBox) Then
+		bMsgBox = ( psErrorLevel = TRACEERRORS Or psErrorLevel = TRACEFATAL Or psErrorLevel = TRACEABORT )
+	Else
+		bMsgBox = pvMsgBox
+	End If
+	TraceLog(psErrorLevel, sErrorText, bMsgBox)
 	
 	&apos;	Unexpected error detected in user program or in Access2Base
 	If psErrorLevel = TRACEFATAL Or psErrorLevel = TRACEABORT Then

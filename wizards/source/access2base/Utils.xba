@@ -105,12 +105,14 @@ Public Function _CheckArgument(pvItem As Variant _
 
 	_CheckArgument = False
 	
-Dim iVarType As Integer
+Dim iVarType As Integer, bValidIsMissing As Boolean
 	If IsArray(pvType) Then iVarType = VarType(pvType(LBound(pvType))) Else iVarType = VarType(pvType)
 	If iVarType = vbString Then					&apos;	pvType is a pseudo-type string
 		_CheckArgument = Utils._IsPseudo(pvItem, pvType)
 	Else
-		If IsMissing(pvValid) Then _CheckArgument = Utils._IsScalar(pvItem, pvType) Else _CheckArgument = Utils._IsScalar(pvItem, pvType, pvValid)
+		bValidIsMissing = ( VarType(pvValid) = vbError )
+		If Not bValidIsMissing Then bValidIsMissing = IsMissing(pvValid)
+		If bValidIsMissing Then _CheckArgument = Utils._IsScalar(pvItem, pvType) Else _CheckArgument = Utils._IsScalar(pvItem, pvType, pvValid)
 	End If
 	
 	If VarType(pvItem) = vbCurrency Or VarType(pvItem) = vbDecimal Or VarType(pvItem) = vbBigint Then pvItem = CDbl(pvItem)

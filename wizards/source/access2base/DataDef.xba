@@ -362,22 +362,33 @@ Dim cstThisSub As String
 	Utils._SetCalledSub(cstThisSub)
 Const cstNull = -1
 Dim lCommandType As Long, sCommand As String, oObject As Object,bPassThrough As Boolean
+Dim iType As Integer, iOptions As Integer, iLockEdit As Integer
+
 
 	Set oObject = Nothing
-	If IsMissing(pvType) Then
-		pvType = cstNull
+	If VarType(pvType) = vbError Then
+		iType = cstNull
+	ElseIf IsMissing(pvType) Then
+		iType = cstNull
 	Else
 		If Not Utils._CheckArgument(pvType, 1, Utils._AddNumeric(), Array(cstNull, dbOpenForwardOnly)) Then Goto Exit_Function
+		iType = pvType
 	End If
-	If IsMissing(pvOptions) Then
-		pvOptions = cstNull
+	If VarType(pvOptions) = vbError Then
+		iOptions = cstNull
+	ElseIf IsMissing(pvOptions) Then
+		iOptions = cstNull
 	Else
 		If Not Utils._CheckArgument(pvOptions, 2, Utils._AddNumeric(), Array(cstNull, dbSQLPassThrough)) Then Goto Exit_Function
+		iOptions = pvOptions
 	End If
-	If IsMissing(pvLockEdit) Then
-		pvLockEdit = cstNull
+	If VarType(pvLockEdit) = vbError Then
+		iLockEdit = cstNull
+	ElseIf IsMissing(pvLockEdit) Then
+		iLockEdit = cstNull
 	Else
 		If Not Utils._CheckArgument(pvLockEdit, 3, Utils._AddNumeric(), Array(cstNull, dbReadOnly)) Then Goto Exit_Function
+		iLockEdit = pvLockEdit
 	End If
 
 	Select Case _Type
@@ -387,7 +398,7 @@ Dim lCommandType As Long, sCommand As String, oObject As Object,bPassThrough As 
 		Case OBJQUERYDEF
 			lCommandType = com.sun.star.sdb.CommandType.QUERY
 			sCommand = _Name
-			If pvOptions = dbSQLPassThrough Then bPassThrough = True Else bPassThrough = Not Query.EscapeProcessing
+			If iOptions = dbSQLPassThrough Then bPassThrough = True Else bPassThrough = Not Query.EscapeProcessing
 	End Select
 	
 	Set oObject = New Recordset
@@ -396,9 +407,9 @@ Dim lCommandType As Long, sCommand As String, oObject As Object,bPassThrough As 
 		._Command = sCommand
 		._ParentName = _Name
 		._ParentType = _Type
-		._ForwardOnly = ( pvType = dbOpenForwardOnly )
+		._ForwardOnly = ( iType = dbOpenForwardOnly )
 		._PassThrough = bPassThrough
-		._ReadOnly = ( (pvLockEdit = dbReadOnly) Or _ReadOnly )
+		._ReadOnly = ( (iLockEdit = dbReadOnly) Or _ReadOnly )
 		Set ._ParentDatabase = _ParentDatabase
 		Set ._This = oObject
 		Call ._Initialize()
