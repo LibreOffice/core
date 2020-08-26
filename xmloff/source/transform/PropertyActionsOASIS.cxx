@@ -103,7 +103,7 @@ XMLTransformerActionInit const aGraphicPropertyOASISAttrActionTable[] =
           NO_PARAMS },
     { XML_NAMESPACE_FO, XML_CLIP, XML_ATACTION_INS2INCHS,
           NO_PARAMS }, /* generated entry */
-//  { XML_NAMESPACE_STYLE, XML_WRAP_DYNAMIC_TRESHOLD, XML_ATACTION_REMOVE,
+//  { XML_NAMESPACE_STYLE, XML_WRAP_DYNAMIC_THRESHOLD, XML_ATACTION_REMOVE,
 //      NO_PARAMS }, /* generated entry */ // TODO
     { XML_NAMESPACE_DRAW, XML_VISIBLE_AREA_LEFT, XML_ATACTION_IN2INCH,
           NO_PARAMS }, /* generated entry */

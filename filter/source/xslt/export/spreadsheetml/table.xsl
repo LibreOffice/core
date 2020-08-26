@@ -269,7 +269,7 @@
                 <xsl:variable name="rowCountHalf" select="floor($rowCount div 2)"/>
                 <xsl:variable name="rowNodesSetA" select="$rowNodes[position() &lt;= $rowCountHalf]"/>
                 <xsl:variable name="rowNodesSetB" select="$rowNodes[position() &gt; $rowCountHalf]"/>
-                <!-- to keep track of the rownumber, the repeteated rows have to kept into accounts -->
+                <!-- to keep track of the rownumber, the repeated rows have to kept into accounts -->
                 <xsl:variable name="rowsCreatedByRepetition">
                 <xsl:choose>
                     <xsl:when test="$rowNodesSetA/@table:number-rows-repeated">
@@ -465,7 +465,7 @@
     <xsl:template name="table:table-cell" match="table:table-cell">
         <xsl:param name="calculatedCellPosition" select="1" /><!-- the later table position of the current cell  -->
         <xsl:param name="calculatedRowPosition" /><!-- the later table position of the current row  -->
-        <xsl:param name="setIndex" select="false()" /> <!-- if not '0' @ss:Index used for neglecting repeteated empty cells -->
+        <xsl:param name="setIndex" select="false()" /> <!-- if not '0' @ss:Index used for neglecting repeated empty cells -->
         <xsl:param name="repetition" select="@table:number-columns-repeated" /> <!-- used for explicit written out cells -->
         <xsl:param name="repetitionCellPosition" select="$calculatedCellPosition" /><!-- during repetition formula needs exact cell positioning -->
         <xsl:param name="nextMatchedCellPosition"><!-- the later table position of the next cell  -->
