@@ -119,7 +119,7 @@ namespace
         return false;
     }
 
-    bool findURL( StringSet const & rContainer, OUString const & aURL, OUString & aResult )
+    bool findURL( std::set<OUString> const & rContainer, OUString const & aURL, OUString & aResult )
     {
         // TODO: This code is actually copied from svl/source/passwordcontainer.cxx
         if( !rContainer.empty() && !aURL.isEmpty() )
@@ -131,7 +131,7 @@ namespace
             do
             {
                 // first look for <url>/somename and then look for <url>/somename/...
-                StringSet::const_iterator aIter = rContainer.find( aUrl );
+                auto aIter = rContainer.find( aUrl );
                 if( aIter != rContainer.end() )
                 {
                     aResult = *aIter;

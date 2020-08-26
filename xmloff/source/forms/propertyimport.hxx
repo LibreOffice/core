@@ -80,8 +80,7 @@ namespace xmloff
         PropertyValueArray          m_aGenericValues;
             // the values which the instance collects between StartElement and EndElement
 
-        typedef std::set<OUString> StringSet;
-        StringSet                   m_aEncounteredAttributes;
+        std::set<OUString>          m_aEncounteredAttributes;
 
         OFormLayerXMLImport_Impl&       m_rContext;
 

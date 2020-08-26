@@ -61,8 +61,7 @@ namespace xmloff
     class OPropertyExport
     {
     private:
-        typedef std::set<OUString> StringSet;
-        StringSet       m_aRemainingProps;
+        std::set<OUString>      m_aRemainingProps;
             // see examinePersistence
 
         void exportRelativeTargetLocation(const OUString& _sPropertyName, CCAFlags _nProperty,bool _bAddType);
