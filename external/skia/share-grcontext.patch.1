@@ -591,3 +591,17 @@ index 909c96127b..35e063ae28 100644
          return nullptr;
      }
      return ctx;
+diff --git a/tools/sk_app/WindowContext.h b/tools/sk_app/WindowContext.h
+--- a/tools/sk_app/WindowContext.h
++++ b/tools/sk_app/WindowContext.h
+@@ -10,9 +10,9 @@
+ #include "include/core/SkRefCnt.h"
+ #include "include/core/SkSurfaceProps.h"
+ #include "include/gpu/GrTypes.h"
++#include "include/gpu/GrDirectContext.h"
+ #include "tools/sk_app/DisplayParams.h"
+ 
+-class GrDirectContext;
+ class SkSurface;
+ 
+ namespace sk_app {
