@@ -296,9 +296,6 @@ void LifecycleTest::testLeakage()
     VclPtr<vcl::Window> xParent = aObjects.back()->getRef();
 
     aObjects.push_back(LeakTestObject::Create<PushButton>(xParent));
-    aObjects.push_back(LeakTestObject::Create<OKButton>(xParent));
-    aObjects.push_back(LeakTestObject::Create<CancelButton>(xParent));
-    aObjects.push_back(LeakTestObject::Create<HelpButton>(xParent));
     aObjects.push_back(LeakTestObject::Create<CheckBox>(xParent));
     aObjects.push_back(LeakTestObject::Create<Edit>(xParent));
     aObjects.push_back(LeakTestObject::Create<ComboBox>(xParent));

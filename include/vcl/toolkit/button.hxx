@@ -24,11 +24,11 @@
 
 #include <vcl/button.hxx>
 
-class VCL_DLLPUBLIC OKButton : public PushButton
+class VCL_DLLPUBLIC OKButton final : public PushButton
 {
-protected:
-    using PushButton::ImplInit;
 private:
+    using PushButton::ImplInit;
+
     SAL_DLLPRIVATE void            ImplInit( vcl::Window* pParent, WinBits nStyle );
 
                                    OKButton (const OKButton &) = delete;
@@ -62,11 +62,10 @@ public:
     explicit CloseButton(vcl::Window* pParent, WinBits nStyle = 0);
 };
 
-class VCL_DLLPUBLIC HelpButton : public PushButton
+class VCL_DLLPUBLIC HelpButton final : public PushButton
 {
-protected:
-    using PushButton::ImplInit;
 private:
+    using PushButton::ImplInit;
     SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle );
 
                         HelpButton( const HelpButton & ) = delete;
@@ -169,10 +168,9 @@ public:
 
 class VCL_DLLPUBLIC ImageButton final : public PushButton
 {
-protected:
+private:
     using PushButton::ImplInitStyle;
 
-private:
     SAL_DLLPRIVATE void     ImplInitStyle();
 
                             ImageButton( const ImageButton & ) = delete;
