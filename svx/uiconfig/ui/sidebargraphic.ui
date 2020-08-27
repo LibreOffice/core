@@ -11,7 +11,7 @@
     <property name="lower">0.01</property>
     <property name="upper">10</property>
     <property name="value">1</property>
-    <property name="step_increment">0.10000000000000001</property>
+    <property name="step_increment">0.1</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkAdjustment" id="plusminus100adjustment">
@@ -54,16 +54,16 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
         <property name="border_width">6</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">12</property>
+        <property name="spacing">3</property>
         <child>
           <object class="GtkGrid" id="grid2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="row_spacing">6</property>
+            <property name="row_spacing">3</property>
             <property name="column_spacing">6</property>
-            <property name="column_homogeneous">True</property>
             <child>
               <object class="GtkLabel" id="brightnesslabel">
                 <property name="visible">True</property>
@@ -75,7 +75,7 @@
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
+                <property name="top_attach">1</property>
               </packing>
             </child>
             <child>
@@ -83,6 +83,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebargraphic|setbrightness|tooltip_text">Specify the luminance of the graphic.</property>
+                <property name="hexpand">True</property>
                 <property name="adjustment">plusminus100adjustment</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="setbrightness-atkobject">
@@ -91,7 +92,7 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
+                <property name="left_attach">1</property>
                 <property name="top_attach">1</property>
               </packing>
             </child>
@@ -105,8 +106,8 @@
                 <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
+                <property name="left_attach">0</property>
+                <property name="top_attach">2</property>
               </packing>
             </child>
             <child>
@@ -114,6 +115,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebargraphic|setcontrast|tooltip_text">Specify the degree of difference between the lightest and darkest parts of the graphic.</property>
+                <property name="hexpand">True</property>
                 <property name="adjustment">plusminus100adjustment1</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="setcontrast-atkobject">
@@ -123,7 +125,7 @@
               </object>
               <packing>
                 <property name="left_attach">1</property>
-                <property name="top_attach">1</property>
+                <property name="top_attach">2</property>
               </packing>
             </child>
             <child>
@@ -137,13 +139,14 @@
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">2</property>
+                <property name="top_attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkComboBoxText" id="setcolormode">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="setcolormode-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="sidebargraphic|setcolormode-atkobject">Color mode</property>
@@ -151,8 +154,8 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">3</property>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
               </packing>
             </child>
             <child>
@@ -165,8 +168,8 @@
                 <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">2</property>
+                <property name="left_attach">0</property>
+                <property name="top_attach">3</property>
               </packing>
             </child>
             <child>
@@ -174,6 +177,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes" context="sidebargraphic|setgraphtransparency|tooltip_text">Specify the percentage of transparency; 0% is fully opaque and 100% is fully transparent.</property>
+                <property name="hexpand">True</property>
                 <property name="adjustment">0to100adjustment</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="setgraphtransparency-atkobject">
@@ -186,6 +190,21 @@
                 <property name="top_attach">3</property>
               </packing>
             </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkGrid">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="row_spacing">3</property>
+            <property name="column_spacing">6</property>
+            <property name="column_homogeneous">True</property>
             <child>
               <object class="GtkBox" id="box9">
                 <property name="visible">True</property>
@@ -226,51 +245,7 @@
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">4</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkBox" id="box10">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="spacing">6</property>
-                <child>
-                  <object class="GtkImage" id="image2">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">center</property>
-                    <property name="valign">center</property>
-                    <property name="icon_name">svx/res/symphony/AdjustColorGreen_16x16.png</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinButton" id="setgreen">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="tooltip_text" translatable="yes" context="sidebargraphic|setgreen|tooltip_text">Green</property>
-                    <property name="adjustment">plusminus100adjustment3</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="setgreen-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebargraphic|setgreen-atkobject">Green</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="pack_type">end</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">4</property>
+                <property name="top_attach">0</property>
               </packing>
             </child>
             <child>
@@ -313,7 +288,51 @@
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">5</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="box10">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkImage" id="image2">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="icon_name">svx/res/symphony/AdjustColorGreen_16x16.png</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="setgreen">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="tooltip_text" translatable="yes" context="sidebargraphic|setgreen|tooltip_text">Green</property>
+                    <property name="adjustment">plusminus100adjustment4</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="setgreen-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebargraphic|setgreen-atkobject">Green</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="pack_type">end</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
               </packing>
             </child>
             <child>
@@ -358,14 +377,14 @@
               </object>
               <packing>
                 <property name="left_attach">1</property>
-                <property name="top_attach">5</property>
+                <property name="top_attach">1</property>
               </packing>
             </child>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">0</property>
+            <property name="position">1</property>
           </packing>
         </child>
       </object>
@@ -374,5 +393,13 @@
         <property name="top_attach">0</property>
       </packing>
     </child>
+  </object>
+  <object class="GtkSizeGroup" id="SizegroupLabels">
+    <widgets>
+      <widget name="transparencylabel"/>
+      <widget name="contrastlabel"/>
+      <widget name="brightnesslabel"/>
+      <widget name="colorlmodelabel"/>
+    </widgets>
   </object>
 </interface>
