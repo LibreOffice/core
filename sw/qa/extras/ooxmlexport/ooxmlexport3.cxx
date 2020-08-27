@@ -322,6 +322,12 @@ DECLARE_OOXMLEXPORT_TEST(testCalendar3, "calendar3.docx")
     uno::Reference<text::XTextRange> xCell2(xTable->getCellByName("A1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x2E74B5), getProperty<sal_Int32>(getRun(getParagraphOfText(1, xCell2->getText()), 1), "CharColor"));
     CPPUNIT_ASSERT_EQUAL(20.f, getProperty<float>(getRun(getParagraphOfText(1, xCell2->getText()),1), "CharHeight"));
+
+    // tdf#132149 Despite specifying portrait, the page size's specified width is greater than its height.
+    // Both Word and LO display it as landscape, so ensure that it round-trips with landscape dimentions.
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Page Width (mm) ", sal_Int32(148), getProperty<sal_Int32>(xPageStyle, "Width") / 100);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Page Height (mm)", sal_Int32(105), getProperty<sal_Int32>(xPageStyle, "Height") / 100);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testCalendar4, "calendar4.docx")
