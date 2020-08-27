@@ -42,14 +42,14 @@ static bool FileExists(const INetURLObject& rURL, const OUString& rExt)
 }
 
 GalleryBinaryEngineEntry::GalleryBinaryEngineEntry(
-    GalleryStorageLocations& rGalleryStorageLocations)
+    GalleryBinaryStorageLocations& rGalleryStorageLocations)
     : m_rGalleryStorageLocations(rGalleryStorageLocations)
 {
 }
 
 void GalleryBinaryEngineEntry::CreateUniqueURL(const INetURLObject& rBaseURL, INetURLObject& aURL)
 {
-    INetURLObject aBaseNoCase(GalleryStorageLocations::ImplGetURLIgnoreCase(rBaseURL));
+    INetURLObject aBaseNoCase(GalleryBinaryStorageLocations::ImplGetURLIgnoreCase(rBaseURL));
     aURL = aBaseNoCase;
     static sal_Int32 nIdx = 0;
     while (FileExists(aURL, "thm"))
