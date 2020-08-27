@@ -59,9 +59,6 @@ protected:
     bool                        mbInsGluePointMode : 1;
     bool                        mbNoDragXorPolys : 1;
 
-private:
-    SVX_DLLPRIVATE void ImpClearVars();
-
 protected:
     virtual void SetMarkHandles(SfxViewShell* pOtherShell) override;
     void ShowDragObj();

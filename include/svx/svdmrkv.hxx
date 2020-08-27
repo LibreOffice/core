@@ -144,7 +144,6 @@ protected:
         const SdrPageView* pPV) const;
 
 private:
-    SVX_DLLPRIVATE void ImpClearVars();
     SVX_DLLPRIVATE void ImpSetPointsRects() const;
     void UndirtyMrkPnt() const;
 

@@ -105,8 +105,6 @@ protected:
 private:
     SfxUndoManager* mpOldTextEditUndoManager;
 
-    SVX_DLLPRIVATE void ImpClearVars();
-
 protected:
     // central method to get an SdrUndoManager for enhanced TextEdit. Default will
     // try to return a dynamic_casted GetModel()->GetSdrUndoManager(). Applications

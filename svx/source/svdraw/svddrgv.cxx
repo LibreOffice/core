@@ -38,40 +38,26 @@
 
 using namespace sdr;
 
-
-// DragView
-
-
-void SdrDragView::ImpClearVars()
+SdrDragView::SdrDragView(SdrModel& rSdrModel, OutputDevice* pOut)
+    : SdrExchangeView(rSdrModel, pOut)
+    , mpDragHdl(nullptr)
+    , mpInsPointUndo(nullptr)
+    , meDragHdl(SdrHdlKind::Move)
+    , mbFramDrag(false)
+    , mbMarkedHitMovesAlways(false)
+    , mbDragLimit(false)
+    , mbDragHdl(false)
+    , mbDragStripes(false)
+    , mbSolidDragging(getOptionsDrawinglayer().IsSolidDragCreate())
+    , mbResizeAtCenter(false)
+    , mbCrookAtCenter(false)
+    , mbDragWithCopy(false)
+    , mbInsGluePoint(false)
+    , mbInsObjPointMode(false)
+    , mbInsGluePointMode(false)
+    , mbNoDragXorPolys(false)
 {
-    mbFramDrag=false;
-    meDragMode=SdrDragMode::Move;
-    mbDragLimit=false;
-    mbMarkedHitMovesAlways=false;
-    meDragHdl=SdrHdlKind::Move;
-    mpDragHdl=nullptr;
-    mbDragHdl=false;
-    mpCurrentSdrDragMethod=nullptr;
-    mbDragStripes=false;
-    mbDragWithCopy=false;
-    mpInsPointUndo=nullptr;
-    mbInsGluePoint=false;
-    mbInsObjPointMode=false;
-    mbInsGluePointMode=false;
-    mbNoDragXorPolys=false;
-    mbResizeAtCenter=false;
-    mbCrookAtCenter=false;
-
-    // init using default
-    mbSolidDragging = getOptionsDrawinglayer().IsSolidDragCreate();
-}
-
-SdrDragView::SdrDragView(
-    SdrModel& rSdrModel,
-    OutputDevice* pOut)
-:   SdrExchangeView(rSdrModel, pOut)
-{
-    ImpClearVars();
+    meDragMode = SdrDragMode::Move;
 }
 
 SdrDragView::~SdrDragView()
