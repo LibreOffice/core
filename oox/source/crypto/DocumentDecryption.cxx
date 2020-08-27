@@ -117,14 +117,14 @@ bool DocumentDecryption::readEncryptionInfo()
         SAL_WARN_IF(aEntryCount != 1, "oox", "DataSpaceMap contains more than one entry. Some content may be skipped");
 
         // Read each DataSpaceMapEntry (MS-OFFCRYPTO 2.1.6.1)
-        for (sal_uInt32 i = 0; i < aEntryCount; i++)
+        for (sal_uInt32 i = 0; i < aEntryCount && !aDataSpaceStream.isEof(); i++)
         {
             // entryLen unused for the moment
             aDataSpaceStream.skip(sizeof(sal_uInt32));
 
             // Read each DataSpaceReferenceComponent (MS-OFFCRYPTO 2.1.6.2)
             sal_uInt32 aReferenceComponentCount = aDataSpaceStream.readuInt32();
-            for (sal_uInt32 j = 0; j < aReferenceComponentCount; j++)
+            for (sal_uInt32 j = 0; j < aReferenceComponentCount && !aDataSpaceStream.isEof(); j++)
             {
                 // Read next reference component
                 // refComponentType unused for the moment
@@ -138,6 +138,12 @@ bool DocumentDecryption::readEncryptionInfo()
             sal_uInt32 aDataSpaceNameLength = aDataSpaceStream.readuInt32();
             sDataSpaceName = aDataSpaceStream.readUnicodeArray(aDataSpaceNameLength / 2);
             aDataSpaceStream.skip((4 - (aDataSpaceNameLength & 3)) & 3);  // Skip padding
+        }
+
+        if (aDataSpaceStream.isEof())
+        {
+            SAL_WARN("oox", "EOF on parsing DataSpaceMapEntry table");
+            return false;
         }
     }
     else
