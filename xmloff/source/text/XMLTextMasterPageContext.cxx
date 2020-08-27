@@ -178,46 +178,44 @@ XMLTextMasterPageContext::~XMLTextMasterPageContext()
 {
 }
 
-SvXMLImportContextRef XMLTextMasterPageContext::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextMasterPageContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContextRef xContext;
 
-    const SvXMLTokenMap& rTokenMap =
-        GetImport().GetTextImport()->GetTextMasterPageElemTokenMap();
-
     bool bInsert = false, bFooter = false, bLeft = false, bFirst = false;
-    switch( rTokenMap.Get( nPrefix, rLocalName ) )
+    switch( nElement )
     {
-    case XML_TOK_TEXT_MP_HEADER:
+    case XML_ELEMENT(STYLE, XML_HEADER):
         if( bInsertHeader && !bHeaderInserted )
         {
             bInsert = true;
             bHeaderInserted = true;
         }
         break;
-    case XML_TOK_TEXT_MP_FOOTER:
+    case XML_ELEMENT(STYLE, XML_FOOTER):
         if( bInsertFooter && !bFooterInserted )
         {
             bInsert = bFooter = true;
             bFooterInserted = true;
         }
         break;
-    case XML_TOK_TEXT_MP_HEADER_LEFT:
+    case XML_ELEMENT(STYLE, XML_HEADER_LEFT):
         if( bInsertHeaderLeft && bHeaderInserted )
             bInsert = bLeft = true;
         break;
-    case XML_TOK_TEXT_MP_FOOTER_LEFT:
+    case XML_ELEMENT(STYLE, XML_FOOTER_LEFT):
         if( bInsertFooterLeft && bFooterInserted )
             bInsert = bFooter = bLeft = true;
         break;
-    case XML_TOK_TEXT_MP_HEADER_FIRST:
+    case XML_ELEMENT(LO_EXT, XML_HEADER_FIRST):
+    case XML_ELEMENT(STYLE, XML_HEADER_FIRST):
         if( bInsertHeaderFirst && bHeaderInserted )
             bInsert = bFirst = true;
         break;
-    case XML_TOK_TEXT_MP_FOOTER_FIRST:
+    case XML_ELEMENT(LO_EXT, XML_FOOTER_FIRST):
+    case XML_ELEMENT(STYLE, XML_FOOTER_FIRST):
         if( bInsertFooterFirst && bFooterInserted )
             bInsert = bFooter = bFirst = true;
         break;
@@ -225,28 +223,22 @@ SvXMLImportContextRef XMLTextMasterPageContext::CreateChildContext(
 
     if( bInsert && xStyle.is() )
     {
-        xContext = CreateHeaderFooterContext( nPrefix, rLocalName,
-                                                    xAttrList,
-                                                    bFooter, bLeft, bFirst );
+        xContext = CreateHeaderFooterContext( nElement, xAttrList,
+                                              bFooter, bLeft, bFirst );
     }
 
-    return xContext;
+    return xContext.get();
 }
 
 SvXMLImportContext *XMLTextMasterPageContext::CreateHeaderFooterContext(
-            sal_uInt16 nPrefix,
-            const OUString& rLocalName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
+            sal_Int32 /*nElement*/,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/,
             const bool bFooter,
             const bool bLeft,
             const bool bFirst )
 {
     Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
-    return new XMLTextHeaderFooterContext( GetImport(),
-                                                nPrefix, rLocalName,
-                                                xAttrList,
-                                                xPropSet,
-                                                bFooter, bLeft, bFirst );
+    return new XMLTextHeaderFooterContext( GetImport(), xPropSet, bFooter, bLeft, bFirst );
 }
 
 void XMLTextMasterPageContext::Finish( bool bOverwrite )
