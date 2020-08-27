@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff9b1a34_343e8cc3",
+        "filename": "sw/source/core/text/txtfld.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-08-27T10:57:33Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 480,
+        "startChar": 60,
+        "endLine": 480,
+        "endChar": 71
+      },
+      "revId": "a8d561626f20db62b96d4c4403fbe8478c179c3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c382864c_a9df376d",
+        "filename": "sw/source/core/text/txtfld.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-08-27T10:57:33Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 480,
+        "startChar": 26,
+        "endLine": 480,
+        "endChar": 35
+      },
+      "revId": "a8d561626f20db62b96d4c4403fbe8478c179c3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
