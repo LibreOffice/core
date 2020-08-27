@@ -22,6 +22,30 @@
       "revId": "cd0ab2cf5063242ef3bff3c6899cea4d4bd53485",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4bb358d8_18c4d384",
+        "filename": "basctl/source/basicide/basidesh.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 909,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-08-27T10:50:50Z",
+      "side": 1,
+      "message": "thanks :-)",
+      "parentUuid": "3a1c5c9d_392690da",
+      "range": {
+        "startLine": 908,
+        "startChar": 4,
+        "endLine": 909,
+        "endChar": 29
+      },
+      "revId": "cd0ab2cf5063242ef3bff3c6899cea4d4bd53485",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
