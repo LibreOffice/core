@@ -111,12 +111,8 @@ void GalleryBrowser1::ImplFillExchangeData( const GalleryTheme* pThm, ExchangeDa
 
     try
     {
-        ::ucbhelper::Content aCnt( pThm->GetThmURL().GetMainURL( INetURLObject::DecodeMechanism::NONE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-        util::DateTime  aDateTimeModified;
-        DateTime        aDateTime( DateTime::EMPTY );
+        DateTime aDateTime(pThm->getModificationDate());
 
-        aCnt.getPropertyValue("DateModified") >>= aDateTimeModified;
-        ::utl::typeConvert( aDateTimeModified, aDateTime );
         rData.aThemeChangeDate = aDateTime;
         rData.aThemeChangeTime = aDateTime;
     }

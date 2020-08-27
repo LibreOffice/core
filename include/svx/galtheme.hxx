@@ -25,6 +25,8 @@
 
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/datetime.hxx>
+#include <unotools/datetime.hxx>
 #include <vcl/bitmapex.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svx/galmisc.hxx>
@@ -157,6 +159,8 @@ public:
     SAL_DLLPRIVATE bool         InsertTransferable(const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable, sal_uInt32 nInsertPos);
 
     SAL_DLLPRIVATE void         CopyToClipboard(sal_uInt32 nPos);
+
+    DateTime getModificationDate() const;
 
 public:
 
