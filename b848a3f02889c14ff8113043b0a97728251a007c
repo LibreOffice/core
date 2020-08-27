@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "86c4bf93_b5243d46",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-27T13:49:13Z",
+      "side": 1,
+      "message": "Simply put, resetting \"fixed\", you make the variable to be of type \"Variant\" with assigned value of type \"Error\" :-) (Variant is just a variable with \"fixed\" unset - that\u0027s the only difference of Variant in StarBasic implementation...)",
+      "range": {
+        "startLine": 10,
+        "startChar": 23,
+        "endLine": 11,
+        "endChar": 31
+      },
+      "revId": "b848a3f02889c14ff8113043b0a97728251a007c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
