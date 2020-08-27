@@ -458,6 +458,7 @@ custom-iconset-name
 custom-label-field
 custom-label-pos-x
 custom-label-pos-y
+custom-leader-lines
 cut
 cut-offs
 cut_offs
