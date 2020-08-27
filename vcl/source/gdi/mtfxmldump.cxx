@@ -205,7 +205,7 @@ OUString convertPolygonFlags(PolyFlags eFlags)
     }
 }
 
-OUString convertFontWeigthToString(FontWeight eFontWeight)
+OUString convertFontWeightToString(FontWeight eFontWeight)
 {
     switch (eFontWeight)
     {
@@ -1145,7 +1145,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
                 rWriter.attribute("width", aFont.GetFontSize().Width());
                 rWriter.attribute("height", aFont.GetFontSize().Height());
                 rWriter.attribute("orientation", aFont.GetOrientation());
-                rWriter.attribute("weight", convertFontWeigthToString(aFont.GetWeight()));
+                rWriter.attribute("weight", convertFontWeightToString(aFont.GetWeight()));
                 rWriter.attribute("vertical", aFont.IsVertical() ? "true" : "false");
 
                 rWriter.endElement();
