@@ -1106,7 +1106,7 @@ private:
 
 static OUString lcl_strip_template(const OUString &aString)
 {
-    static const OUStringLiteral sPostfix("_template");
+    static const OUStringLiteral sPostfix(u"_template");
     OUString sRes(aString);
     if (sRes.endsWith(sPostfix))
         sRes = sRes.copy(0, sRes.getLength() - sPostfix.getLength());

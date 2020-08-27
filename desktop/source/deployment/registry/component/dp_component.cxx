@@ -423,7 +423,7 @@ void BackendImpl::initServiceRdbFiles()
             &oldRDB, makeURL( getCachePath(), m_commonRDB_orig),
             xCmdEnv, false /* no throw */ );
     }
-    m_commonRDB = m_commonRDB_orig == "common.rdb" ? OUStringLiteral("common_.rdb") : OUStringLiteral("common.rdb");
+    m_commonRDB = m_commonRDB_orig == "common.rdb" ? OUStringLiteral(u"common_.rdb") : OUStringLiteral(u"common.rdb");
     if (oldRDB.get().is())
     {
         cacheDir.transferContent(

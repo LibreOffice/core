@@ -257,9 +257,9 @@ inspection::LineDescriptor SAL_CALL DataProviderHandler::describePropertyLine(co
     if ( nId != -1 )
     {
         aOut.Category = (OPropertyInfoService::getPropertyUIFlags(nId ) & PropUIFlags::DataProperty) ?
-                                    OUStringLiteral("Data")
+                                    OUStringLiteral(u"Data")
                                                         :
-                                    OUStringLiteral("General");
+                                    OUStringLiteral(u"General");
         aOut.HelpURL = HelpIdUrl::getHelpURL( OPropertyInfoService::getPropertyHelpId( nId ) );
         aOut.DisplayName = OPropertyInfoService::getPropertyTranslation(nId);
     }
@@ -344,10 +344,10 @@ uno::Sequence< beans::Property > SAL_CALL DataProviderHandler::getSupportedPrope
         beans::Property aValue;
         static const OUStringLiteral s_pProperties[] =
         {
-             PROPERTY_CHARTTYPE
-            ,PROPERTY_MASTERFIELDS
-            ,PROPERTY_DETAILFIELDS
-            ,PROPERTY_PREVIEW_COUNT
+             u"" PROPERTY_CHARTTYPE
+            ,u"" PROPERTY_MASTERFIELDS
+            ,u"" PROPERTY_DETAILFIELDS
+            ,u"" PROPERTY_PREVIEW_COUNT
         };
 
         for (const auto & rName : s_pProperties)

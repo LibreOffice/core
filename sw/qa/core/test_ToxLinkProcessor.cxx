@@ -48,10 +48,10 @@ public:
     static const OUStringLiteral URL_2;
 };
 
-const OUStringLiteral ToxLinkProcessorTest::STYLE_NAME_1 = "anyStyle1";
-const OUStringLiteral ToxLinkProcessorTest::STYLE_NAME_2 = "anyStyle2";
-const OUStringLiteral ToxLinkProcessorTest::URL_1 = "anyUrl1";
-const OUStringLiteral ToxLinkProcessorTest::URL_2 = "anyUrl2";
+const OUStringLiteral ToxLinkProcessorTest::STYLE_NAME_1 = u"anyStyle1";
+const OUStringLiteral ToxLinkProcessorTest::STYLE_NAME_2 = u"anyStyle2";
+const OUStringLiteral ToxLinkProcessorTest::URL_1 = u"anyUrl1";
+const OUStringLiteral ToxLinkProcessorTest::URL_2 = u"anyUrl2";
 const sal_uInt16 ToxLinkProcessorTest::POOL_ID_1 = 42;
 const sal_uInt16 ToxLinkProcessorTest::POOL_ID_2 = 43;
 

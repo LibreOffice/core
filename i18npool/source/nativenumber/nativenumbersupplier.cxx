@@ -654,9 +654,9 @@ OUString NativeNumberSupplierService::getNativeNumberString(const OUString& aNum
 
         static const CasingEntry Casings[] =
         {
-            { OUStringLiteral("capitalize"), CAPITALIZE },
-            { OUStringLiteral("upper"), UPPER },
-            { OUStringLiteral("title"), TITLE }
+            { OUStringLiteral(u"capitalize"), CAPITALIZE },
+            { OUStringLiteral(u"upper"), UPPER },
+            { OUStringLiteral(u"title"), TITLE }
         };
 
         sal_Int32 nStripCase = 0;

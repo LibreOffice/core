@@ -18,6 +18,7 @@
 namespace test1
 {
 static const char XXX1[] = "xxx";
+static const char16_t XXX1u[] = u"xxx";
 static const char XXX2[] = "xxx";
 void f1(OUString s1, int i, OString o)
 {
@@ -36,7 +37,7 @@ void f1(OUString s1, int i, OString o)
     // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
     s2 += XXX1;
     // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
-    s2 += OUStringLiteral(XXX1) + XXX2;
+    s2 += OUStringLiteral(XXX1u) + XXX2;
 
     // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
     s2 += OStringToOUString(o, RTL_TEXTENCODING_UTF8);

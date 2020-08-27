@@ -100,7 +100,7 @@ private:
     sal_Int32           mnIndex;
 };
 
-const OUStringLiteral gaDummyBaseName( "DummyGroupSep" );
+const OUStringLiteral gaDummyBaseName( u"DummyGroupSep" );
 
 VbaControlNamesSet::VbaControlNamesSet() :
     mnIndex( 0 )

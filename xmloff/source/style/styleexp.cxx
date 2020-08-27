@@ -52,11 +52,11 @@ using namespace ::xmloff::token;
 
 using ::com::sun::star::document::XEventsSupplier;
 
-const OUStringLiteral gsIsPhysical( "IsPhysical" );
-const OUStringLiteral gsIsAutoUpdate( "IsAutoUpdate" );
-const OUStringLiteral gsFollowStyle( "FollowStyle" );
-const OUStringLiteral gsNumberingStyleName( "NumberingStyleName" );
-const OUStringLiteral gsOutlineLevel( "OutlineLevel" );
+const OUStringLiteral gsIsPhysical( u"IsPhysical" );
+const OUStringLiteral gsIsAutoUpdate( u"IsAutoUpdate" );
+const OUStringLiteral gsFollowStyle( u"FollowStyle" );
+const OUStringLiteral gsNumberingStyleName( u"NumberingStyleName" );
+const OUStringLiteral gsOutlineLevel( u"OutlineLevel" );
 
 XMLStyleExport::XMLStyleExport(
         SvXMLExport& rExp,

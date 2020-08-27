@@ -5188,7 +5188,7 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
     aLine.append( " 0 obj\n"
                   "<</Type/OutputIntent/S/GTS_PDFA1/OutputConditionIdentifier");
 
-    appendLiteralStringEncrypt( OUStringLiteral("sRGB IEC61966-2.1") ,nOIObject, aLine );
+    appendLiteralStringEncrypt( OUStringLiteral(u"sRGB IEC61966-2.1") ,nOIObject, aLine );
     aLine.append("/DestOutputProfile ");
     aLine.append( nICCObject );
     aLine.append( " 0 R>>\nendobj\n\n" );
@@ -10927,7 +10927,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
             rNewWidget.m_nTextStyle =
                 DrawTextFlags::VCenter | DrawTextFlags::MultiLine | DrawTextFlags::WordBreak;
 
-        rNewWidget.m_aValue = rBox.Checked ? OUStringLiteral("Yes") : OUStringLiteral("Off" );
+        rNewWidget.m_aValue = rBox.Checked ? OUStringLiteral(u"Yes") : OUStringLiteral(u"Off" );
         // create default appearance before m_aRect gets transformed
         createDefaultCheckBoxAppearance( rNewWidget, rBox );
     }

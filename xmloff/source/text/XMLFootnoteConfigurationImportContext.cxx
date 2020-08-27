@@ -109,18 +109,18 @@ void XMLFootnoteConfigHelper::characters( const OUString& rChars )
 
 // XMLFootnoteConfigurationImportContext
 
-const OUStringLiteral gsPropertyAnchorCharStyleName("AnchorCharStyleName");
-const OUStringLiteral gsPropertyCharStyleName("CharStyleName");
-const OUStringLiteral gsPropertyNumberingType("NumberingType");
-const OUStringLiteral gsPropertyPageStyleName("PageStyleName");
-const OUStringLiteral gsPropertyParagraphStyleName("ParaStyleName");
-const OUStringLiteral gsPropertyPrefix("Prefix");
-const OUStringLiteral gsPropertyStartAt("StartAt");
-const OUStringLiteral gsPropertySuffix("Suffix");
-const OUStringLiteral gsPropertyPositionEndOfDoc("PositionEndOfDoc");
-const OUStringLiteral gsPropertyFootnoteCounting("FootnoteCounting");
-const OUStringLiteral gsPropertyEndNotice("EndNotice");
-const OUStringLiteral gsPropertyBeginNotice("BeginNotice");
+const OUStringLiteral gsPropertyAnchorCharStyleName(u"AnchorCharStyleName");
+const OUStringLiteral gsPropertyCharStyleName(u"CharStyleName");
+const OUStringLiteral gsPropertyNumberingType(u"NumberingType");
+const OUStringLiteral gsPropertyPageStyleName(u"PageStyleName");
+const OUStringLiteral gsPropertyParagraphStyleName(u"ParaStyleName");
+const OUStringLiteral gsPropertyPrefix(u"Prefix");
+const OUStringLiteral gsPropertyStartAt(u"StartAt");
+const OUStringLiteral gsPropertySuffix(u"Suffix");
+const OUStringLiteral gsPropertyPositionEndOfDoc(u"PositionEndOfDoc");
+const OUStringLiteral gsPropertyFootnoteCounting(u"FootnoteCounting");
+const OUStringLiteral gsPropertyEndNotice(u"EndNotice");
+const OUStringLiteral gsPropertyBeginNotice(u"BeginNotice");
 
 XMLFootnoteConfigurationImportContext::XMLFootnoteConfigurationImportContext(
     SvXMLImport& rImport,

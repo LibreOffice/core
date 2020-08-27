@@ -87,8 +87,8 @@ static void printPipeError( ::osl::Pipe const & aPipe )
 
 // pipe name and transfer contents
 
-const OUStringLiteral aTestPipeName("testpipe2");
-const OUStringLiteral aTestPipe1("testpipe1");
+const OUStringLiteral aTestPipeName(u"testpipe2");
+const OUStringLiteral aTestPipe1(u"testpipe1");
 
 const OStringLiteral m_pTestString1("Sun Microsystems");
 const OStringLiteral m_pTestString2("test pipe PASS/OK");

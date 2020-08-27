@@ -48,23 +48,23 @@ using namespace ::ooo::vba::excel::XlRowCol;
 using namespace ::ooo::vba::excel::XlAxisType;
 using namespace ::ooo::vba::excel::XlAxisGroup;
 
-const OUStringLiteral CHART_NAME("Name");
+const OUStringLiteral CHART_NAME(u"Name");
 // #TODO move this constant to vbaseries.[ch]xx ( when it exists )
-const OUStringLiteral DEFAULTSERIESPREFIX("Series");
-const OUStringLiteral DATAROWSOURCE("DataRowSource");
-const OUStringLiteral UPDOWN("UpDown");
-const OUStringLiteral VOLUME("Volume");
-const OUStringLiteral LINES("Lines");
-const OUStringLiteral SPLINETYPE("SplineType");
-const OUStringLiteral SYMBOLTYPE("SymbolType");
-const OUStringLiteral DEEP("Deep");
-const OUStringLiteral SOLIDTYPE("SolidType");
-const OUStringLiteral VERTICAL("Vertical");
-const OUStringLiteral PERCENT("Percent");
-const OUStringLiteral STACKED("Stacked");
-const OUStringLiteral DIM3D("Dim3D");
-const OUStringLiteral HASMAINTITLE("HasMainTitle");
-const OUStringLiteral HASLEGEND("HasLegend");
+const OUStringLiteral DEFAULTSERIESPREFIX(u"Series");
+const OUStringLiteral DATAROWSOURCE(u"DataRowSource");
+const OUStringLiteral UPDOWN(u"UpDown");
+const OUStringLiteral VOLUME(u"Volume");
+const OUStringLiteral LINES(u"Lines");
+const OUStringLiteral SPLINETYPE(u"SplineType");
+const OUStringLiteral SYMBOLTYPE(u"SymbolType");
+const OUStringLiteral DEEP(u"Deep");
+const OUStringLiteral SOLIDTYPE(u"SolidType");
+const OUStringLiteral VERTICAL(u"Vertical");
+const OUStringLiteral PERCENT(u"Percent");
+const OUStringLiteral STACKED(u"Stacked");
+const OUStringLiteral DIM3D(u"Dim3D");
+const OUStringLiteral HASMAINTITLE(u"HasMainTitle");
+const OUStringLiteral HASLEGEND(u"HasLegend");
 
 ScVbaChart::ScVbaChart( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const css::uno::Reference< css::lang::XComponent >& _xChartComponent, const css::uno::Reference< css::table::XTableChart >& _xTableChart ) : ChartImpl_BASE( _xParent, _xContext ), mxTableChart( _xTableChart )
 {

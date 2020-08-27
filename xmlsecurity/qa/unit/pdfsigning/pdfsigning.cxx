@@ -429,9 +429,9 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testGood)
 {
     const std::initializer_list<OUStringLiteral> aNames = {
         // We failed to determine if this is good or bad.
-        "good-non-detached.pdf",
+        u"good-non-detached.pdf",
         // Boolean value for dictionary key caused read error.
-        "dict-bool.pdf",
+        u"dict-bool.pdf",
     };
 
     for (const auto& rName : aNames)
@@ -451,18 +451,18 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testTokenize)
 {
     const std::initializer_list<OUStringLiteral> aNames = {
         // We looped on this broken input.
-        "no-eof.pdf",
+        u"no-eof.pdf",
         // ']' in a name token was mishandled.
-        "name-bracket.pdf",
+        u"name-bracket.pdf",
         // %%EOF at the end wasn't followed by a newline.
-        "noeol.pdf",
+        u"noeol.pdf",
         // File that's intentionally smaller than 1024 bytes.
-        "small.pdf",
-        "tdf107149.pdf",
+        u"small.pdf",
+        u"tdf107149.pdf",
         // Nested parentheses were not handled.
-        "tdf114460.pdf",
+        u"tdf114460.pdf",
         // Valgrind was unhappy about this.
-        "forcepoint16.pdf",
+        u"forcepoint16.pdf",
     };
 
     for (const auto& rName : aNames)

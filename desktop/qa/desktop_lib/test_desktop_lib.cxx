@@ -2821,7 +2821,7 @@ void DesktopLOKTest::testCalcSaveAs()
 
 void DesktopLOKTest::testSpellcheckerMultiView()
 {
-    static const OUStringLiteral aLangISO("en-US");
+    static const OUStringLiteral aLangISO(u"en-US");
     SvtSysLocaleOptions aSysLocaleOptions;
     aSysLocaleOptions.SetLocaleConfigString(aLangISO);
     aSysLocaleOptions.SetUILocaleConfigString(aLangISO);

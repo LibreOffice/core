@@ -158,7 +158,7 @@ void test::ostring::StringConcat::checkInvalid()
     CPPUNIT_ASSERT( INVALID_CONCAT( OString( "a" ) + OStringBuffer( "b" )));
     CPPUNIT_ASSERT( INVALID_CONCAT( OString( "a" ) + OUString( "b" )));
     CPPUNIT_ASSERT( INVALID_CONCAT( OString( "a" ) + OUStringBuffer( "b" )));
-    CPPUNIT_ASSERT( INVALID_CONCAT( OString( "a" ) + OUStringLiteral( "b" )));
+    CPPUNIT_ASSERT( INVALID_CONCAT( OString( "a" ) + OUStringLiteral( u"b" )));
     CPPUNIT_ASSERT( INVALID_CONCAT( OString( "a" ) + rtl::OUStringView( u"b" )));
     CPPUNIT_ASSERT( INVALID_CONCAT( OString( "a" ) + 1 ));
     rtl_String* rs = nullptr;

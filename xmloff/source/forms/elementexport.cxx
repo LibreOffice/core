@@ -1124,7 +1124,7 @@ namespace xmloff
             };
             static const OUStringLiteral pStringPropertyNames[] =
             {   // property names
-                PROPERTY_GROUP_NAME
+                u"" PROPERTY_GROUP_NAME
             };
 
             static const sal_Int32 nIdCount = SAL_N_ELEMENTS( nStringPropertyAttributeIds );

@@ -19,7 +19,7 @@ OUString f(sal_Unicode c, int n)
     // expected-note@+1 {{literal OUString variable defined here [loplugin:elidestringvar]}}
     OUString s3(u'a');
     // expected-note@+1 {{literal OUString variable defined here [loplugin:elidestringvar]}}
-    OUString s4 = OUStringLiteral("a");
+    OUString s4 = OUStringLiteral(u"a");
     switch (n)
     {
         case 1:

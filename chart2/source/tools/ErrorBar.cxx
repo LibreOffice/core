@@ -53,22 +53,22 @@ const SfxItemPropertySet* GetErrorBarPropertySet()
 {
     static const SfxItemPropertyMapEntry aErrorBarPropertyMap_Impl[] =
     {
-        {"ShowPositiveError",0,cppu::UnoType<bool>::get(), 0, 0},
-        {"ShowNegativeError",1,cppu::UnoType<bool>::get(), 0, 0},
-        {"PositiveError",2,cppu::UnoType<double>::get(),0,0},
-        {"NegativeError",3,cppu::UnoType<double>::get(), 0, 0},
-        {"PercentageError",4,cppu::UnoType<double>::get(), 0, 0},
-        {"ErrorBarStyle",5,cppu::UnoType<sal_Int32>::get(),0,0},
-        {"ErrorBarRangePositive",6,cppu::UnoType<OUString>::get(),0,0}, // read-only for export
-        {"ErrorBarRangeNegative",7,cppu::UnoType<OUString>::get(),0,0}, // read-only for export
-        {"Weight",8,cppu::UnoType<double>::get(),0,0},
-        {"LineStyle",9,cppu::UnoType<css::drawing::LineStyle>::get(),0,0},
-        {"LineDash",10,cppu::UnoType<drawing::LineDash>::get(),0,0},
-        {"LineWidth",11,cppu::UnoType<sal_Int32>::get(),0,0},
-        {"LineColor",12,cppu::UnoType<css::util::Color>::get(),0,0},
-        {"LineTransparence",13,cppu::UnoType<sal_Int16>::get(),0,0},
-        {"LineJoint",14,cppu::UnoType<css::drawing::LineJoint>::get(),0,0},
-        { "", 0, css::uno::Type(), 0, 0 }
+        {u"ShowPositiveError",0,cppu::UnoType<bool>::get(), 0, 0},
+        {u"ShowNegativeError",1,cppu::UnoType<bool>::get(), 0, 0},
+        {u"PositiveError",2,cppu::UnoType<double>::get(),0,0},
+        {u"NegativeError",3,cppu::UnoType<double>::get(), 0, 0},
+        {u"PercentageError",4,cppu::UnoType<double>::get(), 0, 0},
+        {u"ErrorBarStyle",5,cppu::UnoType<sal_Int32>::get(),0,0},
+        {u"ErrorBarRangePositive",6,cppu::UnoType<OUString>::get(),0,0}, // read-only for export
+        {u"ErrorBarRangeNegative",7,cppu::UnoType<OUString>::get(),0,0}, // read-only for export
+        {u"Weight",8,cppu::UnoType<double>::get(),0,0},
+        {u"LineStyle",9,cppu::UnoType<css::drawing::LineStyle>::get(),0,0},
+        {u"LineDash",10,cppu::UnoType<drawing::LineDash>::get(),0,0},
+        {u"LineWidth",11,cppu::UnoType<sal_Int32>::get(),0,0},
+        {u"LineColor",12,cppu::UnoType<css::util::Color>::get(),0,0},
+        {u"LineTransparence",13,cppu::UnoType<sal_Int16>::get(),0,0},
+        {u"LineJoint",14,cppu::UnoType<css::drawing::LineJoint>::get(),0,0},
+        { u"", 0, css::uno::Type(), 0, 0 }
     };
     static SfxItemPropertySet aPropSet( aErrorBarPropertyMap_Impl );
     return &aPropSet;

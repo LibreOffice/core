@@ -727,7 +727,7 @@ struct Convention_A1 : public ScCompiler::Convention
             KParseTokens::ASC_UNDERSCORE | KParseTokens::ASC_DOLLAR;
         constexpr sal_Int32 nContFlags = nStartFlags | KParseTokens::ASC_DOT;
         // '?' allowed in range names because of Xcl :-/
-        static const OUStringLiteral aAddAllowed("?#");
+        static const OUStringLiteral aAddAllowed(u"?#");
         return pCharClass->parseAnyToken( rFormula,
                 nSrcPos, nStartFlags, aAddAllowed,
                 (bGroupSeparator ? nContFlags | KParseTokens::GROUP_SEPARATOR_IN_NUMBER : nContFlags),
@@ -1358,7 +1358,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
             KParseTokens::ASC_UNDERSCORE | KParseTokens::ASC_DOLLAR;
         constexpr sal_Int32 nContFlags = nStartFlags | KParseTokens::ASC_DOT;
         // '?' allowed in range names
-        static const OUStringLiteral aAddAllowed("?!");
+        static const OUStringLiteral aAddAllowed(u"?!");
         return pCharClass->parseAnyToken( rFormula,
                 nSrcPos, nStartFlags, aAddAllowed,
                 (bGroupSeparator ? nContFlags | KParseTokens::GROUP_SEPARATOR_IN_NUMBER : nContFlags),
@@ -1681,7 +1681,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
             KParseTokens::ASC_UNDERSCORE ;
         constexpr sal_Int32 nContFlags = nStartFlags | KParseTokens::ASC_DOT;
         // '?' allowed in range names
-        static const OUStringLiteral aAddAllowed("?-[]!");
+        static const OUStringLiteral aAddAllowed(u"?-[]!");
 
         return pCharClass->parseAnyToken( rFormula,
                 nSrcPos, nStartFlags, aAddAllowed,

@@ -112,7 +112,7 @@ std::unique_ptr<weld::TreeIter> SwChangeDBDlg::Insert(const OUString& rDBName)
     OUString sUserData = rDBName.getToken(0, DB_DELIM, nIdx);
     sal_Int32 nCommandType = sUserData.toInt32();
 
-    OUString rToInsert = nCommandType ? OUStringLiteral(RID_BMP_DBQUERY) : OUStringLiteral(RID_BMP_DBTABLE);
+    OUString rToInsert = nCommandType ? OUStringLiteral(u"" RID_BMP_DBQUERY) : OUStringLiteral(u"" RID_BMP_DBTABLE);
 
     std::unique_ptr<weld::TreeIter> xIter(m_xUsedDBTLB->make_iterator());
     if (m_xUsedDBTLB->get_iter_first(*xIter))

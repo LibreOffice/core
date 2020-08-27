@@ -23,12 +23,12 @@
 #include <rtl/ustring.hxx>
 
 // PowerPoint-Filter
-const OUStringLiteral pFilterPowerPoint97( "MS PowerPoint 97" );
-const OUStringLiteral pFilterPowerPoint97Template( "MS PowerPoint 97 Vorlage" );
-const OUStringLiteral pFilterPowerPoint97AutoPlay( "MS PowerPoint 97 AutoPlay" );
+const OUStringLiteral pFilterPowerPoint97( u"MS PowerPoint 97" );
+const OUStringLiteral pFilterPowerPoint97Template( u"MS PowerPoint 97 Vorlage" );
+const OUStringLiteral pFilterPowerPoint97AutoPlay( u"MS PowerPoint 97 AutoPlay" );
 
 // XML content stream
-const OUStringLiteral pStarDrawXMLContent( "content.xml" );
+const OUStringLiteral pStarDrawXMLContent( u"content.xml" );
 
 #endif // INCLUDED_SD_INC_STRMNAME_H
 

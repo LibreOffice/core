@@ -60,7 +60,7 @@ static OUString lcl_getImageId(const uno::Reference< report::XReportComponent>& 
     if ( uno::Reference< report::XFixedText>(_xElement,uno::UNO_QUERY).is() )
         sId = RID_SVXBMP_FM_FIXEDTEXT;
     else if ( xFixedLine.is() )
-        sId = xFixedLine->getOrientation() ? OUStringLiteral(RID_SVXBMP_INSERT_VFIXEDLINE) : OUStringLiteral(RID_SVXBMP_INSERT_HFIXEDLINE);
+        sId = xFixedLine->getOrientation() ? OUStringLiteral(u"" RID_SVXBMP_INSERT_VFIXEDLINE) : OUStringLiteral(u"" RID_SVXBMP_INSERT_HFIXEDLINE);
     else if ( uno::Reference< report::XFormattedField>(_xElement,uno::UNO_QUERY).is() )
         sId = RID_SVXBMP_FM_EDIT;
     else if ( uno::Reference< report::XImageControl>(_xElement,uno::UNO_QUERY).is() )

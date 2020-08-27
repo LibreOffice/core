@@ -3702,13 +3702,13 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned long
     if (aMap.find("id") == aMap.end())
         return;
 
-    static const OUStringLiteral sClickAction("CLICK");
-    static const OUStringLiteral sSelectAction("SELECT");
-    static const OUStringLiteral sClearAction("CLEAR");
-    static const OUStringLiteral sTypeAction("TYPE");
-    static const OUStringLiteral sUpAction("UP");
-    static const OUStringLiteral sDownAction("DOWN");
-    static const OUStringLiteral sValue("VALUE");
+    static const OUStringLiteral sClickAction(u"CLICK");
+    static const OUStringLiteral sSelectAction(u"SELECT");
+    static const OUStringLiteral sClearAction(u"CLEAR");
+    static const OUStringLiteral sTypeAction(u"TYPE");
+    static const OUStringLiteral sUpAction(u"UP");
+    static const OUStringLiteral sDownAction(u"DOWN");
+    static const OUStringLiteral sValue(u"VALUE");
 
     bool bIsWeldedDialog = false;
 

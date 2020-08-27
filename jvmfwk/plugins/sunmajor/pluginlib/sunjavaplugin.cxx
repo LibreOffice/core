@@ -577,16 +577,16 @@ static void do_msvcr_magic(OUString const &jvm_dll)
     {
         static OUStringLiteral msvcrts[] =
         {
-            "msvcr71.dll",
-            "msvcr100.dll"
+            u"msvcr71.dll",
+            u"msvcr100.dll"
         };
         char const* importName = reinterpret_cast<char *>(dos_hdr) + imports->Name + VAtoPhys;
         sal_Int32 importNameLen = rtl_str_getLength(importName);
         for (size_t i = 0; i < SAL_N_ELEMENTS(msvcrts); ++i)
         {
-            if (0 == rtl_str_compareIgnoreAsciiCase_WithLength(
-                    importName, importNameLen,
-                    msvcrts[i].data, msvcrts[i].size))
+            if (0 == rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
+                    msvcrts[i].data, msvcrts[i].size,
+                    importName, importNameLen))
             {
                 load_msvcr(Module, msvcrts[i]);
                 free(dos_hdr);

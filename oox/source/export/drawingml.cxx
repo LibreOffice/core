@@ -2908,7 +2908,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
     OUString sPresetWarp(PresetGeometryTypeNames::GetMsoName(sShapeType));
     // ODF may have user defined TextPath, use "textPlain" as ersatz.
     if (sPresetWarp.isEmpty())
-        sPresetWarp = bIsFontworkShape ? OUStringLiteral("textPlain") : OUStringLiteral("textNoShape");
+        sPresetWarp = bIsFontworkShape ? OUStringLiteral(u"textPlain") : OUStringLiteral(u"textNoShape");
 
     bool bFromWordArt = !bScaleX
                         && ( sPresetWarp == "textArchDown" || sPresetWarp == "textArchUp"

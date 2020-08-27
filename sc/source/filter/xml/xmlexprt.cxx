@@ -336,7 +336,7 @@ sal_Int16 ScXMLExport::GetMeasureUnit()
     return SvXMLUnitConverter::GetMeasureUnit(eFieldUnit);
 }
 
-const OUStringLiteral gsLayerID( SC_LAYERID );
+const OUStringLiteral gsLayerID( u"" SC_LAYERID );
 
 ScXMLExport::ScXMLExport(
     const css::uno::Reference< css::uno::XComponentContext >& rContext,

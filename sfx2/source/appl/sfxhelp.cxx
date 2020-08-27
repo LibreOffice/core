@@ -702,7 +702,7 @@ bool SfxHelp::Start(const OUString& rURL, weld::Widget* pWidget)
 /// Redirect the vnd.sun.star.help:// urls to http://help.libreoffice.org
 static bool impl_showOnlineHelp( const OUString& rURL )
 {
-    static const OUStringLiteral aInternal("vnd.sun.star.help://");
+    static const OUStringLiteral aInternal(u"vnd.sun.star.help://");
     if ( rURL.getLength() <= aInternal.getLength() || !rURL.startsWith(aInternal) )
         return false;
 
@@ -851,7 +851,7 @@ bool rewriteFlatpakHelpRootUrl(OUString * helpRootUrl) {
             //   /.../runtime/org.libreoffice.LibreOffice.Help/<arch>/<branch>/<sha>/files
             // because the extension's files are stored at a different place than the app's files,
             // so use this hack until flatpak itself provides a better solution:
-            static constexpr auto segments = OUStringLiteral("/app/org.libreoffice.LibreOffice/");
+            static constexpr auto segments = OUStringLiteral(u"/app/org.libreoffice.LibreOffice/");
             auto const i1 = path.lastIndexOf(segments);
                 // use lastIndexOf instead of indexOf, in case the user-controlled prefix /.../
                 // happens to contain such segments

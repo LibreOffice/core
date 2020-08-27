@@ -77,9 +77,9 @@ const ::std::vector<OUString> CSVImportOptionNames =
     "Language",
     "SkipEmptyCells"
 };
-const OUStringLiteral aSep_Path =           "Office.Calc/Dialogs/CSVImport";
-const OUStringLiteral aSep_Path_Clpbrd =    "Office.Calc/Dialogs/ClipboardTextImport";
-const OUStringLiteral aSep_Path_Text2Col =  "Office.Calc/Dialogs/TextToColumnsImport";
+const OUStringLiteral aSep_Path =           u"Office.Calc/Dialogs/CSVImport";
+const OUStringLiteral aSep_Path_Clpbrd =    u"Office.Calc/Dialogs/ClipboardTextImport";
+const OUStringLiteral aSep_Path_Text2Col =  u"Office.Calc/Dialogs/TextToColumnsImport";
 
 namespace {
 CSVImportOptionsIndex getSkipEmptyCellsIndex( ScImportAsciiCall eCall )
@@ -279,7 +279,7 @@ static void lcl_SaveSeparators(
     aItem.PutProperties(aNames, aValues);
 }
 
-constexpr OUStringLiteral gaTextSepList(SCSTR_TEXTSEP);
+constexpr OUStringLiteral gaTextSepList(u"" SCSTR_TEXTSEP);
 
 ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, const OUString& aDatName,
                                    SvStream* pInStream, ScImportAsciiCall eCall)

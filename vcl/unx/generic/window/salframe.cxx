@@ -189,56 +189,56 @@ namespace
 {
     const OUStringLiteral SV_ICON_SIZE48[] =
     {
-        MAINAPP_48_8,
-        MAINAPP_48_8,
-        ODT_48_8,
-        OTT_48_8,
-        ODS_48_8,
-        OTS_48_8,
-        ODG_48_8,
-        MAINAPP_48_8,
-        ODP_48_8,
-        MAINAPP_48_8,
-        ODM_48_8,
-        MAINAPP_48_8,
-        ODB_48_8,
-        ODF_48_8
+        u"" MAINAPP_48_8,
+        u"" MAINAPP_48_8,
+        u"" ODT_48_8,
+        u"" OTT_48_8,
+        u"" ODS_48_8,
+        u"" OTS_48_8,
+        u"" ODG_48_8,
+        u"" MAINAPP_48_8,
+        u"" ODP_48_8,
+        u"" MAINAPP_48_8,
+        u"" ODM_48_8,
+        u"" MAINAPP_48_8,
+        u"" ODB_48_8,
+        u"" ODF_48_8
     };
 
     const OUStringLiteral SV_ICON_SIZE32[] =
     {
-        MAINAPP_32_8,
-        MAINAPP_32_8,
-        ODT_32_8,
-        OTT_32_8,
-        ODS_32_8,
-        OTS_32_8,
-        ODG_32_8,
-        MAINAPP_32_8,
-        ODP_32_8,
-        MAINAPP_32_8,
-        ODM_32_8,
-        MAINAPP_32_8,
-        ODB_32_8,
-        ODF_32_8
+        u"" MAINAPP_32_8,
+        u"" MAINAPP_32_8,
+        u"" ODT_32_8,
+        u"" OTT_32_8,
+        u"" ODS_32_8,
+        u"" OTS_32_8,
+        u"" ODG_32_8,
+        u"" MAINAPP_32_8,
+        u"" ODP_32_8,
+        u"" MAINAPP_32_8,
+        u"" ODM_32_8,
+        u"" MAINAPP_32_8,
+        u"" ODB_32_8,
+        u"" ODF_32_8
     };
 
     const OUStringLiteral SV_ICON_SIZE16[] =
     {
-        MAINAPP_16_8,
-        MAINAPP_16_8,
-        ODT_16_8,
-        OTT_16_8,
-        ODS_16_8,
-        OTS_16_8,
-        ODG_16_8,
-        MAINAPP_16_8,
-        ODP_16_8,
-        MAINAPP_16_8,
-        ODM_16_8,
-        MAINAPP_16_8,
-        ODB_16_8,
-        ODF_16_8
+        u"" MAINAPP_16_8,
+        u"" MAINAPP_16_8,
+        u"" ODT_16_8,
+        u"" OTT_16_8,
+        u"" ODS_16_8,
+        u"" OTS_16_8,
+        u"" ODG_16_8,
+        u"" MAINAPP_16_8,
+        u"" ODP_16_8,
+        u"" MAINAPP_16_8,
+        u"" ODM_16_8,
+        u"" MAINAPP_16_8,
+        u"" ODB_16_8,
+        u"" ODF_16_8
     };
 }
 

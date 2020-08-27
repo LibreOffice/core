@@ -82,7 +82,7 @@ namespace rptui
 
         case Field:
         {
-            m_sCompleteFormula = sFieldPrefix + OUStringLiteral("[") + _rFieldOrExpression + "]";
+            m_sCompleteFormula = sFieldPrefix + OUStringLiteral(u"[") + _rFieldOrExpression + "]";
         }
         break;
         default:

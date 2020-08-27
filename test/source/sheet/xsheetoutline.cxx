@@ -28,13 +28,13 @@ using namespace css::uno;
 
 namespace apitest {
 
-const OUStringLiteral colLevel1 = "OutlineSheet.A1:Z1";
-const OUStringLiteral colLevel2 = "OutlineSheet.C1:W1";
-const OUStringLiteral colLevel3 = "OutlineSheet.E1:U1";
-const OUStringLiteral colLevel4 = "OutlineSheet.G1:S1";
+const OUStringLiteral colLevel1 = u"OutlineSheet.A1:Z1";
+const OUStringLiteral colLevel2 = u"OutlineSheet.C1:W1";
+const OUStringLiteral colLevel3 = u"OutlineSheet.E1:U1";
+const OUStringLiteral colLevel4 = u"OutlineSheet.G1:S1";
 
-const OUStringLiteral rowLevel1 = "OutlineSheet.A1:A30";
-const OUStringLiteral rowLevel2 = "OutlineSheet.A3:A27";
+const OUStringLiteral rowLevel1 = u"OutlineSheet.A1:A30";
+const OUStringLiteral rowLevel2 = u"OutlineSheet.A3:A27";
 
 static OUString getVisibleAdress(
     uno::Reference<sheet::XSpreadsheet> const& xSheet,

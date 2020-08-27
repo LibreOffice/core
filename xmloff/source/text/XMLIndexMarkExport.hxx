@@ -38,18 +38,18 @@ namespace com::sun::star {
  */
 class XMLIndexMarkExport
 {
-    static constexpr OUStringLiteral gsLevel = "Level";
-    static constexpr OUStringLiteral gsUserIndexName = "UserIndexName";
-    static constexpr OUStringLiteral gsPrimaryKey = "PrimaryKey";
-    static constexpr OUStringLiteral gsSecondaryKey = "SecondaryKey";
-    static constexpr OUStringLiteral gsDocumentIndexMark = "DocumentIndexMark";
-    static constexpr OUStringLiteral gsIsStart = "IsStart";
-    static constexpr OUStringLiteral gsIsCollapsed = "IsCollapsed";
-    static constexpr OUStringLiteral gsAlternativeText = "AlternativeText";
-    static constexpr OUStringLiteral gsTextReading = "TextReading";
-    static constexpr OUStringLiteral gsPrimaryKeyReading = "PrimaryKeyReading";
-    static constexpr OUStringLiteral gsSecondaryKeyReading = "SecondaryKeyReading";
-    static constexpr OUStringLiteral gsMainEntry = "IsMainEntry";
+    static constexpr OUStringLiteral gsLevel = u"Level";
+    static constexpr OUStringLiteral gsUserIndexName = u"UserIndexName";
+    static constexpr OUStringLiteral gsPrimaryKey = u"PrimaryKey";
+    static constexpr OUStringLiteral gsSecondaryKey = u"SecondaryKey";
+    static constexpr OUStringLiteral gsDocumentIndexMark = u"DocumentIndexMark";
+    static constexpr OUStringLiteral gsIsStart = u"IsStart";
+    static constexpr OUStringLiteral gsIsCollapsed = u"IsCollapsed";
+    static constexpr OUStringLiteral gsAlternativeText = u"AlternativeText";
+    static constexpr OUStringLiteral gsTextReading = u"TextReading";
+    static constexpr OUStringLiteral gsPrimaryKeyReading = u"PrimaryKeyReading";
+    static constexpr OUStringLiteral gsSecondaryKeyReading = u"SecondaryKeyReading";
+    static constexpr OUStringLiteral gsMainEntry = u"IsMainEntry";
 
     SvXMLExport& rExport;
 

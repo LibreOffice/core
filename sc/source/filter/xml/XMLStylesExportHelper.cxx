@@ -75,16 +75,16 @@ bool ScMyValidation::IsEqual(const ScMyValidation& aVal) const
         aVal.sFormula2 == sFormula2;
 }
 
-const OUStringLiteral gsERRALSTY(SC_UNONAME_ERRALSTY);
-const OUStringLiteral gsIGNOREBL(SC_UNONAME_IGNOREBL);
-const OUStringLiteral gsSHOWLIST(SC_UNONAME_SHOWLIST);
-const OUStringLiteral gsTYPE(SC_UNONAME_TYPE);
-const OUStringLiteral gsSHOWINP(SC_UNONAME_SHOWINP);
-const OUStringLiteral gsSHOWERR(SC_UNONAME_SHOWERR);
-const OUStringLiteral gsINPTITLE(SC_UNONAME_INPTITLE);
-const OUStringLiteral gsINPMESS(SC_UNONAME_INPMESS);
-const OUStringLiteral gsERRTITLE(SC_UNONAME_ERRTITLE);
-const OUStringLiteral gsERRMESS(SC_UNONAME_ERRMESS);
+const OUStringLiteral gsERRALSTY(u"" SC_UNONAME_ERRALSTY);
+const OUStringLiteral gsIGNOREBL(u"" SC_UNONAME_IGNOREBL);
+const OUStringLiteral gsSHOWLIST(u"" SC_UNONAME_SHOWLIST);
+const OUStringLiteral gsTYPE(u"" SC_UNONAME_TYPE);
+const OUStringLiteral gsSHOWINP(u"" SC_UNONAME_SHOWINP);
+const OUStringLiteral gsSHOWERR(u"" SC_UNONAME_SHOWERR);
+const OUStringLiteral gsINPTITLE(u"" SC_UNONAME_INPTITLE);
+const OUStringLiteral gsINPMESS(u"" SC_UNONAME_INPMESS);
+const OUStringLiteral gsERRTITLE(u"" SC_UNONAME_ERRTITLE);
+const OUStringLiteral gsERRMESS(u"" SC_UNONAME_ERRMESS);
 
 ScMyValidationsContainer::ScMyValidationsContainer()
     : aValidationVec()

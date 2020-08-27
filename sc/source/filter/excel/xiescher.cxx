@@ -468,7 +468,7 @@ SdrObjectUniquePtr XclImpDrawObjBase::CreateSdrObject( XclImpDffConverter& rDffC
             {
                 const Reference< XControlModel >& xCtrlModel = pSdrUnoObj->GetUnoControlModel();
                 Reference< XPropertySet > xPropSet(xCtrlModel,UNO_QUERY);
-                const static OUStringLiteral sPropertyName("ControlTypeinMSO");
+                const static OUStringLiteral sPropertyName(u"ControlTypeinMSO");
 
                 enum { eCreateFromOffice = 0, eCreateFromMSTBXControl, eCreateFromMSOCXControl };
 
@@ -488,7 +488,7 @@ SdrObjectUniquePtr XclImpDrawObjBase::CreateSdrObject( XclImpDffConverter& rDffC
                 if( mnObjType == 8 )//OCX
                 {
                     //Need summary type for export
-                    const static OUStringLiteral sObjIdPropertyName("ObjIDinMSO");
+                    const static OUStringLiteral sObjIdPropertyName(u"ObjIDinMSO");
                     const XclImpPictureObj* const pObj = dynamic_cast< const XclImpPictureObj* const >(this);
                     if( pObj != nullptr && pObj->IsOcxControl() )
                     {
@@ -2918,7 +2918,7 @@ OUString XclImpPictureObj::GetOleStorageName() const
     OUStringBuffer aStrgName;
     if( (mbEmbedded || mbLinked) && !mbControl && (mnStorageId > 0) )
     {
-        aStrgName = mbEmbedded ? OUStringLiteral(EXC_STORAGE_OLE_EMBEDDED) : OUStringLiteral(EXC_STORAGE_OLE_LINKED);
+        aStrgName = mbEmbedded ? OUStringLiteral(u"" EXC_STORAGE_OLE_EMBEDDED) : OUStringLiteral(u"" EXC_STORAGE_OLE_LINKED);
         static const char spcHexChars[] = "0123456789ABCDEF";
         for( sal_uInt8 nIndex = 32; nIndex > 0; nIndex -= 4 )
             aStrgName.append(OUStringChar( spcHexChars[ ::extract_value< sal_uInt8 >( mnStorageId, nIndex - 4, 4 ) ] ));
@@ -3299,7 +3299,7 @@ XclImpDffConverter::XclImpDffConvData::XclImpDffConvData(
 {
 }
 
-const OUStringLiteral gaStdFormName( "Standard" ); /// Standard name of control forms.
+const OUStringLiteral gaStdFormName( u"Standard" ); /// Standard name of control forms.
 
 XclImpDffConverter::XclImpDffConverter( const XclImpRoot& rRoot, SvStream& rDffStrm ) :
     XclImpSimpleDffConverter( rRoot, rDffStrm ),

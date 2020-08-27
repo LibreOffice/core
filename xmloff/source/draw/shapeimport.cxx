@@ -110,10 +110,10 @@ struct XMLShapeImportHelperImpl
     bool                        mbIsPresentationShapesSupported;
 };
 
-const OUStringLiteral gsStartShape("StartShape");
-const OUStringLiteral gsEndShape("EndShape");
-const OUStringLiteral gsStartGluePointIndex("StartGluePointIndex");
-const OUStringLiteral gsEndGluePointIndex("EndGluePointIndex");
+const OUStringLiteral gsStartShape(u"StartShape");
+const OUStringLiteral gsEndShape(u"EndShape");
+const OUStringLiteral gsStartGluePointIndex(u"StartGluePointIndex");
+const OUStringLiteral gsEndGluePointIndex(u"EndGluePointIndex");
 
 XMLShapeImportHelper::XMLShapeImportHelper(
         SvXMLImport& rImporter,

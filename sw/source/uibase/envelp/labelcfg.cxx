@@ -225,7 +225,7 @@ static Sequence<PropertyValue> lcl_CreateProperties(
             case 1:
             {
                 rMeasure.clear();
-                rMeasure += rRec.m_bCont ? OUStringLiteral( "C" ) : OUStringLiteral( "S" );      rMeasure += sColon;
+                rMeasure += rRec.m_bCont ? OUStringLiteral( u"C" ) : OUStringLiteral( u"S" );      rMeasure += sColon;
                 rMeasure += OUString::number( convertTwipToMm100( rRec.m_nHDist ) );   rMeasure += sColon;
                 rMeasure += OUString::number( convertTwipToMm100( rRec.m_nVDist ) );   rMeasure += sColon;
                 rMeasure += OUString::number( convertTwipToMm100( rRec.m_nWidth ) );   rMeasure += sColon;

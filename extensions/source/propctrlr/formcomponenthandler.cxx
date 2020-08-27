@@ -996,8 +996,8 @@ namespace pcr
             aDescriptor.Control = pControl;
 
             aDescriptor.PrimaryButtonId = PROPERTY_ID_TARGET_URL == nPropId
-                ? OUStringLiteral(UID_PROP_DLG_ATTR_TARGET_URL)
-                : OUStringLiteral(UID_PROP_DLG_IMAGE_URL);
+                ? OUStringLiteral(u"" UID_PROP_DLG_ATTR_TARGET_URL)
+                : OUStringLiteral(u"" UID_PROP_DLG_IMAGE_URL);
             break;
         }
 
@@ -1376,7 +1376,7 @@ namespace pcr
             aDescriptor.HasSecondaryButton = true;
 
         bool bIsDataProperty = ( nPropertyUIFlags & PROP_FLAG_DATA_PROPERTY ) != 0;
-        aDescriptor.Category = bIsDataProperty ? OUStringLiteral("Data") : OUStringLiteral("General");
+        aDescriptor.Category = bIsDataProperty ? OUStringLiteral(u"Data") : OUStringLiteral(u"General");
         return aDescriptor;
     }
 

@@ -81,10 +81,10 @@ static SvxItemPropertySet& GetStylePropertySet()
 {
     static const SfxItemPropertyMapEntry aFullPropertyMap_Impl[] =
     {
-        { "Family",                 WID_STYLE_FAMILY,       ::cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY,    0},
-        { "UserDefinedAttributes",  SDRATTR_XMLATTRIBUTES,  cppu::UnoType<XNameContainer>::get(), 0,     0},
-        { "DisplayName",            WID_STYLE_DISPNAME,     ::cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY,    0},
-        { "Hidden",                 WID_STYLE_HIDDEN,       cppu::UnoType<bool>::get(),       0,     0},
+        { u"Family",                 WID_STYLE_FAMILY,       ::cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY,    0},
+        { u"UserDefinedAttributes",  SDRATTR_XMLATTRIBUTES,  cppu::UnoType<XNameContainer>::get(), 0,     0},
+        { u"DisplayName",            WID_STYLE_DISPNAME,     ::cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY,    0},
+        { u"Hidden",                 WID_STYLE_HIDDEN,       cppu::UnoType<bool>::get(),       0,     0},
 
         SVX_UNOEDIT_NUMBERING_PROPERTIE,
         SHADOW_PROPERTIES
@@ -95,11 +95,11 @@ static SvxItemPropertySet& GetStylePropertySet()
         TEXT_PROPERTIES_DEFAULTS
         CONNECTOR_PROPERTIES
         SPECIAL_DIMENSIONING_PROPERTIES_DEFAULTS
-        { "TopBorder",                    SDRATTR_TABLE_BORDER,           ::cppu::UnoType<BorderLine>::get(), 0, TOP_BORDER },
-        { "BottomBorder",                 SDRATTR_TABLE_BORDER,           ::cppu::UnoType<BorderLine>::get(), 0, BOTTOM_BORDER },
-        { "LeftBorder",                   SDRATTR_TABLE_BORDER,           ::cppu::UnoType<BorderLine>::get(), 0, LEFT_BORDER },
-        { "RightBorder",                  SDRATTR_TABLE_BORDER,           ::cppu::UnoType<BorderLine>::get(), 0, RIGHT_BORDER },
-        { "", 0, css::uno::Type(), 0, 0 }
+        { u"TopBorder",                    SDRATTR_TABLE_BORDER,           ::cppu::UnoType<BorderLine>::get(), 0, TOP_BORDER },
+        { u"BottomBorder",                 SDRATTR_TABLE_BORDER,           ::cppu::UnoType<BorderLine>::get(), 0, BOTTOM_BORDER },
+        { u"LeftBorder",                   SDRATTR_TABLE_BORDER,           ::cppu::UnoType<BorderLine>::get(), 0, LEFT_BORDER },
+        { u"RightBorder",                  SDRATTR_TABLE_BORDER,           ::cppu::UnoType<BorderLine>::get(), 0, RIGHT_BORDER },
+        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     static SvxItemPropertySet aPropSet( aFullPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
@@ -575,39 +575,39 @@ struct ApiNameMap
     OUStringLiteral mpApiName;
     sal_uInt32 mnHelpId;
 } const pApiNameMap[]
-    = { { OUStringLiteral("title"), HID_PSEUDOSHEET_TITLE },
-        { OUStringLiteral("subtitle"), HID_PSEUDOSHEET_SUBTITLE },
-        { OUStringLiteral("background"), HID_PSEUDOSHEET_BACKGROUND },
-        { OUStringLiteral("backgroundobjects"), HID_PSEUDOSHEET_BACKGROUNDOBJECTS },
-        { OUStringLiteral("notes"), HID_PSEUDOSHEET_NOTES },
-        { OUStringLiteral("standard"), HID_STANDARD_STYLESHEET_NAME },
-        { OUStringLiteral("objectwithoutfill"), HID_POOLSHEET_OBJWITHOUTFILL },
+    = { { OUStringLiteral(u"title"), HID_PSEUDOSHEET_TITLE },
+        { OUStringLiteral(u"subtitle"), HID_PSEUDOSHEET_SUBTITLE },
+        { OUStringLiteral(u"background"), HID_PSEUDOSHEET_BACKGROUND },
+        { OUStringLiteral(u"backgroundobjects"), HID_PSEUDOSHEET_BACKGROUNDOBJECTS },
+        { OUStringLiteral(u"notes"), HID_PSEUDOSHEET_NOTES },
+        { OUStringLiteral(u"standard"), HID_STANDARD_STYLESHEET_NAME },
+        { OUStringLiteral(u"objectwithoutfill"), HID_POOLSHEET_OBJWITHOUTFILL },
 
-        { OUStringLiteral("Text"), HID_POOLSHEET_TEXT },
-        { OUStringLiteral("A4"), HID_POOLSHEET_A4 },
-        { OUStringLiteral("Title A4"), HID_POOLSHEET_A4_TITLE },
-        { OUStringLiteral("Heading A4"), HID_POOLSHEET_A4_HEADLINE },
-        { OUStringLiteral("Text A4"), HID_POOLSHEET_A4_TEXT },
-        { OUStringLiteral("A4"), HID_POOLSHEET_A0 },
-        { OUStringLiteral("Title A0"), HID_POOLSHEET_A0_TITLE },
-        { OUStringLiteral("Heading A0"), HID_POOLSHEET_A0_HEADLINE },
-        { OUStringLiteral("Text A0"), HID_POOLSHEET_A0_TEXT },
+        { OUStringLiteral(u"Text"), HID_POOLSHEET_TEXT },
+        { OUStringLiteral(u"A4"), HID_POOLSHEET_A4 },
+        { OUStringLiteral(u"Title A4"), HID_POOLSHEET_A4_TITLE },
+        { OUStringLiteral(u"Heading A4"), HID_POOLSHEET_A4_HEADLINE },
+        { OUStringLiteral(u"Text A4"), HID_POOLSHEET_A4_TEXT },
+        { OUStringLiteral(u"A4"), HID_POOLSHEET_A0 },
+        { OUStringLiteral(u"Title A0"), HID_POOLSHEET_A0_TITLE },
+        { OUStringLiteral(u"Heading A0"), HID_POOLSHEET_A0_HEADLINE },
+        { OUStringLiteral(u"Text A0"), HID_POOLSHEET_A0_TEXT },
 
-        { OUStringLiteral("Graphic"), HID_POOLSHEET_GRAPHIC },
-        { OUStringLiteral("Shapes"), HID_POOLSHEET_SHAPES },
-        { OUStringLiteral("Filled"), HID_POOLSHEET_FILLED },
-        { OUStringLiteral("Filled Blue"), HID_POOLSHEET_FILLED_BLUE },
-        { OUStringLiteral("Filled Green"), HID_POOLSHEET_FILLED_GREEN },
-        { OUStringLiteral("Filled Red"), HID_POOLSHEET_FILLED_RED },
-        { OUStringLiteral("Filled Yellow"), HID_POOLSHEET_FILLED_YELLOW },
-        { OUStringLiteral("Outlined"), HID_POOLSHEET_OUTLINE },
-        { OUStringLiteral("Outlined Blue"), HID_POOLSHEET_OUTLINE_BLUE },
-        { OUStringLiteral("Outlined Green"), HID_POOLSHEET_OUTLINE_GREEN },
-        { OUStringLiteral("Outlined Red"), HID_POOLSHEET_OUTLINE_RED },
-        { OUStringLiteral("Outlined Yellow"), HID_POOLSHEET_OUTLINE_YELLOW },
-        { OUStringLiteral("Lines"), HID_POOLSHEET_LINES },
-        { OUStringLiteral("Arrow Line"), HID_POOLSHEET_MEASURE },
-        { OUStringLiteral("Arrow Dashed"), HID_POOLSHEET_LINES_DASHED }
+        { OUStringLiteral(u"Graphic"), HID_POOLSHEET_GRAPHIC },
+        { OUStringLiteral(u"Shapes"), HID_POOLSHEET_SHAPES },
+        { OUStringLiteral(u"Filled"), HID_POOLSHEET_FILLED },
+        { OUStringLiteral(u"Filled Blue"), HID_POOLSHEET_FILLED_BLUE },
+        { OUStringLiteral(u"Filled Green"), HID_POOLSHEET_FILLED_GREEN },
+        { OUStringLiteral(u"Filled Red"), HID_POOLSHEET_FILLED_RED },
+        { OUStringLiteral(u"Filled Yellow"), HID_POOLSHEET_FILLED_YELLOW },
+        { OUStringLiteral(u"Outlined"), HID_POOLSHEET_OUTLINE },
+        { OUStringLiteral(u"Outlined Blue"), HID_POOLSHEET_OUTLINE_BLUE },
+        { OUStringLiteral(u"Outlined Green"), HID_POOLSHEET_OUTLINE_GREEN },
+        { OUStringLiteral(u"Outlined Red"), HID_POOLSHEET_OUTLINE_RED },
+        { OUStringLiteral(u"Outlined Yellow"), HID_POOLSHEET_OUTLINE_YELLOW },
+        { OUStringLiteral(u"Lines"), HID_POOLSHEET_LINES },
+        { OUStringLiteral(u"Arrow Line"), HID_POOLSHEET_MEASURE },
+        { OUStringLiteral(u"Arrow Dashed"), HID_POOLSHEET_LINES_DASHED }
       };
 
 OUString GetApiNameForHelpId(sal_uLong nId)

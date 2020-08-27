@@ -1062,7 +1062,7 @@ OUString SvtFileView::GetConfigString() const
     OUString sRet = OUString::number( mpImpl->mnSortColumn ) + ";";
 
     bool bUp = mpImpl->mbAscending;
-    sRet += (bUp ? OUStringLiteral("1") : OUStringLiteral("0")) + ";";
+    sRet += (bUp ? OUStringLiteral(u"1") : OUStringLiteral(u"0")) + ";";
 
     weld::TreeView* pView = mpImpl->mxView->getWidget();
     sal_uInt16 nCount = mpImpl->mxView->TypeColumnVisible() ? 4 : 3;

@@ -141,8 +141,8 @@ css::uno::Sequence< OUString > SAL_CALL ToolbarsMenuController::getSupportedServ
     return { SERVICENAME_POPUPMENUCONTROLLER };
 }
 
-constexpr OUStringLiteral g_aPropUIName( "UIName" );
-constexpr OUStringLiteral g_aPropResourceURL( "ResourceURL" );
+constexpr OUStringLiteral g_aPropUIName( u"UIName" );
+constexpr OUStringLiteral g_aPropResourceURL( u"ResourceURL" );
 
 ToolbarsMenuController::ToolbarsMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
     svt::PopupMenuControllerBase( xContext ),

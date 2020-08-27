@@ -1522,7 +1522,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, Any& rAny
                         if (!getType(sName, type))
                         {
                             throw CannotConvertException(
-                                      OUStringLiteral("[automation bridge]UnoConversionUtilities<T>::variantToAny \n"
+                                      OUStringLiteral(u"[automation bridge]UnoConversionUtilities<T>::variantToAny \n"
                                       "A UNO type with the name: ") + o3tl::toU(LPCOLESTR(sName)) +
                                 "does not exist!",
                                 nullptr, TypeClass_UNKNOWN, FailReason::TYPE_NOT_SUPPORTED,0);

@@ -82,9 +82,9 @@ namespace svxform
         OUString m_sInstance_UI;
         OUString m_sNone_UI;
 
-        static constexpr OUStringLiteral const m_sDoc_API = "all";
-        static constexpr OUStringLiteral const m_sInstance_API = "instance";
-        static constexpr OUStringLiteral const m_sNone_API = "none";
+        static constexpr OUStringLiteral const m_sDoc_API = u"all";
+        static constexpr OUStringLiteral const m_sInstance_API = u"instance";
+        static constexpr OUStringLiteral const m_sNone_API = u"none";
 
         ReplaceString( const ReplaceString& ) = delete;
 
@@ -127,9 +127,9 @@ namespace svxform
         OUString m_sPut_UI;
         OUString m_sGet_UI;
 
-        static constexpr OUStringLiteral m_sPost_API = "post";
-        static constexpr OUStringLiteral m_sPut_API = "put";
-        static constexpr OUStringLiteral m_sGet_API = "get";
+        static constexpr OUStringLiteral m_sPost_API = u"post";
+        static constexpr OUStringLiteral m_sPut_API = u"put";
+        static constexpr OUStringLiteral m_sGet_API = u"get";
 
         MethodString( const MethodString& ) = delete;
 

@@ -224,8 +224,8 @@ OUString Content::getContentType(
     return ( "application/"
              + aScheme
              + ( bFolder
-                 ? OUStringLiteral("-folder")
-                 : OUStringLiteral("-stream") ) );
+                 ? OUStringLiteral(u"-folder")
+                 : OUStringLiteral(u"-stream") ) );
 }
 
 

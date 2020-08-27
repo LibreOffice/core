@@ -44,15 +44,15 @@ static const SvxItemPropertySet* ImplGetSvxTextPortionPropertySet()
         SVX_UNOEDIT_FONT_PROPERTIES,
         SVX_UNOEDIT_OUTLINER_PROPERTIES,
         SVX_UNOEDIT_PARA_PROPERTIES,
-        {"TextField",                 EE_FEATURE_FIELD,
+        {u"TextField",                 EE_FEATURE_FIELD,
             cppu::UnoType<text::XTextField>::get(), beans::PropertyAttribute::READONLY, 0 },
-        {"TextPortionType",           WID_PORTIONTYPE,
+        {u"TextPortionType",           WID_PORTIONTYPE,
             ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::READONLY, 0 },
-        {"TextUserDefinedAttributes", EE_CHAR_XMLATTRIBS,
+        {u"TextUserDefinedAttributes", EE_CHAR_XMLATTRIBS,
             cppu::UnoType<css::container::XNameContainer>::get(), 0, 0},
-        {"ParaUserDefinedAttributes", EE_PARA_XMLATTRIBS,
+        {u"ParaUserDefinedAttributes", EE_PARA_XMLATTRIBS,
             cppu::UnoType<css::container::XNameContainer>::get(), 0, 0},
-        { "", 0, css::uno::Type(), 0, 0 }
+        { u"", 0, css::uno::Type(), 0, 0 }
     };
     static SvxItemPropertySet aSvxTextPortionPropertySet( aSvxTextPortionPropertyMap, EditEngine::GetGlobalItemPool() );
     return &aSvxTextPortionPropertySet;

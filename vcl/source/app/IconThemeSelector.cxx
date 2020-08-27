@@ -18,7 +18,7 @@
 
 namespace vcl {
 
-/*static*/ const OUStringLiteral IconThemeSelector::FALLBACK_ICON_THEME_ID("colibre");
+/*static*/ const OUStringLiteral IconThemeSelector::FALLBACK_ICON_THEME_ID(u"colibre");
 
 namespace {
 
