@@ -32,6 +32,8 @@
 #include <tools/urlobj.hxx>
 #include <tools/vcompat.hxx>
 
+#include <com/sun/star/ucb/ContentCreationException.hpp>
+
 static bool FileExists(const INetURLObject& rURL, const OUString& rExt)
 {
     INetURLObject aURL(rURL);
@@ -140,4 +142,36 @@ void GalleryBinaryEngineEntry::removeTheme()
     KillFile(aSdvURL);
     KillFile(aStrURL);
 }
+
+std::unique_ptr<GalleryTheme>&
+GalleryBinaryEngineEntry::getCachedTheme(std::unique_ptr<GalleryTheme>& pNewTheme)
+{
+    INetURLObject aURL = GetThmURL();
+
+    DBG_ASSERT(aURL.GetProtocol() != INetProtocol::NotValid, "invalid URL");
+
+    if (FileExists(aURL))
+    {
+        std::unique_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream(
+            aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::READ));
+
+        if (pIStm)
+        {
+            try
+            {
+                ReadGalleryTheme(*pIStm, *pNewTheme);
+
+                if (pIStm->GetError())
+                    pNewTheme.reset();
+            }
+            catch (const css::ucb::ContentCreationException&)
+            {
+            }
+        }
+    }
+    return pNewTheme;
+}
+
+SvStream& ReadGalleryTheme(SvStream& rIn, GalleryTheme& rTheme) { return rTheme.ReadData(rIn); }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
