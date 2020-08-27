@@ -3480,7 +3480,7 @@ std::tuple<OUString, std::vector<OUString>, std::vector<OUString> > splitFieldCo
     return std::make_tuple(sType, arguments, switches);
 }
 
-static OUString lcl_ExctractVariableAndHint( const OUString& rCommand, OUString& rHint )
+static OUString lcl_ExtractVariableAndHint( const OUString& rCommand, OUString& rHint )
 {
     // the first word after "ASK " is the variable
     // the text after the variable and before a '\' is the hint
@@ -4145,7 +4145,7 @@ void DomainMapper_Impl::handleFieldSet
 {
     OUString sVariable, sHint;
 
-    sVariable = lcl_ExctractVariableAndHint(pContext->GetCommand(), sHint);
+    sVariable = lcl_ExtractVariableAndHint(pContext->GetCommand(), sHint);
 
     // remove surrounding "" if exists
     if(sHint.getLength() >= 2)
@@ -4186,7 +4186,7 @@ void DomainMapper_Impl::handleFieldAsk
     //doesn the command contain a variable name?
     OUString sVariable, sHint;
 
-    sVariable = lcl_ExctractVariableAndHint( pContext->GetCommand(),
+    sVariable = lcl_ExtractVariableAndHint( pContext->GetCommand(),
         sHint );
     if(!sVariable.isEmpty())
     {
