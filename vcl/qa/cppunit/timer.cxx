@@ -470,21 +470,21 @@ namespace {
 class IdleSerializer : public Idle
 {
     sal_uInt32 mnPosition;
-    sal_uInt32 &mrProcesed;
+    sal_uInt32 &mrProcessed;
 public:
     IdleSerializer(const char *pDebugName, TaskPriority ePrio,
-                   sal_uInt32 nPosition, sal_uInt32 &rProcesed)
+                   sal_uInt32 nPosition, sal_uInt32 &rProcessed)
         : Idle( pDebugName )
         , mnPosition( nPosition )
-        , mrProcesed( rProcesed )
+        , mrProcessed( rProcessed )
     {
         SetPriority(ePrio);
         Start();
     }
     virtual void Invoke() override
     {
-        ++mrProcesed;
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Ignored prio", mnPosition, mrProcesed );
+        ++mrProcessed;
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Ignored prio", mnPosition, mrProcessed );
     }
 };
 
