@@ -414,16 +414,16 @@ void SchXMLAxisContext::CreateAxis()
     }
     if( m_aCurrentAxis.eDimension==SCH_XML_AXIS_Z )
     {
-        bool bSettingZAxisSuccedded = false;
+        bool bSettingZAxisSucceeded = false;
         try
         {
-            xDiaProp->getPropertyValue( aPropName ) >>= bSettingZAxisSuccedded;
+            xDiaProp->getPropertyValue( aPropName ) >>= bSettingZAxisSucceeded;
         }
         catch( beans::UnknownPropertyException & )
         {
             SAL_INFO("xmloff.chart", "Couldn't turn on z axis" );
         }
-        if( !bSettingZAxisSuccedded )
+        if( !bSettingZAxisSucceeded )
             return;
     }
 
