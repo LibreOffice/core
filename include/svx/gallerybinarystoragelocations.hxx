@@ -20,13 +20,33 @@
 #pragma once
 
 #include <tools/urlobj.hxx>
+#include <svx/svxdllapi.h>
+#include <svx/gallerystoragelocations.hxx>
 
-class GalleryStorageLocations
+class GalleryBinaryStorageLocations : public GalleryStorageLocations
 {
+private:
+    INetURLObject maThmURL;
+    INetURLObject maSdgURL;
+    INetURLObject maSdvURL;
+    INetURLObject maStrURL;
+
+    void SetThmExtension(INetURLObject& aURL);
+    void SetSdgExtension(INetURLObject& aURL);
+    void SetSdvExtension(INetURLObject& aURL);
+    void SetStrExtension(INetURLObject& aURL);
+
 public:
-    virtual ~GalleryStorageLocations() = 0;
-    virtual void SetStorageLocations(INetURLObject& aURL) = 0;
-    virtual const INetURLObject& getThemeURL() const = 0;
+    static INetURLObject ImplGetURLIgnoreCase(const INetURLObject& rURL);
+
+    const INetURLObject& GetThmURL() const { return maThmURL; }
+    const INetURLObject& GetSdgURL() const { return maSdgURL; }
+    const INetURLObject& GetSdvURL() const { return maSdvURL; }
+    const INetURLObject& GetStrURL() const { return maStrURL; }
+
+    void SetStorageLocations(INetURLObject& aURL);
+
+    const INetURLObject& getThemeURL() const { return maSdgURL; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
