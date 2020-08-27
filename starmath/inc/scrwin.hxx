@@ -17,10 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_SCRWIN_HXX
-#define INCLUDED_SVTOOLS_SCRWIN_HXX
+#pragma once
 
-#include <svtools/svtdllapi.h>
 #include <vcl/window.hxx>
 #include <vcl/vclptr.hxx>
 
@@ -28,7 +26,7 @@ class DataChangedEvent;
 class ScrollBar;
 class ScrollBarBox;
 
-class SVT_DLLPUBLIC ScrollableWindow: public vcl::Window
+class ScrollableWindow : public vcl::Window
 {
 private:
     Point           aPixOffset;         // offset to virtual window (pixel)
@@ -41,8 +39,8 @@ private:
     VclPtr<ScrollBarBox> aCornerWin;    // window in the bottom right corner
     bool            bScrolling:1;       // user controlled scrolling
 
-    DECL_DLLPRIVATE_LINK( ScrollHdl, ScrollBar *, void );
-    DECL_DLLPRIVATE_LINK( EndScrollHdl, ScrollBar *, void );
+    DECL_LINK( ScrollHdl, ScrollBar *, void );
+    DECL_LINK( EndScrollHdl, ScrollBar *, void );
 
 public:
                     ScrollableWindow( vcl::Window* pParent );
@@ -64,9 +62,7 @@ public:
     virtual void    Scroll( long nDeltaX, long nDeltaY, ScrollFlags nFlags = ScrollFlags::NONE ) override;
 
 private:
-    SVT_DLLPRIVATE Size         GetOutputSizePixel() const;
+    Size         GetOutputSizePixel() const;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
