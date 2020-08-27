@@ -124,36 +124,44 @@ BitmapEx convertMetafileToBitmapEx(
     return aBitmapEx;
 }
 
-
-void SdrPaintView::ImpClearVars()
+SdrPaintView::SdrPaintView(SdrModel& rSdrModel, OutputDevice* pOut)
+    : mrSdrModelFromSdrView(rSdrModel)
+    , mpModel(&rSdrModel)
+    , mpActualOutDev(nullptr)
+    , mpDragWin(nullptr)
+    , mpDefaultStyleSheet(nullptr)
+    , maDefaultAttr(rSdrModel.GetItemPool())
+    , meAnimationMode(SdrAnimationMode::Animate)
+    , mnHitTolPix(2)
+    , mnMinMovPix(3)
+    , mnHitTolLog(0)
+    , mnMinMovLog(0)
+    , mbPageVisible(true)
+    , mbPageShadowVisible(true)
+    , mbPageBorderVisible(true)
+    , mbBordVisible(true)
+    , mbGridVisible(true)
+    , mbGridFront(false)
+    , mbHlplVisible(true)
+    , mbHlplFront(true)
+    , mbGlueVisible(false)
+    , mbGlueVisible2(false)
+    , mbGlueVisible3(false)
+    , mbGlueVisible4(false)
+    , mbSomeObjChgdFlag(false)
+    , mbSwapAsynchron(false)
+    , mbPrintPreview(false)
+    , mbAnimationPause(false)
+    , mbBufferedOutputAllowed(false)
+    , mbBufferedOverlayAllowed(false)
+    , mbPagePaintingAllowed(true)
+    , mbPreviewRenderer(false)
+    , mbHideOle(false)
+    , mbHideChart(false)
+    , mbHideDraw(false)
+    , mbHideFormControl(false)
+    , maGridColor(COL_BLACK)
 {
-    mbPageVisible=true;
-    mbPageShadowVisible=true;
-    mbPageBorderVisible=true;
-    mbBordVisible=true;
-    mbGridVisible=true;
-    mbGridFront  =false;
-    mbHlplVisible=true;
-    mbHlplFront  =true;
-    mbGlueVisible=false;
-    mbGlueVisible2=false;
-    mbGlueVisible3=false;
-    mbGlueVisible4=false;
-    mbSwapAsynchron=false;
-    mbPrintPreview=false;
-    mbPreviewRenderer=false;
-
-    meAnimationMode = SdrAnimationMode::Animate;
-    mbAnimationPause = false;
-
-    mnHitTolPix=2;
-    mnMinMovPix=3;
-    mnHitTolLog=0;
-    mnMinMovLog=0;
-    mpActualOutDev=nullptr;
-    mpDragWin=nullptr;
-    mpDefaultStyleSheet=nullptr;
-    mbSomeObjChgdFlag=false;
     maComeBackIdle.SetPriority(TaskPriority::REPAINT);
     maComeBackIdle.SetInvokeHandler(LINK(this,SdrPaintView,ImpComeBackHdl));
     maComeBackIdle.SetDebugName( "svx::SdrPaintView aComeBackIdle" );
@@ -161,29 +169,8 @@ void SdrPaintView::ImpClearVars()
     if (mpModel)
         SetDefaultStyleSheet(mpModel->GetDefaultStyleSheet(), true);
 
-    maGridColor = COL_BLACK;
-}
-
-SdrPaintView::SdrPaintView(
-    SdrModel& rSdrModel,
-    OutputDevice* pOut)
-:   mrSdrModelFromSdrView(rSdrModel),
-    maDefaultAttr(rSdrModel.GetItemPool()),
-    mbBufferedOutputAllowed(false),
-    mbBufferedOverlayAllowed(false),
-    mbPagePaintingAllowed(true),
-    mbHideOle(false),
-    mbHideChart(false),
-    mbHideDraw(false),
-    mbHideFormControl(false)
-{
-    mpModel=&rSdrModel;
-    ImpClearVars();
-
-    if(pOut)
-    {
+    if (pOut)
         AddWindowToPaintView(pOut, nullptr);
-    }
 
     maColorConfig.AddListener(this);
     onChangeColorConfig();

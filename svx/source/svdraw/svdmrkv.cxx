@@ -159,39 +159,28 @@ public:
     }
 };
 
-
-// MarkView
-
-
-void SdrMarkView::ImpClearVars()
+SdrMarkView::SdrMarkView(SdrModel& rSdrModel, OutputDevice* pOut)
+    : SdrSnapView(rSdrModel, pOut)
+    , mpMarkedObj(nullptr)
+    , mpMarkedPV(nullptr)
+    , maHdlList(this)
+    , meDragMode(SdrDragMode::Move)
+    , meEditMode(SdrViewEditMode::Edit)
+    , meEditMode0(SdrViewEditMode::Edit)
+    , mbDesignMode(false)
+    , mbForceFrameHandles(false)
+    , mbPlusHdlAlways(false)
+    , mbInsPolyPoint(false)
+    , mbMarkedObjRectDirty(false)
+    , mbMrkPntDirty(false)
+    , mbMarkedPointsRectsDirty(false)
+    , mbMarkHandlesHidden(false)
 {
-    meDragMode=SdrDragMode::Move;
-    meEditMode=SdrViewEditMode::Edit;
-    meEditMode0=SdrViewEditMode::Edit;
-    mbDesignMode=false;
-    mpMarkedObj=nullptr;
-    mpMarkedPV=nullptr;
-    mbForceFrameHandles=false;
-    mbPlusHdlAlways=false;
-    mbInsPolyPoint=false;
-    mbMarkedObjRectDirty=false;
-    mbMarkedPointsRectsDirty=false;
-    mbMarkHandlesHidden = false;
-    mbMrkPntDirty=false;
 
-    // Migrate selections
     BrkMarkObj();
     BrkMarkPoints();
     BrkMarkGluePoints();
-}
 
-SdrMarkView::SdrMarkView(
-    SdrModel& rSdrModel,
-    OutputDevice* pOut)
-:   SdrSnapView(rSdrModel, pOut),
-    maHdlList(this)
-{
-    ImpClearVars();
     StartListening(rSdrModel);
 }
 

@@ -226,7 +226,6 @@ public:
     OutputDevice* GetFirstOutputDevice() const;
 
 private:
-    SVX_DLLPRIVATE void ImpClearVars();
     DECL_LINK(ImpComeBackHdl, Timer*, void);
 
 protected:
