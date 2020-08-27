@@ -40,6 +40,8 @@
 #include <comphelper/processfactory.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/datetime.hxx>
+#include <unotools/datetime.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/tempfile.hxx>
@@ -788,6 +790,20 @@ SvStream& GalleryBinaryEngine::writeGalleryTheme(SvStream& rOStm, const GalleryT
     }
 
     return rOStm;
+}
+
+DateTime GalleryBinaryEngine::getModificationDate() const
+{
+    ::ucbhelper::Content aCnt(GetThmURL().GetMainURL(INetURLObject::DecodeMechanism::NONE),
+                              uno::Reference<ucb::XCommandEnvironment>(),
+                              comphelper::getProcessComponentContext());
+    util::DateTime aDateTimeModified;
+    DateTime aDateTime(DateTime::EMPTY);
+
+    aCnt.getPropertyValue("DateModified") >>= aDateTimeModified;
+    ::utl::typeConvert(aDateTimeModified, aDateTime);
+
+    return aDateTime;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
