@@ -173,7 +173,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLEventsImportContext
         {
             sEventName = sValue;
         }
-        else if (aIter.getToken() == XML_ELEMENT(SCRIPT, XML_EVENT_NAME))
+        else if (aIter.getToken() == XML_ELEMENT(SCRIPT, XML_LANGUAGE))
         {
             sLanguage = sValue;
             // else: ignore -> let child context handle this
