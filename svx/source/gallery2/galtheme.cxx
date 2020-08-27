@@ -96,7 +96,7 @@ void GalleryTheme::SetDestDir(const OUString& rDestDir, bool bRelative)
 
 std::unique_ptr<GalleryBinaryEngine> GalleryTheme::createGalleryStorageEngine(bool bReadOnly)
 {
-    std::unique_ptr<GalleryBinaryEngine> pGalleryBinaryEngine = std::make_unique<GalleryBinaryEngine>(pThm->getGalleryStorageLocations(), maGalleryObjectCollection, bReadOnly);
+    std::unique_ptr<GalleryBinaryEngine> pGalleryBinaryEngine = std::make_unique<GalleryBinaryEngine>(dynamic_cast<GalleryBinaryStorageLocations&>(*(pThm->getGalleryStorageLocations().get())), maGalleryObjectCollection, bReadOnly);
     return pGalleryBinaryEngine;
 }
 
