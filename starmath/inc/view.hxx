@@ -26,13 +26,13 @@
 #include <rtl/ref.hxx>
 #include <sfx2/dockwin.hxx>
 #include <sfx2/viewsh.hxx>
-#include <svtools/scrwin.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/shell.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/timer.hxx>
 #include "document.hxx"
 #include "edit.hxx"
+#include "scrwin.hxx"
 
 class SmViewShell;
 class SmPrintUIOptions;

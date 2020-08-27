@@ -6607,7 +6607,6 @@ include/svtools/rtftoken.h
 include/svtools/ruler.hxx
 include/svtools/sampletext.hxx
 include/svtools/scriptedtext.hxx
-include/svtools/scrwin.hxx
 include/svtools/sfxecode.hxx
 include/svtools/slidesorterbaropt.hxx
 include/svtools/soerr.hxx
@@ -12639,6 +12638,7 @@ starmath/inc/helpids.h
 starmath/inc/node.hxx
 starmath/inc/parse.hxx
 starmath/inc/rect.hxx
+starmath/inc/scrwin.hxx
 starmath/inc/smdll.hxx
 starmath/inc/smmod.hxx
 starmath/inc/strings.hxx
@@ -12689,6 +12689,7 @@ starmath/source/parse.cxx
 starmath/source/rect.cxx
 starmath/source/register.cxx
 starmath/source/register.hxx
+starmath/source/scrwin.cxx
 starmath/source/smdetect.cxx
 starmath/source/smdetect.hxx
 starmath/source/smdll.cxx
@@ -13004,7 +13005,6 @@ svtools/source/control/inettbc.cxx
 svtools/source/control/managedmenubutton.cxx
 svtools/source/control/ruler.cxx
 svtools/source/control/scriptedtext.cxx
-svtools/source/control/scrwin.cxx
 svtools/source/control/tabbar.cxx
 svtools/source/control/toolbarmenu.cxx
 svtools/source/control/valueacc.cxx

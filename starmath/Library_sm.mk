@@ -84,6 +84,7 @@ $(eval $(call gb_Library_add_exception_objects,sm,\
         starmath/source/rtfexport \
         starmath/source/parse \
         starmath/source/rect \
+        starmath/source/scrwin \
         starmath/source/smdll \
         starmath/source/smmod \
         starmath/source/symbol \
