@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a290b00_1054e68b",
+        "filename": "sw/source/filter/ww8/docxsdrexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-08-27T11:17:09Z",
+      "side": 1,
+      "message": "typo (fixing it helps back-porting, because typos generate third-party spell checking commits)",
+      "range": {
+        "startLine": 360,
+        "startChar": 93,
+        "endLine": 360,
+        "endChar": 94
+      },
+      "revId": "4043f47e255615842665ce0ff17a7af78cdb37ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
