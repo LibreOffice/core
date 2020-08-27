@@ -905,14 +905,14 @@ void Shell::SetCurLib( const ScriptDocument& rDocument, const OUString& aLibName
 
     ContainerListenerImpl* pListener = static_cast< ContainerListenerImpl* >( m_xLibListener.get() );
 
+    if (pListener)
+        pListener->removeContainerListener(m_aCurDocument, m_aCurLibName);
+
     m_aCurDocument = rDocument;
     m_aCurLibName = aLibName;
 
     if ( pListener )
-    {
-        pListener->removeContainerListener( m_aCurDocument, m_aCurLibName );
         pListener->addContainerListener( m_aCurDocument, aLibName );
-    }
 
     if ( bUpdateWindows )
         UpdateWindows();
