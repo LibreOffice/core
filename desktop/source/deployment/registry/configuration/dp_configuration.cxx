@@ -229,7 +229,7 @@ BackendImpl::BackendImpl(
                 OUString aStr = "Exception loading legacy package database: '" +
                     e.Message +
                     "' - ignoring file, please remove it.\n";
-                dp_misc::writeConsole( aStr.getStr() );
+                dp_misc::writeConsole( aStr );
             }
         }
         m_registeredPackages = std::move(pMap);
