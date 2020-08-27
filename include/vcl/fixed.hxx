@@ -72,35 +72,6 @@ public:
     vcl::Window*    get_mnemonic_widget() const { return m_pMnemonicWindow; }
 };
 
-class VCL_DLLPUBLIC FixedLine final : public Control
-{
-private:
-    using Control::ImplInitSettings;
-    using Window::ImplInit;
-    SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle );
-    SAL_DLLPRIVATE static WinBits ImplInitStyle( WinBits nStyle );
-    SAL_DLLPRIVATE void    ImplDraw(vcl::RenderContext& rRenderContext);
-
-    virtual void    FillLayoutData() const override;
-    virtual const vcl::Font&
-                    GetCanonicalFont( const StyleSettings& _rStyle ) const override;
-    virtual const Color&
-                    GetCanonicalTextColor( const StyleSettings& _rStyle ) const override;
-
-public:
-    explicit        FixedLine( vcl::Window* pParent, WinBits nStyle = WB_HORZ );
-
-    virtual void    ApplySettings(vcl::RenderContext&) override;
-
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags ) override;
-    virtual void    Resize() override;
-    virtual void    StateChanged( StateChangedType nType ) override;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
-
-    virtual Size    GetOptimalSize() const override;
-};
-
 class VCL_DLLPUBLIC FixedImage : public Control
 {
 private:
