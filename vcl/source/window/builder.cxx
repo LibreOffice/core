@@ -3087,15 +3087,13 @@ void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const OString &rI
     }
 }
 
-void VclBuilder::handleAtkObject(xmlreader::XmlReader &reader, vcl::Window *pWindow)
+VclBuilder::stringmap VclBuilder::handleAtkObject(xmlreader::XmlReader &reader)
 {
-    assert(pWindow);
-
     int nLevel = 1;
 
     stringmap aProperties;
 
-    while(true)
+    while (true)
     {
         xmlreader::Span name;
         int nsId;
@@ -3122,7 +3120,13 @@ void VclBuilder::handleAtkObject(xmlreader::XmlReader &reader, vcl::Window *pWin
             break;
     }
 
-    for (auto const& prop : aProperties)
+    return aProperties;
+}
+
+void VclBuilder::applyAtkProperties(vcl::Window *pWindow, const stringmap& rProperties)
+{
+    assert(pWindow);
+    for (auto const& prop : rProperties)
     {
         const OString &rKey = prop.first;
         const OUString &rValue = prop.second;
@@ -3620,7 +3624,8 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, xmlreader::Xm
     }
     else if (sClass == "AtkObject")
     {
-        handleAtkObject(reader, pParent);
+        auto aAtkProperties = handleAtkObject(reader);
+        applyAtkProperties(pParent, aAtkProperties);
         return nullptr;
     }
 
