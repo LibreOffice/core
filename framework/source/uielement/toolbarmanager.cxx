@@ -131,20 +131,6 @@ sal_Int16 getCurrentImageType()
     return nImageType;
 }
 
-bool IsCorrectContext( const OUString& rModuleIdentifier, const OUString& aContextList )
-{
-    if ( aContextList.isEmpty() )
-        return true;
-
-    if ( !rModuleIdentifier.isEmpty() )
-    {
-        sal_Int32 nIndex = aContextList.indexOf( rModuleIdentifier );
-        return ( nIndex >= 0 );
-    }
-
-    return false;
-}
-
 } // end anonymous namespace
 
 //  XInterface, XTypeProvider, XServiceInfo
@@ -1207,7 +1193,7 @@ void ToolBarManager::FillAddonToolbar( const Sequence< Sequence< PropertyValue >
 
         ToolBarMerger::ConvertSequenceToValues( rSeq, aURL, aTitle, aImageId, aTarget, aContext, aControlType, nWidth );
 
-        if ( IsCorrectContext( m_aModuleIdentifier, aContext ) )
+        if ( ToolBarMerger::IsCorrectContext( aContext, m_aModuleIdentifier ) )
         {
             if ( aURL == "private:separator" )
             {
