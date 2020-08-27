@@ -72,7 +72,7 @@ public:
     vcl::Window*    get_mnemonic_widget() const { return m_pMnemonicWindow; }
 };
 
-class VCL_DLLPUBLIC FixedLine : public Control
+class VCL_DLLPUBLIC FixedLine final : public Control
 {
 private:
     using Control::ImplInitSettings;
@@ -81,7 +81,6 @@ private:
     SAL_DLLPRIVATE static WinBits ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void    ImplDraw(vcl::RenderContext& rRenderContext);
 
-protected:
     virtual void    FillLayoutData() const override;
     virtual const vcl::Font&
                     GetCanonicalFont( const StyleSettings& _rStyle ) const override;
