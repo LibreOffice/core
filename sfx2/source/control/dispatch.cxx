@@ -465,7 +465,7 @@ IMPL_LINK_NOARG( SfxDispatcher, EventHdl_Impl, Timer *, void )
     flushed.
 
     This method is intended among other things to make assertions possible
-    without the side effect of having to flush the SfxDispathcer.
+    without the side effect of having to flush the SfxDispatcher.
 */
 bool SfxDispatcher::CheckVirtualStack(const SfxShell& rShell)
 {

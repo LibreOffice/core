@@ -219,7 +219,7 @@ void XMLTextStyleContext::CreateAndInsert( bool bOverwrite )
         m_xEventContext.clear();
     }
 
-    // XML import: reconstrution of assignment of paragraph style to outline levels (#i69629#)
+    // XML import: reconstruction of assignment of paragraph style to outline levels (#i69629#)
     if (m_nOutlineLevel > 0)
     {
         GetImport().GetTextImport()->AddOutlineStyleCandidate(m_nOutlineLevel,

@@ -65,7 +65,7 @@
 #include <PageMasterStyleMap.hxx>
 #include <PageMasterPropHdlFactory.hxx>
 #include <PageMasterPropMapper.hxx>
-// XML import: reconstrution of assignment of paragraph style to outline levels (#i69629#)
+// XML import: reconstruction of assignment of paragraph style to outline levels (#i69629#)
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <txtlists.hxx>
 #include <xmloff/odffields.hxx>
@@ -605,7 +605,7 @@ struct XMLTextImportHelper::Impl
                 bool const bProgress, bool const bBlockMode,
                 bool const bOrganizerMode)
         :   m_xTextListsHelper( new XMLTextListsHelper() )
-        // XML import: reconstrution of assignment of paragraph style to outline levels (#i69629#)
+        // XML import: reconstruction of assignment of paragraph style to outline levels (#i69629#)
         ,   m_xServiceFactory( rModel, UNO_QUERY )
         ,   m_rSvXMLImport( rImport )
         ,   m_bInsertMode( bInsertMode )
