@@ -538,6 +538,7 @@ namespace xmloff::token {
         XML_CUSTOM_LABEL_FIELD,
         XML_CUSTOM_LABEL_POS_X,
         XML_CUSTOM_LABEL_POS_Y,
+        XML_CUSTOM_LEADERLINES,
         XML_CUT,
         XML_CUT_OFFS,
         XML_CUT_OFFS2,
