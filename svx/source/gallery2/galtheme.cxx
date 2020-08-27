@@ -784,11 +784,6 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
     return rIStm;
 }
 
-SvStream& ReadGalleryTheme( SvStream& rIn, GalleryTheme& rTheme )
-{
-    return rTheme.ReadData( rIn );
-}
-
 void GalleryTheme::ImplSetModified( bool bModified )
 {
     pThm->SetModified(bModified);

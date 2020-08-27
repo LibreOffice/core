@@ -47,6 +47,10 @@ public:
     static GalleryThemeEntry* CreateThemeEntry(const INetURLObject& rURL, bool bReadOnly);
 
     void removeTheme();
+
+    std::unique_ptr<GalleryTheme>& getCachedTheme(std::unique_ptr<GalleryTheme>& pNewTheme);
 };
+
+SvStream& ReadGalleryTheme(SvStream& rIn, GalleryTheme& rTheme);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
