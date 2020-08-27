@@ -102,7 +102,7 @@ void DrawXmlEmitter::visit( TextElement& elem, const std::list< std::unique_ptr<
             m_rEmitContext.rStyles.getStyleName( elem.StyleId );
     }
 
-    OUString str(elem.Text.getStr());
+    OUString str(elem.Text.toString());
 
     // Check for RTL
     bool isRTL = false;
@@ -676,7 +676,7 @@ void DrawXmlOptimizer::optimizeTextElements(Element& rParent)
         {
             TextElement* pNext = dynamic_cast<TextElement*>(next->get());
             bool isComplex = false;
-            OUString str(pCur->Text.getStr());
+            OUString str(pCur->Text.toString());
             for(int i=0; i< str.getLength(); i++)
             {
                 sal_Int16 nType = GetBreakIterator()->getScriptType( str, i );
@@ -708,7 +708,7 @@ void DrawXmlOptimizer::optimizeTextElements(Element& rParent)
                     // append text to current element
                     pCur->Text.append( pNext->Text );
 
-                    str = pCur->Text.getStr();
+                    str = pCur->Text.toString();
                     for(int i=0; i< str.getLength(); i++)
                     {
                         sal_Int16 nType = GetBreakIterator()->getScriptType( str, i );
