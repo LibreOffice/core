@@ -337,12 +337,7 @@
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="legacy_cell_selection_cb-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|legacy_cell_selection_cb">With the option set, expanding a selection (with Command
-  Ctrl  +Shift+Down/Up) jumps to the end of the range in the column that was added as last to the initial selection.
- When the option is not set, expanding a selection (with CommandCtrl+Shift
-  +Down/Up) jumps to the end of the range in the column where selecting the cell range was started.
- The same of course applies when extending a selection on rows, with CommandCtrl+
-  Shift+Left/Right.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|legacy_cell_selection_cb">With the option set, expanding a selection (with Ctrl + Shift + Down/Up) jumps to the end of the range in the column that was added as last to the initial selection. When the option is not set, expanding a selection (with Ctrl + Shift + Down/Up) jumps to the end of the range in the column where selecting the cell range was started. The same of course applies when extending a selection on rows, with Ctrl + Shift + Left/Right.</property>
                       </object>
                     </child>
                   </object>
