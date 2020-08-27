@@ -24,17 +24,18 @@
 #include <svx/galtheme.hxx>
 #include <svx/gallerybinaryengine.hxx>
 #include <svx/gallerystoragelocations.hxx>
+#include <svx/gallerybinarystoragelocations.hxx>
 #include <svx/galleryfilestorageentry.hxx>
 
-class GalleryStorageLocations;
+class GalleryBinaryStorageLocations;
 
 class GalleryBinaryEngineEntry : public GalleryFileStorageEntry
 {
 private:
-    GalleryStorageLocations& m_rGalleryStorageLocations;
+    GalleryBinaryStorageLocations& m_rGalleryStorageLocations;
 
 public:
-    GalleryBinaryEngineEntry(GalleryStorageLocations& rGalleryStorageLocations);
+    GalleryBinaryEngineEntry(GalleryBinaryStorageLocations& rGalleryStorageLocations);
     static void CreateUniqueURL(const INetURLObject& rBaseURL, INetURLObject& aURL);
 
     OUString ReadStrFromIni(const OUString& aKeyName);
