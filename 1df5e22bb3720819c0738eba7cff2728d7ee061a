@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b3c683c3_0ffba249",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-08-27T12:25:07Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 663,
+        "startChar": 95,
+        "endLine": 663,
+        "endChar": 102
+      },
+      "revId": "1df5e22bb3720819c0738eba7cff2728d7ee061a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "124d9b65_346e0fe3",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 670,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-08-27T12:25:07Z",
+      "side": 1,
+      "message": "optimization",
+      "range": {
+        "startLine": 670,
+        "startChar": 62,
+        "endLine": 670,
+        "endChar": 76
+      },
+      "revId": "1df5e22bb3720819c0738eba7cff2728d7ee061a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
