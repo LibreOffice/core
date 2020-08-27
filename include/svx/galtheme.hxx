@@ -22,6 +22,7 @@
 
 #include <svx/svxdllapi.h>
 #include <svx/galleryobjectcollection.hxx>
+#include <svx/gallerybinaryengine.hxx>
 
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
@@ -47,8 +48,6 @@ namespace unogallery
     class GalleryTheme;
     class GalleryItem;
 }
-
-class GalleryBinaryEngine;
 
 class SVXCORE_DLLPUBLIC GalleryTheme : public SfxBroadcaster
 {
@@ -96,11 +95,6 @@ public:
 
     // used for building gallery themes during compilation:
     void                        SetDestDir(const OUString& rDestDir, bool bRelative);
-
-    SAL_DLLPRIVATE const INetURLObject& GetThmURL() const;
-    const INetURLObject&        GetSdgURL() const;
-    SAL_DLLPRIVATE const INetURLObject& GetSdvURL() const;
-    SAL_DLLPRIVATE const INetURLObject& GetStrURL() const;
 
     sal_uInt32                  GetId() const;
     SAL_DLLPRIVATE void         SetId( sal_uInt32 nNewId, bool bResetThemeName );
@@ -161,6 +155,8 @@ public:
     SAL_DLLPRIVATE void         CopyToClipboard(sal_uInt32 nPos);
 
     DateTime getModificationDate() const;
+
+    const INetURLObject& getThemeURL() const { return mpGalleryStorageEngine->getThemeURL(); }
 
 public:
 
