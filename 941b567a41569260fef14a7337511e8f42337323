@@ -16,6 +16,24 @@
       "revId": "941b567a41569260fef14a7337511e8f42337323",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98895879_da058542",
+        "filename": "solenv/gbuild/JavaClassSet.mk",
+        "patchSetId": 19
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-08-27T17:18:17Z",
+      "side": 1,
+      "message": "probably due to the history of the patch, in patch set 8 it was nested inside the $(if on line 43",
+      "parentUuid": "dea7a764_da73b55e",
+      "revId": "941b567a41569260fef14a7337511e8f42337323",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
