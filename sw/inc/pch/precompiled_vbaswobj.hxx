@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-08-12 11:07:07 using:
+ Generated on 2020-08-27 16:26:57 using:
  ./bin/update_pch sw vbaswobj --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -197,6 +197,7 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/text/XTextSection.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>

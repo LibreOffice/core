@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-08-12 11:04:27 using:
+ Generated on 2020-08-27 16:25:54 using:
  ./bin/update_pch connectivity dbtools --cutoff=2 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -163,6 +163,7 @@
 #include <o3tl/functional.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <o3tl/unreachable.hxx>
 #include <resource/sharedresources.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <sdbcx/VIndexColumn.hxx>

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-08-12 11:04:23 using:
+ Generated on 2020-08-27 16:25:53 using:
  ./bin/update_pch chart2 chartcore --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -74,6 +74,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <basegfx/range/b2irectangle.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/vector/b2enums.hxx>
@@ -188,6 +189,7 @@
 #include <libxml/xmlwriter.h>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <officecfg/Office/Compatibility.hxx>
 #include <svl/cenumitm.hxx>
 #include <svl/cintitem.hxx>
 #include <svl/eitem.hxx>

@@ -43,9 +43,6 @@
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/txtattr.hxx>
-#include <vcl/textview.hxx>
-#include <vcl/xtextedt.hxx>
 
 using namespace dbaui;
 

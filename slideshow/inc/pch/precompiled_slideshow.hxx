@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-08-12 11:05:49 using:
+ Generated on 2020-08-27 16:26:28 using:
  ./bin/update_pch slideshow slideshow --cutoff=4 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -82,8 +82,10 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
+#include <vcl/GraphicExternalLink.hxx>
 #include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
+#include <vcl/animate/Animation.hxx>
 #include <vcl/animate/AnimationBitmap.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
@@ -96,6 +98,7 @@
 #include <vcl/font.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/gfxlink.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/outdev.hxx>
@@ -109,6 +112,7 @@
 #include <vcl/vclenum.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/vclreferencebase.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <vcl/wall.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
@@ -123,6 +127,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/basicrange.hxx>
 #include <basegfx/tuple/b2i64tuple.hxx>
@@ -148,7 +153,10 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/TextFitToSizeType.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/graphic/XPrimitive2D.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -176,6 +184,9 @@
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/uno/genfunc.h>
 #include <com/sun/star/uno/genfunc.hxx>
+#include <com/sun/star/util/Date.hpp>
+#include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/util/Time.hpp>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/propertysetinfo.hxx>
@@ -199,6 +210,10 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <drawinglayer/drawinglayerdllapi.h>
+#include <drawinglayer/primitive2d/CommonTypes.hxx>
+#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editengdllapi.h>
@@ -208,12 +223,15 @@
 #include <editeng/macros.hxx>
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <svl/SfxBroadcaster.hxx>
+#include <svl/cenumitm.hxx>
+#include <svl/eitem.hxx>
 #include <svl/hint.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
@@ -226,21 +244,46 @@
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
 #include <svx/DiagramDataInterface.hxx>
+#include <svx/itextprovider.hxx>
+#include <svx/sdr/animation/scheduler.hxx>
+#include <svx/sdr/overlay/overlayobject.hxx>
+#include <svx/sdr/properties/defaultproperties.hxx>
+#include <svx/sdr/properties/properties.hxx>
+#include <svx/sdrpageuser.hxx>
+#include <svx/sdtaditm.hxx>
+#include <svx/sdtaitm.hxx>
+#include <svx/sdtakitm.hxx>
 #include <svx/shapeproperty.hxx>
+#include <svx/svddef.hxx>
+#include <svx/svdglue.hxx>
+#include <svx/svdoattr.hxx>
+#include <svx/svdobj.hxx>
+#include <svx/svdotext.hxx>
+#include <svx/svdsob.hxx>
+#include <svx/svdtext.hxx>
+#include <svx/svdtrans.hxx>
 #include <svx/svdtypes.hxx>
 #include <svx/svxdllapi.h>
+#include <svx/xdef.hxx>
 #include <tools/color.hxx>
+#include <tools/date.hxx>
+#include <tools/datetime.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>
+#include <tools/fract.hxx>
 #include <tools/gen.hxx>
+#include <tools/helpers.hxx>
 #include <tools/lineend.hxx>
 #include <tools/link.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
+#include <tools/time.hxx>
 #include <tools/toolsdllapi.h>
 #include <tools/weakbase.h>
+#include <tools/weakbase.hxx>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 #include <typelib/uik.h>
