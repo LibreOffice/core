@@ -38,7 +38,6 @@ namespace svt {
     class AcceleratorExecute;
 }
 
-class FixedLine;
 class NotifyEvent;
 namespace tools { class Rectangle; }
 
@@ -51,7 +50,6 @@ namespace dbaui
 
     protected:
         rtl::Reference<IController> m_xController;  // the controller where we reside in
-        VclPtr<FixedLine>   m_aSeparator;
         ::std::unique_ptr< ::svt::AcceleratorExecute> m_pAccel;
 
     public:
