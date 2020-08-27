@@ -185,6 +185,7 @@ class GtkSalFrame final : public SalFrame
     GdkCursor                      *m_pCurrentCursor;
     PointerStyle                    m_ePointerStyle;
     ScreenSaverInhibitor            m_ScreenSaverInhibitor;
+    gulong                          m_nSetFocusSignalId;
     bool                            m_bFullscreen;
     bool                            m_bSpanMonitorsWhenFullscreen;
     bool                            m_bDefaultPos;
@@ -523,6 +524,8 @@ public:
     static SalWheelMouseEvent   GetWheelEvent(GdkEventScroll& rEvent);
     static gboolean             NativeWidgetHelpPressed(GtkAccelGroup*, GObject*, guint,
         GdkModifierType, gpointer pFrame);
+
+    void DisallowCycleFocusOut();
 };
 
 #define OOO_TYPE_FIXED ooo_fixed_get_type()

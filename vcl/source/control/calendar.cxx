@@ -1526,7 +1526,7 @@ namespace
 
     public:
         ImplCFieldFloat(vcl::Window* pContainer)
-            : mxBuilder(Application::CreateInterimBuilder(pContainer, "svt/ui/calendar.ui"))
+            : mxBuilder(Application::CreateInterimBuilder(pContainer, "svt/ui/calendar.ui", false))
             , mxContainer(mxBuilder->weld_container("Calendar"))
             , mxCalendar(mxBuilder->weld_calendar("date"))
             , mxTodayBtn(mxBuilder->weld_button("today"))

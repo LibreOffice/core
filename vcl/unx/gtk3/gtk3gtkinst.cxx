@@ -16392,7 +16392,8 @@ gboolean GtkSalFrame::NativeWidgetHelpPressed(GtkAccelGroup*, GObject*, guint, G
     return true;
 }
 
-weld::Builder* GtkInstance::CreateInterimBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile, sal_uInt64)
+weld::Builder* GtkInstance::CreateInterimBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile,
+                                                 bool bAllowCycleFocusOut, sal_uInt64)
 {
     // Create a foreign window which we know is a GtkGrid and make the native widgets a child of that, so we can
     // support GtkWidgets within a vcl::Window
@@ -16408,6 +16409,17 @@ weld::Builder* GtkInstance::CreateInterimBuilder(vcl::Window* pParent, const OUS
 
     GtkWidget *pWindow = static_cast<GtkWidget*>(pEnvData->pWidget);
     gtk_widget_show_all(pWindow);
+
+    if (!bAllowCycleFocusOut)
+    {
+        GtkWidget* pTopLevel = gtk_widget_get_toplevel(pWindow);
+        assert(pTopLevel);
+        GtkSalFrame* pFrame = GtkSalFrame::getFromWindow(pTopLevel);
+        assert(pFrame);
+        // unhook handler and let gtk cycle its own way through this widget's
+        // children because it has no non-gtk siblings
+        pFrame->DisallowCycleFocusOut();
+    }
 
     // build the widget tree as a child of the GtkEventBox GtkGrid parent
     return new GtkInstanceBuilder(pWindow, rUIRoot, rUIFile, xEmbedWindow.get());

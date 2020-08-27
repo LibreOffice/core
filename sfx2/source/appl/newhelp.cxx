@@ -2466,7 +2466,7 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
 
     m_xVclContentArea = VclPtr<VclVBox>::Create(this);
     m_xVclContentArea->Show();
-    m_xBuilder.reset(Application::CreateInterimBuilder(m_xVclContentArea, "sfx/ui/helpwindow.ui"));
+    m_xBuilder.reset(Application::CreateInterimBuilder(m_xVclContentArea, "sfx/ui/helpwindow.ui", false));
     m_xContainer = m_xBuilder->weld_paned("HelpWindow");
     m_xContainer->connect_size_allocate(LINK(this, SfxHelpWindow_Impl, ResizeHdl));
     m_xHelpPaneWindow = m_xBuilder->weld_container("helppanewindow");

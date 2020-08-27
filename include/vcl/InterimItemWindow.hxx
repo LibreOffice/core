@@ -31,8 +31,13 @@ public:
     virtual void Draw(OutputDevice* pDevice, const Point& rPos, DrawFlags nFlags) override;
 
 protected:
+    // bAllowCycleFocusOut of true allows focus to be moved out of the Control
+    // via tab key into a parent window or sibling window, false means focus
+    // remains inside the InterimItemWindow and cycles back to the first child
+    // of this control on reaching pass the last child. This is suitable when
+    // the Control is the toplevel control and has no siblings or parent
     InterimItemWindow(vcl::Window* pParent, const OUString& rUIXMLDescription, const OString& rID,
-                      sal_uInt64 nLOKWindowId = 0);
+                      bool bAllowCycleFocusOut = true, sal_uInt64 nLOKWindowId = 0);
 
     void InitControlBase(weld::Widget* pWidget);
 

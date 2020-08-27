@@ -773,7 +773,7 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
 {
     m_xVclContentArea = VclPtr<VclVBox>::Create(this);
     m_xVclContentArea->Show();
-    m_xBuilder.reset(Application::CreateInterimBuilder(m_xVclContentArea, rUIXMLDescription));
+    m_xBuilder.reset(Application::CreateInterimBuilder(m_xVclContentArea, rUIXMLDescription, true));
     m_xContainer = m_xBuilder->weld_container(rID);
 
     pImpl.reset(new SfxDockingWindow_Impl(this));

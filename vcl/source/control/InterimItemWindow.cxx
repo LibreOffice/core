@@ -11,7 +11,8 @@
 #include <vcl/layout.hxx>
 
 InterimItemWindow::InterimItemWindow(vcl::Window* pParent, const OUString& rUIXMLDescription,
-                                     const OString& rID, sal_uInt64 nLOKWindowId)
+                                     const OString& rID, bool bAllowCycleFocusOut,
+                                     sal_uInt64 nLOKWindowId)
     : Control(pParent, WB_TABSTOP)
     , m_pWidget(nullptr) // inheritors are expected to call InitControlBase
 {
@@ -21,8 +22,8 @@ InterimItemWindow::InterimItemWindow(vcl::Window* pParent, const OUString& rUIXM
 
     m_xVclContentArea = VclPtr<VclVBox>::Create(this);
     m_xVclContentArea->Show();
-    m_xBuilder.reset(
-        Application::CreateInterimBuilder(m_xVclContentArea, rUIXMLDescription, nLOKWindowId));
+    m_xBuilder.reset(Application::CreateInterimBuilder(m_xVclContentArea, rUIXMLDescription,
+                                                       bAllowCycleFocusOut, nLOKWindowId));
     m_xContainer = m_xBuilder->weld_container(rID);
 
     SetBackground();
