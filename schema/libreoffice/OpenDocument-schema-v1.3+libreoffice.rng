@@ -2463,4 +2463,13 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:optional>
   </rng:define>
 
+  <!-- TODO no proposal -->
+  <rng:define name="style-chart-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:custom-leader-lines">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
 </rng:grammar>
