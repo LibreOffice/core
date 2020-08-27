@@ -534,7 +534,7 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
         aType += CuiResId( RID_SVXSTR_GALLERY_READONLY );
 
     m_xFtMSShowType->set_label(aType);
-    m_xFtMSShowPath->set_label(pThm->GetSdgURL().GetMainURL(INetURLObject::DecodeMechanism::Unambiguous));
+    m_xFtMSShowPath->set_label(pThm->getThemeURL().GetMainURL(INetURLObject::DecodeMechanism::Unambiguous));
 
     // singular or plural?
     if ( 1 == pThm->GetObjectCount() )

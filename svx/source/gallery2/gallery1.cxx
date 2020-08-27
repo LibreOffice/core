@@ -193,6 +193,10 @@ void GalleryThemeEntry::SetId( sal_uInt32 nNewId, bool bResetThemeName )
     bThemeNameFromResource = ( nId && bResetThemeName );
 }
 
+void GalleryThemeEntry::removeTheme()
+{
+    mpGalleryStorageEngineEntry->removeTheme();
+}
 
 class GalleryThemeCacheEntry
 {
@@ -615,17 +619,8 @@ bool Gallery::RemoveTheme( const OUString& rThemeName )
 
         if( pThm )
         {
-            INetURLObject   aThmURL( pThm->GetThmURL() );
-            INetURLObject   aSdgURL( pThm->GetSdgURL() );
-            INetURLObject   aSdvURL( pThm->GetSdvURL() );
-            INetURLObject   aStrURL( pThm->GetStrURL() );
-
-            ReleaseTheme( pThm, aListener );
-
-            KillFile( aThmURL );
-            KillFile( aSdgURL );
-            KillFile( aSdvURL );
-            KillFile( aStrURL );
+            ReleaseTheme(pThm, aListener);
+            pThemeEntry->removeTheme();
         }
 
         auto it = std::find_if(aThemeList.begin(), aThemeList.end(),
