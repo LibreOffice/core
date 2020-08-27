@@ -534,7 +534,7 @@ OUString DocPasswordHelper::GetOoxHashAsBase64(
 
             // 1. Prepare binary MS formats encryption data
             auto aUniqueID = GenerateRandomByteSequence(16);
-            auto aEnc97Key = GenerateStd97Key(aPassword.getStr(), aUniqueID);
+            auto aEnc97Key = GenerateStd97Key(aPassword, aUniqueID);
             // 2. Add MS binary and OOXML encryption data to result
             aEncData = comphelper::concatSequences(
                 aEncData, std::initializer_list<beans::NamedValue>{
