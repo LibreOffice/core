@@ -3315,6 +3315,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                         aPoint.maStyleName = maAutoStyleNameQueue.front();
                         if(bExportNumFmt)
                             aPoint.mCustomLabelText = lcl_getCustomLabelField(nElement, xSeries);
+                        aPoint.mCustomLabelPos = lcl_getCustomLabelPosition(nElement, xSeries);
                         maAutoStyleNameQueue.pop();
                         aDataPointVector.push_back( aPoint );
                     }
