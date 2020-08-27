@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "20ba7f3e_389e42da",
+        "filename": "xmloff/source/draw/animationimport.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 928,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-08-27T09:11:09Z",
+      "side": 1,
+      "message": "a small tweak would be ideal: in addition to LO_EXT also handle the ANIMATION namespace in this import code (but obviously, don\u0027t write it in export), in case this is ever standardized by ODF as-is it\u0027ll have better compatibility.",
+      "revId": "394f74e6f168f034f7ed73e3027e4ff07f6b94b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
