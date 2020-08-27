@@ -21,7 +21,7 @@
 
 #include <memory>
 #include <vcl/dllapi.h>
-#include <vcl/ivctrl.hxx>
+#include <vcl/toolkit/ivctrl.hxx>
 #include <vcl/layout.hxx>
 
 struct VerticalTabPageData;

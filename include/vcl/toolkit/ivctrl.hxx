@@ -17,8 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_IVCTRL_HXX
-#define INCLUDED_VCL_IVCTRL_HXX
+#pragma once
+
+#if !defined(VCL_DLLIMPLEMENTATION) && !defined(TOOLKIT_DLLIMPLEMENTATION) && !defined(VCL_INTERNALS)
+#error "don't use this in new code"
+#endif
 
 #include <memory>
 #include <vcl/dllapi.h>
@@ -276,7 +279,5 @@ public:
     /** Creates and returns the accessible object of the Box. */
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 };
-
-#endif // INCLUDED_VCL_IVCTRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

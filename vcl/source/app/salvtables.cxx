@@ -50,7 +50,7 @@
 #include <vcl/toolkit/fixedhyper.hxx>
 #include <vcl/toolkit/fmtfield.hxx>
 #include <vcl/headbar.hxx>
-#include <vcl/ivctrl.hxx>
+#include <vcl/toolkit/ivctrl.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/toolkit/prgsbar.hxx>

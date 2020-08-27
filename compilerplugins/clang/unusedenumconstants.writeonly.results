@@ -2766,9 +2766,9 @@ include/vcl/image.hxx:38
     enum StockImage Yes
 include/vcl/inputctx.hxx:32
     enum InputContextFlags ExtText
-include/vcl/ivctrl.hxx:50
+include/vcl/toolkit/ivctrl.hxx:50
     enum SvxIconChoiceCtrlTextMode Short
-include/vcl/ivctrl.hxx:55
+include/vcl/toolkit/ivctrl.hxx:55
     enum SvxIconChoiceCtrlPositionMode Free
 include/vcl/keycod.hxx:29
     enum KeyFuncType NEW

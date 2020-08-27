@@ -23,7 +23,7 @@
 #include <sal/config.h>
 
 #include <o3tl/safeint.hxx>
-#include <vcl/ivctrl.hxx>
+#include <vcl/toolkit/ivctrl.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/timer.hxx>
