@@ -385,22 +385,22 @@ public:
 /** superclass for database fields: handle database and table names */
 class XMLDatabaseFieldImportContext : public XMLTextFieldImportContext
 {
-    OUString sDatabaseName;
-    OUString sDatabaseURL;
-    OUString sTableName;
+    OUString m_sDatabaseName;
+    OUString m_sDatabaseURL;
+    OUString m_sTableName;
 
-    sal_Int32 nCommandType;
-    bool bCommandTypeOK;
+    sal_Int32 m_nCommandType;
+    bool m_bCommandTypeOK;
 
-    bool bDisplay;
-    bool bDisplayOK;
-    bool bUseDisplay;
+    bool m_bDisplay;
+    bool m_bDisplayOK;
+    bool m_bUseDisplay;
 
 protected:
-    bool bDatabaseOK;
-    bool bDatabaseNameOK;
-    bool bDatabaseURLOK;
-    bool bTableOK;
+    bool m_bDatabaseOK;
+    bool m_bDatabaseNameOK;
+    bool m_bDatabaseURLOK;
+    bool m_bTableOK;
 
     /// protected constructor: only for subclasses
     XMLDatabaseFieldImportContext(SvXMLImport& rImport,

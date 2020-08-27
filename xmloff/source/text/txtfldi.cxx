@@ -1147,15 +1147,15 @@ XMLDatabaseFieldImportContext::XMLDatabaseFieldImportContext(
     const char* pServiceName, sal_uInt16 nPrfx,
     const OUString& sLocalName, bool bUseDisply)
 :   XMLTextFieldImportContext(rImport, rHlp, pServiceName, nPrfx, sLocalName)
-,   nCommandType( sdb::CommandType::TABLE )
-,   bCommandTypeOK(false)
-,   bDisplay( true )
-,   bDisplayOK( false )
-,   bUseDisplay( bUseDisply )
-,   bDatabaseOK(false)
-,   bDatabaseNameOK(false)
-,   bDatabaseURLOK(false)
-,   bTableOK(false)
+,   m_nCommandType( sdb::CommandType::TABLE )
+,   m_bCommandTypeOK(false)
+,   m_bDisplay( true )
+,   m_bDisplayOK( false )
+,   m_bUseDisplay( bUseDisply )
+,   m_bDatabaseOK(false)
+,   m_bDatabaseNameOK(false)
+,   m_bDatabaseURLOK(false)
+,   m_bTableOK(false)
 {
 }
 
@@ -1165,41 +1165,41 @@ void XMLDatabaseFieldImportContext::ProcessAttribute(
     switch (nAttrToken)
     {
         case XML_TOK_TEXTFIELD_DATABASE_NAME:
-            sDatabaseName = sAttrValue;
-            bDatabaseOK = true;
-            bDatabaseNameOK = true;
+            m_sDatabaseName = sAttrValue;
+            m_bDatabaseOK = true;
+            m_bDatabaseNameOK = true;
             break;
         case XML_TOK_TEXTFIELD_TABLE_NAME:
-            sTableName = sAttrValue;
-            bTableOK = true;
+            m_sTableName = sAttrValue;
+            m_bTableOK = true;
             break;
         case XML_TOK_TEXTFIELD_TABLE_TYPE:
             if( IsXMLToken( sAttrValue, XML_TABLE ) )
             {
-                nCommandType = sdb::CommandType::TABLE;
-                bCommandTypeOK = true;
+                m_nCommandType = sdb::CommandType::TABLE;
+                m_bCommandTypeOK = true;
             }
             else if( IsXMLToken( sAttrValue, XML_QUERY ) )
             {
-                nCommandType = sdb::CommandType::QUERY;
-                bCommandTypeOK = true;
+                m_nCommandType = sdb::CommandType::QUERY;
+                m_bCommandTypeOK = true;
             }
             else if( IsXMLToken( sAttrValue, XML_COMMAND ) )
             {
-                nCommandType = sdb::CommandType::COMMAND;
-                bCommandTypeOK = true;
+                m_nCommandType = sdb::CommandType::COMMAND;
+                m_bCommandTypeOK = true;
             }
             break;
         case XML_TOK_TEXTFIELD_DISPLAY:
             if( IsXMLToken( sAttrValue, XML_NONE ) )
             {
-                bDisplay = false;
-                bDisplayOK = true;
+                m_bDisplay = false;
+                m_bDisplayOK = true;
             }
             else if( IsXMLToken( sAttrValue, XML_VALUE ) )
             {
-                bDisplay = true;
-                bDisplayOK = true;
+                m_bDisplay = true;
+                m_bDisplayOK = true;
             }
             break;
     }
@@ -1224,9 +1224,9 @@ SvXMLImportContextRef XMLDatabaseFieldImportContext::CreateChildContext(
             if( ( nPrefix == XML_NAMESPACE_XLINK ) &&
                 IsXMLToken( sLocalName, XML_HREF ) )
             {
-                sDatabaseURL = xAttrList->getValueByIndex(n);
-                bDatabaseOK = true;
-                bDatabaseURLOK = true;
+                m_sDatabaseURL = xAttrList->getValueByIndex(n);
+                m_bDatabaseOK = true;
+                m_bDatabaseURLOK = true;
             }
         }
 
@@ -1242,27 +1242,27 @@ SvXMLImportContextRef XMLDatabaseFieldImportContext::CreateChildContext(
 void XMLDatabaseFieldImportContext::PrepareField(
         const Reference<XPropertySet> & xPropertySet)
 {
-    xPropertySet->setPropertyValue(gsPropertyTableName, Any(sTableName));
+    xPropertySet->setPropertyValue(gsPropertyTableName, Any(m_sTableName));
 
-    if( bDatabaseNameOK )
+    if( m_bDatabaseNameOK )
     {
-        xPropertySet->setPropertyValue(gsPropertyDataBaseName, Any(sDatabaseName));
+        xPropertySet->setPropertyValue(gsPropertyDataBaseName, Any(m_sDatabaseName));
     }
-    else if( bDatabaseURLOK )
+    else if( m_bDatabaseURLOK )
     {
-        xPropertySet->setPropertyValue(gsPropertyDataBaseURL, Any(sDatabaseURL));
+        xPropertySet->setPropertyValue(gsPropertyDataBaseURL, Any(m_sDatabaseURL));
     }
 
     // #99980# load/save command type for all fields; also load
     //         old documents without command type
-    if( bCommandTypeOK )
+    if( m_bCommandTypeOK )
     {
-        xPropertySet->setPropertyValue( gsPropertyDataCommandType, Any(nCommandType) );
+        xPropertySet->setPropertyValue( gsPropertyDataCommandType, Any(m_nCommandType) );
     }
 
-    if( bUseDisplay && bDisplayOK )
+    if( m_bUseDisplay && m_bDisplayOK )
     {
-        xPropertySet->setPropertyValue( gsPropertyIsVisible, Any(bDisplay) );
+        xPropertySet->setPropertyValue( gsPropertyIsVisible, Any(m_bDisplay) );
     }
 }
 
@@ -1283,7 +1283,7 @@ void XMLDatabaseNameImportContext::ProcessAttribute(
 {
     // delegate to superclass and check for success
     XMLDatabaseFieldImportContext::ProcessAttribute(nAttrToken, sAttrValue);
-    bValid = bDatabaseOK && bTableOK;
+    bValid = m_bDatabaseOK && m_bTableOK;
 }
 
 
@@ -1335,7 +1335,7 @@ void XMLDatabaseNextImportContext::ProcessAttribute(
                                                         sAttrValue);
     }
 
-    bValid = bDatabaseOK && bTableOK;
+    bValid = m_bDatabaseOK && m_bTableOK;
 }
 
 void XMLDatabaseNextImportContext::PrepareField(
@@ -1383,7 +1383,7 @@ void XMLDatabaseSelectImportContext::ProcessAttribute(
         XMLDatabaseNextImportContext::ProcessAttribute(nAttrToken, sAttrValue);
     }
 
-    bValid = bTableOK && bDatabaseOK && bNumberOK;
+    bValid = m_bTableOK && m_bDatabaseOK && bNumberOK;
 }
 
 void XMLDatabaseSelectImportContext::PrepareField(
@@ -1441,7 +1441,7 @@ void XMLDatabaseNumberImportContext::ProcessAttribute(
             break;
     }
 
-    bValid = bTableOK && bDatabaseOK;
+    bValid = m_bTableOK && m_bDatabaseOK;
 }
 
 void XMLDatabaseNumberImportContext::PrepareField(

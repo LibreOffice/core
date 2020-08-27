@@ -972,7 +972,7 @@ void XMLDatabaseDisplayImportContext::ProcessAttribute(
             break;
     }
 
-    bValid = bTableOK && bDatabaseOK && bColumnOK;
+    bValid = m_bTableOK && m_bDatabaseOK && bColumnOK;
 }
 
 void XMLDatabaseDisplayImportContext::EndElement()
