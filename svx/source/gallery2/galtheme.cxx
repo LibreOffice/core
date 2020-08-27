@@ -31,6 +31,8 @@
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <tools/vcompat.hxx>
+#include <tools/datetime.hxx>
+#include <unotools/datetime.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/tempfile.hxx>
@@ -648,6 +650,18 @@ void GalleryTheme::CopyToClipboard(sal_uInt32 nPos)
 {
     GalleryTransferable* pTransferable = new GalleryTransferable( this, nPos, false );
     pTransferable->CopyToClipboard(GetSystemClipboard());
+}
+
+DateTime GalleryTheme::getModificationDate() const
+{
+    ::ucbhelper::Content aCnt(mpGalleryStorageEngine->GetThmURL().GetMainURL(INetURLObject::DecodeMechanism::NONE), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext());
+    util::DateTime  aDateTimeModified;
+    DateTime        aDateTime(DateTime::EMPTY);
+
+    aCnt.getPropertyValue("DateModified") >>= aDateTimeModified;
+    ::utl::typeConvert(aDateTimeModified, aDateTime);
+
+    return aDateTime;
 }
 
 SvStream& GalleryTheme::ReadData( SvStream& rIStm )
