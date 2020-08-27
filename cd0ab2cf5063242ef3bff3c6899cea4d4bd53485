@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1c5c9d_392690da",
+        "filename": "basctl/source/basicide/basidesh.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 909,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-27T10:27:19Z",
+      "side": 1,
+      "message": "I got curious about these lines coming ahead of removeContainerListener, ... what a nice change 9ad4eeb4fa413b1a3e084d141c6eb01795f95b7f was! :-D",
+      "range": {
+        "startLine": 908,
+        "startChar": 4,
+        "endLine": 909,
+        "endChar": 29
+      },
+      "revId": "cd0ab2cf5063242ef3bff3c6899cea4d4bd53485",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
