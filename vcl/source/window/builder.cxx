@@ -460,7 +460,7 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
     {
         xmlreader::XmlReader reader(sUri);
 
-        handleChild(pParent, reader);
+        handleChild(pParent, nullptr, reader);
     }
     catch (const css::uno::Exception &rExcept)
     {
@@ -2760,7 +2760,7 @@ bool VclBuilder::sortIntoBestTabTraversalOrder::operator()(const vcl::Window *pA
     return false;
 }
 
-void VclBuilder::handleChild(vcl::Window *pParent, xmlreader::XmlReader &reader)
+void VclBuilder::handleChild(vcl::Window *pParent, stringmap* pAtkProps, xmlreader::XmlReader &reader)
 {
     vcl::Window *pCurrentChild = nullptr;
 
@@ -2798,7 +2798,7 @@ void VclBuilder::handleChild(vcl::Window *pParent, xmlreader::XmlReader &reader)
         {
             if (name == "object" || name == "placeholder")
             {
-                pCurrentChild = handleObject(pParent, reader).get();
+                pCurrentChild = handleObject(pParent, pAtkProps, reader).get();
 
                 bool bObjectInserted = pCurrentChild && pParent != pCurrentChild;
 
@@ -3330,6 +3330,7 @@ void VclBuilder::handleMenuObject(Menu *pParent, xmlreader::XmlReader &reader)
     int nLevel = 1;
 
     stringmap aProperties;
+    stringmap aAtkProperties;
     accelmap aAccelerators;
 
     if (!sCustomProperty.isEmpty())
@@ -3348,9 +3349,10 @@ void VclBuilder::handleMenuObject(Menu *pParent, xmlreader::XmlReader &reader)
             if (name == "child")
             {
                 size_t nChildMenuIdx = m_aMenus.size();
-                handleChild(nullptr, reader);
-                assert(m_aMenus.size() > nChildMenuIdx && "menu not inserted");
-                pSubMenu = dynamic_cast<PopupMenu*>(m_aMenus[nChildMenuIdx].m_pMenu.get());
+                handleChild(nullptr, &aAtkProperties, reader);
+                bool bSubMenuInserted = m_aMenus.size() > nChildMenuIdx;
+                if (bSubMenuInserted)
+                    pSubMenu = dynamic_cast<PopupMenu*>(m_aMenus[nChildMenuIdx].m_pMenu.get());
             }
             else
             {
@@ -3371,7 +3373,7 @@ void VclBuilder::handleMenuObject(Menu *pParent, xmlreader::XmlReader &reader)
             break;
     }
 
-    insertMenuObject(pParent, pSubMenu, sClass, sID, aProperties, aAccelerators);
+    insertMenuObject(pParent, pSubMenu, sClass, sID, aProperties, aAtkProperties, aAccelerators);
 }
 
 void VclBuilder::handleSizeGroup(xmlreader::XmlReader &reader)
@@ -3468,7 +3470,7 @@ namespace
 }
 
 void VclBuilder::insertMenuObject(Menu *pParent, PopupMenu *pSubMenu, const OString &rClass, const OString &rID,
-    stringmap &rProps, accelmap &rAccels)
+    stringmap &rProps, stringmap &rAtkProps, accelmap &rAccels)
 {
     sal_uInt16 nOldCount = pParent->GetItemCount();
     sal_uInt16 nNewId = ++m_pParserState->m_nLastMenuItemId;
@@ -3527,6 +3529,19 @@ void VclBuilder::insertMenuObject(Menu *pParent, PopupMenu *pSubMenu, const OStr
                 SAL_INFO("vcl.builder", "unhandled property: " << rKey);
         }
 
+        for (auto const& prop : rAtkProps)
+        {
+            const OString &rKey = prop.first;
+            const OUString &rValue = prop.second;
+
+            if (rKey == "AtkObject::accessible-name")
+                pParent->SetAccessibleName(nNewId, rValue);
+            else if (rKey == "AtkObject::accessible-description")
+                pParent->SetAccessibleDescription(nNewId, rValue);
+            else
+                SAL_INFO("vcl.builder", "unhandled atk property: " << rKey);
+        }
+
         for (auto const& accel : rAccels)
         {
             const OString &rSignal = accel.first;
@@ -3568,7 +3583,7 @@ template<typename T> static bool insertItems(vcl::Window *pWindow, VclBuilder::s
     return true;
 }
 
-VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, xmlreader::XmlReader &reader)
+VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, stringmap *pAtkProps, xmlreader::XmlReader &reader)
 {
     OString sClass;
     OString sID;
@@ -3624,8 +3639,13 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, xmlreader::Xm
     }
     else if (sClass == "AtkObject")
     {
+        assert((pParent || pAtkProps) && "must have one set");
+        assert(!(pParent && pAtkProps) && "must not have both");
         auto aAtkProperties = handleAtkObject(reader);
-        applyAtkProperties(pParent, aAtkProperties);
+        if (pParent)
+            applyAtkProperties(pParent, aAtkProperties);
+        if (pAtkProps)
+            *pAtkProps = aAtkProperties;
         return nullptr;
     }
 
@@ -3656,7 +3676,7 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, xmlreader::Xm
                     pCurrentChild = insertObject(pParent, sClass, sID,
                         aProperties, aPangoAttributes, aAtkAttributes);
                 }
-                handleChild(pCurrentChild, reader);
+                handleChild(pCurrentChild, nullptr, reader);
             }
             else if (name == "items")
                 aItems = handleItems(reader);

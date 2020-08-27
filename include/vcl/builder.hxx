@@ -345,8 +345,10 @@ private:
     void        extractStock(const OString &id, stringmap &rMap);
     void        extractMnemonicWidget(const OString &id, stringmap &rMap);
 
-    void        handleChild(vcl::Window *pParent, xmlreader::XmlReader &reader);
-    VclPtr<vcl::Window> handleObject(vcl::Window *pParent, xmlreader::XmlReader &reader);
+    // either pParent or pAtkProps must be set, pParent for a child of a widget, pAtkProps for
+    // collecting the atk info for a GtkMenuItem
+    void        handleChild(vcl::Window *pParent, stringmap *pAtkProps, xmlreader::XmlReader &reader);
+    VclPtr<vcl::Window> handleObject(vcl::Window *pParent, stringmap *pAtkProps, xmlreader::XmlReader &reader);
     void        handlePacking(vcl::Window *pCurrent, vcl::Window *pParent, xmlreader::XmlReader &reader);
     static std::vector<vcl::EnumContext::Context> handleStyle(xmlreader::XmlReader &reader, int &nPriority);
     static OString getStyleClass(xmlreader::XmlReader &reader);
@@ -363,6 +365,7 @@ private:
                    const OString &rClass,
                    const OString &rID,
                    stringmap &rProps,
+                   stringmap &rAtkProps,
                    accelmap &rAccels);
 
     void        handleMenuChild(Menu *pParent, xmlreader::XmlReader &reader);

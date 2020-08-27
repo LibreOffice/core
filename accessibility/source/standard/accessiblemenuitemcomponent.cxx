@@ -336,7 +336,7 @@ OUString OAccessibleMenuItemComponent::getAccessibleDescription( )
 
     OUString sDescription;
     if ( m_pParent )
-        sDescription = m_pParent->GetHelpText( m_pParent->GetItemId( m_nItemPos ) );
+        sDescription = m_pParent->GetAccessibleDescription( m_pParent->GetItemId( m_nItemPos ) );
 
     return sDescription;
 }
