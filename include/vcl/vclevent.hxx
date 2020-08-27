@@ -67,6 +67,7 @@ enum class VclEventId
     ListboxSelect,
     ListboxTreeFocus,
     ListboxTreeSelect,
+    MenuAccessibleNameChanged,
     MenuActivate,
     MenuDeactivate,
     MenuDehighlight,

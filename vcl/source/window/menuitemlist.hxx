@@ -54,6 +54,7 @@ struct MenuItemData
     bool            bHiddenOnGUI;
     Size            aSz;                    // only temporarily valid
     OUString        aAccessibleName;        // accessible name
+    OUString        aAccessibleDescription; // accessible description
 
     std::unique_ptr<SalMenuItem> pSalMenuItem; // access to native menu
 

@@ -372,7 +372,11 @@ public:
 
     vcl::Window* GetWindow() const { return pWindow; }
 
+    void SetAccessibleName( sal_uInt16 nItemId, const OUString& rStr );
     OUString GetAccessibleName( sal_uInt16 nItemId ) const;
+
+    void SetAccessibleDescription( sal_uInt16 nItemId, const OUString& rStr );
+    OUString GetAccessibleDescription( sal_uInt16 nItemId ) const;
 
     // returns whether the item a position nItemPos is highlighted or not.
     bool IsHighlighted( sal_uInt16 nItemPos ) const;

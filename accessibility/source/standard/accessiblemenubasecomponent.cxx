@@ -579,6 +579,11 @@ void OAccessibleMenuBaseComponent::ProcessMenuEvent( const VclMenuEvent& rVclMen
             RemoveChild( nItemPos );
         }
         break;
+        case VclEventId::MenuAccessibleNameChanged:
+        {
+            UpdateAccessibleName( nItemPos );
+        }
+        break;
         case VclEventId::MenuItemTextChanged:
         {
             UpdateAccessibleName( nItemPos );
