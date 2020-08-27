@@ -65,6 +65,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <string_view>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -895,7 +896,8 @@ void Edit::ImplSetText( const OUString& rText, const Selection* pNewSelection )
 {
     // we delete text by "selecting" the old text completely then calling InsertText; this is flicker free
     if ( ( rText.getLength() > mnMaxTextLen ) ||
-         ( rText == maText.getStr() && (!pNewSelection || (*pNewSelection == maSelection)) ) )
+         ( std::u16string_view(rText) == std::u16string_view(maText.getStr(), maText.getLength())
+           && (!pNewSelection || (*pNewSelection == maSelection)) ) )
         return;
 
     ImplClearLayoutData();
@@ -1969,7 +1971,10 @@ void Edit::Command( const CommandEvent& rCEvt )
         pPopup->EnableItem(pPopup->GetItemId("delete"), bEnableDelete);
         pPopup->EnableItem(pPopup->GetItemId("paste"), bEnablePaste);
         pPopup->EnableItem(pPopup->GetItemId("specialchar"), bEnableSpecialChar);
-        pPopup->EnableItem(pPopup->GetItemId("undo"), maUndoText != maText.getStr());
+        pPopup->EnableItem(
+            pPopup->GetItemId("undo"),
+            std::u16string_view(maUndoText)
+                != std::u16string_view(maText.getStr(), maText.getLength()));
         bool bAllSelected = maSelection.Min() == 0 && maSelection.Max() == maText.getLength();
         pPopup->EnableItem(pPopup->GetItemId("selectall"), !bAllSelected);
         pPopup->ShowItem(pPopup->GetItemId("specialchar"), pImplFncGetSpecialChars != nullptr);
@@ -2031,7 +2036,7 @@ void Edit::Command( const CommandEvent& rCEvt )
     {
         DeleteSelected();
         sal_Int32 nPos = maSelection.Max();
-        mpIMEInfos.reset(new Impl_IMEInfos( nPos, OUString(maText.getStr() + nPos ) ));
+        mpIMEInfos.reset(new Impl_IMEInfos( nPos, maText.copy(nPos).makeStringAndClear() ));
         mpIMEInfos->bWasCursorOverwrite = !IsInsertMode();
     }
     else if ( rCEvt.GetCommand() == CommandEventId::EndExtTextInput )
