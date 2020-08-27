@@ -27,7 +27,6 @@
 #include <vcl/event.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/scrbar.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
