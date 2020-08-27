@@ -344,12 +344,6 @@ void importSheetFragments( WorkbookFragment& rWorkbookHandler, SheetFragmentVect
 
 void WorkbookFragment::finalizeImport()
 {
-    // lock the model to prevent broadcasting, speeds up load a lot
-    getScDocument().InitDrawLayer();
-    auto pModel = getScDocument().GetDrawLayer();
-    bool bWasLocked = pModel->isLocked();
-    pModel->setLock(true);
-
     ISegmentProgressBarRef xGlobalSegment = getProgressBar().createSegment( PROGRESS_LENGTH_GLOBALS );
 
     // read the theme substream
@@ -472,6 +466,12 @@ void WorkbookFragment::finalizeImport()
             getBaseFilter().getVbaProject().readVbaModules( *xPrjStrg );
         }
     }
+
+    // lock the model to prevent broadcasting, speeds up load a lot
+    getScDocument().InitDrawLayer();
+    auto pModel = getScDocument().GetDrawLayer();
+    bool bWasLocked = pModel->isLocked();
+    pModel->setLock(true);
 
     // load all worksheets
     importSheetFragments(*this, aSheetFragments);
