@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dea7a764_da73b55e",
+        "filename": "solenv/gbuild/JavaClassSet.mk",
+        "patchSetId": 19
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-27T16:40:05Z",
+      "side": 1,
+      "message": "Is there a reason that this block is indented further than its sibling block starting at line 43\n\n  $(if $(filter-out $(JARDEPS),$(4)), \\\n\n(as if this block were part of that other block)?",
+      "revId": "941b567a41569260fef14a7337511e8f42337323",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
