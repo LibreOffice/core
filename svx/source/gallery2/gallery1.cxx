@@ -636,6 +636,14 @@ bool Gallery::RemoveTheme( const OUString& rThemeName )
     return bRet;
 }
 
+std::unique_ptr<GalleryTheme> GalleryThemeEntry::getCachedTheme(Gallery* pGallery) const
+{
+    std::unique_ptr<GalleryTheme> pNewTheme;
+    pNewTheme.reset(new GalleryTheme(pGallery, const_cast<GalleryThemeEntry*>(this)));
+    mpGalleryStorageEngineEntry->getCachedTheme(pNewTheme);
+    return pNewTheme;
+}
+
 GalleryTheme* Gallery::ImplGetCachedTheme(const GalleryThemeEntry* pThemeEntry)
 {
     GalleryTheme* pTheme = nullptr;
@@ -649,31 +657,7 @@ GalleryTheme* Gallery::ImplGetCachedTheme(const GalleryThemeEntry* pThemeEntry)
 
         if( !pTheme )
         {
-            INetURLObject aURL = pThemeEntry->GetThmURL();
-
-            DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
-
-            std::unique_ptr<GalleryTheme> pNewTheme;
-            if( FileExists( aURL ) )
-            {
-                std::unique_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ ));
-
-                if( pIStm )
-                {
-                    try
-                    {
-                        pNewTheme.reset( new GalleryTheme( this, const_cast<GalleryThemeEntry*>(pThemeEntry) ) );
-                        ReadGalleryTheme( *pIStm, *pNewTheme );
-
-                        if( pIStm->GetError() )
-                            pNewTheme.reset();
-                    }
-                    catch (const css::ucb::ContentCreationException&)
-                    {
-                    }
-                }
-            }
-
+            std::unique_ptr<GalleryTheme> pNewTheme = pThemeEntry->getCachedTheme(this);
             if (pNewTheme)
             {
                 aThemeCache.push_back( new GalleryThemeCacheEntry( pThemeEntry, std::move(pNewTheme) ));

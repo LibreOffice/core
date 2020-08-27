@@ -79,7 +79,10 @@ public:
     sal_uInt32              GetId() const { return nId; }
     void                    SetId( sal_uInt32 nNewId, bool bResetThemeName );
 
+
     void removeTheme();
+
+    std::unique_ptr<GalleryTheme> getCachedTheme(Gallery* pGallery) const;
 };
 
 class SfxListener;
