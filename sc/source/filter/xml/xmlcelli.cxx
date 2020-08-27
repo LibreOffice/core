@@ -109,6 +109,8 @@
 #include <i18nlangtag/lang.h>
 #include <o3tl/make_unique.hxx>
 
+#include <comphelper/lok.hxx>
+
 using namespace com::sun::star;
 using namespace xmloff::token;
 
@@ -881,7 +883,7 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
 
         /*  Try to reuse the drawing object already created (but only if the
             note is visible, and the object is a caption object). */
-        if( mxAnnotationData->mbShown && mxAnnotationData->mbUseShapePos )
+        if( mxAnnotationData->mbShown && mxAnnotationData->mbUseShapePos && !comphelper::LibreOfficeKit::isActive())
         {
             if( SdrCaptionObj* pCaption = dynamic_cast< SdrCaptionObj* >( pObject ) )
             {
@@ -915,9 +917,19 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
             if (xOutlinerObj)
             {
                 // create cell note with all data from drawing object
-                pNote = ScNoteUtil::CreateNoteFromObjectData( *pDoc, rPos,
+                if(!comphelper::LibreOfficeKit::isActive())
+                {
+                    pNote = ScNoteUtil::CreateNoteFromObjectData( *pDoc, rPos,
                     std::move(xItemSet), xOutlinerObj.release(),
                     aCaptionRect, mxAnnotationData->mbShown );
+                }
+                else
+                {
+                    pNote = ScNoteUtil::CreateNoteFromObjectData( *pDoc, rPos,
+                    std::move(xItemSet), xOutlinerObj.release(),
+                    aCaptionRect, false );
+                }
+
             }
         }
     }
