@@ -60,7 +60,7 @@ $(call gb_Helper_abbreviate_dirs,\
 				$(if $(T_MODULENAME),--patch-module $(T_MODULENAME)="$(subst $(WHITESPACE),$(gb_CLASSPATHSEP),$(strip $(dir $(PACKAGEDIRS))))") \
 				-d $(call gb_JavaClassSet_get_classdir,$(2)) \
 				@$$RESPONSEFILE &&) \
-			) \
+			rm -f $$RESPONSEFILE &&) \
 	touch $(1))
 
 endef
