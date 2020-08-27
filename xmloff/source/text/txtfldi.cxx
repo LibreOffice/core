@@ -1145,13 +1145,13 @@ const OUStringLiteral gsPropertyIsVisible("IsVisible");
 XMLDatabaseFieldImportContext::XMLDatabaseFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
     const char* pServiceName, sal_uInt16 nPrfx,
-    const OUString& sLocalName, bool bUseDisply)
+    const OUString& sLocalName, bool bUseDisplay)
 :   XMLTextFieldImportContext(rImport, rHlp, pServiceName, nPrfx, sLocalName)
 ,   nCommandType( sdb::CommandType::TABLE )
 ,   bCommandTypeOK(false)
 ,   bDisplay( true )
 ,   bDisplayOK( false )
-,   bUseDisplay( bUseDisply )
+,   bUseDisplay( bUseDisplay )
 ,   bDatabaseOK(false)
 ,   bDatabaseNameOK(false)
 ,   bDatabaseURLOK(false)
