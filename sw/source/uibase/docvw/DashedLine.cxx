@@ -19,9 +19,9 @@
 #include <vcl/settings.hxx>
 #include <memory>
 
-SwDashedLine::SwDashedLine( vcl::Window* pParent, Color& ( *pColorFn )() ) :
-    FixedLine( pParent, WB_DIALOGCONTROL | WB_HORZ ),
-    m_pColorFn( pColorFn )
+SwDashedLine::SwDashedLine( vcl::Window* pParent, Color& ( *pColorFn )() )
+    : Control( pParent, WB_DIALOGCONTROL | WB_HORZ )
+    , m_pColorFn( pColorFn )
 {
 }
 
