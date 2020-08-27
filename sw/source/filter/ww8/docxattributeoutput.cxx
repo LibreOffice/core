@@ -5981,6 +5981,8 @@ void DocxAttributeOutput::WriteTextBox(uno::Reference<drawing::XShape> xShape)
 
     SwFrameFormat* pTextBox = SwTextBoxHelper::getOtherTextBoxFormat(xShape);
     const SwPosition* pAnchor = pTextBox->GetAnchor().GetContentAnchor();
+    if (!pAnchor) //FIXME: If textbox anchored to page this will return...
+        return;
     ww8::Frame aFrame(*pTextBox, *pAnchor);
     m_rExport.SdrExporter().writeDMLTextFrame(&aFrame, m_anchorId++, /*bTextBoxOnly=*/true);
 }
@@ -5991,6 +5993,8 @@ void DocxAttributeOutput::WriteVMLTextBox(uno::Reference<drawing::XShape> xShape
 
     SwFrameFormat* pTextBox = SwTextBoxHelper::getOtherTextBoxFormat(xShape);
     const SwPosition* pAnchor = pTextBox->GetAnchor().GetContentAnchor();
+    if (!pAnchor) //FIXME: If textbox anchored to page this will return...
+        return;
     ww8::Frame aFrame(*pTextBox, *pAnchor);
     m_rExport.SdrExporter().writeVMLTextFrame(&aFrame, /*bTextBoxOnly=*/true);
 }
