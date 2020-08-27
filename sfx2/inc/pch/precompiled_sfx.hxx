@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-08-12 11:05:48 using:
+ Generated on 2020-08-27 16:26:27 using:
  ./bin/update_pch sfx2 sfx --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -170,6 +170,7 @@
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
@@ -299,6 +300,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <drawinglayer/attribute/fontattribute.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonSelectionPrimitive2D.hxx>
@@ -449,6 +451,7 @@
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/sidebar/Context.hxx>
 #include <sfx2/sidebar/Deck.hxx>
+#include <sfx2/sidebar/FocusManager.hxx>
 #include <sfx2/sidebar/Panel.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <sfx2/sidebar/ResourceManager.hxx>
@@ -465,6 +468,7 @@
 #include <sfx2/templatedlg.hxx>
 #include <sfx2/templatelocalview.hxx>
 #include <sfx2/thumbnailview.hxx>
+#include <sfx2/thumbnailviewitem.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/viewfac.hxx>
 #include <sfx2/viewfrm.hxx>
