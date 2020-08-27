@@ -59,25 +59,25 @@ bool matchList(
 
 bool passesNegativeList(const OUString& rUrl) {
     static const OUStringLiteral list[] = {
-        "/desktop/test/deployment/passive/help/en/help.tree",
-        "/desktop/test/deployment/passive/help/en/main.xhp",
-        "/dictionaries.xcu",
-        "/dictionaries/da_DK/help/da/help.tree",
-        ("/dictionaries/da_DK/help/da/"
+        u"/desktop/test/deployment/passive/help/en/help.tree",
+        u"/desktop/test/deployment/passive/help/en/main.xhp",
+        u"/dictionaries.xcu",
+        u"/dictionaries/da_DK/help/da/help.tree",
+        (u"/dictionaries/da_DK/help/da/"
          "org.openoffice.da.hunspell.dictionaries/page1.xhp"),
-        ("/dictionaries/da_DK/help/da/"
+        (u"/dictionaries/da_DK/help/da/"
          "org.openoffice.da.hunspell.dictionaries/page2.xhp"),
-        "/dictionaries/hu_HU/help/hu/help.tree",
-        ("/dictionaries/hu_HU/help/hu/"
+        u"/dictionaries/hu_HU/help/hu/help.tree",
+        (u"/dictionaries/hu_HU/help/hu/"
          "org.openoffice.hu.hunspell.dictionaries/page1.xhp"),
-        "/officecfg/registry/data/org/openoffice/Office/Accelerators.xcu"
+        u"/officecfg/registry/data/org/openoffice/Office/Accelerators.xcu"
     };
     return !matchList(rUrl, list, SAL_N_ELEMENTS(list));
 }
 
 bool passesPositiveList(const OUString& rUrl) {
     static const OUStringLiteral list[] = {
-        "/description.xml"
+        u"/description.xml"
     };
     return matchList(rUrl, list, SAL_N_ELEMENTS(list));
 }
@@ -178,15 +178,15 @@ bool handleFile(const OString& rProject, const OUString& rUrl, const OString& rP
         bool positive;
     };
     static Command const commands[] = {
-        { OUStringLiteral(".hrc"), "hrcex", false },
-        { OUStringLiteral(".ulf"), "ulfex", false },
-        { OUStringLiteral(".xcu"), "cfgex", false },
-        { OUStringLiteral(".xrm"), "xrmex", false },
-        { OUStringLiteral("description.xml"), "xrmex", true },
-        { OUStringLiteral(".xhp"), "helpex", false },
-        { OUStringLiteral(".properties"), "propex", false },
-        { OUStringLiteral(".ui"), "uiex", false },
-        { OUStringLiteral(".tree"), "treex", false } };
+        { OUStringLiteral(u".hrc"), "hrcex", false },
+        { OUStringLiteral(u".ulf"), "ulfex", false },
+        { OUStringLiteral(u".xcu"), "cfgex", false },
+        { OUStringLiteral(u".xrm"), "xrmex", false },
+        { OUStringLiteral(u"description.xml"), "xrmex", true },
+        { OUStringLiteral(u".xhp"), "helpex", false },
+        { OUStringLiteral(u".properties"), "propex", false },
+        { OUStringLiteral(u".ui"), "uiex", false },
+        { OUStringLiteral(u".tree"), "treex", false } };
     for (size_t i = 0; i != SAL_N_ELEMENTS(commands); ++i)
     {
         if (rUrl.endsWith(commands[i].extension) &&

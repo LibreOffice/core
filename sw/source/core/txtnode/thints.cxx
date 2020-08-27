@@ -1234,7 +1234,7 @@ void SwTextNode::DestroyAttr( SwTextAttr* pAttr )
         {
             if (SwDocShell* pDocSh = pDoc->GetDocShell())
             {
-                static const OUStringLiteral metaNS("urn:bails");
+                static const OUStringLiteral metaNS(u"urn:bails");
                 const css::uno::Reference<css::rdf::XResource> xSubject = pMeta->MakeUnoObject();
                 uno::Reference<frame::XModel> xModel = pDocSh->GetBaseModel();
                 SwRDFHelper::clearStatements(xModel, metaNS, xSubject);

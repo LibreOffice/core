@@ -177,7 +177,7 @@ public:
     OUStringBuffer(OUStringLiteral const & literal):
         pData(nullptr), nCapacity(literal.size + 16) //TODO: check for overflow
     {
-        rtl_uString_newFromLiteral(&pData, literal.data, literal.size, 16);
+        rtl_uStringbuffer_newFromStr_WithLength(&pData, literal.data, literal.size);
     }
 #endif
 
@@ -320,11 +320,9 @@ public:
         if (n >= nCapacity) {
             ensureCapacity(n + 16); //TODO: check for overflow
         }
-        char const * from = literal.data;
-        sal_Unicode * to = pData->buffer;
-        for (sal_Int32 i = 0; i <= n; ++i) {
-            to[i] = from[i];
-        }
+        std::memcpy(
+            pData->buffer, literal.data,
+            (n + 1) * sizeof (sal_Unicode)); //TODO: check for overflow
         pData->length = n;
         return *this;
     }
@@ -662,7 +660,7 @@ public:
 
     /** @overload @since LibreOffice 5.4 */
     OUStringBuffer & append(OUStringLiteral const & literal) {
-        return appendAscii(literal.data, literal.size);
+        return append(literal.data, literal.size);
     }
 #endif
 
@@ -1040,9 +1038,7 @@ public:
 
     /** @overload @since LibreOffice 5.4 */
     OUStringBuffer & insert(sal_Int32 offset, OUStringLiteral const & literal) {
-        rtl_uStringbuffer_insert_ascii(
-            &pData, &nCapacity, offset, literal.data, literal.size);
-        return *this;
+        return insert(offset, literal.data, literal.size);
     }
 #endif
 
@@ -1453,7 +1449,7 @@ public:
     sal_Int32 indexOf(OUStringLiteral const & literal, sal_Int32 fromIndex = 0)
         const
     {
-        sal_Int32 n = rtl_ustr_indexOfAscii_WithLength(
+        sal_Int32 n = rtl_ustr_indexOfStr_WithLength(
             pData->buffer + fromIndex, pData->length - fromIndex, literal.data,
             literal.size);
         return n < 0 ? n : n + fromIndex;
@@ -1539,7 +1535,7 @@ public:
 
     /** @overload @since LibreOffice 5.4 */
     sal_Int32 lastIndexOf(OUStringLiteral const & literal) const {
-        return rtl_ustr_lastIndexOfAscii_WithLength(
+        return rtl_ustr_lastIndexOfStr_WithLength(
             pData->buffer, pData->length, literal.data, literal.size);
     }
 #endif

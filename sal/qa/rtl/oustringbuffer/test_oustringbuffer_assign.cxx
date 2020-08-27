@@ -55,13 +55,13 @@ private:
         CPPUNIT_ASSERT_EQUAL(s3, b3.toString());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(32), b3.getCapacity());
         OUStringBuffer b4;
-        b4 = OUStringLiteral("1") + "23456789012345";
+        b4 = OUStringLiteral(u"1") + "23456789012345";
         CPPUNIT_ASSERT_EQUAL(s1, b4.toString());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(16), b4.getCapacity());
-        b4 = OUStringLiteral("a") + "bc";
+        b4 = OUStringLiteral(u"a") + "bc";
         CPPUNIT_ASSERT_EQUAL(s2, b4.toString());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(16), b4.getCapacity());
-        b4 = OUStringLiteral("1") + "234567890123456";
+        b4 = OUStringLiteral(u"1") + "234567890123456";
         CPPUNIT_ASSERT_EQUAL(s3, b4.toString());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(32), b4.getCapacity());
     }

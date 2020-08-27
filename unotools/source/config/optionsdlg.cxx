@@ -44,7 +44,7 @@ class SvtOptionsDlgOptions_Impl : public utl::ConfigItem
 private:
     typedef std::unordered_map< OUString, bool > OptionNodeList;
 
-    static constexpr OUStringLiteral g_sPathDelimiter = "/";
+    static constexpr OUStringLiteral g_sPathDelimiter = u"/";
     OptionNodeList  m_aOptionNodeList;
 
     enum NodeType{ NT_Group, NT_Page, NT_Option };

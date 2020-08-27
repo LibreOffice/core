@@ -204,26 +204,26 @@ static const char* aConvertSlots[] =
 
 const OUStringLiteral aImgIds[] =
 {
-    RID_SVXBMP_EDITBOX,
-    RID_SVXBMP_BUTTON,
-    RID_SVXBMP_FIXEDTEXT,
-    RID_SVXBMP_LISTBOX,
-    RID_SVXBMP_CHECKBOX,
-    RID_SVXBMP_RADIOBUTTON,
-    RID_SVXBMP_GROUPBOX,
-    RID_SVXBMP_COMBOBOX,
-    RID_SVXBMP_IMAGEBUTTON,
-    RID_SVXBMP_FILECONTROL,
-    RID_SVXBMP_DATEFIELD,
-    RID_SVXBMP_TIMEFIELD,
-    RID_SVXBMP_NUMERICFIELD,
-    RID_SVXBMP_CURRENCYFIELD,
-    RID_SVXBMP_PATTERNFIELD,
-    RID_SVXBMP_IMAGECONTROL,
-    RID_SVXBMP_FORMATTEDFIELD,
-    RID_SVXBMP_SCROLLBAR,
-    RID_SVXBMP_SPINBUTTON,
-    RID_SVXBMP_NAVIGATIONBAR
+    u"" RID_SVXBMP_EDITBOX,
+    u"" RID_SVXBMP_BUTTON,
+    u"" RID_SVXBMP_FIXEDTEXT,
+    u"" RID_SVXBMP_LISTBOX,
+    u"" RID_SVXBMP_CHECKBOX,
+    u"" RID_SVXBMP_RADIOBUTTON,
+    u"" RID_SVXBMP_GROUPBOX,
+    u"" RID_SVXBMP_COMBOBOX,
+    u"" RID_SVXBMP_IMAGEBUTTON,
+    u"" RID_SVXBMP_FILECONTROL,
+    u"" RID_SVXBMP_DATEFIELD,
+    u"" RID_SVXBMP_TIMEFIELD,
+    u"" RID_SVXBMP_NUMERICFIELD,
+    u"" RID_SVXBMP_CURRENCYFIELD,
+    u"" RID_SVXBMP_PATTERNFIELD,
+    u"" RID_SVXBMP_IMAGECONTROL,
+    u"" RID_SVXBMP_FORMATTEDFIELD,
+    u"" RID_SVXBMP_SCROLLBAR,
+    u"" RID_SVXBMP_SPINBUTTON,
+    u"" RID_SVXBMP_NAVIGATIONBAR
 };
 
 const sal_Int16 nObjectTypes[] =
@@ -3668,8 +3668,8 @@ void FmXFormShell::smartControlReset( const Reference< XIndexAccess >& _rxModels
         return;
     }
 
-    static const OUStringLiteral sClassIdPropertyName = FM_PROP_CLASSID;
-    static const OUStringLiteral sBoundFieldPropertyName = FM_PROP_BOUNDFIELD;
+    static const OUStringLiteral sClassIdPropertyName = u"" FM_PROP_CLASSID;
+    static const OUStringLiteral sBoundFieldPropertyName = u"" FM_PROP_BOUNDFIELD;
     sal_Int32 nCount = _rxModels->getCount();
     Reference< XPropertySet > xCurrent;
     Reference< XPropertySetInfo > xCurrentInfo;

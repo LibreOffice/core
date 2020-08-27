@@ -374,7 +374,7 @@ static bool RenderAsBMPThroughConvert(const sal_uInt8* pBuf, sal_uInt32 nBytesRe
         arg1.pData, arg2.pData, arg3.pData, arg4.pData
     };
     return RenderAsBMPThroughHelper(pBuf, nBytesRead, rGraphic,
-        { "convert" EXESUFFIX },
+        { u"convert" EXESUFFIX },
         args,
         SAL_N_ELEMENTS(args));
 }
@@ -403,11 +403,11 @@ static bool RenderAsBMPThroughGS(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
 #ifdef _WIN32
         // Try both 32-bit and 64-bit ghostscript executable name
         {
-            "gswin32c" EXESUFFIX,
-            "gswin64c" EXESUFFIX,
+            u"gswin32c" EXESUFFIX,
+            u"gswin64c" EXESUFFIX,
         },
 #else
-        { "gs" EXESUFFIX },
+        { u"gs" EXESUFFIX },
 #endif
         args,
         SAL_N_ELEMENTS(args));

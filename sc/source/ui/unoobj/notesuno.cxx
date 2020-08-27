@@ -46,7 +46,7 @@ static const SvxItemPropertySet* lcl_GetAnnotationPropertySet()
         SVX_UNOEDIT_FONT_PROPERTIES,
         SVX_UNOEDIT_PARA_PROPERTIES,
         SVX_UNOEDIT_NUMBERING_PROPERTIE,    // for completeness of service ParagraphProperties
-        { "", 0, css::uno::Type(), 0, 0 }
+        { u"", 0, css::uno::Type(), 0, 0 }
     };
     static SvxItemPropertySet aAnnotationPropertySet_Impl( aAnnotationPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
     return &aAnnotationPropertySet_Impl;

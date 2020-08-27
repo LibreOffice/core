@@ -88,11 +88,11 @@ void ObjectContainer::createContainer() const
     OSL_ENSURE( mxContainer.is(), "ObjectContainer::createContainer - container not found" );
 }
 
-const OUStringLiteral gaDashNameBase(      "msLineDash " );      ///< Base name for all named line dashes.
-const OUStringLiteral gaGradientNameBase(  "msFillGradient " );  ///< Base name for all named fill gradients.
-const OUStringLiteral gaTransGradNameBase( "msTransGradient " ); ///< Base name for all named fill gradients.
-const OUStringLiteral gaBitmapUrlNameBase( "msFillBitmap " );    ///< Base name for all named fill bitmap URLs.
-const OUStringLiteral gaHatchNameBase(     "msFillHatch " );     ///< Base name for all named fill hatches.
+const OUStringLiteral gaDashNameBase(      u"msLineDash " );      ///< Base name for all named line dashes.
+const OUStringLiteral gaGradientNameBase(  u"msFillGradient " );  ///< Base name for all named fill gradients.
+const OUStringLiteral gaTransGradNameBase( u"msTransGradient " ); ///< Base name for all named fill gradients.
+const OUStringLiteral gaBitmapUrlNameBase( u"msFillBitmap " );    ///< Base name for all named fill bitmap URLs.
+const OUStringLiteral gaHatchNameBase(     u"msFillHatch " );     ///< Base name for all named fill hatches.
 
 ModelObjectHelper::ModelObjectHelper( const Reference< XMultiServiceFactory >& rxModelFactory ) :
     maMarkerContainer(    rxModelFactory, "com.sun.star.drawing.MarkerTable" ),

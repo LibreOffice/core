@@ -1080,7 +1080,7 @@ OUString
 LocaleDataImpl::getIndexKeysByAlgorithm( const Locale& rLocale, const OUString& algorithm )
 {
     sal_Unicode **indexArray = getIndexArrayForAlgorithm(rLocale, algorithm);
-    return indexArray ? (OUStringLiteral("0-9") + indexArray[2]) : OUString();
+    return indexArray ? (OUStringLiteral(u"0-9") + indexArray[2]) : OUString();
 }
 
 OUString

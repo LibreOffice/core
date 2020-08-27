@@ -2601,7 +2601,7 @@ void Test::testSharedFormulaCutCopyMoveWithRef()
     }
 
     // Check formulas in C1:C4 after Paste.
-    const OUStringLiteral sForm[] = { "=SUM(A1:B1)", "=SUM(A2:B2)", "=SUM(A1:B1)", "=SUM(A4:B4)" };
+    const OUStringLiteral sForm[] = { u"=SUM(A1:B1)", u"=SUM(A2:B2)", u"=SUM(A1:B1)", u"=SUM(A4:B4)" };
     for (SCROW i=0; i < 4; ++i)
     {
         OUString aFormula;

@@ -79,7 +79,7 @@ XclDebugObjCounter::~XclDebugObjCounter()
 }
 #endif
 
-const OUStringLiteral XclRootData::gaDefPassword( "VelvetSweatshop" );
+const OUStringLiteral XclRootData::gaDefPassword( u"VelvetSweatshop" );
 
 XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
         tools::SvRef<SotStorage> const & xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc, bool bExport ) :

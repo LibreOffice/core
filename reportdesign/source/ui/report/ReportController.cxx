@@ -2040,14 +2040,14 @@ void OReportController::onLoadedMenu(const Reference< frame::XLayoutManager >& _
         return;
 
     static const OUStringLiteral s_sMenu[] = {
-         "private:resource/statusbar/statusbar"
-        ,"private:resource/toolbar/reportcontrols"
-        ,"private:resource/toolbar/drawbar"
-        ,"private:resource/toolbar/Formatting"
-        ,"private:resource/toolbar/alignmentbar"
-        ,"private:resource/toolbar/sectionalignmentbar"
-        ,"private:resource/toolbar/resizebar"
-        ,"private:resource/toolbar/sectionshrinkbar"
+         u"private:resource/statusbar/statusbar"
+        ,u"private:resource/toolbar/reportcontrols"
+        ,u"private:resource/toolbar/drawbar"
+        ,u"private:resource/toolbar/Formatting"
+        ,u"private:resource/toolbar/alignmentbar"
+        ,u"private:resource/toolbar/sectionalignmentbar"
+        ,u"private:resource/toolbar/resizebar"
+        ,u"private:resource/toolbar/sectionshrinkbar"
     };
     for (const auto & i : s_sMenu)
     {

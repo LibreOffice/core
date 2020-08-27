@@ -916,7 +916,7 @@ void DocxExport::WriteDocVars(const sax_fastparser::FSHelperPtr& pFS)
 
     // Only write docVars if there will be at least a single docVar.
     bool bStarted = false;
-    const OUStringLiteral aPrefix("com.sun.star.text.fieldmaster.User.");
+    const OUStringLiteral aPrefix(u"com.sun.star.text.fieldmaster.User.");
     for (const auto& rMasterName : std::as_const(aMasterNames))
     {
         if (!rMasterName.startsWith(aPrefix))
@@ -1447,7 +1447,7 @@ void DocxExport::WriteCustomXml()
     uno::Reference< beans::XPropertySet > xPropSet( m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
 
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
-    static const OUStringLiteral aName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
+    static const OUStringLiteral aName = u"" UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
     if ( !xPropSetInfo->hasPropertyByName( aName ) )
         return;
 

@@ -17,8 +17,8 @@
 
 /** Look for static O*String and O*String[], they can be more efficiently declared as:
 
-        static const OUStringLiteral our_aLBEntryMap[] = {" ", ", "};
-        static const OUStringLiteral sName("name");
+        static const OUStringLiteral our_aLBEntryMap[] = {u" ", u", "};
+        static const OUStringLiteral sName(u"name");
 
     which is more efficient at startup time.
  */

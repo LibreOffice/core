@@ -39,7 +39,7 @@ namespace chart
 namespace
 {
 
-const OUStringLiteral our_aLBEntryMap[] = {" ", ", ", "; ", "\n", ". "};
+const OUStringLiteral our_aLBEntryMap[] = {u" ", u", ", u"; ", u"\n", u". "};
 
 bool lcl_ReadNumberFormatFromItemSet( const SfxItemSet& rSet, sal_uInt16 nValueWhich, sal_uInt16 nSourceFormatWhich, sal_uLong& rnFormatKeyOut, bool& rbSourceFormatOut, bool& rbSourceFormatMixedStateOut )
 {

@@ -333,11 +333,11 @@ void lclAppendStyle(OUStringBuffer& aBuffer, const OUString& aTag, const OUStrin
 } // anonymous namespace
 
 constexpr OUStringLiteral gaHTMLHeader(
-            "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\r\n"
+            u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\r\n"
             "     \"http://www.w3.org/TR/html4/transitional.dtd\">\r\n"
             "<html>\r\n<head>\r\n" );
 
-constexpr OUStringLiteral gaHTMLExtension = STR_HTMLEXP_DEFAULT_EXTENSION;
+constexpr OUStringLiteral gaHTMLExtension = u"" STR_HTMLEXP_DEFAULT_EXTENSION;
 
 // constructor for the html export helper classes
 HtmlExport::HtmlExport(

@@ -146,26 +146,26 @@ bool supportsText(XmlShapeType eShapeType)
 
 }
 
-const OUStringLiteral gsZIndex( "ZOrder" );
-const OUStringLiteral gsPrintable( "Printable" );
-const OUStringLiteral gsVisible( "Visible" );
-const OUStringLiteral gsModel( "Model" );
-const OUStringLiteral gsStartShape( "StartShape" );
-const OUStringLiteral gsEndShape( "EndShape" );
-const OUStringLiteral gsOnClick( "OnClick" );
-const OUStringLiteral gsEventType( "EventType" );
-const OUStringLiteral gsPresentation( "Presentation" );
-const OUStringLiteral gsMacroName( "MacroName" );
-const OUStringLiteral gsScript( "Script" );
-const OUStringLiteral gsLibrary( "Library" );
-const OUStringLiteral gsClickAction( "ClickAction" );
-const OUStringLiteral gsBookmark( "Bookmark" );
-const OUStringLiteral gsEffect( "Effect" );
-const OUStringLiteral gsPlayFull( "PlayFull" );
-const OUStringLiteral gsVerb( "Verb" );
-const OUStringLiteral gsSoundURL( "SoundURL" );
-const OUStringLiteral gsSpeed( "Speed" );
-const OUStringLiteral gsStarBasic( "StarBasic" );
+const OUStringLiteral gsZIndex( u"ZOrder" );
+const OUStringLiteral gsPrintable( u"Printable" );
+const OUStringLiteral gsVisible( u"Visible" );
+const OUStringLiteral gsModel( u"Model" );
+const OUStringLiteral gsStartShape( u"StartShape" );
+const OUStringLiteral gsEndShape( u"EndShape" );
+const OUStringLiteral gsOnClick( u"OnClick" );
+const OUStringLiteral gsEventType( u"EventType" );
+const OUStringLiteral gsPresentation( u"Presentation" );
+const OUStringLiteral gsMacroName( u"MacroName" );
+const OUStringLiteral gsScript( u"Script" );
+const OUStringLiteral gsLibrary( u"Library" );
+const OUStringLiteral gsClickAction( u"ClickAction" );
+const OUStringLiteral gsBookmark( u"Bookmark" );
+const OUStringLiteral gsEffect( u"Effect" );
+const OUStringLiteral gsPlayFull( u"PlayFull" );
+const OUStringLiteral gsVerb( u"Verb" );
+const OUStringLiteral gsSoundURL( u"SoundURL" );
+const OUStringLiteral gsSpeed( u"Speed" );
+const OUStringLiteral gsStarBasic( u"StarBasic" );
 
 XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
                                 SvXMLExportPropertyMapper *pExtMapper )

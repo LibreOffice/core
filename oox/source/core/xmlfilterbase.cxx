@@ -180,7 +180,7 @@ struct XmlFilterBaseImpl
     explicit            XmlFilterBaseImpl();
 };
 
-const OUStringLiteral gaBinSuffix( ".bin" );
+const OUStringLiteral gaBinSuffix( u".bin" );
 
 XmlFilterBaseImpl::XmlFilterBaseImpl() :
     mrNamespaceMap(StaticNamespaceMap::get())
@@ -247,7 +247,7 @@ void XmlFilterBase::putPropertiesToDocumentGrabBag(const css::uno::Reference<css
         {
             uno::Reference<beans::XPropertySetInfo> xPropsInfo = xDocProps->getPropertySetInfo();
 
-            static const OUStringLiteral aGrabBagPropName = "InteropGrabBag";
+            static const OUStringLiteral aGrabBagPropName = u"InteropGrabBag";
             if (xPropsInfo.is() && xPropsInfo->hasPropertyByName(aGrabBagPropName))
             {
                 // get existing grab bag
@@ -1033,7 +1033,7 @@ void XmlFilterBase::exportCustomFragments()
     uno::Reference<beans::XPropertySet> xPropSet(xModel, uno::UNO_QUERY_THROW);
 
     uno::Reference<beans::XPropertySetInfo> xPropSetInfo = xPropSet->getPropertySetInfo();
-    static const OUStringLiteral aName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
+    static const OUStringLiteral aName = u"" UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
     if (!xPropSetInfo->hasPropertyByName(aName))
         return;
 

@@ -622,7 +622,7 @@ BreakIteratorImpl::getLocaleSpecificBreakIterator(const Locale& rLocale)
             }
         }
 
-        OUStringLiteral under("_");
+        OUStringLiteral under(u"_");
 
         sal_Int32 l = rLocale.Language.getLength();
         sal_Int32 c = rLocale.Country.getLength();

@@ -51,7 +51,7 @@ const char ITEM_DESCRIPTOR_RESOURCEURL[] = "ResourceURL";
 const char ITEM_DESCRIPTOR_UINAME[]      = "UIName";
 
 const char ITEM_MENUBAR_URL[] = "private:resource/menubar/menubar";
-const char ITEM_TOOLBAR_URL[] = "private:resource/toolbar/";
+const char16_t ITEM_TOOLBAR_URL[] = u"private:resource/toolbar/";
 
 const char CUSTOM_TOOLBAR_STR[] = "custom_toolbar_";
 

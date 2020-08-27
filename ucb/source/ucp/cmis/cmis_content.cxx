@@ -1715,8 +1715,8 @@ namespace cmis
         try
         {
             sRet = isFolder( uno::Reference< ucb::XCommandEnvironment >() )
-                ? OUStringLiteral(CMIS_FOLDER_TYPE)
-                : OUStringLiteral(CMIS_FILE_TYPE);
+                ? OUStringLiteral(u"" CMIS_FOLDER_TYPE)
+                : OUStringLiteral(u"" CMIS_FILE_TYPE);
         }
         catch (const uno::RuntimeException&)
         {

@@ -28,22 +28,25 @@
 
 
 #include <string.h>
+
+#include <o3tl/string_view.hxx>
+
 #include "DAVProperties.hxx"
 
 using namespace webdav_ucp;
 
-const OUStringLiteral DAVProperties::CREATIONDATE("DAV:creationdate");
-const OUStringLiteral DAVProperties::DISPLAYNAME("DAV:displayname");
-const OUStringLiteral DAVProperties::GETCONTENTLANGUAGE("DAV:getcontentlanguage");
-const OUStringLiteral DAVProperties::GETCONTENTLENGTH("DAV:getcontentlength");
-const OUStringLiteral DAVProperties::GETCONTENTTYPE("DAV:getcontenttype");
-const OUStringLiteral DAVProperties::GETETAG("DAV:getetag");
-const OUStringLiteral DAVProperties::GETLASTMODIFIED("DAV:getlastmodified");
-const OUStringLiteral DAVProperties::LOCKDISCOVERY("DAV:lockdiscovery");
-const OUStringLiteral DAVProperties::RESOURCETYPE("DAV:resourcetype");
-const OUStringLiteral DAVProperties::SOURCE("DAV:source");
-const OUStringLiteral DAVProperties::SUPPORTEDLOCK("DAV:supportedlock");
-const OUStringLiteral DAVProperties::EXECUTABLE("http://apache.org/dav/props/executable");
+const OUStringLiteral DAVProperties::CREATIONDATE(u"DAV:creationdate");
+const OUStringLiteral DAVProperties::DISPLAYNAME(u"DAV:displayname");
+const OUStringLiteral DAVProperties::GETCONTENTLANGUAGE(u"DAV:getcontentlanguage");
+const OUStringLiteral DAVProperties::GETCONTENTLENGTH(u"DAV:getcontentlength");
+const OUStringLiteral DAVProperties::GETCONTENTTYPE(u"DAV:getcontenttype");
+const OUStringLiteral DAVProperties::GETETAG(u"DAV:getetag");
+const OUStringLiteral DAVProperties::GETLASTMODIFIED(u"DAV:getlastmodified");
+const OUStringLiteral DAVProperties::LOCKDISCOVERY(u"DAV:lockdiscovery");
+const OUStringLiteral DAVProperties::RESOURCETYPE(u"DAV:resourcetype");
+const OUStringLiteral DAVProperties::SOURCE(u"DAV:source");
+const OUStringLiteral DAVProperties::SUPPORTEDLOCK(u"DAV:supportedlock");
+const OUStringLiteral DAVProperties::EXECUTABLE(u"http://apache.org/dav/props/executable");
 
 void DAVProperties::createNeonPropName( const OUString & rFullName,
                                         NeonPropName & rName )
@@ -117,18 +120,18 @@ void DAVProperties::createUCBPropName( const char * nspace,
         // Some servers send XML without proper namespaces. Assume "DAV:"
         // in this case, if name is a well-known dav property name.
         // Although this is not 100% correct, it solves many problems.
-        if ( aName.equalsIgnoreAsciiCaseAscii(DAVProperties::RESOURCETYPE.data + 4) ||
-             aName.equalsIgnoreAsciiCaseAscii(DAVProperties::RESOURCETYPE.data + 4)  ||
-             aName.equalsIgnoreAsciiCaseAscii(DAVProperties::SUPPORTEDLOCK.data + 4) ||
-             aName.equalsIgnoreAsciiCaseAscii(DAVProperties::LOCKDISCOVERY.data + 4) ||
-             aName.equalsIgnoreAsciiCaseAscii(DAVProperties::CREATIONDATE.data + 4) ||
-             aName.equalsIgnoreAsciiCaseAscii(DAVProperties::DISPLAYNAME.data + 4) ||
-             aName.equalsIgnoreAsciiCaseAscii(DAVProperties::GETCONTENTLANGUAGE.data + 4) ||
-             aName.equalsIgnoreAsciiCaseAscii(DAVProperties::GETCONTENTLENGTH.data + 4) ||
-             aName.equalsIgnoreAsciiCaseAscii(DAVProperties::GETCONTENTTYPE.data + 4) ||
-             aName.equalsIgnoreAsciiCaseAscii(DAVProperties::GETETAG.data + 4) ||
-             aName.equalsIgnoreAsciiCaseAscii(DAVProperties::GETLASTMODIFIED.data + 4) ||
-             aName.equalsIgnoreAsciiCaseAscii(DAVProperties::SOURCE.data + 4) )
+        if ( o3tl::equalsIgnoreAsciiCase(aName, std::u16string_view(DAVProperties::RESOURCETYPE).substr(4)) ||
+             o3tl::equalsIgnoreAsciiCase(aName, std::u16string_view(DAVProperties::RESOURCETYPE).substr(4))  ||
+             o3tl::equalsIgnoreAsciiCase(aName, std::u16string_view(DAVProperties::SUPPORTEDLOCK).substr(4)) ||
+             o3tl::equalsIgnoreAsciiCase(aName, std::u16string_view(DAVProperties::LOCKDISCOVERY).substr(4)) ||
+             o3tl::equalsIgnoreAsciiCase(aName, std::u16string_view(DAVProperties::CREATIONDATE).substr(4)) ||
+             o3tl::equalsIgnoreAsciiCase(aName, std::u16string_view(DAVProperties::DISPLAYNAME).substr(4)) ||
+             o3tl::equalsIgnoreAsciiCase(aName, std::u16string_view(DAVProperties::GETCONTENTLANGUAGE).substr(4)) ||
+             o3tl::equalsIgnoreAsciiCase(aName, std::u16string_view(DAVProperties::GETCONTENTLENGTH).substr(4)) ||
+             o3tl::equalsIgnoreAsciiCase(aName, std::u16string_view(DAVProperties::GETCONTENTTYPE).substr(4)) ||
+             o3tl::equalsIgnoreAsciiCase(aName, std::u16string_view(DAVProperties::GETETAG).substr(4)) ||
+             o3tl::equalsIgnoreAsciiCase(aName, std::u16string_view(DAVProperties::GETLASTMODIFIED).substr(4)) ||
+             o3tl::equalsIgnoreAsciiCase(aName, std::u16string_view(DAVProperties::SOURCE).substr(4)) )
             aNameSpace = "DAV:";
     }
 

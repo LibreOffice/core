@@ -116,23 +116,23 @@ TaskManager::MyProperty::MyProperty( bool                               theisNat
 
         // Default properties
 
-const OUStringLiteral Title( "Title" );
-const OUStringLiteral CasePreservingURL( "CasePreservingURL" );
-const OUStringLiteral IsDocument( "IsDocument" );
-const OUStringLiteral IsFolder( "IsFolder" );
-const OUStringLiteral DateModified( "DateModified" );
-const OUStringLiteral Size( "Size" );
-const OUStringLiteral IsVolume( "IsVolume" );
-const OUStringLiteral IsRemoveable( "IsRemoveable" );
-const OUStringLiteral IsRemote( "IsRemote" );
-const OUStringLiteral IsCompactDisc( "IsCompactDisc" );
-const OUStringLiteral IsFloppy( "IsFloppy" );
-const OUStringLiteral IsHidden( "IsHidden" );
-const OUStringLiteral ContentType( "ContentType" );
-const OUStringLiteral IsReadOnly( "IsReadOnly" );
-const OUStringLiteral CreatableContentsInfo( "CreatableContentsInfo" );
-const OUStringLiteral TaskManager::FolderContentType( "application/vnd.sun.staroffice.fsys-folder" );
-const OUStringLiteral TaskManager::FileContentType( "application/vnd.sun.staroffice.fsys-file" );
+const OUStringLiteral Title( u"Title" );
+const OUStringLiteral CasePreservingURL( u"CasePreservingURL" );
+const OUStringLiteral IsDocument( u"IsDocument" );
+const OUStringLiteral IsFolder( u"IsFolder" );
+const OUStringLiteral DateModified( u"DateModified" );
+const OUStringLiteral Size( u"Size" );
+const OUStringLiteral IsVolume( u"IsVolume" );
+const OUStringLiteral IsRemoveable( u"IsRemoveable" );
+const OUStringLiteral IsRemote( u"IsRemote" );
+const OUStringLiteral IsCompactDisc( u"IsCompactDisc" );
+const OUStringLiteral IsFloppy( u"IsFloppy" );
+const OUStringLiteral IsHidden( u"IsHidden" );
+const OUStringLiteral ContentType( u"ContentType" );
+const OUStringLiteral IsReadOnly( u"IsReadOnly" );
+const OUStringLiteral CreatableContentsInfo( u"CreatableContentsInfo" );
+const OUStringLiteral TaskManager::FolderContentType( u"application/vnd.sun.staroffice.fsys-folder" );
+const OUStringLiteral TaskManager::FileContentType( u"application/vnd.sun.staroffice.fsys-file" );
 
 TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxContext,
               FileProvider* pProvider, bool bWithConfig )

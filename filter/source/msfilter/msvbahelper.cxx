@@ -48,8 +48,8 @@ using namespace ::com::sun::star;
 
 namespace ooo::vba {
 
-const OUStringLiteral sUrlPart0( "vnd.sun.star.script:" );
-const OUStringLiteral sUrlPart1( "?language=Basic&location=document" );
+const OUStringLiteral sUrlPart0( u"vnd.sun.star.script:" );
+const OUStringLiteral sUrlPart1( u"?language=Basic&location=document" );
 
 OUString makeMacroURL( const OUString& sMacroName )
 {

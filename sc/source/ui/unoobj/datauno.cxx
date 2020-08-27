@@ -72,19 +72,19 @@ static const SfxItemPropertyMapEntry* lcl_GetSubTotalPropertyMap()
 
     static const SfxItemPropertyMapEntry aSubTotalPropertyMap_Impl[] =
     {
-        {SC_UNONAME_BINDFMT,  0,  cppu::UnoType<bool>::get(),       0, 0},
-        {SC_UNONAME_CASE,     0,  cppu::UnoType<bool>::get(),       0, 0},
-        {SC_UNONAME_ENABSORT, 0,  cppu::UnoType<bool>::get(),       0, 0},
-        {SC_UNONAME_ENUSLIST, 0,  cppu::UnoType<bool>::get(),       0, 0},
-        {SC_UNONAME_FORMATS,  0,  cppu::UnoType<bool>::get(),       0, 0},
-        {SC_UNONAME_INSBRK,   0,  cppu::UnoType<bool>::get(),       0, 0},
-        {SC_UNONAME_ISCASE,   0,  cppu::UnoType<bool>::get(),       0, 0},
-        {SC_UNONAME_MAXFLD,   0,  cppu::UnoType<sal_Int32>::get(), beans::PropertyAttribute::READONLY, 0},
-        {SC_UNONAME_SORTASC,  0,  cppu::UnoType<bool>::get(),       0, 0},
-        {SC_UNONAME_ULIST,    0,  cppu::UnoType<bool>::get(),       0, 0},
-        {SC_UNONAME_UINDEX,   0,  cppu::UnoType<sal_Int32>::get(), 0, 0},
-        {SC_UNONAME_USINDEX,  0,  cppu::UnoType<sal_Int32>::get(), 0, 0},
-        { "", 0, css::uno::Type(), 0, 0 }
+        {u"" SC_UNONAME_BINDFMT,  0,  cppu::UnoType<bool>::get(),       0, 0},
+        {u"" SC_UNONAME_CASE,     0,  cppu::UnoType<bool>::get(),       0, 0},
+        {u"" SC_UNONAME_ENABSORT, 0,  cppu::UnoType<bool>::get(),       0, 0},
+        {u"" SC_UNONAME_ENUSLIST, 0,  cppu::UnoType<bool>::get(),       0, 0},
+        {u"" SC_UNONAME_FORMATS,  0,  cppu::UnoType<bool>::get(),       0, 0},
+        {u"" SC_UNONAME_INSBRK,   0,  cppu::UnoType<bool>::get(),       0, 0},
+        {u"" SC_UNONAME_ISCASE,   0,  cppu::UnoType<bool>::get(),       0, 0},
+        {u"" SC_UNONAME_MAXFLD,   0,  cppu::UnoType<sal_Int32>::get(), beans::PropertyAttribute::READONLY, 0},
+        {u"" SC_UNONAME_SORTASC,  0,  cppu::UnoType<bool>::get(),       0, 0},
+        {u"" SC_UNONAME_ULIST,    0,  cppu::UnoType<bool>::get(),       0, 0},
+        {u"" SC_UNONAME_UINDEX,   0,  cppu::UnoType<sal_Int32>::get(), 0, 0},
+        {u"" SC_UNONAME_USINDEX,  0,  cppu::UnoType<sal_Int32>::get(), 0, 0},
+        { u"", 0, css::uno::Type(), 0, 0 }
     };
     return aSubTotalPropertyMap_Impl;
 }
@@ -93,16 +93,16 @@ static const SfxItemPropertyMapEntry* lcl_GetFilterPropertyMap()
 {
     static const SfxItemPropertyMapEntry aFilterPropertyMap_Impl[] =
     {
-        {SC_UNONAME_CONTHDR,  0,  cppu::UnoType<bool>::get(),                      0, 0},
-        {SC_UNONAME_COPYOUT,  0,  cppu::UnoType<bool>::get(),                      0, 0},
-        {SC_UNONAME_ISCASE,   0,  cppu::UnoType<bool>::get(),                      0, 0},
-        {SC_UNONAME_MAXFLD,   0,  cppu::UnoType<sal_Int32>::get(),                beans::PropertyAttribute::READONLY, 0},
-        {SC_UNONAME_ORIENT,   0,  cppu::UnoType<table::TableOrientation>::get(),  0, 0},
-        {SC_UNONAME_OUTPOS,   0,  cppu::UnoType<table::CellAddress>::get(),       0, 0},
-        {SC_UNONAME_SAVEOUT,  0,  cppu::UnoType<bool>::get(),                      0, 0},
-        {SC_UNONAME_SKIPDUP,  0,  cppu::UnoType<bool>::get(),                      0, 0},
-        {SC_UNONAME_USEREGEX, 0,  cppu::UnoType<bool>::get(),                      0, 0},
-        { "", 0, css::uno::Type(), 0, 0 }
+        {u"" SC_UNONAME_CONTHDR,  0,  cppu::UnoType<bool>::get(),                      0, 0},
+        {u"" SC_UNONAME_COPYOUT,  0,  cppu::UnoType<bool>::get(),                      0, 0},
+        {u"" SC_UNONAME_ISCASE,   0,  cppu::UnoType<bool>::get(),                      0, 0},
+        {u"" SC_UNONAME_MAXFLD,   0,  cppu::UnoType<sal_Int32>::get(),                beans::PropertyAttribute::READONLY, 0},
+        {u"" SC_UNONAME_ORIENT,   0,  cppu::UnoType<table::TableOrientation>::get(),  0, 0},
+        {u"" SC_UNONAME_OUTPOS,   0,  cppu::UnoType<table::CellAddress>::get(),       0, 0},
+        {u"" SC_UNONAME_SAVEOUT,  0,  cppu::UnoType<bool>::get(),                      0, 0},
+        {u"" SC_UNONAME_SKIPDUP,  0,  cppu::UnoType<bool>::get(),                      0, 0},
+        {u"" SC_UNONAME_USEREGEX, 0,  cppu::UnoType<bool>::get(),                      0, 0},
+        { u"", 0, css::uno::Type(), 0, 0 }
     };
     return aFilterPropertyMap_Impl;
 }
@@ -111,21 +111,21 @@ static const SfxItemPropertyMapEntry* lcl_GetDBRangePropertyMap()
 {
     static const SfxItemPropertyMapEntry aDBRangePropertyMap_Impl[] =
     {
-        {SC_UNONAME_AUTOFLT,  0,  cppu::UnoType<bool>::get(),                      0, 0},
-        {SC_UNONAME_FLTCRT,   0,  cppu::UnoType<table::CellRangeAddress>::get(),  0, 0},
-        {SC_UNONAME_FROMSELECT,0, cppu::UnoType<bool>::get(),                      0, 0},
-        {SC_UNONAME_ISUSER,   0,  cppu::UnoType<bool>::get(),           beans::PropertyAttribute::READONLY, 0 },
-        {SC_UNONAME_KEEPFORM, 0,  cppu::UnoType<bool>::get(),                      0, 0},
-        {SC_UNO_LINKDISPBIT,  0,  cppu::UnoType<awt::XBitmap>::get(), beans::PropertyAttribute::READONLY, 0 },
-        {SC_UNO_LINKDISPNAME, 0,  cppu::UnoType<OUString>::get(), beans::PropertyAttribute::READONLY, 0 },
-        {SC_UNONAME_MOVCELLS, 0,  cppu::UnoType<bool>::get(),                      0, 0},
-        {SC_UNONAME_REFPERIOD, 0, cppu::UnoType<sal_Int32>::get(),                0, 0},
-        {SC_UNONAME_STRIPDAT, 0,  cppu::UnoType<bool>::get(),                      0, 0},
-        {SC_UNONAME_TOKENINDEX,0, cppu::UnoType<sal_Int32>::get(),     beans::PropertyAttribute::READONLY, 0 },
-        {SC_UNONAME_USEFLTCRT,0,  cppu::UnoType<bool>::get(),                      0, 0},
-        {SC_UNONAME_TOTALSROW,0,  cppu::UnoType<bool>::get(),                      0, 0},
-        {SC_UNONAME_CONTHDR  ,0,  cppu::UnoType<bool>::get(),                      0, 0},
-        { "", 0, css::uno::Type(), 0, 0 }
+        {u"" SC_UNONAME_AUTOFLT,  0,  cppu::UnoType<bool>::get(),                      0, 0},
+        {u"" SC_UNONAME_FLTCRT,   0,  cppu::UnoType<table::CellRangeAddress>::get(),  0, 0},
+        {u"" SC_UNONAME_FROMSELECT,0, cppu::UnoType<bool>::get(),                      0, 0},
+        {u"" SC_UNONAME_ISUSER,   0,  cppu::UnoType<bool>::get(),           beans::PropertyAttribute::READONLY, 0 },
+        {u"" SC_UNONAME_KEEPFORM, 0,  cppu::UnoType<bool>::get(),                      0, 0},
+        {u"" SC_UNO_LINKDISPBIT,  0,  cppu::UnoType<awt::XBitmap>::get(), beans::PropertyAttribute::READONLY, 0 },
+        {u"" SC_UNO_LINKDISPNAME, 0,  cppu::UnoType<OUString>::get(), beans::PropertyAttribute::READONLY, 0 },
+        {u"" SC_UNONAME_MOVCELLS, 0,  cppu::UnoType<bool>::get(),                      0, 0},
+        {u"" SC_UNONAME_REFPERIOD, 0, cppu::UnoType<sal_Int32>::get(),                0, 0},
+        {u"" SC_UNONAME_STRIPDAT, 0,  cppu::UnoType<bool>::get(),                      0, 0},
+        {u"" SC_UNONAME_TOKENINDEX,0, cppu::UnoType<sal_Int32>::get(),     beans::PropertyAttribute::READONLY, 0 },
+        {u"" SC_UNONAME_USEFLTCRT,0,  cppu::UnoType<bool>::get(),                      0, 0},
+        {u"" SC_UNONAME_TOTALSROW,0,  cppu::UnoType<bool>::get(),                      0, 0},
+        {u"" SC_UNONAME_CONTHDR  ,0,  cppu::UnoType<bool>::get(),                      0, 0},
+        { u"", 0, css::uno::Type(), 0, 0 }
     };
     return aDBRangePropertyMap_Impl;
 }

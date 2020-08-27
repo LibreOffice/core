@@ -89,15 +89,15 @@ BibConfig*  BibModul::GetConfig()
 
 
 // PropertyNames
-const OUStringLiteral FM_PROP_LABEL = "Label";
-const OUStringLiteral FM_PROP_CONTROLSOURCE = "DataField";
-const OUStringLiteral FM_PROP_NAME = "Name";
-const OUStringLiteral FM_PROP_FORMATKEY = "FormatKey";
-const OUStringLiteral FM_PROP_EDITMODE = "RecordMode";
-const OUStringLiteral FM_PROP_CURSORSOURCETYPE = "DataSelectionType";
-const OUStringLiteral FM_PROP_CURSORSOURCE = "DataSelection";
-const OUStringLiteral FM_PROP_DATASOURCE = "DataSource";
-const OUStringLiteral FM_PROP_VALUE = "Value";
-const OUStringLiteral FM_PROP_TEXT = "Text";
+const OUStringLiteral FM_PROP_LABEL = u"Label";
+const OUStringLiteral FM_PROP_CONTROLSOURCE = u"DataField";
+const OUStringLiteral FM_PROP_NAME = u"Name";
+const OUStringLiteral FM_PROP_FORMATKEY = u"FormatKey";
+const OUStringLiteral FM_PROP_EDITMODE = u"RecordMode";
+const OUStringLiteral FM_PROP_CURSORSOURCETYPE = u"DataSelectionType";
+const OUStringLiteral FM_PROP_CURSORSOURCE = u"DataSelection";
+const OUStringLiteral FM_PROP_DATASOURCE = u"DataSource";
+const OUStringLiteral FM_PROP_VALUE = u"Value";
+const OUStringLiteral FM_PROP_TEXT = u"Text";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

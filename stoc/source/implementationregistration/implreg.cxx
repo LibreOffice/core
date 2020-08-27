@@ -57,27 +57,27 @@ using namespace osl;
 namespace {
 
 constexpr OUStringLiteral slash_UNO_slash_REGISTRY_LINKS
-        = "/UNO/REGISTRY_LINKS";
+        = u"/UNO/REGISTRY_LINKS";
 constexpr OUStringLiteral slash_IMPLEMENTATIONS
-        =  "/IMPLEMENTATIONS";
+        =  u"/IMPLEMENTATIONS";
 constexpr OUStringLiteral slash_UNO
-        = "/UNO";
+        = u"/UNO";
 constexpr OUStringLiteral slash_UNO_slash_SERVICES
-        = "/UNO/SERVICES";
+        = u"/UNO/SERVICES";
 constexpr OUStringLiteral slash_UNO_slash_SINGLETONS
-        = "/UNO/SINGLETONS";
+        = u"/UNO/SINGLETONS";
 constexpr OUStringLiteral slash_SERVICES
-        = "/SERVICES/";
+        = u"/SERVICES/";
 constexpr OUStringLiteral slash_UNO_slash_LOCATION
-        = "/UNO/LOCATION";
+        = u"/UNO/LOCATION";
 constexpr OUStringLiteral slash_UNO_slash_ACTIVATOR
-        = "/UNO/ACTIVATOR";
+        = u"/UNO/ACTIVATOR";
 constexpr OUStringLiteral colon_old
-        = ":old";
+        = u":old";
 constexpr OUStringLiteral com_sun_star_registry_SimpleRegistry
-        = "com.sun.star.registry.SimpleRegistry";
+        = u"com.sun.star.registry.SimpleRegistry";
 constexpr OUStringLiteral Registry
-        = "Registry";
+        = u"Registry";
 
 //  static deleteAllLinkReferences()
 

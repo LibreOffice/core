@@ -1061,7 +1061,7 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
         }
         else
         {
-            aBuffer.append(aEvent.IsEnabled ? OUStringLiteral("enabled") : OUStringLiteral("disabled"));
+            aBuffer.append(aEvent.IsEnabled ? OUStringLiteral(u"enabled") : OUStringLiteral(u"disabled"));
         }
     }
     else if (aEvent.FeatureURL.Path == "Cut" ||
@@ -1158,7 +1158,7 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
              aEvent.FeatureURL.Path == "LeaveGroup" ||
              aEvent.FeatureURL.Path == "ResetAttributes")
     {
-        aBuffer.append(aEvent.IsEnabled ? OUStringLiteral("enabled") : OUStringLiteral("disabled"));
+        aBuffer.append(aEvent.IsEnabled ? OUStringLiteral(u"enabled") : OUStringLiteral(u"disabled"));
     }
     else if (aEvent.FeatureURL.Path == "AssignLayout" ||
              aEvent.FeatureURL.Path == "StatusSelectionMode" ||

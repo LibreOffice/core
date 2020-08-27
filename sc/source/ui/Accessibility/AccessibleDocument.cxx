@@ -107,8 +107,8 @@ ScAccessibleShapeData::ScAccessibleShapeData(css::uno::Reference< css::drawing::
     : xShape(xShape_),
     bSelected(false), bSelectable(true)
 {
-    static constexpr OUStringLiteral gsLayerId = "LayerID";
-    static constexpr OUStringLiteral gsZOrder = "ZOrder";
+    static constexpr OUStringLiteral gsLayerId = u"LayerID";
+    static constexpr OUStringLiteral gsZOrder = u"ZOrder";
     uno::Reference< beans::XPropertySet> xProps(xShape, uno::UNO_QUERY);
     if (xProps.is())
     {

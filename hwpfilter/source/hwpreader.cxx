@@ -4820,9 +4820,9 @@ void HwpReader::parsePara(HWPPara * para)
 namespace
 {
 
-constexpr OUStringLiteral IMPLEMENTATION_NAME = "com.sun.comp.hwpimport.HwpImportFilter";
-constexpr OUStringLiteral SERVICE_NAME1 = "com.sun.star.document.ImportFilter";
-constexpr OUStringLiteral SERVICE_NAME2 = "com.sun.star.document.ExtendedTypeDetection";
+constexpr OUStringLiteral IMPLEMENTATION_NAME = u"com.sun.comp.hwpimport.HwpImportFilter";
+constexpr OUStringLiteral SERVICE_NAME1 = u"com.sun.star.document.ImportFilter";
+constexpr OUStringLiteral SERVICE_NAME2 = u"com.sun.star.document.ExtendedTypeDetection";
 
 class HwpImportFilter : public WeakImplHelper< XFilter, XImporter, XServiceInfo, XExtendedFilterDetection >
 {

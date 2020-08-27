@@ -278,7 +278,7 @@ private:
 
 }
 
-const OUStringLiteral gsFontworkAlignment(".uno:FontworkAlignment");
+const OUStringLiteral gsFontworkAlignment(u".uno:FontworkAlignment");
 
 FontworkAlignmentWindow::FontworkAlignmentWindow(svt::PopupWindowController* pControl, weld::Widget* pParent)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/fontworkalignmentcontrol.ui", "FontworkAlignmentControl")
@@ -464,8 +464,8 @@ private:
 
 }
 
-const OUStringLiteral gsFontworkCharacterSpacing(".uno:FontworkCharacterSpacing");
-const OUStringLiteral gsFontworkKernCharacterPairs(".uno:FontworkKernCharacterPairs");
+const OUStringLiteral gsFontworkCharacterSpacing(u".uno:FontworkCharacterSpacing");
+const OUStringLiteral gsFontworkKernCharacterPairs(u".uno:FontworkKernCharacterPairs");
 
 FontworkCharacterSpacingWindow::FontworkCharacterSpacingWindow(svt::PopupWindowController* pControl, weld::Widget* pParent)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/fontworkcharacterspacingcontrol.ui", "FontworkCharacterSpacingControl")

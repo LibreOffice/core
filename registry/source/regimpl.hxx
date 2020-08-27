@@ -145,7 +145,7 @@ private:
     store::OStoreFile   m_file;
     KeyMap              m_openKeyTable;
 
-    static constexpr OUStringLiteral ROOT { "/" };
+    static constexpr OUStringLiteral ROOT { u"/" };
 };
 
 #endif

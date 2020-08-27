@@ -342,14 +342,14 @@ WrappedAxisLabelExistenceProperty::WrappedAxisLabelExistenceProperty(bool bMain,
     switch( m_nDimensionIndex )
     {
         case 0:
-            m_aOuterName = m_bMain ? OUStringLiteral("HasXAxisDescription") : OUStringLiteral("HasSecondaryXAxisDescription");
+            m_aOuterName = m_bMain ? OUStringLiteral(u"HasXAxisDescription") : OUStringLiteral(u"HasSecondaryXAxisDescription");
             break;
         case 2:
             OSL_ENSURE(m_bMain,"there is no description available for a secondary z axis");
             m_aOuterName = "HasZAxisDescription";
             break;
         default:
-            m_aOuterName = m_bMain ? OUStringLiteral("HasYAxisDescription") : OUStringLiteral("HasSecondaryYAxisDescription");
+            m_aOuterName = m_bMain ? OUStringLiteral(u"HasYAxisDescription") : OUStringLiteral(u"HasSecondaryYAxisDescription");
             break;
     }
 }

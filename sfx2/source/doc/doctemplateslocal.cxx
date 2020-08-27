@@ -34,10 +34,10 @@ namespace
 {
 
 // Relations info related strings
-const OUStringLiteral g_sGroupListElement("groupuinames:template-group-list");
-const OUStringLiteral g_sGroupElement("groupuinames:template-group");
-const OUStringLiteral g_sNameAttr("groupuinames:name");
-const OUStringLiteral g_sUINameAttr("groupuinames:default-ui-name");
+const OUStringLiteral g_sGroupListElement(u"groupuinames:template-group-list");
+const OUStringLiteral g_sGroupElement(u"groupuinames:template-group");
+const OUStringLiteral g_sNameAttr(u"groupuinames:name");
+const OUStringLiteral g_sUINameAttr(u"groupuinames:default-ui-name");
 
 }
 
