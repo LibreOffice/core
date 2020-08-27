@@ -5980,9 +5980,28 @@ void DocxAttributeOutput::WriteTextBox(uno::Reference<drawing::XShape> xShape)
     DocxTableExportContext aTableExportContext(*this);
 
     SwFrameFormat* pTextBox = SwTextBoxHelper::getOtherTextBoxFormat(xShape);
-    const SwPosition* pAnchor = pTextBox->GetAnchor().GetContentAnchor();
-    ww8::Frame aFrame(*pTextBox, *pAnchor);
-    m_rExport.SdrExporter().writeDMLTextFrame(&aFrame, m_anchorId++, /*bTextBoxOnly=*/true);
+    assert(pTextBox);
+    SwPosition* pAnchor = nullptr;
+    if (pTextBox->GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PAGE)
+    {
+        auto pNdIdx = pTextBox->GetContent().GetContentIdx();
+        if (pNdIdx)
+            pAnchor = new SwPosition(*pNdIdx);
+    }
+    else
+    {
+        pAnchor = const_cast<SwPosition*>(pTextBox->GetAnchor().GetContentAnchor());
+    }
+
+    if (pAnchor)
+    {
+        ww8::Frame aFrame(*pTextBox, *pAnchor);
+        m_rExport.SdrExporter().writeDMLTextFrame(&aFrame, m_anchorId++, /*bTextBoxOnly=*/true);
+        if (pAnchor && pTextBox->GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PAGE)
+        {
+            delete pAnchor;
+        }
+    }
 }
 
 void DocxAttributeOutput::WriteVMLTextBox(uno::Reference<drawing::XShape> xShape)
@@ -5990,9 +6009,28 @@ void DocxAttributeOutput::WriteVMLTextBox(uno::Reference<drawing::XShape> xShape
     DocxTableExportContext aTableExportContext(*this);
 
     SwFrameFormat* pTextBox = SwTextBoxHelper::getOtherTextBoxFormat(xShape);
-    const SwPosition* pAnchor = pTextBox->GetAnchor().GetContentAnchor();
-    ww8::Frame aFrame(*pTextBox, *pAnchor);
-    m_rExport.SdrExporter().writeVMLTextFrame(&aFrame, /*bTextBoxOnly=*/true);
+    assert(pTextBox);
+    SwPosition* pAnchor = nullptr;
+    if (pTextBox->GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PAGE)
+    {
+        auto pNdIdx = pTextBox->GetContent().GetContentIdx();
+        if (pNdIdx)
+            pAnchor = new SwPosition(*pNdIdx);
+    }
+    else
+    {
+        pAnchor = const_cast<SwPosition*>(pTextBox->GetAnchor().GetContentAnchor());
+    }
+
+    if (pAnchor)
+    {
+        ww8::Frame aFrame(*pTextBox, *pAnchor);
+        m_rExport.SdrExporter().writeVMLTextFrame(&aFrame, /*bTextBoxOnly=*/true);
+        if (pAnchor && pTextBox->GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PAGE)
+        {
+            delete pAnchor;
+        }
+    }
 }
 
 oox::drawingml::DrawingML& DocxAttributeOutput::GetDrawingML()
