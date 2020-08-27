@@ -18,58 +18,7 @@
  */
 
 #include <svx/gallerystoragelocations.hxx>
-#include <svx/galmisc.hxx>
 
-INetURLObject GalleryStorageLocations::ImplGetURLIgnoreCase(const INetURLObject& rURL)
-{
-    INetURLObject aURL(rURL);
-
-    // check original file name
-    if (!FileExists(aURL))
-    {
-        // check upper case file name
-        aURL.setName(aURL.getName().toAsciiUpperCase());
-
-        if (!FileExists(aURL))
-        {
-            // check lower case file name
-            aURL.setName(aURL.getName().toAsciiLowerCase());
-        }
-    }
-
-    return aURL;
-}
-
-void GalleryStorageLocations::SetThmExtension(INetURLObject& aURL)
-{
-    aURL.setExtension("thm");
-    maThmURL = ImplGetURLIgnoreCase(aURL);
-}
-
-void GalleryStorageLocations::SetSdgExtension(INetURLObject& aURL)
-{
-    aURL.setExtension("sdg");
-    maSdgURL = ImplGetURLIgnoreCase(aURL);
-}
-
-void GalleryStorageLocations::SetSdvExtension(INetURLObject& aURL)
-{
-    aURL.setExtension("sdv");
-    maSdvURL = ImplGetURLIgnoreCase(aURL);
-}
-
-void GalleryStorageLocations::SetStrExtension(INetURLObject& aURL)
-{
-    aURL.setExtension("str");
-    maStrURL = ImplGetURLIgnoreCase(aURL);
-}
-
-void GalleryStorageLocations::SetStorageLocations(INetURLObject& aURL)
-{
-    SetThmExtension(aURL);
-    SetSdgExtension(aURL);
-    SetSdvExtension(aURL);
-    SetStrExtension(aURL);
-}
+GalleryStorageLocations::~GalleryStorageLocations(){};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

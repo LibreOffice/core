@@ -48,10 +48,10 @@
 
 using namespace ::com::sun::star;
 
-GalleryBinaryEngine::GalleryBinaryEngine(const GalleryStorageLocations& rGalleryStorageLocations,
-                                         GalleryObjectCollection& rGalleryObjectCollection,
-                                         bool bReadOnly)
-    : maGalleryStorageLocations(rGalleryStorageLocations)
+GalleryBinaryEngine::GalleryBinaryEngine(
+    const GalleryBinaryStorageLocations& rGalleryBinaryStorageLocations,
+    GalleryObjectCollection& rGalleryObjectCollection, bool bReadOnly)
+    : maGalleryBinaryStorageLocations(rGalleryBinaryStorageLocations)
     , mrGalleryObjectCollection(rGalleryObjectCollection)
     , mbReadOnly(bReadOnly)
     , m_bDestDirRelative(false)

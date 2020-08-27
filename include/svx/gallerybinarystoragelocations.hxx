@@ -21,31 +21,30 @@
 
 #include <tools/urlobj.hxx>
 #include <svx/svxdllapi.h>
-#include <svx/galtheme.hxx>
-#include <svx/gallerybinaryengine.hxx>
 #include <svx/gallerystoragelocations.hxx>
-#include <svx/gallerybinarystoragelocations.hxx>
-#include <svx/galleryfilestorageentry.hxx>
 
-class GalleryStorageLocations;
-
-class GalleryBinaryEngineEntry : public GalleryFileStorageEntry
+class GalleryBinaryStorageLocations : public GalleryStorageLocations
 {
 private:
-    GalleryStorageLocations& m_rGalleryStorageLocations;
+    INetURLObject maThmURL;
+    INetURLObject maSdgURL;
+    INetURLObject maSdvURL;
+    INetURLObject maStrURL;
+
+    void SetThmExtension(INetURLObject& aURL);
+    void SetSdgExtension(INetURLObject& aURL);
+    void SetSdvExtension(INetURLObject& aURL);
+    void SetStrExtension(INetURLObject& aURL);
 
 public:
-    GalleryBinaryEngineEntry(GalleryStorageLocations& rGalleryStorageLocations);
-    static void CreateUniqueURL(const INetURLObject& rBaseURL, INetURLObject& aURL);
+    static INetURLObject ImplGetURLIgnoreCase(const INetURLObject& rURL);
 
-    OUString ReadStrFromIni(const OUString& aKeyName);
+    const INetURLObject& GetThmURL() const { return maThmURL; }
+    const INetURLObject& GetSdgURL() const { return maSdgURL; }
+    const INetURLObject& GetSdvURL() const { return maSdvURL; }
+    const INetURLObject& GetStrURL() const { return maStrURL; }
 
-    const INetURLObject& GetThmURL() const { return m_rGalleryStorageLocations.GetThmURL(); }
-    const INetURLObject& GetSdgURL() const { return m_rGalleryStorageLocations.GetSdgURL(); }
-    const INetURLObject& GetSdvURL() const { return m_rGalleryStorageLocations.GetSdvURL(); }
-    const INetURLObject& GetStrURL() const { return m_rGalleryStorageLocations.GetStrURL(); }
-
-    static GalleryThemeEntry* CreateThemeEntry(const INetURLObject& rURL, bool bReadOnly);
+    void SetStorageLocations(INetURLObject& aURL);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
