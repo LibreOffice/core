@@ -5985,9 +5985,28 @@ void DocxAttributeOutput::WriteTextBox(uno::Reference<drawing::XShape> xShape)
     DocxTableExportContext aTableExportContext(*this);
 
     SwFrameFormat* pTextBox = SwTextBoxHelper::getOtherTextBoxFormat(xShape);
-    const SwPosition* pAnchor = pTextBox->GetAnchor().GetContentAnchor();
-    ww8::Frame aFrame(*pTextBox, *pAnchor);
-    m_rExport.SdrExporter().writeDMLTextFrame(&aFrame, m_anchorId++, /*bTextBoxOnly=*/true);
+    assert(pTextBox);
+    const SwPosition* pAnchor = nullptr;
+    if (pTextBox->GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PAGE) //tdf135711
+    {
+        auto pNdIdx = pTextBox->GetContent().GetContentIdx();
+        if (pNdIdx) //Is that possible it is null?
+            pAnchor = new SwPosition(*pNdIdx);
+    }
+    else
+    {
+        pAnchor = pTextBox->GetAnchor().GetContentAnchor();//This might be null
+    }
+
+    if (pAnchor) //pAnchor can be null, so that's why not assert here.
+    {
+        ww8::Frame aFrame(*pTextBox, *pAnchor);
+        m_rExport.SdrExporter().writeDMLTextFrame(&aFrame, m_anchorId++, /*bTextBoxOnly=*/true);
+        if (pTextBox->GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PAGE)
+        {
+            delete pAnchor;
+        }
+    }
 }
 
 void DocxAttributeOutput::WriteVMLTextBox(uno::Reference<drawing::XShape> xShape)
@@ -5995,9 +6014,28 @@ void DocxAttributeOutput::WriteVMLTextBox(uno::Reference<drawing::XShape> xShape
     DocxTableExportContext aTableExportContext(*this);
 
     SwFrameFormat* pTextBox = SwTextBoxHelper::getOtherTextBoxFormat(xShape);
-    const SwPosition* pAnchor = pTextBox->GetAnchor().GetContentAnchor();
-    ww8::Frame aFrame(*pTextBox, *pAnchor);
-    m_rExport.SdrExporter().writeVMLTextFrame(&aFrame, /*bTextBoxOnly=*/true);
+    assert(pTextBox);
+    const SwPosition* pAnchor = nullptr;
+    if (pTextBox->GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PAGE) //tdf135711
+    {
+        auto pNdIdx = pTextBox->GetContent().GetContentIdx();
+        if (pNdIdx) //Is that possible it is null?
+            pAnchor = new SwPosition(*pNdIdx);
+    }
+    else
+    {
+        pAnchor = pTextBox->GetAnchor().GetContentAnchor();//This might be null
+    }
+
+    if (pAnchor) //pAnchor can be null, so that's why not assert here.
+    {
+        ww8::Frame aFrame(*pTextBox, *pAnchor);
+        m_rExport.SdrExporter().writeVMLTextFrame(&aFrame, /*bTextBoxOnly=*/true);
+        if (pTextBox->GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PAGE)
+        {
+            delete pAnchor;
+        }
+    }
 }
 
 oox::drawingml::DrawingML& DocxAttributeOutput::GetDrawingML()
