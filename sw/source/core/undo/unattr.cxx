@@ -99,6 +99,8 @@ SwUndoFormatAttr::SwUndoFormatAttr( const SfxItemSet& rOldSet,
     , m_nFormatWhich( rChgFormat.Which() )
     , m_bSaveDrawPt( bSaveDrawPt )
 {
+    assert(m_sFormatName.getLength());
+
     Init( rChgFormat );
 }
 
@@ -111,6 +113,8 @@ SwUndoFormatAttr::SwUndoFormatAttr( const SfxPoolItem& rItem, SwFormat& rChgForm
     , m_nFormatWhich( rChgFormat.Which() )
     , m_bSaveDrawPt( bSaveDrawPt )
 {
+    assert(m_sFormatName.getLength());
+
     m_pOldSet->Put( rItem );
     Init( rChgFormat );
 }
