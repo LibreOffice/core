@@ -25,7 +25,6 @@
 #include <svtools/acceleratorexecute.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/event.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/settings.hxx>
 
 namespace dbaui
@@ -43,10 +42,8 @@ namespace dbaui
         :Window(pParent,nStyle)
         ,m_xContext(_rxContext)
         ,m_xController( &_rController )
-        ,m_aSeparator( VclPtr<FixedLine>::Create(this) )
     {
         m_pAccel = ::svt::AcceleratorExecute::createAcceleratorHelper();
-        m_aSeparator->Show();
     }
 
     void ODataView::Construct()
@@ -61,12 +58,11 @@ namespace dbaui
     void ODataView::dispose()
     {
         m_xController.clear();
-        m_aSeparator.disposeAndClear();
         m_pAccel.reset();
         vcl::Window::dispose();
     }
 
-    void ODataView::resizeDocumentView( tools::Rectangle& /*_rPlayground*/ )
+    void ODataView::resizeDocumentView(tools::Rectangle& /*_rPlayground*/)
     {
     }
 
@@ -85,17 +81,11 @@ namespace dbaui
         Window::Paint(rRenderContext, _rRect);
     }
 
-    void ODataView::resizeAll( const tools::Rectangle& _rPlayground )
+    void ODataView::resizeAll(const tools::Rectangle& rPlayground)
     {
-        tools::Rectangle aPlayground( _rPlayground );
-
-        // position the separator
-        const Size aSeparatorSize( aPlayground.GetWidth(), 2 );
-        m_aSeparator->SetPosSizePixel( aPlayground.TopLeft(), aSeparatorSize );
-        aPlayground.AdjustTop(aSeparatorSize.Height() + 1 );
-
         // position the controls of the document's view
-        resizeDocumentView( aPlayground );
+        tools::Rectangle aPlayground(rPlayground);
+        resizeDocumentView(aPlayground);
     }
 
     void ODataView::Resize()
