@@ -80,18 +80,44 @@ void SdrEditView::ImpResetPossibilityFlags()
     m_bResizeProtect          =false;
 }
 
-void SdrEditView::ImpClearVars()
+SdrEditView::SdrEditView(SdrModel& rSdrModel, OutputDevice* pOut)
+    : SdrMarkView(rSdrModel, pOut)
+    , m_bPossibilitiesDirty(true)
+    , m_bReadOnly(false)
+    , m_bGroupPossible(false)
+    , m_bUnGroupPossible(false)
+    , m_bGrpEnterPossible(false)
+    , m_bToTopPossible(false)
+    , m_bToBtmPossible(false)
+    , m_bReverseOrderPossible(false)
+    , m_bImportMtfPossible(false)
+    , m_bCombinePossible(false)
+    , m_bDismantlePossible(false)
+    , m_bCombineNoPolyPolyPossible(false)
+    , m_bDismantleMakeLinesPossible(false)
+    , m_bOrthoDesiredOnMarked(false)
+    , m_bOneOrMoreMovable(false)
+    , m_bMoreThanOneNoMovRot(false)
+    , m_bContortionPossible(false)
+    , m_bMoveAllowed(false)
+    , m_bResizeFreeAllowed(false)
+    , m_bResizePropAllowed(false)
+    , m_bRotateFreeAllowed(false)
+    , m_bRotate90Allowed(false)
+    , m_bMirrorFreeAllowed(false)
+    , m_bMirror45Allowed(false)
+    , m_bMirror90Allowed(false)
+    , m_bShearAllowed(false)
+    , m_bEdgeRadiusAllowed(false)
+    , m_bTransparenceAllowed(false)
+    , m_bCropAllowed(false)
+    , m_bGradientAllowed(false)
+    , m_bCanConvToPath(false)
+    , m_bCanConvToPoly(false)
+    , m_bCanConvToContour(false)
+    , m_bMoveProtect(false)
+    , m_bResizeProtect(false)
 {
-    ImpResetPossibilityFlags();
-    m_bPossibilitiesDirty=true;   // << Purify didn't like this
-}
-
-SdrEditView::SdrEditView(
-    SdrModel& rSdrModel,
-    OutputDevice* pOut)
-:   SdrMarkView(rSdrModel, pOut)
-{
-    ImpClearVars();
 }
 
 SdrEditView::~SdrEditView()

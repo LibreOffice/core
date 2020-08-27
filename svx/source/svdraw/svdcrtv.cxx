@@ -177,29 +177,19 @@ void SdrCreateView::ImpClearConnectMarker()
     mpCoMaOverlay.reset();
 }
 
-void SdrCreateView::ImpClearVars()
+SdrCreateView::SdrCreateView(SdrModel& rSdrModel, OutputDevice* pOut)
+    : SdrDragView(rSdrModel, pOut)
+    , pCurrentCreate(nullptr)
+    , pCreatePV(nullptr)
+    , mpCreateViewExtraData(new ImpSdrCreateViewExtraData())
+    , aCurrentCreatePointer(PointerStyle::Cross)
+    , nAutoCloseDistPix(5)
+    , nFreeHandMinDistPix(10)
+    , nCurrentInvent(SdrInventor::Default)
+    , nCurrentIdent(OBJ_NONE)
+    , b1stPointAsCenter(false)
+    , bUseIncompatiblePathCreateInterface(false)
 {
-    nCurrentInvent=SdrInventor::Default;
-    nCurrentIdent=OBJ_NONE;
-    pCurrentCreate=nullptr;
-    pCreatePV=nullptr;
-    b1stPointAsCenter=false;
-    aCurrentCreatePointer=PointerStyle::Cross;
-    bUseIncompatiblePathCreateInterface=false;
-    nAutoCloseDistPix=5;
-    nFreeHandMinDistPix=10;
-
-    ImpClearConnectMarker();
-}
-
-SdrCreateView::SdrCreateView(
-    SdrModel& rSdrModel,
-    OutputDevice* pOut)
-:   SdrDragView(rSdrModel, pOut),
-    mpCreateViewExtraData(new ImpSdrCreateViewExtraData()),
-    aCurrentCreatePointer(PointerStyle::Arrow)
-{
-    ImpClearVars();
 }
 
 SdrCreateView::~SdrCreateView()

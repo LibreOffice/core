@@ -57,9 +57,6 @@ protected:
 
     void ImpClearConnectMarker();
 
-private:
-    SVX_DLLPRIVATE void ImpClearVars();
-
 protected:
     bool ImpBegCreateObj(SdrInventor nInvent, sal_uInt16 nIdent, const Point& rPnt, OutputDevice* pOut,
         sal_Int16 nMinMov, const tools::Rectangle& rLogRect, SdrObject* pPreparedFactoryObject);

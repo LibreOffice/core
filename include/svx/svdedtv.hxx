@@ -114,7 +114,6 @@ protected:
     bool                        m_bResizeProtect : 1;
 
 private:
-    SVX_DLLPRIVATE void ImpClearVars();
     SVX_DLLPRIVATE void ImpResetPossibilityFlags();
 
 protected:

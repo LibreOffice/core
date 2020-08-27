@@ -65,29 +65,23 @@
 
 #include <memory>
 
-void SdrObjEditView::ImpClearVars()
-{
-    bQuickTextEditMode = true;
-    pTextEditOutliner.reset();
-    pTextEditOutlinerView = nullptr;
-    pTextEditPV = nullptr;
-    pTextEditWin = nullptr;
-    pTextEditCursorBuffer = nullptr;
-    bTextEditNewObj = false;
-    bMacroDown = false;
-    pMacroObj = nullptr;
-    pMacroPV = nullptr;
-    pMacroWin = nullptr;
-    nMacroTol = 0;
-    bTextEditDontDelete = false;
-    bTextEditOnlyOneView = false;
-}
-
 SdrObjEditView::SdrObjEditView(SdrModel& rSdrModel, OutputDevice* pOut)
     : SdrGlueEditView(rSdrModel, pOut)
+    , pTextEditPV(nullptr)
+    , pTextEditOutlinerView(nullptr)
+    , pTextEditWin(nullptr)
+    , pTextEditCursorBuffer(nullptr)
+    , pMacroObj(nullptr)
+    , pMacroPV(nullptr)
+    , pMacroWin(nullptr)
+    , nMacroTol(0)
+    , bTextEditDontDelete(false)
+    , bTextEditOnlyOneView(false)
+    , bTextEditNewObj(false)
+    , bQuickTextEditMode(true)
+    , bMacroDown(false)
     , mpOldTextEditUndoManager(nullptr)
 {
-    ImpClearVars();
 }
 
 SdrObjEditView::~SdrObjEditView()
