@@ -19,7 +19,6 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_TABLEDESIGN_TABLEFIELDDESCWIN_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_TABLEDESIGN_TABLEFIELDDESCWIN_HXX
 
-#include <vcl/InterimItemWindow.hxx>
 #include <IClipBoardTest.hxx>
 #include <ChildWindow.hxx>
 #include "TableFieldControl.hxx"
