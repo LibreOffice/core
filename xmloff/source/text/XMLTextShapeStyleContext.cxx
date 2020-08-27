@@ -138,7 +138,7 @@ void XMLTextShapeStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
 }
 
 
-const OUStringLiteral gsIsAutoUpdate( "IsAutoUpdate" );
+const OUStringLiteral gsIsAutoUpdate( u"IsAutoUpdate" );
 
 XMLTextShapeStyleContext::XMLTextShapeStyleContext( SvXMLImport& rImport,
         sal_Int32 nElement,

@@ -41,8 +41,8 @@ const char SHARE_UNO_PACKAGES_URI[] =
     "vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE";
 
 const char USER[] = "user";
-const char USER_URI[] =
-    "vnd.sun.star.expand:${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
+const char16_t USER_URI[] =
+    u"vnd.sun.star.expand:${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
 
 
 

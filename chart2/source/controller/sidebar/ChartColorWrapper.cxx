@@ -96,8 +96,8 @@ void ChartColorWrapper::updateModel(const css::uno::Reference<css::frame::XModel
 
 void ChartColorWrapper::updateData()
 {
-    static const OUStringLiteral aLineColor = "LineColor";
-    static const OUStringLiteral aCommands[2] = {".uno:XLineColor", ".uno:FillColor"};
+    static const OUStringLiteral aLineColor = u"LineColor";
+    static const OUStringLiteral aCommands[2] = {u".uno:XLineColor", u".uno:FillColor"};
 
     css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
     if (!xPropSet.is())

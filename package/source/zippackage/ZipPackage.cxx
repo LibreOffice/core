@@ -1225,7 +1225,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
             // Remove the old manifest.xml file as the
             // manifest will be re-generated and the
             // META-INF directory implicitly created if does not exist
-            static const OUStringLiteral sMeta ("META-INF");
+            static const OUStringLiteral sMeta (u"META-INF");
 
             if ( m_xRootFolder->hasByName( sMeta ) )
             {
@@ -1247,7 +1247,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
             // Remove the old [Content_Types].xml file as the
             // file will be re-generated
 
-            static const OUStringLiteral aContentTypes("[Content_Types].xml");
+            static const OUStringLiteral aContentTypes(u"[Content_Types].xml");
 
             if ( m_xRootFolder->hasByName( aContentTypes ) )
                 m_xRootFolder->removeByName( aContentTypes );
@@ -1256,9 +1256,9 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
         // Create a vector to store data for the manifest.xml file
         vector < uno::Sequence < PropertyValue > > aManList;
 
-        static const OUStringLiteral sMediaType("MediaType");
-        static const OUStringLiteral sVersion("Version");
-        static const OUStringLiteral sFullPath("FullPath");
+        static const OUStringLiteral sMediaType(u"MediaType");
+        static const OUStringLiteral sVersion(u"Version");
+        static const OUStringLiteral sFullPath(u"FullPath");
         const bool bIsGpgEncrypt = m_aGpgProps.hasElements();
 
         if ( m_nFormat == embed::StorageFormats::PACKAGE )

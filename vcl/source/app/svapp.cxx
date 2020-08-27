@@ -1145,7 +1145,7 @@ OUString Application::GetHWOSConfInfo(const int bSelection, const bool bLocalize
     };
 
     if (bSelection != hwUI) {
-        appendDetails("; ", Localize(SV_APP_CPUTHREADS, bLocalize)
+        appendDetails(u"; ", Localize(SV_APP_CPUTHREADS, bLocalize)
                                 + OUString::number(std::thread::hardware_concurrency()));
 
         OUString aVersion;
@@ -1154,21 +1154,21 @@ OUString Application::GetHWOSConfInfo(const int bSelection, const bool bLocalize
         else
             aVersion = "-";
 
-        appendDetails("; ", Localize(SV_APP_OSVERSION, bLocalize) + aVersion);
+        appendDetails(u"; ", Localize(SV_APP_OSVERSION, bLocalize) + aVersion);
     }
 
     if (bSelection != hwEnv) {
-        appendDetails("; ", Localize(SV_APP_UIRENDER, bLocalize));
+        appendDetails(u"; ", Localize(SV_APP_UIRENDER, bLocalize));
 #if HAVE_FEATURE_SKIA
         if ( SkiaHelper::isVCLSkiaEnabled() )
         {
             switch(SkiaHelper::renderMethodToUse())
             {
                 case SkiaHelper::RenderVulkan:
-                    appendDetails("", Localize(SV_APP_SKIA_VULKAN, bLocalize));
+                    appendDetails(u"", Localize(SV_APP_SKIA_VULKAN, bLocalize));
                     break;
                 case SkiaHelper::RenderRaster:
-                    appendDetails("", Localize(SV_APP_SKIA_RASTER, bLocalize));
+                    appendDetails(u"", Localize(SV_APP_SKIA_RASTER, bLocalize));
                     break;
             }
         }
@@ -1176,13 +1176,13 @@ OUString Application::GetHWOSConfInfo(const int bSelection, const bool bLocalize
 #endif
 #if HAVE_FEATURE_OPENGL
         if ( OpenGLWrapper::isVCLOpenGLEnabled() )
-            appendDetails("", Localize(SV_APP_GL, bLocalize));
+            appendDetails(u"", Localize(SV_APP_GL, bLocalize));
         else
 #endif
-            appendDetails("", Localize(SV_APP_DEFAULT, bLocalize));
+            appendDetails(u"", Localize(SV_APP_DEFAULT, bLocalize));
 
 #if (defined LINUX || defined _WIN32 || defined MACOSX)
-        appendDetails("; ", SV_APP_VCLBACKEND + GetToolkitName());
+        appendDetails(u"; ", SV_APP_VCLBACKEND + GetToolkitName());
 #endif
     }
 

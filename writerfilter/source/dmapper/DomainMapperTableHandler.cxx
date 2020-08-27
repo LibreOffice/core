@@ -1323,7 +1323,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
                     if (!aMerges.empty())
                     {
                         static const std::vector<OUStringLiteral> aBorderNames
-                            = { "TopBorder", "LeftBorder", "BottomBorder", "RightBorder" };
+                            = { u"TopBorder", u"LeftBorder", u"BottomBorder", u"RightBorder" };
 
                         // Perform horizontal merges in reverse order, so the fact that merging changes the position of cells won't cause a problem for us.
                         for (std::vector<HorizontallyMergedCell>::reverse_iterator it = aMerges.rbegin(); it != aMerges.rend(); ++it)

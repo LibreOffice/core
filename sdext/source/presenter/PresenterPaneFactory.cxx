@@ -34,20 +34,20 @@ using namespace ::com::sun::star::drawing::framework;
 namespace sdext::presenter {
 
 const OUStringLiteral PresenterPaneFactory::msCurrentSlidePreviewPaneURL(
-    "private:resource/pane/Presenter/Pane1");
+    u"private:resource/pane/Presenter/Pane1");
 const OUStringLiteral PresenterPaneFactory::msNextSlidePreviewPaneURL(
-    "private:resource/pane/Presenter/Pane2");
+    u"private:resource/pane/Presenter/Pane2");
 const OUStringLiteral PresenterPaneFactory::msNotesPaneURL(
-    "private:resource/pane/Presenter/Pane3");
+    u"private:resource/pane/Presenter/Pane3");
 const OUStringLiteral PresenterPaneFactory::msToolBarPaneURL(
-    "private:resource/pane/Presenter/Pane4");
+    u"private:resource/pane/Presenter/Pane4");
 const OUStringLiteral PresenterPaneFactory::msSlideSorterPaneURL(
-    "private:resource/pane/Presenter/Pane5");
+    u"private:resource/pane/Presenter/Pane5");
 const OUStringLiteral PresenterPaneFactory::msHelpPaneURL(
-    "private:resource/pane/Presenter/Pane6");
+    u"private:resource/pane/Presenter/Pane6");
 
 const OUStringLiteral PresenterPaneFactory::msOverlayPaneURL(
-    "private:resource/pane/Presenter/Overlay");
+    u"private:resource/pane/Presenter/Overlay");
 
 //===== PresenterPaneFactory ==================================================
 

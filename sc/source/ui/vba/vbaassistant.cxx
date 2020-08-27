@@ -26,7 +26,7 @@ using namespace ooo::vba;
 
 using namespace ooo::vba::office::MsoAnimationType;
 
-constexpr OUStringLiteral g_sName = "Clippit";
+constexpr OUStringLiteral g_sName = u"Clippit";
 
 ScVbaAssistant::ScVbaAssistant( const uno::Reference< XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext ): ScVbaAssistantImpl_BASE(rParent, rContext)
 {

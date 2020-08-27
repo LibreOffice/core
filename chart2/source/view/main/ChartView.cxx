@@ -1109,9 +1109,9 @@ void ChartView::impl_deleteCoordinateSystems()
 namespace
 {
 const OUStringLiteral lcl_aGDIMetaFileMIMEType(
-    "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" );
+    u"application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" );
 const OUStringLiteral lcl_aGDIMetaFileMIMETypeHighContrast(
-    "application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\"" );
+    u"application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\"" );
 } // anonymous namespace
 
 void ChartView::getMetaFile( const uno::Reference< io::XOutputStream >& xOutStream

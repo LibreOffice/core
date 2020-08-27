@@ -98,7 +98,7 @@ using namespace cppu;
 
 
 // Identifiers for creating the strings for dbg_Properties
-char const ID_DBG_SUPPORTEDINTERFACES[] = "Dbg_SupportedInterfaces";
+char16_t const ID_DBG_SUPPORTEDINTERFACES[] = u"Dbg_SupportedInterfaces";
 char const ID_DBG_PROPERTIES[] = "Dbg_Properties";
 char const ID_DBG_METHODS[] = "Dbg_Methods";
 

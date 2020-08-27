@@ -104,7 +104,7 @@ OUString FindCoverImage(const OUString& rDocumentBaseURL, OUString& rMimeType,
         return aRet;
 
     static const std::initializer_list<OUStringLiteral> vExtensions
-        = { "gif", "jpg", "png", "svg" };
+        = { u"gif", u"jpg", u"png", u"svg" };
 
     OUString aMediaDir = FindMediaDir(rDocumentBaseURL, rFilterData);
     for (const auto& rExtension : vExtensions)

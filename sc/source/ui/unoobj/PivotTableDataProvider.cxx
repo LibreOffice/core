@@ -55,17 +55,17 @@ namespace sc
 {
 namespace
 {
-const OUStringLiteral constIdCategories("categories");
-const OUStringLiteral constIdLabel("label");
-const OUStringLiteral constIdData("data");
+const OUStringLiteral constIdCategories(u"categories");
+const OUStringLiteral constIdLabel(u"label");
+const OUStringLiteral constIdData(u"data");
 
 const SfxItemPropertyMapEntry* lcl_GetDataProviderPropertyMap()
 {
     static const SfxItemPropertyMapEntry aDataProviderPropertyMap_Impl[] =
     {
-        { SC_UNONAME_INCLUDEHIDDENCELLS, 0, cppu::UnoType<bool>::get(), 0, 0 },
-        { SC_UNONAME_USE_INTERNAL_DATA_PROVIDER, 0, cppu::UnoType<bool>::get(), 0, 0 },
-        { "", 0, css::uno::Type(), 0, 0 }
+        { u"" SC_UNONAME_INCLUDEHIDDENCELLS, 0, cppu::UnoType<bool>::get(), 0, 0 },
+        { u"" SC_UNONAME_USE_INTERNAL_DATA_PROVIDER, 0, cppu::UnoType<bool>::get(), 0, 0 },
+        { u"", 0, css::uno::Type(), 0, 0 }
     };
     return aDataProviderPropertyMap_Impl;
 }

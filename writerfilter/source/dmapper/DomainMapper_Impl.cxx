@@ -3223,7 +3223,7 @@ static sal_Int16 lcl_ParseNumberingType( const OUString& rCommand )
     //  The command looks like: " PAGE \* Arabic "
     // tdf#132185: but may as well be "PAGE \* Arabic"
     OUString sNumber;
-    constexpr OUStringLiteral rSeparator("\\* ");
+    constexpr OUStringLiteral rSeparator(u"\\* ");
     if (sal_Int32 nStartIndex = rCommand.indexOf(rSeparator); nStartIndex >= 0)
     {
         nStartIndex += rSeparator.getLength();

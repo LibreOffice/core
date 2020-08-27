@@ -741,7 +741,7 @@ void SAL_CALL FmXGridControl::setDesignMode(sal_Bool bOn)
 
         // prepare firing an event
         aModeChangeEvent.Source = *this;
-        aModeChangeEvent.NewMode = mbDesignMode ? OUStringLiteral( "design" ) : OUStringLiteral( "alive" );
+        aModeChangeEvent.NewMode = mbDesignMode ? OUStringLiteral( u"design" ) : OUStringLiteral( u"alive" );
     }
 
     // --- </mutex_lock> ---
@@ -1549,8 +1549,8 @@ void FmXGridPeer::addColumnListeners(const Reference< XPropertySet >& xCol)
 {
     static const OUStringLiteral aPropsListenedTo[] =
     {
-        FM_PROP_LABEL, FM_PROP_WIDTH, FM_PROP_HIDDEN, FM_PROP_ALIGN,
-        FM_PROP_FORMATKEY
+        u"" FM_PROP_LABEL, u"" FM_PROP_WIDTH, u"" FM_PROP_HIDDEN, u"" FM_PROP_ALIGN,
+        u"" FM_PROP_FORMATKEY
     };
 
     // as not all properties have to be supported by all columns we have to check this
@@ -1574,8 +1574,8 @@ void FmXGridPeer::removeColumnListeners(const Reference< XPropertySet >& xCol)
     // we have to do it this way...
     static const OUStringLiteral aPropsListenedTo[] =
     {
-        FM_PROP_LABEL, FM_PROP_WIDTH, FM_PROP_HIDDEN, FM_PROP_ALIGN,
-        FM_PROP_FORMATKEY
+        u"" FM_PROP_LABEL, u"" FM_PROP_WIDTH, u"" FM_PROP_HIDDEN, u"" FM_PROP_ALIGN,
+        u"" FM_PROP_FORMATKEY
     };
 
     Reference< XPropertySetInfo >  xInfo = xCol->getPropertySetInfo();

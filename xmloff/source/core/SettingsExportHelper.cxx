@@ -45,13 +45,13 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-const OUStringLiteral gsPrinterIndependentLayout( "PrinterIndependentLayout" );
-const OUStringLiteral gsColorTableURL( "ColorTableURL" );
-const OUStringLiteral gsLineEndTableURL( "LineEndTableURL" );
-const OUStringLiteral gsHatchTableURL( "HatchTableURL" );
-const OUStringLiteral gsDashTableURL( "DashTableURL" );
-const OUStringLiteral gsGradientTableURL( "GradientTableURL" );
-const OUStringLiteral gsBitmapTableURL( "BitmapTableURL" );
+const OUStringLiteral gsPrinterIndependentLayout( u"PrinterIndependentLayout" );
+const OUStringLiteral gsColorTableURL( u"ColorTableURL" );
+const OUStringLiteral gsLineEndTableURL( u"LineEndTableURL" );
+const OUStringLiteral gsHatchTableURL( u"HatchTableURL" );
+const OUStringLiteral gsDashTableURL( u"DashTableURL" );
+const OUStringLiteral gsGradientTableURL( u"GradientTableURL" );
+const OUStringLiteral gsBitmapTableURL( u"BitmapTableURL" );
 
 XMLSettingsExportHelper::XMLSettingsExportHelper( ::xmloff::XMLSettingsExportContext& i_rContext )
 : m_rContext( i_rContext )

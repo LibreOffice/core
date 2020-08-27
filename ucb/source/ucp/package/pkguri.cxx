@@ -109,8 +109,8 @@ void PackageUri::init() const
         {
             m_aParam +=
                 ( !m_aParam.isEmpty()
-                  ? OUStringLiteral( "&purezip" )
-                  : OUStringLiteral( "?purezip" ) );
+                  ? OUStringLiteral( u"&purezip" )
+                  : OUStringLiteral( u"?purezip" ) );
         }
 
         aPureUri = aPureUri.replaceAt( 0,

@@ -156,8 +156,8 @@ public:
 
 };
 
-const OUStringLiteral CallbackDocumentHandler::aDefaultNamespace = "";
-const OUStringLiteral CallbackDocumentHandler::aNamespaceSeparator = ":";
+const OUStringLiteral CallbackDocumentHandler::aDefaultNamespace = u"";
+const OUStringLiteral CallbackDocumentHandler::aNamespaceSeparator = u":";
 
 OUString CallbackDocumentHandler::getNamespacePrefixFromToken( sal_Int32 nToken )
 {

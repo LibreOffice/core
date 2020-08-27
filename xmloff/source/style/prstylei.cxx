@@ -143,8 +143,8 @@ namespace
 
 
 
-const OUStringLiteral gsIsPhysical(  "IsPhysical"  );
-const OUStringLiteral gsFollowStyle(  "FollowStyle"  );
+const OUStringLiteral gsIsPhysical(  u"IsPhysical"  );
+const OUStringLiteral gsFollowStyle(  u"FollowStyle"  );
 
 XMLPropStyleContext::XMLPropStyleContext( SvXMLImport& rImport,
         sal_Int32 nElement,
@@ -337,8 +337,8 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
                 {
                     Sequence< OUString > aPropNames(1);
                     aPropNames[0] = GetFamily() == XmlStyleFamily::TEXT_PARAGRAPH ?
-                        OUStringLiteral("ParaAutoStyleName") :
-                        OUStringLiteral("CharAutoStyleName");
+                        OUStringLiteral(u"ParaAutoStyleName") :
+                        OUStringLiteral(u"CharAutoStyleName");
                     Sequence< Any > aAny = xAutoStyle->getPropertyValues( aPropNames );
                     if( aAny.hasElements() )
                     {

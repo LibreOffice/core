@@ -19,7 +19,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 
-#define SYM_MAP(a) { #a, reinterpret_cast<SymbolFunc *>(&a) }
+#define SYM_MAP(a) { u ## #a, reinterpret_cast<SymbolFunc *>(&a) }
 
 namespace avmedia::vlc::wrapper
 {

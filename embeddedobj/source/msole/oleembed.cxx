@@ -701,12 +701,12 @@ namespace
         //this object in a straightforward direct way
         static const OUStringLiteral aStreamNames[] =
         {
-            "CONTENTS",
-            "Package",
-            "EmbeddedOdf",
-            "WordDocument",
-            "Workbook",
-            "PowerPoint Document"
+            u"CONTENTS",
+            u"Package",
+            u"EmbeddedOdf",
+            u"WordDocument",
+            u"Workbook",
+            u"PowerPoint Document"
         };
 
         bool bCopied = false;

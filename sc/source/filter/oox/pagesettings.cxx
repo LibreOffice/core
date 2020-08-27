@@ -470,11 +470,11 @@ const char* const sppcItalicNames[] =
 
 } // namespace
 
-const OUStringLiteral gaPageNumberService( "com.sun.star.text.TextField.PageNumber" );
-const OUStringLiteral gaPageCountService( "com.sun.star.text.TextField.PageCount" );
-const OUStringLiteral gaSheetNameService( "com.sun.star.text.TextField.SheetName" );
-const OUStringLiteral gaFileNameService( "com.sun.star.text.TextField.FileName" );
-const OUStringLiteral gaDateTimeService( "com.sun.star.text.TextField.DateTime" );
+const OUStringLiteral gaPageNumberService( u"com.sun.star.text.TextField.PageNumber" );
+const OUStringLiteral gaPageCountService( u"com.sun.star.text.TextField.PageCount" );
+const OUStringLiteral gaSheetNameService( u"com.sun.star.text.TextField.SheetName" );
+const OUStringLiteral gaFileNameService( u"com.sun.star.text.TextField.FileName" );
+const OUStringLiteral gaDateTimeService( u"com.sun.star.text.TextField.DateTime" );
 
 HeaderFooterParser::HeaderFooterParser( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),

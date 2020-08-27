@@ -611,17 +611,17 @@ struct VbaFormatInfo
 #if HAVE_FEATURE_SCRIPTING
 const VbaFormatInfo pFormatInfoTable[] =
 {
-    { VbaFormatType::Offset,      OUStringLiteral("Long Date"),   NF_DATE_SYSTEM_LONG,    nullptr },
-    { VbaFormatType::UserDefined, OUStringLiteral("Medium Date"), NF_NUMBER_STANDARD,     "DD-MMM-YY" },
-    { VbaFormatType::Offset,      OUStringLiteral("Short Date"),  NF_DATE_SYSTEM_SHORT,   nullptr },
-    { VbaFormatType::UserDefined, OUStringLiteral("Long Time"),   NF_NUMBER_STANDARD,     "H:MM:SS AM/PM" },
-    { VbaFormatType::Offset,      OUStringLiteral("Medium Time"), NF_TIME_HHMMAMPM,       nullptr },
-    { VbaFormatType::Offset,      OUStringLiteral("Short Time"),  NF_TIME_HHMM,           nullptr },
-    { VbaFormatType::Offset,      OUStringLiteral("ddddd"),       NF_DATE_SYSTEM_SHORT,   nullptr },
-    { VbaFormatType::Offset,      OUStringLiteral("dddddd"),      NF_DATE_SYSTEM_LONG,    nullptr },
-    { VbaFormatType::UserDefined, OUStringLiteral("ttttt"),       NF_NUMBER_STANDARD,     "H:MM:SS AM/PM" },
-    { VbaFormatType::Offset,      OUStringLiteral("ww"),          NF_DATE_WW,             nullptr },
-    { VbaFormatType::Null,        OUStringLiteral(""),            NF_INDEX_TABLE_ENTRIES, nullptr }
+    { VbaFormatType::Offset,      OUStringLiteral(u"Long Date"),   NF_DATE_SYSTEM_LONG,    nullptr },
+    { VbaFormatType::UserDefined, OUStringLiteral(u"Medium Date"), NF_NUMBER_STANDARD,     "DD-MMM-YY" },
+    { VbaFormatType::Offset,      OUStringLiteral(u"Short Date"),  NF_DATE_SYSTEM_SHORT,   nullptr },
+    { VbaFormatType::UserDefined, OUStringLiteral(u"Long Time"),   NF_NUMBER_STANDARD,     "H:MM:SS AM/PM" },
+    { VbaFormatType::Offset,      OUStringLiteral(u"Medium Time"), NF_TIME_HHMMAMPM,       nullptr },
+    { VbaFormatType::Offset,      OUStringLiteral(u"Short Time"),  NF_TIME_HHMM,           nullptr },
+    { VbaFormatType::Offset,      OUStringLiteral(u"ddddd"),       NF_DATE_SYSTEM_SHORT,   nullptr },
+    { VbaFormatType::Offset,      OUStringLiteral(u"dddddd"),      NF_DATE_SYSTEM_LONG,    nullptr },
+    { VbaFormatType::UserDefined, OUStringLiteral(u"ttttt"),       NF_NUMBER_STANDARD,     "H:MM:SS AM/PM" },
+    { VbaFormatType::Offset,      OUStringLiteral(u"ww"),          NF_DATE_WW,             nullptr },
+    { VbaFormatType::Null,        OUStringLiteral(u""),            NF_INDEX_TABLE_ENTRIES, nullptr }
 };
 
 const VbaFormatInfo* getFormatInfo( const OUString& rFmt )

@@ -125,7 +125,7 @@ void WriterXmlEmitter::fillFrameProps( DrawElement&       rElem,
         if (pParaElt)
         {
             rProps[ "text:anchor-type" ] = rElem.isCharacter
-                ? OUStringLiteral("character") : OUStringLiteral("paragraph");
+                ? OUStringLiteral(u"character") : OUStringLiteral(u"paragraph");
         }
         else
         {
@@ -1159,7 +1159,7 @@ void WriterXmlFinalizer::visit( PageElement& elem, const std::list< std::unique_
     aPageLayoutProps[ "fo:page-width" ]     = unitMMString( page_width );
     aPageLayoutProps[ "fo:page-height" ]    = unitMMString( page_height );
     aPageLayoutProps[ "style:print-orientation" ]
-        = elem.w < elem.h ? OUStringLiteral("portrait") : OUStringLiteral("landscape");
+        = elem.w < elem.h ? OUStringLiteral(u"portrait") : OUStringLiteral(u"landscape");
     aPageLayoutProps[ "fo:margin-top" ]     = unitMMString( top_margin );
     aPageLayoutProps[ "fo:margin-bottom" ]  = unitMMString( bottom_margin );
     aPageLayoutProps[ "fo:margin-left" ]    = unitMMString( left_margin );

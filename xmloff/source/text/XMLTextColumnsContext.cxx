@@ -244,13 +244,13 @@ XMLTextColumnSepContext_Impl::XMLTextColumnSepContext_Impl(
     }
 }
 
-const OUStringLiteral gsSeparatorLineIsOn("SeparatorLineIsOn");
-const OUStringLiteral gsSeparatorLineWidth("SeparatorLineWidth");
-const OUStringLiteral gsSeparatorLineColor("SeparatorLineColor");
-const OUStringLiteral gsSeparatorLineRelativeHeight("SeparatorLineRelativeHeight");
-const OUStringLiteral gsSeparatorLineVerticalAlignment("SeparatorLineVerticalAlignment");
-const OUStringLiteral gsAutomaticDistance("AutomaticDistance");
-const OUStringLiteral gsSeparatorLineStyle("SeparatorLineStyle");
+const OUStringLiteral gsSeparatorLineIsOn(u"SeparatorLineIsOn");
+const OUStringLiteral gsSeparatorLineWidth(u"SeparatorLineWidth");
+const OUStringLiteral gsSeparatorLineColor(u"SeparatorLineColor");
+const OUStringLiteral gsSeparatorLineRelativeHeight(u"SeparatorLineRelativeHeight");
+const OUStringLiteral gsSeparatorLineVerticalAlignment(u"SeparatorLineVerticalAlignment");
+const OUStringLiteral gsAutomaticDistance(u"AutomaticDistance");
+const OUStringLiteral gsSeparatorLineStyle(u"SeparatorLineStyle");
 
 XMLTextColumnsContext::XMLTextColumnsContext(
                                 SvXMLImport& rImport, sal_uInt16 nPrfx,

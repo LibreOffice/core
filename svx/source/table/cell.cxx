@@ -76,27 +76,27 @@ static const SvxItemPropertySet* ImplGetSvxCellPropertySet()
     {
         FILL_PROPERTIES
 //      { "HasLevels",                    OWN_ATTR_HASLEVELS,             cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::READONLY,      0},
-        { "Style",                        OWN_ATTR_STYLE,                 cppu::UnoType< css::style::XStyle >::get(),                                    css::beans::PropertyAttribute::MAYBEVOID, 0},
-        { UNO_NAME_TEXT_WRITINGMODE,      SDRATTR_TEXTDIRECTION,          cppu::UnoType<css::text::WritingMode>::get(),                         0,      0},
-        { UNO_NAME_TEXT_HORZADJUST,       SDRATTR_TEXT_HORZADJUST,        cppu::UnoType<css::drawing::TextHorizontalAdjust>::get(),  0,      0},
-        { UNO_NAME_TEXT_LEFTDIST,         SDRATTR_TEXT_LEFTDIST,          cppu::UnoType<sal_Int32>::get(),        0,      0, PropertyMoreFlags::METRIC_ITEM},
-        { UNO_NAME_TEXT_LOWERDIST,        SDRATTR_TEXT_LOWERDIST,         cppu::UnoType<sal_Int32>::get(),        0,      0, PropertyMoreFlags::METRIC_ITEM},
-        { UNO_NAME_TEXT_RIGHTDIST,        SDRATTR_TEXT_RIGHTDIST,         cppu::UnoType<sal_Int32>::get(),        0,      0, PropertyMoreFlags::METRIC_ITEM},
-        { UNO_NAME_TEXT_UPPERDIST,        SDRATTR_TEXT_UPPERDIST,         cppu::UnoType<sal_Int32>::get(),        0,      0, PropertyMoreFlags::METRIC_ITEM},
-        { UNO_NAME_TEXT_VERTADJUST,       SDRATTR_TEXT_VERTADJUST,        cppu::UnoType<css::drawing::TextVerticalAdjust>::get(),    0,      0},
-        { UNO_NAME_TEXT_WORDWRAP,         SDRATTR_TEXT_WORDWRAP,          cppu::UnoType<bool>::get(),        0,      0},
+        { u"Style",                        OWN_ATTR_STYLE,                 cppu::UnoType< css::style::XStyle >::get(),                                    css::beans::PropertyAttribute::MAYBEVOID, 0},
+        { u"" UNO_NAME_TEXT_WRITINGMODE,      SDRATTR_TEXTDIRECTION,          cppu::UnoType<css::text::WritingMode>::get(),                         0,      0},
+        { u"" UNO_NAME_TEXT_HORZADJUST,       SDRATTR_TEXT_HORZADJUST,        cppu::UnoType<css::drawing::TextHorizontalAdjust>::get(),  0,      0},
+        { u"" UNO_NAME_TEXT_LEFTDIST,         SDRATTR_TEXT_LEFTDIST,          cppu::UnoType<sal_Int32>::get(),        0,      0, PropertyMoreFlags::METRIC_ITEM},
+        { u"" UNO_NAME_TEXT_LOWERDIST,        SDRATTR_TEXT_LOWERDIST,         cppu::UnoType<sal_Int32>::get(),        0,      0, PropertyMoreFlags::METRIC_ITEM},
+        { u"" UNO_NAME_TEXT_RIGHTDIST,        SDRATTR_TEXT_RIGHTDIST,         cppu::UnoType<sal_Int32>::get(),        0,      0, PropertyMoreFlags::METRIC_ITEM},
+        { u"" UNO_NAME_TEXT_UPPERDIST,        SDRATTR_TEXT_UPPERDIST,         cppu::UnoType<sal_Int32>::get(),        0,      0, PropertyMoreFlags::METRIC_ITEM},
+        { u"" UNO_NAME_TEXT_VERTADJUST,       SDRATTR_TEXT_VERTADJUST,        cppu::UnoType<css::drawing::TextVerticalAdjust>::get(),    0,      0},
+        { u"" UNO_NAME_TEXT_WORDWRAP,         SDRATTR_TEXT_WORDWRAP,          cppu::UnoType<bool>::get(),        0,      0},
 
-        { "TableBorder",                  OWN_ATTR_TABLEBORDER,           cppu::UnoType<TableBorder>::get(), 0, 0 },
-        { "TopBorder",                    SDRATTR_TABLE_BORDER,           cppu::UnoType<BorderLine>::get(), 0, TOP_BORDER },
-        { "BottomBorder",                 SDRATTR_TABLE_BORDER,           cppu::UnoType<BorderLine>::get(), 0, BOTTOM_BORDER },
-        { "LeftBorder",                   SDRATTR_TABLE_BORDER,           cppu::UnoType<BorderLine>::get(), 0, LEFT_BORDER },
-        { "RightBorder",                  SDRATTR_TABLE_BORDER,           cppu::UnoType<BorderLine>::get(), 0, RIGHT_BORDER },
-        { "RotateAngle",                  SDRATTR_TABLE_TEXT_ROTATION,    cppu::UnoType<sal_Int32>::get(), 0, 0 },
+        { u"TableBorder",                  OWN_ATTR_TABLEBORDER,           cppu::UnoType<TableBorder>::get(), 0, 0 },
+        { u"TopBorder",                    SDRATTR_TABLE_BORDER,           cppu::UnoType<BorderLine>::get(), 0, TOP_BORDER },
+        { u"BottomBorder",                 SDRATTR_TABLE_BORDER,           cppu::UnoType<BorderLine>::get(), 0, BOTTOM_BORDER },
+        { u"LeftBorder",                   SDRATTR_TABLE_BORDER,           cppu::UnoType<BorderLine>::get(), 0, LEFT_BORDER },
+        { u"RightBorder",                  SDRATTR_TABLE_BORDER,           cppu::UnoType<BorderLine>::get(), 0, RIGHT_BORDER },
+        { u"RotateAngle",                  SDRATTR_TABLE_TEXT_ROTATION,    cppu::UnoType<sal_Int32>::get(), 0, 0 },
 
         SVX_UNOEDIT_OUTLINER_PROPERTIES,
         SVX_UNOEDIT_CHAR_PROPERTIES,
         SVX_UNOEDIT_PARA_PROPERTIES,
-        { "", 0, css::uno::Type(), 0, 0 }
+        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     static SvxItemPropertySet aSvxCellPropertySet( aSvxCellPropertyMap, SdrObject::GetGlobalDrawObjectItemPool() );

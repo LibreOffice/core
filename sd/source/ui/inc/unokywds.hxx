@@ -72,21 +72,21 @@ inline const char sUNO_Service_ImageMapPolygonObject[] = "com.sun.star.image.Ima
 
 // properties
 inline const char sUNO_Prop_Background[] = "Background";
-inline const char sUNO_Prop_ForbiddenCharacters[] = "ForbiddenCharacters";
-inline const char sUNO_Prop_MapUnit[] = "MapUnit";
-inline const char sUNO_Prop_VisibleArea[] = "VisibleArea";
+inline const char16_t sUNO_Prop_ForbiddenCharacters[] = u"ForbiddenCharacters";
+inline const char16_t sUNO_Prop_MapUnit[] = u"MapUnit";
+inline const char16_t sUNO_Prop_VisibleArea[] = u"VisibleArea";
 inline const char sUNO_Prop_Aspect[] = "Aspect";
-inline const char sUNO_Prop_TabStop[] = "TabStop";
-inline const char sUNO_Prop_CharLocale[] = "CharLocale";
-inline const char sUNO_Prop_AutomContFocus[] = "AutomaticControlFocus";
-inline const char sUNO_Prop_ApplyFrmDsgnMode[] = "ApplyFormDesignMode";
-inline const char sUNO_Prop_IsBackgroundVisible[] = "IsBackgroundVisible";
-inline const char sUNO_Prop_IsBackgroundObjectsVisible[] = "IsBackgroundObjectsVisible";
-inline const char sUNO_Prop_UserDefinedAttributes[] = "UserDefinedAttributes";
-inline const char sUNO_Prop_BookmarkURL[] = "BookmarkURL";
-inline const char sUNO_Prop_RuntimeUID[] = "RuntimeUID";
-inline const char sUNO_Prop_HasValidSignatures[] = "HasValidSignatures";
-inline const char sUNO_Prop_InteropGrabBag[] = "InteropGrabBag";
+inline const char16_t sUNO_Prop_TabStop[] = u"TabStop";
+inline const char16_t sUNO_Prop_CharLocale[] = u"CharLocale";
+inline const char16_t sUNO_Prop_AutomContFocus[] = u"AutomaticControlFocus";
+inline const char16_t sUNO_Prop_ApplyFrmDsgnMode[] = u"ApplyFormDesignMode";
+inline const char16_t sUNO_Prop_IsBackgroundVisible[] = u"IsBackgroundVisible";
+inline const char16_t sUNO_Prop_IsBackgroundObjectsVisible[] = u"IsBackgroundObjectsVisible";
+inline const char16_t sUNO_Prop_UserDefinedAttributes[] = u"UserDefinedAttributes";
+inline const char16_t sUNO_Prop_BookmarkURL[] = u"BookmarkURL";
+inline const char16_t sUNO_Prop_RuntimeUID[] = u"RuntimeUID";
+inline const char16_t sUNO_Prop_HasValidSignatures[] = u"HasValidSignatures";
+inline const char16_t sUNO_Prop_InteropGrabBag[] = u"InteropGrabBag";
 
 // view settings
 inline const char sUNO_View_ViewId[] = "ViewId";

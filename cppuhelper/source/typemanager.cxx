@@ -1806,23 +1806,23 @@ css::uno::Any cppuhelper::TypeManager::find(OUString const & name) {
         css::uno::TypeClass typeClass;
     };
     static Simple const simple[] = {
-        { OUStringLiteral("void"), css::uno::TypeClass_VOID },
-        { OUStringLiteral("boolean"), css::uno::TypeClass_BOOLEAN },
-        { OUStringLiteral("byte"), css::uno::TypeClass_BYTE },
-        { OUStringLiteral("short"), css::uno::TypeClass_SHORT },
-        { OUStringLiteral("unsigned short"),
+        { OUStringLiteral(u"void"), css::uno::TypeClass_VOID },
+        { OUStringLiteral(u"boolean"), css::uno::TypeClass_BOOLEAN },
+        { OUStringLiteral(u"byte"), css::uno::TypeClass_BYTE },
+        { OUStringLiteral(u"short"), css::uno::TypeClass_SHORT },
+        { OUStringLiteral(u"unsigned short"),
           css::uno::TypeClass_UNSIGNED_SHORT },
-        { OUStringLiteral("long"), css::uno::TypeClass_LONG },
-        { OUStringLiteral("unsigned long"), css::uno::TypeClass_UNSIGNED_LONG },
-        { OUStringLiteral("hyper"), css::uno::TypeClass_HYPER },
-        { OUStringLiteral("unsigned hyper"),
+        { OUStringLiteral(u"long"), css::uno::TypeClass_LONG },
+        { OUStringLiteral(u"unsigned long"), css::uno::TypeClass_UNSIGNED_LONG },
+        { OUStringLiteral(u"hyper"), css::uno::TypeClass_HYPER },
+        { OUStringLiteral(u"unsigned hyper"),
           css::uno::TypeClass_UNSIGNED_HYPER },
-        { OUStringLiteral("float"), css::uno::TypeClass_FLOAT },
-        { OUStringLiteral("double"), css::uno::TypeClass_DOUBLE },
-        { OUStringLiteral("char"), css::uno::TypeClass_CHAR },
-        { OUStringLiteral("string"), css::uno::TypeClass_STRING },
-        { OUStringLiteral("type"), css::uno::TypeClass_TYPE },
-        { OUStringLiteral("any"), css::uno::TypeClass_ANY } };
+        { OUStringLiteral(u"float"), css::uno::TypeClass_FLOAT },
+        { OUStringLiteral(u"double"), css::uno::TypeClass_DOUBLE },
+        { OUStringLiteral(u"char"), css::uno::TypeClass_CHAR },
+        { OUStringLiteral(u"string"), css::uno::TypeClass_STRING },
+        { OUStringLiteral(u"type"), css::uno::TypeClass_TYPE },
+        { OUStringLiteral(u"any"), css::uno::TypeClass_ANY } };
     for (std::size_t i = 0; i != SAL_N_ELEMENTS(simple); ++i) {
         if (name == simple[i].name) {
             return css::uno::makeAny<

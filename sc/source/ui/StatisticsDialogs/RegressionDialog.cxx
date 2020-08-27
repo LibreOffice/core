@@ -362,7 +362,7 @@ void ScRegressionDialog::WriteRawRegressionResults(AddressWalkerWriter& rOutput,
 
     rTemplate.setTemplate(constTemplateLINEST[nRegressionIndex].
                           replaceFirst("%CALC_INTERCEPT%",
-                                       mbCalcIntercept ? OUStringLiteral("TRUE") : OUStringLiteral("FALSE")));
+                                       mbCalcIntercept ? OUStringLiteral(u"TRUE") : OUStringLiteral(u"FALSE")));
     rOutput.writeMatrixFormula(rTemplate.getTemplate(), 1 + mnNumIndependentVars, 5);
     // Add LINEST result components to template
     // 1. Add ranges for coefficients and standard errors for indep. vars and the intercept.
@@ -408,7 +408,7 @@ void ScRegressionDialog::WriteRegressionStatistics(AddressWalkerWriter& rOutput,
         "=" + OUString::number(mnNumIndependentVars),
         "=" + OUString::number(mnNumObservations),
         "=1 - (1 - %RSQUARED_ADDR%)*(%NUMOBS_ADDR% - 1)/(%NUMOBS_ADDR% - %NUMXVARS_ADDR%" +
-            (mbCalcIntercept ? OUStringLiteral(" - 1)") : OUStringLiteral(")"))
+            (mbCalcIntercept ? OUStringLiteral(u" - 1)") : OUStringLiteral(u")"))
     };
 
     rTemplate.autoReplaceAddress("%NUMXVARS_ADDR%", rOutput.current(1, 2));

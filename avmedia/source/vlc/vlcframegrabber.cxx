@@ -42,8 +42,8 @@ namespace avmedia::vlc {
 
 namespace
 {
-    const OUStringLiteral AVMEDIA_VLC_GRABBER_IMPLEMENTATIONNAME = "com.sun.star.comp.avmedia.VLCFrameGrabber_VLC";
-    const OUStringLiteral AVMEDIA_VLC_GRABBER_SERVICENAME = "com.sun.star.media.VLCFrameGrabber_VLC";
+    const OUStringLiteral AVMEDIA_VLC_GRABBER_IMPLEMENTATIONNAME = u"com.sun.star.comp.avmedia.VLCFrameGrabber_VLC";
+    const OUStringLiteral AVMEDIA_VLC_GRABBER_SERVICENAME = u"com.sun.star.media.VLCFrameGrabber_VLC";
     const int MSEC_IN_SEC = 1000;
 
     const char * const VLC_ARGS[] = {

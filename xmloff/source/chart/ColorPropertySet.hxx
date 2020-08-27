@@ -69,7 +69,7 @@ protected:
 
 private:
     css::uno::Reference< css::beans::XPropertySetInfo > m_xInfo;
-    static constexpr OUStringLiteral g_aColorPropName = "FillColor";
+    static constexpr OUStringLiteral g_aColorPropName = u"FillColor";
     Color     m_nColor;
     Color     m_nDefaultColor;
 };

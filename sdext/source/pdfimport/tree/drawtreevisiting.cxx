@@ -1034,7 +1034,7 @@ void DrawXmlFinalizer::visit( PageElement& elem, const std::list< std::unique_pt
     aPageLayoutProps[ "fo:margin-right" ]   =  unitMMString( right_margin );
     aPageLayoutProps[ "fo:page-width" ]     =  unitMMString( page_width );
     aPageLayoutProps[ "fo:page-height" ]    =  unitMMString( page_height );
-    aPageLayoutProps[ "style:print-orientation" ]= elem.w < elem.h ? OUStringLiteral("portrait") : OUStringLiteral("landscape");
+    aPageLayoutProps[ "style:print-orientation" ]= elem.w < elem.h ? OUStringLiteral(u"portrait") : OUStringLiteral(u"landscape");
     aPageLayoutProps[ "style:writing-mode" ]= "lr-tb";
 
     StyleContainer::Style aStyle( "style:page-layout", aPageProps);

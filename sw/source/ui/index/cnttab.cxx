@@ -3838,8 +3838,8 @@ void SwEntryBrowseBox::WriteEntries(SvStream& rOutStr)
                          pEntry->sAlternative + ";" +
                          pEntry->sPrimKey  + ";" +
                          pEntry->sSecKey + ";" +
-                         (pEntry->bCase ? OUStringLiteral("1") : OUStringLiteral("0")) + ";" +
-                         (pEntry->bWord ? OUStringLiteral("1") : OUStringLiteral("0")) );
+                         (pEntry->bCase ? OUStringLiteral(u"1") : OUStringLiteral(u"0")) + ";" +
+                         (pEntry->bWord ? OUStringLiteral(u"1") : OUStringLiteral(u"0")) );
 
         if( sWrite.getLength() > 5 )
             rOutStr.WriteByteStringLine( sWrite, eTEnc );

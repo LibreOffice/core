@@ -34,12 +34,12 @@ namespace drawinglayer::geometry
 {
 namespace
 {
-constexpr OUStringLiteral g_PropertyName_ObjectTransformation = "ObjectTransformation";
-constexpr OUStringLiteral g_PropertyName_ViewTransformation = "ViewTransformation";
-constexpr OUStringLiteral g_PropertyName_Viewport = "Viewport";
-constexpr OUStringLiteral g_PropertyName_Time = "Time";
-constexpr OUStringLiteral g_PropertyName_VisualizedPage = "VisualizedPage";
-constexpr OUStringLiteral g_PropertyName_ReducedDisplayQuality = "ReducedDisplayQuality";
+constexpr OUStringLiteral g_PropertyName_ObjectTransformation = u"ObjectTransformation";
+constexpr OUStringLiteral g_PropertyName_ViewTransformation = u"ViewTransformation";
+constexpr OUStringLiteral g_PropertyName_Viewport = u"Viewport";
+constexpr OUStringLiteral g_PropertyName_Time = u"Time";
+constexpr OUStringLiteral g_PropertyName_VisualizedPage = u"VisualizedPage";
+constexpr OUStringLiteral g_PropertyName_ReducedDisplayQuality = u"ReducedDisplayQuality";
 }
 
 class ImpViewInformation2D

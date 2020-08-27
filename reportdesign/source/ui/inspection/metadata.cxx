@@ -232,60 +232,60 @@ namespace rptui
         const uno::Sequence< beans::Property > aProps = _xFormComponentHandler->getSupportedProperties();
         static const OUStringLiteral pExcludeProperties[] =
         {
-                "Enabled",
-                "Printable",
-                "WordBreak",
-                "MultiLine",
-                "Tag",
-                "HelpText",
-                "HelpURL",
-                "MaxTextLen",
-                "ReadOnly",
-                "Tabstop",
-                "TabIndex",
-                "ValueMin",
-                "ValueMax",
-                "Spin",
-                "SpinValue",
-                "SpinValueMin",
-                "SpinValueMax",
-                "DefaultSpinValue",
-                "SpinIncrement",
-                "Repeat",
-                "RepeatDelay",
-                "ControlLabel", /// TODO: has to be checked
-                "LabelControl",
-                "Title", // comment this out if you want to have title feature for charts
-                PROPERTY_MAXTEXTLEN,
-                PROPERTY_EFFECTIVEDEFAULT,
-                PROPERTY_EFFECTIVEMAX,
-                PROPERTY_EFFECTIVEMIN,
-                "HideInactiveSelection",
-                "SubmitAction",
-                "InputRequired",
-                "VerticalAlign",
-                PROPERTY_ALIGN,
-                PROPERTY_EMPTY_IS_NULL,
-                PROPERTY_FILTERPROPOSAL
-                ,PROPERTY_POSITIONX
-                ,PROPERTY_POSITIONY
-                ,PROPERTY_WIDTH
-                ,PROPERTY_HEIGHT
-                ,PROPERTY_AUTOGROW
-                ,PROPERTY_FONT
-                ,PROPERTY_LABEL
-                ,PROPERTY_LINECOLOR
-                ,PROPERTY_BORDER
-                ,PROPERTY_BORDERCOLOR
-                ,PROPERTY_BACKTRANSPARENT
-                ,PROPERTY_CONTROLBACKGROUND
-                ,PROPERTY_BACKGROUNDCOLOR
-                ,PROPERTY_CONTROLBACKGROUNDTRANSPARENT
-                ,PROPERTY_FORMULALIST
-                ,PROPERTY_SCOPE
-                ,PROPERTY_TYPE
-                ,PROPERTY_DATASOURCENAME
-                ,PROPERTY_VERTICALALIGN
+                u"Enabled",
+                u"Printable",
+                u"WordBreak",
+                u"MultiLine",
+                u"Tag",
+                u"HelpText",
+                u"HelpURL",
+                u"MaxTextLen",
+                u"ReadOnly",
+                u"Tabstop",
+                u"TabIndex",
+                u"ValueMin",
+                u"ValueMax",
+                u"Spin",
+                u"SpinValue",
+                u"SpinValueMin",
+                u"SpinValueMax",
+                u"DefaultSpinValue",
+                u"SpinIncrement",
+                u"Repeat",
+                u"RepeatDelay",
+                u"ControlLabel", /// TODO: has to be checked
+                u"LabelControl",
+                u"Title", // comment this out if you want to have title feature for charts
+                u"" PROPERTY_MAXTEXTLEN,
+                u"" PROPERTY_EFFECTIVEDEFAULT,
+                u"" PROPERTY_EFFECTIVEMAX,
+                u"" PROPERTY_EFFECTIVEMIN,
+                u"HideInactiveSelection",
+                u"SubmitAction",
+                u"InputRequired",
+                u"VerticalAlign",
+                u"" PROPERTY_ALIGN,
+                u"" PROPERTY_EMPTY_IS_NULL,
+                u"" PROPERTY_FILTERPROPOSAL
+                ,u"" PROPERTY_POSITIONX
+                ,u"" PROPERTY_POSITIONY
+                ,u"" PROPERTY_WIDTH
+                ,u"" PROPERTY_HEIGHT
+                ,u"" PROPERTY_AUTOGROW
+                ,u"" PROPERTY_FONT
+                ,u"" PROPERTY_LABEL
+                ,u"" PROPERTY_LINECOLOR
+                ,u"" PROPERTY_BORDER
+                ,u"" PROPERTY_BORDERCOLOR
+                ,u"" PROPERTY_BACKTRANSPARENT
+                ,u"" PROPERTY_CONTROLBACKGROUND
+                ,u"" PROPERTY_BACKGROUNDCOLOR
+                ,u"" PROPERTY_CONTROLBACKGROUNDTRANSPARENT
+                ,u"" PROPERTY_FORMULALIST
+                ,u"" PROPERTY_SCOPE
+                ,u"" PROPERTY_TYPE
+                ,u"" PROPERTY_DATASOURCENAME
+                ,u"" PROPERTY_VERTICALALIGN
         };
 
         for (beans::Property const & prop : aProps)

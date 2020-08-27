@@ -53,7 +53,7 @@ const sal_uInt32 BIFF12_DEFNAME_VBNAME      = 0x00000004;
 const sal_uInt32 BIFF12_DEFNAME_MACRO       = 0x00000008;
 const sal_uInt32 BIFF12_DEFNAME_BUILTIN     = 0x00000020;
 
-const OUStringLiteral spcOoxPrefix("_xlnm.");
+const OUStringLiteral spcOoxPrefix(u"_xlnm.");
 
 const char* const sppcBaseNames[] =
 {

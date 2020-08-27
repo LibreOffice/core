@@ -78,7 +78,7 @@ struct SAL_WARN_UNUSED OUStringLiteral
     template<typename T> constexpr OUStringLiteral(
         T & literal,
         typename libreoffice_internal::ConstCharArrayDetector<
-                T, libreoffice_internal::Dummy>::Type
+                T, libreoffice_internal::Dummy>::TypeUtf16
             = libreoffice_internal::Dummy()):
         size(libreoffice_internal::ConstCharArrayDetector<T>::length),
         data(
@@ -88,8 +88,10 @@ struct SAL_WARN_UNUSED OUStringLiteral
             libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
     }
 
+    constexpr operator std::u16string_view() const { return {data, unsigned(size)}; }
+
     int size;
-    const char* data;
+    const sal_Unicode* data;
 
     // So we can use this struct in some places interchangeably with OUString
     constexpr sal_Int32 getLength() const { return size; }
@@ -330,12 +332,12 @@ public:
 
       written as
 
-        OUString(flag ? OUStringLiteral("a") : OUStringLiteral("bb"))
+        OUString(flag ? OUStringLiteral(u"a") : OUStringLiteral(u"bb"))
 
       @since LibreOffice 5.0
     */
     OUString(OUStringLiteral literal): pData(NULL) {
-        rtl_uString_newFromLiteral(&pData, literal.data, literal.size, 0);
+        rtl_uString_newFromStr_WithLength(&pData, literal.data, literal.size);
     }
     /// @endcond
 #endif
@@ -532,7 +534,7 @@ public:
         if (literal.size == 0) {
             rtl_uString_new(&pData);
         } else {
-            rtl_uString_newFromLiteral(&pData, literal.data, literal.size, 0);
+            rtl_uString_newFromStr_WithLength(&pData, literal.data, literal.size);
         }
         return *this;
     }
@@ -614,7 +616,7 @@ public:
 
     /** @overload @since LibreOffice 5.4 */
     OUString & operator +=(OUStringLiteral const & literal) & {
-        rtl_uString_newConcatAsciiL(&pData, pData, literal.data, literal.size);
+        rtl_uString_newConcatUtf16L(&pData, pData, literal.data, literal.size);
         return *this;
     }
     void operator +=(OUStringLiteral const &) && = delete;
@@ -803,7 +805,7 @@ public:
 
     /** @overload @since LibreOffice 5.4 */
     sal_Int32 reverseCompareTo(OUStringLiteral const & literal) const {
-        return rtl_ustr_asciil_reverseCompare_WithLength(
+        return rtl_ustr_reverseCompare_WithLength(
             pData->buffer, pData->length, literal.data, literal.size);
     }
 #endif
@@ -911,10 +913,10 @@ public:
 
     /** @overload @since LibreOffice 5.4 */
     bool equalsIgnoreAsciiCase(OUStringLiteral const & literal) const {
-        return pData->length == literal.size
-            && (rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength(
-                    pData->buffer, pData->length, literal.data)
-                == 0);
+        return
+            rtl_ustr_compareIgnoreAsciiCase_WithLength(
+                pData->buffer, pData->length, literal.data, literal.size)
+            == 0;
     }
 #endif
 
@@ -977,9 +979,9 @@ public:
     /** @overload @since LibreOffice 5.4 */
     bool match(OUStringLiteral const & literal, sal_Int32 fromIndex = 0) const {
         return
-            rtl_ustr_ascii_shortenedCompare_WithLength(
+            rtl_ustr_shortenedCompare_WithLength(
                 pData->buffer + fromIndex, pData->length - fromIndex,
-                literal.data, literal.size)
+                literal.data, literal.size, literal.size)
             == 0;
     }
 #endif
@@ -1049,9 +1051,9 @@ public:
         OUStringLiteral const & literal, sal_Int32 fromIndex = 0) const
     {
         return
-            rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength(
+            rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength(
                 pData->buffer+fromIndex, pData->length-fromIndex, literal.data,
-                literal.size)
+                literal.size, literal.size)
             == 0;
     }
 #endif
@@ -1402,8 +1404,9 @@ public:
         const
     {
         bool b = literal.size <= pData->length
-            && rtl_ustr_asciil_reverseEquals_WithLength(
-                pData->buffer, literal.data, literal.size);
+            && (rtl_ustr_reverseCompare_WithLength(
+                    pData->buffer, literal.size, literal.data, literal.size)
+                == 0);
         if (b && rest != nullptr) {
             *rest = copy(literal.size);
         }
@@ -1494,7 +1497,7 @@ public:
         OUStringLiteral const & literal, OUString * rest = nullptr) const
     {
         bool b
-            = (rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
+            = (rtl_ustr_compareIgnoreAsciiCase_WithLength(
                    pData->buffer, literal.size, literal.data, literal.size)
                == 0);
         if (b && rest != nullptr) {
@@ -1586,9 +1589,10 @@ public:
         const
     {
         bool b = literal.size <= pData->length
-            && rtl_ustr_asciil_reverseEquals_WithLength(
-                pData->buffer + pData->length - literal.size,
-                literal.data, literal.size);
+            && (rtl_ustr_reverseCompare_WithLength(
+                    pData->buffer + pData->length - literal.size, literal.size,
+                    literal.data, literal.size)
+                == 0);
         if (b && rest != nullptr) {
             *rest = copy(0, (getLength() - literal.size));
         }
@@ -1707,7 +1711,7 @@ public:
         OUStringLiteral const & literal, OUString * rest = nullptr) const
     {
         bool b = literal.size <= pData->length
-            && (rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
+            && (rtl_ustr_compareIgnoreAsciiCase_WithLength(
                     pData->buffer + pData->length - literal.size,
                     literal.size, literal.data, literal.size)
                 == 0);
@@ -1882,75 +1886,87 @@ public:
     */
 
     friend bool operator ==(OUString const & lhs, OUStringLiteral const & rhs) {
-        return lhs.equalsAsciiL(rhs.data, rhs.size);
+        return
+            rtl_ustr_reverseCompare_WithLength(
+                lhs.pData->buffer, lhs.pData->length, rhs.data, rhs.size)
+            == 0;
     }
 
     friend bool operator !=(OUString const & lhs, OUStringLiteral const & rhs) {
-        return !lhs.equalsAsciiL(rhs.data, rhs.size);
+        return
+            rtl_ustr_reverseCompare_WithLength(
+                lhs.pData->buffer, lhs.pData->length, rhs.data, rhs.size)
+            != 0;
     }
 
     friend bool operator <(OUString const & lhs, OUStringLiteral const & rhs) {
         return
-            (rtl_ustr_ascii_compare_WithLength(
-                lhs.pData->buffer, lhs.pData->length, rhs.data))
+            (rtl_ustr_compare_WithLength(
+                lhs.pData->buffer, lhs.pData->length, rhs.data, rhs.size))
             < 0;
     }
 
     friend bool operator <=(OUString const & lhs, OUStringLiteral const & rhs) {
         return
-            (rtl_ustr_ascii_compare_WithLength(
-                lhs.pData->buffer, lhs.pData->length, rhs.data))
+            (rtl_ustr_compare_WithLength(
+                lhs.pData->buffer, lhs.pData->length, rhs.data, rhs.size))
             <= 0;
     }
 
     friend bool operator >(OUString const & lhs, OUStringLiteral const & rhs) {
         return
-            (rtl_ustr_ascii_compare_WithLength(
-                lhs.pData->buffer, lhs.pData->length, rhs.data))
+            (rtl_ustr_compare_WithLength(
+                lhs.pData->buffer, lhs.pData->length, rhs.data, rhs.size))
             > 0;
     }
 
     friend bool operator >=(OUString const & lhs, OUStringLiteral const & rhs) {
         return
-            (rtl_ustr_ascii_compare_WithLength(
-                lhs.pData->buffer, lhs.pData->length, rhs.data))
+            (rtl_ustr_compare_WithLength(
+                lhs.pData->buffer, lhs.pData->length, rhs.data, rhs.size))
             >= 0;
     }
 
     friend bool operator ==(OUStringLiteral const & lhs, OUString const & rhs) {
-        return rhs.equalsAsciiL(lhs.data, lhs.size);
+        return
+            rtl_ustr_reverseCompare_WithLength(
+                lhs.data, lhs.size, rhs.pData->buffer, rhs.pData->length)
+            == 0;
     }
 
     friend bool operator !=(OUStringLiteral const & lhs, OUString const & rhs) {
-        return !rhs.equalsAsciiL(lhs.data, lhs.size);
+        return
+            rtl_ustr_reverseCompare_WithLength(
+                lhs.data, lhs.size, rhs.pData->buffer, rhs.pData->length)
+            != 0;
     }
 
     friend bool operator <(OUStringLiteral const & lhs, OUString const & rhs) {
         return
-            (rtl_ustr_ascii_compare_WithLength(
-                rhs.pData->buffer, rhs.pData->length, lhs.data))
-            >= 0;
+            (rtl_ustr_compare_WithLength(
+                lhs.data, lhs.size, rhs.pData->buffer, rhs.pData->length))
+            < 0;
     }
 
     friend bool operator <=(OUStringLiteral const & lhs, OUString const & rhs) {
         return
-            (rtl_ustr_ascii_compare_WithLength(
-                rhs.pData->buffer, rhs.pData->length, lhs.data))
-            > 0;
+            (rtl_ustr_compare_WithLength(
+                lhs.data, lhs.size, rhs.pData->buffer, rhs.pData->length))
+            <= 0;
     }
 
     friend bool operator >(OUStringLiteral const & lhs, OUString const & rhs) {
         return
-            (rtl_ustr_ascii_compare_WithLength(
-                rhs.pData->buffer, rhs.pData->length, lhs.data))
-            <= 0;
+            (rtl_ustr_compare_WithLength(
+                lhs.data, lhs.size, rhs.pData->buffer, rhs.pData->length))
+            > 0;
     }
 
     friend bool operator >=(OUStringLiteral const & lhs, OUString const & rhs) {
         return
-            (rtl_ustr_ascii_compare_WithLength(
-                rhs.pData->buffer, rhs.pData->length, lhs.data))
-            < 0;
+            (rtl_ustr_compare_WithLength(
+                lhs.data, lhs.size, rhs.pData->buffer, rhs.pData->length))
+            >= 0;
     }
 
     /// @endcond
@@ -2075,7 +2091,7 @@ public:
     sal_Int32 indexOf(OUStringLiteral const & literal, sal_Int32 fromIndex = 0)
         const
     {
-        sal_Int32 n = rtl_ustr_indexOfAscii_WithLength(
+        sal_Int32 n = rtl_ustr_indexOfStr_WithLength(
             pData->buffer + fromIndex, pData->length - fromIndex, literal.data,
             literal.size);
         return n < 0 ? n : n + fromIndex;
@@ -2195,7 +2211,7 @@ public:
 
     /** @overload @since LibreOffice 5.4 */
     sal_Int32 lastIndexOf(OUStringLiteral const & literal) const {
-        return rtl_ustr_lastIndexOfAscii_WithLength(
+        return rtl_ustr_lastIndexOfStr_WithLength(
             pData->buffer, pData->length, literal.data, literal.size);
     }
 #endif
@@ -2572,8 +2588,8 @@ public:
     {
         rtl_uString * s = nullptr;
         sal_Int32 i = 0;
-        rtl_uString_newReplaceFirstAsciiL(
-            &s, pData, from.data, from.size, to.pData,
+        rtl_uString_newReplaceFirstUtf16LUtf16L(
+            &s, pData, from.data, from.size, to.pData->buffer, to.pData->length,
             index == nullptr ? &i : index);
         return OUString(s, SAL_NO_ACQUIRE);
     }
@@ -2584,8 +2600,8 @@ public:
     {
         rtl_uString * s = nullptr;
         sal_Int32 i = 0;
-        rtl_uString_newReplaceFirstToAsciiL(
-            &s, pData, from.pData, to.data, to.size,
+        rtl_uString_newReplaceFirstUtf16LUtf16L(
+            &s, pData, from.pData->buffer, from.pData->length, to.data, to.size,
             index == nullptr ? &i : index);
         return OUString(s, SAL_NO_ACQUIRE);
     }
@@ -2596,7 +2612,7 @@ public:
     {
         rtl_uString * s = nullptr;
         sal_Int32 i = 0;
-        rtl_uString_newReplaceFirstAsciiLAsciiL(
+        rtl_uString_newReplaceFirstUtf16LUtf16L(
             &s, pData, from.data, from.size, to.data, to.size,
             index == nullptr ? &i : index);
         return OUString(s, SAL_NO_ACQUIRE);
@@ -2610,7 +2626,7 @@ public:
         assert(libreoffice_internal::ConstCharArrayDetector<T>::isValid(to));
         rtl_uString * s = nullptr;
         sal_Int32 i = 0;
-        rtl_uString_newReplaceFirstAsciiLAsciiL(
+        rtl_uString_newReplaceFirstUtf16LAsciiL(
             &s, pData, from.data, from.size,
             libreoffice_internal::ConstCharArrayDetector<T>::toPointer(to),
             libreoffice_internal::ConstCharArrayDetector<T>::length,
@@ -2626,7 +2642,7 @@ public:
         assert(libreoffice_internal::ConstCharArrayDetector<T>::isValid(from));
         rtl_uString * s = nullptr;
         sal_Int32 i = 0;
-        rtl_uString_newReplaceFirstAsciiLAsciiL(
+        rtl_uString_newReplaceFirstAsciiLUtf16L(
             &s, pData,
             libreoffice_internal::ConstCharArrayDetector<T>::toPointer(from),
             libreoffice_internal::ConstCharArrayDetector<T>::length, to.data,
@@ -2643,7 +2659,7 @@ public:
         assert(libreoffice_internal::ConstCharArrayDetector<T>::isValid(to));
         rtl_uString * s = nullptr;
         sal_Int32 i = 0;
-        rtl_uString_newReplaceFirstAsciiLUtf16L(
+        rtl_uString_newReplaceFirstUtf16LUtf16L(
             &s, pData, from.data, from.size,
             libreoffice_internal::ConstCharArrayDetector<T>::toPointer(to),
             libreoffice_internal::ConstCharArrayDetector<T>::length,
@@ -2660,7 +2676,7 @@ public:
         assert(libreoffice_internal::ConstCharArrayDetector<T>::isValid(from));
         rtl_uString * s = nullptr;
         sal_Int32 i = 0;
-        rtl_uString_newReplaceFirstUtf16LAsciiL(
+        rtl_uString_newReplaceFirstUtf16LUtf16L(
             &s, pData,
             libreoffice_internal::ConstCharArrayDetector<T>::toPointer(from),
             libreoffice_internal::ConstCharArrayDetector<T>::length, to.data,
@@ -2877,8 +2893,8 @@ public:
         OUStringLiteral const & from, OUString const & to) const
     {
         rtl_uString * s = nullptr;
-        rtl_uString_newReplaceAllAsciiL(
-            &s, pData, from.data, from.size, to.pData);
+        rtl_uString_newReplaceAllUtf16LUtf16L(
+            &s, pData, from.data, from.size, to.pData->buffer, to.pData->length);
         return OUString(s, SAL_NO_ACQUIRE);
     }
     /** @overload @since LibreOffice 5.4 */
@@ -2886,8 +2902,8 @@ public:
         OUString const & from, OUStringLiteral const & to) const
     {
         rtl_uString * s = nullptr;
-        rtl_uString_newReplaceAllToAsciiL(
-            &s, pData, from.pData, to.data, to.size);
+        rtl_uString_newReplaceAllUtf16LUtf16L(
+            &s, pData, from.pData->buffer, from.pData->length, to.data, to.size);
         return OUString(s, SAL_NO_ACQUIRE);
     }
     /** @overload @since LibreOffice 5.4 */
@@ -2895,7 +2911,7 @@ public:
         OUStringLiteral const & from, OUStringLiteral const & to) const
     {
         rtl_uString * s = nullptr;
-        rtl_uString_newReplaceAllAsciiLAsciiL(
+        rtl_uString_newReplaceAllUtf16LUtf16L(
             &s, pData, from.data, from.size, to.data, to.size);
         return OUString(s, SAL_NO_ACQUIRE);
     }
@@ -2905,7 +2921,7 @@ public:
     replaceAll(OUStringLiteral const & from, T & to) const {
         assert(libreoffice_internal::ConstCharArrayDetector<T>::isValid(to));
         rtl_uString * s = nullptr;
-        rtl_uString_newReplaceAllAsciiLAsciiL(
+        rtl_uString_newReplaceAllUtf16LAsciiL(
             &s, pData, from.data, from.size,
             libreoffice_internal::ConstCharArrayDetector<T>::toPointer(to),
             libreoffice_internal::ConstCharArrayDetector<T>::length);
@@ -2917,7 +2933,7 @@ public:
     replaceAll(T & from, OUStringLiteral const & to) const {
         assert(libreoffice_internal::ConstCharArrayDetector<T>::isValid(from));
         rtl_uString * s = nullptr;
-        rtl_uString_newReplaceAllAsciiLAsciiL(
+        rtl_uString_newReplaceAllAsciiLUtf16L(
             &s, pData,
             libreoffice_internal::ConstCharArrayDetector<T>::toPointer(from),
             libreoffice_internal::ConstCharArrayDetector<T>::length, to.data,
@@ -2931,7 +2947,7 @@ public:
     replaceAll(OUStringLiteral const & from, T & to) const {
         assert(libreoffice_internal::ConstCharArrayDetector<T>::isValid(to));
         rtl_uString * s = nullptr;
-        rtl_uString_newReplaceAllAsciiLUtf16L(
+        rtl_uString_newReplaceAllUtf16LUtf16L(
             &s, pData, from.data, from.size,
             libreoffice_internal::ConstCharArrayDetector<T>::toPointer(to),
             libreoffice_internal::ConstCharArrayDetector<T>::length);
@@ -2944,7 +2960,7 @@ public:
     replaceAll(T & from, OUStringLiteral const & to) const {
         assert(libreoffice_internal::ConstCharArrayDetector<T>::isValid(from));
         rtl_uString * s = nullptr;
-        rtl_uString_newReplaceAllUtf16LAsciiL(
+        rtl_uString_newReplaceAllUtf16LUtf16L(
             &s, pData,
             libreoffice_internal::ConstCharArrayDetector<T>::toPointer(from),
             libreoffice_internal::ConstCharArrayDetector<T>::length, to.data,
@@ -3609,6 +3625,14 @@ public:
     }
 
 #if defined LIBO_INTERNAL_ONLY
+    static OUString createFromAscii(std::string_view value) {
+        rtl_uString * p = nullptr;
+        rtl_uString_newFromLiteral(&p, value.data(), value.size(), 0); //TODO: check for overflow
+        return OUString(p, SAL_NO_ACQUIRE);
+    }
+ #endif
+
+#if defined LIBO_INTERNAL_ONLY
     operator std::u16string_view() const { return {getStr(), sal_uInt32(getLength())}; }
 #endif
 
@@ -3661,7 +3685,7 @@ template<>
 struct ToStringHelper< OUStringLiteral >
     {
     static std::size_t length( const OUStringLiteral& str ) { return str.size; }
-    static sal_Unicode* addData( sal_Unicode* buffer, const OUStringLiteral& str ) { return addDataLiteral( buffer, str.data, str.size ); }
+    static sal_Unicode* addData( sal_Unicode* buffer, const OUStringLiteral& str ) { return addDataHelper( buffer, str.data, str.size ); }
     static const bool allowOStringConcat = false;
     static const bool allowOUStringConcat = true;
     };

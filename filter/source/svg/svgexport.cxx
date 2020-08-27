@@ -81,7 +81,7 @@ using namespace ::xmloff::token;
 #define SVG_PROP_POSITIONED_CHARACTERS      "UsePositionedCharacters"
 
 // ooo xml elements
-const char    aOOOElemTextField[] = NSPREFIX "text_field";
+const char16_t aOOOElemTextField[] = u"" NSPREFIX "text_field";
 
 
 // ooo xml attributes for meta_slide

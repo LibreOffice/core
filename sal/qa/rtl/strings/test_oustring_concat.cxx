@@ -66,8 +66,8 @@ void test::oustring::StringConcat::checkConcat()
     CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, const char[ 4 ] > )), typeid( OUString( "foo" ) + "bar" ));
     CPPUNIT_ASSERT_EQUAL( OUString( "foobarbaz" ), OUString( OUString( "foo" ) + "bar" + "baz" ));
     CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUStringConcat< OUString, const char[ 4 ] >, const char[ 4 ] > )), typeid( OUString( "foo" ) + "bar" + "baz" ));
-    CPPUNIT_ASSERT_EQUAL( OUString( "foobar" ), OUString( OUStringLiteral( "foo" ) + "bar" ));
-    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUStringLiteral, const char[ 4 ] > )), typeid( OUStringLiteral( "foo" ) + "bar" ));
+    CPPUNIT_ASSERT_EQUAL( OUString( "foobar" ), OUString( OUStringLiteral( u"foo" ) + "bar" ));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUStringLiteral, const char[ 4 ] > )), typeid( OUStringLiteral( u"foo" ) + "bar" ));
     const char d1[] = "xyz";
     CPPUNIT_ASSERT_EQUAL( OUString( "fooxyz" ), OUString( OUString( "foo" ) + d1 ));
     CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, const char[ 4 ] > )), typeid( OUString( "foo" ) + d1 ));
@@ -148,10 +148,10 @@ void test::oustring::StringConcat::checkEnsureCapacity()
 void test::oustring::StringConcat::checkAppend()
 {
     OUString str( "foo" );
-    str += OUStringLiteral( "bar" ) + "baz";
+    str += OUStringLiteral( u"bar" ) + "baz";
     CPPUNIT_ASSERT_EQUAL( OUString( "foobarbaz" ), str );
     OUStringBuffer buf( "foo" );
-    buf.append( OUStringLiteral( "bar" ) + "baz" );
+    buf.append( OUStringLiteral( u"bar" ) + "baz" );
     CPPUNIT_ASSERT_EQUAL( OUString( "foobarbaz" ), buf.makeStringAndClear());
 }
 
