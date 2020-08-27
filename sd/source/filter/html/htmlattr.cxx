@@ -20,7 +20,7 @@
 #include "htmlattr.hxx"
 #include <sdresid.hxx>
 #include <strings.hrc>
-#include <vcl/decoview.hxx>
+#include <vcl/outdev.hxx>
 
 SdHtmlAttrPreview::SdHtmlAttrPreview()
 {

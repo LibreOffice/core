@@ -30,7 +30,6 @@
 #include <svx/labelitemwindow.hxx>
 
 #include <vcl/event.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/toolbox.hxx>
 
