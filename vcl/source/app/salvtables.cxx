@@ -6862,7 +6862,7 @@ weld::Builder* SalInstance::CreateBuilder(weld::Widget* pParent, const OUString&
 }
 
 weld::Builder* SalInstance::CreateInterimBuilder(vcl::Window* pParent, const OUString& rUIRoot,
-                                                 const OUString& rUIFile, sal_uInt64)
+                                                 const OUString& rUIFile, bool, sal_uInt64)
 {
     return new SalInstanceBuilder(pParent, rUIRoot, rUIFile);
 }

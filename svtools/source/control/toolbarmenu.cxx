@@ -178,7 +178,7 @@ InterimToolbarPopup::InterimToolbarPopup(const css::uno::Reference<css::frame::X
     : DockingWindow(pParent, "InterimDockParent", "svx/ui/interimdockparent.ui", rFrame)
     , m_xBox(get("box"))
     , m_xFrame(rFrame)
-    , m_xBuilder(Application::CreateInterimBuilder(m_xBox.get(), "svx/ui/interimparent.ui"))
+    , m_xBuilder(Application::CreateInterimBuilder(m_xBox.get(), "svx/ui/interimparent.ui", false))
     , m_xContainer(m_xBuilder->weld_container("container"))
     , m_xPopup(std::move(xPopup))
 {

@@ -182,7 +182,7 @@ weld::Builder* Application::CreateBuilder(weld::Widget* pParent, const OUString 
         return ImplGetSVData()->mpDefInst->CreateBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
 }
 
-weld::Builder* Application::CreateInterimBuilder(vcl::Window* pParent, const OUString &rUIFile, sal_uInt64 nLOKWindowId)
+weld::Builder* Application::CreateInterimBuilder(vcl::Window* pParent, const OUString &rUIFile, bool bAllowCycleFocusOut, sal_uInt64 nLOKWindowId)
 {
     if (comphelper::LibreOfficeKit::isActive()
         && (rUIFile == "svx/ui/stylespreview.ui"
@@ -191,7 +191,7 @@ weld::Builder* Application::CreateInterimBuilder(vcl::Window* pParent, const OUS
         return new JSInstanceBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, css::uno::Reference<css::frame::XFrame>(), nLOKWindowId);
     }
 
-    return ImplGetSVData()->mpDefInst->CreateInterimBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, nLOKWindowId);
+    return ImplGetSVData()->mpDefInst->CreateInterimBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, bAllowCycleFocusOut, nLOKWindowId);
 }
 
 weld::MessageDialog* Application::CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,

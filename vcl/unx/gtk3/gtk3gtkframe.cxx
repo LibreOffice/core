@@ -451,6 +451,7 @@ GtkSalFrame::GtkSalFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
     : m_nXScreen( getDisplay()->GetDefaultXScreen() )
     , m_pHeaderBar(nullptr)
     , m_bGraphics(false)
+    , m_nSetFocusSignalId(0)
 {
     getDisplay()->registerFrame( this );
     m_bDefaultPos       = true;
@@ -462,6 +463,7 @@ GtkSalFrame::GtkSalFrame( SystemParentData* pSysData )
     : m_nXScreen( getDisplay()->GetDefaultXScreen() )
     , m_pHeaderBar(nullptr)
     , m_bGraphics(false)
+    , m_nSetFocusSignalId(0)
 {
     getDisplay()->registerFrame( this );
     // permanently ignore errors from our unruly children ...
@@ -906,7 +908,7 @@ void GtkSalFrame::InitCommon()
     g_signal_connect_after( G_OBJECT(m_pWindow), "focus-in-event", G_CALLBACK(signalFocus), this );
     g_signal_connect_after( G_OBJECT(m_pWindow), "focus-out-event", G_CALLBACK(signalFocus), this );
     if (GTK_IS_WINDOW(m_pWindow)) // i.e. not if it's a GtkEventBox which doesn't have the signal
-        g_signal_connect( G_OBJECT(m_pWindow), "set-focus", G_CALLBACK(signalSetFocus), this );
+        m_nSetFocusSignalId = g_signal_connect( G_OBJECT(m_pWindow), "set-focus", G_CALLBACK(signalSetFocus), this );
     g_signal_connect( G_OBJECT(m_pWindow), "map-event", G_CALLBACK(signalMap), this );
     g_signal_connect( G_OBJECT(m_pWindow), "unmap-event", G_CALLBACK(signalUnmap), this );
     g_signal_connect( G_OBJECT(m_pWindow), "configure-event", G_CALLBACK(signalConfigure), this );
@@ -1005,6 +1007,21 @@ void GtkSalFrame::InitCommon()
 GtkSalFrame *GtkSalFrame::getFromWindow( GtkWidget *pWindow )
 {
     return static_cast<GtkSalFrame *>(g_object_get_data( G_OBJECT( pWindow ), "SalFrame" ));
+}
+
+void GtkSalFrame::DisallowCycleFocusOut()
+{
+    if (!m_nSetFocusSignalId)
+        return;
+    // don't enable/disable can-focus as control enters and leaves
+    // embedded native gtk widgets
+    g_signal_handler_disconnect(G_OBJECT(m_pWindow), m_nSetFocusSignalId);
+    m_nSetFocusSignalId = 0;
+
+    // set container without can-focus and focus will tab between
+    // the native embedded widgets using the default gtk handling for
+    // that
+    gtk_widget_set_can_focus(GTK_WIDGET(m_pFixedContainer), false);
 }
 
 void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
@@ -2540,7 +2557,10 @@ void GtkSalFrame::GrabFocus()
         pGrabWidget = GTK_WIDGET(m_pWindow);
     else
         pGrabWidget = GTK_WIDGET(m_pFixedContainer);
-    if (!gtk_widget_get_can_focus(pGrabWidget))
+    // m_nSetFocusSignalId is 0 for the DisallowCycleFocusOut case where
+    // we don't allow focus to enter the toplevel, but expect it to
+    // stay in some embedded native gtk widget
+    if (!gtk_widget_get_can_focus(pGrabWidget) && m_nSetFocusSignalId)
         gtk_widget_set_can_focus(pGrabWidget, true);
     if (!gtk_widget_has_focus(pGrabWidget))
         gtk_widget_grab_focus(pGrabWidget);

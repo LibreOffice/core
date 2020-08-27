@@ -348,7 +348,7 @@ namespace pcr
             VclPtr<vcl::Window> pParentWin = pContainerWindow ? pContainerWindow->GetWindow() : VclPtr<vcl::Window>();
             if (!pParentWin)
                 throw RuntimeException("The frame is invalid. Unable to extract the container window.",*this);
-            xBuilder.reset(Application::CreateInterimBuilder(pParentWin, sUIFile));
+            xBuilder.reset(Application::CreateInterimBuilder(pParentWin, sUIFile, true));
         }
 
         Construct(xContainerWindow, std::move(xBuilder));

@@ -414,7 +414,7 @@ ScCheckListMember::ScCheckListMember()
 ScCheckListMenuControl::ScCheckListMenuControl(ScCheckListMenuWindow* pParent, vcl::Window* pContainer,
                                                ScDocument* pDoc, bool bCanHaveSubMenu, int nWidth)
     : mxFrame(pParent)
-    , mxBuilder(Application::CreateInterimBuilder(pContainer, "modules/scalc/ui/filterdropdown.ui"))
+    , mxBuilder(Application::CreateInterimBuilder(pContainer, "modules/scalc/ui/filterdropdown.ui", false))
     , mxContainer(mxBuilder->weld_container("FilterDropDown"))
     , mxMenu(mxBuilder->weld_tree_view("menu"))
     , mxScratchIter(mxMenu->make_iterator())
