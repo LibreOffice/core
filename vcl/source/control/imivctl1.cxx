@@ -33,7 +33,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
 
-#include <vcl/ivctrl.hxx>
+#include <vcl/toolkit/ivctrl.hxx>
 #include "imivctl.hxx"
 
 #include <algorithm>

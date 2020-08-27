@@ -32,7 +32,7 @@
 #include <vcl/toolkit/fixedhyper.hxx>
 #include <vcl/headbar.hxx>
 #include <vcl/IPrioritable.hxx>
-#include <vcl/ivctrl.hxx>
+#include <vcl/toolkit/ivctrl.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/toolkit/lstbox.hxx>
 #include <vcl/menubtn.hxx>

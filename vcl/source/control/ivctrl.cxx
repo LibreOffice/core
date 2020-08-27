@@ -18,7 +18,7 @@
  */
 
 
-#include <vcl/ivctrl.hxx>
+#include <vcl/toolkit/ivctrl.hxx>
 #include "imivctl.hxx"
 #include <vcl/accessiblefactory.hxx>
 #include <vcl/bitmapex.hxx>

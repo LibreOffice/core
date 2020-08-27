@@ -21,7 +21,7 @@
 #include <vcl/toolkit/spin.hxx>
 #include <vcl/toolkit/fmtfield.hxx>
 #include <vcl/toolkit/spinfld.hxx>
-#include <vcl/ivctrl.hxx>
+#include <vcl/toolkit/ivctrl.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/toolkit/field.hxx>

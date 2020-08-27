@@ -7356,7 +7356,6 @@ include/vcl/inetimg.hxx
 include/vcl/inputctx.hxx
 include/vcl/inputtypes.hxx
 include/vcl/introwin.hxx
-include/vcl/ivctrl.hxx
 include/vcl/jobset.hxx
 include/vcl/keycod.hxx
 include/vcl/keycodes.hxx
@@ -7429,6 +7428,7 @@ include/vcl/toolkit/fixedhyper.hxx
 include/vcl/toolkit/fmtfield.hxx
 include/vcl/toolkit/group.hxx
 include/vcl/toolkit/imgctrl.hxx
+include/vcl/toolkit/ivctrl.hxx
 include/vcl/toolkit/longcurr.hxx
 include/vcl/toolkit/lstbox.hxx
 include/vcl/toolkit/morebtn.hxx
