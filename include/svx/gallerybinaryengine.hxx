@@ -28,6 +28,9 @@
 #include <tools/urlobj.hxx>
 #include <sot/storage.hxx>
 
+#include <tools/datetime.hxx>
+#include <unotools/datetime.hxx>
+
 #include <memory>
 
 class GalleryStorageLocations;
@@ -51,6 +54,11 @@ private:
     OUString m_aDestDir;
     bool m_bDestDirRelative;
 
+    const INetURLObject& GetSdgURL() const { return maGalleryStorageLocations.GetSdgURL(); }
+    const INetURLObject& GetSdvURL() const { return maGalleryStorageLocations.GetSdvURL(); }
+    const INetURLObject& GetStrURL() const { return maGalleryStorageLocations.GetStrURL(); }
+    const INetURLObject& GetThmURL() const { return maGalleryStorageLocations.GetThmURL(); }
+
 public:
     GalleryBinaryEngine(const GalleryStorageLocations& rGalleryStorageLocations,
                         GalleryObjectCollection& rGalleryObjectCollection, bool bReadOnly);
@@ -63,10 +71,6 @@ public:
     SAL_DLLPRIVATE void ImplCreateSvDrawStorage();
     SAL_DLLPRIVATE const tools::SvRef<SotStorage>& GetSvDrawStorage() const;
 
-    const INetURLObject& GetThmURL() const { return maGalleryStorageLocations.GetThmURL(); }
-    const INetURLObject& GetSdgURL() const { return maGalleryStorageLocations.GetSdgURL(); }
-    const INetURLObject& GetSdvURL() const { return maGalleryStorageLocations.GetSdvURL(); }
-    const INetURLObject& GetStrURL() const { return maGalleryStorageLocations.GetStrURL(); }
     const INetURLObject& getThemeURL() const { return maGalleryStorageLocations.getThemeURL(); }
 
     SAL_DLLPRIVATE bool implWrite(const GalleryTheme& rTheme, const GalleryThemeEntry* pThm);
@@ -99,6 +103,8 @@ public:
 
     SvStream& writeGalleryTheme(SvStream& rOStm, const GalleryTheme& rTheme,
                                 const GalleryThemeEntry* pThm);
+
+    const DateTime getModificationDate() const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

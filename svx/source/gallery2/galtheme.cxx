@@ -654,14 +654,7 @@ void GalleryTheme::CopyToClipboard(sal_uInt32 nPos)
 
 DateTime GalleryTheme::getModificationDate() const
 {
-    ::ucbhelper::Content aCnt(mpGalleryStorageEngine->GetThmURL().GetMainURL(INetURLObject::DecodeMechanism::NONE), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext());
-    util::DateTime  aDateTimeModified;
-    DateTime        aDateTime(DateTime::EMPTY);
-
-    aCnt.getPropertyValue("DateModified") >>= aDateTimeModified;
-    ::utl::typeConvert(aDateTimeModified, aDateTime);
-
-    return aDateTime;
+    return mpGalleryStorageEngine->getModificationDate();
 }
 
 SvStream& GalleryTheme::ReadData( SvStream& rIStm )
