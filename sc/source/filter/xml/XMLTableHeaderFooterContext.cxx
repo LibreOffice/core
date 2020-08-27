@@ -26,6 +26,7 @@
 #include "XMLTableHeaderFooterContext.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <comphelper/extract.hxx>
+#include <sal/log.hxx>
 
 #include <unonames.hxx>
 
@@ -37,13 +38,12 @@ using namespace ::com::sun::star::beans;
 using namespace xmloff::token;
 
 
-XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                       const OUString& rLName,
+XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, sal_Int32 /*nElement*/,
                        const uno::Reference<
-                            xml::sax::XAttributeList > & xAttrList,
+                            xml::sax::XFastAttributeList > & xAttrList,
                        const Reference < XPropertySet > & rPageStylePropSet,
                        bool bFooter, bool bLeft ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    SvXMLImportContext( rImport ),
     xPropSet( rPageStylePropSet ),
     bContainsLeft(false),
     bContainsRight(false),
@@ -54,20 +54,12 @@ XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, 
     OUString sContentLeft( bFooter ? OUString(SC_UNO_PAGE_LEFTFTRCONT) : OUString(SC_UNO_PAGE_LEFTHDRCONT) );
     OUString sShareContent( bFooter ? OUString(SC_UNO_PAGE_FTRSHARED) : OUString(SC_UNO_PAGE_HDRSHARED) );
     bool bDisplay( true );
-    sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
-    for( sal_Int16 i=0; i < nAttrCount; ++i )
+    for( auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ) )
     {
-        const OUString& rAttrName(xAttrList->getNameByIndex( i ));
-        OUString aLName;
-        sal_uInt16 nPrefix(GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLName ));
-        const OUString& rValue(xAttrList->getValueByIndex( i ));
-
-        // TODO: use a map here
-        if( XML_NAMESPACE_STYLE == nPrefix )
-        {
-            if( IsXMLToken(aLName, XML_DISPLAY ) )
-                bDisplay = IsXMLToken(rValue, XML_TRUE);
-        }
+        if( aIter.getToken() == XML_ELEMENT(STYLE, XML_DISPLAY) )
+            bDisplay = IsXMLToken(aIter.toString(), XML_TRUE);
+        else
+            SAL_WARN("sc", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
     }
     if( bLeft )
     {
@@ -103,6 +95,39 @@ XMLTableHeaderFooterContext::~XMLTableHeaderFooterContext()
 {
 }
 
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTableHeaderFooterContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
+{
+    if (xHeaderFooterContent.is())
+    {
+        uno::Reference < text::XText > xText;
+        switch (nElement)
+        {
+            case XML_ELEMENT(STYLE, XML_REGION_LEFT):
+                xText.set(xHeaderFooterContent->getLeftText());
+                bContainsLeft = true;
+                break;
+            case XML_ELEMENT(STYLE, XML_REGION_CENTER):
+                xText.set(xHeaderFooterContent->getCenterText());
+                bContainsCenter = true;
+                break;
+            case XML_ELEMENT(STYLE, XML_REGION_RIGHT):
+                xText.set(xHeaderFooterContent->getRightText());
+                bContainsRight = true;
+                break;
+            default: break;
+        }
+        if (xText.is())
+        {
+            xText->setString("");
+            uno::Reference < text::XTextCursor > xTempTextCursor(xText->createTextCursor());
+            return new XMLHeaderFooterRegionContext( GetImport(), xTempTextCursor);
+        }
+    }
+    return nullptr;
+}
+
 SvXMLImportContextRef XMLTableHeaderFooterContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
@@ -131,43 +156,11 @@ SvXMLImportContextRef XMLTableHeaderFooterContext::CreateChildContext(
                                                                     rLocalName,
                                                                     xAttrList);
     }
-    else
-    {
-        if (nPrefix == XML_NAMESPACE_STYLE)
-        {
-            if (xHeaderFooterContent.is())
-            {
-                uno::Reference < text::XText > xText;
-                if (IsXMLToken(rLocalName, XML_REGION_LEFT ))
-                {
-                    xText.set(xHeaderFooterContent->getLeftText());
-                    bContainsLeft = true;
-                }
-                else if (IsXMLToken(rLocalName, XML_REGION_CENTER ))
-                {
-                    xText.set(xHeaderFooterContent->getCenterText());
-                    bContainsCenter = true;
-                }
-                else if (IsXMLToken(rLocalName, XML_REGION_RIGHT ))
-                {
-                    xText.set(xHeaderFooterContent->getRightText());
-                    bContainsRight = true;
-                }
-                if (xText.is())
-                {
-                    xText->setString("");
-                    //SvXMLImport aSvXMLImport( GetImport() );
-                    uno::Reference < text::XTextCursor > xTempTextCursor(xText->createTextCursor());
-                    pContext = new XMLHeaderFooterRegionContext( GetImport(), nPrefix, rLocalName, xTempTextCursor);
-                }
-            }
-        }
-    }
 
     return pContext;
 }
 
-void XMLTableHeaderFooterContext::EndElement()
+void XMLTableHeaderFooterContext::endFastElement(sal_Int32 )
 {
     if( GetImport().GetTextImport()->GetCursor().is() )
     {
@@ -196,10 +189,9 @@ void XMLTableHeaderFooterContext::EndElement()
 }
 
 
-XMLHeaderFooterRegionContext::XMLHeaderFooterRegionContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                       const OUString& rLName,
+XMLHeaderFooterRegionContext::XMLHeaderFooterRegionContext( SvXMLImport& rImport,
                        uno::Reference< text::XTextCursor >& xCursor ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    SvXMLImportContext( rImport ),
     xTextCursor ( xCursor )
 {
     xOldTextCursor.set(GetImport().GetTextImport()->GetCursor());
@@ -230,7 +222,7 @@ SvXMLImportContextRef XMLHeaderFooterRegionContext::CreateChildContext(
     return pContext;
 }
 
-void XMLHeaderFooterRegionContext::EndElement()
+void XMLHeaderFooterRegionContext::endFastElement(sal_Int32 )
 {
     if( GetImport().GetTextImport()->GetCursor().is() )
     {
