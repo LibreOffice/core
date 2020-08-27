@@ -2374,10 +2374,19 @@ void Chart2ExportTest::testCustomDataLabelMultipleSeries()
 void Chart2ExportTest::testLeaderLines()
 {
     load("/chart2/qa/extras/data/xlsx/", "testTdf90749.xlsx");
-    xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
-    CPPUNIT_ASSERT(pXmlDoc);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser[1]/c:dLbls/c:extLst/c:ext/c15:showLeaderLines", "val", "1");
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser[2]/c:dLbls/c:extLst/c:ext/c15:showLeaderLines", "val", "0");
+    {
+        xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+        CPPUNIT_ASSERT(pXmlDoc);
+        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser[1]/c:dLbls/c:extLst/c:ext/c15:showLeaderLines", "val", "1");
+        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser[2]/c:dLbls/c:extLst/c:ext/c15:showLeaderLines", "val", "0");
+    }
+    load("/chart2/qa/extras/data/docx/", "MSO_Custom_Leader_Line.docx");
+    {
+        xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart1", "Office Open XML Text");
+        CPPUNIT_ASSERT(pXmlDoc);
+        // tdf#134571: Check the leader line is switch off.
+        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:extLst/c:ext/c15:showLeaderLines", "val", "0");
+    }
 }
 
 void Chart2ExportTest::testNumberFormatExportPPTX()
@@ -2882,6 +2891,7 @@ void Chart2ExportTest::testTdf123647()
 
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart", 1);
 }
+
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();

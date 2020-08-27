@@ -79,6 +79,7 @@ enum
     PROP_SERIES_DATAPOINT_LABEL_PLACEMENT,
     //other series properties
     PROP_SERIES_ATTACHED_AXIS,
+    PROP_SERIES_SHOW_CUSTOM_LEADERLINES,
     PROP_SERIES_DATAPOINT_TEXT_ROTATION,
     PROP_SERIES_DATAPOINT_LABEL_BORDER_STYLE,
     PROP_SERIES_DATAPOINT_LABEL_BORDER_WIDTH,
@@ -209,6 +210,12 @@ void lcl_AddPropertiesToVector_SeriesOnly(
     rOutProperties.emplace_back( "Axis",
                   PROP_SERIES_ATTACHED_AXIS,
                   cppu::UnoType<sal_Int32>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
+
+    rOutProperties.emplace_back( "ShowCustomLeaderLines",
+                  PROP_SERIES_SHOW_CUSTOM_LEADERLINES,
+                  cppu::UnoType<sal_Bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 }
