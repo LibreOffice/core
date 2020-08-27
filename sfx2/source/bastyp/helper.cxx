@@ -143,7 +143,7 @@ std::vector< OUString > SfxContentHelper::GetHelpTreeViewContents( const OUStrin
                     bool bFolder = xRow->getBoolean(2);
                     OUString aRow = aTitle + "\t" +
                         xContentAccess->queryContentIdentifierString() + "\t" +
-                        (bFolder ? OUStringLiteral("1") : OUStringLiteral("0"));
+                        (bFolder ? OUStringLiteral(u"1") : OUStringLiteral(u"0"));
                     aProperties.push_back( aRow );
                 }
             }

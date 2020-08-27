@@ -480,7 +480,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, CertMgrButtonHdl, weld::Button&, void)
     if (aPath.isEmpty())
         return;
 #else
-    static const OUStringLiteral aGUIServers[] = { "kleopatra", "seahorse", "gpa", "kgpg" };
+    static const OUStringLiteral aGUIServers[] = { u"kleopatra", u"seahorse", u"gpa", u"kgpg" };
     const char* cPath = getenv("PATH");
     if (!cPath)
         return;

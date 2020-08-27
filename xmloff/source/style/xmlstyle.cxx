@@ -79,8 +79,8 @@ const SvXMLTokenMapEntry aStyleStylesElemTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-const OUStringLiteral gsParaStyleServiceName( "com.sun.star.style.ParagraphStyle" );
-const OUStringLiteral gsTextStyleServiceName( "com.sun.star.style.CharacterStyle" );
+const OUStringLiteral gsParaStyleServiceName( u"com.sun.star.style.ParagraphStyle" );
+const OUStringLiteral gsTextStyleServiceName( u"com.sun.star.style.CharacterStyle" );
 
 const SvXMLTokenMap& SvXMLStylesContext::GetStyleStylesElemTokenMap()
 {
@@ -698,7 +698,7 @@ Reference < XAutoStyleFamily > SvXMLStylesContext::GetAutoStyles( XmlStyleFamily
             xAutoStyles = mxParaAutoStyles;
         else
         {
-            sName = bPara ? OUStringLiteral( "ParagraphStyles" ): OUStringLiteral( "CharacterStyles" );
+            sName = bPara ? OUStringLiteral( u"ParagraphStyles" ): OUStringLiteral( u"CharacterStyles" );
             Reference< XAutoStylesSupplier > xAutoStylesSupp(   GetImport().GetModel(), UNO_QUERY );
             Reference< XAutoStyles > xAutoStyleFamilies = xAutoStylesSupp->getAutoStyles();
             if (xAutoStyleFamilies->hasByName(sName))

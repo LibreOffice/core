@@ -504,7 +504,7 @@ double SdrObjCustomShape::GetExtraTextRotation( const bool bPreRotation ) const
 {
     const css::uno::Any* pAny;
     const SdrCustomShapeGeometryItem& rGeometryItem = GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
-    pAny = rGeometryItem.GetPropertyValueByName( bPreRotation ? OUStringLiteral( "TextPreRotateAngle" ) : OUStringLiteral( "TextRotateAngle" ) );
+    pAny = rGeometryItem.GetPropertyValueByName( bPreRotation ? OUStringLiteral( u"TextPreRotateAngle" ) : OUStringLiteral( u"TextRotateAngle" ) );
     double fExtraTextRotateAngle = 0.0;
     if ( pAny )
         *pAny >>= fExtraTextRotateAngle;

@@ -1247,8 +1247,8 @@ com_sun_star_cui_ColorPicker_get_implementation(
 }
 
 
-const OUStringLiteral gsColorKey( "Color" );
-const OUStringLiteral gsModeKey( "Mode" );
+const OUStringLiteral gsColorKey( u"Color" );
+const OUStringLiteral gsModeKey( u"Mode" );
 
 ColorPicker::ColorPicker()
     : ColorPickerBase( m_aMutex )

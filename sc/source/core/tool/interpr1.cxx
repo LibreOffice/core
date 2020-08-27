@@ -8326,7 +8326,7 @@ void ScInterpreter::ScAddressFunc()
         if (!aDoc.isEmpty())
             sTabStr = aDoc + sTabStr;
         sTabStr += (eConv == FormulaGrammar::CONV_XL_R1C1 || eConv == FormulaGrammar::CONV_XL_A1) ?
-            OUStringLiteral("!") : OUStringLiteral(".");
+            OUStringLiteral(u"!") : OUStringLiteral(u".");
         sTabStr += aRefStr;
         PushString( sTabStr );
     }

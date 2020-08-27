@@ -183,7 +183,7 @@ void DbRegistrationOptionsPage::FillUserData()
 {
     OUString aUserData = OUString::number( m_xPathBox->get_column_width(COL_TYPE) ) + ";";
     bool bUp = m_xPathBox->get_sort_order();
-    aUserData += (bUp ? OUStringLiteral("1") : OUStringLiteral("0"));
+    aUserData += (bUp ? OUStringLiteral(u"1") : OUStringLiteral(u"0"));
     SetUserData( aUserData );
 }
 

@@ -45,16 +45,16 @@ using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::lang::XMultiServiceFactory;
 
 
-const OUStringLiteral gsFieldMaster_Bibliography("com.sun.star.text.FieldMaster.Bibliography");
-const OUStringLiteral gsBracketBefore("BracketBefore");
-const OUStringLiteral gsBracketAfter("BracketAfter");
-const OUStringLiteral gsIsNumberEntries("IsNumberEntries");
-const OUStringLiteral gsIsSortByPosition("IsSortByPosition");
-const OUStringLiteral gsSortKeys("SortKeys");
-const OUStringLiteral gsSortKey("SortKey");
-const OUStringLiteral gsIsSortAscending("IsSortAscending");
-const OUStringLiteral gsSortAlgorithm("SortAlgorithm");
-const OUStringLiteral gsLocale("Locale");
+const OUStringLiteral gsFieldMaster_Bibliography(u"com.sun.star.text.FieldMaster.Bibliography");
+const OUStringLiteral gsBracketBefore(u"BracketBefore");
+const OUStringLiteral gsBracketAfter(u"BracketAfter");
+const OUStringLiteral gsIsNumberEntries(u"IsNumberEntries");
+const OUStringLiteral gsIsSortByPosition(u"IsSortByPosition");
+const OUStringLiteral gsSortKeys(u"SortKeys");
+const OUStringLiteral gsSortKey(u"SortKey");
+const OUStringLiteral gsIsSortAscending(u"IsSortAscending");
+const OUStringLiteral gsSortAlgorithm(u"SortAlgorithm");
+const OUStringLiteral gsLocale(u"Locale");
 
 XMLIndexBibliographyConfigurationContext::XMLIndexBibliographyConfigurationContext(
     SvXMLImport& rImport,

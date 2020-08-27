@@ -1725,7 +1725,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
         if ( !sFilter.isEmpty() && !aSQL.isEmpty() )
         {
             sFilter = L_BRACKET + sFilter + R_BRACKET +
-                (andCriteria ? OUStringLiteral(STR_AND) : OUStringLiteral(STR_OR));
+                (andCriteria ? OUStringLiteral(u"" STR_AND) : OUStringLiteral(u"" STR_OR));
         }
         sFilter += aSQL;
 

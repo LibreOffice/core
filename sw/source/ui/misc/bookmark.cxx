@@ -38,7 +38,7 @@
 
 using namespace ::com::sun::star;
 
-const OUStringLiteral BookmarkTable::aForbiddenChars("/\\@*?\",#");
+const OUStringLiteral BookmarkTable::aForbiddenChars(u"/\\@*?\",#");
 const char BookmarkTable::cSeparator(';');
 
 // callback to modify EditBox

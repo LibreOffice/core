@@ -58,7 +58,7 @@ struct S4
 S4 const& f4()
 {
     static const S4 s1[] = {
-        { OUStringLiteral("/DocColor"), false },
+        { OUStringLiteral(u"/DocColor"), false },
     };
     return s1[0];
 }

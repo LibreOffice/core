@@ -34,17 +34,17 @@ using namespace ::com::sun::star::drawing::framework;
 namespace sdext::presenter {
 
 const OUStringLiteral PresenterViewFactory::msCurrentSlidePreviewViewURL(
-    "private:resource/view/Presenter/CurrentSlidePreview");
+    u"private:resource/view/Presenter/CurrentSlidePreview");
 const OUStringLiteral PresenterViewFactory::msNextSlidePreviewViewURL(
-    "private:resource/view/Presenter/NextSlidePreview");
+    u"private:resource/view/Presenter/NextSlidePreview");
 const OUStringLiteral PresenterViewFactory::msNotesViewURL(
-    "private:resource/view/Presenter/Notes");
+    u"private:resource/view/Presenter/Notes");
 const OUStringLiteral PresenterViewFactory::msToolBarViewURL(
-    "private:resource/view/Presenter/ToolBar");
+    u"private:resource/view/Presenter/ToolBar");
 const OUStringLiteral PresenterViewFactory::msSlideSorterURL(
-    "private:resource/view/Presenter/SlideSorter");
+    u"private:resource/view/Presenter/SlideSorter");
 const OUStringLiteral PresenterViewFactory::msHelpViewURL(
-    "private:resource/view/Presenter/Help");
+    u"private:resource/view/Presenter/Help");
 
 namespace {
 

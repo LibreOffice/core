@@ -94,9 +94,9 @@ namespace accessibility
             SVX_UNOEDIT_CHAR_PROPERTIES,
             SVX_UNOEDIT_PARA_PROPERTIES,
             SVX_UNOEDIT_NUMBERING_PROPERTIE,
-            { "TextUserDefinedAttributes",     EE_CHAR_XMLATTRIBS,     cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
-            { "ParaUserDefinedAttributes",     EE_PARA_XMLATTRIBS,     cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
-            { "", 0, css::uno::Type(), 0, 0 }
+            { u"TextUserDefinedAttributes",     EE_CHAR_XMLATTRIBS,     cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
+            { u"ParaUserDefinedAttributes",     EE_PARA_XMLATTRIBS,     cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
+            { u"", 0, css::uno::Type(), 0, 0 }
         };
         static SvxItemPropertySet aPropSet( aPropMap, EditEngine::GetGlobalItemPool() );
         return &aPropSet;

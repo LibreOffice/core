@@ -806,9 +806,9 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
     if ( nId != -1 )
     {
         aOut.Category = (OPropertyInfoService::getPropertyUIFlags(nId ) & PropUIFlags::DataProperty) ?
-                                    OUStringLiteral("Data")
+                                    OUStringLiteral(u"Data")
                                                         :
-                                    OUStringLiteral("General");
+                                    OUStringLiteral(u"General");
         aOut.HelpURL = HelpIdUrl::getHelpURL( OPropertyInfoService::getPropertyHelpId( nId ) );
         aOut.DisplayName = OPropertyInfoService::getPropertyTranslation(nId);
     }

@@ -87,9 +87,9 @@ public:
 bool OOXMLSecExporter::Impl::isOOXMLDenylist(const OUString& rStreamName)
 {
     static const std::initializer_list<OUStringLiteral> vDenylist
-        = { "/%5BContent_Types%5D.xml", "/docProps/app.xml", "/docProps/core.xml",
+        = { u"/%5BContent_Types%5D.xml", u"/docProps/app.xml", u"/docProps/core.xml",
             // Don't attempt to sign other signatures for now.
-            "/_xmlsignatures" };
+            u"/_xmlsignatures" };
     // Just check the prefix, as we don't care about the content type part of the stream name.
     return std::any_of(vDenylist.begin(), vDenylist.end(), [&](const OUStringLiteral& rLiteral) {
         return rStreamName.startsWith(rLiteral);
@@ -99,9 +99,9 @@ bool OOXMLSecExporter::Impl::isOOXMLDenylist(const OUString& rStreamName)
 bool OOXMLSecExporter::Impl::isOOXMLRelationDenylist(const OUString& rRelationName)
 {
     static const std::initializer_list<OUStringLiteral> vDenylist = {
-        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties",
-        "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties",
-        "http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/origin"
+        u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties",
+        u"http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties",
+        u"http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/origin"
     };
     return std::find(vDenylist.begin(), vDenylist.end(), rRelationName) != vDenylist.end();
 }

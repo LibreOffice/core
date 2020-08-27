@@ -32,17 +32,17 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
 using namespace ::xmloff::token;
 
-const OUStringLiteral gsHeaderText( "HeaderText" );
-const OUStringLiteral gsHeaderOn( "HeaderIsOn" );
-const OUStringLiteral gsHeaderShareContent( "HeaderIsShared" );
-const OUStringLiteral gsHeaderTextFirst( "HeaderTextFirst" );
-const OUStringLiteral gsHeaderTextLeft( "HeaderTextLeft" );
-const OUStringLiteral gsFirstShareContent( "FirstIsShared" );
-const OUStringLiteral gsFooterText( "FooterText" );
-const OUStringLiteral gsFooterOn( "FooterIsOn" );
-const OUStringLiteral gsFooterShareContent( "FooterIsShared" );
-const OUStringLiteral gsFooterTextFirst( "FooterTextFirst" );
-const OUStringLiteral gsFooterTextLeft( "FooterTextLeft" );
+const OUStringLiteral gsHeaderText( u"HeaderText" );
+const OUStringLiteral gsHeaderOn( u"HeaderIsOn" );
+const OUStringLiteral gsHeaderShareContent( u"HeaderIsShared" );
+const OUStringLiteral gsHeaderTextFirst( u"HeaderTextFirst" );
+const OUStringLiteral gsHeaderTextLeft( u"HeaderTextLeft" );
+const OUStringLiteral gsFirstShareContent( u"FirstIsShared" );
+const OUStringLiteral gsFooterText( u"FooterText" );
+const OUStringLiteral gsFooterOn( u"FooterIsOn" );
+const OUStringLiteral gsFooterShareContent( u"FooterIsShared" );
+const OUStringLiteral gsFooterTextFirst( u"FooterTextFirst" );
+const OUStringLiteral gsFooterTextLeft( u"FooterTextLeft" );
 
 XMLTextMasterPageExport::XMLTextMasterPageExport( SvXMLExport& rExp ) :
     XMLPageExport( rExp )

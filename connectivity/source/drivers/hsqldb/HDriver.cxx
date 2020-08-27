@@ -70,7 +70,7 @@ namespace connectivity
     using namespace css::util;
     using namespace css::reflection;
 
-    constexpr OUStringLiteral IMPL_NAME = "com.sun.star.sdbcx.comp.hsqldb.Driver";
+    constexpr OUStringLiteral IMPL_NAME = u"com.sun.star.sdbcx.comp.hsqldb.Driver";
 
 
 

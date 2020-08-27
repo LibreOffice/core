@@ -175,7 +175,7 @@ namespace {
 
 // Pane URLS.
 
-const OUStringLiteral FrameworkHelper::msPaneURLPrefix("private:resource/pane/");
+const OUStringLiteral FrameworkHelper::msPaneURLPrefix(u"private:resource/pane/");
 const OUString FrameworkHelper::msCenterPaneURL( msPaneURLPrefix + "CenterPane");
 const OUString FrameworkHelper::msFullScreenPaneURL( msPaneURLPrefix + "FullScreenPane");
 const OUString FrameworkHelper::msLeftImpressPaneURL( msPaneURLPrefix + "LeftImpressPane");
@@ -184,7 +184,7 @@ const OUString FrameworkHelper::msSidebarPaneURL( msPaneURLPrefix + "SidebarPane
 
 // View URLs.
 
-const OUStringLiteral FrameworkHelper::msViewURLPrefix("private:resource/view/");
+const OUStringLiteral FrameworkHelper::msViewURLPrefix(u"private:resource/view/");
 const OUString FrameworkHelper::msImpressViewURL( msViewURLPrefix + "ImpressView");
 const OUString FrameworkHelper::msDrawViewURL( msViewURLPrefix + "GraphicView");
 const OUString FrameworkHelper::msOutlineViewURL( msViewURLPrefix + "OutlineView");
@@ -196,11 +196,11 @@ const OUString FrameworkHelper::msSidebarViewURL( msViewURLPrefix + "SidebarView
 
 // Tool bar URLs.
 
-const OUStringLiteral FrameworkHelper::msToolBarURLPrefix("private:resource/toolbar/");
+const OUStringLiteral FrameworkHelper::msToolBarURLPrefix(u"private:resource/toolbar/");
 const OUString FrameworkHelper::msViewTabBarURL( msToolBarURLPrefix + "ViewTabBar");
 
 // Task panel URLs.
-const OUStringLiteral FrameworkHelper::msTaskPanelURLPrefix( "private:resource/toolpanel/" );
+const OUStringLiteral FrameworkHelper::msTaskPanelURLPrefix( u"private:resource/toolpanel/" );
 const OUString FrameworkHelper::msAllMasterPagesTaskPanelURL( msTaskPanelURLPrefix + "AllMasterPages" );
 const OUString FrameworkHelper::msRecentMasterPagesTaskPanelURL( msTaskPanelURLPrefix + "RecentMasterPages" );
 const OUString FrameworkHelper::msUsedMasterPagesTaskPanelURL( msTaskPanelURLPrefix + "UsedMasterPages" );
@@ -210,17 +210,17 @@ const OUString FrameworkHelper::msCustomAnimationTaskPanelURL( msTaskPanelURLPre
 const OUString FrameworkHelper::msSlideTransitionTaskPanelURL( msTaskPanelURLPrefix + "SlideTransitions" );
 
 // Event URLs.
-const OUStringLiteral FrameworkHelper::msResourceActivationRequestEvent( "ResourceActivationRequested" );
-const OUStringLiteral FrameworkHelper::msResourceDeactivationRequestEvent( "ResourceDeactivationRequest" );
-const OUStringLiteral FrameworkHelper::msResourceActivationEvent( "ResourceActivation" );
-const OUStringLiteral FrameworkHelper::msResourceDeactivationEvent( "ResourceDeactivation" );
-const OUStringLiteral FrameworkHelper::msResourceDeactivationEndEvent( "ResourceDeactivationEnd" );
-const OUStringLiteral FrameworkHelper::msConfigurationUpdateStartEvent( "ConfigurationUpdateStart" );
-const OUStringLiteral FrameworkHelper::msConfigurationUpdateEndEvent( "ConfigurationUpdateEnd" );
+const OUStringLiteral FrameworkHelper::msResourceActivationRequestEvent( u"ResourceActivationRequested" );
+const OUStringLiteral FrameworkHelper::msResourceDeactivationRequestEvent( u"ResourceDeactivationRequest" );
+const OUStringLiteral FrameworkHelper::msResourceActivationEvent( u"ResourceActivation" );
+const OUStringLiteral FrameworkHelper::msResourceDeactivationEvent( u"ResourceDeactivation" );
+const OUStringLiteral FrameworkHelper::msResourceDeactivationEndEvent( u"ResourceDeactivationEnd" );
+const OUStringLiteral FrameworkHelper::msConfigurationUpdateStartEvent( u"ConfigurationUpdateStart" );
+const OUStringLiteral FrameworkHelper::msConfigurationUpdateEndEvent( u"ConfigurationUpdateEnd" );
 
 // Service names of controllers.
-const OUStringLiteral FrameworkHelper::msModuleControllerService("com.sun.star.drawing.framework.ModuleController");
-const OUStringLiteral FrameworkHelper::msConfigurationControllerService("com.sun.star.drawing.framework.ConfigurationController");
+const OUStringLiteral FrameworkHelper::msModuleControllerService(u"com.sun.star.drawing.framework.ModuleController");
+const OUStringLiteral FrameworkHelper::msConfigurationControllerService(u"com.sun.star.drawing.framework.ConfigurationController");
 
 //----- helper ----------------------------------------------------------------
 namespace

@@ -448,7 +448,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
                 // for "JohnSmith" without domain returns domain itself. Try getting the SID of the
                 // user using fully qualified name (the case of user of another domain having name
                 // identical this hostname is not handled).
-                sLookupUserName = o3tl::toU(wszDomainName) + OUStringLiteral("\\") + strUserName;
+                sLookupUserName = o3tl::toU(wszDomainName) + OUStringLiteral(u"\\") + strUserName;
                 wszAccName = o3tl::toW(sLookupUserName.getStr());
                 continue;
             }

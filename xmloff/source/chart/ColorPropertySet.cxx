@@ -44,7 +44,7 @@ protected:
     virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
 
 private:
-    static constexpr OUStringLiteral g_aColorPropName = "FillColor";
+    static constexpr OUStringLiteral g_aColorPropName = u"FillColor";
     Property m_aColorProp;
 };
 

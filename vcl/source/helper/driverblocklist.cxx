@@ -162,15 +162,15 @@ OUStringLiteral GetVendorNameFromId(uint32_t id)
     switch (id)
     {
         case 0x8086:
-            return "Intel";
+            return u"Intel";
         case 0x10de:
-            return "Nvidia";
+            return u"Nvidia";
         case 0x1002:
-            return "AMD";
+            return u"AMD";
         case 0x1414:
-            return "Microsoft";
+            return u"Microsoft";
         default:
-            return "?";
+            return u"?";
     }
 }
 

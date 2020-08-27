@@ -284,8 +284,8 @@ sal_Int32 OStorageHelper::GetXStorageFormat(
     else
     {
         // the mediatype is not known
-        OUString aMsg = OUStringLiteral(__func__)
-                      + ":"
+        OUString aMsg = __func__
+                      + OUStringLiteral(u":")
                       + OUString::number(__LINE__)
                       + ": unknown media type '"
                       + aMediaType

@@ -194,7 +194,7 @@ void SvxScriptOrgDialog::Init( const OUString& language  )
         Reference< browse::XBrowseNode > langEntries =
             getLangNodeFromRootNode( childNode, language );
 
-        insertEntry( uiName, app ? OUStringLiteral(RID_CUIBMP_HARDDISK) : OUStringLiteral(RID_CUIBMP_DOC),
+        insertEntry( uiName, app ? OUStringLiteral(u"" RID_CUIBMP_HARDDISK) : OUStringLiteral(u"" RID_CUIBMP_DOC),
             nullptr, true, std::make_unique< SFEntry >( langEntries, xDocumentModel ), factoryURL, false );
     }
 

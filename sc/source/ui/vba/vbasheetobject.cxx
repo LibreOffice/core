@@ -36,8 +36,8 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-constexpr OUStringLiteral gaListenerType = "XActionListener";
-constexpr OUStringLiteral gaEventMethod = "actionPerformed";
+constexpr OUStringLiteral gaListenerType = u"XActionListener";
+constexpr OUStringLiteral gaEventMethod = u"actionPerformed";
 
 
 ScVbaButtonCharacters::ScVbaButtonCharacters(

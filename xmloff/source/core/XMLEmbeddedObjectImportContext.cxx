@@ -170,10 +170,10 @@ XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
 
         OUString sClass;
         static OUStringLiteral const prefixes[] = {
-            "application/vnd.oasis.openoffice.",
-            "application/x-vnd.oasis.openoffice.",
-            "application/vnd.oasis.opendocument.",
-            "application/x-vnd.oasis.opendocument."};
+            u"application/vnd.oasis.openoffice.",
+            u"application/x-vnd.oasis.openoffice.",
+            u"application/vnd.oasis.opendocument.",
+            u"application/x-vnd.oasis.opendocument."};
         for (auto const & p: prefixes)
         {
             if (sMime.startsWith(p, &sClass))
@@ -186,13 +186,13 @@ XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
         {
             static struct { XMLTokenEnum eClass; OUStringLiteral sFilterService;
             } const aServiceMap[] = {
-                { XML_TEXT,         OUStringLiteral(XML_IMPORT_FILTER_WRITER) },
-                { XML_ONLINE_TEXT,  OUStringLiteral(XML_IMPORT_FILTER_WRITER) },
-                { XML_SPREADSHEET,  OUStringLiteral(XML_IMPORT_FILTER_CALC) },
-                { XML_DRAWING,      OUStringLiteral(XML_IMPORT_FILTER_DRAW) },
-                { XML_GRAPHICS,     OUStringLiteral(XML_IMPORT_FILTER_DRAW) },
-                { XML_PRESENTATION, OUStringLiteral(XML_IMPORT_FILTER_IMPRESS) },
-                { XML_CHART,        OUStringLiteral(XML_IMPORT_FILTER_CHART) }};
+                { XML_TEXT,         OUStringLiteral(u"" XML_IMPORT_FILTER_WRITER) },
+                { XML_ONLINE_TEXT,  OUStringLiteral(u"" XML_IMPORT_FILTER_WRITER) },
+                { XML_SPREADSHEET,  OUStringLiteral(u"" XML_IMPORT_FILTER_CALC) },
+                { XML_DRAWING,      OUStringLiteral(u"" XML_IMPORT_FILTER_DRAW) },
+                { XML_GRAPHICS,     OUStringLiteral(u"" XML_IMPORT_FILTER_DRAW) },
+                { XML_PRESENTATION, OUStringLiteral(u"" XML_IMPORT_FILTER_IMPRESS) },
+                { XML_CHART,        OUStringLiteral(u"" XML_IMPORT_FILTER_CHART) }};
             for (auto const & entry: aServiceMap)
             {
                 if( IsXMLToken( sClass, entry.eClass ) )

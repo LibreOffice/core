@@ -31,7 +31,7 @@
 
 using namespace ::com::sun::star;
 
-OUStringLiteral const sWW8_form( "WW-Standard" );
+OUStringLiteral const sWW8_form( u"WW-Standard" );
 
 SvxMSConvertOCXControls::SvxMSConvertOCXControls( const uno::Reference< frame::XModel >& rxModel) : mxModel(rxModel)
 {

@@ -273,9 +273,9 @@ const OStringLiteral DummyTokenHandler::tokens[] = {
     OStringLiteral("Player"), OStringLiteral("Height") };
 
 const OUStringLiteral DummyTokenHandler::namespaceURIs[] = {
-    "http://www.w3.org/2000/09/xmldsig#",
-    "http://schemas.openxmlformats.org/wordprocessingml/2006/main/",
-    "xyzsports.com/players/football/" };
+    u"http://www.w3.org/2000/09/xmldsig#",
+    u"http://schemas.openxmlformats.org/wordprocessingml/2006/main/",
+    u"xyzsports.com/players/football/" };
 
 const OStringLiteral DummyTokenHandler::namespacePrefixes[] = {
     OStringLiteral(""),

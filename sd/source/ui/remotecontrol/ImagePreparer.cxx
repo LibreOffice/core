@@ -209,9 +209,9 @@ OString ImagePreparer::prepareNotes( sal_uInt32 aSlideNumber )
         return "";
 
     static const OUStringLiteral sNotesShapeName (
-        "com.sun.star.presentation.NotesShape" );
+        u"com.sun.star.presentation.NotesShape" );
     static const OUStringLiteral sTextShapeName (
-        "com.sun.star.drawing.TextShape" );
+        u"com.sun.star.drawing.TextShape" );
 
     if (aNotesPage.is())
     {

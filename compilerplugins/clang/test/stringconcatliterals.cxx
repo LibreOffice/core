@@ -15,10 +15,12 @@
 #include <rtl/ustring.hxx>
 
 #define FOO "foo"
+#define FOOu u"foo"
 
 void f(std::ostream& s1)
 {
     static char const foo[] = "foo";
+    static char16_t const foou[] = u"foo";
     s1 << "foo"
        << "foo";
     // expected-error@-1 {{replace '<<' between string literals with juxtaposition}}
@@ -35,9 +37,9 @@ void f(std::ostream& s1)
     s1 << "foo" << OUString(FOO);
     // expected-error@-1 {{replace '<<' between string literals with juxtaposition}}
     s1 << "foo" << OUString(foo);
-    s1 << "foo" << OUStringLiteral("foo"); //TODO: warn too, OUStringLiteral wrapped in OUString
-    s1 << "foo" << OUStringLiteral(FOO); //TODO: warn too, OUStringLiteral wrapped in OUString
-    s1 << "foo" << OUStringLiteral(foo);
+    s1 << "foo" << OUStringLiteral(u"foo"); //TODO: warn too, OUStringLiteral wrapped in OUString
+    s1 << "foo" << OUStringLiteral(FOOu); //TODO: warn too, OUStringLiteral wrapped in OUString
+    s1 << "foo" << OUStringLiteral(foou);
     OString s2;
     s2 = "foo" + OString("foo");
     // expected-error@-1 {{replace '+' between string literals with juxtaposition}}
@@ -55,11 +57,11 @@ void f(std::ostream& s1)
     s3 = "foo" + OUString(FOO);
     // expected-error@-1 {{replace '+' between string literals with juxtaposition}}
     s3 = "foo" + OUString(foo);
-    s3 = "foo" + OUStringLiteral("foo");
+    s3 = "foo" + OUStringLiteral(u"foo");
     // expected-error@-1 {{replace '+' between string literals with juxtaposition}}
-    s3 = "foo" + OUStringLiteral(FOO);
+    s3 = "foo" + OUStringLiteral(FOOu);
     // expected-error@-1 {{replace '+' between string literals with juxtaposition}}
-    s3 = "foo" + OUStringLiteral(foo);
+    s3 = "foo" + OUStringLiteral(foou);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

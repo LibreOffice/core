@@ -1386,7 +1386,7 @@ void GraphicFilter::preload()
     sal_Int32 nTokenCount = comphelper::string::getTokenCount(aFilterPath, ';');
     ImpFilterLibCache& rCache = Cache::get();
     static const std::initializer_list<OUStringLiteral> aFilterNames = {
-        "icd", "idx", "ime", "ipb", "ipd", "ips", "ipt", "ipx", "ira", "itg", "iti",
+        u"icd", u"idx", u"ime", u"ipb", u"ipd", u"ips", u"ipt", u"ipx", u"ira", u"itg", u"iti",
     };
 
     // Load library for each filter.

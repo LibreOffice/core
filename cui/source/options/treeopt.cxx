@@ -115,7 +115,7 @@ using namespace ::com::sun::star::util;
 LastPageSaver* OfaTreeOptionsDialog::pLastPageSaver = nullptr;
 
 // some stuff for easier changes for SvtViewOptions
-const OUStringLiteral VIEWOPT_DATANAME = "page data";
+const OUStringLiteral VIEWOPT_DATANAME = u"page data";
 
 static void SetViewOptUserItem( SvtViewOptions& rOpt, const OUString& rData )
 {
@@ -143,18 +143,18 @@ struct ModuleToGroupNameMap_Impl
 
 static ModuleToGroupNameMap_Impl ModuleMap[] =
 {
-    { "ProductName", OUString(), SID_GENERAL_OPTIONS },
-    { "LanguageSettings", OUString(), SID_LANGUAGE_OPTIONS },
-    { "Internet", OUString(), SID_INET_DLG },
-    { "LoadSave", OUString(), SID_FILTER_DLG },
-    { "Writer", OUString(), SID_SW_EDITOPTIONS },
-    { "WriterWeb", OUString(), SID_SW_ONLINEOPTIONS },
-    { "Math", OUString(), SID_SM_EDITOPTIONS },
-    { "Calc", OUString(), SID_SC_EDITOPTIONS },
-    { "Impress", OUString(), SID_SD_EDITOPTIONS },
-    { "Draw", OUString(), SID_SD_GRAPHIC_OPTIONS },
-    { "Charts", OUString(), SID_SCH_EDITOPTIONS },
-    { "Base", OUString(), SID_SB_STARBASEOPTIONS },
+    { u"ProductName", OUString(), SID_GENERAL_OPTIONS },
+    { u"LanguageSettings", OUString(), SID_LANGUAGE_OPTIONS },
+    { u"Internet", OUString(), SID_INET_DLG },
+    { u"LoadSave", OUString(), SID_FILTER_DLG },
+    { u"Writer", OUString(), SID_SW_EDITOPTIONS },
+    { u"WriterWeb", OUString(), SID_SW_ONLINEOPTIONS },
+    { u"Math", OUString(), SID_SM_EDITOPTIONS },
+    { u"Calc", OUString(), SID_SC_EDITOPTIONS },
+    { u"Impress", OUString(), SID_SD_EDITOPTIONS },
+    { u"Draw", OUString(), SID_SD_GRAPHIC_OPTIONS },
+    { u"Charts", OUString(), SID_SCH_EDITOPTIONS },
+    { u"Base", OUString(), SID_SB_STARBASEOPTIONS },
 };
 
 static void setGroupName( const OUString& rModule, const OUString& rGroupName )

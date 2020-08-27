@@ -46,7 +46,7 @@ using ::com::sun::star::uno::Sequence;
 namespace
 {
 
-const OUStringLiteral lcl_aLabelRole( "label" );
+const OUStringLiteral lcl_aLabelRole( u"label" );
 
 void lcl_UpdateCurrentRange(weld::TreeView& rOutListBox, const OUString & rRole,
                             const OUString& rRange)

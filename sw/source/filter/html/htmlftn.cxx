@@ -529,7 +529,7 @@ void SwHTMLWriter::OutFootEndNoteInfo()
         int nParts = lcl_html_fillEndNoteInfo( rInfo, aParts, false );
         if( rInfo.m_eNum != FTNNUM_DOC )
         {
-            aParts[4] = rInfo.m_eNum == FTNNUM_CHAPTER ? OUStringLiteral( "C" ) : OUStringLiteral( "P" );
+            aParts[4] = rInfo.m_eNum == FTNNUM_CHAPTER ? OUStringLiteral( u"C" ) : OUStringLiteral( u"P" );
             nParts = 5;
         }
         if( rInfo.m_ePos != FTNPOS_PAGE)

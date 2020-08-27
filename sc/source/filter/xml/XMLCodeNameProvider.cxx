@@ -46,8 +46,8 @@ bool XMLCodeNameProvider::_getCodeName( const uno::Any& aAny, OUString& rCodeNam
     return false;
 }
 
-constexpr OUStringLiteral gsDocName( "*doc*" );
-constexpr OUStringLiteral gsCodeNameProp( "CodeName" );
+constexpr OUStringLiteral gsDocName( u"*doc*" );
+constexpr OUStringLiteral gsCodeNameProp( u"CodeName" );
 
 XMLCodeNameProvider::XMLCodeNameProvider( ScDocument* pDoc ) :
     mpDoc( pDoc )

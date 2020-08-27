@@ -292,7 +292,7 @@ static void lcl_formatReferenceLanguage( OUString& rRefText,
             0x00E1, 0x00C1, 0x00E9, 0x00C9, 0x00ED, 0x00CD,
             0x00F3, 0x00D3, 0x00F6, 0x00D6, 0x0151, 0x0150,
             0x00FA, 0x00DA, 0x00FC, 0x00DC, 0x0171, 0x0170, 0 };
-        static OUString sVowels = OUStringLiteral("aAeEiIoOuU") + sVowelsWithDiacritic;
+        static OUString sVowels = OUStringLiteral(u"aAeEiIoOuU") + sVowelsWithDiacritic;
 
         // handle more than 1-letter long Roman numbers and
         // their possible combinations with letters:

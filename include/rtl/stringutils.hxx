@@ -255,6 +255,8 @@ struct ConstCharArrayDetector<sal_Unicode const [N], T> {
     using TypeUtf16 = T;
     static constexpr bool const ok = true;
     static constexpr std::size_t const length = N - 1;
+    static constexpr bool isValid(sal_Unicode const (& literal)[N])
+    { return literal[N - 1] == '\0'; }
     static constexpr sal_Unicode const * toPointer(
         sal_Unicode const (& literal)[N])
     { return literal; }

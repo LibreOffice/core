@@ -28,8 +28,8 @@ namespace avmedia::vlc {
 
 namespace
 {
-    const OUStringLiteral AVMEDIA_VLC_WINDOW_IMPLEMENTATIONNAME = "com.sun.star.comp.avmedia.Window_VLC";
-    const OUStringLiteral AVMEDIA_VLC_WINDOW_SERVICENAME = "com.sun.star.media.Window_VLC";
+    const OUStringLiteral AVMEDIA_VLC_WINDOW_IMPLEMENTATIONNAME = u"com.sun.star.comp.avmedia.Window_VLC";
+    const OUStringLiteral AVMEDIA_VLC_WINDOW_SERVICENAME = u"com.sun.star.media.Window_VLC";
 }
 
 VLCWindow::VLCWindow( VLCPlayer& player, const intptr_t prevWinID )

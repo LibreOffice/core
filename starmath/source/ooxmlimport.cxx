@@ -439,7 +439,7 @@ OUString SmOoxmlImport::handleLimLowUpp( LimLowUpp_t limlowupp )
     if( limlowupp == LimLow && e.endsWith( " underbrace { }" ))
         return e.copy( 0, e.getLength() - 2 ) + lim + "}";
     return e
-        + ( limlowupp == LimLow ? OUStringLiteral( " csub {" ) : OUStringLiteral( " csup {" ))
+        + ( limlowupp == LimLow ? OUStringLiteral( u" csub {" ) : OUStringLiteral( u" csup {" ))
         + lim + "}";
 }
 

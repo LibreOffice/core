@@ -32,9 +32,9 @@ using namespace css::uno;
 
 namespace apitest {
 
-constexpr OUStringLiteral gaSrcSheetName("SheetToCopy");
-constexpr OUStringLiteral gaSrcFileName("rangenamessrc.ods");
-constexpr OUStringLiteral gaDestFileBase("ScNamedRangeObj.ods");
+constexpr OUStringLiteral gaSrcSheetName(u"SheetToCopy");
+constexpr OUStringLiteral gaSrcFileName(u"rangenamessrc.ods");
+constexpr OUStringLiteral gaDestFileBase(u"ScNamedRangeObj.ods");
 
 static sal_Int32 nInsertedSheets(0);
 

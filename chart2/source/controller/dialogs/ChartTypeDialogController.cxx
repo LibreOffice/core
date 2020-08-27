@@ -401,7 +401,7 @@ OUString ColumnChartDialogController::getName()
 
 OUString ColumnChartDialogController::getImage()
 {
-    return OUStringLiteral(BMP_TYPE_COLUMN);
+    return OUStringLiteral(u"" BMP_TYPE_COLUMN);
 }
 
 const tTemplateServiceChartTypeParameterMap& ColumnChartDialogController::getTemplateMap() const
@@ -478,7 +478,7 @@ OUString BarChartDialogController::getName()
 
 OUString BarChartDialogController::getImage()
 {
-    return OUStringLiteral(BMP_TYPE_BAR);
+    return OUStringLiteral(u"" BMP_TYPE_BAR);
 }
 
 const tTemplateServiceChartTypeParameterMap& BarChartDialogController::getTemplateMap() const
@@ -554,7 +554,7 @@ OUString PieChartDialogController::getName()
 
 OUString PieChartDialogController::getImage()
 {
-    return OUStringLiteral(BMP_TYPE_PIE);
+    return OUStringLiteral(u"" BMP_TYPE_PIE);
 }
 
 const tTemplateServiceChartTypeParameterMap& PieChartDialogController::getTemplateMap() const
@@ -620,7 +620,7 @@ OUString LineChartDialogController::getName()
 
 OUString LineChartDialogController::getImage()
 {
-    return OUStringLiteral(BMP_TYPE_LINE);
+    return OUStringLiteral(u"" BMP_TYPE_LINE);
 }
 
 const tTemplateServiceChartTypeParameterMap& LineChartDialogController::getTemplateMap() const
@@ -767,7 +767,7 @@ OUString XYChartDialogController::getName()
 
 OUString XYChartDialogController::getImage()
 {
-    return OUStringLiteral(BMP_TYPE_XY);
+    return OUStringLiteral(u"" BMP_TYPE_XY);
 }
 
 const tTemplateServiceChartTypeParameterMap& XYChartDialogController::getTemplateMap() const
@@ -870,7 +870,7 @@ OUString AreaChartDialogController::getName()
 
 OUString AreaChartDialogController::getImage()
 {
-    return OUStringLiteral(BMP_TYPE_AREA);
+    return OUStringLiteral(u"" BMP_TYPE_AREA);
 }
 
 bool AreaChartDialogController::shouldShow_3DLookControl() const
@@ -957,7 +957,7 @@ OUString NetChartDialogController::getName()
 
 OUString NetChartDialogController::getImage()
 {
-    return OUStringLiteral(BMP_TYPE_NET);
+    return OUStringLiteral(u"" BMP_TYPE_NET);
 }
 
 bool NetChartDialogController::shouldShow_StackingControl() const
@@ -1052,7 +1052,7 @@ OUString StockChartDialogController::getName()
 
 OUString StockChartDialogController::getImage()
 {
-    return OUStringLiteral(BMP_TYPE_STOCK);
+    return OUStringLiteral(u"" BMP_TYPE_STOCK);
 }
 
 const tTemplateServiceChartTypeParameterMap& StockChartDialogController::getTemplateMap() const
@@ -1097,7 +1097,7 @@ OUString CombiColumnLineChartDialogController::getName()
 
 OUString CombiColumnLineChartDialogController::getImage()
 {
-    return OUStringLiteral(BMP_TYPE_COLUMN_LINE);
+    return OUStringLiteral(u"" BMP_TYPE_COLUMN_LINE);
 }
 
 const tTemplateServiceChartTypeParameterMap& CombiColumnLineChartDialogController::getTemplateMap() const
@@ -1227,7 +1227,7 @@ OUString BubbleChartDialogController::getName()
 
 OUString BubbleChartDialogController::getImage()
 {
-    return OUStringLiteral(BMP_TYPE_BUBBLE);
+    return OUStringLiteral(u"" BMP_TYPE_BUBBLE);
 }
 
 const tTemplateServiceChartTypeParameterMap& BubbleChartDialogController::getTemplateMap() const

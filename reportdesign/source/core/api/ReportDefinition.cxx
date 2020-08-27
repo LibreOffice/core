@@ -2111,25 +2111,25 @@ uno::Sequence< OUString > SAL_CALL OReportDefinition::getAvailableServiceNames()
 {
     static const OUStringLiteral aSvxComponentServiceNameList[] =
     {
-        "com.sun.star.form.component.FixedText",
-        "com.sun.star.form.component.DatabaseImageControl",
-        "com.sun.star.style.PageStyle",
-        "com.sun.star.style.GraphicStyle",
-        "com.sun.star.style.FrameStyle",
-        "com.sun.star.drawing.Defaults",
-        "com.sun.star.document.ImportEmbeddedObjectResolver",
-        "com.sun.star.document.ExportEmbeddedObjectResolver",
-        "com.sun.star.document.ImportGraphicStorageHandler",
-        "com.sun.star.document.ExportGraphicStorageHandler",
-        "com.sun.star.chart2.data.DataProvider",
-        "com.sun.star.xml.NamespaceMap",
-        "com.sun.star.document.Settings",
-        "com.sun.star.drawing.GradientTable",
-        "com.sun.star.drawing.HatchTable",
-        "com.sun.star.drawing.BitmapTable",
-        "com.sun.star.drawing.TransparencyGradientTable",
-        "com.sun.star.drawing.DashTable",
-        "com.sun.star.drawing.MarkerTable"
+        u"com.sun.star.form.component.FixedText",
+        u"com.sun.star.form.component.DatabaseImageControl",
+        u"com.sun.star.style.PageStyle",
+        u"com.sun.star.style.GraphicStyle",
+        u"com.sun.star.style.FrameStyle",
+        u"com.sun.star.drawing.Defaults",
+        u"com.sun.star.document.ImportEmbeddedObjectResolver",
+        u"com.sun.star.document.ExportEmbeddedObjectResolver",
+        u"com.sun.star.document.ImportGraphicStorageHandler",
+        u"com.sun.star.document.ExportGraphicStorageHandler",
+        u"com.sun.star.chart2.data.DataProvider",
+        u"com.sun.star.xml.NamespaceMap",
+        u"com.sun.star.document.Settings",
+        u"com.sun.star.drawing.GradientTable",
+        u"com.sun.star.drawing.HatchTable",
+        u"com.sun.star.drawing.BitmapTable",
+        u"com.sun.star.drawing.TransparencyGradientTable",
+        u"com.sun.star.drawing.DashTable",
+        u"com.sun.star.drawing.MarkerTable"
     };
 
     static const sal_uInt16 nSvxComponentServiceNameListCount = SAL_N_ELEMENTS(aSvxComponentServiceNameList);

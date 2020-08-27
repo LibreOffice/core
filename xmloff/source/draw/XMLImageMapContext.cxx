@@ -554,7 +554,7 @@ void XMLImageMapCircleContext::Prepare(
 }
 
 
-const OUStringLiteral gsImageMap("ImageMap");
+const OUStringLiteral gsImageMap(u"ImageMap");
 
 XMLImageMapContext::XMLImageMapContext(
     SvXMLImport& rImport,

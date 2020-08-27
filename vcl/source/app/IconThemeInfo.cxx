@@ -16,13 +16,13 @@
 // constants for theme ids and display names. Only the theme id for high contrast is used
 // outside of this class and hence made public.
 
-const OUStringLiteral vcl::IconThemeInfo::HIGH_CONTRAST_ID("sifr");
+const OUStringLiteral vcl::IconThemeInfo::HIGH_CONTRAST_ID(u"sifr");
 
 namespace {
 
-const OUStringLiteral KARASA_JAGA_ID("karasa_jaga");
-const OUStringLiteral KARASA_JAGA_DISPLAY_NAME("Karasa Jaga");
-const OUStringLiteral HELPIMG_FAKE_THEME("helpimg");
+const OUStringLiteral KARASA_JAGA_ID(u"karasa_jaga");
+const OUStringLiteral KARASA_JAGA_DISPLAY_NAME(u"Karasa Jaga");
+const OUStringLiteral HELPIMG_FAKE_THEME(u"helpimg");
 
 OUString
 filename_from_url(const OUString& url)

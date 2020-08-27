@@ -184,8 +184,8 @@ uno::Reference<media::XPlayer> MediaWindowImpl::createPlayer(const OUString& rUR
 
         static OUStringLiteral aServiceManagers[] =
         {
-            AVMEDIA_MANAGER_SERVICE_PREFERRED,
-            AVMEDIA_MANAGER_SERVICE_NAME,
+            u"" AVMEDIA_MANAGER_SERVICE_PREFERRED,
+            u"" AVMEDIA_MANAGER_SERVICE_NAME,
         };
 
         for (const auto& rServiceName : aServiceManagers)

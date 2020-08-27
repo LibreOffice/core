@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/frame/XController.hpp>
@@ -45,6 +49,7 @@
 #include <editeng/eeitem.hxx>
 #include <svx/sdr/table/tabledesign.hxx>
 #include <o3tl/enumrange.hxx>
+#include <o3tl/string_view.hxx>
 
 #include "TableDesignPane.hxx"
 #include <createtabledesignpanel.hxx>
@@ -73,7 +78,7 @@ const sal_Int32 nCellHeight = 7; // one pixel is shared with the next cell!
 const sal_Int32 nBitmapWidth = (nCellWidth * nPreviewColumns) - (nPreviewColumns - 1);
 const sal_Int32 nBitmapHeight = (nCellHeight * nPreviewRows) - (nPreviewRows - 1);
 
-const OUStringLiteral gPropNames[CB_COUNT] =
+const std::string_view gPropNames[CB_COUNT] =
 {
     "UseFirstRowStyle",
     "UseLastRowStyle",
@@ -96,7 +101,7 @@ TableDesignWidget::TableDesignWidget(weld::Builder& rBuilder, ViewShellBase& rBa
 
     for (sal_uInt16 i = CB_HEADER_ROW; i <= CB_BANDED_COLUMNS; ++i)
     {
-        m_aCheckBoxes[i] = rBuilder.weld_check_button(OString(gPropNames[i].data, gPropNames[i].size));
+        m_aCheckBoxes[i] = rBuilder.weld_check_button(OString(gPropNames[i].data(), gPropNames[i].size()));
         m_aCheckBoxes[i]->connect_toggled(LINK(this, TableDesignWidget, implCheckBoxHdl));
     }
 
@@ -346,7 +351,7 @@ void TableDesignWidget::updateControls()
         bool bUse = gDefaults[i];
         if( bHasTable ) try
         {
-            mxSelectedTable->getPropertyValue( gPropNames[i] ) >>= bUse;
+            mxSelectedTable->getPropertyValue( OUString::createFromAscii(gPropNames[i]) ) >>= bUse;
         }
         catch( Exception& )
         {

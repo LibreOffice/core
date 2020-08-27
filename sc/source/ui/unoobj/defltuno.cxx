@@ -41,27 +41,27 @@ static const SfxItemPropertyMapEntry* lcl_GetDocDefaultsMap()
 {
     static const SfxItemPropertyMapEntry aDocDefaultsMap_Impl[] =
     {
-        {SC_UNONAME_CFCHARS,  ATTR_FONT,          cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_CHAR_SET },
-        {SC_UNO_CJK_CFCHARS,  ATTR_CJK_FONT,      cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_CHAR_SET },
-        {SC_UNO_CTL_CFCHARS,  ATTR_CTL_FONT,      cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_CHAR_SET },
-        {SC_UNONAME_CFFAMIL,  ATTR_FONT,          cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_FAMILY },
-        {SC_UNO_CJK_CFFAMIL,  ATTR_CJK_FONT,      cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_FAMILY },
-        {SC_UNO_CTL_CFFAMIL,  ATTR_CTL_FONT,      cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_FAMILY },
-        {SC_UNONAME_CFNAME,   ATTR_FONT,          cppu::UnoType<OUString>::get(),    0, MID_FONT_FAMILY_NAME },
-        {SC_UNO_CJK_CFNAME,   ATTR_CJK_FONT,      cppu::UnoType<OUString>::get(),    0, MID_FONT_FAMILY_NAME },
-        {SC_UNO_CTL_CFNAME,   ATTR_CTL_FONT,      cppu::UnoType<OUString>::get(),    0, MID_FONT_FAMILY_NAME },
-        {SC_UNONAME_CFPITCH,  ATTR_FONT,          cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_PITCH },
-        {SC_UNO_CJK_CFPITCH,  ATTR_CJK_FONT,      cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_PITCH },
-        {SC_UNO_CTL_CFPITCH,  ATTR_CTL_FONT,      cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_PITCH },
-        {SC_UNONAME_CFSTYLE,  ATTR_FONT,          cppu::UnoType<OUString>::get(),    0, MID_FONT_STYLE_NAME },
-        {SC_UNO_CJK_CFSTYLE,  ATTR_CJK_FONT,      cppu::UnoType<OUString>::get(),    0, MID_FONT_STYLE_NAME },
-        {SC_UNO_CTL_CFSTYLE,  ATTR_CTL_FONT,      cppu::UnoType<OUString>::get(),    0, MID_FONT_STYLE_NAME },
-        {SC_UNONAME_CLOCAL,   ATTR_FONT_LANGUAGE, cppu::UnoType<lang::Locale>::get(),     0, MID_LANG_LOCALE },
-        {SC_UNO_CJK_CLOCAL,   ATTR_CJK_FONT_LANGUAGE, cppu::UnoType<lang::Locale>::get(), 0, MID_LANG_LOCALE },
-        {SC_UNO_CTL_CLOCAL,   ATTR_CTL_FONT_LANGUAGE, cppu::UnoType<lang::Locale>::get(), 0, MID_LANG_LOCALE },
-        {SC_UNO_STANDARDDEC,              0,      cppu::UnoType<sal_Int16>::get(),        0, 0 },
-        {SC_UNO_TABSTOPDIS,               0,      cppu::UnoType<sal_Int32>::get(),        0, 0 },
-        { "", 0, css::uno::Type(), 0, 0 }
+        {u"" SC_UNONAME_CFCHARS,  ATTR_FONT,          cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_CHAR_SET },
+        {u"" SC_UNO_CJK_CFCHARS,  ATTR_CJK_FONT,      cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_CHAR_SET },
+        {u"" SC_UNO_CTL_CFCHARS,  ATTR_CTL_FONT,      cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_CHAR_SET },
+        {u"" SC_UNONAME_CFFAMIL,  ATTR_FONT,          cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_FAMILY },
+        {u"" SC_UNO_CJK_CFFAMIL,  ATTR_CJK_FONT,      cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_FAMILY },
+        {u"" SC_UNO_CTL_CFFAMIL,  ATTR_CTL_FONT,      cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_FAMILY },
+        {u"" SC_UNONAME_CFNAME,   ATTR_FONT,          cppu::UnoType<OUString>::get(),    0, MID_FONT_FAMILY_NAME },
+        {u"" SC_UNO_CJK_CFNAME,   ATTR_CJK_FONT,      cppu::UnoType<OUString>::get(),    0, MID_FONT_FAMILY_NAME },
+        {u"" SC_UNO_CTL_CFNAME,   ATTR_CTL_FONT,      cppu::UnoType<OUString>::get(),    0, MID_FONT_FAMILY_NAME },
+        {u"" SC_UNONAME_CFPITCH,  ATTR_FONT,          cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_PITCH },
+        {u"" SC_UNO_CJK_CFPITCH,  ATTR_CJK_FONT,      cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_PITCH },
+        {u"" SC_UNO_CTL_CFPITCH,  ATTR_CTL_FONT,      cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_PITCH },
+        {u"" SC_UNONAME_CFSTYLE,  ATTR_FONT,          cppu::UnoType<OUString>::get(),    0, MID_FONT_STYLE_NAME },
+        {u"" SC_UNO_CJK_CFSTYLE,  ATTR_CJK_FONT,      cppu::UnoType<OUString>::get(),    0, MID_FONT_STYLE_NAME },
+        {u"" SC_UNO_CTL_CFSTYLE,  ATTR_CTL_FONT,      cppu::UnoType<OUString>::get(),    0, MID_FONT_STYLE_NAME },
+        {u"" SC_UNONAME_CLOCAL,   ATTR_FONT_LANGUAGE, cppu::UnoType<lang::Locale>::get(),     0, MID_LANG_LOCALE },
+        {u"" SC_UNO_CJK_CLOCAL,   ATTR_CJK_FONT_LANGUAGE, cppu::UnoType<lang::Locale>::get(), 0, MID_LANG_LOCALE },
+        {u"" SC_UNO_CTL_CLOCAL,   ATTR_CTL_FONT_LANGUAGE, cppu::UnoType<lang::Locale>::get(), 0, MID_LANG_LOCALE },
+        {u"" SC_UNO_STANDARDDEC,              0,      cppu::UnoType<sal_Int16>::get(),        0, 0 },
+        {u"" SC_UNO_TABSTOPDIS,               0,      cppu::UnoType<sal_Int32>::get(),        0, 0 },
+        { u"", 0, css::uno::Type(), 0, 0 }
     };
     return aDocDefaultsMap_Impl;
 }

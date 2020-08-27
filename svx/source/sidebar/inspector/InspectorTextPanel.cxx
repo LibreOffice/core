@@ -73,8 +73,8 @@ static bool GetPropertyValues(const OUString& rPropName, const uno::Any& rAny, O
     }
     else if (awt::FontSlant eValue; rAny >>= eValue)
     {
-        rString = (eValue == awt::FontSlant_ITALIC) ? OUStringLiteral("italic")
-                                                    : OUStringLiteral("normal");
+        rString = (eValue == awt::FontSlant_ITALIC) ? OUStringLiteral(u"italic")
+                                                    : OUStringLiteral(u"normal");
     }
     else if (long nValueLong; rAny >>= nValueLong)
     {
@@ -86,7 +86,7 @@ static bool GetPropertyValues(const OUString& rPropName, const uno::Any& rAny, O
     else if (double fValue; rAny >>= fValue)
     {
         if (rPropName.indexOf("Weight") != -1)
-            rString = (fValue > 100) ? OUStringLiteral("bold") : OUStringLiteral("normal");
+            rString = (fValue > 100) ? OUStringLiteral(u"bold") : OUStringLiteral(u"normal");
         else
             rString = OUString::number((round(fValue * 100)) / 100.00);
     }
