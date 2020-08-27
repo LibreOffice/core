@@ -955,9 +955,8 @@ ScMasterPageContext::~ScMasterPageContext()
 }
 
 SvXMLImportContext *ScMasterPageContext::CreateHeaderFooterContext(
-            sal_uInt16 nPrefix,
-            const OUString& rLocalName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
+            sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
             const bool bFooter,
             const bool bLeft,
             const bool /*bFirst*/ )
@@ -972,7 +971,7 @@ SvXMLImportContext *ScMasterPageContext::CreateHeaderFooterContext(
     if (!xPropSet.is())
         xPropSet.set(GetStyle(), UNO_QUERY );
     return new XMLTableHeaderFooterContext( GetImport(),
-                                                nPrefix, rLocalName,
+                                                nElement,
                                                 xAttrList,
                                                 xPropSet,
                                                 bFooter, bLeft );

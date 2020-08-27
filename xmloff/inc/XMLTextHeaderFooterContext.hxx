@@ -44,9 +44,7 @@ class XMLTextHeaderFooterContext final : public SvXMLImportContext
 
 public:
 
-    XMLTextHeaderFooterContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-            const OUString& rLName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
+    XMLTextHeaderFooterContext( SvXMLImport& rImport,
             const css::uno::Reference< css::beans::XPropertySet > & rPageStylePropSet,
                bool bFooter, bool bLft, bool bFrst );
 
@@ -57,7 +55,9 @@ public:
             const OUString& rLocalName,
             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 
