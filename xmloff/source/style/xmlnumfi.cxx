@@ -581,7 +581,7 @@ static void lcl_EnquoteIfNecessary( OUStringBuffer& rContent, const SvXMLNumForm
         //  the percent character in percentage styles must be left out of quoting
         //  (one occurrence is enough even if there are several percent characters in the string)
 
-        OUString aString( rContent.getStr() );
+        OUString aString( rContent.toString() );
         sal_Int32 nPos = aString.indexOf( '%' );
         if ( nPos >= 0 )
         {
