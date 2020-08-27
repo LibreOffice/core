@@ -103,6 +103,9 @@ SwUndoFormatAttr::SwUndoFormatAttr( const SfxItemSet& rOldSet,
     , m_nFormatWhich( rChgFormat.Which() )
     , m_bSaveDrawPt( bSaveDrawPt )
 {
+    assert(m_sFormatName.getLength());
+    SAL_WARN_IF(m_sFormatName.isEmpty(), "sw.core", "Format is missing name. Undo/redo could work incorrectly");
+
     Init( rChgFormat );
 }
 
@@ -115,6 +118,9 @@ SwUndoFormatAttr::SwUndoFormatAttr( const SfxPoolItem& rItem, SwFormat& rChgForm
     , m_nFormatWhich( rChgFormat.Which() )
     , m_bSaveDrawPt( bSaveDrawPt )
 {
+    assert(m_sFormatName.getLength());
+    SAL_WARN_IF(m_sFormatName.isEmpty(), "sw.core", "Format is missing name. Undo/redo could work incorrectly");
+
     m_pOldSet->Put( rItem );
     Init( rChgFormat );
 }
