@@ -640,7 +640,7 @@ RegError ORegistry::createKey(RegKeyHandle hKey, const OUString& keyName,
         token = sFullKeyName.getToken(0, '/', nIndex);
         if (!token.isEmpty())
         {
-            if (rStoreDir.create(pKey->getStoreFile(), sFullPath.getStr(), token, storeAccessMode::Create))
+            if (rStoreDir.create(pKey->getStoreFile(), sFullPath.toString(), token, storeAccessMode::Create))
             {
                 return RegError::CREATE_KEY_FAILED;
             }
