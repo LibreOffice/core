@@ -45,6 +45,8 @@ public:
     const INetURLObject& GetStrURL() const { return m_rGalleryStorageLocations.GetStrURL(); }
 
     static GalleryThemeEntry* CreateThemeEntry(const INetURLObject& rURL, bool bReadOnly);
+
+    void removeTheme();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

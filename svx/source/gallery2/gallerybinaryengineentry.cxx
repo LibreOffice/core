@@ -128,4 +128,16 @@ GalleryThemeEntry* GalleryBinaryEngineEntry::CreateThemeEntry(const INetURLObjec
     return pRet;
 }
 
+void GalleryBinaryEngineEntry::removeTheme()
+{
+    INetURLObject aThmURL(GetThmURL());
+    INetURLObject aSdgURL(GetSdgURL());
+    INetURLObject aSdvURL(GetSdvURL());
+    INetURLObject aStrURL(GetStrURL());
+
+    KillFile(aThmURL);
+    KillFile(aSdgURL);
+    KillFile(aSdvURL);
+    KillFile(aStrURL);
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -67,6 +67,7 @@ public:
     const INetURLObject& GetSdgURL() const { return maGalleryStorageLocations.GetSdgURL(); }
     const INetURLObject& GetSdvURL() const { return maGalleryStorageLocations.GetSdvURL(); }
     const INetURLObject& GetStrURL() const { return maGalleryStorageLocations.GetStrURL(); }
+    const INetURLObject& getThemeURL() const { return maGalleryStorageLocations.getThemeURL(); }
 
     SAL_DLLPRIVATE bool implWrite(const GalleryTheme& rTheme, const GalleryThemeEntry* pThm);
 
