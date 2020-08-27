@@ -446,7 +446,8 @@ void SearchAndParseThread::execute()
         std::string sResponse = curlGet(m_pAdditionsDialog->m_sURL);
         parseResponse(sResponse, m_pAdditionsDialog->m_aAllExtensionsVector);
         std::sort(m_pAdditionsDialog->m_aAllExtensionsVector.begin(),
-                  m_pAdditionsDialog->m_aAllExtensionsVector.end(), AdditionsDialog::sortByRating);
+                  m_pAdditionsDialog->m_aAllExtensionsVector.end(),
+                  AdditionsDialog::sortByDownload);
         Search();
     }
     else // Searching
