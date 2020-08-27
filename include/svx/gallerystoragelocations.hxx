@@ -44,6 +44,8 @@ public:
     void SetStrExtension(INetURLObject& aURL);
 
     void SetStorageLocations(INetURLObject& aURL);
+
+    const INetURLObject& getThemeURL() const { return maSdgURL; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
