@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <svx/galtheme.hxx>
 #include <svx/galmisc.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/fmmodel.hxx>
@@ -67,6 +66,7 @@ public:
     const INetURLObject& GetSdgURL() const { return maGalleryStorageLocations.GetSdgURL(); }
     const INetURLObject& GetSdvURL() const { return maGalleryStorageLocations.GetSdvURL(); }
     const INetURLObject& GetStrURL() const { return maGalleryStorageLocations.GetStrURL(); }
+    const INetURLObject& getThemeURL() const { return maGalleryStorageLocations.getThemeURL(); }
 
     SAL_DLLPRIVATE bool implWrite(const GalleryTheme& rTheme, const GalleryThemeEntry* pThm);
 

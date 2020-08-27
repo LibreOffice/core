@@ -801,10 +801,6 @@ void GalleryTheme::ImplSetModified( bool bModified )
     pThm->SetModified(bModified);
 }
 
-const INetURLObject& GalleryTheme::GetThmURL() const { return pThm->GetThmURL(); }
-const INetURLObject& GalleryTheme::GetSdgURL() const { return pThm->GetSdgURL(); }
-const INetURLObject& GalleryTheme::GetSdvURL() const { return pThm->GetSdvURL(); }
-const INetURLObject& GalleryTheme::GetStrURL() const { return pThm->GetStrURL(); }
 sal_uInt32 GalleryTheme::GetId() const { return pThm->GetId(); }
 void GalleryTheme::SetId( sal_uInt32 nNewId, bool bResetThemeName ) { pThm->SetId( nNewId, bResetThemeName ); }
 bool GalleryTheme::IsReadOnly() const { return pThm->IsReadOnly(); }
