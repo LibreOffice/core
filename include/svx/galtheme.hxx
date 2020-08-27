@@ -74,12 +74,11 @@ private:
     SAL_DLLPRIVATE void         ImplSetModified( bool bModified );
     SAL_DLLPRIVATE void         ImplBroadcast(sal_uInt32 nUpdatePos);
 
-    SAL_DLLPRIVATE              GalleryTheme( Gallery* pGallery, GalleryThemeEntry* pThemeEntry );
-
     GalleryTheme(GalleryTheme const &) = delete;
     void operator =(GalleryTheme const &) = delete;
 
 public:
+    SAL_DLLPRIVATE              GalleryTheme(Gallery* pGallery, GalleryThemeEntry* pThemeEntry);
 
     SAL_DLLPRIVATE              virtual ~GalleryTheme() override;
 
@@ -167,8 +166,6 @@ public:
     SAL_DLLPRIVATE void GetPreviewBitmapExAndStrings(sal_uInt32 nPos, BitmapEx& rBitmapEx, Size& rSize, OUString& rTitle, OUString& rPath);
     SAL_DLLPRIVATE void SetPreviewBitmapExAndStrings(sal_uInt32 nPos, const BitmapEx& rBitmapEx, const Size& rSize, const OUString& rTitle, const OUString& rPath);
 };
-
-SvStream& ReadGalleryTheme( SvStream& rIn, GalleryTheme& rTheme );
 
 #endif // INCLUDED_SVX_GALTHEME_HXX
 
