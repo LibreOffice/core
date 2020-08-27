@@ -43,9 +43,8 @@ class XMLTableHeaderFooterContext: public SvXMLImportContext
 
 public:
 
-    XMLTableHeaderFooterContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-            const OUString& rLName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
+    XMLTableHeaderFooterContext( SvXMLImport& rImport, sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
             const css::uno::Reference< css::beans::XPropertySet > & rPageStylePropSet,
                bool bFooter, bool bLft );
 
@@ -56,7 +55,13 @@ public:
             const OUString& rLocalName,
             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 class XMLHeaderFooterRegionContext: public SvXMLImportContext
@@ -67,8 +72,7 @@ private:
 
 public:
 
-    XMLHeaderFooterRegionContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-            const OUString& rLName,
+    XMLHeaderFooterRegionContext( SvXMLImport& rImport,
             css::uno::Reference< css::text::XTextCursor >& xCursor );
 
     virtual ~XMLHeaderFooterRegionContext() override;
@@ -78,7 +82,9 @@ public:
             const OUString& rLocalName,
             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 #endif

@@ -32,13 +32,10 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
 
 
-XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                       const OUString& rLName,
-                       const uno::Reference<
-                            xml::sax::XAttributeList > &,
+XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport,
                         const Reference < XPropertySet > & rPageStylePropSet,
                        bool bFooter, bool bLft, bool bFrst ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    SvXMLImportContext( rImport ),
     xPropSet( rPageStylePropSet ),
     sOn( bFooter ? OUString("FooterIsOn") : OUString("HeaderIsOn") ),
     sShareContent( bFooter ? OUString("FooterIsShared") : OUString("HeaderIsShared") ),
@@ -176,7 +173,7 @@ SvXMLImportContextRef XMLTextHeaderFooterContext::CreateChildContext(
     return pContext;
 }
 
-void XMLTextHeaderFooterContext::EndElement()
+void XMLTextHeaderFooterContext::endFastElement(sal_Int32 )
 {
     if( xOldTextCursor.is() )
     {

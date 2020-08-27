@@ -200,9 +200,8 @@ public:
     virtual ~ScMasterPageContext() override;
 
     virtual SvXMLImportContext *CreateHeaderFooterContext(
-            sal_uInt16 nPrefix,
-            const OUString& rLocalName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
+            sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
             const bool bFooter,
             const bool bLeft,
             const bool bFirst ) override;
