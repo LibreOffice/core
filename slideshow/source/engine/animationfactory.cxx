@@ -288,7 +288,8 @@ namespace slideshow::internal
                         if( mpShape->isContentChanged() )
                             mpShapeManager->notifyShapeUpdate( mpShape );
 
-                        // since animation ended zero out the linear velocity
+                        // if there is a physics animation going on report the animation ending
+                        // and zero out the velocity of the shape
                         if( mpBox2DWorld->isInitialized() )
                             mpBox2DWorld->queueLinearVelocityUpdate( mpShape->getXShape(), {0,0});
                     }
@@ -323,6 +324,8 @@ namespace slideshow::internal
                     if( mpShape->isContentChanged() )
                     {
                         mpShapeManager->notifyShapeUpdate( mpShape );
+
+                        // if there's a physics animation going on report the change to it
                         if ( mpBox2DWorld->isInitialized() )
                         {
                             mpBox2DWorld->queueShapePathAnimationUpdate( mpShape->getXShape(),
@@ -654,6 +657,7 @@ namespace slideshow::internal
 
                     if( mpBox2DWorld && mpBox2DWorld->isInitialized() )
                     {
+                        // if there's a physics animation going on report the animation ending to it
                         mpBox2DWorld->queueShapeAnimationEndUpdate( mpShape->getXShape(), meAttrType );
                     }
 
@@ -717,6 +721,7 @@ namespace slideshow::internal
 
                     if( mpBox2DWorld && mpBox2DWorld->isInitialized() )
                     {
+                        // if there's a physics animation going on report the change to it
                         mpBox2DWorld->queueShapeAnimationUpdate( mpShape->getXShape(), mpAttrLayer, meAttrType, mbAnimationFirstUpdate );
                     }
 
