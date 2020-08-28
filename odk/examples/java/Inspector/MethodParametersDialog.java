@@ -65,7 +65,7 @@ public class MethodParametersDialog extends JDialog{
     private Object m_oUnoReturnObject = null;
     private JLabel jLblResult;
     private JPanel jResultPanel = null;
-    private boolean bisdiposed = false;
+    private boolean bisdisposed = false;
     private XUnoMethodNode m_xUnoMethodNode;
 
 
@@ -105,7 +105,7 @@ public class MethodParametersDialog extends JDialog{
         super.requestFocus();
         m_aParameterPanels[0].getInputComponent().requestFocusInWindow();
         setVisible(true);
-        if (!bisdiposed){
+        if (!bisdisposed){
             ArrayList<Object> aMethodObjects = new ArrayList<Object>();
             for (int i = 0; i < m_aParameterPanels.length; i++){
                 aMethodObjects.add(m_aParameterPanels[i].getValue());
@@ -319,7 +319,7 @@ public class MethodParametersDialog extends JDialog{
             jCancelButton.setFocusPainted(true);
             jCancelButton.addActionListener(new ActionListener(){
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    bisdiposed = true;
+                    bisdisposed = true;
                     dispose();
                 }
             });

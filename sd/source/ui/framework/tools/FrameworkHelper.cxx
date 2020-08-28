@@ -276,7 +276,7 @@ public:
     ViewURLMap() {}
 };
 
-//----- Framework::DiposeListener ---------------------------------------------
+//----- Framework::DisposeListener ---------------------------------------------
 
 namespace {
     typedef ::cppu::WeakComponentImplHelper <
