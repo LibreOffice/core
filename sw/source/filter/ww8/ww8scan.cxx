@@ -7753,7 +7753,7 @@ WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize):
 
             nfcFootnoteRef = Get_Short( pData );      // 492 0x1ec
             nfcEdnRef = Get_Short( pData );      // 494 0x1ee
-            hpsZoonFontPag = Get_Short( pData ); // 496 0x1f0
+            hpsZoomFontPag = Get_Short( pData ); // 496 0x1f0
             dywDispPag = Get_Short( pData );     // 498 0x1f2
 
             if (nRead >= 516)
@@ -8189,7 +8189,7 @@ void WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
 
         Set_UInt16( pData, nfcFootnoteRef );                // 492 0x1ec
         Set_UInt16( pData, nfcEdnRef );                // 494 0x1ee
-        Set_UInt16( pData, hpsZoonFontPag );           // 496 0x1f0
+        Set_UInt16( pData, hpsZoomFontPag );           // 496 0x1f0
         Set_UInt16( pData, dywDispPag );               // 498 0x1f2
 
         //500 -> 508, Appear to be repeated here in 2000+
