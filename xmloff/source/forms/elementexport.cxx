@@ -2175,8 +2175,8 @@ namespace xmloff
             PROPERTY_MASTERFIELDS);
         // detail fields
         exportStringSequenceAttribute(
-            OAttributeMetaData::getFormAttributeNamespace(faDetailFiels),
-            OAttributeMetaData::getFormAttributeName(faDetailFiels),
+            OAttributeMetaData::getFormAttributeNamespace(faDetailFields),
+            OAttributeMetaData::getFormAttributeName(faDetailFields),
             PROPERTY_DETAILFIELDS);
     }
 }   // namespace xmloff
