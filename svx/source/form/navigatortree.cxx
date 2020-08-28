@@ -803,11 +803,11 @@ namespace svxform
         //      means moving the control)
 
         // collect the ancestors of the drop target (speeds up 3)
-        SvLBoxEntrySortedArray arrDropAnchestors;
+        SvLBoxEntrySortedArray arrDropAncestors;
         std::unique_ptr<weld::TreeIter> xLoop(m_xTreeView->make_iterator(_pTargetEntry));
         do
         {
-            arrDropAnchestors.emplace(m_xTreeView->make_iterator(xLoop.get()));
+            arrDropAncestors.emplace(m_xTreeView->make_iterator(xLoop.get()));
         }
         while (m_xTreeView->iter_parent(*xLoop));
 
@@ -835,12 +835,12 @@ namespace svxform
             // test for 3)
             if (IsFormEntry(*rCurrent))
             {
-                auto aIter = std::find_if(arrDropAnchestors.begin(), arrDropAnchestors.end(),
+                auto aIter = std::find_if(arrDropAncestors.begin(), arrDropAncestors.end(),
                                           [this, &rCurrent](const auto& rElem) {
                                             return m_xTreeView->iter_compare(*rElem, *rCurrent) == 0;
                                           });
 
-                if ( aIter != arrDropAnchestors.end() )
+                if ( aIter != arrDropAncestors.end() )
                     return DND_ACTION_NONE;
             }
             else if (IsFormComponentEntry(*rCurrent))
