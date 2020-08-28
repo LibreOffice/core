@@ -246,13 +246,13 @@ bool OPoolCollection::isPoolingEnabledByUrl(const OUString& _sUrl,
     _rxDriver = m_xManager->getDriverByURL(_sUrl);
     if (_rxDriver.is() && isPoolingEnabled())
     {
-        Reference< XServiceInfo > xSerivceInfo(_rxDriver,UNO_QUERY);
-        OSL_ENSURE(xSerivceInfo.is(),"Each driver should have a XServiceInfo interface!");
+        Reference< XServiceInfo > xServiceInfo(_rxDriver,UNO_QUERY);
+        OSL_ENSURE(xServiceInfo.is(),"Each driver should have a XServiceInfo interface!");
 
-        if(xSerivceInfo.is())
+        if(xServiceInfo.is())
         {
             // look for the implementation name of the driver
-            _rsImplName = xSerivceInfo->getImplementationName();
+            _rsImplName = xServiceInfo->getImplementationName();
             bEnabled = isDriverPoolingEnabled(_rsImplName,_rxDriverNode);
         }
     }
