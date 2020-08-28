@@ -19,7 +19,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_APP_APPTITLEWINDOW_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_APP_APPTITLEWINDOW_HXX
 
-#include "ChildWindow.hxx"
+#include <ChildWindow.hxx>
 
 namespace dbaui
 {

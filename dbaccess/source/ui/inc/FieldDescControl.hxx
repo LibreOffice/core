@@ -119,6 +119,8 @@ namespace dbaui
         DECL_LINK( OnControlFocusLost, weld::Widget&, void );
         DECL_LINK( OnControlFocusGot, weld::Widget&, void );
 
+        DECL_LINK( HelpFocusOut, weld::Widget&, void );
+
         void                UpdateFormatSample(OFieldDescription const * pFieldDescr);
 
         bool                isTextFormat(const OFieldDescription* _pFieldDescr,sal_uInt32& _nFormatKey) const;
@@ -187,8 +189,9 @@ namespace dbaui
 
         void Init();
 
-        void GetFocus();
-        void LoseFocus();
+        void GrabFocus();
+
+        bool HasChildPathFocus() const;
 
         virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() = 0;
         virtual css::uno::Reference< css::sdbc::XConnection> getConnection() = 0;

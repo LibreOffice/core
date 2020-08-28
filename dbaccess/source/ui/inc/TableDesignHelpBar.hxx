@@ -41,6 +41,11 @@ namespace dbaui
             m_xTextWin->connect_focus_in(rLink);
         }
 
+        void connect_focus_out(const Link<weld::Widget&, void>& rLink)
+        {
+            m_xTextWin->connect_focus_out(rLink);
+        }
+
         // IClipboardTest
         virtual bool isCutAllowed() override;
         virtual bool isCopyAllowed() override;

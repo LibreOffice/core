@@ -25,6 +25,7 @@
 #include "TableFieldDescWin.hxx"
 #include <TableRow.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/syslocale.hxx>
 #include <vcl/settings.hxx>
 #include <memory>
@@ -36,23 +37,21 @@ using namespace ::com::sun::star::datatransfer::clipboard;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
-OTableBorderWindow::OTableBorderWindow(OTableDesignView* pParent) : Window(pParent,WB_BORDER)
-    ,m_aHorzSplitter( VclPtr<Splitter>::Create(this) )
+OTableBorderWindow::OTableBorderWindow(OTableDesignView* pParent)
+    : InterimItemWindow(pParent, "dbaccess/ui/tableborderwindow.ui", "TableBorderWindow", false)
+    , m_xHorzSplitter(m_xBuilder->weld_paned("splitter"))
+    , m_xEditorParent(m_xBuilder->weld_container("editor"))
+    , m_xEditorParentWin(m_xEditorParent->CreateChildFrame())
+    , m_xEditorCtrl(VclPtr<OTableEditorCtrl>::Create(VCLUnoHelper::GetWindow(m_xEditorParentWin), pParent))
+    , m_xFieldDescParent(m_xBuilder->weld_container("fielddesc"))
+    , m_xFieldDescWin(new OTableFieldDescWin(m_xFieldDescParent.get(), pParent))
 {
+    SetStyle(GetStyle() | WB_DIALOGCONTROL);
 
-    ImplInitSettings();
-    // create children
-    m_pEditorCtrl   = VclPtr<OTableEditorCtrl>::Create( this);
-    m_pFieldDescWin = VclPtr<OTableFieldDescWin>::Create(this, pParent);
-
-    m_pFieldDescWin->SetHelpId(HID_TAB_DESIGN_DESCWIN);
+    m_xFieldDescWin->SetHelpId(HID_TAB_DESIGN_DESCWIN);
 
     // set depending windows and controls
-    m_pEditorCtrl->SetDescrWin(m_pFieldDescWin);
-
-    // set up splitter
-    m_aHorzSplitter->SetSplitHdl( LINK(this, OTableBorderWindow, SplitHdl) );
-    m_aHorzSplitter->Show();
+    m_xEditorCtrl->SetDescrWin(m_xFieldDescWin.get());
 }
 
 OTableBorderWindow::~OTableBorderWindow()
@@ -63,93 +62,45 @@ OTableBorderWindow::~OTableBorderWindow()
 void OTableBorderWindow::dispose()
 {
     // destroy children
-    //  ::dbaui::notifySystemWindow(this,m_pFieldDescWin,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
-    m_pEditorCtrl->Hide();
-    m_pFieldDescWin->Hide();
-    m_pEditorCtrl.disposeAndClear();
-    m_pFieldDescWin.disposeAndClear();
-    m_aHorzSplitter.disposeAndClear();
-    vcl::Window::dispose();
+    m_xEditorCtrl.disposeAndClear();
+    m_xEditorParentWin->dispose();
+    m_xEditorParentWin.clear();
+    m_xEditorParent.reset();
+    m_xFieldDescWin.reset();
+    m_xFieldDescParent.reset();
+    m_xHorzSplitter.reset();
+    InterimItemWindow::dispose();
 }
 
-void OTableBorderWindow::Resize()
+void OTableBorderWindow::IdleResize()
 {
-    const long nSplitterHeight(3);
-
     // dimensions of parent window
-    Size aOutputSize( GetOutputSize() );
-    long nOutputWidth   = aOutputSize.Width();
-    long nOutputHeight  = aOutputSize.Height();
-    long nSplitPos      = m_aHorzSplitter->GetSplitPosPixel();
+    auto nOutputHeight = GetSizePixel().Height();
+    auto nOldSplitPos = m_xHorzSplitter->get_position();
+    auto nSplitPos = nOldSplitPos;
 
     // shift range of the splitter is the middle third of the output
-    long nDragPosY = nOutputHeight/3;
-    long nDragSizeHeight = nOutputHeight/3;
-    m_aHorzSplitter->SetDragRectPixel( tools::Rectangle(Point(0,nDragPosY), Size(nOutputWidth,nDragSizeHeight) ), this );
-    if( (nSplitPos < nDragPosY) || (nSplitPos > (nDragPosY+nDragSizeHeight)) )
-        nSplitPos = nDragPosY+nDragSizeHeight-5;
+    auto nDragPosY = nOutputHeight/3;
+    auto nDragSizeHeight = nOutputHeight/3;
+    if (nSplitPos < nDragPosY || nSplitPos > nDragPosY + nDragSizeHeight)
+        nSplitPos = nDragPosY + nDragSizeHeight;
 
     // set splitter
-    m_aHorzSplitter->SetPosSizePixel( Point( 0, nSplitPos ), Size(nOutputWidth, nSplitterHeight));
-    m_aHorzSplitter->SetSplitPosPixel( nSplitPos );
+    m_xHorzSplitter->set_position(nSplitPos);
 
-    // set window
-    m_pEditorCtrl->SetPosSizePixel( Point(0, 0), Size(nOutputWidth , nSplitPos) );
+    InterimItemWindow::IdleResize();
 
-    m_pFieldDescWin->SetPosSizePixel(   Point(0, nSplitPos+nSplitterHeight),
-                        Size(nOutputWidth, nOutputHeight-nSplitPos-nSplitterHeight) );
-}
-
-IMPL_LINK( OTableBorderWindow, SplitHdl, Splitter*, pSplit, void )
-{
-    if(pSplit == m_aHorzSplitter.get())
-    {
-        m_aHorzSplitter->SetPosPixel( Point( m_aHorzSplitter->GetPosPixel().X(),m_aHorzSplitter->GetSplitPosPixel() ) );
-        Resize();
-    }
-}
-
-void OTableBorderWindow::ImplInitSettings()
-{
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-
-    // FIXME RenderContext
-
-    vcl::Font aFont = rStyleSettings.GetAppFont();
-    if ( IsControlFont() )
-        aFont.Merge( GetControlFont() );
-    SetPointFont(*this,  aFont);
-
-    Color aTextColor = rStyleSettings.GetButtonTextColor();
-    if ( IsControlForeground() )
-        aTextColor = GetControlForeground();
-    SetTextColor( aTextColor );
-
-    if( IsControlBackground() )
-        SetBackground( GetControlBackground() );
-    else
-        SetBackground( rStyleSettings.GetFaceColor() );
-}
-
-void OTableBorderWindow::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    Window::DataChanged( rDCEvt );
-
-    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
-    {
-        ImplInitSettings();
-        Invalidate();
-    }
+    if (nOldSplitPos != nSplitPos)
+        m_xHorzSplitter->set_position(nSplitPos);
 }
 
 void OTableBorderWindow::GetFocus()
 {
-    Window::GetFocus();
+    InterimItemWindow::GetFocus();
 
     // forward the focus to the current cell of the editor control
-    if (m_pEditorCtrl)
-        m_pEditorCtrl->GrabFocus();
+    if (m_xEditorCtrl)
+        m_xEditorCtrl->GrabFocus();
 }
 
 OTableDesignView::OTableDesignView( vcl::Window* pParent,

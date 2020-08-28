@@ -28,6 +28,10 @@ public:
     virtual bool HasChildPathFocus() const = 0;
 
     void Enable(bool bEnable) { m_xContainer->set_sensitive(bEnable); }
+
+    void SetHelpId(const OString& rHelpId) { m_xContainer->set_help_id(rHelpId); }
+
+    void Show() { m_xContainer->show(); }
 };
 }
 

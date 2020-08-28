@@ -21,13 +21,9 @@
 
 #include <dbaccess/dataview.hxx>
 #include <com/sun/star/lang/Locale.hpp>
-#include <vcl/split.hxx>
+#include <vcl/InterimItemWindow.hxx>
+#include <vcl/weld.hxx>
 #include "IClipBoardTest.hxx"
-
-namespace weld
-{
-    class Widget;
-}
 
 namespace dbaui
 {
@@ -36,30 +32,30 @@ namespace dbaui
     class OTableFieldDescWin;
     class OTableEditorCtrl;
 
-    class OTableBorderWindow : public vcl::Window
+    class OTableBorderWindow final : public InterimItemWindow
     {
-        VclPtr<Splitter>                    m_aHorzSplitter;
-        VclPtr<OTableFieldDescWin>          m_pFieldDescWin;
-        VclPtr<OTableEditorCtrl>            m_pEditorCtrl;
+        std::unique_ptr<weld::Paned> m_xHorzSplitter;
+        std::unique_ptr<weld::Container> m_xEditorParent;
+        css::uno::Reference<css::awt::XWindow> m_xEditorParentWin;
+        VclPtr<OTableEditorCtrl> m_xEditorCtrl;
+        std::unique_ptr<weld::Container> m_xFieldDescParent;
+        std::unique_ptr<OTableFieldDescWin> m_xFieldDescWin;
 
-        void ImplInitSettings();
-        DECL_LINK( SplitHdl, Splitter*, void );
-    protected:
-        virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
     public:
         OTableBorderWindow(OTableDesignView* pParent);
         virtual ~OTableBorderWindow() override;
         // Window overrides
         virtual void dispose() override;
-        virtual void Resize() override;
-        virtual void GetFocus() override;
 
-        OTableEditorCtrl*       GetEditorCtrl() const { return m_pEditorCtrl; }
-        OTableFieldDescWin*     GetDescWin()    const { return m_pFieldDescWin; }
+        virtual void GetFocus() override;
+        virtual void IdleResize() override;
+
+        OTableEditorCtrl*       GetEditorCtrl() const { return m_xEditorCtrl.get(); }
+        OTableFieldDescWin*     GetDescWin()    const { return m_xFieldDescWin.get(); }
     };
 
     class OTableDesignView : public ODataView
-                            ,public IClipboardTest
+                           , public IClipboardTest
     {
         enum ChildFocusState
         {

@@ -29,8 +29,8 @@
 
 using namespace dbaui;
 
-OTableFieldDescWin::OTableFieldDescWin(vcl::Window* pParent, OTableDesignView* pView)
-    : InterimItemWindow(pParent, "dbaccess/ui/fielddescpanel.ui", "FieldDescPanel")
+OTableFieldDescWin::OTableFieldDescWin(weld::Container* pParent, OTableDesignView* pView)
+    : OChildWindow(pParent, "dbaccess/ui/fielddescpanel.ui", "FieldDescPanel")
     , m_xHelpBar(new OTableDesignHelpBar(m_xBuilder->weld_text_view("textview")))
     , m_xBox(m_xBuilder->weld_container("box"))
     , m_xFieldControl(new OTableFieldControl(m_xBox.get(), m_xHelpBar.get(), pView))
@@ -46,19 +46,13 @@ OTableFieldDescWin::OTableFieldDescWin(vcl::Window* pParent, OTableDesignView* p
     m_xFieldControl->connect_focus_in(LINK(this, OTableFieldDescWin, FieldFocusIn));
 }
 
-OTableFieldDescWin::~OTableFieldDescWin()
+bool OTableFieldDescWin::HasChildPathFocus() const
 {
-    disposeOnce();
+    return m_xFieldControl->HasChildPathFocus() || m_xHelpBar->HasFocus();
 }
 
-void OTableFieldDescWin::dispose()
+OTableFieldDescWin::~OTableFieldDescWin()
 {
-    // destroy children
-    m_xFieldControl.reset();
-    m_xBox.reset();
-    m_xHeader.reset();
-    m_xHelpBar.reset();
-    InterimItemWindow::dispose();
 }
 
 void OTableFieldDescWin::Init()
@@ -129,16 +123,9 @@ void OTableFieldDescWin::paste()
         getActiveChild()->paste();
 }
 
-void OTableFieldDescWin::GetFocus()
+void OTableFieldDescWin::GrabFocus()
 {
-    if ( getGenPage() )
-        getGenPage()->GetFocus();
-}
-
-void OTableFieldDescWin::LoseFocus()
-{
-    if ( getGenPage() )
-        getGenPage()->LoseFocus();
+    m_xFieldControl->GrabFocus();
 }
 
 IMPL_LINK(OTableFieldDescWin, HelpFocusIn, weld::Widget&, rWidget, void)

@@ -22,7 +22,7 @@
 #include <IClipBoardTest.hxx>
 #include "AppIconControl.hxx"
 #include <AppElementType.hxx>
-#include "ChildWindow.hxx"
+#include <ChildWindow.hxx>
 
 class MnemonicGenerator;
 
