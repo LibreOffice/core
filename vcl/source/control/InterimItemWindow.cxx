@@ -69,7 +69,9 @@ void InterimItemWindow::queue_resize(StateChangedType eReason)
 
 void InterimItemWindow::Resize() { StartIdleLayout(); }
 
-IMPL_LINK_NOARG(InterimItemWindow, DoResize, Timer*, void)
+IMPL_LINK_NOARG(InterimItemWindow, DoResize, Timer*, void) { IdleResize(); }
+
+void InterimItemWindow::IdleResize()
 {
     vcl::Window* pChild = GetWindow(GetWindowType::FirstChild);
     assert(pChild);
