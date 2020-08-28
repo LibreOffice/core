@@ -1658,7 +1658,7 @@ void UseListIndent(SwWW8StyInf &rStyle, const SwNumFormat &rFormat)
         aLR.SetTextLeft(nAbsLSpace);
         aLR.SetTextFirstLineOffset(writer_cast<short>(nListFirstLineIndent));
         rStyle.m_pFormat->SetFormatAttr(aLR);
-        rStyle.m_bListReleventIndentSet = true;
+        rStyle.m_bListRelevantIndentSet = true;
     }
 }
 
@@ -1668,7 +1668,7 @@ void SetStyleIndent(SwWW8StyInf &rStyle, const SwNumFormat &rFormat)
         return;
 
     SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*rStyle.m_pFormat, RES_LR_SPACE));
-    if (rStyle.m_bListReleventIndentSet)
+    if (rStyle.m_bListRelevantIndentSet)
     {
 
         SyncIndentWithList( aLR, rFormat, false, false ); // #i103711#, #i105414#

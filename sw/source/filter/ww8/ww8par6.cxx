@@ -4232,7 +4232,7 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
             aLR->SetTextLeft( nPara );
             if (m_pCurrentColl && m_nCurrentColl < m_vColl.size())
             {
-                m_vColl[m_nCurrentColl].m_bListReleventIndentSet = true;
+                m_vColl[m_nCurrentColl].m_bListRelevantIndentSet = true;
             }
             bLeftIndentSet = true;  // #i105414#
             break;
@@ -4285,7 +4285,7 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
             }
             if (m_pCurrentColl && m_nCurrentColl < m_vColl.size())
             {
-                m_vColl[m_nCurrentColl].m_bListReleventIndentSet = true;
+                m_vColl[m_nCurrentColl].m_bListRelevantIndentSet = true;
             }
             bFirstLinOfstSet = true; // #i103711#
             break;
