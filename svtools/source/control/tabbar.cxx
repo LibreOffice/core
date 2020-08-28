@@ -21,11 +21,11 @@
 #include <svtools/tabbar.hxx>
 #include <tools/time.hxx>
 #include <tools/poly.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/button.hxx>
-#include <vcl/edit.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
@@ -370,78 +370,86 @@ void ImplTabSizer::Paint( vcl::RenderContext& rRenderContext, const tools::Recta
 namespace {
 
 // Is not named Impl. as it may be both instantiated and derived from
-class TabBarEdit : public Edit
+class TabBarEdit final : public InterimItemWindow
 {
 private:
+    std::unique_ptr<weld::Entry> m_xEntry;
     Idle            maLoseFocusIdle;
     bool            mbPostEvt;
 
-                    DECL_LINK( ImplEndEditHdl, void*, void );
-                    DECL_LINK( ImplEndTimerHdl, Timer*, void );
+    DECL_LINK( ImplEndEditHdl, void*, void );
+    DECL_LINK( ImplEndTimerHdl, Timer*, void );
+    DECL_LINK( ActivatedHdl, weld::Entry&, bool );
+    DECL_LINK( KeyInputHdl, const KeyEvent&, bool );
+    DECL_LINK( FocusOutHdl, weld::Widget&, void );
 
 public:
-                    TabBarEdit( TabBar* pParent, WinBits nWinStyle );
+    TabBarEdit(TabBar* pParent);
+    virtual void dispose() override;
 
     TabBar*         GetParent() const { return static_cast<TabBar*>(Window::GetParent()); }
 
+    weld::Entry&    get_widget() { return *m_xEntry; }
+
     void            SetPostEvent() { mbPostEvt = true; }
     void            ResetPostEvent() { mbPostEvt = false; }
-
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
-    virtual void    LoseFocus() override;
 };
 
 }
 
-TabBarEdit::TabBarEdit( TabBar* pParent, WinBits nWinStyle ) :
-    Edit( pParent, nWinStyle )
+TabBarEdit::TabBarEdit(TabBar* pParent)
+    : InterimItemWindow(pParent, "svt/ui/tabbaredit.ui", "TabBarEdit")
+    , m_xEntry(m_xBuilder->weld_entry("entry"))
 {
+    InitControlBase(m_xEntry.get());
+
     mbPostEvt = false;
     maLoseFocusIdle.SetPriority( TaskPriority::REPAINT );
     maLoseFocusIdle.SetInvokeHandler( LINK( this, TabBarEdit, ImplEndTimerHdl ) );
     maLoseFocusIdle.SetDebugName( "svtools::TabBarEdit maLoseFocusIdle" );
+
+    m_xEntry->connect_activate(LINK(this, TabBarEdit, ActivatedHdl));
+    m_xEntry->connect_key_press(LINK(this, TabBarEdit, KeyInputHdl));
+    m_xEntry->connect_focus_out(LINK(this, TabBarEdit, FocusOutHdl));
 }
 
-bool TabBarEdit::PreNotify( NotifyEvent& rNEvt )
+void TabBarEdit::dispose()
 {
-    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
-    {
-        const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-        if ( !pKEvt->GetKeyCode().GetModifier() )
-        {
-            if ( pKEvt->GetKeyCode().GetCode() == KEY_RETURN )
-            {
-                if ( !mbPostEvt )
-                {
-                    if ( PostUserEvent( LINK( this, TabBarEdit, ImplEndEditHdl ), reinterpret_cast<void*>(false), true ) )
-                        mbPostEvt = true;
-                }
-                return true;
-            }
-            else if ( pKEvt->GetKeyCode().GetCode() == KEY_ESCAPE )
-            {
-                if ( !mbPostEvt )
-                {
-                    if ( PostUserEvent( LINK( this, TabBarEdit, ImplEndEditHdl ), reinterpret_cast<void*>(true), true ) )
-                        mbPostEvt = true;
-                }
-                return true;
-            }
-        }
-    }
-
-    return Edit::PreNotify( rNEvt );
+    m_xEntry.reset();
+    InterimItemWindow::dispose();
 }
 
-void TabBarEdit::LoseFocus()
+IMPL_LINK_NOARG(TabBarEdit, ActivatedHdl, weld::Entry&, bool)
 {
     if ( !mbPostEvt )
     {
         if ( PostUserEvent( LINK( this, TabBarEdit, ImplEndEditHdl ), reinterpret_cast<void*>(false), true ) )
             mbPostEvt = true;
     }
+    return true;
+}
 
-    Edit::LoseFocus();
+IMPL_LINK(TabBarEdit, KeyInputHdl, const KeyEvent&, rKEvt, bool)
+{
+    if (!rKEvt.GetKeyCode().GetModifier() && rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE)
+    {
+        if ( !mbPostEvt )
+        {
+            if ( PostUserEvent( LINK( this, TabBarEdit, ImplEndEditHdl ), reinterpret_cast<void*>(true), true ) )
+                mbPostEvt = true;
+        }
+        return true;
+    }
+    return false;
+}
+
+IMPL_LINK_NOARG(TabBarEdit, FocusOutHdl, weld::Widget&, void)
+{
+    if ( !mbPostEvt )
+    {
+        if ( PostUserEvent( LINK( this, TabBarEdit, ImplEndEditHdl ), reinterpret_cast<void*>(false), true ) )
+            mbPostEvt = true;
+    }
 }
 
 IMPL_LINK( TabBarEdit, ImplEndEditHdl, void*, pCancel, void )
@@ -449,27 +457,18 @@ IMPL_LINK( TabBarEdit, ImplEndEditHdl, void*, pCancel, void )
     ResetPostEvent();
     maLoseFocusIdle.Stop();
 
-    // We need this query, because the edit gets a losefocus event,
-    // when it shows the context menu or the insert symbol dialog
-    if ( !HasFocus() && HasChildPathFocus( true ) )
-    {
+    // do it idle in case we quickly regain focus
+    if (!m_xEntry->has_focus())
         maLoseFocusIdle.Start();
-    }
     else
         GetParent()->EndEditMode( pCancel != nullptr );
 }
 
 IMPL_LINK_NOARG(TabBarEdit, ImplEndTimerHdl, Timer *, void)
 {
-    if ( HasFocus() )
+    if (m_xEntry->has_focus())
         return;
-
-    // We need this query, because the edit gets a losefocus event,
-    // when it shows the context menu or the insert symbol dialog
-    if ( HasChildPathFocus( true ) )
-        maLoseFocusIdle.Start();
-    else
-        GetParent()->EndEditMode( true );
+    GetParent()->EndEditMode( true );
 }
 
 struct TabBar_Impl
@@ -480,7 +479,7 @@ struct TabBar_Impl
     ScopedVclPtr<ImplTabButton> mpNextButton;
     ScopedVclPtr<ImplTabButton> mpLastButton;
     ScopedVclPtr<ImplTabButton> mpAddButton;
-    ScopedVclPtr<TabBarEdit>    mpEdit;
+    ScopedVclPtr<TabBarEdit>    mxEdit;
     std::vector<std::unique_ptr<ImplTabBarItem>> mpItemList;
 
     vcl::AccessibleFactoryAccess  maAccessibleFactory;
@@ -1447,8 +1446,11 @@ void TabBar::StateChanged(StateChangedType nType)
             mpImpl->mpSizer->EnableRTL(IsRTLEnabled());
         if (mpImpl->mpAddButton)
             mpImpl->mpAddButton->EnableRTL(IsRTLEnabled());
-        if (mpImpl->mpEdit)
-            mpImpl->mpEdit->EnableRTL(IsRTLEnabled());
+        if (mpImpl->mxEdit)
+        {
+            weld::Entry& rEntry = mpImpl->mxEdit->get_widget();
+            rEntry.set_direction(IsRTLEnabled());
+        }
     }
 }
 
@@ -2037,7 +2039,7 @@ void TabBar::SetProtectionSymbol(sal_uInt16 nPageId, bool bProtection)
 bool TabBar::StartEditMode(sal_uInt16 nPageId)
 {
     sal_uInt16 nPos = GetPagePos( nPageId );
-    if (mpImpl->mpEdit || (nPos == PAGE_NOT_FOUND) || (mnLastOffX < 8))
+    if (mpImpl->mxEdit || (nPos == PAGE_NOT_FOUND) || (mnLastOffX < 8))
         return false;
 
     mnEditId = nPageId;
@@ -2047,7 +2049,7 @@ bool TabBar::StartEditMode(sal_uInt16 nPageId)
         ImplFormat();
         PaintImmediately();
 
-        mpImpl->mpEdit.disposeAndReset(VclPtr<TabBarEdit>::Create(this, WB_CENTER));
+        mpImpl->mxEdit.disposeAndReset(VclPtr<TabBarEdit>::Create(this));
         tools::Rectangle aRect = GetPageRect( mnEditId );
         long nX = aRect.Left();
         long nWidth = aRect.GetWidth();
@@ -2060,8 +2062,9 @@ bool TabBar::StartEditMode(sal_uInt16 nPageId)
             nX = aRect.Left();
             nWidth = aRect.GetWidth();
         }
-        mpImpl->mpEdit->SetText(GetPageText(mnEditId));
-        mpImpl->mpEdit->setPosSizePixel(nX, aRect.Top() + mnOffY + 1, nWidth, aRect.GetHeight() - 3);
+        weld::Entry& rEntry = mpImpl->mxEdit->get_widget();
+        rEntry.set_text(GetPageText(mnEditId));
+        mpImpl->mxEdit->SetPosSizePixel(Point(nX, aRect.Top() + mnOffY + 1), Size(nWidth, aRect.GetHeight() - 3));
         vcl::Font aFont = GetPointFont(*this); // FIXME RenderContext
 
         Color   aForegroundColor;
@@ -2091,12 +2094,12 @@ bool TabBar::StartEditMode(sal_uInt16 nPageId)
         {
             aForegroundColor = COL_LIGHTBLUE;
         }
-        mpImpl->mpEdit->SetControlFont(aFont);
-        mpImpl->mpEdit->SetControlForeground(aForegroundColor);
-        mpImpl->mpEdit->SetControlBackground(aBackgroundColor);
-        mpImpl->mpEdit->GrabFocus();
-        mpImpl->mpEdit->SetSelection(Selection(0, mpImpl->mpEdit->GetText().getLength()));
-        mpImpl->mpEdit->Show();
+        rEntry.set_font(aFont);
+        rEntry.set_font_color(aForegroundColor);
+        mpImpl->mxEdit->SetControlBackground(aBackgroundColor);
+        rEntry.grab_focus();
+        rEntry.select_region(0, -1);
+        mpImpl->mxEdit->Show();
         return true;
     }
     else
@@ -2108,19 +2111,20 @@ bool TabBar::StartEditMode(sal_uInt16 nPageId)
 
 bool TabBar::IsInEditMode() const
 {
-    return bool(mpImpl->mpEdit);
+    return bool(mpImpl->mxEdit);
 }
 
 void TabBar::EndEditMode(bool bCancel)
 {
-    if (!mpImpl->mpEdit)
+    if (!mpImpl->mxEdit)
         return;
 
     // call hdl
     bool bEnd = true;
     mbEditCanceled = bCancel;
-    maEditText = mpImpl->mpEdit->GetText();
-    mpImpl->mpEdit->SetPostEvent();
+    weld::Entry& rEntry = mpImpl->mxEdit->get_widget();
+    maEditText = rEntry.get_text();
+    mpImpl->mxEdit->SetPostEvent();
     if (!bCancel)
     {
         TabBarAllowRenamingReturnCode nAllowRenaming = AllowRenaming();
@@ -2135,13 +2139,13 @@ void TabBar::EndEditMode(bool bCancel)
     // renaming not allowed, then reset edit data
     if (!bEnd)
     {
-        mpImpl->mpEdit->ResetPostEvent();
-        mpImpl->mpEdit->GrabFocus();
+        mpImpl->mxEdit->ResetPostEvent();
+        rEntry.grab_focus();
     }
     else
     {
         // close edit and call end hdl
-        mpImpl->mpEdit.disposeAndClear();
+        mpImpl->mxEdit.disposeAndClear();
 
         EndRenaming();
         mnEditId = 0;
