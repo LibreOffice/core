@@ -55,7 +55,7 @@ private:
 
 protected:
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
-    void                ImpUpdateSrollBarVis( WinBits nWinStyle );
+    void                ImpUpdateScrollBarVis( WinBits nWinStyle );
     void                ImpInitScrollBars();
     void                ImpSetScrollBarRanges();
     void                ImpSetHScrollBarThumbPos();
@@ -126,7 +126,7 @@ ImpVclMEdit::ImpVclMEdit( VclMultiLineEdit* pEdt, WinBits nWinStyle )
     StartListening( *mpTextWindow->GetTextEngine() );
 }
 
-void ImpVclMEdit::ImpUpdateSrollBarVis( WinBits nWinStyle )
+void ImpVclMEdit::ImpUpdateScrollBarVis( WinBits nWinStyle )
 {
     const bool bHaveVScroll = mpVScrollBar->IsVisible();
     const bool bHaveHScroll = mpHScrollBar->IsVisible();
@@ -175,7 +175,7 @@ void ImpVclMEdit::ImpUpdateSrollBarVis( WinBits nWinStyle )
 
 void ImpVclMEdit::InitFromStyle( WinBits nWinStyle )
 {
-    ImpUpdateSrollBarVis( nWinStyle );
+    ImpUpdateScrollBarVis( nWinStyle );
     SetAlign( nWinStyle );
 
     if ( nWinStyle & WB_NOHIDESELECTION )
@@ -331,7 +331,7 @@ void ImpVclMEdit::Resize()
     {
         WinBits nWinStyle( pVclMultiLineEdit->GetStyle() );
         if ( ( nWinStyle & WB_AUTOVSCROLL ) == WB_AUTOVSCROLL )
-            ImpUpdateSrollBarVis( nWinStyle );
+            ImpUpdateScrollBarVis( nWinStyle );
 
         Size aSz = pVclMultiLineEdit->GetOutputSizePixel();
         Size aEditSize = aSz;
@@ -417,7 +417,7 @@ void ImpVclMEdit::SetText( const OUString& rStr )
 
     WinBits nWinStyle( pVclMultiLineEdit->GetStyle() );
     if ( ( nWinStyle & WB_AUTOVSCROLL ) == WB_AUTOVSCROLL )
-        ImpUpdateSrollBarVis( nWinStyle );
+        ImpUpdateScrollBarVis( nWinStyle );
 }
 
 OUString ImpVclMEdit::GetText() const
@@ -475,7 +475,7 @@ void ImpVclMEdit::Notify( SfxBroadcaster&, const SfxHint& rHint )
             break;
 
         case SfxHintId::TextModified:
-            ImpUpdateSrollBarVis(pVclMultiLineEdit->GetStyle());
+            ImpUpdateScrollBarVis(pVclMultiLineEdit->GetStyle());
             pVclMultiLineEdit->Modify();
             break;
 
