@@ -1637,7 +1637,7 @@ void SvXMLImport::SetAutoStyles( SvXMLStylesContext *pAutoStyles )
 {
     if (pAutoStyles && mxNumberStyles.is())
     {
-        uno::Reference<xml::sax::XAttributeList> xAttrList;
+        uno::Reference<xml::sax::XFastAttributeList> xAttrList = new sax_fastparser::FastAttributeList(nullptr);
         const uno::Sequence<OUString> aStyleNames = mxNumberStyles->getElementNames();
         for (const auto& name : aStyleNames)
         {
@@ -1646,7 +1646,7 @@ void SvXMLImport::SetAutoStyles( SvXMLStylesContext *pAutoStyles )
             if (aAny >>= nKey)
             {
                 SvXMLStyleContext* pContext = new SvXMLNumFormatContext(
-                    *this, XML_NAMESPACE_NUMBER, name, xAttrList, nKey,
+                    *this, name, xAttrList, nKey,
                     GetDataStylesImport()->GetLanguageForKey(nKey), *pAutoStyles);
                 pAutoStyles->AddStyle(*pContext);
             }
@@ -2080,6 +2080,13 @@ OUString SvXMLImport::getNamespacePrefixFromURI( const OUString& rURI )
         return OUString();
 }
 
+sal_Int32 SvXMLImport::getTokenFromName( const OUString& rName )
+{
+    Sequence< sal_Int8 > aLocalNameSeq( reinterpret_cast<sal_Int8 const *>(
+        OUStringToOString( rName, RTL_TEXTENCODING_UTF8 ).getStr()), rName.getLength() );
+    return xTokenHandler->getTokenFromUTF8( aLocalNameSeq );
+}
+
 void SvXMLImport::initializeNamespaceMaps()
 {
     auto mapTokenToNamespace = [&]( sal_Int32 nToken, sal_Int32 nPrefix, sal_Int32 nNamespace )
@@ -2255,9 +2262,7 @@ void SAL_CALL SvXMLLegacyToFastDocHandler::startElement( const OUString& rName,
     mrImport->processNSAttributes(xAttrList);
     OUString aLocalName;
     sal_uInt16 nPrefix = mrImport->mpNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
-    Sequence< sal_Int8 > aLocalNameSeq( reinterpret_cast<sal_Int8 const *>(
-                                    OUStringToOString( aLocalName, RTL_TEXTENCODING_UTF8 ).getStr()), aLocalName.getLength() );
-    sal_Int32 mnElement = NAMESPACE_TOKEN( nPrefix ) | SvXMLImport::xTokenHandler->getTokenFromUTF8( aLocalNameSeq );
+    sal_Int32 mnElement = NAMESPACE_TOKEN( nPrefix ) | SvXMLImport::getTokenFromName( aLocalName );
     mxFastAttributes->clear();
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -2271,9 +2276,7 @@ void SAL_CALL SvXMLLegacyToFastDocHandler::startElement( const OUString& rName,
                 rAttrName, nullptr, &aLocalAttrName, &aNamespace));
         if( XML_NAMESPACE_XMLNS != nAttrPrefix )
         {
-            Sequence< sal_Int8 > aAttrSeq( reinterpret_cast<sal_Int8 const *>(
-                                    OUStringToOString( aLocalAttrName, RTL_TEXTENCODING_UTF8 ).getStr()), aLocalAttrName.getLength() );
-            auto const nToken(SvXMLImport::xTokenHandler->getTokenFromUTF8(aAttrSeq));
+            auto const nToken = SvXMLImport::getTokenFromName(aLocalAttrName);
             if (nToken == xmloff::XML_TOKEN_INVALID)
             {
                 mxFastAttributes->addUnknown(aNamespace,
@@ -2294,9 +2297,7 @@ void SAL_CALL SvXMLLegacyToFastDocHandler::endElement( const OUString& rName )
 {
     OUString aLocalName;
     sal_uInt16 nPrefix = mrImport->mpNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
-    Sequence< sal_Int8 > aLocalNameSeq( reinterpret_cast<sal_Int8 const *>(
-                                    OUStringToOString( aLocalName, RTL_TEXTENCODING_UTF8 ).getStr()), aLocalName.getLength() );
-    sal_Int32 mnElement = NAMESPACE_TOKEN( nPrefix ) | SvXMLImport::xTokenHandler->getTokenFromUTF8( aLocalNameSeq );
+    sal_Int32 mnElement = NAMESPACE_TOKEN( nPrefix ) | SvXMLImport::getTokenFromName(aLocalName);
     mrImport->endFastElement( mnElement );
 }
 

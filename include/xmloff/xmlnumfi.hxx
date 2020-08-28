@@ -159,9 +159,8 @@ public:
                                     const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
                                     SvXMLStylesContext& rStyles );
                 SvXMLNumFormatContext( SvXMLImport& rImport,
-                                    sal_uInt16 nPrfx,
-                                    const OUString& rLName,
-                                    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
+                                    const OUString& rName,
+                                    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
                                     const sal_Int32 nKey,
                                     LanguageType nLang,
                                     SvXMLStylesContext& rStyles );
