@@ -20,9 +20,6 @@
 # Collation of Hungarian letters
 #
 
-[caseLevel on]
-[caseFirst lower]
-
 # Because of the different requirements of Writer and Calc,
 # don't ignore the special characters, yet.
 # See tdf#123204 "EDITING Not all special characters appear in the AutoFilter window"
