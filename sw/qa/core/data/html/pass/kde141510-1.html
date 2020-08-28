@@ -164,11 +164,11 @@ arrOnlineSpecialWithTrim[3] = new OnlineSpecialObjectWithTrim(0,'','', '', '', '
 arrOnlineSpecial[4] = new OnlineSpecialObject(0,'','', '', '', '','','','',''); 
 arrOnlineSpecialWithTrim[4] = new OnlineSpecialObjectWithTrim(0,'','', '', '', '','','','','',''); 
 
- var PreviosPageExist =true;
+ var PreviousPageExist =true;
 
  var NextPageExist =false;
 
- var PreviosPageNo =0;
+ var PreviousPageNo =0;
 
  var NextPageNo =0;
 
@@ -639,12 +639,12 @@ urchinTracker();
 		var d1=document.getElementById('DataNotFound2');
 		d1.style.display='none';
 				
-		 if(PreviosPageExist == true)
+		 if(PreviousPageExist == true)
 		{
 			var d1=document.getElementById('HrefForPreviousPage');
-			d1.href="onlinenewcar.jsp?currentPage="+PreviosPageNo;
+			d1.href="onlinenewcar.jsp?currentPage="+PreviousPageNo;
 			var d1=document.getElementById('HrefForPreviousPage2');
-			d1.href="onlinenewcar.jsp?currentPage="+PreviosPageNo;
+			d1.href="onlinenewcar.jsp?currentPage="+PreviousPageNo;
 		}
 		else
 		{
