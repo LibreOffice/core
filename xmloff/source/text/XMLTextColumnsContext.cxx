@@ -253,41 +253,35 @@ const OUStringLiteral gsAutomaticDistance(u"AutomaticDistance");
 const OUStringLiteral gsSeparatorLineStyle(u"SeparatorLineStyle");
 
 XMLTextColumnsContext::XMLTextColumnsContext(
-                                SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                const OUString& rLName,
-                                const Reference< xml::sax::XAttributeList >&
-                                    xAttrList,
+                                SvXMLImport& rImport, sal_Int32 nElement,
+                                const Reference< xml::sax::XFastAttributeList >& xAttrList,
                                 const XMLPropertyState& rProp,
                                  ::std::vector< XMLPropertyState > &rProps )
-:   XMLElementPropertyContext( rImport, nPrfx, rLName, rProp, rProps )
+:   XMLElementPropertyContext( rImport, nElement, rProp, rProps )
 ,   pColumnAttrTokenMap( new SvXMLTokenMap(aColAttrTokenMap) )
 ,   pColumnSepAttrTokenMap( new SvXMLTokenMap(aColSepAttrTokenMap) )
 ,   nCount( 0 )
 ,   bAutomatic( false )
 ,   nAutomaticDistance( 0 )
 {
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     sal_Int32 nVal;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for (auto &aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                            &aLocalName );
-        const OUString& rValue = xAttrList->getValueByIndex( i );
-        if( XML_NAMESPACE_FO == nPrefix )
+        const OUString sValue = aIter.toString();
+        switch(aIter.getToken())
         {
-            if( IsXMLToken( aLocalName, XML_COLUMN_COUNT ) &&
-                ::sax::Converter::convertNumber( nVal, rValue, 0, SHRT_MAX ))
-            {
-                nCount = static_cast<sal_Int16>(nVal);
-            }
-            else if( IsXMLToken( aLocalName, XML_COLUMN_GAP ) )
+            case XML_ELEMENT(FO, XML_COLUMN_COUNT):
+                if(::sax::Converter::convertNumber( nVal, sValue, 0, SHRT_MAX ))
+                    nCount = static_cast<sal_Int16>(nVal);
+                break;
+            case XML_ELEMENT(FO, XML_COLUMN_GAP):
             {
                 bAutomatic = GetImport().GetMM100UnitConverter().
-                    convertMeasureToCore( nAutomaticDistance, rValue );
+                    convertMeasureToCore( nAutomaticDistance, sValue );
+                break;
             }
+            default:
+                SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
         }
     }
 }
@@ -327,7 +321,7 @@ SvXMLImportContextRef XMLTextColumnsContext::CreateChildContext(
     return pContext;
 }
 
-void XMLTextColumnsContext::EndElement( )
+void XMLTextColumnsContext::endFastElement(sal_Int32 nElement )
 {
     Reference<XMultiServiceFactory> xFactory(GetImport().GetModel(),UNO_QUERY);
     if( !xFactory.is() )
@@ -436,7 +430,7 @@ void XMLTextColumnsContext::EndElement( )
     aProp.maValue <<= xColumns;
 
     SetInsert( true );
-    XMLElementPropertyContext::EndElement();
+    XMLElementPropertyContext::endFastElement(nElement);
 
 }
 

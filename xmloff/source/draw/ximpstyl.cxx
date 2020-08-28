@@ -67,12 +67,12 @@ public:
                  ::std::vector< XMLPropertyState > &rProps,
                  const rtl::Reference < SvXMLImportPropertyMapper > &rMap );
 
-    using SvXMLPropertySetContext::CreateChildContext;
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                                   const OUString& rLocalName,
-                                   const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
-                                   ::std::vector< XMLPropertyState > &rProperties,
-                                   const XMLPropertyState& rProp) override;
+    using SvXMLPropertySetContext::createFastChildContext;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        ::std::vector< XMLPropertyState > &rProperties,
+        const XMLPropertyState& rProp ) override;
 };
 
 }
@@ -87,42 +87,34 @@ SdXMLDrawingPagePropertySetContext::SdXMLDrawingPagePropertySetContext(
 {
 }
 
-SvXMLImportContextRef SdXMLDrawingPagePropertySetContext::CreateChildContext(
-                   sal_uInt16 p_nPrefix,
-                   const OUString& rLocalName,
-                   const uno::Reference< xml::sax::XAttributeList > & xAttrList,
-                   ::std::vector< XMLPropertyState > &rProperties,
-                   const XMLPropertyState& rProp )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLDrawingPagePropertySetContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+    ::std::vector< XMLPropertyState > &rProperties,
+    const XMLPropertyState& rProp )
 {
-    SvXMLImportContextRef xContext;
-
     switch( mxMapper->getPropertySetMapper()->GetEntryContextId( rProp.mnIndex ) )
     {
     case CTF_PAGE_SOUND_URL:
     {
-        const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-        for(sal_Int16 i=0; i < nAttrCount; i++)
+        for (auto &aIter : sax_fastparser::castToFastAttributeList(xAttrList))
         {
-            OUString aLocalName;
-            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName(xAttrList->getNameByIndex(i), &aLocalName);
-
-            if( (nPrefix == XML_NAMESPACE_XLINK) && IsXMLToken( aLocalName, XML_HREF ) )
+            if( aIter.getToken() == XML_ELEMENT(XLINK, XML_HREF) )
             {
-                uno::Any aAny( GetImport().GetAbsoluteReference( xAttrList->getValueByIndex(i) ) );
+                uno::Any aAny( GetImport().GetAbsoluteReference( aIter.toString() ) );
                 XMLPropertyState aPropState( rProp.mnIndex, aAny );
                 rProperties.push_back( aPropState );
             }
+            else
+                SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
         }
         break;
     }
     }
 
-    if (!xContext)
-        xContext = SvXMLPropertySetContext::CreateChildContext( p_nPrefix, rLocalName,
+    return SvXMLPropertySetContext::createFastChildContext( nElement,
                                                             xAttrList,
                                                             rProperties, rProp );
-
-    return xContext;
 }
 
 namespace {

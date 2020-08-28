@@ -48,12 +48,11 @@ PagePropertySetContext::~PagePropertySetContext()
 {
 }
 
-SvXMLImportContextRef PagePropertySetContext::CreateChildContext(
-                   sal_uInt16 nPrefix,
-                   const OUString& rLocalName,
-                   const Reference< xml::sax::XAttributeList > & xAttrList,
-                   ::std::vector< XMLPropertyState > &rProperties,
-                   const XMLPropertyState& rProp )
+css::uno::Reference< css::xml::sax::XFastContextHandler > PagePropertySetContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+    ::std::vector< XMLPropertyState > &rProperties,
+    const XMLPropertyState& rProp )
 {
     sal_Int32 nPos = CTF_PM_GRAPHICPOSITION;
     sal_Int32 nFil = CTF_PM_GRAPHICFILTER;
@@ -74,7 +73,6 @@ SvXMLImportContextRef PagePropertySetContext::CreateChildContext(
         default:
             break;
     }
-    SvXMLImportContextRef xContext;
 
     switch( mxMapper->getPropertySetMapper()
                     ->GetEntryContextId( rProp.mnIndex ) )
@@ -88,9 +86,9 @@ SvXMLImportContextRef PagePropertySetContext::CreateChildContext(
                     nFil  == mxMapper->getPropertySetMapper()
                         ->GetEntryContextId( rProp.mnIndex-1 ),
                     "invalid property map!");
-        xContext =
-            new XMLBackgroundImageContext( GetImport(), nPrefix,
-                                           rLocalName, xAttrList,
+        return
+            new XMLBackgroundImageContext( GetImport(), nElement,
+                                           xAttrList,
                                            rProp,
                                            rProp.mnIndex-2,
                                            rProp.mnIndex-1,
@@ -100,24 +98,21 @@ SvXMLImportContextRef PagePropertySetContext::CreateChildContext(
         break;
 
     case CTF_PM_TEXTCOLUMNS:
-        xContext = new XMLTextColumnsContext( GetImport(), nPrefix,
-                                              rLocalName, xAttrList, rProp,
+        return new XMLTextColumnsContext( GetImport(), nElement,
+                                              xAttrList, rProp,
                                               rProperties );
         break;
 
     case CTF_PM_FTN_LINE_WEIGHT:
-        xContext = new XMLFootnoteSeparatorImport(
-            GetImport(), nPrefix, rLocalName, rProperties,
+        return new XMLFootnoteSeparatorImport(
+            GetImport(), nElement, rProperties,
             mxMapper->getPropertySetMapper(), rProp.mnIndex);
         break;
     }
 
-    if (!xContext)
-        xContext = SvXMLPropertySetContext::CreateChildContext( nPrefix, rLocalName,
+    return SvXMLPropertySetContext::createFastChildContext( nElement,
                                                             xAttrList,
                                                             rProperties, rProp );
-
-    return xContext;
 }
 
 
