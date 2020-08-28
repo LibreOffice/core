@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "716a9b5a_ad72cdc7",
+        "filename": "slideshow/README",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1002376
+      },
+      "writtenOn": "2020-08-28T21:19:39Z",
+      "side": 1,
+      "message": "how does this look? is it sufficient or should it be more detailed \u0026 technical?",
+      "revId": "b5df53a6b655b46ad622e4a53eed431667de1c8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
