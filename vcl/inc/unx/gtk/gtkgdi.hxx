@@ -157,7 +157,7 @@ private:
     static GtkStyleContext *mpHScrollbarButtonStyle;
     static GtkStyleContext *mpToolbarStyle;
     static GtkStyleContext *mpToolButtonStyle;
-    static GtkStyleContext *mpToolbarSeperatorStyle;
+    static GtkStyleContext *mpToolbarSeparatorStyle;
     static GtkStyleContext *mpCheckButtonStyle;
     static GtkStyleContext *mpCheckButtonCheckStyle;
     static GtkStyleContext *mpRadioButtonStyle;
