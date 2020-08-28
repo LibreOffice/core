@@ -299,7 +299,7 @@ private:
     const EditViewCallbacks* mpEditViewCallbacks;
     std::unique_ptr<LOKSpecialPositioning> mpLOKSpecialPositioning;
     bool mbBroadcastLOKViewCursor:1;
-    bool mbSupressLOKMessages:1;
+    bool mbSuppressLOKMessages:1;
 
     const EditViewCallbacks* getEditViewCallbacks() const
     {
@@ -460,8 +460,8 @@ public:
     tools::Rectangle GetLOKSpecialVisArea() const;
     bool HasLOKSpecialPositioning() const;
 
-    void SupressLOKMessages(bool bSet) { mbSupressLOKMessages = bSet; }
-    bool IsSupressLOKMessages() const { return mbSupressLOKMessages; }
+    void SuppressLOKMessages(bool bSet) { mbSuppressLOKMessages = bSet; }
+    bool IsSuppressLOKMessages() const { return mbSuppressLOKMessages; }
 };
 
 
