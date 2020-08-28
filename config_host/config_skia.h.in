@@ -56,7 +56,7 @@ are the same.
 
 #else
 
-#define DSK_RELEASE
+#define SK_RELEASE
 
 #endif // DBG_UTIL
 
