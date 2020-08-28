@@ -748,10 +748,7 @@ ScVbaWorksheet::Hyperlinks( const uno::Any& aIndex )
 uno::Any SAL_CALL
 ScVbaWorksheet::Names( const css::uno::Any& aIndex )
 {
-    // fake sheet-local names by returning all global names
-    // #163498# initialize Names object with correct parent (this worksheet)
-    // TODO: real sheet-local names...
-    uno::Reference< beans::XPropertySet > xProps( mxModel, uno::UNO_QUERY_THROW );
+    css::uno::Reference<css::beans::XPropertySet> xProps(getSheet(), css::uno::UNO_QUERY_THROW);
     uno::Reference< sheet::XNamedRanges > xNamedRanges(  xProps->getPropertyValue("NamedRanges"), uno::UNO_QUERY_THROW );
     uno::Reference< XCollection > xNames( new ScVbaNames( this, mxContext, xNamedRanges, mxModel ) );
     if ( aIndex.hasValue() )

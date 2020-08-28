@@ -304,6 +304,10 @@ void ScMacrosTest::testVba()
             OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
         {
+            OUString("NamesSheetLocal."),
+            OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
+        },
+        {
             OUString("vba_endFunction."),
             OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
