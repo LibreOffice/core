@@ -92,7 +92,7 @@ protected:
      */
     void          assertXPathChildren(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath, int nNumberOfChildNodes);
     /**
-     * Assert that rXPath exists, has exactly 1 child node and does *not* have an attribute named rAttribute.
+     * Assert that rXPath exists, has exactly 1 result set nodes and does *not* have an attribute named rAttribute.
      */
     void          assertXPathNoAttribute(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath, const OString& rAttribute);
 
