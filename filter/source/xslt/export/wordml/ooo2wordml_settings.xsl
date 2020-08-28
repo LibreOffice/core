@@ -248,11 +248,11 @@
                 <w:numFmt w:val="korean-digital"/>
             </xsl:when>
             <xsl:when test="$number-format = 'ㄱ, ㄴ, ㄷ, ...' or $number-format = '㉠, ㉡, ㉢, ...'">
-                <!-- mapping circled to uncirled -->
+                <!-- mapping circled to uncircled -->
                 <w:numFmt w:val="chosung"/>
             </xsl:when>
             <xsl:when test="$number-format = '가, 나, 다, ...' or $number-format = '㉮, ㉯, ㉰, ...'">
-                <!-- mapping circled to uncirled -->
+                <!-- mapping circled to uncircled -->
                 <w:numFmt w:val="ganada"/>
             </xsl:when>
             <xsl:when test="$number-format = 'أ, ب, ت, ...'">

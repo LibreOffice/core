@@ -285,11 +285,11 @@
                 <w:nfc w:val="41"/>
             </xsl:when>
             <xsl:when test="$number-format = 'ㄱ, ㄴ, ㄷ, ...' or $number-format = '㉠, ㉡, ㉢, ...'">
-                <!-- mapping circled to uncirled -->
+                <!-- mapping circled to uncircled -->
                 <w:nfc w:val="25"/>
             </xsl:when>
             <xsl:when test='$number-format = "가, 나, 다, ..." or $number-format = "㉮, ㉯, ㉰, ..."'>
-                <!-- mapping circled to uncirled -->
+                <!-- mapping circled to uncircled -->
                 <w:nfc w:val="24"/>
             </xsl:when>
             <xsl:when test="$number-format ='أ, ب, ت, ...'">

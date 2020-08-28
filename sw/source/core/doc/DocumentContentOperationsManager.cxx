@@ -4272,7 +4272,7 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam)
                 --nEnd; // account for deleted start node
             }
 
-            // delete the Nodes from the NodesArary
+            // delete the Nodes from the NodesArray
             m_rDoc.GetNodes().Delete( aSttIdx, nEnd - aSttIdx.GetIndex() );
         }
 
