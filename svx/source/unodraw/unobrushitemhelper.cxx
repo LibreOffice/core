@@ -287,7 +287,7 @@ std::unique_ptr<SvxBrushItem> getSvxBrushItemFromSourceSet(const SfxItemSet& rSo
             const XFillBitmapItem& rBmpItm = rSourceSet.Get(XATTR_FILLBITMAP, bSearchInParents);
             const Graphic aGraphic(rBmpItm.GetGraphicObject().GetGraphic());
 
-            // continue idependent of evtl. GraphicType::NONE as aGraphic.GetType(), we still need to rescue positions
+            // continue independent of evtl. GraphicType::NONE as aGraphic.GetType(), we still need to rescue positions
             SvxGraphicPosition aSvxGraphicPosition(GPOS_NONE);
             const XFillBmpStretchItem& rStretchItem = rSourceSet.Get(XATTR_FILLBMP_STRETCH, bSearchInParents);
             const XFillBmpTileItem& rTileItem = rSourceSet.Get(XATTR_FILLBMP_TILE, bSearchInParents);
