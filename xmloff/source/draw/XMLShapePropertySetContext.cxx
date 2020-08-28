@@ -32,19 +32,6 @@ using namespace ::com::sun::star::uno;
 
 
 XMLShapePropertySetContext::XMLShapePropertySetContext(
-                 SvXMLImport& rImport, sal_uInt16 nPrfx,
-                 const OUString& rLName,
-                 const Reference< xml::sax::XAttributeList > & xAttrList,
-                 sal_uInt32 nFam,
-                 ::std::vector< XMLPropertyState > &rProps,
-                 const rtl::Reference < SvXMLImportPropertyMapper > &rMap ) :
-    SvXMLPropertySetContext( rImport, nPrfx, rLName, xAttrList, nFam,
-                             rProps, rMap ),
-    mnBulletIndex(-1)
-{
-}
-
-XMLShapePropertySetContext::XMLShapePropertySetContext(
                  SvXMLImport& rImport, sal_Int32 nElement,
                  const Reference< xml::sax::XFastAttributeList > & xAttrList,
                  sal_uInt32 nFam,
@@ -60,7 +47,7 @@ XMLShapePropertySetContext::~XMLShapePropertySetContext()
 {
 }
 
-void XMLShapePropertySetContext::EndElement()
+void XMLShapePropertySetContext::endFastElement(sal_Int32 )
 {
     Reference< container::XIndexReplace > xNumRule;
     if( mxBulletStyle.is() )
@@ -77,34 +64,29 @@ void XMLShapePropertySetContext::EndElement()
     SvXMLPropertySetContext::EndElement();
 }
 
-SvXMLImportContextRef XMLShapePropertySetContext::CreateChildContext(
-                   sal_uInt16 nPrefix,
-                   const OUString& rLocalName,
-                   const Reference< xml::sax::XAttributeList > & xAttrList,
-                   ::std::vector< XMLPropertyState > &rProperties,
-                   const XMLPropertyState& rProp )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLShapePropertySetContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+    ::std::vector< XMLPropertyState > &rProperties,
+    const XMLPropertyState& rProp )
 {
-    SvXMLImportContextRef xContext;
-
     switch( mxMapper->getPropertySetMapper()->GetEntryContextId( rProp.mnIndex ) )
     {
     case CTF_NUMBERINGRULES:
         mnBulletIndex = rProp.mnIndex;
-        mxBulletStyle = xContext = new SvxXMLListStyleContext( GetImport(), nPrefix, rLocalName, xAttrList );
+        mxBulletStyle = new SvxXMLListStyleContext( GetImport(), nElement, xAttrList );
+        return mxBulletStyle.get();
         break;
     case CTF_TABSTOP:
-        xContext = new SvxXMLTabStopImportContext( GetImport(), nPrefix,
-                                                   rLocalName, rProp,
+        return new SvxXMLTabStopImportContext( GetImport(), nElement,
+                                                   rProp,
                                                    rProperties );
         break;
     }
 
-    if (!xContext)
-        xContext = SvXMLPropertySetContext::CreateChildContext( nPrefix, rLocalName,
+    return SvXMLPropertySetContext::createFastChildContext( nElement,
                                                             xAttrList,
                                                             rProperties, rProp );
-
-    return xContext;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

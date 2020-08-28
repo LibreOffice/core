@@ -28,27 +28,6 @@ using namespace ::com::sun::star;
 using namespace ::std;
 
 SvXMLPropertySetContext::SvXMLPropertySetContext(
-    SvXMLImport& rImp, sal_uInt16 nPrfx,
-    const OUString& rLName,
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList,
-    sal_uInt32 nFam,
-    vector< XMLPropertyState > &rProps,
-    const rtl::Reference < SvXMLImportPropertyMapper >  &rMap,
-    sal_Int32 nSIdx, sal_Int32 nEIdx )
-:   SvXMLImportContext( rImp, nPrfx, rLName )
-,   mnStartIdx( nSIdx )
-,   mnEndIdx( nEIdx )
-,   mnFamily( nFam )
-,   mrProperties( rProps )
-,   mxMapper( rMap )
-{
-    mxMapper->importXML( mrProperties, xAttrList,
-                        GetImport().GetMM100UnitConverter(),
-                        GetImport().GetNamespaceMap(), mnFamily,
-                        mnStartIdx, mnEndIdx );
-}
-
-SvXMLPropertySetContext::SvXMLPropertySetContext(
     SvXMLImport& rImp, sal_Int32 /*nElement*/,
     const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
     sal_uInt32 nFam,
@@ -72,24 +51,22 @@ SvXMLPropertySetContext::~SvXMLPropertySetContext()
 {
 }
 
-SvXMLImportContextRef SvXMLPropertySetContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SvXMLPropertySetContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     rtl::Reference< XMLPropertySetMapper > aSetMapper(
             mxMapper->getPropertySetMapper() );
-    sal_Int32 nEntryIndex = aSetMapper->GetEntryIndex( nPrefix, rLocalName,
-                                                       mnFamily, mnStartIdx );
+    sal_Int32 nEntryIndex = aSetMapper->GetEntryIndex( nElement, mnFamily, mnStartIdx );
 
     if( ( nEntryIndex != -1 ) && (-1 == mnEndIdx || nEntryIndex < mnEndIdx ) &&
         ( 0 != ( aSetMapper->GetEntryFlags( nEntryIndex )
                          & MID_FLAG_ELEMENT_ITEM_IMPORT ) ) )
     {
         XMLPropertyState aProp( nEntryIndex );
-        return CreateChildContext( nPrefix, rLocalName, xAttrList,
-                                   mrProperties, aProp );
+        return createFastChildContext( nElement, xAttrList, mrProperties, aProp );
     }
+    SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
     return nullptr;
 }
 
@@ -97,13 +74,13 @@ SvXMLImportContextRef SvXMLPropertySetContext::CreateChildContext(
     CreateChildContext if the element matches an entry in the
     SvXMLImportItemMapper with the mid flag MID_FLAG_ELEMENT
 */
-SvXMLImportContextRef SvXMLPropertySetContext::CreateChildContext(
-    sal_uInt16 /*nPrefix*/,
-    const OUString& /*rLocalName*/,
-    const uno::Reference< xml::sax::XAttributeList >&,
-    ::std::vector< XMLPropertyState > &,
-    const XMLPropertyState& )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SvXMLPropertySetContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/,
+    ::std::vector< XMLPropertyState > &/*rProperties*/,
+    const XMLPropertyState& /*rProp*/ )
 {
+    SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
     return nullptr;
 }
 
