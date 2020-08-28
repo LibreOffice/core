@@ -397,6 +397,7 @@ public:
     static OUString getNamespacePrefixFromToken(sal_Int32 nToken, const SvXMLNamespaceMap* pMap);
     static OUString getNamespaceURIFromToken( sal_Int32 nToken );
     static OUString getNamespacePrefixFromURI( const OUString& rURI );
+    static sal_Int32 getTokenFromName(const OUString& sName);
 
     SvXMLNamespaceMap& GetNamespaceMap() { return *mpNamespaceMap; }
     const SvXMLNamespaceMap& GetNamespaceMap() const { return *mpNamespaceMap; }
