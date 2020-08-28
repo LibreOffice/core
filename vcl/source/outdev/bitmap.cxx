@@ -735,10 +735,10 @@ struct LinearScaleContext
 private:
 
     static void generateSimpleMap(long nSrcDimension, long nDstDimension, long nDstLocation,
-                                  long nOutDimention, long nOffset, long* pMap, long* pMapOffset)
+                                  long nOutDimension, long nOffset, long* pMap, long* pMapOffset)
     {
 
-        const double fReverseScale = (std::abs(nOutDimention) > 1) ? (nSrcDimension - 1) / double(std::abs(nOutDimention) - 1) : 0.0;
+        const double fReverseScale = (std::abs(nOutDimension) > 1) ? (nSrcDimension - 1) / double(std::abs(nOutDimension) - 1) : 0.0;
 
         long nSampleRange = std::max(0L, nSrcDimension - 2);
 
@@ -900,7 +900,7 @@ struct TradScaleContext
 private:
 
     static void generateSimpleMap(long nSrcDimension, long nDstDimension, long nDstLocation,
-                                  long nOutDimention, long nOffset, bool bMirror, long* pMap)
+                                  long nOutDimension, long nOffset, bool bMirror, long* pMap)
     {
         long nMirrorOffset = 0;
 
@@ -909,7 +909,7 @@ private:
 
         for (long i = 0; i < nDstDimension; ++i, ++nOffset)
         {
-            pMap[i] = nDstLocation + nOffset * nSrcDimension / nOutDimention;
+            pMap[i] = nDstLocation + nOffset * nSrcDimension / nOutDimension;
             if (bMirror)
                 pMap[i] = nMirrorOffset - pMap[i];
         }
