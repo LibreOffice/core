@@ -974,23 +974,29 @@ void ScUndoReplace::Undo()
 
     ShowTable( aCursorPos.Tab() );
 
-    if (pUndoDoc)       // only for ReplaceAll !!
+    if (pSearchItem->GetCommand() == SvxSearchCmd::REPLACE_ALL)       // only for ReplaceAll !!
     {
-        OSL_ENSURE(pSearchItem->GetCommand() == SvxSearchCmd::REPLACE_ALL,
-                   "ScUndoReplace:: Wrong Mode");
+        OUString aTempStr = pSearchItem->GetSearchString();       // toggle
+        pSearchItem->SetSearchString(pSearchItem->GetReplaceString());
+        pSearchItem->SetReplaceString(aTempStr);
 
-        SetViewMarkData( aMarkData );
+        {
+            SCCOL nCol = 0;
+            SCROW nRow = 0;
+            SCTAB nTab = 0;
+            ScRangeList aMatchedRanges;
 
-//! selected sheet
-//! select range ?
+            rDoc.SearchAndReplace(*pSearchItem, nCol, nRow, nTab, aMarkData, aMatchedRanges,
+                                  aUndoStr, nullptr);
+        }
 
-        // Undo document has no row/column information, thus copy with
-        // bColRowFlags = FALSE to not destroy Outline groups
+        pSearchItem->SetReplaceString(pSearchItem->GetSearchString());
+        pSearchItem->SetSearchString(aTempStr);
 
-        InsertDeleteFlags nUndoFlags = (pSearchItem->GetPattern()) ? InsertDeleteFlags::ATTRIB : InsertDeleteFlags::CONTENTS;
-        pUndoDoc->CopyToDocument( 0,      0,      0,
-                                  rDoc.MaxCol(), rDoc.MaxRow(), MAXTAB,
-                                  nUndoFlags, false, rDoc, nullptr, false );   // without row flags
+        if (pViewShell)
+            pViewShell->MoveCursorAbs( aCursorPos.Col(), aCursorPos.Row(),
+                                       SC_FOLLOW_JUMP, false, false );
+
         pDocShell->PostPaintGridAll();
     }
     else if (pSearchItem->GetPattern() &&
