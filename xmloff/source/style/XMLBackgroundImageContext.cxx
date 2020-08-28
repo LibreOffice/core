@@ -25,6 +25,7 @@
 #include <tools/debug.hxx>
 
 #include <sax/tools/converter.hxx>
+#include <sal/log.hxx>
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -169,37 +170,31 @@ static void lcl_xmlbic_MergeVertPos( GraphicLocation& ePos,
 
 
 void XMLBackgroundImageContext::ProcessAttrs(
-        const Reference< xml::sax::XAttributeList >& xAttrList )
+        const Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     static const SvXMLTokenMap aTokenMap( aBGImgAttributesAttrTokenMap );
 
     ePos = GraphicLocation_NONE;
 
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for (auto &aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                            &aLocalName );
-        const OUString& rValue = xAttrList->getValueByIndex( i );
+        const OUString sValue = aIter.toString();
 
-        switch( aTokenMap.Get( nPrefix, aLocalName ) )
+        switch( aIter.getToken() )
         {
-        case XML_TOK_BGIMG_HREF:
-            m_sURL = rValue;
+        case XML_ELEMENT(XLINK, XML_HREF):
+            m_sURL = sValue;
             if( GraphicLocation_NONE == ePos )
                 ePos = GraphicLocation_TILED;
             break;
-        case XML_TOK_BGIMG_TYPE:
-        case XML_TOK_BGIMG_ACTUATE:
-        case XML_TOK_BGIMG_SHOW:
+        case XML_ELEMENT(XLINK, XML_TYPE):
+        case XML_ELEMENT(XLINK, XML_ACTUATE):
+        case XML_ELEMENT(XLINK, XML_SHOW):
             break;
-        case XML_TOK_BGIMG_POSITION:
+        case XML_ELEMENT(STYLE, XML_POSITION):
             {
                 GraphicLocation eNewPos = GraphicLocation_NONE, eTmp;
-                SvXMLTokenEnumerator aTokenEnum( rValue );
+                SvXMLTokenEnumerator aTokenEnum( sValue );
                 OUString aToken;
                 bool bHori = false, bVert = false;
                 bool bOK = true;
@@ -283,7 +278,7 @@ void XMLBackgroundImageContext::ProcessAttrs(
                     ePos = eNewPos;
             }
             break;
-        case XML_TOK_BGIMG_REPEAT:
+        case XML_ELEMENT(STYLE, XML_REPEAT):
             {
                 GraphicLocation nPos = GraphicLocation_NONE;
                 static const SvXMLEnumMapEntry<GraphicLocation> psXML_BrushRepeat[] =
@@ -293,7 +288,7 @@ void XMLBackgroundImageContext::ProcessAttrs(
                     { XML_STRETCH,              GraphicLocation_AREA    },
                     { XML_TOKEN_INVALID,        GraphicLocation(0)      }
                 };
-                if( SvXMLUnitConverter::convertEnum( nPos, rValue,
+                if( SvXMLUnitConverter::convertEnum( nPos, sValue,
                                                 psXML_BrushRepeat ) )
                 {
                     if( GraphicLocation_MIDDLE_MIDDLE != nPos ||
@@ -304,36 +299,37 @@ void XMLBackgroundImageContext::ProcessAttrs(
                 }
             }
             break;
-        case XML_TOK_BGIMG_FILTER:
-            sFilter = rValue;
+        case XML_ELEMENT(STYLE, XML_FILTER_NAME):
+            sFilter = sValue;
             break;
-        case XML_TOK_BGIMG_OPACITY:
+        case XML_ELEMENT(DRAW, XML_OPACITY):
             {
                 sal_Int32 nTmp;
                 // convert from percent and clip
-                if (::sax::Converter::convertPercent( nTmp, rValue ))
+                if (::sax::Converter::convertPercent( nTmp, sValue ))
                 {
                     if( (nTmp >= 0) && (nTmp <= 100) )
                         nTransparency = static_cast<sal_Int8>( 100-nTmp );
                 }
             }
             break;
+        default:
+            SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
         }
     }
 
 }
 
 XMLBackgroundImageContext::XMLBackgroundImageContext(
-        SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const Reference< xml::sax::XAttributeList > & xAttrList,
+        SvXMLImport& rImport, sal_Int32 nElement,
+        const Reference< xml::sax::XFastAttributeList > & xAttrList,
         const XMLPropertyState& rProp,
         sal_Int32 nPosIdx,
         sal_Int32 nFilterIdx,
         sal_Int32 nTransparencyIdx,
         sal_Int32 nBitmapModeIdx,
         ::std::vector< XMLPropertyState > &rProps ) :
-    XMLElementPropertyContext( rImport, nPrfx, rLName, rProp, rProps ),
+    XMLElementPropertyContext( rImport, nElement, rProp, rProps ),
     aPosProp( nPosIdx ),
     m_nBitmapModeIdx(nBitmapModeIdx),
     aFilterProp( nFilterIdx ),
@@ -369,7 +365,7 @@ SvXMLImportContextRef XMLBackgroundImageContext::CreateChildContext(
     return pContext;
 }
 
-void XMLBackgroundImageContext::EndElement()
+void XMLBackgroundImageContext::endFastElement(sal_Int32 nElement)
 {
     uno::Reference<graphic::XGraphic> xGraphic;
     if (!m_sURL.isEmpty())
@@ -394,7 +390,7 @@ void XMLBackgroundImageContext::EndElement()
     aTransparencyProp.maValue <<= nTransparency;
 
     SetInsert( true );
-    XMLElementPropertyContext::EndElement();
+    XMLElementPropertyContext::endFastElement(nElement);
 
     if( -1 != aPosProp.mnIndex )
     {

@@ -30,12 +30,6 @@ class XMLShapePropertySetContext : public SvXMLPropertySetContext
 public:
 
 
-    XMLShapePropertySetContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                const OUString& rLName,
-                 const css::uno::Reference<css::xml::sax::XAttributeList >& xAttrList,
-                 sal_uInt32 nFam,
-                 ::std::vector< XMLPropertyState > &rProps,
-                 const rtl::Reference < SvXMLImportPropertyMapper > &rMap );
     XMLShapePropertySetContext( SvXMLImport& rImport, sal_Int32 nElement,
                  const css::uno::Reference<css::xml::sax::XFastAttributeList >& xAttrList,
                  sal_uInt32 nFam,
@@ -44,14 +38,14 @@ public:
 
     virtual ~XMLShapePropertySetContext() override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
-    using SvXMLPropertySetContext::CreateChildContext;
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                                   const OUString& rLocalName,
-                                   const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
-                                   ::std::vector< XMLPropertyState > &rProperties,
-                                   const XMLPropertyState& rProp) override;
+    using SvXMLPropertySetContext::createFastChildContext;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        ::std::vector< XMLPropertyState > &rProperties,
+        const XMLPropertyState& rProp ) override;
 };
 
 #endif
