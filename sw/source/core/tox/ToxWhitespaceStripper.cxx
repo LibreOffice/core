@@ -42,7 +42,7 @@ ToxWhitespaceStripper::ToxWhitespaceStripper(const OUString& inputString)
         buffer.truncate(buffer.getLength() - 1);
     }
     mNewPositions.push_back(buffer.getLength());
-    mStripped = buffer.getStr();
+    mStripped = buffer.makeStringAndClear();
 }
 
 

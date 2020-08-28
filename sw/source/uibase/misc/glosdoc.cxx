@@ -341,7 +341,7 @@ static OUString lcl_makePath(const std::vector<OUString>& rPaths)
         const INetURLObject aTemp(*aIt);
         aPath.append(aTemp.GetFull());
     }
-    return aPath.getStr();
+    return aPath.makeStringAndClear();
 }
 
 void SwGlossaries::UpdateGlosPath(bool bFull)
