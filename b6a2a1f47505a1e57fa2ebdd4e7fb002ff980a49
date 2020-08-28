@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b492e5ca_045cfbcd",
+        "filename": "xmloff/source/chart/SchXMLExport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3318,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-08-28T10:08:35Z",
+      "side": 1,
+      "message": "it would be fine to test this, too, here or remove it to a different patch/bug.",
+      "range": {
+        "startLine": 3318,
+        "startChar": 24,
+        "endLine": 3318,
+        "endChar": 95
+      },
+      "revId": "b6a2a1f47505a1e57fa2ebdd4e7fb002ff980a49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
