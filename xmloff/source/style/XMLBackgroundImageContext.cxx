@@ -342,26 +342,21 @@ XMLBackgroundImageContext::~XMLBackgroundImageContext()
 {
 }
 
-SvXMLImportContextRef XMLBackgroundImageContext::CreateChildContext(
-        sal_uInt16 nPrefix, const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLBackgroundImageContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
-    SvXMLImportContext *pContext = nullptr;
-    if( (XML_NAMESPACE_OFFICE == nPrefix) &&
-        xmloff::token::IsXMLToken( rLocalName,
-                                        xmloff::token::XML_BINARY_DATA ) )
+    if( nElement == XML_ELEMENT(OFFICE, xmloff::token::XML_BINARY_DATA) )
     {
         if( m_sURL.isEmpty() && !m_xBase64Stream.is() )
         {
             m_xBase64Stream = GetImport().GetStreamForGraphicObjectURLFromBase64();
             if( m_xBase64Stream.is() )
-                pContext = new XMLBase64ImportContext( GetImport(), nPrefix,
-                                                    rLocalName, xAttrList,
-                                                    m_xBase64Stream );
+                return new XMLBase64ImportContext( GetImport(), m_xBase64Stream );
         }
     }
-
-    return pContext;
+    SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
+    return nullptr;
 }
 
 void XMLBackgroundImageContext::endFastElement(sal_Int32 nElement)
