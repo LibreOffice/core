@@ -13,6 +13,7 @@
 #include <tools/color.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
@@ -535,11 +536,28 @@ DECLARE_OOXMLEXPORT_TEST(testTdf132149_pgBreak, "tdf132149_pgBreak.odt")
     assertXPath(pDump, "//page[2]/infos/bounds", "width", "5953");  //portrait
     // This two-line 3rd page ought not to exist. DID YOU FIX ME? The real page 3 should be "8391" landscape.
     assertXPath(pDump, "//page[3]/infos/bounds", "width", "5953");
+    // This really ought to be on odd page 3, but now it is on odd page 5.
+    assertXPath(pDump, "//page[5]/infos/bounds", "width", "8391");
+    assertXPath(pDump, "//page[5]/infos/prtBounds", "right", "6122");  //Left page style
 
 
-    //Page break is not lost. This SHOULD be on page 4, but sadly it is not.
-    assertXPathContent(pDump, "//page[5]/header/txt", "First Page Style");
-    CPPUNIT_ASSERT(getXPathContent(pDump, "//page[5]/body/txt").startsWith("Lorem ipsum"));
+    //Page style change here must not be lost. This SHOULD be on page 4, but sadly it is not.
+    assertXPathContent(pDump, "//page[6]/header/txt", "First Page Style");
+    CPPUNIT_ASSERT(getXPath(pDump, "//page[6]/body/txt[1]/Text[1]", "Portion").startsWith("Lorem ipsum"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf132149_pgBreak2, "tdf132149_pgBreak2.odt")
+{
+    // This 3 page document is designed to visually exaggerate the problems
+    // of emulating LO's followed-by-page-style into MSWord's sections.
+
+    // The only specified page style change should be between page 1 and 2.
+    // When the first paragraph was split into 3, each paragraph specified a page break. The last was unnecessary.
+    uno::Reference<beans::XPropertySet> xParaThree(getParagraph(3), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(), xParaThree->getPropertyValue("PageDescName"));
+    // The ODT is only 2 paragraphs, but a hack to get the right page style breaks para1 into pieces.
+    // This was 4 paragraphs - the unnecessary page break had hacked in another paragraph split.
+    CPPUNIT_ASSERT_LESSEQUAL( 3, getParagraphs() );
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf135949_anchoredBeforeBreak, "tdf135949_anchoredBeforeBreak.docx")
