@@ -23,7 +23,7 @@
 #include <svx/svxdllapi.h>
 #include <svx/gallerystoragelocations.hxx>
 
-class GalleryBinaryStorageLocations : public GalleryStorageLocations
+class SVXCORE_DLLPUBLIC GalleryBinaryStorageLocations : public GalleryStorageLocations
 {
 private:
     INetURLObject maThmURL;
