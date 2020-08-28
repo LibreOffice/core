@@ -242,7 +242,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                 for ( nSub=0; nSub<nSubCount; nSub++ )
                 {
                     // search sub item by name
-                    OString aStr = rtl::OStringView(pSlot->pUnoName) + "." + pType->aAttrib[nSub].pName;
+                    OString aStr = OString::Concat(pSlot->pUnoName) + "." + pType->aAttrib[nSub].pName;
                     if ( rPropValue.Name.equalsAsciiL(aStr.getStr(), aStr.getLength()) )
                     {
                         sal_uInt8 nSubId = static_cast<sal_uInt8>(static_cast<sal_Int8>(pType->aAttrib[nSub].nAID));
@@ -345,7 +345,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                     for ( sal_uInt16 nSub=0; nSub<nSubCount; nSub++ )
                     {
                         // search sub item by name
-                        OString aStr = rtl::OStringView(rArg.pName) + "." + pType->aAttrib[nSub].pName;
+                        OString aStr = OString::Concat(rArg.pName) + "." + pType->aAttrib[nSub].pName;
                         if ( rProp.Name.equalsAsciiL(aStr.getStr(), aStr.getLength()) )
                         {
                             // at least one member found ...

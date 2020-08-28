@@ -923,7 +923,7 @@ SvStream& HTMLOutFuncs::Out_Events( SvStream& rStrm,
 
             if( pStr )
             {
-                OString sOut = " " + rtl::OStringView(pStr) + "=\"";
+                OString sOut = OString::Concat(" ") + pStr + "=\"";
                 rStrm.WriteOString( sOut );
 
                 Out_String( rStrm, pMacro->GetMacName(), eDestEnc, pNonConvertableChars ).WriteChar( '\"' );

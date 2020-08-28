@@ -1571,7 +1571,7 @@ void PDFWriterImpl::appendLiteralStringEncrypt( const OUString& rInString, const
 
 void PDFWriterImpl::emitComment( const char* pComment )
 {
-    OString aLine = "% " + rtl::OStringView(pComment) + "\n";
+    OString aLine = OString::Concat("% ") + pComment + "\n";
     writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 

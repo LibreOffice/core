@@ -19,6 +19,8 @@
 
 #include <sal/config.h>
 
+#include <string_view>
+
 #include <oox/core/relationshandler.hxx>
 
 #include <sal/log.hxx>
@@ -41,9 +43,9 @@ namespace {
 OUString lclGetRelationsPath( const OUString& rFragmentPath )
 {
     sal_Int32 nPathLen = ::std::max< sal_Int32 >( rFragmentPath.lastIndexOf( '/' ) + 1, 0 );
-    return rtl::OUStringView(rFragmentPath.getStr(), nPathLen ) +    // file path including slash
+    return OUString::Concat(std::u16string_view(rFragmentPath.getStr(), nPathLen )) +    // file path including slash
         "_rels/" +                                // additional '_rels/' path
-        rtl::OUStringView(rFragmentPath.getStr() + nPathLen) +  // file name after path
+        std::u16string_view(rFragmentPath.getStr() + nPathLen) +  // file name after path
         ".rels";                                 // '.rels' suffix
 }
 

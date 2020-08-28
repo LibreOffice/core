@@ -3693,6 +3693,31 @@ public:
     operator std::u16string_view() const { return {getStr(), sal_uInt32(getLength())}; }
 #endif
 
+#if defined LIBO_INTERNAL_ONLY
+    // A wrapper for the first expression in an
+    //
+    //   OUString::Concat(e1) + e2 + ...
+    //
+    // concatenation chain, when neither of the first two e1, e2 is one of our rtl string-related
+    // classes (so something like
+    //
+    //   OUString s = "a" + (b ? std::u16string_view(u"c" : u"dd");
+    //
+    // would not compile):
+    template<typename T> [[nodiscard]] static
+    typename std::enable_if_t<
+        ToStringHelper<T>::allowOUStringConcat, OUStringConcat<OUStringConcatMarker, T>>
+    Concat(T const & value) { return OUStringConcat<OUStringConcatMarker, T>({}, value); }
+
+    // This overload is needed so that an argument of type 'char const[N]' ends up as
+    // 'OUStringConcat<rtl::OUStringConcatMarker, char const[N]>' rather than as
+    // 'OUStringConcat<rtl::OUStringConcatMarker, char[N]>':
+    template<typename T, std::size_t N> [[nodiscard]] static
+    typename std::enable_if_t<
+        ToStringHelper<T[N]>::allowOUStringConcat, OUStringConcat<OUStringConcatMarker, T[N]>>
+    Concat(T (& value)[N]) { return OUStringConcat<OUStringConcatMarker, T[N]>({}, value); }
+#endif
+
 private:
     OUString & internalAppend( rtl_uString* pOtherData )
     {

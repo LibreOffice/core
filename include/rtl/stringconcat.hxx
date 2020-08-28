@@ -490,63 +490,52 @@ struct ToStringHelper< OUStringNumber< T > >
     static const bool allowOUStringConcat = true;
     };
 
-// Abstractions over null-terminated char and sal_Unicode strings that sometimes are needed in
-// concatenations of multiple such raw strings, as in
-//
-//   char const * s1, s2;
-//   OString s = OStringView(s1) + s2;
-//
-// (Providing specializations of ToStringHelper<std::string_view> and
-// ToStringHelper<std::u16string_view> would look dubious, as it would give meaning to expressions
-// like
-//
-//   std::string_view(s1) + s2
-//
-// that do not involve any user-defined types.)
+template<> struct ToStringHelper<std::string_view> {
+    static constexpr std::size_t length(std::string_view s) { return s.size(); }
 
-class OStringView {
-public:
-    explicit OStringView(char const * s): view_(s) {}
-    explicit OStringView(char const * s, size_t len): view_(s, len) {}
+    static char * addData(char * buffer, std::string_view s) SAL_RETURNS_NONNULL
+    { return addDataHelper(buffer, s.data(), s.size()); }
 
-    std::size_t length() const { return view_.length(); }
-
-    char const * data() const { return view_.data(); }
-
-private:
-    std::string_view view_;
+    static constexpr bool allowOStringConcat = true;
+    static constexpr bool allowOUStringConcat = false;
 };
 
-template<>
-struct ToStringHelper< OStringView >
-    {
-    static std::size_t length( const OStringView& v ) { return v.length(); }
-    static char* addData( char* buffer, const OStringView& v ) SAL_RETURNS_NONNULL { return addDataHelper( buffer, v.data(), v.length() ); }
-    static const bool allowOStringConcat = true;
-    static const bool allowOUStringConcat = false;
-    };
+template<> struct ToStringHelper<std::u16string_view> {
+    static constexpr std::size_t length(std::u16string_view s) { return s.size(); }
 
-class OUStringView {
-public:
-    explicit OUStringView(sal_Unicode const * s): view_(s) {}
-    explicit OUStringView(sal_Unicode const * s, size_t len): view_(s, len) {}
+    static sal_Unicode * addData(sal_Unicode * buffer, std::u16string_view s) SAL_RETURNS_NONNULL
+    { return addDataHelper(buffer, s.data(), s.size()); }
 
-    std::size_t length() const { return view_.length(); }
-
-    sal_Unicode const * data() const { return view_.data(); }
-
-private:
-    std::u16string_view view_;
+    static constexpr bool allowOStringConcat = false;
+    static constexpr bool allowOUStringConcat = true;
 };
 
-template<>
-struct ToStringHelper< OUStringView >
-    {
-    static std::size_t length( const OUStringView& v ) { return v.length(); }
-    static sal_Unicode* addData( sal_Unicode* buffer, const OUStringView& v ) SAL_RETURNS_NONNULL { return addDataHelper( buffer, v.data(), v.length() ); }
-    static const bool allowOStringConcat = false;
-    static const bool allowOUStringConcat = true;
-    };
+// An internal marker class used by OString::Concat:
+struct OStringConcatMarker {};
+
+template<> struct ToStringHelper<OStringConcatMarker> {
+    static constexpr std::size_t length(OStringConcatMarker) { return 0; }
+
+    static constexpr char * addData(char * buffer, OStringConcatMarker) SAL_RETURNS_NONNULL
+    { return buffer; }
+
+    static constexpr bool allowOStringConcat = true;
+    static constexpr bool allowOUStringConcat = false;
+};
+
+// An internal marker class used by OUString::Concat:
+struct OUStringConcatMarker {};
+
+template<> struct ToStringHelper<OUStringConcatMarker> {
+    static constexpr std::size_t length(OUStringConcatMarker) { return 0; }
+
+    static constexpr sal_Unicode * addData(sal_Unicode * buffer, OUStringConcatMarker)
+        SAL_RETURNS_NONNULL
+    { return buffer; }
+
+    static constexpr bool allowOStringConcat = false;
+    static constexpr bool allowOUStringConcat = true;
+};
 
 } // namespace
 

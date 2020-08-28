@@ -1035,13 +1035,6 @@ public:
         *pInternalCapacity = &nCapacity;
     }
 
-#if defined LIBO_INTERNAL_ONLY
-    explicit operator OStringView() const
-    {
-        return OStringView(getStr(), getLength());
-    }
-#endif
-
 private:
     /**
         A pointer to the data structure which contains the data.
@@ -1053,6 +1046,18 @@ private:
      */
     sal_Int32       nCapacity;
 };
+
+#if defined LIBO_INTERNAL_ONLY
+template<> struct ToStringHelper<OStringBuffer> {
+    static std::size_t length(OStringBuffer const & s) { return s.getLength(); }
+
+    static char * addData(char * buffer, OStringBuffer const & s) SAL_RETURNS_NONNULL
+    { return addDataHelper(buffer, s.getStr(), s.getLength()); }
+
+    static constexpr bool allowOStringConcat = true;
+    static constexpr bool allowOUStringConcat = false;
+};
+#endif
 
 }
 
