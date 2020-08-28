@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eba13b1f_63102063",
+        "filename": "sd/source/ui/view/DocumentRenderer.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-08-28T20:21:46Z",
+      "side": 1,
+      "message": "this is where the line was before 76e22667625ce8d16dfaa8617a199b774e987a70 I have no idea why I misapplied it on restoring it with c82b891dc9370d4bf72bc07752884603df7d05ac",
+      "revId": "136f9c3dd4cf3fb458c46cffa91c7a808bbd667c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
