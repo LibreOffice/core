@@ -45,7 +45,7 @@
 #include <cuitabline.hxx>
 #include <dialmgr.hxx>
 #include <svx/dlgutil.hxx>
-#include <svx/svxgrahicitem.hxx>
+#include <svx/svxgraphicitem.hxx>
 #include <svx/ofaitem.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpage.hxx>

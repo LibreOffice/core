@@ -16,29 +16,24 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_SVXGRAHICITEM_HXX
-#define INCLUDED_SVX_SVXGRAHICITEM_HXX
 
+#include <svx/svxgraphicitem.hxx>
+#include <svx/svxids.hrc>
 
-#include <svl/poolitem.hxx>
-#include <svx/svxdllapi.h>
-
-#include <vcl/graph.hxx>
-
-class SVX_DLLPUBLIC SvxGraphicItem final : public SfxPoolItem
+SvxGraphicItem::SvxGraphicItem( const Graphic& rGraphic )
+    : SfxPoolItem( SID_GRAPHIC ), aGraphic( rGraphic )
 {
-    Graphic         aGraphic;
 
-public:
-                            SvxGraphicItem( const Graphic& rGraphic);
+}
 
-    virtual bool            operator==( const SfxPoolItem& ) const override;
-    virtual SvxGraphicItem* Clone( SfxItemPool *pPool = nullptr ) const override;
+bool SvxGraphicItem::operator==( const SfxPoolItem& rItem) const
+{
+    return SfxPoolItem::operator==(rItem) && static_cast<const SvxGraphicItem&>(rItem).aGraphic == aGraphic;
+}
 
-    const Graphic&        GetGraphic() const { return aGraphic; }
-
-};
-
-#endif
+SvxGraphicItem* SvxGraphicItem::Clone( SfxItemPool * ) const
+{
+    return new SvxGraphicItem( *this );
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
