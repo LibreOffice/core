@@ -40,6 +40,15 @@ SchXMLParagraphContext::SchXMLParagraphContext( SvXMLImport& rImport,
 {
 }
 
+SchXMLParagraphContext::SchXMLParagraphContext( SvXMLImport& rImport,
+                                                OUString& rText,
+                                                OUString * pOutId /* = 0 */ ) :
+        SvXMLImportContext( rImport ),
+        mrText( rText ),
+        mpId( pOutId )
+{
+}
+
 SchXMLParagraphContext::~SchXMLParagraphContext()
 {}
 
@@ -82,6 +91,44 @@ void SchXMLParagraphContext::EndElement()
     mrText = maBuffer.makeStringAndClear();
 }
 
+void SchXMLParagraphContext::startFastElement(
+   sal_Int32 /*nElement*/,
+   const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+{
+    // remember the id. It is used for storing the original cell range string in
+    // a local table (cached data)
+    if( !mpId )
+        return;
+
+    bool bHaveXmlId( false );
+
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
+    {
+        switch(aIter.getToken())
+        {
+            case XML_ELEMENT(XML, XML_ID):
+                (*mpId) = aIter.toString();
+                bHaveXmlId = true;
+                break;
+            case XML_ELEMENT(TEXT, XML_ID):
+            {   // text:id shall be ignored if xml:id exists
+                if (!bHaveXmlId)
+                {
+                    (*mpId) = aIter.toString();
+                }
+                break;
+            }
+            default:
+                SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
+        }
+    }
+}
+
+void SchXMLParagraphContext::endFastElement(sal_Int32 )
+{
+    mrText = maBuffer.makeStringAndClear();
+}
+
 SvXMLImportContextRef SchXMLParagraphContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
@@ -103,6 +150,11 @@ SvXMLImportContextRef SchXMLParagraphContext::CreateChildContext(
 }
 
 void SchXMLParagraphContext::Characters( const OUString& rChars )
+{
+    maBuffer.append( rChars );
+}
+
+void SchXMLParagraphContext::characters( const OUString& rChars )
 {
     maBuffer.append( rChars );
 }
