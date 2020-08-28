@@ -39,7 +39,6 @@ class GalleryThemeEntry
 private:
 
     std::unique_ptr<GalleryBinaryEngineEntry>     mpGalleryStorageEngineEntry;
-    std::unique_ptr<GalleryStorageLocations>      mpGalleryStorageLocations;
     OUString                aName;
     sal_uInt32              nId;
     bool                    bReadOnly;
@@ -53,18 +52,12 @@ public:
                                                bool bReadOnly, bool bNewFile,
                                                sal_uInt32 nId, bool bThemeNameFromResource );
 
-    std::unique_ptr<GalleryBinaryEngineEntry> createGalleryStorageEngineEntry();
+    static std::unique_ptr<GalleryBinaryEngineEntry> createGalleryStorageEngineEntry();
     const std::unique_ptr<GalleryBinaryEngineEntry>& getGalleryStorageEngineEntry() const { return mpGalleryStorageEngineEntry; }
 
-    static std::unique_ptr<GalleryStorageLocations> createGalleryStorageLocations();
-    const std::unique_ptr<GalleryStorageLocations>& getGalleryStorageLocations() const { return mpGalleryStorageLocations; }
+    GalleryStorageLocations& getGalleryStorageLocations() const { return mpGalleryStorageEngineEntry->getGalleryStorageLocations(); }
 
     const OUString&         GetThemeName() const { return aName; }
-
-    const INetURLObject& GetThmURL() const { return mpGalleryStorageEngineEntry->GetThmURL(); }
-    const INetURLObject& GetSdgURL() const { return mpGalleryStorageEngineEntry->GetSdgURL(); }
-    const INetURLObject& GetSdvURL() const { return mpGalleryStorageEngineEntry->GetSdvURL(); }
-    const INetURLObject& GetStrURL() const { return mpGalleryStorageEngineEntry->GetStrURL(); }
 
     bool                    IsReadOnly() const { return bReadOnly; }
     bool                    IsDefault() const;
