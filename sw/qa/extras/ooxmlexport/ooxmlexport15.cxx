@@ -193,6 +193,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf132149_pgBreak, "tdf132149_pgBreak.odt")
     // No header on pages 1,2,3 (and currently 4).
     assertXPath(pDump, "//page[2]/header", 0);
 
+    // Margins/page orientation between Right and Left page styles are different
+    assertXPath(pDump, "//page[1]/infos/prtBounds", "left", "1134");  //Right page style
+    assertXPath(pDump, "//page[2]/infos/prtBounds", "left", "2268");  //Left page style
+
+    assertXPath(pDump, "//page[1]/infos/bounds", "width", "8391");  //landscape
+    assertXPath(pDump, "//page[2]/infos/bounds", "width", "5953");  //portrait
+    // This two-line 3rd page ought not to exist. DID YOU FIX ME?
+    assertXPath(pDump, "//page[3]/infos/bounds", "width", "5953");
+    // This really ought to be on page 3.
+    //assertXPath(pDump, "//page[4]/infos/bounds", "width", "8391");
+
+
     //Page break is not lost. This SHOULD be on page 4, but sadly it is not.
     assertXPathContent(pDump, "//page[5]/header/txt", "First Page Style");
     CPPUNIT_ASSERT(getXPathContent(pDump, "//page[5]/body/txt").startsWith("Lorem ipsum"));

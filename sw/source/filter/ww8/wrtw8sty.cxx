@@ -1775,8 +1775,8 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
             if ( UseOnPage::Left == ( UseOnPage::All & pPd->ReadUseOn() ) )
             {
                 nBreakCode = 3;
-                pPd = pPd->GetFollow();
-                pPdFormat = &pPd->GetMaster();
+                pPdFormat = &pPd->GetMaster();  //use the current page for settings (margins/width etc)
+                pPd = pPd->GetFollow(); //switch to the right page for the right/odd header/footer
             }
             else
                 nBreakCode = 4;
