@@ -320,7 +320,7 @@ public:
     sal_uInt16 m_nDfltTopMargin;          // defaults which doesn't have to be
     sal_uInt16 m_nDfltBottomMargin;       // written (from template)
     sal_uInt16 m_nIndentLvl;              // How far is it indented?
-    sal_Int32 m_nWhishLineLen;            // How long can a line be?
+    sal_Int32 m_nWishLineLen;             // How long can a line be?
     sal_uInt16 m_nDefListLvl;             // which DL level exists now
     sal_Int32  m_nDefListMargin;          // How far is the indentation in DL
     sal_uInt16 m_nHeaderFooterSpace;
