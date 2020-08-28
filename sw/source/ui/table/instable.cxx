@@ -38,7 +38,7 @@ void SwInsTableDlg::GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rC
 
     if ((sal_Int64)rRow > 255 || (sal_Int64)rCol > 63)
     {
-        printf("Large tables might adverse performance and compatibility");
+        printf("Large tables may adversely affect performance and compatibility");
     }
 
     if (m_xHeaderCB->get_active())
