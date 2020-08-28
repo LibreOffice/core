@@ -210,6 +210,7 @@
                 <child>
                   <object class="GtkGrid" id="grid2">
                     <property name="visible">True</property>
+<<<<<<< HEAD   (04f2c9 bump product version to 6.4.6.2.0+)
                     <property name="can_focus">False</property>
                     <property name="column_spacing">6</property>
                     <child>
@@ -263,10 +264,22 @@
                         <property name="top_attach">0</property>
                       </packing>
                     </child>
+=======
+                    <property name="can_focus">True</property>
+                    <property name="focus_on_click">False</property>
+                    <property name="receives_default">False</property>
+                    <property name="tooltip_text" translatable="yes" context="sidebaralignment|bottom|tooltip_text">Text Extension From Lower Cell Border</property>
+                    <property name="image">image3</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <property name="always_show_image">True</property>
+                    <property name="draw_indicator">False</property>
+                    <property name="group">standard</property>
+>>>>>>> CHANGE (977a97 tdf#134491 Calc sidebar alignment fix)
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="fill">True</property>
+                    <property name="fill">False</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -274,6 +287,7 @@
                   <object class="GtkSpinButton" id="leftindent:0pt">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+<<<<<<< HEAD   (04f2c9 bump product version to 6.4.6.2.0+)
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebaralignment|leftindent|tooltip_text">Indents from the left edge.</property>
                     <accessibility>
@@ -284,10 +298,21 @@
                         <property name="AtkObject::accessible-name" translatable="yes" context="sidebaralignment|leftindent-atkobject">Left Indent</property>
                       </object>
                     </child>
+=======
+                    <property name="focus_on_click">False</property>
+                    <property name="receives_default">False</property>
+                    <property name="tooltip_text" translatable="yes" context="sidebaralignment|top|tooltip_text">Text Extension From Upper Cell Border</property>
+                    <property name="image">image2</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <property name="always_show_image">True</property>
+                    <property name="draw_indicator">False</property>
+                    <property name="group">standard</property>
+>>>>>>> CHANGE (977a97 tdf#134491 Calc sidebar alignment fix)
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="fill">True</property>
+                    <property name="fill">False</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -320,6 +345,7 @@
                   </object>
                   <packing>
                     <property name="expand">False</property>
+<<<<<<< HEAD   (04f2c9 bump product version to 6.4.6.2.0+)
                     <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
@@ -341,6 +367,10 @@
                     <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">1</property>
+=======
+                    <property name="fill">False</property>
+                    <property name="position">2</property>
+>>>>>>> CHANGE (977a97 tdf#134491 Calc sidebar alignment fix)
                   </packing>
                 </child>
               </object>
