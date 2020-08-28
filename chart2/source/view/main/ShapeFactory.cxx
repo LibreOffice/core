@@ -748,9 +748,9 @@ static drawing::PolyPolygonBezierCoords getCircularArcBezierCoords(
     }
     else
     {
-        double fFirstAngleOnSubDevision = (static_cast<sal_Int32>(fStartAngleRadian/fAngleSubdivisionRadian)+1)*fAngleSubdivisionRadian;
-        if( !::rtl::math::approxEqual( fStartAngleRadian, fFirstAngleOnSubDevision ) )
-            fFirstSegmentAngle = fFirstAngleOnSubDevision-fStartAngleRadian;
+        double fFirstAngleOnSubDivision = (static_cast<sal_Int32>(fStartAngleRadian/fAngleSubdivisionRadian)+1)*fAngleSubdivisionRadian;
+        if( !::rtl::math::approxEqual( fStartAngleRadian, fFirstAngleOnSubDivision ) )
+            fFirstSegmentAngle = fFirstAngleOnSubDivision-fStartAngleRadian;
 
         if(nSegmentCount>1)
         {
@@ -781,7 +781,7 @@ static drawing::PolyPolygonBezierCoords getCircularArcBezierCoords(
     for(sal_Int32 nSegment=0; nSegment<nSegmentCount; nSegment++)
     {
         double fCurrentSegmentAngle = fAngleSubdivisionRadian;
-        if(nSegment==0)//first segment gets only a smaller peace until the next subdevision
+        if(nSegment==0)//first segment gets only a smaller peace until the next subdivision
             fCurrentSegmentAngle = fFirstSegmentAngle;
         else if(nSegment==(nSegmentCount-1)) //the last segment gets the rest angle that does not fit into equal pieces
             fCurrentSegmentAngle = fLastSegmentAngle;
