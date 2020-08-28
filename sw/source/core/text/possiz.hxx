@@ -43,6 +43,10 @@ public:
 #else
     virtual ~SwPosSize() {}
 #endif
+    SwPosSize(SwPosSize const &) = default;
+    SwPosSize(SwPosSize &&) = default;
+    SwPosSize & operator =(SwPosSize const &) = default;
+    SwPosSize & operator =(SwPosSize &&) = default;
     sal_uInt16 Height() const { return nHeight; }
     virtual void Height(const sal_uInt16 nNew, const bool = true) { nHeight = nNew; }
     sal_uInt16 Width() const { return nWidth; }
