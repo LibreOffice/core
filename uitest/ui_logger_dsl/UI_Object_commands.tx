@@ -12,13 +12,14 @@ import type_options
         8)  TabControlUIObject ( Change tab event )
         9)  ToolBoxUIObject ( Click on item event )
         10) ValueSetUIObject (Choose item)
+        10)  MenuBtnUIObject ( Select - Open - Close )
 */
 
 UIObjectCommand:
   ButtonUIObject | CheckBoxUIObject | EditUIObject | 
   RadioButtonUIObject | ListBoxUIObject | ComboBoxUIObject | 
   SpinFieldUIObject | TabControlUIObject | ToolBoxUIObject |
-  ValueSetUIObject
+  ValueSetUIObject | MenuBtnUIObject
 ;
 
 ButtonUIObject:
@@ -50,6 +51,19 @@ ToolBoxUIObject:
 ;
 ValueSetUIObject:
    'Choose element with position ' POS=INT 'in' value_set_id=STRING 'from' parent_id=STRING
+;
+//=============================================================
+MenuBtnUIObject:
+  MenuBtnUIObjectOpen | MenuBtnUIObjectSelect | MenuBtnUIObjectClose
+;
+MenuBtnUIObjectOpen:
+    'Open List From' + MenuBtn_ID=ID
+;
+MenuBtnUIObjectClose:
+    'Close List From' + MenuBtn_ID=ID
+;
+MenuBtnUIObjectSelect:
+    'Select item no' + item_num=INT + 'From List of' + MenuBtn_ID=ID
 ;
 //=============================================================
 //helper grammar for EditUIObject

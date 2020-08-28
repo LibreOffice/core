@@ -105,6 +105,9 @@ class ul_Compiler:
                 "EditUIObject": self.handle_Edit_uiObject,
                 "ToolBoxUIObject": self.handle_ToolBox_uiObject,
                 "ValueSetUIObject": self.handle_ValueSet_uiObject,
+                "MenuBtnUIObjectOpen":self.handle_MenuBtnUIObjectOpen,
+                "MenuBtnUIObjectSelect":self.handle_MenuBtnUIObjectSelect,
+                "MenuBtnUIObjectClose":self.handle_MenuBtnUIObjectClose,
                 "writer_Type_command": self.handle_writer_type,
                 "writer_Select_command": self.handle_writer_select,
                 "writer_GOTO_command": self.handle_writer_goto,
@@ -666,6 +669,63 @@ class ul_Compiler:
         )
 
         self.prev_command = ValueSetUIObject
+
+    def handle_MenuBtnUIObjectOpen(self, MenuBtnUIObjectOpen):
+        name_of_obj = ""
+        if keyword.iskeyword(MenuBtnUIObjectOpen.MenuBtn_ID):
+            name_of_obj = "x" + MenuBtnUIObjectOpen.MenuBtn_ID
+        else:
+            name_of_obj = MenuBtnUIObjectOpen.MenuBtn_ID
+
+        self.init_Object(
+            name_of_obj,
+            MenuBtnUIObjectOpen.MenuBtn_ID,
+            self.last_parent[self.parent_hierarchy_count],
+        )
+
+        self.write_line_with_one_parameters(
+            name_of_obj, "OPENLIST", "", ""
+        )
+
+        self.prev_command = MenuBtnUIObjectOpen
+
+    def handle_MenuBtnUIObjectClose(self, MenuBtnUIObjectClose):
+        name_of_obj = ""
+        if keyword.iskeyword(MenuBtnUIObjectClose.MenuBtn_ID):
+            name_of_obj = "x" + MenuBtnUIObjectClose.MenuBtn_ID
+        else:
+            name_of_obj = MenuBtnUIObjectClose.MenuBtn_ID
+
+        self.init_Object(
+            name_of_obj,
+            MenuBtnUIObjectClose.MenuBtn_ID,
+            self.last_parent[self.parent_hierarchy_count],
+        )
+
+        self.write_line_with_one_parameters(
+            name_of_obj, "CLOSELIST", "", ""
+        )
+
+        self.prev_command = MenuBtnUIObjectClose
+
+    def handle_MenuBtnUIObjectSelect(self, MenuBtnUIObjectSelect):
+        name_of_obj = ""
+        if keyword.iskeyword(MenuBtnUIObjectSelect.MenuBtn_ID):
+            name_of_obj = "x" + MenuBtnUIObjectSelect.MenuBtn_ID
+        else:
+            name_of_obj = MenuBtnUIObjectSelect.MenuBtn_ID
+
+        self.init_Object(
+            name_of_obj,
+            MenuBtnUIObjectSelect.MenuBtn_ID,
+            self.last_parent[self.parent_hierarchy_count],
+        )
+
+        self.write_line_with_one_parameters(
+            name_of_obj, "OPENFROMLIST", "POS", MenuBtnUIObjectSelect.item_num[0]
+        )
+
+        self.prev_command = MenuBtnUIObjectSelect
 
     def handle_writer_type(self, writer_Type_command):
 
