@@ -31,6 +31,8 @@
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/uitest/logger.hxx>
+#include <vcl/uitest/eventdescription.hxx>
 
 #include <svl/undo.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -66,6 +68,21 @@
 #include "SidebarTxtControl.hxx"
 
 #include <memory>
+
+namespace{
+
+void collectUIInformation( const OUString& aevent , const OUString& aID )
+{
+    EventDescription aDescription;
+    aDescription.aID =  aID;
+    aDescription.aParameters = {{"" ,  ""}};
+    aDescription.aAction = aevent;
+    aDescription.aParent = "MainWindow";
+    aDescription.aKeyWord = "SwEditWinUIObject";
+    UITestLogger::getInstance().logEvent(aDescription);
+}
+
+}
 
 namespace sw::annotation {
 
@@ -245,6 +262,7 @@ void SwAnnotationWin::SetResolved(bool resolved)
         mbResolvedStateUpdated = true;
     UpdateData();
     Invalidate();
+    collectUIInformation("SETRESOLVED",get_id());
 }
 
 void SwAnnotationWin::ToggleResolved()
@@ -307,6 +325,7 @@ void SwAnnotationWin::UpdateData()
 
 void SwAnnotationWin::Delete()
 {
+    collectUIInformation("DELETE",get_id());
     if (!mrView.GetWrtShellPtr()->GotoField(*mpFormatField))
         return;
 
