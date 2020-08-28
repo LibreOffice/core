@@ -21,6 +21,9 @@
 #include <poolfmt.hxx>
 #include <strings.hrc>
 #include <swtypes.hxx>
+#include <unotools/syslocale.hxx>
+#include <i18nlangtag/languagetag.hxx>
+#include <map>
 
 #ifdef _NEED_TO_DEBUG_MAPPING
 #include <stdlib.h>
@@ -104,8 +107,15 @@ template <auto initFunc> struct TablePair
             static const NameToIdHash s_aProgMap(initFunc(true));
             return s_aProgMap;
         }
-        static const NameToIdHash s_aUIMap(initFunc(false));
-        return s_aUIMap;
+
+        LanguageTag aCurrentLanguage = SvtSysLocale().GetUILanguageTag();
+        static std::map<LanguageTag, NameToIdHash> s_aUIMap;
+
+        auto aFound = s_aUIMap.find(aCurrentLanguage);
+        if (aFound == s_aUIMap.end())
+            s_aUIMap[aCurrentLanguage] = initFunc(false);
+
+        return s_aUIMap[aCurrentLanguage];
     }
 };
 
