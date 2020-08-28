@@ -35,7 +35,7 @@ namespace dbaccess
 class OOO_DLLPUBLIC_DBA OAuthenticationContinuation :
     public comphelper::OInteraction< css::ucb::XInteractionSupplyAuthentication >
 {
-    bool    m_bRemberPassword : 1;      // remember the password for this session ?
+    bool    m_bRememberPassword : 1;      // remember the password for this session ?
 
     bool            m_bCanSetUserName;
     OUString     m_sUser;            // the user
@@ -60,7 +60,7 @@ public:
     void            setCanChangeUserName( bool bVal )  { m_bCanSetUserName = bVal; }
     const OUString& getUser() const             { return m_sUser; }
     const OUString& getPassword() const         { return m_sPassword; }
-    bool        getRememberPassword() const { return m_bRemberPassword; }
+    bool        getRememberPassword() const { return m_bRememberPassword; }
 };
 
 }   // namespace dbaccess
