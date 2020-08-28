@@ -2265,6 +2265,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
     // Let's decide if we need to split the paragraph because of a section break
     bool bNeedParaSplit = NeedTextNodeSplit( rNode, softBreakList )
                         && !IsInTable();
+    const SwPageDesc* pNextSplitParaPageDesc = m_pCurrentPageDesc;
 
     auto aBreakIt = softBreakList.begin();
     // iterate through portions on different pages
@@ -2273,7 +2274,13 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
         sal_Int32 nCurrentPos = *aBreakIt;
 
         if( softBreakList.size() > 1 ) // not for empty paragraph
-            ++aBreakIt;
+        {
+            // no need to split again if the page style won't change anymore
+            if ( pNextSplitParaPageDesc == pNextSplitParaPageDesc->GetFollow() )
+                aBreakIt = --softBreakList.end();
+            else
+                ++aBreakIt;
+        }
 
         AttrOutput().StartParagraph( pTextNodeInfo );
 
@@ -2718,9 +2725,9 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
         // if paragraph is split, put the section break between the parts
         if( bNeedParaSplit && *aBreakIt != rNode.GetText().getLength() )
         {
-                const SwPageDesc* pNextPageDesc = m_pCurrentPageDesc->GetFollow();
-                assert(pNextPageDesc);
-                PrepareNewPageDesc( rNode.GetpSwAttrSet(), rNode, nullptr , pNextPageDesc);
+            pNextSplitParaPageDesc = pNextSplitParaPageDesc->GetFollow();
+            assert(pNextSplitParaPageDesc);
+            PrepareNewPageDesc( rNode.GetpSwAttrSet(), rNode, nullptr , pNextSplitParaPageDesc);
         }
         else
         {
