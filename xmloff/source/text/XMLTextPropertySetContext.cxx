@@ -33,20 +33,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
 XMLTextPropertySetContext::XMLTextPropertySetContext(
-                 SvXMLImport& rImport, sal_uInt16 nPrfx,
-                 const OUString& rLName,
-                 const Reference< xml::sax::XAttributeList > & xAttrList,
-                 sal_uInt32 nFamily,
-                 ::std::vector< XMLPropertyState > &rProps,
-                 const rtl::Reference < SvXMLImportPropertyMapper > &rMap,
-                 OUString& rDCTextStyleName ) :
-    SvXMLPropertySetContext( rImport, nPrfx, rLName, xAttrList, nFamily,
-                             rProps, rMap ),
-    rDropCapTextStyleName( rDCTextStyleName )
-{
-}
-
-XMLTextPropertySetContext::XMLTextPropertySetContext(
                  SvXMLImport& rImport, sal_Int32 nElement,
                  const Reference< xml::sax::XFastAttributeList > & xAttrList,
                  sal_uInt32 nFamily,
@@ -63,12 +49,11 @@ XMLTextPropertySetContext::~XMLTextPropertySetContext()
 {
 }
 
-SvXMLImportContextRef XMLTextPropertySetContext::CreateChildContext(
-                   sal_uInt16 nPrefix,
-                   const OUString& rLocalName,
-                   const Reference< xml::sax::XAttributeList > & xAttrList,
-                   ::std::vector< XMLPropertyState > &rProperties,
-                   const XMLPropertyState& rProp )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextPropertySetContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+    ::std::vector< XMLPropertyState > &rProperties,
+    const XMLPropertyState& rProp )
 {
     SvXMLImportContextRef xContext;
 
@@ -76,13 +61,13 @@ SvXMLImportContextRef XMLTextPropertySetContext::CreateChildContext(
                     ->GetEntryContextId( rProp.mnIndex ) )
     {
     case CTF_TABSTOP:
-        xContext = new SvxXMLTabStopImportContext( GetImport(), nPrefix,
-                                                   rLocalName, rProp,
+        return new SvxXMLTabStopImportContext( GetImport(), nElement,
+                                                   rProp,
                                                    rProperties );
         break;
     case CTF_TEXTCOLUMNS:
-        xContext = new XMLTextColumnsContext( GetImport(), nPrefix,
-                                                   rLocalName, xAttrList, rProp,
+        return new XMLTextColumnsContext( GetImport(), nElement,
+                                                   xAttrList, rProp,
                                                    rProperties );
         break;
 
@@ -93,13 +78,13 @@ SvXMLImportContextRef XMLTextPropertySetContext::CreateChildContext(
                             ->GetEntryContextId( rProp.mnIndex-2 ),
                         "invalid property map!");
             XMLTextDropCapImportContext *pDCContext =
-                new XMLTextDropCapImportContext( GetImport(), nPrefix,
-                                                        rLocalName, xAttrList,
+                new XMLTextDropCapImportContext( GetImport(), nElement,
+                                                        xAttrList,
                                                         rProp,
                                                         rProp.mnIndex-2,
                                                         rProperties );
             rDropCapTextStyleName = pDCContext->GetStyleName();
-            xContext = pDCContext;
+            return pDCContext;
         }
         break;
 
@@ -121,9 +106,9 @@ SvXMLImportContextRef XMLTextPropertySetContext::CreateChildContext(
                   rProp.mnIndex-3 ) ) )
             nTranspIndex = rProp.mnIndex-3;
 
-        xContext =
-            new XMLBackgroundImageContext( GetImport(), nPrefix,
-                                           rLocalName, xAttrList,
+        return
+            new XMLBackgroundImageContext( GetImport(), nElement,
+                                           xAttrList,
                                            rProp,
                                            rProp.mnIndex-2,
                                            rProp.mnIndex-1,
@@ -134,18 +119,15 @@ SvXMLImportContextRef XMLTextPropertySetContext::CreateChildContext(
     break;
     case CTF_SECTION_FOOTNOTE_END:
     case CTF_SECTION_ENDNOTE_END:
-        xContext = new XMLSectionFootnoteConfigImport(
-            GetImport(), nPrefix, rLocalName, rProperties,
+        return new XMLSectionFootnoteConfigImport(
+            GetImport(), nElement, rProperties,
             mxMapper->getPropertySetMapper());
         break;
     }
 
-    if (!xContext)
-        xContext = SvXMLPropertySetContext::CreateChildContext( nPrefix, rLocalName,
+    return SvXMLPropertySetContext::createFastChildContext( nElement,
                                                             xAttrList,
                                                             rProperties, rProp );
-
-    return xContext;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -55,12 +55,11 @@ using ::com::sun::star::xml::sax::XAttributeList;
 
 XMLFootnoteSeparatorImport::XMLFootnoteSeparatorImport(
     SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
+    sal_Int32 /*nElement*/,
     vector<XMLPropertyState> & rProps,
     const rtl::Reference<XMLPropertySetMapper> & rMapperRef,
     sal_Int32 nIndex) :
-        SvXMLImportContext(rImport, nPrefix, rLocalName),
+        SvXMLImportContext(rImport),
         rProperties(rProps),
         rMapper(rMapperRef),
         nPropIndex(nIndex)
@@ -71,8 +70,9 @@ XMLFootnoteSeparatorImport::~XMLFootnoteSeparatorImport()
 {
 }
 
-void XMLFootnoteSeparatorImport::StartElement(
-    const Reference<XAttributeList> & xAttrList)
+void XMLFootnoteSeparatorImport::startFastElement(
+    sal_Int32 /*nElement*/,
+    const Reference<css::xml::sax::XFastAttributeList> & xAttrList)
 {
     // get the values from the properties
     sal_Int16 nLineWeight = 0;
@@ -87,39 +87,36 @@ void XMLFootnoteSeparatorImport::StartElement(
     sal_Int8 nLineStyle = 1;
 
     // iterate over xattribute list and fill values
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
-                              &sLocalName );
-
-        if (XML_NAMESPACE_STYLE == nPrefix)
+        OUString sAttrValue = aIter.toString();
+        sal_Int32 nTmp;
+        switch (aIter.getToken())
         {
-            OUString sAttrValue = xAttrList->getValueByIndex(nAttr);
-            sal_Int32 nTmp;
-            if (IsXMLToken( sLocalName, XML_WIDTH ))
+            case XML_ELEMENT(STYLE, XML_WIDTH):
             {
                 if (GetImport().GetMM100UnitConverter().convertMeasureToCore(
                     nTmp, sAttrValue))
                 {
                     nLineWeight = static_cast<sal_Int16>(nTmp);
                 }
+                break;
             }
-            else if (IsXMLToken( sLocalName, XML_DISTANCE_BEFORE_SEP ))
+            case XML_ELEMENT(STYLE, XML_DISTANCE_BEFORE_SEP):
             {
                 if (GetImport().GetMM100UnitConverter().convertMeasureToCore(
                                                         nTmp, sAttrValue))
                     nLineTextDistance = nTmp;
+                break;
             }
-            else if (IsXMLToken( sLocalName, XML_DISTANCE_AFTER_SEP ))
+            case XML_ELEMENT(STYLE, XML_DISTANCE_AFTER_SEP):
             {
                 if (GetImport().GetMM100UnitConverter().convertMeasureToCore(
                                                         nTmp, sAttrValue))
                     nLineDistance = nTmp;
+                break;
             }
-            else if (IsXMLToken( sLocalName, XML_ADJUSTMENT ))
+            case XML_ELEMENT(STYLE, XML_ADJUSTMENT ):
             {
                 static const SvXMLEnumMapEntry<text::HorizontalAdjust> aXML_HorizontalAdjust_Enum[] =
                 {
@@ -131,20 +128,23 @@ void XMLFootnoteSeparatorImport::StartElement(
 
                 SvXMLUnitConverter::convertEnum(
                             eLineAdjust, sAttrValue, aXML_HorizontalAdjust_Enum);
+                break;
             }
-            else if (IsXMLToken( sLocalName, XML_REL_WIDTH ))
+            case XML_ELEMENT(STYLE, XML_REL_WIDTH ):
             {
                 if (::sax::Converter::convertPercent(nTmp, sAttrValue))
                     nLineRelWidth = static_cast<sal_uInt8>(nTmp);
+                break;
             }
-            else if (IsXMLToken( sLocalName, XML_COLOR ))
+            case XML_ELEMENT(STYLE, XML_COLOR):
             {
                 if (::sax::Converter::convertColor(nTmp, sAttrValue))
                 {
                     nLineColor = nTmp;
                 }
+                break;
             }
-            else if (IsXMLToken( sLocalName, XML_LINE_STYLE ))
+            case XML_ELEMENT(STYLE, XML_LINE_STYLE ):
             {
                 static const SvXMLEnumMapEntry<sal_Int8> aXML_LineStyle_Enum[] =
                 {
@@ -156,7 +156,10 @@ void XMLFootnoteSeparatorImport::StartElement(
                 };
 
                 SvXMLUnitConverter::convertEnum(nLineStyle, sAttrValue, aXML_LineStyle_Enum);
+                break;
             }
+            default:
+                SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sAttrValue);
         }
     }
 
