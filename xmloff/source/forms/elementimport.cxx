@@ -1948,7 +1948,7 @@ namespace xmloff
     {
         // handle the master/details field attributes (they're way too special to let the OPropertyImport handle them)
         static const char* s_sMasterFieldsAttributeName = OAttributeMetaData::getFormAttributeName(faMasterFields);
-        static const char* s_sDetailFieldsAttributeName = OAttributeMetaData::getFormAttributeName(faDetailFiels);
+        static const char* s_sDetailFieldsAttributeName = OAttributeMetaData::getFormAttributeName(faDetailFields);
 
         if ( _rLocalName.equalsAscii(s_sMasterFieldsAttributeName) )
         {

@@ -94,7 +94,7 @@ namespace xmloff
             case faCommandType:         return "command-type";
             case faEscapeProcessing:    return "escape-processing";
             case faDatasource:          return "datasource";
-            case faDetailFiels:         return "detail-fields";
+            case faDetailFields:        return "detail-fields";
             case faFilter:              return "filter";
             case faIgnoreResult:        return "ignore-result";
             case faMasterFields:        return "master-fields";

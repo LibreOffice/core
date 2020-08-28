@@ -153,7 +153,7 @@ namespace xmloff
         faCommandType,
         faEscapeProcessing,
         faDatasource,
-        faDetailFiels,
+        faDetailFields,
         faFilter,
         faIgnoreResult,
         faMasterFields,
