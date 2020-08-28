@@ -41,10 +41,17 @@ static bool FileExists(const INetURLObject& rURL, const OUString& rExt)
     return FileExists(aURL);
 }
 
-GalleryBinaryEngineEntry::GalleryBinaryEngineEntry(
-    GalleryBinaryStorageLocations& rGalleryStorageLocations)
-    : m_rGalleryStorageLocations(rGalleryStorageLocations)
+GalleryBinaryEngineEntry::GalleryBinaryEngineEntry()
 {
+    mpGalleryStorageLocations = createGalleryStorageLocations();
+}
+
+std::unique_ptr<GalleryBinaryStorageLocations>
+GalleryBinaryEngineEntry::createGalleryStorageLocations()
+{
+    std::unique_ptr<GalleryBinaryStorageLocations> pGalleryStorageLocations
+        = std::make_unique<GalleryBinaryStorageLocations>();
+    return pGalleryStorageLocations;
 }
 
 void GalleryBinaryEngineEntry::CreateUniqueURL(const INetURLObject& rBaseURL, INetURLObject& aURL)
