@@ -258,7 +258,7 @@ void GalleryObjTest::TestGalleryThemeEntry()
 
     // Check URLs
     GalleryBinaryStorageLocations& aGalleryBinaryStorageLocations
-        = dynamic_cast<GalleryBinaryStorageLocations&>(*mpThemeEntry->getGalleryStorageLocations());
+        = dynamic_cast<GalleryBinaryStorageLocations&>(mpThemeEntry->getGalleryStorageLocations());
     INetURLObject aURL(aGalleryURL);
     aURL.Append(myThemeName);
     INetURLObject aThemeURL(aURL), aSdvURL(aURL), aSdgURL(aURL), aStrURL(aURL);
