@@ -26,8 +26,10 @@
 #include <xmloff/XMLBase64ImportContext.hxx>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <sal/log.hxx>
 
 using namespace css;
+using namespace xmloff::token;
 
 namespace {
 
@@ -51,43 +53,38 @@ const SvXMLTokenMapEntry aSymbolImageAttrTokenMap[] =
 };
 
 XMLSymbolImageContext::XMLSymbolImageContext(
-    SvXMLImport& rImport, sal_uInt16 nPrfx,
-    const OUString& rLName,
+    SvXMLImport& rImport, sal_Int32 nElement,
     const XMLPropertyState& rProp,
     ::std::vector< XMLPropertyState > &rProps ) :
         XMLElementPropertyContext(
-            rImport, nPrfx, rLName, rProp, rProps )
+            rImport, nElement, rProp, rProps )
 {
 }
 
 XMLSymbolImageContext::~XMLSymbolImageContext()
 {}
 
-void XMLSymbolImageContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+void XMLSymbolImageContext::startFastElement(
+    sal_Int32 /*nElement*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
-    static const SvXMLTokenMap aTokenMap( aSymbolImageAttrTokenMap );
-    OUString aLocalName;
-
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i = 0; i < nAttrCount; i++ )
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        sal_uInt16 nPrefix =
-            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                            &aLocalName );
-        const OUString& rValue = xAttrList->getValueByIndex( i );
+        const OUString sValue = aIter.toString();
 
-        switch( aTokenMap.Get( nPrefix, aLocalName ) )
+        switch( aIter.getToken() )
         {
-            case XML_TOK_SYMBOL_IMAGE_HREF:
-                msURL = rValue;
+            case XML_ELEMENT(XLINK, XML_HREF):
+                msURL = sValue;
                 break;
-            case XML_TOK_SYMBOL_IMAGE_ACTUATE:
-            case XML_TOK_SYMBOL_IMAGE_TYPE:
-            case XML_TOK_SYMBOL_IMAGE_SHOW:
+            case XML_ELEMENT(XLINK, XML_ACTUATE):
+            case XML_ELEMENT(XLINK, XML_TYPE):
+            case XML_ELEMENT(XLINK, XML_SHOW):
                 // these values are currently not interpreted
                 // it is always assumed 'actuate=onLoad', 'type=simple', 'show=embed'
                 break;
+            default:
+                SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
         }
     }
 }
@@ -113,7 +110,7 @@ SvXMLImportContextRef XMLSymbolImageContext::CreateChildContext(
     return pContext;
 }
 
-void XMLSymbolImageContext::EndElement()
+void XMLSymbolImageContext::endFastElement(sal_Int32 nElement)
 {
     uno::Reference<graphic::XGraphic> xGraphic;
 
@@ -134,7 +131,7 @@ void XMLSymbolImageContext::EndElement()
         SetInsert( true );
     }
 
-    XMLElementPropertyContext::EndElement();
+    XMLElementPropertyContext::endFastElement(nElement);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,6 +22,7 @@
 
 #include <com/sun/star/style/DropCapFormat.hpp>
 
+#include <sal/log.hxx>
 #include <sax/tools/converter.hxx>
 
 #include <xmloff/xmltkmap.hxx>
@@ -59,7 +60,7 @@ const SvXMLTokenMapEntry aDropAttrTokenMap[] =
 };
 
 void XMLTextDropCapImportContext::ProcessAttrs(
-        const Reference< xml::sax::XAttributeList >& xAttrList )
+        const Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     static const SvXMLTokenMap aTokenMap( aDropAttrTokenMap );
 
@@ -67,48 +68,45 @@ void XMLTextDropCapImportContext::ProcessAttrs(
     bool bWholeWord = false;
 
     sal_Int32 nTmp;
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for (auto &aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                            &aLocalName );
-        const OUString& rValue = xAttrList->getValueByIndex( i );
+        const OUString sValue = aIter.toString();
 
-        switch( aTokenMap.Get( nPrefix, aLocalName ) )
+        switch( aIter.getToken() )
         {
-        case XML_TOK_DROP_LINES:
-            if (::sax::Converter::convertNumber( nTmp, rValue, 0, 255 ))
+        case XML_ELEMENT(STYLE, XML_LINES):
+            if (::sax::Converter::convertNumber( nTmp, sValue, 0, 255 ))
             {
                 aFormat.Lines = nTmp < 2 ? 0 : static_cast<sal_Int8>(nTmp);
             }
             break;
 
-        case XML_TOK_DROP_LENGTH:
-            if( IsXMLToken( rValue, XML_WORD ) )
+        case XML_ELEMENT(STYLE, XML_LENGTH):
+            if( IsXMLToken( sValue, XML_WORD ) )
             {
                 bWholeWord = true;
             }
-            else if (::sax::Converter::convertNumber( nTmp, rValue, 1, 255 ))
+            else if (::sax::Converter::convertNumber( nTmp, sValue, 1, 255 ))
             {
                 bWholeWord = false;
                 aFormat.Count = static_cast<sal_Int8>(nTmp);
             }
             break;
 
-        case XML_TOK_DROP_DISTANCE:
+        case XML_ELEMENT(STYLE, XML_DISTANCE):
             if (GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                        nTmp, rValue, 0 ))
+                        nTmp, sValue, 0 ))
             {
                 aFormat.Distance = static_cast<sal_uInt16>(nTmp);
             }
             break;
 
-        case XML_TOK_DROP_STYLE:
-            sStyleName = rValue;
+        case XML_ELEMENT(STYLE, XML_STYLE_NAME):
+            sStyleName = sValue;
             break;
+
+        default:
+            SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
         }
     }
 
@@ -121,13 +119,12 @@ void XMLTextDropCapImportContext::ProcessAttrs(
 }
 
 XMLTextDropCapImportContext::XMLTextDropCapImportContext(
-        SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const Reference< xml::sax::XAttributeList > & xAttrList,
+        SvXMLImport& rImport, sal_Int32 nElement,
+        const Reference< xml::sax::XFastAttributeList > & xAttrList,
         const XMLPropertyState& rProp,
         sal_Int32 nWholeWordIdx,
         ::std::vector< XMLPropertyState > &rProps ) :
-    XMLElementPropertyContext( rImport, nPrfx, rLName, rProp, rProps ),
+    XMLElementPropertyContext( rImport, nElement, rProp, rProps ),
     aWholeWordProp( nWholeWordIdx )
 {
     ProcessAttrs( xAttrList );
@@ -137,10 +134,10 @@ XMLTextDropCapImportContext::~XMLTextDropCapImportContext()
 {
 }
 
-void XMLTextDropCapImportContext::EndElement()
+void XMLTextDropCapImportContext::endFastElement(sal_Int32 nElement)
 {
     SetInsert( true );
-    XMLElementPropertyContext::EndElement();
+    XMLElementPropertyContext::endFastElement(nElement);
 
     if( -1 != aWholeWordProp.mnIndex )
         rProperties.push_back( aWholeWordProp );
