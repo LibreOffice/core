@@ -65,6 +65,8 @@ void test::ostring::StringConcat::checkConcat()
     CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OString, const char[ 4 ] > )), typeid( OString( "foo" ) + "bar" ));
     CPPUNIT_ASSERT_EQUAL( OString( "foobarbaz" ), OString( OString( "foo" ) + "bar" + "baz" ));
     CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OStringConcat< OString, const char[ 4 ] >, const char[ 4 ] > )), typeid( OString( "foo" ) + "bar" + "baz" ));
+    CPPUNIT_ASSERT_EQUAL( OString( "foobar" ), OString( OStringBuffer( "foo" ) + "bar" ));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OStringBuffer, const char[ 4 ] > )), typeid( OStringBuffer( "foo" ) + "bar" ));
     CPPUNIT_ASSERT_EQUAL( OString( "foobar" ), OString( OStringLiteral( "foo" ) + "bar" ));
     CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OStringLiteral, const char[ 4 ] > )), typeid( OStringLiteral( "foo" ) + "bar" ));
     CPPUNIT_ASSERT_EQUAL( OString( "foobar" ), OString( OStringLiteral( "foo" ) + static_cast<const char*>("bar") ));
@@ -83,8 +85,16 @@ void test::ostring::StringConcat::checkConcat()
     CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OString, char* > )), typeid( OString( "foo" ) + d4 ));
     CPPUNIT_ASSERT_EQUAL( OString( "fooabc" ), OString( OString( "foo" ) + d4 ));
     CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OString, char* > )), typeid( OString( "foo" ) + d4 ));
-    CPPUNIT_ASSERT_EQUAL( OString( "fooabc" ), OString( rtl::OStringView( "foo" ) + d4 ));
-    CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< rtl::OStringView, char* > )), typeid( rtl::OStringView( "foo" ) + d4 ));
+    CPPUNIT_ASSERT_EQUAL( OString( "foobar" ), OString( OString::Concat( "foo" ) + "bar" ));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OStringConcat< OStringConcatMarker, const char[ 4 ] >, const char[ 4 ] > )), typeid( OString::Concat( "foo" ) + "bar" ));
+    CPPUNIT_ASSERT_EQUAL( OString( "xyzbar" ), OString( OString::Concat( d1 ) + "bar" ));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OStringConcat< OStringConcatMarker, const char[ 4 ] >, const char[ 4 ] > )), typeid( OString::Concat( d1 ) + "bar" ));
+    CPPUNIT_ASSERT_EQUAL( OString( "abcbar" ), OString( OString::Concat( d2 ) + "bar" ));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OStringConcat< OStringConcatMarker, char[ 4 ] >, const char[ 4 ] > )), typeid( OString::Concat( d2 ) + "bar" ));
+    CPPUNIT_ASSERT_EQUAL( OString( "xyzbar" ), OString( OString::Concat( d3 ) + "bar" ));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OStringConcat< OStringConcatMarker, const char* >, const char[ 4 ] > )), typeid( OString::Concat( d3 ) + "bar" ));
+    CPPUNIT_ASSERT_EQUAL( OString( "abcbar" ), OString( OString::Concat( d4 ) + "bar" ));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OStringConcat< OStringConcatMarker, char* >, const char[ 4 ] > )), typeid( OString::Concat( d4 ) + "bar" ));
 
     CPPUNIT_ASSERT_EQUAL( OString( "num10" ), OString( OString( "num" ) + OString::number( 10 )));
     CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OString, OStringNumber< int > > )), typeid( OString( "num" ) + OString::number( 10 )));
@@ -155,11 +165,10 @@ void test::ostring::StringConcat::checkAppend()
 void test::ostring::StringConcat::checkInvalid()
 {
     CPPUNIT_ASSERT( !INVALID_CONCAT( OString() + OString()));
-    CPPUNIT_ASSERT( INVALID_CONCAT( OString( "a" ) + OStringBuffer( "b" )));
     CPPUNIT_ASSERT( INVALID_CONCAT( OString( "a" ) + OUString( "b" )));
     CPPUNIT_ASSERT( INVALID_CONCAT( OString( "a" ) + OUStringBuffer( "b" )));
     CPPUNIT_ASSERT( INVALID_CONCAT( OString( "a" ) + OUStringLiteral( u"b" )));
-    CPPUNIT_ASSERT( INVALID_CONCAT( OString( "a" ) + rtl::OUStringView( u"b" )));
+    CPPUNIT_ASSERT( INVALID_CONCAT( OString( "a" ) + OUString::Concat( u"b" )));
     CPPUNIT_ASSERT( INVALID_CONCAT( OString( "a" ) + 1 ));
     rtl_String* rs = nullptr;
     rtl_uString* rus = nullptr;

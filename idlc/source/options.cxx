@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
 
 #include <options.hxx>
 
@@ -285,7 +288,7 @@ bool Options::initOptions(std::vector< std::string > & rArgs)
         {
           return badOption("invalid", option);
         }
-        OString param = "-D" + rtl::OStringView((*first).c_str(), (*first).size());
+        OString param = OString::Concat("-D") + std::string_view((*first).c_str(), (*first).size());
         if (m_options.count("-D") > 0)
         {
           param = m_options["-D"] + " " + param;

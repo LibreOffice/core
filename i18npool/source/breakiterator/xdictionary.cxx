@@ -166,11 +166,11 @@ void xdictionary::initDictionaryData(const char *pLang)
 
 #ifdef SAL_DLLPREFIX
     OString sModuleName = // mostly "lib*.so" (with * == dict_zh)
-        SAL_DLLPREFIX
+        OString::Concat(SAL_DLLPREFIX "dict_") + pLang + SAL_DLLEXTENSION;
 #else
     OString sModuleName = // mostly "*.dll" (with * == dict_zh)
+        OString::Concat("dict_") + pLang + SAL_DLLEXTENSION;
 #endif
-        "dict_" + rtl::OStringView(pLang) + SAL_DLLEXTENSION;
     aEntry.mhModule = osl_loadModuleRelativeAscii( &thisModule, sModuleName.getStr(), SAL_LOADMODULE_DEFAULT );
     if( aEntry.mhModule ) {
         oslGenericFunction func;

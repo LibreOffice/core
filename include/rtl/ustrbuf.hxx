@@ -1643,13 +1643,6 @@ public:
         return OUStringBuffer( pNew, count + 16 );
     }
 
-#if defined LIBO_INTERNAL_ONLY
-    explicit operator OUStringView() const
-    {
-        return OUStringView(getStr(), getLength());
-    }
-#endif
-
 private:
     OUStringBuffer( rtl_uString * value, const sal_Int32 capacity )
     {
@@ -1667,6 +1660,18 @@ private:
      */
     sal_Int32       nCapacity;
 };
+
+#if defined LIBO_INTERNAL_ONLY
+template<> struct ToStringHelper<OUStringBuffer> {
+    static std::size_t length(OUStringBuffer const & s) { return s.getLength(); }
+
+    static sal_Unicode * addData(sal_Unicode * buffer, OUStringBuffer const & s) SAL_RETURNS_NONNULL
+    { return addDataHelper(buffer, s.getStr(), s.getLength()); }
+
+    static constexpr bool allowOStringConcat = false;
+    static constexpr bool allowOUStringConcat = true;
+};
+#endif
 
 #if defined LIBO_INTERNAL_ONLY
     // Define this here to avoid circular includes

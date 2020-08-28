@@ -185,7 +185,7 @@ OString createFileName(cl_device_id deviceId, const char* clFileName)
             platformVersion, nullptr);
 
     // create hash for deviceName + driver version + platform version
-    OString aString = rtl::OStringView(deviceName) + driverVersion + platformVersion;
+    OString aString = OString::Concat(deviceName) + driverVersion + platformVersion;
     OString aHash = generateMD5(aString.getStr(), aString.getLength());
 
     return getCacheFolder() + fileName + "-" + aHash + ".bin";

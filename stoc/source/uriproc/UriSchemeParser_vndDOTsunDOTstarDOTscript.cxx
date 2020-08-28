@@ -284,7 +284,7 @@ void SAL_CALL UrlReference::setName(OUString const & name)
 
     auto tmp = std::u16string_view(m_base.m_path).substr(i);
     m_base.m_path = encodeNameOrParamFragment(name) +
-        rtl::OUStringView(tmp.data(), tmp.length());
+        std::u16string_view(tmp.data(), tmp.length());
 }
 
 sal_Bool UrlReference::hasParameter(OUString const & key)

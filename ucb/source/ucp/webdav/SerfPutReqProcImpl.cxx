@@ -67,7 +67,7 @@ serf_bucket_t * SerfPutReqProcImpl::createSerfRequestBucket( serf_request_t * in
     setRequestHeaders( hdrs_bkt );
 
     // 'If' header with token, so that we can save document locked by us
-    const OString sIfHeader( "<" + rtl::OStringView(getPathStr()) + "> (<" + OUStringToOString(
+    const OString sIfHeader( OString::Concat("<") + getPathStr() + "> (<" + OUStringToOString(
                 msToken, RTL_TEXTENCODING_UTF8) + ">)" );
     serf_bucket_headers_set( hdrs_bkt, "If", sIfHeader.getStr() );
 

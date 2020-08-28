@@ -199,7 +199,7 @@ void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocal
                 }
 
                 status = U_ZERO_ERROR;
-                OString aUDName = rtl::OStringView(rule) + "_" + aLanguage;
+                OString aUDName = OString::Concat(rule) + "_" + aLanguage;
                 UDataMemory* pUData = udata_open("OpenOffice", "brk", aUDName.getStr(), &status);
                 if( U_SUCCESS(status) )
                     rbi = std::make_shared<OOoRuleBasedBreakIterator>( pUData, status);

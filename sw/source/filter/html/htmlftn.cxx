@@ -505,7 +505,7 @@ static void lcl_html_outFootEndNoteInfo( Writer& rWrt, OUString const *pParts,
     rHTMLWrt.OutNewLine();
     OString sOut =
         "<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_meta " "
-        OOO_STRING_SVTOOLS_HTML_O_name "=\"" + rtl::OStringView(pName) +
+        OOO_STRING_SVTOOLS_HTML_O_name "=\"" + pName +
         "\" " OOO_STRING_SVTOOLS_HTML_O_content "=\"";
     rWrt.Strm().WriteOString( sOut );
     HTMLOutFuncs::Out_String( rWrt.Strm(), aContent.makeStringAndClear(), rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
