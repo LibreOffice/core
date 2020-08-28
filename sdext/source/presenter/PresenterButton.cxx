@@ -419,7 +419,7 @@ void PresenterButton::SetupButtonBitmaps()
 
 Reference<beans::XPropertySet> PresenterButton::GetConfigurationProperties (
     const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
-    const OUString& rsConfgurationName)
+    const OUString& rsConfigurationName)
 {
     PresenterConfigurationAccess aConfiguration (
         rxComponentContext,
@@ -430,10 +430,10 @@ Reference<beans::XPropertySet> PresenterButton::GetConfigurationProperties (
             Reference<container::XNameAccess>(
                 aConfiguration.GetConfigurationNode("PresenterScreenSettings/Buttons"),
                 UNO_QUERY),
-            [&rsConfgurationName](OUString const&, uno::Reference<beans::XPropertySet> const& xProps) -> bool
+            [&rsConfigurationName](OUString const&, uno::Reference<beans::XPropertySet> const& xProps) -> bool
             {
                 return PresenterConfigurationAccess::IsStringPropertyEqual(
-                        rsConfgurationName, "Name", xProps);
+                        rsConfigurationName, "Name", xProps);
             }),
         UNO_QUERY);
 }

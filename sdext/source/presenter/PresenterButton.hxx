@@ -125,7 +125,7 @@ private:
     void SetupButtonBitmaps();
     static css::uno::Reference<css::beans::XPropertySet> GetConfigurationProperties (
         const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
-        const OUString& rsConfgurationName);
+        const OUString& rsConfigurationName);
 
     /// @throws css::lang::DisposedException
     void ThrowIfDisposed() const;
