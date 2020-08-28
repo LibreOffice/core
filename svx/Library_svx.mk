@@ -151,7 +151,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/dialog/srchdlg \
     svx/source/dialog/strarray \
     svx/source/dialog/svxbmpnumvalueset \
-    svx/source/dialog/svxgrahicitem \
+    svx/source/dialog/svxgraphicitem \
     svx/source/dialog/svxruler \
     svx/source/dialog/swframeexample \
     svx/source/dialog/swframeposstrings \

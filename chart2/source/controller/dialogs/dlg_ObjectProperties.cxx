@@ -53,7 +53,7 @@
 
 #include <svx/drawitem.hxx>
 #include <svx/ofaitem.hxx>
-#include <svx/svxgrahicitem.hxx>
+#include <svx/svxgraphicitem.hxx>
 
 #include <svx/dialogs.hrc>
 #include <editeng/flstitem.hxx>
