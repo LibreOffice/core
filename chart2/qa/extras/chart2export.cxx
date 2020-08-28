@@ -15,6 +15,7 @@
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
 #include <com/sun/star/chart2/DataPointCustomLabelFieldType.hpp>
+#include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
@@ -2311,6 +2312,23 @@ void Chart2ExportTest::testCustomPositionofDataLabel()
         OUString aYVal = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:dLbls/c:dLbl[2]/c:layout/c:manualLayout/c:y", "val");
         double nY = aYVal.toDouble();
         CPPUNIT_ASSERT_DOUBLES_EQUAL(0.172648731408574, nY, 1e-7);
+    }
+
+    load("/chart2/qa/extras/data/ods/", "tdf136024.ods");
+    {
+        reload("calc8");
+        // tdf#136024: test custom position of pie chart data label after an ods export
+        Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+        CPPUNIT_ASSERT(xChartDoc.is());
+
+        Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
+        CPPUNIT_ASSERT(xDataSeries.is());
+        uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
+
+        chart2::RelativePosition aCustomLabelPosition;
+        CPPUNIT_ASSERT(xPropertySet->getPropertyValue("CustomLabelPosition") >>= aCustomLabelPosition);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(aCustomLabelPosition.Primary, -0.0961935120945059, 1e-5);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(aCustomLabelPosition.Secondary, 0.209578842093566, 1e-5);
     }
 }
 
