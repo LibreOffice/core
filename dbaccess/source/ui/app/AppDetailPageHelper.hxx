@@ -26,13 +26,13 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <AppElementType.hxx>
 #include <sfx2/weldutils.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
-#include "ChildWindow.hxx"
+#include <AppElementType.hxx>
+#include <ChildWindow.hxx>
 #include "DocumentInfoPreview.hxx"
 
 namespace com::sun::star::awt   { class XWindow; }

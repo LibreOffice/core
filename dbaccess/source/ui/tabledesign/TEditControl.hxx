@@ -44,11 +44,12 @@ namespace dbaui
 
         std::vector< std::shared_ptr<OTableRow> >*    m_pRowList;
 
+        VclPtr<OTableDesignView>           m_pView;
         VclPtr<OSQLNameEditControl>        pNameCell;
         VclPtr<::svt::ListBoxControl>      pTypeCell;
         VclPtr<::svt::EditControl>         pHelpTextCell;
         VclPtr<::svt::EditControl>         pDescrCell;
-        VclPtr<OTableFieldDescWin>         pDescrWin;          // properties of one column
+        OTableFieldDescWin*                pDescrWin;          // properties of one column
 
          std::shared_ptr<OTableRow> pActRow;
 
@@ -116,7 +117,7 @@ namespace dbaui
         bool IsPrimaryKey();
 
     public:
-        explicit OTableEditorCtrl(vcl::Window* pParentWin);
+        explicit OTableEditorCtrl(vcl::Window* pParentWin, OTableDesignView* pView);
         virtual ~OTableEditorCtrl() override;
         virtual void dispose() override;
         virtual bool CursorMoving(long nNewRow, sal_uInt16 nNewCol) override;

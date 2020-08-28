@@ -8,7 +8,7 @@
  */
 
 #include <vcl/svapp.hxx>
-#include "ChildWindow.hxx"
+#include <ChildWindow.hxx>
 
 namespace dbaui
 {

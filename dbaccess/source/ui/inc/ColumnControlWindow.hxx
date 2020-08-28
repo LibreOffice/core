@@ -76,7 +76,6 @@ namespace dbaui
         OColumnControlWindow& GetControl() { return *m_xControl; }
 
         virtual void GetFocus() override;
-        virtual void LoseFocus() override;
     };
 
 }   // namespace dbaui

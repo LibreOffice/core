@@ -125,8 +125,9 @@ void OTableEditorCtrl::Init()
     RowInserted(0, m_pRowList->size());
 }
 
-OTableEditorCtrl::OTableEditorCtrl(vcl::Window* pWindow)
+OTableEditorCtrl::OTableEditorCtrl(vcl::Window* pWindow, OTableDesignView* pView)
     :OTableRowView(pWindow)
+    ,m_pView(pView)
     ,pNameCell(nullptr)
     ,pTypeCell(nullptr)
     ,pHelpTextCell(nullptr)
@@ -142,7 +143,6 @@ OTableEditorCtrl::OTableEditorCtrl(vcl::Window* pWindow)
     ,bReadOnly(true)
     ,m_aInvalidate(this)
 {
-
     SetHelpId(HID_TABDESIGN_BACKGROUND);
     GetDataWindow().SetHelpId(HID_CTL_TABLEEDIT);
 
@@ -273,7 +273,8 @@ void OTableEditorCtrl::dispose()
     pTypeCell.disposeAndClear();
     pDescrCell.disposeAndClear();
     pHelpTextCell.disposeAndClear();
-    pDescrWin.clear();
+    pDescrWin = nullptr;
+    m_pView.clear();
     OTableRowView::dispose();
 }
 
@@ -1640,7 +1641,7 @@ void OTableEditorCtrl::SwitchType( const TOTypeInfoSP& _pType )
 
 OTableDesignView* OTableEditorCtrl::GetView() const
 {
-    return static_cast<OTableDesignView*>(GetParent()->GetParent());
+    return m_pView;
 }
 
 void OTableEditorCtrl::DeactivateCell(bool bUpdate)

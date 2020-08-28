@@ -21,6 +21,7 @@
 
 #include <vcl/InterimItemWindow.hxx>
 #include <IClipBoardTest.hxx>
+#include <ChildWindow.hxx>
 #include "TableFieldControl.hxx"
 
 namespace dbaui
@@ -29,7 +30,7 @@ namespace dbaui
     class OTableDesignView;
     class OFieldDescription;
 
-    class OTableFieldDescWin final : public InterimItemWindow
+    class OTableFieldDescWin final : public OChildWindow
                                    , public IClipboardTest
     {
         enum ChildFocusState
@@ -53,9 +54,8 @@ namespace dbaui
         DECL_LINK(FieldFocusIn, weld::Widget&, void);
 
     public:
-        explicit OTableFieldDescWin(vcl::Window* pParent, OTableDesignView* pView);
+        explicit OTableFieldDescWin(weld::Container* pParent, OTableDesignView* pView);
         virtual ~OTableFieldDescWin() override;
-        virtual void dispose() override;
 
         void Init();
 
@@ -69,8 +69,8 @@ namespace dbaui
         OUString  BoolStringPersistent(const OUString& rUIString) const { return m_xFieldControl->BoolStringPersistent(rUIString); }
         OUString  BoolStringUI(const OUString& rPersistentString) const { return m_xFieldControl->BoolStringUI(rPersistentString); }
 
-        virtual void GetFocus() override;
-        virtual void LoseFocus() override;
+        virtual bool HasChildPathFocus() const override;
+        virtual void GrabFocus() override;
 
         // IClipboardTest
         virtual bool isCutAllowed() override;

@@ -49,12 +49,7 @@ void OColumnControlTopLevel::dispose()
 
 void OColumnControlTopLevel::GetFocus()
 {
-    m_xControl->GetFocus();
-}
-
-void OColumnControlTopLevel::LoseFocus()
-{
-    m_xControl->LoseFocus();
+    m_xControl->GrabFocus();
 }
 
 // OColumnControlWindow

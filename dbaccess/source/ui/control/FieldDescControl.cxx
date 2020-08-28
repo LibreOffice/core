@@ -78,6 +78,7 @@ OFieldDescControl::OFieldDescControl(weld::Container* pPage, OTableDesignHelpBar
     , m_nEditWidth(50)
     , pActFieldDescr(nullptr)
 {
+    m_pHelp->connect_focus_out(LINK(this, OFieldDescControl, HelpFocusOut));
 }
 
 OFieldDescControl::~OFieldDescControl()
@@ -170,7 +171,7 @@ void OFieldDescControl::SetReadOnly( bool bReadOnly )
                                         , m_xScale.get(), m_xColumnName.get()
                                         , m_xType.get(), m_xAutoIncrementValue.get()
     };
-    weld::Widget* ppAggregatesText[] = {   m_xRequiredText.get(), m_xNumTypeText.get()
+    weld::Widget* ppAggregatesText[] = {  m_xRequiredText.get(), m_xNumTypeText.get()
                                         , m_xAutoIncrementText.get(), m_xDefaultText.get()
                                         , m_xTextLenText.get(), m_xLengthText.get()
                                         , m_xScaleText.get(), m_xColumnNameText.get()
@@ -1145,8 +1146,10 @@ void OFieldDescControl::UpdateFormatSample(OFieldDescription const * pFieldDescr
         m_xFormatSample->set_text(getControlDefault(pFieldDescr,false));
 }
 
-void OFieldDescControl::GetFocus()
+void OFieldDescControl::GrabFocus()
 {
+    m_xContainer->grab_focus();
+
     // Set the Focus to the Control that has been active last
     if (m_pLastFocusWindow)
     {
@@ -1166,9 +1169,9 @@ void OFieldDescControl::implFocusLost(weld::Widget* _pWhich)
         m_pHelp->SetHelpText( OUString() );
 }
 
-void OFieldDescControl::LoseFocus()
+IMPL_LINK_NOARG(OFieldDescControl, HelpFocusOut, weld::Widget&, void)
 {
-    implFocusLost(nullptr);
+    m_pHelp->SetHelpText(OUString());
 }
 
 bool OFieldDescControl::IsFocusInEditableWidget() const
@@ -1188,6 +1191,11 @@ bool OFieldDescControl::IsFocusInEditableWidget() const
     if (m_xAutoIncrementValue && m_pActFocusWindow == m_xAutoIncrementValue->GetWidget())
         return true;
     return false;
+}
+
+bool OFieldDescControl::HasChildPathFocus() const
+{
+    return m_pActFocusWindow && m_pActFocusWindow->has_focus();
 }
 
 bool OFieldDescControl::isCopyAllowed()
