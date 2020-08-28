@@ -48,7 +48,7 @@ using namespace ::com::sun::star;
 GalleryBrowser1::GalleryBrowser1(
     weld::Builder& rBuilder,
     Gallery* pGallery,
-    const std::function<void ()>& rThemeSlectionHandler)
+    const std::function<void ()>& rThemeSelectionHandler)
     :
     mxNewTheme(rBuilder.weld_button("insert")),
     mxThemes(rBuilder.weld_tree_view("themelist")),
@@ -57,7 +57,7 @@ GalleryBrowser1::GalleryBrowser1(
     aImgNormal            ( RID_SVXBMP_THEME_NORMAL ),
     aImgDefault           ( RID_SVXBMP_THEME_DEFAULT ),
     aImgReadOnly          ( RID_SVXBMP_THEME_READONLY ),
-    maThemeSlectionHandler(rThemeSlectionHandler)
+    maThemeSelectionHandler(rThemeSelectionHandler)
 {
     mxNewTheme->set_help_id(HID_GALLERY_NEWTHEME);
     mxNewTheme->connect_clicked( LINK( this, GalleryBrowser1, ClickNewThemeHdl ) );
@@ -463,8 +463,8 @@ IMPL_LINK(GalleryBrowser1, PopupMenuHdl, const CommandEvent&, rCEvt, bool)
 
 IMPL_LINK_NOARG(GalleryBrowser1, SelectThemeHdl, weld::TreeView&, void)
 {
-    if (maThemeSlectionHandler)
-        maThemeSlectionHandler();
+    if (maThemeSelectionHandler)
+        maThemeSelectionHandler();
 }
 
 IMPL_LINK_NOARG(GalleryBrowser1, ClickNewThemeHdl, weld::Button&, void)
