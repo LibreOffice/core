@@ -110,6 +110,8 @@ bool DocumentDecryption::readEncryptionInfo()
 
     if (xDataSpaceMap.is())
     {
+        bool bBroken = false;
+
         BinaryXInputStream aDataSpaceStream(xDataSpaceMap, true);
         sal_uInt32 aHeaderLength = aDataSpaceStream.readuInt32();
         SAL_WARN_IF(aHeaderLength != 8, "oox", "DataSpaceMap length != 8 is not supported. Some content may be skipped");
@@ -117,30 +119,44 @@ bool DocumentDecryption::readEncryptionInfo()
         SAL_WARN_IF(aEntryCount != 1, "oox", "DataSpaceMap contains more than one entry. Some content may be skipped");
 
         // Read each DataSpaceMapEntry (MS-OFFCRYPTO 2.1.6.1)
-        for (sal_uInt32 i = 0; i < aEntryCount && !aDataSpaceStream.isEof(); i++)
+        for (sal_uInt32 i = 0; i < aEntryCount && !bBroken; i++)
         {
             // entryLen unused for the moment
             aDataSpaceStream.skip(sizeof(sal_uInt32));
 
             // Read each DataSpaceReferenceComponent (MS-OFFCRYPTO 2.1.6.2)
             sal_uInt32 aReferenceComponentCount = aDataSpaceStream.readuInt32();
-            for (sal_uInt32 j = 0; j < aReferenceComponentCount && !aDataSpaceStream.isEof(); j++)
+            for (sal_uInt32 j = 0; j < aReferenceComponentCount && !bBroken; j++)
             {
                 // Read next reference component
                 // refComponentType unused for the moment
                 aDataSpaceStream.skip(sizeof(sal_uInt32));
                 sal_uInt32 aReferenceComponentNameLength = aDataSpaceStream.readuInt32();
                 // sReferenceComponentName unused for the moment
+                if (aDataSpaceStream.getRemaining() < aReferenceComponentNameLength)
+                {
+                    bBroken = true;
+                    break;
+                }
                 aDataSpaceStream.readUnicodeArray(aReferenceComponentNameLength / 2);
                 aDataSpaceStream.skip((4 - (aReferenceComponentNameLength & 3)) & 3);  // Skip padding
+
+                bBroken |= aDataSpaceStream.isEof();
             }
 
             sal_uInt32 aDataSpaceNameLength = aDataSpaceStream.readuInt32();
+            if (aDataSpaceStream.getRemaining() < aDataSpaceNameLength)
+            {
+                bBroken = true;
+                break;
+            }
             sDataSpaceName = aDataSpaceStream.readUnicodeArray(aDataSpaceNameLength / 2);
             aDataSpaceStream.skip((4 - (aDataSpaceNameLength & 3)) & 3);  // Skip padding
+
+            bBroken |= aDataSpaceStream.isEof();
         }
 
-        if (aDataSpaceStream.isEof())
+        if (bBroken)
         {
             SAL_WARN("oox", "EOF on parsing DataSpaceMapEntry table");
             return false;
