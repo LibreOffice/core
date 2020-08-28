@@ -42,7 +42,7 @@ GtkStyleContext* GtkSalGraphics::mpHScrollbarSliderStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpHScrollbarButtonStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpToolbarStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpToolButtonStyle = nullptr;
-GtkStyleContext* GtkSalGraphics::mpToolbarSeperatorStyle = nullptr;
+GtkStyleContext* GtkSalGraphics::mpToolbarSeparatorStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpCheckButtonStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpCheckButtonCheckStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpRadioButtonStyle = nullptr;
@@ -2435,7 +2435,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
             context = mpToolButtonStyle;
             break;
         case ControlPart::SeparatorVert:
-            context = mpToolbarSeperatorStyle;
+            context = mpToolbarSeparatorStyle;
             renderType = RenderType::ToolbarSeparator;
             break;
         default:
@@ -3588,7 +3588,7 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
 
     GtkToolItem *item = gtk_separator_tool_item_new();
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), item, -1);
-    mpToolbarSeperatorStyle = gtk_widget_get_style_context(GTK_WIDGET(item));
+    mpToolbarSeparatorStyle = gtk_widget_get_style_context(GTK_WIDGET(item));
 
     GtkWidget *pButton = gtk_button_new();
     item = gtk_tool_button_new(pButton, nullptr);
