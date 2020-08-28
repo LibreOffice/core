@@ -1052,7 +1052,14 @@ static bool IsShown(sal_uLong const nIndex,
     {
         return false;
     }
-    if (pIter && rAnch.GetAnchorId() != RndStdIds::FLY_AT_PARA)
+    if (rAnch.GetAnchorId() == RndStdIds::FLY_AT_PARA)
+    {
+        return pIter == nullptr // not merged
+            || pIter != pEnd    // at least one char visible
+            || nIndex == pFirstNode->GetIndex()
+            || nIndex == pLastNode->GetIndex();
+    }
+    if (pIter)
     {
         // note: frames are not sorted by anchor position.
         assert(pEnd);
