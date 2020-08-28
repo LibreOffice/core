@@ -13,6 +13,7 @@
 #include <tools/color.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
@@ -535,11 +536,24 @@ DECLARE_OOXMLEXPORT_TEST(testTdf132149_pgBreak, "tdf132149_pgBreak.odt")
     assertXPath(pDump, "//page[2]/infos/bounds", "width", "5953");  //portrait
     // This two-line 3rd page ought not to exist. DID YOU FIX ME? The real page 3 should be "8391" landscape.
     assertXPath(pDump, "//page[3]/infos/bounds", "width", "5953");
+    // This really ought to be on odd page 3, but now it is on odd page 5.
+    assertXPath(pDump, "//page[5]/infos/bounds", "width", "8391");
+    assertXPath(pDump, "//page[5]/infos/prtBounds", "right", "6122");  //Left page style
 
 
-    //Page break is not lost. This SHOULD be on page 4, but sadly it is not.
-    assertXPathContent(pDump, "//page[5]/header/txt", "First Page Style");
-    CPPUNIT_ASSERT(getXPathContent(pDump, "//page[5]/body/txt").startsWith("Lorem ipsum"));
+    //Page style change here must not be lost. This SHOULD be on page 4, but sadly it is not.
+    assertXPathContent(pDump, "//page[6]/header/txt", "First Page Style");
+    CPPUNIT_ASSERT(getXPath(pDump, "//page[6]/body/txt[1]/Text[1]", "Portion").startsWith("Lorem ipsum"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf132149_pgBreak2, "tdf132149_pgBreak2.odt")
+{
+    // This 3 page document is designed to visually exaggerate the problems
+    // of emulating LO's followed-by-page-style into MSWord's sections.
+    CPPUNIT_ASSERT_LESSEQUAL( 3, getParagraphs() );
+    uno::Reference<beans::XPropertySet> xParaThird(getParagraph(3), uno::UNO_QUERY_THROW);
+    // The only page style change should be between page 1 and 2.
+    CPPUNIT_ASSERT_EQUAL(uno::Any(), xParaThird->getPropertyValue("PageDescName"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf135949_anchoredBeforeBreak, "tdf135949_anchoredBeforeBreak.docx")
