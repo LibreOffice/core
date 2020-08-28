@@ -3134,7 +3134,6 @@ dbaccess/source/ui/control/FieldDescControl.cxx
 dbaccess/source/ui/control/RelationControl.cxx
 dbaccess/source/ui/control/SqlNameEdit.cxx
 dbaccess/source/ui/control/TableGrantCtrl.cxx
-dbaccess/source/ui/control/VertSplitView.cxx
 dbaccess/source/ui/control/charsetlistbox.cxx
 dbaccess/source/ui/control/curledit.cxx
 dbaccess/source/ui/control/dbtreelistbox.cxx
@@ -3257,7 +3256,6 @@ dbaccess/source/ui/inc/TokenWriter.hxx
 dbaccess/source/ui/inc/TypeInfo.hxx
 dbaccess/source/ui/inc/UITools.hxx
 dbaccess/source/ui/inc/UserAdminDlg.hxx
-dbaccess/source/ui/inc/VertSplitView.hxx
 dbaccess/source/ui/inc/WCPage.hxx
 dbaccess/source/ui/inc/WColumnSelect.hxx
 dbaccess/source/ui/inc/WCopyTable.hxx
