@@ -559,6 +559,24 @@ void UITestLogger::logEvent(const EventDescription& rDescription)
             }
         }
     }
+    else if (rDescription.aKeyWord == "SwEditWinUIObject")
+    {
+        if(rDescription.aAction=="LEAVE"){
+            aLogLine = "Leave '" + rDescription.aID + "'";
+        }
+        else if(rDescription.aAction=="SHOW"){
+            aLogLine = "Show '" + rDescription.aID + "'";
+        }
+        else if(rDescription.aAction=="HIDE"){
+            aLogLine = "Hide '" + rDescription.aID + "'";
+        }
+        else if(rDescription.aAction=="DELETE"){
+            aLogLine = "Delete '" + rDescription.aID + "'";
+        }
+        else if(rDescription.aAction=="SETRESOLVED"){
+            aLogLine = "Resolve '" + rDescription.aID + "'";
+        }
+    }
     else if (rDescription.aParent == "element_selector")
     {
         aLogLine = "Select element no " + rDescription.aID + " From " + rDescription.aParent;

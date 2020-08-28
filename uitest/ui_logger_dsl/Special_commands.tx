@@ -26,7 +26,7 @@ SpecialCommand:
 writer_command:
     writer_Type_command | writer_Select_command | writer_GOTO_command |
     writer_Create_table | writer_Copy_Text | writer_Cut_Text |
-    writer_Paste_Text | writer_Insert_BreakPage
+    writer_Paste_Text | writer_Insert_BreakPage | writer_Comment_command
 ;
 writer_Type_command:
   'Type on writer' what_to_type=Type_options
@@ -220,4 +220,36 @@ draw_Delete_Page:
 ;
 draw_Rename_Page:
     'Rename The Selected Page from ' old_name=STRING 'to' new_name=STRING
+;
+
+//=================================================================//
+/*
+  This part for all the Writer Comment statements:
+
+    1) Leave
+    2) Hide
+    3) Show
+    4) Delete
+    5) Set Resolved
+
+  then we can add whatever we need in the future
+*/
+writer_Comment_command:
+    writer_Comment_leave | writer_Comment_show | writer_Comment_hide |
+    writer_Comment_delete | writer_Comment_setresolved
+;
+writer_Comment_leave:
+  'Leave ' comment_id=STRING
+;
+writer_Comment_show:
+  'Show ' comment_id=STRING
+;
+writer_Comment_hide:
+  'Hide ' comment_id=STRING
+;
+writer_Comment_delete:
+  'Delete ' comment_id=STRING
+;
+writer_Comment_setresolved:
+  'Resolve'  comment_id=STRING
 ;

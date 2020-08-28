@@ -58,6 +58,8 @@
 #include <vcl/menubtn.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/ptrstyle.hxx>
+#include <vcl/uitest/logger.hxx>
+#include <vcl/uitest/eventdescription.hxx>
 
 #include <edtwin.hxx>
 #include <view.hxx>
@@ -79,6 +81,17 @@ using namespace sw::sidebarwindows;
 
 namespace
 {
+
+void collectUIInformation( const OUString& aevent , const OUString& aID )
+{
+    EventDescription aDescription;
+    aDescription.aID =  aID;
+    aDescription.aParameters = {{"" ,  ""}};
+    aDescription.aAction = aevent;
+    aDescription.aParent = "MainWindow";
+    aDescription.aKeyWord = "SwEditWinUIObject";
+    UITestLogger::getInstance().logEvent(aDescription);
+}
 
 /// Translate absolute <-> relative twips: LOK wants absolute coordinates as output and gives absolute coordinates as input.
 void lcl_translateTwips(vcl::Window const & rParent, vcl::Window& rChild, MouseEvent* pMouseEvent)
@@ -1126,6 +1139,7 @@ void SwAnnotationWin::ShowNote()
 
     // Invalidate.
     InvalidateControl();
+    collectUIInformation("SHOW",get_id());
 }
 
 void SwAnnotationWin::HideNote()
@@ -1141,6 +1155,7 @@ void SwAnnotationWin::HideNote()
     }
     if (mpShadow && mpShadow->isVisible())
         mpShadow->setVisible(false);
+    collectUIInformation("HIDE",get_id());
 }
 
 void SwAnnotationWin::InvalidateControl()
@@ -1510,6 +1525,7 @@ void SwAnnotationWin::SwitchToFieldPos()
     if (aCount)
         mrView.GetDocShell()->GetWrtShell()->SwCursorShell::Right(aCount, 0);
     GrabFocusToDocument();
+    collectUIInformation("LEAVE",get_id());
 }
 
 void SwAnnotationWin::SetChangeTracking( const SwPostItHelper::SwLayoutStatus aLayoutStatus,

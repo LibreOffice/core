@@ -121,6 +121,11 @@ class ul_Compiler:
                 "setZoom_command": self.handle_setZoom_command,
                 "draw_Type_command": self.handle_draw_Type_command,
                 "SideBar": self.handle_SideBar,
+                "writer_Comment_leave":self.handle_writer_Comment_leave,
+                "writer_Comment_show":self.handle_writer_Comment_show,
+                "writer_Comment_hide":self.handle_writer_Comment_hide,
+                "writer_Comment_delete":self.handle_writer_Comment_delete,
+                "writer_Comment_setresolved":self.handle_writer_Comment_setresolved,
                 "writer_Copy_Text": self.do_nothing,
                 "writer_Cut_Text": self.do_nothing,
                 "writer_Paste_Text": self.do_nothing,
@@ -915,6 +920,76 @@ class ul_Compiler:
         )
 
         self.prev_command = math_element_selector
+
+    def handle_writer_Comment_leave(self,writer_Comment_leave):
+
+        self.init_app()
+
+        self.init_Object(
+            writer_Comment_leave.comment_id, writer_Comment_leave.comment_id, "MainWindow"
+            )
+
+        self.write_line_with_one_parameters(
+            writer_Comment_leave.comment_id, "LEAVE", "", ""
+        )
+
+        self.prev_command = writer_Comment_leave
+
+    def handle_writer_Comment_show(self,writer_Comment_show):
+
+        self.init_app()
+
+        self.init_Object(
+            writer_Comment_show.comment_id, writer_Comment_show.comment_id, "MainWindow"
+            )
+
+        self.write_line_with_one_parameters(
+            writer_Comment_show.comment_id, "SHOW", "", ""
+        )
+
+        self.prev_command = writer_Comment_show
+
+    def handle_writer_Comment_hide(self,writer_Comment_hide):
+
+        self.init_app()
+
+        self.init_Object(
+            writer_Comment_hide.comment_id, writer_Comment_hide.comment_id, "MainWindow"
+            )
+
+        self.write_line_with_one_parameters(
+            writer_Comment_hide.comment_id, "HIDE", "", ""
+        )
+
+        self.prev_command = writer_Comment_hide
+
+    def handle_writer_Comment_delete(self,writer_Comment_delete):
+
+        self.init_app()
+
+        self.init_Object(
+            writer_Comment_delete.comment_id, writer_Comment_delete.comment_id, "MainWindow"
+            )
+
+        self.write_line_with_one_parameters(
+            writer_Comment_delete.comment_id, "DELETE", "", ""
+        )
+
+        self.prev_command = writer_Comment_delete
+
+    def handle_writer_Comment_setresolved(self,writer_Comment_setresolved):
+
+        self.init_app()
+
+        self.init_Object(
+            writer_Comment_setresolved.comment_id, writer_Comment_setresolved.comment_id, "MainWindow"
+            )
+
+        self.write_line_with_one_parameters(
+            writer_Comment_setresolved.comment_id, "RESOLVE", "", ""
+        )
+
+        self.prev_command = writer_Comment_setresolved
 
     def handle_setZoom_command(self, setZoom_command):
 
