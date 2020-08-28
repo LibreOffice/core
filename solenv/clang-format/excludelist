@@ -6914,7 +6914,7 @@ include/svx/svx3ditems.hxx
 include/svx/svxdlg.hxx
 include/svx/svxdllapi.h
 include/svx/svxerr.hxx
-include/svx/svxgrahicitem.hxx
+include/svx/svxgraphicitem.hxx
 include/svx/swframeexample.hxx
 include/svx/swframeposstrings.hxx
 include/svx/swframetypes.hxx
@@ -13326,7 +13326,7 @@ svx/source/dialog/srchdlg.cxx
 svx/source/dialog/strarray.cxx
 svx/source/dialog/svxbmpnumvalueset.cxx
 svx/source/dialog/svxdlg.cxx
-svx/source/dialog/svxgrahicitem.cxx
+svx/source/dialog/svxgraphicitem.cxx
 svx/source/dialog/svxruler.cxx
 svx/source/dialog/swframeexample.cxx
 svx/source/dialog/swframeposstrings.cxx
