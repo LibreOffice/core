@@ -122,9 +122,8 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
     {
         GalleryBinaryEngineEntry::CreateUniqueURL(rBaseURL,aURL);
     }
-    mpGalleryStorageLocations = createGalleryStorageLocations();
     mpGalleryStorageEngineEntry = createGalleryStorageEngineEntry();
-    mpGalleryStorageLocations->SetStorageLocations(aURL);
+    setStorageLocations(aURL);
 
     SetModified( _bNewFile );
 
@@ -164,14 +163,13 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
 
 std::unique_ptr<GalleryBinaryEngineEntry> GalleryThemeEntry::createGalleryStorageEngineEntry()
 {
-    std::unique_ptr<GalleryBinaryEngineEntry> pGalleryBinaryEngineEntry = std::make_unique<GalleryBinaryEngineEntry>(dynamic_cast<GalleryBinaryStorageLocations&>(*mpGalleryStorageLocations));
+    std::unique_ptr<GalleryBinaryEngineEntry> pGalleryBinaryEngineEntry = std::make_unique<GalleryBinaryEngineEntry>();
     return pGalleryBinaryEngineEntry;
 }
 
-std::unique_ptr<GalleryStorageLocations> GalleryThemeEntry::createGalleryStorageLocations()
+void GalleryThemeEntry::setStorageLocations(INetURLObject& rURL)
 {
-    std::unique_ptr<GalleryStorageLocations> pGalleryStorageLocations = std::make_unique<GalleryBinaryStorageLocations>();
-    return pGalleryStorageLocations;
+    mpGalleryStorageEngineEntry->setStorageLocations(rURL);
 }
 
 void GalleryTheme::InsertAllThemes(weld::ComboBox& rListBox)
