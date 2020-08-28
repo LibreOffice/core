@@ -558,7 +558,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testOleObject, "test_ole_object.docx")
 
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFdo74792, "fdo74792.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo74792, "fdo74792.docx")
 {
     /*
      * fdo#74792 : The images associated with smart-art data[i].xml
@@ -566,8 +566,6 @@ DECLARE_OOXMLEXPORT_TEST(testFdo74792, "fdo74792.docx")
      * Added support to grabbag the rels, with associated images.
      */
     xmlDocUniquePtr pXmlDoc = parseExport("word/diagrams/_rels/data1.xml.rels");
-    if(!pXmlDoc)
-        return;
     assertXPath(pXmlDoc,"/rels:Relationships/rels:Relationship", 4);
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(
                          comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
@@ -577,19 +575,14 @@ DECLARE_OOXMLEXPORT_TEST(testFdo74792, "fdo74792.docx")
     CPPUNIT_ASSERT( xInputStream.is() );
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFdo77718, "fdo77718.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo77718, "fdo77718.docx")
 {
     //in case of multiple smart arts the names for images were getting
     //repeated and thereby causing a data loss as the binary stream was
     //getting over written. This test case ensures that unique names are
     //given for images in different smart arts.
     xmlDocUniquePtr pXmlDataRels1 = parseExport("word/diagrams/_rels/data1.xml.rels");
-    if( !pXmlDataRels1 )
-        return;
-
     xmlDocUniquePtr pXmlDataRels2 = parseExport("word/diagrams/_rels/data2.xml.rels");
-    if( !pXmlDataRels2 )
-        return;
 
     //ensure that the rels file is present.
     assertXPath(pXmlDataRels1,"/rels:Relationships/rels:Relationship", 4);
@@ -610,7 +603,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo77718, "fdo77718.docx")
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTableCurruption, "tableCurrupt.docx")
 {
     xmlDocUniquePtr pXmlDoc = parseExport("word/header2.xml");
-    CPPUNIT_ASSERT(pXmlDoc) ;
+    CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/w:hdr/w:tbl[1]/w:tr[1]/w:tc[1]",1);
 
     // tdf#116549: header paragraph should not have a bottom border.
@@ -806,7 +799,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testCheckBoxControl, "checkbox-control.docx"
     // TODO: import control and add a check here
 }
 
-DECLARE_OOXMLEXPORT_TEST(testParagraphWithComments, "paragraphWithComments.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testParagraphWithComments, "paragraphWithComments.docx")
 {
     /* Comment id's were getting overwritten for annotation mark(s),
        which was causing a mismatch in the relationship for comment id's
@@ -814,8 +807,6 @@ DECLARE_OOXMLEXPORT_TEST(testParagraphWithComments, "paragraphWithComments.docx"
     */
     xmlDocUniquePtr pXmlDoc  = parseExport("word/document.xml");
     xmlDocUniquePtr pXmlComm = parseExport("word/comments.xml");
-    if(!pXmlDoc)
-        return;
 
     sal_Int32 idInDocXml     = getXPath(pXmlDoc,"/w:document/w:body/w:p[3]/w:commentRangeEnd[1]","id").toInt32();
     sal_Int32 idInCommentXml = getXPath(pXmlComm,"/w:comments/w:comment[1]","id").toInt32();
@@ -963,14 +954,12 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(test76108, "test76108.docx")
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/w:fldChar[1]", "fldCharType", "begin");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTCTagMisMatch, "TCTagMisMatch.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTCTagMisMatch, "TCTagMisMatch.docx")
 {
    // TCTagMisMatch.docx : This document contains an empty table with borders.
    // there was a TC tag mismatch which resulted into a crash.
 
    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-   if(!pXmlDoc)
-      return;
    assertXPath(pXmlDoc,"/w:document[1]/w:body[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tbl[1]/w:tr[1]/w:tc[1]",0);
    assertXPath(pXmlDoc,"/w:document[1]/w:body[1]/w:tbl[1]/w:tr[1]/w:tc[1]", 1);
 }
@@ -1042,12 +1031,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103001, "tdf103001.docx")
     CPPUNIT_ASSERT(xNameAccess->hasByName("word/_rels/header1.xml.rels"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf92521, "tdf92521.odt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf92521, "tdf92521.odt")
 {
     CPPUNIT_ASSERT_EQUAL(2, getPages());
-    if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
-        // There should be a section break that's in the middle of the document: right after the table.
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:sectPr", 1);
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // There should be a section break that's in the middle of the document: right after the table.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:sectPr", 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf102466, "tdf102466.docx")
@@ -1088,11 +1077,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf102466, "tdf102466.docx")
     }
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf99090_pgbrkAfterTable, "tdf99090_pgbrkAfterTable.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf99090_pgbrkAfterTable, "tdf99090_pgbrkAfterTable.docx")
 {
-    if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
-        // There should be a regular page break that's in the middle of the document: right after the table.
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:br", 1);
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // There should be a regular page break that's in the middle of the document: right after the table.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:br", 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf96750_landscapeFollow, "tdf96750_landscapeFollow.docx")

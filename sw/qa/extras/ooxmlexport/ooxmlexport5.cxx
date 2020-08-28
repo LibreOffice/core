@@ -109,11 +109,11 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo76589 , "fdo76589.docx")
     assertXPath ( pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:lvlText","val","%1" );
 }
 
-DECLARE_OOXMLEXPORT_TEST(testDecimalNumberingNoLeveltext, "decimal-numbering-no-leveltext.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDecimalNumberingNoLeveltext, "decimal-numbering-no-leveltext.docx")
 {
     // This was "%1", not empty: we turned a kind-of-none numbering into a decimal one.
-    if (xmlDocUniquePtr pXmlDoc = parseExport("word/numbering.xml"))
-        assertXPath (pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:lvlText","val", "");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/numbering.xml");
+    assertXPath( pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:lvlText","val","" );
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testNoDuplicateAttributeExport, "duplicate-east-asia.odt")
@@ -537,16 +537,12 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo79540, "fdo79540.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing", 1);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFDO79062, "fdo79062.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO79062, "fdo79062.docx")
 {
     xmlDocUniquePtr pXmlFootNotes = parseExport("word/footnotes.xml");
-    if (!pXmlFootNotes)
-        return;
     assertXPath(pXmlFootNotes, "/w:footnotes", "Ignorable", "w14 wp14");
 
     xmlDocUniquePtr pXmlEndNotes = parseExport("word/endnotes.xml");
-    if (!pXmlEndNotes)
-        return;
     assertXPath(pXmlEndNotes, "/w:endnotes", "Ignorable", "w14 wp14");
 
     //tdf#93121 don't add fake tabs in front of extra footnote paragraphs
@@ -624,13 +620,11 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO79915, "fdo79915.docx")
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[9]/w:t", "How much buoyancy does the water provide?");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testfdo79817, "fdo79817.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo79817, "fdo79817.docx")
 {
-    if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
-    {
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:dataBinding", "storeItemID", "{9222E47B-A68B-4AEB-9855-21C912B9D3D2}");
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:dataBinding", "xpath", "/ns0:properties[1]/documentManagement[1]/ns2:Responsible_x0020_Officer_x0020_Title[1]");
-    }
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:dataBinding", "storeItemID", "{9222E47B-A68B-4AEB-9855-21C912B9D3D2}");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:dataBinding", "xpath", "/ns0:properties[1]/documentManagement[1]/ns2:Responsible_x0020_Officer_x0020_Title[1]");
 }
 
 
@@ -638,7 +632,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo79968_sldx, "fdo79968.docx")
 {
     // This UT for DOCX embedded with powerpoint slide
     xmlDocUniquePtr pXmlDoc = parseExport("[Content_Types].xml");
-
     assertXPath(pXmlDoc,
                 "/ContentType:Types/ContentType:Override[@ContentType='application/vnd.openxmlformats-officedocument.presentationml.slide']",
                 "PartName",
@@ -662,7 +655,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo79969_xlsb, "fdo79969_xlsb.docx")
 {
     // This UT for DOCX embedded with binary excel work sheet.
     xmlDocUniquePtr pXmlDoc = parseExport("[Content_Types].xml");
-
     assertXPath(pXmlDoc,
                 "/ContentType:Types/ContentType:Override[@ContentType='application/vnd.ms-excel.sheet.binary.macroEnabled.12']",
                 "PartName",
@@ -1028,17 +1020,15 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFD083057, "fdo83057.docx")
     assertXPath(pXmlDoc, "//mc:AlternateContent//w:sdt", 0);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testHeaderBorder, "header-border.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testHeaderBorder, "header-border.docx")
 {
-    if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
-    {
-        // This was 0, as header margin was lost during import.
-        assertXPath(pXmlDoc, "//w:pgMar", "header", "720");
-        // This was 33: 33 points -> 660 twips. We counted 900 - 240 (distance
-        // of page and body frame) instead of 720 - 240 (distance of page and
-        // header frame).
-        assertXPath(pXmlDoc, "//w:pgBorders/w:top", "space", "24");
-    }
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // This was 0, as header margin was lost during import.
+    assertXPath(pXmlDoc, "//w:pgMar", "header", "720");
+    // This was 33: 33 points -> 660 twips. We counted 900 - 240 (distance
+    // of page and body frame) instead of 720 - 240 (distance of page and
+    // header frame).
+    assertXPath(pXmlDoc, "//w:pgBorders/w:top", "space", "24");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTablepprShape, "tblppr-shape.docx")
@@ -1055,11 +1045,11 @@ DECLARE_OOXMLEXPORT_TEST(testImageNoborder, "image-noborder.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0), getProperty<table::BorderLine2>(getShape(1), "TopBorder").LineWidth);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf89774, "tdf89774.fodt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf89774, "tdf89774.fodt")
 {
-    if (xmlDocUniquePtr pXmlDoc = parseExport("docProps/app.xml"))
-        // This was 65, as unit was seconds instead of minutes.
-        assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:TotalTime", "1");
+    xmlDocUniquePtr pXmlDoc = parseExport("docProps/app.xml");
+    // This was 65, as unit was seconds instead of minutes.
+    assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:TotalTime", "1");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testSectionProtection, "sectionprot.odt")
@@ -1126,36 +1116,32 @@ DECLARE_OOXMLEXPORT_TEST(tdf66398_permissions, "tdf66398_permissions.docx")
     CPPUNIT_ASSERT(xBookmarksByName->hasByName("permission-for-group:267014232:everyone"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(tdf106843, "tdf106843.fodt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(tdf106843, "tdf106843.fodt")
 {
     // check Track Changes permission set in Writer/OpenDocument (password: "test", encoded by default encoding of Writer)
-    if (xmlDocUniquePtr pXmlSettings = parseExport("word/settings.xml"))
-    {
-        assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "edit",               "trackedChanges");
-        assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "enforcement",        "1");
+    xmlDocUniquePtr pXmlSettings = parseExport("word/settings.xml");
+    assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "edit",               "trackedChanges");
+    assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "enforcement",        "1");
 
-        // LO intends to export a .docx format that is natively compatible with 2013
-        // but this document has an implicitly added setting AddExternalLeading = false
-        assertXPath(pXmlSettings, "/w:settings/w:compat/w:compatSetting[1]", "name", "compatibilityMode");
-        assertXPath(pXmlSettings, "/w:settings/w:compat/w:compatSetting[1]", "uri", "http://schemas.microsoft.com/office/word");
-        assertXPath(pXmlSettings, "/w:settings/w:compat/w:compatSetting[1]", "val", "14"); // compatible with 2010
-    }
+    // LO intends to export a .docx format that is natively compatible with 2013
+    // but this document has an implicitly added setting AddExternalLeading = false
+    assertXPath(pXmlSettings, "/w:settings/w:compat/w:compatSetting[1]", "name", "compatibilityMode");
+    assertXPath(pXmlSettings, "/w:settings/w:compat/w:compatSetting[1]", "uri", "http://schemas.microsoft.com/office/word");
+    assertXPath(pXmlSettings, "/w:settings/w:compat/w:compatSetting[1]", "val", "14"); // compatible with 2010
 }
 
-DECLARE_OOXMLEXPORT_TEST(tdf89991_revisionView, "tdf89991.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(tdf89991_revisionView, "tdf89991.docx")
 {
     // check revisionView (Show Changes) import and export
-    if (xmlDocUniquePtr pXmlSettings = parseExport("word/settings.xml"))
-    {
-        assertXPath(pXmlSettings, "/w:settings/w:revisionView", "insDel",     "0");
-        assertXPath(pXmlSettings, "/w:settings/w:revisionView", "formatting", "0");
+    xmlDocUniquePtr pXmlSettings = parseExport("word/settings.xml");
+    assertXPath(pXmlSettings, "/w:settings/w:revisionView", "insDel",     "0");
+    assertXPath(pXmlSettings, "/w:settings/w:revisionView", "formatting", "0");
 
-        // There was no compatibilityMode defined.
-        // 12: Use word processing features specified in ECMA-376. This is the default.
-        assertXPath(pXmlSettings, "/w:settings/w:compat/w:compatSetting[1]", "name", "compatibilityMode");
-        assertXPath(pXmlSettings, "/w:settings/w:compat/w:compatSetting[1]", "uri", "http://schemas.microsoft.com/office/word");
-        assertXPath(pXmlSettings, "/w:settings/w:compat/w:compatSetting[1]", "val", "12");
-    }
+    // There was no compatibilityMode defined.
+    // 12: Use word processing features specified in ECMA-376. This is the default.
+    assertXPath(pXmlSettings, "/w:settings/w:compat/w:compatSetting[1]", "name", "compatibilityMode");
+    assertXPath(pXmlSettings, "/w:settings/w:compat/w:compatSetting[1]", "uri", "http://schemas.microsoft.com/office/word");
+    assertXPath(pXmlSettings, "/w:settings/w:compat/w:compatSetting[1]", "val", "12");
 }
 
 DECLARE_OOXMLEXPORT_TEST(tdf122201_editUnprotectedText, "tdf122201_editUnprotectedText.odt")
@@ -1247,18 +1233,18 @@ DECLARE_OOXMLEXPORT_TEST(testOO72950, "ooo72950-1.odt")
 //There are two tables to export in this doc the second of which is inside a
 //frame anchored to first cell of the first table. They must not be
 //considered the same table
-DECLARE_OOXMLEXPORT_TEST(fdo60957, "fdo60957-2.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(fdo60957, "fdo60957-2.docx")
 {
-    if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
-        assertXPath(pXmlDoc, "//w:tbl", 2);
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "//w:tbl", 2);
 }
 
 //This has more cells than msword supports, we must balance the
 //number of cell start and ends
-DECLARE_OOXMLEXPORT_TEST(testOO106020, "ooo106020-1.odt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testOO106020, "ooo106020-1.odt")
 {
-    if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
-        assertXPath(pXmlDoc, "//w:tbl", 1);
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "//w:tbl", 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testNonBMPChar, "nonbmpchar.docx")

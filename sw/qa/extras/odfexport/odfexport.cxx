@@ -262,25 +262,25 @@ DECLARE_ODFEXPORT_TEST(testTdf103567, "tdf103567.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32( 408), rect.Height);
 }
 
-DECLARE_ODFEXPORT_TEST(testUserFieldDecl, "user-field-decl.odt")
+DECLARE_ODFEXPORT_EXPORTONLY_TEST(testUserFieldDecl, "user-field-decl.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    if (xmlDocUniquePtr pXmlDoc = parseExport("styles.xml"))
-        // Without the accompanying fix in place, this test would have failed with 'Expected: 2;
-        // Actual: 1', i.e. the in-table field had no declaration (in the header), while the
-        // outside-table one had the declaration.
-        assertXPath(pXmlDoc, "//style:header/text:user-field-decls/text:user-field-decl", 2);
+    xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
+    // Without the accompanying fix in place, this test would have failed with 'Expected: 2;
+    // Actual: 1', i.e. the in-table field had no declaration (in the header), while the
+    // outside-table one had the declaration.
+    assertXPath(pXmlDoc, "//style:header/text:user-field-decls/text:user-field-decl", 2);
 }
 
-DECLARE_ODFEXPORT_TEST(testUserFieldDeclFly, "user-field-decl-fly.odt")
+DECLARE_ODFEXPORT_EXPORTONLY_TEST(testUserFieldDeclFly, "user-field-decl-fly.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    if (xmlDocUniquePtr pXmlDoc = parseExport("styles.xml"))
-        // Without the accompanying fix in place, this test would have failed with 'Expected: 2;
-        // Actual: 1', i.e. the in-textframe field had no declaration (in the header), while the
-        // outside-textframe one had the declaration.
-        assertXPath(pXmlDoc, "//style:header/text:user-field-decls/text:user-field-decl", 2);
+    xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
+    // Without the accompanying fix in place, this test would have failed with 'Expected: 2;
+    // Actual: 1', i.e. the in-textframe field had no declaration (in the header), while the
+    // outside-textframe one had the declaration.
+    assertXPath(pXmlDoc, "//style:header/text:user-field-decls/text:user-field-decl", 2);
 }
 
 DECLARE_ODFEXPORT_TEST(testFramebackgrounds, "framebackgrounds.odt")
@@ -2117,7 +2117,6 @@ DECLARE_ODFEXPORT_EXPORTONLY_TEST(testTableStyles5, "table_styles_5.odt")
     assertXPathNoAttribute(pXmlDoc, "/office:document-styles/office:styles/style:style[@style:display-name='Test style.14']", "parent-style-name");
     assertXPathNoAttribute(pXmlDoc, "/office:document-styles/office:styles/style:style[@style:display-name='Test style.15']", "parent-style-name");
     assertXPathNoAttribute(pXmlDoc, "/office:document-styles/office:styles/style:style[@style:display-name='Test style.16']", "parent-style-name");
-
 }
 
 DECLARE_ODFEXPORT_TEST(testTdf101710, "tdf101710.odt")
@@ -2151,36 +2150,32 @@ DECLARE_ODFEXPORT_TEST(testTdf132642_keepWithNextTable, "tdf132642_keepWithNextT
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Row splits over 2 pages", 2, getPages());
 }
 
-DECLARE_ODFEXPORT_TEST(testImageMimetype, "image-mimetype.odt")
+DECLARE_ODFEXPORT_EXPORTONLY_TEST(testImageMimetype, "image-mimetype.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Test that the loext:mimetype attribute is written for exported images, tdf#109202
-    if (xmlDocUniquePtr pXmlDoc = parseExport("content.xml"))
-    {
-        // Original image (svg)
-        assertXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:p/draw:frame/draw:image[@draw:mime-type='image/svg+xml']");
-    }
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    // Original image (svg)
+    assertXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:p/draw:frame/draw:image[@draw:mime-type='image/svg+xml']");
 }
 
-DECLARE_ODFEXPORT_TEST(testEmbeddedFontProps, "embedded-font-props.odt")
+DECLARE_ODFEXPORT_EXPORTONLY_TEST(testEmbeddedFontProps, "embedded-font-props.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 #if !defined(MACOSX)
     // Test that font style/weight of embedded fonts is exposed.
     // Test file is a normal ODT, except EmbedFonts is set to true in settings.xml.
-    if (xmlDocUniquePtr pXmlDoc = parseExport("content.xml"))
-    {
-        // These failed, the attributes were missing.
-        assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[1]", "font-style", "normal");
-        assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[1]", "font-weight", "normal");
-        assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[2]", "font-style", "normal");
-        assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[2]", "font-weight", "bold");
-        assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[3]", "font-style", "italic");
-        assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[3]", "font-weight", "normal");
-        assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[4]", "font-style", "italic");
-        assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[4]", "font-weight", "bold");
-    }
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    // These failed, the attributes were missing.
+    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[1]", "font-style", "normal");
+    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[1]", "font-weight", "normal");
+    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[2]", "font-style", "normal");
+    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[2]", "font-weight", "bold");
+    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[3]", "font-style", "italic");
+    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[3]", "font-weight", "normal");
+    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[4]", "font-style", "italic");
+    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[4]", "font-weight", "bold");
 #endif
 }
 
@@ -2260,14 +2255,13 @@ DECLARE_ODFEXPORT_TEST(testReferenceLanguage, "referencelanguage.odt")
     }
 }
 
-DECLARE_ODFEXPORT_TEST(testRubyPosition, "ruby-position.odt")
+DECLARE_ODFEXPORT_EXPORTONLY_TEST(testRubyPosition, "ruby-position.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    if (xmlDocUniquePtr pXmlDoc = parseExport("content.xml"))
-    {
-        assertXPath(pXmlDoc, "//style:style[@style:family='ruby']/style:ruby-properties[@loext:ruby-position='inter-character']", 1);
-        assertXPath(pXmlDoc, "//style:style[@style:family='ruby']/style:ruby-properties[@style:ruby-position='below']", 1);
-    }
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+
+    assertXPath(pXmlDoc, "//style:style[@style:family='ruby']/style:ruby-properties[@loext:ruby-position='inter-character']", 1);
+    assertXPath(pXmlDoc, "//style:style[@style:family='ruby']/style:ruby-properties[@style:ruby-position='below']", 1);
 }
 
 DECLARE_ODFEXPORT_TEST(testAllowOverlap, "allow-overlap.odt")
@@ -2559,7 +2553,7 @@ DECLARE_ODFEXPORT_TEST(testPageContentBottom, "page-content-bottom.odt")
     CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int16>(xShape, "VertOrientRelation"));
 }
 
-DECLARE_ODFEXPORT_TEST(tdf124470, "tdf124470TableAndEmbeddedUsedFonts.odt")
+DECLARE_ODFEXPORT_EXPORTONLY_TEST(tdf124470, "tdf124470TableAndEmbeddedUsedFonts.odt")
 {
     // Table styles were exported out of place, inside font-face-decls.
     // Without the fix in place, this will fail already in ODF validation:
@@ -2568,8 +2562,6 @@ DECLARE_ODFEXPORT_TEST(tdf124470, "tdf124470TableAndEmbeddedUsedFonts.odt")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
-    if (!pXmlDoc)
-        return;
 
     assertXPath(pXmlDoc, "/office:document-content/office:font-face-decls/style:style", 0);
     assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:family='table']", 1);
@@ -2577,15 +2569,13 @@ DECLARE_ODFEXPORT_TEST(tdf124470, "tdf124470TableAndEmbeddedUsedFonts.odt")
     assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:family='paragraph']", 1);
 }
 
-DECLARE_ODFEXPORT_TEST(tdf135942, "nestedTableInFooter.odt")
+DECLARE_ODFEXPORT_EXPORTONLY_TEST(tdf135942, "nestedTableInFooter.odt")
 {
     // All table autostyles should be collected, including nested, and must not crash.
 
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
-    if (!pXmlDoc)
-        return;
 
     assertXPath(pXmlDoc, "/office:document-styles/office:automatic-styles/style:style[@style:family='table']", 2);
 }

@@ -75,54 +75,52 @@ DECLARE_OOXMLEXPORT_TEST(testFdo55381, "fdo55381.docx")
     //TODO: frames not located on the correct pages
 }
 
-DECLARE_OOXMLEXPORT_TEST(testDocm, "hello.docm")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDocm, "hello.docm")
 {
     // Make sure that we check the name of the export filter.
     // This was application/vnd.ms-word.document.macroEnabled.main+xml when the
     // name of the import filter was checked.
-    if (xmlDocUniquePtr pXmlDoc = parseExport("[Content_Types].xml"))
-        assertXPath(pXmlDoc,
-                    "/ContentType:Types/ContentType:Override[@PartName='/word/document.xml']",
-                    "ContentType",
-                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("[Content_Types].xml");
+    assertXPath(pXmlDoc,
+                "/ContentType:Types/ContentType:Override[@PartName='/word/document.xml']",
+                "ContentType",
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testDefaultContentTypes, "fdo55381.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDefaultContentTypes, "fdo55381.docx")
 {
-    if (xmlDocUniquePtr pXmlDoc = parseExport("[Content_Types].xml"))
-    {
-        assertXPath(pXmlDoc,
-                    "/ContentType:Types/ContentType:Default[@Extension='xml']",
-                    "ContentType",
-                    "application/xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("[Content_Types].xml");
+    assertXPath(pXmlDoc,
+                "/ContentType:Types/ContentType:Default[@Extension='xml']",
+                "ContentType",
+                "application/xml");
 
-        assertXPath(pXmlDoc,
-                    "/ContentType:Types/ContentType:Default[@Extension='rels']",
-                    "ContentType",
-                    "application/vnd.openxmlformats-package.relationships+xml");
+    assertXPath(pXmlDoc,
+                "/ContentType:Types/ContentType:Default[@Extension='rels']",
+                "ContentType",
+                "application/vnd.openxmlformats-package.relationships+xml");
 
-        assertXPath(pXmlDoc,
-                    "/ContentType:Types/ContentType:Default[@Extension='png']",
-                    "ContentType",
-                    "image/png");
+    assertXPath(pXmlDoc,
+                "/ContentType:Types/ContentType:Default[@Extension='png']",
+                "ContentType",
+                "image/png");
 
-        assertXPath(pXmlDoc,
-                    "/ContentType:Types/ContentType:Default[@Extension='jpeg']",
-                    "ContentType",
-                    "image/jpeg");
-    }
+    assertXPath(pXmlDoc,
+                "/ContentType:Types/ContentType:Default[@Extension='jpeg']",
+                "ContentType",
+                "image/jpeg");
 }
 
-DECLARE_SW_ROUNDTRIP_TEST(testDocmSave, "hello.docm", nullptr, DocmTest)
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDocmSave, "hello.docm")
 {
     // This was
     // application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml,
     // we used the wrong content type for .docm files.
-    if (xmlDocUniquePtr pXmlDoc = parseExport("[Content_Types].xml"))
-        assertXPath(pXmlDoc,
-                    "/ContentType:Types/ContentType:Override[@PartName='/word/document.xml']",
-                    "ContentType",
-                    "application/vnd.ms-word.document.macroEnabled.main+xml");
+    xmlDocUniquePtr pXmlDoc = parseExport("[Content_Types].xml");
+    assertXPath(pXmlDoc,
+                "/ContentType:Types/ContentType:Override[@PartName='/word/document.xml']",
+                "ContentType",
+                "application/vnd.ms-word.document.macroEnabled.main+xml");
 }
 
 DECLARE_SW_ROUNDTRIP_TEST(testBadDocm, "bad.docm", nullptr, DocmTest)
@@ -1121,11 +1119,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121670_columnsInSectionsOnly, "tdf121670_columns
     CPPUNIT_ASSERT_EQUAL_MESSAGE("# of columns", sal_Int16(0), xTextColumns->getColumnCount());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf106492, "tdf106492.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf106492, "tdf106492.docx")
 {
-    if (xmlDocUniquePtr pXmlDoc = parseExport())
-        // This was 4: an additional sectPr was added to the document.
-        assertXPath(pXmlDoc, "//w:sectPr", 3);
+    xmlDocUniquePtr pXmlDoc = parseExport();
+    // This was 4: an additional sectPr was added to the document.
+    assertXPath(pXmlDoc, "//w:sectPr", 3);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf107104, "tdf107104.docx")
