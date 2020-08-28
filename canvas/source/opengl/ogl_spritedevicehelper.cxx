@@ -501,13 +501,13 @@ namespace oglcanvas
 
         class BufferContextImpl : public IBufferContext
         {
-            GLuint mnFrambufferId;
+            GLuint mnFramebufferId;
             GLuint mnDepthId;
             GLuint mnTextureId;
 
             virtual void startBufferRendering() override
             {
-                glBindFramebuffer(GL_FRAMEBUFFER, mnFrambufferId);
+                glBindFramebuffer(GL_FRAMEBUFFER, mnFramebufferId);
             }
 
             virtual void endBufferRendering() override
@@ -522,11 +522,11 @@ namespace oglcanvas
 
         public:
             explicit BufferContextImpl(const ::basegfx::B2IVector& rSize) :
-                mnFrambufferId(0),
+                mnFramebufferId(0),
                 mnDepthId(0),
                 mnTextureId(0)
             {
-                OpenGLHelper::createFramebuffer(rSize.getX(), rSize.getY(), mnFrambufferId,
+                OpenGLHelper::createFramebuffer(rSize.getX(), rSize.getY(), mnFramebufferId,
                         mnDepthId, mnTextureId);
             }
 
@@ -534,7 +534,7 @@ namespace oglcanvas
             {
                 glDeleteTextures(1, &mnTextureId);
                 glDeleteRenderbuffers(1, &mnDepthId);
-                glDeleteFramebuffers(1, &mnFrambufferId);
+                glDeleteFramebuffers(1, &mnFramebufferId);
             }
         };
     }
