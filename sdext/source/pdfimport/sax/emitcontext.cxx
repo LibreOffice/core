@@ -163,7 +163,7 @@ void SaxEmitter::endTag( const char* pTag )
     for( int i = 0; i < nIndent; i++ )
         pStream->write( "    ", 4, nWritten );
 
-    OString aBuf = "</" + rtl::OStringView(pTag) + ">\n";
+    OString aBuf = OString::Concat("</") + pTag + ">\n";
     pStream->write( aBuf.getStr(), aBuf.getLength(), nWritten );
     nIndent--;
 #endif

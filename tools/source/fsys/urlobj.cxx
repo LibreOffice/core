@@ -39,6 +39,7 @@
 #include <cassert>
 #include <limits>
 #include <memory>
+#include <string_view>
 
 #include <string.h>
 
@@ -4198,8 +4199,8 @@ bool INetURLObject::removeExtension(sal_Int32 nIndex, bool bIgnoreFinalSlash)
         return true;
 
     OUString aNewPath =
-        rtl::OUStringView(pPathBegin, pExtension - pPathBegin) +
-        rtl::OUStringView(p, pPathEnd - p);
+        OUString::Concat(std::u16string_view(pPathBegin, pExtension - pPathBegin)) +
+        std::u16string_view(p, pPathEnd - p);
 
     return setPath(aNewPath, EncodeMechanism::NotCanonical, RTL_TEXTENCODING_UTF8);
 }
@@ -4226,7 +4227,8 @@ bool INetURLObject::setFinalSlash()
     if (pPathEnd > pPathBegin && pPathEnd[-1] == '/')
         return true;
 
-    OUString aNewPath = rtl::OUStringView(pPathBegin, pPathEnd - pPathBegin) + "/";
+    OUString aNewPath
+        = OUString::Concat(std::u16string_view(pPathBegin, pPathEnd - pPathBegin)) + "/";
 
     return setPath(aNewPath, EncodeMechanism::NotCanonical, RTL_TEXTENCODING_UTF8);
 }

@@ -550,7 +550,7 @@ oslGenericFunction lcl_LookupTableHelper::getFunctionSymbolByName(
                         {
                             (*pOutCachedItem).reset(new LocaleDataLookupTableItem( rCurrent ));
                             (*pOutCachedItem)->localeName = i.pLocale;
-                            OString sSymbolName = rtl::OStringView(pFunction) + "_" +
+                            OString sSymbolName = OString::Concat(pFunction) + "_" +
                                     (*pOutCachedItem)->localeName;
                             return (*pOutCachedItem)->module->getFunctionSymbol(
                                     sSymbolName.getStr());
@@ -563,10 +563,10 @@ oslGenericFunction lcl_LookupTableHelper::getFunctionSymbolByName(
             // Library not loaded, load it and add it to the list.
 #ifdef SAL_DLLPREFIX
             OString sModuleName =    // mostly "lib*.so"
-                SAL_DLLPREFIX + rtl::OStringView(i.pLib) + SAL_DLLEXTENSION;
+                OString::Concat(SAL_DLLPREFIX) + i.pLib + SAL_DLLEXTENSION;
 #else
             OString sModuleName =    // mostly "*.dll"
-                rtl::OStringView(i.pLib) + SAL_DLLEXTENSION;
+                OString::Concat(i.pLib) + SAL_DLLEXTENSION;
 #endif
             std::unique_ptr<osl::Module> module(new osl::Module());
             if ( module->loadRelative(&thisModule, sModuleName.getStr()) )
@@ -578,7 +578,7 @@ oslGenericFunction lcl_LookupTableHelper::getFunctionSymbolByName(
                 if( pOutCachedItem )
                 {
                     pOutCachedItem->reset(new LocaleDataLookupTableItem( maLookupTable.back() ));
-                    OString sSymbolName = rtl::OStringView(pFunction) + "_" + (*pOutCachedItem)->localeName;
+                    OString sSymbolName = OString::Concat(pFunction) + "_" + (*pOutCachedItem)->localeName;
                     return pTmpModule->getFunctionSymbol(sSymbolName.getStr());
                 }
                 else
@@ -1436,7 +1436,7 @@ oslGenericFunction LocaleDataImpl::getFunctionSymbol( const Locale& rLocale, con
 
     if (cachedItem && cachedItem->equals(rLocale))
     {
-        OString sSymbolName = rtl::OStringView(pFunction) + "_" +
+        OString sSymbolName = OString::Concat(pFunction) + "_" +
                 cachedItem->localeName;
         return cachedItem->module->getFunctionSymbol(sSymbolName.getStr());
     }

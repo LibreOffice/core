@@ -379,7 +379,7 @@ void MethodDescriptor::addTypeParameter(OUString const & name) {
 }
 
 OString MethodDescriptor::getDescriptor() const {
-    return rtl::OStringView(m_descriptorStart) + m_descriptorEnd;
+    return m_descriptorStart + m_descriptorEnd;
 }
 
 

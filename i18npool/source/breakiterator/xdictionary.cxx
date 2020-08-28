@@ -170,7 +170,7 @@ void xdictionary::initDictionaryData(const char *pLang)
 #else
     OString sModuleName = // mostly "*.dll" (with * == dict_zh)
 #endif
-        "dict_" + rtl::OStringView(pLang) + SAL_DLLEXTENSION;
+        OString::Concat("dict_") + pLang + SAL_DLLEXTENSION;
     aEntry.mhModule = osl_loadModuleRelativeAscii( &thisModule, sModuleName.getStr(), SAL_LOADMODULE_DEFAULT );
     if( aEntry.mhModule ) {
         oslGenericFunction func;

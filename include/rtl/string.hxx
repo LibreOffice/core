@@ -1900,6 +1900,31 @@ public:
 #if defined LIBO_INTERNAL_ONLY
     operator std::string_view() const { return {getStr(), sal_uInt32(getLength())}; }
 #endif
+
+#if defined LIBO_INTERNAL_ONLY
+    // A wrapper for the first expression in an
+    //
+    //   OString::Concat(e1) + e2 + ...
+    //
+    // concatenation chain, when neither of the first two e1, e2 is one of our rtl string-related
+    // classes (so something like
+    //
+    //   OString s = "a" + (b ? std::string_view("c" : "dd");
+    //
+    // would not compile):
+    template<typename T> [[nodiscard]] static
+    typename std::enable_if_t<
+        ToStringHelper<T>::allowOStringConcat, OStringConcat<OStringConcatMarker, T>>
+    Concat(T const & value) { return OStringConcat<OStringConcatMarker, T>({}, value); }
+
+    // This overload is needed so that an argument of type 'char const[N]' ends up as
+    // 'OStringConcat<rtl::OStringConcatMarker, char const[N]>' rather than as
+    // 'OStringConcat<rtl::OStringConcatMarker, char[N]>':
+    template<typename T, std::size_t N> [[nodiscard]] static
+    typename std::enable_if_t<
+        ToStringHelper<T[N]>::allowOStringConcat, OStringConcat<OStringConcatMarker, T[N]>>
+    Concat(T (& value)[N]) { return OStringConcat<OStringConcatMarker, T[N]>({}, value); }
+#endif
 };
 
 /* ======================================================================= */

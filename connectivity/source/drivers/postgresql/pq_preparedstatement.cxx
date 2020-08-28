@@ -489,7 +489,7 @@ void PreparedStatement::setBytes(
             *this, OUString(), 1, Any() );
     }
     m_vars[parameterIndex-1]
-        = "'" + rtl::OStringView(reinterpret_cast<char *>(escapedString.get()), len -1) + "'";
+        = OString::Concat("'") + std::string_view(reinterpret_cast<char *>(escapedString.get()), len -1) + "'";
 }
 
 
