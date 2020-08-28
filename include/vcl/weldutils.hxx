@@ -364,6 +364,9 @@ VCL_DLLPUBLIC bool IsEntryVisible(const weld::TreeView& rTreeView, const weld::T
 
 // A Parent's Children are turned into Children of the Parent which comes next in hierarchy
 VCL_DLLPUBLIC void RemoveParentKeepChildren(weld::TreeView& rTreeView, weld::TreeIter& rParent);
+
+// return the min height of a weld::Entry
+VCL_DLLPUBLIC int GetMinimumEditHeight();
 }
 
 #endif

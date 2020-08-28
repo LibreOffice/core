@@ -446,7 +446,6 @@ excludelist:
     sc/source/ui/inc/colorformat.hxx:
     # Needed for VclPtr type
     - svx/colorbox.hxx
-    - vcl/edit.hxx
     sc/source/ui/inc/condformatdlg.hxx:
     # Needed for typedef
     - condformatdlgentry.hxx

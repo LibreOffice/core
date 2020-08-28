@@ -479,6 +479,15 @@ PatternFormatter::~PatternFormatter()
     m_rEntry.connect_changed(Link<weld::Entry&, void>());
     m_rEntry.connect_focus_out(Link<weld::Widget&, void>());
 }
+
+int GetMinimumEditHeight()
+{
+    // load this little .ui just to measure the height of an Entry
+    std::unique_ptr<weld::Builder> xBuilder(
+        Application::CreateBuilder(nullptr, "cui/ui/namedialog.ui"));
+    std::unique_ptr<weld::Entry> xEntry(xBuilder->weld_entry("name_entry"));
+    return xEntry->get_preferred_size().Height();
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
