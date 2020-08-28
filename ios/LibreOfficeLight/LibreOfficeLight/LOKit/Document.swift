@@ -78,7 +78,7 @@ open class Document
      * @return a rectangle list, using the same format as
      * LOK_CALLBACK_TEXT_SELECTION.
      */
-    public func getPartRectanges() -> String
+    public func getPartRectangles() -> String
     {
         return toString( docClass.getPartPageRectangles(pDoc) ) ?? ""
 
