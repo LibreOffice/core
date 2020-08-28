@@ -1347,7 +1347,7 @@ void SdOutliner::EndOfSearch()
         }
         // Ask the user whether to wrap around and continue the search or
         // to terminate.
-        else if (meMode==TEXT_CONVERSION || ShowWrapArroundDialog ())
+        else if (meMode==TEXT_CONVERSION || ShowWrapAroundDialog ())
         {
             mbMatchMayExist = false;
             // Everything back to beginning (or end?) of the document.
@@ -1402,7 +1402,7 @@ void SdOutliner::ShowEndOfSearchDialog()
     xInfoBox->run();
 }
 
-bool SdOutliner::ShowWrapArroundDialog()
+bool SdOutliner::ShowWrapAroundDialog()
 {
     // Determine whether to show the dialog.
     if (mpSearchItem)
@@ -1691,7 +1691,7 @@ bool SdOutliner::HandleFailedSearch()
         {
             // No further matches found.  Ask the user whether to wrap
             // around and start again.
-            bContinueSearch = ShowWrapArroundDialog();
+            bContinueSearch = ShowWrapAroundDialog();
         }
     }
 

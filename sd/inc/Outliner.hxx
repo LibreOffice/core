@@ -414,7 +414,7 @@ private:
         beginning/end of the document and continue with the search/spell
         check.
     */
-    bool ShowWrapArroundDialog();
+    bool ShowWrapAroundDialog();
 
     /** Put text of current text object into outliner so that the text can
         be searched/spell checked.
