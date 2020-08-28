@@ -1595,7 +1595,7 @@ void Output::endItem()
 {
     if( mnItemLevel > 0 )
     {
-        maLastItem = OUString( maLine.getStr() + mnLastItem );
+        maLastItem = maLine.copy( mnLastItem ).makeStringAndClear();
         if( maLastItem.isEmpty() && mnLastItem > 0 && maLine[ mnLastItem - 1 ] == OOX_DUMP_ITEMSEP )
             maLine.setLength( mnLastItem - 1 );
         --mnItemLevel;
