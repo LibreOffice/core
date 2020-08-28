@@ -180,7 +180,7 @@ void SAL_CALL FlushNotificationAdapter::disposing( const EventObject& Source )
 }
 
 OAuthenticationContinuation::OAuthenticationContinuation()
-    :m_bRemberPassword(true),   // TODO: a meaningful default
+    :m_bRememberPassword(true),   // TODO: a meaningful default
     m_bCanSetUserName(true)
 {
 }
@@ -226,7 +226,7 @@ Sequence< RememberAuthentication > SAL_CALL OAuthenticationContinuation::getReme
 
 void SAL_CALL OAuthenticationContinuation::setRememberPassword( RememberAuthentication _eRemember )
 {
-    m_bRemberPassword = (RememberAuthentication_NO != _eRemember);
+    m_bRememberPassword = (RememberAuthentication_NO != _eRemember);
 }
 
 sal_Bool SAL_CALL OAuthenticationContinuation::canSetAccount(  )
