@@ -173,16 +173,16 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::get_maximumValue(VARIANT *maximumVa
 
 /**
    * Get minimum value.
-   * @param  mininumValue Variant that accepts minimum value.
+   * @param  minimumValue Variant that accepts minimum value.
    * @return Result.
    */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::get_minimumValue(VARIANT *mininumValue)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::get_minimumValue(VARIANT *minimumValue)
 {
     SolarMutexGuard g;
 
     ENTER_PROTECTED_BLOCK
 
-    if (mininumValue == nullptr)
+    if (minimumValue == nullptr)
         return E_FAIL;
     if ( !pRXVal.is() )
         return E_FAIL;
@@ -190,7 +190,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::get_minimumValue(VARIANT *mininumVa
     // Get Any type value from UNO.
     css::uno::Any  anyVal = GetXInterface()->getMinimumValue();
     // Convert Any to VARIANT.
-    CMAccessible::ConvertAnyToVariant(anyVal, mininumValue);
+    CMAccessible::ConvertAnyToVariant(anyVal, minimumValue);
 
     return S_OK;
 
