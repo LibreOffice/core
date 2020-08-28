@@ -29,7 +29,7 @@ class ChartListenerCollectionTest : public CppUnit::TestFixture {
     void ListenerGetsNotifiedTwiceWhenRegisteredTwoTimes();
     void ListenerDoesNotGetNotifiedWhenListeningStops();
     void ListenerStopsListeningForAllRanges();
-    void ListenersStopListeningIdependently();
+    void ListenersStopListeningIndependently();
 
     CPPUNIT_TEST_SUITE(ChartListenerCollectionTest);
 
@@ -37,7 +37,7 @@ class ChartListenerCollectionTest : public CppUnit::TestFixture {
     CPPUNIT_TEST(ListenerGetsNotifiedTwiceWhenRegisteredTwoTimes);
     CPPUNIT_TEST(ListenerDoesNotGetNotifiedWhenListeningStops);
     CPPUNIT_TEST(ListenerStopsListeningForAllRanges);
-    CPPUNIT_TEST(ListenersStopListeningIdependently);
+    CPPUNIT_TEST(ListenersStopListeningIndependently);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -99,7 +99,7 @@ void ChartListenerCollectionTest::ListenerStopsListeningForAllRanges() {
     CPPUNIT_ASSERT_EQUAL(0u, listener.mNotifyCount);
 }
 
-void ChartListenerCollectionTest::ListenersStopListeningIdependently() {
+void ChartListenerCollectionTest::ListenersStopListeningIndependently() {
     MockedHiddenRangeListener listener1;
     MockedHiddenRangeListener listener2;
 
