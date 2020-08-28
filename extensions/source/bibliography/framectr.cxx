@@ -650,23 +650,22 @@ void BibFrameController_Impl::addStatusListener(
     {
         vcl::Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
         Edit* pEdit = dynamic_cast<Edit*>( pChild );
-        if( pEdit )
-            aEvent.IsEnabled  = !pEdit->IsReadOnly() && pEdit->GetSelection().Len();
+        aEvent.IsEnabled = pEdit && !pEdit->IsReadOnly() && pEdit->GetSelection().Len();
     }
     if(aURL.Path == "Copy")
     {
         vcl::Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
         Edit* pEdit = dynamic_cast<Edit*>( pChild );
-        if( pEdit )
-            aEvent.IsEnabled  = pEdit->GetSelection().Len() > 0;
+        aEvent.IsEnabled = pEdit && pEdit->GetSelection().Len();
     }
     else if(aURL.Path == "Paste" )
     {
-        aEvent.IsEnabled  = false;
+        aEvent.IsEnabled = false;
         vcl::Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
-        if(pChild)
+        Edit* pEdit = dynamic_cast<Edit*>( pChild );
+        if (pEdit && !pEdit->IsReadOnly())
         {
-            uno::Reference< datatransfer::clipboard::XClipboard > xClip = pChild->GetClipboard();
+            uno::Reference< datatransfer::clipboard::XClipboard > xClip = pEdit->GetClipboard();
             if(xClip.is())
             {
                 uno::Reference< datatransfer::XTransferable > xDataObj;
