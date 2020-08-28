@@ -97,20 +97,12 @@ inline void XFTabStyle::SetLength(double len)
 
 inline void XFTabStyle::SetDelimiter(sal_Unicode delimiter)
 {
-    sal_Unicode     chs[2];
-    chs[0] = delimiter;
-    chs[1] = 0;
-
-    m_strDelimiter = OUString(chs);
+    m_strDelimiter = OUString(delimiter);
 }
 
 inline void XFTabStyle::SetLeaderChar(sal_Unicode leader)
 {
-    sal_Unicode     chs[2];
-    chs[0] = leader;
-    chs[1] = 0;
-
-    m_strLeader = OUString(chs);
+    m_strLeader = OUString(leader);
 }
 
 #endif
