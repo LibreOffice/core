@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f620bc1_48247624",
+        "filename": "xmloff/source/core/xmltoken.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-08-28T09:52:58Z",
+      "side": 1,
+      "message": "leader-lines",
+      "range": {
+        "startLine": 546,
+        "startChar": 23,
+        "endLine": 546,
+        "endChar": 35
+      },
+      "revId": "0647a5991030ffc80168055fe417078eb5cbf4a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
