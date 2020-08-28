@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/style/TabAlign.hpp>
+#include <sal/log.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
@@ -62,19 +63,17 @@ private:
 
 public:
 
-    SvxXMLTabStopContext_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                               const OUString& rLName,
-                               const uno::Reference< xml::sax::XAttributeList > & xAttrList );
+    SvxXMLTabStopContext_Impl( SvXMLImport& rImport, sal_Int32 nElement,
+                               const uno::Reference< xml::sax::XFastAttributeList > & xAttrList );
 
     const style::TabStop& getTabStop() const { return aTabStop; }
 };
 
 
 SvxXMLTabStopContext_Impl::SvxXMLTabStopContext_Impl(
-                               SvXMLImport& rImport, sal_uInt16 nPrfx,
-                               const OUString& rLName,
-                               const uno::Reference< xml::sax::XAttributeList > & xAttrList )
-: SvXMLImportContext( rImport, nPrfx, rLName )
+                               SvXMLImport& rImport, sal_Int32 /*nElement*/,
+                               const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
+: SvXMLImportContext( rImport )
 {
     aTabStop.Position = 0;
     aTabStop.Alignment = style::TabAlign_LEFT;
@@ -84,64 +83,60 @@ SvxXMLTabStopContext_Impl::SvxXMLTabStopContext_Impl(
 
     static const SvXMLTokenMap aTokenMap( aTabsAttributesAttrTokenMap );
 
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for (auto &aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                            &aLocalName );
-        const OUString& rValue = xAttrList->getValueByIndex( i );
+        const OUString sValue = aIter.toString();
 
         sal_Int32 nVal;
-        switch( aTokenMap.Get( nPrefix, aLocalName ) )
+        switch( aIter.getToken() )
         {
-        case XML_TOK_TABSTOP_POSITION:
+        case XML_ELEMENT(STYLE, XML_POSITION):
             if (GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                    nVal, rValue))
+                    nVal, sValue))
             {
                 aTabStop.Position = nVal;
             }
             break;
-        case XML_TOK_TABSTOP_TYPE:
-            if( IsXMLToken( rValue, XML_LEFT ) )
+        case XML_ELEMENT(STYLE, XML_TYPE):
+            if( IsXMLToken( sValue, XML_LEFT ) )
             {
                 aTabStop.Alignment = style::TabAlign_LEFT;
             }
-            else if( IsXMLToken( rValue, XML_RIGHT ) )
+            else if( IsXMLToken( sValue, XML_RIGHT ) )
             {
                 aTabStop.Alignment = style::TabAlign_RIGHT;
             }
-            else if( IsXMLToken( rValue, XML_CENTER ) )
+            else if( IsXMLToken( sValue, XML_CENTER ) )
             {
                 aTabStop.Alignment = style::TabAlign_CENTER;
             }
-            else if( IsXMLToken( rValue, XML_CHAR ) )
+            else if( IsXMLToken( sValue, XML_CHAR ) )
             {
                 aTabStop.Alignment = style::TabAlign_DECIMAL;
             }
-            else if( IsXMLToken( rValue, XML_DEFAULT ) )
+            else if( IsXMLToken( sValue, XML_DEFAULT ) )
             {
                 aTabStop.Alignment = style::TabAlign_DEFAULT;
             }
             break;
-        case XML_TOK_TABSTOP_CHAR:
-            if( !rValue.isEmpty() )
-                aTabStop.DecimalChar = rValue[0];
+        case XML_ELEMENT(STYLE, XML_CHAR):
+            if( !sValue.isEmpty() )
+                aTabStop.DecimalChar = sValue[0];
             break;
-        case XML_TOK_TABSTOP_LEADER_STYLE:
-            if( IsXMLToken( rValue, XML_NONE ) )
+        case XML_ELEMENT(STYLE, XML_LEADER_STYLE):
+            if( IsXMLToken( sValue, XML_NONE ) )
                 aTabStop.FillChar = ' ';
-            else if( IsXMLToken( rValue, XML_DOTTED ) )
+            else if( IsXMLToken( sValue, XML_DOTTED ) )
                 aTabStop.FillChar = '.';
             else
                 aTabStop.FillChar = '_';
             break;
-        case XML_TOK_TABSTOP_LEADER_TEXT:
-            if( !rValue.isEmpty() )
-                cTextFillChar = rValue[0];
+        case XML_ELEMENT(STYLE, XML_LEADER_TEXT):
+            if( !sValue.isEmpty() )
+                cTextFillChar = sValue[0];
             break;
+        default:
+            SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
         }
     }
 
@@ -151,27 +146,22 @@ SvxXMLTabStopContext_Impl::SvxXMLTabStopContext_Impl(
 
 
 SvxXMLTabStopImportContext::SvxXMLTabStopImportContext(
-                                SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                const OUString& rLName,
+                                SvXMLImport& rImport, sal_Int32 nElement,
                                 const XMLPropertyState& rProp,
                                  ::std::vector< XMLPropertyState > &rProps )
-: XMLElementPropertyContext( rImport, nPrfx, rLName, rProp, rProps )
+: XMLElementPropertyContext( rImport, nElement, rProp, rProps )
 {
 }
 
-SvXMLImportContextRef SvxXMLTabStopImportContext::CreateChildContext(
-                                   sal_uInt16 nPrefix,
-                                   const OUString& rLocalName,
-                                   const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SvxXMLTabStopImportContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
-    SvXMLImportContext *pContext = nullptr;
-
-    if( XML_NAMESPACE_STYLE == nPrefix && IsXMLToken( rLocalName, XML_TAB_STOP ) )
+    if( nElement == XML_ELEMENT(STYLE, XML_TAB_STOP) )
     {
         // create new tabstop import context
         const rtl::Reference<SvxXMLTabStopContext_Impl> xTabStopContext{
-            new SvxXMLTabStopContext_Impl( GetImport(), nPrefix, rLocalName,
-                                           xAttrList )};
+            new SvxXMLTabStopContext_Impl( GetImport(), nElement, xAttrList )};
 
         // add new tabstop to array of tabstops
         if( !mpTabStops )
@@ -179,13 +169,15 @@ SvXMLImportContextRef SvxXMLTabStopImportContext::CreateChildContext(
 
         mpTabStops->push_back( xTabStopContext );
 
-        pContext = xTabStopContext.get();
+        return xTabStopContext.get();
     }
+    else
+        SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
 
-    return pContext;
+    return nullptr;
 }
 
-void SvxXMLTabStopImportContext::EndElement( )
+void SvxXMLTabStopImportContext::endFastElement(sal_Int32 nElement)
 {
     sal_uInt16 nCount = mpTabStops ? mpTabStops->size() : 0;
     uno::Sequence< style::TabStop> aSeq( nCount );
@@ -215,8 +207,7 @@ void SvxXMLTabStopImportContext::EndElement( )
     aProp.maValue <<= aSeq;
 
     SetInsert( true );
-    XMLElementPropertyContext::EndElement();
-
+    XMLElementPropertyContext::endFastElement(nElement);
 }
 
 

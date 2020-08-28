@@ -27,12 +27,11 @@
 using namespace ::com::sun::star;
 
 XMLLabelSeparatorContext::XMLLabelSeparatorContext(
-    SvXMLImport& rImport, sal_uInt16 nPrfx,
-    const OUString& rLocalName,
+    SvXMLImport& rImport, sal_Int32 nElement,
     const XMLPropertyState& rProp,
     ::std::vector< XMLPropertyState > &rProps ) :
         XMLElementPropertyContext(
-            rImport, nPrfx, rLocalName, rProp, rProps ),
+            rImport, nElement, rProp, rProps ),
             m_aSeparator()
 {
 }
@@ -40,7 +39,7 @@ XMLLabelSeparatorContext::XMLLabelSeparatorContext(
 XMLLabelSeparatorContext::~XMLLabelSeparatorContext()
 {}
 
-void XMLLabelSeparatorContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& /*xAttrList*/ )
+void XMLLabelSeparatorContext::startFastElement( sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
 }
 
@@ -58,7 +57,7 @@ SvXMLImportContextRef XMLLabelSeparatorContext::CreateChildContext(
     return pContext;
 }
 
-void XMLLabelSeparatorContext::EndElement()
+void XMLLabelSeparatorContext::endFastElement(sal_Int32 nElement)
 {
     if( !m_aSeparator.isEmpty() )
     {
@@ -67,7 +66,7 @@ void XMLLabelSeparatorContext::EndElement()
         SetInsert( true );
     }
 
-    XMLElementPropertyContext::EndElement();
+    XMLElementPropertyContext::endFastElement(nElement);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

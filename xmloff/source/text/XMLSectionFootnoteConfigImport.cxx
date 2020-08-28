@@ -23,6 +23,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
+#include <sal/log.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -47,11 +48,10 @@ using ::com::sun::star::xml::sax::XAttributeList;
 
 XMLSectionFootnoteConfigImport::XMLSectionFootnoteConfigImport(
     SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
+    sal_Int32 /*nElement*/,
     vector<XMLPropertyState> & rProps,
     const rtl::Reference<XMLPropertySetMapper> & rMapperRef) :
-        SvXMLImportContext(rImport, nPrefix, rLocalName),
+        SvXMLImportContext(rImport),
         rProperties(rProps),
         rMapper(rMapperRef)
 {
@@ -61,8 +61,9 @@ XMLSectionFootnoteConfigImport::~XMLSectionFootnoteConfigImport()
 {
 }
 
-void XMLSectionFootnoteConfigImport::StartElement(
-    const Reference<XAttributeList> & xAttrList)
+void XMLSectionFootnoteConfigImport::startFastElement(
+    sal_Int32 /*nElement*/,
+    const Reference<css::xml::sax::XFastAttributeList> & xAttrList)
 {
     bool bNumOwn = false;
     bool bNumRestart = false;
@@ -74,18 +75,13 @@ void XMLSectionFootnoteConfigImport::StartElement(
     OUString sNumLetterSync;
 
     // iterate over xattribute list and fill values
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
-                              &sLocalName );
-        OUString sAttrValue = xAttrList->getValueByIndex(nAttr);
+        OUString sAttrValue = aIter.toString();
 
-        if (XML_NAMESPACE_TEXT == nPrefix)
+        switch(aIter.getToken())
         {
-            if (IsXMLToken(sLocalName, XML_START_VALUE))
+            case XML_ELEMENT(TEXT, XML_START_VALUE):
             {
                 sal_Int32 nTmp;
                 if (::sax::Converter::convertNumber(nTmp, sAttrValue))
@@ -93,35 +89,40 @@ void XMLSectionFootnoteConfigImport::StartElement(
                     nNumRestartAt = static_cast< sal_Int16 >( nTmp ) - 1;
                     bNumRestart = true;
                 }
+                break;
             }
-            else if( IsXMLToken( sLocalName, XML_NOTE_CLASS ) )
+            case XML_ELEMENT(TEXT, XML_NOTE_CLASS):
             {
                 if( IsXMLToken( sAttrValue, XML_ENDNOTE ) )
                     bEndnote = true;
+                break;
             }
-        }
-        else if (XML_NAMESPACE_STYLE == nPrefix)
-        {
-            if (IsXMLToken(sLocalName, XML_NUM_PREFIX))
+            case XML_ELEMENT(STYLE, XML_NUM_PREFIX):
             {
                 sNumPrefix = sAttrValue;
                 bNumOwn = true;
+                break;
             }
-            else if (IsXMLToken(sLocalName, XML_NUM_SUFFIX))
+            case XML_ELEMENT(TEXT, XML_NUM_SUFFIX):
             {
                 sNumSuffix = sAttrValue;
                 bNumOwn = true;
+                break;
             }
-            else if (IsXMLToken(sLocalName, XML_NUM_FORMAT))
+            case XML_ELEMENT(TEXT, XML_NUM_FORMAT):
             {
                 sNumFormat = sAttrValue;
                 bNumOwn = true;
+                break;
             }
-            else if (IsXMLToken(sLocalName, XML_NUM_LETTER_SYNC))
+            case XML_ELEMENT(TEXT, XML_NUM_LETTER_SYNC):
             {
                 sNumLetterSync = sAttrValue;
                 bNumOwn = true;
+                break;
             }
+            default:
+                SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sAttrValue);
         }
     }
 
