@@ -1139,9 +1139,9 @@ void ImplEESdrObject::Init( ImplEESdrWriter& rEx )
     if(GetType() == "drawing.Group")
     {
         // if it's a group, the unrotated range is needed for that group
-        const basegfx::B2DRange aUnroatedRange(getUnrotatedGroupBoundRange(mXShape));
-        const Point aNewP(basegfx::fround(aUnroatedRange.getMinX()), basegfx::fround(aUnroatedRange.getMinY()));
-        const Size aNewS(basegfx::fround(aUnroatedRange.getWidth()), basegfx::fround(aUnroatedRange.getHeight()));
+        const basegfx::B2DRange aUnrotatedRange(getUnrotatedGroupBoundRange(mXShape));
+        const Point aNewP(basegfx::fround(aUnrotatedRange.getMinX()), basegfx::fround(aUnrotatedRange.getMinY()));
+        const Size aNewS(basegfx::fround(aUnrotatedRange.getWidth()), basegfx::fround(aUnrotatedRange.getHeight()));
 
         SetRect(rEx.ImplMapPoint(aNewP), rEx.ImplMapSize(aNewS));
     }
