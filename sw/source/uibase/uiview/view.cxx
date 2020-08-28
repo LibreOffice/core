@@ -1381,10 +1381,16 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
         // delegate further
         GetViewImpl()->GetUNOObject_Impl()->getViewSettings()->setPropertyValue("ShowOnlineLayout", uno::Any(bBrowseMode));
     }
+
+    SelectShell();
+
     if (!bGotVisibleBottom)
         return;
 
     Point aCursorPos( nX, nY );
+    const long nAdd = m_pWrtShell->GetViewOptions()->getBrowseMode() ? DOCUMENTBORDER : DOCUMENTBORDER*2;
+    if (nBottom > (m_pWrtShell->GetDocSize().Height()+nAdd) )
+        return;
 
     m_pWrtShell->EnableSmooth( false );
     const tools::Rectangle aVis( nLeft, nTop, nRight, nBottom );
@@ -1441,7 +1447,6 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
         // reset flag value
         m_pWrtShell->SetMacroExecAllowed( bSavedFlagValue );
     }
-    SelectShell();
 
     // Set ViewLayoutSettings
     const bool bSetViewLayoutSettings = bGotViewLayoutColumns && bGotViewLayoutBookMode &&
