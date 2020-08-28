@@ -1758,7 +1758,7 @@ public:
      bool       fIncludeHeader : 1 /*= false*/;    // Place header inside page border
      bool       fIncludeFooter : 1 /*= false*/;    // Place footer inside page border
      bool       fForcePageSizePag : 1 /*= false*/; // Are we in online view
-     bool       fMinFontSizePag : 1 /*= false*/;   // Are we auto-promoting fonts to >= hpsZoonFontPag?
+     bool       fMinFontSizePag : 1 /*= false*/;   // Are we auto-promoting fonts to >= hpsZoomFontPag?
      bool       fHaveVersions : 1 /*= false*/;     // versioning is turned on
      bool       fAutoVersion : 1 /*= false*/;      // autoversioning is enabled
     sal_uInt16 : 14;                  // reserved
@@ -1772,7 +1772,7 @@ public:
     // Skip 4 Bytes here
     sal_Int16 nfcFootnoteRef = 0;
     sal_Int16 nfcEdnRef = 0;
-    sal_Int16 hpsZoonFontPag = 0;
+    sal_Int16 hpsZoomFontPag = 0;
     sal_Int16 dywDispPag = 0;
 
      bool       fCompatibilityOptions_Unknown2_1 : 1 /*= false*/;  // #i78591#
