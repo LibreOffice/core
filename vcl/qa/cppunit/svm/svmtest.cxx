@@ -92,8 +92,8 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
     void checkTextArray(const GDIMetaFile& rMetaFile);
     void testTextArray();
 
-    void checkStrechText(const GDIMetaFile& rMetaFile);
-    void testStrechText();
+    void checkstretchText(const GDIMetaFile& rMetaFile);
+    void teststretchText();
 
     void checkTextRect(const GDIMetaFile& rMetaFile);
     void testTextRect();
@@ -209,7 +209,7 @@ public:
     CPPUNIT_TEST(testPolyPolygon);
     CPPUNIT_TEST(testText);
     CPPUNIT_TEST(testTextArray);
-    CPPUNIT_TEST(testStrechText);
+    CPPUNIT_TEST(teststretchText);
     CPPUNIT_TEST(testTextRect);
     CPPUNIT_TEST(testTextLine);
     CPPUNIT_TEST(testBitmaps); // BMP, BMPSCALE, BMPSCALEPART
@@ -847,7 +847,7 @@ void SvmTest::testTextArray()
     checkTextArray(readFile("textarray.svm"));
 }
 
-void SvmTest::checkStrechText(const GDIMetaFile& rMetaFile)
+void SvmTest::checkstretchText(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
@@ -858,15 +858,15 @@ void SvmTest::checkStrechText(const GDIMetaFile& rMetaFile)
     assertXPathContent(pDoc, "/metafile/stretchtext[1]/textcontent", "123456");
 }
 
-void SvmTest::testStrechText()
+void SvmTest::teststretchText()
 {
     GDIMetaFile aGDIMetaFile;
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
     setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
     pVirtualDev->DrawStretchText(Point(4,6), 10, "123456", 1, 4);
 
-    checkStrechText(writeAndReadStream(aGDIMetaFile));
-    checkStrechText(readFile("strecthtext.svm"));
+    checkstretchText(writeAndReadStream(aGDIMetaFile));
+    checkstretchText(readFile("strecthtext.svm"));
 }
 
 void SvmTest::checkTextRect(const GDIMetaFile& rMetaFile)
