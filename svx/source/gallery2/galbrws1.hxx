@@ -53,7 +53,7 @@ private:
     OUString aImgDefault;
     OUString aImgReadOnly;
 
-    ::std::function<void ()> maThemeSlectionHandler;
+    ::std::function<void ()> maThemeSelectionHandler;
 
     void                    ImplInsertThemeEntry( const GalleryThemeEntry* pEntry );
     static void             ImplFillExchangeData( const GalleryTheme* pThm, ExchangeData& rData );
@@ -77,7 +77,7 @@ public:
                             GalleryBrowser1(
                                 weld::Builder& rBuilder,
                                 Gallery* pGallery,
-                                const ::std::function<void ()>& rThemeSlectionHandler);
+                                const ::std::function<void ()>& rThemeSelectionHandler);
 
                             ~GalleryBrowser1();
 
