@@ -1352,7 +1352,7 @@ bool ScDBDocFunc::RemovePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     {
         // If we come from GUI - ask to delete the associated pivot charts too...
         std::vector<SdrOle2Obj*> aListOfObjects =
-                    sc::tools::getAllPivotChartsConntectedTo(rDPObj.GetName(), &rDocShell);
+                    sc::tools::getAllPivotChartsConnectedTo(rDPObj.GetName(), &rDocShell);
 
         ScDrawLayer* pModel = rDoc.GetDrawLayer();
 

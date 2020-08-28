@@ -139,7 +139,7 @@ SdrOle2Obj* getChartByIndex(ScDocShell* pDocShell, SCTAB nTab, long nIndex, Char
     return nullptr;
 }
 
-std::vector<SdrOle2Obj*> getAllPivotChartsConntectedTo(OUString const & sPivotTableName, ScDocShell* pDocShell)
+std::vector<SdrOle2Obj*> getAllPivotChartsConnectedTo(OUString const & sPivotTableName, ScDocShell* pDocShell)
 {
     std::vector<SdrOle2Obj*> aObjects;
 
