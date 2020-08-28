@@ -196,7 +196,7 @@ public class ScriptEditorForJavaScript extends ScriptEditor {
     private ScriptEditorForJavaScript(XScriptContext context, URL url) {
         setContext(context);
         // Need to check that before showing the window. Checking in execute() has no effect.
-        if (!isMacroExectionEnabled()) {
+        if (!isMacroExecutionEnabled()) {
             showErrorMessage("Macro Execution has been disabled.");
             return ;
         }

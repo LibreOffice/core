@@ -43,7 +43,7 @@ public abstract class ScriptEditor {
         this.context = context;
     }
 
-    public boolean isMacroExectionEnabled() {
+    public boolean isMacroExecutionEnabled() {
         XNameAccess xNameAccess = null;
         try {
             String sAccess = "com.sun.star.configuration.ConfigurationAccess";
