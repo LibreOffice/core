@@ -225,7 +225,8 @@ void BibFrameController_Impl::dispose()
     mxImpl->aLC.disposeAndClear(aObject);
     m_xDatMan.clear();
     aStatusListeners.clear();
- }
+    m_xLastQueriedFocusWin.clear();
+}
 
 void BibFrameController_Impl::addEventListener( const uno::Reference< lang::XEventListener > & aListener )
 {
@@ -560,7 +561,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
     }
     else if(aCommand == "Cut")
     {
-        vcl::Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
+        vcl::Window* pChild = m_xLastQueriedFocusWin.get();
         if(pChild)
         {
             KeyEvent aEvent( 0, KeyFuncType::CUT );
@@ -569,7 +570,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
     }
     else if(aCommand == "Copy")
     {
-        vcl::Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
+        vcl::Window* pChild = m_xLastQueriedFocusWin.get();
         if(pChild)
         {
             KeyEvent aEvent( 0, KeyFuncType::COPY );
@@ -578,7 +579,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
     }
     else if(aCommand == "Paste")
     {
-        vcl::Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
+        vcl::Window* pChild = m_xLastQueriedFocusWin.get();
         if(pChild)
         {
             KeyEvent aEvent( 0, KeyFuncType::PASTE );
@@ -648,21 +649,21 @@ void BibFrameController_Impl::addStatusListener(
     }
     else if(aURL.Path == "Cut")
     {
-        vcl::Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
-        Edit* pEdit = dynamic_cast<Edit*>( pChild );
+        m_xLastQueriedFocusWin = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
+        Edit* pEdit = dynamic_cast<Edit*>(m_xLastQueriedFocusWin.get());
         aEvent.IsEnabled = pEdit && !pEdit->IsReadOnly() && pEdit->GetSelection().Len();
     }
     if(aURL.Path == "Copy")
     {
-        vcl::Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
-        Edit* pEdit = dynamic_cast<Edit*>( pChild );
+        m_xLastQueriedFocusWin = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
+        Edit* pEdit = dynamic_cast<Edit*>(m_xLastQueriedFocusWin.get());
         aEvent.IsEnabled = pEdit && pEdit->GetSelection().Len();
     }
     else if(aURL.Path == "Paste" )
     {
         aEvent.IsEnabled = false;
-        vcl::Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
-        Edit* pEdit = dynamic_cast<Edit*>( pChild );
+        m_xLastQueriedFocusWin = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
+        Edit* pEdit = dynamic_cast<Edit*>(m_xLastQueriedFocusWin.get());
         if (pEdit && !pEdit->IsReadOnly())
         {
             uno::Reference< datatransfer::clipboard::XClipboard > xClip = pEdit->GetClipboard();

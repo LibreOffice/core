@@ -28,6 +28,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 #include <tools/link.hxx>
+#include <vcl/window.hxx>
 #include <vector>
 #include <memory>
 
@@ -67,6 +68,7 @@ friend class BibFrameCtrl_Impl;
     css::uno::Reference< css::frame::XFrame >                 xFrame;
     bool                        bDisposing;
     rtl::Reference<BibDataManager>                            m_xDatMan;
+    VclPtr<vcl::Window> m_xLastQueriedFocusWin;
 
     DECL_LINK( DisposeHdl, void*, void );
 
