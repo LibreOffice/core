@@ -106,7 +106,7 @@ private:
     void                    exportReportAttributes(const Reference<XReportDefinition>& _xReport);
     void                    exportFunctions(const Reference<XIndexAccess>& _xFunctions); /// <ref name="rpt-function"/>
     void                    exportFunction(const Reference< XFunction>& _xFunction);
-    void                    exportMasterDetailFields(const Reference<XReportComponent>& _xReportComponet);
+    void                    exportMasterDetailFields(const Reference<XReportComponent>& _xReportComponent);
     void                    exportComponent(const Reference<XReportComponent>& _xReportComponent);
     void                    exportGroup(const Reference<XReportDefinition>& _xReportDefinition,sal_Int32 _nPos,bool _bExportAutoStyle = false);
     void                    exportStyleName(XPropertySet* _xProp,SvXMLAttributeList& _rAtt,const OUString& _sName);

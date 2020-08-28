@@ -308,14 +308,14 @@ void ORptExport::exportFunction(const uno::Reference< XFunction>& _xFunction)
     SvXMLElementExport aFunction(*this,XML_NAMESPACE_REPORT, XML_FUNCTION, true, true);
 }
 
-void ORptExport::exportMasterDetailFields(const Reference<XReportComponent>& _xReportComponet)
+void ORptExport::exportMasterDetailFields(const Reference<XReportComponent>& _xReportComponent)
 {
-    const uno::Sequence< OUString> aMasterFields = _xReportComponet->getMasterFields();
+    const uno::Sequence< OUString> aMasterFields = _xReportComponent->getMasterFields();
     if ( !aMasterFields.hasElements() )
         return;
 
     SvXMLElementExport aElement(*this,XML_NAMESPACE_REPORT, XML_MASTER_DETAIL_FIELDS, true, true);
-    const uno::Sequence< OUString> aDetailFields = _xReportComponet->getDetailFields();
+    const uno::Sequence< OUString> aDetailFields = _xReportComponent->getDetailFields();
 
     OSL_ENSURE(aDetailFields.getLength() == aMasterFields.getLength(),"not equal length for master and detail fields!");
 
