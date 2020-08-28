@@ -88,25 +88,21 @@ void XMLSymbolImageContext::startFastElement(
     }
 }
 
-SvXMLImportContextRef XMLSymbolImageContext::CreateChildContext(
-    sal_uInt16 nPrefix, const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLSymbolImageContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
-    SvXMLImportContext* pContext = nullptr;
-    if( xmloff::token::IsXMLToken( rLocalName,
-                                   xmloff::token::XML_BINARY_DATA ) )
+    if( (nElement & TOKEN_MASK) == xmloff::token::XML_BINARY_DATA )
     {
         if( msURL.isEmpty() && ! mxBase64Stream.is() )
         {
             mxBase64Stream = GetImport().GetStreamForGraphicObjectURLFromBase64();
             if( mxBase64Stream.is() )
-                pContext = new XMLBase64ImportContext( GetImport(), nPrefix,
-                                                       rLocalName, xAttrList,
-                                                       mxBase64Stream );
+                return new XMLBase64ImportContext( GetImport(), mxBase64Stream );
         }
     }
-
-    return pContext;
+    SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
+    return nullptr;
 }
 
 void XMLSymbolImageContext::endFastElement(sal_Int32 nElement)

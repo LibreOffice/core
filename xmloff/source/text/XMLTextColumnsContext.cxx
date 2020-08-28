@@ -104,66 +104,55 @@ class XMLTextColumnContext_Impl: public SvXMLImportContext
 
 public:
 
-    XMLTextColumnContext_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                               const OUString& rLName,
+    XMLTextColumnContext_Impl( SvXMLImport& rImport, sal_Int32 nElement,
                                const uno::Reference<
-                                       xml::sax::XAttributeList > & xAttrList,
-                               const SvXMLTokenMap& rTokenMap );
+                                       xml::sax::XFastAttributeList > & xAttrList );
 
     text::TextColumn& getTextColumn() { return aColumn; }
 };
 
 
 XMLTextColumnContext_Impl::XMLTextColumnContext_Impl(
-                               SvXMLImport& rImport, sal_uInt16 nPrfx,
-                               const OUString& rLName,
+                               SvXMLImport& rImport, sal_Int32 /*nElement*/,
                                const uno::Reference<
-                                       xml::sax::XAttributeList > & xAttrList,
-                               const SvXMLTokenMap& rTokenMap ) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+                                       xml::sax::XFastAttributeList > & xAttrList ) :
+    SvXMLImportContext( rImport )
 {
     aColumn.Width = 0;
     aColumn.LeftMargin = 0;
     aColumn.RightMargin = 0;
 
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                            &aLocalName );
-        const OUString& rValue = xAttrList->getValueByIndex( i );
-
+        const OUString sValue = aIter.toString();
         sal_Int32 nVal;
-        switch( rTokenMap.Get( nPrefix, aLocalName ) )
+        switch( aIter.getToken() )
         {
-        case XML_TOK_COLUMN_WIDTH:
+        case XML_ELEMENT(STYLE, XML_REL_WIDTH):
             {
-                sal_Int32 nPos = rValue.indexOf( '*' );
-                if( nPos != -1 && nPos+1 == rValue.getLength() )
+                sal_Int32 nPos = sValue.indexOf( '*' );
+                if( nPos != -1 && nPos+1 == sValue.getLength() )
                 {
                     if (::sax::Converter::convertNumber(
                                 nVal,
-                                std::u16string_view(rValue).substr(0, nPos),
+                                std::u16string_view(sValue).substr(0, nPos),
                                 0, USHRT_MAX))
                         aColumn.Width = nVal;
                 }
             }
             break;
-        case XML_TOK_COLUMN_MARGIN_LEFT:
+        case XML_ELEMENT(FO, XML_START_INDENT):
             if( GetImport().GetMM100UnitConverter().
-                                convertMeasureToCore( nVal, rValue ) )
+                                convertMeasureToCore( nVal, sValue ) )
                 aColumn.LeftMargin = nVal;
             break;
-        case XML_TOK_COLUMN_MARGIN_RIGHT:
-
+        case XML_ELEMENT(FO, XML_END_INDENT):
             if( GetImport().GetMM100UnitConverter().
-                                convertMeasureToCore( nVal, rValue ) )
+                                convertMeasureToCore( nVal, sValue ) )
                 aColumn.RightMargin = nVal;
             break;
         default:
+            SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
             break;
         }
     }
@@ -179,11 +168,9 @@ class XMLTextColumnSepContext_Impl: public SvXMLImportContext
 
 public:
 
-    XMLTextColumnSepContext_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                               const OUString& rLName,
+    XMLTextColumnSepContext_Impl( SvXMLImport& rImport, sal_Int32 nElement,
                                const uno::Reference<
-                                       xml::sax::XAttributeList > & xAttrList,
-                               const SvXMLTokenMap& rTokenMap );
+                                       xml::sax::XFastAttributeList > & xAttrList );
 
     sal_Int32 GetWidth() const { return nWidth; }
     sal_Int32 GetColor() const { return  nColor; }
@@ -194,52 +181,46 @@ public:
 
 
 XMLTextColumnSepContext_Impl::XMLTextColumnSepContext_Impl(
-                               SvXMLImport& rImport, sal_uInt16 nPrfx,
-                               const OUString& rLName,
+                               SvXMLImport& rImport, sal_Int32 /*nElement*/,
                                const uno::Reference<
-                                       xml::sax::XAttributeList > & xAttrList,
-                               const SvXMLTokenMap& rTokenMap ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+                                       xml::sax::XFastAttributeList > & xAttrList) :
+    SvXMLImportContext( rImport ),
     nWidth( 2 ),
     nColor( 0 ),
     nHeight( 100 ),
     nStyle( 1 ),
     eVertAlign( VerticalAlignment_TOP )
 {
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                            &aLocalName );
-        const OUString& rValue = xAttrList->getValueByIndex( i );
+        const OUString sValue = aIter.toString();
 
         sal_Int32 nVal;
-        switch( rTokenMap.Get( nPrefix, aLocalName ) )
+        switch( aIter.getToken() )
         {
-        case XML_TOK_COLUMN_SEP_WIDTH:
+        case XML_ELEMENT(STYLE,  XML_WIDTH):
             if( GetImport().GetMM100UnitConverter().
-                                convertMeasureToCore( nVal, rValue ) )
+                                convertMeasureToCore( nVal, sValue ) )
                 nWidth = nVal;
             break;
-        case XML_TOK_COLUMN_SEP_HEIGHT:
-            if (::sax::Converter::convertPercent( nVal, rValue ) &&
+        case XML_ELEMENT(STYLE, XML_HEIGHT):
+            if (::sax::Converter::convertPercent( nVal, sValue ) &&
                  nVal >=1 && nVal <= 100 )
                 nHeight = static_cast<sal_Int8>(nVal);
             break;
-        case XML_TOK_COLUMN_SEP_COLOR:
-            ::sax::Converter::convertColor( nColor, rValue );
+        case XML_ELEMENT(STYLE, XML_COLOR):
+            ::sax::Converter::convertColor( nColor, sValue );
             break;
-        case XML_TOK_COLUMN_SEP_ALIGN:
-            SvXMLUnitConverter::convertEnum( eVertAlign, rValue,
+        case XML_ELEMENT(STYLE, XML_VERTICAL_ALIGN):
+            SvXMLUnitConverter::convertEnum( eVertAlign, sValue,
                                              pXML_Sep_Align_Enum );
             break;
-        case XML_TOK_COLUMN_SEP_STYLE:
-            SvXMLUnitConverter::convertEnum( nStyle, rValue,
+        case XML_ELEMENT(STYLE, XML_STYLE):
+            SvXMLUnitConverter::convertEnum( nStyle, sValue,
                                              pXML_Sep_Style_Enum );
             break;
+        default:
+            SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
         }
     }
 }
@@ -271,10 +252,12 @@ XMLTextColumnsContext::XMLTextColumnsContext(
         switch(aIter.getToken())
         {
             case XML_ELEMENT(FO, XML_COLUMN_COUNT):
+            case XML_ELEMENT(FO_COMPAT, XML_COLUMN_COUNT):
                 if(::sax::Converter::convertNumber( nVal, sValue, 0, SHRT_MAX ))
                     nCount = static_cast<sal_Int16>(nVal);
                 break;
             case XML_ELEMENT(FO, XML_COLUMN_GAP):
+            case XML_ELEMENT(FO_COMPAT, XML_COLUMN_GAP):
             {
                 bAutomatic = GetImport().GetMM100UnitConverter().
                     convertMeasureToCore( nAutomaticDistance, sValue );
@@ -286,19 +269,14 @@ XMLTextColumnsContext::XMLTextColumnsContext(
     }
 }
 
-SvXMLImportContextRef XMLTextColumnsContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextColumnsContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    SvXMLImportContext *pContext = nullptr;
-
-    if( XML_NAMESPACE_STYLE == nPrefix &&
-        IsXMLToken( rLocalName, XML_COLUMN ) )
+    if( nElement == XML_ELEMENT(STYLE, XML_COLUMN) )
     {
         const rtl::Reference<XMLTextColumnContext_Impl> xColumn{
-            new XMLTextColumnContext_Impl( GetImport(), nPrefix, rLocalName,
-                                           xAttrList, *pColumnAttrTokenMap )};
+            new XMLTextColumnContext_Impl( GetImport(), nElement, xAttrList )};
 
         // add new tabstop to array of tabstops
         if( !pColumns )
@@ -306,19 +284,17 @@ SvXMLImportContextRef XMLTextColumnsContext::CreateChildContext(
 
         pColumns->push_back( xColumn );
 
-        pContext = xColumn.get();
+        return xColumn.get();
     }
-    else if( XML_NAMESPACE_STYLE == nPrefix &&
-             IsXMLToken( rLocalName, XML_COLUMN_SEP ) )
+    else if( nElement == XML_ELEMENT(STYLE, XML_COLUMN_SEP) )
     {
         mxColumnSep.set(
-            new XMLTextColumnSepContext_Impl( GetImport(), nPrefix, rLocalName,
-                                           xAttrList, *pColumnSepAttrTokenMap ));
+            new XMLTextColumnSepContext_Impl( GetImport(), nElement, xAttrList ));
 
-        pContext = mxColumnSep.get();
+        return mxColumnSep.get();
     }
-
-    return pContext;
+    SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
+    return nullptr;
 }
 
 void XMLTextColumnsContext::endFastElement(sal_Int32 nElement )
