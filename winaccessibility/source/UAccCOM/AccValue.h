@@ -84,7 +84,7 @@ public:
     STDMETHOD(get_maximumValue)(VARIANT *maximumValue) override;
 
     // Returns the minimal value that can be represented by this object.
-    STDMETHOD(get_minimumValue)(VARIANT *mininumValue) override;
+    STDMETHOD(get_minimumValue)(VARIANT *minimumValue) override;
 
     // Override of IUNOXWrapper.
     STDMETHOD(put_XInterface)(hyper pXInterface) override;
