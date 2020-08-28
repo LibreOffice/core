@@ -251,7 +251,7 @@ public:
     bool m_bImportSkipped;    // only true if !bNewDoc && existing style
     bool m_bHasStyNumRule;    // true-> named NumRule in style
     bool m_bHasBrokenWW6List; // true-> WW8+ style has a WW7- list
-    bool m_bListReleventIndentSet; //true if this style's indent has
+    bool m_bListRelevantIndentSet; //true if this style's indent has
                                  //been explicitly set, it's set to the value
                                  //of pFormat->GetItemState(RES_LR_SPACE, false)
                                  //if it was possible to get the ItemState
@@ -283,7 +283,7 @@ public:
         m_bImportSkipped(false),
         m_bHasStyNumRule(false),
         m_bHasBrokenWW6List(false),
-        m_bListReleventIndentSet(false),
+        m_bListRelevantIndentSet(false),
         m_bParaAutoBefore(false),
         m_bParaAutoAfter(false),
         m_nRelativeJustify(-1)
