@@ -62,7 +62,7 @@ import "defines.idl";
     interface IEnumVariant : IEnumVARIANT
     {
         [id(1), helpstring("method ClearEnumeration")] HRESULT ClearEnumeration();
-        [id(2), helpstring("method PutSelection")] HRESULT PutSelection(hyper pXSeletion);
+        [id(2), helpstring("method PutSelection")] HRESULT PutSelection(hyper pXSelection);
     };
     [
         object,
