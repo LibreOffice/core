@@ -39,15 +39,6 @@ protected:
 public:
 
     SvXMLPropertySetContext(
-            SvXMLImport& rImport, sal_uInt16 nPrfx,
-            const OUString& rLName,
-            const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
-            sal_uInt32 nFamily,
-            ::std::vector< XMLPropertyState > &rProps,
-            const rtl::Reference < SvXMLImportPropertyMapper > &rMap,
-              sal_Int32 nStartIdx = -1, sal_Int32 nEndIdx = -1 );
-
-    SvXMLPropertySetContext(
             SvXMLImport& rImport, sal_Int32 nElement,
             const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
             sal_uInt32 nFamily,
@@ -60,18 +51,18 @@ public:
     virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                                     const OUString& rLocalName,
-                                     const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     // This method is called from this instance implementation of
     // CreateChildContext if the element matches an entry in the
     // SvXMLImportItemMapper with the mid flag MID_FLAG_ELEMENT_ITEM_IMPORT
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                                   const OUString& rLocalName,
-                                   const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
-                                   ::std::vector< XMLPropertyState > &rProperties,
-                                   const XMLPropertyState& rProp );
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        ::std::vector< XMLPropertyState > &rProperties,
+        const XMLPropertyState& rProp );
 
 };
 

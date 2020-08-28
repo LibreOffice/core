@@ -273,11 +273,11 @@ class XMLTableCellPropsContext : public SvXMLPropertySetContext
              ::std::vector< XMLPropertyState > &rProps,
              const rtl::Reference < SvXMLImportPropertyMapper > &rMap);
 
-        virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-            const OUString& rLocalName,
-            const uno::Reference< xml::sax::XAttributeList >& xAttrList,
-           ::std::vector< XMLPropertyState > &rProperties,
-           const XMLPropertyState& rProp ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        ::std::vector< XMLPropertyState > &rProperties,
+        const XMLPropertyState& rProp ) override;
 };
 
 }
@@ -293,33 +293,25 @@ XMLTableCellPropsContext::XMLTableCellPropsContext(
 {
 }
 
-SvXMLImportContextRef XMLTableCellPropsContext::CreateChildContext( sal_uInt16 nPrefix,
-            const OUString& rLocalName,
-            const uno::Reference< xml::sax::XAttributeList >& xAttrList,
-           ::std::vector< XMLPropertyState > &rProperties,
-           const XMLPropertyState& rProp )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTableCellPropsContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+    ::std::vector< XMLPropertyState > &rProperties,
+    const XMLPropertyState& rProp )
 {
     // no need for a custom context or indeed a SvXMLTokenMap to grab just the
     // single attribute ( href ) that we are interested in.
     // still though, we will check namespaces etc.
-    if ((XML_NAMESPACE_STYLE == nPrefix || XML_NAMESPACE_LO_EXT == nPrefix)
-        && IsXMLToken(rLocalName, XML_HYPERLINK))
+    if (nElement == XML_ELEMENT(STYLE, XML_HYPERLINK) ||
+        nElement == XML_ELEMENT(LO_EXT, XML_HYPERLINK) )
     {
         OUString sURL;
-        for ( int i=0; i<xAttrList->getLength(); ++i )
+        for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
         {
-            OUString aLocalName;
-            OUString sName = xAttrList->getNameByIndex(i);
-            sal_uInt16 nPrfx = GetImport().GetNamespaceMap().GetKeyByAttrName( sName,
-                                                            &aLocalName );
-            if ( nPrfx == XML_NAMESPACE_XLINK )
-            {
-                if ( IsXMLToken( aLocalName, XML_HREF ) )
-                {
-                    sURL = xAttrList->getValueByIndex(i);
-                    break;
-                }
-            }
+            if ( aIter.getToken() == XML_ELEMENT(XLINK, XML_HREF) )
+                sURL = aIter.toString();
+            else
+                SAL_WARN("sc", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
         }
         if ( !sURL.isEmpty() )
         {
@@ -328,7 +320,7 @@ SvXMLImportContextRef XMLTableCellPropsContext::CreateChildContext( sal_uInt16 n
             rProperties.push_back( aProp );
         }
     }
-    return SvXMLPropertySetContext::CreateChildContext( nPrefix, rLocalName, xAttrList, rProperties, rProp );
+    return SvXMLPropertySetContext::createFastChildContext( nElement, xAttrList, rProperties, rProp );
 }
 
 namespace {

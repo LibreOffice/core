@@ -53,12 +53,12 @@ public:
         ::std::vector< XMLPropertyState > &rProps,
         const rtl::Reference < SvXMLImportPropertyMapper > &rMap );
 
-    using SvXMLPropertySetContext::CreateChildContext;
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< XAttributeList >& xAttrList,
+    using SvXMLPropertySetContext::createFastChildContext;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
         ::std::vector< XMLPropertyState > &rProperties,
-        const XMLPropertyState& rProp) override;
+        const XMLPropertyState& rProp ) override;
 };
 
 }
@@ -74,12 +74,11 @@ XMLTextShapePropertySetContext_Impl::XMLTextShapePropertySetContext_Impl(
 {
 }
 
-SvXMLImportContextRef XMLTextShapePropertySetContext_Impl::CreateChildContext(
-                   sal_uInt16 nPrefix,
-                   const OUString& rLocalName,
-                   const Reference< XAttributeList > & xAttrList,
-                   ::std::vector< XMLPropertyState > &rProperties,
-                   const XMLPropertyState& rProp )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextShapePropertySetContext_Impl::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+    ::std::vector< XMLPropertyState > &rProperties,
+    const XMLPropertyState& rProp )
 {
     SvXMLImportContextRef xContext;
 
@@ -87,8 +86,8 @@ SvXMLImportContextRef XMLTextShapePropertySetContext_Impl::CreateChildContext(
                     ->GetEntryContextId( rProp.mnIndex ) )
     {
     case CTF_TEXTCOLUMNS:
-        xContext = new XMLTextColumnsContext( GetImport(), nPrefix,
-                                                   rLocalName, xAttrList, rProp,
+        return new XMLTextColumnsContext( GetImport(), nElement,
+                                                   xAttrList, rProp,
                                                    rProperties );
         break;
 
@@ -102,9 +101,9 @@ SvXMLImportContextRef XMLTextShapePropertySetContext_Impl::CreateChildContext(
                     CTF_BACKGROUND_FILTER  == mxMapper->getPropertySetMapper()
                         ->GetEntryContextId( rProp.mnIndex-1 ),
                     "invalid property map!");
-        xContext =
-            new XMLBackgroundImageContext( GetImport(), nPrefix,
-                                           rLocalName, xAttrList,
+        return
+            new XMLBackgroundImageContext( GetImport(), nElement,
+                                           xAttrList,
                                            rProp,
                                            rProp.mnIndex-2,
                                            rProp.mnIndex-1,
@@ -114,11 +113,8 @@ SvXMLImportContextRef XMLTextShapePropertySetContext_Impl::CreateChildContext(
         break;
     }
 
-    if (!xContext)
-        xContext = XMLShapePropertySetContext::CreateChildContext(
-                        nPrefix, rLocalName, xAttrList, rProperties, rProp );
-
-    return xContext;
+    return XMLShapePropertySetContext::createFastChildContext(
+                        nElement, xAttrList, rProperties, rProp );
 }
 
 void XMLTextShapeStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
