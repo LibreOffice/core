@@ -190,7 +190,7 @@ class ul_Compiler:
         self.variables.append(line)
 
     def write_line_with_one_parameters(
-        self, Action_holder, Action, Paramerter_name, parameter_value
+        self, Action_holder, Action, Parameter_name, parameter_value
     ):
         line = (
             double_tab
@@ -198,7 +198,7 @@ class ul_Compiler:
             + '.executeAction("'
             + Action
             + '", mkPropertyValues({"'
-            + Paramerter_name
+            + Parameter_name
             + '": "'
             + str(parameter_value)
             + '"}))\n'
@@ -209,9 +209,9 @@ class ul_Compiler:
         self,
         Action_holder,
         Action,
-        Paramerter_name_1,
+        Parameter_name_1,
         parameter_value_1,
-        Paramerter_name_2,
+        Parameter_name_2,
         parameter_value_2,
     ):
 
@@ -221,11 +221,11 @@ class ul_Compiler:
             + '.executeAction("'
             + Action
             + '", mkPropertyValues({"'
-            + Paramerter_name_1
+            + Parameter_name_1
             + '": "'
             + str(parameter_value_1)
             + '", "'
-            + Paramerter_name_2
+            + Parameter_name_2
             + '": "'
             + str(parameter_value_2)
             + '"}))\n'
