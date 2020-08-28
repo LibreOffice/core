@@ -69,45 +69,48 @@ SdXMLDataStyleNumber const aSdXMLDataStyleNumbers[] =
 };
 
 // date
-
-#define DATA_STYLE_NUMBER_DAY               1   // <number:day/>
-#define DATA_STYLE_NUMBER_DAY_LONG          2   // <number:day number:style="long"/>
-#define DATA_STYLE_NUMBER_MONTH_LONG        3   // <number:month number:style="long"/>
-#define DATA_STYLE_NUMBER_MONTH_TEXT        4   // <number:month number:textual="true"/>
-#define DATA_STYLE_NUMBER_MONTH_LONG_TEXT   5   // <number:month number:style="long" number:textual="true"/>
-#define DATA_STYLE_NUMBER_YEAR              6   // <number:year/>
-#define DATA_STYLE_NUMBER_YEAR_LONG         7   // <number:year number:style="long"/>
-#define DATA_STYLE_NUMBER_DAYOFWEEK         8   // <number:day-of-week/>
-#define DATA_STYLE_NUMBER_DAYOFWEEK_LONG    9   // <number:day-of-week number:style="long"/>
-#define DATA_STYLE_NUMBER_TEXT_POINT        10  // <number:text>.</number:text>
-#define DATA_STYLE_NUMBER_TEXT_SPACE        11  // <number:text> </number:text>
-#define DATA_STYLE_NUMBER_TEXT_COMMASPACE   12  // <number:text>, </number:text>
-#define DATA_STYLE_NUMBER_TEXT_POINTSPACE   13  // <number:text>. </number:text>
-#define DATA_STYLE_NUMBER_HOURS             14  // <number:hours/>
-#define DATA_STYLE_NUMBER_MINUTES           15  // <number:minutes/>
-#define DATA_STYLE_NUMBER_TEXT_COLON        16  // <number:text>:</number:text>
-#define DATA_STYLE_NUMBER_AMPM              17  // <number:am-pm/>
-#define DATA_STYLE_NUMBER_SECONDS           18  // <number:seconds/>
-#define DATA_STYLE_NUMBER_SECONDS_02        19  // <number:seconds number:/>
+enum class DataStyleNumber : sal_uInt8
+{
+    NONE              = 0,
+    Day               = 1,   // <number:day/>
+    DayLong           = 2,   // <number:day number:style="long"/>
+    MonthLong         = 3,   // <number:month number:style="long"/>
+    MonthText         = 4,   // <number:month number:textual="true"/>
+    MonthLongText     = 5,   // <number:month number:style="long" number:textual="true"/>
+    Year              = 6,   // <number:year/>
+    YearLong          = 7,   // <number:year number:style="long"/>
+    DayOfWeek         = 8,   // <number:day-of-week/>
+    DayOfWeekLong     = 9,   // <number:day-of-week number:style="long"/>
+    TextPoint         = 10,  // <number:text>.</number:text>
+    TextSpace         = 11,  // <number:text> </number:text>
+    TextCommaSpace    = 12,  // <number:text>, </number:text>
+    TextPointSpace    = 13,  // <number:text>. </number:text>
+    Hours             = 14,  // <number:hours/>
+    Minutes           = 15,  // <number:minutes/>
+    TextColon         = 16,  // <number:text>:</number:text>
+    AmPm              = 17,  // <number:am-pm/>
+    Seconds           = 18,  // <number:seconds/>
+    Seconds_02        = 19,  // <number:seconds number:/>
+};
 
 struct SdXMLFixedDataStyle
 {
     const char* mpName;
     bool    mbAutomatic;
     bool    mbDateStyle;
-    sal_uInt8   mpFormat[8];
+    DataStyleNumber mpFormat[8];
 };
 
 const SdXMLFixedDataStyle aSdXML_Standard_Short =
 {
     "D1", true, true,
     {
-        DATA_STYLE_NUMBER_DAY_LONG,
-        DATA_STYLE_NUMBER_TEXT_POINT,
-        DATA_STYLE_NUMBER_MONTH_LONG,
-        DATA_STYLE_NUMBER_TEXT_POINT,
-        DATA_STYLE_NUMBER_YEAR_LONG,
-        0, 0, 0
+        DataStyleNumber::DayLong,
+        DataStyleNumber::TextPoint,
+        DataStyleNumber::MonthLong,
+        DataStyleNumber::TextPoint,
+        DataStyleNumber::YearLong,
+        DataStyleNumber::NONE, DataStyleNumber::NONE, DataStyleNumber::NONE
     }
 };
 
@@ -115,14 +118,14 @@ const SdXMLFixedDataStyle aSdXML_Standard_Long =
 {
     "D2", true, true,
     {
-        DATA_STYLE_NUMBER_DAYOFWEEK_LONG,
-        DATA_STYLE_NUMBER_TEXT_COMMASPACE,
-        DATA_STYLE_NUMBER_DAY,
-        DATA_STYLE_NUMBER_TEXT_POINTSPACE,
-        DATA_STYLE_NUMBER_MONTH_LONG_TEXT,
-        DATA_STYLE_NUMBER_TEXT_SPACE,
-        DATA_STYLE_NUMBER_YEAR_LONG,
-        0
+        DataStyleNumber::DayOfWeekLong,
+        DataStyleNumber::TextCommaSpace,
+        DataStyleNumber::Day,
+        DataStyleNumber::TextPointSpace,
+        DataStyleNumber::MonthLongText,
+        DataStyleNumber::TextSpace,
+        DataStyleNumber::YearLong,
+        DataStyleNumber::NONE
     }
 };
 
@@ -130,12 +133,12 @@ const SdXMLFixedDataStyle aSdXML_DateStyle_1 =
 {
     "D3", false, true,
     {
-        DATA_STYLE_NUMBER_DAY_LONG,
-        DATA_STYLE_NUMBER_TEXT_POINT,
-        DATA_STYLE_NUMBER_MONTH_LONG,
-        DATA_STYLE_NUMBER_TEXT_POINT,
-        DATA_STYLE_NUMBER_YEAR,
-        0, 0, 0
+        DataStyleNumber::DayLong,
+        DataStyleNumber::TextPoint,
+        DataStyleNumber::MonthLong,
+        DataStyleNumber::TextPoint,
+        DataStyleNumber::Year,
+        DataStyleNumber::NONE, DataStyleNumber::NONE, DataStyleNumber::NONE
     }
 };
 
@@ -143,12 +146,12 @@ const SdXMLFixedDataStyle aSdXML_DateStyle_2 =
 {
     "D4", false, true,
     {
-        DATA_STYLE_NUMBER_DAY_LONG,
-        DATA_STYLE_NUMBER_TEXT_POINT,
-        DATA_STYLE_NUMBER_MONTH_LONG,
-        DATA_STYLE_NUMBER_TEXT_POINT,
-        DATA_STYLE_NUMBER_YEAR_LONG,
-        0, 0, 0
+        DataStyleNumber::DayLong,
+        DataStyleNumber::TextPoint,
+        DataStyleNumber::MonthLong,
+        DataStyleNumber::TextPoint,
+        DataStyleNumber::YearLong,
+        DataStyleNumber::NONE, DataStyleNumber::NONE, DataStyleNumber::NONE
     }
 };
 
@@ -156,12 +159,12 @@ const SdXMLFixedDataStyle aSdXML_DateStyle_3 =
 {
     "D5", false, true,
     {
-        DATA_STYLE_NUMBER_DAY,
-        DATA_STYLE_NUMBER_TEXT_POINTSPACE,
-        DATA_STYLE_NUMBER_MONTH_TEXT,
-        DATA_STYLE_NUMBER_TEXT_SPACE,
-        DATA_STYLE_NUMBER_YEAR_LONG,
-        0, 0, 0
+        DataStyleNumber::Day,
+        DataStyleNumber::TextPointSpace,
+        DataStyleNumber::MonthText,
+        DataStyleNumber::TextSpace,
+        DataStyleNumber::YearLong,
+        DataStyleNumber::NONE, DataStyleNumber::NONE, DataStyleNumber::NONE
     }
 };
 
@@ -169,12 +172,12 @@ const SdXMLFixedDataStyle aSdXML_DateStyle_4 =
 {
     "D6", false, true,
     {
-        DATA_STYLE_NUMBER_DAY,
-        DATA_STYLE_NUMBER_TEXT_POINTSPACE,
-        DATA_STYLE_NUMBER_MONTH_LONG_TEXT,
-        DATA_STYLE_NUMBER_TEXT_SPACE,
-        DATA_STYLE_NUMBER_YEAR_LONG,
-        0, 0, 0
+        DataStyleNumber::Day,
+        DataStyleNumber::TextPointSpace,
+        DataStyleNumber::MonthLongText,
+        DataStyleNumber::TextSpace,
+        DataStyleNumber::YearLong,
+        DataStyleNumber::NONE, DataStyleNumber::NONE, DataStyleNumber::NONE
     }
 };
 
@@ -182,14 +185,14 @@ const SdXMLFixedDataStyle aSdXML_DateStyle_5 =
 {
     "D7", false, true,
     {
-        DATA_STYLE_NUMBER_DAYOFWEEK,
-        DATA_STYLE_NUMBER_TEXT_COMMASPACE,
-        DATA_STYLE_NUMBER_DAY,
-        DATA_STYLE_NUMBER_TEXT_POINTSPACE,
-        DATA_STYLE_NUMBER_MONTH_LONG_TEXT,
-        DATA_STYLE_NUMBER_TEXT_SPACE,
-        DATA_STYLE_NUMBER_YEAR_LONG,
-        0
+        DataStyleNumber::DayOfWeek,
+        DataStyleNumber::TextCommaSpace,
+        DataStyleNumber::Day,
+        DataStyleNumber::TextPointSpace,
+        DataStyleNumber::MonthLongText,
+        DataStyleNumber::TextSpace,
+        DataStyleNumber::YearLong,
+        DataStyleNumber::NONE
     }
 };
 
@@ -197,98 +200,98 @@ const SdXMLFixedDataStyle aSdXML_DateStyle_6 =
 {
     "D8", false, true,
     {
-        DATA_STYLE_NUMBER_DAYOFWEEK_LONG,
-        DATA_STYLE_NUMBER_TEXT_COMMASPACE,
-        DATA_STYLE_NUMBER_DAY,
-        DATA_STYLE_NUMBER_TEXT_POINTSPACE,
-        DATA_STYLE_NUMBER_MONTH_LONG_TEXT,
-        DATA_STYLE_NUMBER_TEXT_SPACE,
-        DATA_STYLE_NUMBER_YEAR_LONG,
-        0
+        DataStyleNumber::DayOfWeekLong,
+        DataStyleNumber::TextCommaSpace,
+        DataStyleNumber::Day,
+        DataStyleNumber::TextPointSpace,
+        DataStyleNumber::MonthLongText,
+        DataStyleNumber::TextSpace,
+        DataStyleNumber::YearLong,
+        DataStyleNumber::NONE
     }
 };
 
 const SdXMLFixedDataStyle aSdXML_TimeStyle_1 =
 {   "T1", true, false,
     {
-        DATA_STYLE_NUMBER_HOURS,
-        DATA_STYLE_NUMBER_TEXT_COLON,
-        DATA_STYLE_NUMBER_MINUTES,
-        DATA_STYLE_NUMBER_TEXT_COLON,
-        DATA_STYLE_NUMBER_SECONDS,
-        DATA_STYLE_NUMBER_AMPM,
-        0, 0,
+        DataStyleNumber::Hours,
+        DataStyleNumber::TextColon,
+        DataStyleNumber::Minutes,
+        DataStyleNumber::TextColon,
+        DataStyleNumber::Seconds,
+        DataStyleNumber::AmPm,
+        DataStyleNumber::NONE, DataStyleNumber::NONE
     }
 };
 
 const SdXMLFixedDataStyle aSdXML_TimeStyle_2 =
 {   "T2", false, false,
     {
-        DATA_STYLE_NUMBER_HOURS,
-        DATA_STYLE_NUMBER_TEXT_COLON,
-        DATA_STYLE_NUMBER_MINUTES,
-        0, 0, 0, 0, 0
+        DataStyleNumber::Hours,
+        DataStyleNumber::TextColon,
+        DataStyleNumber::Minutes,
+        DataStyleNumber::NONE, DataStyleNumber::NONE, DataStyleNumber::NONE, DataStyleNumber::NONE, DataStyleNumber::NONE
     }
 };
 
 const SdXMLFixedDataStyle aSdXML_TimeStyle_3 =
 {   "T3", false, false,
     {
-        DATA_STYLE_NUMBER_HOURS,
-        DATA_STYLE_NUMBER_TEXT_COLON,
-        DATA_STYLE_NUMBER_MINUTES,
-        DATA_STYLE_NUMBER_TEXT_COLON,
-        DATA_STYLE_NUMBER_SECONDS,
-        0, 0, 0
+        DataStyleNumber::Hours,
+        DataStyleNumber::TextColon,
+        DataStyleNumber::Minutes,
+        DataStyleNumber::TextColon,
+        DataStyleNumber::Seconds,
+        DataStyleNumber::NONE, DataStyleNumber::NONE, DataStyleNumber::NONE
     }
 };
 
 const SdXMLFixedDataStyle aSdXML_TimeStyle_4 =
 {   "T4", false, false,
     {
-        DATA_STYLE_NUMBER_HOURS,
-        DATA_STYLE_NUMBER_TEXT_COLON,
-        DATA_STYLE_NUMBER_MINUTES,
-        DATA_STYLE_NUMBER_TEXT_COLON,
-        DATA_STYLE_NUMBER_SECONDS_02,
-        0, 0, 0
+        DataStyleNumber::Hours,
+        DataStyleNumber::TextColon,
+        DataStyleNumber::Minutes,
+        DataStyleNumber::TextColon,
+        DataStyleNumber::Seconds_02,
+        DataStyleNumber::NONE, DataStyleNumber::NONE, DataStyleNumber::NONE
     }
 };
 
 const SdXMLFixedDataStyle aSdXML_TimeStyle_5 =
 {   "T5", false, false,
     {
-        DATA_STYLE_NUMBER_HOURS,
-        DATA_STYLE_NUMBER_TEXT_COLON,
-        DATA_STYLE_NUMBER_MINUTES,
-        DATA_STYLE_NUMBER_AMPM,
-        0, 0, 0, 0
+        DataStyleNumber::Hours,
+        DataStyleNumber::TextColon,
+        DataStyleNumber::Minutes,
+        DataStyleNumber::AmPm,
+        DataStyleNumber::NONE, DataStyleNumber::NONE, DataStyleNumber::NONE, DataStyleNumber::NONE
     }
 };
 
 const SdXMLFixedDataStyle aSdXML_TimeStyle_6 =
 {   "T6", false, false,
     {
-        DATA_STYLE_NUMBER_HOURS,
-        DATA_STYLE_NUMBER_TEXT_COLON,
-        DATA_STYLE_NUMBER_MINUTES,
-        DATA_STYLE_NUMBER_TEXT_COLON,
-        DATA_STYLE_NUMBER_SECONDS,
-        DATA_STYLE_NUMBER_AMPM,
-        0, 0
+        DataStyleNumber::Hours,
+        DataStyleNumber::TextColon,
+        DataStyleNumber::Minutes,
+        DataStyleNumber::TextColon,
+        DataStyleNumber::Seconds,
+        DataStyleNumber::AmPm,
+        DataStyleNumber::NONE, DataStyleNumber::NONE
     }
 };
 
 const SdXMLFixedDataStyle aSdXML_TimeStyle_7 =
 {   "T7", false, false,
     {
-        DATA_STYLE_NUMBER_HOURS,
-        DATA_STYLE_NUMBER_TEXT_COLON,
-        DATA_STYLE_NUMBER_MINUTES,
-        DATA_STYLE_NUMBER_TEXT_COLON,
-        DATA_STYLE_NUMBER_SECONDS_02,
-        DATA_STYLE_NUMBER_AMPM,
-        0, 0
+        DataStyleNumber::Hours,
+        DataStyleNumber::TextColon,
+        DataStyleNumber::Minutes,
+        DataStyleNumber::TextColon,
+        DataStyleNumber::Seconds_02,
+        DataStyleNumber::AmPm,
+        DataStyleNumber::NONE, DataStyleNumber::NONE
     }
 };
 
@@ -361,17 +364,17 @@ static void SdXMLExportStyle( SdXMLExport& rExport, const SdXMLFixedDataStyle* p
     do
     {
 
-        const sal_uInt8* pElements = &pStyle->mpFormat[0];
+        const DataStyleNumber* pElements = &pStyle->mpFormat[0];
 
-        while( *pElements )
+        while( *pElements != DataStyleNumber::NONE )
         {
-            SdXMLDataStyleNumber const & rElement = aSdXMLDataStyleNumbers[ (*pElements++) - 1 ];
+            SdXMLDataStyleNumber const & rElement = aSdXMLDataStyleNumbers[ static_cast<int>(*pElements++) - 1 ];
             SdXMLExportDataStyleNumber( rExport, rElement );
         }
 
         if( pStyle2 )
         {
-            SdXMLDataStyleNumber const & rElement = aSdXMLDataStyleNumbers[ DATA_STYLE_NUMBER_TEXT_SPACE - 1 ];
+            SdXMLDataStyleNumber const & rElement = aSdXMLDataStyleNumbers[ static_cast<int>(DataStyleNumber::TextSpace) - 1 ];
             SdXMLExportDataStyleNumber( rExport, rElement );
         }
 
@@ -614,7 +617,7 @@ void SdXMLNumberFormatImportContext::add( OUString const & rNumberStyle, bool bL
             ( ( (pStyleMember->mpText == nullptr) && (rText.isEmpty()) ) ||
               ( pStyleMember->mpText && (rText.equalsAscii( pStyleMember->mpText ) ) ) ) )
         {
-            mnElements[mnIndex++] = nIndex + 1;
+            mnElements[mnIndex++] = static_cast<DataStyleNumber>(nIndex + 1);
             return;
         }
     }
@@ -641,7 +644,7 @@ void SdXMLNumberFormatImportContext::endFastElement(sal_Int32 )
 
     for( ; mnIndex < 16; mnIndex++ )
     {
-        mnElements[mnIndex] = 0;
+        mnElements[mnIndex] = DataStyleNumber::NONE;
     }
 
     if( mbTimeStyle )
@@ -668,7 +671,7 @@ void SdXMLNumberFormatImportContext::endFastElement(sal_Int32 )
                 mnKey = nFormat + 2;
                 break;
             }
-            else if( mnElements[nIndex] == DATA_STYLE_NUMBER_TEXT_SPACE )
+            else if( mnElements[nIndex] == DataStyleNumber::TextSpace )
             {
                 // if it's a valid date ending with a space, see if a time style follows
                 for( sal_Int16 nTimeFormat = 0; nTimeFormat < SdXMLTimeFormatCount; nTimeFormat++ )

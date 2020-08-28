@@ -26,6 +26,7 @@
 
 struct SdXMLFixedDataStyle;
 class SdXMLImport;
+enum class DataStyleNumber : sal_uInt8;
 
 class SdXMLNumberFormatImportContext final : public SvXMLNumFormatContext
 {
@@ -33,7 +34,7 @@ class SdXMLNumberFormatImportContext final : public SvXMLNumFormatContext
 
     bool    mbTimeStyle;
     bool    mbAutomatic;
-    sal_uInt8   mnElements[16];
+    DataStyleNumber mnElements[16];
     sal_Int16   mnIndex;
 
     sal_Int32   mnKey;
