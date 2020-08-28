@@ -39,11 +39,11 @@
 #include <editeng/scriptspaceitem.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/cursor.hxx>
-#include <vcl/edit.hxx>
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weldutils.hxx>
 #include <unotools/charclass.hxx>
 
 #include <inputwin.hxx>
@@ -1585,9 +1585,9 @@ ScTextWnd::ScTextWnd(ScTextWndGroup* pParent, ScTabViewShell* pViewSh)
     aTextFont.SetWeight(WEIGHT_NORMAL);
 
     Size aSize(1, GetPixelHeightForLines(1));
-    Size aMinEditSize(Edit::GetMinimumEditSize());
-    if(aMinEditSize.Height() > aSize.Height())
-        aSize.setHeight(aMinEditSize.Height());
+    auto nMinEditHeight = weld::GetMinimumEditHeight();
+    if (nMinEditHeight > aSize.Height())
+        aSize.setHeight(nMinEditHeight);
 
     SetSizePixel(aSize);
     SetBackground(aBgColor);
