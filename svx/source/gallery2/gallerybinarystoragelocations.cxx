@@ -64,12 +64,12 @@ void GalleryBinaryStorageLocations::SetStrExtension(INetURLObject& aURL)
     maStrURL = ImplGetURLIgnoreCase(aURL);
 }
 
-void GalleryBinaryStorageLocations::SetStorageLocations(INetURLObject& aURL)
+void GalleryBinaryStorageLocations::SetStorageLocations(INetURLObject& rURL)
 {
-    SetThmExtension(aURL);
-    SetSdgExtension(aURL);
-    SetSdvExtension(aURL);
-    SetStrExtension(aURL);
+    SetThmExtension(rURL);
+    SetSdgExtension(rURL);
+    SetSdvExtension(rURL);
+    SetStrExtension(rURL);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
