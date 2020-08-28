@@ -36,6 +36,11 @@ void SwInsTableDlg::GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rC
     rRow = m_xRowNF->get_value();
     rCol = m_xColNF->get_value();
 
+    if ((sal_Int64)rRow > 255 || (sal_Int64)rCol > 63)
+    {
+        printf("Large tables might adverse performance and compatibility");
+    }
+
     if (m_xHeaderCB->get_active())
         nInsMode |= SwInsertTableFlags::Headline;
     if (m_xRepeatHeaderCB->get_sensitive() && m_xRepeatHeaderCB->get_active())
