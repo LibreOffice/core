@@ -2884,7 +2884,7 @@ bool Content::exchangeIdentity(
         return false;
     }
 
-    // Exchange own identitity.
+    // Exchange own identity.
 
     // Fail, if a content with given id already exists.
 //  if ( !hasData( xNewId ) )

@@ -529,7 +529,7 @@ public:
     virtual Type SAL_CALL getElementType(  ) override;
     virtual sal_Bool SAL_CALL hasElements(  ) override;
 
-    // XSerivceInfo
+    // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
@@ -652,7 +652,7 @@ sal_Bool SAL_CALL SvUnoImageMap::hasElements(  )
     return (!maObjectList.empty());
 }
 
-// XSerivceInfo
+// XServiceInfo
 OUString SAL_CALL SvUnoImageMap::getImplementationName(  )
 {
     return "org.openoffice.comp.svt.SvUnoImageMap";

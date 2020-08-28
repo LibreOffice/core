@@ -329,8 +329,8 @@ protected:
     bool                        m_bNativeLook;              // should the control use the native platform look?
     bool                        m_bGenerateVbEvents;        // should the control generate fake vba events
     //added for exporting OCX control
-    sal_Int16                       m_nControlTypeinMSO;        //keep the MS office control type for exporting to MS binarary file
-    sal_uInt16                      m_nObjIDinMSO;              //keep the OCX control obj id for exporting to MS binarary file
+    sal_Int16                       m_nControlTypeinMSO;        //keep the MS office control type for exporting to MS binary file
+    sal_uInt16                      m_nObjIDinMSO;              //keep the OCX control obj id for exporting to MS binary file
 // </properties>
 
 

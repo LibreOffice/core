@@ -1616,7 +1616,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
 
     if( aEndIdx != aSttIdx )
     {
-        // move the nodes into the NodesArary
+        // move the nodes into the NodesArray
         const sal_uLong nSttDiff = aSttIdx.GetIndex() - pStt->nNode.GetIndex();
         SwNodeRange aRg( aSttIdx, aEndIdx );
         MoveNodes( aRg, rNodes, rPos.nNode );

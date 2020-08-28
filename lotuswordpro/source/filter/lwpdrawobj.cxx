@@ -55,7 +55,7 @@
  ************************************************************************/
 /**
  * @file
- * Implementation file of LwpDrawObjcts and associated class like LwpDrawGroup, LwpDrawRectange
+ * Implementation file of LwpDrawObjcts and associated class like LwpDrawGroup, LwpDrawRectangle
  *  and so on.
  */
 #include <osl/thread.h>

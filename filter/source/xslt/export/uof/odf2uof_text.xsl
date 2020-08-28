@@ -4377,7 +4377,7 @@
 
 
      MEASURE LIST:
-     * 1 milimeter (mm), the basic measure
+     * 1 millimeter (mm), the basic measure
 
      * 1 centimeter (cm) = 10 mm
 

@@ -606,7 +606,7 @@ bool Content::exchangeIdentity( const css::uno::Reference< css::ucb::XContentIde
 
     OUString aOldURL = m_xIdentifier->getContentIdentifier();
 
-    // Exchange own identitity.
+    // Exchange own identity.
     if ( exchange( xNewId ) )
     {
         // Process instantiated children...
