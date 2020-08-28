@@ -774,14 +774,12 @@ void SmXMLExport::ExportMath(const SmNode *pNode)
         AddAttribute(XML_NAMESPACE_MATH, XML_MATHVARIANT, XML_NORMAL);
         pMath.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MI, true, false));
     }
-    sal_Unicode nArse[2];
-    nArse[0] = pTemp->GetText()[0];
-    sal_Unicode cTmp = ConvertMathToMathML( nArse[0] );
+    sal_Unicode nArse = pTemp->GetText()[0];
+    sal_Unicode cTmp = ConvertMathToMathML( nArse );
     if (cTmp != 0)
-        nArse[0] = cTmp;
-    OSL_ENSURE(nArse[0] != 0xffff,"Non existent symbol");
-    nArse[1] = 0;
-    GetDocHandler()->characters(nArse);
+        nArse = cTmp;
+    OSL_ENSURE(nArse != 0xffff,"Non existent symbol");
+    GetDocHandler()->characters(OUString(nArse));
 }
 
 void SmXMLExport::ExportText(const SmNode *pNode)
