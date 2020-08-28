@@ -66,7 +66,7 @@ class LibreOfficeKitIOSTests: XCTestCase {
         //XCTAssertTrue(typ == LibreOfficeDocumentType.LOK_DOCTYPE_TEXT)
 
         doc.initializeForRendering()
-        let rects = doc.getPartRectanges()
+        let rects = doc.getPartRectangles()
         print(rects) // 284, 284, 12240, 15840; 284, 16408, 12240, 15840
         let tileMode = doc.getTileMode()
         print(tileMode) // 1
