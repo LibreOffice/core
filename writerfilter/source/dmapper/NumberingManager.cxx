@@ -525,7 +525,9 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
             auto aLvlProps = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aProps[nLevel]);
 
             // Get the char style
-            uno::Sequence< beans::PropertyValue > aAbsCharStyleProps = pAbsLevel->GetCharStyleProperties( );
+            auto aAbsCharStyleProps = pAbsLevel
+                                    ? pAbsLevel->GetCharStyleProperties()
+                                    : uno::Sequence<beans::PropertyValue>();
             if ( pLevel )
             {
                 uno::Sequence< beans::PropertyValue >& rAbsCharStyleProps = aAbsCharStyleProps;
@@ -548,7 +550,9 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
 
             // Get the prefix / suffix / Parent numbering
             // and add them to the level properties
-            OUString sText = pAbsLevel->GetBulletChar( );
+            OUString sText = pAbsLevel
+                           ? pAbsLevel->GetBulletChar()
+                           : OUString();
             // Inherit <w:lvlText> from the abstract level in case the override would be empty.
             if (pLevel && !pLevel->GetBulletChar().isEmpty())
                 sText = pLevel->GetBulletChar( );
@@ -568,7 +572,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
             m_xNumRules->replaceByIndex(nLevel, uno::makeAny(comphelper::containerToSequence(aLvlProps)));
 
             // Handle the outline level here
-            if ( pAbsLevel->isOutlineNumbering())
+            if (pAbsLevel && pAbsLevel->isOutlineNumbering())
             {
                 uno::Reference< text::XChapterNumberingSupplier > xOutlines (
                     xFactory, uno::UNO_QUERY_THROW );
@@ -581,14 +585,17 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                 xOutlineRules->replaceByIndex(nLevel, uno::makeAny(comphelper::containerToSequence(aLvlProps)));
             }
 
-            // first level without default outline paragraph style
-            const tools::SvRef< StyleSheetEntry >& aParaStyle = pAbsLevel->GetParaStyle();
-            if ( WW_OUTLINE_MAX + 1 == m_nDefaultParentLevels && ( !aParaStyle ||
-                aParaStyle->sConvertedStyleName.getLength() != RTL_CONSTASCII_LENGTH( "Heading 1" ) ||
-                !aParaStyle->sConvertedStyleName.startsWith("Heading ") ||
-                aParaStyle->sConvertedStyleName[ RTL_CONSTASCII_LENGTH( "Heading " ) ] - u'1' != nLevel ) )
+            if (pAbsLevel)
             {
-                m_nDefaultParentLevels = nLevel;
+                // first level without default outline paragraph style
+                const tools::SvRef< StyleSheetEntry >& aParaStyle = pAbsLevel->GetParaStyle();
+                if ( WW_OUTLINE_MAX + 1 == m_nDefaultParentLevels && ( !aParaStyle ||
+                    aParaStyle->sConvertedStyleName.getLength() != RTL_CONSTASCII_LENGTH( "Heading 1" ) ||
+                    !aParaStyle->sConvertedStyleName.startsWith("Heading ") ||
+                    aParaStyle->sConvertedStyleName[ RTL_CONSTASCII_LENGTH( "Heading " ) ] - u'1' != nLevel ) )
+                {
+                    m_nDefaultParentLevels = nLevel;
+                }
             }
 
             nLevel++;
