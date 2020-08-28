@@ -1281,7 +1281,7 @@ void SvxCharNamePage::PageCreated(const SfxAllItemSet& aSet)
 {
     const SvxFontListItem* pFontListItem = aSet.GetItem<SvxFontListItem>(SID_ATTR_CHAR_FONTLIST, false);
     const SfxUInt32Item* pFlagItem = aSet.GetItem<SfxUInt32Item>(SID_FLAG_TYPE, false);
-    const SfxUInt16Item* pDisalbeItem = aSet.GetItem<SfxUInt16Item>(SID_DISABLE_CTL, false);
+    const SfxUInt16Item* pDisableItem = aSet.GetItem<SfxUInt16Item>(SID_DISABLE_CTL, false);
     if (pFontListItem)
         SetFontList(*pFontListItem);
 
@@ -1294,8 +1294,8 @@ void SvxCharNamePage::PageCreated(const SfxAllItemSet& aSet)
             // the writer uses SID_ATTR_BRUSH as font background
             m_bPreviewBackgroundToCharacter = true;
     }
-    if (pDisalbeItem)
-        DisableControls(pDisalbeItem->GetValue());
+    if (pDisableItem)
+        DisableControls(pDisableItem->GetValue());
 }
 // class SvxCharEffectsPage ----------------------------------------------
 
