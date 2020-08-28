@@ -210,7 +210,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     INetURLObject aURL;
     xResultSet->beforeFirst();
 
-    bool bKnowCaseSensivity = false;
+    bool bKnowCaseSensitivity = false;
     bool bCaseSensitiveDir = true;
     bool bCheckEnabled = m_pConnection->isCheckEnabled();
 
@@ -226,9 +226,9 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
         aRow.reserve(6);
         bool bNewRow = false;
 
-        if ( !bKnowCaseSensivity )
+        if ( !bKnowCaseSensitivity )
         {
-            bKnowCaseSensivity = true;
+            bKnowCaseSensitivity = true;
             sal_Int16 nCase = isCaseSensitiveParentFolder( m_pConnection->getURL(), aURL.getName() );
             switch( nCase )
             {
@@ -236,12 +236,12 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
                 bCaseSensitiveDir = true;
                 break;
             case -1:
-                bKnowCaseSensivity = false;
+                bKnowCaseSensitivity = false;
                 [[fallthrough]];
             case 0:
                 bCaseSensitiveDir = false;
             }
-            if ( bKnowCaseSensivity )
+            if ( bKnowCaseSensitivity )
             {
                 m_pConnection->setCaseSensitiveExtension( bCaseSensitiveDir, OConnection::GrantAccess() );
                 if ( !bCaseSensitiveDir )
