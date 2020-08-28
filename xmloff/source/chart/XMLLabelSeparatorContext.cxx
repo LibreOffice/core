@@ -20,6 +20,7 @@
 #include "XMLLabelSeparatorContext.hxx"
 
 #include "SchXMLParagraphContext.hxx"
+#include <sal/log.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
 
@@ -43,18 +44,16 @@ void XMLLabelSeparatorContext::startFastElement( sal_Int32 /*nElement*/, const u
 {
 }
 
-SvXMLImportContextRef XMLLabelSeparatorContext::CreateChildContext(
-    sal_uInt16 /*nPrefix*/, const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList > & /*xAttrList*/ )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLLabelSeparatorContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
-    SvXMLImportContext* pContext = nullptr;
-    if( xmloff::token::IsXMLToken( rLocalName, xmloff::token::XML_P ) )
+    if( (nElement & TOKEN_MASK) == xmloff::token::XML_P )
     {
-        pContext = new SchXMLParagraphContext( GetImport(),
-                            rLocalName, m_aSeparator );
+        return new SchXMLParagraphContext( GetImport(), m_aSeparator );
     }
-
-    return pContext;
+    SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
+    return nullptr;
 }
 
 void XMLLabelSeparatorContext::endFastElement(sal_Int32 nElement)
