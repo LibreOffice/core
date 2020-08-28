@@ -611,6 +611,13 @@ bool AdditionsDialog::sortByDownload(const AdditionInfo& a, const AdditionInfo& 
     return a.sDownloadNumber.toUInt32() > b.sDownloadNumber.toUInt32();
 }
 
+/**
+ * @brief AdditionsItem::AdditionsItem
+ * This class represents the UI elements in every row of the extension list.
+ * @param pParent Parent window.
+ * @param pParentDialog The upper class, AdditionsDialog.
+ * @param additionInfo The intermediate class to store information of the extension.
+ */
 AdditionsItem::AdditionsItem(weld::Widget* pParent, AdditionsDialog* pParentDialog,
                              AdditionInfo& additionInfo)
     : m_xBuilder(Application::CreateBuilder(pParent, "cui/ui/additionsfragment.ui"))
@@ -625,6 +632,7 @@ AdditionsItem::AdditionsItem(weld::Widget* pParent, AdditionsDialog* pParentDial
     , m_xLabelVersion(m_xBuilder->weld_label("labelVersion"))
     , m_xLabelComments(m_xBuilder->weld_label("labelComments")) // no change
     , m_xLinkButtonComments(m_xBuilder->weld_link_button("linkButtonComments"))
+    // Rating items
     , m_xImageVoting1(m_xBuilder->weld_image("imageVoting1"))
     , m_xImageVoting2(m_xBuilder->weld_image("imageVoting2"))
     , m_xImageVoting3(m_xBuilder->weld_image("imageVoting3"))
@@ -635,8 +643,9 @@ AdditionsItem::AdditionsItem(weld::Widget* pParent, AdditionsDialog* pParentDial
     , m_xLabelDownloadNumber(m_xBuilder->weld_label("labelDownloadNumber"))
     , m_xButtonShowMore(m_xBuilder->weld_button("buttonShowMore"))
     , m_pParentDialog(pParentDialog)
-    , m_sDownloadURL("")
-    , m_sExtensionID("")
+    // m_sDownloadURL and m_sExtensionID is used to transfer info from AdditionInfo to AdditionsDialogi
+    , m_sDownloadURL("") // To install it.
+    , m_sExtensionID("") // To search it.
 {
     SolarMutexGuard aGuard;
 
@@ -644,10 +653,11 @@ AdditionsItem::AdditionsItem(weld::Widget* pParent, AdditionsDialog* pParentDial
     m_xContainer->set_grid_left_attach(0);
     m_xContainer->set_grid_top_attach(pParentDialog->m_aAdditionsItems.size() - 1);
 
-    // Set maximum length of the extension title
+    // Set maximum length of the extension title.
     OUString sExtensionName;
     const sal_Int32 maxExtensionNameLength = 30;
 
+    // If the length of the is more than the @maxExtensionNameLength, it will be shortened.
     if (additionInfo.sName.getLength() > maxExtensionNameLength)
     {
         OUString sShortName = additionInfo.sName.copy(0, maxExtensionNameLength - 3);
@@ -660,6 +670,9 @@ AdditionsItem::AdditionsItem(weld::Widget* pParent, AdditionsDialog* pParentDial
 
     m_xLinkButtonName->set_label(sExtensionName);
 
+    // There are 5 images to show rating of extensions.
+    // However, all of them are hidden.
+    // We show the required number of images to express the rating.
     double aExtensionRating = additionInfo.sRating.toDouble();
     switch (int(aExtensionRating))
     {
@@ -699,10 +712,17 @@ AdditionsItem::AdditionsItem(weld::Widget* pParent, AdditionsDialog* pParentDial
     m_sDownloadURL = additionInfo.sDownloadURL;
     m_sExtensionID = additionInfo.sExtensionID;
 
+    // Connection between items and handlers.
     m_xButtonShowMore->connect_clicked(LINK(this, AdditionsItem, ShowMoreHdl));
     m_xButtonInstall->connect_clicked(LINK(this, AdditionsItem, InstallHdl));
 }
 
+/**
+ * @brief AdditionsItem::getExtensionFile
+ * This function downloads the extension file and write the location of them to sExtensionFile.
+ * @param sExtensionFile String which stores the local URL of the extension.
+ * @return True, if the download is successfully completed. Otherwise, false.
+ */
 bool AdditionsItem::getExtensionFile(OUString& sExtensionFile)
 {
     uno::Reference<ucb::XSimpleFileAccess3> xFileAccess
@@ -732,6 +752,8 @@ bool AdditionsItem::getExtensionFile(OUString& sExtensionFile)
     return true;
 }
 
+// Search functions
+// If timer is invoked, the UI is refreshed.
 IMPL_LINK_NOARG(AdditionsDialog, ImplUpdateDataHdl, Timer*, void) { RefreshUI(); }
 
 IMPL_LINK_NOARG(AdditionsDialog, SearchUpdateHdl, weld::Entry&, void)
@@ -747,7 +769,9 @@ IMPL_LINK_NOARG(AdditionsDialog, FocusOut_Impl, weld::Widget&, void)
         m_aSearchDataTimer.Invoke();
     }
 }
+// End of the search functions
 
+// If close button is pressed, stop the threads.
 IMPL_LINK_NOARG(AdditionsDialog, CloseButtonHdl, weld::Button&, void)
 {
     if (m_pSearchThread.is())
@@ -755,6 +779,10 @@ IMPL_LINK_NOARG(AdditionsDialog, CloseButtonHdl, weld::Button&, void)
     this->response(RET_CLOSE);
 }
 
+/* If show more button is pressed, the button is hidden.
+   The capacity of the extension list is increased by the PAGE_SIZE offset.
+   Stop the current thread and create a new thread.
+*/
 IMPL_LINK_NOARG(AdditionsItem, ShowMoreHdl, weld::Button&, void)
 {
     this->m_xButtonShowMore->set_visible(false);
@@ -765,6 +793,7 @@ IMPL_LINK_NOARG(AdditionsItem, ShowMoreHdl, weld::Button&, void)
     m_pParentDialog->m_pSearchThread->launch();
 }
 
+// UI changes are done and called ExtensionManager::addExtension function.
 IMPL_LINK_NOARG(AdditionsItem, InstallHdl, weld::Button&, void)
 {
     m_xButtonInstall->set_label("Installing");
@@ -791,6 +820,7 @@ IMPL_LINK_NOARG(AdditionsItem, InstallHdl, weld::Button&, void)
             aExtensionFile, uno::Sequence<beans::NamedValue>(), "user", xAbortChannel, xCmdEnv);
         m_xButtonInstall->set_label("Installed");
     }
+    // Exception Handling due to ExtensionManager::addExtension function.
     catch (const ucb::CommandFailedException)
     {
         SAL_WARN("cui.dialogs", "Additions: addExtension CommandFailedException occurred.");
@@ -815,6 +845,7 @@ IMPL_LINK_NOARG(AdditionsItem, InstallHdl, weld::Button&, void)
         m_xButtonInstall->set_label("Install");
         m_xButtonInstall->set_sensitive(true);
     }
+    // To handle unknown cases.
     catch (const css::uno::Exception)
     {
         SAL_WARN("cui.dialogs", "Additions: addExtension Exception occurred.");
@@ -823,8 +854,10 @@ IMPL_LINK_NOARG(AdditionsItem, InstallHdl, weld::Button&, void)
     }
 }
 
-// TmpRepositoryCommandEnv
+/* ======================================================================= */
+// Dependencies of addExtension function
 
+// TmpRepositoryCommandEnv
 TmpRepositoryCommandEnv::TmpRepositoryCommandEnv() {}
 
 TmpRepositoryCommandEnv::~TmpRepositoryCommandEnv() {}
@@ -871,8 +904,14 @@ void TmpRepositoryCommandEnv::update(uno::Any const& /*Status */) {}
 
 void TmpRepositoryCommandEnv::pop() {}
 
+// End of the dependencies of the addExtension function.
+/* ======================================================================= */
+
+// Gear button sort functions implementations
 IMPL_LINK(AdditionsDialog, GearHdl, const OString&, rIdent, void)
 {
+    // These cases are handled according to their IDs
+    // Sort the vector which includes all AdditionInfo objects.
     if (rIdent == "gear_sort_voting")
     {
         std::sort(m_aAllExtensionsVector.begin(), m_aAllExtensionsVector.end(), sortByRating);
