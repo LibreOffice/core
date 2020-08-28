@@ -28,7 +28,7 @@ public class _XHierarchicalName extends MultiMethodTest {
     public XHierarchicalName oObj;
 
     public void _composeHierarchicalName() {
-        String expName = (String) tEnv.getObjRelation("HierachicalName");
+        String expName = (String) tEnv.getObjRelation("HierarchicalName");
         String element = (String) tEnv.getObjRelation("ElementName");
         boolean res = false;
 
@@ -51,7 +51,7 @@ public class _XHierarchicalName extends MultiMethodTest {
 
     public void _getHierarchicalName() {
         String hName = oObj.getHierarchicalName();
-        String expName = (String) tEnv.getObjRelation("HierachicalName");
+        String expName = (String) tEnv.getObjRelation("HierarchicalName");
         boolean res = true;
 System.out.println("### "+hName);
         if (expName != null) {
@@ -63,7 +63,7 @@ System.out.println("### "+hName);
             }
         } else {
             throw new StatusException(Status.failed(
-                                              "ObjectRelation 'HierachicalName' missing"));
+                                              "ObjectRelation 'HierarchicalName' missing"));
         }
 
         tRes.tested("getHierarchicalName()", res);
