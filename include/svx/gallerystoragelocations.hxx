@@ -19,9 +19,10 @@
 
 #pragma once
 
+#include <svx/svxdllapi.h>
 #include <tools/urlobj.hxx>
 
-class GalleryStorageLocations
+class SVXCORE_DLLPUBLIC GalleryStorageLocations
 {
 public:
     virtual ~GalleryStorageLocations() = 0;
