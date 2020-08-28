@@ -160,7 +160,7 @@ void XMLFile2UTFConverter::removeEncoding( Sequence<sal_Int8> &seq )
 bool XMLFile2UTFConverter::isEncodingRecognizable( const Sequence< sal_Int8 > &seq)
 {
     const sal_Int8 *pSource = seq.getConstArray();
-    bool bCheckIfFirstClosingBracketExsists = false;
+    bool bCheckIfFirstClosingBracketExists = false;
 
     if( seq.getLength() < 8 ) {
         // no recognition possible, when less than 8 bytes are available
@@ -169,22 +169,22 @@ bool XMLFile2UTFConverter::isEncodingRecognizable( const Sequence< sal_Int8 > &s
 
     if( ! strncmp( reinterpret_cast<const char *>(pSource), "<?xml", 5 ) ) {
         // scan if the <?xml tag finishes within this buffer
-        bCheckIfFirstClosingBracketExsists = true;
+        bCheckIfFirstClosingBracketExists = true;
     }
     else if( ('<' == pSource[0] || '<' == pSource[2] ) &&
              ('?' == pSource[4] || '?' == pSource[6] ) )
     {
         // check for utf-16
-        bCheckIfFirstClosingBracketExsists = true;
+        bCheckIfFirstClosingBracketExists = true;
     }
     else if( ( '<' == pSource[1] || '<' == pSource[3] ) &&
              ( '?' == pSource[5] || '?' == pSource[7] ) )
     {
         // check for
-        bCheckIfFirstClosingBracketExsists = true;
+        bCheckIfFirstClosingBracketExists = true;
     }
 
-    if( bCheckIfFirstClosingBracketExsists )
+    if( bCheckIfFirstClosingBracketExists )
     {
         // whole <?xml tag is valid
         return std::find(seq.begin(), seq.end(), '>') != seq.end();
