@@ -239,16 +239,10 @@ public:
 class SdXMLHeaderFooterDeclContext : public SvXMLStyleContext
 {
 public:
-    // Can be called in either fast- or slow-parser mode
-    SdXMLHeaderFooterDeclContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
     SdXMLHeaderFooterDeclContext( SvXMLImport& rImport,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
 
     virtual bool IsTransient() const override;
-    virtual void EndElement() override;
-    virtual void Characters( const OUString& rChars ) override;
     virtual void SAL_CALL startFastElement(
             sal_Int32 /*nElement*/,
             const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
