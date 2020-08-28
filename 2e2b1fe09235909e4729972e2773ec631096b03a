@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c58dc98b_4e7cdb45",
+        "filename": "sw/source/core/undo/unattr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-08-28T09:32:47Z",
+      "side": 1,
+      "message": "it doesn\u0027t make sense to have SAL_WARN after an assert for essentially the same condition because it will never be hit - perhaps just leave out the SAL_WARN",
+      "revId": "2e2b1fe09235909e4729972e2773ec631096b03a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
