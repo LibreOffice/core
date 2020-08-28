@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d6ebb89f_892c514f",
+        "filename": "chart2/qa/extras/chart2export.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2895,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-08-28T08:35:42Z",
+      "side": 1,
+      "message": "We need an assert to check the shape count to avoid exception in the case of regression.",
+      "range": {
+        "startLine": 2894,
+        "startChar": 104,
+        "endLine": 2895,
+        "endChar": 86
+      },
+      "revId": "2a868405a309359abb6e6bf92d080989b8bc185e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
