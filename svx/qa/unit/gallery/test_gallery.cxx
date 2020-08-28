@@ -255,6 +255,9 @@ void GalleryObjTest::TestGalleryThemeEntry()
                                  myThemeName);
 
     // Check URLs
+    GalleryBinaryStorageLocations& aGalleryBinaryStorageLocations
+        = dynamic_cast<GalleryBinaryStorageLocations&>(
+            *(mpThemeEntry->getGalleryStorageLocations().get()));
     INetURLObject aURL(aGalleryURL);
     aURL.Append(myThemeName);
     INetURLObject aThemeURL(aURL), aSdvURL(aURL), aSdgURL(aURL), aStrURL(aURL);
@@ -262,22 +265,22 @@ void GalleryObjTest::TestGalleryThemeEntry()
     aSdvURL.setExtension("sdv");
     aSdgURL.setExtension("sdg");
     aStrURL.setExtension("str");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        "Theme URL doesn't match",
-        mpThemeEntry->GetThmURL().GetMainURL(INetURLObject::DecodeMechanism::Unambiguous),
-        aThemeURL.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        "Sdv URL doesn't match",
-        mpThemeEntry->GetSdvURL().GetMainURL(INetURLObject::DecodeMechanism::Unambiguous),
-        aSdvURL.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        "Sdg URL doesn't match",
-        mpThemeEntry->GetSdgURL().GetMainURL(INetURLObject::DecodeMechanism::Unambiguous),
-        aSdgURL.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        "Str URL doesn't match",
-        mpThemeEntry->GetStrURL().GetMainURL(INetURLObject::DecodeMechanism::Unambiguous),
-        aStrURL.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Theme URL doesn't match",
+                                 aGalleryBinaryStorageLocations.GetThmURL().GetMainURL(
+                                     INetURLObject::DecodeMechanism::Unambiguous),
+                                 aThemeURL.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Sdv URL doesn't match",
+                                 aGalleryBinaryStorageLocations.GetSdvURL().GetMainURL(
+                                     INetURLObject::DecodeMechanism::Unambiguous),
+                                 aSdvURL.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Sdg URL doesn't match",
+                                 aGalleryBinaryStorageLocations.GetSdgURL().GetMainURL(
+                                     INetURLObject::DecodeMechanism::Unambiguous),
+                                 aSdgURL.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Str URL doesn't match",
+                                 aGalleryBinaryStorageLocations.GetStrURL().GetMainURL(
+                                     INetURLObject::DecodeMechanism::Unambiguous),
+                                 aStrURL.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous));
 }
 
 void GalleryObjTest::TestInsertGalleryObject()
