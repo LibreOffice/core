@@ -616,8 +616,8 @@ namespace {
                         else
                             aBuf.append(',');
                         aBuf.append(OUString::number(pPage->GetPageNum() / 2 + 1));
-                        aPageRange = aBuf.getStr();
                     }
+                    aPageRange = aBuf.makeStringAndClear();
                     nPrintRange = 1;
                 }
             }
