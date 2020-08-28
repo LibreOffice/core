@@ -28,9 +28,25 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/uitest/uiobject.hxx>
+#include <vcl/uitest/logger.hxx>
+#include <vcl/uitest/eventdescription.hxx>
 #include <verticaltabctrl.hxx>
 
 using namespace ::com::sun::star::accessibility;
+
+namespace
+{
+void collectUIInformation( const OUString& aID, const OUString& aPos , const OUString& aParent )
+{
+    EventDescription aDescription;
+    aDescription.aID = aID;
+    aDescription.aParameters = {{ "POS" ,  aPos}};
+    aDescription.aAction = "SELECT";
+    aDescription.aParent = aParent;
+    aDescription.aKeyWord = "VerticalTab";
+    UITestLogger::getInstance().logEvent(aDescription);
+}
+}
 
 /*****************************************************************************
 |
@@ -548,6 +564,7 @@ void VerticalTabControl::SetCurPageId(const OString& rId)
         ActivatePage();
         pNewData->xPage->Show();
     }
+    collectUIInformation(get_id(),OStringToOUString(m_sCurrentPageId,RTL_TEXTENCODING_UTF8), GetPageParent()->get_id());
 }
 
 OString VerticalTabControl::GetPageId(sal_uInt16 nIndex) const
