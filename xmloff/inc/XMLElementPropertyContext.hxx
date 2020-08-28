@@ -39,14 +39,16 @@ protected:
 
 public:
 
-    XMLElementPropertyContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                               const OUString& rLName,
+    XMLElementPropertyContext( SvXMLImport& rImport, sal_Int32 nElement,
                                const XMLPropertyState& rProp,
                                 ::std::vector< XMLPropertyState > &rProps );
 
     virtual ~XMLElementPropertyContext() override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+
 };
 
 
