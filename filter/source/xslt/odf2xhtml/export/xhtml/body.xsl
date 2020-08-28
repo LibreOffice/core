@@ -1724,6 +1724,8 @@
 
         <!-- $globalData/styles-file/*/office:styles/ -->
         <xsl:variable name="listLevelStyle" select="$listStyle/*/*[@text:level = number($listLevel)]"/>
+        <!-- 2DO: Acces new list styles
+        <xsl:variable name="listLevelLabelAlignment1" select="$listLevelStyle/style:list-level-properties/style:list-level-label-alignment"/>-->
         <xsl:variable name="listIndent">
             <xsl:call-template name="getListIndent">
                 <xsl:with-param name="globalData" select="$globalData"/>
@@ -1974,7 +1976,7 @@
             <xsl:if test="$listStyle/text:list-style/text:list-level-style-number">
                 <!--
                     A numbered label (e.g. 2.C.III) is created for every text:list-item/header.
-                    Above list levels are listed in the label, if the list-style requires this. Levels are separated by a '.'
+                    Above list levels are listed in the label, if the list-style requires this. Levels are separated by @style:num-suffix
                     Formatation is dependent for every list level depth.
                     The label is passed from ancestor text:list-item/header and if required truncated.
                     The prefix/suffix (as well list level dependent) comes before and after the complete label (after truncation)
@@ -2033,6 +2035,12 @@
                                                         <xsl:with-param name="value" select="string($listLevelLabelAlignment/@fo:text-indent)"/>
                                                     </xsl:call-template>
                                                 </xsl:variable>
+                                                <!-- 2DO: Access new ODF 1.2 list styles
+                                                <xsl:variable name="listLevelTextIndent">
+                                                    <xsl:call-template name="convert2cm">
+                                                        <xsl:with-param name="value" select="string($listLevelLabelAlignment/@text:list-tab-stop-position)"/>
+                                                    </xsl:call-template>
+                                                </xsl:variable> -->
                                                 <xsl:value-of select="-$listLevelTextIndent"/>
                                             </xsl:otherwise>
                                         </xsl:choose>
@@ -2496,7 +2504,6 @@
             </xsl:when>
             <xsl:otherwise>
                 <xsl:variable name="numberedSymbol">
-                    <xsl:comment>&#160;</xsl:comment>
                     <!-- only give out a number when number format is not empty -->
                     <xsl:if test="$listLevelStyle/@style:num-format != ''">
                         <xsl:number value="$itemNumber" format="{$listLevelStyle/@style:num-format}"/>
@@ -2504,10 +2511,10 @@
                 </xsl:variable>
                 <xsl:choose>
                     <xsl:when test="$listLevelsToDisplay != 1">
-                        <xsl:value-of select="concat($itemLabel, '.' , $numberedSymbol)"/>
+                        <xsl:value-of select="concat($itemLabel, $listLevelStyle/@style:num-prefix , $numberedSymbol, $listLevelStyle/@style:num-suffix)"/>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:value-of select="$numberedSymbol"/>
+                        <xsl:value-of select="concat($listLevelStyle/@style:num-prefix , $numberedSymbol, $listLevelStyle/@style:num-suffix)"/>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:otherwise>
@@ -2734,6 +2741,7 @@
         <xsl:param name="listLevel"/>
         <xsl:param name="listRestart"/>
         <xsl:param name="listStyle"/>
+        <xsl:param name="listLevelStyle"/>
         <xsl:param name="listStyleName"/>
 
         <xsl:apply-templates select="self::*">
