@@ -184,7 +184,7 @@ enum                                              /* TxtBox->margin[?][n] */
     L_M, R_M, T_M, B_M
 };
 enum anchor { CHAR_ANCHOR, PARA_ANCHOR, PAGE_ANCHOR, PAPER_ANCHOR };
-enum { TF_OCCUPY_SPACE, TF_TRANSPARENT,TF_ARROUND_TEXT };
+enum { TF_OCCUPY_SPACE, TF_TRANSPARENT,TF_AROUND_TEXT };
 enum
 {
     CAP_OUT_BOT,  CAP_OUT_TOP,  CAP_IN_BOT,    CAP_IN_TOP,
