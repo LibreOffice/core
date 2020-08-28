@@ -27,7 +27,6 @@
 #include <IClipBoardTest.hxx>
 #include "AppTitleWindow.hxx"
 #include <AppElementType.hxx>
-#include <VertSplitView.hxx>
 
 #include <vector>
 
