@@ -32,18 +32,24 @@ class GalleryBinaryStorageLocations;
 class GalleryBinaryEngineEntry : public GalleryFileStorageEntry
 {
 private:
-    GalleryBinaryStorageLocations& m_rGalleryStorageLocations;
+    std::unique_ptr<GalleryBinaryStorageLocations> mpGalleryStorageLocations;
 
 public:
-    GalleryBinaryEngineEntry(GalleryBinaryStorageLocations& rGalleryStorageLocations);
+    GalleryBinaryEngineEntry();
     static void CreateUniqueURL(const INetURLObject& rBaseURL, INetURLObject& aURL);
 
     OUString ReadStrFromIni(const OUString& aKeyName);
 
-    const INetURLObject& GetThmURL() const { return m_rGalleryStorageLocations.GetThmURL(); }
-    const INetURLObject& GetSdgURL() const { return m_rGalleryStorageLocations.GetSdgURL(); }
-    const INetURLObject& GetSdvURL() const { return m_rGalleryStorageLocations.GetSdvURL(); }
-    const INetURLObject& GetStrURL() const { return m_rGalleryStorageLocations.GetStrURL(); }
+    const INetURLObject& GetThmURL() const { return mpGalleryStorageLocations->GetThmURL(); }
+    const INetURLObject& GetSdgURL() const { return mpGalleryStorageLocations->GetSdgURL(); }
+    const INetURLObject& GetSdvURL() const { return mpGalleryStorageLocations->GetSdvURL(); }
+    const INetURLObject& GetStrURL() const { return mpGalleryStorageLocations->GetStrURL(); }
+
+    std::unique_ptr<GalleryBinaryStorageLocations> createGalleryStorageLocations();
+    GalleryStorageLocations& getGalleryStorageLocations() const
+    {
+        return dynamic_cast<GalleryStorageLocations&>(*mpGalleryStorageLocations);
+    }
 
     static GalleryThemeEntry* CreateThemeEntry(const INetURLObject& rURL, bool bReadOnly);
 
