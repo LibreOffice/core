@@ -3466,7 +3466,7 @@
      </table:table-cell>
      <table:covered-table-cell table:number-columns-repeated="2" table:style-name="ce21"/>
      <table:table-cell table:style-name="ce60" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="3" table:number-rows-spanned="1">
-      <text:p>cumulative probabiliy function</text:p>
+      <text:p>cumulative probability function</text:p>
      </table:table-cell>
      <table:covered-table-cell table:style-name="ce47"/>
      <table:covered-table-cell table:style-name="ce19"/>
@@ -3476,7 +3476,7 @@
      </table:table-cell>
      <table:covered-table-cell table:number-columns-repeated="2" table:style-name="ce21"/>
      <table:table-cell table:style-name="ce60" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="3" table:number-rows-spanned="1">
-      <text:p>cumulative probabiliy function</text:p>
+      <text:p>cumulative probability function</text:p>
      </table:table-cell>
      <table:covered-table-cell table:number-columns-repeated="2"/>
     </table:table-row>
