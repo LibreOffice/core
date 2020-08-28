@@ -45,9 +45,8 @@ class XMLTextColumnsContext final :public XMLElementPropertyContext
 public:
 
     XMLTextColumnsContext(
-        SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const css::uno::Reference<css::xml::sax::XAttributeList > & xAttrList,
+        SvXMLImport& rImport, sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList > & xAttrList,
         const XMLPropertyState& rProp,
         ::std::vector< XMLPropertyState > &rProps );
 
@@ -55,7 +54,9 @@ public:
                                    const OUString& rLocalName,
                                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 

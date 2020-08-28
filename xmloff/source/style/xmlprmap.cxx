@@ -25,6 +25,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/maptype.hxx>
 #include <xmloff/prhdlfac.hxx>
+#include <xmloff/xmlimp.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 
@@ -254,6 +255,37 @@ sal_Int32 XMLPropertySetMapper::GetEntryIndex(
 
     if ( nEntries && nIndex < nEntries )
     {
+        do
+        {
+            const XMLPropertySetMapperEntry_Impl& rEntry = mpImpl->maMapEntries[nIndex];
+            if( (!nPropType || nPropType == rEntry.GetPropType()) &&
+                rEntry.nXMLNameSpace == nNamespace &&
+                rStrName == rEntry.sXMLAttributeName )
+                return nIndex;
+            else
+                nIndex++;
+
+        } while( nIndex<nEntries );
+    }
+
+    return -1;
+}
+
+// Search for the given name and the namespace in the list and return
+// the index of the entry
+// If there is no matching entry the method returns -1
+sal_Int32 XMLPropertySetMapper::GetEntryIndex(
+        sal_Int32 nElement,
+        sal_uInt32 nPropType,
+        sal_Int32 nStartAt /* = -1 */ ) const
+{
+    sal_Int32 nEntries = GetEntryCount();
+    sal_Int32 nIndex= nStartAt == - 1? 0 : nStartAt+1;
+
+    if ( nEntries && nIndex < nEntries )
+    {
+        sal_uInt16 nNamespace = (nElement >> NMSP_SHIFT) - 1;
+        const OUString& rStrName = SvXMLImport::getNameFromToken(nElement);
         do
         {
             const XMLPropertySetMapperEntry_Impl& rEntry = mpImpl->maMapEntries[nIndex];
