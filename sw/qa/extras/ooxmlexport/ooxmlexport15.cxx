@@ -201,13 +201,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf132149_pgBreak, "tdf132149_pgBreak.odt")
     assertXPath(pDump, "//page[2]/infos/bounds", "width", "5953");  //portrait
     // This two-line 3rd page ought not to exist. DID YOU FIX ME?
     assertXPath(pDump, "//page[3]/infos/bounds", "width", "5953");
-    // This really ought to be on page 3.
-    //assertXPath(pDump, "//page[4]/infos/bounds", "width", "8391");
+    // This really ought to be on odd page 3, but now it is on odd page 5.
+    assertXPath(pDump, "//page[5]/infos/bounds", "width", "8391");
+    assertXPath(pDump, "//page[5]/infos/prtBounds", "right", "6122");  //Left page style
 
 
     //Page break is not lost. This SHOULD be on page 4, but sadly it is not.
-    assertXPathContent(pDump, "//page[5]/header/txt", "First Page Style");
-    CPPUNIT_ASSERT(getXPathContent(pDump, "//page[5]/body/txt").startsWith("Lorem ipsum"));
+    assertXPathContent(pDump, "//page[6]/header/txt", "First Page Style");
+    CPPUNIT_ASSERT(getXPathContent(pDump, "//page[6]/body/txt").startsWith("Lorem ipsum"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf129452_excessBorder, "tdf129452_excessBorder.docx")
