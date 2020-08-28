@@ -153,13 +153,6 @@ class XMLOFF_DLLPUBLIC SvXMLNumFormatContext : public SvXMLStyleContext
 
 public:
                 SvXMLNumFormatContext( SvXMLImport& rImport,
-                                    sal_uInt16 nPrfx,
-                                    const OUString& rLName,
-                                    SvXMLNumImpData* pNewData,
-                                    SvXMLStylesTokens nNewType,
-                                    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
-                                    SvXMLStylesContext& rStyles );
-                SvXMLNumFormatContext( SvXMLImport& rImport,
                                     sal_Int32 nElement,
                                     SvXMLNumImpData* pNewData,
                                     SvXMLStylesTokens nNewType,
@@ -174,9 +167,8 @@ public:
                                     SvXMLStylesContext& rStyles );
     virtual     ~SvXMLNumFormatContext() override;
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                                    const OUString& rLocalName,
-                                    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
     virtual void CreateAndInsert(bool bOverwrite) override;
 
     SvXMLNumImpData* GetData() const                { return pData; }
