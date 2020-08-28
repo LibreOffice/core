@@ -828,7 +828,7 @@ void SmXMLExport::ExportBlank(const SmNode *pNode)
         OUStringBuffer sStrBuf;
         ::sax::Converter::convertDouble(sStrBuf, pTemp->GetBlankNum() * .5);
         sStrBuf.append("em");
-        AddAttribute(XML_NAMESPACE_MATH, XML_WIDTH, sStrBuf.getStr());
+        AddAttribute(XML_NAMESPACE_MATH, XML_WIDTH, sStrBuf.makeStringAndClear());
     }
 
     SvXMLElementExport aTextExport(*this, XML_NAMESPACE_MATH, XML_MSPACE,
