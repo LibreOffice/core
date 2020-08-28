@@ -1602,14 +1602,14 @@ bool EditView::HasLOKSpecialPositioning() const
     return pImpEditView->HasLOKSpecialPositioning();
 }
 
-void EditView::SupressLOKMessages(bool bSet)
+void EditView::SuppressLOKMessages(bool bSet)
 {
-    pImpEditView->SupressLOKMessages(bSet);
+    pImpEditView->SuppressLOKMessages(bSet);
 }
 
-bool EditView::IsSupressLOKMessages() const
+bool EditView::IsSuppressLOKMessages() const
 {
-    return pImpEditView->IsSupressLOKMessages();
+    return pImpEditView->IsSuppressLOKMessages();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

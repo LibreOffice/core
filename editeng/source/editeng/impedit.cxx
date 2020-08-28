@@ -196,7 +196,7 @@ ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, vcl::Window* pWindo
     eAnchorMode(EEAnchorMode::TopLeft),
     mpEditViewCallbacks(nullptr),
     mbBroadcastLOKViewCursor(comphelper::LibreOfficeKit::isActive()),
-    mbSupressLOKMessages(false)
+    mbSuppressLOKMessages(false)
 {
     aEditSelection.Min() = pEng->GetEditDoc().GetStartPaM();
     aEditSelection.Max() = pEng->GetEditDoc().GetEndPaM();
@@ -1298,7 +1298,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
 
         GetCursor()->SetSize( aCursorSz );
 
-        if (comphelper::LibreOfficeKit::isActive() && mpViewShell && !mbSupressLOKMessages)
+        if (comphelper::LibreOfficeKit::isActive() && mpViewShell && !mbSuppressLOKMessages)
         {
             Point aPos = GetCursor()->GetPos();
             boost::property_tree::ptree aMessageParams;
