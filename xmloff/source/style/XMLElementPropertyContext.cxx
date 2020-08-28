@@ -21,13 +21,12 @@
 
 
 XMLElementPropertyContext::XMLElementPropertyContext (
-                                SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                const OUString& rLName,
+                                SvXMLImport& rImport, sal_Int32 /*nElement*/,
                                 const XMLPropertyState& rProp,
                                  ::std::vector< XMLPropertyState > &rProps ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    SvXMLImportContext( rImport ),
     bInsert( false ),
-      rProperties( rProps ),
+    rProperties( rProps ),
     aProp( rProp )
 {
 }
@@ -36,11 +35,10 @@ XMLElementPropertyContext::~XMLElementPropertyContext()
 {
 }
 
-void XMLElementPropertyContext::EndElement( )
+void XMLElementPropertyContext::endFastElement(sal_Int32 )
 {
     if( bInsert )
         rProperties.push_back( aProp );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

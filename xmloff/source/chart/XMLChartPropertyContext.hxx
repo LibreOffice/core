@@ -32,11 +32,10 @@ public:
                              const rtl::Reference< SvXMLImportPropertyMapper >& rMapper );
     virtual ~XMLChartPropertyContext() override;
 
-    using SvXMLPropertySetContext::CreateChildContext;
-    virtual SvXMLImportContextRef CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
+    using SvXMLPropertySetContext::createFastChildContext;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
         ::std::vector< XMLPropertyState > &rProperties,
         const XMLPropertyState& rProp ) override;
 
