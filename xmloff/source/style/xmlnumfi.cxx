@@ -1278,11 +1278,11 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
 }
 
 SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
-                                    sal_uInt16 nPrfx, const OUString& rLName,
-                                    const uno::Reference<xml::sax::XAttributeList>& xAttrList,
+                                    const OUString& rName,
+                                    const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
                                     const sal_Int32 nTempKey, LanguageType nLang,
                                     SvXMLStylesContext& rStyles ) :
-    SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, XmlStyleFamily::DATA_STYLE ),
+    SvXMLStyleContext( rImport, 0, xAttrList, XmlStyleFamily::DATA_STYLE ),
     pData( nullptr ),
     pStyles( &rStyles ),
     aMyConditions(),
@@ -1308,7 +1308,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
     eDateSecs( XML_DEA_NONE ),
     bDateNoDefault( false )
 {
-    SetAttribute(XML_NAMESPACE_STYLE, GetXMLToken(XML_NAME), rLName);
+    SetAttribute(XML_NAMESPACE_STYLE, GetXMLToken(XML_NAME), rName);
 }
 
 SvXMLNumFormatContext::~SvXMLNumFormatContext()
