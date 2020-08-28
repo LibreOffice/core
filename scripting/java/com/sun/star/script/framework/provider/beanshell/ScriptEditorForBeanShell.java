@@ -170,7 +170,7 @@ public class ScriptEditorForBeanShell extends ScriptEditor implements ActionList
      *
      */
     public Object execute() throws Exception {
-        if (!isMacroExectionEnabled()) {
+        if (!isMacroExecutionEnabled()) {
             showErrorMessage("Macro Execution has been disabled.");
             return null;
         }
