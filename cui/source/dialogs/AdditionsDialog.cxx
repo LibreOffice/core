@@ -685,7 +685,10 @@ AdditionsItem::AdditionsItem(weld::Widget* pParent, AdditionsDialog* pParentDial
 
     m_xLinkButtonName->set_uri(additionInfo.sExtensionURL);
     m_xLabelDescription->set_label(additionInfo.sIntroduction);
-    m_xLabelAuthor->set_label(additionInfo.sAuthorName);
+
+    if (!additionInfo.sAuthorName.equalsIgnoreAsciiCase("null"))
+        m_xLabelAuthor->set_label(additionInfo.sAuthorName);
+
     m_xButtonInstall->set_label(CuiResId(RID_SVXSTR_ADDITIONS_INSTALLBUTTON));
     OUString sLicenseString = CuiResId(RID_SVXSTR_ADDITIONS_LICENCE) + additionInfo.sLicense;
     m_xLabelLicense->set_label(sLicenseString);
