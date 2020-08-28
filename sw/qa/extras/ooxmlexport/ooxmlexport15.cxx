@@ -519,10 +519,23 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135343_columnSectionBreak_c15, "tdf135343_column
 
 DECLARE_OOXMLEXPORT_TEST(testTdf132149_pgBreak, "tdf132149_pgBreak.odt")
 {
+    // This 5 page document is designed to visually exaggerate the problems
+    // of emulating LO's followed-by-page-style into MSWord's sections.
+    // While much has been improved, there are extra pages present, which still need fixing.
     xmlDocUniquePtr pDump = parseLayoutDump();
 
-    // No header on pages 1,2,3 (and currently 4).
+    // No header on pages 1,2,3.
     assertXPath(pDump, "//page[2]/header", 0);
+
+    // Margins/page orientation between Right and Left page styles are different
+    assertXPath(pDump, "//page[1]/infos/prtBounds", "left", "1134");  //Right page style
+    assertXPath(pDump, "//page[2]/infos/prtBounds", "left", "2268");  //Left page style
+
+    assertXPath(pDump, "//page[1]/infos/bounds", "width", "8391");  //landscape
+    assertXPath(pDump, "//page[2]/infos/bounds", "width", "5953");  //portrait
+    // This two-line 3rd page ought not to exist. DID YOU FIX ME? The real page 3 should be "8391" landscape.
+    assertXPath(pDump, "//page[3]/infos/bounds", "width", "5953");
+
 
     //Page break is not lost. This SHOULD be on page 4, but sadly it is not.
     assertXPathContent(pDump, "//page[5]/header/txt", "First Page Style");
