@@ -234,8 +234,8 @@ DomainMapper::~DomainMapper()
         // Add the saved DocumentProtection settings
         aProperties["DocumentProtection"] <<= m_pImpl->GetSettingsTable()->GetDocumentProtectionSettings();
 
-        // Add the saved w:hypenationZone setting
-        aProperties["HyphenationZone"] <<= m_pImpl->GetSettingsTable()->GetHypenationZone();
+        // Add the saved w:hyphenationZone setting
+        aProperties["HyphenationZone"] <<= m_pImpl->GetSettingsTable()->GetHyphenationZone();
 
         // Add the saved w:doNotHyphenateCaps setting
         aProperties["NoHyphenateCaps"] <<= m_pImpl->GetSettingsTable()->GetNoHyphenateCaps();

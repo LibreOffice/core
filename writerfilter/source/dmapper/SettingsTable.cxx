@@ -688,7 +688,7 @@ bool SettingsTable::GetNoHyphenateCaps() const
     return m_pImpl->m_bNoHyphenateCaps;
 }
 
-sal_Int16 SettingsTable::GetHypenationZone() const
+sal_Int16 SettingsTable::GetHyphenationZone() const
 {
     return m_pImpl->m_nHyphenationZone;
 }

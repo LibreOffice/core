@@ -76,7 +76,7 @@ class SettingsTable : public LoggedProperties, public LoggedTable
     bool GetLongerSpaceSequence() const;
     bool GetNoLeading() const;
     bool GetNoHyphenateCaps() const;
-    sal_Int16 GetHypenationZone() const;
+    sal_Int16 GetHyphenationZone() const;
 
     OUString GetDecimalSymbol() const;
     OUString GetListSeparator() const;
