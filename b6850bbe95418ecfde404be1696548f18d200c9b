@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3804d4c4_72abf9c1",
+        "filename": "sw/source/core/access/AccessibilityCheck.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-28T08:48:23Z",
+      "side": 0,
+      "message": "Oh, this change is unrelated to your change. We only need to remove the comments that are not relevant on the lines that are changed in your commit.\n\nWhen you change \"sal_Int32 nParaBackColor \u003d {}\" to \"sal_Int32 nParaBackColor(COL_AUTO)\", your initialization is no more just \"to silence a compiler warning\", but to actually use some initial value to have impact on following processing. Thus, the comment \"I had to add this empty initializer to silence wrong compiler warning\" does not hold true anymore, and should be removed. But in this specific line, the initialization is still the same as original author did, only to silence the warning, and the comment still holds true.",
+      "range": {
+        "startLine": 354,
+        "startChar": 35,
+        "endLine": 354,
+        "endChar": 74
+      },
+      "revId": "b6850bbe95418ecfde404be1696548f18d200c9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
