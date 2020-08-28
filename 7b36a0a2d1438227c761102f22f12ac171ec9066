@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0f5225dd_caa5ab51",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-28T13:40:03Z",
+      "side": 1,
+      "message": "This becomes a re-declaration, and needs removing",
+      "range": {
+        "startLine": 480,
+        "startChar": 4,
+        "endLine": 480,
+        "endChar": 19
+      },
+      "revId": "7b36a0a2d1438227c761102f22f12ac171ec9066",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad87c9a9_dcc87e27",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-28T13:40:03Z",
+      "side": 1,
+      "message": "Why this whitespace after opening bracket (and the one before closing bracket)? It doesn\u0027t match our clang-format rules.",
+      "range": {
+        "startLine": 116,
+        "startChar": 16,
+        "endLine": 116,
+        "endChar": 17
+      },
+      "revId": "7b36a0a2d1438227c761102f22f12ac171ec9066",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "094a09a8_83e4a5a2",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport9.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-28T13:40:03Z",
+      "side": 1,
+      "message": "I\u0027m not sure this is OK. There\u0027s DECLARE_SW_EXPORTONLY_TEST that matches DECLARE_SW_ROUNDTRIP_TEST; I suppose you have changed the export file format using DECLARE_OOXMLEXPORT_EXPORTONLY_TEST",
+      "range": {
+        "startLine": 114,
+        "startChar": 0,
+        "endLine": 114,
+        "endChar": 35
+      },
+      "revId": "7b36a0a2d1438227c761102f22f12ac171ec9066",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
