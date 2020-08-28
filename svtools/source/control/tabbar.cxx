@@ -21,11 +21,11 @@
 #include <svtools/tabbar.hxx>
 #include <tools/time.hxx>
 #include <tools/poly.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/button.hxx>
-#include <vcl/edit.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
@@ -370,9 +370,10 @@ void ImplTabSizer::Paint( vcl::RenderContext& rRenderContext, const tools::Recta
 namespace {
 
 // Is not named Impl. as it may be both instantiated and derived from
-class TabBarEdit : public Edit
+class TabBarEdit final : public InterimItemWindow
 {
 private:
+    std::unique_ptr<weld::Entry> m_xEntry;
     Idle            maLoseFocusIdle;
     bool            mbPostEvt;
 
@@ -380,7 +381,7 @@ private:
                     DECL_LINK( ImplEndTimerHdl, Timer*, void );
 
 public:
-                    TabBarEdit( TabBar* pParent, WinBits nWinStyle );
+    TabBarEdit(TabBar* pParent);
 
     TabBar*         GetParent() const { return static_cast<TabBar*>(Window::GetParent()); }
 
@@ -393,9 +394,12 @@ public:
 
 }
 
-TabBarEdit::TabBarEdit( TabBar* pParent, WinBits nWinStyle ) :
-    Edit( pParent, nWinStyle )
+TabBarEdit::TabBarEdit(TabBar* pParent)
+    : InterimItemWindow(pParent, "svt/ui/editcontrol.ui", "EditControl")
+    , m_xEntry(m_xBuilder->weld_entry("entry"))
 {
+    InitControlBase(m_xEntry.get());
+
     mbPostEvt = false;
     maLoseFocusIdle.SetPriority( TaskPriority::REPAINT );
     maLoseFocusIdle.SetInvokeHandler( LINK( this, TabBarEdit, ImplEndTimerHdl ) );
@@ -430,7 +434,7 @@ bool TabBarEdit::PreNotify( NotifyEvent& rNEvt )
         }
     }
 
-    return Edit::PreNotify( rNEvt );
+    return InterimItemWindow::PreNotify( rNEvt );
 }
 
 void TabBarEdit::LoseFocus()
@@ -441,7 +445,7 @@ void TabBarEdit::LoseFocus()
             mbPostEvt = true;
     }
 
-    Edit::LoseFocus();
+    InterimItemWindow::LoseFocus();
 }
 
 IMPL_LINK( TabBarEdit, ImplEndEditHdl, void*, pCancel, void )
@@ -480,7 +484,7 @@ struct TabBar_Impl
     ScopedVclPtr<ImplTabButton> mpNextButton;
     ScopedVclPtr<ImplTabButton> mpLastButton;
     ScopedVclPtr<ImplTabButton> mpAddButton;
-    ScopedVclPtr<TabBarEdit>    mpEdit;
+    ScopedVclPtr<TabBarEdit>    mxEdit;
     std::vector<std::unique_ptr<ImplTabBarItem>> mpItemList;
 
     vcl::AccessibleFactoryAccess  maAccessibleFactory;
@@ -1447,8 +1451,8 @@ void TabBar::StateChanged(StateChangedType nType)
             mpImpl->mpSizer->EnableRTL(IsRTLEnabled());
         if (mpImpl->mpAddButton)
             mpImpl->mpAddButton->EnableRTL(IsRTLEnabled());
-        if (mpImpl->mpEdit)
-            mpImpl->mpEdit->EnableRTL(IsRTLEnabled());
+        if (mpImpl->mxEdit)
+            mpImpl->mxEdit->EnableRTL(IsRTLEnabled());
     }
 }
 
@@ -2037,7 +2041,7 @@ void TabBar::SetProtectionSymbol(sal_uInt16 nPageId, bool bProtection)
 bool TabBar::StartEditMode(sal_uInt16 nPageId)
 {
     sal_uInt16 nPos = GetPagePos( nPageId );
-    if (mpImpl->mpEdit || (nPos == PAGE_NOT_FOUND) || (mnLastOffX < 8))
+    if (mpImpl->mxEdit || (nPos == PAGE_NOT_FOUND) || (mnLastOffX < 8))
         return false;
 
     mnEditId = nPageId;
@@ -2047,7 +2051,7 @@ bool TabBar::StartEditMode(sal_uInt16 nPageId)
         ImplFormat();
         PaintImmediately();
 
-        mpImpl->mpEdit.disposeAndReset(VclPtr<TabBarEdit>::Create(this, WB_CENTER));
+        mpImpl->mxEdit.disposeAndReset(VclPtr<TabBarEdit>::Create(this));
         tools::Rectangle aRect = GetPageRect( mnEditId );
         long nX = aRect.Left();
         long nWidth = aRect.GetWidth();
@@ -2060,8 +2064,8 @@ bool TabBar::StartEditMode(sal_uInt16 nPageId)
             nX = aRect.Left();
             nWidth = aRect.GetWidth();
         }
-        mpImpl->mpEdit->SetText(GetPageText(mnEditId));
-        mpImpl->mpEdit->setPosSizePixel(nX, aRect.Top() + mnOffY + 1, nWidth, aRect.GetHeight() - 3);
+        mpImpl->mxEdit->SetText(GetPageText(mnEditId));
+        mpImpl->mxEdit->setPosSizePixel(nX, aRect.Top() + mnOffY + 1, nWidth, aRect.GetHeight() - 3);
         vcl::Font aFont = GetPointFont(*this); // FIXME RenderContext
 
         Color   aForegroundColor;
@@ -2091,12 +2095,12 @@ bool TabBar::StartEditMode(sal_uInt16 nPageId)
         {
             aForegroundColor = COL_LIGHTBLUE;
         }
-        mpImpl->mpEdit->SetControlFont(aFont);
-        mpImpl->mpEdit->SetControlForeground(aForegroundColor);
-        mpImpl->mpEdit->SetControlBackground(aBackgroundColor);
-        mpImpl->mpEdit->GrabFocus();
-        mpImpl->mpEdit->SetSelection(Selection(0, mpImpl->mpEdit->GetText().getLength()));
-        mpImpl->mpEdit->Show();
+        mpImpl->mxEdit->SetControlFont(aFont);
+        mpImpl->mxEdit->SetControlForeground(aForegroundColor);
+        mpImpl->mxEdit->SetControlBackground(aBackgroundColor);
+        mpImpl->mxEdit->GrabFocus();
+//TODO        mpImpl->mxEdit->SetSelection(Selection(0, mpImpl->mxEdit->GetText().getLength()));
+        mpImpl->mxEdit->Show();
         return true;
     }
     else
@@ -2108,19 +2112,19 @@ bool TabBar::StartEditMode(sal_uInt16 nPageId)
 
 bool TabBar::IsInEditMode() const
 {
-    return bool(mpImpl->mpEdit);
+    return bool(mpImpl->mxEdit);
 }
 
 void TabBar::EndEditMode(bool bCancel)
 {
-    if (!mpImpl->mpEdit)
+    if (!mpImpl->mxEdit)
         return;
 
     // call hdl
     bool bEnd = true;
     mbEditCanceled = bCancel;
-    maEditText = mpImpl->mpEdit->GetText();
-    mpImpl->mpEdit->SetPostEvent();
+    maEditText = mpImpl->mxEdit->GetText();
+    mpImpl->mxEdit->SetPostEvent();
     if (!bCancel)
     {
         TabBarAllowRenamingReturnCode nAllowRenaming = AllowRenaming();
@@ -2135,13 +2139,13 @@ void TabBar::EndEditMode(bool bCancel)
     // renaming not allowed, then reset edit data
     if (!bEnd)
     {
-        mpImpl->mpEdit->ResetPostEvent();
-        mpImpl->mpEdit->GrabFocus();
+        mpImpl->mxEdit->ResetPostEvent();
+        mpImpl->mxEdit->GrabFocus();
     }
     else
     {
         // close edit and call end hdl
-        mpImpl->mpEdit.disposeAndClear();
+        mpImpl->mxEdit.disposeAndClear();
 
         EndRenaming();
         mnEditId = 0;
