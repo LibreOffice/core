@@ -2226,7 +2226,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
 
     // now it's a good opportunity again for an LF - if it is still allowed
     if( rHTMLWrt.m_bLFPossible &&
-        rHTMLWrt.GetLineLen() >= rHTMLWrt.m_nWhishLineLen )
+        rHTMLWrt.GetLineLen() >= rHTMLWrt.m_nWishLineLen )
     {
         rHTMLWrt.OutNewLine();
     }
@@ -2463,8 +2463,8 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
                         nWordLen = nEnd;
                     nWordLen -= nStrPos;
 
-                    if( nLineLen >= rHTMLWrt.m_nWhishLineLen ||
-                        (nLineLen+nWordLen) >= rHTMLWrt.m_nWhishLineLen )
+                    if( nLineLen >= rHTMLWrt.m_nWishLineLen ||
+                        (nLineLen+nWordLen) >= rHTMLWrt.m_nWishLineLen )
                     {
                         HTMLOutFuncs::FlushToAscii( rWrt.Strm(), aContext );
                         rHTMLWrt.OutNewLine();

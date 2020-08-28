@@ -114,7 +114,7 @@ SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL, const OUString& rFilterOpt
     , m_nDfltTopMargin(0)
     , m_nDfltBottomMargin(0)
     , m_nIndentLvl(0)
-    , m_nWhishLineLen(0)
+    , m_nWishLineLen(0)
     , m_nDefListLvl(0)
     , m_nDefListMargin(0)
     , m_nHeaderFooterSpace(0)
@@ -357,7 +357,7 @@ ErrCode SwHTMLWriter::WriteStream()
     m_bFirstCSS1Property = m_bFirstCSS1Rule = false;
     m_bCSS1IgnoreFirstPageDesc = false;
     m_nIndentLvl = 0;
-    m_nWhishLineLen = 70;
+    m_nWishLineLen = 70;
     m_nLastLFPos = 0;
     m_nDefListLvl = 0;
     m_nDefListMargin = ((m_xTemplate.is() && !m_bCfgOutStyles) ? m_xTemplate.get() : m_pDoc)

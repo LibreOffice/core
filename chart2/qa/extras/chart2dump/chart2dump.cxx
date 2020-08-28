@@ -227,22 +227,22 @@ protected:
 
     OUString sequenceToOneLineString(const uno::Sequence<OUString>& rSeq)
     {
-        OUStringBuffer aBufer;
+        OUStringBuffer aBuffer;
         for (const OUString& seqItem : rSeq)
         {
-            aBufer.append(seqItem).append(";");
+            aBuffer.append(seqItem).append(";");
         }
-        return aBufer.makeStringAndClear();
+        return aBuffer.makeStringAndClear();
     }
 
     OUString doubleVectorToOneLineString(const std::vector<double>& rVector)
     {
-        OUStringBuffer aBufer;
+        OUStringBuffer aBuffer;
         for (const double& vectorItem : rVector)
         {
-            aBufer.append(OUString::number(vectorItem)).append(";");
+            aBuffer.append(OUString::number(vectorItem)).append(";");
         }
-        return aBufer.makeStringAndClear();
+        return aBuffer.makeStringAndClear();
     }
 
     OUString transformationToOneLineString(const drawing::HomogenMatrix3& rTransform)
