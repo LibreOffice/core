@@ -403,11 +403,11 @@ void Window::dispose()
     }
 
     // check if the focus window is our child
-    bool bHasFocussedChild = false;
+    bool bHasFocusedChild = false;
     if (pSVData->mpWinData->mpFocusWin && ImplIsRealParentPath(pSVData->mpWinData->mpFocusWin))
     {
         // #122232#, this must not happen and is an application bug ! but we try some cleanup to hopefully avoid crashes, see below
-        bHasFocussedChild = true;
+        bHasFocusedChild = true;
 #if OSL_DEBUG_LEVEL > 0
         OUString aTempStr = "Window (" + GetText() +
                 ") with focused child window destroyed ! THIS WILL LEAD TO CRASHES AND MUST BE FIXED !";
@@ -419,7 +419,7 @@ void Window::dispose()
     // if we get focus pass focus to another window
     vcl::Window* pOverlapWindow = ImplGetFirstOverlapWindow();
     if (pSVData->mpWinData->mpFocusWin == this
-        || bHasFocussedChild) // #122232#, see above, try some cleanup
+        || bHasFocusedChild) // #122232#, see above, try some cleanup
     {
         if ( mpWindowImpl->mbFrame )
         {
