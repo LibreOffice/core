@@ -43,11 +43,11 @@ service PackageManagerDialog : com::sun::star::ui::dialogs::XAsynchronousExecuta
 
         @param xParent
                parent window
-        @param focussedContext
+        @param focusedContext
                context to be focused
     */
     create( [in] com::sun::star::awt::XWindow xParent,
-            [in] string focussedContext );
+            [in] string focusedContext );
 
     /** Create a GUI and pass the URL of the extension which shall be installed right away.
         This constructor is intended for the case when unopkg is run as result of
