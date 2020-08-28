@@ -327,8 +327,7 @@ DECLARE_RTFEXPORT_TEST(testFdo44715, "fdo44715.rtf")
 DECLARE_RTFEXPORT_TEST(testFdo68076, "fdo68076.rtf")
 {
     // Encoding of the last char was wrong (more 'o' than 'y').
-    OUString aExpected(u"\u041E\u0431\u044A\u0435\u043A\u0442 \u2013 \u0443");
-    getParagraph(1, aExpected);
+    getParagraph(1, u"\u041E\u0431\u044A\u0435\u043A\u0442 \u2013 \u0443");
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo70221, "fdo70221.rtf")
@@ -563,16 +562,14 @@ DECLARE_RTFEXPORT_TEST(testDprectAnchor, "dprect-anchor.rtf")
 
 DECLARE_RTFEXPORT_TEST(testFdo76628, "fdo76628.rtf")
 {
-    OUString aExpected(u"\u041E\u0411\u0420\u0410\u0417\u0415\u0426");
     // Should be 'SAMPLE' in Russian, was garbage.
-    getParagraph(1, aExpected);
+    getParagraph(1, u"\u041E\u0411\u0420\u0410\u0417\u0415\u0426");
 
     uno::Reference<text::XText> xHeaderText = getProperty<uno::Reference<text::XText>>(
         getStyles("PageStyles")->getByName("Standard"), "HeaderText");
-    OUString aExpectedHeader(
-        u"\u041F\u043E\u0434\u0433\u043E\u0442\u043E\u0432\u043B\u0435\u043D\u043E");
     // Should be 'prepared' in Russian, was garbage.
-    getParagraphOfText(1, xHeaderText, aExpectedHeader);
+    getParagraphOfText(1, xHeaderText,
+                       u"\u041F\u043E\u0434\u0433\u043E\u0442\u043E\u0432\u043B\u0435\u043D\u043E");
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo77267, "fdo77267.rtf")
@@ -731,30 +728,26 @@ DECLARE_RTFEXPORT_TEST(testFdo85889pc, "fdo85889-pc.rtf")
 {
     uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
 
-    OUString aExpected(u"\u00B1\u2265\u2264");
-    CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\u00B1\u2265\u2264"), xTextRange->getString());
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo85889pca, "fdo85889-pca.rtf")
 {
     uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
 
-    OUString aExpected(u"\u00B1\u2017\u00BE");
-    CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\u00B1\u2017\u00BE"), xTextRange->getString());
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo85889mac, "fdo85889-mac.rtf")
 {
     uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
 
-    OUString aExpected(u"\u00D2\u00DA\u00DB");
-    CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\u00D2\u00DA\u00DB"), xTextRange->getString());
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo72031, "fdo72031.rtf")
 {
-    OUString aExpected(u"\uF0C5");
-    CPPUNIT_ASSERT_EQUAL(aExpected, getRun(getParagraph(1), 1)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\uF0C5"), getRun(getParagraph(1), 1)->getString());
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo86750, "fdo86750.rtf")

@@ -266,8 +266,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo45182)
     uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
     uno::Reference<text::XTextRange> xTextRange(xFootnotes->getByIndex(0), uno::UNO_QUERY);
     // Encoding in the footnote was wrong.
-    OUString aExpected(u"\u017Eivnost\u00ED" SAL_NEWLINE_STRING);
-    CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\u017Eivnost\u00ED" SAL_NEWLINE_STRING),
+                         xTextRange->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo85812)
@@ -841,8 +841,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf105511)
     DefaultLocale::set("ru-RU", batch);
     batch->commit();
     load(mpTestDocumentPath, "tdf105511.rtf");
-    OUString aExpected(u"\u0418\u043C\u044F");
-    getParagraph(1, aExpected);
+    getParagraph(1, u"\u0418\u043C\u044F");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testContSectionPageBreak)

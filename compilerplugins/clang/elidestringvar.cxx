@@ -139,6 +139,11 @@ public:
             }
             case 2:
             {
+                auto const t = e1->getArg(0)->getType();
+                if (!(t.isConstQualified() && t->isConstantArrayType()))
+                {
+                    return true;
+                }
                 auto const e2 = e1->getArg(1);
                 if (!(isa<CXXDefaultArgExpr>(e2)
                       && loplugin::TypeCheck(e2->getType())

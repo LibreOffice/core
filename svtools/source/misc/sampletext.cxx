@@ -162,14 +162,14 @@ OUString makeShortRepresentativeSymbolTextForSelectedFont(OutputDevice const &rD
     {
         static const sal_Unicode aImplAppleSymbolText[] = {
             0x03BC, 0x2202, 0x2211, 0x220F, 0x03C0, 0x222B, 0x03A9, 0x221A, 0};
-        OUString sSampleText(aImplAppleSymbolText);
-        bool bHasSampleTextGlyphs = (-1 == rDevice.HasGlyphs(rDevice.GetFont(), sSampleText));
+        bool bHasSampleTextGlyphs
+            = (-1 == rDevice.HasGlyphs(rDevice.GetFont(), aImplAppleSymbolText));
         //It's the Apple version
         if (bHasSampleTextGlyphs)
-            return OUString(aImplAppleSymbolText);
+            return aImplAppleSymbolText;
         static const sal_Unicode aImplAdobeSymbolText[] = {
             0xF06D, 0xF0B6, 0xF0E5, 0xF0D5, 0xF070, 0xF0F2, 0xF057, 0xF0D6, 0};
-        return OUString(aImplAdobeSymbolText);
+        return aImplAdobeSymbolText;
     }
 
     const bool bOpenSymbol = IsStarSymbol(rDevice.GetFont().GetFamilyName());

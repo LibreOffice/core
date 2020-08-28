@@ -1297,6 +1297,10 @@ bool StringConstant::VisitReturnStmt(ReturnStmt const * stmt) {
     if (e4->getNumArgs() != 2) {
         return true;
     }
+    auto const t = e4->getArg(0)->getType();
+    if (!(t.isConstQualified() && t->isConstantArrayType())) {
+        return true;
+    }
     auto const e5 = e4->getArg(1);
     if (!(isa<CXXDefaultArgExpr>(e5)
           && (loplugin::TypeCheck(e5->getType()).Struct("Dummy").Namespace("libreoffice_internal")

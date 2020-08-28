@@ -1194,12 +1194,12 @@ void PdfExportTest::testTdf115117_2a()
     int nChars = FPDFText_CountChars(pPdfTextPage);
     CPPUNIT_ASSERT_EQUAL(13, nChars);
 
-    OUString aExpectedText = u"\u0627\u0644 \u0628\u0627\u0644 \u0648\u0642\u0641 \u0627\u0644";
     std::vector<sal_uInt32> aChars(nChars);
     for (int i = 0; i < nChars; i++)
         aChars[i] = FPDFText_GetUnicode(pPdfTextPage, i);
     OUString aActualText(aChars.data(), aChars.size());
-    CPPUNIT_ASSERT_EQUAL(aExpectedText, aActualText);
+    CPPUNIT_ASSERT_EQUAL(
+        OUString(u"\u0627\u0644 \u0628\u0627\u0644 \u0648\u0642\u0641 \u0627\u0644"), aActualText);
 
     FPDFText_ClosePage(pPdfTextPage);
 #endif

@@ -261,8 +261,7 @@ DECLARE_RTFEXPORT_TEST(testFdo45394, "fdo45394.rtf")
         getStyles("PageStyles")->getByName("Standard"), "HeaderText");
     OUString aActual = xHeaderText->getString();
     // Encoding in the header was wrong.
-    OUString aExpected(u"\u041F\u041A \u0420\u0418\u041A");
-    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\u041F\u041A \u0420\u0418\u041A"), aActual);
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
@@ -328,8 +327,9 @@ DECLARE_RTFEXPORT_TEST(testFdo48023, "fdo48023.rtf")
     uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
 
     // Implicit encoding detection based on locale was missing
-    OUString aExpected(u"\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0441\u0442");
-    CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
+    CPPUNIT_ASSERT_EQUAL(
+        OUString(u"\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0441\u0442"),
+        xTextRange->getString());
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo48876, "fdo48876.rtf")
@@ -350,8 +350,7 @@ DECLARE_RTFEXPORT_TEST(testFdo44211, "fdo44211.rtf")
 {
     uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
 
-    OUString aExpected(u"\u0105\u010D\u0119");
-    CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\u0105\u010D\u0119"), xTextRange->getString());
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo48037, "fdo48037.rtf")
@@ -531,11 +530,7 @@ DECLARE_RTFEXPORT_TEST(testFdo36089, "fdo36089.rtf")
                          getProperty<sal_Int16>(getRun(getParagraph(1), 2), "CharEscapement"));
 }
 
-DECLARE_RTFEXPORT_TEST(testFdo48446, "fdo48446.rtf")
-{
-    OUString aExpected(u"\u0418\u043C\u044F");
-    getParagraph(1, aExpected);
-}
+DECLARE_RTFEXPORT_TEST(testFdo48446, "fdo48446.rtf") { getParagraph(1, u"\u0418\u043C\u044F"); }
 
 DECLARE_RTFEXPORT_TEST(testFdo47495, "fdo47495.rtf")
 {
@@ -736,8 +731,8 @@ DECLARE_RTFEXPORT_TEST(testFdo56512, "fdo56512.rtf")
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(),
                                                          uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xTextRange(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-    OUString aExpected(u"\u05E2\u05D5\u05E1\u05E7 \u05DE\u05D5\u05E8\u05E9\u05D4 ");
-    CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\u05E2\u05D5\u05E1\u05E7 \u05DE\u05D5\u05E8\u05E9\u05D4 "),
+                         xTextRange->getString());
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo52989, "fdo52989.rtf")

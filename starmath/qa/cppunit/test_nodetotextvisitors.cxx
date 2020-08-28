@@ -646,12 +646,10 @@ void Test::testMiscEquivalent()
 void Test::testParser()
 {
     OUString sOutput;
-    OUString sInput(u"{ \U0001D44E }"); // non-BMP Unicode
-    OUString sExpected(u"\U0001D44E");
-    auto pNode = SmParser().ParseExpression(sInput);
+    auto pNode = SmParser().ParseExpression(u"{ \U0001D44E }"); // non-BMP Unicode
     pNode->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
     SmNodeToTextVisitor(pNode.get(), sOutput);
-    CPPUNIT_ASSERT_EQUAL(sExpected, sOutput);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\U0001D44E"), sOutput);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
