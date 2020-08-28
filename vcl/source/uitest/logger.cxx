@@ -551,6 +551,17 @@ void UITestLogger::logEvent(const EventDescription& rDescription)
     {
         aLogLine = "Select element no " + rDescription.aID + " From " + rDescription.aParent;
     }
+    else if(rDescription.aKeyWord == "MenuButton"){
+        if(rDescription.aAction == "OPENLIST"){
+            aLogLine = "Open List From " + rDescription.aID;
+        }
+        else if(rDescription.aAction == "CLOSELIST"){
+            aLogLine = "Close List From " + rDescription.aID;
+        }
+        else if(rDescription.aAction == "OPENFROMLIST"){
+            aLogLine = "Select item no "+ GetValueInMapWithIndex(rDescription.aParameters, 0) +" From List of "+ rDescription.aID;
+        }
+    }
     else
     {
         aLogLine = rDescription.aKeyWord + " Action:" + rDescription.aAction + " Id:"

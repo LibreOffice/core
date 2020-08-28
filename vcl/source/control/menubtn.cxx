@@ -25,6 +25,22 @@
 #include <vcl/menubtn.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/uitest/uiobject.hxx>
+#include <vcl/uitest/logger.hxx>
+#include <vcl/uitest/eventdescription.hxx>
+
+namespace
+{
+void collectUIInformation( const OUString& aID, const OUString& aevent , const OUString& akey , const OUString& avalue)
+{
+    EventDescription aDescription;
+    aDescription.aID = aID;
+    aDescription.aParameters = {{ akey ,  avalue}};
+    aDescription.aAction = aevent;
+    aDescription.aParent = "MainWindow";
+    aDescription.aKeyWord = "MenuButton";
+    UITestLogger::getInstance().logEvent(aDescription);
+}
+}
 
 void MenuButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
@@ -85,6 +101,7 @@ void MenuButton::ExecuteMenu()
         mnCurItemId = 0;
         msCurItemIdent.clear();
     }
+    collectUIInformation(get_id(),"OPENLIST","","");
 }
 
 void MenuButton::CancelMenu()
@@ -103,6 +120,7 @@ void MenuButton::CancelMenu()
         else
             vcl::Window::GetDockingManager()->EndPopupMode(mpFloatingWindow);
     }
+    collectUIInformation(get_id(),"CLOSELIST","","");
 }
 
 bool MenuButton::InPopupMode() const
@@ -211,6 +229,9 @@ void MenuButton::Activate()
 
 void MenuButton::Select()
 {
+    if (mnCurItemId)
+        collectUIInformation(get_id(),"OPENFROMLIST","POS",OUString::number(mnCurItemId));
+
     maSelectHdl.Call( this );
 }
 
