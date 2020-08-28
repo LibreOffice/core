@@ -45,6 +45,8 @@ protected:
     // returns true if keystroke is consumed
     bool ChildKeyInput(const KeyEvent& rKEvt);
 
+    virtual void IdleResize();
+
     std::unique_ptr<weld::Builder> m_xBuilder;
     VclPtr<vcl::Window> m_xVclContentArea;
     std::unique_ptr<weld::Container> m_xContainer;
