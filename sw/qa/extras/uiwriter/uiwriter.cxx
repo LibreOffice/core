@@ -4498,8 +4498,8 @@ void SwUiWriterTest::testTdf89954()
     SwNodeIndex aNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1);
     // Placeholder character for the comment anchor was ^A (CH_TXTATR_BREAKWORD), not <fff9> (CH_TXTATR_INWORD).
     // As a result, autocorrect did not turn the 't' input into 'T'.
-    OUString aExpected(u"Tes\uFFF9t. Test.");
-    CPPUNIT_ASSERT_EQUAL(aExpected, aNodeIndex.GetNode().GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(
+        OUString(u"Tes\uFFF9t. Test."), aNodeIndex.GetNode().GetTextNode()->GetText());
 }
 
 void SwUiWriterTest::testTdf89720()
@@ -7377,8 +7377,8 @@ void SwUiWriterTest::testTdf106164()
     const sal_Unicode cChar = ' ';
     pWrtShell->AutoCorrect(corr, cChar);
     sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
-    OUString sReplaced(u"We\u2019re ");
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(
+        OUString(u"We\u2019re "), static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
 
 void SwUiWriterTest::testTdf54409()
@@ -7434,8 +7434,8 @@ void SwUiWriterTest::testTdf59666()
     const sal_Unicode cChar = ' ';
     pWrtShell->AutoCorrect(corr, cChar);
     sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
-    OUString sReplaced(u"\u03C0 ");
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(
+        OUString(u"\u03C0 "), static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
 
 void SwUiWriterTest::testTdf133524()

@@ -211,6 +211,25 @@ public:
     /// @endcond
 #endif
 
+#if defined LIBO_INTERNAL_ONLY
+
+    template<typename T> OUString(
+        T const & value,
+        typename libreoffice_internal::CharPtrDetector<T, libreoffice_internal::Dummy>::TypeUtf16
+            = libreoffice_internal::Dummy()):
+        pData(nullptr)
+    { rtl_uString_newFromStr(&pData, value); }
+
+    template<typename T> OUString(
+        T & value,
+        typename
+        libreoffice_internal::NonConstCharArrayDetector<T, libreoffice_internal::Dummy>::TypeUtf16
+            = libreoffice_internal::Dummy()):
+        pData(nullptr)
+    { rtl_uString_newFromStr(&pData, value); }
+
+#else
+
     /**
       New string from a Unicode character buffer array.
 
@@ -221,6 +240,8 @@ public:
         pData = NULL;
         rtl_uString_newFromStr( &pData, value );
     }
+
+#endif
 
     /**
       New string from a Unicode character buffer array.
@@ -1744,17 +1765,9 @@ public:
 
     friend bool     operator == ( const OUString& rStr1,    const OUString& rStr2 )
                         { return rStr1.equals(rStr2); }
-    friend bool     operator == ( const OUString& rStr1,    const sal_Unicode * pStr2 )
-                        { return rStr1.compareTo( pStr2 ) == 0; }
-    friend bool     operator == ( const sal_Unicode * pStr1,    const OUString& rStr2 )
-                        { return OUString( pStr1 ).compareTo( rStr2 ) == 0; }
 
     friend bool     operator != ( const OUString& rStr1,        const OUString& rStr2 )
                         { return !(operator == ( rStr1, rStr2 )); }
-    friend bool     operator != ( const OUString& rStr1,    const sal_Unicode * pStr2 )
-                        { return !(operator == ( rStr1, pStr2 )); }
-    friend bool     operator != ( const sal_Unicode * pStr1,    const OUString& rStr2 )
-                        { return !(operator == ( pStr1, rStr2 )); }
 
     friend bool     operator <  ( const OUString& rStr1,    const OUString& rStr2 )
                         { return rStr1.compareTo( rStr2 ) < 0; }
@@ -1764,6 +1777,50 @@ public:
                         { return rStr1.compareTo( rStr2 ) <= 0; }
     friend bool     operator >= ( const OUString& rStr1,    const OUString& rStr2 )
                         { return rStr1.compareTo( rStr2 ) >= 0; }
+
+#if defined LIBO_INTERNAL_ONLY
+
+    template<typename T> friend typename libreoffice_internal::CharPtrDetector<T, bool>::TypeUtf16
+    operator ==(OUString const & s1, T const & s2) { return s1.compareTo(s2) == 0; }
+
+    template<typename T>
+    friend typename libreoffice_internal::NonConstCharArrayDetector<T, bool>::TypeUtf16
+    operator ==(OUString const & s1, T & s2) { return s1.compareTo(s2) == 0; }
+
+    template<typename T> friend typename libreoffice_internal::CharPtrDetector<T, bool>::TypeUtf16
+    operator ==(T const & s1, OUString const & s2) { return s2.compareTo(s1) == 0; }
+
+    template<typename T>
+    friend typename libreoffice_internal::NonConstCharArrayDetector<T, bool>::TypeUtf16
+    operator ==(T & s1, OUString const & s2) { return s2.compareTo(s1) == 0; }
+
+    template<typename T> friend typename libreoffice_internal::CharPtrDetector<T, bool>::TypeUtf16
+    operator !=(OUString const & s1, T const & s2) { return !(s1 == s2); }
+
+    template<typename T>
+    friend typename libreoffice_internal::NonConstCharArrayDetector<T, bool>::TypeUtf16
+    operator !=(OUString const & s1, T & s2) { return !(s1 == s2); }
+
+    template<typename T> friend typename libreoffice_internal::CharPtrDetector<T, bool>::TypeUtf16
+    operator !=(T const & s1, OUString const & s2) { return !(s1 == s2); }
+
+    template<typename T>
+    friend typename libreoffice_internal::NonConstCharArrayDetector<T, bool>::TypeUtf16
+    operator !=(T & s1, OUString const & s2) { return !(s1 == s2); }
+
+#else
+
+    friend bool     operator == ( const OUString& rStr1,    const sal_Unicode * pStr2 )
+                        { return rStr1.compareTo( pStr2 ) == 0; }
+    friend bool     operator == ( const sal_Unicode * pStr1,    const OUString& rStr2 )
+                        { return OUString( pStr1 ).compareTo( rStr2 ) == 0; }
+
+    friend bool     operator != ( const OUString& rStr1,    const sal_Unicode * pStr2 )
+                        { return !(operator == ( rStr1, pStr2 )); }
+    friend bool     operator != ( const sal_Unicode * pStr1,    const OUString& rStr2 )
+                        { return !(operator == ( pStr1, rStr2 )); }
+
+#endif
 
     /**
      * Compare string to an ASCII string literal.

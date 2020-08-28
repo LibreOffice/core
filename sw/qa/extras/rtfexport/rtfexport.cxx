@@ -241,15 +241,13 @@ DECLARE_RTFEXPORT_TEST(testMathD, "math-d.rtf")
 DECLARE_RTFEXPORT_TEST(testMathEscaping, "math-escaping.rtf")
 {
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
-    OUString aExpected(u"\u00E1 \\{");
-    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\u00E1 \\{"), aActual);
 }
 
 DECLARE_RTFEXPORT_TEST(testMathLim, "math-lim.rtf")
 {
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
-    OUString aExpected(u"lim from {x \u2192 1} {x}");
-    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"lim from {x \u2192 1} {x}"), aActual);
 }
 
 DECLARE_RTFEXPORT_TEST(testMathMatrix, "math-matrix.rtf")
@@ -404,8 +402,7 @@ DECLARE_RTFEXPORT_TEST(testFdo77979, "fdo77979.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // font name is encoded with \fcharset of font
-    OUString aExpected(u"\u5FAE\u8F6F\u96C5\u9ED1");
-    CPPUNIT_ASSERT_EQUAL(aExpected,
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\u5FAE\u8F6F\u96C5\u9ED1"),
                          getProperty<OUString>(getRun(getParagraph(1), 1), "CharFontName"));
 }
 
@@ -501,8 +498,8 @@ DECLARE_RTFEXPORT_TEST(testFdo61507, "fdo61507.rtf")
         mxComponent, uno::UNO_QUERY);
     uno::Reference<document::XDocumentProperties> xDocumentProperties(
         xDocumentPropertiesSupplier->getDocumentProperties());
-    OUString aExpected(u"\u00C9\u00C1\u0150\u0170\u222D");
-    CPPUNIT_ASSERT_EQUAL(aExpected, xDocumentProperties->getTitle());
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\u00C9\u00C1\u0150\u0170\u222D"),
+                         xDocumentProperties->getTitle());
 
     // Only "Hello.", no additional characters.
     CPPUNIT_ASSERT_EQUAL(6, getLength());
@@ -533,9 +530,10 @@ DECLARE_RTFEXPORT_TEST(testMnor, "mnor.rtf")
 {
     // \mnor wasn't handled, leading to missing quotes around "divF" and so on.
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
-    OUString aExpected(
-        u"iiint from {V} to <?> {\"divF\"} dV = llint from {S} to <?> {\"F\" \u2219 \"n\" dS}");
-    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+    CPPUNIT_ASSERT_EQUAL(
+        OUString(
+            u"iiint from {V} to <?> {\"divF\"} dV = llint from {S} to <?> {\"F\" \u2219 \"n\" dS}"),
+        aActual);
 }
 
 DECLARE_RTFEXPORT_TEST(testI120928, "i120928.rtf")
