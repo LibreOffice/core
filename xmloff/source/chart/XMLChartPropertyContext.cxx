@@ -41,10 +41,9 @@ XMLChartPropertyContext::XMLChartPropertyContext(
 XMLChartPropertyContext::~XMLChartPropertyContext()
 {}
 
-SvXMLImportContextRef XMLChartPropertyContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList > & xAttrList,
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLChartPropertyContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
     ::std::vector< XMLPropertyState > &rProperties,
     const XMLPropertyState& rProp )
 {
@@ -53,21 +52,16 @@ SvXMLImportContextRef XMLChartPropertyContext::CreateChildContext(
     switch( mxMapper->getPropertySetMapper()->GetEntryContextId( rProp.mnIndex ) )
     {
         case XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE:
-            xContext = new XMLSymbolImageContext( GetImport(), nPrefix, rLocalName, rProp, rProperties );
+            return new XMLSymbolImageContext( GetImport(), nElement, rProp, rProperties );
             break;
         case XML_SCH_CONTEXT_SPECIAL_LABEL_SEPARATOR:
-            xContext = new XMLLabelSeparatorContext( GetImport(), nPrefix, rLocalName, rProp, rProperties );
+            return new XMLLabelSeparatorContext( GetImport(), nElement, rProp, rProperties );
             break;
     }
 
     // default / no context yet: create child context by base class
-    if (!xContext)
-    {
-        xContext = SvXMLPropertySetContext::CreateChildContext(
-            nPrefix, rLocalName, xAttrList, rProperties, rProp );
-    }
-
-    return xContext;
+    return SvXMLPropertySetContext::createFastChildContext(
+            nElement, xAttrList, rProperties, rProp );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -48,16 +48,15 @@ public:
 
     XMLFootnoteSeparatorImport(
         SvXMLImport& rImport,
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
+        sal_Int32 nElement,
         ::std::vector<XMLPropertyState> & rProperties,
         const rtl::Reference<XMLPropertySetMapper> & rMapperRef,
         sal_Int32 nIndex);
 
     virtual ~XMLFootnoteSeparatorImport() override;
 
-    virtual void StartElement(
-        const css::uno::Reference< css::xml::sax::XAttributeList> & xAttrList ) override;
+    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override;
 };
 
 #endif
