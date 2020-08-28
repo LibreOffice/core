@@ -571,7 +571,6 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
 
         }
         break;
-
         case ContentTypeId::TABLE     :
         {
             const size_t nCount = m_pWrtShell->GetTableFrameFormatCount(true);
@@ -590,10 +589,18 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     pCnt->SetInvisible();
 
                 m_pMember->insert(std::unique_ptr<SwContent>(pCnt));
+            }
 
-                if(nOldMemberCount > i &&
-                    (*pOldMember)[i]->IsInvisible() != pCnt->IsInvisible())
-                        *pbLevelOrVisibilityChanged = true;
+            if (nullptr != pbLevelOrVisibilityChanged)
+            {
+                assert(pOldMember);
+                // need to check visibility (and equal entry number) after
+                // creation due to a sorted list being used here (before,
+                // entries with same index were compared already at creation
+                // time what worked before a sorted list was used)
+                *pbLevelOrVisibilityChanged = checkVisibilityChanged(
+                    *pOldMember,
+                    *m_pMember);
             }
         }
         break;
@@ -635,9 +642,18 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     !aAskItem.pObject )     // not visible
                     pCnt->SetInvisible();
                 m_pMember->insert(std::unique_ptr<SwContent>(pCnt));
-                if (nOldMemberCount > i &&
-                    (*pOldMember)[i]->IsInvisible() != pCnt->IsInvisible())
-                        *pbLevelOrVisibilityChanged = true;
+            }
+
+            if(nullptr != pbLevelOrVisibilityChanged)
+            {
+                assert(pOldMember);
+                // need to check visibility (and equal entry number) after
+                // creation due to a sorted list being used here (before,
+                // entries with same index were compared already at creation
+                // time what worked before a sorted list was used)
+                *pbLevelOrVisibilityChanged = checkVisibilityChanged(
+                    *pOldMember,
+                    *m_pMember);
             }
         }
         break;
@@ -803,10 +819,19 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                             pCnt->SetInvisible();
                         m_pMember->insert(std::unique_ptr<SwContent>(pCnt));
                         m_nMemberCount++;
-                        if (nOldMemberCount > i &&
-                            (*pOldMember)[i]->IsInvisible() != pCnt->IsInvisible() )
-                                *pbLevelOrVisibilityChanged = true;
                     }
+                }
+
+                if (nullptr != pbLevelOrVisibilityChanged)
+                {
+                    assert(pOldMember);
+                    // need to check visibility (and equal entry number) after
+                    // creation due to a sorted list being used here (before,
+                    // entries with same index were compared already at creation
+                    // time what worked before a sorted list was used)
+                    *pbLevelOrVisibilityChanged = checkVisibilityChanged(
+                        *pOldMember,
+                        *m_pMember);
                 }
             }
         }
