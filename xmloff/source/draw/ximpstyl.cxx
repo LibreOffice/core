@@ -1389,40 +1389,6 @@ SvXMLImportContextRef SdXMLMasterStylesContext::CreateChildContext(
 }
 
 SdXMLHeaderFooterDeclContext::SdXMLHeaderFooterDeclContext(SvXMLImport& rImport,
-    sal_uInt16 nPrfx, const OUString& rLName,
-    const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList)
-    : SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList)
-    , mbFixed(false)
-{
-    const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for(sal_Int16 i=0; i < nAttrCount; i++)
-    {
-        OUString aLocalName;
-        const OUString aValue( xAttrList->getValueByIndex(i) );
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName(xAttrList->getNameByIndex(i), &aLocalName);
-
-        if( nPrefix == XML_NAMESPACE_PRESENTATION )
-        {
-            if( IsXMLToken( aLocalName, XML_NAME ) )
-            {
-                maStrName = aValue;
-            }
-            else if( IsXMLToken( aLocalName, XML_SOURCE ) )
-            {
-                mbFixed = IsXMLToken( aValue, XML_FIXED );
-            }
-        }
-        else if( nPrefix == XML_NAMESPACE_STYLE )
-        {
-            if( IsXMLToken( aLocalName, XML_DATA_STYLE_NAME ) )
-            {
-                maStrDateTimeFormat = aValue;
-            }
-        }
-    }
-}
-
-SdXMLHeaderFooterDeclContext::SdXMLHeaderFooterDeclContext(SvXMLImport& rImport,
     const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
     : SvXMLStyleContext( rImport )
     , mbFixed(false)
@@ -1474,28 +1440,6 @@ void SdXMLHeaderFooterDeclContext::endFastElement(sal_Int32 nToken)
     {
         SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nToken));
     }
-}
-
-void SdXMLHeaderFooterDeclContext::EndElement()
-{
-    SdXMLImport& rImport = dynamic_cast<SdXMLImport&>(GetImport());
-    if( IsXMLToken( GetLocalName(), XML_HEADER_DECL ) )
-    {
-        rImport.AddHeaderDecl( maStrName, maStrText );
-    }
-    else if( IsXMLToken( GetLocalName(), XML_FOOTER_DECL ) )
-    {
-        rImport.AddFooterDecl( maStrName, maStrText );
-    }
-    else if( IsXMLToken( GetLocalName(), XML_DATE_TIME_DECL ) )
-    {
-        rImport.AddDateTimeDecl( maStrName, maStrText, mbFixed, maStrDateTimeFormat );
-    }
-}
-
-void SdXMLHeaderFooterDeclContext::Characters( const OUString& rChars )
-{
-    maStrText += rChars;
 }
 
 void SdXMLHeaderFooterDeclContext::characters( const OUString& rChars )
