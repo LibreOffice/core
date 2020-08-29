@@ -23,6 +23,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
+#include <xmloff/xmlnamespace.hxx>
 
 using namespace css;
 using namespace css::xml::sax;
@@ -35,29 +36,34 @@ using namespace css::graphic;
 using namespace css::security;
 using namespace xmloff::token;
 
-SignatureLineContext::SignatureLineContext(SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                           const OUString& rLocalName,
-                                           const Reference<XAttributeList>& xAttrList,
+SignatureLineContext::SignatureLineContext(SvXMLImport& rImport, sal_Int32 /*nElement*/,
+                                           const Reference<XFastAttributeList>& xAttrList,
                                            const Reference<XShape>& rxShape)
-    : SvXMLImportContext(rImport, nPrfx, rLocalName)
+    : SvXMLImportContext(rImport)
 {
     Reference<beans::XPropertySet> xPropSet(rxShape, UNO_QUERY_THROW);
 
     xPropSet->setPropertyValue("IsSignatureLine", Any(true));
 
-    xPropSet->setPropertyValue("SignatureLineId", Any(xAttrList->getValueByName("loext:id")));
-    xPropSet->setPropertyValue("SignatureLineSuggestedSignerName",
-                               Any(xAttrList->getValueByName("loext:suggested-signer-name")));
-    xPropSet->setPropertyValue("SignatureLineSuggestedSignerTitle",
-                               Any(xAttrList->getValueByName("loext:suggested-signer-title")));
-    xPropSet->setPropertyValue("SignatureLineSuggestedSignerEmail",
-                               Any(xAttrList->getValueByName("loext:suggested-signer-email")));
-    xPropSet->setPropertyValue("SignatureLineSigningInstructions",
-                               Any(xAttrList->getValueByName("loext:signing-instructions")));
+    xPropSet->setPropertyValue("SignatureLineId",
+                               Any(xAttrList->getOptionalValue(XML_ELEMENT(LO_EXT, XML_ID))));
+    xPropSet->setPropertyValue(
+        "SignatureLineSuggestedSignerName",
+        Any(xAttrList->getOptionalValue(XML_ELEMENT(LO_EXT, XML_SUGGESTED_SIGNER_NAME))));
+    xPropSet->setPropertyValue(
+        "SignatureLineSuggestedSignerTitle",
+        Any(xAttrList->getOptionalValue(XML_ELEMENT(LO_EXT, XML_SUGGESTED_SIGNER_TITLE))));
+    xPropSet->setPropertyValue(
+        "SignatureLineSuggestedSignerEmail",
+        Any(xAttrList->getOptionalValue(XML_ELEMENT(LO_EXT, XML_SUGGESTED_SIGNER_EMAIL))));
+    xPropSet->setPropertyValue(
+        "SignatureLineSigningInstructions",
+        Any(xAttrList->getOptionalValue(XML_ELEMENT(LO_EXT, XML_SIGNING_INSTRUCTIONS))));
 
-    bool bShowSignDate = xAttrList->getValueByName("loext:show-sign-date") == GetXMLToken(XML_TRUE);
-    bool bCanAddComment
-        = xAttrList->getValueByName("loext:can-add-comment") == GetXMLToken(XML_TRUE);
+    bool bShowSignDate = xAttrList->getOptionalValue(XML_ELEMENT(LO_EXT, XML_SHOW_SIGN_DATE))
+                         == GetXMLToken(XML_TRUE);
+    bool bCanAddComment = xAttrList->getOptionalValue(XML_ELEMENT(LO_EXT, XML_CAN_ADD_COMMENT))
+                          == GetXMLToken(XML_TRUE);
     xPropSet->setPropertyValue("SignatureLineShowSignDate", Any(bShowSignDate));
     xPropSet->setPropertyValue("SignatureLineCanAddComment", Any(bCanAddComment));
 
@@ -91,11 +97,12 @@ SignatureLineContext::SignatureLineContext(SvXMLImport& rImport, sal_uInt16 nPrf
 
         // Try to find matching signature line image - if none exists that is fine,
         // then the signature line is not digitally signed.
-        auto pSignatureInfo = std::find_if(
-            xSignatureInfo.begin(), xSignatureInfo.end(),
-            [&xAttrList](const DocumentSignatureInformation& rSignatureInfo) {
-                return rSignatureInfo.SignatureLineId == xAttrList->getValueByName("loext:id");
-            });
+        auto pSignatureInfo
+            = std::find_if(xSignatureInfo.begin(), xSignatureInfo.end(),
+                           [&xAttrList](const DocumentSignatureInformation& rSignatureInfo) {
+                               return rSignatureInfo.SignatureLineId
+                                      == xAttrList->getOptionalValue(XML_ELEMENT(LO_EXT, XML_ID));
+                           });
         bool bIsSigned(false);
         if (pSignatureInfo != xSignatureInfo.end())
         {

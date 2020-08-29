@@ -35,9 +35,8 @@ using namespace ::com::sun::star::beans;
 using namespace ::xmloff::token;
 
 
-SdXMLDescriptionContext::SdXMLDescriptionContext( SvXMLImport& rImport, sal_uInt16 nPrfx,   const OUString& rLocalName,
-        const Reference< XAttributeList>&, const Reference< XShape >& rxShape)
-: SvXMLImportContext(rImport, nPrfx, rLocalName), mxShape( rxShape )
+SdXMLDescriptionContext::SdXMLDescriptionContext( SvXMLImport& rImport, sal_Int32 nElement, const Reference< XShape >& rxShape)
+: SvXMLImportContext(rImport), mxShape( rxShape ), mnElement(nElement)
 {
 }
 
@@ -53,7 +52,7 @@ void SdXMLDescriptionContext::endFastElement(sal_Int32 )
     try
     {
         uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY_THROW);
-        if(IsXMLToken(GetLocalName(),XML_TITLE))
+        if( (mnElement & TOKEN_MASK) == XML_TITLE)
         {
             xPropSet->setPropertyValue("Title", Any(msText));
         }

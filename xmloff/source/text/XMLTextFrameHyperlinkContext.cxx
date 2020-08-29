@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/log.hxx>
 #include <sax/tools/converter.hxx>
 
 #include <xmloff/xmlimp.hxx>
@@ -37,64 +38,6 @@ namespace drawing = com::sun::star::drawing;
 
 XMLTextFrameHyperlinkContext::XMLTextFrameHyperlinkContext(
         SvXMLImport& rImport,
-        sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< XAttributeList > & xAttrList,
-        TextContentAnchorType eATyp ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
-    eDefaultAnchorType( eATyp ),
-    bMap( false )
-{
-    OUString sShow;
-    const SvXMLTokenMap& rTokenMap =
-        GetImport().GetTextImport()->GetTextHyperlinkAttrTokenMap();
-
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
-    {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        const OUString& rValue = xAttrList->getValueByIndex( i );
-
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                            &aLocalName );
-        switch( rTokenMap.Get( nPrefix, aLocalName ) )
-        {
-        case XML_TOK_TEXT_HYPERLINK_HREF:
-            sHRef = GetImport().GetAbsoluteReference( rValue );
-            break;
-        case XML_TOK_TEXT_HYPERLINK_NAME:
-            sName = rValue;
-            break;
-        case XML_TOK_TEXT_HYPERLINK_TARGET_FRAME:
-            sTargetFrameName = rValue;
-            break;
-        case XML_TOK_TEXT_HYPERLINK_SHOW:
-            sShow = rValue;
-            break;
-        case XML_TOK_TEXT_HYPERLINK_SERVER_MAP:
-            {
-                bool bTmp(false);
-                if (::sax::Converter::convertBool( bTmp, rValue ))
-                {
-                    bMap = bTmp;
-                }
-            }
-            break;
-        }
-    }
-
-    if( !sShow.isEmpty() && sTargetFrameName.isEmpty() )
-    {
-        if( IsXMLToken( sShow, XML_NEW ) )
-            sTargetFrameName = "_blank";
-        else if( IsXMLToken( sShow, XML_REPLACE ) )
-            sTargetFrameName = "_self";
-    }
-}
-
-XMLTextFrameHyperlinkContext::XMLTextFrameHyperlinkContext(
-        SvXMLImport& rImport,
         sal_Int32 /*nElement*/,
         const Reference< XFastAttributeList > & xAttrList,
         TextContentAnchorType eATyp ) :
@@ -103,6 +46,7 @@ XMLTextFrameHyperlinkContext::XMLTextFrameHyperlinkContext(
     bMap( false )
 {
     OUString sShow;
+
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
         OUString sValue = aIter.toString();
@@ -131,7 +75,7 @@ XMLTextFrameHyperlinkContext::XMLTextFrameHyperlinkContext(
             break;
         default:
             XMLOFF_WARN_UNKNOWN("xmloff", aIter);
-         }
+        }
     }
 
     if( !sShow.isEmpty() && sTargetFrameName.isEmpty() )
@@ -147,27 +91,25 @@ XMLTextFrameHyperlinkContext::~XMLTextFrameHyperlinkContext()
 {
 }
 
-SvXMLImportContextRef XMLTextFrameHyperlinkContext::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextFrameHyperlinkContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
     XMLTextFrameContext *pTextFrameContext = nullptr;
 
-    if( XML_NAMESPACE_DRAW == nPrefix )
+    if( nElement == XML_ELEMENT(DRAW, XML_FRAME) )
     {
-        if( IsXMLToken( rLocalName, XML_FRAME ) )
-            pTextFrameContext = new XMLTextFrameContext( GetImport(), xAttrList,
+        pTextFrameContext = new XMLTextFrameContext( GetImport(),
+                                                xAttrList,
                                                 eDefaultAnchorType );
-    }
-
-    if( pTextFrameContext )
-    {
         pTextFrameContext->SetHyperlink( sHRef, sName, sTargetFrameName, bMap );
         pContext = pTextFrameContext;
         xFrameContext = pContext;
     }
+
+    if (!pContext)
+        XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
 
     return pContext;
 }

@@ -94,7 +94,7 @@ SdXML3DLightContext::~SdXML3DLightContext()
 
 SdXML3DSceneShapeContext::SdXML3DSceneShapeContext(
     SvXMLImport& rImport,
-    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes,
     bool bTemporaryShapes)
 :   SdXMLShapeContext( rImport, xAttrList, rShapes, bTemporaryShapes ), SdXML3DSceneAttributesHelper( rImport )
@@ -168,43 +168,22 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXML3DSceneShapeConte
         case XML_ELEMENT(SVG_COMPAT, XML_TITLE):
         case XML_ELEMENT(SVG, XML_DESC):
         case XML_ELEMENT(SVG_COMPAT, XML_DESC):
+            xContext = new SdXMLDescriptionContext( GetImport(), nElement, mxShape );
             break;
         case XML_ELEMENT(OFFICE, XML_EVENT_LISTENERS):
+            xContext = new SdXMLEventsContext( GetImport(), mxShape );
             break;
         // look for local light context first
         case XML_ELEMENT(DR3D, XML_LIGHT):
             // dr3d:light inside dr3d:scene context
             xContext = create3DLightContext( xAttrList );
             break;
+        default:
+            // call GroupChildContext function at common ShapeImport
+            return XMLShapeImportHelper::Create3DSceneChildContext(
+                GetImport(), nElement, xAttrList, mxChildren);
     }
     return xContext.get();
-}
-
-SvXMLImportContextRef SdXML3DSceneShapeContext::CreateChildContext( sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList>& xAttrList )
-{
-    SvXMLImportContextRef xContext;
-
-    // #i68101#
-    if( nPrefix == XML_NAMESPACE_SVG &&
-        (IsXMLToken( rLocalName, XML_TITLE ) || IsXMLToken( rLocalName, XML_DESC ) ) )
-    {
-        xContext = new SdXMLDescriptionContext( GetImport(), nPrefix, rLocalName, xAttrList, mxShape );
-    }
-    else if( nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) )
-    {
-        xContext = new SdXMLEventsContext( GetImport(), nPrefix, rLocalName, xAttrList, mxShape );
-    }
-
-    // call GroupChildContext function at common ShapeImport
-    if (!xContext)
-    {
-        xContext = GetImport().GetShapeImport()->Create3DSceneChildContext(
-            GetImport(), nPrefix, rLocalName, xAttrList, mxChildren);
-    }
-
-    return xContext;
 }
 
 SdXML3DSceneAttributesHelper::SdXML3DSceneAttributesHelper( SvXMLImport& rImporter )

@@ -608,7 +608,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SwXMLItemSetStyleConte
                 pTextStyle->startFastElement( nElement, xTmpAttrList.get() );
                 rStyles.AddStyle( *pTextStyle );
             }
-            return pTextStyle->createFastChildContextFallback( nElement, xAttrList );
+            return pTextStyle->createFastChildContext( nElement, xAttrList );
         }
         default:
             XMLOFF_WARN_UNKNOWN_ELEMENT("sw", nElement);

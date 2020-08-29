@@ -436,9 +436,8 @@ void SdXMLEventContextData::ApplyProperties()
 }
 
 
-SdXMLEventsContext::SdXMLEventsContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,
-        const Reference< XAttributeList>&, const Reference< XShape >& rxShape)
-: SvXMLImportContext(rImport, nPrfx, rLocalName), mxShape( rxShape )
+SdXMLEventsContext::SdXMLEventsContext( SvXMLImport& rImport, const Reference< XShape >& rxShape)
+: SvXMLImportContext(rImport), mxShape( rxShape )
 {
 }
 

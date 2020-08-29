@@ -496,10 +496,8 @@ constexpr OUStringLiteral gsImageMap(u"ImageMap");
 
 XMLImageMapContext::XMLImageMapContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
     Reference<XPropertySet> const & rPropertySet) :
-        SvXMLImportContext(rImport, nPrefix, rLocalName),
+        SvXMLImportContext(rImport),
         xPropertySet(rPropertySet)
 {
     try

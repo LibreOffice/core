@@ -20,6 +20,7 @@
 #include "XMLTrackedChangesImportContext.hxx"
 #include "XMLChangedRegionImportContext.hxx"
 #include <com/sun/star/uno/Reference.h>
+#include <sal/log.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnamespace.hxx>
@@ -34,10 +35,8 @@ using namespace ::xmloff::token;
 
 
 XMLTrackedChangesImportContext::XMLTrackedChangesImportContext(
-    SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName) :
-        SvXMLImportContext(rImport, nPrefix, rLocalName)
+    SvXMLImport& rImport) :
+        SvXMLImportContext(rImport)
 {
 }
 
@@ -62,6 +61,8 @@ void XMLTrackedChangesImportContext::startFastElement( sal_Int32 /*nElement*/,
             }
             break;
         }
+        else
+            XMLOFF_WARN_UNKNOWN("xmloff", aIter);
     }
 
     // set tracked changes

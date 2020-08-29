@@ -105,43 +105,6 @@ public:
     }
 };
 
-XMLCharContext::XMLCharContext(
-        SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const Reference< xml::sax::XAttributeList > & xAttrList,
-        sal_Unicode c,
-        bool bCount ) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
-    ,m_nControl(0)
-    ,m_nCount(1)
-    ,m_c(c)
-{
-    if( !bCount )
-        return;
-
-    const SvXMLNamespaceMap& rMap = GetImport().GetNamespaceMap();
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
-    {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-
-        OUString aLocalName;
-        sal_uInt16 nPrefix =rMap.GetKeyByAttrName( rAttrName,&aLocalName );
-        if( XML_NAMESPACE_TEXT == nPrefix &&
-            IsXMLToken( aLocalName, XML_C ) )
-        {
-            sal_Int32 nTmp = xAttrList->getValueByIndex(i).toInt32();
-            if( nTmp > 0 )
-            {
-                if( nTmp > SAL_MAX_UINT16 )
-                    m_nCount = SAL_MAX_UINT16;
-                else
-                    m_nCount = static_cast<sal_uInt16>(nTmp);
-            }
-        }
-    }
-}
 
 XMLCharContext::XMLCharContext(
         SvXMLImport& rImport,
@@ -172,19 +135,6 @@ XMLCharContext::XMLCharContext(
         else
             XMLOFF_WARN_UNKNOWN("xmloff", aIter);
     }
-}
-
-XMLCharContext::XMLCharContext(
-        SvXMLImport& rImp,
-        sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const Reference< xml::sax::XAttributeList > &,
-        sal_Int16 nControl ) :
-    SvXMLImportContext( rImp, nPrfx, rLName )
-    ,m_nControl(nControl)
-    ,m_nCount(0)
-    ,m_c(0)
-{
 }
 
 XMLCharContext::XMLCharContext(
@@ -1537,8 +1487,8 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLImpSpanContext_Impl
             Reference < XTextRange > xAnchorPos =
                 rImport.GetTextImport()->GetCursor()->getStart();
             XMLTextFrameContext *pTextFrameContext =
-                new XMLTextFrameContext( rImport,
-                                         rImport.convertToSlowAttrList(xAttrList),
+                            new XMLTextFrameContext(rImport,
+                                         xAttrList,
                                          TextContentAnchorType_AS_CHARACTER );
             // Remove check for text content. (#i33242#)
             // Check for text content is done on the processing of the hint
@@ -1622,7 +1572,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLImpSpanContext_Impl
                nElement == XML_ELEMENT(DRAW, XML_CONTROL ) ) )
         {
             Reference < XShapes > xShapes;
-            SvXMLShapeContext* pShapeContext = rImport.GetShapeImport()->CreateGroupChildContext(
+            SvXMLShapeContext* pShapeContext = XMLShapeImportHelper::CreateGroupChildContext(
                 rImport, nElement, xAttrList, xShapes );
             pContext = pShapeContext;
             // OD 2004-04-20 #i26791# - keep shape in a text frame hint to
@@ -1663,117 +1613,6 @@ void XMLImpSpanContext_Impl::characters( const OUString& rChars )
     GetImport().GetTextImport()->InsertString( sChars, rIgnoreLeadingSpace );
 }
 
-
-XMLParaContext::XMLParaContext(
-        SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const Reference< xml::sax::XAttributeList > & xAttrList,
-        bool bHead ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
-    xStart( rImport.GetTextImport()->GetCursorAsRange()->getStart() ),
-    m_bHaveAbout(false),
-    nOutlineLevel( IsXMLToken( rLName, XML_H ) ? 1 : -1 ),
-    // Lost outline numbering in master document (#i73509#)
-    mbOutlineLevelAttrFound( false ),
-    mbOutlineContentVisible(true),
-    bIgnoreLeadingSpace( true ),
-    bHeading( bHead ),
-    bIsListHeader( false ),
-    bIsRestart (false),
-    nStartValue(0),
-    nStarFontsConvFlags( 0 )
-{
-    const SvXMLTokenMap& rTokenMap =
-        GetImport().GetTextImport()->GetTextPAttrTokenMap();
-
-    bool bHaveXmlId( false );
-    OUString aCondStyleName;
-
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
-    {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        const OUString& rValue = xAttrList->getValueByIndex( i );
-
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                            &aLocalName );
-        switch( rTokenMap.Get( nPrefix, aLocalName ) )
-        {
-        case XML_TOK_TEXT_P_XMLID:
-            m_sXmlId = rValue;
-            bHaveXmlId = true;
-            break;
-        case XML_TOK_TEXT_P_ABOUT:
-            m_sAbout = rValue;
-            m_bHaveAbout = true;
-            break;
-        case XML_TOK_TEXT_P_PROPERTY:
-            m_sProperty = rValue;
-            break;
-        case XML_TOK_TEXT_P_CONTENT:
-            m_sContent = rValue;
-            break;
-        case XML_TOK_TEXT_P_DATATYPE:
-            m_sDatatype = rValue;
-            break;
-        case XML_TOK_TEXT_P_TEXTID:
-            if (!bHaveXmlId) { m_sXmlId = rValue; }
-            break;
-        case XML_TOK_TEXT_P_STYLE_NAME:
-            sStyleName = rValue;
-            break;
-        case XML_TOK_TEXT_P_COND_STYLE_NAME:
-            aCondStyleName = rValue;
-            break;
-        case XML_TOK_TEXT_P_LEVEL:
-            {
-                sal_Int32 nTmp = rValue.toInt32();
-                if( nTmp > 0 )
-                {
-                    if( nTmp > 127 )
-                        nTmp = 127;
-                    nOutlineLevel = static_cast<sal_Int8>(nTmp);
-                }
-                // Lost outline numbering in master document (#i73509#)
-                mbOutlineLevelAttrFound = true;
-            }
-            break;
-        case XML_TOK_TEXT_P_OUTLINE_CONTENT_VISIBLE:
-            {
-                bool bBool(false);
-                if (::sax::Converter::convertBool(bBool, rValue))
-                    mbOutlineContentVisible = bBool;
-            }
-            break;
-        case XML_TOK_TEXT_P_IS_LIST_HEADER:
-            {
-                bool bBool(false);
-                if (::sax::Converter::convertBool(bBool, rValue))
-                    bIsListHeader = bBool;
-            }
-            break;
-        case XML_TOK_TEXT_P_RESTART_NUMBERING:
-            {
-                bool bBool(false);
-                if (::sax::Converter::convertBool(bBool, rValue))
-                    bIsRestart = bBool;
-            }
-            break;
-        case XML_TOK_TEXT_P_START_VALUE:
-            {
-                nStartValue = sal::static_int_cast< sal_Int16 >(
-                    rValue.toInt32());
-            }
-            break;
-        }
-    }
-
-    if( !aCondStyleName.isEmpty() )
-        sStyleName = aCondStyleName;
-}
 
 XMLParaContext::XMLParaContext(
         SvXMLImport& rImport,
@@ -2180,10 +2019,9 @@ void XMLParaContext::characters( const OUString& rChars )
 
 XMLNumberedParaContext::XMLNumberedParaContext(
         SvXMLImport& i_rImport,
-        sal_uInt16 i_nPrefix,
-        const OUString& i_rLocalName,
-        const Reference< xml::sax::XAttributeList > & i_xAttrList ) :
-    SvXMLImportContext( i_rImport, i_nPrefix, i_rLocalName ),
+        sal_Int32 /*nElement*/,
+        const Reference< xml::sax::XFastAttributeList > & xAttrList ) :
+    SvXMLImportContext( i_rImport ),
     m_Level(0),
     m_StartValue(-1),
     m_ListId(),
@@ -2191,51 +2029,42 @@ XMLNumberedParaContext::XMLNumberedParaContext(
 {
     OUString StyleName;
 
-    const SvXMLTokenMap& rTokenMap(
-        i_rImport.GetTextImport()->GetTextNumberedParagraphAttrTokenMap() );
-
-    const sal_Int16 nAttrCount( i_xAttrList.is() ?
-        i_xAttrList->getLength() : 0 );
-    for ( sal_Int16 i=0; i < nAttrCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        const OUString& rAttrName( i_xAttrList->getNameByIndex( i )  );
-        const OUString& rValue   ( i_xAttrList->getValueByIndex( i ) );
-
-        OUString aLocalName;
-        const sal_uInt16 nPrefix(
-            GetImport().GetNamespaceMap().GetKeyByAttrName(
-                rAttrName, &aLocalName ) );
-        switch( rTokenMap.Get( nPrefix, aLocalName ) )
+        OUString sValue = aIter.toString();
+        switch( aIter.getToken() )
         {
-            case XML_TOK_TEXT_NUMBERED_PARAGRAPH_XMLID:
+            case XML_ELEMENT(XML, XML_ID):
 //FIXME: there is no UNO API for lists
                 break;
-            case XML_TOK_TEXT_NUMBERED_PARAGRAPH_LIST_ID:
-                m_ListId = rValue;
+            case XML_ELEMENT(TEXT, XML_LIST_ID):
+                m_ListId = sValue;
                 break;
-            case XML_TOK_TEXT_NUMBERED_PARAGRAPH_LEVEL:
+            case XML_ELEMENT(TEXT, XML_LEVEL):
                 {
-                    sal_Int32 nTmp = rValue.toInt32();
+                    sal_Int32 nTmp = sValue.toInt32();
                     if ( nTmp >= 1 && nTmp <= SHRT_MAX ) {
                         m_Level = static_cast<sal_uInt16>(nTmp) - 1;
                     }
                 }
                 break;
-            case XML_TOK_TEXT_NUMBERED_PARAGRAPH_STYLE_NAME:
-                StyleName = rValue;
+            case XML_ELEMENT(TEXT, XML_STYLE_NAME):
+                StyleName = sValue;
                 break;
-            case XML_TOK_TEXT_NUMBERED_PARAGRAPH_CONTINUE_NUMBERING:
+            case XML_ELEMENT(TEXT, XML_CONTINUE_NUMBERING):
                 // this attribute is deprecated
-//                ContinueNumbering = IsXMLToken(rValue, XML_TRUE);
+//                ContinueNumbering = IsXMLToken(sValue, XML_TRUE);
                 break;
-            case XML_TOK_TEXT_NUMBERED_PARAGRAPH_START_VALUE:
+            case XML_ELEMENT(TEXT, XML_START_VALUE):
                 {
-                    sal_Int32 nTmp = rValue.toInt32();
+                    sal_Int32 nTmp = sValue.toInt32();
                     if ( nTmp >= 0 && nTmp <= SHRT_MAX ) {
                         m_StartValue = static_cast<sal_Int16>(nTmp);
                     }
                 }
                 break;
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 
