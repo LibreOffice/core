@@ -39,6 +39,10 @@ namespace xmloff::metadata
     AttributeDescription
         getAttributeDescription( const sal_uInt16 i_namespacePrefix, const OUString& i_attributeName );
 
+    /** retrieves the attribute descriptor for the attribute given by namespace prefix and attribute name
+    */
+    AttributeDescription getAttributeDescription( sal_Int32 nElement );
+
 } // namespace xmloff::metadata
 
 #endif // INCLUDED_XMLOFF_SOURCE_FORMS_PROPERTY_META_DATA_HXX
