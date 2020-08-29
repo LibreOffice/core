@@ -20,14 +20,14 @@
 #ifndef INCLUDED_XMLOFF_INC_XMLEMBEDDEDOBJECTIMPORTCONTEXT_HXX
 #define INCLUDED_XMLOFF_INC_XMLEMBEDDEDOBJECTIMPORTCONTEXT_HXX
 
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 #include <xmloff/xmlictxt.hxx>
 
 namespace com::sun::star::lang { class XComponent; }
 
 class XMLEmbeddedObjectImportContext final : public SvXMLImportContext
 {
-    css::uno::Reference<css::xml::sax::XDocumentHandler > xHandler;
+    css::uno::Reference<css::xml::sax::XFastDocumentHandler > mxHandler;
     css::uno::Reference<css::lang::XComponent > xComp;
 
     OUString sFilterService;
@@ -38,21 +38,22 @@ public:
     const OUString& GetFilterServiceName() const { return sFilterService; }
     const OUString& GetFilterCLSID() const { return sCLSID; }
 
-    XMLEmbeddedObjectImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                    const OUString& rLName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
+    XMLEmbeddedObjectImportContext( SvXMLImport& rImport, sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
 
     virtual ~XMLEmbeddedObjectImportContext() override;
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                                   const OUString& rLocalName,
-                                   const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList) override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
-    virtual void Characters( const OUString& rChars ) override;
+    virtual void SAL_CALL characters( const OUString& rChars ) override;
 
     void SetComponent( css::uno::Reference< css::lang::XComponent > const & rComp );
 
