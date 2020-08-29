@@ -218,15 +218,19 @@ void SchXMLPlotAreaContext::startFastElement (sal_Int32 /*nElement*/,
         switch( aIter.getToken() )
         {
             case XML_ELEMENT(SVG, XML_X):
+            case XML_ELEMENT(SVG_COMPAT, XML_X):
             case XML_ELEMENT(SVG, XML_Y):
+            case XML_ELEMENT(SVG_COMPAT, XML_Y):
             case XML_ELEMENT(SVG, XML_WIDTH):
+            case XML_ELEMENT(SVG_COMPAT, XML_WIDTH):
             case XML_ELEMENT(SVG, XML_HEIGHT):
+            case XML_ELEMENT(SVG_COMPAT, XML_HEIGHT):
                 m_aOuterPositioning.readPositioningAttribute( aIter.getToken(), aValue );
                 break;
-            case XML_ELEMENT(CHART, XML_STYLE_NAME):
+            case XML_ELEMENT(CHART,  XML_STYLE_NAME):
                 msAutoStyleName = aValue;
                 break;
-            case XML_ELEMENT(TABLE, XML_CELL_RANGE_ADDRESS):
+            case XML_ELEMENT(TABLE,  XML_CELL_RANGE_ADDRESS):
                 mrChartAddress = lcl_ConvertRange( aValue, xNewDoc );
                 // indicator for getting data from the outside
                 m_rbHasRangeAtPlotArea = true;
