@@ -3384,7 +3384,7 @@ namespace basegfx::utils
                     SAL_WARN_IF(ePolygonFlag == css::drawing::PolygonFlags_CONTROL || bControlA != bControlB,
                         "basegfx", "UnoPolygonBezierCoordsToB2DPolygon: Illegal source polygon (!)");
 
-                    // the previous writes used the B2DPolyPoygon -> utils::PolyPolygon converter
+                    // the previous writes used the B2DPolyPolygon -> utils::PolyPolygon converter
                     // which did not create minimal PolyPolygons, but created all control points
                     // as null vectors (identical points). Because of the former P(CA)(CB)-norm of
                     // B2DPolygon and it's unused sign of being the zero-vector and CA and CB being

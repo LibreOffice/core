@@ -96,7 +96,7 @@ namespace wmfemfhelper
         basegfx::BColor         maOverlineColor;
 
         /// clipping
-        basegfx::B2DPolyPolygon maClipPolyPoygon;
+        basegfx::B2DPolyPolygon maClipPolyPolygon;
 
         /// font, etc.
         vcl::Font               maFont;
@@ -154,8 +154,8 @@ namespace wmfemfhelper
         bool getOverlineColorActive() const { return mbOverlineColor; }
         void setOverlineColorActive(bool bNew) { if (bNew != mbOverlineColor) mbOverlineColor = bNew; }
 
-        const basegfx::B2DPolyPolygon& getClipPolyPolygon() const { return maClipPolyPoygon; }
-        void setClipPolyPolygon(const basegfx::B2DPolyPolygon& rNew) { if (rNew != maClipPolyPoygon) maClipPolyPoygon = rNew; }
+        const basegfx::B2DPolyPolygon& getClipPolyPolygon() const { return maClipPolyPolygon; }
+        void setClipPolyPolygon(const basegfx::B2DPolyPolygon& rNew) { if (rNew != maClipPolyPolygon) maClipPolyPolygon = rNew; }
         bool getClipPolyPolygonActive() const { return mbClipPolyPolygonActive; }
         void setClipPolyPolygonActive(bool bNew) { if (bNew != mbClipPolyPolygonActive) mbClipPolyPolygonActive = bNew; }
 

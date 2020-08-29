@@ -123,7 +123,7 @@ namespace wmfemfhelper
         maTextFillColor(),
         maTextLineColor(),
         maOverlineColor(),
-        maClipPolyPoygon(),
+        maClipPolyPolygon(),
         maFont(),
         maRasterOp(RasterOp::OverPaint),
         mnLayoutMode(ComplexTextLayoutFlags::Default),
