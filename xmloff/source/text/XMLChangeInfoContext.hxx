@@ -50,7 +50,6 @@ class XMLChangeInfoContext : public SvXMLImportContext
 
 public:
 
-
     XMLChangeInfoContext(
         SvXMLImport& rImport,
         XMLChangedRegionImportContext& rChangedRegion,
