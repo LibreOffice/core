@@ -925,6 +925,8 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             }
             break;
 
+            case XML_ELEMENT(ANIMATION, XML_PHYSICS_ANIMATION_START_VELOCITY_X):
+            case XML_ELEMENT(ANIMATION_OOO, XML_PHYSICS_ANIMATION_START_VELOCITY_X):
             case XML_ELEMENT(LO_EXT, XML_PHYSICS_ANIMATION_START_VELOCITY_X):
             {
                 Reference< XAnimatePhysics > xAnimatePhysics( mxNode, UNO_QUERY );
@@ -933,6 +935,8 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             }
             break;
 
+            case XML_ELEMENT(ANIMATION, XML_PHYSICS_ANIMATION_START_VELOCITY_Y):
+            case XML_ELEMENT(ANIMATION_OOO, XML_PHYSICS_ANIMATION_START_VELOCITY_Y):
             case XML_ELEMENT(LO_EXT, XML_PHYSICS_ANIMATION_START_VELOCITY_Y):
             {
                 Reference< XAnimatePhysics > xAnimatePhysics( mxNode, UNO_QUERY );
@@ -941,6 +945,8 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             }
             break;
 
+            case XML_ELEMENT(ANIMATION, XML_PHYSICS_ANIMATION_DENSITY):
+            case XML_ELEMENT(ANIMATION_OOO, XML_PHYSICS_ANIMATION_DENSITY):
             case XML_ELEMENT(LO_EXT, XML_PHYSICS_ANIMATION_DENSITY):
             {
                 Reference< XAnimatePhysics > xAnimatePhysics( mxNode, UNO_QUERY );
@@ -949,6 +955,8 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             }
             break;
 
+            case XML_ELEMENT(ANIMATION, XML_PHYSICS_ANIMATION_BOUNCINESS):
+            case XML_ELEMENT(ANIMATION_OOO, XML_PHYSICS_ANIMATION_BOUNCINESS):
             case XML_ELEMENT(LO_EXT, XML_PHYSICS_ANIMATION_BOUNCINESS):
             {
                 Reference< XAnimatePhysics > xAnimatePhysics( mxNode, UNO_QUERY );
