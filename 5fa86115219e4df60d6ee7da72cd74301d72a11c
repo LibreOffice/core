@@ -69,6 +69,24 @@
       "revId": "5fa86115219e4df60d6ee7da72cd74301d72a11c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61b3d0c5_96a7c533",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 6000,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2020-08-29T07:53:32Z",
+      "side": 1,
+      "message": "no sorry it cannot be deleted, beacause if the new statement did not be used (else case), after calling WirteTextFrame() functions the pAnchor might be null and in that case deleting it is not useful. Am I right?",
+      "parentUuid": "ecf8e261_c51c1f73",
+      "revId": "5fa86115219e4df60d6ee7da72cd74301d72a11c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
