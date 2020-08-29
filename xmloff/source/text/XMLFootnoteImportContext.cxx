@@ -20,6 +20,7 @@
 #include "XMLFootnoteImportContext.hxx"
 
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/namespacemap.hxx>

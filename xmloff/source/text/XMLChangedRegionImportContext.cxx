@@ -109,12 +109,9 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLChangedRegionImport
     else
         XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
 
-    if (!xContext)
-    {
-        // illegal element content! TODO: discard the redlines
-        // for the moment -> use text
-        // or default if text fail
-    }
+    // illegal element content! TODO: discard the redlines
+    // for the moment -> use text
+    // or default if text fail
 
     return xContext.get();
 }

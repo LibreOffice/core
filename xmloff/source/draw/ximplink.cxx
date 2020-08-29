@@ -27,23 +27,19 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
 
-SdXMLShapeLinkContext::SdXMLShapeLinkContext( SvXMLImport& rImport, const uno::Reference< xml::sax::XAttributeList>& xAttrList, uno::Reference< drawing::XShapes > const & rShapes)
+SdXMLShapeLinkContext::SdXMLShapeLinkContext( SvXMLImport& rImport, const uno::Reference< xml::sax::XFastAttributeList>& xAttrList, uno::Reference< drawing::XShapes > const & rShapes)
 : SvXMLShapeContext( rImport, false )
 , mxParent( rShapes )
 {
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-
-    for(sal_Int16 i=0; i < nAttrCount; i++)
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-        if( (nPrefix == XML_NAMESPACE_XLINK) && IsXMLToken( aLocalName, XML_HREF ) )
+        if( aIter.getToken() == XML_ELEMENT(XLINK, XML_HREF) )
         {
             assert(msHyperlink.pData);
-            msHyperlink = xAttrList->getValueByIndex( i );
-            break;
+            msHyperlink = aIter.toString();
         }
+        else
+            XMLOFF_WARN_UNKNOWN("xmloff", aIter);
     }
 }
 
@@ -55,7 +51,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLShapeLinkContext:
     sal_Int32 nElement,
     const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    SvXMLShapeContext* pContext = GetImport().GetShapeImport()->CreateGroupChildContext( GetImport(), nElement, xAttrList, mxParent);
+    SvXMLShapeContext* pContext = XMLShapeImportHelper::CreateGroupChildContext( GetImport(), nElement, xAttrList, mxParent);
 
     if( pContext )
     {
