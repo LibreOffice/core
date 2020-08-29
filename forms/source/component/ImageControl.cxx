@@ -326,7 +326,7 @@ void OImageControlModel::describeAggregateProperties( Sequence< Property >& /* [
     OBoundControlModel::describeAggregateProperties( o_rAggregateProperties );
     // remove ImageURL and Graphic properties, we "override" them.
     // This is because our aggregate synchronizes those
-    // two, but we have an own sychronization mechanism.
+    // two, but we have an own synchronization mechanism.
     RemoveProperty( o_rAggregateProperties, PROPERTY_IMAGE_URL );
     RemoveProperty( o_rAggregateProperties, PROPERTY_GRAPHIC );
 }
