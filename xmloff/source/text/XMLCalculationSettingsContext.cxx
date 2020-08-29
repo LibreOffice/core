@@ -23,6 +23,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 
+#include <sal/log.hxx>
 #include <sax/tools/converter.hxx>
 
 #include <xmloff/xmlimp.hxx>
@@ -37,30 +38,21 @@ using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
 
 XMLCalculationSettingsContext::XMLCalculationSettingsContext( SvXMLImport& rImport,
-                                    sal_uInt16 p_nPrefix,
-                                    const OUString& rLocalName,
-                                    const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList )
-: SvXMLImportContext ( rImport, p_nPrefix, rLocalName )
+                                    sal_Int32 /*nElement*/,
+                                    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+: SvXMLImportContext ( rImport )
 , nYear( 1930 )
 {
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName(
-                                            sAttrName, &aLocalName );
-        OUString sValue = xAttrList->getValueByIndex( i );
-
-        if (nPrefix == XML_NAMESPACE_TABLE)
+        if (aIter.getToken() == XML_ELEMENT(TABLE, XML_NULL_YEAR) )
         {
-            if ( IsXMLToken( aLocalName, XML_NULL_YEAR ) )
-            {
-                sal_Int32 nTemp;
-                ::sax::Converter::convertNumber(nTemp, sValue);
-                nYear= static_cast <sal_Int16> (nTemp);
-            }
+            sal_Int32 nTemp;
+            ::sax::Converter::convertNumber(nTemp, aIter.toString());
+            nYear= static_cast <sal_Int16> (nTemp);
         }
+        else
+            XMLOFF_WARN_UNKNOWN("xmloff", aIter);
     }
 }
 
