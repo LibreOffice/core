@@ -1,0 +1,16 @@
+diff a/xmloff/source/draw/ximpgrp.cxx b/xmloff/source/draw/ximpgrp.cxx	(rejected hunks)
+@@ -30,11 +30,11 @@ using namespace ::xmloff::token;
+ 
+ SdXMLGroupShapeContext::SdXMLGroupShapeContext(
+     SvXMLImport& rImport,
+-    sal_uInt16 nPrfx, const OUString& rLocalName,
+-    const uno::Reference< xml::sax::XAttributeList>& xAttrList,
++    sal_Int32 nElement,
++    const uno::Reference< xml::sax::XFastAttributeList>& xAttrList,
+     uno::Reference< drawing::XShapes > const & rShapes,
+     bool bTemporaryShape)
+-:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape )
++:   SdXMLShapeContext( rImport, nElement, xAttrList, rShapes, bTemporaryShape )
+ {
+ }
+ 

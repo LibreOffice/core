@@ -1,0 +1,13 @@
+diff a/xmloff/source/draw/ximpshap.hxx b/xmloff/source/draw/ximpshap.hxx	(rejected hunks)
+@@ -102,6 +102,11 @@ public:
+         sal_uInt16 nPrfx,
+         const OUString& rLocalName,
+         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
++         css::uno::Reference< css::drawing::XShapes > const & rShapes,
++         bool bTemporaryShape);
++    SdXMLShapeContext( SvXMLImport& rImport,
++        sal_Int32 nElement,
++        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+         css::uno::Reference< css::drawing::XShapes > const & rShapes,
+         bool bTemporaryShape);
+     virtual ~SdXMLShapeContext() override;
