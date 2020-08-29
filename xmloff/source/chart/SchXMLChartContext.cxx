@@ -1020,7 +1020,7 @@ void SchXMLChartContext::MergeSeriesForStockChart()
 
 css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLChartContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& )
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext* pContext = nullptr;
     uno::Reference< chart::XChartDocument > xDoc = mrImportHelper.GetChartDocument();
@@ -1038,6 +1038,48 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLChartContext::cr
                                                   maSeriesDefaultsAndStyles,
                                                   maChartTypeServiceName,
                                                   maLSequencesPerIndex, maChartSize );
+            break;
+        case XML_ELEMENT(CHART, XML_TITLE):
+            break;
+        case XML_ELEMENT(CHART, XML_SUBTITLE):
+            break;
+        case XML_ELEMENT(CHART, XML_LEGEND):
+            break;
+        case XML_ELEMENT(TABLE, XML_TABLE):
+            break;
+
+        default:
+            // try importing as an additional shape
+            if( ! mxDrawPage.is())
+            {
+                uno::Reference< drawing::XDrawPageSupplier  > xSupp( xDoc, uno::UNO_QUERY );
+                if( xSupp.is())
+                    mxDrawPage = xSupp->getDrawPage();
+
+                SAL_WARN_IF( !mxDrawPage.is(), "xmloff.chart", "Invalid Chart Page" );
+            }
+            if( mxDrawPage.is())
+                pContext = XMLShapeImportHelper::CreateGroupChildContext(
+                    GetImport(), nElement, xAttrList, mxDrawPage );
+            break;
+    }
+
+    return pContext;
+}
+
+SvXMLImportContextRef SchXMLChartContext::CreateChildContext(
+    sal_uInt16 nPrefix,
+    const OUString& rLocalName,
+    const uno::Reference< xml::sax::XAttributeList >& /*xAttrList*/ )
+{
+    SvXMLImportContext* pContext = nullptr;
+    const SvXMLTokenMap& rTokenMap = mrImportHelper.GetChartElemTokenMap();
+    uno::Reference< chart::XChartDocument > xDoc = mrImportHelper.GetChartDocument();
+    uno::Reference< beans::XPropertySet > xProp( xDoc, uno::UNO_QUERY );
+
+    switch( rTokenMap.Get( nPrefix, rLocalName ))
+    {
+        case XML_TOK_CHART_PLOT_AREA:
             break;
 
         case XML_ELEMENT(CHART, XML_TITLE):
@@ -1103,52 +1145,6 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLChartContext::cr
             break;
 
         default:
-            break;
-    }
-
-    return pContext;
-}
-
-SvXMLImportContextRef SchXMLChartContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList )
-{
-    SvXMLImportContext* pContext = nullptr;
-    const SvXMLTokenMap& rTokenMap = mrImportHelper.GetChartElemTokenMap();
-    uno::Reference< chart::XChartDocument > xDoc = mrImportHelper.GetChartDocument();
-    uno::Reference< beans::XPropertySet > xProp( xDoc, uno::UNO_QUERY );
-
-    switch( rTokenMap.Get( nPrefix, rLocalName ))
-    {
-        case XML_TOK_CHART_PLOT_AREA:
-            break;
-
-        case XML_TOK_CHART_TITLE:
-            break;
-
-        case XML_TOK_CHART_SUBTITLE:
-            break;
-
-        case XML_TOK_CHART_LEGEND:
-            break;
-
-        case XML_TOK_CHART_TABLE:
-            break;
-
-        default:
-            // try importing as an additional shape
-            if( ! mxDrawPage.is())
-            {
-                uno::Reference< drawing::XDrawPageSupplier  > xSupp( xDoc, uno::UNO_QUERY );
-                if( xSupp.is())
-                    mxDrawPage = xSupp->getDrawPage();
-
-                SAL_WARN_IF( !mxDrawPage.is(), "xmloff.chart", "Invalid Chart Page" );
-            }
-            if( mxDrawPage.is())
-                pContext = GetImport().GetShapeImport()->CreateGroupChildContext(
-                    GetImport(), nPrefix, rLocalName, xAttrList, mxDrawPage );
             break;
     }
 

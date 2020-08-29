@@ -20,6 +20,7 @@
 #include "XMLAutoMarkFileContext.hxx"
 #include <xmloff/xmlimp.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -33,6 +34,7 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::xml::sax::XAttributeList;
+using ::com::sun::star::xml::sax::XFastAttributeList;
 using ::com::sun::star::beans::XPropertySet;
 
 using ::xmloff::token::IsXMLToken;
@@ -40,10 +42,8 @@ using ::xmloff::token::XML_HREF;
 
 
 XMLAutoMarkFileContext::XMLAutoMarkFileContext(
-    SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName) :
-        SvXMLImportContext(rImport, nPrefix, rLocalName)
+    SvXMLImport& rImport) :
+        SvXMLImportContext(rImport)
 {
 }
 
@@ -52,24 +52,19 @@ XMLAutoMarkFileContext::~XMLAutoMarkFileContext()
 }
 
 
-void XMLAutoMarkFileContext::StartElement(
-    const Reference<XAttributeList> & xAttrList)
+void XMLAutoMarkFileContext::startFastElement(
+    sal_Int32 /*nElement*/,
+    const Reference<XFastAttributeList> & xAttrList)
 {
     // scan for text:alphabetical-index-auto-mark-file attribute, and if
     // found set value with the document
 
-    sal_Int16 nLength = xAttrList->getLength();
-    for( sal_Int16 i = 0; i < nLength; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(i), &sLocalName );
-
-        if ( ( XML_NAMESPACE_XLINK == nPrefix ) &&
-             IsXMLToken(sLocalName, XML_HREF) )
+        if ( aIter.getToken() == XML_ELEMENT(XLINK, XML_HREF) )
         {
             Any aAny;
-            aAny <<= GetImport().GetAbsoluteReference( xAttrList->getValueByIndex(i) );
+            aAny <<= GetImport().GetAbsoluteReference( aIter.toString() );
             Reference<XPropertySet> xPropertySet(
                 GetImport().GetModel(), UNO_QUERY );
             if (xPropertySet.is())
@@ -77,6 +72,8 @@ void XMLAutoMarkFileContext::StartElement(
                 xPropertySet->setPropertyValue( "IndexAutoMarkFileURL", aAny );
             }
         }
+        else
+            SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
     }
 }
 
