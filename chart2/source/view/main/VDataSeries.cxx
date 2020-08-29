@@ -996,7 +996,7 @@ DataPointLabel* VDataSeries::getDataPointLabelIfLabel( sal_Int32 index ) const
 {
     DataPointLabel* pLabel = getDataPointLabel( index );
     if( !pLabel || (!pLabel->ShowNumber && !pLabel->ShowNumberInPercent
-        && !pLabel->ShowCategoryName ) )
+        && !pLabel->ShowCategoryName && !pLabel->ShowCustomLabel ) )
         return nullptr;
     return pLabel;
 }

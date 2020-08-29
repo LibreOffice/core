@@ -109,7 +109,7 @@ void convertTextProperty(PropertySet& rPropSet, ObjectFormatter& rFormatter,
 
 void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatter,
                                 DataLabelModelBase& rDataLabel, const TypeGroupConverter& rTypeGroup,
-                                bool bDataSeriesLabel, bool bHasInternalData, bool bMSO2007Doc )
+                                bool bDataSeriesLabel, bool bCustomLabelField, bool bHasInternalData, bool bMSO2007Doc )
 {
     const TypeGroupInfo& rTypeInfo = rTypeGroup.getTypeInfo();
 
@@ -141,7 +141,7 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
     // type of attached label
     if( bHasAnyElement || rDataLabel.mbDeleted )
     {
-        DataPointLabel aPointLabel( bShowValue, bShowPercent, bShowCateg, bShowSymbol );
+        DataPointLabel aPointLabel( bShowValue, bShowPercent, bShowCateg, bShowSymbol, bCustomLabelField );
         rPropSet.setProperty( PROP_Label, aPointLabel );
     }
 
@@ -277,8 +277,8 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
         bool bHasInternalData = getChartDocument()->hasInternalDataProvider();
         PropertySet aPropSet( rxDataSeries->getDataPointByIndex( mrModel.mnIndex ) );
 
-        lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, false, bHasInternalData, bMSO2007Doc );
-
+        bool bCustomLabelField = mrModel.mxText && mrModel.mxText->mxTextBody && !mrModel.mxText->mxTextBody->getParagraphs().empty();
+        lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, false, bCustomLabelField, bHasInternalData, bMSO2007Doc );
         const TypeGroupInfo& rTypeInfo = rTypeGroup.getTypeInfo();
         bool bIsPie = rTypeInfo.meTypeCategory == TYPECATEGORY_PIE;
 
@@ -296,7 +296,7 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
             importFillProperties(aPropSet, *mrModel.mxShapeProp, getFilter().getGraphicHelper(),
                                  rHelper);
         }
-        if( mrModel.mxText && mrModel.mxText->mxTextBody && !mrModel.mxText->mxTextBody->getParagraphs().empty() )
+        if( bCustomLabelField )
         {
             css::uno::Reference< XComponentContext > xContext = getComponentContext();
             uno::Sequence< css::uno::Reference< XDataPointCustomLabelField > > aSequence;
@@ -411,7 +411,7 @@ void DataLabelsConverter::convertFromModel( const Reference< XDataSeries >& rxDa
         bool bMSO2007Doc = getFilter().isMSO2007Document();
         bool bHasInternalData = getChartDocument()->hasInternalDataProvider();
 
-        lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, true, bHasInternalData, bMSO2007Doc );
+        lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, true, false, bHasInternalData, bMSO2007Doc );
 
         if (mrModel.mxShapeProp)
         {
