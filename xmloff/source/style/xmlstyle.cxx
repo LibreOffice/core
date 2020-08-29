@@ -82,15 +82,6 @@ const SvXMLTokenMapEntry aStyleStylesElemTokenMap[] =
 const OUStringLiteral gsParaStyleServiceName( u"com.sun.star.style.ParagraphStyle" );
 const OUStringLiteral gsTextStyleServiceName( u"com.sun.star.style.CharacterStyle" );
 
-const SvXMLTokenMap& SvXMLStylesContext::GetStyleStylesElemTokenMap()
-{
-    if( !mpStyleStylesElemTokenMap )
-        mpStyleStylesElemTokenMap.reset(
-            new SvXMLTokenMap( aStyleStylesElemTokenMap ) );
-
-    return *mpStyleStylesElemTokenMap;
-}
-
 void SvXMLStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
                                       const OUString& rLocalName,
                                       const OUString& rValue )

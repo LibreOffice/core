@@ -86,7 +86,6 @@ private:
 
 protected:
 
-    DECL_LINK( ImpUpdateDataHdl, Timer*, void );
     void            StateChanged( StateChangedType nType ) override;
     void            DataChanged( const DataChangedEvent& rDCEvt ) override;
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
@@ -142,8 +141,6 @@ public:
     OUString        GetText() const override;
     OUString        GetText( LineEnd aSeparator ) const;
     OUString        GetTextLines( LineEnd aSeparator ) const;
-
-    void            SetRightToLeft( bool bRightToLeft );
 
     void            SetModifyHdl( const Link<Edit&,void>& rLink ) override { aModifyHdlLink = rLink; }
     const Link<Edit&,void>&   GetModifyHdl() const override                { return aModifyHdlLink; }

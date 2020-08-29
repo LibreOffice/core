@@ -1452,15 +1452,6 @@ void VclMultiLineEdit::EnableFocusSelectionHide( bool bHide )
     pImpVclMEdit->GetTextWindow()->SetAutoFocusHide( bHide );
 }
 
-void VclMultiLineEdit::SetRightToLeft( bool bRightToLeft )
-{
-    if ( GetTextEngine() )
-    {
-        GetTextEngine()->SetRightToLeft( bRightToLeft );
-        GetTextView()->ShowCursor();
-    }
-}
-
 void VclMultiLineEdit::DisableSelectionOnFocus()
 {
     pImpVclMEdit->GetTextWindow()->DisableSelectionOnFocus();

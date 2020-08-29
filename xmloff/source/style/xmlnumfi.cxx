@@ -77,7 +77,6 @@ public:
         const uno::Reference<uno::XComponentContext>& rxContext );
 
     SvNumberFormatter*      GetNumberFormatter() const  { return pFormatter; }
-    const SvXMLTokenMap&    GetStylesElemTokenMap();
     const LocaleDataWrapper&    GetLocaleData( LanguageType nLang );
     sal_uInt32              GetKeyForName( const OUString& rName );
     void                    AddKey( sal_uInt32 nKey, const OUString& rName, bool bRemoveAfterUse );
@@ -370,28 +369,6 @@ void SvXMLNumImpData::RemoveVolatileFormats()
                 pFormatter->DeleteEntry(rObj.nKey);
         }
     }
-}
-
-const SvXMLTokenMap& SvXMLNumImpData::GetStylesElemTokenMap()
-{
-    if( !pStylesElemTokenMap )
-    {
-        static const SvXMLTokenMapEntry aStylesElemMap[] =
-        {
-            //  style elements
-            { XML_NAMESPACE_NUMBER, XML_NUMBER_STYLE,      static_cast<sal_uInt16>(SvXMLStylesTokens::NUMBER_STYLE)      },
-            { XML_NAMESPACE_NUMBER, XML_CURRENCY_STYLE,    static_cast<sal_uInt16>(SvXMLStylesTokens::CURRENCY_STYLE)    },
-            { XML_NAMESPACE_NUMBER, XML_PERCENTAGE_STYLE,  static_cast<sal_uInt16>(SvXMLStylesTokens::PERCENTAGE_STYLE)  },
-            { XML_NAMESPACE_NUMBER, XML_DATE_STYLE,        static_cast<sal_uInt16>(SvXMLStylesTokens::DATE_STYLE)        },
-            { XML_NAMESPACE_NUMBER, XML_TIME_STYLE,        static_cast<sal_uInt16>(SvXMLStylesTokens::TIME_STYLE)        },
-            { XML_NAMESPACE_NUMBER, XML_BOOLEAN_STYLE,     static_cast<sal_uInt16>(SvXMLStylesTokens::BOOLEAN_STYLE)     },
-            { XML_NAMESPACE_NUMBER, XML_TEXT_STYLE,        static_cast<sal_uInt16>(SvXMLStylesTokens::TEXT_STYLE)        },
-            XML_TOKEN_MAP_END
-        };
-
-        pStylesElemTokenMap = std::make_unique<SvXMLTokenMap>( aStylesElemMap );
-    }
-    return *pStylesElemTokenMap;
 }
 
 const LocaleDataWrapper& SvXMLNumImpData::GetLocaleData( LanguageType nLang )
@@ -2170,11 +2147,6 @@ SvXMLStyleContext*  SvXMLNumFmtHelper::CreateChildContext( SvXMLImport& rImport,
     }
     return new SvXMLNumFormatContext( rImport, nElement,
                                       pData.get(), nStyleToken, xAttrList, rStyles );
-}
-
-const SvXMLTokenMap& SvXMLNumFmtHelper::GetStylesElemTokenMap()
-{
-    return pData->GetStylesElemTokenMap();
 }
 
 LanguageType SvXMLNumFmtHelper::GetLanguageForKey(sal_Int32 nKey)

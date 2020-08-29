@@ -89,7 +89,6 @@ public:
 
     SvXMLNumImpData* getData() { return pData.get(); }
 
-    const SvXMLTokenMap&    GetStylesElemTokenMap();
     LanguageType            GetLanguageForKey(sal_Int32 nKey);
 
 //  sal_uInt32  GetKeyForName( const OUString& rName );
@@ -170,7 +169,6 @@ public:
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
     virtual void CreateAndInsert(bool bOverwrite) override;
 
-    SvXMLNumImpData* GetData() const                { return pData; }
     sal_Int32 GetKey();
     sal_Int32 CreateAndInsert( SvNumberFormatter* pFormatter );
     sal_Int32 CreateAndInsert( css::uno::Reference< css::util::XNumberFormatsSupplier > const & xFormatsSupplier );
