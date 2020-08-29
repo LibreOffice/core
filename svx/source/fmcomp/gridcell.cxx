@@ -1314,9 +1314,9 @@ void DbFormattedField::Init( BrowserDataWin& rParent, const Reference< XRowSet >
     SvNumberFormatter* pFormatterUsed = nullptr;
     if (m_xSupplier.is())
     {
-        SvNumberFormatsSupplierObj* pImplmentation = comphelper::getUnoTunnelImplementation<SvNumberFormatsSupplierObj>(m_xSupplier);
-        if (pImplmentation)
-            pFormatterUsed = pImplmentation->GetNumberFormatter();
+        SvNumberFormatsSupplierObj* pImplementation = comphelper::getUnoTunnelImplementation<SvNumberFormatsSupplierObj>(m_xSupplier);
+        if (pImplementation)
+            pFormatterUsed = pImplementation->GetNumberFormatter();
         else
             // Everything is invalid: the supplier is of the wrong type, then we can not
             // rely on a standard formatter to know the (possibly non-standard) key.
@@ -1902,8 +1902,8 @@ void DbNumericField::implAdjustGenericFieldSetting( const Reference< XPropertySe
     SvNumberFormatter* pFormatterUsed = nullptr;
     if ( xSupplier.is() )
     {
-        SvNumberFormatsSupplierObj* pImplmentation = comphelper::getUnoTunnelImplementation<SvNumberFormatsSupplierObj>( xSupplier );
-        pFormatterUsed = pImplmentation ? pImplmentation->GetNumberFormatter() : nullptr;
+        SvNumberFormatsSupplierObj* pImplementation = comphelper::getUnoTunnelImplementation<SvNumberFormatsSupplierObj>( xSupplier );
+        pFormatterUsed = pImplementation ? pImplementation->GetNumberFormatter() : nullptr;
     }
     if ( nullptr == pFormatterUsed )
     {   // the cursor didn't lead to success -> standard
