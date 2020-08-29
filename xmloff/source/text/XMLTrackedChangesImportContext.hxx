@@ -34,14 +34,12 @@ class XMLTrackedChangesImportContext : public SvXMLImportContext
 {
 public:
 
-    XMLTrackedChangesImportContext(
-        SvXMLImport& rImport,
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName);
+    XMLTrackedChangesImportContext(SvXMLImport& rImport);
 
     virtual ~XMLTrackedChangesImportContext() override;
 
-    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(

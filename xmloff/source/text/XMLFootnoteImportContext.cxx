@@ -20,6 +20,7 @@
 #include "XMLFootnoteImportContext.hxx"
 
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/namespacemap.hxx>
@@ -64,10 +65,8 @@ const SvXMLTokenMapEntry aFootnoteChildTokenMap[] =
 
 XMLFootnoteImportContext::XMLFootnoteImportContext(
     SvXMLImport& rImport,
-    XMLTextImportHelper& rHlp,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName )
-:   SvXMLImportContext(rImport, nPrfx, rLocalName)
+    XMLTextImportHelper& rHlp )
+:   SvXMLImportContext(rImport)
 ,   mbListContextPushed(false)
 ,   rHelper(rHlp)
 {
