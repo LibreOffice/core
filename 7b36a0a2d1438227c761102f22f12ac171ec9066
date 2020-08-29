@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1f7da389_5d9429fc",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2020-08-29T07:10:45Z",
+      "side": 1,
+      "message": "Good point, I\u0027ll use different names for this ptr and the one above.",
+      "parentUuid": "0f5225dd_caa5ab51",
+      "range": {
+        "startLine": 480,
+        "startChar": 4,
+        "endLine": 480,
+        "endChar": 19
+      },
+      "revId": "7b36a0a2d1438227c761102f22f12ac171ec9066",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ad87c9a9_dcc87e27",
         "filename": "sw/qa/extras/ooxmlexport/ooxmlexport5.cxx",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "128ccd40_66c6b560",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2020-08-29T07:10:45Z",
+      "side": 1,
+      "message": "I must have looked at the test right before this one and imitated that format. Will revert this along with other unnecessary whitespace changes.",
+      "parentUuid": "ad87c9a9_dcc87e27",
+      "range": {
+        "startLine": 116,
+        "startChar": 16,
+        "endLine": 116,
+        "endChar": 17
+      },
+      "revId": "7b36a0a2d1438227c761102f22f12ac171ec9066",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "094a09a8_83e4a5a2",
         "filename": "sw/qa/extras/ooxmlexport/ooxmlexport9.cxx",
         "patchSetId": 1
@@ -59,6 +107,30 @@
       "writtenOn": "2020-08-28T13:40:03Z",
       "side": 1,
       "message": "I\u0027m not sure this is OK. There\u0027s DECLARE_SW_EXPORTONLY_TEST that matches DECLARE_SW_ROUNDTRIP_TEST; I suppose you have changed the export file format using DECLARE_OOXMLEXPORT_EXPORTONLY_TEST",
+      "range": {
+        "startLine": 114,
+        "startChar": 0,
+        "endLine": 114,
+        "endChar": 35
+      },
+      "revId": "7b36a0a2d1438227c761102f22f12ac171ec9066",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ccbb21f4_254443b6",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport9.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2020-08-29T07:10:45Z",
+      "side": 1,
+      "message": "Nice catch, thank you!",
+      "parentUuid": "094a09a8_83e4a5a2",
       "range": {
         "startLine": 114,
         "startChar": 0,
