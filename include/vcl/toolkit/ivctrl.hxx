@@ -117,8 +117,6 @@ public:
     OUString VCL_DLLPUBLIC  GetDisplayText() const;
     void                    SetQuickHelpText( const OUString& rText ) { aQuickHelpText = rText; }
     const OUString&         GetQuickHelpText() const { return aQuickHelpText; }
-    void                    SetUserData ( void* _pUserData ) { pUserData = _pUserData; }
-    void*                   GetUserData () { return pUserData; }
 
     SvxIconChoiceCtrlTextMode   GetTextMode() const { return eTextMode; }
     SvxIconViewFlags        GetFlags() const { return nFlags; }
@@ -217,13 +215,10 @@ public:
 
     WinBits             GetStyle() const;
 
-    void                SetChoiceWithCursor();
-
     void                SetFont( const vcl::Font& rFont );
     void                SetPointFont( const vcl::Font& rFont );
 
     void                SetClickHdl( const Link<SvtIconChoiceCtrl*,void>& rLink ) { _aClickIconHdl = rLink; }
-    const Link<SvtIconChoiceCtrl*,void>& GetClickHdl() const { return _aClickIconHdl; }
 
     using OutputDevice::SetBackground;
     void                SetBackground( const Wallpaper& rWallpaper );
@@ -236,15 +231,6 @@ public:
 
     void RemoveEntry(sal_Int32 nEntryListPos);
 
-    /** creates automatic mnemonics for all icon texts in the control
-
-    @param _rUsedMnemonics
-        a MnemonicGenerator at which some other mnemonics are already registered.
-        This can be used if the control needs to share the "mnemonic space" with other elements,
-        such as a menu bar.
-    */
-    void                CreateAutoMnemonics( MnemonicGenerator& _rUsedMnemonics );
-
     bool                DoKeyInput( const KeyEvent& rKEvt );
 
     sal_Int32               GetEntryCount() const;
@@ -254,20 +240,12 @@ public:
     void                    SetCursor( SvxIconChoiceCtrlEntry* pEntry );
     SvxIconChoiceCtrlEntry* GetCursor() const;
 
-    // Re-calculation of cached view-data and invalidation of those in the view
-    void                    InvalidateEntry( SvxIconChoiceCtrlEntry* pEntry );
-
-    // Entry is selected, if the BoundRect is selected
-    SvxIconChoiceCtrlEntry* GetEntry( const Point& rPosPixel ) const;
-
     // sal_uLong is the position of the selected element in the list
     SvxIconChoiceCtrlEntry* GetSelectedEntry() const;
 
 #ifdef DBG_UTIL
     void                    SetEntryTextMode( SvxIconChoiceCtrlTextMode eMode, SvxIconChoiceCtrlEntry* pEntry );
 #endif
-
-    void                SetSelectionMode( SelectionMode eMode );
 
     tools::Rectangle           GetBoundingBox( SvxIconChoiceCtrlEntry* pEntry ) const;
     tools::Rectangle           GetEntryCharacterBounds( const sal_Int32 _nEntryPos, const sal_Int32 _nCharacterIndex ) const;

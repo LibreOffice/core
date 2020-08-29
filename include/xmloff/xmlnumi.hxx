@@ -49,14 +49,6 @@ class XMLOFF_DLLPUBLIC SvxXMLListStyleContext final
 
 public:
 
-
-    SvxXMLListStyleContext(
-            SvXMLImport& rImport,
-            sal_uInt16 nPrfx,
-            const OUString& rLName,
-            const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
-            bool bOutl = false );
-
     SvxXMLListStyleContext(
             SvXMLImport& rImport,
             sal_Int32 nElement,

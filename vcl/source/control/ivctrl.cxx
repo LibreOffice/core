@@ -221,13 +221,6 @@ void SvtIconChoiceCtrl::SetPointFont(const vcl::Font& rFont)
     }
 }
 
-SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::GetEntry( const Point& rPixPos ) const
-{
-    Point aPos( rPixPos );
-    aPos -= GetMapMode().GetOrigin();
-    return const_cast<SvtIconChoiceCtrl*>(this)->_pImpl->GetEntry( aPos );
-}
-
 WinBits SvtIconChoiceCtrl::GetStyle() const
 {
     return _pImpl->GetStyle();
@@ -258,11 +251,6 @@ SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::GetEntry( sal_Int32 nPos ) const
     return _pImpl ? _pImpl->GetEntry( nPos ) : nullptr;
 }
 
-void SvtIconChoiceCtrl::CreateAutoMnemonics( MnemonicGenerator& _rUsedMnemonics )
-{
-    _pImpl->CreateAutoMnemonics( &_rUsedMnemonics );
-}
-
 SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::GetSelectedEntry() const
 {
     return _pImpl ? _pImpl->GetFirstSelectedEntry() : nullptr;
@@ -272,11 +260,6 @@ void SvtIconChoiceCtrl::ClickIcon()
 {
     GetSelectedEntry();
     _aClickIconHdl.Call( this );
-}
-
-void SvtIconChoiceCtrl::SetChoiceWithCursor()
-{
-    _pImpl->SetChoiceWithCursor();
 }
 
 void SvtIconChoiceCtrl::KeyInput( const KeyEvent& rKEvt )
@@ -302,10 +285,6 @@ SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::GetCursor( ) const
 void SvtIconChoiceCtrl::SetCursor( SvxIconChoiceCtrlEntry* pEntry )
 {
     _pImpl->SetCursor( pEntry );
-}
-void SvtIconChoiceCtrl::InvalidateEntry( SvxIconChoiceCtrlEntry* pEntry )
-{
-    _pImpl->InvalidateEntry( pEntry );
 }
 
 void SvtIconChoiceCtrl::DataChanged( const DataChangedEvent& rDCEvt )
@@ -376,11 +355,6 @@ void SvtIconChoiceCtrl::RequestHelp( const HelpEvent& rHEvt )
 {
     if ( !_pImpl->RequestHelp( rHEvt ) )
         Control::RequestHelp( rHEvt );
-}
-
-void SvtIconChoiceCtrl::SetSelectionMode( SelectionMode eMode )
-{
-    _pImpl->SetSelectionMode( eMode );
 }
 
 tools::Rectangle SvtIconChoiceCtrl::GetBoundingBox( SvxIconChoiceCtrlEntry* pEntry ) const

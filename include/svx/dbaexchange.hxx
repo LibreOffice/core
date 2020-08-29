@@ -159,40 +159,11 @@ namespace svx
             // needed to provide a SotClipboardFormatId::SBA_DATAEXCHANGE format
 
     public:
-        /** should be used copying and the connection is needed.
-            @param  _rDatasource
-                The data source name.
-            @param  _nCommandType
-                The kind of command. @see com.sun.star.sdbc.CommandType
-            @param  _rCommand
-                The command, either a name of a table or query or a SQL statement.
-        */
-        ODataAccessObjectTransferable(
-            const OUString&  _rDatasourceOrLocation
-            ,const sal_Int32 _nCommandType
-            ,const OUString& _rCommand
-            ,const css::uno::Reference< css::sdbc::XConnection >& _rxConnection
-        );
-
         void Update(
             const OUString&  _rDatasourceOrLocation,
             const sal_Int32 _nCommandType,
             const OUString& _rCommand,
             const css::uno::Reference< css::sdbc::XConnection >& _rxConnection
-        );
-
-        /** should be used when copying a query object and no connection is available.
-            @param  _rDatasource
-                The data source name.
-            @param  _nCommandType
-                The kind of command. @see com.sun.star.sdbc.CommandType
-            @param  _rCommand
-                The command, either a name of a table or query or a SQL statement.
-        */
-        ODataAccessObjectTransferable(
-            const OUString&  _rDatasourceOrLocation
-            ,const sal_Int32 _nCommandType
-            ,const OUString& _rCommand
         );
 
         void Update(

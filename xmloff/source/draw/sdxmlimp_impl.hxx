@@ -158,15 +158,6 @@ public:
     SvXMLImportContext* CreateMasterStylesContext();
     SvXMLImportContext *CreateFontDeclsContext();
 
-    // Styles and AutoStyles contexts
-
-    const SvXMLTokenMap& GetBodyElemTokenMap();
-    const SvXMLTokenMap& GetStylesElemTokenMap();
-    const SvXMLTokenMap& GetMasterPageElemTokenMap();
-    const SvXMLTokenMap& GetPageMasterAttrTokenMap();
-    const SvXMLTokenMap& GetPageMasterStyleAttrTokenMap();
-    const SvXMLTokenMap& GetPresentationPlaceholderAttrTokenMap();
-
     // export local parameters concerning page access and similar
     const css::uno::Reference< css::container::XNameAccess >& GetLocalDocStyleFamilies() const { return mxDocStyleFamilies; }
     const css::uno::Reference< css::container::XIndexAccess >& GetLocalMasterPages() const { return mxDocMasterPages; }

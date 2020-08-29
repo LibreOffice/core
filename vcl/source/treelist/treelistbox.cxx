@@ -2315,11 +2315,6 @@ void SvTreeListBox::SetSpaceBetweenEntries( short nOffsLogic )
     }
 }
 
-void SvTreeListBox::SetCursor( SvTreeListEntry* pEntry )
-{
-    pImpl->SetCursor(pEntry, /*bForceNoSelect*/false);
-}
-
 void SvTreeListBox::SetCurEntry( SvTreeListEntry* pEntry )
 {
     pImpl->SetCurEntry( pEntry );
@@ -3407,11 +3402,6 @@ void SvTreeListBox::InitSettings()
     // always try to re-create default-SvLBoxButtonData
     if( pCheckButtonData && pCheckButtonData->HasDefaultImages() )
         pCheckButtonData->SetDefaultImages(this);
-}
-
-VclPtr<PopupMenu> SvTreeListBox::CreateContextMenu()
-{
-    return nullptr;
 }
 
 css::uno::Reference< XAccessible > SvTreeListBox::CreateAccessible()
