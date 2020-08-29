@@ -1040,6 +1040,16 @@
           <value xml:lang="en-US">Fall simulated</value>
         </prop>
       </node>
+      <node oor:name="libo-physics-shoot-right-return" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Shoot right and return</value>
+        </prop>
+      </node>
+      <node oor:name="libo-physics-shoot-left-return" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Shoot left and return</value>
+        </prop>
+      </node>
       <node oor:name="ooo-media-start" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Start media</value>
@@ -2505,7 +2515,7 @@
           <value xml:lang="en-US">Exciting</value>
         </prop>
         <prop oor:name="Effects" oor:type="oor:string-list">
-          <value oor:separator=";">ooo-emphasis-blast;ooo-emphasis-bold-reveal;ooo-emphasis-style-emphasis;ooo-emphasis-wave;ooo-emphasis-blink;libo-physics-fall</value>
+          <value oor:separator=";">ooo-emphasis-blast;ooo-emphasis-bold-reveal;ooo-emphasis-style-emphasis;ooo-emphasis-wave;ooo-emphasis-blink;libo-physics-fall;libo-physics-shoot-right-return;libo-physics-shoot-left-return</value>
         </prop>
       </node>
     </node>
