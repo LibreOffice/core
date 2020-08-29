@@ -1183,6 +1183,19 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf108505, "tdf108505.docx")
         getProperty<OUString>(xText, "CharFontName"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testVmlShapeTextWordWrap, "tdf97618_testVmlShapeTextWordWrap.docx")
+{
+    // tdf#97618 The text wraping of a shape was not handled in a canvas.
+    // TODO: fix export too
+    if (mbExported)
+        return;
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    if (!pXmlDoc)
+        return;
+    // The bound rect of shape will be wider if wrap does not work (the wrong value is 3167).
+    assertXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "width", "2500");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
