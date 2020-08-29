@@ -1145,7 +1145,7 @@ OBoundControlModel::OBoundControlModel(
     ,m_bSupportsExternalBinding( _bSupportExternalBinding )
     ,m_bSupportsValidation( _bSupportsValidation )
     ,m_bForwardValueChanges(true)
-    ,m_bTransferingValue( false )
+    ,m_bTransferringValue( false )
     ,m_bIsCurrentValueValid( true )
     ,m_bBindingControlsRO( false )
     ,m_bBindingControlsEnable( false )
@@ -1178,7 +1178,7 @@ OBoundControlModel::OBoundControlModel(
     ,m_bSupportsExternalBinding( _pOriginal->m_bSupportsExternalBinding )
     ,m_bSupportsValidation( _pOriginal->m_bSupportsValidation )
     ,m_bForwardValueChanges( true )
-    ,m_bTransferingValue( false )
+    ,m_bTransferringValue( false )
     ,m_bIsCurrentValueValid( _pOriginal->m_bIsCurrentValueValid )
     ,m_bBindingControlsRO( false )
     ,m_bBindingControlsEnable( false )
@@ -2509,7 +2509,7 @@ void SAL_CALL OBoundControlModel::modified( const EventObject& _rEvent )
 {
     ControlModelLock aLock( *this );
     OSL_PRECOND( hasExternalValueBinding(), "OBoundControlModel::modified: Where did this come from?" );
-    if ( !m_bTransferingValue && ( m_xExternalBinding == _rEvent.Source ) && m_xExternalBinding.is() )
+    if ( !m_bTransferringValue && ( m_xExternalBinding == _rEvent.Source ) && m_xExternalBinding.is() )
     {
         transferExternalValueToControl( aLock );
     }
@@ -2557,7 +2557,7 @@ void OBoundControlModel::transferControlValueToExternal( ControlModelLock& _rIns
         return;
 
     Any aExternalValue( translateControlValueToExternalValue() );
-    m_bTransferingValue = true;
+    m_bTransferringValue = true;
     _rInstanceLock.release();
      // UNSAFE >
     try
@@ -2572,7 +2572,7 @@ void OBoundControlModel::transferControlValueToExternal( ControlModelLock& _rIns
 
     // < UNSAFE
     _rInstanceLock.acquire();
-    m_bTransferingValue = false;
+    m_bTransferringValue = false;
 }
 
 Sequence< Type > OBoundControlModel::getSupportedBindingTypes()
