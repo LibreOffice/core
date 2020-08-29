@@ -368,8 +368,8 @@ private:
 protected:
     virtual SvXMLImportContext *CreateTableChildContext(
                 SvXMLImport& rImport,
-                sal_uInt16 nPrefix, const OUString& rLocalName,
-                const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
+                sal_Int32 nElement,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
 
     // access, lazy initialization and destruction of backpatchers
     // Code is implemented in XMLPropertyBackpatcher.cxx
@@ -400,11 +400,6 @@ public:
             SvXMLImport& rImport,
             sal_Int32 nElement,
             const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
-            XMLTextType eType = XMLTextType::Shape );
-    SvXMLImportContext *CreateTextChildContext(
-            SvXMLImport& rImport,
-            sal_uInt16 nPrefix, const OUString& rLocalName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
             XMLTextType eType = XMLTextType::Shape );
 
     SvXMLTokenMap const& GetTextElemTokenMap();

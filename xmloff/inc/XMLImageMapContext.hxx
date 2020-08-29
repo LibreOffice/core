@@ -44,8 +44,6 @@ public:
 
     XMLImageMapContext(
         SvXMLImport& rImport,
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
         css::uno::Reference< css::beans::XPropertySet> const & rPropertySet);
 
     virtual ~XMLImageMapContext() override;

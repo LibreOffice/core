@@ -80,17 +80,6 @@ public:
      * EndElement instead if this is required. */
     virtual ~SvXMLImportContext();
 
-    /** Create a children element context. By default, the import's
-     * CreateContext method is called to create a new default context. */
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                                   const OUString& rLocalName,
-                                   const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
-
-    /** StartElement is called after a context has been constructed and
-     * before an elements context is parsed. It may be used for actions that
-     * require virtual methods. The default is to do nothing. */
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
-
     // css::xml::sax::XFastContextHandler:
     virtual void SAL_CALL startFastElement (sal_Int32 Element,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs) override;
@@ -107,11 +96,6 @@ public:
 
     virtual css::uno::Reference< XFastContextHandler >  SAL_CALL createFastChildContext(sal_Int32 Element,
         const css::uno::Reference<css::xml::sax::XFastAttributeList>& Attribs) override;
-    /**
-     * temporary method to forward call to CreateChildContext, for use during slow-to-fastparser transition
-     */
-    css::uno::Reference< XFastContextHandler > createFastChildContextFallback(sal_Int32 Element,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& Attribs);
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createUnknownChildContext(
         const OUString & Namespace, const OUString & Name,

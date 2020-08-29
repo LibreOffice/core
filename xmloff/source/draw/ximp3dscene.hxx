@@ -36,7 +36,7 @@ public:
 
     SdXML3DSceneShapeContext(
         SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes,
         bool bTemporaryShape);
     virtual ~SdXML3DSceneShapeContext() override;
@@ -48,10 +48,6 @@ public:
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
-
-    virtual SvXMLImportContextRef CreateChildContext(
-        sal_uInt16 nPrefix, const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_DRAW_XIMP3DSCENE_HXX

@@ -60,11 +60,6 @@ public:
 
 
     XMLParaContext( SvXMLImport& rImport,
-            sal_uInt16 nPrfx,
-            const OUString& rLName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
-            bool bHeading );
-    XMLParaContext( SvXMLImport& rImport,
             sal_Int32 nElement,
             const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
 
@@ -92,9 +87,8 @@ public:
 
 
     XMLNumberedParaContext( SvXMLImport& i_rImport,
-            sal_uInt16 i_nPrefix,
-            const OUString& i_rLocalName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > & i_xAttrList );
+            sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList > & i_xAttrList );
 
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
