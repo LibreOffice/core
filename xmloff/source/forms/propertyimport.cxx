@@ -48,6 +48,7 @@ namespace xmloff
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::xml;
     using ::com::sun::star::xml::sax::XAttributeList;
+    using ::com::sun::star::xml::sax::XFastAttributeList;
 
     // NO using namespace ...util !!!
     // need a tools Date/Time/DateTime below, which would conflict with the uno types then
@@ -250,8 +251,8 @@ Type PropertyConversion::xmlTypeToUnoType( const OUString& _rType )
 }
 
 //= OPropertyImport
-OPropertyImport::OPropertyImport(OFormLayerXMLImport_Impl& _rImport, sal_uInt16 _nPrefix, const OUString& _rName)
-    :SvXMLImportContext(_rImport.getGlobalContext(), _nPrefix, _rName)
+OPropertyImport::OPropertyImport(OFormLayerXMLImport_Impl& _rImport)
+    :SvXMLImportContext(_rImport.getGlobalContext())
     ,m_rContext(_rImport)
     ,m_bTrackAttributes(false)
 {
@@ -268,25 +269,19 @@ SvXMLImportContextRef OPropertyImport::CreateChildContext(sal_uInt16 _nPrefix, c
     return nullptr;
 }
 
-void OPropertyImport::StartElement(const Reference< XAttributeList >& _rxAttrList)
+void OPropertyImport::startFastElement(sal_Int32 /*nElement*/, const Reference< XFastAttributeList >& xAttrList)
 {
-    OSL_ENSURE(_rxAttrList.is(), "OPropertyImport::StartElement: invalid attribute list!");
-    const sal_Int32 nAttributeCount = _rxAttrList->getLength();
 
     // assume the 'worst' case: all attributes describe properties. This should save our property array
     // some reallocs
-    m_aValues.reserve(nAttributeCount);
+    m_aValues.reserve(sax_fastparser::castToFastAttributeList(xAttrList).size());
 
-    const SvXMLNamespaceMap& rMap = m_rContext.getGlobalContext().GetNamespaceMap();
-    sal_uInt16 nNamespace;
-    OUString sLocalName;
-    for (sal_Int32 i=0; i<nAttributeCount; ++i)
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        nNamespace = rMap.GetKeyByAttrName(_rxAttrList->getNameByIndex(i), &sLocalName);
-        handleAttribute(nNamespace, sLocalName, _rxAttrList->getValueByIndex(i));
+        handleAttribute(aIter.getToken(), aIter.toString());
 
         if (m_bTrackAttributes)
-            m_aEncounteredAttributes.insert(sLocalName);
+            m_aEncounteredAttributes.insert(aIter.getToken());
     }
 
     // TODO: create PropertyValues for all the attributes which were not present, because they were implied
@@ -294,21 +289,21 @@ void OPropertyImport::StartElement(const Reference< XAttributeList >& _rxAttrLis
     // default
 }
 
-bool OPropertyImport::encounteredAttribute(const OUString& _rAttributeName) const
+bool OPropertyImport::encounteredAttribute(sal_Int32 nAttributeToken) const
 {
     OSL_ENSURE(m_bTrackAttributes, "OPropertyImport::encounteredAttribute: attribute tracking not enabled!");
-    return m_aEncounteredAttributes.end() != m_aEncounteredAttributes.find(_rAttributeName);
+    return m_aEncounteredAttributes.end() != m_aEncounteredAttributes.find(nAttributeToken);
 }
 
-void OPropertyImport::Characters(const OUString& _rChars )
+void OPropertyImport::characters(const OUString& _rChars )
 {
     // ignore them (should be whitespace only)
     OSL_ENSURE(_rChars.trim().isEmpty(), "OPropertyImport::Characters: non-whitespace characters!");
 }
 
-bool OPropertyImport::handleAttribute(sal_uInt16 /*_nNamespaceKey*/, const OUString& _rLocalName, const OUString& _rValue)
+bool OPropertyImport::handleAttribute(sal_Int32 nAttributeToken, const OUString& _rValue)
 {
-    const OAttribute2Property::AttributeAssignment* pProperty = m_rContext.getAttributeMap().getAttributeTranslation(_rLocalName);
+    const OAttribute2Property::AttributeAssignment* pProperty = m_rContext.getAttributeMap().getAttributeTranslation(nAttributeToken & TOKEN_MASK);
     if (pProperty)
     {
         // create and store a new PropertyValue
@@ -316,7 +311,7 @@ bool OPropertyImport::handleAttribute(sal_uInt16 /*_nNamespaceKey*/, const OUStr
         aNewValue.Name = pProperty->sPropertyName;
 
         // convert the value string into the target type
-        if (token::IsXMLToken(_rLocalName, token::XML_HREF))
+        if ((nAttributeToken & TOKEN_MASK) == token::XML_HREF)
         {
             aNewValue.Value <<= m_rContext.getGlobalContext().GetAbsoluteReference(_rValue);
         }
@@ -329,10 +324,10 @@ bool OPropertyImport::handleAttribute(sal_uInt16 /*_nNamespaceKey*/, const OUStr
         implPushBackPropertyValue( aNewValue );
         return true;
     }
-    if (!token::IsXMLToken(_rLocalName, token::XML_TYPE))  // xlink:type is valid but ignored for <form:form>
+    if ((nAttributeToken & TOKEN_MASK) != token::XML_TYPE)  // xlink:type is valid but ignored for <form:form>
     {
-        SAL_WARN( "xmloff", "OPropertyImport::handleAttribute: Can't handle the following:\n"
-                    "  Attribute name: " << _rLocalName << "\n  value: " << _rValue );
+        SAL_WARN( "xmloff", "OPropertyImport::handleAttribute: Can't handle "
+                    << SvXMLImport::getPrefixAndNameFromToken(nAttributeToken) << "=" << _rValue );
         return false;
     }
     return true;
