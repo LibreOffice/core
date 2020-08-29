@@ -52,7 +52,6 @@ public:
                                                bool bReadOnly, bool bNewFile,
                                                sal_uInt32 nId, bool bThemeNameFromResource );
 
-    static std::unique_ptr<GalleryBinaryEngineEntry> createGalleryStorageEngineEntry();
     const std::unique_ptr<GalleryBinaryEngineEntry>& getGalleryStorageEngineEntry() const { return mpGalleryStorageEngineEntry; }
 
     GalleryStorageLocations& getGalleryStorageLocations() const { return *mpGalleryStorageEngineEntry->getGalleryStorageLocations(); }
