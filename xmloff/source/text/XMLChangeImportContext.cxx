@@ -32,11 +32,9 @@ using ::xmloff::token::XML_CHANGE_ID;
 
 XMLChangeImportContext::XMLChangeImportContext(
     SvXMLImport& rImport,
-    sal_Int16 nPrefix,
-    const OUString& rLocalName,
     Element const eElement,
     bool bOutsideOfParagraph)
-    :   SvXMLImportContext(rImport, nPrefix, rLocalName)
+    :   SvXMLImportContext(rImport)
     ,   m_Element(eElement)
     ,   m_bIsOutsideOfParagraph(bOutsideOfParagraph)
 {
