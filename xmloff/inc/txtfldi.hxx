@@ -126,27 +126,25 @@ public:
     XMLTextFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
-        const char* pService,               /// name of SO API service
-        sal_uInt16 nPrfx,                       /// namespace prefix
-        const OUString& rLocalName);     /// element name w/o prefix
+        const char* pService);                  /// name of SO API service
 
     /// process character data: will be collected in member sContentBuffer
-    virtual void Characters( const OUString& sContent ) override;
+    virtual void SAL_CALL characters( const OUString& sContent ) override;
 
     /// parses attributes and calls ProcessAttribute
-    virtual void StartElement(
-        const css::uno::Reference< css::xml::sax::XAttributeList> & xAttrList) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     /// create XTextField and insert into document; calls PrepareTextField
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     /// create the appropriate field context from
     /// (for use in paragraph import)
     static XMLTextFieldImportContext* CreateTextFieldImportContext(
         SvXMLImport& rImport,
         XMLTextImportHelper& rHlp,
-        sal_uInt16 nPrefix,
-        const OUString& rName,
+        sal_Int32 nElement,
         sal_uInt16 nToken);
 
 protected:
@@ -1114,8 +1112,7 @@ public:
     XMLAnnotationImportContext(SvXMLImport& rImport,
                                XMLTextImportHelper& rHlp,
                                sal_uInt16 nToken,
-                               sal_uInt16 nPrfx,
-                               const OUString& sLocalName);
+                               sal_Int32 nElement);
 
 private:
     /// process attributes
@@ -1126,11 +1123,14 @@ private:
     virtual void PrepareField(
         const css::uno::Reference< css::beans::XPropertySet > & xPropertySet) override;
 
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
     virtual SvXMLImportContextRef CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const css::uno::Reference<css::xml::sax::XAttributeList >& xAttrList ) override;
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 /** Import a script field (<text:script>) */

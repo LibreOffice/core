@@ -85,32 +85,6 @@ OXMLCell::~OXMLCell()
 {
 }
 
-SvXMLImportContextRef OXMLCell::CreateChildContext(
-        sal_uInt16 _nPrefix,
-        const OUString& _rLocalName,
-        const Reference< XAttributeList > & xAttrList )
-{
-    SvXMLImportContext *pContext = nullptr;
-    ORptFilter& rImport = GetOwnImport();
-    const SvXMLTokenMap&    rTokenMap   = rImport.GetCellElemTokenMap();
-    const sal_uInt16 nToken = rTokenMap.Get( _nPrefix, _rLocalName );
-    switch( nToken )
-    {
-        case XML_TOK_CUSTOM_SHAPE:
-        case XML_TOK_FRAME:
-            {
-                if ( !m_bContainsShape )
-                    m_nCurrentCount = m_pContainer->getSection()->getCount();
-                rtl::Reference< XMLShapeImportHelper > xShapeImportHelper = rImport.GetShapeImport();
-                uno::Reference< drawing::XShapes > xShapes = m_pContainer->getSection().get();
-                pContext = xShapeImportHelper->CreateGroupChildContext(rImport,_nPrefix,_rLocalName,xAttrList,xShapes);
-                m_bContainsShape = true;
-            }
-            break;
-    }
-    return pContext;
-}
-
 css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLCell::createFastChildContext(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
@@ -171,8 +145,20 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLCell::createFastCh
         case XML_ELEMENT(TEXT, XML_P):
             xContext = new OXMLCell( rImport,xAttrList ,m_pContainer,this);
             break;
-        default:
+
+        case XML_ELEMENT(DRAW, XML_CUSTOM_SHAPE):
+        case XML_ELEMENT(DRAW, XML_FRAME):
+            {
+                if ( !m_bContainsShape )
+                    m_nCurrentCount = m_pContainer->getSection()->getCount();
+                uno::Reference< drawing::XShapes > xShapes = m_pContainer->getSection().get();
+                xContext = XMLShapeImportHelper::CreateGroupChildContext(rImport,nElement,xAttrList,xShapes);
+                m_bContainsShape = true;
+            }
             break;
+
+        default:
+            SAL_WARN("reportdesign", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
     }
 
     if ( m_xComponent.is() )

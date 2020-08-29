@@ -33,10 +33,8 @@ using namespace ::xmloff::token;
 
 
 XMLTrackedChangesImportContext::XMLTrackedChangesImportContext(
-    SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName) :
-        SvXMLImportContext(rImport, nPrefix, rLocalName)
+    SvXMLImport& rImport) :
+        SvXMLImportContext(rImport)
 {
 }
 
@@ -44,31 +42,26 @@ XMLTrackedChangesImportContext::~XMLTrackedChangesImportContext()
 {
 }
 
-void XMLTrackedChangesImportContext::StartElement(
-    const Reference<XAttributeList> & xAttrList )
+void XMLTrackedChangesImportContext::startFastElement(
+    sal_Int32 nElement,
+    const Reference<css::xml::sax::XFastAttributeList> & xAttrList )
 {
     bool bTrackChanges = true;
 
     // scan for text:track-changes and text:protection-key attributes
-    sal_Int16 nLength = xAttrList->getLength();
-    for( sal_Int16 i = 0; i < nLength; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(i), &sLocalName );
-
-        if ( XML_NAMESPACE_TEXT == nPrefix )
+        const OUString sValue = aIter.toString();
+        if ( nElement == XML_ELEMENT(TEXT, XML_TRACK_CHANGES) )
         {
-            if ( IsXMLToken( sLocalName, XML_TRACK_CHANGES ) )
+            bool bTmp(false);
+            if (::sax::Converter::convertBool(bTmp, sValue) )
             {
-                bool bTmp(false);
-                if (::sax::Converter::convertBool(
-                    bTmp, xAttrList->getValueByIndex(i)) )
-                {
-                    bTrackChanges = bTmp;
-                }
+                bTrackChanges = bTmp;
             }
         }
+        else
+            SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
     }
 
     // set tracked changes
@@ -76,21 +69,17 @@ void XMLTrackedChangesImportContext::StartElement(
 }
 
 
-SvXMLImportContextRef XMLTrackedChangesImportContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList> & /*xAttrList*/)
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTrackedChangesImportContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
-    SvXMLImportContextRef xContext;
-
-    if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-         IsXMLToken( rLocalName, XML_CHANGED_REGION ) )
+    if ( nElement == XML_ELEMENT(TEXT, XML_CHANGED_REGION) )
     {
-        xContext = new XMLChangedRegionImportContext(GetImport(),
-                                                     nPrefix, rLocalName);
+        return new XMLChangedRegionImportContext(GetImport());
     }
 
-    return xContext;
+    SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

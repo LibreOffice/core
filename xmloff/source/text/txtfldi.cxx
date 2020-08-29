@@ -118,9 +118,8 @@ const char sAPI_true[] = "TRUE";
 
 XMLTextFieldImportContext::XMLTextFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
-    const char* pService,
-    sal_uInt16 nPrefix, const OUString& rElementName)
-:   SvXMLImportContext( rImport, nPrefix, rElementName )
+    const char* pService)
+:   SvXMLImportContext( rImport )
 ,   rTextImportHelper(rHlp)
 ,   sServicePrefix(sAPI_textfield_prefix)
 ,   bValid(false)
@@ -129,21 +128,13 @@ XMLTextFieldImportContext::XMLTextFieldImportContext(
     sServiceName = OUString::createFromAscii(pService);
 }
 
-void XMLTextFieldImportContext::StartElement(
-    const Reference<XAttributeList> & xAttrList)
+void XMLTextFieldImportContext::startFastElement(
+    sal_Int32 /*nElement*/,
+    const Reference<XFastAttributeList> & xAttrList)
 {
     // process attributes
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 i=0; i<nLength; i++) {
-
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(i), &sLocalName );
-
-        ProcessAttribute(rTextImportHelper.GetTextFieldAttrTokenMap().
-                             Get(nPrefix, sLocalName),
-                         xAttrList->getValueByIndex(i) );
-    }
+    for(auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
+        ProcessAttribute(aIter.getToken(), aIter.toString() );
 }
 
 OUString const & XMLTextFieldImportContext::GetContent()
@@ -156,7 +147,7 @@ OUString const & XMLTextFieldImportContext::GetContent()
     return sContent;
 }
 
-void XMLTextFieldImportContext::EndElement()
+void XMLTextFieldImportContext::endFastElement(sal_Int32 )
 {
     DBG_ASSERT(!GetServiceName().isEmpty(), "no service name for element!");
     if (bValid)
@@ -189,7 +180,7 @@ void XMLTextFieldImportContext::EndElement()
     rTextImportHelper.InsertString(GetContent());
 }
 
-void XMLTextFieldImportContext::Characters(const OUString& rContent)
+void XMLTextFieldImportContext::characters(const OUString& rContent)
 {
     sContentBuffer.append(rContent);
 }
@@ -225,8 +216,7 @@ XMLTextFieldImportContext*
 XMLTextFieldImportContext::CreateTextFieldImportContext(
     SvXMLImport& rImport,
     XMLTextImportHelper& rHlp,
-    sal_uInt16 nPrefix,
-    const OUString& rName,
+    sal_Int32 nElement,
     sal_uInt16 nToken)
 {
     XMLTextFieldImportContext* pContext = nullptr;

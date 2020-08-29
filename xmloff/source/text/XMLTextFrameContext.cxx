@@ -398,21 +398,22 @@ public:
     const OUString& GetHRef() const { return sHRef; }
 
     XMLTextFrameContext_Impl( SvXMLImport& rImport,
-            sal_uInt16 nPrfx,
-            const OUString& rLName,
-            const css::uno::Reference<css::xml::sax::XAttributeList > & rAttrList,
+            sal_Int32 nElement,
+            const css::uno::Reference<css::xml::sax::XFastAttributeList > & rAttrList,
             css::text::TextContentAnchorType eAnchorType,
             sal_uInt16 nType,
-            const css::uno::Reference<css::xml::sax::XAttributeList > & rFrameAttrList,
+            const css::uno::Reference<css::xml::sax::XFastAttributeList > & rFrameAttrList,
             bool bMultipleContent = false );
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
-    virtual void Characters( const OUString& rChars ) override;
+    virtual void SAL_CALL characters( const OUString& rChars ) override;
 
     SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
                  const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     void SetHyperlink( const OUString& rHRef,
                        const OUString& rName,
@@ -828,13 +829,13 @@ bool XMLTextFrameContext_Impl::CreateIfNotThere()
 
 XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
         SvXMLImport& rImport,
-        sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< XAttributeList > & rAttrList,
+        sal_Int32 nElement,
+        const Reference< XFastAttributeList > & rAttrList,
         TextContentAnchorType eATyp,
         sal_uInt16 nNewType,
-        const Reference< XAttributeList > & rFrameAttrList,
+        const Reference< XFastAttributeList > & rFrameAttrList,
         bool bMultipleContent )
-:   SvXMLImportContext( rImport, nPrfx, rLName )
+:   SvXMLImportContext( rImport )
 ,   mbListContextPushed( false )
 ,   nType( nNewType )
 ,   eAnchorType( eATyp )
@@ -863,35 +864,24 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
     const SvXMLTokenMap& rTokenMap =
         xTxtImport->GetTextFrameAttrTokenMap();
 
-    sal_Int16 nAttrCount = rAttrList.is() ? rAttrList->getLength() : 0;
-    sal_Int16 nTotalAttrCount = nAttrCount + (rFrameAttrList.is() ? rFrameAttrList->getLength() : 0);
-    for( sal_Int16 i=0; i < nTotalAttrCount; i++ )
+    auto processAttr = [&](sal_Int32 nElement, OUString rValue) -> void
     {
-        const OUString& rAttrName =
-            i < nAttrCount ? rAttrList->getNameByIndex( i ) : rFrameAttrList->getNameByIndex( i-nAttrCount );
-        const OUString& rValue =
-            i < nAttrCount ? rAttrList->getValueByIndex( i ): rFrameAttrList->getValueByIndex( i-nAttrCount );
-
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                            &aLocalName );
-        switch( rTokenMap.Get( nPrefix, aLocalName ) )
+        switch( nElement )
         {
-        case XML_TOK_TEXT_FRAME_STYLE_NAME:
+        case XML_ELEMENT(DRAW, XML_STYLE_NAME):
             sStyleName = rValue;
             break;
-        case XML_TOK_TEXT_FRAME_NAME:
+        case XML_ELEMENT(DRAW, XML_NAME):
             m_sOrigName = rValue;
             sName = rValue;
             break;
-        case XML_TOK_TEXT_FRAME_FRAME_NAME:
+        case XML_ELEMENT(DRAW, XML_FRAME_NAME):
             sFrameName = rValue;
             break;
-        case XML_TOK_TEXT_FRAME_APPLET_NAME:
+        case XML_ELEMENT(DRAW, XML_APPLET_NAME):
             sAppletName = rValue;
             break;
-        case XML_TOK_TEXT_FRAME_ANCHOR_TYPE:
+        case XML_ELEMENT(TEXT, XML_ANCHOR_TYPE):
             if( TextContentAnchorType_AT_PARAGRAPH == eAnchorType ||
                 TextContentAnchorType_AT_CHARACTER == eAnchorType ||
                 TextContentAnchorType_AS_CHARACTER == eAnchorType )
@@ -906,22 +896,22 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
                     eAnchorType = eNew;
             }
             break;
-        case XML_TOK_TEXT_FRAME_ANCHOR_PAGE_NUMBER:
+        case XML_ELEMENT(TEXT, XML_ANCHOR_PAGE_NUMBER):
             {
                 sal_Int32 nTmp;
                 if (::sax::Converter::convertNumber(nTmp, rValue, 1, SHRT_MAX))
                     nPage = static_cast<sal_Int16>(nTmp);
             }
             break;
-        case XML_TOK_TEXT_FRAME_X:
+        case XML_ELEMENT(SVG, XML_X):
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
                     nX, rValue);
             break;
-        case XML_TOK_TEXT_FRAME_Y:
+        case XML_ELEMENT(SVG, XML_Y):
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
                     nY, rValue );
             break;
-        case XML_TOK_TEXT_FRAME_WIDTH:
+        case XML_ELEMENT(SVG, XML_WIDTH):
             // relative widths are obsolete since SRC617. Remove them some day!
             if( rValue.indexOf( '%' ) != -1 )
             {
@@ -935,7 +925,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
                         nWidth, rValue, 0 );
             }
             break;
-        case XML_TOK_TEXT_FRAME_REL_WIDTH:
+        case XML_ELEMENT(STYLE, XML_REL_WIDTH):
             if( IsXMLToken(rValue, XML_SCALE) )
             {
                 bSyncWidth = true;
@@ -947,7 +937,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
                     nRelWidth = static_cast<sal_Int16>(nTmp);
             }
             break;
-        case XML_TOK_TEXT_FRAME_MIN_WIDTH:
+        case XML_ELEMENT(FO, XML_MIN_WIDTH):
             if( rValue.indexOf( '%' ) != -1 )
             {
                 sal_Int32 nTmp;
@@ -961,7 +951,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             }
             bMinWidth = true;
             break;
-        case XML_TOK_TEXT_FRAME_HEIGHT:
+        case XML_ELEMENT(SVG, XML_HEIGHT):
             // relative heights are obsolete since SRC617. Remove them some day!
             if( rValue.indexOf( '%' ) != -1 )
             {
@@ -975,7 +965,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
                         nHeight, rValue, 0 );
             }
             break;
-        case XML_TOK_TEXT_FRAME_REL_HEIGHT:
+        case XML_ELEMENT(STYLE, XML_REL_HEIGHT):
             if( IsXMLToken( rValue, XML_SCALE ) )
             {
                 bSyncHeight = true;
@@ -992,7 +982,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
                     nRelHeight = static_cast<sal_Int16>(nTmp);
             }
             break;
-        case XML_TOK_TEXT_FRAME_MIN_HEIGHT:
+        case XML_ELEMENT(FO, XML_MIN_HEIGHT):
             if( rValue.indexOf( '%' ) != -1 )
             {
                 sal_Int32 nTmp;
@@ -1006,19 +996,19 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             }
             bMinHeight = true;
             break;
-        case XML_TOK_TEXT_FRAME_Z_INDEX:
+        case XML_ELEMENT(DRAW, XML_ZINDEX):
             ::sax::Converter::convertNumber( nZIndex, rValue, -1 );
             break;
-        case XML_TOK_TEXT_FRAME_NEXT_CHAIN_NAME:
+        case XML_ELEMENT(DRAW, XML_CHAIN_NEXT_NAME):
             sNextName = rValue;
             break;
-        case XML_TOK_TEXT_FRAME_HREF:
+        case XML_ELEMENT(XLINK, XML_HREF):
             sHRef = rValue;
             break;
-        case XML_TOK_TEXT_FRAME_FILTER_NAME:
+        case XML_ELEMENT(DRAW, XML_NAME):
             sFilterName = rValue;
             break;
-        case XML_TOK_TEXT_FRAME_TRANSFORM:
+        case XML_ELEMENT(DRAW, XML_TRANSFORM):
             {
                 // RotateFlyFrameFix: im/export full 'draw:transform' using existing tooling
                 // Currently only rotation is used, but combinations with 'draw:transform'
@@ -1079,24 +1069,32 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
                 }
             }
             break;
-        case XML_TOK_TEXT_FRAME_CODE:
+        case XML_ELEMENT(DRAW, XML_CODE):
             sCode = rValue;
             break;
-        case XML_TOK_TEXT_FRAME_OBJECT:
+        case XML_ELEMENT(DRAW, XML_OBJECT):
             break;
-        case XML_TOK_TEXT_FRAME_ARCHIVE:
+        case XML_ELEMENT(DRAW, XML_ARCHIVE):
             break;
-        case XML_TOK_TEXT_FRAME_MAY_SCRIPT:
+        case XML_ELEMENT(DRAW, XML_MAY_SCRIPT):
             bMayScript = IsXMLToken( rValue, XML_TRUE );
             break;
-        case XML_TOK_TEXT_FRAME_MIME_TYPE:
+        case XML_ELEMENT(DRAW, XML_MIME_TYPE):
             sMimeType = rValue;
             break;
-        case XML_TOK_TEXT_FRAME_NOTIFY_ON_UPDATE:
+        case XML_ELEMENT(DRAW, XML_NOTIFY_ON_UPDATE_OF_RANGES):
+        case XML_ELEMENT(DRAW, XML_NOTIFY_ON_UPDATE_OF_TABLE):
             sTblName = rValue;
             break;
+        default:
+            SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(nElement) << "=" << rValue);
         }
-    }
+    };
+
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(rAttrList) )
+            processAttr(aIter.getToken(), aIter.toString());
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(rFrameAttrList) )
+            processAttr(aIter.getToken(), aIter.toString());
 
     if( ( (XML_TEXT_FRAME_GRAPHIC == nType ||
            XML_TEXT_FRAME_OBJECT == nType ||

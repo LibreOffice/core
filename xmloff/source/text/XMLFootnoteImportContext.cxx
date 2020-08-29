@@ -63,17 +63,16 @@ const SvXMLTokenMapEntry aFootnoteChildTokenMap[] =
 
 XMLFootnoteImportContext::XMLFootnoteImportContext(
     SvXMLImport& rImport,
-    XMLTextImportHelper& rHlp,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName )
-:   SvXMLImportContext(rImport, nPrfx, rLocalName)
+    XMLTextImportHelper& rHlp )
+:   SvXMLImportContext(rImport)
 ,   mbListContextPushed(false)
 ,   rHelper(rHlp)
 {
 }
 
-void XMLFootnoteImportContext::StartElement(
-    const Reference<XAttributeList> & xAttrList)
+void XMLFootnoteImportContext::startFastElement(
+    sal_Int32 /*nElement*/,
+    const Reference<XFastAttributeList> & xAttrList)
 {
     // create footnote
     Reference<XMultiServiceFactory> xFactory(GetImport().GetModel(),
@@ -83,18 +82,11 @@ void XMLFootnoteImportContext::StartElement(
 
     // create endnote or footnote
     bool bIsEndnote = false;
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 nAttr1 = 0; nAttr1 < nLength; nAttr1++)
+    for(auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr1),
-                              &sLocalName );
-        if( XML_NAMESPACE_TEXT == nPrefix && IsXMLToken( sLocalName,
-                                                        XML_NOTE_CLASS ) )
+        if( aIter.getToken() == XML_ELEMENT(TEXT, XML_NOTE_CLASS) )
         {
-            const OUString& rValue = xAttrList->getValueByIndex( nAttr1 );
-            if( IsXMLToken( rValue, XML_ENDNOTE ) )
+            if( IsXMLToken( aIter.toString(), XML_ENDNOTE ) )
                 bIsEndnote = true;
             break;
         }
@@ -110,15 +102,9 @@ void XMLFootnoteImportContext::StartElement(
     rHelper.InsertTextContent(xTextContent);
 
     // process id attribute
-    for(sal_Int16 nAttr2 = 0; nAttr2 < nLength; nAttr2++)
+    for(auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr2),
-                              &sLocalName );
-
-        if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-             IsXMLToken( sLocalName, XML_ID )   )
+        if ( aIter.getToken() == XML_ELEMENT(TEXT, XML_ID) )
         {
             // get ID ...
             Reference<XPropertySet> xPropertySet(xTextContent, UNO_QUERY);
@@ -127,9 +113,7 @@ void XMLFootnoteImportContext::StartElement(
             aAny >>= nID;
 
             // ... and insert into map
-            rHelper.InsertFootnoteID(
-                xAttrList->getValueByIndex(nAttr2),
-                nID);
+            rHelper.InsertFootnoteID(aIter.toString(), nID);
         }
     }
 
@@ -150,13 +134,13 @@ void XMLFootnoteImportContext::StartElement(
     // else: ignore footnote! Content will be merged into document.
 }
 
-void XMLFootnoteImportContext::Characters(const OUString&)
+void XMLFootnoteImportContext::characters(const OUString&)
 {
     // ignore characters! Text must be contained in paragraphs!
     // rHelper.InsertString(rString);
 }
 
-void XMLFootnoteImportContext::EndElement()
+void XMLFootnoteImportContext::endFastElement(sal_Int32 )
 {
     // get rid of last dummy paragraph
     rHelper.DeleteParagraph();
@@ -170,49 +154,36 @@ void XMLFootnoteImportContext::EndElement()
     }
 }
 
-SvXMLImportContextRef XMLFootnoteImportContext::CreateChildContext(
-    sal_uInt16 p_nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList> & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLFootnoteImportContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    SvXMLImportContextRef xContext;
-
-    static const SvXMLTokenMap aTokenMap(aFootnoteChildTokenMap);
-
-    switch(aTokenMap.Get(p_nPrefix, rLocalName))
+    switch(nElement)
     {
-        case XML_TOK_FTN_NOTE_CITATION:
+        case XML_ELEMENT(TEXT, XML_NOTE_CITATION):
         {
             // little hack: we only care for one attribute of the citation
             //              element. We handle that here, and then return a
             //              default context.
-            sal_Int16 nLength = xAttrList->getLength();
-            for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
+            for(auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
             {
-                OUString sLocalName;
-                sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-                    GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
-                                      &sLocalName );
-
-                if ( (nPrefix == XML_NAMESPACE_TEXT) &&
-                     IsXMLToken( sLocalName, XML_LABEL ) )
-                {
-                    xFootnote->setLabel(xAttrList->getValueByIndex(nAttr));
-                }
+                if ( nElement == XML_ELEMENT(TEXT, XML_LABEL) )
+                    xFootnote->setLabel(aIter.toString());
             }
 
             // ignore content: return default context
             break;
         }
 
-        case XML_TOK_FTN_NOTE_BODY:
+        case XML_ELEMENT(TEXT, XML_NOTE_BODY):
             // return footnote body
-            xContext = new XMLFootnoteBodyImportContext(GetImport(),
-                                                        p_nPrefix, rLocalName);
+            return new XMLFootnoteBodyImportContext(GetImport());
             break;
+        default:
+            SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
     }
 
-    return xContext;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -86,10 +86,8 @@ const SvXMLTokenMapEntry aSectionTokenMap[] =
 // between the ends of the inner and the enclosing section. To avoid
 // these problems, additional markers are first inserted and later deleted.
 XMLSectionImportContext::XMLSectionImportContext(
-    SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName )
-:   SvXMLImportContext(rImport, nPrfx, rLocalName)
+    SvXMLImport& rImport )
+:   SvXMLImportContext(rImport)
 ,   bProtect(false)
 ,   bCondOK(false)
 ,   bIsVisible(true)
@@ -105,8 +103,9 @@ XMLSectionImportContext::~XMLSectionImportContext()
 {
 }
 
-void XMLSectionImportContext::StartElement(
-    const Reference<XAttributeList> & xAttrList)
+void XMLSectionImportContext::startFastElement(
+    sal_Int32 /*nElement*/,
+    const Reference<css::xml::sax::XFastAttributeList> & xAttrList)
 {
     // process attributes
     ProcessAttributes(xAttrList);
@@ -226,88 +225,82 @@ void XMLSectionImportContext::StartElement(
 }
 
 void XMLSectionImportContext::ProcessAttributes(
-    const Reference<XAttributeList> & xAttrList )
+    const Reference<css::xml::sax::XFastAttributeList> & xAttrList )
 {
-    static const SvXMLTokenMap aTokenMap(aSectionTokenMap);
-
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
+    for(auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
-        OUString sLocalName;
-        sal_uInt16 nNamePrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
-                              &sLocalName );
-        OUString sAttr = xAttrList->getValueByIndex(nAttr);
+        OUString sValue = aIter.toString();
 
-        switch (aTokenMap.Get(nNamePrefix, sLocalName))
+        switch (aIter.getToken())
         {
-            case XML_TOK_SECTION_XMLID:
-                sXmlId = sAttr;
+            case XML_ELEMENT(XML, XML_ID):
+                sXmlId = sValue;
                 break;
-            case XML_TOK_SECTION_STYLE_NAME:
-                sStyleName = sAttr;
+            case XML_ELEMENT(TEXT, XML_STYLE_NAME):
+                sStyleName = sValue;
                 break;
-            case XML_TOK_SECTION_NAME:
-                sName = sAttr;
+            case XML_ELEMENT(TEXT, XML_NAME):
+                sName = sValue;
                 bValid = true;
                 break;
-            case XML_TOK_SECTION_CONDITION:
+            case XML_ELEMENT(TEXT, XML_CONDITION):
                 {
                     OUString sTmp;
                     sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-                                    GetKeyByAttrValueQName(sAttr, &sTmp);
+                                    GetKeyByAttrValueQName(sValue, &sTmp);
                     if( XML_NAMESPACE_OOOW == nPrefix )
                     {
                         sCond = sTmp;
                         bCondOK = true;
                     }
                     else
-                        sCond = sAttr;
+                        sCond = sValue;
                 }
                 break;
-            case XML_TOK_SECTION_DISPLAY:
-                if (IsXMLToken(sAttr, XML_TRUE))
+            case XML_ELEMENT(TEXT, XML_DISPLAY):
+                if (IsXMLToken(sValue, XML_TRUE))
                 {
                     bIsVisible = true;
                 }
-                else if ( IsXMLToken(sAttr, XML_NONE) ||
-                          IsXMLToken(sAttr, XML_CONDITION) )
+                else if ( IsXMLToken(sValue, XML_NONE) ||
+                          IsXMLToken(sValue, XML_CONDITION) )
                 {
                     bIsVisible = false;
                 }
                 // else: ignore
                 break;
-            case XML_TOK_SECTION_IS_HIDDEN:
+            case XML_ELEMENT(TEXT, XML_IS_HIDDEN):
                 {
                     bool bTmp(false);
-                    if (::sax::Converter::convertBool(bTmp, sAttr))
+                    if (::sax::Converter::convertBool(bTmp, sValue))
                     {
                         bIsCurrentlyVisible = !bTmp;
                         bIsCurrentlyVisibleOK = true;
                     }
                 }
                 break;
-            case XML_TOK_SECTION_PROTECTION_KEY:
-                ::comphelper::Base64::decode(aSequence, sAttr);
+            case XML_ELEMENT(TEXT, XML_PROTECTION_KEY):
+                ::comphelper::Base64::decode(aSequence, sValue);
                 bSequenceOK = true;
                 break;
-            case XML_TOK_SECTION_PROTECT:
+            case XML_ELEMENT(TEXT, XML_PROTECTED):
+            // compatibility with SRC629 (or earlier) versions
+            case XML_ELEMENT(TEXT, XML_PROTECT):
             {
                 bool bTmp(false);
-                if (::sax::Converter::convertBool(bTmp, sAttr))
+                if (::sax::Converter::convertBool(bTmp, sValue))
                 {
                     bProtect = bTmp;
                 }
                 break;
             }
             default:
-                ; // ignore
-                break;
+                SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
         }
     }
 }
 
-void XMLSectionImportContext::EndElement()
+void XMLSectionImportContext::endFastElement(sal_Int32 )
 {
     // get rid of last paragraph
     // (unless it's the only paragraph in the section)
@@ -329,10 +322,37 @@ void XMLSectionImportContext::EndElement()
     rHelper->RedlineAdjustStartNodeCursor();
 }
 
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLSectionImportContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+{
+    // section-source (-dde) elements
+    if ( nElement == XML_ELEMENT(TEXT, XML_SECTION_SOURCE) )
+    {
+    }
+    else if ( nElement == XML_ELEMENT(OFFICE, XML_DDE_SOURCE) )
+    {
+    }
+    else
+    {
+        // otherwise: text context
+        auto pContext = GetImport().GetTextImport()->CreateTextChildContext(
+            GetImport(), nElement, xAttrList, XMLTextType::Section );
+
+        // if that fails, default context
+        if (pContext)
+            bHasContent = true;
+        else
+            SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
+        return pContext;
+    }
+    return nullptr;
+}
+
 SvXMLImportContextRef XMLSectionImportContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    const Reference<XAttributeList> & xAttrList )
+    const Reference<XAttributeList> & /*xAttrList*/ )
 {
     SvXMLImportContext* pContext = nullptr;
 
@@ -350,17 +370,6 @@ SvXMLImportContextRef XMLSectionImportContext::CreateChildContext(
         pContext = new XMLSectionSourceDDEImportContext(GetImport(),
                                                         nPrefix, rLocalName,
                                                         xSectionPropertySet);
-    }
-    else
-    {
-        // otherwise: text context
-        pContext = GetImport().GetTextImport()->CreateTextChildContext(
-            GetImport(), nPrefix, rLocalName, xAttrList,
-            XMLTextType::Section );
-
-        // if that fails, default context
-        if (pContext)
-            bHasContent = true;
     }
 
     return pContext;

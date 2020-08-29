@@ -94,14 +94,14 @@ SvXMLEnumMapEntry<IndexTypeEnum> const aIndexTypeMap[] =
 
 
 XMLIndexTOCContext::XMLIndexTOCContext(SvXMLImport& rImport,
-    sal_uInt16 nPrfx, const OUString& rLocalName)
-    : SvXMLImportContext(rImport, nPrfx, rLocalName)
+    sal_Int32 nElement)
+    : SvXMLImportContext(rImport)
     , eIndexType(TEXT_INDEX_UNKNOWN)
     , bValid(false)
 {
-    if (XML_NAMESPACE_TEXT == nPrfx)
+    if (IsTokenInNamespace(nElement, XML_NAMESPACE_TEXT))
     {
-        if (SvXMLUnitConverter::convertEnum(eIndexType, rLocalName, aIndexTypeMap))
+        if (SvXMLUnitConverter::convertEnum(eIndexType, SvXMLImport::getNameFromToken(nElement), aIndexTypeMap))
         {
             // check for array index:
             OSL_ENSURE(unsigned(eIndexType) < (SAL_N_ELEMENTS(aIndexServiceMap)), "index out of range");
@@ -117,8 +117,9 @@ XMLIndexTOCContext::~XMLIndexTOCContext()
 {
 }
 
-void XMLIndexTOCContext::StartElement(
-    const Reference<XAttributeList> & xAttrList)
+void XMLIndexTOCContext::startFastElement(
+    sal_Int32 /*nElement*/,
+    const Reference<css::xml::sax::XFastAttributeList> & xAttrList)
 {
     if (!bValid)
         return;
@@ -126,44 +127,35 @@ void XMLIndexTOCContext::StartElement(
     // find text:style-name attribute and set section style
     // find text:protected and set value
     // find text:name and set value (if not empty)
-    sal_Int16 nCount = xAttrList->getLength();
     bool bProtected = false;
     OUString sIndexName;
     OUString sXmlId;
     XMLPropStyleContext* pStyle(nullptr);
-    for(sal_Int16 nAttr = 0; nAttr < nCount; nAttr++)
+    for(auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
-                              &sLocalName );
-        if ( XML_NAMESPACE_TEXT == nPrefix)
+        const OUString sValue = aIter.toString();
+        switch (aIter.getToken())
         {
-            if ( IsXMLToken( sLocalName, XML_STYLE_NAME ) )
-            {
-                pStyle = GetImport().GetTextImport()->FindSectionStyle(
-                            xAttrList->getValueByIndex(nAttr));
-            }
-            else if ( IsXMLToken( sLocalName, XML_PROTECTED ) )
+            case XML_ELEMENT(TEXT, XML_STYLE_NAME):
+                pStyle = GetImport().GetTextImport()->FindSectionStyle(sValue);
+                break;
+            case XML_ELEMENT(TEXT, XML_PROTECTED):
             {
                 bool bTmp(false);
-                if (::sax::Converter::convertBool(
-                     bTmp, xAttrList->getValueByIndex(nAttr)))
+                if (::sax::Converter::convertBool(bTmp, sValue))
                 {
                     bProtected = bTmp;
                 }
+                break;
             }
-            else if ( IsXMLToken( sLocalName, XML_NAME ) )
-            {
-                sIndexName = xAttrList->getValueByIndex(nAttr);
-            }
-        }
-        else if ( XML_NAMESPACE_XML == nPrefix)
-        {
-            if ( IsXMLToken( sLocalName, XML_ID ) )
-            {
-                sXmlId = xAttrList->getValueByIndex(nAttr);
-            }
+            case XML_ELEMENT(TEXT, XML_NAME):
+                sIndexName = sValue;
+                break;
+            case XML_ELEMENT(XML, XML_ID):
+                sXmlId = sValue;
+                break;
+            default:
+                SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
         }
     }
 
@@ -245,7 +237,7 @@ void XMLIndexTOCContext::StartElement(
 
 }
 
-void XMLIndexTOCContext::EndElement()
+void XMLIndexTOCContext::endFastElement(sal_Int32 )
 {
     // complete import of index by removing the markers (if the index
     // was actually inserted, that is)
@@ -273,77 +265,86 @@ void XMLIndexTOCContext::EndElement()
     }
 }
 
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexTOCContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
+{
+    if (nElement == XML_ELEMENT(TEXT, XML_INDEX_BODY) )
+    {
+        rtl::Reference<XMLIndexBodyContext> xNewBodyContext = new XMLIndexBodyContext(GetImport());
+        if ( !xBodyContextRef.is() || !xBodyContextRef->HasContent() )
+        {
+            xBodyContextRef = xNewBodyContext;
+        }
+        return xNewBodyContext.get();
+    }
+    return nullptr;
+}
+
 SvXMLImportContextRef XMLIndexTOCContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & /*xAttrList*/ )
 {
+    // not valid -> ignore
+    if (!bValid)
+        return nullptr;
+
     SvXMLImportContextRef xContext;
 
-    if (bValid)
+    if (XML_NAMESPACE_TEXT == nPrefix)
     {
-        if (XML_NAMESPACE_TEXT == nPrefix)
+        if ( IsXMLToken( rLocalName, XML_INDEX_BODY ) )
         {
-            if ( IsXMLToken( rLocalName, XML_INDEX_BODY ) )
-            {
-                rtl::Reference<XMLIndexBodyContext> xNewBodyContext = new XMLIndexBodyContext(GetImport(), nPrefix,
-                                                   rLocalName);
-                xContext = xNewBodyContext;
-                if ( !xBodyContextRef.is() || !xBodyContextRef->HasContent() )
-                {
-                    xBodyContextRef = xNewBodyContext;
-                }
-            }
-            else if (IsXMLToken(rLocalName, aIndexSourceElementMap[eIndexType]))
-            {
-                // instantiate source context for the appropriate index type
-                switch (eIndexType)
-                {
-                    case TEXT_INDEX_TOC:
-                        xContext = new XMLIndexTOCSourceContext(
-                            GetImport(), nPrefix, rLocalName, xTOCPropertySet);
-                        break;
-
-                    case TEXT_INDEX_OBJECT:
-                        xContext = new XMLIndexObjectSourceContext(
-                            GetImport(), nPrefix, rLocalName, xTOCPropertySet);
-                        break;
-
-                    case TEXT_INDEX_ALPHABETICAL:
-                        xContext = new XMLIndexAlphabeticalSourceContext(
-                            GetImport(), nPrefix, rLocalName, xTOCPropertySet);
-                        break;
-
-                    case TEXT_INDEX_USER:
-                        xContext = new XMLIndexUserSourceContext(
-                            GetImport(), nPrefix, rLocalName, xTOCPropertySet);
-                        break;
-
-                    case TEXT_INDEX_BIBLIOGRAPHY:
-                        xContext = new XMLIndexBibliographySourceContext(
-                            GetImport(), nPrefix, rLocalName, xTOCPropertySet);
-                        break;
-
-                    case TEXT_INDEX_TABLE:
-                        xContext = new XMLIndexTableSourceContext(
-                            GetImport(), nPrefix, rLocalName, xTOCPropertySet);
-                        break;
-
-                    case TEXT_INDEX_ILLUSTRATION:
-                        xContext = new XMLIndexIllustrationSourceContext(
-                            GetImport(), nPrefix, rLocalName, xTOCPropertySet);
-                        break;
-
-                    default:
-                        OSL_FAIL("index type not implemented");
-                        break;
-                }
-            }
-            // else: ignore
         }
-        // else: no text: namespace -> ignore
+        else if (IsXMLToken(rLocalName, aIndexSourceElementMap[eIndexType]))
+        {
+            // instantiate source context for the appropriate index type
+            switch (eIndexType)
+            {
+                case TEXT_INDEX_TOC:
+                    xContext = new XMLIndexTOCSourceContext(
+                        GetImport(), nPrefix, rLocalName, xTOCPropertySet);
+                    break;
+
+                case TEXT_INDEX_OBJECT:
+                    xContext = new XMLIndexObjectSourceContext(
+                        GetImport(), nPrefix, rLocalName, xTOCPropertySet);
+                    break;
+
+                case TEXT_INDEX_ALPHABETICAL:
+                    xContext = new XMLIndexAlphabeticalSourceContext(
+                        GetImport(), nPrefix, rLocalName, xTOCPropertySet);
+                    break;
+
+                case TEXT_INDEX_USER:
+                    xContext = new XMLIndexUserSourceContext(
+                        GetImport(), nPrefix, rLocalName, xTOCPropertySet);
+                    break;
+
+                case TEXT_INDEX_BIBLIOGRAPHY:
+                    xContext = new XMLIndexBibliographySourceContext(
+                        GetImport(), nPrefix, rLocalName, xTOCPropertySet);
+                    break;
+
+                case TEXT_INDEX_TABLE:
+                    xContext = new XMLIndexTableSourceContext(
+                        GetImport(), nPrefix, rLocalName, xTOCPropertySet);
+                    break;
+
+                case TEXT_INDEX_ILLUSTRATION:
+                    xContext = new XMLIndexIllustrationSourceContext(
+                        GetImport(), nPrefix, rLocalName, xTOCPropertySet);
+                    break;
+
+                default:
+                    OSL_FAIL("index type not implemented");
+                    break;
+            }
+        }
+        // else: ignore
     }
-    // else: not valid -> ignore
+    // else: no text: namespace -> ignore
 
     return xContext;
 }
