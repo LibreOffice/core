@@ -2222,6 +2222,126 @@ void XMLTextImportHelper::SetAutoStyles( SvXMLStylesContext *pStyles )
 
 SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         SvXMLImport& rImport,
+        sal_Int32 nElement,
+        const Reference< XFastAttributeList > & xAttrList,
+        XMLTextType eType )
+{
+    SvXMLImportContext *pContext = nullptr;
+
+    //bool bHeading = false;
+    bool bContent = true;
+    switch( nElement )
+    {
+    case XML_ELEMENT(TEXT, XML_H):
+    case XML_ELEMENT(TEXT, XML_P):
+    case XML_ELEMENT(LO_EXT, XML_P):
+    // #i52127#
+    case XML_ELEMENT(TEXT, XML_NUMBERED_PARAGRAPH):
+    case XML_ELEMENT(TEXT, XML_LIST):
+        break;
+    case XML_ELEMENT(TABLE,XML_TABLE):
+    case XML_ELEMENT(LO_EXT, XML_TABLE):
+        if( XMLTextType::Body == eType ||
+            XMLTextType::TextBox == eType ||
+             XMLTextType::Section == eType ||
+            XMLTextType::HeaderFooter == eType ||
+            XMLTextType::ChangedRegion == eType ||
+            XMLTextType::Cell == eType )
+            pContext = CreateTableChildContext( rImport, nElement, xAttrList );
+        break;
+    case XML_ELEMENT(TEXT, XML_SEQUENCE_DECLS):
+    case XML_ELEMENT(TEXT, XML_VARIABLE_DECLS):
+    case XML_ELEMENT(TEXT, XML_USER_FIELD_DECLS):
+    case XML_ELEMENT(TEXT, XML_DDE_CONNECTION_DECLS):
+        break;
+    case XML_ELEMENT(DRAW, XML_FRAME):
+        if ((XMLTextType::Body == eType && m_xImpl->m_bBodyContentStarted) ||
+            XMLTextType::TextBox == eType ||
+            XMLTextType::ChangedRegion == eType )
+        {
+            TextContentAnchorType eAnchorType =
+                XMLTextType::TextBox == eType ? TextContentAnchorType_AT_FRAME
+                                               : TextContentAnchorType_AT_PAGE;
+            pContext = new XMLTextFrameContext( rImport, nElement,
+                                                xAttrList,
+                                                eAnchorType );
+            bContent = false;
+        }
+        break;
+    case XML_ELEMENT(DRAW, XML_A):
+        if ((XMLTextType::Body == eType && m_xImpl->m_bBodyContentStarted) ||
+            XMLTextType::TextBox == eType ||
+             XMLTextType::ChangedRegion == eType)
+        {
+            TextContentAnchorType eAnchorType =
+                XMLTextType::TextBox == eType ? TextContentAnchorType_AT_FRAME
+                                               : TextContentAnchorType_AT_PAGE;
+            pContext = new XMLTextFrameHyperlinkContext( rImport, nElement,
+                                                xAttrList,
+                                                eAnchorType );
+            bContent = false;
+        }
+        break;
+    case XML_ELEMENT(TEXT, XML_INDEX_TITLE):
+    case XML_ELEMENT(TEXT, XML_SECTION):
+        pContext = new XMLSectionImportContext( rImport );
+        break;
+    case XML_ELEMENT(TEXT, XML_TABLE_OF_CONTENT):
+    case XML_ELEMENT(TEXT, XML_OBJECT_INDEX):
+    case XML_ELEMENT(TEXT, XML_TABLE_INDEX):
+    case XML_ELEMENT(TEXT, XML_ILLUSTRATION_INDEX):
+    case XML_ELEMENT(TEXT, XML_USER_INDEX):
+    case XML_ELEMENT(TEXT, XML_ALPHABETICAL_INDEX):
+    case XML_ELEMENT(TEXT, XML_BIBLIOGRAPHY):
+        if( XMLTextType::Shape != eType )
+            pContext = new XMLIndexTOCContext( rImport, nElement );
+        break;
+    case XML_ELEMENT(TEXT, XML_TRACKED_CHANGES):
+        pContext = new XMLTrackedChangesImportContext( rImport );
+        bContent = false;
+        break;
+    case XML_ELEMENT(TEXT, XML_CHANGE):
+    case XML_ELEMENT(TEXT, XML_CHANGE_START):
+    case XML_ELEMENT(TEXT, XML_CHANGE_END):
+    case XML_ELEMENT(OFFICE, XML_FORMS):
+        pContext = xmloff::OFormLayerXMLImport::createOfficeFormsContext(rImport, nElement);
+        bContent = false;
+        break;
+    case XML_ELEMENT(TEXT, XML_ALPHABETICAL_INDEX_AUTO_MARK_FILE):
+    case XML_ELEMENT(TABLE, XML_CALCULATION_SETTINGS):
+    break;
+
+    default:
+        if ((XMLTextType::Body == eType && m_xImpl->m_bBodyContentStarted) ||
+            XMLTextType::TextBox == eType ||
+             XMLTextType::ChangedRegion == eType )
+        {
+            Reference < XShapes > xShapes;
+            pContext = XMLShapeImportHelper::CreateGroupChildContext(
+                    rImport, nElement, xAttrList, xShapes );
+            bContent = false;
+        }
+    }
+
+    if (!pContext)
+    {
+        assert(false);
+        // TODO noel
+        //return CreateTextChildContext(rImport, convert(nElement), convert(nElement), convert(xAttrList), eType);
+    }
+
+    if( XMLTextType::Body == eType && bContent )
+    {
+        m_xImpl->m_bBodyContentStarted = false;
+    }
+
+    if( nElement != XML_ELEMENT(DRAW, XML_FRAME) )
+        ClearLastImportedTextFrameName();
+    return pContext;
+}
+
+SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
+        SvXMLImport& rImport,
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList,
         XMLTextType eType )
@@ -2253,16 +2373,6 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
     case XML_TOK_TEXT_LIST:
         pContext = new XMLTextListBlockContext( rImport, *this,
                                                 nPrefix, rLocalName,
-                                                xAttrList );
-        break;
-    case XML_TOK_TABLE_TABLE:
-        if( XMLTextType::Body == eType ||
-            XMLTextType::TextBox == eType ||
-             XMLTextType::Section == eType ||
-            XMLTextType::HeaderFooter == eType ||
-            XMLTextType::ChangedRegion == eType ||
-            XMLTextType::Cell == eType )
-            pContext = CreateTableChildContext( rImport, nPrefix, rLocalName,
                                                 xAttrList );
         break;
     case XML_TOK_TEXT_SEQUENCE_DECLS:
@@ -2305,58 +2415,6 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         }
         break;
 
-    case XML_TOK_TEXT_FRAME_PAGE:
-        if ((XMLTextType::Body == eType && m_xImpl->m_bBodyContentStarted) ||
-            XMLTextType::TextBox == eType ||
-            XMLTextType::ChangedRegion == eType )
-        {
-            TextContentAnchorType eAnchorType =
-                XMLTextType::TextBox == eType ? TextContentAnchorType_AT_FRAME
-                                               : TextContentAnchorType_AT_PAGE;
-            pContext = new XMLTextFrameContext( rImport, nPrefix,
-                                                rLocalName, xAttrList,
-                                                eAnchorType );
-            bContent = false;
-        }
-        break;
-
-    case XML_TOK_DRAW_A_PAGE:
-        if ((XMLTextType::Body == eType && m_xImpl->m_bBodyContentStarted) ||
-            XMLTextType::TextBox == eType ||
-             XMLTextType::ChangedRegion == eType)
-        {
-            TextContentAnchorType eAnchorType =
-                XMLTextType::TextBox == eType ? TextContentAnchorType_AT_FRAME
-                                               : TextContentAnchorType_AT_PAGE;
-            pContext = new XMLTextFrameHyperlinkContext( rImport, nPrefix,
-                                                rLocalName, xAttrList,
-                                                eAnchorType );
-            bContent = false;
-        }
-        break;
-
-    case XML_TOK_TEXT_INDEX_TITLE:
-    case XML_TOK_TEXT_SECTION:
-        pContext = new XMLSectionImportContext( rImport, nPrefix, rLocalName );
-        break;
-
-    case XML_TOK_TEXT_TOC:
-    case XML_TOK_TEXT_OBJECT_INDEX:
-    case XML_TOK_TEXT_TABLE_INDEX:
-    case XML_TOK_TEXT_ILLUSTRATION_INDEX:
-    case XML_TOK_TEXT_USER_INDEX:
-    case XML_TOK_TEXT_ALPHABETICAL_INDEX:
-    case XML_TOK_TEXT_BIBLIOGRAPHY_INDEX:
-        if( XMLTextType::Shape != eType )
-            pContext = new XMLIndexTOCContext( rImport, nPrefix, rLocalName );
-        break;
-
-    case XML_TOK_TEXT_TRACKED_CHANGES:
-        pContext = new XMLTrackedChangesImportContext( rImport, nPrefix,
-                                                       rLocalName);
-        bContent = false;
-        break;
-
     case XML_TOK_TEXT_CHANGE:
     case XML_TOK_TEXT_CHANGE_START:
     case XML_TOK_TEXT_CHANGE_END:
@@ -2368,11 +2426,6 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
                     ? XMLChangeImportContext::Element::START
                     : XMLChangeImportContext::Element::POINT),
             true);
-        break;
-
-    case XML_TOK_TEXT_FORMS:
-        pContext = xmloff::OFormLayerXMLImport::createOfficeFormsContext(rImport, nPrefix, rLocalName);
-        bContent = false;
         break;
 
     case XML_TOK_TEXT_AUTOMARK:
@@ -2388,16 +2441,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         bContent = false;
     break;
 
-    default:
-        if ((XMLTextType::Body == eType && m_xImpl->m_bBodyContentStarted) ||
-            XMLTextType::TextBox == eType ||
-             XMLTextType::ChangedRegion == eType )
-        {
-            Reference < XShapes > xShapes;
-            pContext = rImport.GetShapeImport()->CreateGroupChildContext(
-                    rImport, nPrefix, rLocalName, xAttrList, xShapes );
-            bContent = false;
-        }
+    default: ;
     }
 
     // handle open redlines
@@ -2413,17 +2457,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         m_xImpl->m_bBodyContentStarted = false;
     }
 
-    if( nToken != XML_TOK_TEXT_FRAME_PAGE )
-        ClearLastImportedTextFrameName();
     return pContext;
-}
-
-SvXMLImportContext *XMLTextImportHelper::CreateTableChildContext(
-        SvXMLImport&,
-        sal_uInt16 /*nPrefix*/, const OUString& /*rLocalName*/,
-        const Reference< XAttributeList > & )
-{
-    return nullptr;
 }
 
 /// get data style key for use with NumberFormat property

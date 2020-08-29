@@ -28,6 +28,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <xmloff/xmlnamespace.hxx>
+#include <xmloff/xmltoken.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 template<typename EnumT>
@@ -251,6 +252,7 @@ namespace xmloff
                 the id of the attribute
         */
         static const char* getOfficeFormsAttributeName(OfficeFormsAttributes _eAttrib);
+        static xmloff::token::XMLTokenEnum getOfficeFormsAttributeToken(OfficeFormsAttributes _eAttrib);
 
         /** calculates the xml namedspace key of an attribute of the office:forms element
             @param _nId

@@ -31,8 +31,8 @@ class SwXMLTextImportHelper : public XMLTextImportHelper
 protected:
     virtual SvXMLImportContext *CreateTableChildContext(
                 SvXMLImport& rImport,
-                sal_uInt16 nPrefix, const OUString& rLocalName,
-                const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
+                sal_Int32 nElement,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 
 public:
     SwXMLTextImportHelper(

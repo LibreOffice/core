@@ -26,6 +26,7 @@
 #include <xmloff/txtimp.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/namespacemap.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include "XMLAnchorTypePropHdl.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
@@ -40,6 +41,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::xml::sax;
+using namespace ::xmloff::token;
 
 const OUStringLiteral gsAnchorType(u"AnchorType");
 const OUStringLiteral gsAnchorPageNo(u"AnchorPageNo");
@@ -67,7 +69,7 @@ XMLTextShapeImportHelper::~XMLTextShapeImportHelper()
 
 void XMLTextShapeImportHelper::addShape(
     Reference< XShape >& rShape,
-    const Reference< XAttributeList >& xAttrList,
+    const Reference< XFastAttributeList >& xAttrList,
     Reference< XShapes >& rShapes )
 {
     if( rShapes.is() )
@@ -83,40 +85,31 @@ void XMLTextShapeImportHelper::addShape(
 
     rtl::Reference < XMLTextImportHelper > xTxtImport =
         rImport.GetTextImport();
-    const SvXMLTokenMap& rTokenMap =
-        xTxtImport->GetTextFrameAttrTokenMap();
 
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        const OUString& rValue = xAttrList->getValueByIndex( i );
-
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            rImport.GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                            &aLocalName );
-        switch( rTokenMap.Get( nPrefix, aLocalName ) )
+        const OUString sValue = aIter.toString();
+        switch( aIter.getToken() )
         {
-        case XML_TOK_TEXT_FRAME_ANCHOR_TYPE:
+        case XML_ELEMENT(TEXT, XML_ANCHOR_TYPE):
             {
                 TextContentAnchorType eNew;
                 // OD 2004-06-01 #i26791# - allow all anchor types
-                if ( XMLAnchorTypePropHdl::convert( rValue, eNew ) )
+                if ( XMLAnchorTypePropHdl::convert( sValue, eNew ) )
                 {
                     eAnchorType = eNew;
                 }
             }
             break;
-        case XML_TOK_TEXT_FRAME_ANCHOR_PAGE_NUMBER:
+        case XML_ELEMENT(TEXT, XML_ANCHOR_PAGE_NUMBER):
             {
                 sal_Int32 nTmp;
-                if (::sax::Converter::convertNumber(nTmp, rValue, 1, SHRT_MAX))
+                if (::sax::Converter::convertNumber(nTmp, sValue, 1, SHRT_MAX))
                     nPage = static_cast<sal_Int16>(nTmp);
             }
             break;
-        case XML_TOK_TEXT_FRAME_Y:
-            rImport.GetMM100UnitConverter().convertMeasureToCore( nY, rValue );
+        case XML_ELEMENT(SVG, XML_Y):
+            rImport.GetMM100UnitConverter().convertMeasureToCore( nY, sValue );
             break;
         }
     }

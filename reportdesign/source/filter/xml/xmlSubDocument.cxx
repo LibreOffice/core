@@ -53,33 +53,6 @@ OXMLSubDocument::~OXMLSubDocument()
 {
 }
 
-SvXMLImportContextRef OXMLSubDocument::CreateChildContext( sal_uInt16 nPrefix,
-                    const OUString& rLocalName,
-                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList )
-{
-    SvXMLImportContextRef xContext;
-    const SvXMLTokenMap&    rTokenMap   = static_cast<ORptFilter&>(GetImport()).GetReportElemTokenMap();
-    switch( rTokenMap.Get( nPrefix, rLocalName ) )
-    {
-        case XML_TOK_SUB_FRAME:
-            {
-                if ( !m_bContainsShape )
-                    m_nCurrentCount = m_pContainer->getSection()->getCount();
-                rtl::Reference< XMLShapeImportHelper > xShapeImportHelper = GetImport().GetShapeImport();
-                uno::Reference< drawing::XShapes > xShapes = m_pContainer->getSection().get();
-                xContext = xShapeImportHelper->CreateGroupChildContext(GetImport(),nPrefix,rLocalName,xAttrList,xShapes);
-                m_bContainsShape = true;
-                if (m_pCellParent)
-                {
-                    // #i94115 say to the parent Cell it contains shapes
-                    m_pCellParent->setContainsShape(true);
-                }
-            }
-            break;
-    }
-    return xContext;
-}
-
 css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLSubDocument::createFastChildContext(
         sal_Int32 nElement,
         const Reference< XFastAttributeList > & xAttrList )
@@ -102,7 +75,23 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLSubDocument::creat
         case XML_ELEMENT(OFFICE, XML_BODY):
             xContext = new RptXMLDocumentBodyContext(GetImport());
             break;
+
+        case XML_ELEMENT(DRAW, XML_FRAME):
+            {
+                if ( !m_bContainsShape )
+                    m_nCurrentCount = m_pContainer->getSection()->getCount();
+                uno::Reference< drawing::XShapes > xShapes = m_pContainer->getSection().get();
+                xContext = XMLShapeImportHelper::CreateGroupChildContext(GetImport(),nElement,xAttrList,xShapes);
+                m_bContainsShape = true;
+                if (m_pCellParent)
+                {
+                    // #i94115 say to the parent Cell it contains shapes
+                    m_pCellParent->setContainsShape(true);
+                }
+            }
+            break;
         default:
+            SAL_WARN("reportdesign", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
             break;
     }
 

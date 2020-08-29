@@ -77,10 +77,9 @@ public:
 
     virtual ~XMLHeaderFooterRegionContext() override;
 
-    virtual SvXMLImportContextRef CreateChildContext(
-            sal_uInt16 nPrefix,
-            const OUString& rLocalName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override;
 
     virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}

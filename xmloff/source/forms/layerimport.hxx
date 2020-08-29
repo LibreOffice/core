@@ -144,16 +144,14 @@ namespace xmloff
         */
         static SvXMLImportContext* createOfficeFormsContext(
             SvXMLImport& _rImport,
-            sal_uInt16 _nPrefix,
-            const OUString& _rLocalName);
+            sal_Int32 nElement);
 
         /** create an <type>SvXMLImportContext</type> instance which is able to import the &lt;form:form&gt;
             element.
         */
         SvXMLImportContext* createContext(
-            const sal_uInt16 _nPrefix,
-            const OUString& _rLocalName,
-            const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttribs);
+            sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& _rxAttribs);
 
         /** get the control with the given id
         */

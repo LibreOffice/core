@@ -85,9 +85,9 @@ SchXMLImportHelper::SchXMLImportHelper() :
 
 SvXMLImportContext* SchXMLImportHelper::CreateChartContext(
     SvXMLImport& rImport,
-    sal_uInt16 /*nPrefix*/, const OUString& rLocalName,
+    sal_Int32 /*nElement*/,
     const Reference< frame::XModel >& rChartModel,
-    const Reference< xml::sax::XAttributeList >& )
+    const Reference< xml::sax::XFastAttributeList >& )
 {
     SvXMLImportContext* pContext = nullptr;
 
@@ -95,7 +95,7 @@ SvXMLImportContext* SchXMLImportHelper::CreateChartContext(
     if( xDoc.is())
     {
         mxChartDoc = xDoc;
-        pContext = new SchXMLChartContext( *this, rImport, rLocalName );
+        pContext = new SchXMLChartContext( *this, rImport );
     }
     else
     {

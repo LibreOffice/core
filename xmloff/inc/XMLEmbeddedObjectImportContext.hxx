@@ -38,9 +38,8 @@ public:
     const OUString& GetFilterServiceName() const { return sFilterService; }
     const OUString& GetFilterCLSID() const { return sCLSID; }
 
-    XMLEmbeddedObjectImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                    const OUString& rLName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
+    XMLEmbeddedObjectImportContext( SvXMLImport& rImport, sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
 
     virtual ~XMLEmbeddedObjectImportContext() override;
 
@@ -48,11 +47,13 @@ public:
                                    const OUString& rLocalName,
                                    const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList) override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
-    virtual void Characters( const OUString& rChars ) override;
+    virtual void SAL_CALL characters( const OUString& rChars ) override;
 
     void SetComponent( css::uno::Reference< css::lang::XComponent > const & rComp );
 

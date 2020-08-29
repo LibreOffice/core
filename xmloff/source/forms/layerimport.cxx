@@ -57,6 +57,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::sdb;
+using namespace token;
 
 //= OFormLayerXMLImport_Impl
 OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
@@ -440,25 +441,24 @@ Reference< XPropertySet > OFormLayerXMLImport_Impl::lookupControlId(const OUStri
 
 SvXMLImportContext* OFormLayerXMLImport_Impl::createOfficeFormsContext(
     SvXMLImport& _rImport,
-    sal_uInt16 _nPrefix,
-    const OUString& _rLocalName)
+    sal_Int32 _nElement)
 {
-    return new OFormsRootImport( _rImport, _nPrefix, _rLocalName );
+    return new OFormsRootImport( _rImport, _nElement );
 }
 
-SvXMLImportContext* OFormLayerXMLImport_Impl::createContext(const sal_uInt16 _nPrefix, const OUString& _rLocalName,
-    const Reference< xml::sax::XAttributeList >&)
+SvXMLImportContext* OFormLayerXMLImport_Impl::createContext(
+    sal_Int32 nElement,
+    const Reference< xml::sax::XFastAttributeList >&)
 {
     SvXMLImportContext* pContext = nullptr;
-    if ( _rLocalName == "form" )
+    if ( (nElement & TOKEN_MASK) == XML_FORM )
     {
         if ( m_xCurrentPageFormsSupp.is() )
-            pContext = new OFormImport(*this, *this, _nPrefix, _rLocalName, m_xCurrentPageFormsSupp->getForms() );
+            pContext = new OFormImport(*this, *this, nElement, m_xCurrentPageFormsSupp->getForms() );
     }
-    else if ( _nPrefix == XML_NAMESPACE_XFORMS
-              && xmloff::token::IsXMLToken( _rLocalName, xmloff::token::XML_MODEL ) )
+    else if ( nElement == XML_ELEMENT(XFORMS, XML_MODEL) )
     {
-        pContext = createXFormsModelContext( m_rImporter, _nPrefix, _rLocalName );
+        pContext = createXFormsModelContext( m_rImporter, nElement );
     }
 
     return pContext;

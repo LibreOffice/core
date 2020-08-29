@@ -137,34 +137,30 @@ void XMLEmbeddedObjectImportContext::SetComponent( Reference< XComponent > const
 }
 
 XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
-        SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< XAttributeList >& xAttrList ) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+        SvXMLImport& rImport, sal_Int32 nElement,
+        const Reference< XFastAttributeList >& xAttrList ) :
+    SvXMLImportContext( rImport )
 {
     SvGlobalName aName;
 
-    if( nPrfx == XML_NAMESPACE_MATH &&
-        IsXMLToken( rLName, XML_MATH ) )
+    if( nElement == XML_ELEMENT(MATH, XML_MATH) )
     {
         sFilterService = XML_IMPORT_FILTER_MATH;
         aName = SvGlobalName(SO3_SM_CLASSID);
     }
-    else if( nPrfx == XML_NAMESPACE_OFFICE &&
-        IsXMLToken( rLName, XML_DOCUMENT ) )
+    else if( nElement == XML_ELEMENT(OFFICE, XML_DOCUMENT) )
     {
         OUString sMime;
 
-        sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-        for( sal_Int16 i=0; i < nAttrCount; i++ )
+        for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
         {
-            const OUString& rAttrName = xAttrList->getNameByIndex( i );
-            OUString aLocalName;
-            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
-            if( nPrefix == XML_NAMESPACE_OFFICE &&
-                IsXMLToken( aLocalName, XML_MIMETYPE ) )
+            switch (aIter.getToken())
             {
-                sMime = xAttrList->getValueByIndex( i );
-                break;
+                case XML_ELEMENT(OFFICE, XML_MIMETYPE):
+                    sMime = aIter.toString();
+                    break;
+                default:
+                    SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
             }
         }
 
@@ -237,40 +233,44 @@ SvXMLImportContextRef XMLEmbeddedObjectImportContext::CreateChildContext(
     return nullptr;
 }
 
-void XMLEmbeddedObjectImportContext::StartElement(
-        const Reference< XAttributeList >& rAttrList )
+void XMLEmbeddedObjectImportContext::startFastElement(
+        sal_Int32 /*nElement*/, const Reference< XFastAttributeList >& /*rAttrList*/ )
 {
     if( !xHandler.is() )
         return;
 
     xHandler->startDocument();
-    // #i34042: copy namepspace declarations
-    SvXMLAttributeList *pAttrList = new SvXMLAttributeList( rAttrList );
-    Reference< XAttributeList > xAttrList( pAttrList );
-    const SvXMLNamespaceMap& rNamespaceMap = GetImport().GetNamespaceMap();
-    sal_uInt16 nPos = rNamespaceMap.GetFirstKey();
-    while( USHRT_MAX != nPos )
-    {
-        OUString aAttrName( rNamespaceMap.GetAttrNameByKey( nPos ) );
-        if( xAttrList->getValueByName( aAttrName ).isEmpty() )
-        {
-            pAttrList->AddAttribute( aAttrName,
-                                      rNamespaceMap.GetNameByKey( nPos ) );
-        }
-        nPos = rNamespaceMap.GetNextKey( nPos );
-    }
-    xHandler->startElement( GetImport().GetNamespaceMap().GetQNameByKey(
-                                GetPrefix(), GetLocalName() ),
-                            xAttrList );
+    // Noel - TODO
+    assert(false);
+    // #i34042: copy namespace declarations
+//    SvXMLAttributeList *pAttrList = new SvXMLAttributeList( rAttrList );
+//    Reference< XAttributeList > xAttrList( pAttrList );
+//    const SvXMLNamespaceMap& rNamespaceMap = GetImport().GetNamespaceMap();
+//    sal_uInt16 nPos = rNamespaceMap.GetFirstKey();
+//    while( USHRT_MAX != nPos )
+//    {
+//        OUString aAttrName( rNamespaceMap.GetAttrNameByKey( nPos ) );
+//        if( xAttrList->getValueByName( aAttrName ).isEmpty() )
+//        {
+//            pAttrList->AddAttribute( aAttrName,
+//                                      rNamespaceMap.GetNameByKey( nPos ) );
+//        }
+//        nPos = rNamespaceMap.GetNextKey( nPos );
+//    }
+//    xHandler->startElement( GetImport().GetNamespaceMap().GetQNameByKey(
+//                                GetPrefix(), GetLocalName() ),
+//                            xAttrList );
 }
 
-void XMLEmbeddedObjectImportContext::EndElement()
+void XMLEmbeddedObjectImportContext::endFastElement(sal_Int32 )
 {
     if( !xHandler.is() )
         return;
 
-    xHandler->endElement( GetImport().GetNamespaceMap().GetQNameByKey(
-                                GetPrefix(), GetLocalName() ) );
+    // TODO noel
+    assert(false);
+//    xHandler->endElement( GetImport().GetNamespaceMap().GetQNameByKey(
+//                                GetPrefix(), GetLocalName() ) );
     xHandler->endDocument();
 
     try
@@ -284,7 +284,7 @@ void XMLEmbeddedObjectImportContext::EndElement()
     }
 }
 
-void XMLEmbeddedObjectImportContext::Characters( const OUString& rChars )
+void XMLEmbeddedObjectImportContext::characters( const OUString& rChars )
 {
     if( xHandler.is() )
         xHandler->characters( rChars );

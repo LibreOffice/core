@@ -99,10 +99,8 @@ void XMLFieldParamImportContext::StartElement(const css::uno::Reference< css::xm
 XMLTextMarkImportContext::XMLTextMarkImportContext(
     SvXMLImport& rImport,
     XMLTextImportHelper& rHlp,
-    uno::Reference<uno::XInterface> & io_rxCrossRefHeadingBookmark,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName )
-    : SvXMLImportContext(rImport, nPrefix, rLocalName)
+    uno::Reference<uno::XInterface> & io_rxCrossRefHeadingBookmark )
+    : SvXMLImportContext(rImport)
     , m_rHelper(rHlp)
     , m_rxCrossRefHeadingBookmark(io_rxCrossRefHeadingBookmark)
     , m_bHaveAbout(false)
@@ -156,8 +154,9 @@ static OUString lcl_getFieldmarkName(OUString const& name)
 }
 
 
-void XMLTextMarkImportContext::StartElement(
-    const Reference<XAttributeList> & xAttrList)
+void XMLTextMarkImportContext::startFastElement(
+    sal_Int32 /*nElement*/,
+    const Reference<XFastAttributeList> & xAttrList)
 {
     if (!FindName(GetImport(), xAttrList))
     {
@@ -175,8 +174,8 @@ void XMLTextMarkImportContext::StartElement(
 
     if (IsXMLToken(GetLocalName(), XML_BOOKMARK_START))
     {
-        const OUString sHidden    = xAttrList->getValueByName("loext:hidden");
-        const OUString sCondition = xAttrList->getValueByName("loext:condition");
+        const OUString sHidden    = xAttrList->getValue(XML_ELEMENT(LO_EXT, XML_HIDDEN));
+        const OUString sCondition = xAttrList->getValue(XML_ELEMENT(LO_EXT, XML_CONDITION));
         m_rHelper.setBookmarkAttributes(m_sBookmarkName, sHidden == "true", sCondition);
     }
 }
@@ -248,10 +247,8 @@ static auto PopFieldmark(XMLTextImportHelper & rHelper) -> void
     }
 }
 
-void XMLTextMarkImportContext::EndElement()
+void XMLTextMarkImportContext::endFastElement(sal_Int32 /*nElement*/)
 {
-    SvXMLImportContext::EndElement();
-
     static const char sAPI_bookmark[] = "com.sun.star.text.Bookmark";
 
     lcl_MarkType nTmp{};

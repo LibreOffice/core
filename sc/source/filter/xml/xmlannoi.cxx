@@ -41,11 +41,10 @@ ScXMLAnnotationData::~ScXMLAnnotationData()
 }
 
 ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
-                                      const OUString& rLName,
-                                      const uno::Reference<xml::sax::XAttributeList>& xAttrList,
+                                      sal_Int32 nElement,
+                                      const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
                                       ScXMLAnnotationData& rAnnotationData) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport ),
     mrAnnotationData( rAnnotationData )
 {
     uno::Reference<drawing::XShapes> xLocalShapes (GetScImport().GetTables().GetCurrentXShapes());
@@ -53,52 +52,48 @@ ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
     {
         XMLTableShapeImportHelper* pTableShapeImport = static_cast<XMLTableShapeImportHelper*>(GetScImport().GetShapeImport().get());
         pTableShapeImport->SetAnnotation(this);
-        pShapeContext.reset( GetScImport().GetShapeImport()->CreateGroupChildContext(
-            GetScImport(), nPrfx, rLName, xAttrList, xLocalShapes, true) );
+        pShapeContext.reset( XMLShapeImportHelper::CreateGroupChildContext(
+            GetScImport(), nElement, xAttrList, xLocalShapes, true) );
     }
 
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableAnnotationAttrTokenMap();
-    for( sal_Int16 i=0; i < nAttrCount; ++i )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                            sAttrName, &aLocalName );
-        const OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString sValue = aIter.toString();
 
-        switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
+        switch( aIter.getToken() )
         {
-            case XML_TOK_TABLE_ANNOTATION_ATTR_AUTHOR:
+            case XML_ELEMENT(OFFICE, XML_AUTHOR):
             {
                 maAuthorBuffer = sValue;
             }
             break;
-            case XML_TOK_TABLE_ANNOTATION_ATTR_CREATE_DATE:
+            case XML_ELEMENT(OFFICE, XML_CREATE_DATE):
             {
                 maCreateDateBuffer = sValue;
             }
             break;
-            case XML_TOK_TABLE_ANNOTATION_ATTR_CREATE_DATE_STRING:
+            case XML_ELEMENT(OFFICE, XML_CREATE_DATE_STRING):
             {
                 maCreateDateStringBuffer = sValue;
             }
             break;
-            case XML_TOK_TABLE_ANNOTATION_ATTR_DISPLAY:
+            case XML_ELEMENT(OFFICE, XML_DISPLAY):
             {
                 mrAnnotationData.mbShown = IsXMLToken(sValue, XML_TRUE);
             }
             break;
-            case XML_TOK_TABLE_ANNOTATION_ATTR_X:
+            case XML_ELEMENT(SVG, XML_X):
             {
                 mrAnnotationData.mbUseShapePos = true;
             }
             break;
-            case XML_TOK_TABLE_ANNOTATION_ATTR_Y:
+            case XML_ELEMENT(SVG, XML_Y):
             {
                 mrAnnotationData.mbUseShapePos = true;
             }
             break;
+            default:
+            SAL_WARN("sc", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
         }
     }
 }
@@ -107,50 +102,43 @@ ScXMLAnnotationContext::~ScXMLAnnotationContext()
 {
 }
 
-void ScXMLAnnotationContext::StartElement(const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList)
+void ScXMLAnnotationContext::startFastElement(sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList)
 {
     if (pShapeContext)
-        pShapeContext->StartElement(xAttrList);
+        pShapeContext->startFastElement(nElement, xAttrList);
 }
 
-SvXMLImportContextRef ScXMLAnnotationContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const OUString& rLName,
-                                            const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > ScXMLAnnotationContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    SvXMLImportContextRef xContext;
-
-    if( XML_NAMESPACE_DC == nPrefix )
+    switch (nElement)
     {
-        if( IsXMLToken( rLName, XML_CREATOR ) )
-            xContext = new ScXMLContentContext(GetScImport(), nPrefix,
-                                            rLName, maAuthorBuffer);
-        else if( IsXMLToken( rLName, XML_DATE ) )
-            xContext = new ScXMLContentContext(GetScImport(), nPrefix,
-                                            rLName, maCreateDateBuffer);
-    }
-    else if( XML_NAMESPACE_META == nPrefix )
-    {
-        if( IsXMLToken( rLName, XML_DATE_STRING ) )
-            xContext = new ScXMLContentContext(GetScImport(), nPrefix,
-                                            rLName, maCreateDateStringBuffer);
+        case XML_ELEMENT(DC, XML_CREATOR):
+            return new ScXMLContentContext(GetScImport(), maAuthorBuffer);
+        case XML_ELEMENT(DC, XML_DATE):
+            return new ScXMLContentContext(GetScImport(), maCreateDateBuffer);
+        case XML_ELEMENT(META, XML_DATE_STRING):
+            return new ScXMLContentContext(GetScImport(), maCreateDateStringBuffer);
     }
 
-    if( !xContext && pShapeContext )
-        xContext = pShapeContext->CreateChildContext(nPrefix, rLName, xAttrList);
+    if( pShapeContext )
+        return pShapeContext->createFastChildContext(nElement, xAttrList);
 
-    return xContext;
+    SAL_WARN("sc", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
+    return nullptr;
 }
 
-void ScXMLAnnotationContext::Characters( const OUString& rChars )
+void ScXMLAnnotationContext::characters( const OUString& rChars )
 {
     maTextBuffer.append(rChars);
 }
 
-void ScXMLAnnotationContext::EndElement()
+void ScXMLAnnotationContext::endFastElement(sal_Int32 nElement)
 {
     if (pShapeContext)
     {
-        pShapeContext->EndElement();
+        pShapeContext->endFastElement(nElement);
         pShapeContext.reset();
     }
 

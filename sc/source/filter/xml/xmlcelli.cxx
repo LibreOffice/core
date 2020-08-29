@@ -628,62 +628,6 @@ void ScXMLTableRowCellContext::PushParagraphEnd()
     ++mnCurParagraph;
 }
 
-SvXMLImportContextRef ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const OUString& rLName,
-                                            const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
-{
-    SvXMLImportContext *pContext = nullptr;
-
-    const SvXMLTokenMap& rTokenMap = rXMLImport.GetTableRowCellElemTokenMap();
-    bool bTextP(false);
-    switch( rTokenMap.Get( nPrefix, rLName ) )
-    {
-        case XML_TOK_TABLE_ROW_CELL_P:
-        {
-            bTextP = true;
-        }
-        break;
-        case XML_TOK_TABLE_ROW_CELL_ANNOTATION:
-        {
-            bIsEmpty = false;
-            OSL_ENSURE(
-                !mxAnnotationData,
-                "ScXMLTableRowCellContext::CreateChildContext - multiple annotations in one cell");
-            mxAnnotationData.reset( new ScXMLAnnotationData );
-            pContext = new ScXMLAnnotationContext( rXMLImport, nPrefix, rLName,
-                                                    xAttrList, *mxAnnotationData);
-        }
-        break;
-    }
-
-    if (!pContext && !bTextP)
-    {
-        ScAddress aCellPos = rXMLImport.GetTables().GetCurrentCellPos();
-        uno::Reference<drawing::XShapes> xShapes (rXMLImport.GetTables().GetCurrentXShapes());
-        if (xShapes.is())
-        {
-            ScDocument* pDoc = rXMLImport.GetDocument();
-            if (aCellPos.Col() > pDoc->MaxCol())
-                aCellPos.SetCol(pDoc->MaxCol());
-            if (aCellPos.Row() > pDoc->MaxRow())
-                aCellPos.SetRow(pDoc->MaxRow());
-            XMLTableShapeImportHelper* pTableShapeImport =
-                    static_cast< XMLTableShapeImportHelper* >( rXMLImport.GetShapeImport().get() );
-            pTableShapeImport->SetOnTable(false);
-            pTableShapeImport->SetCell(aCellPos);
-            pContext = rXMLImport.GetShapeImport()->CreateGroupChildContext(
-                rXMLImport, nPrefix, rLName, xAttrList, xShapes);
-            if (pContext)
-            {
-                bIsEmpty = false;
-                rXMLImport.ProgressBarIncrement();
-            }
-        }
-    }
-
-    return pContext;
-}
-
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLTableRowCellContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
@@ -691,13 +635,13 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLTableRowCellContex
     sax_fastparser::FastAttributeList *pAttribList =
         &sax_fastparser::castToFastAttributeList( xAttrList );
 
-    // bool bTextP(false);
+    bool bTextP(false);
     switch (nElement)
     {
         case XML_ELEMENT( TEXT, XML_P ):
         {
             bIsEmpty = false;
-            // bTextP = true;
+            bTextP = true;
 
             pContext = new ScXMLCellTextParaContext(rXMLImport, *this);
         }
@@ -725,6 +669,42 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLTableRowCellContex
                 rXMLImport, pAttribList, pCellRangeSource.get() );
         }
         break;
+        case XML_ELEMENT(OFFICE, XML_ANNOTATION):
+        {
+            bIsEmpty = false;
+            OSL_ENSURE(
+                !mxAnnotationData,
+                "ScXMLTableRowCellContext::CreateChildContext - multiple annotations in one cell");
+            mxAnnotationData.reset( new ScXMLAnnotationData );
+            pContext = new ScXMLAnnotationContext( rXMLImport, nElement,
+                                                    xAttrList, *mxAnnotationData);
+        }
+        break;
+    }
+
+    if (!pContext && !bTextP)
+    {
+        ScAddress aCellPos = rXMLImport.GetTables().GetCurrentCellPos();
+        uno::Reference<drawing::XShapes> xShapes (rXMLImport.GetTables().GetCurrentXShapes());
+        if (xShapes.is())
+        {
+            ScDocument* pDoc = rXMLImport.GetDocument();
+            if (aCellPos.Col() > pDoc->MaxCol())
+                aCellPos.SetCol(pDoc->MaxCol());
+            if (aCellPos.Row() > pDoc->MaxRow())
+                aCellPos.SetRow(pDoc->MaxRow());
+            XMLTableShapeImportHelper* pTableShapeImport =
+                    static_cast< XMLTableShapeImportHelper* >( rXMLImport.GetShapeImport().get() );
+            pTableShapeImport->SetOnTable(false);
+            pTableShapeImport->SetCell(aCellPos);
+            pContext = XMLShapeImportHelper::CreateGroupChildContext(
+                rXMLImport, nElement, xAttrList, xShapes);
+            if (pContext)
+            {
+                bIsEmpty = false;
+                rXMLImport.ProgressBarIncrement();
+            }
+        }
     }
 
     return pContext;

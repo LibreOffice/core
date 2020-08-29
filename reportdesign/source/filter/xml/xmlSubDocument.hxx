@@ -51,10 +51,6 @@ namespace rptxml
                     sal_Int32 nElement,
                     const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 
-        virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                    const OUString& rLocalName,
-                    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
-
         virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
         virtual void addMasterDetailPair(const ::std::pair< OUString,OUString >& _aPair) override;
     };
