@@ -46,9 +46,16 @@ GalleryBinaryEngineEntry::GalleryBinaryEngineEntry()
     mpGalleryStorageLocations = std::make_unique<GalleryBinaryStorageLocations>();
 }
 
-void GalleryBinaryEngineEntry::setStorageLocations(INetURLObject& rURL)
+void GalleryBinaryEngineEntry::setStorageLocations(INetURLObject & rURL)
 {
     mpGalleryStorageLocations->SetStorageLocations(rURL);
+}
+
+std::unique_ptr<GalleryBinaryEngine> GalleryBinaryEngineEntry::createGalleryStorageEngine(
+    GalleryObjectCollection& mrGalleryObjectCollection, bool& bReadOnly)
+{
+    return std::make_unique<GalleryBinaryEngine>(*mpGalleryStorageLocations,
+                                                 mrGalleryObjectCollection, bReadOnly);
 }
 
 void GalleryBinaryEngineEntry::CreateUniqueURL(const INetURLObject& rBaseURL, INetURLObject& aURL)
