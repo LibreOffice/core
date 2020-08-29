@@ -36,18 +36,12 @@ cppu/source/threadpool/threadpool.cxx:365
     _uno_ThreadPool dummy sal_Int32
 cppu/source/typelib/typelib.cxx:60
     (anonymous namespace)::AlignSize_Impl nInt16 sal_Int16
-cui/source/inc/AdditionsDialog.hxx:46
+cui/source/inc/AdditionsDialog.hxx:57
     AdditionInfo sReleaseVersion class rtl::OUString
-cui/source/inc/AdditionsDialog.hxx:50
-    AdditionInfo sRating class rtl::OUString
 dbaccess/source/core/inc/databasecontext.hxx:85
     dbaccess::ODatabaseContext m_aBasicDLL class BasicDLL
 dbaccess/source/sdbtools/inc/connectiondependent.hxx:115
     sdbtools::ConnectionDependentComponent::EntryGuard m_aMutexGuard ::osl::MutexGuard
-dbaccess/source/ui/inc/dbtreelistbox.hxx:40
-    dbaui::DBTreeEditedEntry aNewText class rtl::OUString
-desktop/qa/desktop_lib/test_desktop_lib.cxx:2832
-      class AllSettings &
 emfio/source/emfuno/xemfparser.cxx:48
     emfio::emfreader::(anonymous namespace)::XEmfParser context_ uno::Reference<uno::XComponentContext>
 extensions/source/scanner/scanner.hxx:43
@@ -97,11 +91,11 @@ include/sfx2/msg.hxx:134
 include/sfx2/msg.hxx:134
     SfxType3 aAttrib struct SfxTypeAttrib [3]
 include/sfx2/msg.hxx:135
-    SfxType4 aAttrib struct SfxTypeAttrib [4]
-include/sfx2/msg.hxx:135
     SfxType4 nAttribs sal_uInt16
 include/sfx2/msg.hxx:135
     SfxType4 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:135
+    SfxType4 aAttrib struct SfxTypeAttrib [4]
 include/sfx2/msg.hxx:135
     SfxType4 pType const std::type_info *
 include/sfx2/msg.hxx:136
@@ -396,6 +390,8 @@ sw/source/core/frmedt/fetab.cxx:75
     (anonymous namespace)::TableWait m_pWait const std::unique_ptr<SwWait>
 sw/source/core/layout/dbg_lay.cxx:171
     SwImplEnterLeave nAction enum DbgAction
+sw/source/core/text/porlay.cxx:1312
+      const sw::MergedPara *const &
 sw/source/uibase/inc/condedit.hxx:43
     ConditionEdit m_aDropTargetHelper class ConditionEditDropTarget
 sw/source/uibase/inc/conttree.hxx:294
@@ -456,11 +452,11 @@ vcl/unx/gtk3/a11y/gtk3atkhypertext.cxx:31
     (anonymous namespace)::HyperLink atk_hyper_link const AtkHyperlink
 vcl/unx/gtk3/gtk3gloactiongroup.cxx:27
     (anonymous namespace)::GLOAction parent_instance GObject
-vcl/unx/gtk3/gtk3gtkinst.cxx:5195
+vcl/unx/gtk3/gtk3gtkinst.cxx:5193
     (anonymous namespace)::CrippledViewport viewport GtkViewport
-vcl/unx/gtk3/gtk3gtkinst.cxx:5339
+vcl/unx/gtk3/gtk3gtkinst.cxx:5337
     (anonymous namespace)::CustomCellRendererSurface parent GtkCellRendererText
-vcl/unx/gtk3/gtk3gtkinst.cxx:5347
+vcl/unx/gtk3/gtk3gtkinst.cxx:5345
     (anonymous namespace)::CustomCellRendererSurfaceClass parent_class GtkCellRendererTextClass
 writerfilter/source/ooxml/OOXMLStreamImpl.hxx:42
     writerfilter::ooxml::OOXMLStreamImpl mxFastParser css::uno::Reference<css::xml::sax::XFastParser>
