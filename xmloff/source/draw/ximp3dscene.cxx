@@ -100,12 +100,11 @@ SdXML3DLightContext::~SdXML3DLightContext()
 
 SdXML3DSceneShapeContext::SdXML3DSceneShapeContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
-    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes,
     bool bTemporaryShapes)
-:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShapes ), SdXML3DSceneAttributesHelper( rImport )
+:   SdXMLShapeContext( rImport, nElement, xAttrList, rShapes, bTemporaryShapes ), SdXML3DSceneAttributesHelper( rImport )
 {
 }
 
@@ -169,6 +168,32 @@ void SdXML3DSceneShapeContext::EndElement()
     SdXMLShapeContext::EndElement();
 }
 
+css::uno::Reference< css::xml::sax::XFastContextHandler > SdXML3DSceneShapeContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+{
+    // #i68101#
+    if( nElement == XML_ELEMENT(SVG, XML_TITLE) ||
+        nElement == XML_ELEMENT(SVG, XML_DESC ) )
+    {
+    }
+    else if( nElement == XML_ELEMENT(OFFICE, XML_EVENT_LISTENERS) )
+    {
+    }
+    // look for local light context first
+    else if(nElement == XML_ELEMENT(DR3D, XML_LIGHT) )
+    {
+    }
+    else
+    {
+        // call GroupChildContext function at common ShapeImport
+        return XMLShapeImportHelper::Create3DSceneChildContext(
+            GetImport(), nElement, xAttrList, mxChildren);
+    }
+
+    return nullptr;
+}
+
 SvXMLImportContextRef SdXML3DSceneShapeContext::CreateChildContext( sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList )
@@ -190,13 +215,6 @@ SvXMLImportContextRef SdXML3DSceneShapeContext::CreateChildContext( sal_uInt16 n
     {
         // dr3d:light inside dr3d:scene context
         xContext = create3DLightContext( nPrefix, rLocalName, xAttrList );
-    }
-
-    // call GroupChildContext function at common ShapeImport
-    if (!xContext)
-    {
-        xContext = GetImport().GetShapeImport()->Create3DSceneChildContext(
-            GetImport(), nPrefix, rLocalName, xAttrList, mxChildren);
     }
 
     return xContext;

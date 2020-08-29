@@ -97,19 +97,22 @@ typedef std::vector< std::shared_ptr< MergeInfo > > MergeInfoVector;
 class XMLTableImportContext : public SvXMLImportContext
 {
 public:
-    XMLTableImportContext( const rtl::Reference< XMLTableImport >& xThis, sal_uInt16 nPrfx, const OUString& rLName, Reference< XColumnRowRange > const & xColumnRowRange );
+    XMLTableImportContext( const rtl::Reference< XMLTableImport >& xThis, sal_Int32 nElement, Reference< XColumnRowRange > const & xColumnRowRange );
 
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
     virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList ) override;
 
-    virtual void StartElement( const Reference< XAttributeList >& xAttrList ) override;
+    virtual void SAL_CALL startFastElement( sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     void InitColumns();
 
     SvXMLImportContextRef ImportColumn( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList );
     SvXMLImportContext * ImportRow( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList );
-    SvXMLImportContextRef ImportCell( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList );
+    SvXMLImportContextRef ImportCell( sal_Int32 nElement, const Reference< XFastAttributeList >& xAttrList );
 
     OUString GetDefaultCellStyleName() const;
 
@@ -135,12 +138,14 @@ public:
     XMLCellImportContext( SvXMLImport& rImport,
                           const Reference< XMergeableCell >& xCell,
                           const OUString& sDefaultCellStyleName,
-                          sal_uInt16 nPrfx, const OUString& rLName,
-                          const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
+                          sal_Int32 nElement,
+                          const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     sal_Int32 getColumnSpan() const { return mnColSpan; }
     sal_Int32 getRowSpan() const { return mnRowSpan; }
@@ -230,10 +235,10 @@ XMLTableImport::~XMLTableImport()
 {
 }
 
-SvXMLImportContext* XMLTableImport::CreateTableContext( sal_uInt16 nPrfx, const OUString& rLName, Reference< XColumnRowRange > const & xColumnRowRange )
+SvXMLImportContext* XMLTableImport::CreateTableContext( sal_Int32 nElement, Reference< XColumnRowRange > const & xColumnRowRange )
 {
     rtl::Reference< XMLTableImport > xThis( this );
-    return new XMLTableImportContext( xThis, nPrfx, rLName, xColumnRowRange );
+    return new XMLTableImportContext( xThis, nElement, xColumnRowRange );
 }
 
 SvXMLStyleContext* XMLTableImport::CreateTableTemplateContext( sal_Int32 /*nElement*/, const Reference< XFastAttributeList >& /*xAttrList*/ )
@@ -361,8 +366,9 @@ void XMLTableImport::finishStyles()
 }
 
 
-XMLTableImportContext::XMLTableImportContext( const rtl::Reference< XMLTableImport >& xImporter, sal_uInt16 nPrfx, const OUString& rLName,  Reference< XColumnRowRange > const & xColumnRowRange )
-: SvXMLImportContext( xImporter->mrImport, nPrfx, rLName )
+XMLTableImportContext::XMLTableImportContext( const rtl::Reference< XMLTableImport >& xImporter,
+    sal_Int32 /*nElement*/,  Reference< XColumnRowRange > const & xColumnRowRange )
+: SvXMLImportContext( xImporter->mrImport )
 , mxTable( xColumnRowRange, UNO_QUERY )
 , mxColumns( xColumnRowRange->getColumns() )
 , mxRows( xColumnRowRange->getRows() )
@@ -536,7 +542,7 @@ SvXMLImportContext * XMLTableImportContext::ImportRow( sal_uInt16 nPrefix, const
     return new XMLProxyContext( GetImport(), xThis, nPrefix, rLocalName );
 }
 
-SvXMLImportContextRef XMLTableImportContext::ImportCell( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
+SvXMLImportContextRef XMLTableImportContext::ImportCell( sal_Int32 nElement, const Reference< XFastAttributeList >& xAttrList )
 {
     mnCurrentColumn++;
     if( mxColumns.is() ) try
@@ -545,7 +551,7 @@ SvXMLImportContextRef XMLTableImportContext::ImportCell( sal_uInt16 nPrefix, con
             mxColumns->insertByIndex( mxColumns->getCount(), mnCurrentColumn - mxColumns->getCount() + 1 );
 
         Reference< XMergeableCell > xCell( mxTable->getCellByPosition( mnCurrentColumn, mnCurrentRow ), UNO_QUERY_THROW );
-        XMLCellImportContext* pCellContext = new XMLCellImportContext( GetImport(), xCell, GetDefaultCellStyleName(), nPrefix, rLocalName, xAttrList );
+        XMLCellImportContext* pCellContext = new XMLCellImportContext( GetImport(), xCell, GetDefaultCellStyleName(), nElement, xAttrList );
 
         const sal_Int32 nColumnSpan = pCellContext->getColumnSpan();
         const sal_Int32 nRowSpan = pCellContext->getRowSpan();
@@ -569,6 +575,16 @@ SvXMLImportContextRef XMLTableImportContext::ImportCell( sal_uInt16 nPrefix, con
     return nullptr;
 }
 
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTableImportContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+{
+    if( nElement == XML_ELEMENT(TABLE, XML_TABLE_CELL) ||
+        nElement == XML_ELEMENT(TABLE, XML_COVERED_TABLE_CELL) )
+            return ImportCell( nElement, xAttrList ).get();
+    return nullptr;
+}
+
 SvXMLImportContextRef XMLTableImportContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
 {
     if( nPrefix == XML_NAMESPACE_TABLE )
@@ -577,8 +593,6 @@ SvXMLImportContextRef XMLTableImportContext::CreateChildContext( sal_uInt16 nPre
             return ImportColumn( nPrefix, rLocalName, xAttrList );
         else if( IsXMLToken( rLocalName, XML_TABLE_ROW ) )
             return ImportRow( nPrefix, rLocalName, xAttrList );
-        else if( IsXMLToken( rLocalName, XML_TABLE_CELL ) || IsXMLToken( rLocalName, XML_COVERED_TABLE_CELL ) )
-            return ImportCell( nPrefix, rLocalName, xAttrList );
         else if( IsXMLToken( rLocalName, XML_TABLE_COLUMNS ) || IsXMLToken( rLocalName, XML_TABLE_ROWS ) )
         {
             SvXMLImportContextRef xThis( this );
@@ -589,11 +603,11 @@ SvXMLImportContextRef XMLTableImportContext::CreateChildContext( sal_uInt16 nPre
     return nullptr;
 }
 
-void XMLTableImportContext::StartElement( const Reference< XAttributeList >& /*xAttrList*/ )
+void XMLTableImportContext::startFastElement( sal_Int32 /*nElement*/, const Reference< XFastAttributeList >& /*xAttrList*/ )
 {
 }
 
-void XMLTableImportContext::EndElement()
+void XMLTableImportContext::endFastElement(sal_Int32 )
 {
     for( const std::shared_ptr< MergeInfo >& xInfo : maMergeInfos )
     {
@@ -623,8 +637,12 @@ OUString XMLTableImportContext::GetDefaultCellStyleName() const
 
 // XMLCellImportContext
 
-XMLCellImportContext::XMLCellImportContext( SvXMLImport& rImport, const Reference< XMergeableCell >& xCell, const OUString& sDefaultCellStyleName, sal_uInt16 nPrfx, const OUString& rLName, const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList )
-: SvXMLImportContext( rImport, nPrfx, rLName )
+XMLCellImportContext::XMLCellImportContext( SvXMLImport& rImport,
+    const Reference< XMergeableCell >& xCell,
+    const OUString& sDefaultCellStyleName,
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+: SvXMLImportContext( rImport )
 , mxCell( xCell )
 , mbListContextPushed( false )
 , mnColSpan( 1 )
@@ -634,8 +652,7 @@ XMLCellImportContext::XMLCellImportContext( SvXMLImport& rImport, const Referenc
     OUString sStyleName;
 
     // read attributes for the table-cell
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for(sal_Int16 i=0; i < nAttrCount; i++)
+    for(auto& aItersal_Int16 i=0; i < nAttrCount; i++)
     {
         const OUString sAttrName( xAttrList->getNameByIndex( i ) );
         const OUString sValue( xAttrList->getValueByIndex( i ) );
@@ -692,7 +709,9 @@ XMLCellImportContext::XMLCellImportContext( SvXMLImport& rImport, const Referenc
     }
 }
 
-SvXMLImportContextRef XMLCellImportContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLCellImportContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // create text cursor on demand
     if( !mxCursor.is() )
@@ -718,7 +737,7 @@ SvXMLImportContextRef XMLCellImportContext::CreateChildContext( sal_uInt16 nPref
     // if we have a text cursor, lets  try to import some text
     if( mxCursor.is() )
     {
-        pContext = GetImport().GetTextImport()->CreateTextChildContext( GetImport(), nPrefix, rLocalName, xAttrList );
+        pContext = GetImport().GetTextImport()->CreateTextChildContext( GetImport(), nElement, xAttrList );
     }
 
     return pContext;

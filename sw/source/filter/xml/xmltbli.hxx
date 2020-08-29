@@ -136,14 +136,16 @@ class SwXMLTableContext : public XMLTextTableContext
 public:
 
 
-    SwXMLTableContext( SwXMLImport& rImport, sal_uInt16 nPrfx,
-                       const OUString& rLName,
-                       const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
-    SwXMLTableContext( SwXMLImport& rImport, sal_uInt16 nPrfx,
-                       const OUString& rLName,
+    SwXMLTableContext( SwXMLImport& rImport, sal_Int32 nElement,
+                       const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
+    SwXMLTableContext( SwXMLImport& rImport, sal_Int32 nElement,
                        SwXMLTableContext *pTable );
 
     virtual ~SwXMLTableContext() override;
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 
     virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
@@ -181,7 +183,9 @@ public:
     const SwStartNode *InsertTableSection(const SwStartNode *pPrevSttNd = nullptr,
                                   OUString const* pStringValueStyleName = nullptr);
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 /*nElement*/, const css::uno::Reference<css::xml::sax::XFastAttributeList>&) override {}
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     void SetHasSubTables( bool bNew ) { m_bHasSubTables = bNew; }
 };

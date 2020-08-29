@@ -59,6 +59,7 @@ namespace frame { class XModel; }
 namespace container { class XNameContainer; class XIndexReplace; }
 namespace beans { class XPropertySet; }
 namespace xml::sax { class XAttributeList; }
+namespace xml::sax { class XFastAttributeList; }
 namespace util { struct DateTime; }
 }
 
@@ -378,8 +379,8 @@ private:
 protected:
     virtual SvXMLImportContext *CreateTableChildContext(
                 SvXMLImport& rImport,
-                sal_uInt16 nPrefix, const OUString& rLocalName,
-                const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
+                sal_Int32 nElement,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
 
     // access, lazy initialization and destruction of backpatchers
     // Code is implemented in XMLPropertyBackpatcher.cxx
@@ -408,8 +409,8 @@ public:
 
     SvXMLImportContext *CreateTextChildContext(
             SvXMLImport& rImport,
-            sal_uInt16 nPrefix, const OUString& rLocalName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
+            sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
             XMLTextType eType = XMLTextType::Shape );
 
     SvXMLTokenMap const& GetTextElemTokenMap();
@@ -719,6 +720,12 @@ public:
     bool getBookmarkHidden(OUString const& bookmark) const;
     const OUString& getBookmarkCondition(OUString const& bookmark) const;
 
+private:
+    SvXMLImportContext *CreateTextChildContext(
+            SvXMLImport& rImport,
+            sal_uInt16 nPrefix, const OUString& rLocalName,
+            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
+            XMLTextType eType = XMLTextType::Shape );
 };
 
 #endif

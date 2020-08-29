@@ -163,8 +163,16 @@ SchXMLBodyContext::~SchXMLBodyContext()
 {}
 
 css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLBodyContext::createFastChildContext(
-        sal_Int32 /*nElement*/, const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
+    // <chart:chart> element
+    if( nElement == XML_ELEMENT(CHART, XML_CHART) )
+    {
+        return mrImportHelper.CreateChartContext( GetImport(),
+                                                  nElement,
+                                                  GetImport().GetModel(),
+                                                  xAttrList );
+    }
     return nullptr;
 }
 
@@ -175,16 +183,7 @@ SvXMLImportContextRef SchXMLBodyContext::CreateChildContext(
 {
     SvXMLImportContextRef xContext;
 
-    // <chart:chart> element
-    if( nPrefix == XML_NAMESPACE_CHART &&
-        IsXMLToken( rLocalName, XML_CHART ) )
-    {
-        xContext = mrImportHelper.CreateChartContext( GetImport(),
-                                                      nPrefix, rLocalName,
-                                                      GetImport().GetModel(),
-                                                      xAttrList );
-    }
-    else if(nPrefix == XML_NAMESPACE_TABLE &&
+    if(nPrefix == XML_NAMESPACE_TABLE &&
             IsXMLToken( rLocalName, XML_CALCULATION_SETTINGS ))
     {
         // i99104 handle null date correctly

@@ -28,10 +28,8 @@ using ::com::sun::star::xml::sax::XAttributeList;
 
 
 XMLIndexBodyContext::XMLIndexBodyContext(
-    SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName ) :
-        SvXMLImportContext(rImport, nPrfx, rLocalName),
+    SvXMLImport& rImport ) :
+        SvXMLImportContext(rImport),
         bHasContent(false)
 {
 }
@@ -40,14 +38,13 @@ XMLIndexBodyContext::~XMLIndexBodyContext()
 {
 }
 
-SvXMLImportContextRef XMLIndexBodyContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList> & xAttrList)
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexBodyContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // return text content (if possible)
     SvXMLImportContext* pContext = GetImport().GetTextImport()->CreateTextChildContext(
-        GetImport(), nPrefix, rLocalName, xAttrList, XMLTextType::Section );
+        GetImport(), nElement, xAttrList, XMLTextType::Section );
     if (pContext)
         bHasContent = true;
 

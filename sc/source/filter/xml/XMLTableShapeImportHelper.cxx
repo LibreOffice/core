@@ -74,7 +74,7 @@ static uno::Reference< drawing::XShape > lcl_getTopLevelParent( const uno::Refer
 
 void XMLTableShapeImportHelper::finishShape(
     uno::Reference< drawing::XShape >& rShape,
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes )
 {
     bool bNote = false;
@@ -93,49 +93,47 @@ void XMLTableShapeImportHelper::finishShape(
 
             sal_Int32 nEndX(-1);
             sal_Int32 nEndY(-1);
-            sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
             std::optional<OUString> xRangeList;
             SdrLayerID nLayerID = SDRLAYER_NOTFOUND;
-            for( sal_Int16 i=0; i < nAttrCount; ++i )
+            for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
             {
-                const OUString& rAttrName(xAttrList->getNameByIndex( i ));
-                const OUString& rValue(xAttrList->getValueByIndex( i ));
+                const OUString sValue = aIter.toString();
 
-                OUString aLocalName;
-                sal_uInt16 nPrefix(
-                    static_cast<ScXMLImport&>(mrImporter).GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                                    &aLocalName ));
-                if(nPrefix == XML_NAMESPACE_TABLE)
+                switch(aIter.getToken())
                 {
-                    if (IsXMLToken(aLocalName, XML_END_CELL_ADDRESS))
+                    case XML_ELEMENT(TABLE, XML_END_CELL_ADDRESS):
                     {
                         sal_Int32 nOffset(0);
-                        ScRangeStringConverter::GetAddressFromString(aAnchor.maEnd, rValue, static_cast<ScXMLImport&>(mrImporter).GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset);
+                        ScRangeStringConverter::GetAddressFromString(aAnchor.maEnd, sValue, static_cast<ScXMLImport&>(mrImporter).GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset);
                         // When the cell end address is set, we let the shape resize with the cell
                         aAnchor.mbResizeWithCell = true;
+                        break;
                     }
-                    else if (IsXMLToken(aLocalName, XML_END_X))
+                    case XML_ELEMENT(TABLE, XML_END_X):
                     {
                         static_cast<ScXMLImport&>(mrImporter).
                             GetMM100UnitConverter().convertMeasureToCore(
-                                    nEndX, rValue);
+                                    nEndX, sValue);
                         aAnchor.maEndOffset.setX( nEndX );
+                        break;
                     }
-                    else if (IsXMLToken(aLocalName, XML_END_Y))
+                    case XML_ELEMENT(TABLE, XML_END_Y):
                     {
                         static_cast<ScXMLImport&>(mrImporter).
                             GetMM100UnitConverter().convertMeasureToCore(
-                                    nEndY, rValue);
+                                    nEndY, sValue);
                         aAnchor.maEndOffset.setY( nEndY );
+                        break;
                     }
-                    else if (IsXMLToken(aLocalName, XML_TABLE_BACKGROUND))
-                        if (IsXMLToken(rValue, XML_TRUE))
+                    case XML_ELEMENT(TABLE, XML_TABLE_BACKGROUND):
+                        if (IsXMLToken(sValue, XML_TRUE))
                             nLayerID = SC_LAYER_BACK;
-                }
-                else if(nPrefix == XML_NAMESPACE_DRAW)
-                {
-                    if (IsXMLToken(aLocalName, XML_NOTIFY_ON_UPDATE_OF_RANGES))
-                        xRangeList = rValue;
+                        break;
+                    case XML_ELEMENT(DRAW, XML_NOTIFY_ON_UPDATE_OF_RANGES):
+                        xRangeList = sValue;
+                        break;
+                    default:
+                        SAL_WARN("sc", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
                 }
             }
             SetLayer(rShape, nLayerID, rShape->getShapeType());
@@ -166,18 +164,19 @@ void XMLTableShapeImportHelper::finishShape(
             // get the style names for stream copying
             OUString aStyleName;
             OUString aTextStyle;
-            sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-            for( sal_Int16 i=0; i < nAttrCount; ++i )
+            for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
             {
-                const OUString& rAttrName(xAttrList->getNameByIndex( i ));
-                OUString aLocalName;
-                sal_uInt16 nPrefix(static_cast<ScXMLImport&>(mrImporter).GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName ));
-                if(nPrefix == XML_NAMESPACE_DRAW)
+                const OUString sValue = aIter.toString();
+                switch (aIter.getToken())
                 {
-                    if (IsXMLToken(aLocalName, XML_STYLE_NAME))
-                        aStyleName = xAttrList->getValueByIndex( i );
-                    else if (IsXMLToken(aLocalName, XML_TEXT_STYLE_NAME))
-                        aTextStyle = xAttrList->getValueByIndex( i );
+                    case XML_ELEMENT(DRAW, XML_STYLE_NAME):
+                        aStyleName = sValue;
+                        break;
+                    case XML_ELEMENT(DRAW, XML_TEXT_STYLE_NAME):
+                        aTextStyle = sValue;
+                        break;
+                    default:
+                        SAL_WARN("sc", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
                 }
             }
 
@@ -212,20 +211,18 @@ void XMLTableShapeImportHelper::finishShape(
                 }
             }
         }
-        sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
         SdrLayerID nLayerID = SDRLAYER_NOTFOUND;
-        for( sal_Int16 i=0; i < nAttrCount; ++i )
+        for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
         {
-            const OUString& rAttrName(xAttrList->getNameByIndex( i ));
-            const OUString& rValue(xAttrList->getValueByIndex( i ));
-
-            OUString aLocalName;
-            sal_uInt16 nPrefix(static_cast<ScXMLImport&>(mrImporter).GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName ));
-            if(nPrefix == XML_NAMESPACE_TABLE)
+            const OUString sValue = aIter.toString();
+            switch (aIter.getToken())
             {
-                if (IsXMLToken(aLocalName, XML_TABLE_BACKGROUND))
-                    if (IsXMLToken(rValue, XML_TRUE))
+                case XML_ELEMENT(TABLE, XML_TABLE_BACKGROUND):
+                    if (IsXMLToken(sValue, XML_TRUE))
                         nLayerID = SC_LAYER_BACK;
+                    break;
+                default:
+                    SAL_WARN("sc", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
             }
         }
         SetLayer(rShape, nLayerID, rShape->getShapeType());

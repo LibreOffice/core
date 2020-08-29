@@ -42,10 +42,7 @@ class XMLIndexBodyContext : public SvXMLImportContext
 public:
 
 
-    XMLIndexBodyContext(
-        SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName );
+    XMLIndexBodyContext( SvXMLImport& rImport );
 
     virtual ~XMLIndexBodyContext() override;
 
@@ -54,10 +51,12 @@ public:
 
 protected:
 
-    virtual SvXMLImportContextRef CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList ) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 ,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >&  ) override {}
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
 
 inline bool XMLIndexBodyContext::HasContent() const

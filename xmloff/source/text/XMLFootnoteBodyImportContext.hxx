@@ -38,17 +38,16 @@ class XMLFootnoteBodyImportContext : public SvXMLImportContext
 public:
 
 
-    XMLFootnoteBodyImportContext(
-        SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName );
+    XMLFootnoteBodyImportContext( SvXMLImport& rImport );
 
 protected:
 
-    virtual SvXMLImportContextRef CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList ) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 ,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >&  ) override {}
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
 };
 

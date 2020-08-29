@@ -40,10 +40,8 @@ using ::com::sun::star::xml::sax::XAttributeList;
 
 
 XMLChangedRegionImportContext::XMLChangedRegionImportContext(
-    SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName) :
-        SvXMLImportContext(rImport, nPrefix, rLocalName),
+    SvXMLImport& rImport) :
+        SvXMLImportContext(rImport),
         bMergeLastPara(true)
 {
 }
@@ -52,82 +50,66 @@ XMLChangedRegionImportContext::~XMLChangedRegionImportContext()
 {
 }
 
-void XMLChangedRegionImportContext::StartElement(
-    const Reference<XAttributeList> & xAttrList)
+void XMLChangedRegionImportContext::startFastElement(
+    sal_Int32 /*nElement*/,
+    const Reference<css::xml::sax::XFastAttributeList> & xAttrList)
 {
     // process attributes: id
     bool bHaveXmlId( false );
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
+    for(auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
-                              &sLocalName );
-
-        const OUString sValue = xAttrList->getValueByIndex(nAttr);
-        if (XML_NAMESPACE_XML == nPrefix)
+        const OUString sValue = aIter.toString();
+        switch (aIter.getToken())
         {
-            if (IsXMLToken(sLocalName, XML_ID))
-            {
+            case XML_ELEMENT(XML, XML_ID):
                 sID = sValue;
                 bHaveXmlId = true;
-            }
-        }
-        else if (XML_NAMESPACE_TEXT == nPrefix)
-        {
-            if (IsXMLToken(sLocalName, XML_ID))
-            {
+                break;
+            case XML_ELEMENT(TEXT, XML_ID):
                 if (!bHaveXmlId) { sID = sValue; }
-            }
-            else if( IsXMLToken( sLocalName, XML_MERGE_LAST_PARAGRAPH ) )
+                break;
+            case XML_ELEMENT(TEXT, XML_MERGE_LAST_PARAGRAPH):
             {
                 bool bTmp(false);
                 if (::sax::Converter::convertBool(bTmp, sValue))
                 {
                     bMergeLastPara = bTmp;
                 }
+                break;
             }
+            default:
+                SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
         }
     }
 }
 
-SvXMLImportContextRef XMLChangedRegionImportContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList> & /*xAttrList*/)
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLChangedRegionImportContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
-    SvXMLImportContextRef xContext;
-
-    if (XML_NAMESPACE_TEXT == nPrefix)
+    // from the ODF 1.2 standard :
+    // The <text:changed-region> element has the following child elements:
+    // <text:deletion>, <text:format-change> and <text:insertion>.
+    if ( nElement == XML_ELEMENT(TEXT, XML_INSERTION ) ||
+         nElement == XML_ELEMENT(TEXT, XML_DELETION ) ||
+         nElement == XML_ELEMENT(TEXT, XML_FORMAT_CHANGE ) )
     {
-        // from the ODF 1.2 standard :
-        // The <text:changed-region> element has the following child elements:
-        // <text:deletion>, <text:format-change> and <text:insertion>.
-        if ( IsXMLToken( rLocalName, XML_INSERTION ) ||
-             IsXMLToken( rLocalName, XML_DELETION ) ||
-             IsXMLToken( rLocalName, XML_FORMAT_CHANGE ) )
-        {
-            // create XMLChangeElementImportContext for all kinds of changes
-            xContext = new XMLChangeElementImportContext(
-               GetImport(), nPrefix, rLocalName,
-               IsXMLToken( rLocalName, XML_DELETION ),
-               *this);
-        }
-        // else: it may be a text element, see below
+        // create XMLChangeElementImportContext for all kinds of changes
+        return new XMLChangeElementImportContext(
+           GetImport(), nElement,
+           nElement == XML_ELEMENT(TEXT, XML_DELETION ),
+           *this);
     }
+    // else: it may be a text element, see below
 
-    if (!xContext)
-    {
-        // illegal element content! TODO: discard the redlines
-        // for the moment -> use text
-        // or default if text fail
-    }
+    // illegal element content! TODO: discard the redlines
+    // for the moment -> use text
+    // or default if text fail
 
-    return xContext;
+    return nullptr;
 }
 
-void XMLChangedRegionImportContext::EndElement()
+void XMLChangedRegionImportContext::endFastElement(sal_Int32 )
 {
     // restore old XCursor (if necessary)
     if (xOldCursor.is())
