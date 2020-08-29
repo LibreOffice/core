@@ -30,6 +30,12 @@ XMLTextTableContext::XMLTextTableContext(
 {
 }
 
+XMLTextTableContext::XMLTextTableContext(
+        SvXMLImport& rImport ) :
+    SvXMLImportContext( rImport )
+{
+}
+
 XMLTextTableContext::~XMLTextTableContext()
 {
 }

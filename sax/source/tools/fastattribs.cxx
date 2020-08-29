@@ -63,6 +63,17 @@ FastAttributeList::FastAttributeList( sax_fastparser::FastTokenHandlerBase *pTok
     maAttributeValues.push_back( 0 );
 }
 
+FastAttributeList::FastAttributeList( const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList )
+{
+    const auto& rOther = castToFastAttributeList(xAttrList);
+    mpTokenHandler = rOther.mpTokenHandler;
+    mpChunk = static_cast<char *>(malloc( rOther.mnChunkLength ));
+    maAttributeValues = rOther.maAttributeValues;
+    maAttributeTokens = rOther.maAttributeTokens;
+    maUnknownAttributes = rOther.maUnknownAttributes;
+}
+
+
 FastAttributeList::~FastAttributeList()
 {
     free( mpChunk );
@@ -121,6 +132,20 @@ void FastAttributeList::addUnknown( const OUString& rNamespaceURL, const OString
 void FastAttributeList::addUnknown( const OString& rName, const OString& value )
 {
     maUnknownAttributes.emplace_back( rName, value );
+}
+
+void FastAttributeList::add( const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList )
+{
+    const auto& rOther = castToFastAttributeList(xAttrList);
+    add(rOther);
+}
+
+void FastAttributeList::add( const FastAttributeList& rOther )
+{
+    for (size_t i=0; i < rOther.maAttributeValues.size(); ++i)
+        add(rOther.maAttributeTokens[i], rOther.getFastAttributeValue(i), rOther.AttributeValueLength(i));
+    for (const auto & i : rOther.maUnknownAttributes)
+        addUnknown(i.maNamespaceURL, i.maName, i.maValue);
 }
 
 // XFastAttributeList
