@@ -488,6 +488,12 @@ AnimationNode::AnimationNode( const AnimationNode& rNode )
     maPath( rNode.maPath ),
     maOrigin( rNode.maOrigin ),
 
+    // attributes for XAnimatePhysics
+    maStartVelocityX( rNode.maStartVelocityX ),
+    maStartVelocityY( rNode.maStartVelocityY ),
+    maDensity( rNode.maDensity ),
+    maBounciness( rNode.maBounciness ),
+
     // attributes for XAnimateTransform
     mnTransformType( rNode.mnTransformType ),
 
