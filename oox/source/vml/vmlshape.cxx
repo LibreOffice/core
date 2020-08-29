@@ -786,6 +786,10 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
             eTextVerticalAdjust = drawing::TextVerticalAdjust_BOTTOM;
         PropertySet(xShape).setAnyProperty(PROP_TextVerticalAdjust, makeAny(eTextVerticalAdjust));
 
+        // tdf#97618
+        if(!maTypeModel.maWrapStyle.isEmpty())
+            PropertySet(xShape).setAnyProperty(PROP_TextWordWrap, makeAny(maTypeModel.maWrapStyle == "square"));
+
         PropertySet(xShape).setAnyProperty(PROP_TextAutoGrowHeight,
                                            makeAny(maTypeModel.mbAutoHeight));
 
