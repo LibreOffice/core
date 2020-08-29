@@ -4106,13 +4106,13 @@ bool PDFWriterImpl::emitAppearances( PDFWidget& rWidget, OStringBuffer& rAnnotDi
 
             for (auto const& stream_item : dict_item.second)
             {
-                SvMemoryStream* pApppearanceStream = stream_item.second;
+                SvMemoryStream* pAppearanceStream = stream_item.second;
                 dict_item.second[ stream_item.first ] = nullptr;
 
-                bool bDeflate = compressStream( pApppearanceStream );
+                bool bDeflate = compressStream( pAppearanceStream );
 
-                sal_Int64 nStreamLen = pApppearanceStream->TellEnd();
-                pApppearanceStream->Seek( STREAM_SEEK_TO_BEGIN );
+                sal_Int64 nStreamLen = pAppearanceStream->TellEnd();
+                pAppearanceStream->Seek( STREAM_SEEK_TO_BEGIN );
                 sal_Int32 nObject = createObject();
                 CHECK_RETURN( updateObject( nObject ) );
                 if (g_bDebugDisableCompression)
@@ -4141,7 +4141,7 @@ bool PDFWriterImpl::emitAppearances( PDFWidget& rWidget, OStringBuffer& rAnnotDi
                 aLine.append( ">>\nstream\n" );
                 CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
                 checkAndEnableStreamEncryption( nObject );
-                CHECK_RETURN( writeBuffer( pApppearanceStream->GetData(), nStreamLen ) );
+                CHECK_RETURN( writeBuffer( pAppearanceStream->GetData(), nStreamLen ) );
                 disableStreamEncryption();
                 CHECK_RETURN( writeBuffer( "\nendstream\nendobj\n\n", 19 ) );
 
@@ -4154,7 +4154,7 @@ bool PDFWriterImpl::emitAppearances( PDFWidget& rWidget, OStringBuffer& rAnnotDi
                 rAnnotDict.append( nObject );
                 rAnnotDict.append( " 0 R" );
 
-                delete pApppearanceStream;
+                delete pAppearanceStream;
             }
 
             rAnnotDict.append( bUseSubDict ? ">>\n" : "\n" );
