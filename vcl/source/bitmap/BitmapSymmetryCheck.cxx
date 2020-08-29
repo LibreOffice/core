@@ -8,12 +8,10 @@
  *
  */
 
+#include <vcl/BitmapWriteAccess.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 
 #include <BitmapSymmetryCheck.hxx>
-
-BitmapSymmetryCheck::BitmapSymmetryCheck()
-{}
 
 bool BitmapSymmetryCheck::check(Bitmap& rBitmap)
 {
@@ -23,8 +21,12 @@ bool BitmapSymmetryCheck::check(Bitmap& rBitmap)
 
 bool BitmapSymmetryCheck::checkImpl(BitmapReadAccess const * pReadAccess)
 {
+    maNonSymmetricPoints.clear();
+
     tools::Long nHeight = pReadAccess->Height();
     tools::Long nWidth = pReadAccess->Width();
+
+    maSize = Size(nWidth, nHeight);
 
     tools::Long nHeightHalf = nHeight / 2;
     tools::Long nWidthHalf = nWidth / 2;
@@ -34,22 +36,21 @@ bool BitmapSymmetryCheck::checkImpl(BitmapReadAccess const * pReadAccess)
 
     for (tools::Long y = 0; y < nHeightHalf; ++y)
     {
-        Scanline pScanlineRead = pReadAccess->GetScanline( y );
-        Scanline pScanlineRead2 = pReadAccess->GetScanline( nHeight - y - 1 );
+
+        tools::Long y2 = nHeight - y - 1;
+
+        Scanline pScanlineRead1 = pReadAccess->GetScanline(y);
+        Scanline pScanlineRead2 = pReadAccess->GetScanline(y2);
         for (tools::Long x = 0; x < nWidthHalf; ++x)
         {
-            if (pReadAccess->GetPixelFromData(pScanlineRead, x) != pReadAccess->GetPixelFromData(pScanlineRead2, x))
-            {
-                return false;
-            }
-            if (pReadAccess->GetPixelFromData(pScanlineRead, x) != pReadAccess->GetPixelFromData(pScanlineRead, nWidth - x - 1))
-            {
-                return false;
-            }
-            if (pReadAccess->GetPixelFromData(pScanlineRead, x) != pReadAccess->GetPixelFromData(pScanlineRead2, nWidth - x - 1))
-            {
-                return false;
-            }
+            tools::Long x2 = nWidth - x - 1;
+
+            if (pReadAccess->GetPixelFromData(pScanlineRead1, x) != pReadAccess->GetPixelFromData(pScanlineRead2, x))
+                addNewError(Point(x, y), Point(x, y2));
+            if (pReadAccess->GetPixelFromData(pScanlineRead1, x) != pReadAccess->GetPixelFromData(pScanlineRead1, x2))
+                addNewError(Point(x, y), Point(x2, y));
+            if (pReadAccess->GetPixelFromData(pScanlineRead1, x) != pReadAccess->GetPixelFromData(pScanlineRead2, x2))
+                addNewError(Point(x, y), Point(x2, y2));
         }
     }
 
@@ -57,10 +58,9 @@ bool BitmapSymmetryCheck::checkImpl(BitmapReadAccess const * pReadAccess)
     {
         for (tools::Long y = 0; y < nHeightHalf; ++y)
         {
-            if (pReadAccess->GetPixel(y, nWidthHalf) != pReadAccess->GetPixel(nHeight - y - 1, nWidthHalf))
-            {
-                return false;
-            }
+            tools::Long y2 = nHeight - y - 1;
+            if (pReadAccess->GetPixel(y, nWidthHalf) != pReadAccess->GetPixel(y2, nWidthHalf))
+                addNewError(Point(nWidthHalf, y), Point(nWidthHalf, y2));
         }
     }
 
@@ -69,14 +69,38 @@ bool BitmapSymmetryCheck::checkImpl(BitmapReadAccess const * pReadAccess)
         Scanline pScanlineRead = pReadAccess->GetScanline( nHeightHalf );
         for (tools::Long x = 0; x < nWidthHalf; ++x)
         {
-            if (pReadAccess->GetPixelFromData(pScanlineRead, x) != pReadAccess->GetPixelFromData(pScanlineRead, nWidth - x - 1))
-            {
-                return false;
-            }
+            tools::Long x2 = nWidth - x - 1;
+            BitmapColor c1 = pReadAccess->GetPixelFromData(pScanlineRead, x);
+            BitmapColor c2 = pReadAccess->GetPixelFromData(pScanlineRead, x2);
+            if (c1 != c2)
+                addNewError(Point(x, nHeightHalf), Point(x2, nHeightHalf));
         }
     }
 
-    return true;
+    return maNonSymmetricPoints.empty();
+}
+
+void BitmapSymmetryCheck::addNewError(Point const & rPoint1, Point const & rPoint2)
+{
+    maNonSymmetricPoints.emplace_back(rPoint1, rPoint2);
+}
+
+BitmapEx BitmapSymmetryCheck::getErrorBitmap()
+{
+    if (maSize == Size() || maNonSymmetricPoints.empty())
+        return BitmapEx();
+
+    Bitmap aBitmap(maSize, vcl::PixelFormat::N24_BPP);
+    {
+        BitmapScopedWriteAccess pWrite(aBitmap);
+        pWrite->Erase(COL_BLACK);
+        for (auto const & rPairOfPoints : maNonSymmetricPoints)
+        {
+            pWrite->SetPixel(rPairOfPoints.first.Y(), rPairOfPoints.first.X(), COL_LIGHTRED);
+            pWrite->SetPixel(rPairOfPoints.second.Y(), rPairOfPoints.second.X(), COL_LIGHTGREEN);
+        }
+    }
+    return BitmapEx(aBitmap);
 }
 
 

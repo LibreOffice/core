@@ -127,7 +127,9 @@ void BitmapFilterTest::testBlurCorrectness()
     CPPUNIT_ASSERT_EQUAL(ePixelFormat, aBitmap24Bit.getPixelFormat());
 
     // Check that the bitmap is horizontally and vertically symmetrical
-    CPPUNIT_ASSERT(BitmapSymmetryCheck::check(aBitmap24Bit));
+    BitmapSymmetryCheck aBitmapSymmetryCheck;
+    bool bSymmetryCheckResult = aBitmapSymmetryCheck.check(aBitmap24Bit);
+    CPPUNIT_ASSERT(bSymmetryCheckResult);
 
     {
         BitmapScopedReadAccess aReadAccess(aBitmap24Bit);
