@@ -1180,7 +1180,7 @@ SwXMLTableCell_Impl *SwXMLTableContext::GetCell( sal_uInt32 nRow,
 
 
 SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
-        const Reference< xml::sax::XAttributeList > & xAttrList ) :
+        const Reference< xml::sax::XFastAttributeList > & xAttrList ) :
     XMLTextTableContext( rImport ),
     m_pRows( new SwXMLTableRows_Impl ),
     m_pTableNode( nullptr ),
@@ -1203,31 +1203,28 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     // this method will modify the document directly -> lock SolarMutex
     SolarMutexGuard aGuard;
 
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-
-        OUString aLocalName;
-        const sal_uInt16 nPrefix =
-            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                            &aLocalName );
-        const OUString& rValue = xAttrList->getValueByIndex( i );
-        if( XML_NAMESPACE_TABLE == nPrefix )
+        const OUString sValue = aIter.toString();
+        switch(aIter.getToken())
         {
-            if( IsXMLToken( aLocalName, XML_STYLE_NAME ) )
-                m_aStyleName = rValue;
-            else if( IsXMLToken( aLocalName, XML_NAME ) )
-                aName = rValue;
-            else if( IsXMLToken( aLocalName, XML_DEFAULT_CELL_STYLE_NAME ) )
-                m_aDfltCellStyleName = rValue;
-            else if( IsXMLToken( aLocalName, XML_TEMPLATE_NAME ) )
-                m_aTemplateName = rValue;
-        }
-        else if ( (XML_NAMESPACE_XML == nPrefix) &&
-                 IsXMLToken( aLocalName, XML_ID ) )
-        {
-            sXmlId = rValue;
+            case XML_ELEMENT(TABLE, XML_STYLE_NAME):
+                m_aStyleName = sValue;
+                break;
+            case XML_ELEMENT(TABLE, XML_NAME):
+                aName = sValue;
+                break;
+            case XML_ELEMENT(TABLE, XML_DEFAULT_CELL_STYLE_NAME):
+                m_aDfltCellStyleName = sValue;
+                break;
+            case XML_ELEMENT(TABLE, XML_TEMPLATE_NAME):
+                m_aTemplateName = sValue;
+                break;
+            case XML_ELEMENT(XML, XML_ID):
+                sXmlId = sValue;
+                break;
+            default:
+                XMLOFF_WARN_UNKNOWN("sw", aIter);
         }
     }
 
