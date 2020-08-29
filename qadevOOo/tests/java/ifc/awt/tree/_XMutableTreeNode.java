@@ -251,7 +251,7 @@ public class _XMutableTreeNode extends MultiMethodTest {
         String sDataValue = (String) oObj.getDataValue();
 
         if ( ! sDataValue.equals("myDataValue")) {
-            log.println("ERROR: getDataVlaue does not return the value which is inserted before:\n" +
+            log.println("ERROR: getDataValue does not return the value which is inserted before:\n" +
                 "\texpected: myDataValue\n" +
                 "\tgot: " + sDataValue);
             bOK = false;
@@ -262,7 +262,7 @@ public class _XMutableTreeNode extends MultiMethodTest {
 
         Object oDataValue = oObj.getDataValue();
         if ( oDataValue != null) {
-            log.println("ERROR: getDataVlaue does not return the value which is inserted before:\n" +
+            log.println("ERROR: getDataValue does not return the value which is inserted before:\n" +
                 "\texpected: null\n" +
                 "\tgot: " + oDataValue.toString());
             bOK = false;
@@ -273,7 +273,7 @@ public class _XMutableTreeNode extends MultiMethodTest {
 
         oDataValue = oObj.getDataValue();
         if ( oDataValue != null) {
-            log.println("ERROR: getDataVlaue does not return the value which is inserted before:\n" +
+            log.println("ERROR: getDataValue does not return the value which is inserted before:\n" +
                 "\texpected: " + oObj.toString() +"\n" +
                 "\tgot: " + oDataValue.toString());
             bOK = false;
