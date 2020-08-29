@@ -34,7 +34,7 @@ class SdXMLGroupShapeContext : public SdXMLShapeContext
 public:
 
     SdXMLGroupShapeContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes,
         bool bTemporaryShape);
     virtual ~SdXMLGroupShapeContext() override;

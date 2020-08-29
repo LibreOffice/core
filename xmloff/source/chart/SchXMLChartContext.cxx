@@ -1109,7 +1109,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLChartContext::cr
                 SAL_WARN_IF( !mxDrawPage.is(), "xmloff.chart", "Invalid Chart Page" );
             }
             if( mxDrawPage.is())
-                pContext = GetImport().GetShapeImport()->CreateGroupChildContext(
+                pContext = XMLShapeImportHelper::CreateGroupChildContext(
                     GetImport(), nElement, xAttrList, mxDrawPage );
             break;
     }
