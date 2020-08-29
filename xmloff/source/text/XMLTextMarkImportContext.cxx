@@ -91,10 +91,8 @@ void XMLFieldParamImportContext::startFastElement(sal_Int32 /*nElement*/, const 
 XMLTextMarkImportContext::XMLTextMarkImportContext(
     SvXMLImport& rImport,
     XMLTextImportHelper& rHlp,
-    uno::Reference<uno::XInterface> & io_rxCrossRefHeadingBookmark,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName )
-    : SvXMLImportContext(rImport, nPrefix, rLocalName)
+    uno::Reference<uno::XInterface> & io_rxCrossRefHeadingBookmark )
+    : SvXMLImportContext(rImport)
     , m_rHelper(rHlp)
     , m_rxCrossRefHeadingBookmark(io_rxCrossRefHeadingBookmark)
     , m_bHaveAbout(false)
