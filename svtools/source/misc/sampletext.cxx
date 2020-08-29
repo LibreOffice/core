@@ -623,7 +623,7 @@ static OUString makeMinimalTextForScript(UScriptCode eScript)
 //These ones are typically for use in the font preview window in format
 //character
 
-//There we generally know the language. Though its possible for the language to
+//There we generally know the language. Though it's possible for the language to
 //be "none".
 
 //Currently we fall back to makeShortRepresentativeTextForScript when we don't
