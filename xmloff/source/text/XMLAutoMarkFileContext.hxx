@@ -35,16 +35,15 @@ class XMLAutoMarkFileContext : public SvXMLImportContext
 public:
 
     XMLAutoMarkFileContext(
-        SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName);
+        SvXMLImport& rImport);
 
     virtual ~XMLAutoMarkFileContext() override;
 
 protected:
 
-    virtual void StartElement(
-        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList) override;
 };
 
 #endif

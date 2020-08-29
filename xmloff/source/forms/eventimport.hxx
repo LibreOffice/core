@@ -38,11 +38,13 @@ namespace xmloff
         IEventAttacher& m_rEventAttacher;
 
     public:
-        OFormEventsImportContext(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const OUString& _rLocalName,
+        OFormEventsImportContext(SvXMLImport& _rImport,
             IEventAttacher& _rEventAttacher);
 
     protected:
-        virtual void EndElement() override;
+        virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
+        virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
     };
 
     //= ODefaultEventAttacherManager

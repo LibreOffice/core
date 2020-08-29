@@ -34,16 +34,12 @@ public:
 
     SwXMLBodyContentContext_Impl( SwXMLImport& rImport );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-            sal_Int32 /*nElement*/, const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ ) override
-    { return nullptr; }
-
-    virtual SvXMLImportContextRef CreateChildContext(
-            sal_uInt16 nPrefix, const OUString& rLocalName,
-            const Reference< xml::sax::XAttributeList > & xAttrList ) override;
-
     virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
             const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
+
+    css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     // The body element's text:global attribute can be ignored, because
     // we must have the correct object shell already.
@@ -57,15 +53,13 @@ SwXMLBodyContentContext_Impl::SwXMLBodyContentContext_Impl( SwXMLImport& rImport
 {
 }
 
-SvXMLImportContextRef SwXMLBodyContentContext_Impl::CreateChildContext(
-        sal_uInt16 nPrefix, const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SwXMLBodyContentContext_Impl::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    SvXMLImportContext *pContext = GetSwImport().GetTextImport()->CreateTextChildContext(
-            GetImport(), nPrefix, rLocalName, xAttrList,
+    return GetSwImport().GetTextImport()->CreateTextChildContext(
+            GetImport(), nElement, xAttrList,
                XMLTextType::Body );
-
-    return pContext;
 }
 
 void SwXMLBodyContentContext_Impl::endFastElement(sal_Int32 )
