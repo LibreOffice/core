@@ -1018,17 +1018,6 @@ const OUStringLiteral sNumberingRules( u"NumberingRules"  );
 const OUStringLiteral sIsContinuousNumbering( u"IsContinuousNumbering"  );
 
 SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const Reference< xml::sax::XAttributeList > & xAttrList,
-        bool bOutl )
-:   SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, bOutl ? XmlStyleFamily::TEXT_OUTLINE : XmlStyleFamily::TEXT_LIST )
-,   bConsecutive( false )
-,   bOutline( bOutl )
-{
-}
-
-SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
         bool bOutl )

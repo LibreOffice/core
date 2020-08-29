@@ -176,8 +176,6 @@ class XMLOFF_DLLPUBLIC SvXMLStylesContext : public SvXMLImportContext
     mutable rtl::Reference < SvXMLImportPropertyMapper > mxChartImpPropMapper;
     mutable rtl::Reference < SvXMLImportPropertyMapper > mxPageImpPropMapper;
 
-    SAL_DLLPRIVATE const SvXMLTokenMap& GetStyleStylesElemTokenMap();
-
     SvXMLStylesContext(SvXMLStylesContext const &) = delete;
     SvXMLStylesContext& operator =(SvXMLStylesContext const &) = delete;
 

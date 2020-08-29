@@ -418,7 +418,6 @@ public:
     SvXMLTokenMap const& GetTextFrameAttrTokenMap();
     SvXMLTokenMap const& GetTextContourAttrTokenMap();
     SvXMLTokenMap const& GetTextHyperlinkAttrTokenMap();
-    SvXMLTokenMap const& GetTextMasterPageElemTokenMap();
 
     const SvXMLTokenMap& GetTextNumberedParagraphAttrTokenMap();
     const SvXMLTokenMap& GetTextListBlockAttrTokenMap();

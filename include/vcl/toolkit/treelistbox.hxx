@@ -627,9 +627,6 @@ public:
 
     void            SetFont( const vcl::Font& rFont );
 
-    using Window::SetCursor;
-    void            SetCursor( SvTreeListEntry* pEntry );
-
     SvTreeListEntry*    GetEntry( const Point& rPos, bool bHit = false ) const;
 
     virtual tools::Rectangle GetFocusRect(const SvTreeListEntry*, long nLine );
@@ -666,8 +663,6 @@ public:
     SvTreeListEntry*    GetFirstEntryInView() const;
     SvTreeListEntry*    GetNextEntryInView(SvTreeListEntry*) const;
     void            ScrollToAbsPos( long nPos );
-
-    static VclPtr<PopupMenu> CreateContextMenu();
 
     long            getPreferredDimensions(std::vector<long> &rWidths) const;
 

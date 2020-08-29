@@ -92,18 +92,6 @@ public:
       */
     void importXML(
             ::std::vector< XMLPropertyState >& rProperties,
-            const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
-            const SvXMLUnitConverter& rUnitConverter,
-            const SvXMLNamespaceMap& rNamespaceMap,
-            sal_uInt32 nPropType,
-            sal_Int32 nStartIdx, sal_Int32 nEndIdx ) const;
-
-    /** fills the given itemset with the attributes in the given list
-      * the map is only searched within the range
-      * [nStartIdx, nEndIdx[
-      */
-    void importXML(
-            ::std::vector< XMLPropertyState >& rProperties,
             const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap,

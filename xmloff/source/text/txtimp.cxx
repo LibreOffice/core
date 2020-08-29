@@ -819,16 +819,6 @@ const SvXMLTokenMap& XMLTextImportHelper::GetTextHyperlinkAttrTokenMap()
     return *m_xImpl->m_xTextHyperlinkAttrTokenMap;
 }
 
-const SvXMLTokenMap& XMLTextImportHelper::GetTextMasterPageElemTokenMap()
-{
-    if (!m_xImpl->m_xTextMasterPageElemTokenMap)
-    {
-        m_xImpl->m_xTextMasterPageElemTokenMap.reset(
-            new SvXMLTokenMap( aTextMasterPageElemTokenMap ));
-    }
-    return *m_xImpl->m_xTextMasterPageElemTokenMap;
-}
-
 const SvXMLTokenMap& XMLTextImportHelper::GetTextFieldAttrTokenMap()
 {
     if (!m_xImpl->m_xTextFieldAttrTokenMap)
