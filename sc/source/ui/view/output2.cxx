@@ -1354,7 +1354,7 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
             // filter drop-down width is now independent from row height
             const long nFilter = DROPDOWN_BITMAP_SIZE;
             bool bFit = ( nNeeded + nFilter <= nMergeSizeX );
-            if ( bFit || bCellIsValue )
+            if ( bFit )
             {
                 // content fits even in the remaining area without the filter button
                 // -> align within that remaining area
