@@ -109,7 +109,7 @@ void convertTextProperty(PropertySet& rPropSet, ObjectFormatter& rFormatter,
 
 void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatter,
                                 const DataLabelModelBase& rDataLabel, const TypeGroupConverter& rTypeGroup,
-                                bool bDataSeriesLabel, bool bMSO2007Doc )
+                                bool bDataSeriesLabel, bool bCustomLabelField, bool bMSO2007Doc )
 {
     const TypeGroupInfo& rTypeInfo = rTypeGroup.getTypeInfo();
 
@@ -137,7 +137,7 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
     // type of attached label
     if( bHasAnyElement || rDataLabel.mbDeleted )
     {
-        DataPointLabel aPointLabel( bShowValue, bShowPercent, bShowCateg, bShowSymbol );
+        DataPointLabel aPointLabel( bShowValue, bShowPercent, bShowCateg, bShowSymbol, bCustomLabelField );
         rPropSet.setProperty( PROP_Label, aPointLabel );
     }
 
@@ -271,7 +271,8 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
     {
         bool bMSO2007Doc = getFilter().isMSO2007Document();
         PropertySet aPropSet( rxDataSeries->getDataPointByIndex( mrModel.mnIndex ) );
-        lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, false, bMSO2007Doc );
+        bool bCustomLabelField = mrModel.mxText && mrModel.mxText->mxTextBody && !mrModel.mxText->mxTextBody->getParagraphs().empty();
+        lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, false, bCustomLabelField, bMSO2007Doc );
         const TypeGroupInfo& rTypeInfo = rTypeGroup.getTypeInfo();
         bool bIsPie = rTypeInfo.meTypeCategory == TYPECATEGORY_PIE;
 
@@ -289,7 +290,7 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
             importFillProperties(aPropSet, *mrModel.mxShapeProp, getFilter().getGraphicHelper(),
                                  rHelper);
         }
-        if( mrModel.mxText && mrModel.mxText->mxTextBody && !mrModel.mxText->mxTextBody->getParagraphs().empty() )
+        if( bCustomLabelField )
         {
             css::uno::Reference< XComponentContext > xContext = getComponentContext();
             uno::Sequence< css::uno::Reference< XDataPointCustomLabelField > > aSequence;
@@ -405,7 +406,7 @@ void DataLabelsConverter::convertFromModel( const Reference< XDataSeries >& rxDa
         // tdf#132174: the inner data table has no own cell number format.
         if( getChartDocument()->hasInternalDataProvider() && mrModel.mobShowVal.get(!bMSO2007Doc) )
             mrModel.maNumberFormat.mbSourceLinked = false;
-        lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, true, bMSO2007Doc );
+        lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, true, false, bMSO2007Doc );
 
         if (mrModel.mxShapeProp)
         {
