@@ -142,28 +142,25 @@ class ScXMLChangeCellContext;
 
 class ScXMLChangeTextPContext : public ScXMLImportContext
 {
-    css::uno::Reference< css::xml::sax::XAttributeList> xAttrList;
-    OUString                    sLName;
+    css::uno::Reference< css::xml::sax::XFastAttributeList> mxAttrList;
+    sal_Int32                   mnElement;
     OUStringBuffer              sText;
     ScXMLChangeCellContext*     pChangeCellContext;
     rtl::Reference<SvXMLImportContext>
                                 pTextPContext;
-    sal_uInt16                  nPrefix;
 
 public:
 
-    ScXMLChangeTextPContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                       const OUString& rLName,
-                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+    ScXMLChangeTextPContext( ScXMLImport& rImport, sal_Int32 nElement,
+                       const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLChangeCellContext* pChangeCellContext);
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                                     const OUString& rLocalName,
-                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    virtual void Characters( const OUString& rChars ) override;
+    virtual void SAL_CALL characters( const OUString& rChars ) override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 class ScXMLChangeCellContext : public ScXMLImportContext
@@ -189,12 +186,8 @@ public:
                                       OUString& rInputString, double& fValue, sal_uInt16& nType,
                                       ScMatrixMode& nMatrixFlag, sal_Int32& nMatrixCols, sal_Int32& nMatrixRows);
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                                                    const OUString& rLocalName,
-                                                    const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 /*nElement*/, const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ ) override
-    { return nullptr; }
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     void CreateTextPContext(bool bIsNewParagraph);
     bool IsEditCell() const { return mpEditTextObj.is(); }
@@ -649,39 +642,33 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDeletionsContext::
 }
 
 ScXMLChangeTextPContext::ScXMLChangeTextPContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
-                                      const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xTempAttrList,
+                                      sal_Int32 nElement,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                       ScXMLChangeCellContext* pTempChangeCellContext) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
-    xAttrList(xTempAttrList),
-    sLName(rLName),
+    ScXMLImportContext( rImport ),
+    mxAttrList(xAttrList),
+    mnElement(nElement),
     sText(),
-    pChangeCellContext(pTempChangeCellContext),
-    nPrefix(nPrfx)
+    pChangeCellContext(pTempChangeCellContext)
 {
     // here are no attributes
 }
 
-SvXMLImportContextRef ScXMLChangeTextPContext::CreateChildContext( sal_uInt16 nTempPrefix,
-                                            const OUString& rLName,
-                                            const css::uno::Reference<css::xml::sax::XAttributeList>& xTempAttrList )
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLChangeTextPContext::createFastChildContext(
+    sal_Int32 nElement,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
-    SvXMLImportContextRef xContext;
-
-    if ((nPrefix == XML_NAMESPACE_TEXT) && (IsXMLToken(rLName, XML_S)) && !pTextPContext)
+    uno::Reference< xml::sax::XFastContextHandler > xContext;
+    if (mnElement == XML_ELEMENT(TEXT, XML_S) && !pTextPContext)
     {
         sal_Int32 nRepeat(0);
-        sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
-        for( sal_Int16 i=0; i < nAttrCount; ++i )
+        for( auto& aIter : sax_fastparser::castToFastAttributeList(mxAttrList) )
         {
-            const OUString& sAttrName(xAttrList->getNameByIndex( i ));
-            const OUString& sValue(xAttrList->getValueByIndex( i ));
-            OUString aLocalName;
-            sal_uInt16 nPrfx(GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                                sAttrName, &aLocalName ));
-            if ((nPrfx == XML_NAMESPACE_TEXT) && (IsXMLToken(aLocalName, XML_C)))
+            const OUString sValue = aIter.toString();
+            if (aIter.getToken() == XML_ELEMENT(TEXT, XML_C))
                 nRepeat = sValue.toInt32();
+            else
+                SAL_WARN("sc", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
         }
         if (nRepeat)
             for (sal_Int32 j = 0; j < nRepeat; ++j)
@@ -697,29 +684,29 @@ SvXMLImportContextRef ScXMLChangeTextPContext::CreateChildContext( sal_uInt16 nT
         if (!pTextPContext)
         {
             bWasContext = false;
-            pTextPContext= GetScImport().GetTextImport()->CreateTextChildContext(
-                                    GetScImport(), nPrefix, sLName, xAttrList);
+            pTextPContext = GetScImport().GetTextImport()->CreateTextChildContext(
+                                    GetScImport(), mnElement, mxAttrList);
         }
         if (pTextPContext)
         {
             if (!bWasContext)
-                pTextPContext->Characters(sText.makeStringAndClear());
-            xContext = pTextPContext->CreateChildContext(nTempPrefix, rLName, xTempAttrList);
+                pTextPContext->characters(sText.makeStringAndClear());
+            xContext = pTextPContext->createFastChildContext(nElement, xAttrList);
         }
     }
 
     return xContext;
 }
 
-void ScXMLChangeTextPContext::Characters( const OUString& rChars )
+void ScXMLChangeTextPContext::characters( const OUString& rChars )
 {
     if (!pTextPContext)
         sText.append(rChars);
     else
-        pTextPContext->Characters(rChars);
+        pTextPContext->characters(rChars);
 }
 
-void ScXMLChangeTextPContext::EndElement()
+void ScXMLChangeTextPContext::endFastElement(sal_Int32 /*nElement*/)
 {
     if (!pTextPContext)
         pChangeCellContext->SetText(sText.makeStringAndClear());
@@ -807,18 +794,17 @@ ScXMLChangeCellContext::ScXMLChangeCellContext( ScXMLImport& rImport,
         nMatrixFlag = ScMatrixMode::Formula;
 }
 
-SvXMLImportContextRef ScXMLChangeCellContext::CreateChildContext( sal_uInt16 nPrefix,
-                                     const OUString& rLocalName,
-                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
+uno::Reference< xml::sax::XFastContextHandler > ScXMLChangeCellContext::createFastChildContext(
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext(nullptr);
 
-    if ((nPrefix == XML_NAMESPACE_TEXT) && (IsXMLToken(rLocalName, XML_P)))
+    if (nElement == XML_ELEMENT(TEXT, XML_P))
     {
         bEmpty = false;
         if (bFirstParagraph)
         {
-            pContext = new ScXMLChangeTextPContext(GetScImport(), nPrefix, rLocalName, xAttrList, this);
+            pContext = new ScXMLChangeTextPContext(GetScImport(), nElement, xAttrList, this);
             bFirstParagraph = false;
         }
         else
@@ -826,9 +812,11 @@ SvXMLImportContextRef ScXMLChangeCellContext::CreateChildContext( sal_uInt16 nPr
             if (!mpEditTextObj.is())
                 CreateTextPContext(true);
             pContext = GetScImport().GetTextImport()->CreateTextChildContext(
-                GetScImport(), nPrefix, rLocalName, xAttrList);
+                GetScImport(), nElement, xAttrList);
         }
     }
+    else
+        SAL_WARN("sc", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
 
     return pContext;
 }
