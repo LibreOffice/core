@@ -30,7 +30,7 @@ using namespace ::xmloff::token;
 
 SdXMLGroupShapeContext::SdXMLGroupShapeContext(
     SvXMLImport& rImport,
-    const uno::Reference< xml::sax::XAttributeList>& xAttrList,
+    const uno::Reference< xml::sax::XFastAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes,
     bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, xAttrList, rShapes, bTemporaryShape )
@@ -45,7 +45,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLGroupShapeContext
     sal_Int32 nElement,
     const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-   // #i68101#
+    // #i68101#
     if( nElement == XML_ELEMENT(SVG, XML_TITLE) ||
         nElement == XML_ELEMENT(SVG, XML_DESC ) ||
         nElement == XML_ELEMENT(SVG_COMPAT, XML_TITLE) ||
@@ -64,7 +64,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLGroupShapeContext
     else
     {
         // call GroupChildContext function at common ShapeImport
-        return GetImport().GetShapeImport()->CreateGroupChildContext(
+        return XMLShapeImportHelper::CreateGroupChildContext(
             GetImport(), nElement, xAttrList, mxChildren);
     }
     return nullptr;

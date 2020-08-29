@@ -153,7 +153,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLCell::createFastCh
                 if ( !m_bContainsShape )
                     m_nCurrentCount = m_pContainer->getSection()->getCount();
                 uno::Reference< drawing::XShapes > xShapes = m_pContainer->getSection().get();
-                xContext = GetImport().GetShapeImport()->CreateGroupChildContext(rImport,nElement,xAttrList,xShapes);
+                xContext = XMLShapeImportHelper::CreateGroupChildContext(rImport,nElement,xAttrList,xShapes);
                 m_bContainsShape = true;
             }
             break;
