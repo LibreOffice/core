@@ -21,6 +21,7 @@
 #include "property_meta_data.hxx"
 #include <forms/form_handler_factory.hxx>
 #include "strings.hxx"
+#include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnamespace.hxx>
 
@@ -168,6 +169,14 @@ namespace xmloff::metadata
             attribute.namespacePrefix = i_namespacePrefix;
             attribute.attributeToken = pos->second;
         }
+        return attribute;
+    }
+
+    AttributeDescription getAttributeDescription( sal_Int32 nAttributeToken )
+    {
+        AttributeDescription attribute;
+        attribute.namespacePrefix = (nAttributeToken >> NMSP_SHIFT) - 1;
+        attribute.attributeToken = static_cast<XMLTokenEnum>(nAttributeToken & TOKEN_MASK);
         return attribute;
     }
 
