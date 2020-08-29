@@ -122,7 +122,7 @@ public:
     */
     void Activate();
 
-    /** Deactivate frame sychronization when no animation is active and the
+    /** Deactivate frame synchronization when no animation is active and the
         time between frames depends on user actions and other external
         sources.  While deactivated Synchronize() will return without delay.
     */
