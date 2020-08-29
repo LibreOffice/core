@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "0b918355_a6113695",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 5983,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2020-08-29T06:23:51Z",
+      "side": 1,
+      "message": "right, will be changed to assert",
+      "parentUuid": "1d3bb5ca_b07d4de3",
+      "revId": "e680860d9640ab9befa463a64847f57aba20cbb7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b1c3b363_42c14f79",
         "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
         "patchSetId": 5
@@ -30,6 +48,24 @@
       "writtenOn": "2020-08-28T12:18:03Z",
       "side": 1,
       "message": "No delete is called afterwards, so this will leak memory. :S",
+      "revId": "e680860d9640ab9befa463a64847f57aba20cbb7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a08565b6_8df91e01",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 5990,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2020-08-29T06:23:51Z",
+      "side": 1,
+      "message": "thats true, so delete will called.",
+      "parentUuid": "b1c3b363_42c14f79",
       "revId": "e680860d9640ab9befa463a64847f57aba20cbb7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "0c2b7776_1e171e08",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 5994,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2020-08-29T06:23:51Z",
+      "side": 1,
+      "message": "because pAnchor not const anymore, but GetContentAnchor is.",
+      "parentUuid": "79f86a60_e5e36b38",
+      "revId": "e680860d9640ab9befa463a64847f57aba20cbb7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9e025683_4e768890",
         "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
         "patchSetId": 5
@@ -64,6 +118,24 @@
       "writtenOn": "2020-08-28T12:18:03Z",
       "side": 1,
       "message": "Here we can expect pAnchor to be positive, so again perhaps an assert is more appropriate.",
+      "revId": "e680860d9640ab9befa463a64847f57aba20cbb7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47604b10_ab9a2548",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 5997,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2020-08-29T06:23:51Z",
+      "side": 1,
+      "message": "Im not sure about it, see this issue...",
+      "parentUuid": "9e025683_4e768890",
       "revId": "e680860d9640ab9befa463a64847f57aba20cbb7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
