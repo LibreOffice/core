@@ -879,10 +879,7 @@ SvXMLStyleContext* SdXMLStylesContext::CreateStyleChildContext(
         case XML_ELEMENT(PRESENTATION, XML_FOOTER_DECL):
         case XML_ELEMENT(PRESENTATION, XML_DATE_TIME_DECL):
             return new SdXMLHeaderFooterDeclContext( GetImport(), xAttrList );
-        case XML_ELEMENT(STYLE, XML_STYLE):
-            break; // ignore
-        default:
-            SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
+        default: ;
     }
 
     // call base class
