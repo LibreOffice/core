@@ -70,9 +70,7 @@ struct ColumnInfo
 class XMLProxyContext : public SvXMLImportContext
 {
 public:
-    XMLProxyContext( SvXMLImport& rImport, const SvXMLImportContextRef& xParent, sal_uInt16 nPrfx, const OUString& rLName );
-
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList ) override;
+    XMLProxyContext( SvXMLImport& rImport, const SvXMLImportContextRef& xParent );
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
@@ -104,14 +102,13 @@ public:
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList ) override;
 
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     void InitColumns();
 
-    SvXMLImportContextRef ImportColumn( const Reference< XAttributeList >& xAttrList );
-    SvXMLImportContext * ImportRow( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList );
+    SvXMLImportContextRef ImportColumn( const Reference< XFastAttributeList >& xAttrList );
+    SvXMLImportContext * ImportRow( const Reference< XFastAttributeList >& xAttrList );
     SvXMLImportContextRef ImportCell( sal_Int32 nElement, const Reference< XFastAttributeList >& xAttrList );
 
     OUString GetDefaultCellStyleName() const;
@@ -183,23 +180,16 @@ private:
 }
 
 
-XMLProxyContext::XMLProxyContext( SvXMLImport& rImport, const SvXMLImportContextRef& xParent, sal_uInt16 nPrfx, const OUString& rLName )
-: SvXMLImportContext( rImport, nPrfx, rLName )
+XMLProxyContext::XMLProxyContext( SvXMLImport& rImport, const SvXMLImportContextRef& xParent )
+: SvXMLImportContext( rImport )
 , mxParent( xParent )
 {
 }
 
-SvXMLImportContextRef XMLProxyContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLProxyContext::createFastChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& xAttrList )
 {
     if( mxParent.is() )
-        return mxParent->CreateChildContext( nPrefix, rLocalName, xAttrList );
-    return nullptr;
-}
-
- css::uno::Reference< css::xml::sax::XFastContextHandler > XMLProxyContext::createFastChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& xAttrList )
-{
-    if( mxParent.is() )
-        return mxParent->createFastChildContextFallback( nElement, xAttrList );
+        return mxParent->createFastChildContext( nElement, xAttrList );
     return nullptr;
 }
 
@@ -383,7 +373,7 @@ XMLTableImportContext::XMLTableImportContext( const rtl::Reference< XMLTableImpo
 {
 }
 
-SvXMLImportContextRef XMLTableImportContext::ImportColumn( const Reference< XAttributeList >& xAttrList )
+SvXMLImportContextRef XMLTableImportContext::ImportColumn( const Reference< XFastAttributeList >& xAttrList )
 {
     if( mxColumns.is() && (mnCurrentRow == -1) ) try
     {
@@ -392,33 +382,22 @@ SvXMLImportContextRef XMLTableImportContext::ImportColumn( const Reference< XAtt
         sal_Int32 nRepeated = 1;
 
         // read attributes for the table-column
-        sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-        for(sal_Int16 i=0; i < nAttrCount; i++)
+        for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
         {
-            const OUString sAttrName( xAttrList->getNameByIndex( i ) );
-            const OUString sValue( xAttrList->getValueByIndex( i ) );
-            OUString aLocalName;
-
-            sal_uInt16 nPrefix2 = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-            if( XML_NAMESPACE_TABLE == nPrefix2 )
+            switch (aIter.getToken())
             {
-                if( IsXMLToken( aLocalName, XML_NUMBER_COLUMNS_REPEATED ) )
-                {
-                    nRepeated = sValue.toInt32();
-                }
-                else if( IsXMLToken( aLocalName, XML_STYLE_NAME ) )
-                {
-                    xInfo->msStyleName = sValue;
-                }
-                else if( IsXMLToken( aLocalName, XML_DEFAULT_CELL_STYLE_NAME ) )
-                {
-                    xInfo->msDefaultCellStyleName = sValue;
-                }
-            }
-            else if ( (XML_NAMESPACE_XML == nPrefix2) &&
-                 IsXMLToken(aLocalName, XML_ID)   )
-            {
-//FIXME: TODO
+                case XML_ELEMENT(TABLE, XML_NUMBER_COLUMNS_REPEATED):
+                    nRepeated = aIter.toInt32();
+                    break;
+                case XML_ELEMENT(TABLE, XML_STYLE_NAME):
+                    xInfo->msStyleName = aIter.toString();
+                    break;
+                case XML_ELEMENT(TABLE, XML_DEFAULT_CELL_STYLE_NAME):
+                    xInfo->msDefaultCellStyleName = aIter.toString();
+                    break;
+                case XML_ELEMENT(XML, XML_ID):
+                    //FIXME: TODO
+                    break;
             }
         }
 
@@ -478,7 +457,7 @@ void XMLTableImportContext::InitColumns()
     }
 }
 
-SvXMLImportContext * XMLTableImportContext::ImportRow( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
+SvXMLImportContext * XMLTableImportContext::ImportRow( const Reference< XFastAttributeList >& xAttrList )
 {
     if( mxRows.is() )
     {
@@ -500,30 +479,19 @@ SvXMLImportContext * XMLTableImportContext::ImportRow( sal_uInt16 nPrefix, const
         OUString sStyleName;
 
         // read attributes for the table-row
-        sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-        for(sal_Int16 i=0; i < nAttrCount; i++)
+        for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
         {
-            const OUString sAttrName( xAttrList->getNameByIndex( i ) );
-            const OUString sValue( xAttrList->getValueByIndex( i ) );
-            OUString aLocalName;
-
-            sal_uInt16 nPrefix2 = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-            if( nPrefix2 == XML_NAMESPACE_TABLE )
+            switch(aIter.getToken())
             {
-                if( IsXMLToken( aLocalName, XML_STYLE_NAME ) )
-                {
-                    sStyleName = sValue;
-                }
-                else if( IsXMLToken( aLocalName, XML_DEFAULT_CELL_STYLE_NAME ) )
-                {
-                    msDefaultCellStyleName = sValue;
-                }
-            }
-            else if ( (XML_NAMESPACE_XML == nPrefix2) &&
-                 IsXMLToken(aLocalName, XML_ID)   )
-            {
-                (void) sValue;
-//FIXME: TODO
+                case XML_ELEMENT(TABLE, XML_STYLE_NAME):
+                    sStyleName = aIter.toString();
+                    break;
+                case XML_ELEMENT(TABLE, XML_DEFAULT_CELL_STYLE_NAME):
+                    msDefaultCellStyleName = aIter.toString();
+                    break;
+                case XML_ELEMENT(XML, XML_ID):
+                    //FIXME: TODO
+                    break;
             }
         }
 
@@ -545,7 +513,7 @@ SvXMLImportContext * XMLTableImportContext::ImportRow( sal_uInt16 nPrefix, const
     }
 
     SvXMLImportContextRef xThis( this );
-    return new XMLProxyContext( GetImport(), xThis, nPrefix, rLocalName );
+    return new XMLProxyContext( GetImport(), xThis );
 }
 
 SvXMLImportContextRef XMLTableImportContext::ImportCell( sal_Int32 nElement, const Reference< XFastAttributeList >& xAttrList )
@@ -585,24 +553,20 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTableImportContext:
     sal_Int32 nElement,
     const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    if( nElement == XML_ELEMENT(TABLE, XML_TABLE_CELL) ||
-        nElement == XML_ELEMENT(TABLE, XML_COVERED_TABLE_CELL) )
-            return ImportCell( nElement, xAttrList ).get();
-    return nullptr;
-}
-
-SvXMLImportContextRef XMLTableImportContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
-{
-    if( nPrefix == XML_NAMESPACE_TABLE )
+    switch (nElement)
     {
-        if( IsXMLToken( rLocalName, XML_TABLE_COLUMN ) )
-            return ImportColumn( xAttrList );
-        else if( IsXMLToken( rLocalName, XML_TABLE_ROW ) )
-            return ImportRow( nPrefix, rLocalName, xAttrList );
-        else if( IsXMLToken( rLocalName, XML_TABLE_COLUMNS ) || IsXMLToken( rLocalName, XML_TABLE_ROWS ) )
+        case XML_ELEMENT(TABLE, XML_TABLE_CELL):
+        case XML_ELEMENT(TABLE, XML_COVERED_TABLE_CELL):
+            return ImportCell( nElement, xAttrList ).get();
+        case XML_ELEMENT(TABLE, XML_TABLE_COLUMN):
+            return ImportColumn( xAttrList ).get();
+        case XML_ELEMENT(TABLE, XML_TABLE_ROW):
+            return ImportRow( xAttrList );
+        case XML_ELEMENT(TABLE, XML_TABLE_COLUMNS):
+        case XML_ELEMENT(TABLE, XML_TABLE_ROWS):
         {
             SvXMLImportContextRef xThis( this );
-            return new XMLProxyContext( GetImport(), xThis, nPrefix, rLocalName );
+            return new XMLProxyContext( GetImport(), xThis );
         }
     }
     SAL_WARN("xmloff", "unknown element");

@@ -41,10 +41,8 @@ using namespace ::xmloff::token;
 
 XMLSectionSourceDDEImportContext::XMLSectionSourceDDEImportContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
     Reference<XPropertySet> & rSectPropSet) :
-        SvXMLImportContext(rImport, nPrfx, rLocalName),
+        SvXMLImportContext(rImport),
         rSectionPropertySet(rSectPropSet)
 {
 }

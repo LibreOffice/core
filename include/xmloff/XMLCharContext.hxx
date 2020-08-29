@@ -34,20 +34,6 @@ protected:
     sal_Unicode m_c;
 public:
 
-
-    XMLCharContext(
-            SvXMLImport& rImport,
-            sal_uInt16 nPrfx,
-            const OUString& rLName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
-            sal_Unicode c,
-            bool bCount );
-    XMLCharContext(
-            SvXMLImport& rImport,
-            sal_uInt16 nPrfx,
-            const OUString& rLName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
-            sal_Int16 nControl );
     XMLCharContext(
             SvXMLImport& rImport,
             const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,

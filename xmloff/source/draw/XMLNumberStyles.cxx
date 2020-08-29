@@ -555,7 +555,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLNumberFormatMembe
     sal_Int32 nElement,
     const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    return mxSlaveContext->createFastChildContextFallback( nElement, xAttrList );
+    return mxSlaveContext->createFastChildContext( nElement, xAttrList );
 }
 
 void SdXMLNumberFormatMemberImportContext::startFastElement(

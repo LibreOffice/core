@@ -52,7 +52,7 @@ ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
     {
         XMLTableShapeImportHelper* pTableShapeImport = static_cast<XMLTableShapeImportHelper*>(GetScImport().GetShapeImport().get());
         pTableShapeImport->SetAnnotation(this);
-        pShapeContext.reset( GetImport().GetShapeImport()->CreateGroupChildContext(
+        pShapeContext.reset( XMLShapeImportHelper::CreateGroupChildContext(
             GetScImport(), nElement, xAttrList, xLocalShapes, true) );
     }
 
@@ -126,7 +126,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > ScXMLAnnotationContext
 
     if( pShapeContext )
     {
-        auto p = pShapeContext->createFastChildContextFallback(nElement, xAttrList);
+        auto p = pShapeContext->createFastChildContext(nElement, xAttrList);
         if (p)
             return p;
     }

@@ -51,8 +51,8 @@ class XMLEnhancedCustomShapeContext : public SvXMLImportContext
 public:
 
 
-    XMLEnhancedCustomShapeContext( SvXMLImport& rImport, css::uno::Reference< css::drawing::XShape > &, sal_uInt16 nPrefix,
-        const OUString& rLocalName, std::vector< css::beans::PropertyValue >& rCustomShapeGeometry );
+    XMLEnhancedCustomShapeContext( SvXMLImport& rImport, css::uno::Reference< css::drawing::XShape > &,
+        std::vector< css::beans::PropertyValue >& rCustomShapeGeometry );
 
     virtual void SAL_CALL startFastElement(
         sal_Int32 nElement,
