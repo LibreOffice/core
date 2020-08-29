@@ -30,16 +30,45 @@ using namespace ::xmloff::token;
 
 SdXMLGroupShapeContext::SdXMLGroupShapeContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx, const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList>& xAttrList,
+    sal_Int32 nElement,
+    const uno::Reference< xml::sax::XFastAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes,
     bool bTemporaryShape)
-:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape )
+:   SdXMLShapeContext( rImport, nElement, xAttrList, rShapes, bTemporaryShape )
 {
 }
 
 SdXMLGroupShapeContext::~SdXMLGroupShapeContext()
 {
+}
+
+css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLGroupShapeContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+{
+    // #i68101#
+    if( nElement == XML_ELEMENT(SVG, XML_TITLE) ||
+        nElement == XML_ELEMENT(SVG, XML_DESC ) ||
+        nElement == XML_ELEMENT(SVG_COMPAT, XML_TITLE) ||
+        nElement == XML_ELEMENT(SVG_COMPAT, XML_DESC ) )
+    {
+        // handled in CreateChildContext
+    }
+    else if( nElement == XML_ELEMENT(OFFICE, XML_EVENT_LISTENERS) )
+    {
+        // handled in CreateChildContext
+    }
+    else if( nElement == XML_ELEMENT(DRAW, XML_GLUE_POINT) )
+    {
+        // handled in CreateChildContext
+    }
+    else
+    {
+        // call GroupChildContext function at common ShapeImport
+        return XMLShapeImportHelper::CreateGroupChildContext(
+            GetImport(), nElement, xAttrList, mxChildren);
+    }
+    return nullptr;
 }
 
 SvXMLImportContextRef SdXMLGroupShapeContext::CreateChildContext( sal_uInt16 nPrefix,
@@ -64,15 +93,13 @@ SvXMLImportContextRef SdXMLGroupShapeContext::CreateChildContext( sal_uInt16 nPr
     }
     else
     {
-        // call GroupChildContext function at common ShapeImport
-        xContext = GetImport().GetShapeImport()->CreateGroupChildContext(
-            GetImport(), nPrefix, rLocalName, xAttrList, mxChildren);
+        // handled in createFastChildContext
     }
 
     return xContext;
 }
 
-void SdXMLGroupShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>&)
+void SdXMLGroupShapeContext::startFastElement(sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList>&)
 {
     // create new group shape and add it to rShapes, use it
     // as base for the new group import

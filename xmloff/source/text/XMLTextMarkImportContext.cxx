@@ -99,10 +99,8 @@ void XMLFieldParamImportContext::StartElement(const css::uno::Reference< css::xm
 XMLTextMarkImportContext::XMLTextMarkImportContext(
     SvXMLImport& rImport,
     XMLTextImportHelper& rHlp,
-    uno::Reference<uno::XInterface> & io_rxCrossRefHeadingBookmark,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName )
-    : SvXMLImportContext(rImport, nPrefix, rLocalName)
+    uno::Reference<uno::XInterface> & io_rxCrossRefHeadingBookmark )
+    : SvXMLImportContext(rImport)
     , m_rHelper(rHlp)
     , m_rxCrossRefHeadingBookmark(io_rxCrossRefHeadingBookmark)
     , m_bHaveAbout(false)
@@ -156,15 +154,16 @@ static OUString lcl_getFieldmarkName(OUString const& name)
 }
 
 
-void XMLTextMarkImportContext::StartElement(
-    const Reference<XAttributeList> & xAttrList)
+void XMLTextMarkImportContext::startFastElement(
+    sal_Int32 nElement,
+    const Reference<XFastAttributeList> & xAttrList)
 {
-    if (!FindName(GetImport(), xAttrList))
+    if (!FindName(xAttrList))
     {
         m_sBookmarkName.clear();
     }
 
-    if (IsXMLToken(GetLocalName(), XML_FIELDMARK_START) || IsXMLToken(GetLocalName(), XML_FIELDMARK))
+    if ((nElement & TOKEN_MASK) == XML_FIELDMARK_START || (nElement & TOKEN_MASK) == XML_FIELDMARK)
     {
         if (m_sBookmarkName.isEmpty())
         {
@@ -173,10 +172,10 @@ void XMLTextMarkImportContext::StartElement(
         m_rHelper.pushFieldCtx( m_sBookmarkName, m_sFieldName );
     }
 
-    if (IsXMLToken(GetLocalName(), XML_BOOKMARK_START))
+    if ((nElement & TOKEN_MASK) == XML_BOOKMARK_START)
     {
-        const OUString sHidden    = xAttrList->getValueByName("loext:hidden");
-        const OUString sCondition = xAttrList->getValueByName("loext:condition");
+        const OUString sHidden    = xAttrList->getOptionalValue(XML_ELEMENT(LO_EXT, XML_HIDDEN));
+        const OUString sCondition = xAttrList->getOptionalValue(XML_ELEMENT(LO_EXT, XML_CONDITION));
         m_rHelper.setBookmarkAttributes(m_sBookmarkName, sHidden == "true", sCondition);
     }
 }
@@ -248,12 +247,12 @@ static auto PopFieldmark(XMLTextImportHelper & rHelper) -> void
     }
 }
 
-void XMLTextMarkImportContext::endFastElement(sal_Int32 )
+void XMLTextMarkImportContext::endFastElement(sal_Int32 nElement)
 {
     static const char sAPI_bookmark[] = "com.sun.star.text.Bookmark";
 
     lcl_MarkType nTmp{};
-    if (!SvXMLUnitConverter::convertEnum(nTmp, GetLocalName(), lcl_aMarkTypeMap))
+    if (!SvXMLUnitConverter::convertEnum(nTmp, SvXMLImport::getNameFromToken(nElement), lcl_aMarkTypeMap))
         return;
 
     if (m_sBookmarkName.isEmpty() && TypeFieldmarkEnd != nTmp)
@@ -562,4 +561,46 @@ bool XMLTextMarkImportContext::FindName(
     return bNameOK;
 }
 
+bool XMLTextMarkImportContext::FindName(
+    const Reference<XFastAttributeList> & xAttrList)
+{
+    bool bNameOK = false;
+
+    // find name attribute first
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
+    {
+        OUString sValue = aIter.toString();
+        switch (aIter.getToken())
+        {
+            case XML_ELEMENT(TEXT, XML_NAME):
+                m_sBookmarkName = sValue;
+                bNameOK = true;
+                break;
+            case XML_ELEMENT(XML, XML_ID):
+                m_sXmlId = sValue;
+                break;
+            // RDFa
+            case XML_ELEMENT(XHTML, XML_ABOUT):
+                m_sAbout = sValue;
+                m_bHaveAbout = true;
+                break;
+            case XML_ELEMENT(XHTML, XML_PROPERTY):
+                m_sProperty = sValue;
+                break;
+            case XML_ELEMENT(XHTML, XML_CONTENT):
+                m_sContent = sValue;
+                break;
+            case XML_ELEMENT(XHTML, XML_DATATYPE):
+                m_sDatatype = sValue;
+                break;
+            case XML_ELEMENT(FIELD, XML_TYPE):
+                m_sFieldName = sValue;
+                break;
+            default:
+                SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
+        }
+    }
+
+    return bNameOK;
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

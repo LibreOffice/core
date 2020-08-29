@@ -130,4 +130,73 @@ void TokenContext::characters( const OUString& rCharacters )
         GetImport().SetError( XMLERROR_UNKNOWN_CHARACTERS, rCharacters );
 }
 
+TokenContext2::TokenContext2( SvXMLImport& rImport,
+                            const SvXMLTokenMapEntry* pChildren )
+    : SvXMLImportContext( rImport ),
+      mpChildren( pChildren )
+{
+}
+
+void TokenContext2::startFastElement(
+    sal_Int32 /*nElement*/,
+    const Reference<css::xml::sax::XFastAttributeList>& xAttrList )
+{
+    // iterate over attributes
+    // - if in map: call HandleAttribute
+    // - xmlns:... : ignore
+    // - other: warning
+
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
+    {
+
+        if( HandleAttribute( aIter.getToken(), aIter.toString() ) )
+            ; // ok
+        else if( !IsTokenInNamespace(aIter.getToken(), XML_NAMESPACE_XMLNS) )
+        {
+            SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
+            // error handling, for all attribute that are not
+            // namespace declarations
+            GetImport().SetError( XMLERROR_UNKNOWN_ATTRIBUTE,
+                                  SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()), aIter.toString());
+        }
+    }
+}
+
+SvXMLImportContextRef TokenContext2::CreateChildContext(
+    sal_uInt16 nPrefix,
+    const OUString& rLocalName,
+    const Reference<XAttributeList>& xAttrList )
+{
+    // call HandleChild for elements in token map. Ignore other content.
+
+    SvXMLImportContext* pContext = nullptr;
+
+    SAL_WARN_IF( mpChildren == nullptr, "xmloff", "no token map for child elements" );
+    SvXMLTokenMap aMap( mpChildren );
+    sal_uInt16 nToken = aMap.Get( nPrefix, rLocalName );
+    if( nToken != XML_TOK_UNKNOWN )
+    {
+        // call handle child, and pass down arguments
+        pContext = HandleChild( nToken, nPrefix, rLocalName, xAttrList );
+    }
+
+    // error handling: create default context and generate warning
+    if( pContext == nullptr )
+    {
+        GetImport().SetError( XMLERROR_UNKNOWN_ELEMENT, rLocalName );
+    }
+    return pContext;
+}
+
+void TokenContext2::characters( const OUString& rCharacters )
+{
+    // get iterators for string data
+    const sal_Unicode* pBegin = rCharacters.getStr();
+    const sal_Unicode* pEnd = &( pBegin[ rCharacters.getLength() ] );
+
+    // raise error if non-whitespace character is found
+    if( !::std::all_of( pBegin, pEnd, lcl_IsWhiteSpace ) )
+        GetImport().SetError( XMLERROR_UNKNOWN_CHARACTERS, rCharacters );
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

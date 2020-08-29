@@ -73,6 +73,7 @@ class SAX_DLLPUBLIC FastAttributeList final : public cppu::WeakImplHelper< css::
 {
 public:
     FastAttributeList( FastTokenHandlerBase *pTokenHandler );
+    FastAttributeList( const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
     virtual ~FastAttributeList() override;
 
     void clear();
@@ -81,6 +82,8 @@ public:
         maAttributeValues.reserve(nNumTokens+1);
         maAttributeTokens.reserve(nNumTokens);
     }
+    void add( const FastAttributeList& );
+    void add( const css::uno::Reference<css::xml::sax::XFastAttributeList>& );
     void add( sal_Int32 nToken, const char* pValue );
     void add( sal_Int32 nToken, const char* pValue, size_t nValueLength );
     void add( sal_Int32 nToken, const OString& rValue );
@@ -91,6 +94,7 @@ public:
     const std::vector< sal_Int32 >&  getFastAttributeTokens() const { return maAttributeTokens; }
     const char* getFastAttributeValue(size_t nIndex) const { return mpChunk + maAttributeValues[nIndex]; }
     sal_Int32 AttributeValueLength(size_t i) const { return maAttributeValues[i + 1] - maAttributeValues[i] - 1; }
+    size_t size() const { return maAttributeValues.size(); }
 
     // performance sensitive shortcuts to avoid allocation ...
     bool getAsInteger( sal_Int32 nToken, sal_Int32 &rInt) const;

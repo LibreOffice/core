@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 
-#include <set>
+#include <o3tl/sorted_vector.hxx>
 
 #include <xmloff/xmlictxt.hxx>
 #include "formattributes.hxx"
@@ -80,7 +80,7 @@ namespace xmloff
         PropertyValueArray          m_aGenericValues;
             // the values which the instance collects between StartElement and EndElement
 
-        std::set<OUString>          m_aEncounteredAttributes;
+        o3tl::sorted_vector<sal_Int32>  m_aEncounteredAttributes;
 
         OFormLayerXMLImport_Impl&       m_rContext;
 
@@ -91,14 +91,15 @@ namespace xmloff
         // style properties) can be done in our own EndElement instead of letting derived classes do this.
 
     public:
-        OPropertyImport(OFormLayerXMLImport_Impl& _rImport, sal_uInt16 _nPrefix, const OUString& _rName);
+        OPropertyImport(OFormLayerXMLImport_Impl& _rImport);
 
-        virtual SvXMLImportContextRef CreateChildContext(
-            sal_uInt16 _nPrefix, const OUString& _rLocalName,
-            const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
+        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+            sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
-        virtual void StartElement(
-            const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
+        virtual void SAL_CALL startFastElement(
+            sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& _rxAttrList) override;
         virtual void SAL_CALL characters(const OUString& _rChars) override;
 
     protected:
@@ -116,15 +117,13 @@ namespace xmloff
             @param _rValue
                 attribute value
         */
-        virtual bool handleAttribute(sal_uInt16 _nNamespaceKey,
-            const OUString& _rLocalName,
-            const OUString& _rValue);
+        virtual bool handleAttribute(sal_Int32 nElement, const OUString& _rValue);
 
         /** determine if the element imported by the object had a given attribute.
             <p>Please be aware of the fact that the name given must be a local name, i.e. not contain a namespace.
             All form relevant attributes are in the same namespace, so this would be a redundant information.</p>
         */
-        bool    encounteredAttribute(const OUString& _rAttributeName) const;
+        bool    encounteredAttribute(sal_Int32 nElement) const;
 
         /** enables the tracking of the encountered attributes
             <p>The tracking will raise the import costs a little bit, but it's cheaper than
@@ -158,7 +157,7 @@ namespace xmloff
         OPropertyImportRef  m_xPropertyImporter;    // to add the properties
 
     public:
-        OPropertyElementsContext(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const OUString& _rName,
+        OPropertyElementsContext(SvXMLImport& _rImport,
                 const OPropertyImportRef& _rPropertyImporter);
 
         virtual SvXMLImportContextRef CreateChildContext(

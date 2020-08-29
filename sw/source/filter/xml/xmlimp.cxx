@@ -188,10 +188,6 @@ protected: // #i69629#
 public:
     SwXMLDocContext_Impl( SwXMLImport& rImport );
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                const OUString& rLocalName,
-                const Reference< xml::sax::XAttributeList > & xAttrList ) override;
-
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
@@ -238,27 +234,15 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SwXMLDocContext_Impl::c
             GetSwImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
             return new SwXMLBodyContext_Impl( GetSwImport() );
             break;
+        case XML_ELEMENT(XFORMS, XML_MODEL):
+            return createXFormsModelContext(GetImport(), nElement);
+            break;
+        default:
+            SAL_WARN("sw", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
     }
     return nullptr;
 }
 
-SvXMLImportContextRef SwXMLDocContext_Impl::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & /*xAttrList*/ )
-{
-    SvXMLImportContext *pContext = nullptr;
-
-    const SvXMLTokenMap& rTokenMap = GetSwImport().GetDocElemTokenMap();
-    switch( rTokenMap.Get( nPrefix, rLocalName ) )
-    {
-    case XML_TOK_DOC_XFORMS:
-        pContext = createXFormsModelContext(GetImport(), nPrefix, rLocalName);
-        break;
-    }
-
-    return pContext;
-}
 
 namespace {
 

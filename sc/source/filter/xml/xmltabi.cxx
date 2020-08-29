@@ -210,35 +210,6 @@ ScXMLTableContext::~ScXMLTableContext()
 {
 }
 
-SvXMLImportContextRef ScXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const OUString& rLName,
-                                            const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttrList*/ )
-{
-    const SvXMLTokenMap& rTokenMap(GetScImport().GetTableElemTokenMap());
-    sal_uInt16 nToken = rTokenMap.Get(nPrefix, rLName);
-    if (pExternalRefInfo)
-    {
-        return new SvXMLImportContext(GetImport(), nPrefix, rLName);
-    }
-
-    SvXMLImportContext *pContext(nullptr);
-
-    switch (nToken)
-    {
-    case XML_TOK_TABLE_FORMS:
-        {
-            GetScImport().GetFormImport()->startPage(GetScImport().GetTables().GetCurrentXDrawPage());
-            bStartFormPage = true;
-            pContext = xmloff::OFormLayerXMLImport::createOfficeFormsContext( GetScImport(), nPrefix, rLName );
-        }
-        break;
-    default:
-        ;
-    }
-
-    return pContext;
-}
-
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
         ScXMLTableContext::createFastChildContext( sal_Int32 nElement,
         const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
@@ -337,6 +308,15 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
             pContext = new XMLEventsImportContext( GetImport(), xSupplier );
         }
         break;
+    case XML_ELEMENT(OFFICE, XML_FORMS):
+        {
+            GetScImport().GetFormImport()->startPage(GetScImport().GetTables().GetCurrentXDrawPage());
+            bStartFormPage = true;
+            pContext = xmloff::OFormLayerXMLImport::createOfficeFormsContext( GetScImport(), nElement );
+        }
+        break;
+    default:
+        SAL_WARN("sc", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
     }
 
     return pContext;

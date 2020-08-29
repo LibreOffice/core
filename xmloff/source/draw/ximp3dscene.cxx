@@ -100,12 +100,11 @@ SdXML3DLightContext::~SdXML3DLightContext()
 
 SdXML3DSceneShapeContext::SdXML3DSceneShapeContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
-    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes,
     bool bTemporaryShapes)
-:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShapes ), SdXML3DSceneAttributesHelper( rImport )
+:   SdXMLShapeContext( rImport, nElement, xAttrList, rShapes, bTemporaryShapes ), SdXML3DSceneAttributesHelper( rImport )
 {
 }
 
@@ -113,7 +112,9 @@ SdXML3DSceneShapeContext::~SdXML3DSceneShapeContext()
 {
 }
 
-void SdXML3DSceneShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+void SdXML3DSceneShapeContext::startFastElement(
+    sal_Int32 nElement,
+    const css::uno::Reference<xml::sax::XFastAttributeList> & xAttrList)
 {
     // create new 3DScene shape and add it to rShapes, use it
     // as base for the new 3DScene import
@@ -133,21 +134,16 @@ void SdXML3DSceneShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     }
 
     // read attributes for the 3DScene
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for(sal_Int16 i=0; i < nAttrCount; i++)
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-        OUString sValue = xAttrList->getValueByIndex( i );
-        processSceneAttribute( nPrefix, aLocalName, sValue );
+        processSceneAttribute( aIter.getToken(), aIter.toString() );
     }
 
     // #91047# call parent function is missing here, added it
     if(mxShape.is())
     {
         // call parent
-        SdXMLShapeContext::StartElement(xAttrList);
+        SdXMLShapeContext::startFastElement(nElement, xAttrList);
     }
 }
 
@@ -167,6 +163,34 @@ void SdXML3DSceneShapeContext::endFastElement(sal_Int32 nElement)
 
     // call parent
     SdXMLShapeContext::endFastElement(nElement);
+}
+
+css::uno::Reference< css::xml::sax::XFastContextHandler > SdXML3DSceneShapeContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+{
+    // #i68101#
+    if( nElement == XML_ELEMENT(SVG, XML_TITLE) ||
+        nElement == XML_ELEMENT(SVG, XML_DESC ) ||
+        nElement == XML_ELEMENT(SVG_COMPAT, XML_TITLE) ||
+        nElement == XML_ELEMENT(SVG_COMPAT, XML_DESC ) )
+    {
+    }
+    else if( nElement == XML_ELEMENT(OFFICE, XML_EVENT_LISTENERS) )
+    {
+    }
+    // look for local light context first
+    else if(nElement == XML_ELEMENT(DR3D, XML_LIGHT) )
+    {
+    }
+    else
+    {
+        // call GroupChildContext function at common ShapeImport
+        return XMLShapeImportHelper::Create3DSceneChildContext(
+            GetImport(), nElement, xAttrList, mxChildren);
+    }
+
+    return nullptr;
 }
 
 SvXMLImportContextRef SdXML3DSceneShapeContext::CreateChildContext( sal_uInt16 nPrefix,
@@ -190,13 +214,6 @@ SvXMLImportContextRef SdXML3DSceneShapeContext::CreateChildContext( sal_uInt16 n
     {
         // dr3d:light inside dr3d:scene context
         xContext = create3DLightContext( nPrefix, rLocalName, xAttrList );
-    }
-
-    // call GroupChildContext function at common ShapeImport
-    if (!xContext)
-    {
-        xContext = GetImport().GetShapeImport()->Create3DSceneChildContext(
-            GetImport(), nPrefix, rLocalName, xAttrList, mxChildren);
     }
 
     return xContext;
@@ -233,19 +250,20 @@ SvXMLImportContext * SdXML3DSceneAttributesHelper::create3DLightContext( sal_uIn
 }
 
 /** this should be called for each scene attribute */
-void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
+void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_Int32 nElement, const OUString& rValue )
 {
-    if( XML_NAMESPACE_DR3D != nPrefix )
+    if( IsTokenInNamespace(nElement, XML_NAMESPACE_DR3D) )
         return;
 
-    if( IsXMLToken( rLocalName, XML_TRANSFORM ) )
+    auto nToken = nElement & TOKEN_MASK;
+    if( nToken == XML_TRANSFORM )
     {
         SdXMLImExTransform3D aTransform(rValue, mrImport.GetMM100UnitConverter());
         if(aTransform.NeedsAction())
             mbSetTransform = aTransform.GetFullHomogenTransform(mxHomMat);
         return;
     }
-    else if( IsXMLToken( rLocalName, XML_VRP ) )
+    else if( nToken == XML_VRP )
     {
         ::basegfx::B3DVector aNewVec;
         SvXMLUnitConverter::convertB3DVector(aNewVec, rValue);
@@ -257,7 +275,7 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_uInt16 nPrefix, co
         }
         return;
     }
-    else if( IsXMLToken( rLocalName, XML_VPN ) )
+    else if( nToken == XML_VPN )
     {
         ::basegfx::B3DVector aNewVec;
         SvXMLUnitConverter::convertB3DVector(aNewVec, rValue);
@@ -269,7 +287,7 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_uInt16 nPrefix, co
         }
         return;
     }
-    else if( IsXMLToken( rLocalName, XML_VUP ) )
+    else if( nToken == XML_VUP )
     {
         ::basegfx::B3DVector aNewVec;
         SvXMLUnitConverter::convertB3DVector(aNewVec, rValue);
@@ -281,7 +299,7 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_uInt16 nPrefix, co
         }
         return;
     }
-    else if( IsXMLToken( rLocalName, XML_PROJECTION ) )
+    else if( nToken == XML_PROJECTION )
     {
         if( IsXMLToken( rValue, XML_PARALLEL ) )
             mxPrjMode = drawing::ProjectionMode_PARALLEL;
@@ -289,24 +307,24 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_uInt16 nPrefix, co
             mxPrjMode = drawing::ProjectionMode_PERSPECTIVE;
         return;
     }
-    else if( IsXMLToken( rLocalName, XML_DISTANCE ) )
+    else if( nToken == XML_DISTANCE )
     {
         mrImport.GetMM100UnitConverter().convertMeasureToCore(mnDistance,
                 rValue);
         return;
     }
-    else if( IsXMLToken( rLocalName, XML_FOCAL_LENGTH ) )
+    else if( nToken == XML_FOCAL_LENGTH )
     {
         mrImport.GetMM100UnitConverter().convertMeasureToCore(mnFocalLength,
                 rValue);
         return;
     }
-    else if( IsXMLToken( rLocalName, XML_SHADOW_SLANT ) )
+    else if( nToken == XML_SHADOW_SLANT )
     {
         ::sax::Converter::convertNumber(mnShadowSlant, rValue);
         return;
     }
-    else if( IsXMLToken( rLocalName, XML_SHADE_MODE ) )
+    else if( nToken == XML_SHADE_MODE )
     {
         if( IsXMLToken( rValue, XML_FLAT ) )
             mxShadeMode = drawing::ShadeMode_FLAT;
@@ -318,16 +336,18 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_uInt16 nPrefix, co
             mxShadeMode = drawing::ShadeMode_DRAFT;
         return;
     }
-    else if( IsXMLToken( rLocalName, XML_AMBIENT_COLOR ) )
+    else if( nToken == XML_AMBIENT_COLOR )
     {
         ::sax::Converter::convertColor(maAmbientColor, rValue);
         return;
     }
-    else if( IsXMLToken( rLocalName, XML_LIGHTING_MODE ) )
+    else if( nToken == XML_LIGHTING_MODE )
     {
         (void)::sax::Converter::convertBool(mbLightingMode, rValue);
         return;
     }
+    else
+        SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(nElement));
 }
 
 /** this sets the scene attributes at this propertyset */

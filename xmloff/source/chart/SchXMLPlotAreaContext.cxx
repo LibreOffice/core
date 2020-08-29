@@ -119,7 +119,7 @@ SchXML3DSceneAttributesHelper::~SchXML3DSceneAttributesHelper()
 
 SchXMLPlotAreaContext::SchXMLPlotAreaContext(
     SchXMLImportHelper& rImpHelper,
-    SvXMLImport& rImport, const OUString& rLocalName,
+    SvXMLImport& rImport, sal_Int32 /*nElement*/,
     const OUString& rXLinkHRefAttributeToIndicateDataProvider,
     OUString& rCategoriesAddress,
     OUString& rChartAddress,
@@ -132,7 +132,7 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext(
     const OUString& aChartTypeServiceName,
     tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
     const awt::Size & rChartSize ) :
-        SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
+        SvXMLImportContext( rImport ),
         mrImportHelper( rImpHelper ),
         mrCategoriesAddress( rCategoriesAddress ),
         mrSeriesDefaultsAndStyles( rSeriesDefaultsAndStyles ),
@@ -206,37 +206,35 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext(
 SchXMLPlotAreaContext::~SchXMLPlotAreaContext()
 {}
 
-void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+void SchXMLPlotAreaContext::startFastElement( sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     // parse attributes
-    sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-    const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetPlotAreaAttrTokenMap();
     uno::Reference< chart2::XChartDocument > xNewDoc( GetImport().GetModel(), uno::UNO_QUERY );
 
-    for( sal_Int16 i = 0; i < nAttrCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        OUString aValue = xAttrList->getValueByIndex( i );
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-
-        switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
+        OUString aValue = aIter.toString();
+        switch( aIter.getToken() )
         {
-            case XML_TOK_PA_X:
-            case XML_TOK_PA_Y:
-            case XML_TOK_PA_WIDTH:
-            case XML_TOK_PA_HEIGHT:
-                m_aOuterPositioning.readPositioningAttribute( nPrefix, aLocalName, aValue );
+            case XML_ELEMENT(SVG, XML_X):
+            case XML_ELEMENT(SVG_COMPAT, XML_X):
+            case XML_ELEMENT(SVG, XML_Y):
+            case XML_ELEMENT(SVG_COMPAT, XML_Y):
+            case XML_ELEMENT(SVG, XML_WIDTH):
+            case XML_ELEMENT(SVG_COMPAT, XML_WIDTH):
+            case XML_ELEMENT(SVG, XML_HEIGHT):
+            case XML_ELEMENT(SVG_COMPAT, XML_HEIGHT):
+                m_aOuterPositioning.readPositioningAttribute( nElement, aValue );
                 break;
-            case XML_TOK_PA_STYLE_NAME:
+            case XML_ELEMENT(CHART,  XML_STYLE_NAME):
                 msAutoStyleName = aValue;
                 break;
-            case XML_TOK_PA_CHART_ADDRESS:
+            case XML_ELEMENT(TABLE,  XML_CELL_RANGE_ADDRESS):
                 mrChartAddress = lcl_ConvertRange( aValue, xNewDoc );
                 // indicator for getting data from the outside
                 m_rbHasRangeAtPlotArea = true;
                 break;
-            case XML_TOK_PA_DS_HAS_LABELS:
+            case XML_ELEMENT(CHART,  XML_DATA_SOURCE_HAS_LABELS):
                 {
                     if( aValue == ::xmloff::token::GetXMLToken( ::xmloff::token::XML_BOTH ))
                         mrColHasLabels = mrRowHasLabels = true;
@@ -246,19 +244,21 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
                         mrColHasLabels = true;
                 }
                 break;
-            case XML_TOK_PA_TRANSFORM:
-            case XML_TOK_PA_VRP:
-            case XML_TOK_PA_VPN:
-            case XML_TOK_PA_VUP:
-            case XML_TOK_PA_PROJECTION:
-            case XML_TOK_PA_DISTANCE:
-            case XML_TOK_PA_FOCAL_LENGTH:
-            case XML_TOK_PA_SHADOW_SLANT:
-            case XML_TOK_PA_SHADE_MODE:
-            case XML_TOK_PA_AMBIENT_COLOR:
-            case XML_TOK_PA_LIGHTING_MODE:
-                maSceneImportHelper.processSceneAttribute( nPrefix, aLocalName, aValue );
+            case XML_ELEMENT(DR3D, XML_TRANSFORM):
+            case XML_ELEMENT(DR3D, XML_VRP):
+            case XML_ELEMENT(DR3D, XML_VPN):
+            case XML_ELEMENT(DR3D, XML_VUP):
+            case XML_ELEMENT(DR3D, XML_PROJECTION):
+            case XML_ELEMENT(DR3D, XML_DISTANCE):
+            case XML_ELEMENT(DR3D, XML_FOCAL_LENGTH):
+            case XML_ELEMENT(DR3D, XML_SHADOW_SLANT):
+            case XML_ELEMENT(DR3D, XML_SHADE_MODE):
+            case XML_ELEMENT(DR3D, XML_AMBIENT_COLOR):
+            case XML_ELEMENT(DR3D, XML_LIGHTING_MODE):
+                maSceneImportHelper.processSceneAttribute( nElement, aValue );
                 break;
+            default:
+                SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
         }
     }
 
@@ -399,6 +399,22 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
     }
 }
 
+css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLPlotAreaContext::createFastChildContext(
+    sal_Int32 nElement,
+    const uno::Reference< xml::sax::XFastAttributeList>& /*xAttrList*/ )
+{
+    switch (nElement)
+    {
+        case XML_ELEMENT(CHART_EXT, XML_COORDINATE_REGION):
+        case XML_ELEMENT(CHART, XML_COORDINATE_REGION):
+        {
+            return new SchXMLCoordinateRegionContext( GetImport(), nElement, m_aInnerPositioning );
+        }
+        break;
+    }
+    return nullptr;
+}
+
 SvXMLImportContextRef SchXMLPlotAreaContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
@@ -409,13 +425,6 @@ SvXMLImportContextRef SchXMLPlotAreaContext::CreateChildContext(
 
     switch( rTokenMap.Get( nPrefix, rLocalName ))
     {
-        case XML_TOK_PA_COORDINATE_REGION_EXT:
-        case XML_TOK_PA_COORDINATE_REGION:
-        {
-            pContext = new SchXMLCoordinateRegionContext( GetImport(), nPrefix, rLocalName, m_aInnerPositioning );
-        }
-        break;
-
         case XML_TOK_PA_AXIS:
         {
             bool bAddMissingXAxisForNetCharts = false;
@@ -821,35 +830,38 @@ bool SchXMLPositionAttributesHelper::isAutomatic() const
     return m_bAutoSize || m_bAutoPosition;
 }
 
-void SchXMLPositionAttributesHelper::readPositioningAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
+void SchXMLPositionAttributesHelper::readPositioningAttribute( sal_Int32 nElement, const OUString& rValue )
 {
-    if( XML_NAMESPACE_SVG != nPrefix )
+    if( !IsTokenInNamespace(nElement, XML_NAMESPACE_SVG) )
         return;
 
-    if( IsXMLToken( rLocalName, XML_X ) )
+    auto nToken = nElement & TOKEN_MASK;
+    if( nToken == XML_X )
     {
         m_rImport.GetMM100UnitConverter().convertMeasureToCore(
                 m_aPosition.X, rValue );
         m_bHasPositionX = true;
     }
-    else if( IsXMLToken( rLocalName, XML_Y ) )
+    else if( nToken == XML_Y )
     {
         m_rImport.GetMM100UnitConverter().convertMeasureToCore(
                 m_aPosition.Y, rValue );
         m_bHasPositionY = true;
     }
-    else if( IsXMLToken( rLocalName, XML_WIDTH ) )
+    else if( nToken == XML_WIDTH )
     {
         m_rImport.GetMM100UnitConverter().convertMeasureToCore(
                 m_aSize.Width, rValue );
         m_bHasSizeWidth = true;
     }
-    else if( IsXMLToken( rLocalName, XML_HEIGHT ) )
+    else if( nToken == XML_HEIGHT )
     {
         m_rImport.GetMM100UnitConverter().convertMeasureToCore(
                 m_aSize.Height, rValue );
         m_bHasSizeHeight = true;
     }
+    else
+        SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(nElement));
 }
 
 void SchXMLPositionAttributesHelper::readAutomaticPositioningProperties( XMLPropStyleContext const * pPropStyleContext, const SvXMLStylesContext* pStylesCtxt )
@@ -866,10 +878,9 @@ void SchXMLPositionAttributesHelper::readAutomaticPositioningProperties( XMLProp
 
 SchXMLCoordinateRegionContext::SchXMLCoordinateRegionContext(
           SvXMLImport& rImport
-        , sal_uInt16 nPrefix
-        , const OUString& rLocalName
+        , sal_Int32 /*nElement*/
         , SchXMLPositionAttributesHelper& rPositioning )
-        : SvXMLImportContext( rImport, nPrefix, rLocalName )
+        : SvXMLImportContext( rImport )
         , m_rPositioning( rPositioning )
 {
 }
@@ -878,19 +889,11 @@ SchXMLCoordinateRegionContext::~SchXMLCoordinateRegionContext()
 {
 }
 
-void SchXMLCoordinateRegionContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+void SchXMLCoordinateRegionContext::startFastElement( sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     // parse attributes
-    sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-
-    for( sal_Int16 i = 0; i < nAttrCount; i++ )
-    {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        OUString aValue = xAttrList->getValueByIndex( i );
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-        m_rPositioning.readPositioningAttribute( nPrefix, aLocalName, aValue );
-    }
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
+        m_rPositioning.readPositioningAttribute( aIter.getToken(), aIter.toString() );
 }
 
 SchXMLWallFloorContext::SchXMLWallFloorContext(

@@ -40,18 +40,20 @@ namespace xmloff
     {
     public:
 
-        OFormsRootImport( SvXMLImport& _rImport, sal_uInt16 _nPrfx, const OUString& _rLocalName);
+        OFormsRootImport( SvXMLImport& _rImport, sal_Int32 nElement);
         virtual ~OFormsRootImport() override;
 
         // SvXMLImportContext overridable
-        virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
-            const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
-        virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList ) override;
+        virtual void SAL_CALL startFastElement(
+            sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList) override;
         virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     private:
-        void implImportBool(
-            const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttributes,
+        static void implImportBool(
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& _rxAttributes,
             OfficeFormsAttributes _eAttribute,
             const css::uno::Reference< css::beans::XPropertySet >& _rxProps,
             const css::uno::Reference< css::beans::XPropertySetInfo >& _rxPropInfo,

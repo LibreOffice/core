@@ -33,22 +33,20 @@ class SvXMLImport;
 class SvXMLImportContext;
 
 /** import the xforms:model element */
-class XFormsModelContext : public TokenContext
+class XFormsModelContext : public TokenContext2
 {
     css::uno::Reference<css::xforms::XModel2> mxModel;
 
 public:
-    XFormsModelContext( SvXMLImport& rImport,
-                        sal_uInt16 nPrfx,
-                        const OUString& rLName );
+    XFormsModelContext( SvXMLImport& rImport );
 
     // implement SvXMLImportContext & TokenContext methods:
 
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
 protected:
-    virtual void HandleAttribute(
-        sal_uInt16 nToken,
+    virtual bool HandleAttribute(
+        sal_Int32 nElement,
         const OUString& rValue ) override;
 
     virtual SvXMLImportContext* HandleChild(

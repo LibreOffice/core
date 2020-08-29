@@ -39,10 +39,11 @@ namespace xmloff
     using namespace ::com::sun::star::xml;
     using ::xmloff::token::XML_FORMS;
     using ::com::sun::star::xml::sax::XAttributeList;
+    using ::com::sun::star::xml::sax::XFastAttributeList;
 
     //= OFormsRootImport
-    OFormsRootImport::OFormsRootImport( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName )
-        :SvXMLImportContext(rImport, nPrfx, rLocalName)
+    OFormsRootImport::OFormsRootImport( SvXMLImport& rImport, sal_Int32 /*nElement*/ )
+        :SvXMLImportContext(rImport)
     {
     }
 
@@ -50,13 +51,14 @@ namespace xmloff
     {
     }
 
-    SvXMLImportContextRef OFormsRootImport::CreateChildContext( sal_uInt16 _nPrefix, const OUString& _rLocalName,
-            const Reference< XAttributeList>& xAttrList )
+    css::uno::Reference< css::xml::sax::XFastContextHandler > OFormsRootImport::createFastChildContext(
+        sal_Int32 _nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList )
     {
         SvXMLImportContext* pRet = nullptr;
         try
         {
-            pRet = GetImport().GetFormImport()->createContext( _nPrefix, _rLocalName, xAttrList );
+            pRet = GetImport().GetFormImport()->createContext( _nElement, xAttrList );
         } catch (const Exception&)
         {
             DBG_UNHANDLED_EXCEPTION("xmloff.forms");
@@ -64,17 +66,17 @@ namespace xmloff
         return pRet;
     }
 
-    void OFormsRootImport::implImportBool(const Reference< XAttributeList >& _rxAttributes, OfficeFormsAttributes _eAttribute,
+    void OFormsRootImport::implImportBool(const Reference< XFastAttributeList >& _rxAttributes, OfficeFormsAttributes _eAttribute,
             const Reference< XPropertySet >& _rxProps, const Reference< XPropertySetInfo >& _rxPropInfo,
             const OUString& _rPropName, bool _bDefault)
     {
         // the complete attribute name to look for
-        OUString sCompleteAttributeName = GetImport().GetNamespaceMap().GetQNameByIndex(
-            OAttributeMetaData::getOfficeFormsAttributeNamespace(),
-            OUString::createFromAscii(OAttributeMetaData::getOfficeFormsAttributeName(_eAttribute)));
+        sal_Int32 nCompleteAttributeName = XML_ELEMENT(
+            FORM,
+            OAttributeMetaData::getOfficeFormsAttributeToken(_eAttribute));
 
         // get and convert the value
-        OUString sAttributeValue = _rxAttributes->getValueByName(sCompleteAttributeName);
+        OUString sAttributeValue = _rxAttributes->getOptionalValue(nCompleteAttributeName);
         bool bValue = _bDefault;
         (void)::sax::Converter::convertBool(bValue, sAttributeValue);
 
@@ -85,7 +87,7 @@ namespace xmloff
         }
     }
 
-    void OFormsRootImport::StartElement( const Reference< XAttributeList >& _rxAttrList )
+    void OFormsRootImport::startFastElement( sal_Int32 /*nElement*/, const Reference< XFastAttributeList >& _rxAttrList )
     {
         ENTER_LOG_CONTEXT( "xmloff::OFormsRootImport - importing the complete tree" );
 

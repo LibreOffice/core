@@ -61,28 +61,28 @@ const SvXMLTokenMapEntry aChildren[] =
 };
 
 
-XFormsModelContext::XFormsModelContext( SvXMLImport& rImport,
-                                        sal_uInt16 nPrefix,
-                                        const OUString& rLocalName ) :
-    TokenContext( rImport, nPrefix, rLocalName, aAttributes, aChildren ),
+XFormsModelContext::XFormsModelContext( SvXMLImport& rImport ) :
+    TokenContext2( rImport, aChildren ),
     mxModel( xforms_createXFormsModel() )
 {
 }
 
-void XFormsModelContext::HandleAttribute(
-    sal_uInt16 nToken,
+bool XFormsModelContext::HandleAttribute(
+    sal_Int32 nElement,
     const OUString& rValue )
 {
-    switch( nToken )
+    switch( nElement )
     {
-    case XML_ID:
+    case XML_ELEMENT(NONE, XML_ID):
         mxModel->setPropertyValue( "ID", makeAny( rValue ) );
+        return true;
         break;
-    case XML_SCHEMA:
+    case XML_ELEMENT(NONE, XML_SCHEMA):
         GetImport().SetError( XMLERROR_XFORMS_NO_SCHEMA_SUPPORT );
+        return true;
         break;
     default:
-        OSL_FAIL( "this should not happen" );
+        return false;
         break;
     }
 }
