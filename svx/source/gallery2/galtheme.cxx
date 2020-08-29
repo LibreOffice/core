@@ -71,7 +71,8 @@ GalleryTheme::GalleryTheme( Gallery* pGallery, GalleryThemeEntry* pThemeEntry )
     , bDragging(false)
     , bAbortActualize(false)
 {
-    mpGalleryStorageEngine = createGalleryStorageEngine(IsReadOnly());
+    bool bReadOnly = IsReadOnly();
+    mpGalleryStorageEngine = pThm->createGalleryStorageEngine(maGalleryObjectCollection, bReadOnly);
 }
 
 GalleryTheme::~GalleryTheme()
@@ -92,12 +93,6 @@ GalleryTheme::~GalleryTheme()
 void GalleryTheme::SetDestDir(const OUString& rDestDir, bool bRelative)
 {
     mpGalleryStorageEngine->setDestDir(rDestDir, bRelative);
-}
-
-std::unique_ptr<GalleryBinaryEngine> GalleryTheme::createGalleryStorageEngine(bool bReadOnly)
-{
-    std::unique_ptr<GalleryBinaryEngine> pGalleryBinaryEngine = std::make_unique<GalleryBinaryEngine>(dynamic_cast<GalleryBinaryStorageLocations&>(pThm->getGalleryStorageLocations()), maGalleryObjectCollection, bReadOnly);
-    return pGalleryBinaryEngine;
 }
 
 void GalleryTheme::ImplBroadcast(sal_uInt32 nUpdatePos)

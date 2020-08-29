@@ -28,6 +28,8 @@
 #include <svx/galleryfilestorageentry.hxx>
 
 class GalleryBinaryStorageLocations;
+class GalleryObjectCollection;
+class GalleryBinaryEngine;
 
 class GalleryBinaryEngineEntry : public GalleryFileStorageEntry
 {
@@ -55,6 +57,9 @@ public:
     void removeTheme();
 
     std::unique_ptr<GalleryTheme>& getCachedTheme(std::unique_ptr<GalleryTheme>& pNewTheme);
+
+    std::unique_ptr<GalleryBinaryEngine>
+    createGalleryStorageEngine(GalleryObjectCollection& mrGalleryObjectCollection, bool& bReadOnly);
 };
 
 SvStream& ReadGalleryTheme(SvStream& rIn, GalleryTheme& rTheme);

@@ -68,7 +68,6 @@ private:
     bool                        bDragging;
     bool                        bAbortActualize;
 
-    std::unique_ptr<GalleryBinaryEngine> createGalleryStorageEngine(bool bReadOnly);
     const std::unique_ptr<GalleryBinaryEngine>& getGalleryStorageEngine() const { return mpGalleryStorageEngine; }
 
     SAL_DLLPRIVATE void         ImplSetModified( bool bModified );
