@@ -418,8 +418,49 @@ void XMLShapeImportHelper::SetAutoStylesContext(SvXMLStylesContext* pNew)
 
 SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
     SvXMLImport& rImport,
-    sal_uInt16 p_nPrefix,
-    const OUString& rLocalName,
+    sal_Int32 nElement,
+    const uno::Reference< xml::sax::XFastAttributeList>& xAttrList,
+    uno::Reference< drawing::XShapes > const & rShapes,
+    bool bTemporaryShape)
+{
+    SdXMLShapeContext *pContext = nullptr;
+    switch (nElement)
+    {
+        case XML_ELEMENT(DRAW, XML_G):
+            // draw:g inside group context (RECURSIVE)
+            pContext = new SdXMLGroupShapeContext( rImport, nElement, xAttrList, rShapes, bTemporaryShape);
+            break;
+        case XML_ELEMENT(DRAW, XML_A):
+            return new SdXMLShapeLinkContext( rImport, nElement, xAttrList, rShapes );
+            break;
+        case XML_ELEMENT(CHART, XML_CHART):
+        {
+            // chart:chart inside group context
+            pContext = new SdXMLChartShapeContext( rImport, nElement, xAttrList, rShapes, bTemporaryShape );
+            break;
+        }
+        default: break;
+    }
+    if (!pContext)
+        return CreateGroupChildContext(rImport, convert(nElement), convert(nElement), convert(xAttrList),
+            rShapes, bTemporaryShape);
+
+    // now parse the attribute list and call the child context for each unknown attribute
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
+    {
+//        const OUString& rAttrName = xAttrList->getNameByIndex(a);
+//        OUString aLocalName;
+//        sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName(rAttrName, &aLocalName);
+        OUString aLocalName;
+        sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName(aIter.getToken(), &aLocalName);
+
+        pContext->processAttribute( nPrefix, aLocalName, aIter.toString() );
+    }
+}
+
+SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
+    SvXMLImport& rImport,
+    sal_uInt16 p_nPrefix, const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes,
     bool bTemporaryShape)
@@ -427,16 +468,9 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
     SdXMLShapeContext *pContext = nullptr;
 
     const SvXMLTokenMap& rTokenMap = GetGroupShapeElemTokenMap();
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
 
     switch(rTokenMap.Get(p_nPrefix, rLocalName))
     {
-        case XML_TOK_GROUP_GROUP:
-        {
-            // draw:g inside group context (RECURSIVE)
-            pContext = new SdXMLGroupShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape);
-            break;
-        }
         case XML_TOK_GROUP_3DSCENE:
         {
             // dr3d:3dscene inside group context
@@ -513,28 +547,19 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
             pContext = new SdXMLCaptionShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape );
             break;
         }
-        case XML_TOK_GROUP_CHART:
-        {
-            // chart:chart inside group context
-            pContext = new SdXMLChartShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, bTemporaryShape );
-            break;
-        }
         case XML_TOK_GROUP_CUSTOM_SHAPE:
         {
             // draw:customshape
             pContext = new SdXMLCustomShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes );
             break;
         }
-         case XML_TOK_GROUP_A:
-         {
-             return new SdXMLShapeLinkContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes );
-         }
         // add other shapes here...
         default:
             return new SvXMLShapeContext( rImport, p_nPrefix, rLocalName, bTemporaryShape );
     }
 
     // now parse the attribute list and call the child context for each unknown attribute
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 a(0); a < nAttrCount; a++)
     {
         const OUString& rAttrName = xAttrList->getNameByIndex(a);
