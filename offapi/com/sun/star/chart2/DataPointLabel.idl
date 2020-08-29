@@ -57,6 +57,13 @@ struct DataPointLabel
         caption.
      */
     boolean                     ShowLegendSymbol;
+
+    /** The caption contains a custom label text, which belongs
+        to a data point label.
+
+        @since LibreOffice 7.1
+     */
+    boolean                     ShowCustomLabel;
 };
 
 

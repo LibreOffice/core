@@ -170,6 +170,7 @@ void lcl_insertOrDeleteDataLabelsToSeriesAndAllPoints( const Reference< chart2::
                         {
                             aLabel.ShowNumberInPercent = false;
                             aLabel.ShowCategoryName = false;
+                            aLabel.ShowCustomLabel = false;
                         }
                         xPointProp->setPropertyValue(CHART_UNONAME_LABEL, uno::Any(aLabel));
                     }
@@ -746,7 +747,7 @@ bool hasDataLabelsAtPoints( const Reference< chart2::XDataSeries >& xSeries )
                     {
                         DataPointLabel aLabel;
                         if( xPointProp->getPropertyValue(CHART_UNONAME_LABEL) >>= aLabel )
-                            bRet = aLabel.ShowNumber || aLabel.ShowNumberInPercent || aLabel.ShowCategoryName;
+                            bRet = aLabel.ShowNumber || aLabel.ShowNumberInPercent || aLabel.ShowCategoryName || aLabel.ShowCustomLabel;
                         if( bRet )
                             break;
                     }
@@ -784,7 +785,7 @@ bool hasDataLabelAtPoint( const Reference< chart2::XDataSeries >& xSeries, sal_I
             {
                 DataPointLabel aLabel;
                 if( xProp->getPropertyValue(CHART_UNONAME_LABEL) >>= aLabel )
-                    bRet = aLabel.ShowNumber || aLabel.ShowNumberInPercent || aLabel.ShowCategoryName;
+                    bRet = aLabel.ShowNumber || aLabel.ShowNumberInPercent || aLabel.ShowCategoryName || aLabel.ShowCustomLabel;
             }
         }
     }
@@ -834,6 +835,7 @@ void deleteDataLabelsFromPoint( const Reference< beans::XPropertySet >& xPointPr
             aLabel.ShowNumber = false;
             aLabel.ShowNumberInPercent = false;
             aLabel.ShowCategoryName = false;
+            aLabel.ShowCustomLabel = false;
             xPointProp->setPropertyValue(CHART_UNONAME_LABEL, uno::Any(aLabel));
         }
     }
