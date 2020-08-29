@@ -365,6 +365,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/bitmap/BitmapSeparableUnsharpenFilter \
     vcl/source/bitmap/BitmapFastScaleFilter \
     vcl/source/bitmap/BitmapScaleSuperFilter \
+    vcl/source/bitmap/BitmapComboScaleFilter \
     vcl/source/bitmap/BitmapScaleConvolutionFilter \
     vcl/source/bitmap/BitmapSymmetryCheck \
     vcl/source/bitmap/BitmapColorQuantizationFilter \
@@ -372,6 +373,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/bitmap/BitmapTools \
     vcl/source/bitmap/Octree \
     vcl/source/bitmap/salbmp \
+    vcl/source/bitmap/ScanlineHalfScaler \
     vcl/source/image/Image \
     vcl/source/image/ImageTree \
     vcl/source/image/ImageRepository \

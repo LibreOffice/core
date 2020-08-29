@@ -65,7 +65,8 @@ enum class BmpScaleFlag
     Interpolate, // fast, integer bilinear
     Lanczos,
     BiCubic,
-    BiLinear
+    BiLinear,
+    Combo
 };
 
 #define BMP_COL_TRANS               Color( 252, 3, 251 )

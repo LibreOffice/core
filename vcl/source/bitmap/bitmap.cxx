@@ -36,6 +36,7 @@
 #endif
 #include <vcl/BitmapMonochromeFilter.hxx>
 
+#include <BitmapComboScaleFilter.hxx>
 #include <bitmap/BitmapScaleSuperFilter.hxx>
 #include <bitmap/BitmapScaleConvolutionFilter.hxx>
 #include <bitmap/BitmapFastScaleFilter.hxx>
@@ -1282,6 +1283,10 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
 
         case BmpScaleFlag::BiLinear:
             bRetval = BitmapFilter::Filter(aBmpEx, vcl::BitmapScaleBilinearFilter(rScaleX, rScaleY));
+            break;
+
+        case BmpScaleFlag::Combo:
+            bRetval = BitmapFilter::Filter(aBmpEx, vcl::BitmapComboScaleFilter(rScaleX, rScaleY));
             break;
     }
 
