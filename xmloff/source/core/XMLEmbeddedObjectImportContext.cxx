@@ -24,6 +24,7 @@
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XModifiable2.hpp>
+#include <sal/log.hxx>
 #include <tools/globname.hxx>
 #include <comphelper/classids.hxx>
 #include <xmloff/namespacemap.hxx>
@@ -46,63 +47,57 @@ namespace {
 
 class XMLEmbeddedObjectImportContext_Impl : public SvXMLImportContext
 {
-    css::uno::Reference< css::xml::sax::XDocumentHandler > xHandler;
+    css::uno::Reference< css::xml::sax::XFastDocumentHandler > mxHandler;
 
 public:
 
-    XMLEmbeddedObjectImportContext_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                    const OUString& rLName,
-    const css::uno::Reference< css::xml::sax::XDocumentHandler >& rHandler );
+    XMLEmbeddedObjectImportContext_Impl( SvXMLImport& rImport,
+                        const css::uno::Reference< css::xml::sax::XFastDocumentHandler >& rHandler );
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-                                   const OUString& rLocalName,
-                                   const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
-    virtual void Characters( const OUString& rChars ) override;
+    virtual void SAL_CALL characters( const OUString& rChars ) override;
 };
 
 }
 
 XMLEmbeddedObjectImportContext_Impl::XMLEmbeddedObjectImportContext_Impl(
-        SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const Reference< XDocumentHandler >& rHandler ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
-    xHandler( rHandler )
+        SvXMLImport& rImport,
+        const css::uno::Reference< css::xml::sax::XFastDocumentHandler >& rHandler ) :
+    SvXMLImportContext( rImport ),
+    mxHandler( rHandler )
 {
 }
 
-SvXMLImportContextRef XMLEmbeddedObjectImportContext_Impl::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< XAttributeList >& )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLEmbeddedObjectImportContext_Impl::createFastChildContext(
+        sal_Int32 /*nElement*/,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
-    return new XMLEmbeddedObjectImportContext_Impl( GetImport(),
-                                                    nPrefix, rLocalName,
-                                                    xHandler );
+    return new XMLEmbeddedObjectImportContext_Impl( GetImport(), mxHandler );
 }
 
-void XMLEmbeddedObjectImportContext_Impl::StartElement(
-        const Reference< XAttributeList >& xAttrList )
+void XMLEmbeddedObjectImportContext_Impl::startFastElement(
+        sal_Int32 nElement,
+        const Reference< XFastAttributeList >& xAttrList )
 {
-    xHandler->startElement( GetImport().GetNamespaceMap().GetQNameByKey(
-                                GetPrefix(), GetLocalName() ),
-                            xAttrList );
+    mxHandler->startFastElement( nElement, xAttrList );
 }
 
-void XMLEmbeddedObjectImportContext_Impl::EndElement()
+void XMLEmbeddedObjectImportContext_Impl::endFastElement(sal_Int32 nElement)
 {
-    xHandler->endElement( GetImport().GetNamespaceMap().GetQNameByKey(
-                                GetPrefix(), GetLocalName() ) );
+    mxHandler->endFastElement( nElement );
 }
 
-void XMLEmbeddedObjectImportContext_Impl::Characters( const OUString& rChars )
+void XMLEmbeddedObjectImportContext_Impl::characters( const OUString& rChars )
 {
-    xHandler->characters( rChars );
+    mxHandler->characters( rChars );
 }
 
 
@@ -115,15 +110,20 @@ void XMLEmbeddedObjectImportContext::SetComponent( Reference< XComponent > const
 
     Reference< XComponentContext > xContext( GetImport().GetComponentContext() );
 
-    xHandler.set(
-        xContext->getServiceManager()->createInstanceWithArgumentsAndContext(sFilterService, aArgs, xContext),
-        UNO_QUERY);
+    Reference<XInterface> xInstance =
+        xContext->getServiceManager()->createInstanceWithArgumentsAndContext(sFilterService, aArgs, xContext);
 
-    if( !xHandler.is() )
+    if( !xInstance.is() )
         return;
 
-    if (SvXMLImport *pFastHandler = dynamic_cast<SvXMLImport*>(xHandler.get()))
-        xHandler.set( new SvXMLLegacyToFastDocHandler( pFastHandler ) );
+    mxHandler.set(xInstance, UNO_QUERY);
+
+    assert(mxHandler);
+
+    if( !mxHandler.is() )
+        return;
+
+    assert(dynamic_cast<SvXMLImport*>(mxHandler.get()));
 
     try
     {
@@ -134,41 +134,37 @@ void XMLEmbeddedObjectImportContext::SetComponent( Reference< XComponent > const
     {
     }
 
-    Reference < XImporter > xImporter( xHandler, UNO_QUERY );
+    Reference < XImporter > xImporter( mxHandler, UNO_QUERY );
     xImporter->setTargetDocument( rComp );
 
     xComp = rComp;  // keep ref to component only if there is a handler
 }
 
 XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
-        SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< XAttributeList >& xAttrList ) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+        SvXMLImport& rImport, sal_Int32 nElement,
+        const Reference< XFastAttributeList >& xAttrList ) :
+    SvXMLImportContext( rImport )
 {
     SvGlobalName aName;
 
-    if( nPrfx == XML_NAMESPACE_MATH &&
-        IsXMLToken( rLName, XML_MATH ) )
+    if( nElement == XML_ELEMENT(MATH, XML_MATH) )
     {
         sFilterService = XML_IMPORT_FILTER_MATH;
         aName = SvGlobalName(SO3_SM_CLASSID);
     }
-    else if( nPrfx == XML_NAMESPACE_OFFICE &&
-        IsXMLToken( rLName, XML_DOCUMENT ) )
+    else if( nElement == XML_ELEMENT(OFFICE, XML_DOCUMENT) )
     {
         OUString sMime;
 
-        sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-        for( sal_Int16 i=0; i < nAttrCount; i++ )
+        for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
         {
-            const OUString& rAttrName = xAttrList->getNameByIndex( i );
-            OUString aLocalName;
-            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
-            if( nPrefix == XML_NAMESPACE_OFFICE &&
-                IsXMLToken( aLocalName, XML_MIMETYPE ) )
+            switch (aIter.getToken())
             {
-                sMime = xAttrList->getValueByIndex( i );
-                break;
+                case XML_ELEMENT(OFFICE, XML_MIMETYPE):
+                    sMime = aIter.toString();
+                    break;
+                default:
+                    SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
             }
         }
 
@@ -230,52 +226,34 @@ XMLEmbeddedObjectImportContext::~XMLEmbeddedObjectImportContext()
 {
 }
 
-SvXMLImportContextRef XMLEmbeddedObjectImportContext::CreateChildContext(
-        sal_uInt16 nPrefix, const OUString& rLocalName,
-        const Reference< XAttributeList >& )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLEmbeddedObjectImportContext::createFastChildContext(
+        sal_Int32 /*nElement*/,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
-    if( xHandler.is() )
+    if( mxHandler.is() )
         return new XMLEmbeddedObjectImportContext_Impl( GetImport(),
-                                                        nPrefix, rLocalName,
-                                                        xHandler );
+                                                        mxHandler );
     return nullptr;
 }
 
-void XMLEmbeddedObjectImportContext::StartElement(
-        const Reference< XAttributeList >& rAttrList )
+void XMLEmbeddedObjectImportContext::startFastElement(
+        sal_Int32 nElement, const Reference< XFastAttributeList >& xAttrList )
 {
-    if( !xHandler.is() )
+    if( !mxHandler.is() )
         return;
 
-    xHandler->startDocument();
-    // #i34042: copy namepspace declarations
-    SvXMLAttributeList *pAttrList = new SvXMLAttributeList( rAttrList );
-    Reference< XAttributeList > xAttrList( pAttrList );
-    const SvXMLNamespaceMap& rNamespaceMap = GetImport().GetNamespaceMap();
-    sal_uInt16 nPos = rNamespaceMap.GetFirstKey();
-    while( USHRT_MAX != nPos )
-    {
-        OUString aAttrName( rNamespaceMap.GetAttrNameByKey( nPos ) );
-        if( xAttrList->getValueByName( aAttrName ).isEmpty() )
-        {
-            pAttrList->AddAttribute( aAttrName,
-                                      rNamespaceMap.GetNameByKey( nPos ) );
-        }
-        nPos = rNamespaceMap.GetNextKey( nPos );
-    }
-    xHandler->startElement( GetImport().GetNamespaceMap().GetQNameByKey(
-                                GetPrefix(), GetLocalName() ),
-                            xAttrList );
+    mxHandler->startDocument();
+
+    mxHandler->startFastElement( nElement, xAttrList );
 }
 
-void XMLEmbeddedObjectImportContext::EndElement()
+void XMLEmbeddedObjectImportContext::endFastElement(sal_Int32 nElement)
 {
-    if( !xHandler.is() )
+    if( !mxHandler.is() )
         return;
 
-    xHandler->endElement( GetImport().GetNamespaceMap().GetQNameByKey(
-                                GetPrefix(), GetLocalName() ) );
-    xHandler->endDocument();
+    mxHandler->endFastElement( nElement );
+    mxHandler->endDocument();
 
     try
     {
@@ -288,10 +266,10 @@ void XMLEmbeddedObjectImportContext::EndElement()
     }
 }
 
-void XMLEmbeddedObjectImportContext::Characters( const OUString& rChars )
+void XMLEmbeddedObjectImportContext::characters( const OUString& rChars )
 {
-    if( xHandler.is() )
-        xHandler->characters( rChars );
+    if( mxHandler.is() )
+        mxHandler->characters( rChars );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -88,6 +88,57 @@ protected:
         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) = 0;
 };
 
+/** handle attributes through an SvXMLTokenMap */
+class TokenContext2 : public SvXMLImportContext
+{
+protected:
+    const SvXMLTokenMapEntry* mpChildren;      /// static token map
+
+public:
+    TokenContext2( SvXMLImport& rImport,
+                  const SvXMLTokenMapEntry* pChildren );
+
+    // implement SvXMLImportContext methods:
+
+    /** call HandleAttribute for each attribute in the token map;
+     * create a warning for all others. Classes that wish to override
+     * StartElement need to call the parent method. */
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) override;
+
+    /** call HandleChild for each child element in the token map;
+     * create a warning for all others. Classes that wish to override
+     * CreateChildContext may want to call the parent method for
+     * handling of defaults. */
+    virtual SvXMLImportContextRef CreateChildContext(
+        sal_uInt16 nPrefix,
+        const OUString& rLocalName,
+        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
+
+    /** Create a warning for all non-namespace character
+     * content. Classes that wish to deal with character content have
+     * to override this method anyway, and will thus get rid of the
+     * warnings. */
+    virtual void SAL_CALL characters( const OUString& rChars ) override;
+
+protected:
+    /** will be called for each attribute */
+    virtual bool HandleAttribute(
+        sal_Int32 nElement,
+        const OUString& rValue ) = 0;
+
+    /** will be called for each child element */
+    virtual SvXMLImportContext* HandleChild(
+        sal_uInt16 nToken,
+
+        // the following attributes are mainly to be used for child
+        // context creation
+        sal_uInt16 nPrefix,
+        const OUString& rLocalName,
+        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) = 0;
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
