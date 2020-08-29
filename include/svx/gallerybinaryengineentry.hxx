@@ -45,7 +45,6 @@ public:
     const INetURLObject& GetSdvURL() const { return mpGalleryStorageLocations->GetSdvURL(); }
     const INetURLObject& GetStrURL() const { return mpGalleryStorageLocations->GetStrURL(); }
 
-    std::unique_ptr<GalleryBinaryStorageLocations> createGalleryStorageLocations();
     GalleryStorageLocations& getGalleryStorageLocations() const
     {
         return dynamic_cast<GalleryStorageLocations&>(*(mpGalleryStorageLocations.get()));
