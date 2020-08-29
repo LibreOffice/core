@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "aa1f1a61_e7667ecc",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 5994,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2020-08-29T06:38:18Z",
+      "side": 1,
+      "message": "You can keep pAnchor const. Its original type means \"let pAnchor be a non-const pointer to a const object\", which is what GetContentAnchor returns. And then you won\u0027t need the cast either. :)",
+      "parentUuid": "0c2b7776_1e171e08",
+      "revId": "e680860d9640ab9befa463a64847f57aba20cbb7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9e025683_4e768890",
         "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
         "patchSetId": 5
@@ -136,6 +154,24 @@
       "side": 1,
       "message": "Im not sure about it, see this issue...",
       "parentUuid": "9e025683_4e768890",
+      "revId": "e680860d9640ab9befa463a64847f57aba20cbb7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48359869_4d712afc",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 5997,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2020-08-29T06:38:18Z",
+      "side": 1,
+      "message": "Doesn\u0027t your fix above make sure that we have a valid pAnchor in either case?",
+      "parentUuid": "47604b10_ab9a2548",
       "revId": "e680860d9640ab9befa463a64847f57aba20cbb7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
