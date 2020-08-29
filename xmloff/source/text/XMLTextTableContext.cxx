@@ -24,9 +24,8 @@ using namespace ::com::sun::star::uno;
 
 
 XMLTextTableContext::XMLTextTableContext(
-        SvXMLImport& rImport,
-        sal_uInt16 nPrfx, const OUString& rLName ) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+        SvXMLImport& rImport ) :
+    SvXMLImportContext( rImport )
 {
 }
 

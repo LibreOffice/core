@@ -58,6 +58,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::sdb;
+using namespace token;
 
 //= OFormLayerXMLImport_Impl
 OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
@@ -66,27 +67,27 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
     // build the attribute2property map
     // string properties which are exported as attributes
     m_aAttributeMetaData.addStringProperty(
-        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Name), PROPERTY_NAME);
+        OAttributeMetaData::getCommonControlAttributeToken(CCAFlags::Name), PROPERTY_NAME);
     m_aAttributeMetaData.addStringProperty(
-        OAttributeMetaData::getSpecialAttributeName(SCAFlags::GroupName), PROPERTY_GROUP_NAME);
+        OAttributeMetaData::getSpecialAttributeToken(SCAFlags::GroupName), PROPERTY_GROUP_NAME);
     m_aAttributeMetaData.addStringProperty(
-        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Label), PROPERTY_LABEL);
+        OAttributeMetaData::getCommonControlAttributeToken(CCAFlags::Label), PROPERTY_LABEL);
     m_aAttributeMetaData.addStringProperty(
-        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::TargetLocation), PROPERTY_TARGETURL);
+        OAttributeMetaData::getCommonControlAttributeToken(CCAFlags::TargetLocation), PROPERTY_TARGETURL);
     m_aAttributeMetaData.addStringProperty(
-        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Title), PROPERTY_TITLE);
+        OAttributeMetaData::getCommonControlAttributeToken(CCAFlags::Title), PROPERTY_TITLE);
     m_aAttributeMetaData.addStringProperty(
-        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::TargetFrame), PROPERTY_TARGETFRAME);
+        OAttributeMetaData::getCommonControlAttributeToken(CCAFlags::TargetFrame), PROPERTY_TARGETFRAME);
     m_aAttributeMetaData.addStringProperty(
-        OAttributeMetaData::getDatabaseAttributeName(DAFlags::DataField), PROPERTY_DATAFIELD);
+        OAttributeMetaData::getDatabaseAttributeToken(DAFlags::DataField), PROPERTY_DATAFIELD);
     m_aAttributeMetaData.addStringProperty(
-        OAttributeMetaData::getFormAttributeName(faCommand), PROPERTY_COMMAND);
+        OAttributeMetaData::getFormAttributeToken(faCommand), PROPERTY_COMMAND);
     m_aAttributeMetaData.addStringProperty(
-        OAttributeMetaData::getFormAttributeName(faDatasource), PROPERTY_DATASOURCENAME);
+        OAttributeMetaData::getFormAttributeToken(faDatasource), PROPERTY_DATASOURCENAME);
     m_aAttributeMetaData.addStringProperty(
-        OAttributeMetaData::getFormAttributeName(faFilter), PROPERTY_FILTER);
+        OAttributeMetaData::getFormAttributeToken(faFilter), PROPERTY_FILTER);
     m_aAttributeMetaData.addStringProperty(
-        OAttributeMetaData::getFormAttributeName(faOrder), PROPERTY_ORDER);
+        OAttributeMetaData::getFormAttributeToken(faOrder), PROPERTY_ORDER);
 
     // properties not added because they're already present in another form
     OSL_ENSURE(
@@ -105,108 +106,108 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
 
     // boolean properties which are exported as attributes
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::CurrentSelected), PROPERTY_STATE, false);
+        OAttributeMetaData::getCommonControlAttributeToken(CCAFlags::CurrentSelected), PROPERTY_STATE, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Disabled), PROPERTY_ENABLED, false, true);
+        OAttributeMetaData::getCommonControlAttributeToken(CCAFlags::Disabled), PROPERTY_ENABLED, false, true);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Dropdown), PROPERTY_DROPDOWN, false);
+        OAttributeMetaData::getCommonControlAttributeToken(CCAFlags::Dropdown), PROPERTY_DROPDOWN, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Printable), PROPERTY_PRINTABLE, true);
+        OAttributeMetaData::getCommonControlAttributeToken(CCAFlags::Printable), PROPERTY_PRINTABLE, true);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::ReadOnly), PROPERTY_READONLY, false);
+        OAttributeMetaData::getCommonControlAttributeToken(CCAFlags::ReadOnly), PROPERTY_READONLY, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Selected), PROPERTY_DEFAULT_STATE, false);
+        OAttributeMetaData::getCommonControlAttributeToken(CCAFlags::Selected), PROPERTY_DEFAULT_STATE, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::TabStop), PROPERTY_TABSTOP, true);
+        OAttributeMetaData::getCommonControlAttributeToken(CCAFlags::TabStop), PROPERTY_TABSTOP, true);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getDatabaseAttributeName(DAFlags::ConvertEmpty), PROPERTY_EMPTY_IS_NULL, false);
+        OAttributeMetaData::getDatabaseAttributeToken(DAFlags::ConvertEmpty), PROPERTY_EMPTY_IS_NULL, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getSpecialAttributeName(SCAFlags::Validation), PROPERTY_STRICTFORMAT, false);
+        OAttributeMetaData::getSpecialAttributeToken(SCAFlags::Validation), PROPERTY_STRICTFORMAT, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getSpecialAttributeName(SCAFlags::MultiLine), PROPERTY_MULTILINE, false);
+        OAttributeMetaData::getSpecialAttributeToken(SCAFlags::MultiLine), PROPERTY_MULTILINE, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getSpecialAttributeName(SCAFlags::AutoCompletion), PROPERTY_AUTOCOMPLETE, false);
+        OAttributeMetaData::getSpecialAttributeToken(SCAFlags::AutoCompletion), PROPERTY_AUTOCOMPLETE, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getSpecialAttributeName(SCAFlags::Multiple), PROPERTY_MULTISELECTION, false);
+        OAttributeMetaData::getSpecialAttributeToken(SCAFlags::Multiple), PROPERTY_MULTISELECTION, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getSpecialAttributeName(SCAFlags::DefaultButton), PROPERTY_DEFAULTBUTTON, false);
+        OAttributeMetaData::getSpecialAttributeToken(SCAFlags::DefaultButton), PROPERTY_DEFAULTBUTTON, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getSpecialAttributeName(SCAFlags::IsTristate), PROPERTY_TRISTATE, false);
+        OAttributeMetaData::getSpecialAttributeToken(SCAFlags::IsTristate), PROPERTY_TRISTATE, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getFormAttributeName(faAllowDeletes), PROPERTY_ALLOWDELETES, true);
+        OAttributeMetaData::getFormAttributeToken(faAllowDeletes), PROPERTY_ALLOWDELETES, true);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getFormAttributeName(faAllowInserts), PROPERTY_ALLOWINSERTS, true);
+        OAttributeMetaData::getFormAttributeToken(faAllowInserts), PROPERTY_ALLOWINSERTS, true);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getFormAttributeName(faAllowUpdates), PROPERTY_ALLOWUPDATES, true);
+        OAttributeMetaData::getFormAttributeToken(faAllowUpdates), PROPERTY_ALLOWUPDATES, true);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getFormAttributeName(faApplyFilter), PROPERTY_APPLYFILTER, false);
+        OAttributeMetaData::getFormAttributeToken(faApplyFilter), PROPERTY_APPLYFILTER, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getFormAttributeName(faEscapeProcessing), PROPERTY_ESCAPEPROCESSING, true);
+        OAttributeMetaData::getFormAttributeToken(faEscapeProcessing), PROPERTY_ESCAPEPROCESSING, true);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getFormAttributeName(faIgnoreResult), PROPERTY_IGNORERESULT, false);
+        OAttributeMetaData::getFormAttributeToken(faIgnoreResult), PROPERTY_IGNORERESULT, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getSpecialAttributeName( SCAFlags::Toggle ), PROPERTY_TOGGLE, false );
+        OAttributeMetaData::getSpecialAttributeToken( SCAFlags::Toggle ), PROPERTY_TOGGLE, false );
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getSpecialAttributeName( SCAFlags::FocusOnClick ), PROPERTY_FOCUS_ON_CLICK, true );
+        OAttributeMetaData::getSpecialAttributeToken( SCAFlags::FocusOnClick ), PROPERTY_FOCUS_ON_CLICK, true );
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getDatabaseAttributeName( DAFlags::InputRequired ), PROPERTY_INPUT_REQUIRED, false );
+        OAttributeMetaData::getDatabaseAttributeToken( DAFlags::InputRequired ), PROPERTY_INPUT_REQUIRED, false );
 
     // the int16 attributes
     m_aAttributeMetaData.addInt16Property(
-        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::MaxLength), PROPERTY_MAXTEXTLENGTH);
+        OAttributeMetaData::getCommonControlAttributeToken(CCAFlags::MaxLength), PROPERTY_MAXTEXTLENGTH);
     m_aAttributeMetaData.addInt16Property(
-        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Size), PROPERTY_LINECOUNT);
+        OAttributeMetaData::getCommonControlAttributeToken(CCAFlags::Size), PROPERTY_LINECOUNT);
     m_aAttributeMetaData.addInt16Property(
-        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::TabIndex), PROPERTY_TABINDEX);
+        OAttributeMetaData::getCommonControlAttributeToken(CCAFlags::TabIndex), PROPERTY_TABINDEX);
     m_aAttributeMetaData.addInt16Property(
-        OAttributeMetaData::getDatabaseAttributeName(DAFlags::BoundColumn), PROPERTY_BOUNDCOLUMN);
+        OAttributeMetaData::getDatabaseAttributeToken(DAFlags::BoundColumn), PROPERTY_BOUNDCOLUMN);
 
     // the int32 attributes
     m_aAttributeMetaData.addInt32Property(
-        OAttributeMetaData::getSpecialAttributeName( SCAFlags::PageStepSize ), PROPERTY_BLOCK_INCREMENT );
+        OAttributeMetaData::getSpecialAttributeToken( SCAFlags::PageStepSize ), PROPERTY_BLOCK_INCREMENT );
 
     // the enum attributes
     m_aAttributeMetaData.addEnumProperty(
-        OAttributeMetaData::getCommonControlAttributeName( CCAFlags::VisualEffect ), PROPERTY_VISUAL_EFFECT,
+        OAttributeMetaData::getCommonControlAttributeToken( CCAFlags::VisualEffect ), PROPERTY_VISUAL_EFFECT,
         aVisualEffectMap,
         &::cppu::UnoType<sal_Int16>::get() );
     m_aAttributeMetaData.addEnumProperty(
-        OAttributeMetaData::getCommonControlAttributeName( CCAFlags::Orientation ), PROPERTY_ORIENTATION,
+        OAttributeMetaData::getCommonControlAttributeToken( CCAFlags::Orientation ), PROPERTY_ORIENTATION,
         aOrientationMap,
         &::cppu::UnoType<sal_Int32>::get() );
     m_aAttributeMetaData.addEnumProperty(
-        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::ButtonType), PROPERTY_BUTTONTYPE,
+        OAttributeMetaData::getCommonControlAttributeToken(CCAFlags::ButtonType), PROPERTY_BUTTONTYPE,
         aFormButtonTypeMap,
         &::cppu::UnoType<FormButtonType>::get());
     m_aAttributeMetaData.addEnumProperty(
-        OAttributeMetaData::getDatabaseAttributeName(DAFlags::ListSource_TYPE), PROPERTY_LISTSOURCETYPE,
+        OAttributeMetaData::getDatabaseAttributeToken(DAFlags::ListSource_TYPE), PROPERTY_LISTSOURCETYPE,
         aListSourceTypeMap,
         &::cppu::UnoType<ListSourceType>::get());
     m_aAttributeMetaData.addEnumProperty(
-        OAttributeMetaData::getSpecialAttributeName(SCAFlags::State), PROPERTY_DEFAULT_STATE,
+        OAttributeMetaData::getSpecialAttributeToken(SCAFlags::State), PROPERTY_DEFAULT_STATE,
         aCheckStateMap,
         &::cppu::UnoType<sal_Int16>::get());
     m_aAttributeMetaData.addEnumProperty(
-        OAttributeMetaData::getSpecialAttributeName(SCAFlags::CurrentState), PROPERTY_STATE,
+        OAttributeMetaData::getSpecialAttributeToken(SCAFlags::CurrentState), PROPERTY_STATE,
         aCheckStateMap,
         &::cppu::UnoType<sal_Int16>::get());
     m_aAttributeMetaData.addEnumProperty(
-        OAttributeMetaData::getFormAttributeName(faEnctype), PROPERTY_SUBMIT_ENCODING,
+        OAttributeMetaData::getFormAttributeToken(faEnctype), PROPERTY_SUBMIT_ENCODING,
         aSubmitEncodingMap,
         &::cppu::UnoType<FormSubmitEncoding>::get());
     m_aAttributeMetaData.addEnumProperty(
-        OAttributeMetaData::getFormAttributeName(faMethod), PROPERTY_SUBMIT_METHOD,
+        OAttributeMetaData::getFormAttributeToken(faMethod), PROPERTY_SUBMIT_METHOD,
         aSubmitMethodMap,
         &::cppu::UnoType<FormSubmitMethod>::get());
     m_aAttributeMetaData.addEnumProperty(
-        OAttributeMetaData::getFormAttributeName(faCommandType), PROPERTY_COMMAND_TYPE,
+        OAttributeMetaData::getFormAttributeToken(faCommandType), PROPERTY_COMMAND_TYPE,
         aCommandTypeMap);
     m_aAttributeMetaData.addEnumProperty(
-        OAttributeMetaData::getFormAttributeName(faNavigationMode), PROPERTY_NAVIGATION,
+        OAttributeMetaData::getFormAttributeToken(faNavigationMode), PROPERTY_NAVIGATION,
         aNavigationTypeMap,
         &::cppu::UnoType<NavigationBarMode>::get());
     m_aAttributeMetaData.addEnumProperty(
-        OAttributeMetaData::getFormAttributeName(faTabbingCycle), PROPERTY_CYCLE,
+        OAttributeMetaData::getFormAttributeToken(faTabbingCycle), PROPERTY_CYCLE,
         aTabulatorCycleMap,
         &::cppu::UnoType<TabulatorCycle>::get());
 
@@ -435,33 +436,34 @@ Reference< XPropertySet > OFormLayerXMLImport_Impl::lookupControlId(const OUStri
         if (m_aCurrentPageIds->second.end() != aPos)
             xReturn = aPos->second;
         else
-            OSL_FAIL("OFormLayerXMLImport_Impl::lookupControlId: invalid control id (did not find it)!");
+            SAL_WARN("xmloff", "unknown control id " << _rControlId);
     }
     return xReturn;
 }
 
 SvXMLImportContext* OFormLayerXMLImport_Impl::createOfficeFormsContext(
     SvXMLImport& _rImport,
-    sal_uInt16 _nPrefix,
-    const OUString& _rLocalName)
+    sal_Int32 _nElement)
 {
-    return new OFormsRootImport( _rImport, _nPrefix, _rLocalName );
+    return new OFormsRootImport( _rImport, _nElement );
 }
 
-SvXMLImportContext* OFormLayerXMLImport_Impl::createContext(const sal_uInt16 _nPrefix, const OUString& _rLocalName,
-    const Reference< xml::sax::XAttributeList >&)
+SvXMLImportContext* OFormLayerXMLImport_Impl::createContext(
+    sal_Int32 nElement,
+    const Reference< xml::sax::XFastAttributeList >&)
 {
     SvXMLImportContext* pContext = nullptr;
-    if ( _rLocalName == "form" )
+    if ( (nElement & TOKEN_MASK) == XML_FORM )
     {
         if ( m_xCurrentPageFormsSupp.is() )
-            pContext = new OFormImport(*this, *this, _nPrefix, _rLocalName, m_xCurrentPageFormsSupp->getForms() );
+            pContext = new OFormImport(*this, *this, m_xCurrentPageFormsSupp->getForms() );
     }
-    else if ( _nPrefix == XML_NAMESPACE_XFORMS
-              && xmloff::token::IsXMLToken( _rLocalName, xmloff::token::XML_MODEL ) )
+    else if ( nElement == XML_ELEMENT(XFORMS, XML_MODEL) )
     {
-        pContext = createXFormsModelContext( m_rImporter, _nPrefix, _rLocalName );
+        pContext = createXFormsModelContext( m_rImporter, nElement );
     }
+    else
+        SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
 
     return pContext;
 }

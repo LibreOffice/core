@@ -594,8 +594,6 @@ SdXMLNumberFormatImportContext::SdXMLNumberFormatImportContext( SdXMLImport& rIm
         OUString sValue = aIter.toString();
         if( aIter.getToken() == XML_ELEMENT(NUMBER, XML_AUTOMATIC_ORDER) )
                 mbAutomatic = IsXMLToken( sValue, XML_TRUE );
-        else
-            SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
     }
 }
 
