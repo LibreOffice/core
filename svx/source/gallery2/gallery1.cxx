@@ -36,6 +36,7 @@
 #include <unotools/pathoptions.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/gallery.hxx>
+#include <svx/galleryobjectcollection.hxx>
 #include <svx/strings.hrc>
 #include <strings.hxx>
 #include <svx/galmisc.hxx>
@@ -162,9 +163,19 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
         aName = rName;
 }
 
-void GalleryThemeEntry::setStorageLocations(INetURLObject& rURL)
+void GalleryThemeEntry::setStorageLocations(INetURLObject & rURL)
 {
     mpGalleryStorageEngineEntry->setStorageLocations(rURL);
+}
+
+GalleryTheme* GalleryThemeEntry::createGalleryTheme(Gallery* pGallery)
+{
+    return new GalleryTheme(pGallery,this);
+}
+
+std::unique_ptr<GalleryBinaryEngine> GalleryThemeEntry::createGalleryStorageEngine(GalleryObjectCollection& mrGalleryObjectCollection, bool& bReadOnly)
+{
+    return mpGalleryStorageEngineEntry->createGalleryStorageEngine(mrGalleryObjectCollection, bReadOnly);
 }
 
 void GalleryTheme::InsertAllThemes(weld::ComboBox& rListBox)
@@ -574,7 +585,7 @@ bool Gallery::CreateTheme( const OUString& rThemeName )
                 false, true, 0, false );
 
         aThemeList.emplace_back( pNewEntry );
-        delete new GalleryTheme( this, pNewEntry );
+        delete pNewEntry->createGalleryTheme( this );
         Broadcast( GalleryHint( GalleryHintType::THEME_CREATED, rThemeName ) );
         bRet = true;
     }
@@ -636,15 +647,15 @@ bool Gallery::RemoveTheme( const OUString& rThemeName )
     return bRet;
 }
 
-std::unique_ptr<GalleryTheme> GalleryThemeEntry::getCachedTheme(Gallery* pGallery) const
+std::unique_ptr<GalleryTheme> GalleryThemeEntry::getCachedTheme(Gallery* pGallery)
 {
     std::unique_ptr<GalleryTheme> pNewTheme;
-    pNewTheme.reset(new GalleryTheme(pGallery, const_cast<GalleryThemeEntry*>(this)));
+    pNewTheme.reset(createGalleryTheme(pGallery));
     mpGalleryStorageEngineEntry->getCachedTheme(pNewTheme);
     return pNewTheme;
 }
 
-GalleryTheme* Gallery::ImplGetCachedTheme(const GalleryThemeEntry* pThemeEntry)
+GalleryTheme* Gallery::ImplGetCachedTheme(GalleryThemeEntry* pThemeEntry)
 {
     GalleryTheme* pTheme = nullptr;
 
