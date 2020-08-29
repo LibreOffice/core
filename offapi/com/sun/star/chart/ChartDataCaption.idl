@@ -68,6 +68,14 @@ published constants ChartDataCaption
     /** The symbol of data column/row is additionally displayed in the caption.
      */
     const long SYMBOL = 16;
+
+
+    /** The caption contains a custom text, which belongs
+        to a data point label.
+
+        @since LibreOffice 7.1
+     */
+    const long CUSTOMTEXT = 32;
 };
 
 
