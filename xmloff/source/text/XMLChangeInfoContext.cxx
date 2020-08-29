@@ -35,11 +35,9 @@ using ::com::sun::star::xml::sax::XAttributeList;
 
 XMLChangeInfoContext::XMLChangeInfoContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
     XMLChangedRegionImportContext& rPParent,
     const OUString& rChangeType)
-:   SvXMLImportContext(rImport, nPrefix, rLocalName)
+:   SvXMLImportContext(rImport)
 ,   rType(rChangeType)
 ,   rChangedRegion(rPParent)
 {
