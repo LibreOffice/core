@@ -73,6 +73,15 @@ namespace xmloff
                 the element type
         */
         static const char* getElementName(ElementType _eType);
+
+        /** retrieves the tag name to be used to describe a control of the given type
+
+            <p>The returned string is the pure token, without any namespace.</p>
+
+            @param  _eType
+                the element type
+        */
+        static sal_Int32 getElementToken(ElementType _eType);
     };
 
 }   // namespace xmloff

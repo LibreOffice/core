@@ -49,8 +49,6 @@ public:
      */
     XMLChangeImportContext(
         SvXMLImport& rImport,
-        sal_Int16 nPrefix,
-        const OUString& rLocalName,
         Element eElement,
         /// true if change mark is encountered outside of a paragraph
         /// (usually before a section or table)
@@ -58,8 +56,39 @@ public:
 
     virtual ~XMLChangeImportContext() override;
 
-    virtual void StartElement(
-        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList) override;
+
+private:
+    Element m_Element;
+    bool m_bIsOutsideOfParagraph;
+};
+// Fast-parser variant
+class XMLChangeImportContext2 : public SvXMLImportContext
+{
+public:
+    enum class Element { START, END, POINT };
+
+    /**
+     * import a change mark
+     * (<text:change>, <text:change-start>, <text:change-end>)
+     * Note: a <text:change> mark denotes start and end of a change
+     * simultaneously, as in Element::POINT.
+     */
+    XMLChangeImportContext2(
+        SvXMLImport& rImport,
+        sal_Int32 nElement,
+        Element eElement,
+        /// true if change mark is encountered outside of a paragraph
+        /// (usually before a section or table)
+        bool bIsOutsideOfParagraph);
+
+    virtual ~XMLChangeImportContext2() override;
+
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList) override;
 
 private:
     Element m_Element;
