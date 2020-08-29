@@ -37,6 +37,7 @@
 
 #include <com/sun/star/chart/ChartAxisAssign.hpp>
 #include <com/sun/star/chart/ChartSymbolType.hpp>
+#include <com/sun/star/chart/ChartDataCaption.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -1143,6 +1144,7 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
                         }
                     }
                     xPointProp->setPropertyValue("CustomLabelFields", uno::Any(xLabels));
+                    xPointProp->setPropertyValue("DataCaption", uno::Any(chart::ChartDataCaption::CUSTOM));
                 }
 
                 if( seriesStyle.mCustomLabelPos[0] != 0.0 || seriesStyle.mCustomLabelPos[1] != 0.0 )
