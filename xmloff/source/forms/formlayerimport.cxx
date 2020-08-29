@@ -61,16 +61,15 @@ namespace xmloff
 
     SvXMLImportContext* OFormLayerXMLImport::createOfficeFormsContext(
         SvXMLImport& _rImport,
-        sal_uInt16 _nPrefix,
-        const OUString& _rLocalName)
+        sal_Int32 _nElement)
     {
-        return OFormLayerXMLImport_Impl::createOfficeFormsContext(_rImport, _nPrefix, _rLocalName);
+        return OFormLayerXMLImport_Impl::createOfficeFormsContext(_rImport, _nElement);
     }
 
-    SvXMLImportContext* OFormLayerXMLImport::createContext(const sal_uInt16 _nPrefix, const OUString& _rLocalName,
-        const Reference< xml::sax::XAttributeList >& _rxAttribs)
+    SvXMLImportContext* OFormLayerXMLImport::createContext(sal_Int32 nElement,
+        const Reference< xml::sax::XFastAttributeList >& _rxAttribs)
     {
-        return m_pImpl->createContext(_nPrefix, _rLocalName, _rxAttribs);
+        return m_pImpl->createContext(nElement, _rxAttribs);
     }
 
     void OFormLayerXMLImport::applyControlNumberStyle(const Reference< XPropertySet >& _rxControlModel, const OUString& _rControlNumberStyleName)
