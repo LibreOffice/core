@@ -34,7 +34,6 @@ namespace framework
 
 struct AddonsParams
 {
-    OUString aImageId;
     OUString aControlType;
     sal_uInt16 nWidth;
 };
