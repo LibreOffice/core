@@ -132,11 +132,9 @@ cui/source/dialogs/colorpicker.cxx:736
     cui::(anonymous namespace)::ColorPickerDialog m_aColorPrevious class cui::(anonymous namespace)::ColorPreviewControl
 cui/source/factory/dlgfact.cxx:1410
     (anonymous namespace)::SvxMacroAssignDialog m_aItems class SfxItemSet
-cui/source/inc/AdditionsDialog.hxx:46
+cui/source/inc/AdditionsDialog.hxx:57
     AdditionInfo sReleaseVersion class rtl::OUString
-cui/source/inc/AdditionsDialog.hxx:50
-    AdditionInfo sRating class rtl::OUString
-cui/source/inc/AdditionsDialog.hxx:80
+cui/source/inc/AdditionsDialog.hxx:94
     AdditionsDialog m_sTag class rtl::OString
 cui/source/inc/cfgutil.hxx:241
     SvxScriptSelectorDialog m_aStylesInfo struct SfxStylesInfo_Impl
@@ -176,10 +174,6 @@ dbaccess/source/core/dataaccess/connection.hxx:102
     dbaccess::OConnection m_nInAppend std::atomic<std::size_t>
 dbaccess/source/core/inc/databasecontext.hxx:85
     dbaccess::ODatabaseContext m_aBasicDLL class BasicDLL
-dbaccess/source/ui/inc/dbtreelistbox.hxx:40
-    dbaui::DBTreeEditedEntry aNewText class rtl::OUString
-desktop/qa/desktop_lib/test_desktop_lib.cxx:2832
-      class AllSettings &
 drawinglayer/inc/texture/texture3d.hxx:57
     drawinglayer::texture::GeoTexSvxBitmapEx maBitmap class Bitmap
 drawinglayer/inc/texture/texture3d.hxx:59
@@ -756,6 +750,8 @@ sw/source/core/text/inftxt.hxx:682
     SwTextSlot aText class rtl::OUString
 sw/source/core/text/porfld.cxx:140
     (anonymous namespace)::SwFieldSlot aText class rtl::OUString
+sw/source/core/text/porlay.cxx:1312
+      const sw::MergedPara *const &
 sw/source/uibase/docvw/romenu.hxx:34
     SwReadOnlyPopup m_aBuilder class VclBuilder
 sw/source/uibase/docvw/romenu.hxx:46
@@ -806,9 +802,9 @@ vcl/inc/salmenu.hxx:43
     SalMenuButtonItem maImage class Image
 vcl/inc/salmenu.hxx:44
     SalMenuButtonItem maToolTipText class rtl::OUString
-vcl/inc/salvtables.hxx:559
+vcl/inc/salvtables.hxx:561
     SalInstanceEntry m_aTextFilter class WeldTextFilter
-vcl/inc/salvtables.hxx:939
+vcl/inc/salvtables.hxx:941
     SalInstanceComboBoxWithEdit m_aTextFilter class WeldTextFilter
 vcl/inc/svimpbox.hxx:120
     SvImpLBox m_aFctSet class ImpLBSelEng
@@ -856,19 +852,19 @@ vcl/unx/gtk3/gtk3gloactiongroup.cxx:27
     (anonymous namespace)::GLOAction parent_instance GObject
 vcl/unx/gtk3/gtk3glomenu.cxx:14
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtk3gtkinst.cxx:4822
+vcl/unx/gtk3/gtk3gtkinst.cxx:4820
     (anonymous namespace)::GtkInstanceAssistant m_pButtonBox GtkButtonBox *
-vcl/unx/gtk3/gtk3gtkinst.cxx:5195
+vcl/unx/gtk3/gtk3gtkinst.cxx:5193
     (anonymous namespace)::CrippledViewport viewport GtkViewport
-vcl/unx/gtk3/gtk3gtkinst.cxx:5339
+vcl/unx/gtk3/gtk3gtkinst.cxx:5337
     (anonymous namespace)::CustomCellRendererSurface parent GtkCellRendererText
-vcl/unx/gtk3/gtk3gtkinst.cxx:5347
+vcl/unx/gtk3/gtk3gtkinst.cxx:5345
     (anonymous namespace)::CustomCellRendererSurfaceClass parent_class GtkCellRendererTextClass
-vcl/unx/gtk3/gtk3gtkinst.cxx:13202
+vcl/unx/gtk3/gtk3gtkinst.cxx:13266
     (anonymous namespace)::GtkInstanceComboBox m_pOverlay GtkOverlay *
-vcl/unx/gtk3/gtk3gtkinst.cxx:13208
+vcl/unx/gtk3/gtk3gtkinst.cxx:13272
     (anonymous namespace)::GtkInstanceComboBox m_pMenuTextRenderer GtkCellRenderer *
-writerfilter/source/dmapper/PropertyMap.hxx:219
+writerfilter/source/dmapper/PropertyMap.hxx:220
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32
 xmloff/source/chart/transporttypes.hxx:149
     CustomLabelField sRuns std::vector<OUString>

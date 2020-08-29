@@ -639,7 +639,6 @@ void ToolBarMerger::CreateToolbarItem( ToolBox* pToolbar, ToolBox::ImplToolItems
 
     // Use the user data to store add-on specific data with the toolbar item
     AddonsParams* pAddonParams = new AddonsParams;
-    pAddonParams->aImageId     = rItem.aImageIdentifier;
     pAddonParams->aControlType = rItem.aControlType;
     pAddonParams->nWidth       = rItem.nWidth;
     pToolbar->SetItemData( nItemId, pAddonParams );

@@ -1605,8 +1605,6 @@ void MenuBarManager::AddMenu(MenuBarManager* pSubMenuManager,const OUString& _sI
     Reference< XStatusListener > xSubMenuManager( static_cast< OWeakObject *>( pSubMenuManager ), UNO_QUERY );
     m_xFrame->addFrameActionListener( Reference< XFrameActionListener >( xSubMenuManager, UNO_QUERY ));
 
-    // store menu item command as we later have to know which menu is active (see Activate handler)
-    pSubMenuManager->m_aMenuItemCommand = _sItemCommand;
     Reference< XDispatch > xDispatch;
     std::unique_ptr<MenuItemHandler> pMenuItemHandler(new MenuItemHandler(
                                                 _nItemId,
@@ -1658,9 +1656,6 @@ void MenuBarManager::Init(const Reference< XFrame >& rFrame, Menu* pAddonMenu, b
                                                                   false );
 
             Reference< XStatusListener > xSubMenuManager( static_cast< OWeakObject *>( pSubMenuManager ), UNO_QUERY );
-
-            // store menu item command as we later have to know which menu is active (see Activate handler)
-            pSubMenuManager->m_aMenuItemCommand = aItemCommand;
 
             std::unique_ptr<MenuItemHandler> pMenuItemHandler(new MenuItemHandler(
                                                         nItemId,

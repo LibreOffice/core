@@ -168,7 +168,7 @@ connectivity/source/inc/writer/WConnection.hxx:55
     connectivity::writer::OWriterConnection::CloseVetoButTerminateListener m_pCloseListener std::unique_ptr<utl::CloseVeto>
 cppcanvas/source/inc/implrenderer.hxx:207
     cppcanvas::internal::ImplRenderer aBaseTransform struct cppcanvas::internal::XForm
-cppu/source/typelib/typelib.cxx:907
+cppu/source/typelib/typelib.cxx:906
     (anonymous namespace)::BaseList set (anonymous namespace)::BaseList::Set
 cppu/source/uno/check.cxx:38
     (anonymous namespace)::C1 n1 sal_Int16
@@ -246,9 +246,9 @@ dbaccess/source/ui/browser/dbloader.cxx:62
     (anonymous namespace)::DBContentLoader m_xListener Reference<class com::sun::star::frame::XLoadEventListener>
 desktop/qa/desktop_lib/test_desktop_lib.cxx:237
     DesktopLOKTest m_bModified _Bool
-desktop/source/app/app.cxx:1198
+desktop/source/app/app.cxx:1184
     desktop::(anonymous namespace)::ExecuteGlobals pLanguageOptions std::unique_ptr<SvtLanguageOptions>
-desktop/source/app/app.cxx:1199
+desktop/source/app/app.cxx:1185
     desktop::(anonymous namespace)::ExecuteGlobals pPathOptions std::unique_ptr<SvtPathOptions>
 desktop/source/deployment/gui/dp_gui_extlistbox.hxx:138
     dp_gui::ExtensionBox_Impl m_vRemovedEntries std::vector<TEntry_Impl>
@@ -318,6 +318,10 @@ framework/inc/uielement/langselectionmenucontroller.hxx:73
     framework::LanguageSelectionMenuController m_xMenuDispatch_Font css::uno::Reference<css::frame::XDispatch>
 framework/inc/uielement/langselectionmenucontroller.hxx:75
     framework::LanguageSelectionMenuController m_xMenuDispatch_CharDlgForParagraph css::uno::Reference<css::frame::XDispatch>
+framework/inc/uielement/menubarmanager.hxx:186
+    framework::MenuBarManager m_aMenuItemCommand class rtl::OUString
+framework/inc/uielement/toolbarmerger.hxx:37
+    framework::AddonsParams aImageId class rtl::OUString
 framework/source/layoutmanager/toolbarlayoutmanager.hxx:272
     framework::ToolbarLayoutManager m_pGlobalSettings std::unique_ptr<GlobalSettings>
 framework/source/layoutmanager/toolbarlayoutmanager.hxx:276
@@ -631,7 +635,7 @@ sc/source/ui/sidebar/CellAppearancePropertyPanel.hxx:79
 sc/source/ui/sidebar/CellAppearancePropertyPanel.hxx:83
     sc::sidebar::CellAppearancePropertyPanel mxLineColorDispatch std::unique_ptr<ToolbarUnoDispatcher>
 sc/source/ui/sidebar/NumberFormatPropertyPanel.hxx:70
-    sc::sidebar::NumberFormatPropertyPanel mxCatagoryDispatch std::unique_ptr<ToolbarUnoDispatcher>
+    sc::sidebar::NumberFormatPropertyPanel mxCategoryDispatch std::unique_ptr<ToolbarUnoDispatcher>
 sc/source/ui/vba/vbachartobject.hxx:44
     ScVbaChartObject oShapeHelper std::unique_ptr<ov::ShapeHelper>
 sd/inc/sdmod.hxx:133
@@ -690,10 +694,6 @@ sfx2/inc/notebookbar/NotebookbarTabControl.hxx:41
     NotebookbarTabControl m_pListener css::uno::Reference<css::ui::XUIConfigurationListener>
 sfx2/source/appl/fileobj.hxx:40
     SvFileObject mxDelMed tools::SvRef<SfxMedium>
-sfx2/source/control/objface.cxx:79
-    SfxInterface_Impl pModule class SfxModule *
-sfx2/source/control/objface.cxx:80
-    SfxInterface_Impl bRegistered _Bool
 sfx2/source/doc/sfxbasemodel.cxx:448
     (anonymous namespace)::SfxSaveGuard m_pFramesLock std::unique_ptr<SfxOwnFramesLocker>
 sfx2/source/inc/appdata.hxx:71
@@ -1018,7 +1018,7 @@ vbahelper/source/vbahelper/vbafillformat.hxx:36
     ScVbaFillFormat m_nForeColor sal_Int32
 vcl/inc/accel.h:33
     ImplAccelEntry mpAutoAccel class Accelerator *
-vcl/inc/driverblocklist.hxx:99
+vcl/inc/driverblocklist.hxx:98
     DriverBlocklist::DriverInfo maMsg class rtl::OUString
 vcl/inc/fontselect.hxx:61
     FontSelectPattern mfExactHeight float
@@ -1136,7 +1136,7 @@ vcl/unx/gtk3/gtk3glomenu.cxx:14
     GLOMenu parent_instance const GMenuModel
 vcl/unx/gtk3/gtk3gtkinst.cxx:1613
      in char *
-vcl/unx/gtk3/gtk3gtkinst.cxx:13212
+vcl/unx/gtk3/gtk3gtkinst.cxx:13276
     (anonymous namespace)::GtkInstanceComboBox m_xCustomMenuButtonHelper std::unique_ptr<CustomRenderMenuButtonHelper>
 vcl/unx/gtk3/gtk3hudawareness.cxx:18
     (anonymous namespace)::HudAwarenessHandle connection GDBusConnection *
@@ -1146,7 +1146,7 @@ vcl/workben/vcldemo.cxx:1748
     (anonymous namespace)::DemoWin mxThread rtl::Reference<RenderThread>
 writerfilter/source/dmapper/DomainMapperTableHandler.cxx:228
     writerfilter::dmapper::TableInfo aTablePropertyIds std::vector<PropertyIds>
-writerfilter/source/dmapper/PropertyMap.hxx:219
+writerfilter/source/dmapper/PropertyMap.hxx:220
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32
 writerfilter/source/dmapper/SettingsTable.cxx:264
     writerfilter::dmapper::SettingsTable_Impl m_sRedlineProtectionKey class rtl::OUString
@@ -1160,7 +1160,7 @@ xmlhelp/source/cxxhelp/provider/databases.hxx:266
     chelp::Databases m_aZipFileTable chelp::Databases::ZipFileTable
 xmlhelp/source/cxxhelp/provider/databases.hxx:272
     chelp::Databases m_aCollatorTable chelp::Databases::CollatorTable
-xmloff/source/draw/ximpstyl.hxx:224
+xmloff/source/draw/ximpstyl.hxx:216
     SdXMLMasterStylesContext maMasterPageList std::vector<rtl::Reference<SdXMLMasterPageContext> >
 xmloff/source/forms/elementexport.hxx:47
     xmloff::OElementExport m_pXMLElement std::unique_ptr<SvXMLElementExport>

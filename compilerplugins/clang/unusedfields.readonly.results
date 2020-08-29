@@ -178,12 +178,12 @@ dbaccess/source/core/inc/ContentHelper.hxx:103
     dbaccess::OContentHelper m_aErrorHelper const ::connectivity::SQLError
 dbaccess/source/filter/hsqldb/parseschema.hxx:35
     dbahsql::SchemaParser m_PrimaryKeys std::map<OUString, std::vector<OUString> >
-dbaccess/source/ui/control/tabletree.cxx:195
+dbaccess/source/ui/control/tabletree.cxx:132
     dbaui::(anonymous namespace)::OViewSetter m_aEqualFunctor ::comphelper::UStringMixEqual
 dbaccess/source/ui/inc/charsetlistbox.hxx:44
     dbaui::CharSetListBox m_aCharSets class dbaui::OCharsetDisplay
-dbaccess/source/ui/inc/directsql.hxx:69
-    dbaui::DirectSQLDialog m_aColorConfig const svtools::ColorConfig
+dbaccess/source/ui/inc/sqledit.hxx:41
+    dbaui::SQLEditView m_aColorConfig const svtools::ColorConfig
 dbaccess/source/ui/inc/WCopyTable.hxx:259
     dbaui::OCopyTableWizard m_aLocale css::lang::Locale
 drawinglayer/inc/processor3d/defaultprocessor3d.hxx:87
@@ -326,8 +326,6 @@ include/sfx2/sidebar/ResourceManager.hxx:110
     sfx2::sidebar::ResourceManager maMiscOptions class SvtMiscOptions
 include/svl/ondemand.hxx:55
     OnDemandLocaleDataWrapper aSysLocale class SvtSysLocale
-include/svtools/editsyntaxhighlighter.hxx:32
-    MultiLineEditSyntaxHighlight m_aColorConfig svtools::ColorConfig
 include/svx/graphctl.hxx:52
     GraphCtrl xVD ScopedVclPtrInstance<class VirtualDevice>
 include/svx/sdr/overlay/overlayanimatedbitmapex.hxx:49
@@ -582,7 +580,7 @@ sw/inc/acmplwrd.hxx:42
     SwAutoCompleteWord m_LookupTree editeng::Trie
 sw/inc/breakit.hxx:38
     SwBreakIt m_xLanguageTag std::unique_ptr<LanguageTag>
-sw/inc/calc.hxx:197
+sw/inc/calc.hxx:202
     SwCalc m_aSysLocale class SvtSysLocale
 sw/inc/dpage.hxx:35
     SwDPage pGridLst std::unique_ptr<SdrPageGridFrameList>
@@ -634,7 +632,7 @@ sw/source/uibase/dbui/mmconfigitem.cxx:116
     SwMailMergeConfigItem_Impl m_aNeutralGreetingLines std::vector<OUString>
 sw/source/uibase/inc/fldmgr.hxx:79
     SwInsertField_Data m_aDBDataSource css::uno::Any
-toolkit/source/awt/vclxtoolkit.cxx:435
+toolkit/source/awt/vclxtoolkit.cxx:436
     (anonymous namespace)::VCLXToolkit mxSelection css::uno::Reference<css::datatransfer::clipboard::XClipboard>
 ucb/source/ucp/gio/gio_mount.hxx:74
     OOoMountOperationClass parent_class GMountOperationClass
@@ -696,9 +694,9 @@ unoidl/source/sourceprovider-scanner.hxx:249
     unoidl::detail::SourceProviderAccumulationBasedServiceEntityPad directMandatoryBaseInterfaces std::vector<unoidl::AnnotatedReference>
 unoidl/source/sourceprovider-scanner.hxx:250
     unoidl::detail::SourceProviderAccumulationBasedServiceEntityPad directOptionalBaseInterfaces std::vector<unoidl::AnnotatedReference>
-unoidl/source/unoidl-read.cxx:146
-    (anonymous namespace)::Entity dependencies std::set<OUString>
 unoidl/source/unoidl-read.cxx:147
+    (anonymous namespace)::Entity dependencies std::set<OUString>
+unoidl/source/unoidl-read.cxx:148
     (anonymous namespace)::Entity interfaceDependencies std::set<OUString>
 unoidl/source/unoidlprovider.cxx:86
     unoidl::detail::(anonymous namespace)::Memory16 byte unsigned char [2]
@@ -1000,8 +998,6 @@ vcl/source/treelist/headbar.cxx:41
     ImplHeadItem maHelpId class rtl::OString
 vcl/source/treelist/headbar.cxx:42
     ImplHeadItem maImage class Image
-vcl/source/window/menuitemlist.hxx:56
-    MenuItemData aAccessibleName class rtl::OUString
 vcl/unx/gtk3/a11y/atkwrapper.hxx:47
     AtkObjectWrapper aParent AtkObject
 vcl/unx/gtk3/a11y/atkwrapper.hxx:75

@@ -183,7 +183,6 @@ class MenuBarManager final :
         bool                                                         m_bAcceleratorCfg;
         bool                                                         m_bModuleIdentified;
         bool                                                         m_bHasMenuBar;
-        OUString                                                     m_aMenuItemCommand;
         OUString                                                     m_aModuleIdentifier;
         VclPtr<Menu>                                                 m_pVCLMenu;
         css::uno::Reference< css::frame::XFrame >                    m_xFrame;
