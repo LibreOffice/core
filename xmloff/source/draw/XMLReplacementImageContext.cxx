@@ -37,34 +37,13 @@ using namespace ::xmloff::token;
 
 XMLReplacementImageContext::XMLReplacementImageContext(
         SvXMLImport& rImport,
-        sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< XAttributeList > & rAttrList,
+        sal_Int32 /*nElement*/,
+        const Reference< XFastAttributeList > & rAttrList,
         const Reference< XPropertySet > & rPropSet ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    SvXMLImportContext( rImport ),
     m_xPropSet( rPropSet )
 {
-    rtl::Reference < XMLTextImportHelper > xTxtImport =
-        GetImport().GetTextImport();
-    const SvXMLTokenMap& rTokenMap =
-        xTxtImport->GetTextFrameAttrTokenMap();
-
-    sal_Int16 nAttrCount = rAttrList.is() ? rAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
-    {
-        const OUString& rAttrName = rAttrList->getNameByIndex( i );
-        const OUString& rValue = rAttrList->getValueByIndex( i );
-
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                            &aLocalName );
-        switch( rTokenMap.Get( nPrefix, aLocalName ) )
-        {
-        case XML_TOK_TEXT_FRAME_HREF:
-            m_sHRef = rValue;
-            break;
-        }
-    }
+    m_sHRef = rAttrList->getOptionalValue(XML_ELEMENT(XLINK, XML_HREF));
 }
 
 XMLReplacementImageContext::~XMLReplacementImageContext()

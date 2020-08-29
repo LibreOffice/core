@@ -264,7 +264,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLGenericPageContex
     else
     {
         // call GroupChildContext function at common ShapeImport
-        auto p = GetImport().GetShapeImport()->CreateGroupChildContext(GetImport(), nElement, xAttrList, mxShapes);
+        auto p = XMLShapeImportHelper::CreateGroupChildContext(GetImport(), nElement, xAttrList, mxShapes);
         if (p)
             return p;
     }

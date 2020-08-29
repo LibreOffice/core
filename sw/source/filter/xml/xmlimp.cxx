@@ -151,12 +151,13 @@ namespace {
 //     in SwXMLOfficeDocContext_Impl
 class SwXMLDocContext_Impl : public virtual SvXMLImportContext
 {
+    sal_Int32 mnElement;
 
 protected: // #i69629#
     SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
 
 public:
-    SwXMLDocContext_Impl( SwXMLImport& rImport );
+    SwXMLDocContext_Impl( SwXMLImport& rImport, sal_Int32 nElement );
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
@@ -164,8 +165,8 @@ public:
 
 }
 
-SwXMLDocContext_Impl::SwXMLDocContext_Impl( SwXMLImport& rImport ) :
-    SvXMLImportContext( rImport )
+SwXMLDocContext_Impl::SwXMLDocContext_Impl( SwXMLImport& rImport, sal_Int32 nElement ) :
+    SvXMLImportContext( rImport ), mnElement(nElement)
 {
 }
 
@@ -186,7 +187,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SwXMLDocContext_Impl::c
             break;
         case XML_ELEMENT(OFFICE, XML_AUTOMATIC_STYLES):
             // don't use the autostyles from the styles-document for the progress
-            if ( !IsPrefixFilledIn() || ! IsXMLToken( GetLocalName(), XML_DOCUMENT_STYLES ) )
+            if ( mnElement != 0 && (mnElement & TOKEN_MASK) != XML_DOCUMENT_STYLES )
                 GetSwImport().GetProgressBarHelper()->Increment
                     ( PROGRESS_BAR_STEP );
             return GetSwImport().CreateStylesContext( true );
@@ -221,7 +222,7 @@ class SwXMLOfficeDocContext_Impl :
 {
 public:
 
-    SwXMLOfficeDocContext_Impl( SwXMLImport& rImport,
+    SwXMLOfficeDocContext_Impl( SwXMLImport& rImport, sal_Int32 nElement,
                 const Reference< document::XDocumentProperties >& xDocProps);
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
@@ -232,9 +233,10 @@ public:
 
 SwXMLOfficeDocContext_Impl::SwXMLOfficeDocContext_Impl(
                 SwXMLImport& rImport,
+                sal_Int32 nElement,
                 const Reference< document::XDocumentProperties >& xDocProps) :
     SvXMLImportContext( rImport ),
-    SwXMLDocContext_Impl( rImport ),
+    SwXMLDocContext_Impl( rImport, nElement ),
     SvXMLMetaDocumentContext( rImport, xDocProps )
 {
 }
@@ -269,16 +271,16 @@ class SwXMLDocStylesContext_Impl : public SwXMLDocContext_Impl
 {
 public:
 
-    SwXMLDocStylesContext_Impl( SwXMLImport& rImport );
+    SwXMLDocStylesContext_Impl( SwXMLImport& rImport, sal_Int32 nElement );
 
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 }
 
-SwXMLDocStylesContext_Impl::SwXMLDocStylesContext_Impl( SwXMLImport& rImport ) :
+SwXMLDocStylesContext_Impl::SwXMLDocStylesContext_Impl( SwXMLImport& rImport, sal_Int32 nElement ) :
     SvXMLImportContext( rImport ),
-    SwXMLDocContext_Impl( rImport )
+    SwXMLDocContext_Impl( rImport, nElement )
 {
 }
 
@@ -306,16 +308,16 @@ SvXMLImportContext *SwXMLImport::CreateFastContext( sal_Int32 nElement,
             uno::Reference<document::XDocumentProperties> const xDocProps(
                 GetDocumentProperties());
             // flat OpenDocument file format
-            pContext = new SwXMLOfficeDocContext_Impl( *this, xDocProps );
+            pContext = new SwXMLOfficeDocContext_Impl( *this, nElement, xDocProps );
         }
         break;
         // #i69629# - own subclasses for <office:document> and <office:document-styles>
         case XML_ELEMENT(OFFICE, XML_DOCUMENT_SETTINGS):
         case XML_ELEMENT(OFFICE, XML_DOCUMENT_CONTENT):
-            pContext = new SwXMLDocContext_Impl( *this );
+            pContext = new SwXMLDocContext_Impl( *this, nElement );
             break;
         case XML_ELEMENT(OFFICE, XML_DOCUMENT_STYLES):
-            pContext = new SwXMLDocStylesContext_Impl( *this );
+            pContext = new SwXMLDocStylesContext_Impl( *this, nElement );
             break;
     }
     return pContext;

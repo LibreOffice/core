@@ -30,15 +30,6 @@ using namespace ::com::sun::star::io;
 
 
 XMLBase64ImportContext::XMLBase64ImportContext(
-        SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< XAttributeList >&,
-        const Reference< XOutputStream >& rOut ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
-    xOut( rOut )
-{
-}
-
-XMLBase64ImportContext::XMLBase64ImportContext(
         SvXMLImport& rImport,
         const Reference< XOutputStream >& rOut ) :
     SvXMLImportContext( rImport ),

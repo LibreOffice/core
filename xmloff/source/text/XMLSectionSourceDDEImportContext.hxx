@@ -34,11 +34,8 @@ class XMLSectionSourceDDEImportContext : public SvXMLImportContext
 
 public:
 
-
     XMLSectionSourceDDEImportContext(
         SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName,
         css::uno::Reference<css::beans::XPropertySet> & rSectPropSet);
 
     virtual ~XMLSectionSourceDDEImportContext() override;

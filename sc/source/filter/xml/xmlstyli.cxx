@@ -263,7 +263,6 @@ namespace {
 
 class XMLTableCellPropsContext : public SvXMLPropertySetContext
 {
-    using SvXMLPropertySetContext::CreateChildContext;
     public:
         XMLTableCellPropsContext(
              SvXMLImport& rImport, sal_Int32 nElement,

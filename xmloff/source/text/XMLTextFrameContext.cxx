@@ -125,8 +125,6 @@ public:
 
 
     XMLTextFrameTitleOrDescContext_Impl( SvXMLImport& rImport,
-                                         sal_uInt16 nPrfx,
-                                         const OUString& rLName,
                                          OUString& rTitleOrDesc );
 
     virtual void SAL_CALL characters( const OUString& rText ) override;
@@ -136,10 +134,8 @@ public:
 
 XMLTextFrameTitleOrDescContext_Impl::XMLTextFrameTitleOrDescContext_Impl(
         SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLName,
         OUString& rTitleOrDesc )
-    : SvXMLImportContext( rImport, nPrfx, rLName )
+    : SvXMLImportContext( rImport )
     , mrTitleOrDesc( rTitleOrDesc )
 {
 }
@@ -199,9 +195,8 @@ class XMLTextFrameContourContext_Impl : public SvXMLImportContext
 public:
 
 
-    XMLTextFrameContourContext_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
-            const OUString& rLName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
+    XMLTextFrameContourContext_Impl( SvXMLImport& rImport, sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
             const Reference < XPropertySet >& rPropSet,
             bool bPath );
 };
@@ -210,11 +205,11 @@ public:
 
 XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
         SvXMLImport& rImport,
-        sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< XAttributeList > & xAttrList,
+        sal_Int32 /*nElement*/,
+        const Reference< XFastAttributeList > & xAttrList,
         const Reference < XPropertySet >& rPropSet,
         bool bPath ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    SvXMLImportContext( rImport ),
     xPropSet( rPropSet )
 {
     OUString sD, sPoints, sViewBox;
@@ -223,48 +218,42 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
     sal_Int32 nWidth = 0;
     sal_Int32 nHeight = 0;
 
-    const SvXMLTokenMap& rTokenMap =
-        GetImport().GetTextImport()->GetTextContourAttrTokenMap();
-
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        const OUString& rValue = xAttrList->getValueByIndex( i );
-
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                            &aLocalName );
-        switch( rTokenMap.Get( nPrefix, aLocalName ) )
+        OUString sValue = aIter.toString();
+        switch( aIter.getToken() )
         {
-        case XML_TOK_TEXT_CONTOUR_VIEWBOX:
-            sViewBox = rValue;
+        case XML_ELEMENT(SVG, XML_VIEWBOX):
+        case XML_ELEMENT(SVG_COMPAT, XML_VIEWBOX):
+            sViewBox = sValue;
             break;
-        case XML_TOK_TEXT_CONTOUR_D:
+        case XML_ELEMENT(SVG, XML_D):
+        case XML_ELEMENT(SVG_COMPAT, XML_D):
             if( bPath )
-                sD = rValue;
+                sD = sValue;
             break;
-        case XML_TOK_TEXT_CONTOUR_POINTS:
+        case XML_ELEMENT(DRAW,XML_POINTS):
             if( !bPath )
-                sPoints = rValue;
+                sPoints = sValue;
             break;
-        case XML_TOK_TEXT_CONTOUR_WIDTH:
-            if (::sax::Converter::convertMeasurePx(nWidth, rValue))
+        case XML_ELEMENT(SVG, XML_WIDTH):
+        case XML_ELEMENT(SVG_COMPAT, XML_WIDTH):
+            if (::sax::Converter::convertMeasurePx(nWidth, sValue))
                 bPixelWidth = true;
             else
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                        nWidth, rValue);
+                        nWidth, sValue);
             break;
-        case XML_TOK_TEXT_CONTOUR_HEIGHT:
-            if (::sax::Converter::convertMeasurePx(nHeight, rValue))
+        case XML_ELEMENT(SVG, XML_HEIGHT):
+        case XML_ELEMENT(SVG_COMPAT, XML_HEIGHT):
+            if (::sax::Converter::convertMeasurePx(nHeight, sValue))
                 bPixelHeight = true;
             else
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                        nHeight, rValue);
+                        nHeight, sValue);
             break;
-        case XML_TOK_TEXT_CONTOUR_AUTO:
-            bAuto = IsXMLToken(rValue, XML_TRUE);
+        case  XML_ELEMENT(DRAW, XML_RECREATE_ON_EDIT):
+            bAuto = IsXMLToken(sValue, XML_TRUE);
             break;
         }
     }
@@ -389,12 +378,11 @@ public:
     const OUString& GetHRef() const { return sHRef; }
 
     XMLTextFrameContext_Impl( SvXMLImport& rImport,
-            sal_uInt16 nPrfx,
-            const OUString& rLName,
-            const css::uno::Reference<css::xml::sax::XAttributeList > & rAttrList,
+            sal_Int32 nElement,
+            const css::uno::Reference<css::xml::sax::XFastAttributeList > & rAttrList,
             css::text::TextContentAnchorType eAnchorType,
             sal_uInt16 nType,
-            const css::uno::Reference<css::xml::sax::XAttributeList > & rFrameAttrList,
+            const css::uno::Reference<css::xml::sax::XFastAttributeList > & rFrameAttrList,
             bool bMultipleContent = false );
 
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
@@ -818,13 +806,13 @@ bool XMLTextFrameContext_Impl::CreateIfNotThere()
 
 XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
         SvXMLImport& rImport,
-        sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< XAttributeList > & rAttrList,
+        sal_Int32 /*nElement*/,
+        const Reference< XFastAttributeList > & rAttrList,
         TextContentAnchorType eATyp,
         sal_uInt16 nNewType,
-        const Reference< XAttributeList > & rFrameAttrList,
+        const Reference< XFastAttributeList > & rFrameAttrList,
         bool bMultipleContent )
-:   SvXMLImportContext( rImport, nPrfx, rLName )
+:   SvXMLImportContext( rImport )
 ,   mbListContextPushed( false )
 ,   nType( nNewType )
 ,   eAnchorType( eATyp )
@@ -848,40 +836,24 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
     bOwnBase64Stream = false;
     mbMultipleContent = bMultipleContent;
 
-    rtl::Reference < XMLTextImportHelper > xTxtImport =
-        GetImport().GetTextImport();
-    const SvXMLTokenMap& rTokenMap =
-        xTxtImport->GetTextFrameAttrTokenMap();
-
-    sal_Int16 nAttrCount = rAttrList.is() ? rAttrList->getLength() : 0;
-    sal_Int16 nTotalAttrCount = nAttrCount + (rFrameAttrList.is() ? rFrameAttrList->getLength() : 0);
-    for( sal_Int16 i=0; i < nTotalAttrCount; i++ )
+    auto processAttr = [&](sal_Int32 nElement, OUString rValue) -> void
     {
-        const OUString& rAttrName =
-            i < nAttrCount ? rAttrList->getNameByIndex( i ) : rFrameAttrList->getNameByIndex( i-nAttrCount );
-        const OUString& rValue =
-            i < nAttrCount ? rAttrList->getValueByIndex( i ): rFrameAttrList->getValueByIndex( i-nAttrCount );
-
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                            &aLocalName );
-        switch( rTokenMap.Get( nPrefix, aLocalName ) )
+        switch( nElement )
         {
-        case XML_TOK_TEXT_FRAME_STYLE_NAME:
+        case XML_ELEMENT(DRAW, XML_STYLE_NAME):
             sStyleName = rValue;
             break;
-        case XML_TOK_TEXT_FRAME_NAME:
+        case XML_ELEMENT(DRAW, XML_NAME):
             m_sOrigName = rValue;
             sName = rValue;
             break;
-        case XML_TOK_TEXT_FRAME_FRAME_NAME:
+        case XML_ELEMENT(DRAW, XML_FRAME_NAME):
             sFrameName = rValue;
             break;
-        case XML_TOK_TEXT_FRAME_APPLET_NAME:
+        case XML_ELEMENT(DRAW, XML_APPLET_NAME):
             sAppletName = rValue;
             break;
-        case XML_TOK_TEXT_FRAME_ANCHOR_TYPE:
+        case XML_ELEMENT(TEXT, XML_ANCHOR_TYPE):
             if( TextContentAnchorType_AT_PARAGRAPH == eAnchorType ||
                 TextContentAnchorType_AT_CHARACTER == eAnchorType ||
                 TextContentAnchorType_AS_CHARACTER == eAnchorType )
@@ -896,22 +868,25 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
                     eAnchorType = eNew;
             }
             break;
-        case XML_TOK_TEXT_FRAME_ANCHOR_PAGE_NUMBER:
+        case XML_ELEMENT(TEXT, XML_ANCHOR_PAGE_NUMBER):
             {
                 sal_Int32 nTmp;
                 if (::sax::Converter::convertNumber(nTmp, rValue, 1, SHRT_MAX))
                     nPage = static_cast<sal_Int16>(nTmp);
             }
             break;
-        case XML_TOK_TEXT_FRAME_X:
+        case XML_ELEMENT(SVG, XML_X):
+        case XML_ELEMENT(SVG_COMPAT, XML_X):
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
                     nX, rValue);
             break;
-        case XML_TOK_TEXT_FRAME_Y:
+        case XML_ELEMENT(SVG, XML_Y):
+        case XML_ELEMENT(SVG_COMPAT, XML_Y):
             GetImport().GetMM100UnitConverter().convertMeasureToCore(
                     nY, rValue );
             break;
-        case XML_TOK_TEXT_FRAME_WIDTH:
+        case XML_ELEMENT(SVG, XML_WIDTH):
+        case XML_ELEMENT(SVG_COMPAT, XML_WIDTH):
             // relative widths are obsolete since SRC617. Remove them some day!
             if( rValue.indexOf( '%' ) != -1 )
             {
@@ -925,7 +900,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
                         nWidth, rValue, 0 );
             }
             break;
-        case XML_TOK_TEXT_FRAME_REL_WIDTH:
+        case XML_ELEMENT(STYLE, XML_REL_WIDTH):
             if( IsXMLToken(rValue, XML_SCALE) )
             {
                 bSyncWidth = true;
@@ -937,7 +912,8 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
                     nRelWidth = static_cast<sal_Int16>(nTmp);
             }
             break;
-        case XML_TOK_TEXT_FRAME_MIN_WIDTH:
+        case XML_ELEMENT(FO, XML_MIN_WIDTH):
+        case XML_ELEMENT(FO_COMPAT, XML_MIN_WIDTH):
             if( rValue.indexOf( '%' ) != -1 )
             {
                 sal_Int32 nTmp;
@@ -951,7 +927,8 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             }
             bMinWidth = true;
             break;
-        case XML_TOK_TEXT_FRAME_HEIGHT:
+        case XML_ELEMENT(SVG, XML_HEIGHT):
+        case XML_ELEMENT(SVG_COMPAT, XML_HEIGHT):
             // relative heights are obsolete since SRC617. Remove them some day!
             if( rValue.indexOf( '%' ) != -1 )
             {
@@ -965,7 +942,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
                         nHeight, rValue, 0 );
             }
             break;
-        case XML_TOK_TEXT_FRAME_REL_HEIGHT:
+        case XML_ELEMENT(STYLE, XML_REL_HEIGHT):
             if( IsXMLToken( rValue, XML_SCALE ) )
             {
                 bSyncHeight = true;
@@ -982,7 +959,8 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
                     nRelHeight = static_cast<sal_Int16>(nTmp);
             }
             break;
-        case XML_TOK_TEXT_FRAME_MIN_HEIGHT:
+        case XML_ELEMENT(FO, XML_MIN_HEIGHT):
+        case XML_ELEMENT(FO_COMPAT, XML_MIN_HEIGHT):
             if( rValue.indexOf( '%' ) != -1 )
             {
                 sal_Int32 nTmp;
@@ -996,16 +974,16 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             }
             bMinHeight = true;
             break;
-        case XML_TOK_TEXT_FRAME_Z_INDEX:
+        case XML_ELEMENT(DRAW, XML_ZINDEX):
             ::sax::Converter::convertNumber( nZIndex, rValue, -1 );
             break;
-        case XML_TOK_TEXT_FRAME_NEXT_CHAIN_NAME:
+        case XML_ELEMENT(DRAW, XML_CHAIN_NEXT_NAME):
             sNextName = rValue;
             break;
-        case XML_TOK_TEXT_FRAME_HREF:
+        case XML_ELEMENT(XLINK, XML_HREF):
             sHRef = rValue;
             break;
-        case XML_TOK_TEXT_FRAME_TRANSFORM:
+        case XML_ELEMENT(DRAW, XML_TRANSFORM):
             {
                 // RotateFlyFrameFix: im/export full 'draw:transform' using existing tooling
                 // Currently only rotation is used, but combinations with 'draw:transform'
@@ -1066,24 +1044,33 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
                 }
             }
             break;
-        case XML_TOK_TEXT_FRAME_CODE:
+        case XML_ELEMENT(DRAW, XML_CODE):
             sCode = rValue;
             break;
-        case XML_TOK_TEXT_FRAME_OBJECT:
+        case XML_ELEMENT(DRAW, XML_OBJECT):
             break;
-        case XML_TOK_TEXT_FRAME_ARCHIVE:
+        case XML_ELEMENT(DRAW, XML_ARCHIVE):
             break;
-        case XML_TOK_TEXT_FRAME_MAY_SCRIPT:
+        case XML_ELEMENT(DRAW, XML_MAY_SCRIPT):
             bMayScript = IsXMLToken( rValue, XML_TRUE );
             break;
-        case XML_TOK_TEXT_FRAME_MIME_TYPE:
+        case XML_ELEMENT(DRAW, XML_MIME_TYPE):
+        case XML_ELEMENT(LO_EXT, XML_MIME_TYPE):
             sMimeType = rValue;
             break;
-        case XML_TOK_TEXT_FRAME_NOTIFY_ON_UPDATE:
+        case XML_ELEMENT(DRAW, XML_NOTIFY_ON_UPDATE_OF_RANGES):
+        case XML_ELEMENT(DRAW, XML_NOTIFY_ON_UPDATE_OF_TABLE):
             sTblName = rValue;
             break;
+        default:
+            XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nElement, rValue);
         }
-    }
+    };
+
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(rAttrList) )
+            processAttr(aIter.getToken(), aIter.toString());
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(rFrameAttrList) )
+            processAttr(aIter.getToken(), aIter.toString());
 
     if( ( (XML_TEXT_FRAME_GRAPHIC == nType ||
            XML_TEXT_FRAME_OBJECT == nType ||
@@ -1330,11 +1317,11 @@ bool XMLTextFrameContext::CreateIfNotThere( css::uno::Reference < css::beans::XP
 
 XMLTextFrameContext::XMLTextFrameContext(
         SvXMLImport& rImport,
-        const Reference< XAttributeList > & xAttrList,
+        const Reference< XFastAttributeList > & xAttrList,
         TextContentAnchorType eATyp )
 :   SvXMLImportContext( rImport )
 ,   MultiImageImportHelper()
-,   m_xAttrList( new SvXMLAttributeList( xAttrList ) )
+,   m_xAttrList( new sax_fastparser::FastAttributeList( xAttrList ) )
     // Implement Title/Description Elements UI (#i73249#)
 ,   m_sTitle()
 ,   m_sDesc()
@@ -1343,42 +1330,39 @@ XMLTextFrameContext::XMLTextFrameContext(
 ,   m_HasAutomaticStyleWithoutParentStyle( false )
 ,   m_bSupportsReplacement( false )
 {
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
         // New distinguish attribute between Writer objects and Draw objects is:
         // Draw objects have an automatic style without a parent style (#i51726#)
-        if ( XML_NAMESPACE_DRAW == nPrefix &&
-             IsXMLToken( aLocalName, XML_STYLE_NAME ) )
+        switch (aIter.getToken())
         {
-            OUString aStyleName = xAttrList->getValueByIndex( i );
-            if( !aStyleName.isEmpty() )
+            case XML_ELEMENT(DRAW, XML_STYLE_NAME):
             {
-                rtl::Reference < XMLTextImportHelper > xTxtImport =
-                                                    GetImport().GetTextImport();
-                XMLPropStyleContext* pStyle = xTxtImport->FindAutoFrameStyle( aStyleName );
-                if ( pStyle && pStyle->GetParentName().isEmpty() )
+                OUString aStyleName = aIter.toString();
+                if( !aStyleName.isEmpty() )
                 {
-                    m_HasAutomaticStyleWithoutParentStyle = true;
+                    rtl::Reference < XMLTextImportHelper > xTxtImport =
+                                                        GetImport().GetTextImport();
+                    XMLPropStyleContext* pStyle = xTxtImport->FindAutoFrameStyle( aStyleName );
+                    if ( pStyle && pStyle->GetParentName().isEmpty() )
+                    {
+                        m_HasAutomaticStyleWithoutParentStyle = true;
+                    }
                 }
+                break;
             }
-        }
-        else if ( XML_NAMESPACE_TEXT == nPrefix &&
-                  IsXMLToken( aLocalName, XML_ANCHOR_TYPE ) )
-        {
-            TextContentAnchorType eNew;
-            if( XMLAnchorTypePropHdl::convert( xAttrList->getValueByIndex(i),
-                        eNew ) &&
-                ( TextContentAnchorType_AT_PARAGRAPH == eNew ||
-                  TextContentAnchorType_AT_CHARACTER == eNew ||
-                  TextContentAnchorType_AS_CHARACTER == eNew ||
-                  TextContentAnchorType_AT_PAGE == eNew) )
-                m_eDefaultAnchorType = eNew;
+            case XML_ELEMENT(TEXT, XML_ANCHOR_TYPE):
+            {
+                TextContentAnchorType eNew;
+                if( XMLAnchorTypePropHdl::convert( aIter.toString(),
+                            eNew ) &&
+                    ( TextContentAnchorType_AT_PARAGRAPH == eNew ||
+                      TextContentAnchorType_AT_CHARACTER == eNew ||
+                      TextContentAnchorType_AS_CHARACTER == eNew ||
+                      TextContentAnchorType_AT_PAGE == eNew) )
+                    m_eDefaultAnchorType = eNew;
+                break;
+            }
         }
     }
 }
@@ -1428,79 +1412,37 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextFrameContext::c
     const uno::Reference< xml::sax::XFastAttributeList>& xAttrList )
 {
     SvXMLImportContextRef xContext;
-    if( !m_xImplContext.is() )
-    {
-    }
-    else if(getSupportsMultipleContents() && nElement == XML_ELEMENT(DRAW, XML_IMAGE))
-    {
-    }
-    else if( m_bSupportsReplacement && !m_xReplImplContext.is() &&
-             nElement == XML_ELEMENT(DRAW, XML_IMAGE) )
-    {
-    }
-    else if( nullptr != dynamic_cast< const XMLTextFrameContext_Impl*>( m_xImplContext.get() ))
-    {
-    }
-    // #i68101#
-    else if( nElement == XML_ELEMENT(SVG, XML_TITLE) || nElement == XML_ELEMENT(SVG, XML_DESC ) ||
-             nElement == XML_ELEMENT(SVG_COMPAT, XML_TITLE) || nElement == XML_ELEMENT(SVG_COMPAT, XML_DESC ) )
-    {
-        if (getSupportsMultipleContents())
-        {   // tdf#103567 ensure props are set on surviving shape
-            // note: no more draw:image can be added once we get here
-            m_xImplContext = solveMultipleImages();
-        }
-        xContext = &dynamic_cast<SvXMLImportContext&>(*m_xImplContext->createFastChildContextFallback( nElement, xAttrList ));
-    }
-    else if (nElement == XML_ELEMENT(LO_EXT, XML_SIGNATURELINE))
-    {
-        if (getSupportsMultipleContents())
-        {   // tdf#103567 ensure props are set on surviving shape
-            // note: no more draw:image can be added once we get here
-            m_xImplContext = solveMultipleImages();
-        }
-        xContext = &dynamic_cast<SvXMLImportContext&>(*m_xImplContext->createFastChildContextFallback(nElement, xAttrList));
-    }
-    else if (nElement == XML_ELEMENT(LO_EXT, XML_QRCODE))
-    {
-        if (getSupportsMultipleContents())
-        {   // tdf#103567 ensure props are set on surviving shape
-            // note: no more draw:image can be added once we get here
-            m_xImplContext = solveMultipleImages();
-        }
-        xContext = &dynamic_cast<SvXMLImportContext&>(*m_xImplContext->createFastChildContextFallback(nElement, xAttrList));
-    }
-
-    return xContext.get();
-}
-
-SvXMLImportContextRef XMLTextFrameContext::CreateChildContext(
-        sal_uInt16 p_nPrefix,
-        const OUString& rLocalName,
-        const Reference< XAttributeList > & xAttrList )
-{
-    SvXMLImportContextRef xContext;
 
     if( !m_xImplContext.is() )
     {
         // no child exists
-        if( XML_NAMESPACE_DRAW == p_nPrefix )
+        if( IsTokenInNamespace(nElement, XML_NAMESPACE_DRAW) )
         {
             sal_uInt16 nFrameType = USHRT_MAX;
-            if( IsXMLToken( rLocalName, XML_TEXT_BOX ) )
-                nFrameType = XML_TEXT_FRAME_TEXTBOX;
-            else if( IsXMLToken( rLocalName, XML_IMAGE ) )
-                nFrameType = XML_TEXT_FRAME_GRAPHIC;
-            else if( IsXMLToken( rLocalName, XML_OBJECT ) )
-                nFrameType = XML_TEXT_FRAME_OBJECT;
-            else if( IsXMLToken( rLocalName, XML_OBJECT_OLE ) )
-                nFrameType = XML_TEXT_FRAME_OBJECT_OLE;
-            else if( IsXMLToken( rLocalName, XML_APPLET) )
-                nFrameType = XML_TEXT_FRAME_APPLET;
-            else if( IsXMLToken( rLocalName, XML_PLUGIN ) )
-                nFrameType = XML_TEXT_FRAME_PLUGIN;
-            else if( IsXMLToken( rLocalName, XML_FLOATING_FRAME ) )
-                nFrameType = XML_TEXT_FRAME_FLOATING_FRAME;
+            switch (nElement & TOKEN_MASK)
+            {
+                case XML_TEXT_BOX:
+                    nFrameType = XML_TEXT_FRAME_TEXTBOX;
+                    break;
+                case XML_IMAGE:
+                    nFrameType = XML_TEXT_FRAME_GRAPHIC;
+                    break;
+                case XML_OBJECT:
+                    nFrameType = XML_TEXT_FRAME_OBJECT;
+                    break;
+                case XML_OBJECT_OLE:
+                    nFrameType = XML_TEXT_FRAME_OBJECT_OLE;
+                    break;
+                case XML_APPLET:
+                    nFrameType = XML_TEXT_FRAME_APPLET;
+                    break;
+                case XML_PLUGIN:
+                    nFrameType = XML_TEXT_FRAME_PLUGIN;
+                    break;
+                case XML_FLOATING_FRAME:
+                    nFrameType = XML_TEXT_FRAME_FLOATING_FRAME;
+                    break;
+            }
 
             if( USHRT_MAX != nFrameType )
             {
@@ -1510,34 +1452,31 @@ SvXMLImportContextRef XMLTextFrameContext::CreateChildContext(
                      m_HasAutomaticStyleWithoutParentStyle )
                 {
                     Reference < XShapes > xShapes;
-                    xContext = GetImport().GetShapeImport()->CreateFrameChildContext(
-                                    GetImport(), p_nPrefix, rLocalName, xAttrList, xShapes, m_xAttrList );
+                    xContext = XMLShapeImportHelper::CreateFrameChildContext(
+                                    GetImport(), nElement, xAttrList, xShapes, m_xAttrList.get() );
                 }
                 else if( XML_TEXT_FRAME_PLUGIN == nFrameType )
                 {
                     bool bMedia = false;
 
                     // check, if we have a media object
-                    for( sal_Int16 n = 0, nAttrCount = ( xAttrList.is() ? xAttrList->getLength() : 0 ); n < nAttrCount; ++n )
+                    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
                     {
-                        OUString    aLocalName;
-                        sal_uInt16  nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( n ), &aLocalName );
-
-                        if( nPrefix == XML_NAMESPACE_DRAW && IsXMLToken( aLocalName, XML_MIME_TYPE ) )
+                        if( aIter.getToken() == XML_ELEMENT(DRAW, XML_MIME_TYPE) )
                         {
-                            if( xAttrList->getValueByIndex( n ) == "application/vnd.sun.star.media" )
+                            if( aIter.toString() == "application/vnd.sun.star.media" )
                                 bMedia = true;
 
                             // leave this loop
-                            n = nAttrCount - 1;
+                            break;
                         }
                     }
 
                     if( bMedia )
                     {
                         Reference < XShapes > xShapes;
-                        xContext = GetImport().GetShapeImport()->CreateFrameChildContext(
-                                        GetImport(), p_nPrefix, rLocalName, xAttrList, xShapes, m_xAttrList );
+                        xContext = XMLShapeImportHelper::CreateFrameChildContext(
+                                        GetImport(), nElement, xAttrList, xShapes, m_xAttrList.get() );
                     }
                 }
                 else if( XML_TEXT_FRAME_OBJECT == nFrameType ||
@@ -1547,16 +1486,16 @@ SvXMLImportContextRef XMLTextFrameContext::CreateChildContext(
                 }
                 else if(XML_TEXT_FRAME_GRAPHIC == nFrameType)
                 {
-                    setSupportsMultipleContents(IsXMLToken(rLocalName, XML_IMAGE));
+                    setSupportsMultipleContents( (nElement & TOKEN_MASK) == XML_IMAGE );
                 }
 
                 if (!xContext)
                 {
-                    xContext = new XMLTextFrameContext_Impl( GetImport(), p_nPrefix,
-                                                        rLocalName, xAttrList,
+                    xContext = new XMLTextFrameContext_Impl( GetImport(), nElement,
+                                                        xAttrList,
                                                         m_eDefaultAnchorType,
                                                         nFrameType,
-                                                        m_xAttrList );
+                                                        m_xAttrList.get() );
                 }
 
                 m_xImplContext = xContext;
@@ -1568,106 +1507,100 @@ SvXMLImportContextRef XMLTextFrameContext::CreateChildContext(
             }
         }
     }
-    else if(getSupportsMultipleContents() && XML_NAMESPACE_DRAW == p_nPrefix && IsXMLToken(rLocalName, XML_IMAGE))
+    else if(getSupportsMultipleContents() && nElement == XML_ELEMENT(DRAW, XML_IMAGE))
     {
         // read another image
         xContext = new XMLTextFrameContext_Impl(
-            GetImport(), p_nPrefix, rLocalName, xAttrList,
-            m_eDefaultAnchorType, XML_TEXT_FRAME_GRAPHIC, m_xAttrList, true);
+            GetImport(), nElement, xAttrList,
+            m_eDefaultAnchorType, XML_TEXT_FRAME_GRAPHIC, m_xAttrList.get(), true);
 
         m_xImplContext = xContext;
         addContent(*m_xImplContext);
     }
     else if( m_bSupportsReplacement && !m_xReplImplContext.is() &&
-             XML_NAMESPACE_DRAW == p_nPrefix &&
-             IsXMLToken( rLocalName, XML_IMAGE ) )
+             nElement == XML_ELEMENT(DRAW, XML_IMAGE) )
     {
         // read replacement image
         Reference < XPropertySet > xPropSet;
         if( CreateIfNotThere( xPropSet ) )
         {
             xContext = new XMLReplacementImageContext( GetImport(),
-                                p_nPrefix, rLocalName, xAttrList, xPropSet );
+                                nElement, xAttrList, xPropSet );
             m_xReplImplContext = xContext;
         }
     }
     else if( nullptr != dynamic_cast< const XMLTextFrameContext_Impl*>( m_xImplContext.get() ))
     {
         // the child is a writer frame
-        if( XML_NAMESPACE_SVG == p_nPrefix )
+        if( IsTokenInNamespace(nElement, XML_NAMESPACE_SVG) ||
+            IsTokenInNamespace(nElement, XML_NAMESPACE_SVG_COMPAT) )
         {
             // Implement Title/Description Elements UI (#i73249#)
             const bool bOld = SvXMLImport::OOo_2x >= GetImport().getGeneratorVersion();
             if ( bOld )
             {
-                if ( IsXMLToken( rLocalName, XML_DESC ) )
+                if ( (nElement & TOKEN_MASK) == XML_DESC )
                 {
                     xContext = new XMLTextFrameTitleOrDescContext_Impl( GetImport(),
-                                                                        p_nPrefix,
-                                                                        rLocalName,
                                                                         m_sTitle );
                 }
             }
             else
             {
-                if( IsXMLToken( rLocalName, XML_TITLE ) )
+                if( (nElement & TOKEN_MASK) == XML_TITLE )
                 {
                     if (getSupportsMultipleContents())
                     {   // tdf#103567 ensure props are set on surviving shape
                         m_xImplContext = solveMultipleImages();
                     }
                     xContext = new XMLTextFrameTitleOrDescContext_Impl( GetImport(),
-                                                                        p_nPrefix,
-                                                                        rLocalName,
                                                                         m_sTitle );
                 }
-                else if ( IsXMLToken( rLocalName, XML_DESC ) )
+                else if ( (nElement & TOKEN_MASK) == XML_DESC )
                 {
                     if (getSupportsMultipleContents())
                     {   // tdf#103567 ensure props are set on surviving shape
                         m_xImplContext = solveMultipleImages();
                     }
                     xContext = new XMLTextFrameTitleOrDescContext_Impl( GetImport(),
-                                                                        p_nPrefix,
-                                                                        rLocalName,
                                                                         m_sDesc );
                 }
             }
         }
-        else if( XML_NAMESPACE_DRAW == p_nPrefix )
+        else if( IsTokenInNamespace(nElement, XML_NAMESPACE_DRAW) )
         {
             Reference < XPropertySet > xPropSet;
-            if( IsXMLToken( rLocalName, XML_CONTOUR_POLYGON ) )
+            if( (nElement & TOKEN_MASK) == XML_CONTOUR_POLYGON )
             {
                 if (getSupportsMultipleContents())
                 {   // tdf#103567 ensure props are set on surviving shape
                     m_xImplContext = solveMultipleImages();
                 }
                 if( CreateIfNotThere( xPropSet ) )
-                    xContext = new XMLTextFrameContourContext_Impl( GetImport(), p_nPrefix, rLocalName,
+                    xContext = new XMLTextFrameContourContext_Impl( GetImport(), nElement,
                                                   xAttrList, xPropSet, false );
             }
-            else if( IsXMLToken( rLocalName, XML_CONTOUR_PATH ) )
+            else if( (nElement & TOKEN_MASK) == XML_CONTOUR_PATH )
             {
                 if (getSupportsMultipleContents())
                 {   // tdf#103567 ensure props are set on surviving shape
                     m_xImplContext = solveMultipleImages();
                 }
                 if( CreateIfNotThere( xPropSet ) )
-                    xContext = new XMLTextFrameContourContext_Impl( GetImport(), p_nPrefix, rLocalName,
+                    xContext = new XMLTextFrameContourContext_Impl( GetImport(), nElement,
                                                   xAttrList, xPropSet, true );
             }
-            else if( IsXMLToken( rLocalName, XML_IMAGE_MAP ) )
+            else if( (nElement & TOKEN_MASK) == XML_IMAGE_MAP )
             {
                 if (getSupportsMultipleContents())
                 {   // tdf#103567 ensure props are set on surviving shape
                     m_xImplContext = solveMultipleImages();
                 }
                 if( CreateIfNotThere( xPropSet ) )
-                    xContext = new XMLImageMapContext( GetImport(), p_nPrefix, rLocalName, xPropSet );
+                    xContext = new XMLImageMapContext( GetImport(), xPropSet );
             }
         }
-        else if( (XML_NAMESPACE_OFFICE == p_nPrefix) && IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) )
+        else if( nElement == XML_ELEMENT(OFFICE, XML_EVENT_LISTENERS) )
         {
             if (getSupportsMultipleContents())
             {   // tdf#103567 ensure props are set on surviving shape
@@ -1687,24 +1620,43 @@ SvXMLImportContextRef XMLTextFrameContext::CreateChildContext(
             }
         }
     }
-    else if( p_nPrefix == XML_NAMESPACE_SVG &&  // #i68101#
-                (IsXMLToken( rLocalName, XML_TITLE ) || IsXMLToken( rLocalName, XML_DESC ) ) )
+    // #i68101#
+    else if( nElement == XML_ELEMENT(SVG, XML_TITLE) || nElement == XML_ELEMENT(SVG, XML_DESC ) ||
+             nElement == XML_ELEMENT(SVG_COMPAT, XML_TITLE) || nElement == XML_ELEMENT(SVG_COMPAT, XML_DESC ) )
     {
+        if (getSupportsMultipleContents())
+        {   // tdf#103567 ensure props are set on surviving shape
+            // note: no more draw:image can be added once we get here
+            m_xImplContext = solveMultipleImages();
+        }
+        xContext = &dynamic_cast<SvXMLImportContext&>(*m_xImplContext->createFastChildContext( nElement, xAttrList ));
     }
-    else if (p_nPrefix == XML_NAMESPACE_LO_EXT && (IsXMLToken(rLocalName, XML_SIGNATURELINE)))
+    else if (nElement == XML_ELEMENT(LO_EXT, XML_SIGNATURELINE))
     {
+        if (getSupportsMultipleContents())
+        {   // tdf#103567 ensure props are set on surviving shape
+            // note: no more draw:image can be added once we get here
+            m_xImplContext = solveMultipleImages();
+        }
+        xContext = &dynamic_cast<SvXMLImportContext&>(*m_xImplContext->createFastChildContext(nElement, xAttrList));
     }
-    else if (p_nPrefix == XML_NAMESPACE_LO_EXT && (IsXMLToken(rLocalName, XML_QRCODE)))
+    else if (nElement == XML_ELEMENT(LO_EXT, XML_QRCODE))
     {
+        if (getSupportsMultipleContents())
+        {   // tdf#103567 ensure props are set on surviving shape
+            // note: no more draw:image can be added once we get here
+            m_xImplContext = solveMultipleImages();
+        }
+        xContext = &dynamic_cast<SvXMLImportContext&>(*m_xImplContext->createFastChildContext(nElement, xAttrList));
     }
     else
     {
         // the child is a drawing shape
-        xContext = XMLShapeImportHelper::CreateFrameChildContext(
-                                    m_xImplContext.get(), p_nPrefix, rLocalName, xAttrList );
+        return XMLShapeImportHelper::CreateFrameChildContext(
+                                    m_xImplContext.get(), nElement, xAttrList );
     }
 
-    return xContext;
+    return xContext.get();
 }
 
 void XMLTextFrameContext::SetHyperlink( const OUString& rHRef,

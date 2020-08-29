@@ -693,7 +693,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLChangeTextPContext
         {
             if (!bWasContext)
                 pTextPContext->characters(sText.makeStringAndClear());
-            xContext = pTextPContext->createFastChildContextFallback(nElement, xAttrList);
+            xContext = pTextPContext->createFastChildContext(nElement, xAttrList);
         }
     }
 

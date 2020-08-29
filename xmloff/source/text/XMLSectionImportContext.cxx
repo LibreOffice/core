@@ -331,9 +331,13 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLSectionImportContex
     // section-source (-dde) elements
     if ( nElement == XML_ELEMENT(TEXT, XML_SECTION_SOURCE) )
     {
+        return new XMLSectionSourceImportContext(GetImport(),
+                                                     xSectionPropertySet);
     }
     else if ( nElement == XML_ELEMENT(OFFICE, XML_DDE_SOURCE) )
     {
+        return new XMLSectionSourceDDEImportContext(GetImport(),
+                                                        xSectionPropertySet);
     }
     else
     {
@@ -348,32 +352,6 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLSectionImportContex
             XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
         return pContext;
     }
-    return nullptr;
-}
-
-SvXMLImportContextRef XMLSectionImportContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList> & /*xAttrList*/ )
-{
-    SvXMLImportContext* pContext = nullptr;
-
-    // section-source (-dde) elements
-    if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-         IsXMLToken(rLocalName, XML_SECTION_SOURCE) )
-    {
-        pContext = new XMLSectionSourceImportContext(GetImport(),
-                                                     xSectionPropertySet);
-    }
-    else if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
-              IsXMLToken(rLocalName, XML_DDE_SOURCE) )
-    {
-        pContext = new XMLSectionSourceDDEImportContext(GetImport(),
-                                                        nPrefix, rLocalName,
-                                                        xSectionPropertySet);
-    }
-
-    return pContext;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

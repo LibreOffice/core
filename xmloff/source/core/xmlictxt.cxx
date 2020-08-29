@@ -27,36 +27,13 @@
 
 using namespace ::com::sun::star;
 
-SvXMLImportContext::SvXMLImportContext( SvXMLImport& rImp, sal_uInt16 nPrfx,
-                              const OUString& rLName )
-    : mrImport(rImp)
-    , maLocalName(rLName)
-    , m_nRefCount(0)
-    , mnPrefix(nPrfx)
-    , mbPrefixAndLocalNameFilledIn(true)
-{
-}
-
 SvXMLImportContext::SvXMLImportContext( SvXMLImport& rImp )
     : mrImport(rImp)
     , m_nRefCount(0)
-    , mnPrefix(0)
-    , mbPrefixAndLocalNameFilledIn(false)
 {
 }
 
 SvXMLImportContext::~SvXMLImportContext()
-{
-}
-
-SvXMLImportContextRef SvXMLImportContext::CreateChildContext( sal_uInt16 /*nPrefix*/,
-        const OUString& /*rLocalName*/,
-        const uno::Reference<xml::sax::XAttributeList>& )
-{
-    return nullptr;
-}
-
-void SvXMLImportContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& )
 {
 }
 
@@ -65,34 +42,8 @@ void SvXMLImportContext::endFastElement(sal_Int32 )
 }
 
 // css::xml::sax::XFastContextHandler:
-void SAL_CALL SvXMLImportContext::startFastElement(sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
+void SAL_CALL SvXMLImportContext::startFastElement(sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList > & )
 {
-    const OUString& rPrefix = SvXMLImport::getNamespacePrefixFromToken(nElement, &GetImport().GetNamespaceMap());
-    const OUString& rLocalName = SvXMLImport::getNameFromToken( nElement );
-    startUnknownElement( SvXMLImport::aDefaultNamespace, (rPrefix.isEmpty())? rLocalName : rPrefix + SvXMLImport::aNamespaceSeparator + rLocalName, Attribs );
-    mrImport.maAttrList->Clear();
-    mrImport.maNamespaceHandler->addNSDeclAttributes( mrImport.maAttrList );
-
-    for( auto &it : sax_fastparser::castToFastAttributeList( Attribs ) )
-    {
-        sal_Int32 nToken = it.getToken();
-        const OUString& rAttrNamespacePrefix = SvXMLImport::getNamespacePrefixFromToken(nToken, &GetImport().GetNamespaceMap());
-        OUString sAttrName = SvXMLImport::getNameFromToken( nToken );
-        if ( !rAttrNamespacePrefix.isEmpty() )
-            sAttrName = rAttrNamespacePrefix + SvXMLImport::aNamespaceSeparator + sAttrName;
-
-        mrImport.maAttrList->AddAttribute( sAttrName, "CDATA", it.toString() );
-    }
-
-    const uno::Sequence< xml::Attribute > unknownAttribs = Attribs->getUnknownAttributes();
-    for ( const auto& rUnknownAttrib : unknownAttribs )
-    {
-        const OUString& rAttrValue = rUnknownAttrib.Value;
-        const OUString& rAttrName = rUnknownAttrib.Name;
-        // note: rAttrName is expected to be namespace-prefixed here
-        mrImport.maAttrList->AddAttribute( rAttrName, "CDATA", rAttrValue );
-    }
-    StartElement( mrImport.maAttrList.get() );
 }
 
 void SAL_CALL SvXMLImportContext::startUnknownElement(const OUString & /*rNamespace*/, const OUString & /*rElementName*/,
@@ -108,49 +59,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SvXMLImportContext::cre
     (sal_Int32 /*Element*/, const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
 {
     return nullptr;
-}
-
-css::uno::Reference< css::xml::sax::XFastContextHandler > SvXMLImportContext::createFastChildContextFallback(sal_Int32 Element, const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
-{
-    auto p = createFastChildContext(Element, Attribs);
-    if (p)
-        return p;
-
-    // fall back to slow-parser path
-    const OUString& rPrefix = SvXMLImport::getNamespacePrefixFromToken(Element, &mrImport.GetNamespaceMap());
-    const OUString& rLocalName = SvXMLImport::getNameFromToken( Element );
-    OUString aName = rPrefix.isEmpty() ? rLocalName : rPrefix + SvXMLImport::aNamespaceSeparator + rLocalName;
-    OUString aLocalName;
-    sal_uInt16 nPrefix =
-        mrImport.mpNamespaceMap->GetKeyByAttrName( aName, &aLocalName );
-
-    mrImport.maAttrList->Clear();
-
-    if ( Attribs.is() )
-    {
-        for( auto &it : sax_fastparser::castToFastAttributeList( Attribs ) )
-        {
-            sal_Int32 nToken = it.getToken();
-            const OUString& rAttrNamespacePrefix = SvXMLImport::getNamespacePrefixFromToken(nToken, &mrImport.GetNamespaceMap());
-            OUString sAttrName = SvXMLImport::getNameFromToken( nToken );
-            if ( !rAttrNamespacePrefix.isEmpty() )
-                sAttrName = rAttrNamespacePrefix + SvXMLImport::aNamespaceSeparator + sAttrName;
-
-            mrImport.maAttrList->AddAttribute( sAttrName, "CDATA", it.toString() );
-        }
-
-        const uno::Sequence< xml::Attribute > unknownAttribs = Attribs->getUnknownAttributes();
-        for ( const auto& rUnknownAttrib : unknownAttribs )
-        {
-            const OUString& rAttrValue = rUnknownAttrib.Value;
-            const OUString& rAttrName = rUnknownAttrib.Name;
-            // note: rAttrName is expected to be namespace-prefixed here
-            mrImport.maAttrList->AddAttribute( rAttrName, "CDATA", rAttrValue );
-        }
-    }
-
-    SAL_INFO("xmloff.core", "calling CreateChildContext on " << typeid(*this).name());
-    return CreateChildContext(nPrefix, aLocalName, mrImport.maAttrList.get() ).get();
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SvXMLImportContext::createUnknownChildContext

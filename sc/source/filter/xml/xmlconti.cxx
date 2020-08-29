@@ -27,15 +27,6 @@
 using namespace xmloff::token;
 
 ScXMLContentContext::ScXMLContentContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
-                                      const OUString& rLName,
-                                      OUStringBuffer& sTempValue) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
-    sValue(sTempValue)
-{
-}
-
-ScXMLContentContext::ScXMLContentContext( ScXMLImport& rImport,
                                       OUStringBuffer& sTempValue) :
     ScXMLImportContext( rImport ),
     sValue(sTempValue)

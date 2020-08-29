@@ -697,7 +697,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLTableRowCellContex
                     static_cast< XMLTableShapeImportHelper* >( rXMLImport.GetShapeImport().get() );
             pTableShapeImport->SetOnTable(false);
             pTableShapeImport->SetCell(aCellPos);
-            pContext = GetImport().GetShapeImport()->CreateGroupChildContext(
+            pContext = XMLShapeImportHelper::CreateGroupChildContext(
                 rXMLImport, nElement, xAttrList, xShapes);
             if (pContext)
             {

@@ -2135,132 +2135,82 @@ void XMLTextImportHelper::SetAutoStyles( SvXMLStylesContext *pStyles )
 
 SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         SvXMLImport& rImport,
-        sal_Int32 Element,
-        const Reference< XFastAttributeList > & Attribs,
-        XMLTextType eType )
-{
-    // fall back to slow-parser path
-    const OUString& rPrefix = SvXMLImport::getNamespacePrefixFromToken(Element, &GetXMLImport().GetNamespaceMap());
-    const OUString& rLocalName = SvXMLImport::getNameFromToken( Element );
-    OUString aName = rPrefix.isEmpty() ? rLocalName : rPrefix + SvXMLImport::aNamespaceSeparator + rLocalName;
-    OUString aLocalName;
-    sal_uInt16 nPrefix =
-        GetXMLImport().GetNamespaceMap().GetKeyByAttrName( aName, &aLocalName );
-
-    rtl::Reference < comphelper::AttributeList > maAttrList = new comphelper::AttributeList();
-
-    if ( Attribs.is() )
-    {
-        for( auto &it : sax_fastparser::castToFastAttributeList( Attribs ) )
-        {
-            sal_Int32 nToken = it.getToken();
-            const OUString& rAttrNamespacePrefix = SvXMLImport::getNamespacePrefixFromToken(nToken, &GetXMLImport().GetNamespaceMap());
-            OUString sAttrName = SvXMLImport::getNameFromToken( nToken );
-            if ( !rAttrNamespacePrefix.isEmpty() )
-                sAttrName = rAttrNamespacePrefix + SvXMLImport::aNamespaceSeparator + sAttrName;
-
-            maAttrList->AddAttribute( sAttrName, "CDATA", it.toString() );
-        }
-
-        const uno::Sequence< xml::Attribute > unknownAttribs = Attribs->getUnknownAttributes();
-        for ( const auto& rUnknownAttrib : unknownAttribs )
-        {
-            const OUString& rAttrValue = rUnknownAttrib.Value;
-            const OUString& rAttrName = rUnknownAttrib.Name;
-            // note: rAttrName is expected to be namespace-prefixed here
-            maAttrList->AddAttribute( rAttrName, "CDATA", rAttrValue );
-        }
-    }
-
-    return CreateTextChildContext(rImport, nPrefix, aLocalName, maAttrList.get(), eType );
-}
-
-SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
-        SvXMLImport& rImport,
-        sal_uInt16 nPrefix, const OUString& rLocalName,
-        const Reference< XAttributeList > & xAttrList,
+        sal_Int32 nElement,
+        const Reference< XFastAttributeList > & xAttrList,
         XMLTextType eType )
 {
     SvXMLImportContext *pContext = nullptr;
 
-    const SvXMLTokenMap& rTokenMap = GetTextElemTokenMap();
-    bool bHeading = false;
     bool bContent = true;
-    sal_uInt16 nToken = rTokenMap.Get( nPrefix, rLocalName );
-    switch( nToken )
+    switch( nElement )
     {
-    case XML_TOK_TEXT_H:
-        bHeading = true;
-        [[fallthrough]];
-    case XML_TOK_TEXT_P:
+    case XML_ELEMENT(TEXT, XML_H):
+    case XML_ELEMENT(TEXT, XML_P):
+    case XML_ELEMENT(LO_EXT, XML_P):
         pContext = new XMLParaContext( rImport,
-                                       nPrefix, rLocalName,
-                                       xAttrList, bHeading );
+                                       nElement,
+                                       xAttrList );
         if (m_xImpl->m_bProgress && XMLTextType::Shape != eType)
         {
             rImport.GetProgressBarHelper()->Increment();
         }
         break;
-    case XML_TOK_TEXT_NUMBERED_PARAGRAPH:
+    // #i52127#
+    case XML_ELEMENT(TEXT, XML_NUMBERED_PARAGRAPH):
         pContext = new XMLNumberedParaContext(
-                        rImport, nPrefix, rLocalName, xAttrList );
+                        rImport, nElement, xAttrList );
         break;
-    case XML_TOK_TEXT_LIST:
+        break;
+    case XML_ELEMENT(TEXT, XML_LIST):
         pContext = new XMLTextListBlockContext( rImport, *this,
-                                                nPrefix, rLocalName,
                                                 xAttrList );
         break;
-    case XML_TOK_TABLE_TABLE:
+    case XML_ELEMENT(TABLE,XML_TABLE):
+    case XML_ELEMENT(LO_EXT, XML_TABLE):
         if( XMLTextType::Body == eType ||
             XMLTextType::TextBox == eType ||
              XMLTextType::Section == eType ||
             XMLTextType::HeaderFooter == eType ||
             XMLTextType::ChangedRegion == eType ||
             XMLTextType::Cell == eType )
-            pContext = CreateTableChildContext( rImport, nPrefix, rLocalName,
-                                                xAttrList );
+            pContext = CreateTableChildContext( rImport, nElement, xAttrList );
         break;
-    case XML_TOK_TEXT_SEQUENCE_DECLS:
+    case XML_ELEMENT(TEXT, XML_SEQUENCE_DECLS):
         if ((XMLTextType::Body == eType && m_xImpl->m_bBodyContentStarted) ||
             XMLTextType::HeaderFooter == eType )
         {
             pContext = new XMLVariableDeclsImportContext(
-                rImport, *this, nPrefix, rLocalName, VarTypeSequence);
+                rImport, *this, VarTypeSequence);
             bContent = false;
         }
         break;
-
-    case XML_TOK_TEXT_VARFIELD_DECLS:
+    case XML_ELEMENT(TEXT, XML_VARIABLE_DECLS):
         if ((XMLTextType::Body == eType && m_xImpl->m_bBodyContentStarted) ||
             XMLTextType::HeaderFooter == eType )
         {
             pContext = new XMLVariableDeclsImportContext(
-                rImport, *this, nPrefix, rLocalName, VarTypeSimple);
+                rImport, *this, VarTypeSimple);
             bContent = false;
         }
         break;
-
-    case XML_TOK_TEXT_USERFIELD_DECLS:
+    case XML_ELEMENT(TEXT, XML_USER_FIELD_DECLS):
         if ((XMLTextType::Body == eType && m_xImpl->m_bBodyContentStarted)||
             XMLTextType::HeaderFooter == eType )
         {
             pContext = new XMLVariableDeclsImportContext(
-                rImport, *this, nPrefix, rLocalName, VarTypeUserField);
+                rImport, *this, VarTypeUserField);
             bContent = false;
         }
         break;
-
-    case XML_TOK_TEXT_DDE_DECLS:
+    case XML_ELEMENT(TEXT, XML_DDE_CONNECTION_DECLS):
         if ((XMLTextType::Body == eType && m_xImpl->m_bBodyContentStarted) ||
             XMLTextType::HeaderFooter == eType )
         {
-            pContext = new XMLDdeFieldDeclsImportContext(
-                rImport, nPrefix, rLocalName);
+            pContext = new XMLDdeFieldDeclsImportContext(rImport);
             bContent = false;
         }
         break;
-
-    case XML_TOK_TEXT_FRAME_PAGE:
+    case XML_ELEMENT(DRAW, XML_FRAME):
         if ((XMLTextType::Body == eType && m_xImpl->m_bBodyContentStarted) ||
             XMLTextType::TextBox == eType ||
             XMLTextType::ChangedRegion == eType )
@@ -2273,8 +2223,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
             bContent = false;
         }
         break;
-
-    case XML_TOK_DRAW_A_PAGE:
+    case XML_ELEMENT(DRAW, XML_A):
         if ((XMLTextType::Body == eType && m_xImpl->m_bBodyContentStarted) ||
             XMLTextType::TextBox == eType ||
              XMLTextType::ChangedRegion == eType)
@@ -2282,65 +2231,57 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
             TextContentAnchorType eAnchorType =
                 XMLTextType::TextBox == eType ? TextContentAnchorType_AT_FRAME
                                                : TextContentAnchorType_AT_PAGE;
-            pContext = new XMLTextFrameHyperlinkContext( rImport, nPrefix,
-                                                rLocalName, xAttrList,
+            pContext = new XMLTextFrameHyperlinkContext( rImport, nElement,
+                                                xAttrList,
                                                 eAnchorType );
             bContent = false;
         }
         break;
-
-    case XML_TOK_TEXT_INDEX_TITLE:
-    case XML_TOK_TEXT_SECTION:
+    case XML_ELEMENT(TEXT, XML_INDEX_TITLE):
+    case XML_ELEMENT(TEXT, XML_SECTION):
         pContext = new XMLSectionImportContext( rImport );
         break;
-
-    case XML_TOK_TEXT_TOC:
-    case XML_TOK_TEXT_OBJECT_INDEX:
-    case XML_TOK_TEXT_TABLE_INDEX:
-    case XML_TOK_TEXT_ILLUSTRATION_INDEX:
-    case XML_TOK_TEXT_USER_INDEX:
-    case XML_TOK_TEXT_ALPHABETICAL_INDEX:
-    case XML_TOK_TEXT_BIBLIOGRAPHY_INDEX:
+    case XML_ELEMENT(TEXT, XML_TABLE_OF_CONTENT):
+    case XML_ELEMENT(TEXT, XML_OBJECT_INDEX):
+    case XML_ELEMENT(TEXT, XML_TABLE_INDEX):
+    case XML_ELEMENT(TEXT, XML_ILLUSTRATION_INDEX):
+    case XML_ELEMENT(TEXT, XML_USER_INDEX):
+    case XML_ELEMENT(TEXT, XML_ALPHABETICAL_INDEX):
+    case XML_ELEMENT(TEXT, XML_BIBLIOGRAPHY):
         if( XMLTextType::Shape != eType )
-            pContext = new XMLIndexTOCContext( rImport, nPrefix, rLocalName );
+            pContext = new XMLIndexTOCContext( rImport, nElement );
         break;
-
-    case XML_TOK_TEXT_TRACKED_CHANGES:
-        pContext = new XMLTrackedChangesImportContext( rImport, nPrefix,
-                                                       rLocalName);
+    case XML_ELEMENT(TEXT, XML_TRACKED_CHANGES):
+        pContext = new XMLTrackedChangesImportContext( rImport );
         bContent = false;
         break;
-
-    case XML_TOK_TEXT_CHANGE:
-    case XML_TOK_TEXT_CHANGE_START:
-    case XML_TOK_TEXT_CHANGE_END:
+    case XML_ELEMENT(TEXT, XML_CHANGE):
+    case XML_ELEMENT(TEXT, XML_CHANGE_START):
+    case XML_ELEMENT(TEXT, XML_CHANGE_END):
         pContext = new XMLChangeImportContext(
             rImport,
-            ((nToken == XML_TOK_TEXT_CHANGE_END)
+            ((nElement == XML_ELEMENT(TEXT, XML_CHANGE_END))
                 ? XMLChangeImportContext::Element::END
-                : (nToken == XML_TOK_TEXT_CHANGE_START)
+                : (nElement == XML_ELEMENT(TEXT, XML_CHANGE_START))
                     ? XMLChangeImportContext::Element::START
                     : XMLChangeImportContext::Element::POINT),
             true);
         break;
-
-    case XML_TOK_TEXT_FORMS:
+    case XML_ELEMENT(OFFICE, XML_FORMS):
         pContext = xmloff::OFormLayerXMLImport::createOfficeFormsContext(rImport);
         bContent = false;
         break;
-
-    case XML_TOK_TEXT_AUTOMARK:
+    case XML_ELEMENT(TEXT, XML_ALPHABETICAL_INDEX_AUTO_MARK_FILE):
         if( XMLTextType::Body == eType )
         {
-            pContext = new XMLAutoMarkFileContext(rImport, nPrefix,rLocalName);
+            pContext = new XMLAutoMarkFileContext(rImport);
         }
         bContent = false;
         break;
-
-    case XML_TOK_TEXT_CALCULATION_SETTINGS:
-        pContext = new XMLCalculationSettingsContext ( rImport, nPrefix, rLocalName, xAttrList);
+    case XML_ELEMENT(TABLE, XML_CALCULATION_SETTINGS):
+        pContext = new XMLCalculationSettingsContext ( rImport, nElement, xAttrList);
         bContent = false;
-    break;
+        break;
 
     default:
         if ((XMLTextType::Body == eType && m_xImpl->m_bBodyContentStarted) ||
@@ -2348,16 +2289,16 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
              XMLTextType::ChangedRegion == eType )
         {
             Reference < XShapes > xShapes;
-            pContext = rImport.GetShapeImport()->CreateGroupChildContext(
-                    rImport, nPrefix, rLocalName, xAttrList, xShapes );
+            pContext = XMLShapeImportHelper::CreateGroupChildContext(
+                    rImport, nElement, xAttrList, xShapes );
             bContent = false;
         }
     }
 
     // handle open redlines
-    if ( (XML_TOK_TEXT_CHANGE != nToken) &&
-         (XML_TOK_TEXT_CHANGE_END != nToken) &&
-         (XML_TOK_TEXT_CHANGE_START != nToken) )
+    if ( (XML_ELEMENT(TEXT, XML_CHANGE) != nElement) &&
+         (XML_ELEMENT(TEXT, XML_CHANGE_END) != nElement) &&
+         (XML_ELEMENT(TEXT, XML_CHANGE_START) != nElement) )
     {
 //      ResetOpenRedlineId();
     }
@@ -2367,15 +2308,19 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         m_xImpl->m_bBodyContentStarted = false;
     }
 
-    if( nToken != XML_TOK_TEXT_FRAME_PAGE )
+    if( nElement != XML_ELEMENT(DRAW, XML_FRAME) )
         ClearLastImportedTextFrameName();
+
+    if (!pContext)
+        XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
+
     return pContext;
 }
 
 SvXMLImportContext *XMLTextImportHelper::CreateTableChildContext(
         SvXMLImport&,
-        sal_uInt16 /*nPrefix*/, const OUString& /*rLocalName*/,
-        const Reference< XAttributeList > & )
+        sal_Int32 /*nElement*/,
+        const Reference< XFastAttributeList > & )
 {
     return nullptr;
 }
