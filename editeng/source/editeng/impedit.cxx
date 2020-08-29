@@ -1396,7 +1396,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
                     SfxLokHelper::notifyOtherViews(pThisShell,
                             LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, aMessageParams);
 
-                aMessageParams.put("mispelledWord", bIsWrong ? 1 : 0);
+                aMessageParams.put("misspelledWord", bIsWrong ? 1 : 0);
                 aMessageParams.add_child("hyperlink", aHyperlinkTree);
 
                 if (comphelper::LibreOfficeKit::isViewIdForVisCursorInvalidation())

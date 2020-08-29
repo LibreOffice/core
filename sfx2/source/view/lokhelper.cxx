@@ -476,7 +476,7 @@ void SfxLokHelper::notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc
     }
 }
 
-void SfxLokHelper::notifyVisCursorInvalidation(OutlinerViewShell const* pThisView, const OString& rRectangle, bool bMispelledWord, const OString& rHyperlink)
+void SfxLokHelper::notifyVisCursorInvalidation(OutlinerViewShell const* pThisView, const OString& rRectangle, bool bMisspelledWord, const OString& rHyperlink)
 {
     if (DisableCallbacks::disabled())
         return;
@@ -487,7 +487,7 @@ void SfxLokHelper::notifyVisCursorInvalidation(OutlinerViewShell const* pThisVie
         OString sHyperlink = rHyperlink.isEmpty() ? "{}" : rHyperlink;
         sPayload = OStringLiteral("{ \"viewId\": \"") + OString::number(SfxLokHelper::getView()) +
             "\", \"rectangle\": \"" + rRectangle +
-            "\", \"mispelledWord\": \"" +  OString::number(bMispelledWord ? 1 : 0) +
+            "\", \"misspelledWord\": \"" +  OString::number(bMispelledWord ? 1 : 0) +
             "\", \"hyperlink\": " + sHyperlink + " }";
     }
     else
