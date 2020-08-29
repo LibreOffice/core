@@ -34,7 +34,7 @@ class XMLTextFrameContextHyperlink_Impl;
 
 class XMLTextFrameContext : public SvXMLImportContext, public MultiImageImportHelper
 {
-    css::uno::Reference< css::xml::sax::XAttributeList > m_xAttrList;
+    rtl::Reference< sax_fastparser::FastAttributeList > m_xAttrList;
 
     SvXMLImportContextRef m_xImplContext;
     SvXMLImportContextRef m_xReplImplContext;
@@ -67,14 +67,15 @@ public:
 
 
     XMLTextFrameContext( SvXMLImport& rImport,
-            sal_uInt16 nPrfx,
-            const OUString& rLName,
+            sal_Int32 nElement,
             const css::uno::Reference<
-                css::xml::sax::XAttributeList > & xAttrList,
+                css::xml::sax::XFastAttributeList > & xAttrList,
             css::text::TextContentAnchorType eDfltAnchorType );
 
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
     SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
                 const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;

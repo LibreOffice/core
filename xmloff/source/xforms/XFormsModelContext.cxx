@@ -33,6 +33,7 @@
 #include <xmloff/xmlerror.hxx>
 
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/xforms/XModel2.hpp>
@@ -62,7 +63,7 @@ void XFormsModelContext::HandleAttribute(
         GetImport().SetError( XMLERROR_XFORMS_NO_SCHEMA_SUPPORT );
         break;
     default:
-        OSL_FAIL( "this should not happen" );
+        XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttributeToken, rValue);
         break;
     }
 }
