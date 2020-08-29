@@ -33,6 +33,7 @@
 
 class GalleryBinaryEngineEntry;
 class GalleryStorageLocations;
+class GalleryTheme;
 
 class GalleryThemeEntry
 {
@@ -56,6 +57,10 @@ public:
 
     GalleryStorageLocations& getGalleryStorageLocations() const { return *mpGalleryStorageEngineEntry->getGalleryStorageLocations(); }
 
+    GalleryTheme* createGalleryTheme(Gallery* pGallery);
+
+    std::unique_ptr<GalleryBinaryEngine> createGalleryStorageEngine(GalleryObjectCollection& mrGalleryObjectCollection, bool& bReadOnly);
+
     const OUString&         GetThemeName() const { return aName; }
 
     bool                    IsReadOnly() const { return bReadOnly; }
@@ -75,7 +80,7 @@ public:
 
     void removeTheme();
 
-    std::unique_ptr<GalleryTheme> getCachedTheme(Gallery* pGallery) const;
+    std::unique_ptr<GalleryTheme> getCachedTheme(Gallery* pGallery);
 
     void setStorageLocations(INetURLObject& rURL);
 };
@@ -102,7 +107,7 @@ private:
 
     GalleryThemeEntry*          ImplGetThemeEntry( const OUString& rThemeName );
 
-    SAL_DLLPRIVATE GalleryTheme* ImplGetCachedTheme( const GalleryThemeEntry* pThemeEntry );
+    SAL_DLLPRIVATE GalleryTheme* ImplGetCachedTheme( GalleryThemeEntry* pThemeEntry );
     SAL_DLLPRIVATE void         ImplDeleteCachedTheme( GalleryTheme const * pTheme );
 
     Gallery&                    operator=( Gallery const & ) = delete; // MSVC2015 workaround
