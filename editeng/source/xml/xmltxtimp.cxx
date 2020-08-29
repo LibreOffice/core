@@ -52,7 +52,6 @@ class SvxXMLTextImportContext : public SvXMLImportContext
 public:
     SvxXMLTextImportContext( SvXMLImport& rImport, const uno::Reference< XText >& xText );
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList ) override;
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
             sal_Int32 nElement,
             const uno::Reference< xml::sax::XFastAttributeList >& xAttrList) override;
@@ -70,7 +69,7 @@ SvxXMLTextImportContext::SvxXMLTextImportContext( SvXMLImport& rImport, const un
 
 css::uno::Reference< css::xml::sax::XFastContextHandler > SvxXMLTextImportContext::createFastChildContext(
         sal_Int32 nElement,
-        const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/)
+        const uno::Reference< xml::sax::XFastAttributeList >& xAttrList)
 {
     SvXMLImportContext* pContext = nullptr;
     if(nElement == XML_ELEMENT(OFFICE, XML_BODY ))
@@ -82,25 +81,8 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SvxXMLTextImportContex
         pContext = new SvXMLStylesContext( GetImport() );
         GetImport().GetTextImport()->SetAutoStyles( static_cast<SvXMLStylesContext*>(pContext) );
     }
-    return pContext;
-}
-
-SvXMLImportContextRef SvxXMLTextImportContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList )
-{
-    SvXMLImportContext* pContext = nullptr;
-    if(XML_NAMESPACE_OFFICE == nPrefix && IsXMLToken( rLocalName, XML_BODY ) )
-    {
-        // dealt with in createFastChildContext
-    }
-    else if( XML_NAMESPACE_OFFICE == nPrefix && IsXMLToken( rLocalName, XML_AUTOMATIC_STYLES ) )
-    {
-        // dealt with in createFastChildContext
-    }
     else
-    {
-        pContext = GetImport().GetTextImport()->CreateTextChildContext( GetImport(), nPrefix, rLocalName, xAttrList );
-    }
-
+        pContext = GetImport().GetTextImport()->CreateTextChildContext( GetImport(), nElement, xAttrList );
     return pContext;
 }
 

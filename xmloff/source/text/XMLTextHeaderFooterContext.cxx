@@ -93,10 +93,9 @@ XMLTextHeaderFooterContext::~XMLTextHeaderFooterContext()
 {
 }
 
-SvXMLImportContextRef XMLTextHeaderFooterContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextHeaderFooterContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
     if( bInsertContent )
@@ -166,7 +165,7 @@ SvXMLImportContextRef XMLTextHeaderFooterContext::CreateChildContext(
 
         pContext =
             GetImport().GetTextImport()->CreateTextChildContext(
-                GetImport(), nPrefix, rLocalName, xAttrList,
+                GetImport(), nElement, xAttrList,
                 XMLTextType::HeaderFooter );
     }
 
