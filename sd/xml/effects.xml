@@ -2648,6 +2648,26 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
         <anim:par smil:begin="0" smil:fill="hold">
+            <anim:par smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="emphasis" pres:preset-id="libo-physics-shoot-right-return">
+                <anim:animatePhysics smil:dur="4" anim:bounciness="0.6" anim:velocity-x="10000" smil:fill="hold"/>
+                <anim:animate smil:begin="4s" smil:dur="2s" smil:fill="hold" smil:accelerate="0.2" smil:decelerate="0.5" smil:attributeName="x" smil:to="x"/>
+                <anim:animate smil:begin="4s" smil:dur="2s" smil:fill="hold" smil:accelerate="0.2" smil:decelerate="0.5" smil:attributeName="y" smil:to="y"/>
+                <anim:animate smil:begin="4s" smil:dur="2s" smil:fill="hold" smil:accelerate="0.2" smil:decelerate="0.5" smil:attributeName="rotate" smil:to="0"/>
+            </anim:par>
+        </anim:par>
+    </anim:par>
+    <anim:par smil:begin="indefinite" smil:fill="hold">
+        <anim:par smil:begin="0" smil:fill="hold">
+            <anim:par smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="emphasis" pres:preset-id="libo-physics-shoot-left-return">
+                <anim:animatePhysics smil:dur="4" anim:bounciness="0.6" anim:velocity-x="-10000" smil:fill="hold"/>
+                <anim:animate smil:begin="4s" smil:dur="2s" smil:fill="hold" smil:accelerate="0.2" smil:decelerate="0.5" smil:attributeName="x" smil:to="x"/>
+                <anim:animate smil:begin="4s" smil:dur="2s" smil:fill="hold" smil:accelerate="0.2" smil:decelerate="0.5" smil:attributeName="y" smil:to="y"/>
+                <anim:animate smil:begin="4s" smil:dur="2s" smil:fill="hold" smil:accelerate="0.2" smil:decelerate="0.5" smil:attributeName="rotate" smil:to="0"/>
+            </anim:par>
+        </anim:par>
+    </anim:par>
+    <anim:par smil:begin="indefinite" smil:fill="hold">
+        <anim:par smil:begin="0" smil:fill="hold">
             <anim:par smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="media-call" pres:preset-id="ooo-media-start">
                 <anim:command smil:begin="0" smil:dur="0.001" smil:fill="hold" anim:command="play"/>
             </anim:par>
