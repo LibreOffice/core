@@ -94,7 +94,7 @@ SdXML3DLightContext::~SdXML3DLightContext()
 
 SdXML3DSceneShapeContext::SdXML3DSceneShapeContext(
     SvXMLImport& rImport,
-    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes,
     bool bTemporaryShapes)
 :   SdXMLShapeContext( rImport, xAttrList, rShapes, bTemporaryShapes ), SdXML3DSceneAttributesHelper( rImport )
@@ -176,6 +176,10 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXML3DSceneShapeConte
             // dr3d:light inside dr3d:scene context
             xContext = create3DLightContext( xAttrList );
             break;
+        default:
+            // call GroupChildContext function at common ShapeImport
+            return XMLShapeImportHelper::Create3DSceneChildContext(
+                GetImport(), nElement, xAttrList, mxChildren);
     }
     return xContext.get();
 }
@@ -195,13 +199,6 @@ SvXMLImportContextRef SdXML3DSceneShapeContext::CreateChildContext( sal_uInt16 n
     else if( nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) )
     {
         xContext = new SdXMLEventsContext( GetImport(), nPrefix, rLocalName, xAttrList, mxShape );
-    }
-
-    // call GroupChildContext function at common ShapeImport
-    if (!xContext)
-    {
-        xContext = GetImport().GetShapeImport()->Create3DSceneChildContext(
-            GetImport(), nPrefix, rLocalName, xAttrList, mxChildren);
     }
 
     return xContext;

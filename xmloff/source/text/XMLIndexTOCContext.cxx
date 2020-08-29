@@ -44,6 +44,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlement.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <osl/diagnose.h>
 
 
@@ -94,14 +95,14 @@ SvXMLEnumMapEntry<IndexTypeEnum> const aIndexTypeMap[] =
 
 
 XMLIndexTOCContext::XMLIndexTOCContext(SvXMLImport& rImport,
-    sal_uInt16 nPrfx, const OUString& rLocalName)
-    : SvXMLImportContext(rImport, nPrfx, rLocalName)
+    sal_Int32 nElement)
+    : SvXMLImportContext(rImport)
     , eIndexType(TEXT_INDEX_UNKNOWN)
     , bValid(false)
 {
-    if (XML_NAMESPACE_TEXT == nPrfx)
+    if (IsTokenInNamespace(nElement, XML_NAMESPACE_TEXT))
     {
-        if (SvXMLUnitConverter::convertEnum(eIndexType, rLocalName, aIndexTypeMap))
+        if (SvXMLUnitConverter::convertEnum(eIndexType, SvXMLImport::getNameFromToken(nElement), aIndexTypeMap))
         {
             // check for array index:
             OSL_ENSURE(unsigned(eIndexType) < (SAL_N_ELEMENTS(aIndexServiceMap)), "index out of range");
@@ -117,8 +118,9 @@ XMLIndexTOCContext::~XMLIndexTOCContext()
 {
 }
 
-void XMLIndexTOCContext::StartElement(
-    const Reference<XAttributeList> & xAttrList)
+void XMLIndexTOCContext::startFastElement(
+    sal_Int32 /*nElement*/,
+    const Reference<css::xml::sax::XFastAttributeList> & xAttrList)
 {
     if (!bValid)
         return;
@@ -126,44 +128,35 @@ void XMLIndexTOCContext::StartElement(
     // find text:style-name attribute and set section style
     // find text:protected and set value
     // find text:name and set value (if not empty)
-    sal_Int16 nCount = xAttrList->getLength();
     bool bProtected = false;
     OUString sIndexName;
     OUString sXmlId;
     XMLPropStyleContext* pStyle(nullptr);
-    for(sal_Int16 nAttr = 0; nAttr < nCount; nAttr++)
+    for(auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
-                              &sLocalName );
-        if ( XML_NAMESPACE_TEXT == nPrefix)
+        const OUString sValue = aIter.toString();
+        switch (aIter.getToken())
         {
-            if ( IsXMLToken( sLocalName, XML_STYLE_NAME ) )
-            {
-                pStyle = GetImport().GetTextImport()->FindSectionStyle(
-                            xAttrList->getValueByIndex(nAttr));
-            }
-            else if ( IsXMLToken( sLocalName, XML_PROTECTED ) )
+            case XML_ELEMENT(TEXT, XML_STYLE_NAME):
+                pStyle = GetImport().GetTextImport()->FindSectionStyle(sValue);
+                break;
+            case XML_ELEMENT(TEXT, XML_PROTECTED):
             {
                 bool bTmp(false);
-                if (::sax::Converter::convertBool(
-                     bTmp, xAttrList->getValueByIndex(nAttr)))
+                if (::sax::Converter::convertBool(bTmp, sValue))
                 {
                     bProtected = bTmp;
                 }
+                break;
             }
-            else if ( IsXMLToken( sLocalName, XML_NAME ) )
-            {
-                sIndexName = xAttrList->getValueByIndex(nAttr);
-            }
-        }
-        else if ( XML_NAMESPACE_XML == nPrefix)
-        {
-            if ( IsXMLToken( sLocalName, XML_ID ) )
-            {
-                sXmlId = xAttrList->getValueByIndex(nAttr);
-            }
+            case XML_ELEMENT(TEXT, XML_NAME):
+                sIndexName = sValue;
+                break;
+            case XML_ELEMENT(XML, XML_ID):
+                sXmlId = sValue;
+                break;
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
 

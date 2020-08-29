@@ -1301,10 +1301,11 @@ namespace xmloff
         enableTrackAttributes();
     }
 
-    SvXMLImportContextRef OTextLikeImport::CreateChildContext( sal_uInt16 _nPrefix, const OUString& _rLocalName,
-        const Reference< XAttributeList >& _rxAttrList )
+    css::uno::Reference< css::xml::sax::XFastContextHandler > OTextLikeImport::createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
     {
-        if ( ( XML_NAMESPACE_TEXT == _nPrefix ) && _rLocalName.equalsIgnoreAsciiCase("p") )
+        if ( nElement == XML_ELEMENT(TEXT, XML_P) )
         {
             OSL_ENSURE( m_eElementType == OControlElement::TEXT_AREA,
                 "OTextLikeImport::CreateChildContext: text paragraphs in a non-text-area?" );
@@ -1327,7 +1328,7 @@ namespace xmloff
                     if ( m_xCursor.is() )
                     {
                         m_bEncounteredTextPara = true;
-                        return xTextImportHelper->CreateTextChildContext( m_rContext.getGlobalContext(), _nPrefix, _rLocalName, _rxAttrList );
+                        return xTextImportHelper->CreateTextChildContext( m_rContext.getGlobalContext(), nElement, xAttrList );
                     }
                 }
                 else
