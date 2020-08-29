@@ -306,12 +306,12 @@ class formatBulletsNumbering(UITestCase):
         xBulletPage = xDialog.getChild("PickBulletPage")
         xselector = xBulletPage.getChild("valueset")
         self.assertEqual(get_state_as_dict(xselector)["ItemsCount"], "8")
-        # Select elemet num 3
+        # Select element num 3
         xselector.executeAction("CHOOSE", mkPropertyValues({"POS": "3"}))
         self.assertEqual(get_state_as_dict(xselector)["SelectedItemPos"], "2")
         self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "3")
         self.assertEqual(get_state_as_dict(xselector)["ItemText"], "Solid diamond bullets")
-        # Select elemet num 7
+        # Select element num 7
         xselector.executeAction("CHOOSE", mkPropertyValues({"POS": "7"}))
         self.assertEqual(get_state_as_dict(xselector)["SelectedItemPos"], "6")
         self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "7")
@@ -329,12 +329,12 @@ class formatBulletsNumbering(UITestCase):
         xNumberingPage = xDialog.getChild("PickNumberingPage")
         xselector = xNumberingPage.getChild("valueset")
         self.assertEqual(get_state_as_dict(xselector)["ItemsCount"], "8")
-        # Select elemet num 5
+        # Select element num 5
         xselector.executeAction("CHOOSE", mkPropertyValues({"POS": "5"}))
         self.assertEqual(get_state_as_dict(xselector)["SelectedItemPos"], "4")
         self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "5")
         self.assertEqual(get_state_as_dict(xselector)["ItemText"], "Uppercase letter A) B) C)")
-        # Select elemet num 8
+        # Select element num 8
         xselector.executeAction("CHOOSE", mkPropertyValues({"POS": "8"}))
         self.assertEqual(get_state_as_dict(xselector)["SelectedItemPos"], "7")
         self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "8")
@@ -346,7 +346,7 @@ class formatBulletsNumbering(UITestCase):
         xOutlinePage = xDialog.getChild("PickOutlinePage")
         xselector = xOutlinePage.getChild("valueset")
         self.assertEqual(get_state_as_dict(xselector)["ItemsCount"], "8")
-        # Select elemet num 1
+        # Select element num 1
         xselector.executeAction("CHOOSE", mkPropertyValues({"POS": "1"}))
         self.assertEqual(get_state_as_dict(xselector)["SelectedItemPos"], "0")
         self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "1")
@@ -358,11 +358,11 @@ class formatBulletsNumbering(UITestCase):
         xGraphicPage = xDialog.getChild("PickGraphicPage")
         xselector = xGraphicPage.getChild("valueset")
         self.assertEqual(get_state_as_dict(xselector)["ItemsCount"], "92")
-        # Select elemet num 22
+        # Select element num 22
         xselector.executeAction("CHOOSE", mkPropertyValues({"POS": "22"}))
         self.assertEqual(get_state_as_dict(xselector)["SelectedItemPos"], "21")
         self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "22")
-        # Select elemet num 73
+        # Select element num 73
         xselector.executeAction("CHOOSE", mkPropertyValues({"POS": "73"}))
         self.assertEqual(get_state_as_dict(xselector)["SelectedItemPos"], "72")
         self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "73")

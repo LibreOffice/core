@@ -50,7 +50,7 @@ public class _XSpinValue extends MultiMethodTest {
     }
 
     public void _removeAdjustmentListener() {
-        //this method is checked in addAjustmentListener
+        //this method is checked in addAdjustmentListener
         //so that method is required here and if it works
         //this method is given OK too
         requiredMethod("addAdjustmentListener()");
