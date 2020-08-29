@@ -30,7 +30,7 @@ using namespace ::xmloff::token;
 
 SdXMLGroupShapeContext::SdXMLGroupShapeContext(
     SvXMLImport& rImport,
-    const uno::Reference< xml::sax::XAttributeList>& xAttrList,
+    const uno::Reference< xml::sax::XFastAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes,
     bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, xAttrList, rShapes, bTemporaryShape )
@@ -45,57 +45,29 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLGroupShapeContext
     sal_Int32 nElement,
     const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-   // #i68101#
+    // #i68101#
     if( nElement == XML_ELEMENT(SVG, XML_TITLE) ||
         nElement == XML_ELEMENT(SVG, XML_DESC ) ||
         nElement == XML_ELEMENT(SVG_COMPAT, XML_TITLE) ||
         nElement == XML_ELEMENT(SVG_COMPAT, XML_DESC ) )
     {
-        // handled in CreateChildContext
+        return new SdXMLDescriptionContext( GetImport(), nElement, mxShape );
     }
     else if( nElement == XML_ELEMENT(OFFICE, XML_EVENT_LISTENERS) )
     {
-        // handled in CreateChildContext
+        return new SdXMLEventsContext( GetImport(), mxShape );
     }
     else if( nElement == XML_ELEMENT(DRAW, XML_GLUE_POINT) )
-    {
-        // handled in CreateChildContext
-    }
-    else
-    {
-        // call GroupChildContext function at common ShapeImport
-        return GetImport().GetShapeImport()->CreateGroupChildContext(
-            GetImport(), nElement, xAttrList, mxChildren);
-    }
-    return nullptr;
-}
-
-SvXMLImportContextRef SdXMLGroupShapeContext::CreateChildContext( sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList>& xAttrList )
-{
-    SvXMLImportContextRef xContext;
-
-    // #i68101#
-    if( nPrefix == XML_NAMESPACE_SVG &&
-        (IsXMLToken( rLocalName, XML_TITLE ) || IsXMLToken( rLocalName, XML_DESC ) ) )
-    {
-        xContext = new SdXMLDescriptionContext( GetImport(), nPrefix, rLocalName, xAttrList, mxShape );
-    }
-    else if( nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) )
-    {
-        xContext = new SdXMLEventsContext( GetImport(), nPrefix, rLocalName, xAttrList, mxShape );
-    }
-    else if( nPrefix == XML_NAMESPACE_DRAW && IsXMLToken( rLocalName, XML_GLUE_POINT ) )
     {
         addGluePoint( xAttrList );
     }
     else
     {
-        // handled in createFastChildContext
+        // call GroupChildContext function at common ShapeImport
+        return XMLShapeImportHelper::CreateGroupChildContext(
+            GetImport(), nElement, xAttrList, mxChildren);
     }
-
-    return xContext;
+    return nullptr;
 }
 
 void SdXMLGroupShapeContext::startFastElement (sal_Int32 /*nElement*/,

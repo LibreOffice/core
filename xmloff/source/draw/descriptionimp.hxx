@@ -25,17 +25,15 @@
 
 // office:events inside a shape
 
-class SdXMLDescriptionContext : public SvXMLImportContext
+class SdXMLDescriptionContext final : public SvXMLImportContext
 {
 private:
     css::uno::Reference< css::drawing::XShape > mxShape;
     OUString msText;
+    sal_Int32 mnElement;
 public:
 
-    SdXMLDescriptionContext( SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
+    SdXMLDescriptionContext( SvXMLImport& rImport, sal_Int32 mnElement,
         const css::uno::Reference< css::drawing::XShape >& rxShape );
     virtual ~SdXMLDescriptionContext() override;
 

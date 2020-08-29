@@ -43,7 +43,7 @@ uno::Reference< xml::sax::XFastContextHandler > ScXMLTableShapesContext::createF
     {
         XMLTableShapeImportHelper* pTableShapeImport(static_cast<XMLTableShapeImportHelper*>(rXMLImport.GetShapeImport().get()));
         pTableShapeImport->SetOnTable(true);
-        return GetImport().GetShapeImport()->CreateGroupChildContext(
+        return XMLShapeImportHelper::CreateGroupChildContext(
             rXMLImport, nElement, xAttrList, xShapes);
     }
     XMLOFF_WARN_UNKNOWN_ELEMENT("sc", nElement);

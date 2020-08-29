@@ -36,9 +36,6 @@ private:
 public:
 
     SdXMLEventsContext( SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         const css::uno::Reference< css::drawing::XShape >& rxShape );
     virtual ~SdXMLEventsContext() override;
 

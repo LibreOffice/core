@@ -18,8 +18,8 @@
 class QRCodeContext : public SvXMLImportContext
 {
 public:
-    QRCodeContext(SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,
-                  const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+    QRCodeContext(SvXMLImport& rImport, sal_Int32 nElement,
+                  const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                   const css::uno::Reference<css::drawing::XShape>& rxShape);
 };
 

@@ -35,11 +35,6 @@ class XMLOFF_DLLPUBLIC XMLBase64ImportContext final : public SvXMLImportContext
 
 public:
 
-    XMLBase64ImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                            const OUString& rLName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
-        const css::uno::Reference< css::io::XOutputStream >& rOut );
-
     XMLBase64ImportContext( SvXMLImport& rImport,
         const css::uno::Reference< css::io::XOutputStream >& rOut );
 

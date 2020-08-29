@@ -28,9 +28,6 @@ class ScXMLContentContext : public ScXMLImportContext
 
 public:
 
-    ScXMLContentContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                       const OUString& rLName,
-                       OUStringBuffer& sValue);
     ScXMLContentContext( ScXMLImport& rImport,
                        OUStringBuffer& sValue);
 

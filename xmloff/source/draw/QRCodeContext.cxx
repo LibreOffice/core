@@ -35,53 +35,47 @@ using namespace css::io;
 using namespace css::graphic;
 using namespace xmloff::token;
 
-QRCodeContext::QRCodeContext(SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,
-                             const Reference<XAttributeList>& xAttrList,
+QRCodeContext::QRCodeContext(SvXMLImport& rImport, sal_Int32 /*nElement*/,
+                             const Reference<XFastAttributeList>& xAttrList,
                              const Reference<XShape>& rxShape)
-    : SvXMLImportContext(rImport, nPrfx, rLocalName)
+    : SvXMLImportContext(rImport)
 {
     Reference<beans::XPropertySet> xPropSet(rxShape, UNO_QUERY_THROW);
 
     css::drawing::QRCode aQRCode;
-    const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
 
-    for (sal_Int16 i = 0; i < nAttrCount; i++)
+    for (auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
-        OUString sAttrName = xAttrList->getNameByIndex(i);
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName(sAttrName, &aLocalName);
-        OUString sValue = xAttrList->getValueByIndex(i);
-
-        switch (nPrefix)
+        switch (aIter.getToken())
         {
-            case XML_NAMESPACE_LO_EXT:
-                if (IsXMLToken(aLocalName, XML_QRCODE_ERROR_CORRECTION))
-                {
-                    OUString aErrorCorrValue = sValue;
+            case XML_ELEMENT(LO_EXT, XML_QRCODE_ERROR_CORRECTION):
+            {
+                OUString aErrorCorrValue = aIter.toString();
 
-                    if (aErrorCorrValue == "low")
-                        aQRCode.ErrorCorrection = css::drawing::QRCodeErrorCorrection::LOW;
-                    else if (aErrorCorrValue == "medium")
-                        aQRCode.ErrorCorrection = css::drawing::QRCodeErrorCorrection::MEDIUM;
-                    else if (aErrorCorrValue == "quartile")
-                        aQRCode.ErrorCorrection = css::drawing::QRCodeErrorCorrection::QUARTILE;
-                    else
-                        aQRCode.ErrorCorrection = css::drawing::QRCodeErrorCorrection::HIGH;
-                }
-
-                if (IsXMLToken(aLocalName, XML_QRCODE_BORDER))
-                {
-                    sal_Int32 nAttrVal;
-                    if (sax::Converter::convertNumber(nAttrVal, sValue, 0))
-                        aQRCode.Border = nAttrVal;
-                }
+                if (aErrorCorrValue == "low")
+                    aQRCode.ErrorCorrection = css::drawing::QRCodeErrorCorrection::LOW;
+                else if (aErrorCorrValue == "medium")
+                    aQRCode.ErrorCorrection = css::drawing::QRCodeErrorCorrection::MEDIUM;
+                else if (aErrorCorrValue == "quartile")
+                    aQRCode.ErrorCorrection = css::drawing::QRCodeErrorCorrection::QUARTILE;
+                else
+                    aQRCode.ErrorCorrection = css::drawing::QRCodeErrorCorrection::HIGH;
                 break;
-
-            case XML_NAMESPACE_OFFICE:
-                if (IsXMLToken(aLocalName, XML_STRING_VALUE))
-                {
-                    aQRCode.Payload = sValue;
-                }
+            }
+            case XML_ELEMENT(LO_EXT, XML_QRCODE_BORDER):
+            {
+                sal_Int32 nAttrVal;
+                if (sax::Converter::convertNumber(nAttrVal, aIter.toString(), 0))
+                    aQRCode.Border = nAttrVal;
+                break;
+            }
+            case XML_ELEMENT(OFFICE, XML_STRING_VALUE):
+            {
+                aQRCode.Payload = aIter.toString();
+                break;
+            }
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
         }
     }
     xPropSet->setPropertyValue("QRCodeProperties", Any(aQRCode));

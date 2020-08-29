@@ -779,44 +779,6 @@ void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
         const SvXMLImportContextRef & pHandler = maContexts.top();
         SAL_INFO("xmloff.core", "calling createFastChildContext on " << typeid(*pHandler.get()).name());
         auto tmp = pHandler->createFastChildContext( Element, Attribs );
-        if (!tmp)
-        {
-            // fall back to slow-parser path
-            const OUString& rPrefix = SvXMLImport::getNamespacePrefixFromToken(Element, &GetNamespaceMap());
-            const OUString& rLocalName = SvXMLImport::getNameFromToken( Element );
-            OUString aName = rPrefix.isEmpty() ? rLocalName : rPrefix + SvXMLImport::aNamespaceSeparator + rLocalName;
-            OUString aLocalName;
-            sal_uInt16 nPrefix =
-                mpNamespaceMap->GetKeyByAttrName( aName, &aLocalName );
-
-            maAttrList->Clear();
-
-            if ( Attribs.is() )
-            {
-                for( auto &it : sax_fastparser::castToFastAttributeList( Attribs ) )
-                {
-                    sal_Int32 nToken = it.getToken();
-                    const OUString& rAttrNamespacePrefix = SvXMLImport::getNamespacePrefixFromToken(nToken, &GetNamespaceMap());
-                    OUString sAttrName = SvXMLImport::getNameFromToken( nToken );
-                    if ( !rAttrNamespacePrefix.isEmpty() )
-                        sAttrName = rAttrNamespacePrefix + SvXMLImport::aNamespaceSeparator + sAttrName;
-
-                    maAttrList->AddAttribute( sAttrName, "CDATA", it.toString() );
-                }
-
-                const uno::Sequence< xml::Attribute > unknownAttribs = Attribs->getUnknownAttributes();
-                for ( const auto& rUnknownAttrib : unknownAttribs )
-                {
-                    const OUString& rAttrValue = rUnknownAttrib.Value;
-                    const OUString& rAttrName = rUnknownAttrib.Name;
-                    // note: rAttrName is expected to be namespace-prefixed here
-                    maAttrList->AddAttribute( rAttrName, "CDATA", rAttrValue );
-                }
-            }
-
-            SAL_INFO("xmloff.core", "calling CreateChildContext on " << typeid(*pHandler).name());
-            tmp = pHandler->CreateChildContext(nPrefix, aLocalName, maAttrList.get() ).get();
-        }
         xContext = dynamic_cast<SvXMLImportContext*>(tmp.get());
         assert((tmp && xContext) || (!tmp && !xContext));
     }
@@ -851,41 +813,6 @@ void SAL_CALL SvXMLImport::startUnknownElement (const OUString & rNamespace, con
         const SvXMLImportContextRef & pHandler = maContexts.top();
         SAL_INFO("xmloff.core", "calling createUnknownChildContext on " << typeid(*pHandler.get()).name());
         auto tmp = pHandler->createUnknownChildContext( rNamespace, rName, Attribs );
-        if (!tmp)
-        {
-            // fall back to slow-parser path
-            OUString aLocalName;
-            sal_uInt16 nPrefix = mpNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
-
-            maAttrList->Clear();
-            maNamespaceHandler->addNSDeclAttributes( maAttrList );
-
-            if ( Attribs.is() )
-            {
-                for( auto &it : sax_fastparser::castToFastAttributeList( Attribs ) )
-                {
-                    sal_Int32 nToken = it.getToken();
-                    const OUString& rAttrNamespacePrefix = SvXMLImport::getNamespacePrefixFromToken(nToken, &GetNamespaceMap());
-                    OUString sAttrName = SvXMLImport::getNameFromToken( nToken );
-                    if ( !rAttrNamespacePrefix.isEmpty() )
-                        sAttrName = rAttrNamespacePrefix + SvXMLImport::aNamespaceSeparator + sAttrName;
-
-                    maAttrList->AddAttribute( sAttrName, "CDATA", it.toString() );
-                }
-
-                const uno::Sequence< xml::Attribute > unknownAttribs = Attribs->getUnknownAttributes();
-                for ( const auto& rUnknownAttrib : unknownAttribs )
-                {
-                    const OUString& rAttrValue = rUnknownAttrib.Value;
-                    const OUString& rAttrName = rUnknownAttrib.Name;
-                    // note: rAttrName is expected to be namespace-prefixed here
-                    maAttrList->AddAttribute( rAttrName, "CDATA", rAttrValue );
-                }
-            }
-
-            SAL_INFO("xmloff.core", "calling CreateChildContext on " << typeid(*pHandler).name());
-            tmp = pHandler->CreateChildContext(nPrefix, aLocalName, maAttrList.get() ).get();
-        }
         xContext = dynamic_cast<SvXMLImportContext*>(tmp.get());
         assert((tmp && xContext) || (!tmp && !xContext));
     }
@@ -1580,36 +1507,6 @@ XMLEventImportHelper& SvXMLImport::GetEventImport()
     }
 
     return *mpEventImportHelper;
-}
-
-css::uno::Reference< css::xml::sax::XAttributeList > SvXMLImport::convertToSlowAttrList(const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
-{
-    maAttrList->Clear();
-
-    if ( Attribs.is() )
-    {
-        for( auto &it : sax_fastparser::castToFastAttributeList( Attribs ) )
-        {
-            sal_Int32 nToken = it.getToken();
-            const OUString& rAttrNamespacePrefix = SvXMLImport::getNamespacePrefixFromToken(nToken, &GetNamespaceMap());
-            OUString sAttrName = SvXMLImport::getNameFromToken( nToken );
-            if ( !rAttrNamespacePrefix.isEmpty() )
-                sAttrName = rAttrNamespacePrefix + SvXMLImport::aNamespaceSeparator + sAttrName;
-
-            maAttrList->AddAttribute( sAttrName, "CDATA", it.toString() );
-        }
-
-        const uno::Sequence< xml::Attribute > unknownAttribs = Attribs->getUnknownAttributes();
-        for ( const auto& rUnknownAttrib : unknownAttribs )
-        {
-            const OUString& rAttrValue = rUnknownAttrib.Value;
-            const OUString& rAttrName = rUnknownAttrib.Name;
-            // note: rAttrName is expected to be namespace-prefixed here
-            maAttrList->AddAttribute( rAttrName, "CDATA", rAttrValue );
-        }
-    }
-
-    return maAttrList.get();
 }
 
 void SvXMLImport::SetFontDecls( XMLFontStylesContext *pFontDecls )

@@ -55,9 +55,8 @@ using namespace ::xmloff::EnhancedCustomShapeToken;
 
 XMLEnhancedCustomShapeContext::XMLEnhancedCustomShapeContext( SvXMLImport& rImport,
             css::uno::Reference< css::drawing::XShape >& rxShape,
-            sal_uInt16 nPrefix, const OUString& rLocalName,
             std::vector< css::beans::PropertyValue >& rCustomShapeGeometry ) :
-        SvXMLImportContext( rImport, nPrefix, rLocalName ),
+        SvXMLImportContext( rImport ),
         mrUnitConverter( rImport.GetMM100UnitConverter() ),
         mrxShape( rxShape ),
         mrCustomShapeGeometry( rCustomShapeGeometry )
