@@ -71,7 +71,7 @@ sal_Int32 lcl_LabelToCaption( const chart2::DataPointLabel& rLabel )
 
 chart2::DataPointLabel lcl_CaptionToLabel( sal_Int32 nCaption )
 {
-    chart2::DataPointLabel aLabel(false,false,false,false);
+    chart2::DataPointLabel aLabel(false,false,false,false,false);
 
     if( nCaption & css::chart::ChartDataCaption::VALUE )
         aLabel.ShowNumber = true;
@@ -81,6 +81,8 @@ chart2::DataPointLabel lcl_CaptionToLabel( sal_Int32 nCaption )
         aLabel.ShowCategoryName = true;
     if( nCaption & css::chart::ChartDataCaption::SYMBOL )
         aLabel.ShowLegendSymbol = true;
+    if( nCaption & css::chart::ChartDataCaption::CUSTOMTEXT )
+        aLabel.ShowCustomLabel = true;
 
     return aLabel;
 }

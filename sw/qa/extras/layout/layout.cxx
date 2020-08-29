@@ -3052,6 +3052,20 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf134146)
     assertXPath(pXmlDoc, "//textarray", 14);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf136061)
+{
+    SwDoc* pDoc = createDoc("tdf136061.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+    // This failed, if the custom text of data label is missing.
+    assertXPathContent(pXmlDoc, "//textarray[16]/text", "Customlabel");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf116925)
 {
     SwDoc* pDoc = createDoc("tdf116925.docx");

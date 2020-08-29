@@ -1102,7 +1102,7 @@ void XclImpChText::ConvertDataLabel( ScfPropertySet& rPropSet, const XclChTypeIn
     bool bShowSymbol = bShowAny && ::get_flag( maData.mnFlags, EXC_CHTEXT_SHOWSYMBOL );
 
     // create API struct for label values, set API label separator
-    cssc2::DataPointLabel aPointLabel( bShowValue, bShowPercent, bShowCateg, bShowSymbol );
+    cssc2::DataPointLabel aPointLabel( bShowValue, bShowPercent, bShowCateg, bShowSymbol, false );
     rPropSet.SetProperty( EXC_CHPROP_LABEL, aPointLabel );
     OUString aSep = mxLabelProps ? mxLabelProps->maSeparator : OUString('\n');
     if( aSep.isEmpty() )
