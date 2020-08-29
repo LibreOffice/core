@@ -27,9 +27,8 @@ class XMLCalculationSettingsContext : public SvXMLImportContext
     sal_Int16 nYear;
 public:
     XMLCalculationSettingsContext( SvXMLImport& rImport,
-                                    sal_uInt16 nPrefix,
-                                    const OUString& rLocalName,
-                                    const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
+                                    sal_Int32 nElement,
+                                    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
 
     virtual ~XMLCalculationSettingsContext() override;
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;

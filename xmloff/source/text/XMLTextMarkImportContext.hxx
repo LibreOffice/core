@@ -79,14 +79,13 @@ public:
     XMLTextMarkImportContext(
         SvXMLImport& rImport,
         XMLTextImportHelper& rHlp,
-        css::uno::Reference<css::uno::XInterface> & io_rxCrossRefHeadingBookmark,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName );
+        css::uno::Reference<css::uno::XInterface> & io_rxCrossRefHeadingBookmark );
 
 protected:
 
-    virtual void StartElement(
-        const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList) override;
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
@@ -104,6 +103,8 @@ public:
     bool FindName(
         SvXMLImport& rImport,
         const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList);
+    bool FindName(
+        const css::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList);
 };
 
 #endif
