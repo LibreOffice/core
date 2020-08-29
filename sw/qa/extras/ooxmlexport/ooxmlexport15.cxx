@@ -388,14 +388,12 @@ DECLARE_OOXMLIMPORT_TEST(TestTdf135653, "tdf135653.docx")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("OLE bg color does not match!", aExpectedColor, aFillColor);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testAtPageShapeRelOrientation, "rotated_shape.fodt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testAtPageShapeRelOrientation, "rotated_shape.fodt")
 {
     // invalid combination of at-page anchor and horizontal-rel="paragraph"
     // caused relativeFrom="column" instead of relativeFrom="page"
 
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
-    if (!pXmlDocument)
-        return;
 
     assertXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor"
         "/wp:positionH/wp:posOffset", "-480060");
@@ -425,7 +423,7 @@ DECLARE_OOXMLEXPORT_TEST(testAtPageShapeRelOrientation, "rotated_shape.fodt")
     CPPUNIT_ASSERT(style.indexOf("v-text-anchor:middle") != -1);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testRelativeAnchorHeightFromBottomMarginHasFooter,
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testRelativeAnchorHeightFromBottomMarginHasFooter,
                          "tdf133070_testRelativeAnchorHeightFromBottomMarginHasFooter.docx")
 {
     // tdf#133070 The height was set relative to page print area bottom,
@@ -433,8 +431,6 @@ DECLARE_OOXMLEXPORT_TEST(testRelativeAnchorHeightFromBottomMarginHasFooter,
     // Note: page print area bottom = margin + footer height.
     // In this case the footer exists.
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "height", "1147");
 }
 
@@ -466,7 +462,7 @@ DECLARE_OOXMLIMPORT_TEST(TestTdf132483, "tdf132483.docx")
         text::RelOrientation::PAGE_FRAME , nHRelPos);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testRelativeAnchorHeightFromBottomMarginNoFooter,
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testRelativeAnchorHeightFromBottomMarginNoFooter,
                          "tdf133070_testRelativeAnchorHeightFromBottomMarginNoFooter.docx")
 {
     // tdf#133070 The height was set relative to page print area bottom,
@@ -474,17 +470,12 @@ DECLARE_OOXMLEXPORT_TEST(testRelativeAnchorHeightFromBottomMarginNoFooter,
     // Note: page print area bottom = margin + footer height.
     // In this case the footer does not exist, so OpenDocument and OOXML margins are the same.
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "height", "1147");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf133702, "tdf133702.docx")
 {
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
-    if (!pXmlDocument)
-        return;
-
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr");
 }
 
