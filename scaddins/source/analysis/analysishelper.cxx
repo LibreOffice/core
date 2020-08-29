@@ -2266,7 +2266,7 @@ ConvertDataList::ConvertDataList()
     NEWD( "in",         3.9370078740157480E01,  CDC_Length ); // Inch               39,37007874015748031496062992126
     NEWD( "ft",         3.2808398950131234E00,  CDC_Length ); // Foot               3,2808398950131233595800524934383
     NEWD( "yd",         1.0936132983377078E00,  CDC_Length ); // Yard               1,0936132983377077865266841644794
-    NEWDP( "ang",       1.0000000000000000E10,  CDC_Length ); // Angstroem
+    NEWDP( "ang",       1.0000000000000000E10,  CDC_Length ); // Angstrom
     NEWD( "Pica",       2.8346456692913386E03,  CDC_Length ); // Pica Point (1/72 Inch)   2834,6456692913385826771653543307
     NEWD( "picapt",     2.8346456692913386E03,  CDC_Length ); // Pica Point (1/72 Inch)   2834,6456692913385826771653543307
     NEWD( "pica",       2.36220472441E02,       CDC_Length ); // pica (1/6 Inch)
@@ -2357,7 +2357,7 @@ ConvertDataList::ConvertDataList()
     NEWD( "in3",        6.1023744094732284E01,  CDC_Volume ); // *** Cubic Inch
     NEWD( "ft3",        3.5314666721488590E-02, CDC_Volume ); // *** Cubic Foot
     NEWD( "yd3",        1.3079506193143922E-03, CDC_Volume ); // *** Cubic Yard
-    NEWDP( "ang3",      1.0000000000000000E27,  CDC_Volume ); // *** Cubic Angstroem
+    NEWDP( "ang3",      1.0000000000000000E27,  CDC_Volume ); // *** Cubic Angstrom
     NEWD( "Pica3",      2.2776990435870636E07,  CDC_Volume ); // *** Cubic Pica Point (1/72 inch)
     NEWD( "picapt3",    2.2776990435870636E07,  CDC_Volume ); // *** Cubic Pica Point (1/72 inch)
     NEWD( "pica3",      1.31811287245E04,       CDC_Volume ); // *** Cubic Pica (1/6 inch)
@@ -2383,7 +2383,7 @@ ConvertDataList::ConvertDataList()
     NEWD( "in2",        1.5500031000062000E03,  CDC_Area ); // *** Square Inch
     NEWD( "ft2",        1.0763910416709722E01,  CDC_Area ); // *** Square Foot
     NEWD( "yd2",        1.1959900463010803E00,  CDC_Area ); // *** Square Yard
-    NEWDP( "ang2",      1.0000000000000000E20,  CDC_Area ); // *** Square Angstroem
+    NEWDP( "ang2",      1.0000000000000000E20,  CDC_Area ); // *** Square Angstrom
     NEWD( "Pica2",      8.0352160704321409E06,  CDC_Area ); // *** Square Pica Point (1/72 inch)
     NEWD( "picapt2",    8.0352160704321409E06,  CDC_Area ); // *** Square Pica Point (1/72 inch)
     NEWD( "pica2",      5.58001116002232E04,    CDC_Area ); // *** Square Pica (1/6 inch)
