@@ -58,7 +58,7 @@ public class _XTreeNode extends MultiMethodTest {
         msDisplayValue = (String) tEnv.getObjRelation("XTreeNode_DisplayValue");
         if (msDisplayValue == null){
             throw new StatusException(Status.failed(
-                "Couldn't get relation 'XTreeNode_DisplayVlaue'"));
+                "Couldn't get relation 'XTreeNode_DisplayValue'"));
         }
 
         msExpandedGraphicURL = (String) tEnv.getObjRelation("XTreeNode_ExpandedGraphicURL");
