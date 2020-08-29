@@ -1183,6 +1183,52 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf108505, "tdf108505.docx")
         getProperty<OUString>(xText, "CharFontName"));
 }
 
+<<<<<<< HEAD   (fb96d9 tdf#135711: DOCX export: fix crash on page anchored textboxe)
+=======
+DECLARE_OOXMLEXPORT_TEST(testRelativeAnchorHeightFromTopMarginHasHeader,
+                         "tdf123324_testRelativeAnchorHeightFromTopMarginHasHeader.docx")
+{
+    // tdf#123324 The height was set relative to page print area top,
+    // but this was handled relative to page height.
+    // Note: page print area top = margin + header height.
+    // In this case the header exists.
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "height", "2551");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testRelativeAnchorHeightFromTopMarginNoHeader,
+                         "tdf123324_testRelativeAnchorHeightFromTopMarginNoHeader.docx")
+{
+    // tdf#123324 The height was set relative from top margin, but this was handled relative from page height.
+    // Note: the MSO Word margin = LO margin + LO header height.
+    // In this case the header does not exist, so MSO Word margin and LO Writer margin are the same.
+
+    // tdf#123324 The height was set relative to page print area top,
+    // but this was handled relative to page height.
+    // Note: page print area top = margin + header height.
+    // In this case the header does not exist, so OpenDocument and OOXML margins are the same.
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "height", "2551");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testVmlShapeTextWordWrap, "tdf97618_testVmlShapeTextWordWrap.docx")
+{
+    // tdf#97618 The text wraping of a shape was not handled in a canvas.
+    // TODO: fix export too
+    if (mbExported)
+        return;
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    if (!pXmlDoc)
+        return;
+    // The bound rect of shape will be wider if wrap does not work (the wrong value is 3167).
+    assertXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "width", "2500");
+}
+
+>>>>>>> CHANGE (0d773f tdf#97618 DOCX import: VML shape: fix missing square wrap)
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
