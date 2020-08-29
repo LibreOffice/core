@@ -122,7 +122,8 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
     {
         GalleryBinaryEngineEntry::CreateUniqueURL(rBaseURL,aURL);
     }
-    mpGalleryStorageEngineEntry = createGalleryStorageEngineEntry();
+
+    mpGalleryStorageEngineEntry = std::make_unique<GalleryBinaryEngineEntry>();
     setStorageLocations(aURL);
 
     SetModified( _bNewFile );
@@ -159,12 +160,6 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
 
     if( aName.isEmpty() )
         aName = rName;
-}
-
-std::unique_ptr<GalleryBinaryEngineEntry> GalleryThemeEntry::createGalleryStorageEngineEntry()
-{
-    std::unique_ptr<GalleryBinaryEngineEntry> pGalleryBinaryEngineEntry = std::make_unique<GalleryBinaryEngineEntry>();
-    return pGalleryBinaryEngineEntry;
 }
 
 void GalleryThemeEntry::setStorageLocations(INetURLObject& rURL)
