@@ -204,8 +204,10 @@ protected:
 
 public:
     SvXMLShapeContext( SvXMLImport& rImp, sal_uInt16 nPrfx,
-        const OUString& rLName, bool bTemporaryShape ) : SvXMLImportContext( rImp, nPrfx, rLName ), mbTemporaryShape(bTemporaryShape) {}
-
+        const OUString& rLName, bool bTemporaryShape )
+        : SvXMLImportContext( rImp, nPrfx, rLName ), mbTemporaryShape(bTemporaryShape) {}
+    SvXMLShapeContext( SvXMLImport& rImp, bool bTemporaryShape )
+        : SvXMLImportContext( rImp ), mbTemporaryShape(bTemporaryShape) {}
 
     const css::uno::Reference< css::drawing::XShape >& getShape() const { return mxShape; }
 
@@ -255,8 +257,8 @@ public:
     virtual ~XMLShapeImportHelper() override;
 
     SvXMLShapeContext* CreateGroupChildContext(
-        SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
+        SvXMLImport& rImport, sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes,
         bool bTemporaryShape = false);
 
@@ -363,6 +365,13 @@ public:
     XMLSdPropHdlFactory* GetSdPropHdlFactory() const { return mpSdPropHdlFactory.get(); }
 
     const rtl::Reference< XMLTableImport >&     GetShapeTableImport();
+
+private:
+    SvXMLShapeContext* CreateGroupChildContext(
+        SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName,
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
+        css::uno::Reference< css::drawing::XShapes > const & rShapes,
+        bool bTemporaryShape = false);
 };
 
 #endif // INCLUDED_XMLOFF_SHAPEIMPORT_HXX

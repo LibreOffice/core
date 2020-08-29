@@ -2248,6 +2248,74 @@ void XMLTextImportHelper::SetAutoStyles( SvXMLStylesContext *pStyles )
 
 SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         SvXMLImport& rImport,
+        sal_Int32 nElement,
+        const Reference< XFastAttributeList > & xAttrList,
+        XMLTextType eType )
+{
+    SvXMLImportContext *pContext = nullptr;
+
+    const SvXMLTokenMap& rTokenMap = GetTextElemTokenMap();
+    bool bHeading = false;
+    bool bContent = true;
+    sal_uInt16 nToken = rTokenMap.Get( nPrefix, rLocalName );
+    switch( nToken )
+    {
+    case XML_TOK_TEXT_H:
+    case XML_TOK_TEXT_P:
+    case XML_TOK_TEXT_NUMBERED_PARAGRAPH:
+    case XML_TOK_TEXT_LIST:
+    case XML_TOK_TABLE_TABLE:
+    case XML_TOK_TEXT_SEQUENCE_DECLS:
+    case XML_TOK_TEXT_VARFIELD_DECLS:
+    case XML_TOK_TEXT_USERFIELD_DECLS:
+    case XML_TOK_TEXT_DDE_DECLS:
+    case XML_TOK_TEXT_FRAME_PAGE:
+    case XML_TOK_DRAW_A_PAGE:
+    case XML_TOK_TEXT_INDEX_TITLE:
+    case XML_TOK_TEXT_SECTION:
+    case XML_TOK_TEXT_TOC:
+    case XML_TOK_TEXT_OBJECT_INDEX:
+    case XML_TOK_TEXT_TABLE_INDEX:
+    case XML_TOK_TEXT_ILLUSTRATION_INDEX:
+    case XML_TOK_TEXT_USER_INDEX:
+    case XML_TOK_TEXT_ALPHABETICAL_INDEX:
+    case XML_TOK_TEXT_BIBLIOGRAPHY_INDEX:
+    case XML_TOK_TEXT_TRACKED_CHANGES:
+    case XML_TOK_TEXT_CHANGE:
+    case XML_TOK_TEXT_CHANGE_START:
+    case XML_TOK_TEXT_CHANGE_END:
+    case XML_TOK_TEXT_FORMS:
+    case XML_TOK_TEXT_AUTOMARK:
+    case XML_TOK_TEXT_CALCULATION_SETTINGS:
+    break;
+
+    default:
+        if ((XMLTextType::Body == eType && m_xImpl->m_bBodyContentStarted) ||
+            XMLTextType::TextBox == eType ||
+             XMLTextType::ChangedRegion == eType )
+        {
+            Reference < XShapes > xShapes;
+            pContext = rImport.GetShapeImport()->CreateGroupChildContext(
+                    rImport, nPrefix, rLocalName, xAttrList, xShapes );
+            bContent = false;
+        }
+    }
+
+    if (!pContext)
+        return CreateTextChildContext(rImport, convert(nElement), convert(nElement), convert(xAttrList), eType);
+
+    if( XMLTextType::Body == eType && bContent )
+    {
+        m_xImpl->m_bBodyContentStarted = false;
+    }
+
+    if( nToken != XML_TOK_TEXT_FRAME_PAGE )
+        ClearLastImportedTextFrameName();
+    return pContext;
+}
+
+SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
+        SvXMLImport& rImport,
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList,
         XMLTextType eType )
@@ -2415,15 +2483,6 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
     break;
 
     default:
-        if ((XMLTextType::Body == eType && m_xImpl->m_bBodyContentStarted) ||
-            XMLTextType::TextBox == eType ||
-             XMLTextType::ChangedRegion == eType )
-        {
-            Reference < XShapes > xShapes;
-            pContext = rImport.GetShapeImport()->CreateGroupChildContext(
-                    rImport, nPrefix, rLocalName, xAttrList, xShapes );
-            bContent = false;
-        }
     }
 
     // handle open redlines

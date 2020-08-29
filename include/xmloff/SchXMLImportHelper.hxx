@@ -83,9 +83,9 @@ public:
      */
     SvXMLImportContext* CreateChartContext(
         SvXMLImport& rImport,
-        sal_uInt16 nPrefix, const OUString& rLocalName,
+        sal_Int32 nElement,
         const css::uno::Reference< css::frame::XModel >& rChartModel,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& rAttrList );
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& rAttrList );
 
     /** set the auto-style context that will be used to retrieve auto-styles
         used inside the following <chart:chart> element to parse

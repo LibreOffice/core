@@ -2509,16 +2509,15 @@ SdXMLGraphicObjectShapeContext::~SdXMLGraphicObjectShapeContext()
 
 SdXMLChartShapeContext::SdXMLChartShapeContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
-    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes,
     bool bTemporaryShape)
-:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape )
+:   SdXMLShapeContext( rImport, nElement, xAttrList, rShapes, bTemporaryShape )
 {
 }
 
-void SdXMLChartShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+void SdXMLChartShapeContext::startFastElement(sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList>& xAttrList)
 {
     const bool bIsPresentation = isPresentationShape();
 
@@ -2550,7 +2549,7 @@ void SdXMLChartShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
             uno::Reference< frame::XModel > xChartModel;
             if( aAny >>= xChartModel )
             {
-                mxChartContext.set( GetImport().GetChartImport()->CreateChartContext( GetImport(), XML_NAMESPACE_SVG, GetXMLToken(XML_CHART), xChartModel, xAttrList ) );
+                mxChartContext.set( GetImport().GetChartImport()->CreateChartContext( GetImport(), XML_ELEMENT(SVG, XML_CHART), xChartModel, xAttrList ) );
             }
         }
     }
@@ -2572,31 +2571,31 @@ void SdXMLChartShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
     // set pos, size, shear and rotate
     SetTransformation();
 
-    SdXMLShapeContext::StartElement(xAttrList);
+    SdXMLShapeContext::startFastElement(nElement, xAttrList);
 
     if( mxChartContext.is() )
-        mxChartContext->StartElement( xAttrList );
+        mxChartContext->startFastElement( nElement, xAttrList );
 }
 
-void SdXMLChartShapeContext::EndElement()
+void SdXMLChartShapeContext::endFastElement(sal_Int32 nElement)
 {
     if( mxChartContext.is() )
-        mxChartContext->EndElement();
+        mxChartContext->endFastElement(nElement);
 
-    SdXMLShapeContext::EndElement();
+    SdXMLShapeContext::endFastElement(nElement);
 }
 
-void SdXMLChartShapeContext::Characters( const OUString& rChars )
+void SdXMLChartShapeContext::characters( const OUString& rChars )
 {
     if( mxChartContext.is() )
-        mxChartContext->Characters( rChars );
+        mxChartContext->characters( rChars );
 }
 
-SvXMLImportContextRef SdXMLChartShapeContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLChartShapeContext::createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if( mxChartContext.is() )
-        return mxChartContext->CreateChildContext( nPrefix, rLocalName, xAttrList );
+        return mxChartContext->createFastChildContext( nElement, xAttrList );
 
     return nullptr;
 }

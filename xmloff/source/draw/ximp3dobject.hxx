@@ -36,13 +36,14 @@ class SdXML3DObjectContext : public SdXMLShapeContext
 public:
 
     SdXML3DObjectContext( SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXML3DObjectContext() override;
 
-    virtual void StartElement(const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList) override;
+    virtual void SAL_CALL startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList) override;
 };
 
 // dr3d:3dcube context
