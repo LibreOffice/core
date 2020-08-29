@@ -19,45 +19,41 @@
 
 #include "ximp3dobject.hxx"
 #include <xmloff/xmluconv.hxx>
+#include <xmloff/xmlnamespace.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <xexptran.hxx>
 #include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
+#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 
 SdXML3DObjectContext::SdXML3DObjectContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
-    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes)
-:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, false/*bTemporaryShape*/ ),
+:   SdXMLShapeContext( rImport, nElement, xAttrList, rShapes, false/*bTemporaryShape*/ ),
     mbSetTransform( false )
 {
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for(sal_Int16 i=0; i < nAttrCount; i++)
+    for(auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-        OUString sValue = xAttrList->getValueByIndex( i );
-        const SvXMLTokenMap& rAttrTokenMap = GetImport().GetShapeImport()->Get3DObjectAttrTokenMap();
-
-        switch(rAttrTokenMap.Get(nPrefix, aLocalName))
+        const OUString sValue = aIter.toString();
+        switch(aIter.getToken())
         {
-            case XML_TOK_3DOBJECT_DRAWSTYLE_NAME:
+            case XML_ELEMENT(DRAW, XML_STYLE_NAME):
             {
                 maDrawStyleName = sValue;
                 break;
             }
-            case XML_TOK_3DOBJECT_TRANSFORM:
+            case XML_ELEMENT(DR3D, XML_TRANSFORM):
             {
                 SdXMLImExTransform3D aTransform(sValue, GetImport().GetMM100UnitConverter());
                 if(aTransform.NeedsAction())
@@ -72,7 +68,7 @@ SdXML3DObjectContext::~SdXML3DObjectContext()
 {
 }
 
-void SdXML3DObjectContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+void SdXML3DObjectContext::startFastElement(sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList>& xAttrList)
 {
     uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
     if(xPropSet.is())
@@ -84,32 +80,26 @@ void SdXML3DObjectContext::StartElement(const uno::Reference< xml::sax::XAttribu
         }
 
         // call parent
-        SdXMLShapeContext::StartElement(xAttrList);
+        SdXMLShapeContext::startFastElement(nElement, xAttrList);
     }
 }
 
 SdXML3DCubeObjectShapeContext::SdXML3DCubeObjectShapeContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
-    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes)
-:   SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes ),
+:   SdXML3DObjectContext( rImport, nElement, xAttrList, rShapes ),
     maMinEdge(-2500.0, -2500.0, -2500.0),
     maMaxEdge(2500.0, 2500.0, 2500.0)
 {
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for(sal_Int16 i=0; i < nAttrCount; i++)
+    for(auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-        OUString sValue = xAttrList->getValueByIndex( i );
-        const SvXMLTokenMap& rAttrTokenMap = GetImport().GetShapeImport()->Get3DCubeObjectAttrTokenMap();
+        OUString sValue = aIter.toString();
 
-        switch(rAttrTokenMap.Get(nPrefix, aLocalName))
+        switch(aIter.getToken())
         {
-            case XML_TOK_3DCUBEOBJ_MINEDGE:
+            case XML_ELEMENT(DR3D, XML_MIN_EDGE):
             {
                 ::basegfx::B3DVector aNewVec;
                 SvXMLUnitConverter::convertB3DVector(aNewVec, sValue);
@@ -118,7 +108,7 @@ SdXML3DCubeObjectShapeContext::SdXML3DCubeObjectShapeContext(
                     maMinEdge = aNewVec;
                 break;
             }
-            case XML_TOK_3DCUBEOBJ_MAXEDGE:
+            case XML_ELEMENT(DR3D, XML_MAX_EDGE):
             {
                 ::basegfx::B3DVector aNewVec;
                 SvXMLUnitConverter::convertB3DVector(aNewVec, sValue);
@@ -127,6 +117,8 @@ SdXML3DCubeObjectShapeContext::SdXML3DCubeObjectShapeContext(
                     maMaxEdge = aNewVec;
                 break;
             }
+            default:
+                SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
         }
     }
 }
@@ -135,7 +127,9 @@ SdXML3DCubeObjectShapeContext::~SdXML3DCubeObjectShapeContext()
 {
 }
 
-void SdXML3DCubeObjectShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+void SdXML3DCubeObjectShapeContext::startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference<xml::sax::XFastAttributeList> & xAttrList)
 {
     // create shape
     AddShape( "com.sun.star.drawing.Shape3DCubeObject" );
@@ -144,7 +138,7 @@ void SdXML3DCubeObjectShapeContext::StartElement(const uno::Reference< xml::sax:
 
     // add, set style and properties from base shape
     SetStyle();
-    SdXML3DObjectContext::StartElement(xAttrList);
+    SdXML3DObjectContext::startFastElement(nElement, xAttrList);
 
     // set local parameters on shape
     uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
@@ -172,26 +166,20 @@ void SdXML3DCubeObjectShapeContext::StartElement(const uno::Reference< xml::sax:
 
 SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
-    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes)
-:   SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes ),
+:   SdXML3DObjectContext( rImport, nElement, xAttrList, rShapes ),
     maCenter(0.0, 0.0, 0.0),
     maSphereSize(5000.0, 5000.0, 5000.0)
 {
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for(sal_Int16 i=0; i < nAttrCount; i++)
+    for(auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-        OUString sValue = xAttrList->getValueByIndex( i );
-        const SvXMLTokenMap& rAttrTokenMap = GetImport().GetShapeImport()->Get3DSphereObjectAttrTokenMap();
+        OUString sValue = aIter.toString();
 
-        switch(rAttrTokenMap.Get(nPrefix, aLocalName))
+        switch(aIter.getToken())
         {
-            case XML_TOK_3DSPHEREOBJ_CENTER:
+            case XML_ELEMENT(DR3D, XML_CENTER):
             {
                 ::basegfx::B3DVector aNewVec;
                 SvXMLUnitConverter::convertB3DVector(aNewVec, sValue);
@@ -200,7 +188,7 @@ SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
                     maCenter = aNewVec;
                 break;
             }
-            case XML_TOK_3DSPHEREOBJ_SIZE:
+            case XML_ELEMENT(DR3D, XML_SIZE):
             {
                 ::basegfx::B3DVector aNewVec;
                 SvXMLUnitConverter::convertB3DVector(aNewVec, sValue);
@@ -209,6 +197,8 @@ SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
                     maSphereSize = aNewVec;
                 break;
             }
+            default:
+                SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
         }
     }
 }
@@ -217,7 +207,9 @@ SdXML3DSphereObjectShapeContext::~SdXML3DSphereObjectShapeContext()
 {
 }
 
-void SdXML3DSphereObjectShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+void SdXML3DSphereObjectShapeContext::startFastElement(
+        sal_Int32 nElement,
+        const css::uno::Reference<xml::sax::XFastAttributeList> & xAttrList)
 {
     // create shape
     AddShape( "com.sun.star.drawing.Shape3DSphereObject" );
@@ -226,7 +218,7 @@ void SdXML3DSphereObjectShapeContext::StartElement(const uno::Reference< xml::sa
 
     // add, set style and properties from base shape
     SetStyle();
-    SdXML3DObjectContext::StartElement(xAttrList);
+    SdXML3DObjectContext::startFastElement(nElement, xAttrList);
 
     // set local parameters on shape
     uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
@@ -251,33 +243,31 @@ void SdXML3DSphereObjectShapeContext::StartElement(const uno::Reference< xml::sa
 
 SdXML3DPolygonBasedShapeContext::SdXML3DPolygonBasedShapeContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
-    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes)
-:   SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
+:   SdXML3DObjectContext( rImport, nElement, xAttrList, rShapes )
 {
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for(sal_Int16 i=0; i < nAttrCount; i++)
+    for(auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-        OUString sValue = xAttrList->getValueByIndex( i );
-        const SvXMLTokenMap& rAttrTokenMap = GetImport().GetShapeImport()->Get3DPolygonBasedAttrTokenMap();
+        OUString sValue = aIter.toString();
 
-        switch(rAttrTokenMap.Get(nPrefix, aLocalName))
+        switch(aIter.getToken())
         {
-            case XML_TOK_3DPOLYGONBASED_VIEWBOX:
+            case XML_ELEMENT(SVG, XML_VIEWBOX):
+            case XML_ELEMENT(SVG_COMPAT, XML_VIEWBOX):
             {
                 maViewBox = sValue;
                 break;
             }
-            case XML_TOK_3DPOLYGONBASED_D:
+            case XML_ELEMENT(SVG, XML_D):
+            case XML_ELEMENT(SVG_COMPAT, XML_D):
             {
                 maPoints = sValue;
                 break;
             }
+            default:
+                SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
         }
     }
 }
@@ -286,7 +276,9 @@ SdXML3DPolygonBasedShapeContext::~SdXML3DPolygonBasedShapeContext()
 {
 }
 
-void SdXML3DPolygonBasedShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+void SdXML3DPolygonBasedShapeContext::startFastElement(
+    sal_Int32 nElement,
+    const css::uno::Reference<xml::sax::XFastAttributeList> & xAttrList)
 {
     uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
 
@@ -322,17 +314,16 @@ void SdXML3DPolygonBasedShapeContext::StartElement(const uno::Reference< xml::sa
     }
 
     // call parent
-    SdXML3DObjectContext::StartElement(xAttrList);
+    SdXML3DObjectContext::startFastElement(nElement, xAttrList);
 }
 
 
 SdXML3DLatheObjectShapeContext::SdXML3DLatheObjectShapeContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
-    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes)
-:   SdXML3DPolygonBasedShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
+:   SdXML3DPolygonBasedShapeContext( rImport, nElement, xAttrList, rShapes )
 {
 }
 
@@ -340,7 +331,9 @@ SdXML3DLatheObjectShapeContext::~SdXML3DLatheObjectShapeContext()
 {
 }
 
-void SdXML3DLatheObjectShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+void SdXML3DLatheObjectShapeContext::startFastElement(
+    sal_Int32 nElement,
+    const css::uno::Reference<xml::sax::XFastAttributeList> & xAttrList)
 {
     // create shape
     AddShape( "com.sun.star.drawing.Shape3DLatheObject" );
@@ -348,17 +341,16 @@ void SdXML3DLatheObjectShapeContext::StartElement(const uno::Reference< xml::sax
     {
         // add, set style and properties from base shape
         SetStyle();
-        SdXML3DPolygonBasedShapeContext::StartElement(xAttrList);
+        SdXML3DPolygonBasedShapeContext::startFastElement(nElement, xAttrList);
     }
 }
 
 SdXML3DExtrudeObjectShapeContext::SdXML3DExtrudeObjectShapeContext(
     SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
-    const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes)
-:   SdXML3DPolygonBasedShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
+:   SdXML3DPolygonBasedShapeContext( rImport, nElement, xAttrList, rShapes )
 {
 }
 
@@ -366,14 +358,16 @@ SdXML3DExtrudeObjectShapeContext::~SdXML3DExtrudeObjectShapeContext()
 {
 }
 
-void SdXML3DExtrudeObjectShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+void SdXML3DExtrudeObjectShapeContext::startFastElement(
+    sal_Int32 nElement,
+    const css::uno::Reference<xml::sax::XFastAttributeList> & xAttrList)
 {
     AddShape( "com.sun.star.drawing.Shape3DExtrudeObject" );
     if(mxShape.is())
     {
         // add, set style and properties from base shape
         SetStyle();
-        SdXML3DPolygonBasedShapeContext::StartElement(xAttrList);
+        SdXML3DPolygonBasedShapeContext::startFastElement(nElement, xAttrList);
     }
 }
 
