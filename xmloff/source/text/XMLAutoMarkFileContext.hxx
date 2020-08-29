@@ -35,9 +35,7 @@ class XMLAutoMarkFileContext : public SvXMLImportContext
 public:
 
     XMLAutoMarkFileContext(
-        SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLocalName);
+        SvXMLImport& rImport);
 
     virtual ~XMLAutoMarkFileContext() override;
 

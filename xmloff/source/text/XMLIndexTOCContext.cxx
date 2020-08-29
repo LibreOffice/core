@@ -45,6 +45,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlement.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <osl/diagnose.h>
 
 
@@ -95,14 +96,14 @@ SvXMLEnumMapEntry<IndexTypeEnum> const aIndexTypeMap[] =
 
 
 XMLIndexTOCContext::XMLIndexTOCContext(SvXMLImport& rImport,
-    sal_uInt16 nPrfx, const OUString& rLocalName)
-    : SvXMLImportContext(rImport, nPrfx, rLocalName)
+    sal_Int32 nElement)
+    : SvXMLImportContext(rImport)
     , eIndexType(TEXT_INDEX_UNKNOWN)
     , bValid(false)
 {
-    if (XML_NAMESPACE_TEXT == nPrfx)
+    if (IsTokenInNamespace(nElement, XML_NAMESPACE_TEXT))
     {
-        if (SvXMLUnitConverter::convertEnum(eIndexType, rLocalName, aIndexTypeMap))
+        if (SvXMLUnitConverter::convertEnum(eIndexType, SvXMLImport::getNameFromToken(nElement), aIndexTypeMap))
         {
             // check for array index:
             OSL_ENSURE(unsigned(eIndexType) < (SAL_N_ELEMENTS(aIndexServiceMap)), "index out of range");

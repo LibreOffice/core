@@ -229,41 +229,41 @@ void XMLSectionImportContext::ProcessAttributes(
 {
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sAttr = aIter.toString();
+        OUString sValue = aIter.toString();
 
         switch (aIter.getToken())
         {
             case XML_ELEMENT(XML, XML_ID):
-                sXmlId = sAttr;
+                sXmlId = sValue;
                 break;
             case XML_ELEMENT(TEXT, XML_STYLE_NAME):
-                sStyleName = sAttr;
+                sStyleName = sValue;
                 break;
             case XML_ELEMENT(TEXT, XML_NAME):
-                sName = sAttr;
+                sName = sValue;
                 bValid = true;
                 break;
             case XML_ELEMENT(TEXT, XML_CONDITION):
                 {
                     OUString sTmp;
                     sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-                                    GetKeyByAttrValueQName(sAttr, &sTmp);
+                                    GetKeyByAttrValueQName(sValue, &sTmp);
                     if( XML_NAMESPACE_OOOW == nPrefix )
                     {
                         sCond = sTmp;
                         bCondOK = true;
                     }
                     else
-                        sCond = sAttr;
+                        sCond = sValue;
                 }
                 break;
             case XML_ELEMENT(TEXT, XML_DISPLAY):
-                if (IsXMLToken(sAttr, XML_TRUE))
+                if (IsXMLToken(sValue, XML_TRUE))
                 {
                     bIsVisible = true;
                 }
-                else if ( IsXMLToken(sAttr, XML_NONE) ||
-                          IsXMLToken(sAttr, XML_CONDITION) )
+                else if ( IsXMLToken(sValue, XML_NONE) ||
+                          IsXMLToken(sValue, XML_CONDITION) )
                 {
                     bIsVisible = false;
                 }
@@ -272,7 +272,7 @@ void XMLSectionImportContext::ProcessAttributes(
             case XML_ELEMENT(TEXT, XML_IS_HIDDEN):
                 {
                     bool bTmp(false);
-                    if (::sax::Converter::convertBool(bTmp, sAttr))
+                    if (::sax::Converter::convertBool(bTmp, sValue))
                     {
                         bIsCurrentlyVisible = !bTmp;
                         bIsCurrentlyVisibleOK = true;
@@ -280,7 +280,7 @@ void XMLSectionImportContext::ProcessAttributes(
                 }
                 break;
             case XML_ELEMENT(TEXT, XML_PROTECTION_KEY):
-                ::comphelper::Base64::decode(aSequence, sAttr);
+                ::comphelper::Base64::decode(aSequence, sValue);
                 bSequenceOK = true;
                 break;
             case XML_ELEMENT(TEXT, XML_PROTECTED):
@@ -288,7 +288,7 @@ void XMLSectionImportContext::ProcessAttributes(
             case XML_ELEMENT(TEXT, XML_PROTECT):
             {
                 bool bTmp(false);
-                if (::sax::Converter::convertBool(bTmp, sAttr))
+                if (::sax::Converter::convertBool(bTmp, sValue))
                 {
                     bProtect = bTmp;
                 }
@@ -324,10 +324,37 @@ void XMLSectionImportContext::endFastElement(sal_Int32 )
     rHelper->RedlineAdjustStartNodeCursor();
 }
 
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLSectionImportContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+{
+    // section-source (-dde) elements
+    if ( nElement == XML_ELEMENT(TEXT, XML_SECTION_SOURCE) )
+    {
+    }
+    else if ( nElement == XML_ELEMENT(OFFICE, XML_DDE_SOURCE) )
+    {
+    }
+    else
+    {
+        // otherwise: text context
+        auto pContext = GetImport().GetTextImport()->CreateTextChildContext(
+            GetImport(), nElement, xAttrList, XMLTextType::Section );
+
+        // if that fails, default context
+        if (pContext)
+            bHasContent = true;
+        else
+            XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
+        return pContext;
+    }
+    return nullptr;
+}
+
 SvXMLImportContextRef XMLSectionImportContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    const Reference<XAttributeList> & xAttrList )
+    const Reference<XAttributeList> & /*xAttrList*/ )
 {
     SvXMLImportContext* pContext = nullptr;
 
@@ -344,17 +371,6 @@ SvXMLImportContextRef XMLSectionImportContext::CreateChildContext(
         pContext = new XMLSectionSourceDDEImportContext(GetImport(),
                                                         nPrefix, rLocalName,
                                                         xSectionPropertySet);
-    }
-    else
-    {
-        // otherwise: text context
-        pContext = GetImport().GetTextImport()->CreateTextChildContext(
-            GetImport(), nPrefix, rLocalName, xAttrList,
-            XMLTextType::Section );
-
-        // if that fails, default context
-        if (pContext)
-            bHasContent = true;
     }
 
     return pContext;
