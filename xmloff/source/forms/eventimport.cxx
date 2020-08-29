@@ -32,13 +32,13 @@ namespace xmloff
     using namespace ::com::sun::star::container;
 
     //= OFormEventsImportContext
-    OFormEventsImportContext::OFormEventsImportContext(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const OUString& _rLocalName, IEventAttacher& _rEventAttacher)
-        :XMLEventsImportContext(_rImport, _nPrefix, _rLocalName)
+    OFormEventsImportContext::OFormEventsImportContext(SvXMLImport& _rImport, IEventAttacher& _rEventAttacher)
+        :XMLEventsImportContext(_rImport)
         ,m_rEventAttacher(_rEventAttacher)
     {
     }
 
-    void OFormEventsImportContext::EndElement()
+    void OFormEventsImportContext::endFastElement(sal_Int32 nElement)
     {
         Sequence< ScriptEventDescriptor > aTranslated(aCollectEvents.size());
         ScriptEventDescriptor* pTranslated = aTranslated.getArray();
@@ -90,7 +90,7 @@ namespace xmloff
         // register the events
         m_rEventAttacher.registerEvents(aTranslated);
 
-        XMLEventsImportContext::EndElement();
+        XMLEventsImportContext::endFastElement(nElement);
     }
 
     //= ODefaultEventAttacherManager
