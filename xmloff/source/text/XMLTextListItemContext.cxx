@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/log.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
@@ -135,7 +136,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextListItemContext
                                        xAttrList );
         if (rTxtImport.IsProgress())
             GetImport().GetProgressBarHelper()->Increment();
-
+        return pContext;
         break;
     case XML_ELEMENT(TEXT, XML_LIST):
         ++mnSubListCount;
@@ -146,8 +147,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextListItemContext
     default:
         XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     }
-
-    return pContext;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

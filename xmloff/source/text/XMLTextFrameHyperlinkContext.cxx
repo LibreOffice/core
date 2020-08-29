@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/log.hxx>
 #include <sax/tools/converter.hxx>
 
 #include <xmloff/xmlimp.hxx>
@@ -37,50 +38,43 @@ namespace drawing = com::sun::star::drawing;
 
 XMLTextFrameHyperlinkContext::XMLTextFrameHyperlinkContext(
         SvXMLImport& rImport,
-        sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< XAttributeList > & xAttrList,
+        sal_Int32 /*nElement*/,
+        const Reference< XFastAttributeList > & xAttrList,
         TextContentAnchorType eATyp ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    SvXMLImportContext( rImport ),
     eDefaultAnchorType( eATyp ),
     bMap( false )
 {
     OUString sShow;
-    const SvXMLTokenMap& rTokenMap =
-        GetImport().GetTextImport()->GetTextHyperlinkAttrTokenMap();
 
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        const OUString& rValue = xAttrList->getValueByIndex( i );
-
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                            &aLocalName );
-        switch( rTokenMap.Get( nPrefix, aLocalName ) )
+        OUString sValue = aIter.toString();
+        switch( aIter.getToken() )
         {
-        case XML_TOK_TEXT_HYPERLINK_HREF:
-            sHRef = GetImport().GetAbsoluteReference( rValue );
+        case XML_ELEMENT(XLINK, XML_HREF):
+            sHRef = GetImport().GetAbsoluteReference( sValue );
             break;
-        case XML_TOK_TEXT_HYPERLINK_NAME:
-            sName = rValue;
+        case XML_ELEMENT(OFFICE, XML_NAME):
+            sName = sValue;
             break;
-        case XML_TOK_TEXT_HYPERLINK_TARGET_FRAME:
-            sTargetFrameName = rValue;
+        case XML_ELEMENT(OFFICE, XML_TARGET_FRAME_NAME):
+            sTargetFrameName = sValue;
             break;
-        case XML_TOK_TEXT_HYPERLINK_SHOW:
-            sShow = rValue;
+        case XML_ELEMENT(XLINK, XML_SHOW):
+            sShow = sValue;
             break;
-        case XML_TOK_TEXT_HYPERLINK_SERVER_MAP:
+        case XML_ELEMENT(OFFICE, XML_SERVER_MAP):
             {
                 bool bTmp(false);
-                if (::sax::Converter::convertBool( bTmp, rValue ))
+                if (::sax::Converter::convertBool( bTmp, sValue ))
                 {
                     bMap = bTmp;
                 }
             }
             break;
+        default:
+            SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
         }
     }
 
@@ -97,24 +91,18 @@ XMLTextFrameHyperlinkContext::~XMLTextFrameHyperlinkContext()
 {
 }
 
-SvXMLImportContextRef XMLTextFrameHyperlinkContext::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextFrameHyperlinkContext::createFastChildContext(
+    sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
     XMLTextFrameContext *pTextFrameContext = nullptr;
 
-    if( XML_NAMESPACE_DRAW == nPrefix )
+    if( nElement == XML_ELEMENT(DRAW, XML_FRAME) )
     {
-        if( IsXMLToken( rLocalName, XML_FRAME ) )
-            pTextFrameContext = new XMLTextFrameContext( GetImport(), nPrefix,
-                                                rLocalName, xAttrList,
+        pTextFrameContext = new XMLTextFrameContext( GetImport(), nElement,
+                                                xAttrList,
                                                 eDefaultAnchorType );
-    }
-
-    if( pTextFrameContext )
-    {
         pTextFrameContext->SetHyperlink( sHRef, sName, sTargetFrameName, bMap );
         pContext = pTextFrameContext;
         xFrameContext = pContext;
