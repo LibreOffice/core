@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "50f3d75b_6da842ae",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2020-08-29T10:49:43Z",
+      "side": 1,
+      "message": "Let\u0027s group this together with the other svx/ includes!",
+      "revId": "6a5fa316645fa80c9e0c05c840bcad21325c6971",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
