@@ -147,7 +147,7 @@ bool JobData::getStreamBuffer( void*& pData, sal_uInt32& bytes )
         aStream.WriteLine(aLine.makeStringAndClear());
     }
 
-    aLine.append("margindajustment=");
+    aLine.append("margindadjustment=");
     aLine.append(static_cast<sal_Int32>(m_nLeftMarginAdjust));
     aLine.append(',');
     aLine.append(static_cast<sal_Int32>(m_nRightMarginAdjust));
@@ -207,7 +207,7 @@ bool JobData::constructFromStreamBuffer( const void* pData, sal_uInt32 bytes, Jo
     const char orientatationEquals[] = "orientation=";
     const char copiesEquals[] = "copies=";
     const char collateEquals[] = "collate=";
-    const char margindajustmentEquals[] = "margindajustment=";
+    const char margindadjustmentEquals[] = "margindadjustment=";
     const char colordepthEquals[] = "colordepth=";
     const char colordeviceEquals[] = "colordevice=";
     const char pslevelEquals[] = "pslevel=";
@@ -237,10 +237,10 @@ bool JobData::constructFromStreamBuffer( const void* pData, sal_uInt32 bytes, Jo
         {
             rJobData.m_bCollate = aLine.copy(RTL_CONSTASCII_LENGTH(collateEquals)).toBoolean();
         }
-        else if (aLine.startsWith(margindajustmentEquals))
+        else if (aLine.startsWith(margindadjustmentEquals))
         {
             bMargin = true;
-            sal_Int32 nIdx {RTL_CONSTASCII_LENGTH(margindajustmentEquals)};
+            sal_Int32 nIdx {RTL_CONSTASCII_LENGTH(margindadjustmentEquals)};
             rJobData.m_nLeftMarginAdjust = aLine.getToken(0, ',', nIdx).toInt32();
             rJobData.m_nRightMarginAdjust = aLine.getToken(0, ',', nIdx).toInt32();
             rJobData.m_nTopMarginAdjust = aLine.getToken(0, ',', nIdx).toInt32();
