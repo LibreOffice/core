@@ -22,20 +22,20 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <sal/log.hxx>
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
+using ::com::sun::star::xml::sax::XFastAttributeList;
 using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_CHANGE_ID;
 
 
 XMLChangeImportContext::XMLChangeImportContext(
     SvXMLImport& rImport,
-    sal_Int16 nPrefix,
-    const OUString& rLocalName,
     Element const eElement,
     bool bOutsideOfParagraph)
-    :   SvXMLImportContext(rImport, nPrefix, rLocalName)
+    :   SvXMLImportContext(rImport)
     ,   m_Element(eElement)
     ,   m_bIsOutsideOfParagraph(bOutsideOfParagraph)
 {
@@ -45,25 +45,20 @@ XMLChangeImportContext::~XMLChangeImportContext()
 {
 }
 
-void XMLChangeImportContext::StartElement(
-    const Reference<XAttributeList>& xAttrList)
+void XMLChangeImportContext::startFastElement(
+    sal_Int32 /*nElement*/,
+    const Reference<XFastAttributeList>& xAttrList)
 {
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
-                              &sLocalName );
-        if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-             IsXMLToken( sLocalName, XML_CHANGE_ID ) )
+        if ( aIter.getToken() == XML_ELEMENT(TEXT, XML_CHANGE_ID) )
         {
             // Id found! Now call RedlineImportHelper
 
             // prepare parameters
             rtl::Reference<XMLTextImportHelper> rHelper =
                 GetImport().GetTextImport();
-            OUString sID = xAttrList->getValueByIndex(nAttr);
+            OUString sID = aIter.toString();
 
             // <text:change> is both start and end
             if (Element::START == m_Element || Element::POINT == m_Element)
@@ -81,4 +76,51 @@ void XMLChangeImportContext::StartElement(
     }
 }
 
+XMLChangeImportContext2::XMLChangeImportContext2(
+    SvXMLImport& rImport,
+    sal_Int32 /*nELement*/,
+    Element const eElement,
+    bool bOutsideOfParagraph)
+    :   SvXMLImportContext(rImport)
+    ,   m_Element(eElement)
+    ,   m_bIsOutsideOfParagraph(bOutsideOfParagraph)
+{
+}
+
+XMLChangeImportContext2::~XMLChangeImportContext2()
+{
+}
+
+void XMLChangeImportContext2::startFastElement(
+    sal_Int32 /*nElement*/,
+    const Reference<XFastAttributeList>& xAttrList)
+{
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
+    {
+        if ( aIter.getToken() == XML_ELEMENT(TEXT, XML_CHANGE_ID) )
+        {
+            // Id found! Now call RedlineImportHelper
+
+            // prepare parameters
+            rtl::Reference<XMLTextImportHelper> rHelper =
+                GetImport().GetTextImport();
+            OUString sID = aIter.toString();
+
+            // <text:change> is both start and end
+            if (Element::START == m_Element || Element::POINT == m_Element)
+                rHelper->RedlineSetCursor(sID, true, m_bIsOutsideOfParagraph);
+            if (Element::END == m_Element || Element::POINT == m_Element)
+                rHelper->RedlineSetCursor(sID, false, m_bIsOutsideOfParagraph);
+
+            // outside of paragraph and still open? set open redline ID
+            if (m_bIsOutsideOfParagraph)
+            {
+                rHelper->SetOpenRedlineId(sID);
+            }
+        }
+        // else: ignore
+        else
+            SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
+    }
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
