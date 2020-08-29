@@ -52,7 +52,7 @@ ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
     {
         XMLTableShapeImportHelper* pTableShapeImport = static_cast<XMLTableShapeImportHelper*>(GetScImport().GetShapeImport().get());
         pTableShapeImport->SetAnnotation(this);
-        pShapeContext.reset( GetImport().GetShapeImport()->CreateGroupChildContext(
+        pShapeContext.reset( XMLShapeImportHelper::CreateGroupChildContext(
             GetScImport(), nElement, xAttrList, xLocalShapes, true) );
     }
 

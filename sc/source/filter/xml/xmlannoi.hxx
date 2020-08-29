@@ -68,16 +68,14 @@ class ScXMLAnnotationContext : public ScXMLImportContext
 {
 public:
 
-    ScXMLAnnotationContext( ScXMLImport& rImport,
-                        sal_Int32 nElement,
+    ScXMLAnnotationContext( ScXMLImport& rImport, sal_Int32 nElement,
                         const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLAnnotationData& rAnnotationData);
 
     virtual ~ScXMLAnnotationContext() override;
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     virtual void SAL_CALL startFastElement(sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList) override;
 
