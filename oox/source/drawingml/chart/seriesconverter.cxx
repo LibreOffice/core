@@ -108,8 +108,13 @@ void convertTextProperty(PropertySet& rPropSet, ObjectFormatter& rFormatter,
 }
 
 void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatter,
+<<<<<<< HEAD   (47c492 tdf#123218 tdf#108067 config key ReverseXAxisOrientationDoug)
                                 DataLabelModelBase& rDataLabel, const TypeGroupConverter& rTypeGroup,
                                 bool bDataSeriesLabel, bool bHasInternalData, bool bMSO2007Doc )
+=======
+                                const DataLabelModelBase& rDataLabel, const TypeGroupConverter& rTypeGroup,
+                                bool bDataSeriesLabel, bool bCustomLabelField, bool bMSO2007Doc )
+>>>>>>> CHANGE (0d2340 tdf#136061 Chart ODF/OOXML: fix missing custom labels)
 {
     const TypeGroupInfo& rTypeInfo = rTypeGroup.getTypeInfo();
 
@@ -141,7 +146,7 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
     // type of attached label
     if( bHasAnyElement || rDataLabel.mbDeleted )
     {
-        DataPointLabel aPointLabel( bShowValue, bShowPercent, bShowCateg, bShowSymbol );
+        DataPointLabel aPointLabel( bShowValue, bShowPercent, bShowCateg, bShowSymbol, bCustomLabelField );
         rPropSet.setProperty( PROP_Label, aPointLabel );
     }
 
@@ -276,9 +281,14 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
         bool bMSO2007Doc = getFilter().isMSO2007Document();
         bool bHasInternalData = getChartDocument()->hasInternalDataProvider();
         PropertySet aPropSet( rxDataSeries->getDataPointByIndex( mrModel.mnIndex ) );
+<<<<<<< HEAD   (47c492 tdf#123218 tdf#108067 config key ReverseXAxisOrientationDoug)
 
         lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, false, bHasInternalData, bMSO2007Doc );
 
+=======
+        bool bCustomLabelField = mrModel.mxText && mrModel.mxText->mxTextBody && !mrModel.mxText->mxTextBody->getParagraphs().empty();
+        lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, false, bCustomLabelField, bMSO2007Doc );
+>>>>>>> CHANGE (0d2340 tdf#136061 Chart ODF/OOXML: fix missing custom labels)
         const TypeGroupInfo& rTypeInfo = rTypeGroup.getTypeInfo();
         bool bIsPie = rTypeInfo.meTypeCategory == TYPECATEGORY_PIE;
 
@@ -296,7 +306,7 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
             importFillProperties(aPropSet, *mrModel.mxShapeProp, getFilter().getGraphicHelper(),
                                  rHelper);
         }
-        if( mrModel.mxText && mrModel.mxText->mxTextBody && !mrModel.mxText->mxTextBody->getParagraphs().empty() )
+        if( bCustomLabelField )
         {
             css::uno::Reference< XComponentContext > xContext = getComponentContext();
             uno::Sequence< css::uno::Reference< XDataPointCustomLabelField > > aSequence;
@@ -409,9 +419,16 @@ void DataLabelsConverter::convertFromModel( const Reference< XDataSeries >& rxDa
     if( !mrModel.mbDeleted )
     {
         bool bMSO2007Doc = getFilter().isMSO2007Document();
+<<<<<<< HEAD   (47c492 tdf#123218 tdf#108067 config key ReverseXAxisOrientationDoug)
         bool bHasInternalData = getChartDocument()->hasInternalDataProvider();
 
         lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, true, bHasInternalData, bMSO2007Doc );
+=======
+        // tdf#132174: the inner data table has no own cell number format.
+        if( getChartDocument()->hasInternalDataProvider() && mrModel.mobShowVal.get(!bMSO2007Doc) )
+            mrModel.maNumberFormat.mbSourceLinked = false;
+        lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, true, false, bMSO2007Doc );
+>>>>>>> CHANGE (0d2340 tdf#136061 Chart ODF/OOXML: fix missing custom labels)
 
         if (mrModel.mxShapeProp)
         {
