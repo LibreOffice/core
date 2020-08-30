@@ -22,6 +22,30 @@
       "revId": "a67ddb337499c52957dbf358902537eb26971e1c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1ebea1b_9907a10a",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 690,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-08-30T14:42:11Z",
+      "side": 1,
+      "message": "The initial label of the author label was \"label\". But, I made it empty. Thanks for the better idea.",
+      "parentUuid": "148adca0_a618b05b",
+      "range": {
+        "startLine": 690,
+        "startChar": 8,
+        "endLine": 690,
+        "endChar": 38
+      },
+      "revId": "a67ddb337499c52957dbf358902537eb26971e1c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
