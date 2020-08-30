@@ -126,8 +126,6 @@ public:
 
     SdXMLDrawingPageStyleContext(
         SvXMLImport& rImport,
-        sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
         SvXMLStylesContext& rStyles);
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
@@ -163,12 +161,10 @@ XmlStyleFamily const g_Families[MAX_SPECIAL_DRAW_STYLES] =
 
 XMLDrawingPageStyleContext::XMLDrawingPageStyleContext(
     SvXMLImport& rImport,
-    sal_Int32 nElement,
-    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
     SvXMLStylesContext& rStyles,
     ContextID_Index_Pair const pContextIDs[],
     XmlStyleFamily const pFamilies[])
-    : XMLPropStyleContext(rImport, nElement, xAttrList, rStyles, XmlStyleFamily::SD_DRAWINGPAGE_ID)
+    : XMLPropStyleContext(rImport, rStyles, XmlStyleFamily::SD_DRAWINGPAGE_ID)
     , m_pFamilies(pFamilies)
 {
     size_t size(1); // for the -1 entry
@@ -179,11 +175,8 @@ XMLDrawingPageStyleContext::XMLDrawingPageStyleContext(
 
 SdXMLDrawingPageStyleContext::SdXMLDrawingPageStyleContext(
     SvXMLImport& rImport,
-    sal_Int32 nElement,
-    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
     SvXMLStylesContext& rStyles)
-    : XMLDrawingPageStyleContext(rImport, nElement, xAttrList, rStyles,
-            g_ContextIDs, g_Families)
+    : XMLDrawingPageStyleContext(rImport, rStyles, g_ContextIDs, g_Families)
 {
 }
 
@@ -285,9 +278,9 @@ void XMLDrawingPageStyleContext::FillPropertySet(
 
 SdXMLPageMasterStyleContext::SdXMLPageMasterStyleContext(
     SdXMLImport& rImport,
-    sal_Int32 nElement,
+    sal_Int32 /*nElement*/,
     const uno::Reference< xml::sax::XFastAttributeList>& xAttrList)
-:   SvXMLStyleContext(rImport, nElement, xAttrList, XmlStyleFamily::SD_PAGEMASTERSTYLECONEXT_ID),
+:   SvXMLStyleContext(rImport, XmlStyleFamily::SD_PAGEMASTERSTYLECONEXT_ID),
     mnBorderBottom( 0 ),
     mnBorderLeft( 0 ),
     mnBorderRight( 0 ),
@@ -367,9 +360,9 @@ SdXMLPageMasterStyleContext::~SdXMLPageMasterStyleContext()
 
 SdXMLPageMasterContext::SdXMLPageMasterContext(
     SdXMLImport& rImport,
-    sal_Int32 nElement,
-    const uno::Reference< xml::sax::XFastAttributeList>& xAttrList)
-:   SvXMLStyleContext(rImport, nElement, xAttrList, XmlStyleFamily::SD_PAGEMASTERCONEXT_ID)
+    sal_Int32 /*nElement*/,
+    const uno::Reference< xml::sax::XFastAttributeList>& /*xAttrList*/)
+:   SvXMLStyleContext(rImport, XmlStyleFamily::SD_PAGEMASTERCONEXT_ID)
 {
     // set family to something special at SvXMLStyleContext
     // for differences in search-methods
@@ -394,9 +387,9 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLPageMasterContext
 
 SdXMLPresentationPageLayoutContext::SdXMLPresentationPageLayoutContext(
     SdXMLImport& rImport,
-    sal_Int32 nElement,
-    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList)
-:   SvXMLStyleContext(rImport, nElement, xAttrList, XmlStyleFamily::SD_PRESENTATIONPAGELAYOUT_ID),
+    sal_Int32 /*nElement*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/)
+:   SvXMLStyleContext(rImport, XmlStyleFamily::SD_PRESENTATIONPAGELAYOUT_ID),
     mnTypeId( AUTOLAYOUT_NONE )
 {
     // set family to something special at SvXMLStyleContext
@@ -800,7 +793,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLMasterPageContext
             {
                 // style:style inside master-page context -> presentation style
                 XMLShapeStyleContext* pNew = new XMLShapeStyleContext(
-                    GetSdImport(), nElement, xAttrList,
+                    GetSdImport(),
                     *GetSdImport().GetShapeImport()->GetStylesContext(),
                     XmlStyleFamily::SD_PRESENTATION_ID);
 
@@ -902,12 +895,12 @@ SvXMLStyleContext* SdXMLStylesContext::CreateStyleStyleChildContext(
     switch( nFamily )
     {
     case XmlStyleFamily::SD_DRAWINGPAGE_ID:
-        return new SdXMLDrawingPageStyleContext(GetSdImport(), nElement, xAttrList, *this );
+        return new SdXMLDrawingPageStyleContext(GetSdImport(), *this );
         break;
     case XmlStyleFamily::TABLE_CELL:
     case XmlStyleFamily::TABLE_COLUMN:
     case XmlStyleFamily::TABLE_ROW:
-        return new XMLShapeStyleContext( GetSdImport(), nElement, xAttrList, *this, nFamily );
+        return new XMLShapeStyleContext( GetSdImport(), *this, nFamily );
         break;
     default: break;
     }
@@ -924,7 +917,7 @@ SvXMLStyleContext* SdXMLStylesContext::CreateDefaultStyleStyleChildContext(
     switch( nFamily )
     {
     case XmlStyleFamily::SD_GRAPHICS_ID:
-        return new XMLGraphicsDefaultStyle(GetSdImport(), nElement, xAttrList, *this );
+        return new XMLGraphicsDefaultStyle(GetSdImport(), *this );
         break;
     default: break;
     }

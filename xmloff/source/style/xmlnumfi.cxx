@@ -1256,10 +1256,10 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
 
 SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
                                     const OUString& rName,
-                                    const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
+                                    const uno::Reference<xml::sax::XFastAttributeList>& /*xAttrList*/,
                                     const sal_Int32 nTempKey, LanguageType nLang,
                                     SvXMLStylesContext& rStyles ) :
-    SvXMLStyleContext( rImport, 0, xAttrList, XmlStyleFamily::DATA_STYLE ),
+    SvXMLStyleContext( rImport, XmlStyleFamily::DATA_STYLE ),
     pData( nullptr ),
     pStyles( &rStyles ),
     aMyConditions(),

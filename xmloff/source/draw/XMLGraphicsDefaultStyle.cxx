@@ -49,8 +49,8 @@ using ::xmloff::token::XML_GRAPHIC_PROPERTIES;
 using ::xmloff::token::XML_PARAGRAPH_PROPERTIES;
 
 
-XMLGraphicsDefaultStyle::XMLGraphicsDefaultStyle( SvXMLImport& rImport, sal_Int32 nElement, const Reference< XFastAttributeList >& xAttrList, SvXMLStylesContext& rStyles )
-: XMLPropStyleContext( rImport, nElement, xAttrList, rStyles, XmlStyleFamily::SD_GRAPHICS_ID, true )
+XMLGraphicsDefaultStyle::XMLGraphicsDefaultStyle( SvXMLImport& rImport, SvXMLStylesContext& rStyles )
+: XMLPropStyleContext( rImport, rStyles, XmlStyleFamily::SD_GRAPHICS_ID, true )
 {
 }
 

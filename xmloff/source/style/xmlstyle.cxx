@@ -128,35 +128,6 @@ void SvXMLStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
 
 
 SvXMLStyleContext::SvXMLStyleContext(
-        SvXMLImport& rImp, sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const uno::Reference< xml::sax::XAttributeList >&,
-        XmlStyleFamily nFam, bool bDefault ) :
-    SvXMLImportContext( rImp, nPrfx, rLName ),
-    mbHidden( false ),
-    mnFamily( nFam ),
-    mbValid( true ),
-    mbNew( true ),
-    mbDefaultStyle( bDefault )
-{
-}
-
-SvXMLStyleContext::SvXMLStyleContext(
-        SvXMLImport& rImp,
-        sal_Int32 /*nElement*/,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > &,
-        XmlStyleFamily nFam, bool bDefault ) :
-    SvXMLImportContext( rImp ),
-    mbHidden( false ),
-    mnFamily( nFam ),
-    mbValid( true ),
-    mbNew( true ),
-    mbDefaultStyle( bDefault )
-{
-}
-
-// fast-parser constructor
-SvXMLStyleContext::SvXMLStyleContext(
         SvXMLImport& rImp,
         XmlStyleFamily nFam, bool bDefault ) :
     SvXMLImportContext( rImp ),
@@ -170,20 +141,6 @@ SvXMLStyleContext::SvXMLStyleContext(
 
 SvXMLStyleContext::~SvXMLStyleContext()
 {
-}
-
-void SvXMLStyleContext::StartElement( const uno::Reference< xml::sax::XAttributeList > & xAttrList )
-{
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
-    {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
-        const OUString& rValue = xAttrList->getValueByIndex( i );
-
-        SetAttribute( nPrefix, aLocalName, rValue );
-    }
 }
 
 void SvXMLStyleContext::startFastElement(
@@ -425,30 +382,28 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext(
             break;
         }
         case XML_ELEMENT(TEXT, XML_BIBLIOGRAPHY_CONFIGURATION):
-            pStyle = new XMLIndexBibliographyConfigurationContext(
-                GetImport(), nElement, xAttrList);
+            pStyle = new XMLIndexBibliographyConfigurationContext(GetImport());
             break;
         case XML_ELEMENT(TEXT, XML_NOTES_CONFIGURATION):
             pStyle = new XMLFootnoteConfigurationImportContext(
                 GetImport(), nElement, xAttrList);
             break;
         case XML_ELEMENT(TEXT, XML_LINENUMBERING_CONFIGURATION):
-            pStyle = new XMLLineNumberingImportContext(
-                GetImport(), nElement, xAttrList);
+            pStyle = new XMLLineNumberingImportContext(GetImport());
             break;
         case XML_ELEMENT(STYLE, XML_PAGE_LAYOUT):
         case XML_ELEMENT(STYLE, XML_DEFAULT_PAGE_LAYOUT):
         {
             //there is not page family in ODF now, so I specify one for it
             bool bDefaultStyle  = XML_ELEMENT(STYLE, XML_DEFAULT_PAGE_LAYOUT) == nElement;
-            pStyle = new PageStyleContext( GetImport(), nElement, xAttrList, *this, bDefaultStyle );
+            pStyle = new PageStyleContext( GetImport(), *this, bDefaultStyle );
         }
         break;
         case XML_ELEMENT(TEXT, XML_LIST_STYLE):
-            pStyle = new SvxXMLListStyleContext( GetImport(), nElement, xAttrList );
+            pStyle = new SvxXMLListStyleContext( GetImport() );
             break;
         case XML_ELEMENT(TEXT, XML_OUTLINE_STYLE):
-            pStyle = new SvxXMLListStyleContext( GetImport(), nElement, xAttrList, true );
+            pStyle = new SvxXMLListStyleContext( GetImport(), true );
             break;
 
         // FillStyles
@@ -492,8 +447,8 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext(
 }
 
 SvXMLStyleContext *SvXMLStylesContext::CreateStyleStyleChildContext(
-        XmlStyleFamily nFamily, sal_Int32 nElement,
-        const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
+        XmlStyleFamily nFamily, sal_Int32 /*nElement*/,
+        const uno::Reference< xml::sax::XFastAttributeList > & /*xAttrList*/ )
 {
     SvXMLStyleContext *pStyle = nullptr;
 
@@ -502,24 +457,20 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleStyleChildContext(
         case XmlStyleFamily::TEXT_PARAGRAPH:
         case XmlStyleFamily::TEXT_TEXT:
         case XmlStyleFamily::TEXT_SECTION:
-            pStyle = new XMLTextStyleContext( GetImport(), nElement,
-                                              xAttrList, *this, nFamily );
+            pStyle = new XMLTextStyleContext( GetImport(), *this, nFamily );
             break;
 
         case XmlStyleFamily::TEXT_RUBY:
-            pStyle = new XMLPropStyleContext( GetImport(), nElement,
-                                              xAttrList, *this, nFamily );
+            pStyle = new XMLPropStyleContext( GetImport(), *this, nFamily );
             break;
         case XmlStyleFamily::SCH_CHART_ID:
-            pStyle = new XMLChartStyleContext( GetImport(), nElement,
-                                               xAttrList, *this, nFamily );
+            pStyle = new XMLChartStyleContext( GetImport(), *this, nFamily );
             break;
 
         case XmlStyleFamily::SD_GRAPHICS_ID:
         case XmlStyleFamily::SD_PRESENTATION_ID:
         case XmlStyleFamily::SD_POOL_ID:
-            pStyle = new XMLShapeStyleContext( GetImport(), nElement,
-                                               xAttrList, *this, nFamily );
+            pStyle = new XMLShapeStyleContext( GetImport(), *this, nFamily );
             break;
         default: break;
     }

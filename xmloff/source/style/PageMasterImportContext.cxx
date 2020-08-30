@@ -61,11 +61,9 @@ void PageStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
 
 
 PageStyleContext::PageStyleContext( SvXMLImport& rImport,
-        sal_Int32 nElement,
-        const uno::Reference< xml::sax::XFastAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles,
         bool bDefaultStyle) :
-    XMLPropStyleContext( rImport, nElement, xAttrList, rStyles, XmlStyleFamily::PAGE_MASTER, bDefaultStyle),
+    XMLPropStyleContext( rImport, rStyles, XmlStyleFamily::PAGE_MASTER, bDefaultStyle),
     sPageUsage(),
     m_bIsFillStyleAlreadyConverted(false) //
 {
