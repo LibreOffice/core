@@ -17,17 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
-
-#include <svx/svxdllapi.h>
+#include <svx/galleryxmlstoragelocations.hxx>
 #include <tools/urlobj.hxx>
+#include <svx/gallerybinarystoragelocations.hxx>
 
-class SVXCORE_DLLPUBLIC GalleryStorageLocations
+void GalleryXMLStorageLocations::SetStorageLocations(INetURLObject& rURL)
 {
-public:
-    virtual ~GalleryStorageLocations() = 0;
-    virtual void SetStorageLocations(INetURLObject& rURL) = 0;
-    virtual const INetURLObject& getThemeURL() const = 0;
-};
+    rURL.setExtension("xml");
+    maXMLURL = GalleryBinaryStorageLocations::ImplGetURLIgnoreCase(rURL);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
