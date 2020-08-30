@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "daa57735_a4854464",
+        "filename": "editeng/source/editeng/impedit.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1399,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-08-30T09:55:30Z",
+      "side": 1,
+      "message": "Don\u0027t know if it can be changed",
+      "range": {
+        "startLine": 1399,
+        "startChar": 36,
+        "endLine": 1399,
+        "endChar": 50
+      },
+      "revId": "e4b1cb0730538721d669a22d7e56e7030d4785fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bc807f7_92aecf93",
+        "filename": "sfx2/source/view/lokhelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-08-30T09:55:30Z",
+      "side": 1,
+      "message": "You forgot to fix this one.",
+      "range": {
+        "startLine": 490,
+        "startChar": 60,
+        "endLine": 490,
+        "endChar": 74
+      },
+      "revId": "e4b1cb0730538721d669a22d7e56e7030d4785fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
