@@ -416,10 +416,8 @@ void XMLTableStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
 
 
 XMLTableStyleContext::XMLTableStyleContext( ScXMLImport& rImport,
-        sal_Int32 nElement,
-        const uno::Reference< XFastAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles, XmlStyleFamily nFamily, bool bDefaultStyle ) :
-    XMLPropStyleContext( rImport, nElement, xAttrList, rStyles, nFamily, bDefaultStyle ),
+    XMLPropStyleContext( rImport, rStyles, nFamily, bDefaultStyle ),
     sDataStyleName(),
     pStyles(&rStyles),
     nNumberFormat(-1),
@@ -614,8 +612,7 @@ SvXMLStyleContext *XMLTableStylesContext::CreateStyleStyleChildContext(
     SvXMLStyleContext *pStyle;
     // use own wrapper for text and paragraph, to record style usage
     if (nFamily == XmlStyleFamily::TEXT_PARAGRAPH || nFamily == XmlStyleFamily::TEXT_TEXT)
-        pStyle = new ScCellTextStyleContext( GetImport(), nElement,
-                                            xAttrList, *this, nFamily );
+        pStyle = new  ScCellTextStyleContext( GetImport(),*this, nFamily );
     else
         pStyle = SvXMLStylesContext::CreateStyleStyleChildContext(
                     nFamily, nElement, xAttrList );
@@ -628,8 +625,7 @@ SvXMLStyleContext *XMLTableStylesContext::CreateStyleStyleChildContext(
         case XmlStyleFamily::TABLE_COLUMN:
         case XmlStyleFamily::TABLE_ROW:
         case XmlStyleFamily::TABLE_TABLE:
-            pStyle = new XMLTableStyleContext( GetScImport(), nElement,
-                                               xAttrList, *this, nFamily );
+            pStyle = new XMLTableStyleContext( GetScImport(), *this, nFamily );
             break;
         default: break;
         }
@@ -649,12 +645,10 @@ SvXMLStyleContext *XMLTableStylesContext::CreateDefaultStyleStyleChildContext(
         switch( nFamily )
         {
             case XmlStyleFamily::TABLE_CELL:
-                pStyle = new XMLTableStyleContext( GetScImport(), nElement,
-                                            xAttrList, *this, nFamily, true);
+                pStyle = new XMLTableStyleContext( GetScImport(), *this, nFamily, true);
             break;
             case XmlStyleFamily::SD_GRAPHICS_ID:
-                pStyle = new XMLGraphicsDefaultStyle( GetScImport(), nElement,
-                                            xAttrList, *this);
+                pStyle = new XMLGraphicsDefaultStyle( GetScImport(), *this);
             break;
             default: break;
         }
@@ -997,10 +991,9 @@ void ScMasterPageContext::Finish( bool bOverwrite )
         ClearContent(SC_UNO_PAGE_RIGHTHDRCON);
 }
 
-ScCellTextStyleContext::ScCellTextStyleContext( SvXMLImport& rImport, sal_Int32 nElement,
-            const uno::Reference<xml::sax::XFastAttributeList> & xAttrList,
+ScCellTextStyleContext::ScCellTextStyleContext( SvXMLImport& rImport,
             SvXMLStylesContext& rStyles, XmlStyleFamily nFamily ) :
-    XMLTextStyleContext( rImport, nElement, xAttrList, rStyles, nFamily, false/*bDefaultStyle*/ ),
+    XMLTextStyleContext( rImport, rStyles, nFamily, false/*bDefaultStyle*/ ),
     nLastSheet(-1)
 {
 }

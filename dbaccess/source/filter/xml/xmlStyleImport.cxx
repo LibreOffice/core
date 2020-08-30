@@ -41,10 +41,8 @@ using namespace xmloff::token;
 
 
 OTableStyleContext::OTableStyleContext( ODBFilter& rImport,
-        sal_Int32 nElement,
-        const Reference< XFastAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles, XmlStyleFamily nFamily )
-    :XMLPropStyleContext( rImport, nElement, xAttrList, rStyles, nFamily, false )
+    :XMLPropStyleContext( rImport, rStyles, nFamily, false )
     ,pStyles(&rStyles)
     ,m_nNumberFormat(-1)
 {
@@ -204,8 +202,7 @@ SvXMLStyleContext *OTableStylesContext::CreateStyleStyleChildContext(
     case XmlStyleFamily::TABLE_TABLE:
     case XmlStyleFamily::TABLE_COLUMN:
     case XmlStyleFamily::TABLE_CELL:
-        return new OTableStyleContext( GetOwnImport(), nElement,
-                                           xAttrList, *this, nFamily );
+        return new OTableStyleContext( GetOwnImport(), *this, nFamily );
         break;
     default: break;
     }

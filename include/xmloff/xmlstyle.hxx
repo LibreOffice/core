@@ -85,28 +85,11 @@ protected:
 
 public:
 
-
-    SvXMLStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
-              XmlStyleFamily nFamily=XmlStyleFamily::DATA_STYLE,
-              bool bDefaultStyle = false );
-
-    SvXMLStyleContext( SvXMLImport& rImport,
-            sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
-            XmlStyleFamily nFamily=XmlStyleFamily::DATA_STYLE,
-            bool bDefaultStyle = false );
-
-    // Fast-parser constructor
     SvXMLStyleContext( SvXMLImport& rImport,
               XmlStyleFamily nFamily=XmlStyleFamily::DATA_STYLE,
               bool bDefaultStyle = false );
 
     virtual ~SvXMLStyleContext() override;
-
-    virtual void StartElement(
-        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) final override;
 
     virtual void SAL_CALL startFastElement(
             sal_Int32 nElement,

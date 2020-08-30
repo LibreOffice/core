@@ -36,8 +36,7 @@ private:
 public:
 
 
-    PageStyleContext( SvXMLImport& rImport, sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
+    PageStyleContext( SvXMLImport& rImport,
             SvXMLStylesContext& rStyles,
             bool bDefaultStyle);
     virtual ~PageStyleContext() override;

@@ -74,7 +74,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLShapePropertySetCon
     {
     case CTF_NUMBERINGRULES:
         mnBulletIndex = rProp.mnIndex;
-        mxBulletStyle = new SvxXMLListStyleContext( GetImport(), nElement, xAttrList );
+        mxBulletStyle = new SvxXMLListStyleContext( GetImport() );
         return mxBulletStyle.get();
         break;
     case CTF_TABSTOP:

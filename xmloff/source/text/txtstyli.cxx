@@ -126,11 +126,9 @@ void XMLTextStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
 }
 
 XMLTextStyleContext::XMLTextStyleContext( SvXMLImport& rImport,
-        sal_Int32 nElement,
-        const Reference< XFastAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles, XmlStyleFamily nFamily,
         bool bDefaultStyle )
-:   XMLPropStyleContext( rImport, nElement, xAttrList, rStyles, nFamily, bDefaultStyle )
+:   XMLPropStyleContext( rImport, rStyles, nFamily, bDefaultStyle )
 ,   m_nOutlineLevel( -1 )
 ,   m_isAutoUpdate( false )
 ,   m_bHasMasterPageName( false )

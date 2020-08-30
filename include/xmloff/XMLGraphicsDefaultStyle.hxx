@@ -28,8 +28,7 @@ class XMLOFF_DLLPUBLIC XMLGraphicsDefaultStyle final : public XMLPropStyleContex
 {
 public:
 
-    XMLGraphicsDefaultStyle( SvXMLImport& rImport, sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+    XMLGraphicsDefaultStyle( SvXMLImport& rImport,
         SvXMLStylesContext& rStyles);
 
     virtual ~XMLGraphicsDefaultStyle() override;

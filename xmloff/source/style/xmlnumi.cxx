@@ -82,14 +82,15 @@ class SvxXMLListLevelStyleAttrContext_Impl : public SvXMLImportContext
 public:
 
     SvxXMLListLevelStyleAttrContext_Impl(
-            SvXMLImport& rImport, sal_uInt16 nPrfx,
-             const OUString& rLName,
-              const Reference< xml::sax::XAttributeList >& xAttrList,
+            SvXMLImport& rImport, sal_Int32 nElement,
+            const Reference< xml::sax::XFastAttributeList >& xAttrList,
             SvxXMLListLevelStyleContext_Impl& rLLevel   );
 
-    virtual SvXMLImportContextRef CreateChildContext(
-            sal_uInt16 nPrefix, const OUString& rLocalName,
-            const Reference< xml::sax::XAttributeList > & xAttrList ) override;
+     virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 class SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl : public SvXMLImportContext
@@ -97,9 +98,8 @@ class SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl : public SvXMLImportCon
 public:
 
     SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl(
-            SvXMLImport& rImport, sal_uInt16 nPrfx,
-            const OUString& rLName,
-            const Reference< xml::sax::XAttributeList >& xAttrList,
+            SvXMLImport& rImport, sal_Int32 nElement,
+            const Reference< xml::sax::XFastAttributeList >& xAttrList,
             SvxXMLListLevelStyleContext_Impl& rLLevel   );
 };
 
@@ -120,30 +120,6 @@ enum SvxXMLTextListLevelStyleAttrTokens
     XML_TOK_TEXT_LEVEL_ATTR_DISPLAY_LEVELS
 };
 
-}
-
-static const SvXMLTokenMapEntry* lcl_getLevelAttrTokenMap()
-{
-    static const SvXMLTokenMapEntry aLevelAttrTokenMap[] =
-    {
-        { XML_NAMESPACE_TEXT, XML_LEVEL, XML_TOK_TEXT_LEVEL_ATTR_LEVEL },
-        { XML_NAMESPACE_TEXT, XML_STYLE_NAME, XML_TOK_TEXT_LEVEL_ATTR_STYLE_NAME },
-        { XML_NAMESPACE_TEXT, XML_BULLET_CHAR, XML_TOK_TEXT_LEVEL_ATTR_BULLET_CHAR },
-        { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_TEXT_LEVEL_ATTR_HREF },
-        { XML_NAMESPACE_XLINK, XML_TYPE, XML_TOK_TEXT_LEVEL_ATTR_TYPE },
-        { XML_NAMESPACE_XLINK, XML_SHOW, XML_TOK_TEXT_LEVEL_ATTR_SHOW },
-        { XML_NAMESPACE_XLINK, XML_ACTUATE, XML_TOK_TEXT_LEVEL_ATTR_ACTUATE },
-
-        { XML_NAMESPACE_STYLE, XML_NUM_FORMAT, XML_TOK_TEXT_LEVEL_ATTR_NUM_FORMAT },
-        { XML_NAMESPACE_STYLE, XML_NUM_PREFIX, XML_TOK_TEXT_LEVEL_ATTR_NUM_PREFIX },
-        { XML_NAMESPACE_STYLE, XML_NUM_SUFFIX, XML_TOK_TEXT_LEVEL_ATTR_NUM_SUFFIX },
-        { XML_NAMESPACE_STYLE, XML_NUM_LETTER_SYNC, XML_TOK_TEXT_LEVEL_ATTR_NUM_LETTER_SYNC },
-        { XML_NAMESPACE_TEXT, XML_START_VALUE, XML_TOK_TEXT_LEVEL_ATTR_START_VALUE },
-        { XML_NAMESPACE_TEXT, XML_DISPLAY_LEVELS, XML_TOK_TEXT_LEVEL_ATTR_DISPLAY_LEVELS },
-
-        XML_TOKEN_MAP_END
-    };
-    return aLevelAttrTokenMap;
 }
 
 class SvxXMLListLevelStyleContext_Impl : public SvXMLImportContext
@@ -216,13 +192,14 @@ class SvxXMLListLevelStyleContext_Impl : public SvXMLImportContext
 public:
 
     SvxXMLListLevelStyleContext_Impl(
-            SvXMLImport& rImport, sal_uInt16 nPrfx,
-            const OUString& rLName,
-            const Reference< xml::sax::XAttributeList > & xAttrList );
+            SvXMLImport& rImport, sal_Int32 nElement,
+            const Reference< xml::sax::XFastAttributeList > & xAttrList );
 
-    virtual SvXMLImportContextRef CreateChildContext(
-            sal_uInt16 nPrefix, const OUString& rLocalName,
-            const Reference< xml::sax::XAttributeList > & xAttrList ) override;
+    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     sal_Int32 GetLevel() const { return nLevel; }
     Sequence<beans::PropertyValue> GetProperties();
@@ -253,11 +230,10 @@ const OUStringLiteral gsStarBats( u"StarBats"  );
 const OUStringLiteral gsStarMath( u"StarMath"  );
 
 SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
-        SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const Reference< xml::sax::XAttributeList > & xAttrList )
+        SvXMLImport& rImport, sal_Int32 nElement,
+        const Reference< xml::sax::XFastAttributeList > & xAttrList )
 
-:   SvXMLImportContext( rImport, nPrfx, rLName )
+:   SvXMLImportContext( rImport )
 ,   sNumFormat( "1" )
 ,   nLevel( -1 )
 ,   nSpaceBefore( 0 )
@@ -285,115 +261,109 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
 ,   bNum( false )
 ,   bHasColor( false )
 {
-    if( IsXMLToken( rLName, XML_LIST_LEVEL_STYLE_NUMBER ) ||
-        IsXMLToken( rLName, XML_OUTLINE_LEVEL_STYLE )        )
-        bNum = true;
-    else if( IsXMLToken( rLName, XML_LIST_LEVEL_STYLE_BULLET ) )
-        bBullet = true;
-    else if( IsXMLToken( rLName, XML_LIST_LEVEL_STYLE_IMAGE ) )
-        bImage = true;
-
-    static const SvXMLTokenMap aTokenMap( lcl_getLevelAttrTokenMap() );
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    switch (nElement & TOKEN_MASK)
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                            &aLocalName );
-        const OUString& rValue = xAttrList->getValueByIndex( i );
+        case XML_LIST_LEVEL_STYLE_NUMBER:
+        case XML_OUTLINE_LEVEL_STYLE:
+            bNum = true;
+            break;
+        case XML_LIST_LEVEL_STYLE_BULLET:
+            bBullet = true;
+            break;
+        case XML_LIST_LEVEL_STYLE_IMAGE:
+            bImage = true;
+            break;
+    }
 
-        switch( aTokenMap.Get( nPrefix, aLocalName ) )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
+    {
+        const OUString sValue = aIter.toString();
+        switch( aIter.getToken() )
         {
-        case XML_TOK_TEXT_LEVEL_ATTR_LEVEL:
-            nLevel = rValue.toInt32();
+        case XML_ELEMENT(TEXT, XML_LEVEL):
+            nLevel = sValue.toInt32();
             if( nLevel >= 1 )
                 nLevel--;
             else
                 nLevel = 0;
             break;
-        case XML_TOK_TEXT_LEVEL_ATTR_STYLE_NAME:
-            sTextStyleName = rValue;
+        case XML_ELEMENT(TEXT, XML_STYLE_NAME):
+            sTextStyleName = sValue;
             break;
-        case XML_TOK_TEXT_LEVEL_ATTR_BULLET_CHAR:
-            if (!rValue.isEmpty())
-                cBullet = rValue[0];
+        case XML_ELEMENT(TEXT, XML_BULLET_CHAR):
+            if (!sValue.isEmpty())
+                cBullet = sValue[0];
             break;
-        case XML_TOK_TEXT_LEVEL_ATTR_HREF:
+        case XML_ELEMENT(XLINK, XML_HREF):
             if( bImage )
-                sImageURL = rValue;
+                sImageURL = sValue;
             break;
-        case XML_TOK_TEXT_LEVEL_ATTR_TYPE:
-        case XML_TOK_TEXT_LEVEL_ATTR_SHOW:
-        case XML_TOK_TEXT_LEVEL_ATTR_ACTUATE:
+        case XML_ELEMENT(XLINK, XML_TYPE):
+        case XML_ELEMENT(XLINK, XML_SHOW):
+        case XML_ELEMENT(XLINK, XML_ACTUATE):
             // This properties will be ignored
             break;
-        case XML_TOK_TEXT_LEVEL_ATTR_NUM_FORMAT:
+        case XML_ELEMENT(STYLE, XML_NUM_FORMAT):
             if( bNum )
-                sNumFormat = rValue;
+                sNumFormat = sValue;
             break;
-        case XML_TOK_TEXT_LEVEL_ATTR_NUM_PREFIX:
-            sPrefix = rValue;
+        case XML_ELEMENT(STYLE, XML_NUM_PREFIX):
+            sPrefix = sValue;
             break;
-        case XML_TOK_TEXT_LEVEL_ATTR_NUM_SUFFIX:
-            sSuffix = rValue;
+        case XML_ELEMENT(STYLE, XML_NUM_SUFFIX):
+            sSuffix = sValue;
             break;
-        case XML_TOK_TEXT_LEVEL_ATTR_NUM_LETTER_SYNC:
+        case XML_ELEMENT(STYLE, XML_NUM_LETTER_SYNC):
             if( bNum )
-                sNumLetterSync = rValue;
+                sNumLetterSync = sValue;
             break;
-        case XML_TOK_TEXT_LEVEL_ATTR_START_VALUE:
+        case XML_ELEMENT(TEXT, XML_START_VALUE):
             if( bNum )
             {
-                sal_Int32 nTmp = rValue.toInt32();
+                sal_Int32 nTmp = sValue.toInt32();
                 nNumStartValue =
                     (nTmp < 0) ? 1 : ( (nTmp>SHRT_MAX) ? SHRT_MAX
                                                         : static_cast<sal_Int16>(nTmp) );
             }
             break;
-        case XML_TOK_TEXT_LEVEL_ATTR_DISPLAY_LEVELS:
+        case XML_ELEMENT(TEXT, XML_DISPLAY_LEVELS):
             if( bNum )
             {
-                sal_Int32 nTmp = rValue.toInt32();
+                sal_Int32 nTmp = sValue.toInt32();
                 nNumDisplayLevels =
                     (nTmp < 1) ? 1 : ( (nTmp>SHRT_MAX) ? SHRT_MAX
                                                         : static_cast<sal_Int16>(nTmp) );
             }
             break;
+        default:
+            SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
         }
     }
 }
 
-SvXMLImportContextRef SvxXMLListLevelStyleContext_Impl::CreateChildContext(
-        sal_uInt16 nPrefix, const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SvxXMLListLevelStyleContext_Impl::createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    SvXMLImportContext *pContext = nullptr;
-    if( XML_NAMESPACE_STYLE == nPrefix &&
-        ( IsXMLToken( rLocalName, XML_LIST_LEVEL_PROPERTIES ) ||
-             IsXMLToken( rLocalName, XML_TEXT_PROPERTIES ) ) )
+    if( nElement == XML_ELEMENT(STYLE, XML_LIST_LEVEL_PROPERTIES) ||
+        nElement == XML_ELEMENT(STYLE, XML_TEXT_PROPERTIES) )
     {
-        pContext = new SvxXMLListLevelStyleAttrContext_Impl( GetImport(),
-                                                             nPrefix,
-                                                             rLocalName,
-                                                               xAttrList,
-                                                             *this );
+        return new SvxXMLListLevelStyleAttrContext_Impl( GetImport(),
+                                                         nElement,
+                                                         xAttrList,
+                                                         *this );
     }
-    else if( (XML_NAMESPACE_OFFICE == nPrefix) && xmloff::token::IsXMLToken( rLocalName,
-                                        xmloff::token::XML_BINARY_DATA ) )
+    else if( nElement == XML_ELEMENT(OFFICE, XML_BINARY_DATA) )
     {
         if( bImage && sImageURL.isEmpty() && !xBase64Stream.is() )
         {
             xBase64Stream = GetImport().GetStreamForGraphicObjectURLFromBase64();
             if( xBase64Stream.is() )
-                pContext = new XMLBase64ImportContext( GetImport(), nPrefix,
-                                                    rLocalName, xAttrList,
-                                                    xBase64Stream );
+                return new XMLBase64ImportContext( GetImport(), xBase64Stream );
         }
     }
-
-    return pContext;
+    SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
+    return nullptr;
 }
 
 Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties()
@@ -610,160 +580,115 @@ enum SvxXMLStyleAttributesAttrTokens
 
 }
 
-static const SvXMLTokenMapEntry* lcl_getStyleAttributesAttrTokenMap()
-{
-    static const SvXMLTokenMapEntry aStyleAttributesAttrTokenMap[] =
-    {
-        { XML_NAMESPACE_TEXT, XML_SPACE_BEFORE,
-                XML_TOK_STYLE_ATTRIBUTES_ATTR_SPACE_BEFORE },
-        { XML_NAMESPACE_TEXT, XML_MIN_LABEL_WIDTH,
-                  XML_TOK_STYLE_ATTRIBUTES_ATTR_MIN_LABEL_WIDTH },
-        { XML_NAMESPACE_TEXT, XML_MIN_LABEL_DISTANCE,
-                XML_TOK_STYLE_ATTRIBUTES_ATTR_MIN_LABEL_DIST },
-        { XML_NAMESPACE_FO, XML_TEXT_ALIGN,
-                XML_TOK_STYLE_ATTRIBUTES_ATTR_TEXT_ALIGN },
-        { XML_NAMESPACE_STYLE, XML_FONT_NAME,
-                XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_NAME },
-        { XML_NAMESPACE_FO, XML_FONT_FAMILY,
-                XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_FAMILY },
-        { XML_NAMESPACE_STYLE, XML_FONT_FAMILY_GENERIC,
-                XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_FAMILY_GENERIC },
-        { XML_NAMESPACE_STYLE, XML_FONT_STYLE_NAME,
-                XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_STYLENAME },
-        { XML_NAMESPACE_STYLE, XML_FONT_PITCH,
-                XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_PITCH },
-        { XML_NAMESPACE_STYLE, XML_FONT_CHARSET,
-                XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_CHARSET },
-        { XML_NAMESPACE_STYLE, XML_VERTICAL_POS,
-                XML_TOK_STYLE_ATTRIBUTES_ATTR_VERTICAL_POS },
-        { XML_NAMESPACE_STYLE, XML_VERTICAL_REL,
-                XML_TOK_STYLE_ATTRIBUTES_ATTR_VERTICAL_REL },
-        { XML_NAMESPACE_FO, XML_WIDTH,
-                XML_TOK_STYLE_ATTRIBUTES_ATTR_WIDTH },
-        { XML_NAMESPACE_FO, XML_HEIGHT,
-                XML_TOK_STYLE_ATTRIBUTES_ATTR_HEIGHT },
-        { XML_NAMESPACE_FO, XML_COLOR,
-                XML_TOK_STYLE_ATTRIBUTES_ATTR_COLOR },
-        { XML_NAMESPACE_STYLE, XML_USE_WINDOW_FONT_COLOR,
-                XML_TOK_STYLE_ATTRIBUTES_ATTR_WINDOW_FONT_COLOR },
-        { XML_NAMESPACE_FO, XML_FONT_SIZE,
-                XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_SIZE },
-        { XML_NAMESPACE_TEXT, XML_LIST_LEVEL_POSITION_AND_SPACE_MODE,
-                XML_TOK_STYLE_ATTRIBUTES_ATTR_POSITION_AND_SPACE_MODE },
-        XML_TOKEN_MAP_END
-    };
-    return aStyleAttributesAttrTokenMap;
-}
 SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
-        SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const Reference< xml::sax::XAttributeList > & xAttrList,
+        SvXMLImport& rImport, sal_Int32 /*nElement*/,
+        const Reference< xml::sax::XFastAttributeList > & xAttrList,
         SvxXMLListLevelStyleContext_Impl& rLLevel ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    SvXMLImportContext( rImport ),
     rListLevel( rLLevel )
 {
-    static const SvXMLTokenMap aTokenMap( lcl_getStyleAttributesAttrTokenMap() );
     SvXMLUnitConverter& rUnitConv = GetImport().GetMM100UnitConverter();
 
     OUString sFontName, sFontFamily, sFontStyleName, sFontFamilyGeneric,
              sFontPitch, sFontCharset;
     OUString sVerticalPos, sVerticalRel;
 
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                            &aLocalName );
-        const OUString& rValue = xAttrList->getValueByIndex( i );
-
+        const OUString sValue = aIter.toString();
         sal_Int32 nVal;
-        switch( aTokenMap.Get( nPrefix, aLocalName ) )
+        switch( aIter.getToken() )
         {
-        case XML_TOK_STYLE_ATTRIBUTES_ATTR_SPACE_BEFORE:
-            if (rUnitConv.convertMeasureToCore(nVal, rValue, SHRT_MIN, SHRT_MAX))
+        case XML_ELEMENT(TEXT, XML_SPACE_BEFORE):
+            if (rUnitConv.convertMeasureToCore(nVal, sValue, SHRT_MIN, SHRT_MAX))
                 rListLevel.SetSpaceBefore( nVal );
             break;
-        case XML_TOK_STYLE_ATTRIBUTES_ATTR_MIN_LABEL_WIDTH:
-            if (rUnitConv.convertMeasureToCore( nVal, rValue, 0, SHRT_MAX ))
+        case XML_ELEMENT(TEXT, XML_MIN_LABEL_WIDTH):
+            if (rUnitConv.convertMeasureToCore( nVal, sValue, 0, SHRT_MAX ))
                 rListLevel.SetMinLabelWidth( nVal );
             break;
-        case XML_TOK_STYLE_ATTRIBUTES_ATTR_MIN_LABEL_DIST:
-            if (rUnitConv.convertMeasureToCore( nVal, rValue, 0, USHRT_MAX ))
+        case XML_ELEMENT(TEXT, XML_MIN_LABEL_DISTANCE):
+            if (rUnitConv.convertMeasureToCore( nVal, sValue, 0, USHRT_MAX ))
                 rListLevel.SetMinLabelDist( nVal );
             break;
-        case XML_TOK_STYLE_ATTRIBUTES_ATTR_TEXT_ALIGN:
-            if( !rValue.isEmpty() )
+        case XML_ELEMENT(FO, XML_TEXT_ALIGN):
+        case XML_ELEMENT(FO_COMPAT, XML_TEXT_ALIGN):
+            if( !sValue.isEmpty() )
             {
                 sal_Int16 eAdjust = HoriOrientation::LEFT;
-                if( IsXMLToken( rValue, XML_CENTER ) )
+                if( IsXMLToken( sValue, XML_CENTER ) )
                     eAdjust = HoriOrientation::CENTER;
-                else if( IsXMLToken( rValue, XML_END ) )
+                else if( IsXMLToken( sValue, XML_END ) )
                     eAdjust = HoriOrientation::RIGHT;
                 rListLevel.SetAdjust( eAdjust );
             }
             break;
-        case XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_NAME:
-            sFontName = rValue;
+        case XML_ELEMENT(STYLE, XML_FONT_NAME):
+            sFontName = sValue;
             break;
-        case XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_FAMILY:
-            sFontFamily = rValue;
+        case XML_ELEMENT(FO, XML_FONT_FAMILY):
+        case XML_ELEMENT(FO_COMPAT, XML_FONT_FAMILY):
+            sFontFamily = sValue;
             break;
-        case XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_FAMILY_GENERIC:
-            sFontFamilyGeneric = rValue;
+        case XML_ELEMENT(STYLE, XML_FONT_FAMILY_GENERIC):
+            sFontFamilyGeneric = sValue;
             break;
-        case XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_STYLENAME:
-            sFontStyleName = rValue;
+        case XML_ELEMENT(STYLE, XML_FONT_STYLE_NAME):
+            sFontStyleName = sValue;
             break;
-        case XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_PITCH:
-            sFontPitch = rValue;
+        case XML_ELEMENT(STYLE, XML_FONT_PITCH):
+            sFontPitch = sValue;
             break;
-        case XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_CHARSET:
-            sFontCharset = rValue;
+        case XML_ELEMENT(STYLE, XML_FONT_CHARSET):
+            sFontCharset = sValue;
             break;
-        case XML_TOK_STYLE_ATTRIBUTES_ATTR_VERTICAL_POS:
-            sVerticalPos = rValue;
+        case XML_ELEMENT(STYLE, XML_VERTICAL_POS):
+            sVerticalPos = sValue;
             break;
-        case XML_TOK_STYLE_ATTRIBUTES_ATTR_VERTICAL_REL:
-            sVerticalRel = rValue;
+        case XML_ELEMENT(STYLE, XML_VERTICAL_REL):
+            sVerticalRel = sValue;
             break;
-        case XML_TOK_STYLE_ATTRIBUTES_ATTR_WIDTH:
-            if (rUnitConv.convertMeasureToCore(nVal, rValue))
+        case XML_ELEMENT(FO, XML_WIDTH):
+        case XML_ELEMENT(FO_COMPAT, XML_WIDTH):
+            if (rUnitConv.convertMeasureToCore(nVal, sValue))
                 rListLevel.SetImageWidth( nVal );
             break;
-        case XML_TOK_STYLE_ATTRIBUTES_ATTR_HEIGHT:
-            if (rUnitConv.convertMeasureToCore(nVal, rValue))
+        case XML_ELEMENT(FO, XML_HEIGHT):
+        case XML_ELEMENT(FO_COMPAT, XML_HEIGHT):
+            if (rUnitConv.convertMeasureToCore(nVal, sValue))
                 rListLevel.SetImageHeight( nVal );
             break;
-        case XML_TOK_STYLE_ATTRIBUTES_ATTR_COLOR:
+        case XML_ELEMENT(FO, XML_COLOR):
+        case XML_ELEMENT(FO_COMPAT, XML_COLOR):
             {
                 sal_Int32 nColor(0);
-                if (::sax::Converter::convertColor( nColor, rValue ))
+                if (::sax::Converter::convertColor( nColor, sValue ))
                 {
                     rListLevel.SetColor( Color(nColor) );
                 }
             }
             break;
-        case XML_TOK_STYLE_ATTRIBUTES_ATTR_WINDOW_FONT_COLOR:
+        case XML_ELEMENT(STYLE, XML_USE_WINDOW_FONT_COLOR):
             {
-                if( IsXMLToken( rValue, XML_TRUE ) )
+                if( IsXMLToken( sValue, XML_TRUE ) )
                     rListLevel.SetColor( Color(0xffffffff) );
             }
             break;
-        case XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_SIZE:
-            if (::sax::Converter::convertPercent( nVal, rValue ))
+        case XML_ELEMENT(FO, XML_FONT_SIZE):
+        case XML_ELEMENT(FO_COMPAT, XML_FONT_SIZE):
+            if (::sax::Converter::convertPercent( nVal, sValue ))
                 rListLevel.SetRelSize( static_cast<sal_Int16>(nVal) );
             break;
-        case XML_TOK_STYLE_ATTRIBUTES_ATTR_POSITION_AND_SPACE_MODE:
+        case XML_ELEMENT(TEXT, XML_LIST_LEVEL_POSITION_AND_SPACE_MODE):
             {
                 sal_Int16 ePosAndSpaceMode = PositionAndSpaceMode::LABEL_WIDTH_AND_POSITION;
-                if( IsXMLToken( rValue, XML_LABEL_ALIGNMENT ) )
+                if( IsXMLToken( sValue, XML_LABEL_ALIGNMENT ) )
                     ePosAndSpaceMode = PositionAndSpaceMode::LABEL_ALIGNMENT;
                 rListLevel.SetPosAndSpaceMode( ePosAndSpaceMode );
             }
             break;
+        default:
+            SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
         }
     }
 
@@ -895,22 +820,19 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
     rListLevel.SetImageVertOrient( eVertOrient );
 }
 
-SvXMLImportContextRef SvxXMLListLevelStyleAttrContext_Impl::CreateChildContext(
-        sal_uInt16 nPrefix, const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SvxXMLListLevelStyleAttrContext_Impl::createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    SvXMLImportContext *pContext = nullptr;
-    if ( XML_NAMESPACE_STYLE == nPrefix &&
-         IsXMLToken( rLocalName, XML_LIST_LEVEL_LABEL_ALIGNMENT ) )
+    if ( nElement == XML_ELEMENT(STYLE, XML_LIST_LEVEL_LABEL_ALIGNMENT) )
     {
-        pContext = new SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl( GetImport(),
-                                                             nPrefix,
-                                                             rLocalName,
+        return new SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl( GetImport(),
+                                                             nElement,
                                                              xAttrList,
                                                              rListLevel );
     }
-
-    return pContext;
+    SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
+    return nullptr;
 }
 
 namespace {
@@ -925,74 +847,50 @@ enum SvxXMLStyleAttributesLabelAlignmentAttrTokens
 
 }
 
-static const SvXMLTokenMapEntry* lcl_getStyleAlignmentAttributesAttrTokenMap()
-{
-    static const SvXMLTokenMapEntry aStyleAlignmentAttributesAttrTokenMap[] =
-    {
-        { XML_NAMESPACE_TEXT, XML_LABEL_FOLLOWED_BY,
-                XML_TOK_STYLE_ATTRIBUTES_ATTR_LABEL_FOLLOWED_BY },
-        { XML_NAMESPACE_LO_EXT, XML_LABEL_FOLLOWED_BY,
-                XML_TOK_STYLE_ATTRIBUTES_ATTR_LABEL_FOLLOWED_BY },
-        { XML_NAMESPACE_TEXT, XML_LIST_TAB_STOP_POSITION,
-                XML_TOK_STYLE_ATTRIBUTES_ATTR_LISTTAB_STOP_POSITION },
-        { XML_NAMESPACE_FO, XML_TEXT_INDENT,
-                XML_TOK_STYLE_ATTRIBUTES_ATTR_FIRST_LINE_INDENT },
-        { XML_NAMESPACE_FO, XML_MARGIN_LEFT,
-                XML_TOK_STYLE_ATTRIBUTES_ATTR_INDENT_AT },
-
-        XML_TOKEN_MAP_END
-    };
-    return aStyleAlignmentAttributesAttrTokenMap;
-}
 SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl(
-        SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const Reference< xml::sax::XAttributeList > & xAttrList,
+        SvXMLImport& rImport, sal_Int32 /*nElement*/,
+        const Reference< xml::sax::XFastAttributeList > & xAttrList,
         SvxXMLListLevelStyleContext_Impl& rLLevel ) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+    SvXMLImportContext( rImport )
 {
-    static const SvXMLTokenMap aTokenMap( lcl_getStyleAlignmentAttributesAttrTokenMap() );
     SvXMLUnitConverter& rUnitConv = GetImport().GetMM100UnitConverter();
 
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     sal_Int16 eLabelFollowedBy = LabelFollow::LISTTAB;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                            &aLocalName );
-        const OUString& rValue = xAttrList->getValueByIndex( i );
+        const OUString sValue = aIter.toString();
 
         sal_Int32 nVal;
-        switch( aTokenMap.Get( nPrefix, aLocalName ) )
+        switch( aIter.getToken() )
         {
-        case XML_TOK_STYLE_ATTRIBUTES_ATTR_LABEL_FOLLOWED_BY:
+        case XML_ELEMENT(TEXT, XML_LABEL_FOLLOWED_BY):
+        case XML_ELEMENT(LO_EXT, XML_LABEL_FOLLOWED_BY):
             {
                 if( eLabelFollowedBy == LabelFollow::NEWLINE)
                     //NewLine from LO_EXT has precedence over other values of the Non LO_EXT namespace
                     break;
-                if( IsXMLToken( rValue, XML_SPACE ) )
+                if( IsXMLToken( sValue, XML_SPACE ) )
                     eLabelFollowedBy = LabelFollow::SPACE;
-                else if( IsXMLToken( rValue, XML_NOTHING ) )
+                else if( IsXMLToken( sValue, XML_NOTHING ) )
                     eLabelFollowedBy = LabelFollow::NOTHING;
-                else if( IsXMLToken( rValue, XML_NEWLINE ) )
+                else if( IsXMLToken( sValue, XML_NEWLINE ) )
                     eLabelFollowedBy = LabelFollow::NEWLINE;
             }
             break;
-        case XML_TOK_STYLE_ATTRIBUTES_ATTR_LISTTAB_STOP_POSITION:
-            if (rUnitConv.convertMeasureToCore(nVal, rValue, 0, SHRT_MAX))
+        case XML_ELEMENT(TEXT, XML_LIST_TAB_STOP_POSITION):
+            if (rUnitConv.convertMeasureToCore(nVal, sValue, 0, SHRT_MAX))
                 rLLevel.SetListtabStopPosition( nVal );
             break;
-        case XML_TOK_STYLE_ATTRIBUTES_ATTR_FIRST_LINE_INDENT:
-            if (rUnitConv.convertMeasureToCore(nVal, rValue, SHRT_MIN, SHRT_MAX))
+        case XML_ELEMENT(FO, XML_TEXT_INDENT):
+            if (rUnitConv.convertMeasureToCore(nVal, sValue, SHRT_MIN, SHRT_MAX))
                 rLLevel.SetFirstLineIndent( nVal );
             break;
-        case XML_TOK_STYLE_ATTRIBUTES_ATTR_INDENT_AT:
-            if (rUnitConv.convertMeasureToCore(nVal, rValue, SHRT_MIN, SHRT_MAX))
+        case XML_ELEMENT(FO, XML_MARGIN_LEFT):
+            if (rUnitConv.convertMeasureToCore(nVal, sValue, SHRT_MIN, SHRT_MAX))
                 rLLevel.SetIndentAt( nVal );
             break;
+        default:
+            SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << sValue);
         }
     }
     rLLevel.SetLabelFollowedBy( eLabelFollowedBy );
@@ -1018,10 +916,8 @@ const OUStringLiteral sNumberingRules( u"NumberingRules"  );
 const OUStringLiteral sIsContinuousNumbering( u"IsContinuousNumbering"  );
 
 SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
-        sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
         bool bOutl )
-:   SvXMLStyleContext( rImport, nElement, xAttrList, bOutl ? XmlStyleFamily::TEXT_OUTLINE : XmlStyleFamily::TEXT_LIST )
+:   SvXMLStyleContext( rImport, bOutl ? XmlStyleFamily::TEXT_OUTLINE : XmlStyleFamily::TEXT_LIST )
 ,   bConsecutive( false )
 ,   bOutline( bOutl )
 {
@@ -1029,31 +925,26 @@ SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
 
 SvxXMLListStyleContext::~SvxXMLListStyleContext() {}
 
-SvXMLImportContextRef SvxXMLListStyleContext::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & xAttrList )
+css::uno::Reference< css::xml::sax::XFastContextHandler > SvxXMLListStyleContext::createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    SvXMLImportContextRef xContext;
-
-    if( XML_NAMESPACE_TEXT == nPrefix &&
-        ( bOutline
-              ? IsXMLToken( rLocalName, XML_OUTLINE_LEVEL_STYLE )
-              : ( IsXMLToken( rLocalName, XML_LIST_LEVEL_STYLE_NUMBER ) ||
-                IsXMLToken( rLocalName, XML_LIST_LEVEL_STYLE_BULLET ) ||
-                 IsXMLToken( rLocalName, XML_LIST_LEVEL_STYLE_IMAGE )    ) ) )
+    if( bOutline
+        ? nElement == XML_ELEMENT(TEXT, XML_OUTLINE_LEVEL_STYLE)
+        : ( nElement == XML_ELEMENT(TEXT, XML_LIST_LEVEL_STYLE_NUMBER) ||
+            nElement == XML_ELEMENT(TEXT, XML_LIST_LEVEL_STYLE_BULLET) ||
+            nElement == XML_ELEMENT(TEXT, XML_LIST_LEVEL_STYLE_IMAGE )    ) )
     {
         rtl::Reference<SvxXMLListLevelStyleContext_Impl> xLevelStyle{
-            new SvxXMLListLevelStyleContext_Impl( GetImport(), nPrefix,
-                                                  rLocalName, xAttrList )};
+            new SvxXMLListLevelStyleContext_Impl( GetImport(), nElement, xAttrList )};
         if( !pLevelStyles )
             pLevelStyles = std::make_unique<SvxXMLListStyle_Impl>();
         pLevelStyles->push_back( xLevelStyle );
 
-        xContext = xLevelStyle.get();
+        return xLevelStyle.get();
     }
-
-    return xContext;
+    SAL_WARN("xmloff", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
+    return nullptr;
 }
 
 void SvxXMLListStyleContext::FillUnoNumRule(

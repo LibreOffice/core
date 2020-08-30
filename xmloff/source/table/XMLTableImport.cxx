@@ -157,7 +157,7 @@ public:
 class XMLTableTemplateContext : public SvXMLStyleContext
 {
 public:
-    XMLTableTemplateContext( SvXMLImport& rImport, sal_Int32 nElement, const Reference< XFastAttributeList >& xAttrList );
+    XMLTableTemplateContext( SvXMLImport& rImport );
 
     // Create child element.
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
@@ -236,9 +236,9 @@ SvXMLImportContext* XMLTableImport::CreateTableContext( sal_uInt16 nPrfx, const 
     return new XMLTableImportContext( xThis, nPrfx, rLName, xColumnRowRange );
 }
 
-SvXMLStyleContext* XMLTableImport::CreateTableTemplateContext( sal_Int32 nElement, const Reference< XFastAttributeList >& xAttrList )
+SvXMLStyleContext* XMLTableImport::CreateTableTemplateContext( sal_Int32 /*nElement*/, const Reference< XFastAttributeList >& /*xAttrList*/ )
 {
-    return new XMLTableTemplateContext( mrImport, nElement, xAttrList );
+    return new XMLTableTemplateContext( mrImport );
 }
 
 void XMLTableImport::addTableTemplate( const OUString& rsStyleName, XMLTableTemplate& xTableTemplate )
@@ -747,8 +747,8 @@ void XMLCellImportContext::EndElement()
 }
 
 
-XMLTableTemplateContext::XMLTableTemplateContext( SvXMLImport& rImport, sal_Int32 nElement, const Reference< XFastAttributeList >& xAttrList )
-: SvXMLStyleContext( rImport, nElement, xAttrList, XmlStyleFamily::TABLE_TEMPLATE_ID, false )
+XMLTableTemplateContext::XMLTableTemplateContext( SvXMLImport& rImport )
+: SvXMLStyleContext( rImport, XmlStyleFamily::TABLE_TEMPLATE_ID, false )
 {
 }
 

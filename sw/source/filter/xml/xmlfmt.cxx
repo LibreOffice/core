@@ -269,8 +269,7 @@ protected:
 public:
 
 
-    SwXMLTextStyleContext_Impl( SwXMLImport& rImport, sal_Int32 nElement,
-            const uno::Reference< xml::sax::XFastAttributeList > & xAttrList,
+    SwXMLTextStyleContext_Impl( SwXMLImport& rImport,
             XmlStyleFamily nFamily,
             SvXMLStylesContext& rStyles );
 
@@ -348,11 +347,9 @@ SwXMLTextStyleContext_Impl::Finish( bool bOverwrite )
 }
 
 SwXMLTextStyleContext_Impl::SwXMLTextStyleContext_Impl( SwXMLImport& rImport,
-        sal_Int32 nElement,
-        const uno::Reference< xml::sax::XFastAttributeList > & xAttrList,
         XmlStyleFamily nFamily,
         SvXMLStylesContext& rStyles ) :
-    XMLTextStyleContext( rImport, nElement, xAttrList, rStyles, nFamily )
+    XMLTextStyleContext( rImport, rStyles, nFamily )
 {
 }
 
@@ -417,8 +414,7 @@ public:
 
 
     SwXMLItemSetStyleContext_Impl(
-            SwXMLImport& rImport, sal_Int32 nElement,
-            const uno::Reference< xml::sax::XFastAttributeList > & xAttrList,
+            SwXMLImport& rImport,
             SvXMLStylesContext& rStylesC,
             XmlStyleFamily nFamily);
 
@@ -574,11 +570,9 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateItemSetContext(
 
 
 SwXMLItemSetStyleContext_Impl::SwXMLItemSetStyleContext_Impl( SwXMLImport& rImport,
-        sal_Int32 nElement,
-        const uno::Reference< xml::sax::XFastAttributeList > & xAttrList,
         SvXMLStylesContext& rStylesC,
         XmlStyleFamily nFamily ) :
-    SvXMLStyleContext( rImport, nElement, xAttrList, nFamily ),
+    SvXMLStyleContext( rImport, nFamily ),
     pTextStyle( nullptr ),
     rStyles( rStylesC ),
     bHasMasterPageName( false ),
@@ -610,10 +604,9 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SwXMLItemSetStyleConte
         {
             if( !pTextStyle )
             {
+                pTextStyle = new SwXMLTextStyleContext_Impl( GetSwImport(), XmlStyleFamily::TEXT_PARAGRAPH, rStyles );
                 rtl::Reference<sax_fastparser::FastAttributeList> xTmpAttrList = new sax_fastparser::FastAttributeList(nullptr);
                 xTmpAttrList->add(XML_ELEMENT(STYLE, XML_NAME), GetName().toUtf8() );
-                pTextStyle = new SwXMLTextStyleContext_Impl( GetSwImport(), nElement,
-                                 xTmpAttrList.get(), XmlStyleFamily::TEXT_PARAGRAPH, rStyles );
                 pTextStyle->startFastElement( nElement, xTmpAttrList.get() );
                 rStyles.AddStyle( *pTextStyle );
             }
@@ -783,8 +776,7 @@ SvXMLStyleContext *SwXMLStylesContext_Impl::CreateStyleStyleChildContext(
     switch( nFamily )
     {
     case XmlStyleFamily::TEXT_PARAGRAPH:
-        pStyle = new SwXMLTextStyleContext_Impl( GetSwImport(), nElement,
-                            xAttrList, nFamily, *this );
+        pStyle = new SwXMLTextStyleContext_Impl( GetSwImport(), nFamily, *this );
         break;
     case XmlStyleFamily::TABLE_TABLE:
     case XmlStyleFamily::TABLE_COLUMN:
@@ -792,21 +784,20 @@ SvXMLStyleContext *SwXMLStylesContext_Impl::CreateStyleStyleChildContext(
     case XmlStyleFamily::TABLE_CELL:
         // Distinguish real and automatic styles.
         if (IsAutomaticStyle())
-            pStyle = new SwXMLItemSetStyleContext_Impl(GetSwImport(), nElement, xAttrList, *this, nFamily);
+            pStyle = new SwXMLItemSetStyleContext_Impl(GetSwImport(), *this, nFamily);
         else if (nFamily == XmlStyleFamily::TABLE_CELL) // Real cell styles are used for table-template import.
-            pStyle = new SwXMLCellStyleContext(GetSwImport(), nElement, xAttrList, *this, nFamily);
+            pStyle = new SwXMLCellStyleContext(GetSwImport(), *this, nFamily);
         else
             SAL_WARN("sw.xml", "Context does not exists for non automatic table, column or row style.");
         break;
     case XmlStyleFamily::SD_GRAPHICS_ID:
         // As long as there are no element items, we can use the text
         // style class.
-        pStyle = new XMLTextShapeStyleContext( GetImport(), nElement,
-                            xAttrList, *this, nFamily );
+        pStyle = new XMLTextShapeStyleContext( GetImport(), *this, nFamily );
         break;
     case XmlStyleFamily::SD_DRAWINGPAGE_ID:
-        pStyle = new XMLDrawingPageStyleContext(GetImport(), nElement,
-                xAttrList, *this, g_MasterPageContextIDs, g_MasterPageFamilies);
+        pStyle = new XMLDrawingPageStyleContext(GetImport(),
+                *this, g_MasterPageContextIDs, g_MasterPageFamilies);
         break;
     default:
         pStyle = SvXMLStylesContext::CreateStyleStyleChildContext( nFamily,
@@ -829,14 +820,13 @@ SvXMLStyleContext *SwXMLStylesContext_Impl::CreateDefaultStyleStyleChildContext(
     case XmlStyleFamily::TEXT_PARAGRAPH:
     case XmlStyleFamily::TABLE_TABLE:
     case XmlStyleFamily::TABLE_ROW:
-        pStyle = new XMLTextStyleContext( GetImport(), nElement,
-                                          xAttrList, *this, nFamily,
+        pStyle = new XMLTextStyleContext( GetImport(),
+                                          *this, nFamily,
                                           true );
         break;
     case XmlStyleFamily::SD_GRAPHICS_ID:
         // There are no writer specific defaults for graphic styles!
-        pStyle = new XMLGraphicsDefaultStyle( GetImport(), nElement,
-                            xAttrList, *this );
+        pStyle = new XMLGraphicsDefaultStyle( GetImport(), *this );
         break;
     default:
         pStyle = SvXMLStylesContext::CreateDefaultStyleStyleChildContext( nFamily,

@@ -68,10 +68,10 @@ Reference < XStyle > XMLTextMasterPageContext::Create()
 const OUStringLiteral gsFollowStyle( u"FollowStyle" );
 
 XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
-        sal_Int32 nElement,
+        sal_Int32 /*nElement*/,
         const Reference< XFastAttributeList > & xAttrList,
         bool bOverwrite )
-:   SvXMLStyleContext( rImport, nElement, xAttrList, XmlStyleFamily::MASTER_PAGE )
+:   SvXMLStyleContext( rImport, XmlStyleFamily::MASTER_PAGE )
 ,   bInsertHeader( false )
 ,   bInsertFooter( false )
 ,   bInsertHeaderLeft( false )
