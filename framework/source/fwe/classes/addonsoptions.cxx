@@ -256,7 +256,8 @@ class AddonsOptions_Impl : public ConfigItem
             // accessed in this order
             OneImageEntry aSizeEntry[2];
             ImageEntry() {}
-            void addImage(ImageSize eSize, const BitmapEx &rImage, const OUString &rURL);
+            void addImage(ImageSize eSize, const BitmapEx &rImage);
+            void addImage(ImageSize eSize, const OUString &rURL);
         };
 
         typedef std::unordered_map< OUString, ImageEntry > ImageManager;
@@ -349,11 +350,13 @@ class AddonsOptions_Impl : public ConfigItem
         MergeStatusbarInstructionContainer                m_aCachedStatusbarMergingInstructions;
 };
 
-void AddonsOptions_Impl::ImageEntry::addImage(ImageSize eSize,
-                                              const BitmapEx& rImage,
-                                              const OUString &rURL)
+void AddonsOptions_Impl::ImageEntry::addImage(ImageSize eSize, const BitmapEx& rImage)
 {
     aSizeEntry[static_cast<int>(eSize)].aImage = rImage;
+}
+
+void AddonsOptions_Impl::ImageEntry::addImage(ImageSize eSize, const OUString &rURL)
+{
     aSizeEntry[static_cast<int>(eSize)].aURL = rURL;
 }
 
@@ -1608,8 +1611,7 @@ void AddonsOptions_Impl::ReadAndAssociateImages( const OUString& aURL, const OUS
         aFileURL.appendAscii( aExtArray[i] );
         aFileURL.append( ".bmp" );
 
-        aImageEntry.addImage( !i ? IMGSIZE_SMALL : IMGSIZE_BIG,
-                              BitmapEx(), aFileURL.makeStringAndClear() );
+        aImageEntry.addImage( !i ? IMGSIZE_SMALL : IMGSIZE_BIG, aFileURL.makeStringAndClear() );
     }
 
     m_aImageManager.emplace( aURL, aImageEntry );
@@ -1639,7 +1641,7 @@ std::unique_ptr<AddonsOptions_Impl::ImageEntry> AddonsOptions_Impl::ReadImageDat
             {
                 if ( !pEntry )
                     pEntry.reset(new ImageEntry);
-                pEntry->addImage(i == OFFSET_IMAGES_SMALL ? IMGSIZE_SMALL : IMGSIZE_BIG, aImage, "");
+                pEntry->addImage(i == OFFSET_IMAGES_SMALL ? IMGSIZE_SMALL : IMGSIZE_BIG, aImage);
             }
         }
         else if ( i == OFFSET_IMAGES_SMALL_URL || i == OFFSET_IMAGES_BIG_URL )
@@ -1649,11 +1651,11 @@ std::unique_ptr<AddonsOptions_Impl::ImageEntry> AddonsOptions_Impl::ReadImageDat
 
             // Retrieve image data from an external bitmap file. Make sure that embedded image data
             // has a higher priority.
-            aPropertyData[i] >>= aImageURL;
-
-            SubstituteVariables( aImageURL );
-
-            pEntry->addImage(i == OFFSET_IMAGES_SMALL_URL ? IMGSIZE_SMALL : IMGSIZE_BIG, BitmapEx(), aImageURL);
+            if (aPropertyData[i] >>= aImageURL)
+            {
+                SubstituteVariables(aImageURL);
+                pEntry->addImage(i == OFFSET_IMAGES_SMALL_URL ? IMGSIZE_SMALL : IMGSIZE_BIG, aImageURL);
+            }
         }
     }
 
