@@ -21,6 +21,7 @@
 #include <svx/galleryobjectcollection.hxx>
 #include <svx/galtheme.hxx>
 #include <svx/gallery1.hxx>
+#include <svx/galleryxmlstoragelocations.hxx>
 #include <galobj.hxx>
 
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
@@ -53,8 +54,12 @@
 
 using namespace ::com::sun::star;
 
-GalleryXMLEngine::GalleryXMLEngine(GalleryObjectCollection& rGalleryObjectCollection)
-    : mrGalleryObjectCollection(rGalleryObjectCollection)
+GalleryXMLEngine::GalleryXMLEngine(const GalleryXMLStorageLocations& rGalleryStorageLocations,
+                                   GalleryObjectCollection& rGalleryObjectCollection,
+                                   bool bReadOnly)
+    : maGalleryStorageLocations(rGalleryStorageLocations)
+    , mrGalleryObjectCollection(rGalleryObjectCollection)
+    , mbReadOnly(bReadOnly)
 {
 }
 
