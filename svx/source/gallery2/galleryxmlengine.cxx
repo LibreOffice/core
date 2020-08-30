@@ -17,32 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/galleryxmlengineentry.hxx>
 #include <svx/galleryxmlengine.hxx>
 #include <svx/galleryobjectcollection.hxx>
 #include <svx/galleryxmlstoragelocations.hxx>
 
-#include <memory>
+using namespace ::com::sun::star;
 
-GalleryXMLEngineEntry::GalleryXMLEngineEntry() {}
-
-std::unique_ptr<GalleryXMLEngine> GalleryXMLEngineEntry::createGalleryStorageEngine()
-{
-    return std::make_unique<GalleryXMLEngine>();
-}
-
-void GalleryXMLEngineEntry::setStorageLocations(INetURLObject& rURL)
-{
-    mpGalleryStorageLocations->SetStorageLocations(rURL);
-}
-
-void GalleryXMLEngineEntry::removeTheme()
-{
-    INetURLObject aXMLURL(mpGalleryStorageLocations->getXMLURL());
-    INetURLObject aMimeTypeURL(mpGalleryStorageLocations->getMimeTypeURL());
-
-    KillFile(aXMLURL);
-    KillFile(aMimeTypeURL);
-}
+GalleryXMLEngine::GalleryXMLEngine() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

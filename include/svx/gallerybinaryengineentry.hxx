@@ -27,6 +27,8 @@
 #include <svx/gallerybinarystoragelocations.hxx>
 #include <svx/galleryfilestorageentry.hxx>
 
+#include <memory>
+
 class GalleryBinaryStorageLocations;
 class GalleryObjectCollection;
 class GalleryBinaryEngine;
