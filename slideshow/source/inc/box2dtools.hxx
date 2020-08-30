@@ -85,6 +85,9 @@ private:
     /// Holds whether or not there is a PhysicsAnimation that
     /// is stepping the Box2D World. Used to create a lock mechanism
     bool mbHasWorldStepper;
+    /// Flag used to stop overstepping that occurs when a physics
+    /// animation effect transfers step-lock to another one.
+    bool mbAlreadyStepped;
     /// Number of Physics Animations going on
     int mnPhysicsAnimationCounter;
     std::unordered_map<css::uno::Reference<css::drawing::XShape>, Box2DBodySharedPtr>
