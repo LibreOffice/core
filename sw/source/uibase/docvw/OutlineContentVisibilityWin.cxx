@@ -10,7 +10,6 @@
 #include <edtwin.hxx>
 #include <OutlineContentVisibilityWin.hxx>
 #include <view.hxx>
-#include <viewopt.hxx>
 #include <wrtsh.hxx>
 
 #include <memory>
