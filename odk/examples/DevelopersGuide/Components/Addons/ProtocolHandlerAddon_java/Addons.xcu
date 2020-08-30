@@ -31,9 +31,6 @@
                         <prop oor:name="URL" oor:type="xs:string">
                             <value>org.openoffice.Office.addon.example:Function1</value>
                         </prop>
-                        <prop oor:name="ImageIdentifier" oor:type="xs:string">
-                            <value/>
-                        </prop>
                         <prop oor:name="Title" oor:type="xs:string">
                             <value/>
                             <value xml:lang="en-US">Add-On Function 1</value>
@@ -45,9 +42,6 @@
                     <node oor:name="m2" oor:op="replace">
                         <prop oor:name="URL" oor:type="xs:string">
                             <value>org.openoffice.Office.addon.example:Function2</value>
-                        </prop>
-                        <prop oor:name="ImageIdentifier" oor:type="xs:string">
-                            <value/>
                         </prop>
                         <prop oor:name="Title" oor:type="xs:string">
                             <value/>
@@ -71,9 +65,6 @@
                         <prop oor:name="URL" oor:type="xs:string">
                             <value>org.openoffice.Office.addon.example:Function1</value>
                         </prop>
-                        <prop oor:name="ImageIdentifier" oor:type="xs:string">
-                            <value/>
-                        </prop>
                         <prop oor:name="Title" oor:type="xs:string">
                             <value/>
                             <value xml:lang="en-US">Add-On Function 1</value>
@@ -94,9 +85,6 @@
                         <prop oor:name="URL" oor:type="xs:string">
                             <value/>
                         </prop>
-                        <prop oor:name="ImageIdentifier" oor:type="xs:string">
-                            <value/>
-                        </prop>
                         <prop oor:name="Title" oor:type="xs:string">
                             <value/>
                             <value xml:lang="en-US">Add-On sub menu</value>
@@ -108,9 +96,6 @@
                             <node oor:name="submenu1" oor:op="replace">
                                 <prop oor:name="URL" oor:type="xs:string">
                                     <value>org.openoffice.Office.addon.example:Function2</value>
-                                </prop>
-                                <prop oor:name="ImageIdentifier" oor:type="xs:string">
-                                    <value/>
                                 </prop>
                                 <prop oor:name="Title" oor:type="xs:string">
                                     <value/>
@@ -134,9 +119,6 @@
                     <prop oor:name="URL" oor:type="xs:string">
                         <value>org.openoffice.Office.addon.example:Function1</value>
                     </prop>
-                    <prop oor:name="ImageIdentifier" oor:type="xs:string">
-                        <value/>
-                    </prop>
                     <prop oor:name="Title" oor:type="xs:string">
                         <value/>
                         <value xml:lang="en-US">Function 1</value>
@@ -151,9 +133,6 @@
                 <node oor:name="m2" oor:op="replace">
                     <prop oor:name="URL" oor:type="xs:string">
                         <value>org.openoffice.Office.addon.example:Function2</value>
-                    </prop>
-                    <prop oor:name="ImageIdentifier" oor:type="xs:string">
-                        <value/>
                     </prop>
                     <prop oor:name="Title" oor:type="xs:string">
                         <value/>
@@ -212,9 +191,6 @@
             <node oor:name="com.sun.star.comp.framework.addon" oor:op="replace">
                 <prop oor:name="URL" oor:type="xs:string">
                     <value>org.openoffice.Office.addon.example:Help</value>
-                </prop>
-                <prop oor:name="ImageIdentifier" oor:type="xs:string">
-                    <value/>
                 </prop>
                 <prop oor:name="Title" oor:type="xs:string">
                     <!-- The x-no-translate entry is a marker to prevent l10n tooling from translation. If it is not necessary. -->
