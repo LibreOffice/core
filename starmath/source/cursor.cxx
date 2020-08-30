@@ -765,7 +765,7 @@ bool SmCursor::InsertRow() {
             pTable->SetSubNode(i, pTable->GetSubNode(i-1));
 
         //Insert new line
-        pTable->SetSubNode(nTableIndex + 1, pNewLine.get());
+        pTable->SetSubNode(nTableIndex + 1, pNewLine.release());
 
         //Check if we need to change token type:
         if(pTable->GetNumSubNodes() > 2 && pTable->GetToken().eType == TBINOM) {
