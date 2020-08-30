@@ -225,6 +225,7 @@ box2DWorld::box2DWorld(const ::basegfx::B2DVector& rSlideSize)
     , mfScaleFactor(calculateScaleFactor(rSlideSize))
     , mbShapesInitialized(false)
     , mbHasWorldStepper(false)
+    , mbAlreadyStepped(false)
     , mnPhysicsAnimationCounter(0)
     , mpXShapeToBodyMap()
     , maShapeParallelUpdateQueue()
@@ -574,6 +575,13 @@ void box2DWorld::alertPhysicsAnimationEnd(const slideshow::internal::ShapeShared
         // destroyed if there's nothing else that owns them
         mpXShapeToBodyMap.clear();
     }
+    else
+    {
+        // the physics animation that will take over the lock after this one
+        // shouldn't step the world for an update cycle - since it was already
+        // stepped.
+        mbAlreadyStepped = true;
+    }
 }
 
 void box2DWorld::alertPhysicsAnimationStart(
@@ -609,9 +617,18 @@ double box2DWorld::stepAmount(const double fPassedTime, const float fTimeStep,
     // do the updates required to simulate other animaton effects going in parallel
     processUpdateQueue(fTimeSteppedThrough);
 
-    for (unsigned int nStepCounter = 0; nStepCounter < nStepAmount; nStepCounter++)
+    if (!mbAlreadyStepped)
     {
-        step(fTimeStep, nVelocityIterations, nPositionIterations);
+        for (unsigned int nStepCounter = 0; nStepCounter < nStepAmount; nStepCounter++)
+        {
+            step(fTimeStep, nVelocityIterations, nPositionIterations);
+        }
+    }
+    else
+    {
+        // just got the step lock from another physics animation
+        // so skipping stepping the world for an update cycle
+        mbAlreadyStepped = false;
     }
 
     return fTimeSteppedThrough;
