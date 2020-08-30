@@ -25,6 +25,7 @@
 using namespace ::com::sun::star;
 
 class GalleryObjectCollection;
+class GalleryXMLStorageLocations;
 class GalleryTheme;
 class GalleryThemeEntry;
 class SvStream;
@@ -33,12 +34,15 @@ class GalleryXMLEngine : public GalleryFileStorage
 {
 private:
     GalleryObjectCollection& mrGalleryObjectCollection;
+    const GalleryXMLStorageLocations& maGalleryStorageLocations;
+    bool mbReadOnly;
 
     static void writeMimeType(uno::Reference<embed::XStorage>& rxWriteableZipStore);
     static uno::Reference<embed::XStorage> writeZipFile(const OUString& rZipFile);
 
 public:
-    GalleryXMLEngine(GalleryObjectCollection& rGalleryObjectCollection);
+    GalleryXMLEngine(const GalleryXMLStorageLocations& rGalleryStorageLocations,
+                     GalleryObjectCollection& rGalleryObjectCollection, bool bReadOnly);
 
     SvStream& writeGalleryTheme(SvStream& rOStm, const GalleryTheme& rTheme,
                                 const GalleryThemeEntry* pThm);

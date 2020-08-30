@@ -18,5 +18,33 @@
  */
 
 #include <svx/galleryxmlengineentry.hxx>
+#include <svx/galleryxmlengine.hxx>
+#include <svx/galleryobjectcollection.hxx>
+#include <svx/galleryxmlstoragelocations.hxx>
+
+#include <memory>
+
+GalleryXMLEngineEntry::GalleryXMLEngineEntry() {}
+
+std::unique_ptr<GalleryXMLEngine> GalleryXMLEngineEntry::createGalleryStorageEngine(
+    GalleryObjectCollection& mrGalleryObjectCollection, bool& bReadOnly)
+{
+    return std::make_unique<GalleryXMLEngine>(*mpGalleryStorageLocations, mrGalleryObjectCollection,
+                                              bReadOnly);
+}
+
+void GalleryXMLEngineEntry::setStorageLocations(INetURLObject& rURL)
+{
+    mpGalleryStorageLocations->SetStorageLocations(rURL);
+}
+
+void GalleryXMLEngineEntry::removeTheme()
+{
+    INetURLObject aXMLURL(mpGalleryStorageLocations->getXMLURL());
+    INetURLObject aMimeTypeURL(mpGalleryStorageLocations->getMimeTypeURL());
+
+    KillFile(aXMLURL);
+    KillFile(aMimeTypeURL);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
