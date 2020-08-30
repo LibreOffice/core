@@ -21,8 +21,30 @@
 
 #include <svx/galleryfilestorageentry.hxx>
 
+#include <memory>
+#include <tools/urlobj.hxx>
+
+class GalleryXMLStorageLocations;
+class GalleryObjectCollection;
+class GalleryXMLEngine;
+
 class GalleryXMLEngineEntry : public GalleryFileStorageEntry
 {
+private:
+    std::unique_ptr<GalleryXMLStorageLocations> mpGalleryStorageLocations;
+
+public:
+    GalleryXMLEngineEntry();
+    const std::unique_ptr<GalleryXMLStorageLocations>& getGalleryStorageLocations() const
+    {
+        return mpGalleryStorageLocations;
+    }
+
+    void setStorageLocations(INetURLObject& rURL);
+
+    std::unique_ptr<GalleryXMLEngine> createGalleryStorageEngine();
+
+    void removeTheme();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
