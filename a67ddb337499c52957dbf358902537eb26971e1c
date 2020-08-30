@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "148adca0_a618b05b",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 690,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-08-30T14:37:06Z",
+      "side": 1,
+      "message": "Is this necessary to \"leave it empty\"? If not, maybe you can get rid of one of the branches here.",
+      "range": {
+        "startLine": 690,
+        "startChar": 8,
+        "endLine": 690,
+        "endChar": 38
+      },
+      "revId": "a67ddb337499c52957dbf358902537eb26971e1c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
