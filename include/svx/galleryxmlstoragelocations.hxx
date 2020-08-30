@@ -27,9 +27,14 @@ class GalleryXMLStorageLocations : public GalleryStorageLocations
 private:
     INetURLObject maXMLURL;
     INetURLObject maZIPURL;
+    INetURLObject maMimeType;
 
 public:
-    const INetURLObject& getThemeURL() const { return maXMLURL; }
+    const INetURLObject& getXMLURL() const { return maXMLURL; }
+    const INetURLObject& getZIPURL() const { return maZIPURL; }
+    const INetURLObject& getMimeTypeURL() const { return maMimeType; }
+
+    const INetURLObject& getThemeURL() const { return getXMLURL(); }
     void SetStorageLocations(INetURLObject& rURL);
 };
 
