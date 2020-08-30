@@ -162,6 +162,7 @@ namespace sd
             case AnimationNodeType::ANIMATE:
             case AnimationNodeType::SET:
             case AnimationNodeType::ANIMATEMOTION:
+            case AnimationNodeType::ANIMATEPHYSICS:
             case AnimationNodeType::ANIMATECOLOR:
             case AnimationNodeType::ANIMATETRANSFORM:
             case AnimationNodeType::TRANSITIONFILTER:
