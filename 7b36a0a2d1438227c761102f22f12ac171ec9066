@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "9ecd7c3d_49b8c212",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-30T07:27:44Z",
+      "side": 1,
+      "message": "\u003e I\u0027ll use different names for this ptr and the one above\n\nIt\u0027s an option; or just using `doc \u003d parseExport(...)` would be correct, and would make sure you have freed the resources allocated from previous parseExport in that smart pointer.",
+      "parentUuid": "1f7da389_5d9429fc",
+      "range": {
+        "startLine": 480,
+        "startChar": 4,
+        "endLine": 480,
+        "endChar": 19
+      },
+      "revId": "7b36a0a2d1438227c761102f22f12ac171ec9066",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ad87c9a9_dcc87e27",
         "filename": "sw/qa/extras/ooxmlexport/ooxmlexport5.cxx",
         "patchSetId": 1
