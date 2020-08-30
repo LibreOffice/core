@@ -46,9 +46,6 @@ public:
 
 
     XMLFontStyleContextFontFace( SvXMLImport& rImport,
-            sal_Int32 nElement,
-            const css::uno::Reference<
-                css::xml::sax::XFastAttributeList > & xAttrList,
             XMLFontStylesContext& rStyles );
     virtual ~XMLFontStyleContextFontFace() override;
 
@@ -100,8 +97,7 @@ class XMLFontStyleContextFontFaceUri : public SvXMLStyleContext
 public:
 
 
-    XMLFontStyleContextFontFaceUri( SvXMLImport& rImport, sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
+    XMLFontStyleContextFontFaceUri( SvXMLImport& rImport,
             const XMLFontStyleContextFontFace& font );
 
     virtual void SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName,
@@ -119,8 +115,7 @@ class XMLFontStyleContextFontFaceFormat : public SvXMLStyleContext
     XMLFontStyleContextFontFaceUri& uri;
 public:
 
-    XMLFontStyleContextFontFaceFormat( SvXMLImport& rImport, sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
+    XMLFontStyleContextFontFaceFormat( SvXMLImport& rImport,
             XMLFontStyleContextFontFaceUri& uri );
 
     void SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName,

@@ -53,8 +53,7 @@ protected:
 
 public:
 
-    XMLTextStyleContext( SvXMLImport& rImport, sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
+    XMLTextStyleContext( SvXMLImport& rImport,
             SvXMLStylesContext& rStyles, XmlStyleFamily nFamily,
             bool bDefaultStyle = false );
     ~XMLTextStyleContext() override;

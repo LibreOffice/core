@@ -54,10 +54,7 @@ class XMLIndexBibliographyConfigurationContext final : public SvXMLStyleContext
 public:
 
 
-    XMLIndexBibliographyConfigurationContext(
-        SvXMLImport& rImport,
-        sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList> & xAttrList);
+    XMLIndexBibliographyConfigurationContext(SvXMLImport& rImport);
 
     virtual ~XMLIndexBibliographyConfigurationContext() override;
 

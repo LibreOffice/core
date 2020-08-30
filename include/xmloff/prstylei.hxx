@@ -88,8 +88,7 @@ protected:
 public:
 
 
-    XMLPropStyleContext( SvXMLImport& rImport, sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
+    XMLPropStyleContext( SvXMLImport& rImport,
             SvXMLStylesContext& rStyles, XmlStyleFamily nFamily,
             bool bDefaultStyle=false );
     virtual ~XMLPropStyleContext() override;

@@ -67,10 +67,8 @@ public:
 }
 
 OControlStyleContext::OControlStyleContext( ORptFilter& rImport,
-        sal_Int32 nElement,
-        const Reference< XFastAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles, XmlStyleFamily nFamily ) :
-    XMLPropStyleContext( rImport, nElement, xAttrList, rStyles, nFamily, false/*bDefaultStyle*/ ),
+    XMLPropStyleContext( rImport, rStyles, nFamily, false/*bDefaultStyle*/ ),
     pStyles(&rStyles),
     m_nNumberFormat(-1),
     m_rImport(rImport)
@@ -233,14 +231,14 @@ rtl::Reference < SvXMLImportPropertyMapper >
 }
 
 SvXMLStyleContext *OReportStylesContext::CreateDefaultStyleStyleChildContext(
-        XmlStyleFamily nFamily, sal_Int32 nElement,
-        const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
+        XmlStyleFamily nFamily, sal_Int32 /*nElement*/,
+        const uno::Reference< xml::sax::XFastAttributeList > & /*xAttrList*/ )
 {
     switch( nFamily )
     {
         case XmlStyleFamily::SD_GRAPHICS_ID:
             // There are no writer specific defaults for graphic styles!
-            return new XMLGraphicsDefaultStyle( GetImport(), nElement, xAttrList, *this );
+            return new XMLGraphicsDefaultStyle( GetImport(), *this );
         default:
             return nullptr;
     }
@@ -260,8 +258,7 @@ SvXMLStyleContext *OReportStylesContext::CreateStyleStyleChildContext(
         case XmlStyleFamily::TABLE_COLUMN:
         case XmlStyleFamily::TABLE_ROW:
         case XmlStyleFamily::TABLE_CELL:
-            pStyle = new OControlStyleContext( GetOwnImport(), nElement,
-                                               xAttrList, *this, nFamily );
+            pStyle = new OControlStyleContext( GetOwnImport(), *this, nFamily );
             break;
         default:
             OSL_FAIL("OReportStylesContext::CreateStyleStyleChildContext: Unknown style family. Please check.");

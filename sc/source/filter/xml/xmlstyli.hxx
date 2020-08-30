@@ -85,9 +85,7 @@ protected:
 
 public:
 
-
-    XMLTableStyleContext( ScXMLImport& rImport, sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
+    XMLTableStyleContext( ScXMLImport& rImport,
             SvXMLStylesContext& rStyles, XmlStyleFamily nFamily, bool bDefaultStyle = false );
     virtual ~XMLTableStyleContext() override;
 
@@ -217,8 +215,7 @@ class ScCellTextStyleContext : public XMLTextStyleContext
     ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
-    ScCellTextStyleContext( SvXMLImport& rImport, sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
+    ScCellTextStyleContext( SvXMLImport& rImport,
             SvXMLStylesContext& rStyles, XmlStyleFamily nFamily );
     virtual ~ScCellTextStyleContext() override;
 

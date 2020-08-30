@@ -44,8 +44,6 @@ public:
 
     XMLShapeStyleContext(
         SvXMLImport& rImport,
-        sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
         SvXMLStylesContext& rStyles,
         XmlStyleFamily nFamily);
     virtual ~XMLShapeStyleContext() override;

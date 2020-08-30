@@ -137,11 +137,8 @@ void XMLTextShapeStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
 const OUStringLiteral gsIsAutoUpdate( u"IsAutoUpdate" );
 
 XMLTextShapeStyleContext::XMLTextShapeStyleContext( SvXMLImport& rImport,
-        sal_Int32 nElement,
-        const Reference< XFastAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles, XmlStyleFamily nFamily ) :
-    XMLShapeStyleContext( rImport, nElement, xAttrList, rStyles,
-                          nFamily ),
+    XMLShapeStyleContext( rImport, rStyles, nFamily ),
     bAutoUpdate( false )
 {
 }
