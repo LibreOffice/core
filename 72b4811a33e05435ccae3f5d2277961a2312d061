@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f9e46d95_78a0594f",
+        "filename": "scripting/java/com/sun/star/script/framework/provider/ScriptEditor.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-08-30T16:44:46Z",
+      "side": 1,
+      "message": "Beware about end of line.",
+      "revId": "72b4811a33e05435ccae3f5d2277961a2312d061",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
