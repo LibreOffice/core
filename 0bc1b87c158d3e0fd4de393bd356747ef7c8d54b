@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "91eb4aa6_e8ef8d85",
+        "filename": "cui/uiconfig/ui/additionsfragment.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-08-30T15:15:55Z",
+      "side": 1,
+      "message": "We don\u0027t expect this to be translated. Please make it not translatable.\n\nAnd if there are more temporary strings in the UI, also make them untranslatable. We wouldn\u0027t want to put unnecessary burden on our volunteer translators.",
+      "range": {
+        "startLine": 100,
+        "startChar": 39,
+        "endLine": 100,
+        "endChar": 57
+      },
+      "revId": "0bc1b87c158d3e0fd4de393bd356747ef7c8d54b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
