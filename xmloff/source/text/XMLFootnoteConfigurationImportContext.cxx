@@ -124,9 +124,9 @@ const OUStringLiteral gsPropertyBeginNotice(u"BeginNotice");
 
 XMLFootnoteConfigurationImportContext::XMLFootnoteConfigurationImportContext(
     SvXMLImport& rImport,
-    sal_Int32 nElement,
+    sal_Int32 /*nElement*/,
     const Reference<XFastAttributeList> & xAttrList)
-:   SvXMLStyleContext(rImport, nElement, xAttrList, XmlStyleFamily::TEXT_FOOTNOTECONFIG)
+:   SvXMLStyleContext(rImport, XmlStyleFamily::TEXT_FOOTNOTECONFIG)
 ,   sNumFormat("1")
 ,   sNumSync("false")
 ,   nOffset(0)

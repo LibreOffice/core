@@ -47,8 +47,7 @@ namespace dbaxml
     public:
 
 
-        OTableStyleContext( ODBFilter& rImport, sal_Int32 nElement,
-                const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
+        OTableStyleContext( ODBFilter& rImport,
                 SvXMLStylesContext& rStyles, XmlStyleFamily nFamily );
 
         virtual ~OTableStyleContext() override;

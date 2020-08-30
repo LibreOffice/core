@@ -61,11 +61,9 @@ void XMLChartStyleContext::SetAttribute(
 }
 
 XMLChartStyleContext::XMLChartStyleContext(
-    SvXMLImport& rImport, sal_Int32 nElement,
-    const uno::Reference< xml::sax::XFastAttributeList > & xAttrList,
+    SvXMLImport& rImport,
     SvXMLStylesContext& rStyles, XmlStyleFamily nFamily ) :
-
-        XMLShapeStyleContext( rImport, nElement, xAttrList, rStyles, nFamily ),
+        XMLShapeStyleContext( rImport, rStyles, nFamily ),
         mrStyles( rStyles )
 {}
 

@@ -50,11 +50,9 @@ using ::xmloff::token::XML_PARAGRAPH_PROPERTIES;
 
 XMLShapeStyleContext::XMLShapeStyleContext(
     SvXMLImport& rImport,
-    sal_Int32 nElement,
-    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
     SvXMLStylesContext& rStyles,
     XmlStyleFamily nFamily)
-:   XMLPropStyleContext(rImport, nElement, xAttrList, rStyles, nFamily ),
+:   XMLPropStyleContext(rImport, rStyles, nFamily ),
     m_bIsNumRuleAlreadyConverted( false )
 {
 }

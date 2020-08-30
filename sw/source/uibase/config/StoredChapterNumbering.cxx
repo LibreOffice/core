@@ -351,8 +351,7 @@ public:
             if (m_nCounter <= SwChapterNumRules::nMaxRules)
             {
                 SvxXMLListStyleContext *const pContext(
-                    new SvxXMLListStyleContext(GetImport(),
-                                Element, xAttrList, true));
+                    new SvxXMLListStyleContext(GetImport(), true));
                 m_Contexts.emplace_back(pContext);
                 return pContext;
             }

@@ -46,8 +46,7 @@ namespace rptxml
 
     public:
 
-        OControlStyleContext( ORptFilter& rImport, sal_Int32 nElement,
-                const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
+        OControlStyleContext( ORptFilter& rImport,
                 SvXMLStylesContext& rStyles, XmlStyleFamily nFamily );
 
         virtual ~OControlStyleContext() override;
