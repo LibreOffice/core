@@ -29,9 +29,6 @@
             <prop oor:name="URL" oor:type="xs:string">
               <value>vnd.sun.star.script:DialogWithHelp.Module1.main?language=Basic&amp;location=application</value>
             </prop>
-            <prop oor:name="ImageIdentifier" oor:type="xs:string">
-              <value/>
-            </prop>
             <prop oor:name="Target" oor:type="xs:string">
               <value>_self</value>
             </prop>
