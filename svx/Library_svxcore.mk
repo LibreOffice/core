@@ -160,6 +160,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/gallery2/galleryfilestorage \
     svx/source/gallery2/galleryfilestorageentry \
     svx/source/gallery2/galleryxmlengine \
+    svx/source/gallery2/galleryxmlengineentry \
     svx/source/gallery2/galleryobjectstorage \
     svx/source/gallery2/galleryobjectbinarystorage \
     svx/source/gallery2/galleryobjectxmlstorage \
