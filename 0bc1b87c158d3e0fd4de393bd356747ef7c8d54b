@@ -22,6 +22,30 @@
       "revId": "0bc1b87c158d3e0fd4de393bd356747ef7c8d54b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11653396_ae217967",
+        "filename": "cui/uiconfig/ui/additionsfragment.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1002293
+      },
+      "writtenOn": "2020-08-30T15:28:07Z",
+      "side": 1,
+      "message": "To avoid UI errors, I made it translatable temporarily. Thank you for the warning. I fixed them.",
+      "parentUuid": "91eb4aa6_e8ef8d85",
+      "range": {
+        "startLine": 100,
+        "startChar": 39,
+        "endLine": 100,
+        "endChar": 57
+      },
+      "revId": "0bc1b87c158d3e0fd4de393bd356747ef7c8d54b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
