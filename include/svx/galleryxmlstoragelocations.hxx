@@ -19,15 +19,18 @@
 
 #pragma once
 
-#include <svx/svxdllapi.h>
+#include <svx/gallerystoragelocations.hxx>
 #include <tools/urlobj.hxx>
 
-class SVXCORE_DLLPUBLIC GalleryStorageLocations
+class GalleryXMLStorageLocations : public GalleryStorageLocations
 {
+private:
+    INetURLObject maXMLURL;
+    INetURLObject maZIPURL;
+
 public:
-    virtual ~GalleryStorageLocations() = 0;
-    virtual void SetStorageLocations(INetURLObject& rURL) = 0;
-    virtual const INetURLObject& getThemeURL() const = 0;
+    const INetURLObject& getThemeURL() const { return maXMLURL; }
+    void SetStorageLocations(INetURLObject& rURL);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
