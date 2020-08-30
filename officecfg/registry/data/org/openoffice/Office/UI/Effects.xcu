@@ -1035,6 +1035,11 @@
           <value xml:lang="en-US">Vertical Figure 8</value>
         </prop>
       </node>
+      <node oor:name="libo-physics-fall-fade-out" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Fall and fade out</value>
+        </prop>
+      </node>
       <node oor:name="libo-physics-fall" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Fall simulated</value>
@@ -2539,7 +2544,7 @@
           <value xml:lang="en-US">Exciting</value>
         </prop>
         <prop oor:name="Effects" oor:type="oor:string-list">
-          <value oor:separator=";">ooo-exit-swivel;ooo-exit-boomerang;ooo-exit-bounce;ooo-exit-movie-credits;ooo-exit-float;ooo-exit-breaks;ooo-exit-pinwheel;ooo-exit-swish;ooo-exit-thread;ooo-exit-whip;ooo-exit-sling;ooo-exit-magnify;ooo-exit-curve-down;ooo-exit-glide;ooo-exit-flip;ooo-exit-fold</value>
+          <value oor:separator=";">ooo-exit-swivel;ooo-exit-boomerang;ooo-exit-bounce;ooo-exit-movie-credits;ooo-exit-float;ooo-exit-breaks;ooo-exit-pinwheel;ooo-exit-swish;ooo-exit-thread;ooo-exit-whip;ooo-exit-sling;ooo-exit-magnify;ooo-exit-curve-down;ooo-exit-glide;ooo-exit-flip;ooo-exit-fold;libo-physics-fall-fade-out</value>
         </prop>
       </node>
     </node>

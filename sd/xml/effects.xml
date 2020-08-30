@@ -2641,6 +2641,15 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
         <anim:par smil:begin="0" smil:fill="hold">
+            <anim:par smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="libo-physics-fall-fade-out">
+                <anim:animatePhysics smil:dur="4" anim:bounciness="0.6" smil:fill="hold"/>
+                <anim:transitionFilter smil:begin="2" smil:dur="2" smil:type="fade" smil:subtype="crossfade" smil:mode="out"/>
+                <anim:set smil:begin="3.999" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
+            </anim:par>
+        </anim:par>
+    </anim:par>
+    <anim:par smil:begin="indefinite" smil:fill="hold">
+        <anim:par smil:begin="0" smil:fill="hold">
             <anim:par smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="emphasis" pres:preset-id="libo-physics-fall">
                 <anim:animatePhysics smil:dur="4" smil:fill="hold"/>
             </anim:par>
