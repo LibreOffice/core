@@ -517,11 +517,11 @@ void XMLConfigItemContext::ManipulateConfigItem()
         try
         {
             uno::Reference< uno::XComponentContext > xContext( GetImport().GetComponentContext() );
-            uno::Reference< util::XStringSubstitution > xStringSubsitution( util::PathSubstitution::create(xContext) );
+            uno::Reference< util::XStringSubstitution > xStringSubstitution( util::PathSubstitution::create(xContext) );
 
             OUString aURL;
             mrAny >>= aURL;
-            aURL = xStringSubsitution->substituteVariables( aURL, false );
+            aURL = xStringSubstitution->substituteVariables( aURL, false );
             mrAny <<= aURL;
         }
         catch( uno::Exception& )
