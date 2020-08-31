@@ -2015,9 +2015,9 @@ void ODocumentDefinition::fillReportData( const Reference< XComponentContext >& 
     }));
     try
     {
-        Reference< XJobExecutor > xExecuteable(
+        Reference< XJobExecutor > xExecutable(
             _rContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.wizards.report.CallReportWizard", aArgs, _rContext), UNO_QUERY_THROW );
-        xExecuteable->trigger( "fill" );
+        xExecutable->trigger( "fill" );
     }
     catch( const Exception& )
     {

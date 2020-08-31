@@ -220,9 +220,9 @@ static sal_Int16 impl_showExtensionDialog( uno::Reference< uno::XComponentContex
             "impl_showExtensionDialog(): unable to obtain service manager from component context", uno::Reference< uno::XInterface > () );
 
     xService = xServiceManager->createInstanceWithContext( "com.sun.star.deployment.ui.UpdateRequiredDialog", xContext );
-    uno::Reference< ui::dialogs::XExecutableDialog > xExecuteable( xService, uno::UNO_QUERY );
-    if ( xExecuteable.is() )
-        nRet = xExecuteable->execute();
+    uno::Reference< ui::dialogs::XExecutableDialog > xExecutable( xService, uno::UNO_QUERY );
+    if ( xExecutable.is() )
+        nRet = xExecutable->execute();
 
     return nRet;
 }

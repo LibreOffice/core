@@ -1476,9 +1476,9 @@ void UpdateCheck::showExtensionDialog()
             "UpdateCheck::showExtensionDialog(): unable to obtain service manager from component context", uno::Reference< uno::XInterface > () );
 
     xService = xServiceManager->createInstanceWithContext( "com.sun.star.deployment.ui.PackageManagerDialog", m_xContext );
-    uno::Reference< task::XJobExecutor > xExecuteable( xService, uno::UNO_QUERY );
-    if ( xExecuteable.is() )
-        xExecuteable->trigger( "SHOW_UPDATE_DIALOG" );
+    uno::Reference< task::XJobExecutor > xExecutable( xService, uno::UNO_QUERY );
+    if ( xExecutable.is() )
+        xExecutable->trigger( "SHOW_UPDATE_DIALOG" );
 }
 
 
