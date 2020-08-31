@@ -136,20 +136,15 @@ void SvXMLImportPropertyMapper::importXML(
 
         importXMLAttribute(rProperties, rUnitConverter, rNamespaceMap,
             nPropType, nStartIdx, nEndIdx, xAttrContainer,
-            aPrefix, sAttrName, aNamespaceURI, sValue);
+            sAttrName, aNamespaceURI, sValue, /*bUnknownAttr*/false);
     }
 
     const css::uno::Sequence< css::xml::Attribute > unknownAttribs = xAttrList->getUnknownAttributes();
     for (const css::xml::Attribute& rAttribute : unknownAttribs)
     {
-        OUString aPrefix;
-        int nSepIndex = rAttribute.Name.indexOf(SvXMLImport::aNamespaceSeparator);
-        if (nSepIndex != -1)
-            aPrefix = rAttribute.Name.copy(0, nSepIndex);
-
         importXMLAttribute(rProperties, rUnitConverter, rNamespaceMap,
             nPropType, nStartIdx, nEndIdx, xAttrContainer,
-            aPrefix, rAttribute.Name, rAttribute.NamespaceURL, rAttribute.Value);
+            rAttribute.Name, rAttribute.NamespaceURL, rAttribute.Value, /*bUnknownAttr*/true);
     }
 
     finished( rProperties, nStartIdx, nEndIdx );
@@ -163,13 +158,13 @@ void SvXMLImportPropertyMapper::importXMLAttribute(
         const sal_Int32 nStartIdx,
         const sal_Int32 nEndIdx,
         Reference< XNameContainer >& xAttrContainer,
-        const OUString& aPrefix,
         const OUString& sAttrName,
         const OUString& aNamespaceURI,
-        const OUString& sValue) const
+        const OUString& sValue,
+        bool bUnknownAttr) const
 {
     OUString aLocalName;
-    sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+    sal_uInt16 nPrefix = bUnknownAttr ? -1 : GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
     // index of actual property map entry
     // This looks very strange, but it works well:
@@ -188,10 +183,11 @@ void SvXMLImportPropertyMapper::importXMLAttribute(
     do
     {
         // find an entry for this attribute
-        nIndex = maPropMapper->GetEntryIndex( nPrefix, aLocalName,
-                                              nPropType, nIndex );
+        if (!bUnknownAttr)
+            nIndex = maPropMapper->GetEntryIndex( nPrefix, aLocalName,
+                                                  nPropType, nIndex );
 
-        if( nIndex > -1 && nIndex < nEndIdx  )
+        if( !bUnknownAttr && nIndex > -1 && nIndex < nEndIdx  )
         {
             // create a XMLPropertyState with an empty value
 
@@ -289,7 +285,7 @@ void SvXMLImportPropertyMapper::importXMLAttribute(
                         !(XML_NAMESPACE_UNKNOWN_FLAG & nPrefix) &&
                         !bAlienImport, "xmloff.style",
                         "unknown attribute: \"" << sAttrName << "\"");
-            if( (XML_NAMESPACE_UNKNOWN_FLAG & nPrefix) || (XML_NAMESPACE_NONE == nPrefix) || bAlienImport )
+            if( bUnknownAttr || bAlienImport )
             {
                 if( !xAttrContainer.is() )
                 {
@@ -334,18 +330,8 @@ void SvXMLImportPropertyMapper::importXMLAttribute(
                     AttributeData aData;
                     aData.Type = GetXMLToken( XML_CDATA );
                     aData.Value = sValue;
-
-                    OUStringBuffer sName;
-                    if( XML_NAMESPACE_NONE != nPrefix )
-                    {
-                        sName.append( aPrefix );
-                        sName.append( ':' );
-                        aData.Namespace = aNamespaceURI;
-                    }
-
-                    sName.append( aLocalName );
-
-                    xAttrContainer->insertByName( sName.makeStringAndClear(), Any(aData) );
+                    aData.Namespace = aNamespaceURI;
+                    xAttrContainer->insertByName( sAttrName, Any(aData) );
                 }
             }
         }

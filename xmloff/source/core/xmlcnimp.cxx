@@ -44,6 +44,8 @@ bool SvXMLAttrContainerData::operator ==( const SvXMLAttrContainerData& rCmp ) c
 bool SvXMLAttrContainerData::AddAttr( const OUString& rLName,
                                           const OUString& rValue )
 {
+    assert( !rLName.isEmpty() && "empty attribute name is invalid");
+    assert( rLName.indexOf(':') == -1 && "colon in name?");
     return pimpl->AddAttr(rLName, rValue);
 }
 
@@ -52,6 +54,9 @@ bool SvXMLAttrContainerData::AddAttr( const OUString& rPrefix,
                                           const OUString& rLName,
                                           const OUString& rValue )
 {
+    assert( !rLName.isEmpty() && "empty attribute name is invalid");
+    assert( rPrefix.indexOf(':') == -1 && "colon in prefix?");
+    assert( rLName.indexOf(':') == -1 && "colon in name?");
     return pimpl->AddAttr(rPrefix, rNamespace, rLName, rValue);
 }
 
@@ -59,6 +64,9 @@ bool SvXMLAttrContainerData::AddAttr( const OUString& rPrefix,
                                           const OUString& rLName,
                                           const OUString& rValue )
 {
+    assert( !rLName.isEmpty() && "empty attribute name is invalid");
+    assert( rPrefix.indexOf(':') == -1 && "colon in prefix?");
+    assert( rLName.indexOf(':') == -1 && "colon in name?");
     return pimpl->AddAttr(rPrefix, rLName, rValue);
 }
 
@@ -66,6 +74,8 @@ bool SvXMLAttrContainerData::SetAt( size_t i,
                                         const OUString& rLName,
                                         const OUString& rValue )
 {
+    assert( !rLName.isEmpty() && "empty attribute name is invalid");
+    assert( rLName.indexOf(':') == -1 && "colon in name?");
     return pimpl->SetAt(i, rLName, rValue);
 }
 
@@ -75,6 +85,9 @@ bool SvXMLAttrContainerData::SetAt( size_t i,
                                         const OUString& rLName,
                                         const OUString& rValue )
 {
+    assert( !rLName.isEmpty() && "empty attribute name is invalid");
+    assert( rPrefix.indexOf(':') == -1 && "colon in prefix?");
+    assert( rLName.indexOf(':') == -1 && "colon in name?");
     return pimpl->SetAt(i, rPrefix, rNamespace, rLName, rValue);
 }
 
@@ -83,6 +96,9 @@ bool SvXMLAttrContainerData::SetAt( size_t i,
                                         const OUString& rLName,
                                         const OUString& rValue )
 {
+    assert( !rLName.isEmpty() && "empty attribute name is invalid");
+    assert( rPrefix.indexOf(':') == -1 && "colon in prefix?");
+    assert( rLName.indexOf(':') == -1 && "colon in name?");
     return pimpl->SetAt(i, rPrefix, rLName, rValue);
 }
 
