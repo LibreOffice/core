@@ -84,8 +84,8 @@ public:
     sal_Int32    getPointCount() const;
     sal_Int32    getAttachedAxisIndexForFirstSeries() const;
 
-    void getMinimumAndMaximiumX( double& rfMinimum, double& rfMaximum ) const;
-    void getMinimumAndMaximiumYInContinuousXRange( double& rfMinY, double& rfMaxY, double fMinX, double fMaxX, sal_Int32 nAxisIndex ) const;
+    void getMinimumAndMaximumX( double& rfMinimum, double& rfMaximum ) const;
+    void getMinimumAndMaximumYInContinuousXRange( double& rfMinY, double& rfMaxY, double fMinX, double fMaxX, sal_Int32 nAxisIndex ) const;
 
     void calculateYMinAndMaxForCategory( sal_Int32 nCategoryIndex
                                             , bool bSeparateStackingForDifferentSigns
@@ -175,8 +175,8 @@ public:
     virtual long calculateTimeResolutionOnXAxis() override;
     virtual void setTimeResolutionOnXAxis( long nTimeResolution, const Date& rNullDate ) override;
 
-    void getMinimumAndMaximiumX( double& rfMinimum, double& rfMaximum ) const;
-    void getMinimumAndMaximiumYInContinuousXRange( double& rfMinY, double& rfMaxY, double fMinX, double fMaxX, sal_Int32 nAxisIndex ) const;
+    void getMinimumAndMaximumX( double& rfMinimum, double& rfMaximum ) const;
+    void getMinimumAndMaximumYInContinuousXRange( double& rfMinY, double& rfMaxY, double fMinX, double fMaxX, sal_Int32 nAxisIndex ) const;
 
 
     // Methods for handling legends and legend entries.
