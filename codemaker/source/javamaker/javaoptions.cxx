@@ -86,7 +86,7 @@ bool JavaOptions::initOptions(int ac, char* av[], bool bCmdFile)
                 case 'n':
                     if (av[i][2] != 'D' || av[i][3] != '\0')
                     {
-                        OString tmp(OStringLiteral("'-nD', please check your input '") + av[i] + "'");
+                        OString tmp(OString::Concat("'-nD', please check your input '") + av[i] + "'");
                         throw IllegalArgument(tmp);
                     }
 

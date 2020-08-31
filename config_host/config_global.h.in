@@ -15,6 +15,10 @@ Any change in this header will cause a rebuild of almost everything.
 #define HAVE_GCC_BUILTIN_ATOMIC 0
 #define HAVE_SYSLOG_H 0
 
+// Compiler supports C++20 <http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1073r3.html>
+// "Immediate functions":
+#define HAVE_CPP_CONSTEVAL 0
+
 // Compiler supports all of C++2a <https://wg21.link/P0202R3> "Add Constexpr Modifiers to Functions
 // in <algorithm> and <utility> Headers", <https://wg21.link/P1004R2> "Making std::vector
 // constexpr", and <https://wg21.link/P1143R2> "Adding the constinit keyword":
