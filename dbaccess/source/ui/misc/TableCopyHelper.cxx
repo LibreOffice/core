@@ -56,8 +56,8 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::ucb;
 
-OTableCopyHelper::OTableCopyHelper(OGenericUnoController* _pControler)
-    :m_pController(_pControler)
+OTableCopyHelper::OTableCopyHelper(OGenericUnoController* _pController)
+    :m_pController(_pController)
 {
 }
 
