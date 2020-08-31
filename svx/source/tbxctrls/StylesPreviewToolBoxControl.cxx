@@ -80,7 +80,10 @@ void StylesPreviewToolBoxControl::InitializeStyles(
                     OUString sName;
                     xStyle->getPropertyValue("DisplayName") >>= sName;
                     if (!sName.isEmpty())
-                        m_aDefaultStyles.push_back(sName);
+                        m_aDefaultStyles.push_back(std::pair<OUString, OUString>(aStyle, sName));
+                }
+                catch (const css::container::NoSuchElementException&)
+                {
                 }
                 catch (const css::uno::Exception&)
                 {
@@ -104,7 +107,10 @@ void StylesPreviewToolBoxControl::InitializeStyles(
                         OUString sName;
                         xStyle->getPropertyValue("DisplayName") >>= sName;
                         if (!sName.isEmpty())
-                            m_aDefaultStyles.push_back(sName);
+                        {
+                            m_aDefaultStyles.push_back(
+                                std::pair<OUString, OUString>(sStyleName, sName));
+                        }
                     }
                 }
                 catch (const css::uno::Exception&)

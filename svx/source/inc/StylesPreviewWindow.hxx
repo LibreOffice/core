@@ -44,19 +44,19 @@ class StyleItemController : public weld::CustomWidgetController
     static constexpr unsigned LEFT_MARGIN = 8;
 
     SfxStyleFamily m_eStyleFamily;
-    OUString m_aStyleName;
+    std::pair<OUString, OUString> m_aStyleName;
     bool m_bSelected;
     css::uno::Reference<css::frame::XDispatchProvider> m_xDispatchProvider;
 
 public:
-    StyleItemController(const OUString& aStyleName,
+    StyleItemController(const std::pair<OUString, OUString>& aStyleName,
                         css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider);
 
     void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
 
     bool MouseButtonDown(const MouseEvent&) override;
 
-    void SetStyle(const OUString& sStyleName);
+    void SetStyle(const std::pair<OUString, OUString>& sStyleName);
 
     void Select(bool bSelect);
 
@@ -83,8 +83,8 @@ protected:
     std::unique_ptr<weld::Toolbar> m_xUp;
     std::unique_ptr<weld::Toolbar> m_xDown;
 
-    std::vector<OUString> m_aDefaultStyles;
-    std::vector<OUString> m_aAllStyles;
+    std::vector<std::pair<OUString, OUString>> m_aDefaultStyles;
+    std::vector<std::pair<OUString, OUString>> m_aAllStyles;
 
     unsigned m_nStyleIterator;
     OUString m_sSelectedStyle;
@@ -93,7 +93,8 @@ protected:
     DECL_LINK(GoDown, const OString&, void);
 
 public:
-    StylesPreviewWindow_Base(weld::Builder& xBuilder, std::vector<OUString>& aDefaultStyles,
+    StylesPreviewWindow_Base(weld::Builder& xBuilder,
+                             std::vector<std::pair<OUString, OUString>>& aDefaultStyles,
                              css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider);
     ~StylesPreviewWindow_Base();
 
@@ -103,13 +104,14 @@ private:
     void Update();
     void UpdateStylesList();
     void MakeCurrentStyleVisible();
-    OUString GetVisibleStyle(unsigned nPosition);
+    std::pair<OUString, OUString> GetVisibleStyle(unsigned nPosition);
 };
 
 class StylesPreviewWindow_Impl : public InterimItemWindow, public StylesPreviewWindow_Base
 {
 public:
-    StylesPreviewWindow_Impl(vcl::Window* pParent, std::vector<OUString>& aDefaultStyles,
+    StylesPreviewWindow_Impl(vcl::Window* pParent,
+                             std::vector<std::pair<OUString, OUString>>& aDefaultStyles,
                              css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider);
     ~StylesPreviewWindow_Impl();
 

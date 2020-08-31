@@ -36,7 +36,7 @@ class SVX_DLLPUBLIC StylesPreviewToolBoxControl final
 
     css::uno::Reference<css::frame::XDispatchProvider> m_xDispatchProvider;
 
-    std::vector<OUString> m_aDefaultStyles;
+    std::vector<std::pair<OUString, OUString>> m_aDefaultStyles;
 
 public:
     StylesPreviewToolBoxControl();
