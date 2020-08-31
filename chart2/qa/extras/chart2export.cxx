@@ -655,8 +655,7 @@ void Chart2ExportTest::testStockChart()
     load("/chart2/qa/extras/data/docx/", "testStockChart.docx");
 
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
-    if (!pXmlDoc)
-       return;
+    CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:stockChart/c:ser[1]/c:idx", "val", "1");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:stockChart/c:ser[1]/c:order", "val", "1");
@@ -670,8 +669,7 @@ void Chart2ExportTest::testBarChart()
 {
     load("/chart2/qa/extras/data/docx/", "testBarChart.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
-    if (!pXmlDoc)
-       return;
+    CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:barDir", "val", "col");
 }
@@ -727,8 +725,7 @@ void Chart2ExportTest::testScatterChartTextXValues()
 
     // Test the export.
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
-    if (!pXmlDoc)
-       return;
+    CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPathContent(pXmlDoc, "//c:scatterChart/c:ser[1]/c:xVal[1]/c:numRef[1]/c:numCache[1]/c:pt[1]/c:v[1]", "1");
 }
