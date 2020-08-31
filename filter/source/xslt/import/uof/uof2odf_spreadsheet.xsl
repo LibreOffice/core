@@ -189,7 +189,7 @@
                                         <xsl:element name="table:filter">
                                             <xsl:element name="table:filter-and">
                                                 <xsl:call-template name="auto-filter-condition">
-                                                    <xsl:with-param name="conditon-set" select="$filter/表:条件"/>
+                                                    <xsl:with-param name="condition-set" select="$filter/表:条件"/>
                                                     <xsl:with-param name="zone-left-column-num" select="$zone-left-column-num"/>
                                                 </xsl:call-template>
                                             </xsl:element>
@@ -5318,10 +5318,10 @@
         </xsl:element>
     </xsl:template>
     <xsl:template name="auto-filter-condition">
-        <xsl:param name="conditon-set"/>
+        <xsl:param name="condition-set"/>
         <xsl:param name="zone-left-column-num"/>
-        <xsl:if test="$conditon-set">
-            <xsl:variable name="first-condition" select="$conditon-set[1]"/>
+        <xsl:if test="$condition-set">
+            <xsl:variable name="first-condition" select="$condition-set[1]"/>
             <xsl:element name="table:filter-condition">
                 <xsl:attribute name="table:field-number"><xsl:value-of select="$first-condition/@表:列号 - $zone-left-column-num"/></xsl:attribute>
                 <xsl:attribute name="office:value"><xsl:choose><xsl:when test="$first-condition/表:普通"><xsl:value-of select="$first-condition/表:普通/@表:值"/></xsl:when><xsl:when test="$first-condition/表:自定义"><xsl:value-of select="$first-condition/表:自定义/表:操作条件/表:值"/></xsl:when></xsl:choose></xsl:attribute>
@@ -5357,7 +5357,7 @@
                 <xsl:attribute name="table:operator"><xsl:value-of select="$operator"/></xsl:attribute>
             </xsl:element>
             <xsl:call-template name="auto-filter-condition">
-                <xsl:with-param name="conditon-set" select="$conditon-set[position()!=1]"/>
+                <xsl:with-param name="condition-set" select="$condition-set[position()!=1]"/>
                 <xsl:with-param name="zone-left-column-num" select="$zone-left-column-num"/>
             </xsl:call-template>
         </xsl:if>
