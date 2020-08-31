@@ -44,36 +44,36 @@ namespace
 void ImplDrawArrow(vcl::RenderContext& rRenderContext, long nX, long nY, long nSize,
                    const Color& rColor, bool bCollapsed)
 {
-    tools::Polygon aTriaglePolygon(4);
+    tools::Polygon aTrianglePolygon(4);
 
     if (bCollapsed)
     {
         if (AllSettings::GetLayoutRTL()) // <
         {
-            aTriaglePolygon.SetPoint({ nX + nSize / 2, nY }, 0);
-            aTriaglePolygon.SetPoint({ nX + nSize / 2, nY + nSize }, 1);
-            aTriaglePolygon.SetPoint({ nX, nY + nSize / 2 }, 2);
-            aTriaglePolygon.SetPoint({ nX + nSize / 2, nY }, 3);
+            aTrianglePolygon.SetPoint({ nX + nSize / 2, nY }, 0);
+            aTrianglePolygon.SetPoint({ nX + nSize / 2, nY + nSize }, 1);
+            aTrianglePolygon.SetPoint({ nX, nY + nSize / 2 }, 2);
+            aTrianglePolygon.SetPoint({ nX + nSize / 2, nY }, 3);
         }
         else // >
         {
-            aTriaglePolygon.SetPoint({ nX, nY }, 0);
-            aTriaglePolygon.SetPoint({ nX + nSize / 2, nY + nSize / 2 }, 1);
-            aTriaglePolygon.SetPoint({ nX, nY + nSize }, 2);
-            aTriaglePolygon.SetPoint({ nX, nY }, 3);
+            aTrianglePolygon.SetPoint({ nX, nY }, 0);
+            aTrianglePolygon.SetPoint({ nX + nSize / 2, nY + nSize / 2 }, 1);
+            aTrianglePolygon.SetPoint({ nX, nY + nSize }, 2);
+            aTrianglePolygon.SetPoint({ nX, nY }, 3);
         }
     }
     else // v
     {
-        aTriaglePolygon.SetPoint({ nX, nY + nSize / 2 }, 0);
-        aTriaglePolygon.SetPoint({ nX + nSize, nY + nSize / 2 }, 1);
-        aTriaglePolygon.SetPoint({ nX + nSize / 2, nY + nSize }, 2);
-        aTriaglePolygon.SetPoint({ nX, nY + nSize / 2 }, 3);
+        aTrianglePolygon.SetPoint({ nX, nY + nSize / 2 }, 0);
+        aTrianglePolygon.SetPoint({ nX + nSize, nY + nSize / 2 }, 1);
+        aTrianglePolygon.SetPoint({ nX + nSize / 2, nY + nSize }, 2);
+        aTrianglePolygon.SetPoint({ nX, nY + nSize / 2 }, 3);
     }
 
     rRenderContext.SetLineColor();
     rRenderContext.SetFillColor(rColor);
-    rRenderContext.DrawPolygon(aTriaglePolygon);
+    rRenderContext.DrawPolygon(aTrianglePolygon);
 }
 }
 
