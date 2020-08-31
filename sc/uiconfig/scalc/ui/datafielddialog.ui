@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore2">
@@ -145,6 +145,11 @@
                                     </child>
                                   </object>
                                 </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="functions-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="datafielddialog|extended_tip|functions">Click the type of subtotal that you want to calculate. This option is only available if the User-defined option is selected.</property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>
@@ -182,6 +187,11 @@
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="checkbutton1-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="datafielddialog|extended_tip|checkbutton1">Includes empty columns and rows in the results table.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -197,8 +207,8 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="datafielddialog|label2">Name:</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -245,11 +255,11 @@
                           <object class="GtkLabel" id="label4">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes" context="datafielddialog|label4">_Type:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">type</property>
                             <property name="ellipsize">end</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -260,11 +270,11 @@
                           <object class="GtkLabel" id="basefieldft">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes" context="datafielddialog|basefieldft">_Base field:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">basefield</property>
                             <property name="ellipsize">end</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -275,11 +285,11 @@
                           <object class="GtkLabel" id="baseitemft">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes" context="datafielddialog|baseitemft">Ba_se item:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">baseitem</property>
                             <property name="ellipsize">end</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -301,6 +311,11 @@
                               <item translatable="yes" context="datafielddialog|type">% of total</item>
                               <item translatable="yes" context="datafielddialog|type">Index</item>
                             </items>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="type-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="datafielddialog|extended_tip|type">Select the type of calculating of the displayed value for the data field.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -311,6 +326,11 @@
                           <object class="GtkComboBoxText" id="basefield">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="basefield-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="datafielddialog|extended_tip|basefield">Select the field from which the respective value is taken as base for the calculation.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -325,6 +345,11 @@
                               <item translatable="yes" context="datafielddialog|baseitem">- previous item -</item>
                               <item translatable="yes" context="datafielddialog|baseitem">- next item -</item>
                             </items>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="baseitem-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="datafielddialog|extended_tip|baseitem">Select the item of the base field from which the respective value is taken as base for the calculation.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -340,6 +365,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="datafielddialog|label3">Displayed value</property>
+                  </object>
+                </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="expander-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="datafielddialog|extended_tip|expander">Expands or reduces the dialog. The More button is visible for data fields only.</property>
                   </object>
                 </child>
               </object>
@@ -362,5 +392,8 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>

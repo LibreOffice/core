@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore2">
@@ -18,9 +18,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -39,6 +36,11 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="options-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pivotfielddialog|extended_tip|options">Opens the Data Field Options dialog. The Options button is visible for column, row, or page fields only.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -213,6 +215,11 @@
                                     </child>
                                   </object>
                                 </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="functions-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="pivotfielddialog|extended_tip|functions">Click the type of subtotal that you want to calculate. This option is only available if the User-defined option is selected.</property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>
@@ -250,6 +257,11 @@
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="showall-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pivotfielddialog|extended_tip|showall">Includes empty columns and rows in the results table.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -304,5 +316,8 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>

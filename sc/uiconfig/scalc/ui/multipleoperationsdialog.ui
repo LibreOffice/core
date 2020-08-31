@@ -151,6 +151,11 @@
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
                         <property name="width_chars">35</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="formulas-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="multipleoperationsdialog|extended_tip|formulas">Enter the cell references for the cells containing the formulas that you want to use in the multiple operation.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -164,6 +169,11 @@
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
                         <property name="width_chars">35</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="row-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="multipleoperationsdialog|extended_tip|row">Enter the input cell reference that you want to use as a variable for the rows in the data table.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -177,6 +187,11 @@
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
                         <property name="width_chars">35</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="col-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="multipleoperationsdialog|extended_tip|col">Enter the input cell reference that you want to use as a variable for the columns in the data table.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -261,6 +276,11 @@
     </action-widgets>
     <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="MultipleOperationsDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="multipleoperationsdialog|extended_tip|MultipleOperationsDialog">Applies the same formula to different cells, but with different parameter values.</property>
+      </object>
     </child>
   </object>
 </interface>

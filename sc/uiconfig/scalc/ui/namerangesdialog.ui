@@ -129,6 +129,11 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="edassign-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="namerangesdialog|extended_tip|edassign">Displays the cell reference of each label range.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -177,6 +182,11 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="colhead-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="namerangesdialog|extended_tip|colhead">Includes column labels in the current label range.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -194,6 +204,11 @@
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">colhead</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="rowhead-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="namerangesdialog|extended_tip|rowhead">Includes row labels in the current label range.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -232,6 +247,11 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="edassign2-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="namerangesdialog|extended_tip|edassign2">Sets the data range for which the selected label range is valid. To modify it, click in the sheet and select another range with the mouse.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -277,6 +297,11 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="use_stock">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="add-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="namerangesdialog|extended_tip|add">Adds the current label range to the list.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -343,6 +368,11 @@
                                 </child>
                               </object>
                             </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="range-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="namerangesdialog|extended_tip|range">Displays the cell reference of each label range.</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -381,6 +411,11 @@
     </action-widgets>
     <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="NameRangesDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="namerangesdialog|extended_tip|NameRangesDialog">Opens a dialog in which you can define a label range.</property>
+      </object>
     </child>
   </object>
 </interface>

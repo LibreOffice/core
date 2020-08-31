@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="lower">1</property>
+    <property name="upper">256</property>
+    <property name="value">1</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkTreeStore" id="liststore1">
     <columns>
       <!-- column-name text -->
@@ -9,13 +16,6 @@
       <!-- column-name id -->
       <column type="gchararray"/>
     </columns>
-  </object>
-  <object class="GtkAdjustment" id="adjustment1">
-    <property name="lower">1</property>
-    <property name="upper">256</property>
-    <property name="value">1</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
   </object>
   <object class="GtkDialog" id="InsertSheetDialog">
     <property name="can_focus">False</property>
@@ -25,9 +25,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -125,6 +122,11 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="before-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="insertsheet|extended_tip|before">Inserts a new sheet directly before the current sheet.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -142,6 +144,11 @@
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">before</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="after-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="insertsheet|extended_tip|after">Inserts a new sheet directly after the current sheet.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -211,6 +218,11 @@
                                 <property name="xalign">0</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="new-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertsheet|extended_tip|new">Creates a new sheet. Enter a sheet name in the Name field. Allowed characters are letters, numbers, spaces, and the underline character.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -266,6 +278,11 @@
                                         <property name="halign">start</property>
                                         <property name="activates_default">True</property>
                                         <property name="adjustment">adjustment1</property>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="countnf-atkobject">
+                                            <property name="AtkObject::accessible-description" translatable="yes" context="insertsheet|extended_tip|countnf">Specifies the number of sheets to be created.</property>
+                                          </object>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -280,6 +297,11 @@
                                         <property name="activates_default">True</property>
                                         <property name="width_chars">52</property>
                                         <property name="text" translatable="yes" context="insertsheet|nameed">Sheet...</property>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="nameed-atkobject">
+                                            <property name="AtkObject::accessible-description" translatable="yes" context="insertsheet|extended_tip|nameed">Specifies the name of the new sheet.</property>
+                                          </object>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -320,6 +342,11 @@
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">new</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="fromfile-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertsheet|extended_tip|fromfile">Inserts a sheet from an existing file into the current document.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -386,6 +413,7 @@
                                             <child internal-child="accessible">
                                               <object class="AtkObject" id="tables-atkobject">
                                                 <property name="AtkObject::accessible-name" translatable="yes" context="insertsheet|tables-atkobject">Tables in file</property>
+                                                <property name="AtkObject::accessible-description" translatable="yes" context="insertsheet|extended_tip|tables">If you selected a file by using the Browse button, the sheets contained in it are displayed in the list box. The file path is displayed below this box. Select the sheet to be inserted from the list box.</property>
                                               </object>
                                             </child>
                                           </object>
@@ -408,6 +436,11 @@
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">True</property>
                                             <property name="use_underline">True</property>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="browse-atkobject">
+                                                <property name="AtkObject::accessible-description" translatable="yes" context="insertsheet|extended_tip|browse">Opens a dialog for selecting a file.</property>
+                                              </object>
+                                            </child>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
@@ -425,6 +458,11 @@
                                             <property name="use_underline">True</property>
                                             <property name="xalign">0</property>
                                             <property name="draw_indicator">True</property>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="link-atkobject">
+                                                <property name="AtkObject::accessible-description" translatable="yes" context="insertsheet|extended_tip|link">Select to insert the sheet as a link instead as a copy. The links can be updated to show the current contents.</property>
+                                              </object>
+                                            </child>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
@@ -488,5 +526,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="InsertSheetDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="insertsheet|extended_tip|InsertSheetDialog">Defines the options to be used to insert a new sheet.</property>
+      </object>
+    </child>
   </object>
 </interface>

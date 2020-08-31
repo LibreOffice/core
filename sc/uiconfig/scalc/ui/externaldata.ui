@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -25,9 +25,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -138,6 +135,11 @@
                                     <property name="activates_default">True</property>
                                   </object>
                                 </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="url-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="externaldata|extended_tip|url">Enter the URL or the file name that contains the data that you want to insert, and then press Enter.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
@@ -152,6 +154,11 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="use_underline">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="browse-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="externaldata|extended_tip|browse">Open a file dialog to locate the file containing the data you want to insert.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -242,6 +249,11 @@
                                     </child>
                                   </object>
                                 </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="ranges-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="externaldata|extended_tip|ranges">Select the table or the data range that you want to insert.</property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>
@@ -268,6 +280,11 @@
                                 <accessibility>
                                   <relation type="label-for" target="delay"/>
                                 </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="reload-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="externaldata|extended_tip|reload">Enter the number of seconds to wait before the external data are reloaded into the current document.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -289,6 +306,11 @@
                                     <accessibility>
                                       <relation type="labelled-by" target="reload"/>
                                     </accessibility>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="delay-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="externaldata|extended_tip|delay">Enter the number of seconds to wait before the external data are reloaded into the current document.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -360,5 +382,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="ExternalDataDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="externaldata|extended_tip|ExternalDataDialog">Inserts data from an HTML, Calc, CSV or Excel file into the current sheet as a link. The data must be located within a named range.</property>
+      </object>
+    </child>
   </object>
 </interface>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="for">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -52,7 +52,6 @@
             <property name="headers_visible">False</property>
             <property name="headers_clickable">False</property>
             <property name="search_column">0</property>
-            <property name="show_expanders">True</property>
             <child internal-child="selection">
               <object class="GtkTreeSelection" id="treeview-selection1"/>
             </child>
@@ -71,6 +70,11 @@
                     <attribute name="text">1</attribute>
                   </attributes>
                 </child>
+              </object>
+            </child>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="struct-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="structpage|extended_tip|struct">Displays a hierarchical representation of the current function.</property>
               </object>
             </child>
           </object>

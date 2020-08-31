@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkBox" id="SortOptionsPage">
@@ -35,6 +35,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="case-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|case">Sorts first by uppercase letters and then by lowercase letters. For Asian languages, special handling applies.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -50,6 +55,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="header-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|header">Omits the first row or the first column in the selection from the sort.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -65,6 +75,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="formats-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|formats">Preserves the current cell formatting.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -80,6 +95,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="naturalsort-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|naturalsort">Natural sort is a sort algorithm that sorts string-prefixed numbers based on the value of the numerical element in each sorted number, instead of the traditional way of sorting them as ordinary strings.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -128,6 +148,11 @@
                     <accessibility>
                       <relation type="label-for" target="outarealb"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="copyresult-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|copyresult">Copies the sorted list to the cell range that you specify.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -146,6 +171,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject" id="outarealb-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="sortoptionspage|outarealb-atkobject">Copy sort results to:</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|outarealb">Select a named cell range where you want to display the sorted list, or enter a cell range in the input box.</property>
                       </object>
                     </child>
                   </object>
@@ -166,6 +192,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject" id="outareaed-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="sortoptionspage|outareaed-atkobject">Copy sort results to:</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|outareaed">Enter the cell range where you want to display the sorted list, or select a named range from the list.</property>
                       </object>
                     </child>
                   </object>
@@ -186,6 +213,11 @@
                     <accessibility>
                       <relation type="label-for" target="sortuserlb"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="sortuser-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|sortuser">Click here and then select the custom sort order that you want.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -203,6 +235,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject" id="sortuserlb-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="sortoptionspage|sortuserlb-atkobject">Custom sort order</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|sortuserlb">Select the custom sort order that you want to apply. To define a custom sort order, choose Tools - Options - %PRODUCTNAME Calc - Sort Lists .</property>
                       </object>
                     </child>
                   </object>
@@ -244,6 +277,11 @@
                   <object class="GtkComboBoxText" id="algorithmlb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="algorithmlb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|algorithmlb">Select a sorting option for the language.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -258,6 +296,11 @@
                     <child internal-child="entry">
                       <object class="GtkEntry">
                         <property name="can_focus">True</property>
+                      </object>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="language-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|language">Select the language for the sorting rules.</property>
                       </object>
                     </child>
                   </object>
@@ -337,6 +380,11 @@
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="topdown-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|topdown">Sorts rows by the values in the active columns of the selected range.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -353,6 +401,11 @@
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">topdown</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="leftright-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|leftright">Sorts columns by the values in the active rows of the selected range.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -379,6 +432,11 @@
         <property name="fill">True</property>
         <property name="position">10</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="SortOptionsPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|SortOptionsPage">Sets additional sorting options.</property>
+      </object>
     </child>
   </object>
 </interface>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="SelectSourceDialog">
@@ -11,9 +11,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox3">
         <property name="can_focus">False</property>
@@ -96,23 +93,6 @@
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="GtkRadioButton" id="selection">
-                        <property name="label" translatable="yes" context="selectsource|selection">_Current selection</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="active">True</property>
-                        <property name="draw_indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkBox" id="box2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -159,6 +139,28 @@
                       </packing>
                     </child>
                     <child>
+                      <object class="GtkRadioButton" id="selection">
+                        <property name="label" translatable="yes" context="selectsource|selection">_Current selection</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="active">True</property>
+                        <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="selection-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="selectsource|extended_tip|selection">Uses the selected cells as the data source for the pivot table.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkRadioButton" id="database">
                         <property name="label" translatable="yes" context="selectsource|database">_Data source registered in %PRODUCTNAME</property>
                         <property name="visible">True</property>
@@ -168,6 +170,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">selection</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="database-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="selectsource|extended_tip|database">Uses a table or query in a database that is registered in %PRODUCTNAME as the data source for the pivot table.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -185,6 +192,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">selection</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="external-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="selectsource|extended_tip|external">Opens the External Source dialog where you can select the OLAP data source for the pivot table.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -220,5 +232,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="SelectSourceDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="selectsource|extended_tip|SelectSourceDialog">Opens a dialog where you can select the source for your pivot table, and then create your table.</property>
+      </object>
+    </child>
   </object>
 </interface>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkImage" id="imageBTN_DATE">
@@ -135,6 +135,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="textviewWND_LEFT-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="headerfootercontent|extended_tip|textviewWND_LEFT">Enter the text to be displayed at the left side of the header or footer.</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -160,6 +165,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="textviewWND_CENTER-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="headerfootercontent|extended_tip|textviewWND_CENTER">Enter the text to be displayed at the center of the header or footer.</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -185,6 +195,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="textviewWND_RIGHT-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="headerfootercontent|extended_tip|textviewWND_RIGHT">Enter the text to be displayed at the right side of the header or footer.</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -300,6 +315,11 @@
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes" context="headerfootercontent|buttonBTN_TEXT|tooltip_text">Text Attributes</property>
                 <property name="image">imageBTN_TEXT</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="buttonBTN_TEXT-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="headerfootercontent|extended_tip|buttonBTN_TEXT">Opens a dialog to assign formats to new or selected text.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -318,6 +338,11 @@
                 <property name="popup">popup</property>
                 <property name="direction">up</property>
                 <property name="use_popover">False</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="buttonBTN_FILE-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="headerfootercontent|extended_tip|buttonBTN_FILE">Inserts a file name placeholder in the selected area.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -332,6 +357,11 @@
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes" context="headerfootercontent|buttonBTN_TABLE|tooltip_text">Sheet Name</property>
                 <property name="image">imageBTN_TABLE</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="buttonBTN_TABLE-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="headerfootercontent|extended_tip|buttonBTN_TABLE">Inserts a placeholder in the selected header/footer area, which is replaced by the sheet name in the header/footer of the actual document.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -346,6 +376,11 @@
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes" context="headerfootercontent|buttonBTN_PAGE|tooltip_text">Page</property>
                 <property name="image">imageBTN_PAGE</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="buttonBTN_PAGE-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="headerfootercontent|extended_tip|buttonBTN_PAGE">Inserts a placeholder in the selected header/footer area, which is replaced by page numbering. This allows continuous page numbering in a document.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -360,6 +395,11 @@
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes" context="headerfootercontent|buttonBTN_PAGES|tooltip_text">Pages</property>
                 <property name="image">imageBTN_PAGES</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="buttonBTN_PAGES-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="headerfootercontent|extended_tip|buttonBTN_PAGES">Inserts a placeholder in the selected header/footer area, which is replaced by the total number of pages in the document.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -374,6 +414,11 @@
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes" context="headerfootercontent|buttonBTN_DATE|tooltip_text">Date</property>
                 <property name="image">imageBTN_DATE</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="buttonBTN_DATE-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="headerfootercontent|extended_tip|buttonBTN_DATE">Inserts a placeholder in the selected header/footer area, which is replaced by the current date which will be repeated in the header/footer on each page of the document.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -388,6 +433,11 @@
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes" context="headerfootercontent|buttonBTN_TIME|tooltip_text">Time</property>
                 <property name="image">imageBTN_TIME</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="buttonBTN_TIME-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="headerfootercontent|extended_tip|buttonBTN_TIME">Inserts a placeholder in the selected header/footer area, which is replaced by the current time in the header/footer on each page of the document.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -405,6 +455,11 @@
           <object class="GtkComboBoxText" id="comboLB_DEFINED">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="comboLB_DEFINED-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="headerfootercontent|extended_tip|comboLB_DEFINED">Select a predefined header or footer from the list.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -551,6 +606,11 @@
         <property name="fill">True</property>
         <property name="position">4</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="HeaderFooterContent-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="headerfootercontent|extended_tip|HeaderFooterContent">Defines or formats a header or footer for a Page Style.</property>
+      </object>
     </child>
   </object>
 </interface>
