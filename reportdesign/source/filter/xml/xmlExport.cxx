@@ -1238,8 +1238,8 @@ void ORptExport::exportReportAttributes(const Reference<XReportDefinition>& _xRe
         return;
 
     OUStringBuffer sValue;
-    const SvXMLEnumMapEntry<sal_Int32>* aXML_CommnadTypeEnumMap = OXMLHelper::GetCommandTypeOptions();
-    if ( SvXMLUnitConverter::convertEnum( sValue, _xReport->getCommandType(), aXML_CommnadTypeEnumMap ) )
+    const SvXMLEnumMapEntry<sal_Int32>* aXML_CommandTypeEnumMap = OXMLHelper::GetCommandTypeOptions();
+    if ( SvXMLUnitConverter::convertEnum( sValue, _xReport->getCommandType(), aXML_CommandTypeEnumMap ) )
         AddAttribute(XML_NAMESPACE_REPORT, XML_COMMAND_TYPE,sValue.makeStringAndClear());
 
     OUString sComamnd = _xReport->getCommand();

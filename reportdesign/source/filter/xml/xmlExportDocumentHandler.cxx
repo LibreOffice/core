@@ -125,13 +125,13 @@ void SAL_CALL ExportDocumentHandler::startElement(const OUString & _sName, const
         SvXMLAttributeList* pList = new SvXMLAttributeList();
         uno::Reference< xml::sax::XAttributeList > xNewAttribs = pList;
         OUStringBuffer sValue;
-        static const SvXMLEnumMapEntry<sal_uInt16> aXML_CommnadTypeEnumMap[] =
+        static const SvXMLEnumMapEntry<sal_uInt16> aXML_CommandTypeEnumMap[] =
         {
             { XML_TABLE, sdb::CommandType::TABLE },
             { XML_QUERY, sdb::CommandType::QUERY },
             { XML_TOKEN_INVALID, 0 }
         };
-        if ( SvXMLUnitConverter::convertEnum( sValue, static_cast<sal_uInt16>(m_xDatabaseDataProvider->getCommandType()),aXML_CommnadTypeEnumMap ) )
+        if ( SvXMLUnitConverter::convertEnum( sValue, static_cast<sal_uInt16>(m_xDatabaseDataProvider->getCommandType()),aXML_CommandTypeEnumMap ) )
         {
             pList->AddAttribute(lcl_createAttribute(XML_NP_RPT,XML_COMMAND_TYPE),sValue.makeStringAndClear());
         }
