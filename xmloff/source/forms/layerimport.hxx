@@ -99,7 +99,7 @@ namespace xmloff
         void                                leaveEventContext();
         void                                applyControlNumberStyle(
             const css::uno::Reference< css::beans::XPropertySet >& _rxControlModel,
-            const OUString& _rControlNumerStyleName
+            const OUString& _rControlNumberStyleName
         );
         void                        registerCellValueBinding(
             const css::uno::Reference< css::beans::XPropertySet >& _rxControlModel,

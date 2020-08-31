@@ -222,9 +222,9 @@ void OFormLayerXMLImport_Impl::setAutoStyleContext(SvXMLStylesContext* _pNewCont
     m_xAutoStyles.set(_pNewContext);
 }
 
-void OFormLayerXMLImport_Impl::applyControlNumberStyle(const Reference< XPropertySet >& _rxControlModel, const OUString& _rControlNumerStyleName)
+void OFormLayerXMLImport_Impl::applyControlNumberStyle(const Reference< XPropertySet >& _rxControlModel, const OUString& _rControlNumberStyleName)
 {
-    OSL_ENSURE(_rxControlModel.is() && (!_rControlNumerStyleName.isEmpty()),
+    OSL_ENSURE(_rxControlModel.is() && (!_rControlNumberStyleName.isEmpty()),
         "OFormLayerXMLImport_Impl::applyControlNumberStyle: invalid arguments (this will crash)!");
 
     OSL_ENSURE(m_xAutoStyles.is(), "OFormLayerXMLImport_Impl::applyControlNumberStyle: have no auto style context!");
@@ -236,7 +236,7 @@ void OFormLayerXMLImport_Impl::applyControlNumberStyle(const Reference< XPropert
     if (!m_xAutoStyles.is())
         return;
 
-    const SvXMLStyleContext* pStyle = m_xAutoStyles->FindStyleChildContext(XmlStyleFamily::DATA_STYLE, _rControlNumerStyleName);
+    const SvXMLStyleContext* pStyle = m_xAutoStyles->FindStyleChildContext(XmlStyleFamily::DATA_STYLE, _rControlNumberStyleName);
     if (pStyle)
     {
         const SvXMLNumFormatContext* pDataStyle = static_cast<const SvXMLNumFormatContext*>(pStyle);
