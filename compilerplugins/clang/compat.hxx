@@ -187,35 +187,11 @@ inline clang::Expr * getSubExpr(clang::MaterializeTemporaryExpr const * expr) {
 #endif
 }
 
-// Work around <http://reviews.llvm.org/D22128>:
-//
-// SfxErrorHandler::GetClassString (svtools/source/misc/ehdl.cxx):
-//
-//   ErrorResource_Impl aEr(aId, (sal_uInt16)lClassId);
-//   if(aEr)
-//   {
-//       rStr = static_cast<ResString>(aEr).GetString();
-//   }
-//
-// expr->dump():
-//  CXXStaticCastExpr 0x2b74e8e657b8 'class ResString' static_cast<class ResString> <ConstructorConversion>
-//  `-CXXBindTemporaryExpr 0x2b74e8e65798 'class ResString' (CXXTemporary 0x2b74e8e65790)
-//    `-CXXConstructExpr 0x2b74e8e65758 'class ResString' 'void (class ResString &&) noexcept(false)' elidable
-//      `-MaterializeTemporaryExpr 0x2b74e8e65740 'class ResString' xvalue
-//        `-CXXBindTemporaryExpr 0x2b74e8e65720 'class ResString' (CXXTemporary 0x2b74e8e65718)
-//          `-ImplicitCastExpr 0x2b74e8e65700 'class ResString' <UserDefinedConversion>
-//            `-CXXMemberCallExpr 0x2b74e8e656d8 'class ResString'
-//              `-MemberExpr 0x2b74e8e656a0 '<bound member function type>' .operator ResString 0x2b74e8dc1f00
-//                `-DeclRefExpr 0x2b74e8e65648 'struct ErrorResource_Impl' lvalue Var 0x2b74e8e653b0 'aEr' 'struct ErrorResource_Impl'
-// expr->getSubExprAsWritten()->dump():
-//  MaterializeTemporaryExpr 0x2b74e8e65740 'class ResString' xvalue
-//  `-CXXBindTemporaryExpr 0x2b74e8e65720 'class ResString' (CXXTemporary 0x2b74e8e65718)
-//    `-ImplicitCastExpr 0x2b74e8e65700 'class ResString' <UserDefinedConversion>
-//      `-CXXMemberCallExpr 0x2b74e8e656d8 'class ResString'
-//        `-MemberExpr 0x2b74e8e656a0 '<bound member function type>' .operator ResString 0x2b74e8dc1f00
-//          `-DeclRefExpr 0x2b74e8e65648 'struct ErrorResource_Impl' lvalue Var 0x2b74e8e653b0 'aEr' 'struct ErrorResource_Impl'
-//
-// Also work around CastExpr::getSubExprAsWritten firing
+#if CLANG_VERSION < 80000
+inline clang::Expr const * getSubExprAsWritten(clang::CastExpr const * expr)
+{ return expr->getSubExprAsWritten(); }
+#else
+// Work around CastExpr::getSubExprAsWritten firing
 //
 //   include/llvm/Support/Casting.h:269: typename llvm::cast_retty<X, Y*>::ret_type llvm::cast(Y*)
 //   [with X = clang::CXXConstructExpr; Y = clang::Expr;
@@ -280,6 +256,7 @@ inline clang::Expr *getSubExprAsWritten(clang::CastExpr *This) {
 inline const clang::Expr *getSubExprAsWritten(const clang::CastExpr *This) {
   return getSubExprAsWritten(const_cast<clang::CastExpr *>(This));
 }
+#endif
 
 inline clang::QualType getObjectType(clang::CXXMemberCallExpr const * expr) {
 #if CLANG_VERSION >= 100000
