@@ -76,7 +76,7 @@ private:
 OOX_DLLPUBLIC void SaveInteropProperties(
        css::uno::Reference<css::frame::XModel> const& xModel,
        OUString const& rObjectName, OUString const* pOldObjectName,
-       OUString const& rProgId, OUString const& rDrawAspect);
+       OUString const& rProgId);
 
 
 } // namespace oox::ole
