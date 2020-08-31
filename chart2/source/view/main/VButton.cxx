@@ -51,7 +51,7 @@ uno::Reference<drawing::XShape> VButton::createTriangle(awt::Size aSize)
     if (!xShape.is())
         return xShape;
 
-    uno::Reference<beans::XPropertySet> xProperies(xShape, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xproperties(xShape, uno::UNO_QUERY);
 
     drawing::PolyPolygonShape3D aPolyPolygon;
     aPolyPolygon.SequenceX.realloc(1);
@@ -82,10 +82,10 @@ uno::Reference<drawing::XShape> VButton::createTriangle(awt::Size aSize)
     pInnerSequenceY[2] = 0.0;
     pInnerSequenceZ[2] = 0.0;
 
-    xProperies->setPropertyValue("Name", uno::makeAny(m_sCID));
-    xProperies->setPropertyValue(UNO_NAME_POLYPOLYGON, uno::Any(PolyToPointSequence(aPolyPolygon)));
-    xProperies->setPropertyValue("LineStyle", uno::makeAny(drawing::LineStyle_NONE));
-    xProperies->setPropertyValue("FillColor", uno::makeAny(m_nArrowColor));
+    xproperties->setPropertyValue("Name", uno::makeAny(m_sCID));
+    xproperties->setPropertyValue(UNO_NAME_POLYPOLYGON, uno::Any(PolyToPointSequence(aPolyPolygon)));
+    xproperties->setPropertyValue("LineStyle", uno::makeAny(drawing::LineStyle_NONE));
+    xproperties->setPropertyValue("FillColor", uno::makeAny(m_nArrowColor));
 
     return xShape;
 }

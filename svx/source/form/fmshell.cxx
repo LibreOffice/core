@@ -146,7 +146,7 @@ void FmFormShell::InitInterface_Impl()
                                             SfxShellFeature::FormShowTextControlBar);
 
     GetStaticInterface()->RegisterChildWindow(SID_FM_ADD_FIELD, false, SfxShellFeature::FormShowField);
-    GetStaticInterface()->RegisterChildWindow(SID_FM_SHOW_PROPERTIES, false, SfxShellFeature::FormShowProperies);
+    GetStaticInterface()->RegisterChildWindow(SID_FM_SHOW_PROPERTIES, false, SfxShellFeature::FormShowproperties);
     GetStaticInterface()->RegisterChildWindow(SID_FM_SHOW_FMEXPLORER, false, SfxShellFeature::FormShowExplorer);
     GetStaticInterface()->RegisterChildWindow(SID_FM_FILTER_NAVIGATOR, false, SfxShellFeature::FormShowFilterNavigator);
     GetStaticInterface()->RegisterChildWindow(SID_FM_SHOW_DATANAVIGATOR, false, SfxShellFeature::FormShowDataNavigator);
@@ -292,7 +292,7 @@ bool FmFormShell::HasUIFeature(SfxShellFeature nFeature) const
     {
         bResult = m_bDesignMode && m_pFormView && m_bHasForms;
     }
-    else if (nFeature & SfxShellFeature::FormShowProperies)
+    else if (nFeature & SfxShellFeature::FormShowproperties)
     {
         bResult = m_bDesignMode && m_pFormView && m_bHasForms;
     }

@@ -79,7 +79,7 @@ enum class SfxShellFeature
     // Forms only, class FmFormShell
     FormShowDatabaseBar     = 0x0008,
     FormShowField           = 0x0010,
-    FormShowProperies       = 0x0020,
+    FormShowproperties      = 0x0020,
     FormShowExplorer        = 0x0040,
     FormShowFilterBar       = 0x0080,
     FormShowFilterNavigator = 0x0100,
