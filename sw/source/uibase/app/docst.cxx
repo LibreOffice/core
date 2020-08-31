@@ -1471,7 +1471,7 @@ sfx::AccessibilityIssueCollection SwDocShell::runAccessibilityCheck()
 {
     sw::AccessibilityCheck aCheck(m_xDoc.get());
     aCheck.check();
-    return aCheck.getIssueCollecton();
+    return aCheck.getIssueCollection();
 }
 
 std::set<Color> SwDocShell::GetDocColors()
