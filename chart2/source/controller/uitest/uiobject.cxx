@@ -150,15 +150,15 @@ namespace {
 
 void recursiveAdd(chart::ObjectIdentifier const & rID, std::set<OUString>& rChildren, const chart::ObjectHierarchy& rHierarchy)
 {
-    std::vector<chart::ObjectIdentifier> aChildIndentifiers = rHierarchy.getChildren(rID);
-    std::transform(aChildIndentifiers.begin(), aChildIndentifiers.end(), std::inserter(rChildren, rChildren.begin()),
+    std::vector<chart::ObjectIdentifier> aChildIdentifiers = rHierarchy.getChildren(rID);
+    std::transform(aChildIdentifiers.begin(), aChildIdentifiers.end(), std::inserter(rChildren, rChildren.begin()),
                 [](const chart::ObjectIdentifier& rObject)
                 {
                     return rObject.getObjectCID();
                 }
             );
 
-    for (const chart::ObjectIdentifier& ID: aChildIndentifiers)
+    for (const chart::ObjectIdentifier& ID: aChildIdentifiers)
         recursiveAdd(ID, rChildren, rHierarchy);
 }
 

@@ -184,11 +184,11 @@ void UnoControlHolderList::getControls( uno::Sequence< uno::Reference< awt::XCon
 void UnoControlHolderList::getIdentifiers( uno::Sequence< sal_Int32 >& _out_rIdentifiers ) const
 {
     _out_rIdentifiers.realloc( maControls.size() );
-    sal_Int32* pIndentifiers = _out_rIdentifiers.getArray();
+    sal_Int32* pIdentifiers = _out_rIdentifiers.getArray();
     for (const auto& rEntry : maControls)
     {
-        *pIndentifiers = rEntry.first;
-        ++pIndentifiers;
+        *pIdentifiers = rEntry.first;
+        ++pIdentifiers;
     }
 }
 
