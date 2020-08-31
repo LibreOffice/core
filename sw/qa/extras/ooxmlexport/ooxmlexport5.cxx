@@ -887,7 +887,18 @@ DECLARE_OOXMLEXPORT_TEST(testfdo80898, "fdo80898.docx")
         "Word.Document.8");
 }
 
+<<<<<<< HEAD   (8deb35 tdf#134649 DOCX export: fix page break between tables)
 DECLARE_OOXMLEXPORT_TEST(testTableCellWithDirectFormatting, "fdo80800.docx")
+=======
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testOleIconDrawAspect, "tdf131537.odt")
+{
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:object/o:OLEObject",
+        "DrawAspect", "Icon");
+}
+
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTableCellWithDirectFormatting, "fdo80800.docx")
+>>>>>>> CHANGE (10184f tdf#131537 DOCX export: fix OLE "Display as icon")
 {
     // Issue was Direct Formatting for non-first Table cells was not getting preserved.
 
