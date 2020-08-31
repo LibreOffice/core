@@ -1517,7 +1517,6 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
                     m_xPgBrkBeforeRB->set_sensitive(true);
                     m_xPgBrkAfterRB->set_sensitive(true);
                     m_xPageCollCB->set_sensitive(true);
-                    m_xPgBrkCB->set_active(true);
 
                     m_xPgBrkCB->set_active(true);
                     m_xColBrkRB->set_active( false );
