@@ -1066,7 +1066,7 @@ void SvxXLinePreview::Resize()
     const sal_Int32 nDistance(500);
     const sal_Int32 nAvailableLength(aOutputSize.Width() - (4 * nDistance));
 
-    // create DrawObectA
+    // create DrawObjectA
     const sal_Int32 aYPosA(aOutputSize.Height() / 2);
     const basegfx::B2DPoint aPointA1( nDistance,  aYPosA);
     const basegfx::B2DPoint aPointA2( aPointA1.getX() + ((nAvailableLength * 14) / 20), aYPosA );
@@ -1075,7 +1075,7 @@ void SvxXLinePreview::Resize()
     aPolygonA.append(aPointA2);
     mpLineObjA->SetPathPoly(basegfx::B2DPolyPolygon(aPolygonA));
 
-    // create DrawObectB
+    // create DrawObjectB
     const sal_Int32 aYPosB1((aOutputSize.Height() * 3) / 4);
     const sal_Int32 aYPosB2((aOutputSize.Height() * 1) / 4);
     const basegfx::B2DPoint aPointB1( aPointA2.getX() + nDistance,  aYPosB1);
@@ -1087,7 +1087,7 @@ void SvxXLinePreview::Resize()
     aPolygonB.append(aPointB3);
     mpLineObjB->SetPathPoly(basegfx::B2DPolyPolygon(aPolygonB));
 
-    // create DrawObectC
+    // create DrawObjectC
     basegfx::B2DPolygon aPolygonC;
     const basegfx::B2DPoint aPointC1( aPointB3.getX() + nDistance,  aYPosB1);
     const basegfx::B2DPoint aPointC2( aPointC1.getX() + ((nAvailableLength * 1) / 20), aYPosB2 );
