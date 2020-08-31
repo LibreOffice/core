@@ -146,7 +146,6 @@ void SvXMLImportPropertyMapper::importXML(
         int nSepIndex = rAttribute.Name.indexOf(SvXMLImport::aNamespaceSeparator);
         if (nSepIndex != -1)
             aPrefix = rAttribute.Name.copy(0, nSepIndex);
-
         importXMLAttribute(rProperties, rUnitConverter, rNamespaceMap,
             nPropType, nStartIdx, nEndIdx, xAttrContainer,
             aPrefix, rAttribute.Name, rAttribute.NamespaceURL, rAttribute.Value);
