@@ -339,34 +339,34 @@ sal_Int32 VCLXAccessibleTabPage::getAccessibleIndexInParent(  )
     return nIndexInParent;
 }
 
-
-sal_Int16 VCLXAccessibleTabPage::getAccessibleRole(  )
+sal_Int16 VCLXAccessibleTabPage::getAccessibleRole()
 {
     OExternalLockGuard aGuard( this );
 
     return AccessibleRole::PAGE_TAB;
 }
 
-
-OUString VCLXAccessibleTabPage::getAccessibleDescription(    )
+OUString VCLXAccessibleTabPage::getAccessibleDescription()
 {
     OExternalLockGuard aGuard( this );
 
     OUString sDescription;
     if ( m_pTabControl )
-        sDescription = m_pTabControl->GetHelpText( m_nPageId );
+        sDescription = m_pTabControl->GetAccessibleDescription( m_nPageId );
 
     return sDescription;
 }
 
-
-OUString VCLXAccessibleTabPage::getAccessibleName(  )
+OUString VCLXAccessibleTabPage::getAccessibleName()
 {
     OExternalLockGuard aGuard( this );
 
-    return GetPageText();
-}
+    OUString sName;
+    if ( m_pTabControl )
+        sName = m_pTabControl->GetAccessibleName( m_nPageId );
 
+    return sName;
+}
 
 Reference< XAccessibleRelationSet > VCLXAccessibleTabPage::getAccessibleRelationSet(  )
 {

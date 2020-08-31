@@ -2603,6 +2603,7 @@ void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &read
 
     int nLevel = 1;
     stringmap aProperties;
+    stringmap aAtkProperties;
     std::vector<vcl::EnumContext::Context> context;
 
     while(true)
@@ -2643,6 +2644,11 @@ void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &read
             }
             else if (name == "property")
                 collectProperty(reader, aProperties);
+            else if (name == "child")
+            {
+                handleChild(nullptr, &aAtkProperties, reader);
+                --nLevel;
+            }
         }
 
         if (res == xmlreader::XmlReader::Result::End)
@@ -2676,6 +2682,20 @@ void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &read
                 TabPage* pPage = pTabControl->GetTabPage(nPageId);
                 pPage->SetContext(context);
             }
+
+            for (auto const& prop : aAtkProperties)
+            {
+                const OString &rKey = prop.first;
+                const OUString &rValue = prop.second;
+
+                if (rKey == "AtkObject::accessible-name")
+                    pTabControl->SetAccessibleName(nPageId, rValue);
+                else if (rKey == "AtkObject::accessible-description")
+                    pTabControl->SetAccessibleDescription(nPageId, rValue);
+                else
+                    SAL_INFO("vcl.builder", "unhandled atk property: " << rKey);
+            }
+
         }
         else
         {
