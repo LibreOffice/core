@@ -38,6 +38,7 @@
 #include <unotools/streamwrap.hxx>
 #include <sax/fastattribs.hxx>
 #include <stack>
+#include <string_view>
 #include <deque>
 #include <rtl/ref.hxx>
 
@@ -254,9 +255,9 @@ void SAL_CALL NSDocumentHandler::startElement( const OUString& aName, const Refe
 class DummyTokenHandler : public sax_fastparser::FastTokenHandlerBase
 {
 public:
-    const static OStringLiteral tokens[];
+    const static std::string_view tokens[];
     const static OUStringLiteral namespaceURIs[];
-    const static OStringLiteral namespacePrefixes[];
+    const static std::string_view namespacePrefixes[];
 
     // XFastTokenHandler
     virtual Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 nToken ) override;
@@ -265,26 +266,26 @@ public:
     virtual sal_Int32 getTokenDirect( const char *pToken, sal_Int32 nLength ) const override;
 };
 
-const OStringLiteral DummyTokenHandler::tokens[] = {
-    OStringLiteral("Signature"), OStringLiteral("CanonicalizationMethod"),
-    OStringLiteral("Algorithm"), OStringLiteral("Type"),
-    OStringLiteral("DigestMethod"), OStringLiteral("Reference"),
-    OStringLiteral("document"), OStringLiteral("spacing"),
-    OStringLiteral("Player"), OStringLiteral("Height") };
+const std::string_view DummyTokenHandler::tokens[] = {
+    "Signature", "CanonicalizationMethod",
+    "Algorithm", "Type",
+    "DigestMethod", "Reference",
+    "document", "spacing",
+    "Player", "Height" };
 
 const OUStringLiteral DummyTokenHandler::namespaceURIs[] = {
     u"http://www.w3.org/2000/09/xmldsig#",
     u"http://schemas.openxmlformats.org/wordprocessingml/2006/main/",
     u"xyzsports.com/players/football/" };
 
-const OStringLiteral DummyTokenHandler::namespacePrefixes[] = {
-    OStringLiteral(""),
-    OStringLiteral("w"),
-    OStringLiteral("Player") };
+const std::string_view DummyTokenHandler::namespacePrefixes[] = {
+    "",
+    "w",
+    "Player" };
 
 Sequence< sal_Int8 > DummyTokenHandler::getUTF8Identifier( sal_Int32 nToken )
 {
-    OString aUtf8Token;
+    std::string_view aUtf8Token;
     if ( ( nToken & 0xffff0000 ) != 0 ) //namespace
     {
         sal_uInt32 nNamespaceToken = ( nToken >> 16 ) - 1;
@@ -298,7 +299,7 @@ Sequence< sal_Int8 > DummyTokenHandler::getUTF8Identifier( sal_Int32 nToken )
             aUtf8Token = tokens[ nElementToken ];
     }
     Sequence< sal_Int8 > aSeq( reinterpret_cast< const sal_Int8* >(
-                aUtf8Token.getStr() ), aUtf8Token.getLength() );
+                aUtf8Token.data() ), aUtf8Token.size() );
     return aSeq;
 }
 
@@ -310,7 +311,7 @@ sal_Int32 DummyTokenHandler::getTokenFromUTF8( const uno::Sequence< sal_Int8 >& 
 
 sal_Int32 DummyTokenHandler::getTokenDirect( const char* pToken, sal_Int32 nLength ) const
 {
-    OString sToken( pToken, nLength );
+    std::string_view sToken( pToken, nLength );
     for( size_t  i = 0; i < SAL_N_ELEMENTS(tokens); i++ )
     {
         if ( tokens[i] == sToken )
