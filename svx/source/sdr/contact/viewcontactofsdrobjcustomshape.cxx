@@ -134,7 +134,7 @@ namespace sdr::contact
                 // see createViewIndependentPrimitive2DSequence implementations and usage of
                 // GetObjectCount()). Thus in principle iterating here (esp. 'deep') seems to
                 // be wrong anyways, it might have even created wrong and double geometries
-                // (only with complex CustomShapes with multiple representation SdrObects and
+                // (only with complex CustomShapes with multiple representation SdrObjects and
                 // only visible when transparency involved, but runtime-expensive).
                 // Thus: Just do not iterate, will check behaviour deeply.
                 b3DShape = (nullptr != dynamic_cast< const E3dObject* >(pSdrObjRepresentation));

@@ -101,7 +101,7 @@ class SVXCORE_DLLPUBLIC SdrMarkView : public SdrSnapView
 
 protected:
     SdrObject*                  mpMarkedObj;       // If not just one object ( i.e. More than one object ) is marked.
-    SdrPageView*                mpMarkedPV;        // If all marked obects are situated on the same PageView.
+    SdrPageView*                mpMarkedPV;        // If all marked objects are situated on the same PageView.
 
     Point                       maRef1;            // Persistent - Rotation center / axis of reflection
     Point                       maRef2;            // Persistent
@@ -453,7 +453,7 @@ public:
 //     a vertical area of 200 logical units is sensitive.
 //   - For a polygon, a rectangular of the size (200,200) is generated and a
 //     touch test between Poly and this Rect is processed.
-//   - Obects which respond SdrObject::HasEdit()==TRUE ( e.g. a text frame ),
+//   - Objects which respond SdrObject::HasEdit()==TRUE ( e.g. a text frame ),
 //     are specially treated: An additional sensitive area with a width of
 //     2*Tol (200 units for this example) is created around the object.
 //     When an object is directly hit, the Edit method is called.
