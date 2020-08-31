@@ -712,6 +712,8 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
         pCurrRedline = nullptr;
 
     rTreeView.freeze();
+    if (m_pTable->IsSorted())
+        rTreeView.make_unsorted();
     for (SwRedlineTable::size_type i = nStart; i <= nEnd; i++)
     {
         const SwRangeRedline& rRedln = pSh->GetRedline(i);
@@ -758,6 +760,8 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
         InsertChildren(pRedlineParent, rRedln, bHasRedlineAutoFormat);
     }
     rTreeView.thaw();
+    if (m_pTable->IsSorted())
+        rTreeView.make_sorted();
 }
 
 void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
