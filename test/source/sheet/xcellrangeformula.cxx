@@ -24,7 +24,7 @@ void XCellRangeFormula::testGetSetFormulaArray()
 {
     uno::Reference<sheet::XCellRangeFormula> xCRF(init(), UNO_QUERY_THROW);
 
-    uno::Sequence<uno::Sequence<OUString>> aFormulaArrayOrginal = xCRF->getFormulaArray();
+    uno::Sequence<uno::Sequence<OUString>> aFormulaArrayOriginal = xCRF->getFormulaArray();
     uno::Sequence<uno::Sequence<OUString>> aFormulaArrayNew = xCRF->getFormulaArray();
     aFormulaArrayNew[0][0] = "NewValue";
 
@@ -32,8 +32,8 @@ void XCellRangeFormula::testGetSetFormulaArray()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to get new FormulaArray", OUString("NewValue"),
                                  xCRF->getFormulaArray()[0][0]);
 
-    xCRF->setFormulaArray(aFormulaArrayOrginal);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set new FormulaArray", aFormulaArrayOrginal[0][0],
+    xCRF->setFormulaArray(aFormulaArrayOriginal);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set new FormulaArray", aFormulaArrayOriginal[0][0],
                                  xCRF->getFormulaArray()[0][0]);
 }
 } // namespace apitest
