@@ -89,11 +89,17 @@ void TipOfTheDayDialog::UpdateTip()
 #endif
     sal_Int32 aPos;
     aPos = aText.indexOf("%MOD1");
-    if (aPos != -1)
+    while (aPos != -1)
+    {
         aText = aText.replaceAt(aPos, 5, aMOD1);
+        aPos = aText.indexOf("%MOD1");
+    }
     aPos = aText.indexOf("%MOD2");
-    if (aPos != -1)
+    while (aPos != -1)
+    {
         aText = aText.replaceAt(aPos, 5, aMOD2);
+        aPos = aText.indexOf("%MOD2");
+    }
     m_pText->set_label(aText);
 
     // hyperlink
