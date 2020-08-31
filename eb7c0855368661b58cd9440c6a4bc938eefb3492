@@ -16,6 +16,24 @@
       "revId": "eb7c0855368661b58cd9440c6a4bc938eefb3492",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5cb646b_2e5150ca",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2728,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-08-31T12:00:46Z",
+      "side": 1,
+      "message": "\u003e there\u0027s another oddity here: it assumes that the *first* page\u0027s follow remains constant, the m_pCurrentPageDesc isn\u0027t updated AFAICS.\n\nYup - that is in follow-up patch tdf#132149 ww8export: respect ginormous paragraphs",
+      "parentUuid": "986556d8_7591abac",
+      "revId": "eb7c0855368661b58cd9440c6a4bc938eefb3492",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
