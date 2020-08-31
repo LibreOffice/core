@@ -16,6 +16,24 @@
       "revId": "b14538f2da3f12bdc43db80e0c94b579b1ca9b1a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "447f5f6c_8c05c4a2",
+        "filename": "xmloff/source/draw/animationimport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 929,
+      "author": {
+        "id": 1002376
+      },
+      "writtenOn": "2020-08-31T10:40:38Z",
+      "side": 1,
+      "message": "I don\u0027t know why but when the animation presets are being imported from sd/xml/effects.xml, they are imported in the ANIMATION_OOO namespace instead of ANIMATION namespace - so leaving out the ANIMATION_OOO causes a problem in there that\u0027s why i\u0027ve included it",
+      "parentUuid": "999ebedf_981c7d08",
+      "revId": "b14538f2da3f12bdc43db80e0c94b579b1ca9b1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
