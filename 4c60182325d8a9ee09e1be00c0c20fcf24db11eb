@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1fc6b7d8_6c26c963",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1369,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-08-31T10:39:13Z",
+      "side": 1,
+      "message": "unused code, it\u0027s better to remove in this patch",
+      "range": {
+        "startLine": 1364,
+        "startChar": 0,
+        "endLine": 1369,
+        "endChar": 66
+      },
+      "revId": "4c60182325d8a9ee09e1be00c0c20fcf24db11eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
