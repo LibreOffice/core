@@ -143,13 +143,16 @@ void SvXMLImportPropertyMapper::importXML(
     for (const css::xml::Attribute& rAttribute : unknownAttribs)
     {
         OUString aPrefix;
+        OUString aLocalName = rAttribute.Name;
         int nSepIndex = rAttribute.Name.indexOf(SvXMLImport::aNamespaceSeparator);
         if (nSepIndex != -1)
+        {
             aPrefix = rAttribute.Name.copy(0, nSepIndex);
-
+            aLocalName = rAttribute.Name.copy(nSepIndex+1);
+        }
         importXMLAttribute(rProperties, rUnitConverter, rNamespaceMap,
             nPropType, nStartIdx, nEndIdx, xAttrContainer,
-            aPrefix, rAttribute.Name, rAttribute.NamespaceURL, rAttribute.Value);
+            aPrefix, aLocalName, rAttribute.NamespaceURL, rAttribute.Value);
     }
 
     finished( rProperties, nStartIdx, nEndIdx );
