@@ -626,8 +626,17 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
 
             if ( bSigValid )
             {
-                 bSigValid = DocumentSignatureHelper::checkIfAllFilesAreSigned(
-                      aElementsToBeVerified, rInfo, mode);
+                if (maSignatureManager.mxStore.is())
+                {
+                    // XML based.
+                    bSigValid = DocumentSignatureHelper::checkIfAllFilesAreSigned(
+                          aElementsToBeVerified, rInfo, mode);
+                }
+                else
+                {
+                    // Assume PDF.
+                    bSigValid = !rInfo.bPartialDocumentSignature;
+                }
 
                 if( bSigValid )
                     nValidSigs++;
