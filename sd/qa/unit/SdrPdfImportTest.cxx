@@ -209,10 +209,12 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testAnnotationsImportExport)
         CPPUNIT_ASSERT_EQUAL(2, pPDFPage->getAnnotationCount());
 
         auto pPDFAnnotation1 = pPDFPage->getAnnotation(0);
-        CPPUNIT_ASSERT_EQUAL(1, pPDFAnnotation1->getSubType()); // Text annotation
+        CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Text,
+                             pPDFAnnotation1->getSubType()); // Text annotation
 
         auto pPDFAnnotation2 = pPDFPage->getAnnotation(1);
-        CPPUNIT_ASSERT_EQUAL(16, pPDFAnnotation2->getSubType()); // Pop-up annotation
+        CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Popup,
+                             pPDFAnnotation2->getSubType()); // Pop-up annotation
     }
 
     { // save as PDF and check annotations
@@ -243,10 +245,12 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testAnnotationsImportExport)
         CPPUNIT_ASSERT_EQUAL(2, pPDFPage->getAnnotationCount());
 
         auto pPDFAnnotation1 = pPDFPage->getAnnotation(0);
-        CPPUNIT_ASSERT_EQUAL(1, pPDFAnnotation1->getSubType()); // Text annotation
+        CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Text,
+                             pPDFAnnotation1->getSubType()); // Text annotation
 
         auto pPDFAnnotation2 = pPDFPage->getAnnotation(1);
-        CPPUNIT_ASSERT_EQUAL(16, pPDFAnnotation2->getSubType()); // Pop-up annotation
+        CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Popup,
+                             pPDFAnnotation2->getSubType()); // Pop-up annotation
 
         // Load document again
         mxComponent = loadFromDesktop(aTempFile.GetURL());
