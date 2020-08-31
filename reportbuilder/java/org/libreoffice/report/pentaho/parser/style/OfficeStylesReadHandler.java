@@ -87,9 +87,9 @@ public class OfficeStylesReadHandler extends ElementReadHandler
             return xrh;
         }
 
-        final SectionReadHandler genericReadHander = new SectionReadHandler();
-        otherStyleChildren.add(genericReadHander);
-        return genericReadHander;
+        final SectionReadHandler genericReadHandler = new SectionReadHandler();
+        otherStyleChildren.add(genericReadHandler);
+        return genericReadHandler;
     }
 
     /**
