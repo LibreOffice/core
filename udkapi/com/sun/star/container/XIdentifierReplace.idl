@@ -56,7 +56,7 @@ published interface XIdentifierReplace: com::sun::star::container::XIdentifierAc
             then wrap these in a com::sun::star::lang::WrappedTargetException
             exception.
      */
-    void replaceByIdentifer( [in] long Identifier,
+    void replaceByIdentifier( [in] long Identifier,
              [in] any aElement )
             raises( com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::container::NoSuchElementException,

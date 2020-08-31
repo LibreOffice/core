@@ -52,7 +52,7 @@ public:
     virtual void SAL_CALL removeByIdentifier( sal_Int32 Identifier ) override;
 
     // XIdentifierReplace
-    virtual void SAL_CALL replaceByIdentifer( sal_Int32 Identifier, const uno::Any& aElement ) override;
+    virtual void SAL_CALL replaceByIdentifier( sal_Int32 Identifier, const uno::Any& aElement ) override;
 
     // XIdentifierReplace
     virtual uno::Any SAL_CALL getByIdentifier( sal_Int32 Identifier ) override;
@@ -261,7 +261,7 @@ void SAL_CALL SvxUnoGluePointAccess::removeByIdentifier( sal_Int32 Identifier )
 }
 
 // XIdentifierReplace
-void SAL_CALL SvxUnoGluePointAccess::replaceByIdentifer( sal_Int32 Identifier, const uno::Any& aElement )
+void SAL_CALL SvxUnoGluePointAccess::replaceByIdentifier( sal_Int32 Identifier, const uno::Any& aElement )
 {
     if( !mpObject.is() )
         return;

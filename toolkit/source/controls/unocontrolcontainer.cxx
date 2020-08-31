@@ -478,7 +478,7 @@ void SAL_CALL UnoControlContainer::removeByIdentifier( ::sal_Int32 _nIdentifier 
     impl_removeControl( _nIdentifier, xControl );
 }
 
-void SAL_CALL UnoControlContainer::replaceByIdentifer( ::sal_Int32 _nIdentifier, const uno::Any& _rElement )
+void SAL_CALL UnoControlContainer::replaceByIdentifier( ::sal_Int32 _nIdentifier, const uno::Any& _rElement )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 

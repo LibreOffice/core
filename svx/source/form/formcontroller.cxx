@@ -1304,7 +1304,7 @@ bool FormController::replaceControl( const Reference< XControl >& _rxExistentCon
                 // carry over the model
                 _rxNewControl->setModel( _rxExistentControl->getModel() );
 
-                xContainer->replaceByIdentifer( *pIdentifiers, makeAny( _rxNewControl ) );
+                xContainer->replaceByIdentifier( *pIdentifiers, makeAny( _rxNewControl ) );
                 bSuccess = true;
 
                 if ( bReplacedWasActive )

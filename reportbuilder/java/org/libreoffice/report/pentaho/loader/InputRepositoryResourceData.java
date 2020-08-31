@@ -33,7 +33,7 @@ public class InputRepositoryResourceData extends AbstractResourceData
 
     private final InputRepository inputRepository;
     private final ResourceKey key;
-    private final String resourceIdentifer;
+    private final String resourceIdentifier;
 
     public InputRepositoryResourceData(final ResourceKey key,
             final InputRepository repository)
@@ -42,7 +42,7 @@ public class InputRepositoryResourceData extends AbstractResourceData
         this.inputRepository = repository;
         final InputResourceKey rkey = (InputResourceKey) key.getIdentifier();
         final String identifier = rkey.getPath();
-        this.resourceIdentifer = identifier.substring("sun:oo://".length());
+        this.resourceIdentifier = identifier.substring("sun:oo://".length());
     }
 
     public Object getAttribute(final String key)
@@ -61,16 +61,16 @@ public class InputRepositoryResourceData extends AbstractResourceData
     {
         try
         {
-            return inputRepository.createInputStream(resourceIdentifer);
+            return inputRepository.createInputStream(resourceIdentifier);
         }
         catch (IOException e)
         {
-            throw new ResourceLoadingException("Failed to create input stream for " + resourceIdentifer, e);
+            throw new ResourceLoadingException("Failed to create input stream for " + resourceIdentifier, e);
         }
     }
 
     public long getVersion(final ResourceManager caller)
     {
-        return inputRepository.getVersion(resourceIdentifer);
+        return inputRepository.getVersion(resourceIdentifier);
     }
 }

@@ -603,7 +603,7 @@ module com {
     };
     published interface XIdentifierReplace {
      interface ::com::sun::star::container::XIdentifierAccess;
-     void replaceByIdentifer([in] long Identifier, [in] any aElement) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException);
+     void replaceByIdentifier([in] long Identifier, [in] any aElement) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException);
     };
     published interface XIdentifierContainer {
      interface ::com::sun::star::container::XIdentifierReplace;

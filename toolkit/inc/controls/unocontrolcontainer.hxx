@@ -72,7 +72,7 @@ public:
 
     // css::container::XIdentifierReplace
     virtual void SAL_CALL removeByIdentifier( ::sal_Int32 Identifier ) override;
-    virtual void SAL_CALL replaceByIdentifer( ::sal_Int32 Identifier, const css::uno::Any& aElement ) override;
+    virtual void SAL_CALL replaceByIdentifier( ::sal_Int32 Identifier, const css::uno::Any& aElement ) override;
 
     // css::container::XIdentifierAccess
     virtual css::uno::Any SAL_CALL getByIdentifier( ::sal_Int32 Identifierr ) override;
