@@ -833,8 +833,11 @@ void SkiaSalGraphicsImpl::checkPendingDrawing()
         std::swap(polygons, mLastPolyPolygonInfo.polygons);
         double transparency = mLastPolyPolygonInfo.transparency;
         mLastPolyPolygonInfo.bounds.reset();
-        basegfx::B2DPolyPolygon merged = basegfx::utils::mergeToSinglePolyPolygon(polygons);
-        performDrawPolyPolygon(merged, transparency, true);
+        if (polygons.size() == 1)
+            performDrawPolyPolygon(polygons.front(), transparency, true);
+        else
+            performDrawPolyPolygon(basegfx::utils::mergeToSinglePolyPolygon(polygons), transparency,
+                                   true);
     }
 }
 
