@@ -132,6 +132,54 @@ void addPolyPolygonToPath(const basegfx::B2DPolyPolygon& rPolyPolygon, SkPath& r
     }
 }
 
+// Check if the given polygon contains a straight line. If not, it consists
+// solely of curves.
+bool polygonContainsLine(const basegfx::B2DPolyPolygon& rPolyPolygon)
+{
+    if (!rPolyPolygon.areControlPointsUsed())
+        return true; // no curves at all
+    for (const auto& rPolygon : rPolyPolygon)
+    {
+        const sal_uInt32 nPointCount(rPolygon.count());
+        bool bFirst = true;
+
+        const bool bClosePath(rPolygon.isClosed());
+
+        sal_uInt32 nCurrentIndex = 0;
+        sal_uInt32 nPreviousIndex = nPointCount - 1;
+
+        basegfx::B2DPoint aCurrentPoint;
+        basegfx::B2DPoint aPreviousPoint;
+
+        for (sal_uInt32 nIndex = 0; nIndex <= nPointCount; nIndex++)
+        {
+            if (nIndex == nPointCount && !bClosePath)
+                continue;
+
+            // Make sure we loop the last point to first point
+            nCurrentIndex = nIndex % nPointCount;
+            if (bFirst)
+                bFirst = false;
+            else
+            {
+                basegfx::B2DPoint aPreviousControlPoint
+                    = rPolygon.getNextControlPoint(nPreviousIndex);
+                basegfx::B2DPoint aCurrentControlPoint
+                    = rPolygon.getPrevControlPoint(nCurrentIndex);
+
+                if (aPreviousControlPoint.equal(aPreviousPoint)
+                    && aCurrentControlPoint.equal(aCurrentPoint))
+                {
+                    return true; // found a straight line
+                }
+            }
+            aPreviousPoint = aCurrentPoint;
+            nPreviousIndex = nCurrentIndex;
+        }
+    }
+    return false; // no straight line found
+}
+
 SkColor toSkColor(Color color)
 {
     return SkColorSetARGB(255 - color.GetTransparency(), color.GetRed(), color.GetGreen(),
@@ -817,6 +865,11 @@ bool SkiaSalGraphicsImpl::delayDrawPolyPolygon(const basegfx::B2DPolyPolygon& aP
     // Merge only simple polygons, real polypolygons most likely aren't needlessly split,
     // so they do not need joining.
     if (aPolyPolygon.count() != 1)
+        return false;
+    // If a polygon does not contain a straight line, i.e. it's all curves, then do not merge.
+    // First of all that's even more expensive, and second it's very unlikely that it's a polygon
+    // split into more polygons.
+    if (!polygonContainsLine(aPolyPolygon))
         return false;
 
     if (mLastPolyPolygonInfo.polygons.size() != 0
