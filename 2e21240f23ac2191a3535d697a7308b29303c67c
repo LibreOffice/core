@@ -22,6 +22,30 @@
       "revId": "2e21240f23ac2191a3535d697a7308b29303c67c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "095eba6c_2549adb7",
+        "filename": "include/rtl/string.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1912,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-08-31T06:32:48Z",
+      "side": 1,
+      "message": "oops, \u003chttps://gerrit.libreoffice.org/c/core/+/101689\u003e \"Fix typos in comments\"",
+      "parentUuid": "86041876_d4818a83",
+      "range": {
+        "startLine": 1912,
+        "startChar": 27,
+        "endLine": 1912,
+        "endChar": 60
+      },
+      "revId": "2e21240f23ac2191a3535d697a7308b29303c67c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
