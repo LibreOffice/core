@@ -226,7 +226,7 @@ void OLEHandler::importStream(const uno::Reference<uno::XComponentContext>& xCom
     uno::Reference<beans::XPropertySet> xPropertySet(xOLE, uno::UNO_QUERY);
     ::oox::ole::SaveInteropProperties(xTextDocument,
         xPropertySet->getPropertyValue("StreamName").get<OUString>(), &m_aURL,
-        m_sProgId, m_sDrawAspect);
+        m_sProgId);
 }
 
 OUString OLEHandler::getCLSID(const uno::Reference<uno::XComponentContext>& xComponentContext) const
@@ -302,7 +302,7 @@ OUString OLEHandler::copyOLEOStream(
                 }
             }
 
-            ::oox::ole::SaveInteropProperties(xTextDocument, aURL, nullptr, m_sProgId, m_sDrawAspect);
+            ::oox::ole::SaveInteropProperties(xTextDocument, aURL, nullptr, m_sProgId);
 
             OUString aPersistName( xEmbeddedResolver->resolveEmbeddedObjectURL( aURL ) );
             sRet = aPersistName.copy( strlen("vnd.sun.star.EmbeddedObject:") );
