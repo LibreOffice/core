@@ -708,7 +708,7 @@ namespace
             const OUString aQuote = xMetaData->getIdentifierQuoteString();
             const IParseContext& rContext = static_cast<OQueryController&>(_pView->getController()).getParser().getContext();
             // * must not contain a filter : have I already shown the correct warning ?
-            bool bCritsOnAsterikWarning = false;        // ** TMFS **
+            bool bCritsOnAsteriskWarning = false;        // ** TMFS **
 
             for (sal_uInt16 i=0 ; i < nMaxCriteria ; i++)
             {
@@ -728,14 +728,14 @@ namespace
                         if ( aFieldName.toChar() == '*' && field->isNoneFunction() )
                         {
                             // only show the messagebox the first time
-                            if (!bCritsOnAsterikWarning)
+                            if (!bCritsOnAsteriskWarning)
                             {
                                 std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(_pView->GetFrameWeld(),
                                                                           VclMessageType::Warning, VclButtonsType::Ok,
                                                                           DBA_RES(STR_QRY_CRITERIA_ON_ASTERISK)));
                                 xBox->run();
                             }
-                            bCritsOnAsterikWarning = true;
+                            bCritsOnAsteriskWarning = true;
                             continue;
                         }
                         aWork = quoteTableAlias(bMulti,field->GetAlias(),aQuote);
@@ -872,7 +872,7 @@ namespace
             Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
             OUString aQuote = xMetaData->getIdentifierQuoteString();
             // * must not contain filter - have I already shown the warning?
-            bool bCritsOnAsterikWarning = false;        // ** TMFS **
+            bool bCritsOnAsteriskWarning = false;        // ** TMFS **
             for (auto const& field : _rFieldList)
             {
                 EOrderDir eOrder = field->GetOrderDir();
@@ -884,14 +884,14 @@ namespace
                     if(aColumnName.toChar() == '*')
                     {
                         // only show the  MessageBox the first time
-                        if (!bCritsOnAsterikWarning)
+                        if (!bCritsOnAsteriskWarning)
                         {
                             std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(_pView->GetFrameWeld(),
                                                                       VclMessageType::Warning, VclButtonsType::Ok,
                                                                       DBA_RES(STR_QRY_ORDERBY_ON_ASTERISK)));
                             xBox->run();
                         }
-                        bCritsOnAsterikWarning = true;
+                        bCritsOnAsteriskWarning = true;
                         continue;
                     }
 
