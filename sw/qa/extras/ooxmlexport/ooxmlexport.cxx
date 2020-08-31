@@ -67,10 +67,10 @@ protected:
     }
 };
 
-DECLARE_OOXMLEXPORT_TEST(testfdo81381, "fdo81381.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo81381, "fdo81381.docx")
 {
-    if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:object[1]/o:OLEObject[1]", "DrawAspect", "Icon");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:object[1]/o:OLEObject[1]", "DrawAspect", "Icon");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSdtAlias, "sdt-alias.docx")
@@ -81,11 +81,11 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSdtAlias, "sdt-alias.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:alias", "val", "Subtitle");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFooterBodyDistance, "footer-body-distance.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFooterBodyDistance, "footer-body-distance.docx")
 {
-    if (xmlDocUniquePtr pXmlDoc = parseExport())
-        // Page break was exported as section break, this was 0
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:br", 1);
+    xmlDocUniquePtr pXmlDoc = parseExport();
+    // Page break was exported as section break, this was 0
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:br", 1);
 }
 
 // Check for correct header/footer with special first page with TOC inside:
@@ -149,21 +149,21 @@ DECLARE_OOXMLEXPORT_TEST(testfdo81031, "fdo81031.docx")
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(148), xBitmap->getSize().Height );
 }
 
-DECLARE_OOXMLEXPORT_TEST(testPlausableBorder, "plausable-border.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testPlausableBorder, "plausable-border.docx")
 {
     // sw::util::IsPlausableSingleWordSection() did not merge two page styles due to borders.
-    if (xmlDocUniquePtr pXmlDoc = parseExport())
-        // Page break was exported as section break, this was 0
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:br", 1);
+    xmlDocUniquePtr pXmlDoc = parseExport();
+    // Page break was exported as section break, this was 0
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:br", 1);
 
     CPPUNIT_ASSERT_EQUAL( 2, getPages() );
 }
 
-DECLARE_OOXMLEXPORT_TEST(testUnwantedSectionBreak, "unwanted-section-break.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testUnwantedSectionBreak, "unwanted-section-break.docx")
 {
-    if (xmlDocUniquePtr pXmlDoc = parseExport())
-        // This was 2: an additional sectPr was added to the document.
-        assertXPath(pXmlDoc, "//w:sectPr", 1);
+    xmlDocUniquePtr pXmlDoc = parseExport();
+    // This was 2: an additional sectPr was added to the document.
+    assertXPath(pXmlDoc, "//w:sectPr", 1);
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo80897 , "fdo80897.docx")
@@ -188,11 +188,11 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo80902, "fdo80902.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:docGrid", "type", "lines");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testParaShading, "para-shading.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testParaShading, "para-shading.docx")
 {
     // Make sure the themeColor attribute is not written when it would be empty.
-    if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
-        assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:shd", "themeColor");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:shd", "themeColor");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFirstHeaderFooter, "first-header-footer.docx")
@@ -233,16 +233,14 @@ DECLARE_OOXMLEXPORT_TEST(testfdo83428, "fdo83428.docx")
      CPPUNIT_ASSERT_EQUAL(OUString("Document"), getProperty<OUString>(xUDProps, "Testing"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testShapeInFloattable, "shape-in-floattable.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testShapeInFloattable, "shape-in-floattable.docx")
 {
-    if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
-    {
-        // No nested drawingML w:txbxContent.
-        assertXPath(pXmlDoc, "//mc:Choice//w:txbxContent//w:txbxContent", 0);
-        // Instead, make sure we have a separate shape and a table
-        assertXPath(pXmlDoc, "//mc:AlternateContent//mc:Choice[@Requires='wpg']", 1);
-        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl", 1);
-    }
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // No nested drawingML w:txbxContent.
+    assertXPath(pXmlDoc, "//mc:Choice//w:txbxContent//w:txbxContent", 0);
+    // Instead, make sure we have a separate shape and a table
+    assertXPath(pXmlDoc, "//mc:AlternateContent//mc:Choice[@Requires='wpg']", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl", 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testEmptyAnnotationMark, "empty-annotation-mark.docx")
@@ -306,25 +304,21 @@ DECLARE_OOXMLEXPORT_TEST(testTableAlignment, "table-alignment.docx")
     CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::RIGHT, getProperty<sal_Int16>(xTable, "HoriOrient"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testSdtIgnoredFooter, "sdt-ignored-footer.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSdtIgnoredFooter, "sdt-ignored-footer.docx")
 {
-    if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
-    {
-        // This was 1, make sure no w:sdt sneaks into the main document from the footer.
-        assertXPath(pXmlDoc, "//w:sdt", 0);
-    }
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // This was 1, make sure no w:sdt sneaks into the main document from the footer.
+    assertXPath(pXmlDoc, "//w:sdt", 0);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testSdtRunPicture, "sdt-run-picture.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSdtRunPicture, "sdt-run-picture.docx")
 {
     // SDT around run was exported as SDT around paragraph
-    if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
-    {
-        // This was 1: there was an SDT around w:p.
-        assertXPath(pXmlDoc, "//w:body/w:sdt", 0);
-        // This was 0: there were no SDT around w:r.
-        assertXPath(pXmlDoc, "//w:body/w:p/w:sdt", 1);
-    }
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // This was 1: there was an SDT around w:p.
+    assertXPath(pXmlDoc, "//w:body/w:sdt", 0);
+    // This was 0: there were no SDT around w:r.
+    assertXPath(pXmlDoc, "//w:body/w:p/w:sdt", 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testChartDupe, "chart-dupe.docx")
@@ -432,80 +426,69 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104713_undefinedStyles, "tdf104713_undefinedStyl
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Font size", 10.f, getProperty<float>(xStyle, "CharHeight"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testDrawingmlFlipv, "drawingml-flipv.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDrawingmlFlipv, "drawingml-flipv.docx")
 {
     // The problem was that the shape had vertical flip only, but then we added rotation as well on export.
-    if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
-        assertXPathNoAttribute(pXmlDoc, "//a:xfrm", "rot");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPathNoAttribute(pXmlDoc, "//a:xfrm", "rot");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testRot90Fliph, "rot90-fliph.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testRot90Fliph, "rot90-fliph.docx")
 {
     // The problem was that a shape rotation of 90° got turned into 270° after roundtrip.
-    if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
-    {
-        assertXPath(pXmlDoc, "//a:xfrm", "flipH", "1");
-        // This was 16200000 (270 * 60000).
-        assertXPath(pXmlDoc, "//a:xfrm", "rot", "5400000");
-    }
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "//a:xfrm", "flipH", "1");
+    // This was 16200000 (270 * 60000).
+    assertXPath(pXmlDoc, "//a:xfrm", "rot", "5400000");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testRot180Flipv, "rot180-flipv.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testRot180Flipv, "rot180-flipv.docx")
 {
     // 180° rotation got lost after roundtrip.
-    if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
-    {
-        assertXPath(pXmlDoc, "//a:xfrm", "flipV", "1");
-        // This attribute was completely missing.
-        assertXPath(pXmlDoc, "//a:xfrm", "rot", "10800000");
-    }
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "//a:xfrm", "flipV", "1");
+    // This attribute was completely missing.
+    assertXPath(pXmlDoc, "//a:xfrm", "rot", "10800000");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testRot270Flipv, "rot270-flipv.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testRot270Flipv, "rot270-flipv.docx")
 {
     // 270° rotation got turned into 90° after roundtrip.
-    if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
-    {
-        assertXPath(pXmlDoc, "//a:xfrm", "flipV", "1");
-        // This was 5400000.
-        assertXPath(pXmlDoc, "//a:xfrm", "rot", "16200000");
-    }
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "//a:xfrm", "flipV", "1");
+    // This was 5400000.
+    assertXPath(pXmlDoc, "//a:xfrm", "rot", "16200000");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testMsoPosition, "bnc884615-mso-position.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testMsoPosition, "bnc884615-mso-position.docx")
 {
-    if(xmlDocUniquePtr doc = parseExport("word/footer1.xml"))
-    {
-        // We write the frames out in different order than they were read, so check it's the correct
-        // textbox first by checking width. These tests may need reordering if that gets fixed.
-        OUString style1 = getXPath(doc, "/w:ftr/w:p/w:r[3]/mc:AlternateContent/mc:Fallback/w:pict/v:rect", "style");
-        CPPUNIT_ASSERT( style1.indexOf( ";width:531pt;" ) >= 0 );
-        CPPUNIT_ASSERT( style1.indexOf( ";mso-position-vertical-relative:page" ) >= 0 );
-        CPPUNIT_ASSERT( style1.indexOf( ";mso-position-horizontal-relative:page" ) >= 0 );
-        OUString style2 = getXPath(doc, "/w:ftr/w:p/w:r[4]/mc:AlternateContent/mc:Fallback/w:pict/v:rect", "style");
-        CPPUNIT_ASSERT( style2.indexOf( ";width:549pt;" ) >= 0 );
-        CPPUNIT_ASSERT( style2.indexOf( ";mso-position-vertical-relative:text" ) >= 0 );
-        CPPUNIT_ASSERT( style2.indexOf( ";mso-position-horizontal:center" ) >= 0 );
-        CPPUNIT_ASSERT( style2.indexOf( ";mso-position-horizontal-relative:text" ) >= 0 );
-        OUString style3 = getXPath(doc, "/w:ftr/w:p/w:r[5]/mc:AlternateContent/mc:Fallback/w:pict/v:rect", "style");
-        CPPUNIT_ASSERT( style3.indexOf( ";width:36pt;" ) >= 0 );
-        CPPUNIT_ASSERT( style3.indexOf( ";mso-position-horizontal-relative:text" ) >= 0 );
-        CPPUNIT_ASSERT( style3.indexOf( ";mso-position-vertical-relative:text" ) >= 0 );
-    }
+    xmlDocUniquePtr pXmlFooter = parseExport("word/footer1.xml");
+    // We write the frames out in different order than they were read, so check it's the correct
+    // textbox first by checking width. These tests may need reordering if that gets fixed.
+    OUString style1 = getXPath(pXmlFooter, "/w:ftr/w:p/w:r[3]/mc:AlternateContent/mc:Fallback/w:pict/v:rect", "style");
+    CPPUNIT_ASSERT( style1.indexOf( ";width:531pt;" ) >= 0 );
+    CPPUNIT_ASSERT( style1.indexOf( ";mso-position-vertical-relative:page" ) >= 0 );
+    CPPUNIT_ASSERT( style1.indexOf( ";mso-position-horizontal-relative:page" ) >= 0 );
+    OUString style2 = getXPath(pXmlFooter, "/w:ftr/w:p/w:r[4]/mc:AlternateContent/mc:Fallback/w:pict/v:rect", "style");
+    CPPUNIT_ASSERT( style2.indexOf( ";width:549pt;" ) >= 0 );
+    CPPUNIT_ASSERT( style2.indexOf( ";mso-position-vertical-relative:text" ) >= 0 );
+    CPPUNIT_ASSERT( style2.indexOf( ";mso-position-horizontal:center" ) >= 0 );
+    CPPUNIT_ASSERT( style2.indexOf( ";mso-position-horizontal-relative:text" ) >= 0 );
+    OUString style3 = getXPath(pXmlFooter, "/w:ftr/w:p/w:r[5]/mc:AlternateContent/mc:Fallback/w:pict/v:rect", "style");
+    CPPUNIT_ASSERT( style3.indexOf( ";width:36pt;" ) >= 0 );
+    CPPUNIT_ASSERT( style3.indexOf( ";mso-position-horizontal-relative:text" ) >= 0 );
+    CPPUNIT_ASSERT( style3.indexOf( ";mso-position-vertical-relative:text" ) >= 0 );
 
-    xmlDocUniquePtr doc = parseExport("word/header1.xml");
-    if(!doc)
-        return;
-
-    OUString style1 = getXPath(doc, "/w:hdr/w:p/w:r[2]/mc:AlternateContent/mc:Fallback/w:pict/v:rect", "style");
+    xmlDocUniquePtr pXmlHeader = parseExport("word/header1.xml");
+    style1 = getXPath(pXmlHeader, "/w:hdr/w:p/w:r[2]/mc:AlternateContent/mc:Fallback/w:pict/v:rect", "style");
     CPPUNIT_ASSERT( style1.indexOf( ";width:335.75pt;" ) >= 0 );
     CPPUNIT_ASSERT( style1.indexOf( ";mso-position-horizontal-relative:page" ) >= 0 );
     CPPUNIT_ASSERT( style1.indexOf( ";mso-position-vertical-relative:page" ) >= 0 );
-    OUString style2 = getXPath(doc, "/w:hdr/w:p/w:r[3]/mc:AlternateContent/mc:Fallback/w:pict/v:rect", "style");
+    style2 = getXPath(pXmlHeader, "/w:hdr/w:p/w:r[3]/mc:AlternateContent/mc:Fallback/w:pict/v:rect", "style");
     CPPUNIT_ASSERT( style2.indexOf( ";width:138.15pt;" ) >= 0 );
     CPPUNIT_ASSERT( style2.indexOf( ";mso-position-horizontal-relative:page" ) >= 0 );
     CPPUNIT_ASSERT( style2.indexOf( ";mso-position-vertical-relative:page" ) >= 0 );
-    OUString style3 = getXPath(doc, "/w:hdr/w:p/w:r[4]/mc:AlternateContent/mc:Fallback/w:pict/v:rect", "style");
+    style3 = getXPath(pXmlHeader, "/w:hdr/w:p/w:r[4]/mc:AlternateContent/mc:Fallback/w:pict/v:rect", "style");
     CPPUNIT_ASSERT( style3.indexOf( ";width:163.8pt;" ) >= 0 );
     CPPUNIT_ASSERT( style3.indexOf( ";mso-position-horizontal-relative:page" ) >= 0 );
     CPPUNIT_ASSERT( style3.indexOf( ";mso-position-vertical-relative:page" ) >= 0 );
@@ -587,39 +570,35 @@ DECLARE_OOXMLEXPORT_TEST(testTextboxTable, "textbox-table.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTables->getCount());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testCropPixel, "crop-pixel.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testCropPixel, "crop-pixel.docx")
 {
     // If map mode of the graphic is in pixels, then we used to handle original
     // size of the graphic as mm100, but it was in pixels.
-    if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
-    {
-        // This is 17667 in the original document, was 504666 (so the image
-        // become invisible), now is around 19072.
-        CPPUNIT_ASSERT(getXPath(pXmlDoc, "//a:srcRect", "l").toInt32() <= 22452);
-    }
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // This is 17667 in the original document, was 504666 (so the image
+    // become invisible), now is around 19072.
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "//a:srcRect", "l").toInt32() <= 22452);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testEffectExtent, "effect-extent.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testEffectExtent, "effect-extent.docx")
 {
     // The problem was that in case there were no shadows on the picture, we
     // wrote a <wp:effectExtent> full or zeros.
-    if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
-        // E.g. this was 0.
-        assertXPath(pXmlDoc, "//wp:effectExtent", "l", "114300");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // E.g. this was 0.
+    assertXPath(pXmlDoc, "//wp:effectExtent", "l", "114300");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testEffectExtentInline, "effect-extent-inline.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testEffectExtentInline, "effect-extent-inline.docx")
 {
     // The problem was that in case there was inline rotated picture, we
     // wrote a <wp:effectExtent> full or zeros.
-    if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
-    {
-        // E.g. this was 0.
-        assertXPath(pXmlDoc, "//wp:effectExtent", "l", "609600");
-        assertXPath(pXmlDoc, "//wp:effectExtent", "r", "590550");
-        assertXPath(pXmlDoc, "//wp:effectExtent", "t", "590550");
-        assertXPath(pXmlDoc, "//wp:effectExtent", "b", "571500");
-    }
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // E.g. this was 0.
+    assertXPath(pXmlDoc, "//wp:effectExtent", "l", "609600");
+    assertXPath(pXmlDoc, "//wp:effectExtent", "r", "590550");
+    assertXPath(pXmlDoc, "//wp:effectExtent", "t", "590550");
+    assertXPath(pXmlDoc, "//wp:effectExtent", "b", "571500");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testEm, "em.docx")
@@ -668,12 +647,12 @@ DECLARE_OOXMLEXPORT_TEST(testParagraphMark2, "paragraph-mark2.docx")
     CPPUNIT_ASSERT_EQUAL(10.f, getProperty<float>(getRun(getParagraph(1), 1), "CharHeight"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testParagraphMarkNonempty, "paragraph-mark-nonempty.odt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testParagraphMarkNonempty, "paragraph-mark-nonempty.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    if (xmlDocUniquePtr pXmlDoc = parseExport())
-        // There were two <w:sz> elements, make sure the 40 one is dropped and the 20 one is kept.
-        assertXPath(pXmlDoc, "//w:p/w:pPr/w:rPr/w:sz", "val", "20");
+    xmlDocUniquePtr pXmlDoc = parseExport();
+    // There were two <w:sz> elements, make sure the 40 one is dropped and the 20 one is kept.
+    assertXPath(pXmlDoc, "//w:p/w:pPr/w:rPr/w:sz", "val", "20");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testPageBreakBefore, "page-break-before.docx")
@@ -982,7 +961,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf44986, "tdf44986.docx")
     CPPUNIT_ASSERT_EQUAL(OUString(""), uno::Reference<text::XTextRange>(xTable->getCellByName("B1"), uno::UNO_QUERY_THROW)->getString());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf118682, "tdf118682.fodt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf118682, "tdf118682.fodt")
 {
     // Support cell references in table formulas
     xmlDocUniquePtr pXmlDoc = parseExport();
@@ -996,7 +975,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf118682, "tdf118682.fodt")
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r[2]/w:instrText", " =SUM(A1:A3)");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf133163, "tdf133163.fodt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf133163, "tdf133163.fodt")
 {
     xmlDocUniquePtr pXmlDoc = parseExport();
 
@@ -1009,11 +988,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf133163, "tdf133163.fodt")
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r[2]/w:instrText", " =SUM(A1:A3)");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf133647, "tdf133647.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf133647, "tdf133647.docx")
 {
     xmlDocUniquePtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
 
     // Keep original formula during round-trip
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc[4]/w:p/w:r[2]/w:instrText", " =SUM(A1,B1)");
@@ -1026,11 +1003,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf133647, "tdf133647.docx")
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[11]/w:tc[4]/w:p/w:r[2]/w:instrText", " =sum(a1,b1)");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf123386, "tdf123386.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf123386, "tdf123386.docx")
 {
     xmlDocUniquePtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
 
     // Keep original formula during round-trip
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc[4]/w:p/w:r[2]/w:instrText", " =A1 < 2");
@@ -1045,11 +1020,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123386, "tdf123386.docx")
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[12]/w:tc[4]/w:p/w:r[2]/w:instrText", " =AND(1,DEFINED(ABC1))");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf123389, "tdf123389.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf123389, "tdf123389.docx")
 {
     xmlDocUniquePtr pXmlDoc = parseExport();
-    if (!pXmlDoc)
-        return;
 
     // Keep original formula during round-trip
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc[4]/w:p/w:r[2]/w:instrText", " =ROUND(2.345,1)");
