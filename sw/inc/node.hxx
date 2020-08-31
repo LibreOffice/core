@@ -551,7 +551,7 @@ public:
 
     /** Method deletes all views of document for the node. The
      content frames are removed from the respective layout. */
-    void DelFrames(SwRootFrame const* pLayout = nullptr);
+    void DelFrames(SwRootFrame const* pLayout = nullptr, bool bForce = false);
 
     /** Method creates all views of document for the previous node.
        The content frames created are put into the respective layout. */
