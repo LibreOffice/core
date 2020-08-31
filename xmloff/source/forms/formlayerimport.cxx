@@ -73,9 +73,9 @@ namespace xmloff
         return m_pImpl->createContext(_nPrefix, _rLocalName, _rxAttribs);
     }
 
-    void OFormLayerXMLImport::applyControlNumberStyle(const Reference< XPropertySet >& _rxControlModel, const OUString& _rControlNumerStyleName)
+    void OFormLayerXMLImport::applyControlNumberStyle(const Reference< XPropertySet >& _rxControlModel, const OUString& _rControlNumberStyleName)
     {
-        m_pImpl->applyControlNumberStyle(_rxControlModel, _rControlNumerStyleName);
+        m_pImpl->applyControlNumberStyle(_rxControlModel, _rControlNumberStyleName);
     }
 
     void OFormLayerXMLImport::documentDone( )

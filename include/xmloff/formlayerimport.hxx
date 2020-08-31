@@ -109,12 +109,12 @@ namespace xmloff
         /** sets the given number style on the given control
             @param _rxControlModel
                 the control model which's style is to be set
-            @param _rControlNumerStyleName
+            @param _rControlNumberStyleName
                 the style name for the control's number style
         */
         void applyControlNumberStyle(
             const css::uno::Reference< css::beans::XPropertySet >& _rxControlModel,
-            const OUString& _rControlNumerStyleName
+            const OUString& _rControlNumberStyleName
         );
 
         /** to be called when the document has been completely imported
