@@ -299,7 +299,7 @@ public:
      */
     Box2DBodySharedPtr makeShapeStatic(const slideshow::internal::ShapeSharedPtr& pShape);
 
-    /** Create a static body that represeted by the shape's geometry
+    /** Create a static body that is represented by the shape's geometry
 
         @return pointer to the box2d body
      */
@@ -325,20 +325,20 @@ public:
                                    const ::basegfx::B2DVector& rVelocity,
                                    const int nDelayForSteps = 0);
 
-    /// Queue an appropraite update for the animation effect that is in parallel with a physics animation
+    /// Queue an appropriate update for the animation effect that is in parallel with a physics animation
     void
     queueShapeAnimationUpdate(const css::uno::Reference<css::drawing::XShape>& xShape,
                               const slideshow::internal::ShapeAttributeLayerSharedPtr& pAttrLayer,
                               const slideshow::internal::AttributeType eAttrType,
                               const bool bIsFirstUpdate);
 
-    /// Queue an appropraite update for a path animation that is in parallel with a physics animation
+    /// Queue an appropriate update for a path animation that is in parallel with a physics animation
     void queueShapePathAnimationUpdate(
         const css::uno::Reference<com::sun::star::drawing::XShape>& xShape,
         const slideshow::internal::ShapeAttributeLayerSharedPtr& pAttrLayer,
         const bool bIsFirstUpdate);
 
-    /// Queue an appropraite update for the animation effect that just ended
+    /// Queue an appropriate update for the animation effect that just ended
     void queueShapeAnimationEndUpdate(const css::uno::Reference<css::drawing::XShape>& xShape,
                                       const slideshow::internal::AttributeType eAttrType);
 

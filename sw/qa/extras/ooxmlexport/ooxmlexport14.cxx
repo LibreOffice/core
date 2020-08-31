@@ -1266,7 +1266,7 @@ DECLARE_OOXMLEXPORT_TEST(testRelativeAnchorHeightFromTopMarginNoHeader,
 
 DECLARE_OOXMLEXPORT_TEST(testVmlShapeTextWordWrap, "tdf97618_testVmlShapeTextWordWrap.docx")
 {
-    // tdf#97618 The text wraping of a shape was not handled in a canvas.
+    // tdf#97618 The text wrapping of a shape was not handled in a canvas.
     // TODO: fix export too
     if (mbExported)
         return;
