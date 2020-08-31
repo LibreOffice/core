@@ -2107,7 +2107,8 @@ void SwWrtShell::ToggleOutlineContentVisibility(size_t nPos, bool bForceFold)
         }
         pSttNd->GetTextNode()->SetAttrOutlineContentVisible(false);
     }
-    GetView().GetEditWin().Invalidate();
+    GetView().GetEditWin().Invalidate(InvalidateFlags::Update);
+    GetDoc()->GetDocShell()->Broadcast(SfxHint(SfxHintId::DocChanged));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
