@@ -172,7 +172,7 @@ public:
     static void getAxisOrGridPossibilities( css::uno::Sequence< sal_Bool >& rPossibilityList
         , const css::uno::Reference< css::chart2::XDiagram>& xDiagram, bool bAxis=true );
 
-    static void getAxisOrGridExcistence( css::uno::Sequence< sal_Bool >& rExcistenceList
+    static void getAxisOrGridExistence( css::uno::Sequence< sal_Bool >& rExistenceList
         , const css::uno::Reference< css::chart2::XDiagram>& xDiagram, bool bAxis=true );
 
     static bool changeVisibilityOfGrids( const css::uno::Reference< css::chart2::XDiagram>& xDiagram
