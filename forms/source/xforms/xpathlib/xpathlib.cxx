@@ -74,11 +74,11 @@ xmlXPathFunction xforms_lookupFunc(void *, const xmlChar *xname, const xmlChar *
     else if ((strcmp("seconds-from-dateTime", name))==0)
         return xforms_secondsFromDateTimeFunction;
     else if ((strcmp("seconds", name))==0)
-        return xforms_secondsFuction;
+        return xforms_secondsFunction;
     else if ((strcmp("months", name))==0)
-        return xforms_monthsFuction;
+        return xforms_monthsFunction;
     else if ((strcmp("instance", name))==0)
-        return xforms_instanceFuction;
+        return xforms_instanceFunction;
     else if ((strcmp("current", name))==0)
         return xforms_currentFunction;
     else
@@ -417,7 +417,7 @@ static bool parseDuration(const xmlChar* aString, bool& bNegative, sal_Int32& nY
     return true;
 }
 
-void xforms_secondsFuction(xmlXPathParserContextPtr ctxt, int nargs)
+void xforms_secondsFunction(xmlXPathParserContextPtr ctxt, int nargs)
 {
     // convert a xsd:duration to seconds
     // (-)PnYnMnDTnHnMnS
@@ -447,7 +447,7 @@ void xforms_secondsFuction(xmlXPathParserContextPtr ctxt, int nargs)
         xmlXPathReturnNumber(ctxt, xmlXPathNAN);
 }
 
-void xforms_monthsFuction(xmlXPathParserContextPtr ctxt, int nargs)
+void xforms_monthsFunction(xmlXPathParserContextPtr ctxt, int nargs)
 {
     // convert a xsd:duration to seconds
     // (-)PnYnMnDTnHnMnS
@@ -477,7 +477,7 @@ void xforms_monthsFuction(xmlXPathParserContextPtr ctxt, int nargs)
 }
 
 // Node-set Functions
-void xforms_instanceFuction(xmlXPathParserContextPtr ctxt, int nargs)
+void xforms_instanceFunction(xmlXPathParserContextPtr ctxt, int nargs)
 {
     if (nargs != 1) XP_ERROR(XPATH_INVALID_ARITY);
     xmlChar *pString = xmlXPathPopString(ctxt);
