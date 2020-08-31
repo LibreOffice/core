@@ -855,7 +855,7 @@ static bool performSequenceTest(XBridgeTest xBT)
 }
 /** Test the System::Object method on the proxy object
  */
-static bool testObjectMethodsImplemention(XBridgeTest xLBT)
+static bool testObjectMethodsImplementetion(XBridgeTest xLBT)
 {
     bool ret = false;
     Object obj = new Object();
@@ -970,7 +970,7 @@ static bool raiseException(XBridgeTest xLBT )
        bRet = check( performTest( xLBT ), "standard test" ) && bRet;
        bRet = check( raiseException( xLBT ) , "exception test" )&& bRet;
        bRet = check( raiseOnewayException( xLBT ), "oneway exception test" ) && bRet;
-       bRet = check( testObjectMethodsImplemention(xLBT), "object methods test") && bRet;
+       bRet = check( testObjectMethodsImplementetion(xLBT), "object methods test") && bRet;
        bRet = performQueryForUnknownType( xLBT ) && bRet;
         if ( ! bRet)
         {

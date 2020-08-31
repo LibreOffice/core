@@ -766,7 +766,7 @@ Public Class BridgeTest
 
     'Test the System::Object method on the proxy object
     '
-    Private Shared Function testObjectMethodsImplemention(xLBT As XBridgeTest) As Boolean
+    Private Shared Function testObjectMethodsImplementation(xLBT As XBridgeTest) As Boolean
         Dim ret As Boolean = False
         Dim obj As Object = New Object
 	    Dim xInt As Object = DirectCast(xLBT, Object) 
@@ -807,7 +807,7 @@ Public Class BridgeTest
         bRet = check( raiseException( xLBT ) , "exception test" ) And bRet
         bRet = check( raiseOnewayException( xLBT ), "oneway exception test" ) _
                And bRet
-        bRet = check( testObjectMethodsImplemention(xLBT), _ 
+        bRet = check( testObjectMethodsImplementation(xLBT), _ 
                "object methods test") And bRet
         bRet = performQueryForUnknownType( xLBT ) And bRet
         If  Not bRet
