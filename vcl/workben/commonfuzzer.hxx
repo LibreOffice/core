@@ -42,9 +42,9 @@ namespace
         if (osl_getExecutableFile(&uri.pData) != osl_Process_E_None) {
             abort();
         }
-        sal_Int32 lastDirSeperatorPos = uri.lastIndexOf('/');
-        if (lastDirSeperatorPos >= 0) {
-            uri = uri.copy(0, lastDirSeperatorPos + 1);
+        sal_Int32 lastDirSeparatorPos = uri.lastIndexOf('/');
+        if (lastDirSeparatorPos >= 0) {
+            uri = uri.copy(0, lastDirSeparatorPos + 1);
         }
         return uri;
     }
