@@ -444,11 +444,16 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
     SfxLokHelper::notifyDocumentSizeChanged(aViewData.GetViewShell(), sSize, pModel, false);
 }
 
-static bool lcl_IsScSimpleRefDlgOpen(SfxViewFrame* pViewFrm)
+static bool lcl_IsRefDlgOpen(SfxViewFrame* pViewFrm)
 {
-    if (pViewFrm->HasChildWindow(WID_SIMPLE_REF))
+    ScModule* pScMod = SC_MOD();
+    if (!pScMod->IsRefDialogOpen())
+       return false;
+
+    auto nDlgId = pScMod->GetCurRefDlgId();
+    if (pViewFrm->HasChildWindow(nDlgId))
     {
-        SfxChildWindow* pChild = pViewFrm->GetChildWindow(WID_SIMPLE_REF);
+        SfxChildWindow* pChild = pViewFrm->GetChildWindow(nDlgId);
         if (pChild)
         {
             auto xDlgController = pChild->GetController();
@@ -478,10 +483,10 @@ void ScTabView::CheckSelectionTransfer()
 
     pScMod->SetSelectionTransfer( pNew.get() );
 
-    // tdf#124975 changing the calc selection can trigger removal of the
-    // selection of an open ScSimpleRefDlg dialog, so don't inform the
+    // tdf#124975/tdf#136242 changing the calc selection can trigger removal of the
+    // selection of an open RefDlg dialog, so don't inform the
     // desktop clipboard of the changed selection if that dialog is open
-    if (!lcl_IsScSimpleRefDlgOpen(aViewData.GetViewShell()->GetViewFrame()))
+    if (!lcl_IsRefDlgOpen(aViewData.GetViewShell()->GetViewFrame()))
         pNew->CopyToSelection( GetActiveWin() );                    // may delete pOld
 
     // Log the selection change
