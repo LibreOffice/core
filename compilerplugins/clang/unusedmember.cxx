@@ -21,6 +21,7 @@
 #include "config_clang.h"
 
 #include "check.hxx"
+#include "compat.hxx"
 #include "plugin.hxx"
 
 namespace
@@ -289,7 +290,7 @@ public:
             return true;
         }
         auto const t1 = expr->getType();
-        auto const t2 = expr->getSubExprAsWritten()->getType();
+        auto const t2 = compat::getSubExprAsWritten(expr)->getType();
         if (loplugin::TypeCheck(t1).Pointer().Void())
         {
             recordCastedRecordDecl(t2);

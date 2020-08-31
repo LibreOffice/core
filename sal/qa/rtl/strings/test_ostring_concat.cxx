@@ -68,9 +68,9 @@ void test::ostring::StringConcat::checkConcat()
     CPPUNIT_ASSERT_EQUAL( OString( "foobar" ), OString( OStringBuffer( "foo" ) + "bar" ));
     CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OStringBuffer, const char[ 4 ] > )), typeid( OStringBuffer( "foo" ) + "bar" ));
     CPPUNIT_ASSERT_EQUAL( OString( "foobar" ), OString( OStringLiteral( "foo" ) + "bar" ));
-    CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OStringLiteral, const char[ 4 ] > )), typeid( OStringLiteral( "foo" ) + "bar" ));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OStringLiteral<4>, const char[ 4 ] > )), typeid( OStringLiteral( "foo" ) + "bar" ));
     CPPUNIT_ASSERT_EQUAL( OString( "foobar" ), OString( OStringLiteral( "foo" ) + static_cast<const char*>("bar") ));
-    CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OStringLiteral, const char* > )), typeid( OStringLiteral( "foo" ) + static_cast<const char*>("bar") ));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OStringLiteral<4>, const char* > )), typeid( OStringLiteral( "foo" ) + static_cast<const char*>("bar") ));
     const char d1[] = "xyz";
     char d2[] = "abc";
     const char* d3 = d1;
