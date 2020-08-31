@@ -85,12 +85,12 @@ namespace svt
             return selectedDataSource;
         }
 
-    // = IAssigmentData
+    // = IAssignmentData
 
-    class IAssigmentData
+    class IAssignmentData
     {
     public:
-        virtual ~IAssigmentData();
+        virtual ~IAssignmentData();
 
         /// the data source to use for the address book
         virtual OUString getDatasourceName() const = 0;
@@ -112,16 +112,16 @@ namespace svt
 
     }
 
-    IAssigmentData::~IAssigmentData()
+    IAssignmentData::~IAssignmentData()
     {
     }
 
 
-    // = AssigmentTransientData
+    // = AssignmentTransientData
 
     namespace {
 
-    class AssigmentTransientData : public IAssigmentData
+    class AssignmentTransientData : public IAssignmentData
     {
     protected:
         OUString             m_sDSName;
@@ -129,13 +129,13 @@ namespace svt
         MapString2String     m_aAliases;
 
     public:
-        AssigmentTransientData(
+        AssignmentTransientData(
             const OUString& _rDataSourceName,
             const OUString& _rTableName,
             const Sequence< AliasProgrammaticPair >& _rFields
         );
 
-        // IAssigmentData overridables
+        // IAssignmentData overridables
         virtual OUString getDatasourceName() const override;
         virtual OUString getCommand() const override;
 
@@ -149,7 +149,7 @@ namespace svt
 
     }
 
-    AssigmentTransientData::AssigmentTransientData(
+    AssignmentTransientData::AssignmentTransientData(
             const OUString& _rDataSourceName, const OUString& _rTableName,
             const Sequence< AliasProgrammaticPair >& _rFields )
         :m_sDSName( _rDataSourceName )
@@ -177,26 +177,26 @@ namespace svt
             }
             else
             {
-                SAL_WARN( "svtools", "AssigmentTransientData::AssigmentTransientData: unknown programmatic name: "
+                SAL_WARN( "svtools", "AssignmentTransientData::AssignmentTransientData: unknown programmatic name: "
                           << rField.ProgrammaticName );
             }
         }
     }
 
 
-    OUString AssigmentTransientData::getDatasourceName() const
+    OUString AssignmentTransientData::getDatasourceName() const
     {
         return m_sDSName;
     }
 
 
-    OUString AssigmentTransientData::getCommand() const
+    OUString AssignmentTransientData::getCommand() const
     {
         return m_sTableName;
     }
 
 
-    bool AssigmentTransientData::hasFieldAssignment(const OUString& _rLogicalName)
+    bool AssignmentTransientData::hasFieldAssignment(const OUString& _rLogicalName)
     {
         MapString2String::const_iterator aPos = m_aAliases.find( _rLogicalName );
         return  ( m_aAliases.end() != aPos )
@@ -204,7 +204,7 @@ namespace svt
     }
 
 
-    OUString AssigmentTransientData::getFieldAssignment(const OUString& _rLogicalName)
+    OUString AssignmentTransientData::getFieldAssignment(const OUString& _rLogicalName)
     {
         OUString sReturn;
         MapString2String::const_iterator aPos = m_aAliases.find( _rLogicalName );
@@ -215,21 +215,21 @@ namespace svt
     }
 
 
-    void AssigmentTransientData::setFieldAssignment(const OUString& _rLogicalName, const OUString& _rAssignment)
+    void AssignmentTransientData::setFieldAssignment(const OUString& _rLogicalName, const OUString& _rAssignment)
     {
         m_aAliases[ _rLogicalName ] = _rAssignment;
     }
 
 
-    void AssigmentTransientData::setDatasourceName(const OUString&)
+    void AssignmentTransientData::setDatasourceName(const OUString&)
     {
-        OSL_FAIL( "AssigmentTransientData::setDatasourceName: cannot be implemented for transient data!" );
+        OSL_FAIL( "AssignmentTransientData::setDatasourceName: cannot be implemented for transient data!" );
     }
 
 
-    void AssigmentTransientData::setCommand(const OUString&)
+    void AssignmentTransientData::setCommand(const OUString&)
     {
-        OSL_FAIL( "AssigmentTransientData::setCommand: cannot be implemented for transient data!" );
+        OSL_FAIL( "AssignmentTransientData::setCommand: cannot be implemented for transient data!" );
     }
 
 
@@ -239,7 +239,7 @@ namespace svt
 
     class AssignmentPersistentData
             :public ::utl::ConfigItem
-            ,public IAssigmentData
+            ,public IAssignmentData
     {
     protected:
         StringBag       m_aStoredFields;
@@ -255,7 +255,7 @@ namespace svt
     public:
         AssignmentPersistentData();
 
-        // IAssigmentData overridables
+        // IAssignmentData overridables
         virtual OUString getDatasourceName() const override;
         virtual OUString getCommand() const override;
 
@@ -435,7 +435,7 @@ void AssignmentPersistentData::ImplCommit()
         /// the logical field names
         std::vector<OUString>     aLogicalFieldNames;
 
-        std::unique_ptr<IAssigmentData> pConfigData;
+        std::unique_ptr<IAssignmentData> pConfigData;
 
 
         AddressBookSourceDialogData( )
@@ -456,7 +456,7 @@ void AssignmentPersistentData::ImplCommit()
             ,nFieldScrollPos(0)
             ,bOddFieldNumber(false)
             ,bWorkingPersistent( false )
-            ,pConfigData( new AssigmentTransientData( _rDataSourceName, _rTableName, _rFields ) )
+            ,pConfigData( new AssignmentTransientData( _rDataSourceName, _rTableName, _rFields ) )
         {
         }
 
