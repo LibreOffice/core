@@ -658,7 +658,7 @@ void LocalizationMgr::handleRemoveLocales( const Sequence< Locale >& aLocaleSeq 
 {
     const Locale* pLocales = aLocaleSeq.getConstArray();
     sal_Int32 nLocaleCount = aLocaleSeq.getLength();
-    bool bConsistant = true;
+    bool bConsistent = true;
     bool bModified = false;
 
     for( sal_Int32 i = 0 ; i < nLocaleCount ; i++ )
@@ -678,7 +678,7 @@ void LocalizationMgr::handleRemoveLocales( const Sequence< Locale >& aLocaleSeq 
             else
             {
                 // Inconsistency, keep last locale
-                bConsistant = false;
+                bConsistent = false;
                 bRemove = false;
             }
         }
@@ -692,7 +692,7 @@ void LocalizationMgr::handleRemoveLocales( const Sequence< Locale >& aLocaleSeq 
             }
             catch(const IllegalArgumentException&)
             {
-                bConsistant = false;
+                bConsistent = false;
             }
         }
     }
@@ -710,7 +710,7 @@ void LocalizationMgr::handleRemoveLocales( const Sequence< Locale >& aLocaleSeq 
         handleTranslationbar();
     }
 
-    DBG_ASSERT( bConsistant,
+    DBG_ASSERT( bConsistent,
         "LocalizationMgr::handleRemoveLocales(): sequence contains unsupported locales" );
 }
 
