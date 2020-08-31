@@ -489,14 +489,12 @@ DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("RenderedShapes"), nValue); // Rendered bitmap has the proper name
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFontNameIsEmpty, "font-name-is-empty.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFontNameIsEmpty, "font-name-is-empty.docx")
 {
     // Check no empty font name is exported
     // This test does not fail, if the document contains a font with empty name.
 
     xmlDocUniquePtr pXmlFontTable = parseExport("word/fontTable.xml");
-    if (!pXmlFontTable)
-        return;
     xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlFontTable, "/w:fonts/w:font");
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     sal_Int32 length = xmlXPathNodeSetGetLength(pXmlNodes);
@@ -1109,14 +1107,12 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testArrowMarker, "tdf123346_ArrowMarker.docx
         "/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:tailEnd", "type", "arrow");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testShapeLineWidth, "tdf92526_ShapeLineWidth.odt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testShapeLineWidth, "tdf92526_ShapeLineWidth.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // tdf#92526: Make sure that line with stays 0.
     xmlDocUniquePtr pXml = parseExport("word/document.xml");
-    if (!pXml)
-        return;
 
     // "w" attribute was not exported.
     assertXPath(pXml, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing"
