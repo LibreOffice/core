@@ -1387,7 +1387,7 @@ void CallbackFlushHandler::callback(const int type, const char* payload, void* d
 
 void CallbackFlushHandler::queue(const int type, const char* data)
 {
-    comphelper::ProfileZone aZone("CallbackFlushHander::queue");
+    comphelper::ProfileZone aZone("CallbackFlushHandler::queue");
 
     CallbackData aCallbackData(type, (data ? data : "(nil)"));
     const std::string& payload = aCallbackData.PayloadString;
@@ -1945,7 +1945,7 @@ bool CallbackFlushHandler::processWindowEvent(CallbackData& aCallbackData)
 
 void CallbackFlushHandler::Invoke()
 {
-    comphelper::ProfileZone aZone("CallbackFlushHander::Invoke");
+    comphelper::ProfileZone aZone("CallbackFlushHandler::Invoke");
 
     if (!m_pCallback)
         return;

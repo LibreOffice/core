@@ -61,13 +61,13 @@ const unsigned int SELECTION_WITH_NUM = 10;
 
 namespace {
 
-class SwAccTableSelHander_Impl
+class SwAccTableSelHandler_Impl
 {
 public:
     virtual void Unselect( sal_Int32 nRowOrCol, sal_Int32 nExt ) = 0;
 
 protected:
-    ~SwAccTableSelHander_Impl() {}
+    ~SwAccTableSelHandler_Impl() {}
 };
 
 }
@@ -89,7 +89,7 @@ class SwAccessibleTableData_Impl
 
     void GetSelection( const Point& rTabPos, const SwRect& rArea,
                        const SwSelBoxes& rSelBoxes, const SwFrame *pFrame,
-                       SwAccTableSelHander_Impl& rSelHdl,
+                       SwAccTableSelHandler_Impl& rSelHdl,
                        bool bColumns ) const;
 
     // #i77106#
@@ -121,7 +121,7 @@ public:
 
     void GetSelection( sal_Int32 nStart, sal_Int32 nEnd,
                        const SwSelBoxes& rSelBoxes,
-                          SwAccTableSelHander_Impl& rSelHdl,
+                          SwAccTableSelHandler_Impl& rSelHdl,
                        bool bColumns ) const;
 
     /// @throws lang::IndexOutOfBoundsException
@@ -220,7 +220,7 @@ void SwAccessibleTableData_Impl::GetSelection(
             const SwRect& rArea,
             const SwSelBoxes& rSelBoxes,
             const SwFrame *pFrame,
-            SwAccTableSelHander_Impl& rSelHdl,
+            SwAccTableSelHandler_Impl& rSelHdl,
             bool bColumns ) const
 {
     const SwAccessibleChildSList aList( *pFrame, mrAccMap );
@@ -296,7 +296,7 @@ const SwFrame *SwAccessibleTableData_Impl::GetCell(
 void SwAccessibleTableData_Impl::GetSelection(
                        sal_Int32 nStart, sal_Int32 nEnd,
                        const SwSelBoxes& rSelBoxes,
-                          SwAccTableSelHander_Impl& rSelHdl,
+                          SwAccTableSelHandler_Impl& rSelHdl,
                        bool bColumns ) const
 {
     SwRect aArea( mpTabFrame->getFrameArea() );
@@ -410,15 +410,15 @@ void SwAccessibleTableData_Impl::CheckRowAndCol(
 
 namespace {
 
-class SwAccSingleTableSelHander_Impl : public SwAccTableSelHander_Impl
+class SwAccSingleTableSelHandler_Impl : public SwAccTableSelHandler_Impl
 {
     bool m_bSelected;
 
 public:
 
-    inline SwAccSingleTableSelHander_Impl();
+    inline SwAccSingleTableSelHandler_Impl();
 
-    virtual ~SwAccSingleTableSelHander_Impl() {}
+    virtual ~SwAccSingleTableSelHandler_Impl() {}
 
     bool IsSelected() const { return m_bSelected; }
 
@@ -427,26 +427,26 @@ public:
 
 }
 
-inline SwAccSingleTableSelHander_Impl::SwAccSingleTableSelHander_Impl() :
+inline SwAccSingleTableSelHandler_Impl::SwAccSingleTableSelHandler_Impl() :
     m_bSelected( true )
 {
 }
 
-void SwAccSingleTableSelHander_Impl::Unselect( sal_Int32, sal_Int32 )
+void SwAccSingleTableSelHandler_Impl::Unselect( sal_Int32, sal_Int32 )
 {
     m_bSelected = false;
 }
 
 namespace {
 
-class SwAccAllTableSelHander_Impl : public SwAccTableSelHander_Impl
+class SwAccAllTableSelHandler_Impl : public SwAccTableSelHandler_Impl
 
 {
     std::vector< bool > m_aSelected;
     sal_Int32 m_nCount;
 
 public:
-    explicit SwAccAllTableSelHander_Impl(sal_Int32 nSize)
+    explicit SwAccAllTableSelHandler_Impl(sal_Int32 nSize)
         : m_aSelected(nSize, true)
         , m_nCount(nSize)
     {
@@ -455,16 +455,16 @@ public:
     uno::Sequence < sal_Int32 > GetSelSequence();
 
     virtual void Unselect( sal_Int32 nRowOrCol, sal_Int32 nExt ) override;
-    virtual ~SwAccAllTableSelHander_Impl();
+    virtual ~SwAccAllTableSelHandler_Impl();
 };
 
 }
 
-SwAccAllTableSelHander_Impl::~SwAccAllTableSelHander_Impl()
+SwAccAllTableSelHandler_Impl::~SwAccAllTableSelHandler_Impl()
 {
 }
 
-uno::Sequence < sal_Int32 > SwAccAllTableSelHander_Impl::GetSelSequence()
+uno::Sequence < sal_Int32 > SwAccAllTableSelHandler_Impl::GetSelSequence()
 {
     OSL_ENSURE( m_nCount >= 0, "underflow" );
     uno::Sequence < sal_Int32 > aRet( m_nCount );
@@ -485,7 +485,7 @@ uno::Sequence < sal_Int32 > SwAccAllTableSelHander_Impl::GetSelSequence()
     return aRet;
 }
 
-void SwAccAllTableSelHander_Impl::Unselect( sal_Int32 nRowOrCol,
+void SwAccAllTableSelHandler_Impl::Unselect( sal_Int32 nRowOrCol,
                                             sal_Int32 nExt )
 {
     OSL_ENSURE( o3tl::make_unsigned( nRowOrCol ) < m_aSelected.size(),
@@ -924,7 +924,7 @@ uno::Sequence< sal_Int32 > SAL_CALL SwAccessibleTable::getSelectedAccessibleRows
     if( pSelBoxes )
     {
         sal_Int32 nRows = GetTableData().GetRowCount();
-        SwAccAllTableSelHander_Impl aSelRows( nRows  );
+        SwAccAllTableSelHandler_Impl aSelRows( nRows  );
 
         GetTableData().GetSelection( 0, nRows, *pSelBoxes, aSelRows,
                                       false );
@@ -947,7 +947,7 @@ uno::Sequence< sal_Int32 > SAL_CALL SwAccessibleTable::getSelectedAccessibleColu
     if( pSelBoxes )
     {
         sal_Int32 nCols = GetTableData().GetColumnCount();
-        SwAccAllTableSelHander_Impl aSelCols( nCols );
+        SwAccAllTableSelHandler_Impl aSelCols( nCols );
 
         GetTableData().GetSelection( 0, nCols, *pSelBoxes, aSelCols, true );
 
@@ -971,7 +971,7 @@ sal_Bool SAL_CALL SwAccessibleTable::isAccessibleRowSelected( sal_Int32 nRow )
     const SwSelBoxes *pSelBoxes = GetSelBoxes();
     if( pSelBoxes )
     {
-        SwAccSingleTableSelHander_Impl aSelRow;
+        SwAccSingleTableSelHandler_Impl aSelRow;
         GetTableData().GetSelection( nRow, nRow+1, *pSelBoxes, aSelRow,
                                      false );
         bRet = aSelRow.IsSelected();
@@ -997,7 +997,7 @@ sal_Bool SAL_CALL SwAccessibleTable::isAccessibleColumnSelected(
     const SwSelBoxes *pSelBoxes = GetSelBoxes();
     if( pSelBoxes )
     {
-        SwAccSingleTableSelHander_Impl aSelCol;
+        SwAccSingleTableSelHandler_Impl aSelCol;
 
         GetTableData().GetSelection( nColumn, nColumn+1, *pSelBoxes, aSelCol,
                                      true );
