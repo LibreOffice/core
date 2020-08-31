@@ -133,8 +133,8 @@ public class FinalizedMandatoryTest
         oObj = getTestObject(serviceName);
         System.out.println("ImplName: " + util.utils.getImplName(oObj));
 
-        boolean mandantoryTrue = false;
-        boolean mandantoryFalse = false;
+        boolean mandatoryTrue = false;
+        boolean mandatoryFalse = false;
         boolean finalizedTrue = false;
         boolean finalizedFalse = false;
 
@@ -174,8 +174,8 @@ public class FinalizedMandatoryTest
             boolean isFinalized = ((Boolean) getPropertyValueValue(props, "Finalized")).booleanValue();
 
             // memory if every state is available
-            mandantoryTrue |= isMandatory;
-            mandantoryFalse |= !isMandatory;
+            mandatoryTrue |= isMandatory;
+            mandatoryFalse |= !isMandatory;
 
             finalizedTrue |= isFinalized;
             finalizedFalse |= !isFinalized;
@@ -222,8 +222,8 @@ public class FinalizedMandatoryTest
         }
         String preMsg = "Could not find filter with state ";
         String postMsg = " Please check if such filter is installed!";
-        assertTrue(preMsg + "'Mandatory=true'" + postMsg, mandantoryTrue);
-        assertTrue(preMsg + "'Mandatory=false'" + postMsg, mandantoryFalse);
+        assertTrue(preMsg + "'Mandatory=true'" + postMsg, mandatoryTrue);
+        assertTrue(preMsg + "'Mandatory=false'" + postMsg, mandatoryFalse);
         assertTrue(preMsg + "'Finalized=true'" + postMsg, finalizedTrue);
         assertTrue(preMsg + "'Finalized=false'" + postMsg, finalizedFalse);
     }
