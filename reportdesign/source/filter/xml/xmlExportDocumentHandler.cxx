@@ -135,9 +135,9 @@ void SAL_CALL ExportDocumentHandler::startElement(const OUString & _sName, const
         {
             pList->AddAttribute(lcl_createAttribute(XML_NP_RPT,XML_COMMAND_TYPE),sValue.makeStringAndClear());
         }
-        const OUString sComamnd = m_xDatabaseDataProvider->getCommand();
-        if ( !sComamnd.isEmpty() )
-            pList->AddAttribute(lcl_createAttribute(XML_NP_RPT,XML_COMMAND),sComamnd);
+        const OUString sCommand = m_xDatabaseDataProvider->getCommand();
+        if ( !sCommand.isEmpty() )
+            pList->AddAttribute(lcl_createAttribute(XML_NP_RPT,XML_COMMAND),sCommand);
 
         const OUString sFilter( m_xDatabaseDataProvider->getFilter() );
         if ( !sFilter.isEmpty() )

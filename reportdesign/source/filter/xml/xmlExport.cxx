@@ -1242,9 +1242,9 @@ void ORptExport::exportReportAttributes(const Reference<XReportDefinition>& _xRe
     if ( SvXMLUnitConverter::convertEnum( sValue, _xReport->getCommandType(), aXML_CommandTypeEnumMap ) )
         AddAttribute(XML_NAMESPACE_REPORT, XML_COMMAND_TYPE,sValue.makeStringAndClear());
 
-    OUString sComamnd = _xReport->getCommand();
-    if ( !sComamnd.isEmpty() )
-        AddAttribute(XML_NAMESPACE_REPORT, XML_COMMAND, sComamnd);
+    OUString sCommand = _xReport->getCommand();
+    if ( !sCommand.isEmpty() )
+        AddAttribute(XML_NAMESPACE_REPORT, XML_COMMAND, sCommand);
 
     OUString sFilter( _xReport->getFilter() );
     if ( !sFilter.isEmpty() )
