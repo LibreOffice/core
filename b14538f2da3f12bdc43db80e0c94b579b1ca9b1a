@@ -34,6 +34,24 @@
       "revId": "b14538f2da3f12bdc43db80e0c94b579b1ca9b1a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a491dce4_716e3eba",
+        "filename": "xmloff/source/draw/animationimport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 929,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-08-31T10:49:06Z",
+      "side": 1,
+      "message": "oh, interesting, i don\u0027t know about these XML files, so let\u0027s just keep this for now...",
+      "parentUuid": "447f5f6c_8c05c4a2",
+      "revId": "b14538f2da3f12bdc43db80e0c94b579b1ca9b1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
