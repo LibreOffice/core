@@ -128,7 +128,7 @@ IMPLEMENT_SERVICE_INFO2(OTableContainer, "com.sun.star.sdb.dbaccess.OTableContai
 
 namespace
 {
-void lcl_createDefintionObject(const OUString& _rName
+void lcl_createDefinitionObject(const OUString& _rName
                            ,const Reference< XNameContainer >& _xTableDefinitions
                            ,Reference<XPropertySet>& _xTableDefinition
                            ,Reference<XNameAccess>& _xColumnDefinitions)
@@ -162,7 +162,7 @@ connectivity::sdbcx::ObjectType OTableContainer::createObject(const OUString& _r
     {
         Reference<XPropertySet> xTableDefinition;
         Reference<XNameAccess> xColumnDefinitions;
-        lcl_createDefintionObject(_rName,m_xTableDefinitions,xTableDefinition,xColumnDefinitions);
+        lcl_createDefinitionObject(_rName,m_xTableDefinitions,xTableDefinition,xColumnDefinitions);
 
         if ( xSup.is() )
         {
@@ -288,7 +288,7 @@ ObjectType OTableContainer::appendObject( const OUString& _rForName, const Refer
 
     Reference<XPropertySet> xTableDefinition;
     Reference<XNameAccess> xColumnDefinitions;
-    lcl_createDefintionObject(getNameForObject(descriptor),m_xTableDefinitions,xTableDefinition,xColumnDefinitions);
+    lcl_createDefinitionObject(getNameForObject(descriptor),m_xTableDefinitions,xTableDefinition,xColumnDefinitions);
     Reference<XColumnsSupplier> xSup(descriptor,UNO_QUERY);
     Reference<XDataDescriptorFactory> xFac(xColumnDefinitions,UNO_QUERY);
     Reference<XAppend> xAppend(xColumnDefinitions,UNO_QUERY);

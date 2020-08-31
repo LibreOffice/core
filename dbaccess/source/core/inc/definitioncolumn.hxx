@@ -273,7 +273,7 @@ namespace dbaccess
 
     public:
         OTableColumnWrapper( const css::uno::Reference< css::beans::XPropertySet >& rCol,
-                             const css::uno::Reference< css::beans::XPropertySet >& rColDefintion,
+                             const css::uno::Reference< css::beans::XPropertySet >& rColDefinition,
                              const bool _bPureWrap );
 
     // css::lang::XTypeProvider

@@ -559,16 +559,16 @@ void OTableColumnDescriptorWrapper::setFastPropertyValue_NoBroadcast(
 }
 
 // OTableColumnWrapper
-OTableColumnWrapper::OTableColumnWrapper( const Reference< XPropertySet >& rCol, const Reference< XPropertySet >& _xColDefintion,
+OTableColumnWrapper::OTableColumnWrapper( const Reference< XPropertySet >& rCol, const Reference< XPropertySet >& _xColDefinition,
             const bool _bPureWrap )
     :OTableColumnDescriptorWrapper( rCol, _bPureWrap, false )
 {
     osl_atomic_increment( &m_refCount );
-    if ( _xColDefintion.is() )
+    if ( _xColDefinition.is() )
     {
         try
         {
-            ::comphelper::copyProperties( _xColDefintion, this );
+            ::comphelper::copyProperties( _xColDefinition, this );
         }
         catch( const Exception& )
         {

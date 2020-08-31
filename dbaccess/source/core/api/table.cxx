@@ -100,10 +100,10 @@ OColumn* ODBTable::createColumn(const OUString& _rName) const
         xProp.set(pColumns->createBaseObject(_rName),UNO_QUERY);
     }
 
-    Reference<XPropertySet> xColumnDefintion;
+    Reference<XPropertySet> xColumnDefinition;
     if ( m_xColumnDefinitions.is() && m_xColumnDefinitions->hasByName(_rName) )
-        xColumnDefintion.set(m_xColumnDefinitions->getByName(_rName),UNO_QUERY);
-    pReturn = new OTableColumnWrapper( xProp, xColumnDefintion, false );
+        xColumnDefinition.set(m_xColumnDefinitions->getByName(_rName),UNO_QUERY);
+    pReturn = new OTableColumnWrapper( xProp, xColumnDefinition, false );
 
     return pReturn;
 }
