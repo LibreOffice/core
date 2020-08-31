@@ -39,7 +39,7 @@
 
 #include "prlayout.hxx"
 
-class ModifyListenerForewarder;
+class ModifyListenerForwarder;
 struct SfxItemPropertySimpleEntry;
 
 typedef cppu::ImplInheritanceHelper< SfxUnoStyleSheet,
@@ -145,7 +145,7 @@ private:
     /** broadcast helper for events */
     ::cppu::OBroadcastHelper mrBHelper;
 
-    std::unique_ptr< ModifyListenerForewarder > mpModifyListenerForewarder;
+    std::unique_ptr< ModifyListenerForwarder > mpModifyListenerForwarder;
 
     SdStyleSheet( const SdStyleSheet& ) = delete;
     SdStyleSheet& operator=( const SdStyleSheet& ) = delete;

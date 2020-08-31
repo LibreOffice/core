@@ -746,7 +746,7 @@ void AnnotationManagerImpl::GetAnnotationState(SfxItemSet& rSet)
     }
 }
 
-void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
+void AnnotationManagerImpl::SelectNextAnnotation(bool bForward)
 {
     ShowAnnotations( true );
 
@@ -758,7 +758,7 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
 
     AnnotationVector aAnnotations( pPage->getAnnotations() );
 
-    if( bForeward )
+    if( bForward )
     {
         if( xCurrent.is() )
         {
@@ -804,7 +804,7 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
     {
         do
         {
-            pPage = GetNextPage( pPage, bForeward );
+            pPage = GetNextPage( pPage, bForward );
 
             if( pPage && !pPage->getAnnotations().empty() )
             {
@@ -817,7 +817,7 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
 
                     SfxDispatcher* pDispatcher = getDispatcher( mrBase );
                     if( pDispatcher )
-                        pDispatcher->Execute( bForeward ? SID_NEXT_POSTIT : SID_PREVIOUS_POSTIT );
+                        pDispatcher->Execute( bForward ? SID_NEXT_POSTIT : SID_PREVIOUS_POSTIT );
 
                     return;
                 }
@@ -828,7 +828,7 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
         // The question text depends on the search direction.
         bool bImpress = mpDoc->GetDocumentType() == DocumentType::Impress;
         const char* pStringId;
-        if(bForeward)
+        if(bForward)
             pStringId = bImpress ? STR_ANNOTATION_WRAP_FORWARD : STR_ANNOTATION_WRAP_FORWARD_DRAW;
         else
             pStringId = bImpress ? STR_ANNOTATION_WRAP_BACKWARD : STR_ANNOTATION_WRAP_BACKWARD_DRAW;

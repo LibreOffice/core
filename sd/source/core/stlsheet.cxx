@@ -106,10 +106,10 @@ static SvxItemPropertySet& GetStylePropertySet()
     return aPropSet;
 }
 
-class ModifyListenerForewarder : public SfxListener
+class ModifyListenerForwarder : public SfxListener
 {
 public:
-    explicit ModifyListenerForewarder( SdStyleSheet* pStyleSheet );
+    explicit ModifyListenerForwarder( SdStyleSheet* pStyleSheet );
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
@@ -117,7 +117,7 @@ private:
     SdStyleSheet* mpStyleSheet;
 };
 
-ModifyListenerForewarder::ModifyListenerForewarder( SdStyleSheet* pStyleSheet )
+ModifyListenerForwarder::ModifyListenerForwarder( SdStyleSheet* pStyleSheet )
 : mpStyleSheet( pStyleSheet )
 {
     if( pStyleSheet )
@@ -127,7 +127,7 @@ ModifyListenerForewarder::ModifyListenerForewarder( SdStyleSheet* pStyleSheet )
     }
 }
 
-void ModifyListenerForewarder::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& /*rHint*/)
+void ModifyListenerForwarder::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& /*rHint*/)
 {
     if( mpStyleSheet )
         mpStyleSheet->notifyModifyListener();
@@ -800,8 +800,8 @@ void SAL_CALL SdStyleSheet::addModifyListener( const Reference< XModifyListener 
     }
     else
     {
-        if (!mpModifyListenerForewarder)
-            mpModifyListenerForewarder.reset( new ModifyListenerForewarder( this ) );
+        if (!mpModifyListenerForwarder)
+            mpModifyListenerForwarder.reset( new ModifyListenerForwarder( this ) );
         mrBHelper.addListener( cppu::UnoType<XModifyListener>::get(), xListener );
     }
 }
