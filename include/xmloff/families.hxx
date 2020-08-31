@@ -80,8 +80,8 @@ enum class XmlStyleFamily
 
     SD_PRESENTATION_ID     = 301,
 // families for derived from SvXMLStyleContext
-    SD_PAGEMASTERCONEXT_ID         = 302,
-    SD_PAGEMASTERSTYLECONEXT_ID    = 306,
+    SD_PAGEMASTERCONTEXT_ID        = 302,
+    SD_PAGEMASTERSTYLECONTEXT_ID   = 306,
     SD_PRESENTATIONPAGELAYOUT_ID   = 303,
 // family for draw pool
     SD_POOL_ID             = 304,

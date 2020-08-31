@@ -280,7 +280,7 @@ SdXMLPageMasterStyleContext::SdXMLPageMasterStyleContext(
     SdXMLImport& rImport,
     sal_Int32 /*nElement*/,
     const uno::Reference< xml::sax::XFastAttributeList>& xAttrList)
-:   SvXMLStyleContext(rImport, XmlStyleFamily::SD_PAGEMASTERSTYLECONEXT_ID),
+:   SvXMLStyleContext(rImport, XmlStyleFamily::SD_PAGEMASTERSTYLECONTEXT_ID),
     mnBorderBottom( 0 ),
     mnBorderLeft( 0 ),
     mnBorderRight( 0 ),
@@ -362,7 +362,7 @@ SdXMLPageMasterContext::SdXMLPageMasterContext(
     SdXMLImport& rImport,
     sal_Int32 /*nElement*/,
     const uno::Reference< xml::sax::XFastAttributeList>& /*xAttrList*/)
-:   SvXMLStyleContext(rImport, XmlStyleFamily::SD_PAGEMASTERCONEXT_ID)
+:   SvXMLStyleContext(rImport, XmlStyleFamily::SD_PAGEMASTERCONTEXT_ID)
 {
     // set family to something special at SvXMLStyleContext
     // for differences in search-methods

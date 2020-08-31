@@ -2913,9 +2913,9 @@ include/vcl/window.hxx:381
 include/xmloff/families.hxx:75
     enum XmlStyleFamily TABLE_TEMPLATE_ID
 include/xmloff/families.hxx:83
-    enum XmlStyleFamily SD_PAGEMASTERCONEXT_ID
+    enum XmlStyleFamily SD_PAGEMASTERCONTEXT_ID
 include/xmloff/families.hxx:84
-    enum XmlStyleFamily SD_PAGEMASTERSTYLECONEXT_ID
+    enum XmlStyleFamily SD_PAGEMASTERSTYLECONTEXT_ID
 include/xmloff/families.hxx:85
     enum XmlStyleFamily SD_PRESENTATIONPAGELAYOUT_ID
 include/xmloff/families.hxx:91
