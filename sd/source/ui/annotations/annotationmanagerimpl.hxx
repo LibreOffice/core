@@ -72,7 +72,7 @@ public:
     void ExecuteEditAnnotation(SfxRequest const & rReq);
     void ExecuteReplyToAnnotation(SfxRequest const & rReq);
 
-    void SelectNextAnnotation(bool bForeward);
+    void SelectNextAnnotation(bool bForward);
 
     void SelectAnnotation( const css::uno::Reference< css::office::XAnnotation >& xAnnotation, bool bEdit = false );
     void GetSelectedAnnotation( css::uno::Reference< css::office::XAnnotation >& xAnnotation );
@@ -106,7 +106,7 @@ public:
     void CreateTags();
     void DisposeTags();
 
-    SdPage* GetNextPage( SdPage const * pPage, bool bForeward );
+    SdPage* GetNextPage( SdPage const * pPage, bool bForward );
 
     SdPage* GetCurrentPage();
 
