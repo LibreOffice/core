@@ -596,9 +596,13 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 auto pRequest = std::make_shared<SfxRequest>(rReq);
                 rReq.Ignore(); // the 'old' request is not relevant any more
 
-                pDlg->StartExecuteAsync([pDlg, pRequest, pTableRep, &rBindings, &rSh](sal_Int32 nResult){
+                auto xPaM(std::make_shared<SwPaM>(*rSh.GetCursor(), nullptr)); // tdf#135636 make a copy to use at later apply
+                pDlg->StartExecuteAsync([pDlg, pRequest, pTableRep, &rBindings, &rSh, xPaM](sal_Int32 nResult){
                     if (RET_OK == nResult)
                     {
+                        rSh.Push();              // save current cursor on stack
+                        rSh.SetSelection(*xPaM); // tdf#135636 set the table selected at dialog launch as current selection
+
                         const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
 
                         //to record FN_INSERT_TABLE correctly
@@ -606,6 +610,8 @@ void SwTableShell::Execute(SfxRequest &rReq)
                         pRequest->Done(*pOutSet);
 
                         ItemSetToTableParam(*pOutSet, rSh);
+
+                        rSh.Pop(SwCursorShell::PopMode::DeleteCurrent); // restore cursor from stack
                     }
 
                     rBindings.Update(SID_RULER_BORDERS);
