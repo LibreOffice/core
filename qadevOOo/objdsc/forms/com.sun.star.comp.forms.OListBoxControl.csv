@@ -60,7 +60,7 @@
 "OListBoxControl";"com::sun::star::awt::XListBox";"selectItemPos()"
 "OListBoxControl";"com::sun::star::awt::XListBox";"selectItemsPos()"
 "OListBoxControl";"com::sun::star::awt::XListBox";"selectItem()"
-"OListBoxControl";"com::sun::star::awt::XListBox";"isMutipleMode()"
+"OListBoxControl";"com::sun::star::awt::XListBox";"isMultipleMode()"
 "OListBoxControl";"com::sun::star::awt::XListBox";"setMultipleMode()"
 "OListBoxControl";"com::sun::star::awt::XListBox";"getDropDownLineCount()"
 "OListBoxControl";"com::sun::star::awt::XListBox";"setDropDownLineCount()"

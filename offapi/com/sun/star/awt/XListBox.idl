@@ -134,7 +134,7 @@ published interface XListBox: com::sun::star::uno::XInterface
     /** returns `TRUE` if multiple items can be selected,
         `FALSE` if only one item can be selected.
      */
-    boolean isMutipleMode();
+    boolean isMultipleMode();
 
 
     /** determines if only a single item or multiple items can be selected.

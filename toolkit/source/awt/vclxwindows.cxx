@@ -1778,7 +1778,7 @@ sal_Int16 VCLXListBox::getDropDownLineCount()
     return nLines;
 }
 
-sal_Bool VCLXListBox::isMutipleMode()
+sal_Bool VCLXListBox::isMultipleMode()
 {
     SolarMutexGuard aGuard;
     bool bMulti = false;

@@ -734,7 +734,7 @@ public:
     void SAL_CALL selectItemPos( sal_Int16 nPos, sal_Bool bSelect ) override;
     void SAL_CALL selectItemsPos( const css::uno::Sequence< sal_Int16 >& aPositions, sal_Bool bSelect ) override;
     void SAL_CALL selectItem( const OUString& aItem, sal_Bool bSelect ) override;
-    sal_Bool SAL_CALL isMutipleMode(  ) override;
+    sal_Bool SAL_CALL isMultipleMode(  ) override;
     void SAL_CALL setMultipleMode( sal_Bool bMulti ) override;
     sal_Int16 SAL_CALL getDropDownLineCount(  ) override;
     void SAL_CALL setDropDownLineCount( sal_Int16 nLines ) override;

@@ -2137,10 +2137,10 @@ namespace frm
     }
 
 
-    sal_Bool SAL_CALL OListBoxControl::isMutipleMode(  )
+    sal_Bool SAL_CALL OListBoxControl::isMultipleMode(  )
     {
         if ( m_xAggregateListBox.is() )
-            return m_xAggregateListBox->isMutipleMode();
+            return m_xAggregateListBox->isMultipleMode();
         return false;
     }
 

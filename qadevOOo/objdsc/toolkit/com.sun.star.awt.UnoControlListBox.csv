@@ -56,7 +56,7 @@
 "UnoControlListBox";"com::sun::star::awt::XListBox";"selectItemPos()"
 "UnoControlListBox";"com::sun::star::awt::XListBox";"selectItemsPos()"
 "UnoControlListBox";"com::sun::star::awt::XListBox";"selectItem()"
-"UnoControlListBox";"com::sun::star::awt::XListBox";"isMutipleMode()"
+"UnoControlListBox";"com::sun::star::awt::XListBox";"isMultipleMode()"
 "UnoControlListBox";"com::sun::star::awt::XListBox";"setMultipleMode()"
 "UnoControlListBox";"com::sun::star::awt::XListBox";"getDropDownLineCount()"
 "UnoControlListBox";"com::sun::star::awt::XListBox";"setDropDownLineCount()"

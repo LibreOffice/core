@@ -45,7 +45,7 @@ import com.sun.star.awt.XListBox;
 *  <li><code> selectItemPos()</code></li>
 *  <li><code> selectItemsPos()</code></li>
 *  <li><code> selectItem()</code></li>
-*  <li><code> isMutipleMode()</code></li>
+*  <li><code> isMultipleMode()</code></li>
 *  <li><code> setMultipleMode()</code></li>
 *  <li><code> getDropDownLineCount()</code></li>
 *  <li><code> setDropDownLineCount()</code></li>
@@ -451,13 +451,13 @@ public class _XListBox extends MultiMethodTest {
     *  <li> <code> setMultipleMode </code>  </li>
     * </ul>
     */
-    public void _isMutipleMode() {
+    public void _isMultipleMode() {
         requiredMethod("setMultipleMode()") ;
 
         boolean result = true ;
-        result = oObj.isMutipleMode() ;
+        result = oObj.isMultipleMode() ;
 
-        tRes.tested("isMutipleMode()", result) ;
+        tRes.tested("isMultipleMode()", result) ;
     }
 
     /**

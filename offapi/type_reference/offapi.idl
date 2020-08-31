@@ -1561,7 +1561,7 @@ module com {
      void selectItemPos([in] short nPos, [in] boolean bSelect);
      void selectItemsPos([in] sequence< short > aPositions, [in] boolean bSelect);
      void selectItem([in] string aItem, [in] boolean bSelect);
-     boolean isMutipleMode();
+     boolean isMultipleMode();
      void setMultipleMode([in] boolean bMulti);
      short getDropDownLineCount();
      void setDropDownLineCount([in] short nLines);

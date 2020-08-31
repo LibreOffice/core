@@ -4154,7 +4154,7 @@ void SAL_CALL FmXListBoxCell::selectItem(const OUString& aItem, sal_Bool bSelect
     }
 }
 
-sal_Bool SAL_CALL FmXListBoxCell::isMutipleMode()
+sal_Bool SAL_CALL FmXListBoxCell::isMultipleMode()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 

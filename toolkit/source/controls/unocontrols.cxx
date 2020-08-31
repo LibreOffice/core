@@ -2777,7 +2777,7 @@ sal_Int16 UnoListBoxControl::getDropDownLineCount()
     return ImplGetPropertyValue_INT16( BASEPROPERTY_LINECOUNT );
 }
 
-sal_Bool UnoListBoxControl::isMutipleMode()
+sal_Bool UnoListBoxControl::isMultipleMode()
 {
     return ImplGetPropertyValue_BOOL( BASEPROPERTY_MULTISELECTION );
 }
