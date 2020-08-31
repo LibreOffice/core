@@ -176,10 +176,10 @@ public:
     /** call setPersistentEntry for each embedded object in the container
     *
     * \param _xStorage The storage where to store the objects.
-    * \param _bClearModifedFlag If <TRUE/> then the modified flag will be set to <FALSE/> otherwise nothing happen.
+    * \param _bClearModifiedFlag If <TRUE/> then the modified flag will be set to <FALSE/> otherwise nothing happen.
     * \return <FALSE/> if no error occurred, otherwise <TRUE/>.
     */
-    bool             SetPersistentEntries(const css::uno::Reference< css::embed::XStorage >& _xStorage,bool _bClearModifedFlag = true);
+    bool             SetPersistentEntries(const css::uno::Reference< css::embed::XStorage >& _xStorage,bool _bClearModifiedFlag = true);
 
     bool getUserAllowsLinkUpdate() const;
     void setUserAllowsLinkUpdate(bool bNew);

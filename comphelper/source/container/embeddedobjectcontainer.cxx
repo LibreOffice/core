@@ -1430,7 +1430,7 @@ uno::Reference< io::XInputStream > EmbeddedObjectContainer::GetGraphicReplacemen
     return xInStream;
 }
 
-bool EmbeddedObjectContainer::SetPersistentEntries(const uno::Reference< embed::XStorage >& _xStorage,bool _bClearModifedFlag)
+bool EmbeddedObjectContainer::SetPersistentEntries(const uno::Reference< embed::XStorage >& _xStorage,bool _bClearModifiedFlag)
 {
     bool bError = false;
     const uno::Sequence < OUString > aNames = GetObjectNames();
@@ -1461,7 +1461,7 @@ bool EmbeddedObjectContainer::SetPersistentEntries(const uno::Reference< embed::
                     break;
                 }
             }
-            if ( _bClearModifedFlag )
+            if ( _bClearModifiedFlag )
             {
                 // if this method is used as part of SaveCompleted the object must stay unmodified after execution
                 try
