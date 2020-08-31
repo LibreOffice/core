@@ -689,14 +689,14 @@ bool AxisHelper::areAxisLabelsVisible( const Reference< beans::XPropertySet >& x
     return bRet;
 }
 
-bool AxisHelper::isGridVisible( const Reference< beans::XPropertySet >& xGridProperies )
+bool AxisHelper::isGridVisible( const Reference< beans::XPropertySet >& xGridproperties )
 {
     bool bRet = false;
 
-    if( xGridProperies.is() )
+    if( xGridproperties.is() )
     {
-        xGridProperies->getPropertyValue( "Show" ) >>= bRet;
-        bRet = bRet && LinePropertiesHelper::IsLineVisible( xGridProperies );
+        xGridproperties->getPropertyValue( "Show" ) >>= bRet;
+        bRet = bRet && LinePropertiesHelper::IsLineVisible( xGridproperties );
     }
 
     return bRet;

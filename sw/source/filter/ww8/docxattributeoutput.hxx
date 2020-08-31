@@ -392,7 +392,7 @@ private:
 
     /// Output what we collected during the run properties output.
     ///
-    /// @see InitCollectedRunProperies(), WriteCollectedParagraphProperties()
+    /// @see InitCollectedRunproperties(), WriteCollectedParagraphProperties()
     void WriteCollectedRunProperties();
 
     /// Output graphic fly frames or replacement graphics for OLE nodes.
