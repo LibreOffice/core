@@ -395,9 +395,9 @@ class DocumentController: UIViewController, MenuDelegate, UIDocumentBrowserViewC
             // TODO - cleanup
             self.document = nil
         }
-        if let exisitingView = self.documentView
+        if let existingView = self.documentView
         {
-            exisitingView.removeFromSuperview()
+            existingView.removeFromSuperview()
             self.documentView = nil // forces the close of the view and it's held documents before we setup the new one
         }
         // also remove current overlays and start fresh
