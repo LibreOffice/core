@@ -58,7 +58,7 @@ const sal_Int32 nHandleTextReverse = 26;
 
 const sal_Int32 nHandleCurrentPage = 27;
 const sal_Int32 nHandleSoundURL = 28;
-const sal_Int32 nHandleSoundVolumne = 29;
+const sal_Int32 nHandleSoundVolume = 29;
 const sal_Int32 nHandleSoundEndAfterSlide = 30;
 
 const sal_Int32 nHandleCommand = 31;

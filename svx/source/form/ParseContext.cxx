@@ -144,7 +144,7 @@ IParseContext::InternationalKeyCode OSystemParseContext::getIntlKeyCode(const OS
 namespace
 {
 
-    ::osl::Mutex& getSafteyMutex()
+    ::osl::Mutex& getSafetyMutex()
     {
         static ::osl::Mutex s_aSafety;
         return s_aSafety;
@@ -177,7 +177,7 @@ namespace
 
 OParseContextClient::OParseContextClient()
 {
-    ::osl::MutexGuard aGuard( getSafteyMutex() );
+    ::osl::MutexGuard aGuard( getSafetyMutex() );
     if ( 1 == osl_atomic_increment( &getCounter() ) )
     {   // first instance
         getSharedContext( new OSystemParseContext, false );
@@ -187,7 +187,7 @@ OParseContextClient::OParseContextClient()
 
 OParseContextClient::~OParseContextClient()
 {
-    ::osl::MutexGuard aGuard( getSafteyMutex() );
+    ::osl::MutexGuard aGuard( getSafetyMutex() );
     if ( 0 == osl_atomic_decrement( &getCounter() ) )
         delete getSharedContext(nullptr,true);
 }
