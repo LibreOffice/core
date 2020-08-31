@@ -31,7 +31,7 @@ RuleListContext::RuleListContext(ContextHandler2Helper const& rParent, const Lay
     assert(pNode);
 }
 
-RuleListContext::~RuleListContext() {}
+RuleListContext::~RuleListContext() = default;
 
 core::ContextHandlerRef RuleListContext::onCreateContext(sal_Int32 nElement,
                                                          const AttributeList& rAttribs)
