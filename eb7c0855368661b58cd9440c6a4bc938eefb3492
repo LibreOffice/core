@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "986556d8_7591abac",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2728,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-08-31T10:33:15Z",
+      "side": 1,
+      "message": "there\u0027s another oddity here: it assumes that the *first* page\u0027s follow remains constant, the m_pCurrentPageDesc isn\u0027t updated AFAICS.\n\nso if you have something like LeftPage-\u003eRightPage-\u003eLeftPage this will probably do LeftPage-\u003eRightPage-\u003eRightPage instead?",
+      "revId": "eb7c0855368661b58cd9440c6a4bc938eefb3492",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
