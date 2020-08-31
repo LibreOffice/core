@@ -218,7 +218,15 @@ void SvXMLImportItemMapper::importXMLUnknownAttributes( SfxItemSet& rSet,
                 pUnknownItem->AddAttr( rAttribute.Name, rAttribute.Value );
             else
             {
-                pUnknownItem->AddAttr( rAttribute.Name, rAttribute.NamespaceURL, rAttribute.Name,
+                OUString sPrefix;
+                OUString sName = rAttribute.Name;
+                int i = sName.indexOf(':');
+                if (i != -1)
+                {
+                    sPrefix = sName.copy(0, i-1);
+                    sName = sName.copy(i+1);
+                }
+                pUnknownItem->AddAttr( sPrefix, rAttribute.NamespaceURL, sName,
                                        rAttribute.Value );
             }
         }
