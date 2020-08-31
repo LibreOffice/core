@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "999ebedf_981c7d08",
+        "filename": "xmloff/source/draw/animationimport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 929,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-08-31T10:28:42Z",
+      "side": 1,
+      "message": "okay the ANIMATION looks good but there\u0027s no point in ANIMATION_OOO, that\u0027s another extension namespace that will almost certainly never be used for new attributes any more",
+      "revId": "b14538f2da3f12bdc43db80e0c94b579b1ca9b1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
