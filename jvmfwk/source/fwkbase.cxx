@@ -252,8 +252,7 @@ OString BootParams::getClasspath()
         char * pCp = getenv("CLASSPATH");
         if (pCp)
         {
-            char szSep[] = {SAL_PATHSEPARATOR,0};
-            sClassPath += OStringLiteral(szSep) + pCp;
+            sClassPath += OStringChar(SAL_PATHSEPARATOR) + pCp;
         }
         SAL_INFO(
             "jfw.level2",
@@ -415,7 +414,6 @@ OUString getApplicationClassPath()
 
     OUStringBuffer buf;
     sal_Int32 index = 0;
-    const char szClassPathSep[] = {SAL_PATHSEPARATOR,0};
     do
     {
         OUString token( sParams.getToken( 0, ' ', index ).trim() );
@@ -428,7 +426,7 @@ OUString getApplicationClassPath()
             if (rc == osl_File_E_None && !systemPathElement.isEmpty())
             {
                 if (buf.getLength() > 0)
-                    buf.append( szClassPathSep );
+                    buf.append( SAL_PATHSEPARATOR );
                 buf.append( systemPathElement );
             }
         }
