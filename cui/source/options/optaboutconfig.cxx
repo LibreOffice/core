@@ -181,7 +181,9 @@ IMPL_LINK(CuiAboutConfigTabPage, HeaderBarClick, int, nColumn, void)
     }
     else
     {
-        m_xPrefBox->set_sort_indicator(TRISTATE_INDET, m_xPrefBox->get_sort_column());
+        int nOldSortColumn = m_xPrefBox->get_sort_column();
+        if (nOldSortColumn != -1)
+            m_xPrefBox->set_sort_indicator(TRISTATE_INDET, nOldSortColumn);
         m_xPrefBox->set_sort_column(nColumn);
     }
 
