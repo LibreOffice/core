@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "973411f2_718e0d6f",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-08-31T07:25:42Z",
+      "side": 1,
+      "message": "Add text to strings.hrc and use swresid() to allow localization.",
+      "range": {
+        "startLine": 41,
+        "startChar": 16,
+        "endLine": 41,
+        "endChar": 72
+      },
+      "revId": "2575af175e763291679cc8792549e18c5c036443",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
