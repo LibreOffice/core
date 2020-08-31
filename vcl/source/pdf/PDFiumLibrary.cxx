@@ -391,7 +391,10 @@ PDFiumAnnotation::~PDFiumAnnotation()
         FPDFPage_CloseAnnot(mpAnnotation);
 }
 
-int PDFiumAnnotation::getSubType() { return FPDFAnnot_GetSubtype(mpAnnotation); }
+PDFAnnotationSubType PDFiumAnnotation::getSubType()
+{
+    return PDFAnnotationSubType(FPDFAnnot_GetSubtype(mpAnnotation));
+}
 
 basegfx::B2DRectangle PDFiumAnnotation::getRectangle()
 {
