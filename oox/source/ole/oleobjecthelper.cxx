@@ -87,7 +87,7 @@ OleObjectHelper::~OleObjectHelper()
 // just "application/vnd.sun.star.oleobject"
 void SaveInteropProperties(uno::Reference<frame::XModel> const& xModel,
        OUString const& rObjectName, OUString const*const pOldObjectName,
-       OUString const& rProgId, OUString const& rDrawAspect)
+       OUString const& rProgId)
 {
     static const char sEmbeddingsPropName[] = "EmbeddedObjects";
 
@@ -100,11 +100,9 @@ void SaveInteropProperties(uno::Reference<frame::XModel> const& xModel,
     if (aGrabBag.find(sEmbeddingsPropName) != aGrabBag.end())
         objectsList << aGrabBag[sEmbeddingsPropName];
 
-    uno::Sequence< beans::PropertyValue > aGrabBagAttribute(2);
+    uno::Sequence< beans::PropertyValue > aGrabBagAttribute(1);
     aGrabBagAttribute[0].Name = "ProgID";
     aGrabBagAttribute[0].Value <<= rProgId;
-    aGrabBagAttribute[1].Name = "DrawAspect";
-    aGrabBagAttribute[1].Value <<= rDrawAspect;
 
     // If we got an "old name", erase that first.
     if (pOldObjectName)
@@ -148,9 +146,7 @@ bool OleObjectHelper::importOleObject( PropertyMap& rPropMap, const OleObjectInf
             xOutStrm->writeBytes( rOleObject.maEmbeddedData );
             xOutStrm->closeOutput();
 
-            SaveInteropProperties(m_xModel, aObjectId, nullptr,
-                rOleObject.maProgId,
-                rOleObject.mbShowAsIcon ? OUString("Icon") : OUString("Content"));
+            SaveInteropProperties(m_xModel, aObjectId, nullptr, rOleObject.maProgId);
 
             OUString aUrl = mxResolver->resolveEmbeddedObjectURL( aObjectId );
             OSL_ENSURE( aUrl.match( g_aEmbeddedObjScheme ), "OleObjectHelper::importOleObject - unexpected URL scheme" );

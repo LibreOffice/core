@@ -915,6 +915,13 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo80898, "fdo80898.docx")
         "Word.Document.8");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testOleIconDrawAspect, "tdf131537.odt")
+{
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:object/o:OLEObject",
+        "DrawAspect", "Icon");
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTableCellWithDirectFormatting, "fdo80800.docx")
 {
     // Issue was Direct Formatting for non-first Table cells was not getting preserved.
