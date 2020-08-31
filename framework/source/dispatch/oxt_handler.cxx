@@ -97,9 +97,9 @@ void SAL_CALL Oxt_Handler::dispatchWithNotification( const css::util::URL& aURL,
     lParams[0] <<= aURL.Main;
 
     css::uno::Reference< css::uno::XInterface > xService = m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( "com.sun.star.deployment.ui.PackageManagerDialog", lParams, m_xContext );
-    css::uno::Reference< css::task::XJobExecutor > xExecuteable( xService, css::uno::UNO_QUERY );
-    if ( xExecuteable.is() )
-        xExecuteable->trigger( OUString() );
+    css::uno::Reference< css::task::XJobExecutor > xExecutable( xService, css::uno::UNO_QUERY );
+    if ( xExecutable.is() )
+        xExecutable->trigger( OUString() );
 
     if ( xListener.is() )
     {

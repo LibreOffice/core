@@ -207,9 +207,9 @@ css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( con
         // => a) a service starts running inside his own ctor and we create it only
         xService = m_xContext->getServiceManager()->createInstanceWithContext(sServiceName, m_xContext);
         // or b) he implements the right interface and starts there (may with optional parameters)
-        css::uno::Reference< css::task::XJobExecutor > xExecuteable(xService, css::uno::UNO_QUERY);
-        if (xExecuteable.is())
-            xExecuteable->trigger(sArguments);
+        css::uno::Reference< css::task::XJobExecutor > xExecutable(xService, css::uno::UNO_QUERY);
+        if (xExecutable.is())
+            xExecutable->trigger(sArguments);
     }
     // ignore all errors - inclusive runtime errors!
     // E.g. a script based service (written in Python) could not be executed
