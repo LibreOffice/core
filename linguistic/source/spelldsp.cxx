@@ -453,7 +453,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
         // try already instantiated services first
         {
             const Reference< XSpellChecker >  *pRef  = pEntry->aSvcRefs.getConstArray();
-            sal_Int32 nNumSugestions = -1;
+            sal_Int32 nNumSuggestions = -1;
             while (i <= pEntry->nLastTriedSvcIndex
                    &&  (!bTmpResValid || xTmpRes.is()) )
             {
@@ -483,17 +483,17 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
                 if (!xRes.is() && bTmpResValid)
                 {
                     xRes = xTmpRes;
-                    nNumSugestions = 0;
+                    nNumSuggestions = 0;
                     if (xRes.is())
-                        nNumSugestions = xRes->getAlternatives().getLength();
+                        nNumSuggestions = xRes->getAlternatives().getLength();
                 }
-                sal_Int32 nTmpNumSugestions = 0;
+                sal_Int32 nTmpNumSuggestions = 0;
                 if (xTmpRes.is() && bTmpResValid)
-                    nTmpNumSugestions = xTmpRes->getAlternatives().getLength();
-                if (xRes.is() && nNumSugestions == 0 && nTmpNumSugestions > 0)
+                    nTmpNumSuggestions = xTmpRes->getAlternatives().getLength();
+                if (xRes.is() && nNumSuggestions == 0 && nTmpNumSuggestions > 0)
                 {
                     xRes = xTmpRes;
-                    nNumSugestions = nTmpNumSugestions;
+                    nNumSuggestions = nTmpNumSuggestions;
                 }
 
                 ++i;
@@ -514,7 +514,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
             Sequence< Any > aArgs(2);
             aArgs.getArray()[0] <<= GetPropSet();
 
-            sal_Int32 nNumSugestions = -1;
+            sal_Int32 nNumSuggestions = -1;
             while (i < nLen  &&  (!bTmpResValid || xTmpRes.is()))
             {
                 // create specific service via it's implementation name
@@ -562,17 +562,17 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
                 if (!xRes.is() && bTmpResValid)
                 {
                     xRes = xTmpRes;
-                    nNumSugestions = 0;
+                    nNumSuggestions = 0;
                     if (xRes.is())
-                        nNumSugestions = xRes->getAlternatives().getLength();
+                        nNumSuggestions = xRes->getAlternatives().getLength();
                 }
-                sal_Int32 nTmpNumSugestions = 0;
+                sal_Int32 nTmpNumSuggestions = 0;
                 if (xTmpRes.is() && bTmpResValid)
-                    nTmpNumSugestions = xTmpRes->getAlternatives().getLength();
-                if (xRes.is() && nNumSugestions == 0 && nTmpNumSugestions > 0)
+                    nTmpNumSuggestions = xTmpRes->getAlternatives().getLength();
+                if (xRes.is() && nNumSuggestions == 0 && nTmpNumSuggestions > 0)
                 {
                     xRes = xTmpRes;
-                    nNumSugestions = nTmpNumSugestions;
+                    nNumSuggestions = nTmpNumSuggestions;
                 }
 
                 pEntry->nLastTriedSvcIndex = static_cast<sal_Int16>(i);
