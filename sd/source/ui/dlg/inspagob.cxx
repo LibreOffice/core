@@ -110,7 +110,7 @@ bool SdInsertPagesObjsDlg::IsLink() const
 /**
  *  is link checked
  */
-bool SdInsertPagesObjsDlg::IsRemoveUnnessesaryMasterPages() const
+bool SdInsertPagesObjsDlg::IsRemoveUnnecessaryMasterPages() const
 {
     return m_xCbxMasters->get_active();
 }

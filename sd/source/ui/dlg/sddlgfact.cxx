@@ -468,9 +468,9 @@ bool AbstractSdInsertPagesObjsDlg_Impl::IsLink()
     return m_xDlg->IsLink();
 }
 
-bool AbstractSdInsertPagesObjsDlg_Impl::IsRemoveUnnessesaryMasterPages() const
+bool AbstractSdInsertPagesObjsDlg_Impl::IsRemoveUnnecessaryMasterPages() const
 {
-    return m_xDlg->IsRemoveUnnessesaryMasterPages();
+    return m_xDlg->IsRemoveUnnecessaryMasterPages();
 }
 
 BitmapEx AbstractSdInsertPagesObjsDlg_Impl::createScreenshot() const

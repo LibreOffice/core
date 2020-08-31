@@ -206,7 +206,7 @@ void CurrentMasterPagesSelector::ExecuteCommand(const OString &rIdent)
             && mrDocument.GetMasterPageUserCount(pMasterPage) == 0)
         {
             // Removing the precious flag so that the following call to
-            // RemoveUnnessesaryMasterPages() will remove this master page.
+            // RemoveUnnecessaryMasterPages() will remove this master page.
             pMasterPage->SetPrecious(false);
             mrDocument.RemoveUnnecessaryMasterPages(pMasterPage);
         }
