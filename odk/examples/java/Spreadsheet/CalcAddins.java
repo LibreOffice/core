@@ -229,7 +229,7 @@ public class CalcAddins {
             return stringReturn;
         }
 
-        public String getProgrammaticFuntionName(String p1) {
+        public String getProgrammaticFunctionName(String p1) {
             return "";
         }
 

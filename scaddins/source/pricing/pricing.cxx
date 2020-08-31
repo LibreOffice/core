@@ -180,7 +180,7 @@ lang::Locale SAL_CALL ScaPricingAddIn::getLocale()
 
 // function descriptions start here
 // XAddIn
-OUString SAL_CALL ScaPricingAddIn::getProgrammaticFuntionName( const OUString& )
+OUString SAL_CALL ScaPricingAddIn::getProgrammaticFunctionName( const OUString& )
 {
     //  not used by calc
     //  (but should be implemented for other uses of the AddIn service)

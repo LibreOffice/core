@@ -307,7 +307,7 @@ void generateXAddInBodies(std::ostream& o, const OString & classname)
 {
     o << "// css::sheet::XAddIn:\n";
 
-    o << "OUString SAL_CALL " << classname << "getProgrammaticFuntionName("
+    o << "OUString SAL_CALL " << classname << "getProgrammaticFunctionName("
         "const OUString & aDisplayName) throw (css::uno::RuntimeException)"
         "\n{\n    OUString ret;\n    try {\n        css::uno::Reference< "
         "css::container::XNameAccess > xNAccess(m_xHAccess, css::uno::UNO_QUERY);\n"

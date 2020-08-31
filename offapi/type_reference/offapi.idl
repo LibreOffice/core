@@ -11240,7 +11240,7 @@ module com {
     };
     published interface XAddIn {
      interface ::com::sun::star::lang::XLocalizable;
-     string getProgrammaticFuntionName([in] string aDisplayName);
+     string getProgrammaticFunctionName([in] string aDisplayName);
      string getDisplayFunctionName([in] string aProgrammaticName);
      string getFunctionDescription([in] string aProgrammaticName);
      string getDisplayArgumentName([in] string aProgrammaticFunctionName, [in] long nArgument);

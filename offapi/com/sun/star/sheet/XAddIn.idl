@@ -48,7 +48,7 @@ published interface XAddIn: com::sun::star::lang::XLocalizable
             the exact name of the method within its interface.
 
      */
-    string getProgrammaticFuntionName( [in] string aDisplayName );
+    string getProgrammaticFunctionName( [in] string aDisplayName );
 
 
     /** returns the user-visible function name for an internal name.

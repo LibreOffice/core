@@ -191,7 +191,7 @@ public class ExampleAddIn
 
         //  XAddIn
 
-        public String getProgrammaticFuntionName(String aDisplayName)
+        public String getProgrammaticFunctionName(String aDisplayName)
         {
             for ( int i = 0; i < aFunctionNames.length; i++ )
                 if ( aDisplayName.equals(aDisplayFunctionNames[i]) )

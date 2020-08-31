@@ -179,7 +179,7 @@ lang::Locale SAL_CALL ScaDateAddIn::getLocale()
     return aFuncLoc;
 }
 
-OUString SAL_CALL ScaDateAddIn::getProgrammaticFuntionName( const OUString& )
+OUString SAL_CALL ScaDateAddIn::getProgrammaticFunctionName( const OUString& )
 {
     //  not used by calc
     //  (but should be implemented for other uses of the AddIn service)

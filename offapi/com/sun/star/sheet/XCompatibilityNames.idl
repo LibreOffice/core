@@ -40,7 +40,7 @@ published interface XCompatibilityNames: com::sun::star::uno::XInterface
         compatibility names is used to find the internal name of the
         function. The current locale may differ from the locale used in
         the imported file, so the method
-        XAddIn::getProgrammaticFuntionName() cannot be used
+        XAddIn::getProgrammaticFunctionName() cannot be used
         here.</p>
 
         <p>The order inside the sequence of compatibility names is used to

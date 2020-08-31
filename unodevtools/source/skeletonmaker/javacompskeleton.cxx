@@ -291,9 +291,9 @@ static void generateXLocalizableBodies(std::ostream& o) {
 static void generateXAddInBodies(std::ostream& o)
 {
     // com.sun.star.sheet.XAddIn:
-    // getProgrammaticFuntionName
+    // getProgrammaticFunctionName
     o << "    // com.sun.star.sheet.XAddIn:\n"
-        "    public String getProgrammaticFuntionName(String "
+        "    public String getProgrammaticFunctionName(String "
         "aDisplayName)\n    {\n"
         "        try {\n"
         "            com.sun.star.container.XNameAccess xNAccess =\n"

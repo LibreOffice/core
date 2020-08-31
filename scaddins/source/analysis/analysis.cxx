@@ -169,7 +169,7 @@ lang::Locale SAL_CALL AnalysisAddIn::getLocale()
 }
 
 // XAddIn
-OUString SAL_CALL AnalysisAddIn::getProgrammaticFuntionName( const OUString& )
+OUString SAL_CALL AnalysisAddIn::getProgrammaticFunctionName( const OUString& )
 {
     //  not used by calc
     //  (but should be implemented for other uses of the AddIn service)

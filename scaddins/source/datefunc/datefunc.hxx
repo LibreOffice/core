@@ -124,7 +124,7 @@ public:
     OUString ScaResId(const char* pId);
 
                                 // XAddIn
-    virtual OUString SAL_CALL getProgrammaticFuntionName( const OUString& aDisplayName ) override;
+    virtual OUString SAL_CALL getProgrammaticFunctionName( const OUString& aDisplayName ) override;
     virtual OUString SAL_CALL getDisplayFunctionName( const OUString& aProgrammaticName ) override;
     virtual OUString SAL_CALL getFunctionDescription( const OUString& aProgrammaticName ) override;
     virtual OUString SAL_CALL getDisplayArgumentName( const OUString& aProgrammaticName, sal_Int32 nArgument ) override;
