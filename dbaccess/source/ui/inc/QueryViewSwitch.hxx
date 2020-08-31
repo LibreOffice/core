@@ -72,7 +72,7 @@ namespace dbaui
         void     forceInitialView();
         bool     isSlotEnabled(sal_Int32 _nSlotId);
         void     setSlotEnabled(sal_Int32 _nSlotId, bool _bEnable);
-        void     setNoneVisbleRow(sal_Int32 _nRows);
+        void     setNoneVisibleRow(sal_Int32 _nRows);
         void     SaveUIConfig();
         void     reset();
         void     GrabFocus();

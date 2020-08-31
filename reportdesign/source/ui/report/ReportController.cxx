@@ -2225,7 +2225,7 @@ void SAL_CALL OReportController::disposing( const lang::EventObject& Source )
 }
 
 
-static sal_uInt16 lcl_getNonVisbleGroupsBefore( const uno::Reference< report::XGroups>& _xGroups
+static sal_uInt16 lcl_getNonVisibleGroupsBefore( const uno::Reference< report::XGroups>& _xGroups
                           ,sal_Int32 _nGroupPos
                           ,::std::function<bool(OGroupHelper *)> const & _pGroupMemberFunction)
 {
@@ -2253,7 +2253,7 @@ void OReportController::groupChange( const uno::Reference< report::XGroup>& _xGr
     if ( _sPropName == PROPERTY_HEADERON )
     {
         nPosition = m_xReportDefinition->getPageHeaderOn() ? (m_xReportDefinition->getReportHeaderOn() ? 2 : 1) : (m_xReportDefinition->getReportHeaderOn() ? 1 : 0);
-        nPosition += (static_cast<sal_uInt16>(_nGroupPos) - lcl_getNonVisbleGroupsBefore(m_xReportDefinition->getGroups(),_nGroupPos,pMemFun));
+        nPosition += (static_cast<sal_uInt16>(_nGroupPos) - lcl_getNonVisibleGroupsBefore(m_xReportDefinition->getGroups(),_nGroupPos,pMemFun));
         bHandle = true;
     }
     else if ( _sPropName == PROPERTY_FOOTERON )
@@ -2267,7 +2267,7 @@ void OReportController::groupChange( const uno::Reference< report::XGroup>& _xGr
         if ( m_xReportDefinition->getReportFooterOn() )
             --nPosition;
         sColor = DBGROUPFOOTER;
-        nPosition -= (static_cast<sal_uInt16>(_nGroupPos) - lcl_getNonVisbleGroupsBefore(m_xReportDefinition->getGroups(),_nGroupPos,pMemFun));
+        nPosition -= (static_cast<sal_uInt16>(_nGroupPos) - lcl_getNonVisibleGroupsBefore(m_xReportDefinition->getGroups(),_nGroupPos,pMemFun));
         if ( !_bShow )
             --nPosition;
         bHandle = true;
