@@ -218,13 +218,6 @@ endif
 
 else # $(OS) == WNT
 
-# FIXME ?
-# .IF "$(CCNUMVER)" >= "001400000000"
-# $(eval $(call gb_Library_add_defs,sal,\
-	-D_CRT_NON_CONFORMING_SWPRINTFS \
-))
-# .ENDIF
-
 $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/w32/backtrace \
 	sal/osl/w32/conditn \
