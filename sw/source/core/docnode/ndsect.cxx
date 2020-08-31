@@ -1156,7 +1156,7 @@ void SwSectionNode::MakeOwnFrames(SwNodeIndex* pIdxBehind, SwNodeIndex* pEndIdx)
     }
 }
 
-void SwSectionNode::DelFrames(SwRootFrame const*const /*FIXME TODO*/)
+void SwSectionNode::DelFrames(SwRootFrame const*const /*FIXME TODO*/, bool const bForce)
 {
     sal_uLong nStt = GetIndex()+1, nEnd = EndOfSectionIndex();
     if( nStt >= nEnd )
@@ -1173,6 +1173,7 @@ void SwSectionNode::DelFrames(SwRootFrame const*const /*FIXME TODO*/)
     // If the Area is within a Fly or TableBox, we can only hide it if
     // there is more Content which has Frames.
     // Or else the Fly/TableBox Frame does not have a Lower!
+    if (!bForce)
     {
         SwNodeIndex aIdx( *this );
         if( !SwNodes::GoPrevSection( &aIdx, true, false ) ||
