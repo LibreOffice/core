@@ -68,7 +68,7 @@ class SwThreadManager
         SwThreadManager(SwThreadManager const&) = delete;
         SwThreadManager& operator=(SwThreadManager const&) = delete;
 
-        static bool mbThreadManagerInstantiated;
+        static bool sbThreadManagerInstantiated;
 
         std::unique_ptr<ThreadManager> mpThreadManagerImpl;
 

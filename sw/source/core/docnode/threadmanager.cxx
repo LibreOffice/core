@@ -33,7 +33,7 @@ using namespace ::com::sun::star;
 
     #i73788#
 */
-const std::deque< ThreadManager::tThreadData >::size_type ThreadManager::mnStartedSize = 10;
+const std::deque< ThreadManager::tThreadData >::size_type ThreadManager::snStartedSize = 10;
 
 ThreadManager::ThreadManager( uno::Reference< util::XJobManager > const & rThreadJoiner )
     : maMutex(),
@@ -92,7 +92,7 @@ oslInterlockedCount ThreadManager::AddThread(
     }
 
     // add thread to manager
-    if ( maStartedThreads.size() < mnStartedSize &&
+    if ( maStartedThreads.size() < snStartedSize &&
          !StartingOfThreadsSuspended() )
     {
         // Try to start thread
@@ -233,7 +233,7 @@ void ThreadManager::ResumeStartingOfThreads()
 
     mbStartingOfThreadsSuspended = false;
 
-    while ( maStartedThreads.size() < mnStartedSize &&
+    while ( maStartedThreads.size() < snStartedSize &&
             !maWaitingForStartThreads.empty() )
     {
         if ( !StartWaitingThread() )
