@@ -193,7 +193,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_textAtOffset(long offset, I
 /**
    * Remove selection.
    * @param selectionIndex Special selection index
-   * @param success Variant to accept the memthod called result.
+   * @param success Variant to accept the method called result.
    * @return Result.
 */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::removeSelection(long selectionIndex)
@@ -205,7 +205,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::removeSelection(long selectionI
 /**
    * Set caret position.
    * @param offset Special position.
-   * @param success Variant to accept the memthod called result.
+   * @param success Variant to accept the method called result.
    * @return Result.
 */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::setCaretOffset(long offset)
@@ -219,7 +219,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::setCaretOffset(long offset)
    * @param selectionIndex Special selection index.
    * @param startOffset start position.
    * @param endOffset end position.
-   * @param success Variant to accept the memthod called result.
+   * @param success Variant to accept the method called result.
    * @return Result.
 */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::setSelection(long selectionIndex, long startOffset, long endOffset)

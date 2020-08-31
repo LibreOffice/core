@@ -188,7 +188,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccText::get_textAtOffset(long offset, IA2Tex
 /**
    * Remove selection.
    * @param selectionIndex Special selection index
-   * @param success Variant to accept the memthod called result.
+   * @param success Variant to accept the method called result.
    * @return Result.
 */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccText::removeSelection(long selectionIndex)//, unsigned char * success)
@@ -200,7 +200,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccText::removeSelection(long selectionIndex)
 /**
    * Set caret position.
    * @param offset Special position.
-   * @param success Variant to accept the memthod called result.
+   * @param success Variant to accept the method called result.
    * @return Result.
 */
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccText::setCaretOffset(long offset)
@@ -214,7 +214,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccText::setCaretOffset(long offset)
    * @param selectionIndex Special selection index.
    * @param startOffset start position.
    * @param endOffset end position.
-   * @param success Variant to accept the memthod called result.
+   * @param success Variant to accept the method called result.
    * @return Result.
 */
 
