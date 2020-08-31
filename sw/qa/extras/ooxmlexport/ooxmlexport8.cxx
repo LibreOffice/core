@@ -506,6 +506,18 @@ DECLARE_OOXMLEXPORT_TEST(testTDF91122, "tdf91122.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTDF91260, "tdf91260.docx")
+{
+    //textbox can't extend beyond the page bottom
+    uno::Reference<text::XTextRange> xFrame(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFrame->getString().startsWith( "Lorem ipsum" ) );
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10920), getProperty<sal_Int32>(xFrame, "Height"));
+
+    uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5450), xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(21946), xShape->getPosition().Y);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testFdo74357, "fdo74357.docx")
 {
     // Floating table wasn't converted to a textframe.
