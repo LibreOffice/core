@@ -491,11 +491,11 @@ void XMLSettingsExportHelper::ManipulateSetting( uno::Any& rAny, const OUString&
     else if( (rName == gsColorTableURL) || (rName == gsLineEndTableURL) || (rName == gsHatchTableURL) ||
              (rName == gsDashTableURL) || (rName == gsGradientTableURL) || (rName == gsBitmapTableURL ) )
     {
-        if( !mxStringSubsitution.is() )
+        if( !mxStringSubstitution.is() )
         {
             try
             {
-                const_cast< XMLSettingsExportHelper* >(this)->mxStringSubsitution =
+                const_cast< XMLSettingsExportHelper* >(this)->mxStringSubstitution =
                     util::PathSubstitution::create( m_rContext.GetComponentContext() );
             }
             catch( uno::Exception& )
@@ -504,11 +504,11 @@ void XMLSettingsExportHelper::ManipulateSetting( uno::Any& rAny, const OUString&
             }
         }
 
-        if( mxStringSubsitution.is() )
+        if( mxStringSubstitution.is() )
         {
             OUString aURL;
             rAny >>= aURL;
-            aURL = mxStringSubsitution->reSubstituteVariables( aURL );
+            aURL = mxStringSubstitution->reSubstituteVariables( aURL );
             rAny <<= aURL;
         }
     }

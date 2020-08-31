@@ -45,7 +45,7 @@ class XMLOFF_DLLPUBLIC XMLSettingsExportHelper
 {
     ::xmloff::XMLSettingsExportContext& m_rContext;
 
-    css::uno::Reference< css::util::XStringSubstitution > mxStringSubsitution;
+    css::uno::Reference< css::util::XStringSubstitution > mxStringSubstitution;
 
     void ManipulateSetting( css::uno::Any& rAny, const OUString& rName ) const;
 
