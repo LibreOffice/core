@@ -70,6 +70,8 @@ FuncPage::FuncPage(weld::Container* pParent, const IFunctionManager* _pFunctionM
     m_xLbFunction->connect_row_activated( LINK( this, FuncPage, DblClkHdl ) );
     m_xLbFunction->connect_key_press( LINK( this, FuncPage, KeyInputHdl ) );
     m_xLbFunctionSearchString->connect_changed( LINK( this, FuncPage, ModifyHdl ) );
+
+    m_xLbFunctionSearchString->grab_focus();
 }
 
 FuncPage::~FuncPage()
