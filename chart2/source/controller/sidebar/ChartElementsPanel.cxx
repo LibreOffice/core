@@ -143,7 +143,7 @@ void setLegendOverlay(const css::uno::Reference<css::frame::XModel>& xModel, boo
     xLegendProp->setPropertyValue("Overlay", css::uno::Any(bOverlay));
 }
 
-bool isTitleVisisble(const css::uno::Reference<css::frame::XModel>& xModel, TitleHelper::eTitleType eTitle)
+bool isTitleVisible(const css::uno::Reference<css::frame::XModel>& xModel, TitleHelper::eTitleType eTitle)
 {
     css::uno::Reference<css::uno::XInterface> xTitle = TitleHelper::getTitle(eTitle, xModel);
     if (!xTitle.is())
@@ -447,13 +447,13 @@ void ChartElementsPanel::updateData()
     mxCBLegendNoOverlay->set_sensitive(isLegendVisible(mxModel));
     mxCBLegendNoOverlay->set_active(!isLegendOverlay(mxModel));
     mxBoxLegend->set_sensitive(isLegendVisible(mxModel));
-    mxCBTitle->set_active(isTitleVisisble(mxModel, TitleHelper::MAIN_TITLE));
-    mxCBSubtitle->set_active(isTitleVisisble(mxModel, TitleHelper::SUB_TITLE));
-    mxCBXAxisTitle->set_active(isTitleVisisble(mxModel, TitleHelper::X_AXIS_TITLE));
-    mxCBYAxisTitle->set_active(isTitleVisisble(mxModel, TitleHelper::Y_AXIS_TITLE));
-    mxCBZAxisTitle->set_active(isTitleVisisble(mxModel, TitleHelper::Z_AXIS_TITLE));
-    mxCB2ndXAxisTitle->set_active(isTitleVisisble(mxModel, TitleHelper::SECONDARY_X_AXIS_TITLE));
-    mxCB2ndYAxisTitle->set_active(isTitleVisisble(mxModel, TitleHelper::SECONDARY_Y_AXIS_TITLE));
+    mxCBTitle->set_active(isTitleVisible(mxModel, TitleHelper::MAIN_TITLE));
+    mxCBSubtitle->set_active(isTitleVisible(mxModel, TitleHelper::SUB_TITLE));
+    mxCBXAxisTitle->set_active(isTitleVisible(mxModel, TitleHelper::X_AXIS_TITLE));
+    mxCBYAxisTitle->set_active(isTitleVisible(mxModel, TitleHelper::Y_AXIS_TITLE));
+    mxCBZAxisTitle->set_active(isTitleVisible(mxModel, TitleHelper::Z_AXIS_TITLE));
+    mxCB2ndXAxisTitle->set_active(isTitleVisible(mxModel, TitleHelper::SECONDARY_X_AXIS_TITLE));
+    mxCB2ndYAxisTitle->set_active(isTitleVisible(mxModel, TitleHelper::SECONDARY_Y_AXIS_TITLE));
     mxCBGridVerticalMajor->set_active(isGridVisible(mxModel, GridType::VERT_MAJOR));
     mxCBGridHorizontalMajor->set_active(isGridVisible(mxModel, GridType::HOR_MAJOR));
     mxCBGridVerticalMinor->set_active(isGridVisible(mxModel, GridType::VERT_MINOR));
