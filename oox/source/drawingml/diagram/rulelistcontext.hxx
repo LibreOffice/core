@@ -29,10 +29,10 @@ class RuleListContext : public oox::core::ContextHandler2
 {
 public:
     RuleListContext(ContextHandler2Helper const& rParent, const LayoutAtomPtr& pNode);
-    virtual ~RuleListContext() override;
+    ~RuleListContext() override;
 
-    virtual oox::core::ContextHandlerRef onCreateContext(sal_Int32 nElement,
-                                                         const AttributeList& rAttribs) override;
+    oox::core::ContextHandlerRef onCreateContext(sal_Int32 nElement,
+                                                 const AttributeList& rAttribs) override;
 
 private:
     LayoutAtomPtr mpNode;
