@@ -33,6 +33,8 @@ void * com_sun_star_i18n_Transliteration_get_implementation( void *, void * );
 void * com_sun_star_text_DefaultNumberingProvider_get_implementation( void *, void * );
 void * com_sun_star_comp_uri_UriReferenceFactory_get_implementation( void *, void * );
 void * emfio_emfreader_XEmfParser_get_implementation( void *, void * );
+void * i18npool_CalendarImpl_get_implementation(void*, void*);
+void * i18npool_Calendar_gregorian_get_implementation( void *, void * );
 void * unoxml_rdfRepository_get_implementation( void *, void * );
 void * unoxml_CURI_get_implementation( void *, void * );
 void * unoxml_CLiteral_get_implementation( void *, void * );
@@ -79,6 +81,8 @@ lo_get_constructor_map(void)
         { "com_sun_star_text_DefaultNumberingProvider_get_implementation", com_sun_star_text_DefaultNumberingProvider_get_implementation },
         { "com_sun_star_comp_uri_UriReferenceFactory_get_implementation", com_sun_star_comp_uri_UriReferenceFactory_get_implementation},
         { "emfio_emfreader_XEmfParser_get_implementation", emfio_emfreader_XEmfParser_get_implementation},
+        { "i18npool_CalendarImpl_get_implementation", i18npool_CalendarImpl_get_implementation},
+        { "i18npool_Calendar_gregorian_get_implementation", i18npool_Calendar_gregorian_get_implementation},
         { "unoxml_rdfRepository_get_implementation", unoxml_rdfRepository_get_implementation },
         { "unoxml_CURI_get_implementation", unoxml_CURI_get_implementation },
         { "unoxml_CLiteral_get_implementation", unoxml_CLiteral_get_implementation },
