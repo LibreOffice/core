@@ -517,7 +517,7 @@ void SdXMLGenericPageContext::SetPageMaster( OUString const & rsPageMasterName )
     // #80012# GetStylesContext() replaced with GetAutoStylesContext()
     const SvXMLStylesContext* pAutoStyles = GetSdImport().GetShapeImport()->GetAutoStylesContext();
 
-    const SvXMLStyleContext* pStyle = pAutoStyles ? pAutoStyles->FindStyleChildContext(XmlStyleFamily::SD_PAGEMASTERCONEXT_ID, rsPageMasterName) : nullptr;
+    const SvXMLStyleContext* pStyle = pAutoStyles ? pAutoStyles->FindStyleChildContext(XmlStyleFamily::SD_PAGEMASTERCONTEXT_ID, rsPageMasterName) : nullptr;
 
     const SdXMLPageMasterContext* pPageMaster = dynamic_cast<const SdXMLPageMasterContext*>(pStyle);
     if (!pPageMaster)
