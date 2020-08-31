@@ -465,12 +465,10 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testPictureEffectPreservation, "picture-effe
         "rad", 63500); // actually, it returns 63360
 }
 
-DECLARE_OOXMLEXPORT_TEST(testPictureArtisticEffectPreservation, "picture-artistic-effects-preservation.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testPictureArtisticEffectPreservation, "picture-artistic-effects-preservation.docx")
 {
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     xmlDocUniquePtr pRelsDoc = parseExport("word/_rels/document.xml.rels");
-    if (!pXmlDoc || !pRelsDoc)
-       return;
 
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(
             comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
@@ -581,10 +579,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testNestedAlternateContent, "nestedAlternate
 // Currently LibreOffice exports custom geometry for this hexagon, not preset shape.
 // When LibreOffice can export preset shapes with correct modifiers, then this test can be re-enabled.
 
-DECLARE_OOXMLEXPORT_TEST(test76317, "test76317.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(test76317, "test76317.docx")
 {
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc) return;
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:prstGeom[1]", "prst", "hexagon");
 }
 
@@ -677,15 +674,13 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testLockedCanvas, "fdo78658.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/lc:lockedCanvas", 1);
 }
 
-DECLARE_OOXMLEXPORT_TEST(fdo78474, "fdo78474.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(fdo78474, "fdo78474.docx")
 {
     xmlDocUniquePtr pXmlDoc1 = parseExport("word/document.xml");
-    if (!pXmlDoc1) return;
     //docx file after RT is getting corrupted.
     assertXPath(pXmlDoc1, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:txbx[1]/w:txbxContent[1]/w:p[1]/w:r[1]/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/pic:pic[1]/pic:blipFill[1]/a:blip[1]", "embed", "rId2");
 
     xmlDocUniquePtr pXmlDoc2 = parseExport("word/_rels/document.xml.rels");
-    if (!pXmlDoc2) return;
     assertXPath(pXmlDoc2,"/rels:Relationships/rels:Relationship[2]","Id","rId2");
 }
 
@@ -764,12 +759,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo78663, "fdo78663.docx")
     assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r/w:pict",1);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFdo78957, "fdo78957.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo78957, "fdo78957.docx")
 {
     xmlDocUniquePtr pXmlHeader = parseExport("word/header2.xml");
-
-    if(!pXmlHeader)
-        return;
 
     const sal_Int64 IntMax = SAL_MAX_INT32;
     sal_Int64 cx = 0, cy = 0;
@@ -923,16 +915,14 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf118242, "tdf118242.odt")
 
 }
 
-DECLARE_OOXMLEXPORT_TEST(testWrapTightThrough, "wrap-tight-through.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testWrapTightThrough, "wrap-tight-through.docx")
 {
     // These were wrapSquare without a wrap polygon before.
-    if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
-    {
-        // The first shape should be wrapThrough with a wrap polygon (was wrapSquare).
-        assertXPath(pXmlDoc, "//w:drawing/wp:anchor[1]/wp:wrapThrough/wp:wrapPolygon/wp:start", "x", "-1104");
-        // The second shape should be wrapTight with a wrap polygon (was wrapSquare).
-        assertXPath(pXmlDoc, "//w:drawing/wp:anchor[1]/wp:wrapTight/wp:wrapPolygon/wp:start", "y", "792");
-    }
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // The first shape should be wrapThrough with a wrap polygon (was wrapSquare).
+    assertXPath(pXmlDoc, "//w:drawing/wp:anchor[1]/wp:wrapThrough/wp:wrapPolygon/wp:start", "x", "-1104");
+    // The second shape should be wrapTight with a wrap polygon (was wrapSquare).
+    assertXPath(pXmlDoc, "//w:drawing/wp:anchor[1]/wp:wrapTight/wp:wrapPolygon/wp:start", "y", "792");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testPictureWrapPolygon, "picture-wrap-polygon.docx")
