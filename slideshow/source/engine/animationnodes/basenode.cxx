@@ -657,15 +657,15 @@ AnimationNode::NodeState BaseNode::getState() const
 }
 
 bool BaseNode::registerDeactivatingListener(
-    const AnimationNodeSharedPtr& rNotifee )
+    const AnimationNodeSharedPtr& rNotify )
 {
     if (! checkValidNode())
         return false;
 
     ENSURE_OR_RETURN_FALSE(
-        rNotifee,
-        "BaseNode::registerDeactivatingListener(): invalid notifee" );
-    maDeactivatingListeners.push_back( rNotifee );
+        rNotify,
+        "BaseNode::registerDeactivatingListener(): invalid notify" );
+    maDeactivatingListeners.push_back( rNotify );
 
     return true;
 }

@@ -117,7 +117,7 @@ public:
     virtual css::uno::Reference<css::animations::XAnimationNode> getXAnimationNode() const override;
     virtual NodeState getState() const override;
     virtual bool registerDeactivatingListener(
-        const AnimationNodeSharedPtr& rNotifee ) override;
+        const AnimationNodeSharedPtr& rNotify ) override;
     // nop:
     virtual void notifyDeactivating( const AnimationNodeSharedPtr& rNotifier ) override;
 

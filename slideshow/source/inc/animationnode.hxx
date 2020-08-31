@@ -123,10 +123,10 @@ public:
         notifyDeactivating() call. The node calls all
         registered listener, when it leaves the ACTIVE state.
 
-        @param rNotifee AnimationNode to notify
+        @param rNotify AnimationNode to notify
     */
     virtual bool registerDeactivatingListener(
-        const AnimationNodeSharedPtr& rNotifee ) = 0;
+        const AnimationNodeSharedPtr& rNotify ) = 0;
 
     /** Called to notify another AnimationNode's deactivation
 
