@@ -325,7 +325,7 @@
                 <child type="label">
                   <object class="GtkLabel" id="label1">
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="findreplacedialog|label1">_Search For</property>
+                    <property name="label" translatable="yes" context="findreplacedialog|label1">Search For</property>
                     <property name="use_underline">True</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
@@ -836,7 +836,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="includediacritics">
-                                    <property name="label" translatable="yes" context="findreplacedialog|includediacritics">Diac_ritic-sensitive</property>
+                                    <property name="label" translatable="yes" context="findreplacedialog|includediacritics">Diacritic-_sensitive</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
