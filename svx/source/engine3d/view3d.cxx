@@ -1573,26 +1573,26 @@ void E3dView::CheckPossibilities()
         return;
 
     const size_t nMarkCnt = GetMarkedObjectCount();
-    bool bCoumpound = false;
+    bool bCompound = false;
     bool b3DObject = false;
-    for(size_t nObjs = 0; (nObjs < nMarkCnt) && !bCoumpound; ++nObjs)
+    for(size_t nObjs = 0; (nObjs < nMarkCnt) && !bCompound; ++nObjs)
     {
         SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
         if(dynamic_cast< const E3dCompoundObject* >(pObj))
-            bCoumpound = true;
+            bCompound = true;
         if(dynamic_cast< const E3dObject* >(pObj))
             b3DObject = true;
     }
 
     // So far: there are two or more of any objects selected. See if
     // compound objects are involved. If yes, ban grouping.
-    if(m_bGroupPossible && bCoumpound)
+    if(m_bGroupPossible && bCompound)
         m_bGroupPossible = false;
 
     if(m_bUnGroupPossible && b3DObject)
         m_bUnGroupPossible = false;
 
-    if(m_bGrpEnterPossible && bCoumpound)
+    if(m_bGrpEnterPossible && bCompound)
         m_bGrpEnterPossible = false;
 }
 

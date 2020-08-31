@@ -1140,7 +1140,7 @@ std::unique_ptr<STLPropertySet> CustomAnimationPane::createSelectionSet()
         if( pEffect->getAudio().is() )
         {
             aSoundSource = pEffect->getAudio()->getSource();
-            addValue( pSet, nHandleSoundVolumne, makeAny( pEffect->getAudio()->getVolume() ) );
+            addValue( pSet, nHandleSoundVolume, makeAny( pEffect->getAudio()->getVolume() ) );
 // todo     addValue( pSet, nHandleSoundEndAfterSlide, makeAny( pEffect->getAudio()->getEndAfterSlide() ) );
 // this is now stored at the XCommand parameter sequence
         }

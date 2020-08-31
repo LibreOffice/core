@@ -2032,7 +2032,7 @@ std::unique_ptr<STLPropertySet> CustomAnimationDialog::createDefaultSet()
     pSet->setPropertyDefaultValue( nHandleCurrentPage, aEmpty );
 
     pSet->setPropertyDefaultValue( nHandleSoundURL, aEmpty );
-    pSet->setPropertyDefaultValue( nHandleSoundVolumne, makeAny( 1.0) );
+    pSet->setPropertyDefaultValue( nHandleSoundVolume, makeAny( 1.0) );
     pSet->setPropertyDefaultValue( nHandleSoundEndAfterSlide, makeAny( sal_Int32(0) ) );
 
     pSet->setPropertyDefaultValue( nHandleCommand, makeAny( sal_Int16(0) ) );

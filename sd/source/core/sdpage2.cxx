@@ -520,9 +520,9 @@ void SdPage::setTransitionFadeColor ( sal_Int32 nTransitionFadeColor )
     ActionChanged();
 }
 
-void SdPage::setTransitionDuration ( double fTranstionDuration )
+void SdPage::setTransitionDuration ( double fTransitionDuration )
 {
-    mfTransitionDuration = fTranstionDuration;
+    mfTransitionDuration = fTransitionDuration;
     ActionChanged();
 }
 

@@ -245,7 +245,7 @@ public:
     void        setTransitionFadeColor( sal_Int32 nTransitionFadeColor );
 
     double      getTransitionDuration() const { return mfTransitionDuration;}
-    void        setTransitionDuration( double fTranstionDuration );
+    void        setTransitionDuration( double fTransitionDuration );
 
     virtual void Changed(const SdrObject& rObj, SdrUserCallType eType,
                          const ::tools::Rectangle& rOldBoundRect) override;
