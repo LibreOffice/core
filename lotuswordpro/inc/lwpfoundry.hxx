@@ -248,7 +248,7 @@ private:
 public:
     LwpContentManager& GetContentManager() { return m_ContentMgr; }
     LwpObjectID& GetGraphicListHead() { return m_ContentMgr.GetGraphicListHead(); }
-    LwpFontManager& GetFontManger() { return m_FontMgr;}
+    LwpFontManager& GetFontManager() { return m_FontMgr;}
     LwpObjectID& GetTextStyleHead()  { return m_TextStyle;}
     LwpObjectID& GetLayout() {return m_Layout;}
     LwpObjectID& GetBulletManagerID() { return m_BulMgr.GetHeadID();}
