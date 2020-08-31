@@ -58,11 +58,11 @@ void xforms_propertyFunction(xmlXPathParserContextPtr ctxt, int nargs);
 void xforms_nowFunction(xmlXPathParserContextPtr ctxt, int nargs);
 void xforms_daysFromDateFunction(xmlXPathParserContextPtr ctxt, int nargs);
 void xforms_secondsFromDateTimeFunction(xmlXPathParserContextPtr ctxt, int nargs);
-void xforms_secondsFuction(xmlXPathParserContextPtr ctxt, int nargs);
-void xforms_monthsFuction(xmlXPathParserContextPtr ctxt, int nargs);
+void xforms_secondsFunction(xmlXPathParserContextPtr ctxt, int nargs);
+void xforms_monthsFunction(xmlXPathParserContextPtr ctxt, int nargs);
 
 // Node-set Functions
-void xforms_instanceFuction(xmlXPathParserContextPtr ctxt, int nargs);
+void xforms_instanceFunction(xmlXPathParserContextPtr ctxt, int nargs);
 
 // Node-set Functions; XForms 1.1
 void xforms_currentFunction(xmlXPathParserContextPtr ctxt, int nargs);
