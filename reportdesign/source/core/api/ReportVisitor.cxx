@@ -28,7 +28,7 @@ using namespace com::sun::star;
 OReportVisitor::OReportVisitor(ITraverseReport* _pTraverseReport)
                        :m_pTraverseReport(_pTraverseReport)
 {
-    OSL_ENSURE(m_pTraverseReport,"ReportDefintion must be not NULL!");
+    OSL_ENSURE(m_pTraverseReport,"ReportDefinition must be not NULL!");
 }
 
 void OReportVisitor::start(const uno::Reference< report::XReportDefinition>& _xReportDefinition)
