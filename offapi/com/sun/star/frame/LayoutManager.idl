@@ -44,7 +44,7 @@
         <li>boolean <code>RefreshContextToolbarVisibility</code>: Set to true to refresh visibility of context toolbars</li>
         <li>boolean <code>HideCurrentUI</code>: Hide/Show current UI elements (Toolbar, Statusbar, Menubar, etc)</li>
         <li>boolean <code>PreserveContentSize</code>: When true, the outer window is resized the content/document size is preserved</li>
-    <ul>
+    </ul>
     </p>
 
     @since OOo 2.0
