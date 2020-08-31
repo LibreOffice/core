@@ -196,7 +196,9 @@ IMPL_LINK(SearchResultsDlg, HeaderBarClick, int, nColumn, void)
     }
     else
     {
-        mxList->set_sort_indicator(TRISTATE_INDET, mxList->get_sort_column());
+        int nOldSortColumn = mxList->get_sort_column();
+        if (nOldSortColumn != -1)
+            mxList->set_sort_indicator(TRISTATE_INDET, nOldSortColumn);
         mxList->set_sort_column(nColumn);
     }
 

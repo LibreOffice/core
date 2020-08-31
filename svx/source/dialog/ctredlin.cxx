@@ -111,7 +111,9 @@ IMPL_LINK(SvxRedlinTable, HeaderBarClick, int, nColumn, void)
     }
     else
     {
-        pTreeView->set_sort_indicator(TRISTATE_INDET, pTreeView->get_sort_column());
+        int nOldSortColumn = pTreeView->get_sort_column();
+        if (nOldSortColumn != -1)
+            pTreeView->set_sort_indicator(TRISTATE_INDET, nOldSortColumn);
         pTreeView->set_sort_column(nColumn);
     }
 

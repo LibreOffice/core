@@ -362,7 +362,9 @@ IMPL_LINK(SwInsertBookmarkDlg, HeaderBarClick, int, nColumn, void)
     }
     else
     {
-        m_xBookmarksBox->set_sort_indicator(TRISTATE_INDET, m_xBookmarksBox->get_sort_column());
+        int nOldSortColumn = m_xBookmarksBox->get_sort_column();
+        if (nOldSortColumn != -1)
+            m_xBookmarksBox->set_sort_indicator(TRISTATE_INDET, nOldSortColumn);
         m_xBookmarksBox->set_sort_column(nColumn);
     }
 
