@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "86041876_d4818a83",
+        "filename": "include/rtl/string.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1912,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-08-31T06:24:05Z",
+      "side": 1,
+      "message": "Seems to miss a closing parenthesis - after \"c\"?",
+      "range": {
+        "startLine": 1912,
+        "startChar": 27,
+        "endLine": 1912,
+        "endChar": 60
+      },
+      "revId": "2e21240f23ac2191a3535d697a7308b29303c67c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
