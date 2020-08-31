@@ -142,6 +142,7 @@
 #include <com/sun/star/drawing/ShadingPattern.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
+#include <com/sun/star/embed/Aspects.hpp>
 
 #include <algorithm>
 #include <stdarg.h>
@@ -5541,7 +5542,16 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
     OUString sObjectName = aContainer->GetEmbeddedObjectName( xObj );
 
     // set some attributes according to the type of the embedded object
-    OUString sProgID, sDrawAspect = "Content";
+    OUString sProgID, sDrawAspect;
+    switch (rNode.GetAspect())
+    {
+        case embed::Aspects::MSOLE_CONTENT: sDrawAspect = "Content"; break;
+        case embed::Aspects::MSOLE_DOCPRINT: sDrawAspect = "DocPrint"; break;
+        case embed::Aspects::MSOLE_ICON: sDrawAspect = "Icon"; break;
+        case embed::Aspects::MSOLE_THUMBNAIL: sDrawAspect = "Thumbnail"; break;
+        default:
+            SAL_WARN("sw.ww8", "DocxAttributeOutput::WriteOLE: invalid aspect value");
+    }
     auto pObjectsInterop = std::find_if(aObjectsInteropList.begin(), aObjectsInteropList.end(),
         [&sObjectName](const beans::PropertyValue& rProp) { return rProp.Name == sObjectName; });
     if (pObjectsInterop != aObjectsInteropList.end())
@@ -5552,10 +5562,6 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
         if ( rObjectInteropAttribute.Name == "ProgID" )
         {
             rObjectInteropAttribute.Value >>= sProgID;
-        }
-        else if ( rObjectInteropAttribute.Name == "DrawAspect" )
-        {
-            rObjectInteropAttribute.Value >>= sDrawAspect;
         }
     }
 
