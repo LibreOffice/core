@@ -3701,7 +3701,7 @@ public:
     // concatenation chain, when neither of the first two e1, e2 is one of our rtl string-related
     // classes (so something like
     //
-    //   OUString s = "a" + (b ? std::u16string_view(u"c" : u"dd");
+    //   OUString s = "a" + (b ? std::u16string_view(u"c") : std::u16string_view(u"dd"));
     //
     // would not compile):
     template<typename T> [[nodiscard]] static

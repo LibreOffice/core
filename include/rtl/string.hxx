@@ -1909,7 +1909,7 @@ public:
     // concatenation chain, when neither of the first two e1, e2 is one of our rtl string-related
     // classes (so something like
     //
-    //   OString s = "a" + (b ? std::string_view("c" : "dd");
+    //   OString s = "a" + (b ? std::string_view("c") : std::string_view("dd"));
     //
     // would not compile):
     template<typename T> [[nodiscard]] static
