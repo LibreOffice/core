@@ -19,7 +19,7 @@
 
 void f(std::ostream& s1)
 {
-    static char const foo[] = "foo";
+    static constexpr char foo[] = "foo";
     static char16_t const foou[] = u"foo";
     s1 << "foo"
        << "foo";

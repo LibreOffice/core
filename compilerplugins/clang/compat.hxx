@@ -215,6 +215,28 @@ inline clang::Expr * getSubExpr(clang::MaterializeTemporaryExpr const * expr) {
 //        `-MemberExpr 0x2b74e8e656a0 '<bound member function type>' .operator ResString 0x2b74e8dc1f00
 //          `-DeclRefExpr 0x2b74e8e65648 'struct ErrorResource_Impl' lvalue Var 0x2b74e8e653b0 'aEr' 'struct ErrorResource_Impl'
 //
+// Also work around CastExpr::getSubExprAsWritten firing
+//
+//   include/llvm/Support/Casting.h:269: typename llvm::cast_retty<X, Y*>::ret_type llvm::cast(Y*)
+//   [with X = clang::CXXConstructExpr; Y = clang::Expr;
+//   typename llvm::cast_retty<X, Y*>::ret_type = clang::CXXConstructExpr*]: Assertion
+//   `isa<X>(Val) && "cast<Ty>() argument of incompatible type!"' failed.
+//
+// for CastExprs involving ConstantExpr (introduced with
+// <https://github.com/llvm/llvm-project/commit/7c44da279e399d302a685c500e7f802f8adf9762> "Create
+// ConstantExpr class" towards LLVM 8) like
+//
+//   CXXFunctionalCastExpr 0xc01c4e8 'class rtl::OStringLiteral<9>':'class rtl::OStringLiteral<9>' functional cast to OStringLiteral <ConstructorConversion>
+//   `-ConstantExpr 0xc01c380 'class rtl::OStringLiteral<9>':'class rtl::OStringLiteral<9>'
+//     |-value: Struct
+//     | |-fields: Int 1073741824, Int 8
+//     | `-field: Array size=9
+//     |   |-elements: Int 46, Int 111, Int 115, Int 108
+//     |   |-elements: Int 45, Int 116, Int 109, Int 112
+//     |   `-element: Int 0
+//     `-CXXConstructExpr 0xc01c350 'class rtl::OStringLiteral<9>':'class rtl::OStringLiteral<9>' 'void (const char (&)[9])'
+//       `-StringLiteral 0xc019ad8 'const char [9]' lvalue ".osl-tmp"
+//
 // Copies code from Clang's lib/AST/Expr.cpp:
 namespace detail {
   inline clang::Expr *skipImplicitTemporary(clang::Expr *expr) {
@@ -240,7 +262,7 @@ inline clang::Expr *getSubExprAsWritten(clang::CastExpr *This) {
     // subexpression describing the call; strip it off.
     if (E->getCastKind() == clang::CK_ConstructorConversion)
       SubExpr =
-        detail::skipImplicitTemporary(clang::cast<clang::CXXConstructExpr>(SubExpr)->getArg(0));
+        detail::skipImplicitTemporary(clang::cast<clang::CXXConstructExpr>(SubExpr->IgnoreImplicit())->getArg(0));
     else if (E->getCastKind() == clang::CK_UserDefinedConversion) {
       assert((clang::isa<clang::CXXMemberCallExpr>(SubExpr) ||
               clang::isa<clang::BlockExpr>(SubExpr)) &&
