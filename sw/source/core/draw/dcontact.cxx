@@ -1456,6 +1456,9 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
                 // #i40845# - follow-up of #i35635#
                 // move object to visible layer
                 MoveObjToVisibleLayer(GetMaster());
+                // tdf#135661 InsertMasterIntoDrawPage may have created a new
+                // SwXShape with null m_pFormat; fix that
+                SwXShape::AddExistingShapeToFormat(*GetMaster());
                 break;
             case sw::DrawFrameFormatHintId::PREP_DELETE_FLY:
                 RemoveMasterFromDrawPage();
