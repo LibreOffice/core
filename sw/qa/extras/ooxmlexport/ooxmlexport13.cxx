@@ -883,12 +883,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf125324, "tdf125324.docx")
     assertXPath(pXmlDoc, "/root/page/body/txt[2]/anchored/fly/tab/infos/bounds", "top", "4193");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf78657, "tdf78657_picture_hyperlink.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf78657, "tdf78657_picture_hyperlink.docx")
 {
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     xmlDocUniquePtr pXmlRels = parseExport("word/_rels/document.xml.rels");
-    if (!pXmlDoc || !pXmlRels)
-        return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing/wp:inline/wp:docPr/a:hlinkClick", 1);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing/wp:inline/a:graphic/a:graphicData/pic:pic/pic:nvPicPr/pic:cNvPr/a:hlinkClick", 1);
     assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@Target='http://www.google.com']", "TargetMode", "External");
@@ -1107,8 +1105,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127362, "tdf127362.odt")
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     xmlDocUniquePtr pXmlRels = parseExport("word/_rels/document.xml.rels");
-    if (!pXmlRels)
-        return;
 
     OUString bookmarkName = "#" + getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:bookmarkStart", "name");
     OUString anchor = getXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@Id='rId3']", "Target");
@@ -1175,8 +1171,6 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf123628, "tdf123628.odt")
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
-    if (!pXmlStyles)
-        return;
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:hyperlink/w:r/w:rPr/w:rStyle", "val", "InternetLink");
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='InternetLink']/w:name", "val", "Hyperlink");
@@ -1192,13 +1186,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf127741, "tdf127741.docx")
     CPPUNIT_ASSERT(visitedStyleName.equalsIgnoreAsciiCase("Visited Internet Link"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf127925, "tdf127925.odt")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127925, "tdf127925.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
-    if (!pXmlStyles)
-        return;
-
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='VisitedInternetLink']/w:name", "val", "FollowedHyperlink");
 }
 
