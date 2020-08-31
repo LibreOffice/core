@@ -104,6 +104,7 @@ public:
     void set_size_request(int nWidth, int nHeight);
 
     weld::TreeView& GetWidget() { return *pTreeView; }
+    bool IsSorted() const { return bSorted; }
 
     ~SvxRedlinTable();
 
