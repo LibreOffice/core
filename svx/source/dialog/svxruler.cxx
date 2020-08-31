@@ -68,7 +68,7 @@ struct SvxRuler_Impl {
     long   lLastRMargin;
     std::unique_ptr<SvxProtectItem> aProtectItem;
     std::unique_ptr<SfxBoolItem> pTextRTLItem;
-    sal_uInt16 nControlerItems;
+    sal_uInt16 nControllerItems;
     sal_uInt16 nIdx;
     sal_uInt16 nColLeftPix;
     sal_uInt16 nColRightPix;    // Pixel values for left / right edge
@@ -85,7 +85,7 @@ struct SvxRuler_Impl {
         lOldWinPos(0), lMaxLeftLogic(0), lMaxRightLogic(0),
         lLastLMargin(0), lLastRMargin(0),
         aProtectItem(std::make_unique<SvxProtectItem>(SID_RULER_PROTECT)),
-        nControlerItems(0), nIdx(0),
+        nControllerItems(0), nIdx(0),
         nColLeftPix(0), nColRightPix(0),
         bIsTableRows(false),
         bIsTabsRelativeToIndent(true)
@@ -263,7 +263,7 @@ SvxRuler::SvxRuler(
 
     pCtrlItems[i++].reset(new SvxRulerItem(SID_RULER_PROTECT, *this, rBindings));
     pCtrlItems[i++].reset(new SvxRulerItem(SID_RULER_BORDER_DISTANCE, *this, rBindings));
-    mxRulerImpl->nControlerItems=i;
+    mxRulerImpl->nControllerItems=i;
 
     if( (nFlags & SvxRulerSupportFlags::SET_NULLOFFSET) == SvxRulerSupportFlags::SET_NULLOFFSET )
         SetExtraType(RulerExtra::NullOffset);
@@ -1627,10 +1627,10 @@ void SvxRuler::SetActive(bool bOn)
     {
         pBindings->EnterRegistrations();
         if(bOn)
-            for(sal_uInt16 i=0;i<mxRulerImpl->nControlerItems;i++)
+            for(sal_uInt16 i=0;i<mxRulerImpl->nControllerItems;i++)
                 pCtrlItems[i]->ReBind();
         else
-            for(sal_uInt16 j=0;j<mxRulerImpl->nControlerItems;j++)
+            for(sal_uInt16 j=0;j<mxRulerImpl->nControllerItems;j++)
                 pCtrlItems[j]->UnBind();
         pBindings->LeaveRegistrations();
     }
@@ -3210,7 +3210,7 @@ void SvxRuler::EndDrag()
     Ruler::EndDrag();
     if(bUndo)
     {
-        for(sal_uInt16 i = 0; i < mxRulerImpl->nControlerItems; i++)
+        for(sal_uInt16 i = 0; i < mxRulerImpl->nControllerItems; i++)
         {
             pCtrlItems[i]->ClearCache();
             pCtrlItems[i]->GetBindings().Invalidate(pCtrlItems[i]->GetId());

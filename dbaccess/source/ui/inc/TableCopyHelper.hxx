@@ -88,7 +88,7 @@ namespace dbaui
                 { }
         };
 
-        OTableCopyHelper(OGenericUnoController* _pControler);
+        OTableCopyHelper(OGenericUnoController* _pController);
 
         /** pastes a table into the data source
             @param  _rPasteData
