@@ -157,7 +157,7 @@ OUString AboutDialog::GetVersionString() {
 OUString AboutDialog::GetBuildString()
 {
   OUString sBuildId(utl::Bootstrap::getBuildIdData(""));
-  SAL_WARN_IF(!sBuildId.isEmpty(), "cui.dialogs", "No BUILDID in bootstrap file");
+  SAL_WARN_IF(sBuildId.isEmpty(), "cui.dialogs", "No BUILDID in bootstrap file");
 
   return sBuildId;
 }
