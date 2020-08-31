@@ -52,14 +52,14 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
     private final FieldSelection curPrimaryKeySelection;
     private String[] fieldnames;
     private final TableDescriptor curTableDescriptor;
-    private final boolean bAutoPrimaryKeysupportsAutoIncrmentation;
+    private final boolean bAutoPrimaryKeysupportsAutoIncrementation;
     private static final String SAUTOMATICKEYFIELDNAME = "ID";
 
     public PrimaryKeyHandler(TableWizard _CurUnoDialog, TableDescriptor _curTableDescriptor)
     {
         this.CurUnoDialog = _CurUnoDialog;
         curTableDescriptor = _curTableDescriptor;
-        bAutoPrimaryKeysupportsAutoIncrmentation = curTableDescriptor.oTypeInspector.isAutoIncrementationSupported();
+        bAutoPrimaryKeysupportsAutoIncrementation = curTableDescriptor.oTypeInspector.isAutoIncrementationSupported();
         short curtabindex = (short) ((TableWizard.SOPRIMARYKEYPAGE * 100) - 20);
         Integer IPRIMEKEYSTEP = Integer.valueOf(TableWizard.SOPRIMARYKEYPAGE);
         final String sExplanations = CurUnoDialog.m_oResource.getResText("RID_TABLE_26");
@@ -274,7 +274,7 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
     {
         boolean bdoEnable = (this.chkcreatePrimaryKey.getState() == 1);
         Helper.setUnoPropertyValue(UnoDialog.getModel(optAddAutomatically), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bdoEnable));
-        Helper.setUnoPropertyValue(UnoDialog.getModel(chkApplyAutoValueAutomatic), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bAutoPrimaryKeysupportsAutoIncrmentation && bdoEnable));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(chkApplyAutoValueAutomatic), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bAutoPrimaryKeysupportsAutoIncrementation && bdoEnable));
         Helper.setUnoPropertyValue(UnoDialog.getModel(optUseExisting), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bdoEnable));
         Helper.setUnoPropertyValue(UnoDialog.getModel(optUseSeveral), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bdoEnable));
         //toggle subcontrols of the radiobuttons...
@@ -386,7 +386,7 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
         try
         {
             boolean bisAutomaticMode = AnyConverter.toBoolean(Helper.getUnoPropertyValue(UnoDialog.getModel(optAddAutomatically), PropertyNames.PROPERTY_ENABLED));
-            boolean bdoenable = bAutoPrimaryKeysupportsAutoIncrmentation && optAddAutomatically.getState() && bisAutomaticMode;
+            boolean bdoenable = bAutoPrimaryKeysupportsAutoIncrementation && optAddAutomatically.getState() && bisAutomaticMode;
             Helper.setUnoPropertyValue(UnoDialog.getModel(chkApplyAutoValueAutomatic), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bdoenable));
         }
         catch (IllegalArgumentException e)
