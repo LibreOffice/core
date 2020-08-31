@@ -71,7 +71,7 @@ void StyleStatusListener::StateChanged(SfxItemState /*eState*/, const SfxPoolIte
 }
 
 StyleItemController::StyleItemController(
-    const OUString& aStyleName,
+    const std::pair<OUString, OUString>& aStyleName,
     css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider)
     : m_eStyleFamily(SfxStyleFamily::Para)
     , m_aStyleName(aStyleName)
@@ -90,7 +90,7 @@ void StyleItemController::Paint(vcl::RenderContext& rRenderContext,
     rRenderContext.Pop();
 }
 
-void StyleItemController::SetStyle(const OUString& sStyleName)
+void StyleItemController::SetStyle(const std::pair<OUString, OUString>& sStyleName)
 {
     m_aStyleName = sStyleName;
     Invalidate();
@@ -105,7 +105,7 @@ void StyleItemController::Select(bool bSelect)
 bool StyleItemController::MouseButtonDown(const MouseEvent&)
 {
     css::uno::Sequence<css::beans::PropertyValue> aArgs(2);
-    aArgs[0].Value <<= m_aStyleName;
+    aArgs[0].Value <<= m_aStyleName.second;
     aArgs[1].Name = "Family";
     aArgs[1].Value <<= sal_Int16(m_eStyleFamily);
 
@@ -217,7 +217,8 @@ void StyleItemController::DrawEntry(vcl::RenderContext& rRenderContext)
     {
         pPool->SetSearchMask(m_eStyleFamily);
         pStyle = pPool->First();
-        while (pStyle && pStyle->GetName() != m_aStyleName)
+        while (pStyle && pStyle->GetName() != m_aStyleName.first
+               && pStyle->GetName() != m_aStyleName.second)
             pStyle = pPool->Next();
 
         if (!pStyle)
@@ -320,7 +321,7 @@ void StyleItemController::DrawSelection(vcl::RenderContext& rRenderContext)
 void StyleItemController::DrawHighlight(vcl::RenderContext& rRenderContext, Color aFontBack)
 {
     tools::Rectangle aTextRect;
-    rRenderContext.GetTextBoundRect(aTextRect, m_aStyleName);
+    rRenderContext.GetTextBoundRect(aTextRect, m_aStyleName.second);
 
     Size aSize = aTextRect.GetSize();
     aSize.AdjustHeight(aSize.getHeight());
@@ -340,17 +341,17 @@ void StyleItemController::DrawHighlight(vcl::RenderContext& rRenderContext, Colo
 void StyleItemController::DrawText(vcl::RenderContext& rRenderContext)
 {
     tools::Rectangle aTextRect;
-    rRenderContext.GetTextBoundRect(aTextRect, m_aStyleName);
+    rRenderContext.GetTextBoundRect(aTextRect, m_aStyleName.second);
 
     Point aPos(0, 0);
     aPos.AdjustX(LEFT_MARGIN);
     aPos.AdjustY((rRenderContext.GetOutputHeightPixel() - aTextRect.Bottom()) / 2);
 
-    rRenderContext.DrawText(aPos, m_aStyleName);
+    rRenderContext.DrawText(aPos, m_aStyleName.second);
 }
 
 StylesPreviewWindow_Base::StylesPreviewWindow_Base(
-    weld::Builder& xBuilder, std::vector<OUString>& aDefaultStyles,
+    weld::Builder& xBuilder, std::vector<std::pair<OUString, OUString>>& aDefaultStyles,
     css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider)
     : m_xUp(xBuilder.weld_toolbar("uptoolbar"))
     , m_xDown(xBuilder.weld_toolbar("downtoolbar"))
@@ -359,7 +360,9 @@ StylesPreviewWindow_Base::StylesPreviewWindow_Base(
 {
     for (unsigned int i = 0; i < STYLES_COUNT; i++)
     {
-        m_xStyleControllers[i].reset(new StyleItemController(aDefaultStyles[i], xDispatchProvider));
+        auto aStyle
+            = i < aDefaultStyles.size() ? aDefaultStyles[i] : std::pair<OUString, OUString>("", "");
+        m_xStyleControllers[i].reset(new StyleItemController(aStyle, xDispatchProvider));
 
         OUString sIdOUString = "style" + OUString::number(i + 1);
         OString sId = OUStringToOString(sIdOUString, RTL_TEXTENCODING_ASCII_US);
@@ -391,10 +394,10 @@ StylesPreviewWindow_Base::~StylesPreviewWindow_Base()
     m_pStatusListener = nullptr;
 }
 
-OUString StylesPreviewWindow_Base::GetVisibleStyle(unsigned nPosition)
+std::pair<OUString, OUString> StylesPreviewWindow_Base::GetVisibleStyle(unsigned nPosition)
 {
     if (nPosition >= STYLES_COUNT || !m_aAllStyles.size())
-        return "";
+        return std::make_pair<OUString, OUString>("", "");
 
     return m_aAllStyles[(m_nStyleIterator + nPosition) % m_aAllStyles.size()];
 }
@@ -413,7 +416,17 @@ void StylesPreviewWindow_Base::MakeCurrentStyleVisible()
     if (m_aAllStyles.size())
     {
         unsigned nNewIterator = m_nStyleIterator;
-        auto aFound = std::find(m_aAllStyles.begin(), m_aAllStyles.end(), m_sSelectedStyle);
+        auto aIt = m_aAllStyles.begin();
+        auto aFound = m_aAllStyles.end();
+        while (aIt != m_aAllStyles.end())
+        {
+            if (aIt->first == m_sSelectedStyle || aIt->second == m_sSelectedStyle)
+            {
+                aFound = aIt;
+                break;
+            }
+            aIt++;
+        }
         if (aFound != m_aAllStyles.end())
             nNewIterator = aFound - m_aAllStyles.begin();
 
@@ -431,11 +444,11 @@ void StylesPreviewWindow_Base::Update()
 
     for (unsigned int i = 0; i < STYLES_COUNT; i++)
     {
-        OUString sStyleName = GetVisibleStyle(i);
+        std::pair<OUString, OUString> sStyleName = GetVisibleStyle(i);
         m_xStyleControllers[i]->SetStyle(sStyleName);
-        m_xStyleControllersWeld[i]->set_tooltip_text(sStyleName);
+        m_xStyleControllersWeld[i]->set_tooltip_text(sStyleName.second);
 
-        if (sStyleName == m_sSelectedStyle)
+        if (sStyleName.first == m_sSelectedStyle || sStyleName.second == m_sSelectedStyle)
             m_xStyleControllers[i]->Select(true);
         else
             m_xStyleControllers[i]->Select(false);
@@ -461,7 +474,7 @@ void StylesPreviewWindow_Base::UpdateStylesList()
 
         while (pStyle)
         {
-            m_aAllStyles.push_back(pStyle->GetName());
+            m_aAllStyles.push_back(std::pair<OUString, OUString>("", pStyle->GetName()));
             pStyle = xIter->Next();
         }
     }
@@ -484,7 +497,7 @@ IMPL_LINK(StylesPreviewWindow_Base, GoDown, const OString&, /*rItem*/, void)
 }
 
 StylesPreviewWindow_Impl::StylesPreviewWindow_Impl(
-    vcl::Window* pParent, std::vector<OUString>& aDefaultStyles,
+    vcl::Window* pParent, std::vector<std::pair<OUString, OUString>>& aDefaultStyles,
     css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider)
     : InterimItemWindow(pParent, "svx/ui/stylespreview.ui", "ApplyStyleBox",
                         reinterpret_cast<sal_uInt64>(SfxViewShell::Current()))
