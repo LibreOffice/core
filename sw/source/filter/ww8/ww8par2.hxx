@@ -69,7 +69,7 @@ struct WW8SwFlyPara
     std::unique_ptr<SwPosition> xMainTextPos;   // to return to main text after apo
     sal_uInt16 nLineSpace;          // line space in tw for graf apos
     bool bAutoWidth;
-    bool bToggelPos;
+    bool bTogglePos;
 
     // add parameter <nWWPgTop> - WW8's page top margin
     WW8SwFlyPara( SwPaM& rPaM,

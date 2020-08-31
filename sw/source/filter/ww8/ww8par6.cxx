@@ -1883,7 +1883,7 @@ nYBind(( rWW.nSp29 & 0x30 ) >> 4),
 nNewNetWidth(MINFLY),
 nLineSpace(0),
 bAutoWidth(false),
-bToggelPos(false)
+bTogglePos(false)
 {
     //#i119466 mapping "Around" wrap setting to "Parallel" for table
     const bool bIsTable = rIo.m_xPlcxMan->HasParaSprm(NS_sprm::PFInTable::val).pSprm;
@@ -1980,11 +1980,11 @@ bToggelPos(false)
             break;  // right
         case -12:
             eHAlign = text::HoriOrientation::LEFT;
-            bToggelPos = true;
+            bTogglePos = true;
             break;  // inside
         case -16:
             eHAlign = text::HoriOrientation::RIGHT;
-            bToggelPos = true;
+            bTogglePos = true;
             break;  // outside
         default:
             nXPos = rWW.nSp26 + static_cast<short>(nIniFlyDx);
@@ -2131,7 +2131,7 @@ WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
     sal_Int16 eHRel = pFS->eHRel;
     rReader.MiserableRTLGraphicsHack(nXPos, pFS->nWidth, pFS->eHAlign, eHRel);
 /*Above can all go when we have from left in rtl mode*/
-    Put( SwFormatHoriOrient(nXPos, pFS->eHAlign, pFS->eHRel, pFS->bToggelPos ));
+    Put( SwFormatHoriOrient(nXPos, pFS->eHAlign, pFS->eHRel, pFS->bTogglePos ));
     Put( SwFormatVertOrient( pFS->nYPos, pFS->eVAlign, pFS->eVRel ) );
 
     if (pFS->nLeMgn || pFS->nRiMgn)     // set borders
