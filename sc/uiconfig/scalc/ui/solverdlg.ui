@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="SolverDialog">
@@ -10,9 +10,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -29,6 +26,11 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="options-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="solverdlg|extended_tip|options">Opens the Solver Options dialog.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -157,6 +159,11 @@
                     <accessibility>
                       <relation type="member-of" target="result"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="min-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="solverdlg|extended_tip|min">Enter the cell range that can be changed.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -177,6 +184,11 @@
                     <accessibility>
                       <relation type="member-of" target="result"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="max-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="solverdlg|extended_tip|max">Enter the cell range that can be changed.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -196,6 +208,11 @@
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
                         <property name="width_chars">32</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="changeedit-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="solverdlg|extended_tip|changeedit">Enter the cell range that can be changed.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -233,6 +250,11 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="width_chars">32</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="targetedit-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="solverdlg|extended_tip|targetedit">Enter or click the cell reference of the target cell. This field takes the address of the cell whose value is to be optimized.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -277,6 +299,11 @@
                         <accessibility>
                           <relation type="member-of" target="result"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="value-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="solverdlg|extended_tip|value">Enter the cell range that can be changed.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -296,6 +323,11 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="valueedit-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="solverdlg|extended_tip|valueedit">Enter the cell range that can be changed.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -839,6 +871,14 @@
       <action-widget response="-5">ok</action-widget>
       <action-widget response="-7">close</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="SolverDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="solverdlg|extended_tip|SolverDialog">Opens the Solver dialog. A solver allows you to solve mathematical problems with multiple unknown variables and a set of constraints on the variables by goal-seeking methods.</property>
+      </object>
+    </child>
   </object>
   <object class="GtkSizeGroup">
     <property name="mode">vertical</property>

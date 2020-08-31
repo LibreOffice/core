@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="FillSeriesDialog">
@@ -10,9 +10,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -112,6 +109,11 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="down-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="filldlg|extended_tip|down">Creates a downward series in the selected cell range for the column using the defined increment to the end value.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -129,6 +131,11 @@
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">down</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="right-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="filldlg|extended_tip|right">Creates a series running from left to right within the selected cell range using the defined increment to the end value.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -146,6 +153,11 @@
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">down</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="up-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="filldlg|extended_tip|up">Creates an upward series in the cell range of the column using the defined increment to the end value.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -163,6 +175,11 @@
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">down</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="left-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="filldlg|extended_tip|left">Creates a series running from right to left in the selected cell range using the defined increment to the end value.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -222,6 +239,11 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="linear-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="filldlg|extended_tip|linear">Creates a linear number series using the defined increment and end value.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -239,6 +261,11 @@
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">linear</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="growth-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="filldlg|extended_tip|growth">Creates a growth series using the defined increment and end value.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -256,6 +283,11 @@
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">linear</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="date-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="filldlg|extended_tip|date">Creates a date series using the defined increment and end date.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -273,6 +305,11 @@
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">linear</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="autofill-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="filldlg|extended_tip|autofill">Forms a series directly in the sheet.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -332,6 +369,11 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="day-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="filldlg|extended_tip|day">Use the Date series type and this option to create a series using all seven days of the week. Unit of Increment is day.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -350,6 +392,11 @@
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">day</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="week-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="filldlg|extended_tip|week">Use the Date series type and this option to create a series only using the five weekdays. Unit of Increment is day.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -367,6 +414,11 @@
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">day</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="month-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="filldlg|extended_tip|month">Use the Date series type and this option to form a series which unit of Increment is month.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -384,6 +436,11 @@
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">day</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="year-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="filldlg|extended_tip|year">Use the Date series type and this option to create a series which unit of Increment is year.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -465,6 +522,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="startValue-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="filldlg|extended_tip|startValue">Determines the start value for the series.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -476,6 +538,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="endValue-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="filldlg|extended_tip|endValue">Determines the end value for the series.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -487,6 +554,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="increment-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="filldlg|extended_tip|increment">Determines the value by which the series of the selected type increases by each step.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -517,6 +589,14 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="FillSeriesDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="filldlg|extended_tip|FillSeriesDialog">Automatically generate series with the options in this dialog. Determine direction, increment, time unit and series type.</property>
+      </object>
+    </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1"/>
 </interface>

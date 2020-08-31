@@ -148,6 +148,11 @@
                         <property name="valign">center</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="formulaedit-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="goalseekdlg|extended_tip|formulaedit">In the formula cell, enter the reference of the cell which contains the formula. It contains the current cell reference.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -161,6 +166,11 @@
                         <property name="valign">center</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="target-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="goalseekdlg|extended_tip|target">Specifies the value you want to achieve as a new result.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -174,6 +184,11 @@
                         <property name="valign">center</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="varedit-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="goalseekdlg|extended_tip|varedit">Specifies the reference for the cell that contains the value you want to adjust in order to reach the target.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -245,6 +260,11 @@
     </action-widgets>
     <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="GoalSeekDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="goalseekdlg|extended_tip|GoalSeekDialog">Opens a dialog where you can solve an equation with a variable.</property>
+      </object>
     </child>
   </object>
 </interface>

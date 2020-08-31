@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="DefineNameDialog">
@@ -10,9 +10,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -46,6 +43,11 @@
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="add-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="definename|extended_tip|add">Click the Add button to add a new defined name.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -133,6 +135,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="edit-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="definename|extended_tip|edit">Enter the name of the area for which you want to define a reference or a formula expression.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -151,6 +158,11 @@
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
                         <property name="width_chars">50</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="range-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="definename|extended_tip|range">The reference of the selected area name is shown here as an absolute value.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -181,6 +193,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="scope-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="definename|extended_tip|scope">Select the scope of the named range or named formula. Document (Global) means the name is valid for the whole document.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -229,6 +246,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="printarea-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="definename|extended_tip|printarea">Defines the area as a print range.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -244,6 +266,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="filter-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="definename|extended_tip|filter">Defines the selected area to be used in an advanced filter.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -259,6 +286,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="colheader-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="definename|extended_tip|colheader">Defines the area as a repeating column.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -274,6 +306,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="rowheader-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="definename|extended_tip|rowheader">Defines the area as a repeating row.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -288,6 +325,11 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="definename|label5">Range _Options</property>
                     <property name="use_underline">True</property>
+                  </object>
+                </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="more-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="definename|extended_tip|more">Allows you to specify the Area type (optional) for the reference.</property>
                   </object>
                 </child>
               </object>
@@ -311,5 +353,13 @@
       <action-widget response="101">add</action-widget>
       <action-widget response="-6">cancel</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="DefineNameDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="definename|extended_tip|DefineNameDialog">Opens a dialog where you can specify a name for a selected area or a name for a formula expression.</property>
+      </object>
+    </child>
   </object>
 </interface>

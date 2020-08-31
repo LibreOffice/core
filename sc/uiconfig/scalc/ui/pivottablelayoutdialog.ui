@@ -207,6 +207,11 @@
                                     </child>
                                   </object>
                                 </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="listbox-column-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|listbox-column">To define the layout of a pivot table, drag and drop data field buttons onto the Page Fields, Row Fields, Column Fields, and Data Fields areas.</property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>
@@ -284,6 +289,11 @@
                                     </child>
                                   </object>
                                 </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="listbox-data-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|listbox-data">To define the layout of a pivot table, drag and drop data field buttons onto the Page Fields, Row Fields, Column Fields, and Data Fields areas.</property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>
@@ -357,6 +367,11 @@
                                         <attribute name="text">0</attribute>
                                       </attributes>
                                     </child>
+                                  </object>
+                                </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="listbox-row-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|listbox-row">To define the layout of a pivot table, drag and drop data field buttons onto the Page Fields, Row Fields, Column Fields, and Data Fields areas.</property>
                                   </object>
                                 </child>
                               </object>
@@ -434,6 +449,11 @@
                                         <attribute name="text">0</attribute>
                                       </attributes>
                                     </child>
+                                  </object>
+                                </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="listbox-page-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|listbox-page">To define the layout of a pivot table, drag and drop data field buttons onto the Page Fields, Row Fields, Column Fields, and Data Fields areas.</property>
                                   </object>
                                 </child>
                               </object>
@@ -522,6 +542,11 @@
                                 </child>
                               </object>
                             </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="listbox-fields-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|listbox-fields">To define the layout of a pivot table, drag and drop data field buttons onto the Page Fields, Row Fields, Column Fields, and Data Fields areas.</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -583,6 +608,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="check-ignore-empty-rows-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|check-ignore-empty-rows">Ignores empty fields in the data source.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -599,6 +629,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="check-identify-categories-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|check-identify-categories">Automatically assigns rows without labels to the category of the row above.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -615,6 +650,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="check-total-rows-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|check-total-rows">Calculates and displays the grand total of the row calculation.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -631,6 +671,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="check-total-columns-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|check-total-columns">Calculates and displays the grand total of the column calculation.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -647,6 +692,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="check-add-filter-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|check-add-filter">Adds a Filter button to pivot tables that are based on spreadsheet data.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -663,6 +713,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="check-drill-to-details-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|check-drill-to-details">Select this check box and double-click an item label in the table to show or hide details for the item. Clear this check box and double-click a cell in the table to edit the contents of the cell.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -763,6 +818,11 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="hexpand">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="destination-edit-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|destination-edit">Select the area where you want to display the results of the pivot table.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -789,6 +849,11 @@
                                   <object class="GtkComboBoxText" id="destination-list">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="destination-list-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|destination-list">Select the area where you want to display the results of the pivot table.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -876,6 +941,11 @@
                                     <property name="can_focus">True</property>
                                     <property name="hexpand">True</property>
                                     <property name="activates_default">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="source-edit-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|source-edit">Select the area that contains the data for the current pivot table.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -887,6 +957,11 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="source-button-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|source-button">Select the area that contains the data for the current pivot table.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="left_attach">2</property>
@@ -953,6 +1028,11 @@
                     </attributes>
                   </object>
                 </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="more-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|more">Displays or hides additional options for defining the pivot table.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -976,6 +1056,11 @@
     </action-widgets>
     <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="PivotTableLayout-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|PivotTableLayout">Specify the layout of the table that is generated by the pivot table.</property>
+      </object>
     </child>
   </object>
 </interface>
