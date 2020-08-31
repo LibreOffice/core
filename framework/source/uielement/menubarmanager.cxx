@@ -152,7 +152,7 @@ Any SAL_CALL MenuBarManager::getMenuHandle( const Sequence< sal_Int8 >& /*Proces
 MenuBarManager::~MenuBarManager()
 {
     // stop asynchronous settings timer
-    m_xDeferedItemContainer.clear();
+    m_xDeferredItemContainer.clear();
     m_aAsyncSettingsTimer.Stop();
 
     SAL_WARN_IF( OWeakObject::m_refCount != 0, "fwk.uielement", "Who wants to delete an object with refcount > 0!" );
@@ -168,7 +168,7 @@ void MenuBarManager::Destroy()
     // stop asynchronous settings timer and
     // release deferred item container reference
     m_aAsyncSettingsTimer.Stop();
-    m_xDeferedItemContainer.clear();
+    m_xDeferredItemContainer.clear();
     RemoveListener();
 
     m_aMenuItemHandlerVector.clear();
@@ -771,7 +771,7 @@ IMPL_LINK( MenuBarManager, Deactivate, Menu *, pMenu, bool )
     if ( pMenu == m_pVCLMenu )
     {
         m_bActive = false;
-        if ( pMenu->IsMenuBar() && m_xDeferedItemContainer.is() )
+        if ( pMenu->IsMenuBar() && m_xDeferredItemContainer.is() )
         {
             // Start timer to handle settings asynchronous
             // Changing the menu inside this handler leads to
@@ -792,10 +792,10 @@ IMPL_LINK_NOARG( MenuBarManager, AsyncSettingsHdl, Timer*, void)
         static_cast< ::cppu::OWeakObject* >( this ), UNO_QUERY_THROW );
 
     m_aAsyncSettingsTimer.Stop();
-    if ( !m_bActive && m_xDeferedItemContainer.is() )
+    if ( !m_bActive && m_xDeferredItemContainer.is() )
     {
-        SetItemContainer( m_xDeferedItemContainer );
-        m_xDeferedItemContainer.clear();
+        SetItemContainer( m_xDeferredItemContainer );
+        m_xDeferredItemContainer.clear();
     }
 }
 
@@ -1536,7 +1536,7 @@ void MenuBarManager::SetItemContainer( const Reference< XIndexAccess >& rItemCon
         // Check active state as we cannot change our VCL menu during activation by the user
         if ( m_bActive )
         {
-            m_xDeferedItemContainer = rItemContainer;
+            m_xDeferredItemContainer = rItemContainer;
             return;
         }
 

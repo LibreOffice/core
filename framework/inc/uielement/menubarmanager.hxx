@@ -196,7 +196,7 @@ class MenuBarManager final :
         css::uno::Reference< css::ui::XAcceleratorConfiguration >    m_xGlobalAcceleratorManager;
         css::uno::Reference< css::uno::XComponentContext >           m_xContext;
         css::uno::Reference< css::util::XURLTransformer >            m_xURLTransformer;
-        css::uno::Reference< css::container::XIndexAccess >          m_xDeferedItemContainer;
+        css::uno::Reference< css::container::XIndexAccess >          m_xDeferredItemContainer;
         OUString                                                     m_sIconTheme;
         Timer                                                        m_aAsyncSettingsTimer;
 };
