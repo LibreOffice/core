@@ -56,8 +56,7 @@ template <typename Zone> struct WatchdogHelper
                 if (!bFired)
                 {
                     gbWatchdogFiring = true;
-                    SAL_WARN("vcl.watchdog",
-                             OStringLiteral("Watchdog triggered: hard disable ") + Zone::name());
+                    SAL_WARN("vcl.watchdog", "Watchdog triggered: hard disable " << Zone::name());
                     Zone::hardDisable();
                     gbWatchdogFiring = false;
                 }
@@ -66,8 +65,7 @@ template <typename Zone> struct WatchdogHelper
                 // we can hang using VCL in the abort handling -> be impatient
                 if (bAbortFired)
                 {
-                    SAL_WARN("vcl.watchdog",
-                             OStringLiteral("Watchdog gave up: hard exiting ") + Zone::name());
+                    SAL_WARN("vcl.watchdog", "Watchdog gave up: hard exiting " << Zone::name());
                     _Exit(1);
                 }
             }
@@ -77,8 +75,7 @@ template <typename Zone> struct WatchdogHelper
             {
                 if (!bAbortFired)
                 {
-                    SAL_WARN("vcl.watchdog",
-                             OStringLiteral("Watchdog gave up: aborting ") + Zone::name());
+                    SAL_WARN("vcl.watchdog", "Watchdog gave up: aborting " << Zone::name());
                     gbWatchdogFiring = true;
                     std::abort();
                 }
