@@ -74,26 +74,28 @@ public:
                                         SwFrameFormat const* pOld, sal_Int16 nType);
 
 private:
-    SwFrameFormat *pOld, *pNew;
-    sal_Int16 nType;
+    SwFrameFormat *m_pOld, *m_pNew;
+    sal_Int16 m_nType;
 };
 
 }
 
-SwTableFormatCmp::SwTableFormatCmp( SwFrameFormat *pO, SwFrameFormat *pN, sal_Int16 nT )
-    : pOld ( pO ), pNew ( pN ), nType( nT )
+SwTableFormatCmp::SwTableFormatCmp(SwFrameFormat* pO, SwFrameFormat* pN, sal_Int16 nT)
+    : m_pOld(pO)
+    , m_pNew(pN)
+    , m_nType(nT)
 {
-    if (pOld)
-        pOld->Add(this);
+    if (m_pOld)
+        m_pOld->Add(this);
 }
 
 SwTableFormatCmp::~SwTableFormatCmp()
 {
-    if (pOld)
+    if (m_pOld)
     {
-        pOld->Remove(this);
-        if (!pOld->HasWriterListeners())
-            delete pOld;
+        m_pOld->Remove(this);
+        if (!m_pOld->HasWriterListeners())
+            delete m_pOld;
     }
 }
 
@@ -103,8 +105,8 @@ SwFrameFormat* SwTableFormatCmp::FindNewFormat(std::vector<std::unique_ptr<SwTab
 {
     for (const auto& pCmp : rArr)
     {
-        if ( pCmp->pOld == pOld && pCmp->nType == nType )
-            return pCmp->pNew;
+        if (pCmp->m_pOld == pOld && pCmp->m_nType == nType)
+            return pCmp->m_pNew;
     }
     return nullptr;
 }

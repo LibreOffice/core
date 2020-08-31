@@ -26,13 +26,13 @@
 
     #i73788#
 */
-bool SwThreadManager::mbThreadManagerInstantiated = false;
+bool SwThreadManager::sbThreadManagerInstantiated = false;
 
 SwThreadManager::SwThreadManager()
     : mpThreadManagerImpl( new ThreadManager( SwThreadJoiner::GetThreadJoiner() ) )
 {
     mpThreadManagerImpl->Init();
-    mbThreadManagerInstantiated = true;
+    sbThreadManagerInstantiated = true;
 }
 
 SwThreadManager::~SwThreadManager()
@@ -52,7 +52,7 @@ SwThreadManager& SwThreadManager::GetThreadManager()
 
 bool SwThreadManager::ExistsThreadManager()
 {
-    return mbThreadManagerInstantiated;
+    return sbThreadManagerInstantiated;
 }
 
 oslInterlockedCount SwThreadManager::AddThread( const rtl::Reference< ObservableThread >& rThread )

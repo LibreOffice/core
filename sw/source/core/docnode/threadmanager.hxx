@@ -109,7 +109,7 @@ class ThreadManager final
 
     private:
 
-        static const std::deque< tThreadData >::size_type mnStartedSize;
+        static const std::deque< tThreadData >::size_type snStartedSize;
 
         osl::Mutex maMutex;
 

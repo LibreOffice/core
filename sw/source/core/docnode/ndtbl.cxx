@@ -3273,27 +3273,31 @@ namespace {
 
 class SplitTable_Para
 {
-    std::map<SwFrameFormat const *, SwFrameFormat*> aSrcDestMap;
-    SwTableNode* pNewTableNd;
-    SwTable& rOldTable;
+    std::map<SwFrameFormat const*, SwFrameFormat*> m_aSrcDestMap;
+    SwTableNode* m_pNewTableNode;
+    SwTable& m_rOldTable;
 
 public:
-    SplitTable_Para( SwTableNode* pNew, SwTable& rOld )
-        : aSrcDestMap(), pNewTableNd( pNew ), rOldTable( rOld )
+    SplitTable_Para(SwTableNode* pNew, SwTable& rOld)
+        : m_aSrcDestMap()
+        , m_pNewTableNode(pNew)
+        , m_rOldTable(rOld)
     {}
     SwFrameFormat* GetDestFormat( SwFrameFormat* pSrcFormat ) const
     {
-        auto it = aSrcDestMap.find( pSrcFormat );
-        return it == aSrcDestMap.end() ? nullptr : it->second;
+        auto it = m_aSrcDestMap.find(pSrcFormat);
+        return it == m_aSrcDestMap.end() ? nullptr : it->second;
     }
 
     void InsertSrcDest( SwFrameFormat const * pSrcFormat, SwFrameFormat* pDestFormat )
-            { aSrcDestMap[ pSrcFormat ] = pDestFormat; }
+            {
+                m_aSrcDestMap[pSrcFormat] = pDestFormat;
+            }
 
     void ChgBox( SwTableBox* pBox )
     {
-        rOldTable.GetTabSortBoxes().erase( pBox );
-        pNewTableNd->GetTable().GetTabSortBoxes().insert( pBox );
+        m_rOldTable.GetTabSortBoxes().erase(pBox);
+        m_pNewTableNode->GetTable().GetTabSortBoxes().insert(pBox);
     }
 };
 
