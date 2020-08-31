@@ -52,7 +52,6 @@ sc/uiconfig/scalc/ui/dataproviderentry.ui://GtkEntry[@id='ed_id'] no-labelled-by
 sc/uiconfig/scalc/ui/dataproviderentry.ui:GtkGrid[@id='grid']/GtkLabel orphan-label
 sc/uiconfig/scalc/ui/dataproviderentry.ui:GtkGrid[@id='grid']/GtkLabel orphan-label
 sc/uiconfig/scalc/ui/dataproviderentry.ui:GtkGrid[@id='grid']/GtkLabel orphan-label
-sc/uiconfig/scalc/ui/definedatabaserangedialog.ui://GtkEntry[@id='assign'] no-labelled-by
 sc/uiconfig/scalc/ui/definedatabaserangedialog.ui://GtkLabel[@id='Source'] orphan-label
 sc/uiconfig/scalc/ui/definedatabaserangedialog.ui://GtkLabel[@id='Operations'] orphan-label
 sc/uiconfig/scalc/ui/definedatabaserangedialog.ui://GtkLabel[@id='invalid'] orphan-label
