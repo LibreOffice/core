@@ -343,8 +343,7 @@ public:
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
     /// @cond INTERNAL
     /**
-      New string from an 8-Bit string literal that is expected to contain only
-      characters in the ASCII set (i.e. first 128 characters).
+      New string from a string literal.
 
       This constructor is similar to the "direct template" one, but can be
       useful in cases where the latter does not work, like in
