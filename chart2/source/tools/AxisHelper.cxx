@@ -955,7 +955,7 @@ bool AxisHelper::shouldAxisBeDisplayed( const Reference< XAxis >& xAxis
     return bRet;
 }
 
-void AxisHelper::getAxisOrGridExcistence( Sequence< sal_Bool >& rExistenceList
+void AxisHelper::getAxisOrGridExistence( Sequence< sal_Bool >& rExistenceList
         , const Reference< XDiagram>& xDiagram, bool bAxis )
 {
     rExistenceList.realloc(6);

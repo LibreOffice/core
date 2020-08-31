@@ -79,7 +79,7 @@ void TitlesAndObjectsTabPage::initializePage()
         uno::Sequence< sal_Bool > aPossibilityList;
         uno::Sequence< sal_Bool > aExistenceList;
         AxisHelper::getAxisOrGridPossibilities( aPossibilityList, xDiagram, false );
-        AxisHelper::getAxisOrGridExcistence( aExistenceList, xDiagram, false );
+        AxisHelper::getAxisOrGridExistence( aExistenceList, xDiagram, false );
         m_xCB_Grid_X->set_sensitive( aPossibilityList[0] );
         m_xCB_Grid_Y->set_sensitive( aPossibilityList[1] );
         m_xCB_Grid_Z->set_sensitive( aPossibilityList[2] );
@@ -122,7 +122,7 @@ void TitlesAndObjectsTabPage::commitToModel()
     {
         uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( xModel );
         uno::Sequence< sal_Bool > aOldExistenceList;
-        AxisHelper::getAxisOrGridExcistence( aOldExistenceList, xDiagram, false );
+        AxisHelper::getAxisOrGridExistence( aOldExistenceList, xDiagram, false );
         uno::Sequence< sal_Bool > aNewExistenceList(aOldExistenceList);
         aNewExistenceList[0] = m_xCB_Grid_X->get_active();
         aNewExistenceList[1] = m_xCB_Grid_Y->get_active();
