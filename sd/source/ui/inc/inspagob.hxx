@@ -52,7 +52,7 @@ public:
     std::vector<OUString> GetList ( const sal_uInt16 nType ) ;
 
     bool        IsLink() const;
-    bool        IsRemoveUnnessesaryMasterPages() const;
+    bool        IsRemoveUnnecessaryMasterPages() const;
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_INSPAGOB_HXX

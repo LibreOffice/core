@@ -388,7 +388,7 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
             bOK = mpDoc->InsertBookmarkAsObject( aObjectBookmarkList, aExchangeList,
                                 nullptr, nullptr, false );
 
-        if( pDlg->IsRemoveUnnessesaryMasterPages() )
+        if( pDlg->IsRemoveUnnecessaryMasterPages() )
             mpDoc->RemoveUnnecessaryMasterPages();
     }
 

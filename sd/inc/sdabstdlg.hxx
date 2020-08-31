@@ -114,7 +114,7 @@ protected:
 public:
     virtual std::vector<OUString> GetList ( const sal_uInt16 nType ) = 0;
     virtual bool        IsLink() = 0;
-    virtual bool        IsRemoveUnnessesaryMasterPages() const = 0;
+    virtual bool        IsRemoveUnnecessaryMasterPages() const = 0;
 };
 
 class AbstractMorphDlg : public VclAbstractDialog

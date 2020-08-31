@@ -274,7 +274,7 @@ public:
     virtual short   Execute() override;
     virtual std::vector<OUString> GetList ( const sal_uInt16 nType ) override;
     virtual bool        IsLink() override;
-    virtual bool        IsRemoveUnnessesaryMasterPages() const override;
+    virtual bool        IsRemoveUnnecessaryMasterPages() const override;
 
     // screenshotting
     virtual BitmapEx createScreenshot() const override;
