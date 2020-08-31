@@ -53,6 +53,8 @@ public:
     OUString            maText;
     OUString            maFormatText;
     OUString            maHelpText;
+    OUString            maAccessibleName;
+    OUString            maAccessibleDescription;
     OString             maTabName;
     tools::Rectangle    maRect;
     sal_uInt16          mnLine;
@@ -1945,6 +1947,38 @@ const OUString& TabControl::GetHelpText( sal_uInt16 nPageId ) const
 {
     ImplTabItem* pItem = ImplGetItem( nPageId );
     assert( pItem );
+    return pItem->maHelpText;
+}
+
+void TabControl::SetAccessibleName(sal_uInt16 nPageId, const OUString& rName)
+{
+    ImplTabItem* pItem = ImplGetItem( nPageId );
+    assert( pItem );
+    pItem->maAccessibleName = rName;
+}
+
+OUString TabControl::GetAccessibleName( sal_uInt16 nPageId ) const
+{
+    ImplTabItem* pItem = ImplGetItem( nPageId );
+    assert( pItem );
+    if (!pItem->maAccessibleName.isEmpty())
+        return pItem->maAccessibleName;
+    return OutputDevice::GetNonMnemonicString(pItem->maText);
+}
+
+void TabControl::SetAccessibleDescription(sal_uInt16 nPageId, const OUString& rDesc)
+{
+    ImplTabItem* pItem = ImplGetItem( nPageId );
+    assert( pItem );
+    pItem->maAccessibleDescription = rDesc;
+}
+
+OUString TabControl::GetAccessibleDescription( sal_uInt16 nPageId ) const
+{
+    ImplTabItem* pItem = ImplGetItem( nPageId );
+    assert( pItem );
+    if (!pItem->maAccessibleDescription.isEmpty())
+        return pItem->maAccessibleDescription;
     return pItem->maHelpText;
 }
 

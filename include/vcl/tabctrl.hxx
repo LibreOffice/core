@@ -152,6 +152,12 @@ public:
     void                SetPageName( sal_uInt16 nPageId, const OString& rName ) const;
     OString             GetPageName( sal_uInt16 nPageId ) const;
 
+    void SetAccessibleName( sal_uInt16 nItemId, const OUString& rStr );
+    OUString GetAccessibleName( sal_uInt16 nItemId ) const;
+
+    void SetAccessibleDescription( sal_uInt16 nItemId, const OUString& rStr );
+    OUString GetAccessibleDescription( sal_uInt16 nItemId ) const;
+
     void                SetPageImage( sal_uInt16 nPageId, const Image& rImage );
 
     using Control::SetHelpId;
