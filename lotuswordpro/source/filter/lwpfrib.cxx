@@ -195,7 +195,7 @@ LwpFrib* LwpFrib::CreateFrib(LwpPara* pPara, LwpObjectStream* pObjStrm, sal_uInt
             break;
     }
 
-    //Do not know why the fribTag judgement is necessary, to be checked with
+    //Do not know why the fribTag judgment is necessary, to be checked with
     if (fribtag & FRIB_TAG_MODIFIER)
     {
         newFrib->SetModifiers(xModInfo.release());

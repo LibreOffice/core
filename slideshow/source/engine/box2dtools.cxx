@@ -408,7 +408,7 @@ void box2DWorld::initateAllShapesAsStaticBodies(
             SdrObject* pTemp = SdrObject::getSdrObjectFromXShape(pShape->getXShape());
             if (pTemp && pTemp->IsGroupObject())
             {
-                // if it is a group object iterate over it's childs and flag them
+                // if it is a group object iterate over its children and flag them
                 SdrObjList* aObjList = pTemp->GetSubList();
                 const size_t nObjCount(aObjList->GetObjCount());
 
@@ -614,7 +614,7 @@ double box2DWorld::stepAmount(const double fPassedTime, const float fTimeStep,
     // that the updates can be processed using that value
     double fTimeSteppedThrough = fTimeStep * nStepAmount;
 
-    // do the updates required to simulate other animaton effects going in parallel
+    // do the updates required to simulate other animation effects going in parallel
     processUpdateQueue(fTimeSteppedThrough);
 
     if (!mbAlreadyStepped)
