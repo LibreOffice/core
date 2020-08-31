@@ -2015,11 +2015,14 @@ void Edit::Command( const CommandEvent& rCEvt )
         else if (sCommand == "specialchar" && pImplFncGetSpecialChars)
         {
             OUString aChars = pImplFncGetSpecialChars(GetFrameWeld(), GetFont());
-            SetSelection( aSaveSel );
-            if (!aChars.isEmpty())
+            if (!IsDisposed()) // destroyed while the insert special character dialog was still open
             {
-                ImplInsertText( aChars );
-                ImplModified();
+                SetSelection( aSaveSel );
+                if (!aChars.isEmpty())
+                {
+                    ImplInsertText( aChars );
+                    ImplModified();
+                }
             }
         }
         pPopup.clear();
