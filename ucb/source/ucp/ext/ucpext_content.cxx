@@ -174,7 +174,7 @@ namespace ucb::ucp::ext
     }
 
 
-    Any SAL_CALL Content::execute( const Command& aCommand, sal_Int32 /* CommandId */, const Reference< XCommandEnvironment >& i_rEvironment )
+    Any SAL_CALL Content::execute( const Command& aCommand, sal_Int32 /* CommandId */, const Reference< XCommandEnvironment >& i_rEnvironment )
     {
         Any aRet;
 
@@ -185,11 +185,11 @@ namespace ucb::ucp::ext
             {
                 ::ucbhelper::cancelCommandExecution( makeAny( IllegalArgumentException(
                     OUString(), *this, -1 ) ),
-                    i_rEvironment );
+                    i_rEnvironment );
                 // unreachable
             }
 
-            aRet <<= getPropertyValues( Properties, i_rEvironment );
+            aRet <<= getPropertyValues( Properties, i_rEnvironment );
         }
         else if ( aCommand.Name == "setPropertyValues" )
         {
@@ -198,7 +198,7 @@ namespace ucb::ucp::ext
             {
                 ::ucbhelper::cancelCommandExecution( makeAny( IllegalArgumentException(
                     OUString(), *this, -1 ) ),
-                    i_rEvironment );
+                    i_rEnvironment );
                 // unreachable
             }
 
@@ -206,7 +206,7 @@ namespace ucb::ucp::ext
             {
                 ::ucbhelper::cancelCommandExecution( makeAny( IllegalArgumentException(
                     OUString(), *this, -1 ) ),
-                    i_rEvironment );
+                    i_rEnvironment );
                 // unreachable
             }
 
@@ -215,12 +215,12 @@ namespace ucb::ucp::ext
         else if ( aCommand.Name == "getPropertySetInfo" )
         {
             // implemented by base class.
-            aRet <<= getPropertySetInfo( i_rEvironment );
+            aRet <<= getPropertySetInfo( i_rEnvironment );
         }
         else if ( aCommand.Name == "getCommandInfo" )
         {
             // implemented by base class.
-            aRet <<= getCommandInfo( i_rEvironment );
+            aRet <<= getCommandInfo( i_rEnvironment );
         }
         else if ( aCommand.Name == "open" )
         {
@@ -229,7 +229,7 @@ namespace ucb::ucp::ext
             {
                 ::ucbhelper::cancelCommandExecution( makeAny( IllegalArgumentException(
                     OUString(), *this, -1 ) ),
-                    i_rEvironment );
+                    i_rEnvironment );
                 // unreachable
             }
 
@@ -241,14 +241,14 @@ namespace ucb::ucp::ext
 
             if ( bOpenFolder && impl_isFolder() )
             {
-                Reference< XDynamicResultSet > xSet = new ResultSet( m_xContext, this, aOpenCommand, i_rEvironment );
+                Reference< XDynamicResultSet > xSet = new ResultSet( m_xContext, this, aOpenCommand, i_rEnvironment );
                 aRet <<= xSet;
               }
 
             if ( aOpenCommand.Sink.is() )
             {
                 const OUString sPhysicalContentURL( getPhysicalURL() );
-                ::ucbhelper::Content aRequestedContent( sPhysicalContentURL, i_rEvironment, m_xContext );
+                ::ucbhelper::Content aRequestedContent( sPhysicalContentURL, i_rEnvironment, m_xContext );
                 aRet = aRequestedContent.executeCommand( "open", makeAny( aOpenCommand ) );
             }
         }
@@ -257,7 +257,7 @@ namespace ucb::ucp::ext
         {
             ::ucbhelper::cancelCommandExecution( makeAny( UnsupportedCommandException(
                 OUString(), *this ) ),
-                i_rEvironment );
+                i_rEnvironment );
             // unreachable
         }
 
