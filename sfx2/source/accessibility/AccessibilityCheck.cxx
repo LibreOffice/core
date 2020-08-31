@@ -14,7 +14,7 @@ namespace sfx
 {
 AccessibilityCheck::~AccessibilityCheck() = default;
 
-AccessibilityIssueCollection& AccessibilityCheck::getIssueCollecton() { return m_aIssueCollection; }
+AccessibilityIssueCollection& AccessibilityCheck::getIssueCollection() { return m_aIssueCollection; }
 
 } // end sfx namespace
 

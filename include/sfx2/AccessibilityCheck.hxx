@@ -27,7 +27,7 @@ public:
 
     virtual void check() = 0;
 
-    AccessibilityIssueCollection& getIssueCollecton();
+    AccessibilityIssueCollection& getIssueCollection();
 };
 
 } // end sfx namespace
