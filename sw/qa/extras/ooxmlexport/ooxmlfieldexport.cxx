@@ -371,9 +371,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo78599,"fdo78599.docx")
     assertXPath ( pXmlDoc, "/w:document/w:body/w:p[1]/w:hyperlink/w:r[6]/w:fldChar", "fldCharType", "end" );
 
     // Check for automatic hyphenation
-    if (xmlDocUniquePtr pSettingsXml = parseExport("word/settings.xml"))
-        // This failed as w:settings had no w:autoHyphenation child.
-        assertXPath(pSettingsXml, "/w:settings/w:autoHyphenation");
+    xmlDocUniquePtr pSettingsXml = parseExport("word/settings.xml");
+    // This failed as w:settings had no w:autoHyphenation child.
+    assertXPath(pSettingsXml, "/w:settings/w:autoHyphenation");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo78886, "fdo78886.docx")
@@ -401,55 +401,45 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO78590, "FDO78590.docx")
     assertXPath ( pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "h", "1669" );
 }
 
-DECLARE_OOXMLEXPORT_TEST(testSdtCitationRun, "sdt-citation-run.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSdtCitationRun, "sdt-citation-run.docx")
 {
     // The problem was that the SDT was around the whole paragraph, not only around the citation field.
-    if (xmlDocUniquePtr pXmlDoc = parseExport())
-    {
-        assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/w:t", "Before sdt.");
-        assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r/w:instrText", " CITATION BBC11 \\l 1033 ");
-        assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:t", "After sdt.");
-    }
+    xmlDocUniquePtr pXmlDoc = parseExport();
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/w:t", "Before sdt.");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r/w:instrText", " CITATION BBC11 \\l 1033 ");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:t", "After sdt.");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testParagraphSdt, "paragraph-sdt.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testParagraphSdt, "paragraph-sdt.docx")
 {
     // The problem was that the SDT was around the run only, not the whole paragraph.
-    if (xmlDocUniquePtr pXmlDoc = parseExport())
-    {
-        // The path to w:sdt contained a w:p.
-        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:sdt");
-    }
+    xmlDocUniquePtr pXmlDoc = parseExport();
+    // The path to w:sdt contained a w:p.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:sdt");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testSdt2Run, "sdt-2-para.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSdt2Run, "sdt-2-para.docx")
 {
-    if (xmlDocUniquePtr pXmlDoc = parseExport())
-    {
-        // The problem was that <w:sdt> was closed after "first", not after "second", so the second assert failed.
-        assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r/w:t", "first");
-        assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[2]/w:r/w:t", "second");
-        // Make sure the third paragraph is still outside <w:sdt>.
-        assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r/w:t", "third");
-    }
+    xmlDocUniquePtr pXmlDoc = parseExport();
+    // The problem was that <w:sdt> was closed after "first", not after "second", so the second assert failed.
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r/w:t", "first");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[2]/w:r/w:t", "second");
+    // Make sure the third paragraph is still outside <w:sdt>.
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r/w:t", "third");
 }
 
-DECLARE_OOXMLEXPORT_TEST(test2Id, "2-id.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(test2Id, "2-id.docx")
 {
-    if (xmlDocUniquePtr pXmlDoc = parseExport())
-    {
-        // This was 2, but only one w:id is allowed.
-        assertXPath(pXmlDoc, "//w:sdtPr/w:id", 1);
-    }
+    xmlDocUniquePtr pXmlDoc = parseExport();
+    // This was 2, but only one w:id is allowed.
+    assertXPath(pXmlDoc, "//w:sdtPr/w:id", 1);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTableStart2Sdt, "table-start-2-sdt.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTableStart2Sdt, "table-start-2-sdt.docx")
 {
-    if (xmlDocUniquePtr pXmlDoc = parseExport())
-    {
-        // w:docPartGallery should be a child of <w:docPartObj>, make sure it's not a child of w:text.
-        assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:text/w:docPartGallery", 0);
-    }
+    xmlDocUniquePtr pXmlDoc = parseExport();
+    // w:docPartGallery should be a child of <w:docPartObj>, make sure it's not a child of w:text.
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:text/w:docPartGallery", 0);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testSdtDateDuplicate, "sdt-date-duplicate.docx")
@@ -473,27 +463,25 @@ DECLARE_OOXMLEXPORT_TEST(testSdtDateDuplicate, "sdt-date-duplicate.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("4/26/2012"), pFieldmark->GetContent());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFdo81492, "fdo81492.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo81492, "fdo81492.docx")
 {
-    if (xmlDocUniquePtr pXmlDoc = parseExport())
-        assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[6]/w:instrText", "ADDIN EN.CITE.DATA");
+    xmlDocUniquePtr pXmlDoc = parseExport();
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[6]/w:instrText", "ADDIN EN.CITE.DATA");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testEditTime, "fdo81341.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testEditTime, "fdo81341.docx")
 {
     /* Issue was LO was not able to Import and Export EditTime in seconds format.
      * It was supporting Time in "HH:MM" format. But if DOCX contains Time in seconds,
      * then LO was not able to display time in "HH:MM:SS" format.
      * While exporting LO was writing plain text instead of field entry.
      */
-    if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
-    {
-        //Ensure that EditTime is written inside w:fldChar in "HH:MM:SS" format.
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/w:fldChar", "fldCharType", "begin");
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[3]/w:fldChar", "fldCharType", "separate");
-        assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:t", "00:05");
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[5]/w:fldChar", "fldCharType", "end");
-    }
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    //Ensure that EditTime is written inside w:fldChar in "HH:MM:SS" format.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/w:fldChar", "fldCharType", "begin");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[3]/w:fldChar", "fldCharType", "separate");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:t", "00:05");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[5]/w:fldChar", "fldCharType", "end");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo81945, "fdo81945.docx")
@@ -511,13 +499,11 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo82123, "fdo82123.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[2]/w:p/w:sdt[1]/w:sdtContent/w:r",1);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testSdtBeforeField, "sdt-before-field.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSdtBeforeField, "sdt-before-field.docx")
 {
-    if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
-    {
-        // Make sure the field doesn't sneak inside the SDT: the SDT should contain only a single run (there were 6 ones).
-        assertXPath(pXmlDoc, "//w:sdt/w:sdtContent/w:r", 1);
-    }
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // Make sure the field doesn't sneak inside the SDT: the SDT should contain only a single run (there were 6 ones).
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtContent/w:r", 1);
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo81946, "fdo81946.docx")
@@ -535,21 +521,19 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo82492, "fdo82492.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt[1]/w:sdtContent/w:r",1);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testSdtHeader, "sdt-header.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSdtHeader, "sdt-header.docx")
 {
     // Problem was that w:sdt elements in headers were lost on import.
-    if (xmlDocUniquePtr pXmlDoc = parseExport("word/header1.xml"))
-        // This was 0, w:sdt (and then w:date) was missing.
-        assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:date", 1);
+    xmlDocUniquePtr pXmlDoc = parseExport("word/header1.xml");
+    // This was 0, w:sdt (and then w:date) was missing.
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:date", 1);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testSdtCompanyMultipara, "sdt-company-multipara.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSdtCompanyMultipara, "sdt-company-multipara.docx")
 {
-    if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
-    {
-        // This was 3, but multiple paragraphs inside "Company" SDT is now allowed.
-        assertXPath(pXmlDoc, "//w:sdtContent/w:p", 1);
-    }
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // This was 3, but multiple paragraphs inside "Company" SDT is now allowed.
+    assertXPath(pXmlDoc, "//w:sdtContent/w:p", 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFixedDateFields, "fixed-date-field.docx")
@@ -599,17 +583,15 @@ DECLARE_OOXMLEXPORT_TEST( testTdf85161, "tdf85161.docx" )
     CPPUNIT_ASSERT_EQUAL(OUString(u'\x5e'),getParagraph(1)->getString());
 }
 
-DECLARE_OOXMLEXPORT_TEST( testTdf66401, "tdf66401.docx")
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf66401, "tdf66401.docx")
 {
-    if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
-    {
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[3]/w:rPr/w:rFonts", 1);
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[3]/w:rPr/w:rFonts", "ascii", "Arial Black");
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[3]/w:rPr/w:sz", "val", "24");
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[9]/w:rPr/w:rFonts", 1);
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[9]/w:rPr/w:rFonts", "ascii", "Arial Black");
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[9]/w:rPr/w:sz", "val", "24");
-    }
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[3]/w:rPr/w:rFonts", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[3]/w:rPr/w:rFonts", "ascii", "Arial Black");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[3]/w:rPr/w:sz", "val", "24");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[9]/w:rPr/w:rFonts", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[9]/w:rPr/w:rFonts", "ascii", "Arial Black");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[9]/w:rPr/w:sz", "val", "24");
 }
 
 DECLARE_OOXMLEXPORT_TEST( testDateFieldInShape, "date_field_in_shape.docx" )
