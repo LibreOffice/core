@@ -17,6 +17,8 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 
+#include <vcl/pdf/PDFAnnotationSubType.hxx>
+
 namespace com::sun::star::uno
 {
 template <typename> class Sequence;
@@ -37,9 +39,11 @@ struct PDFGraphicAnnotation
 {
     OUString maAuthor;
     OUString maText;
-    // In HMM
-    basegfx::B2DRectangle maRectangle;
+
+    basegfx::B2DRectangle maRectangle; // In HMM
     css::util::DateTime maDateTime;
+
+    pdf::PDFAnnotationSubType meSubType;
 };
 
 class PDFGraphicResult

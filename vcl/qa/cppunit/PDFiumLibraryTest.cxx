@@ -184,7 +184,7 @@ void PDFiumLibraryTest::testAnnotationsMadeInEvince()
     {
         auto pAnnotation = pPage->getAnnotation(0);
         CPPUNIT_ASSERT(pAnnotation);
-        CPPUNIT_ASSERT_EQUAL(1, pAnnotation->getSubType()); // FPDF_ANNOT_TEXT
+        CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Text, pAnnotation->getSubType());
 
         OUString aPopupString = pAnnotation->getString(vcl::pdf::constDictionaryKeyTitle);
         CPPUNIT_ASSERT_EQUAL(OUString("quikee"), aPopupString);
@@ -197,7 +197,7 @@ void PDFiumLibraryTest::testAnnotationsMadeInEvince()
         CPPUNIT_ASSERT(pPopupAnnotation);
 
         CPPUNIT_ASSERT_EQUAL(1, pPage->getAnnotationIndex(pPopupAnnotation));
-        CPPUNIT_ASSERT_EQUAL(16, pPopupAnnotation->getSubType());
+        CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Popup, pPopupAnnotation->getSubType());
 
         OUString sDateTimeString
             = pAnnotation->getString(vcl::pdf::constDictionaryKeyModificationDate);
@@ -207,7 +207,7 @@ void PDFiumLibraryTest::testAnnotationsMadeInEvince()
     {
         auto pAnnotation = pPage->getAnnotation(1);
         CPPUNIT_ASSERT(pAnnotation);
-        CPPUNIT_ASSERT_EQUAL(16, pAnnotation->getSubType()); // FPDF_ANNOT_POPUP
+        CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Popup, pAnnotation->getSubType());
     }
 }
 
@@ -241,7 +241,7 @@ void PDFiumLibraryTest::testAnnotationsMadeInAcrobat()
     {
         auto pAnnotation = pPage->getAnnotation(0);
         CPPUNIT_ASSERT(pAnnotation);
-        CPPUNIT_ASSERT_EQUAL(1, pAnnotation->getSubType()); // FPDF_ANNOT_TEXT
+        CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Text, pAnnotation->getSubType());
 
         OUString aPopupString = pAnnotation->getString(vcl::pdf::constDictionaryKeyTitle);
         CPPUNIT_ASSERT_EQUAL(OUString("quikee"), aPopupString);
@@ -254,19 +254,19 @@ void PDFiumLibraryTest::testAnnotationsMadeInAcrobat()
         CPPUNIT_ASSERT(pPopupAnnotation);
 
         CPPUNIT_ASSERT_EQUAL(1, pPage->getAnnotationIndex(pPopupAnnotation));
-        CPPUNIT_ASSERT_EQUAL(16, pPopupAnnotation->getSubType());
+        CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Popup, pPopupAnnotation->getSubType());
     }
 
     {
         auto pAnnotation = pPage->getAnnotation(1);
         CPPUNIT_ASSERT(pAnnotation);
-        CPPUNIT_ASSERT_EQUAL(16, pAnnotation->getSubType()); // FPDF_ANNOT_POPUP
+        CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Popup, pAnnotation->getSubType());
     }
 
     {
         auto pAnnotation = pPage->getAnnotation(2);
         CPPUNIT_ASSERT(pAnnotation);
-        CPPUNIT_ASSERT_EQUAL(1, pAnnotation->getSubType()); // FPDF_ANNOT_TEXT
+        CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Text, pAnnotation->getSubType());
 
         OUString aPopupString = pAnnotation->getString(vcl::pdf::constDictionaryKeyTitle);
         CPPUNIT_ASSERT_EQUAL(OUString("quikee"), aPopupString);
@@ -279,13 +279,13 @@ void PDFiumLibraryTest::testAnnotationsMadeInAcrobat()
         CPPUNIT_ASSERT(pPopupAnnotation);
 
         CPPUNIT_ASSERT_EQUAL(3, pPage->getAnnotationIndex(pPopupAnnotation));
-        CPPUNIT_ASSERT_EQUAL(16, pPopupAnnotation->getSubType());
+        CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Popup, pPopupAnnotation->getSubType());
     }
 
     {
         auto pAnnotation = pPage->getAnnotation(3);
         CPPUNIT_ASSERT(pAnnotation);
-        CPPUNIT_ASSERT_EQUAL(16, pAnnotation->getSubType()); // FPDF_ANNOT_POPUP
+        CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Popup, pAnnotation->getSubType());
     }
 }
 

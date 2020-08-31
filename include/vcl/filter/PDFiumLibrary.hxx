@@ -24,6 +24,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
 #include <vcl/checksum.hxx>
+#include <vcl/pdf/PDFAnnotationSubType.hxx>
 
 #include <fpdf_doc.h>
 
@@ -65,7 +66,7 @@ public:
     ~PDFiumAnnotation();
     FPDF_ANNOTATION getPointer() { return mpAnnotation; }
 
-    int getSubType();
+    PDFAnnotationSubType getSubType();
     basegfx::B2DRectangle getRectangle();
     bool hasKey(OString const& rKey);
     OUString getString(OString const& rKey);
