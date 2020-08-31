@@ -195,7 +195,7 @@ OUString LwpSilverBullet::GetBulletFontName()
         return OUString();
     }
 
-    LwpFontManager& rFontMgr = m_pFoundry->GetFontManger();
+    LwpFontManager& rFontMgr = m_pFoundry->GetFontManager();
 
     sal_uInt32 nBulletFontID = m_xBulletPara->GetBulletFontID();
     sal_uInt16 nFinalFont = static_cast<sal_uInt16>((nBulletFontID >> 16) & 0xFFFF);

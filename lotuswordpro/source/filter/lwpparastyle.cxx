@@ -653,7 +653,7 @@ void LwpParaStyle::RegisterStyle()
     xStyle->SetStyleName(styleName);
 
     //Create font
-    LwpFontManager& rFontMgr = m_pFoundry->GetFontManger();
+    LwpFontManager& rFontMgr = m_pFoundry->GetFontManager();
     rtl::Reference<XFFont> pFont = rFontMgr.CreateFont(m_nFinalFontID);
     xStyle->SetFont(pFont);
 

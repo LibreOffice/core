@@ -85,12 +85,12 @@ public class SharedLibraryLoader_Test {
         if ( sharedLibraryLoader == null && ! test_instantiateSharedLibraryLoader() )
             return false;
 
-        System.err.println("- get the native ServiceManger factory");
+        System.err.println("- get the native ServiceManager factory");
         XSingleServiceFactory aSMgrFac =
             UnoRuntime.queryInterface( XSingleServiceFactory.class,
                         sharedLibraryLoader.activate(NATIVE_SERVICE_MANAGER_IMP_NAME, null, NATIVE_SERVICE_MANAGER_LIB_NAME, null));
 
-        System.err.println("- instantiate the native ServiceManger");
+        System.err.println("- instantiate the native ServiceManager");
         nativeServiceManager = UnoRuntime.queryInterface( XMultiServiceFactory.class, aSMgrFac.createInstance() );
 
         System.out.print("Test - ");

@@ -44,7 +44,7 @@ class SelectionObserver;
 class SelectionManager
 {
 public:
-    /** Create a new SelectionManger for the given slide sorter.
+    /** Create a new SelectionManager for the given slide sorter.
     */
     SelectionManager (SlideSorter& rSlideSorter);
 
