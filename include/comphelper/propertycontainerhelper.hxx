@@ -86,7 +86,7 @@ protected:
     ~OPropertyContainerHelper();
 
     /** register a property. The property is represented through a member of the derived class which calls
-        this methdod.
+        this method.
         @param      _rName              the name of the property
         @param      _nHandle            the handle of the property
         @param      _nAttributes        the attributes of the property
@@ -100,7 +100,7 @@ protected:
 
 
     /** register a property. The property is represented through a css::uno::Any member of the
-        derived class which calls this methdod.
+        derived class which calls this method.
         @param      _rName              the name of the property
         @param      _nHandle            the handle of the property
         @param      _nAttributes        the attributes of the property
