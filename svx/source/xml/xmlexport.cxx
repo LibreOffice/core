@@ -181,7 +181,7 @@ bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStr
         }
 
         // parse
-        // prepare ParserInputSrouce
+        // prepare ParserInputSource
         xml::sax::InputSource aParserInput;
         aParserInput.aInputStream = xInputStream;
 

@@ -80,7 +80,7 @@ namespace svgio::svgreader
         {
             try
             {
-                // prepare ParserInputSrouce
+                // prepare ParserInputSource
                 xml::sax::InputSource myInputSource;
                 myInputSource.aInputStream = xSVGStream;
 

@@ -185,7 +185,7 @@ ErrCode SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
 
         uno::Reference<io::XInputStream> xInputStream = xDocStream->getInputStream();
 
-        // prepare ParserInputSrouce
+        // prepare ParserInputSource
         xml::sax::InputSource aParserInput;
         aParserInput.sSystemId = m_aName;
         aParserInput.aInputStream = xInputStream;

@@ -85,7 +85,7 @@ static ErrCode ReadThroughComponent(
     OSL_ENSURE(xModelComponent.is(), "document missing");
     OSL_ENSURE(rxContext.is(), "factory missing");
 
-    // prepare ParserInputSrouce
+    // prepare ParserInputSource
     InputSource aParserInput;
     aParserInput.aInputStream = xInputStream;
 

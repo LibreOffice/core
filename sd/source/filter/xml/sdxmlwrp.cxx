@@ -184,7 +184,7 @@ ErrCode ReadThroughComponent(
 
     SAL_INFO( "sd.filter", "ReadThroughComponent" );
 
-    // prepare ParserInputSrouce
+    // prepare ParserInputSource
     xml::sax::InputSource aParserInput;
     aParserInput.sSystemId = rName;
     aParserInput.aInputStream = xInputStream;
