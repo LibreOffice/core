@@ -71,7 +71,6 @@
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:Signature" menu:style="text"/>
           <menu:menuitem menu:id=".uno:SignPDF" menu:style="text"/>
-          <menu:menuitem menu:id=".uno:InsertSignatureLine" menu:style="text"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
@@ -273,6 +272,7 @@
           <menu:menuitem menu:id=".uno:NavigationBar"/>
         </menu:menupopup>
       </menu:menu>
+      <menu:menuitem menu:id=".uno:InsertSignatureLine" menu:style="text"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:FormatMenu">
