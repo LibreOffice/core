@@ -2599,10 +2599,14 @@ VclPtr<vcl::Window> VclBuilder::insertObject(vcl::Window *pParent, const OString
 
 void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &reader)
 {
+    TabControl *pTabControl = pParent && pParent->GetType() == WindowType::TABCONTROL ?
+        static_cast<TabControl*>(pParent) : nullptr;
+
     std::vector<OString> sIDs;
 
     int nLevel = 1;
     stringmap aProperties;
+    stringmap aAtkProperties;
     std::vector<vcl::EnumContext::Context> context;
 
     while(true)
@@ -2643,6 +2647,12 @@ void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &read
             }
             else if (name == "property")
                 collectProperty(reader, aProperties);
+            else if (pTabControl && name == "child")
+            {
+                // just to collect the atk properties (if any) for the label
+                handleChild(nullptr, &aAtkProperties, reader);
+                --nLevel;
+            }
         }
 
         if (res == xmlreader::XmlReader::Result::End)
@@ -2658,8 +2668,6 @@ void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &read
     if (!pParent)
         return;
 
-    TabControl *pTabControl = pParent->GetType() == WindowType::TABCONTROL ?
-        static_cast<TabControl*>(pParent) : nullptr;
     VerticalTabControl *pVerticalTabControl = pParent->GetType() == WindowType::VERTICALTABCONTROL ?
         static_cast<VerticalTabControl*>(pParent) : nullptr;
     assert(pTabControl || pVerticalTabControl);
@@ -2676,6 +2684,20 @@ void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &read
                 TabPage* pPage = pTabControl->GetTabPage(nPageId);
                 pPage->SetContext(context);
             }
+
+            for (auto const& prop : aAtkProperties)
+            {
+                const OString &rKey = prop.first;
+                const OUString &rValue = prop.second;
+
+                if (rKey == "AtkObject::accessible-name")
+                    pTabControl->SetAccessibleName(nPageId, rValue);
+                else if (rKey == "AtkObject::accessible-description")
+                    pTabControl->SetAccessibleDescription(nPageId, rValue);
+                else
+                    SAL_INFO("vcl.builder", "unhandled atk property: " << rKey);
+            }
+
         }
         else
         {
