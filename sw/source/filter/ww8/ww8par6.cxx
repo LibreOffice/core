@@ -403,6 +403,9 @@ void SwWW8ImplReader::Read_ParaBiDi(sal_uInt16, const sal_uInt8* pData, short nL
         }
 
         NewAttr(SvxFrameDirectionItem(eDir, RES_FRAMEDIR));
+
+        if ( m_pCurrentColl && m_xStyles )    // in style definition
+            m_xStyles->mbBidiChanged = true;
     }
 }
 
@@ -3071,9 +3074,6 @@ void SwWW8ImplReader::Read_Bidi(sal_uInt16, const sal_uInt8* pData, short nLen)
         m_bBidi = true;
         sal_uInt8 nBidi = *pData;
         NewAttr( SfxInt16Item( RES_CHRATR_BIDIRTL, (nBidi!=0)? 1 : 0 ) );
-
-        if( m_pCurrentColl && m_xStyles )    // in style definition
-            m_xStyles->mbBidiChanged = true;
     }
 }
 
