@@ -159,6 +159,9 @@ void SwOutlineContentVisibilityWin::ToggleOutlineContentVisibility(const bool bS
     if (GetEditWin()->GetView().IsDrawMode())
         GetEditWin()->GetView().LeaveDrawCreate();
     rSh.EnterStdMode();
+    // set cursor position here so Navigator tracks outline
+    // when doc changed broadcast message is sent in toggle function
+    rSh.GotoOutline(m_nOutlinePos);
     if (bSubs)
     {
         // toggle including sub levels
@@ -178,7 +181,6 @@ void SwOutlineContentVisibilityWin::ToggleOutlineContentVisibility(const bool bS
         rSh.ToggleOutlineContentVisibility(m_nOutlinePos);
     SetSymbol(rSh.IsOutlineContentFolded(m_nOutlinePos) ? SymbolType::ARROW_RIGHT
                                                         : SymbolType::ARROW_DOWN);
-    rSh.GotoOutline(m_nOutlinePos); // sets cursor position
     rSh.LockView(false);
 }
 
