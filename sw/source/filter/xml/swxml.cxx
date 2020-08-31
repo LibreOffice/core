@@ -145,7 +145,7 @@ ErrCode ReadThroughComponent(
     OSL_ENSURE(rxContext.is(), "factory missing");
     OSL_ENSURE(nullptr != pFilterName,"I need a service name for the component!");
 
-    // prepare ParserInputSrouce
+    // prepare ParserInputSource
     xml::sax::InputSource aParserInput;
     aParserInput.sSystemId = rName;
     aParserInput.aInputStream = xInputStream;

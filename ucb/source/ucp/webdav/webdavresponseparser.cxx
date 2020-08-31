@@ -840,7 +840,7 @@ namespace
         {
             try
             {
-                // prepare ParserInputSrouce
+                // prepare ParserInputSource
                 xml::sax::InputSource myInputSource;
                 myInputSource.aInputStream = xInputStream;
 

@@ -252,7 +252,7 @@ bool XMLSignatureHelper::ReadAndVerifySignature( const css::uno::Reference< css:
 
     SAL_WARN_IF(!xInputStream.is(), "xmlsecurity.helper", "input stream missing");
 
-    // prepare ParserInputSrouce
+    // prepare ParserInputSource
     xml::sax::InputSource aParserInput;
     aParserInput.aInputStream = xInputStream;
 
