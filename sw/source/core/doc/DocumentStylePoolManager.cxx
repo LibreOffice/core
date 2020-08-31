@@ -69,6 +69,7 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <unotools/syslocale.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <comphelper/lok.hxx>
 
 using namespace ::editeng;
 using namespace ::com::sun::star;
@@ -583,10 +584,20 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
 
     SwTextFormatColl* pNewColl;
     sal_uInt16 nOutLvlBits = 0;
+
     for (size_t n = 0, nSize = m_rDoc.GetTextFormatColls()->size(); n < nSize; ++n)
     {
         if( nId == ( pNewColl = (*m_rDoc.GetTextFormatColls())[ n ] )->GetPoolFormatId() )
         {
+            // in online we can have multiple languages, use translated name
+            if (comphelper::LibreOfficeKit::isActive())
+            {
+                OUString aName;
+                SwStyleNameMapper::GetUIName(nId, aName);
+                if (!aName.isEmpty())
+                    pNewColl->SetName(aName);
+            }
+
             return pNewColl;
         }
 
