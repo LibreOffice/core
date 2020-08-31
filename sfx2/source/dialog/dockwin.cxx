@@ -853,7 +853,7 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
                 aStr.clear();
             }
 
-            // get last alignment (for toggeling)
+            // get last alignment (for toggling)
             nPos = aStr.indexOf(',');
             if ( nPos != -1 )
             {
@@ -903,7 +903,7 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
     }
 
     // detect floating mode
-    // toggeling mode will not execute code in handlers, because pImpl->bConstructed is not set yet
+    // toggling mode will not execute code in handlers, because pImpl->bConstructed is not set yet
     bool bFloatMode = IsFloatingMode();
     if ( bFloatMode != (GetAlignment() == SfxChildAlignment::NOALIGNMENT) )
     {

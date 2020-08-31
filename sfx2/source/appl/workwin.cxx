@@ -1609,7 +1609,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
     }
 
     if ( n < aSortedList.size() )
-        // sometimes called while toggeling float mode
+        // sometimes called while toggling float mode
         nPos = aSortedList[n];
 
     switch ( eConfig )

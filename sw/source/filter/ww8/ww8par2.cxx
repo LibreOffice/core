@@ -2449,7 +2449,7 @@ void WW8TabDesc::CreateSwTable()
     if ( m_pIo->m_xSFlyPara && !m_pIo->m_xSFlyPara->pFlyFormat )
     {
         // Get the table orientation from the fly
-        // Do we also need to check m_pIo->m_xSFlyPara->bToggelPos/IsPosToggle()? [Probably not - layout-only concern]
+        // Do we also need to check m_pIo->m_xSFlyPara->bTogglePos/IsPosToggle()? [Probably not - layout-only concern]
         const bool bAdjustMargin = m_pIo->m_xSFlyPara->eHRel == text::RelOrientation::PAGE_FRAME || m_pIo->m_xSFlyPara->nXPos;
         const bool bIsInsideMargin = m_bIsBiDi ? m_pIo->m_xSFlyPara->eHAlign == text::HoriOrientation::RIGHT
                                                : m_pIo->m_xSFlyPara->eHAlign == text::HoriOrientation::LEFT;
