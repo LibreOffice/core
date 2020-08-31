@@ -100,7 +100,7 @@ namespace dbaui
 
         bool isSlotEnabled(sal_Int32 _nSlotId);
         void setSlotEnabled(sal_Int32 _nSlotId, bool _bEnable);
-        void setNoneVisbleRow(sal_Int32 _nRows);
+        void setNoneVisibleRow(sal_Int32 _nRows);
 
         const css::lang::Locale&      getLocale() const           { return m_aLocale;}
         const OUString&               getDecimalSeparator() const { return m_sDecimalSep;}

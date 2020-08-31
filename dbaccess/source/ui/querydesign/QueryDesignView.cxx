@@ -2427,7 +2427,7 @@ OQueryDesignView::OQueryDesignView( OQueryContainerWindow* _pParent,
 
     m_pSelectionBox = VclPtr<OSelectionBrowseBox>::Create(this);
 
-    setNoneVisbleRow(static_cast<OQueryController&>(getController()).getVisibleRows());
+    setNoneVisibleRow(static_cast<OQueryController&>(getController()).getVisibleRows());
     m_pSelectionBox->Show();
     // setup Splitter
     m_aSplitter->SetSplitHdl(LINK(this, OQueryDesignView,SplitHdl));
@@ -3009,9 +3009,9 @@ void OQueryDesignView::reset()
     m_pTableView->ReSync();
 }
 
-void OQueryDesignView::setNoneVisbleRow(sal_Int32 _nRows)
+void OQueryDesignView::setNoneVisibleRow(sal_Int32 _nRows)
 {
-    m_pSelectionBox->SetNoneVisbleRow(_nRows);
+    m_pSelectionBox->SetNoneVisibleRow(_nRows);
 }
 
 void OQueryDesignView::initByFieldDescriptions( const Sequence< PropertyValue >& i_rFieldDescriptions )

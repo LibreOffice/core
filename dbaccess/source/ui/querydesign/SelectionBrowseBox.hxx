@@ -112,7 +112,7 @@ namespace dbaui
         void                        SetCellContents(sal_Int32 nCellIndex, sal_uInt16 nColId, const OUString& strNewText);
                                         // cell content (formatted as string) set/return
         sal_Int32                   GetNoneVisibleRows() const;
-        void                        SetNoneVisbleRow(long nRows);
+        void                        SetNoneVisibleRow(long nRows);
         bool                        IsRowVisible(sal_uInt16 _nWhich) const;
         void                        SetRowVisible(sal_uInt16 _nWhich, bool _bVis);
 

@@ -1711,7 +1711,7 @@ void OQueryController::impl_reset( const bool i_bForceCurrentControllerSettings 
         setQueryComposer();
     OSL_ENSURE(m_pSqlIterator,"No SQLIterator set!");
 
-    getContainer()->setNoneVisbleRow(m_nVisibleRows);
+    getContainer()->setNoneVisibleRow(m_nVisibleRows);
 }
 
 void OQueryController::reset()

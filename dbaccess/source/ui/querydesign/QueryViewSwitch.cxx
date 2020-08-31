@@ -284,10 +284,10 @@ void OQueryViewSwitch::reset()
     switchView( nullptr );
 }
 
-void OQueryViewSwitch::setNoneVisbleRow(sal_Int32 _nRows)
+void OQueryViewSwitch::setNoneVisibleRow(sal_Int32 _nRows)
 {
     if(m_pDesignView)
-        m_pDesignView->setNoneVisbleRow(_nRows);
+        m_pDesignView->setNoneVisibleRow(_nRows);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
