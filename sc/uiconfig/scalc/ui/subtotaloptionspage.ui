@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkBox" id="SubTotalOptionsPage">
@@ -40,6 +40,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="pagebreak-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="subtotaloptionspage|extended_tip|pagebreak">Inserts a new page after each group of subtotaled data.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -56,6 +61,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="case-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="subtotaloptionspage|extended_tip|case">Recalculates subtotals when you change the case of a data label.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -72,6 +82,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="sort-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="subtotaloptionspage|extended_tip|sort">Sorts the area that you selected in the Group by box of the Group tabs according to the columns that you selected.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -133,6 +148,11 @@
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="ascending-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="subtotaloptionspage|extended_tip|ascending">Sorts beginning with the lowest value. You can define the sort rules on Data - Sort - Options.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -151,6 +171,11 @@
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">ascending</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="descending-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="subtotaloptionspage|extended_tip|descending">Sorts beginning with the highest value. You can define the sort rules on Data - Sort - Options.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -167,6 +192,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="formats-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="subtotaloptionspage|extended_tip|formats">Considers formatting attributes when sorting.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -186,6 +216,11 @@
                     <accessibility>
                       <relation type="label-for" target="lbuserdef"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="btnuserdef-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="subtotaloptionspage|extended_tip|btnuserdef">Uses a custom sorting order that you defined in the Options dialog box at %PRODUCTNAME Calc - Sort Lists.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -200,6 +235,11 @@
                     <accessibility>
                       <relation type="labelled-by" target="btnuserdef"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="lbuserdef-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="subtotaloptionspage|extended_tip|lbuserdef">Uses a custom sorting order that you defined in the Options dialog box at %PRODUCTNAME Calc - Sort Lists.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -226,6 +266,11 @@
         <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="SubTotalOptionsPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="subtotaloptionspage|extended_tip|SubTotalOptionsPage">Specify the settings for calculating and presenting subtotals.</property>
+      </object>
     </child>
   </object>
 </interface>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="for">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkBox" id="ParameterPage">
@@ -214,6 +214,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="FX1-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="parameter|extended_tip|FX1">Allows you to access a subordinate level of the Function Wizard in order to nest another function within the function, instead of a value or reference.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -225,6 +230,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="FX2-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="parameter|extended_tip|FX2">Allows you to access a subordinate level of the Function Wizard in order to nest another function within the function, instead of a value or reference.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -236,6 +246,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="FX3-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="parameter|extended_tip|FX3">Allows you to access a subordinate level of the Function Wizard in order to nest another function within the function, instead of a value or reference.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -247,6 +262,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="FX4-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="parameter|extended_tip|FX4">Allows you to access a subordinate level of the Function Wizard in order to nest another function within the function, instead of a value or reference.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>

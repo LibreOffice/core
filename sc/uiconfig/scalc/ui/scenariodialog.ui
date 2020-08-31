@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="ScenarioDialog">
@@ -10,9 +10,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -106,6 +103,11 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="name-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="scenariodialog|extended_tip|name">Defines the name for the scenario. Use a clear and unique name so you can easily identify the scenario.</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -161,6 +163,11 @@
                                 <property name="hexpand">True</property>
                                 <property name="vexpand">True</property>
                                 <property name="accepts_tab">False</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="comment-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="scenariodialog|extended_tip|comment">Specifies additional information about the scenario. This information will be displayed in the Navigator when you click the Scenarios icon and select the desired scenario.</property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>
@@ -214,6 +221,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="copyback-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="scenariodialog|extended_tip|copyback">Copies the values of cells that you change into the active scenario. If you do not select this option, the scenario is not changed when you change cell values. The behavior of the Copy back setting depends on the cell protection, the sheet protection, and the Prevent changes settings.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -229,6 +241,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="copysheet-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="scenariodialog|extended_tip|copysheet">Copies the entire sheet into an additional scenario sheet.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -244,6 +261,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="preventchanges-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="scenariodialog|extended_tip|preventchanges">Prevents changes to the active scenario. The behavior of the Copy back setting depends on the cell protection, the sheet protection, and the Prevent changes settings.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -267,6 +289,11 @@
                                 <accessibility>
                                   <relation type="label-for" target="bordercolor"/>
                                 </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="showframe-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="scenariodialog|extended_tip|showframe">Highlights the scenario in your table with a border. The color for the border is specified in the field to the right of this option.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -280,13 +307,17 @@
                                 <property name="receives_default">False</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
-                                <property name="label" translatable="no"></property>
                                 <child>
                                   <placeholder/>
                                 </child>
                                 <accessibility>
                                   <relation type="labelled-by" target="showframe"/>
                                 </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="bordercolor-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="scenariodialog|extended_tip|bordercolor">Highlights the scenario in your table with a border. The color for the border is specified in the field to the right of this option.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -377,5 +408,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="ScenarioDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="scenariodialog|extended_tip|ScenarioDialog">Defines a scenario for the selected sheet area.</property>
+      </object>
+    </child>
   </object>
 </interface>

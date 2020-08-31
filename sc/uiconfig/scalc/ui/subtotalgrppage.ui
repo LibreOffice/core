@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -56,6 +56,11 @@
           <object class="GtkComboBoxText" id="group_by">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="group_by-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="subtotalgrppage|extended_tip|group_by">Select the column that you want to control the subtotal calculation process. If the contents of the selected column change, the subtotals are automatically recalculated.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -153,6 +158,11 @@
                     </child>
                   </object>
                 </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="columns-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="subtotalgrppage|extended_tip|columns">Select the column(s) containing the values that you want to subtotal.</property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
@@ -194,6 +204,11 @@
                     </child>
                   </object>
                 </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="functions-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="subtotalgrppage|extended_tip|functions">Select the mathematical function that you want to use to calculate the subtotals.</property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
@@ -208,6 +223,11 @@
         <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="SubTotalGrpPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="subtotalgrppage|extended_tip|SubTotalGrpPage">Specify the settings for up to three subtotal groups. Each tab has the same layout.</property>
+      </object>
     </child>
   </object>
 </interface>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="DeleteCellsDialog">
@@ -102,6 +102,11 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="up-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="deletecells|extended_tip|up">Fills the space produced by the deleted cells with the cells underneath it.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -119,6 +124,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">up</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="left-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="deletecells|extended_tip|left">Fills the resulting space by the cells to the right of the deleted cells.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -136,6 +146,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">up</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="rows-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="deletecells|extended_tip|rows">After selecting at least one cell, deletes the entire row from the sheet.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -153,6 +168,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">up</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="cols-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="deletecells|extended_tip|cols">After selecting at least one cell, deletes the entire column from the sheet.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -188,8 +208,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
+    <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="DeleteCellsDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="deletecells|extended_tip|DeleteCellsDialog">Completely deletes selected cells, columns or rows. The cells below or to the right of the deleted cells will fill the space.</property>
+      </object>
     </child>
   </object>
 </interface>

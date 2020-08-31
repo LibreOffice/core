@@ -149,6 +149,11 @@
                   <item translatable="yes" context="consolidatedialog|func">Var (sample)</item>
                   <item translatable="yes" context="consolidatedialog|func">VarP (population)</item>
                 </items>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="func-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="consolidatedialog|extended_tip|func">Select the function that you want to use to consolidate the data.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -188,6 +193,11 @@
                         </child>
                       </object>
                     </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="consareas-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="consolidatedialog|extended_tip|consareas">Displays the cell ranges that you want to consolidate.</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -220,6 +230,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="lbdataarea-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="consolidatedialog|extended_tip|lbdataarea">Specifies the cell range that you want to consolidate with the cell ranges listed in the Consolidation ranges box. Select a cell range in a sheet, and then click Add. You can also select the name of a predefined cell from the Source data range list.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -233,6 +248,11 @@
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
                     <property name="width_chars">50</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="eddataarea-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="consolidatedialog|extended_tip|eddataarea">Specifies the cell range that you want to consolidate with the cell ranges listed in the Consolidation ranges box. Select a cell range in a sheet, and then click Add. You can also select the name of a predefined cell from the Source data range list.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -276,6 +296,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="lbdestarea-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="consolidatedialog|extended_tip|lbdestarea">Displays the first cell in the range where the consolidation results will be displayed.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -289,6 +314,11 @@
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
                     <property name="width_chars">50</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="eddestarea-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="consolidatedialog|extended_tip|eddestarea">Displays the first cell in the range where the consolidation results will be displayed.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -335,6 +365,11 @@
                     <property name="can_default">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_stock">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="add-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="consolidatedialog|extended_tip|add">Adds the cell range specified in the Source data range box to the Consolidation ranges box.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -450,6 +485,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="byrow-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="consolidatedialog|extended_tip|byrow">Uses the row labels to arrange the consolidated data.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -466,6 +506,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="bycol-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="consolidatedialog|extended_tip|bycol">Uses the column labels to arrange the consolidated data.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -520,6 +565,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="refs-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="consolidatedialog|extended_tip|refs">Links the data in the consolidation range to the source data, and automatically updates the results of the consolidation when the source data is changed.</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -550,6 +600,11 @@
                 <property name="label" translatable="yes" context="consolidatedialog|more_label">Options</property>
               </object>
             </child>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="more-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="consolidatedialog|extended_tip|more">Shows additional options.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -566,6 +621,11 @@
     </action-widgets>
     <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="ConsolidateDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="consolidatedialog|extended_tip|ConsolidateDialog">Combines data from one or more independent cell ranges and calculates a new range using the function that you specify.</property>
+      </object>
     </child>
   </object>
 </interface>

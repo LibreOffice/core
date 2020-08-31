@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkMenu" id="contextmenu">
@@ -23,6 +23,11 @@
                 <property name="use_underline">True</property>
                 <property name="active">True</property>
                 <property name="draw_as_radio">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="hyperlink-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="dropmenu|extended_tip|hyperlink">Inserts a hyperlink when you drag-and-drop an object from the Navigator into a document.</property>
+                  </object>
+                </child>
               </object>
             </child>
             <child>
@@ -33,6 +38,11 @@
                 <property name="use_underline">True</property>
                 <property name="draw_as_radio">True</property>
                 <property name="group">hyperlink</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="link-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="dropmenu|extended_tip|link">Creates a link when you drag-and-drop an object from the Navigator into a document.</property>
+                  </object>
+                </child>
               </object>
             </child>
             <child>
@@ -43,6 +53,11 @@
                 <property name="use_underline">True</property>
                 <property name="draw_as_radio">True</property>
                 <property name="group">hyperlink</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="copy-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="dropmenu|extended_tip|copy">Generates a copy when you drag-and-drop an object from the Navigator into a document.</property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>

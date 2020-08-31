@@ -167,6 +167,11 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="acceptrejectchangesdialog|calcedit">Edit Comment...</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="calcedit-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="acceptrejectchangesdialog|extended_tip|calcedit">Edit the comment for the selected change.</property>
+          </object>
+        </child>
       </object>
     </child>
     <child>
@@ -236,6 +241,11 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="acceptrejectchangesdialog|writeredit">Edit Comment...</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="writeredit-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="acceptrejectchangesdialog|extended_tip|writeredit">Edit the comment for the selected change.</property>
+          </object>
+        </child>
       </object>
     </child>
     <child>

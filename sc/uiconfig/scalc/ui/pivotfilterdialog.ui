@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="PivotFilterDialog">
@@ -10,9 +10,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -113,6 +110,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="label2"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="connect1-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pivotfilterdialog|extended_tip|connect1">Select a logical operator for the filter.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -127,6 +129,11 @@
                           <item translatable="yes" context="pivotfilterdialog|connect2">AND</item>
                           <item translatable="yes" context="pivotfilterdialog|connect2">OR</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="connect2-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pivotfilterdialog|extended_tip|connect2">Select a logical operator for the filter.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -184,6 +191,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="label3"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="field1-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pivotfilterdialog|extended_tip|field1">Select the field that you want to use in the filter. If field names are not available, the column labels are listed.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -197,6 +209,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="label3"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="field2-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pivotfilterdialog|extended_tip|field2">Select the field that you want to use in the filter. If field names are not available, the column labels are listed.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -210,6 +227,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="label3"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="field3-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pivotfilterdialog|extended_tip|field3">Select the field that you want to use in the filter. If field names are not available, the column labels are listed.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -231,6 +253,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="label4"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="cond1-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pivotfilterdialog|extended_tip|cond1">Select an operator to compare the Field name and Value entries.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -252,6 +279,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="label4"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="cond2-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pivotfilterdialog|extended_tip|cond2">Select an operator to compare the Field name and Value entries.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -273,6 +305,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="label4"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="cond3-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pivotfilterdialog|extended_tip|cond3">Select an operator to compare the Field name and Value entries.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -294,6 +331,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="label5"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="val1-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pivotfilterdialog|extended_tip|val1">Select the value that you want to compare to the selected field.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -315,6 +357,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="label5"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="val2-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pivotfilterdialog|extended_tip|val2">Select the value that you want to compare to the selected field.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -336,6 +383,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="label5"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="val3-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pivotfilterdialog|extended_tip|val3">Select the value that you want to compare to the selected field.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -399,6 +451,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="case-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pivotfilterdialog|extended_tip|case">Distinguishes between uppercase and lowercase letters.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -415,6 +472,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="regexp-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pivotfilterdialog|extended_tip|regexp">Allows you to use regular expressions in the filter definition.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -431,6 +493,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="unique-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pivotfilterdialog|extended_tip|unique">Excludes duplicate rows in the list of filtered data.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -470,6 +537,11 @@
                         <property name="hexpand">True</property>
                         <property name="label" translatable="yes" context="pivotfilterdialog|dbarea">dummy</property>
                         <property name="xalign">0</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="dbarea-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="pivotfilterdialog|extended_tip|dbarea">Displays the name of the filtered data range in the table.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -506,5 +578,8 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>

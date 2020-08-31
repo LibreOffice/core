@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="lower">1</property>
+    <property name="upper">999</property>
+    <property name="value">1</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkTreeStore" id="liststore2">
     <columns>
       <!-- column-name check1 -->
@@ -16,13 +23,6 @@
       <column type="gboolean"/>
     </columns>
   </object>
-  <object class="GtkAdjustment" id="adjustment1">
-    <property name="lower">1</property>
-    <property name="upper">999</property>
-    <property name="value">1</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
   <object class="GtkDialog" id="DataFieldOptionsDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -32,9 +32,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -135,6 +132,11 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="ascending-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|ascending">Sorts the values from the lowest value to the highest value. If the selected field is the field for which the dialog was opened, the items are sorted by name. If a data field was selected, the items are sorted by the resultant value of the selected data field.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -151,6 +153,11 @@
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">ascending</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="descending-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|descending">Sorts the values descending from the highest value to the lowest value. If the selected field is the field for which the dialog was opened, the items are sorted by name. If a data field was selected, the items are sorted by the resultant value of the selected data field.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -167,6 +174,11 @@
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">ascending</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="manual-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|manual">Sorts values alphabetically.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -179,6 +191,11 @@
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
                             <property name="hexpand">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="sortby-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|sortby">Select the data field that you want to sort columns or rows by.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -252,6 +269,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="emptyline-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|emptyline">Adds an empty row after the data for each item in the pivot table.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -283,6 +305,11 @@
                               <item translatable="yes" context="datafieldoptionsdialog|layout">Outline layout with subtotals at the top</item>
                               <item translatable="yes" context="datafieldoptionsdialog|layout">Outline layout with subtotals at the bottom</item>
                             </items>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="layout-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|layout">Select the layout mode for the field in the list box.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -339,6 +366,11 @@
                             <accessibility>
                               <relation type="label-for" target="items"/>
                             </accessibility>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="show-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|show">Turns on the automatic show feature.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -400,6 +432,11 @@
                                 <accessibility>
                                   <relation type="labelled-by" target="show"/>
                                 </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="items-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|items">Enter the maximum number of items that you want to show automatically.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -420,6 +457,11 @@
                               <item translatable="yes" context="datafieldoptionsdialog|from">Top</item>
                               <item translatable="yes" context="datafieldoptionsdialog|from">Bottom</item>
                             </items>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="from-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|from">Shows the top or bottom items in the specified sort order.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -430,6 +472,11 @@
                           <object class="GtkComboBoxText" id="using">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="using-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|using">Select the data field that you want to sort the data by.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -519,6 +566,11 @@
                                 </child>
                               </object>
                             </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="hideitems-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|hideitems">Select the items that you want to hide from the calculations.</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -550,6 +602,11 @@
                   <object class="GtkComboBoxText" id="hierarchy">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="hierarchy-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="datafieldoptionsdialog|extended_tip|hierarchy">Select the hierarchy that you want to use. The pivot table must be based on an external source data that contains data hierarchies.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -590,6 +647,9 @@
       <action-widget response="-6">close</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <widgets>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -21,9 +21,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -155,6 +152,11 @@
                                 </child>
                               </object>
                             </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="CONTAINER-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="condformatmanager|extended_tip|CONTAINER">The Conditional Formats list displays the active conditional formatting rules set in the current spreadsheet.</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -176,6 +178,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="add-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="condformatmanager|extended_tip|add">Here you can add, edit or remove one or several conditional formattings.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -189,6 +196,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="edit-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="condformatmanager|extended_tip|edit">Here you can add, edit or remove one or several conditional formattings.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -202,6 +214,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="remove-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="condformatmanager|extended_tip|remove">Here you can add, edit or remove one or several conditional formattings.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -244,5 +261,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="CondFormatManager-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="condformatmanager|extended_tip|CondFormatManager">This dialog allows you to see all the conditional formatting defined in the spreadsheet.</property>
+      </object>
+    </child>
   </object>
 </interface>

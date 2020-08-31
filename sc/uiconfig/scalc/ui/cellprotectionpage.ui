@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkGrid" id="CellProtectionPage">
@@ -42,6 +42,11 @@
                     <property name="active">True</property>
                     <property name="inconsistent">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="checkProtected-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="cellprotectionpage|extended_tip|checkProtected">Prevents the selected cells from being modified.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -59,6 +64,11 @@
                     <property name="xalign">0</property>
                     <property name="inconsistent">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="checkHideFormula-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="cellprotectionpage|extended_tip|checkHideFormula">Hides formulas in the selected cells.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -76,6 +86,11 @@
                     <property name="always_show_image">True</property>
                     <property name="inconsistent">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="checkHideAll-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="cellprotectionpage|extended_tip|checkHideAll">Hides formulas and contents of the selected cells.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -150,6 +165,11 @@ Select 'Protect Sheet' from the 'Tools' menu.</property>
                     <property name="xalign">0</property>
                     <property name="inconsistent">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="checkHidePrinting-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="cellprotectionpage|extended_tip|checkHidePrinting">Keeps the selected cells from being printed.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -191,6 +211,11 @@ Select 'Protect Sheet' from the 'Tools' menu.</property>
         <property name="left_attach">0</property>
         <property name="top_attach">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="CellProtectionPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="cellprotectionpage|extended_tip|CellProtectionPage">Defines protection options for selected cells.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

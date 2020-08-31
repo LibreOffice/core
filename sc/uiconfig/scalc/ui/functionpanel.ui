@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkImage" id="image1">
@@ -84,6 +84,11 @@
                           <item translatable="yes" context="functionpanel|category">Text</item>
                           <item translatable="yes" context="functionpanel|category">Add-in</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="category-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="functionpanel|extended_tip|category">Displays the available functions.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -124,6 +129,11 @@
                                 <attribute name="text">0</attribute>
                               </attributes>
                             </child>
+                          </object>
+                        </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="funclist-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="functionpanel|extended_tip|funclist">Displays the available functions.</property>
                           </object>
                         </child>
                       </object>

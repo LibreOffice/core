@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -33,9 +33,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -158,6 +155,11 @@
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
                         <property name="width_chars">30</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="cell-range-edit-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="randomnumbergenerator|extended_tip|cell-range-edit">Define the range of cells to fill with random numbers. If you have previously selected a range, it will be displayed here.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -249,6 +251,11 @@
                           <item id="6" translatable="yes" context="randomnumbergenerator|distribution-liststore">Geometric</item>
                           <item id="7" translatable="yes" context="randomnumbergenerator|distribution-liststore">Negative Binomial</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="distribution-combo-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="randomnumbergenerator|extended_tip|distribution-combo">The distribution function for the random number generator.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -366,6 +373,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="enable-seed-check-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="randomnumbergenerator|extended_tip|enable-seed-check">Set the initial value of the random number generator to a known value Seed.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -395,6 +407,11 @@
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment1</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="seed-spin-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="randomnumbergenerator|extended_tip|seed-spin">Value set to initiate the random number generator algorithm. It is used to initialize (seed) the random number generator in order to reproduce the same sequence of pseudorandom numbers. Specify a positive integer number (1, 2, ...) to produce a specific sequence, or leave the field blank if you don't need this particular feature.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -410,6 +427,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="enable-rounding-check-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="randomnumbergenerator|extended_tip|enable-rounding-check">Truncate the number to a given number of Decimal Places.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -442,6 +464,11 @@
                         <property name="text">1</property>
                         <property name="adjustment">decimal-places-adjustment</property>
                         <property name="value">1</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="decimal-places-spin-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="randomnumbergenerator|extended_tip|decimal-places-spin">Number of decimal places of the numbers generated.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -477,6 +504,14 @@
       <action-widget response="-7">close</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="RandomNumberGeneratorDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="randomnumbergenerator|extended_tip|RandomNumberGeneratorDialog">Populate a cell range with automatically generated pseudo random numbers with the selected distribution function and its parameters.</property>
+      </object>
+    </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <widgets>
