@@ -6780,6 +6780,19 @@ if test "$GCC" = yes; then
 fi
 AC_SUBST([HAVE_GCC_FNO_SIZED_DEALLOCATION])
 
+AC_MSG_CHECKING([whether $CXX_BASE supports C++20 consteval])
+AC_LANG_PUSH([C++])
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+        consteval int f() { return 0; }
+    ])], [
+        AC_DEFINE([HAVE_CPP_CONSTEVAL],[1])
+        AC_MSG_RESULT([yes])
+    ], [AC_MSG_RESULT([no])])
+CXXFLAGS=$save_CXXFLAGS
+AC_LANG_POP([C++])
+
 AC_MSG_CHECKING([whether $CXX_BASE supports C++2a constinit sorted vectors])
 AC_LANG_PUSH([C++])
 save_CXXFLAGS=$CXXFLAGS

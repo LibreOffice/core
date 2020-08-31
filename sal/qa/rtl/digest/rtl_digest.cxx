@@ -24,6 +24,7 @@
 #include <cppunit/plugin/TestPlugIn.h>
 
 #include <memory>
+#include <string_view>
 
 #include <rtl/digest.h>
 #include <rtl/string.h>
@@ -61,14 +62,14 @@ const sal_uInt32 constDigestAlgorithmLengths[] =
     RTL_DIGEST_LENGTH_HMAC_SHA1,
 };
 
-const OStringLiteral constSampleStringSums[] =
+const std::string_view constSampleStringSums[] =
 {
-    OStringLiteral("647ee6c9d4aa5fdd374ed9d7a156acbf"),
-    OStringLiteral("b16b903e6fc0b62ae389013ed93fe531"),
-    OStringLiteral("eab2814429b2613301c8a077b806af3680548914"),
-    OStringLiteral("2bc5bdb7506a2cdc2fd27fc8b9889343012d5008"),
-    OStringLiteral("0b1b0e1a6f2e4420326354b031063605"),
-    OStringLiteral("1998c6a556915be76451bfb587fa7c34d849936e")
+    std::string_view("647ee6c9d4aa5fdd374ed9d7a156acbf"),
+    std::string_view("b16b903e6fc0b62ae389013ed93fe531"),
+    std::string_view("eab2814429b2613301c8a077b806af3680548914"),
+    std::string_view("2bc5bdb7506a2cdc2fd27fc8b9889343012d5008"),
+    std::string_view("0b1b0e1a6f2e4420326354b031063605"),
+    std::string_view("1998c6a556915be76451bfb587fa7c34d849936e")
 };
 
 // Create hex-value string from the digest value to keep the string size minimal

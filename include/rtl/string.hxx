@@ -24,6 +24,7 @@
 
 #include <cassert>
 #include <cstddef>
+#include <limits>
 #include <new>
 #include <ostream>
 #include <utility>
@@ -38,6 +39,7 @@
 #include "rtl/stringutils.hxx"
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
+#include "config_global.h"
 #include "rtl/stringconcat.hxx"
 #endif
 
@@ -70,34 +72,53 @@ namespace rtl
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 /**
-A simple wrapper around string literal. It is usually not necessary to use, can
-be mostly used to force OString operator+ working with operands that otherwise would
-not trigger it.
+A wrapper dressing a string literal as a static-refcount rtl_String.
 
 This class is not part of public API and is meant to be used only in LibreOffice code.
 @since LibreOffice 4.0
 */
-struct SAL_WARN_UNUSED OStringLiteral
-{
-    template< int N >
-    explicit OStringLiteral( const char (&str)[ N ] ) : size( N - 1 ), data( str ) { assert( strlen( str ) == N - 1 ); }
+template<std::size_t N> class SAL_WARN_UNUSED OStringLiteral {
+    static_assert(N != 0);
+    static_assert(N - 1 <= std::numeric_limits<sal_Int32>::max(), "literal too long");
+
+public:
+#if HAVE_CPP_CONSTEVAL
+    consteval
+#else
+    constexpr
+#endif
+    explicit OStringLiteral(char const (&literal)[N]) {
+        assert(literal[N - 1] == '\0');
+        //TODO: Use C++20 constexpr std::copy_n (P0202R3):
+        for (std::size_t i = 0; i != N; ++i) {
+            buffer[i] = literal[i];
+        }
+    }
+
 #if defined __cpp_char8_t
-    template< int N >
-    explicit OStringLiteral( const char8_t (&str)[ N ] ) : size( N - 1 ), data( reinterpret_cast<char const *>(str) ) { assert( strlen( data ) == N - 1 ); }
+#if HAVE_CPP_CONSTEVAL
+    consteval
+#else
+    constexpr
+#endif
+    explicit OStringLiteral(char8_t const (&literal)[N]) {
+        assert(literal[N - 1] == '\0');
+        //TODO: Use C++20 constexpr std::copy_n (P0202R3):
+        for (std::size_t i = 0; i != N; ++i) {
+            buffer[i] = literal[i];
+        }
+    }
 #endif
 
-    int size;
-    const char* data;
+    constexpr sal_Int32 getLength() const { return length; }
 
-    /** So we can use this in some places interchangeably with OUString.
-     * @since LibreOffice 7.1
-     */
-    constexpr sal_Int32 getLength() const { return size; }
+    constexpr char const * getStr() const SAL_RETURNS_NONNULL { return buffer; }
 
-    /** So we can use this in some places interchangeably with OString.
-     * @since LibreOffice 7.1
-     */
-    constexpr const char* getStr() const { return data; }
+private:
+    // Same layout as rtl_String (include/rtl/string.h):
+    oslInterlockedCount refCount = 0x4000'0000; // SAL_STRING_STATIC_FLAG (sal/rtl/strimp.hxx)
+    sal_Int32 length = N - 1;
+    char buffer[N] = {}; //TODO: drop initialization for C++20 (P1331R2)
 };
 #endif
 
@@ -274,23 +295,22 @@ public:
     /**
       New string from an 8-Bit string literal.
 
-      This constructor is similar to the "direct template" one, but can be
-      useful in cases where the latter does not work, like in
-
-        OString(flag ? "a" : "bb")
-
-      written as
-
-        OString(flag ? OStringLiteral("a") : OStringLiteral("bb"))
-
       @since LibreOffice 7.1
     */
-    OString(OStringLiteral literal): pData(NULL) {
-        rtl_string_newFromLiteral(&pData, literal.data, literal.size, 0);
-    }
+    template<std::size_t N> OString(OStringLiteral<N> const & literal):
+        pData(const_cast<rtl_String *>(reinterpret_cast<rtl_String const *>(&literal))) {}
     /// @endcond
 #endif
 
+#if defined LIBO_INTERNAL_ONLY
+    explicit OString(std::string_view sv) {
+        if (sv.size() > sal_uInt32(std::numeric_limits<sal_Int32>::max())) {
+            throw std::bad_alloc();
+        }
+        pData = nullptr;
+        rtl_string_newFromStr_WithLength(&pData, sv.data(), sv.size());
+    }
+#endif
 
     /**
       New string from a Unicode character buffer array.
@@ -1946,11 +1966,11 @@ struct ToStringHelper< OString >
 /**
  @internal
 */
-template<>
-struct ToStringHelper< OStringLiteral >
+template<std::size_t N>
+struct ToStringHelper< OStringLiteral<N> >
     {
-    static std::size_t length( const OStringLiteral& str ) { return str.size; }
-    static char* addData( char* buffer, const OStringLiteral& str ) { return addDataHelper( buffer, str.data, str.size ); }
+    static constexpr std::size_t length( const OStringLiteral<N>& str ) { return str.getLength(); }
+    static char* addData( char* buffer, const OStringLiteral<N>& str ) { return addDataHelper( buffer, str.getStr(), str.getLength() ); }
     static const bool allowOStringConcat = true;
     static const bool allowOUStringConcat = false;
     };
