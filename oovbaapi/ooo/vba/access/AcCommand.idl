@@ -194,7 +194,7 @@ module ooo { module vba { module access {
         const long acCmdMacroConditions = 87;
         const long acCmdMacroNames = 86;
         const long acCmdMakeMDEFile = 7;
-        const long acCmdMaximiumRecords = 508;
+        const long acCmdMaximumRecords = 508;
         const long acCmdMicrosoftAccessHelpTopics = 100;
         const long acCmdMicrosoftOnTheWeb = 236;
         const long acCmdMicrosoftScriptEditor = 390;

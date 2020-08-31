@@ -1675,13 +1675,13 @@ long VSeriesPlotter::calculateTimeResolutionOnXAxis()
 double VSeriesPlotter::getMinimumX()
 {
     double fMinimum, fMaximum;
-    getMinimumAndMaximiumX( fMinimum, fMaximum );
+    getMinimumAndMaximumX( fMinimum, fMaximum );
     return fMinimum;
 }
 double VSeriesPlotter::getMaximumX()
 {
     double fMinimum, fMaximum;
-    getMinimumAndMaximiumX( fMinimum, fMaximum );
+    getMinimumAndMaximumX( fMinimum, fMaximum );
     return fMaximum;
 }
 
@@ -1690,7 +1690,7 @@ double VSeriesPlotter::getMinimumYInRange( double fMinimumX, double fMaximumX, s
     if( !m_bCategoryXAxis || ( m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->isDateAxis() ) )
     {
         double fMinY, fMaxY;
-        getMinimumAndMaximiumYInContinuousXRange( fMinY, fMaxY, fMinimumX, fMaximumX, nAxisIndex );
+        getMinimumAndMaximumYInContinuousXRange( fMinY, fMaxY, fMinimumX, fMaximumX, nAxisIndex );
         return fMinY;
     }
 
@@ -1723,7 +1723,7 @@ double VSeriesPlotter::getMaximumYInRange( double fMinimumX, double fMaximumX, s
     if( !m_bCategoryXAxis || ( m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->isDateAxis() ) )
     {
         double fMinY, fMaxY;
-        getMinimumAndMaximiumYInContinuousXRange( fMinY, fMaxY, fMinimumX, fMaximumX, nAxisIndex );
+        getMinimumAndMaximumYInContinuousXRange( fMinY, fMaxY, fMinimumX, fMaximumX, nAxisIndex );
         return fMaxY;
     }
 
@@ -1803,7 +1803,7 @@ bool VSeriesPlotter::isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIn
     return nDimensionIndex == 1;
 }
 
-void VSeriesPlotter::getMinimumAndMaximiumX( double& rfMinimum, double& rfMaximum ) const
+void VSeriesPlotter::getMinimumAndMaximumX( double& rfMinimum, double& rfMaximum ) const
 {
     ::rtl::math::setInf(&rfMinimum, false);
     ::rtl::math::setInf(&rfMaximum, true);
@@ -1813,7 +1813,7 @@ void VSeriesPlotter::getMinimumAndMaximiumX( double& rfMinimum, double& rfMaximu
         for (auto const& XSlot : ZSlot)
         {
             double fLocalMinimum, fLocalMaximum;
-            XSlot.getMinimumAndMaximiumX( fLocalMinimum, fLocalMaximum );
+            XSlot.getMinimumAndMaximumX( fLocalMinimum, fLocalMaximum );
             if( !std::isnan(fLocalMinimum) && fLocalMinimum< rfMinimum )
                 rfMinimum = fLocalMinimum;
             if( !std::isnan(fLocalMaximum) && fLocalMaximum> rfMaximum )
@@ -1826,7 +1826,7 @@ void VSeriesPlotter::getMinimumAndMaximiumX( double& rfMinimum, double& rfMaximu
         ::rtl::math::setNan(&rfMaximum);
 }
 
-void VSeriesPlotter::getMinimumAndMaximiumYInContinuousXRange( double& rfMinY, double& rfMaxY, double fMinX, double fMaxX, sal_Int32 nAxisIndex ) const
+void VSeriesPlotter::getMinimumAndMaximumYInContinuousXRange( double& rfMinY, double& rfMaxY, double fMinX, double fMaxX, sal_Int32 nAxisIndex ) const
 {
     ::rtl::math::setInf(&rfMinY, false);
     ::rtl::math::setInf(&rfMaxY, true);
@@ -1836,7 +1836,7 @@ void VSeriesPlotter::getMinimumAndMaximiumYInContinuousXRange( double& rfMinY, d
         for (auto const& XSlot : ZSlot)
         {
             double fLocalMinimum, fLocalMaximum;
-            XSlot.getMinimumAndMaximiumYInContinuousXRange( fLocalMinimum, fLocalMaximum, fMinX, fMaxX, nAxisIndex );
+            XSlot.getMinimumAndMaximumYInContinuousXRange( fLocalMinimum, fLocalMaximum, fMinX, fMaxX, nAxisIndex );
             if( !std::isnan(fLocalMinimum) && fLocalMinimum< rfMinY )
                 rfMinY = fLocalMinimum;
             if( !std::isnan(fLocalMaximum) && fLocalMaximum> rfMaxY )
@@ -1911,7 +1911,7 @@ sal_Int32 VDataSeriesGroup::getAttachedAxisIndexForFirstSeries() const
     return nRet;
 }
 
-void VDataSeriesGroup::getMinimumAndMaximiumX( double& rfMinimum, double& rfMaximum ) const
+void VDataSeriesGroup::getMinimumAndMaximumX( double& rfMinimum, double& rfMaximum ) const
 {
 
     ::rtl::math::setInf(&rfMinimum, false);
@@ -2070,7 +2070,7 @@ private:
 
 }
 
-void VDataSeriesGroup::getMinimumAndMaximiumYInContinuousXRange(
+void VDataSeriesGroup::getMinimumAndMaximumYInContinuousXRange(
     double& rfMinY, double& rfMaxY, double fMinX, double fMaxX, sal_Int32 nAxisIndex ) const
 {
     ::rtl::math::setNan(&rfMinY);
