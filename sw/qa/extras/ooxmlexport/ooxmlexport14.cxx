@@ -1234,7 +1234,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf108505, "tdf108505.docx")
         getProperty<OUString>(xText, "CharFontName"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testRelativeAnchorHeightFromTopMarginHasHeader,
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testRelativeAnchorHeightFromTopMarginHasHeader,
                          "tdf123324_testRelativeAnchorHeightFromTopMarginHasHeader.docx")
 {
     // tdf#123324 The height was set relative to page print area top,
@@ -1242,12 +1242,10 @@ DECLARE_OOXMLEXPORT_TEST(testRelativeAnchorHeightFromTopMarginHasHeader,
     // Note: page print area top = margin + header height.
     // In this case the header exists.
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "height", "2551");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testRelativeAnchorHeightFromTopMarginNoHeader,
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testRelativeAnchorHeightFromTopMarginNoHeader,
                          "tdf123324_testRelativeAnchorHeightFromTopMarginNoHeader.docx")
 {
     // tdf#123324 The height was set relative from top margin, but this was handled relative from page height.
@@ -1259,8 +1257,6 @@ DECLARE_OOXMLEXPORT_TEST(testRelativeAnchorHeightFromTopMarginNoHeader,
     // Note: page print area top = margin + header height.
     // In this case the header does not exist, so OpenDocument and OOXML margins are the same.
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    if (!pXmlDoc)
-        return;
     assertXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "height", "2551");
 }
 
