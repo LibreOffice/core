@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkBox" id="ErrorAlertTabPage">
@@ -21,6 +21,11 @@
         <property name="xalign">0</property>
         <property name="inconsistent">True</property>
         <property name="draw_indicator">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="tsbshow-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="erroralerttabpage|extended_tip|tsbshow">Displays the error message that you enter in the Contents area when invalid data is entered in a cell.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -92,6 +97,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="vexpand">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="errorMsg-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="erroralerttabpage|extended_tip|errorMsg">Enter the message that you want to display when invalid data is entered in a cell.</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -135,6 +145,11 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="browseBtn-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="erroralerttabpage|extended_tip|browseBtn">Opens the Macro dialog where you can select the macro that is executed when invalid data is entered in a cell. The macro is executed after the error message is displayed.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -152,6 +167,11 @@
                       <item translatable="yes" context="erroralerttabpage|actionCB">Information</item>
                       <item translatable="yes" context="erroralerttabpage|actionCB">Macro</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="actionCB-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="erroralerttabpage|extended_tip|actionCB">Select the action that you want to occur when invalid data is entered in a cell.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -178,6 +198,11 @@
         <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="ErrorAlertTabPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="erroralerttabpage|extended_tip|ErrorAlertTabPage">Define the error message that is displayed when invalid data is entered in a cell.</property>
+      </object>
     </child>
   </object>
 </interface>

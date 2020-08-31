@@ -170,6 +170,11 @@
                                         </child>
                                       </object>
                                     </child>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="formatlb-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="autoformattable|extended_tip|formatlb">Choose a predefined AutoFormat to apply to a selected area in your sheet.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
                               </object>
@@ -198,6 +203,11 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="use_stock">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="add-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="autoformattable|extended_tip|add">Allows you to add the current formatting of a range of at least 4 x 4 cells to the list of predefined AutoFormats.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -230,6 +240,11 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="rename-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="autoformattable|extended_tip|rename">Opens a dialog where you can change the name of the selected AutoFormat.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -291,6 +306,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="numformatcb-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="autoformattable|extended_tip|numformatcb">When marked, specifies that you want to retain the number format of the selected format.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -306,6 +326,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="bordercb-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="autoformattable|extended_tip|bordercb">When marked, specifies that you want to retain the border of the selected format.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -321,6 +346,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="fontcb-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="autoformattable|extended_tip|fontcb">When marked, specifies that you want to retain the font of the selected format.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -336,6 +366,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="patterncb-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="autoformattable|extended_tip|patterncb">When marked, specifies that you want to retain the pattern of the selected format.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -351,6 +386,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="alignmentcb-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="autoformattable|extended_tip|alignmentcb">When marked, specifies that you want to retain the alignment of the selected format.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -366,6 +406,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="autofitcb-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="autoformattable|extended_tip|autofitcb">When marked, specifies that you want to retain the width and height of the selected cells of the selected format.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -410,6 +455,11 @@
     </action-widgets>
     <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="AutoFormatTableDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="autoformattable|extended_tip|AutoFormatTableDialog">Use this command to apply an AutoFormat to a selected sheet area or to define your own AutoFormats.</property>
+      </object>
     </child>
   </object>
 </interface>

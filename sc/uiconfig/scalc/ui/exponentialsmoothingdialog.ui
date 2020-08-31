@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="smoothing-factor-adjustment">
     <property name="upper">1</property>
-    <property name="value">0.20000000000000001</property>
-    <property name="step_increment">0.050000000000000003</property>
-    <property name="page_increment">0.10000000000000001</property>
+    <property name="value">0.2</property>
+    <property name="step_increment">0.05</property>
+    <property name="page_increment">0.1</property>
   </object>
   <object class="GtkDialog" id="ExponentialSmoothingDialog">
     <property name="can_focus">False</property>
@@ -16,9 +16,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -352,6 +349,14 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="ExponentialSmoothingDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="exponentialsmoothingdialog|extended_tip|ExponentialSmoothingDialog">Results in a smoothed data series</property>
+      </object>
+    </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <widgets>

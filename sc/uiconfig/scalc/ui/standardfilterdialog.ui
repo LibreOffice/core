@@ -657,6 +657,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="case-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|case">Distinguishes between uppercase and lowercase letters when filtering the data.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -673,6 +678,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="header-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|header">Includes the column labels in the first row of a cell range.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -689,6 +699,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="regexp-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|regexp">Allows you to use regular expressions in the filter definition.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -705,6 +720,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="unique-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|unique">Excludes duplicate rows in the list of filtered data.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -725,6 +745,11 @@
                           <relation type="label-for" target="lbcopyarea"/>
                           <relation type="label-for" target="edcopyarea"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="copyresult-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|copyresult">Select the check box, and then select the cell range where you want to display the filter results.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -741,6 +766,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="destpers-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|destpers">Select the Copy results to check box, and then specify the destination range where you want to display the filtered data. If this box is checked, the destination range remains linked to the source range. You must have defined the source range under Data - Define range as a database range.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -770,6 +800,7 @@
                         <child internal-child="accessible">
                           <object class="AtkObject" id="lbcopyarea-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|lbcopyarea-atkobject">Copy results to</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|lbcopyarea">Select the check box, and then select the cell range where you want to display the filter results.</property>
                           </object>
                         </child>
                       </object>
@@ -791,6 +822,7 @@
                         <child internal-child="accessible">
                           <object class="AtkObject" id="edcopyarea-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|edcopyarea-atkobject">Copy results to</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|edcopyarea">Select the check box, and then select the cell range where you want to display the filter results.</property>
                           </object>
                         </child>
                       </object>
@@ -868,6 +900,11 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="standardfilterdialog|label6">Op_tions</property>
                 <property name="use_underline">True</property>
+              </object>
+            </child>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="more-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|more">Shows additional filter options.</property>
               </object>
             </child>
           </object>

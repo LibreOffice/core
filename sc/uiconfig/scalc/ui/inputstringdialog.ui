@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.2 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="InputStringDialog">
@@ -102,6 +102,11 @@
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
                 <property name="width_chars">30</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="name_entry-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="inputstringdialog|extended_tip|name_entry">Enter a new name for the sheet here.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -123,8 +128,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
+    <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="InputStringDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="inputstringdialog|extended_tip|InputStringDialog">This command opens a dialog where you can assign a different name to the current sheet.</property>
+      </object>
     </child>
   </object>
 </interface>

@@ -156,6 +156,11 @@
                                 <child>
                                   <placeholder/>
                                 </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="list-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="conditionalformatdialog|extended_tip|list">List of the conditions defined for the cell range in order of evaluation.</property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>
@@ -180,6 +185,11 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="use_stock">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="add-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="conditionalformatdialog|extended_tip|add">Here you can add, edit or remove one or several conditional formattings.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -213,6 +223,11 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="use_stock">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="up-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="conditionalformatdialog|extended_tip|up">Increase priority of the selected condition.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -227,6 +242,11 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="use_stock">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="down-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="conditionalformatdialog|extended_tip|down">Decrease priority of the selected condition.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -358,6 +378,11 @@
     </action-widgets>
     <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="ConditionalFormatDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="conditionalformatdialog|extended_tip|ConditionalFormatDialog">Choose Conditional Formatting to define format styles depending on certain conditions.</property>
+      </object>
     </child>
   </object>
 </interface>

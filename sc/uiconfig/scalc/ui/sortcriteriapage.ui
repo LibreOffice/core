@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkScrolledWindow" id="SortCriteriaPage">
@@ -26,6 +26,11 @@
             </child>
           </object>
         </child>
+      </object>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="SortCriteriaPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="sortcriteriapage|extended_tip|SortCriteriaPage">Specify the sorting options for the selected range.</property>
       </object>
     </child>
   </object>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="DeleteContentsDialog">
@@ -100,6 +100,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="deleteall-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="deletecontents|extended_tip|deleteall">Deletes all content from the selected cell range.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -123,6 +128,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="text-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="deletecontents|extended_tip|text">Deletes text only. Formats, formulas, numbers and dates are not affected.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -138,6 +148,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="numbers-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="deletecontents|extended_tip|numbers">Deletes numbers only. Formats and formulas remain unchanged.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -153,6 +168,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="datetime-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="deletecontents|extended_tip|datetime">Deletes date and time values. Formats, text, numbers and formulas remain unchanged.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -168,6 +188,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="formulas-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="deletecontents|extended_tip|formulas">Deletes formulas. Text, numbers, formats, dates and times remain unchanged.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -183,6 +208,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="comments-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="deletecontents|extended_tip|comments">Deletes comments added to cells. All other elements remain unchanged.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -198,6 +228,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="formats-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="deletecontents|extended_tip|formats">Deletes format attributes applied to cells. All cell content remains unchanged.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -213,6 +248,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="objects-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="deletecontents|extended_tip|objects">Deletes objects. All cell content remains unchanged.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -257,8 +297,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
+    <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="DeleteContentsDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="deletecontents|extended_tip|DeleteContentsDialog">Specifies the contents to be deleted from the active cell or from a selected cell range.</property>
+      </object>
     </child>
   </object>
 </interface>
