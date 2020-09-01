@@ -583,6 +583,7 @@ void SdXMLNumberFormatMemberImportContext::characters( const OUString& rChars )
 SdXMLNumberFormatImportContext::SdXMLNumberFormatImportContext( SdXMLImport& rImport, sal_Int32 nElement, SvXMLNumImpData* pNewData, SvXMLStylesTokens nNewType, const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList, SvXMLStylesContext& rStyles)
 :   SvXMLNumFormatContext(rImport, nElement, pNewData, nNewType, xAttrList, rStyles),
     mbAutomatic( false ),
+    mnElements{},
     mnIndex(0),
     mnKey( -1 )
 {
