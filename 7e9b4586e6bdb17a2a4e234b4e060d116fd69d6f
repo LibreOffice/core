@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2bb60297_7b0a50d0",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-01T06:28:02Z",
+      "side": 0,
+      "message": "A less intrusive change would be to move the creation of the `doc` inside the {} block, keeping the names local to the scope.",
+      "range": {
+        "startLine": 477,
+        "startChar": 4,
+        "endLine": 477,
+        "endChar": 61
+      },
+      "revId": "7e9b4586e6bdb17a2a4e234b4e060d116fd69d6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
