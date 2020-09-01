@@ -532,9 +532,9 @@ namespace SfxTemplate
 
 // Constructor
 
-SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl(SfxBindings* pB, vcl::Window* pW, weld::Builder* pBuilder)
+SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl(SfxBindings* pB, weld::Container* pC, weld::Builder* pBuilder)
     : pBindings(pB)
-    , pWindow(pW)
+    , mpContainer(pC)
     , pModule(nullptr)
     , pStyleSheetPool(nullptr)
     , pCurObjShell(nullptr)
@@ -780,7 +780,6 @@ SfxCommonTemplateDialog_Impl::~SfxCommonTemplateDialog_Impl()
 {
     if ( bIsWater )
         Execute_Impl(SID_STYLE_WATERCAN, "", "", 0);
-    GetWindow()->Hide();
     impl_clear();
     if ( pStyleSheetPool )
         EndListening(*pStyleSheetPool);
@@ -1631,7 +1630,7 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(const OString& rEntry)
                 nFilter = nAppFilter;
 
             // why? : FloatingWindow must not be parent of a modal dialog
-            SfxNewStyleDlg aDlg(pWindow ? pWindow->GetFrameWeld() : nullptr, *pStyleSheetPool, eFam);
+            SfxNewStyleDlg aDlg(mpContainer, *pStyleSheetPool, eFam);
             auto nResult = aDlg.run();
             if (nResult ==  RET_OK)
             {
@@ -2056,7 +2055,7 @@ void SfxCommonTemplateDialog_Impl::CreateContextMenu()
 }
 
 SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(SfxBindings* pB, SfxTemplatePanelControl* pDlgWindow)
-    : SfxCommonTemplateDialog_Impl(pB, pDlgWindow, pDlgWindow->get_builder())
+    : SfxCommonTemplateDialog_Impl(pB, pDlgWindow->get_container(), pDlgWindow->get_builder())
     , m_xActionTbL(pDlgWindow->get_builder()->weld_toolbar("left"))
     , m_xActionTbR(pDlgWindow->get_builder()->weld_toolbar("right"))
     , m_xToolMenu(pDlgWindow->get_builder()->weld_menu("toolmenu"))

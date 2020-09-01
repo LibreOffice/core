@@ -26,7 +26,6 @@ class SfxTemplateControllerItem;
 #include <array>
 #include <memory>
 
-#include <vcl/toolbox.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/weld.hxx>
 #include <svl/lstner.hxx>
@@ -82,7 +81,7 @@ protected:
     SfxBindings* pBindings;
     std::array<std::unique_ptr<SfxTemplateControllerItem>, COUNT_BOUND_FUNC> pBoundItems;
 
-    VclPtr<vcl::Window> pWindow;
+    weld::Container* mpContainer;
     std::unique_ptr<weld::Builder> mxMenuBuilder;
     std::unique_ptr<weld::Menu> mxMenu;
     OString sLastItemIdent;
@@ -211,7 +210,7 @@ protected:
 
 public:
 
-    SfxCommonTemplateDialog_Impl(SfxBindings* pB, vcl::Window*, weld::Builder* pBuilder);
+    SfxCommonTemplateDialog_Impl(SfxBindings* pB, weld::Container*, weld::Builder* pBuilder);
     virtual ~SfxCommonTemplateDialog_Impl() override;
 
     void MenuSelect(const OString& rIdent);
@@ -236,16 +235,6 @@ public:
     void EnableShow( bool b )
     {
         bCanShow = b;
-    }
-
-    vcl::Window* GetWindow()
-    {
-        return pWindow;
-    }
-
-    weld::Widget* GetFrameWeld()
-    {
-        return pWindow ? pWindow->GetFrameWeld() : nullptr;
     }
 
     void EnableTreeDrag(bool b);

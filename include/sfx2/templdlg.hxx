@@ -36,6 +36,7 @@ public:
     virtual void dispose() override;
 
     weld::Builder* get_builder() { return m_xBuilder.get(); }
+    weld::Container* get_container() { return m_xContainer.get(); }
 
 private:
     std::unique_ptr<SfxTemplateDialog_Impl> pImpl;
