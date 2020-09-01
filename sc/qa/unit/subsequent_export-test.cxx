@@ -268,6 +268,7 @@ public:
     void testHeaderFontStyleXLSX();
     void testTdf135828_Shape_Rect();
     void testTdf123353();
+    void testTdf133688_precedents();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -430,6 +431,7 @@ public:
     CPPUNIT_TEST(testHeaderFontStyleXLSX);
     CPPUNIT_TEST(testTdf135828_Shape_Rect);
     CPPUNIT_TEST(testTdf123353);
+    CPPUNIT_TEST(testTdf133688_precedents);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5442,6 +5444,20 @@ void ScExportTest::testTdf123353()
     assertXPath(pDoc, "/x:worksheet/x:autoFilter/x:filterColumn/x:filters", "blank", "1");
 
     xShell->DoClose();
+}
+
+void ScExportTest::testTdf133688_precedents()
+{
+    // tdf#133688 Check that we do not export detective shapes.
+    ScDocShellRef xShell = loadDoc("tdf133688_dont_save_precedents_to_xlsx.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xShell.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+    xmlDocUniquePtr pDrawing = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/drawing1.xml");
+    CPPUNIT_ASSERT(pDrawing);
+
+    // We do not export any shapes.
+    assertXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor[1]", 0);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
