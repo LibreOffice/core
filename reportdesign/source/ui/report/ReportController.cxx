@@ -1037,7 +1037,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             {
                 OSectionView* pSectionView = getCurrentSectionView();
                 if ( pSectionView )
-                    pSectionView->DistributeMarkedObjects(getFrameWeld());
+                    pSectionView->DistributeMarkedObjects(getFrameWeld(),SID_DISTRIBUTE_DLG);
             }
             break;
         case SID_OBJECT_SMALLESTWIDTH:
