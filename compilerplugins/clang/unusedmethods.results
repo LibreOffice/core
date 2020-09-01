@@ -40,8 +40,6 @@ canvas/inc/vclwrapper.hxx:137
     void canvas::vcltools::VCLObject::swap(VCLObject<Wrappee_> &)
 canvas/source/vcl/impltools.hxx:103
      vclcanvas::tools::LocalGuard::LocalGuard()
-chart2/source/controller/dialogs/tp_3D_SceneIllumination.hxx:55
-    void chart::ThreeD_SceneIllumination_TabPage::LinkStubfillControlsFromModel(void *,void *)
 connectivity/inc/sdbcx/VGroup.hxx:61
      connectivity::sdbcx::OGroup::OGroup(_Bool)
 connectivity/inc/sdbcx/VGroup.hxx:62
