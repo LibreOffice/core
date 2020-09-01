@@ -26,11 +26,9 @@
 
 namespace vcl { class Window; }
 
-enum class KeyFuncType : sal_Int32 { DONTKNOW, NEW, OPEN, SAVE,
-                   SAVEAS, PRINT, CLOSE, QUIT,
+enum class KeyFuncType : sal_Int32 { DONTKNOW,
                    CUT, COPY, PASTE, UNDO,
-                   REDO, DELETE, REPEAT, FIND,
-                   FINDBACKWARD, PROPERTIES, FRONT };
+                   REDO, DELETE, REPEAT };
 
 namespace vcl
 {
