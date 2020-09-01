@@ -182,11 +182,6 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:Distribution" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Distribution...</value>
-        </prop>
-      </node>
       <node oor:name=".uno:SelectAllInSection" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Select Objects in Section</value>

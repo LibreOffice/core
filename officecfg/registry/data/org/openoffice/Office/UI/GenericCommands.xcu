@@ -4062,14 +4062,6 @@
           <value>9</value>
         </prop>
       </node>
-      <node oor:name=".uno:DistributeSelection" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Distribution...</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
       <node oor:name=".uno:ParagraphDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">P~aragraph...</value>
