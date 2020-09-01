@@ -23,6 +23,7 @@
 #include <svx/gallerybinaryengine.hxx>
 #include <svx/galleryobjectcollection.hxx>
 #include <svx/gallery1.hxx>
+#include <svx/galleryobjectbinarystorage.hxx>
 #include <osl/thread.hxx>
 #include "codec.hxx"
 #include "gallerydrawmodel.hxx"
@@ -160,7 +161,8 @@ void GalleryBinaryEngine::removeObject(std::unique_ptr<GalleryObject>& pEntry)
         KillFile(GetSdgURL());
 
     if (SgaObjKind::SvDraw == pEntry->eObjKind)
-        GetSvDrawStorage()->Remove(pEntry->aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+        GetSvDrawStorage()->Remove(
+            pEntry->getURL().GetMainURL(INetURLObject::DecodeMechanism::NONE));
 }
 
 std::unique_ptr<SgaObject> GalleryBinaryEngine::implReadSgaObject(GalleryObject const* pEntry)
@@ -209,7 +211,7 @@ std::unique_ptr<SgaObject> GalleryBinaryEngine::implReadSgaObject(GalleryObject 
                 if (pSgaObj)
                 {
                     ReadSgaObject(*pIStm, *pSgaObj);
-                    pSgaObj->ImplUpdateURL(pEntry->aURL);
+                    pSgaObj->ImplUpdateURL(pEntry->getURL());
                 }
             }
         }
@@ -249,7 +251,9 @@ bool GalleryBinaryEngine::implWriteSgaObject(const SgaObject& rObj, sal_uInt32 n
             else
                 pEntry = pExistentEntry;
 
-            pEntry->aURL = rObj.GetURL();
+            pEntry->m_pGalleryObjectStorage = std::make_unique<GalleryObjectBinaryStorage>();
+            pEntry->m_pGalleryObjectStorage->setURL(rObj.GetURL());
+
             pEntry->nOffset = nOffset;
             pEntry->eObjKind = rObj.GetObjKind();
             bRet = true;
@@ -447,12 +451,14 @@ INetURLObject GalleryBinaryEngine::implCreateUniqueURL(SgaObjKind eObjKind,
 
             bExists = false;
 
-            for (auto const& p : mrGalleryObjectCollection.getObjectList())
-                if (p->aURL == aNewURL)
+            for (auto const& pObject : mrGalleryObjectCollection.getObjectList())
+            {
+                if (pObject->getURL() == aNewURL)
                 {
                     bExists = true;
                     break;
                 }
+            }
         }
         else
         {
@@ -526,7 +532,7 @@ SgaObjectSvDraw GalleryBinaryEngine::updateSvDrawObject(GalleryObject* pEntry)
 {
     if (GetSvDrawStorage().is())
     {
-        const OUString aStmName(GetSvDrawStreamNameFromURL(pEntry->aURL));
+        const OUString aStmName(GetSvDrawStreamNameFromURL(pEntry->getURL()));
         tools::SvRef<SotStorageStream> pIStm
             = GetSvDrawStorage()->OpenSotStream(aStmName, StreamMode::READ);
 
@@ -534,7 +540,7 @@ SgaObjectSvDraw GalleryBinaryEngine::updateSvDrawObject(GalleryObject* pEntry)
         {
             pIStm->SetBufferSize(16384);
 
-            SgaObjectSvDraw aNewObj(*pIStm, pEntry->aURL);
+            SgaObjectSvDraw aNewObj(*pIStm, pEntry->getURL());
 
             pIStm->SetBufferSize(0);
 
@@ -699,29 +705,29 @@ SvStream& GalleryBinaryEngine::writeGalleryTheme(SvStream& rOStm, const GalleryT
 
         if (SgaObjKind::SvDraw == pObj->eObjKind)
         {
-            aPath = GetSvDrawStreamNameFromURL(pObj->aURL);
+            aPath = GetSvDrawStreamNameFromURL(pObj->getURL());
             bRel = false;
         }
         else
         {
-            aPath = pObj->aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+            aPath = pObj->getURL().GetMainURL(INetURLObject::DecodeMechanism::NONE);
             aPath = aPath.copy(
                 0, std::min(rRelURL1.GetMainURL(INetURLObject::DecodeMechanism::NONE).getLength(),
                             aPath.getLength()));
             bRel = aPath == rRelURL1.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 
             if (bRel
-                && (pObj->aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE).getLength()
+                && (pObj->getURL().GetMainURL(INetURLObject::DecodeMechanism::NONE).getLength()
                     > (rRelURL1.GetMainURL(INetURLObject::DecodeMechanism::NONE).getLength() + 1)))
             {
-                aPath = pObj->aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+                aPath = pObj->getURL().GetMainURL(INetURLObject::DecodeMechanism::NONE);
                 aPath = aPath.copy(
                     std::min(rRelURL1.GetMainURL(INetURLObject::DecodeMechanism::NONE).getLength(),
                              aPath.getLength()));
             }
             else
             {
-                aPath = pObj->aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+                aPath = pObj->getURL().GetMainURL(INetURLObject::DecodeMechanism::NONE);
                 aPath = aPath.copy(
                     0,
                     std::min(rRelURL2.GetMainURL(INetURLObject::DecodeMechanism::NONE).getLength(),
@@ -729,17 +735,17 @@ SvStream& GalleryBinaryEngine::writeGalleryTheme(SvStream& rOStm, const GalleryT
                 bRel = aPath == rRelURL2.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 
                 if (bRel
-                    && (pObj->aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE).getLength()
+                    && (pObj->getURL().GetMainURL(INetURLObject::DecodeMechanism::NONE).getLength()
                         > (rRelURL2.GetMainURL(INetURLObject::DecodeMechanism::NONE).getLength()
                            + 1)))
                 {
-                    aPath = pObj->aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+                    aPath = pObj->getURL().GetMainURL(INetURLObject::DecodeMechanism::NONE);
                     aPath = aPath.copy(std::min(
                         rRelURL2.GetMainURL(INetURLObject::DecodeMechanism::NONE).getLength(),
                         aPath.getLength()));
                 }
                 else
-                    aPath = pObj->aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+                    aPath = pObj->getURL().GetMainURL(INetURLObject::DecodeMechanism::NONE);
             }
         }
 

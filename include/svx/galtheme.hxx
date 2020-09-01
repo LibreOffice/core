@@ -35,25 +35,9 @@ namespace weld { class ComboBox; }
 
 class SotStorageStream;
 
-struct GalleryObject
-{
-    INetURLObject   aURL;
-    sal_uInt32      nOffset;
-    SgaObjKind      eObjKind;
-    bool            mbDelete;
-
-    //UI visualization buffering
-    BitmapEx        maPreviewBitmapEx;
-    Size            maPreparedSize;
-    OUString        maTitle;
-    OUString        maPath;
-};
-
-
 class GalleryThemeEntry;
 class SgaObject;
 class FmFormModel;
-
 class Gallery;
 
 namespace unogallery
@@ -150,10 +134,10 @@ public:
     }
 
     SAL_DLLPRIVATE const INetURLObject& GetObjectURL(sal_uInt32 nPos) const
-                                {
-                                    DBG_ASSERT( nPos < GetObjectCount(), "Position out of range" );
-                                    return maGalleryObjectCollection.getForPosition( nPos )->aURL;
-                                }
+    {
+        DBG_ASSERT(nPos < GetObjectCount(), "Position out of range");
+        return maGalleryObjectCollection.getURLForPosition(nPos);
+    }
 
     SAL_DLLPRIVATE bool         GetThumb(sal_uInt32 nPos, BitmapEx& rBmp);
 
