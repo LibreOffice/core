@@ -4062,12 +4062,16 @@
           <value>9</value>
         </prop>
       </node>
+      <!-- 2020/09: Deprecate the dialog in favor of sd/.uno:Distribute -->
       <node oor:name=".uno:DistributeSelection" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Distribution...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
+        </prop>
+        <prop oor:name="IsExperimental" oor:type="xs:boolean">
+          <value>false</value>
         </prop>
       </node>
       <node oor:name=".uno:ParagraphDialog" oor:op="replace">
