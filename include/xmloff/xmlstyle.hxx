@@ -142,7 +142,6 @@ public:
 class XMLOFF_DLLPUBLIC SvXMLStylesContext : public SvXMLImportContext
 {
     std::unique_ptr<SvXMLStylesContext_Impl> mpImpl;
-    std::unique_ptr<SvXMLTokenMap>           mpStyleStylesElemTokenMap;
 
 
     css::uno::Reference< css::container::XNameContainer > mxParaStyles;

@@ -64,24 +64,6 @@ enum SvXMLSepTokenMapAttrs
 
 }
 
-const SvXMLTokenMapEntry aColAttrTokenMap[] =
-{
-    { XML_NAMESPACE_STYLE,  XML_REL_WIDTH,      XML_TOK_COLUMN_WIDTH },
-    { XML_NAMESPACE_FO,     XML_START_INDENT,   XML_TOK_COLUMN_MARGIN_LEFT },
-    { XML_NAMESPACE_FO,     XML_END_INDENT,     XML_TOK_COLUMN_MARGIN_RIGHT },
-    XML_TOKEN_MAP_END
-};
-
-const SvXMLTokenMapEntry aColSepAttrTokenMap[] =
-{
-    { XML_NAMESPACE_STYLE,  XML_WIDTH,          XML_TOK_COLUMN_SEP_WIDTH },
-    { XML_NAMESPACE_STYLE,  XML_COLOR,          XML_TOK_COLUMN_SEP_COLOR },
-    { XML_NAMESPACE_STYLE,  XML_HEIGHT,         XML_TOK_COLUMN_SEP_HEIGHT },
-    { XML_NAMESPACE_STYLE,  XML_VERTICAL_ALIGN, XML_TOK_COLUMN_SEP_ALIGN },
-    { XML_NAMESPACE_STYLE,  XML_STYLE,          XML_TOK_COLUMN_SEP_STYLE },
-    XML_TOKEN_MAP_END
-};
-
 SvXMLEnumMapEntry<sal_Int8> const pXML_Sep_Style_Enum[] =
 {
     { XML_NONE,          0 },
@@ -240,8 +222,6 @@ XMLTextColumnsContext::XMLTextColumnsContext(
                                 const XMLPropertyState& rProp,
                                  ::std::vector< XMLPropertyState > &rProps )
 :   XMLElementPropertyContext( rImport, nElement, rProp, rProps )
-,   pColumnAttrTokenMap( new SvXMLTokenMap(aColAttrTokenMap) )
-,   pColumnSepAttrTokenMap( new SvXMLTokenMap(aColSepAttrTokenMap) )
 ,   nCount( 0 )
 ,   bAutomatic( false )
 ,   nAutomaticDistance( 0 )

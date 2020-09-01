@@ -174,6 +174,8 @@ dbaccess/source/core/dataaccess/connection.hxx:102
     dbaccess::OConnection m_nInAppend std::atomic<std::size_t>
 dbaccess/source/core/inc/databasecontext.hxx:85
     dbaccess::ODatabaseContext m_aBasicDLL class BasicDLL
+desktop/qa/desktop_lib/test_desktop_lib.cxx:2832
+      class AllSettings &
 drawinglayer/inc/texture/texture3d.hxx:57
     drawinglayer::texture::GeoTexSvxBitmapEx maBitmap class Bitmap
 drawinglayer/inc/texture/texture3d.hxx:59
@@ -358,12 +360,8 @@ include/vcl/font/Feature.hxx:100
     vcl::font::Feature m_eType enum vcl::font::FeatureType
 include/vcl/NotebookBarAddonsMerger.hxx:36
     NotebookBarAddonsItem aImage class Image
-include/vcl/NotebookBarAddonsMerger.hxx:43
-    AddonsParams sImageId class rtl::OUString
-include/vcl/NotebookBarAddonsMerger.hxx:44
-    AddonsParams sControlType class rtl::OUString
-include/vcl/NotebookBarAddonsMerger.hxx:45
-    AddonsParams nWidth sal_uInt16
+include/vcl/toolkit/ivctrl.hxx:67
+    SvxIconChoiceCtrlEntry pUserData void *
 include/xmloff/shapeimport.hxx:140
     SdXML3DLightContext mbSpecular _Bool
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:51
@@ -750,8 +748,6 @@ sw/source/core/text/inftxt.hxx:682
     SwTextSlot aText class rtl::OUString
 sw/source/core/text/porfld.cxx:140
     (anonymous namespace)::SwFieldSlot aText class rtl::OUString
-sw/source/core/text/porlay.cxx:1312
-      const sw::MergedPara *const &
 sw/source/uibase/docvw/romenu.hxx:34
     SwReadOnlyPopup m_aBuilder class VclBuilder
 sw/source/uibase/docvw/romenu.hxx:46

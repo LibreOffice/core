@@ -248,9 +248,9 @@ framework/inc/helper/uiconfigelementwrapperbase.hxx:128
     framework::UIConfigElementWrapperBase m_bConfigListening _Bool
 framework/inc/xml/menudocumenthandler.hxx:187
     framework::OReadMenuPopupHandler m_bMenuMode _Bool
-framework/source/fwe/classes/addonsoptions.cxx:344
-    framework::AddonsOptions_Impl m_aEmptyAddonToolBar Sequence<Sequence<struct com::sun::star::beans::PropertyValue> >
 framework/source/fwe/classes/addonsoptions.cxx:345
+    framework::AddonsOptions_Impl m_aEmptyAddonToolBar Sequence<Sequence<struct com::sun::star::beans::PropertyValue> >
+framework/source/fwe/classes/addonsoptions.cxx:346
     framework::AddonsOptions_Impl m_aEmptyAddonNotebookBar Sequence<Sequence<struct com::sun::star::beans::PropertyValue> >
 i18npool/inc/textconversion.hxx:79
     i18npool::(anonymous) code sal_Unicode

@@ -36,8 +36,6 @@ class XMLTextColumnsContext final :public XMLElementPropertyContext
 {
     std::unique_ptr<XMLTextColumnsArray_Impl> pColumns;
     rtl::Reference<XMLTextColumnSepContext_Impl> mxColumnSep;
-    std::unique_ptr<SvXMLTokenMap> pColumnAttrTokenMap;
-    std::unique_ptr<SvXMLTokenMap> pColumnSepAttrTokenMap;
     sal_Int16                nCount;
     bool                 bAutomatic;
     sal_Int32                nAutomaticDistance;

@@ -42,6 +42,8 @@ dbaccess/source/core/inc/databasecontext.hxx:85
     dbaccess::ODatabaseContext m_aBasicDLL class BasicDLL
 dbaccess/source/sdbtools/inc/connectiondependent.hxx:115
     sdbtools::ConnectionDependentComponent::EntryGuard m_aMutexGuard ::osl::MutexGuard
+desktop/qa/desktop_lib/test_desktop_lib.cxx:2832
+      class AllSettings &
 emfio/source/emfuno/xemfparser.cxx:48
     emfio::emfreader::(anonymous namespace)::XEmfParser context_ uno::Reference<uno::XComponentContext>
 extensions/source/scanner/scanner.hxx:43
@@ -117,11 +119,11 @@ include/sfx2/msg.hxx:137
 include/sfx2/msg.hxx:138
     SfxType7 nAttribs sal_uInt16
 include/sfx2/msg.hxx:138
+    SfxType7 pType const std::type_info *
+include/sfx2/msg.hxx:138
     SfxType7 aAttrib struct SfxTypeAttrib [7]
 include/sfx2/msg.hxx:138
     SfxType7 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:138
-    SfxType7 pType const std::type_info *
 include/sfx2/msg.hxx:139
     SfxType8 aAttrib struct SfxTypeAttrib [8]
 include/sfx2/msg.hxx:139
@@ -206,16 +208,14 @@ include/vcl/font/Feature.hxx:100
     vcl::font::Feature m_eType enum vcl::font::FeatureType
 include/vcl/NotebookBarAddonsMerger.hxx:36
     NotebookBarAddonsItem aImage class Image
-include/vcl/NotebookBarAddonsMerger.hxx:43
-    AddonsParams sImageId class rtl::OUString
-include/vcl/NotebookBarAddonsMerger.hxx:44
-    AddonsParams sControlType class rtl::OUString
-include/vcl/NotebookBarAddonsMerger.hxx:45
-    AddonsParams nWidth sal_uInt16
+include/vcl/toolkit/ivctrl.hxx:67
+    SvxIconChoiceCtrlEntry pUserData void *
 include/vcl/uitest/uiobject.hxx:279
     TabPageUIObject mxTabPage VclPtr<class TabPage>
 include/xmloff/formlayerexport.hxx:172
     xmloff::OOfficeFormsExport m_pImpl std::unique_ptr<OFormsRootExport>
+include/xmloff/xmlstyle.hxx:145
+    SvXMLStylesContext mpStyleStylesElemTokenMap std::unique_ptr<SvXMLTokenMap>
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:51
     GtvApplicationWindow parent_instance GtkApplicationWindow
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:55
@@ -390,8 +390,6 @@ sw/source/core/frmedt/fetab.cxx:75
     (anonymous namespace)::TableWait m_pWait const std::unique_ptr<SwWait>
 sw/source/core/layout/dbg_lay.cxx:171
     SwImplEnterLeave nAction enum DbgAction
-sw/source/core/text/porlay.cxx:1312
-      const sw::MergedPara *const &
 sw/source/uibase/inc/condedit.hxx:43
     ConditionEdit m_aDropTargetHelper class ConditionEditDropTarget
 sw/source/uibase/inc/conttree.hxx:294
@@ -460,8 +458,28 @@ vcl/unx/gtk3/gtk3gtkinst.cxx:5345
     (anonymous namespace)::CustomCellRendererSurfaceClass parent_class GtkCellRendererTextClass
 writerfilter/source/ooxml/OOXMLStreamImpl.hxx:42
     writerfilter::ooxml::OOXMLStreamImpl mxFastParser css::uno::Reference<css::xml::sax::XFastParser>
+xmloff/inc/XMLTextColumnsContext.hxx:39
+    XMLTextColumnsContext pColumnAttrTokenMap std::unique_ptr<SvXMLTokenMap>
+xmloff/inc/XMLTextColumnsContext.hxx:40
+    XMLTextColumnsContext pColumnSepAttrTokenMap std::unique_ptr<SvXMLTokenMap>
 xmloff/source/chart/transporttypes.hxx:149
     CustomLabelField sRuns std::vector<OUString>
+xmloff/source/draw/sdxmlimp_impl.hxx:108
+    SdXMLImport mpBodyElemTokenMap std::unique_ptr<SvXMLTokenMap>
+xmloff/source/draw/sdxmlimp_impl.hxx:109
+    SdXMLImport mpStylesElemTokenMap std::unique_ptr<SvXMLTokenMap>
+xmloff/source/draw/sdxmlimp_impl.hxx:110
+    SdXMLImport mpMasterPageElemTokenMap std::unique_ptr<SvXMLTokenMap>
+xmloff/source/draw/sdxmlimp_impl.hxx:111
+    SdXMLImport mpPageMasterAttrTokenMap std::unique_ptr<SvXMLTokenMap>
+xmloff/source/draw/sdxmlimp_impl.hxx:112
+    SdXMLImport mpPageMasterStyleAttrTokenMap std::unique_ptr<SvXMLTokenMap>
+xmloff/source/draw/sdxmlimp_impl.hxx:113
+    SdXMLImport mpPresentationPlaceholderAttrTokenMap std::unique_ptr<SvXMLTokenMap>
+xmloff/source/style/xmlnumfi.cxx:68
+    SvXMLNumImpData pStylesElemTokenMap std::unique_ptr<SvXMLTokenMap>
+xmloff/source/text/txtimp.cxx:520
+    XMLTextImportHelper::Impl m_xTextMasterPageElemTokenMap std::unique_ptr<SvXMLTokenMap>
 xmlsecurity/qa/unit/signing/signing2.cxx:42
     SigningTest2 mxSEInitializer uno::Reference<xml::crypto::XSEInitializer>
 xmlsecurity/qa/unit/signing/signing2.cxx:43

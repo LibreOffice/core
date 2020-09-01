@@ -517,7 +517,6 @@ struct XMLTextImportHelper::Impl
     std::unique_ptr<SvXMLTokenMap> m_xTextFrameAttrTokenMap;
     std::unique_ptr<SvXMLTokenMap> m_xTextContourAttrTokenMap;
     std::unique_ptr<SvXMLTokenMap> m_xTextHyperlinkAttrTokenMap;
-    std::unique_ptr<SvXMLTokenMap> m_xTextMasterPageElemTokenMap;
     std::unique_ptr< std::vector<OUString> > m_xPrevFrmNames;
     std::unique_ptr< std::vector<OUString> > m_xNextFrmNames;
     std::unique_ptr<XMLTextListsHelper> m_xTextListsHelper;
