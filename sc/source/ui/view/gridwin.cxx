@@ -37,7 +37,6 @@
 #include <sfx2/ipclient.hxx>
 #include <svl/stritem.hxx>
 #include <svl/sharedstringpool.hxx>
-#include <vcl/InterimItemWindow.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/cursor.hxx>
@@ -139,18 +138,11 @@
 #include <vector>
 #include <boost/property_tree/json_parser.hpp>
 
+#include <FilterListBox.hxx>
+#include <FilterFloatingWindow.hxx>
+
 using namespace css;
 using namespace css::uno;
-
-namespace {
-
-enum class ScFilterBoxMode
-{
-    DataSelect,
-    Scenario
-};
-
-}
 
 struct ScGridWindow::MouseEventState
 {
@@ -187,39 +179,6 @@ bool ScGridWindow::VisibleRange::set(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
 
     return bChanged;
 }
-
-class ScFilterListBox final : public InterimItemWindow
-{
-private:
-    std::unique_ptr<weld::TreeView> xTreeView;
-    VclPtr<ScGridWindow>   pGridWin;
-    SCCOL           nCol;
-    SCROW           nRow;
-    bool            bInit;
-    bool            bCancelled;
-    sal_uLong       nSel;
-    ScFilterBoxMode eMode;
-    ImplSVEvent* nAsyncSelectHdl;
-
-    DECL_LINK(SelectHdl, weld::TreeView&, bool);
-    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
-    DECL_LINK(AsyncSelectHdl, void*, void);
-
-public:
-    ScFilterListBox( vcl::Window* pParent, ScGridWindow* pGrid,
-                     SCCOL nNewCol, SCROW nNewRow, ScFilterBoxMode eNewMode );
-    virtual ~ScFilterListBox() override;
-    virtual void dispose() override;
-
-    weld::TreeView& get_widget() { return *xTreeView; }
-
-    SCCOL           GetCol() const          { return nCol; }
-    SCROW           GetRow() const          { return nRow; }
-    ScFilterBoxMode GetMode() const         { return eMode; }
-    void            EndInit();
-    bool            IsInInit() const        { return bInit; }
-    void            SetCancelled()          { bCancelled = true; }
-};
 
 //  ListBox in a FloatingWindow (pParent)
 ScFilterListBox::ScFilterListBox( vcl::Window* pParent, ScGridWindow* pGrid,
@@ -315,22 +274,6 @@ IMPL_LINK_NOARG(ScFilterListBox, AsyncSelectHdl, void*, void)
     }
     pGridWin->ClickExtern();
 }
-
-// use a System floating window for the above filter listbox
-class ScFilterFloatingWindow : public FloatingWindow
-{
-private:
-    bool m_bGridHadMouseCaptured;
-public:
-    ScFilterFloatingWindow(vcl::Window* pParent);
-    virtual ~ScFilterFloatingWindow() override;
-    virtual void dispose() override;
-
-    bool MouseWasCaptured() const
-    {
-        return m_bGridHadMouseCaptured;
-    }
-};
 
 ScFilterFloatingWindow::ScFilterFloatingWindow(vcl::Window* pParent)
     : FloatingWindow( pParent, WB_BORDER | WB_SYSTEMWINDOW ) // make it a system floater
