@@ -66,15 +66,6 @@ namespace weld{
     class Window;
 }
 
-class AbstractSvxDistributeDialog :public VclAbstractDialog
-{
-protected:
-    virtual ~AbstractSvxDistributeDialog() override = default;
-public:
-    virtual SvxDistributeHorizontal GetDistributeHor() const = 0;
-    virtual SvxDistributeVertical GetDistributeVer() const = 0;
-};
-
 class AbstractFmShowColsDialog : public VclAbstractDialog
 {
 protected:
@@ -333,9 +324,6 @@ public:
     virtual VclPtr<AbstractSvxCaptionDialog> CreateCaptionDialog(weld::Window* pParent,
                                                                  const SdrView* pView,
                                                                  SvxAnchorIds nAnchorTypes = SvxAnchorIds::NONE) = 0;
-
-    virtual VclPtr<AbstractSvxDistributeDialog>    CreateSvxDistributeDialog(weld::Window* pParent,
-                                            const SfxItemSet& rAttr)= 0;
 
     virtual VclPtr<AbstractFmShowColsDialog> CreateFmShowColsDialog(weld::Window* pParent) = 0;
 
