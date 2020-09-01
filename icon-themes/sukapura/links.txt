@@ -2707,3 +2707,13 @@ cmd/lc_pastespecialmenu.png cmd/lc_pastespecial.png
 cmd/sc_editpastespecialmenu.png cmd/sc_pastespecial.png
 cmd/sc_insertcontents.png cmd/sc_pastespecial.png
 cmd/sc_pastespecialmenu.png cmd/sc_pastespecial.png
+
+# Distribution
+cmd/sc_distributehorzleft.png svx/res/dsth_low.png
+cmd/sc_distributehorzcenter.png svx/res/dsth_cen.png
+cmd/sc_distributehorzdistance.png svx/res/dsth_dst.png
+cmd/sc_distributehorzright.png svx/res/dsth_hig.png
+cmd/sc_distributeverttop.png svx/res/dstv_hig.png
+cmd/sc_distributevertcenter.png svx/res/dstv_cen.png
+cmd/sc_distributevertdistance.png svx/res/dstv_dst.png
+cmd/sc_distributevertbottom.png svx/res/dstv_low.png

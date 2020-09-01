@@ -2694,3 +2694,13 @@ cmd/lc_com.sun.star.deployment.ui.packagemanagerdialog.png cmd/lc_insertplugin.p
 cmd/sc_focustofindbar.png cmd/sc_recsearch.png
 cmd/sc_macroorganizer%3ftabid%3ashort=1.png cmd/sc_open.png
 cmd/sc_com.sun.star.deployment.ui.packagemanagerdialog.png cmd/sc_insertplugin.png
+
+# Distribution
+cmd/sc_distributehorzleft.png svx/res/dsth_low.png
+cmd/sc_distributehorzcenter.png svx/res/dsth_cen.png
+cmd/sc_distributehorzdistance.png svx/res/dsth_dst.png
+cmd/sc_distributehorzright.png svx/res/dsth_hig.png
+cmd/sc_distributeverttop.png svx/res/dstv_hig.png
+cmd/sc_distributevertcenter.png svx/res/dstv_cen.png
+cmd/sc_distributevertdistance.png svx/res/dstv_dst.png
+cmd/sc_distributevertbottom.png svx/res/dstv_low.png
