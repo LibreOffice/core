@@ -1159,7 +1159,14 @@ bool SkiaSalGraphicsImpl::blendBitmap(const SalTwoRect& rPosAry, const SalBitmap
     // combinedTextureFragmentShader.glsl, the layer is not even alpha values but
     // simply yes-or-no mask.
     // See also blendAlphaBitmap().
-    drawBitmap(rPosAry, rSkiaBitmap, SkBlendMode::kMultiply);
+    if (rSkiaBitmap.IsFullyOpaqueAsAlpha())
+    {
+        // Optimization. If the bitmap means fully opaque, it's all zero's. In CPU
+        // mode it should be faster to just copy instead of SkBlendMode::kMultiply.
+        drawBitmap(rPosAry, rSkiaBitmap);
+    }
+    else
+        drawBitmap(rPosAry, rSkiaBitmap, SkBlendMode::kMultiply);
     return true;
 }
 
@@ -1178,6 +1185,13 @@ bool SkiaSalGraphicsImpl::blendAlphaBitmap(const SalTwoRect& rPosAry,
     const SkiaSalBitmap& rSkiaMaskBitmap = static_cast<const SkiaSalBitmap&>(rMaskBitmap);
     const SkiaSalBitmap& rSkiaAlphaBitmap = static_cast<const SkiaSalBitmap&>(rAlphaBitmap);
 
+    if (rSkiaMaskBitmap.IsFullyOpaqueAsAlpha())
+    {
+        // Optimization. If the mask of the bitmap to be blended means it's actually opaque,
+        // just draw the bitmap directly (that's what the math below will result in).
+        drawBitmap(rPosAry, rSkiaSourceBitmap);
+        return true;
+    }
     // This was originally implemented for the OpenGL drawing method and it is poorly documented.
     // The source and mask bitmaps are the usual data and alpha bitmaps, and 'alpha'
     // is the "alpha" layer of the VirtualDevice (the alpha in VirtualDevice is also stored
@@ -1412,6 +1426,8 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
     // GPU-accelerated drawing with SkShader should be fast enough to not need caching.
     if (isGPU())
         return image;
+    if (alphaBitmap && alphaBitmap->IsFullyOpaqueAsAlpha())
+        alphaBitmap = nullptr; // the alpha can be ignored
     // Probably not much point in caching of just doing a copy.
     if (alphaBitmap == nullptr && targetSize == bitmap.GetSize())
         return image;
@@ -1517,6 +1533,8 @@ bool SkiaSalGraphicsImpl::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBi
 {
     assert(dynamic_cast<const SkiaSalBitmap*>(&rSourceBitmap));
     assert(dynamic_cast<const SkiaSalBitmap*>(&rAlphaBitmap));
+    const SkiaSalBitmap& rSkiaSourceBitmap = static_cast<const SkiaSalBitmap&>(rSourceBitmap);
+    const SkiaSalBitmap& rSkiaAlphaBitmap = static_cast<const SkiaSalBitmap&>(rAlphaBitmap);
     // In raster mode use mergeCacheBitmaps(), which will cache the result, avoiding repeated
     // alpha blending or scaling. In GPU mode it is simpler to just use SkShader.
     SalTwoRect imagePosAry(rPosAry);
@@ -1531,17 +1549,16 @@ bool SkiaSalGraphicsImpl::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBi
         imagePosAry.mnSrcHeight = imagePosAry.mnDestHeight;
         imageSize = Size(imagePosAry.mnSrcWidth, imagePosAry.mnSrcHeight);
     }
-    sk_sp<SkImage> image
-        = mergeCacheBitmaps(static_cast<const SkiaSalBitmap&>(rSourceBitmap),
-                            static_cast<const SkiaSalBitmap*>(&rAlphaBitmap), imageSize);
+    sk_sp<SkImage> image = mergeCacheBitmaps(rSkiaSourceBitmap, &rSkiaAlphaBitmap, imageSize);
     if (image)
         drawImage(imagePosAry, image);
+    else if (rSkiaAlphaBitmap.IsFullyOpaqueAsAlpha()) // alpha can be ignored
+        drawShader(rPosAry, rSkiaSourceBitmap.GetSkShader());
     else
-        drawShader(
-            rPosAry,
-            SkShaders::Blend(SkBlendMode::kDstOut, // VCL alpha is one-minus-alpha.
-                             static_cast<const SkiaSalBitmap&>(rSourceBitmap).GetSkShader(),
-                             static_cast<const SkiaSalBitmap*>(&rAlphaBitmap)->GetAlphaSkShader()));
+        drawShader(rPosAry,
+                   SkShaders::Blend(SkBlendMode::kDstOut, // VCL alpha is one-minus-alpha.
+                                    rSkiaSourceBitmap.GetSkShader(),
+                                    rSkiaAlphaBitmap.GetAlphaSkShader()));
     return true;
 }
 
@@ -1616,6 +1633,9 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
 
     const SkiaSalBitmap& rSkiaBitmap = static_cast<const SkiaSalBitmap&>(rSourceBitmap);
     const SkiaSalBitmap* pSkiaAlphaBitmap = static_cast<const SkiaSalBitmap*>(pAlphaBitmap);
+
+    if (pSkiaAlphaBitmap && pSkiaAlphaBitmap->IsFullyOpaqueAsAlpha())
+        pSkiaAlphaBitmap = nullptr; // the alpha can be ignored
 
     // Setup the image transformation,
     // using the rNull, rX, rY points as destinations for the (0,0), (Width,0), (0,Height) source points.
