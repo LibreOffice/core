@@ -199,7 +199,6 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/tabpages/border \
     cui/source/tabpages/chardlg \
     cui/source/tabpages/connect \
-    cui/source/tabpages/dstribut \
     cui/source/tabpages/grfpage \
     cui/source/tabpages/labdlg \
     cui/source/tabpages/macroass \
