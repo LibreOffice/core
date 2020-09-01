@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.2 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustmentANGLE">
@@ -38,6 +38,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="browse-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="picturepage|extended_tip|browse">Locate the new graphic file that you want to link to, and then click Open.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -50,6 +55,11 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="entry-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="picturepage|extended_tip|entry">Displays the path to the linked graphic file. To change the link, click the Browse button and then locate the file that you want to link to.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -121,6 +131,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="vert-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="picturepage|extended_tip|vert">Flips the selected image vertically.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -136,6 +151,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="hori-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="picturepage|extended_tip|hori">Flips the selected image horizontally.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -153,6 +173,11 @@
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="allpages-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="picturepage|extended_tip|allpages">Flips the selected image horizontally on all pages.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -170,6 +195,11 @@
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">allpages</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="leftpages-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="picturepage|extended_tip|leftpages">Flips the selected image horizontally only on even pages.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -187,6 +217,11 @@
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">allpages</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="rightpages-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="picturepage|extended_tip|rightpages">Flips the selected image horizontally only on odd pages.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -368,6 +403,11 @@
         <property name="top_attach">2</property>
         <property name="width">2</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="PicturePage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="picturepage|extended_tip|PicturePage">Specify the flip and the link options for the selected image.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

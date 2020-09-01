@@ -170,6 +170,11 @@
                                         </child>
                                       </object>
                                     </child>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="formatlb-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="autoformattable|extended_tip|formatlb">Lists the available formatting styles for tables. Click the format that you want to apply, and then click OK.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
                               </object>
@@ -198,6 +203,11 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="use_stock">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="add-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="autoformattable|extended_tip|add">Adds a new table style to the list.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -291,6 +301,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="numformatcb-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="autoformattable|extended_tip|numformatcb">Includes numbering formats in the selected table style.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -306,6 +321,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="bordercb-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="autoformattable|extended_tip|bordercb">Includes border styles in the selected table style.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -321,6 +341,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="fontcb-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="autoformattable|extended_tip|fontcb">Includes font formatting in the selected table style.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -336,6 +361,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="patterncb-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="autoformattable|extended_tip|patterncb">Includes background styles in the selected table style.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -351,6 +381,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="alignmentcb-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="autoformattable|extended_tip|alignmentcb">Includes alignment settings in the selected table style.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -398,6 +433,11 @@
     </action-widgets>
     <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="AutoFormatTableDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="autoformattable|extended_tip|AutoFormatTableDialog">Automatically applies formats to the current table, including fonts, shading, and borders.</property>
+      </object>
     </child>
   </object>
 </interface>

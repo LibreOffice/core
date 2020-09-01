@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -105,6 +105,11 @@
             </attributes>
           </object>
         </child>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="section-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="sectionpage|extended_tip|section">Select the section in the file that you want to insert as a link.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -147,6 +152,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="link-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sectionpage|extended_tip|link">Inserts the contents of another document or section from another document in the current section.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -163,6 +173,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="dde-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sectionpage|extended_tip|dde">Creates a DDE link. Select this check box, and then enter the DDE command that you want to use. The DDE option is only available if the Link check box is selected.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -245,6 +260,11 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="use_underline">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="selectfile-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="sectionpage|extended_tip|selectfile">Locate the file that you want to insert as a link, and then click Insert.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">2</property>
@@ -259,6 +279,11 @@
                                 <property name="hexpand">True</property>
                                 <property name="activates_default">True</property>
                                 <property name="width_chars">18</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="filename-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="sectionpage|extended_tip|filename">Enter the path and the filename for the file that you want to insert, or click the Browse button to locate the file.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -277,6 +302,11 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="activates_default">True</property>
+                                  </object>
+                                </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="sectionname-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="sectionpage|extended_tip|sectionname">Type a name for the new section.</property>
                                   </object>
                                 </child>
                               </object>
@@ -345,6 +375,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="protect-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sectionpage|extended_tip|protect">Prevents the selected section from being edited.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -375,6 +410,11 @@
                                 <accessibility>
                                   <relation type="label-for" target="selectpassword"/>
                                 </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="withpassword-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="sectionpage|extended_tip|withpassword">Protects the selected section with a password. The password must have a minimum of 5 characters.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -391,6 +431,11 @@
                                 <accessibility>
                                   <relation type="labelled-by" target="withpassword"/>
                                 </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="selectpassword-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="sectionpage|extended_tip|selectpassword">Opens a dialog where you can change the current password.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -456,6 +501,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="hide-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="sectionpage|extended_tip|hide">Hides and prevents the selected section from being printed.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -496,6 +546,11 @@
                                 <property name="hexpand">True</property>
                                 <property name="activates_default">True</property>
                                 <property name="width_chars">18</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="withcond-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="sectionpage|extended_tip|withcond">Enter the condition that must be met to hide the section.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -578,6 +633,11 @@
         <property name="left_attach">1</property>
         <property name="top_attach">0</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="SectionPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="sectionpage|extended_tip|SectionPage">Sets the properties of the section.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

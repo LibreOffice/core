@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
-    <property name="lower">-99.989999999999995</property>
-    <property name="upper">99.989999999999995</property>
-    <property name="step_increment">0.10000000000000001</property>
+    <property name="lower">-99.99</property>
+    <property name="upper">99.99</property>
+    <property name="step_increment">0.1</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkAdjustment" id="adjustment2">
-    <property name="lower">-99.989999999999995</property>
-    <property name="upper">99.989999999999995</property>
-    <property name="step_increment">0.10000000000000001</property>
+    <property name="lower">-99.99</property>
+    <property name="upper">99.99</property>
+    <property name="step_increment">0.1</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkGrid" id="IndentPage">
@@ -85,6 +85,11 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="digits">2</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="before-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="indentpage|extended_tip|before">Specifies the indents before the section, at the left margin.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -98,6 +103,11 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment2</property>
                         <property name="digits">2</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="after-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="indentpage|extended_tip|after">Specifies the indents after the section, at the right margin.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>

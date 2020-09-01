@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -64,7 +64,6 @@
                     <property name="headers_visible">False</property>
                     <property name="headers_clickable">False</property>
                     <property name="search_column">0</property>
-                    <property name="show_expanders">True</property>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection" id="treeview-selection1"/>
                     </child>
@@ -76,6 +75,11 @@
                             <attribute name="text">0</attribute>
                           </attributes>
                         </child>
+                      </object>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="type-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="flddocinfopage|extended_tip|type">Lists the available field types. To add a field to your document, click a field type, click a field in the Select list, and then click Insert.</property>
                       </object>
                     </child>
                   </object>
@@ -145,6 +149,11 @@
                             <attribute name="text">0</attribute>
                           </attributes>
                         </child>
+                      </object>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="select-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="flddocinfopage|extended_tip|select">Lists the available fields for the field type selected in the Type list. To insert a field, click the field, and then click Insert.</property>
                       </object>
                     </child>
                   </object>
@@ -223,6 +232,11 @@
                             </child>
                           </object>
                         </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="format-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="flddocinfopage|extended_tip|format">Click the format that you want to apply to the selected field, or click "Additional formats" to define a custom format.</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -241,6 +255,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="fixed-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="flddocinfopage|extended_tip|fixed">Inserts the field as static content, that is, the field cannot be updated.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>

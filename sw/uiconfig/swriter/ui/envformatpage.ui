@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -124,6 +124,11 @@
                                 <property name="activates_default">True</property>
                                 <property name="adjustment">adjustment1</property>
                                 <property name="digits">2</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="leftaddr-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="envformatpage|extended_tip|leftaddr">Enter the amount of space that you want to leave between the left edge of the envelope and the addressee field.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -137,6 +142,11 @@
                                 <property name="activates_default">True</property>
                                 <property name="adjustment">adjustment3</property>
                                 <property name="digits">2</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="topaddr-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="envformatpage|extended_tip|topaddr">Enter the amount of space that you want to leave between the top edge of the envelope and the addressee field.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -229,10 +239,15 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <property name="popup">editmenu1</property>
                                 <property name="draw_indicator">True</property>
+                                <property name="popup">editmenu1</property>
                                 <child>
                                   <placeholder/>
+                                </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="addredit-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="envformatpage|extended_tip|addredit">Click and choose the text formatting style for the addressee field that you want to edit.</property>
+                                  </object>
                                 </child>
                               </object>
                               <packing>
@@ -322,6 +337,11 @@
                                 <property name="activates_default">True</property>
                                 <property name="adjustment">adjustment4</property>
                                 <property name="digits">2</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="leftsender-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="envformatpage|extended_tip|leftsender">Enter the amount of space that you want to leave between the left edge of the envelope and the sender field.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -335,6 +355,11 @@
                                 <property name="activates_default">True</property>
                                 <property name="adjustment">adjustment5</property>
                                 <property name="digits">2</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="topsender-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="envformatpage|extended_tip|topsender">Enter the amount of space that you want to leave between the top edge of the envelope and the sender field.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -427,10 +452,15 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <property name="popup">editmenu2</property>
                                 <property name="draw_indicator">True</property>
+                                <property name="popup">editmenu2</property>
                                 <child>
                                   <placeholder/>
+                                </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="senderedit-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="envformatpage|extended_tip|senderedit">Click and choose the text formatting style for the sender field that you want to edit.</property>
+                                  </object>
                                 </child>
                               </object>
                               <packing>
@@ -552,6 +582,11 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment2</property>
                         <property name="digits">2</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="width-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="envformatpage|extended_tip|width">Enter the width of the envelope.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -566,6 +601,11 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment6</property>
                         <property name="digits">2</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="height-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="envformatpage|extended_tip|height">Enter the height of the envelope.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -576,6 +616,11 @@
                       <object class="GtkComboBoxText" id="format">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="format-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="envformatpage|extended_tip|format">Select the envelope size that want, or select "User Defined", and then enter the width and the height of the custom size.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -622,6 +667,11 @@
         <property name="left_attach">0</property>
         <property name="top_attach">2</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="EnvFormatPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="envformatpage|extended_tip|EnvFormatPage">Specifies the layout and the dimension of the envelope.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

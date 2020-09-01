@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
-    <property name="upper">99.989999999999995</property>
-    <property name="step_increment">0.10000000000000001</property>
+    <property name="upper">99.99</property>
+    <property name="step_increment">0.1</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkAdjustment" id="adjustment2">
-    <property name="upper">99.989999999999995</property>
-    <property name="step_increment">0.10000000000000001</property>
+    <property name="upper">99.99</property>
+    <property name="step_increment">0.1</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkAdjustment" id="adjustment3">
-    <property name="upper">99.989999999999995</property>
-    <property name="step_increment">0.10000000000000001</property>
+    <property name="upper">99.99</property>
+    <property name="step_increment">0.1</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkAdjustment" id="adjustment4">
-    <property name="upper">99.989999999999995</property>
-    <property name="step_increment">0.10000000000000001</property>
+    <property name="upper">99.99</property>
+    <property name="step_increment">0.1</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkGrid" id="WrapPage">
@@ -68,6 +68,11 @@
                     <property name="always_show_image">True</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="none-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="wrappage|extended_tip|none">Places the object on a separate line in the document. The Text in the document appears above and below the object, but not on the sides of the object.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -90,6 +95,11 @@
                     <property name="always_show_image">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">none</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="before-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="wrappage|extended_tip|before">Wraps text on the left side of the object if there is enough space.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -112,6 +122,11 @@
                     <property name="always_show_image">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">none</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="after-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="wrappage|extended_tip|after">Wraps text on the right side of the object if there is enough space.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -134,6 +149,11 @@
                     <property name="always_show_image">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">none</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="parallel-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="wrappage|extended_tip|parallel">Wraps text on all four sides of the border frame of the object.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -156,6 +176,11 @@
                     <property name="always_show_image">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">none</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="through-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="wrappage|extended_tip|through">Places the object in front of the text.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -178,6 +203,11 @@
                     <property name="always_show_image">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">none</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="optimal-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="wrappage|extended_tip|optimal">Automatically wraps text to the left, to the right, or on all four sides of the border frame of the object. If the distance between the object and the page margin is less than 2 cm, the text is not wrapped.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -298,6 +328,11 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="digits">2</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="left-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="wrappage|extended_tip|left">Enter the amount of space that you want between the left edge of the object and the text.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -311,6 +346,11 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment2</property>
                         <property name="digits">2</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="right-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="wrappage|extended_tip|right">Enter the amount of space that you want between the right edge of the object and the text.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -324,6 +364,11 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment3</property>
                         <property name="digits">2</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="top-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="wrappage|extended_tip|top">Enter the amount of space that you want between the top edge of the object and the text.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -337,6 +382,11 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment4</property>
                         <property name="digits">2</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="bottom-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="wrappage|extended_tip|bottom">Enter the amount of space that you want between the bottom edge of the object and the text.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -395,6 +445,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="anchoronly-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="wrappage|extended_tip|anchoronly">Starts a new paragraph below the object after you press Enter.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -410,6 +465,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="transparent-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="wrappage|extended_tip|transparent">Moves the selected object to the background. This option is only available if you selected the Through wrap type.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -425,6 +485,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="outline-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="wrappage|extended_tip|outline">Wraps text around the shape of the object. This option is not available for the Through wrap type, or for frames.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -440,6 +505,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="outside-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="wrappage|extended_tip|outside">Wraps text only around the contour of the object, but not in open areas within the object shape.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -486,6 +556,11 @@
         <property name="left_attach">0</property>
         <property name="top_attach">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="WrapPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="wrappage|extended_tip|WrapPage">Specify the way you want text to wrap around an object.</property>
+      </object>
     </child>
   </object>
 </interface>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="SelectBlockDialog">
@@ -10,9 +10,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -97,6 +94,11 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="new-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="selectblockdialog|extended_tip|new">Opens the New Address Block dialog where you can define a new address block layout.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -111,6 +113,11 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="edit-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="selectblockdialog|extended_tip|edit">Opens the Edit Address Block dialog where you can edit the selected address block layout.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -125,6 +132,11 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="delete-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="selectblockdialog|extended_tip|delete">Deletes the selected address block layout.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -181,6 +193,11 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="never-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="selectblockdialog|extended_tip|never">Excludes country or regional information from the address block.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -197,6 +214,11 @@
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">never</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="always-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="selectblockdialog|extended_tip|always">Includes country or regional information in the address block.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -216,6 +238,11 @@
                             <accessibility>
                               <relation type="label-for" target="country"/>
                             </accessibility>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="dependent-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="selectblockdialog|extended_tip|dependent">Only includes country or regional information in the address block if the value differs from the value that you enter in the text box.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -232,6 +259,11 @@
                             <accessibility>
                               <relation type="labelled-by" target="dependent"/>
                             </accessibility>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="country-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="selectblockdialog|extended_tip|country">Enter the country/region string that shall not be printed.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -277,6 +309,11 @@
                         <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="preview-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="selectblockdialog|extended_tip|preview">Select the block in the list that you want to use for mail merge addresses, and click OK.</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -301,5 +338,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="SelectBlockDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="selectblockdialog|extended_tip|SelectBlockDialog">Select, edit, or delete an address block layout for mail merge.</property>
+      </object>
+    </child>
   </object>
 </interface>

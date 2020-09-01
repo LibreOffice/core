@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.2 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="SplitTableDialog">
@@ -95,11 +95,16 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
                         <property name="relief">half</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="copyheading-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="splittable|extended_tip|copyheading">Includes the first row of the original table as the first row of the second table.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -116,6 +121,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">copyheading</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="customheadingapplystyle-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="splittable|extended_tip|customheadingapplystyle">Inserts a blank header row in the second table that is formatted with the style of the first row in the original table.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -132,6 +142,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">copyheading</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="customheading-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="splittable|extended_tip|customheading">Inserts an additional blank row in the second table.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -148,6 +163,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">copyheading</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="noheading-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="splittable|extended_tip|noheading">Splits the table without copying the header row.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -182,8 +202,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
+    <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="SplitTableDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="splittable|extended_tip|SplitTableDialog">Splits the current table into two separate tables at the cursor position.</property>
+      </object>
     </child>
   </object>
 </interface>

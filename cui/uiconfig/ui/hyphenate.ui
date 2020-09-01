@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkImage" id="image1">
@@ -21,9 +21,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -106,6 +103,11 @@
                     <property name="can_default">True</property>
                     <property name="has_default">True</property>
                     <property name="receives_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="ok-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="hyphenate|extended_tip|ok">Inserts the hyphen at the indicated position.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -119,6 +121,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="continue-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="hyphenate|extended_tip|continue">Ignores the hyphenation suggestion and finds the next word to hyphenate.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -133,6 +140,11 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_stock">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="delete-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="hyphenate|extended_tip|delete">Removes the current hyphenation point from the displayed word.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -176,6 +188,11 @@
                     <property name="editable">False</property>
                     <property name="activates_default">True</property>
                     <property name="width_chars">32</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="worded-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="hyphenate|extended_tip|worded">Displays the hyphenation suggestion(s) for the selected word.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -190,6 +207,11 @@
                     <property name="receives_default">True</property>
                     <property name="halign">end</property>
                     <property name="image">image1</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="left-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="hyphenate|extended_tip|left">Set the position of the hyphen. This option is only available if more than one hyphenation suggestion is displayed.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -203,6 +225,11 @@
                     <property name="receives_default">True</property>
                     <property name="halign">start</property>
                     <property name="image">image2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="right-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="hyphenate|extended_tip|right">Set the position of the hyphen. This option is only available if more than one hyphenation suggestion is displayed.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -233,5 +260,13 @@
       <action-widget response="101">hyphall</action-widget>
       <action-widget response="-7">close</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="HyphenateDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="hyphenate|extended_tip|HyphenateDialog">Inserts hyphens in words that are too long to fit at the end of a line.</property>
+      </object>
+    </child>
   </object>
 </interface>

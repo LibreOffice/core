@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -45,9 +45,6 @@
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="indexentry|IndexEntryDialog">Insert Index Entry</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -78,6 +75,11 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="delete-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|delete">Deletes the selected entry from the index. The entry text in the document is not deleted.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -528,6 +530,11 @@
                                 <property name="halign">center</property>
                                 <property name="valign">center</property>
                                 <property name="image">image2</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="previous-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|previous">Jumps to the previous index entry of the same type in the document.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -542,6 +549,11 @@
                                 <property name="halign">center</property>
                                 <property name="valign">center</property>
                                 <property name="image">image3</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="next-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|next">Jumps to the next index entry of the same type in the document.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -556,6 +568,11 @@
                                 <property name="halign">center</property>
                                 <property name="valign">center</property>
                                 <property name="image">image4</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="first-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|first">Jumps to the first index entry of the same type in the document.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -570,6 +587,11 @@
                                 <property name="halign">center</property>
                                 <property name="valign">center</property>
                                 <property name="image">image5</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="last-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="indexentry|extended_tip|last">Jumps to the last index entry of the same type in the document.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -619,5 +641,8 @@
       <action-widget response="-5">ok</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>

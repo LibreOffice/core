@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkImage" id="image1">
@@ -49,9 +49,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -170,6 +167,11 @@
                         </child>
                       </object>
                     </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="addresses-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="addressblockdialog|extended_tip|addresses">Select a field and drag the field to the other list.</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -208,6 +210,11 @@
                     <property name="receives_default">True</property>
                     <property name="tooltip_text" translatable="yes" context="addressblockdialog|up|tooltip_text">Move up</property>
                     <property name="image">image3</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="up-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="addressblockdialog|extended_tip|up">Select an item in the list and click an arrow button to move the item.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -221,6 +228,11 @@
                     <property name="receives_default">True</property>
                     <property name="tooltip_text" translatable="yes" context="addressblockdialog|left|tooltip_text">Move left</property>
                     <property name="image">image2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="left-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="addressblockdialog|extended_tip|left">Select an item in the list and click an arrow button to move the item.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -234,6 +246,11 @@
                     <property name="receives_default">True</property>
                     <property name="tooltip_text" translatable="yes" context="addressblockdialog|right|tooltip_text">Move right</property>
                     <property name="image">image1</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="right-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="addressblockdialog|extended_tip|right">Select an item in the list and click an arrow button to move the item.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -247,6 +264,11 @@
                     <property name="receives_default">True</property>
                     <property name="tooltip_text" translatable="yes" context="addressblockdialog|down|tooltip_text">Move down</property>
                     <property name="image">image4</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="down-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="addressblockdialog|extended_tip|down">Select an item in the list and click an arrow button to move the item.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -313,6 +335,11 @@
                     <property name="activates_default">True</property>
                   </object>
                 </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="custom-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="addressblockdialog|extended_tip|custom">Select a value from the list for the salutation and the punctuation mark fields.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">2</property>
@@ -339,6 +366,11 @@
                         <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="addressdest-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="addressblockdialog|extended_tip|addressdest">Arrange the fields by drag-and-drop or use the arrow buttons.</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -367,6 +399,11 @@
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="addrpreview-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="addressblockdialog|extended_tip|addrpreview">Displays a preview of the first database record with the current salutation layout.</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -390,6 +427,11 @@
                     <property name="receives_default">True</property>
                     <property name="tooltip_text" translatable="yes" context="addressblockdialog|fromaddr|tooltip_text">Remove from address</property>
                     <property name="image">image6</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="fromaddr-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="addressblockdialog|extended_tip|fromaddr">Removes the selected field from the other list.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -402,6 +444,11 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="image">image5</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="toaddr-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="addressblockdialog|extended_tip|toaddr">Adds the selected field from the list of salutation elements to the other list. You can add a field more than once.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -458,6 +505,9 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <property name="mode">both</property>

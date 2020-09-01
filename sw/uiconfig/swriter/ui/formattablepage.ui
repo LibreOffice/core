@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
-    <property name="upper">99.989999999999995</property>
-    <property name="step_increment">0.050000000000000003</property>
+    <property name="upper">99.99</property>
+    <property name="step_increment">0.05</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkAdjustment" id="adjustment2">
-    <property name="lower">-99.989999999999995</property>
-    <property name="upper">99.989999999999995</property>
-    <property name="step_increment">0.050000000000000003</property>
+    <property name="lower">-99.99</property>
+    <property name="upper">99.99</property>
+    <property name="step_increment">0.05</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkAdjustment" id="adjustment3">
-    <property name="lower">-99.989999999999995</property>
-    <property name="upper">99.989999999999995</property>
-    <property name="step_increment">0.050000000000000003</property>
+    <property name="lower">-99.99</property>
+    <property name="upper">99.99</property>
+    <property name="step_increment">0.05</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkAdjustment" id="adjustment4">
-    <property name="upper">99.989999999999995</property>
-    <property name="step_increment">0.050000000000000003</property>
+    <property name="upper">99.99</property>
+    <property name="step_increment">0.05</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkAdjustment" id="adjustment5">
-    <property name="upper">99.989999999999995</property>
-    <property name="step_increment">0.050000000000000003</property>
+    <property name="upper">99.99</property>
+    <property name="step_increment">0.05</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkGrid" id="FormatTablePage">
@@ -104,6 +104,11 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="name-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="formattablepage|extended_tip|name">Enter an internal name for the table. You can use this name to quickly locate the table in the Navigator.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -124,6 +129,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="relwidth-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="formattablepage|extended_tip|relwidth">Displays the width of the table as a percentage of the page width.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -137,6 +147,11 @@
                                 <property name="activates_default">True</property>
                                 <property name="adjustment">adjustment1</property>
                                 <property name="digits">2</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="widthmf-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="formattablepage|extended_tip|widthmf">Enter the width of the table.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -196,7 +211,7 @@
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">leftmf</property>
                             <property name="xalign">0</property>
-                            <property name="yalign">0.50999999046325684</property>
+                            <property name="yalign">0.5099999904632568</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -255,6 +270,11 @@
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment2</property>
                             <property name="digits">2</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="leftmf-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="formattablepage|extended_tip|leftmf">Enter the amount of space that you want to leave between the left page margin and the edge of the table.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -268,6 +288,11 @@
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment3</property>
                             <property name="digits">2</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="rightmf-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="formattablepage|extended_tip|rightmf">Enter the amount of space that you want to leave between the right page margin and the edge of the table.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -281,6 +306,11 @@
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment4</property>
                             <property name="digits">2</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="abovemf-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="formattablepage|extended_tip|abovemf">Enter the amount of space that you want to leave between the top edge of the table and the text above the table.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -294,6 +324,11 @@
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment5</property>
                             <property name="digits">2</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="belowmf-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="formattablepage|extended_tip|belowmf">Enter the amount of space that you want to leave between the bottom edge of the table and the text below the table.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -354,6 +389,11 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="full-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="formattablepage|extended_tip|full">Extends the table horizontally to the left and to the right page margins.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -370,6 +410,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">full</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="left-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="formattablepage|extended_tip|left">Aligns the left edge of the table to the left page margin.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -386,6 +431,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">full</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="fromleft-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="formattablepage|extended_tip|fromleft">Aligns the left edge of the table to the indent that you enter in the Left box in the Spacing area.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -402,6 +452,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">full</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="right-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="formattablepage|extended_tip|right">Aligns the right edge of the table to the right page margin.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -418,6 +473,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">full</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="center-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="formattablepage|extended_tip|center">Centers the table horizontally on the page.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -434,6 +494,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">full</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="free-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="formattablepage|extended_tip|free">Horizontally aligns the table based on the values that you enter in the Left and Right boxes in the Spacing area.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -527,6 +592,11 @@
         <property name="left_attach">0</property>
         <property name="top_attach">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="FormatTablePage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="formattablepage|extended_tip|FormatTablePage">Specify the size, position, spacing, and alignment options for the selected table.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

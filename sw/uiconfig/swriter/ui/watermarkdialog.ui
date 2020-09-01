@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="angle_adj">
@@ -20,9 +20,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -115,6 +112,11 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="TextInput-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="watermarkdialog|extended_tip|TextInput">Enter the watermark text to be displayed as image in the page background.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -177,6 +179,11 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">angle_adj</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="Angle-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="watermarkdialog|extended_tip|Angle">Select the rotation angle for the watermark. The text will be rotated by this angle in counterclockwise direction.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -190,6 +197,11 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">transparenct_adj</property>
                     <property name="value">50</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="Transparency-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="watermarkdialog|extended_tip|Transparency">Select the transparency level for the watermark. A 0% value produces an opaque watermark and a value of 100% is totally transparent (invisible).</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -203,9 +215,13 @@
                     <property name="receives_default">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
-                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="Color-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="watermarkdialog|extended_tip|Color">Select a color from the drop-down box.</property>
+                      </object>
                     </child>
                   </object>
                   <packing>
@@ -222,6 +238,11 @@
                       <object class="GtkEntry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                      </object>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="FontBox-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="watermarkdialog|extended_tip|FontBox">Select the font from the list.</property>
                       </object>
                     </child>
                   </object>
@@ -247,9 +268,17 @@
       </object>
     </child>
     <action-widgets>
+      <action-widget response="-11">help</action-widget>
       <action-widget response="-5">ok</action-widget>
       <action-widget response="-6">cancel</action-widget>
-      <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="WatermarkDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="watermarkdialog|extended_tip|WatermarkDialog">Insert a watermark text in the current page style background.</property>
+      </object>
+    </child>
   </object>
 </interface>

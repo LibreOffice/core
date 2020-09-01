@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.2 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustmentCHARSPERLINE">
@@ -74,6 +74,11 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="radioRB_NOGRID-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="textgridpage|extended_tip|radioRB_NOGRID">Adds or removes a text grid for lines or characters to the current page style.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -90,6 +95,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">radioRB_NOGRID</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="radioRB_LINESGRID-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="textgridpage|extended_tip|radioRB_LINESGRID">Adds or removes a text grid for lines or characters to the current page style.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -106,6 +116,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">radioRB_NOGRID</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="radioRB_CHARSGRID-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="textgridpage|extended_tip|radioRB_CHARSGRID">Adds or removes a text grid for lines or characters to the current page style.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -221,6 +236,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="adjustment">adjustmentCHARSPERLINE</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="spinNF_CHARSPERLINE-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="textgridpage|extended_tip|spinNF_CHARSPERLINE">Enter the maximum number of characters that you want on a line.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -232,7 +252,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label" translatable="no" context="textgridpage|labelFT_CHARRANGE">(1-45)</property>
+                            <property name="label" context="textgridpage|labelFT_CHARRANGE">(1-45)</property>
                             <property name="use_underline">True</property>
                           </object>
                           <packing>
@@ -261,6 +281,11 @@
                             <property name="input_purpose">digits</property>
                             <property name="adjustment">adjustmentLINESPERPAGE</property>
                             <property name="numeric">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="spinNF_LINESPERPAGE-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="textgridpage|extended_tip|spinNF_LINESPERPAGE">Enter the maximum number of lines that you want on a page.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -273,7 +298,7 @@
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
                             <property name="ypad">4</property>
-                            <property name="label" translatable="no" context="textgridpage|labelFT_LINERANGE">(1-48)</property>
+                            <property name="label" context="textgridpage|labelFT_LINERANGE">(1-48)</property>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -341,6 +366,11 @@
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustmentMetric1</property>
                             <property name="digits">2</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="spinMF_RUBYSIZE-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="textgridpage|extended_tip|spinMF_RUBYSIZE">Enter the font size for the Ruby text.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -368,6 +398,11 @@
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustmentMetric</property>
                             <property name="digits">2</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="spinMF_TEXTSIZE-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="textgridpage|extended_tip|spinMF_TEXTSIZE">Enter the maximum base text size. A large value results in less characters per line.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -398,6 +433,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="checkCB_RUBYBELOW-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="textgridpage|extended_tip|checkCB_RUBYBELOW">Displays Ruby text to the left of or below the base text.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -454,6 +494,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="checkCB_DISPLAY-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="textgridpage|extended_tip|checkCB_DISPLAY">Specifies the printing and color options of the text grid.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -471,6 +516,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="checkCB_PRINT-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="textgridpage|extended_tip|checkCB_PRINT">Specifies the printing and color options of the text grid.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -497,12 +547,16 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="halign">start</property>
-                    <property name="xalign">0</property>
                     <property name="valign">center</property>
+                    <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
-                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="listLB_COLOR-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="textgridpage|extended_tip|listLB_COLOR">Specifies the printing and color options of the text grid.</property>
+                      </object>
                     </child>
                   </object>
                   <packing>
@@ -536,6 +590,11 @@
         <property name="fill">True</property>
         <property name="position">2</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="TextGridPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="textgridpage|extended_tip|TextGridPage">Adds a text grid to the current page style. This option is only available if Asian language support is enabled under Language Settings - Languages in the Options dialog box.</property>
+      </object>
     </child>
   </object>
 </interface>

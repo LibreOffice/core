@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkImage" id="image1">
@@ -63,6 +63,11 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="use_underline">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="addresslist-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="mmaddressblockpage|extended_tip|addresslist">Opens the Select Address List dialog, where you can choose a data source for the addresses, add new addresses, or type in a new address list.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -163,6 +168,11 @@
                         <property name="receives_default">True</property>
                         <property name="valign">end</property>
                         <property name="use_underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="assign-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="mmaddressblockpage|extended_tip|assign">Opens the Match Fields dialog.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -248,6 +258,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="address-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="mmaddressblockpage|extended_tip|address">Adds an address block to the mail merge document.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -283,6 +298,11 @@
                                     <property name="receives_default">True</property>
                                     <property name="valign">end</property>
                                     <property name="use_underline">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="settings-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="mmaddressblockpage|extended_tip|settings">Opens the Select Address Block dialog.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -307,6 +327,11 @@
                                             <property name="can_focus">False</property>
                                             <property name="hexpand">True</property>
                                             <property name="vexpand">True</property>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="settingspreview-atkobject">
+                                                <property name="AtkObject::accessible-description" translatable="yes" context="mmaddressblockpage|extended_tip|settingspreview">Select the address block layout that you want to use.</property>
+                                              </object>
+                                            </child>
                                           </object>
                                         </child>
                                       </object>
@@ -332,6 +357,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="hideempty-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="mmaddressblockpage|extended_tip|hideempty">Enable to leave empty lines out of the address.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -391,6 +421,11 @@
                                         <property name="can_focus">False</property>
                                         <property name="hexpand">True</property>
                                         <property name="vexpand">True</property>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="addresspreview-atkobject">
+                                            <property name="AtkObject::accessible-description" translatable="yes" context="mmaddressblockpage|extended_tip|addresspreview">Shows a preview of the address block template filled with data.</property>
+                                          </object>
+                                        </child>
                                       </object>
                                     </child>
                                   </object>
@@ -413,6 +448,11 @@
                                     <property name="receives_default">True</property>
                                     <property name="tooltip_text" translatable="yes" context="mmaddressblockpage|prev|tooltip_text">Preview Previous Address Block</property>
                                     <property name="image">image1</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="prev-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="mmaddressblockpage|extended_tip|prev">Use the browse buttons to preview the information from the previous or next data record.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -426,6 +466,11 @@
                                     <property name="receives_default">True</property>
                                     <property name="tooltip_text" translatable="yes" context="mmaddressblockpage|next|tooltip_text">Preview Next Address Block</property>
                                     <property name="image">image2</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="next-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="mmaddressblockpage|extended_tip|next">Use the browse buttons to preview the information from the previous or next data record.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="left_attach">2</property>
@@ -526,6 +571,11 @@
         <property name="fill">True</property>
         <property name="position">0</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="MMAddressBlockPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="mmaddressblockpage|extended_tip|MMAddressBlockPage">Specify the recipients for the mail merge document as well as the layout of the address block.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

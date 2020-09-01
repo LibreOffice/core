@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -77,6 +77,11 @@
                     <property name="always_show_image">True</property>
                     <property name="inconsistent">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="checkAuto-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|checkAuto">Automatically inserts hyphens where they are needed in a paragraph.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -92,6 +97,11 @@
                     <property name="margin_left">25</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="spinMaxNum-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|spinMaxNum">Enter the maximum number of consecutive lines that can be hyphenated.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -106,6 +116,11 @@
                     <property name="margin_left">25</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment4</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="spinLineBegin-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|spinLineBegin">Enter the minimum number of characters that must appear at the beginning of the line after the hyphen.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -121,6 +136,11 @@
                     <property name="activates_default">True</property>
                     <property name="input_purpose">number</property>
                     <property name="adjustment">adjustment1</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="spinLineEnd-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|spinLineEnd">Enter the minimum number of characters to leave at the end of the line before a hyphen is inserted.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -234,6 +254,11 @@
                     <property name="xalign">0</property>
                     <property name="inconsistent">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="checkInsert-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|checkInsert">Select this check box, and then select the break type that you want to use.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -253,6 +278,11 @@
                     <accessibility>
                       <relation type="label-for" target="comboPageStyle"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="checkPageStyle-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|checkPageStyle">Select this check box, and then select the page style that you want to use for the first page after the break.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -282,6 +312,11 @@
                     <accessibility>
                       <relation type="labelled-by" target="labelPageNum"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="spinPageNumber-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|spinPageNumber">Enter the page number for the first page that follows the break. If you want to continue the current page numbering, leave the checkbox unchecked.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -332,6 +367,7 @@
                     <child internal-child="accessible">
                       <object class="AtkObject" id="comboPageStyle-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="textflowpage|comboPageStyle-atkobject">Page Style</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|comboPageStyle">Select the formatting style to use for the first page after the break.</property>
                       </object>
                     </child>
                   </object>
@@ -348,6 +384,11 @@
                       <item translatable="yes" context="textflowpage|comboBreakType">Page</item>
                       <item translatable="yes" context="textflowpage|comboBreakType">Column</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="comboBreakType-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|comboBreakType">Select the break type that you want to insert.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -362,6 +403,11 @@
                       <item translatable="yes" context="textflowpage|comboBreakPosition">Before</item>
                       <item translatable="yes" context="textflowpage|comboBreakPosition">After</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="comboBreakPosition-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|comboBreakPosition">Select where you want to insert the break.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -419,6 +465,11 @@
                     <property name="xalign">0</property>
                     <property name="inconsistent">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="checkSplitPara-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|checkSplitPara">Shifts the entire paragraph to the next page or column after a break is inserted.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -436,6 +487,11 @@
                     <property name="xalign">0</property>
                     <property name="inconsistent">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="checkKeepPara-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|checkKeepPara">Keeps the current paragraph and the following paragraph together when a break or column break is inserted.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -456,6 +512,11 @@
                     <accessibility>
                       <relation type="label-for" target="spinOrphan"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="checkOrphan-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|checkOrphan">Specifies the minimum number of lines in a paragraph before a page break. Select this check box, and then enter a number in the Lines box.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -475,6 +536,11 @@
                     <accessibility>
                       <relation type="label-for" target="spinWidow"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="checkWidow-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|checkWidow">Specifies the minimum number of lines in a paragraph in the first page after the break. Select this check box, and then enter a number in the Lines box.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -490,6 +556,11 @@
                     <accessibility>
                       <relation type="labelled-by" target="checkOrphan"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="spinOrphan-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|spinOrphan">Specifies the minimum number of lines in a paragraph before a page break. Select this check box, and then enter a number in the Lines box.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -506,6 +577,11 @@
                     <accessibility>
                       <relation type="labelled-by" target="checkWidow"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="spinWidow-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|spinWidow">Specifies the minimum number of lines in a paragraph in the first page after the break. Select this check box, and then enter a number in the Lines box.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -558,6 +634,11 @@
     </child>
     <child>
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="TextFlowPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="textflowpage|extended_tip|TextFlowPage">Specify hyphenation and pagination options.</property>
+      </object>
     </child>
   </object>
 </interface>

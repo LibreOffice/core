@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkImage" id="image1">
@@ -82,6 +82,11 @@
                             <property name="receives_default">True</property>
                             <property name="valign">start</property>
                             <property name="use_underline">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="assign-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="mmsalutationpage|extended_tip|assign">Opens the Match Fields dialog.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -107,6 +112,11 @@
                                     <property name="can_focus">False</property>
                                     <property name="hexpand">True</property>
                                     <property name="vexpand">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="preview-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="mmsalutationpage|extended_tip|preview">Displays a preview of the salutation.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
                               </object>
@@ -129,6 +139,11 @@
                                 <property name="receives_default">True</property>
                                 <property name="tooltip_text" translatable="yes" context="mmsalutationpage|prev|tooltip_text">Preview Previous Address Block</property>
                                 <property name="image">image1</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="prev-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="mmsalutationpage|extended_tip|prev">Use the browse buttons to preview the information from the previous or next data record.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -142,6 +157,11 @@
                                 <property name="receives_default">True</property>
                                 <property name="tooltip_text" translatable="yes" context="mmsalutationpage|next|tooltip_text">Preview Next Address Block</property>
                                 <property name="image">image2</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="next-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="mmsalutationpage|extended_tip|next">Use the browse buttons to preview the information from the previous or next data record.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">2</property>
@@ -194,6 +214,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="greeting-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="mmsalutationpage|extended_tip|greeting">Adds a salutation.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -235,6 +260,11 @@
                                 <child internal-child="entry">
                                   <object class="GtkEntry" id="comboboxtext-entry">
                                     <property name="can_focus">True</property>
+                                  </object>
+                                </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="general-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="mmsalutationpage|extended_tip|general">Select the default salutation that is used when you do not specify a personalized salutation.</property>
                                   </object>
                                 </child>
                               </object>
@@ -340,6 +370,11 @@
                                             <property name="receives_default">True</property>
                                             <property name="valign">center</property>
                                             <property name="use_underline">True</property>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="newfemale-atkobject">
+                                                <property name="AtkObject::accessible-description" translatable="yes" context="mmsalutationpage|extended_tip|newfemale">Opens the Custom Salutation (Female recipient) dialog.</property>
+                                              </object>
+                                            </child>
                                           </object>
                                           <packing>
                                             <property name="left_attach">2</property>
@@ -354,6 +389,11 @@
                                             <property name="receives_default">True</property>
                                             <property name="valign">center</property>
                                             <property name="use_underline">True</property>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="newmale-atkobject">
+                                                <property name="AtkObject::accessible-description" translatable="yes" context="mmsalutationpage|extended_tip|newmale">Opens the Custom Salutation (Male recipient) dialog.</property>
+                                              </object>
+                                            </child>
                                           </object>
                                           <packing>
                                             <property name="left_attach">2</property>
@@ -366,6 +406,11 @@
                                             <property name="can_focus">False</property>
                                             <property name="valign">center</property>
                                             <property name="hexpand">True</property>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="female-atkobject">
+                                                <property name="AtkObject::accessible-description" translatable="yes" context="mmsalutationpage|extended_tip|female">Select the personalized greeting for a female recipient.</property>
+                                              </object>
+                                            </child>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -378,6 +423,11 @@
                                             <property name="can_focus">False</property>
                                             <property name="valign">center</property>
                                             <property name="hexpand">True</property>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="male-atkobject">
+                                                <property name="AtkObject::accessible-description" translatable="yes" context="mmsalutationpage|extended_tip|male">Select the personalized greeting for a male recipient.</property>
+                                              </object>
+                                            </child>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -390,6 +440,11 @@
                                             <property name="can_focus">False</property>
                                             <property name="valign">center</property>
                                             <property name="hexpand">True</property>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="femalecol-atkobject">
+                                                <property name="AtkObject::accessible-description" translatable="yes" context="mmsalutationpage|extended_tip|femalecol">Select the field name of the address database field that contains the gender information.</property>
+                                              </object>
+                                            </child>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -406,6 +461,11 @@
                                             <child internal-child="entry">
                                               <object class="GtkEntry" id="comboboxtext-entry2">
                                                 <property name="can_focus">True</property>
+                                              </object>
+                                            </child>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="femalefield-atkobject">
+                                                <property name="AtkObject::accessible-description" translatable="yes" context="mmsalutationpage|extended_tip|femalefield">Select the field value that indicates the gender of the recipient.</property>
                                               </object>
                                             </child>
                                           </object>
@@ -437,6 +497,11 @@
                                     <property name="use_underline">True</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="personalized-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="mmsalutationpage|extended_tip|personalized">Adds a personalized salutation to the mail merge document. To use the default salutation, clear this check box.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -483,6 +548,11 @@
         <property name="fill">True</property>
         <property name="position">0</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="MMSalutationPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="mmsalutationpage|extended_tip|MMSalutationPage">Specify the properties for the salutation.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup2">

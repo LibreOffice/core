@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
-    <property name="lower">0.050000000000000003</property>
-    <property name="upper">99.989999999999995</property>
+    <property name="lower">0.05</property>
+    <property name="upper">99.99</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment2">
-    <property name="lower">-99.989999999999995</property>
-    <property name="upper">99.989999999999995</property>
+    <property name="lower">-99.99</property>
+    <property name="upper">99.99</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment3">
-    <property name="lower">-99.989999999999995</property>
-    <property name="upper">99.989999999999995</property>
+    <property name="lower">-99.99</property>
+    <property name="upper">99.99</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment4">
-    <property name="lower">0.050000000000000003</property>
-    <property name="upper">99.989999999999995</property>
+    <property name="lower">0.05</property>
+    <property name="upper">99.99</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
@@ -72,6 +72,11 @@
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment1</property>
                             <property name="digits">2</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="width-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="swpossizepage|extended_tip|width">Enter the width that you want for the selected object.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -110,6 +115,11 @@
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment4</property>
                             <property name="digits">2</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="height-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="swpossizepage|extended_tip|height">Enter the height that you want for the selected object.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -145,6 +155,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="ratio-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="swpossizepage|extended_tip|ratio">Maintains the height and width ratio when you change the width or the height setting.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -223,6 +238,11 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="topage-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="swpossizepage|extended_tip|topage">Anchors the selection to the current page.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -239,6 +259,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">topage</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="topara-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="swpossizepage|extended_tip|topara">Anchors the selection to the current paragraph.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -255,6 +280,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">topage</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="tochar-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="swpossizepage|extended_tip|tochar">Anchors the selection to a character.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -271,6 +301,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">topage</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="aschar-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="swpossizepage|extended_tip|aschar">Anchors the selection as character. The height of the current line is resized to match the height of the selection.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -400,6 +435,11 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="digits">2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="byhori-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="swpossizepage|extended_tip|byhori">Enter the amount of space to leave between the left edge of the selected object and the reference point that you select in the To box.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -410,6 +450,11 @@
                   <object class="GtkComboBoxText" id="horianchor">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="horianchor-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="swpossizepage|extended_tip|horianchor">Select the reference point for the selected horizontal alignment option.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">5</property>
@@ -420,6 +465,11 @@
                   <object class="GtkComboBoxText" id="horipos">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="horipos-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="swpossizepage|extended_tip|horipos">Select the horizontal alignment option for the object.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -444,6 +494,11 @@
                   <object class="GtkComboBoxText" id="vertpos">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="vertpos-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="swpossizepage|extended_tip|vertpos">Select the vertical alignment option for the object.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -457,6 +512,11 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment3</property>
                     <property name="digits">2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="byvert-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="swpossizepage|extended_tip|byvert">Enter the amount of space to leave between the top edge of the selected object and the reference point that you select in the To box.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -481,6 +541,11 @@
                   <object class="GtkComboBoxText" id="vertanchor">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="vertanchor-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="swpossizepage|extended_tip|vertanchor">Select the reference point for the selected vertical alignment option.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">5</property>
@@ -497,6 +562,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="mirror-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="swpossizepage|extended_tip|mirror">Reverses the current horizontal alignment settings on even pages.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -514,6 +584,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="followtextflow-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="swpossizepage|extended_tip|followtextflow">Keeps the selected object within the layout boundaries of the text that the object is anchored to. To place the selected object anywhere in your document, do not select this option.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -609,6 +684,11 @@
         <property name="left_attach">0</property>
         <property name="top_attach">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="SwPosSizePage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="swpossizepage|extended_tip|SwPosSizePage">Specifies the size and the position of the selected object or frame on a page.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

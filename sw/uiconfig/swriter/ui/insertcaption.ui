@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="InsertCaptionDialog">
@@ -10,9 +10,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -28,6 +25,11 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="auto-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="insertcaption|extended_tip|auto">Opens the Caption dialog. It has the same information as the dialog you get by menu %PRODUCTNAME Writer - AutoCaption in the Options dialog box.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -216,6 +218,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="numbering-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="insertcaption|extended_tip|numbering">Select the type of numbering that you want to use in the caption.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -229,6 +236,11 @@
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
                             <property name="text" translatable="yes" context="insertcaption|separator_edit">: </property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="separator_edit-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="insertcaption|extended_tip|separator_edit">Enter optional text characters to appear between the number and the caption text.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -256,6 +268,11 @@
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
                             <property name="text" translatable="yes" context="insertcaption|num_separator_edit">. </property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="num_separator_edit-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="insertcaption|extended_tip|num_separator_edit">Type the text that you want to appear after the caption number.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -267,6 +284,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="position-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="insertcaption|extended_tip|position">Adds the caption above or below the selected item. This option is only available for some objects.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -296,6 +318,11 @@
                               <object class="GtkEntry" id="comboboxtext-entry">
                                 <property name="can_focus">True</property>
                                 <property name="activates_default">True</property>
+                              </object>
+                            </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="category-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="insertcaption|extended_tip|category">Select the caption category, or type a name to create a new category. The category text appears before the caption number in the caption label. Each predefined caption category is formatted with a paragraph style of the same name.</property>
                               </object>
                             </child>
                           </object>
@@ -394,6 +421,14 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="InsertCaptionDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="insertcaption|extended_tip|InsertCaptionDialog">Adds a numbered caption to a selected image, table, chart, frame, or shape.</property>
+      </object>
+    </child>
   </object>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>

@@ -196,6 +196,11 @@ numbering and text:</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment3</property>
                     <property name="digits">2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="numdistmf-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinepositionpage|extended_tip|numdistmf">The alignment of the numbering symbol is adjusted to get the desired minimum space. If it is not possible because the numbering area is not wide enough, then the start of the text is adjusted.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -224,6 +229,11 @@ numbering and text:</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment1</property>
                     <property name="digits">2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="numberingwidthmf-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinepositionpage|extended_tip|numberingwidthmf">Enter the width of the numbering area. The numbering symbol can be left, center or right in this area.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -239,6 +249,11 @@ numbering and text:</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="relative-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinepositionpage|extended_tip|relative">Indents the current level relative to the previous level in the list hierarchy.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -267,6 +282,11 @@ numbering and text:</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="digits">2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="indentmf-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinepositionpage|extended_tip|indentmf">Enter the amount of space to leave between the left page margin (or the left edge of the text object) and the left edge of the numbering area. If the current paragraph style uses an indent, the amount you enter here is added to the indent.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>

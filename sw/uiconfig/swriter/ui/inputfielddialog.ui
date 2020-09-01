@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="InputFieldDialog">
@@ -10,9 +10,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -49,6 +46,11 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_stock">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="next-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="inputfielddialog|extended_tip|next">Jumps to the next input field in the document.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -166,6 +168,11 @@
                     <property name="has_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="text-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="inputfielddialog|extended_tip|text">This box displays the name that you entered in the Reference box on the Functions or Variables tab of the Fields dialog. The box underneath displays the contents of the field.</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -189,5 +196,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="InputFieldDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="inputfielddialog|extended_tip|InputFieldDialog">Inserts a text field that you can open and edit by clicking it in the document.</property>
+      </object>
+    </child>
   </object>
 </interface>

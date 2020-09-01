@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="MailBodyDialog">
@@ -7,9 +7,6 @@
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="mmmailbody|MailBodyDialog">Email Message</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -113,6 +110,11 @@
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
                         <property name="accepts_tab">False</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="bodymle-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="mmmailbody|extended_tip|bodymle">Enter the main text of the email.</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -142,6 +144,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="greeting-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="mmmailbody|extended_tip|greeting">Adds a salutation to the email.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -184,6 +191,11 @@
                               <object class="GtkEntry" id="comboboxtext-entry1">
                                 <property name="can_focus">True</property>
                                 <property name="activates_default">True</property>
+                              </object>
+                            </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="general-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="mmmailbody|extended_tip|general">Select the default greeting to use if a personalized salutation cannot be created.</property>
                               </object>
                             </child>
                           </object>
@@ -287,6 +299,11 @@
                                         <property name="receives_default">True</property>
                                         <property name="valign">center</property>
                                         <property name="use_underline">True</property>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="newfemale-atkobject">
+                                            <property name="AtkObject::accessible-description" translatable="yes" context="mmmailbody|extended_tip|newfemale">Opens the Custom Salutation dialog for a female recipient.</property>
+                                          </object>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="left_attach">2</property>
@@ -301,6 +318,11 @@
                                         <property name="receives_default">True</property>
                                         <property name="valign">center</property>
                                         <property name="use_underline">True</property>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="newmale-atkobject">
+                                            <property name="AtkObject::accessible-description" translatable="yes" context="mmmailbody|extended_tip|newmale">Opens the Custom Salutation dialog for a male recipient.</property>
+                                          </object>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="left_attach">2</property>
@@ -313,6 +335,11 @@
                                         <property name="can_focus">False</property>
                                         <property name="valign">center</property>
                                         <property name="hexpand">True</property>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="female-atkobject">
+                                            <property name="AtkObject::accessible-description" translatable="yes" context="mmmailbody|extended_tip|female">Select the personalized greeting for a female recipient.</property>
+                                          </object>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -325,6 +352,11 @@
                                         <property name="can_focus">False</property>
                                         <property name="valign">center</property>
                                         <property name="hexpand">True</property>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="male-atkobject">
+                                            <property name="AtkObject::accessible-description" translatable="yes" context="mmmailbody|extended_tip|male">Select the personalized greeting for a male recipient.</property>
+                                          </object>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -337,6 +369,11 @@
                                         <property name="can_focus">False</property>
                                         <property name="valign">center</property>
                                         <property name="hexpand">True</property>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="femalecol-atkobject">
+                                            <property name="AtkObject::accessible-description" translatable="yes" context="mmmailbody|extended_tip|femalecol">Select the field name of the address database field that contains the gender information.</property>
+                                          </object>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -354,6 +391,11 @@
                                           <object class="GtkEntry" id="comboboxtext-entry2">
                                             <property name="can_focus">True</property>
                                             <property name="activates_default">True</property>
+                                          </object>
+                                        </child>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="femalefield-atkobject">
+                                            <property name="AtkObject::accessible-description" translatable="yes" context="mmmailbody|extended_tip|femalefield">Select the field value that indicates the gender of the recipient.</property>
                                           </object>
                                         </child>
                                       </object>
@@ -385,6 +427,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="personalized-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="mmmailbody|extended_tip|personalized">Adds a personalized salutation. To use the default salutation, clear this check box.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -425,6 +472,14 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="MailBodyDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="mmmailbody|extended_tip|MailBodyDialog">Type the message and the salutation for files that you send as email attachments.</property>
+      </object>
+    </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup2">
     <widgets>

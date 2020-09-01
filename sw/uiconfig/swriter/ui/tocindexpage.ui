@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -107,6 +107,11 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="title-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|title">Enter a title for the selected index.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -141,6 +146,11 @@
                           <item id="32" translatable="yes" context="tocindexpage|liststore1">Table of Objects</item>
                           <item id="64" translatable="yes" context="tocindexpage|liststore1">Bibliography</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="type-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|type">Select the type of index that you want to insert or edit.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -157,6 +167,11 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="readonly-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|readonly">Prevents the contents of the index from being changed.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -231,6 +246,11 @@
                               <item translatable="yes" context="tocindexpage|scope">Entire document</item>
                               <item translatable="yes" context="tocindexpage|scope">Chapter</item>
                             </items>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="scope-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|scope">Select whether to create the index for the document or for the current chapter.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -268,6 +288,11 @@
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment1</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="level-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|level">Enter the number of heading levels to include in the index.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -336,6 +361,11 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="fromheadings-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|fromheadings">Creates the index using outline levels. Paragraphs formatted with one of the predefined heading styles (Heading 1-10) are added to the index.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -352,6 +382,11 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="indexmarks-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|indexmarks">Includes the index entries that you inserted by choosing Insert - Table of Contents and Index - Index Entry in the index.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -367,6 +402,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="fromtables-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|fromtables">Includes tables in the index.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -382,6 +422,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="fromframes-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|fromframes">Includes frames in the index.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -397,6 +442,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="fromgraphics-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|fromgraphics">Includes graphics in the index.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -412,6 +462,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="fromoles-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|fromoles">Includes OLE objects in the index.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -428,6 +483,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="uselevel-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|uselevel">Indents table, graphic, frame, and OLE object index entries according their place in the chapter heading hierarchy.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -456,6 +516,11 @@
                                     <property name="use_underline">True</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="addstylescb-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|addstylescb">Includes the paragraph styles that you specify in the Assign Styles dialog as index entries. To select the paragraph styles that you want to include in the index, click the Assign Styles (...) button to the right of this box.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -497,6 +562,11 @@
                                 <accessibility>
                                   <relation type="labelled-by" target="addstylescb"/>
                                 </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="styles-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|styles">Opens the Assign Styles dialog, where you can select the paragraph styles to include in the index. Choose the proper heading level on which the style will be included in the index.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -542,6 +612,11 @@
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">objnames</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="captions-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|captions">Creates index entries from object captions.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -558,6 +633,11 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="objnames-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|objnames">Creates index entries from object names.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -588,6 +668,11 @@
                               <object class="GtkComboBoxText" id="category">
                                 <property name="can_focus">False</property>
                                 <property name="no_show_all">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="category-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|category">Select the caption category that you want to use for the index entries.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -617,6 +702,11 @@
                                   <item translatable="yes" context="tocindexpage|display">Category and Number</item>
                                   <item translatable="yes" context="tocindexpage|display">Caption Text</item>
                                 </items>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="display-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|display">Select the part of the caption that you want to use for index entries.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -720,6 +810,11 @@
                             </child>
                           </object>
                         </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="objects-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|objects">Select the object types that you want to include in a table of objects.</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -786,6 +881,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="numberentries-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|numberentries">Automatically numbers the bibliography entries.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -805,6 +905,11 @@
                           <item translatable="yes" context="tocindexpage|brackets">{}</item>
                           <item translatable="yes" context="tocindexpage|brackets">&lt;&gt;</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="brackets-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|brackets">Select the brackets that you want to enclose bibliography entries.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -867,6 +972,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="combinesame-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|combinesame">Replaces identical index entries with a single entry that lists the page numbers where the entry occurs in the document. For example, the entries "View 10, View 43" are combined as "View 10, 43".</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -883,6 +993,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="useff-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|useff">Replaces identical index entries that occur on the directly following page(s), with a single entry that lists the first page number and a "f" or "ff". For example, the entries "View 10, View 11" are combined as "View 10f", and "View 10, View 11, View 12" as "View 10ff". Actual appearance depends on the locale setting, but can be overridden with Sort - Language.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -899,6 +1014,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="usedash-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|usedash">Replaces identical index entries that occur on consecutive pages with a single entry and the page range where the entry occurs. For example, the entries "View 10, View 11, View 12" are combined as "View 10-12".</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -915,6 +1035,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="casesens-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|casesens">Distinguishes between uppercase and lowercase letters in identical index entries. For Asian languages special handling applies.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -930,6 +1055,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="initcaps-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|initcaps">Automatically capitalizes the first letter of an index entry.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -945,6 +1075,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="keyasentry-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|keyasentry">Inserts index keys as separate index entries.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -960,6 +1095,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="fromfile-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|fromfile">Automatically marks index entries using a concordance file - a list of words to include in an index.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -975,11 +1115,16 @@
                             <property name="halign">start</property>
                             <property name="margin_left">12</property>
                             <property name="use_underline">True</property>
+                            <property name="draw_indicator">True</property>
                             <property name="popup">filemenu</property>
                             <property name="use_popover">False</property>
-                            <property name="draw_indicator">True</property>
                             <child>
                               <placeholder/>
+                            </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="file-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|file">Select, create, or edit a concordance file.</property>
+                              </object>
                             </child>
                           </object>
                           <packing>
@@ -1051,6 +1196,11 @@
                               <object class="GtkComboBoxText" id="lang">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="lang-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|lang">Select the language rules to use for sorting the index entries.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -1086,6 +1236,11 @@
                               <object class="GtkComboBoxText" id="keytype">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="keytype-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|keytype">Select numeric when you want to sort numbers by value, such as in 1, 2, 12. Select alphanumeric, when you want to sort the numbers by character code, such as in 1, 12, 2.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>

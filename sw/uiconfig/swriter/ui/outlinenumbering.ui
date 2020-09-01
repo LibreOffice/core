@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkMenu" id="form">
@@ -11,6 +11,11 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="outlinenumbering|form1">Untitled 1</property>
         <property name="use_underline">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="form1-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumbering|extended_tip|form1">Select the predefined numbering style that you want to assign to the selected outline level.</property>
+          </object>
+        </child>
       </object>
     </child>
     <child>
@@ -89,6 +94,16 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="outlinenumbering|saveas">Save _As...</property>
         <property name="use_underline">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="saveas-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumbering|extended_tip|saveas">Opens a dialog where you can save the current settings for the selected chapter and outline level. You can then load these settings from another document.</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="form-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumbering|extended_tip|form">Click a numbering style in the list, and then enter a name for the style. The numbers correspond to the outline level that the styles are assigned to.</property>
       </object>
     </child>
   </object>
@@ -117,8 +132,8 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
-                <property name="popup">form</property>
                 <property name="draw_indicator">True</property>
+                <property name="popup">form</property>
                 <child>
                   <placeholder/>
                 </child>
@@ -309,8 +324,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
+    <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="OutlineNumberingDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumbering|extended_tip|OutlineNumberingDialog">Specifies the number format and the hierarchy for chapter numbering in the current document.</property>
+      </object>
     </child>
   </object>
 </interface>

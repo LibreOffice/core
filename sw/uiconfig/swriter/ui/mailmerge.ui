@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -18,9 +18,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -143,6 +140,11 @@
                                 <property name="xalign">0</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="all-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="mailmerge|extended_tip|all">Processes all the records from the database.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -160,6 +162,11 @@
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">all</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="selected-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="mailmerge|extended_tip|selected">Processes only the marked records from the database. This option is only available when you have previously marked the necessary records in the database.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -182,6 +189,11 @@
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
                                     <property name="group">all</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="rbfrom-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="mailmerge|extended_tip|rbfrom">Specify the number of the first record to be printed.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -196,6 +208,11 @@
                                     <property name="activates_default">True</property>
                                     <property name="adjustment">adjustment1</property>
                                     <property name="numeric">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="from-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="mailmerge|extended_tip|from">Specify the number of the first record to be printed.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -224,6 +241,11 @@
                                     <property name="activates_default">True</property>
                                     <property name="adjustment">adjustment2</property>
                                     <property name="numeric">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="to-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="mailmerge|extended_tip|to">Specify the number of the last record to be printed.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -294,6 +316,11 @@
                                     <property name="xalign">0</property>
                                     <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="printer-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="mailmerge|extended_tip|printer">Prints the form letters.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -328,6 +355,11 @@
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
                                     <property name="group">printer</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="file-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="mailmerge|extended_tip|file">Saves the form letters in files.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -399,6 +431,11 @@
                                                     <property name="use_underline">True</property>
                                                     <property name="xalign">0</property>
                                                     <property name="draw_indicator">True</property>
+                                                    <child internal-child="accessible">
+                                                      <object class="AtkObject" id="generate-atkobject">
+                                                        <property name="AtkObject::accessible-description" translatable="yes" context="mailmerge|extended_tip|generate">Generate each file name from data contained in a database.</property>
+                                                      </object>
+                                                    </child>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">0</property>
@@ -453,6 +490,11 @@
                                                   <object class="GtkComboBoxText" id="field">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
+                                                    <child internal-child="accessible">
+                                                      <object class="AtkObject" id="field-atkobject">
+                                                        <property name="AtkObject::accessible-description" translatable="yes" context="mailmerge|extended_tip|field">Uses the content of the selected database field as the file name for the form letter.</property>
+                                                      </object>
+                                                    </child>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">1</property>
@@ -464,6 +506,11 @@
                                                   <object class="GtkComboBoxText" id="fileformat">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
+                                                    <child internal-child="accessible">
+                                                      <object class="AtkObject" id="fileformat-atkobject">
+                                                        <property name="AtkObject::accessible-description" translatable="yes" context="mailmerge|extended_tip|fileformat">Select the file format to store the resulting document.</property>
+                                                      </object>
+                                                    </child>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">1</property>
@@ -478,6 +525,11 @@
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
                                                     <property name="use_underline">True</property>
+                                                    <child internal-child="accessible">
+                                                      <object class="AtkObject" id="pathpb-atkobject">
+                                                        <property name="AtkObject::accessible-description" translatable="yes" context="mailmerge|extended_tip|pathpb">Opens the Select Path dialog.</property>
+                                                      </object>
+                                                    </child>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">2</property>
@@ -489,6 +541,11 @@
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="activates_default">True</property>
+                                                    <child internal-child="accessible">
+                                                      <object class="AtkObject" id="path-atkobject">
+                                                        <property name="AtkObject::accessible-description" translatable="yes" context="mailmerge|extended_tip|path">Specifies the path to store the form letters.</property>
+                                                      </object>
+                                                    </child>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">1</property>
@@ -726,6 +783,11 @@
                                                 <property name="xalign">0</property>
                                                 <property name="active">True</property>
                                                 <property name="draw_indicator">True</property>
+                                                <child internal-child="accessible">
+                                                  <object class="AtkObject" id="singledocument-atkobject">
+                                                    <property name="AtkObject::accessible-description" translatable="yes" context="mailmerge|extended_tip|singledocument">Create one big document containing all data records.</property>
+                                                  </object>
+                                                </child>
                                               </object>
                                               <packing>
                                                 <property name="expand">False</property>
@@ -743,6 +805,11 @@
                                                 <property name="xalign">0</property>
                                                 <property name="draw_indicator">True</property>
                                                 <property name="group">singledocument</property>
+                                                <child internal-child="accessible">
+                                                  <object class="AtkObject" id="individualdocuments-atkobject">
+                                                    <property name="AtkObject::accessible-description" translatable="yes" context="mailmerge|extended_tip|individualdocuments">Create one document for every one data record.</property>
+                                                  </object>
+                                                </child>
                                               </object>
                                               <packing>
                                                 <property name="expand">False</property>
@@ -815,5 +882,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="MailmergeDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="mailmerge|extended_tip|MailmergeDialog">The Mail Merge dialog helps you in printing and saving form letters.</property>
+      </object>
+    </child>
   </object>
 </interface>

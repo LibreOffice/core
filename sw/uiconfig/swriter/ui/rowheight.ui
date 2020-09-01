@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -105,6 +105,11 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="digits">2</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="heightmf-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="rowheight|extended_tip|heightmf">Enter the height that you want for the selected row(s).</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -121,6 +126,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="fit-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="rowheight|extended_tip|fit">Automatically adjusts the row height to match the contents of the cells.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -156,8 +166,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
+    <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="RowHeightDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="rowheight|extended_tip|RowHeightDialog">Changes the height of the selected row(s).</property>
+      </object>
     </child>
   </object>
 </interface>

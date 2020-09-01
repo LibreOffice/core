@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -101,6 +101,11 @@
                                 </child>
                               </object>
                             </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="type-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="fldrefpage|extended_tip|type">Lists the available field types. To add a field to your document, click a field type, click a field in the Selection list, and then click Insert.</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -168,6 +173,11 @@
                                     <attribute name="text">0</attribute>
                                   </attributes>
                                 </child>
+                              </object>
+                            </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="format-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="fldrefpage|extended_tip|format">Select the format that you want to use for the selected reference field.</property>
                               </object>
                             </child>
                           </object>
@@ -311,6 +321,11 @@
                                     </child>
                                   </object>
                                 </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="selecttip-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="fldrefpage|extended_tip|selecttip">Lists the available fields for the field type selected in the Type list. To insert a field, click the field, select a format in the "Insert reference to" list, and then click Insert.</property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>
@@ -349,6 +364,11 @@
                                         <attribute name="text">0</attribute>
                                       </attributes>
                                     </child>
+                                  </object>
+                                </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="select-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="fldrefpage|extended_tip|select">Lists the available fields for the field type selected in the Type list. To insert a field, click the field, select a format in the "Insert reference to" list, and then click Insert.</property>
                                   </object>
                                 </child>
                               </object>
@@ -411,6 +431,11 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="value-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="fldrefpage|extended_tip|value">Enter the contents that you want to add to a user-defined fields.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -437,6 +462,11 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="name-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="fldrefpage|extended_tip|name">Type the name of the user-defined field that you want to create.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -463,6 +493,11 @@
         <property name="fill">True</property>
         <property name="position">0</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="FieldRefPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="fldrefpage|extended_tip|FieldRefPage">This is where you insert the references or referenced fields into the current document. References are referenced fields within the same document or within sub-documents of a master document.</property>
+      </object>
     </child>
   </object>
 </interface>

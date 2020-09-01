@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -108,6 +108,11 @@
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="top-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="envprinterpage|extended_tip|top">Feeds the envelope with the print side face up in the printer tray.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -125,6 +130,11 @@
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">top</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="bottom-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="envprinterpage|extended_tip|bottom">Feeds the envelope with the print side face down in the printer tray.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -167,6 +177,11 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="digits">2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="right-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="envprinterpage|extended_tip|right">Enter the amount to shift the print area to the right.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -180,6 +195,11 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment1</property>
                     <property name="digits">2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="down-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="envprinterpage|extended_tip|down">Enter the amount to shift the print area down.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -449,6 +469,11 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="setup-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="envprinterpage|extended_tip|setup">Opens the Print Setup dialog where you can define additional printer settings, such as paper format and orientation.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -490,6 +515,11 @@
         <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="EnvPrinterPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="envprinterpage|extended_tip|EnvPrinterPage">Set the print options for the envelope.</property>
+      </object>
     </child>
   </object>
 </interface>

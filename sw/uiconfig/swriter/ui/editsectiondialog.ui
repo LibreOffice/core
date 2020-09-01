@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -20,9 +20,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -85,6 +82,11 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="remove-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="editsectiondialog|extended_tip|remove">Removes the selected section from the document, and inserts the contents of the section into the document.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -150,6 +152,11 @@
                             <property name="visible">True</property>
                             <property name="sensitive">False</property>
                             <property name="can_focus">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="curname-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="editsectiondialog|extended_tip|curname">Type a name for the new section.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -191,6 +198,11 @@
                                         <attribute name="text">1</attribute>
                                       </attributes>
                                     </child>
+                                  </object>
+                                </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="tree-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="editsectiondialog|extended_tip|tree">Type the name of the section that you want to edit, or click a name in the Section list.</property>
                                   </object>
                                 </child>
                               </object>
@@ -261,6 +273,11 @@
                                 <property name="xalign">0</property>
                                 <property name="inconsistent">True</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="link-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="editsectiondialog|extended_tip|link">Inserts the contents of another document or section from another document in the current section.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -278,6 +295,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="dde-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="editsectiondialog|extended_tip|dde">Creates a DDE link. Select this check box, and then enter the DDE command that you want to use. The DDE option is only available if the Link check box is selected.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -304,6 +326,11 @@
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">True</property>
                                         <property name="use_underline">True</property>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="file-atkobject">
+                                            <property name="AtkObject::accessible-description" translatable="yes" context="editsectiondialog|extended_tip|file">Locate the file that you want to insert as a link, and then click Insert.</property>
+                                          </object>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="left_attach">2</property>
@@ -316,6 +343,11 @@
                                         <property name="can_focus">True</property>
                                         <property name="hexpand">True</property>
                                         <property name="activates_default">True</property>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="filename-atkobject">
+                                            <property name="AtkObject::accessible-description" translatable="yes" context="editsectiondialog|extended_tip|filename">Enter the path and the filename for the file that you want to insert, or click the Browse button to locate the file.</property>
+                                          </object>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -346,6 +378,11 @@
                                           <object class="GtkEntry" id="comboboxtext-entry">
                                             <property name="can_focus">True</property>
                                             <property name="activates_default">True</property>
+                                          </object>
+                                        </child>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="section-atkobject">
+                                            <property name="AtkObject::accessible-description" translatable="yes" context="editsectiondialog|extended_tip|section">Select the section in the file that you want to insert as a link.</property>
                                           </object>
                                         </child>
                                       </object>
@@ -459,6 +496,11 @@
                                 <property name="xalign">0</property>
                                 <property name="inconsistent">True</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="protect-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="editsectiondialog|extended_tip|protect">Prevents the selected section from being edited.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -488,6 +530,11 @@
                                         <accessibility>
                                           <relation type="label-for" target="password"/>
                                         </accessibility>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="withpassword-atkobject">
+                                            <property name="AtkObject::accessible-description" translatable="yes" context="editsectiondialog|extended_tip|withpassword">Protects the selected section with a password. The password must have a minimum of 5 characters.</property>
+                                          </object>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="left_attach">0</property>
@@ -504,6 +551,11 @@
                                         <accessibility>
                                           <relation type="labelled-by" target="withpassword"/>
                                         </accessibility>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="password-atkobject">
+                                            <property name="AtkObject::accessible-description" translatable="yes" context="editsectiondialog|extended_tip|password">Opens a dialog where you can change the current password.</property>
+                                          </object>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -572,6 +624,11 @@
                                 <property name="xalign">0</property>
                                 <property name="inconsistent">True</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="hide-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="editsectiondialog|extended_tip|hide">Hides and prevents the selected section from being printed.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -611,6 +668,11 @@
                                         <property name="can_focus">True</property>
                                         <property name="hexpand">True</property>
                                         <property name="activates_default">True</property>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="condition-atkobject">
+                                            <property name="AtkObject::accessible-description" translatable="yes" context="editsectiondialog|extended_tip|condition">Enter the condition that must be met to hide the section.</property>
+                                          </object>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -726,6 +788,14 @@
       <action-widget response="102">remove</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="EditSectionDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="editsectiondialog|extended_tip|EditSectionDialog">Sets the properties of the section.</property>
+      </object>
+    </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <widgets>

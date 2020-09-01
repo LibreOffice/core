@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkImage" id="image1">
@@ -42,6 +42,11 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="addredit-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="envaddresspage|extended_tip|addredit">Enter the delivery address.</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -103,6 +108,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="database-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="envaddresspage|extended_tip|database">Select the database containing the address data that you want to insert.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -141,6 +151,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="table-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="envaddresspage|extended_tip|table">Select the database table containing the address data that you want to insert.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -179,6 +194,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="field-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="envaddresspage|extended_tip|field">Select the database field containing the address data that you want to insert, and then click the left arrow button. The data is added to the address box containing the cursor.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -206,6 +226,11 @@
             <property name="valign">center</property>
             <property name="image">image1</property>
             <property name="always_show_image">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="insert-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="envaddresspage|extended_tip|insert">Select the database field containing the address data that you want to insert, and then click the left arrow button. The data is added to the address box containing the cursor.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -249,6 +274,11 @@
                     <accessibility>
                       <relation type="labelled-by" target="sender"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="senderedit-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="envaddresspage|extended_tip|senderedit">Includes a return address on the envelope. Select the Sender check box, and then enter the return address.</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -316,6 +346,11 @@
         <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="EnvAddressPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="envaddresspage|extended_tip|EnvAddressPage">Enter the delivery and return addresses for the envelope. You can also insert address fields from a database, for example from the Addresses database.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

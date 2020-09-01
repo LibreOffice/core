@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkImage" id="image1">
@@ -42,6 +42,11 @@
                     <property name="receives_default">True</property>
                     <property name="image">image1</property>
                     <property name="image_position">right</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="previous-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="insertscript|extended_tip|previous">Jump to Previous Script.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -54,6 +59,11 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="image">image2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="next-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="insertscript|extended_tip|next">Jump to Next Script.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -146,6 +156,11 @@
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
                 <property name="text" translatable="yes" context="insertscript|scripttype">JavaScript</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="scripttype-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="insertscript|extended_tip|scripttype">Enter the type of script that you want to insert.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -164,6 +179,11 @@
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
                 <property name="group">text</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="url-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="insertscript|extended_tip|url">Adds a link to a script file. Click the URL radio button, and then enter the link in the box. You can also click the Browse button, locate the file, and then click Insert.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -176,6 +196,11 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="urlentry-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="insertscript|extended_tip|urlentry">Adds a link to a script file. Click the URL radio button, and then enter the link in the box. You can also click the Browse button, locate the file, and then click Insert.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -189,6 +214,11 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="halign">end</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="browse-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="insertscript|extended_tip|browse">Locate the script file that you want to link to, and then click Insert.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">2</property>
@@ -206,6 +236,11 @@
                 <property name="xalign">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="text-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="insertscript|extended_tip|text">Enter the script code that you want to insert.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -226,6 +261,11 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="textentry-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="insertscript|extended_tip|textentry">Enter the script code that you want to insert.</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -255,8 +295,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
+    <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="InsertScriptDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="insertscript|extended_tip|InsertScriptDialog">Inserts a script at the current cursor position in an HTML or text document.</property>
+      </object>
     </child>
   </object>
 </interface>

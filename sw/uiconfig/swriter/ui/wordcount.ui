@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="WordCountDialog">
@@ -10,9 +10,6 @@
     <property name="default_height">0</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -32,6 +29,11 @@
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="close-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="wordcount|extended_tip|close">Counts the words and characters, with or without spaces, in the current selection and in the whole document. The count is kept up to date as you type or change the selection.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -46,6 +48,11 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="help-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="wordcount|extended_tip|help">Counts the words and characters, with or without spaces, in the current selection and in the whole document. The count is kept up to date as you type or change the selection.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -327,6 +334,14 @@
       <action-widget response="-7">close</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="WordCountDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="wordcount|extended_tip|WordCountDialog">Counts the words and characters, with or without spaces, in the current selection and in the whole document. The count is kept up to date as you type or change the selection.</property>
+      </object>
+    </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <property name="ignore_hidden">True</property>

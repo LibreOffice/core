@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -98,6 +98,11 @@
                         </child>
                       </object>
                     </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="type-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="flddocumentpage|extended_tip|type">Lists the available field types. To add a field to your document, click a field type, click a field in the Select list, and then click Insert.</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -165,6 +170,11 @@
                             <attribute name="text">0</attribute>
                           </attributes>
                         </child>
+                      </object>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="select-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="flddocumentpage|extended_tip|select">Lists the available fields for the field type selected in the Type list. To insert a field, click the field, and then click Insert.</property>
                       </object>
                     </child>
                   </object>
@@ -251,6 +261,11 @@
                                 </child>
                               </object>
                             </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="format-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="flddocumentpage|extended_tip|format">Click the format that you want to apply to the selected field, or click "Additional formats" to define a custom format.</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -331,6 +346,11 @@
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="fixed-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="flddocumentpage|extended_tip|fixed">Inserts the field as static content, that is, the field cannot be updated.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -361,6 +381,11 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="adjustment">adjustment1</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="level-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="flddocumentpage|extended_tip|level">Select the chapter heading level that you want to include in the selected field.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -373,6 +398,11 @@
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
                 <property name="adjustment">adjustment2</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="offset-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="flddocumentpage|extended_tip|offset">Enter the offset that you want to apply to a date or time field.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -437,6 +467,11 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="value-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="flddocumentpage|extended_tip|value">Enter the offset value that you want to apply to a page number field, for example "+1".</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>

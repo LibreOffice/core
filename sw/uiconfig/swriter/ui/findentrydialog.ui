@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="FindEntryDialog">
@@ -29,6 +29,11 @@
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
                 <property name="image_position">top</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="find-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="findentrydialog|extended_tip|find">Displays the next record that contains the search text.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -104,6 +109,11 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="entry-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="findentrydialog|extended_tip|entry">Enter the search term.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -133,6 +143,11 @@
                     <accessibility>
                       <relation type="label-for" target="area"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="findin-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="findentrydialog|extended_tip|findin">Restricts the search to one data field.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -147,6 +162,11 @@
                     <accessibility>
                       <relation type="labelled-by" target="findin"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="area-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="findentrydialog|extended_tip|area">Select the data field where you want to search for the text.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -173,5 +193,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="FindEntryDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="findentrydialog|extended_tip|FindEntryDialog">Searches for a record or recipient in the mail merge address list.</property>
+      </object>
+    </child>
   </object>
 </interface>

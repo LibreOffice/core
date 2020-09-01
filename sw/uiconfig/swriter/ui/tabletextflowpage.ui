@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -57,6 +57,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="break-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tabletextflowpage|extended_tip|break">Select this check box, and then select the type of break that you want to associate with the table.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -76,6 +81,11 @@
                         <accessibility>
                           <relation type="member-of" target="break"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="page-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tabletextflowpage|extended_tip|page">Inserts a page break before or after the table.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -95,6 +105,11 @@
                         <accessibility>
                           <relation type="member-of" target="break"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="column-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tabletextflowpage|extended_tip|column">Inserts a column break before or after the table on a multi-column page.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -114,6 +129,11 @@
                         <accessibility>
                           <relation type="member-of" target="break"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="before-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tabletextflowpage|extended_tip|before">Inserts a page or column break before the table.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -133,6 +153,11 @@
                         <accessibility>
                           <relation type="member-of" target="break"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="after-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tabletextflowpage|extended_tip|after">Inserts a page or column break after the table.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -166,6 +191,11 @@
                         <accessibility>
                           <relation type="label-for" target="pagestylelb"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="pagestyle-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tabletextflowpage|extended_tip|pagestyle">Applies the page style that you specify to the first page that follows the page break.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -195,6 +225,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="pagenoft"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="pagenonf-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tabletextflowpage|extended_tip|pagenonf">Enter the page number for the first page that follows the break. If you want to continue the current page numbering, leave the checkbox unchecked.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -211,6 +246,7 @@
                         <child internal-child="accessible">
                           <object class="AtkObject" id="pagestylelb-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="tabletextflowpage|pagestylelb-atkobject">With Page Style</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tabletextflowpage|extended_tip|pagestylelb">Select the page style that you want to apply to the first page that follows the break.</property>
                           </object>
                         </child>
                       </object>
@@ -234,6 +270,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="split-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tabletextflowpage|extended_tip|split">Allows a page break or column break between the rows of a table.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -251,6 +292,11 @@
                     <property name="xalign">0</property>
                     <property name="inconsistent">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="splitrow-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tabletextflowpage|extended_tip|splitrow">Allows a page break or column break inside a row of the table.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -266,6 +312,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="keep-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tabletextflowpage|extended_tip|keep">Keeps the table and the following paragraph together when you insert the break.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -300,6 +351,11 @@
                           <item id="5" translatable="yes" context="tabletextflowpage|liststore1">Vertical (bottom to top)</item>
                           <item id="4" translatable="yes" context="tabletextflowpage|liststore1">Use superordinate object settings</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="textorientation-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tabletextflowpage|extended_tip|textorientation">Select the orientation for the text in the cells.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -326,6 +382,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="headline-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tabletextflowpage|extended_tip|headline">Repeats the table heading on a new page when the table spans more than one page.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -367,6 +428,11 @@
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment2</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="repeatheadernf-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tabletextflowpage|extended_tip|repeatheadernf">Enter the number of rows to include in the heading.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -444,6 +510,11 @@
                       <item id="1" translatable="yes" context="tabletextflowpage|liststore2">Centered</item>
                       <item id="2" translatable="yes" context="tabletextflowpage|liststore2">Bottom</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="vertorient-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tabletextflowpage|extended_tip|vertorient">Specify the vertical text alignment for the cells in the table.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -469,6 +540,11 @@
         <property name="left_attach">0</property>
         <property name="top_attach">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="TableTextFlowPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="tabletextflowpage|extended_tip|TableTextFlowPage">Set the text flow options for the text before and after the table.</property>
+      </object>
     </child>
   </object>
 </interface>
