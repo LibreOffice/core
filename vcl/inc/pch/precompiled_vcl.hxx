@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-08-18 15:54:52 using:
+ Generated on 2020-09-01 15:31:50 using:
  ./bin/update_pch vcl vcl --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -284,7 +284,6 @@
 #include <vcl/dibtools.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/dockwin.hxx>
-#include <vcl/edit.hxx>
 #include <vcl/event.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/fntstyle.hxx>
@@ -317,6 +316,7 @@
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/combobox.hxx>
 #include <vcl/toolkit/dialog.hxx>
+#include <vcl/toolkit/edit.hxx>
 #include <vcl/toolkit/fixed.hxx>
 #include <vcl/toolkit/lstbox.hxx>
 #include <vcl/toolkit/spinfld.hxx>

@@ -24,8 +24,8 @@
 #include <vcl/toolkit/ivctrl.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/dialog.hxx>
+#include <vcl/toolkit/edit.hxx>
 #include <vcl/toolkit/field.hxx>
-#include <vcl/edit.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/toolkit/vclmedit.hxx>
 #include <vcl/uitest/logger.hxx>

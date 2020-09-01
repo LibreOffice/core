@@ -7316,7 +7316,6 @@ include/vcl/dllapi.h
 include/vcl/dndhelp.hxx
 include/vcl/dockingarea.hxx
 include/vcl/dockwin.hxx
-include/vcl/edit.hxx
 include/vcl/embeddedfontshelper.hxx
 include/vcl/errcode.hxx
 include/vcl/errinf.hxx
@@ -7419,6 +7418,7 @@ include/vcl/toolkit/calendar.hxx
 include/vcl/toolkit/combobox.hxx
 include/vcl/toolkit/controllayout.hxx
 include/vcl/toolkit/dialog.hxx
+include/vcl/toolkit/edit.hxx
 include/vcl/toolkit/field.hxx
 include/vcl/toolkit/fixed.hxx
 include/vcl/toolkit/fixedhyper.hxx

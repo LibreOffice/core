@@ -88,7 +88,7 @@
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/dockingarea.hxx>
 #include <vcl/dockwin.hxx>
-#include <vcl/edit.hxx>
+#include <vcl/toolkit/edit.hxx>
 #include <vcl/event.hxx>
 #include <vcl/toolkit/field.hxx>
 #include <vcl/toolkit/fixed.hxx>

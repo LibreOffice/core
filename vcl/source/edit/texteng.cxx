@@ -30,7 +30,7 @@
 #include <svl/ctloptions.hxx>
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/edit.hxx>
+#include <vcl/toolkit/edit.hxx>
 #include <vcl/virdev.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>

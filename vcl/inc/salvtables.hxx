@@ -14,7 +14,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/ctrl.hxx>
-#include <vcl/edit.hxx>
+#include <vcl/toolkit/edit.hxx>
 #include <vcl/formatter.hxx>
 #include <vcl/toolkit/spinfld.hxx>
 #include <vcl/toolkit/fixed.hxx>

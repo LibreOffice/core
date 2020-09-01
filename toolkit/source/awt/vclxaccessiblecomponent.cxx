@@ -31,7 +31,7 @@
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/window.hxx>
-#include <vcl/edit.hxx>
+#include <vcl/toolkit/edit.hxx>
 #include <vcl/settings.hxx>
 #include <tools/debug.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
