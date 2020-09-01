@@ -168,7 +168,6 @@ bool SdrView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
             case KeyFuncType::DELETE: DeleteMarked(); break;
             case KeyFuncType::UNDO: mpModel->Undo(); break;
             case KeyFuncType::REDO: mpModel->Redo(); break;
-            case KeyFuncType::REPEAT: mpModel->Repeat(*this); break;
             default: {
                 switch (rKEvt.GetKeyCode().GetFullCode()) {
                     case KEY_ESCAPE: {
