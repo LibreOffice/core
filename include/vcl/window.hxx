@@ -983,11 +983,6 @@ public:
     */
     void                                AlwaysDisableInput( bool bAlways, bool bChild = true );
 
-    /** get state of SetCallHandlersOnInputDisabled
-
-    @returns whether handlers are called regardless of input enabled state
-    */
-    bool                                IsCallHandlersOnInputDisabled() const;
     /** A window is in modal mode if one of its children or subchildren
         is a running modal window (a modal dialog)
 
