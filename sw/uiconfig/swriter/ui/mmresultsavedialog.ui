@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -24,9 +24,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -44,6 +41,11 @@
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="ok-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="mmresultsavedialog|extended_tip|ok">Saves the documents.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -120,6 +122,11 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="singlerb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="mmresultsavedialog|extended_tip|singlerb">Saves the merged document as a single file.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -136,6 +143,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">singlerb</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="individualrb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="mmresultsavedialog|extended_tip|individualrb">Saves the merged document as a separate file for each recipient. The file names of the documents are constructed from the name that you enter, followed by an underscore, and the number of the current record.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -160,6 +172,11 @@
                             <accessibility>
                               <relation type="label-for" target="from"/>
                             </accessibility>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="fromrb-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="mmresultsavedialog|extended_tip|fromrb">Selects a range of records starting at the record number in the From box and ending at the record number in the To box.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -189,6 +206,11 @@
                             <accessibility>
                               <relation type="labelled-by" target="fromrb"/>
                             </accessibility>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="from-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="mmresultsavedialog|extended_tip|from">Enter the number of the first record to include in the mail merge.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -202,6 +224,11 @@
                             <property name="activates_default">True</property>
                             <property name="text">1</property>
                             <property name="adjustment">adjustment2</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="to-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="mmresultsavedialog|extended_tip|to">Enter the number of the last record to include in the mail merge.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">3</property>
@@ -242,5 +269,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="MMResultSaveDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="mmresultsavedialog|extended_tip|MMResultSaveDialog">Save the mail merge output to file.</property>
+      </object>
+    </child>
   </object>
 </interface>

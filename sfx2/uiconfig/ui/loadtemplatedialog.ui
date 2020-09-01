@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.2 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sfx">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -42,6 +42,11 @@
                 <property name="receives_default">True</property>
                 <property name="no_show_all">True</property>
                 <property name="use_underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="fromfile-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="loadtemplatedialog|extended_tip|fromfile">Locate the file containing the styles that you want to load, and then click Open.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -156,6 +161,11 @@
                                 </child>
                               </object>
                             </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="categories-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="loadtemplatedialog|extended_tip|categories">Lists the available template categories. Click a category to view its contents in the Templates list.</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -223,6 +233,11 @@
                                 </child>
                               </object>
                             </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="templates-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="loadtemplatedialog|extended_tip|templates">Lists the available templates for the selected category.</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -261,6 +276,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="text-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="loadtemplatedialog|extended_tip|text">Loads the paragraph and the character styles from the selected document into the current document.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -276,6 +296,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="frame-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="loadtemplatedialog|extended_tip|frame">Loads the frame styles from the selected document into the current document.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -291,6 +316,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="pages-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="loadtemplatedialog|extended_tip|pages">Loads the page styles from the selected document into the current document.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -306,6 +336,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="numbering-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="loadtemplatedialog|extended_tip|numbering">Loads the numbering styles from the selected document into the current document.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -321,6 +356,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="overwrite-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="loadtemplatedialog|extended_tip|overwrite">Replaces styles in the current document that have the same name as the styles you are loading.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -403,8 +443,13 @@
       <action-widget response="-5">ok</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
+    <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="LoadTemplateDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="loadtemplatedialog|extended_tip|LoadTemplateDialog">Imports formatting styles from another document or template into the current document.</property>
+      </object>
     </child>
   </object>
 </interface>

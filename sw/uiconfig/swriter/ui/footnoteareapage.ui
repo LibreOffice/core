@@ -72,6 +72,11 @@
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">maxheight</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="maxheightpage-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="footnoteareapage|extended_tip|maxheightpage">Automatically adjusts the height of the footnote area depending on the number of footnotes.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -93,6 +98,11 @@
                     <accessibility>
                       <relation type="label-for" target="maxheightsb"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="maxheight-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="footnoteareapage|extended_tip|maxheight">Sets a maximum height for the footnote area. Enable this option, then enter the height.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -123,6 +133,11 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="digits">2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="spacetotext-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="footnoteareapage|extended_tip|spacetotext">Enter the amount of space to leave between the bottom page margin and the first line of text in the footnote area.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -141,6 +156,11 @@
                     <accessibility>
                       <relation type="labelled-by" target="maxheight"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="maxheightsb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="footnoteareapage|extended_tip|maxheightsb">Enter the maximum height for the footnote area.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -290,6 +310,11 @@
                       <item translatable="yes" context="footnoteareapage|position">Centered</item>
                       <item translatable="yes" context="footnoteareapage|position">Right</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="position-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="footnoteareapage|extended_tip|position">Select the horizontal alignment for the line that separates the main text from the footnote area.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -305,9 +330,13 @@
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
-                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="style-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="footnoteareapage|extended_tip|style">Select the formatting style for the separator line. If you do not want a separator line, choose "None".</property>
+                      </object>
                     </child>
                   </object>
                   <packing>
@@ -324,9 +353,13 @@
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
-                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="color-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="footnoteareapage|extended_tip|color">Select the color of the separator line.</property>
+                      </object>
                     </child>
                   </object>
                   <packing>
@@ -342,6 +375,11 @@
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment4</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="length-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="footnoteareapage|extended_tip|length">Enter the length of the separator line as a percentage of the page width area.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -357,6 +395,11 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment5</property>
                     <property name="digits">2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="spacingtocontents-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="footnoteareapage|extended_tip|spacingtocontents">Enter the amount of space to leave between the separator line and the first line of the footnote area.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -372,6 +415,11 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment3</property>
                     <property name="digits">2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="thickness-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="footnoteareapage|extended_tip|thickness">Select the thickness of the separator line.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -398,6 +446,11 @@
         <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="FootnoteAreaPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="footnoteareapage|extended_tip|FootnoteAreaPage">Specifies the layout options for footnotes, including the line that separates the footnote from the main body of document.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

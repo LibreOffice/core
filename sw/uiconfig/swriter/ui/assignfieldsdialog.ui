@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="AssignFieldsDialog">
@@ -10,9 +10,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -155,6 +152,11 @@
                                 <child>
                                   <placeholder/>
                                 </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="FIELDS-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="assignfieldsdialog|extended_tip|FIELDS">Select a field name in your database for each logical address element.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -258,6 +260,11 @@
                       <object class="GtkDrawingArea" id="PREVIEW">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="PREVIEW-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="assignfieldsdialog|extended_tip|PREVIEW">Displays a preview of the values of the first data record.</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -283,5 +290,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="AssignFieldsDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="assignfieldsdialog|extended_tip|AssignFieldsDialog">Matches the logical field names of the layout dialog to the field names in your database when you create new address blocks or salutations.</property>
+      </object>
+    </child>
   </object>
 </interface>

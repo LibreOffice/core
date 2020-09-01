@@ -146,6 +146,11 @@
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
                             <property name="shadow_type">out</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="nameedit-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="inserttable|extended_tip|nameedit">Enter a name for the table.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -189,6 +194,11 @@
                             <property name="shadow_type">none</property>
                             <property name="adjustment">adjustment1</property>
                             <property name="value">2</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="colspin-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="inserttable|extended_tip|colspin">Enter the number of columns that you want in the table.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -217,6 +227,11 @@
                             <property name="shadow_type">out</property>
                             <property name="adjustment">adjustment2</property>
                             <property name="value">2</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="rowspin-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="inserttable|extended_tip|rowspin">Enter the number of rows that you want in the table.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">3</property>
@@ -276,6 +291,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0.00000000022351741291</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="headercb-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="inserttable|extended_tip|headercb">Includes a heading row in the table.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -294,6 +314,11 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="repeatcb-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="inserttable|extended_tip|repeatcb">Repeats the heading of the table at the top of subsequent page if the table spans more than one page.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -309,6 +334,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="dontsplitcb-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="inserttable|extended_tip|dontsplitcb">Prevents the table from spanning more than one page.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -329,6 +359,11 @@
                                 <property name="activates_default">True</property>
                                 <property name="adjustment">adjustment3</property>
                                 <property name="value">1</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="repeatheaderspin-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="inserttable|extended_tip|repeatheaderspin">Select the number of rows that you want to use for the heading.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -445,6 +480,11 @@
                                     </child>
                                   </object>
                                 </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="formatlbinstable-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="inserttable|extended_tip|formatlbinstable">Select a predefined style for the new table.</property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>
@@ -490,6 +530,11 @@
     </action-widgets>
     <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="InsertTableDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="inserttable|extended_tip|InsertTableDialog">Inserts a table into the document. You can also click the arrow, drag to select the number of rows and columns to include in the table, and then click in the last cell.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

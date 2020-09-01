@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -137,6 +137,11 @@
                                 </child>
                               </object>
                             </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="form-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="numberingnamedialog|extended_tip|form">Click a numbering style in the list, and then enter a name for the style. The numbers correspond to the outline level that the styles are assigned to.</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -150,6 +155,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="entry-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="numberingnamedialog|extended_tip|entry">Click a numbering style in the list, and then enter a name for the style. The numbers correspond to the outline level that the styles are assigned to.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -184,7 +194,7 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
+    <child type="titlebar">
       <placeholder/>
     </child>
   </object>

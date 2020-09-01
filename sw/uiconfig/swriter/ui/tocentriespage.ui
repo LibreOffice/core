@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
-    <property name="upper">19.989999999999998</property>
-    <property name="step_increment">0.050000000000000003</property>
+    <property name="upper">19.99</property>
+    <property name="step_increment">0.05</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkAdjustment" id="adjustment2">
@@ -212,6 +212,11 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="use_underline">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="all-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|all">Applies the current settings to all levels without closing the dialog.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">2</property>
@@ -224,6 +229,11 @@
                                 <property name="can_focus">False</property>
                                 <property name="valign">center</property>
                                 <property name="hexpand">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="token-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|token">Displays the remainder of the Structure line.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -264,6 +274,11 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="use_underline">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="edit-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|edit">Opens a dialog where you can edit the selected character style.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">2</property>
@@ -276,6 +291,11 @@
                                 <property name="can_focus">False</property>
                                 <property name="valign">center</property>
                                 <property name="hexpand">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="charstyle-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|charstyle">Specify the formatting style for the selected part on the Structure line.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -309,6 +329,11 @@
                                     <property name="activates_default">True</property>
                                   </object>
                                 </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="fillchar-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|fillchar">Select the tab leader that you want use.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -338,6 +363,11 @@
                                 <property name="activates_default">True</property>
                                 <property name="adjustment">adjustment1</property>
                                 <property name="digits">2</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="tabstoppos-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|tabstoppos">Enter the distance to leave between the left page margin and the tab stop.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -353,6 +383,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="alignright-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|alignright">Aligns the tab stop to the right page margin.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">2</property>
@@ -384,6 +419,11 @@
                                   <item translatable="yes" context="tocentriespage|chapterentry">Description only</item>
                                   <item translatable="yes" context="tocentriespage|chapterentry">Number range and description</item>
                                 </items>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="chapterentry-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|chapterentry">Select the chapter information that you want to include in the index entry.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -412,6 +452,11 @@
                                 <property name="hexpand">True</property>
                                 <property name="activates_default">True</property>
                                 <property name="adjustment">adjustment2</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="entryoutlinelevel-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|entryoutlinelevel">Enter the maximum hierarchy level down to which objects are shown in the generated index.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -442,6 +487,11 @@
                                   <item translatable="yes" context="tocentriespage|numberformat">Number</item>
                                   <item translatable="yes" context="tocentriespage|numberformat">Number without separator</item>
                                 </items>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="numberformat-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|numberformat">Only visible when you click the E# button in the Structure line. Select to show the chapter number with or without separator.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -476,6 +526,11 @@
                               <object class="GtkComboBoxText" id="authfield">
                                 <property name="can_focus">False</property>
                                 <property name="no_show_all">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="authfield-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|authfield">To add an entry to the Structure line, click the entry, click in an empty box on the Structure line, and then click Insert.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -497,6 +552,11 @@
                                     <property name="receives_default">True</property>
                                     <property name="no_show_all">True</property>
                                     <property name="use_underline">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="insert-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|insert">Adds the reference code for the selected bibliography entry to the Structure line. Select an entry in the list, click in an empty box, and then click this button.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -511,6 +571,11 @@
                                     <property name="receives_default">True</property>
                                     <property name="no_show_all">True</property>
                                     <property name="use_underline">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="remove-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|remove">Removes the selected reference code from the Structure line.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -525,6 +590,11 @@
                                     <property name="receives_default">True</property>
                                     <property name="no_show_all">True</property>
                                     <property name="use_underline">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="chapterno-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|chapterno">Inserts the chapter number. To assign chapter numbering to a heading style, choose Tools - Chapter Numbering.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -538,6 +608,11 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="entrytext-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|entrytext">Inserts the text of the chapter heading.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -552,6 +627,11 @@
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
                                     <property name="use_underline">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="tabstop-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|tabstop">Inserts a tab stop. To add leader dots to the tab stop, select a character in the Fill character box. To change the position of the tab stop, enter a value in the Tab stop position box, or select the Align right check box.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -566,6 +646,11 @@
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
                                     <property name="use_underline">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="chapterinfo-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|chapterinfo">Inserts chapter information, such as the chapter heading and number. Select the information that you want to display in the Chapter entry box.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -580,6 +665,11 @@
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
                                     <property name="use_underline">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="pageno-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|pageno">Inserts the page number of the entry.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -594,6 +684,11 @@
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
                                     <property name="use_underline">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="hyperlink-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|hyperlink">Creates a hyperlink for the part of the entry that you enclose by the opening (LS) and the closing (LE) hyperlink tags. On the Structure line, click in the empty box in front of the part that you want to create a hyperlink for, and then click this button. Click in the empty box after the part that you want to hyperlink, and then click this button again. All hyperlinks must be unique. Available only for a table of contents.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -664,6 +759,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="reltostyle-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|reltostyle">Positions the tab stop relative to the "indent from left" value defined in the paragraph style selected on the Styles tab. Otherwise the tab stop is positioned relative to the left text margin.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -680,6 +780,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="commasep-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|commasep">Arranges the index entries on the same line, separated by commas.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -696,6 +801,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="alphadelim-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|alphadelim">Uses the initial letters of the alphabetically arranged index entries as section headings.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -721,6 +831,11 @@
                           <object class="GtkComboBoxText" id="mainstyle">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="mainstyle-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|mainstyle">Specify the formatting style for the main entries in the alphabetical index. To convert an index entry into a main entry, click in front of the index field in the document and then choose Edit - Index Entry.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -778,6 +893,11 @@
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">sortcontents</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="sortpos-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|sortpos">Sorts the bibliography entries according to the position of their references in the document.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -794,6 +914,11 @@
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">sortpos</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="sortcontents-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|sortcontents">Sorts the bibliography entries by the Sort keys that you specify, for example, by author or by year of publication.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -859,6 +984,11 @@
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
                             <property name="hexpand">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="key1lb-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|key1lb">Select the entry by which to sort the bibliography entries. This option is only available if you select the Content radio button in the Sort by area.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -895,6 +1025,11 @@
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
                             <property name="hexpand">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="key2lb-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|key2lb">Select the entry by which to sort the bibliography entries. This option is only available if you select the Content radio button in the Sort by area.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -907,6 +1042,11 @@
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
                             <property name="hexpand">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="key3lb-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|key3lb">Select the entry by which to sort the bibliography entries. This option is only available if you select the Content radio button in the Sort by area.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -924,6 +1064,11 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="up1cb-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|up1cb">Sorts the bibliography entries in ascending alphanumerical order.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -941,6 +1086,11 @@
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">up1cb</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="down1cb-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|down1cb">Sorts the bibliography entries in a descending alphanumerical order.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">3</property>
@@ -958,6 +1108,11 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="up2cb-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|up2cb">Sorts the bibliography entries in ascending alphanumerical order.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -975,6 +1130,11 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="up3cb-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|up3cb">Sorts the bibliography entries in ascending alphanumerical order.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -992,6 +1152,11 @@
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">up2cb</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="down2cb-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|down2cb">Sorts the bibliography entries in a descending alphanumerical order.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">3</property>
@@ -1009,6 +1174,11 @@
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">up3cb</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="down3cb-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|down3cb">Sorts the bibliography entries in a descending alphanumerical order.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">3</property>
@@ -1047,6 +1217,11 @@
         <property name="fill">True</property>
         <property name="position">0</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="TocEntriesPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|TocEntriesPage">Specify the format of the index or table entries. The appearance of this tab changes to reflect the type of index that you selected on the Type tab.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -24,9 +24,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -167,6 +164,11 @@
                         <property name="can_focus">True</property>
                         <property name="halign">end</property>
                         <property name="adjustment">adjustment1</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="outlines-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="abstractdialog|extended_tip|outlines">Enter the extent of the outline levels to be copied to the new document.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -179,6 +181,11 @@
                         <property name="can_focus">True</property>
                         <property name="halign">end</property>
                         <property name="adjustment">adjustment2</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="paras-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="abstractdialog|extended_tip|paras">Specify the maximum number of consecutive paragraphs to be included in the AutoAbstract document after each heading.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -213,5 +220,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="AbstractDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="abstractdialog|extended_tip|AbstractDialog">Copies the headings and a number of subsequent paragraphs in the active document to a new AutoAbstract text document. An AutoAbstract is useful for obtaining an overview of long documents.</property>
+      </object>
+    </child>
   </object>
 </interface>

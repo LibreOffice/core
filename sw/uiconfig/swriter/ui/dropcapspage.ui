@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustmentFLD_DISTANCE">
     <property name="upper">2</property>
-    <property name="step_increment">0.10000000000000001</property>
+    <property name="step_increment">0.1</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkAdjustment" id="adjustmentFLD_DROPCAPS">
@@ -63,6 +63,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="checkCB_SWITCH-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="dropcapspage|extended_tip|checkCB_SWITCH">Applies the drop cap settings to the selected paragraph.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -79,6 +84,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="checkCB_WORD-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="dropcapspage|extended_tip|checkCB_WORD">Displays the first letter of the first word in the paragraph as a drop cap, and the remaining letters of the word as large type.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -135,6 +145,11 @@
                         <property name="halign">start</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentFLD_DROPCAPS</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="spinFLD_DROPCAPS-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="dropcapspage|extended_tip|spinFLD_DROPCAPS">Enter the number of characters to convert to drop caps.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -148,6 +163,11 @@
                         <property name="halign">start</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentFLD_LINES</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="spinFLD_LINES-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="dropcapspage|extended_tip|spinFLD_LINES">Enter the number of lines that you want the drop cap to extend downward from the first line of the paragraph. Shorter paragraphs will not get drop caps.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -162,6 +182,11 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentFLD_DISTANCE</property>
                         <property name="digits">2</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="spinFLD_DISTANCE-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="dropcapspage|extended_tip|spinFLD_DISTANCE">Enter the amount of space to leave between the drop caps and the rest of the text in the paragraph.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -240,6 +265,11 @@
                         <property name="can_focus">True</property>
                         <property name="max_length">9</property>
                         <property name="activates_default">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="entryEDT_TEXT-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="dropcapspage|extended_tip|entryEDT_TEXT">Enter the text that you want to display as drop caps instead of the first letters of the paragraph.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -250,6 +280,11 @@
                       <object class="GtkComboBoxText" id="comboBOX_TEMPLATE">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="comboBOX_TEMPLATE-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="dropcapspage|extended_tip|comboBOX_TEMPLATE">Select the formatting style that you want to apply to the drop caps.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -317,6 +352,11 @@
         <property name="left_attach">1</property>
         <property name="top_attach">0</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="DropCapPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="dropcapspage|extended_tip|DropCapPage">Formats the first letter of a paragraph with a large capital letter, that can span several lines. The paragraph must span at least as many lines as you specify in the Lines box.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">

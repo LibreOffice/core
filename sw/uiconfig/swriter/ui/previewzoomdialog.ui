@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -131,6 +131,11 @@
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
                 <property name="adjustment">adjustment1</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="rows-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="previewzoomdialog|extended_tip|rows">Defines the number of rows of pages.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -144,6 +149,11 @@
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
                 <property name="adjustment">adjustment2</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="cols-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="previewzoomdialog|extended_tip|cols">Defines the number of pages shown in columns.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -164,8 +174,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
+    <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="PreviewZoomDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="previewzoomdialog|extended_tip|PreviewZoomDialog">Defines the number of pages displayed on screen. Click the arrow next to the icon to open a grid to select the number of pages to be displayed as rows and columns in the preview.</property>
+      </object>
     </child>
   </object>
 </interface>

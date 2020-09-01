@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -68,6 +68,11 @@
                         </child>
                       </object>
                     </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="level-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumberingpage|extended_tip|level">Click the chapter and outline level that you want to modify, and then specify the numbering options for the level.</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -129,6 +134,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="style-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumberingpage|extended_tip|style">Select the paragraph style that you want to assign to the selected chapter and outline level.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -182,6 +192,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="numbering-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumberingpage|extended_tip|numbering">Select the numbering style that you want to apply to the selected outline level.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -193,6 +208,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="charstyle-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumberingpage|extended_tip|charstyle">Select the format of the numbering character.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -208,6 +228,11 @@
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="value">1</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="sublevelsnf-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumberingpage|extended_tip|sublevelsnf">Select the number of outline levels to include in the chapter numbering. For example, select "3" to display three levels of chapter numbering: 1.1.1</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -235,6 +260,11 @@
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment1</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="startat-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumberingpage|extended_tip|startat">Enter the number that you want to restart the chapter numbering at.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -340,6 +370,11 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="prefix-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumberingpage|extended_tip|prefix">Enter the text that you want to display before the chapter number.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -352,6 +387,11 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="suffix-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumberingpage|extended_tip|suffix">Enter the text that you want to display after the chapter number.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>

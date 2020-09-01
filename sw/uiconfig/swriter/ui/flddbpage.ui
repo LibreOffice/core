@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -88,6 +88,11 @@
                                 </child>
                               </object>
                             </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="type-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="flddbpage|extended_tip|type">Lists the available field types. To add a field to your document, click a field type, click a field in the Select list, and then click Insert.</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -142,6 +147,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="condition-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="flddbpage|extended_tip|condition">For fields linked to a condition, enter the criteria here.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -164,6 +174,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="recnumber-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="flddbpage|extended_tip|recnumber">Enter the number of the record that you want to insert when the condition that you specify is met.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -243,7 +258,6 @@
                             <property name="headers_visible">False</property>
                             <property name="search_column">1</property>
                             <property name="enable_tree_lines">True</property>
-                            <property name="show_expanders">True</property>
                             <child internal-child="selection">
                               <object class="GtkTreeSelection" id="Macro Library List-selection1"/>
                             </child>
@@ -262,6 +276,11 @@
                                     <attribute name="text">1</attribute>
                                   </attributes>
                                 </child>
+                              </object>
+                            </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="select-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="flddbpage|extended_tip|select">Select the database table or the database query that you want the field to refer to.</property>
                               </object>
                             </child>
                           </object>
@@ -315,6 +334,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="browse-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="flddbpage|extended_tip|browse">Opens a file open dialog where you can select a database file (*.odb). The selected file is added to the Databases Selection list.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -358,6 +382,11 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="fromdatabasecb-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="flddbpage|extended_tip|fromdatabasecb">Uses the format defined in the selected database.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -378,6 +407,11 @@
                             <accessibility>
                               <relation type="label-for" target="numformat"/>
                             </accessibility>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="userdefinedcb-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="flddbpage|extended_tip|userdefinedcb">Applies the format that you select in the List of user-defined formats.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -393,6 +427,11 @@
                                 <property name="can_focus">True</property>
                                 <property name="no_show_all">True</property>
                                 <property name="hexpand">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="format-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="flddbpage|extended_tip|format">Lists the available user-defined formats.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -408,6 +447,11 @@
                                 <accessibility>
                                   <relation type="labelled-by" target="userdefinedcb"/>
                                 </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="numformat-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="flddbpage|extended_tip|numformat">Lists the available user-defined formats.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>

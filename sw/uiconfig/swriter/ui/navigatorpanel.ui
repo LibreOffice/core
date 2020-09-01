@@ -258,6 +258,11 @@
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes" context="navigatorpanel|contenttoggle|tooltip_text">Toggle Master View</property>
                         <property name="icon_name">sw/res/sc20244.png</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="contenttoggle-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|contenttoggle">Switches between master view and normal view if a master document is open.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -354,6 +359,11 @@
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes" context="navigatorpanel|root|tooltip_text">Content Navigation View</property>
                         <property name="icon_name">sw/res/sc20234.png</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="root-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|root">Switches between the display of all categories in the Navigator and the selected category.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -376,6 +386,11 @@
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes" context="navigatorpanel|header|tooltip_text">Header</property>
                         <property name="icon_name">sw/res/sc20179.png</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="header-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|header">Moves the cursor to the header, or from the header to the document text area.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -388,6 +403,11 @@
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes" context="navigatorpanel|footer|tooltip_text">Footer</property>
                         <property name="icon_name">sw/res/sc20177.png</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="footer-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|footer">Moves the cursor to the footer, or from the footer to the document text area.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -400,6 +420,11 @@
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes" context="navigatorpanel|anchor|tooltip_text">Anchor&lt;-&gt;Text</property>
                         <property name="icon_name">sw/res/sc20182.png</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="anchor-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|anchor">Jumps between the footnote text and the footnote anchor.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -412,6 +437,11 @@
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes" context="navigatorpanel|reminder|tooltip_text">Set Reminder</property>
                         <property name="icon_name">sw/res/sc20183.png</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="reminder-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|reminder">Click here to set a reminder at the current cursor position. You can define up to five reminders. To jump to a reminder, click the Navigation icon, in the Navigation window click the Reminder icon, and then click the Previous or Next button.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -434,6 +464,11 @@
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes" context="navigatorpanel|headings|tooltip_text">Heading Levels Shown</property>
                         <property name="icon_name">sw/res/sc20236.png</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="headings-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|headings">Click this icon, and then choose the number of heading outline levels that you want to view in the Navigator window.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -458,6 +493,11 @@
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes" context="navigatorpanel|listbox|tooltip_text">List Box On/Off</property>
                         <property name="icon_name">sw/res/sc20233.png</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="listbox-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|listbox">Shows or hides the Navigator list.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -480,6 +520,11 @@
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes" context="navigatorpanel|promote|tooltip_text">Promote Level</property>
                         <property name="icon_name">sw/res/sc20172.png</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="promote-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|promote">Increases the outline level of the selected heading, and the headings that occur below the heading, by one. To only increase the outline level of the selected heading, hold down Ctrl, and then click this icon.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -492,6 +537,11 @@
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes" context="navigatorpanel|demote|tooltip_text">Demote Level</property>
                         <property name="icon_name">sw/res/sc20173.png</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="demote-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|demote">Decreases the outline level of the selected heading, and the headings that occur below the heading, by one. To only decrease the outline level of the selected heading, hold down Ctrl, and then click this icon.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -504,6 +554,11 @@
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes" context="navigatorpanel|chapterup|tooltip_text">Promote Chapter</property>
                         <property name="icon_name">sw/res/sc20174.png</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="chapterup-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|chapterup">Moves the selected heading, and the text below the heading, up one heading position in the Navigator and in the document. To move only the selected heading and not the text associated with the heading, hold down Ctrl, and then click this icon.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -516,6 +571,11 @@
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes" context="navigatorpanel|chapterdown|tooltip_text">Demote Chapter</property>
                         <property name="icon_name">sw/res/sc20171.png</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="chapterdown-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|chapterdown">Moves the selected heading, and the text below the heading, down one heading position in the Navigator and in the document. To move only the selected heading and not the text associated with the heading, hold down Ctrl, and then click this icon.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -538,6 +598,11 @@
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes" context="navigatorpanel|dragmode|tooltip_text">Drag Mode</property>
                         <property name="icon_name">sw/res/sc20235.png</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="dragmode-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|dragmode">Sets the drag and drop options for inserting items from the Navigator into a document, for example, as a hyperlink. Click this icon, and then choose the option that you want to use.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -657,6 +722,11 @@
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes" context="navigatorpanel|globaltoggle|tooltip_text">Toggle Master View</property>
                 <property name="icon_name">sw/res/sc20244.png</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="globaltoggle-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|globaltoggle">Switches between master view and normal view if a master document is open.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>

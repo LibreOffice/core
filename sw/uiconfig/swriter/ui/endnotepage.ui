@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -86,6 +86,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">adjustment1</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="offsetnf-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="endnotepage|extended_tip|offsetnf">Enter the number for the first endnote in the document.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -97,6 +102,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="prefix-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="endnotepage|extended_tip|prefix">Enter the text that you want to display in front of the endnote number in the note text.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -108,6 +118,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="suffix-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="endnotepage|extended_tip|suffix">Enter the text that you want to display after the endnote number in the note text.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -118,6 +133,11 @@
                   <object class="GtkComboBoxText" id="numberinglb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="numberinglb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="endnotepage|extended_tip|numberinglb">Enter the number for the first endnote in the document.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -191,6 +211,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="parastylelb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="endnotepage|extended_tip|parastylelb">Select the paragraph style for the endnote text. Only special styles can be selected.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -202,6 +227,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="pagestylelb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="endnotepage|extended_tip|pagestylelb">Select the page style that you want to use for endnotes.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -237,6 +267,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="charanchorstylelb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="endnotepage|extended_tip|charanchorstylelb">Select the character style that you want to use for endnote anchors in the text area of your document.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -248,6 +283,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="charstylelb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="endnotepage|extended_tip|charstylelb">Select the character style that you want to use for the endnote numbers in the endnote area.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -273,6 +313,11 @@
         <property name="left_attach">1</property>
         <property name="top_attach">0</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="EndnotePage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="endnotepage|extended_tip|EndnotePage">Specifies the formatting for endnotes.</property>
+      </object>
     </child>
   </object>
 </interface>

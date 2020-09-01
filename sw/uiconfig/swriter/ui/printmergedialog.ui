@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkMessageDialog" id="PrintMergeDialog">
@@ -79,5 +79,13 @@
       <action-widget response="-9">no</action-widget>
       <action-widget response="-6">cancel</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="PrintMergeDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="printmergedialog|extended_tip|PrintMergeDialog">When you print a document that contains database fields, a dialog asks you if you want to print a form letter. If you answer Yes, the Mail Merge dialog opens where you can select the database records to print.</property>
+      </object>
+    </child>
   </object>
 </interface>

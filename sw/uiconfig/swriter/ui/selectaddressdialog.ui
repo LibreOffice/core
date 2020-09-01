@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -19,9 +19,6 @@
     <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -140,6 +137,11 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="add-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="selectaddressdialog|extended_tip|add">Select the database file that contains the addresses that you want to use as an address list.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -168,6 +170,11 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="create-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="selectaddressdialog|extended_tip|create">Opens the New Address List dialog, where you can create a new address list.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -182,6 +189,11 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="filter-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="selectaddressdialog|extended_tip|filter">Opens the Standard Filter dialog , where you can apply filters to the address list to display the recipients that you want to see.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -196,6 +208,11 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="edit-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="selectaddressdialog|extended_tip|edit">Opens the New Address List dialog, where you can edit the selected address list.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -210,6 +227,11 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="changetable-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="selectaddressdialog|extended_tip|changetable">Opens the Select Table dialog, where you can select another table to use for mail merge.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -308,5 +330,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="SelectAddressDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="selectaddressdialog|extended_tip|SelectAddressDialog">Select the address list that you want to use for mail merge, then click OK.</property>
+      </object>
+    </child>
   </object>
 </interface>

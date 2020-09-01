@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -60,6 +60,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="ftnntnum-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="footnotesendnotestabpage|extended_tip|ftnntnum">Restarts the footnote numbering at the number that you specify.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -79,6 +84,11 @@
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment1</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="ftnoffset-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="footnotesendnotestabpage|extended_tip|ftnoffset">Enter the number that you want to assign the footnote.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -137,6 +147,11 @@
                             <property name="max_length">50</property>
                             <property name="activates_default">True</property>
                             <property name="width_chars">6</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="ftnsuffix-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="footnotesendnotestabpage|extended_tip|ftnsuffix">Enter the text that you want to display after the footnote number.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">4</property>
@@ -161,6 +176,11 @@
                           <object class="GtkComboBoxText" id="ftnnumviewbox">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="ftnnumviewbox-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="footnotesendnotestabpage|extended_tip|ftnnumviewbox">Select the numbering style for the footnotes.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -174,6 +194,11 @@
                             <property name="max_length">50</property>
                             <property name="activates_default">True</property>
                             <property name="width_chars">6</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="ftnprefix-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="footnotesendnotestabpage|extended_tip|ftnprefix">Enter the text that you want to display in front of the footnote number.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -217,6 +242,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="ftnntattextend-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="footnotesendnotestabpage|extended_tip|ftnntattextend">Adds footnotes at the end of the section. If the section spans more than one page, the footnotes are added to the bottom of the page on which the footnote anchors appear.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -276,6 +306,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="endntattextend-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="footnotesendnotestabpage|extended_tip|endntattextend">Adds endnotes at the end of the section.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -300,6 +335,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="endntnum-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="footnotesendnotestabpage|extended_tip|endntnum">Restarts the endnote numbering at the number that you specify.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -319,6 +359,11 @@
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment2</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="endoffset-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="footnotesendnotestabpage|extended_tip|endoffset">Enter the number that you want to assign the endnote.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -357,6 +402,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="endntnumfmt-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="footnotesendnotestabpage|extended_tip|endntnumfmt">Specifies a custom numbering format for endnotes.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -377,6 +427,11 @@
                             <property name="max_length">50</property>
                             <property name="activates_default">True</property>
                             <property name="width_chars">6</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="endsuffix-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="footnotesendnotestabpage|extended_tip|endsuffix">Enter the text that you want to display after the endnote number.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">4</property>
@@ -401,6 +456,11 @@
                           <object class="GtkComboBoxText" id="endnumviewbox">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="endnumviewbox-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="footnotesendnotestabpage|extended_tip|endnumviewbox">Select the numbering style for the endnotes.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -414,6 +474,11 @@
                             <property name="max_length">50</property>
                             <property name="activates_default">True</property>
                             <property name="width_chars">6</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="endprefix-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="footnotesendnotestabpage|extended_tip|endprefix">Enter the text that you want to display in front of the endnote number</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -467,6 +532,11 @@
         <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="FootnotesEndnotesTabPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="footnotesendnotestabpage|extended_tip|FootnotesEndnotesTabPage">Specifies where footnotes and endnotes are displayed as well as their numbering formats.</property>
+      </object>
     </child>
   </object>
 </interface>

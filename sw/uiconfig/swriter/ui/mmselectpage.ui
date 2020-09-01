@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkBox" id="MMSelectPage">
@@ -36,6 +36,11 @@
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="currentdoc-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="mmselectpage|extended_tip|currentdoc">Uses the current Writer document as the base for the mail merge document.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -52,6 +57,11 @@
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">currentdoc</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="newdoc-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="mmselectpage|extended_tip|newdoc">Creates a new Writer document to use for the mail merge.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -69,6 +79,11 @@
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">currentdoc</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="loaddoc-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="mmselectpage|extended_tip|loaddoc">Select an existing Writer document to use as the base for the mail merge document.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -86,6 +101,11 @@
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">currentdoc</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="template-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="mmselectpage|extended_tip|template">Select the template that you want to create your mail merge document with.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -102,6 +122,11 @@
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">currentdoc</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="recentdoc-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="mmselectpage|extended_tip|recentdoc">Use an existing mail merge document as the base for a new mail merge document.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -113,6 +138,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="margin_left">18</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="recentdoclb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="mmselectpage|extended_tip|recentdoclb">Select the document.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -128,6 +158,11 @@
                     <property name="halign">start</property>
                     <property name="margin_left">18</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="browsedoc-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="mmselectpage|extended_tip|browsedoc">Locate the Writer document that you want to use, and then click Open.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -143,6 +178,11 @@
                     <property name="halign">start</property>
                     <property name="margin_left">18</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="browsetemplate-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="mmselectpage|extended_tip|browsetemplate">Opens a template selector dialog.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -169,6 +209,11 @@
         <property name="fill">True</property>
         <property name="position">0</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="MMSelectPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="mmselectpage|extended_tip|MMSelectPage">Specify the document that you want to use as a base for the mail merge document.</property>
+      </object>
     </child>
   </object>
 </interface>

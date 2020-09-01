@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -27,9 +27,6 @@
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="exchangedatabases|ExchangeDatabasesDialog">Exchange Databases</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -158,6 +155,11 @@
                             <property name="receives_default">True</property>
                             <property name="halign">start</property>
                             <property name="use_underline">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="browse-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="exchangedatabases|extended_tip|browse">Opens a file open dialog to select a database file (*.odb). The selected file is added to the Available Databases list.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -200,7 +202,6 @@ Use the browse button to select a database file.</property>
                                 <property name="vexpand">True</property>
                                 <property name="model">liststore1</property>
                                 <property name="headers_visible">False</property>
-                                <property name="show_expanders">True</property>
                                 <property name="search_column">1</property>
                                 <property name="enable_tree_lines">True</property>
                                 <child internal-child="selection">
@@ -221,6 +222,11 @@ Use the browse button to select a database file.</property>
                                         <attribute name="text">1</attribute>
                                       </attributes>
                                     </child>
+                                  </object>
+                                </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="inuselb-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="exchangedatabases|extended_tip|inuselb">Lists the databases that are currently in use.</property>
                                   </object>
                                 </child>
                               </object>
@@ -248,7 +254,6 @@ Use the browse button to select a database file.</property>
                                 <property name="vexpand">True</property>
                                 <property name="model">liststore2</property>
                                 <property name="headers_visible">False</property>
-                                <property name="show_expanders">True</property>
                                 <property name="search_column">1</property>
                                 <property name="enable_tree_lines">True</property>
                                 <child internal-child="selection">
@@ -269,6 +274,11 @@ Use the browse button to select a database file.</property>
                                         <attribute name="text">1</attribute>
                                       </attributes>
                                     </child>
+                                  </object>
+                                </child>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="availablelb-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="exchangedatabases|extended_tip|availablelb">Lists the databases that are registered in %PRODUCTNAME.</property>
                                   </object>
                                 </child>
                               </object>
@@ -324,7 +334,7 @@ Use the browse button to select a database file.</property>
                   <object class="GtkLabel" id="dbnameft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="no">DataSource.Command</property>
+                    <property name="label">DataSource.Command</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -353,5 +363,13 @@ Use the browse button to select a database file.</property>
       <action-widget response="-7">close</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="ExchangeDatabasesDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="exchangedatabases|extended_tip|ExchangeDatabasesDialog">Change the data sources for the current document.</property>
+      </object>
+    </child>
   </object>
 </interface>

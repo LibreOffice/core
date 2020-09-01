@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="intervaladjustment">
@@ -29,9 +29,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -110,6 +107,11 @@
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="shownumbering-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="linenumbering|extended_tip|shownumbering">Adds line numbers to the current document.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -213,6 +215,11 @@
                               <object class="GtkComboBoxText" id="styledropdown">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="styledropdown-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="linenumbering|extended_tip|styledropdown">Select the formatting style that you want to use for the line numbers.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -224,6 +231,11 @@
                               <object class="GtkComboBoxText" id="formatdropdown">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="formatdropdown-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="linenumbering|extended_tip|formatdropdown">Select the numbering style that you want to use.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -241,6 +253,11 @@
                                   <item translatable="yes" context="linenumbering|positionstore">Inner</item>
                                   <item translatable="yes" context="linenumbering|positionstore">Outer</item>
                                 </items>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="positiondropdown-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="linenumbering|extended_tip|positiondropdown">Select where you want the line numbers to appear.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -255,6 +272,11 @@
                                 <property name="halign">start</property>
                                 <property name="adjustment">spacingadjustment</property>
                                 <property name="digits">2</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="spacingspin-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="linenumbering|extended_tip|spacingspin">Enter the amount of space that you want to leave between the line numbers and the text.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -272,6 +294,11 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="adjustment">intervaladjustment</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="intervalspin-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="linenumbering|extended_tip|intervalspin">Enter the counting interval for the line numbers.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -372,6 +399,11 @@
                                 <property name="halign">start</property>
                                 <property name="activates_default">True</property>
                                 <property name="width_chars">3</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="textentry-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="linenumbering|extended_tip|textentry">Enter the text that you want to use as a separator.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -389,6 +421,11 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="adjustment">lineadjustment</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="linesspin-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="linenumbering|extended_tip|linesspin">Enter the number of lines to leave between the separators.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -464,6 +501,11 @@
                                 <property name="xalign">0</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="blanklines-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="linenumbering|extended_tip|blanklines">Includes empty paragraphs in the line count.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -480,6 +522,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="linesintextframes-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="linenumbering|extended_tip|linesintextframes">Adds line numbers to text in frames. The numbering restarts in each frame, and is excluded from the line count in the main text area of the document.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -512,6 +559,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="restarteverynewpage-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="linenumbering|extended_tip|restarteverynewpage">Restarts line numbering at the top of each page in the document.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -564,15 +616,9 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-  </object>
-  <object class="GtkSizeGroup" id="sizegroupWidget">
-    <widgets>
-      <widget name="styledropdown"/>
-      <widget name="formatdropdown"/>
-      <widget name="positiondropdown"/>
-      <widget name="box4"/>
-      <widget name="box6"/>
-    </widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroupLabel">
     <widgets>
@@ -583,6 +629,15 @@
       <widget name="interval"/>
       <widget name="text"/>
       <widget name="every"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroupWidget">
+    <widgets>
+      <widget name="styledropdown"/>
+      <widget name="formatdropdown"/>
+      <widget name="positiondropdown"/>
+      <widget name="box4"/>
+      <widget name="box6"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroupWidget1">

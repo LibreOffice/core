@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -118,6 +118,11 @@
                     <accessibility>
                       <relation type="member-of" target="pos"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="pospagecb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="footnotepage|extended_tip|pospagecb">Displays footnotes at the bottom of the page.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -137,6 +142,11 @@
                     <accessibility>
                       <relation type="member-of" target="pos"/>
                     </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="posdoccb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="footnotepage|extended_tip|posdoccb">Displays footnotes at the end of the document as endnotes.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -149,6 +159,11 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment1</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="offsetnf-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="footnotepage|extended_tip|offsetnf">Enter the number for the first footnote in the document. This option is only available if you selected "Per Document" in the Counting box.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -164,6 +179,11 @@
                       <item translatable="yes" context="footnotepage|liststore1">Per chapter</item>
                       <item translatable="yes" context="footnotepage|liststore1">Per document</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="countinglb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="footnotepage|extended_tip|countinglb">Select the numbering option for the footnotes.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -175,6 +195,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="prefix-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="footnotepage|extended_tip|prefix">Enter the text that you want to display in front of the footnote number in the note text.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -186,6 +211,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="suffix-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="footnotepage|extended_tip|suffix">Enter the text that you want to display after the footnote number in the note text.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -196,6 +226,11 @@
                   <object class="GtkComboBoxText" id="numberinglb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="numberinglb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="footnotepage|extended_tip|numberinglb">Select the numbering style that you want to use.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -276,6 +311,11 @@
                     <property name="hexpand">True</property>
                     <property name="max_length">30</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="contfromed-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="footnotepage|extended_tip|contfromed">Enter the text that you want to display on the page where the footnotes are continued, for example, "Continued from Page ". %PRODUCTNAME Writer automatically inserts the number of the previous page.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -289,6 +329,11 @@
                     <property name="hexpand">True</property>
                     <property name="max_length">30</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="conted-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="footnotepage|extended_tip|conted">Enter the text that you want to display when the footnotes are continued on the next page, for example, "Continued on Page ". %PRODUCTNAME Writer automatically inserts the number of the following page.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -362,6 +407,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="parastylelb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="footnotepage|extended_tip|parastylelb">Select the paragraph style for the footnote text. Only special styles can be selected.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -373,6 +423,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="pagestylelb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="footnotepage|extended_tip|pagestylelb">Select the page style that you want to use for footnotes.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -384,6 +439,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="charanchorstylelb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="footnotepage|extended_tip|charanchorstylelb">Select the character style that you want to use for footnote anchors in the text area of your document.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -395,6 +455,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="charstylelb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="footnotepage|extended_tip|charstylelb">Select the character style that you want to use for the footnote numbers in the footnote area.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -444,6 +509,11 @@
         <property name="left_attach">1</property>
         <property name="top_attach">0</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="FootnotePage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="footnotepage|extended_tip|FootnotePage">Specifies the formatting for footnotes.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroupLabel">

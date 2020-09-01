@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.2 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -181,6 +181,11 @@
                                 <accessibility>
                                   <relation type="member-of" target="key1"/>
                                 </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="up1-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="sortdialog|extended_tip|up1">Sorts in ascending order, (for example, 1, 2, 3 or a, b, c).</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -201,6 +206,11 @@
                                 <accessibility>
                                   <relation type="member-of" target="key1"/>
                                 </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="down1-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="sortdialog|extended_tip|down1">Sorts in descending order (for example, 9, 8, 7 or z, y, x).</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -231,6 +241,11 @@
                                 <accessibility>
                                   <relation type="member-of" target="key2"/>
                                 </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="up2-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="sortdialog|extended_tip|up2">Sorts in ascending order, (for example, 1, 2, 3 or a, b, c).</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -251,6 +266,11 @@
                                 <accessibility>
                                   <relation type="member-of" target="key2"/>
                                 </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="down2-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="sortdialog|extended_tip|down2">Sorts in descending order (for example, 9, 8, 7 or z, y, x).</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -281,6 +301,11 @@
                                 <accessibility>
                                   <relation type="member-of" target="key3"/>
                                 </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="up3-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="sortdialog|extended_tip|up3">Sorts in ascending order, (for example, 1, 2, 3 or a, b, c).</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -301,6 +326,11 @@
                                 <accessibility>
                                   <relation type="member-of" target="key3"/>
                                 </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="down3-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="sortdialog|extended_tip|down3">Sorts in descending order (for example, 9, 8, 7 or z, y, x).</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -319,11 +349,16 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_underline">True</property>
                             <property name="valign">center</property>
+                            <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="key1-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="sortdialog|extended_tip|key1">Specifies additional sorting criteria. You can also combine sort keys.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -336,10 +371,15 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_underline">True</property>
                             <property name="valign">center</property>
+                            <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="key2-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="sortdialog|extended_tip|key2">Specifies additional sorting criteria. You can also combine sort keys.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -352,10 +392,15 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_underline">True</property>
                             <property name="valign">center</property>
-                            <property name="xalign">0.0099999997764825821</property>
+                            <property name="use_underline">True</property>
+                            <property name="xalign">0.009999999776482582</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="key3-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="sortdialog|extended_tip|key3">Specifies additional sorting criteria. You can also combine sort keys.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -373,6 +418,11 @@
                               <relation type="labelled-by" target="column"/>
                               <relation type="member-of" target="key1"/>
                             </accessibility>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="colsb1-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="sortdialog|extended_tip|colsb1">Enter the number of the table column that you want to use as a basis for sorting.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -390,6 +440,11 @@
                               <relation type="labelled-by" target="column"/>
                               <relation type="member-of" target="key2"/>
                             </accessibility>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="colsb2-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="sortdialog|extended_tip|colsb2">Enter the number of the table column that you want to use as a basis for sorting.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -407,6 +462,11 @@
                               <relation type="labelled-by" target="column"/>
                               <relation type="member-of" target="key3"/>
                             </accessibility>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="colsb3-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="sortdialog|extended_tip|colsb3">Enter the number of the table column that you want to use as a basis for sorting.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -426,6 +486,7 @@
                             <child internal-child="accessible">
                               <object class="AtkObject" id="typelb1-atkobject">
                                 <property name="AtkObject::accessible-name" translatable="yes" context="sortdialog|typelb1-atkobject">Key type</property>
+                                <property name="AtkObject::accessible-description" translatable="yes" context="sortdialog|extended_tip|typelb1">Select the sorting option that you want to use.</property>
                               </object>
                             </child>
                           </object>
@@ -448,6 +509,7 @@
                             <child internal-child="accessible">
                               <object class="AtkObject" id="typelb2-atkobject">
                                 <property name="AtkObject::accessible-name" translatable="yes" context="sortdialog|typelb2-atkobject">Key type</property>
+                                <property name="AtkObject::accessible-description" translatable="yes" context="sortdialog|extended_tip|typelb2">Select the sorting option that you want to use.</property>
                               </object>
                             </child>
                           </object>
@@ -469,6 +531,7 @@
                             <child internal-child="accessible">
                               <object class="AtkObject" id="typelb3-atkobject">
                                 <property name="AtkObject::accessible-name" translatable="yes" context="sortdialog|typelb3-atkobject">Key type</property>
+                                <property name="AtkObject::accessible-description" translatable="yes" context="sortdialog|extended_tip|typelb3">Select the sorting option that you want to use.</property>
                               </object>
                             </child>
                           </object>
@@ -489,7 +552,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="sortdialog|1">Sort Criteria</property>
-                    <property name="xalign">0.56000000238418579</property>
+                    <property name="xalign">0.5600000023841858</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -536,6 +599,11 @@
                                 <property name="xalign">0</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="columns-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="sortdialog|extended_tip|columns">Sorts the columns in the table according to the current sort options.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -552,6 +620,11 @@
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">columns</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="rows-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="sortdialog|extended_tip|rows">Sorts the rows in the table or the paragraphs in the selection according to the current sort options.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -607,6 +680,11 @@
                                 <property name="xalign">0</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="tabs-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="sortdialog|extended_tip|tabs">If the selected paragraphs correspond to a list separated by tabs, select this option.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -628,6 +706,11 @@
                                   <relation type="label-for" target="separator"/>
                                   <relation type="label-for" target="delimpb"/>
                                 </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="character-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="sortdialog|extended_tip|character">Enter the character that you want to use as a separator in the selected area.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -651,6 +734,11 @@
                                     <accessibility>
                                       <relation type="labelled-by" target="character"/>
                                     </accessibility>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="separator-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="sortdialog|extended_tip|separator">Enter the character that you want to use as a separator in the selected area.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -667,6 +755,11 @@
                                       <relation type="labelled-by" target="character"/>
                                       <relation type="member-of" target="character"/>
                                     </accessibility>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="delimpb-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="sortdialog|extended_tip|delimpb">Opens the Special Characters dialog, where you can select the character that you want to use as a separator.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -735,6 +828,11 @@
                                 <property name="can_focus">True</property>
                               </object>
                             </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="langlb-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="sortdialog|extended_tip|langlb">Select the language that defines the sorting rules.</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -772,10 +870,15 @@
                             <property name="label" translatable="yes" context="sortdialog|matchcase">Match case</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="use_underline">True</property>
                             <property name="receives_default">False</property>
+                            <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="matchcase-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="sortdialog|extended_tip|matchcase">Distinguishes between uppercase and lowercase letters when you sort a table. For Asian languages special handling applies.</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -817,8 +920,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
+    <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="SortDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="sortdialog|extended_tip|SortDialog">Sorts the selected paragraphs or table rows alphabetically or numerically.</property>
+      </object>
     </child>
   </object>
 </interface>

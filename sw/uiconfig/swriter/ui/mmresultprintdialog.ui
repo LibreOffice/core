@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -39,6 +39,11 @@
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="ok-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="mmresultprintdialog|extended_tip|ok">Prints the mail merge documents.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -124,6 +129,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="printers-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="mmresultprintdialog|extended_tip|printers">Select the printer.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -137,6 +147,11 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="printersettings-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="mmresultprintdialog|extended_tip|printersettings">Changes the printer properties.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -196,6 +211,11 @@
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">fromrb</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="printallrb-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="mmresultprintdialog|extended_tip|printallrb">Prints documents for all recipients.</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -223,6 +243,11 @@
                             <accessibility>
                               <relation type="label-for" target="from"/>
                             </accessibility>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="fromrb-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="mmresultprintdialog|extended_tip|fromrb">Selects a range of records starting at the record number in the From box and ending at the record number in the To box.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -252,6 +277,11 @@
                             <accessibility>
                               <relation type="labelled-by" target="fromrb"/>
                             </accessibility>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="from-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="mmresultprintdialog|extended_tip|from">Enter the number of the first record to include in the mail merge.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -265,6 +295,11 @@
                             <property name="text">1</property>
                             <property name="adjustment">adjustment2</property>
                             <property name="value">1</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="to-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="mmresultprintdialog|extended_tip|to">Enter the number of the last record to include in the mail merge.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">3</property>
@@ -306,8 +341,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
+    <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="MMResultPrintDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="mmresultprintdialog|extended_tip|MMResultPrintDialog">Prints the mail merge output for all or some recipients.</property>
+      </object>
     </child>
   </object>
 </interface>

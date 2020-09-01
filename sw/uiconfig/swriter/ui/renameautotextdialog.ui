@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="RenameAutoTextDialog">
@@ -10,9 +10,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -112,6 +109,11 @@
                     <property name="editable">False</property>
                     <property name="activates_default">True</property>
                     <property name="width_chars">32</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="oldname-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="renameautotextdialog|extended_tip|oldname">Displays the current name of the selected AutoText item.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -126,6 +128,11 @@
                     <property name="max_length">60</property>
                     <property name="activates_default">True</property>
                     <property name="width_chars">32</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="newname-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="renameautotextdialog|extended_tip|newname">Type the new name for the selected AutoText component.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -181,6 +188,11 @@
                     <property name="editable">False</property>
                     <property name="activates_default">True</property>
                     <property name="width_chars">6</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="oldsc-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="renameautotextdialog|extended_tip|oldsc">Assigns a shortcut to the selected AutoText entry.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -193,6 +205,11 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="width_chars">6</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="newsc-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="renameautotextdialog|extended_tip|newsc">Assigns a shortcut to the selected AutoText entry.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -218,5 +235,8 @@
       <action-widget response="-5">ok</action-widget>
       <action-widget response="-6">cancel</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>

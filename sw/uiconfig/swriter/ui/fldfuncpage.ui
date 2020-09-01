@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -19,14 +19,6 @@
     </columns>
   </object>
   <object class="GtkTreeStore" id="liststore3">
-    <columns>
-      <!-- column-name text -->
-      <column type="gchararray"/>
-      <!-- column-name id -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkTreeStore" id="liststore4">
     <columns>
       <!-- column-name text -->
       <column type="gchararray"/>
@@ -85,6 +77,11 @@
                             <attribute name="text">0</attribute>
                           </attributes>
                         </child>
+                      </object>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="type-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="fldfuncpage|extended_tip|type">Lists the available field types. To add a field to your document, click a field type, click a field in the Select list, and then click Insert.</property>
                       </object>
                     </child>
                   </object>
@@ -227,6 +224,11 @@
                         </child>
                       </object>
                     </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="format-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="fldfuncpage|extended_tip|format">Click the format that you want to apply to the selected field, or click "Additional formats" to define a custom format.</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -267,6 +269,11 @@
             <property name="receives_default">True</property>
             <property name="halign">end</property>
             <property name="use_underline">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="macro-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="fldfuncpage|extended_tip|macro">Opens the Macro Selector, where you can choose the macro that will run when you click the selected field in the document.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -299,6 +306,11 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="value-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="fldfuncpage|extended_tip|value">Sets additional function parameters for fields. The type of parameter depends on the field type that you select.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -375,6 +387,11 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="cond1-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="fldfuncpage|extended_tip|cond1">Enter the text to display when the condition is met in the Then box, and the text to display when the condition is not met in the Else box.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -412,6 +429,11 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="cond2-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="fldfuncpage|extended_tip|cond2">Enter the text to display when the condition is met in the Then box, and the text to display when the condition is not met in the Else box.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -455,6 +477,11 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="item-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="fldfuncpage|extended_tip|item">Enter a new item.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -475,6 +502,11 @@
                 <property name="receives_default">True</property>
                 <property name="halign">start</property>
                 <property name="use_stock">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="add-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="fldfuncpage|extended_tip|add">Adds the Item to the list.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -531,6 +563,11 @@
                             </child>
                           </object>
                         </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="listitems-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="fldfuncpage|extended_tip|listitems">Lists the items. The topmost item is shown in the document.</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -555,6 +592,11 @@
                         <property name="receives_default">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="remove-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="fldfuncpage|extended_tip|remove">Removes the selected item from the list.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -569,6 +611,11 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="up-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="fldfuncpage|extended_tip|up">Moves the selected item up in the list.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -583,6 +630,11 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="down-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="fldfuncpage|extended_tip|down">Moves the selected item down in the list.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -621,6 +673,11 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="listname-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="fldfuncpage|extended_tip|listname">Enter a unique name for the Input list.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -660,5 +717,13 @@
       <widget name="select"/>
       <widget name="format"/>
     </widgets>
+  </object>
+  <object class="GtkTreeStore" id="liststore4">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
   </object>
 </interface>

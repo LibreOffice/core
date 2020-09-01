@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkImage" id="image1">
@@ -114,6 +114,11 @@
                             </child>
                           </object>
                         </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="levels-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tocstylespage|extended_tip|levels">Select the index level that you change the formatting of.</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -153,6 +158,11 @@
                             </child>
                           </object>
                         </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="styles-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tocstylespage|extended_tip|styles">Select the paragraph style that you want to apply to the selected index level, and then click the Assign (&lt;) button.</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -170,6 +180,11 @@
                     <property name="halign">end</property>
                     <property name="valign">center</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="default-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tocstylespage|extended_tip|default">Resets the formatting of the selected level to the "Default" paragraph style.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -185,6 +200,11 @@
                     <property name="halign">end</property>
                     <property name="valign">center</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="edit-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tocstylespage|extended_tip|edit">Opens the Paragraph Style dialog, where you can modify the selected paragraph style.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -199,6 +219,11 @@
                     <property name="halign">center</property>
                     <property name="valign">start</property>
                     <property name="image">image1</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="assign-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="tocstylespage|extended_tip|assign">Formats the selected index level with the selected paragraph style.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>

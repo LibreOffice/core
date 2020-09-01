@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkImage" id="image1">
@@ -94,9 +94,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -200,11 +197,12 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <property name="image">image1</property>
                                 <property name="tooltip_text" translatable="yes" context="assignstylesdialog|left|tooltip_text">Promote level</property>
+                                <property name="image">image1</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="left-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="assignstylesdialog|left-atkobject">Left</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="assignstylesdialog|extended_tip|left">Moves the selected paragraph style up one level in the index hierarchy.</property>
                                   </object>
                                 </child>
                               </object>
@@ -219,11 +217,12 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <property name="image">image2</property>
                                 <property name="tooltip_text" translatable="yes" context="assignstylesdialog|right|tooltip_text">Demote level</property>
+                                <property name="image">image2</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="right-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="assignstylesdialog|right-atkobject">Right</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="assignstylesdialog|extended_tip|right">Moves the selected paragraph style down one level in the index hierarchy.</property>
                                   </object>
                                 </child>
                               </object>
@@ -481,5 +480,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="AssignStylesDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="assignstylesdialog|extended_tip|AssignStylesDialog">Creates index entries from specific paragraph styles.</property>
+      </object>
+    </child>
   </object>
 </interface>

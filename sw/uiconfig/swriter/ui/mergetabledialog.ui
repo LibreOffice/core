@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="MergeTableDialog">
@@ -150,8 +150,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
+    <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="MergeTableDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="mergetabledialog|extended_tip|MergeTableDialog">Combines two consecutive tables into a single table. The tables must be directly next to each other and not separated by an empty paragraph.</property>
+      </object>
     </child>
   </object>
 </interface>

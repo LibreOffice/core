@@ -91,6 +91,11 @@
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="autowidth-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|autowidth">Creates columns of equal width.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -200,6 +205,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="widthft"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="width3mf-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|width3mf">Enter the width of the column.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">4</property>
@@ -218,6 +228,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="widthft"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="width2mf-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|width2mf">Enter the width of the column.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -236,6 +251,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="widthft"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="width1mf-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|width1mf">Enter the width of the column.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -275,6 +295,11 @@
                             <accessibility>
                               <relation type="labelled-by" target="distft"/>
                             </accessibility>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="spacing1mf-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|spacing1mf">Enter the amount of space that you want to leave between the columns.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -292,6 +317,11 @@
                             <accessibility>
                               <relation type="labelled-by" target="distft"/>
                             </accessibility>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="spacing2mf-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|spacing2mf">Enter the amount of space that you want to leave between the columns.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -314,6 +344,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="columnft"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="back-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|back">Moves the column display one column to the left.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -329,6 +364,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="columnft"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="next-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|next">Moves the column display one column to the right.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">5</property>
@@ -458,9 +498,13 @@
                     <property name="receives_default">False</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
-                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="linestylelb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|linestylelb">Select the formatting style for the column separator line. If you do not want a separator line, choose "None".</property>
+                      </object>
                     </child>
                   </object>
                   <packing>
@@ -477,6 +521,11 @@
                       <item translatable="yes" context="columnpage|lineposlb">Centered</item>
                       <item translatable="yes" context="columnpage|lineposlb">Bottom</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="lineposlb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|lineposlb">Select the vertical alignment of the separator line. This option is only available if Height value of the line is less than 100%.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -489,6 +538,11 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment5</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="lineheightmf-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|lineheightmf">Enter the length of the separator line as a percentage of the height of the column area.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -515,7 +569,6 @@
                     <property name="receives_default">False</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
-                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>
@@ -632,6 +685,11 @@
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustment1</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="colsnf-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|colsnf">Enter the number of columns that you want in the page, frame, or section.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -658,6 +716,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="balance-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|balance">Distributes the text in multi-column sections. The text flows into all columns to the same height. The height of the section adjusts automatically.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -680,6 +743,11 @@
                                   <item id="4" translatable="yes" context="columnpage|liststore2">Frame</item>
                                   <item id="3" translatable="yes" context="columnpage|liststore2">Page Style: </item>
                                 </items>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="applytolb-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|applytolb">Select the item that you want to apply the column layout to.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -758,6 +826,11 @@
                         <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="valueset-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|valueset">Enter the number of columns that you want in the page, frame, or section.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -823,6 +896,11 @@
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="ColumnPage-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|ColumnPage">Specifies the number of columns and the column layout for a page style, frame, or section.</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
