@@ -235,7 +235,8 @@ OString InsertOLE1HeaderFromOle10NativeStream(tools::SvRef<SotStorage>& xStorage
 
 /// Inserts an OLE1 header before an OLE2 storage.
 OString InsertOLE1Header(SvStream& rOle2, SvStream& rOle1, sal_uInt32& nWidth, sal_uInt32& nHeight,
-                         SwOLENode& rOLENode)
+                         SwOLENode& rOLENode, const sal_uInt8* /*pPresentationData*/,
+                         sal_uInt64 /*nPresentationData*/)
 {
     rOle2.Seek(0);
     tools::SvRef<SotStorage> xStorage(new SotStorage(rOle2));
@@ -284,6 +285,7 @@ OString InsertOLE1Header(SvStream& rOle2, SvStream& rOle1, sal_uInt32& nWidth, s
     SvMemoryStream aPresentationData;
     if (ParseOLE2Presentation(rOle2, nWidth, nHeight, aPresentationData))
     {
+        // Take presentation data for OLE1 from OLE2.
         // OLEVersion.
         rOle1.WriteUInt32(0x00000501);
         // FormatID: constant means the ClassName field is present.
@@ -312,8 +314,9 @@ OString InsertOLE1Header(SvStream& rOle2, SvStream& rOle1, sal_uInt32& nWidth, s
     return aClassName;
 }
 
-/// Writes rGraphic with size from rOLENode to rRtf as an RTF hexdump.
-void WrapOleGraphicInRtf(SvStream& rRtf, const SwOLENode& rOLENode, const Graphic& rGraphic)
+/// Writes presentation data with the specified size to rRtf as an RTF hexdump.
+void WrapOleGraphicInRtf(SvStream& rRtf, sal_uInt32 nWidth, sal_uInt32 nHeight,
+                         const sal_uInt8* pPresentationData, sal_uInt64 nPresentationData)
 {
     // Start result.
     rRtf.WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_RESULT);
@@ -322,25 +325,18 @@ void WrapOleGraphicInRtf(SvStream& rRtf, const SwOLENode& rOLENode, const Graphi
     rRtf.WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_PICT);
 
     rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_WMETAFILE "8");
-    Size aSize(rOLENode.GetTwipSize());
     rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PICW);
-    rRtf.WriteOString(OString::number(aSize.getWidth()));
+    rRtf.WriteOString(OString::number(nWidth));
     rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PICH);
-    rRtf.WriteOString(OString::number(aSize.getHeight()));
+    rRtf.WriteOString(OString::number(nHeight));
     rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PICWGOAL);
-    rRtf.WriteOString(OString::number(aSize.getWidth()));
+    rRtf.WriteOString(OString::number(nWidth));
     rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PICHGOAL);
-    rRtf.WriteOString(OString::number(aSize.getHeight()));
-    SvMemoryStream aGraphicStream;
-    if (GraphicConverter::Export(aGraphicStream, rGraphic, ConvertDataFormat::WMF) == ERRCODE_NONE)
+    rRtf.WriteOString(OString::number(nHeight));
+    if (pPresentationData)
     {
-        const sal_uInt8* pGraphicAry = static_cast<const sal_uInt8*>(aGraphicStream.GetData());
-        sal_uInt64 nCurrent = aGraphicStream.Tell();
-        sal_uInt64 nSize = aGraphicStream.Seek(STREAM_SEEK_TO_END);
-        aGraphicStream.Seek(nCurrent);
-        msfilter::rtfutil::StripMetafileHeader(pGraphicAry, nSize);
         rRtf.WriteCharPtr(SAL_NEWLINE_STRING);
-        msfilter::rtfutil::WriteHex(pGraphicAry, nSize, &rRtf);
+        msfilter::rtfutil::WriteHex(pPresentationData, nPresentationData, &rRtf);
     }
 
     // End pict.
@@ -401,9 +397,29 @@ bool WrapOleInRtf(SvStream& rOle2, SvStream& rRtf, SwOLENode& rOLENode)
 
     // Write OLE1 header, then the RTF wrapper.
     SvMemoryStream aOLE1;
-    sal_uInt32 nWidth = 0;
-    sal_uInt32 nHeight = 0;
-    OString aClassName = InsertOLE1Header(rOle2, aOLE1, nWidth, nHeight, rOLENode);
+
+    // Prepare presentation data early, so it's available to both OLE1 and RTF.
+    Size aSize(rOLENode.GetTwipSize());
+    sal_uInt32 nWidth = aSize.getWidth();
+    sal_uInt32 nHeight = aSize.getHeight();
+    const Graphic* pGraphic = rOLENode.GetGraphic();
+    const sal_uInt8* pPresentationData = nullptr;
+    sal_uInt64 nPresentationData = 0;
+    SvMemoryStream aGraphicStream;
+    if (pGraphic)
+    {
+        if (GraphicConverter::Export(aGraphicStream, *pGraphic, ConvertDataFormat::WMF)
+            == ERRCODE_NONE)
+        {
+            pPresentationData = static_cast<const sal_uInt8*>(aGraphicStream.GetData());
+            sal_uInt64 nCurrent = aGraphicStream.Tell();
+            nPresentationData = aGraphicStream.Seek(STREAM_SEEK_TO_END);
+            aGraphicStream.Seek(nCurrent);
+            msfilter::rtfutil::StripMetafileHeader(pPresentationData, nPresentationData);
+        }
+    }
+    OString aClassName = InsertOLE1Header(rOle2, aOLE1, nWidth, nHeight, rOLENode,
+                                          pPresentationData, nPresentationData);
 
     // Start object.
     rRtf.WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_OBJECT);
@@ -429,8 +445,10 @@ bool WrapOleInRtf(SvStream& rOle2, SvStream& rRtf, SwOLENode& rOLENode)
     // End objdata.
     rRtf.WriteCharPtr("}");
 
-    if (const Graphic* pGraphic = rOLENode.GetGraphic())
-        WrapOleGraphicInRtf(rRtf, rOLENode, *pGraphic);
+    if (pPresentationData)
+    {
+        WrapOleGraphicInRtf(rRtf, nWidth, nHeight, pPresentationData, nPresentationData);
+    }
 
     // End object.
     rRtf.WriteCharPtr("}");
