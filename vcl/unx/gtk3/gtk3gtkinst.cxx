@@ -15922,12 +15922,6 @@ public:
         return std::make_unique<GtkInstanceDialog>(pDialog, this, true);
     }
 
-    virtual std::unique_ptr<weld::Window> weld_window(const OString &id, bool bTakeOwnership) override
-    {
-        GtkWindow* pWindow = GTK_WINDOW(gtk_builder_get_object(m_pBuilder, id.getStr()));
-        return pWindow ? std::make_unique<GtkInstanceWindow>(pWindow, this, bTakeOwnership) : nullptr;
-    }
-
     virtual std::unique_ptr<weld::Widget> weld_widget(const OString &id, bool bTakeOwnership) override
     {
         GtkWidget* pWidget = GTK_WIDGET(gtk_builder_get_object(m_pBuilder, id.getStr()));

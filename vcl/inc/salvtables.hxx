@@ -47,9 +47,6 @@ public:
 
     virtual std::unique_ptr<weld::Window> create_screenshot_window() override;
 
-    virtual std::unique_ptr<weld::Window> weld_window(const OString& id,
-                                                      bool bTakeOwnership = true) override;
-
     virtual std::unique_ptr<weld::Widget> weld_widget(const OString& id,
                                                       bool bTakeOwnership = false) override;
 

@@ -912,8 +912,6 @@ include/vcl/weld.hxx:2161
     class rtl::OUString weld::Toolbar::get_item_label(const class rtl::OString &) const
 include/vcl/weld.hxx:2171
     void weld::Toolbar::append_separator(const class rtl::OUString &)
-include/vcl/weld.hxx:2214
-    class std::unique_ptr<class weld::Window, struct std::default_delete<class weld::Window> > weld::Builder::weld_window(const class rtl::OString &,_Bool)
 include/vcl/weldutils.hxx:304
     void weld::DateFormatter::CursorChangedHdl(class weld::Entry &)
 include/vcl/weldutils.hxx:304

@@ -6535,13 +6535,6 @@ std::unique_ptr<weld::Window> SalInstanceBuilder::create_screenshot_window()
     return std::unique_ptr<weld::Dialog>(new SalInstanceDialog(xDialog, this, false));
 }
 
-std::unique_ptr<weld::Window> SalInstanceBuilder::weld_window(const OString& id,
-                                                              bool bTakeOwnership)
-{
-    SystemWindow* pWindow = m_xBuilder->get<SystemWindow>(id);
-    return pWindow ? std::make_unique<SalInstanceWindow>(pWindow, this, bTakeOwnership) : nullptr;
-}
-
 std::unique_ptr<weld::Widget> SalInstanceBuilder::weld_widget(const OString& id,
                                                               bool bTakeOwnership)
 {
