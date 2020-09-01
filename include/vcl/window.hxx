@@ -983,23 +983,6 @@ public:
     */
     void                                AlwaysDisableInput( bool bAlways, bool bChild = true );
 
-    /** usually event handlers (see AddEventListener and AddChildEventListener)
-    are not called on disabled, modal or input disabled windows. There are however rare cases
-    in which one wants a Window or rather one of its Control subclasses to
-    not evaluate events but still react to those events externally. In these
-    rare cases call SetCallHandlersOnInputDisabled( true ) to have your handler
-    called anyway.
-
-    Currently only mouse events get this special treatment.
-
-    Use this sparingly, chances are if you want to use it you're working around
-    the real problem.
-
-    @param bCall
-    Enable/Disable calling event handlers for this disabled, modal or input disabled window.
-    This call is implicitly done recursively for possible child windows.
-    */
-    void                                SetCallHandlersOnInputDisabled( bool bCall );
     /** get state of SetCallHandlersOnInputDisabled
 
     @returns whether handlers are called regardless of input enabled state
