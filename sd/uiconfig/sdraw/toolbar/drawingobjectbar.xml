@@ -56,8 +56,6 @@
  <toolbar:toolbaritem xlink:href=".uno:MirrorHorz"/>
  <toolbar:toolbaritem xlink:href=".uno:AdvancedMode"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:DistributeSelection"/>
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FormatLine" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:FormatArea" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Window3D" toolbar:visible="false"/>
