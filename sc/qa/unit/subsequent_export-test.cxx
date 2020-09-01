@@ -238,6 +238,7 @@ public:
     void testTdf134817_HeaderFooterTextWith2SectionXLSX();
     void testHeaderFontStyleXLSX();
     void testTdf135828_Shape_Rect();
+    void testTdf123353();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -374,6 +375,7 @@ public:
     CPPUNIT_TEST(testTdf134817_HeaderFooterTextWith2SectionXLSX);
     CPPUNIT_TEST(testHeaderFontStyleXLSX);
     CPPUNIT_TEST(testTdf135828_Shape_Rect);
+    CPPUNIT_TEST(testTdf123353);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -4716,10 +4718,29 @@ void ScExportTest::testTdf135828_Shape_Rect()
 
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
     xmlDocPtr pDrawing = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/drawing1.xml");
+
     CPPUNIT_ASSERT(pDrawing);
 
     assertXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:spPr/a:xfrm/a:ext", "cx", "294480"); // width
     assertXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:spPr/a:xfrm/a:ext", "cy", "1990440"); // height
+}
+
+void ScExportTest::testTdf123353()
+{
+    ScDocShellRef xShell = loadDoc("tdf123353.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/x:worksheet/x:autoFilter/x:filterColumn/x:filters", "blank", "1");
+
+    xShell->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);

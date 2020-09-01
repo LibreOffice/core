@@ -361,7 +361,7 @@ public:
 class XclExpAutofilter : public XclExpRecord, protected XclExpRoot
 {
 private:
-    enum FilterType { FilterCondition, MultiValue };
+    enum FilterType { FilterCondition, MultiValue, BlankValue };
     FilterType              meType;
     sal_uInt16              nCol;
     sal_uInt16              nFlags;
