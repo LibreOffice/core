@@ -2748,3 +2748,13 @@ cmd/sc_librelogo-stop.png cmd/sc_basicstop.png
 cmd/sc_librelogo-translate.png cmd/sc_editglossary.png
 cmd/sc_librelogo-home.png cmd/sc_navigationbar.png
 cmd/sc_librelogo-clearscreen.png cmd/sc_newdoc.png
+
+# Distribution
+cmd/sc_distributehorzleft.png svx/res/dsth_low.png
+cmd/sc_distributehorzcenter.png svx/res/dsth_cen.png
+cmd/sc_distributehorzdistance.png svx/res/dsth_dst.png
+cmd/sc_distributehorzright.png svx/res/dsth_hig.png
+cmd/sc_distributeverttop.png svx/res/dstv_hig.png
+cmd/sc_distributevertcenter.png svx/res/dstv_cen.png
+cmd/sc_distributevertdistance.png svx/res/dstv_dst.png
+cmd/sc_distributevertbottom.png svx/res/dstv_low.png
