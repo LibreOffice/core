@@ -782,8 +782,6 @@ include/vcl/ITiledRenderable.hxx:214
     enum PointerStyle vcl::ITiledRenderable::getPointer()
 include/vcl/lok.hxx:22
     void vcl::lok::unregisterPollCallbacks()
-include/vcl/NotebookBarAddonsMerger.hxx:55
-     NotebookBarAddonsMerger::NotebookBarAddonsMerger()
 include/vcl/opengl/OpenGLHelper.hxx:67
     void OpenGLHelper::renderToFile(long,long,const class rtl::OUString &)
 include/vcl/opengl/OpenGLHelper.hxx:100

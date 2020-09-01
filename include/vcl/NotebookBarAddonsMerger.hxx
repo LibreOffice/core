@@ -49,19 +49,14 @@ struct AddonNotebookBarItem
     OUString sStyle;
 };
 
-class NotebookBarAddonsMerger
+namespace NotebookBarAddonsMerger
 {
-public:
-    NotebookBarAddonsMerger();
-    ~NotebookBarAddonsMerger();
-    static void MergeNotebookBarAddons(vcl::Window* pParent,
-                                       const VclBuilder::customMakeWidget& pFunction,
-                                       const css::uno::Reference<css::frame::XFrame>& rFrame,
-                                       const NotebookBarAddonsItem& aNotebookBarAddonsItem,
-                                       VclBuilder::stringmap& rVec);
-    static void MergeNotebookBarMenuAddons(Menu* pPopupMenu, sal_Int16 nItemId,
-                                           const OString& sItemIdName,
-                                           NotebookBarAddonsItem& aNotebookBarAddonsItem);
+void MergeNotebookBarAddons(vcl::Window* pParent, const VclBuilder::customMakeWidget& pFunction,
+                            const css::uno::Reference<css::frame::XFrame>& rFrame,
+                            const NotebookBarAddonsItem& aNotebookBarAddonsItem,
+                            VclBuilder::stringmap& rVec);
+void MergeNotebookBarMenuAddons(Menu* pPopupMenu, sal_Int16 nItemId, const OString& sItemIdName,
+                                NotebookBarAddonsItem& aNotebookBarAddonsItem);
 };
 
 #endif

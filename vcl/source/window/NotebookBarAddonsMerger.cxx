@@ -103,14 +103,12 @@ static void CreateNotebookBarToolBox(vcl::Window* pNotebookbarToolBox,
     pToolbox->Show();
 }
 
-NotebookBarAddonsMerger::NotebookBarAddonsMerger() {}
-
-NotebookBarAddonsMerger::~NotebookBarAddonsMerger() {}
-
-void NotebookBarAddonsMerger::MergeNotebookBarAddons(
-    vcl::Window* pParent, const VclBuilder::customMakeWidget& pFunction,
-    const css::uno::Reference<css::frame::XFrame>& m_xFrame,
-    const NotebookBarAddonsItem& aNotebookBarAddonsItem, VclBuilder::stringmap& rMap)
+namespace NotebookBarAddonsMerger
+{
+void MergeNotebookBarAddons(vcl::Window* pParent, const VclBuilder::customMakeWidget& pFunction,
+                            const css::uno::Reference<css::frame::XFrame>& m_xFrame,
+                            const NotebookBarAddonsItem& aNotebookBarAddonsItem,
+                            VclBuilder::stringmap& rMap)
 {
     std::vector<Image> aImageVec = aNotebookBarAddonsItem.aImageValues;
     unsigned long nIter = 0;
@@ -145,9 +143,8 @@ void NotebookBarAddonsMerger::MergeNotebookBarAddons(
     }
 }
 
-void NotebookBarAddonsMerger::MergeNotebookBarMenuAddons(
-    Menu* pPopupMenu, sal_Int16 nItemId, const OString& sItemIdName,
-    NotebookBarAddonsItem& aNotebookBarAddonsItem)
+void MergeNotebookBarMenuAddons(Menu* pPopupMenu, sal_Int16 nItemId, const OString& sItemIdName,
+                                NotebookBarAddonsItem& aNotebookBarAddonsItem)
 {
     std::vector<Image> aImageVec = aNotebookBarAddonsItem.aImageValues;
     unsigned long nIter = 0;
@@ -181,6 +178,7 @@ void NotebookBarAddonsMerger::MergeNotebookBarMenuAddons(
             ++nItemId;
         }
     }
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
