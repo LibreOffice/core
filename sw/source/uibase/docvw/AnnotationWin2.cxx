@@ -468,7 +468,6 @@ void SwAnnotationWin::InitControls()
     mpMetadataAuthor = VclPtr<FixedText>::Create(this);
     mpMetadataAuthor->SetAccessibleName( SwResId( STR_ACCESS_ANNOTATION_AUTHOR_NAME ) );
     mpMetadataAuthor->EnableRTL(AllSettings::GetLayoutRTL());
-    mpMetadataAuthor->SetCallHandlersOnInputDisabled(true);
     mpMetadataAuthor->AddEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
     // we should leave this setting alone, but for this we need a better layout algo
     // with variable meta size height
@@ -485,7 +484,6 @@ void SwAnnotationWin::InitControls()
     mpMetadataDate = VclPtr<FixedText>::Create(this);
     mpMetadataDate->SetAccessibleName( SwResId( STR_ACCESS_ANNOTATION_DATE_NAME ) );
     mpMetadataDate->EnableRTL(AllSettings::GetLayoutRTL());
-    mpMetadataDate->SetCallHandlersOnInputDisabled(true);
     mpMetadataDate->AddEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
     // we should leave this setting alone, but for this we need a better layout algo
     // with variable meta size height
@@ -502,7 +500,6 @@ void SwAnnotationWin::InitControls()
     mpMetadataResolved = VclPtr<FixedText>::Create(this);
     mpMetadataResolved->SetAccessibleName( SwResId( STR_ACCESS_ANNOTATION_RESOLVED_NAME ) );
     mpMetadataResolved->EnableRTL(AllSettings::GetLayoutRTL());
-    mpMetadataResolved->SetCallHandlersOnInputDisabled(true);
     mpMetadataResolved->AddEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
     // we should leave this setting alone, but for this we need a better layout algo
     // with variable meta size height
