@@ -1605,14 +1605,22 @@ ScDetectiveObjType ScDetectiveFunc::GetDetectiveObjectType( SdrObject* pObject, 
                 if ( nObjColor == GetErrorColor() && nObjColor != GetArrowColor() )
                     rRedLine = true;
             }
-            else if ( dynamic_cast<const SdrCircObj*>( pObject) !=  nullptr )
+            else if (dynamic_cast<const SdrCircObj*>(pObject) != nullptr)
             {
-                if ( bValidStart )
+                if (bValidStart)
                 {
                     // cell position is returned in rPosition
-
                     rPosition = pData->maStart;
                     eType = SC_DETOBJ_CIRCLE;
+                }
+            }
+            else if (dynamic_cast<const SdrRectObj*>(pObject) != nullptr)
+            {
+                if (bValidStart)
+                {
+                    // cell position is returned in rPosition
+                    rPosition = pData->maStart;
+                    eType = SC_DETOBJ_RECTANGLE;
                 }
             }
         }
