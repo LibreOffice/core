@@ -104,8 +104,6 @@ codemaker/source/javamaker/classfile.cxx:508
      floatBytes float
 codemaker/source/javamaker/classfile.cxx:540
      doubleBytes double
-comphelper/qa/container/comphelper_ifcontainer.cxx:44
-    (anonymous namespace)::ContainerListener m_pStats struct (anonymous namespace)::ContainerStats *const
 comphelper/qa/unit/parallelsorttest.cxx:44
     ParallelSortTest mnThreads size_t
 comphelper/source/misc/asyncnotification.cxx:86
@@ -214,6 +212,8 @@ cppu/source/uno/copy.hxx:39
     cppu::(anonymous namespace)::SequencePrefix nRefCount sal_Int32
 cppu/source/uno/copy.hxx:40
     cppu::(anonymous namespace)::SequencePrefix nElements sal_Int32
+cppuhelper/qa/ifcontainer/cppu_ifcontainer.cxx:45
+    (anonymous namespace)::ContainerListener m_pStats struct (anonymous namespace)::ContainerStats *
 cppuhelper/source/access_control.cxx:79
     cppu::(anonymous namespace)::permission m_str1 rtl_uString *
 cppuhelper/source/access_control.cxx:80
@@ -318,10 +318,6 @@ framework/inc/uielement/langselectionmenucontroller.hxx:73
     framework::LanguageSelectionMenuController m_xMenuDispatch_Font css::uno::Reference<css::frame::XDispatch>
 framework/inc/uielement/langselectionmenucontroller.hxx:75
     framework::LanguageSelectionMenuController m_xMenuDispatch_CharDlgForParagraph css::uno::Reference<css::frame::XDispatch>
-framework/inc/uielement/menubarmanager.hxx:186
-    framework::MenuBarManager m_aMenuItemCommand class rtl::OUString
-framework/inc/uielement/toolbarmerger.hxx:37
-    framework::AddonsParams aImageId class rtl::OUString
 framework/source/layoutmanager/toolbarlayoutmanager.hxx:272
     framework::ToolbarLayoutManager m_pGlobalSettings std::unique_ptr<GlobalSettings>
 framework/source/layoutmanager/toolbarlayoutmanager.hxx:276
@@ -428,13 +424,13 @@ include/test/beans/xpropertyset.hxx:56
     apitest::XPropertySet::PropsToTest constrained std::vector<OUString>
 include/unotools/fontcfg.hxx:159
     utl::FontSubstConfiguration maSubstHash utl::FontSubstConfiguration::UniqueSubstHash
-include/vcl/NotebookBarAddonsMerger.hxx:53
+include/vcl/NotebookBarAddonsMerger.hxx:45
     AddonNotebookBarItem sTarget class rtl::OUString
-include/vcl/NotebookBarAddonsMerger.hxx:54
+include/vcl/NotebookBarAddonsMerger.hxx:46
     AddonNotebookBarItem sContext class rtl::OUString
-include/vcl/NotebookBarAddonsMerger.hxx:55
+include/vcl/NotebookBarAddonsMerger.hxx:47
     AddonNotebookBarItem sControlType class rtl::OUString
-include/vcl/NotebookBarAddonsMerger.hxx:56
+include/vcl/NotebookBarAddonsMerger.hxx:48
     AddonNotebookBarItem nWidth sal_uInt16
 include/vcl/opengl/OpenGLContext.hxx:32
     GLWindow bMultiSampleSupported _Bool
