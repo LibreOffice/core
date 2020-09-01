@@ -20,7 +20,6 @@
   <menu:menuitem menu:id=".uno:FontDialog"/>
   <menu:menuitem menu:id=".uno:ParagraphDialog"/>
   <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:DistributeSelection"/>
   <menu:menu menu:id=".uno:ObjectAlign">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:ObjectAlignLeft"/>
