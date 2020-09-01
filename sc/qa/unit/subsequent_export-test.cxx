@@ -257,6 +257,7 @@ public:
     void testTdf134817_HeaderFooterTextWith2SectionXLSX();
     void testTdf121718_UseFirstPageNumberXLSX();
     void testHeaderFontStyleXLSX();
+    void testTdf123353();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -412,6 +413,7 @@ public:
     CPPUNIT_TEST(testTdf134817_HeaderFooterTextWith2SectionXLSX);
     CPPUNIT_TEST(testTdf121718_UseFirstPageNumberXLSX);
     CPPUNIT_TEST(testHeaderFontStyleXLSX);
+    CPPUNIT_TEST(testTdf123353);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5273,6 +5275,23 @@ void ScExportTest::testHeaderFontStyleXLSX()
         return rAttrib.pAttr->Which() == EE_CHAR_ITALIC &&
             static_cast<const SvxPostureItem&>(*rAttrib.pAttr).GetPosture() == ITALIC_NORMAL; });
     CPPUNIT_ASSERT_MESSAGE("Second line should be italic.", bHasItalic);
+
+    xShell->DoClose();
+}
+
+void ScExportTest::testTdf123353()
+{
+    ScDocShellRef xShell = loadDoc("tdf123353.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/x:worksheet/x:autoFilter/x:filterColumn/x:filters", "blank", "1");
 
     xShell->DoClose();
 }

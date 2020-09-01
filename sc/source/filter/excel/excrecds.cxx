@@ -649,9 +649,12 @@ bool XclExpAutofilter::HasCondition() const
 bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
 {
     const ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
-    if (rItems.empty())
-        return true;
 
+    if (GetOutput() != EXC_OUTPUT_BINARY && rItems.empty())
+    {
+        meType = BlankValue;
+        return false;
+    }
     if (GetOutput() != EXC_OUTPUT_BINARY && rItems.size() > 1)
     {
         AddMultiValueEntry(rEntry);
@@ -815,6 +818,11 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
             rWorksheet->endElement( XML_customFilters );
             // OOXTODO: XLM_colorFilter, XML_dynamicFilter,
             // XML_extLst, XML_filters, XML_iconFilter, XML_top10
+        }
+        break;
+        case BlankValue:
+        {
+            rWorksheet->singleElement(XML_filters, XML_blank, "1");
         }
         break;
         case MultiValue:
