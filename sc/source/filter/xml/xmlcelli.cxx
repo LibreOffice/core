@@ -96,6 +96,7 @@
 
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/lok.hxx>
+#include <svx/unoshape.hxx>
 
 using namespace com::sun::star;
 using namespace xmloff::token;
@@ -972,6 +973,36 @@ void ScXMLTableRowCellContext::SetDetectiveObj( const ScAddress& rPosition )
             sal_Int32 nShapes = xShapesIndex->getCount();
             uno::Reference < drawing::XShape > xShape;
             rXMLImport.GetShapeImport()->shapeWithZIndexAdded(xShape, nShapes);
+
+            // This entire block is about flagging validaton, precedent and dependent shapes.
+            // So we can catch them at export. We should not export them because MSO does not export them.
+            if (xShapesIndex->hasElements())
+            {
+                for (sal_Int32 ind = 0; ind < nShapes; ++ind)
+                {
+                    uno::Reference<drawing::XShape> rShape(xShapesIndex->getByIndex(ind), uno::UNO_QUERY);
+                    if (SvxShape* trySvxShape = dynamic_cast<SvxShape*>(rShape.get()))
+                    {
+                        auto aShapeType = trySvxShape->getShapeType();
+                        if ( (aShapeType == "com.sun.star.drawing.EllipseShape" && rDetectiveObj.eObjType == SC_DETOBJ_CIRCLE)  // validation circles
+                          || (aShapeType == "com.sun.star.drawing.LineShape"    && rDetectiveObj.eObjType == SC_DETOBJ_ARROW)   // precedent and dependent arrows
+                          || (aShapeType == "com.sun.star.drawing.RectangleShape"  && rDetectiveObj.eObjType == SC_DETOBJ_ARROW) ) // dependent rectangles
+                        {
+                            uno::Reference< beans::XPropertySet > xShapeProperties(rShape, uno::UNO_QUERY);
+                            if (xShapeProperties)
+                            {
+                                uno::Sequence<beans::PropertyValue> aGrabBag;
+                                xShapeProperties->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+                                sal_Int32 length = aGrabBag.getLength();
+                                aGrabBag.realloc(length + 1);
+                                aGrabBag[length].Name = "IsDetective";
+                                aGrabBag[length].Value <<= true;
+                                xShapeProperties->setPropertyValue("InteropGrabBag", uno::makeAny(aGrabBag));
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
