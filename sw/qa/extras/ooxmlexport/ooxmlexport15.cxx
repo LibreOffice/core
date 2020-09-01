@@ -123,6 +123,192 @@ DECLARE_OOXMLEXPORT_TEST(testTdf131801, "tdf131801.docx")
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[8]/w:pPr/w:rPr/w:rStyle", 0);
 }
 
+<<<<<<< HEAD   (a63072 tdf#47079 sc layout: fix visibility of Autofilter header)
+=======
+DECLARE_OOXMLEXPORT_TEST(testTdf133334_followPgStyle, "tdf133334_followPgStyle.odt")
+{
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf118701, "tdf118701.docx")
+{
+    // This was 6, related to moving inline images after the page breaks
+    CPPUNIT_ASSERT_EQUAL(4, getPages());
+
+    xmlDocUniquePtr pXmlDoc = parseExport();
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr[1]/w:numPr", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr[1]/w:numPr", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr[1]/w:numPr", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:pPr[1]/w:numPr", 1);
+
+    // Keep numbering of the paragraph of the inline image
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:pPr[1]/w:numPr", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[9]/w:pPr[1]/w:numPr", 1);
+    // This was 0
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[10]/w:pPr[1]/w:numPr", 1);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf123388, "tdf123388.docx")
+{
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    // Tests new cell formula PRODUCT
+    uno::Reference<text::XTextField> xEnumerationAccess1(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("PRODUCT(<B2:B3>)"), xEnumerationAccess1->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("640"), xEnumerationAccess1->getPresentation(false).trim());
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf123401, "tdf123401.fodt")
+{
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    // Tests new cell formula AVERAGE
+    uno::Reference<text::XTextField> xEnumerationAccess1(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("AVERAGE(<A1:A2>)"), xEnumerationAccess1->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("3"), xEnumerationAccess1->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess2(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("AVERAGE(<A1:A3>)"), xEnumerationAccess2->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("3"), xEnumerationAccess2->getPresentation(false).trim());
+
+    xmlDocUniquePtr pXmlDoc = parseExport();
+
+    // MEAN converted to AVERAGE
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:p/w:r[2]/w:instrText", " =AVERAGE(A1:A2)");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r[2]/w:instrText", " =AVERAGE(A1:A3)");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf123356, "tdf123356.fodt")
+{
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    // Tests new cell formula COUNT
+    uno::Reference<text::XTextField> xEnumerationAccess1(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("COUNT(<A1>)"), xEnumerationAccess1->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), xEnumerationAccess1->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess2(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("COUNT(<A1:B2>)"), xEnumerationAccess2->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("4"), xEnumerationAccess2->getPresentation(false).trim());
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf123390, "tdf123390.fodt")
+{
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    // Tests new cell formula SIGN
+    uno::Reference<text::XTextField> xEnumerationAccess1(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("SIGN(<A1>)"), xEnumerationAccess1->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("-1"), xEnumerationAccess1->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess2(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("SIGN(<C1>)"), xEnumerationAccess2->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), xEnumerationAccess2->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess3(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("SIGN(<B1>)"), xEnumerationAccess3->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("0"), xEnumerationAccess3->getPresentation(false).trim());
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf123354, "tdf123354.fodt")
+{
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    // Tests new cell formula SIGN
+    uno::Reference<text::XTextField> xEnumerationAccess1(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("ABS(<A1>)"), xEnumerationAccess1->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("10"), xEnumerationAccess1->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess2(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("ABS(<C1>)"), xEnumerationAccess2->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("10"), xEnumerationAccess2->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess3(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("ABS(<B1>)"), xEnumerationAccess3->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("0"), xEnumerationAccess3->getPresentation(false).trim());
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf98000_changePageStyle, "tdf98000_changePageStyle.odt")
+{
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY_THROW);
+    OUString sPageOneStyle = getProperty<OUString>( xCursor, "PageStyleName" );
+
+    xCursor->jumpToNextPage();
+    OUString sPageTwoStyle = getProperty<OUString>( xCursor, "PageStyleName" );
+    CPPUNIT_ASSERT_MESSAGE("Different page1/page2 styles", sPageOneStyle != sPageTwoStyle);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf135216_evenOddFooter, "tdf135216_evenOddFooter.odt")
+{
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+
+    // get LO page style for the first page (even page #2)
+    OUString pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+    uno::Reference<container::XNameAccess> xPageStyles = getStyles("PageStyles");
+    uno::Reference<style::XStyle> xPageStyle(xPageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+
+    xCursor->jumpToFirstPage();  // Even/Left page #2
+    uno::Reference<text::XText> xFooter = getProperty<uno::Reference<text::XText>>(xPageStyle, "FooterTextLeft");
+    CPPUNIT_ASSERT_EQUAL(OUString("even page"), xFooter->getString());
+
+    xCursor->jumpToNextPage();
+    pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+    xPageStyle.set(xPageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+    xFooter.set(getProperty<uno::Reference<text::XText>>(xPageStyle, "FooterTextRight"));
+    CPPUNIT_ASSERT_EQUAL(OUString("odd page - first footer"), xFooter->getString());
+
+    xCursor->jumpToNextPage();
+    pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+    xPageStyle.set(xPageStyles->getByName(pageStyleName), uno::UNO_QUERY);
+    xFooter.set(getProperty<uno::Reference<text::XText>>(xPageStyle, "FooterTextLeft"));
+    CPPUNIT_ASSERT_EQUAL(OUString("even page"), xFooter->getString());
+
+    // The contents of paragraph 2 should be the page number (2) located on page 1.
+    getParagraph(2, "2");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf133370_columnBreak, "tdf133370_columnBreak.odt")
+{
+    // Since non-DOCX formats ignores column breaks in non-column situations, don't export to docx.
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf134649_pageBreak, "tdf134649_pageBreak.fodt")
+{
+    // This was 1 (missing page break between tables).
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf135343_columnSectionBreak_c14, "tdf135343_columnSectionBreak_c14.docx")
+{
+    uno::Reference<beans::XPropertySet> xTextSection = getProperty<uno::Reference<beans::XPropertySet>>(getParagraph(1), "TextSection");
+    uno::Reference<text::XTextColumns> xTextColumns = getProperty<uno::Reference<text::XTextColumns>>(xTextSection, "TextColumns");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Section one's columns", sal_Int16(2), xTextColumns->getColumnCount());
+
+    // Old Word 2010 version - nextColumn breaks inside column sections are just treated as regular column breaks.
+    //xTextSection = getProperty<uno::Reference<beans::XPropertySet>>(getParagraph(12, "RTL 2"), "TextSection");
+    //xTextColumns = getProperty<uno::Reference<text::XTextColumns>>(xTextSection, "TextColumns");
+    //CPPUNIT_ASSERT_EQUAL_MESSAGE("Section four's columns", sal_Int16(3), xTextColumns->getColumnCount());
+    //CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
+>>>>>>> CHANGE (4a96b2 tdf#134649 DOCX export: fix page break between tables)
 DECLARE_OOXMLEXPORT_TEST(testTdf135973, "tdf135973.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
