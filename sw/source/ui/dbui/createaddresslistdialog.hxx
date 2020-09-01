@@ -95,7 +95,6 @@ public:
 
     void show() { m_xDialog->show(); }
     void set_visible(bool bVisible) { m_xDialog->set_visible(bVisible); }
-    void hide() { m_xDialog->hide(); }
     bool get_visible() const { return m_xDialog->get_visible(); }
 
     weld::ComboBox& GetFieldsListBox()

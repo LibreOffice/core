@@ -148,11 +148,6 @@ public:
         m_xWidget->insert_separator(pos, rId);
     }
 
-    virtual void set_sensitive(bool bSensitive)
-    {
-        m_xWidget->set_sensitive(bSensitive);
-    }
-
     void set_active_or_entry_text(const OUString& rText)
     {
         const int nFound = m_xWidget->find_text(rText);
@@ -254,15 +249,6 @@ public:
     virtual bool DoKeyInput(const KeyEvent& rKEvt) override;
 
 private:
-
-    virtual void set_sensitive(bool bSensitive) override
-    {
-        m_xWidget->set_sensitive(bSensitive);
-        if (bSensitive)
-            InterimItemWindow::Enable();
-        else
-            InterimItemWindow::Disable();
-    }
 
     virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
     void  SetOptimalSize();

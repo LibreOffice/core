@@ -4363,15 +4363,6 @@ public:
         return rVclIter.iter != nullptr;
     }
 
-    virtual bool iter_next_visible(weld::TreeIter& rIter) const override
-    {
-        SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
-        rVclIter.iter = m_xTreeView->NextVisible(rVclIter.iter);
-        if (rVclIter.iter && IsDummyEntry(rVclIter.iter))
-            return iter_next_visible(rVclIter);
-        return rVclIter.iter != nullptr;
-    }
-
     virtual bool iter_children(weld::TreeIter& rIter) const override
     {
         SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);

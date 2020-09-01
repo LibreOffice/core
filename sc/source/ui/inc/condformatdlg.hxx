@@ -48,7 +48,6 @@ public:
     ScCondFormatList(ScCondFormatDlg* pParent,
                      std::unique_ptr<weld::ScrolledWindow> xWindow,
                      std::unique_ptr<weld::Container> xGrid);
-    weld::ScrolledWindow* GetWidget() { return mxScrollWindow.get(); }
     weld::Container* GetContainer() { return mxGrid.get(); }
     ~ScCondFormatList();
 

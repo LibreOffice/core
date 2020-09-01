@@ -73,7 +73,6 @@ namespace dbaui
         void SetPKey(bool bPKey) { m_bPKey = bPKey; }
         weld::TreeView* GetWidget() { return m_xControl.get(); }
         OUString get_selected_id() const { return m_xControl->get_selected_id(); }
-        void show() { m_xControl->show(); }
         void clear() { m_xControl->clear(); }
         void append(const OUString& rId, const OUString& rStr)
         {

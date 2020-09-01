@@ -368,11 +368,6 @@ ContentTabPage_Impl::~ContentTabPage_Impl()
     }
 }
 
-weld::Widget* ContentTabPage_Impl::GetLastFocusControl()
-{
-    return m_xContentBox.get();
-}
-
 void IndexTabPage_Impl::SelectExecutableEntry()
 {
     sal_Int32 nPos = m_xIndexList->find_text(m_xIndexEntry->get_text());
@@ -800,11 +795,6 @@ void IndexTabPage_Impl::Activate()
     }
 }
 
-weld::Widget* IndexTabPage_Impl::GetLastFocusControl()
-{
-    return m_xOpenBtn.get();
-}
-
 void IndexTabPage_Impl::SetDoubleClickHdl(const Link<LinkParamNone*, void>& rLink)
 {
     aDoubleClickHdl = rLink;
@@ -1051,11 +1041,6 @@ IMPL_LINK(SearchTabPage_Impl, ModifyHdl, weld::ComboBox&, rComboBox, void)
         Search();
 }
 
-weld::Widget* SearchTabPage_Impl::GetLastFocusControl()
-{
-    return m_xOpenBtn.get();
-}
-
 IMPL_LINK_NOARG(SearchTabPage_Impl, DoubleClickHdl, weld::TreeView&, bool)
 {
     aDoubleClickHdl.Call(nullptr);
@@ -1217,11 +1202,6 @@ BookmarksTabPage_Impl::~BookmarksTabPage_Impl()
 IMPL_LINK_NOARG(BookmarksTabPage_Impl, OpenHdl, weld::Button&, void)
 {
     aDoubleClickHdl.Call(nullptr);
-}
-
-weld::Widget* BookmarksTabPage_Impl::GetLastFocusControl()
-{
-    return m_xBookmarksPB.get();
 }
 
 IMPL_LINK_NOARG(BookmarksTabPage_Impl, DoubleClickHdl, weld::TreeView&, bool)

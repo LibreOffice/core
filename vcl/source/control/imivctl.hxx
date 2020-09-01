@@ -110,7 +110,6 @@ class SvxIconChoiceCtrl_Impl
     friend class IcnCursor_Impl;
     friend class IcnGridMap_Impl;
 
-    bool                    bChooseWithCursor;
     std::vector< std::unique_ptr<SvxIconChoiceCtrlEntry> > maEntries;
     VclPtr<ScrollBar>       aVerSBar;
     VclPtr<ScrollBar>       aHorSBar;

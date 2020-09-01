@@ -110,7 +110,6 @@ namespace dbaui
         OUString get_text() const { return m_xEntry->get_text(); }
         void set_text(const OUString& rText) { m_xEntry->set_text(rText); }
         void set_max_length(int nLen) { m_xEntry->set_max_length(nLen); }
-        void set_sensitive(bool bSensitive) { m_xEntry->set_sensitive(bSensitive); }
         virtual void save_value() override { m_xEntry->save_value(); }
         virtual bool get_value_changed_from_saved() const override
         {

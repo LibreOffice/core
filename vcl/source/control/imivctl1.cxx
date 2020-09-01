@@ -53,7 +53,6 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     SvtIconChoiceCtrl* pCurView,
     WinBits nWinStyle
 ) :
-    bChooseWithCursor(false),
     aVerSBar( VclPtr<ScrollBar>::Create(pCurView, WB_DRAG | WB_VSCROLL) ),
     aHorSBar( VclPtr<ScrollBar>::Create(pCurView, WB_DRAG | WB_HSCROLL) ),
     aScrBarBox( VclPtr<ScrollBarBox>::Create(pCurView) ),
@@ -904,14 +903,6 @@ bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
                         MakeVisible( aRect );
                     }
                 }
-
-                if ( bChooseWithCursor && pNewCursor != nullptr )
-                {
-                    pHdlEntry = pNewCursor;//GetCurEntry();
-                    pCurHighlightFrame = pHdlEntry;
-                    pView->ClickIcon();
-                    pCurHighlightFrame = nullptr;
-                }
             }
             break;
 
@@ -924,14 +915,6 @@ bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
                 else
                     pNewCursor=pImpCursor->GoPageUpDown( pCursor,true );
                 SetCursor_Impl( pOldCursor, pNewCursor, bMod1, bShift );
-
-                if ( bChooseWithCursor && pNewCursor != nullptr)
-                {
-                    pHdlEntry = pNewCursor;//GetCurEntry();
-                    pCurHighlightFrame = pHdlEntry;
-                    pView->ClickIcon();
-                    pCurHighlightFrame = nullptr;
-                }
             }
             break;
 

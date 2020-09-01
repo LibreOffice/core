@@ -381,7 +381,6 @@ public:
     void set_max_mru_count(int nCount) { m_xComboBox->set_max_mru_count(nCount); }
 
     // font size is in points, not pixels, e.g. see Window::[G]etPointFont
-    vcl::Font get_font() { return m_xComboBox->get_font(); }
     void set_entry_font(const vcl::Font& rFont) { m_xComboBox->set_entry_font(rFont); }
     vcl::Font get_entry_font() { return m_xComboBox->get_entry_font(); }
 

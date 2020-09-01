@@ -1,17 +1,3 @@
-basctl/source/inc/bastype2.hxx:262
-    void basctl::SbTreeListBox::make_unsorted()
-basctl/source/inc/bastype2.hxx:263
-    _Bool basctl::SbTreeListBox::get_sort_order() const
-basctl/source/inc/bastype2.hxx:264
-    void basctl::SbTreeListBox::set_sort_order(_Bool)
-basctl/source/inc/bastype2.hxx:266
-    void basctl::SbTreeListBox::set_sort_indicator(enum TriState,int)
-basctl/source/inc/bastype2.hxx:270
-    enum TriState basctl::SbTreeListBox::get_sort_indicator(int)
-basctl/source/inc/bastype2.hxx:275
-    void basctl::SbTreeListBox::set_sort_column(int)
-basctl/source/inc/bastype2.hxx:277
-    void basctl::SbTreeListBox::set_sort_func(const class std::function<int (const class weld::TreeIter &, const class weld::TreeIter &)> &)
 basegfx/source/range/b2drangeclipper.cxx:688
     type-parameter-?-? basegfx::(anonymous namespace)::eraseFromList(type-parameter-?-? &,const type-parameter-?-? &)
 basic/source/inc/buffer.hxx:41
@@ -102,32 +88,8 @@ connectivity/source/inc/OTypeInfo.hxx:47
     _Bool connectivity::OTypeInfo::operator!=(const struct connectivity::OTypeInfo &) const
 cui/source/dialogs/SpellAttrib.hxx:72
     _Bool svx::SpellErrorDescription::operator==(const struct svx::SpellErrorDescription &) const
-cui/source/inc/cfg.hxx:336
-    class rtl::OUString SvxMenuEntriesListBox::get_text(int)
-cui/source/inc/cfg.hxx:337
-    void SvxMenuEntriesListBox::set_image(int,const class com::sun::star::uno::Reference<class com::sun::star::graphic::XGraphic> &,int)
-cui/source/inc/cfg.hxx:338
-    void SvxMenuEntriesListBox::set_dropdown(int,int)
-cui/source/inc/cfg.hxx:339
-    void SvxMenuEntriesListBox::set_id(int,const class rtl::OUString &)
-cui/source/inc/cfgutil.hxx:144
-    _Bool CuiConfigFunctionListBox::get_iter_first(class weld::TreeIter &) const
-cui/source/inc/cfgutil.hxx:146
-    _Bool CuiConfigFunctionListBox::iter_next(class weld::TreeIter &) const
-cui/source/inc/cfgutil.hxx:147
-    _Bool CuiConfigFunctionListBox::iter_next_sibling(class weld::TreeIter &) const
-cui/source/inc/cfgutil.hxx:149
-    class rtl::OUString CuiConfigFunctionListBox::get_text(const class weld::TreeIter &) const
-cui/source/inc/cfgutil.hxx:152
-    class rtl::OUString CuiConfigFunctionListBox::get_id(int) const
-cui/source/inc/cfgutil.hxx:166
-    int CuiConfigFunctionListBox::get_selected_index() const
-cui/source/inc/cfgutil.hxx:167
-    void CuiConfigFunctionListBox::select(const class weld::TreeIter &)
 cui/source/inc/CustomNotebookbarGenerator.hxx:30
      CustomNotebookbarGenerator::CustomNotebookbarGenerator()
-cui/source/inc/hangulhanjadlg.hxx:244
-    class rtl::OUString svx::SuggestionEdit::get_text() const
 cui/source/inc/SvxNotebookbarConfigPage.hxx:40
     void SvxNotebookbarConfigPage::SetElement()
 dbaccess/source/filter/hsqldb/fbalterparser.hxx:20
@@ -150,18 +112,8 @@ dbaccess/source/ui/inc/indexcollection.hxx:62
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const struct dbaui::OIndex *, class std::__cxx1998::vector<struct dbaui::OIndex, class std::allocator<struct dbaui::OIndex> > >, class std::__debug::vector<struct dbaui::OIndex, class std::allocator<struct dbaui::OIndex> >, struct std::random_access_iterator_tag> dbaui::OIndexCollection::find(const class rtl::OUString &) const
 dbaccess/source/ui/inc/indexcollection.hxx:64
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const struct dbaui::OIndex *, class std::__cxx1998::vector<struct dbaui::OIndex, class std::allocator<struct dbaui::OIndex> > >, class std::__debug::vector<struct dbaui::OIndex, class std::allocator<struct dbaui::OIndex> >, struct std::random_access_iterator_tag> dbaui::OIndexCollection::findOriginal(const class rtl::OUString &) const
-dbaccess/source/ui/inc/opendoccontrols.hxx:45
-    _Bool dbaui::OpenDocumentButton::get_sensitive() const
-dbaccess/source/ui/inc/opendoccontrols.hxx:68
-    _Bool dbaui::OpenDocumentListBox::get_sensitive() const
-dbaccess/source/ui/inc/opendoccontrols.hxx:69
-    void dbaui::OpenDocumentListBox::grab_focus()
 dbaccess/source/ui/inc/sbamultiplex.hxx:385
     class cppu::OInterfaceContainerHelper * dbaui::SbaXVetoableChangeMultiplexer::getContainer(const class rtl::OUString &)
-dbaccess/source/ui/inc/SqlNameEdit.hxx:113
-    void dbaui::OSQLNameEntry::set_sensitive(_Bool)
-dbaccess/source/ui/inc/WTypeSelect.hxx:76
-    void dbaui::OWizTypeSelectList::show()
 desktop/source/lib/lokclipboard.hxx:96
      LOKClipboardFactory::LOKClipboardFactory()
 drawinglayer/inc/texture/texture.hxx:41
@@ -628,10 +580,6 @@ include/sax/fshelper.hxx:126
     void sax_fastparser::FastSerializerHelper::singleElementNS(int,int,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XFastAttributeList> &)
 include/sax/fshelper.hxx:130
     void sax_fastparser::FastSerializerHelper::startElementNS(int,int,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XFastAttributeList> &)
-include/sfx2/charwin.hxx:63
-    void SvxCharView::connect_focus_in(const class Link<class weld::Widget &, void> &)
-include/sfx2/charwin.hxx:64
-    void SvxCharView::connect_focus_out(const class Link<class weld::Widget &, void> &)
 include/sfx2/childwin.hxx:163
     void SfxChildWindow::ClearController()
 include/sfx2/docfilt.hxx:80
@@ -658,14 +606,8 @@ include/svl/lockfilecommon.hxx:58
     void svt::LockFileCommon::SetURL(const class rtl::OUString &)
 include/svtools/asynclink.hxx:44
     void svtools::AsynchronLink::LinkStubHandleCall_Idle(void *,class Timer *)
-include/svtools/ctrlbox.hxx:384
-    class vcl::Font FontNameBox::get_font()
 include/svtools/DocumentToGraphicRenderer.hxx:106
     _Bool DocumentToGraphicRenderer::isImpress() const
-include/svtools/toolbarmenu.hxx:80
-    class weld::Container * ToolbarPopupContainer::getContainer()
-include/svtools/toolbarmenu.hxx:98
-    class weld::Container * InterimToolbarPopup::getContainer()
 include/svx/autoformathelper.hxx:145
     _Bool AutoFormatBase::operator==(const class AutoFormatBase &) const
 include/svx/ClassificationDialog.hxx:78
@@ -676,40 +618,18 @@ include/svx/ClassificationField.hxx:52
     _Bool svx::ClassificationResult::operator==(const class svx::ClassificationResult &) const
 include/svx/DiagramDataInterface.hxx:33
     class rtl::OUString DiagramDataInterface::getString() const
-include/svx/dlgctrl.hxx:244
-    void SvxLineLB::set_sensitive(_Bool)
-include/svx/dlgctrl.hxx:245
-    _Bool SvxLineLB::get_sensitive() const
-include/svx/dlgctrl.hxx:267
-    void SvxLineEndLB::set_active_text(const class rtl::OUString &)
 include/svx/framelink.hxx:170
     _Bool svx::frame::operator>(const class svx::frame::Style &,const class svx::frame::Style &)
 include/svx/gallery1.hxx:58
     const class std::unique_ptr<class GalleryBinaryEngineEntry, struct std::default_delete<class GalleryBinaryEngineEntry> > & GalleryThemeEntry::getGalleryBinaryEngineEntry() const
 include/svx/gallerybinaryengine.hxx:69
     const class INetURLObject & GalleryBinaryEngine::GetStrURL() const
-include/svx/langbox.hxx:94
-    void SvxLanguageBox::show()
-include/svx/pagenumberlistbox.hxx:33
-    int SvxPageNumberListBox::get_count() const
-include/svx/pagenumberlistbox.hxx:36
-    int SvxPageNumberListBox::get_active() const
-include/svx/pagenumberlistbox.hxx:37
-    void SvxPageNumberListBox::set_active(int)
-include/svx/relfld.hxx:61
-    void SvxRelativeField::set_size_request(int,int)
-include/svx/relfld.hxx:62
-    void SvxRelativeField::grab_focus()
-include/svx/relfld.hxx:63
-    class Size SvxRelativeField::get_preferred_size() const
 include/svx/sidebar/InspectorTextPanel.hxx:50
     class VclPtr<class vcl::Window> svx::sidebar::InspectorTextPanel::Create(class vcl::Window *,const class com::sun::star::uno::Reference<class com::sun::star::frame::XFrame> &)
 include/svx/svdlayer.hxx:74
     _Bool SdrLayer::operator==(const class SdrLayer &) const
 include/svx/svdpntv.hxx:449
     _Bool SdrPaintView::IsSwapAsynchron() const
-include/svx/txencbox.hxx:92
-    void SvxTextEncodingBox::grab_focus()
 include/svx/txencbox.hxx:146
     void SvxTextEncodingTreeView::connect_changed(const class Link<class weld::TreeView &, void> &)
 include/svx/xpoly.hxx:82
@@ -808,8 +728,6 @@ include/vcl/BitmapColor.hxx:39
     void BitmapColor::SetAlpha(unsigned char)
 include/vcl/builder.hxx:337
     void VclBuilder::connectNumericFormatterAdjustment(const class rtl::OString &,const class rtl::OUString &)
-include/vcl/builder.hxx:484
-    class rtl::OString VclBuilderContainer::getUIFile() const
 include/vcl/builderpage.hxx:36
     void BuilderPage::SetHelpId(const class rtl::OString &)
 include/vcl/ColorMask.hxx:113
@@ -954,12 +872,6 @@ include/vcl/weld.hxx:547
     class rtl::OString weld::Assistant::get_current_page_ident() const
 include/vcl/weld.hxx:553
     class rtl::OUString weld::Assistant::get_page_title(const class rtl::OString &) const
-include/vcl/weld.hxx:883
-    void weld::TreeView::append(const class weld::TreeIter *,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &)
-include/vcl/weld.hxx:892
-    void weld::TreeView::append(const class rtl::OUString &,const class rtl::OUString &,class VirtualDevice &)
-include/vcl/weld.hxx:1000
-    _Bool weld::TreeView::iter_next_visible(class weld::TreeIter &) const
 include/vcl/weld.hxx:1043
     void weld::TreeView::set_text_align(const class weld::TreeIter &,double,int)
 include/vcl/weld.hxx:1171
@@ -986,8 +898,6 @@ include/vcl/weld.hxx:1441
     void weld::Scale::get_increments(int &,int &) const
 include/vcl/weld.hxx:1458
     class rtl::OUString weld::ProgressBar::get_text() const
-include/vcl/weld.hxx:1477
-    void weld::Entry::signal_insert_text(class rtl::OUString &)
 include/vcl/weld.hxx:1493
     int weld::Entry::get_position() const
 include/vcl/weld.hxx:1667
@@ -1236,12 +1146,6 @@ sc/source/filter/inc/xlformula.hxx:409
     _Bool XclTokenArray::operator==(const class XclTokenArray &) const
 sc/source/filter/xml/xmltransformationi.hxx:160
      ScXMLDateTimeContext::ScXMLDateTimeContext(class ScXMLImport &,const class rtl::Reference<class sax_fastparser::FastAttributeList> &)
-sc/source/ui/inc/condformatdlg.hxx:51
-    class weld::ScrolledWindow * ScCondFormatList::GetWidget()
-sc/source/ui/inc/condformatdlgentry.hxx:80
-    int ScCondFrmtEntry::get_grid_top_attach() const
-sc/source/ui/inc/condformatdlgentry.hxx:82
-    class Size ScCondFrmtEntry::get_preferred_size() const
 sc/source/ui/inc/dataprovider.hxx:56
     _Bool sc::CSVFetchThread::IsRequestedTerminate()
 sc/source/ui/inc/dataprovider.hxx:57
@@ -1306,16 +1210,6 @@ sd/source/ui/slidesorter/inc/view/SlsLayouter.hxx:200
     _Bool sd::slidesorter::view::InsertPosition::operator!=(const class sd::slidesorter::view::InsertPosition &) const
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:111
     long (anonymous namespace)::PDFGrammar<boost::spirit::classic::file_iterator<char, boost::spirit::classic::fileiter_impl::mmap_file_iterator<char>>>::pdf_string_parser::operator()(const type-parameter-?-? &,struct boost::spirit::classic::nil_t &) const
-sfx2/inc/autoredactdialog.hxx:67
-    void TargetsTable::SelectByName(const class rtl::OUString &)
-sfx2/inc/autoredactdialog.hxx:71
-    void TargetsTable::unselect_all()
-sfx2/inc/autoredactdialog.hxx:72
-    _Bool TargetsTable::has_focus() const
-sfx2/inc/autoredactdialog.hxx:73
-    int TargetsTable::n_children() const
-sfx2/source/appl/newhelp.hxx:57
-    class weld::Widget * HelpTabPage_Impl::GetLastFocusControl()
 sfx2/source/appl/shutdownicon.hxx:79
     class rtl::OUString ShutdownIcon::getShortcutName()
 sfx2/source/appl/shutdownicon.hxx:95
@@ -1420,8 +1314,6 @@ svl/source/misc/gridprinter.cxx:47
     void rtl::mdds_mtv_append_values(struct mdds::mtv::base_element_block &,const class rtl::OUString &,const type-parameter-?-? &,const type-parameter-?-? &)
 svx/inc/sdr/contact/viewcontactofgraphic.hxx:52
     class SdrGrafObj & sdr::contact::ViewContactOfGraphic::GetGrafObject()
-svx/source/tbxctrls/tbcontrl.cxx:151
-    void (anonymous namespace)::SvxStyleBox_Base::set_sensitive(_Bool)
 sw/inc/calbck.hxx:307
     class sw::WriterListener * sw::ClientIteratorBase::GetLeftOfPos()
 sw/inc/dbgoutsw.hxx:53
@@ -1600,14 +1492,6 @@ sw/source/core/text/txtpaint.hxx:71
      DbgBackColor::DbgBackColor(class OutputDevice *,const _Bool)
 sw/source/core/text/txtpaint.hxx:78
      DbgRect::DbgRect(class OutputDevice *,const class tools::Rectangle &,const _Bool,class Color)
-sw/source/ui/dbui/createaddresslistdialog.hxx:98
-    void SwFindEntryDialog::hide()
-sw/source/uibase/inc/bookmark.hxx:45
-    void BookmarkTable::remove(const class weld::TreeIter &)
-sw/source/uibase/inc/condedit.hxx:53
-    _Bool ConditionEdit::get_sensitive() const
-sw/source/uibase/inc/conttree.hxx:348
-    int SwGlobalTree::count_selected_rows() const
 sw/source/uibase/inc/numfmtlb.hxx:130
     _Bool SwNumFormatTreeView::get_value_changed_from_saved() const
 sw/source/uibase/inc/numfmtlb.hxx:131

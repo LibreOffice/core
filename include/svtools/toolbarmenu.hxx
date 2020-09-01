@@ -77,7 +77,6 @@ public:
     ToolbarPopupContainer(weld::Widget* pParent);
     ~ToolbarPopupContainer();
     weld::Container* getTopLevel() { return m_xTopLevel.get(); }
-    weld::Container* getContainer() { return m_xContainer.get(); }
 
     void setPopover(std::unique_ptr<WeldToolbarPopup> xPopup);
     WeldToolbarPopup* getPopover() const { return m_xPopup.get(); }
@@ -95,7 +94,6 @@ private:
 public:
     InterimToolbarPopup(const css::uno::Reference<css::frame::XFrame>& rFrame, vcl::Window* pParent,
                         std::unique_ptr<WeldToolbarPopup> xPopup);
-    weld::Container* getContainer() { return m_xContainer.get(); }
     virtual void dispose() override;
     virtual ~InterimToolbarPopup() override;
 

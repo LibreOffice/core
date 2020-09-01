@@ -60,9 +60,6 @@ public:
 
     Size            get_preferred_size() const { return GetDrawingArea()->get_preferred_size(); }
 
-    void            connect_focus_in(const Link<weld::Widget&, void>& rLink);
-    void            connect_focus_out(const Link<weld::Widget&, void>& rLink);
-
     void setMouseClickHdl(const Link<SvxCharView*,void> &rLink);
     void setClearClickHdl(const Link<SvxCharView*,void> &rLink);
     void setClearAllClickHdl(const Link<SvxCharView*,void> &rLink);

@@ -880,18 +880,9 @@ public:
     {
         insert(nullptr, -1, &rStr, &rId, &rImage, nullptr, false, nullptr);
     }
-    void append(const TreeIter* pParent, const OUString& rId, const OUString& rStr,
-                const OUString& rImage)
-    {
-        insert(pParent, -1, &rStr, &rId, &rImage, nullptr, false, nullptr);
-    }
     void append(const TreeIter* pParent, const OUString& rStr)
     {
         insert(pParent, -1, &rStr, nullptr, nullptr, nullptr, false, nullptr);
-    }
-    void append(const OUString& rId, const OUString& rStr, VirtualDevice& rImage)
-    {
-        insert(nullptr, -1, &rStr, &rId, nullptr, &rImage, false, nullptr);
     }
 
     virtual void insert_separator(int pos, const OUString& rId) = 0;
@@ -996,8 +987,7 @@ public:
     virtual bool iter_next(TreeIter& rIter) const = 0;
     // set iter to point to previous node, sibling first then depth
     virtual bool iter_previous(TreeIter& rIter) const = 0;
-    // set iter to point to next node, depth first but only if expanded, then sibling
-    virtual bool iter_next_visible(TreeIter& rIter) const = 0;
+    // set iter to point to first child node
     virtual bool iter_children(TreeIter& rIter) const = 0;
     bool iter_nth_sibling(TreeIter& rIter, int nChild) const
     {
@@ -1474,7 +1464,6 @@ protected:
 
     void signal_changed() { m_aChangeHdl.Call(*this); }
     void signal_cursor_position() { m_aCursorPositionHdl.Call(*this); }
-    void signal_insert_text(OUString& rString);
 
 public:
     virtual void set_text(const OUString& rText) = 0;
