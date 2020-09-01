@@ -23,7 +23,6 @@
 #include <i18nutil/unicode.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <tools/stream.hxx>
-#include <vcl/builder.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
@@ -38,6 +37,7 @@
 #include <comphelper/string.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <unotools/syslocale.hxx>
 
 #include <svtools/borderline.hxx>
 #include <svtools/sampletext.hxx>
