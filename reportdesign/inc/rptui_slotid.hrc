@@ -29,7 +29,7 @@
 #define SID_CONDITIONALFORMATTING               ( SID_RPTUI_START +   4 )
 #define SID_PAGEDIALOG                          ( SID_RPTUI_START +   5 )
 #define SID_SETCONTROLDEFAULTS                  ( SID_RPTUI_START +   6 )
-#define SID_DISTRIBUTION                        ( SID_RPTUI_START +   7 )
+
 #define SID_PAGEHEADER_WITHOUT_UNDO             ( SID_RPTUI_START +   8 )
 #define SID_PAGEFOOTER_WITHOUT_UNDO             ( SID_RPTUI_START +   9 )
 #define SID_REPORTHEADER_WITHOUT_UNDO           ( SID_RPTUI_START +  10 )
