@@ -28,7 +28,6 @@
 #include <sfx2/navigat.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/toolbox.hxx>
 #include <swtypes.hxx>
 #include <swmodule.hxx>
 #include <view.hxx>
