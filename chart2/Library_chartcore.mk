@@ -204,6 +204,7 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/tools/LogarithmicRegressionCurveCalculator \
     chart2/source/tools/MeanValueRegressionCurveCalculator \
     chart2/source/tools/MediaDescriptorHelper \
+    chart2/source/tools/ModifyListenerCallBack \
     chart2/source/tools/ModifyListenerHelper \
     chart2/source/tools/MovingAverageRegressionCurveCalculator \
     chart2/source/tools/NameContainer \
