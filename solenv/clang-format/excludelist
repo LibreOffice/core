@@ -1171,6 +1171,7 @@ chart2/source/inc/LinearRegressionCurveCalculator.hxx
 chart2/source/inc/LogarithmicRegressionCurveCalculator.hxx
 chart2/source/inc/MeanValueRegressionCurveCalculator.hxx
 chart2/source/inc/MediaDescriptorHelper.hxx
+chart2/source/inc/ModifyListenerCallBack.hxx
 chart2/source/inc/ModifyListenerHelper.hxx
 chart2/source/inc/MovingAverageRegressionCurveCalculator.hxx
 chart2/source/inc/NameContainer.hxx
@@ -1334,6 +1335,7 @@ chart2/source/tools/LinearRegressionCurveCalculator.cxx
 chart2/source/tools/LogarithmicRegressionCurveCalculator.cxx
 chart2/source/tools/MeanValueRegressionCurveCalculator.cxx
 chart2/source/tools/MediaDescriptorHelper.cxx
+chart2/source/tools/ModifyListenerCallBack.cxx
 chart2/source/tools/ModifyListenerHelper.cxx
 chart2/source/tools/MovingAverageRegressionCurveCalculator.cxx
 chart2/source/tools/NameContainer.cxx

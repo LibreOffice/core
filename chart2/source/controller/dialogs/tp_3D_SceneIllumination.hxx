@@ -19,6 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_3D_SCENEILLUMINATION_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_3D_SCENEILLUMINATION_HXX
 
+#include <ModifyListenerCallBack.hxx>
 #include <TimerTriggeredControllerLock.hxx>
 #include <vcl/weld.hxx>
 #include <svx/dlgctl3d.hxx>
@@ -65,6 +66,7 @@ private:
 
     bool            m_bInCommitToModel;
 
+    ModifyListenerCallBack m_aModelChangeListener;
     css::uno::Reference<css::frame::XModel> m_xChartModel;
 
     weld::Window* m_pTopLevel;
