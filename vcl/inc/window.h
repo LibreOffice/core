@@ -196,7 +196,7 @@ struct ImplAccessibleInfos
     ~ImplAccessibleInfos();
 };
 
-enum AlwaysInputMode { AlwaysInputNone = 0, AlwaysInputEnabled = 1, AlwaysInputDisabled =2 };
+enum AlwaysInputMode { AlwaysInputNone = 0, AlwaysInputEnabled = 1 };
 
 enum class ImplPaintFlags {
     NONE             = 0x0000,
