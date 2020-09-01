@@ -481,15 +481,6 @@ public:
             return;
         m_pUIBuilder->setDeferredProperties();
     }
-    OString getUIFile() const
-    {
-        if (m_pUIBuilder)
-        {
-            return m_pUIBuilder->getUIFile();
-        }
-
-        return OString();
-    }
 
 protected:
     std::unique_ptr<VclBuilder> m_pUIBuilder;

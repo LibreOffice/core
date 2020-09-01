@@ -53,8 +53,6 @@ public:
     HelpTabPage_Impl(weld::Widget* pParent, SfxHelpIndexWindow_Impl* _pIdxWin,
         const OString& rID, const OUString& rUIXMLDescription);
     virtual ~HelpTabPage_Impl() override;
-
-    virtual weld::Widget* GetLastFocusControl() = 0;
 };
 
 // class ContentTabPage_Impl ---------------------------------------------
@@ -79,8 +77,6 @@ private:
 public:
     ContentTabPage_Impl(weld::Widget* pParent, SfxHelpIndexWindow_Impl* _pIdxWin);
     virtual ~ContentTabPage_Impl() override;
-
-    virtual weld::Widget* GetLastFocusControl() override;
 
     void     SetDoubleClickHdl(const Link<LinkParamNone*, void>& rLink);
     OUString GetSelectedEntry() const;
@@ -131,7 +127,6 @@ public:
     virtual ~IndexTabPage_Impl() override;
 
     virtual void        Activate() override;
-    virtual weld::Widget* GetLastFocusControl() override;
 
     void                SetDoubleClickHdl(const Link<LinkParamNone*, void>& rLink);
     void                SetFactory( const OUString& rFactory );
@@ -180,8 +175,6 @@ public:
     SearchTabPage_Impl(weld::Widget* pParent, SfxHelpIndexWindow_Impl* pIdxWin);
     virtual ~SearchTabPage_Impl() override;
 
-    virtual weld::Widget* GetLastFocusControl() override;
-
     void         SetDoubleClickHdl(const Link<LinkParamNone*, void>& rLink);
     void         SetFactory( const OUString& rFactory ) { aFactory = rFactory; }
     OUString     GetSelectedEntry() const;
@@ -211,8 +204,6 @@ private:
 public:
     BookmarksTabPage_Impl(weld::Widget* pParent, SfxHelpIndexWindow_Impl* pIdxWin);
     virtual ~BookmarksTabPage_Impl() override;
-
-    virtual weld::Widget* GetLastFocusControl() override;
 
     void                SetDoubleClickHdl(const Link<LinkParamNone*, void>& rLink);
     OUString            GetSelectedEntry() const;

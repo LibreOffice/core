@@ -241,7 +241,6 @@ namespace svx
         void init(weld::ScrolledWindow* pScrollBar, SuggestionEdit* pPrev, SuggestionEdit* pNext);
 
         void grab_focus() { m_xEntry->grab_focus(); }
-        OUString get_text() const { return m_xEntry->get_text(); }
         void set_text(const OUString& rText) { m_xEntry->set_text(rText); }
         void connect_changed(const Link<weld::Entry&, void>& rLink) { m_xEntry->connect_changed(rLink); }
     };

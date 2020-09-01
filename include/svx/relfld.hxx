@@ -58,9 +58,6 @@ public:
     void set_text(const OUString& rText) { m_xSpinButton->set_text(rText); }
     void save_value() { m_xSpinButton->save_value(); }
     bool get_value_changed_from_saved() const { return m_xSpinButton->get_value_changed_from_saved(); }
-    void set_size_request(int nWidth, int nHeight) { m_xSpinButton->set_size_request(nWidth, nHeight); }
-    void grab_focus() { m_xSpinButton->grab_focus(); }
-    Size get_preferred_size() const { return m_xSpinButton->get_preferred_size(); }
     weld::SpinButton& get_widget() { return m_xSpinButton->get_widget(); }
 
     int GetCoreValue(MapUnit eUnit) const { return ::GetCoreValue(*m_xSpinButton, eUnit); }

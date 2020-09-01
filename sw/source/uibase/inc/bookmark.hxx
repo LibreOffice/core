@@ -42,7 +42,6 @@ public:
     bool                has_focus() const { return m_xControl->has_focus(); }
     std::unique_ptr<weld::TreeIter> get_selected() const;
     void                clear() { m_xControl->clear(); }
-    void                remove(const weld::TreeIter& rIter) { m_xControl->remove(rIter); }
     void                select(const weld::TreeIter& rIter) { m_xControl->select(rIter); }
     void                remove_selection() { m_xControl->remove_selection(); }
     OUString            get_id(const weld::TreeIter& rIter) const { return m_xControl->get_id(rIter); }

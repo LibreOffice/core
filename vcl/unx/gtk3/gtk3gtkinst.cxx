@@ -11112,11 +11112,6 @@ public:
         return false;
     }
 
-    virtual bool iter_next_visible(weld::TreeIter& rIter) const override
-    {
-        return iter_next(rIter, true);
-    }
-
     virtual bool iter_children(weld::TreeIter& rIter) const override
     {
         GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);

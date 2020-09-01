@@ -259,25 +259,6 @@ public:
     }
 
     void make_sorted() { m_xControl->make_sorted(); };
-    void make_unsorted() { m_xControl->make_unsorted(); }
-    bool get_sort_order() const { return m_xControl->get_sort_order(); }
-    void set_sort_order(bool bAscending) { m_xControl->set_sort_order(bAscending); }
-
-    void set_sort_indicator(TriState eState, int nColumn = -1)
-    {
-        m_xControl->set_sort_indicator(eState, nColumn);
-    }
-    TriState get_sort_indicator(int nColumn = -1)
-    {
-        return m_xControl->get_sort_indicator(nColumn);
-    }
-
-    void set_sort_column(int nColumn) { m_xControl->set_sort_column(nColumn); }
-
-    void set_sort_func(const std::function<int(const weld::TreeIter&, const weld::TreeIter&)>& func)
-    {
-        m_xControl->set_sort_func(func);
-    }
 
     void            RemoveEntry(const weld::TreeIter& rIter);
     void            RemoveEntry(const ScriptDocument&);

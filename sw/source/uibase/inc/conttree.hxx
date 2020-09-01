@@ -345,11 +345,6 @@ public:
         FocusInHdl(*m_xTreeView);
     }
 
-    int count_selected_rows() const
-    {
-        return m_xTreeView->count_selected_rows();
-    }
-
     void set_selection_mode(SelectionMode eMode)
     {
         m_xTreeView->set_selection_mode(eMode);

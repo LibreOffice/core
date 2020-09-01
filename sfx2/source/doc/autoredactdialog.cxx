@@ -137,14 +137,6 @@ void TargetsTable::InsertTarget(RedactionTarget* pTarget)
         nRow, pTarget->bWholeWords ? SfxResId(STR_REDACTION_YES) : SfxResId(STR_REDACTION_NO), 4);
 }
 
-void TargetsTable::SelectByName(const OUString& sName)
-{
-    int nEntry = GetRowByTargetName(sName);
-    if (nEntry == -1)
-        return;
-    select(nEntry);
-}
-
 RedactionTarget* TargetsTable::GetTargetByName(const OUString& sName)
 {
     int nEntry = GetRowByTargetName(sName);

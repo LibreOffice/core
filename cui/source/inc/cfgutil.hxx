@@ -141,15 +141,9 @@ public:
     void expand_row(const weld::TreeIter& rIter) { m_xTreeView->expand_row(rIter); }
     int n_children() const { return m_xTreeView->n_children(); }
     std::unique_ptr<weld::TreeIter> make_iterator(const weld::TreeIter* pOrig = nullptr) const { return m_xTreeView->make_iterator(pOrig); }
-    bool get_iter_first(weld::TreeIter& rIter) const { return m_xTreeView->get_iter_first(rIter); }
-    // set iter to point to next node, depth first, then sibling
-    bool iter_next(weld::TreeIter& rIter) const { return m_xTreeView->iter_next(rIter); }
-    bool iter_next_sibling(weld::TreeIter& rIter) const { return m_xTreeView->iter_next_sibling(rIter); }
     bool iter_has_child(const weld::TreeIter& rIter) const { return m_xTreeView->iter_has_child(rIter); }
-    OUString get_text(const weld::TreeIter& rIter) const { return m_xTreeView->get_text(rIter); }
     OUString get_text(int nPos) const { return m_xTreeView->get_text(nPos); }
     OUString get_id(const weld::TreeIter& rIter) const { return m_xTreeView->get_id(rIter); }
-    OUString get_id(int nPos) const { return m_xTreeView->get_id(nPos); }
     bool get_selected(weld::TreeIter* pIter) const { return m_xTreeView->get_selected(pIter); }
     OUString get_selected_text() const
     {
@@ -163,8 +157,6 @@ public:
             return OUString();
         return m_xTreeView->get_id(*m_xScratchIter);
     }
-    int get_selected_index() const { return m_xTreeView->get_selected_index(); }
-    void select(const weld::TreeIter& rIter) { m_xTreeView->select(rIter); }
     void select(int pos) { m_xTreeView->select(pos); }
     void set_size_request(int nWidth, int nHeight) { m_xTreeView->set_size_request(nWidth, nHeight); }
     Size get_size_request() const { return m_xTreeView->get_size_request(); }

@@ -64,13 +64,9 @@ class TargetsTable
 public:
     TargetsTable(std::unique_ptr<weld::TreeView> xControl);
     void InsertTarget(RedactionTarget* pTarget);
-    void SelectByName(const OUString& sName);
     RedactionTarget* GetTargetByName(const OUString& sName);
     OUString GetNameProposal() const;
 
-    void unselect_all() { m_xControl->unselect_all(); }
-    bool has_focus() const { return m_xControl->has_focus(); }
-    int n_children() const { return m_xControl->n_children(); }
     int get_selected_index() const { return m_xControl->get_selected_index(); }
     std::vector<int> get_selected_rows() const { return m_xControl->get_selected_rows(); }
     void clear() { m_xControl->clear(); }
@@ -80,9 +76,6 @@ public:
 
     // Sync data on the targets box with the data on the target
     void setRowData(int nRowIndex, const RedactionTarget* pTarget);
-
-    //void connect_changed(const Link<weld::TreeView&, void>& rLink) { m_xControl->connect_changed(rLink); }
-    //void connect_row_activated(const Link<weld::TreeView&, void>& rLink) { m_xControl->connect_row_activated(rLink); }
 };
 
 namespace sfx2

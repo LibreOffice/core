@@ -91,7 +91,6 @@ public:
     void save_active_id() { m_eSavedLanguage = get_active_id(); }
     LanguageType get_saved_active_id() const { return m_eSavedLanguage; }
     bool get_active_id_changed_from_saved() const { return m_eSavedLanguage != get_active_id(); }
-    void show() { m_xControl->show(); }
     void hide() { m_xControl->hide(); }
     void set_visible(bool bShow) { m_xControl->set_visible(bShow); }
     void set_sensitive(bool bSensitive) { m_xControl->set_sensitive(bSensitive); }

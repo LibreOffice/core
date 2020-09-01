@@ -333,10 +333,6 @@ public:
     void remove(int nPos) { m_xControl->remove(nPos); }
     int n_children() const { return m_xControl->n_children(); }
     void set_text(int row, const OUString& rText, int col) { m_xControl->set_text(row, rText, col); }
-    OUString get_text(int row) { return m_xControl->get_text(row); }
-    void set_image(int row, const css::uno::Reference<css::graphic::XGraphic>& rImage, int col) { m_xControl->set_image(row, rImage, col); }
-    void set_dropdown(int row, int col) { m_xControl->set_image(row, *m_xDropDown, col); }
-    void set_id(int row, const OUString& rId) { m_xControl->set_id(row, rId); }
     void clear() { m_xControl->clear(); } //need frees ?
     void set_toggle(int row, TriState eState) { m_xControl->set_toggle(row, eState); }
     void scroll_to_row(int pos) { m_xControl->scroll_to_row(pos); }

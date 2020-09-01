@@ -241,8 +241,6 @@ public:
     void append_text(const OUString& rStr) { m_xControl->append_text(rStr); }
     bool get_value_changed_from_saved() const { return m_xControl->get_value_changed_from_saved(); }
     void save_value() { m_xControl->save_value(); }
-    void set_sensitive(bool bSensitive) { m_xControl->set_sensitive(bSensitive); }
-    bool get_sensitive() const { return m_xControl->get_sensitive(); }
 };
 
 /************************************************************************/
