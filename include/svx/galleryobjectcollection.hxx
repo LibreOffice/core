@@ -20,12 +20,30 @@
 #pragma once
 
 #include <svx/svxdllapi.h>
+#include <svx/galmisc.hxx>
+#include <svx/galleryobjectxmlstorage.hxx>
+#include <svx/galleryobjectbinarystorage.hxx>
 
+#include <vcl/bitmapex.hxx>
 #include <tools/urlobj.hxx>
 #include <memory>
 #include <vector>
 
-struct GalleryObject;
+struct GalleryObject
+{
+    std::unique_ptr<GalleryObjectStorage> m_pGalleryObjectStorage;
+    sal_uInt32 nOffset;
+    SgaObjKind eObjKind;
+    bool mbDelete;
+
+    //UI visualization buffering
+    BitmapEx maPreviewBitmapEx;
+    Size maPreparedSize;
+    OUString maTitle;
+    OUString maPath;
+
+    const INetURLObject& getURL() const { return m_pGalleryObjectStorage->getURL(); }
+};
 
 class SVXCORE_DLLPUBLIC GalleryObjectCollection
 {
@@ -42,6 +60,7 @@ public:
     const GalleryObject* searchObjectWithURL(const INetURLObject& rURL);
     const GalleryObject* getForPosition(sal_uInt32 nPos) const;
     sal_uInt32 searchPosWithObject(const GalleryObject* pObj);
+    const INetURLObject& getURLForPosition(sal_uInt32 nPos) const;
 
     void clear();
 
