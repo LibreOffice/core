@@ -478,8 +478,8 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
             {
                 // Copy from parent sets only allowed items which will not overwrite
                 // values explicitly defined in current set (pCleanedSet) or in pFormat
-                const SfxPoolItem* pItem = rStyleAttrs.GetItem(nWhich, true);
-                pCleanedSet->Put(*pItem);
+                if (const SfxPoolItem* pItem = rStyleAttrs.GetItem(nWhich, true))
+                    pCleanedSet->Put(*pItem);
             }
             nWhich = aIter.NextWhich();
         }
