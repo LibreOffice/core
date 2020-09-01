@@ -26,7 +26,7 @@
 #include <vcl/window.hxx>
 #include <vcl/keycod.hxx>
 
-const sal_uInt16 aImplKeyFuncTab[(static_cast<int>(KeyFuncType::REPEAT)+1)*4] =
+const sal_uInt16 aImplKeyFuncTab[(static_cast<int>(KeyFuncType::DELETE)+1)*4] =
 {
     0, 0, 0, 0,                                                    // KeyFuncType::DONTKNOW
     KEY_X | KEY_MOD1, KEY_DELETE | KEY_SHIFT, KEY_CUT, 0,          // KeyFuncType::CUT
@@ -34,8 +34,7 @@ const sal_uInt16 aImplKeyFuncTab[(static_cast<int>(KeyFuncType::REPEAT)+1)*4] =
     KEY_V | KEY_MOD1, KEY_INSERT | KEY_SHIFT, KEY_PASTE, 0,        // KeyFuncType::PASTE
     KEY_Z | KEY_MOD1, KEY_BACKSPACE | KEY_MOD2, KEY_UNDO, 0,       // KeyFuncType::UNDO
     KEY_Y | KEY_MOD1, KEY_UNDO | KEY_SHIFT, 0, 0,                  // KeyFuncType::REDO
-    KEY_DELETE, 0, 0, 0,                                           // KeyFuncType::DELETE
-    KEY_REPEAT, 0, 0, 0                                            // KeyFuncType::REPEAT
+    KEY_DELETE, 0, 0, 0                                            // KeyFuncType::DELETE
 };
 
 bool ImplGetKeyCode( KeyFuncType eFunc, sal_uInt16& rCode1, sal_uInt16& rCode2, sal_uInt16& rCode3, sal_uInt16& rCode4 )
@@ -79,7 +78,7 @@ KeyFuncType vcl::KeyCode::GetFunction() const
     sal_uInt16 nCompCode = GetModifier() | GetCode();
     if ( nCompCode )
     {
-        for ( sal_uInt16 i = sal_uInt16(KeyFuncType::CUT); i <= sal_uInt16(KeyFuncType::REPEAT); i++ )
+        for ( sal_uInt16 i = sal_uInt16(KeyFuncType::CUT); i <= sal_uInt16(KeyFuncType::DELETE); i++ )
         {
             sal_uInt16 nKeyCode1;
             sal_uInt16 nKeyCode2;
