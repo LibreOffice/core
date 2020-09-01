@@ -63,6 +63,7 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/simpress,\
 	sd/uiconfig/simpress/toolbar/commontaskbar \
 	sd/uiconfig/simpress/toolbar/connectorsbar \
 	sd/uiconfig/simpress/toolbar/drawingobjectbar \
+	sd/uiconfig/simpress/toolbar/distributebar \
 	sd/uiconfig/simpress/toolbar/ellipsesbar \
 	sd/uiconfig/simpress/toolbar/extrusionobjectbar \
 	sd/uiconfig/simpress/toolbar/findbar \
