@@ -10,7 +10,7 @@
 #include <test/bootstrapfixture.hxx>
 
 #include <vcl/wrkwin.hxx>
-#include <vcl/edit.hxx>
+#include <vcl/toolkit/edit.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/combobox.hxx>
 #include <vcl/toolkit/dialog.hxx>

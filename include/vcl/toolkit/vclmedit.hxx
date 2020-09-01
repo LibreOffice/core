@@ -25,7 +25,7 @@
 
 #include <tools/lineend.hxx>
 #include <tools/wintypes.hxx>
-#include <vcl/edit.hxx>
+#include <vcl/toolkit/edit.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/timer.hxx>
 #include <memory>

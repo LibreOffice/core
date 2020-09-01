@@ -29,7 +29,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/accel.hxx>
 #include <vcl/builder.hxx>
-#include <vcl/edit.hxx>
+#include <vcl/toolkit/edit.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/uitest/uiobject.hxx>

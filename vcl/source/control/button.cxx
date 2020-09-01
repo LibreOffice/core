@@ -29,7 +29,7 @@
 #include <vcl/toolkit/fixed.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/salnativewidgets.hxx>
-#include <vcl/edit.hxx>
+#include <vcl/toolkit/edit.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/uitest/uiobject.hxx>

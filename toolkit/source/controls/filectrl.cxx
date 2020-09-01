@@ -27,7 +27,7 @@
 #include <svl/svlresid.hxx>
 #include <svl/svl.hrc>
 #include <tools/urlobj.hxx>
-#include <vcl/edit.hxx>
+#include <vcl/toolkit/edit.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

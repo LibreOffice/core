@@ -24,7 +24,7 @@
 #include <vcl/builder.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/dialog.hxx>
-#include <vcl/edit.hxx>
+#include <vcl/toolkit/edit.hxx>
 #include <vcl/toolkit/field.hxx>
 #include <vcl/fieldvalues.hxx>
 #include <vcl/toolkit/fmtfield.hxx>
