@@ -26,7 +26,7 @@
 
 #include <uiobject.hxx>
 
-#include <vcl/edit.hxx>
+#include <vcl/fixed.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>

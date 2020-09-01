@@ -39,7 +39,7 @@ class Outliner;
 class ScrollBar;
 class SwEditWin;
 class SwView;
-class Edit;
+class FixedText;
 class MenuButton;
 class SwFrame;
 class SvxLanguageItem;
@@ -229,9 +229,9 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
 
         VclPtr<sw::sidebarwindows::SidebarTextControl> mpSidebarTextControl;
         VclPtr<ScrollBar>      mpVScrollbar;
-        VclPtr<Edit>           mpMetadataAuthor;
-        VclPtr<Edit>           mpMetadataDate;
-        VclPtr<Edit>           mpMetadataResolved;
+        VclPtr<FixedText>      mpMetadataAuthor;
+        VclPtr<FixedText>      mpMetadataDate;
+        VclPtr<FixedText>      mpMetadataResolved;
         VclPtr<MenuButton>     mpMenuButton;
 
         std::unique_ptr<sw::sidebarwindows::AnchorOverlayObject> mpAnchor;
