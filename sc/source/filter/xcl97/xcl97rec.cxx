@@ -1089,6 +1089,7 @@ ExcBof8_Base::ExcBof8_Base()
     nRupBuild       = 0x0dbb;
     nRupYear        = 0x07cc;
 }
+
 void XclObjAny::WriteFromTo( XclExpXmlStream& rStrm, const Reference< XShape >& rShape, SCTAB nTab )
 {
     sax_fastparser::FSHelperPtr pDrawing = rStrm.GetCurrentStream();
@@ -1271,6 +1272,23 @@ void XclObjAny::SaveXml( XclExpXmlStream& rStrm )
     // leading to ms2010 rejecting the content
     if( !mxShape.is() || mxShape->getShapeType() == "com.sun.star.drawing.GroupShape" )
         return;
+
+    uno::Reference< beans::XPropertySet > xShapeProperties(mxShape, uno::UNO_QUERY);
+    if (xShapeProperties)
+    {
+        uno::Sequence<beans::PropertyValue> aGrabBag;
+        xShapeProperties->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+        if (aGrabBag.hasElements())
+        {
+            for (auto aProp : aGrabBag)
+            {
+                if (aProp.Name == "IsDetective")
+                {
+                    return;
+                }
+            }
+        }
+    }
 
     sax_fastparser::FSHelperPtr pDrawing = rStrm.GetCurrentStream();
 
