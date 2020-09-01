@@ -189,6 +189,7 @@ ThreeD_SceneIllumination_TabPage::ThreeD_SceneIllumination_TabPage(weld::Contain
     : m_xSceneProperties( xSceneProperties )
     , m_aTimerTriggeredControllerLock( xChartModel )
     , m_bInCommitToModel( false )
+    , m_aModelChangeListener( LINK( this, ThreeD_SceneIllumination_TabPage, fillControlsFromModel ) )
     , m_xChartModel( xChartModel )
     , m_pTopLevel(pTopLevel)
     , m_xBuilder(Application::CreateBuilder(pParent, "modules/schart/ui/tp_3D_SceneIllumination.ui"))
@@ -243,6 +244,8 @@ ThreeD_SceneIllumination_TabPage::ThreeD_SceneIllumination_TabPage(weld::Contain
     m_xCtl_Preview->SetUserSelectionChangeCallback( LINK( this, ThreeD_SceneIllumination_TabPage, PreviewSelectHdl ) );
 
     ClickLightSourceButtonHdl(*m_xBtn_Light2->get_widget());
+
+    m_aModelChangeListener.startListening( uno::Reference< util::XModifyBroadcaster >(m_xSceneProperties, uno::UNO_QUERY) );
 }
 
 ThreeD_SceneIllumination_TabPage::~ThreeD_SceneIllumination_TabPage()
