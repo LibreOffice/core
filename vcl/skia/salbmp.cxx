@@ -565,6 +565,17 @@ static SkColor toSkColor(Color color)
                           color.GetBlue());
 }
 
+// If mEraseColor is set, this is the color to use when the bitmap is used as alpha bitmap.
+// E.g. COL_BLACK actually means fully opaque and COL_WHITE means fully transparent.
+// This is because the alpha value is set as the color itself, not the alpha of the color.
+// Additionally VCL actually uses transparency and not opacity, so we should use "255 - value",
+// but we account for this by doing SkBlendMode::kDstOut when using alpha images (which
+// basically does another "255 - alpha"), so do not do it here.
+static SkColor fromEraseColorToAlphaImageColor(Color color)
+{
+    return SkColorSetARGB(color.GetBlue(), 0, 0, 0);
+}
+
 const sk_sp<SkImage>& SkiaSalBitmap::GetSkImage() const
 {
 #ifdef DBG_UTIL
@@ -655,7 +666,7 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
         SkiaZone zone;
         sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(mSize, kAlpha_8_SkColorType);
         assert(surface);
-        surface->getCanvas()->clear(SkColorSetARGB(255 - mEraseColor.GetBlue(), 0, 0, 0));
+        surface->getCanvas()->clear(fromEraseColorToAlphaImageColor(mEraseColor));
         SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
         thisPtr->mAlphaImage = surface->makeImageSnapshot();
         SAL_INFO("vcl.skia.trace",
@@ -758,7 +769,7 @@ sk_sp<SkShader> SkiaSalBitmap::GetSkShader() const
 sk_sp<SkShader> SkiaSalBitmap::GetAlphaSkShader() const
 {
     if (mEraseColorSet)
-        return SkShaders::Color(toSkColor(mEraseColor));
+        return SkShaders::Color(fromEraseColorToAlphaImageColor(mEraseColor));
     return GetAlphaSkImage()->makeShader();
 }
 
@@ -999,8 +1010,8 @@ OString SkiaSalBitmap::GetAlphaImageKey() const
     if (mEraseColorSet)
     {
         std::stringstream ss;
-        ss << std::hex << std::setfill('0') << std::setw(2) << (255 - mEraseColor.GetTransparency())
-           << std::setw(6) << sal_uInt32(mEraseColor.GetRGBColor());
+        ss << std::hex << std::setfill('0') << std::setw(2)
+           << (255 - SkColorGetA(fromEraseColorToAlphaImageColor(mEraseColor)));
         return OStringLiteral("E") + ss.str().c_str();
     }
     return OStringLiteral("I") + OString::number(GetAlphaSkImage()->uniqueID());
