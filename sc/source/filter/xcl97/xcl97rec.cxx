@@ -1089,6 +1089,7 @@ ExcBof8_Base::ExcBof8_Base()
     nRupBuild       = 0x0dbb;
     nRupYear        = 0x07cc;
 }
+
 void XclObjAny::WriteFromTo( XclExpXmlStream& rStrm, const Reference< XShape >& rShape, SCTAB nTab )
 {
     sax_fastparser::FSHelperPtr pDrawing = rStrm.GetCurrentStream();
@@ -1269,7 +1270,8 @@ void XclObjAny::SaveXml( XclExpXmlStream& rStrm )
 {
     // ignore group shapes at the moment, we don't process them correctly
     // leading to ms2010 rejecting the content
-    if( !mxShape.is() || mxShape->getShapeType() == "com.sun.star.drawing.GroupShape" )
+    if( !mxShape.is() || mxShape->getShapeType() == "com.sun.star.drawing.GroupShape"
+        || rStrm.GetRoot().GetDoc().IsDetectiveDirty() )
         return;
 
     sax_fastparser::FSHelperPtr pDrawing = rStrm.GetCurrentStream();
