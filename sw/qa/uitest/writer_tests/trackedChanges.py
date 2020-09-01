@@ -226,4 +226,36 @@ class trackedchanges(UITestCase):
         xcloseBtn.executeAction("CLICK", tuple())
 
         self.ui_test.close_doc()
+
+    def test_tdf135018(self):
+        self.ui_test.load_file(get_url_for_data_file("tdf135018.odt"))
+        xWriterDoc = self.xUITest.getTopFocusWindow()
+        xWriterEdit = xWriterDoc.getChild("writer_edit")
+        document = self.ui_test.get_component()
+
+        self.assertEqual(5, document.CurrentController.PageCount)
+
+        self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges")
+        xTrackDlg = self.xUITest.getTopFocusWindow()
+        changesList = xTrackDlg.getChild("writerchanges")
+        self.assertEqual(147, len(changesList.getChildren()))
+
+        # Without the fix in place, it would have crashed here
+        xAccBtn = xTrackDlg.getChild("acceptall")
+        xAccBtn.executeAction("CLICK", tuple())
+
+        self.assertEqual(0, len(changesList.getChildren()))
+
+        xUndoBtn = xTrackDlg.getChild("undo")
+        xUndoBtn.executeAction("CLICK", tuple())
+
+        self.assertEqual(147, len(changesList.getChildren()))
+
+        xcloseBtn = xTrackDlg.getChild("close")
+        xcloseBtn.executeAction("CLICK", tuple())
+
+        self.assertEqual(17, document.CurrentController.PageCount)
+
+        self.ui_test.close_doc()
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
