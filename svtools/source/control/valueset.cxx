@@ -165,8 +165,8 @@ void ValueSet::ImplDeleteItems()
 
 void ValueSet::Select()
 {
-    maSelectHdl.Call( this );
     collectUIInformation(OStringToOUString(GetDrawingArea()->get_buildable_name(),RTL_TEXTENCODING_UTF8) , OStringToOUString(GetDrawingArea()->get_help_id(),RTL_TEXTENCODING_UTF8) , OUString::number(GetSelectedItemId()));
+    maSelectHdl.Call( this );
 }
 
 void ValueSet::UserDraw( const UserDrawEvent& )
