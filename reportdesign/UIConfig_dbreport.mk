@@ -26,6 +26,7 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/dbreport,\
 	reportdesign/uiconfig/dbreport/toolbar/arrowshapes \
 	reportdesign/uiconfig/dbreport/toolbar/basicshapes \
 	reportdesign/uiconfig/dbreport/toolbar/calloutshapes \
+	reportdesign/uiconfig/dbreport/toolbar/distributebar \
 	reportdesign/uiconfig/dbreport/toolbar/drawbar \
 	reportdesign/uiconfig/dbreport/toolbar/flowchartshapes \
 	reportdesign/uiconfig/dbreport/toolbar/Formatting \

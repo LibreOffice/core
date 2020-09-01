@@ -240,7 +240,7 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:Distribution"/>
+            <menu:menuitem menu:id=".uno:DistributeSelection"/>
         </menu:menupopup>
     </menu:menu>
     <menu:menu menu:id=".uno:ToolsMenu" >

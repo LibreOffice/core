@@ -520,6 +520,20 @@
           <value>com.sun.star.comp.framework.WindowListMenuController</value>
         </prop>
       </node>
+      <node oor:name="DistributeControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:DistributeSelection</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ToolbarAsMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>distributebar</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="ToolBar">
       <node oor:name="lo.writer.ScrollToPrevious" oor:op="replace">
@@ -1898,6 +1912,20 @@
         </prop>
         <prop oor:name="Controller">
           <value>com.sun.star.comp.framework.GenericPopupToolbarController</value>
+        </prop>
+      </node>
+      <node oor:name="DistributeControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:DistributeSelection</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>distributebar</value>
         </prop>
       </node>
     </node>

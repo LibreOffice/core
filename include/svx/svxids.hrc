@@ -92,9 +92,17 @@ class SvxSetItem;
 #define SID_POLY_MERGE                      (SID_SFX_START + 679)
 #define SID_POLY_SUBSTRACT                  (SID_SFX_START + 680)
 #define SID_POLY_INTERSECT                  (SID_SFX_START + 681)
-#define SID_DISTRIBUTE_DLG                  (SID_SFX_START + 683)
+#define SID_DISTRIBUTE_DLG                  (SID_SFX_START + 683) // dialog replaced by dropdown
 #define SID_EQUALIZEWIDTH                   (SID_SFX_START + 684)
 #define SID_EQUALIZEHEIGHT                  (SID_SFX_START + 685)
+#define SID_DISTRIBUTE_HLEFT                (SID_SFX_START + 686)
+#define SID_DISTRIBUTE_HCENTER              (SID_SFX_START + 687)
+#define SID_DISTRIBUTE_HDISTANCE            (SID_SFX_START + 688)
+#define SID_DISTRIBUTE_HRIGHT               (SID_SFX_START + 689)
+#define SID_DISTRIBUTE_VTOP                 (SID_SFX_START + 690)
+#define SID_DISTRIBUTE_VCENTER              (SID_SFX_START + 691)
+#define SID_DISTRIBUTE_VDISTANCE            (SID_SFX_START + 692)
+#define SID_DISTRIBUTE_VBOTTOM              (SID_SFX_START + 693)
 
 // StarBase IDs
 
