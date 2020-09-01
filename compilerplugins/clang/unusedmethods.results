@@ -72,8 +72,6 @@ connectivity/source/drivers/firebird/Util.hxx:72
     short connectivity::firebird::ColumnTypeInfo::getSubType() const
 connectivity/source/drivers/firebird/Util.hxx:74
     const class rtl::OUString & connectivity::firebird::ColumnTypeInfo::getCharacterSet() const
-connectivity/source/drivers/mork/mork_helper.cxx:37
-    int main(int,char **)
 connectivity/source/drivers/mysqlc/mysqlc_connection.hxx:176
     class rtl::OUString connectivity::mysqlc::OConnection::transFormPreparedStatement(const class rtl::OUString &)
 connectivity/source/drivers/mysqlc/mysqlc_prepared_resultset.hxx:94
@@ -501,13 +499,13 @@ include/comphelper/sequence.hxx:200
 include/comphelper/sequence.hxx:200
     Sequence<type-parameter-?-?> comphelper::containerToSequence(type-parameter-?-? const (&)[S])
 include/comphelper/sequence.hxx:200
+    Sequence<type-parameter-?-?> comphelper::containerToSequence(type-parameter-?-? const (&)[_Bound])
+include/comphelper/sequence.hxx:200
     Sequence<type-parameter-?-?> comphelper::containerToSequence(type-parameter-?-? const (&)[N])
 include/comphelper/sequence.hxx:200
     Sequence<type-parameter-?-?> comphelper::containerToSequence(type-parameter-?-? const (&)[_Nm])
 include/comphelper/sequence.hxx:200
     Sequence<type-parameter-?-?> comphelper::containerToSequence(type-parameter-?-? const (&)[SrcSize])
-include/comphelper/sequence.hxx:200
-    Sequence<type-parameter-?-?> comphelper::containerToSequence(type-parameter-?-? const (&)[_Bound])
 include/comphelper/servicedecl.hxx:108
      comphelper::service_decl::ServiceDecl::ServiceDecl(const type-parameter-?-? &,const char *,const char *)
 include/comphelper/unique_disposing_ptr.hxx:46
@@ -676,10 +674,6 @@ include/svx/ClassificationField.hxx:47
     const class rtl::OUString & svx::ClassificationResult::getDisplayText() const
 include/svx/ClassificationField.hxx:52
     _Bool svx::ClassificationResult::operator==(const class svx::ClassificationResult &) const
-include/svx/dbaexchange.hxx:170
-     svx::ODataAccessObjectTransferable::ODataAccessObjectTransferable(const class rtl::OUString &,const int,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::sdbc::XConnection> &)
-include/svx/dbaexchange.hxx:192
-     svx::ODataAccessObjectTransferable::ODataAccessObjectTransferable(const class rtl::OUString &,const int,const class rtl::OUString &)
 include/svx/DiagramDataInterface.hxx:33
     class rtl::OUString DiagramDataInterface::getString() const
 include/svx/dlgctrl.hxx:244
@@ -692,7 +686,7 @@ include/svx/framelink.hxx:170
     _Bool svx::frame::operator>(const class svx::frame::Style &,const class svx::frame::Style &)
 include/svx/gallery1.hxx:58
     const class std::unique_ptr<class GalleryBinaryEngineEntry, struct std::default_delete<class GalleryBinaryEngineEntry> > & GalleryThemeEntry::getGalleryBinaryEngineEntry() const
-include/svx/gallerybinaryengine.hxx:63
+include/svx/gallerybinaryengine.hxx:69
     const class INetURLObject & GalleryBinaryEngine::GetStrURL() const
 include/svx/langbox.hxx:94
     void SvxLanguageBox::show()
@@ -840,6 +834,8 @@ include/vcl/customweld.hxx:142
     void weld::CustomWeld::queue_draw_area(int,int,int,int)
 include/vcl/customweld.hxx:157
     void weld::CustomWeld::set_visible(_Bool)
+include/vcl/edit.hxx:240
+    class Size Edit::GetMinimumEditSize()
 include/vcl/errcode.hxx:86
     _Bool ErrCode::operator<(const class ErrCode &) const
 include/vcl/errcode.hxx:87
@@ -868,7 +864,7 @@ include/vcl/ITiledRenderable.hxx:214
     enum PointerStyle vcl::ITiledRenderable::getPointer()
 include/vcl/lok.hxx:22
     void vcl::lok::unregisterPollCallbacks()
-include/vcl/NotebookBarAddonsMerger.hxx:63
+include/vcl/NotebookBarAddonsMerger.hxx:55
      NotebookBarAddonsMerger::NotebookBarAddonsMerger()
 include/vcl/opengl/OpenGLHelper.hxx:67
     void OpenGLHelper::renderToFile(long,long,const class rtl::OUString &)
@@ -916,38 +912,12 @@ include/vcl/TaskStopwatch.hxx:118
     void TaskStopwatch::setTimeSlice(unsigned int)
 include/vcl/textrectinfo.hxx:45
     _Bool TextRectInfo::operator!=(const class TextRectInfo &) const
-include/vcl/toolkit/ivctrl.hxx:120
-    void SvxIconChoiceCtrlEntry::SetUserData(void *)
-include/vcl/toolkit/ivctrl.hxx:121
-    void * SvxIconChoiceCtrlEntry::GetUserData()
-include/vcl/toolkit/ivctrl.hxx:220
-    void SvtIconChoiceCtrl::SetChoiceWithCursor()
-include/vcl/toolkit/ivctrl.hxx:226
-    const class Link<class SvtIconChoiceCtrl *, void> & SvtIconChoiceCtrl::GetClickHdl() const
-include/vcl/toolkit/ivctrl.hxx:246
-    void SvtIconChoiceCtrl::CreateAutoMnemonics(class MnemonicGenerator &)
-include/vcl/toolkit/ivctrl.hxx:258
-    void SvtIconChoiceCtrl::InvalidateEntry(class SvxIconChoiceCtrlEntry *)
-include/vcl/toolkit/ivctrl.hxx:261
-    class SvxIconChoiceCtrlEntry * SvtIconChoiceCtrl::GetEntry(const class Point &) const
-include/vcl/toolkit/ivctrl.hxx:270
-    void SvtIconChoiceCtrl::SetSelectionMode(enum SelectionMode)
 include/vcl/toolkit/longcurr.hxx:47
     class BigInt LongCurrencyFormatter::GetValue() const
 include/vcl/toolkit/treelist.hxx:170
     const class SvTreeListEntry * SvTreeList::GetParent(const class SvTreeListEntry *) const
 include/vcl/toolkit/treelistbox.hxx:369
     void SvTreeListBox::RemoveSelection()
-include/vcl/toolkit/treelistbox.hxx:631
-    void SvTreeListBox::SetCursor(class SvTreeListEntry *)
-include/vcl/toolkit/treelistbox.hxx:670
-    class VclPtr<class PopupMenu> SvTreeListBox::CreateContextMenu()
-include/vcl/toolkit/vclmedit.hxx:89
-    void VclMultiLineEdit::LinkStubImpUpdateDataHdl(void *,class Timer *)
-include/vcl/toolkit/vclmedit.hxx:89
-    void VclMultiLineEdit::ImpUpdateDataHdl(class Timer *)
-include/vcl/toolkit/vclmedit.hxx:146
-    void VclMultiLineEdit::SetRightToLeft(_Bool)
 include/vcl/txtattr.hxx:56
     _Bool TextAttrib::operator!=(const class TextAttrib &) const
 include/vcl/uitest/uiobject.hxx:281
@@ -1048,20 +1018,8 @@ include/xmloff/txtimp.hxx:386
     class XMLPropertyBackpatcher<short> & XMLTextImportHelper::GetFootnoteBP()
 include/xmloff/txtimp.hxx:387
     class XMLPropertyBackpatcher<short> & XMLTextImportHelper::GetSequenceIdBP()
-include/xmloff/txtimp.hxx:421
-    const class SvXMLTokenMap & XMLTextImportHelper::GetTextMasterPageElemTokenMap()
-include/xmloff/txtimp.hxx:572
+include/xmloff/txtimp.hxx:571
     class rtl::OUString XMLTextImportHelper::FindActiveBookmarkName()
-include/xmloff/xmlimppr.hxx:93
-    void SvXMLImportPropertyMapper::importXML(class std::__debug::vector<struct XMLPropertyState, class std::allocator<struct XMLPropertyState> > &,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XAttributeList> &,const class SvXMLUnitConverter &,const class SvXMLNamespaceMap &,unsigned int,int,int) const
-include/xmloff/xmlnumfi.hxx:92
-    const class SvXMLTokenMap & SvXMLNumFmtHelper::GetStylesElemTokenMap()
-include/xmloff/xmlnumfi.hxx:173
-    class SvXMLNumImpData * SvXMLNumFormatContext::GetData() const
-include/xmloff/xmlnumi.hxx:53
-     SvxXMLListStyleContext::SvxXMLListStyleContext(class SvXMLImport &,unsigned short,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XAttributeList> &,_Bool)
-include/xmloff/xmlstyle.hxx:179
-    const class SvXMLTokenMap & SvXMLStylesContext::GetStyleStylesElemTokenMap()
 include/xmlreader/pad.hxx:38
     void xmlreader::Pad::add(char const (&)[size_])
 include/xmlreader/span.hxx:45
@@ -1318,6 +1276,8 @@ sd/source/filter/ppt/pptinanimations.hxx:108
     void ppt::AnimationImporter::dump(const char *,long)
 sd/source/ui/inc/filedlg.hxx:55
     _Bool SdOpenSoundFileDialog::IsInsertAsLinkSelected() const
+sd/source/ui/inc/fusearch.hxx:34
+    class rtl::Reference<class sd::FuPoor> sd::FuSearch::Create(class sd::ViewShell *,class sd::Window *,class sd::View *,class SdDrawDocument *,class SfxRequest &)
 sd/source/ui/inc/GraphicViewShell.hxx:43
     class SfxViewFactory * sd::GraphicViewShell::Factory()
 sd/source/ui/inc/GraphicViewShell.hxx:43
@@ -1400,23 +1360,23 @@ slideshow/source/engine/activities/activitiesfactory.cxx:566
     void slideshow::internal::(anonymous namespace)::ValuesActivity::perform(unsigned int,unsigned int) const
 slideshow/source/engine/activities/activitiesfactory.cxx:581
     void slideshow::internal::(anonymous namespace)::ValuesActivity::performEnd()
-slideshow/source/engine/animationfactory.cxx:613
-    void slideshow::internal::(anonymous namespace)::GenericAnimation::prefetch()
 slideshow/source/engine/animationfactory.cxx:616
+    void slideshow::internal::(anonymous namespace)::GenericAnimation::prefetch()
+slideshow/source/engine/animationfactory.cxx:619
     void slideshow::internal::(anonymous namespace)::GenericAnimation::start(const class std::shared_ptr<class slideshow::internal::AnimatableShape> &,const class std::shared_ptr<class slideshow::internal::ShapeAttributeLayer> &)
-slideshow/source/engine/animationfactory.cxx:694
+slideshow/source/engine/animationfactory.cxx:698
     _Bool slideshow::internal::(anonymous namespace)::GenericAnimation::operator()(const typename type-parameter-?-?::ValueType &)
-slideshow/source/engine/animationfactory.cxx:711
+slideshow/source/engine/animationfactory.cxx:715
     _Bool slideshow::internal::(anonymous namespace)::GenericAnimation::operator()(typename type-parameter-?-?::ValueType)
-slideshow/source/engine/animationfactory.cxx:731
+slideshow/source/engine/animationfactory.cxx:736
     typename type-parameter-?-?::ValueType slideshow::internal::(anonymous namespace)::GenericAnimation::getUnderlyingValue() const
 slideshow/source/engine/opengl/TransitionImpl.hxx:184
     void OGLTransitionImpl::cleanup()
-slideshow/source/inc/box2dtools.hxx:119
+slideshow/source/inc/box2dtools.hxx:160
     void box2d::utils::box2DWorld::setShapeAngle(const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape>,const double)
-slideshow/source/inc/box2dtools.hxx:206
+slideshow/source/inc/box2dtools.hxx:262
     _Bool box2d::utils::box2DWorld::shapesInitialized()
-slideshow/source/inc/box2dtools.hxx:228
+slideshow/source/inc/box2dtools.hxx:300
     class std::shared_ptr<class box2d::utils::box2DBody> box2d::utils::box2DWorld::makeShapeStatic(const class std::shared_ptr<class slideshow::internal::Shape> &)
 slideshow/source/inc/listenercontainer.hxx:44
     _Bool slideshow::internal::FunctionApply::apply(type-parameter-?-?,const class std::shared_ptr<class slideshow::internal::AnimationEventHandler> &)
@@ -1436,6 +1396,8 @@ slideshow/source/inc/listenercontainer.hxx:54
     _Bool slideshow::internal::FunctionApply::apply(type-parameter-?-?,const class std::shared_ptr<class slideshow::internal::ViewRepaintHandler> &)
 slideshow/source/inc/listenercontainer.hxx:54
     _Bool slideshow::internal::FunctionApply::apply(type-parameter-?-?,const class std::shared_ptr<class slideshow::internal::ViewEventHandler> &)
+smoketest/libtest.cxx:70
+    int main(int,char **)
 starmath/inc/format.hxx:138
     _Bool SmFormat::operator!=(const class SmFormat &) const
 svgio/inc/svgstyleattributes.hxx:346
@@ -1517,11 +1479,11 @@ sw/inc/docary.hxx:94
 sw/inc/docary.hxx:94
     void SwVectorModifyBase::insert(class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class SwGrfFormatColl **, class std::__cxx1998::vector<class SwGrfFormatColl *, class std::allocator<class SwGrfFormatColl *> > >, class std::__debug::vector<class SwGrfFormatColl *, class std::allocator<class SwGrfFormatColl *> >, struct std::random_access_iterator_tag>,type-parameter-?-?,type-parameter-?-?)
 sw/inc/docary.hxx:94
+    void SwVectorModifyBase::insert(class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class SwFrameFormat **, class std::__cxx1998::vector<class SwFrameFormat *, class std::allocator<class SwFrameFormat *> > >, class std::__debug::vector<class SwFrameFormat *, class std::allocator<class SwFrameFormat *> >, struct std::random_access_iterator_tag>,type-parameter-?-?,type-parameter-?-?)
+sw/inc/docary.hxx:94
     void SwVectorModifyBase::insert(class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class SwSectionFormat **, class std::__cxx1998::vector<class SwSectionFormat *, class std::allocator<class SwSectionFormat *> > >, class std::__debug::vector<class SwSectionFormat *, class std::allocator<class SwSectionFormat *> >, struct std::random_access_iterator_tag>,type-parameter-?-?,type-parameter-?-?)
 sw/inc/docary.hxx:94
     void SwVectorModifyBase::insert(class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class SwCharFormat **, class std::__cxx1998::vector<class SwCharFormat *, class std::allocator<class SwCharFormat *> > >, class std::__debug::vector<class SwCharFormat *, class std::allocator<class SwCharFormat *> >, struct std::random_access_iterator_tag>,type-parameter-?-?,type-parameter-?-?)
-sw/inc/docary.hxx:94
-    void SwVectorModifyBase::insert(class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class SwFrameFormat **, class std::__cxx1998::vector<class SwFrameFormat *, class std::allocator<class SwFrameFormat *> > >, class std::__debug::vector<class SwFrameFormat *, class std::allocator<class SwFrameFormat *> >, struct std::random_access_iterator_tag>,type-parameter-?-?,type-parameter-?-?)
 sw/inc/docary.hxx:94
     void SwVectorModifyBase::insert(class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class SwNumRule **, class std::__cxx1998::vector<class SwNumRule *, class std::allocator<class SwNumRule *> > >, class std::__debug::vector<class SwNumRule *, class std::allocator<class SwNumRule *> >, struct std::random_access_iterator_tag>,type-parameter-?-?,type-parameter-?-?)
 sw/inc/docary.hxx:140
@@ -1802,6 +1764,12 @@ vcl/source/app/scheduler.cxx:83
     basic_ostream<type-parameter-?-?, type-parameter-?-?> & (anonymous namespace)::operator<<(basic_ostream<type-parameter-?-?, type-parameter-?-?> &,const class Idle &)
 vcl/source/bitmap/BitmapColorQuantizationFilter.cxx:113
     int ::operator()(const void *,const void *) const
+vcl/source/control/imivctl.hxx:256
+    void SvxIconChoiceCtrl_Impl::SetChoiceWithCursor()
+vcl/source/control/imivctl.hxx:262
+    void SvxIconChoiceCtrl_Impl::CreateAutoMnemonics(class MnemonicGenerator *)
+vcl/source/control/imivctl.hxx:389
+    void SvxIconChoiceCtrl_Impl::SetSelectionMode(enum SelectionMode)
 vcl/source/edit/textdat2.hxx:85
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const class std::unique_ptr<class TETextPortion, struct std::default_delete<class TETextPortion> > *, class std::__cxx1998::vector<class std::unique_ptr<class TETextPortion, struct std::default_delete<class TETextPortion> >, class std::allocator<class std::unique_ptr<class TETextPortion, struct std::default_delete<class TETextPortion> > > > >, class std::__debug::vector<class std::unique_ptr<class TETextPortion, struct std::default_delete<class TETextPortion> >, class std::allocator<class std::unique_ptr<class TETextPortion, struct std::default_delete<class TETextPortion> > > >, struct std::random_access_iterator_tag> TETextPortionList::begin() const
 vcl/source/edit/textdat2.hxx:87
@@ -1830,18 +1798,6 @@ writerfilter/source/ooxml/OOXMLPropertySet.hxx:176
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const class tools::SvRef<class writerfilter::ooxml::OOXMLProperty> *, class std::__cxx1998::vector<class tools::SvRef<class writerfilter::ooxml::OOXMLProperty>, class std::allocator<class tools::SvRef<class writerfilter::ooxml::OOXMLProperty> > > >, class std::__debug::vector<class tools::SvRef<class writerfilter::ooxml::OOXMLProperty>, class std::allocator<class tools::SvRef<class writerfilter::ooxml::OOXMLProperty> > >, struct std::random_access_iterator_tag> writerfilter::ooxml::OOXMLPropertySet::end() const
 writerfilter/source/ooxml/OOXMLPropertySet.hxx:179
     class std::__cxx11::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > writerfilter::ooxml::OOXMLPropertySet::toString()
-xmloff/source/draw/sdxmlimp_impl.hxx:163
-    const class SvXMLTokenMap & SdXMLImport::GetBodyElemTokenMap()
-xmloff/source/draw/sdxmlimp_impl.hxx:164
-    const class SvXMLTokenMap & SdXMLImport::GetStylesElemTokenMap()
-xmloff/source/draw/sdxmlimp_impl.hxx:165
-    const class SvXMLTokenMap & SdXMLImport::GetMasterPageElemTokenMap()
-xmloff/source/draw/sdxmlimp_impl.hxx:166
-    const class SvXMLTokenMap & SdXMLImport::GetPageMasterAttrTokenMap()
-xmloff/source/draw/sdxmlimp_impl.hxx:167
-    const class SvXMLTokenMap & SdXMLImport::GetPageMasterStyleAttrTokenMap()
-xmloff/source/draw/sdxmlimp_impl.hxx:168
-    const class SvXMLTokenMap & SdXMLImport::GetPresentationPlaceholderAttrTokenMap()
 xmlsecurity/source/gpg/XMLEncryption.hxx:25
      XMLEncryptionGpg::XMLEncryptionGpg()
 xmlsecurity/source/xmlsec/nss/nssinitializer.hxx:46

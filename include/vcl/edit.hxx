@@ -235,10 +235,6 @@ public:
 
     virtual FactoryFunction GetUITestFactory() const override;
 
-    // returns the minimum size a bordered Edit should have given the current
-    // global style settings (needed by sc's inputwin.cxx)
-    static Size GetMinimumEditSize();
-
     void SetForceControlBackground(bool b) { mbForceControlBackground = b; }
 
     bool IsPassword() const { return mbPassword; }
