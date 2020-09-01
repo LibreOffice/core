@@ -23,7 +23,7 @@
 #endif
 
 #include <vcl/dllapi.h>
-#include <vcl/edit.hxx>
+#include <vcl/toolkit/edit.hxx>
 #include <vcl/fixed.hxx>
 
 class SelectableFixedText final : public Edit

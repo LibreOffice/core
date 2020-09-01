@@ -33,7 +33,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/edit.hxx>
+#include <vcl/toolkit/edit.hxx>
 #include <vcl/toolkit/vclmedit.hxx>
 #include <vcl/textdata.hxx>
 #include <vcl/txtattr.hxx>

@@ -24,7 +24,7 @@
 #endif
 
 #include <vcl/dllapi.h>
-#include <vcl/edit.hxx>
+#include <vcl/toolkit/edit.hxx>
 #include <vcl/timer.hxx>
 
 class VCL_DLLPUBLIC SpinField : public Edit

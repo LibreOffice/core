@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-08-12 11:06:39 using:
+ Generated on 2020-09-01 15:31:17 using:
  ./bin/update_pch sw sw --cutoff=7 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -113,6 +113,8 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/transfer.hxx>
+#include <vcl/uitest/eventdescription.hxx>
+#include <vcl/uitest/logger.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/virdev.hxx>
@@ -276,7 +278,6 @@
 #include <libxml/xmlwriter.h>
 #include <o3tl/any.hxx>
 #include <o3tl/cow_wrapper.hxx>
-#include <o3tl/deleter.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/strong_int.hxx>

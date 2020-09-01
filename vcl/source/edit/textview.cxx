@@ -54,7 +54,7 @@
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 
-#include <vcl/edit.hxx>
+#include <vcl/toolkit/edit.hxx>
 
 #include <sot/exchange.hxx>
 

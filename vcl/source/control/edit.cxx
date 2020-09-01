@@ -21,7 +21,7 @@
 #include <vcl/event.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/edit.hxx>
+#include <vcl/toolkit/edit.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/specialchars.hxx>
 #include <vcl/svapp.hxx>
