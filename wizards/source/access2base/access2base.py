@@ -36,6 +36,8 @@ Specific documentation about Access2Base and Python:
     http://www.access2base.com/access2base.html#%5B%5BAccess2Base%20and%20Python%5D%5D
 """
 
+from __future__ import unicode_literals
+
 import uno
 XSCRIPTCONTEXT = uno
 
@@ -43,7 +45,7 @@ from platform import system as _opsys
 import datetime, os, sys, traceback
 
 _LIBRARY = ''               # Should be 'Access2Base' or 'Access2BaseDev'
-_VERSION = '6.4'            # Actual version number
+_VERSION = '7.1'            # Actual version number
 _WRAPPERMODULE = 'Python'   # Module name in the Access2Base library containing Python interfaces
 
 # CallByName types

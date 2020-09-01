@@ -9,7 +9,7 @@ REM ============================================================================
 Option Explicit
 
 REM Access2Base -----------------------------------------------------
-Global Const Access2Base_Version = &quot;7.0.0&quot;		&apos;	Alignment on LibreOffice versions
+Global Const Access2Base_Version = &quot;7.1.0&quot;		&apos;	Alignment on LibreOffice versions
 
 REM AcCloseSave
 REM -----------------------------------------------------------------
