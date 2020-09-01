@@ -1246,10 +1246,7 @@ void MenuBarManager::RetrieveShortcuts( std::vector< std::unique_ptr<MenuItemHan
     const sal_uInt32 nCount = aMenuShortCuts.size();
     for ( sal_uInt32 i = 0; i < nCount; ++i )
     {
-        OUString aItemURL = aMenuShortCuts[i]->aMenuItemURL;
-        if( aItemURL.isEmpty() && aMenuShortCuts[i]->xSubMenuManager.is())
-            aItemURL = "-"; // tdf#99527 prevent throw in case of empty commands
-        aSeq[i] = aItemURL;
+        aSeq[i] = aMenuShortCuts[i]->aMenuItemURL;
         aMenuShortCuts[i]->aKeyCode = aEmptyKeyCode;
     }
 
@@ -1661,6 +1658,7 @@ void MenuBarManager::Init(const Reference< XFrame >& rFrame, Menu* pAddonMenu, b
                                                         nItemId,
                                                         xSubMenuManager,
                                                         xDispatch ));
+            pMenuItemHandler->aMenuItemURL = aItemCommand;
             m_aMenuItemHandlerVector.push_back( std::move(pMenuItemHandler) );
         }
         else
