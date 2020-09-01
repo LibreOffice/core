@@ -2484,18 +2484,6 @@ void Window::Enable( bool bEnable, bool bChild )
         ImplGenerateMouseMove();
 }
 
-void Window::SetCallHandlersOnInputDisabled( bool bCall )
-{
-    mpWindowImpl->mbCallHandlersDuringInputDisabled = bCall;
-
-    VclPtr< vcl::Window > pChild = mpWindowImpl->mpFirstChild;
-    while ( pChild )
-    {
-        pChild->SetCallHandlersOnInputDisabled( bCall );
-        pChild = pChild->mpWindowImpl->mpNext;
-    }
-}
-
 bool Window::IsCallHandlersOnInputDisabled() const
 {
     return mpWindowImpl->mbCallHandlersDuringInputDisabled;
