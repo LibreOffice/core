@@ -237,6 +237,11 @@ public:
     void testTdf134459_HeaderFooterColorXLSX();
     void testTdf134817_HeaderFooterTextWith2SectionXLSX();
     void testHeaderFontStyleXLSX();
+<<<<<<< HEAD   (8d80c1 tdf#131537 DOCX export: fix OLE "Display as icon")
+=======
+    void testTdf135828_Shape_Rect();
+    void testTdf123353();
+>>>>>>> CHANGE (487df0 tdf#123353 XLSX export: fix lost AutoFilter on empty cells)
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -372,6 +377,11 @@ public:
     CPPUNIT_TEST(testTdf134459_HeaderFooterColorXLSX);
     CPPUNIT_TEST(testTdf134817_HeaderFooterTextWith2SectionXLSX);
     CPPUNIT_TEST(testHeaderFontStyleXLSX);
+<<<<<<< HEAD   (8d80c1 tdf#131537 DOCX export: fix OLE "Display as icon")
+=======
+    CPPUNIT_TEST(testTdf135828_Shape_Rect);
+    CPPUNIT_TEST(testTdf123353);
+>>>>>>> CHANGE (487df0 tdf#123353 XLSX export: fix lost AutoFilter on empty cells)
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -4702,6 +4712,46 @@ void ScExportTest::testHeaderFontStyleXLSX()
     xShell->DoClose();
 }
 
+<<<<<<< HEAD   (8d80c1 tdf#131537 DOCX export: fix OLE "Display as icon")
+=======
+void ScExportTest::testTdf135828_Shape_Rect()
+{
+    // tdf#135828 Check that the width and the height of rectangle of the shape
+    // is correct.
+    ScDocShellRef xShell = loadDoc("tdf135828_Shape_Rect.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+
+    xmlDocUniquePtr pDrawing = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/drawing1.xml");
+    CPPUNIT_ASSERT(pDrawing);
+
+    assertXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:spPr/a:xfrm/a:ext", "cx", "294480"); // width
+    assertXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:spPr/a:xfrm/a:ext", "cy", "1990440"); // height
+}
+
+void ScExportTest::testTdf123353()
+{
+    ScDocShellRef xShell = loadDoc("tdf123353.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/x:worksheet/x:autoFilter/x:filterColumn/x:filters", "blank", "1");
+
+    xShell->DoClose();
+}
+
+>>>>>>> CHANGE (487df0 tdf#123353 XLSX export: fix lost AutoFilter on empty cells)
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
