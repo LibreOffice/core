@@ -65,13 +65,6 @@ class MenuBarManager final :
         css::ui::XUIConfigurationListener,
         css::awt::XSystemDependentMenuPeer>
 {
-        MenuBarManager(
-            const css::uno::Reference< css::uno::XComponentContext >& xContext,
-            const css::uno::Reference< css::frame::XFrame >& rFrame,
-            const css::uno::Reference< css::util::XURLTransformer >& _xURLTransformer,
-            Menu*           pAddonMenu,
-            bool            popup);
-
     public:
         MenuBarManager(
             const css::uno::Reference< css::uno::XComponentContext >& xContext,
@@ -172,12 +165,10 @@ class MenuBarManager final :
         bool         CreatePopupMenuController( MenuItemHandler* pMenuItemHandler );
         void             AddMenu(MenuBarManager* pSubMenuManager,const OUString& _sItemCommand,sal_uInt16 _nItemId);
         sal_uInt16           FillItemCommand(OUString& _rItemCommand, Menu* _pMenu,sal_uInt16 _nIndex) const;
-        void             Init(const css::uno::Reference< css::frame::XFrame >& rFrame,Menu* pAddonMenu,bool _bHandlePopUp);
         void             SetHdl();
 
         bool                                                         m_bDeleteMenu;
         bool                                                         m_bActive;
-        bool                                                         m_bIsBookmarkMenu;
         bool                                                         m_bShowMenuImages;
         bool                                                         m_bRetrieveImages;
         bool                                                         m_bAcceleratorCfg;
