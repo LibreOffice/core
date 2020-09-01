@@ -40,7 +40,7 @@
       <menu:menuitem menu:id=".uno:ReverseOrder"/>
     </menu:menupopup>
   </menu:menu>
-  <menu:menuitem menu:id=".uno:DistributeSelection"/>
+  <menu:menuitem menu:id=".uno:Distribute"/>
   <menu:menu menu:id=".uno:ConvertMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:ChangeBezier"/>

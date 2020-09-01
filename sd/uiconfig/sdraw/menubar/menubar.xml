@@ -492,7 +492,7 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:DistributeSelection"/>
+      <menu:menuitem menu:id=".uno:Distribute"/>
       <menu:menuitem menu:id=".uno:ToggleObjectRotateMode"/>
       <menu:menuitem menu:id=".uno:AdvancedMode"/>
       <menu:menu menu:id=".uno:MirrorMenu">

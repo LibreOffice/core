@@ -1474,7 +1474,7 @@
       <object class="GtkMenuItem" id="GroupBoxD1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:DistributeSelection</property>
+        <property name="action_name">.uno:Distribute</property>
       </object>
     </child>
   </object>
@@ -2012,7 +2012,7 @@
       <object class="GtkMenuItem" id="DistributeSelection1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:DistributeSelection</property>
+        <property name="action_name">.uno:Distribute</property>
       </object>
     </child>
   </object>
@@ -8189,7 +8189,7 @@
                                   <object class="GtkToolButton" id="Draw-DistributeSelection">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:DistributeSelection</property>
+                                    <property name="action_name">.uno:Distribute</property>
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
