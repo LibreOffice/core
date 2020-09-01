@@ -2497,8 +2497,7 @@ void Window::EnableInput( bool bEnable, bool bChild )
             static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->mpMenuBarWindow->EnableInput( bEnable );
     }
 
-    if ( (! bEnable && mpWindowImpl->meAlwaysInputMode != AlwaysInputEnabled) ||
-         (  bEnable && mpWindowImpl->meAlwaysInputMode != AlwaysInputDisabled) )
+    if ( (!bEnable && mpWindowImpl->meAlwaysInputMode != AlwaysInputEnabled) || bEnable )
     {
         // automatically stop the tracking mode or steal capture
         // if the window is disabled
