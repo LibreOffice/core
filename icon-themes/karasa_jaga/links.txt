@@ -2063,3 +2063,13 @@ vcl/res/radio5.png vcl/res/radio3.png
 vcl/source/src/msgbox.png vcl/res/msgbox.png
 xmlsecurity/res/notcertificate_16.png svx/res/notcertificate_16.png
 xmlsecurity/res/signet_11x16.png svx/res/signet_11x16.png
+
+# Distribution
+cmd/sc_distributehorzleft.png svx/res/dsth_low.png
+cmd/sc_distributehorzcenter.png svx/res/dsth_cen.png
+cmd/sc_distributehorzdistance.png svx/res/dsth_dst.png
+cmd/sc_distributehorzright.png svx/res/dsth_hig.png
+cmd/sc_distributeverttop.png svx/res/dstv_hig.png
+cmd/sc_distributevertcenter.png svx/res/dstv_cen.png
+cmd/sc_distributevertdistance.png svx/res/dstv_dst.png
+cmd/sc_distributevertbottom.png svx/res/dstv_low.png

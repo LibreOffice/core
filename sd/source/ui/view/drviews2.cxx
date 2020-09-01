@@ -2756,6 +2756,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         break;
 
         case SID_DISTRIBUTE_DLG:
+        case SID_DISTRIBUTE_HLEFT ... SID_DISTRIBUTE_VBOTTOM:
         {
             if ( mpDrawView->IsPresObjSelected() )
             {
@@ -2766,13 +2767,22 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
             else
             {
-                mpDrawView->DistributeMarkedObjects(GetFrameWeld());
+                mpDrawView->DistributeMarkedObjects(GetFrameWeld(),nSId);
             }
             Cancel();
             rReq.Done ();
         }
         break;
-
+/*
+SID_DISTRIBUTE_HLEFT                (SID_SFX_START + 686)
+SID_DISTRIBUTE_HCENTER              (SID_SFX_START + 687)
+SID_DISTRIBUTE_HDISTANCE            (SID_SFX_START + 688)
+SID_DISTRIBUTE_HRIGHT               (SID_SFX_START + 689)
+SID_DISTRIBUTE_VTOP                 (SID_SFX_START + 690)
+SID_DISTRIBUTE_VCENTER              (SID_SFX_START + 691)
+SID_DISTRIBUTE_VDISTANCE            (SID_SFX_START + 692)
+SID_DISTRIBUTE_VBOTTOM              (SID_SFX_START + 693)
+*/
         case SID_POLY_MERGE:
         {
             // End text edit to avoid conflicts
