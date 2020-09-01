@@ -753,7 +753,7 @@ uno::Reference< drawing::XShapeGroup >  SwXDrawPage::group(const uno::Reference<
         {
             // mark and return MarkList
             const SdrMarkList& rMarkList = pPage->PreGroup(xShapes);
-            if ( rMarkList.GetMarkCount() > 1 )
+            if ( rMarkList.GetMarkCount() > 0 )
             {
                 for (size_t i = 0; i < rMarkList.GetMarkCount(); ++i)
                 {
