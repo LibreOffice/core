@@ -28,7 +28,7 @@ namespace vcl { class Window; }
 
 enum class KeyFuncType : sal_Int32 { DONTKNOW,
                    CUT, COPY, PASTE, UNDO,
-                   REDO, DELETE, REPEAT };
+                   REDO, DELETE };
 
 namespace vcl
 {
