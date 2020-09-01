@@ -51,7 +51,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 
-#include <vcl/edit.hxx>
+#include <vcl/fixed.hxx>
 #include <vcl/event.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/svapp.hxx>
@@ -286,7 +286,7 @@ void SwAnnotationWin::Draw(OutputDevice* pDev, const Point& rPt, DrawFlags nInFl
         vcl::Font aOrigFont(mpMetadataAuthor->GetControlFont());
         Point aPos(PixelToLogic(mpMetadataAuthor->GetPosPixel()));
         aPos += rPt;
-        vcl::Font aFont( mpMetadataAuthor->GetSettings().GetStyleSettings().GetFieldFont() );
+        vcl::Font aFont( mpMetadataAuthor->GetSettings().GetStyleSettings().GetLabelFont() );
         mpMetadataAuthor->SetControlFont( aFont );
         mpMetadataAuthor->Draw(pDev, aPos, nInFlags);
         mpMetadataAuthor->SetControlFont( aOrigFont );
@@ -297,7 +297,7 @@ void SwAnnotationWin::Draw(OutputDevice* pDev, const Point& rPt, DrawFlags nInFl
         vcl::Font aOrigFont(mpMetadataDate->GetControlFont());
         Point aPos(PixelToLogic(mpMetadataDate->GetPosPixel()));
         aPos += rPt;
-        vcl::Font aFont( mpMetadataDate->GetSettings().GetStyleSettings().GetFieldFont() );
+        vcl::Font aFont( mpMetadataDate->GetSettings().GetStyleSettings().GetLabelFont() );
         mpMetadataDate->SetControlFont( aFont );
         mpMetadataDate->SetControlFont( aOrigFont );
     }
@@ -307,7 +307,7 @@ void SwAnnotationWin::Draw(OutputDevice* pDev, const Point& rPt, DrawFlags nInFl
         vcl::Font aOrigFont(mpMetadataResolved->GetControlFont());
         Point aPos(PixelToLogic(mpMetadataResolved->GetPosPixel()));
         aPos += rPt;
-        vcl::Font aFont( mpMetadataResolved->GetSettings().GetStyleSettings().GetFieldFont() );
+        vcl::Font aFont( mpMetadataResolved->GetSettings().GetStyleSettings().GetLabelFont() );
         mpMetadataResolved->SetControlFont( aFont );
         mpMetadataResolved->SetControlFont( aOrigFont );
     }
@@ -338,7 +338,7 @@ void SwAnnotationWin::Draw(OutputDevice* pDev, const Point& rPt, DrawFlags nInFl
     Point aPos(PixelToLogic(mpMenuButton->GetPosPixel()));
     aPos += rPt;
 
-    vcl::Font aFont( mpMetadataDate->GetSettings().GetStyleSettings().GetFieldFont() );
+    vcl::Font aFont( mpMetadataDate->GetSettings().GetStyleSettings().GetLabelFont() );
     mpMetadataDate->SetControlFont( aFont );
     mpMetadataDate->SetControlBackground( Color(0xFFFFFF) );
     mpMetadataDate->SetText("...");
@@ -465,11 +465,9 @@ void SwAnnotationWin::InitControls()
     mpSidebarTextControl->SetPointer(PointerStyle::Text);
 
     // window controls for author and date
-    mpMetadataAuthor = VclPtr<Edit>::Create( this, 0 );
+    mpMetadataAuthor = VclPtr<FixedText>::Create(this);
     mpMetadataAuthor->SetAccessibleName( SwResId( STR_ACCESS_ANNOTATION_AUTHOR_NAME ) );
     mpMetadataAuthor->EnableRTL(AllSettings::GetLayoutRTL());
-    mpMetadataAuthor->SetReadOnly();
-    mpMetadataAuthor->AlwaysDisableInput(true);
     mpMetadataAuthor->SetCallHandlersOnInputDisabled(true);
     mpMetadataAuthor->AddEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
     // we should leave this setting alone, but for this we need a better layout algo
@@ -477,18 +475,16 @@ void SwAnnotationWin::InitControls()
     {
         AllSettings aSettings = mpMetadataAuthor->GetSettings();
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-        vcl::Font aFont = aStyleSettings.GetFieldFont();
+        vcl::Font aFont = aStyleSettings.GetLabelFont();
         aFont.SetFontHeight(8);
-        aStyleSettings.SetFieldFont(aFont);
+        aStyleSettings.SetLabelFont(aFont);
         aSettings.SetStyleSettings(aStyleSettings);
         mpMetadataAuthor->SetSettings(aSettings);
     }
 
-    mpMetadataDate = VclPtr<Edit>::Create( this, 0 );
+    mpMetadataDate = VclPtr<FixedText>::Create(this);
     mpMetadataDate->SetAccessibleName( SwResId( STR_ACCESS_ANNOTATION_DATE_NAME ) );
     mpMetadataDate->EnableRTL(AllSettings::GetLayoutRTL());
-    mpMetadataDate->SetReadOnly();
-    mpMetadataDate->AlwaysDisableInput(true);
     mpMetadataDate->SetCallHandlersOnInputDisabled(true);
     mpMetadataDate->AddEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
     // we should leave this setting alone, but for this we need a better layout algo
@@ -496,18 +492,16 @@ void SwAnnotationWin::InitControls()
     {
         AllSettings aSettings = mpMetadataDate->GetSettings();
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-        vcl::Font aFont = aStyleSettings.GetFieldFont();
+        vcl::Font aFont = aStyleSettings.GetLabelFont();
         aFont.SetFontHeight(8);
-        aStyleSettings.SetFieldFont(aFont);
+        aStyleSettings.SetLabelFont(aFont);
         aSettings.SetStyleSettings(aStyleSettings);
         mpMetadataDate->SetSettings(aSettings);
     }
 
-    mpMetadataResolved = VclPtr<Edit>::Create( this, 0 );
+    mpMetadataResolved = VclPtr<FixedText>::Create(this);
     mpMetadataResolved->SetAccessibleName( SwResId( STR_ACCESS_ANNOTATION_RESOLVED_NAME ) );
     mpMetadataResolved->EnableRTL(AllSettings::GetLayoutRTL());
-    mpMetadataResolved->SetReadOnly();
-    mpMetadataResolved->AlwaysDisableInput(true);
     mpMetadataResolved->SetCallHandlersOnInputDisabled(true);
     mpMetadataResolved->AddEventListener( LINK( this, SwAnnotationWin, WindowEventListener ) );
     // we should leave this setting alone, but for this we need a better layout algo
@@ -515,9 +509,9 @@ void SwAnnotationWin::InitControls()
     {
         AllSettings aSettings = mpMetadataResolved->GetSettings();
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-        vcl::Font aFont = aStyleSettings.GetFieldFont();
+        vcl::Font aFont = aStyleSettings.GetLabelFont();
         aFont.SetFontHeight(8);
-        aStyleSettings.SetFieldFont(aFont);
+        aStyleSettings.SetLabelFont(aFont);
         aSettings.SetStyleSettings(aStyleSettings);
         mpMetadataResolved->SetSettings(aSettings);
         mpMetadataResolved->SetText( SwResId( STR_ACCESS_ANNOTATION_RESOLVED_NAME ) );
@@ -641,21 +635,21 @@ void SwAnnotationWin::Rescale()
     const Fraction& rFraction = mrView.GetWrtShellPtr()->GetOut()->GetMapMode().GetScaleY();
     if ( mpMetadataAuthor )
     {
-        vcl::Font aFont( mpMetadataAuthor->GetSettings().GetStyleSettings().GetFieldFont() );
+        vcl::Font aFont( mpMetadataAuthor->GetSettings().GetStyleSettings().GetLabelFont() );
         sal_Int32 nHeight = long(aFont.GetFontHeight() * rFraction);
         aFont.SetFontHeight( nHeight );
         mpMetadataAuthor->SetControlFont( aFont );
     }
     if ( mpMetadataDate )
     {
-        vcl::Font aFont( mpMetadataDate->GetSettings().GetStyleSettings().GetFieldFont() );
+        vcl::Font aFont( mpMetadataDate->GetSettings().GetStyleSettings().GetLabelFont() );
         sal_Int32 nHeight = long(aFont.GetFontHeight() * rFraction);
         aFont.SetFontHeight( nHeight );
         mpMetadataDate->SetControlFont( aFont );
     }
     if ( mpMetadataResolved )
     {
-        vcl::Font aFont( mpMetadataResolved->GetSettings().GetStyleSettings().GetFieldFont() );
+        vcl::Font aFont( mpMetadataResolved->GetSettings().GetStyleSettings().GetLabelFont() );
         sal_Int32 nHeight = long(aFont.GetFontHeight() * rFraction);
         aFont.SetFontHeight( nHeight );
         mpMetadataResolved->SetControlFont( aFont );
@@ -1041,7 +1035,7 @@ void SwAnnotationWin::SetColor(Color aColorDark,Color aColorLight, Color aColorA
         mpMetadataAuthor->SetControlBackground(mColorDark);
         AllSettings aSettings = mpMetadataAuthor->GetSettings();
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-        aStyleSettings.SetFieldTextColor(aColorAnchor);
+        aStyleSettings.SetLabelTextColor(aColorAnchor);
         aSettings.SetStyleSettings(aStyleSettings);
         mpMetadataAuthor->SetSettings(aSettings);
     }
@@ -1050,7 +1044,7 @@ void SwAnnotationWin::SetColor(Color aColorDark,Color aColorLight, Color aColorA
         mpMetadataDate->SetControlBackground(mColorDark);
         AllSettings aSettings = mpMetadataDate->GetSettings();
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-        aStyleSettings.SetFieldTextColor(aColorAnchor);
+        aStyleSettings.SetLabelTextColor(aColorAnchor);
         aSettings.SetStyleSettings(aStyleSettings);
         mpMetadataDate->SetSettings(aSettings);
     }
@@ -1059,7 +1053,7 @@ void SwAnnotationWin::SetColor(Color aColorDark,Color aColorLight, Color aColorA
         mpMetadataResolved->SetControlBackground(mColorDark);
         AllSettings aSettings = mpMetadataResolved->GetSettings();
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-        aStyleSettings.SetFieldTextColor(aColorAnchor);
+        aStyleSettings.SetLabelTextColor(aColorAnchor);
         aSettings.SetStyleSettings(aStyleSettings);
         mpMetadataResolved->SetSettings(aSettings);
     }

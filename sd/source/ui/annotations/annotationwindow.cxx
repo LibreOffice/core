@@ -269,6 +269,7 @@ void AnnotationWindow::InitControls()
 
     // window control for author and date
     mpMeta = VclPtr<FixedText>::Create(this);
+    mpMeta->EnableRTL(AllSettings::GetLayoutRTL());
     mpMeta->SetCallHandlersOnInputDisabled(true);
 
     // we should leave this setting alone, but for this we need a better layout algo
