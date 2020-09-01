@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8ece3d32_45532370",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-01T06:11:11Z",
+      "side": 1,
+      "message": "This is now obsolete, as you moved those to the other changes.",
+      "range": {
+        "startLine": 10,
+        "startChar": 28,
+        "endLine": 11,
+        "endChar": 8
+      },
+      "revId": "dd7273168066c2e37f8c275f47bb83e9fac23ac1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f211f291_245b86a8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-01T06:11:11Z",
+      "side": 1,
+      "message": "This is not a text to be merged as the commit message (telling people in, say, 5 years from now about what this commit did). Rather, it\u0027s a text to appear in comments to the gerrit change :-)",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 42
+      },
+      "revId": "dd7273168066c2e37f8c275f47bb83e9fac23ac1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
