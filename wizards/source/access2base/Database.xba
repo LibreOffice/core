@@ -992,7 +992,7 @@ Dim i As Integer, bFound As Boolean, oTables As Object
 			Set oObject = RecordsetsColl.Item(pvIndex)
 		Case Else		&apos;	pvIndex is numeric
 			If pvIndex &lt; 0 Or pvIndex &gt;= RecordsetsColl.Count Then Goto Trace_IndexError
-			Set oObject = RecordsetsColl.Item(pvIndex + 1)		&apos;	Collection members are numbered 1 ... Count
+			Set oObject = RecordsetsColl.Item(pvIndex + 1)		&apos;	Collection members are numERRSQLSTATEMENTbered 1 ... Count
 	End Select
 
 Exit_Function:
@@ -1161,12 +1161,7 @@ Dim sProductName As String
 	If pvOrderClause &lt;&gt; &quot;&quot; Then sOrderBy = &quot; ORDER BY &quot; &amp; pvOrderClause Else sOrderBy = &quot;&quot;
 	sLimit = &quot;&quot;
 
-&apos;	Workaround for https://bugs.documentfoundation.org/show_bug.cgi?id=118767
-&apos;	awaiting solution for https://bugs.documentfoundation.org/show_bug.cgi?id=118809
 	sProductName = UCase(MetaData.getDatabaseProductName())
-	If sProductName = &quot;&quot; Then
-		If MetaData.URL = &quot;sdbc:embedded:firebird&quot; Or Left(MetaData.URL, 13) = &quot;sdbc:firebird&quot; Then sProductName = &quot;FIREBIRD&quot;
-	End If
 
 	Select Case sProductName
 		Case &quot;MYSQL&quot;, &quot;SQLITE&quot;
@@ -1177,7 +1172,7 @@ Dim sProductName As String
 				sTarget = UCase(psFunction) &amp; &quot;(&quot; &amp; psExpr &amp; &quot;)&quot;
 			End If
 			sSql = &quot;SELECT &quot; &amp; sTarget &amp; &quot; AS &quot; &amp; sTempField &amp; &quot; FROM &quot; &amp; psDomain &amp;  sWhere &amp; sOrderBy &amp; sLimit
-		Case &quot;FIREBIRD&quot;
+		Case &quot;FIREBIRD (ENGINE12)&quot;
 			If psFunction = &quot;&quot; Then sTarget = &quot;FIRST 1 &quot; &amp; psExpr Else sTarget = UCase(psFunction) &amp; &quot;(&quot; &amp; psExpr &amp; &quot;)&quot;
 			sSql = &quot;SELECT &quot; &amp; sTarget &amp; &quot; AS &quot; &amp; sTempField &amp; &quot; FROM &quot; &amp; psDomain &amp; sWhere &amp; sOrderBy
 		Case Else		&apos;	Standard syntax - Includes HSQLDB
