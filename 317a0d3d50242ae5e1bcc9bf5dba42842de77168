@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8f392dcd_d0147cd0",
+        "filename": "offapi/com/sun/star/chart/ChartDataCaption.idl",
+        "patchSetId": 4
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-09-01T09:55:35Z",
+      "side": 1,
+      "message": "CUSTOM_TEXT or CUSTOM seem to be better.",
+      "range": {
+        "startLine": 78,
+        "startChar": 15,
+        "endLine": 78,
+        "endChar": 25
+      },
+      "revId": "317a0d3d50242ae5e1bcc9bf5dba42842de77168",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
