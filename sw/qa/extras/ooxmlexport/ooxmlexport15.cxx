@@ -123,6 +123,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf131801, "tdf131801.docx")
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[8]/w:pPr/w:rPr/w:rStyle", 0);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf134649_pageBreak, "tdf134649_pageBreak.fodt")
+{
+    // This was 1 (missing page break between tables).
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf135973, "tdf135973.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
