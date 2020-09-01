@@ -464,7 +464,7 @@
       <menu:menuitem menu:id=".uno:NameGroup" menu:style="text"/>
       <menu:menuitem menu:id=".uno:ObjectTitleDescription" menu:style="text"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:DistributeSelection"/>
+      <menu:menuitem menu:id=".uno:Distribute"/>
       <menu:menuitem menu:id=".uno:ToggleObjectRotateMode"/>
       <menu:menu menu:id=".uno:MirrorMenu">
         <menu:menupopup>

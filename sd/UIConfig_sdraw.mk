@@ -61,6 +61,7 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/sdraw,\
 	sd/uiconfig/sdraw/toolbar/commentsbar \
 	sd/uiconfig/sdraw/toolbar/connectorsbar \
 	sd/uiconfig/sdraw/toolbar/drawingobjectbar \
+	sd/uiconfig/sdraw/toolbar/distributebar \
 	sd/uiconfig/sdraw/toolbar/ellipsesbar \
 	sd/uiconfig/sdraw/toolbar/extrusionobjectbar \
 	sd/uiconfig/sdraw/toolbar/findbar \
