@@ -27,6 +27,7 @@
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
+#include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/form/XConfirmDeleteListener.hpp>
 #include <com/sun/star/form/runtime/XFormController.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -42,7 +43,6 @@
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/edit.hxx>
 #include <vcl/weld.hxx>
 #include <osl/mutex.hxx>
 
@@ -650,49 +650,58 @@ void BibFrameController_Impl::addStatusListener(
     else if(aURL.Path == "Cut")
     {
         m_xLastQueriedFocusWin = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
-        Edit* pEdit = dynamic_cast<Edit*>(m_xLastQueriedFocusWin.get());
-        aEvent.IsEnabled = pEdit && !pEdit->IsReadOnly() && pEdit->GetSelection().Len();
+        if (m_xLastQueriedFocusWin)
+        {
+            Reference<css::awt::XTextComponent> xEdit(m_xLastQueriedFocusWin->GetComponentInterface(), css::uno::UNO_QUERY);
+            aEvent.IsEnabled = xEdit && xEdit->isEditable() && !xEdit->getSelectedText().isEmpty();
+        }
     }
     if(aURL.Path == "Copy")
     {
         m_xLastQueriedFocusWin = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
-        Edit* pEdit = dynamic_cast<Edit*>(m_xLastQueriedFocusWin.get());
-        aEvent.IsEnabled = pEdit && pEdit->GetSelection().Len();
+        if (m_xLastQueriedFocusWin)
+        {
+            Reference<css::awt::XTextComponent> xEdit(m_xLastQueriedFocusWin->GetComponentInterface(), css::uno::UNO_QUERY);
+            aEvent.IsEnabled = xEdit && !xEdit->getSelectedText().isEmpty();
+        }
     }
     else if(aURL.Path == "Paste" )
     {
         aEvent.IsEnabled = false;
         m_xLastQueriedFocusWin = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
-        Edit* pEdit = dynamic_cast<Edit*>(m_xLastQueriedFocusWin.get());
-        if (pEdit && !pEdit->IsReadOnly())
+        if (m_xLastQueriedFocusWin)
         {
-            uno::Reference< datatransfer::clipboard::XClipboard > xClip = pEdit->GetClipboard();
-            if(xClip.is())
+            Reference<css::awt::XTextComponent> xEdit(m_xLastQueriedFocusWin->GetComponentInterface(), css::uno::UNO_QUERY);
+            if (xEdit && !xEdit->isEditable())
             {
-                uno::Reference< datatransfer::XTransferable > xDataObj;
-
-                try
-                    {
-                        SolarMutexReleaser aReleaser;
-                        xDataObj = xClip->getContents();
-                    }
-                catch( const uno::Exception& )
-                    {
-                    }
-
-                if ( xDataObj.is() )
+                uno::Reference< datatransfer::clipboard::XClipboard > xClip = m_xLastQueriedFocusWin->GetClipboard();
+                if(xClip.is())
                 {
-                    datatransfer::DataFlavor aFlavor;
-                    SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aFlavor );
+                    uno::Reference< datatransfer::XTransferable > xDataObj;
+
                     try
-                    {
-                        uno::Any aData = xDataObj->getTransferData( aFlavor );
-                        OUString aText;
-                        aData >>= aText;
-                        aEvent.IsEnabled  = !aText.isEmpty();
-                    }
+                        {
+                            SolarMutexReleaser aReleaser;
+                            xDataObj = xClip->getContents();
+                        }
                     catch( const uno::Exception& )
+                        {
+                        }
+
+                    if ( xDataObj.is() )
                     {
+                        datatransfer::DataFlavor aFlavor;
+                        SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aFlavor );
+                        try
+                        {
+                            uno::Any aData = xDataObj->getTransferData( aFlavor );
+                            OUString aText;
+                            aData >>= aText;
+                            aEvent.IsEnabled  = !aText.isEmpty();
+                        }
+                        catch( const uno::Exception& )
+                        {
+                        }
                     }
                 }
             }
