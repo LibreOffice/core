@@ -14,6 +14,7 @@
 #include <tools/stream.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <bitmapwriteaccess.hxx>
 
 #include <test/outputdevice.hxx>
 
@@ -582,6 +583,56 @@ public:
         }
     }
 
+    // Test SalGraphics::blendBitmap() and blendAlphaBitmap() calls.
+    void testDrawBlendExtended()
+    {
+        // Create virtual device with alpha.
+        ScopedVclPtr<VirtualDevice> device
+            = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
+        device->SetOutputSizePixel(Size(10, 10));
+        device->SetBackground(Wallpaper(COL_WHITE));
+        device->Erase();
+        Bitmap bitmap(Size(5, 5), 24);
+        bitmap.Erase(COL_BLUE);
+        // No alpha, this will actually call SalGraphics::DrawBitmap(), but still check
+        // the alpha of the device is handled correctly.
+        device->DrawBitmapEx(Point(2, 2), BitmapEx(bitmap));
+        exportDevice("/tmp/blend_extended_01.png", device);
+        CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(2, 2)));
+        CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(6, 6)));
+        // Check pixels outside of the bitmap aren't affected.
+        CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(1, 1)));
+        CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(7, 7)));
+
+        device->Erase();
+        AlphaMask alpha(Size(5, 5));
+        alpha.Erase(0); // opaque
+        device->DrawBitmapEx(Point(2, 2), BitmapEx(bitmap, alpha));
+        exportDevice("/tmp/blend_extended_02.png", device);
+        CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(2, 2)));
+        CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(6, 6)));
+
+        device->Erase();
+        alpha.Erase(255); // transparent
+        device->DrawBitmapEx(Point(2, 2), BitmapEx(bitmap, alpha));
+        exportDevice("/tmp/blend_extended_03.png", device);
+        CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(2, 2)));
+        CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(6, 6)));
+
+        // Skia optimizes bitmaps that have just been Erase()-ed, so explicitly
+        // set some pixels in the alpha to avoid this and have an actual bitmap
+        // as the alpha mask.
+        device->Erase();
+        alpha.Erase(255); // transparent
+        BitmapWriteAccess* alphaWrite = alpha.AcquireAlphaWriteAccess();
+        alphaWrite->SetPixelIndex(0, 0, 0); // opaque
+        alpha.ReleaseAccess(alphaWrite);
+        device->DrawBitmapEx(Point(2, 2), BitmapEx(bitmap, alpha));
+        exportDevice("/tmp/blend_extended_04.png", device);
+        CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(2, 2)));
+        CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(6, 6)));
+    }
+
     void testTdf124848()
     {
         ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
@@ -692,6 +743,8 @@ public:
     CPPUNIT_TEST(testDashedLine);
 
     CPPUNIT_TEST(testErase);
+
+    CPPUNIT_TEST(testDrawBlendExtended);
 
     CPPUNIT_TEST(testTdf124848);
     CPPUNIT_TEST(testTdf136171);
