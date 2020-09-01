@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1562c525_6cdadaa6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-01T06:23:26Z",
+      "side": 1,
+      "message": "This commit message gives no information about the change. It is only meaningful to those who have participated in the preparation of the patch and know the relevant details. The history of the patch has no value for others 5 years from now; the essence of the change has. Please make your commit messages useful. Thanks!",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 46
+      },
+      "revId": "7e9b4586e6bdb17a2a4e234b4e060d116fd69d6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
