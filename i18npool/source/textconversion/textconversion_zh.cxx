@@ -212,7 +212,7 @@ TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos,
                 }
             }
 
-            if (!found && index[len+1] - index[len] > 0) {
+            if (wordData && !found && index[len+1] - index[len] > 0) {
                 sal_Int32 bottom = static_cast<sal_Int32>(index[len]);
                 sal_Int32 top = static_cast<sal_Int32>(index[len+1]) - 1;
 
