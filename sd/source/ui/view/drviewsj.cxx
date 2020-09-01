@@ -279,6 +279,14 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
         rSet.DisableItem(SID_TEXT_COMBINE);
         rSet.DisableItem(SID_COMBINE);
         rSet.DisableItem(SID_DISTRIBUTE_DLG);
+        rSet.DisableItem(SID_DISTRIBUTE_HLEFT);
+        rSet.DisableItem(SID_DISTRIBUTE_HCENTER);
+        rSet.DisableItem(SID_DISTRIBUTE_HDISTANCE);
+        rSet.DisableItem(SID_DISTRIBUTE_HRIGHT);
+        rSet.DisableItem(SID_DISTRIBUTE_VTOP);
+        rSet.DisableItem(SID_DISTRIBUTE_VCENTER);
+        rSet.DisableItem(SID_DISTRIBUTE_VDISTANCE);
+        rSet.DisableItem(SID_DISTRIBUTE_VBOTTOM);
         rSet.DisableItem(SID_POLY_MERGE);
         rSet.DisableItem(SID_POLY_SUBSTRACT);
         rSet.DisableItem(SID_POLY_INTERSECT);
@@ -291,7 +299,17 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
     {
         // distribute dialog for 3+n objects
         if(nMarkCount <= 2)
+        {
             rSet.DisableItem(SID_DISTRIBUTE_DLG);
+            rSet.DisableItem(SID_DISTRIBUTE_HLEFT);
+            rSet.DisableItem(SID_DISTRIBUTE_HCENTER);
+            rSet.DisableItem(SID_DISTRIBUTE_HDISTANCE);
+            rSet.DisableItem(SID_DISTRIBUTE_HRIGHT);
+            rSet.DisableItem(SID_DISTRIBUTE_VTOP);
+            rSet.DisableItem(SID_DISTRIBUTE_VCENTER);
+            rSet.DisableItem(SID_DISTRIBUTE_VDISTANCE);
+            rSet.DisableItem(SID_DISTRIBUTE_VBOTTOM);
+        }
 
         rSet.DisableItem( SID_LINEEND_POLYGON );
         rSet.DisableItem( SID_ENTER_GROUP );
@@ -492,6 +510,14 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
         rSet.DisableItem( SID_TEXT_COMBINE );
         rSet.DisableItem( SID_COMBINE );
         rSet.DisableItem(SID_DISTRIBUTE_DLG);
+        rSet.DisableItem(SID_DISTRIBUTE_HLEFT);
+        rSet.DisableItem(SID_DISTRIBUTE_HCENTER);
+        rSet.DisableItem(SID_DISTRIBUTE_HDISTANCE);
+        rSet.DisableItem(SID_DISTRIBUTE_HRIGHT);
+        rSet.DisableItem(SID_DISTRIBUTE_VTOP);
+        rSet.DisableItem(SID_DISTRIBUTE_VCENTER);
+        rSet.DisableItem(SID_DISTRIBUTE_VDISTANCE);
+        rSet.DisableItem(SID_DISTRIBUTE_VBOTTOM);
         rSet.DisableItem(SID_POLY_MERGE);
         rSet.DisableItem(SID_POLY_SUBSTRACT);
         rSet.DisableItem(SID_POLY_INTERSECT);
