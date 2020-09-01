@@ -31,6 +31,9 @@
 #include <memory>
 #include <vector>
 
+#include <FilterListBox.hxx>
+#include <FilterFloatingWindow.hxx>
+
 namespace editeng {
     struct MisspellRanges;
 }
@@ -46,7 +49,6 @@ struct ScTableInfo;
 class ScDPObject;
 class ScDPFieldButton;
 class ScOutputData;
-class ScFilterListBox;
 class SdrObject;
 class SdrEditView;
 class ScNoteMarker;
@@ -81,8 +83,6 @@ struct SpellCallbackInfo;
 
 // predefines
 namespace sdr::overlay { class OverlayObjectList; }
-
-class ScFilterFloatingWindow;
 
 class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSourceHelper
 {
