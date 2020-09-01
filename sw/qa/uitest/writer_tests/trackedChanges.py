@@ -7,8 +7,12 @@
 
 from uitest.framework import UITestCase
 from uitest.debug import sleep
+from uitest.path import get_srcdir_url
 import time
 from uitest.uihelper.common import get_state_as_dict, type_text
+
+def get_url_for_data_file(file_name):
+   return get_srcdir_url() + "/sw/qa/uitest/writer_tests/data/" + file_name
 
 class trackedchanges(UITestCase):
 
@@ -151,4 +155,36 @@ class trackedchanges(UITestCase):
         self.assertEqual(document.Text.String[0:30], "Test LibreOffice Test2 Test4")
 
         self.ui_test.close_doc()
+
+    def test_tdf135018(self):
+        self.ui_test.load_file(get_url_for_data_file("tdf135018.odt"))
+        xWriterDoc = self.xUITest.getTopFocusWindow()
+        xWriterEdit = xWriterDoc.getChild("writer_edit")
+        document = self.ui_test.get_component()
+
+        self.assertEqual(5, document.CurrentController.PageCount)
+
+        self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges")
+        xTrackDlg = self.xUITest.getTopFocusWindow()
+        changesList = xTrackDlg.getChild("writerchanges")
+        self.assertEqual(147, len(changesList.getChildren()))
+
+        # Without the fix in place, it would have crashed here
+        xAccBtn = xTrackDlg.getChild("acceptall")
+        xAccBtn.executeAction("CLICK", tuple())
+
+        self.assertEqual(0, len(changesList.getChildren()))
+
+        xUndoBtn = xTrackDlg.getChild("undo")
+        xUndoBtn.executeAction("CLICK", tuple())
+
+        self.assertEqual(147, len(changesList.getChildren()))
+
+        xcloseBtn = xTrackDlg.getChild("close")
+        xcloseBtn.executeAction("CLICK", tuple())
+
+        #self.assertEqual(18, document.CurrentController.PageCount)
+
+        self.ui_test.close_doc()
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
