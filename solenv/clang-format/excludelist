@@ -2714,7 +2714,6 @@ cui/source/inc/cuitabline.hxx
 cui/source/inc/dbregister.hxx
 cui/source/inc/defdlgname.hxx
 cui/source/inc/dlgname.hxx
-cui/source/inc/dstribut.hxx
 cui/source/inc/grfpage.hxx
 cui/source/inc/hangulhanjadlg.hxx
 cui/source/inc/headertablistbox.hxx
@@ -2828,7 +2827,6 @@ cui/source/tabpages/border.cxx
 cui/source/tabpages/chardlg.cxx
 cui/source/tabpages/chardlg.h
 cui/source/tabpages/connect.cxx
-cui/source/tabpages/dstribut.cxx
 cui/source/tabpages/grfpage.cxx
 cui/source/tabpages/labdlg.cxx
 cui/source/tabpages/macroass.cxx

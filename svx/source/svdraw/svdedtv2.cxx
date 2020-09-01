@@ -50,6 +50,7 @@
 #include <memory>
 #include <vector>
 #include <vcl/graph.hxx>
+#include <svx/svxids.hrc>
 
 using namespace com::sun::star;
 
@@ -768,25 +769,28 @@ struct ImpDistributeEntry
 
 typedef std::vector<ImpDistributeEntry> ImpDistributeEntryList;
 
-void SdrEditView::DistributeMarkedObjects(weld::Window* pParent)
+void SdrEditView::DistributeMarkedObjects(sal_uInt16 SlotID)
 {
     const size_t nMark(GetMarkedObjectCount());
 
     if(nMark <= 2)
         return;
 
-    SfxItemSet aNewAttr(mpModel->GetItemPool());
+    SvxDistributeHorizontal eHor = SvxDistributeHorizontal::NONE;
+    SvxDistributeVertical eVer = SvxDistributeVertical::NONE;
 
-    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractSvxDistributeDialog> pDlg(pFact->CreateSvxDistributeDialog(pParent, aNewAttr));
+    switch (SlotID)
+    {
+        case SID_DISTRIBUTE_HLEFT: eHor = SvxDistributeHorizontal::Left; break;
+        case SID_DISTRIBUTE_HCENTER: eHor = SvxDistributeHorizontal::Center; break;
+        case SID_DISTRIBUTE_HDISTANCE: eHor = SvxDistributeHorizontal::Distance; break;
+        case SID_DISTRIBUTE_HRIGHT: eHor = SvxDistributeHorizontal::Right; break;
+        case SID_DISTRIBUTE_VTOP: eVer = SvxDistributeVertical::Top; break;
+        case SID_DISTRIBUTE_VCENTER: eVer = SvxDistributeVertical::Center; break;
+        case SID_DISTRIBUTE_VDISTANCE: eVer = SvxDistributeVertical::Distance; break;
+        case SID_DISTRIBUTE_VBOTTOM: eVer = SvxDistributeVertical::Bottom; break;
+    }
 
-    sal_uInt16 nResult = pDlg->Execute();
-
-    if(nResult != RET_OK)
-        return;
-
-    SvxDistributeHorizontal eHor = pDlg->GetDistributeHor();
-    SvxDistributeVertical eVer = pDlg->GetDistributeVer();
     ImpDistributeEntryList aEntryList;
     ImpDistributeEntryList::iterator itEntryList;
     sal_uInt32 nFullLength;

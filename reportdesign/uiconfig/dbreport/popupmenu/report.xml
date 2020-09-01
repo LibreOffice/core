@@ -62,7 +62,7 @@
     </menu:menupopup>
   </menu:menu>
   <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:Distribution"/>
+  <menu:menuitem menu:id=".uno:DistributeSelection"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:ControlProperties"/>
 </menu:menupopup>

@@ -451,7 +451,14 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
                 aReturn.bEnabled = m_nSelectionCount > 1;
             break;
 
-        case SID_DISTRIBUTION:
+        case SID_DISTRIBUTE_HLEFT:
+        case SID_DISTRIBUTE_HCENTER:
+        case SID_DISTRIBUTE_HDISTANCE:
+        case SID_DISTRIBUTE_HRIGHT:
+        case SID_DISTRIBUTE_VTOP:
+        case SID_DISTRIBUTE_VCENTER:
+        case SID_DISTRIBUTE_VDISTANCE:
+        case SID_DISTRIBUTE_VBOTTOM:
             aReturn.bEnabled = isEditable() && getDesignView()->HasSelection();
             if ( aReturn.bEnabled )
             {
@@ -1034,11 +1041,18 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
         case SID_OBJECT_HELL:
             changeZOrder(_nId);
             break;
-        case SID_DISTRIBUTION:
+        case SID_DISTRIBUTE_HLEFT:
+        case SID_DISTRIBUTE_HCENTER:
+        case SID_DISTRIBUTE_HDISTANCE:
+        case SID_DISTRIBUTE_HRIGHT:
+        case SID_DISTRIBUTE_VTOP:
+        case SID_DISTRIBUTE_VCENTER:
+        case SID_DISTRIBUTE_VDISTANCE:
+        case SID_DISTRIBUTE_VBOTTOM:
             {
                 OSectionView* pSectionView = getCurrentSectionView();
                 if ( pSectionView )
-                    pSectionView->DistributeMarkedObjects(getFrameWeld());
+                    pSectionView->DistributeMarkedObjects(_nId);
             }
             break;
         case SID_OBJECT_SMALLESTWIDTH:
@@ -1838,7 +1852,16 @@ void OReportController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:SmallestHeight",            SID_OBJECT_SMALLESTHEIGHT,      CommandGroup::FORMAT );
     implDescribeSupportedFeature( ".uno:GreatestWidth",             SID_OBJECT_GREATESTWIDTH,       CommandGroup::FORMAT );
     implDescribeSupportedFeature( ".uno:GreatestHeight",            SID_OBJECT_GREATESTHEIGHT,      CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:Distribution",              SID_DISTRIBUTION,               CommandGroup::FORMAT );
+
+    implDescribeSupportedFeature( ".uno:DistributeSelection",       SID_DISTRIBUTE_DLG,             CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:DistributeHorzLeft",        SID_DISTRIBUTE_HLEFT,           CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:DistributeHorzCenter",      SID_DISTRIBUTE_HCENTER,         CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:DistributeHorzDistance",    SID_DISTRIBUTE_HDISTANCE,       CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:DistributeHorzRight",       SID_DISTRIBUTE_HRIGHT,          CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:DistributeVertTop",         SID_DISTRIBUTE_VTOP,            CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:DistributeVertCenter",      SID_DISTRIBUTE_VCENTER,         CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:DistributeVertDistance",    SID_DISTRIBUTE_VDISTANCE,       CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:DistributeVertBottom",      SID_DISTRIBUTE_VBOTTOM,         CommandGroup::FORMAT );
 
     implDescribeSupportedFeature( ".uno:ExportTo",                  SID_EXPORTDOC,                  CommandGroup::APPLICATION );
     implDescribeSupportedFeature( ".uno:ExportToPDF",               SID_EXPORTDOCASPDF,             CommandGroup::APPLICATION );

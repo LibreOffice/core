@@ -30,7 +30,6 @@
 #include <svx/svxids.hrc>
 #include <numfmt.hxx>
 #include <splitcelldlg.hxx>
-#include <dstribut.hxx>
 #include <cuiimapwnd.hxx>
 #include <cui/cuicharmap.hxx>
 #include <srchxtra.hxx>
@@ -106,11 +105,6 @@ short CuiAbstractController_Impl::Execute()
 }
 
 short CuiAbstractSingleTabController_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-short AbstractSvxDistributeDialog_Impl::Execute()
 {
     return m_xDlg->run();
 }
@@ -395,15 +389,6 @@ const SfxItemSet* CuiAbstractSingleTabController_Impl::GetOutputItemSet() const
 void CuiAbstractSingleTabController_Impl::SetText(const OUString& rStr)
 {
     m_xDlg->set_title(rStr);
-}
-
-SvxDistributeHorizontal AbstractSvxDistributeDialog_Impl::GetDistributeHor()const
-{
-    return m_xDlg->GetDistributeHor();
-}
-SvxDistributeVertical AbstractSvxDistributeDialog_Impl::GetDistributeVer()const
-{
-    return m_xDlg->GetDistributeVer();
 }
 
 void AbstractHangulHanjaConversionDialog_Impl::EndDialog(sal_Int32 nResult)
@@ -1073,12 +1058,6 @@ VclPtr<AbstractSvxCaptionDialog> AbstractDialogFactory_Impl::CreateCaptionDialog
                                                                                  SvxAnchorIds nAnchorTypes)
 {
     return VclPtr<AbstractSvxCaptionDialog_Impl>::Create(std::make_shared<SvxCaptionTabDialog>(pParent, pView, nAnchorTypes));
-}
-
-VclPtr<AbstractSvxDistributeDialog> AbstractDialogFactory_Impl::CreateSvxDistributeDialog(weld::Window* pParent,
-                                                                                          const SfxItemSet& rAttr)
-{
-    return VclPtr<AbstractSvxDistributeDialog_Impl>::Create(std::make_unique<SvxDistributeDialog>(pParent, rAttr, SvxDistributeHorizontal::NONE, SvxDistributeVertical::NONE));
 }
 
 VclPtr<AbstractHangulHanjaConversionDialog> AbstractDialogFactory_Impl::CreateHangulHanjaConversionDialog(weld::Window* pParent)
