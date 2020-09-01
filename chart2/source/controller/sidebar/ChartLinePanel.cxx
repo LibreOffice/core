@@ -46,7 +46,10 @@ OUString getCID(const css::uno::Reference<css::frame::XModel>& xModel)
 
     css::uno::Any aAny = xSelectionSupplier->getSelection();
     if (!aAny.hasValue())
-        return OUString();
+    {
+        xSelectionSupplier->select(css::uno::makeAny(OUString("CID/Page=")));
+        aAny = xSelectionSupplier->getSelection();
+    }
 
     OUString aCID;
     aAny >>= aCID;
