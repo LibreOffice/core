@@ -96,6 +96,7 @@
 
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/lok.hxx>
+#include <svx/unoshape.hxx>
 
 using namespace com::sun::star;
 using namespace xmloff::token;
