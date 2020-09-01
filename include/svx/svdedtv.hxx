@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_SVDEDTV_HXX
 #define INCLUDED_SVX_SVDEDTV_HXX
 
+#include <svx/dstribut_enum.hxx>
 #include <svx/svdmrkv.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/svdmodel.hxx>
@@ -264,7 +265,7 @@ public:
     void MergeMarkedObjects(SdrMergeMode eMode);
 
     // for distribution dialog function
-    void DistributeMarkedObjects(weld::Window* pParent);
+    void DistributeMarkedObjects(weld::Window* pParent, sal_uInt16 SlotID);
 
     // for setting either the width or height of all selected
     // objects to the width/height of the last selected object

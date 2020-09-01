@@ -2872,3 +2872,13 @@ cmd/sc_neutralcellstyle.png cmd/sc_neutralcellstyles.png
 cmd/32/openxmlfiltersettings.png cmd/32/managexmlsource.png
 cmd/lc_openxmlfiltersettings.png cmd/lc_managexmlsource.png
 cmd/sc_openxmlfiltersettings.png cmd/sc_managexmlsource.png
+
+# Distribution
+cmd/sc_distributehorzleft.png svx/res/dsth_low.png
+cmd/sc_distributehorzcenter.png svx/res/dsth_cen.png
+cmd/sc_distributehorzdistance.png svx/res/dsth_dst.png
+cmd/sc_distributehorzright.png svx/res/dsth_hig.png
+cmd/sc_distributeverttop.png svx/res/dstv_hig.png
+cmd/sc_distributevertcenter.png svx/res/dstv_cen.png
+cmd/sc_distributevertdistance.png svx/res/dstv_dst.png
+cmd/sc_distributevertbottom.png svx/res/dstv_low.png
