@@ -1025,6 +1025,13 @@ void DocxAttributeOutput::SectionBreaks(const SwNode& rNode)
             if (rNode.StartOfSectionNode()->IsTableNode() || rNode.StartOfSectionNode()->IsSectionNode())
                 m_rExport.OutputSectionBreaks(pTextNode->GetpSwAttrSet(), *pTextNode, m_tableReference->m_bTableCellOpen);
         }
+        else if (aNextIndex.GetNode().IsTableNode())
+        {
+            // Handle section break between tables.
+            const SwTableNode* pTableNode = static_cast<SwTableNode*>(&aNextIndex.GetNode());
+            const SwFrameFormat *pFormat = pTableNode->GetTable().GetFrameFormat();
+            m_rExport.OutputSectionBreaks(&(pFormat->GetAttrSet()), *pTableNode);
+        }
     }
 }
 
