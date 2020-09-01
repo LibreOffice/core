@@ -66,6 +66,7 @@
 #include <oox/export/shapes.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/export/vmlexport.hxx>
+#include <detfunc.hxx>
 
 #include <memory>
 
@@ -1089,6 +1090,7 @@ ExcBof8_Base::ExcBof8_Base()
     nRupBuild       = 0x0dbb;
     nRupYear        = 0x07cc;
 }
+
 void XclObjAny::WriteFromTo( XclExpXmlStream& rStrm, const Reference< XShape >& rShape, SCTAB nTab )
 {
     sax_fastparser::FSHelperPtr pDrawing = rStrm.GetCurrentStream();
@@ -1271,6 +1273,21 @@ void XclObjAny::SaveXml( XclExpXmlStream& rStrm )
     // leading to ms2010 rejecting the content
     if( !mxShape.is() || mxShape->getShapeType() == "com.sun.star.drawing.GroupShape" )
         return;
+
+    // Do not output any of the detective shapes and validation circles.
+    SdrObject* pObject = GetSdrObjectFromXShape(mxShape);
+    if (pObject)
+    {
+        ScDocument& rDoc = rStrm.GetRoot().GetDoc();
+        ScDetectiveFunc aDetFunc(&rDoc, mnScTab);
+        ScAddress       aPosition;
+        ScRange         aSourceRange;
+        bool            bRedLine;
+        ScDetectiveObjType eObjType = aDetFunc.GetDetectiveObjectType(pObject, mnScTab, aPosition, aSourceRange, bRedLine);
+
+        if (eObjType != SC_DETOBJ_NONE)
+            return;
+    }
 
     sax_fastparser::FSHelperPtr pDrawing = rStrm.GetCurrentStream();
 
