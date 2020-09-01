@@ -42,7 +42,6 @@ SvxIconChoiceCtrlEntry::SvxIconChoiceCtrlEntry( const OUString& rText,
                                                 const Image& rImage )
     : aImage(rImage)
     , aText(rText)
-    , pUserData(nullptr)
     , nPos(0)
     , pblink(nullptr)
     , pflink(nullptr)

@@ -65,7 +65,6 @@ struct SvXMLNumFmtEntry
 class SvXMLNumImpData
 {
     SvNumberFormatter*  pFormatter;
-    std::unique_ptr<SvXMLTokenMap>      pStylesElemTokenMap;
     std::unique_ptr<LocaleDataWrapper>  pLocaleData;
     std::vector<SvXMLNumFmtEntry> m_NameEntries;
 

@@ -64,7 +64,6 @@ class SvxIconChoiceCtrlEntry
 
     OUString aText;
     OUString aQuickHelpText;
-    void*  pUserData;
 
     friend class SvxIconChoiceCtrl_Impl;
     friend class IcnCursor_Impl;
