@@ -537,6 +537,31 @@ public:
         CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(51, 20)));
     }
 
+    void testTdf136171()
+    {
+        // Create virtual device with alpha.
+        ScopedVclPtr<VirtualDevice> device
+            = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
+        device->SetOutputSizePixel(Size(10, 10));
+        device->SetBackground(Wallpaper(COL_WHITE));
+        device->Erase();
+        Bitmap bitmap(Size(10, 10), 24);
+        bitmap.Erase(COL_BLUE);
+        basegfx::B2DHomMatrix matrix;
+        matrix.scale(bitmap.GetSizePixel().Width(),
+                     bitmap.GetSizePixel().Height()); // draw as 10x10
+        // Draw a blue bitmap to the device. The bug was that there was no alpha, but OutputDevice::DrawTransformBitmapExDirect()
+        // supplied a fully opaque alpha done with Erase() on the alpha bitmap, and Skia backend didn't handle such alpha correctly.
+        device->DrawTransformedBitmapEx(matrix, BitmapEx(bitmap));
+        exportDevice("/tmp/tdf136171.png", device);
+        // The whole virtual device content now should be blue.
+        CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(0, 0)));
+        CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(9, 0)));
+        CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(0, 9)));
+        CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(9, 9)));
+        CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(4, 4)));
+    }
+
     CPPUNIT_TEST_SUITE(BackendTest);
     CPPUNIT_TEST(testDrawRectWithRectangle);
     CPPUNIT_TEST(testDrawRectWithPixel);
@@ -588,6 +613,7 @@ public:
     CPPUNIT_TEST(testDashedLine);
 
     CPPUNIT_TEST(testTdf124848);
+    CPPUNIT_TEST(testTdf136171);
 
     CPPUNIT_TEST_SUITE_END();
 };

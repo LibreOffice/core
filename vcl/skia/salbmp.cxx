@@ -487,6 +487,26 @@ SkBitmap SkiaSalBitmap::GetAsSkBitmap() const
     return bitmap;
 }
 
+<<<<<<< HEAD   (cb8bf2 tdf#133564: Text coloring of buttons within non key windows )
+=======
+static SkColor toSkColor(Color color)
+{
+    return SkColorSetARGB(255 - color.GetTransparency(), color.GetRed(), color.GetGreen(),
+                          color.GetBlue());
+}
+
+// If mEraseColor is set, this is the color to use when the bitmap is used as alpha bitmap.
+// E.g. COL_BLACK actually means fully opaque and COL_WHITE means fully transparent.
+// This is because the alpha value is set as the color itself, not the alpha of the color.
+// Additionally VCL actually uses transparency and not opacity, so we should use "255 - value",
+// but we account for this by doing SkBlendMode::kDstOut when using alpha images (which
+// basically does another "255 - alpha"), so do not do it here.
+static SkColor fromEraseColorToAlphaImageColor(Color color)
+{
+    return SkColorSetARGB(color.GetBlue(), 0, 0, 0);
+}
+
+>>>>>>> CHANGE (2e3111 handle properly cleared bitmap used as alpha for Skia (tdf#1)
 const sk_sp<SkImage>& SkiaSalBitmap::GetSkImage() const
 {
 #ifdef DBG_UTIL
@@ -545,6 +565,21 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
 #ifdef DBG_UTIL
     assert(mWriteAccessCount == 0);
 #endif
+<<<<<<< HEAD   (cb8bf2 tdf#133564: Text coloring of buttons within non key windows )
+=======
+    if (mEraseColorSet)
+    {
+        SkiaZone zone;
+        sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(mSize, kAlpha_8_SkColorType);
+        assert(surface);
+        surface->getCanvas()->clear(fromEraseColorToAlphaImageColor(mEraseColor));
+        SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
+        thisPtr->mAlphaImage = surface->makeImageSnapshot();
+        SAL_INFO("vcl.skia.trace",
+                 "getalphaskimage(" << this << ") from erase color " << mEraseColor);
+        return mAlphaImage;
+    }
+>>>>>>> CHANGE (2e3111 handle properly cleared bitmap used as alpha for Skia (tdf#1)
     if (mAlphaImage)
     {
         assert(mSize == mPixelsSize); // data has already been scaled if needed
@@ -627,6 +662,52 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
     return mAlphaImage;
 }
 
+<<<<<<< HEAD   (cb8bf2 tdf#133564: Text coloring of buttons within non key windows )
+=======
+// If the bitmap is to be erased, SkShader with the color set is more efficient
+// than creating an image filled with the color.
+bool SkiaSalBitmap::PreferSkShader() const { return mEraseColorSet; }
+
+sk_sp<SkShader> SkiaSalBitmap::GetSkShader() const
+{
+    if (mEraseColorSet)
+        return SkShaders::Color(toSkColor(mEraseColor));
+    return GetSkImage()->makeShader();
+}
+
+sk_sp<SkShader> SkiaSalBitmap::GetAlphaSkShader() const
+{
+    if (mEraseColorSet)
+        return SkShaders::Color(fromEraseColorToAlphaImageColor(mEraseColor));
+    return GetAlphaSkImage()->makeShader();
+}
+
+void SkiaSalBitmap::EraseInternal()
+{
+    if (mPixelsSize.IsEmpty())
+        return;
+    BitmapBuffer* bitmapBuffer = AcquireBuffer(BitmapAccessMode::Write);
+    if (bitmapBuffer == nullptr)
+        abort();
+    Color fastColor = mEraseColor;
+    if (!!mPalette)
+        fastColor = mPalette.GetBestIndex(fastColor);
+    if (!ImplFastEraseBitmap(*bitmapBuffer, fastColor))
+    {
+        FncSetPixel setPixel = BitmapReadAccess::SetPixelFunction(bitmapBuffer->mnFormat);
+        assert(bitmapBuffer->mnFormat & ScanlineFormat::TopDown);
+        // Set first scanline, copy to others.
+        Scanline scanline = bitmapBuffer->mpBits;
+        for (long x = 0; x < bitmapBuffer->mnWidth; ++x)
+            setPixel(scanline, x, mEraseColor, bitmapBuffer->maColorMask);
+        for (long y = 1; y < bitmapBuffer->mnHeight; ++y)
+            memcpy(scanline + y * bitmapBuffer->mnScanlineSize, scanline,
+                   bitmapBuffer->mnScanlineSize);
+    }
+    ReleaseBuffer(bitmapBuffer, BitmapAccessMode::Write);
+}
+
+>>>>>>> CHANGE (2e3111 handle properly cleared bitmap used as alpha for Skia (tdf#1)
 void SkiaSalBitmap::EnsureBitmapData()
 {
     if (mBuffer)
@@ -784,6 +865,33 @@ void SkiaSalBitmap::ResetCachedDataBySize()
         mAlphaImage.reset();
 }
 
+<<<<<<< HEAD   (cb8bf2 tdf#133564: Text coloring of buttons within non key windows )
+=======
+OString SkiaSalBitmap::GetImageKey() const
+{
+    if (mEraseColorSet)
+    {
+        std::stringstream ss;
+        ss << std::hex << std::setfill('0') << std::setw(2) << (255 - mEraseColor.GetTransparency())
+           << std::setw(6) << sal_uInt32(mEraseColor.GetRGBColor());
+        return OStringLiteral("E") + ss.str().c_str();
+    }
+    return OStringLiteral("I") + OString::number(GetSkImage()->uniqueID());
+}
+
+OString SkiaSalBitmap::GetAlphaImageKey() const
+{
+    if (mEraseColorSet)
+    {
+        std::stringstream ss;
+        ss << std::hex << std::setfill('0') << std::setw(2)
+           << (255 - SkColorGetA(fromEraseColorToAlphaImageColor(mEraseColor)));
+        return OStringLiteral("E") + ss.str().c_str();
+    }
+    return OStringLiteral("I") + OString::number(GetAlphaSkImage()->uniqueID());
+}
+
+>>>>>>> CHANGE (2e3111 handle properly cleared bitmap used as alpha for Skia (tdf#1)
 #ifdef DBG_UTIL
 void SkiaSalBitmap::dump(const char* file) const
 {
