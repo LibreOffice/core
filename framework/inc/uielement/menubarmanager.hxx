@@ -172,7 +172,6 @@ class MenuBarManager final :
         bool                                                         m_bShowMenuImages;
         bool                                                         m_bRetrieveImages;
         bool                                                         m_bAcceleratorCfg;
-        bool                                                         m_bModuleIdentified;
         bool                                                         m_bHasMenuBar;
         OUString                                                     m_aModuleIdentifier;
         VclPtr<Menu>                                                 m_pVCLMenu;

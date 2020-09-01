@@ -36,7 +36,6 @@
 #include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
-#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
@@ -92,7 +91,6 @@ MenuBarManager::MenuBarManager(
     WeakComponentImplHelper( m_aMutex )
     , m_bRetrieveImages( false )
     , m_bAcceleratorCfg( false )
-    , m_bModuleIdentified( false )
     , m_bHasMenuBar( bHasMenuBar )
     , m_xContext(rxContext)
     , m_xURLTransformer(_xURLTransformer)
@@ -927,6 +925,12 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
     m_bShowMenuImages   = rSettings.GetUseImagesInMenus();
     m_bRetrieveImages   = false;
 
+    // Set module identifier when provided from outside
+    if (!rModuleIdentifier.isEmpty())
+        m_aModuleIdentifier = rModuleIdentifier;
+    else
+        m_aModuleIdentifier = vcl::CommandInfoProvider::GetModuleIdentifier(m_xFrame);
+
     // Add root as ui configuration listener
     RetrieveImageManagers();
 
@@ -957,13 +961,6 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
     for ( sal_uInt16 i = 0; i < nItemCount; i++ )
     {
         sal_uInt16 nItemId = FillItemCommand(aItemCommand,pMenu, i );
-
-        // Set module identifier when provided from outside
-        if ( !rModuleIdentifier.isEmpty() )
-        {
-            m_aModuleIdentifier = rModuleIdentifier;
-            m_bModuleIdentified = true;
-        }
 
         if (( pMenu->IsMenuBar() || bAccessibilityEnabled ) &&
             ( pMenu->GetItemText( nItemId ).isEmpty() ))
@@ -1128,23 +1125,6 @@ void MenuBarManager::impl_RetrieveShortcutsFromConfiguration(
 
 void MenuBarManager::RetrieveShortcuts( std::vector< std::unique_ptr<MenuItemHandler> >& aMenuShortCuts )
 {
-    if ( !m_bModuleIdentified )
-    {
-        m_bModuleIdentified = true;
-        Reference< XModuleManager2 > xModuleManager = ModuleManager::create( m_xContext );
-
-        try
-        {
-            m_aModuleIdentifier = xModuleManager->identify( m_xFrame );
-        }
-        catch( const Exception& )
-        {
-        }
-    }
-
-    if ( !m_bModuleIdentified )
-        return;
-
     Reference< XAcceleratorConfiguration > xDocAccelCfg( m_xDocAcceleratorManager );
     Reference< XAcceleratorConfiguration > xModuleAccelCfg( m_xModuleAcceleratorManager );
     Reference< XAcceleratorConfiguration > xGlobalAccelCfg( m_xGlobalAcceleratorManager );
@@ -1249,19 +1229,6 @@ void MenuBarManager::RetrieveImageManagers()
                 }
             }
         }
-    }
-
-    Reference< XModuleManager2 > xModuleManager;
-    if ( m_aModuleIdentifier.isEmpty() )
-        xModuleManager.set( ModuleManager::create( m_xContext ) );
-
-    try
-    {
-        if ( xModuleManager.is() )
-            m_aModuleIdentifier = xModuleManager->identify( Reference< XInterface >( m_xFrame, UNO_QUERY ) );
-    }
-    catch( const Exception& )
-    {
     }
 
     if ( !m_xModuleImageManager.is() )
@@ -1482,20 +1449,6 @@ void MenuBarManager::SetItemContainer( const Reference< XIndexAccess >& rItemCon
     SolarMutexGuard aSolarMutexGuard;
 
     Reference< XFrame > xFrame = m_xFrame;
-
-    if ( !m_bModuleIdentified )
-    {
-        m_bModuleIdentified = true;
-        Reference< XModuleManager2 > xModuleManager = ModuleManager::create( m_xContext );
-
-        try
-        {
-            m_aModuleIdentifier = xModuleManager->identify( xFrame );
-        }
-        catch( const Exception& )
-        {
-        }
-    }
 
     // Clear MenuBarManager structures
     {
