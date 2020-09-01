@@ -47,13 +47,6 @@
 #define FIELD_PROPERTY_TYPE             15
 #define FIELD_PROPERTY_AUTOINCREMENT    16
 
-class FixedText;
-class PushButton;
-class ScrollBar;
-class Button;
-class ListBox;
-class Control;
-
 namespace dbaui
 {
     class OTableDesignHelpBar;
