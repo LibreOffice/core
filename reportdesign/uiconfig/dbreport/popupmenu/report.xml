@@ -62,7 +62,19 @@
     </menu:menupopup>
   </menu:menu>
   <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:Distribution"/>
+  <menu:menu menu:id=".uno:DistributeSelection">
+    <menu:menupopup>
+      <menu:menuitem menu:id=".uno:DistributeHorzLeft"/>
+      <menu:menuitem menu:id=".uno:DistributeHorzCenter"/>
+      <menu:menuitem menu:id=".uno:DistributeHorzDistance"/>
+      <menu:menuitem menu:id=".uno:DistributeHorzRight"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:DistributeVertTop"/>
+      <menu:menuitem menu:id=".uno:DistributeVertCenter"/>
+      <menu:menuitem menu:id=".uno:DistributeVertDistance"/>
+      <menu:menuitem menu:id=".uno:DistributeVertBottom"/>
+    </menu:menupopup>
+  </menu:menu>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:ControlProperties"/>
 </menu:menupopup>
