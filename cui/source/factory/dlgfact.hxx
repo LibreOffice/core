@@ -39,7 +39,6 @@
 #include <cuitbxform.hxx>
 #include <dlgname.hxx>
 #include <DiagramDialog.hxx>
-#include <dstribut.hxx>
 #include <hangulhanjadlg.hxx>
 #include <hyphen.hxx>
 #include <insdlg.hxx>
@@ -161,21 +160,6 @@ public:
     virtual bool selectPageByUIXMLDescription(const OString& rUIXMLDescription) override;
     virtual BitmapEx createScreenshot() const override;
     virtual OString GetScreenshotId() const override;
-};
-
-class SvxDistributeDialog;
-class AbstractSvxDistributeDialog_Impl: public AbstractSvxDistributeDialog
-{
-    std::unique_ptr<SvxDistributeDialog> m_xDlg;
-public:
-    explicit AbstractSvxDistributeDialog_Impl(std::unique_ptr<SvxDistributeDialog> p)
-        : m_xDlg(std::move(p))
-    {
-    }
-    virtual short Execute() override;
-public:
-    virtual SvxDistributeHorizontal GetDistributeHor() const override;
-    virtual SvxDistributeVertical GetDistributeVer() const override;
 };
 
 class AbstractHangulHanjaConversionDialog_Impl: public AbstractHangulHanjaConversionDialog
@@ -800,8 +784,6 @@ public:
                                           CreateCaptionDialog(weld::Window* pParent,
                                             const SdrView* pView,
                                             SvxAnchorIds nAnchorTypes = SvxAnchorIds::NONE) override;
-    virtual VclPtr<AbstractSvxDistributeDialog>
-                                          CreateSvxDistributeDialog(weld::Window* pParent, const SfxItemSet& rAttr) override;
     virtual VclPtr<SfxAbstractInsertObjectDialog>
                                            CreateInsertObjectDialog(weld::Window* pParent, const OUString& rCommand,
                                             const css::uno::Reference < css::embed::XStorage >& xStor,

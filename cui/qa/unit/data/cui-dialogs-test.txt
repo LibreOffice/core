@@ -88,8 +88,6 @@ cui/ui/customizedialog.ui
 cui/ui/databaselinkdialog.ui
 cui/ui/dbregisterpage.ui
 cui/ui/dimensionlinestabpage.ui
-cui/ui/distributiondialog.ui
-cui/ui/distributionpage.ui
 cui/ui/editdictionarydialog.ui
 cui/ui/editmodulesdialog.ui
 cui/ui/effectspage.ui

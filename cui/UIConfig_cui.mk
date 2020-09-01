@@ -64,8 +64,6 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/gradientpage \
 	cui/uiconfig/ui/customizedialog \
 	cui/uiconfig/ui/dbregisterpage \
-	cui/uiconfig/ui/distributiondialog \
-	cui/uiconfig/ui/distributionpage \
 	cui/uiconfig/ui/effectspage \
 	cui/uiconfig/ui/eventsconfigpage \
 	cui/uiconfig/ui/formatcellsdialog \
