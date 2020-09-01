@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "80f7461b_a46b3d2f",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5717,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2020-09-01T15:27:37Z",
+      "side": 1,
+      "message": "Typo: bIsContour",
+      "revId": "c8f8b75c59eae768d059200f7d275835b9e44004",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b34496d_e1b1a61e",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5752,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2020-09-01T15:27:37Z",
+      "side": 1,
+      "message": "None of the above? We should issue a warning here.",
+      "revId": "c8f8b75c59eae768d059200f7d275835b9e44004",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8890f176_1768216e",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2020-09-01T15:27:37Z",
+      "side": 1,
+      "message": "Let\u0027s make this function static.\n\n(Also, a really tiny formatting issue: the \"pointer star\" should stick to the type, not the name of the function.)",
+      "revId": "c8f8b75c59eae768d059200f7d275835b9e44004",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
