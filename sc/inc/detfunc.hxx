@@ -42,10 +42,11 @@ enum ScDetectiveObjType
     SC_DETOBJ_ARROW,
     SC_DETOBJ_FROMOTHERTAB,
     SC_DETOBJ_TOOTHERTAB,
-    SC_DETOBJ_CIRCLE
+    SC_DETOBJ_CIRCLE,
+    SC_DETOBJ_RECTANGLE
 };
 
-class ScDetectiveFunc
+class SC_DLLPUBLIC ScDetectiveFunc
 {
     static Color     nArrowColor;
     static Color     nErrorColor;
