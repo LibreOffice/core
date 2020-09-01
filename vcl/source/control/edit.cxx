@@ -2669,14 +2669,6 @@ Size Edit::CalcMinimumSize() const
     return CalcMinimumSizeForText(GetText());
 }
 
-Size Edit::GetMinimumEditSize()
-{
-    vcl::Window* pDefWin = ImplGetDefaultWindow();
-    ScopedVclPtrInstance< Edit > aEdit(  pDefWin, WB_BORDER  );
-    Size aSize( aEdit->CalcMinimumSize() );
-    return aSize;
-}
-
 Size Edit::GetOptimalSize() const
 {
     return CalcMinimumSize();

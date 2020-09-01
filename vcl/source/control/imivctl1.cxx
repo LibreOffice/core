@@ -233,38 +233,6 @@ void SvxIconChoiceCtrl_Impl::RemoveEntry(size_t nPos)
     RecalcAllBoundingRectsSmart();
 }
 
-void SvxIconChoiceCtrl_Impl::CreateAutoMnemonics( MnemonicGenerator* _pGenerator )
-{
-    std::unique_ptr< MnemonicGenerator > pAutoDeleteOwnGenerator;
-    if ( !_pGenerator )
-    {
-        _pGenerator = new MnemonicGenerator;
-        pAutoDeleteOwnGenerator.reset( _pGenerator );
-    }
-
-    sal_uLong   nEntryCount = GetEntryCount();
-    sal_uLong   i;
-
-    // insert texts in generator
-    for( i = 0; i < nEntryCount; ++i )
-    {
-        DBG_ASSERT( GetEntry( i ), "-SvxIconChoiceCtrl_Impl::CreateAutoMnemonics(): more expected than provided!" );
-
-        _pGenerator->RegisterMnemonic( GetEntry( i )->GetText() );
-    }
-
-    // exchange texts with generated mnemonics
-    for( i = 0; i < nEntryCount; ++i )
-    {
-        SvxIconChoiceCtrlEntry* pEntry = GetEntry( i );
-        OUString                aTxt = pEntry->GetText();
-
-        OUString aNewText = _pGenerator->CreateMnemonic( aTxt );
-        if( aNewText != aTxt )
-            pEntry->SetText( aNewText );
-    }
-}
-
 tools::Rectangle SvxIconChoiceCtrl_Impl::GetOutputRect() const
 {
     Point aOrigin( pView->GetMapMode().GetOrigin() );

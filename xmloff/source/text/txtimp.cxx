@@ -2639,18 +2639,6 @@ bool XMLTextImportHelper::FindAndRemoveBookmarkStartRange(
     }
 }
 
-OUString XMLTextImportHelper::FindActiveBookmarkName()
-{
-    if (!m_xImpl->m_BookmarkVector.empty())
-    {
-        return m_xImpl->m_BookmarkVector.back();
-    }
-    else
-    {
-        return OUString(); // return the empty string on error...
-    }
-}
-
 void XMLTextImportHelper::pushFieldCtx( const OUString& name, const OUString& type )
 {
     m_xImpl->m_FieldStack.push(Impl::field_stack_item_t(

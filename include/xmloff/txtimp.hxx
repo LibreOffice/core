@@ -568,8 +568,6 @@ public:
         OUString & o_rXmlId,
         std::shared_ptr< ::xmloff::ParsedRDFaAttributes > & o_rpRDFaAttributes);
 
-    OUString FindActiveBookmarkName();
-
     void pushFieldCtx( const OUString& name, const OUString& type );
     css::uno::Reference<css::text::XFormField> popFieldCtx();
     void addFieldParam( const OUString& name, const OUString& value );

@@ -64,11 +64,6 @@ FuSearch* FuSearch::createPtr(ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View
     return xFunc;
 }
 
-rtl::Reference<FuPoor> FuSearch::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
-{
-    return rtl::Reference<FuPoor>(createPtr(pViewSh, pWin, pView, pDoc, rReq));
-}
-
 void FuSearch::DoExecute( SfxRequest& )
 {
     mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArraySpell );

@@ -253,13 +253,11 @@ public:
                         SvxIconChoiceCtrl_Impl( SvtIconChoiceCtrl* pView, WinBits nWinStyle );
                         ~SvxIconChoiceCtrl_Impl();
 
-    void                SetChoiceWithCursor() { bChooseWithCursor = true; }
     void                Clear( bool bInCtor );
     void                SetStyle( WinBits nWinStyle );
     WinBits             GetStyle() const { return nWinBits; }
     void                InsertEntry( std::unique_ptr<SvxIconChoiceCtrlEntry>, size_t nPos );
     void                RemoveEntry( size_t nPos );
-    void                CreateAutoMnemonics( MnemonicGenerator* _pGenerator );
     void                FontModified();
     void                SelectAll();
     void                SelectEntry(
@@ -386,7 +384,6 @@ public:
                                 return maEntries[ nPos ].get();
                             }
     SvxIconChoiceCtrlEntry* GetFirstSelectedEntry() const;
-    void                SetSelectionMode( SelectionMode eMode ) { eSelectionMode=eMode; }
     sal_Int32           GetEntryListPos( SvxIconChoiceCtrlEntry const * ) const;
     void                InitSettings();
     tools::Rectangle           GetOutputRect() const;
