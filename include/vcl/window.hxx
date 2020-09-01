@@ -952,9 +952,6 @@ public:
     /** Override <code>EnableInput</code>. This can be necessary due to other people
         using EnableInput for whole window hierarchies.
 
-
-        <code>AlwaysEnableInput</code> and <code>AlwaysDisableInput</code> are
-        mutually exclusive; the last setter wins.
         @param bAlways
         sets always enabled flag
 
@@ -962,26 +959,12 @@ public:
         if true children are recursively set to AlwaysEnableInput
     */
     void                                AlwaysEnableInput( bool bAlways, bool bChild = true );
+
     /** returns the current AlwaysEnableInput state
     @return
     true if window is in AlwaysEnableInput state
     */
     bool                                IsAlwaysEnableInput() const;
-    /** Override <code>EnableInput</code>, counterpart to AlwaysEnableInput.
-        Windows with AlwaysDisableInput will not get key events even if enabled
-        and input enabled.This can be necessary due to other people using EnableInput
-        for whole window hierarchies.
-
-        <code>AlwaysEnableInput</code> and <code>AlwaysDisableInput</code> are
-        mutually exclusive; the last setter wins.
-
-        @param bAlways
-        sets always disable flag
-
-        @param bChild
-        if true children are recursively set to AlwaysDisableInput
-    */
-    void                                AlwaysDisableInput( bool bAlways, bool bChild = true );
 
     /** A window is in modal mode if one of its children or subchildren
         is a running modal window (a modal dialog)

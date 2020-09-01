@@ -645,7 +645,7 @@ WindowImpl::WindowImpl( WindowType nType )
     mnParentClipMode                    = ParentClipMode::NONE;      // Flags for Parent-ClipChildren-Mode
     mnActivateMode                      = ActivateModeFlags::NONE;   // Will be converted in System/Overlap-Windows
     mnDlgCtrlFlags                      = DialogControlFlags::NONE;  // DialogControl-Flags
-    meAlwaysInputMode                   = AlwaysInputNone;           // neither AlwaysEnableInput nor AlwaysDisableInput called
+    meAlwaysInputMode                   = AlwaysInputNone;           // AlwaysEnableInput not called
     meHalign                            = VclAlign::Fill;
     meValign                            = VclAlign::Fill;
     mePackType                          = VclPackType::Start;
@@ -2629,33 +2629,6 @@ void Window::AlwaysEnableInput( bool bAlways, bool bChild )
         while ( pChild )
         {
             pChild->AlwaysEnableInput( bAlways, bChild );
-            pChild = pChild->mpWindowImpl->mpNext;
-        }
-    }
-}
-
-void Window::AlwaysDisableInput( bool bAlways, bool bChild )
-{
-
-    if ( mpWindowImpl->mpBorderWindow )
-        mpWindowImpl->mpBorderWindow->AlwaysDisableInput( bAlways, false );
-
-    if( bAlways && mpWindowImpl->meAlwaysInputMode != AlwaysInputDisabled )
-    {
-        mpWindowImpl->meAlwaysInputMode = AlwaysInputDisabled;
-        EnableInput(false, false);
-    }
-    else if( ! bAlways && mpWindowImpl->meAlwaysInputMode == AlwaysInputDisabled )
-    {
-        mpWindowImpl->meAlwaysInputMode = AlwaysInputNone;
-    }
-
-    if ( bChild )
-    {
-        VclPtr< vcl::Window > pChild = mpWindowImpl->mpFirstChild;
-        while ( pChild )
-        {
-            pChild->AlwaysDisableInput( bAlways, bChild );
             pChild = pChild->mpWindowImpl->mpNext;
         }
     }
