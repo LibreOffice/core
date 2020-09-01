@@ -389,12 +389,6 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
             MouseEvent aMEvt( aChildPos, pWinFrameData->mnClickCount, nMode, nCode, nCode );
             NotifyEvent aNEvt( nSVEvent, pChild, &aMEvt );
 
-            if( pChild->IsCallHandlersOnInputDisabled() )
-            {
-                pWinFrameData->mpMouseMoveWin = pChild;
-                pChild->ImplNotifyKeyMouseCommandEventListeners( aNEvt );
-            }
-
             if ( nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN )
                 return true;
             else
