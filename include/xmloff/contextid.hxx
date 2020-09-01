@@ -38,11 +38,6 @@
 
 #define CTF_FORMS_DATA_STYLE                ( XML_FORM_CTF_START +  0 )
 
-/** use together with MID_FLAG_NO_PROPERTY to import the specified
-    attribute into the alien attribute container */
-
-#define CTF_ALIEN_ATTRIBUTE_IMPORT  0x00007fff
-
 #endif // INCLUDED_XMLOFF_CONTEXTID_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

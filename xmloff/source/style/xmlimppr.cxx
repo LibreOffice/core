@@ -183,7 +183,6 @@ void SvXMLImportPropertyMapper::importXMLAttribute(
     // for better error reporting: this should be set true if no
     // warning is needed
     bool bNoWarning = false;
-    bool bAlienImport = false;
 
     do
     {
@@ -196,100 +195,92 @@ void SvXMLImportPropertyMapper::importXMLAttribute(
             // create a XMLPropertyState with an empty value
 
             nFlags = maPropMapper->GetEntryFlags( nIndex );
-            if( (( nFlags & MID_FLAG_NO_PROPERTY ) == MID_FLAG_NO_PROPERTY) && (maPropMapper->GetEntryContextId( nIndex ) == CTF_ALIEN_ATTRIBUTE_IMPORT) )
+            if( ( nFlags & MID_FLAG_ELEMENT_ITEM_IMPORT ) == 0 )
             {
-                bAlienImport = true;
-                nIndex = -1;
-            }
-            else
-            {
-                if( ( nFlags & MID_FLAG_ELEMENT_ITEM_IMPORT ) == 0 )
+                XMLPropertyState aNewProperty( nIndex );
+                sal_Int32 nReference = -1;
+
+                // if this is a multi attribute check if another attribute already set
+                // this any. If so use this as an initial value
+                if( ( nFlags & MID_FLAG_MERGE_PROPERTY ) != 0 )
                 {
-                    XMLPropertyState aNewProperty( nIndex );
-                    sal_Int32 nReference = -1;
-
-                    // if this is a multi attribute check if another attribute already set
-                    // this any. If so use this as an initial value
-                    if( ( nFlags & MID_FLAG_MERGE_PROPERTY ) != 0 )
+                    const OUString aAPIName( maPropMapper->GetEntryAPIName( nIndex ) );
+                    const sal_Int32 nSize = rProperties.size();
+                    for( nReference = 0; nReference < nSize; nReference++ )
                     {
-                        const OUString aAPIName( maPropMapper->GetEntryAPIName( nIndex ) );
-                        const sal_Int32 nSize = rProperties.size();
-                        for( nReference = 0; nReference < nSize; nReference++ )
+                        sal_Int32 nRefIdx = rProperties[nReference].mnIndex;
+                        if( (nRefIdx != -1) && (nIndex != nRefIdx) &&
+                            (maPropMapper->GetEntryAPIName( nRefIdx ) == aAPIName ))
                         {
-                            sal_Int32 nRefIdx = rProperties[nReference].mnIndex;
-                            if( (nRefIdx != -1) && (nIndex != nRefIdx) &&
-                                (maPropMapper->GetEntryAPIName( nRefIdx ) == aAPIName ))
-                            {
-                                aNewProperty = rProperties[nReference];
-                                aNewProperty.mnIndex = nIndex;
-                                break;
-                            }
+                            aNewProperty = rProperties[nReference];
+                            aNewProperty.mnIndex = nIndex;
+                            break;
                         }
-
-                        if( nReference == nSize )
-                            nReference = -1;
                     }
 
-                    bool bSet = false;
-                    if( ( nFlags & MID_FLAG_SPECIAL_ITEM_IMPORT ) == 0 )
-                    {
-                        // let the XMLPropertySetMapper decide how to import the value
-                        bSet = maPropMapper->importXML( sValue, aNewProperty,
-                                                 rUnitConverter );
-                    }
+                    if( nReference == nSize )
+                        nReference = -1;
+                }
+
+                bool bSet = false;
+                if( ( nFlags & MID_FLAG_SPECIAL_ITEM_IMPORT ) == 0 )
+                {
+                    // let the XMLPropertySetMapper decide how to import the value
+                    bSet = maPropMapper->importXML( sValue, aNewProperty,
+                                             rUnitConverter );
+                }
+                else
+                {
+                    sal_uInt32 nOldSize = rProperties.size();
+
+                    bSet = handleSpecialItem( aNewProperty, rProperties,
+                                              sValue, rUnitConverter,
+                                                 rNamespaceMap );
+
+                    // no warning if handleSpecialItem added properties
+                    bNoWarning |= ( nOldSize != rProperties.size() );
+                }
+
+                // no warning if we found could set the item. This
+                // 'remembers' bSet across multi properties.
+                bNoWarning |= bSet;
+
+                // store the property in the given vector
+                if( bSet )
+                {
+                    if( nReference == -1 )
+                        rProperties.push_back( aNewProperty );
                     else
+                        rProperties[nReference] = aNewProperty;
+                }
+                else
+                {
+                    // warn about unknown value. Unless it's a
+                    // multi property: Then we get another chance
+                    // to set the value.
+                    if( !bNoWarning &&
+                        ((nFlags & MID_FLAG_MULTI_PROPERTY) == 0) )
                     {
-                        sal_uInt32 nOldSize = rProperties.size();
-
-                        bSet = handleSpecialItem( aNewProperty, rProperties,
-                                                  sValue, rUnitConverter,
-                                                     rNamespaceMap );
-
-                        // no warning if handleSpecialItem added properties
-                        bNoWarning |= ( nOldSize != rProperties.size() );
-                    }
-
-                    // no warning if we found could set the item. This
-                    // 'remembers' bSet across multi properties.
-                    bNoWarning |= bSet;
-
-                    // store the property in the given vector
-                    if( bSet )
-                    {
-                        if( nReference == -1 )
-                            rProperties.push_back( aNewProperty );
-                        else
-                            rProperties[nReference] = aNewProperty;
-                    }
-                    else
-                    {
-                        // warn about unknown value. Unless it's a
-                        // multi property: Then we get another chance
-                        // to set the value.
-                        if( !bNoWarning &&
-                            ((nFlags & MID_FLAG_MULTI_PROPERTY) == 0) )
-                        {
-                            Sequence<OUString> aSeq(2);
-                            aSeq[0] = sAttrName;
-                            aSeq[1] = sValue;
-                            rImport.SetError( XMLERROR_FLAG_WARNING |
-                                              XMLERROR_STYLE_ATTR_VALUE,
-                                              aSeq );
-                        }
+                        Sequence<OUString> aSeq(2);
+                        aSeq[0] = sAttrName;
+                        aSeq[1] = sValue;
+                        rImport.SetError( XMLERROR_FLAG_WARNING |
+                                          XMLERROR_STYLE_ATTR_VALUE,
+                                          aSeq );
                     }
                 }
-                bFound = true;
-                continue;
             }
+            bFound = true;
+            continue;
         }
 
         if( !bFound )
         {
             SAL_INFO_IF((XML_NAMESPACE_NONE != nPrefix) &&
-                        !(XML_NAMESPACE_UNKNOWN_FLAG & nPrefix) &&
-                        !bAlienImport, "xmloff.style",
+                        !(XML_NAMESPACE_UNKNOWN_FLAG & nPrefix),
+                        "xmloff.style",
                         "unknown attribute: \"" << sAttrName << "\"");
-            if( (XML_NAMESPACE_UNKNOWN_FLAG & nPrefix) || (XML_NAMESPACE_NONE == nPrefix) || bAlienImport )
+            if( (XML_NAMESPACE_UNKNOWN_FLAG & nPrefix) || (XML_NAMESPACE_NONE == nPrefix) )
             {
                 if( !xAttrContainer.is() )
                 {
