@@ -1330,8 +1330,6 @@ sfx2/source/appl/shutdownicon.hxx:112
     class rtl::OUString ShutdownIcon::GetUrlDescription(const class rtl::OUString &)
 sfx2/source/appl/shutdownicon.hxx:114
     void ShutdownIcon::SetVeto(_Bool)
-sfx2/source/inc/templdgi.hxx:246
-    class weld::Widget * SfxCommonTemplateDialog_Impl::GetFrameWeld()
 shell/inc/xml_parser.hxx:46
      xml_parser::xml_parser()
 shell/inc/xml_parser.hxx:69

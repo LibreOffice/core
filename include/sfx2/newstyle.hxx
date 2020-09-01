@@ -41,7 +41,7 @@ private:
     DECL_DLLPRIVATE_LINK(ModifyHdl, weld::ComboBox&, void);
 
 public:
-    SfxNewStyleDlg(weld::Window* pParent, SfxStyleSheetBasePool& rPool, SfxStyleFamily eFam);
+    SfxNewStyleDlg(weld::Widget* pParent, SfxStyleSheetBasePool& rPool, SfxStyleFamily eFam);
     virtual ~SfxNewStyleDlg() override;
 
     OUString                GetName() const { return comphelper::string::stripStart(m_xColBox->get_active_text(), ' '); }
