@@ -44,7 +44,6 @@
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/interfacecontainer.h>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>

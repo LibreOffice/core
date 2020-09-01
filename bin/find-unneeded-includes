@@ -108,6 +108,8 @@ def ignoreRemoval(include, toAdd, absFileName, moduleRules):
         return True
     if include == "librevenge/librevenge.h" and "librevenge/RVNGPropertyList.h" in toAdd:
         return True
+    if include == "libetonyek/libetonyek.h" and "libetonyek/EtonyekDocument.h" in toAdd:
+        return True
 
     noRemove = (
         # <https://www.openoffice.org/tools/CodingGuidelines.sxw> insists on not
@@ -262,7 +264,9 @@ def tidy(compileCommands, paths):
             compileFile = pathAbs
             matches = [i for i in compileCommands if i["file"] == compileFile]
             if not len(matches):
-                if "assumeFilename" in moduleRules.keys():
+                # Only use assume-filename for headers, so we don't try to analyze e.g. Windows-only
+                # code on Linux.
+                if "assumeFilename" in moduleRules.keys() and not path.endswith("cxx"):
                     assume = moduleRules["assumeFilename"]
                 if assume:
                     assumeAbs = os.path.abspath(assume)

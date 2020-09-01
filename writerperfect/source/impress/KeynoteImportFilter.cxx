@@ -21,7 +21,6 @@
 #include <unotools/ucbhelper.hxx>
 
 #include <DirectoryStream.hxx>
-#include <DocumentHandler.hxx>
 #include <WPXSvInputStream.hxx>
 
 #include "KeynoteImportFilter.hxx"
