@@ -111,7 +111,7 @@ RegError ORegKey::openSubKeys(const OUString& keyName, RegKeyHandle** phOpenSubK
     {
         if ( iter.m_nAttrib & STORE_ATTRIB_ISDIR )
         {
-            OUString const sSubKeyName = iter.m_pszName;
+            OUString const sSubKeyName(iter.m_pszName, iter.m_nLength);
 
             ORegKey* pOpenSubKey = nullptr;
             _ret = pKey->openKey(sSubKeyName, reinterpret_cast<RegKeyHandle*>(&pOpenSubKey));
@@ -175,7 +175,7 @@ RegError ORegKey::getKeyNames(const OUString& keyName,
     {
         if ( iter.m_nAttrib & STORE_ATTRIB_ISDIR)
         {
-            OUString const sSubKeyName = iter.m_pszName;
+            OUString const sSubKeyName(iter.m_pszName, iter.m_nLength);
 
             OUString sFullKeyName(pKey->getName());
             if (sFullKeyName.getLength() > 1)

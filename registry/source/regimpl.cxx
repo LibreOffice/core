@@ -820,7 +820,7 @@ RegError ORegistry::deleteSubkeysAndValues(ORegKey* pKey)
 
     while (_err == store_E_None)
     {
-        OUString const keyName = iter.m_pszName;
+        OUString const keyName(iter.m_pszName, iter.m_nLength);
 
         if (iter.m_nAttrib & STORE_ATTRIB_ISDIR)
         {
@@ -867,7 +867,7 @@ RegError ORegistry::loadKey(RegKeyHandle hKey, const OUString& regFileName,
 
     while (_err == store_E_None)
     {
-        OUString const keyName = iter.m_pszName;
+        OUString const keyName(iter.m_pszName, iter.m_nLength);
 
         if (iter.m_nAttrib & STORE_ATTRIB_ISDIR)
         {
@@ -1221,7 +1221,7 @@ RegError ORegistry::loadAndSaveKeys(ORegKey* pTargetKey,
 
     while (_err == store_E_None)
     {
-        OUString const sName = iter.m_pszName;
+        OUString const sName(iter.m_pszName, iter.m_nLength);
 
         if (iter.m_nAttrib & STORE_ATTRIB_ISDIR)
         {
@@ -1266,7 +1266,7 @@ RegError ORegistry::dumpRegistry(RegKeyHandle hKey) const
 
     while (_err == store_E_None)
     {
-        sName = iter.m_pszName;
+        sName = OUString(iter.m_pszName, iter.m_nLength);
 
         if (iter.m_nAttrib & STORE_ATTRIB_ISDIR)
         {
@@ -1552,7 +1552,7 @@ RegError ORegistry::dumpKey(const OUString& sPath, const OUString& sName, sal_In
 
     while (_err == store_E_None)
     {
-        sSubName = iter.m_pszName;
+        sSubName = OUString(iter.m_pszName, iter.m_nLength);
 
         if (iter.m_nAttrib & STORE_ATTRIB_ISDIR)
         {
