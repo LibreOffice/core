@@ -27,7 +27,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <officecfg/Office/Common.hxx>
