@@ -626,6 +626,38 @@ public:
     }
 };
 
+// ISO 142891-1 : 7.14
+class NonInteractiveFormCheck : public NodeCheck
+{
+public:
+    NonInteractiveFormCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
+        : NodeCheck(rIssueCollection)
+    {
+    }
+
+    void check(SwNode* pCurrent) override
+    {
+        if (!pCurrent->IsTextNode())
+            return;
+
+        const auto& text = pCurrent->GetTextNode()->GetText();
+
+        // Series of tests to detect if there are fake forms in the text.
+
+        const bool bUnderscoreSeries = text.indexOf(u"___") != -1; // Repeated underscores.
+        const bool bDotSeries = text.indexOf(u"....") != -1; // Repeated dots.
+        const bool bEllipsisSeries = text.indexOf(u"……") != -1; // Repeated ellipsis.
+        const bool bEllipsisDot = text.indexOf(u"….") != -1; // An ellipsis after a dot.
+        const bool bDotEllipsis = text.indexOf(u".…") != -1; // A dot after an ellipsis.
+
+        // Checking if all the tests are passed successfully. If not, adding a warning.
+        if (bUnderscoreSeries || bDotSeries || bEllipsisSeries || bEllipsisDot || bDotEllipsis)
+        {
+            lclAddIssue(m_rIssueCollection, SwResId(STR_NON_INTERACTIVE_FORMS));
+        }
+    }
+};
+
 class DocumentCheck : public BaseCheck
 {
 public:
@@ -770,6 +802,7 @@ void AccessibilityCheck::check()
     aNodeChecks.push_back(std::make_unique<BlinkingTextCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<HeaderCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<TextFormattingCheck>(m_aIssueCollection));
+    aNodeChecks.push_back(std::make_unique<NonInteractiveFormCheck>(m_aIssueCollection));
 
     auto const& pNodes = m_pDoc->GetNodes();
     SwNode* pNode = nullptr;
