@@ -235,7 +235,7 @@ private:
 void FakeBool::run() {
     if (compiler.getLangOpts().CPlusPlus) {
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
-        for (auto const dcl: varDecls_) {
+        for (auto const & dcl: varDecls_) {
             auto const decl = dcl.first; auto const fbk = dcl.second;
             SourceLocation loc { compat::getBeginLoc(decl) };
             TypeSourceInfo * tsi = decl->getTypeSourceInfo();
@@ -277,7 +277,7 @@ void FakeBool::run() {
                     << decl->getSourceRange();
             }
         }
-        for (auto const dcl: fieldDecls_) {
+        for (auto const & dcl: fieldDecls_) {
             auto const decl = dcl.first; auto const fbk = dcl.second;
             SourceLocation loc { compat::getBeginLoc(decl) };
             TypeSourceInfo * tsi = decl->getTypeSourceInfo();
@@ -319,7 +319,7 @@ void FakeBool::run() {
             }
         }
         auto const ignoredFns = getFunctionsWithAddressTaken();
-        for (auto const dcl: parmVarDecls_) {
+        for (auto const & dcl: parmVarDecls_) {
             auto const decl = dcl.first; auto const fbk = dcl.second;
             FunctionDecl const * f = cast<FunctionDecl>(decl->getDeclContext())->getCanonicalDecl();
             if (ignoredFns.find(f) != ignoredFns.end()) {
@@ -393,7 +393,7 @@ void FakeBool::run() {
                     << decl->getSourceRange();
             }
         }
-        for (auto const dcl: functionDecls_) {
+        for (auto const & dcl: functionDecls_) {
             auto const decl = dcl.first; auto const fbk = dcl.second;
             FunctionDecl const * f = decl->getCanonicalDecl();
             if (ignoredFns.find(f) != ignoredFns.end()) {

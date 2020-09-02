@@ -609,7 +609,7 @@ bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation
     }
     ranges.emplace_back(startLoc, endLoc);
 
-    for (auto const range : ranges)
+    for (auto const& range : ranges)
     {
         if (range.isInvalid())
         {
