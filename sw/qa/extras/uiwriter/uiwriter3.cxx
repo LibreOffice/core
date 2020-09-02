@@ -184,6 +184,31 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132321)
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135056)
+{
+    load(DATA_DIRECTORY, "tdf135056.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pWrtShell->GetTOXCount());
+
+    const SwTOXBase* pTOX = pWrtShell->GetTOX(0);
+    CPPUNIT_ASSERT(pTOX);
+
+    //Without the fix in place, it would have hung here
+    pWrtShell->DeleteTOX(*pTOX, true);
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), pWrtShell->GetTOXCount());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pWrtShell->GetTOXCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126626)
 {
     load(DATA_DIRECTORY, "tdf126626.docx");
