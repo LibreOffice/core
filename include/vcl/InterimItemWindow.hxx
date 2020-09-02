@@ -45,7 +45,7 @@ protected:
     // returns true if keystroke is consumed
     bool ChildKeyInput(const KeyEvent& rKEvt);
 
-    virtual void IdleResize();
+    virtual void Layout();
 
     std::unique_ptr<weld::Builder> m_xBuilder;
     VclPtr<vcl::Window> m_xVclContentArea;
@@ -57,7 +57,7 @@ private:
 
     void StartIdleLayout();
 
-    DECL_LINK(DoResize, Timer*, void);
+    DECL_LINK(DoLayout, Timer*, void);
 
     virtual void ImplPaintToDevice(::OutputDevice* pTargetOutDev, const Point& rPos) override;
 };

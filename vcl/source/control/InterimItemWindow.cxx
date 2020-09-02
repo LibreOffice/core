@@ -17,7 +17,7 @@ InterimItemWindow::InterimItemWindow(vcl::Window* pParent, const OUString& rUIXM
     , m_pWidget(nullptr) // inheritors are expected to call InitControlBase
 {
     m_aLayoutIdle.SetPriority(TaskPriority::RESIZE);
-    m_aLayoutIdle.SetInvokeHandler(LINK(this, InterimItemWindow, DoResize));
+    m_aLayoutIdle.SetInvokeHandler(LINK(this, InterimItemWindow, DoLayout));
     m_aLayoutIdle.SetDebugName("InterimItemWindow m_aLayoutIdle");
 
     m_xVclContentArea = VclPtr<VclVBox>::Create(this);
@@ -67,11 +67,11 @@ void InterimItemWindow::queue_resize(StateChangedType eReason)
     StartIdleLayout();
 }
 
-void InterimItemWindow::Resize() { StartIdleLayout(); }
+void InterimItemWindow::Resize() { Layout(); }
 
-IMPL_LINK_NOARG(InterimItemWindow, DoResize, Timer*, void) { IdleResize(); }
+IMPL_LINK_NOARG(InterimItemWindow, DoLayout, Timer*, void) { Layout(); }
 
-void InterimItemWindow::IdleResize()
+void InterimItemWindow::Layout()
 {
     vcl::Window* pChild = GetWindow(GetWindowType::FirstChild);
     assert(pChild);

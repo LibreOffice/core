@@ -72,7 +72,7 @@ void OTableBorderWindow::dispose()
     InterimItemWindow::dispose();
 }
 
-void OTableBorderWindow::IdleResize()
+void OTableBorderWindow::Layout()
 {
     // dimensions of parent window
     auto nOutputHeight = GetSizePixel().Height();
@@ -88,7 +88,7 @@ void OTableBorderWindow::IdleResize()
     // set splitter
     m_xHorzSplitter->set_position(nSplitPos);
 
-    InterimItemWindow::IdleResize();
+    InterimItemWindow::Layout();
 
     if (nOldSplitPos != nSplitPos)
         m_xHorzSplitter->set_position(nSplitPos);
