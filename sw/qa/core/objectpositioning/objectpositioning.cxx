@@ -211,6 +211,26 @@ CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testVertAlignBottomMarginWithF
     // Verify that the distance between the bottom of body and top of third shape is around 0cm. (align=top)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nThirdShapeTop - nBodyBottom);
 }
+
+CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testInsideOutsideVertAlignBottomMargin)
+{
+    // Load a document, with two shapes.
+    // The shapes align the outside and inside of page print area bottom.
+    load(DATA_DIRECTORY, "inside-outside-vert-align.docx");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nBodyBottom = getXPath(pXmlDoc, "//body/infos/bounds", "bottom").toInt32(); //15704
+    sal_Int32 nPageBottom = getXPath(pXmlDoc, "//page/infos/bounds", "bottom").toInt32(); //17121
+    sal_Int32 nFirstShapeOutside
+        = getXPath(pXmlDoc, "//SwAnchoredDrawObject[1]/bounds", "bottom").toInt32(); //17098
+    sal_Int32 nSecondShapeInside
+        = getXPath(pXmlDoc, "//SwAnchoredDrawObject[2]/bounds", "top").toInt32(); //15694
+
+    // Verify that the distance between the bottom of page and bottom of first shape is around 0cm. (align=outside)
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(23), nPageBottom - nFirstShapeOutside);
+    // Verify that the distance between the bottom of body and top of second shape is around 0cm. (align=inside)
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(10), nBodyBottom - nSecondShapeInside);
+}
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
