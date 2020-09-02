@@ -592,8 +592,6 @@ include/sfx2/lokhelper.hxx:62
     int SfxLokHelper::getDocumentIdOfView(int)
 include/sfx2/msg.hxx:120
     const class std::type_info * SfxType0::Type() const
-include/sfx2/thumbnailview.hxx:208
-    unsigned short ThumbnailView::getNextItemId() const
 include/sfx2/viewsh.hxx:365
     enum LOKDeviceFormFactor SfxViewShell::GetLOKDeviceFormFactor() const
 include/sfx2/viewsh.hxx:367
@@ -790,8 +788,6 @@ include/vcl/outdev.hxx:1738
     class basegfx::B2DPolyPolygon OutputDevice::LogicToPixel(const class basegfx::B2DPolyPolygon &,const class MapMode &) const
 include/vcl/outdev.hxx:1758
     class basegfx::B2DPolyPolygon OutputDevice::PixelToLogic(const class basegfx::B2DPolyPolygon &,const class MapMode &) const
-include/vcl/pngread.hxx:56
-    void vcl::PNGReader::SetIgnoreGammaChunk(_Bool)
 include/vcl/salnativewidgets.hxx:408
     _Bool TabitemValue::isBothAligned() const
 include/vcl/salnativewidgets.hxx:409
