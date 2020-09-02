@@ -229,10 +229,15 @@ OString InsertOLE1HeaderFromOle10NativeStream(tools::SvRef<SotStorage>& xStorage
     return aClassName;
 }
 
-/// Inserts an OLE1 header before an OLE2 storage.
+/**
+ * Writes an OLE1 header and data from rOle2 to rOle1.
+ *
+ * In case rOle2 has presentation data, then its size is written to nWidth/nHeight.  Otherwise
+ * nWidth/nHeight/pPresentationData/nPresentationData is used for the presentation data.
+ */
 OString InsertOLE1Header(SvStream& rOle2, SvStream& rOle1, sal_uInt32& nWidth, sal_uInt32& nHeight,
-                         SwOLENode& rOLENode, const sal_uInt8* /*pPresentationData*/,
-                         sal_uInt64 /*nPresentationData*/)
+                         SwOLENode& rOLENode, const sal_uInt8* pPresentationData,
+                         sal_uInt64 nPresentationData)
 {
     rOle2.Seek(0);
     tools::SvRef<SotStorage> xStorage(new SotStorage(rOle2));
@@ -278,33 +283,41 @@ OString InsertOLE1Header(SvStream& rOle2, SvStream& rOle1, sal_uInt32& nWidth, s
 
     // Write Presentation.
     SvMemoryStream aPresentationData;
+    // OLEVersion.
+    rOle1.WriteUInt32(0x00000501);
+    // FormatID: constant means the ClassName field is present.
+    rOle1.WriteUInt32(0x00000005);
+    // ClassName: null terminated pascal string.
+    OString aPresentationClassName("METAFILEPICT");
+    rOle1.WriteUInt32(aPresentationClassName.getLength() + 1);
+    rOle1.WriteOString(aPresentationClassName);
+    rOle1.WriteChar(0);
+    const sal_uInt8* pBytes = nullptr;
+    sal_uInt64 nBytes = 0;
     if (ParseOLE2Presentation(rOle2, nWidth, nHeight, aPresentationData))
     {
         // Take presentation data for OLE1 from OLE2.
-        // OLEVersion.
-        rOle1.WriteUInt32(0x00000501);
-        // FormatID: constant means the ClassName field is present.
-        rOle1.WriteUInt32(0x00000005);
-        // ClassName: null terminated pascal string.
-        OString aPresentationClassName("METAFILEPICT");
-        rOle1.WriteUInt32(aPresentationClassName.getLength() + 1);
-        rOle1.WriteOString(aPresentationClassName);
-        rOle1.WriteChar(0);
-        // Width.
-        rOle1.WriteUInt32(nWidth);
-        // Height.
-        rOle1.WriteUInt32(nHeight * -1);
-        // PresentationDataSize
-        sal_uInt32 nPresentationData = aPresentationData.Tell();
-        rOle1.WriteUInt32(8 + nPresentationData);
-        // Reserved1-4.
-        rOle1.WriteUInt16(0x0008);
-        rOle1.WriteUInt16(0x31b1);
-        rOle1.WriteUInt16(0x1dd9);
-        rOle1.WriteUInt16(0x0000);
-        aPresentationData.Seek(0);
-        rOle1.WriteStream(aPresentationData, nPresentationData);
+        pBytes = static_cast<const sal_uInt8*>(aPresentationData.GetData());
+        nBytes = aPresentationData.Tell();
     }
+    else
+    {
+        // Take presentation data for OLE1 from RTF.
+        pBytes = pPresentationData;
+        nBytes = nPresentationData;
+    }
+    // Width.
+    rOle1.WriteUInt32(nWidth);
+    // Height.
+    rOle1.WriteUInt32(nHeight * -1);
+    // PresentationDataSize
+    rOle1.WriteUInt32(8 + nPresentationData);
+    // Reserved1-4.
+    rOle1.WriteUInt16(0x0008);
+    rOle1.WriteUInt16(0x31b1);
+    rOle1.WriteUInt16(0x1dd9);
+    rOle1.WriteUInt16(0x0000);
+    rOle1.WriteBytes(pBytes, nBytes);
 
     return aClassName;
 }
