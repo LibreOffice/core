@@ -4311,6 +4311,31 @@ void SwUiWriterTest::testDocModState()
     CPPUNIT_ASSERT(!(pShell->IsModified()));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf135056)
+{
+    load(DATA_DIRECTORY, "tdf135056.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pWrtShell->GetTOXCount());
+
+    const SwTOXBase* pTOX = pWrtShell->GetTOX(0);
+    CPPUNIT_ASSERT(pTOX);
+
+    //Without the fix in place, it would have hung here
+    pWrtShell->DeleteTOX(*pTOX, true);
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), pWrtShell->GetTOXCount());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pWrtShell->GetTOXCount());
+}
+
 void SwUiWriterTest::testTdf94804()
 {
     //create new writer document
