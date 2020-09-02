@@ -23,6 +23,7 @@
 #define STR_AVOID_ENDNOTES              NC_("STR_AVOID_ENDNOTES", "Avoid endnotes.")
 #define STR_HEADINGS_NOT_IN_ORDER       NC_("STR_HEADINGS_NOT_IN_ORDER", "Headings not in order.")
 #define STR_TEXT_FORMATTING_CONVEYS_MEANING NC_("STR_TEXT_FORMATTING_CONVEYS_MEANING", "The text formatting conveys additional meaning.")
+#define STR_NON_INTERACTIVE_FORMS       NC_("STR_NN_INTERACTIVE_FORMS", "An input form is not interactive.")
 
 #define STR_DOCUMENT_DEFAULT_LANGUAGE   NC_("STR_DOCUMENT_DEFAULT_LANGUAGE", "Document default language is not set")
 #define STR_STYLE_NO_LANGUAGE           NC_("STR_STYLE_NO_LANGUAGE", "Style '%STYLE_NAME%' has no language set")
