@@ -49,10 +49,10 @@ namespace avmedia { class MediaItem; }
 
 namespace avmedia {
 
-enum MediaControlStyle
+enum class MediaControlStyle
 {
-    MEDIACONTROLSTYLE_SINGLELINE = 0,
-    MEDIACONTROLSTYLE_MULTILINE = 1
+    SingleLine = 0,
+    MultiLine = 1
 };
 
 class UNLESS_MERGELIBS(AVMEDIA_DLLPUBLIC) MediaControlBase

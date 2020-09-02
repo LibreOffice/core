@@ -46,7 +46,7 @@ using namespace ::com::sun::star;
 namespace avmedia::priv {
 
 MediaWindowControl::MediaWindowControl(vcl::Window* pParent)
-    : MediaControl(pParent, MEDIACONTROLSTYLE_MULTILINE)
+    : MediaControl(pParent, MediaControlStyle::MultiLine)
 {
 }
 
