@@ -133,7 +133,6 @@ private:
     bool                mbIDATStarted : 1;  // true if IDAT seen
     bool                mbIDATComplete : 1; // true if finished with enough IDAT chunks
     bool                mbpHYs : 1;         // true if physical size of pixel available
-    bool                mbIgnoreGammaChunk : 1;
     bool                mbIgnoreCRC : 1; // skip checking CRCs while fuzzing
 
 #if OSL_DEBUG_LEVEL > 0
@@ -174,7 +173,6 @@ public:
 
     BitmapEx            GetBitmapEx();
     const std::vector<vcl::PNGReader::ChunkData>& GetAllChunks();
-    void                SetIgnoreGammaChunk( bool bIgnore ){ mbIgnoreGammaChunk = bIgnore; };
 };
 
 PNGReaderImpl::PNGReaderImpl( SvStream& rPNGStream )
@@ -212,7 +210,6 @@ PNGReaderImpl::PNGReaderImpl( SvStream& rPNGStream )
     mbIDATStarted( false ),
     mbIDATComplete( false ),
     mbpHYs              ( false ),
-    mbIgnoreGammaChunk  ( false ),
     mbIgnoreCRC( utl::ConfigManager::IsFuzzing() )
 #if OSL_DEBUG_LEVEL > 0
     ,mnAllocSizeScanline(0),
@@ -352,7 +349,7 @@ BitmapEx PNGReaderImpl::GetBitmapEx()
 
             case PNGCHUNK_gAMA :                                // the gamma chunk must precede
             {                                                   // the 'IDAT' and also the 'PLTE'(if available )
-                if (!mbIgnoreGammaChunk && !mbIDATComplete)
+                if (!mbIDATComplete)
                     ImplGetGamma();
             }
             break;
@@ -1703,11 +1700,6 @@ BitmapEx PNGReader::Read()
 const std::vector< vcl::PNGReader::ChunkData >& PNGReader::GetChunks() const
 {
     return mpImpl->GetAllChunks();
-}
-
-void PNGReader::SetIgnoreGammaChunk(bool bIgnoreGammaChunk)
-{
-    mpImpl->SetIgnoreGammaChunk(bIgnoreGammaChunk);
 }
 
 } // namespace vcl

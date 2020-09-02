@@ -963,11 +963,6 @@ sal_uInt16 ThumbnailView::GetItemId( const Point& rPos ) const
     return 0;
 }
 
-sal_uInt16 ThumbnailView::getNextItemId() const
-{
-    return mItemList.empty() ? 1 : mItemList.back()->mnId + 1;
-}
-
 void ThumbnailView::setItemMaxTextLength(sal_uInt32 nLength)
 {
     mpItemAttrs->nMaxTextLength = nLength;

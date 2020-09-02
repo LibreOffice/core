@@ -205,8 +205,6 @@ public:
 
     sal_uInt16 GetItemId( const Point& rPos ) const;
 
-    sal_uInt16 getNextItemId () const;
-
     virtual bool isDrawMnemonic() const override { return false; }
 
     void setItemMaxTextLength (sal_uInt32 nLength);

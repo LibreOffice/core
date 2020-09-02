@@ -52,8 +52,6 @@ public:
         std::vector<sal_uInt8> aData;
     };
     const std::vector<ChunkData>& GetChunks() const;
-
-    void SetIgnoreGammaChunk(bool bIgnoreGammaChunk);
 };
 
 } // end namespace vcl
