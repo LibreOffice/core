@@ -766,6 +766,13 @@ typedef enum
      * and row-groups data have changed.
      */
     LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY = 50,
+
+    /**
+     * This is used for flushing messages queue and it has no payload.
+     * Normally this is used internally in LOK and should not reach client
+     * or it should be ignored.
+     */
+    LOK_CALLBACK_FLUSH_MESSAGE_QUEUE = 51
 }
 LibreOfficeKitCallbackType;
 
@@ -896,6 +903,8 @@ static inline const char* lokCallbackTypeToString(int nType)
         return "LOK_CALLBACK_FORM_FIELD_BUTTON";
     case LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY:
         return "LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY";
+    case LOK_CALLBACK_FLUSH_MESSAGE_QUEUE:
+        return "LOK_CALLBACK_FLUSH_MESSAGE_QUEUE";
     }
 
     assert(!"Unknown LibreOfficeKitCallbackType type.");

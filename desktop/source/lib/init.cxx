@@ -1389,6 +1389,12 @@ void CallbackFlushHandler::queue(const int type, const char* data)
 {
     comphelper::ProfileZone aZone("CallbackFlushHandler::queue");
 
+    if (type == LOK_CALLBACK_FLUSH_MESSAGE_QUEUE)
+    {
+        Invoke();
+        return;
+    }
+
     CallbackData aCallbackData(type, (data ? data : "(nil)"));
     const std::string& payload = aCallbackData.PayloadString;
     SAL_INFO("lok", "Queue: [" << type << "]: [" << payload << "] on " << m_queue.size() << " entries.");

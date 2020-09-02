@@ -745,20 +745,24 @@ void ScTabViewShell::ExecuteSave( SfxRequest& rReq )
     // Finish entering unless 'DontTerminateEdit' is specified, even if a formula is being processed
     if (bCommitChanges)
     {
+        SC_MOD()->InputEnterHandler();
+
         if (comphelper::LibreOfficeKit::isActive())
         {
             // Normally this isn't needed, but in Calc when editing a cell formula
             // and manually saving (without changing cells or hitting enter), while
             // InputEnterHandler will mark the doc as modified (when it is), because
             // we will save the doc immediately afterwards, the modified state event
-            // is clobbered. To avoid that, we notify all views immediately of the
-            // modified state, apply the modification, then save the document.
-            ScInputHandler* pHdl = GetInputHandler();
-            if (pHdl != nullptr && pHdl->GetModified())
-                SfxLokHelper::notifyAllViews(LOK_CALLBACK_STATE_CHANGED, ".uno:ModifiedStatus=true");
+            // is clobbered. To avoid that, we need to flush here so that the possible
+            // state of "true" for SID_DOC_MODIFIED after "InputEnterHandler" will be
+            // sent as a notification. It is important that the notification goes through
+            // normal process (cache) rather than directly notifying the views.
+            // Otherwise, because there is a previous state of "false" in cache, the
+            // "false" state after saving will be ignored. A flush between "InputEnterHandler"
+            // and "save" ensures that state changes after each of them will be delivered.
+            GetViewData().GetDocShell()->GetViewBindings()->Update(SID_DOC_MODIFIED);
+            SfxLokHelper::notifyAllViews(LOK_CALLBACK_FLUSH_MESSAGE_QUEUE, "");
         }
-
-        SC_MOD()->InputEnterHandler();
     }
 
     if ( GetViewData().GetDocShell()->IsDocShared() )
