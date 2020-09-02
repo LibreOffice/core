@@ -233,6 +233,7 @@ public:
     void testTdf134455();
     void testTdf119533();
     void testTdf127982();
+    void testTdf109409();
     void testTdf131424();
     void testTdf100709XLSX();
     void testTdf97598XLSX();
@@ -397,6 +398,7 @@ public:
     CPPUNIT_TEST(testTdf134455);
     CPPUNIT_TEST(testTdf119533);
     CPPUNIT_TEST(testTdf127982);
+    CPPUNIT_TEST(testTdf109409);
     CPPUNIT_TEST(testTdf131424);
     CPPUNIT_TEST(testTdf100709XLSX);
     CPPUNIT_TEST(testTdf97598XLSX);
@@ -3876,6 +3878,35 @@ void ScFiltersTest::testTdf127982()
     CPPUNIT_ASSERT_EQUAL(OUString("R1"), rDoc.GetString(ScAddress(4,5,0)));
     CPPUNIT_ASSERT_EQUAL(OUString("R6"), rDoc.GetString(ScAddress(4,6,0)));
     CPPUNIT_ASSERT_EQUAL(OUString("R7"), rDoc.GetString(ScAddress(4,7,0)));
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf109409()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf109409.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // TEXTJOIN
+    CPPUNIT_ASSERT_EQUAL(OUString("A1;B1;A2;B2;A3;B3"), rDoc.GetString(ScAddress(3,1,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("A1;B1;A2;B2;A3;B3"), rDoc.GetString(ScAddress(3,2,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("A1;A2;A3;B1;B2;B3"), rDoc.GetString(ScAddress(3,4,0)));
+
+    // Without the fix in place, it would have failed with
+    //- Expected: A1;B1;A2;B2;A3;B3
+    //- Actual  : A1;A2;A3;B1;B2;B3
+    CPPUNIT_ASSERT_EQUAL(OUString("A1;B1;A2;B2;A3;B3"), rDoc.GetString(ScAddress(3,5,0)));
+
+    // CONCAT
+    CPPUNIT_ASSERT_EQUAL(OUString("A1B1A2B2A3B3"), rDoc.GetString(ScAddress(6,1,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("A1B1A2B2A3B3"), rDoc.GetString(ScAddress(6,2,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("A1A2A3B1B2B3"), rDoc.GetString(ScAddress(6,4,0)));
+
+    // Without the fix in place, it would have failed with
+    //- Expected: A1B1A2B2A3B3
+    //- Actual  : A1A2A3B1B2B3
+    CPPUNIT_ASSERT_EQUAL(OUString("A1B1A2B2A3B3"), rDoc.GetString(ScAddress(6,5,0)));
 
     xDocSh->DoClose();
 }
