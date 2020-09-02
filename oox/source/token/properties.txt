@@ -509,6 +509,7 @@ SubViewSize
 Subtotals
 Suffix
 Surround
+SurroundContour
 SwapXAndYAxis
 Symbol
 SymbolColor
