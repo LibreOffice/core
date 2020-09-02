@@ -634,7 +634,7 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     // No mbInvertBorderSpacing
     mbCollapseEmptyCellPara = rSource.mbCollapseEmptyCellPara;
     mbTabAtLeftIndentForParagraphsInList = rSource.mbTabAtLeftIndentForParagraphsInList;
-    // No mbSmallCapsPercentage66
+    mbSmallCapsPercentage66 = rSource.mbSmallCapsPercentage66;
     mbTabOverflow = rSource.mbTabOverflow;
     mbUnbreakableNumberings = rSource.mbUnbreakableNumberings;
     mbClippedPictures = rSource.mbClippedPictures;
