@@ -27,9 +27,6 @@
 namespace avmedia { class MediaItem; }
 
 #define AVMEDIA_TIME_RANGE          2048
-#define AVMEDIA_DB_RANGE            -40
-#define AVMEDIA_LINEINCREMENT       1.0
-#define AVMEDIA_PAGEINCREMENT       10.0
 
 #define AVMEDIA_ZOOMLEVEL_50        0
 #define AVMEDIA_ZOOMLEVEL_100       1
