@@ -806,10 +806,6 @@ include/sfx2/frame.hxx:192
     void SfxUnoFrameItem::SfxUnoFrameItem(unsigned short,const class com::sun::star::uno::Reference<class com::sun::star::frame::XFrame> &)
     unsigned short nWhich
     6516
-include/sfx2/infobar.hxx:111
-    class VclPtr<class SfxInfoBarWindow> SfxInfoBarContainerWindow::appendInfoBar(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,enum InfobarType,long,_Bool)
-    long nMessageStyle
-    278528
 include/sfx2/linkmgr.hxx:63
     _Bool sfx2::LinkManager::InsertLink(class sfx2::SvBaseLink *,enum sfx2::SvBaseLinkObjectType,enum SfxLinkUpdateMode,const class rtl::OUString *)
     enum SfxLinkUpdateMode nUpdateType

@@ -30,7 +30,7 @@
 #include <svl/poolitem.hxx>
 #include <vcl/svapp.hxx>
 
-class Button;
+namespace weld { class Button; }
 class SvBorder;
 class SfxDispatcher;
 class SfxBindings;
@@ -59,11 +59,11 @@ private:
 protected:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-    DECL_LINK(GetInvolvedHandler, Button*, void);
-    DECL_LINK(DonationHandler, Button*, void);
-    DECL_LINK(WhatsNewHandler, Button*, void);
-    DECL_LINK(SwitchReadOnlyHandler, Button*, void);
-    DECL_LINK(SignDocumentHandler, Button*, void);
+    DECL_LINK(GetInvolvedHandler, weld::Button&, void);
+    DECL_LINK(DonationHandler, weld::Button&, void);
+    DECL_LINK(WhatsNewHandler, weld::Button&, void);
+    DECL_LINK(SwitchReadOnlyHandler, weld::Button&, void);
+    DECL_LINK(SignDocumentHandler, weld::Button&, void);
     SAL_DLLPRIVATE void KillDispatcher_Impl();
 
     virtual                 ~SfxViewFrame() override;
