@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "458aa000_2ecbd12c",
+        "filename": "sw/qa/extras/ww8export/ww8export3.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-09-02T08:51:46Z",
+      "side": 1,
+      "message": "Just for consistency, go with DECLARE_WW8EXPORT_TEST()? One day we should clean up these duplicated macros, though.",
+      "revId": "41a20e359bda770f3c2712eb72b0726d7e4f62cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
