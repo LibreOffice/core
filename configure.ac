@@ -735,6 +735,7 @@ ios*) # iOS
     enable_lotuswordpro=no
     enable_coinmp=no
     enable_lpsolve=no
+    enable_mariadb_sdbc=no
     enable_postgresql_sdbc=no
     enable_extension_integration=no
     enable_report_builder=no
@@ -829,6 +830,7 @@ linux-android*)
     enable_mpl_subset=yes
     enable_coinmp=yes
     enable_lpsolve=no
+    enable_mariadb_sdbc=no
     enable_report_builder=no
     enable_odk=no
     enable_postgresql_sdbc=no
@@ -1531,6 +1533,11 @@ libo_FUZZ_ARG_ENABLE(readonly-installset,
          at least that no "system-wide" extensions can be added. Partly experimental work in
          progress, probably not fully implemented. Always enabled for macOS.]),
 ,)
+
+libo_FUZZ_ARG_ENABLE(mariadb-sdbc,
+    AS_HELP_STRING([--disable-mariadb-sdbc],
+        [Disable the build of the MariaDB/MySQL-SDBC driver.])
+)
 
 libo_FUZZ_ARG_ENABLE(postgresql-sdbc,
     AS_HELP_STRING([--disable-postgresql-sdbc],
@@ -4906,6 +4913,7 @@ if test "$cross_compiling" = "yes"; then
         --disable-gpgmepp \
         --disable-gstreamer-1-0 \
         --disable-gtk3 \
+        --disable-mariadb-sdbc \
         --disable-pdfimport \
         --disable-postgresql-sdbc \
         --enable-icecream="$enable_icecream" \
@@ -9099,17 +9107,18 @@ AC_SUBST(PYTHON_VERSION)
 AC_SUBST(PYTHON_VERSION_MAJOR)
 AC_SUBST(PYTHON_VERSION_MINOR)
 
-ENABLE_MARIADBC=TRUE
-if test "$_os" = "Android" -o "$_os" = "iOS" -o "$enable_mpl_subset" = "yes"; then
-    ENABLE_MARIADBC=
-fi
+ENABLE_MARIADBC=
 MARIADBC_MAJOR=1
 MARIADBC_MINOR=0
 MARIADBC_MICRO=2
-if test "$ENABLE_MARIADBC" = "TRUE"; then
+AC_MSG_CHECKING([whether to build the MariaDB/MySQL SDBC driver])
+if test "x$enable_mariadb_sdbc" != "xno" -a "$enable_mpl_subset" != "yes"; then
+    ENABLE_MARIADBC=TRUE
+    AC_MSG_RESULT([yes])
     BUILD_TYPE="$BUILD_TYPE MARIADBC"
+else
+    AC_MSG_RESULT([no])
 fi
-
 AC_SUBST(ENABLE_MARIADBC)
 AC_SUBST(MARIADBC_MAJOR)
 AC_SUBST(MARIADBC_MINOR)
