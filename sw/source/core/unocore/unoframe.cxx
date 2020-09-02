@@ -752,15 +752,19 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         bRet &= aSh.PutValue(*pShTr, MID_SHADOW_TRANSPARENCE);
         rToSet.Put(aSh);
     }
-    const ::uno::Any* pSur      = nullptr;
+    const ::uno::Any* pSur     = nullptr;
     GetProperty(RES_SURROUND, MID_SURROUND_SURROUNDTYPE, pSur);
+    const ::uno::Any* pSurCont = nullptr;
+    GetProperty(RES_SURROUND, MID_SURROUND_CONTOUR, pSurCont);
     const ::uno::Any* pSurAnch = nullptr;
     GetProperty(RES_SURROUND, MID_SURROUND_ANCHORONLY, pSurAnch);
     if(pSur || pSurAnch)
     {
         SwFormatSurround aSrnd ( rFromSet.Get ( RES_SURROUND ) );
         if(pSur)
-            bRet &= static_cast<SfxPoolItem&>(aSrnd).PutValue(*pSur, MID_SURROUND_SURROUNDTYPE );
+            bRet &= static_cast<SfxPoolItem&>(aSrnd).PutValue(*pSur, MID_SURROUND_SURROUNDTYPE);
+        if(pSurCont)
+            bRet &= static_cast<SfxPoolItem&>(aSrnd).PutValue(*pSurCont, MID_SURROUND_CONTOUR);
         if(pSurAnch)
             bRet &= static_cast<SfxPoolItem&>(aSrnd).PutValue(*pSurAnch, MID_SURROUND_ANCHORONLY);
         rToSet.Put(aSrnd);
