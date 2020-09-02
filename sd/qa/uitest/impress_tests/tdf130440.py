@@ -15,9 +15,12 @@ class tdf129346(UITestCase):
         xCancelBtn = xTemplateDlg.getChild("cancel")
         self.ui_test.close_dialog_through_button(xCancelBtn)
 
+        xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+
         document = self.ui_test.get_component()
         self.assertEqual(document.CurrentController.getCurrentPage().Number, 1)
         self.xUITest.executeCommand(".uno:DuplicatePage")
+        xToolkit.processEventsToIdle()
         self.assertEqual(document.CurrentController.getCurrentPage().Number, 2)
 
         xDoc = self.xUITest.getTopFocusWindow()
@@ -25,20 +28,28 @@ class tdf129346(UITestCase):
         xEdit.executeAction("TYPE", mkPropertyValues({"TEXT":"test"}))
 
         self.xUITest.executeCommand(".uno:Undo")
+        xToolkit.processEventsToIdle()
         self.assertEqual(document.CurrentController.getCurrentPage().Number, 2)
+
         self.xUITest.executeCommand(".uno:Undo")
+        xToolkit.processEventsToIdle()
         self.assertEqual(document.CurrentController.getCurrentPage().Number, 2)
+
         self.xUITest.executeCommand(".uno:Undo")
+        xToolkit.processEventsToIdle()
         self.assertEqual(document.CurrentController.getCurrentPage().Number, 1)
+
         self.xUITest.executeCommand(".uno:Redo")
-        # usually passes, but sometimes it asserts with AssertionError: 1 != 2
-        #self.assertEqual(document.CurrentController.getCurrentPage().Number, 2)
+        xToolkit.processEventsToIdle()
+        self.assertEqual(document.CurrentController.getCurrentPage().Number, 2)
+
         self.xUITest.executeCommand(".uno:Redo")
 
         xDoc = self.xUITest.getTopFocusWindow()
         xEdit = xDoc.getChild("impress_win")
         xEdit.executeAction("TYPE", mkPropertyValues({"TEXT":"test"}))
 
+        xToolkit.processEventsToIdle()
         #Without the accompanying fix in place, it would fail with AssertionError: 2 != 1
         self.assertEqual(document.CurrentController.getCurrentPage().Number, 2)
         self.ui_test.close_doc()
