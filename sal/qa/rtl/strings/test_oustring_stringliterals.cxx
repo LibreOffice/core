@@ -185,7 +185,7 @@ void test::oustring::StringLiterals::checkNonconstChar()
             [&consttest, &bar]() {
                 return rtl::OUString("footest").replaceAll(consttest, bar); }));
     CPPUNIT_ASSERT(
-        !VALID_CONVERSION(
+        !VALID_CONVERSION_CALL(
             [&test, &constbar]() {
                 return rtl::OUString("footest").replaceAll(test, constbar); }));
     CPPUNIT_ASSERT_EQUAL( rtl::OUString( "foobar" ), rtl::OUString( "footest" ).replaceAll( consttest, constbar ));
