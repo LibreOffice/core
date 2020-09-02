@@ -1258,19 +1258,17 @@ void SfxViewFrame::AppendReadOnlyInfobar()
     {
         // SID_SIGNPDF opened a read-write PDF
         // read-only for signing purposes.
-        VclPtrInstance<PushButton> xSignButton(&GetWindow());
+        weld::Button& rSignButton = pInfoBar->addButton();
         if (bSignWithCert)
         {
-            xSignButton->SetText(SfxResId(STR_READONLY_FINISH_SIGN));
+            rSignButton.set_label(SfxResId(STR_READONLY_FINISH_SIGN));
         }
         else
         {
-            xSignButton->SetText(SfxResId(STR_READONLY_SIGN));
+            rSignButton.set_label(SfxResId(STR_READONLY_SIGN));
         }
 
-        xSignButton->SetSizePixel(xSignButton->GetOptimalSize());
-        xSignButton->SetClickHdl(LINK(this, SfxViewFrame, SignDocumentHandler));
-        pInfoBar->addButton(xSignButton);
+        rSignButton.connect_clicked(LINK(this, SfxViewFrame, SignDocumentHandler));
     }
 
     bool showEditDocumentButton = true;
@@ -1279,11 +1277,9 @@ void SfxViewFrame::AppendReadOnlyInfobar()
 
     if (showEditDocumentButton)
     {
-        VclPtrInstance<PushButton> xBtn(&GetWindow());
-        xBtn->SetText(SfxResId(STR_READONLY_EDIT));
-        xBtn->SetSizePixel(xBtn->GetOptimalSize());
-        xBtn->SetClickHdl(LINK(this, SfxViewFrame, SwitchReadOnlyHandler));
-        pInfoBar->addButton(xBtn);
+        weld::Button& rBtn = pInfoBar->addButton();
+        rBtn.set_label(SfxResId(STR_READONLY_EDIT));
+        rBtn.connect_clicked(LINK(this, SfxViewFrame, SwitchReadOnlyHandler));
     }
 }
 
@@ -1341,11 +1337,9 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                         VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar("whatsnew", "", SfxResId(STR_WHATSNEW_TEXT), InfobarType::INFO);
                         if (pInfoBar)
                         {
-                            VclPtrInstance<PushButton> xWhatsNewButton(&GetWindow());
-                            xWhatsNewButton->SetText(SfxResId(STR_WHATSNEW_BUTTON));
-                            xWhatsNewButton->SetSizePixel(xWhatsNewButton->GetOptimalSize());
-                            xWhatsNewButton->SetClickHdl(LINK(this, SfxViewFrame, WhatsNewHandler));
-                            pInfoBar->addButton(xWhatsNewButton);
+                            weld::Button& rWhatsNewButton = pInfoBar->addButton();
+                            rWhatsNewButton.set_label(SfxResId(STR_WHATSNEW_BUTTON));
+                            rWhatsNewButton.connect_clicked(LINK(this, SfxViewFrame, WhatsNewHandler));
 
                             //update lastversion
                             std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
@@ -1384,11 +1378,9 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
                     if (pInfoBar)
                     {
-                        VclPtrInstance<PushButton> xGetInvolvedButton(&GetWindow());
-                        xGetInvolvedButton->SetText(SfxResId(STR_GET_INVOLVED_BUTTON));
-                        xGetInvolvedButton->SetSizePixel(xGetInvolvedButton->GetOptimalSize());
-                        xGetInvolvedButton->SetClickHdl(LINK(this, SfxViewFrame, GetInvolvedHandler));
-                        pInfoBar->addButton(xGetInvolvedButton);
+                        weld::Button& rGetInvolvedButton = pInfoBar->addButton();
+                        rGetInvolvedButton.set_label(SfxResId(STR_GET_INVOLVED_BUTTON));
+                        rGetInvolvedButton.connect_clicked(LINK(this, SfxViewFrame, GetInvolvedHandler));
                     }
                 }
 
@@ -1413,11 +1405,9 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar("donate", "", SfxResId(STR_DONATE_TEXT), InfobarType::INFO);
                     if (pInfoBar)
                     {
-                        VclPtrInstance<PushButton> xDonateButton(&GetWindow());
-                        xDonateButton->SetText(SfxResId(STR_DONATE_BUTTON));
-                        xDonateButton->SetSizePixel(xDonateButton->GetOptimalSize());
-                        xDonateButton->SetClickHdl(LINK(this, SfxViewFrame, DonationHandler));
-                        pInfoBar->addButton(xDonateButton);
+                        weld::Button& rDonateButton = pInfoBar->addButton();
+                        rDonateButton.set_label(SfxResId(STR_DONATE_BUTTON));
+                        rDonateButton.connect_clicked(LINK(this, SfxViewFrame, DonationHandler));
                     }
                 }
 
@@ -1546,33 +1536,33 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     }
 }
 
-IMPL_LINK_NOARG(SfxViewFrame, WhatsNewHandler, Button*, void)
+IMPL_LINK_NOARG(SfxViewFrame, WhatsNewHandler, weld::Button&, void)
 {
     GetDispatcher()->Execute(SID_WHATSNEW);
 }
 
-IMPL_LINK_NOARG(SfxViewFrame, GetInvolvedHandler, Button*, void)
+IMPL_LINK_NOARG(SfxViewFrame, GetInvolvedHandler, weld::Button&, void)
 {
     GetDispatcher()->Execute(SID_GETINVOLVED);
 }
 
-IMPL_LINK_NOARG(SfxViewFrame, DonationHandler, Button*, void)
+IMPL_LINK_NOARG(SfxViewFrame, DonationHandler, weld::Button&, void)
 {
     GetDispatcher()->Execute(SID_DONATION);
 }
 
-IMPL_LINK(SfxViewFrame, SwitchReadOnlyHandler, Button*, pButton, void)
+IMPL_LINK(SfxViewFrame, SwitchReadOnlyHandler, weld::Button&, rButton, void)
 {
     if (m_xObjSh.is() && m_xObjSh->IsSignPDF())
     {
-        SfxEditDocumentDialog aDialog(pButton->GetFrameWeld());
+        SfxEditDocumentDialog aDialog(&rButton);
         if (aDialog.run() != RET_OK)
             return;
     }
     GetDispatcher()->Execute(SID_EDITDOC);
 }
 
-IMPL_LINK_NOARG(SfxViewFrame, SignDocumentHandler, Button*, void)
+IMPL_LINK_NOARG(SfxViewFrame, SignDocumentHandler, weld::Button&, void)
 {
     GetDispatcher()->Execute(SID_SIGNATURE);
 }
@@ -3340,7 +3330,7 @@ VclPtr<SfxInfoBarWindow> SfxViewFrame::AppendInfoBar(const OUString& sId,
 
     SfxInfoBarContainerWindow* pInfoBarContainer = static_cast<SfxInfoBarContainerWindow*>(pChild->GetWindow());
     auto pInfoBar = pInfoBarContainer->appendInfoBar(sId, sPrimaryMessage, sSecondaryMessage,
-                                                     aInfobarType, WB_LEFT | WB_VCENTER, bShowCloseButton);
+                                                     aInfobarType, bShowCloseButton);
     ShowChildWindow(SfxInfoBarContainerChild::GetChildWindowId());
     return pInfoBar;
 }
