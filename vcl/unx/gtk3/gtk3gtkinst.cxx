@@ -2357,9 +2357,10 @@ private:
         gtk_drag_source_set(m_pWidget, GDK_BUTTON1_MASK, rGtkTargets.data(), rGtkTargets.size(), eDragAction);
     }
 
-    void set_background(const OUString* pColor)
+    void do_set_background(const Color& rColor)
     {
-        if (!pColor && !m_pBgCssProvider)
+        const bool bRemoveColor = rColor == COL_AUTO;
+        if (bRemoveColor && !m_pBgCssProvider)
             return;
         GtkStyleContext *pWidgetContext = gtk_widget_get_style_context(GTK_WIDGET(m_pWidget));
         if (m_pBgCssProvider)
@@ -2367,10 +2368,11 @@ private:
             gtk_style_context_remove_provider(pWidgetContext, GTK_STYLE_PROVIDER(m_pBgCssProvider));
             m_pBgCssProvider = nullptr;
         }
-        if (!pColor)
+        if (bRemoveColor)
             return;
+        OUString sColor = rColor.AsRGBHexString();
         m_pBgCssProvider = gtk_css_provider_new();
-        OUString aBuffer = "* { background-color: #" + *pColor + "; }";
+        OUString aBuffer = "* { background-color: #" + sColor + "; }";
         OString aResult = OUStringToOString(aBuffer, RTL_TEXTENCODING_UTF8);
         gtk_css_provider_load_from_data(m_pBgCssProvider, aResult.getStr(), aResult.getLength(), nullptr);
         gtk_style_context_add_provider(pWidgetContext, GTK_STYLE_PROVIDER(m_pBgCssProvider),
@@ -2917,20 +2919,22 @@ public:
 
     virtual void set_stack_background() override
     {
-        OUString sColor = Application::GetSettings().GetStyleSettings().GetWindowColor().AsRGBHexString();
-        set_background(&sColor);
+        do_set_background(Application::GetSettings().GetStyleSettings().GetWindowColor());
     }
 
     virtual void set_title_background() override
     {
-        OUString sColor = Application::GetSettings().GetStyleSettings().GetShadowColor().AsRGBHexString();
-        set_background(&sColor);
+        do_set_background(Application::GetSettings().GetStyleSettings().GetShadowColor());
     }
 
     virtual void set_highlight_background() override
     {
-        OUString sColor = Application::GetSettings().GetStyleSettings().GetHighlightColor().AsRGBHexString();
-        set_background(&sColor);
+        do_set_background(Application::GetSettings().GetStyleSettings().GetHighlightColor());
+    }
+
+    virtual void set_background(const Color& rColor) override
+    {
+        do_set_background(rColor);
     }
 
     virtual void set_toolbar_background() override
@@ -2987,7 +2991,7 @@ public:
         if (m_nSizeAllocateSignalId)
             g_signal_handler_disconnect(m_pWidget, m_nSizeAllocateSignalId);
 
-        set_background(nullptr);
+        do_set_background(COL_AUTO);
 
         if (m_pMouseEventBox && m_pMouseEventBox != m_pWidget)
         {
