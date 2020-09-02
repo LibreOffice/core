@@ -29,6 +29,10 @@
 
 using ::rtl::OUString;
 
+#define AVMEDIA_DB_RANGE            -40
+#define AVMEDIA_LINEINCREMENT       1.0
+#define AVMEDIA_PAGEINCREMENT       10.0
+
 namespace avmedia {
 
 MediaControlBase::MediaControlBase()
