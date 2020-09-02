@@ -1571,11 +1571,16 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                 if (pos != std::string::npos)
                 {
                     const std::string name = payload.substr(0, pos + 1);
-                    removeAll(
-                        [type, &name] (const queue_type::value_type& elem) {
-                            return (elem.Type == type) && (elem.PayloadString.compare(0, name.size(), name) == 0);
-                        }
-                    );
+                    // This is needed because otherwise it creates some problems when
+                    // a save occurs while a cell is still edited in Calc.
+                    if (name != ".uno:ModifiedStatus=")
+                    {
+                        removeAll(
+                            [type, &name] (const queue_type::value_type& elem) {
+                                return (elem.Type == type) && (elem.PayloadString.compare(0, name.size(), name) == 0);
+                            }
+                        );
+                    }
                 }
             }
             break;
