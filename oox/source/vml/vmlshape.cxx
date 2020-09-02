@@ -574,18 +574,32 @@ static void lcl_setSurround(PropertySet& rPropSet, const ShapeTypeModel& rTypeMo
     if (nMarginTop < -35277) // Less than 1000 points.
         aWrapType.clear();
 
-    css::text::WrapTextMode nSurround = css::text::WrapTextMode_THROUGH;
-    if ( aWrapType == "square" || aWrapType == "tight" ||
-         aWrapType == "through" )
+    css::text::WrapTextMode nSurround = css::text::WrapTextMode_NONE;
+    if (aWrapType == "square" || aWrapType == "tight")
     {
-        nSurround = css::text::WrapTextMode_PARALLEL;
-        if ( rTypeModel.moWrapSide.get() == "left" )
+        if (!rTypeModel.moWrapSide.has())
+            nSurround = css::text::WrapTextMode_PARALLEL;
+        else if (rTypeModel.moWrapSide.get() == "both")
+            nSurround = css::text::WrapTextMode_DYNAMIC;
+        else if (rTypeModel.moWrapSide.get() == "largest")
+            nSurround = css::text::WrapTextMode_DYNAMIC;
+        else if (rTypeModel.moWrapSide.get() == "left")
             nSurround = css::text::WrapTextMode_LEFT;
-        else if ( rTypeModel.moWrapSide.get() == "right" )
+        else if (rTypeModel.moWrapSide.get() == "right")
             nSurround = css::text::WrapTextMode_RIGHT;
+        else
+            SAL_WARN("oox", "invalid wrap side");
     }
-    else if ( aWrapType == "topAndBottom" )
+    else if (aWrapType == "through")
+    {
+        nSurround = css::text::WrapTextMode_THROUGH;
+    }
+    else if (aWrapType == "none" || aWrapType == "topAndBottom")
+    {
         nSurround = css::text::WrapTextMode_NONE;
+    }
+    else
+        SAL_WARN("oox", "invalid wrap type");
 
     rPropSet.setProperty(PROP_Surround, static_cast<sal_Int32>(nSurround));
 }
