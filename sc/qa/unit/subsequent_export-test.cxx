@@ -225,6 +225,7 @@ public:
 
     void testTdf133595();
     void testTdf134769();
+    void testTdf106181();
     void testTdf105272();
     void testTdf118990();
     void testTdf121612();
@@ -381,6 +382,7 @@ public:
 
     CPPUNIT_TEST(testTdf133595);
     CPPUNIT_TEST(testTdf134769);
+    CPPUNIT_TEST(testTdf106181);
     CPPUNIT_TEST(testTdf105272);
     CPPUNIT_TEST(testTdf118990);
     CPPUNIT_TEST(testTdf121612);
@@ -4618,6 +4620,28 @@ void ScExportTest::testTdf134769()
     assertXPath(pSheet, "/x:worksheet/x:drawing", "id", "rId2");
     assertXPath(pSheet, "/x:worksheet/x:legacyDrawing", "id", "rId3");
     assertXPath(pSheet, "/x:worksheet/mc:AlternateContent/mc:Choice/x:controls/mc:AlternateContent/mc:Choice/x:control", "id", "rId4");
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf106181()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf106181.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+    xmlDocUniquePtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pSheet);
+
+    assertXPath(pSheet, "/x:worksheet/mc:AlternateContent/mc:Choice/x:controls/mc:AlternateContent/mc:Choice/x:control", "name", "Check Box");
+    assertXPath(pSheet, "/x:worksheet/mc:AlternateContent/mc:Choice/x:controls/mc:AlternateContent/mc:Choice/x:control/x:controlPr", "altText", "Check Box 1");
+
+    xmlDocUniquePtr pDrawing = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/drawing1.xml");
+    CPPUNIT_ASSERT(pDrawing);
+
+    assertXPath(pDrawing, "/xdr:wsDr/mc:AlternateContent/mc:Choice/xdr:twoCellAnchor/xdr:sp/xdr:nvSpPr/xdr:cNvPr", "name", "Check Box 1");
+    assertXPath(pDrawing, "/xdr:wsDr/mc:AlternateContent/mc:Choice/xdr:twoCellAnchor/xdr:sp/xdr:nvSpPr/xdr:cNvPr", "descr", "Check Box");
+    assertXPath(pDrawing, "/xdr:wsDr/mc:AlternateContent/mc:Choice/xdr:twoCellAnchor/xdr:sp/xdr:nvSpPr/xdr:cNvPr", "hidden", "0");
 
     xDocSh->DoClose();
 }
