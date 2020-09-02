@@ -255,6 +255,7 @@ public:
     void testDde();
 #endif
     void testDocModState();
+    void testTdf135056();
     void testTdf94804();
     void testTdf34957();
     void testTdf89954();
@@ -467,6 +468,7 @@ public:
     CPPUNIT_TEST(testDde);
 #endif
     CPPUNIT_TEST(testDocModState);
+    CPPUNIT_TEST(testTdf135056);
     CPPUNIT_TEST(testTdf94804);
     CPPUNIT_TEST(testTdf34957);
     CPPUNIT_TEST(testTdf89954);
@@ -4284,6 +4286,31 @@ void SwUiWriterTest::testDocModState()
     CPPUNIT_ASSERT(!(rState.IsModified()));
     //again checking for the state via SfxObjectShell
     CPPUNIT_ASSERT(!(pShell->IsModified()));
+}
+
+void SwUiWriterTest::testTdf135056()
+{
+    load(DATA_DIRECTORY, "tdf135056.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pWrtShell->GetTOXCount());
+
+    const SwTOXBase* pTOX = pWrtShell->GetTOX(0);
+    CPPUNIT_ASSERT(pTOX);
+
+    //Without the fix in place, it would have hung here
+    pWrtShell->DeleteTOX(*pTOX, true);
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), pWrtShell->GetTOXCount());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pWrtShell->GetTOXCount());
 }
 
 void SwUiWriterTest::testTdf94804()
