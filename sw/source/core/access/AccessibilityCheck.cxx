@@ -626,6 +626,28 @@ public:
     }
 };
 
+// ISO 142891-1 : 7.14
+class NonInteractiveFormCheck : public NodeCheck
+{
+public:
+    NonInteractiveFormCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
+        : NodeCheck(rIssueCollection)
+    {
+    }
+
+    void check(SwNode* pCurrent) override
+    {
+        if (!pCurrent->IsTextNode())
+            return;
+
+        SwTextNode* pTextNode = pCurrent->GetTextNode();
+
+        // Detecting if there are multiple underscores in a text
+        if (pTextNode->GetText().indexOf("___") != -1)
+            lclAddIssue(m_rIssueCollection, SwResId(STR_NON_INTERACTIVE_FORMS));
+    }
+};
+
 class DocumentCheck : public BaseCheck
 {
 public:
@@ -770,6 +792,7 @@ void AccessibilityCheck::check()
     aNodeChecks.push_back(std::make_unique<BlinkingTextCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<HeaderCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<TextFormattingCheck>(m_aIssueCollection));
+    aNodeChecks.push_back(std::make_unique<NonInteractiveFormCheck>(m_aIssueCollection));
 
     auto const& pNodes = m_pDoc->GetNodes();
     SwNode* pNode = nullptr;
