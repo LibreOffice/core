@@ -35,9 +35,9 @@ namespace avmedia
 {
 
 MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyle ) :
-    // MEDIACONTROLSTYLE_MULTILINE is the normal docking windows of tools->media player
-    // MEDIACONTROLSTYLE_SINGLELINE is the toolbar of view->toolbar->media playback
-    InterimItemWindow(pParent, eControlStyle == MEDIACONTROLSTYLE_MULTILINE ?
+    // MediaControlStyle::MultiLine is the normal docking windows of tools->media player
+    // MediaControlStyle::SingleLine is the toolbar of view->toolbar->media playback
+    InterimItemWindow(pParent, eControlStyle == MediaControlStyle::MultiLine ?
                                    OUString("svx/ui/mediawindow.ui") :
                                    OUString("svx/ui/medialine.ui"),
                                "MediaWindow"),
@@ -82,7 +82,7 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
 
     const OUString aMediaPath( AvmResId( AVMEDIA_MEDIA_PATH_DEFAULT ) );
     mxMediaPath->set_label(aMediaPath);
-    if (meControlStyle == MEDIACONTROLSTYLE_SINGLELINE)
+    if (meControlStyle == MediaControlStyle::SingleLine)
         mxMediaPath->set_size_request(mxMediaPath->get_preferred_size().Width() + 400, -1); // maybe extend the no. 400 to span the screen width
 
     // we want time field + progress slider to update as the media plays
@@ -93,7 +93,7 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
 
 void MediaControl::InitializeWidgets()
 {
-    if( meControlStyle != MEDIACONTROLSTYLE_SINGLELINE )
+    if( meControlStyle != MediaControlStyle::SingleLine )
     {
         mxPlayToolBox->set_item_help_id("open", HID_AVMEDIA_TOOLBOXITEM_OPEN);
         mxPlayToolBox->set_item_label("open", AvmResId(AVMEDIA_STR_OPEN));
@@ -128,7 +128,7 @@ void MediaControl::setState( const MediaItem& rItem )
     {
         mfTime = fTime;
         maItem.merge( rItem );
-        if( rItem.getURL().isEmpty() && meControlStyle == MEDIACONTROLSTYLE_SINGLELINE )
+        if( rItem.getURL().isEmpty() && meControlStyle == MediaControlStyle::SingleLine )
             mxPlayToolBox->set_sensitive(false);
         UpdateToolBoxes( maItem );
         UpdateTimeSlider( maItem );
