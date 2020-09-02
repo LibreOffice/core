@@ -802,13 +802,16 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130685)
     // Without fix in place, this test would have failed with:
     //- Expected: 2
     //- Actual  : 4
+    Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
