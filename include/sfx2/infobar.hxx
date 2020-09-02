@@ -15,11 +15,7 @@
 
 #include <sfx2/childwin.hxx>
 #include <sfx2/dllapi.h>
-
-class FixedImage;
-class FixedText;
-class Button;
-class PushButton;
+#include <vcl/InterimItemWindow.hxx>
 
 // These must match the values in offapi/com/sun/star/frame/InfobarType.idl
 enum class InfobarType
@@ -57,31 +53,33 @@ public:
     void Update();
 };
 
+class ExtraButton;
+
 /** Class representing a single InfoBar to be added in a SfxInfoBarContainerWindow.
   */
-class SFX2_DLLPUBLIC SfxInfoBarWindow final : public vcl::Window
+class SFX2_DLLPUBLIC SfxInfoBarWindow final : public InterimItemWindow
 {
 private:
     OUString m_sId;
     InfobarType m_eType;
-    VclPtr<FixedImage> m_pImage;
-    VclPtr<FixedText> m_pPrimaryMessage;
-    VclPtr<FixedText> m_pSecondaryMessage;
-    VclPtr<Button> m_pCloseBtn;
-    std::vector<VclPtr<PushButton>> m_aActionBtns;
+    std::unique_ptr<weld::Image> m_xImage;
+    std::unique_ptr<weld::Label> m_xPrimaryMessage;
+    std::unique_ptr<weld::Label> m_xSecondaryMessage;
+    std::unique_ptr<weld::Container> m_xButtonBox;
+    std::unique_ptr<weld::Button> m_xCloseBtn;
+    std::vector<std::unique_ptr<ExtraButton>> m_aActionBtns;
 
     void SetForeAndBackgroundColors(InfobarType eType);
+    void CloseButtonPaint();
 
 public:
     SfxInfoBarWindow(vcl::Window* parent, const OUString& sId, const OUString& sPrimaryMessage,
                      const OUString& sSecondaryMessage, InfobarType InfobarType,
-                     WinBits nMessageStyle, bool bShowCloseButton);
+                     bool bShowCloseButton);
     virtual ~SfxInfoBarWindow() override;
     virtual void dispose() override;
 
     const OUString& getId() const { return m_sId; }
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
-    virtual void Resize() override;
     void Update(const OUString& sPrimaryMessage, const OUString& sSecondaryMessage,
                 InfobarType eType);
     basegfx::BColor m_aBackgroundColor;
@@ -91,10 +89,10 @@ public:
          * Infobar takes ownership of the button so the button is
          * destroyed when the infobar gets destroyed.
          */
-    void addButton(PushButton* pButton);
+    weld::Button& addButton();
 
 private:
-    DECL_LINK(CloseHandler, Button*, void);
+    DECL_LINK(CloseHandler, weld::Button&, void);
 };
 
 class SfxInfoBarContainerWindow final : public vcl::Window
@@ -110,7 +108,7 @@ public:
 
     VclPtr<SfxInfoBarWindow> appendInfoBar(const OUString& sId, const OUString& sPrimaryMessage,
                                            const OUString& sSecondaryMessage, InfobarType ibType,
-                                           WinBits nMessageStyle, bool bShowCloseButton);
+                                           bool bShowCloseButton);
     VclPtr<SfxInfoBarWindow> getInfoBar(const OUString& sId);
     bool hasInfoBarWithID(const OUString& sId);
     void removeInfoBar(VclPtr<SfxInfoBarWindow> const& pInfoBar);

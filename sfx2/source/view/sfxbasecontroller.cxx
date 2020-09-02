@@ -1398,15 +1398,13 @@ void SfxBaseController::ShowInfoBars( )
                                               InfobarType::WARNING);
     if (pInfoBar)
     {
-        VclPtrInstance<PushButton> xBtn(&pViewFrame->GetWindow());
-        xBtn->SetText(SfxResId(STR_CHECKOUT));
-        xBtn->SetSizePixel(xBtn->GetOptimalSize());
-        xBtn->SetClickHdl(LINK(this, SfxBaseController, CheckOutHandler));
-        pInfoBar->addButton(xBtn);
+        weld::Button &rBtn = pInfoBar->addButton();
+        rBtn.set_label(SfxResId(STR_CHECKOUT));
+        rBtn.connect_clicked(LINK(this, SfxBaseController, CheckOutHandler));
     }
 }
 
-IMPL_LINK_NOARG ( SfxBaseController, CheckOutHandler, Button*, void )
+IMPL_LINK_NOARG ( SfxBaseController, CheckOutHandler, weld::Button&, void )
 {
     if ( m_pData->m_pViewShell )
         m_pData->m_pViewShell->GetObjectShell()->CheckOut( );
@@ -1498,11 +1496,9 @@ void SAL_CALL SfxBaseController::appendInfobar(const OUString& sId, const OUStri
     {
         if (actionButton.First.isEmpty() || actionButton.Second.isEmpty())
             continue;
-        VclPtrInstance<PushButton> xBtn(&pViewFrame->GetWindow());
-        xBtn->SetText(actionButton.First);
-        xBtn->SetSizePixel(xBtn->GetOptimalSize());
-        xBtn->SetCommandHandler(actionButton.Second);
-        pInfoBar->addButton(xBtn);
+        weld::Button& rBtn = pInfoBar->addButton();
+        rBtn.set_label(actionButton.First);
+//TODO        rBtn.SetCommandHandler(actionButton.Second);
     }
 }
 
