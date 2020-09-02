@@ -46,7 +46,7 @@ bool isDerivedFrom(
     bool * hidden)
 {
     bool derived = false;
-    for (auto const i: decl->bases()) {
+    for (auto const & i: decl->bases()) {
         auto const bd
             = (cast<CXXRecordDecl>(i.getType()->getAs<RecordType>()->getDecl())
                ->getDefinition());

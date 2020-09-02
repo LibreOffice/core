@@ -421,7 +421,7 @@ private:
                 {
                     continue;
                 }
-                for (auto const t : affected)
+                for (auto const& t : affected)
                 {
                     auto const tc = t.getCanonicalType();
                     for (auto p = f->param_begin(); p != f->param_end(); ++p)
