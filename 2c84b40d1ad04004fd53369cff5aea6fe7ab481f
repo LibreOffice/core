@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb1dc661_6ce4f115",
+        "filename": "icon-themes/colibre/links.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 2752,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-09-02T05:30:21Z",
+      "side": 1,
+      "message": "@Andreas: This solves the icon question only for sc_*. Guess you and Rizal want to add true sc_* icons for the new UNO commands (independently from this patch).",
+      "range": {
+        "startLine": 2752,
+        "startChar": 2,
+        "endLine": 2752,
+        "endChar": 14
+      },
+      "revId": "2c84b40d1ad04004fd53369cff5aea6fe7ab481f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
