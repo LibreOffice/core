@@ -1940,6 +1940,13 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
             break;
         case FN_FRAME_WRAP_CONTOUR:
             aWrap.SetContour(!aWrap.IsContour());
+            // Contour is meaningless in no-wrap or wrap-through context. Otherwise keep existing wrap.
+            if ( !aWrap.IsContour() ||
+                 ( nOldSurround != css::text::WrapTextMode_NONE &&
+                   nOldSurround != css::text::WrapTextMode_THROUGH ) )
+            {
+                nSurround = nOldSurround;
+            }
             break;
         case FN_FRAME_WRAPTHRU_TRANSP:
         case FN_FRAME_WRAPTHRU_TOGGLE:
