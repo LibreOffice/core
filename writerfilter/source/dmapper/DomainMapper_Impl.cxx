@@ -2258,6 +2258,7 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const std::share
             OUString pProperties[] = {
                 "AnchorType",
                 "Surround",
+                "SurroundContour",
                 "HoriOrient",
                 "HoriOrientPosition",
                 "VertOrient",
