@@ -533,6 +533,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
     size_t nInfos = maSignatureManager.maCurrentSignatureInformations.size();
     size_t nValidSigs = 0, nValidCerts = 0;
     bool bAllNewSignatures = true;
+    bool bSomePartial = false;
 
     if( nInfos )
     {
@@ -610,7 +611,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             {
                 if (maSignatureManager.mxStore.is())
                 {
-                    // XML based.
+                    // ZIP based.
                     bSigValid = DocumentSignatureHelper::checkIfAllFilesAreSigned(
                           aElementsToBeVerified, rInfo, mode);
                 }
@@ -622,6 +623,10 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
 
                 if( bSigValid )
                     nValidSigs++;
+                else
+                {
+                    bSomePartial = true;
+                }
             }
 
             Image aImage;
@@ -675,8 +680,8 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
 
     bool bShowInvalidState = nInfos && !bAllSigsValid;
 
-    m_pSigsInvalidImg->Show( bShowInvalidState );
-    m_pSigsInvalidFI->Show( bShowInvalidState );
+    m_pSigsInvalidImg->Show( bShowInvalidState && !bSomePartial);
+    m_pSigsInvalidFI->Show( bShowInvalidState && !bSomePartial);
 
     bool bShowNotValidatedState = nInfos && bAllSigsValid && !bAllCertsValid;
 
@@ -685,8 +690,8 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
 
     //bAllNewSignatures is always true if we are not in document mode
     bool bShowOldSignature = nInfos && bAllSigsValid && bAllCertsValid && !bAllNewSignatures;
-    m_pSigsOldSignatureImg->Show(bShowOldSignature);
-    m_pSigsOldSignatureFI->Show(bShowOldSignature);
+    m_pSigsOldSignatureImg->Show(bShowOldSignature || bSomePartial);
+    m_pSigsOldSignatureFI->Show(bShowOldSignature || bSomePartial);
 
     SignatureHighlightHdl( nullptr );
 }
