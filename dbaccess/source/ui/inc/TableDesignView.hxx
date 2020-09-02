@@ -48,7 +48,7 @@ namespace dbaui
         virtual void dispose() override;
 
         virtual void GetFocus() override;
-        virtual void IdleResize() override;
+        virtual void Layout() override;
 
         OTableEditorCtrl*       GetEditorCtrl() const { return m_xEditorCtrl.get(); }
         OTableFieldDescWin*     GetDescWin()    const { return m_xFieldDescWin.get(); }
