@@ -455,7 +455,40 @@ void OutputDevice::SetBackground( const Wallpaper& rBackground )
         mbBackground = true;
 
     if( mpAlphaVDev )
-        mpAlphaVDev->SetBackground( rBackground );
+    {
+        if( rBackground.GetStyle() == WallpaperStyle::NONE )
+            mpAlphaVDev->SetBackground( rBackground );
+        else if( rBackground.IsBitmap())
+        {
+            BitmapEx bitmap = rBackground.GetBitmap();
+            if( bitmap.IsAlpha())
+                mpAlphaVDev->SetBackground( Wallpaper( BitmapEx( Bitmap( bitmap.GetAlpha()))));
+            else
+            {
+                switch( bitmap.GetTransparentType())
+                {
+                    case TransparentType::NONE:
+                        mpAlphaVDev->SetBackground( Wallpaper( COL_BLACK ));
+                        break;
+                    case TransparentType::Color:
+                        mpAlphaVDev->SetBackground( Wallpaper( bitmap.GetTransparentColor().GetTransparency()));
+                        break;
+                    case TransparentType::Bitmap:
+                        mpAlphaVDev->SetBackground( Wallpaper( BitmapEx( bitmap.GetMask())));
+                        break;
+                }
+            }
+        }
+        else if( rBackground.IsGradient())
+            // This is probably wrong if gradient has transparency, but hopefully nobody uses that.
+            mpAlphaVDev->SetBackground( Wallpaper( COL_BLACK ));
+        else
+        {
+            // Color background.
+            int transparency = rBackground.GetColor().GetTransparency();
+            mpAlphaVDev->SetBackground( Wallpaper( Color( transparency, transparency, transparency )));
+        }
+    }
 }
 
 void OutputDevice::SetFont( const vcl::Font& rNewFont )

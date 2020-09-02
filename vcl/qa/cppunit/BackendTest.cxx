@@ -49,7 +49,7 @@ class BackendTest : public test::BootstrapFixture
     {
         if (mbExportBitmap)
         {
-            BitmapEx aBitmapEx(device->GetBitmap(Point(0, 0), device->GetOutputSizePixel()));
+            BitmapEx aBitmapEx(device->GetBitmapEx(Point(0, 0), device->GetOutputSizePixel()));
             SvFileStream aStream(filename, StreamMode::WRITE | StreamMode::TRUNC);
             GraphicFilter::GetGraphicFilter().compressAsPNG(aBitmapEx, aStream);
         }
@@ -517,6 +517,71 @@ public:
 
     // vcl::test::OutputDeviceTestGradient does not verify anything, cannot test here
 
+    void testErase()
+    {
+        {
+            // Create normal virtual device (no alpha).
+            ScopedVclPtr<VirtualDevice> device
+                = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+            device->SetOutputSizePixel(Size(10, 10));
+            // Erase with white, check it's white.
+            device->SetBackground(Wallpaper(COL_WHITE));
+            device->Erase();
+            exportDevice("/tmp/12-01_erase.png", device);
+            CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(0, 0)));
+            CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(9, 9)));
+            CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(5, 5)));
+            // Erase with black, check it's black.
+            device->SetBackground(Wallpaper(COL_BLACK));
+            device->Erase();
+            exportDevice("/tmp/12-02_erase.png", device);
+            CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(0, 0)));
+            CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(9, 9)));
+            CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(5, 5)));
+            // Erase with cyan, check it's cyan.
+            device->SetBackground(Wallpaper(COL_CYAN));
+            device->Erase();
+            exportDevice("/tmp/12-03_erase.png", device);
+            CPPUNIT_ASSERT_EQUAL(COL_CYAN, device->GetPixel(Point(0, 0)));
+            CPPUNIT_ASSERT_EQUAL(COL_CYAN, device->GetPixel(Point(9, 9)));
+            CPPUNIT_ASSERT_EQUAL(COL_CYAN, device->GetPixel(Point(5, 5)));
+        }
+        {
+            // Create virtual device with alpha.
+            ScopedVclPtr<VirtualDevice> device
+                = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
+            device->SetOutputSizePixel(Size(10, 10));
+            // Erase with white, check it's white.
+            device->SetBackground(Wallpaper(COL_WHITE));
+            device->Erase();
+            exportDevice("/tmp/12-04_erase.png", device);
+            CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(0, 0)));
+            CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(9, 9)));
+            CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(5, 5)));
+            // Erase with black, check it's black.
+            device->SetBackground(Wallpaper(COL_BLACK));
+            device->Erase();
+            exportDevice("/tmp/12-05_erase.png", device);
+            CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(0, 0)));
+            CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(9, 9)));
+            CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(5, 5)));
+            // Erase with cyan, check it's cyan.
+            device->SetBackground(Wallpaper(COL_CYAN));
+            device->Erase();
+            exportDevice("/tmp/12-06_erase.png", device);
+            CPPUNIT_ASSERT_EQUAL(COL_CYAN, device->GetPixel(Point(0, 0)));
+            CPPUNIT_ASSERT_EQUAL(COL_CYAN, device->GetPixel(Point(9, 9)));
+            CPPUNIT_ASSERT_EQUAL(COL_CYAN, device->GetPixel(Point(5, 5)));
+            // Erase with transparent, check it's transparent.
+            device->SetBackground(Wallpaper(COL_TRANSPARENT));
+            device->Erase();
+            exportDevice("/tmp/12-07_erase.png", device);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt8(255), device->GetPixel(Point(0, 0)).GetTransparency());
+            CPPUNIT_ASSERT_EQUAL(sal_uInt8(255), device->GetPixel(Point(9, 9)).GetTransparency());
+            CPPUNIT_ASSERT_EQUAL(sal_uInt8(255), device->GetPixel(Point(5, 5)).GetTransparency());
+        }
+    }
+
     void testTdf124848()
     {
         ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
@@ -625,6 +690,8 @@ public:
     CPPUNIT_TEST(testDrawOutDev);
 
     CPPUNIT_TEST(testDashedLine);
+
+    CPPUNIT_TEST(testErase);
 
     CPPUNIT_TEST(testTdf124848);
     CPPUNIT_TEST(testTdf136171);
