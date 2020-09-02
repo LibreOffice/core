@@ -40,10 +40,15 @@ bool FunctionsTest::load(const OUString& rFilter, const OUString& rURL,
 
     ScDocument& rDoc = xDocShRef->GetDocument();
 
-#ifdef __APPLE__
-// FIXME tends to fail a lot
-if (!rURL.endsWith("forecast.ets.add.fods"))
-#endif
+    if (rURL.endsWith("forecast.ets.add.fods"))
+    {
+        for (int row = 1; row <= 150; ++row)
+        {
+            OString sRow = "row " + OString::number(row);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(sRow.getStr(), rDoc.GetValue(0, row, 1), rDoc.GetValue(1, row, 1), 1e-8);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(sRow.getStr(), 1.0, rDoc.GetValue(2, row, 1), 1e-14);
+        }
+    }
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, rDoc.GetValue(1, 2, 0), 1e-14);
 
     xDocShRef->DoClose();
