@@ -420,7 +420,7 @@
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="yes" context="digitalsignaturesdialog|oldsignatureft">Not all parts of the document are signed</property>
+                    <property name="label" translatable="yes" context="digitalsignaturesdialog|oldsignatureft">At least one signature has problems: the document is only partially signed.</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -433,7 +433,7 @@
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="yes" context="digitalsignaturesdialog|notvalidatedft">Certificate could not be validated</property>
+                    <property name="label" translatable="yes" context="digitalsignaturesdialog|notvalidatedft">At least one signature has problems: the certificate could not be validated.</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
