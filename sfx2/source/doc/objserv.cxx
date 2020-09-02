@@ -1434,11 +1434,9 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                             auto pInfoBar = pFrame->AppendInfoBar("signature", "", sMessage, aInfobarType);
                             if (pInfoBar == nullptr || pInfoBar->IsDisposed())
                                 return;
-                            VclPtrInstance<PushButton> xBtn(&(pFrame->GetWindow()));
-                            xBtn->SetText(SfxResId(STR_SIGNATURE_SHOW));
-                            xBtn->SetSizePixel(xBtn->GetOptimalSize());
-                            xBtn->SetClickHdl(LINK(this, SfxObjectShell, SignDocumentHandler));
-                            pInfoBar->addButton(xBtn);
+                            weld::Button& rBtn = pInfoBar->addButton();
+                            rBtn.set_label(SfxResId(STR_SIGNATURE_SHOW));
+                            rBtn.connect_clicked(LINK(this, SfxObjectShell, SignDocumentHandler));
                         }
                     }
                     else // info bar exists already
@@ -1475,7 +1473,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
     }
 }
 
-IMPL_LINK_NOARG(SfxObjectShell, SignDocumentHandler, Button*, void)
+IMPL_LINK_NOARG(SfxObjectShell, SignDocumentHandler, weld::Button&, void)
 {
     GetDispatcher()->Execute(SID_SIGNATURE);
 }
