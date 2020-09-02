@@ -144,12 +144,12 @@ String STR_SIGNATURE_INVALID
 
 String STR_SIGNATURE_NOTVALIDATED
 {
-    Text[ en-US ] = "The signature is OK, but the certificate could not be validated.";
+    Text[ en-US ] = "At least one signature has problems: the certificate could not be validated.";
 };
 
 String STR_SIGNATURE_PARTIAL_OK
 {
-    Text[ en-US ] = "The signature is OK, but the document is only partially signed.";
+    Text[ en-US ] = "At least one signature has problems: the document is only partially signed.";
 };
 
 String STR_SIGNATURE_OK
