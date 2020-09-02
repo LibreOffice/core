@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <algorithm>
+
 #include <xlescher.hxx>
 
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -113,7 +117,7 @@ void lclGetRowFromY(
     }
     if( !bFound )
         rnXclRow = nXclMaxRow;
-    rnOffset = static_cast< sal_uInt32 >( nRowH ? ((nTwipsY - rnStartH) * 256.0 / nRowH + 0.5) : 0 );
+    rnOffset = static_cast< sal_uInt32 >( nRowH ? std::max((nTwipsY - rnStartH) * 256.0 / nRowH + 0.5, 0.0) : 0 );
 }
 
 /** Mirrors a rectangle (from LTR to RTL layout or vice versa). */
