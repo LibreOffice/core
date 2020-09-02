@@ -455,7 +455,44 @@ void OutputDevice::SetBackground( const Wallpaper& rBackground )
         mbBackground = true;
 
     if( mpAlphaVDev )
-        mpAlphaVDev->SetBackground( rBackground );
+    {
+        // Some of these are probably wrong (e.g. if the gradient has transparency),
+        // but hopefully nobody uses that. If you do, feel free to implement it properly.
+        if( rBackground.GetStyle() == WallpaperStyle::NONE )
+            mpAlphaVDev->SetBackground( rBackground );
+        else if( rBackground.IsBitmap())
+        {
+            BitmapEx bitmap = rBackground.GetBitmap();
+            if( bitmap.IsAlpha())
+                mpAlphaVDev->SetBackground( Wallpaper( BitmapEx( Bitmap( bitmap.GetAlpha()))));
+            else
+            {
+                switch( bitmap.GetTransparentType())
+                {
+                    case TransparentType::NONE:
+                        mpAlphaVDev->SetBackground( Wallpaper( COL_BLACK ));
+                        break;
+                    case TransparentType::Color:
+                    {
+                        AlphaMask mask( bitmap.GetBitmap().CreateMask( bitmap.GetTransparentColor()));
+                        mpAlphaVDev->SetBackground( Wallpaper( BitmapEx( bitmap.GetBitmap(), mask )));
+                        break;
+                    }
+                    case TransparentType::Bitmap:
+                        mpAlphaVDev->SetBackground( Wallpaper( BitmapEx( bitmap.GetMask())));
+                        break;
+                }
+            }
+        }
+        else if( rBackground.IsGradient())
+            mpAlphaVDev->SetBackground( Wallpaper( COL_BLACK ));
+        else
+        {
+            // Color background.
+            int transparency = rBackground.GetColor().GetTransparency();
+            mpAlphaVDev->SetBackground( Wallpaper( Color( transparency, transparency, transparency )));
+        }
+    }
 }
 
 void OutputDevice::SetFont( const vcl::Font& rNewFont )
