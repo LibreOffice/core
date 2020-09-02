@@ -940,8 +940,6 @@ void SAL_CALL SvXMLImport::endFastElement (sal_Int32 Element)
         xContext->endFastElement( Element );
         if (isFastContext)
             maContexts.pop();
-
-        xContext = nullptr;
     }
 }
 
@@ -952,7 +950,6 @@ void SAL_CALL SvXMLImport::endUnknownElement (const OUString & rPrefix, const OU
         uno::Reference<XFastContextHandler> xContext = std::move(maFastContexts.top());
         maFastContexts.pop();
         xContext->endUnknownElement( rPrefix, rLocalName );
-        xContext = nullptr;
     }
 }
 
