@@ -176,10 +176,10 @@ void PositionHandler::lcl_sprm(Sprm& rSprm)
                 m_nOrient = text::VertOrientation::BOTTOM;
             else if (rAlign == "center")
                 m_nOrient = text::VertOrientation::CENTER;
-            else if (rAlign == "inside")
-                m_nOrient = text::VertOrientation::NONE;
-            else if (rAlign == "outside")
-                m_nOrient = text::VertOrientation::NONE;
+            else if (rAlign == "inside" && m_nRelation == text::RelOrientation::PAGE_PRINT_AREA_BOTTOM)
+                m_nOrient = text::VertOrientation::TOP;
+            else if (rAlign == "outside" && m_nRelation == text::RelOrientation::PAGE_PRINT_AREA_BOTTOM)
+                m_nOrient = text::VertOrientation::BOTTOM;
             rAlign.clear();
             break;
         }
