@@ -74,6 +74,16 @@ public:
         rStream.Seek(0);
     }
 
+    /// Wraps an RTF fragment into a complete RTF file, so an RTF parser can handle it.
+    static void wrapRtfFragment(const OUString& rURL, SvMemoryStream& rStream)
+    {
+        SvFileStream aRtfStream(rURL, StreamMode::READ);
+        rStream.WriteOString("{\\rtf1");
+        rStream.WriteStream(aRtfStream);
+        rStream.WriteOString("}");
+        rStream.Seek(0);
+    }
+
 private:
     bool mustCalcLayoutOf(const char* filename) override
     {
@@ -1012,12 +1022,8 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1PDF)
     OUString aRtfUrl = aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 
     // Parse the ole1 data out of that.
-    SvFileStream aRtfStream(aRtfUrl, StreamMode::READ);
     SvMemoryStream aRtf;
-    aRtf.WriteOString("{\\rtf1");
-    aRtf.WriteStream(aRtfStream);
-    aRtf.WriteOString("}");
-    aRtf.Seek(0);
+    HtmlExportTest::wrapRtfFragment(aRtfUrl, aRtf);
     tools::SvRef<TestReqIfRtfReader> xReader(new TestReqIfRtfReader(aRtf));
     CPPUNIT_ASSERT(xReader->CallParser() != SvParserState::Error);
     SvMemoryStream aOle1;
@@ -1150,6 +1156,64 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testUnderlineNone)
     xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPathNoAttribute(pXmlDoc, "//reqif-xhtml:div/reqif-xhtml:p", "style");
+}
+
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1PresDataNoOle2)
+{
+    // Save to reqif-xhtml.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "no-ole2-pres-data.odt";
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", {});
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+
+    // Get the .ole path.
+    SvMemoryStream aStream;
+    HtmlExportTest::wrapFragment(maTempFile, aStream);
+    xmlDocUniquePtr pDoc = parseXmlStream(&aStream);
+    CPPUNIT_ASSERT(pDoc);
+    OUString aOlePath = getXPath(
+        pDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p/reqif-xhtml:object", "data");
+    OUString aOleSuffix(".ole");
+    CPPUNIT_ASSERT(aOlePath.endsWith(aOleSuffix));
+    INetURLObject aUrl(maTempFile.GetURL());
+    aUrl.setBase(aOlePath.copy(0, aOlePath.getLength() - aOleSuffix.getLength()));
+    aUrl.setExtension("ole");
+    OUString aRtfUrl = aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+
+    // Parse the ole1 data out of the RTF fragment.
+    SvMemoryStream aRtf;
+    HtmlExportTest::wrapRtfFragment(aRtfUrl, aRtf);
+    tools::SvRef<TestReqIfRtfReader> xReader(new TestReqIfRtfReader(aRtf));
+    CPPUNIT_ASSERT(xReader->CallParser() != SvParserState::Error);
+    SvMemoryStream aOle1;
+    CPPUNIT_ASSERT(xReader->WriteObjectData(aOle1));
+    CPPUNIT_ASSERT(aOle1.Tell());
+
+    // Check the content of the ole1 data.
+    // Skip ObjectHeader, see [MS-OLEDS] 2.2.4.
+    aOle1.Seek(0);
+    sal_uInt32 nData;
+    aOle1.ReadUInt32(nData); // OLEVersion
+    aOle1.ReadUInt32(nData); // FormatID
+    aOle1.ReadUInt32(nData); // ClassName
+    aOle1.SeekRel(nData);
+    aOle1.ReadUInt32(nData); // TopicName
+    aOle1.SeekRel(nData);
+    aOle1.ReadUInt32(nData); // ItemName
+    aOle1.SeekRel(nData);
+    aOle1.ReadUInt32(nData); // NativeDataSize
+    aOle1.SeekRel(nData);
+
+    aOle1.ReadUInt32(nData); // OLEVersion for presentation data
+
+    // Without the accompanying fix in place, this test would have failed as there was no
+    // presentation data after the native data in the OLE1 container. The result was not editable in
+    // Word.
+    CPPUNIT_ASSERT(aOle1.good());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
