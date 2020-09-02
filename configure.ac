@@ -3814,7 +3814,8 @@ if test "$_os" = "WINNT"; then
     # Check for 32-bit compiler to use to build the 32-bit TWAIN shim
     # needed to support TWAIN scan on both 32- and 64-bit systems
 
-    if test "$WIN_HOST_ARCH" = "x64"; then
+    case "$WIN_HOST_ARCH" in
+    x64)
         AC_MSG_CHECKING([for a x86 compiler and libraries for 32-bit binaries required for TWAIN support])
         if test -n "$WIN_MULTI_ARCH"; then
             BUILD_X86=TRUE
@@ -3825,10 +3826,12 @@ if test "$_os" = "WINNT"; then
             AC_MSG_RESULT([not found])
             AC_MSG_WARN([Installation set will not contain 32-bit binaries required for TWAIN support])
         fi
-    else
+        ;;
+    x86)
         BUILD_X86=TRUE
         CXX_X86_BINARY=$MSVC_CXX
-    fi
+        ;;
+    esac
     AC_SUBST(BUILD_X86)
     AC_SUBST(CXX_X86_BINARY)
 fi

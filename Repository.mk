@@ -151,7 +151,7 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,brand, \
 		unoinfo \
 		unopkg \
 		unopkg_com \
-		twain32shim \
+		$(if $(filter-out ARM64,$(CPUNAME)),twain32shim) \
 	) \
 ))
 
