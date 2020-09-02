@@ -125,7 +125,41 @@ DECLARE_OOXMLEXPORT_TEST(testTdf134063, "tdf134063.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(720), getXPath(pDump, "//page[1]/body/txt[1]/Text[3]", "nWidth").toInt32());
 }
 
+<<<<<<< HEAD   (9bcb2e tdf#136474 wait until mouse grab is dropped to trigger selec)
 DECLARE_OOXMLEXPORT_TEST(testAtPageShapeRelOrientation, "rotated_shape.fodt")
+=======
+DECLARE_OOXMLIMPORT_TEST(TestTdf135653, "tdf135653.docx")
+{
+    uno::Reference<beans::XPropertySet> xOLEProps(getShape(1), uno::UNO_QUERY_THROW);
+    drawing::FillStyle nFillStyle = static_cast<drawing::FillStyle>(-1);
+    xOLEProps->getPropertyValue("FillStyle") >>= nFillStyle;
+    Color aFillColor(COL_AUTO);
+    xOLEProps->getPropertyValue("FillColor") >>= aFillColor;
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Fill style setting does not match!",
+                                 drawing::FillStyle::FillStyle_SOLID, nFillStyle);
+    Color aExpectedColor;
+    aExpectedColor.SetRed(255);
+    aExpectedColor.SetGreen(0);
+    aExpectedColor.SetBlue(0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("OLE bg color does not match!", aExpectedColor, aFillColor);
+}
+
+DECLARE_OOXMLIMPORT_TEST(testTdf135665, "tdf135665.docx")
+{
+    uno::Reference<beans::XPropertySet> xOLEProps1(getShape(1), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xOLEProps2(getShape(2), uno::UNO_QUERY_THROW);
+    bool bSurroundContour1 = false;
+    bool bSurroundContour2 = false;
+    xOLEProps1->getPropertyValue("SurroundContour") >>= bSurroundContour1;
+    xOLEProps2->getPropertyValue("SurroundContour") >>= bSurroundContour2;
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("OLE tight wrap setting not imported correctly", true, bSurroundContour1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("OLE tight wrap setting not imported correctly", false, bSurroundContour2);
+}
+
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testAtPageShapeRelOrientation, "rotated_shape.fodt")
+>>>>>>> CHANGE (4b7ee7 tdf#135665 DOCX: import tight wrap setting of VML shapes)
 {
     // invalid combination of at-page anchor and horizontal-rel="paragraph"
     // caused relativeFrom="column" instead of relativeFrom="page"

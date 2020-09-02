@@ -2223,12 +2223,28 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const std::share
         if (xReplacementProperties.is())
         {
             OUString pProperties[] = {
+<<<<<<< HEAD   (9bcb2e tdf#136474 wait until mouse grab is dropped to trigger selec)
                 OUString("AnchorType"),
                 OUString("Surround"),
                 OUString("HoriOrient"),
                 OUString("HoriOrientPosition"),
                 OUString("VertOrient"),
                 OUString("VertOrientPosition")
+=======
+                "AnchorType",
+                "Surround",
+                "SurroundContour",
+                "HoriOrient",
+                "HoriOrientPosition",
+                "VertOrient",
+                "VertOrientPosition",
+                "VertOrientRelation",
+                "HoriOrientRelation",
+                "FillStyle",
+                "FillColor",
+                "FillColor2",
+                "LineStyle",
+>>>>>>> CHANGE (4b7ee7 tdf#135665 DOCX: import tight wrap setting of VML shapes)
             };
             for (const OUString & s : pProperties)
                 xOLEProperties->setPropertyValue(s, xReplacementProperties->getPropertyValue(s));
