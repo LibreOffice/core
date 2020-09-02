@@ -23,44 +23,6 @@ namespace basegfx
 
 namespace basegfx
 {
-    MinimalSystemDependentDataManager::MinimalSystemDependentDataManager()
-    :   SystemDependentDataManager(),
-        maSystemDependentDataReferences()
-    {
-    }
-
-    MinimalSystemDependentDataManager::~MinimalSystemDependentDataManager()
-    {
-    }
-
-    void MinimalSystemDependentDataManager::startUsage(basegfx::SystemDependentData_SharedPtr& rData)
-    {
-        if(rData)
-        {
-            maSystemDependentDataReferences.insert(rData);
-        }
-    }
-
-    void MinimalSystemDependentDataManager::endUsage(basegfx::SystemDependentData_SharedPtr& rData)
-    {
-        if(rData)
-        {
-            maSystemDependentDataReferences.erase(rData);
-        }
-    }
-
-    void MinimalSystemDependentDataManager::touchUsage(basegfx::SystemDependentData_SharedPtr& /* rData */)
-    {
-    }
-
-    void MinimalSystemDependentDataManager::flushAll()
-    {
-        maSystemDependentDataReferences.clear();
-    }
-} // namespace basegfx
-
-namespace basegfx
-{
     SystemDependentData::SystemDependentData(
         SystemDependentDataManager& rSystemDependentDataManager)
     :   mrSystemDependentDataManager(rSystemDependentDataManager),
