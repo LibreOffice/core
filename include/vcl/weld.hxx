@@ -264,6 +264,9 @@ public:
     virtual void set_title_background() = 0;
     //make this widget suitable for use in a toolbar
     virtual void set_toolbar_background() = 0;
+    //trying to use a custom color for a background is generally a bad idea. If your need
+    //fits one of the above categories then that's a somewhat better choice
+    virtual void set_background(const Color& rBackColor) = 0;
 
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> get_drop_target() = 0;
 

@@ -218,8 +218,6 @@ protected:
     virtual bool HandleKeyEventListener(VclWindowEvent& rEvent);
     virtual void HandleMouseEventListener(VclSimpleEvent& rEvent);
 
-    void set_background(const Color& rColor);
-
 public:
     SalInstanceWidget(vcl::Window* pWidget, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
 
@@ -381,6 +379,8 @@ public:
     virtual void set_toolbar_background() override;
 
     virtual void set_highlight_background() override;
+
+    virtual void set_background(const Color& rColor) override;
 
     virtual void draw(OutputDevice& rOutput, const tools::Rectangle& rRect) override;
 
