@@ -173,6 +173,7 @@ void lcl_insertOrDeleteDataLabelsToSeriesAndAllPoints( const Reference< chart2::
                             aLabel.ShowCustomLabel = false;
                         }
                         xPointProp->setPropertyValue(CHART_UNONAME_LABEL, uno::Any(aLabel));
+                        xPointProp->setPropertyValue(CHART_UNONAME_CUSTOM_LABEL_FIELDS, uno::Any());
                     }
                 }
             }
@@ -837,6 +838,7 @@ void deleteDataLabelsFromPoint( const Reference< beans::XPropertySet >& xPointPr
             aLabel.ShowCategoryName = false;
             aLabel.ShowCustomLabel = false;
             xPointProp->setPropertyValue(CHART_UNONAME_LABEL, uno::Any(aLabel));
+            xPointProp->setPropertyValue(CHART_UNONAME_CUSTOM_LABEL_FIELDS, uno::Any());
         }
     }
     catch(const uno::Exception &)
