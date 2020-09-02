@@ -226,6 +226,58 @@ bool ImportPDF(SvStream& rStream, Graphic& rGraphic)
     return true;
 }
 
+namespace
+{
+std::vector<PDFGraphicAnnotation> findAnnotations(std::unique_ptr<vcl::pdf::PDFiumPage>& pPage,
+                                                  basegfx::B2DSize aPageSize)
+{
+    std::vector<PDFGraphicAnnotation> aPDFGraphicAnnotations;
+    for (int nAnnotation = 0; nAnnotation < pPage->getAnnotationCount(); nAnnotation++)
+    {
+        auto pAnnotation = pPage->getAnnotation(nAnnotation);
+        if (pAnnotation)
+        {
+            auto eSubtype = pAnnotation->getSubType();
+
+            if (eSubtype == vcl::pdf::PDFAnnotationSubType::Text
+                && pAnnotation->hasKey(vcl::pdf::constDictionaryKeyPopup))
+            {
+                OUString sAuthor = pAnnotation->getString(vcl::pdf::constDictionaryKeyTitle);
+                OUString sText = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
+                auto pPopupAnnotation = pAnnotation->getLinked(vcl::pdf::constDictionaryKeyPopup);
+
+                basegfx::B2DRectangle rRectangle = pAnnotation->getRectangle();
+                basegfx::B2DRectangle rRectangleHMM(
+                    convertPointToMm100(rRectangle.getMinX()),
+                    convertPointToMm100(aPageSize.getY() - rRectangle.getMinY()),
+                    convertPointToMm100(rRectangle.getMaxX()),
+                    convertPointToMm100(aPageSize.getY() - rRectangle.getMaxY()));
+
+                OUString sDateTimeString
+                    = pAnnotation->getString(vcl::pdf::constDictionaryKeyModificationDate);
+                OUString sISO8601String = vcl::pdf::convertPdfDateToISO8601(sDateTimeString);
+
+                css::util::DateTime aDateTime;
+                if (!sISO8601String.isEmpty())
+                {
+                    utl::ISO8601parseDateTime(sISO8601String, aDateTime);
+                }
+
+                PDFGraphicAnnotation aPDFGraphicAnnotation;
+                aPDFGraphicAnnotation.maRectangle = rRectangleHMM;
+                aPDFGraphicAnnotation.maAuthor = sAuthor;
+                aPDFGraphicAnnotation.maText = sText;
+                aPDFGraphicAnnotation.maDateTime = aDateTime;
+                aPDFGraphicAnnotation.meSubType = eSubtype;
+                aPDFGraphicAnnotations.push_back(aPDFGraphicAnnotation);
+            }
+        }
+    }
+    return aPDFGraphicAnnotations;
+}
+
+} // end anonymous namespace
+
 size_t ImportPDFUnloaded(const OUString& rURL, std::vector<PDFGraphicResult>& rGraphics)
 {
 #if HAVE_FEATURE_PDFIUM
@@ -282,49 +334,8 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<PDFGraphicResult>& rG
 
         auto pPage = pPdfDocument->openPage(nPageIndex);
 
-        std::vector<PDFGraphicAnnotation> aPDFGraphicAnnotations;
-        for (int nAnnotation = 0; nAnnotation < pPage->getAnnotationCount(); nAnnotation++)
-        {
-            auto pAnnotation = pPage->getAnnotation(nAnnotation);
-            if (pAnnotation)
-            {
-                auto eSubtype = pAnnotation->getSubType();
-
-                if (eSubtype == vcl::pdf::PDFAnnotationSubType::Text
-                    && pAnnotation->hasKey(vcl::pdf::constDictionaryKeyPopup))
-                {
-                    OUString sAuthor = pAnnotation->getString(vcl::pdf::constDictionaryKeyTitle);
-                    OUString sText = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
-                    auto pPopupAnnotation
-                        = pAnnotation->getLinked(vcl::pdf::constDictionaryKeyPopup);
-
-                    basegfx::B2DRectangle rRectangle = pAnnotation->getRectangle();
-                    basegfx::B2DRectangle rRectangleHMM(
-                        convertPointToMm100(rRectangle.getMinX()),
-                        convertPointToMm100(aPageSize.getY() - rRectangle.getMinY()),
-                        convertPointToMm100(rRectangle.getMaxX()),
-                        convertPointToMm100(aPageSize.getY() - rRectangle.getMaxY()));
-
-                    OUString sDateTimeString
-                        = pAnnotation->getString(vcl::pdf::constDictionaryKeyModificationDate);
-                    OUString sISO8601String = vcl::pdf::convertPdfDateToISO8601(sDateTimeString);
-
-                    css::util::DateTime aDateTime;
-                    if (!sISO8601String.isEmpty())
-                    {
-                        utl::ISO8601parseDateTime(sISO8601String, aDateTime);
-                    }
-
-                    PDFGraphicAnnotation aPDFGraphicAnnotation;
-                    aPDFGraphicAnnotation.maRectangle = rRectangleHMM;
-                    aPDFGraphicAnnotation.maAuthor = sAuthor;
-                    aPDFGraphicAnnotation.maText = sText;
-                    aPDFGraphicAnnotation.maDateTime = aDateTime;
-                    aPDFGraphicAnnotation.meSubType = eSubtype;
-                    aPDFGraphicAnnotations.push_back(aPDFGraphicAnnotation);
-                }
-            }
-        }
+        std::vector<PDFGraphicAnnotation> aPDFGraphicAnnotations
+            = findAnnotations(pPage, aPageSize);
 
         rGraphics.emplace_back(std::move(aGraphic), Size(nPageWidth, nPageHeight),
                                aPDFGraphicAnnotations);
