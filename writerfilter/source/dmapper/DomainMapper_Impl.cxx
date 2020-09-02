@@ -2223,12 +2223,13 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const std::share
         if (xReplacementProperties.is())
         {
             OUString pProperties[] = {
-                OUString("AnchorType"),
-                OUString("Surround"),
-                OUString("HoriOrient"),
-                OUString("HoriOrientPosition"),
-                OUString("VertOrient"),
-                OUString("VertOrientPosition")
+                "AnchorType",
+                "Surround",
+                "SurroundContour",
+                "HoriOrient",
+                "HoriOrientPosition",
+                "VertOrient",
+                "VertOrientPosition",
             };
             for (const OUString & s : pProperties)
                 xOLEProperties->setPropertyValue(s, xReplacementProperties->getPropertyValue(s));
