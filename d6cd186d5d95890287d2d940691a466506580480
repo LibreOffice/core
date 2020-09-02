@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "72888614_b3b7df59",
+        "filename": "svx/source/svdraw/svdedtv2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-09-02T09:45:55Z",
+      "side": 1,
+      "message": "This can be moved under case SID_DISTRIBUTE_DLG",
+      "revId": "d6cd186d5d95890287d2d940691a466506580480",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
