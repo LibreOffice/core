@@ -41,7 +41,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf133370_columnBreak, "tdf133370_columnBreak.odt")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf131801, "tdf131801.docx")
+DECLARE_OOXMLEXPORT_TEST(testTdf131801, "tdf131801.docx")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
@@ -126,6 +126,19 @@ DECLARE_OOXMLEXPORT_TEST(testTdf134063, "tdf134063.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(720), getXPath(pDump, "//page[1]/body/txt[1]/Text[3]", "nWidth").toInt32());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf135665, "tdf135665.docx")
+{
+    uno::Reference<beans::XPropertySet> xOLEProps1(getShape(1), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xOLEProps2(getShape(2), uno::UNO_QUERY_THROW);
+    bool bSurroundContour1 = false;
+    bool bSurroundContour2 = false;
+    xOLEProps1->getPropertyValue("SurroundContour") >>= bSurroundContour1;
+    xOLEProps2->getPropertyValue("SurroundContour") >>= bSurroundContour2;
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("OLE tight wrap setting not imported correctly", true, bSurroundContour1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("OLE tight wrap setting not imported correctly", false, bSurroundContour2);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testAtPageShapeRelOrientation, "rotated_shape.fodt")
 {
     // invalid combination of at-page anchor and horizontal-rel="paragraph"
@@ -179,7 +192,7 @@ DECLARE_OOXMLEXPORT_TEST(testRelativeAnchorHeightFromBottomMarginHasFooter,
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1147), nAnchoredHeight);
 }
 
-DECLARE_OOXMLIMPORT_TEST(TestTdf132483, "tdf132483.docx")
+DECLARE_OOXMLEXPORT_TEST(TestTdf132483, "tdf132483.docx")
 {
     uno::Reference<beans::XPropertySet> xOLEProps(getShape(1), uno::UNO_QUERY_THROW);
     sal_Int16 nVRelPos = -1;
