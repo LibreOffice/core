@@ -318,8 +318,6 @@ include/basegfx/tuple/b3ituple.hxx:164
     _Bool basegfx::B3ITuple::operator!=(const class basegfx::B3ITuple &) const
 include/basegfx/utils/b2dclipstate.hxx:72
     _Bool basegfx::utils::B2DClipState::operator!=(const class basegfx::utils::B2DClipState &) const
-include/basegfx/utils/systemdependentdata.hxx:62
-     basegfx::MinimalSystemDependentDataManager::MinimalSystemDependentDataManager()
 include/basegfx/utils/unopolypolygon.hxx:88
     const class basegfx::B2DPolyPolygon & basegfx::unotools::UnoPolyPolygon::getPolyPolygonUnsafe() const
 include/basegfx/vector/b2ivector.hxx:73

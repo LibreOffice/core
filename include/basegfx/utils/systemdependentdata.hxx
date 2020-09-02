@@ -42,32 +42,6 @@ namespace basegfx
         virtual void flushAll() = 0;
     };
 
-    class BASEGFX_DLLPUBLIC MinimalSystemDependentDataManager final : public SystemDependentDataManager
-    {
-    private:
-        // example of a minimal SystemDependentDataManager. It *needs to hold*
-        // a SystemDependentData_SharedPtr while SystemDependentDataHolder's will
-        // use a SystemDependentData_WeakPtr. When the held SystemDependentData_SharedPtr
-        // is deleted, the corresponding SystemDependentData_WeakPtr will get void.
-        // To make this work, a minimal SystemDependentDataManager *has* to hold at
-        // least that one SystemDependentData_SharedPtr.
-        // That SystemDependentData_SharedPtr may be (e.g. Timer-based or resource-based)
-        // be freed then. This minimal implementation does never free it, so all stay valid.
-        // The instances may still be removed by endUsage calls, but there is no
-        // caching/buffering mechanism involved here at all. It's an example, but
-        // not used - better use an advanced derivation of SystemDependentDataManager
-        std::set< SystemDependentData_SharedPtr >   maSystemDependentDataReferences;
-
-    public:
-        MinimalSystemDependentDataManager();
-        virtual ~MinimalSystemDependentDataManager() override;
-
-        virtual void startUsage(basegfx::SystemDependentData_SharedPtr& rData) override;
-        virtual void endUsage(basegfx::SystemDependentData_SharedPtr& rData) override;
-        virtual void touchUsage(basegfx::SystemDependentData_SharedPtr& rData) override;
-        virtual void flushAll() override;
-    };
-
     class BASEGFX_DLLPUBLIC SystemDependentData
     {
     private:

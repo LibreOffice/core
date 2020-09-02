@@ -230,7 +230,6 @@ basegfx::BColorModifier_gamma
 basegfx::BColorModifier_gray
 basegfx::BColorModifier_invert
 basegfx::BColorModifier_replace
-basegfx::MinimalSystemDependentDataManager
 basegfx::ODFGradientInfo
 basegfx::RasterConverter3D
 basegfx::SystemDependentDataHolder

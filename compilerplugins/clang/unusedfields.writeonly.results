@@ -326,8 +326,6 @@ i18nutil/source/utility/paper.cxx:305
     paperword string char *
 include/basegfx/DrawCommands.hxx:81
     gfx::LinearGradientInfo maMatrix basegfx::B2DHomMatrix
-include/basegfx/utils/systemdependentdata.hxx:59
-    basegfx::MinimalSystemDependentDataManager maSystemDependentDataReferences std::set<SystemDependentData_SharedPtr>
 include/basic/basmgr.hxx:56
     BasicError nReason enum BasicErrorReason
 include/basic/sbxvar.hxx:73

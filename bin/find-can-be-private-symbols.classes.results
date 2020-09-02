@@ -165,7 +165,6 @@ XMLConstantsPropertyHandler
 XMLEnumPropertyHdl
 XMLShapeStyleContext
 basegfx::BColorModifier
-basegfx::MinimalSystemDependentDataManager
 canvas
 chart::PopupRequest
 comphelper::RefCountedMutex
