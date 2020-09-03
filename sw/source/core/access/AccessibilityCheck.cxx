@@ -32,6 +32,9 @@
 #include <txtftn.hxx>
 #include <svl/itemiter.hxx>
 #include <o3tl/vector_utils.hxx>
+#include <svx/swframetypes.hxx>
+#include <fmtanchr.hxx>
+#include <dcontact.hxx>
 
 namespace sw
 {
@@ -771,6 +774,11 @@ void AccessibilityCheck::checkObject(SdrObject* pObject)
 {
     if (!pObject)
         return;
+
+    // Checking if there are floating text forms and if there are, throwing a warning.
+    if (pObject->HasText()
+        && FindFrameFormat(pObject)->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
+        lclAddIssue(m_aIssueCollection, SwResId(STR_FLOATING_FORM));
 
     if (pObject->GetObjIdentifier() == OBJ_CUSTOMSHAPE || pObject->GetObjIdentifier() == OBJ_TEXT)
     {
