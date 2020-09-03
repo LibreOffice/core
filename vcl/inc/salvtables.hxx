@@ -407,6 +407,8 @@ public:
     virtual void set_label_type(weld::LabelType eType) override;
 
     virtual void set_font(const vcl::Font& rFont) override;
+
+    virtual void set_font_color(const Color& rColor) override;
 };
 
 class SalInstanceContainer : public SalInstanceWidget, public virtual weld::Container
