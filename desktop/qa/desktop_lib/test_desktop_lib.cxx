@@ -2940,95 +2940,98 @@ void DesktopLOKTest::testSpellcheckerMultiView()
 
 void DesktopLOKTest::testMultiDocuments()
 {
-    // Load a document.
-    uno::Reference<lang::XComponent> xComponent1;
-    std::unique_ptr<LibLODocument_Impl> document1;
-    std::tie(document1, xComponent1) = loadDocImpl("blank_text.odt");
-    LibLODocument_Impl* pDocument1 = document1.get();
-    CPPUNIT_ASSERT_EQUAL(1, pDocument1->m_pDocumentClass->getViewsCount(pDocument1));
-    const int nDocId1 = pDocument1->mnDocumentId;
+    for (int i = 0; i < 3; i++)
+    {
+        // Load a document.
+        uno::Reference<lang::XComponent> xComponent1;
+        std::unique_ptr<LibLODocument_Impl> document1;
+        std::tie(document1, xComponent1) = loadDocImpl("blank_text.odt");
+        LibLODocument_Impl* pDocument1 = document1.get();
+        CPPUNIT_ASSERT_EQUAL(1, pDocument1->m_pDocumentClass->getViewsCount(pDocument1));
+        const int nDocId1 = pDocument1->mnDocumentId;
 
-    const int nDoc1View0 = pDocument1->m_pDocumentClass->getView(pDocument1);
-    CPPUNIT_ASSERT_EQUAL(nDocId1, SfxLokHelper::getDocumentIdOfView(nDoc1View0));
-    const int nDoc1View1 = pDocument1->m_pDocumentClass->createView(pDocument1);
-    CPPUNIT_ASSERT_EQUAL(nDoc1View1, pDocument1->m_pDocumentClass->getView(pDocument1));
-    CPPUNIT_ASSERT_EQUAL(nDocId1, SfxLokHelper::getDocumentIdOfView(nDoc1View1));
-    CPPUNIT_ASSERT_EQUAL(2, pDocument1->m_pDocumentClass->getViewsCount(pDocument1));
+        const int nDoc1View0 = pDocument1->m_pDocumentClass->getView(pDocument1);
+        CPPUNIT_ASSERT_EQUAL(nDocId1, SfxLokHelper::getDocumentIdOfView(nDoc1View0));
+        const int nDoc1View1 = pDocument1->m_pDocumentClass->createView(pDocument1);
+        CPPUNIT_ASSERT_EQUAL(nDoc1View1, pDocument1->m_pDocumentClass->getView(pDocument1));
+        CPPUNIT_ASSERT_EQUAL(nDocId1, SfxLokHelper::getDocumentIdOfView(nDoc1View1));
+        CPPUNIT_ASSERT_EQUAL(2, pDocument1->m_pDocumentClass->getViewsCount(pDocument1));
 
-    // Validate the views of document 1.
-    std::vector<int> aViewIdsDoc1(2);
-    CPPUNIT_ASSERT(pDocument1->m_pDocumentClass->getViewIds(pDocument1, aViewIdsDoc1.data(), aViewIdsDoc1.size()));
-    CPPUNIT_ASSERT_EQUAL(nDoc1View0, aViewIdsDoc1[0]);
-    CPPUNIT_ASSERT_EQUAL(nDoc1View1, aViewIdsDoc1[1]);
+        // Validate the views of document 1.
+        std::vector<int> aViewIdsDoc1(2);
+        CPPUNIT_ASSERT(pDocument1->m_pDocumentClass->getViewIds(pDocument1, aViewIdsDoc1.data(), aViewIdsDoc1.size()));
+        CPPUNIT_ASSERT_EQUAL(nDoc1View0, aViewIdsDoc1[0]);
+        CPPUNIT_ASSERT_EQUAL(nDoc1View1, aViewIdsDoc1[1]);
 
-    CPPUNIT_ASSERT_EQUAL(nDoc1View1, pDocument1->m_pDocumentClass->getView(pDocument1));
-    CPPUNIT_ASSERT_EQUAL(nDocId1, SfxLokHelper::getDocumentIdOfView(nDoc1View1));
-    pDocument1->m_pDocumentClass->setView(pDocument1, nDoc1View0);
-    CPPUNIT_ASSERT_EQUAL(nDoc1View0, pDocument1->m_pDocumentClass->getView(pDocument1));
-    CPPUNIT_ASSERT_EQUAL(nDocId1, SfxLokHelper::getDocumentIdOfView(nDoc1View0));
-    pDocument1->m_pDocumentClass->setView(pDocument1, nDoc1View1);
-    CPPUNIT_ASSERT_EQUAL(nDoc1View1, pDocument1->m_pDocumentClass->getView(pDocument1));
-    CPPUNIT_ASSERT_EQUAL(nDocId1, SfxLokHelper::getDocumentIdOfView(nDoc1View1));
-    CPPUNIT_ASSERT_EQUAL(2, pDocument1->m_pDocumentClass->getViewsCount(pDocument1));
+        CPPUNIT_ASSERT_EQUAL(nDoc1View1, pDocument1->m_pDocumentClass->getView(pDocument1));
+        CPPUNIT_ASSERT_EQUAL(nDocId1, SfxLokHelper::getDocumentIdOfView(nDoc1View1));
+        pDocument1->m_pDocumentClass->setView(pDocument1, nDoc1View0);
+        CPPUNIT_ASSERT_EQUAL(nDoc1View0, pDocument1->m_pDocumentClass->getView(pDocument1));
+        CPPUNIT_ASSERT_EQUAL(nDocId1, SfxLokHelper::getDocumentIdOfView(nDoc1View0));
+        pDocument1->m_pDocumentClass->setView(pDocument1, nDoc1View1);
+        CPPUNIT_ASSERT_EQUAL(nDoc1View1, pDocument1->m_pDocumentClass->getView(pDocument1));
+        CPPUNIT_ASSERT_EQUAL(nDocId1, SfxLokHelper::getDocumentIdOfView(nDoc1View1));
+        CPPUNIT_ASSERT_EQUAL(2, pDocument1->m_pDocumentClass->getViewsCount(pDocument1));
 
-    // Load another document.
-    uno::Reference<lang::XComponent> xComponent2;
-    std::unique_ptr<LibLODocument_Impl> document2;
-    std::tie(document2, xComponent2) = loadDocImpl("blank_presentation.odp");
-    LibLODocument_Impl* pDocument2 = document2.get();
-    CPPUNIT_ASSERT_EQUAL(1, pDocument2->m_pDocumentClass->getViewsCount(pDocument2));
-    const int nDocId2 = pDocument2->mnDocumentId;
+        // Load another document.
+        uno::Reference<lang::XComponent> xComponent2;
+        std::unique_ptr<LibLODocument_Impl> document2;
+        std::tie(document2, xComponent2) = loadDocImpl("blank_presentation.odp");
+        LibLODocument_Impl* pDocument2 = document2.get();
+        CPPUNIT_ASSERT_EQUAL(1, pDocument2->m_pDocumentClass->getViewsCount(pDocument2));
+        const int nDocId2 = pDocument2->mnDocumentId;
 
-    const int nDoc2View0 = pDocument2->m_pDocumentClass->getView(pDocument2);
-    CPPUNIT_ASSERT_EQUAL(nDocId2, SfxLokHelper::getDocumentIdOfView(nDoc2View0));
-    const int nDoc2View1 = pDocument2->m_pDocumentClass->createView(pDocument2);
-    CPPUNIT_ASSERT_EQUAL(nDoc2View1, pDocument2->m_pDocumentClass->getView(pDocument2));
-    CPPUNIT_ASSERT_EQUAL(nDocId2, SfxLokHelper::getDocumentIdOfView(nDoc2View1));
-    CPPUNIT_ASSERT_EQUAL(2, pDocument2->m_pDocumentClass->getViewsCount(pDocument2));
+        const int nDoc2View0 = pDocument2->m_pDocumentClass->getView(pDocument2);
+        CPPUNIT_ASSERT_EQUAL(nDocId2, SfxLokHelper::getDocumentIdOfView(nDoc2View0));
+        const int nDoc2View1 = pDocument2->m_pDocumentClass->createView(pDocument2);
+        CPPUNIT_ASSERT_EQUAL(nDoc2View1, pDocument2->m_pDocumentClass->getView(pDocument2));
+        CPPUNIT_ASSERT_EQUAL(nDocId2, SfxLokHelper::getDocumentIdOfView(nDoc2View1));
+        CPPUNIT_ASSERT_EQUAL(2, pDocument2->m_pDocumentClass->getViewsCount(pDocument2));
 
-    // Validate the views of document 2.
-    std::vector<int> aViewIdsDoc2(2);
-    CPPUNIT_ASSERT(pDocument2->m_pDocumentClass->getViewIds(pDocument2, aViewIdsDoc2.data(), aViewIdsDoc2.size()));
-    CPPUNIT_ASSERT_EQUAL(nDoc2View0, aViewIdsDoc2[0]);
-    CPPUNIT_ASSERT_EQUAL(nDoc2View1, aViewIdsDoc2[1]);
+        // Validate the views of document 2.
+        std::vector<int> aViewIdsDoc2(2);
+        CPPUNIT_ASSERT(pDocument2->m_pDocumentClass->getViewIds(pDocument2, aViewIdsDoc2.data(), aViewIdsDoc2.size()));
+        CPPUNIT_ASSERT_EQUAL(nDoc2View0, aViewIdsDoc2[0]);
+        CPPUNIT_ASSERT_EQUAL(nDoc2View1, aViewIdsDoc2[1]);
 
-    CPPUNIT_ASSERT_EQUAL(nDoc2View1, pDocument2->m_pDocumentClass->getView(pDocument2));
-    CPPUNIT_ASSERT_EQUAL(nDocId2, SfxLokHelper::getDocumentIdOfView(nDoc2View1));
-    pDocument2->m_pDocumentClass->setView(pDocument2, nDoc2View0);
-    CPPUNIT_ASSERT_EQUAL(nDoc2View0, pDocument2->m_pDocumentClass->getView(pDocument2));
-    CPPUNIT_ASSERT_EQUAL(nDocId2, SfxLokHelper::getDocumentIdOfView(nDoc2View0));
-    pDocument2->m_pDocumentClass->setView(pDocument2, nDoc2View1);
-    CPPUNIT_ASSERT_EQUAL(nDoc2View1, pDocument2->m_pDocumentClass->getView(pDocument2));
-    CPPUNIT_ASSERT_EQUAL(nDocId2, SfxLokHelper::getDocumentIdOfView(nDoc2View1));
-    CPPUNIT_ASSERT_EQUAL(2, pDocument2->m_pDocumentClass->getViewsCount(pDocument2));
+        CPPUNIT_ASSERT_EQUAL(nDoc2View1, pDocument2->m_pDocumentClass->getView(pDocument2));
+        CPPUNIT_ASSERT_EQUAL(nDocId2, SfxLokHelper::getDocumentIdOfView(nDoc2View1));
+        pDocument2->m_pDocumentClass->setView(pDocument2, nDoc2View0);
+        CPPUNIT_ASSERT_EQUAL(nDoc2View0, pDocument2->m_pDocumentClass->getView(pDocument2));
+        CPPUNIT_ASSERT_EQUAL(nDocId2, SfxLokHelper::getDocumentIdOfView(nDoc2View0));
+        pDocument2->m_pDocumentClass->setView(pDocument2, nDoc2View1);
+        CPPUNIT_ASSERT_EQUAL(nDoc2View1, pDocument2->m_pDocumentClass->getView(pDocument2));
+        CPPUNIT_ASSERT_EQUAL(nDocId2, SfxLokHelper::getDocumentIdOfView(nDoc2View1));
+        CPPUNIT_ASSERT_EQUAL(2, pDocument2->m_pDocumentClass->getViewsCount(pDocument2));
 
-    // The views of document1 should be unchanged.
-    CPPUNIT_ASSERT(pDocument1->m_pDocumentClass->getViewIds(pDocument1, aViewIdsDoc1.data(), aViewIdsDoc1.size()));
-    CPPUNIT_ASSERT_EQUAL(nDoc1View0, aViewIdsDoc1[0]);
-    CPPUNIT_ASSERT_EQUAL(nDoc1View1, aViewIdsDoc1[1]);
-    // Switch views in the first doc.
-    CPPUNIT_ASSERT_EQUAL(nDocId1, SfxLokHelper::getDocumentIdOfView(nDoc1View0));
-    pDocument1->m_pDocumentClass->setView(pDocument1, nDoc1View0);
-    CPPUNIT_ASSERT_EQUAL(nDoc1View0, pDocument1->m_pDocumentClass->getView(pDocument1));
-    CPPUNIT_ASSERT_EQUAL(nDocId1, SfxLokHelper::getDocumentIdOfView(nDoc1View1));
-    pDocument1->m_pDocumentClass->destroyView(pDocument1, nDoc1View1);
-    CPPUNIT_ASSERT_EQUAL(1, pDocument1->m_pDocumentClass->getViewsCount(pDocument1));
+        // The views of document1 should be unchanged.
+        CPPUNIT_ASSERT(pDocument1->m_pDocumentClass->getViewIds(pDocument1, aViewIdsDoc1.data(), aViewIdsDoc1.size()));
+        CPPUNIT_ASSERT_EQUAL(nDoc1View0, aViewIdsDoc1[0]);
+        CPPUNIT_ASSERT_EQUAL(nDoc1View1, aViewIdsDoc1[1]);
+        // Switch views in the first doc.
+        CPPUNIT_ASSERT_EQUAL(nDocId1, SfxLokHelper::getDocumentIdOfView(nDoc1View0));
+        pDocument1->m_pDocumentClass->setView(pDocument1, nDoc1View0);
+        CPPUNIT_ASSERT_EQUAL(nDoc1View0, pDocument1->m_pDocumentClass->getView(pDocument1));
+        CPPUNIT_ASSERT_EQUAL(nDocId1, SfxLokHelper::getDocumentIdOfView(nDoc1View1));
+        pDocument1->m_pDocumentClass->destroyView(pDocument1, nDoc1View1);
+        CPPUNIT_ASSERT_EQUAL(1, pDocument1->m_pDocumentClass->getViewsCount(pDocument1));
 
-    // The views of document2 should be unchanged.
-    CPPUNIT_ASSERT(pDocument2->m_pDocumentClass->getViewIds(pDocument2, aViewIdsDoc2.data(), aViewIdsDoc2.size()));
-    CPPUNIT_ASSERT_EQUAL(nDoc2View0, aViewIdsDoc2[0]);
-    CPPUNIT_ASSERT_EQUAL(nDoc2View1, aViewIdsDoc2[1]);
-    // Switch views in the second doc.
-    CPPUNIT_ASSERT_EQUAL(nDocId2, SfxLokHelper::getDocumentIdOfView(nDoc2View0));
-    pDocument2->m_pDocumentClass->setView(pDocument2, nDoc2View0);
-    CPPUNIT_ASSERT_EQUAL(nDoc2View0, pDocument2->m_pDocumentClass->getView(pDocument2));
-    CPPUNIT_ASSERT_EQUAL(nDocId2, SfxLokHelper::getDocumentIdOfView(nDoc2View1));
-    pDocument2->m_pDocumentClass->destroyView(pDocument2, nDoc2View1);
-    CPPUNIT_ASSERT_EQUAL(1, pDocument2->m_pDocumentClass->getViewsCount(pDocument2));
+        // The views of document2 should be unchanged.
+        CPPUNIT_ASSERT(pDocument2->m_pDocumentClass->getViewIds(pDocument2, aViewIdsDoc2.data(), aViewIdsDoc2.size()));
+        CPPUNIT_ASSERT_EQUAL(nDoc2View0, aViewIdsDoc2[0]);
+        CPPUNIT_ASSERT_EQUAL(nDoc2View1, aViewIdsDoc2[1]);
+        // Switch views in the second doc.
+        CPPUNIT_ASSERT_EQUAL(nDocId2, SfxLokHelper::getDocumentIdOfView(nDoc2View0));
+        pDocument2->m_pDocumentClass->setView(pDocument2, nDoc2View0);
+        CPPUNIT_ASSERT_EQUAL(nDoc2View0, pDocument2->m_pDocumentClass->getView(pDocument2));
+        CPPUNIT_ASSERT_EQUAL(nDocId2, SfxLokHelper::getDocumentIdOfView(nDoc2View1));
+        pDocument2->m_pDocumentClass->destroyView(pDocument2, nDoc2View1);
+        CPPUNIT_ASSERT_EQUAL(1, pDocument2->m_pDocumentClass->getViewsCount(pDocument2));
 
-    closeDoc(document2, xComponent2);
+        closeDoc(document2, xComponent2);
 
-    closeDoc(document1, xComponent1);
+        closeDoc(document1, xComponent1);
+    }
 }
 
 void DesktopLOKTest::testControlState()
