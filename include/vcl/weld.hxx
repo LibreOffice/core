@@ -1926,9 +1926,14 @@ public:
     virtual void set_label(const OUString& rText) = 0;
     virtual OUString get_label() const = 0;
     virtual void set_mnemonic_widget(Widget* pTarget) = 0;
-    virtual void set_label_type(LabelType eType) = 0;
     // font size is in points, not pixels, e.g. see Window::[G]etPointFont
     virtual void set_font(const vcl::Font& rFont) = 0;
+    virtual void set_label_type(LabelType eType) = 0;
+    /*
+       If you want to set a warning or error state, see set_label_type
+       instead.
+    */
+    virtual void set_font_color(const Color& rColor) = 0;
 };
 
 class VCL_DLLPUBLIC TextView : virtual public Container
@@ -1965,6 +1970,12 @@ public:
         //can improve this if needed
         return get_text_height() * nRows;
     }
+
+    /*
+       Typically you want to avoid the temptation of customizing
+       font colors
+    */
+    virtual void set_font_color(const Color& rColor) = 0;
 
     void save_value() { m_sSavedValue = get_text(); }
     bool get_value_changed_from_saved() const { return m_sSavedValue != get_text(); }
