@@ -785,10 +785,9 @@ void ScETSForecastCalculation::refill()
         }
         else
         {
-            SCSIZE nIdx;
+            SCSIZE nIdx = ( i >= mnSmplInPrd ? i - mnSmplInPrd : i );
             if ( bAdditive )
             {
-                nIdx = ( i > mnSmplInPrd ? i - mnSmplInPrd : i );
                 mpBase[ i ] = mfAlpha * ( maRange[ i ].Y - mpPerIdx[ nIdx ] ) +
                               ( 1 - mfAlpha ) * ( mpBase[ i - 1 ] + mpTrend[ i - 1 ] );
                 mpPerIdx[ i ] = mfBeta * ( maRange[ i ].Y - mpBase[ i ] ) +
@@ -796,7 +795,6 @@ void ScETSForecastCalculation::refill()
             }
             else
             {
-                nIdx = ( i >= mnSmplInPrd ? i - mnSmplInPrd : i );
                 mpBase[ i ] = mfAlpha * ( maRange[ i ].Y / mpPerIdx[ nIdx ] ) +
                               ( 1 - mfAlpha ) * ( mpBase[ i - 1 ] + mpTrend[ i - 1 ] );
                 mpPerIdx[ i ] = mfBeta * ( maRange[ i ].Y / mpBase[ i ] ) +
