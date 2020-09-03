@@ -106,11 +106,21 @@ const NfKeywordTable ImpSvNumberformatScan::sEnglishKeyword =
     "WHITE"    // NF_KEY_WHITE
 };
 
-::std::vector<Color> ImpSvNumberformatScan::StandardColor;
-bool ImpSvNumberformatScan::bStandardColorNeedInitialization = true;
+::std::vector<Color> ImpSvNumberformatScan::StandardColor{
+    COL_BLACK,        COL_LIGHTBLUE, COL_LIGHTGREEN, COL_LIGHTCYAN, COL_LIGHTRED,
+    COL_LIGHTMAGENTA, COL_BROWN,     COL_GRAY,       COL_YELLOW,    COL_WHITE
+};
 
 // This vector will hold *only* the color names in German language.
-::std::vector<OUString> ImpSvNumberformatScan::sGermanColorNames;
+static const std::u16string_view& GermanColorName(size_t i)
+{
+    static const std::u16string_view sGermanColorNames[]{ u"FARBE",   u"SCHWARZ", u"BLAU",
+                                                          u"GRÜN",    u"CYAN",    u"ROT",
+                                                          u"MAGENTA", u"BRAUN",   u"GRAU",
+                                                          u"GELB",    u"WEISS" };
+    assert(i < SAL_N_ELEMENTS(sGermanColorNames));
+    return sGermanColorNames[i];
+}
 
 const OUStringLiteral ImpSvNumberformatScan::sErrStr =  u"#FMT";
 
@@ -129,38 +139,10 @@ ImpSvNumberformatScan::ImpSvNumberformatScan( SvNumberFormatter* pFormatterP )
     bKeywordsNeedInit = true;            // locale dependent and not locale dependent keywords
     bCompatCurNeedInit = true;           // locale dependent compatibility currency strings
 
-    if ( bStandardColorNeedInitialization )
-    {
-        bStandardColorNeedInitialization = false;
-        StandardColor.push_back( COL_BLACK );
-        StandardColor.push_back( COL_LIGHTBLUE );
-        StandardColor.push_back( COL_LIGHTGREEN );
-        StandardColor.push_back( COL_LIGHTCYAN );
-        StandardColor.push_back( COL_LIGHTRED );
-        StandardColor.push_back( COL_LIGHTMAGENTA );
-        StandardColor.push_back( COL_BROWN );
-        StandardColor.push_back( COL_GRAY );
-        StandardColor.push_back( COL_YELLOW );
-        StandardColor.push_back( COL_WHITE );
-
-        static_assert( NF_KEY_BLACK - NF_KEY_COLOR == 1,        "bad FARBE(COLOR), SCHWARZ(BLACK) sequence");
-        static_assert( NF_KEY_FIRSTCOLOR - NF_KEY_COLOR == 1,   "bad color sequence");
-        static_assert( NF_MAX_DEFAULT_COLORS + 1 == 11,         "bad color count");
-        static_assert( NF_KEY_WHITE - NF_KEY_COLOR + 1 == 11,   "bad color sequence count");
-
-        sGermanColorNames.resize( NF_KEY_WHITE - NF_KEY_COLOR + 1 );
-        sGermanColorNames[NF_KEY_COLOR - NF_KEY_COLOR]   = "FARBE";
-        sGermanColorNames[NF_KEY_BLACK - NF_KEY_COLOR]   = "SCHWARZ";
-        sGermanColorNames[NF_KEY_BLUE - NF_KEY_COLOR]    = "BLAU";
-        sGermanColorNames[NF_KEY_GREEN - NF_KEY_COLOR]   = OUString( "GR" "\xDC" "N", 4, RTL_TEXTENCODING_ISO_8859_1 );
-        sGermanColorNames[NF_KEY_CYAN - NF_KEY_COLOR]    = "CYAN";
-        sGermanColorNames[NF_KEY_RED - NF_KEY_COLOR]     = "ROT";
-        sGermanColorNames[NF_KEY_MAGENTA - NF_KEY_COLOR] = "MAGENTA";
-        sGermanColorNames[NF_KEY_BROWN - NF_KEY_COLOR]   = "BRAUN";
-        sGermanColorNames[NF_KEY_GREY - NF_KEY_COLOR]    = "GRAU";
-        sGermanColorNames[NF_KEY_YELLOW - NF_KEY_COLOR]  = "GELB";
-        sGermanColorNames[NF_KEY_WHITE - NF_KEY_COLOR]   = "WEISS";
-    }
+    static_assert( NF_KEY_BLACK - NF_KEY_COLOR == 1,        "bad FARBE(COLOR), SCHWARZ(BLACK) sequence");
+    static_assert( NF_KEY_FIRSTCOLOR - NF_KEY_COLOR == 1,   "bad color sequence");
+    static_assert( NF_MAX_DEFAULT_COLORS + 1 == 11,         "bad color count");
+    static_assert( NF_KEY_WHITE - NF_KEY_COLOR + 1 == 11,   "bad color sequence count");
 
     nStandardPrec = 2;
 
@@ -404,17 +386,17 @@ void ImpSvNumberformatScan::SetDependentKeywords()
         sKeyword[NF_KEY_YY] =        "JJ";
         sKeyword[NF_KEY_YYYY] =      "JJJJ";
         sKeyword[NF_KEY_BOOLEAN] =   "LOGISCH";
-        sKeyword[NF_KEY_COLOR] =     sGermanColorNames[NF_KEY_COLOR - NF_KEY_COLOR];
-        sKeyword[NF_KEY_BLACK] =     sGermanColorNames[NF_KEY_BLACK - NF_KEY_COLOR];
-        sKeyword[NF_KEY_BLUE] =      sGermanColorNames[NF_KEY_BLUE - NF_KEY_COLOR];
-        sKeyword[NF_KEY_GREEN] =     sGermanColorNames[NF_KEY_GREEN - NF_KEY_COLOR];
-        sKeyword[NF_KEY_CYAN] =      sGermanColorNames[NF_KEY_CYAN - NF_KEY_COLOR];
-        sKeyword[NF_KEY_RED] =       sGermanColorNames[NF_KEY_RED - NF_KEY_COLOR];
-        sKeyword[NF_KEY_MAGENTA] =   sGermanColorNames[NF_KEY_MAGENTA - NF_KEY_COLOR];
-        sKeyword[NF_KEY_BROWN] =     sGermanColorNames[NF_KEY_BROWN - NF_KEY_COLOR];
-        sKeyword[NF_KEY_GREY] =      sGermanColorNames[NF_KEY_GREY - NF_KEY_COLOR];
-        sKeyword[NF_KEY_YELLOW] =    sGermanColorNames[NF_KEY_YELLOW - NF_KEY_COLOR];
-        sKeyword[NF_KEY_WHITE] =     sGermanColorNames[NF_KEY_WHITE - NF_KEY_COLOR];
+        sKeyword[NF_KEY_COLOR] =     GermanColorName(NF_KEY_COLOR - NF_KEY_COLOR);
+        sKeyword[NF_KEY_BLACK] =     GermanColorName(NF_KEY_BLACK - NF_KEY_COLOR);
+        sKeyword[NF_KEY_BLUE] =      GermanColorName(NF_KEY_BLUE - NF_KEY_COLOR);
+        sKeyword[NF_KEY_GREEN] =     GermanColorName(NF_KEY_GREEN - NF_KEY_COLOR);
+        sKeyword[NF_KEY_CYAN] =      GermanColorName(NF_KEY_CYAN - NF_KEY_COLOR);
+        sKeyword[NF_KEY_RED] =       GermanColorName(NF_KEY_RED - NF_KEY_COLOR);
+        sKeyword[NF_KEY_MAGENTA] =   GermanColorName(NF_KEY_MAGENTA - NF_KEY_COLOR);
+        sKeyword[NF_KEY_BROWN] =     GermanColorName(NF_KEY_BROWN - NF_KEY_COLOR);
+        sKeyword[NF_KEY_GREY] =      GermanColorName(NF_KEY_GREY - NF_KEY_COLOR);
+        sKeyword[NF_KEY_YELLOW] =    GermanColorName(NF_KEY_YELLOW - NF_KEY_COLOR);
+        sKeyword[NF_KEY_WHITE] =     GermanColorName(NF_KEY_WHITE - NF_KEY_COLOR);
     }
     else
     {
@@ -634,7 +616,7 @@ Color* ImpSvNumberformatScan::GetColor(OUString& sStr)
                     sStr = sEnglishKeyword[NF_KEY_COLOR] + sStr;                    // Farbe -> COLOR
                 break;
                 case ColorKeywordConversion::EnglishToGerman:
-                    sStr = sGermanColorNames[NF_KEY_COLOR - NF_KEY_COLOR] + sStr;   // Color -> FARBE
+                    sStr = GermanColorName(NF_KEY_COLOR - NF_KEY_COLOR) + sStr;   // Color -> FARBE
                 break;
             }
             sString = sString.copy(nPos);
@@ -662,7 +644,7 @@ Color* ImpSvNumberformatScan::GetColor(OUString& sStr)
                 sStr = sEnglishKeyword[NF_KEY_FIRSTCOLOR + i];                  // Rot -> RED
             break;
             case ColorKeywordConversion::EnglishToGerman:
-                sStr = sGermanColorNames[NF_KEY_FIRSTCOLOR - NF_KEY_COLOR + i]; // Red -> ROT
+                sStr = GermanColorName(NF_KEY_FIRSTCOLOR - NF_KEY_COLOR + i); // Red -> ROT
             break;
         }
         pResult = &(StandardColor[i]);
