@@ -254,6 +254,9 @@ class trackedchanges(UITestCase):
         xcloseBtn = xTrackDlg.getChild("close")
         xcloseBtn.executeAction("CLICK", tuple())
 
+        # Check the changes are shown after opening the Manage Tracked Changes dialog
+        self.assertGreater(document.CurrentController.PageCount, 5)
+
         self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
