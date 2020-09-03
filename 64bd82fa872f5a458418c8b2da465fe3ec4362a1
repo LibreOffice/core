@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "68dd142c_13cfca2e",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 5621,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2020-09-03T12:56:33Z",
+      "side": 1,
+      "message": "GetBox() returns a reference AFAIK, so it\u0027s better to store it as such.",
+      "revId": "64bd82fa872f5a458418c8b2da465fe3ec4362a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0dae2249_73937667",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 5655,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2020-09-03T12:56:33Z",
+      "side": 1,
+      "message": "Is DOUBLE really supposed to be the same thing as DOUBLE_THIN?",
+      "revId": "64bd82fa872f5a458418c8b2da465fe3ec4362a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1963cd70_a605dfb0",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 5661,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2020-09-03T12:56:33Z",
+      "side": 1,
+      "message": "These special styles might need their own separate bug ticket.",
+      "revId": "64bd82fa872f5a458418c8b2da465fe3ec4362a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "247c71cf_d2f5bc90",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 5706,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2020-09-03T12:56:33Z",
+      "side": 1,
+      "message": "Are you sure you need the \"/ 20\" unit conversion here?",
+      "revId": "64bd82fa872f5a458418c8b2da465fe3ec4362a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53f9bc62_20eef066",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 5721,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2020-09-03T12:56:33Z",
+      "side": 1,
+      "message": "This got commented out during experimentation, right?",
+      "revId": "64bd82fa872f5a458418c8b2da465fe3ec4362a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0789fb70_ed5f16bd",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2020-09-03T12:56:33Z",
+      "side": 1,
+      "message": "You can take the last argument as a reference too.",
+      "revId": "64bd82fa872f5a458418c8b2da465fe3ec4362a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
