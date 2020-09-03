@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b57227d3_dea1c6c4",
+        "filename": "desktop/source/app/app.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1002705
+      },
+      "writtenOn": "2020-09-03T20:35:00Z",
+      "side": 1,
+      "message": "This line was copied from Desktop::QueryExit method in the same file. Is there a benefit for extracting this into a variable, as opposed to simply calling `xPropertySet-\u003esetPropertyValue( \"SuspendQuickstartVeto\", Any(true) );`? Both variants compile without warnings.",
+      "revId": "dd95c04e19fe8867e9a536d05d70038eaf8e27dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
