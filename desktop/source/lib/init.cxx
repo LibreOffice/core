@@ -2278,6 +2278,8 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
         aFilterOptions[3].Value <<= nUpdateDoc;
         */
 
+        const int nThisDocumentId = nDocumentIdCounter++;
+        SfxViewShell::SetCurrentDocId(ViewShellDocId(nThisDocumentId));
         uno::Reference<lang::XComponent> xComponent = xComponentLoader->loadComponentFromURL(
                                             aURL, "_blank", 0,
                                             aFilterOptions);
@@ -2291,7 +2293,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
             return nullptr;
         }
 
-        LibLODocument_Impl* pDocument = new LibLODocument_Impl(xComponent, nDocumentIdCounter++);
+        LibLODocument_Impl* pDocument = new LibLODocument_Impl(xComponent, nThisDocumentId);
 
         // After loading the document, its initial view is the "current" view.
         if (pLib->mpCallback)
