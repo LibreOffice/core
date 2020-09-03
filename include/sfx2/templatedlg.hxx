@@ -43,6 +43,8 @@ public:
     virtual short run() override;
 
     void setDocumentModel (const css::uno::Reference<css::frame::XModel> &rModel);
+    void setTemplateViewMode ( TemplateViewMode eViewMode );
+    TemplateViewMode getTemplateViewMode ();
 
 protected:
 
@@ -82,6 +84,11 @@ protected:
     DECL_LINK(LoseFocusHdl, weld::Widget&, void);
     DECL_LINK(ImplUpdateDataHdl, Timer*, void);
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+
+    DECL_LINK(ListViewHdl, weld::Button&, void);
+    DECL_LINK(ThumbnailViewHdl, weld::Button&, void);
+    DECL_LINK(ListSelectionChangedHdl, weld::TreeView&, void);
+    DECL_LINK(ListSelectionChangedSearchHdl, weld::TreeView&, void);
 
     void OnTemplateImportCategory(const OUString& sCategory);
     static void OnTemplateLink ();
@@ -138,6 +145,9 @@ protected:
     std::unique_ptr<weld::Menu> mxTemplateDefaultMenu;
     std::unique_ptr<weld::CustomWeld> mxSearchViewWeld;
     std::unique_ptr<weld::CustomWeld> mxLocalViewWeld;
+    TemplateViewMode mViewMode;
+    std::unique_ptr<weld::ToggleButton> mxListViewButton;
+    std::unique_ptr<weld::ToggleButton> mxThumbnailViewButton;
 };
 
 //  class SfxTemplateCategoryDialog -------------------------------------------------------------------

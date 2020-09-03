@@ -35,6 +35,16 @@
     <property name="can_focus">False</property>
     <property name="icon_name">sfx2/res/actionaction013.png</property>
   </object>
+  <object class="GtkImage" id="image8">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">svx/res/galicon.png</property>
+  </object>
+  <object class="GtkImage" id="image9">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">svx/res/gallist.png</property>
+  </object>
   <object class="GtkMenu" id="menu1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -52,6 +62,38 @@
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkTreeStore" id="tree_store">
+    <columns>
+      <!-- column-name default_img -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name name -->
+      <column type="gchararray"/>
+      <!-- column-name category -->
+      <column type="gchararray"/>
+      <!-- column-name application -->
+      <column type="gchararray"/>
+      <!-- column-name modified -->
+      <column type="gchararray"/>
+      <!-- column-name size -->
+      <column type="gchararray"/>
+      <!-- column-name display_path -->
+      <column type="gchararray"/>
+      <!-- column-name check1 -->
+      <column type="gboolean"/>
+      <!-- column-name sort_modified -->
+      <column type="gchararray"/>
+      <!-- column-name sort_size -->
+      <column type="gchararray"/>
+      <!-- column-name path -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name checkvis1 -->
+      <column type="gboolean"/>
+      <!-- column-name checktri1 -->
+      <column type="gboolean"/>
+    </columns>
   </object>
   <object class="GtkDialog" id="TemplateDialog">
     <property name="width_request">740</property>
@@ -159,6 +201,51 @@
                     <property name="can_focus">False</property>
                     <property name="spacing">12</property>
                     <child>
+                      <object class="GtkBox" id="box7">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="spacing">12</property>
+                        <child>
+                          <object class="GtkToggleButton" id="thumbnail_view_btn">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="tooltip_text" translatable="yes" context="templatedlg|thumbnail_view_btn|tooltip_text">Thumbnail View</property>
+                            <property name="image">image8</property>
+                            <property name="relief">none</property>
+                            <property name="always_show_image">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToggleButton" id="list_view_btn">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="tooltip_text" translatable="yes" context="templatedlg|list_view_btn|tooltip_text">List View</property>
+                            <property name="image">image9</property>
+                            <property name="relief">none</property>
+                            <property name="always_show_image">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="pack_type">end</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkBox" id="box6">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -204,7 +291,7 @@
                         <property name="expand">False</property>
                         <property name="fill">True</property>
                         <property name="pack_type">end</property>
-                        <property name="position">0</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                     <child>
@@ -217,7 +304,7 @@
                         <property name="expand">False</property>
                         <property name="fill">True</property>
                         <property name="pack_type">end</property>
-                        <property name="position">1</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                   </object>
@@ -311,6 +398,340 @@
                         <property name="expand">False</property>
                         <property name="fill">True</property>
                         <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkScrolledWindow" id="scroll_list">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <object class="GtkTreeView" id="tree_list">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                            <property name="model">tree_store</property>
+                            <property name="search_column">0</property>
+                            <property name="show_expanders">False</property>
+                            <child internal-child="selection">
+                              <object class="GtkTreeSelection">
+                                <property name="mode">multiple</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                                <property name="resizable">True</property>
+                                <property name="spacing">6</property>
+                                <property name="title" translatable="yes" context="templatedlg|treeviewcolumn1">Name</property>
+                                <property name="clickable">True</property>
+                                <child>
+                                  <object class="GtkCellRendererPixbuf" id="cellrenderer1"/>
+                                  <attributes>
+                                    <attribute name="visible">7</attribute>
+                                    <attribute name="pixbuf">0</attribute>
+                                  </attributes>
+                                </child>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderer2"/>
+                                  <attributes>
+                                    <attribute name="text">1</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                                <property name="resizable">True</property>
+                                <property name="spacing">6</property>
+                                <property name="title" translatable="yes" context="templatedlg|treeviewcolumn2">Category</property>
+                                <property name="clickable">True</property>
+                                <property name="sort_order">descending</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderer3"/>
+                                  <attributes>
+                                    <attribute name="text">2</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn3">
+                                <property name="title" translatable="yes" context="templatedlg|treeviewcolumn3">Application</property>
+                                <property name="clickable">True</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderer4"/>
+                                  <attributes>
+                                    <attribute name="text">3</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn4">
+                                <property name="resizable">True</property>
+                                <property name="title" translatable="yes" context="templatedlg|treeviewcolumn4">Modified</property>
+                                <property name="clickable">True</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderer5"/>
+                                  <attributes>
+                                    <attribute name="text">4</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn5">
+                                <property name="resizable">True</property>
+                                <property name="title" translatable="yes" context="templatedlg|treeviewcolumn5">Size</property>
+                                <property name="clickable">True</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderer6"/>
+                                  <attributes>
+                                    <attribute name="text">5</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn6">
+                                <property name="resizable">True</property>
+                                <property name="title" translatable="yes" context="templatedlg|treeviewcolumn6">Path</property>
+                                <property name="clickable">True</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderer7"/>
+                                  <attributes>
+                                    <attribute name="text">6</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn7">
+                                <property name="visible">False</property>
+                                <property name="title">isdefault</property>
+                                <child>
+                                  <object class="GtkCellRendererToggle" id="cellrenderer8"/>
+                                  <attributes>
+                                    <attribute name="visible">12</attribute>
+                                    <attribute name="active">7</attribute>
+                                    <attribute name="inconsistent">13</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn8">
+                                <property name="visible">False</property>
+                                <property name="title">sort_modified</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderer9"/>
+                                  <attributes>
+                                    <attribute name="text">8</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn19">
+                                <property name="visible">False</property>
+                                <property name="title">sort_size</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderer21"/>
+                                  <attributes>
+                                    <attribute name="text">9</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn20">
+                                <property name="visible">False</property>
+                                <property name="title">absolute_path</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderer22"/>
+                                  <attributes>
+                                    <attribute name="text">10</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkScrolledWindow" id="scrollsearch_list">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <object class="GtkTreeView" id="treesearch_list">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                            <property name="model">tree_store</property>
+                            <property name="search_column">0</property>
+                            <property name="show_expanders">False</property>
+                            <child internal-child="selection">
+                              <object class="GtkTreeSelection">
+                                <property name="mode">multiple</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn9">
+                                <property name="resizable">True</property>
+                                <property name="spacing">6</property>
+                                <property name="title" translatable="yes" context="templatedlg|treeviewcolumn1">Name</property>
+                                <property name="clickable">True</property>
+                                <child>
+                                  <object class="GtkCellRendererPixbuf" id="cellrenderer10"/>
+                                  <attributes>
+                                    <attribute name="visible">7</attribute>
+                                    <attribute name="pixbuf">0</attribute>
+                                  </attributes>
+                                </child>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderer11"/>
+                                  <attributes>
+                                    <attribute name="text">1</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn10">
+                                <property name="resizable">True</property>
+                                <property name="spacing">6</property>
+                                <property name="title" translatable="yes" context="templatedlg|treeviewcolumn2">Category</property>
+                                <property name="clickable">True</property>
+                                <property name="sort_order">descending</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderer12"/>
+                                  <attributes>
+                                    <attribute name="text">2</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn11">
+                                <property name="title" translatable="yes" context="templatedlg|treeviewcolumn3">Application</property>
+                                <property name="clickable">True</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderer13"/>
+                                  <attributes>
+                                    <attribute name="text">3</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn12">
+                                <property name="resizable">True</property>
+                                <property name="title" translatable="yes" context="templatedlg|treeviewcolumn4">Modified</property>
+                                <property name="clickable">True</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderer14"/>
+                                  <attributes>
+                                    <attribute name="text">4</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn13">
+                                <property name="resizable">True</property>
+                                <property name="title" translatable="yes" context="templatedlg|treeviewcolumn5">Size</property>
+                                <property name="clickable">True</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderer15"/>
+                                  <attributes>
+                                    <attribute name="text">5</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn14">
+                                <property name="resizable">True</property>
+                                <property name="title" translatable="yes" context="templatedlg|treeviewcolumn6">Path</property>
+                                <property name="clickable">True</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderer16"/>
+                                  <attributes>
+                                    <attribute name="text">6</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn15">
+                                <property name="visible">False</property>
+                                <property name="title">isdefault</property>
+                                <child>
+                                  <object class="GtkCellRendererToggle" id="cellrenderer17"/>
+                                  <attributes>
+                                    <attribute name="visible">12</attribute>
+                                    <attribute name="active">7</attribute>
+                                    <attribute name="inconsistent">13</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn16">
+                                <property name="visible">False</property>
+                                <property name="title">sort_modified</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderer18"/>
+                                  <attributes>
+                                    <attribute name="text">8</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn17">
+                                <property name="visible">False</property>
+                                <property name="title">sort_size</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderer19"/>
+                                  <attributes>
+                                    <attribute name="text">9</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="treeviewcolumn18">
+                                <property name="visible">False</property>
+                                <property name="title">absolute_path</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderer20"/>
+                                  <attributes>
+                                    <attribute name="text">10</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">3</property>
                       </packing>
                     </child>
                   </object>
