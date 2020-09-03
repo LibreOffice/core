@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aa69dfa0_5e0a5292",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 966,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-03T05:19:15Z",
+      "side": 1,
+      "message": "Interesting how did these tests work without EXPORTONLY and without pointer checks...",
+      "range": {
+        "startLine": 966,
+        "startChar": 20,
+        "endLine": 966,
+        "endChar": 31
+      },
+      "revId": "34c533234ce05f638f7594e6fded95280ca304f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
