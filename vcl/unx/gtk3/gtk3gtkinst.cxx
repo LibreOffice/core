@@ -7902,7 +7902,6 @@ private:
                 gtk_style_context_add_provider(pButtonContext,
                                                GTK_STYLE_PROVIDER(m_pMenuButtonProvider),
                                                GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-                gtk_style_context_add_class(pButtonContext, "small-button");
             }
 
         }
