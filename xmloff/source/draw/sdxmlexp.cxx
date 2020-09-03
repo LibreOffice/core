@@ -2662,16 +2662,6 @@ com_sun_star_comp_Draw_XMLExporter_get_implementation(uno::XComponentContext* pC
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
-com_sun_star_comp_Draw_XMLStylesExporter_get_implementation(uno::XComponentContext* pCtx,
-                                                            uno::Sequence<uno::Any> const& /*rSeq*/)
-{
-    return cppu::acquire(new SdXMLExport(pCtx, "XMLDrawStylesExportOOO", true,
-                                         SvXMLExportFlags::STYLES | SvXMLExportFlags::MASTERSTYLES
-                                             | SvXMLExportFlags::AUTOSTYLES
-                                             | SvXMLExportFlags::FONTDECLS));
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Draw_XMLContentExporter_get_implementation(uno::XComponentContext* pCtx,
                                                             uno::Sequence<uno::Any> const& /*rSeq*/)
 {

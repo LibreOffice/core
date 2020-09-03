@@ -42,7 +42,7 @@ import com.sun.star.xml.sax.XDocumentHandler;
 
 /**
  * Test for object which is represented by service
- * <code>com.sun.star.comp.Draw.XMLStylesExporter</code>. <p>
+ * <code>com.sun.star.comp.Draw.XMLOasisStylesExporter</code>. <p>
  * Object implements the following interfaces :
  * <ul>
  *  <li><code>com::sun::star::lang::XInitialization</code></li>
@@ -91,7 +91,7 @@ public class XMLStylesExporter extends TestCase {
     /**
     * Creating a TestEnvironment for the interfaces to be tested.
     * Creates an instance of the service
-    * <code>com.sun.star.comp.Draw.XMLStylesExporter</code> with
+    * <code>com.sun.star.comp.Draw.XMLOasisStylesExporter</code> with
     * argument which is an implementation of <code>XDocumentHandler</code>
     * and which can check if required tags and character data is
     * exported. <p>
@@ -121,7 +121,7 @@ public class XMLStylesExporter extends TestCase {
         final String STYLE_NAME = "New style" + counter++ ;
 
         oObj = (XInterface) xMSF.createInstanceWithArguments(
-            "com.sun.star.comp.Draw.XMLStylesExporter", new Object[] {arg});
+            "com.sun.star.comp.Draw.XMLOasisStylesExporter", new Object[] {arg});
         XExporter xEx = UnoRuntime.queryInterface(XExporter.class,oObj);
         xEx.setSourceDocument(xDrawDoc);
 
