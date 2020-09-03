@@ -755,7 +755,7 @@ void WW8FieldEntry::SetBookmarkCode(const OUString& bookmarkCode)
 // Returnvalue: Total length of field
 long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
 {
-    typedef eF_ResT (SwWW8ImplReader:: *FNReadField)( WW8FieldDesc*, OUString& );
+    typedef eF_ResT (SwWW8ImplReader::*FNReadField)( WW8FieldDesc*, OUString& );
     enum Limits {eMax = 96};
     static const FNReadField aWW8FieldTab[eMax+1] =
     {

@@ -330,7 +330,7 @@ private:
                                 SwFrameFormat* );
     sal_Int8 SetFlyFrameAnchor( SwFrameFormat& rFlyFormat, SfxItemSet& rSet, bool bNewFrames );
 
-    typedef SwFormat* (SwDoc:: *FNCopyFormat)( const OUString&, SwFormat*, bool, bool );
+    typedef SwFormat* (SwDoc::*FNCopyFormat)( const OUString&, SwFormat*, bool, bool );
     SwFormat* CopyFormat( const SwFormat& rFormat, const SwFormatsBase& rFormatArr,
                         FNCopyFormat fnCopyFormat, const SwFormat& rDfltFormat );
     void CopyFormatArr( const SwFormatsBase& rSourceArr, SwFormatsBase const & rDestArr,

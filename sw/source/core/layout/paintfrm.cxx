@@ -6510,8 +6510,8 @@ static void lcl_RefreshLine( const SwLayoutFrame *pLay,
     const bool bHori = rP1.Y() == rP2.Y();
 
     // use pointers to member function in order to unify flow
-    typedef long (Point:: *pmfPtGet)() const;
-    typedef void (Point:: *pmfPtSet)(long);
+    typedef long (Point::*pmfPtGet)() const;
+    typedef void (Point::*pmfPtSet)(long);
     const pmfPtGet pDirPtX = &Point::X;
     const pmfPtGet pDirPtY = &Point::Y;
     const pmfPtGet pDirPt = bHori ? pDirPtX : pDirPtY;

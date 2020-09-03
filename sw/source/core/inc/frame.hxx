@@ -1258,11 +1258,11 @@ public:
     SwFrameDeleteGuard& operator=(const SwFrameDeleteGuard&) =delete;
 };
 
-typedef long (SwFrame:: *SwFrameGet)() const;
-typedef bool (SwFrame:: *SwFrameMax)( long );
-typedef void (SwFrame:: *SwFrameMakePos)( const SwFrame*, const SwFrame*, bool );
+typedef long (SwFrame::*SwFrameGet)() const;
+typedef bool (SwFrame::*SwFrameMax)( long );
+typedef void (SwFrame::*SwFrameMakePos)( const SwFrame*, const SwFrame*, bool );
 typedef long (*SwOperator)( long, long );
-typedef void (SwFrame:: *SwFrameSet)( long, long );
+typedef void (SwFrame::*SwFrameSet)( long, long );
 
 struct SwRectFnCollection
 {

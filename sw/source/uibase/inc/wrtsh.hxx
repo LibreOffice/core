@@ -198,7 +198,7 @@ public:
     void    SelAll();
 
     // basecursortravelling
-typedef bool (SwWrtShell:: *FNSimpleMove)();
+typedef bool (SwWrtShell::*FNSimpleMove)();
     bool SimpleMove( FNSimpleMove, bool bSelect );
 
     bool Left       ( sal_uInt16 nMode, bool bSelect,

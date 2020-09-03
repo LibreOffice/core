@@ -151,14 +151,14 @@ public:
     bool OverStepRight( long ) const;
 };
 
-typedef void (SwRect:: *SwRectSet)( const long nNew );
-typedef long (SwRect:: *SwRectGet)() const;
-typedef Point (SwRect:: *SwRectPoint)() const;
-typedef Size (SwRect:: *SwRectSize)() const;
-typedef bool (SwRect:: *SwRectMax)( long ) const;
-typedef long (SwRect:: *SwRectDist)( long ) const;
-typedef void (SwRect:: *SwRectSetTwice)( long, long );
-typedef void (SwRect:: *SwRectSetPos)( const Point& );
+typedef void (SwRect::*SwRectSet)( const long nNew );
+typedef long (SwRect::*SwRectGet)() const;
+typedef Point (SwRect::*SwRectPoint)() const;
+typedef Size (SwRect::*SwRectSize)() const;
+typedef bool (SwRect::*SwRectMax)( long ) const;
+typedef long (SwRect::*SwRectDist)( long ) const;
+typedef void (SwRect::*SwRectSetTwice)( long, long );
+typedef void (SwRect::*SwRectSetPos)( const Point& );
 
 //  Set-Methods
 inline void SwRect::Chg( const Point& rNP, const Size &rNS )
