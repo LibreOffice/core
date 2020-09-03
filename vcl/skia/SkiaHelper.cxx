@@ -267,6 +267,7 @@ bool isVCLSkiaEnabled()
         if (bEnable)
         {
             SkGraphics::Init();
+            SkLoOpts::Init();
             checkDeviceDenylisted(); // switch to raster if driver is denylisted
         }
 
