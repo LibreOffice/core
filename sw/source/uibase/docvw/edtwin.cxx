@@ -2060,7 +2060,16 @@ KEYINPUT_CHECKTABLE_INSDEL:
                              && numfunc::ChangeIndentOnTabAtFirstPosOfFirstListItem() )
                             eKeyState = SwKeyState::NumIndentInc;
                         else
-                            eKeyState = SwKeyState::NumDown;
+                        {
+                            if (numfunc::NumDownChangesIndent(rSh))
+                            {
+                                eKeyState = SwKeyState::NumDown;
+                            }
+                            else
+                            {
+                                eKeyState = SwKeyState::InsTab;
+                            }
+                        }
                     }
                     else if ( rSh.GetTableFormat() )
                     {

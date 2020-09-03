@@ -14,11 +14,15 @@
 #include <svtools/embedhlp.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <vcl/errinf.hxx>
+#include <vcl/event.hxx>
 
 #include <wrtsh.hxx>
 #include <fmtanchr.hxx>
 #include <frameformats.hxx>
 #include <docsh.hxx>
+#include <edtwin.hxx>
+#include <view.hxx>
+#include <ndtxt.hxx>
 
 char const DATA_DIRECTORY[] = "/sw/qa/core/doc/data/";
 
@@ -67,6 +71,24 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTextboxTextRotateAngle)
     // case.
     CPPUNIT_ASSERT_EQUAL(SvxFrameDirection::Vertical_LR_BT, eActual);
     ErrorRegistry::Reset();
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testNumDownIndent)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "num-down-indent.docx");
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Down(/*bSelect=*/false);
+    SwEditWin& rEditWin = pDocShell->GetView()->GetEditWin();
+    KeyEvent aKeyEvent(0, KEY_TAB);
+    rEditWin.KeyInput(aKeyEvent);
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetNode().GetTextNode();
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: \tB
+    // - Actual  : B
+    // i.e. pressing <tab> at the start of the paragraph did not change the layout.
+    CPPUNIT_ASSERT_EQUAL(OUString("\tB"), pTextNode->GetText());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

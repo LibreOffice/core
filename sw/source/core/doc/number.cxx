@@ -54,6 +54,7 @@
 #include <IDocumentState.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <wrtsh.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1436,6 +1437,50 @@ namespace numfunc
     bool ChangeIndentOnTabAtFirstPosOfFirstListItem()
     {
         return SwNumberingUIBehaviorConfig::getInstance().ChangeIndentOnTabAtFirstPosOfFirstListItem();
+    }
+
+    bool NumDownChangesIndent(SwWrtShell& rShell)
+    {
+        SwPaM* pCursor = rShell.GetCursor();
+        if (!pCursor)
+        {
+            return true;
+        }
+
+        SwTextNode* pTextNode = pCursor->GetNode().GetTextNode();
+        if (!pTextNode)
+        {
+            return true;
+        }
+
+        const SwNumRule* pNumRule = pTextNode->GetNumRule();
+        if (!pNumRule)
+        {
+            return true;
+        }
+
+        int nOldLevel = pTextNode->GetActualListLevel();
+        int nNewLevel = nOldLevel + 1;
+        if (nNewLevel >= MAXLEVEL)
+        {
+            return true;
+        }
+
+        const SwNumFormat& rOldFormat = pNumRule->Get(nOldLevel);
+        if (rOldFormat.GetNumberingType() != SVX_NUM_NUMBER_NONE)
+        {
+            return true;
+        }
+
+        const SwNumFormat& rNewFormat = pNumRule->Get(nNewLevel);
+        if (rNewFormat.GetNumberingType() != SVX_NUM_NUMBER_NONE)
+        {
+            return true;
+        }
+
+        // This is the case when the numbering levels don't differ, so changing between them is not
+        // a better alternative to inserting a tab character.
+        return rOldFormat.GetIndentAt() != rNewFormat.GetIndentAt();
     }
 
     SvxNumberFormat::SvxNumPositionAndSpaceMode GetDefaultPositionAndSpaceMode()
