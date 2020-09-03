@@ -67,12 +67,12 @@ void test::oustring::Compare::compareToIgnoreAsciiCase()
 {
     CPPUNIT_ASSERT_EQUAL(
         sal_Int32(0),
-        OUString("abc").compareToIgnoreAsciiCase("ABC"));
+        OUString("abc").compareToIgnoreAsciiCase(u"ABC"));
     CPPUNIT_ASSERT(
-        OUString("ABC").compareToIgnoreAsciiCase("abcdef")
+        OUString("ABC").compareToIgnoreAsciiCase(u"abcdef")
         < 0);
     CPPUNIT_ASSERT(
-        OUString("A").compareToIgnoreAsciiCase("_") > 0);
+        OUString("A").compareToIgnoreAsciiCase(u"_") > 0);
 }
 
 void test::oustring::Compare::compareTo()

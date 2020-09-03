@@ -589,7 +589,7 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
             for ( nPos = reinterpret_cast<typelib_EnumTypeDescription *>(aEnumTD.get())->nEnumValues; nPos--; )
             {
                 if (o3tl::forceAccess<OUString>(rVal)->equalsIgnoreAsciiCase(
-                        reinterpret_cast<typelib_EnumTypeDescription *>(aEnumTD.get())->ppEnumNames[nPos] ))
+                        OUString::unacquired(&reinterpret_cast<typelib_EnumTypeDescription *>(aEnumTD.get())->ppEnumNames[nPos]) ))
                     break;
             }
         }

@@ -288,7 +288,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
         {
             const char *appBundle = [[[NSBundle mainBundle] bundlePath] UTF8String];
             OUString path = rBaseURL.GetURLPath();
-            if( path.startsWith( OUString( appBundle, strlen( appBundle ), RTL_TEXTENCODING_UTF8 ) + "/" ) )
+            if( path.startsWith( OUString(OUString( appBundle, strlen( appBundle ), RTL_TEXTENCODING_UTF8 ) + "/") ) )
                 rbDirIsReadOnly = true;
         }
 #else

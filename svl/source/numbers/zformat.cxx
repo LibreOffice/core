@@ -5558,7 +5558,7 @@ OUString SvNumberformat::impTransliterateImpl(const OUString& rStr,
     sal_Int32 nField = -1;
     do
     {
-        nField = rNum.GetParams().indexOf(rKeywords[nDateKey] + "=", ++nField);
+        nField = rNum.GetParams().indexOf(OUString(rKeywords[nDateKey] + "="), ++nField);
     }
     while (nField != -1 && nField != 0 &&
             (rNum.GetParams()[nField - 1] != ',' &&

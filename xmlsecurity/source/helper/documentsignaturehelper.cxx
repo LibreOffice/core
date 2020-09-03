@@ -314,7 +314,7 @@ void DocumentSignatureHelper::AppendContentTypes(const uno::Reference<embed::XSt
 
         it = std::find_if(rDefaults.begin(), rDefaults.end(), [&](const beans::StringPair& rPair)
         {
-            return rElement.endsWith("." + rPair.First);
+            return rElement.endsWith(OUString("." + rPair.First));
         });
 
         if (it != rDefaults.end())
