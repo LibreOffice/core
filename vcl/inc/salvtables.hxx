@@ -407,6 +407,8 @@ public:
     virtual void set_label_type(weld::LabelType eType) override;
 
     virtual void set_font(const vcl::Font& rFont) override;
+
+    virtual void set_font_color(const Color& rColor) override;
 };
 
 class SalInstanceContainer : public SalInstanceWidget, public virtual weld::Container
@@ -1275,6 +1277,8 @@ public:
     virtual void set_max_length(int nChars) override;
 
     virtual void set_monospace(bool bMonospace) override;
+
+    virtual void set_font_color(const Color& rColor) override;
 
     virtual void connect_cursor_position(const Link<TextView&, void>& rLink) override;
 

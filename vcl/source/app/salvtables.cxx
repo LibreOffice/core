@@ -5547,6 +5547,14 @@ void SalInstanceLabel::set_label_type(weld::LabelType eType)
     }
 }
 
+void SalInstanceLabel::set_font_color(const Color& rColor)
+{
+    if (rColor != COL_AUTO)
+        m_xLabel->SetControlForeground(rColor);
+    else
+        m_xLabel->SetControlForeground();
+}
+
 void SalInstanceLabel::set_font(const vcl::Font& rFont)
 {
     m_xLabel->SetPointFont(*m_xLabel, rFont);
@@ -5621,6 +5629,14 @@ void SalInstanceTextView::set_monospace(bool bMonospace)
     aFont.SetFontHeight(aOrigFont.GetFontHeight());
     m_xTextView->SetFont(aFont);
     m_xTextView->SetControlFont(aFont);
+}
+
+void SalInstanceTextView::set_font_color(const Color& rColor)
+{
+    if (rColor != COL_AUTO)
+        m_xTextView->SetControlForeground(rColor);
+    else
+        m_xTextView->SetControlForeground();
 }
 
 void SalInstanceTextView::connect_cursor_position(const Link<TextView&, void>& rLink)
