@@ -187,7 +187,8 @@ bool StringStatic::VisitMemberExpr(MemberExpr const * expr)
         return true;
     if (potentialVars.count(varDecl) == 0)
         return true;
-    if (expr->getMemberDecl()->getName() != "pData") {
+    auto const id = expr->getMemberDecl()->getIdentifier();
+    if (id == nullptr || id->getName() != "pData") {
         return true;
     }
     excludeVars.insert(varDecl);
