@@ -43,6 +43,7 @@ class SwDoc;
 class SwFormatVertOrient;
 class SwTextNode;
 class Size;
+class SwWrtShell;
 
 const sal_Unicode cBulletChar = 0x2022; ///< Character for lists.
 
@@ -296,6 +297,13 @@ namespace numfunc
         indent of the complete list or only promotes this list item.
     */
     bool ChangeIndentOnTabAtFirstPosOfFirstListItem();
+
+    /**
+     * Decides if increasing ("downing") the numbering level will change the amount of indentation
+     * or not. This is typically true, unless the numbering levels are invisible and have no
+     * indents.
+     */
+    bool NumDownChangesIndent(SwWrtShell& rShell);
 
     SvxNumberFormat::SvxNumPositionAndSpaceMode GetDefaultPositionAndSpaceMode();
 }
