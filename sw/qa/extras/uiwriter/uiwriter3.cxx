@@ -1363,6 +1363,33 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf127652)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("We are on the wrong page!", assertPage, currentPage);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135661)
+{
+    load(DATA_DIRECTORY, "tdf135661.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3424), xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1545), xShape->getPosition().Y);
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+
+    xShape.set(getShape(1), uno::UNO_QUERY);
+
+    //Without the fix in place, the shape position would have been 0,0
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3424), xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1545), xShape->getPosition().Y);
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133477)
 {
     load(DATA_DIRECTORY, "tdf133477.fodt");
