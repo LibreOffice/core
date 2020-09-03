@@ -32,6 +32,9 @@
 #include <txtftn.hxx>
 #include <svl/itemiter.hxx>
 #include <o3tl/vector_utils.hxx>
+#include <svx/swframetypes.hxx>
+#include <fmtanchr.hxx>
+#include <dcontact.hxx>
 
 namespace sw
 {
@@ -664,6 +667,30 @@ public:
     }
 };
 
+/// Check for floating text frames, as it causes problems with reading order.
+class FloatingTextCheck : public NodeCheck
+{
+public:
+    FloatingTextCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
+        : NodeCheck(rIssueCollection)
+    {
+    }
+
+    void check(SwNode* pCurrent) override
+    {
+        // if node is a text-node and if it has text, we proceed. Otherwise - return.
+        const SwTextNode* textNode = pCurrent->GetTextNode();
+        if (!textNode || textNode->GetText().isEmpty())
+            return;
+
+        // If a node is in fly and if it is not anchored as char, throw warning.
+        const SwNode* startFly = pCurrent->FindFlyStartNode();
+        if (startFly
+            && startFly->GetFlyFormat()->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
+            lclAddIssue(m_rIssueCollection, SwResId(STR_FLOATING_TEXT));
+    }
+};
+
 class DocumentCheck : public BaseCheck
 {
 public:
@@ -772,6 +799,12 @@ void AccessibilityCheck::checkObject(SdrObject* pObject)
     if (!pObject)
         return;
 
+    // Checking if there is floating Writer text draw object and if so, throwing a warning.
+    // (Floating objects with text create problems with reading order)
+    if (pObject->HasText()
+        && FindFrameFormat(pObject)->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
+        lclAddIssue(m_aIssueCollection, SwResId(STR_FLOATING_TEXT));
+
     if (pObject->GetObjIdentifier() == OBJ_CUSTOMSHAPE || pObject->GetObjIdentifier() == OBJ_TEXT)
     {
         OUString sAlternative = pObject->GetTitle();
@@ -809,6 +842,7 @@ void AccessibilityCheck::check()
     aNodeChecks.push_back(std::make_unique<HeaderCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<TextFormattingCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<NonInteractiveFormCheck>(m_aIssueCollection));
+    aNodeChecks.push_back(std::make_unique<FloatingTextCheck>(m_aIssueCollection));
 
     auto const& pNodes = m_pDoc->GetNodes();
     SwNode* pNode = nullptr;
