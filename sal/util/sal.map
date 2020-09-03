@@ -749,6 +749,11 @@ PRIVATE_1.6 { # LibreOffice 6.4
         rtl_ustr_toInt64_WithLength;
 } PRIVATE_1.5;
 
+PRIVATE_1.7 { # LibreOffice 7.1
+    global:
+        rtl_uString_newReplaceAllFromIndexUtf16LUtf16L;
+} PRIVATE_1.5;
+
 PRIVATE_textenc.1 { # LibreOffice 3.6
     global:
         _ZN3sal6detail7textenc20convertCharToUnicode*;

@@ -30,6 +30,8 @@ $(eval $(call gb_Module_add_check_targets,sal,\
 	CppunitTest_sal_osl \
 	CppunitTest_sal_rtl \
 	CppunitTest_sal_types \
+	$(if $(COM_IS_CLANG),$(if $(COMPILER_EXTERNAL_TOOL)$(COMPILER_PLUGIN_TOOL),, \
+	    CompilerTest_sal_rtl_oustring)) \
 ))
 
 endif
