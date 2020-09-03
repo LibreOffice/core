@@ -2089,7 +2089,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                         sal_uInt32 nFormat = m_aDocument.GetNumberFormat(aPos);
                         if ( bFixedWidth || bSaveAsShown )
                         {
-                            Color* pDummy;
+                            const Color* pDummy;
                             ScCellFormat::GetString(*pCell, nFormat, aString, &pDummy, rFormatter, &m_aDocument);
                             bString = bSaveAsShown && rFormatter.IsTextFormat( nFormat);
                         }
@@ -2104,7 +2104,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                         if ( bSaveAsShown )
                         {
                             sal_uInt32 nFormat = m_aDocument.GetNumberFormat(aPos);
-                            Color* pDummy;
+                            const Color* pDummy;
                             ScCellFormat::GetString(*pCell, nFormat, aString, &pDummy, rFormatter, &m_aDocument);
                         }
                         else
@@ -2117,7 +2117,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                 if ( bSaveAsShown )
                 {
                     sal_uInt32 nFormat = m_aDocument.GetNumberFormat(aPos);
-                    Color* pDummy;
+                    const Color* pDummy;
                     ScCellFormat::GetString(*pCell, nFormat, aString, &pDummy, rFormatter, &m_aDocument);
                 }
                 else
@@ -2139,7 +2139,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                     m_aDocument.GetNumberFormat( nCol, nRow, nTab, nFormat );
                     if ( bFixedWidth || bSaveAsShown )
                     {
-                        Color* pDummy;
+                        const Color* pDummy;
                         ScCellFormat::GetString(*pCell, nFormat, aString, &pDummy, rFormatter, &m_aDocument);
                         bString = bSaveAsShown && rFormatter.IsTextFormat( nFormat);
                     }

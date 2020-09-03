@@ -872,7 +872,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                     }
                     else
                     {
-                        Color* pColor = pSc->GetColor( sStr);
+                        const Color* pColor = pSc->GetColor( sStr);
                         NumFor[nIndex].SetColor( pColor, sStr);
                         if (pColor == nullptr)
                         {                       // error
@@ -1919,7 +1919,7 @@ void SvNumberformat::ConvertLanguage( SvNumberFormatter& rConverter,
         for (ImpSvNumFor & rFormatter : NumFor)
         {
             OUString aColorName = rFormatter.GetColorName();
-            Color* pColor = rScan.GetColor( aColorName );
+            const Color* pColor = rScan.GetColor( aColorName );
             rFormatter.SetColor( pColor, aColorName );
         }
     }
@@ -2160,7 +2160,7 @@ static bool lcl_insertStarFillChar( OUStringBuffer& rBuf, sal_Int32 nPos, const 
 
 void SvNumberformat::GetOutputString(const OUString& sString,
                                      OUString& OutString,
-                                     Color** ppColor)
+                                     const Color** ppColor)
 {
     OUStringBuffer sOutBuff;
     sal_uInt16 nIx;
@@ -2439,7 +2439,7 @@ sal_uInt16 SvNumberformat::GetSubformatIndex (double fNumber ) const
 
 bool SvNumberformat::GetOutputString(double fNumber,
                                      OUString& OutString,
-                                     Color** ppColor)
+                                     const Color** ppColor)
 {
     bool bRes = false;
     OUStringBuffer sBuff(64);
@@ -5039,7 +5039,7 @@ void SvNumberformat::GetConditions( SvNumberformatLimitOps& rOper1, double& rVal
     rVal2  = fLimit2;
 }
 
-Color* SvNumberformat::GetColor( sal_uInt16 nNumFor ) const
+const Color* SvNumberformat::GetColor( sal_uInt16 nNumFor ) const
 {
     if ( nNumFor > 3 )
     {

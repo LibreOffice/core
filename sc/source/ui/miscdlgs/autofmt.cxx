@@ -190,7 +190,7 @@ void ScAutoFmtPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nCo
     bool bNumFormat = pCurData->GetIncludeValueFormat();
     sal_uInt32 nNum;
     double nVal;
-    Color* pDummy = nullptr;
+    const Color* pDummy = nullptr;
     sal_uInt16 nIndex = static_cast<sal_uInt16>(maArray.GetCellIndex(nCol, nRow, mbRTL));
 
     switch (nIndex)

@@ -419,7 +419,7 @@ OUString SvxDateField::GetFormatted( Date const & aDate, SvxDateFormat eFormat, 
 
     double fDiffDate = aDate - rFormatter.GetNullDate();
     OUString aStr;
-    Color* pColor = nullptr;
+    const Color* pColor = nullptr;
     rFormatter.GetOutputString( fDiffDate, nFormatKey, aStr, &pColor );
     return aStr;
 }
@@ -682,7 +682,7 @@ OUString SvxExtTimeField::GetFormatted( tools::Time const & aTime, SvxTimeFormat
 
     double fFracTime = aTime.GetTimeInDays();
     OUString aStr;
-    Color* pColor = nullptr;
+    const Color* pColor = nullptr;
     rFormatter.GetOutputString( fFracTime, nFormatKey, aStr, &pColor );
     return aStr;
 }

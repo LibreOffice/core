@@ -929,9 +929,8 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
             SvNumberFormatter* pNumForm = pDoc->GetFormatTable();
             sal_uInt32 nfIndex = pNumForm->GetFormatIndex( NF_DATE_SYS_DDMMYYYY, LANGUAGE_SYSTEM );
             OUString aDate;
-            Color* pColor = nullptr;
-            Color** ppColor = &pColor;
-            pNumForm->GetOutputString( fDate, nfIndex, aDate, ppColor );
+            const Color* pColor = nullptr;
+            pNumForm->GetOutputString( fDate, nfIndex, aDate, &pColor );
             pNote->SetDate( aDate );
         }
         pNote->SetAuthor( mxAnnotationData->maAuthor );
@@ -1301,7 +1300,7 @@ OUString getOutputString( ScDocument* pDoc, const ScAddress& aCellPos )
         default:
         {
             //  like in GetString for document (column)
-            Color* pColor;
+            const Color* pColor;
             sal_uInt32 nNumFmt = pDoc->GetNumberFormat(aCellPos);
             OUString aStr;
             ScCellFormat::GetString(aCell, nNumFmt, aStr, &pColor, *pDoc->GetFormatTable(), pDoc);

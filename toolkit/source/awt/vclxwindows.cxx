@@ -7056,7 +7056,7 @@ css::uno::Any SVTXFormattedField::convertEffectiveValue(const css::uno::Any& rVa
                     pFormatter = rFieldFormatter.StandardFormatter();
                     // should never fail
 
-                Color* pDum;
+                const Color* pDum;
                 double d = 0.0;
                 rValue >>= d;
                 OUString sConverted;

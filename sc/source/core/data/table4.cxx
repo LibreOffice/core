@@ -993,7 +993,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
                             }
                         }
 
-                        Color* pColor;
+                        const Color* pColor;
                         pDocument->GetFormatTable()->GetOutputString( nVal, nNumFmt, aValue, &pColor );
                     }
                     break;
@@ -1080,7 +1080,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
                 else
                 {
                     //TODO: get number format according to Index?
-                    Color* pColor;
+                    const Color* pColor;
                     sal_uInt32 nNumFmt = GetNumberFormat( nCol1, nRow1 );
                     pDocument->GetFormatTable()->GetOutputString( nStart, nNumFmt, aValue, &pColor );
                 }

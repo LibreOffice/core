@@ -1695,7 +1695,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                         }
                         else
                         {
-                            Color* pColor;
+                            const Color* pColor;
                             ScCellFormat::GetString(aCell, nNumFmt, aCellStr, &pColor, *pFormatter, pDoc);
 
                             bool bMultiLineText = ( aCellStr.indexOf( '\n' ) != -1 );
@@ -1719,7 +1719,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                     break;
                     case CELLTYPE_VALUE:
                     {
-                        Color* pColor;
+                        const Color* pColor;
                         ScCellFormat::GetString(aCell, nNumFmt, aCellStr, &pColor, *pFormatter, pDoc);
                         lcl_WriteSimpleString( rStrm, aCellStr );
                     }
@@ -1728,7 +1728,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                     break;
                     default:
                     {
-                        Color* pColor;
+                        const Color* pColor;
                         ScCellFormat::GetString(aCell, nNumFmt, aCellStr, &pColor, *pFormatter, pDoc);
 
                         bool bMultiLineText = ( aCellStr.indexOf( '\n' ) != -1 );

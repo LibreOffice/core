@@ -112,7 +112,7 @@ public:
         }
     sal_uInt16 GetStandardPrec() const          { return nStandardPrec; }
     static const Color& GetRedColor()           { return StandardColor[4]; }
-    Color* GetColor(OUString& sStr); // Set main colors or defines colors
+    const Color* GetColor(OUString& sStr) const; // Set main colors or defines colors
 
     // the compatibility currency symbol for old automatic currency formats
     const OUString& GetCurSymbol() const
@@ -176,7 +176,7 @@ public:
 private: // Private section
     NfKeywordTable sKeyword;                    // Syntax keywords
     static const NfKeywordTable sEnglishKeyword; // English Syntax keywords
-    static ::std::vector<Color> StandardColor;  // Standard color array
+    static const ::std::vector<Color> StandardColor;  // Standard color array
     Date maNullDate;                            // 30Dec1899
     OUString sNameStandardFormat;               // "Standard"
     sal_uInt16 nStandardPrec;                   // Default Precision for Standardformat

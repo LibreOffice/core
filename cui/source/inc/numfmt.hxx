@@ -125,7 +125,7 @@ private:
     void    Obstructing();
     void    EnableBySourceFormat_Impl();
     void    SetCategory( sal_uInt16 nPos );
-    OUString  GetExpColorString( Color*& rpPreviewColor, const OUString& aFormatStr, short nTmpCatPos );
+    OUString  GetExpColorString( const Color*& rpPreviewColor, const OUString& aFormatStr, short nTmpCatPos );
     void    MakePreviewText( const OUString& rFormat );
     void    ChangePreviewText( sal_uInt16 nPos );
     void    AddAutomaticLanguage_Impl(LanguageType eAutoLang, bool bSelect);

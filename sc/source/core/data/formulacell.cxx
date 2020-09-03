@@ -2693,7 +2693,7 @@ void ScFormulaCell::GetURLResult( OUString& rURL, OUString& rCellText )
 {
     OUString aCellString;
 
-    Color* pColor;
+    const Color* pColor;
 
     // Cell Text uses the Cell format while the URL uses
     // the default format for the type.

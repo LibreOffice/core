@@ -3648,7 +3648,7 @@ void ScInterpreter::ScGetPivotData()
                     else
                         nNumFormat = pFormatter->GetStandardFormat( nCurFmtType, ScGlobal::eLnge);
                 }
-                Color* pColor;
+                const Color* pColor;
                 pFormatter->GetOutputString( fDouble, nNumFormat, aFilters[i].MatchValueName, &pColor);
                 aFilters[i].MatchValue = ScDPCache::GetLocaleIndependentFormattedString(
                         fDouble, *pFormatter, nNumFormat);

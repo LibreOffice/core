@@ -966,7 +966,7 @@ namespace sw::mark
 
         if (nFormat != NUMBERFORMAT_ENTRY_NOT_FOUND)
         {
-            Color* pCol = nullptr;
+            const Color* pCol = nullptr;
             m_pNumberFormatter->GetOutputString(fDate, nFormat, sCurrentDate, &pCol, false);
         }
         return sCurrentDate;
@@ -1043,7 +1043,7 @@ namespace sw::mark
 
         if (nFormat != NUMBERFORMAT_ENTRY_NOT_FOUND)
         {
-            Color* pCol = nullptr;
+            const Color* pCol = nullptr;
             m_pNumberFormatter->GetOutputString(fDate, nFormat, sCurrentContent, &pCol, false);
         }
         return sCurrentContent;

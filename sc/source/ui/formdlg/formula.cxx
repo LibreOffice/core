@@ -324,7 +324,7 @@ bool ScFormulaDlg::calculateValue( const OUString& rStrExp, OUString& rStrResult
     if ( nErrCode == FormulaError::NONE || pFCell->IsMatrix() )
     {
         SvNumberFormatter& aFormatter = *(m_pDoc->GetFormatTable());
-        Color* pColor;
+        const Color* pColor;
         if (pFCell->IsMatrix())
         {
             rStrResult = pFCell->GetString().getString();

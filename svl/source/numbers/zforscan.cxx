@@ -106,7 +106,7 @@ const NfKeywordTable ImpSvNumberformatScan::sEnglishKeyword =
     "WHITE"    // NF_KEY_WHITE
 };
 
-::std::vector<Color> ImpSvNumberformatScan::StandardColor{
+const ::std::vector<Color> ImpSvNumberformatScan::StandardColor{
     COL_BLACK,        COL_LIGHTBLUE, COL_LIGHTGREEN, COL_LIGHTCYAN, COL_LIGHTRED,
     COL_LIGHTMAGENTA, COL_BROWN,     COL_GRAY,       COL_YELLOW,    COL_WHITE
 };
@@ -537,7 +537,7 @@ void ImpSvNumberformatScan::ChangeStandardPrec(sal_uInt16 nPrec)
     nStandardPrec = nPrec;
 }
 
-Color* ImpSvNumberformatScan::GetColor(OUString& sStr)
+const Color* ImpSvNumberformatScan::GetColor(OUString& sStr) const
 {
     OUString sString = pFormatter->GetCharClass()->uppercase(sStr);
     const NfKeywordTable & rKeyword = GetKeywords();
@@ -595,7 +595,7 @@ Color* ImpSvNumberformatScan::GetColor(OUString& sStr)
             eColorKeywordConversion = ColorKeywordConversion::EnglishToGerman;
     }
 
-    Color* pResult = nullptr;
+    const Color* pResult = nullptr;
     if (i >= NF_MAX_DEFAULT_COLORS)
     {
         const OUString& rColorWord = rKeyword[NF_KEY_COLOR];

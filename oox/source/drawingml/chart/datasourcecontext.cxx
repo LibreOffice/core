@@ -125,7 +125,7 @@ void DoubleSequenceContext::onCharacters( const OUString& rChars )
                         else
                         {
                             double fValue = rChars.toDouble();
-                            ::Color* pColor = nullptr;
+                            const ::Color* pColor = nullptr;
                             OUString aFormattedValue;
                             // tdf#91250: use UNLIMITED_PRECISION in case of GENERAL Number Format of category axis labels
                             if( pNumFrmt->GetStandardPrec() != SvNumberFormatter::UNLIMITED_PRECISION )

@@ -1746,7 +1746,7 @@ static OUString lcl_Calculate( const OUString& rFormula, ScDocument* pDoc, const
         sal_uInt32 nFormat = aFormatter.GetStandardFormat(
                 pCalc->GetFormatType(), ScGlobal::eLnge);
         {
-            Color* pColor;
+            const Color* pColor;
             aFormatter.GetOutputString( aStr, nFormat,
                     aValue, &pColor );
         }
