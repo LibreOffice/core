@@ -2822,6 +2822,8 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
                                 eMerge = DIFFER;
                                 break;
                             }
+                            if (iter1.IsAtEnd() && iter2.IsAtEnd())
+                                break;
                             if (iter1.IsAtEnd() || iter2.IsAtEnd())
                             {
                                 eMerge = DIFFER;
