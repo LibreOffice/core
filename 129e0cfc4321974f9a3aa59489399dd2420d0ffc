@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ded163c3_eb92d929",
+        "filename": "sw/source/core/access/AccessibilityCheck.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-09-03T08:44:18Z",
+      "side": 1,
+      "message": "Nitpick: next time you add a new class, comment it with \"/// One-liner description.\", which helps doxygen to pick up the documentation at https://docs.libreoffice.org.\n\nAnd also it may make sense to spell out PDF/UA. If I search for \"ISO 142891-1\" or \"ISO 142891\", PDF/UA doesn\u0027t obviously come up as a first hit.",
+      "revId": "129e0cfc4321974f9a3aa59489399dd2420d0ffc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
