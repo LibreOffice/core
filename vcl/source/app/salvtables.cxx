@@ -5502,6 +5502,14 @@ void SalInstanceLabel::set_label_type(weld::LabelType eType)
     }
 }
 
+void SalInstanceLabel::set_font_color(const Color& rColor)
+{
+    if (rColor != COL_AUTO)
+        m_xLabel->SetControlForeground(rColor);
+    else
+        m_xLabel->SetControlForeground();
+}
+
 void SalInstanceLabel::set_font(const vcl::Font& rFont)
 {
     m_xLabel->SetPointFont(*m_xLabel, rFont);
