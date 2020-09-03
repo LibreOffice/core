@@ -162,6 +162,7 @@ namespace desktop
 {
 
 static oslSignalHandler pSignalHandler = nullptr;
+static oslSignalHandler terminateSignalHandler = nullptr;
 
 namespace {
 
@@ -408,6 +409,21 @@ OUString ReplaceStringHookProc( const OUString& rStr )
     return sRet;
 }
 
+oslSignalAction TerminateDesktopSignal_impl(SAL_UNUSED_PARAMETER void* /*pData*/, oslSignalInfo* pInfo)
+{
+    if (pInfo->Signal == osl_Signal_Terminate) {
+        Reference< XDesktop2 > xDesktop = css::frame::Desktop::create( ::comphelper::getProcessComponentContext() );
+        Reference< XPropertySet > xPropertySet(xDesktop, UNO_QUERY_THROW);
+        const char SUSPEND_QUICKSTARTVETO[] = "SuspendQuickstartVeto";
+        xPropertySet->setPropertyValue( SUSPEND_QUICKSTARTVETO, Any(true) );
+
+        xDesktop->terminate();
+        return osl_Signal_ActIgnore;
+    } else {
+        return osl_Signal_ActCallNextHdl;
+    }
+}
+
 Desktop::Desktop()
     : m_bCleanedExtensionCache(false)
     , m_bServicesRegistered(false)
@@ -519,6 +535,7 @@ void Desktop::Init()
         // disable IPC thread in an instance that is just showing a help message
         RequestHandler::Disable();
     }
+    terminateSignalHandler = osl_addSignalHandler(TerminateDesktopSignal_impl, nullptr);
     pSignalHandler = osl_addSignalHandler(SalMainPipeExchangeSignal_impl, nullptr);
 }
 
@@ -548,6 +565,8 @@ void Desktop::DeInit()
         RequestHandler::Disable();
         if( pSignalHandler )
             osl_removeSignalHandler( pSignalHandler );
+        if( terminateSignalHandler )
+            osl_removeSignalHandler( terminateSignalHandler );
     } catch (const RuntimeException&) {
         // someone threw an exception during shutdown
         // this will leave some garbage behind...
@@ -1154,6 +1173,8 @@ void Desktop::Exception(ExceptionCategory nCategory)
         RequestHandler::Disable();
         if( pSignalHandler )
             osl_removeSignalHandler( pSignalHandler );
+        if( terminateSignalHandler )
+            osl_removeSignalHandler( terminateSignalHandler );
 
         restartOnMac(false);
         if ( m_rSplashScreen.is() )
