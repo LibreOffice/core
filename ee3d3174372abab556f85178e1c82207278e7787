@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d456fe48_62575a9d",
+        "filename": "readlicense_oo/docs/readme.xrm",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-09-03T12:55:54Z",
+      "side": 1,
+      "message": "I\u0027d remove the quotes then?",
+      "revId": "ee3d3174372abab556f85178e1c82207278e7787",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
