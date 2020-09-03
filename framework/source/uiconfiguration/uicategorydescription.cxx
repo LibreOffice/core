@@ -29,6 +29,8 @@
 #include <sal/log.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <unotools/configmgr.hxx>
+#include <unotools/syslocale.hxx>
 
 #include <comphelper/propertysequence.hxx>
 
@@ -362,16 +364,18 @@ public:
 UICategoryDescription::UICategoryDescription( const Reference< XComponentContext >& rxContext ) :
     UICommandDescription(rxContext,true)
 {
+    LanguageTag aCurrentLanguage = SvtSysLocale().GetUILanguageTag();
     Reference< XNameAccess > xEmpty;
     OUString aGenericCategories( "GenericCategories" );
-    m_xGenericUICommands = new ConfigurationAccess_UICategory( aGenericCategories, xEmpty, rxContext );
+    m_xGenericUICommands[aCurrentLanguage] = new ConfigurationAccess_UICategory( aGenericCategories, xEmpty, rxContext );
 
     // insert generic categories mappings
     m_aModuleToCommandFileMap.emplace( OUString("generic"), aGenericCategories );
 
-    UICommandsHashMap::iterator pCatIter = m_aUICommandsHashMap.find( aGenericCategories );
-    if ( pCatIter != m_aUICommandsHashMap.end() )
-        pCatIter->second = m_xGenericUICommands;
+    auto& rMap = m_aUICommandsHashMap[aCurrentLanguage];
+    UICommandsHashMap::iterator pCatIter = rMap.find( aGenericCategories );
+    if ( pCatIter != rMap.end() )
+        pCatIter->second = m_xGenericUICommands[aCurrentLanguage];
 
     impl_fillElements("ooSetupFactoryCmdCategoryConfigRef");
 }

@@ -20,6 +20,7 @@
 #pragma once
 
 #include <unordered_map>
+#include <map>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/XModuleManager2.hpp>
@@ -29,6 +30,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustring.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 namespace framework
 {
@@ -80,12 +82,13 @@ public:
     protected:
         UICommandDescription( const css::uno::Reference< css::uno::XComponentContext>& rxContext, bool  );
         void impl_fillElements(const char* _pName);
+        void ensureGenericUICommandsForLanguage(const LanguageTag& rLanguage);
 
         OUString                                                  m_aPrivateResourceURL;
         css::uno::Reference< css::uno::XComponentContext >        m_xContext;
         ModuleToCommandFileMap                                    m_aModuleToCommandFileMap;
-        UICommandsHashMap                                         m_aUICommandsHashMap;
-        css::uno::Reference< css::container::XNameAccess >        m_xGenericUICommands;
+        std::map<LanguageTag, UICommandsHashMap>                  m_aUICommandsHashMap;
+        std::map<LanguageTag, css::uno::Reference< css::container::XNameAccess > > m_xGenericUICommands;
         css::uno::Reference< css::frame::XModuleManager2 >        m_xModuleManager;
 };
 
