@@ -592,6 +592,16 @@ DECLARE_OOXMLEXPORT_TEST(testInputListExport, "tdf122186_input_list.odt")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf123435, "tdf123435.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    // Without the fix in place, it would have failed with
+    // - Expected: 2
+    // - Actual  : 1
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf116371, "tdf116371.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
