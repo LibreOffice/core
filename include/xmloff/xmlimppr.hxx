@@ -185,7 +185,6 @@ private:
         sal_Int32 nStartIdx,
         sal_Int32 nEndIdx,
         css::uno::Reference< css::container::XNameContainer >& xAttrContainer,
-        const OUString& aPrefix,
         const OUString& sAttrName,
         const OUString& aNamespaceURI,
         const OUString& sValue) const;

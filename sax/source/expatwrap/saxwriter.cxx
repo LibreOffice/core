@@ -38,6 +38,7 @@
 
 #include <osl/diagnose.h>
 #include <rtl/character.hxx>
+#include <sal/log.hxx>
 
 using namespace ::std;
 using namespace ::osl;
@@ -579,6 +580,7 @@ void CheckValidName(OUString const& rName)
         if (c == ':')
         {
             // see https://www.w3.org/TR/REC-xml-names/#ns-qualnames
+            SAL_WARN_IF(hasColon, "sax", "only one colon allowed: " << rName);
             assert(!hasColon && "only one colon allowed");
             hasColon = true;
         }
@@ -593,6 +595,7 @@ void CheckValidName(OUString const& rName)
         {
             // https://www.w3.org/TR/xml11/#NT-NameChar
             // (currently we don't warn about invalid start chars)
+            SAL_WARN("sax", "unexpected character in attribute name: " << rName);
             assert(!"unexpected character in attribute name");
         }
     }
