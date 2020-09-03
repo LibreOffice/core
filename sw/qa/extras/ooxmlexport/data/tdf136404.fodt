@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:ooow="http://openoffice.org/2004/writer" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:styles>
+  <style:style style:name="Standard" style:family="paragraph" style:class="text"/>
+  <style:default-style style:family="paragraph">
+   <style:text-properties fo:language="en" fo:country="US"/>
+  </style:default-style>
+ </office:styles>
+ <office:body>
+  <office:text>
+   <table:table>
+    <table:table-column/>
+    <table:table-column/>
+    <table:table-column/>
+    <table:table-column/>
+    <table:table-column/>
+    <table:table-column/>
+    <table:table-column/>
+    <table:table-row>
+     <table:table-cell office:value-type="string">
+      <text:p>6</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string">
+      <text:p></text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string">
+      <text:p></text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string">
+      <text:p>10</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string">
+      <text:p>text</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string">
+      <text:p>text</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:formula="ooow:COUNT(&lt;A1:F1&gt;)" office:value-type="float" office:value="2">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="ooow:AVERAGE(&lt;A1:F1&gt;)" office:value-type="float" office:value="0">
+      <text:p>8</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="ooow:PRODUCT(&lt;A1:F1&gt;)" office:value-type="float" office:value="60">
+      <text:p>60</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="ooow:COUNT(&lt;B1&gt;)" office:value-type="float" office:value="0">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="ooow:COUNT(&lt;B1:C1&gt;)" office:value-type="float" office:value="0">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="ooow:AVERAGE(&lt;B1&gt;)" office:value-type="float" office:value="1.79769313486232E+308">
+      <text:p text:style-name="P1">** Expression is faulty **</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="ooow:AVERAGE(&lt;B1:C1&gt;)" office:value-type="float" office:value="1.79769313486232E+308">
+      <text:p text:style-name="P1">** Expression is faulty **</text:p>
+     </table:table-cell>
+    </table:table-row>
+   </table:table>
+  </office:text>
+ </office:body>
+</office:document>

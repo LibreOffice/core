@@ -173,6 +173,48 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123356, "tdf123356.fodt")
     CPPUNIT_ASSERT_EQUAL(OUString("4"), xEnumerationAccess2->getPresentation(false).trim());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf136404, "tdf136404.fodt")
+{
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    // Ignore empty cells or cells with text content with new interoperability functions COUNT, AVERAGE and PRODUCT
+    uno::Reference<text::XTextField> xEnumerationAccess1(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("COUNT(<A1:F1>)"), xEnumerationAccess1->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("2"), xEnumerationAccess1->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess2(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("AVERAGE(<B1:C1>)"), xEnumerationAccess2->getPresentation(true).trim());
+    // This was 0
+    CPPUNIT_ASSERT_EQUAL(OUString("** Expression is faulty **"), xEnumerationAccess2->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess3(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("AVERAGE(<B1>)"), xEnumerationAccess3->getPresentation(true).trim());
+    // This was 0
+    CPPUNIT_ASSERT_EQUAL(OUString("** Expression is faulty **"), xEnumerationAccess3->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess4(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("COUNT(<B1:C1>)"), xEnumerationAccess4->getPresentation(true).trim());
+    // This was 2
+    CPPUNIT_ASSERT_EQUAL(OUString("0"), xEnumerationAccess4->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess5(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("COUNT(<B1>)"), xEnumerationAccess5->getPresentation(true).trim());
+    // This was 1
+    CPPUNIT_ASSERT_EQUAL(OUString("0"), xEnumerationAccess5->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess6(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("PRODUCT(<A1:F1>)"), xEnumerationAccess6->getPresentation(true).trim());
+    // This was 0
+    CPPUNIT_ASSERT_EQUAL(OUString("60"), xEnumerationAccess6->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess7(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("AVERAGE(<A1:F1>)"), xEnumerationAccess7->getPresentation(true).trim());
+    // This was 2
+    CPPUNIT_ASSERT_EQUAL(OUString("8"), xEnumerationAccess7->getPresentation(false).trim());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf123390, "tdf123390.fodt")
 {
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);

@@ -106,7 +106,7 @@ CalcOp const aOpTable[] = {
 /* AND */     {{sCalc_And},        CALC_AND},   // log. AND
 /* ASIN */    {{sCalc_Asin},       CALC_ASIN},  // Arc sine
 /* ATAN */    {{sCalc_Atan},       CALC_ATAN},  // Arc tangent
-/* AVERAGE */ {{sCalc_Average},    CALC_MEAN},  // Mean (since LibreOffice 7.1)
+/* AVERAGE */ {{sCalc_Average},    CALC_AVERAGE}, // Average (since LibreOffice 7.1)
 /* COS */     {{sCalc_Cos},        CALC_COS},   // Cosine
 /* COUNT */   {{sCalc_Count},      CALC_COUNT}, // Count (since LibreOffice 7.1)
 /* DATE */    {{sCalc_Date},       CALC_DATE},  // Date
@@ -221,6 +221,7 @@ SwCalc::SwCalc( SwDoc& rD )
     , m_pLocaleDataWrapper( m_aSysLocale.GetLocaleDataPtr() )
     , m_pCharClass( &GetAppCharClass() )
     , m_nListPor( 0 )
+    , m_bHasNumber( false )
     , m_eCurrOper( CALC_NAME )
     , m_eCurrListOper( CALC_NAME )
     , m_eError( SwCalcError::NONE )
@@ -460,6 +461,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
             {
                 // Save the current values...
                 sal_uInt16 nListPor = m_nListPor;
+                bool bHasNumber = m_bHasNumber;
                 SwSbxValue nLastLeft = m_nLastLeft;
                 SwSbxValue nNumberValue = m_nNumberValue;
                 sal_Int32 nCommandPos = m_nCommandPos;
@@ -471,6 +473,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
 
                 // ...and write them back.
                 m_nListPor = nListPor;
+                m_bHasNumber = bHasNumber;
                 m_nLastLeft = nLastLeft;
                 m_nNumberValue = nNumberValue;
                 m_nCommandPos = nCommandPos;
@@ -674,6 +677,7 @@ SwCalcOper SwCalc::GetToken()
                 {
                 case CALC_SUM:
                 case CALC_MEAN:
+                case CALC_AVERAGE:
                 case CALC_COUNT:
                     m_eCurrListOper = CALC_PLUS;
                     break;
@@ -1120,6 +1124,7 @@ SwSbxValue SwCalc::PrimFunc(bool &rChkPow)
         {
             SAL_INFO("sw.calc", "number: " << m_nNumberValue.GetDouble());
             SwSbxValue nErg;
+            m_bHasNumber = true;
             if( GetToken() == CALC_PHD )
             {
                 double aTmp = m_nNumberValue.GetDouble();
@@ -1196,14 +1201,19 @@ SwSbxValue SwCalc::PrimFunc(bool &rChkPow)
             SAL_INFO("sw.calc", ")");
             break;
         case CALC_MEAN:
+        case CALC_AVERAGE:
         {
             SAL_INFO("sw.calc", "mean");
             m_nListPor = 1;
+            m_bHasNumber = CALC_MEAN == m_eCurrOper;
             GetToken();
             SwSbxValue nErg = Expr();
             double aTmp = nErg.GetDouble();
             aTmp /= m_nListPor;
-            nErg.PutDouble( aTmp );
+            if ( !m_bHasNumber )
+                m_eError = SwCalcError::DivByZero;
+            else
+                nErg.PutDouble( aTmp );
             return nErg;
             break;
         }
@@ -1211,9 +1221,10 @@ SwSbxValue SwCalc::PrimFunc(bool &rChkPow)
         {
             SAL_INFO("sw.calc", "count");
             m_nListPor = 1;
+            m_bHasNumber = false;
             GetToken();
             SwSbxValue nErg = Expr();
-            nErg.PutDouble( m_nListPor );
+            nErg.PutDouble( m_bHasNumber ? m_nListPor : 0 );
             return nErg;
             break;
         }

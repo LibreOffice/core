@@ -98,6 +98,7 @@ extern const char sCalc_Abs[];
 enum class SwCalcError
 {
     NONE=0,
+    NaN,              //  not a number (not an error, used for interoperability)
     Syntax,           //  syntax error
     DivByZero,        //  division by zero
     FaultyBrackets,   //  faulty brackets
@@ -204,6 +205,7 @@ class SwCalc
     CharClass*  m_pCharClass;
 
     sal_uInt16      m_nListPor;
+    bool        m_bHasNumber; // fix COUNT() and AVERAGE(), if all cells are NaN
     SwCalcOper  m_eCurrOper;
     SwCalcOper  m_eCurrListOper;
     SwCalcError m_eError;
@@ -240,7 +242,8 @@ public:
     CharClass* GetCharClass();
 
     void        SetCalcError( SwCalcError eErr )    { m_eError = eErr; }
-    bool        IsCalcError() const                 { return SwCalcError::NONE != m_eError; }
+    bool        IsCalcError() const                 { return SwCalcError::NONE != m_eError && SwCalcError::NaN != m_eError; }
+    bool        IsCalcNotANumber() const            { return SwCalcError::NaN == m_eError; }
 
     static bool Str2Double( const OUString& rStr, sal_Int32& rPos,
                                 double& rVal );
