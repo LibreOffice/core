@@ -498,22 +498,45 @@ void GtkSalData::Init()
     GtkSalDisplay *pDisplay = new GtkSalDisplay( pGdkDisp );
     SetDisplay( pDisplay );
 
-    //FIXME: unwind keyboard extension bits
-
-    // add signal handler to notify screen size changes
     int nScreens = gdk_display_get_n_screens( pGdkDisp );
     for( int n = 0; n < nScreens; n++ )
     {
         GdkScreen *pScreen = gdk_display_get_screen( pGdkDisp, n );
-        if( pScreen )
-        {
-            pDisplay->screenSizeChanged( pScreen );
-            pDisplay->monitorsChanged( pScreen );
-            g_signal_connect( G_OBJECT(pScreen), "size-changed",
-                              G_CALLBACK(signalScreenSizeChanged), pDisplay );
-            g_signal_connect( G_OBJECT(pScreen), "monitors-changed",
-                              G_CALLBACK(signalMonitorsChanged), GetGtkDisplay() );
-        }
+        if (!pScreen)
+            continue;
+
+        pDisplay->screenSizeChanged( pScreen );
+        pDisplay->monitorsChanged( pScreen );
+        // add signal handler to notify screen size changes
+        g_signal_connect( G_OBJECT(pScreen), "size-changed",
+                          G_CALLBACK(signalScreenSizeChanged), pDisplay );
+        g_signal_connect( G_OBJECT(pScreen), "monitors-changed",
+                          G_CALLBACK(signalMonitorsChanged), GetGtkDisplay() );
+
+        /*
+           set a provider to allow certain buttons to have no padding
+
+           a) little close button in menubar to close back to start-center
+           b) small buttons in view->data sources
+           c) small toolbar button in infobars
+        */
+        GtkCssProvider* pSmallButtonProvider = gtk_css_provider_new();
+        static const gchar data[] = "button.small-button, toolbar.small-button button { "
+          "padding: 0;"
+          "margin-left: 0px;"
+          "margin-right: 0px;"
+          "min-height: 18px;"
+          "min-width: 18px;"
+          "}";
+        static const gchar olddata[] = "button.small-button, toolbar.small-button button { "
+          "padding: 0;"
+          "margin-left: 0px;"
+          "margin-right: 0px;"
+          "}";
+        gtk_css_provider_load_from_data(pSmallButtonProvider, gtk_check_version(3, 20, 0) == nullptr ? data : olddata, -1, nullptr);
+
+        gtk_style_context_add_provider_for_screen(pScreen, GTK_STYLE_PROVIDER(pSmallButtonProvider),
+            GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
 }
 
