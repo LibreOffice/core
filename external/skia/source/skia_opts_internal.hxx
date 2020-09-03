@@ -41,7 +41,7 @@ inline void RGB1_to_RGB(uint8_t dst[], const uint32_t* src, int count) {
             // Store 4 pixels.
             _mm_storeu_si128((__m128i*) dst, rgb);
 
-            src += 4*4;
+            src += 4;
             dst += 4*3;
             count -= 4;
         }
@@ -62,7 +62,7 @@ inline void RGB1_to_gray_fast(uint8_t dst[], const uint32_t* src, int count) {
             // Store 4 pixels.
             _mm_storeu_si128((__m128i*) dst, rgb);
 
-            src += 4*4;
+            src += 4;
             dst += 4;
             count -= 4;
         }
