@@ -238,6 +238,8 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
 
             if( pDoc->IsNumberFormat( sText, nFormatIndex, aNum ))
                 nRet = aNum;
+            else
+                rCalcPara.m_rCalc.SetCalcError( SwCalcError::NaN ); // set for interoperability functions
         }
         // ?? otherwise it is an error
     } while( false );
@@ -354,6 +356,9 @@ void SwTableFormula::MakeFormula_( const SwTable& rTable, OUStringBuffer& rNewSt
         SwSelBoxes aBoxes;
         GetBoxes( *pSttBox, *pEndBox, aBoxes );
 
+        // don't use empty cells or cells with text content as zeroes in interoperability functions
+        sal_Int16 nUseOnlyNumber = -1;
+
         rNewStr.append("(");
         bool bDelim = false;
         for (size_t n = 0; n < aBoxes.size() &&
@@ -362,11 +367,26 @@ void SwTableFormula::MakeFormula_( const SwTable& rTable, OUStringBuffer& rNewSt
             const SwTableBox* pTableBox = aBoxes[n];
             if ( pTableBox->getRowSpan() >= 1 )
             {
+                double fVal = pTableBox->GetValue( *pCalcPara );
+
+                if ( pCalcPara->m_rCalc.IsCalcNotANumber() )
+                {
+                    if ( nUseOnlyNumber == -1 )
+                    {
+                        OUString sFormula = rNewStr.toString().toAsciiUpperCase();
+                        nUseOnlyNumber = sal_Int16(
+                                sFormula.lastIndexOf("AVERAGE") > -1 ||
+                                sFormula.lastIndexOf("COUNT") > -1 ||
+                                sFormula.lastIndexOf("PRODUCT") > -1 );
+                    }
+                    if ( nUseOnlyNumber > 0 )
+                        continue;
+                }
+
                 if( bDelim )
                     rNewStr.append(cListDelim);
                 bDelim = true;
-                rNewStr.append(pCalcPara->m_rCalc.GetStrResult(
-                            pTableBox->GetValue( *pCalcPara ) ));
+                rNewStr.append(pCalcPara->m_rCalc.GetStrResult( fVal ));
             }
         }
         rNewStr.append(")");
@@ -378,8 +398,15 @@ void SwTableFormula::MakeFormula_( const SwTable& rTable, OUStringBuffer& rNewSt
         if ( pSttBox->getRowSpan() >= 1 )
         {
             rNewStr.append("(");
-            rNewStr.append(pCalcPara->m_rCalc.GetStrResult(
-                            pSttBox->GetValue( *pCalcPara ) ));
+            double fVal = pSttBox->GetValue( *pCalcPara );
+            // don't use empty cell or a cell with text content as zero in interoperability functions
+            // (except PRODUCT, where the result is correct anyway)
+            if ( !pCalcPara->m_rCalc.IsCalcNotANumber() ||
+                 ( rNewStr.toString().toAsciiUpperCase().lastIndexOf("AVERAGE") == -1 &&
+                   rNewStr.toString().toAsciiUpperCase().lastIndexOf("COUNT") == -1 ) )
+            {
+                rNewStr.append(pCalcPara->m_rCalc.GetStrResult( fVal ));
+            }
             rNewStr.append(")");
         }
     }
