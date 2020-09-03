@@ -59,6 +59,9 @@
 #include <sal/macros.h>
 #include <rtl/bootstrap.h>
 #include <rtl/digest.h>
+#if defined( LINUX )
+#include <osl/thread.h>
+#endif
 
 #include "file_path_helper.hxx"
 #define ACT_IGNORE  1
@@ -170,6 +173,20 @@ bool is_unset_signal(int signal)
 
 }
 
+#if defined( LINUX )
+static void SAL_CALL terminationHandlerFunction(void*) {
+    while (true) {
+        sigset_t terminationSignals;
+        sigemptyset(&terminationSignals);
+        sigaddset(&terminationSignals, SIGINT);
+        sigaddset(&terminationSignals, SIGTERM);
+        siginfo_t siginfo;
+        sigwaitinfo(&terminationSignals, &siginfo);
+        signalHandlerFunction(siginfo.si_signo, &siginfo, nullptr);
+    }
+}
+#endif
+
 bool onInitSignal()
 {
     if (sal::detail::isSoffice())
@@ -207,6 +224,12 @@ bool onInitSignal()
 #if defined HAVE_VALGRIND_HEADERS
         if (rSignal.Signal == SIGUSR2 && RUNNING_ON_VALGRIND)
             rSignal.Action = ACT_IGNORE;
+#endif
+
+#if defined( LINUX )
+        if (rSignal.Signal == SIGINT || rSignal.Signal == SIGTERM) {
+            continue;
+        }
 #endif
 
         /* hack: stomcatd is attaching JavaVM which does not work with an sigaction(SEGV) */
@@ -268,6 +291,15 @@ bool onInitSignal()
     {
         SAL_WARN("sal.osl", "sigemptyset or pthread_sigmask failed");
     }
+
+#if defined( LINUX )
+    sigset_t terminationSignals;
+    sigemptyset(&terminationSignals);
+    sigaddset(&terminationSignals, SIGINT);
+    sigaddset(&terminationSignals, SIGTERM);
+    pthread_sigmask(SIG_BLOCK, &terminationSignals, NULL);
+    osl_createThread(terminationHandlerFunction, nullptr);
+#endif
 
     return true;
 }
