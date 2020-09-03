@@ -1,0 +1,13 @@
+--- configure
++++ configure
+@@ -14387,8 +14387,8 @@
+ 
+ libxml_source=no
+ if test "X$XML_CONFIG" != "X"; then
+-  LIBXML_CFLAGS=`$XML_CONFIG --cflags`
+-  LIBXML_LIBS=`$XML_CONFIG --libs`
++  : ${LIBXML_CFLAGS=`$XML_CONFIG --cflags`}
++  : ${LIBXML_LIBS=`$XML_CONFIG --libs`}
+ 
+   CPPFLAGS="$LIBXML_CFLAGS $CPPFLAGS"
+   LIBS="$LIBS $LIBXML_LIBS"
