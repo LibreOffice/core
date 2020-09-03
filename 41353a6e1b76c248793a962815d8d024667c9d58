@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fbfa253d_c81ddc5e",
+        "filename": "vcl/source/outdev/outdevstate.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-03T05:09:34Z",
+      "side": 1,
+      "message": "I think that \"transparent color\" is just a color on the main bitmap that needs to be turned fully transparent - like in vcl::bitmap::DrawAlphaBitmapAndAlphaGradient?",
+      "range": {
+        "startLine": 474,
+        "startChar": 92,
+        "endLine": 474,
+        "endChar": 109
+      },
+      "revId": "41353a6e1b76c248793a962815d8d024667c9d58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
