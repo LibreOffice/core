@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-08-27 16:25:53 using:
+ Generated on 2020-09-03 20:50:38 using:
  ./bin/update_pch chart2 chartcore --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -177,6 +177,7 @@
 #include <comphelper/uno3.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppuhelper/compbase.hxx>
+#include <cppuhelper/compbase_ex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -206,6 +207,7 @@
 #include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>
 #include <tools/helpers.hxx>
+#include <tools/link.hxx>
 #include <tools/ref.hxx>
 #include <tools/toolsdllapi.h>
 #include <tools/weakbase.h>

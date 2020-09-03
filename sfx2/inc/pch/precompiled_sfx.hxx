@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-08-27 16:26:27 using:
+ Generated on 2020-09-03 20:51:12 using:
  ./bin/update_pch sfx2 sfx --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -27,6 +27,7 @@
 #include <cstddef>
 #include <functional>
 #include <initializer_list>
+#include <limits>
 #include <map>
 #include <memory>
 #include <new>
@@ -90,7 +91,6 @@
 #include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/builder.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/button.hxx>
 #include <vcl/commandevent.hxx>
@@ -100,7 +100,6 @@
 #include <vcl/dllapi.h>
 #include <vcl/errcode.hxx>
 #include <vcl/event.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-07-09 17:06:26 using:
+ Generated on 2020-09-03 20:50:48 using:
  ./bin/update_pch forms frm --cutoff=2 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -28,6 +28,7 @@
 #include <functional>
 #include <iterator>
 #include <limits.h>
+#include <limits>
 #include <map>
 #include <memory>
 #include <new>

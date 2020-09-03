@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-09-01 15:31:17 using:
+ Generated on 2020-09-03 20:51:31 using:
  ./bin/update_pch sw sw --cutoff=7 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -89,6 +89,7 @@
 #include <vcl/EnumContext.hxx>
 #include <vcl/GraphicAttributes.hxx>
 #include <vcl/GraphicObject.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmapex.hxx>
