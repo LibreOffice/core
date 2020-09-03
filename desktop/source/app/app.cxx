@@ -161,6 +161,7 @@ namespace desktop
 {
 
 static oslSignalHandler pSignalHandler = nullptr;
+static oslSignalHandler terminateSignalHandler = nullptr;
 
 namespace {
 
@@ -407,6 +408,23 @@ OUString ReplaceStringHookProc( const OUString& rStr )
     return sRet;
 }
 
+#if defined( LINUX )
+static oslSignalAction TerminateDesktopSignal_impl(SAL_UNUSED_PARAMETER void* /*pData*/, oslSignalInfo* pInfo)
+{
+    if (pInfo->Signal == osl_Signal_Terminate) {
+        Reference< XDesktop2 > xDesktop = css::frame::Desktop::create( ::comphelper::getProcessComponentContext() );
+        Reference< XPropertySet > xPropertySet(xDesktop, UNO_QUERY_THROW);
+        const char SUSPEND_QUICKSTARTVETO[] = "SuspendQuickstartVeto";
+        xPropertySet->setPropertyValue( SUSPEND_QUICKSTARTVETO, Any(true) );
+
+        xDesktop->terminate();
+        return osl_Signal_ActIgnore;
+    } else {
+        return osl_Signal_ActCallNextHdl;
+    }
+}
+#endif
+
 Desktop::Desktop()
     : m_bCleanedExtensionCache(false)
     , m_bServicesRegistered(false)
@@ -424,6 +442,13 @@ Desktop::~Desktop()
 
 void Desktop::Init()
 {
+#if defined( LINUX )
+    // This has to be called early, otherwise some threads will be created
+    // without SIGINT/SIGTERM blocked and this will result in our handler
+    // missing the signal.
+    terminateSignalHandler = osl_addSignalHandler(TerminateDesktopSignal_impl, nullptr);
+#endif
+
     SetBootstrapStatus(BS_OK);
 
 #if HAVE_FEATURE_EXTENSIONS
@@ -547,6 +572,8 @@ void Desktop::DeInit()
         RequestHandler::Disable();
         if( pSignalHandler )
             osl_removeSignalHandler( pSignalHandler );
+        if( terminateSignalHandler )
+            osl_removeSignalHandler( terminateSignalHandler );
     } catch (const RuntimeException&) {
         // someone threw an exception during shutdown
         // this will leave some garbage behind...
@@ -1153,6 +1180,8 @@ void Desktop::Exception(ExceptionCategory nCategory)
         RequestHandler::Disable();
         if( pSignalHandler )
             osl_removeSignalHandler( pSignalHandler );
+        if( terminateSignalHandler )
+            osl_removeSignalHandler( terminateSignalHandler );
 
         restartOnMac(false);
         if ( m_rSplashScreen.is() )
