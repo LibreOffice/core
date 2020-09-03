@@ -280,7 +280,7 @@ start:
             {
                 p->pOUString = new OUString;
             }
-            Color* pColor;
+            const Color* pColor;
 
             LanguageType eLangType = Application::GetSettings().GetLanguageTag().getLanguageType();
             std::shared_ptr<SvNumberFormatter> pFormatter;

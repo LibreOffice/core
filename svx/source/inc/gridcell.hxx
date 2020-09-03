@@ -284,7 +284,7 @@ public:
     bool Commit();
 
     // Formatting the field data to output text
-    virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, Color** ppColor = nullptr) = 0;
+    virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) = 0;
 
     virtual void Update(){}
     // Refresh the control by the field data
@@ -393,7 +393,7 @@ public:
     bool                    IsSimpleEdit() const { return m_bIsSimpleEdit; }
 
     virtual void Init( BrowserDataWin& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
-    virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, Color** ppColor = nullptr) override;
+    virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
     virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
     virtual ::svt::CellControllerRef CreateController() const override;
     virtual void PaintFieldToCell( OutputDevice& _rDev, const tools::Rectangle& _rRect,
@@ -416,7 +416,7 @@ public:
     virtual ~DbFormattedField() override;
 
     virtual void Init( BrowserDataWin& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
-    virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, Color** ppColor = nullptr) override;
+    virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
     virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
     virtual ::svt::CellControllerRef CreateController() const override;
 
@@ -443,7 +443,7 @@ public:
     virtual void PaintFieldToCell(OutputDevice& rDev, const tools::Rectangle& rRect,
                           const css::uno::Reference< css::sdb::XColumn >& _rxField,
                           const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
-    virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, Color** ppColor = nullptr) override;
+    virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
 
 protected:
     // DbCellControl
@@ -459,7 +459,7 @@ public:
     DbComboBox(DbGridColumn& _rColumn);
 
     virtual void Init( BrowserDataWin& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
-    virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, Color** ppColor = nullptr) override;
+    virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
     virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
     virtual ::svt::CellControllerRef CreateController() const override;
 
@@ -486,7 +486,7 @@ public:
     DbListBox(DbGridColumn& _rColumn);
 
     virtual void Init( BrowserDataWin& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
-    virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, Color** ppColor = nullptr) override;
+    virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
     virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
     virtual ::svt::CellControllerRef CreateController() const override;
 
@@ -509,7 +509,7 @@ class DbPatternField : public DbCellControl
 public:
     DbPatternField( DbGridColumn& _rColumn, const css::uno::Reference<css::uno::XComponentContext>& _rContext );
     virtual void Init( BrowserDataWin& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
-    virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, Color** ppColor = nullptr) override;
+    virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
     virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
     virtual ::svt::CellControllerRef CreateController() const override;
 
@@ -556,7 +556,7 @@ class DbDateField : public DbSpinField
 {
 public:
     DbDateField(DbGridColumn& _rColumn);
-    virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, Color** ppColor = nullptr) override;
+    virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
     virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
 
 protected:
@@ -579,7 +579,7 @@ class DbTimeField : public DbSpinField
 {
 public:
     DbTimeField(DbGridColumn& _rColumn);
-    virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, Color** ppColor = nullptr) override;
+    virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
     virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
 
 protected:
@@ -602,7 +602,7 @@ class DbCurrencyField : public DbSpinField
 {
 public:
     DbCurrencyField(DbGridColumn& _rColumn);
-    virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, Color** ppColor = nullptr) override;
+    virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
     virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
 
 protected:
@@ -626,7 +626,7 @@ class DbNumericField : public DbSpinField
 public:
     DbNumericField(DbGridColumn& _rColumn);
 
-    virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, Color** ppColor = nullptr) override;
+    virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
     virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
 
 protected:
@@ -657,7 +657,7 @@ public:
     virtual ::svt::CellControllerRef CreateController() const override;
     virtual void PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect) override;
     virtual void Update() override;
-    virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, Color** ppColor = nullptr) override;
+    virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
     virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
 
     const OUString& GetText() const {return m_aText;}
@@ -838,7 +838,7 @@ public:
 
     OUString GetText(const css::uno::Reference< css::sdb::XColumn >& _rxField,
                      const css::uno::Reference< css::util::XNumberFormatter >& xFormatter,
-                     Color** ppColor = nullptr)
+                     const Color** ppColor = nullptr)
             {return m_pCellControl->GetFormatText(_rxField, xFormatter, ppColor);}
 };
 

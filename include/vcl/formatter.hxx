@@ -136,7 +136,7 @@ protected:
     OUString            m_sDefaultText;
 
     // The last color from the Formatter at the last output operation (not we would use it, but you can get it)
-    Color*              m_pLastOutputColor;
+    const Color*              m_pLastOutputColor;
 
     bool                m_bUseInputStringForFormatting;
 
@@ -248,7 +248,7 @@ public:
 
     // The last colour from the Formatter's last output operation. Output operations get triggered by:
     // SetValue, SetTextValue, SetTextFormatted, also indirectly via SetMin - / -MaxValue
-    Color*  GetLastOutputColor() const { return m_pLastOutputColor; }
+    const Color*  GetLastOutputColor() const { return m_pLastOutputColor; }
 
     /** reformats the current text. Interesting if the user entered some text in an "input format", and
         this should be formatted in the "output format" (which may differ, e.g. by additional numeric

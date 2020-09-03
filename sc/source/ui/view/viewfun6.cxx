@@ -329,7 +329,7 @@ void ScViewFunc::InsertCurrentTime(SvNumFormatType nReqFmt, const OUString& rUnd
             //nFormat = pFormatter->GetStandardFormat( fVal, nFormat, nReqFmt, nLang);
         }
         OUString aString;
-        Color* pColor;
+        const Color* pColor;
         pFormatter->GetOutputString( fVal, nFormat, aString, &pColor);
 
         pInputHdl->DataChanging();

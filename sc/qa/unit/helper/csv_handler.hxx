@@ -22,7 +22,7 @@
 inline OUString getConditionalFormatString(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab)
 {
     OUString aString;
-    Color* pColor;
+    const Color* pColor;
     ScRefCellValue aCell(*pDoc, ScAddress(nCol, nRow, nTab));
     if (aCell.isEmpty())
         return aString;

@@ -217,7 +217,7 @@ OUString lcl_GetFormattedString(ScDocument* pDoc, const ScRefCellValue& rCell, c
         case CELLTYPE_STRING:
         {
             OUString aStr;
-            Color* pColor;
+            const Color* pColor;
             SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
 
             sal_uInt32 nFormat = pDoc->GetNumberFormat(rAddr);

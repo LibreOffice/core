@@ -745,7 +745,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     if( ! rReq.IsAPI() )
                     {
                         OUString  aPara;
-                        Color*  pColor=nullptr;
+                        const Color* pColor = nullptr;
 
                         switch( eFillDir )
                         {

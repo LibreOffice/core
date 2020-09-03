@@ -190,7 +190,7 @@ void SvxNumberFormatShell::LanguageChanged(LanguageType eLangType, short& rFmtSe
 }
 
 void SvxNumberFormatShell::FormatChanged(sal_uInt16 nFmtLbPos, OUString& rPreviewStr,
-                                         Color*& rpFontColor)
+                                         const Color*& rpFontColor)
 {
     if (static_cast<size_t>(nFmtLbPos) < aCurEntryList.size())
     {
@@ -371,7 +371,7 @@ void SvxNumberFormatShell::GetOptions(const OUString& rFormat, bool& rThousand, 
 }
 
 void SvxNumberFormatShell::MakePreviewString(const OUString& rFormatStr, OUString& rPreviewStr,
-                                             Color*& rpFontColor)
+                                             const Color*& rpFontColor)
 {
     rpFontColor = nullptr;
 
@@ -466,7 +466,7 @@ bool SvxNumberFormatShell::FindEntry(const OUString& rFmtString, sal_uInt32* pAt
 void SvxNumberFormatShell::GetInitSettings(sal_uInt16& nCatLbPos, LanguageType& rLangType,
                                            sal_uInt16& nFmtLbSelPos,
                                            std::vector<OUString>& rFmtEntries,
-                                           OUString& rPrevString, Color*& rpPrevColor)
+                                           OUString& rPrevString, const Color*& rpPrevColor)
 {
     // precondition: number formater found
     DBG_ASSERT(pFormatter != nullptr, "Number formatter not found!");
@@ -1053,7 +1053,7 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl(std::vector<OUString>& rList,
     return nSelPos;
 }
 
-void SvxNumberFormatShell::GetPreviewString_Impl(OUString& rString, Color*& rpColor)
+void SvxNumberFormatShell::GetPreviewString_Impl(OUString& rString, const Color*& rpColor)
 {
     rpColor = nullptr;
 
@@ -1178,7 +1178,7 @@ void SvxNumberFormatShell::CategoryToPos_Impl(SvNumFormatType nCategory, sal_uIn
  * Output:     Output string rPreviewStr
  */
 void SvxNumberFormatShell::MakePrevStringFromVal(const OUString& rFormatStr, OUString& rPreviewStr,
-                                                 Color*& rpFontColor, double nValue)
+                                                 const Color*& rpFontColor, double nValue)
 {
     rpFontColor = nullptr;
     pFormatter->GetPreviewString(rFormatStr, nValue, rPreviewStr, &rpFontColor, eCurLanguage);

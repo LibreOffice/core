@@ -703,7 +703,7 @@ svl::SharedString ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE
             sal_uInt32 nKey = rFormatter.GetStandardFormat( SvNumFormatType::LOGICAL,
                     ScGlobal::eLnge);
             OUString aStr;
-            Color* pColor = nullptr;
+            const Color* pColor = nullptr;
             rFormatter.GetOutputString( 0.0, nKey, aStr, &pColor);
             return svl::SharedString( aStr);    // string not interned
         }

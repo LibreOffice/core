@@ -2327,7 +2327,7 @@ void SbRtl_FormatDateTime(StarBASIC *, SbxArray & rPar, bool)
 
             LanguageType eLangType = Application::GetSettings().GetLanguageTag().getLanguageType();
             const sal_uInt32 nIndex = pFormatter->GetFormatIndex( NF_DATE_SYSTEM_LONG, eLangType );
-            Color* pCol;
+            const Color* pCol;
             pFormatter->GetOutputString( dDate, nIndex, aRetStr, &pCol );
             break;
         }

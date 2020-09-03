@@ -121,7 +121,7 @@ void SvxOnlineUpdateTabPage::UpdateLastCheckedText()
 
         LanguageType eUILang = Application::GetSettings().GetUILanguageTag().getLanguageType();
         std::unique_ptr<SvNumberFormatter> pNumberFormatter(new SvNumberFormatter( ::comphelper::getProcessComponentContext(), eUILang ));
-        Color*      pColor = nullptr;
+        const Color*      pColor = nullptr;
         const Date& rNullDate = pNumberFormatter->GetNullDate();
         sal_uInt32  nFormat = pNumberFormatter->GetStandardFormat( SvNumFormatType::DATE, eUILang );
 

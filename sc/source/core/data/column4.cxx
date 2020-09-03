@@ -1016,7 +1016,7 @@ private:
         }
 
         OUString aStr;
-        Color* pColor;
+        const Color* pColor;
         sal_uInt32 nFormat = pPat->GetNumberFormat(mpFormatter, pCondSet);
         ScCellFormat::GetString(rCell, nFormat, aStr, &pColor, *mpFormatter, mrCol.GetDoc());
 

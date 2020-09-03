@@ -849,7 +849,7 @@ OUString SvNumberFormatter::GetFormatStringForExcel( sal_uInt32 nKey, const NfKe
         {
             // Build Boolean number format, which needs non-zero and zero
             // subformat codes with TRUE and FALSE strings.
-            Color* pColor = nullptr;
+            const Color* pColor = nullptr;
             OUString aTemp;
             const_cast< SvNumberformat* >( pEntry )->GetOutputString( 1.0, aTemp, &pColor );
             aFormatStr += "\"" + aTemp + "\";\"" + aTemp + "\";\"";
@@ -1592,7 +1592,7 @@ void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
                                            OUString& sOutString)
 {
     ::osl::MutexGuard aGuard( GetInstanceMutex() );
-    Color* pColor;
+    const Color* pColor;
     sal_uInt32 nRealKey = nFIndex;
     SvNumberformat* pFormat = ImpSubstituteEntry( GetFormatEntry( nFIndex ), &nRealKey);
     if (!pFormat)
@@ -1652,7 +1652,7 @@ void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
 void SvNumberFormatter::GetOutputString(const OUString& sString,
                                         sal_uInt32 nFIndex,
                                         OUString& sOutString,
-                                        Color** ppColor,
+                                        const Color** ppColor,
                                         bool bUseStarFormat )
 {
     ::osl::MutexGuard aGuard( GetInstanceMutex() );
@@ -1686,7 +1686,7 @@ void SvNumberFormatter::GetOutputString(const OUString& sString,
 void SvNumberFormatter::GetOutputString(const double& fOutNumber,
                                         sal_uInt32 nFIndex,
                                         OUString& sOutString,
-                                        Color** ppColor,
+                                        const Color** ppColor,
                                         bool bUseStarFormat )
 {
     ::osl::MutexGuard aGuard( GetInstanceMutex() );
@@ -1709,7 +1709,7 @@ void SvNumberFormatter::GetOutputString(const double& fOutNumber,
 bool SvNumberFormatter::GetPreviewString(const OUString& sFormatString,
                                          double fPreviewNumber,
                                          OUString& sOutString,
-                                         Color** ppColor,
+                                         const Color** ppColor,
                                          LanguageType eLnge,
                                          bool bUseStarFormat )
 {
@@ -1763,7 +1763,7 @@ bool SvNumberFormatter::GetPreviewString(const OUString& sFormatString,
 bool SvNumberFormatter::GetPreviewStringGuess( const OUString& sFormatString,
                                                double fPreviewNumber,
                                                OUString& sOutString,
-                                               Color** ppColor,
+                                               const Color** ppColor,
                                                LanguageType eLnge )
 {
     ::osl::MutexGuard aGuard( GetInstanceMutex() );
@@ -1864,7 +1864,7 @@ bool SvNumberFormatter::GetPreviewStringGuess( const OUString& sFormatString,
 bool SvNumberFormatter::GetPreviewString( const OUString& sFormatString,
                                           const OUString& sPreviewString,
                                           OUString& sOutString,
-                                          Color** ppColor,
+                                          const Color** ppColor,
                                           LanguageType eLnge )
 {
     ::osl::MutexGuard aGuard( GetInstanceMutex() );

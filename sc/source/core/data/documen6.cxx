@@ -115,7 +115,7 @@ SvtScriptType ScDocument::GetCellScriptType( const ScAddress& rPos, sal_uInt32 n
     if ( nStored != SvtScriptType::UNKNOWN )         // stored value valid?
         return nStored;                             // use stored value
 
-    Color* pColor;
+    const Color* pColor;
     OUString aStr;
     if( pCell )
         ScCellFormat::GetString(*pCell, nNumberFormat, aStr, &pColor, *mxPoolHelper->GetFormTable(), this);

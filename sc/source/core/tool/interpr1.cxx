@@ -8779,7 +8779,7 @@ void ScInterpreter::ScCurrency()
         fVal = ceil(fVal*fFac-0.5)/fFac;
     else
         fVal = floor(fVal*fFac+0.5)/fFac;
-    Color* pColor = nullptr;
+    const Color* pColor = nullptr;
     if ( fDec < 0.0 )
         fDec = 0.0;
     sal_uLong nIndex = pFormatter->GetStandardFormat(
@@ -8879,7 +8879,7 @@ void ScInterpreter::ScFixed()
         fVal = ceil(fVal*fFac-0.5)/fFac;
     else
         fVal = floor(fVal*fFac+0.5)/fFac;
-    Color* pColor = nullptr;
+    const Color* pColor = nullptr;
     if (fDec < 0.0)
         fDec = 0.0;
     sal_uLong nIndex = pFormatter->GetStandardFormat(
@@ -9616,7 +9616,7 @@ void ScInterpreter::ScText()
     else
     {
         OUString aResult;
-        Color* pColor = nullptr;
+        const Color* pColor = nullptr;
         LanguageType eCellLang;
         const ScPatternAttr* pPattern = pDok->GetPattern(
                 aPos.Col(), aPos.Row(), aPos.Tab() );

@@ -717,7 +717,7 @@ void lcl_getLongVarCharEditString( OUString& rString,
 void lcl_getLongVarCharString(
     OUString& rString, ScDocument& rDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, SvNumberFormatter& rNumFmt )
 {
-    Color* pColor;
+    const Color* pColor;
     ScAddress aPos(nCol, nRow, nTab);
     sal_uInt32 nFormat = rDoc.GetNumberFormat(aPos);
     rString = ScCellFormat::GetString(rDoc, aPos, nFormat, &pColor, rNumFmt);

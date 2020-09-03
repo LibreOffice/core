@@ -1290,7 +1290,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                             if( pDBCol->nFormat &&
                                 DBL_MAX != nValue )
                             {
-                                Color* pCol;
+                                const Color* pCol;
                                 if(rNumFormatr.GetType(pDBCol->nFormat) & SvNumFormatType::DATE)
                                 {
                                     ::Date aStandard(1,1,1900);

@@ -1142,7 +1142,7 @@ void DbTextField::PaintFieldToCell( OutputDevice& _rDev, const tools::Rectangle&
     DbLimitedLengthField::PaintFieldToCell( _rDev, _rRect, _rxField, _rxFormatter );
 }
 
-OUString DbTextField::GetFormatText(const Reference< XColumn >& _rxField, const Reference< XNumberFormatter >& xFormatter, Color** /*ppColor*/)
+OUString DbTextField::GetFormatText(const Reference< XColumn >& _rxField, const Reference< XNumberFormatter >& xFormatter, const Color** /*ppColor*/)
 {
     if (!_rxField.is())
         return OUString();
@@ -1398,7 +1398,7 @@ void DbFormattedField::Init( BrowserDataWin& rParent, const Reference< XRowSet >
                 else
                 {
                     OUString sConverted;
-                    Color* pDummy;
+                    const Color* pDummy;
                     pFormatterUsed->GetOutputString(::comphelper::getDouble(aDefault), 0, sConverted, &pDummy);
                     rControlFormatter.SetDefaultText(sConverted);
                     rPainterFormatter.SetDefaultText(sConverted);
@@ -1455,7 +1455,7 @@ void DbFormattedField::_propertyChanged( const PropertyChangeEvent& _rEvent )
     }
 }
 
-OUString DbFormattedField::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/, Color** ppColor)
+OUString DbFormattedField::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/, const Color** ppColor)
 {
     // no color specification by default
     if (ppColor != nullptr)
@@ -1709,7 +1709,7 @@ bool DbCheckBox::commitControl()
     return true;
 }
 
-OUString DbCheckBox::GetFormatText(const Reference< XColumn >& /*_rxField*/, const Reference< XNumberFormatter >& /*xFormatter*/, Color** /*ppColor*/)
+OUString DbCheckBox::GetFormatText(const Reference< XColumn >& /*_rxField*/, const Reference< XNumberFormatter >& /*xFormatter*/, const Color** /*ppColor*/)
 {
     return OUString();
 }
@@ -1775,7 +1775,7 @@ OUString DbPatternField::impl_formatText( const OUString& _rText )
     return rPaintFormatter.get_widget().get_text();
 }
 
-OUString DbPatternField::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/, Color** /*ppColor*/)
+OUString DbPatternField::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/, const Color** /*ppColor*/)
 {
     bool bIsForPaint = _rxField != m_rColumn.GetField();
     ::std::unique_ptr< FormattedColumnValue >& rpFormatter = bIsForPaint ? m_pPaintFormatter : m_pValueFormatter;
@@ -1952,7 +1952,7 @@ namespace
     }
 }
 
-OUString DbNumericField::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< css::util::XNumberFormatter >& _rxFormatter, Color** /*ppColor*/)
+OUString DbNumericField::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< css::util::XNumberFormatter >& _rxFormatter, const Color** /*ppColor*/)
 {
     return lcl_setFormattedNumeric_nothrow(dynamic_cast<FormattedControlBase&>(*m_pPainter), *this, _rxField, _rxFormatter);
 }
@@ -2072,7 +2072,7 @@ namespace
     }
 }
 
-OUString DbCurrencyField::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< css::util::XNumberFormatter >& _rxFormatter, Color** /*ppColor*/)
+OUString DbCurrencyField::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< css::util::XNumberFormatter >& _rxFormatter, const Color** /*ppColor*/)
 {
     return lcl_setFormattedCurrency_nothrow(dynamic_cast<FormattedControlBase&>(*m_pPainter), *this, _rxField, _rxFormatter);
 }
@@ -2202,7 +2202,7 @@ namespace
     }
 }
 
-OUString DbDateField::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< css::util::XNumberFormatter >& /*xFormatter*/, Color** /*ppColor*/)
+OUString DbDateField::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< css::util::XNumberFormatter >& /*xFormatter*/, const Color** /*ppColor*/)
 {
      return lcl_setFormattedDate_nothrow(*static_cast<DateControl*>(m_pPainter.get()), _rxField);
 }
@@ -2313,7 +2313,7 @@ namespace
     }
 }
 
-OUString DbTimeField::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< css::util::XNumberFormatter >& /*xFormatter*/, Color** /*ppColor*/)
+OUString DbTimeField::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< css::util::XNumberFormatter >& /*xFormatter*/, const Color** /*ppColor*/)
 {
     return lcl_setFormattedTime_nothrow(*static_cast<TimeControl*>(m_pPainter.get()), _rxField);
 }
@@ -2423,7 +2423,7 @@ CellControllerRef DbComboBox::CreateController() const
     return new ComboBoxCellController(static_cast<ComboBoxControl*>(m_pWindow.get()));
 }
 
-OUString DbComboBox::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& xFormatter, Color** /*ppColor*/)
+OUString DbComboBox::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& xFormatter, const Color** /*ppColor*/)
 {
     const css::uno::Reference<css::beans::XPropertySet> xPS(_rxField, UNO_QUERY);
     ::dbtools::FormattedColumnValue fmter( xFormatter, xPS );
@@ -2532,7 +2532,7 @@ CellControllerRef DbListBox::CreateController() const
     return new ListBoxCellController(static_cast<ListBoxControl*>(m_pWindow.get()));
 }
 
-OUString DbListBox::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/, Color** /*ppColor*/)
+OUString DbListBox::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/, const Color** /*ppColor*/)
 {
     OUString sText;
     if ( _rxField.is() )
@@ -3038,7 +3038,7 @@ void DbFilterField::Update()
         rComboBox.append_text(rString);
 }
 
-OUString DbFilterField::GetFormatText(const Reference< XColumn >& /*_rxField*/, const Reference< XNumberFormatter >& /*xFormatter*/, Color** /*ppColor*/)
+OUString DbFilterField::GetFormatText(const Reference< XColumn >& /*_rxField*/, const Reference< XNumberFormatter >& /*xFormatter*/, const Color** /*ppColor*/)
 {
     return OUString();
 }
@@ -3497,7 +3497,7 @@ void FmXTextCell::PaintFieldToCell(OutputDevice& rDev,
 
     try
     {
-        Color* pColor = nullptr;
+        const Color* pColor = nullptr;
         OUString aText = GetText(_rxField, xFormatter, &pColor);
         if (pColor != nullptr)
         {

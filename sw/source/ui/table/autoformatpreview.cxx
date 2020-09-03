@@ -220,7 +220,7 @@ void AutoFormatPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nC
                 sal_Int32 nCheckPos;
                 sal_uInt32 nKey = mxNumFormat->GetIndexPuttingAndConverting(sFormat, eLng, eSys,
                                                                             nType, bNew, nCheckPos);
-                Color* pDummy;
+                const Color* pDummy;
                 mxNumFormat->GetOutputString(nVal, nKey, cellString, &pDummy);
             }
             else

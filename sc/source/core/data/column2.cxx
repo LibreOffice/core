@@ -282,7 +282,7 @@ long ScColumn::GetNeededSize(
 
     if (!bEditEngine)                                   // direct output
     {
-        Color* pColor;
+        const Color* pColor;
         OUString aValStr;
         ScCellFormat::GetString(
             aCell, nFormat, aValStr, &pColor, *pFormatter, pDocument, true, rOptions.bFormula);
@@ -459,7 +459,7 @@ long ScColumn::GetNeededSize(
         }
         else
         {
-            Color* pColor;
+            const Color* pColor;
             OUString aString;
             ScCellFormat::GetString(
                 aCell, nFormat, aString, &pColor, *pFormatter, pDocument, true,
@@ -613,7 +613,7 @@ class MaxStrLenFinder
 
     void checkLength(const ScRefCellValue& rCell)
     {
-        Color* pColor;
+        const Color* pColor;
         OUString aValStr;
         ScCellFormat::GetString(
             rCell, mnFormat, aValStr, &pColor, *mrDoc.GetFormatTable(), &mrDoc);
@@ -699,7 +699,7 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
         SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
         sal_uInt32 nFormat = pPattern->GetNumberFormat( pFormatter );
         OUString aLongStr;
-        Color* pColor;
+        const Color* pColor;
         if (pParam->mnMaxTextRow >= 0)
         {
             ScRefCellValue aCell = GetCellValue(pParam->mnMaxTextRow);

@@ -88,7 +88,7 @@ public:
                                          sal_uInt16&           nFmtLbSelPos,
                                          std::vector<OUString>& rFmtEntries,
                                          OUString&             rPrevString,
-                                         Color*&               rpPrevColor );
+                                         const Color*&               rpPrevColor );
 
     void                CategoryChanged( sal_uInt16            nCatLbPos,
                                          short&                rFmtSelPos,
@@ -100,7 +100,7 @@ public:
 
     void                FormatChanged( sal_uInt16  nFmtLbPos,
                                        OUString&   rPreviewStr,
-                                       Color*&     rpFontColor );
+                                       const Color*&     rpFontColor );
 
     bool                AddFormat( OUString&             rFormat,
                                    sal_Int32&            rErrPos,
@@ -131,11 +131,11 @@ public:
 
     void                MakePreviewString( const OUString& rFormatStr,
                                            OUString&       rPreviewStr,
-                                           Color*&         rpFontColor );
+                                           const Color*&         rpFontColor );
 
     void                MakePrevStringFromVal( const OUString& rFormatStr,
                                                OUString& rPreviewStr,
-                                               Color*& rpFontColor,
+                                               const Color*& rpFontColor,
                                                double  nValue);
 
     bool                IsUserDefined( const OUString& rFmtString );
@@ -218,7 +218,7 @@ private:
     SVX_DLLPRIVATE ::std::vector<sal_uInt32>::iterator GetAdded_Impl( size_t nKey );
 
     SVX_DLLPRIVATE void  GetPreviewString_Impl( OUString& rString,
-                                                Color*& rpColor );
+                                                const Color*& rpColor );
     SVX_DLLPRIVATE static void PosToCategory_Impl(sal_uInt16 nPos, SvNumFormatType& rCategory);
     SVX_DLLPRIVATE static void CategoryToPos_Impl(SvNumFormatType nCategory, sal_uInt16& rPos);
 };

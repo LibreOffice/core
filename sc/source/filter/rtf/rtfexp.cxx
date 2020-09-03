@@ -178,7 +178,7 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
         {
             bValueData = pDoc->HasValueData(aPos);
             sal_uInt32 nFormat = pAttr->GetNumberFormat(pFormatter);
-            Color* pColor;
+            const Color* pColor;
             aContent = ScCellFormat::GetString(*pDoc, aPos, nFormat, &pColor, *pFormatter);
         }
     }

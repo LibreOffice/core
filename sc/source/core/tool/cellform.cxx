@@ -31,7 +31,7 @@
 #include <editutil.hxx>
 
 void ScCellFormat::GetString( const ScRefCellValue& rCell, sal_uInt32 nFormat, OUString& rString,
-                              Color** ppColor, SvNumberFormatter& rFormatter, const ScDocument* pDoc,
+                              const Color** ppColor, SvNumberFormatter& rFormatter, const ScDocument* pDoc,
                               bool bNullVals, bool bFormula, bool bUseStarFormat )
 {
     *ppColor = nullptr;
@@ -106,7 +106,7 @@ void ScCellFormat::GetString( const ScRefCellValue& rCell, sal_uInt32 nFormat, O
 }
 
 OUString ScCellFormat::GetString(
-    ScDocument& rDoc, const ScAddress& rPos, sal_uInt32 nFormat, Color** ppColor,
+    ScDocument& rDoc, const ScAddress& rPos, sal_uInt32 nFormat, const Color** ppColor,
     SvNumberFormatter& rFormatter, bool bNullVals, bool bFormula )
 {
     OUString aString;
@@ -174,7 +174,7 @@ OUString ScCellFormat::GetOutputString( ScDocument& rDoc, const ScAddress& rPos,
     else
     {
         //  like in GetString for document (column)
-        Color* pColor;
+        const Color* pColor;
         sal_uInt32 nNumFmt = rDoc.GetNumberFormat(rPos);
         GetString(rCell, nNumFmt, aVal, &pColor, *rDoc.GetFormatTable(), &rDoc);
     }

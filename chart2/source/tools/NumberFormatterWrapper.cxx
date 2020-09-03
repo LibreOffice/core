@@ -86,7 +86,7 @@ OUString NumberFormatterWrapper::getFormattedString( sal_Int32 nNumberFormatKey,
                                                      Color& rLabelColor, bool& rbColorChanged ) const
 {
     OUString aText;
-    Color* pTextColor = nullptr;
+    const Color* pTextColor = nullptr;
     if( !m_pNumberFormatter )
     {
         OSL_FAIL("Need a NumberFormatter");
