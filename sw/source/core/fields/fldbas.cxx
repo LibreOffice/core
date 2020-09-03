@@ -511,7 +511,7 @@ OUString SwValueFieldType::ExpandValue( const double& rVal,
 
     OUString sExpand;
     SvNumberFormatter* pFormatter = m_pDoc->GetNumberFormatter();
-    Color* pCol = nullptr;
+    const Color* pCol = nullptr;
 
     // Bug #60010
     LanguageType nFormatLng = ::lcl_GetLanguageOfFormat( nLng, nFormat, *pFormatter );
@@ -770,7 +770,7 @@ OUString SwFormulaField::GetExpandedFormula() const
     if (nFormat && nFormat != SAL_MAX_UINT32 && static_cast<SwValueFieldType *>(GetTyp())->UseFormat())
     {
         OUString sFormattedValue;
-        Color* pCol = nullptr;
+        const Color* pCol = nullptr;
 
         SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
 

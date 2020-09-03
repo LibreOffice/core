@@ -115,8 +115,8 @@ public:
     // Get count of substrings (symbols)
     sal_uInt16 GetCount() const { return nStringsCnt;}
 
-    Color* GetColor() const { return pColor; }
-    void SetColor( Color* pCol, OUString const & rName )
+    const Color* GetColor() const { return pColor; }
+    void SetColor(const Color* pCol, OUString const& rName)
      { pColor = pCol; sColorName = rName; }
     const OUString& GetColorName() const { return sColorName; }
 
@@ -134,7 +134,7 @@ public:
 private:
     ImpSvNumberformatInfo aI;           // helper struct for remaining information
     OUString sColorName;                // color name
-    Color* pColor;                      // pointer to color of subformat
+    const Color* pColor;                      // pointer to color of subformat
     sal_uInt16 nStringsCnt;             // count of symbols
     SvNumberNatNum aNatNum;             // DoubleByteNumber
 
@@ -241,8 +241,8 @@ public:
      */
     bool GetOutputString( double fNumber, sal_uInt16 nCharCount, OUString& rOutString ) const;
 
-    bool GetOutputString( double fNumber, OUString& OutString, Color** ppColor );
-    void GetOutputString( const OUString& sString, OUString& OutString, Color** ppColor );
+    bool GetOutputString( double fNumber, OUString& OutString, const Color** ppColor );
+    void GetOutputString( const OUString& sString, OUString& OutString, const Color** ppColor );
 
     // True if type text
     bool IsTextFormat() const { return bool(eType & SvNumFormatType::TEXT); }
@@ -444,7 +444,7 @@ public:
     // used in XML export
     void GetConditions( SvNumberformatLimitOps& rOper1, double& rVal1,
                         SvNumberformatLimitOps& rOper2, double& rVal2 ) const;
-    Color* GetColor( sal_uInt16 nNumFor ) const;
+    const Color* GetColor( sal_uInt16 nNumFor ) const;
     void GetNumForInfo( sal_uInt16 nNumFor, SvNumFormatType& rScannedType,
                     bool& bThousand, sal_uInt16& nPrecision, sal_uInt16& nLeadingCnt ) const;
 

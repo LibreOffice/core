@@ -502,7 +502,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
     FillCurrencyBox();
 
     OUString aPrevString;
-    Color* pDummy = nullptr;
+    const Color* pDummy = nullptr;
     pNumFmtShell->GetInitSettings( nCatLbSelPos, eLangType, nFmtLbSelPos,
                                    aFmtEntryList, aPrevString, pDummy );
 
@@ -820,7 +820,7 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( std::vector<OUString>& rEnt
             short aPrivCat = pNumFmtShell->GetCategory4Entry( static_cast<short>(i) );
             if(aPrivCat!=CAT_TEXT)
             {
-                Color* pPreviewColor = nullptr;
+                const Color* pPreviewColor = nullptr;
                 OUString aPreviewString( GetExpColorString( pPreviewColor, aEntry, aPrivCat ) );
                 m_xLbFormat->append_text(aPreviewString);
                 if (pPreviewColor)
@@ -1625,7 +1625,7 @@ IMPL_LINK_NOARG(SvxNumberFormatTabPage, LostFocusHdl_Impl, weld::Widget&, void)
 #************************************************************************/
 
 OUString SvxNumberFormatTabPage::GetExpColorString(
-        Color*& rpPreviewColor, const OUString& rFormatStr, short nTmpCatPos)
+        const Color*& rpPreviewColor, const OUString& rFormatStr, short nTmpCatPos)
 {
     SvxNumValCategory i;
     switch (nTmpCatPos)
@@ -1663,7 +1663,7 @@ OUString SvxNumberFormatTabPage::GetExpColorString(
 void SvxNumberFormatTabPage::MakePreviewText( const OUString& rFormat )
 {
     OUString aPreviewString;
-    Color* pPreviewColor = nullptr;
+    const Color* pPreviewColor = nullptr;
     pNumFmtShell->MakePreviewString( rFormat, aPreviewString, pPreviewColor );
     m_aWndPreview.NotifyChange( aPreviewString, pPreviewColor );
 }
@@ -1671,7 +1671,7 @@ void SvxNumberFormatTabPage::MakePreviewText( const OUString& rFormat )
 void SvxNumberFormatTabPage::ChangePreviewText( sal_uInt16 nPos )
 {
     OUString aPreviewString;
-    Color* pPreviewColor = nullptr;
+    const Color* pPreviewColor = nullptr;
     pNumFmtShell->FormatChanged( nPos, aPreviewString, pPreviewColor );
     m_aWndPreview.NotifyChange( aPreviewString, pPreviewColor );
 }

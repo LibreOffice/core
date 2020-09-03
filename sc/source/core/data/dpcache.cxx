@@ -1203,7 +1203,7 @@ OUString ScDPCache::GetLocaleIndependentFormattedString( double fValue,
         return GetLocaleIndependentFormattedNumberString( fValue);
 
     OUString aStr;
-    Color* pColor = nullptr;
+    const Color* pColor = nullptr;
     rFormatter.GetOutputString( fValue, nNumFormat, aStr, &pColor);
     return aStr;
 }
@@ -1225,7 +1225,7 @@ OUString ScDPCache::GetFormattedString(long nDim, const ScDPItemData& rItem, boo
                 return GetLocaleIndependentFormattedString( rItem.GetValue(), *pFormatter, nNumFormat);
 
             OUString aStr;
-            Color* pColor = nullptr;
+            const Color* pColor = nullptr;
             pFormatter->GetOutputString(rItem.GetValue(), nNumFormat, aStr, &pColor);
             return aStr;
         }

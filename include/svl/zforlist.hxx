@@ -551,13 +551,13 @@ public:
 
     /// Format a number according to a format index, return string and color
     void GetOutputString( const double& fOutNumber, sal_uInt32 nFIndex,
-                          OUString& sOutString, Color** ppColor, bool bUseStarFormat = false );
+                          OUString& sOutString, const Color** ppColor, bool bUseStarFormat = false );
 
     /** Format a string according to a format index, return string and color.
         Formats only if the format code is of type text or the 4th subcode
         of a format code is specified, otherwise sOutString will be == "" */
     void GetOutputString( const OUString& sString, sal_uInt32 nFIndex,
-                          OUString& sOutString, Color** ppColor, bool bUseStarFormat = false );
+                          OUString& sOutString, const Color** ppColor, bool bUseStarFormat = false );
 
     /** Format a number according to the standard default format matching
         the given format index */
@@ -572,14 +572,14 @@ public:
     bool GetPreviewString(const OUString& sFormatString,
                           double fPreviewNumber,
                           OUString& sOutString,
-                          Color** ppColor,
+                          const Color** ppColor,
                           LanguageType eLnge,
                           bool bUseStarFormat = false );
 
     /** Same as <method>GetPreviewString</method> but the format code string
         may be either language/country eLnge or en_US english US */
     bool GetPreviewStringGuess( const OUString& sFormatString, double fPreviewNumber,
-                                OUString& sOutString, Color** ppColor,
+                                OUString& sOutString, const Color** ppColor,
                                 LanguageType eLnge = LANGUAGE_DONTKNOW );
 
     /** Format a string according to a format code string to be scanned.
@@ -588,7 +588,7 @@ public:
             <TRUE/> else, in which case the string and color are returned.
      */
     bool GetPreviewString( const OUString& sFormatString, const OUString& sPreviewString,
-                           OUString& sOutString, Color** ppColor,
+                           OUString& sOutString, const Color** ppColor,
                            LanguageType eLnge = LANGUAGE_DONTKNOW );
 
     /** Test whether the format code string is already present in container

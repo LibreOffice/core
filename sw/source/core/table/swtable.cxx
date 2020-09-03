@@ -2090,7 +2090,7 @@ static void ChgNumToText( SwTableBox& rBox, sal_uLong nFormat )
     bool bChgAlign = pDoc->IsInsTableAlignNum();
     const SfxPoolItem* pItem;
 
-    Color* pCol = nullptr;
+    const Color* pCol = nullptr;
     if( getSwDefaultTextFormat() != nFormat )
     {
         // special text format:
@@ -2328,7 +2328,7 @@ void SwTableBoxFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
                         }
 
                         // format contents with the new value assigned and write to paragraph
-                        Color* pCol = nullptr;
+                        const Color* pCol = nullptr;
                         OUString sNewText;
                         if( DBL_MAX == fVal )
                         {
@@ -2453,7 +2453,7 @@ bool SwTableBox::IsNumberChanged() const
                                     GetTextNode()->GetRedlineText() );
             lcl_DelTabsAtSttEnd( sOldText );
 
-            Color* pCol = nullptr;
+            const Color* pCol = nullptr;
             GetFrameFormat()->GetDoc()->GetNumberFormatter()->GetOutputString(
                 pValue->GetValue(), pNumFormat->GetValue(), sNewText, &pCol );
 
@@ -2583,7 +2583,7 @@ void SwTableBox::ActualiseValueBox()
         ULONG_MAX != (nNdPos = IsValidNumTextNd()) )
     {
         double fVal = static_cast<const SwTableBoxValue*>(pValItem)->GetValue();
-        Color* pCol = nullptr;
+        const Color* pCol = nullptr;
         OUString sNewText;
         pNumFormatr->GetOutputString( fVal, nFormatId, sNewText, &pCol );
 

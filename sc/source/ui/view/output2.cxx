@@ -490,7 +490,7 @@ bool ScDrawStringsVars::SetText( const ScRefCellValue& rCell )
         {
             maLastCell = rCell;          // store cell
 
-            Color* pColor;
+            const Color* pColor;
             sal_uLong nFormat = nValueFormat;
             ScCellFormat::GetString( rCell,
                                      nFormat, aString, &pColor,
@@ -2371,7 +2371,7 @@ bool ScOutputData::DrawEditParam::readCellContent(
         sal_uInt32 nFormat = mpPattern->GetNumberFormat(
                                     pDoc->GetFormatTable(), mpCondSet );
         OUString aString;
-        Color* pColor;
+        const Color* pColor;
         ScCellFormat::GetString( maCell,
                                  nFormat,aString, &pColor,
                                  *pDoc->GetFormatTable(),
@@ -4697,7 +4697,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 sal_uInt32 nFormat = pPattern->GetNumberFormat(
                                                             mpDoc->GetFormatTable(), pCondSet );
                                 OUString aString;
-                                Color* pColor;
+                                const Color* pColor;
                                 ScCellFormat::GetString( aCell,
                                                          nFormat,aString, &pColor,
                                                          *mpDoc->GetFormatTable(),

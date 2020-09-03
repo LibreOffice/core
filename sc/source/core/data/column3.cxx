@@ -788,7 +788,7 @@ bool ScColumn::UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow, sc::CellSt
     SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
 
     OUString aStr;
-    Color* pColor;
+    const Color* pColor;
     sal_uInt32 nFormat = pPattern->GetNumberFormat(pFormatter, pCondSet);
     ScCellFormat::GetString(aCell, nFormat, aStr, &pColor, *pFormatter, pDocument);
 
@@ -2915,7 +2915,7 @@ void ScColumn::GetString( const ScRefCellValue& aCell, SCROW nRow, OUString& rSt
         aCell.mpFormula->MaybeInterpret();
 
     sal_uInt32 nFormat = GetNumberFormat( pContext ? *pContext : GetDoc()->GetNonThreadedContext(), nRow);
-    Color* pColor = nullptr;
+    const Color* pColor = nullptr;
     ScCellFormat::GetString(aCell, nFormat, rString, &pColor,
         pContext ? *(pContext->GetFormatTable()) : *(GetDoc()->GetFormatTable()), GetDoc());
 }
@@ -3141,7 +3141,7 @@ class MaxStringLenHandler
 
     void processCell(size_t nRow, const ScRefCellValue& rCell)
     {
-        Color* pColor;
+        const Color* pColor;
         OUString aString;
         sal_uInt32 nFormat = mrColumn.GetAttr(nRow, ATTR_VALUE_FORMAT).GetValue();
         ScCellFormat::GetString(rCell, nFormat, aString, &pColor, *mpFormatter, mrColumn.GetDoc());

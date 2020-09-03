@@ -2585,7 +2585,7 @@ sal_Int32 ScChart2DataSequence::FillCacheFromExternalRef(const ScTokenRef& pToke
                     if (pFormatter)
                     {
                         const double fVal = aItem.mfValue;
-                        Color* pColor = nullptr;
+                        const Color* pColor = nullptr;
                         sal_uInt32 nFmt = 0;
                         if (pTable)
                         {

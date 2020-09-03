@@ -2259,7 +2259,7 @@ void SbRtl_Time(StarBASIC *, SbxArray & rPar, bool bWrite)
             nSeconds += aTime.GetMin() * 60;
             nSeconds += aTime.GetSec();
             double nDays = static_cast<double>(nSeconds) * ( 1.0 / (24.0*3600.0) );
-            Color* pCol;
+            const Color* pCol;
 
             std::shared_ptr<SvNumberFormatter> pFormatter;
             sal_uInt32 nIndex;
@@ -2305,7 +2305,7 @@ void SbRtl_Date(StarBASIC *, SbxArray & rPar, bool bWrite)
         if( pMeth->IsString() )
         {
             OUString aRes;
-            Color* pCol;
+            const Color* pCol;
 
             std::shared_ptr<SvNumberFormatter> pFormatter;
             sal_uInt32 nIndex;
@@ -3074,7 +3074,7 @@ void SbRtl_FileDateTime(StarBASIC *, SbxArray & rPar, bool)
             double nDays = static_cast<double>(nSeconds) / (24.0*3600.0);
             fSerial += nDays;
 
-            Color* pCol;
+            const Color* pCol;
 
             std::shared_ptr<SvNumberFormatter> pFormatter;
             sal_uInt32 nIndex;

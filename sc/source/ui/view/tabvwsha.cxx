@@ -131,7 +131,7 @@ bool ScTabViewShell::GetFunction( OUString& rFuncStr, FormulaError nErrCode )
                     }
 
                     OUString aValStr;
-                    Color* pDummy;
+                    const Color* pDummy;
                     pFormatter->GetOutputString( nVal, nNumFmt, aValStr, &pDummy );
                     aStr += aValStr;
                 }

@@ -181,7 +181,7 @@ OUString SAL_CALL SvNumberFormatterServiceObj::convertNumberToString( sal_Int32 
     if (!pFormatter)
         throw uno::RuntimeException();
 
-    Color* pColor = nullptr;
+    const Color* pColor = nullptr;
     pFormatter->GetOutputString(fValue, nKey, aRet, &pColor);
 
     return aRet;
@@ -199,7 +199,7 @@ sal_Int32 SAL_CALL SvNumberFormatterServiceObj::queryColorForNumber( sal_Int32 n
         throw uno::RuntimeException();
 
     OUString aStr;
-    Color* pColor = nullptr;
+    const Color* pColor = nullptr;
     pFormatter->GetOutputString(fValue, nKey, aStr, &pColor);
     if (pColor)
         nRet = sal_uInt32(*pColor);
@@ -220,7 +220,7 @@ OUString SAL_CALL SvNumberFormatterServiceObj::formatString( sal_Int32 nKey,
         throw uno::RuntimeException();
     }
 
-    Color* pColor = nullptr;
+    const Color* pColor = nullptr;
     pFormatter->GetOutputString(aString, nKey, aRet, &pColor);
 
     return aRet;
@@ -240,7 +240,7 @@ sal_Int32 SAL_CALL SvNumberFormatterServiceObj::queryColorForString( sal_Int32 n
     }
 
     OUString aStr;
-    Color* pColor = nullptr;
+    const Color* pColor = nullptr;
     pFormatter->GetOutputString(aString, nKey, aStr, &pColor);
     if (pColor)
     {
@@ -280,7 +280,7 @@ OUString SAL_CALL SvNumberFormatterServiceObj::convertNumberToPreviewString( con
         throw uno::RuntimeException();
 
     LanguageType eLang = lcl_GetLanguage( nLocale );
-    Color* pColor = nullptr;
+    const Color* pColor = nullptr;
 
     bool bOk;
     if ( bAllowEnglish )
@@ -309,7 +309,7 @@ sal_Int32 SAL_CALL SvNumberFormatterServiceObj::queryPreviewColorForNumber( cons
 
     OUString aOutString;
     LanguageType eLang = lcl_GetLanguage( nLocale );
-    Color* pColor = nullptr;
+    const Color* pColor = nullptr;
 
     bool bOk;
     if ( bAllowEnglish )

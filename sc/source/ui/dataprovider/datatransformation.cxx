@@ -836,7 +836,7 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
                     if (eType == CELLTYPE_VALUE)
                     {
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
-                        Color* pColor = nullptr;
+                        const Color* pColor = nullptr;
                         OUString aResult;
                         pFormatter->GetPreviewStringGuess("MMMM", nVal, aResult, &pColor, eLanguage);
                         rDoc.SetString(rCol, nRow, 0, aResult);

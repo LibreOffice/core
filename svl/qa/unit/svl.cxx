@@ -431,9 +431,8 @@ void Test::checkPreviewString(SvNumberFormatter& aFormatter,
                               OUString const & sExpected)
 {
     OUString sStr;
-    Color* pColor = nullptr;
-    Color** ppColor = &pColor;
-    if (!aFormatter.GetPreviewString(sCode, fPreviewNumber, sStr, ppColor, eLang))
+    const Color* pColor = nullptr;
+    if (!aFormatter.GetPreviewString(sCode, fPreviewNumber, sStr, &pColor, eLang))
     {
         OString aMessage = "GetPreviewString( \"" +
             OUStringToOString( sCode, RTL_TEXTENCODING_ASCII_US ) +
@@ -1111,7 +1110,7 @@ void Test::checkDateInput( SvNumberFormatter& rFormatter, const char* pTimezone,
     CPPUNIT_ASSERT_MESSAGE("Format parsed is not date.",
             (rFormatter.GetType(nIndex) & SvNumFormatType::DATE));
     OUString aOutString;
-    Color *pColor;
+    const Color *pColor;
     rFormatter.GetOutputString( fVal, nIndex, aOutString, &pColor);
     CPPUNIT_ASSERT_EQUAL( aDate, aOutString);
 }
@@ -1184,7 +1183,7 @@ void checkSpecificNumberFormats( SvNumberFormatter& rFormatter,
         {
             if (rVec[i].mnOutputIndex)
                 nIndex = rVec[i].mnOutputIndex;
-            Color* pColor;
+            const Color* pColor;
             rFormatter.GetOutputString( fNumber, nIndex, aString, &pColor);
             CPPUNIT_ASSERT_EQUAL_MESSAGE( OString( pName + OStringLiteral(" ") + OString::number(i)  + " mismatch").getStr(),
                     OUString::fromUtf8( rVec[i].mpOutput), aString);

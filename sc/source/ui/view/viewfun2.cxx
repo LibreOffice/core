@@ -2207,7 +2207,7 @@ void ScViewFunc::Solve( const ScSolveParam& rParam )
     const ScPatternAttr* pPattern = pDoc->GetPattern( nDestCol, nDestRow, nDestTab );
     if ( pPattern )
         nFormat = pPattern->GetNumberFormat( pFormatter );
-    Color* p;
+    const Color* p;
     pFormatter->GetOutputString( nSolveResult, nFormat, aResStr, &p );
 
     if ( bExact )

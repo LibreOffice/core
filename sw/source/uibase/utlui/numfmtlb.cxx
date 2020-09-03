@@ -245,7 +245,7 @@ void SwNumFormatBase::SetFormatType(const SvNumFormatType nFormatType)
 
     const SvNumberformat* pFormat;
     sal_Int32 i = 0;
-    Color* pCol;
+    const Color* pCol;
     double fVal = SwNumFormatBase::GetDefValue(nFormatType);
     OUString sValue;
 
@@ -330,7 +330,7 @@ void SwNumFormatBase::SetDefFormat(const sal_uInt32 nDefaultFormat)
 
     // No entry found:
     OUString sValue;
-    Color* pCol = nullptr;
+    const Color* pCol = nullptr;
 
     if (nType == SvNumFormatType::TEXT)
     {

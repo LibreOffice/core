@@ -1130,7 +1130,7 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
     OUString aStrOut;
     bool bFieldText = false;
 
-    Color* pColor;
+    const Color* pColor;
     switch (aCell.meType)
     {
         case CELLTYPE_EDIT :

@@ -693,7 +693,7 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
         // locale in case the formatter wasn't default created with it.
         sal_uInt32 nIndex = pFormatter->GetStandardIndex( eLangType);
         double nNumber;
-        Color* pCol;
+        const Color* pCol;
 
         bool bSuccess = pFormatter->IsNumberFormat( aStr, nIndex, nNumber );
 

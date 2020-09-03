@@ -268,7 +268,7 @@ OUString SwUserFieldType::GetContent( sal_uInt32 nFormat )
     if (nFormat && nFormat != SAL_MAX_UINT32)
     {
         OUString sFormattedValue;
-        Color* pCol = nullptr;
+        const Color* pCol = nullptr;
 
         SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
 

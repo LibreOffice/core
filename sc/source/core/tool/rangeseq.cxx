@@ -223,7 +223,7 @@ bool ScRangeToSequence::FillStringArray( uno::Any& rAny, const ScMatrix* pMatrix
             else if ( pFormatter )
             {
                 double fVal = pMatrix->GetDouble( nCol, nRow );
-                Color* pColor;
+                const Color* pColor;
                 pFormatter->GetOutputString( fVal, 0, aStr, &pColor );
             }
             pColAry[nCol] = aStr;

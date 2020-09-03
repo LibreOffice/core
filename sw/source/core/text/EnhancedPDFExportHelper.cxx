@@ -1589,7 +1589,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     const Date aDateDiff(pField->GetDate() - pNumFormatter->GetNullDate());
                     const sal_uLong nFormat = pNumFormatter->GetStandardFormat(SvNumFormatType::DATE, pField->GetLanguage());
                     OUString sDate;
-                    Color* pColor;
+                    const Color* pColor;
                     pNumFormatter->GetOutputString(aDateDiff.GetDate(), nFormat, sDate, &pColor);
 
                     vcl::PDFNote aNote;
