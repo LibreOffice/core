@@ -1765,6 +1765,12 @@ bool ChartController::impl_moveOrResizeObject(
 {
     bool bResult = false;
     bool bNeedResize = ( eType == CENTERED_RESIZE_OBJECT );
+    ObjectType eObjectType = ObjectIdentifier::getObjectType(rCID);
+
+    /*TODO: Move data label objects with arrow-keys,
+    in that case we have to use CustomLabelPosition instead of RelativePosition!*/
+    if( eObjectType == OBJECTTYPE_DATA_LABEL )
+        return bResult;
 
     uno::Reference< frame::XModel > xChartModel( getModel() );
     uno::Reference< beans::XPropertySet > xObjProp(
@@ -1824,7 +1830,6 @@ bool ChartController::impl_moveOrResizeObject(
             if( bNeedResize )
                 eActionType = ActionDescriptionProvider::ActionType::Resize;
 
-            ObjectType eObjectType = ObjectIdentifier::getObjectType( rCID );
             UndoGuard aUndoGuard( ActionDescriptionProvider::createDescription(
                     eActionType, ObjectNameProvider::getName( eObjectType )), m_xUndoManager );
             {
