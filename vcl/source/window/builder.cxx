@@ -3945,7 +3945,7 @@ std::vector<vcl::EnumContext::Context> VclBuilder::handleStyle(xmlreader::XmlRea
                     OUString aPriority2(aPriority.getStr(), aPriority.getLength(), RTL_TEXTENCODING_UTF8);
                     nPriority = aPriority2.toInt32();
                 }
-                else
+                else if (classStyle != "small-button")
                 {
                     SAL_WARN("vcl.builder", "unknown class: " << classStyle);
                 }
