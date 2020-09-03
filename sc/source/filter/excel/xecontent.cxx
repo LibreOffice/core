@@ -452,7 +452,7 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
         mnFlags |= EXC_HLINK_MARK;
 
         OUString location = XclXmlUtils::ToOUString(*mxTextMark);
-        if (!location.isEmpty() && msTarget.endsWith("#" + location))
+        if (!location.isEmpty() && msTarget.endsWith(OUString("#" + location)))
             msTarget = msTarget.copy(0, msTarget.getLength() - location.getLength() - 1);
     }
 

@@ -98,7 +98,7 @@ namespace
     // #120879# - helper method to identify a bookmark name to match the internal TOC bookmark naming convention
     bool IsTOCBookmarkName(const OUString& rName)
     {
-        return rName.startsWith("_Toc") || rName.startsWith(IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix()+"_Toc");
+        return rName.startsWith("_Toc") || rName.startsWith(OUString(IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix()+"_Toc"));
     }
 
     OUString EnsureTOCBookmarkName(const OUString& rName)

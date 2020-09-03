@@ -273,6 +273,9 @@ void Test::ustringReplaceAll() {
     CPPUNIT_ASSERT_EQUAL(
         OUString("xxa"),
         OUString("xaa").replaceAll(s_xa, s_xx));
+
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("foobarbaz"), OUString("foobarfoo").replaceAll(u"foo", u"baz", 1));
 }
 
 void Test::ustringReplaceAllAsciiL() {

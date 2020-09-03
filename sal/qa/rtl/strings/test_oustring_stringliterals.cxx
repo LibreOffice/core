@@ -12,6 +12,8 @@
 
 #include <sal/config.h>
 
+#include <string>
+#include <string_view>
 #include <utility>
 
 #include <o3tl/cppunittraitshelper.hxx>
@@ -33,12 +35,11 @@ class StringLiterals: public CppUnit::TestFixture
 private:
     void checkCtors();
     void checkUsage();
-    void checkExtraIntArgument();
-    void checkNonconstChar();
     void checkBuffer();
     void checkOUStringLiteral();
     void checkOUStringChar();
     void checkUtf16();
+    void checkEmbeddedNul();
 
     void testcall( const char str[] );
 
@@ -48,12 +49,11 @@ private:
 CPPUNIT_TEST_SUITE(StringLiterals);
 CPPUNIT_TEST(checkCtors);
 CPPUNIT_TEST(checkUsage);
-CPPUNIT_TEST(checkExtraIntArgument);
-CPPUNIT_TEST(checkNonconstChar);
 CPPUNIT_TEST(checkBuffer);
 CPPUNIT_TEST(checkOUStringLiteral);
 CPPUNIT_TEST(checkOUStringChar);
 CPPUNIT_TEST(checkUtf16);
+CPPUNIT_TEST(checkEmbeddedNul);
 CPPUNIT_TEST_SUITE_END();
 };
 
@@ -155,40 +155,6 @@ void test::oustring::StringLiterals::checkUsage()
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(0), foo.reverseCompareTo( "foo" ) );
     // if this is not true, some of the calls above converted to OUString
     CPPUNIT_ASSERT( !rtl_string_unittest_const_literal );
-}
-
-void test::oustring::StringLiterals::checkExtraIntArgument()
-{
-    // This makes sure that using by mistake RTL_CONSTASCII_STRINGPARAM does not trigger a different
-    // overload, i.e. the second argument to match() in this case is the indexFrom argument,
-    // but with the macro it would contain the length of the string. Therefore
-    // match( RTL_CONSTASCII_STRINGPARAM( "bar" )) would be match( "bar", 3 ), which would be
-    // true when called for OUString( "foobar" ). But this should not happen because of the
-    // &foo[0] trick in the RTL_CONSTASCII_STRINGPARAM macro.
-    CPPUNIT_ASSERT( !rtl::OUString("foobar").match( "bar" ));
-    CPPUNIT_ASSERT( !rtl::OUString("foobar").match( RTL_CONSTASCII_STRINGPARAM( "bar" )));
-}
-
-void test::oustring::StringLiterals::checkNonconstChar()
-{ // check that non-const char[] data do not trigger string literal overloads
-    CPPUNIT_ASSERT_EQUAL( rtl::OUString( "foobar" ), rtl::OUString( "footest" ).replaceAll( "test", "bar" ));
-    char test[] = "test";
-    char bar[] = "bar";
-    const char consttest[] = "test";
-    const char constbar[] = "bar";
-    CPPUNIT_ASSERT(
-        !VALID_CONVERSION_CALL(
-            [&test, &bar]() {
-                return rtl::OUString("footest").replaceAll(test, bar); }));
-    CPPUNIT_ASSERT(
-        !VALID_CONVERSION_CALL(
-            [&consttest, &bar]() {
-                return rtl::OUString("footest").replaceAll(consttest, bar); }));
-    CPPUNIT_ASSERT(
-        !VALID_CONVERSION_CALL(
-            [&test, &constbar]() {
-                return rtl::OUString("footest").replaceAll(test, constbar); }));
-    CPPUNIT_ASSERT_EQUAL( rtl::OUString( "foobar" ), rtl::OUString( "footest" ).replaceAll( consttest, constbar ));
 }
 
 void test::oustring::StringLiterals::checkBuffer()
@@ -422,6 +388,20 @@ void test::oustring::StringLiterals::checkUtf16() {
     CPPUNIT_ASSERT_EQUAL(rtl::OUString("abgababcdef"), b.toString());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), b.indexOf(u"ab", 1));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), b.lastIndexOf(u"ab"));
+}
+
+void test::oustring::StringLiterals::checkEmbeddedNul() {
+    using namespace std::literals;
+    rtl::OUString const s("foobar");
+    constexpr char16_t const a[] = u"foo\0hidden";
+    char16_t const * const p = a;
+    CPPUNIT_ASSERT(s.startsWith(a));
+    CPPUNIT_ASSERT(s.startsWith(p));
+    CPPUNIT_ASSERT(s.startsWith(u"foo\0hidden"));
+    CPPUNIT_ASSERT(!s.startsWith(u"foo\0hidden"s));
+    CPPUNIT_ASSERT(!s.startsWith(u"foo\0hidden"sv));
+    CPPUNIT_ASSERT(!s.startsWith(rtlunittest::OUStringLiteral(a)));
+    CPPUNIT_ASSERT(!s.startsWith(rtlunittest::OUStringLiteral(u"foo\0hidden")));
 }
 
 } // namespace

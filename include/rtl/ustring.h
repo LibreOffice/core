@@ -2001,6 +2001,41 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uString_newReplaceAllUtf16LUtf16L(
     sal_Int32 fromLength, sal_Unicode const * to, sal_Int32 toLength)
     SAL_THROW_EXTERN_C();
 
+#if defined LIBO_INTERNAL_ONLY
+/** Create a new string by replacing all occurrences of a given substring with
+    another substring.
+
+    Replacing subsequent occurrences picks up only after a given replacement.
+    That is, replacing from "xa" to "xx" in "xaa" results in "xxa", not "xxx".
+
+    @param[in, out] newStr  pointer to the new string; must not be null; must
+    point to null or a valid rtl_uString; upon return, points to the newly
+    allocated string or to null if there was either an out-of-memory condition
+    or the resulting number of UTF-16 code units would have been larger than
+    SAL_MAX_INT32
+
+    @param str  pointer to the original string; must not be null
+
+    @param from  pointer to the substring to be replaced; must not be null and
+    must point to memory of at least \p fromLength UTF-16 code units
+
+    @param fromLength  the length of the \p from substring; must be non-negative
+
+    @param to  pointer to the substring to be replaced; must not be null and
+    must point to memory of at least \p toLength UTF-16 code units
+
+    @param toLength  the length of the \p to substring; must be non-negative
+
+    @param fromIndex  the position in the string where we will begin searching
+
+    @since LibreOffice 7.1
+*/
+SAL_DLLPUBLIC void SAL_CALL rtl_uString_newReplaceAllFromIndexUtf16LUtf16L(
+    rtl_uString ** newStr, rtl_uString * str, sal_Unicode const * from,
+    sal_Int32 fromLength, sal_Unicode const * to, sal_Int32 toLengt, sal_Int32 fromIndex)
+    SAL_THROW_EXTERN_C();
+#endif
+
 /** Create a new string by converting all ASCII uppercase letters to lowercase
     within another string.
 

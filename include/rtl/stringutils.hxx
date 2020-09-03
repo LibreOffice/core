@@ -94,6 +94,7 @@ struct SAL_WARN_UNUSED OUStringChar_ {
     constexpr OUStringChar_(sal_Unicode theC): c(theC) {}
     constexpr OUStringChar_(char theC): c(theC) { assert(c <= 0x7F); }
     template<typename T> OUStringChar_(T &&) = delete;
+    constexpr operator std::u16string_view() const { return {&c, 1}; }
     sal_Unicode const c;
 };
 using OUStringChar = OUStringChar_ const;

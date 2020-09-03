@@ -1548,9 +1548,18 @@ void rtl_uString_newReplaceAllUtf16LUtf16L(
     sal_Int32 fromLength, sal_Unicode const * to, sal_Int32 toLength)
     SAL_THROW_EXTERN_C()
 {
+    rtl_uString_newReplaceAllFromIndexUtf16LUtf16L(newStr, str, from, fromLength, to, toLength, 0);
+}
+
+void rtl_uString_newReplaceAllFromIndexUtf16LUtf16L(
+    rtl_uString ** newStr, rtl_uString * str, sal_Unicode const * from,
+    sal_Int32 fromLength, sal_Unicode const * to, sal_Int32 toLength, sal_Int32 fromIndex)
+    SAL_THROW_EXTERN_C()
+{
     assert(toLength >= 0);
+    assert(fromIndex >= 0 && fromIndex <= str->length);
     rtl_uString_assign(newStr, str);
-    for (sal_Int32 i = 0;; i += toLength) {
+    for (sal_Int32 i = fromIndex;; i += toLength) {
         rtl_uString_newReplaceFirstUtf16LUtf16L(
             newStr, *newStr, from, fromLength, to, toLength, &i);
         if (i == -1 || *newStr == nullptr) {
