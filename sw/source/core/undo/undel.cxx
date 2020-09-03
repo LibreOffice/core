@@ -821,12 +821,12 @@ static void lcl_ReAnchorAtContentFlyFrames( const SwFrameFormats& rSpzArr, SwPos
     if( rSpzArr.empty() )
         return;
 
-    SwFlyFrameFormat* pFormat;
+    SwFrameFormat* pFormat;
     const SwFormatAnchor* pAnchor;
     const SwPosition* pAPos;
     for( size_t n = 0; n < rSpzArr.size(); ++n )
     {
-        pFormat = static_cast<SwFlyFrameFormat*>(rSpzArr[n]);
+        pFormat = rSpzArr[n];
         pAnchor = &pFormat->GetAnchor();
         if (pAnchor->GetAnchorId() == RndStdIds::FLY_AT_PARA)
         {
