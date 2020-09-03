@@ -239,12 +239,10 @@ std::vector<PDFGraphicAnnotation> findAnnotations(std::unique_ptr<vcl::pdf::PDFi
         {
             auto eSubtype = pAnnotation->getSubType();
 
-            if (eSubtype == vcl::pdf::PDFAnnotationSubType::Text
-                && pAnnotation->hasKey(vcl::pdf::constDictionaryKeyPopup))
+            if (eSubtype == vcl::pdf::PDFAnnotationSubType::Text)
             {
                 OUString sAuthor = pAnnotation->getString(vcl::pdf::constDictionaryKeyTitle);
                 OUString sText = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
-                auto pPopupAnnotation = pAnnotation->getLinked(vcl::pdf::constDictionaryKeyPopup);
 
                 basegfx::B2DRectangle rRectangle = pAnnotation->getRectangle();
                 basegfx::B2DRectangle rRectangleHMM(
