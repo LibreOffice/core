@@ -38,6 +38,7 @@ class PDFiumLibraryTest : public test::BootstrapFixtureBase
     void testPageObjects();
     void testAnnotationsMadeInEvince();
     void testAnnotationsMadeInAcrobat();
+    void testAnnotationsDifferentTypes();
     void testTools();
 
     CPPUNIT_TEST_SUITE(PDFiumLibraryTest);
@@ -46,6 +47,7 @@ class PDFiumLibraryTest : public test::BootstrapFixtureBase
     CPPUNIT_TEST(testPageObjects);
     CPPUNIT_TEST(testAnnotationsMadeInEvince);
     CPPUNIT_TEST(testAnnotationsMadeInAcrobat);
+    CPPUNIT_TEST(testAnnotationsDifferentTypes);
     CPPUNIT_TEST(testTools);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -286,6 +288,46 @@ void PDFiumLibraryTest::testAnnotationsMadeInAcrobat()
         auto pAnnotation = pPage->getAnnotation(3);
         CPPUNIT_ASSERT(pAnnotation);
         CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Popup, pAnnotation->getSubType());
+    }
+}
+
+void PDFiumLibraryTest::testAnnotationsDifferentTypes()
+{
+    OUString aURL = getFullUrl("PangramWithMultipleTypeOfAnnotations.pdf");
+    SvFileStream aStream(aURL, StreamMode::READ);
+    GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
+    Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
+    aGraphic.makeAvailable();
+
+    auto pVectorGraphicData = aGraphic.getVectorGraphicData();
+    CPPUNIT_ASSERT(pVectorGraphicData);
+    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf,
+                         pVectorGraphicData->getVectorGraphicDataType());
+
+    const void* pData = pVectorGraphicData->getVectorGraphicDataArray().getConstArray();
+    int nLength = pVectorGraphicData->getVectorGraphicDataArrayLength();
+
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    auto pDocument = pPdfium->openDocument(pData, nLength);
+    CPPUNIT_ASSERT(pDocument);
+
+    CPPUNIT_ASSERT_EQUAL(1, pDocument->getPageCount());
+
+    auto pPage = pDocument->openPage(0);
+    CPPUNIT_ASSERT(pPage);
+
+    CPPUNIT_ASSERT_EQUAL(2, pPage->getAnnotationCount());
+
+    {
+        auto pAnnotation = pPage->getAnnotation(0);
+        CPPUNIT_ASSERT(pAnnotation);
+        CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::FreeText, pAnnotation->getSubType());
+    }
+
+    {
+        auto pAnnotation = pPage->getAnnotation(1);
+        CPPUNIT_ASSERT(pAnnotation);
+        CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Line, pAnnotation->getSubType());
     }
 }
 
