@@ -475,6 +475,8 @@ bool ScETSForecastCalculation::prefillPerIdx()
             }
             mpPerIdx[ j ] = fI / nPeriods;
         }
+        if (mnSmplInPrd < mnCount)
+            mpPerIdx[mnSmplInPrd] = 0.0;
     }
     return true;
 }
