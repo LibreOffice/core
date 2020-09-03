@@ -819,7 +819,7 @@ void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
     else
         rTreeView.all_foreach(lambda);
 
-    bool (SwEditShell:: *FnAccRej)( SwRedlineTable::size_type ) = &SwEditShell::AcceptRedline;
+    bool (SwEditShell::*FnAccRej)( SwRedlineTable::size_type ) = &SwEditShell::AcceptRedline;
     if( !bAccept )
         FnAccRej = &SwEditShell::RejectRedline;
 

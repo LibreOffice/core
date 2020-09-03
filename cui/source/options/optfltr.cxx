@@ -159,8 +159,8 @@ bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet* )
 
     static struct ChkCBoxEntries{
         MSFltrPg2_CheckBoxEntries eType;
-        bool (SvtFilterOptions:: *FnIs)() const;
-        void (SvtFilterOptions:: *FnSet)( bool bFlag );
+        bool (SvtFilterOptions::*FnIs)() const;
+        void (SvtFilterOptions::*FnSet)( bool bFlag );
     } const aChkArr[] = {
         { MSFltrPg2_CheckBoxEntries::Math,     &SvtFilterOptions::IsMathType2Math,
                         &SvtFilterOptions::SetMathType2Math },
@@ -257,7 +257,7 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet* )
 
     static struct ChkCBoxEntries{
         MSFltrPg2_CheckBoxEntries eType;
-        bool (SvtFilterOptions:: *FnIs)() const;
+        bool (SvtFilterOptions::*FnIs)() const;
     } const aChkArr[] = {
         { MSFltrPg2_CheckBoxEntries::Math,     &SvtFilterOptions::IsMathType2Math },
         { MSFltrPg2_CheckBoxEntries::Math,     &SvtFilterOptions::IsMath2MathType },

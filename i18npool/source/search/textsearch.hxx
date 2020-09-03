@@ -62,7 +62,7 @@ class TextSearch: public cppu::WeakImplHelper
 
     // define a function pointer for the different search methods
     typedef css::util::SearchResult
-        (SAL_CALL TextSearch:: *FnSrch)( const OUString& searchStr,
+        (SAL_CALL TextSearch::*FnSrch)( const OUString& searchStr,
                                 sal_Int32 startPos, sal_Int32 endPos );
 
     FnSrch fnForward;

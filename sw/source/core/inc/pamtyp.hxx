@@ -60,9 +60,9 @@ typedef bool (*GoNd)( SwNode*, SwIndex*, sal_uInt16 );
 typedef SwContentNode* (*GoNds)( SwNodeIndex*, bool );
 typedef void (*GoDoc)( SwPosition* );
 typedef void (*GoSection)( SwPosition* );
-typedef bool (SwPosition:: *CmpOp)( const SwPosition& ) const;
+typedef bool (SwPosition::*CmpOp)( const SwPosition& ) const;
 typedef const SwTextAttr* (*GetHint)( const SwpHints&, size_t&, sal_Int32 );
-typedef bool (utl::TextSearch:: *SearchText)( const OUString&, sal_Int32*,
+typedef bool (utl::TextSearch::*SearchText)( const OUString&, sal_Int32*,
                     sal_Int32*, css::util::SearchResult* );
 typedef void (*MvSection)( SwNodeIndex * );
 

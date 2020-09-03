@@ -57,7 +57,7 @@ public:
 
 class SAL_DLLPUBLIC_RTTI SwTableFormula
 {
-typedef void (SwTableFormula:: *FnScanFormula)( const SwTable&, OUStringBuffer&,
+typedef void (SwTableFormula::*FnScanFormula)( const SwTable&, OUStringBuffer&,
                                                 OUString&, OUString*, void* ) const;
 
     void BoxNmsToPtr( const SwTable&, OUStringBuffer&, OUString&, OUString*,

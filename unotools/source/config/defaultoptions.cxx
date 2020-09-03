@@ -108,7 +108,7 @@ std::weak_ptr<SvtDefaultOptions_Impl> g_pOptions;
 
 }
 
-typedef OUString SvtDefaultOptions_Impl:: *PathStrPtr;
+typedef OUString SvtDefaultOptions_Impl::*PathStrPtr;
 
 namespace {
 

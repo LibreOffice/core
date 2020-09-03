@@ -5256,7 +5256,7 @@ bool SwWW8ImplReader::ParseTabPos(WW8_TablePos *pTabPos, WW8PLCFx_Cp_FKP* pPap)
 long SwWW8ImplReader::ImportExtSprm(WW8PLCFManResult* pRes)
 {
     // array for reading of the extended ( self-defined ) SPRMs
-    typedef long (SwWW8ImplReader:: *FNReadRecordExt)(WW8PLCFManResult*);
+    typedef long (SwWW8ImplReader::*FNReadRecordExt)(WW8PLCFManResult*);
 
     static const FNReadRecordExt aWwSprmTab[] =
     {
@@ -5284,7 +5284,7 @@ long SwWW8ImplReader::ImportExtSprm(WW8PLCFManResult* pRes)
 
 void SwWW8ImplReader::EndExtSprm(sal_uInt16 nSprmId)
 {
-    typedef sal_uInt16 (SwWW8ImplReader:: *FNReadRecordExt)();
+    typedef sal_uInt16 (SwWW8ImplReader::*FNReadRecordExt)();
 
     static const FNReadRecordExt aWwSprmTab[] =
     {
@@ -5304,7 +5304,7 @@ void SwWW8ImplReader::EndExtSprm(sal_uInt16 nSprmId)
 // arrays for reading the SPRMs
 
 // function for reading of SPRMs. Par1: SprmId
-typedef void (SwWW8ImplReader:: *FNReadRecord)( sal_uInt16, const sal_uInt8*, short );
+typedef void (SwWW8ImplReader::*FNReadRecord)( sal_uInt16, const sal_uInt8*, short );
 
 struct SprmReadInfo
 {

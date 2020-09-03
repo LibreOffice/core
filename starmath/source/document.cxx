@@ -1043,7 +1043,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 if( pArgs && SfxItemState::SET == pArgs->GetItemState( nId, false, &pItem ))
                     nCnt = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
 
-                bool (SfxUndoManager:: *fnDo)();
+                bool (SfxUndoManager::*fnDo)();
 
                 size_t nCount;
                 if( SID_UNDO == rReq.GetSlot() )
@@ -1150,7 +1150,7 @@ void SmDocShell::GetState(SfxItemSet &rSet)
                 SfxUndoManager* pTmpUndoMgr = GetUndoManager();
                 if( pTmpUndoMgr )
                 {
-                    OUString(SfxUndoManager:: *fnGetComment)( size_t, bool const ) const;
+                    OUString(SfxUndoManager::*fnGetComment)( size_t, bool const ) const;
 
                     size_t nCount;
                     if( SID_GETUNDOSTRINGS == nWh )
