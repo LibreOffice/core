@@ -1158,7 +1158,10 @@ std::unique_ptr<weld::TreeIter> SbaTableQueryBrowser::getObjectEntry(const OUStr
                         assert(false);
                     }
                     xObject = m_pTreeView->GetEntryPosByName(sPath, xCommandType.get());
-                    rTreeView.copy_iterator(*xObject, *xCommandType);
+                    if (xObject)
+                        rTreeView.copy_iterator(*xObject, *xCommandType);
+                    else
+                        xCommandType.reset();
                     if ( nIndex >= 0 )
                     {
                         if (ensureEntryObject(*xObject))
