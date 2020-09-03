@@ -46,6 +46,30 @@
       "revId": "ab1b341342ab6f3cc63105acab0d3afa1e682baf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4904efe_8ada2a79",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport6.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-03T07:47:46Z",
+      "side": 1,
+      "message": "Well - we only use import-only tests for cases where round-trip fails *yet*, so exported result differs. So we should not use import-only tests where import+export works :-).",
+      "parentUuid": "9e8271dd_7bb12065",
+      "range": {
+        "startLine": 122,
+        "startChar": 20,
+        "endLine": 122,
+        "endChar": 31
+      },
+      "revId": "ab1b341342ab6f3cc63105acab0d3afa1e682baf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
