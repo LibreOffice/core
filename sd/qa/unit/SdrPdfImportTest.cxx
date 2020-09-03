@@ -261,7 +261,34 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testAnnotationsImportExport)
         SdPage* pPage = pNewViewShell->GetActualPage();
         CPPUNIT_ASSERT(pPage);
 
-        CPPUNIT_ASSERT(!pPage->getAnnotations().empty());
+        // We expect only 1 annotation in the document because the PDF
+        // annotations are dependent on each-other:
+        // parent annotation "Text" and the child annotation "Pop-up"
+
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->getAnnotations().size());
+
+        // check annotation
+        auto xAnnotation = pPage->getAnnotations().at(0);
+
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(90.33, xAnnotation->getPosition().X, 1E-3);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(12.07, xAnnotation->getPosition().Y, 1E-3);
+
+        CPPUNIT_ASSERT_EQUAL(OUString("TheAuthor"), xAnnotation->getAuthor());
+        CPPUNIT_ASSERT_EQUAL(OUString(), xAnnotation->getInitials());
+
+        auto xText = xAnnotation->getTextRange();
+
+        CPPUNIT_ASSERT_EQUAL(OUString("This is the annotation text!"), xText->getString());
+
+        auto aDateTime = xAnnotation->getDateTime();
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(2020), aDateTime.Year);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(6), aDateTime.Month);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(18), aDateTime.Day);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(12), aDateTime.Hours);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(11), aDateTime.Minutes);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(53), aDateTime.Seconds);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), aDateTime.NanoSeconds);
+        CPPUNIT_ASSERT_EQUAL(false, bool(aDateTime.IsUTC));
     }
 
 #endif // HAVE_FEATURE_PDFIUM
