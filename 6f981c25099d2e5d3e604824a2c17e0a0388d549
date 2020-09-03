@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f2e7fb54_364700fa",
+        "filename": "readlicense_oo/docs/readme.xrm",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2020-09-03T06:55:01Z",
+      "side": 1,
+      "message": "Replace:\nsu -c \u0027dnf install *.rpm\u0027\nWith:\nsudo dnf install \u0027*.rpm\u0027",
+      "range": {
+        "startLine": 100,
+        "startChar": 66,
+        "endLine": 100,
+        "endChar": 91
+      },
+      "revId": "6f981c25099d2e5d3e604824a2c17e0a0388d549",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
