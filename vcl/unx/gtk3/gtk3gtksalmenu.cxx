@@ -657,6 +657,8 @@ void GtkSalMenu::ShowCloseButton(bool bShow)
 
     MenuBar *pVclMenuBar = static_cast<MenuBar*>(mpVCLMenu.get());
     mpCloseButton = gtk_button_new();
+    gtk_widget_set_margin_start(mpCloseButton, 8);
+    gtk_widget_set_margin_end(mpCloseButton, 8);
     g_signal_connect(mpCloseButton, "clicked", G_CALLBACK(CloseMenuBar), pVclMenuBar);
 
     gtk_button_set_relief(GTK_BUTTON(mpCloseButton), GTK_RELIEF_NONE);
@@ -664,24 +666,6 @@ void GtkSalMenu::ShowCloseButton(bool bShow)
     gtk_widget_set_can_focus(mpCloseButton, false);
 
     GtkStyleContext *pButtonContext = gtk_widget_get_style_context(GTK_WIDGET(mpCloseButton));
-
-    GtkCssProvider *pProvider = gtk_css_provider_new();
-    static const gchar data[] = "* { "
-      "padding: 0;"
-      "margin-left: 8px;"
-      "margin-right: 8px;"
-      "min-width: 18px;"
-      "min-height: 18px;"
-      "}";
-    const gchar olddata[] = "* { "
-      "padding: 0;"
-      "margin-left: 8px;"
-      "margin-right: 8px;"
-      "}";
-    gtk_css_provider_load_from_data(pProvider, gtk_check_version(3, 20, 0) == nullptr ? data : olddata, -1, nullptr);
-    gtk_style_context_add_provider(pButtonContext,
-                                   GTK_STYLE_PROVIDER(pProvider),
-                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
     gtk_style_context_add_class(pButtonContext, "flat");
     gtk_style_context_add_class(pButtonContext, "small-button");

@@ -7931,7 +7931,6 @@ private:
                 gtk_style_context_add_provider(pButtonContext,
                                                GTK_STYLE_PROVIDER(m_pMenuButtonProvider),
                                                GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-                gtk_style_context_add_class(pButtonContext, "small-button");
             }
 
         }
@@ -15551,7 +15550,6 @@ private:
     GtkBuilder* m_pBuilder;
     GSList* m_pObjectList;
     GtkWidget* m_pParentWidget;
-    GtkCssProvider *m_pSmallButtonProvider;
     gulong m_nNotifySignalId;
     std::vector<GtkButton*> m_aMnemonicButtons;
     std::vector<GtkLabel*> m_aMnemonicLabels;
@@ -15643,33 +15641,6 @@ private:
             }
             if (gtk_button_get_use_underline(pButton) && !gtk_button_get_use_stock(pButton))
                 m_aMnemonicButtons.push_back(pButton);
-
-            GtkStyleContext *pButtonContext = gtk_widget_get_style_context(pWidget);
-            if (gtk_style_context_has_class(pButtonContext, "small-button"))
-            {
-                if (!m_pSmallButtonProvider)
-                {
-                    m_pSmallButtonProvider = gtk_css_provider_new();
-                    static const gchar data[] = "* { "
-                      "padding: 0;"
-                      "margin-left: 0px;"
-                      "margin-right: 0px;"
-                      "min-height: 18px;"
-                      "min-width: 18px;"
-                      "}";
-                    const gchar olddata[] = "* { "
-                      "padding: 0;"
-                      "margin-left: 0px;"
-                      "margin-right: 0px;"
-                      "}";
-                    gtk_css_provider_load_from_data(m_pSmallButtonProvider, gtk_check_version(3, 20, 0) == nullptr ? data : olddata, -1, nullptr);
-                }
-
-                gtk_style_context_add_provider(pButtonContext,
-                                               GTK_STYLE_PROVIDER(m_pSmallButtonProvider),
-                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-            }
-
         }
         else if (GTK_IS_LABEL(pWidget))
         {
@@ -15752,7 +15723,6 @@ public:
         : weld::Builder()
         , m_pStringReplace(Translate::GetReadStringHook())
         , m_pParentWidget(pParent)
-        , m_pSmallButtonProvider(nullptr)
         , m_nNotifySignalId(0)
         , m_xInterimGlue(pInterimGlue)
     {
