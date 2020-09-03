@@ -32,6 +32,8 @@
 #include <txtftn.hxx>
 #include <svl/itemiter.hxx>
 #include <o3tl/vector_utils.hxx>
+#include <svx/swframetypes.hxx>
+#include <fmtanchr.hxx>
 
 namespace sw
 {
@@ -664,6 +666,25 @@ public:
     }
 };
 
+// Checking if there are floating forms in a document.
+class FloatingTextCheck : public NodeCheck
+{
+public:
+    FloatingTextCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
+    : NodeCheck(rIssueCollection)
+    {
+    }
+
+    void check(SwNode* pCurrent) {
+        const SwFrameFormat* format = pCurrent->GetFlyFormat();
+
+        // If node's format is FlyFormat and if it is not anchored as a character
+        if (format && format->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
+            // Throw a dummy output to check if code works properly.
+            lclAddIssue(m_rIssueCollection, SwResId(STR_NON_INTERACTIVE_FORMS));
+    }
+};
+
 class DocumentCheck : public BaseCheck
 {
 public:
@@ -809,6 +830,7 @@ void AccessibilityCheck::check()
     aNodeChecks.push_back(std::make_unique<HeaderCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<TextFormattingCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<NonInteractiveFormCheck>(m_aIssueCollection));
+    aNodeChecks.push_back(std::make_unique<FloatingTextCheck>(m_aIssueCollection));
 
     auto const& pNodes = m_pDoc->GetNodes();
     SwNode* pNode = nullptr;
