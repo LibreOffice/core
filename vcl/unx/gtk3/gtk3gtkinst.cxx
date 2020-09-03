@@ -12553,7 +12553,7 @@ private:
         pango_attr_list_unref(pAttrs);
     }
 
-    void set_bold_text_foreground_color(const Color& rColor)
+    void set_text_foreground_color(const Color& rColor, bool bSetBold)
     {
         guint16 nRed = rColor.GetRed() << 8;
         guint16 nGreen = rColor.GetRed() << 8;
@@ -12561,14 +12561,19 @@ private:
 
         PangoAttrType aFilterAttrs[] = {PANGO_ATTR_FOREGROUND, PANGO_ATTR_WEIGHT, PANGO_ATTR_INVALID};
 
+        if (!bSetBold)
+            aFilterAttrs[1] = PANGO_ATTR_INVALID;
+
         PangoAttrList* pOrigList = gtk_label_get_attributes(m_pLabel);
         PangoAttrList* pAttrs = pOrigList
             ? pango_attr_list_filter(pOrigList, filter_pango_attrs, &aFilterAttrs)
             : nullptr;
         if (!pAttrs)
             pAttrs = pango_attr_list_new();
-        pango_attr_list_insert(pAttrs, pango_attr_foreground_new(nRed, nGreen, nBlue));
-        pango_attr_list_insert(pAttrs, pango_attr_weight_new(PANGO_WEIGHT_BOLD));
+        if (rColor != COL_AUTO)
+            pango_attr_list_insert(pAttrs, pango_attr_foreground_new(nRed, nGreen, nBlue));
+        if (bSetBold)
+            pango_attr_list_insert(pAttrs, pango_attr_weight_new(PANGO_WEIGHT_BOLD));
         gtk_label_set_attributes(m_pLabel, pAttrs);
         pango_attr_list_unref(pAttrs);
     }
@@ -12611,16 +12616,22 @@ public:
                 set_text_background_color(Application::GetSettings().GetStyleSettings().GetHighlightColor());
                 break;
             case weld::LabelType::Title:
-                set_bold_text_foreground_color(Application::GetSettings().GetStyleSettings().GetLightColor());
+                set_text_foreground_color(Application::GetSettings().GetStyleSettings().GetLightColor(), true);
                 break;
         }
     }
 
     virtual void set_font(const vcl::Font& rFont) override
     {
+        // TODO, clear old props like set_text_foreground_color does
         PangoAttrList* pAttrList = create_attr_list(rFont);
         gtk_label_set_attributes(m_pLabel, pAttrList);
         pango_attr_list_unref(pAttrList);
+    }
+
+    virtual void set_font_color(const Color& rColor) override
+    {
+        set_text_foreground_color(rColor, false);
     }
 };
 
