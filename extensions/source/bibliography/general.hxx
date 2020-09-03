@@ -51,7 +51,9 @@ public:
 
 };
 
-class BibGeneralPage : public TabPage, public BibShortCutHandler
+class BibGeneralPage : public TabPage
+                     , public VclBuilderContainer
+                     , public BibShortCutHandler
 {
     VclPtr<VclGrid>            pGrid;
     VclPtr<VclScrolledWindow>  pScrolledWindow;

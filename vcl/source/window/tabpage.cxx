@@ -69,26 +69,9 @@ TabPage::TabPage( vcl::Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-TabPage::TabPage(vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription)
-    : Window(WindowType::TABPAGE)
-    , IContext()
-{
-    ImplInit(pParent, 0);
-    m_pUIBuilder.reset( new VclBuilder(this, AllSettings::GetUIRootDir(), rUIXMLDescription, rID) );
-    set_hexpand(true);
-    set_vexpand(true);
-    set_expand(true);
-}
-
 TabPage::~TabPage()
 {
     disposeOnce();
-}
-
-void TabPage::dispose()
-{
-    disposeBuilder();
-    vcl::Window::dispose();
 }
 
 void TabPage::StateChanged( StateChangedType nType )

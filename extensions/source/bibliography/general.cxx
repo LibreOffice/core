@@ -166,11 +166,16 @@ void BibPosListener::disposing(const lang::EventObject& /*Source*/)
 }
 
 BibGeneralPage::BibGeneralPage(vcl::Window* pParent, BibDataManager* pMan):
-    TabPage(pParent, "GeneralPage", "modules/sbibliography/ui/generalpage.ui"),
+    TabPage(pParent),
     BibShortCutHandler( this ),
     mxBibGeneralPageFocusListener(new BibGeneralPageFocusListener(this)),
     pDatMan(pMan)
 {
+    m_pUIBuilder.reset(new VclBuilder(this, AllSettings::GetUIRootDir(), "modules/sbibliography/ui/generalpage.ui", "GeneralPage"));
+    set_hexpand(true);
+    set_vexpand(true);
+    set_expand(true);
+
     get(pIdentifierFT, "shortname");
     get(pAuthTypeFT, "authtype");
     get(pGrid, "grid");
@@ -388,6 +393,7 @@ void BibGeneralPage::dispose()
     pCustom5FT.clear();
     for (auto & a: aFixedTexts) a.clear();
     mxBibGeneralPageFocusListener.clear();
+    disposeBuilder();
     TabPage::dispose();
 }
 
