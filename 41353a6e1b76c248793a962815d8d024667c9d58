@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "aa4777e2_75216446",
+        "filename": "vcl/source/outdev/outdevstate.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2020-09-03T08:31:43Z",
+      "side": 1,
+      "message": "You may be right, but I\u0027ll \"solve\" this one by adding a comment. That\u0027s such a crazy corner case that if somebody actually needs it one day, they can implement it properly. Given that even setting plain color has been broken until now, I think that\u0027s all that\u0027s realistically needed.",
+      "parentUuid": "c1d26b8e_46a03abd",
+      "range": {
+        "startLine": 461,
+        "startChar": 13,
+        "endLine": 461,
+        "endChar": 40
+      },
+      "revId": "41353a6e1b76c248793a962815d8d024667c9d58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fbfa253d_c81ddc5e",
         "filename": "vcl/source/outdev/outdevstate.cxx",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "41353a6e1b76c248793a962815d8d024667c9d58",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b50d2a01_dc7f581b",
+        "filename": "vcl/source/outdev/outdevstate.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2020-09-03T08:31:43Z",
+      "side": 1,
+      "message": "You\u0027re right.",
+      "parentUuid": "fbfa253d_c81ddc5e",
+      "range": {
+        "startLine": 474,
+        "startChar": 92,
+        "endLine": 474,
+        "endChar": 109
+      },
+      "revId": "41353a6e1b76c248793a962815d8d024667c9d58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
