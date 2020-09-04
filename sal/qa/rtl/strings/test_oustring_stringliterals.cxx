@@ -400,8 +400,6 @@ void test::oustring::StringLiterals::checkEmbeddedNul() {
     CPPUNIT_ASSERT(s.startsWith(u"foo\0hidden"));
     CPPUNIT_ASSERT(!s.startsWith(u"foo\0hidden"s));
     CPPUNIT_ASSERT(!s.startsWith(u"foo\0hidden"sv));
-    CPPUNIT_ASSERT(!s.startsWith(rtlunittest::OUStringLiteral(a)));
-    CPPUNIT_ASSERT(!s.startsWith(rtlunittest::OUStringLiteral(u"foo\0hidden")));
 }
 
 } // namespace

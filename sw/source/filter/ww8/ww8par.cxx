@@ -1967,8 +1967,12 @@ void SwWW8ImplReader::ImportDopTypography(const WW8DopTypography &rTypo)
     {
         case 2: // custom
             {
-                i18n::ForbiddenCharacters aForbidden(rTypo.m_rgxchFPunct,
-                    rTypo.m_rgxchLPunct);
+                i18n::ForbiddenCharacters aForbidden(+rTypo.m_rgxchFPunct,
+                    +rTypo.m_rgxchLPunct);
+                    // unary + makes sure not to accidentally call the
+                    // OUString(ConstCharArrayDetector<...>::TypeUtf16) ctor that takes the full
+                    // m_rgxchFPunct, m_rgxchLPunct arrays with embedded NULs, instead of just the
+                    // prefix leading up to the first NUL
                 m_rDoc.getIDocumentSettingAccess().setForbiddenCharacters(rTypo.GetConvertedLang(),
                         aForbidden);
                 // Obviously cannot set the standard level 1 for japanese, so
