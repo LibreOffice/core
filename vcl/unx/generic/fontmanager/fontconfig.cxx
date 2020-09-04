@@ -213,7 +213,7 @@ FcFontSet* FontCfgWrapper::getFontSet()
         addFontSet( FcSetSystem );
         addFontSet( FcSetApplication );
 
-        ::std::sort(m_pFontSet->fonts,m_pFontSet->fonts+m_pFontSet->nfont,SortFont());
+        std::stable_sort(m_pFontSet->fonts,m_pFontSet->fonts+m_pFontSet->nfont,SortFont());
     }
 
     return m_pFontSet;
