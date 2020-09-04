@@ -88,6 +88,8 @@ public:
     void testPDFGood();
     /// Test a typical PDF where the signature is bad.
     void testPDFBad();
+    /// Test a maliciously manipulated signed pdf
+    void testPDFHideAndReplace();
     /// Test a typical PDF which is not signed.
     void testPDFNo();
 #endif
@@ -113,6 +115,7 @@ public:
 #if HAVE_FEATURE_PDFIMPORT
     CPPUNIT_TEST(testPDFGood);
     CPPUNIT_TEST(testPDFBad);
+    CPPUNIT_TEST(testPDFHideAndReplace);
     CPPUNIT_TEST(testPDFNo);
 #endif
     CPPUNIT_TEST(test96097Calc);
@@ -456,6 +459,22 @@ void SigningTest::testPDFBad()
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
     CPPUNIT_ASSERT(pObjectShell);
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(SignatureState::BROKEN), static_cast<int>(pObjectShell->GetDocumentSignatureState()));
+}
+
+void SigningTest::testPDFHideAndReplace()
+{
+    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY)
+              + "hide-and-replace-shadow-file-signed-2.pdf");
+    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    CPPUNIT_ASSERT(pBaseModel);
+    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+    CPPUNIT_ASSERT(pObjectShell);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2 (BROKEN)
+    // - Actual  : 6 (NOTVALIDATED_PARTIAL_OK)
+    // i.e. a non-commenting update after a signature was not marked as invalid.
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(SignatureState::BROKEN),
+                         static_cast<int>(pObjectShell->GetDocumentSignatureState()));
 }
 
 void SigningTest::testPDFNo()

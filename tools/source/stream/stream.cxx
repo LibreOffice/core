@@ -1176,6 +1176,27 @@ SvStream& SvStream::WriteStream( SvStream& rStream )
     return *this;
 }
 
+sal_uInt64 SvStream::WriteStream( SvStream& rStream, sal_uInt64 nSize )
+{
+    const sal_uInt32 cBufLen = 0x8000;
+    std::unique_ptr<char[]> pBuf( new char[ cBufLen ] );
+    sal_uInt32 nCurBufLen = cBufLen;
+    sal_uInt32 nCount;
+    sal_uInt64 nWriteSize = nSize;
+
+    do {
+        if ( nSize >= nCurBufLen )
+            nWriteSize -= nCurBufLen;
+        else
+            nCurBufLen = nWriteSize;
+        nCount = rStream.ReadBytes( pBuf.get(), nCurBufLen );
+        WriteBytes( pBuf.get(), nCount );
+    }
+    while( nWriteSize && nCount == nCurBufLen );
+
+    return nSize - nWriteSize;
+}
+
 OUString SvStream::ReadUniOrByteString( rtl_TextEncoding eSrcCharSet )
 {
     // read UTF-16 string directly from stream ?

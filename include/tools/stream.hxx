@@ -257,6 +257,7 @@ public:
     SvStream&       WriteOString(const OString& rStr)
                         { return WriteCharPtr(rStr.getStr()); }
     SvStream&       WriteStream( SvStream& rStream );
+    sal_uInt64      WriteStream( SvStream& rStream, sal_uInt64 nSize );
 
     SvStream&       WriteBool( bool b )
                         { return WriteUChar(static_cast<unsigned char>(b)); }
