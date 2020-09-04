@@ -1219,6 +1219,46 @@ sal_uInt32 VMLExport::GenerateShapeId()
         return m_nShapeIDCounter++;
 }
 
+OString VMLExport::GetVMLShapeTypeDefinition(const OString& sShapeID, const bool& bIsPictureFrame)
+{
+    // We don't have a shape definition for host control in presetShapeDefinitions.xml
+    // So use a definition copied from DOCX file created with MSO
+    OString sOut;
+    if (bIsPictureFrame)
+        sOut = "<v:shapetype id=\"shapetype_" + sShapeID
+               + "\" coordsize=\"21600,21600\" o:spt=\"" + sShapeID
+               + "\" o:preferrelative=\"t\" path=\"m@4@5l@4@11@9@11@9@5xe\" filled=\"f\" "
+                 "stroked=\"f\">\n"
+                 "<v:stroke joinstyle=\"miter\"/>\n"
+                 "<v:formulas>\n"
+                 "<v:f eqn=\"if lineDrawn pixelLineWidth 0\"/>\n"
+                 "<v:f eqn=\"sum @0 1 0\"/>\n"
+                 "<v:f eqn=\"sum 0 0 @1\"/>\n"
+                 "<v:f eqn=\"prod @2 1 2\"/>\n"
+                 "<v:f eqn=\"prod @3 21600 pixelWidth\"/>\n"
+                 "<v:f eqn=\"prod @3 21600 pixelHeight\"/>\n"
+                 "<v:f eqn=\"sum @0 0 1\"/>\n"
+                 "<v:f eqn=\"prod @6 1 2\"/>\n"
+                 "<v:f eqn=\"prod @7 21600 pixelWidth\"/>\n"
+                 "<v:f eqn=\"sum @8 21600 0\"/>\n"
+                 "<v:f eqn=\"prod @7 21600 pixelHeight\"/>\n"
+                 "<v:f eqn=\"sum @10 21600 0\"/>\n"
+                 "</v:formulas>\n"
+                 "<v:path o:extrusionok=\"f\" gradientshapeok=\"t\" o:connecttype=\"rect\"/>\n"
+                 "<o:lock v:ext=\"edit\" aspectratio=\"t\"/>\n"
+                 "</v:shapetype>";
+    else
+        sOut = "<v:shapetype id=\"shapetype_" + sShapeID
+               + "\" coordsize=\"21600,21600\" o:spt=\"" + sShapeID
+               + "\" path=\"m,l,21600l21600,21600l21600,xe\">\n"
+                 "<v:stroke joinstyle=\"miter\"/>\n"
+                 "<v:path shadowok=\"f\" o:extrusionok=\"f\" strokeok=\"f\" fillok=\"f\" "
+                 "o:connecttype=\"rect\"/>\n"
+                 "<o:lock v:ext=\"edit\" shapetype=\"t\"/>\n"
+                 "</v:shapetype>";
+    return sOut;
+}
+
 sal_Int32 VMLExport::StartShape()
 {
     if ( m_nShapeType == ESCHER_ShpInst_Nil )
@@ -1237,56 +1277,22 @@ sal_Int32 VMLExport::StartShape()
         case ESCHER_ShpInst_Line:           nShapeElement = XML_line;      break;
         case ESCHER_ShpInst_HostControl:
         {
-            // We don't have a shape definition for host control in presetShapeDefinitions.xml
-            // So use a definition copied from DOCX file created with MSO
             bReferToShapeType = true;
             nShapeElement = XML_shape;
             if ( !m_aShapeTypeWritten[ m_nShapeType ] )
             {
-                OString sShapeType =
-                    "<v:shapetype id=\"shapetype_" + OString::number(m_nShapeType) +
-                        "\" coordsize=\"21600,21600\" o:spt=\"" + OString::number(m_nShapeType) +
-                        "\" path=\"m,l,21600l21600,21600l21600,xe\">\n"
-                        "<v:stroke joinstyle=\"miter\"/>\n"
-                        "<v:path shadowok=\"f\" o:extrusionok=\"f\" strokeok=\"f\" fillok=\"f\" o:connecttype=\"rect\"/>\n"
-                        "<o:lock v:ext=\"edit\" shapetype=\"t\"/>\n"
-                    "</v:shapetype>";
-                m_pSerializer->write(sShapeType);
+                m_pSerializer->write(GetVMLShapeTypeDefinition(OString::number(m_nShapeType), false));
                 m_aShapeTypeWritten[ m_nShapeType ] = true;
             }
             break;
         }
         case ESCHER_ShpInst_PictureFrame:
         {
-            // We don't have a shape definition for picture frame in presetShapeDefinitions.xml
-            // So use a definition copied from DOCX file created with MSO
             bReferToShapeType = true;
             nShapeElement = XML_shape;
             if ( !m_aShapeTypeWritten[ m_nShapeType ] )
             {
-                OString sShapeType =
-                    "<v:shapetype id=\"shapetype_" + OString::number(m_nShapeType) +
-                        "\" coordsize=\"21600,21600\" o:spt=\"" + OString::number(m_nShapeType) +
-                        "\" o:preferrelative=\"t\" path=\"m@4@5l@4@11@9@11@9@5xe\" filled=\"f\" stroked=\"f\">\n"
-                        "<v:stroke joinstyle=\"miter\"/>\n"
-                        "<v:formulas>\n"
-                            "<v:f eqn=\"if lineDrawn pixelLineWidth 0\"/>\n"
-                            "<v:f eqn=\"sum @0 1 0\"/>\n"
-                            "<v:f eqn=\"sum 0 0 @1\"/>\n"
-                            "<v:f eqn=\"prod @2 1 2\"/>\n"
-                            "<v:f eqn=\"prod @3 21600 pixelWidth\"/>\n"
-                            "<v:f eqn=\"prod @3 21600 pixelHeight\"/>\n"
-                            "<v:f eqn=\"sum @0 0 1\"/>\n"
-                            "<v:f eqn=\"prod @6 1 2\"/>\n"
-                            "<v:f eqn=\"prod @7 21600 pixelWidth\"/>\n"
-                            "<v:f eqn=\"sum @8 21600 0\"/>\n"
-                            "<v:f eqn=\"prod @7 21600 pixelHeight\"/>\n"
-                            "<v:f eqn=\"sum @10 21600 0\"/>\n"
-                        "</v:formulas>\n"
-                        "<v:path o:extrusionok=\"f\" gradientshapeok=\"t\" o:connecttype=\"rect\"/>\n"
-                        "<o:lock v:ext=\"edit\" aspectratio=\"t\"/>\n"
-                        "</v:shapetype>";
-                m_pSerializer->write(sShapeType);
+                m_pSerializer->write(GetVMLShapeTypeDefinition(OString::number(m_nShapeType), true));
                 m_aShapeTypeWritten[ m_nShapeType ] = true;
             }
             break;
