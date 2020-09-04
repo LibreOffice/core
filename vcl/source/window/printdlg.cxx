@@ -1972,6 +1972,15 @@ void PrintDialog::previewBackward()
     mpPageEdit->Down();
 }
 
+
+static OUString getNewLabel(const OUString& aLabel, int i_nCurr, int i_nMax)
+{
+    OUString aNewText( aLabel.replaceFirst( "%p", OUString::number( i_nCurr ) ) );
+    aNewText = aNewText.replaceFirst( "%n", OUString::number( i_nMax ) );
+
+    return aNewText;
+}
+
 // PrintProgressDialog
 
 PrintProgressDialog::PrintProgressDialog(vcl::Window* i_pParent, int i_nMax)
@@ -1991,9 +2000,7 @@ PrintProgressDialog::PrintProgressDialog(vcl::Window* i_pParent, int i_nMax)
 
     //just multiply largest value by 10 and take the width of that string as
     //the max size we will want
-    OUString aNewText( searchAndReplace( maStr, "%p", 2, OUString::number( mnMax * 10 ) ) );
-    aNewText = searchAndReplace( aNewText, "%n", 2, OUString::number( mnMax * 10 ) );
-    mpText->SetText( aNewText );
+    mpText->SetText( getNewLabel(maStr, mnMax * 10, mnMax * 10) );
     mpText->set_width_request(mpText->get_preferred_size().Width());
 
     //Pick a useful max width
@@ -2001,6 +2008,7 @@ PrintProgressDialog::PrintProgressDialog(vcl::Window* i_pParent, int i_nMax)
 
     mpButton->SetClickHdl( LINK( this, PrintProgressDialog, ClickHdl ) );
 
+    mpText->SetText( getNewLabel(maStr, mnMax, mnMax) );
 }
 
 PrintProgressDialog::~PrintProgressDialog()
@@ -2029,11 +2037,9 @@ void PrintProgressDialog::setProgress( int i_nCurrent )
     if( mnMax < 1 )
         mnMax = 1;
 
-    mpProgress->SetValue(mnCur*100/mnMax);
+    mpText->SetText( getNewLabel(maStr, mnCur, mnMax) );
 
-    OUString aNewText( searchAndReplace( maStr, "%p", 2, OUString::number( mnCur ) ) );
-    aNewText = searchAndReplace( aNewText, "%n", 2, OUString::number( mnMax ) );
-    mpText->SetText( aNewText );
+    mpProgress->SetValue(mnCur*100/mnMax);
 }
 
 void PrintProgressDialog::tick()
