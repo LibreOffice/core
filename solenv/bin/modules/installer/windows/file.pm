@@ -565,6 +565,9 @@ sub get_fileversion
         if ($ttfdata =~ /(Version )?([0-9]+(\.[0-9]+)*)/i)
         {
             my ($version, $subversion, $microversion, $vervariant) = split(/\./,$2);
+            $subversion = 0 if not defined $subversion;
+            $microversion = 0 if not defined $microversion;
+            $vervariant = 0 if not defined $vervariant;
             $fileversion = int($version) . "." . int($subversion) . "." . int($microversion) . "." . int($vervariant);
         }
         else
