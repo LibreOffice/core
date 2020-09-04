@@ -3511,6 +3511,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                             && !m_pImpl->GetIsDummyParaAddedForTableInSection()
                             && !( pSectionContext && pSectionContext->GetBreakType() != -1 && pContext && pContext->isSet(PROP_BREAK_TYPE) )
                             && !m_pImpl->GetIsPreviousParagraphFramed()
+                            && !m_pImpl->HasTopAnchoredObjects()
                             && !m_pImpl->IsParaWithInlineObject());
 
             const bool bNoNumbering = bRemove || (!m_pImpl->GetParaChanged() && m_pImpl->GetParaSectpr() && bSingleParagraph);
