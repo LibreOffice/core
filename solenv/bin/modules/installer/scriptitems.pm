@@ -399,7 +399,8 @@ sub remove_not_required_spellcheckerlanguage_files
     for ( my $i = 0; $i <= $#{$filesarrayref}; $i++ )
     {
         my $onefile = ${$filesarrayref}[$i];
-        if ( exists($installer::globals::spellcheckerfilehash{$onefile->{'gid'}}) )
+        # FIXME: some items don't have 'gid'
+        if ( (defined $onefile->{'gid'}) && exists($installer::globals::spellcheckerfilehash{$onefile->{'gid'}}) )
         {
             $infoline = "Spellchecker selection: Removing file $onefile->{'gid'}\n";
             push( @installer::globals::logfileinfo, $infoline);
