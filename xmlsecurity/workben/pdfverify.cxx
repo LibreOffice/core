@@ -23,6 +23,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/filter/pdfdocument.hxx>
+#include <comphelper/scopeguard.hxx>
 
 #include <pdfio/pdfdocument.hxx>
 
@@ -80,11 +81,11 @@ int pdfVerify(int nArgc, char** pArgv)
                                                                     uno::UNO_QUERY);
     comphelper::setProcessServiceFactory(xMultiServiceFactory);
 
+    InitVCL();
+    comphelper::ScopeGuard g([] { DeInitVCL(); });
     if (nArgc > 3 && OString(pArgv[3]) == "-p")
     {
-        InitVCL();
         generatePreview(pArgv[1], pArgv[2]);
-        DeInitVCL();
         return 0;
     }
 
