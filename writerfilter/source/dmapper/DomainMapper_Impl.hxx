@@ -710,6 +710,8 @@ public:
     css::uno::Reference<css::text::XTextAppend> const & GetTopTextAppend();
     FieldContextPtr const & GetTopFieldContext();
 
+    bool HasTopAnchoredObjects() const;
+
     FontTablePtr const & GetFontTable()
     {
         if(!m_pFontTable)
