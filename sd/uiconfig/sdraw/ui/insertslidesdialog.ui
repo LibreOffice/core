@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -18,9 +18,6 @@
     <property name="title" translatable="yes" context="insertslidesdialog|InsertSlidesDialog">Insert Slides/Objects</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -100,6 +97,11 @@
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="backgrounds-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="insertslidesdialog|extended_tip|backgrounds">Unused master pages are not inserted.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -115,6 +117,11 @@
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="links-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="insertslidesdialog|extended_tip|links">Inserts a file or some file elements as a link that is automatically updated when the source file is modified.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -138,7 +145,6 @@
                     <property name="vexpand">True</property>
                     <property name="model">liststore1</property>
                     <property name="headers_visible">False</property>
-                    <property name="show_expanders">True</property>
                     <property name="search_column">1</property>
                     <property name="enable_tree_lines">True</property>
                     <child internal-child="selection">
@@ -183,5 +189,8 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>

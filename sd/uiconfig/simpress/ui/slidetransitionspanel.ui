@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.2 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -54,6 +54,11 @@
                         <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="transitions_icons-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="slidetransitionspanel|extended_tip|transitions_icons">Select the slide transition you want to use for the selected slides.</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -113,6 +118,11 @@
                         <property name="hexpand">True</property>
                         <property name="adjustment">adjustment2</property>
                         <property name="digits">2</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="transition_duration-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="slidetransitionspanel|extended_tip|transition_duration">Sets the duration of the slide transition.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -143,6 +153,11 @@
                           <item translatable="yes" context="slidetransitionspanel|sound_list">Stop previous sound</item>
                           <item translatable="yes" context="slidetransitionspanel|sound_list">Other sound...</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="sound_list-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="slidetransitionspanel|extended_tip|sound_list">Lists sounds that can played during the slide transition.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -158,6 +173,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="loop_sound-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="slidetransitionspanel|extended_tip|loop_sound">Select to play the sound repeatedly until another sound starts.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -182,6 +202,11 @@
                       <object class="GtkComboBoxText" id="variant_list">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="variant_list-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="slidetransitionspanel|extended_tip|variant_list">Select a variation of the transition.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -240,6 +265,11 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="rb_mouse_click-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="slidetransitionspanel|extended_tip|rb_mouse_click">Select to advance to the next slide on a mouse click.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -260,6 +290,11 @@
                         <accessibility>
                           <relation type="label-for" target="auto_after_value"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="rb_auto_after-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="slidetransitionspanel|extended_tip|rb_auto_after">Select to advance to the next slide after a number of seconds. Enter the seconds in the numerical field next to the spin button, or click the spin button.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -275,6 +310,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="rb_auto_after"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="auto_after_value-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="slidetransitionspanel|extended_tip|auto_after_value">Select to advance to the next slide after a number of seconds. Enter the seconds in the numerical field next to the spin button, or click the spin button.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -320,6 +360,11 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="halign">center</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="apply_to_all-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="slidetransitionspanel|extended_tip|apply_to_all">Applies the selected slide transition to all slides in the current presentation document.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -359,6 +404,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="auto_preview-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="slidetransitionspanel|extended_tip|auto_preview">Select to see the slide transitions automatically in the document.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -377,6 +427,11 @@
                     <property name="use_underline">True</property>
                     <property name="image_position">right</property>
                     <property name="always_show_image">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="play-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="slidetransitionspanel|extended_tip|play">Shows the current slide transition as a preview.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -404,6 +459,11 @@
         <property name="fill">True</property>
         <property name="position">0</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="SlideTransitionsPanel-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="slidetransitionspanel|extended_tip|SlideTransitionsPanel">Defines the special effect that plays when you display a slide during a slide show.</property>
+      </object>
     </child>
   </object>
 </interface>
