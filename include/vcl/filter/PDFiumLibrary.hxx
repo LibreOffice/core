@@ -17,6 +17,9 @@
 #include <memory>
 #include <rtl/instance.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/checksum.hxx>
+
+#include <fpdfview.h>
 
 namespace vcl::pdf
 {
@@ -29,6 +32,33 @@ private:
 public:
     PDFium();
     ~PDFium();
+};
+
+class VCL_DLLPUBLIC PDFiumPage final
+{
+private:
+    FPDF_PAGE mpPage;
+
+private:
+    PDFiumPage(const PDFiumPage&) = delete;
+    PDFiumPage& operator=(const PDFiumPage&) = delete;
+
+public:
+    PDFiumPage(FPDF_PAGE pPage)
+        : mpPage(pPage)
+    {
+    }
+
+    ~PDFiumPage()
+    {
+        if (mpPage)
+            FPDF_ClosePage(mpPage);
+    }
+
+    FPDF_PAGE getPointer() { return mpPage; }
+
+    /// Get bitmap checksum of the page, without annotations/commenting.
+    BitmapChecksum getChecksum();
 };
 
 struct PDFiumLibrary : public rtl::StaticWithInit<std::shared_ptr<PDFium>, PDFiumLibrary>
