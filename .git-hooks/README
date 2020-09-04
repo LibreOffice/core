@@ -3,6 +3,11 @@ Git hooks are executable scripts you can place in $GIT_DIR/hooks directory to tr
 To install manually, run:
 
   cd .git/hooks && ln -s ../../.git-hooks/* ./
+  
+When you using GIT for Windows, you need Windows links
+Open a Dos-Box with admin rights then
+  cd .git/hooks
+  FOR /F " usebackq " %i IN (`dir /b ..\..\.git-hooks`) DO mklink %i ..\..\.git-hooks\%i
 
 There are two groups of these hooks: client side and server side.
 
@@ -13,3 +18,4 @@ The server-side hooks:
 are for Git server operations such as receiving pushed commits.
 
 See Also [ http://git-scm.com/book/en/Customizing-Git-Git-Hooks ]
+
