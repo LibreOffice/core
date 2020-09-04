@@ -26,6 +26,7 @@
 #include <com/sun/star/text/XFlatParagraphIteratorProvider.hpp>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
@@ -100,6 +101,9 @@
 #include <fmtmeta.hxx>
 
 #include <svx/xfillit0.hxx>
+#include <unotools/configmgr.hxx>
+#include <i18nlangtag/mslangid.hxx>
+#include <editeng/langitem.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::document;
@@ -356,6 +360,24 @@ SwDoc::SwDoc()
         mnRsid = comphelper::rng::uniform_uint_distribution(1, (1 << 21) - 1);
     }
     mnRsidRoot = mnRsid;
+
+    if (!utl::ConfigManager::IsFuzzing())
+    {
+        // Make sure that in case the document language is not set, then we don't return
+        // LANGUAGE_DONTKNOW, but the UI locale.
+        const SvtLinguConfig aLinguConfig;
+        SvtLinguOptions aOptions;
+        aLinguConfig.GetOptions(aOptions);
+        LanguageType eLang = MsLangId::resolveSystemLanguageByScriptType(aOptions.nDefaultLanguage,
+                                                                         i18n::ScriptType::LATIN);
+        SetLanguage(eLang, RES_CHRATR_LANGUAGE);
+        eLang = MsLangId::resolveSystemLanguageByScriptType(aOptions.nDefaultLanguage_CJK,
+                                                            i18n::ScriptType::ASIAN);
+        SetLanguage(eLang, RES_CHRATR_CJK_LANGUAGE);
+        eLang = MsLangId::resolveSystemLanguageByScriptType(aOptions.nDefaultLanguage_CTL,
+                                                            i18n::ScriptType::COMPLEX);
+        SetLanguage(eLang, RES_CHRATR_CTL_LANGUAGE);
+    }
 
     getIDocumentState().ResetModified();
 }

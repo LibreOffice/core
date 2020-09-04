@@ -1653,6 +1653,8 @@ public:
     /// Returns true if no dictionary can be found for any content
     bool IsDictionaryMissing() const { return meDictionaryMissing == MissingDictionary::True; }
 
+    void SetLanguage(const LanguageType eLang, const sal_uInt16 nId);
+
 private:
     // Copies master header to left / first one, if necessary - used by ChgPageDesc().
     void CopyMasterHeader(const SwPageDesc &rChged, const SwFormatHeader &rHead, SwPageDesc &pDesc, bool bLeft, bool bFirst);
