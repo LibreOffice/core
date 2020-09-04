@@ -295,4 +295,37 @@ class writerWordCount(UITestCase):
         xCloseBtn = xDialog.getChild("close")
         self.ui_test.close_dialog_through_button(xCloseBtn)
         self.ui_test.close_doc()
+
+    def test_tdf117703(self):
+        self.ui_test.load_file(get_url_for_data_file("tdf117703.odt"))
+        self.xUITest.getTopFocusWindow()
+
+        self.xUITest.executeCommand(".uno:SelectAll")
+
+        self.ui_test.execute_modeless_dialog_through_command(".uno:WordCountDialog")
+        xDialog = self.xUITest.getTopFocusWindow()
+
+        xselectwords = xDialog.getChild("selectwords")
+        xdocwords = xDialog.getChild("docwords")
+        xselectchars = xDialog.getChild("selectchars")
+        xdocchars = xDialog.getChild("docchars")
+        xselectcharsnospaces = xDialog.getChild("selectcharsnospaces")
+        xdoccharsnospaces = xDialog.getChild("doccharsnospaces")
+        xselectcjkchars = xDialog.getChild("selectcjkchars")
+        xdoccjkchars = xDialog.getChild("doccjkchars")
+
+        self.assertEqual(get_state_as_dict(xselectwords)["Text"], "12")
+        self.assertEqual(get_state_as_dict(xdocwords)["Text"], "12")
+        self.assertEqual(get_state_as_dict(xselectchars)["Text"], "54")
+        self.assertEqual(get_state_as_dict(xdocchars)["Text"], "54")
+
+        # Without the fix in place it would have failed with: AssertionError: '0' != '44'
+        self.assertEqual(get_state_as_dict(xselectcharsnospaces)["Text"], "44")
+        self.assertEqual(get_state_as_dict(xdoccharsnospaces)["Text"], "44")
+        self.assertEqual(get_state_as_dict(xselectcjkchars)["Text"], "0")
+        self.assertEqual(get_state_as_dict(xdoccjkchars)["Text"], "0")
+        xCloseBtn = xDialog.getChild("close")
+        self.ui_test.close_dialog_through_button(xCloseBtn)
+
+        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
