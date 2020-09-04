@@ -88,10 +88,14 @@
 #include <editeng/charhiddenitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/keepitem.hxx>
+#include <editeng/borderline.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xflgrit.hxx>
+#include <svx/xlineit0.hxx>
+#include <svx/xlnclit.hxx>
+#include <svx/xlnwtit.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/unobrushitemhelper.hxx>
 #include <svl/grabbagitem.hxx>
@@ -5606,24 +5610,197 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
         m_pSerializer->startElementNS(XML_w, XML_object);
     }
 
+    OString sShapeId = "ole_" + sId;
+
+    //OLE Shape definition
+    WriteOLEShape(*pFlyFrameFormat, rSize, sShapeId, sImageId);
+
+    //OLE Object definition
+    m_pSerializer->singleElementNS(XML_o, XML_OLEObject,
+                                   XML_Type, "Embed",
+                                   XML_ProgID, sProgID,
+                                   XML_ShapeID, sShapeId.getStr(),
+                                   XML_DrawAspect, sDrawAspect,
+                                   XML_ObjectID, "_" + OString::number(comphelper::rng::uniform_int_distribution(0, std::numeric_limits<int>::max())),
+                                   FSNS( XML_r, XML_id ), sId );
+
+    m_pSerializer->endElementNS(XML_w, XML_object);
+}
+
+void DocxAttributeOutput::WriteOLEShape(const SwFlyFrameFormat& rFrameFormat, const Size& rSize,
+                                        const OString& rShapeId, const OUString& rImageId)
+{
+    assert(m_pSerializer);
+
+    //Here is an attribute list where we collect the attributes what we want to export
+    FastAttributeList* pAttr = FastSerializerHelper::createAttrList();
+    pAttr->add(XML_id, rShapeId.getStr());
+
+    //export the fixed shape type for picture frame
+    m_pSerializer->write(vml::VMLExport::GetVMLShapeTypeDefinition(rShapeId, true));
+    pAttr->add(XML_type, "shapetype_" + rShapeId);
+
+    //Export the style attribute for position and size
+    pAttr->add(XML_style, GetOLEStyle(rFrameFormat, rSize).getStr());
+    //Get the OLE frame
+    const SvxBoxItem& rBox = rFrameFormat.GetAttrSet().GetBox();
+    OString sLineType;
+    OString sDashType;
+    //Word does not handle differently the four sides,
+    //so we have to choose, and the left one is the winner:
+    if (rBox.GetLeft())
+    {
+        //Get the left border color and width
+        const Color aLineColor = rBox.GetLeft()->GetColor();
+        const long aLineWidth = rBox.GetLeft()->GetWidth();
+
+        //Convert the left OLE border style to OOXML
+        //FIXME improve if it's necessary
+        switch (rBox.GetLeft()->GetBorderLineStyle())
+        {
+            case SvxBorderLineStyle::SOLID:
+                sLineType = OString("Single");
+                sDashType = OString("Solid");
+                break;
+            case SvxBorderLineStyle::DASHED:
+                sLineType = OString("Single");
+                sDashType = OString("Dash");
+                break;
+            case SvxBorderLineStyle::DASH_DOT:
+                sLineType = OString("Single");
+                sDashType = OString("DashDot");
+                break;
+            case SvxBorderLineStyle::DASH_DOT_DOT:
+                sLineType = OString("Single");
+                sDashType = OString("ShortDashDotDot");
+                break;
+            case SvxBorderLineStyle::DOTTED:
+                sLineType = OString("Single");
+                sDashType = OString("Dot");
+                break;
+            case SvxBorderLineStyle::DOUBLE:
+                sLineType = OString("ThinThin");
+                sDashType = OString("Solid");
+                break;
+            case SvxBorderLineStyle::DOUBLE_THIN:
+                sLineType = OString("ThinThin");
+                sDashType = OString("Solid");
+                break;
+            case SvxBorderLineStyle::EMBOSSED:
+                sLineType = OString("Single");
+                sDashType = OString("Solid");
+                break;
+            case SvxBorderLineStyle::ENGRAVED:
+                sLineType = OString("Single");
+                sDashType = OString("Solid");
+                break;
+            case SvxBorderLineStyle::FINE_DASHED:
+                sLineType = OString("Single");
+                sDashType = OString("Dot");
+                break;
+            case SvxBorderLineStyle::INSET:
+                sLineType = OString("Single");
+                sDashType = OString("Solid");
+                break;
+            case SvxBorderLineStyle::OUTSET:
+                sLineType = OString("Single");
+                sDashType = OString("Solid");
+                break;
+            case SvxBorderLineStyle::THICKTHIN_LARGEGAP:
+            case SvxBorderLineStyle::THICKTHIN_MEDIUMGAP:
+            case SvxBorderLineStyle::THICKTHIN_SMALLGAP:
+                sLineType = OString("ThickThin");
+                sDashType = OString("Solid");
+                break;
+            case SvxBorderLineStyle::THINTHICK_LARGEGAP:
+            case SvxBorderLineStyle::THINTHICK_MEDIUMGAP:
+            case SvxBorderLineStyle::THINTHICK_SMALLGAP:
+                sLineType = OString("ThinThick");
+                sDashType = OString("Solid");
+                break;
+            case SvxBorderLineStyle::NONE:
+                sLineType = OString("");
+                sDashType = OString("");
+                break;
+            default:
+                SAL_WARN("sw.ww8", "Unknown line type on OOXML ELE export!");
+                break;
+        }
+
+        //If there is a line add it for export
+        if (!sLineType.isEmpty() && !sDashType.isEmpty())
+        {
+            pAttr->add(XML_stroked, "t");
+            pAttr->add(XML_strokecolor, "#" + msfilter::util::ConvertColor(aLineColor));
+            pAttr->add(XML_strokeweight, OString::number(aLineWidth / 20) + "pt");
+        }
+    }
+
+    //Let's check the filltype of the OLE
+    switch (rFrameFormat.GetAttrSet().Get(XATTR_FILLSTYLE).GetValue())
+    {
+        case drawing::FillStyle::FillStyle_SOLID:
+        {
+            //If solid, we get the color and add it to the exporter
+            const Color rShapeColor = rFrameFormat.GetAttrSet().Get(XATTR_FILLCOLOR).GetColorValue();
+            pAttr->add(XML_filled, "t");
+            pAttr->add(XML_fillcolor, "#" + msfilter::util::ConvertColor(rShapeColor));
+            break;
+        }
+        case drawing::FillStyle::FillStyle_GRADIENT:
+        case drawing::FillStyle::FillStyle_HATCH:
+        case drawing::FillStyle::FillStyle_BITMAP:
+            //TODO
+            break;
+        case drawing::FillStyle::FillStyle_NONE:
+        {
+            pAttr->add(XML_filled, "f");
+            break;
+        }
+        default:
+            SAL_WARN("sw.ww8", "Unknown fill type on OOXML OLE export!");
+            break;
+    }
+    pAttr->addNS(XML_o, XML_ole, ""); //compulsory, even if it's empty
+    m_pSerializer->startElementNS(XML_v, XML_shape, pAttr);//Write the collected atttrs...
+
+    if (!sLineType.isEmpty() && !sDashType.isEmpty()) //If there is a line/dash style it is time to export it
+    {
+        m_pSerializer->singleElementNS(XML_v, XML_stroke, XML_linestyle, sLineType, XML_dashstyle, sDashType);
+    }
+
+    // shape filled with the preview image
+    m_pSerializer->singleElementNS(XML_v, XML_imagedata,
+                                   FSNS(XML_r, XML_id), rImageId,
+                                   FSNS(XML_o, XML_title), "");
+
+    //export wrap settings
+    if (rFrameFormat.GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR) //As-char objs does not have surround.
+        ExportOLESurround(rFrameFormat.GetSurround());
+
+    m_pSerializer->endElementNS(XML_v, XML_shape);
+}
+
+OString DocxAttributeOutput::GetOLEStyle(const SwFlyFrameFormat& rFormat, const Size& rSize)
+{
     //tdf#131539: Export OLE positions in docx:
     //This string will store the position output for the xml
     OString aPos;
     //This string will store the relative position for aPos
     OString aAnch;
 
-    if (pFlyFrameFormat->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
+    if (rFormat.GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
     {
         //Get the horizontal alignment of the OLE via the frame format, to aHAlign
-        OString aHAlign = convertToOOXMLHoriOrient(pFlyFrameFormat->GetHoriOrient().GetHoriOrient(),
-            pFlyFrameFormat->GetHoriOrient().IsPosToggle());
+        OString aHAlign = convertToOOXMLHoriOrient(rFormat.GetHoriOrient().GetHoriOrient(),
+            rFormat.GetHoriOrient().IsPosToggle());
         //Get the vertical alignment of the OLE via the frame format to aVAlign
-        OString aVAlign = convertToOOXMLVertOrient(pFlyFrameFormat->GetVertOrient().GetVertOrient());
+        OString aVAlign = convertToOOXMLVertOrient(rFormat.GetVertOrient().GetVertOrient());
 
         //Get the relative horizontal positions for the anchors
-        OString aHAnch = convertToOOXMLHoriOrientRel(pFlyFrameFormat->GetHoriOrient().GetRelationOrient());
+        OString aHAnch = convertToOOXMLHoriOrientRel(rFormat.GetHoriOrient().GetRelationOrient());
         //Get the relative vertical positions for the anchors
-        OString aVAnch = convertToOOXMLVertOrientRel(pFlyFrameFormat->GetVertOrient().GetRelationOrient());
+        OString aVAnch = convertToOOXMLVertOrientRel(rFormat.GetVertOrient().GetRelationOrient());
 
         //Choice that the horizontal position is relative or not
         if (!aHAlign.isEmpty())
@@ -5640,81 +5817,61 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
 
         //Query the positions to aPos from frameformat
         aPos =
-            "position:absolute;margin-left:" + OString::number(double(pFlyFrameFormat->GetHoriOrient().GetPos()) / 20) +
-            "pt;margin-top:" + OString::number(double(pFlyFrameFormat->GetVertOrient().GetPos()) / 20) + "pt;";
+            "position:absolute;margin-left:" + OString::number(double(rFormat.GetHoriOrient().GetPos()) / 20) +
+            "pt;margin-top:" + OString::number(double(rFormat.GetVertOrient().GetPos()) / 20) + "pt;";
     }
 
     OString sShapeStyle = "width:" + OString::number( double( rSize.Width() ) / 20 ) +
                         "pt;height:" + OString::number( double( rSize.Height() ) / 20 ) +
                         "pt"; //from VMLExport::AddRectangleDimensions(), it does: value/20
-    OString sShapeId = "ole_" + sId;
 
     //Export anchor setting, if it exists
     if (!aPos.isEmpty() && !aAnch.isEmpty())
         sShapeStyle = aPos + sShapeStyle  + aAnch;
 
-    // shape definition
-    const bool bFilled = pFlyFrameFormat->GetAttrSet().Get(XATTR_FILLSTYLE).GetValue() != FillStyle::FillStyle_NONE;
-    const Color rShapeColor = pFlyFrameFormat->GetAttrSet().Get(XATTR_FILLCOLOR).GetColorValue();
-    if (bFilled)
+    return sShapeStyle;
+}
+
+void DocxAttributeOutput::ExportOLESurround(const SwFormatSurround& rWrap)
+{
+    const bool bIsContour = rWrap.IsContour(); //Has the shape countour or not
+    OString sSurround;
+    OString sSide;
+
+    //Map the ODF wrap settings to OOXML one
+    switch (rWrap.GetSurround())
     {
-        m_pSerializer->startElementNS( XML_v, XML_shape,
-                                       XML_id, sShapeId.getStr(),
-                                       XML_style, sShapeStyle.getStr(),
-                                       XML_fillcolor, "#" + msfilter::util::ConvertColor( rShapeColor ),
-                                       FSNS( XML_o, XML_ole ), ""); //compulsory, even if it's empty
+        case text::WrapTextMode::WrapTextMode_NONE:
+            sSurround = OString("topAndBottom");
+            break;
+        case text::WrapTextMode::WrapTextMode_PARALLEL:
+            sSurround = bIsContour ? OString("tight") : OString("square");
+            break;
+        case text::WrapTextMode::WrapTextMode_DYNAMIC:
+            sSide = OString("largest");
+            sSurround = bIsContour ? OString("tight") : OString("square");
+            break;
+        case text::WrapTextMode::WrapTextMode_LEFT:
+            sSide = OString("left");
+            sSurround = bIsContour ? OString("tight") : OString("square");
+            break;
+        case text::WrapTextMode::WrapTextMode_RIGHT:
+            sSide = OString("right");
+            sSurround = bIsContour ? OString("tight") : OString("square");
+            break;
+        default:
+            SAL_WARN("sw.ww8", "Unknown surround type on OOXML export!");
+            break;
     }
-    else
+
+    //if there is a setting export it:
+    if (!sSurround.isEmpty())
     {
-        m_pSerializer->startElementNS( XML_v, XML_shape,
-                                       XML_id, sShapeId.getStr(),
-                                       XML_style, sShapeStyle.getStr(),
-                                       XML_filled, "f",
-                                       FSNS( XML_o, XML_ole ), ""); //compulsory, even if it's empty
+        if (sSide.isEmpty())
+            m_pSerializer->singleElementNS(XML_w10, XML_wrap, XML_type, sSurround);
+        else
+            m_pSerializer->singleElementNS(XML_w10, XML_wrap, XML_type, sSurround, XML_side, sSide);
     }
-
-    // shape filled with the preview image
-    m_pSerializer->singleElementNS( XML_v, XML_imagedata,
-                                    FSNS( XML_r, XML_id ), sImageId,
-                                    FSNS( XML_o, XML_title ), "" );
-
-    //export wrap settings
-    if(pFlyFrameFormat->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
-    {
-        const SwFormatSurround aWrap = pFlyFrameFormat->GetSurround();
-        const bool bIsCountur = aWrap.IsContour();
-
-        if (aWrap.GetSurround() == text::WrapTextMode::WrapTextMode_NONE)
-            m_pSerializer->singleElementNS(XML_w10, XML_wrap, XML_type, "topAndBottom");
-        if (aWrap.GetSurround() == text::WrapTextMode::WrapTextMode_PARALLEL && !bIsCountur)
-            m_pSerializer->singleElementNS(XML_w10, XML_wrap, XML_type, "square");
-        if (aWrap.GetSurround() == text::WrapTextMode::WrapTextMode_PARALLEL && bIsCountur)
-            m_pSerializer->singleElementNS(XML_w10, XML_wrap, XML_type, "tight");
-        if (aWrap.GetSurround() == text::WrapTextMode::WrapTextMode_DYNAMIC && !bIsCountur)
-            m_pSerializer->singleElementNS(XML_w10, XML_wrap, XML_type, "square", XML_side, "largest");
-        if (aWrap.GetSurround() == text::WrapTextMode::WrapTextMode_LEFT && !bIsCountur)
-            m_pSerializer->singleElementNS(XML_w10, XML_wrap, XML_type, "square", XML_side, "left");
-        if (aWrap.GetSurround() == text::WrapTextMode::WrapTextMode_RIGHT && !bIsCountur)
-            m_pSerializer->singleElementNS(XML_w10, XML_wrap, XML_type, "square", XML_side, "right");
-        if (aWrap.GetSurround() == text::WrapTextMode::WrapTextMode_DYNAMIC && bIsCountur)
-            m_pSerializer->singleElementNS(XML_w10, XML_wrap, XML_type, "tight", XML_side, "largest");
-        if (aWrap.GetSurround() == text::WrapTextMode::WrapTextMode_LEFT && bIsCountur)
-            m_pSerializer->singleElementNS(XML_w10, XML_wrap, XML_type, "tight", XML_side, "left");
-        if (aWrap.GetSurround() == text::WrapTextMode::WrapTextMode_RIGHT && bIsCountur)
-            m_pSerializer->singleElementNS(XML_w10, XML_wrap, XML_type, "tight", XML_side, "right");
-    }
-    m_pSerializer->endElementNS( XML_v, XML_shape );
-
-    // OLE object definition
-    m_pSerializer->singleElementNS( XML_o, XML_OLEObject,
-                                    XML_Type, "Embed",
-                                    XML_ProgID, sProgID,
-                                    XML_ShapeID, sShapeId.getStr(),
-                                    XML_DrawAspect, sDrawAspect,
-                                    XML_ObjectID, "_" + OString::number(comphelper::rng::uniform_int_distribution(0, std::numeric_limits<int>::max())),
-                                    FSNS( XML_r, XML_id ), sId );
-
-    m_pSerializer->endElementNS( XML_w, XML_object );
 }
 
 void DocxAttributeOutput::WritePostponedCustomShape()
