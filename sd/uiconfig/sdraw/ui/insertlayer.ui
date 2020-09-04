@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="InsertLayerDialog">
@@ -98,6 +98,11 @@
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="width_chars">54</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="name-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="insertlayer|extended_tip|name">Enter a name for the new layer.</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -138,6 +143,11 @@
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="width_chars">54</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="title-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="insertlayer|extended_tip|title">Enter the title of the layer.</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -189,6 +199,11 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="textview-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="insertlayer|extended_tip|textview">Enter a description of the layer.</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -222,6 +237,11 @@
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="visible-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="insertlayer|extended_tip|visible">Show or hide the layer.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -238,6 +258,11 @@
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="printable-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="insertlayer|extended_tip|printable">When printing, print or ignore this particular layer.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -254,6 +279,11 @@
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="locked-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="insertlayer|extended_tip|locked">Prevent elements on the layer from being edited.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -275,8 +305,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
+    <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="InsertLayerDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="insertlayer|extended_tip|InsertLayerDialog">Inserts a new layer in the document. Layers are only available in Draw, not in Impress.</property>
+      </object>
     </child>
   </object>
 </interface>

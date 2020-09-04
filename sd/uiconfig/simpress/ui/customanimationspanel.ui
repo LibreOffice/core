@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.2 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -127,6 +127,11 @@
                         </child>
                       </object>
                     </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="custom_animation_list-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="customanimationspanel|extended_tip|custom_animation_list">The animation list displays all animations for the current slide.</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -189,6 +194,11 @@
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes" context="customanimationspanel|add_effect|tooltip_text">Add Effect</property>
                 <property name="image">image_add</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="add_effect-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="customanimationspanel|extended_tip|add_effect">Adds another animation effect for the selected object on the slide.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -203,6 +213,11 @@
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes" context="customanimationspanel|remove_effect|tooltip_text">Remove Effect</property>
                 <property name="image">image_remove</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="remove_effect-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="customanimationspanel|extended_tip|remove_effect">Removes the selected animation effects from the animation list.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -217,6 +232,11 @@
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes" context="customanimationspanel|move_up|tooltip_text">Move Up</property>
                 <property name="image">image_up</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="move_up-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="customanimationspanel|extended_tip|move_up">Click one of the buttons to move the selected animation effect up or down in the list.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -231,6 +251,11 @@
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes" context="customanimationspanel|move_down|tooltip_text">Move Down</property>
                 <property name="image">image_down</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="move_down-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="customanimationspanel|extended_tip|move_down">Click one of the buttons to move the selected animation effect up or down in the list.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -291,6 +316,11 @@
                   <item translatable="yes" context="customanimationspanel|categorylb">Motion Paths</item>
                   <item translatable="yes" context="customanimationspanel|categorylb">Misc Effects</item>
                 </items>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="categorylb-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="customanimationspanel|extended_tip|categorylb">Select an animation effect category.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -328,6 +358,11 @@
                             <attribute name="weight">2</attribute>
                           </attributes>
                         </child>
+                      </object>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="effect_list-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="customanimationspanel|extended_tip|effect_list">Select an animation effect.</property>
                       </object>
                     </child>
                   </object>
@@ -410,6 +445,11 @@
                       <item translatable="yes" context="customanimationspanel|start_effect_list">With previous</item>
                       <item translatable="yes" context="customanimationspanel|start_effect_list">After previous</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="start_effect_list-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="customanimationspanel|extended_tip|start_effect_list">Displays when the selected animation effect should be started.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -439,6 +479,11 @@
                     <property name="tooltip_text" translatable="yes" context="customanimationspanel|more_properties|tooltip_text">Options</property>
                     <property name="image">image1</property>
                     <property name="always_show_image">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="more_properties-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="customanimationspanel|extended_tip|more_properties">Specifies additional properties for the selected element in the Custom Animations pane.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -452,6 +497,11 @@
                     <property name="hexpand">True</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="digits">2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="anim_duration-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="customanimationspanel|extended_tip|anim_duration">Specifies the duration of the selected animation effect.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -479,6 +529,11 @@
                     <property name="hexpand">True</property>
                     <property name="adjustment">adjustment1</property>
                     <property name="digits">1</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="delay_value-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="customanimationspanel|extended_tip|delay_value">The animation starts delayed by this amount of time.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -545,6 +600,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="auto_preview-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="customanimationspanel|extended_tip|auto_preview">Select to preview new or edited effects on the slide while you assign them.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -563,6 +623,11 @@
                     <property name="use_underline">True</property>
                     <property name="image_position">right</property>
                     <property name="always_show_image">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="play-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="customanimationspanel|extended_tip|play">Plays the selected animation effect in the preview.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -616,6 +681,11 @@
         <property name="fill">True</property>
         <property name="position">2</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="CustomAnimationsPanel-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="customanimationspanel|extended_tip|CustomAnimationsPanel">Assigns effects to selected objects.</property>
+      </object>
     </child>
   </object>
 </interface>

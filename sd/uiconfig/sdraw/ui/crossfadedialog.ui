@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -109,6 +109,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="orientation-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="crossfadedialog|extended_tip|orientation">Applies a smooth transition between the selected objects.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -125,6 +130,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="attributes-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="crossfadedialog|extended_tip|attributes">Applies cross-fading to the line and fill properties of the selected objects.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -152,6 +162,11 @@
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment1</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="increments-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="crossfadedialog|extended_tip|increments">Enter the number of shapes you want between the two selected objects.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -186,8 +201,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
+    <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="CrossFadeDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="crossfadedialog|extended_tip|CrossFadeDialog">Creates shapes and distributes them by uniform increments between two drawing objects.</property>
+      </object>
     </child>
   </object>
 </interface>

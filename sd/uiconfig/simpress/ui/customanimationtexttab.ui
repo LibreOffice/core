@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
-    <property name="upper">999.99000000000001</property>
+    <property name="upper">999.99</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
@@ -44,6 +44,11 @@
             <property name="activates_default">True</property>
             <property name="adjustment">adjustment1</property>
             <property name="digits">1</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="auto_after_value-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="customanimationtexttab|extended_tip|auto_after_value">Enter an additional delay in seconds to animate subsequent paragraphs.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -59,6 +64,11 @@
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="auto_after-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="customanimationtexttab|extended_tip|auto_after">If "Group text - By 1st level paragraphs" is selected, the paragraphs are animated one after the other.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -78,6 +88,11 @@
               <item translatable="yes" context="customanimationtexttab|group_text_list">By 4th level paragraphs</item>
               <item translatable="yes" context="customanimationtexttab|group_text_list">By 5th level paragraphs</item>
             </items>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="group_text_list-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="customanimationtexttab|extended_tip|group_text_list">Specifies how multiple paragraphs are animated</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -100,6 +115,11 @@
         <property name="use_underline">True</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="animate_shape-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="customanimationtexttab|extended_tip|animate_shape">Deselect this box to animate only the text, not the shape.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -116,6 +136,11 @@
         <property name="use_underline">True</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="reverse_order-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="customanimationtexttab|extended_tip|reverse_order">Animates the paragraphs in reverse order.</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="expand">False</property>

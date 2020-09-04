@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkBox" id="HeaderFooterTab">
@@ -44,6 +44,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="header_cb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="headerfootertab|extended_tip|header_cb">Adds the text that you enter in the Header text box to the top of the slide.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -82,6 +87,11 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="activates_default">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="header_text-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="headerfootertab|extended_tip|header_text">Adds the text that you enter to the top of the slide.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -110,6 +120,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="datetime_cb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="headerfootertab|extended_tip|datetime_cb">Adds the date and time to the slide.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -147,6 +162,11 @@
                                     <accessibility>
                                       <relation type="label-for" target="datetime_value"/>
                                     </accessibility>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="rb_fixed-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="headerfootertab|extended_tip|rb_fixed">Displays the date and time that you enter in the text box.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -162,6 +182,11 @@
                                     <accessibility>
                                       <relation type="labelled-by" target="rb_fixed"/>
                                     </accessibility>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="datetime_value-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="headerfootertab|extended_tip|datetime_value">Displays the date and time that you enter in the text box.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -194,6 +219,11 @@
                                     <accessibility>
                                       <relation type="labelled-by" target="variablebox"/>
                                     </accessibility>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="rb_auto-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="headerfootertab|extended_tip|rb_auto">Displays the date and time that the slide was created. Select a date format from the list.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -214,6 +244,11 @@
                                           <object class="GtkComboBoxText" id="language_list">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="language_list-atkobject">
+                                                <property name="AtkObject::accessible-description" translatable="yes" context="headerfootertab|extended_tip|language_list">Select the language for the date and time format.</property>
+                                              </object>
+                                            </child>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -238,6 +273,11 @@
                                           <object class="GtkComboBoxText" id="datetime_format_list">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="datetime_format_list-atkobject">
+                                                <property name="AtkObject::accessible-description" translatable="yes" context="headerfootertab|extended_tip|datetime_format_list">Displays the date and time that the slide was created. Select a date format from the list.</property>
+                                              </object>
+                                            </child>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -303,6 +343,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="footer_cb-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="headerfootertab|extended_tip|footer_cb">Adds the text that you enter in the Footer text box to the bottom of the slide.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -341,6 +386,11 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="activates_default">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="footer_text-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="headerfootertab|extended_tip|footer_text">Adds the text that you enter to the bottom of the slide.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -376,6 +426,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="slide_number-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="headerfootertab|extended_tip|slide_number">Adds the slide number or the page number.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -418,6 +473,11 @@
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="not_on_title-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="headerfootertab|extended_tip|not_on_title">Does not display your specified information on the first slide of your presentation.</property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>

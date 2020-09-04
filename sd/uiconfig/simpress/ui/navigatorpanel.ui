@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkMenu" id="dragmodemenu">
@@ -65,6 +65,7 @@
             <child internal-child="accessible">
               <object class="AtkObject" id="documents-atkobject">
                 <property name="AtkObject::accessible-name" translatable="yes" context="navigatorpanel|documents-atkobject">Active Window</property>
+                <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|documents">Lists available %PRODUCTNAME files.</property>
               </object>
             </child>
           </object>
@@ -116,6 +117,7 @@
                 <child internal-child="accessible">
                   <object class="AtkObject" id="tree-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="navigatorpanel|STR_OBJECTS_TREE">Page Tree</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|tree">Lists available slides. Double-click a slide to make it the active slide.</property>
                   </object>
                 </child>
               </object>
@@ -138,6 +140,11 @@
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes" context="navigatorpanel|first|tooltip_text">First Slide</property>
                 <property name="icon_name">sd/res/nv03.png</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="first-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|first">Jumps to the first page.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -150,6 +157,11 @@
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes" context="navigatorpanel|previous|tooltip_text">Previous Slide</property>
                 <property name="icon_name">sd/res/nv04.png</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="previous-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|previous">Moves back one page.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -162,6 +174,11 @@
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes" context="navigatorpanel|next|tooltip_text">Next Slide</property>
                 <property name="icon_name">sd/res/nv05.png</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="next-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|next">Move forward one page.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -174,6 +191,11 @@
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes" context="navigatorpanel|last|tooltip_text">Last Slide</property>
                 <property name="icon_name">sd/res/nv06.png</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="last-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|last">Jumps to the last page.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -196,6 +218,11 @@
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes" context="navigatorpanel|dragmode|tooltip_text">Drag Mode</property>
                 <property name="icon_name">sd/res/nv09.png</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="dragmode-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|dragmode">Drag and drop slides and named objects into the active slide.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -208,6 +235,11 @@
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes" context="navigatorpanel|shapes|tooltip_text">Show Shapes</property>
                 <property name="icon_name">sd/res/graphic.png</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="shapes-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|shapes">In the submenu you can choose to display a list of all shapes or only the named shapes. Use drag-and-drop in the list to reorder the shapes. When you set the focus to a slide and press the Tab key, the next shape in the defined order is selected.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -225,6 +257,11 @@
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="NavigatorPanel-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|NavigatorPanel">Opens the Navigator, where you can quickly jump to other slides or move between open files.</property>
+      </object>
     </child>
   </object>
   <object class="GtkMenu" id="shapemenu">

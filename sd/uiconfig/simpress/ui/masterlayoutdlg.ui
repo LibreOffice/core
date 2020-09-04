@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="MasterLayoutDialog">
@@ -100,6 +100,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="header-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="masterlayoutdlg|extended_tip|header">Adds a header placeholder to the master slide for notes.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -116,6 +121,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="datetime-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="masterlayoutdlg|extended_tip|datetime">Adds a date/time placeholder to the master slide.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -132,6 +142,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="footer-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="masterlayoutdlg|extended_tip|footer">Adds a footer placeholder to the master slide.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -148,6 +163,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="pagenumber-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="masterlayoutdlg|extended_tip|pagenumber">Adds a slide number placeholder to the master slide.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -199,8 +219,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
+    <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="MasterLayoutDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="masterlayoutdlg|extended_tip|MasterLayoutDialog">Adds or removes header, footer, date, and slide number placeholders to the layout of the master slide.</property>
+      </object>
     </child>
   </object>
 </interface>

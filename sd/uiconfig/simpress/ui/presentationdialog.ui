@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -15,9 +15,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="visible">True</property>
@@ -126,6 +123,11 @@
                                 <accessibility>
                                   <relation type="label-for" target="from_cb"/>
                                 </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="from-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="presentationdialog|extended_tip|from">Enter the number of the start slide.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -143,6 +145,7 @@
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="from_cb-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="presentationdialog|from_cb-atkobject">Starting slide</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="presentationdialog|extended_tip|from_cb">Enter the number of the start slide.</property>
                                   </object>
                                 </child>
                               </object>
@@ -167,6 +170,11 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="allslides-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="presentationdialog|extended_tip|allslides">Includes all of the slides in your slide show.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -191,6 +199,11 @@
                                 <accessibility>
                                   <relation type="label-for" target="customslideshow_cb"/>
                                 </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="customslideshow-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="presentationdialog|extended_tip|customslideshow">Runs a custom slide show in the order that you defined in Slide Show - Custom Slide Show.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -205,6 +218,11 @@
                                 <accessibility>
                                   <relation type="labelled-by" target="customslideshow"/>
                                 </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="customslideshow_cb-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="presentationdialog|extended_tip|customslideshow_cb">Runs a custom slide show in the order that you defined in Slide Show - Custom Slide Show.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -269,6 +287,11 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="hexpand">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="presdisplay_cb-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="presentationdialog|extended_tip|presdisplay_cb">Select a display to use for full screen slide show mode.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -400,6 +423,11 @@
                                 <property name="xalign">0</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="default-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="presentationdialog|extended_tip|default">A full screen slide is shown.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -416,6 +444,11 @@
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">default</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="window-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="presentationdialog|extended_tip|window">Slide show runs in the %PRODUCTNAME program window.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -435,6 +468,11 @@
                                 <accessibility>
                                   <relation type="label-for" target="pauseduration"/>
                                 </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="auto-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="presentationdialog|extended_tip|auto">Restarts the slide show after the pause interval you specify. A pause slide is displayed between the final slide and the start slide. Press the Esc key to stop the show.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -451,6 +489,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="showlogo-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="presentationdialog|extended_tip|showlogo">Displays the %PRODUCTNAME logo on the pause slide.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -472,6 +515,7 @@
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="pauseduration-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="presentationdialog|pauseduration-atkobject">Pause Duration</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="presentationdialog|extended_tip|pauseduration">Enter the duration of the pause before the slide show is repeated. If you enter zero, the show restarts immediately without showing a pause slide.</property>
                                   </object>
                                 </child>
                               </object>
@@ -530,6 +574,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="manualslides-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="presentationdialog|extended_tip|manualslides">Slides never change automatically when this box is selected.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -545,6 +594,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="pointervisible-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="presentationdialog|extended_tip|pointervisible">Shows the mouse pointer during a slide show.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -560,6 +614,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="pointeraspen-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="presentationdialog|extended_tip|pointeraspen">Changes the mouse pointer to a pen which you can use to draw on slides during the presentation.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -575,6 +634,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="animationsallowed-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="presentationdialog|extended_tip|animationsallowed">Displays all frames of animated GIF files during the slide show.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -590,6 +654,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="changeslidesbyclick-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="presentationdialog|extended_tip|changeslidesbyclick">Advances to the next slide when you click on the background of a slide.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -605,6 +674,11 @@
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="alwaysontop-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="presentationdialog|extended_tip|alwaysontop">The %PRODUCTNAME window remains on top during the presentation. No other program will show its window in front of your presentation.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -654,6 +728,14 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="PresentationDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="presentationdialog|extended_tip|PresentationDialog">Defines settings for your slide show, including which slide to start from, the way you advance the slides, the type of presentation, and pointer options.</property>
+      </object>
+    </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroupLabel1">
     <widgets>

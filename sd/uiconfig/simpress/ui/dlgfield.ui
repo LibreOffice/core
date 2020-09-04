@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="EditFieldsDialog">
@@ -10,9 +10,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -111,6 +108,11 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="fixedRB-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="dlgfield|extended_tip|fixedRB">Displays the content of the field when the field was inserted.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -129,6 +131,11 @@
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">fixedRB</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="varRB-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="dlgfield|extended_tip|varRB">Displays the current value of the field.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -187,6 +194,11 @@
                         <property name="activates_default">True</property>
                       </object>
                     </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="languageLB-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="dlgfield|extended_tip|languageLB">Select the language for the field.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -217,6 +229,11 @@
                       <object class="GtkComboBoxText" id="formatLB">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="formatLB-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="dlgfield|extended_tip|formatLB">Select a display format for the field.</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -253,5 +270,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="EditFieldsDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="dlgfield|extended_tip|EditFieldsDialog">Edits the properties of an inserted field.</property>
+      </object>
+    </child>
   </object>
 </interface>

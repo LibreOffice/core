@@ -50,6 +50,11 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="startshow-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="customslideshows|extended_tip|startshow">Runs the slide show. Ensure that Use Custom Slide Show is selected if you want to run a custom presentation.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -129,6 +134,11 @@
                             </child>
                           </object>
                         </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="customshowlist-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="customslideshows|extended_tip|customshowlist">Lists the custom slide shows that are available.</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -147,6 +157,11 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="usecustomshows-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="customslideshows|extended_tip|usecustomshows">Runs the custom slide show you selected when you click Start. Otherwise, the entire presentation is shown.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -178,6 +193,11 @@
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
                     <property name="use_stock">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="new-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="customslideshows|extended_tip|new">Add, remove or reorder slides as well as change the name of the selected custom slide show.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -193,6 +213,11 @@
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
                     <property name="use_stock">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="edit-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="customslideshows|extended_tip|edit">Add, remove or reorder slides as well as change the name of the selected custom slide show.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -207,6 +232,11 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="copy-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="customslideshows|extended_tip|copy">Creates a copy of the selected custom slide show. You can modify the name of the show by clicking Edit.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -257,6 +287,11 @@
     </action-widgets>
     <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="CustomSlideShows-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="customslideshows|extended_tip|CustomSlideShows">Defines a custom slide show using slides within the current presentation. You can then pick slides to meet the needs of your audience. You can create as many custom slide shows as you want.</property>
+      </object>
     </child>
   </object>
 </interface>

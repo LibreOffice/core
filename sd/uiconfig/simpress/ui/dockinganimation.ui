@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -112,6 +112,11 @@
                       <item>1000</item>
                       <item translatable="yes" context="dockinganimation|loopcount">Max.</item>
                     </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="loopcount-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="dockinganimation|extended_tip|loopcount">Sets the number of times that the animation is played.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -125,6 +130,11 @@
                     <property name="tooltip_text" translatable="yes" context="dockinganimation|duration|tooltip_text">Duration</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="digits">2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="duration-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="dockinganimation|extended_tip|duration">Enter the number of seconds to display the current image. This option is only available if you select the Bitmap object option in the Animation group field.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -139,6 +149,11 @@
                     <property name="text">1</property>
                     <property name="adjustment">adjustment1</property>
                     <property name="value">1</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="numbitmap-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="dockinganimation|extended_tip|numbitmap">Indicates the position of the current image in the animation sequence.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -158,6 +173,11 @@
                         <property name="receives_default">True</property>
                         <property name="tooltip_text" translatable="yes" context="dockinganimation|first|tooltip_text">First Image</property>
                         <property name="image">image5</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="first-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="dockinganimation|extended_tip|first">Jumps to the first image in the animation sequence.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -171,6 +191,11 @@
                         <property name="receives_default">True</property>
                         <property name="tooltip_text" translatable="yes" context="dockinganimation|prev|tooltip_text">Backwards</property>
                         <property name="image">image6</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="prev-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="dockinganimation|extended_tip|prev">Plays the animation backwards.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -184,6 +209,11 @@
                         <property name="receives_default">True</property>
                         <property name="tooltip_text" translatable="yes" context="dockinganimation|stop|tooltip_text">Stop</property>
                         <property name="image">image7</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="stop-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="dockinganimation|extended_tip|stop">Stops playing the animation.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -197,6 +227,11 @@
                         <property name="receives_default">True</property>
                         <property name="tooltip_text" translatable="yes" context="dockinganimation|next|tooltip_text">Play</property>
                         <property name="image">image8</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="next-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="dockinganimation|extended_tip|next">Plays the animation.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -210,6 +245,11 @@
                         <property name="receives_default">True</property>
                         <property name="tooltip_text" translatable="yes" context="dockinganimation|last|tooltip_text">Last Image</property>
                         <property name="image">image9</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="last-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="dockinganimation|extended_tip|last">Jumps to the last image in the animation sequence.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">4</property>
@@ -273,6 +313,11 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="group-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="dockinganimation|extended_tip|group">Assembles images into a single object so that they can be moved as a group. You can still edit individual objects by double-clicking the group in the slide.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -289,6 +334,11 @@
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">group</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="bitmap-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="dockinganimation|extended_tip|bitmap">Combines images into a single image.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -326,6 +376,11 @@
                               <item translatable="yes" context="dockinganimation|alignment">Right</item>
                               <item translatable="yes" context="dockinganimation|alignment">Bottom Right</item>
                             </items>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="alignment-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="dockinganimation|extended_tip|alignment">Aligns the images in your animation.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -390,6 +445,11 @@
                             <property name="receives_default">True</property>
                             <property name="tooltip_text" translatable="yes" context="dockinganimation|getone|tooltip_text">Apply Object</property>
                             <property name="image">image1</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="getone-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="dockinganimation|extended_tip|getone">Adds selected object(s) as a single image.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -403,6 +463,11 @@
                             <property name="receives_default">True</property>
                             <property name="tooltip_text" translatable="yes" context="dockinganimation|getall|tooltip_text">Apply Objects Individually</property>
                             <property name="image">image2</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="getall-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="dockinganimation|extended_tip|getall">Adds an image for each selected object.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -466,6 +531,11 @@
                             <property name="receives_default">True</property>
                             <property name="tooltip_text" translatable="yes" context="dockinganimation|delone|tooltip_text">Delete Current Image</property>
                             <property name="image">image3</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="delone-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="dockinganimation|extended_tip|delone">Deletes current image from the animation sequence.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -479,6 +549,11 @@
                             <property name="receives_default">True</property>
                             <property name="tooltip_text" translatable="yes" context="dockinganimation|delall|tooltip_text">Delete All Images</property>
                             <property name="image">image4</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="delall-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="dockinganimation|extended_tip|delall">Deletes all of the images in the animation.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -546,6 +621,11 @@
             <property name="can_default">True</property>
             <property name="receives_default">True</property>
             <property name="use_underline">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="create-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="dockinganimation|extended_tip|create">Inserts the animation into the current slide.</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -560,6 +640,11 @@
         <property name="pack_type">end</property>
         <property name="position">1</property>
       </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="DockingAnimation-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="dockinganimation|extended_tip|DockingAnimation">Creates a custom animation on the current slide.</property>
+      </object>
     </child>
   </object>
 </interface>

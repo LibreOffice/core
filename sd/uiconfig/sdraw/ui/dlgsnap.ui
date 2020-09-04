@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkImage" id="image1">
@@ -41,6 +41,11 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="delete-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="dlgsnap|extended_tip|delete">Deletes the selected snap point or snap line.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -131,6 +136,11 @@
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
                             <property name="digits">2</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="x-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="dlgsnap|extended_tip|x">Enter the amount of space you want between the snap point or line and the left edge of the page.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -143,6 +153,11 @@
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
                             <property name="digits">2</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="y-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="dlgsnap|extended_tip|y">Enter the amount of space you want between the snap point or line and the top edge of the page.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -226,6 +241,11 @@
                             <property name="always_show_image">True</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="point-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="dlgsnap|extended_tip|point">Inserts a snap point.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -245,6 +265,11 @@
                             <property name="always_show_image">True</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">point</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="vert-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="dlgsnap|extended_tip|vert">Inserts a vertical snap line.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -264,6 +289,11 @@
                             <property name="always_show_image">True</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">point</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="horz-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="dlgsnap|extended_tip|horz">Inserts a horizontal snap line.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -307,8 +337,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
+    <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="SnapObjectDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="dlgsnap|extended_tip|SnapObjectDialog">Inserts a snap point or snap line (also known as guide) that you can use to quickly align objects.</property>
+      </object>
     </child>
   </object>
 </interface>

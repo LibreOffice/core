@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -47,6 +47,11 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="preview-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="vectorize|extended_tip|preview">Previews the converted image without applying the changes.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -133,6 +138,11 @@
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
                 <property name="adjustment">adjustment1</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="colors-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="vectorize|extended_tip|colors">Enter the number of colors to be displayed in the converted image. %PRODUCTNAME generates a polygon for each occurrence of a color in the image.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -159,6 +169,11 @@
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
                 <property name="adjustment">adjustment2</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="points-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="vectorize|extended_tip|points">Removes color polygons that are smaller than the pixel value you enter.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -187,6 +202,11 @@
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
                 <property name="adjustment">adjustment3</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="tiles-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="vectorize|extended_tip|tiles">Enter the size of the rectangle for the background fill.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -202,6 +222,11 @@
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="fillholes-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="vectorize|extended_tip|fillholes">Fills the color gaps caused by applying a point reduction.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -336,8 +361,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
+    <child type="titlebar">
       <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="VectorizeDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="vectorize|extended_tip|VectorizeDialog">Converts the selected object to a polygon (a closed object bounded by straight lines).</property>
+      </object>
     </child>
   </object>
 </interface>

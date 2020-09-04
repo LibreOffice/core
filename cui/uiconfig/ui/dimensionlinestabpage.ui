@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">-10</property>
     <property name="upper">10</property>
-    <property name="step_increment">0.10000000000000001</property>
+    <property name="step_increment">0.1</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkAdjustment" id="adjustment2">
@@ -16,25 +16,25 @@
   <object class="GtkAdjustment" id="adjustment3">
     <property name="lower">-10</property>
     <property name="upper">10</property>
-    <property name="step_increment">0.10000000000000001</property>
+    <property name="step_increment">0.1</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkAdjustment" id="adjustment4">
     <property name="lower">-10</property>
     <property name="upper">10</property>
-    <property name="step_increment">0.10000000000000001</property>
+    <property name="step_increment">0.1</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkAdjustment" id="adjustment5">
     <property name="lower">-10</property>
     <property name="upper">10</property>
-    <property name="step_increment">0.10000000000000001</property>
+    <property name="step_increment">0.1</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkAdjustment" id="adjustment6">
     <property name="lower">-10</property>
     <property name="upper">10</property>
-    <property name="step_increment">0.10000000000000001</property>
+    <property name="step_increment">0.1</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkBox" id="DimensionLinesTabPage">
@@ -165,6 +165,11 @@
                         <property name="xalign">0</property>
                         <property name="inconsistent">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="TSB_BELOW_REF_EDGE-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="dimensionlinestabpage|extended_tip|TSB_BELOW_REF_EDGE">Reverses the properties set in the Line area.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -179,6 +184,11 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="digits">2</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="MTR_LINE_DIST-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="dimensionlinestabpage|extended_tip|MTR_LINE_DIST">Specifies the distance between the dimension line and the baseline (line distance = 0).</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -192,6 +202,11 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment3</property>
                         <property name="digits">2</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="MTR_FLD_HELPLINE_OVERHANG-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="dimensionlinestabpage|extended_tip|MTR_FLD_HELPLINE_OVERHANG">Specifies the length of the left and right guides starting at the baseline (line distance = 0). Positive values extend the guides above the baseline and negative values extend the guides below the baseline.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -205,6 +220,11 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment4</property>
                         <property name="digits">2</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="MTR_FLD_HELPLINE_DIST-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="dimensionlinestabpage|extended_tip|MTR_FLD_HELPLINE_DIST">Specifies the length of the right and left guides starting at the dimension line. Positive values extend the guides above the dimension line and negative values extend the guides below the dimension line.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -218,6 +238,11 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment5</property>
                         <property name="digits">2</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="MTR_FLD_HELPLINE1_LEN-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="dimensionlinestabpage|extended_tip|MTR_FLD_HELPLINE1_LEN">Specifies the length of the left guide starting at the dimension line. Positive values extend the guide below the dimension line and negative values extend the guide above the dimension line.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -231,6 +256,11 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment6</property>
                         <property name="digits">2</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="MTR_FLD_HELPLINE2_LEN-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="dimensionlinestabpage|extended_tip|MTR_FLD_HELPLINE2_LEN">Specifies the length of the right guide starting at the dimension line. Positive values extend the guide below the dimension line and negative values extend the guide above the dimension line.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -243,6 +273,11 @@
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment2</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="MTR_FLD_DECIMALPLACES-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="dimensionlinestabpage|extended_tip|MTR_FLD_DECIMALPLACES">Specifies the number of decimal places used for the display of line properties.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -334,6 +369,11 @@
                                         <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
                                         <property name="halign">start</property>
                                         <property name="valign">center</property>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="CTL_POSITION-atkobject">
+                                            <property name="AtkObject::accessible-description" translatable="yes" context="dimensionlinestabpage|extended_tip|CTL_POSITION">Determines the position of the dimension text with respect to the dimension line and the guides.</property>
+                                          </object>
+                                        </child>
                                       </object>
                                     </child>
                                   </object>
@@ -355,6 +395,11 @@
                                 <property name="xalign">0</property>
                                 <property name="inconsistent">True</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="TSB_AUTOPOSV-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="dimensionlinestabpage|extended_tip|TSB_AUTOPOSV">Determines the optimal vertical position for the dimension text.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -372,6 +417,11 @@
                                 <property name="xalign">0</property>
                                 <property name="inconsistent">True</property>
                                 <property name="draw_indicator">True</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="TSB_AUTOPOSH-atkobject">
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="dimensionlinestabpage|extended_tip|TSB_AUTOPOSH">Determines the optimal horizontal position for the dimension text.</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -398,6 +448,11 @@
                         <property name="xalign">0</property>
                         <property name="inconsistent">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="TSB_PARALLEL-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="dimensionlinestabpage|extended_tip|TSB_PARALLEL">Displays the text parallel to or at 90 degrees to the dimension line.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -415,6 +470,11 @@
                         <property name="xalign">0</property>
                         <property name="inconsistent">True</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="TSB_SHOW_UNIT-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="dimensionlinestabpage|extended_tip|TSB_SHOW_UNIT">Shows or hides the dimension measurement units. You can also select a measurement unit you want to display from the list.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -428,6 +488,11 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="margin_left">12</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="LB_UNIT-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="dimensionlinestabpage|extended_tip|LB_UNIT">Shows or hides the dimension measurement units. You can also select a measurement unit you want to display from the list.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
