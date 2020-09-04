@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cb5ffe84_7c3a686e",
+        "filename": "formula/source/core/api/FormulaCompiler.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 2329,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-09-04T23:27:16Z",
+      "side": 1,
+      "message": "What is this good for? It looks very wrong. It replaces any unresolved (ocBad) string (unknown identifier or whatever) in the formula expression with #REF! for OOXML. This place should not be touched for the problem.",
+      "revId": "1d465aa0159327f2666d02af4db7f1d8e5fbca8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
