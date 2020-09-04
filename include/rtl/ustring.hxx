@@ -301,6 +301,8 @@ public:
                 = libreoffice_internal::Dummy()):
         pData(nullptr)
     {
+        assert(
+            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
         if (libreoffice_internal::ConstCharArrayDetector<T>::length == 0) {
             rtl_uString_new(&pData);
         } else {

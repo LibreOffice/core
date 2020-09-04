@@ -256,8 +256,14 @@ struct ConstCharArrayDetector<sal_Unicode const [N], T> {
     using TypeUtf16 = T;
     static constexpr bool const ok = true;
     static constexpr std::size_t const length = N - 1;
-    static constexpr bool isValid(sal_Unicode const (& literal)[N])
-    { return literal[N - 1] == '\0'; }
+    static constexpr bool isValid(sal_Unicode const (& literal)[N]) {
+        for (std::size_t i = 0; i != N - 1; ++i) {
+            if (literal[i] == '\0') {
+                return false;
+            }
+        }
+        return literal[N - 1] == '\0';
+    }
     static constexpr sal_Unicode const * toPointer(
         sal_Unicode const (& literal)[N])
     { return literal; }
@@ -269,6 +275,7 @@ template<typename T> struct ConstCharArrayDetector<
     using TypeUtf16 = T;
     static constexpr bool const ok = true;
     static constexpr std::size_t const length = 1;
+    static constexpr bool isValid(OUStringChar) { return true; }
     static constexpr sal_Unicode const * toPointer(
         OUStringChar_ const & literal)
     { return &literal.c; }
