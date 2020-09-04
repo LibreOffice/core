@@ -16,6 +16,7 @@
 #include <editeng/frmdiritem.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/event.hxx>
+#include <editeng/langitem.hxx>
 
 #include <wrtsh.hxx>
 #include <fmtanchr.hxx>
@@ -102,6 +103,27 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testNumDownIndent)
     // - Actual  : B
     // i.e. pressing <tab> at the start of the paragraph did not change the layout.
     CPPUNIT_ASSERT_EQUAL(OUString("\tB"), pTextNode->GetText());
+    ErrorRegistry::Reset();
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testLocaleIndependentTemplate)
+{
+    SwDoc* pDoc = createDoc("locale-independent-template.odt");
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    SfxItemSet aSet(pWrtShell->GetAttrPool(), { { RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE } });
+    pWrtShell->GetCurAttr(aSet);
+    const SvxLanguageItem* pItem = aSet.GetItem(RES_CHRATR_LANGUAGE);
+    CPPUNIT_ASSERT(pItem);
+    LanguageType eLang = pItem->GetValue();
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1033 (LANGUAGE_ENGLISH_US)
+    // - Actual  : 1023 (LANGUAGE_DONTKNOW)
+    // i.e. the status bar and the format -> character dialog didn't fall back to the UI locale when
+    // an explicit language was not set for the document.
+    CPPUNIT_ASSERT_EQUAL(LANGUAGE_ENGLISH_US, eLang);
+    ErrorRegistry::Reset();
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
