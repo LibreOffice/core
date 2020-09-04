@@ -2164,6 +2164,15 @@ void PrintDialog::previewLast()
     ActivateHdl(*mxPageEdit);
 }
 
+
+static OUString getNewLabel(const OUString& aLabel, int i_nCurr, int i_nMax)
+{
+    OUString aNewText( aLabel.replaceFirst( "%p", OUString::number( i_nCurr ) ) );
+    aNewText = aNewText.replaceFirst( "%n", OUString::number( i_nMax ) );
+
+    return aNewText;
+}
+
 // PrintProgressDialog
 PrintProgressDialog::PrintProgressDialog(weld::Window* i_pParent, int i_nMax)
     : GenericDialogController(i_pParent, "vcl/ui/printprogressdialog.ui", "PrintProgressDialog")
@@ -2181,15 +2190,17 @@ PrintProgressDialog::PrintProgressDialog(weld::Window* i_pParent, int i_nMax)
 
     //just multiply largest value by 10 and take the width of that string as
     //the max size we will want
-    OUString aNewText( maStr.replaceFirst( "%p", OUString::number( mnMax * 10 ) ) );
-    aNewText = aNewText.replaceFirst( "%n", OUString::number( mnMax * 10 ) );
-    mxText->set_label( aNewText );
+    mxText->set_label(getNewLabel(maStr, mnMax * 10, mnMax * 10));
     mxText->set_size_request(mxText->get_preferred_size().Width(), -1);
 
     //Pick a useful max width
     mxProgress->set_size_request(mxProgress->get_approximate_digit_width() * 25, -1);
 
     mxButton->connect_clicked( LINK( this, PrintProgressDialog, ClickHdl ) );
+
+    // after this patch f7157f04fab298423e2c4f6a7e5f8e361164b15f, we have seen the calc Max string (sometimes) look above
+    // now init to the right start vaules
+    mxText->set_label(getNewLabel(maStr, mnCur, mnMax));
 }
 
 PrintProgressDialog::~PrintProgressDialog()
@@ -2208,11 +2219,10 @@ void PrintProgressDialog::setProgress( int i_nCurrent )
     if( mnMax < 1 )
         mnMax = 1;
 
-    mxProgress->set_percentage(mnCur*100/mnMax);
+    mxText->set_label(getNewLabel(maStr, mnCur, mnMax));
 
-    OUString aNewText( maStr.replaceFirst( "%p", OUString::number( mnCur ) ) );
-    aNewText = aNewText.replaceFirst( "%n", OUString::number( mnMax ) );
-    mxText->set_label( aNewText );
+    // here view the dialog, with the right label
+    mxProgress->set_percentage(mnCur*100/mnMax);
 }
 
 void PrintProgressDialog::tick()
