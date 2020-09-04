@@ -447,7 +447,6 @@ void TiledRenderingTest::testMultiKeyInput(Office *pOffice)
     // get track changes ?
     char *values = pDocument->getCommandValues(".uno:AcceptTrackedChanges");
     std::cerr << "Values: '" << values << "'\n";
-    CPPUNIT_ASSERT(0);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TiledRenderingTest);
