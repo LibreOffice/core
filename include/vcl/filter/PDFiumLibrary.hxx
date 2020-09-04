@@ -23,6 +23,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
+#include <vcl/checksum.hxx>
 
 #include <fpdf_doc.h>
 
@@ -170,6 +171,9 @@ public:
     std::unique_ptr<PDFiumAnnotation> getAnnotation(int nIndex);
 
     std::unique_ptr<PDFiumTextPage> getTextPage();
+
+    /// Get bitmap checksum of the page, without annotations/commenting.
+    BitmapChecksum getChecksum();
 };
 
 class VCL_DLLPUBLIC PDFiumDocument final
