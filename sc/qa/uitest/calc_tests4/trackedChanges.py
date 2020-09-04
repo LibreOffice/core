@@ -295,4 +295,33 @@ class CalcTrackedChanges(UITestCase):
         self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "")
         self.ui_test.close_doc()
 
+    def test_tdf136062(self):
+
+        self.ui_test.load_file(get_url_for_data_file("tdf136062.ods"))
+
+        self.xUITest.getTopFocusWindow()
+
+        self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptChanges")
+        xTrackDlg = self.xUITest.getTopFocusWindow()
+
+        xChangesList = xTrackDlg.getChild("calcchanges")
+        self.assertEqual(1, len(xChangesList.getChildren()))
+
+        xRejectAllBtn = xTrackDlg.getChild("rejectall")
+        xRejectBtn = xTrackDlg.getChild("reject")
+        xAcceptAllBtn = xTrackDlg.getChild("acceptall")
+        xAcceptBtn = xTrackDlg.getChild("accept")
+
+        # Without the fix in place, it would have failed with
+        # AssertionError: 'R~eject All' != 'R~eject All/Clear formatting'
+        self.assertEqual('R~eject All', get_state_as_dict(xRejectAllBtn)['Text'])
+        self.assertEqual('~Reject', get_state_as_dict(xRejectBtn)['Text'])
+        self.assertEqual('A~ccept All', get_state_as_dict(xAcceptAllBtn)['Text'])
+        self.assertEqual('~Accept', get_state_as_dict(xAcceptBtn)['Text'])
+
+        xCancBtn = xTrackDlg.getChild("close")
+        xCancBtn.executeAction("CLICK", tuple())
+
+        self.ui_test.close_doc()
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
