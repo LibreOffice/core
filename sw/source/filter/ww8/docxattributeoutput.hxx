@@ -408,6 +408,10 @@ private:
     bool WriteOLEMath( const SwOLENode& rNode, const sal_Int8 nAlign );
     void PostponeOLE( SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* pFlyFrameFormat );
     void WriteOLE( SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* rFlyFrameFormat );
+    void WriteOLEShape(const SwFlyFrameFormat& rFrameFormat, const Size& rSize,
+                       const OString& rShapeId, const OUString& rImageId);
+    static OString GetOLEStyle(const SwFlyFrameFormat& rFormat, const Size& rSize);
+    void ExportOLESurround(const SwFormatSurround& rWrap);
 
     void WriteActiveXControl(const SdrObject* pObject, const SwFrameFormat& rFrameFormat, bool bInsideRun);
     bool ExportAsActiveXControl(const SdrObject* pObject) const;
