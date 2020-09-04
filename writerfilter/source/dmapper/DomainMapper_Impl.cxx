@@ -734,6 +734,11 @@ FieldContextPtr const &  DomainMapper_Impl::GetTopFieldContext()
     return m_aFieldStack.back();
 }
 
+bool DomainMapper_Impl::HasTopAnchoredObjects() const
+{
+    return !m_aTextAppendStack.empty() && !m_aTextAppendStack.top().m_aAnchoredObjects.empty();
+}
+
 void DomainMapper_Impl::InitTabStopFromStyle( const uno::Sequence< style::TabStop >& rInitTabStops )
 {
     OSL_ENSURE(m_aCurrentTabStops.empty(), "tab stops already initialized");
