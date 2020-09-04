@@ -2115,7 +2115,7 @@
           <value xml:lang="en-US">Select Table</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">~Select...</value>
+          <value xml:lang="en-US">~Select Table</value>
         </prop>
         <prop oor:name="PopupLabel" oor:type="xs:string">
           <value xml:lang="en-US">Select Table</value>
