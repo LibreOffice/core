@@ -389,6 +389,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf132149_pgBreak, "tdf132149_pgBreak.odt")
     //CPPUNIT_ASSERT(getXPathContent(pDump, "//page[5]/body/txt").startsWith("Lorem ipsum"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf135949_anchoredBeforeBreak, "tdf135949_anchoredBeforeBreak.docx")
+{
+    xmlDocUniquePtr pDump = parseLayoutDump();
+    //The picture was shown on page 2, because the empty paragraph before the page break was removed
+    assertXPath(pDump, "//page[1]/body/txt/anchored/fly", 1);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf129452_excessBorder, "tdf129452_excessBorder.docx")
 {
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
