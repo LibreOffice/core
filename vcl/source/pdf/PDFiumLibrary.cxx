@@ -17,6 +17,10 @@
 #include <fpdf_edit.h>
 #include <fpdf_text.h>
 
+#include <vcl/bitmap.hxx>
+
+#include <bitmapwriteaccess.hxx>
+
 namespace vcl::pdf
 {
 OUString convertPdfDateToISO8601(OUString const& rInput)
@@ -326,6 +330,34 @@ std::unique_ptr<PDFiumPathSegment> PDFiumPageObject::getPathSegment(int index)
         pPDFiumPathSegment = std::make_unique<PDFiumPathSegment>(pPathSegment);
     }
     return pPDFiumPathSegment;
+}
+
+BitmapChecksum PDFiumPage::getChecksum()
+{
+    size_t nPageWidth = FPDF_GetPageWidth(mpPage);
+    size_t nPageHeight = FPDF_GetPageHeight(mpPage);
+    FPDF_BITMAP pPdfBitmap = FPDFBitmap_Create(nPageWidth, nPageHeight, /*alpha=*/1);
+    if (!pPdfBitmap)
+    {
+        return 0;
+    }
+
+    // Intentionally not using FPDF_ANNOT here, annotations/commenting is OK to not affect the
+    // checksum, signature verification wants this.
+    FPDF_RenderPageBitmap(pPdfBitmap, mpPage, /*start_x=*/0, /*start_y=*/0, nPageWidth, nPageHeight,
+                          /*rotate=*/0, /*flags=*/0);
+    Bitmap aBitmap(Size(nPageWidth, nPageHeight), 24);
+    {
+        BitmapScopedWriteAccess pWriteAccess(aBitmap);
+        const auto pPdfBuffer = static_cast<ConstScanline>(FPDFBitmap_GetBuffer(pPdfBitmap));
+        const int nStride = FPDFBitmap_GetStride(pPdfBitmap);
+        for (size_t nRow = 0; nRow < nPageHeight; ++nRow)
+        {
+            ConstScanline pPdfLine = pPdfBuffer + (nStride * nRow);
+            pWriteAccess->CopyScanline(nRow, pPdfLine, ScanlineFormat::N32BitTcBgra, nStride);
+        }
+    }
+    return aBitmap.GetChecksum();
 }
 
 PDFiumPathSegment::PDFiumPathSegment(FPDF_PATHSEGMENT pPathSegment)
