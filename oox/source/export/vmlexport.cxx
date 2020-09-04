@@ -1219,54 +1219,24 @@ sal_uInt32 VMLExport::GenerateShapeId()
         return m_nShapeIDCounter++;
 }
 
-sal_Int32 VMLExport::StartShape()
+OString VMLExport::GetVMLShapeTypeDefinition( const OString& sShapeID, const bool bIsPictureFrame )
 {
-    if ( m_nShapeType == ESCHER_ShpInst_Nil )
-        return -1;
-
-    // some of the shapes have their own name ;-)
-    sal_Int32 nShapeElement = -1;
-    bool bReferToShapeType = false;
-    switch ( m_nShapeType )
-    {
-        case ESCHER_ShpInst_NotPrimitive:   nShapeElement = XML_shape;     break;
-        case ESCHER_ShpInst_Rectangle:      nShapeElement = XML_rect;      break;
-        case ESCHER_ShpInst_RoundRectangle: nShapeElement = XML_roundrect; break;
-        case ESCHER_ShpInst_Ellipse:        nShapeElement = XML_oval;      break;
-        case ESCHER_ShpInst_Arc:            nShapeElement = XML_arc;       break;
-        case ESCHER_ShpInst_Line:           nShapeElement = XML_line;      break;
-        case ESCHER_ShpInst_HostControl:
-        {
-            // We don't have a shape definition for host control in presetShapeDefinitions.xml
-            // So use a definition copied from DOCX file created with MSO
-            bReferToShapeType = true;
-            nShapeElement = XML_shape;
-            if ( !m_aShapeTypeWritten[ m_nShapeType ] )
-            {
-                OString sShapeType =
-                    "<v:shapetype id=\"shapetype_" + OString::number(m_nShapeType) +
-                        "\" coordsize=\"21600,21600\" o:spt=\"" + OString::number(m_nShapeType) +
+    OString sShapeType;
+    if ( !bIsPictureFrame )
+        // We don't have a shape definition for host control in presetShapeDefinitions.xml
+        // So use a definition copied from DOCX file created with MSO
+        sShapeType = "<v:shapetype id=\"shapetype_" + sShapeID +
+                        "\" coordsize=\"21600,21600\" o:spt=\"" + sShapeID +
                         "\" path=\"m,l,21600l21600,21600l21600,xe\">\n"
                         "<v:stroke joinstyle=\"miter\"/>\n"
                         "<v:path shadowok=\"f\" o:extrusionok=\"f\" strokeok=\"f\" fillok=\"f\" o:connecttype=\"rect\"/>\n"
                         "<o:lock v:ext=\"edit\" shapetype=\"t\"/>\n"
                     "</v:shapetype>";
-                m_pSerializer->write(sShapeType);
-                m_aShapeTypeWritten[ m_nShapeType ] = true;
-            }
-            break;
-        }
-        case ESCHER_ShpInst_PictureFrame:
-        {
-            // We don't have a shape definition for picture frame in presetShapeDefinitions.xml
-            // So use a definition copied from DOCX file created with MSO
-            bReferToShapeType = true;
-            nShapeElement = XML_shape;
-            if ( !m_aShapeTypeWritten[ m_nShapeType ] )
-            {
-                OString sShapeType =
-                    "<v:shapetype id=\"shapetype_" + OString::number(m_nShapeType) +
-                        "\" coordsize=\"21600,21600\" o:spt=\"" + OString::number(m_nShapeType) +
+    else
+        // We don't have a shape definition for picture frame in presetShapeDefinitions.xml
+        // So use a definition copied from DOCX file created with MSO
+        sShapeType = "<v:shapetype id=\"shapetype_" + sShapeID +
+                        "\" coordsize=\"21600,21600\" o:spt=\"" + sShapeID +
                         "\" o:preferrelative=\"t\" path=\"m@4@5l@4@11@9@11@9@5xe\" filled=\"f\" stroked=\"f\">\n"
                         "<v:stroke joinstyle=\"miter\"/>\n"
                         "<v:formulas>\n"
@@ -1286,7 +1256,43 @@ sal_Int32 VMLExport::StartShape()
                         "<v:path o:extrusionok=\"f\" gradientshapeok=\"t\" o:connecttype=\"rect\"/>\n"
                         "<o:lock v:ext=\"edit\" aspectratio=\"t\"/>\n"
                         "</v:shapetype>";
-                m_pSerializer->write(sShapeType);
+    return sShapeType;
+}
+
+sal_Int32 VMLExport::StartShape()
+{
+    if ( m_nShapeType == ESCHER_ShpInst_Nil )
+        return -1;
+
+    // some of the shapes have their own name ;-)
+    sal_Int32 nShapeElement = -1;
+    bool bReferToShapeType = false;
+    switch ( m_nShapeType )
+    {
+        case ESCHER_ShpInst_NotPrimitive:   nShapeElement = XML_shape;     break;
+        case ESCHER_ShpInst_Rectangle:      nShapeElement = XML_rect;      break;
+        case ESCHER_ShpInst_RoundRectangle: nShapeElement = XML_roundrect; break;
+        case ESCHER_ShpInst_Ellipse:        nShapeElement = XML_oval;      break;
+        case ESCHER_ShpInst_Arc:            nShapeElement = XML_arc;       break;
+        case ESCHER_ShpInst_Line:           nShapeElement = XML_line;      break;
+        case ESCHER_ShpInst_HostControl:
+        {
+            bReferToShapeType = true;
+            nShapeElement = XML_shape;
+            if ( !m_aShapeTypeWritten[ m_nShapeType ] )
+            {
+                m_pSerializer->write(GetVMLShapeTypeDefinition(OString::number(m_nShapeType), false));
+                m_aShapeTypeWritten[ m_nShapeType ] = true;
+            }
+            break;
+        }
+        case ESCHER_ShpInst_PictureFrame:
+        {
+            bReferToShapeType = true;
+            nShapeElement = XML_shape;
+            if ( !m_aShapeTypeWritten[ m_nShapeType ] )
+            {
+                m_pSerializer->write(GetVMLShapeTypeDefinition(OString::number(m_nShapeType), true));
                 m_aShapeTypeWritten[ m_nShapeType ] = true;
             }
             break;
