@@ -174,9 +174,9 @@
           </packing>
         </child>
         <child>
-            <object class="GtkLabel" id="transparancylabel">
+            <object class="GtkLabel" id="transparencylabel">
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="sidebarpossize|transparancylabel">Transparancy:</property>
+                <property name="label" translatable="yes" context="sidebarpossize|transparencylabel">Transparency:</property>
                 <property name="xalign">0</property>
             </object>
             <packing>
@@ -608,7 +608,7 @@
       <widget name="verticallabel"/>
       <widget name="widthlabel"/>
       <widget name="heightlabel"/>
-      <widget name="transparancylabel"/>
+      <widget name="transparencylabel"/>
       <widget name="rotationlabel"/>
       <widget name="fliplabel"/>
       <widget name="arrangelabel"/>
