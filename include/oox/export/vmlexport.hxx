@@ -145,6 +145,7 @@ public:
     void    SetHashMarkForType(bool bUseHashMarkForType) { m_bUseHashMarkForType = bUseHashMarkForType; }
     void    OverrideShapeIDGen(bool bOverrideShapeIdGeneration,
                             const OString& sShapeIDPrefix = OString());
+    static OString GetVMLShapeTypeDefinition(const OString& sShapeID, const bool bIsPictureFrame);
 
 protected:
     /// Add an attribute to the generated <v:shape/> element.
