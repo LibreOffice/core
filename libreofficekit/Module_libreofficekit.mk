@@ -15,8 +15,10 @@ $(eval $(call gb_Module_add_check_targets,libreofficekit, \
     CppunitTest_libreofficekit_checkapi \
 ))
 
-# tdf#113311 disabled because it can deadlock on shutdown
-#$(eval $(call gb_Module_add_subsequentcheck_targets,libreofficekit,\
+# This was disabled because of tdf#113311 which says it can deadlock
+# on shutdown. Let's check if that is still the case. At least in my
+# testing it did not happen.
+$(eval $(call gb_Module_add_subsequentcheck_targets,libreofficekit,\
     CppunitTest_libreofficekit_tiledrendering \
 ))
 
