@@ -2032,7 +2032,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uString_newReplaceAllUtf16LUtf16L(
 */
 SAL_DLLPUBLIC void SAL_CALL rtl_uString_newReplaceAllFromIndexUtf16LUtf16L(
     rtl_uString ** newStr, rtl_uString * str, sal_Unicode const * from,
-    sal_Int32 fromLength, sal_Unicode const * to, sal_Int32 toLengt, sal_Int32 fromIndex)
+    sal_Int32 fromLength, sal_Unicode const * to, sal_Int32 toLength, sal_Int32 fromIndex)
     SAL_THROW_EXTERN_C();
 #endif
 
