@@ -662,6 +662,23 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf133702, "tdf133702.docx")
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf135667, "tdf135667.odt")
+{
+    xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
+
+    // This was missing.
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:r/w:object/v:shapetype");
+
+    // line settings
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:r/w:object/v:shape", "stroked", "t");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:r/w:object/v:shape", "strokecolor", "#FF0000");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:r/w:object/v:shape", "strokeweight", "4pt");
+
+    // line type
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:r/w:object/v:shape/v:stroke", "linestyle", "Single");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:r/w:object/v:shape/v:stroke", "dashstyle", "Dash");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testImageSpaceSettings, "tdf135047_ImageSpaceSettings.fodt")
 {
     // tdf#135047 The spaces of image were not saved.
