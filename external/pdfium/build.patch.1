@@ -37,3 +37,18 @@ index 0fb627ba8..dda1fc8bc 100644
        : span(container.data(), container.size()) {}
    template <
        typename Container,
+--- a/core/fxge/dib/cfx_cmyk_to_srgb.cpp	2020-09-10 17:32:37.165872018 +0200
++++ b/core/fxge/dib/cfx_cmyk_to_srgb.cpp	2020-09-10 17:33:15.870395738 +0200
+@@ -1740,10 +1740,12 @@
+   uint8_t y1 = static_cast<int>(y * 255.f + rounding_offset);
+   uint8_t k1 = static_cast<int>(k * 255.f + rounding_offset);
+ 
++#ifndef _WIN32
+   ASSERT(c1 == FXSYS_roundf(c * 255));
+   ASSERT(m1 == FXSYS_roundf(m * 255));
+   ASSERT(y1 == FXSYS_roundf(y * 255));
+   ASSERT(k1 == FXSYS_roundf(k * 255));
++#endif
+ 
+   uint8_t r;
+   uint8_t g;
