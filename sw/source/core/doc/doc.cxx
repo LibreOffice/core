@@ -127,6 +127,7 @@
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
 #include <vbahelper/vbaaccesshelper.hxx>
+#include <editeng/langitem.hxx>
 #include <calbck.hxx>
 
 /* @@@MAINTAINABILITY-HORROR@@@
@@ -1839,5 +1840,9 @@ void SwDoc::SetMissingDictionaries( bool bIsMissing )
         meDictionaryMissing = MissingDictionary::False;
 };
 
+void SwDoc::SetLanguage(const LanguageType eLang, const sal_uInt16 nId)
+{
+    mpAttrPool->SetPoolDefaultItem(SvxLanguageItem(eLang, nId));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
