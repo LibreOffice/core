@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5e202251_e02a6967",
+        "filename": "sc/source/filter/xcl97/xcl97rec.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1274,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-09-04T08:14:06Z",
+      "side": 1,
+      "message": "This will result loss of all shapes, not only the detective ones.",
+      "range": {
+        "startLine": 1274,
+        "startChar": 10,
+        "endLine": 1274,
+        "endChar": 55
+      },
+      "revId": "98ff2afbe1dd0391a8142883757e1527b9c33ec0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
