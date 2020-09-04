@@ -21,7 +21,7 @@ def get_url_for_data_file(file_name):
 class CalcTrackedChanges(UITestCase):
 
     def test_tdf131907(self):
-        calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf131907.odt"))
+        calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf131907.ods"))
         xCalcDoc = self.xUITest.getTopFocusWindow()
         self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptChanges")
         xTrackDlg = self.xUITest.getTopFocusWindow()
