@@ -67,7 +67,7 @@ void insertString(Document& rDocument, const std::string& s)
 
 }
 
-OUString getFileURLFromSystemPath(OUString const & path)
+static OUString getFileURLFromSystemPath(OUString const & path)
 {
     OUString url;
     osl::FileBase::RC e = osl::FileBase::getFileURLFromSystemPath(path, url);
@@ -130,7 +130,7 @@ void TiledRenderingTest::runAllTests()
 
     std::unique_ptr< Office > pOffice( lok_cpp_init(
                                       m_sLOPath.c_str() ) );
-    CPPUNIT_ASSERT( pOffice.get() );
+    CPPUNIT_ASSERT( pOffice );
 
     testDocumentLoadFail( pOffice.get() );
     testDocumentTypes( pOffice.get() );
@@ -148,7 +148,7 @@ void TiledRenderingTest::testDocumentLoadFail( Office* pOffice )
 {
     const string sDocPath = m_sSrcRoot + "/libreofficekit/qa/data/IDONOTEXIST.odt";
     std::unique_ptr< Document> pDocument( pOffice->documentLoad( sDocPath.c_str() ) );
-    CPPUNIT_ASSERT( !pDocument.get() );
+    CPPUNIT_ASSERT( !pDocument );
     // TODO: we probably want to have some way of returning what
     // the cause of failure was. getError() will return
     // something along the lines of:
@@ -158,10 +158,10 @@ void TiledRenderingTest::testDocumentLoadFail( Office* pOffice )
 // Our dumped .png files end up in
 // workdir/CppunitTest/libreofficekit_tiledrendering.test.core
 
-int getDocumentType( Office* pOffice, const string& rPath )
+static int getDocumentType( Office* pOffice, const string& rPath )
 {
     std::unique_ptr< Document> pDocument( pOffice->documentLoad( rPath.c_str() ) );
-    CPPUNIT_ASSERT( pDocument.get() );
+    CPPUNIT_ASSERT( pDocument );
     return pDocument->getDocumentType();
 }
 
@@ -180,7 +180,7 @@ void TiledRenderingTest::testDocumentTypes( Office* pOffice )
 {
     std::unique_ptr<Document> pDocument(loadDocument(pOffice, "blank_text.odt"));
 
-    CPPUNIT_ASSERT(pDocument.get());
+    CPPUNIT_ASSERT(pDocument);
     CPPUNIT_ASSERT_EQUAL(LOK_DOCTYPE_TEXT, static_cast<LibreOfficeKitDocumentType>(pDocument->getDocumentType()));
     // This crashed.
     pDocument->postUnoCommand(".uno:Bold");
@@ -223,7 +223,7 @@ void TiledRenderingTest::testPaintPartTile(Office* pOffice)
 {
     std::unique_ptr<Document> pDocument(loadDocument(pOffice, "blank_text.odt"));
 
-    CPPUNIT_ASSERT(pDocument.get());
+    CPPUNIT_ASSERT(pDocument);
     CPPUNIT_ASSERT_EQUAL(LOK_DOCTYPE_TEXT, static_cast<LibreOfficeKitDocumentType>(pDocument->getDocumentType()));
 
     // Create two views.
@@ -401,7 +401,7 @@ void TiledRenderingTest::testMultiKeyInput(Office *pOffice)
 {
     std::unique_ptr<Document> pDocument(loadDocument(pOffice, "blank_text.odt"));
 
-    CPPUNIT_ASSERT(pDocument.get());
+    CPPUNIT_ASSERT(pDocument);
     CPPUNIT_ASSERT_EQUAL(LOK_DOCTYPE_TEXT, static_cast<LibreOfficeKitDocumentType>(pDocument->getDocumentType()));
 
     // Create two views.
