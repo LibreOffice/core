@@ -466,38 +466,6 @@ sub copy_directory
     }
 }
 
-##########################################
-# Copying all files from one directory
-# to another directory
-##########################################
-
-sub is_empty_dir
-{
-    my ($dir) = @_;
-
-    my $directory_is_empty = 1;
-    my @sourcefiles = ();
-
-    opendir(DIR, $dir);
-    @sourcefiles = readdir(DIR);
-    closedir(DIR);
-
-    my $onefile;
-    my @realcontent = ();
-
-    foreach $onefile (@sourcefiles)
-    {
-        if ((!($onefile eq ".")) && (!($onefile eq "..")))
-        {
-            push(@realcontent, $onefile);
-        }
-    }
-
-    if ( $#realcontent > -1 ) { $directory_is_empty = 0; }
-
-    return $directory_is_empty;
-}
-
 #####################################################################
 # Creating hard links to a complete directory with sub directories.
 #####################################################################
