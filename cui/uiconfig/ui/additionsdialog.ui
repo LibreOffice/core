@@ -86,15 +86,14 @@
     </child>
   </object>
   <object class="GtkDialog" id="AdditionsDialog">
-    <property name="width_request">400</property>
-    <property name="height_request">500</property>
+    <property name="width_request">550</property>
+    <property name="height_request">600</property>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="additionsdialog|AdditionsDialog">Additions</property>
-    <property name="resizable">False</property>
     <property name="modal">True</property>
-    <property name="default_width">500</property>
-    <property name="default_height">1</property>
+    <property name="default_width">300</property>
+    <property name="default_height">400</property>
     <property name="type_hint">dialog</property>
     <child>
       <placeholder/>
@@ -107,17 +106,14 @@
         <child internal-child="action_area">
           <object class="GtkButtonBox">
             <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
+            <property name="halign">end</property>
+            <property name="layout_style">start</property>
             <child>
               <object class="GtkBox">
-                <property name="width_request">300</property>
+                <property name="width_request">200</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
-                <property name="spacing">5</property>
-                <child>
-                  <placeholder/>
-                </child>
                 <child>
                   <object class="GtkLabel" id="labelProgress">
                     <property name="visible">True</property>
@@ -162,7 +158,7 @@
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">False</property>
+            <property name="fill">True</property>
             <property name="position">0</property>
           </packing>
         </child>
@@ -171,10 +167,12 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
+            <property name="spacing">12</property>
             <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="spacing">6</property>
                 <child>
                   <object class="GtkEntry" id="entrySearch">
                     <property name="visible">True</property>
@@ -207,7 +205,7 @@
                       <object class="GtkImage" id="imageGear">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="icon_name">sfx2/res/actionaction013.png</property>
+                        <property name="icon_name">cmd/sc_menubar.png</property>
                       </object>
                     </child>
                     <child internal-child="accessible">
@@ -246,30 +244,7 @@
                         <property name="can_focus">False</property>
                         <property name="valign">start</property>
                         <property name="row_spacing">6</property>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
+                        <property name="column_spacing">12</property>
                         <child>
                           <placeholder/>
                         </child>
