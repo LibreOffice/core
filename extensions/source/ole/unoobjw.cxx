@@ -2866,7 +2866,7 @@ HRESULT InterfaceOleWrapper::InvokeGeneral( DISPID dispidMember, unsigned short 
             CComVariant arg;
             if( pdispparams->cArgs == 1 && SUCCEEDED( arg.ChangeType( VT_BSTR, &pdispparams->rgvarg[0])) )
             {
-                Reference<XIdlClass> classStruct= xRefl->forName(o3tl::toU(arg.bstrVal));
+                Reference<XIdlClass> classStruct= xRefl->forName(OUString(o3tl::toU(arg.bstrVal)));
                 if( classStruct.is())
                 {
                     Any anyStruct;

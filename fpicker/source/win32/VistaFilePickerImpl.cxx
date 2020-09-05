@@ -102,7 +102,7 @@ static OUString lcl_getURLFromShellItem (IShellItem* pItem)
     hr = pItem->GetDisplayName ( SIGDN_FILESYSPATH, &pStr );
     if (SUCCEEDED(hr))
     {
-        ::osl::FileBase::getFileURLFromSystemPath( o3tl::toU(pStr), sURL );
+        ::osl::FileBase::getFileURLFromSystemPath( OUString(o3tl::toU(pStr)), sURL );
         goto cleanup;
     }
 
@@ -128,7 +128,7 @@ static OUString lcl_getURLFromShellItem (IShellItem* pItem)
             hr = SHGetKnownFolderPath(known_folder_id, 0, nullptr, &pStr);
             if (SUCCEEDED(hr))
             {
-                ::osl::FileBase::getFileURLFromSystemPath(o3tl::toU(pStr), sURL);
+                ::osl::FileBase::getFileURLFromSystemPath(OUString(o3tl::toU(pStr)), sURL);
                 goto cleanup;
             }
         }
@@ -137,7 +137,7 @@ static OUString lcl_getURLFromShellItem (IShellItem* pItem)
     // Default fallback
     hr = SHGetKnownFolderPath(FOLDERID_Documents, 0, nullptr, &pStr);
     if (SUCCEEDED(hr))
-        ::osl::FileBase::getFileURLFromSystemPath(o3tl::toU(pStr), sURL);
+        ::osl::FileBase::getFileURLFromSystemPath(OUString(o3tl::toU(pStr)), sURL);
     else // shouldn't happen...
         goto bailout;
 

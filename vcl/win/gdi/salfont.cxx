@@ -548,7 +548,7 @@ static FontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rEnumFont
     aDFA.SetSymbolFlag(rLogFont.lfCharSet == SYMBOL_CHARSET);
 
     // get the font face name
-    aDFA.SetFamilyName(o3tl::toU(rLogFont.lfFaceName));
+    aDFA.SetFamilyName(OUString(o3tl::toU(rLogFont.lfFaceName)));
 
     // use the face's style name only if it looks reasonable
     const wchar_t* pStyleName = rEnumFont.elfStyle;
@@ -558,7 +558,7 @@ static FontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rEnumFont
         if( *p < 0x0020 )
             break;
     if( p < pEnd )
-        aDFA.SetStyleName(o3tl::toU(pStyleName));
+        aDFA.SetStyleName(OUString(o3tl::toU(pStyleName)));
 
     // heuristics for font quality
     // -   opentypeTT > truetype
@@ -962,7 +962,7 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFa
 
     wchar_t aFaceName[LF_FACESIZE+60];
     if( GetTextFaceW( getHDC(), SAL_N_ELEMENTS(aFaceName), aFaceName ) )
-        rxFontMetric->SetFamilyName(o3tl::toU(aFaceName));
+        rxFontMetric->SetFamilyName(OUString(o3tl::toU(aFaceName)));
 
     rxFontMetric->SetMinKashida(pFontInstance->GetKashidaWidth());
     rxFontMetric->ImplCalcLineSpacing(pFontInstance.get());

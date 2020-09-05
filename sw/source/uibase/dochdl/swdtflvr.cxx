@@ -2736,7 +2736,7 @@ bool SwTransferable::PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
                     DWORD nCopied = GetLongPathNameW(o3tl::toW(sSysPath.getStr()),
                                                      o3tl::toW(aBuf.get()), 32767);
                     if (nCopied && nCopied < 32767)
-                        sText = URIHelper::SmartRel2Abs(INetURLObject(), aBuf.get(),
+                        sText = URIHelper::SmartRel2Abs(INetURLObject(), OUString(aBuf.get()),
                                                         Link<OUString*, bool>(), false);
                 }
 #endif

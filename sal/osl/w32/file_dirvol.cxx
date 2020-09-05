@@ -174,7 +174,7 @@ namespace
         }
         else
         {
-            has_parent = !osl::systemPathIsLogicalDrivePattern(path);
+            has_parent = !osl::systemPathIsLogicalDrivePattern(OUString(path));
         }
         return has_parent;
     }

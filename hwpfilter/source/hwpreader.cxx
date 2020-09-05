@@ -3826,9 +3826,9 @@ void HwpReader::makePicture(Picture * hbox)
                 padd("xlink:type", sXML_CDATA, "simple");
 #ifdef _WIN32
                 if( hbox->follow[4] != 0 )
-                    padd("xlink:href", sXML_CDATA, reinterpret_cast<sal_Unicode const *>(hconv(kstr2hstr(hbox->follow.data() + 4).c_str())));
+                    padd("xlink:href", sXML_CDATA, fromHcharStringToOUString(hstr2ucsstr(kstr2hstr(hbox->follow.data() + 4).c_str())));
                 else
-                    padd("xlink:href", sXML_CDATA, reinterpret_cast<sal_Unicode const *>(hconv(kstr2hstr(hbox->follow.data() + 5).c_str())));
+                    padd("xlink:href", sXML_CDATA, fromHcharStringToOUString(hstr2ucsstr(kstr2hstr(hbox->follow.data() + 5).c_str())));
 #else
                 if( hbox->follow[4] != 0 )
                     padd("xlink:href", sXML_CDATA,
@@ -3887,7 +3887,7 @@ void HwpReader::makePicture(Picture * hbox)
             if ( hbox->pictype == PICTYPE_FILE ){
 #ifdef _WIN32
                 sprintf(buf, "file:///%s", hbox->picinfo.picun.path );
-                padd("xlink:href", sXML_CDATA, reinterpret_cast<sal_Unicode const *>(hconv(kstr2hstr(reinterpret_cast<uchar *>(buf)).c_str())));
+                padd("xlink:href", sXML_CDATA, fromHcharStringToOUString(hstr2ucsstr(kstr2hstr(reinterpret_cast<uchar *>(buf)).c_str())));
 #else
                 padd("xlink:href", sXML_CDATA,
                     fromHcharStringToOUString(hstr2ucsstr(kstr2hstr(reinterpret_cast<uchar const *>(urltounix(hbox->picinfo.picun.path).c_str())).c_str())));

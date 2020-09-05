@@ -73,7 +73,7 @@ namespace /* private */
             lret = RegQueryValueW(hkey, nullptr, buff, &sz);
             if (lret == ERROR_SUCCESS)
             {
-                osl::FileBase::getFileURLFromSystemPath(o3tl::toU(buff), altSenddocUrl);
+                osl::FileBase::getFileURLFromSystemPath(OUString(o3tl::toU(buff)), altSenddocUrl);
             }
             RegCloseKey(hkey);
         }

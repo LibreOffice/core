@@ -379,7 +379,7 @@ DdeItem* DdeInternal::FindItem( DdeTopic& rTopic, HSZ hItem )
         // Let's query our subclass
         WCHAR chBuf[250];
         DdeQueryStringW(pInst->hDdeInstSvr,hItem,chBuf,SAL_N_ELEMENTS(chBuf),CP_WINUNICODE );
-        bContinue = rTopic.MakeItem( o3tl::toU(chBuf) );
+        bContinue = rTopic.MakeItem( OUString(o3tl::toU(chBuf)) );
         // We need to search again
     }
     while( bContinue );
@@ -625,7 +625,7 @@ DdeItem::DdeItem( const sal_Unicode* p )
 {
     DdeInstData* pInst = ImpGetInstData();
     assert(pInst);
-    pName = new DdeString( pInst->hDdeInstSvr, p );
+    pName = new DdeString( pInst->hDdeInstSvr, OUString(p) );
     nType = DDEITEM;
     pMyTopic = nullptr;
     pImpData = nullptr;
