@@ -1391,31 +1391,6 @@ void SkiaSalGraphicsImpl::invert(sal_uInt32 nPoints, const SalPoint* pPointArray
 
 bool SkiaSalGraphicsImpl::drawEPS(long, long, long, long, void*, sal_uInt32) { return false; }
 
-static void drawBitmapToCanvas(const SkiaSalBitmap& bitmap, SkCanvas* canvas, const SkPaint& paint)
-{
-    if (bitmap.PreferSkShader())
-    {
-        SkPaint paint2(paint);
-        paint2.setShader(bitmap.GetSkShader());
-        canvas->drawPaint(paint2);
-    }
-    else
-        canvas->drawImage(bitmap.GetSkImage(), 0, 0, &paint);
-}
-
-static void drawAlphaBitmapToCanvas(const SkiaSalBitmap& bitmap, SkCanvas* canvas,
-                                    const SkPaint& paint)
-{
-    if (bitmap.PreferSkShader())
-    {
-        SkPaint paint2(paint);
-        paint2.setShader(bitmap.GetAlphaSkShader());
-        canvas->drawPaint(paint2);
-    }
-    else
-        canvas->drawImage(bitmap.GetAlphaSkImage(), 0, 0, &paint);
-}
-
 // Create SkImage from a bitmap and possibly an alpha mask (the usual VCL one-minus-alpha),
 // with the given target size. Result will be possibly cached, unless disabled.
 sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitmap,
@@ -1477,54 +1452,35 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
         assert(image->width() == targetSize.Width() && image->height() == targetSize.Height());
         return image;
     }
-    // Combine bitmap + alpha bitmap into one temporary bitmap with alpha.
-    // If scaling is needed, first apply the alpha, then scale, otherwise the scaling might affect the alpha values.
-    if (alphaBitmap && targetSize != bitmap.GetSize())
+    sk_sp<SkSurface> tmpSurface = SkiaHelper::createSkSurface(targetSize);
+    if (!tmpSurface)
+        return nullptr;
+    SkCanvas* canvas = tmpSurface->getCanvas();
+    SkAutoCanvasRestore autoRestore(canvas, true);
+    SkPaint paint;
+    if (targetSize != bitmap.GetSize())
     {
-        sk_sp<SkSurface> mergedSurface = SkiaHelper::createSkSurface(bitmap.GetSize());
-        if (!mergedSurface)
-            return nullptr;
-        SkPaint paint;
-        paint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
-        drawBitmapToCanvas(bitmap, mergedSurface->getCanvas(), paint);
-        paint.setBlendMode(SkBlendMode::kDstOut); // VCL alpha is one-minus-alpha
-        drawAlphaBitmapToCanvas(*alphaBitmap, mergedSurface->getCanvas(), paint);
-        sk_sp<SkSurface> scaledSurface = SkiaHelper::createSkSurface(targetSize);
-        if (!scaledSurface)
-            return nullptr;
-        paint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
+        SkMatrix matrix;
+        matrix.set(SkMatrix::kMScaleX, 1.0 * targetSize.Width() / bitmap.GetSize().Width());
+        matrix.set(SkMatrix::kMScaleY, 1.0 * targetSize.Height() / bitmap.GetSize().Height());
+        canvas->concat(matrix);
         paint.setFilterQuality(kHigh_SkFilterQuality);
-        scaledSurface->getCanvas()->drawImageRect(
-            mergedSurface->makeImageSnapshot(),
-            SkRect::MakeXYWH(0, 0, bitmap.GetSize().Width(), bitmap.GetSize().Height()),
-            SkRect::MakeXYWH(0, 0, targetSize.Width(), targetSize.Height()), &paint);
-        image = scaledSurface->makeImageSnapshot();
     }
-    else // No alpha or no scaling, scale directly.
+    if (alphaBitmap != nullptr)
     {
-        sk_sp<SkSurface> tmpSurface = SkiaHelper::createSkSurface(targetSize);
-        if (!tmpSurface)
-            return nullptr;
-        SkCanvas* canvas = tmpSurface->getCanvas();
-        SkAutoCanvasRestore autoRestore(canvas, true);
-        SkPaint paint;
-        if (targetSize != bitmap.GetSize())
-        {
-            SkMatrix matrix;
-            matrix.set(SkMatrix::kMScaleX, 1.0 * targetSize.Width() / bitmap.GetSize().Width());
-            matrix.set(SkMatrix::kMScaleY, 1.0 * targetSize.Height() / bitmap.GetSize().Height());
-            canvas->concat(matrix);
-            paint.setFilterQuality(kHigh_SkFilterQuality);
-        }
-        paint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
-        drawBitmapToCanvas(bitmap, canvas, paint);
-        if (alphaBitmap != nullptr)
-        {
-            paint.setBlendMode(SkBlendMode::kDstOut); // VCL alpha is one-minus-alpha
-            drawAlphaBitmapToCanvas(*alphaBitmap, canvas, paint);
-        }
-        image = tmpSurface->makeImageSnapshot();
+        canvas->clear(SK_ColorTRANSPARENT);
+        paint.setShader(SkShaders::Blend(SkBlendMode::kDstOut, bitmap.GetSkShader(),
+                                         alphaBitmap->GetAlphaSkShader()));
+        canvas->drawPaint(paint);
     }
+    else if (bitmap.PreferSkShader())
+    {
+        paint.setShader(bitmap.GetSkShader());
+        canvas->drawPaint(paint);
+    }
+    else
+        canvas->drawImage(bitmap.GetSkImage(), 0, 0, &paint);
+    image = tmpSurface->makeImageSnapshot();
     SkiaHelper::addCachedImage(key, image);
     return image;
 }
