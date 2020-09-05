@@ -1682,10 +1682,9 @@ void ContentNode::UnExpandPosition( sal_Int32 &rPos, bool bBiasStart )
         if (nOffset >= rPos) // happens after the position
             return;
 
-        sal_Int32 nChunk = 0;
         if (rAttr.Which() == EE_FEATURE_FIELD)
         {
-            nChunk += static_cast<const EditCharAttribField&>(rAttr).GetFieldValue().getLength();
+            sal_Int32 nChunk = static_cast<const EditCharAttribField&>(rAttr).GetFieldValue().getLength();
             nChunk--; // Character representing the field in the string
 
             if (nOffset + nChunk >= rPos) // we're inside the field

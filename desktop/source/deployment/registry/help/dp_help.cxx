@@ -507,9 +507,9 @@ void BackendImpl::implProcessHelp(
                                 sal_Unicode const nCR = 13, nLF = 10;
                                 sal_Int32 nSearchCR = aErrMsg.indexOf( nCR );
                                 sal_Int32 nSearchLF = aErrMsg.indexOf( nLF );
-                                sal_Int32 nCopy;
                                 if( nSearchCR != -1 || nSearchLF != -1 )
                                 {
+                                    sal_Int32 nCopy;
                                     if( nSearchCR == -1 )
                                         nCopy = nSearchLF;
                                     else if( nSearchLF == -1 )

@@ -168,9 +168,9 @@ bool Options::checkCommandFile (std::vector< std::string > & rArgs, char const *
 
 bool Options::badOption(char const * reason, std::string const & rArg)
 {
-  OStringBuffer message;
   if (reason != nullptr)
   {
+    OStringBuffer message;
     message.append(reason); message.append(" option '"); message.append(rArg.c_str()); message.append("'");
     throw IllegalArgument(message.makeStringAndClear());
   }

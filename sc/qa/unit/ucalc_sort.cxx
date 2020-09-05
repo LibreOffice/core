@@ -41,7 +41,6 @@ void Test::testSort()
     // We need a drawing layer in order to create caption objects.
     m_pDoc->InitDrawLayer(&getDocShell());
 
-    ScRange aDataRange;
     ScAddress aPos(0,0,0);
     {
         const char* aData[][2] = {
@@ -52,7 +51,7 @@ void Test::testSort()
         };
 
         clearRange(m_pDoc, ScRange(0, 0, 0, 1, SAL_N_ELEMENTS(aData), 0));
-        aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+        ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
     }
 
@@ -80,6 +79,7 @@ void Test::testSort()
     pNote = m_pDoc->GetNote(1, 0, 0);
     CPPUNIT_ASSERT(pNote);
 
+    ScRange aDataRange;
     clearRange(m_pDoc, ScRange(0, 0, 0, 1, 9, 0)); // Clear A1:B10.
     {
         // 0 = empty cell

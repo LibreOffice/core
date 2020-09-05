@@ -802,7 +802,6 @@ namespace osl_StreamPipe
         void SAL_CALL run( ) override
             {
                 //create pipe.
-                sal_Int32 nChars;
                 printf("listen\n");
                 if ( !aListenPipe.is() )
                 {
@@ -819,7 +818,7 @@ namespace osl_StreamPipe
                     }
                     printf("write\n");
                     // write to pipe
-                    nChars = aConnectionPipe.write( m_pTestString1.getStr(), m_pTestString1.getLength() + 1 );
+                    sal_Int32 nChars = aConnectionPipe.write( m_pTestString1.getStr(), m_pTestString1.getLength() + 1 );
                     if ( nChars < 0)
                     {
                         printf("server write failed! \n");

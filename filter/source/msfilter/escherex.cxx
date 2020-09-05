@@ -1484,10 +1484,8 @@ bool EscherPropertyContainer::CreateGraphicProperties(const uno::Reference<beans
     bool        bCreateFillStyles = false;
 
     std::unique_ptr<GraphicAttr> pGraphicAttr;
-    OUString aGraphicUrl;
     uno::Reference<graphic::XGraphic> xGraphic;
 
-    drawing::BitmapMode eBitmapMode(drawing::BitmapMode_NO_REPEAT);
     uno::Any aAny;
 
     if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, rSource ) )
@@ -1500,6 +1498,8 @@ bool EscherPropertyContainer::CreateGraphicProperties(const uno::Reference<beans
         sal_Int16 nGreen(0);
         sal_Int16 nBlue(0);
         double fGamma(1.0);
+        drawing::BitmapMode eBitmapMode(drawing::BitmapMode_NO_REPEAT);
+        OUString aGraphicUrl;
 
         sal_uInt16 nAngle = 0;
         if ( rSource == "MetaFile" )
@@ -2194,7 +2194,6 @@ bool EscherPropertyContainer::CreateConnectorProperties(
 
     if ( rXShape.is() )
     {
-        awt::Point aStartPoint, aEndPoint;
         uno::Reference<beans::XPropertySet> aXPropSet;
         uno::Reference<drawing::XShape> aShapeA, aShapeB;
         uno::Any aAny( rXShape->queryInterface( cppu::UnoType<beans::XPropertySet>::get()));
@@ -2206,10 +2205,10 @@ bool EscherPropertyContainer::CreateConnectorProperties(
                 aAny >>= eCt;
                 if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, "EdgeStartPoint" ) )
                 {
-                    aStartPoint = *o3tl::doAccess<awt::Point>(aAny);
+                    awt::Point aStartPoint = *o3tl::doAccess<awt::Point>(aAny);
                     if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, "EdgeEndPoint" ) )
                     {
-                        aEndPoint = *o3tl::doAccess<awt::Point>(aAny);
+                        awt::Point aEndPoint = *o3tl::doAccess<awt::Point>(aAny);
 
                         rShapeFlags = ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty | ShapeFlag::Connector;
                         rGeoRect = awt::Rectangle( aStartPoint.X, aStartPoint.Y,

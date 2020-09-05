@@ -1054,14 +1054,12 @@ void SAL_CALL rtl_uString_internConvert( rtl_uString   ** newStr,
 static void
 internRelease (rtl_uString *pThis)
 {
-    oslMutex pPoolMutex;
-
     rtl_uString *pFree = nullptr;
     if ( SAL_STRING_REFCOUNT(
              osl_atomic_decrement( &(pThis->refCount) ) ) == 0)
     {
         RTL_LOG_STRING_INTERN_DELETE(pThis);
-        pPoolMutex = getInternMutex();
+        oslMutex pPoolMutex = getInternMutex();
         osl_acquireMutex( pPoolMutex );
 
         rtl_str_hash_remove (pThis);

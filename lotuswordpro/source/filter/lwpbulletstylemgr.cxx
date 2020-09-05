@@ -114,11 +114,10 @@ OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, const LwpBulletO
     }
 
     LwpParaProperty* pProp = pPara->GetProperty(PP_LOCAL_INDENT);
-    LwpParaIndentProperty* pIndentProp = nullptr;
     LwpObjectID aIndentID;
     if (pProp)
     {
-        pIndentProp = static_cast<LwpParaIndentProperty*>(pProp);
+        LwpParaIndentProperty* pIndentProp = static_cast<LwpParaIndentProperty*>(pProp);
         aIndentID = pIndentProp->GetIndentID();
     }
 

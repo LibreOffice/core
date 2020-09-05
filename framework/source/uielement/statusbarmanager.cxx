@@ -457,7 +457,7 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
     }
 
     // Statusbar Merging
-    const sal_uInt16 STATUSBAR_ITEM_STARTID = 1000;
+    constexpr sal_uInt16 STATUSBAR_ITEM_STARTID = 1000;
     MergeStatusbarInstructionContainer aMergeInstructions = AddonsOptions().GetMergeStatusbarInstructions();
     if ( !aMergeInstructions.empty() )
     {

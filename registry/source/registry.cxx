@@ -162,11 +162,9 @@ static RegError REGISTRY_CALLTYPE openRegistry(rtl_uString* registryName,
 
 static RegError REGISTRY_CALLTYPE closeRegistry(RegHandle hReg)
 {
-    ORegistry   *pReg;
-
     if (hReg)
     {
-        pReg = static_cast<ORegistry*>(hReg);
+        ORegistry *pReg = static_cast<ORegistry*>(hReg);
         if (!pReg->isOpen())
             return RegError::REGISTRY_NOT_OPEN;
 
@@ -192,11 +190,9 @@ static RegError REGISTRY_CALLTYPE closeRegistry(RegHandle hReg)
 static RegError REGISTRY_CALLTYPE destroyRegistry(RegHandle hReg,
                                                   rtl_uString* registryName)
 {
-    ORegistry   *pReg;
-
     if (hReg)
     {
-        pReg = static_cast<ORegistry*>(hReg);
+        ORegistry *pReg = static_cast<ORegistry*>(hReg);
         if (!pReg->isOpen())
             return RegError::INVALID_REGISTRY;
 

@@ -586,7 +586,6 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void )
 
     bool bOpenDialog = true;
     OUString sDialogValue;
-    OUString sNewValue;
 
     if( sPropertyType == "boolean" )
     {
@@ -633,7 +632,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void )
 
             if (aValueDialog.run() == RET_OK )
             {
-                sNewValue = aValueDialog.getValue();
+                OUString sNewValue = aValueDialog.getValue();
                 bSaveChanges = true;
                 if ( sPropertyType == "short")
                 {

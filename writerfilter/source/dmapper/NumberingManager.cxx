@@ -874,12 +874,12 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
 
                 // Respect only the aspect ratio of the picture, not its size.
                 awt::Size aPrefSize = xShape->getSize();
-                // See SwDefBulletConfig::InitFont(), default height is 14.
-                const int nFontHeight = 14;
-                // Point -> mm100.
-                const int nHeight = nFontHeight * 35;
                 if ( aPrefSize.Height * aPrefSize.Width != 0 )
                 {
+                    // See SwDefBulletConfig::InitFont(), default height is 14.
+                    const int nFontHeight = 14;
+                    // Point -> mm100.
+                    const int nHeight = nFontHeight * 35;
                     int nWidth = (nHeight * aPrefSize.Width) / aPrefSize.Height;
 
                     awt::Size aSize( convertMm100ToTwip(nWidth), convertMm100ToTwip(nHeight) );

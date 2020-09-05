@@ -424,11 +424,10 @@ uno::Any SAL_CALL ScVbaControls::Add( const uno::Any& Object, const uno::Any& St
 
 void SAL_CALL ScVbaControls::Remove( const uno::Any& StringKeyOrIndex )
 {
-    OUString aControlName;
-    sal_Int32 nIndex = -1;
-
     try
     {
+        OUString aControlName;
+        sal_Int32 nIndex = -1;
         if ( !mxDialog.is() )
             throw uno::RuntimeException();
 

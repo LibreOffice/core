@@ -571,7 +571,6 @@ void LwpGraphicObject::CreateGrafObject()
                 };
                 LwpRect aFrameRect(-fOffsetX, (fDisFrameWidth-fOffsetX), (-fOffsetY), (fDisFrameHeight-fOffsetY));
                 LwpRect aImageRect(0, fSclGrafWidth, 0, fSclGrafHeight);
-                LwpRect aCropRect;
 
                 if (aFrameRect.fRight <= aImageRect.fLeft || aFrameRect.fLeft >= aImageRect.fRight
                     ||aFrameRect.fBottom <= aImageRect.fTop|| aFrameRect.fTop >= aImageRect.fBottom)
@@ -581,6 +580,7 @@ void LwpGraphicObject::CreateGrafObject()
                 else// need cropped
                 {
                     // horizontal crop
+                    LwpRect aCropRect;
                     if (aFrameRect.fLeft > aImageRect.fLeft)
                     {
                         aCropRect.fLeft = (aFrameRect.fLeft - aImageRect.fLeft) / fXRatio;

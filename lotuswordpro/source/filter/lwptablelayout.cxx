@@ -791,17 +791,16 @@ void LwpTableLayout::ParseTable()
     //process header rows
     LwpTableHeadingLayout* pTableHeading;
     pTableHeading = pSuper->GetTableHeadingLayout();
-    sal_uInt16 nStartHeadRow;
-    sal_uInt16 nEndHeadRow;
-    sal_uInt16 nContentRow;
     if (pTableHeading)
     {
+        sal_uInt16 nStartHeadRow;
+        sal_uInt16 nEndHeadRow;
         pTableHeading->GetStartEndRow(nStartHeadRow,nEndHeadRow);
         if (nStartHeadRow != 0)
             ConvertTable(m_pXFTable,0,nRow,0,nCol);
         else
         {
-            nContentRow = ConvertHeadingRow(m_pXFTable,nStartHeadRow,nEndHeadRow+1);
+            sal_uInt16 nContentRow = ConvertHeadingRow(m_pXFTable,nStartHeadRow,nEndHeadRow+1);
             ConvertTable(m_pXFTable,nContentRow,nRow,0,nCol);
         }
     }

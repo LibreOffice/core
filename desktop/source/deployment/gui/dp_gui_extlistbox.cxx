@@ -894,7 +894,6 @@ void ExtensionBox_Impl::addEventListenerOnce(
 void ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &xPackage,
                                   bool bLicenseMissing )
 {
-    long         nPos = 0;
     PackageState eState = TheExtensionManager::getPackageState( xPackage );
     bool         bLocked = m_pManager->isReadOnly( xPackage );
 
@@ -906,6 +905,7 @@ void ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &
 
     {
         osl::MutexGuard guard(m_entriesMutex);
+        long nPos = 0;
         if (m_vEntries.empty())
         {
             addEventListenerOnce(xPackage);

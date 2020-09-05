@@ -498,7 +498,6 @@ void SAL_CALL GeometryHandler::setPropertyValue(const OUString & PropertyName, c
                 }
                 else if ( m_nDataFieldType == USER_DEF_FUNCTION )
                 {
-                    OUString sDataField;
                     OBlocker aBlocker(m_bIn);
                     const sal_uInt32 nNewDataType = impl_getDataFieldType_throw(sFunction);
                     if ( nNewDataType != UNDEF_DATA && nNewDataType != m_nDataFieldType )
@@ -513,6 +512,7 @@ void SAL_CALL GeometryHandler::setPropertyValue(const OUString & PropertyName, c
                         else
                         {
                             OUString sNamePostfix;
+                            OUString sDataField;
                             const uno::Reference< report::XFunctionsSupplier> xFunctionsSupplier = fillScope_throw(sNamePostfix);
                             isDefaultFunction(sFunction,sDataField,xFunctionsSupplier,true);
                         }

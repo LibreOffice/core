@@ -1734,9 +1734,9 @@ void SAL_CALL SvxUnoTextBase::insertString( const uno::Reference< text::XTextRan
     if( !xRange.is() )
         return;
 
-    ESelection aSelection;
     if (GetEditSource())
     {
+        ESelection aSelection;
         ::GetSelection( aSelection, GetEditSource()->GetTextForwarder() );
         SetSelection( aSelection );
     }

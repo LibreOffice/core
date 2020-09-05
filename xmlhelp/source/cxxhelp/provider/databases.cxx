@@ -781,9 +781,9 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( const OUString& jar,
 
     if( ! it->second.is() )
     {
-        OUString zipFile;
         try
         {
+            OUString zipFile;
             // Extension jar file? Search for ?
             sal_Int32 nQuestionMark1 = jar.indexOf( '?' );
             sal_Int32 nQuestionMark2 = jar.lastIndexOf( '?' );

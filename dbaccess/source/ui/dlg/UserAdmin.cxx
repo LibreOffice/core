@@ -220,10 +220,10 @@ IMPL_LINK(OUserAdmin, UserHdl, weld::Button&, rButton, void)
                 m_xUsers->getByName(sName) >>= xUser;
                 if(xUser.is())
                 {
-                    OUString sNewPassword,sOldPassword;
                     OPasswordDialog aDlg(GetFrameWeld(), sName);
                     if (aDlg.run() == RET_OK)
                     {
+                        OUString sNewPassword,sOldPassword;
                         sNewPassword = aDlg.GetNewPassword();
                         sOldPassword = aDlg.GetOldPassword();
 

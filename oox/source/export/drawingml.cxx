@@ -518,7 +518,6 @@ bool DrawingML::EqualGradients( awt::Gradient aGradient1, awt::Gradient aGradien
 void DrawingML::WriteGradientFill( const Reference< XPropertySet >& rXPropSet )
 {
     awt::Gradient aGradient;
-    awt::Gradient aTransparenceGradient;
     if (!GetProperty(rXPropSet, "FillGradient"))
         return;
 
@@ -553,6 +552,7 @@ void DrawingML::WriteGradientFill( const Reference< XPropertySet >& rXPropSet )
     }
     else
     {
+        awt::Gradient aTransparenceGradient;
         mpFS->startElementNS(XML_a, XML_gradFill, XML_rotWithShape, "0");
         OUString sFillTransparenceGradientName;
         if (GetProperty(rXPropSet, "FillTransparenceGradientName")

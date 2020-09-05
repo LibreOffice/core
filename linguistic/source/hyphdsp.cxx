@@ -88,7 +88,6 @@ Reference<XHyphenatedWord>  HyphenatorDispatcher::buildHyphWord(
         if (nTextLen > 0  &&  aText[ nTextLen - 1 ] != '=' && aText[ nTextLen - 1 ] != '[')
         {
             sal_Int16 nHyphenationPos = -1;
-            sal_Int32 nHyphenPos = -1;
             sal_Int16 nOrigHyphPos = -1;
 
             OUStringBuffer aTmp( nTextLen );
@@ -149,6 +148,7 @@ Reference<XHyphenatedWord>  HyphenatorDispatcher::buildHyphWord(
                     }
                 }
 #endif
+                sal_Int32 nHyphenPos = -1;
                 if (aText[ nOrigHyphPos ] == '[')  // alternative hyphenation
                 {
                     sal_Int16 split = 0;
