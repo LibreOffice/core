@@ -218,7 +218,8 @@ TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos,
 
                 while (bottom <= top && !found) {
                     current = (top + bottom) / 2;
-                    const sal_Int32 result = word.compareTo(wordData + entry[current]);
+                    const sal_Int32 result = rtl_ustr_compare(
+                        word.getStr(), wordData + entry[current]);
                     if (result < 0)
                         top = current - 1;
                     else if (result > 0)
