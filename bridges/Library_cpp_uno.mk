@@ -273,6 +273,7 @@ $(eval $(call gb_Library_add_exception_objects,$(gb_CPPU_ENV)_uno,\
 
 ifeq ($(COM),MSC)
 $(eval $(call gb_Library_add_exception_objects,$(gb_CPPU_ENV)_uno,\
+    bridges/source/cpp_uno/msvc_shared/cpp2uno \
     bridges/source/cpp_uno/msvc_shared/except \
 ))
 endif
