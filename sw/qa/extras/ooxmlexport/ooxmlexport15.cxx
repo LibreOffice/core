@@ -114,6 +114,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135973, "tdf135973.odt")
     }
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf136441_commentInFootnote, "tdf136441_commentInFootnote.odt")
+{
+    // failed to load without error if footnote contained a comment.
+    // (MS Word's UI doesn't allow adding comments to a footnote.)
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf134063, "tdf134063.docx")
 {
     CPPUNIT_ASSERT_EQUAL(2, getPages());
