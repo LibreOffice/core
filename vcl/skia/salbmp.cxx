@@ -204,12 +204,14 @@ BitmapBuffer* SkiaSalBitmap::AcquireBuffer(BitmapAccessMode nMode)
             if (!mBuffer)
                 return nullptr;
             assert(mPixelsSize == mSize);
+            assert(!mEraseColorSet);
             break;
         case BitmapAccessMode::Read:
             EnsureBitmapData();
             if (!mBuffer)
                 return nullptr;
             assert(mPixelsSize == mSize);
+            assert(!mEraseColorSet);
             break;
         case BitmapAccessMode::Info:
             break;

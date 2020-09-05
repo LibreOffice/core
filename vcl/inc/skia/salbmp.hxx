@@ -121,10 +121,14 @@ private:
             return stream << "(null)";
         // I/i - has SkImage (on GPU/CPU),
         // A/a - has alpha SkImage (on GPU/CPU)
-        return stream << static_cast<const void*>(bitmap) << " " << bitmap->GetSize() << "/"
-                      << (bitmap->mImage ? (bitmap->mImage->isTextureBacked() ? "I" : "i") : "")
-                      << (bitmap->mAlphaImage ? (bitmap->mAlphaImage->isTextureBacked() ? "A" : "a")
-                                              : "");
+        stream << static_cast<const void*>(bitmap) << " " << bitmap->GetSize() << "/";
+        if (bitmap->mImage)
+            stream << (bitmap->mImage->isTextureBacked() ? "I" : "i");
+        if (bitmap->mAlphaImage)
+            stream << (bitmap->mAlphaImage->isTextureBacked() ? "A" : "a");
+        if (bitmap->mEraseColorSet)
+            stream << "E" << bitmap->mEraseColor;
+        return stream;
     }
 
     BitmapPalette mPalette;
