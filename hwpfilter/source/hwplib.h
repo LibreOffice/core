@@ -21,7 +21,13 @@
 #define INCLUDED_HWPFILTER_SOURCE_HWPLIB_H
 #include "precompile.h"
 
+#include <limits>
+#include <new>
 #include <string>
+
+#include <o3tl/safeint.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 /* hwp96부터 hunit가 4byte가 되었다. */
 /**
@@ -36,6 +42,13 @@ typedef unsigned short  ushort;
 typedef unsigned int    uint;
 
 typedef ::std::basic_string<hchar> hchar_string;
+
+inline OUString fromHcharStringToOUString(hchar_string const & s) {
+    if (s.length() > o3tl::make_unsigned(std::numeric_limits<sal_Int32>::max())) {
+        throw std::bad_alloc();
+    }
+    return {reinterpret_cast<char16_t const *>(s.c_str()), sal_Int32(s.length())};
+}
 
 /**
  * @short Point
