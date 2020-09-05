@@ -828,7 +828,7 @@ const std::pair<OUString, OUString> aApiToLabelFooPairs[]
     = { { "LineStyle", "LabelBorderStyle" },
         { "LineWidth", "LabelBorderWidth" },
         { "LineColor", "LabelBorderColor" },
-        // The name "LaberBorderDash" ist defined, but the associated API name "LineDash" belongs to
+        // TThe name "LabelBorderDash" is defined, but the associated API name "LineDash" belongs to
         // the <draw:stroke-dash> element and is not used directly as line property.
         //{"LineDash", "LabelBorderDash"},
         { "LineDashName", "LabelBorderDashName" },
