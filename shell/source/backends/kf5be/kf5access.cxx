@@ -45,6 +45,15 @@ namespace
 namespace uno = css::uno;
 }
 
+namespace
+{
+OUString fromQStringToOUString(QString const& s)
+{
+    // Conversion from QString size()'s int to OUString's sal_Int32 should be non-narrowing:
+    return { reinterpret_cast<char16_t const*>(s.utf16()), s.size() };
+}
+}
+
 css::beans::Optional<css::uno::Any> getValue(OUString const& id)
 {
     if (id == "ExternalMailer")
@@ -58,7 +67,7 @@ css::beans::Optional<css::uno::Any> getValue(OUString const& id)
             aClientProgram = QStringLiteral("kmail");
         else
             aClientProgram = aClientProgram.section(QLatin1Char(' '), 0, 0);
-        sClientProgram = reinterpret_cast<const sal_Unicode*>(aClientProgram.utf16());
+        sClientProgram = fromQStringToOUString(aClientProgram);
         return css::beans::Optional<css::uno::Any>(true, uno::makeAny(sClientProgram));
     }
     else if (id == "SourceViewFontHeight")
@@ -71,7 +80,7 @@ css::beans::Optional<css::uno::Any> getValue(OUString const& id)
     {
         const QFont aFixedFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
         const QString aFontName = aFixedFont.family();
-        const OUString sFontName = reinterpret_cast<const sal_Unicode*>(aFontName.utf16());
+        const OUString sFontName = fromQStringToOUString(aFontName);
         return css::beans::Optional<css::uno::Any>(true, uno::makeAny(sFontName));
     }
     else if (id == "EnableATToolSupport")
@@ -90,7 +99,7 @@ css::beans::Optional<css::uno::Any> getValue(OUString const& id)
         OUString sDocumentsURL;
         if (aDocumentsDir.endsWith(QLatin1Char('/')))
             aDocumentsDir.truncate(aDocumentsDir.length() - 1);
-        sDocumentsDir = reinterpret_cast<const sal_Unicode*>(aDocumentsDir.utf16());
+        sDocumentsDir = fromQStringToOUString(aDocumentsDir);
         osl_getFileURLFromSystemPath(sDocumentsDir.pData, &sDocumentsURL.pData);
         return css::beans::Optional<css::uno::Any>(true, uno::makeAny(sDocumentsURL));
     }
@@ -117,7 +126,7 @@ css::beans::Optional<css::uno::Any> getValue(OUString const& id)
         if (!aFTPProxy.isEmpty())
         {
             QUrl aProxy(aFTPProxy);
-            OUString sProxy = reinterpret_cast<const sal_Unicode*>(aProxy.host().utf16());
+            OUString sProxy = fromQStringToOUString(aProxy.host());
             return css::beans::Optional<css::uno::Any>(true, uno::makeAny(sProxy));
         }
     }
@@ -171,7 +180,7 @@ css::beans::Optional<css::uno::Any> getValue(OUString const& id)
         if (!aHTTPProxy.isEmpty())
         {
             QUrl aProxy(aHTTPProxy);
-            OUString sProxy = reinterpret_cast<const sal_Unicode*>(aProxy.host().utf16());
+            OUString sProxy = fromQStringToOUString(aProxy.host());
             return css::beans::Optional<css::uno::Any>(true, uno::makeAny(sProxy));
         }
     }
@@ -225,7 +234,7 @@ css::beans::Optional<css::uno::Any> getValue(OUString const& id)
         if (!aHTTPSProxy.isEmpty())
         {
             QUrl aProxy(aHTTPSProxy);
-            OUString sProxy = reinterpret_cast<const sal_Unicode*>(aProxy.host().utf16());
+            OUString sProxy = fromQStringToOUString(aProxy.host());
             return css::beans::Optional<css::uno::Any>(true, uno::makeAny(sProxy));
         }
     }
@@ -275,7 +284,7 @@ css::beans::Optional<css::uno::Any> getValue(OUString const& id)
             OUString sNoProxyFor;
 
             aNoProxyFor = aNoProxyFor.replace(QLatin1Char(','), QLatin1Char(';'));
-            sNoProxyFor = reinterpret_cast<const sal_Unicode*>(aNoProxyFor.utf16());
+            sNoProxyFor = fromQStringToOUString(aNoProxyFor);
             return css::beans::Optional<css::uno::Any>(true, uno::makeAny(sNoProxyFor));
         }
     }
