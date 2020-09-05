@@ -394,8 +394,18 @@ public:
     //full document, might not matter all that much though ?
 
     enum RuleLengths {nMaxFollowing = 101, nMaxLeading = 51};
-    static const sal_Unicode * GetJapanNotBeginLevel1();
-    static const sal_Unicode * GetJapanNotEndLevel1();
+    static constexpr sal_Unicode JapanNotBeginLevel1[]
+        = u"\u0021\u0025\u0029\u002c\u002e\u003a\u003b\u003f"
+           "\u005d\u007d\u00a2\u00b0\u2019\u201d\u2030\u2032"
+           "\u2033\u2103\u3001\u3002\u3005\u3009\u300b\u300d"
+           "\u300f\u3011\u3015\u309b\u309c\u309d\u309e\u30fb"
+           "\u30fd\u30fe\uff01\uff05\uff09\uff0c\uff0e\uff1a"
+           "\uff1b\uff1f\uff3d\uff5d\uff61\uff63\uff64\uff65"
+           "\uff9e\uff9f\uffe0";
+    static constexpr sal_Unicode JapanNotEndLevel1[]
+        = u"\u0024\u0028\u005b\u005c\u007b\u00a3\u00a5\u2018"
+           "\u201c\u3008\u300a\u300c\u300e\u3010\u3014\uff04"
+           "\uff08\uff3b\uff5b\uff62\uffe1\uffe5";
 
     sal_Int16 m_cchFollowingPunct;    // length of rgxchFPunct
     sal_Int16 m_cchLeadingPunct;      // length of rgxchLPunct
