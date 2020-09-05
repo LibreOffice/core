@@ -35,6 +35,7 @@
 #include <com/sun/star/text/XPageCursor.hpp>
 
 #include <config_features.h>
+#include <editeng/ulspitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <comphelper/processfactory.hxx>
@@ -45,6 +46,8 @@
 #include <swmodule.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
+#include <fmtsrnd.hxx>
+#include <frameformats.hxx>
 #include <grfatr.hxx>
 #include <pagedesc.hxx>
 #include <ndgrf.hxx>
@@ -687,6 +690,141 @@ DECLARE_WW8EXPORT_TEST(testTdf102334, "tdf102334.doc")
 {
     // This was false, i.e. the first run wasn't hidden, when it should have been
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getRun(getParagraph(7), 1), "CharHidden"));
+}
+
+DECLARE_WW8EXPORT_TEST(testTdf128605, "tdf128605.doc")
+{
+    OUString aPara1PageStyleName = getProperty<OUString>(getParagraph(1), "PageStyleName");
+    OUString aPara2PageStyleName = getProperty<OUString>(getParagraph(2), "PageStyleName");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: Standard
+    // - Actual  : Convert 1
+    // i.e. the continuous section break resulted in an unwanted page break.
+    CPPUNIT_ASSERT_EQUAL(aPara1PageStyleName, aPara2PageStyleName);
+}
+
+DECLARE_WW8EXPORT_TEST(testTdf112535, "tdf112535.doc")
+{
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT(pDoc->GetSpzFrameFormats());
+
+    SwFrameFormats& rFormats = *pDoc->GetSpzFrameFormats();
+    CPPUNIT_ASSERT(!rFormats.empty());
+
+    const SwFrameFormat* pFormat = rFormats[0];
+    CPPUNIT_ASSERT(pFormat);
+
+    // Without the accompanying fix in place, this test would have failed: auto-contour was enabled
+    // in Writer, but not in Word.
+    CPPUNIT_ASSERT(!pFormat->GetSurround().IsContour());
+}
+
+DECLARE_WW8EXPORT_TEST(testTdf106291, "tdf106291.doc")
+{
+    // Table cell was merged vertically instead of horizontally -> had incorrect dimensions
+    OUString cellWidth = parseDump("/root/page[1]/body/tab/row/cell[1]/infos/bounds", "width");
+    OUString cellHeight = parseDump("/root/page[1]/body/tab/row/cell[1]/infos/bounds", "height");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8650), cellWidth.toInt32());
+    CPPUNIT_ASSERT(cellHeight.toInt32() > 200); // height might depend on font size
+}
+
+DECLARE_WW8EXPORT_TEST(testTransparentText, "transparent-text.doc")
+{
+    uno::Reference<text::XText> xHeaderText = getProperty<uno::Reference<text::XText>>(
+        getStyles("PageStyles")->getByName("Standard"), "HeaderText");
+    uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(3, xHeaderText);
+    // Without the accompanying fix in place, this test would have failed: transparency was set to
+    // 100%, so the text was not readable.
+    sal_Int32 nExpected(COL_BLACK);
+    sal_Int32 nActual(getProperty<sal_Int16>(xParagraph, "CharTransparence"));
+    CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
+}
+
+DECLARE_WW8EXPORT_TEST( testTdf105570, "tdf105570.doc" )
+{
+    /*****
+      * MS-DOC specification ( https://msdn.microsoft.com/en-us/library/cc313153 )
+      * ch. 2.6.3, sprmTTableHeader:
+      *     A Bool8 value that specifies that the current table row is a header row.
+      *     If the value is 0x01 but sprmTTableHeader is not applied with a value of 0x01
+      *     for a previous row in the same table, then this property MUST be ignored.
+      *
+      * The document have three tables with three rows.
+      * Table 1 has { 1, 0, 0 } values of the "repeat as header row" property for each row
+      * Table 2 has { 1, 1, 0 }
+      * Table 3 has { 0, 1, 1 }
+      ****/
+    SwXTextDocument* pTextDoc     = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc*           pDoc         = pTextDoc->GetDocShell()->GetDoc();
+    SwWrtShell*      pWrtShell    = pDoc->GetDocShell()->GetWrtShell();
+    SwShellCursor*   pShellCursor = pWrtShell->getShellCursor( false );
+    SwNodeIndex      aIdx         = pShellCursor->Start()->nNode;
+
+    // Find first table
+    SwTableNode*     pTableNd     = aIdx.GetNode().FindTableNode();
+
+    CPPUNIT_ASSERT_EQUAL( sal_uInt16(1), pTableNd->GetTable().GetRowsToRepeat() );
+
+    // Go to next table
+    aIdx.Assign( *pTableNd->EndOfSectionNode(), 1 );
+    while ( nullptr == (pTableNd = aIdx.GetNode().GetTableNode()) ) ++aIdx;
+
+    CPPUNIT_ASSERT_EQUAL( sal_uInt16(2), pTableNd->GetTable().GetRowsToRepeat() );
+
+    // Go to next table
+    aIdx.Assign( *pTableNd->EndOfSectionNode(), 1 );
+    while ( nullptr == (pTableNd = aIdx.GetNode().GetTableNode()) ) ++aIdx;
+
+    // As first row hasn't sprmTTableHeader set, all following must be ignored, so no rows must be repeated
+    CPPUNIT_ASSERT_EQUAL( sal_uInt16(0), pTableNd->GetTable().GetRowsToRepeat() );
+}
+
+DECLARE_WW8EXPORT_TEST(testTdf112346, "tdf112346.doc")
+{
+    // This was 1, multi-page table was imported as a floating one.
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+}
+
+DECLARE_WW8EXPORT_TEST(testTdf79639, "tdf79639.doc")
+{
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // as the floating table in the header wasn't converted to a TextFrame.
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+}
+
+DECLARE_WW8EXPORT_TEST(testTdf122425_2, "tdf122425_2.doc")
+{
+    // This is for graphic objects in headers/footers
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwPosFlyFrames aPosFlyFrames = pDoc->GetAllFlyFormats(nullptr, false);
+    // There is one fly frame in the document: the text box
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPosFlyFrames.size());
+    for (const auto& rPosFlyFrame : aPosFlyFrames)
+    {
+        const SwFrameFormat& rFormat = rPosFlyFrame->GetFormat();
+        const SfxPoolItem* pItem = nullptr;
+
+        // Check for correct explicitly-set values of UL spacings. Previously this was "DEFAULT",
+        // and resulted in inherited values (114 = 2 mm) used.
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, rFormat.GetItemState(RES_UL_SPACE, false, &pItem));
+        auto pUL = static_cast<const SvxULSpaceItem*>(pItem);
+        CPPUNIT_ASSERT(pUL);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), pUL->GetUpper());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), pUL->GetLower());
+    }
+}
+
+DECLARE_WW8EXPORT_TEST(testTdf130262, "tdf130262.doc")
+{
+    // We had an infinite layout loop
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf38778, "tdf38778_properties_in_run_for_field.doc")
