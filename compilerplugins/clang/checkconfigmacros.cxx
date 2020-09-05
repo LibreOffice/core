@@ -67,7 +67,11 @@ void CheckConfigMacros::MacroDefined( const Token& macroToken, const MacroDirect
             || hasPathnamePrefix(filename, BUILDDIR "/config_build/") ))
         {
 //        fprintf(stderr,"DEF: %s %s\n", macroToken.getIdentifierInfo()->getName().data(), filename );
-        configMacros.insert( macroToken.getIdentifierInfo()->getName().str());
+        StringRef macro = macroToken.getIdentifierInfo()->getName();
+        // Skia #defines do not have values, but we set them in config_skia.h .
+        if( macro.startswith( "SK_" ) && loplugin::isSamePathname(filename, BUILDDIR "/config_host/config_skia.h"))
+            return;
+        configMacros.insert( macro.str());
         }
     }
 
