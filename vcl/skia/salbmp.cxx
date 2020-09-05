@@ -779,7 +779,7 @@ bool SkiaSalBitmap::IsFullyOpaqueAsAlpha() const
         return false; // don't bother figuring it out from the pixels
     // If the erase color is set so that this bitmap used as alpha would
     // mean a fully opaque alpha mask (= noop), we can skip using it.
-    // Note that for alpha bitmaps we use the VCL "trasparency" convention,
+    // Note that for alpha bitmaps we use the VCL "transparency" convention,
     // i.e. alpha 0 is opaque.
     return SkColorGetA(fromEraseColorToAlphaImageColor(mEraseColor)) == 0;
 }
