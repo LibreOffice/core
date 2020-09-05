@@ -20,8 +20,10 @@
 
 #include "regimpl.hxx"
 
+#include <cstddef>
 #include <memory>
 #include <set>
+#include <string_view>
 #include <vector>
 #include <string.h>
 #include <stdio.h>
@@ -52,9 +54,9 @@ using namespace store;
 
 namespace {
 
-void printString(OUString const & s) {
+void printString(std::u16string_view s) {
     printf("\"");
-    for (sal_Int32 i = 0; i < s.getLength(); ++i) {
+    for (std::size_t i = 0; i < s.size(); ++i) {
         sal_Unicode c = s[i];
         if (c == '"' || c == '\\') {
             printf("\\%c", static_cast< char >(c));
