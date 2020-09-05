@@ -472,13 +472,12 @@ void addCachedImage(const OString& key, sk_sp<SkImage> image)
     imageCache->push_front({ key, image, size });
     imageCacheSize += size;
     SAL_INFO("vcl.skia.trace", "addcachedimage " << image << " :" << size << "/" << imageCacheSize);
-    const int MAX_CACHE_SIZE = 4 * 1000 * 1000 * 4; // 4x 1000px 32bpp images, 16MiB
     while (imageCacheSize > MAX_CACHE_SIZE)
     {
         assert(!imageCache->empty());
         imageCacheSize -= imageCache->back().size;
-        SAL_INFO("vcl.skia.trace",
-                 "least used removal " << image << ":" << imageCache->back().size);
+        SAL_INFO("vcl.skia.trace", "least used removal " << imageCache->back().image << ":"
+                                                         << imageCache->back().size);
         imageCache->pop_back();
     }
 }
