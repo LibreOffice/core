@@ -325,6 +325,7 @@ protected:
         double transparency;
     };
     LastPolyPolygonInfo mLastPolyPolygonInfo;
+    int mPendingOperationsToFlush;
 };
 
 #endif

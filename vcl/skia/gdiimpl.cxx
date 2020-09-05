@@ -255,6 +255,7 @@ SkiaSalGraphicsImpl::SkiaSalGraphicsImpl(SalGraphics& rParent, SalGeometryProvid
     , mFillColor(SALCOLOR_NONE)
     , mXorMode(false)
     , mFlush(new SkiaFlushIdle(this))
+    , mPendingOperationsToFlush(0)
 {
 }
 
@@ -389,6 +390,15 @@ void SkiaSalGraphicsImpl::preDraw()
 void SkiaSalGraphicsImpl::postDraw()
 {
     scheduleFlush();
+    // Skia (at least when using Vulkan) queues drawing commands and executes them only later.
+    // But tdf#136369 leads to creating and queueing many tiny bitmaps, which makes
+    // Skia slow, and may make it even run out of memory. So force a flush if such
+    // a problematic operation has been performed too many times without a flush.
+    if (mPendingOperationsToFlush > 1000)
+    {
+        mSurface->flushAndSubmit();
+        mPendingOperationsToFlush = 0;
+    }
     SkiaZone::leave(); // matched in preDraw()
 }
 
@@ -454,6 +464,7 @@ void SkiaSalGraphicsImpl::flushDrawing()
     if (mXorMode)
         applyXor();
     mSurface->flushAndSubmit();
+    mPendingOperationsToFlush = 0;
 }
 
 bool SkiaSalGraphicsImpl::setClipRegion(const vcl::Region& region)
@@ -1550,6 +1561,7 @@ void SkiaSalGraphicsImpl::drawImage(const SalTwoRect& rPosAry, const sk_sp<SkIma
              "drawimage(" << this << "): " << rPosAry << ":" << SkBlendMode_Name(eBlendMode));
     getDrawCanvas()->drawImageRect(aImage, aSourceRect, aDestinationRect, &aPaint);
     addXorRegion(aDestinationRect);
+    ++mPendingOperationsToFlush; // tdf#136369
     postDraw();
 }
 
