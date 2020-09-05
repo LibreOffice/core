@@ -16,6 +16,24 @@
       "revId": "302d85a931586313e04f82d206970dbc3bce9a47",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87b0860d_b458bb98",
+        "filename": "solenv/gbuild/platform/macosx.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-09-05T16:28:27Z",
+      "side": 1,
+      "message": "oh, that is very bad.\n\nfix here:\n    https://gerrit.libreoffice.org/c/core/+/102082",
+      "parentUuid": "439692eb_5b5cfea5",
+      "revId": "302d85a931586313e04f82d206970dbc3bce9a47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
