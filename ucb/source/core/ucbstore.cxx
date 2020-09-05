@@ -1553,15 +1553,12 @@ void SAL_CALL PersistentPropertySet::removeProperty( const OUString& Name )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
-    OUString aFullValuesName;
-    OUString aFullPropName;
-
     Reference< XHierarchicalNameAccess > xRootHierNameAccess(
                 m_pImpl->m_pCreator->getRootConfigReadAccess(), UNO_QUERY );
     if ( xRootHierNameAccess.is() )
     {
-        aFullValuesName = getFullKey();
-        aFullPropName   = aFullValuesName + "/";
+        OUString aFullValuesName = getFullKey();
+        OUString aFullPropName   = aFullValuesName + "/";
         aFullPropName   += makeHierarchalNameSegment( Name );
 
         // Property in set?

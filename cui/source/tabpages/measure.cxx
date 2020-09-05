@@ -432,8 +432,8 @@ bool SvxMeasurePage::FillItemSet( SfxItemSet* rAttrs)
     if( bPositionModified )
     {
         // Position
-        css::drawing::MeasureTextVertPos eVPos, eOldVPos;
-        css::drawing::MeasureTextHorzPos eHPos, eOldHPos;
+        css::drawing::MeasureTextVertPos eVPos;
+        css::drawing::MeasureTextHorzPos eHPos;
 
         RectPoint eRP = m_aCtlPosition.GetActualRP();
         switch( eRP )
@@ -466,7 +466,7 @@ bool SvxMeasurePage::FillItemSet( SfxItemSet* rAttrs)
 
         if ( rAttrs->GetItemState( SDRATTR_MEASURETEXTVPOS ) != SfxItemState::DONTCARE )
         {
-            eOldVPos = rOutAttrs.Get(SDRATTR_MEASURETEXTVPOS).GetValue();
+            css::drawing::MeasureTextVertPos eOldVPos = rOutAttrs.Get(SDRATTR_MEASURETEXTVPOS).GetValue();
             if( eOldVPos != eVPos )
             {
                 rAttrs->Put( SdrMeasureTextVPosItem( eVPos ) );
@@ -481,7 +481,7 @@ bool SvxMeasurePage::FillItemSet( SfxItemSet* rAttrs)
 
         if ( rAttrs->GetItemState( SDRATTR_MEASURETEXTHPOS ) != SfxItemState::DONTCARE )
         {
-            eOldHPos = rOutAttrs.Get( SDRATTR_MEASURETEXTHPOS ).GetValue();
+            css::drawing::MeasureTextHorzPos eOldHPos = rOutAttrs.Get( SDRATTR_MEASURETEXTHPOS ).GetValue();
             if( eOldHPos != eHPos )
             {
                 rAttrs->Put( SdrMeasureTextHPosItem( eHPos ) );

@@ -218,7 +218,6 @@ const OUString& SvtPathOptions_Impl::GetPath( SvtPathOptions::Paths ePath )
     try
     {
         OUString    aPathValue;
-        OUString    aResult;
         sal_Int32   nHandle = m_aMapEnumToPropHandle[ static_cast<sal_Int32>(ePath) ];
 
         // Substitution is done by the service itself using the substitution service
@@ -233,6 +232,7 @@ const OUString& SvtPathOptions_Impl::GetPath( SvtPathOptions::Paths ePath )
           )
         {
             // These office paths have to be converted to system pates
+            OUString    aResult;
             osl::FileBase::getSystemPathFromFileURL( aPathValue, aResult );
             aPathValue = aResult;
         }

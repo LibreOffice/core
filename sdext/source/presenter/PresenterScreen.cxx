@@ -422,7 +422,6 @@ sal_Int32 PresenterScreen::GetPresenterScreenNumber (
     const Reference<presentation::XPresentation2>& rxPresentation) const
 {
     sal_Int32 nScreenNumber (0);
-    sal_Int32 nScreenCount (1);
     try
     {
         if ( ! rxPresentation.is())
@@ -456,7 +455,7 @@ sal_Int32 PresenterScreen::GetPresenterScreenNumber (
 
         // We still have to determine the number of screens to decide
         // whether the presenter screen may be shown at all.
-        nScreenCount = Application::GetScreenCount();
+        sal_Int32 nScreenCount = Application::GetScreenCount();
 
         if (nScreenCount < 2 || nDisplayNumber > nScreenCount)
         {

@@ -364,12 +364,12 @@ void SubToolBarController::endPopupMode( const css::awt::EndPopupModeEvent& e )
     if ( !(xSubToolBar.is() && xProp.is()) )
         return;
 
-    OUString aPersistentString( "Persistent" );
     try
     {
         VclPtr<vcl::Window> pTbxWindow = VCLUnoHelper::GetWindow( xSubToolBar );
         if ( pTbxWindow && pTbxWindow->GetType() == WindowType::TOOLBOX )
         {
+            OUString aPersistentString( "Persistent" );
             css::uno::Any a = xProp->getPropertyValue( aPersistentString );
             xProp->setPropertyValue( aPersistentString, css::uno::makeAny( false ) );
 

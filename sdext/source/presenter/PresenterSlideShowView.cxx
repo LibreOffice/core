@@ -842,9 +842,9 @@ void PresenterSlideShowView::Resize()
         return;
 
     const awt::Rectangle aWindowBox (mxWindow->getPosSize());
-    awt::Rectangle aViewWindowBox;
     if (aWindowBox.Height > 0)
     {
+        awt::Rectangle aViewWindowBox;
         const double nWindowAspectRatio (
             double(aWindowBox.Width) / double(aWindowBox.Height));
         if (nWindowAspectRatio > mnPageAspectRatio)

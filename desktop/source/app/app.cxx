@@ -632,7 +632,6 @@ OUString    Desktop::CreateErrorMsgString(
     const OUString& aFileURL )
 {
     OUString        aMsg;
-    OUString        aFilePath;
     bool            bFileInfo = true;
 
     switch ( nFailureCode )
@@ -708,6 +707,7 @@ OUString    Desktop::CreateErrorMsgString(
     if ( bFileInfo )
     {
         OUString aMsgString( aMsg );
+        OUString        aFilePath;
 
         osl::File::getSystemPathFromFileURL( aFileURL, aFilePath );
 

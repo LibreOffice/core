@@ -91,8 +91,6 @@ SvxOnlineUpdateTabPage::~SvxOnlineUpdateTabPage()
 
 void SvxOnlineUpdateTabPage::UpdateLastCheckedText()
 {
-    OUString aDateStr;
-    OUString aTimeStr;
     OUString aText;
     sal_Int64 lastChecked = 0;
 
@@ -125,9 +123,11 @@ void SvxOnlineUpdateTabPage::UpdateLastCheckedText()
         const Date& rNullDate = pNumberFormatter->GetNullDate();
         sal_uInt32  nFormat = pNumberFormatter->GetStandardFormat( SvNumFormatType::DATE, eUILang );
 
+        OUString aDateStr;
         pNumberFormatter->GetOutputString( aDate - rNullDate, nFormat, aDateStr, &pColor );
 
         nFormat = pNumberFormatter->GetStandardFormat( SvNumFormatType::TIME, eUILang );
+        OUString aTimeStr;
         pNumberFormatter->GetOutputString( aTime.GetTimeInDays(), nFormat, aTimeStr, &pColor );
 
         pNumberFormatter.reset();

@@ -350,13 +350,12 @@ bool MenuBarMerger::ProcessFallbackOperation(
             {
                 const OUString aCmd( rReferencePath[nLevel] );
 
-                sal_uInt16 nInsPos( MENU_APPEND );
                 VclPtr<PopupMenu> pPopupMenu = VclPtr<PopupMenu>::Create();
 
                 if ( bFirstLevel && ( aRefPathInfo.eResult == RP_MENUITEM_INSTEAD_OF_POPUPMENU_FOUND ))
                 {
                     // special case: menu item without popup
-                    nInsPos = aRefPathInfo.nPos;
+                    sal_uInt16 nInsPos = aRefPathInfo.nPos;
                     sal_uInt16 nSetItemId = pCurrMenu->GetItemId( nInsPos );
                     pCurrMenu->SetItemCommand( nSetItemId, aCmd );
                     pCurrMenu->SetPopupMenu( nSetItemId, pPopupMenu );

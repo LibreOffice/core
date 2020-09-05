@@ -1018,8 +1018,6 @@ RegError ORegistry::checkBlop(OStoreStream& rValue,
     }
 
     std::vector<sal_uInt8> aBuffer(VALUE_HEADERSIZE);
-    RegValueType    valueType;
-    sal_uInt32      valueSize;
     sal_uInt32      rwBytes;
     OString         targetPath(OUStringToOString(sTargetPath, RTL_TEXTENCODING_UTF8));
 
@@ -1027,7 +1025,8 @@ RegError ORegistry::checkBlop(OStoreStream& rValue,
         (rwBytes == VALUE_HEADERSIZE))
     {
         sal_uInt8 type = aBuffer[0];
-        valueType = static_cast<RegValueType>(type);
+        RegValueType valueType = static_cast<RegValueType>(type);
+        sal_uInt32      valueSize;
         readUINT32(aBuffer.data() + VALUE_TYPEOFFSET, valueSize);
 
         if (valueType == RegValueType::BINARY)

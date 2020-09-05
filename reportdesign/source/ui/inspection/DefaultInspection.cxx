@@ -129,9 +129,9 @@ namespace rptui
             return;
         }
 
-        sal_Int32 nMinHelpTextLines( 0 ), nMaxHelpTextLines( 0 );
         if ( _arguments.getLength() == 2 )
         {   // constructor: "createWithHelpSection( long, long )"
+            sal_Int32 nMinHelpTextLines( 0 ), nMaxHelpTextLines( 0 );
             if ( !( _arguments[0] >>= nMinHelpTextLines ) || !( _arguments[1] >>= nMaxHelpTextLines ) )
                 throw lang::IllegalArgumentException( OUString(), *this, 0 );
             createWithHelpSection( nMinHelpTextLines, nMaxHelpTextLines );

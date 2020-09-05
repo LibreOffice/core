@@ -150,7 +150,6 @@ void Test::tearDown()
 void Test::testSmTmpDeviceRestoreFont()
 {
     ScopedVclPtrInstance<Printer> pPrinter;
-    bool bUseMap100th_mm = true;
 
     OUString aFontName("Linux Libertine G");
     CPPUNIT_ASSERT(pPrinter->IsFontAvailable(aFontName));
@@ -162,6 +161,7 @@ void Test::testSmTmpDeviceRestoreFont()
     vcl::Font aNewFont;
 
     {
+        bool bUseMap100th_mm = true;
         SmTmpDevice aTmpDev(*pPrinter, bUseMap100th_mm);
 
         aNewFont = pPrinter->GetFont();
@@ -384,8 +384,8 @@ void Test::editUndoRedo()
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Strings must match", sFinalText, sStringOne);
     }
 
-    OUString sStringTwo("a over b");
     {
+        OUString sStringTwo("a over b");
         rEditEngine.SetText(0, sStringTwo);
         m_xDocShRef->UpdateText();
         OUString sFinalText = m_xDocShRef->GetText();
@@ -439,12 +439,12 @@ void Test::replacePlaceholder()
 
 void Test::viewZoom()
 {
-    sal_uInt16 nOrigZoom, nNextZoom, nFinalZoom;
+    sal_uInt16 nOrigZoom, nFinalZoom;
 
     EditEngine &rEditEngine = m_xDocShRef->GetEditEngine();
 
-    OUString sStringOne("a under b");
     {
+        OUString sStringOne("a under b");
         rEditEngine.SetText(0, sStringOne);
         m_xDocShRef->UpdateText();
         OUString sFinalText = m_xDocShRef->GetText();
@@ -458,7 +458,7 @@ void Test::viewZoom()
     {
         SfxRequest aZoomIn(SID_ZOOMIN, SfxCallMode::SYNCHRON, m_pViewShell->GetPool());
         m_pViewShell->Execute(aZoomIn);
-        nNextZoom = rGraphicWindow.GetZoom();
+        sal_uInt16 nNextZoom = rGraphicWindow.GetZoom();
         CPPUNIT_ASSERT_MESSAGE("Should be bigger", nNextZoom > nOrigZoom);
     }
 

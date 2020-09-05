@@ -1061,13 +1061,13 @@ Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes 
         typedef ::std::vector< ::std::vector< PolygonFlags > > FlagsList;
         std::vector< ::std::vector< awt::Point > > aCoordLists;
         FlagsList aFlagLists;
-        sal_Int32 nIndex = 0;
 
         // Curve defined by to, from, control1 and control2 attributes
         if ( maShapeModel.maVmlPath.isEmpty() )
         {
             aCoordLists.emplace_back( );
             aFlagLists.emplace_back( );
+            sal_Int32 nIndex = 0;
 
             // Start point
             aCoordLists[ 0 ].emplace_back(

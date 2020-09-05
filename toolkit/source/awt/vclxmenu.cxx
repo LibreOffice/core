@@ -552,7 +552,7 @@ namespace
         const ::Size aCurSize = aImage.GetSizePixel();
         const sal_Int32 nCurWidth = aCurSize.Width();
         const sal_Int32 nCurHeight = aCurSize.Height();
-        const sal_Int32 nIdeal( 16 );
+        constexpr sal_Int32 nIdeal( 16 );
 
         if ( nCurWidth > 0 && nCurHeight > 0 )
         {

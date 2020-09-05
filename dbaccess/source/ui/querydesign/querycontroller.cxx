@@ -463,7 +463,6 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
             SQLExceptionInfo aError;
             try
             {
-                OUString aErrorMsg;
                 setStatement_fireEvent( getContainer()->getStatement() );
                 if(m_sStatement.isEmpty() && m_pSqlIterator)
                 {
@@ -475,6 +474,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                 }
                 else
                 {
+                    OUString aErrorMsg;
                     std::unique_ptr<::connectivity::OSQLParseNode> pNode = m_aSqlParser.parseTree(aErrorMsg,m_sStatement,m_bGraphicalDesign);
                     if ( pNode )
                     {

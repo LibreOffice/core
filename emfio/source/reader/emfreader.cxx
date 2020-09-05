@@ -1202,15 +1202,13 @@ namespace emfio
 
                     case EMR_EXTCREATEPEN :
                     {
-                        sal_Int32   elpHatch;
-                        sal_uInt32  offBmi, cbBmi, offBits, cbBits, nStyle, nWidth, nBrushStyle, elpNumEntries;
-                        Color       aColorRef;
-
                         mpInputStream->ReadUInt32( nIndex );
                         if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
                         {
+                            sal_uInt32  offBmi, cbBmi, offBits, cbBits, nStyle, nWidth, nBrushStyle, elpNumEntries;
+                            sal_Int32   elpHatch;
                             mpInputStream->ReadUInt32( offBmi ).ReadUInt32( cbBmi ).ReadUInt32( offBits ).ReadUInt32( cbBits ). ReadUInt32( nStyle ).ReadUInt32( nWidth ).ReadUInt32( nBrushStyle );
-                            aColorRef = ReadColor();
+                            Color aColorRef = ReadColor();
                             mpInputStream->ReadInt32( elpHatch ).ReadUInt32( elpNumEntries );
 
                             LineInfo    aLineInfo;
@@ -1292,10 +1290,10 @@ namespace emfio
 
                     case EMR_CREATEBRUSHINDIRECT :
                     {
-                        sal_uInt32  nStyle;
                         mpInputStream->ReadUInt32( nIndex );
                         if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
                         {
+                            sal_uInt32  nStyle;
                             mpInputStream->ReadUInt32( nStyle );
                             CreateObjectIndexed(nIndex, std::make_unique<WinMtfFillStyle>( ReadColor(), ( nStyle == BS_HOLLOW ) ));
                         }

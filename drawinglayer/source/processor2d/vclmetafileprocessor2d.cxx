@@ -1205,9 +1205,9 @@ void VclMetafileProcessor2D::processTextHierarchyFieldPrimitive2D(
 {
     // support for FIELD_SEQ_BEGIN, FIELD_SEQ_END and URL. It wraps text primitives (but is not limited to)
     // thus do the MetafileAction embedding stuff but just handle recursively.
-    const OString aCommentStringCommon("FIELD_SEQ_BEGIN");
-    const OString aCommentStringPage("FIELD_SEQ_BEGIN;PageField");
-    const OString aCommentStringEnd("FIELD_SEQ_END");
+    static const OStringLiteral aCommentStringCommon("FIELD_SEQ_BEGIN");
+    static const OStringLiteral aCommentStringPage("FIELD_SEQ_BEGIN;PageField");
+    static const OStringLiteral aCommentStringEnd("FIELD_SEQ_END");
     OUString aURL;
 
     switch (rFieldPrimitive.getType())
@@ -2215,7 +2215,6 @@ void VclMetafileProcessor2D::processTransparencePrimitive2D(
                                           static_cast<sal_Int32>(ceil(aViewRange.getMaxY())));
         const tools::Rectangle aRectPixel(mpOutputDevice->LogicToPixel(aRectLogic));
         Size aSizePixel(aRectPixel.GetSize());
-        const Point aEmptyPoint;
         ScopedVclPtrInstance<VirtualDevice> aBufferDevice;
         const sal_uInt32 nMaxQuadratPixels(500000);
         const sal_uInt32 nViewVisibleArea(aSizePixel.getWidth() * aSizePixel.getHeight());
@@ -2271,6 +2270,7 @@ void VclMetafileProcessor2D::processTransparencePrimitive2D(
             VclPixelProcessor2D aBufferProcessor(aViewInfo, *aBufferDevice);
 
             // draw content using pixel renderer
+            const Point aEmptyPoint;
             aBufferProcessor.process(rContent);
             const Bitmap aBmContent(aBufferDevice->GetBitmap(aEmptyPoint, aSizePixel));
 
