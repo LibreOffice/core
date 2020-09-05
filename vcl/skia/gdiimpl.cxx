@@ -1422,17 +1422,18 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
         // Since the problem is mainly the cost of upscaling and then the size of the resulting bitmap,
         // compute a ratio of how much this is going to be scaled up, how much this is larger than
         // the drawing area, and then refuse to cache if it's too much.
-        const double upscaleRatio = 1.0 * targetSize.Width() / bitmap.GetSize().Width()
-                                    * targetSize.Height() / bitmap.GetSize().Height();
+        const double upscaleRatio
+            = std::max(1.0, 1.0 * targetSize.Width() / bitmap.GetSize().Width()
+                                * targetSize.Height() / bitmap.GetSize().Height());
         const double oversizeRatio = 1.0 * targetSize.Width() / drawAreaSize.Width()
                                      * targetSize.Height() / drawAreaSize.Height();
         const double ratio = upscaleRatio * oversizeRatio;
-        if (ratio > 10)
+        if (ratio > 4)
         {
             SAL_INFO("vcl.skia.trace", "mergecachebitmaps("
-                                           << this << "): not caching upscaling, ratio:" << ratio
-                                           << ", " << bitmap.GetSize() << "->" << targetSize
-                                           << " in " << drawAreaSize);
+                                           << this << "): not caching, ratio:" << ratio << ", "
+                                           << bitmap.GetSize() << "->" << targetSize << " in "
+                                           << drawAreaSize);
             return image;
         }
     }
