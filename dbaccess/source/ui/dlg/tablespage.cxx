@@ -105,7 +105,7 @@ namespace dbaui
         for (const OUString& rIncludeTable : _rTables)
         {
             if (xMeta.is())
-                qualifiedNameComponents(xMeta, rIncludeTable.getStr(), sCatalog, sSchema, sName,::dbtools::EComposeRule::InDataManipulation);
+                qualifiedNameComponents(xMeta, rIncludeTable, sCatalog, sSchema, sName,::dbtools::EComposeRule::InDataManipulation);
             else
                 sName = rIncludeTable;
 
