@@ -2613,7 +2613,6 @@ bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
             std::optional<Color> pCol;
             if (GetFont())
                 pCol = GetFont()->GetBackColor();
-            Color aColor;
             if( ! pCol || COL_TRANSPARENT == *pCol )
             {
                 const SvxBrushItem* pItem;
@@ -2631,8 +2630,7 @@ bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
                     if (aFillAttributes && aFillAttributes->isUsed())
                     {
                         // First see if fill attributes provide a color.
-                        aColor = Color(aFillAttributes->getAverageColor(aGlobalRetoucheColor.getBColor()));
-                        pCol = aColor;
+                        pCol = Color(aFillAttributes->getAverageColor(aGlobalRetoucheColor.getBColor()));
                     }
 
                     // If not, then fall back to the old brush item.
