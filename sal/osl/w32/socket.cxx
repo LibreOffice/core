@@ -651,7 +651,7 @@ oslSocketResult SAL_CALL osl_getLocalHostname (rtl_uString **strLocalHostname)
 
             if (rtl_ustr_getLength(LocalHostname) > 0)
             {
-                return {osl_Socket_Ok, LocalHostname};
+                return {osl_Socket_Ok, OUString(LocalHostname)};
             }
 
             return {osl_Socket_Error, OUString()};

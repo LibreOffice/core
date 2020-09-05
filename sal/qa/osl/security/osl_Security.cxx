@@ -389,7 +389,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
         if ( ( lRet == ERROR_SUCCESS ) && ( Type == REG_SZ ) &&  ( _waccess( o3tl::toW(PathW), 0 ) == 0 ) )
         {
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "#Convert from system path to URL failed.",
-                                    ::osl::File::E_None, ::osl::File::getFileURLFromSystemPath( PathW, strConfigDirectory ) );
+                                    ::osl::File::E_None, ::osl::File::getFileURLFromSystemPath( OUString(PathW), strConfigDirectory ) );
         }
 
         lSize = sizeof(PathW);
@@ -397,7 +397,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
         if ( ( lRet == ERROR_SUCCESS ) && ( Type == REG_SZ ) &&  ( _waccess( o3tl::toW(PathW), 0 ) == 0 ) )
         {
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "#Convert from system path to URL failed.",
-                                    ::osl::File::E_None, ::osl::File::getFileURLFromSystemPath( PathW, strHomeDirectory ) );
+                                    ::osl::File::E_None, ::osl::File::getFileURLFromSystemPath( OUString(PathW), strHomeDirectory ) );
         }
 
         RegCloseKey(hRegKey);

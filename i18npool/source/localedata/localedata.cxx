@@ -403,26 +403,26 @@ LocaleDataImpl::getLocaleItem( const Locale& rLocale )
         sal_Int16 dataItemCount = 0;
         sal_Unicode **dataItem = func(dataItemCount);
 
-        LocaleDataItem item(
-                dataItem[0],
-                dataItem[1],
-                dataItem[2],
-                dataItem[3],
-                dataItem[4],
-                dataItem[5],
-                dataItem[6],
-                dataItem[7],
-                dataItem[8],
-                dataItem[9],
-                dataItem[10],
-                dataItem[11],
-                dataItem[12],
-                dataItem[13],
-                dataItem[14],
-                dataItem[15],
-                dataItem[16],
-                dataItem[17]
-                );
+        LocaleDataItem item{
+                OUString(dataItem[0]),
+                OUString(dataItem[1]),
+                OUString(dataItem[2]),
+                OUString(dataItem[3]),
+                OUString(dataItem[4]),
+                OUString(dataItem[5]),
+                OUString(dataItem[6]),
+                OUString(dataItem[7]),
+                OUString(dataItem[8]),
+                OUString(dataItem[9]),
+                OUString(dataItem[10]),
+                OUString(dataItem[11]),
+                OUString(dataItem[12]),
+                OUString(dataItem[13]),
+                OUString(dataItem[14]),
+                OUString(dataItem[15]),
+                OUString(dataItem[16]),
+                OUString(dataItem[17])
+                };
         return item;
     }
     else {
@@ -443,27 +443,27 @@ LocaleDataImpl::getLocaleItem2( const Locale& rLocale )
 
         assert(dataItemCount >= 18);
 
-        LocaleDataItem2 item(
-                dataItem[0],
-                dataItem[1],
-                dataItem[2],
-                dataItem[3],
-                dataItem[4],
-                dataItem[5],
-                dataItem[6],
-                dataItem[7],
-                dataItem[8],
-                dataItem[9],
-                dataItem[10],
-                dataItem[11],
-                dataItem[12],
-                dataItem[13],
-                dataItem[14],
-                dataItem[15],
-                dataItem[16],
-                dataItem[17],
-                dataItemCount >= 19 ? dataItem[18] : OUString()
-                );
+        LocaleDataItem2 item{
+                OUString(dataItem[0]),
+                OUString(dataItem[1]),
+                OUString(dataItem[2]),
+                OUString(dataItem[3]),
+                OUString(dataItem[4]),
+                OUString(dataItem[5]),
+                OUString(dataItem[6]),
+                OUString(dataItem[7]),
+                OUString(dataItem[8]),
+                OUString(dataItem[9]),
+                OUString(dataItem[10]),
+                OUString(dataItem[11]),
+                OUString(dataItem[12]),
+                OUString(dataItem[13]),
+                OUString(dataItem[14]),
+                OUString(dataItem[15]),
+                OUString(dataItem[16]),
+                OUString(dataItem[17]),
+                dataItemCount >= 19 ? OUString(dataItem[18]) : OUString()
+                };
         return item;
     }
     else {
@@ -719,8 +719,9 @@ Sequence< CalendarItem2 > LocaleDataImpl::getCalendarItems(
             case REF_PMONTHS:
                 for (CalendarItem2& rItem : aItems)
                 {
-                    CalendarItem2 item( allCalendars[rnOffset], allCalendars[rnOffset+1],
-                            allCalendars[rnOffset+2], allCalendars[rnOffset+3]);
+                    CalendarItem2 item{ OUString(allCalendars[rnOffset]),
+                            OUString(allCalendars[rnOffset+1]),
+                            OUString(allCalendars[rnOffset+2]), OUString(allCalendars[rnOffset+3])};
                     rItem = item;
                     rnOffset += 4;
                 }
@@ -729,8 +730,9 @@ Sequence< CalendarItem2 > LocaleDataImpl::getCalendarItems(
                 // Absent narrow name.
                 for (CalendarItem2& rItem : aItems)
                 {
-                    CalendarItem2 item( allCalendars[rnOffset], allCalendars[rnOffset+1],
-                            allCalendars[rnOffset+2], OUString());
+                    CalendarItem2 item{ OUString(allCalendars[rnOffset]),
+                            OUString(allCalendars[rnOffset+1]),
+                            OUString(allCalendars[rnOffset+2]), OUString()};
                     rItem = item;
                     rnOffset += 3;
                 }
@@ -812,10 +814,10 @@ LocaleDataImpl::getAllCurrencies2( const Locale& rLocale )
         Sequence< Currency2 > seq(currencyCount);
         for(int i = 0, nOff = 0; i < currencyCount; i++, nOff += 8 ) {
             Currency2 cur(
-                    allCurrencies[nOff],        // string ID
-                    allCurrencies[nOff+1],      // string Symbol
-                    allCurrencies[nOff+2],      // string BankSymbol
-                    allCurrencies[nOff+3],      // string Name
+                    OUString(allCurrencies[nOff]), // string ID
+                    OUString(allCurrencies[nOff+1]), // string Symbol
+                    OUString(allCurrencies[nOff+2]), // string BankSymbol
+                    OUString(allCurrencies[nOff+3]), // string Name
                     allCurrencies[nOff+4][0] != 0, // boolean Default
                     allCurrencies[nOff+5][0] != 0, // boolean UsedInCompatibleFormatCodes
                     allCurrencies[nOff+6][0],   // short DecimalPlaces
@@ -876,10 +878,10 @@ LocaleDataImpl::getAllFormats( const Locale& rLocale )
             {
                 FormatElement elem(
                         OUString(formatArray[nOff]).replaceAll(s.from, s.to),
-                        formatArray[nOff + 1],
-                        formatArray[nOff + 2],
-                        formatArray[nOff + 3],
-                        formatArray[nOff + 4],
+                        OUString(formatArray[nOff + 1]),
+                        OUString(formatArray[nOff + 2]),
+                        OUString(formatArray[nOff + 3]),
+                        OUString(formatArray[nOff + 4]),
                         formatArray[nOff + 5][0],
                         formatArray[nOff + 6][0] != 0);
                 seq[f] = elem;
@@ -944,7 +946,8 @@ LocaleDataImpl::getCollatorImplementations( const Locale& rLocale )
         sal_Unicode **collatorArray = func(collatorCount);
         Sequence< Implementation > seq(collatorCount);
         for(sal_Int16 i = 0; i < collatorCount; i++) {
-            Implementation impl(collatorArray[i * COLLATOR_ELEMENTS + COLLATOR_OFFSET_ALGO],
+            Implementation impl(
+                    OUString(collatorArray[i * COLLATOR_ELEMENTS + COLLATOR_OFFSET_ALGO]),
                     collatorArray[i * COLLATOR_ELEMENTS + COLLATOR_OFFSET_DEFAULT][0] != 0);
             seq[i] = impl;
         }
@@ -1163,11 +1166,11 @@ LocaleDataImpl::getLanguageCountryInfo( const Locale& rLocale )
     if ( func ) {
         sal_Int16 LCInfoCount = 0;
         sal_Unicode **LCInfoArray = func(LCInfoCount);
-        LanguageCountryInfo info(LCInfoArray[0],
-                LCInfoArray[1],
-                LCInfoArray[2],
-                LCInfoArray[3],
-                LCInfoArray[4]);
+        LanguageCountryInfo info{OUString(LCInfoArray[0]),
+                OUString(LCInfoArray[1]),
+                OUString(LCInfoArray[2]),
+                OUString(LCInfoArray[3]),
+                OUString(LCInfoArray[4])};
         return info;
     }
     else {
@@ -1186,7 +1189,8 @@ LocaleDataImpl::getForbiddenCharacters( const Locale& rLocale )
     if ( func ) {
         sal_Int16 LCForbiddenCharactersCount = 0;
         sal_Unicode **LCForbiddenCharactersArray = func(LCForbiddenCharactersCount);
-        ForbiddenCharacters chars(LCForbiddenCharactersArray[0], LCForbiddenCharactersArray[1]);
+        ForbiddenCharacters chars{
+            OUString(LCForbiddenCharactersArray[0]), OUString(LCForbiddenCharactersArray[1])};
         return chars;
     }
     else {

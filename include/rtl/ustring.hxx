@@ -213,14 +213,14 @@ public:
 
 #if defined LIBO_INTERNAL_ONLY
 
-    template<typename T> OUString(
+    template<typename T> explicit OUString(
         T const & value,
         typename libreoffice_internal::CharPtrDetector<T, libreoffice_internal::Dummy>::TypeUtf16
             = libreoffice_internal::Dummy()):
         pData(nullptr)
     { rtl_uString_newFromStr(&pData, value); }
 
-    template<typename T> OUString(
+    template<typename T> explicit OUString(
         T & value,
         typename
         libreoffice_internal::NonConstCharArrayDetector<T, libreoffice_internal::Dummy>::TypeUtf16
@@ -560,6 +560,22 @@ public:
         }
         return *this;
     }
+
+    template<typename T>
+    OUString & operator =(OUStringNumber<T> && n) {
+        // n.length should never be zero, so no need to add an optimization for that case
+        rtl_uString_newFromStr_WithLength(&pData, n.buf, n.length);
+        return *this;
+    }
+
+    OUString & operator =(std::u16string_view sv) {
+        if (sv.empty()) {
+            rtl_uString_new(&pData);
+        } else {
+            rtl_uString_newFromStr_WithLength(&pData, sv.data(), sv.size());
+        }
+        return *this;
+    }
 #endif
 
 #if defined LIBO_INTERNAL_ONLY
@@ -642,6 +658,15 @@ public:
         return *this;
     }
     void operator +=(OUStringLiteral const &) && = delete;
+
+    OUString & operator +=(std::u16string_view sv) & {
+        if (sv.size() > sal_uInt32(std::numeric_limits<sal_Int32>::max())) {
+            throw std::bad_alloc();
+        }
+        rtl_uString_newConcatUtf16L(&pData, pData, sv.data(), sv.size());
+        return *this;
+    }
+    void operator +=(std::u16string_view) && = delete;
 #endif
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
@@ -1614,18 +1639,30 @@ public:
 #if defined LIBO_INTERNAL_ONLY
 
     template<typename T> friend typename libreoffice_internal::CharPtrDetector<T, bool>::TypeUtf16
-    operator ==(OUString const & s1, T const & s2) { return s1.compareTo(s2) == 0; }
+    operator ==(OUString const & s1, T const & s2) {
+        return rtl_ustr_compare_WithLength(s1.getStr(), s1.getLength(), s2, rtl_ustr_getLength(s2))
+            == 0;
+    }
 
     template<typename T>
     friend typename libreoffice_internal::NonConstCharArrayDetector<T, bool>::TypeUtf16
-    operator ==(OUString const & s1, T & s2) { return s1.compareTo(s2) == 0; }
+    operator ==(OUString const & s1, T & s2) {
+        return rtl_ustr_compare_WithLength(s1.getStr(), s1.getLength(), s2, rtl_ustr_getLength(s2))
+            == 0;
+    }
 
     template<typename T> friend typename libreoffice_internal::CharPtrDetector<T, bool>::TypeUtf16
-    operator ==(T const & s1, OUString const & s2) { return s2.compareTo(s1) == 0; }
+    operator ==(T const & s1, OUString const & s2) {
+        return rtl_ustr_compare_WithLength(s1, rtl_ustr_getLength(s1), s2.getStr(), s2.getLength())
+            == 0;
+    }
 
     template<typename T>
     friend typename libreoffice_internal::NonConstCharArrayDetector<T, bool>::TypeUtf16
-    operator ==(T & s1, OUString const & s2) { return s2.compareTo(s1) == 0; }
+    operator ==(T & s1, OUString const & s2) {
+        return rtl_ustr_compare_WithLength(s1, rtl_ustr_getLength(s1), s2.getStr(), s2.getLength())
+            == 0;
+    }
 
     template<typename T> friend typename libreoffice_internal::CharPtrDetector<T, bool>::TypeUtf16
     operator !=(OUString const & s1, T const & s2) { return !(s1 == s2); }

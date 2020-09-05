@@ -102,7 +102,7 @@ namespace /* private */
 
         while (size_t l = wcslen(p))
         {
-            environment->push_back(o3tl::toU(p));
+            environment->push_back(OUString(o3tl::toU(p)));
             p += l + 1;
         }
         FreeEnvironmentStringsW(env);

@@ -414,7 +414,7 @@ void SbRtl_CurDir(StarBASIC * pBasic, SbxArray & rPar, bool bWrite)
     _set_thread_local_invalid_parameter_handler(handler);
     if ( ok )
     {
-        rPar.Get32(0)->PutString( o3tl::toU(pBuffer) );
+        rPar.Get32(0)->PutString( OUString(o3tl::toU(pBuffer)) );
     }
     else
     {

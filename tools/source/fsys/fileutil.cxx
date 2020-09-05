@@ -29,7 +29,7 @@ OUString UNCToDavURL(LPCWSTR sUNC)
         bufURL = std::make_unique<wchar_t[]>(nSize);
         nResult = DavGetHTTPFromUNCPath(sUNC, bufURL.get(), &nSize);
     }
-    return nResult == ERROR_SUCCESS ? o3tl::toU(bufURL.get()) : OUString();
+    return nResult == ERROR_SUCCESS ? OUString(o3tl::toU(bufURL.get())) : OUString();
 }
 #endif
 }

@@ -4975,14 +4975,14 @@ namespace osl_Directory
         if (i == path.getLength())
             buffer[i] = 0;
 
-        Directory::remove(buffer);
+        Directory::remove(OUString(buffer));
 
         i = rtl_ustr_lastIndexOfChar(buffer, '/');
         assert(i != -1);
         if (i != -1)
         {
             buffer[i] = 0;
-            Directory::remove(buffer);
+            Directory::remove(OUString(buffer));
         }
     }
 

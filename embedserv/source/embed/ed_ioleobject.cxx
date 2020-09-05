@@ -45,8 +45,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP EmbedDocument_Impl::SetHostNames( LPCOLESTR sz
     // the code should be ignored for links
     if ( !m_aFileName.getLength() )
     {
-        m_pDocHolder->setTitle(o3tl::toU(szContainerObj));
-        m_pDocHolder->setContainerName(o3tl::toU(szContainerApp));
+        m_pDocHolder->setTitle(OUString(o3tl::toU(szContainerObj)));
+        m_pDocHolder->setContainerName(OUString(o3tl::toU(szContainerApp)));
     }
 
     return S_OK;
