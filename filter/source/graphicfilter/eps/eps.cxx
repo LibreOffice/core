@@ -1060,10 +1060,9 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             case MetaActionType::POP :
             {
                 rVDev.Pop();
-                StackMember* pGS;
                 if( pGDIStack )
                 {
-                    pGS = pGDIStack;
+                    StackMember* pGS = pGDIStack;
                     pGDIStack = pGS->pSucc;
                     aDashArray = pGS->aDashArray;
                     eJoinType = pGS->eJoinType;

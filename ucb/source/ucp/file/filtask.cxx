@@ -2274,7 +2274,7 @@ TaskManager::commit( const TaskManager::ContentMap::iterator& it,
     }
 
 
-    bool isDirectory,isFile,isVolume,isRemoveable,isRemote,isFloppy,isCompactDisc;
+    bool isDirectory;
 
     sal_Int64 dirSize = 0;
 
@@ -2283,6 +2283,7 @@ TaskManager::commit( const TaskManager::ContentMap::iterator& it,
 
     if( aFileStatus.isValid( osl_FileStatus_Mask_Type ) )
     {
+        bool isFile,isVolume;
         if( osl::FileStatus::Link == aFileStatus.getFileType() &&
             aFileStatus.isValid( osl_FileStatus_Mask_LinkTargetURL ) )
         {
@@ -2343,10 +2344,10 @@ TaskManager::commit( const TaskManager::ContentMap::iterator& it,
             aVolumeInfo.isValid( osl_VolumeInfo_Mask_Attributes ) )
         {
             // Retrieve the flags;
-            isRemote = aVolumeInfo.getRemoteFlag();
-            isRemoveable = aVolumeInfo.getRemoveableFlag();
-            isCompactDisc = aVolumeInfo.getCompactDiscFlag();
-            isFloppy = aVolumeInfo.getFloppyDiskFlag();
+            bool isRemote = aVolumeInfo.getRemoteFlag();
+            bool isRemoveable = aVolumeInfo.getRemoveableFlag();
+            bool isCompactDisc = aVolumeInfo.getCompactDiscFlag();
+            bool isFloppy = aVolumeInfo.getFloppyDiskFlag();
 
             it1 = properties.find( MyProperty( IsRemote ) );
             if( it1 != properties.end() )

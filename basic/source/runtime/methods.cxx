@@ -4107,8 +4107,6 @@ void SbRtl_StrConv(StarBASIC *, SbxArray & rPar, bool)
     OUString aOldStr = rPar.Get32(1)->GetOUString();
     sal_Int32 nConversion = rPar.Get32(2)->GetLong();
 
-    LanguageType nLanguage = LANGUAGE_SYSTEM;
-
     sal_Int32 nOldLen = aOldStr.getLength();
     if( nOldLen == 0 )
     {
@@ -4153,6 +4151,7 @@ void SbRtl_StrConv(StarBASIC *, SbxArray & rPar, bool)
         uno::Reference< uno::XComponentContext > xContext = getProcessComponentContext();
         ::utl::TransliterationWrapper aTransliterationWrapper( xContext, nType );
         uno::Sequence<sal_Int32> aOffsets;
+        LanguageType nLanguage = LANGUAGE_SYSTEM;
         aTransliterationWrapper.loadModuleIfNeeded( nLanguage );
         aNewStr = aTransliterationWrapper.transliterate( aOldStr, nLanguage, 0, nOldLen, &aOffsets );
     }

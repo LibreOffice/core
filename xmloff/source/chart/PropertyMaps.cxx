@@ -403,7 +403,6 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
         OUString sAttrName = getPropertySetMapper()->GetEntryXMLName( rProperty.mnIndex );
         sal_uInt16 nNameSpace = getPropertySetMapper()->GetEntryNameSpace( rProperty.mnIndex );
         OUStringBuffer sValueBuffer;
-        OUString sValue;
 
         sal_Int32 nValue = 0;
         bool bValue = false;
@@ -519,7 +518,7 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
 
         if( !sValueBuffer.isEmpty())
         {
-            sValue = sValueBuffer.makeStringAndClear();
+            OUString sValue = sValueBuffer.makeStringAndClear();
             sAttrName = rNamespaceMap.GetQNameByKey( nNameSpace, sAttrName );
             rAttrList.AddAttribute( sAttrName, sValue );
         }

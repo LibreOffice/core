@@ -81,7 +81,6 @@ bool XMLErrorIndicatorPropertyHdl::importXML( const OUString& rStrImpValue,
 bool XMLErrorIndicatorPropertyHdl::exportXML( OUString& rStrExpValue,
                                                   const uno::Any& rValue, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
-    OUStringBuffer aBuffer;
     chart::ChartErrorIndicatorType eType;
 
     rValue >>= eType;
@@ -92,6 +91,7 @@ bool XMLErrorIndicatorPropertyHdl::exportXML( OUString& rStrExpValue,
 
     if( bValue )
     {
+        OUStringBuffer aBuffer;
         ::sax::Converter::convertBool( aBuffer, bValue );
         rStrExpValue = aBuffer.makeStringAndClear();
     }

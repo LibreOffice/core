@@ -950,8 +950,6 @@ IMPL_LINK_NOARG(SvxCharacterMap, FavClickHdl, SvxShowCharSet*, void)
 IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)
 {
     OUString aText;
-    OUString aHexText;
-    OUString aDecimalText;
     sal_UCS4 cChar = m_xShowSet->GetSelectCharacter();
     bool bSelect = (cChar > 0);
 
@@ -961,9 +959,9 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)
         // using the new UCS4 constructor
         aText = OUString( &cChar, 1 );
         // Get the hexadecimal code
-        aHexText = OUString::number(cChar, 16).toAsciiUpperCase();
+        OUString aHexText = OUString::number(cChar, 16).toAsciiUpperCase();
         // Get the decimal code
-        aDecimalText = OUString::number(cChar);
+        OUString aDecimalText = OUString::number(cChar);
         setCharName(cChar);
 
         // Update the hex and decimal codes only if necessary
@@ -991,8 +989,6 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)
 IMPL_LINK_NOARG(SvxCharacterMap, SearchCharHighlightHdl, SvxShowCharSet*, void)
 {
     OUString aText;
-    OUString aHexText;
-    OUString aDecimalText;
     sal_UCS4 cChar = m_xSearchSet->GetSelectCharacter();
     bool bSelect = (cChar > 0);
 
@@ -1001,9 +997,9 @@ IMPL_LINK_NOARG(SvxCharacterMap, SearchCharHighlightHdl, SvxShowCharSet*, void)
     {
         aText = OUString( &cChar, 1 );
         // Get the hexadecimal code
-        aHexText = OUString::number(cChar, 16).toAsciiUpperCase();
+        OUString aHexText = OUString::number(cChar, 16).toAsciiUpperCase();
         // Get the decimal code
-        aDecimalText = OUString::number(cChar);
+        OUString aDecimalText = OUString::number(cChar);
         setCharName(cChar);
 
         // Update the hex and decimal codes only if necessary

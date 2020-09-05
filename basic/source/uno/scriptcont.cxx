@@ -1026,9 +1026,9 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                     if( bLoadSource || bVerifyPasswordOnly )
                     {
                         // Access encrypted source stream
-                        OUString aSourceStreamName( "source.xml" );
                         try
                         {
+                            OUString aSourceStreamName( "source.xml" );
                             uno::Reference< io::XStream > xSourceStream = xElementRootStorage->openEncryptedStreamElement(
                                                                     aSourceStreamName,
                                                                     embed::ElementModes::READ,

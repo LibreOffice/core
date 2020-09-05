@@ -628,13 +628,14 @@ void SdrEscherImport::RecolorGraphic( SvStream& rSt, sal_uInt32 nRecLen, Graphic
     {
         for ( ; i > 0; i-- )
         {
-            sal_uInt32 nIndex, nPos = rSt.Tell();
-            sal_uInt8  nDummy, nRed, nGreen, nBlue;
+            sal_uInt32 nPos = rSt.Tell();
             sal_uInt16 nChanged;
             rSt.ReadUInt16( nChanged );
             if ( nChanged & 1 )
             {
+                sal_uInt8  nDummy, nRed, nGreen, nBlue;
                 sal_uInt32 nColor = 0;
+                sal_uInt32 nIndex;
                 rSt.ReadUChar( nDummy )
                    .ReadUChar( nRed )
                    .ReadUChar( nDummy )
@@ -2121,12 +2122,12 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
 
                     if ( aAt.nPersistPtr && ( aAt.nPersistPtr < m_nPersistPtrCnt ) )
                     {
-                        sal_uInt32 nId;
                         rStCtrl.Seek( m_pPersistPtr[ aAt.nPersistPtr ] );
                         DffRecordHeader aHd;
                         ReadDffRecordHeader( rStCtrl, aHd );
                         if ( aHd.nRecType == DFF_PST_ExOleObjStg )
                         {
+                            sal_uInt32 nId;
                             rStCtrl.ReadUInt32( nId );
                             aOleObjectList.emplace_back(
                                 aAt.nId, aHd.nFilePos, pShell, nRecType, aAt.nAspect );
@@ -3252,11 +3253,11 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
                     auto nHdEndRecPos = DffPropSet::SanitizeEndPos(rSt, aHd.GetRecEndFilePos());
                     while ( ( rSt.GetError() == ERRCODE_NONE ) && ( rSt.Tell() < nHdEndRecPos ) )
                     {
-                        sal_uInt16 nType;
                         DffRecordHeader aBuGraAtomHd;
                         ReadDffRecordHeader( rSt, aBuGraAtomHd );
                         if ( aBuGraAtomHd.nRecType == PPT_PST_ExtendedBuGraAtom )
                         {
+                            sal_uInt16 nType;
                             rSt.ReadUInt16( nType );
                             Graphic aGraphic;
                             if ( SvxMSDffManager::GetBLIPDirect( rSt, aGraphic ) )
@@ -4899,7 +4900,7 @@ void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, const DffRecordHeader
             }
             if ( nMask & 0x0020 )   // buColor
             {
-                sal_uInt32 nVal32, nHiByte;
+                sal_uInt32 nVal32;
                 rIn.ReadUInt32( nVal32 );
                 if (!rIn.good())
                 {
@@ -4907,6 +4908,7 @@ void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, const DffRecordHeader
                 }
                 else
                 {
+                    sal_uInt32 nHiByte;
                     nHiByte = nVal32 >> 24;
                     if ( nHiByte <= 8 )
                         nVal32 = nHiByte | PPT_COLSCHEME;

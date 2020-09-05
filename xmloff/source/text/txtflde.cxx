@@ -2261,7 +2261,6 @@ void XMLTextFieldExport::ExportMacro(
 {
     // some strings we'll need
     OUString sEventType( "EventType" );
-    OUString sScript( "Script" );
     OUString sPropertyScriptURL( "ScriptURL" );
 
 
@@ -2285,6 +2284,7 @@ void XMLTextFieldExport::ExportMacro(
     // Framework URL, otherwise treat it as a Basic Macro
     if (!sName.isEmpty())
     {
+        OUString sScript( "Script" );
         aSeq = Sequence<PropertyValue> (2);
         PropertyValue* pArr = aSeq.getArray();
         pArr[0].Name = sEventType;

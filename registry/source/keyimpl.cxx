@@ -146,15 +146,13 @@ RegError ORegKey::getKeyNames(const OUString& keyName,
                               rtl_uString*** pSubKeyNames,
                               sal_uInt32* pnSubKeys)
 {
-    RegError _ret = RegError::NO_ERROR;
-
     *pSubKeyNames = nullptr;
     *pnSubKeys = 0;
 
     ORegKey* pKey = this;
     if (!keyName.isEmpty())
     {
-        _ret = openKey(keyName, reinterpret_cast<RegKeyHandle*>(&pKey));
+        RegError _ret = openKey(keyName, reinterpret_cast<RegKeyHandle*>(&pKey));
         if (_ret != RegError::NO_ERROR)
             return _ret;
     }

@@ -1478,13 +1478,13 @@ awt::Size Button::CreateBoundingSize (
     widths.push_back(sal::static_int_cast<sal_Int32>(0.5 + aTextBBoxDisabled.X2 - aTextBBoxDisabled.X1));
     widths.push_back(sal::static_int_cast<sal_Int32>(0.5 + aTextBBoxMouseOverSelected.X2 - aTextBBoxMouseOverSelected.X1));
 
-    const sal_Int32 nGap (5);
     sal_Int32 nTextHeight (sal::static_int_cast<sal_Int32>(0.5 + aTextBBox.Y2 - aTextBBox.Y1));
     Reference<rendering::XBitmap> xBitmap;
     if (mpMode->mpIcon)
         xBitmap = mpMode->mpIcon->GetNormalBitmap();
     if (xBitmap.is())
     {
+        const sal_Int32 nGap (5);
         geometry::IntegerSize2D aSize (xBitmap->getSize());
         return awt::Size(
             ::std::max(aSize.Width, *std::max_element(widths.begin(), widths.end())),

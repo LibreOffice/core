@@ -168,12 +168,12 @@ bool XMLUnderlineTypePropHdl::exportXML( OUString& rStrExpValue, const uno::Any&
 {
     bool bRet = false;
     sal_uInt16 nValue = sal_uInt16();
-    OUStringBuffer aOut;
 
     if( (rValue >>= nValue) &&
         (awt::FontUnderline::DOUBLE == nValue ||
          awt::FontUnderline::DOUBLEWAVE == nValue) )
     {
+        OUStringBuffer aOut;
         bRet = SvXMLUnitConverter::convertEnum(
             aOut, nValue, pXML_UnderlineType_Enum );
         if( bRet )
@@ -259,10 +259,10 @@ bool XMLUnderlineStylePropHdl::exportXML( OUString& rStrExpValue, const uno::Any
 {
     bool bRet = false;
     sal_uInt16 nValue = sal_uInt16();
-    OUStringBuffer aOut;
 
     if( rValue >>= nValue )
     {
+        OUStringBuffer aOut;
         bRet = SvXMLUnitConverter::convertEnum(
             aOut, nValue, pXML_UnderlineStyle_Enum );
         if( bRet )
@@ -349,10 +349,10 @@ bool XMLUnderlineWidthPropHdl::exportXML( OUString& rStrExpValue, const uno::Any
 {
     bool bRet = false;
     sal_uInt16 nValue = sal_uInt16();
-    OUStringBuffer aOut;
 
     if( (rValue >>= nValue) && (awt::FontUnderline::NONE != nValue) )
     {
+        OUStringBuffer aOut;
         bRet = SvXMLUnitConverter::convertEnum(
             aOut, nValue, pXML_UnderlineWidth_Enum );
         if( bRet )

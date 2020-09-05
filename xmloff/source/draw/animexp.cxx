@@ -299,7 +299,6 @@ void XMLAnimationsExporter::collect( const Reference< XShape >& xShape, SvXMLExp
         Reference< XPropertySet > xProps( xShape, UNO_QUERY );
         if( xProps.is() )
         {
-            AnimationEffect eEffect;
             XMLEffectHint aEffect;
 
             if( any2bool( xProps->getPropertyValue( AnimExpImpl::gsSoundOn ) ) )
@@ -328,7 +327,7 @@ void XMLAnimationsExporter::collect( const Reference< XShape >& xShape, SvXMLExp
             }
 
             {
-
+                AnimationEffect eEffect;
                 xProps->getPropertyValue( AnimExpImpl::gsEffect ) >>= eEffect;
                 if( eEffect != AnimationEffect_NONE )
                 {

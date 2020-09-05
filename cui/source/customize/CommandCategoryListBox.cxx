@@ -357,11 +357,11 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
                 const css::uno::Sequence<css::uno::Reference<css::script::browse::XBrowseNode>> aChildNodes = rootNode->getChildNodes();
                 for ( auto const & childGroup : aChildNodes )
                 {
-                    OUString sUIName;
                     childGroup->acquire();
 
                     if ( childGroup->hasChildNodes() )
                     {
+                        OUString sUIName;
                         if ( childGroup->getName() == "user" )
                         {
                             sUIName = CuiResId( RID_SVXSTR_MYMACROS );

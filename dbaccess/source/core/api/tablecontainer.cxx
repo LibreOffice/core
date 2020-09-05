@@ -335,12 +335,13 @@ void OTableContainer::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
         xDrop->dropByName(_sElementName);
     else
     {
-        OUString sCatalog,sSchema,sTable,sComposedName;
+        OUString sComposedName;
 
         bool bIsView = false;
         Reference<XPropertySet> xTable(getObject(_nPos),UNO_QUERY);
         if ( xTable.is() && m_xMetaData.is() )
         {
+            OUString sSchema,sCatalog,sTable;
             if (m_xMetaData->supportsCatalogsInTableDefinitions())
                 xTable->getPropertyValue(PROPERTY_CATALOGNAME)  >>= sCatalog;
             if (m_xMetaData->supportsSchemasInTableDefinitions())

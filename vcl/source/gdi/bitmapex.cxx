@@ -289,7 +289,6 @@ BitmapChecksum BitmapEx::GetChecksum() const
 {
     BitmapChecksum  nCrc = maBitmap.GetChecksum();
     SVBT32      aBT32;
-    BitmapChecksumOctetArray aBCOA;
 
     UInt32ToSVBT32( o3tl::underlyingEnumValue(meTransparent), aBT32 );
     nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
@@ -299,6 +298,7 @@ BitmapChecksum BitmapEx::GetChecksum() const
 
     if( ( TransparentType::Bitmap == meTransparent ) && !maMask.IsEmpty() )
     {
+        BitmapChecksumOctetArray aBCOA;
         BCToBCOA( maMask.GetChecksum(), aBCOA );
         nCrc = vcl_get_checksum( nCrc, aBCOA, BITMAP_CHECKSUM_SIZE );
     }
@@ -630,7 +630,6 @@ BitmapEx BitmapEx:: AutoScaleBitmap(BitmapEx const & aBitmap, const long aStanda
     double imgOldWidth = aRet.GetSizePixel().Width();
     double imgOldHeight = aRet.GetSizePixel().Height();
 
-    Size aScaledSize;
     if (imgOldWidth >= aStandardSize || imgOldHeight >= aStandardSize)
     {
         sal_Int32 imgNewWidth = 0;
@@ -650,7 +649,7 @@ BitmapEx BitmapEx:: AutoScaleBitmap(BitmapEx const & aBitmap, const long aStanda
             imgposX = (aStandardSize - (imgOldWidth / (imgOldHeight / aStandardSize) + 0.5)) / 2 + 0.5;
         }
 
-        aScaledSize = Size( imgNewWidth, imgNewHeight );
+        Size aScaledSize( imgNewWidth, imgNewHeight );
         aRet.Scale( aScaledSize, BmpScaleFlag::BestQuality );
     }
     else

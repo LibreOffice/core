@@ -827,14 +827,13 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
         std::unique_ptr<SdrView> pView(new SdrView( *pModel, pVDev ));
         pView->hideMarkHandles();
         pView->ShowSdrPage(pPage);
-        SdrObject *pObj=nullptr;
         size_t nSymTmp = static_cast<size_t>(nSymType);
         if(m_pSymbolList)
         {
             if(m_pSymbolList->GetObjCount())
             {
                 nSymTmp %= m_pSymbolList->GetObjCount(); // Treat list as cyclic!
-                pObj=m_pSymbolList->GetObj(nSymTmp);
+                SdrObject *pObj=m_pSymbolList->GetObj(nSymTmp);
                 if(pObj)
                 {
                     // directly clone to target SdrModel

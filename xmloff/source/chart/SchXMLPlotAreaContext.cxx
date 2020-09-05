@@ -724,7 +724,6 @@ void SchXMLDataPointContext::StartElement( const uno::Reference< xml::sax::XAttr
     {
         OUString sAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
-        bool bHideLegend = false;
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         if( nPrefix == XML_NAMESPACE_CHART )
@@ -753,7 +752,7 @@ void SchXMLDataPointContext::StartElement( const uno::Reference< xml::sax::XAttr
             }
             else if (IsXMLToken(aLocalName, XML_HIDE_LEGEND))
             {
-                bHideLegend = xAttrList->getValueByIndex(i).toBoolean();
+                bool bHideLegend = xAttrList->getValueByIndex(i).toBoolean();
                 if (bHideLegend)
                 {
                     uno::Sequence<sal_Int32> deletedLegendEntriesSeq;

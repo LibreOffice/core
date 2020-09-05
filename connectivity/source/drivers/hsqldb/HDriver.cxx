@@ -239,10 +239,10 @@ namespace connectivity
                 );
                 aProperties.put( "SystemProperties", Sequence< NamedValue >( &aPermittedClasses, 1 ) );
 
-                const OUString sProperties(  "properties"  );
                 OUString sMessage;
                 try
                 {
+                    const OUString sProperties(  "properties"  );
                     if ( !bIsNewDatabase && xStorage->isStreamElement(sProperties) )
                     {
                         Reference<XStream > xStream = xStorage->openStreamElement(sProperties,ElementModes::READ);

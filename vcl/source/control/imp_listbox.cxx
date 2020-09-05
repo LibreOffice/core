@@ -1662,14 +1662,13 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
         nPos = mnUserDrawEntry; // real entry, not the matching entry from MRU
 
     long nY = mpEntryList->GetAddedHeight(nPos, mnTop);
-    Size aImgSz;
 
     if (bDrawImage && mpEntryList->HasImages())
     {
         Image aImage = mpEntryList->GetEntryImage(nPos);
         if (!!aImage)
         {
-            aImgSz = aImage.GetSizePixel();
+            Size aImgSz = aImage.GetSizePixel();
             Point aPtImg(gnBorder - mnLeft, nY + ((nEntryHeight - aImgSz.Height()) / 2));
 
             if (!IsZoom())

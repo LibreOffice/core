@@ -3090,7 +3090,6 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
     aMediaProps[0].Name = "URL";
 
     uno::Reference< graphic::XGraphic > xGraphic;
-    css::awt::Size aSize;
     aMediaProps[0].Value <<= aURL;
     try
     {
@@ -3103,6 +3102,7 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
         if ( xGraphic.is() )
         {
             bool bOK = true;
+            css::awt::Size aSize;
 
             a >>= aSize;
             if ( 0 == aSize.Width || 0 == aSize.Height )

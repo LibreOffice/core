@@ -532,7 +532,6 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
     // check for GnomeWM
     if( m_aWMAtoms[ WIN_SUPPORTING_WM_CHECK ] && m_aWMAtoms[ WIN_PROTOCOLS ] )
     {
-        ::Window         aWMChild    = None;
         if( XGetWindowProperty( m_pDisplay,
                                 m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultXScreen() ),
                                 m_aWMAtoms[ WIN_SUPPORTING_WM_CHECK ],
@@ -549,10 +548,9 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
             && nItems != 0
             )
         {
-            aWMChild = *reinterpret_cast< ::Window* >(pProperty);
+            ::Window aWMChild = *reinterpret_cast< ::Window* >(pProperty);
             XFree( pProperty );
             pProperty = nullptr;
-            ::Window aCheckWindow = None;
             GetGenericUnixSalData()->ErrorTrapPush();
             if( XGetWindowProperty( m_pDisplay,
                                     aWMChild,
@@ -573,7 +571,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
                 {
                     GetGenericUnixSalData()->ErrorTrapPush();
 
-                    aCheckWindow =  *reinterpret_cast< ::Window* >(pProperty);
+                    ::Window aCheckWindow =  *reinterpret_cast< ::Window* >(pProperty);
                     XFree( pProperty );
                     pProperty = nullptr;
                     if( aCheckWindow == aWMChild )
@@ -733,7 +731,6 @@ bool WMAdaptor::getNetWmName()
 
     if( m_aWMAtoms[ NET_SUPPORTING_WM_CHECK ] && m_aWMAtoms[ NET_WM_NAME ] )
     {
-        ::Window         aWMChild = None;
         if( XGetWindowProperty( m_pDisplay,
                                 m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultXScreen() ),
                                 m_aWMAtoms[ NET_SUPPORTING_WM_CHECK ],
@@ -750,10 +747,9 @@ bool WMAdaptor::getNetWmName()
             && nItems != 0
             )
         {
-            aWMChild = *reinterpret_cast< ::Window* >(pProperty);
+            ::Window aWMChild = *reinterpret_cast< ::Window* >(pProperty);
             XFree( pProperty );
             pProperty = nullptr;
-            ::Window aCheckWindow = None;
             GetGenericUnixSalData()->ErrorTrapPush();
             if( XGetWindowProperty( m_pDisplay,
                                     aWMChild,
@@ -773,7 +769,7 @@ bool WMAdaptor::getNetWmName()
                     if ( ! GetGenericUnixSalData()->ErrorTrapPop( false ) )
                     {
                         GetGenericUnixSalData()->ErrorTrapPush();
-                        aCheckWindow =  *reinterpret_cast< ::Window* >(pProperty);
+                        ::Window aCheckWindow =  *reinterpret_cast< ::Window* >(pProperty);
                         XFree( pProperty );
                         pProperty = nullptr;
                         if( aCheckWindow == aWMChild )

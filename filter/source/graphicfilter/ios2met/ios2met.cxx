@@ -1133,9 +1133,14 @@ void OS2METReader::ReadFullArc(bool bGivenPos, sal_uInt16 nOrderSize)
         nP = o3tl::saturating_toggle_sign(nP);
     if (nQ < 0)
         nQ = o3tl::saturating_toggle_sign(nQ);
-    sal_uInt32 nMul(0); sal_uInt16 nMulS(0);
-    if (nOrderSize>=4) pOS2MET->ReadUInt32( nMul );
-    else { pOS2MET->ReadUInt16( nMulS ); nMul=static_cast<sal_uInt32>(nMulS)<<8; }
+    sal_uInt32 nMul(0);
+    if (nOrderSize>=4)
+        pOS2MET->ReadUInt32( nMul );
+    else {
+        sal_uInt16 nMulS(0);
+        pOS2MET->ReadUInt16( nMulS );
+        nMul=static_cast<sal_uInt32>(nMulS)<<8;
+    }
     if (nMul!=0x00010000) {
         nP=(nP*nMul)>>16;
         nQ=(nQ*nMul)>>16;
@@ -1180,9 +1185,14 @@ void OS2METReader::ReadPartialArc(bool bGivenPos, sal_uInt16 nOrderSize)
         nP = o3tl::saturating_toggle_sign(nP);
     if (nQ < 0)
         nQ = o3tl::saturating_toggle_sign(nQ);
-    sal_uInt32 nMul(0); sal_uInt16 nMulS(0);
-    if (nOrderSize>=12) pOS2MET->ReadUInt32( nMul );
-    else { pOS2MET->ReadUInt16( nMulS ); nMul=static_cast<sal_uInt32>(nMulS)<<8; }
+    sal_uInt32 nMul(0);
+    if (nOrderSize>=12)
+        pOS2MET->ReadUInt32( nMul );
+    else {
+        sal_uInt16 nMulS(0);
+        pOS2MET->ReadUInt16( nMulS );
+        nMul=static_cast<sal_uInt32>(nMulS)<<8;
+    }
     if (nMul!=0x00010000) {
         nP=(nP*nMul)>>16;
         nQ=(nQ*nMul)>>16;
@@ -1714,7 +1724,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         case GOrdPIvAtr: PushAttr(nOrderID);
             [[fallthrough]];
         case GOrdSIvAtr: {
-            sal_uInt8 nA, nP, nFlags, nMix;
+            sal_uInt8 nA, nP, nFlags;
             Color aCol;
             RasterOp eROP;
             pOS2MET->ReadUChar( nA ).ReadUChar( nP ).ReadUChar( nFlags );
@@ -1763,6 +1773,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
                 }
             }
             else {
+                sal_uInt8 nMix;
                 pOS2MET->ReadUChar( nMix );
                 if (nMix==0) {
                     switch (nP) {
@@ -1790,7 +1801,6 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             [[fallthrough]];
         case GOrdSIxCol: {
             sal_uInt8 nFlags;
-            Color aCol;
             pOS2MET->ReadUChar( nFlags );
             if ((nFlags&0x80)!=0) {
                 aAttr.aLinCol=aDefAttr.aLinCol;
@@ -1800,6 +1810,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
                 aAttr.aImgCol=aDefAttr.aImgCol;
             }
             else {
+                Color aCol;
                 const auto nVal = ReadLittleEndian3BytesLong();
                 if      ((nFlags&0x40)!=0 && nVal==1) aCol=COL_BLACK;
                 else if ((nFlags&0x40)!=0 && nVal==2) aCol=COL_WHITE;
@@ -1817,10 +1828,9 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             [[fallthrough]];
         case GOrdSColor:
         case GOrdSXtCol: {
-            sal_uInt8 nbyte;
             sal_uInt16 nVal;
-            Color aCol;
             if (nOrderID==GOrdPColor || nOrderID==GOrdSColor) {
+                sal_uInt8 nbyte;
                 pOS2MET->ReadUChar( nbyte ); nVal=static_cast<sal_uInt16>(nbyte)|0xff00;
             }
             else pOS2MET->ReadUInt16( nVal );
@@ -1832,6 +1842,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
                 aAttr.aImgCol=aDefAttr.aImgCol;
             }
             else {
+                Color aCol;
                 if      (nVal==0x0007) aCol=COL_WHITE;
                 else if (nVal==0x0008) aCol=COL_BLACK;
                 else if (nVal==0xff08) aCol=GetPaletteColor(1);
@@ -1846,7 +1857,6 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             [[fallthrough]];
         case GOrdSBgCol: {
             sal_uInt16 nVal;
-            Color aCol;
             pOS2MET->ReadUInt16( nVal );
             if (nVal==0x0000 || nVal==0xff00)  {
                 aAttr.aLinBgCol=aDefAttr.aLinBgCol;
@@ -1856,6 +1866,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
                 aAttr.aImgBgCol=aDefAttr.aImgBgCol;
             }
             else {
+                Color aCol;
                 if      (nVal==0x0007) aCol=COL_WHITE;
                 else if (nVal==0x0008) aCol=COL_BLACK;
                 else if (nVal==0xff08) aCol=GetPaletteColor(0);
@@ -1869,7 +1880,6 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             [[fallthrough]];
         case GOrdSBxCol: {
             sal_uInt8 nFlags;
-            Color aCol;
             pOS2MET->ReadUChar( nFlags );
             if ((nFlags&0x80)!=0) {
                 aAttr.aLinBgCol=aDefAttr.aLinBgCol;
@@ -1879,6 +1889,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
                 aAttr.aImgBgCol=aDefAttr.aImgBgCol;
             }
             else {
+                Color aCol;
                 const auto nVal = ReadLittleEndian3BytesLong();
                 if      ((nFlags&0x40)!=0 && nVal==1) aCol=COL_BLACK;
                 else if ((nFlags&0x40)!=0 && nVal==2) aCol=COL_WHITE;
@@ -2042,7 +2053,6 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         case GOrdPChCel: PushAttr(nOrderID);
             [[fallthrough]];
         case GOrdSChCel: {
-            sal_uInt8 nbyte;
             sal_uInt16 nLen=nOrderLen;
             auto nWidth = ReadCoord(bCoord32);
             auto nHeight = ReadCoord(bCoord32);
@@ -2055,6 +2065,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
                 pOS2MET->SeekRel(4); nLen-=4;
             }
             if (nLen>=2) {
+                sal_uInt8 nbyte;
                 pOS2MET->ReadUChar( nbyte );
                 if ((nbyte&0x80)==0 && aAttr.aChrCellSize==Size(0,0))
                     aAttr.aChrCellSize = aDefAttr.aChrCellSize;
@@ -2109,12 +2120,12 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         case GOrdPMkCel: PushAttr(nOrderID);
             [[fallthrough]];
         case GOrdSMkCel: {
-            sal_uInt8 nbyte;
             sal_uInt16 nLen=nOrderLen;
             aAttr.aMrkCellSize.setWidth(ReadCoord(bCoord32) );
             aAttr.aMrkCellSize.setHeight(ReadCoord(bCoord32) );
             if (bCoord32) nLen-=8; else nLen-=4;
             if (nLen>=2) {
+                sal_uInt8 nbyte;
                 pOS2MET->ReadUChar( nbyte );
                 if ((nbyte&0x80)==0 && aAttr.aMrkCellSize==Size(0,0))
                     aAttr.aMrkCellSize=aDefAttr.aMrkCellSize;

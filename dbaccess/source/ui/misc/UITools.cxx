@@ -1285,9 +1285,9 @@ bool insertHierachyElement(weld::Window* pParent, const Reference< XComponentCon
 
     if ( !_bMove || sNewName.isEmpty() )
     {
-        OUString sTargetName,sLabel;
         if ( sNewName.isEmpty() || xNameAccess->hasByName(sNewName) )
         {
+            OUString sLabel, sTargetName;
             if ( !sNewName.isEmpty() )
                 sTargetName = sNewName;
             else

@@ -348,12 +348,12 @@ void ItemListener::itemStateChanged( const ItemEvent& Event )
     try
     {
         sal_Int16 nState;
-        OUString aControlName;
         Reference< XControl > xControl;
         Any aSource( Event.Source );
         if ( aSource >>= xControl )
         {
             Reference< XPropertySet > xPropertySet( xControl->getModel(), UNO_QUERY_THROW );
+            OUString aControlName;
             xPropertySet->getPropertyValue( "Name" ) >>= aControlName;
             PPPOptimizerTokenEnum eControl( TKGet( aControlName ) );
             switch( eControl )

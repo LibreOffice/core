@@ -284,7 +284,7 @@ void StgAvlNode::StgEnum( short& n )
 
 bool StgAvlNode::Insert( StgAvlNode** pRoot, StgAvlNode* pIns )
 {
-    StgAvlNode* pPivot, *pHeavy, *pNewRoot, *pParent, *pPrev;
+    StgAvlNode* pPivot, *pHeavy, *pParent, *pPrev;
     if ( !pRoot )
         return false;
 
@@ -310,6 +310,7 @@ bool StgAvlNode::Insert( StgAvlNode** pRoot, StgAvlNode* pIns )
     short nDelta = pPivot->Adjust( &pHeavy, pIns );
     if( pPivot->m_nBalance >= 2 || pPivot->m_nBalance <= -2 )
     {
+        StgAvlNode* pNewRoot;
         pHeavy = ( nDelta < 0 ) ? pPivot->m_pRight : pPivot->m_pLeft;
         // left imbalance
         if( nDelta > 0 )

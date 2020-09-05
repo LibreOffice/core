@@ -1718,7 +1718,6 @@ bool SvNumberFormatter::GetPreviewString(const OUString& sFormatString,
     {
         return false;
     }
-    sal_uInt32 nKey;
     if (eLnge == LANGUAGE_DONTKNOW)
     {
         eLnge = IniLnge;
@@ -1735,7 +1734,7 @@ bool SvNumberFormatter::GetPreviewString(const OUString& sFormatString,
     if (nCheckPos == 0)                                 // String ok
     {
         sal_uInt32 CLOffset = ImpGenerateCL(eLnge);     // create new standard formats if necessary
-        nKey = ImpIsEntry(p_Entry->GetFormatstring(),CLOffset, eLnge);
+        sal_uInt32 nKey = ImpIsEntry(p_Entry->GetFormatstring(),CLOffset, eLnge);
         if (nKey != NUMBERFORMAT_ENTRY_NOT_FOUND)       // already present
         {
             GetOutputString(fPreviewNumber, nKey, sOutString, ppColor, bUseStarFormat);
@@ -1872,7 +1871,6 @@ bool SvNumberFormatter::GetPreviewString( const OUString& sFormatString,
     {
         return false;
     }
-    sal_uInt32 nKey;
     if (eLnge == LANGUAGE_DONTKNOW)
     {
         eLnge = IniLnge;
@@ -1890,7 +1888,7 @@ bool SvNumberFormatter::GetPreviewString( const OUString& sFormatString,
     {
         // May have to create standard formats for this locale.
         sal_uInt32 CLOffset = ImpGenerateCL(eLnge);
-        nKey = ImpIsEntry( p_Entry->GetFormatstring(), CLOffset, eLnge);
+        sal_uInt32 nKey = ImpIsEntry( p_Entry->GetFormatstring(), CLOffset, eLnge);
         if (nKey != NUMBERFORMAT_ENTRY_NOT_FOUND)       // already present
         {
             GetOutputString( sPreviewString, nKey, sOutString, ppColor);
