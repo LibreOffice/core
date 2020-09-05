@@ -2938,7 +2938,7 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
         else
         {
             // Old (deprecated) addins first for legacy.
-            if (ScGlobal::GetLegacyFuncCollection()->findByName(cSymbol))
+            if (ScGlobal::GetLegacyFuncCollection()->findByName(OUString(cSymbol)))
             {
                 aIntName = cSymbol;
             }
