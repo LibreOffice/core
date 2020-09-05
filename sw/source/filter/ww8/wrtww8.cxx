@@ -550,34 +550,6 @@ static void WriteDop( WW8Export& rWrt )
     rDop.Write( *rWrt.pTableStrm, *rWrt.pFib );
 }
 
-const sal_Unicode *WW8DopTypography::GetJapanNotBeginLevel1()
-{
-    static const sal_Unicode aJapanNotBeginLevel1[nMaxFollowing] =
-    //Japanese Level 1
-    {
-        0x0021, 0x0025, 0x0029, 0x002c, 0x002e, 0x003a, 0x003b, 0x003f,
-        0x005d, 0x007d, 0x00a2, 0x00b0, 0x2019, 0x201d, 0x2030, 0x2032,
-        0x2033, 0x2103, 0x3001, 0x3002, 0x3005, 0x3009, 0x300b, 0x300d,
-        0x300f, 0x3011, 0x3015, 0x309b, 0x309c, 0x309d, 0x309e, 0x30fb,
-        0x30fd, 0x30fe, 0xff01, 0xff05, 0xff09, 0xff0c, 0xff0e, 0xff1a,
-        0xff1b, 0xff1f, 0xff3d, 0xff5d, 0xff61, 0xff63, 0xff64, 0xff65,
-        0xff9e, 0xff9f, 0xffe0
-    };
-    return &aJapanNotBeginLevel1[0];
-}
-
-const sal_Unicode *WW8DopTypography::GetJapanNotEndLevel1()
-{
-    static const sal_Unicode aJapanNotEndLevel1[nMaxLeading] =
-    //Japanese Level 1
-    {
-        0x0024, 0x0028, 0x005b, 0x005c, 0x007b, 0x00a3, 0x00a5, 0x2018,
-        0x201c, 0x3008, 0x300a, 0x300c, 0x300e, 0x3010, 0x3014, 0xff04,
-        0xff08, 0xff3b, 0xff5b, 0xff62, 0xffe1, 0xffe5
-    };
-    return &aJapanNotEndLevel1[0];
-}
-
 static int lcl_CmpBeginEndChars( const OUString& rSWStr,
     const sal_Unicode* pMSStr, int nMSStrByteLen )
 {
@@ -717,14 +689,14 @@ void WW8Export::ExportDopTypography(WW8DopTypography &rTypo)
                           !lcl_CmpBeginEndChars
                             (
                                 pForbidden->endLine,
-                                WW8DopTypography::GetJapanNotEndLevel1(),
+                                WW8DopTypography::JapanNotEndLevel1,
                                 WW8DopTypography::nMaxLeading * sizeof(sal_Unicode)
                             )
                         &&
                           !lcl_CmpBeginEndChars
                             (
                                 pForbidden->beginLine,
-                                WW8DopTypography::GetJapanNotBeginLevel1(),
+                                WW8DopTypography::JapanNotBeginLevel1,
                                 WW8DopTypography::nMaxFollowing * sizeof(sal_Unicode)
                             )
                         )

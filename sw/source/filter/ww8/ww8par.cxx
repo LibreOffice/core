@@ -1993,8 +1993,8 @@ void SwWW8ImplReader::ImportDopTypography(const WW8DopTypography &rTypo)
     */
     if (!rTypo.m_reserved2)
     {
-        i18n::ForbiddenCharacters aForbidden(WW8DopTypography::GetJapanNotBeginLevel1(),
-            WW8DopTypography::GetJapanNotEndLevel1());
+        i18n::ForbiddenCharacters aForbidden(WW8DopTypography::JapanNotBeginLevel1,
+            WW8DopTypography::JapanNotEndLevel1);
         m_rDoc.getIDocumentSettingAccess().setForbiddenCharacters(LANGUAGE_JAPANESE,aForbidden);
     }
 
