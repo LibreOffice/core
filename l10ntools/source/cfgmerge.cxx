@@ -164,7 +164,6 @@ void CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
         sLastWhitespace += sToken;
 
     OString sTokenName;
-    OString sTokenId;
 
     bool bOutput = true;
 
@@ -222,6 +221,7 @@ void CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                     }
                     break;
                 }
+                OString sTokenId;
                 if ( !sSearch.isEmpty())
                 {
                     OString sTemp = sToken.copy( sToken.indexOf( sSearch ));
