@@ -1075,7 +1075,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
 
     OUString query = queryBuf.makeStringAndClear();
 
-    uno::Reference< XResultSet > rs = statement->executeQuery(query.getStr());
+    uno::Reference< XResultSet > rs = statement->executeQuery(query);
     uno::Reference< XRow > xRow( rs, UNO_QUERY_THROW );
     ODatabaseMetaDataResultSet::ORows aResults;
 
@@ -1164,7 +1164,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
     OUString query = queryBuf.makeStringAndClear();
 
     uno::Reference< XStatement > statement = m_pConnection->createStatement();
-    uno::Reference< XResultSet > rs = statement->executeQuery(query.getStr());
+    uno::Reference< XResultSet > rs = statement->executeQuery(query);
     uno::Reference< XRow > xRow( rs, UNO_QUERY_THROW );
 
     ODatabaseMetaDataResultSet::ORows aResults;
@@ -1366,7 +1366,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
 
     OUString query = queryBuf.makeStringAndClear();
 
-    uno::Reference< XResultSet > rs = statement->executeQuery(query.getStr());
+    uno::Reference< XResultSet > rs = statement->executeQuery(query);
     uno::Reference< XRow > xRow( rs, UNO_QUERY_THROW );
     ODatabaseMetaDataResultSet::ORows aResults;
 
@@ -1749,7 +1749,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
 
     OUString query = queryBuf.makeStringAndClear();
 
-    uno::Reference< XResultSet > rs = statement->executeQuery(query.getStr());
+    uno::Reference< XResultSet > rs = statement->executeQuery(query);
     uno::Reference< XRow > xRow( rs, UNO_QUERY_THROW );
     ODatabaseMetaDataResultSet::ORows aResults;
 

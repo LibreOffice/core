@@ -747,7 +747,7 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getColumns(const Any& /*catalo
 
     OUString query = queryBuf.makeStringAndClear();
     Reference<XStatement> statement = m_rConnection.createStatement();
-    Reference<XResultSet> rs = statement->executeQuery(query.getStr());
+    Reference<XResultSet> rs = statement->executeQuery(query);
     Reference<XRow> xRow(rs, UNO_QUERY_THROW);
 
     Reference<XResultSet> xResultSet(getOwnConnection().getDriver().getFactory()->createInstance(
@@ -946,7 +946,7 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getImportedKeys(const Any& /*c
 
     std::vector<std::vector<Any>> aRows;
     Reference<XStatement> statement = m_rConnection.createStatement();
-    Reference<XResultSet> rs = statement->executeQuery(query.getStr());
+    Reference<XResultSet> rs = statement->executeQuery(query);
     Reference<XRow> xRow(rs, UNO_QUERY_THROW);
 
     while (rs->next())
