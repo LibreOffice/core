@@ -1383,7 +1383,7 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
                 std::unique_ptr<sal_Unicode[]> value(new sal_Unicode[size]);
                 readString(aBuffer.data(), value.get(), size);
 
-                OString uStr = OUStringToOString(value.get(), RTL_TEXTENCODING_UTF8);
+                OString uStr(value.get(), rtl_ustr_getLength(value.get()), RTL_TEXTENCODING_UTF8);
                 fprintf(stdout, "L\"%s\"\n", uStr.getStr());
             }
             break;
@@ -1498,7 +1498,7 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
                     if (offset > 8)
                         fprintf(stdout, "%s              ", indent);
 
-                    uStr = OUStringToOString(pValue, RTL_TEXTENCODING_UTF8);
+                    uStr = OString(pValue, rtl_ustr_getLength(pValue), RTL_TEXTENCODING_UTF8);
                     fprintf(
                         stdout, "%lu = L\"%s\"\n",
                         sal::static_int_cast< unsigned long >(i),
