@@ -57,6 +57,9 @@ template <typename Zone> struct WatchdogHelper
                 {
                     gbWatchdogFiring = true;
                     SAL_WARN("vcl.watchdog", "Watchdog triggered: hard disable " << Zone::name());
+#ifdef DBG_UTIL
+                    std::abort();
+#endif
                     Zone::hardDisable();
                     gbWatchdogFiring = false;
                 }

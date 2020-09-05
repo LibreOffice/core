@@ -18,6 +18,8 @@
 
 #include <vcl/skia/SkiaHelper.hxx>
 
+#include <config_skia.h>
+
 /**
  * Called from a signal handler or watchdog thread if we get
  * a crash or hang in some driver.
@@ -59,7 +61,13 @@ const CrashWatchdogTimingsValues& SkiaZone::getCrashWatchdogTimingsValues()
     {
         case SkiaHelper::RenderVulkan:
         {
+#if defined(SK_RELEASE)
             static const CrashWatchdogTimingsValues vulkanValues = { 6, 20 }; /* 1.5s,  5s */
+#elif defined(SK_DEBUG)
+            static const CrashWatchdogTimingsValues vulkanValues = { 60, 200 }; /* 15s,  50s */
+#else
+#error Unknown Skia debug/release setting.
+#endif
             return vulkanValues;
         }
         case SkiaHelper::RenderRaster:
