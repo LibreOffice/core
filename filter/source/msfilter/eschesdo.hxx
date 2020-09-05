@@ -53,10 +53,8 @@ public:
 
     bool ImplGetPropertyValue( const OUString& rString );
 
-    sal_Int32 ImplGetInt32PropertyValue( const sal_Unicode* pStr )
-    { return ImplGetPropertyValue( pStr ) ? *o3tl::doAccess<sal_Int32>(mAny) : 0; }
     sal_Int32 ImplGetInt32PropertyValue( const OUString& rStr )
-    { return ImplGetInt32PropertyValue(rStr.getStr()); }
+    { return ImplGetPropertyValue( rStr ) ? *o3tl::doAccess<sal_Int32>(mAny) : 0; }
 
     const css::uno::Reference< css::drawing::XShape >&    GetShapeRef() const     { return mXShape; }
     const css::uno::Any&       GetUsrAny() const       { return mAny; }
