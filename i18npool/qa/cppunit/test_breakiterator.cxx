@@ -123,12 +123,11 @@ void TestBreakIterator::testLineBreaking()
 
     //See https://bz.apache.org/ooo/show_bug.cgi?id=19716
     {
-        OUString aTest("aaa]aaa");
-
         aLocale.Language = "en";
         aLocale.Country = "US";
 
         {
+            OUString aTest("aaa]aaa");
             //Here we want the line break to move the whole lot to the next line
             i18n::LineBreakResults aResult = m_xBreak->getLineBreak(aTest, aTest.getLength()-2, aLocale, 0,
                 aHyphOptions, aUserOptions);
@@ -1030,13 +1029,12 @@ void TestBreakIterator::testChinese()
     lang::Locale aLocale;
     aLocale.Language = "zh";
     aLocale.Country = "CN";
-    i18n::Boundary aBounds;
 
     {
         const sal_Unicode CHINESE[] = { 0x6A35, 0x6A30, 0x69FE, 0x8919, 0xD867, 0xDEDB  };
 
         OUString aTest(CHINESE, SAL_N_ELEMENTS(CHINESE));
-        aBounds = m_xBreak->getWordBoundary(aTest, 4, aLocale,
+        i18n::Boundary aBounds = m_xBreak->getWordBoundary(aTest, 4, aLocale,
             i18n::WordType::DICTIONARY_WORD, true);
         CPPUNIT_ASSERT(aBounds.startPos == 4 && aBounds.endPos == 6);
     }

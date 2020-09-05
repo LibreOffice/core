@@ -2241,12 +2241,11 @@ LanguageTag & LanguageTag::makeFallback()
     else if (maBcp47 == "en-GB-oxendict")
         aVec.emplace_back("en-GB-oed");
 
-    OUString aScript;
     OUString aVariants( getVariants());
     OUString aTmp;
     if (hasScript())
     {
-        aScript = getScript();
+        OUString aScript = getScript();
         bool bHaveLanguageScriptVariant = false;
         if (!aCountry.isEmpty())
         {
