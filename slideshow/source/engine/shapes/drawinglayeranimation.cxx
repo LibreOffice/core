@@ -305,7 +305,7 @@ double ActivityImpl::GetMixerState( sal_uInt32 nTime )
 sal_uInt32 ActivityImpl::GetStepWidthLogic() const
 {
     // #i69847# Assuming higher DPI
-    sal_uInt32 const PIXEL_TO_LOGIC = 30;
+    constexpr sal_uInt32 PIXEL_TO_LOGIC = 30;
 
     sal_uInt32 nRetval(0);
 

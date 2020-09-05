@@ -38,7 +38,6 @@ double SAL_CALL VbaPageSetupBase::getTopMargin()
     try
     {
         bool headerOn = false;
-        sal_Int32 headerHeight = 0;
 
         uno::Any aValue = mxPageProps->getPropertyValue( "HeaderIsOn" );
         aValue >>= headerOn;
@@ -48,6 +47,7 @@ double SAL_CALL VbaPageSetupBase::getTopMargin()
 
         if( headerOn )
         {
+            sal_Int32 headerHeight = 0;
             aValue = mxPageProps->getPropertyValue( "HeaderHeight" );
             aValue >>= headerHeight;
             topMargin = topMargin + headerHeight;
@@ -67,13 +67,13 @@ void SAL_CALL VbaPageSetupBase::setTopMargin( double margin )
     try
     {
         bool headerOn = false;
-        sal_Int32 headerHeight = 0;
 
         uno::Any aValue = mxPageProps->getPropertyValue( "HeaderIsOn" );
         aValue >>= headerOn;
 
         if( headerOn )
         {
+            sal_Int32 headerHeight = 0;
             aValue = mxPageProps->getPropertyValue( "HeaderHeight" );
             aValue >>= headerHeight;
             topMargin -= headerHeight;
@@ -93,7 +93,6 @@ double SAL_CALL VbaPageSetupBase::getBottomMargin()
     try
     {
         bool footerOn = false;
-        sal_Int32 footerHeight = 0;
 
         uno::Any aValue = mxPageProps->getPropertyValue( "FooterIsOn" );
         aValue >>= footerOn;
@@ -103,6 +102,7 @@ double SAL_CALL VbaPageSetupBase::getBottomMargin()
 
         if( footerOn )
         {
+            sal_Int32 footerHeight = 0;
             aValue = mxPageProps->getPropertyValue( "FooterHeight" );
             aValue >>= footerHeight;
             bottomMargin += footerHeight;
@@ -122,13 +122,13 @@ void SAL_CALL VbaPageSetupBase::setBottomMargin( double margin )
     try
     {
         bool footerOn = false;
-        sal_Int32 footerHeight = 0;
 
         uno::Any aValue = mxPageProps->getPropertyValue( "FooterIsOn" );
         aValue >>= footerOn;
 
         if( footerOn )
         {
+            sal_Int32 footerHeight = 0;
             aValue = mxPageProps->getPropertyValue( "FooterHeight" );
             aValue >>= footerHeight;
             bottomMargin -= footerHeight;

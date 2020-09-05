@@ -1389,10 +1389,10 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                     uno::Reference< text::XTextRange > xRange;
                     aFramedRedlines[i] >>= xRange;
                     uno::Reference< beans::XPropertySet > xRangeProperties;
-                    OUString sTableName;
-                    OUString sCellName;
                     if ( xRange.is() )
                     {
+                        OUString sTableName;
+                        OUString sCellName;
                         xRangeProperties.set( xRange, uno::UNO_QUERY_THROW );
                         if (xRangeProperties->getPropertySetInfo()->hasPropertyByName("TextTable"))
                         {

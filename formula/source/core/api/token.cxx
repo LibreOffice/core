@@ -1389,12 +1389,11 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissing( const MissingConvention &
                     ++nFn;      // all following operations on _that_ function
                     pCtx[ nFn ].mpFunc = aIter.PeekPrevNoSpaces();
                     pCtx[ nFn ].mnCurArg = 0;
-                    OpCode eOp;
                     if (rConv.isPODF() && pCtx[ nFn ].mpFunc && pCtx[ nFn ].mpFunc->GetOpCode() == ocAddress)
                         pOcas[ nOcas++ ] = nFn;     // entering ADDRESS() if PODF
                     else if ((rConv.isODFF() || rConv.isOOXML()) && pCtx[ nFn ].mpFunc)
                     {
-                        eOp = pCtx[ nFn ].mpFunc->GetOpCode();
+                        OpCode eOp = pCtx[ nFn ].mpFunc->GetOpCode();
                         if (eOp == ocDBCount || eOp == ocDBCount2)
                             pOcds[ nOcds++ ] = nFn;     // entering DCOUNT() or DCOUNTA() if ODFF or OOXML
                     }
