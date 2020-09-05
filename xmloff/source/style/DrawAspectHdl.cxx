@@ -45,15 +45,12 @@ bool DrawAspectHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, c
 bool DrawAspectHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     bool bRet = false;
-    OUStringBuffer aOut;
 
     sal_Int64 nAspect = 0;
     if( ( rValue >>= nAspect ) && nAspect > 0 )
     {
         // store the aspect as an integer value
-        aOut.append( nAspect );
-
-        rStrExpValue = aOut.makeStringAndClear();
+        rStrExpValue = OUString::number(nAspect);
 
         bRet = true;
     }

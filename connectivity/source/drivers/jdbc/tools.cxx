@@ -37,7 +37,6 @@ using namespace ::com::sun::star::lang;
 void java_util_Properties::setProperty(const OUString& key, const OUString& value)
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java environment has been deleted!");
-    jobject out(nullptr);
 
     {
         jvalue args[2];
@@ -50,7 +49,7 @@ void java_util_Properties::setProperty(const OUString& key, const OUString& valu
         // Turn off Java-Call
         static jmethodID mID(nullptr);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
-        out = t.pEnv->CallObjectMethod(object, mID, args[0].l,args[1].l);
+        jobject out = t.pEnv->CallObjectMethod(object, mID, args[0].l,args[1].l);
         ThrowSQLException(t.pEnv,nullptr);
         t.pEnv->DeleteLocalRef(static_cast<jstring>(args[1].l));
         t.pEnv->DeleteLocalRef(static_cast<jstring>(args[0].l));

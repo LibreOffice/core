@@ -1220,11 +1220,11 @@ void SVGFilter::implGenerateMetaData()
                     }
 
                     sal_Int32 nChange(0);
-                    double fSlideDuration(0);
 
                     if( xPropSet->getPropertySetInfo()->hasPropertyByName( "Change" ) &&
                         (xPropSet->getPropertyValue( "Change" ) >>= nChange ) && nChange == 1 )
                     {
+                        double fSlideDuration(0);
                         if( xPropSet->getPropertySetInfo()->hasPropertyByName( "HighResDuration" ) &&
                             (xPropSet->getPropertyValue( "HighResDuration" ) >>= fSlideDuration) )
                         {

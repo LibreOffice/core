@@ -802,7 +802,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 SCROW nStartRow;
                 SCCOL nEndCol;
                 SCROW nEndRow;
-                SCTAB nStartTab, nEndTab;
 
                 GetViewData()->GetFillData( nStartCol, nStartRow, nEndCol, nEndRow );
                 SCCOL nFillCol = GetViewData()->GetRefEndX();
@@ -825,6 +824,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         }
                     }
 
+                    SCTAB nStartTab, nEndTab;
                     GetViewData()->GetSimpleArea( nStartCol,nStartRow,nStartTab,
                                               nEndCol,nEndRow,nEndTab );
                 }
@@ -1336,16 +1336,15 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case FID_INS_CELL_CONTENTS:
             {
-                InsertDeleteFlags nFlags = InsertDeleteFlags::NONE;
-                ScPasteFunc nFunction = ScPasteFunc::NONE;
-                InsCellCmd eMoveMode = INS_NONE;
-
                 ScDocument& rDoc = GetViewData()->GetDocument();
                 bool bOtherDoc = !rDoc.IsClipboardSource();
                 // keep a reference in case the clipboard is changed during dialog or PasteFromClip
                 const ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard(ScTabViewShell::GetClipData(GetViewData()->GetActiveWin()));
                 if ( pOwnClip )
                 {
+                    InsertDeleteFlags nFlags = InsertDeleteFlags::NONE;
+                    ScPasteFunc nFunction = ScPasteFunc::NONE;
+                    InsCellCmd eMoveMode = INS_NONE;
                     bool bSkipEmpty = false;
                     bool bTranspose = false;
                     bool bAsLink    = false;

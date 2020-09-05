@@ -784,7 +784,7 @@ bool SbiRuntime::Step()
         }
 
         SbiOpcode eOp = static_cast<SbiOpcode>( *pCode++ );
-        sal_uInt32 nOp1, nOp2;
+        sal_uInt32 nOp1;
         if (eOp <= SbiOpcode::SbOP0_END)
         {
             (this->*( aStep0[ int(eOp) ] ) )();
@@ -798,7 +798,7 @@ bool SbiRuntime::Step()
         else if (eOp >= SbiOpcode::SbOP2_START && eOp <= SbiOpcode::SbOP2_END)
         {
             nOp1 = *pCode++; nOp1 |= *pCode++ << 8; nOp1 |= *pCode++ << 16; nOp1 |= *pCode++ << 24;
-            nOp2 = *pCode++; nOp2 |= *pCode++ << 8; nOp2 |= *pCode++ << 16; nOp2 |= *pCode++ << 24;
+            sal_uInt32 nOp2 = *pCode++; nOp2 |= *pCode++ << 8; nOp2 |= *pCode++ << 16; nOp2 |= *pCode++ << 24;
             (this->*( aStep2[ int(eOp) - int(SbiOpcode::SbOP2_START) ] ) )( nOp1, nOp2 );
         }
         else
@@ -2430,7 +2430,6 @@ void SbiRuntime::StepARGV()
 void SbiRuntime::StepINPUT()
 {
     OUStringBuffer sin;
-    OUString s;
     char ch = 0;
     ErrCode err;
     // Skip whitespace
@@ -2482,7 +2481,7 @@ void SbiRuntime::StepINPUT()
     }
     if( !err )
     {
-        s = sin.makeStringAndClear();
+        OUString s = sin.makeStringAndClear();
         SbxVariableRef pVar = GetTOS();
         // try to fill the variable with a numeric value first,
         // then with a string value

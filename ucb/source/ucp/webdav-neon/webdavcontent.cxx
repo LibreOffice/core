@@ -3921,12 +3921,12 @@ void Content::getResourceOptions(
                     const std::unique_ptr< DAVResourceAccess > & rResAccess,
                     bool * networkAccessAllowed )
 {
-    OUString aRedirURL;
     OUString aTargetURL = rResAccess->getURL();
     DAVOptions aDAVOptions;
     // first check if in cache, if not, then send method to server
     if ( !aStaticDAVOptionsCache.getDAVOptions( aTargetURL, aDAVOptions ) )
     {
+        OUString aRedirURL;
         try
         {
             rResAccess->OPTIONS( aDAVOptions, xEnv );

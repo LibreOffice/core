@@ -438,13 +438,12 @@ bool SwCursorShell::GotoNxtPrvTableFormula( bool bNext, bool bOnlyErrors )
                         ( !bOnlyErrors ||
                           !pFormulaItem->HasValidBoxes() ) )
                     {
-                        const SwContentFrame* pCFrame;
                         SwNodeIndex aIdx( *pTBox->GetSttNd() );
                         const SwContentNode* pCNd = GetDoc()->GetNodes().GoNext( &aIdx );
                         std::pair<Point, bool> const tmp(aPt, false);
                         if (pCNd)
                         {
-                            pCFrame = pCNd->getLayoutFrame(GetLayout(), nullptr, &tmp);
+                            const SwContentFrame* pCFrame = pCNd->getLayoutFrame(GetLayout(), nullptr, &tmp);
                             if (pCFrame && (IsReadOnlyAvailable() || !pCFrame->IsProtected() ))
                             {
                                 SetGetExpField aCmp( *pTBox );
@@ -1258,8 +1257,6 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
         SwPosition aPos( *m_pCurrentCursor->GetPoint() );
 
         SwTextNode* pTextNd;
-        SwContentFrame *pFrame(nullptr);
-        SwTextAttr* pTextAttr;
         SwCursorMoveState aTmpState;
         aTmpState.m_bFieldInfo = true;
         aTmpState.m_bExactOnly = !( IsAttrAtPos::Outline & rContentAtPos.eContentAtPos );
@@ -1305,8 +1302,10 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
         }
         else if( bCursorFoundExact && pTextNd )
         {
+            SwContentFrame *pFrame(nullptr);
             if( !aTmpState.m_bPosCorr )
             {
+                SwTextAttr* pTextAttr;
                 if ( IsAttrAtPos::SmartTag & rContentAtPos.eContentAtPos
                      && !aTmpState.m_bFootnoteNoInfo )
                 {
@@ -2425,11 +2424,10 @@ bool SwCursorShell::SelectNxtPrvHyperlink( bool bNext )
     if( aCurPos.GetNode() < nBodySttNdIdx )
     {
         const SwContentNode* pCNd = aCurPos.GetNodeFromContent()->GetContentNode();
-        SwContentFrame* pFrame;
         std::pair<Point, bool> tmp(aPt, true);
         if (pCNd)
         {
-            pFrame = pCNd->getLayoutFrame(GetLayout(), nullptr, &tmp);
+            SwContentFrame* pFrame = pCNd->getLayoutFrame(GetLayout(), nullptr, &tmp);
             if( pFrame )
                 aCurPos.SetBodyPos( *pFrame );
         }
@@ -2451,11 +2449,10 @@ bool SwCursorShell::SelectNxtPrvHyperlink( bool bNext )
                     SwTextINetFormat& rAttr = *pFnd;
                     SwPosition aTmpPos( *pTextNd );
                     SetGetExpField aPos( aTmpPos.nNode, rAttr );
-                    SwContentFrame* pFrame;
                     if (pTextNd->GetIndex() < nBodySttNdIdx)
                     {
                         std::pair<Point, bool> tmp(aPt, true);
-                        pFrame = pTextNd->getLayoutFrame(GetLayout(), nullptr, &tmp);
+                        SwContentFrame* pFrame = pTextNd->getLayoutFrame(GetLayout(), nullptr, &tmp);
                         if (pFrame)
                         {
                             aPos.SetBodyPos( *pFrame );

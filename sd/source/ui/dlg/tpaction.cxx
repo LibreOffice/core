@@ -161,12 +161,10 @@ void SdTPAction::Construct()
     if ( mpView->AreObjectsMarked() )
     {
         const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-        SdrObject* pObj;
-
         if (rMarkList.GetMarkCount() == 1)
         {
             SdrMark* pMark = rMarkList.GetMark(0);
-            pObj = pMark->GetMarkedSdrObj();
+            SdrObject* pObj = pMark->GetMarkedSdrObj();
 
             SdrInventor nInv        = pObj->GetObjInventor();
             sal_uInt16  nSdrObjKind = pObj->GetObjIdentifier();

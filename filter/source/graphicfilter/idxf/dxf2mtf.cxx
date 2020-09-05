@@ -49,14 +49,13 @@ Color DXF2GDIMetaFile::ConvertColor(sal_uInt8 nColor)
 long DXF2GDIMetaFile::GetEntityColor(const DXFBasicEntity & rE)
 {
     long nColor;
-    const DXFLayer * pLayer;
 
     nColor=rE.nColor;
     if (nColor==256) {
         if (rE.m_sLayer.getLength() < 2) {
             nColor=nParentLayerColor;
         } else {
-            pLayer=pDXF->aTables.SearchLayer(rE.m_sLayer);
+            const DXFLayer * pLayer=pDXF->aTables.SearchLayer(rE.m_sLayer);
             if (pLayer!=nullptr) nColor=pLayer->nColor;
             else nColor=nParentLayerColor;
         }
@@ -315,7 +314,6 @@ void DXF2GDIMetaFile::DrawArcEntity(const DXFArcEntity & rE, const DXFTransform 
     double frx,fry;
     sal_uInt16 nPoints,i;
     DXFVector aC;
-    Point aPS,aPE;
 
     if (!SetLineAttribute(rE)) return;
     double fA1=rE.fStart;
@@ -330,6 +328,7 @@ void DXF2GDIMetaFile::DrawArcEntity(const DXFArcEntity & rE, const DXFTransform 
         DXFVector aVE(cos((fA1+fdA)/180.0*3.14159265359),sin((fA1+fdA)/180.0*3.14159265359),0.0);
         aVE*=rE.fRadius;
         aVE+=rE.aP0;
+        Point aPS,aPE;
         if (rTransform.Mirror()) {
             rTransform.Transform(aVS,aPS);
             rTransform.Transform(aVE,aPE);
@@ -430,7 +429,6 @@ void DXF2GDIMetaFile::DrawSolidEntity(const DXFSolidEntity & rE, const DXFTransf
 void DXF2GDIMetaFile::DrawTextEntity(const DXFTextEntity & rE, const DXFTransform & rTransform)
 {
     DXFVector aV;
-    Point aPt;
     double fA;
     sal_uInt16 nHeight;
     short nAng;
@@ -443,6 +441,7 @@ void DXF2GDIMetaFile::DrawTextEntity(const DXFTextEntity & rE, const DXFTransfor
     if ( SetFontAttribute( rE,nAng, nHeight ) )
     {
         OUString const aUString(pDXF->ToOUString(rE.m_sText));
+        Point aPt;
         aT.Transform( DXFVector( 0, 0, 0 ), aPt );
         pVirDev->DrawText( aPt, aUString );
     }
@@ -491,7 +490,6 @@ void DXF2GDIMetaFile::DrawAttribEntity(const DXFAttribEntity & rE, const DXFTran
         return;
 
     DXFVector aV;
-    Point aPt;
     double fA;
     sal_uInt16 nHeight;
     short nAng;
@@ -504,6 +502,7 @@ void DXF2GDIMetaFile::DrawAttribEntity(const DXFAttribEntity & rE, const DXFTran
     if (SetFontAttribute(rE,nAng,nHeight))
     {
         OUString const aUString(pDXF->ToOUString(rE.m_sText));
+        Point aPt;
         aT.Transform( DXFVector( 0, 0, 0 ), aPt );
         pVirDev->DrawText( aPt, aUString );
     }

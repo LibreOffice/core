@@ -488,12 +488,10 @@ sal_Bool SAL_CALL osl_writeProfileString(oslProfile Profile,
                                          const char* pszEntry,
                                          const char* pszString)
 {
-    sal_uInt32  i;
     bool bRet = false;
     sal_uInt32    NoEntry;
     char* pStr;
     char*       Line = nullptr;
-    osl_TProfileSection* pSec;
     osl_TProfileImpl*    pProfile = nullptr;
     osl_TProfileImpl*    pTmpProfile = static_cast<osl_TProfileImpl*>(Profile);
 
@@ -525,6 +523,7 @@ sal_Bool SAL_CALL osl_writeProfileString(oslProfile Profile,
 
     if (! (pProfile->m_Flags & osl_Profile_SYSTEM))
     {
+        osl_TProfileSection* pSec;
         if ((pSec = findEntry(pProfile, pszSection, pszEntry, &NoEntry)) == nullptr)
         {
             Line[0] = '\0';
@@ -559,6 +558,7 @@ sal_Bool SAL_CALL osl_writeProfileString(oslProfile Profile,
 
         if (NoEntry >= pSec->m_NoEntries)
         {
+            sal_uInt32  i;
             if (pSec->m_NoEntries > 0)
                 i = pSec->m_Entries[pSec->m_NoEntries - 1].m_Line + 1;
             else
@@ -581,7 +581,7 @@ sal_Bool SAL_CALL osl_writeProfileString(oslProfile Profile,
         }
         else
         {
-            i = pSec->m_Entries[NoEntry].m_Line;
+            sal_uInt32  i = pSec->m_Entries[NoEntry].m_Line;
             free(pProfile->m_Lines[i]);
             pProfile->m_Lines[i] = strdup(Line);
             setEntry(pProfile, pSec, NoEntry, i, pProfile->m_Lines[i], strlen(pszEntry));

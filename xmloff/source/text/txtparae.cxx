@@ -2001,7 +2001,6 @@ void XMLTextParagraphExport::exportParagraph(
                         {
                             Reference< XChapterNumberingSupplier > xCNSupplier( GetExport().GetModel(), UNO_QUERY );
 
-                            OUString sOutlineName;
                             if (xCNSupplier.is())
                             {
                                 Reference< XIndexReplace > xNumRule ( xCNSupplier->getChapterNumberingRules() );
@@ -2010,6 +2009,7 @@ void XMLTextParagraphExport::exportParagraph(
                                 if (xNumRule.is())
                                 {
                                     Reference< XPropertySet > xNumRulePropSet( xNumRule, UNO_QUERY );
+                                    OUString sOutlineName;
                                     xNumRulePropSet->getPropertyValue(
                                         "Name" ) >>= sOutlineName;
                                     bAssignedtoOutlineStyle = ( sListStyleName == sOutlineName );

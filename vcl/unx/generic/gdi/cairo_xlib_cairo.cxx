@@ -195,8 +195,6 @@ namespace cairo
      **/
     SurfaceSharedPtr X11Surface::getSimilar(int cairo_content_type, int width, int height ) const
     {
-        Pixmap hPixmap;
-
         if( maSysData.pDisplay && maSysData.hDrawable )
         {
             XRenderPictFormat* pFormat;
@@ -217,7 +215,7 @@ namespace cairo
             }
 
             pFormat = XRenderFindStandardFormat( static_cast<Display*>(maSysData.pDisplay), nFormat );
-            hPixmap = limitXCreatePixmap( static_cast<Display*>(maSysData.pDisplay), maSysData.hDrawable,
+            Pixmap hPixmap = limitXCreatePixmap( static_cast<Display*>(maSysData.pDisplay), maSysData.hDrawable,
                                      width > 0 ? width : 1, height > 0 ? height : 1,
                                      pFormat->depth );
 

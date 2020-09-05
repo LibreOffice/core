@@ -363,12 +363,10 @@ namespace {
             const SfxSlot* pSlot = SfxSlotPool::GetSlotPool(pShell->GetFrame()).GetSlot(nWhich);
             if (pSlot)
             {
-                OUStringBuffer sUnoCommand(".uno:");
                 const char* pName = pSlot->GetUnoName();
                 if (pName)
                 {
-                    sUnoCommand.append(OStringToOUString(pName, RTL_TEXTENCODING_ASCII_US));
-                    return sUnoCommand.makeStringAndClear();
+                    return ".uno:" + OStringToOUString(pName, RTL_TEXTENCODING_ASCII_US);
                 }
             }
         }

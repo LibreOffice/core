@@ -496,8 +496,6 @@ bool Outliner::ImpConvertEdtToOut( sal_Int32 nPara )
     ESelection aDelSel;
 
     OUString aName;
-    OUString aHeading_US( "heading" );
-    OUString aNumber_US( "Numbering" );
 
     OUString aStr( pEditEngine->GetText( nPara ) );
     const sal_Unicode* pPtr = aStr.getStr();
@@ -507,6 +505,8 @@ bool Outliner::ImpConvertEdtToOut( sal_Int32 nPara )
     SfxStyleSheet* pStyle= pEditEngine->GetStyleSheet( nPara );
     if( pStyle )
     {
+        OUString aHeading_US( "heading" );
+        OUString aNumber_US( "Numbering" );
         aName = pStyle->GetName();
         sal_Int32 nSearch;
         if ( ( nSearch = aName.indexOf( aHeading_US ) ) != -1 )

@@ -1029,10 +1029,10 @@ bool DocxSdrExport::Impl::isSupportedDMLShape(const uno::Reference<drawing::XSha
         return false;
 
     // For signature line shapes, we don't want DML, just the VML shape.
-    bool bIsSignatureLineShape = false;
     if (xServiceInfo->supportsService("com.sun.star.drawing.GraphicObjectShape"))
     {
         uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
+        bool bIsSignatureLineShape = false;
         xShapeProperties->getPropertyValue("IsSignatureLine") >>= bIsSignatureLineShape;
         if (bIsSignatureLineShape)
             return false;

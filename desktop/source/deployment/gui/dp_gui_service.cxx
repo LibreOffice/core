@@ -140,9 +140,9 @@ ServiceImpl::ServiceImpl( Sequence<Any> const& args,
       m_bShowUpdateOnly( false )
 {
     /* if true then this service is running in a unopkg process and not in an office process */
-    std::optional<sal_Bool> unopkg;
     std::optional<OUString> view;
     try {
+        std::optional<sal_Bool> unopkg;
         comphelper::unwrapArgs( args, m_parent, view, unopkg );
         return;
     } catch ( const css::lang::IllegalArgumentException & ) {

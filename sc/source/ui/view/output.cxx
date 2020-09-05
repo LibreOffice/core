@@ -2236,10 +2236,9 @@ void ScOutputData::DrawChangeTrack()
     const ScChangeAction* pAction = pTrack->GetFirst();
     while (pAction)
     {
-        ScChangeActionType eActionType;
         if ( pAction->IsVisible() )
         {
-            eActionType = pAction->GetType();
+            ScChangeActionType eActionType = pAction->GetType();
             const ScBigRange& rBig = pAction->GetBigRange();
             if ( rBig.aStart.Tab() == nTab )
             {

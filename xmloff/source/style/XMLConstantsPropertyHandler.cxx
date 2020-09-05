@@ -49,8 +49,6 @@ bool XMLConstantsPropertyHandler::exportXML(
     const Any& rValue,
     const SvXMLUnitConverter& ) const
 {
-    OUStringBuffer aOut;
-
     bool bRet = false;
 
     sal_Int32 nEnum = 0;
@@ -70,6 +68,7 @@ bool XMLConstantsPropertyHandler::exportXML(
         if( (nEnum >= 0) && (nEnum <= 0xffff) )
         {
             sal_uInt16 nConst = static_cast<sal_uInt16>( nEnum );
+            OUStringBuffer aOut;
 
             bRet = SvXMLUnitConverter::convertEnum(
                 aOut, nConst, pMap, eDefault );

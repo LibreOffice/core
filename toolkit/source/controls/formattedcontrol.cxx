@@ -324,7 +324,6 @@ namespace toolkit
         if ( BASEPROPERTY_EFFECTIVE_DEFAULT == nPropId && rValue.hasValue() )
         {
             double dVal = 0;
-            OUString sVal;
             bool bStreamed = (rValue >>= dVal);
             if ( bStreamed )
             {
@@ -340,6 +339,7 @@ namespace toolkit
                 }
                 else
                 {
+                    OUString sVal;
                     bStreamed = (rValue >>= sVal);
                     if ( bStreamed )
                     {

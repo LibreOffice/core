@@ -58,6 +58,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/passparamsbyref \
     compilerplugins/clang/test/passstuffbyref \
     compilerplugins/clang/test/pointerbool \
+    compilerplugins/clang/test/reducevarscope \
     compilerplugins/clang/test/redundantcast \
     compilerplugins/clang/test/redundantfcast \
     compilerplugins/clang/test/redundantinline \

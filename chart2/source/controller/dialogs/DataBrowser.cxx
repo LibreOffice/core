@@ -699,12 +699,12 @@ OUString DataBrowser::GetCellText( long nRow, sal_uInt16 nColumnId ) const
         if( m_apDataBrowserModel->getCellType( nColIndex ) == DataBrowserModel::NUMBER )
         {
             double fData( m_apDataBrowserModel->getCellNumber( nColIndex, nRow ));
-            Color nLabelColor;
 
             if( ! std::isnan( fData ) &&
                 m_spNumberFormatterWrapper )
             {
                 bool bColorChanged = false;
+                Color nLabelColor;
                 aResult = m_spNumberFormatterWrapper->getFormattedString(
                                       GetNumberFormatKey( nColumnId ),
                                       fData, nLabelColor, bColorChanged );

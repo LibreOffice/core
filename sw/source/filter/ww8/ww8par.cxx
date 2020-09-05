@@ -220,12 +220,12 @@ void SwWW8ImplReader::ReadEmbeddedData(SvStream& rStrm, SwDocShell const * pDocS
 {
     // (0x01B8) HLINK
     // const sal_uInt16 WW8_ID_HLINK               = 0x01B8;
-    const sal_uInt32 WW8_HLINK_BODY             = 0x00000001;   /// Contains file link or URL.
-    const sal_uInt32 WW8_HLINK_ABS              = 0x00000002;   /// Absolute path.
-    const sal_uInt32 WW8_HLINK_DESCR            = 0x00000014;   /// Description.
-    const sal_uInt32 WW8_HLINK_MARK             = 0x00000008;   /// Text mark.
-    const sal_uInt32 WW8_HLINK_FRAME            = 0x00000080;   /// Target frame.
-    const sal_uInt32 WW8_HLINK_UNC              = 0x00000100;   /// UNC path.
+    constexpr sal_uInt32 WW8_HLINK_BODY             = 0x00000001;   /// Contains file link or URL.
+    constexpr sal_uInt32 WW8_HLINK_ABS              = 0x00000002;   /// Absolute path.
+    constexpr sal_uInt32 WW8_HLINK_DESCR            = 0x00000014;   /// Description.
+    constexpr sal_uInt32 WW8_HLINK_MARK             = 0x00000008;   /// Text mark.
+    constexpr sal_uInt32 WW8_HLINK_FRAME            = 0x00000080;   /// Target frame.
+    constexpr sal_uInt32 WW8_HLINK_UNC              = 0x00000100;   /// UNC path.
 
     //sal_uInt8 maGuidStdLink[ 16 ] ={
     //    0xD0, 0xC9, 0xEA, 0x79, 0xF9, 0xBA, 0xCE, 0x11, 0x8C, 0x82, 0x00, 0xAA, 0x00, 0x4B, 0xA9, 0x0B };
@@ -243,7 +243,6 @@ void SwWW8ImplReader::ReadEmbeddedData(SvStream& rStrm, SwDocShell const * pDocS
     rStrm.SeekRel( 4 );
     rStrm.ReadUInt32( nFlags );
 
-    sal_uInt16 nLevel = 0;                  // counter for level to climb down in path
     std::unique_ptr< OUString > xLongName;    // link / file name
     std::unique_ptr< OUString > xShortName;   // 8.3-representation of file name
     std::unique_ptr< OUString > xTextMark;    // text mark
@@ -279,6 +278,7 @@ void SwWW8ImplReader::ReadEmbeddedData(SvStream& rStrm, SwDocShell const * pDocS
 
         if( memcmp(aGuid, aGuidFileMoniker, 16) == 0 )
         {
+            sal_uInt16 nLevel = 0;                  // counter for level to climb down in path
             rStrm.ReadUInt16( nLevel );
             // MS-OSHARED: An unsigned integer that specifies the number of
             // ANSI characters in ansiPath, including the terminating NULL character
@@ -1106,7 +1106,6 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
     {
         SvMemoryStream aMemStream;
         struct HyperLinksTable hlStr;
-        sal_uInt16 nRawRecId,nRawRecSize;
         aMemStream.WriteUInt16( 0 ).WriteUInt16( nBufferSize );
 
         // copy from DFF stream to memory stream
@@ -1117,6 +1116,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             sal_uInt8 nStreamSize = aMemStream.TellEnd();
             aMemStream.Seek( STREAM_SEEK_TO_BEGIN );
             bool bRet = 4 <= nStreamSize;
+            sal_uInt16 nRawRecId,nRawRecSize;
             if( bRet )
                 aMemStream.ReadUInt16( nRawRecId ).ReadUInt16( nRawRecSize );
             SwDocShell* pDocShell = rReader.m_pDocShell;
@@ -3596,12 +3596,12 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
     if (!checkSeek(*m_pStrm, nRequestedPos))
         return false;
 
-    sal_uInt8 nBCode(0);
     sal_uInt16 nWCharVal(0);
     if( m_bIsUnicode )
         m_pStrm->ReadUInt16( nWCharVal ); // unicode  --> read 2 bytes
     else
     {
+        sal_uInt8 nBCode(0);
         m_pStrm -> ReadUChar( nBCode ); // old code --> read 1 byte
         nWCharVal = nBCode;
     }
@@ -4825,13 +4825,12 @@ void SwWW8ImplReader::ReadDocInfo()
 
     if ( m_xWwFib->m_fDot )
     {
-        OUString sTemplateURL;
         SfxMedium* pMedium = m_pDocShell->GetMedium();
         if ( pMedium )
         {
             const OUString& aName = pMedium->GetName();
             INetURLObject aURL( aName );
-            sTemplateURL = aURL.GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
+            OUString sTemplateURL = aURL.GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
             if ( !sTemplateURL.isEmpty() )
                 xDocProps->setTemplateURL( sTemplateURL );
         }
@@ -4877,11 +4876,10 @@ static void lcl_createTemplateToProjectEntry( const uno::Reference< container::X
     try
     {
         OUString templateNameWithExt = aObj.GetLastName();
-        OUString templateName;
         sal_Int32 nIndex =  templateNameWithExt.lastIndexOf( '.' );
         if ( nIndex != -1 )
         {
-            templateName = templateNameWithExt.copy( 0, nIndex );
+            OUString templateName = templateNameWithExt.copy( 0, nIndex );
             xPrjNameCache->insertByName( templateName, uno::makeAny( sVBAProjName ) );
         }
     }

@@ -302,10 +302,9 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                         for( sal_Int32 i = 0 ; i < nLocaleCount ; i++ )
                         {
                             const Locale& rLocale = pLocales[ i ];
-                            OUString aResStr;
                             try
                             {
-                                aResStr = xStringResourceManager->resolveStringForLocale
+                                OUString aResStr = xStringResourceManager->resolveStringForLocale
                                     ( aPureSourceIdStr, rLocale );
                                 xStringResourceManager->removeIdForLocale( aPureSourceIdStr, rLocale );
                                 xStringResourceManager->setStringForLocale( aPureIdStr, aResStr, rLocale );
@@ -515,10 +514,9 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                             {
                                 const Locale& rLocale = pLocales[ iLocale ];
 
-                                OUString aResStr;
                                 try
                                 {
-                                    aResStr = xStringResourceManager->resolveStringForLocale
+                                    OUString aResStr = xStringResourceManager->resolveStringForLocale
                                         ( aPureSourceIdStr, rLocale );
                                     xStringResourceManager->removeIdForLocale( aPureSourceIdStr, rLocale );
                                     xStringResourceManager->setStringForLocale( aPureIdStr, aResStr, rLocale );

@@ -339,10 +339,9 @@ void SvxRectCtlAccessibleContext::selectChild( long nNew )
     long    nNumOfChildren = getAccessibleChildCount();
     if( nNew < nNumOfChildren )
     {   // valid index
-        SvxRectCtlChildAccessibleContext*   pChild;
         if( mnSelectedChild != NOCHILDSELECTED )
         {   // deselect old selected child if one is selected
-            pChild = mvChildren[ mnSelectedChild ].get();
+            SvxRectCtlChildAccessibleContext* pChild = mvChildren[ mnSelectedChild ].get();
             if( pChild )
                 pChild->setStateChecked( false );
         }

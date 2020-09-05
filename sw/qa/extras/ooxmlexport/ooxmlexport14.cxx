@@ -682,9 +682,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf124986, "tdf124986.docx")
     {
         uno::Reference<lang::XServiceInfo> xServiceInfo(xFields->nextElement(), uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xPropertySet(xServiceInfo, uno::UNO_QUERY);
-        OUString aValue;
         if (xServiceInfo->supportsService("com.sun.star.text.TextField.SetExpression"))
         {
+            OUString aValue;
             xPropertySet->getPropertyValue("Content") >>= aValue;
             CPPUNIT_ASSERT_EQUAL(OUString("demo"), aValue);
         }

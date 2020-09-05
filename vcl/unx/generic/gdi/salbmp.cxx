@@ -704,11 +704,11 @@ bool X11SalBitmap::Create(
     css::uno::Reference< css::beans::XFastPropertySet > xFastPropertySet( rBitmapCanvas, css::uno::UNO_QUERY );
 
     if( xFastPropertySet ) {
-        sal_Int32 depth;
         css::uno::Sequence< css::uno::Any > args;
 
         if( xFastPropertySet->getFastPropertyValue(bMask ? 2 : 1) >>= args ) {
             long pixmapHandle = {}; // spurious -Werror=maybe-uninitialized
+            sal_Int32 depth;
             if( ( args[1] >>= pixmapHandle ) && ( args[2] >>= depth ) ) {
 
                 mbGrey = bMask;

@@ -84,7 +84,6 @@ IXFStyleRet XFStyleContainer::AddStyle(std::unique_ptr<IXFStyle> pStyle)
     IXFStyleRet aRet;
 
     IXFStyle    *pConStyle = nullptr;
-    OUString   name;
 
     if( !pStyle )
         return aRet;
@@ -102,6 +101,7 @@ IXFStyleRet XFStyleContainer::AddStyle(std::unique_ptr<IXFStyle> pStyle)
     }
     else
     {
+        OUString   name;
         if( pStyle->GetStyleName().isEmpty() )
         {
             name = m_strStyleNamePrefix + OUString::number(m_aStyles.size()+1);

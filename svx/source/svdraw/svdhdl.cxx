@@ -745,11 +745,10 @@ BitmapEx ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, BitmapColorIndex eIndex)
     // use this code path only when we use HiDPI (for now)
     if (Application::GetDefaultDevice()->GetDPIScalePercentage() > 100)
     {
-        OUString sMarkerPrefix("svx/res/marker-");
-
         OUString sMarkerName = appendMarkerName(eKindOfMarker);
         if (!sMarkerName.isEmpty())
         {
+            OUString sMarkerPrefix("svx/res/marker-");
             BitmapEx aBitmapEx;
 
             if (eKindOfMarker == BitmapMarkerKind::Crosshair
@@ -1373,8 +1372,6 @@ void SdrHdlGradient::FromIAOToItem(SdrObject* _pObj, bool bSetItemOnObject, bool
     GradTransGradient aGradTransGradient;
     GradTransVector aGradTransVector;
 
-    OUString aString;
-
     aGradTransVector.maPositionA = basegfx::B2DPoint(GetPos().X(), GetPos().Y());
     aGradTransVector.maPositionB = basegfx::B2DPoint(Get2ndPos().X(), Get2ndPos().Y());
     if(pColHdl1)
@@ -1394,16 +1391,15 @@ void SdrHdlGradient::FromIAOToItem(SdrObject* _pObj, bool bSetItemOnObject, bool
     {
         SdrModel& rModel(_pObj->getSdrModelFromSdrObject());
         SfxItemSet aNewSet(rModel.GetItemPool());
+        const OUString aString;
 
         if(IsGradient())
         {
-            aString.clear();
             XFillGradientItem aNewGradItem(aString, aGradTransGradient.aGradient);
             aNewSet.Put(aNewGradItem);
         }
         else
         {
-            aString.clear();
             XFillFloatTransparenceItem aNewTransItem(aString, aGradTransGradient.aGradient);
             aNewSet.Put(aNewTransItem);
         }

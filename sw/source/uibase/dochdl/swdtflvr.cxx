@@ -1391,7 +1391,7 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
 {
     SwPasteContext aPasteContext(rSh);
 
-    sal_uInt8 nEventAction, nAction=0;
+    sal_uInt8 nAction=0;
     SotExchangeDest nDestination = SwTransferable::GetSotDestination( rSh );
     SotClipboardFormatId nFormat = SotClipboardFormatId::NONE;
     SotExchangeActionFlags nActionFlags = SotExchangeActionFlags::NONE;
@@ -1411,6 +1411,7 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
                                     ? EXCHG_IN_ACTION_COPY
                                     : EXCHG_IN_ACTION_MOVE);
         uno::Reference<XTransferable> xTransferable( rData.GetXTransferable() );
+        sal_uInt8 nEventAction;
         nAction = SotExchange::GetExchangeAction(
                                     rData.GetDataFlavorExVector(),
                                     nDestination,
@@ -3308,9 +3309,10 @@ bool SwTransferable::PasteFormat( SwWrtShell& rSh,
 bool SwTransferable::TestAllowedFormat( const TransferableDataHelper& rData,
                                         SotClipboardFormatId nFormat, SotExchangeDest nDestination )
 {
-    sal_uInt8 nAction = EXCHG_INOUT_ACTION_NONE, nEventAction;
+    sal_uInt8 nAction = EXCHG_INOUT_ACTION_NONE;
     if( rData.HasFormat( nFormat )) {
         uno::Reference<XTransferable> xTransferable( rData.GetXTransferable() );
+        sal_uInt8 nEventAction;
         nAction = SotExchange::GetExchangeAction(
                         rData.GetDataFlavorExVector(),
                         nDestination, EXCHG_IN_ACTION_COPY,

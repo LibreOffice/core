@@ -138,11 +138,10 @@ void CandleStickChart::createShapes()
     {
         for( auto const& rZSlot : m_aZSlots )
         {
-            sal_Int32 nAttachedAxisIndex = 0;
             BarPositionHelper* pPosHelper = m_pMainPosHelper.get();
             if( !rZSlot.empty() )
             {
-                nAttachedAxisIndex = rZSlot.front().getAttachedAxisIndexForFirstSeries();
+                sal_Int32 nAttachedAxisIndex = rZSlot.front().getAttachedAxisIndexForFirstSeries();
                 //2ND_AXIS_IN_BARS so far one can assume to have the same plotter for each z slot
                 pPosHelper = dynamic_cast<BarPositionHelper*>(&( getPlottingPositionHelper( nAttachedAxisIndex ) ) );
                 if(!pPosHelper)

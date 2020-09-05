@@ -953,9 +953,9 @@ bool SvXMLImportItemMapper::PutXMLValue(
                 break;
                 }
 
-            sal_Int32 nValue;
             if( bSetHeight || bSetWidth )
             {
+                sal_Int32 nValue;
                 bOk = rUnitConverter.convertMeasureToCore(nValue, rValue, nMin,
                                                      USHRT_MAX );
                 if( bOk )

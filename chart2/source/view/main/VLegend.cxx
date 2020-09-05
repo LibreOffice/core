@@ -66,13 +66,13 @@ double lcl_CalcViewFontSize(
 {
     double fResult = 10.0;
 
-    awt::Size aPropRefSize;
     float fFontHeight( 0.0 );
     if( xProp.is() && ( xProp->getPropertyValue( "CharHeight") >>= fFontHeight ))
     {
         fResult = fFontHeight;
         try
         {
+            awt::Size aPropRefSize;
             if( (xProp->getPropertyValue( "ReferencePageSize") >>= aPropRefSize) &&
                 (aPropRefSize.Height > 0))
             {

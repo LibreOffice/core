@@ -1495,16 +1495,15 @@ void MenuBarManager::GetPopupController( PopupControllerCache& rPopupController 
             aPopupControllerEntry.m_xDispatchProvider = xDispatchProvider;
 
             // Just use the main part of the URL for popup menu controllers
-            sal_Int32     nQueryPart( 0 );
             sal_Int32     nSchemePart( 0 );
-            OUString aMainURL( "vnd.sun.star.popup:" );
             OUString aMenuURL( menuItemHandler->aMenuItemURL );
 
             nSchemePart = aMenuURL.indexOf( ':' );
             if (( nSchemePart > 0 ) &&
                 ( aMenuURL.getLength() > ( nSchemePart+1 )))
             {
-                nQueryPart  = aMenuURL.indexOf( '?', nSchemePart );
+                OUString aMainURL( "vnd.sun.star.popup:" );
+                sal_Int32 nQueryPart  = aMenuURL.indexOf( '?', nSchemePart );
                 if ( nQueryPart > 0 )
                     aMainURL += aMenuURL.copy( nSchemePart, nQueryPart-nSchemePart );
                 else if ( nQueryPart == -1 )

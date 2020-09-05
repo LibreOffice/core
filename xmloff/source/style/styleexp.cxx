@@ -281,7 +281,6 @@ bool XMLStyleExport::exportStyle(
                             Reference< XChapterNumberingSupplier > xCNSupplier
                                 (GetExport().GetModel(), UNO_QUERY);
 
-                            OUString sOutlineName;
                             if (xCNSupplier.is())
                             {
                                 Reference< XIndexReplace > xNumRule
@@ -290,6 +289,7 @@ bool XMLStyleExport::exportStyle(
 
                                 Reference< XPropertySet > xNumRulePropSet
                                     (xNumRule, UNO_QUERY);
+                                OUString sOutlineName;
                                 xNumRulePropSet->getPropertyValue("Name")
                                     >>= sOutlineName;
                                 bSuppressListStyle = sListName == sOutlineName;

@@ -236,11 +236,9 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
     Size aTextSize;
     Size aSymbolSize;
     Size aDeviceTextSize;
-    Size aMax;
     Point aImagePos = rPos;
     Point aTextPos = rPos;
     tools::Rectangle aUnion(aImagePos, aImageSize);
-    tools::Rectangle aSymbol;
     long nSymbolHeight = 0;
 
     if (bDrawText || bHasSymbol)
@@ -253,6 +251,7 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
 
         if (bHasSymbol)
         {
+            tools::Rectangle aSymbol;
             if (bDrawText)
             {
                 nSymbolHeight = pDev->GetTextHeight();
@@ -311,6 +310,7 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
             }
         }
 
+        Size aMax;
         aMax.setWidth( std::max(aTSSize.Width(), aImageSize.Width()) );
         aMax.setHeight( std::max(aTSSize.Height(), aImageSize.Height()) );
 

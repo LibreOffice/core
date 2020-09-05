@@ -518,20 +518,18 @@ OUString SwValueFieldType::ExpandValue( const double& rVal,
 
     if( nFormat < SV_COUNTRY_LANGUAGE_OFFSET && LANGUAGE_SYSTEM != nFormatLng )
     {
-        SvNumFormatType nType = SvNumFormatType::DEFINED;
-        sal_Int32 nDummy;
-
         const SvNumberformat* pEntry = pFormatter->GetEntry(nFormat);
 
         if (pEntry && nLng != pEntry->GetLanguage())
         {
             sal_uInt32 nNewFormat = pFormatter->GetFormatForLanguageIfBuiltIn(nFormat,
                                                     nFormatLng);
-
             if (nNewFormat == nFormat)
             {
                 // probably user-defined format
                 OUString sFormat(pEntry->GetFormatstring());
+                sal_Int32 nDummy;
+                SvNumFormatType nType = SvNumFormatType::DEFINED;
 
                 pFormatter->PutandConvertEntry(sFormat, nDummy, nType, nFormat,
                                         pEntry->GetLanguage(), nFormatLng, false);

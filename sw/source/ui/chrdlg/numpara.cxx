@@ -165,10 +165,9 @@ void SwParagraphNumTabPage::Reset(const SfxItemSet* rSet)
 
     SfxItemState eItemState = rSet->GetItemState( GetWhich(SID_ATTR_PARA_OUTLINE_LEVEL) );
 
-    sal_Int16 nOutlineLv;
     if( eItemState >= SfxItemState::DEFAULT )
     {
-        nOutlineLv = static_cast<const SfxUInt16Item &>(rSet->Get( GetWhich(SID_ATTR_PARA_OUTLINE_LEVEL) )).GetValue();
+        sal_Int16 nOutlineLv = static_cast<const SfxUInt16Item &>(rSet->Get( GetWhich(SID_ATTR_PARA_OUTLINE_LEVEL) )).GetValue();
         m_xOutlineLvLB->set_active(nOutlineLv) ;
     }
     else

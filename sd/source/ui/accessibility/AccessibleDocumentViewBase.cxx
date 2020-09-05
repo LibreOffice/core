@@ -741,11 +741,11 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
     }
     if (dynamic_cast<const ::sd::OutlineViewShell* >(mpViewShell ) !=  nullptr )
     {
-        OUString sDisplay;
         SdPage* pCurrPge = mpViewShell->GetActualPage();
         SdDrawDocument* pDoc = mpViewShell->GetDoc();
         if(pCurrPge && pDoc)
         {
+            OUString sDisplay;
             sDisplay = pCurrPge->GetName();
             sDisplay = sDisplay.replaceFirst( "=", "\\=" );
             sDisplay = sDisplay.replaceFirst( ";", "\\;" );

@@ -917,7 +917,7 @@ Reference< XNumberFormatsSupplier> getNumberFormats(
     // ask the parent of the connection (should be a DatabaseAccess)
     Reference< XNumberFormatsSupplier> xReturn;
     Reference< XChild> xConnAsChild(_rxConn, UNO_QUERY);
-    OUString sPropFormatsSupplier( "NumberFormatsSupplier" );
+    static const OUStringLiteral sPropFormatsSupplier( u"NumberFormatsSupplier" );
     if (xConnAsChild.is())
     {
         Reference< XPropertySet> xConnParentProps(xConnAsChild->getParent(), UNO_QUERY);
@@ -952,20 +952,20 @@ try
 
     Property* pNewProps = aNewProperties.getArray();
 
-    OUString sPropFormatsSupplier("FormatsSupplier");
-    OUString sPropCurrencySymbol("CurrencySymbol");
-    OUString sPropDecimals("Decimals");
-    OUString sPropEffectiveMin("EffectiveMin");
-    OUString sPropEffectiveMax("EffectiveMax");
-    OUString sPropEffectiveDefault("EffectiveDefault");
-    OUString sPropDefaultText("DefaultText");
-    OUString sPropDefaultDate("DefaultDate");
-    OUString sPropDefaultTime("DefaultTime");
-    OUString sPropValueMin("ValueMin");
-    OUString sPropValueMax("ValueMax");
-    OUString sPropDecimalAccuracy("DecimalAccuracy");
-    OUString sPropClassId("ClassId");
-    OUString sFormattedServiceName( "com.sun.star.form.component.FormattedField" );
+    static const OUStringLiteral sPropFormatsSupplier(u"FormatsSupplier");
+    static const OUStringLiteral sPropCurrencySymbol(u"CurrencySymbol");
+    static const OUStringLiteral sPropDecimals(u"Decimals");
+    static const OUStringLiteral sPropEffectiveMin(u"EffectiveMin");
+    static const OUStringLiteral sPropEffectiveMax(u"EffectiveMax");
+    static const OUStringLiteral sPropEffectiveDefault(u"EffectiveDefault");
+    static const OUStringLiteral sPropDefaultText(u"DefaultText");
+    static const OUStringLiteral sPropDefaultDate(u"DefaultDate");
+    static const OUStringLiteral sPropDefaultTime(u"DefaultTime");
+    static const OUStringLiteral sPropValueMin(u"ValueMin");
+    static const OUStringLiteral sPropValueMax(u"ValueMax");
+    static const OUStringLiteral sPropDecimalAccuracy(u"DecimalAccuracy");
+    static const OUStringLiteral sPropClassId(u"ClassId");
+    static const OUStringLiteral sFormattedServiceName( u"com.sun.star.form.component.FormattedField" );
 
     for (const Property& rOldProp : aOldProperties)
     {

@@ -3346,7 +3346,7 @@ void ScInterpreter::ScNumberValue()
         return;
 
     OUString aInputString;
-    OUString aDecimalSeparator, aGroupSeparator;
+    OUString aGroupSeparator;
     sal_Unicode cDecimalSeparator = 0;
 
     if ( nParamCount == 3 )
@@ -3354,7 +3354,7 @@ void ScInterpreter::ScNumberValue()
 
     if ( nParamCount >= 2 )
     {
-        aDecimalSeparator = GetString().getString();
+        OUString aDecimalSeparator = GetString().getString();
         if ( aDecimalSeparator.getLength() == 1  )
             cDecimalSeparator = aDecimalSeparator[ 0 ];
         else
@@ -5877,13 +5877,12 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
             const ScComplexRefData* pRefData = pMainRangeToken->GetDoubleRef();
             if (!pRefData->IsDeleted())
             {
-                ScRange aSubRange;
                 DoubleRefToRange( *pRefData, aMainRange);
 
                 if (aMainRange.aStart.Tab() == aMainRange.aEnd.Tab())
                 {
                     // Shrink the range to actual data content.
-                    aSubRange = aMainRange;
+                    ScRange aSubRange = aMainRange;
                     mrDoc.GetDataAreaSubrange(aSubRange);
 
                     nStartColDiff = aSubRange.aStart.Col() - aMainRange.aStart.Col();
@@ -7229,10 +7228,10 @@ void ScInterpreter::CalculateLookup(bool bHLookup)
     SCTAB nTab1 = 0;
     SCCOL nCol2 = 0;
     SCROW nRow2 = 0;
-    SCTAB nTab2;
     StackVar eType = GetStackType();
     if (eType == svDoubleRef)
     {
+        SCTAB nTab2;
         PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
         if (nTab1 != nTab2)
         {

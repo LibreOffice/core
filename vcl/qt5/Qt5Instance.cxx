@@ -560,7 +560,6 @@ void Qt5Instance::AllocFakeCmdlineArgs(std::unique_ptr<char* []>& rFakeArgv,
     SAL_INFO("vcl.qt5", "qt version string is " << aVersion);
 
     const sal_uInt32 nParams = osl_getCommandArgCount();
-    OString aDisplay;
     sal_uInt32 nDisplayValueIdx = 0;
     OUString aParam, aBin;
 
@@ -585,7 +584,7 @@ void Qt5Instance::AllocFakeCmdlineArgs(std::unique_ptr<char* []>& rFakeArgv,
     {
         aFakeArgvFreeable.emplace_back(strdup("-display"));
         osl_getCommandArg(nDisplayValueIdx, &aParam.pData);
-        aDisplay = OUStringToOString(aParam, osl_getThreadTextEncoding());
+        OString aDisplay = OUStringToOString(aParam, osl_getThreadTextEncoding());
         aFakeArgvFreeable.emplace_back(strdup(aDisplay.getStr()));
     }
     rFakeArgvFreeable.swap(aFakeArgvFreeable);

@@ -131,7 +131,6 @@ void XMLSectionFootnoteConfigExport::exportXML(
                              GetXMLToken( bEndnote ? XML_ENDNOTE
                                                      : XML_FOOTNOTE ) );
     // start numbering
-    OUStringBuffer sBuf;
     if (bNumRestart)
     {
         // restart number is stored as 0.., but interpreted as 1..
@@ -154,6 +153,7 @@ void XMLSectionFootnoteConfigExport::exportXML(
         }
 
         // number type: num format
+        OUStringBuffer sBuf;
         rExport.GetMM100UnitConverter().convertNumFormat( sBuf,
                                                           nNumberingType );
         rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_NUM_FORMAT,

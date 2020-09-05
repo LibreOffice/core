@@ -241,8 +241,8 @@ void SAL_CALL JobExecutor::trigger( const OUString& sEvent )
 
 void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent )
 {
-    OUString EVENT_ON_DOCUMENT_OPENED("onDocumentOpened");   // Job UI  event : OnNew    or OnLoad
-    OUString EVENT_ON_DOCUMENT_ADDED("onDocumentAdded");     // Job API event : OnCreate or OnLoadFinished
+    static const OUStringLiteral EVENT_ON_DOCUMENT_OPENED(u"onDocumentOpened");   // Job UI  event : OnNew    or OnLoad
+    static const OUStringLiteral EVENT_ON_DOCUMENT_ADDED(u"onDocumentAdded");     // Job API event : OnCreate or OnLoadFinished
 
     OUString aModuleIdentifier;
     ::std::vector< JobData::TJob2DocEventBinding > lJobs;

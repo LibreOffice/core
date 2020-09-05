@@ -1108,7 +1108,6 @@ namespace emfio
                                                 if ( Application::GetDefaultDevice()->IsFontAvailable( GetFont().GetFamilyName() ) )
                                                 {
                                                     Point  aPt;
-                                                    OUString aString;
                                                     sal_uInt32  nStringLen, nDXCount;
                                                     std::unique_ptr<long[]> pDXAry;
                                                     SvMemoryStream aMemoryStream( nEscLen );
@@ -1123,8 +1122,7 @@ namespace emfio
 
                                                     if ( ( static_cast< sal_uInt64 >( nStringLen ) * sizeof( sal_Unicode ) ) < ( nEscLen - aMemoryStream.Tell() ) )
                                                     {
-
-                                                        aString = read_uInt16s_ToOUString(aMemoryStream, nStringLen);
+                                                        OUString aString = read_uInt16s_ToOUString(aMemoryStream, nStringLen);
                                                         aMemoryStream.ReadUInt32( nDXCount );
                                                         if ( ( static_cast< sal_uInt64 >( nDXCount ) * sizeof( sal_Int32 ) ) >= ( nEscLen - aMemoryStream.Tell() ) )
                                                             nDXCount = 0;
@@ -1309,9 +1307,9 @@ namespace emfio
 
                 // The image size is not known so normalize the calculated bounds so that the
                 // resulting image is not too big
-                const double fMaxWidth = static_cast<double>(aMaxWidth);
                 if (aPlaceableBound.GetWidth() > aMaxWidth)
                 {
+                    const double fMaxWidth = static_cast<double>(aMaxWidth);
                     double fRatio = aPlaceableBound.GetWidth() / fMaxWidth;
 
                     aPlaceableBound = tools::Rectangle(

@@ -2767,7 +2767,7 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
 {
     /* TODO: all this functions needs improvements */
     tools::Rectangle aEditRect = rControlRegion;
-    gint indicator_size, indicator_spacing, point;
+    gint indicator_size, indicator_spacing;
 
     if(((nType == ControlType::Checkbox) || (nType == ControlType::Radiobutton)) &&
        nPart == ControlPart::Entire)
@@ -2811,7 +2811,7 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
                                          "indicator-size", &indicator_size,
                                          nullptr );
 
-            point = MAX(0, rControlRegion.GetHeight() - indicator_size);
+            gint point = MAX(0, rControlRegion.GetHeight() - indicator_size);
             aEditRect = tools::Rectangle( Point( 0, point / 2),
                                    Size( indicator_size, indicator_size ) );
         }

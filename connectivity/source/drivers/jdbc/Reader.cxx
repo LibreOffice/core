@@ -129,7 +129,6 @@ sal_Int32 SAL_CALL java_io_Reader::readBytes( css::uno::Sequence< sal_Int8 >& aD
 
     sal_Int32 nCharsToRead = (nBytesToRead + 1)/2;
 
-    jint outChars(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java environment has been deleted!");
 
     {
@@ -139,7 +138,7 @@ sal_Int32 SAL_CALL java_io_Reader::readBytes( css::uno::Sequence< sal_Int8 >& aD
         // Java-Call
         static jmethodID mID(nullptr);
         obtainMethodId_throwRuntime(t.pEnv, cMethodName,cSignature, mID);
-        outChars = t.pEnv->CallIntMethod( object, mID, pCharArray, 0, nCharsToRead );
+        jint outChars = t.pEnv->CallIntMethod( object, mID, pCharArray, 0, nCharsToRead );
         if ( !outChars )
         {
             if(nBytesWritten==0)

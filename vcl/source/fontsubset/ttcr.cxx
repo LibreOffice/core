@@ -272,13 +272,12 @@ SFErrCodes StreamToFile(TrueTypeCreator *_this, const char* fname)
     sal_uInt8 *ptr;
     sal_uInt32 length;
     SFErrCodes r;
-    FILE* fd;
 
     if ((r = StreamToMemory(_this, &ptr, &length)) != SFErrCodes::Ok) return r;
     r = SFErrCodes::BadFile;
     if (fname)
     {
-        fd = fopen(fname, "wb");
+        FILE* fd = fopen(fname, "wb");
         if (fd)
         {
             if (fwrite(ptr, 1, length, fd) != length) {
@@ -1262,7 +1261,6 @@ static void ProcessTables(TrueTypeCreator *tt)
     listToFirst(glyphlist);
     do {
         GlyphData *gd = static_cast<GlyphData *>(listCurrent(glyphlist));
-        sal_Int16 z;
         glyfLen += gd->nbytes;
         /* XXX if (gd->nbytes & 1) glyfLen++; */
 
@@ -1273,7 +1271,7 @@ static void ProcessTables(TrueTypeCreator *tt)
         /* printf("IDs: %d %d.\n", gd->glyphID, gd->newID); */
 
         if (gd->nbytes != 0) {
-            z = GetInt16(gd->ptr, 2);
+            sal_Int16 z = GetInt16(gd->ptr, 2);
             if (z < xMin) xMin = z;
 
             z = GetInt16(gd->ptr, 4);

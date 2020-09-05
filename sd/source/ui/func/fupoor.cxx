@@ -913,10 +913,10 @@ void FuPoor::DoPasteUnformatted()
 {
     if (mpView)
     {
-        sal_Int8 nAction = DND_ACTION_COPY;
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( mpViewShell->GetActiveWindow() ) );
         if (aDataHelper.GetTransferable().is())
         {
+            sal_Int8 nAction = DND_ACTION_COPY;
             mpView->InsertData( aDataHelper,
                                 mpWindow->PixelToLogic( ::tools::Rectangle( Point(), mpWindow->GetOutputSizePixel() ).Center() ),
                                 nAction, false, SotClipboardFormatId::STRING);

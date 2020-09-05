@@ -314,9 +314,9 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
         case SCHATTR_DATADESCR_SEPARATOR:
         {
             OUString aNewValue = static_cast<const SfxStringItem&>(rItemSet.Get(nWhichId)).GetValue();
-            OUString aOldValue;
             try
             {
+                OUString aOldValue;
                 GetPropertySet()->getPropertyValue("LabelSeparator") >>= aOldValue;
                 if (mbDataSeries)
                 {
@@ -601,9 +601,9 @@ void TextLabelItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet& r
         break;
         case SCHATTR_DATADESCR_SEPARATOR:
         {
-            OUString aValue;
             try
             {
+                OUString aValue;
                 GetPropertySet()->getPropertyValue("LabelSeparator") >>= aValue;
                 rOutItemSet.Put(SfxStringItem(nWhichId, aValue));
             }

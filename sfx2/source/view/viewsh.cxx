@@ -529,8 +529,6 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_WEBHTML:
         {
-            const sal_Int32   FILTERFLAG_EXPORT    = 0x00000002;
-
             css::uno::Reference< lang::XMultiServiceFactory > xSMGR(::comphelper::getProcessServiceFactory(), css::uno::UNO_SET_THROW);
             css::uno::Reference< uno::XComponentContext >     xContext(::comphelper::getProcessComponentContext(), css::uno::UNO_SET_THROW);
             css::uno::Reference< css::frame::XFrame >         xFrame( pFrame->GetFrame().GetFrameInterface() );
@@ -577,7 +575,8 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                     css::uno::UNO_QUERY_THROW );
 
                 // Retrieve filter from type
-                sal_Int32 nFilterFlags = FILTERFLAG_EXPORT;
+
+                sal_Int32 nFilterFlags = 0x00000002; // export
                 aFilterName = impl_retrieveFilterNameFromTypeAndModule( xContainerQuery, aTypeName, aModule, nFilterFlags );
                 if ( aFilterName.isEmpty() )
                 {

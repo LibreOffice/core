@@ -67,13 +67,13 @@ void ScSolverUtil::GetImplementations( uno::Sequence<OUString>& rImplNames,
             if ( xCFac.is() )
             {
                 OUString sName = xInfo->getImplementationName();
-                OUString sDescription;
 
                 try
                 {
                     uno::Reference<sheet::XSolver> xSolver(
                             xCFac->createInstanceWithContext(xCtx), uno::UNO_QUERY );
                     uno::Reference<sheet::XSolverDescription> xDesc( xSolver, uno::UNO_QUERY );
+                    OUString sDescription;
                     if ( xDesc.is() )
                         sDescription = xDesc->getComponentDescription();
 

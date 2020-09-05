@@ -1282,13 +1282,13 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem, bool bGraphic 
     if( !bGraphic )
         return;
 
-    OUString aGraphicInBase64;
     const Graphic* pGrf = pBrushItem->GetGraphic();
     OUString GraphicURL = pBrushItem->GetGraphicLink();
     if( mbEmbedImages || GraphicURL.isEmpty())
     {
         if( pGrf )
         {
+            OUString aGraphicInBase64;
             if( !XOutBitmap::GraphicToBase64(*pGrf, aGraphicInBase64) )
             {
                 m_nWarn = WARN_SWG_POOR_LOAD;

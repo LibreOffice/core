@@ -46,7 +46,6 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport,
     bLeft( bLft ),
     bFirst( bFrst )
 {
-    const OUString sShareContentFirst( "FirstIsShared" );
     // NOTE: if this ever handles XML_DISPLAY attr then beware of fdo#72850 !
     if( !(bLeft || bFirst) )
         return;
@@ -70,6 +69,7 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport,
         }
         if (bFirst)
         {
+            const OUString sShareContentFirst( "FirstIsShared" );
             aAny = xPropSet->getPropertyValue( sShareContentFirst );
             bool bSharedFirst = bool();
             if (!(aAny >>= bSharedFirst))

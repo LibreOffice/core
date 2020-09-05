@@ -818,8 +818,6 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
     if (bDataValid)
         return pForwarder.get();
 
-    OUString aText;
-
     if (pDocShell)
     {
         ScDocument& rDoc = pDocShell->GetDocument();
@@ -841,6 +839,7 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
         else
         {
             sal_uInt32 nFormat = rDoc.GetNumberFormat(aCellPos);
+            OUString aText;
             ScCellFormat::GetInputString(aCell, nFormat, aText, *rDoc.GetFormatTable(), rDoc);
             if (!aText.isEmpty())
                 pEditEngine->SetTextNewDefaults(aText, aDefaults);
