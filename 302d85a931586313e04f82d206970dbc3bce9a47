@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "439692eb_5b5cfea5",
+        "filename": "solenv/gbuild/platform/macosx.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-09-05T11:40:49Z",
+      "side": 1,
+      "message": "Has this part ever actually worked?  On recent master, `make CppunitTest_sal_rtl CPPUNITTRACE\u003d\u0027lldb --\u0027` causes lldb to fail for me with\n\n  ... \u0026\u0026   (  lo_dyldpathfile\u003d/var/folders/q3/7lltvjlj4_l44qtq0fjz_slh0000gn/T/gbuild.NFR5bqg9 \u0026\u0026 MAX_CONCURRENCY\u003d4 MOZILLA_CERTIFICATE_FOLDER\u003d SAL_DISABLE_SYNCHRONOUS_PRINTER_DETECTION\u003d1 SAL_USE_VCLPLUGIN\u003dsvp LIBO_LANG\u003dC  DYLD_LIBRARY_PATH\u003d${DYLD_LIBRARY_PATH:+$DYLD_LIBRARY_PATH:}\"$I/LibreOffice.app/Contents/Frameworks:$I/LibreOffice.app/Contents/Frameworks\":$W/LinkTarget/Library:$W/UnpackedTarball/cppunit/src/cppunit/.libs       lldb -s $lo_dyldpathfile MallocScribble\u003d1 MallocPreScribble\u003d1 --   $W/LinkTarget/Executable/cppunittester $W/LinkTarget/CppunitTest/libtest_sal_rtl.dylib --headless \"-env:BRAND_BASE_DIR\u003dfile://$I/LibreOffice.app/Contents\" \"-env:BRAND_SHARE_SUBDIR\u003dResources\" \"-env:BRAND_SHARE_RESOURCE_SUBDIR\u003dResources/resource\" \"-env:UserInstallation\u003dfile://$W/CppunitTest/sal_rtl.test.user\"    \"-env:CPPUNITTESTTARGET\u003d$W/CppunitTest/sal_rtl.test\"  ; RET\u003d$? \u0026\u0026 rm $lo_dyldpathfile \u0026\u0026 (exit $RET)  ) \n  (lldb) target create \"MallocScribble\u003d1\"\n  error: unable to find executable for \u0027MallocScribble\u003d1\u0027\n\nwhile removing the above line completely makes it work as expected again.",
+      "revId": "302d85a931586313e04f82d206970dbc3bce9a47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
