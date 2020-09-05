@@ -1435,10 +1435,11 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
     if (bitmap.GetSize().Width() < 100 && bitmap.GetSize().Height() < 100
         && targetSize.Width() < 100 && targetSize.Height() < 100)
         return image;
-    // In some cases (tdf#134237) the draw size may be very large. In that case it's
+    // In some cases (tdf#134237) the target size may be very large. In that case it's
     // better to rely on Skia to clip and draw only the necessary, rather than prepare
     // a very large image only to not use most of it.
-    if (targetSize.Width() > GetWidth() || targetSize.Height() > GetHeight())
+    const Size drawAreaSize = mClipRegion.GetBoundRect().GetSize();
+    if (targetSize.Width() > drawAreaSize.Width() || targetSize.Height() > drawAreaSize.Height())
     {
         // This is a bit tricky. The condition above just checks that at least a part of the resulting
         // image will not be used (it's larger then our drawing area). But this may often happen
@@ -1448,15 +1449,15 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
         // the drawing area, and then refuse to cache if it's too much.
         const double upscaleRatio = 1.0 * targetSize.Width() / bitmap.GetSize().Width()
                                     * targetSize.Height() / bitmap.GetSize().Height();
-        const double oversizeRatio
-            = 1.0 * targetSize.Width() / GetWidth() * targetSize.Height() / GetHeight();
+        const double oversizeRatio = 1.0 * targetSize.Width() / drawAreaSize.Width()
+                                     * targetSize.Height() / drawAreaSize.Height();
         const double ratio = upscaleRatio * oversizeRatio;
         if (ratio > 10)
         {
             SAL_INFO("vcl.skia.trace", "mergecachebitmaps("
                                            << this << "): not caching upscaling, ratio:" << ratio
                                            << ", " << bitmap.GetSize() << "->" << targetSize
-                                           << " in " << Size(GetWidth(), GetHeight()));
+                                           << " in " << drawAreaSize);
             return image;
         }
     }
