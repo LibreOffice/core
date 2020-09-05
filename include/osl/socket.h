@@ -31,6 +31,9 @@ extern "C" {
 #define OSL_INADDR_NONE             0xffffffff
 #define OSL_INVALID_PORT (-1)
 
+/**@{ begin section types
+*/
+
 /**
     Opaque datatype SocketAddr.
 */
