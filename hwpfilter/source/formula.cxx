@@ -217,7 +217,7 @@ void Formula::makeIdentifier(Node *res)
           indo;
 #else
           rstartEl("math:mi", mxList.get());
-          runistr(reinterpret_cast<sal_Unicode const *>(getMathMLEntity(tmp->value).c_str()));
+          runistr(fromHcharStringToOUString(getMathMLEntity(tmp->value)));
           rendEl("math:mi");
 #endif
           break;
@@ -239,7 +239,7 @@ void Formula::makeIdentifier(Node *res)
           inds; fprintf(stderr,"<math:mo>%s</math:mo>\n",tmp->value); indo;
 #else
           rstartEl("math:mo", mxList.get());
-          runistr(reinterpret_cast<sal_Unicode const *>(getMathMLEntity(tmp->value).c_str()));
+          runistr(fromHcharStringToOUString(getMathMLEntity(tmp->value)));
           rendEl("math:mo");
 #endif
           break;
@@ -400,7 +400,7 @@ void Formula::makeDecoration(Node *res)
      indo;
 #else
      rstartEl("math:mo", mxList.get());
-     runistr(reinterpret_cast<sal_Unicode const *>(getMathMLEntity(tmp->value).c_str()));
+     runistr(fromHcharStringToOUString(getMathMLEntity(tmp->value)));
      rendEl("math:mo");
 #endif
 
