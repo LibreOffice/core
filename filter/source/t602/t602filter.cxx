@@ -472,9 +472,7 @@ void T602ImportFilter::Reset602()
 
 void T602ImportFilter::inschrdef(unsigned char ch)
 {
-    static sal_Unicode xch[2];
-
-    xch[1] = 0;
+    sal_Unicode xch;
 
     if(ch > 127) {
 
@@ -486,15 +484,15 @@ void T602ImportFilter::inschrdef(unsigned char ch)
         }
 
         if(ini.ruscode)
-            xch[0] = (rus2UNC[(ch-128)*2] << 8) + rus2UNC[(ch-128)*2+1];
+            xch = (rus2UNC[(ch-128)*2] << 8) + rus2UNC[(ch-128)*2+1];
         else
-            xch[0] = (lat2UNC[(ch-128)*2] << 8) + lat2UNC[(ch-128)*2+1];
+            xch = (lat2UNC[(ch-128)*2] << 8) + lat2UNC[(ch-128)*2+1];
     } else
-        xch[0] = ch;
+        xch = ch;
 
     pst.waspar = false;
     if (mxHandler.is())
-        mxHandler->characters(xch);
+        mxHandler->characters(OUString(xch));
 }
 
 void T602ImportFilter::wrtfnt()
