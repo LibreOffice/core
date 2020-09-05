@@ -478,6 +478,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135329_lostImage, "tdf135329_lostImage.odt")
     uno::Reference<beans::XPropertySet> xImageProps(getShape(2), uno::UNO_QUERY_THROW);
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf136441_commentInFootnote, "tdf136441_commentInFootnote.odt")
+{
+    // failed to load without error if footnote contained a comment.
+    // (MS Word's UI doesn't allow adding comments to a footnote.)
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf134063, "tdf134063.docx")
 {
     CPPUNIT_ASSERT_EQUAL(2, getPages());

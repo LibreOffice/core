@@ -2374,7 +2374,9 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
             // Append bookmarks in this range after flys, exclusive of final
             // position of this range
             AppendBookmarks( rNode, nCurrentPos, nNextAttr - nCurrentPos );
-            AppendAnnotationMarks(aAttrIter, nCurrentPos, nNextAttr - nCurrentPos);
+            //Sadly only possible for word in main document text
+            if ( m_nTextTyp == TXT_MAINTEXT )
+                AppendAnnotationMarks(aAttrIter, nCurrentPos, nNextAttr - nCurrentPos);
 
             // At the moment smarttags are only written for paragraphs, at the
             // beginning of the paragraph.
