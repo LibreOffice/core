@@ -193,11 +193,10 @@ SwPaM* SwCursorShell::GetCursor( bool bMakeTableCursor ) const
         if( bMakeTableCursor && m_pTableCursor->IsCursorMovedUpdate() )
         {
             //don't re-create 'parked' cursors
-            const SwContentNode* pCNd;
             if( m_pTableCursor->GetPoint()->nNode.GetIndex() &&
                 m_pTableCursor->GetMark()->nNode.GetIndex() )
             {
-                pCNd = m_pTableCursor->GetContentNode();
+                const SwContentNode* pCNd = m_pTableCursor->GetContentNode();
                 if( pCNd && pCNd->getLayoutFrame( GetLayout() ) )
                 {
                     pCNd = m_pTableCursor->GetContentNode(false);

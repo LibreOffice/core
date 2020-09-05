@@ -45,11 +45,11 @@ VclPtr<PopupMenu> AddonMenuManager::CreateAddonMenu( const Reference< XFrame >& 
 {
     AddonsOptions     aOptions;
     VclPtr<PopupMenu> pAddonMenu;
-    sal_uInt16        nUniqueMenuId   = ADDONMENU_ITEMID_START;
 
     const Sequence< Sequence< PropertyValue > >& rAddonMenuEntries = aOptions.GetAddonsMenu();
     if ( rAddonMenuEntries.hasElements() )
     {
+        sal_uInt16  nUniqueMenuId   = ADDONMENU_ITEMID_START;
         pAddonMenu = VclPtr<PopupMenu>::Create();
         OUString aModuleIdentifier = vcl::CommandInfoProvider::GetModuleIdentifier( rFrame );
         AddonMenuManager::BuildMenu( pAddonMenu, MENU_APPEND, nUniqueMenuId, rAddonMenuEntries, rFrame, aModuleIdentifier );

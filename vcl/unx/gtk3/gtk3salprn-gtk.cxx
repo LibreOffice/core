@@ -408,7 +408,6 @@ GtkPrintDialog::impl_initCustomTab()
         sal_Int32 nDependsOnValue = 0;
         bool bUseDependencyRow = false;
         bool bIgnore = false;
-        GtkWidget* pGroup = nullptr;
         bool bGtkInternal = false;
 
         //Fix fdo#69381
@@ -527,6 +526,7 @@ GtkPrintDialog::impl_initCustomTab()
 
             GtkWidget* pWidget = nullptr;
             beans::PropertyValue* pVal = nullptr;
+            GtkWidget* pGroup = nullptr;
             if (aCtrlType == "Bool" && pCurParent)
             {
                 pWidget = gtk_check_button_new_with_mnemonic(

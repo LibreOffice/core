@@ -153,11 +153,10 @@ void lcl_CalDate(sal_Int32 _nJulianDate,sal_Int32 _nJulianTime,css::util::DateTi
 {
     if ( _nJulianDate )
     {
-        sal_Int32 ialp;
         sal_Int32 ka = _nJulianDate;
         if ( _nJulianDate >= 2299161 )
         {
-            ialp = static_cast<sal_Int32>( (static_cast<double>(_nJulianDate) - 1867216.25 ) / 36524.25 );
+            sal_Int32 ialp = static_cast<sal_Int32>( (static_cast<double>(_nJulianDate) - 1867216.25 ) / 36524.25 );
             ka = _nJulianDate + 1 + ialp - ( ialp >> 2 );
         }
         sal_Int32 kb = ka + 1524;
@@ -2137,7 +2136,6 @@ void ODbaseTable::alterColumn(sal_Int32 index,
     if(index < 0 || index >= m_xColumns->getCount())
         throw IndexOutOfBoundsException(OUString::number(index),*this);
 
-    ODbaseTable* pNewTable = nullptr;
     try
     {
         OSL_ENSURE(descriptor.is(),"ODbaseTable::alterColumn: descriptor can not be null!");
@@ -2154,7 +2152,7 @@ void ODbaseTable::alterColumn(sal_Int32 index,
 
         OUString sTempName = createTempFile();
 
-        pNewTable = new ODbaseTable(m_pTables,static_cast<ODbaseConnection*>(m_pConnection));
+        ODbaseTable* pNewTable = new ODbaseTable(m_pTables,static_cast<ODbaseConnection*>(m_pConnection));
         Reference<XPropertySet> xHoldTable = pNewTable;
         pNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(sTempName));
         Reference<XAppend> xAppend(pNewTable->getColumns(),UNO_QUERY);

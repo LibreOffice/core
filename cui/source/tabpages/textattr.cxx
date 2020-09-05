@@ -368,8 +368,8 @@ bool SvxTextAttrPage::FillItemSet( SfxItemSet* rAttrs)
 
     // centered
     RectPoint eRP = m_aCtlPosition.GetActualRP();
-    SdrTextVertAdjust eTVA, eOldTVA;
-    SdrTextHorzAdjust eTHA, eOldTHA;
+    SdrTextVertAdjust eTVA;
+    SdrTextHorzAdjust eTHA;
 
     switch( eRP )
     {
@@ -409,7 +409,7 @@ bool SvxTextAttrPage::FillItemSet( SfxItemSet* rAttrs)
 
         if ( rOutAttrs.GetItemState( SDRATTR_TEXT_VERTADJUST ) != SfxItemState::DONTCARE )
         {
-            eOldTVA = rOutAttrs.Get( SDRATTR_TEXT_VERTADJUST ).GetValue();
+            SdrTextVertAdjust eOldTVA = rOutAttrs.Get( SDRATTR_TEXT_VERTADJUST ).GetValue();
             if( eOldTVA != eTVA )
                 rAttrs->Put( SdrTextVertAdjustItem( eTVA ) );
         }
@@ -418,7 +418,7 @@ bool SvxTextAttrPage::FillItemSet( SfxItemSet* rAttrs)
 
         if ( rOutAttrs.GetItemState( SDRATTR_TEXT_HORZADJUST ) != SfxItemState::DONTCARE )
         {
-            eOldTHA = rOutAttrs.Get( SDRATTR_TEXT_HORZADJUST ).GetValue();
+            SdrTextHorzAdjust eOldTHA = rOutAttrs.Get( SDRATTR_TEXT_HORZADJUST ).GetValue();
             if( eOldTHA != eTHA )
                 rAttrs->Put( SdrTextHorzAdjustItem( eTHA ) );
         }

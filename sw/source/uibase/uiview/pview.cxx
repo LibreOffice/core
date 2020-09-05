@@ -839,11 +839,10 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
         }
         case SID_JUMP_TO_SPECIFIC_PAGE:
         {
-            sal_uInt16 nPageNum = 1;
             const SfxItemSet *pArgs = rReq.GetArgs();
             if( pArgs && pArgs->Count())
             {
-                nPageNum = static_cast<const SfxUInt16Item &>(pArgs->Get(SID_JUMP_TO_SPECIFIC_PAGE)).GetValue();
+                sal_uInt16 nPageNum = static_cast<const SfxUInt16Item &>(pArgs->Get(SID_JUMP_TO_SPECIFIC_PAGE)).GetValue();
 
                 if( nPageNum > 0 && nPageNum <= mnPageCount )
                 {

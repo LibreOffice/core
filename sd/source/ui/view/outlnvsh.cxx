@@ -489,10 +489,10 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
             }
             else if(pOlView)
             {
-                sal_Int8 nAction = DND_ACTION_COPY;
                 TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( GetActiveWindow() ) );
                 if (aDataHelper.GetTransferable().is())
                 {
+                    sal_Int8 nAction = DND_ACTION_COPY;
                     pOlView->InsertData( aDataHelper,
                                          GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(), GetActiveWindow()->GetOutputSizePixel() ).Center() ),
                                          nAction, false, SotClipboardFormatId::STRING);
@@ -1568,10 +1568,10 @@ void OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph const * pPara
 
     OUString aTest = rOutliner.GetText(pPara);
     bool    bText = !aTest.isEmpty();
-    bool    bNewObject = false;
 
     if( bText )
     {
+        bool    bNewObject = false;
         // create a title object if we don't have one but have text
         if( !pTO )
         {
@@ -1647,8 +1647,6 @@ void OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
     std::unique_ptr<OutlinerParaObject> pOPO;
     SdrTextObj*         pTO  = nullptr;
 
-    bool bNewObject = false;
-
     OutlinerMode eOutlinerMode = OutlinerMode::TitleObject;
     pTO = static_cast<SdrTextObj*>(pPage->GetPresObj( PresObjKind::Text ));
     if( !pTO )
@@ -1676,6 +1674,7 @@ void OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
     if( pOPO )
     {
         DBG_ASSERT( pOlView->isRecordingUndo(), "sd::OutlineViewShell::UpdateOutlineObject(), no undo for model change!?" );
+        bool bNewObject = false;
 
         // do we need an outline text object?
         if( !pTO )

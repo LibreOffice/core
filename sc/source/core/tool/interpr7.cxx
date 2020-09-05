@@ -46,7 +46,6 @@ void ScInterpreter::ScFilterXML()
         return;
 
     SCSIZE nMatCols = 1, nMatRows = 1, nNode = 0;
-    const ScMatrix* pPathMatrix = nullptr;
     // In array/matrix context node elements' results are to be
     // subsequently stored. Check this before obtaining any argument from
     // the stack so the stack type can be used.
@@ -76,7 +75,7 @@ void ScInterpreter::ScFilterXML()
         }
         else if (GetStackType() == formula::svMatrix)
         {
-            pPathMatrix = pStack[sp-1]->GetMatrix();
+            const ScMatrix* pPathMatrix = pStack[sp-1]->GetMatrix();
             if (!pPathMatrix)
             {
                 PushIllegalParameter();

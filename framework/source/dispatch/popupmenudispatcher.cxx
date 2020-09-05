@@ -119,7 +119,6 @@ SAL_CALL PopupMenuDispatcher::queryDispatch(
             try
             {
                 // Just use the main part of the URL for popup menu controllers
-                sal_Int32     nQueryPart( 0 );
                 sal_Int32     nSchemePart( 0 );
                 OUString aBaseURL( "vnd.sun.star.popup:" );
                 OUString aURL( rURL.Complete );
@@ -128,7 +127,7 @@ SAL_CALL PopupMenuDispatcher::queryDispatch(
                 if (( nSchemePart > 0 ) &&
                     ( aURL.getLength() > ( nSchemePart+1 )))
                 {
-                    nQueryPart  = aURL.indexOf( '?', nSchemePart );
+                    sal_Int32 nQueryPart  = aURL.indexOf( '?', nSchemePart );
                     if ( nQueryPart > 0 )
                         aBaseURL += aURL.copy( nSchemePart+1, nQueryPart-(nSchemePart+1) );
                     else if ( nQueryPart == -1 )

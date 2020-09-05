@@ -905,9 +905,9 @@ void PropertyMap::dumpCode( const Reference< XPropertySet >& rXPropSet )
             continue;
 
         OString name = OUStringToOString( rProp.Name, RTL_TEXTENCODING_UTF8);
-        int level = 1;
 
         try {
+            int level = 1;
             printLevel (level);
             fprintf (stderr, "{\n");
             const char* var = lclDumpAnyValueCode (rXPropSet->getPropertyValue (rProp.Name), level + 1);

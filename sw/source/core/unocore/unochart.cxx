@@ -279,14 +279,13 @@ static bool GetTableAndCellsFromRangeRep(
     // parse range representation for table name and cell/range names
     // accepted format sth like: "Table1.A2:C5" , "Table2.A2.1:B3.2"
     OUString aTableName;    // table name
-    OUString aRange;    // cell range
     OUString aStartCell;  // name of top left cell
     OUString aEndCell;    // name of bottom right cell
     sal_Int32 nIdx = rRangeRepresentation.indexOf( '.' );
     if (nIdx >= 0)
     {
         aTableName = rRangeRepresentation.copy( 0, nIdx );
-        aRange = rRangeRepresentation.copy( nIdx + 1 );
+        OUString aRange = rRangeRepresentation.copy( nIdx + 1 ); // cell range
         sal_Int32 nPos = aRange.indexOf( ':' );
         if (nPos >= 0) // a cell-range like "Table1.A2:D4"
         {

@@ -1336,7 +1336,7 @@ void SvxStyleBox_Base::CalcOptimalExtraUserWidth(vcl::RenderContext& rRenderCont
 //        when the color is R=G=B=128 the DecreaseContrast make 128 the need an exception
 Color SvxStyleBox_Base::TestColorsVisible(const Color &FontCol, const Color &BackCol)
 {
-    const sal_uInt8  ChgVal = 60;       // increase/decrease the Contrast
+    constexpr sal_uInt8  ChgVal = 60;       // increase/decrease the Contrast
 
     Color  retCol = FontCol;
     if ((FontCol.IsDark() == BackCol.IsDark()) && (FontCol.IsBright() == BackCol.IsBright()))

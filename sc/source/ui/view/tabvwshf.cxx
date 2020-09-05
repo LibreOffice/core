@@ -114,14 +114,13 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
         case FID_TABLE_SHOW:
             {
-                OUString aName;
                 std::vector<OUString> rNames;
                 if ( pReqArgs )
                 {
                     const SfxPoolItem* pItem;
                     if( pReqArgs->HasItem( FID_TABLE_SHOW, &pItem ) )
                     {
-                        aName = static_cast<const SfxStringItem*>(pItem)->GetValue();
+                        OUString aName = static_cast<const SfxStringItem*>(pItem)->GetValue();
                         rNames.push_back(aName);
                         ShowTable( rNames );
 

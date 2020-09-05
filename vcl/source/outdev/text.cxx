@@ -522,7 +522,6 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                         // is broken into more than two lines ...
                         if ( xHyph.is() )
                         {
-                            sal_Unicode cAlternateReplChar = 0;
                             css::i18n::Boundary aBoundary = xBI->getWordBoundary( rStr, nBreakPos, rDefLocale, css::i18n::WordType::DICTIONARY_WORD, true );
                             sal_Int32 nWordStart = nPos;
                             sal_Int32 nWordEnd = aBoundary.endPos;
@@ -592,6 +591,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
 
                                             SAL_WARN_IF( ( nAltEnd - nAltStart ) != 1, "vcl", "Alternate: Wrong assumption!" );
 
+                                            sal_Unicode cAlternateReplChar = 0;
                                             if ( nTxtEnd > nTxtStart )
                                                 cAlternateReplChar = aAlt[ nAltStart ];
 
@@ -1538,17 +1538,16 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
     if ( nStyle & DrawTextFlags::MultiLine )
     {
 
-        OUString                aLastLine;
         ImplMultiTextLineInfo   aMultiLineInfo;
         ImplTextLineInfo*       pLineInfo;
         sal_Int32               i;
-        sal_Int32               nLines;
         sal_Int32               nFormatLines;
 
         if ( nTextHeight )
         {
             long nMaxTextWidth = ImplGetTextLines( aMultiLineInfo, nWidth, aStr, nStyle, _rLayout );
-            nLines = static_cast<sal_Int32>(nHeight/nTextHeight);
+            sal_Int32 nLines = static_cast<sal_Int32>(nHeight/nTextHeight);
+            OUString aLastLine;
             nFormatLines = aMultiLineInfo.Count();
             if (nLines <= 0)
                 nLines = 1;
@@ -2292,9 +2291,9 @@ bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
 
     pSalLayout = ImplLayout(rStr, nIndex, nLen, aPoint, nLayoutWidth, pDXAry, eDefaultLayout,
                             nullptr, pGlyphs);
-    tools::Rectangle aPixelRect;
     if( pSalLayout )
     {
+        tools::Rectangle aPixelRect;
         bRet = pSalLayout->GetBoundRect(aPixelRect);
 
         if( bRet )

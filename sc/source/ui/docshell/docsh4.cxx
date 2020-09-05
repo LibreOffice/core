@@ -1160,7 +1160,6 @@ void ScDocShell::Execute( SfxRequest& rReq )
         break;
         case SID_LANGUAGE_STATUS:
         {
-            sal_Int32 nPos = 0;
             OUString aLangText;
             const SfxStringItem* pItem = rReq.GetArg<SfxStringItem>(nSlot);
             if ( pItem )
@@ -1179,6 +1178,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 ScDocument& rDoc = GetDocument();
                 rDoc.GetLanguage( eLatin, eCjk, eCtl );
 
+                sal_Int32 nPos = 0;
                 if ( aLangText == "*" )
                 {
                     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();

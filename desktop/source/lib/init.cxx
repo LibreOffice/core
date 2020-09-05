@@ -319,7 +319,6 @@ static uno::Any jsonToUnoAny(const boost::property_tree::ptree& aTree)
     uno::Any aAny;
     uno::Any aValue;
     sal_Int32 nFields;
-    uno::TypeClass aTypeClass;
     uno::Reference< reflection::XIdlField > aField;
     boost::property_tree::ptree aNodeNull, aNodeValue, aNodeField;
     const std::string& rType = aTree.get<std::string>("type", "");
@@ -329,7 +328,7 @@ static uno::Any jsonToUnoAny(const boost::property_tree::ptree& aTree)
         css::reflection::theCoreReflection::get(comphelper::getProcessComponentContext())->forName(OUString::fromUtf8(rType.c_str()));
     if (xIdlClass.is())
     {
-        aTypeClass = xIdlClass->getTypeClass();
+        uno::TypeClass aTypeClass = xIdlClass->getTypeClass();
         xIdlClass->createObject(aAny);
         aFields = xIdlClass->getFields();
         nFields = aFields.getLength();
@@ -789,8 +788,7 @@ void ExecuteOrientationChange()
     std::unique_ptr<SvxLongULSpaceItem> pPageULMarginItem(new SvxLongULSpaceItem( 0, 0, SID_ATTR_PAGE_ULSPACE ));
     // 1mm in twips rounded
     // This should be in sync with MINBODY in sw/source/uibase/sidebar/PageMarginControl.hxx
-    const long MINBODY = 56;
-    bool bIsLandscape = false;
+    constexpr long MINBODY = 56;
 
     css::uno::Reference< css::document::XUndoManager > mxUndoManager(
                 getUndoManager( SfxViewFrame::Current()->GetFrame().GetFrameInterface() ) );
@@ -817,6 +815,7 @@ void ExecuteOrientationChange()
 
 
     {
+        bool bIsLandscape = false;
         if ( pPageSizeItem->GetSize().Width() > pPageSizeItem->GetSize().Height())
             bIsLandscape = true;
 

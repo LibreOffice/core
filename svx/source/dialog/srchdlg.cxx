@@ -452,12 +452,12 @@ void SvxSearchDialog::Construct_Impl()
     // vnd.sun.star::SearchViaComponent1 and 2 are supported
     const uno::Reference< frame::XFrame >xFrame = rBindings.GetActiveFrame();
     const uno::Reference< frame::XDispatchProvider > xDispatchProv(xFrame, uno::UNO_QUERY);
-    OUString sTarget("_self");
 
     bool bSearchComponent1 = false;
     bool bSearchComponent2 = false;
     if(xDispatchProv.is())
     {
+        OUString sTarget("_self");
         pImpl->xCommand1Dispatch = xDispatchProv->queryDispatch(pImpl->aCommand1URL, sTarget, 0);
         if (pImpl->xCommand1Dispatch.is())
             bSearchComponent1 = true;

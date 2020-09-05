@@ -137,8 +137,7 @@ namespace sfx2
         void                    verifyPath( );
 
         void                    implGetAndCacheFiles( const css::uno::Reference< XInterface >& xPicker  ,
-                                                      std::vector<OUString>&                   rpURLList,
-                                                      const std::shared_ptr<const SfxFilter>&  pFilter  );
+                                                      std::vector<OUString>&                   rpURLList );
 
         DECL_LINK( TimeOutHdl_Impl, Timer *, void);
         DECL_LINK( InitControls, void*, void );

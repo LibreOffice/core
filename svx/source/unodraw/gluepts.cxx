@@ -372,11 +372,11 @@ void SAL_CALL SvxUnoGluePointAccess::insertByIndex( sal_Int32, const uno::Any& E
         SdrGluePointList* pList = mpObject->ForceGluePointList();
         if( pList )
         {
-            SdrGluePoint aSdrGlue;
             drawing::GluePoint2 aUnoGlue;
 
             if( Element >>= aUnoGlue )
             {
+                SdrGluePoint aSdrGlue;
                 convert( aUnoGlue, aSdrGlue );
                 pList->Insert( aSdrGlue );
 

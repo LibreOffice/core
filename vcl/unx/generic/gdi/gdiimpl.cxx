@@ -239,8 +239,6 @@ inline GC X11SalGraphicsImpl::GetCopyGC()
 
 GC X11SalGraphicsImpl::GetTrackingGC()
 {
-    const char    dash_list[2] = {2, 2};
-
     if( !mpTrackingGC )
     {
         XGCValues     values;
@@ -256,6 +254,7 @@ GC X11SalGraphicsImpl::GetTrackingGC()
                                   GCGraphicsExposures | GCForeground | GCFunction
                                   | GCLineWidth | GCLineStyle,
                                   &values );
+        const char dash_list[2] = {2, 2};
         XSetDashes( mrParent.GetXDisplay(), mpTrackingGC, 0, dash_list, 2 );
     }
 

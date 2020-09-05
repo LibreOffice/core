@@ -1865,11 +1865,11 @@ void ScDatabaseRangeObj::Refreshed_Impl()
 uno::Reference<table::XCellRange> SAL_CALL ScDatabaseRangeObj::getReferredCells()
 {
     SolarMutexGuard aGuard;
-    ScRange aRange;
     ScDBData* pData = GetDBData_Impl();
     if ( pData )
     {
         //! static function to create ScCellObj/ScCellRange on ScCellRangeObj ???
+        ScRange aRange;
 
         pData->GetArea(aRange);
         if ( aRange.aStart == aRange.aEnd )

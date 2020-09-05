@@ -129,7 +129,6 @@ bool GIFLZWDecompressor::AddToTable( sal_uInt16 nPrevCode, sal_uInt16 nCodeFirst
 
 bool GIFLZWDecompressor::ProcessOneCode()
 {
-    sal_uInt16              nCode;
     bool                bRet = false;
     bool                bEndOfBlock = false;
 
@@ -148,7 +147,7 @@ bool GIFLZWDecompressor::ProcessOneCode()
     if ( !bEndOfBlock )
     {
         // fetch code from input buffer
-        nCode = sal::static_int_cast< sal_uInt16 >(
+        sal_uInt16 nCode = sal::static_int_cast< sal_uInt16 >(
             static_cast<sal_uInt16>(nInputBitsBuf) & ( ~( 0xffff << nCodeSize ) ));
         nInputBitsBuf >>= nCodeSize;
         nInputBitsBufSize = nInputBitsBufSize - nCodeSize;

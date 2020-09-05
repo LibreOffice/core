@@ -389,7 +389,6 @@ void AnnotationManagerImpl::ExecuteEditAnnotation(SfxRequest const & rReq)
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
     Reference< XAnnotation > xAnnotation;
-    sal_uInt32 nId = 0;
     OUString sText;
     sal_Int32 nPositionX = -1;
     sal_Int32 nPositionY = -1;
@@ -403,7 +402,7 @@ void AnnotationManagerImpl::ExecuteEditAnnotation(SfxRequest const & rReq)
     const SfxPoolItem* pPoolItem = nullptr;
     if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_POSTIT_ID, true, &pPoolItem))
     {
-        nId = static_cast<const SvxPostItIdItem*>(pPoolItem)->GetValue().toUInt32();
+        sal_uInt32 nId = static_cast<const SvxPostItIdItem*>(pPoolItem)->GetValue().toUInt32();
         xAnnotation = GetAnnotationById(nId);
     }
     if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_POSTIT_TEXT, true, &pPoolItem))
@@ -540,13 +539,13 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest const & rReq )
 {
     Reference< XAnnotation > xAnnotation;
     const SfxItemSet* pArgs = rReq.GetArgs();
-    sal_uInt32 nReplyId = 0; // Id of the comment to reply to
     OUString sReplyText;
     if( pArgs )
     {
         const SfxPoolItem*  pPoolItem = nullptr;
         if( SfxItemState::SET == pArgs->GetItemState( SID_ATTR_POSTIT_ID, true, &pPoolItem ) )
         {
+            sal_uInt32 nReplyId = 0; // Id of the comment to reply to
             nReplyId = static_cast<const SvxPostItIdItem*>(pPoolItem)->GetValue().toUInt32();
             xAnnotation = GetAnnotationById(nReplyId);
         }

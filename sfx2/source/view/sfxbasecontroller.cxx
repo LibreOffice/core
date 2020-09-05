@@ -621,10 +621,10 @@ sal_Bool SAL_CALL SfxBaseController::suspend( sal_Bool bSuspend )
 uno::Any SfxBaseController::getViewData()
 {
     uno::Any         aAny;
-    OUString sData;
     SolarMutexGuard aGuard;
     if ( m_pData->m_pViewShell )
     {
+        OUString sData;
         m_pData->m_pViewShell->WriteUserData( sData ) ;
         aAny <<= sData ;
     }

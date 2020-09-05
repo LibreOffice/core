@@ -250,9 +250,9 @@ static void lcl_CopyCol( FndBox_ & rFndBox, CpyPara *const pCpyPara)
     SwTableBox* pBox = rFndBox.GetBox();
     CpyTabFrame aFindFrame(pBox->GetFrameFormat());
 
-    sal_uInt16 nFndPos;
     if( pCpyPara->nCpyCnt )
     {
+        sal_uInt16 nFndPos;
         CpyTabFrames::const_iterator itFind = pCpyPara->rTabFrameArr.lower_bound( aFindFrame );
         nFndPos = itFind - pCpyPara->rTabFrameArr.begin();
         if( itFind == pCpyPara->rTabFrameArr.end() || !(*itFind == aFindFrame) )

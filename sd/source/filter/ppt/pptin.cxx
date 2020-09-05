@@ -249,7 +249,7 @@ bool ImplSdPPTImport::Import()
     {
         PropItem aPropItem;
 
-        sal_uInt32 nType, nPropSize, nPropCount;
+        sal_uInt32 nType, nPropCount;
 
         pDInfoSec2->Read();
 
@@ -372,6 +372,7 @@ bool ImplSdPPTImport::Import()
                             aPropItem.ReadUInt32( nType );
                             if ( nType == VT_BLOB )
                             {
+                                sal_uInt32 nPropSize;
                                 aPropItem.ReadUInt32( nPropSize )
                                          .ReadUInt32( nPropCount );
 

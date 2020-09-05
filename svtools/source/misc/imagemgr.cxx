@@ -323,9 +323,9 @@ static bool GetVolumeProperties_Impl( ::ucbhelper::Content& rContent, svtools::V
 static SvImageId GetFolderImageId_Impl( const OUString& rURL )
 {
     SvImageId nRet = SvImageId::Folder;
-    ::svtools::VolumeInfo aVolumeInfo;
     try
     {
+        ::svtools::VolumeInfo aVolumeInfo;
         ::ucbhelper::Content aCnt( rURL, css::uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         if ( GetVolumeProperties_Impl( aCnt, aVolumeInfo ) )
         {
@@ -455,10 +455,10 @@ static OUString GetDescriptionByFactory_Impl( const OUString& rFactory )
 static const char* GetFolderDescriptionId_Impl( const OUString& rURL )
 {
     const char* pRet = STR_DESCRIPTION_FOLDER;
-    svtools::VolumeInfo aVolumeInfo;
     try
     {
         ::ucbhelper::Content aCnt( rURL, css::uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+        svtools::VolumeInfo aVolumeInfo;
         if ( GetVolumeProperties_Impl( aCnt, aVolumeInfo ) )
         {
             if ( aVolumeInfo.m_bIsRemote )

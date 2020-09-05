@@ -262,7 +262,6 @@ void ScFunctionWin::UpdateFunctionList()
 
 void ScFunctionWin::DoEnter()
 {
-    OUString aFirstArgStr;
     OUStringBuffer aArgStr;
     OUString aString=xFuncList->get_selected_text();
     SfxViewShell* pCurSh = SfxViewShell::Current();
@@ -270,7 +269,7 @@ void ScFunctionWin::DoEnter()
 
     if(!aString.isEmpty())
     {
-
+        OUString aFirstArgStr;
         ScModule* pScMod = SC_MOD();
         ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( pCurSh );
         ScInputHandler* pHdl = pScMod->GetInputHdl( pViewSh );

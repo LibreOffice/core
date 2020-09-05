@@ -288,7 +288,6 @@ Reference< XRef > SAL_CALL java_sql_ResultSet::getRef( sal_Int32 columnIndex )
 
 Any SAL_CALL java_sql_ResultSet::getObject( sal_Int32 columnIndex, const Reference< css::container::XNameAccess >& typeMap )
 {
-    jobject out(nullptr);
     Any aRet;
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java environment has been deleted!");
     {
@@ -307,7 +306,7 @@ Any SAL_CALL java_sql_ResultSet::getObject( sal_Int32 columnIndex, const Referen
             obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
         }
 
-        out = t.pEnv->CallObjectMethodA( object, mID, args);
+        jobject out = t.pEnv->CallObjectMethodA( object, mID, args);
         t.pEnv->DeleteLocalRef(static_cast<jstring>(args[1].l));
         ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
         // and clean up

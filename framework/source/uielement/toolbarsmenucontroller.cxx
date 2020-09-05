@@ -768,10 +768,9 @@ void SAL_CALL ToolbarsMenuController::initialize( const Sequence< Any >& aArgume
     Reference< XNameAccess > xPersistentWindowStateSupplier = css::ui::theWindowStateConfiguration::get( m_xContext );
 
     // Retrieve persistent window state reference for our module
-    OUString aModuleIdentifier;
     try
     {
-        aModuleIdentifier = xModuleManager->identify( m_xFrame );
+        OUString aModuleIdentifier = xModuleManager->identify( m_xFrame );
         xPersistentWindowStateSupplier->getByName( aModuleIdentifier ) >>= m_xPersistentWindowState;
 
         Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier =

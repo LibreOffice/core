@@ -1008,7 +1008,6 @@ bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::X
     }
     const SdrMarkList* pMarkList = nullptr;
     SdrObject* pMarkedObj = nullptr;
-    SdrObject* pUpObj = nullptr;
     bool bIsFocuseMarked = true;
     if( mpViewShell && mnShapesSelected == 1 && bWinFocus)
     {
@@ -1038,7 +1037,7 @@ bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::X
         if( pMarkedObj )
         {
             uno::Reference< drawing::XShape > xMarkedXShape (pMarkedObj->getUnoShape(), uno::UNO_QUERY);
-            pUpObj = pMarkedObj->getParentSdrObjectFromSdrObject();
+            SdrObject* pUpObj = pMarkedObj->getParentSdrObjectFromSdrObject();
 
             if( pMarkedObj == pFocusedObj && pUpObj )
             {

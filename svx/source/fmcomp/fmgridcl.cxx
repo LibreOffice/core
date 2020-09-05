@@ -757,12 +757,11 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
         return;
 
     SfxViewFrame* pCurrentFrame = SfxViewFrame::Current();
-    SfxItemState eState = SfxItemState::UNKNOWN;
     // ask the bindings of the current view frame (which should be the one we're residing in) for the state
     if (pCurrentFrame)
     {
         std::unique_ptr<SfxPoolItem> pItem;
-        eState = pCurrentFrame->GetBindings().QueryState(SID_FM_CTL_PROPERTIES, pItem);
+        SfxItemState eState = pCurrentFrame->GetBindings().QueryState(SID_FM_CTL_PROPERTIES, pItem);
 
         if (eState >= SfxItemState::DEFAULT && pItem != nullptr)
         {

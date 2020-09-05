@@ -80,11 +80,11 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( weld::Window* pParent, SwDocShell& rDocSh,
         const OUString sFindNm = OUString::createFromAscii(
                                     pStream ? sDialogImpExtraData
                                               : sDialogExpExtraData);
-        sal_Int32 nEnd, nStt = m_sExtraData.indexOf( sFindNm );
+        sal_Int32 nStt = m_sExtraData.indexOf( sFindNm );
         if( -1 != nStt )
         {
             nStt += nDialogExtraDataLen;
-            nEnd = m_sExtraData.indexOf( cDialogExtraDataClose, nStt );
+            sal_Int32 nEnd = m_sExtraData.indexOf( cDialogExtraDataClose, nStt );
             if( -1 != nEnd )
             {
                 aOpt.ReadUserData(m_sExtraData.copy(nStt, nEnd - nStt));
@@ -282,11 +282,11 @@ void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )
     const OUString sFindNm = OUString::createFromAscii(
                                 m_xFontLB->get_visible() ? sDialogImpExtraData
                                           : sDialogExpExtraData);
-    sal_Int32 nEnd, nStt = m_sExtraData.indexOf( sFindNm );
+    sal_Int32 nStt = m_sExtraData.indexOf( sFindNm );
     if( -1 != nStt )
     {
         // called twice, so remove "old" settings
-        nEnd = m_sExtraData.indexOf( cDialogExtraDataClose,
+        sal_Int32 nEnd = m_sExtraData.indexOf( cDialogExtraDataClose,
                                         nStt + nDialogExtraDataLen );
         if( -1 != nEnd )
             m_sExtraData = m_sExtraData.replaceAt( nStt, nEnd - nStt + 1, "" );

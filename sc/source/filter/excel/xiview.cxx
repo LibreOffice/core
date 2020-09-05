@@ -105,14 +105,12 @@ void XclImpTabViewSettings::ReadTabBgColor( XclImpStream& rStrm, const XclImpPal
         return;
 
     sal_uInt8 ColorIndex;
-    Color TabBgColor;
 
     rStrm.Ignore( 16 );
     ColorIndex = rStrm.ReaduInt8() & EXC_SHEETEXT_TABCOLOR; //0x7F
     if ( ColorIndex >= 8 && ColorIndex <= 63 ) //only accept valid index values
     {
-        TabBgColor = rPal.GetColor( ColorIndex );
-        maData.maTabBgColor = TabBgColor;
+        maData.maTabBgColor = rPal.GetColor( ColorIndex );
     }
 }
 

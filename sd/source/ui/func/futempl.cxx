@@ -295,7 +295,6 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                 ScopedVclPtr<SfxAbstractTabDialog> pStdDlg;
                 ScopedVclPtr<SfxAbstractTabDialog> pPresDlg;
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-                bool bOldDocInOtherLanguage = false;
 
                 SfxStyleFamily eFamily = pStyleSheet->GetFamily();
 
@@ -307,6 +306,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                 {
                     OUString aName(pStyleSheet->GetName());
                     bool bBackground = false;
+                    bool bOldDocInOtherLanguage = false;
 
                     if (aName == SdResId(STR_PSEUDOSHEET_TITLE))
                     {

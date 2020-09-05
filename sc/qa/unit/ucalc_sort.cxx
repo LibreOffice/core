@@ -1040,7 +1040,6 @@ void Test::testSortRefUpdate4_Impl()
     m_pDoc->InsertTab(1, "Lesson1");
     m_pDoc->InsertTab(2, "Lesson2");
 
-    ScRange aLesson1Range;
     {
         const char* aData[][2] = {
             { "Name", "Note" },
@@ -1054,11 +1053,10 @@ void Test::testSortRefUpdate4_Impl()
         SCTAB nTab = 1;
         ScAddress aPos(0,0,nTab);
         clearRange(m_pDoc, ScRange(0, 0, nTab, 1, SAL_N_ELEMENTS(aData), nTab));
-        aLesson1Range = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+        ScRange aLesson1Range = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aLesson1Range.aStart);
     }
 
-    ScRange aLesson2Range;
     {
         const char* aData[][2] = {
             { "Name", "Note" },
@@ -1072,7 +1070,7 @@ void Test::testSortRefUpdate4_Impl()
         SCTAB nTab = 2;
         ScAddress aPos(0,0,nTab);
         clearRange(m_pDoc, ScRange(0, 0, nTab, 1, SAL_N_ELEMENTS(aData), nTab));
-        aLesson2Range = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+        ScRange aLesson2Range = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aLesson2Range.aStart);
     }
 
@@ -1893,7 +1891,6 @@ void Test::testSortImages()
     ScDrawLayer* pDrawLayer = m_pDoc->GetDrawLayer();
     CPPUNIT_ASSERT(pDrawLayer);
 
-    ScRange aDataRange;
     ScAddress aPos(0,0,0);
     {
         const char* aData[][1] = {
@@ -1902,7 +1899,7 @@ void Test::testSortImages()
         };
 
         clearRange(m_pDoc, ScRange(0, 0, 0, 1, SAL_N_ELEMENTS(aData), 0));
-        aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+        ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
     }
 

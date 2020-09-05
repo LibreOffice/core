@@ -1323,13 +1323,12 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                         (IsAutoCorrFlag( ACFlags::ChgSglQuotes ) && bSingle );
             if( bIsReplaceQuote )
             {
-                sal_Unicode cPrev;
                 bool bSttQuote = !nInsPos;
                 ACQuotes eType = ACQuotes::NONE;
                 const LanguageType eLang = GetDocLanguage( rDoc, nInsPos );
                 if (!bSttQuote)
                 {
-                    cPrev = rTxt[ nInsPos-1 ];
+                    sal_Unicode cPrev = rTxt[ nInsPos-1 ];
                     bSttQuote = NonFieldWordDelim(cPrev) ||
                         lcl_IsInAsciiArr( "([{", cPrev ) ||
                         ( cEmDash == cPrev ) ||
@@ -2775,10 +2774,10 @@ void SvxAutoCorrectLanguageLists::PutText( const OUString& rShort,
 
     MakeUserStorage_Impl();
 
-    OUString sLong;
     try
     {
         uno::Reference < embed::XStorage > xStg = comphelper::OStorageHelper::GetStorageFromURL( sUserAutoCorrFile, embed::ElementModes::READWRITE );
+        OUString sLong;
         bool bRet = rAutoCorrect.PutText( xStg, sUserAutoCorrFile, rShort, rShell, sLong );
         xStg = nullptr;
 

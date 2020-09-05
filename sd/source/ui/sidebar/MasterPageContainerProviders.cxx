@@ -109,11 +109,10 @@ SdPage* TemplatePageObjectProvider::operator() (SdDrawDocument*)
     SdPage* pPage = nullptr;
 
     mxDocumentShell = nullptr;
-    ::sd::DrawDocShell* pDocumentShell = nullptr;
     try
     {
         // Load the template document and return its first page.
-        pDocumentShell = LoadDocument (msURL);
+        ::sd::DrawDocShell* pDocumentShell = LoadDocument (msURL);
         if (pDocumentShell != nullptr)
         {
             SdDrawDocument* pDocument = pDocumentShell->GetDoc();

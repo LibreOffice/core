@@ -1537,12 +1537,11 @@ static sal_Int32 ImplPDFGetBookmarkPage( const OUString& rBookmark, SdDrawDocume
     // is the bookmark a page ?
     bool        bIsMasterPage;
     sal_uInt16  nPgNum = rDoc.GetPageByName( aBookmark, bIsMasterPage );
-    SdrObject*  pObj = nullptr;
 
     if ( nPgNum == SDRPAGE_NOTFOUND )
     {
         // is the bookmark an object ?
-        pObj = rDoc.GetObj( aBookmark );
+        SdrObject* pObj = rDoc.GetObj( aBookmark );
         if (pObj)
             nPgNum = pObj->getSdrPageFromSdrObject()->GetPageNum();
     }

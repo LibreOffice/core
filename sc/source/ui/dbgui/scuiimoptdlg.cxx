@@ -148,7 +148,6 @@ ScImportOptionsDlg::ScImportOptionsDlg(weld::Window* pParent, bool bAscii,
     pTextSepTab.reset( new ScDelimiterTable(SCSTR_TEXTSEP) );
 
     OUString aStr = pFieldSepTab->FirstDel();
-    sal_Unicode nCode;
 
     while (!aStr.isEmpty())
     {
@@ -187,7 +186,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(weld::Window* pParent, bool bAscii,
     {
         if ( pOptions )
         {
-            nCode = pOptions->nFieldSepCode;
+            sal_Unicode nCode = pOptions->nFieldSepCode;
             aStr  = pFieldSepTab->GetDelimiter( nCode );
 
             if ( aStr.isEmpty() )

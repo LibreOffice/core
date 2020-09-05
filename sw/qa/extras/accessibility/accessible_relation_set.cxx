@@ -150,14 +150,13 @@ void AccessibleRelationSet::contents_flows_to_and_from()
     css::uno::Reference<css::accessibility::XAccessibleRelationSet> set
         = oObj->getAccessibleRelationSet();
 
-    sal_Int16 firstrelation = -1;
     css::uno::Reference<css::accessibility::XAccessibleText> atarget;
 
     if (set.is())
     {
         CPPUNIT_ASSERT_EQUAL_MESSAGE("didn't gain correct count of relations", sal_Int32(1),
                                      set->getRelationCount());
-        firstrelation = set->getRelation(0).RelationType;
+        sal_Int16 firstrelation = set->getRelation(0).RelationType;
         css::uno::Reference<css::accessibility::XAccessibleText> adummy(
             set->getRelation(0).TargetSet[0], uno::UNO_QUERY_THROW);
         atarget = adummy;

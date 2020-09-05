@@ -225,11 +225,11 @@ namespace svgio::svgreader
         {
             // prepare retval, index and length
             drawinglayer::primitive2d::TextSimplePortionPrimitive2D* pRetval = nullptr;
-            sal_uInt32 nIndex(0);
             sal_uInt32 nLength(getText().getLength());
 
             if(nLength)
             {
+                sal_uInt32 nIndex(0);
                 // prepare FontAttribute
                 const SvgStringVector& rFontFamilyVector = rSvgStyleAttributes.getFontFamily();
                 OUString aFontFamily = rFontFamilyVector.empty() ?

@@ -2419,10 +2419,10 @@ ScDocument* ScExternalRefManager::getSrcDocument(sal_uInt16 nFileId)
         // no file name associated with this ID.
         return nullptr;
 
-    OUString aFilter;
     SrcShell aSrcDoc;
     try
     {
+        OUString aFilter;
         aSrcDoc.maShell = loadSrcDocument(nFileId, aFilter);
     }
     catch (const css::uno::Exception&)
@@ -2888,10 +2888,10 @@ public:
 
 bool ScExternalRefManager::refreshSrcDocument(sal_uInt16 nFileId)
 {
-    OUString aFilter;
     SfxObjectShellRef xDocShell;
     try
     {
+        OUString aFilter;
         xDocShell = loadSrcDocument(nFileId, aFilter);
     }
     catch ( const css::uno::Exception& ) {}

@@ -117,15 +117,15 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
     // Read Master-Record
     r.ReadUInt16( nSign ).ReadUInt32( nLen ).ReadUInt16( nCount );
     sal_uInt64 nLast = r.Tell() + nLen;
-    sal_uInt32 nCharSet;               // System charset
-    sal_uInt32 lDimBase;
-    sal_uInt16 nReserved1;
-    sal_uInt32 nReserved2;
-    sal_uInt32 nReserved3;
     bool bBadVer = false;
     if( nSign == static_cast<sal_uInt16>( FileOffset::Module ) )
     {
+        sal_uInt32 nCharSet;               // System charset
+        sal_uInt32 lDimBase;
         sal_uInt16 nTmpFlags;
+        sal_uInt16 nReserved1;
+        sal_uInt32 nReserved2;
+        sal_uInt32 nReserved3;
         r.ReadUInt32( nVersion ).ReadUInt32( nCharSet ).ReadUInt32( lDimBase )
          .ReadUInt16( nTmpFlags ).ReadUInt16( nReserved1 ).ReadUInt32( nReserved2 ).ReadUInt32( nReserved3 );
         nFlags = static_cast<SbiImageFlags>(nTmpFlags);

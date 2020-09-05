@@ -157,10 +157,10 @@ bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
                                  bool bCurrency = false )
 {
     OUString            aStr = rStr;
-    OUStringBuffer      aStr1, aStr2, aStrFrac, aStrNum, aStrDenom;
+    OUStringBuffer      aStr1, aStr2, aStrNum, aStrDenom;
     bool                bNegative = false;
     bool                bFrac = false;
-    sal_Int32           nDecPos, nFracDivPos, nFracNumPos;
+    sal_Int32           nDecPos, nFracDivPos;
     sal_Int64           nValue;
 
     // react on empty string
@@ -182,7 +182,7 @@ bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
     if (nFracDivPos > 0)
     {
         bFrac = true;
-        nFracNumPos = aStr.lastIndexOf(' ', nFracDivPos);
+        sal_Int32 nFracNumPos = aStr.lastIndexOf(' ', nFracDivPos);
 
         // If in "a b/c" format.
         if(nFracNumPos != -1 )
@@ -310,6 +310,7 @@ bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
         sal_Int64 nDenom = aStrDenom.makeStringAndClear().toInt64();
         if (nDenom == 0) return false; // Division by zero
         double nFrac2Dec = nWholeNum + static_cast<double>(nNum)/nDenom; // Convert to double for floating point precision
+        OUStringBuffer aStrFrac;
         aStrFrac.append(nFrac2Dec);
         // Reconvert division result to string and parse
         nDecPos = aStrFrac.indexOf('.');

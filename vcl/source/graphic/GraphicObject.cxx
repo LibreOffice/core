@@ -466,9 +466,6 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
     bool                bCropped = aAttr.IsCropped();
     bool bRet;
 
-    // #i29534# Provide output rects for PDF writer
-    tools::Rectangle           aCropRect;
-
     pOut->SetDrawMode( nOldDrawMode & ~DrawModeFlags( DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill | DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient ) );
 
     // mirrored horizontically
@@ -501,7 +498,7 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
             {
                 // #i29534# Store crop rect for later forwarding to
                 // PDF writer
-                aCropRect = aClipPolyPoly.GetBoundRect();
+                tools::Rectangle aCropRect = aClipPolyPoly.GetBoundRect();
                 pOut->IntersectClipRegion( aCropRect );
             }
             else

@@ -1168,7 +1168,6 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
         SCROW nEndRow = aMarkRange.aEnd.Row();
         SCTAB nEndTab = aMarkRange.aEnd.Tab();
 
-        ScUndoSelectionAttr* pUndoAttr = nullptr;
         ScEditDataArray* pEditDataArray = nullptr;
         if (bRecord)
         {
@@ -1185,7 +1184,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
 
             aFuncMark.MarkToMulti();
 
-            pUndoAttr = new ScUndoSelectionAttr(
+            ScUndoSelectionAttr* pUndoAttr = new ScUndoSelectionAttr(
                 pDocSh, aFuncMark, nStartCol, nStartRow, nStartTab,
                 nEndCol, nEndRow, nEndTab, std::move(pUndoDoc), bMulti, &rAttr );
             pDocSh->GetUndoManager()->AddUndoAction(std::unique_ptr<ScUndoSelectionAttr>(pUndoAttr));
@@ -2354,7 +2353,7 @@ void ScViewFunc::ModifyCellSize( ScDirection eDir, bool bOptimal )
 {
     //! step size adjustable
     //  step size is also minimum
-    sal_uInt16 nStepX = STD_COL_WIDTH / 5;
+    constexpr sal_uInt16 nStepX = STD_COL_WIDTH / 5;
     sal_uInt16 nStepY = ScGlobal::nStdRowHeight;
 
     ScModule* pScMod = SC_MOD();

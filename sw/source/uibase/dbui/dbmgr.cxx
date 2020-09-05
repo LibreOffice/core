@@ -1169,11 +1169,11 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
     std::unique_ptr< utl::TempFile > aTempFile;
     sal_uInt16 nStartingPageNo = 0;
 
-    vcl::Window *pSourceWindow = nullptr;
     std::shared_ptr<weld::GenericDialogController> xProgressDlg;
 
     try
     {
+        vcl::Window *pSourceWindow = nullptr;
         if( !bIsMergeSilent )
         {
             // construct the process dialog
@@ -1317,12 +1317,11 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 }
             }
 
-            OUString sPasswordColumnData;
             uno::Sequence< beans::PropertyValue > aSaveToFilterDataOptions( rMergeDescriptor.aSaveToFilterData );
 
             if( bMT_EMAIL || bPasswordColumnName )
             {
-                sPasswordColumnData = GetDBField( xPasswordColumnProp, aColumnDBFormat );
+                OUString sPasswordColumnData = GetDBField( xPasswordColumnProp, aColumnDBFormat );
                 lcl_PrepareSaveFilterDataOptions( rMergeDescriptor.aSaveToFilterData, aSaveToFilterDataOptions, sPasswordColumnData );
             }
 

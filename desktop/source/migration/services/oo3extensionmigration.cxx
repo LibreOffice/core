@@ -118,12 +118,11 @@ OO3ExtensionMigration::ScanResult OO3ExtensionMigration::scanExtensionFolder( co
         {
             if (item.getFileStatus(fs) == osl::FileBase::E_None)
             {
-                OUString aDirEntryURL;
                 if (fs.getFileType() == osl::FileStatus::Directory)
                     aDirectories.push_back( fs.getFileURL() );
                 else
                 {
-                    aDirEntryURL = fs.getFileURL();
+                    OUString aDirEntryURL = fs.getFileURL();
                     if ( aDirEntryURL.indexOf( "/description.xml" ) > 0 )
                         aResult = scanDescriptionXml( aDirEntryURL ) ? SCANRESULT_MIGRATE_EXTENSION : SCANRESULT_DONTMIGRATE_EXTENSION;
                 }

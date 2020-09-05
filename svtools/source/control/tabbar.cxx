@@ -2296,7 +2296,6 @@ bool TabBar::StartDrag(const CommandEvent& rCEvt, vcl::Region& rRegion)
 
 sal_uInt16 TabBar::ShowDropPos(const Point& rPos)
 {
-    sal_uInt16 nDropId;
     sal_uInt16 nNewDropPos;
     sal_uInt16 nItemCount = mpImpl->getItemSize();
     sal_Int16 nScroll = 0;
@@ -2325,7 +2324,7 @@ sal_uInt16 TabBar::ShowDropPos(const Point& rPos)
     }
     else
     {
-        nDropId = GetPageId(rPos);
+        sal_uInt16 nDropId = GetPageId(rPos);
         if (nDropId)
         {
             nNewDropPos = GetPagePos(nDropId);

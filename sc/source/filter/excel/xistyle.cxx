@@ -701,12 +701,12 @@ void XclImpNumFmtBuffer::CreateScFormats()
     for( const auto& [rXclNumFmt, rNumFmt] : GetFormatMap() )
     {
         // insert/convert the Excel number format
-        sal_Int32 nCheckPos;
-        SvNumFormatType nType = SvNumFormatType::DEFINED;
         sal_uInt32 nKey;
         if( !rNumFmt.maFormat.isEmpty() )
         {
             OUString aFormat( rNumFmt.maFormat );
+            sal_Int32 nCheckPos;
+            SvNumFormatType nType = SvNumFormatType::DEFINED;
             rFormatter.PutandConvertEntry( aFormat, nCheckPos,
                                            nType, nKey, LANGUAGE_ENGLISH_US, rNumFmt.meLanguage, false);
         }

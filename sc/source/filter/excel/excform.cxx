@@ -45,7 +45,6 @@ void ImportExcel::Formula25()
     XclAddress aXclPos;
     sal_uInt16  nXF = 0, nFormLen;
     double  fCurVal;
-    sal_uInt8   nFlag0;
     bool    bShrFmla;
 
     aIn >> aXclPos;
@@ -61,6 +60,7 @@ void ImportExcel::Formula25()
     }
     else
     {//                     BIFF5
+        sal_uInt8   nFlag0;
         nXF = aIn.ReaduInt16();
         fCurVal = aIn.ReadDouble();
         nFlag0 = aIn.ReaduInt8();

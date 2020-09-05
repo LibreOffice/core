@@ -1089,7 +1089,6 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
     }
 
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr aPageFillAttributes;
-    const SfxPoolItem* pItem = nullptr;
 
     if(mbEnableDrawingLayerFillStyles)
     {
@@ -1098,7 +1097,7 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
     }
     else
     {
-        pItem = GetItem(rSet, SID_ATTR_BRUSH);
+        const SfxPoolItem* pItem = GetItem(rSet, SID_ATTR_BRUSH);
 
         if(pItem)
         {

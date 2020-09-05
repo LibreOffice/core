@@ -778,9 +778,9 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                 oRelativeWidth = 100;
             }
             nRelativeWidthRelation = text::RelOrientation::FRAME;
-            sal_Int16 const nVertOrient = text::VertOrientation::CENTER;
             if (xPropertySet.is())
             {
+                sal_Int16 const nVertOrient = text::VertOrientation::CENTER;
                 xPropertySet->setPropertyValue("VertOrient", uno::makeAny(nVertOrient));
             }
         }

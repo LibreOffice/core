@@ -1935,7 +1935,6 @@ sal_uInt32 SvXMLNumFmtExport::ForceSystemLanguage( sal_uInt32 nKey )
     {
         SAL_WARN_IF( pFormatter == nullptr, "xmloff.style", "format without formatter?" );
 
-        sal_Int32 nErrorPos;
         SvNumFormatType nType = pFormat->GetType();
 
         sal_uInt32 nNewKey = pFormatter->GetFormatForLanguageIfBuiltIn(
@@ -1948,6 +1947,7 @@ sal_uInt32 SvXMLNumFmtExport::ForceSystemLanguage( sal_uInt32 nKey )
         else
         {
             OUString aFormatString( pFormat->GetFormatstring() );
+            sal_Int32 nErrorPos;
             pFormatter->PutandConvertEntry(
                             aFormatString,
                             nErrorPos, nType, nNewKey,

@@ -58,10 +58,10 @@ bool XMLCaseMapPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValu
 {
     bool bRet = false;
     sal_uInt16 nValue = sal_uInt16();
-    OUStringBuffer aOut;
 
     if( rValue >>= nValue )
     {
+        OUStringBuffer aOut;
         bRet = SvXMLUnitConverter::convertEnum(
             aOut, nValue, pXML_Casemap_Enum );
         if( bRet )

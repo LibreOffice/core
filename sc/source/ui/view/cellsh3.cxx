@@ -576,7 +576,6 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         SCTAB i=1;
                         OUString aBaseName;
                         OUString aName;
-                        OUString aComment;
                         Color  aColor;
                         ScScenarioFlags nFlags;
 
@@ -630,6 +629,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                             ScopedVclPtr<AbstractScNewScenarioDlg> pNewDlg(pFact->CreateScNewScenarioDlg(pTabViewShell->GetFrameWeld(), aName, false, bSheetProtected));
                             if ( pNewDlg->Execute() == RET_OK )
                             {
+                                OUString aComment;
                                 pNewDlg->GetScenarioData( aName, aComment, aColor, nFlags );
                                 pTabViewShell->MakeScenario( aName, aComment, aColor, nFlags );
 

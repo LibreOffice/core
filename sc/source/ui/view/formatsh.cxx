@@ -1466,8 +1466,6 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
 
             case SID_ATTR_CHAR_UNDERLINE:
                 {
-                    FontLineStyle       eUnderline;
-
                     if( pSet )
                     {
                         const SfxPoolItem& rUnderline = pSet->Get( ATTR_FONT_UNDERLINE );
@@ -1490,7 +1488,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
                     else
                     {
                         SvxUnderlineItem aUnderline( pAttrs->GetItem( ATTR_FONT_UNDERLINE ) );
-                        eUnderline = (LINESTYLE_NONE != aUnderline.GetLineStyle())
+                        FontLineStyle eUnderline = (LINESTYLE_NONE != aUnderline.GetLineStyle())
                                     ? LINESTYLE_NONE
                                     : LINESTYLE_SINGLE;
                         aUnderline.SetLineStyle( eUnderline );

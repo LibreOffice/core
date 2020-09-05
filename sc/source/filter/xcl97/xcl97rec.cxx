@@ -1223,7 +1223,6 @@ void transformURL(const OUString& rOldURL, OUString& rNewURL, const ScDocument& 
         OUString aAddressString = aURL.copy(1);
 
         ScRange aRange;
-        ScAddress aAddress;
         ScRefFlags nResult = parseRange(aAddressString, aRange, &rDoc);
         if ( nResult & ScRefFlags::VALID )
         {
@@ -1233,6 +1232,7 @@ void transformURL(const OUString& rOldURL, OUString& rNewURL, const ScDocument& 
         }
         else
         {
+            ScAddress aAddress;
             nResult = parseAddress(aAddressString, aAddress, &rDoc);
             if( nResult & ScRefFlags::VALID )
             {

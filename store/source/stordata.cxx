@@ -590,7 +590,7 @@ OStoreDirectoryPageObject::scope (
 {
     page const & rPage = PAGE();
 
-    sal_uInt32 index0, index1, index2, index3;
+    sal_uInt32 index0, index1, index2;
 
     // direct.
     sal_uInt32 nCount = OStoreDirectoryDataBlock::directCount;
@@ -682,7 +682,7 @@ OStoreDirectoryPageObject::scope (
         sal_uInt32 n = nPage;
 
         // Reduce to triple indirect i(3), double indirect n.
-        index3 = n / (nCapacity * nCapacity * nCapacity);
+        sal_uInt32 index3 = n / (nCapacity * nCapacity * nCapacity);
         n      = n % (nCapacity * nCapacity * nCapacity);
 
         // Reduce to double indirect i(2), single indirect n.

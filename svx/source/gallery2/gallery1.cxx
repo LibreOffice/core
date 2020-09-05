@@ -355,7 +355,6 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
                     {
                         INetURLObject   aSdgURL( aThmURL); aSdgURL.SetExtension( "sdg" );
                         INetURLObject   aSdvURL( aThmURL ); aSdvURL.SetExtension( "sdv" );
-                        OUString        aTitle;
 
                         try
                         {
@@ -363,6 +362,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
                             ::ucbhelper::Content aSdgCnt( aSdgURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xEnv, comphelper::getProcessComponentContext() );
                             ::ucbhelper::Content aSdvCnt( aSdvURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xEnv, comphelper::getProcessComponentContext() );
 
+                            OUString        aTitle;
                             try
                             {
                                 aThmCnt.getPropertyValue( s_sTitle ) >>= aTitle;

@@ -1008,12 +1008,12 @@ void View::onAccessibilityOptionsChanged()
 
     const StyleSettings& rStyleSettings = pWindow->GetSettings().GetStyleSettings();
 
-    sal_uInt16 nOutputSlot, nPreviewSlot;
-
     SvtAccessibilityOptions& aAccOptions = getAccessibilityOptions();
 
     if( mpViewSh->GetViewFrame() && mpViewSh->GetViewFrame()->GetDispatcher() )
     {
+        sal_uInt16 nOutputSlot, nPreviewSlot;
+
         if( rStyleSettings.GetHighContrastMode() )
         {
             nOutputSlot = SID_OUTPUT_QUALITY_CONTRAST;

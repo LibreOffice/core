@@ -3131,7 +3131,6 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
 
     // and now the Graphic
     OUString aGraphicInBase64;
-    OUString aGraphicAsLink;
 
     // Embedded Graphic -> export WriteEmbedded
     const Graphic* pGrf = nullptr;
@@ -3149,7 +3148,7 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
     }
     else if( !pGraphicName && rHTMLWrt.m_bCfgCpyLinkedGrfs )
     {
-        aGraphicAsLink = aLink;
+        OUString aGraphicAsLink = aLink;
         rWrt.CopyLocalFileToINet( aGraphicAsLink );
         aLink = aGraphicAsLink;
     }

@@ -117,7 +117,6 @@ namespace xmloff
 
     bool OControlTextEmphasisHandler::exportXML( OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& ) const
     {
-        OUStringBuffer aReturn;
         bool bSuccess = false;
         sal_Int16 nFontEmphasis = sal_Int16();
         if (_rValue >>= nFontEmphasis)
@@ -128,6 +127,7 @@ namespace xmloff
             bool bBelow = 0 != (nFontEmphasis & awt::FontEmphasisMark::BELOW);
 
             // convert
+            OUStringBuffer aReturn;
             bSuccess = SvXMLUnitConverter::convertEnum(aReturn, nType, aFontEmphasisMap, XML_NONE);
             if (bSuccess)
             {

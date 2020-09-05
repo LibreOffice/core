@@ -198,10 +198,10 @@ void LwpOleObject::Read()
     cPersistentFlags = m_pObjStrm->QuickReaduInt16();
 
     // qCMarker read
-    LwpObjectID ID;
 
     if (LwpFileHeader::m_nFileRevision >= 0x0004)
     {
+        LwpObjectID ID;
         m_pObjStrm->QuickReaduInt16();
 
         m_pObjStrm->QuickReadStringPtr();

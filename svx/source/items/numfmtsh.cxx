@@ -1237,10 +1237,10 @@ short SvxNumberFormatShell::GetCategory4Entry(short nEntry) const
         if (nMyNfEntry != NUMBERFORMAT_ENTRY_NOT_FOUND)
         {
             const SvNumberformat* pNumEntry = pFormatter->GetEntry(nMyNfEntry);
-            sal_uInt16 nMyType;
             if (pNumEntry != nullptr)
             {
                 SvNumFormatType nMyCat = pNumEntry->GetMaskedType();
+                sal_uInt16 nMyType;
                 CategoryToPos_Impl(nMyCat, nMyType);
 
                 return static_cast<short>(nMyType);

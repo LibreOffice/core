@@ -495,8 +495,6 @@ void SplashScreen::determineProgressRatioValues(
     double& rXRelPos, double& rYRelPos,
     double& rRelWidth, double& rRelHeight )
 {
-    sal_Int32 nWidth( 0 );
-    sal_Int32 nHeight( 0 );
     sal_Int32 nScreenRatio( 0 );
 
     // determine desktop resolution
@@ -505,8 +503,8 @@ void SplashScreen::determineProgressRatioValues(
     {
         // retrieve size from first screen
         tools::Rectangle aScreenArea = Application::GetScreenPosSizePixel(static_cast<unsigned int>(0));
-        nWidth  = aScreenArea.GetWidth();
-        nHeight = aScreenArea.GetHeight();
+        sal_Int32 nWidth  = aScreenArea.GetWidth();
+        sal_Int32 nHeight = aScreenArea.GetHeight();
         nScreenRatio  = nHeight ? sal_Int32( rtl::math::round( double( nWidth ) / double( nHeight ), 2 ) * 100 ) :  0;
     }
 

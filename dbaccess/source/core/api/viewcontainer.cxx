@@ -154,11 +154,12 @@ void OViewContainer::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
         xDrop->dropByName(_sElementName);
     else
     {
-        OUString sCatalog,sSchema,sTable,sComposedName;
+        OUString sComposedName;
 
         Reference<XPropertySet> xTable(getObject(_nPos),UNO_QUERY);
         if ( xTable.is() )
         {
+            OUString sCatalog,sSchema,sTable;
             xTable->getPropertyValue(PROPERTY_CATALOGNAME)  >>= sCatalog;
             xTable->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
             xTable->getPropertyValue(PROPERTY_NAME)         >>= sTable;

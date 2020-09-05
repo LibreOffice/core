@@ -66,14 +66,12 @@ namespace rptui
 
     void FormattedFieldBeautifier::setPlaceholderText( const uno::Reference< uno::XInterface >& _rxComponent )
     {
-        OUString sDataField;
-
         try
         {
             uno::Reference< report::XFormattedField > xControlModel( _rxComponent, uno::UNO_QUERY );
             if ( xControlModel.is() )
             {
-                sDataField = xControlModel->getDataField();
+                OUString sDataField = xControlModel->getDataField();
 
                 if ( !sDataField.isEmpty() )
                 {

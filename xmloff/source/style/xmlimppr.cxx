@@ -142,12 +142,11 @@ void SvXMLImportPropertyMapper::importXML(
     const css::uno::Sequence< css::xml::Attribute > unknownAttribs = xAttrList->getUnknownAttributes();
     for (const css::xml::Attribute& rAttribute : unknownAttribs)
     {
-        OUString aPrefix;
         int nSepIndex = rAttribute.Name.indexOf(SvXMLImport::aNamespaceSeparator);
         if (nSepIndex != -1)
         {
             // If it's an unknown attribute in a known namespace, ignore it.
-            aPrefix = rAttribute.Name.copy(0, nSepIndex);
+            OUString aPrefix = rAttribute.Name.copy(0, nSepIndex);
             if (rNamespaceMap.GetKeyByPrefix(aPrefix) != USHRT_MAX)
                 continue;
         }

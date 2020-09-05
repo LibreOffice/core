@@ -483,15 +483,13 @@ bool DocumentLinksAdministrationManager::SelectServerObj( const OUString& rStr, 
         }
         else if( sCmp == "frame" )
         {
-            SwNodeIndex* pIdx;
-            SwNode* pNd;
             const SwFlyFrameFormat* pFlyFormat = m_rDoc.FindFlyByName( sName );
             if( pFlyFormat )
             {
-                pIdx = const_cast<SwNodeIndex*>(pFlyFormat->GetContent().GetContentIdx());
+                SwNodeIndex* pIdx = const_cast<SwNodeIndex*>(pFlyFormat->GetContent().GetContentIdx());
                 if( pIdx )
                 {
-                    pNd = &pIdx->GetNode();
+                    SwNode* pNd = &pIdx->GetNode();
                     if( !pNd->IsNoTextNode() )
                     {
                         rpRange.reset(new SwNodeRange( *pNd, 1, *pNd->EndOfSectionNode() ));

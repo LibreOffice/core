@@ -25,10 +25,9 @@ using namespace ::com::sun::star;
 
 void SAL_CALL VbaDialogBase::Show()
 {
-    OUString aURL;
     if ( m_xModel.is() )
     {
-        aURL = mapIndexToName( mnIndex );
+        OUString aURL = mapIndexToName( mnIndex );
         if( aURL.isEmpty() )
             throw uno::RuntimeException( "Unable to open the specified dialog" );
 

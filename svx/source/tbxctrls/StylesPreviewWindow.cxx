@@ -446,7 +446,6 @@ void StylesPreviewWindow_Base::UpdateStylesList()
     m_aAllStyles = m_aDefaultStyles;
 
     SfxObjectShell* pDocShell = SfxObjectShell::Current();
-    const SfxStyleFamily eFamily = SfxStyleFamily::Para;
     SfxStyleSheetBasePool* pStyleSheetPool = nullptr;
 
     if (pDocShell)
@@ -454,7 +453,8 @@ void StylesPreviewWindow_Base::UpdateStylesList()
 
     if (pStyleSheetPool)
     {
-        auto xIter = pStyleSheetPool->CreateIterator(eFamily, SfxStyleSearchBits::UserDefined);
+        auto xIter = pStyleSheetPool->CreateIterator(SfxStyleFamily::Para,
+                                                     SfxStyleSearchBits::UserDefined);
 
         SfxStyleSheetBase* pStyle = xIter->First();
 

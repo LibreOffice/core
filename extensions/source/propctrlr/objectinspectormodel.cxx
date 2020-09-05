@@ -127,9 +127,9 @@ namespace pcr
             return;
         }
 
-        sal_Int32 nMinHelpTextLines( 0 ), nMaxHelpTextLines( 0 );
         if ( arguments.size() == 3 )
         {   // constructor: "createWithHandlerFactoriesAndHelpSection( any[], long, long )"
+            sal_Int32 nMinHelpTextLines( 0 ), nMaxHelpTextLines( 0 );
             impl_verifyArgument_throw( arguments[1] >>= nMinHelpTextLines, 2 );
             impl_verifyArgument_throw( arguments[2] >>= nMaxHelpTextLines, 3 );
             createWithHandlerFactoriesAndHelpSection( factories, nMinHelpTextLines, nMaxHelpTextLines );

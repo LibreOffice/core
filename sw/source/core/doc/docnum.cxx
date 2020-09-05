@@ -1525,11 +1525,9 @@ static bool lcl_GotoNextPrevNum( SwPosition& rPos, bool bNext,
                 pNd = aIdx.GetNode().GetTextNode();
                 const SwNumRule* pRule = pNd->GetNumRule();
 
-                sal_uInt8 nTmpNum;
-
                 if( pRule  )
                 {
-                    nTmpNum = static_cast<sal_uInt8>(pNd->GetActualListLevel());
+                    sal_uInt8 nTmpNum = static_cast<sal_uInt8>(pNd->GetActualListLevel());
                     if( pNd->IsCountedInList() || (nTmpNum < nSrchNum ) )
                         break;      // found it!
                 }

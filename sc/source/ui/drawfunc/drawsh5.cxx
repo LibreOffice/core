@@ -81,9 +81,6 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
             uno::Reference< beans::XPropertySetInfo > xInfo = xPropSet->getPropertySetInfo();
 
             OUString sPropButtonType( "ButtonType" );
-            OUString sPropTargetURL( "TargetURL" );
-            OUString sPropTargetFrame( "TargetFrame" );
-            OUString sPropLabel( "Label" );
 
             if(xInfo->hasPropertyByName( sPropButtonType ))
             {
@@ -93,6 +90,7 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
                 {
                     OUString sTmp;
                     // Label
+                    OUString sPropLabel( "Label" );
                     if(xInfo->hasPropertyByName( sPropLabel ))
                     {
                         aAny = xPropSet->getPropertyValue( sPropLabel );
@@ -102,6 +100,7 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
                         }
                     }
                     // URL
+                    OUString sPropTargetURL( "TargetURL" );
                     if(xInfo->hasPropertyByName( sPropTargetURL ))
                     {
                         aAny = xPropSet->getPropertyValue( sPropTargetURL );
@@ -111,6 +110,7 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
                         }
                     }
                     // Target
+                    OUString sPropTargetFrame( "TargetFrame" );
                     if(xInfo->hasPropertyByName( sPropTargetFrame ))
                     {
                         aAny = xPropSet->getPropertyValue( sPropTargetFrame );

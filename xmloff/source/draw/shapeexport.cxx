@@ -4756,7 +4756,6 @@ void XMLShapeExport::ImpExportCustomShape(
     if ( !xPropSet.is() )
         return;
 
-    OUString aStr;
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
 
     // Transformation
@@ -4764,6 +4763,7 @@ void XMLShapeExport::ImpExportCustomShape(
 
     if ( xPropSetInfo.is() )
     {
+        OUString aStr;
         if ( xPropSetInfo->hasPropertyByName( "CustomShapeEngine" ) )
         {
             uno::Any aEngine( xPropSet->getPropertyValue( "CustomShapeEngine" ) );

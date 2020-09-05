@@ -87,14 +87,12 @@ FileEmitContext::FileEmitContext( const OUString&                            rOr
     m_xOut = m_xContextStream->getOutputStream();
     m_xSeek.set(m_xOut, uno::UNO_QUERY_THROW );
 
-    oslFileError aErr = osl_File_E_None;
     if( osl_openFile( rOrigFile.pData,
                       &m_aReadHandle,
                       osl_File_OpenFlag_Read ) == osl_File_E_None )
     {
-        if( (aErr=osl_setFilePos( m_aReadHandle,
-                                  osl_Pos_End,
-                                  0 )) == osl_File_E_None )
+        oslFileError aErr = osl_setFilePos( m_aReadHandle, osl_Pos_End, 0 );
+        if( aErr == osl_File_E_None )
         {
             sal_uInt64 nFileSize = 0;
             if( (aErr=osl_getFilePos( m_aReadHandle,

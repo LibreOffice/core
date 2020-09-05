@@ -192,10 +192,10 @@ bool XMLMeasurePropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, co
 {
     bool bRet = false;
     sal_Int32 nValue;
-    OUStringBuffer aOut;
 
     if( lcl_xmloff_getAny( rValue, nValue, nBytes ) )
     {
+        OUStringBuffer aOut;
         rUnitConverter.convertMeasureToXML( aOut, nValue );
         rStrExpValue = aOut.makeStringAndClear();
 
@@ -304,10 +304,10 @@ bool XMLPercentPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, co
 {
     bool bRet = false;
     sal_Int32 nValue;
-    OUStringBuffer aOut;
 
     if( lcl_xmloff_getAny( rValue, nValue, nBytes ) )
     {
+        OUStringBuffer aOut;
         ::sax::Converter::convertPercent( aOut, nValue );
         rStrExpValue = aOut.makeStringAndClear();
 
@@ -382,10 +382,10 @@ bool XMLNegPercentPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue,
 {
     bool bRet = false;
     sal_Int32 nValue;
-    OUStringBuffer aOut;
 
     if( lcl_xmloff_getAny( rValue, nValue, nBytes ) )
     {
+        OUStringBuffer aOut;
         ::sax::Converter::convertPercent( aOut, 100-nValue );
         rStrExpValue = aOut.makeStringAndClear();
 
@@ -412,10 +412,10 @@ bool XMLMeasurePxPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, 
 {
     bool bRet = false;
     sal_Int32 nValue;
-    OUStringBuffer aOut;
 
     if( lcl_xmloff_getAny( rValue, nValue, nBytes ) )
     {
+        OUStringBuffer aOut;
         ::sax::Converter::convertMeasurePx( aOut, nValue );
         rStrExpValue = aOut.makeStringAndClear();
 
@@ -514,9 +514,9 @@ bool XMLHexPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const 
     bool bRet = false;
     sal_uInt32 nRsid = 0;
 
-    OUStringBuffer aOut;
     if( rValue >>= nRsid )
     {
+        OUStringBuffer aOut;
         SvXMLUnitConverter::convertHex( aOut, nRsid );
         rStrExpValue = aOut.makeStringAndClear();
 

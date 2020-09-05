@@ -538,7 +538,6 @@ void ControlConverter::convertToAxState( PropertySet const & rPropSet,
 
     sal_Int16 nState = API_STATE_DONTKNOW;
 
-    bool bTriStateEnabled = false;
     // need to use State for current state ( I think this is regardless of whether
     // control is awt or not )
     rPropSet.getProperty( nState, PROP_State );
@@ -552,6 +551,7 @@ void ControlConverter::convertToAxState( PropertySet const & rPropSet,
     // tristate
     if( bSupportsTriState )
     {
+        bool bTriStateEnabled = false;
         bool bPropertyExists = rPropSet.getProperty( bTriStateEnabled, PROP_TriState );
         if( bPropertyExists && bTriStateEnabled )
             nMultiSelect = AX_SELECTION_MULTI;

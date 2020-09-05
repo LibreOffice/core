@@ -126,13 +126,11 @@ SmFontPickListBox::SmFontPickListBox(std::unique_ptr<weld::ComboBox> pWidget)
 
 IMPL_LINK_NOARG(SmFontPickListBox, SelectHdl, weld::ComboBox&, void)
 {
-    OUString aString;
-
     const int nPos = m_xWidget->get_active();
     if (nPos != 0)
     {
         SmFontPickList::Insert(Get(nPos));
-        aString = m_xWidget->get_text(nPos);
+        OUString aString = m_xWidget->get_text(nPos);
         m_xWidget->remove(nPos);
         m_xWidget->insert_text(0, aString);
     }

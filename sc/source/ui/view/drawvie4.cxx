@@ -459,10 +459,9 @@ void ScDrawView::SetMarkedOriginalSize()
                 else
                 {
                     MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( static_cast<SdrOle2Obj*>(pObj)->GetAspect() ) );
-                    awt::Size aSz;
                     try
                     {
-                        aSz = xObj->getVisualAreaSize( static_cast<SdrOle2Obj*>(pObj)->GetAspect() );
+                        awt::Size aSz = xObj->getVisualAreaSize( static_cast<SdrOle2Obj*>(pObj)->GetAspect() );
                         aOriginalSize = OutputDevice::LogicToLogic(
                                             Size( aSz.Width, aSz.Height ),
                                             MapMode(aUnit),

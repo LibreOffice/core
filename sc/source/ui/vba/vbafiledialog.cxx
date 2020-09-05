@@ -44,10 +44,10 @@ ScVbaFileDialog::getInitialFileName() { return uno::makeAny( m_sInitialFileName 
 void ScVbaFileDialog::setInitialFileName( const css::uno::Any& rName )
 {
     OUString sDefaultPath;
-    OUString sDefaultURL;
 
     if( rName >>= sDefaultPath )
     {
+        OUString sDefaultURL;
         sal_Int32 eSuccess = osl::FileBase::getFileURLFromSystemPath(
                 sDefaultPath, sDefaultURL ) ;
         if( eSuccess == osl::FileBase::RC::E_INVAL )

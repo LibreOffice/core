@@ -1629,12 +1629,12 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
     LocaleSettingHdl(*m_xLocaleSettingLB->get_widget());
 
     // configured currency, for example, USD-en-US or EUR-de-DE, or empty for locale default
-    OUString aAbbrev;
-    LanguageType eLang;
     const NfCurrencyEntry* pCurr = nullptr;
     OUString sCurrency = pLangConfig->aSysLocaleOptions.GetCurrencyConfigString();
     if ( !sCurrency.isEmpty() )
     {
+        LanguageType eLang;
+        OUString aAbbrev;
         SvtSysLocaleOptions::GetCurrencyAbbrevAndLanguage( aAbbrev, eLang, sCurrency );
         pCurr = SvNumberFormatter::GetCurrencyEntry( aAbbrev, eLang );
     }

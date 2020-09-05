@@ -192,7 +192,6 @@ void HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile* pMergeDataFile 
 void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResData *pResData , MergeDataFile* pMergeDataFile ){
 
     XMLElement*   pXMLElement = nullptr;
-    MergeEntrys   *pEntrys    = nullptr;
 
     if( sCur.equalsIgnoreAsciiCase("en-US") )
         return;
@@ -228,7 +227,7 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResDa
     }
     else if( pMergeDataFile )
     {
-        pEntrys = pMergeDataFile->GetMergeEntrys( pResData );
+        MergeEntrys *pEntrys = pMergeDataFile->GetMergeEntrys( pResData );
         if( pEntrys != nullptr)
         {
             pEntrys->GetText( sNewText, sCur, true );

@@ -1059,7 +1059,6 @@ static sal_uInt32 getGlyph2(const sal_uInt8 *cmap, const sal_uInt32 nMaxCmapSize
     sal_uInt16 const * subHeader2Keys;
     sal_uInt16 firstCode;
     int k = -1;
-    sal_uInt32 ToReturn;
 
     theHighByte = static_cast<sal_uInt8>((c >> 8) & 0x00ff);
     theLowByte = static_cast<sal_uInt8>(c & 0x00ff);
@@ -1091,7 +1090,7 @@ static sal_uInt32 getGlyph2(const sal_uInt8 *cmap, const sal_uInt32 nMaxCmapSize
     } else if (k > 0) {
         firstCode = Int16FromMOTA(subHeader2s[k].firstCode);
         if(theLowByte >= firstCode && theLowByte < (firstCode + Int16FromMOTA(subHeader2s[k].entryCount))) {
-            ToReturn = *((&(subHeader2s[k].idRangeOffset))
+            sal_uInt32 ToReturn = *((&(subHeader2s[k].idRangeOffset))
                          + (Int16FromMOTA(subHeader2s[k].idRangeOffset)/2)
                          + theLowByte - firstCode);
             if(ToReturn == 0) {

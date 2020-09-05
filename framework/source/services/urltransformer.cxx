@@ -117,10 +117,9 @@ sal_Bool SAL_CALL URLTransformer::parseStrict( css::util::URL& aURL )
     }
     // Try to extract the protocol
     sal_Int32 nURLIndex = aURL.Complete.indexOf( ':' );
-    OUString aProtocol;
     if ( nURLIndex > 1 )
     {
-        aProtocol = aURL.Complete.copy( 0, nURLIndex+1 );
+        OUString aProtocol = aURL.Complete.copy( 0, nURLIndex+1 );
 
         // If INetURLObject knows this protocol let it parse
         if ( INetURLObject::CompareProtocolScheme( aProtocol ) != INetProtocol::NotValid )
@@ -187,10 +186,9 @@ sal_Bool SAL_CALL URLTransformer::parseSmart( css::util::URL& aURL,
         {
             // Try to extract the protocol
             sal_Int32 nIndex = aURL.Complete.indexOf( ':' );
-            OUString aProtocol;
             if ( nIndex > 1 )
             {
-                aProtocol = aURL.Complete.copy( 0, nIndex+1 );
+                OUString aProtocol = aURL.Complete.copy( 0, nIndex+1 );
 
                 // If INetURLObject knows this protocol something is wrong as detected before =>
                 // give up and return false!

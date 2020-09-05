@@ -122,11 +122,10 @@ void IMapWindow::ReplaceImageMap( const ImageMap& rImageMap )
 void IMapWindow::ReplaceActualIMapInfo( const NotifyInfo& rNewInfo )
 {
     const SdrObject*    pSdrObj = GetSelectedSdrObject();
-    IMapObject*         pIMapObj;
 
     if ( pSdrObj )
     {
-        pIMapObj = GetIMapObj( pSdrObj );
+        IMapObject* pIMapObj = GetIMapObj( pSdrObj );
         if (pIMapObj)
         {
             pIMapObj->SetURL( rNewInfo.aMarkURL );

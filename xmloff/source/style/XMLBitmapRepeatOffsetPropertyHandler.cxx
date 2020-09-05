@@ -76,11 +76,10 @@ bool XMLBitmapRepeatOffsetPropertyHandler::exportXML(
     const Any& rValue,
     const SvXMLUnitConverter& ) const
 {
-    OUStringBuffer aOut;
-
     sal_Int32 nValue = 0;
     if( rValue >>= nValue )
     {
+        OUStringBuffer aOut;
         ::sax::Converter::convertPercent( aOut, nValue );
         aOut.append( ' ' );
         aOut.append( mbX ? msHorizontal : msVertical );

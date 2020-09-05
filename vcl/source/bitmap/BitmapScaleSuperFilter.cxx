@@ -861,7 +861,7 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap) const
     const long nDstW = FRound(aSizePix.Width()  * fScaleX);
     const long nDstH = FRound(aSizePix.Height() * fScaleY);
 
-    const double fScaleThresh = 0.6;
+    constexpr double fScaleThresh = 0.6;
 
     if (nDstW <= 1 || nDstH <= 1)
         return BitmapEx();
@@ -898,7 +898,6 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap) const
 
         BitmapScopedWriteAccess pWriteAccess(aOutBmp);
 
-        const long nStartY = 0;
         const long nEndY   = nDstH - 1;
 
         if (pReadAccess && pWriteAccess)
@@ -967,6 +966,7 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap) const
             // A large source image.
             bool bHorizontalWork = pReadAccess->Height() >= 512 && pReadAccess->Width() >= 512;
             bool bUseThreads = true;
+            const long nStartY = 0;
 
             static bool bDisableThreadedScaling = getenv ("VCL_NO_THREAD_SCALE");
             if (bDisableThreadedScaling || !bHorizontalWork)

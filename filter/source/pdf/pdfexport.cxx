@@ -330,7 +330,6 @@ static OUString getMimetypeForDocument( const Reference< XComponentContext >& xC
             if ( !aDocServiceName.isEmpty() )
             {
                 // get the actual filter name
-                OUString aFilterName;
                 Reference< lang::XMultiServiceFactory > xConfigProvider =
                     configuration::theDefaultProvider::get( xContext );
                 uno::Sequence< uno::Any > aArgs( 1 );
@@ -348,6 +347,7 @@ static OUString getMimetypeForDocument( const Reference< XComponentContext >& xC
                 xSOFConfig->getByName( aDocServiceName ) >>= xApplConfig;
                 if ( xApplConfig.is() )
                 {
+                    OUString aFilterName;
                     xApplConfig->getByName( "ooSetupFactoryActualFilter" ) >>= aFilterName;
                     if( !aFilterName.isEmpty() )
                     {

@@ -108,7 +108,6 @@ Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch(
 {
     SolarMutexGuard guard;
 
-    sal_uInt16                  nId( 0 );
     bool                bMasterCommand( false );
     Reference < XDispatch > xDisp;
     const SfxSlot* pSlot = nullptr;
@@ -118,7 +117,7 @@ Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch(
     SfxDispatcher* pAppDisp = pApp->GetAppDispatcher_Impl();
     if ( aURL.Protocol == "slot:" || aURL.Protocol == "commandId:" )
     {
-        nId = static_cast<sal_uInt16>(aURL.Path.toInt32());
+        sal_uInt16 nId = static_cast<sal_uInt16>(aURL.Path.toInt32());
         SfxShell* pShell;
         pAppDisp->GetShellAndSlot_Impl( nId, &pShell, &pSlot, true, true );
     }

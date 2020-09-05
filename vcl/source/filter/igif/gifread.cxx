@@ -253,8 +253,6 @@ void GIFReader::CreateBitmaps(long nWidth, long nHeight, BitmapPalette* pPal,
 bool GIFReader::ReadGlobalHeader()
 {
     char    pBuf[ 7 ];
-    sal_uInt8   nRF;
-    sal_uInt8   nAspect;
     bool    bRet = false;
 
     rIStm.ReadBytes( pBuf, 6 );
@@ -266,6 +264,8 @@ bool GIFReader::ReadGlobalHeader()
             rIStm.ReadBytes( pBuf, 7 );
             if( NO_PENDING( rIStm ) )
             {
+                sal_uInt8   nAspect;
+                sal_uInt8   nRF;
                 SvMemoryStream aMemStm;
 
                 aMemStm.SetBuffer( pBuf, 7, 7 );
@@ -510,7 +510,6 @@ bool GIFReader::ReadLocalHeader()
 sal_uLong GIFReader::ReadNextBlock()
 {
     sal_uLong   nRet = 0;
-    sal_uLong   nRead;
     sal_uInt8   cBlockSize;
 
     rIStm.ReadUChar( cBlockSize );
@@ -532,6 +531,7 @@ sal_uLong GIFReader::ReadNextBlock()
                 else
                 {
                     bool       bEOI;
+                    sal_uLong  nRead;
                     sal_uInt8* pTarget = pDecomp->DecompressBlock( aSrcBuf.data(), cBlockSize, nRead, bEOI );
 
                     nRet = ( bEOI ? 3 : 1 );

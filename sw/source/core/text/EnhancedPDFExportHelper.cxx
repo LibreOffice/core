@@ -487,7 +487,6 @@ void SwTaggedPDFHelper::EndTag()
 // Sets the attributes according to the structure type.
 void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
 {
-    vcl::PDFWriter::StructAttributeValue eVal;
     sal_Int32 nVal;
 
     /*
@@ -495,6 +494,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
      */
     if ( mpFrameInfo )
     {
+        vcl::PDFWriter::StructAttributeValue eVal;
         const SwFrame* pFrame = &mpFrameInfo->mrFrame;
         SwRectFnSet aRectFnSet(pFrame);
 

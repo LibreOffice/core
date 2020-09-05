@@ -637,13 +637,12 @@ bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
     SfxViewShell* pViewShell = GetViewShell();
     OSL_ASSERT (pViewShell!=nullptr);
     bool bChangeDefaultsForChart = false;
-    OUString aName;
 
     uno::Reference < embed::XEmbeddedObject > xObj = pObj->GetObjRef();
     if ( !xObj.is() )
     {
         // provide OLE object to empty OLE object
-        aName = pObj->GetProgName();
+        OUString aName = pObj->GetProgName();
         OUString aObjName;
         SvGlobalName aClass;
 

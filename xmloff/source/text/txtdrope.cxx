@@ -47,8 +47,6 @@ void XMLTextDropCapExport::exportXML( const Any& rAny,
 {
     DropCapFormat aFormat;
     rAny >>= aFormat;
-    OUString sValue;
-    OUStringBuffer sBuffer;
     if( aFormat.Lines > 1 )
     {
         SvXMLUnitConverter& rUnitConv = rExport.GetMM100UnitConverter();
@@ -58,6 +56,7 @@ void XMLTextDropCapExport::exportXML( const Any& rAny,
                               OUString::number( aFormat.Lines ) );
 
         // style:length
+        OUString sValue;
         if( bWholeWord )
         {
             sValue = GetXMLToken(XML_WORD);
@@ -72,6 +71,7 @@ void XMLTextDropCapExport::exportXML( const Any& rAny,
         // style:distance
         if( aFormat.Distance > 0 )
         {
+            OUStringBuffer sBuffer;
             rUnitConv.convertMeasureToXML( sBuffer, aFormat.Distance );
             rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_DISTANCE,
                                   sBuffer.makeStringAndClear() );

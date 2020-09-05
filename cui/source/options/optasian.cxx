@@ -205,11 +205,11 @@ void SvxAsianLayoutPage::Reset( const SfxItemSet* )
     }
     if( pImpl->xPrSet.is() )
         pImpl->xPrSetInfo = pImpl->xPrSet->getPropertySetInfo();
-    OUString sForbidden("ForbiddenCharacters");
     bool bKernWesternText = pImpl->aConfig.IsKerningWesternTextOnly();
     CharCompressType nCompress = pImpl->aConfig.GetCharDistanceCompression();
     if(pImpl->xPrSetInfo.is())
     {
+        OUString sForbidden("ForbiddenCharacters");
         if(pImpl->xPrSetInfo->hasPropertyByName(sForbidden))
         {
             Any aForbidden = pImpl->xPrSet->getPropertyValue(sForbidden);

@@ -101,7 +101,6 @@ namespace vclcanvas
         if( !isActive() || ::basegfx::fTools::equalZero( fAlpha ) )
             return;
 
-        const Point                 aEmptyPoint;
         const ::basegfx::B2DVector& rOrigOutputSize( getSizePixel() );
 
         // might get changed below (e.g. adapted for
@@ -128,6 +127,7 @@ namespace vclcanvas
 
         if( bNeedBitmapUpdate )
         {
+            const Point aEmptyPoint;
             BitmapEx aBmp( mpBackBuffer->getOutDev().GetBitmapEx( aEmptyPoint,
                                                               aOutputSize ) );
 

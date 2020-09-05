@@ -121,7 +121,6 @@ void SAL_CALL OInstanceLocker::initialize( const uno::Sequence< uno::Any >& aArg
 
     uno::Reference< uno::XInterface > xInstance;
     uno::Reference< embed::XActionsApproval > xApproval;
-    sal_Int32 nModes = 0;
 
     try
     {
@@ -138,6 +137,7 @@ void SAL_CALL OInstanceLocker::initialize( const uno::Sequence< uno::Any >& aArg
                     uno::Reference< uno::XInterface >(),
                     0 );
 
+        sal_Int32 nModes = 0;
         if (
             !( aArguments[1] >>= nModes ) ||
             (

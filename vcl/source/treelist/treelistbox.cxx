@@ -3198,14 +3198,9 @@ void SvTreeListBox::Invalidate( const tools::Rectangle& rRect, InvalidateFlags n
 void SvTreeListBox::SetHighlightRange( sal_uInt16 nStart, sal_uInt16 nEnd)
 {
 
-    sal_uInt16 nTemp;
     nTreeFlags |= SvTreeFlags::USESEL;
     if( nStart > nEnd )
-    {
-        nTemp = nStart;
-        nStart = nEnd;
-        nEnd = nTemp;
-    }
+        std::swap(nStart, nEnd);
     // select all tabs that lie within the area
     nTreeFlags |= SvTreeFlags::RECALCTABS;
     nFirstSelTab = nStart;

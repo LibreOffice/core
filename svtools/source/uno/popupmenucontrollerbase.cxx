@@ -278,7 +278,6 @@ void SAL_CALL PopupMenuControllerBase::removeStatusListener(
 OUString PopupMenuControllerBase::determineBaseURL( const OUString& aURL )
 {
     // Just use the main part of the URL for popup menu controllers
-    sal_Int32     nQueryPart( 0 );
     sal_Int32     nSchemePart( 0 );
     OUString aMainURL( "vnd.sun.star.popup:" );
 
@@ -286,7 +285,7 @@ OUString PopupMenuControllerBase::determineBaseURL( const OUString& aURL )
     if (( nSchemePart > 0 ) &&
         ( aURL.getLength() > ( nSchemePart+1 )))
     {
-        nQueryPart  = aURL.indexOf( '?', nSchemePart );
+        sal_Int32 nQueryPart = aURL.indexOf( '?', nSchemePart );
         if ( nQueryPart > 0 )
             aMainURL += aURL.copy( nSchemePart, nQueryPart-nSchemePart );
         else if ( nQueryPart == -1 )

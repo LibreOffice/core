@@ -2595,7 +2595,6 @@ void SchXMLExportHelper_Impl::exportSeries(
                         xSource->getDataSequences());
                     sal_Int32 nMainSequenceIndex = -1;
                     sal_Int32 nSeriesLength = 0;
-                    sal_Int32 nAttachedAxis = chart::ChartAxisAssign::PRIMARY_Y;
                     bool bHasMeanValueLine = false;
                     Reference< beans::XPropertySet > xPropSet;
                     tLabelValuesDataPair aSeriesLabelValuesPair;
@@ -2607,10 +2606,10 @@ void SchXMLExportHelper_Impl::exportSeries(
                         sal_Int32 nSeqIdx=0;
                         for( ; nSeqIdx<aSeqCnt.getLength(); ++nSeqIdx )
                         {
-                            OUString aRole;
                             Reference< chart2::data::XDataSequence > xTempValueSeq( aSeqCnt[nSeqIdx]->getValues() );
                             if( nMainSequenceIndex==-1 )
                             {
+                                OUString aRole;
                                 Reference< beans::XPropertySet > xSeqProp( xTempValueSeq, uno::UNO_QUERY );
                                 if( xSeqProp.is())
                                     xSeqProp->getPropertyValue("Role") >>= aRole;
@@ -2630,6 +2629,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                         // have found the main sequence, then xValuesSeq and
                         // xLabelSeq contain those.  Otherwise both are empty
                         {
+                            sal_Int32 nAttachedAxis = chart::ChartAxisAssign::PRIMARY_Y;
                             // get property states for autostyles
                             try
                             {
@@ -3254,7 +3254,6 @@ void SchXMLExportHelper_Impl::exportDataPoints(
 
     const sal_Int32 * pPoints = aDataPointSeq.getConstArray();
     sal_Int32 nElement;
-    sal_Int32 nRepeat;
     Reference< chart2::XColorScheme > xColorScheme;
     if( xDiagram.is())
         xColorScheme.set( xDiagram->getDefaultColorScheme());
@@ -3397,7 +3396,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
             nLastIndex = nCurrIndex;
         }
         // final empty elements
-        nRepeat = nSeriesLength - nLastIndex - 1;
+        sal_Int32 nRepeat = nSeriesLength - nLastIndex - 1;
         if( nRepeat > 0 )
         {
             SchXMLDataPointStruct aPoint;

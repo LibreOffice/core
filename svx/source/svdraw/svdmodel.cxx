@@ -1867,9 +1867,9 @@ SvxNumType SdrModel::GetPageNumType() const
 
 void SdrModel::ReadUserDataSequenceValue(const css::beans::PropertyValue* pValue)
 {
-    bool bBool = false;
     if (pValue->Name == "AnchoredTextOverflowLegacy")
     {
+        bool bBool = false;
         if (pValue->Value >>= bBool)
         {
             mpImpl->mbAnchoredTextOverflowLegacy = bBool;

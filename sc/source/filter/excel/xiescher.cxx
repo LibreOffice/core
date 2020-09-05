@@ -474,10 +474,10 @@ SdrObjectUniquePtr XclImpDrawObjBase::CreateSdrObject( XclImpDffConverter& rDffC
 
                 if( mnObjType == 7 || (mnObjType < 25 && mnObjType > 10) )//TBX
                 {
-                    //Need summary type for export. Detail type(checkbox, button ...) has been contained by mnObjType
-                    const sal_Int16 nTBXControlType = eCreateFromMSTBXControl ;
                     try
                     {
+                        //Need summary type for export. Detail type(checkbox, button ...) has been contained by mnObjType
+                        const sal_Int16 nTBXControlType = eCreateFromMSTBXControl ;
                         xPropSet->setPropertyValue(sPropertyName, Any(nTBXControlType));
                     }
                     catch(const Exception&)
@@ -492,9 +492,9 @@ SdrObjectUniquePtr XclImpDrawObjBase::CreateSdrObject( XclImpDffConverter& rDffC
                     const XclImpPictureObj* const pObj = dynamic_cast< const XclImpPictureObj* const >(this);
                     if( pObj != nullptr && pObj->IsOcxControl() )
                     {
-                        const sal_Int16 nOCXControlType =  eCreateFromMSOCXControl;
                         try
                         {
+                            const sal_Int16 nOCXControlType =  eCreateFromMSOCXControl;
                             xPropSet->setPropertyValue(sPropertyName, Any(nOCXControlType));
                             //Detail type(checkbox, button ...)
                             xPropSet->setPropertyValue(sObjIdPropertyName, makeAny<sal_uInt16>(mnObjId));
@@ -3474,11 +3474,11 @@ SdrObjectUniquePtr XclImpDffConverter::CreateSdrObject( const XclImpPictureObj& 
                 if( GetConvData().mxCtrlForm.is() )
                 {
                      Reference< XFormComponent >  xFComp;
-                     css::awt::Size aSz;  // not used in import
                      ReadOCXCtlsStream( mxCtlsStrm, xFComp, rPicObj.GetCtlsStreamPos(),  rPicObj.GetCtlsStreamSize() );
                      // recreate the method formerly known as ReadOCXExcelKludgeStream()
                      if ( xFComp.is() )
                      {
+                         css::awt::Size aSz;  // not used in import
                          ScfPropertySet aPropSet( xFComp );
                          aPropSet.SetStringProperty( "Name", rPicObj.GetObjName() );
                          InsertControl( xFComp, aSz,&xShape,true);

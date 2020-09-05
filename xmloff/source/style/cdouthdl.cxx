@@ -134,10 +134,10 @@ bool XMLCrossedOutTypePropHdl::exportXML( OUString& rStrExpValue, const uno::Any
 {
     bool bRet = false;
     sal_uInt16 nValue = sal_uInt16();
-    OUStringBuffer aOut;
 
     if (rValue >>= nValue)
     {
+        OUStringBuffer aOut;
         bRet = SvXMLUnitConverter::convertEnum(
             aOut, nValue, pXML_CrossedoutType_Enum );
         if( bRet )
@@ -181,10 +181,10 @@ bool XMLCrossedOutStylePropHdl::exportXML( OUString& rStrExpValue, const uno::An
 {
     bool bRet = false;
     sal_uInt16 nValue = sal_uInt16();
-    OUStringBuffer aOut;
 
     if( rValue >>= nValue )
     {
+        OUStringBuffer aOut;
         bRet = SvXMLUnitConverter::convertEnum(
             aOut, nValue, pXML_CrossedoutStyle_Enum );
         if( bRet )
@@ -250,10 +250,10 @@ bool XMLCrossedOutWidthPropHdl::exportXML( OUString& rStrExpValue, const uno::An
 {
     bool bRet = false;
     sal_uInt16 nValue = sal_uInt16();
-    OUStringBuffer aOut;
 
     if( (rValue >>= nValue) && (awt::FontStrikeout::BOLD == nValue) )
     {
+        OUStringBuffer aOut;
         bRet = SvXMLUnitConverter::convertEnum(
             aOut, nValue, pXML_CrossedoutWidth_Enum );
         if( bRet )

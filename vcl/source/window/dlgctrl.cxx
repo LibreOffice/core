@@ -765,8 +765,6 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
             // do not skip Alt key, for MS Windows
             if ( !aKeyCode.IsMod2() )
             {
-                GetDlgWindowType nType;
-                GetFocusFlags    nGetFocusFlags = GetFocusFlags::Tab;
                 sal_uInt16  nNewIndex;
                 bool        bForm = false;
 
@@ -837,6 +835,8 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
                     // dialog or for the current control (#103667#)
                     if (!aKeyCode.IsMod1() || (pSWindow->GetStyle() & WB_NODIALOGCONTROL))
                     {
+                        GetDlgWindowType nType;
+                        GetFocusFlags    nGetFocusFlags = GetFocusFlags::Tab;
                         if ( aKeyCode.IsShift() )
                         {
                             nType = GetDlgWindowType::Prev;

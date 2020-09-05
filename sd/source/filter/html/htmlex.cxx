@@ -1706,12 +1706,11 @@ bool HtmlExport::CreateHtmlForPresPages()
                         // corresponding names of the html file
                         bool        bIsMasterPage;
                         sal_uInt16  nPgNum = mpDoc->GetPageByName( aURL, bIsMasterPage );
-                        SdrObject*  pObj = nullptr;
 
                         if (nPgNum == SDRPAGE_NOTFOUND)
                         {
                             // is the bookmark an object?
-                            pObj = mpDoc->GetObj( aURL );
+                            SdrObject* pObj = mpDoc->GetObj( aURL );
                             if (pObj)
                                 nPgNum = pObj->getSdrPageFromSdrObject()->GetPageNum();
                         }
@@ -1792,12 +1791,11 @@ bool HtmlExport::CreateHtmlForPresPages()
                         {
                             bool        bIsMasterPage;
                             sal_uInt16  nPgNum = mpDoc->GetPageByName( pInfo->GetBookmark(), bIsMasterPage );
-                            SdrObject*  pObj = nullptr;
 
                             if( nPgNum == SDRPAGE_NOTFOUND )
                             {
                                 // is the bookmark an object?
-                                pObj = mpDoc->GetObj(pInfo->GetBookmark());
+                                SdrObject* pObj = mpDoc->GetObj(pInfo->GetBookmark());
                                 if (pObj)
                                     nPgNum = pObj->getSdrPageFromSdrObject()->GetPageNum();
                             }

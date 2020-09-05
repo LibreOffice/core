@@ -597,9 +597,6 @@ public:
         long nWidth = aSize.Width();
         long nHeight = aSize.Height();
 
-        tools::Rectangle aRectangle;
-        size_t index = 0;
-
         if (mnTest % gnNumberOfTests == 0)
         {
             testRectangles(rRenderContext, nWidth, nHeight, false);
@@ -636,7 +633,8 @@ public:
         {
             std::vector<tools::Rectangle> aRegions = setupRegions(2, 2, nWidth, nHeight);
 
-            aRectangle = aRegions[index++];
+            size_t index = 0;
+            tools::Rectangle aRectangle = aRegions[index++];
             {
                 vcl::test::OutputDeviceTestAnotherOutDev aOutDevTest;
                 Bitmap aBitmap = aOutDevTest.setupDrawOutDev();

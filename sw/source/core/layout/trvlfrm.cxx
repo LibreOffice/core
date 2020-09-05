@@ -338,9 +338,9 @@ bool SwPageFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
             {
                 // FIXME There are still cases were we don't have the proper node here.
                 SwContentFrame* pBackFrame = pBackNd->getLayoutFrame( getRootFrame( ) );
-                SwRect rBackRect;
                 if (pBackFrame)
                 {
+                    SwRect rBackRect;
                     pBackFrame->GetCharRect( rBackRect, aBackPos );
 
                     nBackDistance = lcl_getDistance( rBackRect, rPoint );

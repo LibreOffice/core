@@ -368,11 +368,10 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
 
             std::unique_ptr< SfxItemSet > tmpSet;
 
-            const SwPageDesc* pPgDesc;
             if( pSrcDoc != pDstDoc && SfxItemState::SET == GetItemState(
                                             RES_PAGEDESC, false, &pItem ))
             {
-                pPgDesc = static_cast<const SwFormatPageDesc*>(pItem)->GetPageDesc();
+                const SwPageDesc* pPgDesc = static_cast<const SwFormatPageDesc*>(pItem)->GetPageDesc();
                 if( pPgDesc )
                 {
                     tmpSet.reset(new SfxItemSet(*this));

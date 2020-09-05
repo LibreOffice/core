@@ -554,9 +554,9 @@ bool VDataSeries::hasExplicitNumberFormat( sal_Int32 nPointIndex, bool bForPerce
     bool bHasNumberFormat = false;
     bool bLinkToSource = true;
     uno::Reference< beans::XPropertySet > xPointProp( getPropertiesOfPoint( nPointIndex ));
-    sal_Int32 nNumberFormat = -1;
     if( xPointProp.is() && (xPointProp->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bLinkToSource))
     {
+        sal_Int32 nNumberFormat = -1;
         if( !bLinkToSource && (xPointProp->getPropertyValue(aPropName) >>= nNumberFormat))
             bHasNumberFormat = true;
     }
@@ -653,12 +653,12 @@ awt::Point VDataSeries::getLabelPosition( awt::Point aTextShapePos, sal_Int32 nP
 bool VDataSeries::isLabelCustomPos(sal_Int32 nPointIndex) const
 {
     bool bCustom = false;
-    RelativePosition aCustomLabelPosition;
     try
     {
         if( isAttributedDataPoint(nPointIndex) )
         {
             uno::Reference< beans::XPropertySet > xPointProps(m_xDataSeries->getDataPointByIndex(nPointIndex));
+            RelativePosition aCustomLabelPosition;
             if( xPointProps.is() && (xPointProps->getPropertyValue("CustomLabelPosition") >>= aCustomLabelPosition) )
                 bCustom = true;
         }

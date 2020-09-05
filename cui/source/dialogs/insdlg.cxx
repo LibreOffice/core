@@ -160,12 +160,12 @@ short SvInsertOleDlg::run()
         m_xLbObjecttype->append_text((*m_pServers)[i].GetHumanName());
     m_xLbObjecttype->thaw();
     m_xLbObjecttype->select(0);
-    OUString aName;
 
     DBG_ASSERT( m_xStorage.is(), "No storage!");
     if ( m_xStorage.is() && ( nRet = InsertObjectDialog_Impl::run() ) == RET_OK )
     {
         OUString aFileName;
+        OUString aName;
         bool bCreateNew = IsCreateNew();
         if ( bCreateNew )
         {

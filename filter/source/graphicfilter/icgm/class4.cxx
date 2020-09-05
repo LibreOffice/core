@@ -362,7 +362,7 @@ void CGM::ImplDoClass4()
 
             case 0x0d : /*Circular Arc 3 Point*/
             {
-                FloatPoint aStartingPoint, aIntermediatePoint, aEndingPoint, aCenterPoint;
+                FloatPoint aStartingPoint, aIntermediatePoint, aEndingPoint;
                 ImplGetPoint( aStartingPoint, true );
                 ImplGetPoint( aIntermediatePoint, true );
                 ImplGetPoint( aEndingPoint, true );
@@ -379,6 +379,7 @@ void CGM::ImplDoClass4()
 
                 if ( fG != 0 )
                 {
+                    FloatPoint aCenterPoint;
                     aCenterPoint.X = ( fD * fE - fB * fF ) / fG;
                     aCenterPoint.Y = ( fA * fF - fC * fE ) / fG;
                     double fStartAngle = ImplGetOrientation( aCenterPoint, aStartingPoint );
@@ -435,7 +436,7 @@ void CGM::ImplDoClass4()
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
 
-                FloatPoint aStartingPoint, aIntermediatePoint, aEndingPoint, aCenterPoint;
+                FloatPoint aStartingPoint, aIntermediatePoint, aEndingPoint;
                 ImplGetPoint( aStartingPoint );
                 ImplGetPoint( aIntermediatePoint );
                 ImplGetPoint( aEndingPoint );
@@ -452,6 +453,7 @@ void CGM::ImplDoClass4()
 
                 if ( fG != 0 )
                 {
+                    FloatPoint aCenterPoint;
                     aCenterPoint.X = ( fD * fE - fB * fF ) / fG;
                     aCenterPoint.Y = ( fA * fF - fC * fE ) / fG;
                     double fStartAngle = ImplGetOrientation( aCenterPoint, aStartingPoint );

@@ -65,11 +65,10 @@ bool XMLFillBitmapSizePropertyHandler::exportXML(
     const Any& rValue,
     const SvXMLUnitConverter& rUnitConverter ) const
 {
-    OUStringBuffer aOut;
-
     sal_Int32 nValue = 0;
     if( rValue >>= nValue )
     {
+        OUStringBuffer aOut;
         if( nValue < 0 )
         {
             ::sax::Converter::convertPercent( aOut, -nValue );

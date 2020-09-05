@@ -2075,8 +2075,8 @@ ScVbaRange::Address(  const uno::Any& RowAbsolute, const uno::Any& ColumnAbsolut
     RangeHelper thisRange( mxRange );
     table::CellRangeAddress thisAddress = thisRange.getCellRangeAddressable()->getRangeAddress();
     ScRange aRange( static_cast< SCCOL >( thisAddress.StartColumn ), static_cast< SCROW >( thisAddress.StartRow ), static_cast< SCTAB >( thisAddress.Sheet ), static_cast< SCCOL >( thisAddress.EndColumn ), static_cast< SCROW >( thisAddress.EndRow ), static_cast< SCTAB >( thisAddress.Sheet ) );
-    ScRefFlags const ROW_ABS = ScRefFlags::ROW_ABS | ScRefFlags::ROW2_ABS;
-    ScRefFlags const COL_ABS = ScRefFlags::COL_ABS | ScRefFlags::COL2_ABS;
+    constexpr ScRefFlags ROW_ABS = ScRefFlags::ROW_ABS | ScRefFlags::ROW2_ABS;
+    constexpr ScRefFlags COL_ABS = ScRefFlags::COL_ABS | ScRefFlags::COL2_ABS;
 
     if ( RowAbsolute.hasValue() )
     {
@@ -2343,13 +2343,12 @@ ScVbaRange::Activate()
 uno::Reference< excel::XRange >
 ScVbaRange::Rows(const uno::Any& aIndex )
 {
-    OUString sAddress;
-
     if ( aIndex.hasValue() )
     {
         sal_Int32 nValue = 0;
         ScCellRangesBase* pUnoRangesBase = getCellRangesBase();
         ScRangeList aCellRanges = pUnoRangesBase->GetRangeList();
+        OUString sAddress;
 
         ScRange aRange = aCellRanges.front();
         if( aIndex >>= nValue )
@@ -2386,14 +2385,13 @@ ScVbaRange::Rows(const uno::Any& aIndex )
 uno::Reference< excel::XRange >
 ScVbaRange::Columns(const uno::Any& aIndex )
 {
-    OUString sAddress;
-
     ScCellRangesBase* pUnoRangesBase = getCellRangesBase();
     ScRangeList aCellRanges = pUnoRangesBase->GetRangeList();
 
     ScRange aRange = aCellRanges.front();
     if ( aIndex.hasValue() )
     {
+        OUString sAddress;
         sal_Int32 nValue = 0;
         if ( aIndex >>= nValue )
         {
@@ -2700,7 +2698,6 @@ ScVbaRange::Range( const uno::Any &Cell1, const uno::Any &Cell2, bool bForceUseI
     if( !Cell1.hasValue() )
         throw uno::RuntimeException( "Invalid Argument" );
 
-    table::CellRangeAddress resultAddress;
     table::CellRangeAddress parentRangeAddress = xAddressable->getRangeAddress();
 
     ScRange aRange;
@@ -2724,6 +2721,7 @@ ScVbaRange::Range( const uno::Any &Cell1, const uno::Any &Cell2, bool bForceUseI
 
         cell2 = getCellRangeAddressForVBARange( Cell2, getScDocShell() );
 
+        table::CellRangeAddress resultAddress;
         resultAddress.StartColumn = ( cell1.StartColumn <  cell2.StartColumn ) ? cell1.StartColumn : cell2.StartColumn;
         resultAddress.StartRow = ( cell1.StartRow <  cell2.StartRow ) ? cell1.StartRow : cell2.StartRow;
         resultAddress.EndColumn = std::max( cell1.EndColumn, cell2.EndColumn );
@@ -4458,7 +4456,6 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
     }
 
     sal_Int32 nField = 0; // *IS* 1 based
-    OUString sCriteria1;
     sal_Int32 nOperator = excel::XlAutoFilterOperator::xlAnd;
 
     sheet::FilterConnection nConn = sheet::FilterConnection_AND;
@@ -4492,6 +4489,7 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
                 xDataBaseRange->getFilterDescriptor(), uno::UNO_QUERY );
         if ( xDesc.is() )
         {
+            OUString sCriteria1;
             bool bAcceptCriteria2 = true;
             bool bAll = false;
             uno::Sequence< sheet::TableFilterField2 > sTabFilts;
@@ -4584,7 +4582,6 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
                 sTabFilts[0].Connection = sheet::FilterConnection_AND;
                 sTabFilts[0].Field = (nField - 1);
 
-                OUString sCriteria2;
                 uno::Sequence< OUString > aCriteria2;
                 if ( Criteria2.hasValue() ) // there is a Criteria2
                 {
@@ -4592,6 +4589,7 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
                     sTabFilts[1].Field = sTabFilts[0].Field;
                     sTabFilts[1].Connection = nConn;
 
+                    OUString sCriteria2;
                     if ( Criteria2 >>= sCriteria2 )
                     {
                         if ( !sCriteria2.isEmpty() )

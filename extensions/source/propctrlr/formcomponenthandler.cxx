@@ -394,11 +394,10 @@ namespace pcr
                             sal_Int32 nOldIdCount = aOldIdStrings.getLength();
                             for ( i = 0; i < nNewCount; ++i )
                             {
-                                OUString aOldIdStr;
                                 OUString aOldPureIdStr;
                                 if( i < nOldIdCount )
                                 {
-                                    aOldIdStr = pOldIdStrings[i];
+                                    OUString aOldIdStr = pOldIdStrings[i];
                                     aOldPureIdStr = aOldIdStr.copy( 1 );
                                 }
                                 OUString aNewPureIdStr = pNewPureIds[i];
@@ -1680,7 +1679,6 @@ namespace pcr
         {
             bool        bAccuracy = (PROPERTY_ID_DECIMAL_ACCURACY == nActuatingPropId);
             sal_uInt16  nNewDigits = 0;
-            bool        bUseSep = false;
             if ( bAccuracy )
             {
                 if( ! (_rNewValue >>= nNewDigits) )
@@ -1688,6 +1686,7 @@ namespace pcr
             }
             else
             {
+                bool        bUseSep = false;
                 if( ! (_rNewValue >>= bUseSep) )
                     SAL_WARN("extensions.propctrlr", "actuatingPropertyChanged: unable to get property " << PROPERTY_ID_SHOWTHOUSANDSEP);
             }

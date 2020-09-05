@@ -686,7 +686,6 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
             std::unique_ptr<GalleryObject> pObj(new GalleryObject);
 
             OUString    aFileName;
-            OUString    aPath;
             sal_uInt16  nTemp;
 
             rIStm.ReadCharAsBool( bRel );
@@ -702,7 +701,7 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
             if( bRel )
             {
                 aFileName = aFileName.replaceAll( "\\", "/" );
-                aPath = aRelURL1.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+                OUString aPath = aRelURL1.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
                 if( aFileName[ 0 ] != '/' )
                         aPath += "/";

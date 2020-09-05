@@ -749,13 +749,12 @@ void SlideSorterController::PrepareEditModeChange()
 
 void SlideSorterController::ChangeEditMode (EditMode eEditMode)
 {
-    bool bResult (false);
     if (mrModel.GetEditMode() != eEditMode)
     {
         ModelChangeLock aLock (*this);
         PreModelChange();
         // Do the actual edit mode switching.
-        bResult = mrModel.SetEditMode(eEditMode);
+        bool bResult = mrModel.SetEditMode(eEditMode);
         if (bResult)
             HandleModelChange();
     }

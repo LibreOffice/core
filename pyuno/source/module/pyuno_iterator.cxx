@@ -211,10 +211,10 @@ static PyObject* PyUNO_list_iterator_next( PyObject *self )
 
     Runtime runtime;
     Any aRet;
-    bool noMoreElements = false;
 
     try
     {
+        bool noMoreElements = false;
         {
             PyThreadDetach antiguard;
             try {

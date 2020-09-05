@@ -810,7 +810,6 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                     if( pTableNd->GetIndex() < m_rDoc.GetNodes().GetEndOfExtras().GetIndex() )
                     {
                         // is in the special section, that's expensive!
-                        Point aPt;      // return the first frame of the layout - Tab.Headline!!
                         SwNodeIndex aCNdIdx( *pTableNd, +2 );
                         SwContentNode* pCNd = aCNdIdx.GetNode().GetContentNode();
                         if( !pCNd )
@@ -818,6 +817,7 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
 
                         if (pCNd)
                         {
+                            Point aPt;      // return the first frame of the layout - Tab.Headline!!
                             std::pair<Point, bool> const tmp(aPt, true);
                             pFrame = pCNd->getLayoutFrame(pLayout, nullptr, &tmp);
                             if( pFrame )

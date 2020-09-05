@@ -691,7 +691,6 @@ void ORptExport::exportReportComponentAutoStyles(const Reference<XSection>& _xPr
 void ORptExport::exportSection(const Reference<XSection>& _xSection,bool bHeader)
 {
     OSL_ENSURE(_xSection.is(),"Section is NULL -> GPF");
-    OUStringBuffer sValue;
     AddAttribute(XML_NAMESPACE_TABLE, XML_NAME,_xSection->getName());
 
     if ( !_xSection->getVisible() )
@@ -699,6 +698,7 @@ void ORptExport::exportSection(const Reference<XSection>& _xSection,bool bHeader
 
     if ( !bHeader )
     {
+        OUStringBuffer sValue;
         sal_Int16 nRet = _xSection->getForceNewPage();
         const SvXMLEnumMapEntry<sal_Int16>* aXML_EnumMap = OXMLHelper::GetForceNewPageOptions();
         if ( SvXMLUnitConverter::convertEnum( sValue, nRet,aXML_EnumMap ) )

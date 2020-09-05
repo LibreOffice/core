@@ -180,9 +180,9 @@ namespace pcr
             return;
         }
 
-        sal_Int32 nMinHelpTextLines( 0 ), nMaxHelpTextLines( 0 );
         if ( arguments.size() == 2 )
         {   // constructor: "createWithHelpSection( long, long )"
+            sal_Int32 nMinHelpTextLines( 0 ), nMaxHelpTextLines( 0 );
             if ( !( arguments[0] >>= nMinHelpTextLines ) || !( arguments[1] >>= nMaxHelpTextLines ) )
                 throw IllegalArgumentException( OUString(), *this, 0 );
             createWithHelpSection( nMinHelpTextLines, nMaxHelpTextLines );

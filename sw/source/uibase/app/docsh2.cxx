@@ -520,7 +520,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 static bool bPage =  false;
                 static bool bNum =   false;
                 static bool bMerge = false;
-                sal_uInt16 nRet = USHRT_MAX;
 
                 SfxTemplateFlags nFlags = bFrame ? SfxTemplateFlags::LOAD_FRAME_STYLES : SfxTemplateFlags::NONE;
                 if(bPage)
@@ -550,7 +549,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     SfxNewFileDialog aNewFileDlg(GetView()->GetFrameWeld(), SfxNewFileDialogMode::LoadTemplate);
                     aNewFileDlg.SetTemplateFlags(nFlags);
 
-                    nRet = aNewFileDlg.run();
+                    sal_uInt16 nRet = aNewFileDlg.run();
                     if(RET_TEMPLATE_LOAD == nRet)
                     {
                         FileDialogHelper aDlgHelper(TemplateDescription::FILEOPEN_SIMPLE,

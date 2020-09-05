@@ -1075,7 +1075,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
 
     // Support add-on toolbar merging here. Working directly on the toolbar object is much
     // simpler and faster.
-    const sal_uInt16 TOOLBAR_ITEM_STARTID = 1000;
+    constexpr sal_uInt16 TOOLBAR_ITEM_STARTID = 1000;
 
     MergeToolbarInstructionContainer aMergeInstructionContainer;
 

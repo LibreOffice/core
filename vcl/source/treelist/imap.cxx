@@ -956,7 +956,6 @@ void ImageMap::Read( SvStream& rIStm )
 {
     char            cMagic[6];
     SvStreamEndian  nOldFormat = rIStm.GetEndian();
-    sal_uInt16      nCount;
 
     rIStm.SetEndian( SvStreamEndian::LITTLE );
     rIStm.ReadBytes(cMagic, sizeof(cMagic));
@@ -964,6 +963,7 @@ void ImageMap::Read( SvStream& rIStm )
     if ( !memcmp( cMagic, IMAPMAGIC, sizeof( cMagic ) ) )
     {
         IMapCompat* pCompat;
+        sal_uInt16  nCount;
 
         // delete old content
         ClearImageMap();

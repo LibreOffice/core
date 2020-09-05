@@ -204,7 +204,6 @@ void ScDbNameDlg::Init()
         SCTAB   nEndTab     = 0;
 
         ScDBCollection* pDBColl = rDoc.GetDBCollection();
-        ScDBData*       pDBData = nullptr;
 
         pViewData->GetSimpleArea( nStartCol, nStartRow, nStartTab,
                                   nEndCol,   nEndRow,  nEndTab );
@@ -216,7 +215,7 @@ void ScDbNameDlg::Init()
         if ( pDBColl )
         {
             // determine if the defined DB area has been marked:
-            pDBData = pDBColl->GetDBAtCursor( nStartCol, nStartRow, nStartTab, ScDBDataPortion::TOP_LEFT );
+            ScDBData* pDBData = pDBColl->GetDBAtCursor( nStartCol, nStartRow, nStartTab, ScDBDataPortion::TOP_LEFT );
             if ( pDBData )
             {
                 ScAddress&  rStart = theCurArea.aStart;

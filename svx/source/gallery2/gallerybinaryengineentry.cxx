@@ -85,7 +85,6 @@ GalleryThemeEntry* GalleryBinaryEngineEntry::CreateThemeEntry(const INetURLObjec
 
         if (pIStm)
         {
-            OUString aThemeName;
             sal_uInt16 nVersion;
 
             pIStm->ReadUInt16(nVersion);
@@ -96,7 +95,7 @@ GalleryThemeEntry* GalleryBinaryEngineEntry::CreateThemeEntry(const INetURLObjec
                 sal_uInt32 nThemeId = 0;
 
                 OString aTmpStr = read_uInt16_lenPrefixed_uInt8s_ToOString(*pIStm);
-                aThemeName = OStringToOUString(aTmpStr, RTL_TEXTENCODING_UTF8);
+                OUString aThemeName = OStringToOUString(aTmpStr, RTL_TEXTENCODING_UTF8);
 
                 // execute a character conversion
                 if (nVersion >= 0x0004)

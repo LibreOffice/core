@@ -176,9 +176,8 @@ void ZipPackage::parseManifest()
     const OUString sMeta ("META-INF");
     if ( m_xRootFolder->hasByName( sMeta ) )
     {
-        const OUString sManifest ("manifest.xml");
-
         try {
+            const OUString sManifest ("manifest.xml");
             uno::Reference< XUnoTunnel > xTunnel;
             Any aAny = m_xRootFolder->getByName( sMeta );
             aAny >>= xTunnel;
@@ -457,8 +456,8 @@ void ZipPackage::parseContentType()
     if ( m_nFormat != embed::StorageFormats::OFOPXML )
         return;
 
-    const OUString aContentTypes("[Content_Types].xml");
     try {
+        const OUString aContentTypes("[Content_Types].xml");
         // the content type must exist in OFOPXML format!
         if ( !m_xRootFolder->hasByName( aContentTypes ) )
             throw io::IOException(THROW_WHERE "Wrong format!" );
@@ -899,8 +898,8 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
 
 sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
 {
-    OUString sTemp, sDirName;
-    sal_Int32 nOldIndex, nStreamIndex;
+    OUString sTemp;
+    sal_Int32 nOldIndex;
     FolderHash::iterator aIter;
 
     sal_Int32 nIndex = aName.getLength();
@@ -911,6 +910,8 @@ sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
 
     try
     {
+        OUString sDirName;
+        sal_Int32 nStreamIndex;
         nStreamIndex = aName.lastIndexOf ( '/' );
         bool bFolder = nStreamIndex == nIndex-1;
         if ( nStreamIndex != -1 )
@@ -1105,13 +1106,13 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< uno:
     sal_Int32 nOverSeqLength = 0;
     for (const auto& rMan : aManList)
     {
-        OUString aPath;
         OUString aType;
         OSL_ENSURE( rMan[PKG_MNFST_MEDIATYPE].Name == "MediaType" && rMan[PKG_MNFST_FULLPATH].Name == "FullPath",
                     "The mediatype sequence format is wrong!" );
         rMan[PKG_MNFST_MEDIATYPE].Value >>= aType;
         if ( !aType.isEmpty() )
         {
+            OUString aPath;
             // only nonempty type makes sense here
             rMan[PKG_MNFST_FULLPATH].Value >>= aPath;
             //FIXME: For now we have no way of differentiating defaults from others.

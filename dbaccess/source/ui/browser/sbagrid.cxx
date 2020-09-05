@@ -1126,9 +1126,9 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_Int16 nRowPos)
     // the old implementation copied a SBA_FIELDDATAEXCHANGE_FORMAT, too, (which was rather expensive to obtain),
     // but we have no client for this DnD format anymore (the mail part of SO 5.2 was the only client)
 
-    OUString sCellText;
     try
     {
+        OUString sCellText;
         Reference< XGridFieldDataSupplier >  xFieldData(static_cast< XGridPeer* >(GetPeer()), UNO_QUERY);
         Sequence<sal_Bool> aSupportingText = xFieldData->queryFieldDataType(cppu::UnoType<decltype(sCellText)>::get());
         if (aSupportingText.getConstArray()[nColumnPos])

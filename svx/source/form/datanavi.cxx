@@ -781,8 +781,6 @@ namespace svxform
 
     void XFormsPage::EditEntry( const Reference< XPropertySet >& _rEntry )
     {
-        OUString sTemp;
-
         if ( DGTSubmission != m_eGroup )
             return;
 
@@ -801,6 +799,7 @@ namespace svxform
             if (!m_xItemList->iter_has_child(*xEntry))
                 m_xItemList->iter_parent(*xEntry);
 
+            OUString sTemp;
             _rEntry->getPropertyValue( PN_SUBMISSION_ID ) >>= sTemp;
             m_xItemList->set_text(*xEntry, sTemp);
 
@@ -2155,7 +2154,7 @@ namespace svxform
 
     IMPL_LINK(AddDataItemDialog, ConditionHdl, weld::Button&, rBtn, void)
     {
-        OUString sTemp, sPropName;
+        OUString sPropName;
         if ( m_xDefaultBtn.get() == &rBtn )
             sPropName = PN_BINDING_EXPR;
         else if ( m_xRequiredBtn.get() == &rBtn )
@@ -2175,6 +2174,7 @@ namespace svxform
             sCondition = m_xDefaultED->get_text();
         else
         {
+            OUString sTemp;
             m_xTempBinding->getPropertyValue( sPropName ) >>= sTemp;
             if ( sTemp.isEmpty() )
                 sTemp = TRUE_VALUE;
@@ -2387,10 +2387,10 @@ namespace svxform
                         TOOLS_WARN_EXCEPTION( "svx.form", "AddDataItemDialog::InitFromNode()" );
                     }
                 }
-                OUString sTemp;
                 try
                 {
                     Reference< XPropertySetInfo > xInfo = m_pItemNode->m_xPropSet->getPropertySetInfo();
+                    OUString sTemp;
                     if ( xInfo->hasPropertyByName( PN_BINDING_ID ) )
                     {
                         m_pItemNode->m_xPropSet->getPropertyValue( PN_BINDING_ID ) >>= sTemp;
@@ -2414,9 +2414,9 @@ namespace svxform
 
             if ( m_xTempBinding.is() )
             {
-                OUString sTemp;
                 try
                 {
+                    OUString sTemp;
                     if ( ( m_xTempBinding->getPropertyValue( PN_REQUIRED_EXPR ) >>= sTemp )
                         && !sTemp.isEmpty() )
                         m_xRequiredCB->set_active(true);
@@ -2977,9 +2977,9 @@ namespace svxform
         if ( m_pItemNode && m_pItemNode->m_xPropSet.is() )
         {
             m_xSubmission = m_pItemNode->m_xPropSet;
-            OUString sTemp;
             try
             {
+                OUString sTemp;
                 m_xSubmission->getPropertyValue( PN_SUBMISSION_ID ) >>= sTemp;
                 m_xNameED->set_text( sTemp );
                 m_xSubmission->getPropertyValue( PN_SUBMISSION_ACTION ) >>= sTemp;

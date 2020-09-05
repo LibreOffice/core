@@ -273,8 +273,8 @@ OUString Idlc::processDocumentation()
 static void lcl_writeString(::osl::File & rFile, ::osl::FileBase::RC & o_rRC,
         OString const& rString)
 {
-    sal_uInt64 nWritten(0);
     if (::osl::FileBase::E_None == o_rRC) {
+        sal_uInt64 nWritten(0);
         o_rRC = rFile.write(rString.getStr(), rString.getLength(), nWritten);
         if (static_cast<sal_uInt64>(rString.getLength()) != nWritten) {
             o_rRC = ::osl::FileBase::E_INVAL; //?

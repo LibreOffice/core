@@ -1278,11 +1278,10 @@ OUString OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldD
     bool bCheck = !_bCheck || _pFieldDescr->GetControlDefault().hasValue();
     if ( bCheck )
     {
-        sal_uInt32 nFormatKey;
-
         try
         {
             double nValue = 0.0;
+            sal_uInt32 nFormatKey;
             bool bTextFormat = isTextFormat(_pFieldDescr,nFormatKey);
             if ( _pFieldDescr->GetControlDefault() >>= sDefault )
             {
