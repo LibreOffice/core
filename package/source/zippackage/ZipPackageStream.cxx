@@ -373,7 +373,6 @@ bool ZipPackageStream::ParsePackageRawStream()
     bool bOk = false;
 
     ::rtl::Reference< BaseEncryptionData > xTempEncrData;
-    sal_Int32 nMagHackSize = 0;
     Sequence < sal_Int8 > aHeader ( 4 );
 
     try
@@ -395,6 +394,7 @@ bool ZipPackageStream::ParsePackageRawStream()
                 sal_Int32 nChecksumAlgorithm = 0;
                 sal_Int32 nDerivedKeySize = 0;
                 sal_Int32 nStartKeyGenID = 0;
+                sal_Int32 nMagHackSize = 0;
                 if ( ZipFile::StaticFillData( xTempEncrData, nEncAlgorithm, nChecksumAlgorithm, nDerivedKeySize, nStartKeyGenID, nMagHackSize, aMediaType, GetOwnSeekStream() ) )
                 {
                     // We'll want to skip the data we've just read, so calculate how much we just read

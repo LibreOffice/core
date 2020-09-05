@@ -2061,10 +2061,9 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
         return *this;
     }
 
-    OString anotherProgID;
     if (!pProgID && !progID.isEmpty())
     {
-        anotherProgID = OUStringToOString(progID, RTL_TEXTENCODING_UTF8);
+        OString anotherProgID = OUStringToOString(progID, RTL_TEXTENCODING_UTF8);
         pProgID = anotherProgID.getStr();
     }
 

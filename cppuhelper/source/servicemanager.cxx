@@ -1912,13 +1912,13 @@ void cppuhelper::ServiceManager::preloadImplementations() {
         if (aModule.is() &&
             !rEntry.second->environment.isEmpty())
         {
-            OUString aSymFactory;
             oslGenericFunction fpFactory;
             css::uno::Environment aTargetEnv;
             css::uno::Reference<css::uno::XInterface> xFactory;
 
             if(rEntry.second->constructorName.isEmpty())
             {
+                OUString aSymFactory;
                 // expand full name component factory symbol
                 if (rEntry.second->prefix == "direct")
                     aSymFactory = rEntry.second->name.replace('.', '_') + "_" COMPONENT_GETFACTORY;

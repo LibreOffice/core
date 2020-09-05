@@ -2211,9 +2211,9 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
     else if ( FormulaGrammar::isOOXML( meGrammar ) )
     {
         // Scan token array for missing args and rewrite if present.
-        MissingConventionOOXML aConv;
         if (pArr->NeedsOoxmlRewrite())
         {
+            MissingConventionOOXML aConv;
             pArr = pArr->RewriteMissing( aConv );
             maArrIterator = FormulaTokenArrayPlainIterator( *pArr );
         }

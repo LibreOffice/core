@@ -258,7 +258,6 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
     sal_Int16 minLen = rHelper.GetMinWordLength();
     bool bNoHyphenateCaps = rHelper.IsNoHyphenateCaps();
 
-    HyphenDict *dict = nullptr;
     rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
 
     Reference< XHyphenatedWord > xRes;
@@ -285,7 +284,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
         }
 
         // otherwise hyphenate the word with that dictionary
-        dict = mvDicts[k].aPtr;
+        HyphenDict *dict = mvDicts[k].aPtr;
         eEnc = mvDicts[k].eEnc;
         CharClass * pCC =  mvDicts[k].apCC.get();
 

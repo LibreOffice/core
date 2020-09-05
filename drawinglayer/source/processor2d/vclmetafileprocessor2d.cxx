@@ -2207,7 +2207,6 @@ void VclMetafileProcessor2D::processTransparencePrimitive2D(
                                           static_cast<sal_Int32>(ceil(aViewRange.getMaxY())));
         const tools::Rectangle aRectPixel(mpOutputDevice->LogicToPixel(aRectLogic));
         Size aSizePixel(aRectPixel.GetSize());
-        const Point aEmptyPoint;
         ScopedVclPtrInstance<VirtualDevice> aBufferDevice;
         const sal_uInt32 nMaxQuadratPixels(500000);
         const sal_uInt32 nViewVisibleArea(aSizePixel.getWidth() * aSizePixel.getHeight());
@@ -2263,6 +2262,7 @@ void VclMetafileProcessor2D::processTransparencePrimitive2D(
             VclPixelProcessor2D aBufferProcessor(aViewInfo, *aBufferDevice);
 
             // draw content using pixel renderer
+            const Point aEmptyPoint;
             aBufferProcessor.process(rContent);
             const Bitmap aBmContent(aBufferDevice->GetBitmap(aEmptyPoint, aSizePixel));
 
