@@ -160,6 +160,7 @@ void AnalyizeSignatureStream(SvMemoryStream& rStream, std::vector<BitmapChecksum
     }
 #else
     (void)rStream;
+    (void)rPageChecksums;
 #endif
 }
 
