@@ -230,6 +230,7 @@ public:
     void testTdf103734();
     void testTdf98844();
     void testTdf100458();
+    void testTdf118561();
     void testTdf134455();
     void testTdf119533();
     void testTdf127982();
@@ -395,6 +396,7 @@ public:
     CPPUNIT_TEST(testTdf103734);
     CPPUNIT_TEST(testTdf98844);
     CPPUNIT_TEST(testTdf100458);
+    CPPUNIT_TEST(testTdf118561);
     CPPUNIT_TEST(testTdf134455);
     CPPUNIT_TEST(testTdf119533);
     CPPUNIT_TEST(testTdf127982);
@@ -3819,6 +3821,25 @@ void ScFiltersTest::testTdf100458()
     CPPUNIT_ASSERT(rDoc.HasValueData(0, 0, 0));
     CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(0,0,0));
     CPPUNIT_ASSERT(!rDoc.HasStringData(0, 0, 0));
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf118561()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf118561.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    //Without the fix in place, it would have failed with
+    //- Expected: apple
+    //- Actual  : Err:502
+    CPPUNIT_ASSERT_EQUAL(OUString("apple"), rDoc.GetString(ScAddress(1,1,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("apple"), rDoc.GetString(ScAddress(2,1,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("TRUE"), rDoc.GetString(ScAddress(3,1,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("fruits"), rDoc.GetString(ScAddress(4,1,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("apple"), rDoc.GetString(ScAddress(5,1,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("hat"), rDoc.GetString(ScAddress(6,1,1)));
+
     xDocSh->DoClose();
 }
 
