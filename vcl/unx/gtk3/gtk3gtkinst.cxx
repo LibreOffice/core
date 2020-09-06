@@ -8940,17 +8940,15 @@ public:
 
         PangoAttrType aFilterAttrs[] = {PANGO_ATTR_FOREGROUND, PANGO_ATTR_INVALID};
 
-        PangoAttrList* pAttrList = pOrigList
-            ? pango_attr_list_filter(pOrigList, filter_pango_attrs, &aFilterAttrs)
-            : nullptr;
-        if (!pAttrList)
-            pAttrList = pango_attr_list_new();
+        PangoAttrList* pAttrs = pOrigList ? pango_attr_list_copy(pOrigList) : pango_attr_list_new();
+        PangoAttrList* pRemovedAttrs = pOrigList ? pango_attr_list_filter(pAttrs, filter_pango_attrs, &aFilterAttrs) : nullptr;
 
         if (rColor != COL_AUTO)
-            pango_attr_list_insert(pAttrList, pango_attr_foreground_new(rColor.GetRed()/255.0, rColor.GetGreen()/255.0, rColor.GetBlue()/255.0));
+            pango_attr_list_insert(pAttrs, pango_attr_foreground_new(rColor.GetRed()/255.0, rColor.GetGreen()/255.0, rColor.GetBlue()/255.0));
 
-        gtk_entry_set_attributes(m_pEntry, pAttrList);
-        pango_attr_list_unref(pAttrList);
+        gtk_entry_set_attributes(m_pEntry, pAttrs);
+        pango_attr_list_unref(pAttrs);
+        pango_attr_list_unref(pRemovedAttrs);
     }
 
     void fire_signal_changed()
@@ -12546,14 +12544,12 @@ private:
         PangoAttrType aFilterAttrs[] = {PANGO_ATTR_BACKGROUND, PANGO_ATTR_INVALID};
 
         PangoAttrList* pOrigList = gtk_label_get_attributes(m_pLabel);
-        PangoAttrList* pAttrs = pOrigList
-            ? pango_attr_list_filter(pOrigList, filter_pango_attrs, &aFilterAttrs)
-            : nullptr;
-        if (!pAttrs)
-            pAttrs = pango_attr_list_new();
+        PangoAttrList* pAttrs = pOrigList ? pango_attr_list_copy(pOrigList) : pango_attr_list_new();
+        PangoAttrList* pRemovedAttrs = pOrigList ? pango_attr_list_filter(pAttrs, filter_pango_attrs, &aFilterAttrs) : nullptr;
         pango_attr_list_insert(pAttrs, pango_attr_background_new(nRed, nGreen, nBlue));
         gtk_label_set_attributes(m_pLabel, pAttrs);
         pango_attr_list_unref(pAttrs);
+        pango_attr_list_unref(pRemovedAttrs);
     }
 
     void set_text_foreground_color(const Color& rColor, bool bSetBold)
@@ -12568,17 +12564,15 @@ private:
             aFilterAttrs[1] = PANGO_ATTR_INVALID;
 
         PangoAttrList* pOrigList = gtk_label_get_attributes(m_pLabel);
-        PangoAttrList* pAttrs = pOrigList
-            ? pango_attr_list_filter(pOrigList, filter_pango_attrs, &aFilterAttrs)
-            : nullptr;
-        if (!pAttrs)
-            pAttrs = pango_attr_list_new();
+        PangoAttrList* pAttrs = pOrigList ? pango_attr_list_copy(pOrigList) : pango_attr_list_new();
+        PangoAttrList* pRemovedAttrs = pOrigList ? pango_attr_list_filter(pAttrs, filter_pango_attrs, &aFilterAttrs) : nullptr;
         if (rColor != COL_AUTO)
             pango_attr_list_insert(pAttrs, pango_attr_foreground_new(nRed, nGreen, nBlue));
         if (bSetBold)
             pango_attr_list_insert(pAttrs, pango_attr_weight_new(PANGO_WEIGHT_BOLD));
         gtk_label_set_attributes(m_pLabel, pAttrs);
         pango_attr_list_unref(pAttrs);
+        pango_attr_list_unref(pRemovedAttrs);
     }
 
 public:
