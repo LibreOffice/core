@@ -145,6 +145,7 @@ CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
     , mxMFStartDelay(m_xBuilder->weld_metric_spin_button("delay_value", FieldUnit::SECOND))
     , mxCBAutoPreview(m_xBuilder->weld_check_button("auto_preview"))
     , mxPBPlay(m_xBuilder->weld_button("play"))
+    , maIdle("sd idle treeview select")
     , mnLastSelectedAnimation(-1)
     , mnPropertyType(nPropertyTypeNone)
     , mnCurvePathPos(-1)
@@ -179,6 +180,9 @@ void CustomAnimationPane::initialize()
     mxLBCategory->connect_changed( LINK(this, CustomAnimationPane, UpdateAnimationLB) );
     mxMFStartDelay->connect_value_changed( LINK(this, CustomAnimationPane, DelayModifiedHdl) );
     mxMFStartDelay->connect_focus_out(LINK( this, CustomAnimationPane, DelayLoseFocusHdl));
+
+    maIdle.SetPriority(TaskPriority::DEFAULT);
+    maIdle.SetInvokeHandler(LINK(this, CustomAnimationPane, SelectionHandler));
 
     maStrModify = mxFTEffect->get_label();
 
@@ -2073,6 +2077,17 @@ IMPL_LINK_NOARG(CustomAnimationPane, DelayLoseFocusHdl, weld::Widget&, void)
 
 IMPL_LINK_NOARG(CustomAnimationPane, AnimationSelectHdl, weld::TreeView&, void)
 {
+    maIdle.Start();
+}
+
+IMPL_LINK_NOARG(CustomAnimationPane, SelectionHandler, Timer*, void)
+{
+    if (mxLBAnimation->has_grab()) // tdf#136474 try again later
+    {
+        maIdle.Start();
+        return;
+    }
+
     int nSelected = mxLBAnimation->get_selected_index();
 
     // tdf#99137, the selected entry may also be a subcategory title, so not an effect

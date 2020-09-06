@@ -113,6 +113,7 @@ private:
     DECL_LINK( DelayLoseFocusHdl, weld::Widget&, void );
     DECL_LINK( UpdateAnimationLB, weld::ComboBox&, void );
     DECL_LINK( AnimationSelectHdl, weld::TreeView&, void );
+    DECL_LINK( SelectionHandler, Timer*, void );
     void implControlHdl(const weld::Widget* pControl);
 
 private:
@@ -141,6 +142,8 @@ private:
     std::unique_ptr<weld::MetricSpinButton> mxMFStartDelay;
     std::unique_ptr<weld::CheckButton> mxCBAutoPreview;
     std::unique_ptr<weld::Button> mxPBPlay;
+
+    Idle maIdle;
 
     OUString    maStrModify;
     OUString    maStrProperty;
