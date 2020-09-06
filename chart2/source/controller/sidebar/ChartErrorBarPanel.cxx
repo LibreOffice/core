@@ -24,6 +24,8 @@
 #include "ChartErrorBarPanel.hxx"
 #include <ChartController.hxx>
 #include <vcl/svapp.hxx>
+#include <sal/log.hxx>
+
 
 using namespace css;
 using namespace css::uno;
@@ -220,9 +222,11 @@ OUString getCID(const css::uno::Reference<css::frame::XModel>& xModel)
     aAny >>= aCID;
 #if defined DBG_UTIL && !defined NDEBUG
     ObjectType eType = ObjectIdentifier::getObjectType(aCID);
-    assert(eType == OBJECTTYPE_DATA_ERRORS_X ||
-            eType == OBJECTTYPE_DATA_ERRORS_Y ||
-            eType == OBJECTTYPE_DATA_ERRORS_Z);
+    if (eType != OBJECTTYPE_DATA_ERRORS_X &&
+         eType != OBJECTTYPE_DATA_ERRORS_Y &&
+         eType != OBJECTTYPE_DATA_ERRORS_Z)
+        SAL_WARN("chart2","Selected item is not an error bar");
+
 #endif
 
     return aCID;
@@ -297,6 +301,12 @@ void ChartErrorBarPanel::updateData()
         return;
 
     OUString aCID = getCID(mxModel);
+    ObjectType eType = ObjectIdentifier::getObjectType(aCID);
+    if (eType != OBJECTTYPE_DATA_ERRORS_X &&
+         eType != OBJECTTYPE_DATA_ERRORS_Y &&
+         eType != OBJECTTYPE_DATA_ERRORS_Z)
+        return;
+
     bool bPos = showPositiveError(mxModel, aCID);
     bool bNeg = showNegativeError(mxModel, aCID);
 
