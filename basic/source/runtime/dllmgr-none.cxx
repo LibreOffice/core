@@ -32,8 +32,6 @@
 
 #include "dllmgr.hxx"
 
-struct SbiDllMgr::Impl {};
-
 namespace {
 
 // Overcome the mess of Currency vs. custom types etc.
@@ -107,8 +105,8 @@ ErrCode SbiDllMgr::Call(
 
 void SbiDllMgr::FreeDll(SAL_UNUSED_PARAMETER OUString const &) {}
 
-SbiDllMgr::SbiDllMgr(): impl_(new Impl) {}
+SbiDllMgr::SbiDllMgr() = default;
 
-SbiDllMgr::~SbiDllMgr() {}
+SbiDllMgr::~SbiDllMgr() = default;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
