@@ -26,8 +26,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <memory>
 
-class AccessibleStateSetHelperImpl;
-
 //= XAccessibleStateSet helper classes
 
 //... namespace utl .......................................................
@@ -134,7 +132,7 @@ private:
     /// Mutex guarding this object.
     ::osl::Mutex maMutex;
     /// The implementation of this helper interface.
-    std::unique_ptr<AccessibleStateSetHelperImpl>   mpHelperImpl;
+    sal_uInt64 maStates;
 };
 
 }

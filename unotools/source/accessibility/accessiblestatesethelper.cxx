@@ -28,110 +28,32 @@ using namespace ::utl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-class AccessibleStateSetHelperImpl
+namespace
 {
-public:
-    AccessibleStateSetHelperImpl();
-    AccessibleStateSetHelperImpl(const AccessibleStateSetHelperImpl& rImpl);
+    bool lcl_contains(sal_uInt64 aStates, sal_uInt64 aState)
+    {
+        DBG_ASSERT(aState < BITFIELDSIZE, "the statesset is too small");
+        sal_uInt64 aTempBitSet(1);
+        aTempBitSet <<= aState;
+        return ((aTempBitSet & aStates) != 0);
+    }
+}
+//=====  internal  ============================================================
 
-    /// @throws uno::RuntimeException
-    bool IsEmpty () const;
-    /// @throws uno::RuntimeException
-    bool Contains (sal_Int16 aState) const;
-    /// @throws uno::RuntimeException
-    uno::Sequence<sal_Int16> GetStates() const;
-    /// @throws uno::RuntimeException
-    void AddState(sal_Int16 aState);
-    /// @throws uno::RuntimeException
-    void RemoveState(sal_Int16 aState);
-
-    inline void AddStates( const sal_Int64 _nStates );
-
-private:
-    sal_uInt64 maStates;
-};
-
-AccessibleStateSetHelperImpl::AccessibleStateSetHelperImpl()
+AccessibleStateSetHelper::AccessibleStateSetHelper ()
     : maStates(0)
 {
 }
 
-AccessibleStateSetHelperImpl::AccessibleStateSetHelperImpl(const AccessibleStateSetHelperImpl& rImpl)
-    : maStates(rImpl.maStates)
-{
-}
-
-inline bool AccessibleStateSetHelperImpl::IsEmpty () const
-{
-    return maStates == 0;
-}
-
-inline bool AccessibleStateSetHelperImpl::Contains (sal_Int16 aState) const
-{
-    DBG_ASSERT(aState < BITFIELDSIZE, "the statesset is too small");
-    sal_uInt64 aTempBitSet(1);
-    aTempBitSet <<= aState;
-    return ((aTempBitSet & maStates) != 0);
-}
-
-inline uno::Sequence<sal_Int16> AccessibleStateSetHelperImpl::GetStates() const
-{
-    uno::Sequence<sal_Int16> aRet(BITFIELDSIZE);
-    sal_Int16* pSeq = aRet.getArray();
-    sal_Int16 nStateCount(0);
-    for (sal_Int16 i = 0; i < BITFIELDSIZE; ++i)
-        if (Contains(i))
-        {
-            *pSeq = i;
-            ++pSeq;
-            ++nStateCount;
-        }
-    aRet.realloc(nStateCount);
-    return aRet;
-}
-
-inline void AccessibleStateSetHelperImpl::AddStates( const sal_Int64 _nStates )
-{
-    maStates |= _nStates;
-}
-
-inline void AccessibleStateSetHelperImpl::AddState(sal_Int16 aState)
-{
-    DBG_ASSERT(aState < BITFIELDSIZE, "the statesset is too small");
-    sal_uInt64 aTempBitSet(1);
-    aTempBitSet <<= aState;
-    maStates |= aTempBitSet;
-}
-
-inline void AccessibleStateSetHelperImpl::RemoveState(sal_Int16 aState)
-{
-    DBG_ASSERT(aState < BITFIELDSIZE, "the statesset is too small");
-    sal_uInt64 aTempBitSet(1);
-    aTempBitSet <<= aState;
-    aTempBitSet = ~aTempBitSet;
-    maStates &= aTempBitSet;
-}
-
-//=====  internal  ============================================================
-
-AccessibleStateSetHelper::AccessibleStateSetHelper ()
-    : mpHelperImpl(new AccessibleStateSetHelperImpl)
-{
-}
-
 AccessibleStateSetHelper::AccessibleStateSetHelper ( const sal_Int64 _nInitialStates )
-    : mpHelperImpl(new AccessibleStateSetHelperImpl)
+    : maStates(_nInitialStates)
 {
-    mpHelperImpl->AddStates( _nInitialStates );
 }
 
 AccessibleStateSetHelper::AccessibleStateSetHelper (const AccessibleStateSetHelper& rHelper)
-    : cppu::WeakImplHelper<XAccessibleStateSet>(rHelper)
+    : cppu::WeakImplHelper<XAccessibleStateSet>(rHelper),
+      maStates(rHelper.maStates)
 {
-    if (rHelper.mpHelperImpl)
-        mpHelperImpl.reset(new AccessibleStateSetHelperImpl(*rHelper.mpHelperImpl));
-    else
-        mpHelperImpl.reset(new AccessibleStateSetHelperImpl());
 }
 
 AccessibleStateSetHelper::~AccessibleStateSetHelper()
@@ -149,7 +71,7 @@ AccessibleStateSetHelper::~AccessibleStateSetHelper()
 sal_Bool SAL_CALL AccessibleStateSetHelper::isEmpty ()
 {
     osl::MutexGuard aGuard (maMutex);
-    return mpHelperImpl->IsEmpty();
+    return maStates == 0;
 }
 
     /** Checks if the given state is a member of the state set of this
@@ -166,7 +88,8 @@ sal_Bool SAL_CALL AccessibleStateSetHelper::isEmpty ()
 sal_Bool SAL_CALL AccessibleStateSetHelper::contains (sal_Int16 aState)
 {
     osl::MutexGuard aGuard (maMutex);
-    return mpHelperImpl->Contains(aState);
+
+    return lcl_contains(maStates, aState);
 }
 
     /** Checks if all of the given states are in this object's state
@@ -189,25 +112,43 @@ sal_Bool SAL_CALL AccessibleStateSetHelper::containsAll
 {
     osl::MutexGuard aGuard (maMutex);
     return std::all_of(rStateSet.begin(), rStateSet.end(),
-        [this](const sal_Int16 nState) { return mpHelperImpl->Contains(nState); });
+        [this](const sal_Int16 nState) { return lcl_contains(maStates, nState); });
 }
 
 uno::Sequence<sal_Int16> SAL_CALL AccessibleStateSetHelper::getStates()
 {
     osl::MutexGuard aGuard(maMutex);
-    return mpHelperImpl->GetStates();
+    uno::Sequence<sal_Int16> aRet(BITFIELDSIZE);
+    sal_Int16* pSeq = aRet.getArray();
+    sal_Int16 nStateCount(0);
+    for (sal_Int16 i = 0; i < BITFIELDSIZE; ++i)
+        if (lcl_contains(maStates, i))
+        {
+            *pSeq = i;
+            ++pSeq;
+            ++nStateCount;
+        }
+    aRet.realloc(nStateCount);
+    return aRet;
 }
 
 void AccessibleStateSetHelper::AddState(sal_Int16 aState)
 {
     osl::MutexGuard aGuard (maMutex);
-    mpHelperImpl->AddState(aState);
+    DBG_ASSERT(aState < BITFIELDSIZE, "the statesset is too small");
+    sal_uInt64 aTempBitSet(1);
+    aTempBitSet <<= aState;
+    maStates |= aTempBitSet;
 }
 
 void AccessibleStateSetHelper::RemoveState(sal_Int16 aState)
 {
     osl::MutexGuard aGuard (maMutex);
-    mpHelperImpl->RemoveState(aState);
+    DBG_ASSERT(aState < BITFIELDSIZE, "the statesset is too small");
+    sal_uInt64 aTempBitSet(1);
+    aTempBitSet <<= aState;
+    aTempBitSet = ~aTempBitSet;
+    maStates &= aTempBitSet;
 }
 
 //=====  XTypeProvider  =======================================================
