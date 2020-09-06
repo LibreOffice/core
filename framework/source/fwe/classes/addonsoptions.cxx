@@ -920,7 +920,6 @@ void AddonsOptions_Impl::ReadImages( ImageManager& aImageManager )
 OUString AddonsOptions_Impl::GeneratePrefixURL()
 {
     // Create a unique prefixed Add-On popup menu URL so it can be identified later as a runtime popup menu.
-    // They use a different image manager, so they must be identified by the sfx2/framework code.
     OUString aPopupMenuURL;
     OUStringBuffer aBuf( m_aRootAddonPopupMenuURLPrexfix.getLength() + 3 );
     aBuf.append( m_aRootAddonPopupMenuURLPrexfix );
