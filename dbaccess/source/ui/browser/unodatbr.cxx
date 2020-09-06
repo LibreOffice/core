@@ -297,9 +297,9 @@ bool SbaTableQueryBrowser::Construct(vcl::Window* pParent)
         m_pSplitter->SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
 
         m_pTreeView = VclPtr<InterimDBTreeListBox>::Create(getBrowserView(), E_TABLE);
-        m_pTreeView->SetHelpId(HID_TLB_TREELISTBOX);
 
-        m_pTreeView->GetWidget().connect_expanding(LINK(this, SbaTableQueryBrowser, OnExpandEntry));
+        weld::TreeView& rTreeView = m_pTreeView->GetWidget();
+        rTreeView.connect_expanding(LINK(this, SbaTableQueryBrowser, OnExpandEntry));
 
         m_pTreeView->setCopyHandler(LINK(this, SbaTableQueryBrowser, OnCopyEntry));
 
@@ -314,13 +314,13 @@ bool SbaTableQueryBrowser::Construct(vcl::Window* pParent)
         getBrowserView()->setTreeView(m_pTreeView);
 
         // fill view with data
-        weld::TreeView& rTreeView = m_pTreeView->GetWidget();
         rTreeView.set_sort_order(true);
         rTreeView.set_sort_func([this](const weld::TreeIter& rLeft, const weld::TreeIter& rRight){
             return OnTreeEntryCompare(rLeft, rRight);
         });
         rTreeView.make_sorted();
         m_pTreeView->SetSelChangeHdl(LINK(this, SbaTableQueryBrowser, OnSelectionChange));
+        m_pTreeView->show_container();
 
         // TODO
         getBrowserView()->getVclControl()->SetHelpId(HID_CTL_TABBROWSER);

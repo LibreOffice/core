@@ -24,7 +24,6 @@
 #define HID_DATABROWSE_HEADER                             "DBACCESS_HID_DATABROWSE_HEADER"
 #define HID_CTL_TABBROWSER                                "DBACCESS_HID_CTL_TABBROWSER"
 #define HID_CTL_TREEVIEW                                  "DBACCESS_HID_CTL_TREEVIEW"
-#define HID_TLB_TREELISTBOX                               "DBACCESS_HID_TLB_TREELISTBOX"
 
 #define HID_DSADMIN_BROWSECONN                            "DBACCESS_HID_DSADMIN_BROWSECONN"
 
