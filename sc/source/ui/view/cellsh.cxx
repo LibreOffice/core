@@ -229,6 +229,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             case FID_INS_ROW:
             case FID_INS_ROWS_BEFORE:           // insert rows
             case FID_INS_ROWS_AFTER:
+            case SID_DEL_ROWS:
             {
                 sc::ColRowEditAction eAction = sc::ColRowEditAction::InsertRowsBefore;
                 if (nWhich == FID_INS_ROWS_AFTER)
@@ -249,6 +250,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             case FID_INS_COLUMN:
             case FID_INS_COLUMNS_BEFORE:        // insert columns
             case FID_INS_COLUMNS_AFTER:
+            case SID_DEL_COLS:
             {
                 sc::ColRowEditAction eAction = sc::ColRowEditAction::InsertColumnsBefore;
                 if (nWhich == FID_INS_COLUMNS_AFTER)
