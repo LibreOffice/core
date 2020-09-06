@@ -235,6 +235,7 @@ public:
     void testTdf119533();
     void testTdf127982();
     void testTdf109409();
+    void testTdf132105();
     void testTdf131424();
     void testTdf100709XLSX();
     void testTdf97598XLSX();
@@ -401,6 +402,7 @@ public:
     CPPUNIT_TEST(testTdf119533);
     CPPUNIT_TEST(testTdf127982);
     CPPUNIT_TEST(testTdf109409);
+    CPPUNIT_TEST(testTdf132105);
     CPPUNIT_TEST(testTdf131424);
     CPPUNIT_TEST(testTdf100709XLSX);
     CPPUNIT_TEST(testTdf97598XLSX);
@@ -3928,6 +3930,34 @@ void ScFiltersTest::testTdf109409()
     //- Expected: A1B1A2B2A3B3
     //- Actual  : A1A2A3B1B2B3
     CPPUNIT_ASSERT_EQUAL(OUString("A1B1A2B2A3B3"), rDoc.GetString(ScAddress(6,5,0)));
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf132105()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf132105.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // MATCH
+    CPPUNIT_ASSERT_EQUAL(OUString("5"), rDoc.GetString(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("5"), rDoc.GetString(ScAddress(1,1,0)));
+
+    // COUNT
+    CPPUNIT_ASSERT_EQUAL(OUString("0"), rDoc.GetString(ScAddress(0,2,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("20"), rDoc.GetString(ScAddress(1,2,0)));
+
+    // COUNTA
+    CPPUNIT_ASSERT_EQUAL(OUString("20"), rDoc.GetString(ScAddress(0,3,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("20"), rDoc.GetString(ScAddress(1,3,0)));
+
+    // COUNTBLANK
+    // Without the fix in place, it would have failed with
+    // - Expected: 0
+    //- Actual  : Err:504
+    CPPUNIT_ASSERT_EQUAL(OUString("0"), rDoc.GetString(ScAddress(0,4,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("0"), rDoc.GetString(ScAddress(1,4,0)));
 
     xDocSh->DoClose();
 }
