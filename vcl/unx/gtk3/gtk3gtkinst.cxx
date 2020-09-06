@@ -14279,6 +14279,21 @@ private:
         return true;
     }
 
+    // Since tdf#131120 we don't use the original ComboBox menu, but it's still
+    // listening to additions to the ListStore and slowing things down (tdf#136455)
+    void destroy_unused_menu()
+    {
+        AtkObject* pAtkObj = gtk_combo_box_get_popup_accessible(m_pComboBox);
+        if (!pAtkObj)
+            return;
+        if (!GTK_IS_ACCESSIBLE(pAtkObj))
+            return;
+        GtkWidget* pWidget = gtk_accessible_get_widget(GTK_ACCESSIBLE(pAtkObj));
+        if (!pWidget)
+            return;
+        gtk_widget_destroy(pWidget);
+    }
+
 public:
     GtkInstanceComboBox(GtkBuilder* pComboBuilder, GtkComboBox* pComboBox, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(gtk_builder_get_object(pComboBuilder, "box")), pBuilder, bTakeOwnership)
@@ -14420,6 +14435,8 @@ public:
         gtk_overlay_add_overlay(m_pOverlay, GTK_WIDGET(m_pOverlayButton));
         g_signal_connect(m_pOverlayButton, "leave-notify-event", G_CALLBACK(signalOverlayButtonCrossing), this);
         g_signal_connect(m_pOverlayButton, "enter-notify-event", G_CALLBACK(signalOverlayButtonCrossing), this);
+
+        destroy_unused_menu();
     }
 
     virtual int get_active() const override
