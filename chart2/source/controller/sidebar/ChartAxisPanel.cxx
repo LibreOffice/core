@@ -24,6 +24,7 @@
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 
 #include <vcl/svapp.hxx>
+#include <sal/log.hxx>
 
 #include "ChartAxisPanel.hxx"
 #include <ChartController.hxx>
@@ -166,7 +167,8 @@ OUString getCID(const css::uno::Reference<css::frame::XModel>& xModel)
     aAny >>= aCID;
 #if defined DBG_UTIL && !defined NDEBUG
     ObjectType eType = ObjectIdentifier::getObjectType(aCID);
-    assert(eType == OBJECTTYPE_AXIS);
+    if(eType != OBJECTTYPE_AXIS)
+        SAL_WARN("chart2","Selected item is not an axis");
 #endif
 
     return aCID;
@@ -271,6 +273,10 @@ void ChartAxisPanel::updateData()
         return;
 
     OUString aCID = getCID(mxModel);
+    ObjectType eType = ObjectIdentifier::getObjectType(aCID);
+    if (eType!=OBJECTTYPE_AXIS)
+        return;
+
     SolarMutexGuard aGuard;
 
     mxCBShowLabel->set_active(isLabelShown(mxModel, aCID));
