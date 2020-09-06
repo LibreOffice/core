@@ -19,7 +19,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 
-#define SYM_MAP(a) { u ## #a, reinterpret_cast<SymbolFunc *>(&a) }
+#define SYM_MAP(a) { #a, reinterpret_cast<SymbolFunc *>(&a) }
 
 namespace avmedia::vlc::wrapper
 {
@@ -27,7 +27,7 @@ typedef void (*SymbolFunc) (void);
 
 struct ApiMap
 {
-    OUStringLiteral symName;
+    char const * symName;
     SymbolFunc *refValue;
 };
 
@@ -70,8 +70,8 @@ struct ApiMap
     {
         for (size_t i = 0; i < N; ++i)
         {
-            SymbolFunc aMethod = reinterpret_cast<SymbolFunc>(osl_getFunctionSymbol
-                ( aModule, OUString( pMap[ i ].symName ).pData ));
+            SymbolFunc aMethod = reinterpret_cast<SymbolFunc>(osl_getAsciiFunctionSymbol
+                ( aModule, pMap[ i ].symName ));
             if ( !aMethod )
             {
                 SAL_WARN("avmedia", "Cannot load method " << pMap[ i ].symName);
