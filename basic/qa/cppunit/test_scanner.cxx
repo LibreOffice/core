@@ -46,6 +46,7 @@ namespace
     void testDataType();
     void testHexOctal();
     void testTdf103104();
+    void testTdf136032();
 
     // Adds code needed to register the test suite
     CPPUNIT_TEST_SUITE(ScannerTest);
@@ -62,6 +63,7 @@ namespace
     CPPUNIT_TEST(testDataType);
     CPPUNIT_TEST(testHexOctal);
     CPPUNIT_TEST(testTdf103104);
+    CPPUNIT_TEST(testTdf136032);
 
     // End of test suite definition
     CPPUNIT_TEST_SUITE_END();
@@ -1059,6 +1061,21 @@ namespace
     CPPUNIT_ASSERT_EQUAL(asdf, symbols[2].text);
     CPPUNIT_ASSERT(!symbols[2].ws);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[3].text);
+  }
+
+  void ScannerTest::testTdf136032()
+  {
+    std::vector<Symbol> symbols;
+    sal_Int32 errors;
+
+    // tdf#136032 - abort scan of a string beginning with a hashtag,
+    // if a comma/whitespace is found. Otherwise, the compiler raises a syntax error.
+    symbols = getSymbols("Print #i,\"A#B\"", errors);
+    CPPUNIT_ASSERT_EQUAL(size_t(5), symbols.size());
+    CPPUNIT_ASSERT_EQUAL(0u, static_cast<unsigned int>(errors));
+    symbols = getSymbols("Print #i, \"A#B\"", errors);
+    CPPUNIT_ASSERT_EQUAL(size_t(5), symbols.size());
+    CPPUNIT_ASSERT_EQUAL(0u, static_cast<unsigned int>(errors));
   }
 
   // Put the test suite in the registry
