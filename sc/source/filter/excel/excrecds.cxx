@@ -951,7 +951,8 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab, const
             ScSortParam aSortParam;
             pData->GetSortParam( aSortParam );
 
-            if (aSortParam.bUserDef)
+            ScUserList* pList = ScGlobal::GetUserList();
+            if (aSortParam.bUserDef && pList && pList->size() > aSortParam.nUserIndex)
             {
                 // get sorted area without headers
                 maSortRef = ScRange(
@@ -959,7 +960,6 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab, const
                     aParam.nCol2, aParam.nRow2, aParam.nTab );
 
                 // get sorted columns with custom lists
-                ScUserList* pList = ScGlobal::GetUserList();
                 const ScUserListData& rData = (*pList)[aSortParam.nUserIndex];
 
                 // get column index and sorting direction
