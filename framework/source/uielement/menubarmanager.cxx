@@ -1043,7 +1043,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                 }
 
                 MenuBarManager* pSubMenuManager = new MenuBarManager( m_xContext, rFrame, m_xURLTransformer,
-                    rDispatchProvider, aModuleIdentifier, pPopup, false, m_bHasMenuBar );
+                    xPopupMenuDispatchProvider, aModuleIdentifier, pPopup, false, m_bHasMenuBar );
 
                 AddMenu(pSubMenuManager, aItemCommand, nItemId);
             }
