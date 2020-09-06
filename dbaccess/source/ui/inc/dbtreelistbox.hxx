@@ -126,6 +126,7 @@ namespace dbaui
         InterimDBTreeListBox(vcl::Window* pParent, bool bSQLType);
         virtual void dispose() override;
         virtual ~InterimDBTreeListBox() override;
+        void show_container() { m_xContainer->show(); }
     protected:
         virtual bool DoChildKeyInput(const KeyEvent& rKEvt) override;
     };
