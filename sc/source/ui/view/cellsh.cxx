@@ -242,6 +242,16 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
                 }
                 break;
             }
+            case SID_DEL_ROWS:
+            {
+                bDisable = (!bSimpleArea) || GetViewData()->SimpleColMarked();
+                if (!bEditable && nCol1 == 0 && nCol2 == pDoc->MaxCol())
+                {
+                    // See if row insertions are allowed.
+                    bEditable = pDoc->IsEditActionAllowed(sc::ColRowEditAction::DeleteRows, rMark, nRow1, nRow2);
+                }
+                break;
+            }
             case FID_INS_CELLSDOWN:
                 bDisable = (!bSimpleArea) || GetViewData()->SimpleColMarked();
                 break;
@@ -259,6 +269,16 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
                 {
                     // See if row insertions are allowed.
                     bEditable = pDoc->IsEditActionAllowed(eAction, rMark, nCol1, nCol2);
+                }
+                break;
+            }
+            case SID_DEL_COLS:
+            {
+                bDisable = (!bSimpleArea) || GetViewData()->SimpleRowMarked();
+                if (!bEditable && nRow1 == 0 && nRow2 == pDoc->MaxRow())
+                {
+                    // See if row insertions are allowed.
+                    bEditable = pDoc->IsEditActionAllowed(sc::ColRowEditAction::DeleteColumns, rMark, nCol1, nCol2);
                 }
                 break;
             }
