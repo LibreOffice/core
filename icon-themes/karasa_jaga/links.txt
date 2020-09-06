@@ -319,6 +319,9 @@ cmd/32/ko/tablesort.png cmd/32/ko/datasort.png
 cmd/32/ko/underlinesimple.png cmd/32/ko/underline.png
 cmd/32/languagemenu.png cmd/32/managelanguage.png
 cmd/32/leftpara.png cmd/32/alignleft.png
+cmd/32/librelogo-run.png cmd/32/datastreamsplay.png
+cmd/32/librelogo-stop.png cmd/32/datastreamsstop.png
+cmd/32/librelogo-translate.png cmd/32/editglossary.png
 cmd/32/linenumberdialog.png cmd/32/linenumberingdialog.png
 cmd/32/linespacing.png cmd/32/spacepara15.png
 cmd/32/linestyle.png cmd/32/borderdialog.png
@@ -925,6 +928,9 @@ cmd/lc_insobjctrl.png cmd/lc_newdoc.png
 cmd/lc_justifypara.png cmd/lc_alignblock.png
 cmd/lc_languagemenu.png cmd/lc_managelanguage.png
 cmd/lc_leftpara.png cmd/lc_alignleft.png
+cmd/lc_librelogo-run.png cmd/lc_datastreamsplay.png
+cmd/lc_librelogo-stop.png cmd/lc_datastreamsstop.png
+cmd/lc_librelogo-translate.png cmd/lc_editglossary.png
 cmd/lc_linenumberdialog.png cmd/lc_linenumberingdialog.png
 cmd/lc_linespacing.png cmd/lc_spacepara15.png
 cmd/lc_linestyle.png cmd/lc_borderdialog.png
@@ -1315,6 +1321,9 @@ cmd/sc_insobjctrl.png cmd/sc_newdoc.png
 cmd/sc_justifypara.png cmd/sc_alignblock.png
 cmd/sc_languagemenu.png cmd/sc_managelanguage.png
 cmd/sc_leftpara.png cmd/sc_alignleft.png
+cmd/sc_librelogo-run.png cmd/sc_datastreamsplay.png
+cmd/sc_librelogo-stop.png cmd/sc_datastreamsstop.png
+cmd/sc_librelogo-translate.png cmd/sc_editglossary.png
 cmd/sc_linenumberdialog.png cmd/sc_linenumberingdialog.png
 cmd/sc_linespacing.png cmd/sc_spacepara15.png
 cmd/sc_linestyle.png cmd/sc_borderdialog.png

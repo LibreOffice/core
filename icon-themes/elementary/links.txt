@@ -2696,6 +2696,16 @@ cmd/sc_badcellstyle.png cmd/sc_badcellstyles.png
 cmd/sc_goodcellstyle.png cmd/sc_goodcellstyles.png
 cmd/sc_neutralcellstyle.png cmd/sc_neutralcellstyles.png
 
+#LibreLogo
+cmd/32/librelogo-stop.png cmd/32/basicstop.png
+cmd/32/librelogo-translate.png cmd/32/editglossary.png
+
+cmd/lc_librelogo-stop.png cmd/lc_basicstop.png
+cmd/lc_librelogo-translate.png cmd/lc_editglossary.png
+
+cmd/sc_librelogo-stop.png cmd/sc_basicstop.png
+cmd/sc_librelogo-translate.png cmd/sc_editglossary.png
+
 # Other
 cmd/32/objecttitledescription.png cmd/32/insertcaptiondialog.png
 cmd/lc_objecttitledescription.png cmd/lc_insertcaptiondialog.png
