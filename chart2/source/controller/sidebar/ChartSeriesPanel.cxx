@@ -27,6 +27,7 @@
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 
+#include <sal/log.hxx>
 #include "ChartSeriesPanel.hxx"
 #include <ChartController.hxx>
 #include <vcl/fixed.hxx>
@@ -264,7 +265,10 @@ OUString getCID(const css::uno::Reference<css::frame::XModel>& xModel)
 
 #if defined DBG_UTIL && !defined NDEBUG
     ObjectType eType = ObjectIdentifier::getObjectType(aCID);
-    assert(eType == OBJECTTYPE_DATA_SERIES);
+    assert(eType == OBJECTTYPE_DATA_SERIES || eType == OBJECTTYPE_DATA_POINT);
+         eType != OBJECTTYPE_DATA_POINT &&
+         eType != OBJECTTYPE_DATA_CURVE)
+        SAL_WARN("chart2","Selected item is not a chart series");
 #endif
 
     return aCID;
@@ -358,6 +362,12 @@ void ChartSeriesPanel::updateData()
         return;
 
     OUString aCID = getCID(mxModel);
+    ObjectType eType = ObjectIdentifier::getObjectType(aCID);
+    if (eType!=OBJECTTYPE_DATA_SERIES &&
+          eType != OBJECTTYPE_DATA_POINT &&
+          eType != OBJECTTYPE_DATA_CURVE)
+        return;
+
     SolarMutexGuard aGuard;
     bool bLabelVisible = isDataLabelVisible(mxModel, aCID);
     mpCBLabel->Check(bLabelVisible);
