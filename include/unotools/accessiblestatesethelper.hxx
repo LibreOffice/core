@@ -134,7 +134,7 @@ private:
     /// Mutex guarding this object.
     ::osl::Mutex maMutex;
     /// The implementation of this helper interface.
-    std::unique_ptr<AccessibleStateSetHelperImpl>   mpHelperImpl;
+    sal_uInt64 maStates;
 };
 
 }
