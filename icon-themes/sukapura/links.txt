@@ -2707,3 +2707,16 @@ cmd/lc_pastespecialmenu.png cmd/lc_pastespecial.png
 cmd/sc_editpastespecialmenu.png cmd/sc_pastespecial.png
 cmd/sc_insertcontents.png cmd/sc_pastespecial.png
 cmd/sc_pastespecialmenu.png cmd/sc_pastespecial.png
+
+# LibreLogo
+cmd/32/librelogo-run.png cmd/32/runbasic.png
+cmd/32/librelogo-stop.png cmd/32/basicstop.png
+cmd/32/librelogo-translate.png cmd/32/editglossary.png
+
+cmd/lc_librelogo-run.png cmd/lc_runbasic.png
+cmd/lc_librelogo-stop.png cmd/lc_basicstop.png
+cmd/lc_librelogo-translate.png cmd/lc_editglossary.png
+
+cmd/sc_librelogo-run.png cmd/sc_runbasic.png
+cmd/sc_librelogo-stop.png cmd/sc_basicstop.png
+cmd/sc_librelogo-translate.png cmd/sc_editglossary.png

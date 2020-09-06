@@ -2694,3 +2694,25 @@ cmd/lc_com.sun.star.deployment.ui.packagemanagerdialog.png cmd/lc_insertplugin.p
 cmd/sc_focustofindbar.png cmd/sc_recsearch.png
 cmd/sc_macroorganizer%3ftabid%3ashort=1.png cmd/sc_open.png
 cmd/sc_com.sun.star.deployment.ui.packagemanagerdialog.png cmd/sc_insertplugin.png
+
+# LibreLogo
+cmd/32/librelogo-gobackward.png cmd/32/upsearch.png
+cmd/32/librelogo-goforward.png cmd/32/downsearch.png
+cmd/32/librelogo-home.png cmd/32/firstpage.png
+cmd/32/librelogo-run.png cmd/32/mediaplay.png
+cmd/32/librelogo-stop.png cmd/32/basicstop.png
+cmd/32/librelogo-translate.png cmd/32/editglossary.png
+
+cmd/lc_librelogo-gobackward.png cmd/lc_upsearch.png
+cmd/lc_librelogo-goforward.png cmd/lc_downsearch.png
+cmd/lc_librelogo-home.png cmd/lc_firstpage.png
+cmd/lc_librelogo-run.png cmd/lc_mediaplay.png
+cmd/lc_librelogo-stop.png cmd/lc_basicstop.png
+cmd/lc_librelogo-translate.png cmd/lc_editglossary.png
+
+cmd/sc_librelogo-gobackward.png cmd/sc_upsearch.png
+cmd/sc_librelogo-goforward.png cmd/sc_downsearch.png
+cmd/sc_librelogo-home.png cmd/sc_firstpage.png
+cmd/sc_librelogo-run.png cmd/sc_mediaplay.png
+cmd/sc_librelogo-stop.png cmd/sc_basicstop.png
+cmd/sc_librelogo-translate.png cmd/sc_editglossary.png
