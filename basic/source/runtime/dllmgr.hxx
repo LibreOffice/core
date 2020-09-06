@@ -42,9 +42,11 @@ public:
     void FreeDll(OUString const & library);
 
 private:
+#ifdef _WIN32
     struct Impl;
 
     std::unique_ptr< Impl > impl_;
+#endif
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
