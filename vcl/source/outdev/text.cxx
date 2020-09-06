@@ -42,6 +42,7 @@
 # include <vcl/opengl/OpenGLHelper.hxx>
 #endif
 
+#include <config_fuzzers.h>
 #include <outdata.hxx>
 #include <outdev.h>
 #include <salgdi.hxx>
@@ -784,6 +785,13 @@ vcl::Region OutputDevice::GetOutputBoundsClipRegion() const
     return GetClipRegion();
 }
 
+#if !ENABLE_FUZZERS
+const SalLayoutFlags eDefaultLayout = SalLayoutFlags::NONE;
+#else
+// ofz#23573 skip detecting bidi directions
+const SalLayoutFlags eDefaultLayout = SalLayoutFlags::BiDiStrong;
+#endif
+
 void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
                              sal_Int32 nIndex, sal_Int32 nLen,
                              MetricVector* pVector, OUString* pDisplayText,
@@ -871,7 +879,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
         pLayoutCache = nullptr;
 #endif
 
-    std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, 0, nullptr, SalLayoutFlags::NONE, nullptr, pLayoutCache);
+    std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, 0, nullptr, eDefaultLayout, nullptr, pLayoutCache);
     if(pSalLayout)
     {
         ImplDrawText( *pSalLayout );
@@ -966,7 +974,7 @@ long OutputDevice::GetTextArray( const OUString& rStr, long* pDXAry,
 
     // do layout
     std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen,
-            Point(0,0), 0, nullptr, SalLayoutFlags::NONE, pLayoutCache, pSalLayoutCache);
+            Point(0,0), 0, nullptr, eDefaultLayout, pLayoutCache, pSalLayoutCache);
     if( !pSalLayout )
     {
         // The caller expects this to init the elements of pDXAry.
@@ -1072,7 +1080,7 @@ void OutputDevice::GetCaretPositions( const OUString& rStr, long* pCaretXArray,
 
     // layout complex text
     std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen, Point(0, 0), 0, nullptr,
-                                                       SalLayoutFlags::NONE, nullptr, pGlyphs);
+                                                       eDefaultLayout, nullptr, pGlyphs);
     if( !pSalLayout )
         return;
 
@@ -1382,7 +1390,7 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
          const SalLayoutGlyphs* pGlyphs) const
 {
     std::unique_ptr<SalLayout> pSalLayout = ImplLayout( rStr, nIndex, nLen,
-            Point(0,0), 0, nullptr, SalLayoutFlags::NONE, pLayoutCache, pGlyphs);
+            Point(0,0), 0, nullptr, eDefaultLayout, pLayoutCache, pGlyphs);
     sal_Int32 nRetVal = -1;
     if( pSalLayout )
     {
@@ -1415,7 +1423,7 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
     rHyphenPos = -1;
 
     std::unique_ptr<SalLayout> pSalLayout = ImplLayout( rStr, nIndex, nLen,
-            Point(0,0), 0, nullptr, SalLayoutFlags::NONE, pLayoutCache);
+            Point(0,0), 0, nullptr, eDefaultLayout, pLayoutCache);
     sal_Int32 nRetVal = -1;
     if( pSalLayout )
     {
@@ -2282,7 +2290,7 @@ bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
         }
     }
 
-    pSalLayout = ImplLayout(rStr, nIndex, nLen, aPoint, nLayoutWidth, pDXAry, SalLayoutFlags::NONE,
+    pSalLayout = ImplLayout(rStr, nIndex, nLen, aPoint, nLayoutWidth, pDXAry, eDefaultLayout,
                             nullptr, pGlyphs);
     tools::Rectangle aPixelRect;
     if( pSalLayout )
