@@ -33,7 +33,6 @@ SbiBuffer::SbiBuffer( SbiParser* p, short n )
     pParser = p;
     n = ( (n + 15 ) / 16 ) * 16;
     if( !n ) n = 16;
-    pBuf  = nullptr;
     pCur  = nullptr;
     nInc  = n;
     nSize =
