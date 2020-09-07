@@ -212,12 +212,19 @@ namespace o3tl
 enum class InvalidateFlags
 {
     NONE                 = 0x0000,
+    /** The child windows are invalidated, too. */
     Children             = 0x0001,
+    /** The child windows are not invalidated. */
     NoChildren           = 0x0002,
+    /** The invalidated area is painted with the background color/pattern. */
     NoErase              = 0x0004,
+    /** The invalidated area is updated immediately. */
     Update               = 0x0008,
+    /** The parent window is invalidated, too. */
     Transparent          = 0x0010,
+    /** The parent window is not invalidated. */
     NoTransparent        = 0x0020,
+    /** The area is invalidated regardless of overlapping child windows. */
     NoClipChildren       = 0x4000,
 };
 namespace o3tl
