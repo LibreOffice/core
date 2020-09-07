@@ -8845,6 +8845,9 @@ else
         LIBXML_LIBS="${WORKDIR}/UnpackedTarball/libxml2/win32/bin.msvc/libxml2.lib"
     else
         LIBXML_LIBS="-L${WORKDIR}/UnpackedTarball/libxml2/.libs -lxml2"
+        if test "$_os" = Android; then
+            LIBXML_LIBS="$LIBXML_LIBS -lm"
+        fi
     fi
     BUILD_TYPE="$BUILD_TYPE LIBXML2"
 fi
