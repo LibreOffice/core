@@ -2415,7 +2415,7 @@ void VclMetafileProcessor2D::processPrimitive2DOnPixelProcessor(
         mpOutputDevice->DrawBitmapEx(aRectLogic.TopLeft(), aRectLogic.GetSize(), aBmContent);
 
         // aBufferProcessor dtor pops state off pBufferDevice pushed on by its ctor, let
-        // pBufferDevice live past aBufferProcessor scope to avoid warnigns
+        // pBufferDevice live past aBufferProcessor scope to avoid warnings
     }
     pBufferDevice.disposeAndClear();
 }
