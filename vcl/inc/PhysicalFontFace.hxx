@@ -23,6 +23,7 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ref.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/fontcharmap.hxx>
 
 #include "fontattributes.hxx"
 
@@ -30,6 +31,11 @@ class LogicalFontInstance;
 struct FontMatchStatus;
 class FontSelectPattern;
 class PhysicalFontFamily;
+
+namespace vcl
+{
+struct FontCapabilities;
+}
 
 struct FontMatchStatus
 {
@@ -59,6 +65,8 @@ public:
     int                     GetHeight() const           { return mnHeight; }
     int                     GetWidth() const            { return mnWidth; }
     virtual sal_IntPtr      GetFontId() const = 0;
+    virtual FontCharMapRef GetFontCharMap() const = 0;
+    virtual bool GetFontCapabilities(vcl::FontCapabilities&) const = 0;
 
     bool                    IsBetterMatch( const FontSelectPattern&, FontMatchStatus& ) const;
     sal_Int32               CompareWithSize( const PhysicalFontFace& ) const;
