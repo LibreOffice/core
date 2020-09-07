@@ -160,6 +160,25 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentText)
     assertXPath(pXmlDoc, "//svg:text[2]/svg:tspan/svg:tspan/svg:tspan[@fill-opacity]", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(SvgFilterTest, testShapeNographic)
+{
+    // Load a document containing a 3D shape.
+    load("shape-nographic.odp");
+
+    // Export to SVG.
+    uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY_THROW);
+    SvMemoryStream aStream;
+    uno::Reference<io::XOutputStream> xOut = new utl::OOutputStreamWrapper(aStream);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("impress_svg_Export");
+    aMediaDescriptor["OutputStream"] <<= xOut;
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // An uncaught exception of type com.sun.star.io.IOException
+    // - SfxBaseModel::impl_store <private:stream> failed: 0xc10(Error Area:Io Class:Write Code:16)
+    xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

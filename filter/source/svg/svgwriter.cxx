@@ -2758,7 +2758,10 @@ void GetGraphicFromXShape(const css::uno::Reference<css::drawing::XShape>* pShap
     }
 
     uno::Reference<graphic::XGraphic> xGraphic;
-    xPropertySet->getPropertyValue("Graphic") >>= xGraphic;
+    if (xPropertySet->getPropertySetInfo()->hasPropertyByName("Graphic"))
+    {
+        xPropertySet->getPropertyValue("Graphic") >>= xGraphic;
+    }
     rGraphic= Graphic(xGraphic);
 }
 }
