@@ -1338,6 +1338,15 @@ DECLARE_OOXMLEXPORT_TEST( testTdf107359, "tdf107359-char-pitch.docx" )
     CPPUNIT_ASSERT_EQUAL( sal_Int32(convertTwipToMm100(24 * 20)), nBaseWidth );
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf77236_MissingSolidFill, "tdf77236_MissingSolidFill.docx")
+{
+    // tdf#77236: solidFill of VML shape was not exported if the colors of line and style were the same
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "//mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:solidFill", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
