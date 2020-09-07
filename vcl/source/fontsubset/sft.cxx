@@ -2364,6 +2364,22 @@ void GetTTFontMetrics(const uint8_t *pHhea, size_t nHhea,
     }
 }
 
+bool GetTTGlobalFontHeadInfo(AbstractTrueTypeFont *ttf, int& xMin, int& yMin, int& xMax, int& yMax, sal_uInt16& macStyle)
+{
+    sal_uInt32 table_size;
+    const sal_uInt8* table = ttf->table(O_head, table_size);
+    if (table_size < 46)
+        return false;
+
+    const int UPEm = ttf->unitsPerEm();
+    xMin = XUnits(UPEm, GetInt16(table, HEAD_xMin_offset));
+    yMin = XUnits(UPEm, GetInt16(table, HEAD_yMin_offset));
+    xMax = XUnits(UPEm, GetInt16(table, HEAD_xMax_offset));
+    yMax = XUnits(UPEm, GetInt16(table, HEAD_yMax_offset));
+    macStyle = GetUInt16(table, HEAD_macStyle_offset);
+    return true;
+}
+
 void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info)
 {
     int UPEm = ttf->unitsPerEm();
@@ -2406,15 +2422,7 @@ void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info)
         info->italicAngle = GetInt32(table, POST_italicAngle_offset);
     }
 
-    table = ttf->table(O_head, table_size);      /* 'head' tables is always there */
-    if (table_size >= 46)
-    {
-        info->xMin = XUnits(UPEm, GetInt16(table, HEAD_xMin_offset));
-        info->yMin = XUnits(UPEm, GetInt16(table, HEAD_yMin_offset));
-        info->xMax = XUnits(UPEm, GetInt16(table, HEAD_xMax_offset));
-        info->yMax = XUnits(UPEm, GetInt16(table, HEAD_yMax_offset));
-        info->macStyle = GetUInt16(table, HEAD_macStyle_offset);
-    }
+    GetTTGlobalFontHeadInfo(ttf, info->xMin, info->yMin, info->xMax, info->yMax, info->macStyle);
 
     table  = ttf->table(O_hhea, table_size);
     if (table_size >= 10)
