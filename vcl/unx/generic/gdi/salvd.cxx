@@ -59,7 +59,7 @@ std::unique_ptr<SalVirtualDevice> X11SalInstance::CreateVirtualDevice(SalGraphic
     return CreateX11VirtualDevice(pGraphics, nDX, nDY, eFormat, pData, std::make_unique<X11SalGraphics>());
 }
 
-void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, SalColormap* pColormap,
+void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, cairo_surface_t* pPreExistingTarget, SalColormap* pColormap,
                            bool bDeleteColormap )
 {
     SalDisplay *pDisplay  = pDevice->GetDisplay();
@@ -88,8 +88,7 @@ void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, SalColormap* pColormap,
     bWindow_     = pDisplay->IsDisplay();
     bVirDev_     = true;
 
-    const Drawable aVdevDrawable = pDevice->GetDrawable();
-    SetDrawable( aVdevDrawable, m_nXScreen );
+    SetDrawable(pDevice->GetDrawable(), pPreExistingTarget, m_nXScreen);
     mxImpl->Init();
 }
 
@@ -171,7 +170,11 @@ X11SalVirtualDevice::X11SalVirtualDevice(SalGraphics const * pGraphics, long &nD
     }
 
     pGraphics_->SetLayout( SalLayoutFlags::NONE ); // by default no! mirroring for VirtualDevices, can be enabled with EnableRTL()
-    pGraphics_->Init( this, pColormap, bDeleteColormap );
+
+    // tdf#127529 see SvpSalInstance::CreateVirtualDevice for the rare case of a non-null pPreExistingTarget
+    cairo_surface_t* pPreExistingTarget = pData ? static_cast<cairo_surface_t*>(pData->pSurface) : nullptr;
+
+    pGraphics_->Init( this, pPreExistingTarget, pColormap, bDeleteColormap );
 }
 
 X11SalVirtualDevice::~X11SalVirtualDevice()

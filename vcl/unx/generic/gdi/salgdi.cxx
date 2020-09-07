@@ -66,6 +66,7 @@ X11SalGraphics::X11SalGraphics():
     m_pVDev(nullptr),
     m_pColormap(nullptr),
     hDrawable_(None),
+    m_pExternalSurface(nullptr),
     m_nXScreen( 0 ),
     m_pXRenderFormat(nullptr),
     m_aXRenderPicture(0),
@@ -144,8 +145,10 @@ SalGraphicsImpl* X11SalGraphics::GetImpl() const
     return mxImpl.get();
 }
 
-void X11SalGraphics::SetDrawable( Drawable aDrawable, SalX11Screen nXScreen )
+void X11SalGraphics::SetDrawable(Drawable aDrawable, cairo_surface_t* pExternalSurface, SalX11Screen nXScreen)
 {
+    m_pExternalSurface = pExternalSurface;
+
     // shortcut if nothing changed
     if( hDrawable_ == aDrawable )
         return;
@@ -165,8 +168,6 @@ void X11SalGraphics::SetDrawable( Drawable aDrawable, SalX11Screen nXScreen )
         XRenderPeer::GetInstance().FreePicture( m_aXRenderPicture );
         m_aXRenderPicture = 0;
     }
-
-    // TODO: moggi: FIXME nTextPixel_     = GetPixel( nTextColor_ );
 }
 
 void X11SalGraphics::Init( SalFrame *pFrame, Drawable aTarget,
@@ -181,14 +182,14 @@ void X11SalGraphics::Init( SalFrame *pFrame, Drawable aTarget,
     bWindow_    = true;
     bVirDev_    = false;
 
-    SetDrawable( aTarget, nXScreen );
+    SetDrawable(aTarget, nullptr, nXScreen);
     mxImpl->Init();
 }
 
 void X11SalGraphics::DeInit()
 {
     mxImpl->DeInit();
-    SetDrawable( None, m_nXScreen );
+    SetDrawable(None, nullptr, m_nXScreen);
 }
 
 void X11SalGraphics::SetClipRegion( GC pGC, Region pXReg ) const
@@ -782,6 +783,9 @@ SalGeometryProvider *X11SalGraphics::GetGeometryProvider() const
 
 cairo_t* X11SalGraphics::getCairoContext()
 {
+    if (m_pExternalSurface)
+        return cairo_create(m_pExternalSurface);
+
     cairo_surface_t* surface = cairo_xlib_surface_create(GetXDisplay(), hDrawable_,
             GetVisual().visual, SAL_MAX_INT16, SAL_MAX_INT16);
 

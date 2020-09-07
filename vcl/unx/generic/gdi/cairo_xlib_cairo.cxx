@@ -248,12 +248,15 @@ namespace cairo
     {
         SystemGraphicsData aSystemGraphicsData;
 
+        cairo_surface_t* pSurface = mpSurface.get();
+
         aSystemGraphicsData.nSize = sizeof(SystemGraphicsData);
         aSystemGraphicsData.hDrawable = mpPixmap ? mpPixmap->mhDrawable : maSysData.hDrawable;
         aSystemGraphicsData.pXRenderFormat = maSysData.pRenderFormat;
+        aSystemGraphicsData.pSurface = pSurface;
 
-        int width = cairo_xlib_surface_get_width(mpSurface.get());
-        int height = cairo_xlib_surface_get_height(mpSurface.get());
+        int width = cairo_xlib_surface_get_width(pSurface);
+        int height = cairo_xlib_surface_get_height(pSurface);
 
         return VclPtr<VirtualDevice>::Create(aSystemGraphicsData,
                               Size(width, height),
