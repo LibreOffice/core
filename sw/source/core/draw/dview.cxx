@@ -972,15 +972,16 @@ void SwDrawView::DeleteMarked()
     {
         FmFormView::DeleteMarked();
         ::FrameNotify( Imp().GetShell(), FLY_DRAG_END );
-
-        // Only delete these now: earlier deletion would clear the mark list as well.
-        // Delete in reverse order, assuming that the container is sorted by anchor positions.
-        for (int i = aTextBoxesToDelete.size() - 1; i >= 0; --i)
-        {
-            SwFrameFormat*& rpTextBox = aTextBoxesToDelete[i];
-            pDoc->getIDocumentLayoutAccess().DelLayoutFormat(rpTextBox);
-        }
     }
+
+    // Only delete these now: earlier deletion would clear the mark list as well.
+    // Delete in reverse order, assuming that the container is sorted by anchor positions.
+    for (int i = aTextBoxesToDelete.size() - 1; i >= 0; --i)
+    {
+        SwFrameFormat*& rpTextBox = aTextBoxesToDelete[i];
+        pDoc->getIDocumentLayoutAccess().DelLayoutFormat(rpTextBox);
+    }
+
     pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::EMPTY, nullptr);
     if( pTmpRoot )
         pTmpRoot->EndAllAction();
