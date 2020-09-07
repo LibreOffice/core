@@ -240,8 +240,6 @@ namespace chelp {
 
         int                    m_vAdd[7];
         OUString          m_vReplacement[7];
-        OUString          newProdName,newProdVersion,
-            prodName,prodVersion,vendName,vendVersion,vendShort;
 
         OUString          m_aInstallDirectory;                // Installation directory
 
