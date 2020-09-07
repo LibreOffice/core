@@ -2630,6 +2630,20 @@ void DomainMapper_Impl::CreateRedline(uno::Reference<text::XTextRange> const& xR
         {
             OSL_FAIL( "Exception in makeRedline" );
         }
+<<<<<<< HEAD   (359760 tdf#136061 Chart ODF/OOXML: fix missing custom labels)
+=======
+        // store frame and (possible floating) table redline data for restoring them after frame conversion
+        if (m_bIsActualParagraphFramed || (hasTableManager() && getTableManager().isInTable()))
+        {
+            aFramedRedlines.push_back( uno::makeAny(xRange) );
+            aFramedRedlines.push_back( uno::makeAny(sType) );
+            aFramedRedlines.push_back( uno::makeAny(aRedlineProperties) );
+        }
+    }
+    catch( const uno::Exception & )
+    {
+        OSL_FAIL( "Exception in makeRedline" );
+>>>>>>> CHANGE (288db6 tdf#132271 DOCX: import change tracking in floating tables)
     }
 }
 
