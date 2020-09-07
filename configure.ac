@@ -11148,7 +11148,7 @@ AC_SUBST([ENABLE_DCONF])
 # pdf import?
 AC_MSG_CHECKING([whether to build the PDF import feature])
 ENABLE_PDFIMPORT=
-if test $_os != Android -a $_os != iOS -a \( -z "$enable_pdfimport" -o "$enable_pdfimport" = yes \); then
+if test $_os != iOS -a \( -z "$enable_pdfimport" -o "$enable_pdfimport" = yes \); then
     AC_MSG_RESULT([yes])
     ENABLE_PDFIMPORT=TRUE
     AC_DEFINE(HAVE_FEATURE_PDFIMPORT)
@@ -11174,7 +11174,7 @@ dnl Check for poppler
 dnl ===================================================================
 ENABLE_POPPLER=
 AC_MSG_CHECKING([whether to build Poppler])
-if test \( -z "$enable_poppler" -a "$ENABLE_PDFIMPORT" = "TRUE" \) -o "$enable_poppler" = yes; then
+if test test $_os != Android -a \( -z "$enable_poppler" -a "$ENABLE_PDFIMPORT" = "TRUE" \) -o "$enable_poppler" = yes; then
     AC_MSG_RESULT([yes])
     ENABLE_POPPLER=TRUE
     AC_DEFINE(HAVE_FEATURE_POPPLER)
