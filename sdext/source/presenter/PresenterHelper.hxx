@@ -38,12 +38,6 @@ namespace PresenterHelper
     extern const OUString msPresenterScreenURL;
     extern const OUString msSlideSorterURL;
 
-    extern const OUStringLiteral msResourceActivationEvent;
-    extern const OUStringLiteral msResourceDeactivationEvent;
-
-    extern const OUStringLiteral msDefaultPaneStyle;
-    extern const OUStringLiteral msDefaultViewStyle;
-
     /** Return the slide show controller of a running presentation that has
         the same document as the given framework controller.
         @return

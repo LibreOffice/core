@@ -36,12 +36,6 @@ const OUStringLiteral PresenterHelper::msViewURLPrefix( u"private:resource/view/
 const OUString PresenterHelper::msPresenterScreenURL( msViewURLPrefix + "PresenterScreen");
 const OUString PresenterHelper::msSlideSorterURL( msViewURLPrefix + "SlideSorter");
 
-const OUStringLiteral PresenterHelper::msResourceActivationEvent( u"ResourceActivation");
-const OUStringLiteral PresenterHelper::msResourceDeactivationEvent( u"ResourceDeactivation");
-
-const OUStringLiteral PresenterHelper::msDefaultPaneStyle ( u"DefaultPaneStyle");
-const OUStringLiteral PresenterHelper::msDefaultViewStyle ( u"DefaultViewStyle");
-
 Reference<presentation::XSlideShowController> PresenterHelper::GetSlideShowController (
     const Reference<frame::XController>& rxController)
 {
