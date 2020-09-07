@@ -326,8 +326,8 @@ void SvxFontSubstTabPage::SelectHdl(const weld::Widget* pWin)
         if (m_xCheckLB->count_selected_rows() == 1)
         {
             int nRow = m_xCheckLB->get_selected_index();
-            m_xFont1CB->set_entry_text(m_xCheckLB->get_text(nRow, 3));
-            m_xFont2CB->set_entry_text(m_xCheckLB->get_text(nRow, 4));
+            m_xFont1CB->set_entry_text(m_xCheckLB->get_text(nRow, 2));
+            m_xFont2CB->set_entry_text(m_xCheckLB->get_text(nRow, 3));
         }
     }
 
