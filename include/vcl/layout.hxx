@@ -809,6 +809,7 @@ public:
             ::comphelper::Base64::encode(aBuffer, aSeq);
             aTree.put("image", aBuffer.makeStringAndClear());
         }
+        aTree.put("text", GetQuickHelpText());
         return aTree;
     }
 };
