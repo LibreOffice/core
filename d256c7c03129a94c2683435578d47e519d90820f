@@ -52,6 +52,24 @@
       "revId": "d256c7c03129a94c2683435578d47e519d90820f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "368752ea_6cee01c0",
+        "filename": "vcl/source/gdi/pdfwriter_impl.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 4419,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-09-07T13:09:09Z",
+      "side": 1,
+      "message": "No, sadly I\u0027m not familiar with encrypted pdfs.",
+      "parentUuid": "355c0756_d8193d92",
+      "revId": "d256c7c03129a94c2683435578d47e519d90820f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
