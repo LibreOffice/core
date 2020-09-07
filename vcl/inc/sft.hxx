@@ -675,6 +675,22 @@ class TrueTypeFont;
     VCL_DLLPUBLIC void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info);
 
 /**
+ * Returns part of the head table info, normally collected by GetTTGlobalFontInfo.
+ *
+ * Just implemented separate, because this info not available via Qt API.
+ *
+ * @param ttf         pointer to a AbstractTrueTypeFont structure
+ * @param xMin        global glyph bounding box min X
+ * @param yMin        global glyph bounding box min Y
+ * @param xMax        global glyph bounding box max X
+ * @param yMax        global glyph bounding box max Y
+ * @param macStyle    encoded Mac style flags of the font
+ * @return            true, if table data could be decoded
+ * @ingroup sft
+ */
+    VCL_DLLPUBLIC bool GetTTGlobalFontHeadInfo(AbstractTrueTypeFont *ttf, int& xMin, int& yMin, int& xMax, int& yMax, sal_uInt16& macStyle);
+
+/**
  * Returns fonts metrics.
  * @see TTGlobalFontInfo
  *

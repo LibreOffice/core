@@ -238,6 +238,12 @@ bool Qt5Graphics::CreateFontSubset(const OUString& rToFile, const PhysicalFontFa
     rInfo.m_nAscent = aRawFont.ascent();
     rInfo.m_nDescent = aRawFont.descent();
 
+    Qt5TrueTypeFont aTTF(aRawFont);
+    int nXmin, nYmin, nXmax, nYmax;
+    sal_uInt16 nMacStyleFlags;
+    if (GetTTGlobalFontHeadInfo(&aTTF, nXmin, nYmin, nXmax, nYmax, nMacStyleFlags))
+        rInfo.m_aFontBBox = tools::Rectangle(Point(nXmin, nYmin), Point(nXmax, nYmax));
+
     sal_uInt16 aShortIDs[nGlyphCount + 1];
     sal_uInt8 aTempEncs[nGlyphCount + 1];
 
@@ -278,7 +284,6 @@ bool Qt5Graphics::CreateFontSubset(const OUString& rToFile, const PhysicalFontFa
         pGlyphWidths[i] = pGlyphMetrics[i];
 
     // write subset into destination file
-    Qt5TrueTypeFont aTTF(aRawFont);
     vcl::SFErrCodes nRC
         = vcl::CreateTTFromTTGlyphs(&aTTF, aToFile.getStr(), aShortIDs, aTempEncs, nGlyphCount);
     return (nRC == vcl::SFErrCodes::Ok);
