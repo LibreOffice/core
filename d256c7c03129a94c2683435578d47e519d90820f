@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "64934a71_413e2dce",
+        "filename": "vcl/source/gdi/pdfwriter_impl.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 4419,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-09-07T12:31:07Z",
+      "side": 1,
+      "message": "I think this would mostly happen to work (though I would rather use the all-encompassing rtl_UriCharClassUric), as the various URL schemes prevalently use UTF-8 by now, but it would break e.g. for internationalized domain names, which need a different sort of encoding than percent-encoding.\nI think I would stick here with the INetURLObject route, which is already used in other places in this file too, something like\n\n  INetURLObject(rWidget.m_aListEntries.front()).GetMainURL(INetURLObject::DecodeMechanism::WithCharset);",
+      "revId": "d256c7c03129a94c2683435578d47e519d90820f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
