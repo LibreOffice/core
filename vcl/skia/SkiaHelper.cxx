@@ -32,6 +32,7 @@ bool isVCLSkiaEnabled() { return false; }
 #include <osl/file.hxx>
 #include <tools/stream.hxx>
 #include <list>
+#include <string_view>
 
 #include <SkCanvas.h>
 #include <SkPaint.h>
@@ -64,7 +65,7 @@ static OUString versionAsString(uint32_t version)
            + OUString::number(version & 0xfff);
 }
 
-static OUStringLiteral vendorAsString(uint32_t vendor)
+static std::string_view vendorAsString(uint32_t vendor)
 {
     return DriverBlocklist::GetVendorNameFromId(vendor);
 }

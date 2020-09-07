@@ -12,6 +12,8 @@
 
 #include <vcl/dllapi.h>
 #include <xmlreader/xmlreader.hxx>
+
+#include <string_view>
 #include <vector>
 
 namespace DriverBlocklist
@@ -36,7 +38,7 @@ const int DeviceVendorMax = VendorMicrosoft + 1;
 /// Returns vendor for the given vendor ID, or VendorAll if not known.
 VCL_DLLPUBLIC DeviceVendor GetVendorFromId(uint32_t id);
 
-VCL_DLLPUBLIC OUStringLiteral GetVendorNameFromId(uint32_t id);
+VCL_DLLPUBLIC std::string_view GetVendorNameFromId(uint32_t id);
 
 // The rest should be private (only for the unittest).
 
