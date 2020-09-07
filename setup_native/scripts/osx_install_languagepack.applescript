@@ -125,12 +125,13 @@ else
 end if	
 
 -- now only check whether the path is really from [PRODUCTNAME]
-try
-	do shell script "mdls --raw --name kMDItemDisplayName --name kMDItemVersion " & quoted form of (choice as string) & " | xargs -0 | fgrep '[PRODUCTNAME] [PRODUCTVERSION]'"
-on error
-	display dialog (choice as string) & appInvalid buttons {InstallLabel} default button 1 with icon 0
-	return 3 --wrong target-directory
-end try
+-- FIXME: https://bugs.documentfoundation.org/show_bug.cgi?id=134607
+-- try
+-- 	do shell script "mdls --raw --name kMDItemDisplayName --name kMDItemVersion " & quoted form of (choice as string) & " | xargs -0 | fgrep '[PRODUCTNAME] [PRODUCTVERSION]'"
+-- on error
+-- 	display dialog (choice as string) & appInvalid buttons {InstallLabel} default button 1 with icon 0
+-- 	return 3 --wrong target-directory
+-- end try
 
 (*
 display dialog startInstall buttons {AbortLabel, InstallLabel} default button 2
