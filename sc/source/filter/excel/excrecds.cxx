@@ -650,11 +650,18 @@ bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
 {
     const ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
 
-    if (GetOutput() != EXC_OUTPUT_BINARY && rItems.empty())
+    if (rItems.empty())
     {
-        meType = BlankValue;
-        return false;
+        if (GetOutput() != EXC_OUTPUT_BINARY)
+        {
+            // tdf#123353 XLSX export
+            meType = BlankValue;
+            return false;
+        }
+        // XLS export
+        return true;
     }
+
     if (GetOutput() != EXC_OUTPUT_BINARY && rItems.size() > 1)
     {
         AddMultiValueEntry(rEntry);
