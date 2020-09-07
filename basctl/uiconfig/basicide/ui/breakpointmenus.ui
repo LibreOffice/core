@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="basctl">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkMenu" id="breaklistmenu">
@@ -10,6 +10,11 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="breakpointmenus|manage">Manage Breakpoints...</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="manage-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="breakpointmenus|extended_tip|manage">Specifies the options for breakpoints.</property>
+          </object>
+        </child>
       </object>
     </child>
   </object>
@@ -22,6 +27,11 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="breakpointmenus|active">_Active</property>
         <property name="use_underline">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="active-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="breakpointmenus|extended_tip|active">Activates or deactivates the current breakpoint.</property>
+          </object>
+        </child>
       </object>
     </child>
     <child>
@@ -36,6 +46,11 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="breakpointmenus|properties">_Properties...</property>
         <property name="use_underline">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="properties-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="breakpointmenus|extended_tip|properties">Specifies the options for breakpoints.</property>
+          </object>
+        </child>
       </object>
     </child>
   </object>

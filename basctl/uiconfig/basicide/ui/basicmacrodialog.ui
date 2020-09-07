@@ -410,6 +410,11 @@
                         <property name="receives_default">True</property>
                         <property name="no_show_all">True</property>
                         <property name="use_underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="new-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="basicmacrodialog|extended_tip|new">Creates a new library.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>

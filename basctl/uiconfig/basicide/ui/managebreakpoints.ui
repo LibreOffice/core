@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="basctl">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -18,9 +18,6 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -38,6 +35,11 @@
                 <property name="can_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="new-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="managebreakpoints|extended_tip|new">Creates a breakpoint on the line number specified.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -53,6 +55,11 @@
                 <property name="can_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="delete-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="managebreakpoints|extended_tip|delete">Deletes the selected breakpoint.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -143,6 +150,11 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="active-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="managebreakpoints|extended_tip|active">Activates or deactivates the current breakpoint.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -174,7 +186,6 @@
                                 <property name="headers_clickable">False</property>
                                 <property name="search_column">0</property>
                                 <property name="show_expanders">False</property>
-                                <property name="show_expanders">False</property>
                                 <child internal-child="selection">
                                   <object class="GtkTreeSelection" id="treeview-selection1"/>
                                 </child>
@@ -202,6 +213,11 @@
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="entries-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="managebreakpoints|extended_tip|entries">Enter the line number for a new breakpoint, then click New.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -224,6 +240,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="pass-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="managebreakpoints|extended_tip|pass">Specify the number of loops to perform before the breakpoint takes effect.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -279,5 +300,13 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="ManageBreakpointsDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="managebreakpoints|extended_tip|ManageBreakpointsDialog">Specifies the options for breakpoints.</property>
+      </object>
+    </child>
   </object>
 </interface>
