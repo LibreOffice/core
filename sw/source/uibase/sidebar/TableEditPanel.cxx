@@ -19,6 +19,7 @@
 #include <svx/dlgctrl.hxx>
 #include <swmodule.hxx>
 #include <usrpref.hxx>
+#include <comphelper/lok.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
@@ -134,6 +135,9 @@ TableEditPanel::TableEditPanel(vcl::Window* pParent,
 
     InitRowHeightToolitem();
     InitColumnWidthToolitem();
+
+    if (comphelper::LibreOfficeKit::isActive())
+        m_xMisc->set_item_visible(".uno:InsertFormula", true);
 }
 
 TableEditPanel::~TableEditPanel() { disposeOnce(); }
