@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "15ad8524_5b08765c",
+        "filename": "sw/source/core/access/AccessibilityCheck.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-07T11:30:12Z",
+      "side": 1,
+      "message": "We should only perform the following if this is text node - like is done on lines 643-644.",
+      "range": {
+        "startLine": 681,
+        "startChar": 8,
+        "endLine": 681,
+        "endChar": 63
+      },
+      "revId": "b0361949601fb34bbdf0dbe41b0f9a2c91720656",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "737e5956_05a2b4a1",
+        "filename": "sw/source/core/access/AccessibilityCheck.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-07T11:30:12Z",
+      "side": 1,
+      "message": "I suggest to move this right after the initial check if this is a text node. That way, GetTextNode would be cheap, and then you would use another cheap OUString\u0027s isEmpty() to decide if you also need to break. Then the expensive FindFlyStartNode, GetFlyFormat etc. will follow.",
+      "range": {
+        "startLine": 688,
+        "startChar": 8,
+        "endLine": 689,
+        "endChar": 50
+      },
+      "revId": "b0361949601fb34bbdf0dbe41b0f9a2c91720656",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
