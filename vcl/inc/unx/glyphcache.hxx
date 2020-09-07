@@ -116,6 +116,7 @@ public:
     int                     GetFontFaceVariation() const;
     bool                    TestFont() const { return mbFaceOk;}
     FT_Face                 GetFtFace() const;
+    int                     GetLoadFlags() const { return (mnLoadFlags & ~FT_LOAD_IGNORE_TRANSFORM); }
     const FontConfigFontOptions* GetFontOptions() const;
     bool                    NeedsArtificialBold() const { return mbArtBold; }
     bool                    NeedsArtificialItalic() const { return mbArtItalic; }
@@ -128,6 +129,8 @@ public:
     bool                    GetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const;
     bool                    GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const;
     bool                    GetAntialiasAdvice() const;
+
+    FreetypeFontInstance&   GetFontInstance() const { return mrFontInstance; }
 
     void                    SetFontVariationsOnHBFont(hb_font_t* pHbFace) const;
 
