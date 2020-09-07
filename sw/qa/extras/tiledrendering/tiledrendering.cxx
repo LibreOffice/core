@@ -123,6 +123,7 @@ public:
     void testDocumentRepair();
     void testPageHeader();
     void testPageFooter();
+    void testTdf132892();
     void testTdf115088();
     void testRedlineField();
     void testIMESupport();
@@ -193,6 +194,7 @@ public:
     CPPUNIT_TEST(testDocumentRepair);
     CPPUNIT_TEST(testPageHeader);
     CPPUNIT_TEST(testPageFooter);
+    CPPUNIT_TEST(testTdf132892);
     CPPUNIT_TEST(testTdf115088);
     CPPUNIT_TEST(testRedlineField);
     CPPUNIT_TEST(testIMESupport);
@@ -2091,6 +2093,41 @@ void SwTiledRenderingTest::testPageFooter()
     }
     // Check Footer State
     checkPageHeaderOrFooter(pViewShell, FN_INSERT_PAGEFOOTER, false);
+}
+
+void SwTiledRenderingTest::testTdf132892()
+{
+    SwXTextDocument* pXTextDocument = createDoc("tdf132892.odt");
+
+    CPPUNIT_ASSERT_EQUAL(OUString("M deeeed"), pXTextDocument->getText()->getString());
+
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+
+    SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
+
+    Point aEnd = pShellCursor->GetSttPos();
+
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 2, /*bBasicCall=*/false);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), pShellCursor->GetPoint()->nContent.GetIndex());
+
+    Point aStart = pShellCursor->GetSttPos();
+    pXTextDocument->setTextSelection(LOK_SETTEXTSELECTION_RESET, aStart.getX(), aStart.getY());
+    pXTextDocument->setTextSelection(LOK_SETTEXTSELECTION_END, aStart.getX() + 3000, aStart.getY());
+
+    CPPUNIT_ASSERT(pShellCursor->GetText().startsWith("deeee"));
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(9), pShellCursor->GetPoint()->nContent.GetIndex());
+
+    // Drag and drop the selection to the beginning of the paragraph
+    pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aStart.getX() + 1, aStart.getY() + 1, 1, MOUSE_LEFT, 0);
+    pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEMOVE, aEnd.getX(), aEnd.getY(), 1, MOUSE_LEFT, 0);
+    pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, aEnd.getX(), aEnd.getY(), 1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), pShellCursor->GetPoint()->nContent.GetIndex());
+
+    CPPUNIT_ASSERT_EQUAL(OUString("deeeed M"), pXTextDocument->getText()->getString());
 }
 
 void SwTiledRenderingTest::testTdf115088()
