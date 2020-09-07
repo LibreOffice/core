@@ -33,12 +33,12 @@ without becoming a XModifyListener yourself
 
 class ModifyListenerCallBack_impl;
 
-class OOO_DLLPUBLIC_CHARTTOOLS ModifyListenerCallBack final
+class OOO_DLLPUBLIC_CHARTTOOLS ModifyListenerCallBack
 {
 public:
     explicit ModifyListenerCallBack( const Link<void*,void>& rCallBack );
 
-    ~ModifyListenerCallBack();
+    virtual ~ModifyListenerCallBack();
 
     void startListening( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyBroadcaster >& xBroadcaster );
     SAL_DLLPRIVATE void stopListening();

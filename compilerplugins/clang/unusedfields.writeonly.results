@@ -1,10 +1,10 @@
 basctl/source/basicide/moduldlg.hxx:131
     basctl::ObjectPage m_xDropTarget std::unique_ptr<SbTreeListBoxDropTarget>
-basctl/source/inc/basidesh.hxx:87
+basctl/source/inc/basidesh.hxx:86
     basctl::Shell m_aNotifier class basctl::DocumentEventNotifier
-basctl/source/inc/bastype2.hxx:183
+basctl/source/inc/bastype2.hxx:182
     basctl::SbTreeListBox m_aNotifier class basctl::DocumentEventNotifier
-basctl/source/inc/IDEComboBox.hxx:114
+basctl/source/inc/IDEComboBox.hxx:113
     basctl::DocListenerBox maNotifier class basctl::DocumentEventNotifier
 basegfx/source/polygon/b2dpolygontriangulator.cxx:113
     basegfx::(anonymous namespace)::Triangulator maNewEdgeEntries std::vector<std::unique_ptr<EdgeEntry> >
@@ -12,7 +12,7 @@ basic/qa/cppunit/test_scanner.cxx:24
     (anonymous namespace)::Symbol line sal_uInt16
 basic/qa/cppunit/test_scanner.cxx:25
     (anonymous namespace)::Symbol col1 sal_uInt16
-basic/source/inc/runtime.hxx:253
+basic/source/inc/runtime.hxx:252
     SbiRuntime aRefSaved std::vector<SbxVariableRef>
 bridges/source/cpp_uno/gcc3_linux_x86-64/callvirtualmethod.cxx:56
     Data pMethod sal_uInt64
@@ -74,9 +74,9 @@ canvas/inc/rendering/irendermodule.hxx:37
     canvas::Vertex y float
 canvas/source/cairo/cairo_canvasbitmap.hxx:119
     cairocanvas::CanvasBitmap mpBufferCairo ::cairo::CairoSharedPtr
-canvas/source/cairo/cairo_spritedevicehelper.hxx:74
+canvas/source/cairo/cairo_spritedevicehelper.hxx:73
     cairocanvas::SpriteDeviceHelper mbFullScreen _Bool
-canvas/source/cairo/cairo_spritehelper.hxx:99
+canvas/source/cairo/cairo_spritehelper.hxx:98
     cairocanvas::SpriteHelper mbTextureDirty _Bool
 chart2/inc/ChartModel.hxx:143
     chart::ChartModel m_aGraphicObjectVector std::vector<GraphicObject>
@@ -88,22 +88,24 @@ chart2/source/controller/dialogs/DialogModel.cxx:173
     (anonymous namespace)::lcl_DataSeriesContainerAppend m_rDestCnt (anonymous namespace)::lcl_DataSeriesContainerAppend::tContainerType *
 chart2/source/controller/dialogs/DialogModel.cxx:232
     (anonymous namespace)::lcl_RolesWithRangeAppend m_rDestCnt (anonymous namespace)::lcl_RolesWithRangeAppend::tContainerType *
-chart2/source/controller/inc/ChartController.hxx:413
+chart2/source/controller/inc/ChartController.hxx:412
     chart::ChartController m_apDropTargetHelper std::unique_ptr<DropTargetHelper>
-chart2/source/controller/inc/dlg_View3D.hxx:51
+chart2/source/controller/inc/dlg_View3D.hxx:50
     chart::View3DDialog m_xIllumination std::unique_ptr<ThreeD_SceneIllumination_TabPage>
-chart2/source/controller/main/ElementSelector.hxx:38
+chart2/source/controller/main/ElementSelector.hxx:37
     chart::ListBoxEntryData nHierarchyDepth sal_Int32
-chart2/source/inc/MediaDescriptorHelper.hxx:72
+chart2/source/inc/MediaDescriptorHelper.hxx:71
     apphelper::MediaDescriptorHelper ReadOnly _Bool
-chart2/source/view/charttypes/PieChart.hxx:128
+chart2/source/view/charttypes/PieChart.hxx:127
     chart::PieChart::PieLabelInfo fValue double
-codemaker/source/cppumaker/dependencies.hxx:108
+codemaker/source/cppumaker/dependencies.hxx:107
     codemaker::cppumaker::Dependencies m_voidDependency _Bool
 codemaker/source/javamaker/classfile.cxx:508
      floatBytes float
 codemaker/source/javamaker/classfile.cxx:540
      doubleBytes double
+comphelper/qa/container/comphelper_ifcontainer.cxx:44
+    (anonymous namespace)::ContainerListener m_pStats struct (anonymous namespace)::ContainerStats *const
 comphelper/qa/unit/parallelsorttest.cxx:44
     ParallelSortTest mnThreads size_t
 comphelper/source/misc/asyncnotification.cxx:86
@@ -212,15 +214,13 @@ cppu/source/uno/copy.hxx:39
     cppu::(anonymous namespace)::SequencePrefix nRefCount sal_Int32
 cppu/source/uno/copy.hxx:40
     cppu::(anonymous namespace)::SequencePrefix nElements sal_Int32
-cppuhelper/qa/ifcontainer/cppu_ifcontainer.cxx:45
-    (anonymous namespace)::ContainerListener m_pStats struct (anonymous namespace)::ContainerStats *
 cppuhelper/source/access_control.cxx:79
     cppu::(anonymous namespace)::permission m_str1 rtl_uString *
 cppuhelper/source/access_control.cxx:80
     cppu::(anonymous namespace)::permission m_str2 rtl_uString *
 cppuhelper/source/typemanager.cxx:825
     (anonymous namespace)::BaseOffset set_ std::set<OUString>
-cui/source/inc/cfg.hxx:409
+cui/source/inc/cfg.hxx:405
     SvxConfigPage m_xDropTargetHelper std::unique_ptr<SvxConfigPageFunctionDropTarget>
 cui/source/inc/cuihyperdlg.hxx:46
     SvxHlinkCtrl aRdOnlyForwarder class SfxStatusForwarder
@@ -376,7 +376,7 @@ include/opencl/platforminfo.hxx:31
     OpenCLDeviceInfo mnFrequency size_t
 include/sfx2/minfitem.hxx:35
     SfxMacroInfoItem aCommentText class rtl::OUString
-include/sfx2/templdlg.hxx:41
+include/sfx2/templdlg.hxx:42
     SfxTemplatePanelControl pImpl std::unique_ptr<SfxTemplateDialog_Impl>
 include/svtools/brwbox.hxx:327
     BrowseBox::CursorMoveAttempt m_nCol long
@@ -434,6 +434,8 @@ include/vcl/opengl/OpenGLContext.hxx:32
     GLWindow bMultiSampleSupported _Bool
 include/vcl/pdfextoutdevdata.hxx:83
     vcl::PDFExtOutDevData mbSinglePageSheets _Bool
+include/vcl/pdfread.hxx:46
+    vcl::PDFGraphicAnnotation meSubType pdf::PDFAnnotationSubType
 include/vcl/salnativewidgets.hxx:467
     ToolbarValue mbIsTopDockingArea _Bool
 include/vcl/salnativewidgets.hxx:532
@@ -706,11 +708,11 @@ sfx2/source/inc/appdata.hxx:88
     SfxAppData_Impl mxAppPickList std::unique_ptr<SfxPickList>
 sfx2/source/inc/splitwin.hxx:52
     SfxSplitWindow pActive VclPtr<class SfxDockingWindow>
-sfx2/source/inc/templdgi.hxx:103
+sfx2/source/inc/templdgi.hxx:102
     SfxCommonTemplateDialog_Impl m_xTreeView1DropTargetHelper std::unique_ptr<TreeViewDropTarget>
-sfx2/source/inc/templdgi.hxx:104
+sfx2/source/inc/templdgi.hxx:103
     SfxCommonTemplateDialog_Impl m_xTreeView2DropTargetHelper std::unique_ptr<TreeViewDropTarget>
-sfx2/source/inc/templdgi.hxx:276
+sfx2/source/inc/templdgi.hxx:265
     SfxTemplateDialog_Impl m_xToolbarDropTargetHelper std::unique_ptr<ToolbarDropTarget>
 sfx2/source/view/classificationcontroller.cxx:73
     sfx2::(anonymous namespace)::ClassificationCategoriesController m_aPropertyListener class sfx2::(anonymous namespace)::ClassificationPropertyListener
@@ -870,7 +872,7 @@ svx/source/sidebar/text/TextPropertyPanel.hxx:68
     svx::sidebar::TextPropertyPanel mxPositionBarDispatch std::unique_ptr<ToolbarUnoDispatcher>
 svx/source/sidebar/text/TextPropertyPanel.hxx:70
     svx::sidebar::TextPropertyPanel mxSpacingBarDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/tbxctrls/tbcontrl.cxx:326
+svx/source/tbxctrls/tbcontrl.cxx:312
     (anonymous namespace)::SvxFontNameBox_Base m_aOwnFontList ::std::unique_ptr<FontList>
 sw/inc/accmap.hxx:96
     SwAccessibleMap mvShapes SwShapeList_Impl
@@ -1130,7 +1132,7 @@ vcl/unx/gtk3/gtk3glomenu.cxx:14
     GLOMenu parent_instance const GMenuModel
 vcl/unx/gtk3/gtk3gtkinst.cxx:1613
      in char *
-vcl/unx/gtk3/gtk3gtkinst.cxx:13276
+vcl/unx/gtk3/gtk3gtkinst.cxx:13274
     (anonymous namespace)::GtkInstanceComboBox m_xCustomMenuButtonHelper std::unique_ptr<CustomRenderMenuButtonHelper>
 vcl/unx/gtk3/gtk3hudawareness.cxx:18
     (anonymous namespace)::HudAwarenessHandle connection GDBusConnection *
@@ -1162,7 +1164,7 @@ xmloff/source/forms/elementexport.hxx:104
     xmloff::OControlExport m_pOuterElement std::unique_ptr<SvXMLElementExport>
 xmloff/source/forms/officeforms.hxx:67
     xmloff::OFormsRootExport m_pImplElement std::unique_ptr<SvXMLElementExport>
-xmloff/source/text/txtimp.cxx:529
+xmloff/source/text/txtimp.cxx:528
     XMLTextImportHelper::Impl m_xFrameImpPrMap rtl::Reference<SvXMLImportPropertyMapper>
 xmlsecurity/inc/certificatechooser.hxx:53
     CertificateChooser mvUserData std::vector<std::shared_ptr<UserData> >

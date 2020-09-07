@@ -20,21 +20,23 @@ basegfx/source/polygon/b2dtrapezoid.cxx:205
     basegfx::trapezoidhelper::(anonymous namespace)::PointBlockAllocator maFirstStackBlock class basegfx::B2DPoint [32]
 basegfx/source/polygon/b2dtrapezoid.cxx:257
     basegfx::trapezoidhelper::(anonymous namespace)::TrapezoidSubdivider maPoints std::vector<B2DPoint>
-basic/qa/cppunit/basictest.hxx:28
+basic/qa/cppunit/basictest.hxx:27
     MacroSnippet maDll class BasicDLL
-binaryurp/source/unmarshal.hxx:87
+binaryurp/source/unmarshal.hxx:86
     binaryurp::Unmarshal buffer_ com::sun::star::uno::Sequence<sal_Int8>
-binaryurp/source/writer.hxx:148
+binaryurp/source/writer.hxx:147
     binaryurp::Writer state_ struct binaryurp::WriterState
-canvas/source/tools/surfaceproxy.hxx:105
+canvas/source/tools/surfaceproxy.hxx:104
     canvas::SurfaceProxy mpPageManager canvas::PageManagerSharedPtr
-canvas/source/vcl/impltools.hxx:115
+canvas/source/vcl/impltools.hxx:114
     vclcanvas::tools::LocalGuard aSolarGuard class SolarMutexGuard
-chart2/source/controller/accessibility/AccessibleChartShape.hxx:79
+chart2/source/controller/accessibility/AccessibleChartShape.hxx:78
     chart::AccessibleChartShape m_aShapeTreeInfo ::accessibility::AccessibleShapeTreeInfo
-chart2/source/controller/inc/dlg_View3D.hxx:44
+chart2/source/controller/dialogs/tp_3D_SceneIllumination.hxx:68
+    chart::ThreeD_SceneIllumination_TabPage m_aModelChangeListener class chart::ModifyListenerCallBack
+chart2/source/controller/inc/dlg_View3D.hxx:43
     chart::View3DDialog m_aControllerLocker class chart::ControllerLockHelper
-chart2/source/controller/inc/RangeSelectionListener.hxx:63
+chart2/source/controller/inc/RangeSelectionListener.hxx:62
     chart::RangeSelectionListener m_aControllerLockGuard class chart::ControllerLockGuardUNO
 connectivity/source/commontools/RowFunctionParser.cxx:372
     connectivity::(anonymous namespace)::ExpressionGrammar::definition unaryFunction ::boost::spirit::classic::rule<ScannerT>
@@ -136,7 +138,7 @@ cui/source/inc/AdditionsDialog.hxx:57
     AdditionInfo sReleaseVersion class rtl::OUString
 cui/source/inc/AdditionsDialog.hxx:94
     AdditionsDialog m_sTag class rtl::OString
-cui/source/inc/cfgutil.hxx:241
+cui/source/inc/cfgutil.hxx:233
     SvxScriptSelectorDialog m_aStylesInfo struct SfxStylesInfo_Impl
 cui/source/inc/cuitabarea.hxx:224
     SvxAreaTabPage maFixed_ChangeType enum ChangeType
@@ -174,8 +176,6 @@ dbaccess/source/core/dataaccess/connection.hxx:102
     dbaccess::OConnection m_nInAppend std::atomic<std::size_t>
 dbaccess/source/core/inc/databasecontext.hxx:85
     dbaccess::ODatabaseContext m_aBasicDLL class BasicDLL
-desktop/qa/desktop_lib/test_desktop_lib.cxx:2832
-      class AllSettings &
 drawinglayer/inc/texture/texture3d.hxx:57
     drawinglayer::texture::GeoTexSvxBitmapEx maBitmap class Bitmap
 drawinglayer/inc/texture/texture3d.hxx:59
@@ -239,13 +239,13 @@ include/sfx2/msg.hxx:133
 include/sfx2/msg.hxx:133
     SfxType2 nAttribs sal_uInt16
 include/sfx2/msg.hxx:134
+    SfxType3 nAttribs sal_uInt16
+include/sfx2/msg.hxx:134
     SfxType3 aAttrib struct SfxTypeAttrib [3]
 include/sfx2/msg.hxx:134
     SfxType3 pType const std::type_info *
 include/sfx2/msg.hxx:134
     SfxType3 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:134
-    SfxType3 nAttribs sal_uInt16
 include/sfx2/msg.hxx:135
     SfxType4 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:135
@@ -265,11 +265,11 @@ include/sfx2/msg.hxx:136
 include/sfx2/msg.hxx:137
     SfxType6 nAttribs sal_uInt16
 include/sfx2/msg.hxx:137
+    SfxType6 aAttrib struct SfxTypeAttrib [6]
+include/sfx2/msg.hxx:137
     SfxType6 pType const std::type_info *
 include/sfx2/msg.hxx:137
     SfxType6 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:137
-    SfxType6 aAttrib struct SfxTypeAttrib [6]
 include/sfx2/msg.hxx:138
     SfxType7 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:138
@@ -360,8 +360,6 @@ include/vcl/font/Feature.hxx:100
     vcl::font::Feature m_eType enum vcl::font::FeatureType
 include/vcl/NotebookBarAddonsMerger.hxx:36
     NotebookBarAddonsItem aImage class Image
-include/vcl/toolkit/ivctrl.hxx:67
-    SvxIconChoiceCtrlEntry pUserData void *
 include/xmloff/shapeimport.hxx:140
     SdXML3DLightContext mbSpecular _Bool
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:51
@@ -432,6 +430,8 @@ pyuno/source/module/pyuno_impl.hxx:237
     pyuno::stRuntimeImpl ob_base PyObject
 reportdesign/source/core/api/ReportDefinition.cxx:236
     reportdesign::(anonymous namespace)::OStyle m_aSize awt::Size
+reportdesign/source/filter/xml/xmlExport.cxx:1202
+      sal_Int32
 sal/qa/osl/condition/osl_Condition.cxx:72
     osl_Condition::ctors bRes1 _Bool
 sal/qa/osl/condition/osl_Condition.cxx:202
@@ -595,11 +595,11 @@ sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
     (anonymous namespace)::PDFGrammar::definition boolean rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
-    (anonymous namespace)::PDFGrammar::definition name rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
     (anonymous namespace)::PDFGrammar::definition stream rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
     (anonymous namespace)::PDFGrammar::definition comment rule<ScannerT>
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
+    (anonymous namespace)::PDFGrammar::definition name rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
     (anonymous namespace)::PDFGrammar::definition stringtype rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:263
@@ -630,7 +630,7 @@ sdext/source/pdfimport/pdfparse/pdfparse.cxx:266
     (anonymous namespace)::PDFGrammar::definition xref rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:266
     (anonymous namespace)::PDFGrammar::definition trailer rule<ScannerT>
-sfx2/inc/autoredactdialog.hxx:101
+sfx2/inc/autoredactdialog.hxx:94
     SfxAutoRedactDialog m_xDocShell class SfxObjectShellLock
 sfx2/source/dialog/basedlgs.cxx:47
     SfxModelessDialog_Impl aMoveIdle class Idle
@@ -798,9 +798,9 @@ vcl/inc/salmenu.hxx:43
     SalMenuButtonItem maImage class Image
 vcl/inc/salmenu.hxx:44
     SalMenuButtonItem maToolTipText class rtl::OUString
-vcl/inc/salvtables.hxx:561
+vcl/inc/salvtables.hxx:558
     SalInstanceEntry m_aTextFilter class WeldTextFilter
-vcl/inc/salvtables.hxx:941
+vcl/inc/salvtables.hxx:938
     SalInstanceComboBoxWithEdit m_aTextFilter class WeldTextFilter
 vcl/inc/svimpbox.hxx:120
     SvImpLBox m_aFctSet class ImpLBSelEng
@@ -848,21 +848,21 @@ vcl/unx/gtk3/gtk3gloactiongroup.cxx:27
     (anonymous namespace)::GLOAction parent_instance GObject
 vcl/unx/gtk3/gtk3glomenu.cxx:14
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtk3gtkinst.cxx:4820
+vcl/unx/gtk3/gtk3gtkinst.cxx:4824
     (anonymous namespace)::GtkInstanceAssistant m_pButtonBox GtkButtonBox *
-vcl/unx/gtk3/gtk3gtkinst.cxx:5193
+vcl/unx/gtk3/gtk3gtkinst.cxx:5197
     (anonymous namespace)::CrippledViewport viewport GtkViewport
-vcl/unx/gtk3/gtk3gtkinst.cxx:5337
+vcl/unx/gtk3/gtk3gtkinst.cxx:5341
     (anonymous namespace)::CustomCellRendererSurface parent GtkCellRendererText
-vcl/unx/gtk3/gtk3gtkinst.cxx:5345
+vcl/unx/gtk3/gtk3gtkinst.cxx:5349
     (anonymous namespace)::CustomCellRendererSurfaceClass parent_class GtkCellRendererTextClass
-vcl/unx/gtk3/gtk3gtkinst.cxx:13266
+vcl/unx/gtk3/gtk3gtkinst.cxx:13264
     (anonymous namespace)::GtkInstanceComboBox m_pOverlay GtkOverlay *
-vcl/unx/gtk3/gtk3gtkinst.cxx:13272
+vcl/unx/gtk3/gtk3gtkinst.cxx:13270
     (anonymous namespace)::GtkInstanceComboBox m_pMenuTextRenderer GtkCellRenderer *
 writerfilter/source/dmapper/PropertyMap.hxx:220
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32
-xmloff/source/chart/transporttypes.hxx:149
+xmloff/source/chart/transporttypes.hxx:150
     CustomLabelField sRuns std::vector<OUString>
 xmloff/source/text/XMLTextListBlockContext.hxx:35
     XMLTextListBlockContext msListStyleName class rtl::OUString

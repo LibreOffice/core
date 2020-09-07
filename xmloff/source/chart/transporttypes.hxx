@@ -146,10 +146,6 @@ struct RegressionStyle
     {}
 };
 
-struct CustomLabelField {
-    std::vector<OUString> sRuns;
-};
-
 struct DataRowPointStyle
 {
     enum StyleType
