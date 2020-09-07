@@ -10,18 +10,20 @@ avmedia/source/vlc/wrapper/Types.hxx:46
     libvlc_event_t u union (anonymous union at /home/noel/libo2/avmedia/source/vlc/wrapper/Types.hxx:40:5)
 avmedia/source/vlc/wrapper/Types.hxx:52
     libvlc_track_description_t psz_name char *
-basctl/source/inc/dlged.hxx:122
+basctl/source/inc/dlged.hxx:121
     basctl::DlgEditor pObjFac std::unique_ptr<DlgEdFactory, o3tl::default_delete<DlgEdFactory> >
-basic/qa/cppunit/basictest.hxx:28
+basic/qa/cppunit/basictest.hxx:27
     MacroSnippet maDll class BasicDLL
-basic/source/runtime/dllmgr.hxx:48
+basic/source/runtime/dllmgr.hxx:47
     SbiDllMgr impl_ std::unique_ptr<Impl>
-canvas/source/vcl/canvasbitmap.hxx:114
+canvas/source/vcl/canvasbitmap.hxx:113
     vclcanvas::CanvasBitmap mxDevice css::uno::Reference<css::rendering::XGraphicDevice>
-canvas/source/vcl/impltools.hxx:115
+canvas/source/vcl/impltools.hxx:114
     vclcanvas::tools::LocalGuard aSolarGuard class SolarMutexGuard
-chart2/source/controller/inc/RangeSelectionListener.hxx:63
+chart2/source/controller/inc/RangeSelectionListener.hxx:62
     chart::RangeSelectionListener m_aControllerLockGuard class chart::ControllerLockGuardUNO
+chart2/source/inc/ModifyListenerCallBack.hxx:51
+    chart::ModifyListenerCallBack m_xModifyListener css::uno::Reference<css::util::XModifyListener>
 comphelper/source/container/enumerablemap.cxx:297
     comphelper::(anonymous namespace)::MapEnumeration m_xKeepMapAlive Reference<class com::sun::star::uno::XInterface>
 connectivity/source/drivers/evoab2/EApi.h:122
@@ -42,8 +44,6 @@ dbaccess/source/core/inc/databasecontext.hxx:85
     dbaccess::ODatabaseContext m_aBasicDLL class BasicDLL
 dbaccess/source/sdbtools/inc/connectiondependent.hxx:115
     sdbtools::ConnectionDependentComponent::EntryGuard m_aMutexGuard ::osl::MutexGuard
-desktop/qa/desktop_lib/test_desktop_lib.cxx:2832
-      class AllSettings &
 emfio/source/emfuno/xemfparser.cxx:48
     emfio::emfreader::(anonymous namespace)::XEmfParser context_ uno::Reference<uno::XComponentContext>
 extensions/source/scanner/scanner.hxx:43
@@ -85,13 +85,13 @@ include/sfx2/msg.hxx:133
 include/sfx2/msg.hxx:133
     SfxType2 nAttribs sal_uInt16
 include/sfx2/msg.hxx:134
+    SfxType3 aAttrib struct SfxTypeAttrib [3]
+include/sfx2/msg.hxx:134
     SfxType3 pType const std::type_info *
 include/sfx2/msg.hxx:134
     SfxType3 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:134
     SfxType3 nAttribs sal_uInt16
-include/sfx2/msg.hxx:134
-    SfxType3 aAttrib struct SfxTypeAttrib [3]
 include/sfx2/msg.hxx:135
     SfxType4 nAttribs sal_uInt16
 include/sfx2/msg.hxx:135
@@ -119,11 +119,11 @@ include/sfx2/msg.hxx:137
 include/sfx2/msg.hxx:138
     SfxType7 nAttribs sal_uInt16
 include/sfx2/msg.hxx:138
-    SfxType7 pType const std::type_info *
-include/sfx2/msg.hxx:138
     SfxType7 aAttrib struct SfxTypeAttrib [7]
 include/sfx2/msg.hxx:138
     SfxType7 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:138
+    SfxType7 pType const std::type_info *
 include/sfx2/msg.hxx:139
     SfxType8 aAttrib struct SfxTypeAttrib [8]
 include/sfx2/msg.hxx:139
@@ -165,13 +165,13 @@ include/sfx2/msg.hxx:144
 include/sfx2/msg.hxx:144
     SfxType14 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:145
-    SfxType16 nAttribs sal_uInt16
-include/sfx2/msg.hxx:145
     SfxType16 aAttrib struct SfxTypeAttrib [16]
 include/sfx2/msg.hxx:145
     SfxType16 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:145
     SfxType16 pType const std::type_info *
+include/sfx2/msg.hxx:145
+    SfxType16 nAttribs sal_uInt16
 include/sfx2/msg.hxx:146
     SfxType17 pType const std::type_info *
 include/sfx2/msg.hxx:146
@@ -208,14 +208,10 @@ include/vcl/font/Feature.hxx:100
     vcl::font::Feature m_eType enum vcl::font::FeatureType
 include/vcl/NotebookBarAddonsMerger.hxx:36
     NotebookBarAddonsItem aImage class Image
-include/vcl/toolkit/ivctrl.hxx:67
-    SvxIconChoiceCtrlEntry pUserData void *
 include/vcl/uitest/uiobject.hxx:279
     TabPageUIObject mxTabPage VclPtr<class TabPage>
 include/xmloff/formlayerexport.hxx:172
     xmloff::OOfficeFormsExport m_pImpl std::unique_ptr<OFormsRootExport>
-include/xmloff/xmlstyle.hxx:145
-    SvXMLStylesContext mpStyleStylesElemTokenMap std::unique_ptr<SvXMLTokenMap>
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:51
     GtvApplicationWindow parent_instance GtkApplicationWindow
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:55
@@ -254,6 +250,8 @@ pyuno/source/module/pyuno_impl.hxx:137
     pyuno::(anonymous) ob_base PyObject
 pyuno/source/module/pyuno_impl.hxx:237
     pyuno::stRuntimeImpl ob_base PyObject
+reportdesign/source/filter/xml/xmlExport.cxx:1202
+      sal_Int32
 reportdesign/source/ui/inc/ReportWindow.hxx:52
     rptui::OReportWindow m_pObjFac std::unique_ptr<DlgEdFactory, o3tl::default_delete<DlgEdFactory> >
 sal/qa/osl/condition/osl_Condition.cxx:72
@@ -344,7 +342,7 @@ sdext/source/pdfimport/pdfparse/pdfparse.cxx:264
     (anonymous namespace)::PDFGrammar::definition array rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:264
     (anonymous namespace)::PDFGrammar::definition value rule<ScannerT>
-sfx2/inc/autoredactdialog.hxx:101
+sfx2/inc/autoredactdialog.hxx:94
     SfxAutoRedactDialog m_xDocShell class SfxObjectShellLock
 sfx2/source/dialog/basedlgs.cxx:47
     SfxModelessDialog_Impl aMoveIdle class Idle
@@ -450,36 +448,16 @@ vcl/unx/gtk3/a11y/gtk3atkhypertext.cxx:31
     (anonymous namespace)::HyperLink atk_hyper_link const AtkHyperlink
 vcl/unx/gtk3/gtk3gloactiongroup.cxx:27
     (anonymous namespace)::GLOAction parent_instance GObject
-vcl/unx/gtk3/gtk3gtkinst.cxx:5193
+vcl/unx/gtk3/gtk3gtkinst.cxx:5197
     (anonymous namespace)::CrippledViewport viewport GtkViewport
-vcl/unx/gtk3/gtk3gtkinst.cxx:5337
+vcl/unx/gtk3/gtk3gtkinst.cxx:5341
     (anonymous namespace)::CustomCellRendererSurface parent GtkCellRendererText
-vcl/unx/gtk3/gtk3gtkinst.cxx:5345
+vcl/unx/gtk3/gtk3gtkinst.cxx:5349
     (anonymous namespace)::CustomCellRendererSurfaceClass parent_class GtkCellRendererTextClass
 writerfilter/source/ooxml/OOXMLStreamImpl.hxx:42
     writerfilter::ooxml::OOXMLStreamImpl mxFastParser css::uno::Reference<css::xml::sax::XFastParser>
-xmloff/inc/XMLTextColumnsContext.hxx:39
-    XMLTextColumnsContext pColumnAttrTokenMap std::unique_ptr<SvXMLTokenMap>
-xmloff/inc/XMLTextColumnsContext.hxx:40
-    XMLTextColumnsContext pColumnSepAttrTokenMap std::unique_ptr<SvXMLTokenMap>
-xmloff/source/chart/transporttypes.hxx:149
+xmloff/source/chart/transporttypes.hxx:150
     CustomLabelField sRuns std::vector<OUString>
-xmloff/source/draw/sdxmlimp_impl.hxx:108
-    SdXMLImport mpBodyElemTokenMap std::unique_ptr<SvXMLTokenMap>
-xmloff/source/draw/sdxmlimp_impl.hxx:109
-    SdXMLImport mpStylesElemTokenMap std::unique_ptr<SvXMLTokenMap>
-xmloff/source/draw/sdxmlimp_impl.hxx:110
-    SdXMLImport mpMasterPageElemTokenMap std::unique_ptr<SvXMLTokenMap>
-xmloff/source/draw/sdxmlimp_impl.hxx:111
-    SdXMLImport mpPageMasterAttrTokenMap std::unique_ptr<SvXMLTokenMap>
-xmloff/source/draw/sdxmlimp_impl.hxx:112
-    SdXMLImport mpPageMasterStyleAttrTokenMap std::unique_ptr<SvXMLTokenMap>
-xmloff/source/draw/sdxmlimp_impl.hxx:113
-    SdXMLImport mpPresentationPlaceholderAttrTokenMap std::unique_ptr<SvXMLTokenMap>
-xmloff/source/style/xmlnumfi.cxx:68
-    SvXMLNumImpData pStylesElemTokenMap std::unique_ptr<SvXMLTokenMap>
-xmloff/source/text/txtimp.cxx:520
-    XMLTextImportHelper::Impl m_xTextMasterPageElemTokenMap std::unique_ptr<SvXMLTokenMap>
 xmlsecurity/qa/unit/signing/signing2.cxx:42
     SigningTest2 mxSEInitializer uno::Reference<xml::crypto::XSEInitializer>
 xmlsecurity/qa/unit/signing/signing2.cxx:43
