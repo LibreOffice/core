@@ -214,32 +214,23 @@ bool GlobalImageList::hasImage( vcl::ImageType nImageType, const OUString& rComm
 
 static bool implts_checkAndScaleGraphic( uno::Reference< XGraphic >& rOutGraphic, const uno::Reference< XGraphic >& rInGraphic, vcl::ImageType nImageType )
 {
-    static Size aNormSize(16, 16);
-    static Size aLargeSize(26, 26);
-    static Size aSize32(32, 32);
-
     if ( !rInGraphic.is() )
     {
         rOutGraphic = uno::Reference<graphic::XGraphic>();
         return false;
     }
 
+    static const o3tl::enumarray<vcl::ImageType, Size> BITMAP_SIZE =
+    {
+        Size(16, 16), Size(24, 24), Size(32, 32)
+    };
+
     // Check size and scale it
     Graphic aImage(rInGraphic);
-    Size   aSize = aImage.GetSizePixel();
-    bool   bMustScale( false );
-
-    if (nImageType == vcl::ImageType::Size26)
-        bMustScale = (aSize != aLargeSize);
-    else if (nImageType == vcl::ImageType::Size32)
-        bMustScale = (aSize != aSize32);
-    else
-        bMustScale = (aSize != aNormSize);
-
-    if (bMustScale)
+    if (BITMAP_SIZE[nImageType] != aImage.GetSizePixel())
     {
         BitmapEx aBitmap = aImage.GetBitmapEx();
-        aBitmap.Scale( aNormSize );
+        aBitmap.Scale(BITMAP_SIZE[nImageType]);
         aImage = Graphic(aBitmap);
         rOutGraphic = aImage.GetXGraphic();
     }
