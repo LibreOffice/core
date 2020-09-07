@@ -19,6 +19,7 @@
 
 #include "xmlimpit.hxx"
 
+#include <sal/log.hxx>
 #include <sax/tools/converter.hxx>
 #include <utility>
 #include <xmloff/xmluconv.hxx>
@@ -226,8 +227,12 @@ void SvXMLImportItemMapper::importXMLUnknownAttributes( SfxItemSet& rSet,
                     sPrefix = sName.copy(0, i-1);
                     sName = sName.copy(i+1);
                 }
-                pUnknownItem->AddAttr( sPrefix, rAttribute.NamespaceURL, sName,
-                                       rAttribute.Value );
+                // the sax parser doesn't reject these, strangely
+                if (sName.indexOf(':') == -1)
+                    pUnknownItem->AddAttr( sPrefix, rAttribute.NamespaceURL, sName,
+                                           rAttribute.Value );
+                else
+                    SAL_WARN("sw", "ignoring dodgy attribute: " + rAttribute.Name);
             }
         }
     }
