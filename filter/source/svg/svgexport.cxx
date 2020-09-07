@@ -59,6 +59,7 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdxcgv.hxx>
+#include <sal/log.hxx>
 
 #include <memory>
 
@@ -608,7 +609,7 @@ bool SVGFilter::implExportImpressOrDraw( const Reference< XOutputStream >& rxOSt
                 {
                     delete mpSVGDoc;
                     mpSVGDoc = nullptr;
-                    OSL_FAIL( "Exception caught" );
+                    SAL_WARN("filter.svg", "Exception caught");
                 }
 
                 if( nullptr != pSdrModel )
