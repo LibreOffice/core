@@ -72,7 +72,8 @@ public:
 
     void                  AnnounceFont( PhysicalFontCollection* );
 
-    const FontCharMapRef& GetFontCharMap();
+    FontCharMapRef GetFontCharMap() const;
+    bool GetFontCapabilities(vcl::FontCapabilities&) const;
 
 private:
     friend class FreetypeManager;
@@ -87,7 +88,7 @@ private:
     sal_IntPtr      mnFontId;
     FontAttributes  maDevFontAttributes;
 
-    FontCharMapRef  mxFontCharMap;
+    mutable FontCharMapRef mxFontCharMap;
 };
 
 class FreetypeFontFace : public PhysicalFontFace
@@ -100,7 +101,15 @@ public:
 
     virtual rtl::Reference<LogicalFontInstance> CreateFontInstance( const FontSelectPattern& ) const override;
     virtual sal_IntPtr      GetFontId() const override { return mpFreetypeFontInfo->GetFontId(); }
+
+    FontCharMapRef GetFontCharMap() const override { return mpFreetypeFontInfo->GetFontCharMap(); }
+    inline bool GetFontCapabilities(vcl::FontCapabilities&) const override;
 };
+
+bool FreetypeFontFace::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) const
+{
+    return mpFreetypeFontInfo->GetFontCapabilities(rFontCapabilities);
+}
 
 class SAL_DLLPUBLIC_RTTI FreetypeFontInstance : public LogicalFontInstance
 {
