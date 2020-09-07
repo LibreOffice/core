@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "43955da8_f3bd7208",
+        "filename": "vcl/source/window/printdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2203,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-09-07T07:30:09Z",
+      "side": 1,
+      "message": "so you\u0027re simply resetting this to normal dimensions?",
+      "revId": "4bd976b49f7aa5df5dcd24687fa51f5e64a22389",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
