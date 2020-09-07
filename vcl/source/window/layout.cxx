@@ -2893,6 +2893,7 @@ void VclDrawingArea::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
         ::comphelper::Base64::encode(aBuffer, aSeq);
         rJsonWriter.put("image", aBuffer.makeStringAndClear());
     }
+    rJsonWriter.put("text", GetQuickHelpText());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
