@@ -16,6 +16,24 @@
       "revId": "4bd976b49f7aa5df5dcd24687fa51f5e64a22389",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f752127_1d185251",
+        "filename": "vcl/source/window/printdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2203,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2020-09-07T09:26:11Z",
+      "side": 1,
+      "message": "Set the start string to the right display, \nbefore was \"Seite 20 von 20\"\nnow        \"Seite 0 von 2\".\nBut with the patch in 2222 i think this wouldn\u0027t be display, because it set to \n\"Seite 1 von 20\" and only this is first what displayed.\n\nThe calculate of the dimension of the textbox is above in 2194",
+      "parentUuid": "43955da8_f3bd7208",
+      "revId": "4bd976b49f7aa5df5dcd24687fa51f5e64a22389",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
