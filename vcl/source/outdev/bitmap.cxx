@@ -1065,7 +1065,7 @@ bool OutputDevice::DrawTransformBitmapExDirect(
     }
     else if (mpAlphaVDev)
     {
-        aAlphaBitmap = Bitmap(rBitmapEx.GetSizePixel(), 1);
+        aAlphaBitmap = Bitmap(rBitmapEx.GetSizePixel(), 8);
         aAlphaBitmap.Erase(COL_BLACK);
     }
 
@@ -1082,7 +1082,7 @@ bool OutputDevice::DrawTransformBitmapExDirect(
     if (mpAlphaVDev)
     {
         // Merge bitmap alpha to alpha device
-        Bitmap aBlack(rBitmapEx.GetSizePixel(), 1);
+        Bitmap aBlack(rBitmapEx.GetSizePixel(), 8);
         aBlack.Erase(COL_BLACK);
         mpAlphaVDev->DrawTransformBitmapExDirect(aFullTransform, BitmapEx(aBlack, aAlphaBitmap));
     }
