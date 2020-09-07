@@ -680,7 +680,7 @@ void WinFontFace::UpdateFromHDC( HDC hDC ) const
     GetFontCapabilities( hDC );
 }
 
-FontCharMapRef WinFontFace::GetFontCharMap() const
+const FontCharMapRef WinFontFace::GetFontCharMap() const
 {
     return mxUnicodeMap;
 }
