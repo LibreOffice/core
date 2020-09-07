@@ -226,6 +226,7 @@ bool ImportPDF(SvStream& rStream, Graphic& rGraphic)
     return true;
 }
 
+#if HAVE_FEATURE_PDFIUM
 namespace
 {
 std::vector<PDFGraphicAnnotation> findAnnotations(std::unique_ptr<vcl::pdf::PDFiumPage>& pPage,
@@ -275,6 +276,7 @@ std::vector<PDFGraphicAnnotation> findAnnotations(std::unique_ptr<vcl::pdf::PDFi
 }
 
 } // end anonymous namespace
+#endif
 
 size_t ImportPDFUnloaded(const OUString& rURL, std::vector<PDFGraphicResult>& rGraphics)
 {
