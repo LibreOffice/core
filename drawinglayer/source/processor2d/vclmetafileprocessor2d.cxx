@@ -2413,8 +2413,11 @@ void VclMetafileProcessor2D::processPrimitive2DOnPixelProcessor(
         aBufferProcessor.process({ aRef });
         const BitmapEx aBmContent(pBufferDevice->GetBitmapEx(Point(), aSizePixel));
         mpOutputDevice->DrawBitmapEx(aRectLogic.TopLeft(), aRectLogic.GetSize(), aBmContent);
-        pBufferDevice.disposeAndClear();
+
+        // aBufferProcessor dtor pops state off pBufferDevice pushed on by its ctor, let
+        // pBufferDevice live past aBufferProcessor scope to avoid warnigns
     }
+    pBufferDevice.disposeAndClear();
 }
 
 } // end of namespace
