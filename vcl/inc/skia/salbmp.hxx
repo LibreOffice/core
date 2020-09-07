@@ -119,9 +119,15 @@ private:
     {
         if (bitmap == nullptr)
             return stream << "(null)";
+        // p - has (non-trivial) palette
         // I/i - has SkImage (on GPU/CPU),
         // A/a - has alpha SkImage (on GPU/CPU)
-        stream << static_cast<const void*>(bitmap) << " " << bitmap->GetSize() << "/";
+        // E - has erase color
+        stream << static_cast<const void*>(bitmap) << " " << bitmap->GetSize() << "x"
+               << bitmap->GetBitCount();
+        if (bitmap->GetBitCount() <= 8 && !bitmap->Palette().IsGreyPalette8Bit())
+            stream << "p";
+        stream << "/";
         if (bitmap->mImage)
             stream << (bitmap->mImage->isTextureBacked() ? "I" : "i");
         if (bitmap->mAlphaImage)
