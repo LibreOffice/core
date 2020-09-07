@@ -69,11 +69,12 @@ namespace {
 
 class SwIntrnlSectRefLink : public SwBaseLink
 {
-    SwSectionFormat& rSectFormat;
+    SwSectionFormat& m_rSectFormat;
+
 public:
-    SwIntrnlSectRefLink( SwSectionFormat& rFormat, SfxLinkUpdateMode nUpdateType )
-        : SwBaseLink( nUpdateType, SotClipboardFormatId::RTF ),
-        rSectFormat( rFormat )
+    SwIntrnlSectRefLink(SwSectionFormat& rFormat, SfxLinkUpdateMode nUpdateType)
+        : SwBaseLink(nUpdateType, SotClipboardFormatId::RTF)
+        , m_rSectFormat(rFormat)
     {}
 
     virtual void Closed() override;
@@ -1172,8 +1173,8 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
 ::sfx2::SvBaseLink::UpdateResult SwIntrnlSectRefLink::DataChanged(
     const OUString& rMimeType, const uno::Any & rValue )
 {
-    SwSectionNode* pSectNd = rSectFormat.GetSectionNode();
-    SwDoc* pDoc = rSectFormat.GetDoc();
+    SwSectionNode* pSectNd = m_rSectFormat.GetSectionNode();
+    SwDoc* pDoc = m_rSectFormat.GetDoc();
 
     SotClipboardFormatId nDataFormat = SotExchange::GetFormatIdFromMimeType( rMimeType );
 
@@ -1443,14 +1444,14 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
 
 void SwIntrnlSectRefLink::Closed()
 {
-    SwDoc* pDoc = rSectFormat.GetDoc();
+    SwDoc* pDoc = m_rSectFormat.GetDoc();
     if( pDoc && !pDoc->IsInDtor() )
     {
         // Advise says goodbye: mark the Section as not protected
         // and change the Flag
         const SwSectionFormats& rFormats = pDoc->GetSections();
         for( auto n = rFormats.size(); n; )
-            if( rFormats[ --n ] == &rSectFormat )
+            if (rFormats[--n] == &m_rSectFormat)
             {
                 SwViewShell* pSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
                 SwEditShell* pESh = pDoc->GetEditShell();
@@ -1460,7 +1461,7 @@ void SwIntrnlSectRefLink::Closed()
                 else
                     pSh->StartAction();
 
-                SwSectionData aSectionData(*rSectFormat.GetSection());
+                SwSectionData aSectionData(*m_rSectFormat.GetSection());
                 aSectionData.SetType( SectionType::Content );
                 aSectionData.SetLinkFileName( OUString() );
                 aSectionData.SetProtectFlag( false );
@@ -1472,7 +1473,7 @@ void SwIntrnlSectRefLink::Closed()
                 pDoc->UpdateSection( n, aSectionData );
 
                 // Make all Links within the Section visible again
-                SwSectionNode* pSectNd = rSectFormat.GetSectionNode();
+                SwSectionNode* pSectNd = m_rSectFormat.GetSectionNode();
                 if( pSectNd )
                     SwSection::MakeChildLinksVisible( *pSectNd );
 
@@ -1578,14 +1579,11 @@ void SwSection::BreakLink()
     SetLinkFilePassword( OUString() );
 }
 
-const SwNode* SwIntrnlSectRefLink::GetAnchor() const
-{
-    return rSectFormat.GetSectionNode();
-}
+const SwNode* SwIntrnlSectRefLink::GetAnchor() const { return m_rSectFormat.GetSectionNode(); }
 
 bool SwIntrnlSectRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd ) const
 {
-    SwStartNode* pSttNd = rSectFormat.GetSectionNode();
+    SwStartNode* pSttNd = m_rSectFormat.GetSectionNode();
     return pSttNd &&
             nSttNd < pSttNd->GetIndex() &&
             pSttNd->EndOfSectionIndex() < nEndNd;

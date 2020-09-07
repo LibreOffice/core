@@ -32,8 +32,8 @@ class SwDPage final : public FmFormPage, public SdrObjUserCall
     SwDPage &operator=(const SwDPage&) = delete;
     SwDPage(const SwDPage&) = delete;
 
-    std::unique_ptr<SdrPageGridFrameList>   pGridLst;
-    SwDoc*                                  pDoc;
+    std::unique_ptr<SdrPageGridFrameList>   m_pGridLst;
+    SwDoc*                                  m_pDoc;
 
 public:
     explicit SwDPage(SwDrawModel& rNewModel, bool bMasterPage);

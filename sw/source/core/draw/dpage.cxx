@@ -46,7 +46,7 @@ using namespace ::com::sun::star::frame;
 
 SwDPage::SwDPage(SwDrawModel& rNewModel, bool bMasterPage)
 :   FmFormPage(rNewModel, bMasterPage),
-    pDoc(&rNewModel.GetDoc())
+    m_pDoc(&rNewModel.GetDoc())
 {
 }
 
@@ -58,11 +58,11 @@ void SwDPage::lateInit(const SwDPage& rSrcPage)
 {
     FmFormPage::lateInit( rSrcPage );
 
-    if ( rSrcPage.pGridLst )
+    if ( rSrcPage.m_pGridLst )
     {
-        pGridLst.reset( new SdrPageGridFrameList );
-        for ( sal_uInt16 i = 0; i != rSrcPage.pGridLst->GetCount(); ++i )
-            pGridLst->Insert( ( *rSrcPage.pGridLst )[ i ] );
+        m_pGridLst.reset( new SdrPageGridFrameList );
+        for ( sal_uInt16 i = 0; i != rSrcPage.m_pGridLst->GetCount(); ++i )
+            m_pGridLst->Insert( ( *rSrcPage.m_pGridLst )[ i ] );
     }
 }
 
@@ -111,10 +111,10 @@ const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
                 break;
             }
         }
-        if ( pGridLst )
-            const_cast<SwDPage*>(this)->pGridLst->Clear();
+        if ( m_pGridLst )
+            const_cast<SwDPage*>(this)->m_pGridLst->Clear();
         else
-            const_cast<SwDPage*>(this)->pGridLst.reset( new SdrPageGridFrameList );
+            const_cast<SwDPage*>(this)->m_pGridLst.reset( new SdrPageGridFrameList );
 
         if ( pRect )
         {
@@ -123,7 +123,7 @@ const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
             const SwFrame *pPg = pSh->GetLayout()->Lower();
             do
             {   if ( pPg->getFrameArea().IsOver( aRect ) )
-                    ::InsertGridFrame( const_cast<SwDPage*>(this)->pGridLst.get(), pPg );
+                    ::InsertGridFrame( const_cast<SwDPage*>(this)->m_pGridLst.get(), pPg );
                 pPg = pPg->GetNext();
             } while ( pPg );
         }
@@ -133,18 +133,18 @@ const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
             const SwFrame *pPg = pSh->Imp()->GetFirstVisPage(pSh->GetOut());
             if ( pPg )
                 do
-                {   ::InsertGridFrame( const_cast<SwDPage*>(this)->pGridLst.get(), pPg );
+                {   ::InsertGridFrame( const_cast<SwDPage*>(this)->m_pGridLst.get(), pPg );
                     pPg = pPg->GetNext();
                 } while ( pPg && pPg->getFrameArea().IsOver( pSh->VisArea() ) );
         }
     }
-    return pGridLst.get();
+    return m_pGridLst.get();
 }
 
 bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView const * pView,
                            const HelpEvent& rEvt )
 {
-    assert( pDoc );
+    assert( m_pDoc );
 
     bool bContinue = true;
 
@@ -214,7 +214,7 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView const * pView,
         if (!sText.isEmpty())
         {
             // #i80029#
-            bool bExecHyperlinks = pDoc->GetDocShell()->IsReadOnly();
+            bool bExecHyperlinks = m_pDoc->GetDocShell()->IsReadOnly();
             if (!bExecHyperlinks)
                 sText = SfxHelp::GetURLHelpText(sText);
 
@@ -238,10 +238,10 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView const * pView,
 
 Reference< XInterface > SwDPage::createUnoPage()
 {
-    assert( pDoc );
+    assert( m_pDoc );
 
     Reference < XInterface > xRet;
-    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwDocShell* pDocShell = m_pDoc->GetDocShell();
     if ( pDocShell )
     {
         Reference<XModel> xModel = pDocShell->GetBaseModel();

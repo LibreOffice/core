@@ -31,13 +31,13 @@ class SwTextCursor;
 
 class SwTextFrameInfo
 {
-    const SwTextFrame *pFrame;
+    const SwTextFrame *m_pFrame;
 
     // Where does the text (w/o whitespaces) start (document is global!)?
     static SwTwips GetLineStart( const SwTextCursor &rLine );
 
 public:
-    SwTextFrameInfo( const SwTextFrame *pTextFrame ) : pFrame(pTextFrame) { }
+    SwTextFrameInfo( const SwTextFrame *pTextFrame ) : m_pFrame(pTextFrame) { }
 
     // Does the paragraph fit into a single line?
     bool IsOneLine() const;
@@ -61,9 +61,9 @@ public:
     // determine indentation for first line
     SwTwips GetFirstIndent() const;
 
-    const SwTextFrame* GetFrame() const { return pFrame; }
+    const SwTextFrame* GetFrame() const { return m_pFrame; }
     SwTextFrameInfo& SetFrame( const SwTextFrame* pNew )
-        { pFrame = pNew; return *this; }
+        { m_pFrame = pNew; return *this; }
 
     // Is it a comparison? Returns position in frame.
     sal_Int32 GetBigIndent( TextFrameIndex & rFndPos,
