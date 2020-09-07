@@ -10,31 +10,31 @@ avmedia/source/framework/soundhandler.hxx:114
 basctl/source/basicide/baside2.hxx:83
     basctl::EditorWindow aHighlighter
     0
-basctl/source/inc/dlged.hxx:132
+basctl/source/inc/dlged.hxx:131
     basctl::DlgEditor aMarkIdle
     basctl DlgEditor Mark
-binaryurp/source/proxy.hxx:81
+binaryurp/source/proxy.hxx:80
     binaryurp::Proxy references_
     1
-binaryurp/source/writerstate.hxx:41
+binaryurp/source/writerstate.hxx:40
     binaryurp::WriterState typeCache
     256
-binaryurp/source/writerstate.hxx:43
+binaryurp/source/writerstate.hxx:42
     binaryurp::WriterState oidCache
     256
-binaryurp/source/writerstate.hxx:45
+binaryurp/source/writerstate.hxx:44
     binaryurp::WriterState tidCache
     256
-bridges/inc/bridge.hxx:90
+bridges/inc/bridge.hxx:89
     bridges::cpp_uno::shared::Bridge nRef
     1
-bridges/inc/cppinterfaceproxy.hxx:83
+bridges/inc/cppinterfaceproxy.hxx:82
     bridges::cpp_uno::shared::CppInterfaceProxy nRef
     1
-bridges/inc/unointerfaceproxy.hxx:84
+bridges/inc/unointerfaceproxy.hxx:83
     bridges::cpp_uno::shared::UnoInterfaceProxy nRef
     1
-bridges/source/jni_uno/jni_bridge.h:53
+bridges/source/jni_uno/jni_bridge.h:52
     jni_uno::Bridge m_ref
     1
 bridges/source/jni_uno/jni_uno2java.cxx:391
@@ -55,19 +55,19 @@ canvas/inc/rendering/irendermodule.hxx:37
 chart2/source/controller/dialogs/DataBrowser.cxx:209
     chart::impl::SeriesHeader m_aUpdateDataTimer
     UpdateDataTimer
-chart2/source/controller/inc/ChartController.hxx:378
+chart2/source/controller/inc/ChartController.hxx:377
     chart::ChartController m_aLifeTimeManager
     0
-chart2/source/controller/inc/TitleDialogData.hxx:34
+chart2/source/controller/inc/TitleDialogData.hxx:33
     chart::TitleDialogData aPossibilityList
     7
-chart2/source/controller/inc/TitleDialogData.hxx:35
+chart2/source/controller/inc/TitleDialogData.hxx:34
     chart::TitleDialogData aExistenceList
     7
-chart2/source/controller/inc/TitleDialogData.hxx:36
+chart2/source/controller/inc/TitleDialogData.hxx:35
     chart::TitleDialogData aTextList
     7
-chart2/source/model/main/DataPoint.hxx:108
+chart2/source/model/main/DataPoint.hxx:107
     chart::DataPoint m_bNoParentPropAllowed
     0
 comphelper/source/misc/threadpool.cxx:40
@@ -112,10 +112,10 @@ cppu/source/uno/copy.hxx:39
 cui/source/inc/acccfg.hxx:100
     SfxAcceleratorConfigPage m_aUpdateDataTimer
     UpdateDataTimer
-cui/source/inc/AdditionsDialog.hxx:58
+cui/source/inc/AdditionsDialog.hxx:69
     AdditionsDialog m_aSearchDataTimer
     SearchDataTimer
-cui/source/inc/cfg.hxx:375
+cui/source/inc/cfg.hxx:371
     SvxConfigPage m_aUpdateDataTimer
     UpdateDataTimer
 cui/source/inc/linkdlg.hxx:46
@@ -178,6 +178,12 @@ filter/source/msfilter/msdffimp.cxx:2630
 filter/source/msfilter/viscache.hxx:30
     Impl_OlePres nFormat
     3
+filter/source/xsltdialog/xmlfilterjar.hxx:47
+    XMLFilterJarHelper sVndSunStarPackage
+    vnd.sun.star.Package:
+framework/inc/xml/saxnamespacefilter.hxx:74
+    framework::SaxNamespaceFilter m_aXMLAttributeNamespace
+    xmlns
 framework/source/services/autorecovery.cxx:398
     (anonymous namespace)::AutoRecovery m_aTimer
     Auto save timer
@@ -355,6 +361,12 @@ io/qa/textinputstream.cxx:97
 libreofficekit/source/gtk/lokdocview.cxx:86
     (anonymous namespace)::LOKDocViewPrivateImpl m_bIsLoading
     0
+odk/source/unoapploader/unx/unoapploader.c:39
+    /home/noel/libo2/odk/source/unoapploader/unx/unoapploader.c PATHSEPARATOR
+    :
+odk/source/unoapploader/unx/unoapploader.c:81
+    main ENVVARNAME
+    LD_LIBRARY_PATH
 oox/source/core/contexthandler2.cxx:36
     oox::core::ElementInfo maChars
     0
@@ -382,6 +394,9 @@ sal/osl/unx/sockimpl.hxx:39
 sal/qa/osl/condition/osl_Condition_Const.h:41
     /home/noel/libo2/sal/qa/osl/condition/osl_Condition.cxx aTestCon
     testcondition
+sal/qa/osl/file/osl_File_Const.h:115
+    extern aPreURL
+    file:///
 sal/qa/osl/file/osl_File_Const.h:128
     extern aCanURL3
     ca@#;+.,$//tmp/678nonical//name
@@ -448,6 +463,24 @@ sal/qa/rtl/process/rtl_Process_Const.h:33
 sal/qa/rtl/strings/test_ostring_stringliterals.cxx:22
     /home/noel/libo2/sal/qa/rtl/strings/test_ostring_stringliterals.cxx rtl_string_unittest_non_const_literal_function
     0
+sal/qa/rtl/strings/test_strings_replace.cxx:24
+    (anonymous) s_bar
+    bar
+sal/qa/rtl/strings/test_strings_replace.cxx:25
+    (anonymous) s_bars
+    bars
+sal/qa/rtl/strings/test_strings_replace.cxx:26
+    (anonymous) s_foo
+    foo
+sal/qa/rtl/strings/test_strings_replace.cxx:27
+    (anonymous) s_other
+    other
+sal/qa/rtl/strings/test_strings_replace.cxx:28
+    (anonymous) s_xa
+    xa
+sal/qa/rtl/strings/test_strings_replace.cxx:29
+    (anonymous) s_xx
+    xx
 sax/source/tools/fastserializer.hxx:231
     sax_fastparser::FastSaxSerializer mbXescape
     1
@@ -553,10 +586,10 @@ sd/source/ui/inc/DrawController.hxx:292
 sd/source/ui/inc/pubdlg.hxx:151
     SdPublishingDlg aAssistentFunc
     6
-sd/source/ui/inc/View.hxx:240
+sd/source/ui/inc/View.hxx:263
     sd::View maDropErrorIdle
     sd View DropError
-sd/source/ui/inc/View.hxx:241
+sd/source/ui/inc/View.hxx:264
     sd::View maDropInsertFileIdle
     sd View DropInsertFile
 sd/source/ui/inc/ViewTabBar.hxx:146
@@ -580,7 +613,7 @@ sd/source/ui/slidesorter/inc/controller/SlsAnimator.hxx:92
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:60
     (anonymous namespace)::StringEmitContext m_aBuf
     256
-sfx2/inc/autoredactdialog.hxx:104
+sfx2/inc/autoredactdialog.hxx:97
     SfxAutoRedactDialog m_bIsValidState
     1
 sfx2/source/appl/lnkbase2.cxx:79
@@ -592,16 +625,16 @@ sfx2/source/appl/lnkbase2.cxx:84
 sfx2/source/appl/lnkbase2.cxx:103
     sfx2::(anonymous namespace)::ImplDdeItem bIsInDTOR
     1
-sfx2/source/appl/newhelp.hxx:97
+sfx2/source/appl/newhelp.hxx:93
     IndexTabPage_Impl aFactoryIdle
     sfx2 appl IndexTabPage_Impl Factory
-sfx2/source/appl/newhelp.hxx:98
+sfx2/source/appl/newhelp.hxx:94
     IndexTabPage_Impl aAutoCompleteIdle
     sfx2 appl IndexTabPage_Impl AutoComplete
-sfx2/source/appl/newhelp.hxx:235
+sfx2/source/appl/newhelp.hxx:226
     SfxHelpIndexWindow_Impl aIdle
     sfx2 appl SfxHelpIndexWindow_Impl
-sfx2/source/appl/newhelp.hxx:355
+sfx2/source/appl/newhelp.hxx:346
     SfxHelpTextWindow_Impl aSelectIdle
     sfx2 appl SfxHelpTextWindow_Impl Select
 sfx2/source/control/itemdel.cxx:31
@@ -745,7 +778,7 @@ sw/inc/view.hxx:696
 sw/inc/viewopt.hxx:193
     SwViewOption m_bTest10
     0
-sw/source/core/bastyp/calc.cxx:94
+sw/source/core/bastyp/calc.cxx:99
     CalcOp eOp
     0
 sw/source/core/doc/docredln.cxx:64
@@ -907,10 +940,10 @@ sw/source/filter/ww8/ww8scan.hxx:1509
 sw/source/filter/ww8/ww8scan.hxx:1514
     WW8Fib m_lcbHplxsdr
     0
-sw/source/filter/ww8/ww8struc.hxx:532
+sw/source/filter/ww8/ww8struc.hxx:542
     WW8_TCell fUnused
     0
-sw/source/filter/ww8/ww8struc.hxx:889
+sw/source/filter/ww8/ww8struc.hxx:899
     WW8_TablePos nSp37
     2
 sw/source/ui/envelp/labfmt.hxx:69
@@ -979,9 +1012,6 @@ vcl/inc/salwtype.hxx:162
 vcl/inc/svdata.hxx:315
     ImplSVNWFData mbMenuBarDockingAreaCommonBG
     0
-vcl/inc/svimpbox.hxx:128
-    SvImpLBox m_bContextMenuHandling
-    0
 vcl/source/bitmap/bitmap.cxx:140
     Bitmap::~Bitmap save
     0
@@ -991,16 +1021,16 @@ vcl/source/bitmap/BitmapTools.cxx:1059
 vcl/source/bitmap/BitmapTools.cxx:1075
     vcl::bitmap::get_premultiply_table inited
     1
-vcl/source/control/imivctl.hxx:120
+vcl/source/control/imivctl.hxx:119
     SvxIconChoiceCtrl_Impl aAutoArrangeIdle
     svtools contnr SvxIconChoiceCtrl_Impl AutoArrange
-vcl/source/control/imivctl.hxx:121
+vcl/source/control/imivctl.hxx:120
     SvxIconChoiceCtrl_Impl aDocRectChangedIdle
     svtools contnr SvxIconChoiceCtrl_Impl DocRectChanged
-vcl/source/control/imivctl.hxx:122
+vcl/source/control/imivctl.hxx:121
     SvxIconChoiceCtrl_Impl aVisRectChangedIdle
     svtools contnr SvxIconChoiceCtrl_Impl VisRectChanged
-vcl/source/control/imivctl.hxx:123
+vcl/source/control/imivctl.hxx:122
     SvxIconChoiceCtrl_Impl aCallSelectHdlIdle
     svtools contnr SvxIconChoiceCtrl_Impl CallSelectHdl
 vcl/source/control/roadmapwizard.cxx:60
@@ -1075,16 +1105,16 @@ vcl/source/gdi/dibtools.cxx:120
 vcl/source/gdi/pdfwriter_impl.hxx:756
     vcl::PDFWriterImpl m_DocDigest
     0
-vcl/source/outdev/bitmap.cxx:1243
+vcl/source/outdev/bitmap.cxx:1247
     OutputDevice::DrawTransformedBitmapEx bAllowPreferDirectPaint
     1
 vcl/unx/gtk3/a11y/gtk3atkutil.cxx:694
     ooo_atk_util_ensure_event_listener bInited
     1
-vcl/unx/gtk3/gtk3gtkinst.cxx:15466
+vcl/unx/gtk3/gtk3gtkinst.cxx:15506
     (anonymous namespace)::ensure_intercept_drawing_area_accessibility bDone
     1
-vcl/unx/gtk3/gtk3gtkinst.cxx:15494
+vcl/unx/gtk3/gtk3gtkinst.cxx:15534
     (anonymous namespace)::ensure_disable_ctrl_page_up_down_bindings bDone
     1
 workdir/LexTarget/l10ntools/source/xrmlex.cxx:706
@@ -1111,6 +1141,42 @@ writerfilter/source/rtftok/rtftokenizer.hxx:61
 writerfilter/source/rtftok/rtftokenizer.hxx:64
     writerfilter::rtftok::RTFTokenizer s_bMathControlWordsSorted
     1
+xmlhelp/source/cxxhelp/inc/tvread.hxx:49
+    treeview::ConfigData prodName
+    %PRODUCTNAME
+xmlhelp/source/cxxhelp/inc/tvread.hxx:49
+    treeview::ConfigData vendName
+    %VENDORNAME
+xmlhelp/source/cxxhelp/inc/tvread.hxx:49
+    treeview::ConfigData vendVersion
+    %VENDORVERSION
+xmlhelp/source/cxxhelp/inc/tvread.hxx:49
+    treeview::ConfigData vendShort
+    %VENDORSHORT
+xmlhelp/source/cxxhelp/inc/tvread.hxx:49
+    treeview::ConfigData prodVersion
+    %PRODUCTVERSION
+xmlhelp/source/cxxhelp/provider/databases.hxx:243
+    chelp::Databases newProdName
+    $[officename]
+xmlhelp/source/cxxhelp/provider/databases.hxx:243
+    chelp::Databases newProdVersion
+    $[officeversion]
+xmlhelp/source/cxxhelp/provider/databases.hxx:244
+    chelp::Databases prodName
+    %PRODUCTNAME
+xmlhelp/source/cxxhelp/provider/databases.hxx:244
+    chelp::Databases vendShort
+    %VENDORSHORT
+xmlhelp/source/cxxhelp/provider/databases.hxx:244
+    chelp::Databases prodVersion
+    %PRODUCTVERSION
+xmlhelp/source/cxxhelp/provider/databases.hxx:244
+    chelp::Databases vendName
+    %VENDORNAME
+xmlhelp/source/cxxhelp/provider/databases.hxx:244
+    chelp::Databases vendVersion
+    %VENDORVERSION
 xmloff/source/text/XMLIndexTemplateContext.hxx:57
     /home/noel/libo2/xmloff/source/text/XMLIndexTemplateContext.cxx aLevelNameTableMap
     0

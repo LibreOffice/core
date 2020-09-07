@@ -70,10 +70,6 @@ class SaxNamespaceFilter final : public SaxNamespaceFilter_Base
         css::uno::Reference< css::xml::sax::XLocator >          m_xLocator;
         css::uno::Reference< css::xml::sax::XDocumentHandler>   xDocumentHandler;
         NamespaceStack                                          m_aNamespaceStack;
-
-        OUString m_aXMLAttributeNamespace;
-        OUString m_aXMLAttributeType;
-
 };
 
 }

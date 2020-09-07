@@ -36,9 +36,7 @@ using namespace ::com::sun::star::uno;
 namespace framework{
 
 SaxNamespaceFilter::SaxNamespaceFilter( Reference< XDocumentHandler > const & rSax1DocumentHandler ) :
-     xDocumentHandler( rSax1DocumentHandler ),
-     m_aXMLAttributeNamespace( "xmlns" ),
-     m_aXMLAttributeType( "CDATA" )
+     xDocumentHandler( rSax1DocumentHandler )
 {
 }
 
@@ -70,7 +68,7 @@ void SAL_CALL SaxNamespaceFilter::startElement(
         for ( sal_Int16 i=0; i< xAttribs->getLength(); i++ )
         {
             OUString aName = xAttribs->getNameByIndex( i );
-            if ( aName.startsWith( m_aXMLAttributeNamespace ) )
+            if ( aName.startsWith( "xmlns" ) )
                 aXMLNamespaces.addNamespace( aName, xAttribs->getValueByIndex( i ));
             else
                 aAttributeIndexes.push_back( i );
@@ -88,7 +86,7 @@ void SAL_CALL SaxNamespaceFilter::startElement(
             OUString aAttributeName           = xAttribs->getNameByIndex(attributeIndex);
             OUString aValue                   = xAttribs->getValueByIndex(attributeIndex);
             OUString aNamespaceAttributeName = aXMLNamespaces.applyNSToAttributeName( aAttributeName );
-            pNewList->AddAttribute( aNamespaceAttributeName, m_aXMLAttributeType, aValue );
+            pNewList->AddAttribute( aNamespaceAttributeName, "CDATA", aValue );
         }
     }
     catch ( SAXException& e )
