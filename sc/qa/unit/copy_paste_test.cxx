@@ -14,6 +14,9 @@
 #include <docsh.hxx>
 #include <tabvwsh.hxx>
 #include <impex.hxx>
+#include <viewfunc.hxx>
+#include <scitems.hxx>
+#include <attrib.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
@@ -36,6 +39,7 @@ public:
     void testTdf124565();
     void testTdf126421();
     void testTdf107394();
+    void testTdf53431_fillOnAutofilter();
 
     CPPUNIT_TEST_SUITE(ScCopyPasteTest);
     CPPUNIT_TEST(testCopyPasteXLS);
@@ -43,6 +47,7 @@ public:
     CPPUNIT_TEST(testTdf124565);
     CPPUNIT_TEST(testTdf126421);
     CPPUNIT_TEST(testTdf107394);
+    CPPUNIT_TEST(testTdf53431_fillOnAutofilter);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -419,6 +424,74 @@ void ScCopyPasteTest::testTdf107394()
     CPPUNIT_ASSERT_EQUAL(nFirstRowHeight, nSecondRowHeight);
 
     xComponent->dispose();
+}
+
+static ScMF lcl_getMergeFlagOfCell(const ScDocument& rDoc, SCCOL nCol, SCROW nRow, SCTAB nTab)
+{
+    const SfxPoolItem& rPoolItem = rDoc.GetPattern(nCol, nRow, nTab)->GetItem(ATTR_MERGE_FLAG);
+    const ScMergeFlagAttr& rMergeFlag = static_cast<const ScMergeFlagAttr&>(rPoolItem);
+    return rMergeFlag.GetValue();
+}
+
+void ScCopyPasteTest::testTdf53431_fillOnAutofilter()
+{
+    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(::comphelper::getProcessComponentContext());
+    CPPUNIT_ASSERT(xDesktop.is());
+
+    // create a frame
+    Reference< frame::XFrame > xTargetFrame = xDesktop->findFrame("_blank", 0);
+    CPPUNIT_ASSERT(xTargetFrame.is());
+
+    // 1. Open the document
+    ScDocShellRef xDocSh = loadDoc("tdf53431_autofilterFilldown.", FORMAT_ODS, true);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf53431_autofilterFilldown.ods.", xDocSh.is());
+
+    uno::Reference< frame::XModel2 > xModel2(xDocSh->GetModel(), UNO_QUERY);
+    CPPUNIT_ASSERT(xModel2.is());
+
+    Reference< frame::XController2 > xController = xModel2->createDefaultViewController(xTargetFrame);
+    CPPUNIT_ASSERT(xController.is());
+
+    // introduce model/view/controller to each other
+    xController->attachModel(xModel2.get());
+    xModel2->connectController(xController.get());
+    xTargetFrame->setComponent(xController->getComponentWindow(), xController.get());
+    xController->attachFrame(xTargetFrame);
+    xModel2->setCurrentController(xController.get());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Get the document controller
+    ScTabViewShell* pView = xDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT(pView != nullptr);
+
+    //Fill should not clone Autofilter button
+    ScDocShell::GetViewData()->GetMarkData().SetMarkArea(ScRange(1, 1, 0, 2, 4, 0));
+    pView->FillSimple(FILL_TO_BOTTOM);
+    CPPUNIT_ASSERT((lcl_getMergeFlagOfCell(rDoc, 1, 1, 0) & ScMF::Auto));
+    CPPUNIT_ASSERT((lcl_getMergeFlagOfCell(rDoc, 2, 1, 0) & ScMF::Auto));
+    CPPUNIT_ASSERT(!(lcl_getMergeFlagOfCell(rDoc, 1, 4, 0) & ScMF::Auto));
+
+    ScDocShell::GetViewData()->GetMarkData().SetMarkArea(ScRange(1, 1, 0, 4, 4, 0));
+    pView->FillSimple(FILL_TO_RIGHT);
+    CPPUNIT_ASSERT((lcl_getMergeFlagOfCell(rDoc, 1, 1, 0) & ScMF::Auto));
+    CPPUNIT_ASSERT((lcl_getMergeFlagOfCell(rDoc, 2, 1, 0) & ScMF::Auto));
+    CPPUNIT_ASSERT(!(lcl_getMergeFlagOfCell(rDoc, 4, 1, 0) & ScMF::Auto));
+    CPPUNIT_ASSERT(!(lcl_getMergeFlagOfCell(rDoc, 1, 4, 0) & ScMF::Auto));
+    CPPUNIT_ASSERT(!(lcl_getMergeFlagOfCell(rDoc, 4, 4, 0) & ScMF::Auto));
+
+    //Fill should not delete Autofilter buttons
+    ScDocShell::GetViewData()->GetMarkData().SetMarkArea(ScRange(0, 0, 0, 2, 4, 0));
+    pView->FillSimple(FILL_TO_TOP);
+    CPPUNIT_ASSERT((lcl_getMergeFlagOfCell(rDoc, 1, 1, 0) & ScMF::Auto));
+    CPPUNIT_ASSERT((lcl_getMergeFlagOfCell(rDoc, 2, 1, 0) & ScMF::Auto));
+    CPPUNIT_ASSERT(!(lcl_getMergeFlagOfCell(rDoc, 1, 0, 0) & ScMF::Auto));
+
+    ScDocShell::GetViewData()->GetMarkData().SetMarkArea(ScRange(0, 0, 0, 4, 4, 0));
+    pView->FillSimple(FILL_TO_LEFT);
+    CPPUNIT_ASSERT((lcl_getMergeFlagOfCell(rDoc, 1, 1, 0) & ScMF::Auto));
+    CPPUNIT_ASSERT((lcl_getMergeFlagOfCell(rDoc, 2, 1, 0) & ScMF::Auto));
+    CPPUNIT_ASSERT(!(lcl_getMergeFlagOfCell(rDoc, 0, 1, 0) & ScMF::Auto));
 }
 
 ScCopyPasteTest::ScCopyPasteTest()

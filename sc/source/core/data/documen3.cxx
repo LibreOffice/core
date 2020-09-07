@@ -1137,15 +1137,20 @@ void ScDocument::Fill(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScProg
 {
     PutInOrder( nCol1, nCol2 );
     PutInOrder( nRow1, nRow2 );
+    ScRange rRange;
+    rMark.GetMarkArea(rRange);
     SCTAB nMax = maTabs.size();
     for (const auto& rTab : rMark)
     {
         if (rTab >= nMax)
             break;
         if (maTabs[rTab])
+        {
             maTabs[rTab]->Fill(nCol1, nRow1, nCol2, nRow2,
                             nFillCount, eFillDir, eFillCmd, eFillDateCmd,
                             nStepValue, nMaxValue, pProgress);
+            RefreshAutoFilter(rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row(), rTab);
+        }
     }
 }
 
