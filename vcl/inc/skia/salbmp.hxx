@@ -105,6 +105,7 @@ private:
     bool ComputeScanlineSize();
     void EraseInternal();
     SkBitmap GetAsSkBitmap() const;
+    bool ConserveMemory() const;
     void verify() const
 #ifdef DBG_UTIL
         ;

@@ -578,6 +578,29 @@ static SkColor fromEraseColorToAlphaImageColor(Color color)
     return SkColorSetARGB(color.GetBlue(), 0, 0, 0);
 }
 
+// SkiaSalBitmap can store data in both the SkImage and our mBuffer, which with large
+// images can waste quite a lot of memory. Ideally we should store the data in Skia's
+// SkBitmap, but LO wants us to support data formats that Skia doesn't support.
+// So try to conserve memory by keeping the data only once in that was the most
+// recently wanted storage, and drop the other one. Usually the other one won't be needed
+// for a long time, and especially with raster the conversion is usually fast.
+// Do this only with raster, to avoid GPU->CPU transfer in GPU mode (exception is 32bit
+// builds, where memory is more important). Also don't do this with paletted bitmaps,
+// where EnsureBitmapData() would be expensive.
+// Ideally SalBitmap should be able to say which bitmap formats it supports
+// and VCL code should oblige, which would allow reusing the same data.
+bool SkiaSalBitmap::ConserveMemory() const
+{
+    static bool keepBitmapBuffer = getenv("SAL_SKIA_KEEP_BITMAP_BUFFER") != nullptr;
+    constexpr bool is32Bit = sizeof(void*) == 4;
+    // 16MiB bitmap data at least (set to 0 for easy testing).
+    constexpr long maxBufferSize = 2000 * 2000 * 4;
+    return !keepBitmapBuffer
+           && (SkiaHelper::renderMethodToUse() == SkiaHelper::RenderRaster || is32Bit)
+           && mPixelsSize.Height() * mScanlineSize > maxBufferSize
+           && (mBitCount > 8 || (mBitCount == 8 && mPalette.IsGreyPalette8Bit()));
+}
+
 const sk_sp<SkImage>& SkiaSalBitmap::GetSkImage() const
 {
 #ifdef DBG_UTIL
@@ -639,24 +662,13 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetSkImage() const
     assert(image);
     SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
     thisPtr->mImage = image;
-    // The data is now stored both in the SkImage and in our mBuffer, which with large
-    // images can waste quite a lot of memory. Ideally we should store the data in Skia's
-    // SkBitmap, but LO wants us to support data formats that Skia doesn't support.
-    // So just drop our buffer, it usually won't be needed anyway, and it'll be converted
-    // back by EnsureBitmapData() if yes. Do this only with raster, to avoid GPU->CPU
-    // transfer in GPU mode. Also don't do this with paletted bitmaps, where EnsureBitmapData()
-    // would be expensive.
-    // Ideally SalBitmap should be able to say which bitmap formats it supports
-    // and VCL code should oblige, which would allow reusing the same data.
-    static bool keepBitmapBuffer = getenv("SAL_SKIA_KEEP_BITMAP_BUFFER") != nullptr;
-    // 32bit builds have limited address space, so try to conserve memory as well.
-    constexpr bool is32Bit = sizeof(void*) == 4;
-    constexpr long maxBufferSize = 2000 * 2000 * 4;
-    if (!keepBitmapBuffer
-        && (SkiaHelper::renderMethodToUse() == SkiaHelper::RenderRaster || is32Bit)
-        && mPixelsSize.Height() * mScanlineSize > maxBufferSize
-        && (mBitCount > 8 || (mBitCount == 8 && mPalette.IsGreyPalette8Bit())))
+    // The data is now stored both in the SkImage and in our mBuffer, so drop the buffer
+    // if conserving memory. It'll be converted back by EnsureBitmapData() if needed.
+    if (ConserveMemory())
+    {
+        SAL_INFO("vcl.skia.trace", "getskimage(" << this << "): dropping buffer");
         thisPtr->ResetToSkImage(mImage);
+    }
     SAL_INFO("vcl.skia.trace", "getskimage(" << this << ")");
     return mImage;
 }
@@ -714,6 +726,9 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
                                                           << static_cast<int>(mScaleQuality));
         else
             SAL_INFO("vcl.skia.trace", "getalphaskimage(" << this << ") from image");
+        // Don't bother here with ConserveMemory(), mImage -> mAlphaImage conversions should
+        // generally only happen with the separate-alpha-outdev hack, and those bitmaps should
+        // be temporary.
         SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
         thisPtr->mAlphaImage = surface->makeImageSnapshot();
         return mAlphaImage;
@@ -755,6 +770,15 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
         surface->getCanvas()->drawBitmap(GetAsSkBitmap(), 0, 0, &paint);
         SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
         thisPtr->mAlphaImage = surface->makeImageSnapshot();
+    }
+    // The data is now stored both in the SkImage and in our mBuffer, so drop the buffer
+    // if conserving memory and the conversion back would be simple (it'll be converted back
+    // by EnsureBitmapData() if needed).
+    if (ConserveMemory() && mBitCount == 8 && mPalette.IsGreyPalette8Bit())
+    {
+        SAL_INFO("vcl.skia.trace", "getalphaskimage(" << this << "): dropping buffer");
+        SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
+        thisPtr->mBuffer.reset();
     }
     SAL_INFO("vcl.skia.trace", "getalphaskimage(" << this << ")");
     return mAlphaImage;
@@ -852,10 +876,52 @@ void SkiaSalBitmap::EnsureBitmapData()
         ResetToSkImage(SkImage::MakeFromBitmap(GetAsSkBitmap()));
         mSize = savedSize;
     }
+
+    // Convert from alpha image, if the conversion is simple.
+    if (mAlphaImage && mSize == mPixelsSize && mBitCount == 8 && mPalette.IsGreyPalette8Bit())
+    {
+        assert(mAlphaImage->colorType() == kAlpha_8_SkColorType);
+        SkiaZone zone;
+        SkBitmap bitmap;
+        if (!bitmap.tryAllocPixels(SkImageInfo::MakeA8(mSize.Width(), mSize.Height())))
+            abort();
+        SkCanvas canvas(bitmap);
+        SkPaint paint;
+        paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
+        canvas.drawImage(mAlphaImage, 0, 0, &paint);
+        canvas.flush();
+        bitmap.setImmutable();
+        CreateBitmapData();
+        assert(mBuffer != nullptr);
+        assert(mPixelsSize == mSize);
+        if (int(bitmap.rowBytes()) == mScanlineSize)
+            memcpy(mBuffer.get(), bitmap.getPixels(), mSize.Height() * mScanlineSize);
+        else
+        {
+            for (long y = 0; y < mSize.Height(); ++y)
+            {
+                const uint8_t* src = static_cast<uint8_t*>(bitmap.getAddr(0, y));
+                sal_uInt8* dest = mBuffer.get() + mScanlineSize * y;
+                memcpy(dest, src, mScanlineSize);
+            }
+        }
+        verify();
+        // We've created the bitmap data from mAlphaImage, drop the image if conserving memory,
+        // it'll be converted back if needed.
+        if (ConserveMemory())
+        {
+            SAL_INFO("vcl.skia.trace", "ensurebitmapdata(" << this << "): dropping images");
+            ResetCachedData();
+        }
+        SAL_INFO("vcl.skia.trace", "ensurebitmapdata(" << this << "): from alpha image");
+        return;
+    }
+
     if (!mImage)
     {
         // No data at all, create uninitialized data.
         CreateBitmapData();
+        SAL_INFO("vcl.skia.trace", "ensurebitmapdata(" << this << "): uninitialized");
         return;
     }
     // Try to fill mBuffer from mImage.
@@ -963,6 +1029,13 @@ void SkiaSalBitmap::EnsureBitmapData()
         }
     }
     verify();
+    // We've created the bitmap data from mImage, drop the image if conserving memory,
+    // it'll be converted back if needed.
+    if (ConserveMemory())
+    {
+        SAL_INFO("vcl.skia.trace", "ensurebitmapdata(" << this << "): dropping images");
+        ResetCachedData();
+    }
     SAL_INFO("vcl.skia.trace", "ensurebitmapdata(" << this << ")");
 }
 
