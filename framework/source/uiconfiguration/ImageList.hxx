@@ -65,7 +65,6 @@ private:
     std::vector< std::unique_ptr<ImageAryData> >   maImages;
     std::unordered_map< OUString, ImageAryData * > maNameHash;
     OUString               maPrefix;
-    Size                   maImageSize;
 
     sal_uInt16  ImplGetImageId( const OUString& rImageName ) const;
     void ImplAddImage( const OUString &aPrefix, const OUString &aName, sal_uInt16 nId, const Image &aImage );
