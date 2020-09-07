@@ -299,6 +299,7 @@ public:
     */
     template<std::size_t N> OString(OStringLiteral<N> const & literal):
         pData(const_cast<rtl_String *>(reinterpret_cast<rtl_String const *>(&literal))) {}
+    template<std::size_t N> OString(OStringLiteral<N> &&) = delete;
     /// @endcond
 #endif
 
