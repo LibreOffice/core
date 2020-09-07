@@ -45,8 +45,11 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/text/XRedline.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/text/XTextFrame.hpp>
+#include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/TextGridMode.hpp>
 #include <com/sun/star/text/XTextCopy.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
@@ -1371,15 +1374,93 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         rInfo.m_nBreakType = m_nBreakType;
         if ( FloatingTableConversion( rDM_Impl, rInfo ) )
         {
+            std::vector<css::uno::Any> aFramedRedlines = rDM_Impl.aFramedRedlines;
             try
             {
+                // convert redline ranges to cursor movement and character length
+                std::vector<sal_Int32> redPos, redLen;
+                std::vector<OUString> redCell;
+                OUString sTableName;
+                for( size_t i = 0; i < aFramedRedlines.size(); i+=3)
+                {
+                    uno::Reference<text::XText> xCell;
+                    uno::Reference< text::XTextRange > xRange;
+                    aFramedRedlines[i] >>= xRange;
+                    uno::Reference< beans::XPropertySet > xRangeProperties;
+                    if ( xRange.is() )
+                    {
+                        xRangeProperties.set( xRange, uno::UNO_QUERY_THROW );
+
+                        const uno::Sequence<beans::Property> aRangeProperties
+                            = xRangeProperties->getPropertySetInfo()->getProperties();
+
+                        for (const beans::Property& rProperty : aRangeProperties)
+                        {
+                            const OUString& rKey = rProperty.Name;
+                            uno::Any aValue = xRangeProperties->getPropertyValue(rKey);
+                            if ( rKey == "TextTable" )
+                            {
+                                uno::Reference<text::XTextTable> xTable;
+                                aValue >>= xTable;
+                                uno::Reference<beans::XPropertySet> xTableProperties(xTable, uno::UNO_QUERY);
+                                xTableProperties->getPropertyValue("TableName") >>= sTableName;
+                            }
+                            else if ( rKey == "Cell" )
+                            {
+                                 OUString sCellName;
+                                 aValue >>= xCell;
+                                 uno::Reference<beans::XPropertySet> xCellProperties(xCell, uno::UNO_QUERY);
+                                 xCellProperties->getPropertyValue("CellName") >>= sCellName;
+                                 redCell.push_back(sCellName);
+                            }
+                        }
+
+                        uno::Reference<text::XTextCursor> xRangeCursor = xCell->createTextCursorByRange( xRange );
+                        if ( xRangeCursor.is() )
+                        {
+                            sal_Int32 nLen = xRange->getString().getLength();
+                            redLen.push_back(nLen);
+                            xRangeCursor->gotoStart(true);
+                            redPos.push_back(xRangeCursor->getString().getLength() - nLen);
+                        }
+                        else
+                        {
+                            // failed createTextCursorByRange()
+                            redLen.push_back(-1);
+                            redPos.push_back(-1);
+                        }
+                    }
+                }
+
                 xBodyText->convertToTextFrame(rInfo.m_xStart, rInfo.m_xEnd,
                                               rInfo.m_aFrameProperties);
+
+                uno::Reference<text::XTextTablesSupplier> xTextDocument(rDM_Impl.GetTextDocument(), uno::UNO_QUERY);
+                uno::Reference<container::XNameAccess> xTables = xTextDocument->getTextTables();
+                uno::Reference<text::XTextTable> xTable(xTables->getByName(sTableName), uno::UNO_QUERY);
+                for( size_t i = 0; i < aFramedRedlines.size(); i+=3)
+                {
+                    OUString sType;
+                    beans::PropertyValues aRedlineProperties( 3 );
+                    // skip failed createTextCursorByRange()
+                    if (redPos[i/3] == -1)
+                        continue;
+                    aFramedRedlines[i+1] >>= sType;
+                    aFramedRedlines[i+2] >>= aRedlineProperties;
+                    uno::Reference<text::XText> xCell(xTable->getCellByName(redCell[i/3]), uno::UNO_QUERY);
+                    uno::Reference<text::XTextCursor> xCrsr = xCell->createTextCursor();
+                    xCrsr->goRight(redPos[i/3], false);
+                    xCrsr->goRight(redLen[i/3], true);
+                    uno::Reference < text::XRedline > xRedline( xCrsr, uno::UNO_QUERY_THROW );
+                    xRedline->makeRedline( sType, aRedlineProperties );
+                }
             }
             catch (const uno::Exception&)
             {
                 DBG_UNHANDLED_EXCEPTION("writerfilter", "convertToTextFrame() failed");
             }
+
+            aFramedRedlines.clear();
         }
     }
     rPendingFloatingTables.clear();
