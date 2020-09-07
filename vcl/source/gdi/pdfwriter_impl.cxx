@@ -23,6 +23,7 @@
 
 #include <math.h>
 #include <algorithm>
+#include <string_view>
 
 #include <lcms2.h>
 
@@ -1521,28 +1522,22 @@ inline void PDFWriterImpl::appendUnicodeTextStringEncrypt( const OUString& rInSt
     rOutBuffer.append( ">" );
 }
 
-inline void PDFWriterImpl::appendLiteralStringEncrypt( OStringBuffer const & rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer )
+inline void PDFWriterImpl::appendLiteralStringEncrypt( std::string_view rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer )
 {
     rOutBuffer.append( "(" );
-    sal_Int32 nChars = rInString.getLength();
+    sal_Int32 nChars = rInString.size();
     //check for encryption, if ok, encrypt the string, then convert with appndLiteralString
     if( m_aContext.Encryption.Encrypt() )
     {
         m_vEncryptionBuffer.resize(nChars);
         //encrypt the string in a buffer, then append it
         enableStringEncryption( nInObjectNumber );
-        rtl_cipher_encodeARCFOUR( m_aCipher, rInString.getStr(), nChars, m_vEncryptionBuffer.data(), nChars );
+        rtl_cipher_encodeARCFOUR( m_aCipher, rInString.data(), nChars, m_vEncryptionBuffer.data(), nChars );
         appendLiteralString( reinterpret_cast<char*>(m_vEncryptionBuffer.data()), nChars, rOutBuffer );
     }
     else
-        appendLiteralString( rInString.getStr(), nChars , rOutBuffer );
+        appendLiteralString( rInString.data(), nChars , rOutBuffer );
     rOutBuffer.append( ")" );
-}
-
-inline void PDFWriterImpl::appendLiteralStringEncrypt( const OString& rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer )
-{
-    OStringBuffer aBufferString( rInString );
-    appendLiteralStringEncrypt( aBufferString, nInObjectNumber, rOutBuffer);
 }
 
 void PDFWriterImpl::appendLiteralStringEncrypt( const OUString& rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer, rtl_TextEncoding nEnc )
@@ -5188,7 +5183,7 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
     aLine.append( " 0 obj\n"
                   "<</Type/OutputIntent/S/GTS_PDFA1/OutputConditionIdentifier");
 
-    appendLiteralStringEncrypt( OUStringLiteral(u"sRGB IEC61966-2.1") ,nOIObject, aLine );
+    appendLiteralStringEncrypt( std::string_view("sRGB IEC61966-2.1") ,nOIObject, aLine );
     aLine.append("/DestOutputProfile ");
     aLine.append( nICCObject );
     aLine.append( " 0 R>>\nendobj\n\n" );
