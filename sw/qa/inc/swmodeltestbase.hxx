@@ -1030,6 +1030,25 @@ protected:
         // reqif-xhtml
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("reqif-xhtml"), BAD_CAST("http://www.w3.org/1999/xhtml"));
     }
+
+    /**
+     * Creates a new document to be used with the internal sw/ API.
+     *
+     * Examples:
+     * SwDoc* pDoc = createSwDoc();
+     * SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "test.fodt");
+     */
+    SwDoc* createSwDoc(const OUString& rDataDirectory = OUString(), const char* pName = nullptr)
+    {
+        if (rDataDirectory.isEmpty() || !pName)
+            loadURL("private:factory/swriter", nullptr);
+        else
+            load(rDataDirectory, pName);
+
+        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+        CPPUNIT_ASSERT(pTextDoc);
+        return pTextDoc->GetDocShell()->GetDoc();
+    }
 };
 
 /**
