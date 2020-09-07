@@ -43,7 +43,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <comphelper/propertyvalue.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/javainteractionhandler.hxx>
 #include <uno/current_context.hxx>
@@ -683,7 +683,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu, bool )
                              m_xPopupMenuControllerFactory->hasController( menuItemHandler->aMenuItemURL, m_aModuleIdentifier ) )
                         {
                             if( xMenuItemDispatch.is() || menuItemHandler->aMenuItemURL != ".uno:RecentFileList" )
-                                bPopupMenu = CreatePopupMenuController(menuItemHandler.get());
+                                bPopupMenu = CreatePopupMenuController(menuItemHandler.get(), m_xDispatchProvider, m_aModuleIdentifier);
                         }
                         else if ( menuItemHandler->xPopupMenuController.is() )
                         {
@@ -880,7 +880,9 @@ OUString MenuBarManager::RetrieveLabelFromCommand(const OUString& rCmdURL)
     return vcl::CommandInfoProvider::GetMenuLabelForCommand(aProperties);
 }
 
-bool MenuBarManager::CreatePopupMenuController( MenuItemHandler* pMenuItemHandler )
+bool MenuBarManager::CreatePopupMenuController( MenuItemHandler* pMenuItemHandler,
+                                                const css::uno::Reference< css::frame::XDispatchProvider >& rDispatchProvider,
+                                                const OUString& rModuleIdentifier )
 {
     OUString aItemCommand( pMenuItemHandler->aMenuItemURL );
 
@@ -888,10 +890,12 @@ bool MenuBarManager::CreatePopupMenuController( MenuItemHandler* pMenuItemHandle
     if ( !m_xPopupMenuControllerFactory.is() )
         return false;
 
-    Sequence< Any > aSeq( 3 );
-    aSeq[0] <<= comphelper::makePropertyValue( "ModuleIdentifier", m_aModuleIdentifier );
-    aSeq[1] <<= comphelper::makePropertyValue( "Frame", m_xFrame );
-    aSeq[2] <<= comphelper::makePropertyValue( "InToolbar", !m_bHasMenuBar );
+    auto aSeq( comphelper::InitAnyPropertySequence( {
+        { "DispatchProvider", makeAny(rDispatchProvider) },
+        { "ModuleIdentifier", makeAny(rModuleIdentifier) },
+        { "Frame", makeAny(m_xFrame) },
+        { "InToolbar", makeAny(!m_bHasMenuBar) }
+    } ) );
 
     Reference< XPopupMenuController > xPopupMenuController(
                                             m_xPopupMenuControllerFactory->createInstanceWithArgumentsAndContext(
@@ -992,8 +996,14 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                 pMenu->SetHelpCommand( nItemId, "" );
             }
 
+            // Retrieve possible attributes struct
+            Reference< XDispatchProvider > xPopupMenuDispatchProvider( rDispatchProvider );
+            MenuAttributes* pAttributes = static_cast<MenuAttributes *>(pMenu->GetUserValue( nItemId ));
+            if ( pAttributes )
+                xPopupMenuDispatchProvider = pAttributes->xDispatchProvider;
+
             if ( m_xPopupMenuControllerFactory.is() &&
-                 m_xPopupMenuControllerFactory->hasController( aItemCommand, m_aModuleIdentifier )
+                 m_xPopupMenuControllerFactory->hasController( aItemCommand, aModuleIdentifier )
                   )
             {
                 // Check if we have to create a popup menu for a uno based popup menu controller.
@@ -1007,20 +1017,13 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
 
                 if ( bAccessibilityEnabled || pMenu->IsMenuBar())
                 {
-                    if ( CreatePopupMenuController( pItemHandler ))
+                    if ( CreatePopupMenuController( pItemHandler, xPopupMenuDispatchProvider, aModuleIdentifier ))
                         pItemHandler->xPopupMenuController->updatePopupMenu();
                 }
                 lcl_CheckForChildren(pMenu, nItemId);
             }
             else
             {
-                Reference< XDispatchProvider > xPopupMenuDispatchProvider( rDispatchProvider );
-
-                // Retrieve possible attributes struct
-                MenuAttributes* pAttributes = static_cast<MenuAttributes *>(pMenu->GetUserValue( nItemId ));
-                if ( pAttributes )
-                    xPopupMenuDispatchProvider = pAttributes->xDispatchProvider;
-
                 // Check if this is the tools menu. Add menu item if needed
                 if ( aItemCommand == aCmdToolsMenu && AddonMenuManager::HasAddonMenuElements() )
                 {
@@ -1068,7 +1071,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                 pMenu->SetPopupMenu( pItemHandler->nItemId, pPopupMenu );
                 pItemHandler->xPopupMenu = pVCLXPopupMenu;
 
-                if ( bAccessibilityEnabled && CreatePopupMenuController( pItemHandler.get() ) )
+                if ( bAccessibilityEnabled && CreatePopupMenuController( pItemHandler.get(), m_xDispatchProvider, m_aModuleIdentifier ) )
                 {
                     pItemHandler->xPopupMenuController->updatePopupMenu();
                 }

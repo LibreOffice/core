@@ -162,7 +162,9 @@ class MenuBarManager final :
         static void      MergeAddonMenus( Menu* pMenuBar, const MergeMenuInstructionContainer&, const OUString& aModuleIdentifier );
 
         MenuItemHandler* GetMenuItemHandler( sal_uInt16 nItemId );
-        bool         CreatePopupMenuController( MenuItemHandler* pMenuItemHandler );
+        bool         CreatePopupMenuController( MenuItemHandler* pMenuItemHandler,
+                                                const css::uno::Reference< css::frame::XDispatchProvider >& rDispatchProvider,
+                                                const OUString& rModuleIdentifier );
         void             AddMenu(MenuBarManager* pSubMenuManager,const OUString& _sItemCommand,sal_uInt16 _nItemId);
         sal_uInt16           FillItemCommand(OUString& _rItemCommand, Menu* _pMenu,sal_uInt16 _nIndex) const;
         void             SetHdl();

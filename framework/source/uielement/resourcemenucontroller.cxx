@@ -73,6 +73,7 @@ private:
     bool m_bToolbarContainer;
     sal_uInt16 m_nNewMenuId;
     rtl::Reference< framework::MenuBarManager > m_xMenuBarManager;
+    css::uno::Reference< css::frame::XDispatchProvider > m_xDispatchProvider;
     css::uno::Reference< css::container::XIndexAccess > m_xMenuContainer;
     css::uno::Reference< css::ui::XUIConfigurationManager > m_xConfigManager, m_xModuleConfigManager;
     void addVerbs( const css::uno::Sequence< css::embed::VerbDescriptor >& rVerbs );
@@ -114,6 +115,8 @@ ResourceMenuController::ResourceMenuController( const css::uno::Reference< css::
                 aPropValue.Value >>= m_xFrame;
             else if ( aPropValue.Name == "ModuleIdentifier" )
                 aPropValue.Value >>= m_aModuleName;
+            else if ( aPropValue.Name == "DispatchProvider" )
+                aPropValue.Value >>= m_xDispatchProvider;
             else if ( aPropValue.Name == "IsContextMenu" )
                 aPropValue.Value >>= m_bContextMenu;
             else if ( aPropValue.Name == "InToolbar" )
@@ -222,8 +225,7 @@ void ResourceMenuController::updatePopupMenu()
     m_nNewMenuId = 1;
 
     // Now fill the menu with the configuration data.
-    css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( m_xFrame, css::uno::UNO_QUERY );
-    framework::MenuBarManager::FillMenu( m_nNewMenuId, comphelper::getUnoTunnelImplementation<VCLXMenu>( m_xPopupMenu )->GetMenu(), m_aModuleName, m_xMenuContainer, xDispatchProvider );
+    framework::MenuBarManager::FillMenu( m_nNewMenuId, comphelper::getUnoTunnelImplementation<VCLXMenu>( m_xPopupMenu )->GetMenu(), m_aModuleName, m_xMenuContainer, m_xDispatchProvider );
 
     // For context menus, add object verbs.
     if ( m_bContextMenu )
@@ -231,6 +233,7 @@ void ResourceMenuController::updatePopupMenu()
         css::util::URL aObjectMenuURL;
         aObjectMenuURL.Complete = ".uno:ObjectMenue";
         m_xURLTransformer->parseStrict( aObjectMenuURL );
+        css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( m_xFrame, css::uno::UNO_QUERY );
         css::uno::Reference< css::frame::XDispatch > xDispatch( xDispatchProvider->queryDispatch( aObjectMenuURL, OUString(), 0 ) );
         if ( xDispatch.is() )
         {
@@ -277,9 +280,8 @@ void ResourceMenuController::itemActivated( const css::awt::MenuEvent& /*rEvent*
     if ( !m_xMenuBarManager.is() )
     {
         VCLXMenu* pAwtMenu = comphelper::getUnoTunnelImplementation<VCLXMenu>( m_xPopupMenu );
-        css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( m_xFrame, css::uno::UNO_QUERY );
         m_xMenuBarManager.set( new framework::MenuBarManager(
-            m_xContext, m_xFrame, m_xURLTransformer, xDispatchProvider, m_aModuleName, pAwtMenu->GetMenu(), false, !m_bContextMenu && !m_bInToolbar ) );
+            m_xContext, m_xFrame, m_xURLTransformer, m_xDispatchProvider, m_aModuleName, pAwtMenu->GetMenu(), false, !m_bContextMenu && !m_bInToolbar ) );
         m_xFrame->addFrameActionListener( m_xMenuBarManager.get() );
     }
 }
@@ -335,6 +337,7 @@ void ResourceMenuController::disposing()
     m_xConfigManager.clear();
     m_xModuleConfigManager.clear();
     m_xMenuContainer.clear();
+    m_xDispatchProvider.clear();
     if ( m_xMenuBarManager.is() )
     {
         m_xMenuBarManager->dispose();
