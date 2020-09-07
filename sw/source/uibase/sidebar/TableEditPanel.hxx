@@ -15,6 +15,7 @@
 #include <svx/sidebar/PanelLayout.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <svx/relfld.hxx>
+#include <sfx2/sidebar/SidebarToolBox.hxx>
 
 namespace sw
 {
@@ -49,6 +50,7 @@ private:
 
     VclPtr<SvxRelativeField> m_pRowHeightEdit;
     VclPtr<SvxRelativeField> m_pColumnWidthEdit;
+    VclPtr<::sfx2::sidebar::SidebarToolBox> m_pMiscToolbar;
     ::sfx2::sidebar::ControllerItem m_aRowHeightController;
     ::sfx2::sidebar::ControllerItem m_aColumnWidthController;
     ::sfx2::sidebar::ControllerItem m_aInsertRowsBeforeController;
