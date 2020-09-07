@@ -44,16 +44,16 @@ BitmapEx ImageList::GetAsHorizontalStrip() const
     sal_uInt16 nCount = maImages.size();
     if( !nCount )
         return BitmapEx();
-    Size aSize( maImageSize.Width() * nCount, maImageSize.Height() );
 
     BitmapEx aTempl = maImages[ 0 ]->maImage.GetBitmapEx();
+    Size aImageSize(aTempl.GetSizePixel());
+    Size aSize(aImageSize.Width() * nCount, aImageSize.Height());
     BitmapEx aResult( aTempl, Point(), aSize );
 
-    tools::Rectangle aSrcRect( Point( 0, 0 ), maImageSize );
+    tools::Rectangle aSrcRect( Point( 0, 0 ), aImageSize );
     for (sal_uInt16 nIdx = 0; nIdx < nCount; nIdx++)
     {
-        tools::Rectangle aDestRect( Point( nIdx * maImageSize.Width(), 0 ),
-                             maImageSize );
+        tools::Rectangle aDestRect( Point( nIdx * aImageSize.Width(), 0 ), aImageSize );
         ImageAryData *pData = maImages[ nIdx ].get();
         BitmapEx aTmp = pData->maImage.GetBitmapEx();
         aResult.CopyPixel( aDestRect, aSrcRect, &aTmp);
@@ -77,7 +77,6 @@ void ImageList::InsertFromHorizontalStrip( const BitmapEx &rBitmapEx,
     maImages.clear();
     maNameHash.clear();
     maImages.reserve( nItems );
-    maImageSize = aSize;
     maPrefix.clear();
 
     for (sal_uInt16 nIdx = 0; nIdx < nItems; nIdx++)
