@@ -649,8 +649,11 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetSkImage() const
     // Ideally SalBitmap should be able to say which bitmap formats it supports
     // and VCL code should oblige, which would allow reusing the same data.
     static bool keepBitmapBuffer = getenv("SAL_SKIA_KEEP_BITMAP_BUFFER") != nullptr;
+    // 32bit builds have limited address space, so try to conserve memory as well.
+    constexpr bool is32Bit = sizeof(void*) == 4;
     constexpr long maxBufferSize = 2000 * 2000 * 4;
-    if (!keepBitmapBuffer && SkiaHelper::renderMethodToUse() == SkiaHelper::RenderRaster
+    if (!keepBitmapBuffer
+        && (SkiaHelper::renderMethodToUse() == SkiaHelper::RenderRaster || is32Bit)
         && mPixelsSize.Height() * mScanlineSize > maxBufferSize
         && (mBitCount > 8 || (mBitCount == 8 && mPalette.IsGreyPalette8Bit())))
         thisPtr->ResetToSkImage(mImage);
