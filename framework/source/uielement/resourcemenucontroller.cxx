@@ -407,7 +407,9 @@ OUString SaveAsMenuController::getImplementationName()
 class WindowListMenuController : public ResourceMenuController
 {
 public:
-    using ResourceMenuController::ResourceMenuController;
+    WindowListMenuController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                              const css::uno::Sequence< css::uno::Any >& rxArgs )
+        : ResourceMenuController(rxContext, rxArgs, false) {}
 
     // XMenuListener
     void SAL_CALL itemActivated( const css::awt::MenuEvent& rEvent ) override;
@@ -563,7 +565,7 @@ com_sun_star_comp_framework_WindowListMenuController_get_implementation(
     css::uno::XComponentContext* context,
     css::uno::Sequence< css::uno::Any > const & args )
 {
-    return cppu::acquire( new WindowListMenuController( context, args, false ) );
+    return cppu::acquire( new WindowListMenuController( context, args ) );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *

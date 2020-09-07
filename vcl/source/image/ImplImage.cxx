@@ -31,15 +31,13 @@
 ImplImage::ImplImage(const BitmapEx &rBitmapEx)
     : maBitmapChecksum(0)
     , maSizePixel(rBitmapEx.GetSizePixel())
-    , maPreferedSizePixel()
     , maBitmapEx(rBitmapEx)
 {
 }
 
-ImplImage::ImplImage(const OUString &aStockName, Size const & rPreferedSize)
+ImplImage::ImplImage(const OUString &aStockName)
     : maBitmapChecksum(0)
     , maSizePixel() // defer size lookup
-    , maPreferedSizePixel(rPreferedSize)
     , maStockName(aStockName)
 {
 }
@@ -84,11 +82,6 @@ bool ImplImage::loadStockAtScale(double fScale, BitmapEx &rBitmapEx)
                      " at " << fScale);
             return false;
         }
-    }
-    if (maPreferedSizePixel != Size())
-    {
-        Size aScaleSize(maPreferedSizePixel.Width() * fScale, maPreferedSizePixel.Height() * fScale);
-        aBitmapEx.Scale(aScaleSize);
     }
     rBitmapEx = aBitmapEx;
     return true;

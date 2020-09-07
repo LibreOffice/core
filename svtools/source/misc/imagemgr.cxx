@@ -715,7 +715,7 @@ static Image GetImageFromList_Impl( SvImageId nImageId, vcl::ImageType eImageTyp
 {
     OUString sImageName(GetImageNameFromList_Impl(nImageId, eImageType));
     if (!sImageName.isEmpty())
-        return Image(StockImage::Yes, sImageName, Size());
+        return Image(StockImage::Yes, sImageName);
     return Image();
 }
 

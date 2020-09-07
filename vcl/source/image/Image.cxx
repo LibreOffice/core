@@ -46,7 +46,7 @@ Image::Image(uno::Reference<graphic::XGraphic> const & rxGraphic)
 
         OUString aPath;
         if (aGraphic.getOriginURL().startsWith("private:graphicrepository/", &aPath))
-            mpImplData = std::make_shared<ImplImage>(aPath, Size());
+            mpImplData = std::make_shared<ImplImage>(aPath);
         else
             ImplInit(aGraphic.GetBitmapEx());
     }
@@ -56,7 +56,7 @@ Image::Image(const OUString & rFileUrl)
 {
     OUString sImageName;
     if (rFileUrl.startsWith("private:graphicrepository/", &sImageName))
-        mpImplData = std::make_shared<ImplImage>(sImageName, Size());
+        mpImplData = std::make_shared<ImplImage>(sImageName);
     else
     {
         Graphic aGraphic;
@@ -65,8 +65,8 @@ Image::Image(const OUString & rFileUrl)
     }
 }
 
-Image::Image(StockImage, const OUString & rFileUrl, Size aSpecificSize)
-    : mpImplData(std::make_shared<ImplImage>(rFileUrl, aSpecificSize))
+Image::Image(StockImage, const OUString & rFileUrl)
+    : mpImplData(std::make_shared<ImplImage>(rFileUrl))
 {
 }
 

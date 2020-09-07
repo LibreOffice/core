@@ -1,7 +1,7 @@
-codemaker/source/javamaker/classfile.hxx:153
+codemaker/source/javamaker/classfile.hxx:152
     void codemaker::javamaker::ClassFile::ClassFile(enum codemaker::javamaker::ClassFile::AccessFlags,const class rtl::OString &,const class rtl::OString &,const class rtl::OString &)
     enum codemaker::javamaker::ClassFile::AccessFlags accessFlags setBits=0x1
-codemaker/source/javamaker/classfile.hxx:168
+codemaker/source/javamaker/classfile.hxx:167
     void codemaker::javamaker::ClassFile::addField(enum codemaker::javamaker::ClassFile::AccessFlags,const class rtl::OString &,const class rtl::OString &,unsigned short,const class rtl::OString &)
     enum codemaker::javamaker::ClassFile::AccessFlags accessFlags setBits=0x1
 dbaccess/source/filter/xml/xmlExport.hxx:165
