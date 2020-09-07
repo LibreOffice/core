@@ -34,6 +34,24 @@
       "revId": "1d465aa0159327f2666d02af4db7f1d8e5fbca8a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eef9676e_c583c01c",
+        "filename": "formula/source/core/api/FormulaCompiler.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 2329,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-09-07T23:19:51Z",
+      "side": 1,
+      "message": "Side note: I noticed that a #REF!!A1:B2 saved to .xlsx after reload becomes #ref!!A1:B2 (i.e. lower case #ref!) which means it was not recognized as an invalid reference but just an unkown something (and hence the attempt to \"fix\" that here). Probably if this is wanted to be fixed it needs to be done when reading the document to produce a proper invalid reference instead, not when writing a document.",
+      "parentUuid": "f53e23d3_9623da4f",
+      "revId": "1d465aa0159327f2666d02af4db7f1d8e5fbca8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
