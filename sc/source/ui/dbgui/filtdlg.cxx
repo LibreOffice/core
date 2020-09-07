@@ -438,14 +438,14 @@ void ScFilterDlg::UpdateValueList( size_t nList )
         const sal_Int32 nFieldSelPos = maFieldLbArr[nList-1]->get_active();
         OUString aCurValue = pValList->get_active_text();
 
-        pValList->clear();
-        pValList->append_text(aStrNotEmpty);
-        pValList->append_text(aStrEmpty);
+        std::unique_ptr<weld::WaitObject> xWaiter;
+        std::vector<weld::ComboBoxEntry> aEntries;
+        aEntries.emplace_back(aStrNotEmpty);
+        aEntries.emplace_back(aStrEmpty);
 
-        if ( nFieldSelPos )
+        if (nFieldSelPos)
         {
-            weld::WaitObject aWaiter(m_xDialog.get());     // even if only the list box has content
-
+            xWaiter.reset(new weld::WaitObject(m_xDialog.get()));     // even if only the list box has content
             SCCOL nColumn = theQueryData.nCol1 + static_cast<SCCOL>(nFieldSelPos) - 1;
             EntryList* pList = nullptr;
             if (!m_EntryLists.count(nColumn))
@@ -504,13 +504,10 @@ void ScFilterDlg::UpdateValueList( size_t nList )
 
             assert(pList);
 
-            pValList->freeze();
             for (const auto& rEntry : pList->maFilterEntries)
-            {
-                pValList->append_text(rEntry.GetString());
-            }
-            pValList->thaw();
+                aEntries.emplace_back(rEntry.GetString());
         }
+        pValList->insert_vector(aEntries, false);
         pValList->set_entry_text(aCurValue);
     }
 
