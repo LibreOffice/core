@@ -34,6 +34,24 @@
       "revId": "d256c7c03129a94c2683435578d47e519d90820f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "355c0756_d8193d92",
+        "filename": "vcl/source/gdi/pdfwriter_impl.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 4419,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-09-07T13:01:14Z",
+      "side": 1,
+      "message": "\u003e And looking at this piece of code, a related issue appears to be that the argument to\n\u003e \n\u003e   aLine.append( ... )\n\u003e \n\u003e could contain characters that must not appear unescaped in a PDF string literal, like a lone \"(\" parenthesis.  This looks like it is broken ever since the code got introduced with \u003chttps://git.libreoffice.org/core/+/6822a05136317f4fdd155055fc10feefe7c44832%5E!/\u003e \"INTEGRATION: CWS pdf03 (1.92.20)\", and should probably use appendLiteralString instead.  Can you fix all of that in one go?\n\nMiklos, Tomaž, do you happen to know whether it should use appendLiteralString or rather appendLiteralStringEncrypt?",
+      "parentUuid": "4c56feb4_5bb4c488",
+      "revId": "d256c7c03129a94c2683435578d47e519d90820f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
