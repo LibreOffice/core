@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f40c1c59_eda30f8d",
+        "filename": "sfx2/source/dialog/filedlghelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1327,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-07T08:03:32Z",
+      "side": 0,
+      "message": "Oh, here\u0027s a nice reduction :-)",
+      "range": {
+        "startLine": 1327,
+        "startChar": 4,
+        "endLine": 1327,
+        "endChar": 23
+      },
+      "revId": "7cd3527b8e5bccd99eb171a8d35c554b774a050f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
