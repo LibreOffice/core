@@ -48,6 +48,10 @@ class OutputDevice;
 class FreetypeFont;
 struct SystemGraphicsData;
 
+#if ENABLE_CAIRO_CANVAS
+struct SystemFontData;
+#endif // ENABLE_CAIRO_CANVAS
+
 namespace basegfx {
     class B2DVector;
     class B2DPolygon;
@@ -430,6 +434,8 @@ public:
     /// Create Surface for given bitmap data
     virtual cairo::SurfaceSharedPtr CreateBitmapSurface(const OutputDevice& rRefDevice, const BitmapSystemData& rData, const Size& rSize) const = 0;
     virtual css::uno::Any       GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& rSize) const = 0;
+
+    virtual SystemFontData      GetSysFontData( int nFallbacklevel ) const = 0;
 
 #endif // ENABLE_CAIRO_CANVAS
 

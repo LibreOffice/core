@@ -895,7 +895,7 @@ sal_Int32 GenericSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoor
 
 bool GenericSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
                                     Point& rPos, int& nStart,
-                                    const PhysicalFontFace**) const
+                                    const PhysicalFontFace**, int* const pFallbackLevel) const
 {
     std::vector<GlyphItem>::const_iterator pGlyphIter = m_GlyphItems.Impl()->begin();
     std::vector<GlyphItem>::const_iterator pGlyphIterEnd = m_GlyphItems.Impl()->end();
@@ -918,6 +918,8 @@ bool GenericSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
 
     // update return data with glyph info
     *pGlyph = &(*pGlyphIter);
+    if (pFallbackLevel)
+        *pFallbackLevel = 0;
     ++nStart;
 
     // calculate absolute position in pixel units
@@ -1504,7 +1506,8 @@ void MultiSalLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) cons
 
 bool MultiSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
                                   Point& rPos, int& nStart,
-                                  const PhysicalFontFace** pFallbackFont) const
+                                  const PhysicalFontFace** pFallbackFont,
+                                  int* const pFallbackLevel) const
 {
     // NOTE: nStart is tagged with current font index
     int nLevel = static_cast<unsigned>(nStart) >> GF_FONTSHIFT;
@@ -1520,6 +1523,8 @@ bool MultiSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
             nStart |= nFontTag;
             if (pFallbackFont)
                 *pFallbackFont = pFontFace;
+            if (pFallbackLevel)
+                *pFallbackLevel = nLevel;
             rPos += maDrawBase;
             rPos += maDrawOffset;
             return true;

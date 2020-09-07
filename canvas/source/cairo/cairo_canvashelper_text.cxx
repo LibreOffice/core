@@ -254,7 +254,7 @@ namespace cairocanvas
             mpVirtualDevice->SetLayoutMode( nLayoutMode );
 
             rtl::Reference pTextLayout( new TextLayout(text, textDirection, 0, CanvasFont::Reference(dynamic_cast< CanvasFont* >( xFont.get() )), mpSurfaceProvider) );
-            pTextLayout->draw(*mpVirtualDevice, aOutpos, viewState, renderState);
+            pTextLayout->draw(mpCairo, *mpVirtualDevice, aOutpos, viewState, renderState);
         }
 
         return uno::Reference< rendering::XCachedPrimitive >(nullptr);
@@ -289,7 +289,7 @@ namespace cairocanvas
                     return uno::Reference< rendering::XCachedPrimitive >(nullptr); // no output necessary
 
                 // TODO(F2): What about the offset scalings?
-                pTextLayout->draw(*mpVirtualDevice, aOutpos, viewState, renderState);
+                pTextLayout->draw(mpCairo, *mpVirtualDevice, aOutpos, viewState, renderState);
             }
         }
         else

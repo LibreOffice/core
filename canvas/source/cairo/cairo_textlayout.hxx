@@ -82,7 +82,8 @@ namespace cairocanvas
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-        void draw( OutputDevice&                                   rOutDev,
+        void draw( ::cairo::CairoSharedPtr const &                 pSCairo,
+                   OutputDevice&                                   rOutDev,
                    const Point&                                    rOutpos,
                    const css::rendering::ViewState&   viewState,
                    const css::rendering::RenderState& renderState ) const;
@@ -101,6 +102,8 @@ namespace cairocanvas
         CanvasFont::Reference                      mpFont;
         SurfaceProviderRef                         mpRefDevice;
         sal_Int8                                   mnTextDirection;
+
+        bool isCairoRenderable(SystemFontData aSysFontData) const;
     };
 
 }
