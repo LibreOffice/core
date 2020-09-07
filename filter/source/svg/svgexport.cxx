@@ -58,6 +58,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/animationexport.hxx>
 #include <svx/svdograf.hxx>
+#include <sal/log.hxx>
 
 #include <memory>
 
@@ -604,7 +605,7 @@ bool SVGFilter::implExportImpressOrDraw( const Reference< XOutputStream >& rxOSt
                 {
                     delete mpSVGDoc;
                     mpSVGDoc = nullptr;
-                    OSL_FAIL( "Exception caught" );
+                    SAL_WARN("filter.svg", "Exception caught");
                 }
 
                 if( nullptr != pSdrModel )
