@@ -47,9 +47,9 @@ namespace {
 
 class PaMIntoCursorShellRing
 {
-    SwPaM &rDelPam, &rCursor;
-    SwPaM* pPrevDelPam;
-    SwPaM* pPrevCursor;
+    SwPaM &m_rDelPam, &m_rCursor;
+    SwPaM* m_pPrevDelPam;
+    SwPaM* m_pPrevCursor;
 
     static void RemoveFromRing( SwPaM& rPam, SwPaM const * pPrev );
 public:
@@ -59,24 +59,24 @@ public:
 
 }
 
-PaMIntoCursorShellRing::PaMIntoCursorShellRing( SwCursorShell& rCSh,
-                                            SwPaM& rShCursor, SwPaM& rPam )
-    : rDelPam( rPam ), rCursor( rShCursor )
+PaMIntoCursorShellRing::PaMIntoCursorShellRing(SwCursorShell& rCSh, SwPaM& rShCursor, SwPaM& rPam)
+    : m_rDelPam(rPam)
+    , m_rCursor(rShCursor)
 {
     SwPaM* pShCursor = rCSh.GetCursor_();
 
-    pPrevDelPam = rDelPam.GetPrev();
-    pPrevCursor = rCursor.GetPrev();
+    m_pPrevDelPam = m_rDelPam.GetPrev();
+    m_pPrevCursor = m_rCursor.GetPrev();
 
-    rDelPam.GetRingContainer().merge( pShCursor->GetRingContainer() );
-    rCursor.GetRingContainer().merge( pShCursor->GetRingContainer() );
+    m_rDelPam.GetRingContainer().merge(pShCursor->GetRingContainer());
+    m_rCursor.GetRingContainer().merge(pShCursor->GetRingContainer());
 }
 
 PaMIntoCursorShellRing::~PaMIntoCursorShellRing()
 {
     // and take out the Pam again:
-    RemoveFromRing( rDelPam, pPrevDelPam );
-    RemoveFromRing( rCursor, pPrevCursor );
+    RemoveFromRing(m_rDelPam, m_pPrevDelPam);
+    RemoveFromRing(m_rCursor, m_pPrevCursor);
 }
 
 void PaMIntoCursorShellRing::RemoveFromRing( SwPaM& rPam, SwPaM const * pPrev )

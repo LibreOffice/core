@@ -54,12 +54,12 @@ TextFrameIndex SwTextMargin::GetTextEnd() const
 // Does the paragraph fit into one line?
 bool SwTextFrameInfo::IsOneLine() const
 {
-    const SwLineLayout *pLay = pFrame->GetPara();
+    const SwLineLayout *pLay = m_pFrame->GetPara();
     if( !pLay )
         return false;
 
     // For follows false of course
-    if( pFrame->GetFollow() )
+    if( m_pFrame->GetFollow() )
         return false;
 
     pLay = pLay->GetNext();
@@ -75,11 +75,11 @@ bool SwTextFrameInfo::IsOneLine() const
 // Is the line filled for X percent?
 bool SwTextFrameInfo::IsFilled( const sal_uInt8 nPercent ) const
 {
-    const SwLineLayout *pLay = pFrame->GetPara();
+    const SwLineLayout *pLay = m_pFrame->GetPara();
     if( !pLay )
         return false;
 
-    long nWidth = pFrame->getFramePrintArea().Width();
+    long nWidth = m_pFrame->getFramePrintArea().Width();
     nWidth *= nPercent;
     nWidth /= 100;
     return o3tl::make_unsigned(nWidth) <= pLay->Width();
@@ -100,38 +100,38 @@ SwTwips SwTextFrameInfo::GetLineStart( const SwTextCursor &rLine )
 // Where does the text start (without whitespace)? (relative in the Frame)
 SwTwips SwTextFrameInfo::GetLineStart() const
 {
-    SwTextSizeInfo aInf( const_cast<SwTextFrame*>(pFrame) );
-    SwTextCursor aLine( const_cast<SwTextFrame*>(pFrame), &aInf );
-    return GetLineStart( aLine ) - pFrame->getFrameArea().Left() - pFrame->getFramePrintArea().Left();
+    SwTextSizeInfo aInf( const_cast<SwTextFrame*>(m_pFrame) );
+    SwTextCursor aLine( const_cast<SwTextFrame*>(m_pFrame), &aInf );
+    return GetLineStart( aLine ) - m_pFrame->getFrameArea().Left() - m_pFrame->getFramePrintArea().Left();
 }
 
 // Calculates the character's position and returns the middle position
 SwTwips SwTextFrameInfo::GetCharPos(TextFrameIndex const nChar, bool bCenter) const
 {
-    SwRectFnSet aRectFnSet(pFrame);
-    SwFrameSwapper aSwapper( pFrame, true );
+    SwRectFnSet aRectFnSet(m_pFrame);
+    SwFrameSwapper aSwapper( m_pFrame, true );
 
-    SwTextSizeInfo aInf( const_cast<SwTextFrame*>(pFrame) );
-    SwTextCursor aLine( const_cast<SwTextFrame*>(pFrame), &aInf );
+    SwTextSizeInfo aInf( const_cast<SwTextFrame*>(m_pFrame) );
+    SwTextCursor aLine( const_cast<SwTextFrame*>(m_pFrame), &aInf );
 
     SwTwips nStt, nNext;
     SwRect aRect;
     aLine.GetCharRect( &aRect, nChar );
     if ( aRectFnSet.IsVert() )
-        pFrame->SwitchHorizontalToVertical( aRect );
+        m_pFrame->SwitchHorizontalToVertical( aRect );
 
     nStt = aRectFnSet.GetLeft(aRect);
 
     if( !bCenter )
-        return nStt - aRectFnSet.GetLeft(pFrame->getFrameArea());
+        return nStt - aRectFnSet.GetLeft(m_pFrame->getFrameArea());
 
     aLine.GetCharRect( &aRect, nChar + TextFrameIndex(1) );
     if ( aRectFnSet.IsVert() )
-        pFrame->SwitchHorizontalToVertical( aRect );
+        m_pFrame->SwitchHorizontalToVertical( aRect );
 
     nNext = aRectFnSet.GetLeft(aRect);
 
-    return (( nNext + nStt ) / 2 ) - aRectFnSet.GetLeft(pFrame->getFrameArea());
+    return (( nNext + nStt ) / 2 ) - aRectFnSet.GetLeft(m_pFrame->getFrameArea());
 }
 
 static void
@@ -157,8 +157,8 @@ void SwTextFrameInfo::GetSpaces(
     std::vector<std::pair<TextFrameIndex, TextFrameIndex>> & rRanges,
     bool const bWithLineBreak) const
 {
-    SwTextSizeInfo aInf( const_cast<SwTextFrame*>(pFrame) );
-    SwTextMargin aLine( const_cast<SwTextFrame*>(pFrame), &aInf );
+    SwTextSizeInfo aInf( const_cast<SwTextFrame*>(m_pFrame) );
+    SwTextMargin aLine( const_cast<SwTextFrame*>(m_pFrame), &aInf );
     bool bFirstLine = true;
     do {
 
@@ -194,8 +194,8 @@ void SwTextFrameInfo::GetSpaces(
 // Fonts: CharSet, SYMBOL and DONTKNOW
 bool SwTextFrameInfo::IsBullet(TextFrameIndex const nTextStart) const
 {
-    SwTextSizeInfo aInf( const_cast<SwTextFrame*>(pFrame) );
-    SwTextMargin aLine( const_cast<SwTextFrame*>(pFrame), &aInf );
+    SwTextSizeInfo aInf( const_cast<SwTextFrame*>(m_pFrame) );
+    SwTextMargin aLine( const_cast<SwTextFrame*>(m_pFrame), &aInf );
     aInf.SetIdx( nTextStart );
     return aLine.IsSymbol( nTextStart );
 }
@@ -206,8 +206,8 @@ bool SwTextFrameInfo::IsBullet(TextFrameIndex const nTextStart) const
 // We do not want to be so picky and work with a tolerance of TOLERANCE twips.
 SwTwips SwTextFrameInfo::GetFirstIndent() const
 {
-    SwTextSizeInfo aInf( const_cast<SwTextFrame*>(pFrame) );
-    SwTextCursor aLine( const_cast<SwTextFrame*>(pFrame), &aInf );
+    SwTextSizeInfo aInf( const_cast<SwTextFrame*>(m_pFrame) );
+    SwTextCursor aLine( const_cast<SwTextFrame*>(m_pFrame), &aInf );
     const SwTwips nFirst = GetLineStart( aLine );
     const SwTwips TOLERANCE = 20;
 
@@ -239,8 +239,8 @@ SwTwips SwTextFrameInfo::GetFirstIndent() const
 sal_Int32 SwTextFrameInfo::GetBigIndent(TextFrameIndex& rFndPos,
                                     const SwTextFrame *pNextFrame ) const
 {
-    SwTextSizeInfo aInf( const_cast<SwTextFrame*>(pFrame) );
-    SwTextCursor aLine( const_cast<SwTextFrame*>(pFrame), &aInf );
+    SwTextSizeInfo aInf( const_cast<SwTextFrame*>(m_pFrame) );
+    SwTextCursor aLine( const_cast<SwTextFrame*>(m_pFrame), &aInf );
     SwTwips nNextIndent = 0;
 
     if( pNextFrame )
@@ -287,7 +287,7 @@ sal_Int32 SwTextFrameInfo::GetBigIndent(TextFrameIndex& rFndPos,
 
     SwRect aRect;
     aLine.GetCharRect( &aRect, rFndPos );
-    return static_cast<sal_Int32>(aRect.Left() - pFrame->getFrameArea().Left() - pFrame->getFramePrintArea().Left());
+    return static_cast<sal_Int32>(aRect.Left() - m_pFrame->getFrameArea().Left() - m_pFrame->getFramePrintArea().Left());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
