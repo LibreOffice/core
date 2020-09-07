@@ -42,11 +42,10 @@ SchXMLParagraphContext::SchXMLParagraphContext( SvXMLImport& rImport,
 }
 
 SchXMLParagraphContext::SchXMLParagraphContext( SvXMLImport& rImport,
-                                                OUString& rText,
-                                                OUString * pOutId /* = 0 */ ) :
+                                                OUString& rText ) :
         SvXMLImportContext( rImport ),
         mrText( rText ),
-        mpId( pOutId )
+        mpId( nullptr )
 {
 }
 

@@ -28,7 +28,6 @@ private:
     BitmapChecksum maBitmapChecksum;
     /// if non-empty: cached original size of maStockName else Size of maBitmap
     Size maSizePixel;
-    Size maPreferedSizePixel;
     /// If set - defines the bitmap via images.zip*
     OUString maStockName;
 
@@ -41,7 +40,7 @@ private:
 
 public:
     ImplImage(const BitmapEx& rBitmapEx);
-    ImplImage(const OUString &aStockName, Size const & rPreferedSize);
+    ImplImage(const OUString &aStockName);
 
     bool isStock() const
     {
