@@ -59,8 +59,9 @@ using namespace css::accessibility;
 using namespace css::beans;
 using namespace css::uno;
 
-Qt5AccessibleWidget::Qt5AccessibleWidget(const Reference<XAccessible> xAccessible)
+Qt5AccessibleWidget::Qt5AccessibleWidget(const Reference<XAccessible> xAccessible, QObject* pObject)
     : m_xAccessible(xAccessible)
+    , m_pObject(pObject)
 {
     Reference<XAccessibleContext> xContext = xAccessible->getAccessibleContext();
     Reference<XAccessibleEventBroadcaster> xBroadcaster(xContext, UNO_QUERY);
@@ -699,7 +700,7 @@ bool Qt5AccessibleWidget::isValid() const
     return xAc.is();
 }
 
-QObject* Qt5AccessibleWidget::object() const { return nullptr; }
+QObject* Qt5AccessibleWidget::object() const { return m_pObject; }
 
 void Qt5AccessibleWidget::setText(QAccessible::Text /* t */, const QString& /* text */) {}
 
@@ -722,13 +723,13 @@ QAccessibleInterface* Qt5AccessibleWidget::customFactory(const QString& classnam
         vcl::Window* pWindow = pWidget->frame().GetWindow();
 
         if (pWindow)
-            return new Qt5AccessibleWidget(pWindow->GetAccessible());
+            return new Qt5AccessibleWidget(pWindow->GetAccessible(), object);
     }
     if (classname == QLatin1String("Qt5XAccessible") && object)
     {
         Qt5XAccessible* pXAccessible = dynamic_cast<Qt5XAccessible*>(object);
         if (pXAccessible && pXAccessible->m_xAccessible.is())
-            return new Qt5AccessibleWidget(pXAccessible->m_xAccessible);
+            return new Qt5AccessibleWidget(pXAccessible->m_xAccessible, object);
     }
 
     return nullptr;
