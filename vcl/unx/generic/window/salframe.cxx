@@ -991,9 +991,9 @@ void X11SalFrame::updateGraphics( bool bClear )
 {
     Drawable aDrawable = bClear ? None : GetWindow();
     if( pGraphics_ )
-        pGraphics_->SetDrawable( aDrawable, m_nXScreen );
+        pGraphics_->SetDrawable( aDrawable, nullptr, m_nXScreen );
     if( pFreeGraphics_ )
-        pFreeGraphics_->SetDrawable( aDrawable, m_nXScreen );
+        pFreeGraphics_->SetDrawable( aDrawable, nullptr, m_nXScreen );
 }
 
 void X11SalFrame::SetIcon( sal_uInt16 nIcon )

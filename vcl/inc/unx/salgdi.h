@@ -76,7 +76,8 @@ public:
     virtual                         ~X11SalGraphics() COVERITY_NOEXCEPT_FALSE override;
 
     void                            Init( SalFrame *pFrame, Drawable aDrawable, SalX11Screen nXScreen );
-    void                            Init( X11SalVirtualDevice *pVirtualDevice, SalColormap* pColormap = nullptr, bool bDeleteColormap = false );
+    void                            Init( X11SalVirtualDevice *pVirtualDevice, cairo_surface_t* pPreExistingTarget = nullptr,
+                                          SalColormap* pColormap = nullptr, bool bDeleteColormap = false );
     void                            Init( X11OpenGLSalVirtualDevice *pVirtualDevice );
     void                            Init( X11SkiaSalVirtualDevice *pVirtualDevice );
     void                            DeInit();
@@ -86,8 +87,8 @@ public:
     inline  Display*                GetXDisplay() const;
     inline  const SalVisual&        GetVisual() const;
     SalGeometryProvider*            GetGeometryProvider() const;
-    Drawable                GetDrawable() const { return hDrawable_; }
-    void                            SetDrawable( Drawable d, SalX11Screen nXScreen );
+    Drawable                        GetDrawable() const { return hDrawable_; }
+    void                            SetDrawable(Drawable d, cairo_surface_t* surface, SalX11Screen nXScreen);
     XRenderPictFormat*              GetXRenderFormat() const;
     void                    SetXRenderFormat( XRenderPictFormat* pXRenderFormat ) { m_pXRenderFormat = pXRenderFormat; }
     const SalColormap&      GetColormap() const { return *m_pColormap; }
@@ -296,6 +297,7 @@ private:
     const SalColormap*              m_pColormap;
     std::unique_ptr<SalColormap>    m_pDeleteColormap;
     Drawable                        hDrawable_;     // use
+    cairo_surface_t*                m_pExternalSurface;
     SalX11Screen                    m_nXScreen;
     mutable XRenderPictFormat*      m_pXRenderFormat;
     XID                             m_aXRenderPicture;
