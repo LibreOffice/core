@@ -40,8 +40,7 @@ public:
                             OUString& rText,
                             OUString * pOutId = nullptr );
     SchXMLParagraphContext( SvXMLImport& rImport,
-                            OUString& rText,
-                            OUString * pOutId = nullptr );
+                            OUString& rText );
     virtual ~SchXMLParagraphContext() override;
 
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
