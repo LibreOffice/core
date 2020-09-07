@@ -19,6 +19,7 @@
 #include <swmodule.hxx>
 #include <usrpref.hxx>
 #include <svx/svxids.hrc>
+#include <comphelper/lok.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
@@ -116,6 +117,10 @@ TableEditPanel::TableEditPanel(vcl::Window* pParent,
 {
     get(m_pRowHeightEdit, "rowheight");
     get(m_pColumnWidthEdit, "columnwidth");
+    get(m_pMiscToolbar, "misc");
+
+    if (comphelper::LibreOfficeKit::isActive())
+        m_pMiscToolbar->HideItem(m_pMiscToolbar->GetItemId(".uno:InsertFormula"));
 
     InitRowHeightToolitem();
     InitColumnWidthToolitem();
@@ -151,6 +156,7 @@ void TableEditPanel::dispose()
 {
     m_pRowHeightEdit.clear();
     m_pColumnWidthEdit.clear();
+    m_pMiscToolbar.clear();
     m_aRowHeightController.dispose();
     m_aColumnWidthController.dispose();
     m_aInsertRowsBeforeController.dispose();
