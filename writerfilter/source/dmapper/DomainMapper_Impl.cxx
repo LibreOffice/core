@@ -2619,7 +2619,7 @@ void DomainMapper_Impl::CreateRedline(uno::Reference<text::XTextRange> const& xR
                 uno::Reference < text::XRedline > xRedline( xRange, uno::UNO_QUERY_THROW );
                 xRedline->makeRedline( sType, aRedlineProperties );
             }
-            else
+            if (m_bIsActualParagraphFramed || (hasTableManager() && getTableManager().isInTable()))
             {
                 aFramedRedlines.push_back( uno::makeAny(xRange) );
                 aFramedRedlines.push_back( uno::makeAny(sType) );
