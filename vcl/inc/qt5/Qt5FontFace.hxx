@@ -48,8 +48,8 @@ public:
     QFont CreateFont() const;
     int GetFontTable(const char pTagName[5], unsigned char*) const;
 
-    const FontCharMapRef& GetFontCharMap() const;
-    bool GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) const;
+    FontCharMapRef GetFontCharMap() const override;
+    bool GetFontCapabilities(vcl::FontCapabilities&) const override;
     bool HasChar(sal_uInt32 cChar) const;
 
     rtl::Reference<LogicalFontInstance>
