@@ -458,7 +458,7 @@
                 <property name="label" translatable="yes" context="sidebarpossize|btnEditChart">Edit Chart</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="valign">top</property>
+                <property name="valign">start</property>
                 <property name="receives_default">True</property>
               </object>
               <packing>
