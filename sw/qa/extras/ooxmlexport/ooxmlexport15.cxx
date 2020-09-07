@@ -674,6 +674,26 @@ DECLARE_OOXMLEXPORT_TEST(testImageSpaceSettings, "tdf135047_ImageSpaceSettings.f
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:drawing/wp:anchor", "distR", "90170");
 }
 
+// TODO: change this to an export test once wrap distance export (TDF#135663) is implemented
+DECLARE_OOXMLIMPORT_TEST(testTdf13660, "tdf135660.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    const uno::Reference<drawing::XShape> xShape = getShape(1);
+    const uno::Reference<beans::XPropertySet> xOLEProps(xShape, uno::UNO_QUERY_THROW);
+    sal_Int32 nWrapDistanceLeft = -1;
+    sal_Int32 nWrapDistanceRight = -1;
+    sal_Int32 nWrapDistanceTop = -1;
+    sal_Int32 nWrapDistanceBottom = -1;
+    xOLEProps->getPropertyValue("LeftMargin") >>= nWrapDistanceLeft;
+    xOLEProps->getPropertyValue("RightMargin") >>= nWrapDistanceRight;
+    xOLEProps->getPropertyValue("TopMargin") >>= nWrapDistanceTop;
+    xOLEProps->getPropertyValue("BottomMargin") >>= nWrapDistanceBottom;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Left wrap distance is wrong", static_cast<sal_Int32>(0), nWrapDistanceLeft);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Right wrap distance is wrong", static_cast<sal_Int32>(400), nWrapDistanceRight);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Top wrap distance is wrong", static_cast<sal_Int32>(300), nWrapDistanceTop);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Bottom wrap distance is wrong", static_cast<sal_Int32>(199), nWrapDistanceBottom);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

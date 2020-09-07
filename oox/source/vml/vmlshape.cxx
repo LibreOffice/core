@@ -911,6 +911,15 @@ Reference< XShape > SimpleShape::createPictureObject(const Reference< XShapes >&
         const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
         lcl_SetAnchorType(aPropSet, maTypeModel, rGraphicHelper);
 
+        const sal_Int32 nWrapDistanceLeft = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maTypeModel.maWrapDistanceLeft, 0, true, true);
+        const sal_Int32 nWrapDistanceRight = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maTypeModel.maWrapDistanceRight, 0, true, true);
+        const sal_Int32 nWrapDistanceTop = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maTypeModel.maWrapDistanceTop, 0, false, true);
+        const sal_Int32 nWrapDistanceBottom = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maTypeModel.maWrapDistanceBottom, 0, false, true);
+        aPropSet.setProperty(PROP_LeftMargin, uno::makeAny(nWrapDistanceLeft));
+        aPropSet.setProperty(PROP_RightMargin, uno::makeAny(nWrapDistanceRight));
+        aPropSet.setProperty(PROP_TopMargin, uno::makeAny(nWrapDistanceTop));
+        aPropSet.setProperty(PROP_BottomMargin, uno::makeAny(nWrapDistanceBottom));
+
         if (maTypeModel.moCropBottom.has() || maTypeModel.moCropLeft.has() || maTypeModel.moCropRight.has() || maTypeModel.moCropTop.has())
         {
             text::GraphicCrop aGraphicCrop;
