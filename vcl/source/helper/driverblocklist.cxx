@@ -157,20 +157,20 @@ DeviceVendor GetVendorFromId(uint32_t id)
     }
 }
 
-OUStringLiteral GetVendorNameFromId(uint32_t id)
+std::string_view GetVendorNameFromId(uint32_t id)
 {
     switch (id)
     {
         case 0x8086:
-            return u"Intel";
+            return "Intel";
         case 0x10de:
-            return u"Nvidia";
+            return "Nvidia";
         case 0x1002:
-            return u"AMD";
+            return "AMD";
         case 0x1414:
-            return u"Microsoft";
+            return "Microsoft";
         default:
-            return u"?";
+            return "?";
     }
 }
 
