@@ -793,7 +793,7 @@ DECLARE_OOXMLEXPORT_TEST(testShapeThemePreservation, "shape-theme-preservation.d
             0);
     assertXPath(pXmlDocument,
             "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:solidFill",
-            0);
+            1);
 
     // check direct theme assignments have been preserved
     assertXPath(pXmlDocument,
