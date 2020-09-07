@@ -729,12 +729,22 @@ BuildinFontFace::BuildinFontFace(int nId)
 {
 }
 
+FontCharMapRef BuildinFontFace::GetFontCharMap() const
+{
+    assert(false && "pdf::BuildinFontFace doesn't provide valid char maps!");
+    if (m_xFontCharMap.is())
+        return m_xFontCharMap;
+
+    m_xFontCharMap = new FontCharMap();
+    return m_xFontCharMap;
+}
+
 rtl::Reference<LogicalFontInstance>
 BuildinFontFace::CreateFontInstance(const FontSelectPattern& rFSP) const
 {
     return new BuildinFontInstance(*this, rFSP);
 }
 
-} // namespace vcl
+} // namespace vcl::pdf
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

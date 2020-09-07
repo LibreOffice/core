@@ -72,8 +72,8 @@ public:
     BYTE                    GetCharSet() const          { return meWinCharSet; }
     BYTE                    GetPitchAndFamily() const   { return mnPitchAndFamily; }
 
-    FontCharMapRef          GetFontCharMap() const;
-    bool GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
+    FontCharMapRef GetFontCharMap() const override;
+    bool GetFontCapabilities(vcl::FontCapabilities&) const override;
 
 private:
     sal_IntPtr              mnId;

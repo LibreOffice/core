@@ -55,9 +55,9 @@ public:
 
 class BuildinFontFace final : public PhysicalFontFace
 {
-private:
     static const BuildinFont m_aBuildinFonts[14];
     const BuildinFont& mrBuildin;
+    static FontCharMapRef m_xFontCharMap;
 
     rtl::Reference<LogicalFontInstance>
     CreateFontInstance(const FontSelectPattern& rFSD) const override;
@@ -67,6 +67,8 @@ public:
 
     const BuildinFont& GetBuildinFont() const { return mrBuildin; }
     sal_IntPtr GetFontId() const override { return reinterpret_cast<sal_IntPtr>(&mrBuildin); }
+    FontCharMapRef GetFontCharMap() const override;
+    bool GetFontCapabilities(vcl::FontCapabilities&) const override { return false; }
 
     static const BuildinFont& Get(int nId) { return m_aBuildinFonts[nId]; }
 };

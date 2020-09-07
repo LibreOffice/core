@@ -72,15 +72,14 @@ FontCharMapRef Qt5Graphics::GetFontCharMap() const
 {
     if (!m_pTextStyle[0])
         return FontCharMapRef(new FontCharMap());
-    return static_cast<const Qt5FontFace*>(m_pTextStyle[0]->GetFontFace())->GetFontCharMap();
+    return m_pTextStyle[0]->GetFontFace()->GetFontCharMap();
 }
 
 bool Qt5Graphics::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) const
 {
     if (!m_pTextStyle[0])
         return false;
-    return static_cast<const Qt5FontFace*>(m_pTextStyle[0]->GetFontFace())
-        ->GetFontCapabilities(rFontCapabilities);
+    return m_pTextStyle[0]->GetFontFace()->GetFontCapabilities(rFontCapabilities);
 }
 
 void Qt5Graphics::GetDevFontList(PhysicalFontCollection* pPFC)
