@@ -916,7 +916,11 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
 
     if( bColorSet )
     {
-        if( nColor != nOriginalColor )
+        // tdf#77236
+        FillStyle aFillStyle {FillStyle_NONE};
+        if (GetProperty(rXPropSet, "FillStyle"))
+            rXPropSet->getPropertyValue("FillStyle") >>= aFillStyle;
+        if( nColor != nOriginalColor || aFillStyle == FillStyle_NONE)
         {
             // the user has set a different color for the line
             WriteSolidFill( nColor, nColorAlpha );
