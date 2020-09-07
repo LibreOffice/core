@@ -38,8 +38,10 @@ struct BuildinFont
     FontWeight const m_eWeight;
     FontItalic const m_eItalic;
     int const m_aWidths[256];
+    mutable FontCharMapRef m_xFontCharMap;
 
     OString getNameObject() const;
+    FontCharMapRef GetFontCharMap() const;
     FontAttributes GetFontAttributes() const;
 };
 
@@ -55,7 +57,6 @@ public:
 
 class BuildinFontFace final : public PhysicalFontFace
 {
-private:
     static const BuildinFont m_aBuildinFonts[14];
     const BuildinFont& mrBuildin;
 
@@ -67,6 +68,8 @@ public:
 
     const BuildinFont& GetBuildinFont() const { return mrBuildin; }
     sal_IntPtr GetFontId() const override { return reinterpret_cast<sal_IntPtr>(&mrBuildin); }
+    FontCharMapRef GetFontCharMap() const override { return mrBuildin.GetFontCharMap(); }
+    bool GetFontCapabilities(vcl::FontCapabilities&) const override { return false; }
 
     static const BuildinFont& Get(int nId) { return m_aBuildinFonts[nId]; }
 };
