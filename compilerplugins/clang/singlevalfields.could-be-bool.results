@@ -1,4 +1,4 @@
-chart2/source/view/inc/PlottingPositionHelper.hxx:206
+chart2/source/view/inc/PlottingPositionHelper.hxx:205
     chart::PolarPlottingPositionHelper m_fRadiusOffset
     double
 connectivity/source/inc/dbase/dindexnode.hxx:120

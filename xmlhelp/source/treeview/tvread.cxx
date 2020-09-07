@@ -155,12 +155,13 @@ using namespace com::sun::star::util;
 using namespace com::sun::star::container;
 using namespace com::sun::star::deployment;
 
+const char prodName[] = "%PRODUCTNAME";
+const char vendName[] = "%VENDORNAME";
+const char vendVersion[] = "%VENDORVERSION";
+const char vendShort[] = "%VENDORSHORT";
+const char prodVersion[] = "%PRODUCTVERSION";
+
 ConfigData::ConfigData()
-    : prodName("%PRODUCTNAME"),
-      prodVersion("%PRODUCTVERSION"),
-      vendName("%VENDORNAME"),
-      vendVersion("%VENDORVERSION"),
-      vendShort("%VENDORSHORT")
 {
 }
 

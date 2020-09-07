@@ -46,7 +46,6 @@ namespace treeview {
         ConfigData();
         int                    m_vAdd[5] = {};
         OUString          m_vReplacement[5];
-        OUString          prodName,prodVersion,vendName,vendVersion,vendShort;
 
         std::vector< sal_uInt64 >       vFileLen;
         std::vector< OUString >    vFileURL;

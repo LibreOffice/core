@@ -59,9 +59,10 @@ using namespace com::sun::star::io;
 
 using ::rtl::Uri;
 
+const OUStringLiteral sVndSunStarPackage(u"vnd.sun.star.Package:");
+
 XMLFilterJarHelper::XMLFilterJarHelper( const Reference< XComponentContext >& rxContext )
 : mxContext( rxContext ),
-    sVndSunStarPackage( "vnd.sun.star.Package:" ),
     sXSLTPath( "$(user)/xslt/" ),
     sTemplatePath( "$(user)/template/" ),
     sProgPath( "$(prog)/" )

@@ -114,6 +114,14 @@ OUString Databases::expandURL( const OUString& aURL, const Reference< uno::XComp
     return aRetURL;
 }
 
+const char vendVersion[] = "%VENDORVERSION";
+const char vendName[] = "%VENDORNAME";
+const char prodVersion[] = "%PRODUCTVERSION";
+const char vendShort[] = "%VENDORSHORT";
+const char prodName[] = "%PRODUCTNAME";
+const char newProdVersion[] = "$[officeversion]";
+const char newProdName[] = "$[officename]";
+
 Databases::Databases( bool showBasic,
                       const OUString& instPath,
                       const OUString& productName,
@@ -122,14 +130,7 @@ Databases::Databases( bool showBasic,
                       Reference< uno::XComponentContext > const & xContext )
     : m_xContext( xContext ),
       m_bShowBasic(showBasic),
-      m_aCSS(styleSheet.toAsciiLowerCase()),
-      newProdName( "$[officename]" ),
-      newProdVersion( "$[officeversion]" ),
-      prodName( "%PRODUCTNAME" ),
-      prodVersion( "%PRODUCTVERSION" ),
-      vendName( "%VENDORNAME" ),
-      vendVersion( "%VENDORVERSION" ),
-      vendShort( "%VENDORSHORT" )
+      m_aCSS(styleSheet.toAsciiLowerCase())
 {
     m_xSMgr = m_xContext->getServiceManager();
 
