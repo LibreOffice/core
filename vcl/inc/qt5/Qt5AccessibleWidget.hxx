@@ -41,7 +41,8 @@ class Qt5AccessibleWidget final : public QObject,
     Q_OBJECT
 
 public:
-    Qt5AccessibleWidget(const css::uno::Reference<css::accessibility::XAccessible> xAccessible);
+    Qt5AccessibleWidget(const css::uno::Reference<css::accessibility::XAccessible> xAccessible,
+                        QObject* pObject);
     QWindow* window() const override;
     int childCount() const override;
     int indexOfChild(const QAccessibleInterface* child) const override;
@@ -137,6 +138,7 @@ public:
 private:
     css::uno::Reference<css::accessibility::XAccessible> m_xAccessible;
     css::uno::Reference<css::accessibility::XAccessibleContext> getAccessibleContextImpl() const;
+    QObject* m_pObject;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
