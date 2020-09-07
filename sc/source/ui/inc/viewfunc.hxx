@@ -238,7 +238,8 @@ public:
     bool            MergeCells( bool bApi, bool& rDoContents, bool bCenter );
     bool            RemoveMerge();
 
-    void            FillSimple( FillDir eDir );
+    SC_DLLPUBLIC void
+                    FillSimple( FillDir eDir );
     void            FillSeries( FillDir eDir, FillCmd eCmd, FillDateCmd eDateCmd,
                                 double fStart, double fStep, double fMax );
     void            FillAuto( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
