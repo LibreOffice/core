@@ -43,6 +43,15 @@ OString BuildinFont::getNameObject() const
     return aBuf.makeStringAndClear();
 }
 
+FontCharMapRef BuildinFont::GetFontCharMap() const
+{
+    if (m_xFontCharMap.is())
+        return m_xFontCharMap;
+
+    m_xFontCharMap = new FontCharMap();
+    return m_xFontCharMap;
+}
+
 FontAttributes BuildinFont::GetFontAttributes() const
 {
     FontAttributes aDFA;
@@ -103,7 +112,8 @@ const BuildinFont BuildinFontFace::m_aBuildinFonts[14]
               600, 600, 600, 600, 600, 600, 600, 600, // 232 - 239
               600, 600, 600, 600, 600, 600, 600, 600, // 240 - 247
               600, 600, 600, 600, 600, 600, 600, 600 // 248 - 255
-          } },
+          },
+          nullptr },
 
         { "Courier", // family name
           "Italic", // style
@@ -149,7 +159,8 @@ const BuildinFont BuildinFontFace::m_aBuildinFonts[14]
               600, 600, 600, 600, 600, 600, 600, 600, // 232 - 239
               600, 600, 600, 600, 600, 600, 600, 600, // 240 - 247
               600, 600, 600, 600, 600, 600, 600, 600 // 248 - 255
-          } },
+          },
+          nullptr },
 
         { "Courier", // family name
           "Bold", // style
@@ -195,7 +206,8 @@ const BuildinFont BuildinFontFace::m_aBuildinFonts[14]
               600, 600, 600, 600, 600, 600, 600, 600, // 232 - 239
               600, 600, 600, 600, 600, 600, 600, 600, // 240 - 247
               600, 600, 600, 600, 600, 600, 600, 600 // 248 - 255
-          } },
+          },
+          nullptr },
 
         { "Courier", // family name
           "Bold Italic", // style
@@ -241,7 +253,8 @@ const BuildinFont BuildinFontFace::m_aBuildinFonts[14]
               600, 600, 600, 600, 600, 600, 600, 600, // 232 - 239
               600, 600, 600, 600, 600, 600, 600, 600, // 240 - 247
               600, 600, 600, 600, 600, 600, 600, 600 // 248 - 255
-          } },
+          },
+          nullptr },
 
         { "Helvetica", // family name
           "Normal", // style
@@ -287,7 +300,8 @@ const BuildinFont BuildinFontFace::m_aBuildinFonts[14]
               556,  556,  556, 556, 278,  278,  278,  278, // 232 - 239
               556,  556,  556, 556, 556,  556,  556,  584, // 240 - 247
               611,  556,  556, 556, 556,  500,  556,  500 // 248 - 255
-          } },
+          },
+          nullptr },
 
         { "Helvetica", // family name
           "Italic", // style
@@ -333,7 +347,8 @@ const BuildinFont BuildinFontFace::m_aBuildinFonts[14]
               556,  556,  556, 556, 278,  278,  278,  278, // 232 - 239
               556,  556,  556, 556, 556,  556,  556,  584, // 240 - 247
               611,  556,  556, 556, 556,  500,  556,  500 // 248 - 255
-          } },
+          },
+          nullptr },
 
         { "Helvetica", // family name
           "Bold", // style
@@ -379,7 +394,8 @@ const BuildinFont BuildinFontFace::m_aBuildinFonts[14]
               556, 556,  556, 556, 278,  278,  278,  278, // 232 - 239
               611, 611,  611, 611, 611,  611,  611,  584, // 240 - 247
               611, 611,  611, 611, 611,  556,  611,  556 // 248 - 255
-          } },
+          },
+          nullptr },
 
         { "Helvetica", // family name
           "Bold Italic", // style
@@ -425,7 +441,8 @@ const BuildinFont BuildinFontFace::m_aBuildinFonts[14]
               556, 556,  556, 556, 278,  278,  278,  278, // 232 - 239
               611, 611,  611, 611, 611,  611,  611,  584, // 240 - 247
               611, 611,  611, 611, 611,  556,  611,  556 // 248 - 255
-          } },
+          },
+          nullptr },
 
         { "Times", // family name
           "Normal", // style
@@ -471,7 +488,8 @@ const BuildinFont BuildinFontFace::m_aBuildinFonts[14]
               444, 444,  444, 444, 278, 278,  278, 278, // 232 - 239
               500, 500,  500, 500, 500, 500,  500, 564, // 240 - 247
               500, 500,  500, 500, 500, 500,  500, 500 // 248 - 255
-          } },
+          },
+          nullptr },
 
         { "Times", // family name
           "Italic", // style
@@ -517,7 +535,8 @@ const BuildinFont BuildinFontFace::m_aBuildinFonts[14]
               444, 444,  444, 444, 278, 278, 278, 278, // 232 - 239
               500, 500,  500, 500, 500, 500, 500, 675, // 240 - 247
               500, 500,  500, 500, 500, 444, 500, 444 // 248 - 255
-          } },
+          },
+          nullptr },
 
         { "Times", // family name
           "Bold", // style
@@ -563,7 +582,8 @@ const BuildinFont BuildinFontFace::m_aBuildinFonts[14]
               444, 444,  444, 444, 278,  278,  278,  278, // 232 - 239
               500, 556,  500, 500, 500,  500,  500,  570, // 240 - 247
               500, 556,  556, 556, 556,  500,  556,  500 // 248 - 255
-          } },
+          },
+          nullptr },
 
         { "Times", // family name
           "Bold Italic", // style
@@ -609,7 +629,8 @@ const BuildinFont BuildinFontFace::m_aBuildinFonts[14]
               444, 444,  444, 444, 278, 278,  278, 278, // 232 - 239
               500, 556,  500, 500, 500, 500,  500, 570, // 240 - 247
               500, 556,  556, 556, 556, 444,  500, 444 // 248 - 255
-          } },
+          },
+          nullptr },
 
         // The font name "Symbol" is too generic and causes plenty of trouble.
         // To ensure WYSIWIG the PDF-Base14 variant gets a not-confusable name
@@ -657,7 +678,8 @@ const BuildinFont BuildinFontFace::m_aBuildinFonts[14]
               384, 384, 384, 384,  494,  494, 494,  494, // 232 - 239
               0,   329, 274, 686,  686,  686, 384,  384, // 240 - 247
               384, 384, 384, 384,  494,  494, 494,  0 // 248 - 255
-          } },
+          },
+          nullptr },
 
         { "ZapfDingbats", // family name
           "Normal", // style
@@ -703,7 +725,8 @@ const BuildinFont BuildinFontFace::m_aBuildinFonts[14]
               883, 836, 836, 867, 867, 696, 696,  874, // 232 - 239
               0,   874, 760, 946, 771, 865, 771,  888, // 240 - 247
               967, 888, 831, 873, 927, 970, 918,  0 // 248 - 255
-          } }
+          },
+          nullptr }
 
       };
 
@@ -735,6 +758,6 @@ BuildinFontFace::CreateFontInstance(const FontSelectPattern& rFSP) const
     return new BuildinFontInstance(*this, rFSP);
 }
 
-} // namespace vcl
+} // namespace vcl::pdf
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

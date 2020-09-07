@@ -67,8 +67,8 @@ public:
     int                             GetFontTable( uint32_t nTagCode, unsigned char* ) const;
     int                             GetFontTable( const char pTagName[5], unsigned char* ) const;
 
-    FontCharMapRef                  GetFontCharMap() const;
-    bool                            GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
+    FontCharMapRef GetFontCharMap() const override;
+    bool GetFontCapabilities(vcl::FontCapabilities&) const override;
     bool                            HasChar( sal_uInt32 cChar ) const;
 
     rtl::Reference<LogicalFontInstance> CreateFontInstance(const FontSelectPattern&) const override;
