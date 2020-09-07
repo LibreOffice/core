@@ -1565,23 +1565,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
         rWrtSh.Replace(aTmp, false);
 
-        /* #102505# EndAction/EndUndo moved down since insertion
-           of temporary auto correction is now undoable two and
-           must reside in the same undo group.*/
-
-        // record only if it's NOT already present in autocorrection
-        SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
-
-        OUString aOrigWord( bGrammar ? OUString() : xSpellAlt->getWord() ) ;
-        OUString aNewWord( sApplyText );
-        SvxPrepareAutoCorrect( aOrigWord, aNewWord );
-
-        if (xSpellAlt.is())
-            pACorr->PutText( aOrigWord, aNewWord, LanguageTag( xSpellAlt->getLocale() ).getLanguageType() );
-
-        /* #102505# EndAction/EndUndo moved down since insertion
-           of temporary auto correction is now undoable two and
-           must reside in the same undo group.*/
         rWrtSh.EndAction();
         rWrtSh.EndUndo();
 
