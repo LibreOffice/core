@@ -22,6 +22,30 @@
       "revId": "d5116acbd01009509305390f262d42767f0ddb9b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce3d6586_70a030de",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 787,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-09-07T08:19:47Z",
+      "side": 1,
+      "message": "No, that could be moved in as well, but detecting that would require a more sophisticated analysis (some kind of dataflow analysis)",
+      "parentUuid": "702ffb63_2df4e022",
+      "range": {
+        "startLine": 787,
+        "startChar": 8,
+        "endLine": 787,
+        "endChar": 23
+      },
+      "revId": "d5116acbd01009509305390f262d42767f0ddb9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
