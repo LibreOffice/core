@@ -23,6 +23,7 @@
 #include <list>
 #include <unordered_map>
 #include <memory>
+#include <string_view>
 #include <vector>
 
 #include <pdf/ResourceDict.hxx>
@@ -795,8 +796,7 @@ i12626
     void appendUnicodeTextStringEncrypt( const OUString& rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer );
 
     void appendLiteralStringEncrypt( const OUString& rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer, rtl_TextEncoding nEnc = RTL_TEXTENCODING_ASCII_US );
-    void appendLiteralStringEncrypt( const OString& rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer );
-    void appendLiteralStringEncrypt( OStringBuffer const & rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer );
+    void appendLiteralStringEncrypt( std::string_view rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer );
 
     /* creates fonts and subsets that will be emitted later */
     void registerGlyph(const GlyphItem* pGlyph, const PhysicalFontFace* pFont, const std::vector<sal_Ucs>& rCodeUnits, sal_uInt8& nMappedGlyph, sal_Int32& nMappedFontObject);
