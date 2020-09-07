@@ -16,6 +16,24 @@
       "revId": "1d465aa0159327f2666d02af4db7f1d8e5fbca8a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f53e23d3_9623da4f",
+        "filename": "formula/source/core/api/FormulaCompiler.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 2329,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-09-07T14:03:00Z",
+      "side": 1,
+      "message": "What this is supposed to fix: When an xlsx with an invalid sheet reference is loaded, and saved again, this should replace the invalid sheet reference with the \"#REF\" error string.\nAs this is not directly a fix for tdf#108673 I will move this part into a different patch to make it easier to review this patch and hopefully get it in soon.",
+      "parentUuid": "cb5ffe84_7c3a686e",
+      "revId": "1d465aa0159327f2666d02af4db7f1d8e5fbca8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
