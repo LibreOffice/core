@@ -111,6 +111,7 @@ DataLabelResources::DataLabelResources(weld::Builder* pBuilder, weld::Window* pP
     , m_xLB_TextDirection(new TextDirectionListBox(pBuilder->weld_combo_box("LB_LABEL_TEXTDIR")))
     , m_xDC_Dial(new svx::DialControl)
     , m_xDC_DialWin(new weld::CustomWeld(*pBuilder, "CT_DIAL", *m_xDC_Dial))
+    , m_xCBCustomLeaderLines(pBuilder->weld_check_button("CB_CUSTOM_LEADER_LINES"))
 {
     m_xDC_Dial->SetText(m_xFT_Dial->get_label());
 
@@ -143,6 +144,7 @@ DataLabelResources::DataLabelResources(weld::Builder* pBuilder, weld::Window* pP
     m_xCBCategory->connect_toggled(  LINK( this, DataLabelResources, CheckHdl ));
     m_xCBSymbol->connect_toggled(  LINK( this, DataLabelResources, CheckHdl ));
     m_xCBWrapText->connect_toggled(  LINK( this, DataLabelResources, CheckHdl ));
+    m_xCBCustomLeaderLines->connect_toggled( LINK( this, DataLabelResources, CheckHdl ));
 
     m_bNumberFormatMixedState = !lcl_ReadNumberFormatFromItemSet( rInAttrs, SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_SOURCE, m_nNumberFormatForValue, m_bSourceFormatForValue, m_bSourceFormatMixedState );
     m_bPercentFormatMixedState = !lcl_ReadNumberFormatFromItemSet( rInAttrs, SCHATTR_PERCENT_NUMBERFORMAT_VALUE, SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, m_nNumberFormatForPercent, m_bSourceFormatForPercent , m_bPercentSourceMixedState);
@@ -280,6 +282,8 @@ void DataLabelResources::FillItemSet( SfxItemSet* rOutAttrs ) const
         rOutAttrs->Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_SYMBOL, m_xCBSymbol->get_active()) );
     if( m_xCBWrapText->get_state()!= TRISTATE_INDET )
         rOutAttrs->Put( SfxBoolItem( SCHATTR_DATADESCR_WRAP_TEXT, m_xCBWrapText->get_active()) );
+    if( m_xCBCustomLeaderLines->get_state() != TRISTATE_INDET )
+        rOutAttrs->Put(SfxBoolItem( SCHATTR_DATADESCR_CUSTOM_LEADER_LINES, m_xCBCustomLeaderLines->get_active()) );
 
     auto const aSep = our_aLBEntryMap[m_xLB_Separator->get_active()];
     rOutAttrs->Put( SfxStringItem( SCHATTR_DATADESCR_SEPARATOR, aSep) );
@@ -311,6 +315,7 @@ void DataLabelResources::Reset(const SfxItemSet& rInAttrs)
     lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_SHOW_CATEGORY, *m_xCBCategory );
     lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_SHOW_SYMBOL, *m_xCBSymbol );
     lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_WRAP_TEXT, *m_xCBWrapText );
+    lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_CUSTOM_LEADER_LINES, *m_xCBCustomLeaderLines );
 
     m_bNumberFormatMixedState = !lcl_ReadNumberFormatFromItemSet( rInAttrs, SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_SOURCE, m_nNumberFormatForValue, m_bSourceFormatForValue, m_bSourceFormatMixedState );
     m_bPercentFormatMixedState = !lcl_ReadNumberFormatFromItemSet( rInAttrs, SCHATTR_PERCENT_NUMBERFORMAT_VALUE, SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, m_nNumberFormatForPercent, m_bSourceFormatForPercent ,  m_bPercentSourceMixedState);
