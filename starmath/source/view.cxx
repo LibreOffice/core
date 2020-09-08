@@ -490,7 +490,6 @@ void SmGraphicWindow::KeyInput(const KeyEvent& rKEvt)
         default:
         {
             sal_Unicode code = rKEvt.GetCharCode();
-            SmBraceNode* pBraceNode = nullptr;
 
             if(code == ' ') {
                 rCursor.InsertElement(BlankElement);
@@ -506,13 +505,14 @@ void SmGraphicWindow::KeyInput(const KeyEvent& rKEvt)
                 rCursor.InsertElement(FactorialElement);
             }else if(code == '%') {
                 rCursor.InsertElement(PercentElement);
-            }else if(code == ')' && rCursor.IsAtTailOfBracket(SmBracketType::Round, &pBraceNode)) {
-                rCursor.MoveAfterBracket(pBraceNode);
-            }else if(code == ']' && rCursor.IsAtTailOfBracket(SmBracketType::Square, &pBraceNode)) {
-                rCursor.MoveAfterBracket(pBraceNode);
-            }else if(code == '}' && rCursor.IsAtTailOfBracket(SmBracketType::Curly, &pBraceNode)) {
-                rCursor.MoveAfterBracket(pBraceNode);
-            }else{
+            }
+            else if ((code == ')' && rCursor.IsAtTailOfBracket(SmBracketType::Round))
+                     || (code == ']' && rCursor.IsAtTailOfBracket(SmBracketType::Square))
+                     || (code == '}' && rCursor.IsAtTailOfBracket(SmBracketType::Curly)))
+            {
+                rCursor.Move(this, MoveRight);
+            }
+            else{
                 if(code != 0){
                     rCursor.InsertText(OUString(code));
                 }else if (! (GetView() && GetView()->KeyInput(rKEvt)) )

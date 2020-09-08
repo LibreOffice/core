@@ -103,15 +103,14 @@ private:
 
 /** An entry in SmCaretPosGraph */
 struct SmCaretPosGraphEntry{
-    SmCaretPosGraphEntry(SmCaretPos pos,
-                         SmCaretPosGraphEntry* left,
-                         SmCaretPosGraphEntry* right) {
-        CaretPos = pos;
-        Left = left;
-        Right = right;
+    SmCaretPosGraphEntry(SmCaretPos pos, SmCaretPosGraphEntry* left, SmCaretPosGraphEntry* right)
+        : CaretPos{pos}
+        , Left{left}
+        , Right{right}
+    {
     }
     /** Caret position */
-    SmCaretPos CaretPos;
+    const SmCaretPos CaretPos;
     /** Entry to the left visually */
     SmCaretPosGraphEntry* Left;
     /** Entry to the right visually */

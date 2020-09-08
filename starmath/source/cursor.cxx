@@ -1327,7 +1327,8 @@ void SmCursor::RequestRepaint(){
     }
 }
 
-bool SmCursor::IsAtTailOfBracket(SmBracketType eBracketType, SmBraceNode** ppBraceNode) const {
+bool SmCursor::IsAtTailOfBracket(SmBracketType eBracketType) const
+{
     const SmCaretPos pos = GetPosition();
     if (!pos.IsValid()) {
         return false;
@@ -1391,22 +1392,8 @@ bool SmCursor::IsAtTailOfBracket(SmBracketType eBracketType, SmBraceNode** ppBra
         return false;
     }
 
-    if (ppBraceNode) {
-        *ppBraceNode = pBraceNode;
-    }
-
     return true;
 }
-
-void SmCursor::MoveAfterBracket(SmBraceNode* pBraceNode)
-{
-    mpPosition->CaretPos.pSelectedNode = pBraceNode;
-    mpPosition->CaretPos.nIndex = 1;
-    mpAnchor->CaretPos.pSelectedNode = pBraceNode;
-    mpAnchor->CaretPos.nIndex = 1;
-    RequestRepaint();
-}
-
 
 /////////////////////////////////////// SmNodeListParser
 
