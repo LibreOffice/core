@@ -49,6 +49,7 @@
 #include <algorithm>
 #include <deque>
 #include <memory>
+#include <string_view>
 #include <unordered_map>
 #include <vector>
 #include "dp_compbackenddb.hxx"
@@ -423,7 +424,7 @@ void BackendImpl::initServiceRdbFiles()
             &oldRDB, makeURL( getCachePath(), m_commonRDB_orig),
             xCmdEnv, false /* no throw */ );
     }
-    m_commonRDB = m_commonRDB_orig == "common.rdb" ? OUStringLiteral(u"common_.rdb") : OUStringLiteral(u"common.rdb");
+    m_commonRDB = m_commonRDB_orig == "common.rdb" ? std::u16string_view(u"common_.rdb") : std::u16string_view(u"common.rdb");
     if (oldRDB.get().is())
     {
         cacheDir.transferContent(

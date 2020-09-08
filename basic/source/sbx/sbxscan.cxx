@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <config_features.h>
 
 #include <vcl/errcode.hxx>
@@ -603,7 +607,7 @@ enum class VbaFormatType
 struct VbaFormatInfo
 {
     VbaFormatType meType;
-    OUStringLiteral mpVbaFormat; // Format string in vba
+    std::u16string_view mpVbaFormat; // Format string in vba
     NfIndexTableOffset meOffset; // SvNumberFormatter format index, if meType = VbaFormatType::Offset
     const char* mpOOoFormat;     // if meType = VbaFormatType::UserDefined
 };
@@ -611,17 +615,17 @@ struct VbaFormatInfo
 #if HAVE_FEATURE_SCRIPTING
 const VbaFormatInfo pFormatInfoTable[] =
 {
-    { VbaFormatType::Offset,      OUStringLiteral(u"Long Date"),   NF_DATE_SYSTEM_LONG,    nullptr },
-    { VbaFormatType::UserDefined, OUStringLiteral(u"Medium Date"), NF_NUMBER_STANDARD,     "DD-MMM-YY" },
-    { VbaFormatType::Offset,      OUStringLiteral(u"Short Date"),  NF_DATE_SYSTEM_SHORT,   nullptr },
-    { VbaFormatType::UserDefined, OUStringLiteral(u"Long Time"),   NF_NUMBER_STANDARD,     "H:MM:SS AM/PM" },
-    { VbaFormatType::Offset,      OUStringLiteral(u"Medium Time"), NF_TIME_HHMMAMPM,       nullptr },
-    { VbaFormatType::Offset,      OUStringLiteral(u"Short Time"),  NF_TIME_HHMM,           nullptr },
-    { VbaFormatType::Offset,      OUStringLiteral(u"ddddd"),       NF_DATE_SYSTEM_SHORT,   nullptr },
-    { VbaFormatType::Offset,      OUStringLiteral(u"dddddd"),      NF_DATE_SYSTEM_LONG,    nullptr },
-    { VbaFormatType::UserDefined, OUStringLiteral(u"ttttt"),       NF_NUMBER_STANDARD,     "H:MM:SS AM/PM" },
-    { VbaFormatType::Offset,      OUStringLiteral(u"ww"),          NF_DATE_WW,             nullptr },
-    { VbaFormatType::Null,        OUStringLiteral(u""),            NF_INDEX_TABLE_ENTRIES, nullptr }
+    { VbaFormatType::Offset,      std::u16string_view(u"Long Date"),   NF_DATE_SYSTEM_LONG,    nullptr },
+    { VbaFormatType::UserDefined, std::u16string_view(u"Medium Date"), NF_NUMBER_STANDARD,     "DD-MMM-YY" },
+    { VbaFormatType::Offset,      std::u16string_view(u"Short Date"),  NF_DATE_SYSTEM_SHORT,   nullptr },
+    { VbaFormatType::UserDefined, std::u16string_view(u"Long Time"),   NF_NUMBER_STANDARD,     "H:MM:SS AM/PM" },
+    { VbaFormatType::Offset,      std::u16string_view(u"Medium Time"), NF_TIME_HHMMAMPM,       nullptr },
+    { VbaFormatType::Offset,      std::u16string_view(u"Short Time"),  NF_TIME_HHMM,           nullptr },
+    { VbaFormatType::Offset,      std::u16string_view(u"ddddd"),       NF_DATE_SYSTEM_SHORT,   nullptr },
+    { VbaFormatType::Offset,      std::u16string_view(u"dddddd"),      NF_DATE_SYSTEM_LONG,    nullptr },
+    { VbaFormatType::UserDefined, std::u16string_view(u"ttttt"),       NF_NUMBER_STANDARD,     "H:MM:SS AM/PM" },
+    { VbaFormatType::Offset,      std::u16string_view(u"ww"),          NF_DATE_WW,             nullptr },
+    { VbaFormatType::Null,        std::u16string_view(u""),            NF_INDEX_TABLE_ENTRIES, nullptr }
 };
 
 const VbaFormatInfo* getFormatInfo( const OUString& rFmt )

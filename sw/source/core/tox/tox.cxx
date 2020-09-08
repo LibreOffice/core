@@ -45,8 +45,6 @@ using namespace std;
 
 const sal_Unicode C_NUM_REPL      = '@';
 const sal_Unicode C_END_PAGE_NUM   = '~';
-const OUStringLiteral S_PAGE_DELI(u", ");
-
 
 namespace
 {

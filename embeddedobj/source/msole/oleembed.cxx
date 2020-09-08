@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <oleembobj.hxx>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/EmbedVerbs.hpp>
@@ -698,7 +702,7 @@ namespace
 
         //various stream names that can contain the real document contents for
         //this object in a straightforward direct way
-        static const OUStringLiteral aStreamNames[] =
+        static const std::u16string_view aStreamNames[] =
         {
             u"CONTENTS",
             u"Package",

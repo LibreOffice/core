@@ -21,6 +21,8 @@
 
 #include <initializer_list>
 #include <memory>
+#include <string_view>
+
 #include <sal/log.hxx>
 
 #include <cmdid.h>
@@ -2184,7 +2186,7 @@ uno::Sequence< OUString > SwXShape::getSupportedServiceNames()
     if (SvxShape* pSvxShape = GetSvxShape())
         aSeq = pSvxShape->getSupportedServiceNames();
     return comphelper::concatSequences(
-        aSeq, std::initializer_list<OUStringLiteral>{ u"com.sun.star.drawing.Shape" });
+        aSeq, std::initializer_list<std::u16string_view>{ u"com.sun.star.drawing.Shape" });
 }
 
 SvxShape*   SwXShape::GetSvxShape()

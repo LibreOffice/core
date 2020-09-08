@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
 
 #include <svtools/toolbarmenu.hxx>
 #include <vcl/toolbox.hxx>
@@ -44,7 +47,7 @@ const sal_Int32 gSkewList[] = { 135, 90, 45, 180, 0, -360, -135, -90, -45 };
 const char g_sExtrusionDirection[] = ".uno:ExtrusionDirection";
 const char g_sExtrusionProjection[] = ".uno:ExtrusionProjection";
 
-const OUStringLiteral aLightOffBmps[] =
+const std::u16string_view aLightOffBmps[] =
 {
     u"" RID_SVXBMP_LIGHT_OFF_FROM_TOP_LEFT,
     u"" RID_SVXBMP_LIGHT_OFF_FROM_TOP,
@@ -57,7 +60,7 @@ const OUStringLiteral aLightOffBmps[] =
     u"" RID_SVXBMP_LIGHT_OFF_FROM_BOTTOM_RIGHT
 };
 
-const OUStringLiteral aLightOnBmps[] =
+const std::u16string_view aLightOnBmps[] =
 {
     u"" RID_SVXBMP_LIGHT_ON_FROM_TOP_LEFT,
     u"" RID_SVXBMP_LIGHT_ON_FROM_TOP,
@@ -70,7 +73,7 @@ const OUStringLiteral aLightOnBmps[] =
     u"" RID_SVXBMP_LIGHT_ON_FROM_BOTTOM_RIGHT
 };
 
-const OUStringLiteral aLightPreviewBmps[] =
+const std::u16string_view aLightPreviewBmps[] =
 {
     u"" RID_SVXBMP_LIGHT_PREVIEW_FROM_TOP_LEFT,
     u"" RID_SVXBMP_LIGHT_PREVIEW_FROM_TOP,
@@ -83,7 +86,7 @@ const OUStringLiteral aLightPreviewBmps[] =
     u"" RID_SVXBMP_LIGHT_PREVIEW_FROM_BOTTOM_RIGHT
 };
 
-const OUStringLiteral aDirectionBmps[] =
+const std::u16string_view aDirectionBmps[] =
 {
     u"" RID_SVXBMP_DIRECTION_DIRECTION_NW,
     u"" RID_SVXBMP_DIRECTION_DIRECTION_N,

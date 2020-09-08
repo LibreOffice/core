@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <initializer_list>
+#include <string_view>
 
 #include <o3tl/safeint.hxx>
 #include <vcl/svapp.hxx>
@@ -365,7 +366,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextContent::getSupportedServiceNames()
 {
     return comphelper::concatSequences(
         SvxUnoTextRangeBase::getSupportedServiceNames(),
-        std::initializer_list<OUStringLiteral>{ u"com.sun.star.style.ParagraphProperties",
+        std::initializer_list<std::u16string_view>{ u"com.sun.star.style.ParagraphProperties",
                                           u"com.sun.star.style.ParagraphPropertiesComplex",
                                           u"com.sun.star.style.ParagraphPropertiesAsian",
                                           u"com.sun.star.text.TextContent",
@@ -644,7 +645,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextCursor::getSupportedServiceNames()
 {
     return comphelper::concatSequences(
         SvxUnoTextRangeBase::getSupportedServiceNames(),
-        std::initializer_list<OUStringLiteral>{ u"com.sun.star.style.ParagraphProperties",
+        std::initializer_list<std::u16string_view>{ u"com.sun.star.style.ParagraphProperties",
                                           u"com.sun.star.style.ParagraphPropertiesComplex",
                                           u"com.sun.star.style.ParagraphPropertiesAsian",
                                           u"com.sun.star.text.TextCursor" });

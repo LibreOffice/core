@@ -11,6 +11,8 @@
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
 
+#include <string_view>
+
 struct S1
 {
     int x, y;
@@ -52,13 +54,13 @@ S2 const& f3()
 // no warning expected
 struct S4
 {
-    OUStringLiteral const cName;
+    std::u16string_view const cName;
     bool const bCanBeVisible;
 };
 S4 const& f4()
 {
     static const S4 s1[] = {
-        { OUStringLiteral(u"/DocColor"), false },
+        { std::u16string_view(u"/DocColor"), false },
     };
     return s1[0];
 }

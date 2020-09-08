@@ -57,6 +57,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <memory>
+#include <string_view>
 
 using namespace css;
 using namespace com::sun::star::uno;
@@ -217,7 +218,7 @@ private:
 
 // important: The order and position of the elements must match the constant
 // definition of "css::ui::UIElementType"
-OUStringLiteral UIELEMENTTYPENAMES[] =
+std::u16string_view UIELEMENTTYPENAMES[] =
 {
     u"",  // Dummy value for unknown!
     u"" UIELEMENTTYPE_MENUBAR_NAME,
@@ -356,7 +357,7 @@ void ModuleUIConfigurationManager::impl_preloadUIElementTypeList( Layer eLayer, 
         return;
 
     OUString aResURLPrefix =
-        RESOURCEURL_PREFIX +
+        OUString::Concat(RESOURCEURL_PREFIX) +
         UIELEMENTTYPENAMES[ nElementType ] +
         "/";
 

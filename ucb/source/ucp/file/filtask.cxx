@@ -131,8 +131,6 @@ const OUStringLiteral IsHidden( u"IsHidden" );
 const OUStringLiteral ContentType( u"ContentType" );
 const OUStringLiteral IsReadOnly( u"IsReadOnly" );
 const OUStringLiteral CreatableContentsInfo( u"CreatableContentsInfo" );
-const OUStringLiteral TaskManager::FolderContentType( u"application/vnd.sun.staroffice.fsys-folder" );
-const OUStringLiteral TaskManager::FileContentType( u"application/vnd.sun.staroffice.fsys-file" );
 
 TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxContext,
               FileProvider* pProvider, bool bWithConfig )

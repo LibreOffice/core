@@ -719,7 +719,7 @@ bool ImplicitBoolConversion::VisitImplicitCastExpr(
     if (ignoreLocation(expr)) {
         return true;
     }
-    if (isBool(expr->getSubExprAsWritten()) && !isBool(expr)) {
+    if (isBool(compat::getSubExprAsWritten(expr)) && !isBool(expr)) {
         // Ignore NoOp from 'sal_Bool' (aka 'unsigned char') to 'const unsigned
         // char' in makeAny(b) with b of type sal_Bool:
         if (expr->getCastKind() != CK_NoOp) {
