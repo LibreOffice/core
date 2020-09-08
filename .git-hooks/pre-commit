@@ -85,6 +85,14 @@ sub check_whitespaces($)
             {
                 bad_line("temporary debug in commit", $_, $src_limited);
             }
+            if ((/OOXMLIMPORT/) and ($filename =~ /ooxmlexport/))
+            {
+                bad_line("OOXMLIMPORT definition used in a ooxmlexport file", $_, "cxx");
+            }
+            if ((/OOXMLEXPORT/) and ($filename =~ /ooxmlimport/))
+            {
+                bad_line("OOXMLEXPORT definition used in a ooxmlimport file", $_, "cxx");
+            }
             if (/<property name="use_markup">True<\/property>/)
             {
                 bad_line("use font attributes instead of use-markup", $_, "ui");
