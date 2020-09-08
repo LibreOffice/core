@@ -2246,6 +2246,19 @@ bool SwTransferable::PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
                     }
                 }
             }
+            else if (rData.HasFormat(SotClipboardFormatId::SIMPLE_FILE))
+            {
+                OUString sFile;
+                if (rData.GetString(nFormat, sFile) && !sFile.isEmpty())
+                {
+                    // Copied from sd::View::DropInsertFileHdl
+                    uno::Sequence< beans::PropertyValue > aMedium(1);
+                    aMedium[0].Name = "URL";
+                    aMedium[0].Value <<= sFile;
+                    SwDocShell* pDocSh = rSh.GetDoc()->GetDocShell();
+                    xObj = pDocSh->GetEmbeddedObjectContainer().InsertEmbeddedObject(aMedium, aName);
+                }
+            }
         }
 
         if ( xStrm.is() && !xObj.is() )
@@ -3022,6 +3035,11 @@ bool SwTransferable::PasteFileName( TransferableDataHelper& rData,
 
                     rSh.StartInsertRegionDialog( aSect ); // starts dialog asynchronously
                     bRet = true;
+                }
+                else if (SwPasteSdr::Insert == nAction && rData.HasFormat(SotClipboardFormatId::SIMPLE_FILE))
+                {
+                    // insert file as OLE
+                    PasteOLE(rData, rSh, nFormat, nActionFlags, nullptr == pPt);
                 }
                 else if( SwPasteSdr::SetAttr == nAction ||
                         ( bIsURLFile && SwPasteSdr::Insert == nAction ))
