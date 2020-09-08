@@ -26,6 +26,8 @@
 
 #include <cstddef>
 #include <string.h>
+#include <string_view>
+
 #include "EApi.h"
 
 using namespace connectivity::evoab;
@@ -978,7 +980,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTableTypes(  )
     /* Don't need to change as evoab driver supports only table */
 
     // there exists no possibility to get table types so we have to check
-    static const OUStringLiteral sTableTypes[] =
+    static const std::u16string_view sTableTypes[] =
     {
         u"TABLE" // Currently we only support a 'TABLE' nothing more complex
     };

@@ -53,6 +53,7 @@
 #include <unotools/sharedunocomponent.hxx>
 
 #include <memory>
+#include <string_view>
 
 using namespace ::dbaccess;
 using namespace ::dbtools;
@@ -1725,7 +1726,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
         if ( !sFilter.isEmpty() && !aSQL.isEmpty() )
         {
             sFilter = L_BRACKET + sFilter + R_BRACKET +
-                (andCriteria ? OUStringLiteral(u"" STR_AND) : OUStringLiteral(u"" STR_OR));
+                (andCriteria ? std::u16string_view(u"" STR_AND) : std::u16string_view(u"" STR_OR));
         }
         sFilter += aSQL;
 

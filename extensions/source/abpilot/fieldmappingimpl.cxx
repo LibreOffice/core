@@ -153,7 +153,7 @@ namespace abp
 
                 // access the configuration information which the driver uses for determining its column names
                 OUString sDriverAliasesNodeName(
-                    OUStringLiteral(sDriverSettingsNodeName)
+                    OUString::Concat(sDriverSettingsNodeName)
                     + "/ColumnAliases");
 
                 // create a config node for this

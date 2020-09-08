@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <unotools/wincodepage.hxx>
 #include <rtl/string.h>
 #include <rtl/textenc.h>
@@ -15,7 +19,7 @@ namespace{
 
 struct LangEncodingDef
 {
-    const OUStringLiteral msLangStr;
+    const std::u16string_view msLangStr;
     rtl_TextEncoding meTextEncoding;
 };
 

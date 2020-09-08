@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "xmlimp.hxx"
 
 #include <initializer_list>
@@ -103,7 +107,7 @@ OUString FindCoverImage(const OUString& rDocumentBaseURL, OUString& rMimeType,
     if (rDocumentBaseURL.isEmpty())
         return aRet;
 
-    static const std::initializer_list<OUStringLiteral> vExtensions
+    static const std::initializer_list<std::u16string_view> vExtensions
         = { u"gif", u"jpg", u"png", u"svg" };
 
     OUString aMediaDir = FindMediaDir(rDocumentBaseURL, rFilterData);

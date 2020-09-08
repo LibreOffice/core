@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XModifiable2.hpp>
@@ -169,7 +173,7 @@ XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
         }
 
         OUString sClass;
-        static OUStringLiteral const prefixes[] = {
+        static std::u16string_view const prefixes[] = {
             u"application/vnd.oasis.openoffice.",
             u"application/x-vnd.oasis.openoffice.",
             u"application/vnd.oasis.opendocument.",
@@ -184,15 +188,15 @@ XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
 
         if( !sClass.isEmpty() )
         {
-            static struct { XMLTokenEnum eClass; OUStringLiteral sFilterService;
+            static struct { XMLTokenEnum eClass; std::u16string_view sFilterService;
             } const aServiceMap[] = {
-                { XML_TEXT,         OUStringLiteral(u"" XML_IMPORT_FILTER_WRITER) },
-                { XML_ONLINE_TEXT,  OUStringLiteral(u"" XML_IMPORT_FILTER_WRITER) },
-                { XML_SPREADSHEET,  OUStringLiteral(u"" XML_IMPORT_FILTER_CALC) },
-                { XML_DRAWING,      OUStringLiteral(u"" XML_IMPORT_FILTER_DRAW) },
-                { XML_GRAPHICS,     OUStringLiteral(u"" XML_IMPORT_FILTER_DRAW) },
-                { XML_PRESENTATION, OUStringLiteral(u"" XML_IMPORT_FILTER_IMPRESS) },
-                { XML_CHART,        OUStringLiteral(u"" XML_IMPORT_FILTER_CHART) }};
+                { XML_TEXT,         std::u16string_view(u"" XML_IMPORT_FILTER_WRITER) },
+                { XML_ONLINE_TEXT,  std::u16string_view(u"" XML_IMPORT_FILTER_WRITER) },
+                { XML_SPREADSHEET,  std::u16string_view(u"" XML_IMPORT_FILTER_CALC) },
+                { XML_DRAWING,      std::u16string_view(u"" XML_IMPORT_FILTER_DRAW) },
+                { XML_GRAPHICS,     std::u16string_view(u"" XML_IMPORT_FILTER_DRAW) },
+                { XML_PRESENTATION, std::u16string_view(u"" XML_IMPORT_FILTER_IMPRESS) },
+                { XML_CHART,        std::u16string_view(u"" XML_IMPORT_FILTER_CHART) }};
             for (auto const & entry: aServiceMap)
             {
                 if( IsXMLToken( sClass, entry.eClass ) )
