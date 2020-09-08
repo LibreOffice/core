@@ -2402,7 +2402,7 @@ const Wallpaper& ImplListBox::GetDisplayBackground() const
     return maLBWindow->GetDisplayBackground();
 }
 
-bool ImplListBox::HandleWheelAsCursorTravel( const CommandEvent& rCEvt )
+bool ImplListBox::HandleWheelAsCursorTravel(const CommandEvent& rCEvt, Control& rControl)
 {
     bool bDone = false;
     if ( rCEvt.GetCommand() == CommandEventId::Wheel )
@@ -2410,6 +2410,8 @@ bool ImplListBox::HandleWheelAsCursorTravel( const CommandEvent& rCEvt )
         const CommandWheelData* pData = rCEvt.GetWheelData();
         if( !pData->GetModifier() && ( pData->GetMode() == CommandWheelMode::SCROLL ) )
         {
+            if (!rControl.HasChildPathFocus())
+                rControl.GrabFocus();
             sal_uInt16 nKey = ( pData->GetDelta() < 0 ) ? KEY_DOWN : KEY_UP;
             KeyEvent aKeyEvent( 0, vcl::KeyCode( nKey ) );
             bDone = ProcessKeyInput( aKeyEvent );

@@ -784,7 +784,7 @@ bool ComboBox::EventNotify( NotifyEvent& rNEvt )
                 )
             )
         {
-            bDone = m_pImpl->m_pImplLB->HandleWheelAsCursorTravel( *rNEvt.GetCommandEvent() );
+            bDone = m_pImpl->m_pImplLB->HandleWheelAsCursorTravel(*rNEvt.GetCommandEvent(), *this);
         }
         else
         {

@@ -554,6 +554,9 @@ bool SpinField::EventNotify(NotifyEvent& rNEvt)
                     else
                         Up();
                     bDone = true;
+
+                    if (!HasChildPathFocus())
+                        GrabFocus();
                 }
             }
             else
