@@ -602,6 +602,50 @@ DECLARE_OOXMLIMPORT_TEST(testTdf103345, "numbering-circle.docx")
     }
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf125038, "tdf125038.docx")
+{
+    OUString aActual = getParagraph(1)->getString();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: phone:...
+    // - Actual  : result1result2phone:...
+    // i.e. the result if the inner MERGEFIELD fields ended up in the body text.
+    CPPUNIT_ASSERT_EQUAL(OUString("phone: \t1234567890"), aActual);
+}
+
+DECLARE_OOXMLIMPORT_TEST(testTdf125038b, "tdf125038b.docx")
+{
+    // Load a document with an IF field, where the IF field command contains a paragraph break.
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParagraphAccess(xTextDocument->getText(),
+                                                                   uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphs = xParagraphAccess->createEnumeration();
+    CPPUNIT_ASSERT(xParagraphs->hasMoreElements());
+    uno::Reference<text::XTextRange> xParagraph(xParagraphs->nextElement(), uno::UNO_QUERY);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: phone: 1234
+    // - Actual  :
+    // i.e. the first paragraph was empty and the second paragraph had the content.
+    CPPUNIT_ASSERT_EQUAL(OUString("phone: 1234"), xParagraph->getString());
+    CPPUNIT_ASSERT(xParagraphs->hasMoreElements());
+    xParagraphs->nextElement();
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expression: !xParagraphs->hasMoreElements()
+    // i.e. the document had 3 paragraphs, while only 2 was expected.
+    CPPUNIT_ASSERT(!xParagraphs->hasMoreElements());
+}
+
+DECLARE_OOXMLIMPORT_TEST(testTdf125038c, "tdf125038c.docx")
+{
+    OUString aActual = getParagraph(1)->getString();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: email: test@test.test
+    // - Actual  : email:
+    // I.e. the result of the MERGEFIELD field inside an IF field was lost.
+    CPPUNIT_ASSERT_EQUAL(OUString("email: test@test.test"), aActual);
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf130214, "tdf130214.docx")
 {
     // Currently this file imports with errors because of tdf#126435; it must not segfault on load

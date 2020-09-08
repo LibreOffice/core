@@ -57,7 +57,7 @@ protected:
     }
 };
 
-DECLARE_OOXMLIMPORT_TEST(Tdf130907, "tdf130907.docx")
+DECLARE_OOXMLEXPORT_TEST(Tdf130907, "tdf130907.docx")
 {
     uno::Reference<text::XTextRange> xPara1 = getParagraph(2);
     CPPUNIT_ASSERT(xPara1.is());
@@ -120,7 +120,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135595_HFtableWrap_c12, "tdf135595_HFtableWrap_c
     CPPUNIT_ASSERT_MESSAGE("Text must not wrap around header image", nRowHeight < 800);
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf123622, "tdf123622.docx")
+DECLARE_OOXMLEXPORT_TEST(testTdf123622, "tdf123622.docx")
 {
     uno::Reference<beans::XPropertySet> XPropsRight(getShape(1),uno::UNO_QUERY);
     sal_Int16 nRelativePosR = 0;
@@ -231,7 +231,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf130814ooxml, "tdf130814.docx")
         p_XmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w:u", "val", "single");
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf129888vml, "tdf129888vml.docx")
+DECLARE_OOXMLEXPORT_TEST(testTdf129888vml, "tdf129888vml.docx")
 {
     //the line shape has anchor in the first cell however it has to
     //be positioned to an another cell. To reach this we must handle
@@ -245,7 +245,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf129888vml, "tdf129888vml.docx")
                                  false, bValue);
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf129888dml, "tdf129888dml.docx")
+DECLARE_OOXMLEXPORT_TEST(testTdf129888dml, "tdf129888dml.docx")
 {
     //the shape has anchor in the first cell however it has to
     //be positioned to the right side of the page. To reach this we must handle
@@ -639,17 +639,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf130167_spilloverHeaderShape, "testTdf130167_spil
     CPPUNIT_ASSERT(xNameAccess->getCount() < 4);
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf125038, "tdf125038.docx")
-{
-    OUString aActual = getParagraph(1)->getString();
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: phone:...
-    // - Actual  : result1result2phone:...
-    // i.e. the result if the inner MERGEFIELD fields ended up in the body text.
-    CPPUNIT_ASSERT_EQUAL(OUString("phone: \t1234567890"), aActual);
-}
-
-DECLARE_OOXMLIMPORT_TEST(testTdf124986, "tdf124986.docx")
+DECLARE_OOXMLEXPORT_TEST(testTdf124986, "tdf124986.docx")
 {
     // Load a document with SET fields, where the SET fields contain leading/trailing quotation marks and spaces.
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
@@ -667,39 +657,6 @@ DECLARE_OOXMLIMPORT_TEST(testTdf124986, "tdf124986.docx")
             CPPUNIT_ASSERT_EQUAL(OUString("demo"), aValue);
         }
     }
-}
-
-DECLARE_OOXMLIMPORT_TEST(testTdf125038b, "tdf125038b.docx")
-{
-    // Load a document with an IF field, where the IF field command contains a paragraph break.
-    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XEnumerationAccess> xParagraphAccess(xTextDocument->getText(), uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> xParagraphs = xParagraphAccess->createEnumeration();
-    CPPUNIT_ASSERT(xParagraphs->hasMoreElements());
-    uno::Reference<text::XTextRange> xParagraph(xParagraphs->nextElement(), uno::UNO_QUERY);
-
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: phone: 1234
-    // - Actual  :
-    // i.e. the first paragraph was empty and the second paragraph had the content.
-    CPPUNIT_ASSERT_EQUAL(OUString("phone: 1234"), xParagraph->getString());
-    CPPUNIT_ASSERT(xParagraphs->hasMoreElements());
-    xParagraphs->nextElement();
-
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expression: !xParagraphs->hasMoreElements()
-    // i.e. the document had 3 paragraphs, while only 2 was expected.
-    CPPUNIT_ASSERT(!xParagraphs->hasMoreElements());
-}
-
-DECLARE_OOXMLIMPORT_TEST(testTdf125038c, "tdf125038c.docx")
-{
-    OUString aActual = getParagraph(1)->getString();
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: email: test@test.test
-    // - Actual  : email:
-    // I.e. the result of the MERGEFIELD field inside an IF field was lost.
-    CPPUNIT_ASSERT_EQUAL(OUString("email: test@test.test"), aActual);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf83309, "tdf83309.docx")
