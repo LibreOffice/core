@@ -30,6 +30,7 @@ $(eval $(call gb_UIConfig_add_uifiles,sfx,\
 	sfx2/uiconfig/ui/editdocumentdialog \
 	sfx2/uiconfig/ui/editdurationdialog \
 	sfx2/uiconfig/ui/emojicontrol \
+	sfx2/uiconfig/ui/extrabutton \
 	sfx2/uiconfig/ui/errorfindemaildialog \
 	sfx2/uiconfig/ui/floatingrecord \
 	sfx2/uiconfig/ui/helpbookmarkpage \
@@ -39,6 +40,7 @@ $(eval $(call gb_UIConfig_add_uifiles,sfx,\
 	sfx2/uiconfig/ui/helpmanual \
 	sfx2/uiconfig/ui/helpsearchpage \
 	sfx2/uiconfig/ui/helpwindow \
+	sfx2/uiconfig/ui/infobar \
 	sfx2/uiconfig/ui/inputdialog \
 	sfx2/uiconfig/ui/licensedialog \
 	sfx2/uiconfig/ui/linefragment \

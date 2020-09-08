@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <com/sun/star/util/URLTransformer.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
+#include <comphelper/processfactory.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <vcl/builderpage.hxx>
@@ -487,6 +490,61 @@ int GetMinimumEditHeight()
         Application::CreateBuilder(nullptr, "cui/ui/namedialog.ui"));
     std::unique_ptr<weld::Entry> xEntry(xBuilder->weld_entry("name_entry"));
     return xEntry->get_preferred_size().Height();
+}
+
+WidgetStatusListener::WidgetStatusListener(weld::Widget* widget, const OUString& aCommand)
+    : mWidget(widget)
+{
+    css::uno::Reference<css::uno::XComponentContext> xContext
+        = ::comphelper::getProcessComponentContext();
+    css::uno::Reference<css::frame::XDesktop2> xDesktop = css::frame::Desktop::create(xContext);
+
+    css::uno::Reference<css::frame::XFrame> xFrame(xDesktop->getActiveFrame());
+    if (!xFrame.is())
+        xFrame = xDesktop;
+
+    mxFrame = xFrame;
+
+    maCommandURL.Complete = aCommand;
+    css::uno::Reference<css::util::XURLTransformer> xParser
+        = css::util::URLTransformer::create(xContext);
+    xParser->parseStrict(maCommandURL);
+}
+
+void WidgetStatusListener::startListening()
+{
+    if (mxDispatch.is())
+        mxDispatch->removeStatusListener(this, maCommandURL);
+
+    css::uno::Reference<css::frame::XDispatchProvider> xDispatchProvider(mxFrame,
+                                                                         css::uno::UNO_QUERY);
+    if (!xDispatchProvider.is())
+        return;
+
+    mxDispatch = xDispatchProvider->queryDispatch(maCommandURL, "", 0);
+    if (mxDispatch.is())
+        mxDispatch->addStatusListener(this, maCommandURL);
+}
+
+void WidgetStatusListener::statusChanged(const css::frame::FeatureStateEvent& rEvent)
+{
+    mWidget->set_sensitive(rEvent.IsEnabled);
+}
+
+void WidgetStatusListener::disposing(const css::lang::EventObject& /*Source*/)
+{
+    mxDispatch.clear();
+}
+
+void WidgetStatusListener::dispose()
+{
+    if (mxDispatch.is())
+    {
+        mxDispatch->removeStatusListener(this, maCommandURL);
+        mxDispatch.clear();
+    }
+    mxFrame.clear();
+    mWidget = nullptr;
 }
 }
 

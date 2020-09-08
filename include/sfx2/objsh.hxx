@@ -41,6 +41,7 @@
 #include <functional>
 #include <sfx2/AccessibilityIssue.hxx>
 
+namespace weld {class Button; }
 class SbxValue;
 class SbxArray;
 class BasicManager;
@@ -58,7 +59,6 @@ class GDIMetaFile;
 class INetURLObject;
 class IndexBitSet;
 class JobSetup;
-class Button;
 class OutputDevice;
 class Color;
 class Fraction;
@@ -368,7 +368,7 @@ public:
                            const OUString& aComment);
     SignatureState              GetScriptingSignatureState();
     void                        SignScriptingContent(weld::Window* pDialogParent);
-    DECL_LINK(SignDocumentHandler, Button*, void);
+    DECL_LINK(SignDocumentHandler, weld::Button&, void);
 
     virtual std::shared_ptr<SfxDocumentInfoDialog> CreateDocumentInfoDialog(weld::Window* pParent, const SfxItemSet& rItemSet);
 
