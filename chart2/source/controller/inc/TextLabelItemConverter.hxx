@@ -63,6 +63,8 @@ private:
 
     bool mbDataSeries:1;
     bool mbForbidPercentValue:1;
+
+    css::uno::Reference<css::chart2::XDataSeries> m_xSeries;
 };
 
 }

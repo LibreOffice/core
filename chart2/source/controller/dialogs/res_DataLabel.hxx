@@ -83,6 +83,8 @@ private:
     std::unique_ptr<svx::DialControl> m_xDC_Dial;
     std::unique_ptr<weld::CustomWeld> m_xDC_DialWin;
 
+    std::unique_ptr<weld::CheckButton> m_xCBCustomLeaderLines;
+
     DECL_LINK(NumberFormatDialogHdl, weld::Button&, void );
     DECL_LINK(CheckHdl, weld::ToggleButton&, void );
     void EnableControls();
