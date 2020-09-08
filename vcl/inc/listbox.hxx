@@ -427,7 +427,7 @@ public:
     sal_Int32       GetCurrentPos() const           { return maLBWindow->GetCurrentPos(); }
 
     bool            ProcessKeyInput( const KeyEvent& rKEvt )    { return maLBWindow->ProcessKeyInput( rKEvt ); }
-    bool            HandleWheelAsCursorTravel( const CommandEvent& rCEvt );
+    bool            HandleWheelAsCursorTravel(const CommandEvent& rCEvt, Control& rControl);
 
     /**
      * Removes existing separators, and sets the position of the

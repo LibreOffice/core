@@ -883,7 +883,7 @@ bool ListBox::PreNotify( NotifyEvent& rNEvt )
                     )
                 )
             {
-                bDone = mpImplLB->HandleWheelAsCursorTravel( *rNEvt.GetCommandEvent() );
+                bDone = mpImplLB->HandleWheelAsCursorTravel(*rNEvt.GetCommandEvent(), *this);
             }
             else
             {
