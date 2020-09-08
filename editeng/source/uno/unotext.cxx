@@ -1965,12 +1965,12 @@ void SAL_CALL SvxUnoTextBase::moveTextRange( const uno::Reference< text::XTextRa
 /// @throws uno::RuntimeException
 static void SvxPropertyValuesToItemSet(
         SfxItemSet &rItemSet,
-        const uno::Sequence< beans::PropertyValue >& rPropertyVaules,
+        const uno::Sequence< beans::PropertyValue >& rPropertyValues,
         const SfxItemPropertySet *pPropSet,
         SvxTextForwarder *pForwarder /*needed for WID_NUMLEVEL*/,
         sal_Int32 nPara /*needed for WID_NUMLEVEL*/)
 {
-    for (const beans::PropertyValue& rProp : rPropertyVaules)
+    for (const beans::PropertyValue& rProp : rPropertyValues)
     {
         const SfxItemPropertySimpleEntry *pEntry = pPropSet->getPropertyMap().getByName( rProp.Name );
         if (!pEntry)
