@@ -369,11 +369,13 @@ static bool DoSearch(SwPaM & rSearchPam,
 
 namespace sw {
 
+// @param xSearchItem allocate in parent so we can do so outside the calling loop
 bool FindTextImpl(SwPaM & rSearchPam,
         const i18nutil::SearchOptions2& rSearchOpt, bool bSearchInNotes,
         utl::TextSearch& rSText,
         SwMoveFnCollection const & fnMove, const SwPaM & rRegion,
-        bool bInReadOnly, SwRootFrame const*const pLayout)
+        bool bInReadOnly, SwRootFrame const*const pLayout,
+        std::unique_ptr<SvxSearchItem>& xSearchItem)
 {
     if( rSearchOpt.searchString.isEmpty() )
         return false;
@@ -395,9 +397,12 @@ bool FindTextImpl(SwPaM & rSearchPam,
                           rSearchOpt.searchString == "$^" );
     const bool bChkParaEnd = bRegSearch && rSearchOpt.searchString == "$";
 
-    SvxSearchItem aSearchItem(SID_SEARCH_ITEM); // this is a very expensive operation (calling configmgr etc.)
-    aSearchItem.SetSearchOptions(rSearchOpt);
-    aSearchItem.SetBackward(!bSrchForward);
+    if (!xSearchItem)
+    {
+        xSearchItem.reset(new SvxSearchItem(SID_SEARCH_ITEM)); // this is a very expensive operation (calling configmgr etc.)
+        xSearchItem->SetSearchOptions(rSearchOpt);
+        xSearchItem->SetBackward(!bSrchForward);
+    }
 
     // LanguageType eLastLang = 0;
     while (nullptr != (pNode = ::GetNode(*pPam, bFirst, fnMove, bInReadOnly, pLayout)))
@@ -525,7 +530,7 @@ bool FindTextImpl(SwPaM & rSearchPam,
 
                 if (pObject)
                 {
-                    sal_uInt16 nResult = pSdrView->GetTextEditOutlinerView()->StartSearchAndReplace(aSearchItem);
+                    sal_uInt16 nResult = pSdrView->GetTextEditOutlinerView()->StartSearchAndReplace(*xSearchItem);
                     if (!nResult)
                     {
                         // If not found, end the text edit.
@@ -577,7 +582,7 @@ bool FindTextImpl(SwPaM & rSearchPam,
                         aPaM.GetMark()->nNode = rTextNode.GetIndex() + 1;
                     }
                     aPaM.GetMark()->nContent.Assign(aPaM.GetMark()->nNode.GetNode().GetTextNode(), 0);
-                    if (pNode->GetDoc()->getIDocumentDrawModelAccess().Search(aPaM, aSearchItem) && pSdrView)
+                    if (pNode->GetDoc()->getIDocumentDrawModelAccess().Search(aPaM, *xSearchItem) && pSdrView)
                     {
                         if (SdrObject* pObject = pSdrView->GetTextEditObject())
                         {
@@ -931,7 +936,7 @@ struct SwFindParaText : public SwFindParas
         , m_bReplace( bRepl )
         , m_bSearchInNotes( bSearchInNotes )
     {}
-    virtual int DoFind(SwPaM &, SwMoveFnCollection const &, const SwPaM &, bool bInReadOnly) override;
+    virtual int DoFind(SwPaM &, SwMoveFnCollection const &, const SwPaM &, bool bInReadOnly, std::unique_ptr<SvxSearchItem>& xSearchItem) override;
     virtual bool IsReplaceMode() const override;
     virtual ~SwFindParaText();
 };
@@ -943,13 +948,14 @@ SwFindParaText::~SwFindParaText()
 }
 
 int SwFindParaText::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnMove,
-                          const SwPaM & rRegion, bool bInReadOnly)
+                          const SwPaM & rRegion, bool bInReadOnly,
+                          std::unique_ptr<SvxSearchItem>& xSearchItem)
 {
     if( bInReadOnly && m_bReplace )
         bInReadOnly = false;
 
     const bool bFnd = sw::FindTextImpl(rCursor, m_rSearchOpt, m_bSearchInNotes,
-            m_aSText, fnMove, rRegion, bInReadOnly, m_pLayout);
+            m_aSText, fnMove, rRegion, bInReadOnly, m_pLayout, xSearchItem);
 
     if( bFnd && m_bReplace ) // replace string
     {
