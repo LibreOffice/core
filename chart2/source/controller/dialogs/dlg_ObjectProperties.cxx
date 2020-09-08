@@ -566,7 +566,11 @@ void SchAttribTabDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
     {
         DataLabelsTabPage* pLabelPage = dynamic_cast< DataLabelsTabPage* >( &rPage );
         if( pLabelPage )
-            pLabelPage->SetNumberFormatter( m_pNumberFormatter );
+        {
+            pLabelPage->SetNumberFormatter(m_pNumberFormatter);
+            if( m_pParameter->getObjectType() == OBJECTTYPE_DATA_LABEL )
+                pLabelPage->HideLeaderLinesControls();
+        }
     }
     else if (rId == "numberformat")
     {

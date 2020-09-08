@@ -498,6 +498,25 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
             }
         }
         break;
+        case SCHATTR_DATADESCR_CUSTOM_LEADERLINES:
+        {
+            try
+            {
+                bool bNew = static_cast<const SfxBoolItem&>(rItemSet.Get(nWhichId)).GetValue();
+                bool bOld = false;
+                GetPropertySet()->getPropertyValue("ShowCustomLeaderLines") >>= bOld;
+                if( bOld != bNew )
+                {
+                    GetPropertySet()->setPropertyValue("ShowCustomLeaderLines", uno::Any(bNew));
+                    bChanged = true;
+                }
+            }
+            catch (const uno::Exception&)
+            {
+                TOOLS_WARN_EXCEPTION("chart2", "");
+            }
+        }
+        break;
     }
 
     return bChanged;
@@ -633,6 +652,20 @@ void TextLabelItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet& r
         case SCHATTR_DATADESCR_NO_PERCENTVALUE:
         {
             rOutItemSet.Put(SfxBoolItem(nWhichId, mbForbidPercentValue));
+        }
+        break;
+        case SCHATTR_DATADESCR_CUSTOM_LEADERLINES:
+        {
+            try
+            {
+                bool bValue = false;
+                GetPropertySet()->getPropertyValue( "ShowCustomLeaderLines" ) >>= bValue;
+                rOutItemSet.Put(SfxBoolItem(nWhichId, bValue));
+            }
+            catch (const uno::Exception&)
+            {
+                TOOLS_WARN_EXCEPTION("chart2", "");
+            }
         }
         break;
         case SCHATTR_STYLE_SYMBOL:

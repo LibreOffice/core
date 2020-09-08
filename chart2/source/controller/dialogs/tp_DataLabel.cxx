@@ -49,6 +49,11 @@ void DataLabelsTabPage::SetNumberFormatter( SvNumberFormatter* pFormatter )
     m_aDataLabelResources.SetNumberFormatter( pFormatter );
 }
 
+void DataLabelsTabPage::HideLeaderLinesControls()
+{
+    m_aDataLabelResources.HideLeaderLinesControls();
+}
+
 } //namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
