@@ -39,6 +39,7 @@
 #include "rtl/textenc.h"
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
+#include "config_global.h"
 #include "rtl/stringconcat.hxx"
 #endif
 
@@ -68,34 +69,48 @@ class OUStringBuffer;
 /// @cond INTERNAL
 
 /**
-A simple wrapper around string literal.
+A wrapper dressing a string literal as a static-refcount rtl_uString.
 
 This class is not part of public API and is meant to be used only in LibreOffice code.
 @since LibreOffice 4.0
 */
-struct SAL_WARN_UNUSED OUStringLiteral
-{
-    template<typename T> constexpr OUStringLiteral(
-        T & literal,
-        typename libreoffice_internal::ConstCharArrayDetector<
-                T, libreoffice_internal::Dummy>::TypeUtf16
-            = libreoffice_internal::Dummy()):
-        size(libreoffice_internal::ConstCharArrayDetector<T>::length),
-        data(
-            libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal))
-    {
-        assert(
-            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
+template<std::size_t N> class SAL_WARN_UNUSED OUStringLiteral {
+    static_assert(N != 0);
+    static_assert(N - 1 <= std::numeric_limits<sal_Int32>::max(), "literal too long");
+
+public:
+#if HAVE_CPP_CONSTEVAL
+    consteval
+#else
+    constexpr
+#endif
+    OUStringLiteral(char16_t const (&literal)[N]) {
+        assert(literal[N - 1] == '\0');
+        //TODO: Use C++20 constexpr std::copy_n (P0202R3):
+        for (std::size_t i = 0; i != N; ++i) {
+            buffer[i] = literal[i];
+        }
     }
 
-    constexpr operator std::u16string_view() const { return {data, unsigned(size)}; }
+    constexpr sal_Int32 getLength() const { return length; }
 
-    int size;
-    const sal_Unicode* data;
+    constexpr sal_Unicode const * getStr() const SAL_RETURNS_NONNULL { return buffer; }
 
-    // So we can use this struct in some places interchangeably with OUString
-    constexpr sal_Int32 getLength() const { return size; }
+    constexpr operator std::u16string_view() const { return {buffer, sal_uInt32(length)}; }
+
+private:
+    // Same layout as rtl_uString (include/rtl/ustring.h):
+    oslInterlockedCount refCount = 0x40000000; // SAL_STRING_STATIC_FLAG (sal/rtl/strimp.hxx)
+    sal_Int32 length = N - 1;
+    sal_Unicode buffer[N] = {}; //TODO: drop initialization for C++20 (P1331R2)
 };
+
+#if defined RTL_STRING_UNITTEST
+namespace libreoffice_internal {
+template<std::size_t N> struct ExceptConstCharArrayDetector<OUStringLiteral<N>> {};
+template<std::size_t N> struct ExceptCharArrayDetector<OUStringLiteral<N>> {};
+}
+#endif
 
 /// @endcond
 #endif
@@ -347,20 +362,11 @@ public:
     /**
       New string from a string literal.
 
-      This constructor is similar to the "direct template" one, but can be
-      useful in cases where the latter does not work, like in
-
-        OUString(flag ? "a" : "bb")
-
-      written as
-
-        OUString(flag ? OUStringLiteral(u"a") : OUStringLiteral(u"bb"))
-
       @since LibreOffice 5.0
     */
-    OUString(OUStringLiteral literal): pData(NULL) {
-        rtl_uString_newFromStr_WithLength(&pData, literal.data, literal.size);
-    }
+    template<std::size_t N> OUString(OUStringLiteral<N> const & literal):
+        pData(const_cast<rtl_uString *>(reinterpret_cast<rtl_uString const *>(&literal))) {}
+    template<std::size_t N> OUString(OUStringLiteral<N> &&) = delete;
     /// @endcond
 #endif
 
@@ -552,11 +558,11 @@ public:
     }
 
     /** @overload @since LibreOffice 5.4 */
-    OUString & operator =(OUStringLiteral const & literal) {
-        if (literal.size == 0) {
+    template<std::size_t N> OUString & operator =(OUStringLiteral<N> const & literal) {
+        if (literal.getLength() == 0) {
             rtl_uString_new(&pData);
         } else {
-            rtl_uString_newFromStr_WithLength(&pData, literal.data, literal.size);
+            rtl_uString_newFromStr_WithLength(&pData, literal.getStr(), literal.getLength());
         }
         return *this;
     }
@@ -653,11 +659,11 @@ public:
     operator +=(T &) && = delete;
 
     /** @overload @since LibreOffice 5.4 */
-    OUString & operator +=(OUStringLiteral const & literal) & {
-        rtl_uString_newConcatUtf16L(&pData, pData, literal.data, literal.size);
+    template<std::size_t N> OUString & operator +=(OUStringLiteral<N> const & literal) & {
+        rtl_uString_newConcatUtf16L(&pData, pData, literal.getStr(), literal.getLength());
         return *this;
     }
-    void operator +=(OUStringLiteral const &) && = delete;
+    template<std::size_t N> void operator +=(OUStringLiteral<N> const &) && = delete;
 
     OUString & operator +=(std::u16string_view sv) & {
         if (sv.size() > sal_uInt32(std::numeric_limits<sal_Int32>::max())) {
@@ -1812,91 +1818,189 @@ public:
        @since LibreOffice 5.0
     */
 
-    friend bool operator ==(OUString const & lhs, OUStringLiteral const & rhs) {
+    template<std::size_t N>
+    friend bool operator ==(OUString const & lhs, OUStringLiteral<N> const & rhs) {
         return
             rtl_ustr_reverseCompare_WithLength(
-                lhs.pData->buffer, lhs.pData->length, rhs.data, rhs.size)
+                lhs.pData->buffer, lhs.pData->length, rhs.getStr(), rhs.getLength())
             == 0;
     }
 
-    friend bool operator !=(OUString const & lhs, OUStringLiteral const & rhs) {
+    template<std::size_t N>
+    friend bool operator !=(OUString const & lhs, OUStringLiteral<N> const & rhs) {
         return
             rtl_ustr_reverseCompare_WithLength(
-                lhs.pData->buffer, lhs.pData->length, rhs.data, rhs.size)
+                lhs.pData->buffer, lhs.pData->length, rhs.getStr(), rhs.getLength())
             != 0;
     }
 
-    friend bool operator <(OUString const & lhs, OUStringLiteral const & rhs) {
+    template<std::size_t N>
+    friend bool operator <(OUString const & lhs, OUStringLiteral<N> const & rhs) {
         return
             (rtl_ustr_compare_WithLength(
-                lhs.pData->buffer, lhs.pData->length, rhs.data, rhs.size))
+                lhs.pData->buffer, lhs.pData->length, rhs.getStr(), rhs.getLength()))
             < 0;
     }
 
-    friend bool operator <=(OUString const & lhs, OUStringLiteral const & rhs) {
+    template<std::size_t N>
+    friend bool operator <=(OUString const & lhs, OUStringLiteral<N> const & rhs) {
         return
             (rtl_ustr_compare_WithLength(
-                lhs.pData->buffer, lhs.pData->length, rhs.data, rhs.size))
+                lhs.pData->buffer, lhs.pData->length, rhs.getStr(), rhs.getLength()))
             <= 0;
     }
 
-    friend bool operator >(OUString const & lhs, OUStringLiteral const & rhs) {
+    template<std::size_t N>
+    friend bool operator >(OUString const & lhs, OUStringLiteral<N> const & rhs) {
         return
             (rtl_ustr_compare_WithLength(
-                lhs.pData->buffer, lhs.pData->length, rhs.data, rhs.size))
+                lhs.pData->buffer, lhs.pData->length, rhs.getStr(), rhs.getLength()))
             > 0;
     }
 
-    friend bool operator >=(OUString const & lhs, OUStringLiteral const & rhs) {
+    template<std::size_t N>
+    friend bool operator >=(OUString const & lhs, OUStringLiteral<N> const & rhs) {
         return
             (rtl_ustr_compare_WithLength(
-                lhs.pData->buffer, lhs.pData->length, rhs.data, rhs.size))
+                lhs.pData->buffer, lhs.pData->length, rhs.getStr(), rhs.getLength()))
             >= 0;
     }
 
-    friend bool operator ==(OUStringLiteral const & lhs, OUString const & rhs) {
+    template<std::size_t N>
+    friend bool operator ==(OUStringLiteral<N> const & lhs, OUString const & rhs) {
         return
             rtl_ustr_reverseCompare_WithLength(
-                lhs.data, lhs.size, rhs.pData->buffer, rhs.pData->length)
+                lhs.getStr(), lhs.getLength(), rhs.pData->buffer, rhs.pData->length)
             == 0;
     }
 
-    friend bool operator !=(OUStringLiteral const & lhs, OUString const & rhs) {
+    template<std::size_t N>
+    friend bool operator !=(OUStringLiteral<N> const & lhs, OUString const & rhs) {
         return
             rtl_ustr_reverseCompare_WithLength(
-                lhs.data, lhs.size, rhs.pData->buffer, rhs.pData->length)
+                lhs.getStr(), lhs.getLength(), rhs.pData->buffer, rhs.pData->length)
             != 0;
     }
 
-    friend bool operator <(OUStringLiteral const & lhs, OUString const & rhs) {
+    template<std::size_t N>
+    friend bool operator <(OUStringLiteral<N> const & lhs, OUString const & rhs) {
         return
             (rtl_ustr_compare_WithLength(
-                lhs.data, lhs.size, rhs.pData->buffer, rhs.pData->length))
+                lhs.getStr(), lhs.getLength(), rhs.pData->buffer, rhs.pData->length))
             < 0;
     }
 
-    friend bool operator <=(OUStringLiteral const & lhs, OUString const & rhs) {
+    template<std::size_t N>
+    friend bool operator <=(OUStringLiteral<N> const & lhs, OUString const & rhs) {
         return
             (rtl_ustr_compare_WithLength(
-                lhs.data, lhs.size, rhs.pData->buffer, rhs.pData->length))
+                lhs.getStr(), lhs.getLength(), rhs.pData->buffer, rhs.pData->length))
             <= 0;
     }
 
-    friend bool operator >(OUStringLiteral const & lhs, OUString const & rhs) {
+    template<std::size_t N>
+    friend bool operator >(OUStringLiteral<N> const & lhs, OUString const & rhs) {
         return
             (rtl_ustr_compare_WithLength(
-                lhs.data, lhs.size, rhs.pData->buffer, rhs.pData->length))
+                lhs.getStr(), lhs.getLength(), rhs.pData->buffer, rhs.pData->length))
             > 0;
     }
 
-    friend bool operator >=(OUStringLiteral const & lhs, OUString const & rhs) {
+    template<std::size_t N>
+    friend bool operator >=(OUStringLiteral<N> const & lhs, OUString const & rhs) {
         return
             (rtl_ustr_compare_WithLength(
-                lhs.data, lhs.size, rhs.pData->buffer, rhs.pData->length))
+                lhs.getStr(), lhs.getLength(), rhs.pData->buffer, rhs.pData->length))
             >= 0;
     }
 
     /// @endcond
+#endif
+
+#if defined LIBO_INTERNAL_ONLY
+    friend bool operator ==(OUString const & lhs, std::u16string_view rhs) {
+        return
+            rtl_ustr_reverseCompare_WithLength(
+                lhs.pData->buffer, lhs.pData->length, rhs.data(), rhs.size())
+            == 0;
+    }
+
+    friend bool operator !=(OUString const & lhs, std::u16string_view rhs) {
+        return
+            rtl_ustr_reverseCompare_WithLength(
+                lhs.pData->buffer, lhs.pData->length, rhs.data(), rhs.size())
+            != 0;
+    }
+
+    friend bool operator <(OUString const & lhs, std::u16string_view rhs) {
+        return
+            (rtl_ustr_compare_WithLength(
+                lhs.pData->buffer, lhs.pData->length, rhs.data(), rhs.size()))
+            < 0;
+    }
+
+    friend bool operator <=(OUString const & lhs, std::u16string_view rhs) {
+        return
+            (rtl_ustr_compare_WithLength(
+                lhs.pData->buffer, lhs.pData->length, rhs.data(), rhs.size()))
+            <= 0;
+    }
+
+    friend bool operator >(OUString const & lhs, std::u16string_view rhs) {
+        return
+            (rtl_ustr_compare_WithLength(
+                lhs.pData->buffer, lhs.pData->length, rhs.data(), rhs.size()))
+            > 0;
+    }
+
+    friend bool operator >=(OUString const & lhs, std::u16string_view rhs) {
+        return
+            (rtl_ustr_compare_WithLength(
+                lhs.pData->buffer, lhs.pData->length, rhs.data(), rhs.size()))
+            >= 0;
+    }
+
+    friend bool operator ==(std::u16string_view lhs, OUString const & rhs) {
+        return
+            rtl_ustr_reverseCompare_WithLength(
+                lhs.data(), lhs.size(), rhs.pData->buffer, rhs.pData->length)
+            == 0;
+    }
+
+    friend bool operator !=(std::u16string_view lhs, OUString const & rhs) {
+        return
+            rtl_ustr_reverseCompare_WithLength(
+                lhs.data(), lhs.size(), rhs.pData->buffer, rhs.pData->length)
+            != 0;
+    }
+
+    friend bool operator <(std::u16string_view lhs, OUString const & rhs) {
+        return
+            (rtl_ustr_compare_WithLength(
+                lhs.data(), lhs.size(), rhs.pData->buffer, rhs.pData->length))
+            < 0;
+    }
+
+    friend bool operator <=(std::u16string_view lhs, OUString const & rhs) {
+        return
+            (rtl_ustr_compare_WithLength(
+                lhs.data(), lhs.size(), rhs.pData->buffer, rhs.pData->length))
+            <= 0;
+    }
+
+    friend bool operator >(std::u16string_view lhs, OUString const & rhs) {
+        return
+            (rtl_ustr_compare_WithLength(
+                lhs.data(), lhs.size(), rhs.pData->buffer, rhs.pData->length))
+            > 0;
+    }
+
+    friend bool operator >=(std::u16string_view lhs, OUString const & rhs) {
+        return
+            (rtl_ustr_compare_WithLength(
+                lhs.data(), lhs.size(), rhs.pData->buffer, rhs.pData->length))
+            >= 0;
+    }
 #endif
 
     /**
@@ -3295,11 +3399,11 @@ struct ToStringHelper< OUString >
 /**
  @internal
 */
-template<>
-struct ToStringHelper< OUStringLiteral >
+template<std::size_t N>
+struct ToStringHelper< OUStringLiteral<N> >
     {
-    static std::size_t length( const OUStringLiteral& str ) { return str.size; }
-    static sal_Unicode* addData( sal_Unicode* buffer, const OUStringLiteral& str ) { return addDataHelper( buffer, str.data, str.size ); }
+    static std::size_t length( const OUStringLiteral<N>& str ) { return str.getLength(); }
+    static sal_Unicode* addData( sal_Unicode* buffer, const OUStringLiteral<N>& str ) { return addDataHelper( buffer, str.getStr(), str.getLength() ); }
     static const bool allowOStringConcat = false;
     static const bool allowOUStringConcat = true;
     };

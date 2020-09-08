@@ -139,6 +139,7 @@
 #include <pagefrm.hxx>
 
 #include <memory>
+#include <string_view>
 
 const char sStatusDelim[] = " : ";
 
@@ -193,7 +194,7 @@ OUString SwView::GetPageStr(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const OUStr
 {
     // Show user-defined page number in brackets if any.
     OUString extra;
-    if (!rPgStr.isEmpty() && OUString::number(nPhyNum) != rPgStr)
+    if (!rPgStr.isEmpty() && std::u16string_view(OUString::number(nPhyNum)) != rPgStr)
         extra = rPgStr;
     else if (nPhyNum != nVirtNum)
         extra = OUString::number(nVirtNum);
@@ -1361,7 +1362,8 @@ void SwView::UpdatePageNums(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const OUStr
     const SfxStringItem aTmp( FN_STAT_PAGE, sTemp );
     // Used to distinguish which tooltip to show
     const SfxBoolItem bExtendedTooltip( FN_STAT_PAGE,
-                                        !rPgStr.isEmpty() && OUString::number(nPhyNum) != rPgStr
+                                        !rPgStr.isEmpty()
+                                        && std::u16string_view(OUString::number(nPhyNum)) != rPgStr
                                         && nPhyNum != nVirtNum );
 
     SfxBindings &rBnd = GetViewFrame()->GetBindings();
@@ -1423,7 +1425,8 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 GetViewFrame()->GetBindings().SetState( aTmp );
                 // Used to distinguish which tooltip to show
                 const SfxBoolItem bExtendedTooltip( FN_STAT_PAGE, !sDisplay.isEmpty() &&
-                                                    OUString::number( nPage ) != sDisplay &&
+                                                    std::u16string_view(OUString::number( nPage ))
+                                                        != sDisplay &&
                                                     nPage != nLogPage );
                 GetViewFrame()->GetBindings().SetState( bExtendedTooltip );
                 //if existing page number is not equal to old page number, send out this event.

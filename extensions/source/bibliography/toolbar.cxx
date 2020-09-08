@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -597,9 +601,9 @@ void BibToolBar::RebuildToolbar()
 
 void BibToolBar::ApplyImageList()
 {
-    SetItemImage(nTBC_BT_AUTOFILTER, Image(StockImage::Yes, nSymbolsSize == SFX_SYMBOLS_SIZE_SMALL ? OUStringLiteral(u"" RID_EXTBMP_AUTOFILTER_SC) : OUStringLiteral(u"" RID_EXTBMP_AUTOFILTER_LC)));
-    SetItemImage(nTBC_BT_FILTERCRIT, Image(StockImage::Yes, nSymbolsSize == SFX_SYMBOLS_SIZE_SMALL ? OUStringLiteral(u"" RID_EXTBMP_FILTERCRIT_SC) : OUStringLiteral(u"" RID_EXTBMP_FILTERCRIT_LC)));
-    SetItemImage(nTBC_BT_REMOVEFILTER, Image(StockImage::Yes, nSymbolsSize == SFX_SYMBOLS_SIZE_SMALL ? OUStringLiteral(u"" RID_EXTBMP_REMOVE_FILTER_SORT_SC) : OUStringLiteral(u"" RID_EXTBMP_REMOVE_FILTER_SORT_LC)));
+    SetItemImage(nTBC_BT_AUTOFILTER, Image(StockImage::Yes, nSymbolsSize == SFX_SYMBOLS_SIZE_SMALL ? std::u16string_view(u"" RID_EXTBMP_AUTOFILTER_SC) : std::u16string_view(u"" RID_EXTBMP_AUTOFILTER_LC)));
+    SetItemImage(nTBC_BT_FILTERCRIT, Image(StockImage::Yes, nSymbolsSize == SFX_SYMBOLS_SIZE_SMALL ? std::u16string_view(u"" RID_EXTBMP_FILTERCRIT_SC) : std::u16string_view(u"" RID_EXTBMP_FILTERCRIT_LC)));
+    SetItemImage(nTBC_BT_REMOVEFILTER, Image(StockImage::Yes, nSymbolsSize == SFX_SYMBOLS_SIZE_SMALL ? std::u16string_view(u"" RID_EXTBMP_REMOVE_FILTER_SORT_SC) : std::u16string_view(u"" RID_EXTBMP_REMOVE_FILTER_SORT_LC)));
     AdjustToolBox();
 }
 

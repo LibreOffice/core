@@ -127,7 +127,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLFixedContent::crea
     if (xContext)
         return xContext;
 
-    static const char16_t s_sStringConcat[] = u" & ";
+    static constexpr char16_t s_sStringConcat[] = u" & ";
 
     m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
     switch( nElement )

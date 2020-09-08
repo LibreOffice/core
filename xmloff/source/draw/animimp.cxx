@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/presentation/AnimationEffect.hpp>
@@ -321,12 +325,12 @@ namespace
     constexpr OUStringLiteral gsDimColor = u"DimColor";
     constexpr OUStringLiteral gsDimHide = u"DimHide";
     constexpr OUStringLiteral gsDimPrev = u"DimPrevious";
-    constexpr OUStringLiteral gsEffect = u"Effect";
+    constexpr std::u16string_view gsEffect = u"Effect";
     constexpr OUStringLiteral gsPlayFull = u"PlayFull";
     constexpr OUStringLiteral gsSound = u"Sound";
     constexpr OUStringLiteral gsSoundOn = u"SoundOn";
     constexpr OUStringLiteral gsSpeed = u"Speed";
-    constexpr OUStringLiteral gsTextEffect = u"TextEffect";
+    constexpr std::u16string_view gsTextEffect = u"TextEffect";
     constexpr OUStringLiteral gsPresShapeService = u"com.sun.star.presentation.Shape";
     constexpr OUStringLiteral gsAnimPath = u"AnimationPath";
     constexpr OUStringLiteral gsIsAnimation = u"IsAnimation";

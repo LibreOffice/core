@@ -100,6 +100,7 @@
 #include <algorithm>
 #include <map>
 #include <memory>
+#include <string_view>
 #include <vector>
 
 // is used for Invalidate -> maintain it as well
@@ -202,7 +203,7 @@ static const char* aConvertSlots[] =
     "ConvertToNavigationBar"
 };
 
-const OUStringLiteral aImgIds[] =
+const std::u16string_view aImgIds[] =
 {
     u"" RID_SVXBMP_EDITBOX,
     u"" RID_SVXBMP_BUTTON,

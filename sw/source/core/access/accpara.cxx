@@ -1782,7 +1782,7 @@ void SwAccessibleParagraph::_getSupplementalAttributesImpl(
     {
         const SfxItemPropertyMapEntry* pPropMap(
                 aSwMapProvider.GetPropertyMapEntries( PROPERTY_MAP_ACCESSIBILITY_TEXT_ATTRIBUTE ) );
-        while ( pPropMap->aName.getLength() )
+        while ( !pPropMap->aName.empty() )
         {
             const SfxPoolItem* pItem = pSet->GetItem( pPropMap->nWID );
             if ( pItem )

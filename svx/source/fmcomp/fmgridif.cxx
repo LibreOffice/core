@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
 
 #include <svx/fmgridif.hxx>
 #include <fmprop.hxx>
@@ -741,7 +744,7 @@ void SAL_CALL FmXGridControl::setDesignMode(sal_Bool bOn)
 
         // prepare firing an event
         aModeChangeEvent.Source = *this;
-        aModeChangeEvent.NewMode = mbDesignMode ? OUStringLiteral( u"design" ) : OUStringLiteral( u"alive" );
+        aModeChangeEvent.NewMode = mbDesignMode ? std::u16string_view( u"design" ) : std::u16string_view( u"alive" );
     }
 
     // --- </mutex_lock> ---
@@ -1547,7 +1550,7 @@ Reference< XIndexContainer >  FmXGridPeer::getColumns()
 
 void FmXGridPeer::addColumnListeners(const Reference< XPropertySet >& xCol)
 {
-    static const OUStringLiteral aPropsListenedTo[] =
+    static const std::u16string_view aPropsListenedTo[] =
     {
         u"" FM_PROP_LABEL, u"" FM_PROP_WIDTH, u"" FM_PROP_HIDDEN, u"" FM_PROP_ALIGN,
         u"" FM_PROP_FORMATKEY
@@ -1572,7 +1575,7 @@ void FmXGridPeer::removeColumnListeners(const Reference< XPropertySet >& xCol)
 {
     // the same props as in addColumnListeners... linux has problems with global static UStrings, so
     // we have to do it this way...
-    static const OUStringLiteral aPropsListenedTo[] =
+    static const std::u16string_view aPropsListenedTo[] =
     {
         u"" FM_PROP_LABEL, u"" FM_PROP_WIDTH, u"" FM_PROP_HIDDEN, u"" FM_PROP_ALIGN,
         u"" FM_PROP_FORMATKEY

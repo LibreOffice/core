@@ -53,6 +53,7 @@
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 
+#include <string_view>
 #include <unordered_map>
 
 using namespace com::sun::star::uno;
@@ -195,7 +196,7 @@ private:
 
 // important: The order and position of the elements must match the constant
 // definition of "css::ui::UIElementType"
-OUStringLiteral UIELEMENTTYPENAMES[] =
+std::u16string_view UIELEMENTTYPENAMES[] =
 {
     u"",  // Dummy value for unknown!
     u"" UIELEMENTTYPE_MENUBAR_NAME,
@@ -282,7 +283,7 @@ void UIConfigurationManager::impl_preloadUIElementTypeList( sal_Int16 nElementTy
         if ( xElementTypeStorage.is() )
         {
             OUString aResURLPrefix =
-                RESOURCEURL_PREFIX +
+                OUString::Concat(RESOURCEURL_PREFIX) +
                 UIELEMENTTYPENAMES[ nElementType ] +
                 "/";
 

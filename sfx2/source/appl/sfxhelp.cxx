@@ -862,7 +862,7 @@ bool rewriteFlatpakHelpRootUrl(OUString * helpRootUrl) {
                         << "\" doesn't contain /app/org.libreoffice.LibreOffice/");
                 throw Failure();
             }
-            auto const i2 = i1 + segments.size;
+            auto const i2 = i1 + segments.getLength();
             auto i3 = path.indexOf('/', i2);
             if (i3 == -1) {
                 SAL_WARN(

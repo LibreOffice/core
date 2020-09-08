@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <sal/macros.h>
 #include <java/sql/DatabaseMetaData.hxx>
 #include <java/sql/Connection.hxx>
@@ -430,7 +434,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTablePrivileges(
             {
                 // here we know that the count of column doesn't match
                 std::map<sal_Int32,sal_Int32> aColumnMatching;
-                static const OUStringLiteral sPrivs[] = {
+                static const std::u16string_view sPrivs[] = {
                                             u"TABLE_CAT",
                                             u"TABLE_SCHEM",
                                             u"TABLE_NAME",
