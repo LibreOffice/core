@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b33e9313_495b2bfd",
+        "filename": "reportdesign/source/ui/report/ReportController.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1036,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-09-08T16:32:24Z",
+      "side": 1,
+      "message": "Maxim: I wonder how to deal with this later on. It introduces an own SID_DISTRIBUTION and calls the deprecated command. Just remove?",
+      "range": {
+        "startLine": 1036,
+        "startChar": 13,
+        "endLine": 1036,
+        "endChar": 29
+      },
+      "revId": "e56a5a1396e42a8ef88381b3887ae32be7d74919",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
