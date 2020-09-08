@@ -23,6 +23,7 @@
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <unotools/charclass.hxx>
 #include <svl/ctloptions.hxx>
+#include <svl/srchitem.hxx>
 #include <swmodule.hxx>
 #include <fmtcntnt.hxx>
 #include <swtblfmt.hxx>
@@ -768,6 +769,7 @@ static sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurrentCurso
     sal_uLong nFound = 0;
     const bool bSrchBkwrd = &fnMove == &fnMoveBackward;
     SwPaM *pTmpCursor = pCurrentCursor, *pSaveCursor = pCurrentCursor;
+    std::unique_ptr<SvxSearchItem> xSearchItem;
 
     // only create progress bar for ShellCursor
     bool bIsUnoCursor = dynamic_cast<SwUnoCursor*>(pCurrentCursor) !=  nullptr;
@@ -801,7 +803,7 @@ static sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurrentCurso
         // as long as found and not at same position
         while(  *pSttPos <= *pEndPos )
         {
-            nFndRet = rParas.DoFind(*pCurrentCursor, fnMove, aRegion, bInReadOnly);
+            nFndRet = rParas.DoFind(*pCurrentCursor, fnMove, aRegion, bInReadOnly, xSearchItem);
             if( 0 == nFndRet ||
                 ( pFndRing &&
                   *pFndRing->GetPoint() == *pCurrentCursor->GetPoint() &&
@@ -961,6 +963,7 @@ sal_uLong SwCursor::FindAll( SwFindParas& rParas,
     sal_uLong nFound = 0;
     const bool bMvBkwrd = &fnMove == &fnMoveBackward;
     bool bInReadOnly = IsReadOnlyAvailable();
+    std::unique_ptr<SvxSearchItem> xSearchItem;
 
     SwCursor* pFndRing = nullptr;
     SwNodes& rNds = GetDoc()->GetNodes();
@@ -1089,7 +1092,7 @@ sal_uLong SwCursor::FindAll( SwFindParas& rParas,
         SwPosition aMarkPos( *GetMark() );
         const bool bMarkPos = HasMark() && (eFndRngs == FindRanges::InBody);
 
-        nFound = rParas.DoFind(*this, fnMove, aRegion, bInReadOnly) ? 1 : 0;
+        nFound = rParas.DoFind(*this, fnMove, aRegion, bInReadOnly, xSearchItem) ? 1 : 0;
         if (0 != nFound && bMarkPos)
             *GetMark() = aMarkPos;
     }

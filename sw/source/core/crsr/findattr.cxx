@@ -25,6 +25,7 @@
 #include <unotools/syslocale.hxx>
 #include <hintids.hxx>
 #include <svl/itemiter.hxx>
+#include <svl/srchitem.hxx>
 #include <svl/whiter.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/fontitem.hxx>
@@ -1253,14 +1254,16 @@ struct SwFindParaAttr : public SwFindParas
 
     virtual ~SwFindParaAttr()   {}
 
-    virtual int DoFind(SwPaM &, SwMoveFnCollection const &, const SwPaM &, bool bInReadOnly) override;
+    virtual int DoFind(SwPaM &, SwMoveFnCollection const &, const SwPaM &, bool bInReadOnly,
+                       std::unique_ptr<SvxSearchItem>& xSearchItem) override;
     virtual bool IsReplaceMode() const override;
 };
 
 }
 
 int SwFindParaAttr::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnMove,
-        const SwPaM & rRegion, bool bInReadOnly)
+        const SwPaM & rRegion, bool bInReadOnly,
+        std::unique_ptr<SvxSearchItem>& xSearchItem)
 {
     // replace string (only if text given and search is not parameterized)?
     bool bReplaceText = pSearchOpt && ( !pSearchOpt->replaceString.isEmpty() ||
@@ -1310,7 +1313,7 @@ int SwFindParaAttr::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnMove,
             // TODO: searching for attributes in Outliner text?!
 
             // continue search in correct section (pTextRegion)
-            if (sw::FindTextImpl(aSrchPam, *pSearchOpt, false/*bSearchInNotes*/, *pSText, fnMove, *pTextRegion, bInReadOnly, m_pLayout) &&
+            if (sw::FindTextImpl(aSrchPam, *pSearchOpt, false/*bSearchInNotes*/, *pSText, fnMove, *pTextRegion, bInReadOnly, m_pLayout, xSearchItem) &&
                 *aSrchPam.GetMark() != *aSrchPam.GetPoint() )
                 break; // found
             else if( !pSet->Count() )

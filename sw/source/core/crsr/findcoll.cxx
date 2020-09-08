@@ -41,14 +41,15 @@ struct SwFindParaFormatColl : public SwFindParas
         , m_pLayout(pLayout)
     {}
     virtual ~SwFindParaFormatColl() {}
-    virtual int DoFind(SwPaM &, SwMoveFnCollection const &, const SwPaM &, bool bInReadOnly) override;
+    virtual int DoFind(SwPaM &, SwMoveFnCollection const &, const SwPaM &, bool bInReadOnly, std::unique_ptr<SvxSearchItem>& xSearchItem) override;
     virtual bool IsReplaceMode() const override;
 };
 
 }
 
 int SwFindParaFormatColl::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnMove,
-        const SwPaM & rRegion, bool bInReadOnly)
+        const SwPaM & rRegion, bool bInReadOnly,
+        std::unique_ptr<SvxSearchItem>& /*xSearchItem*/)
 {
     int nRet = FIND_FOUND;
     if( bInReadOnly && pReplColl )
