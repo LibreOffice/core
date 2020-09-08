@@ -1,0 +1,169 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "325efc94_f839d4a3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-09-08T19:39:39Z",
+      "side": 1,
+      "message": "This Change-Id didn\u0027t have an empty line before it. That\u0027s why the commit hook didn\u0027t recognize it, and added yet another Change-Id, which in turn made gerrit create a new change set. If you remove the new Change-Id, and add an empty line before the old, then gerrit should recognize it again as the old change. (Or alternatively remove the old one, and stay here.)",
+      "revId": "12dff2152fc6d1fed35ba924274f56238f5e2c1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4169f85_8d9ad297",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 4073,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-09-08T19:39:39Z",
+      "side": 1,
+      "message": "What\u0027s the benefit from marking it as experimental? As of now, this will only hide it from menus and toolbars that have it (most likely customized ones, as we remove the use of this command from master).",
+      "revId": "12dff2152fc6d1fed35ba924274f56238f5e2c1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de8e7aff_cffe00f9",
+        "filename": "reportdesign/source/ui/report/ReportController.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1036,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-09-08T19:39:39Z",
+      "side": 1,
+      "message": "Question from the other thread: \"I wonder how to deal with this later on. It introduces an own SID_DISTRIBUTION and calls the deprecated command. Just remove?\"\n\nDon\u0027t see a problem in leaving it as-is for now. Of course removing its own SID_DISTRIBUTION, and replacing its usages with the global SID_DISTRIBUTE_DLG is also an option. We also might consider adding the new individual commands to the reportdesign module as well, so the dialog\nwill no longer be used by default anywhere in the UI.",
+      "revId": "12dff2152fc6d1fed35ba924274f56238f5e2c1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed149a80_fc017feb",
+        "filename": "sd/sdi/_drvwsh.sdi",
+        "patchSetId": 1
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-09-08T19:39:39Z",
+      "side": 1,
+      "message": "Why is this?",
+      "revId": "12dff2152fc6d1fed35ba924274f56238f5e2c1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d21e4ed_5d285b84",
+        "filename": "sd/source/ui/view/drviews2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2758,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-09-08T19:39:39Z",
+      "side": 1,
+      "message": "Don\u0027t see a benefit in stating the deprecation in c++ files.",
+      "range": {
+        "startLine": 2758,
+        "startChar": 34,
+        "endLine": 2758,
+        "endChar": 74
+      },
+      "revId": "12dff2152fc6d1fed35ba924274f56238f5e2c1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8f4a620_d36a17cc",
+        "filename": "sd/source/ui/view/drviewsj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-09-08T19:39:39Z",
+      "side": 1,
+      "message": "I think the new SID_DISTRIBUTE should also be handled in this method.",
+      "revId": "12dff2152fc6d1fed35ba924274f56238f5e2c1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dbedb2de_5d9e6c02",
+        "filename": "sd/uiconfig/sdraw/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-09-08T19:39:39Z",
+      "side": 1,
+      "message": "You can avoid repeating the command list like this, by changing it to menu:menuitem and adding another entry to Controller.xcu under the \"PopupMenu\" node, like this: https://opengrok.libreoffice.org/xref/core/officecfg/registry/data/org/openoffice/Office/UI/Controller.xcu?r\u003d3a46e402#210",
+      "revId": "12dff2152fc6d1fed35ba924274f56238f5e2c1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af5567d0_4dfbfab9",
+        "filename": "sd/uiconfig/sdraw/toolbar/distributebar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-09-08T19:39:39Z",
+      "side": 1,
+      "message": "MPLv2-only header, as in https://opengrok.libreoffice.org/xref/core/TEMPLATE.SOURCECODE.HEADER?r\u003df75cd221#70",
+      "revId": "12dff2152fc6d1fed35ba924274f56238f5e2c1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ab2132d_770fcded",
+        "filename": "svx/sdi/svx.sdi",
+        "patchSetId": 1
+      },
+      "lineNbr": 2276,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-09-08T19:39:39Z",
+      "side": 1,
+      "message": "Maybe set these to FALSE, so it doesn\u0027t appear in the customization dialog?",
+      "range": {
+        "startLine": 2274,
+        "startChar": 0,
+        "endLine": 2276,
+        "endChar": 25
+      },
+      "revId": "12dff2152fc6d1fed35ba924274f56238f5e2c1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
