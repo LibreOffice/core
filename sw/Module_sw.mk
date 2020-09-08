@@ -80,7 +80,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_globalfilter \
     CppunitTest_sw_unowriter \
     CppunitTest_sw_uibase_shells \
-    CppunitTest_sw_updateall_object_replacements \
+    CppunitTest_sw_uibase_uiview \
 ))
 
 ifneq ($(ENABLE_HEADLESS),TRUE)
