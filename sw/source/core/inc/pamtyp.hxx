@@ -36,6 +36,7 @@ class SwNode;
 class SwNodeIndex;
 class SwContentNode;
 class SwIndex;
+class SvxSearchItem;
 
 namespace i18nutil {
     struct SearchOptions2;
@@ -94,7 +95,8 @@ namespace sw {
                 utl::TextSearch& rSText,
                 SwMoveFnCollection const & fnMove,
                 const SwPaM & rRegion, bool bInReadOnly,
-                SwRootFrame const* pLayout);
+                SwRootFrame const* pLayout,
+                std::unique_ptr<SvxSearchItem>& xSearchItem);
     bool FindFormatImpl(SwPaM & rSearchPam,
                 const SwFormat& rFormat,
                 SwMoveFnCollection const & fnMove,
