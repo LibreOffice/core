@@ -2931,7 +2931,7 @@ if test $_os = Darwin; then
         if test "$host_cpu" = x86_64; then
             with_macosx_version_min_required="10.10";
         else
-            with_macosx_version_min_required="10.16";
+            with_macosx_version_min_required="11.0";
         fi
     fi
 
