@@ -209,6 +209,7 @@ LIBO_VERSION_MICRO=$3
 LIBO_VERSION_PATCH=$4
 
 LIBO_VERSION_SUFFIX=$5
+
 # Split out LIBO_VERSION_SUFFIX_SUFFIX... horrible crack. But apparently wanted separately in
 # openoffice.lst as ABOUTBOXPRODUCTVERSIONSUFFIX. Note that the double brackets are for m4's sake,
 # they get undoubled before actually passed to sed.
@@ -217,12 +218,33 @@ test -n "$LIBO_VERSION_SUFFIX_SUFFIX" && LIBO_VERSION_SUFFIX="${LIBO_VERSION_SUF
 # LIBO_VERSION_SUFFIX, if non-empty, should include the period separator
 test -n "$LIBO_VERSION_SUFFIX" && LIBO_VERSION_SUFFIX=".$LIBO_VERSION_SUFFIX"
 
+# The value for key CFBundleVersion in the Info.plist file must be a period-separated list of at most
+# three non-negative integers. Please find more information about CFBundleVersion at
+# https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundleversion
+
+# The value for key CFBundleShortVersionString in the Info.plist file must be a period-separated list
+# of at most three non-negative integers. Please find more information about
+# CFBundleShortVersionString at
+# https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundleshortversionstring
+
+# But that is enforced only in the App Store, and we apparently want to break the rules otherwise.
+
+if test "$enable_macosx_sandbox" = yes; then
+    MACOSX_BUNDLE_SHORTVERSION=$LIBO_VERSION_MAJOR.$LIBO_VERSION_MINOR.`expr $LIBO_VERSION_MICRO '*' 1000 + $LIBO_VERSION_PATCH`
+    MACOSX_BUNDLE_VERSION=$MACOSX_BUNDLE_SHORTVERSION
+else
+    MACOSX_BUNDLE_SHORTVERSION=$LIBO_VERSION_MAJOR.$LIBO_VERSION_MINOR.$LIBO_VERSION_MICRO.$LIBO_VERSION_PATCH
+    MACOSX_BUNDLE_VERSION=$MACOSX_BUNDLE_SHORTVERSION$LIBO_VERSION_SUFFIX_SUFFIX
+fi
+
 AC_SUBST(LIBO_VERSION_MAJOR)
 AC_SUBST(LIBO_VERSION_MINOR)
 AC_SUBST(LIBO_VERSION_MICRO)
 AC_SUBST(LIBO_VERSION_PATCH)
 AC_SUBST(LIBO_VERSION_SUFFIX)
 AC_SUBST(LIBO_VERSION_SUFFIX_SUFFIX)
+AC_SUBST(MACOSX_BUNDLE_SHORTVERSION)
+AC_SUBST(MACOSX_BUNDLE_VERSION)
 
 AC_DEFINE_UNQUOTED(LIBO_VERSION_MAJOR,$LIBO_VERSION_MAJOR)
 AC_DEFINE_UNQUOTED(LIBO_VERSION_MINOR,$LIBO_VERSION_MINOR)

@@ -1921,9 +1921,9 @@
     <key>CFBundleIconFile</key>
     <string>main.icns</string>
     <key>CFBundleShortVersionString</key>
-    <string>@LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@</string>
+    <string>@MACOSX_BUNDLE_SHORTVERSION@</string>
     <key>CFBundleVersion</key>
-    <string>@LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@</string>
+    <string>@MACOSX_BUNDLE_VERSION@</string>
     <key>CFBundleIdentifier</key>
     <string>@MACOSX_BUNDLE_IDENTIFIER@</string>
     <key>CFBundleInfoDictionaryVersion</key>
