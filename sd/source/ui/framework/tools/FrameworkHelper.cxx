@@ -180,7 +180,6 @@ const OUString FrameworkHelper::msCenterPaneURL( msPaneURLPrefix + "CenterPane")
 const OUString FrameworkHelper::msFullScreenPaneURL( msPaneURLPrefix + "FullScreenPane");
 const OUString FrameworkHelper::msLeftImpressPaneURL( msPaneURLPrefix + "LeftImpressPane");
 const OUString FrameworkHelper::msLeftDrawPaneURL( msPaneURLPrefix + "LeftDrawPane");
-const OUString FrameworkHelper::msSidebarPaneURL( msPaneURLPrefix + "SidebarPane");
 
 // View URLs.
 
@@ -201,13 +200,6 @@ const OUString FrameworkHelper::msViewTabBarURL( msToolBarURLPrefix + "ViewTabBa
 
 // Task panel URLs.
 const OUStringLiteral FrameworkHelper::msTaskPanelURLPrefix( u"private:resource/toolpanel/" );
-const OUString FrameworkHelper::msAllMasterPagesTaskPanelURL( msTaskPanelURLPrefix + "AllMasterPages" );
-const OUString FrameworkHelper::msRecentMasterPagesTaskPanelURL( msTaskPanelURLPrefix + "RecentMasterPages" );
-const OUString FrameworkHelper::msUsedMasterPagesTaskPanelURL( msTaskPanelURLPrefix + "UsedMasterPages" );
-const OUString FrameworkHelper::msLayoutTaskPanelURL( msTaskPanelURLPrefix + "Layouts" );
-const OUString FrameworkHelper::msTableDesignPanelURL( msTaskPanelURLPrefix + "TableDesign" );
-const OUString FrameworkHelper::msCustomAnimationTaskPanelURL( msTaskPanelURLPrefix + "CustomAnimations" );
-const OUString FrameworkHelper::msSlideTransitionTaskPanelURL( msTaskPanelURLPrefix + "SlideTransitions" );
 
 // Event URLs.
 const OUStringLiteral FrameworkHelper::msResourceActivationRequestEvent( u"ResourceActivationRequested" );
@@ -217,10 +209,6 @@ const OUStringLiteral FrameworkHelper::msResourceDeactivationEvent( u"ResourceDe
 const OUStringLiteral FrameworkHelper::msResourceDeactivationEndEvent( u"ResourceDeactivationEnd" );
 const OUStringLiteral FrameworkHelper::msConfigurationUpdateStartEvent( u"ConfigurationUpdateStart" );
 const OUStringLiteral FrameworkHelper::msConfigurationUpdateEndEvent( u"ConfigurationUpdateEnd" );
-
-// Service names of controllers.
-const OUStringLiteral FrameworkHelper::msModuleControllerService(u"com.sun.star.drawing.framework.ModuleController");
-const OUStringLiteral FrameworkHelper::msConfigurationControllerService(u"com.sun.star.drawing.framework.ConfigurationController");
 
 //----- helper ----------------------------------------------------------------
 namespace

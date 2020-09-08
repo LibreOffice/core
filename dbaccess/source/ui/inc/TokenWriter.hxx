@@ -138,10 +138,6 @@ namespace dbaui
     const sal_Int16 nIndentMax = 23;
     class OHTMLImportExport : public ODatabaseImportExport
     {
-        // default HtmlFontSz[1-7]
-        static const sal_Int16  nDefaultFontSize[SBA_HTML_FONTSIZES];
-        // HtmlFontSz[1-7] in s*3.ini [user]
-        static sal_Int16        nFontSize[SBA_HTML_FONTSIZES];
         static const sal_Int16  nCellSpacing;
         static const char sIndentSource[];
         char                    sIndent[nIndentMax+1];

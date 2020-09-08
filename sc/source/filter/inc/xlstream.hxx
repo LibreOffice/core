@@ -30,7 +30,6 @@ const std::size_t EXC_REC_SEEK_TO_END       = static_cast<std::size_t>( -1 );
 const sal_uInt16 EXC_MAXRECSIZE_BIFF5       = 2080;
 const sal_uInt16 EXC_MAXRECSIZE_BIFF8       = 8224;
 
-const ErrCode EXC_ENCR_ERROR_WRONG_PASS     = ERRCODE_SVX_WRONGPASS;
 const ErrCode EXC_ENCR_ERROR_UNSUPP_CRYPT   = ERRCODE_SVX_READ_FILTER_CRYPT;
 const sal_uInt16 EXC_ENCR_BLOCKSIZE         = 1024;
 

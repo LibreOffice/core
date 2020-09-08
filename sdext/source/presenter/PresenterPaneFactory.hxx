@@ -54,8 +54,6 @@ public:
     static const OUStringLiteral msNotesPaneURL;
     static const OUStringLiteral msToolBarPaneURL;
     static const OUStringLiteral msSlideSorterPaneURL;
-    static const OUStringLiteral msHelpPaneURL;
-    static const OUStringLiteral msOverlayPaneURL;
 
     /** Create a new instance of this class and register it as resource
         factory in the drawing framework of the given controller.

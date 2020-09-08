@@ -60,8 +60,6 @@ class ScContentTree
 
     o3tl::enumarray<ScContentId, sal_uInt16> pPosList;     // for the sequence
 
-    static bool bIsInDrag;      // static, if the Navigator is deleted in ExecuteDrag
-
     ScDocShell* GetManualOrCurrent();
 
     void    InitRoot(ScContentId nType);

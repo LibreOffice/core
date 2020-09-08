@@ -85,8 +85,6 @@ protected:
     };
     typedef std::unordered_map<SCCOL, LastFormula> LastFormulaMapType;
 
-    static const double     fExcToTwips;        // translate 1/256 chars -> Twips
-
     RootData*               pExcRoot;
 
     XclImpStream            maStrm;             // input stream

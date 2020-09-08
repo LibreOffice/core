@@ -31,32 +31,15 @@
 
 /**
 This performs two analyses:
- (1) look for unused fields
- (2) look for fields that are write-only
-
-We dmp a list of calls to methods, and a list of field definitions.
-Then we will post-process the 2 lists and find the set of unused methods.
-
-Be warned that it produces around 5G of log file.
-
-The process goes something like this:
-  $ make check
-  $ make FORCE_COMPILE_ALL=1 COMPILER_PLUGIN_TOOL='UnusedVarsGlobal' check
-  $ ./compilerplugins/clang/UnusedVarsGlobal.py
-
-and then
-  $ for dir in *; do make FORCE_COMPILE_ALL=1 UPDATE_FILES=$dir COMPILER_PLUGIN_TOOL='UnusedVarsGlobalremove' $dir; done
-to auto-remove the method declarations
-
-Note that the actual process may involve a fair amount of undoing, hand editing, and general messing around
-to get it to work :-)
-
+ (1) look for unused global vars
+ (2) look for global vars that are write-only
 */
 
 namespace
 {
 struct MyVarInfo
 {
+    const VarDecl* varDecl;
     std::string fieldName;
     std::string fieldType;
     std::string sourceLocation;
@@ -196,25 +179,36 @@ void UnusedVarsGlobal::run()
 {
     TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
 
-    // dump all our output in one write call - this is to try and limit IO "crosstalk" between multiple processes
-    // writing to the same logfile
-    std::string output;
-    for (const MyVarInfo& s : readFromSet)
-        output += "read:\t" + s.sourceLocation + "\t" + s.fieldName + "\n";
-    for (const MyVarInfo& s : writeToSet)
-        output += "write:\t" + s.sourceLocation + "\t" + s.fieldName + "\n";
-    for (const MyVarInfo& s : definitionSet)
-        output
-            += "definition:\t" + s.fieldName + "\t" + s.fieldType + "\t" + s.sourceLocation + "\n";
-    std::ofstream myfile;
-    myfile.open(WORKDIR "/loplugin.unusedvarsglobal.log", std::ios::app | std::ios::out);
-    myfile << output;
-    myfile.close();
+    if (!isUnitTestMode())
+    {
+        // dump all our output in one write call - this is to try and limit IO "crosstalk" between multiple processes
+        // writing to the same logfile
+        std::string output;
+        for (const MyVarInfo& s : readFromSet)
+            output += "read:\t" + s.sourceLocation + "\t" + s.fieldName + "\n";
+        for (const MyVarInfo& s : writeToSet)
+            output += "write:\t" + s.sourceLocation + "\t" + s.fieldName + "\n";
+        for (const MyVarInfo& s : definitionSet)
+            output += "definition:\t" + s.fieldName + "\t" + s.fieldType + "\t" + s.sourceLocation
+                      + "\n";
+        std::ofstream myfile;
+        myfile.open(WORKDIR "/loplugin.unusedvarsglobal.log", std::ios::app | std::ios::out);
+        myfile << output;
+        myfile.close();
+    }
+    else
+    {
+        for (const MyVarInfo& s : readFromSet)
+            report(DiagnosticsEngine::Warning, "read", compat::getBeginLoc(s.varDecl));
+        for (const MyVarInfo& s : writeToSet)
+            report(DiagnosticsEngine::Warning, "write", compat::getBeginLoc(s.varDecl));
+    }
 }
 
 MyVarInfo UnusedVarsGlobal::niceName(const VarDecl* varDecl)
 {
     MyVarInfo aInfo;
+    aInfo.varDecl = varDecl;
 
     aInfo.fieldName = varDecl->getNameAsString();
     // sometimes the name (if it's an anonymous thing) contains the full path of the build folder, which we don't need
@@ -241,14 +235,23 @@ bool UnusedVarsGlobal::VisitVarDecl(const VarDecl* varDecl)
     varDecl = varDecl->getCanonicalDecl();
     if (isa<ParmVarDecl>(varDecl))
         return true;
-    if (varDecl->isConstexpr())
-        return true;
-    if (varDecl->isExceptionVariable())
+    if (!varDecl->hasGlobalStorage())
         return true;
     if (!varDecl->getLocation().isValid() || ignoreLocation(varDecl))
         return true;
     // ignore stuff that forms part of the stable URE interface
     if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(varDecl->getLocation())))
+        return true;
+
+    /**
+     If we have
+        const size_t NB_PRODUCTS = 3;
+        int DefaultProductDir[NB_PRODUCTS] = { 3, 3, 3 };
+     clang will inline the constant "3" and never tell us that we are reading from NB_PRODUCTS,
+     so just ignore integer constants.
+    */
+    auto varType = varDecl->getType();
+    if (varType.isConstQualified() && varType->isIntegerType())
         return true;
 
     auto initExpr = varDecl->getAnyInitializer();
@@ -267,9 +270,7 @@ bool UnusedVarsGlobal::VisitDeclRefExpr(const DeclRefExpr* declRefExpr)
         return true;
     if (isa<ParmVarDecl>(varDecl))
         return true;
-    if (varDecl->isConstexpr())
-        return true;
-    if (varDecl->isExceptionVariable())
+    if (!varDecl->hasGlobalStorage())
         return true;
     varDecl = varDecl->getCanonicalDecl();
     if (!varDecl->getLocation().isValid() || ignoreLocation(varDecl))

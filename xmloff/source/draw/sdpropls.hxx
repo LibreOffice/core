@@ -37,7 +37,6 @@ extern const XMLPropertyMapEntry aXMLSDProperties[];
 // entry list for presentation page properties
 
 extern const XMLPropertyMapEntry aXMLSDPresPageProps[];
-extern const XMLPropertyMapEntry aXMLSDPresPageProps_onlyHeadersFooter[];
 
 // enum maps for attributes
 

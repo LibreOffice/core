@@ -163,7 +163,6 @@ private:
     static GtkStyleContext *mpRadioButtonStyle;
     static GtkStyleContext *mpRadioButtonRadioStyle;
     static GtkStyleContext *mpSpinStyle;
-    static GtkStyleContext *mpSpinEntryStyle;
     static GtkStyleContext *mpSpinUpStyle;
     static GtkStyleContext *mpSpinDownStyle;
     static GtkStyleContext *mpComboboxStyle;

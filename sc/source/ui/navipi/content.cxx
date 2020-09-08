@@ -83,8 +83,6 @@ const OUStringLiteral aContentBmps[]=
     u"" RID_BMP_CONTENT_DRAWING
 };
 
-bool ScContentTree::bIsInDrag = false;
-
 ScDocShell* ScContentTree::GetManualOrCurrent()
 {
     ScDocShell* pSh = nullptr;
@@ -1232,7 +1230,6 @@ IMPL_LINK(ScContentTree, DragBeginHdl, bool&, rUnsetDragIcon, bool)
     bool bDisallow = true;
 
     std::unique_ptr<ScDocumentLoader> pDocLoader;
-    bIsInDrag = true;
 
     ScModule* pScMod = SC_MOD();
 
@@ -1375,8 +1372,6 @@ IMPL_LINK(ScContentTree, DragBeginHdl, bool&, rUnsetDragIcon, bool)
             bDisallow = false;
         }
     }
-
-    bIsInDrag = false;              // static member
 
     return bDisallow;
 }

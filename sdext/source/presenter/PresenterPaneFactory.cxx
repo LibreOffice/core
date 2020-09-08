@@ -43,11 +43,6 @@ const OUStringLiteral PresenterPaneFactory::msToolBarPaneURL(
     u"private:resource/pane/Presenter/Pane4");
 const OUStringLiteral PresenterPaneFactory::msSlideSorterPaneURL(
     u"private:resource/pane/Presenter/Pane5");
-const OUStringLiteral PresenterPaneFactory::msHelpPaneURL(
-    u"private:resource/pane/Presenter/Pane6");
-
-const OUStringLiteral PresenterPaneFactory::msOverlayPaneURL(
-    u"private:resource/pane/Presenter/Overlay");
 
 //===== PresenterPaneFactory ==================================================
 

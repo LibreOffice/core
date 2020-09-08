@@ -511,7 +511,6 @@ class ScGlobal
     static OUString         aStrClipDocName;
     static std::unique_ptr<SvxBrushItem> xEmptyBrushItem;
     static std::unique_ptr<SvxBrushItem> xButtonBrushItem;
-    static std::unique_ptr<SvxBrushItem> xEmbeddedBrushItem;
 
     static std::unique_ptr<ScFunctionList> xStarCalcFunctionList;
     static std::unique_ptr<ScFunctionMgr> xStarCalcFunctionMgr;

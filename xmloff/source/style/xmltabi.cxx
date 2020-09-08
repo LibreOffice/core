@@ -81,8 +81,6 @@ SvxXMLTabStopContext_Impl::SvxXMLTabStopContext_Impl(
     aTabStop.FillChar = ' ';
     sal_Unicode cTextFillChar = 0;
 
-    static const SvXMLTokenMap aTokenMap( aTabsAttributesAttrTokenMap );
-
     for (auto &aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
         const OUString sValue = aIter.toString();

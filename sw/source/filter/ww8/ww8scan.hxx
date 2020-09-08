@@ -47,7 +47,6 @@ namespace SL
     const char aData[]          = "Data";
     const char aCheckBox[]      = "CheckBox";
     const char aListBox[]       = "ListBox";
-    const char aTextBox[]       = "TextBox";
     const char aTextField[]     = "TextField";
     const char aMSMacroCmds[]   = "MSMacroCmds";
 }

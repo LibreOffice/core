@@ -171,8 +171,6 @@ static void lcl_xmlbic_MergeVertPos( GraphicLocation& ePos,
 void XMLBackgroundImageContext::ProcessAttrs(
         const Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
-    static const SvXMLTokenMap aTokenMap( aBGImgAttributesAttrTokenMap );
-
     ePos = GraphicLocation_NONE;
 
     for (auto &aIter : sax_fastparser::castToFastAttributeList(xAttrList))

@@ -37,8 +37,6 @@
 
 using namespace com::sun::star;
 
-GraphicFilter* XOutBitmap::pGrfFilter = nullptr;
-
 Animation XOutBitmap::MirrorAnimation( const Animation& rAnimation, bool bHMirr, bool bVMirr )
 {
     Animation aNewAnim( rAnimation );
@@ -381,11 +379,8 @@ ErrCode XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObject&
 
     if( pOStm )
     {
-        pGrfFilter = &rFilter;
-
         nRet = rFilter.ExportGraphic( rGraphic, rURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), *pOStm, nFormat, pFilterData );
 
-        pGrfFilter = nullptr;
         aMedium.Commit();
 
         if( aMedium.GetError() && ( ERRCODE_NONE == nRet  ) )

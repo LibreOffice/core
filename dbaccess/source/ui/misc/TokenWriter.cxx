@@ -566,14 +566,6 @@ bool ORTFImportExport::Read()
     return eState != SvParserState::Error;
 }
 
-const sal_Int16 OHTMLImportExport::nDefaultFontSize[SBA_HTML_FONTSIZES] =
-{
-    HTMLFONTSZ1_DFLT, HTMLFONTSZ2_DFLT, HTMLFONTSZ3_DFLT, HTMLFONTSZ4_DFLT,
-    HTMLFONTSZ5_DFLT, HTMLFONTSZ6_DFLT, HTMLFONTSZ7_DFLT
-};
-
-sal_Int16 OHTMLImportExport::nFontSize[SBA_HTML_FONTSIZES] = { 0 };
-
 const sal_Int16 OHTMLImportExport::nCellSpacing = 0;
 const char OHTMLImportExport::sIndentSource[nIndentMax+1] = "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
 
