@@ -135,7 +135,7 @@ void ScDocShell::ReloadAllLinks()
     m_aDocument.UpdateAreaLinks();
 }
 
-IMPL_LINK_NOARG( ScDocShell, ReloadAllLinksHdl, Button*, void )
+IMPL_LINK_NOARG( ScDocShell, ReloadAllLinksHdl, weld::Button&, void )
 {
     ReloadAllLinks();
 
@@ -500,11 +500,9 @@ void ScDocShell::Execute( SfxRequest& rReq )
                         auto pInfoBar = pViewFrame->AppendInfoBar("enablecontent", "", ScResId(STR_RELOAD_TABLES), InfobarType::WARNING);
                         if (pInfoBar)
                         {
-                            VclPtrInstance<PushButton> xBtn(&pViewFrame->GetWindow());
-                            xBtn->SetText(ScResId(STR_ENABLE_CONTENT));
-                            xBtn->SetSizePixel(xBtn->GetOptimalSize());
-                            xBtn->SetClickHdl(LINK(this, ScDocShell, ReloadAllLinksHdl));
-                            pInfoBar->addButton(xBtn);
+                            weld::Button& rBtn = pInfoBar->addButton();
+                            rBtn.set_label(ScResId(STR_ENABLE_CONTENT));
+                            rBtn.connect_clicked(LINK(this, ScDocShell, ReloadAllLinksHdl));
                         }
                     }
                     rReq.Done();
