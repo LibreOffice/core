@@ -23,14 +23,14 @@
 #include <wrtsh.hxx>
 #include <swdtflvr.hxx>
 
-char const DATA_DIRECTORY[] = "/sw/qa/core/data/";
+char const DATA_DIRECTORY[] = "/sw/qa/uibase/uiview/data/";
 
-/// Covers sw/source/core/undo/ fixes.
-class SwCoreUpdateAllObjectReplacementsTest : public SwModelTestBase
+/// Covers sw/source/uibase/uiview/ fixes.
+class SwUibaseUiviewTest : public SwModelTestBase
 {
 };
 
-CPPUNIT_TEST_FIXTURE(SwCoreUpdateAllObjectReplacementsTest, testDoIt)
+CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testUpdateAllObjectReplacements)
 {
     // Make a temporary copy of the test document
     utl::TempFile tmp;
