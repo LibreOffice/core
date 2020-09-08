@@ -53,8 +53,7 @@ const INetURLObject& GalleryObjectCollection::getURLForPosition(sal_uInt32 nPos)
 {
     if (nPos < size())
         return get(nPos)->getURL();
-    INetURLObject* aInvalidURL = new INetURLObject();
-    return *aInvalidURL;
+    return m_aInvalidURL;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

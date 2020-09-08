@@ -49,6 +49,7 @@ class SVXCORE_DLLPUBLIC GalleryObjectCollection
 {
 private:
     std::vector<std::unique_ptr<GalleryObject>> m_aObjectList;
+    INetURLObject m_aInvalidURL;
 
 public:
     GalleryObjectCollection();
