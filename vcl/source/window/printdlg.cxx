@@ -2199,7 +2199,7 @@ PrintProgressDialog::PrintProgressDialog(weld::Window* i_pParent, int i_nMax)
     mxButton->connect_clicked( LINK( this, PrintProgressDialog, ClickHdl ) );
 
     // after this patch f7157f04fab298423e2c4f6a7e5f8e361164b15f, we have seen the calc Max string (sometimes) look above
-    // now init to the right start vaules
+    // now init to the right start values
     mxText->set_label(getNewLabel(maStr, mnCur, mnMax));
 }
 
