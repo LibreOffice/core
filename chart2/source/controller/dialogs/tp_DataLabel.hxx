@@ -35,6 +35,7 @@ public:
     static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rInAttrs);
 
     void SetNumberFormatter( SvNumberFormatter* pFormatter );
+    void HideLeaderLinesControls( bool bHideLeaderLinesControls );
 
     virtual void Reset(const SfxItemSet* rInAttrs) override;
     virtual bool FillItemSet(SfxItemSet* rOutAttrs) override;

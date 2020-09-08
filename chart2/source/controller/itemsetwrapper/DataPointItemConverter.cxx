@@ -581,6 +581,27 @@ bool DataPointItemConverter::ApplySpecialItem(
             }
         }
         break;
+
+        case SCHATTR_DATADESCR_CUSTOM_LEADERLINES:
+        {
+            try
+            {
+                bool bNew = static_cast<const SfxBoolItem&>(rItemSet.Get(nWhichId)).GetValue();
+                bool bOld = false;
+                Reference<beans::XPropertySet> xSeriesProp(m_xSeries, uno::UNO_QUERY);
+                xSeriesProp->getPropertyValue("ShowCustomLeaderLines") >>= bOld;
+                if( bOld != bNew )
+                {
+                    xSeriesProp->setPropertyValue("ShowCustomLeaderLines", uno::Any(bNew));
+                    bChanged = true;
+                }
+            }
+            catch (const uno::Exception&)
+            {
+                TOOLS_WARN_EXCEPTION("chart2", "");
+            }
+        }
+        break;
     }
 
     return bChanged;
@@ -725,6 +746,21 @@ void DataPointItemConverter::FillSpecialItem(
         case SCHATTR_DATADESCR_NO_PERCENTVALUE:
         {
             rOutItemSet.Put( SfxBoolItem( nWhichId, m_bForbidPercentValue ));
+        }
+        break;
+
+        case SCHATTR_DATADESCR_CUSTOM_LEADERLINES:
+        {
+            try
+            {
+                bool bValue = true;
+                GetPropertySet()->getPropertyValue( "ShowCustomLeaderLines" ) >>= bValue;
+                rOutItemSet.Put(SfxBoolItem(nWhichId, bValue));
+            }
+            catch (const uno::Exception&)
+            {
+                TOOLS_WARN_EXCEPTION("chart2", "");
+            }
         }
         break;
 

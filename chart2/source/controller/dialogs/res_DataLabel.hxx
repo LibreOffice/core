@@ -40,6 +40,7 @@ public:
     void Reset(const SfxItemSet& rInAttrs);
 
     void SetNumberFormatter( SvNumberFormatter* pFormatter );
+    void HideLeaderLinesControls( bool bHideLeaderLinesControls );
 
 private:
     std::map< sal_Int32, sal_uInt16 > m_aPlacementToListBoxMap;
@@ -83,6 +84,9 @@ private:
     std::unique_ptr<TextDirectionListBox> m_xLB_TextDirection;
     std::unique_ptr<svx::DialControl> m_xDC_Dial;
     std::unique_ptr<weld::CustomWeld> m_xDC_DialWin;
+
+    std::unique_ptr<weld::CheckButton> m_xCBCustomLeaderLines;
+    std::unique_ptr<weld::Frame> m_xFCustomLeaderLines;
 
     DECL_LINK(NumberFormatDialogHdl, weld::Button&, void );
     DECL_LINK(CheckHdl, weld::ToggleButton&, void );
