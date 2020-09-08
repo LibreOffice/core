@@ -5597,6 +5597,9 @@ static GtkMessageType VclToGtk(VclMessageType eType)
         case VclMessageType::Error:
             eRet = GTK_MESSAGE_ERROR;
             break;
+        case VclMessageType::Other:
+            eRet = GTK_MESSAGE_OTHER;
+            break;
     }
     return eRet;
 }
