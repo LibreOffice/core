@@ -93,6 +93,8 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 
 #include <vcl/wmf.hxx>
+#include <svx/sdtfsitm.hxx>
+#include <svx/svdoutl.hxx>
 
 #include <memory>
 #include <vector>
@@ -173,6 +175,35 @@ protected:
         _out_rCurrentValue <<= static_cast< SvxShape& >( getContext() ).getSize();
     }
 };
+
+namespace
+{
+/// Calculates what scaling factor will be used for autofit text scaling of this shape.
+sal_Int16 GetTextFitToSizeScale(SdrObject* pObject)
+{
+    SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(pObject);
+    if (!pTextObj)
+    {
+        return 0;
+    }
+
+    const SfxItemSet& rTextObjSet = pTextObj->GetMergedItemSet();
+    if (rTextObjSet.GetItem<SdrTextFitToSizeTypeItem>(SDRATTR_TEXT_FITTOSIZE)->GetValue()
+        != drawing::TextFitToSizeType_AUTOFIT)
+    {
+        return 0;
+    }
+
+    std::unique_ptr<SdrOutliner> pOutliner
+        = pTextObj->getSdrModelFromSdrObject().createOutliner(OutlinerMode::TextObject);
+    tools::Rectangle aBoundRect(pTextObj->GetCurrentBoundRect());
+    pTextObj->SetupOutlinerFormatting(*pOutliner, aBoundRect);
+    sal_uInt16 nX = 0;
+    sal_uInt16 nY = 0;
+    pOutliner->GetGlobalCharStretching(nX, nY);
+    return nY;
+}
+}
 
 SvxShape::SvxShape( SdrObject* pObject )
 :   maSize(100,100)
@@ -2835,6 +2866,12 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
     case OWN_ATTR_UINAME_SINGULAR:
     {
         rValue <<= GetSdrObject()->TakeObjNameSingul();
+        break;
+    }
+
+    case OWN_ATTR_TEXTFITTOSIZESCALE:
+    {
+        rValue <<= GetTextFitToSizeScale(GetSdrObject());
         break;
     }
 
