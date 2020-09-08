@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <ExponentialRegressionCurveCalculator.hxx>
 #include <RegressionCalculationHelper.hxx>
 #include <SpecialCharacters.hxx>
@@ -199,7 +203,7 @@ OUString ExponentialRegressionCurveCalculator::ImplGetRepresentation(
             OUString aValueString = getFormattedString( xNumFormatter, nNumberFormatKey, m_fLogIntercept, pValueLength );
             if ( aValueString != "0" )  // aValueString may be rounded to 0 if nValueLength is small
             {
-                aTmpBuf.append( aValueString ).append( (m_fLogSlope < 0.0) ? OUStringLiteral(u" ") : OUStringLiteral(u" + ") );
+                aTmpBuf.append( aValueString ).append( (m_fLogSlope < 0.0) ? std::u16string_view(u" ") : std::u16string_view(u" + ") );
             }
         }
     }

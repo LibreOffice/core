@@ -535,8 +535,8 @@ public:
     **/
     bool getBuildIds( sal_Int32& rUPD, sal_Int32& rBuild ) const;
 
-    static const OUStringLiteral aDefaultNamespace;
-    static const OUStringLiteral aNamespaceSeparator;
+    static constexpr OUStringLiteral aDefaultNamespace = u"";
+    static constexpr OUStringLiteral aNamespaceSeparator = u":";
 
     static const sal_uInt16 OOo_1x = 10;
     static const sal_uInt16 OOo_2x = 20;

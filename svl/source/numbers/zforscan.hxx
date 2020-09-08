@@ -91,7 +91,6 @@ public:
     const OUString& GetFalseString() const    { return GetSpecialKeyword( NF_KEY_FALSE ); }
     const OUString& GetRedString() const      { return GetKeywords()[NF_KEY_RED]; }
     const OUString& GetBooleanString() const  { return GetKeywords()[NF_KEY_BOOLEAN]; }
-    static const OUStringLiteral& GetErrorString()   { return sErrStr; }
     static const ::std::vector<Color> & GetStandardColors()
         {
             return StandardColor;
@@ -173,6 +172,8 @@ public:
     /// Get type scanned (so far).
     SvNumFormatType GetScannedType() const { return eScannedType; }
 
+    static constexpr OUStringLiteral sErrStr = u"#FMT"; // String for error output
+
 private: // Private section
     NfKeywordTable sKeyword;                    // Syntax keywords
     static const NfKeywordTable sEnglishKeyword; // English Syntax keywords
@@ -209,7 +210,6 @@ private: // Private section
     OUString sCurAbbrev;                        // Currency abbreviation
     OUString sBooleanEquivalent1;               // "TRUE";"TRUE";"FALSE"
     OUString sBooleanEquivalent2;               // [>0]"TRUE";[<0]"TRUE";"FALSE"
-    static const OUStringLiteral sErrStr;       // String for error output
 
     bool bConvertMode;                          // Set in the convert mode
     bool mbConvertDateOrder;                    // Set in the convert mode whether to convert date particles order

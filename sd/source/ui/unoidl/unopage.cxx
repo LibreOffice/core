@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <initializer_list>
+#include <string_view>
 
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -1491,7 +1492,7 @@ Sequence< OUString > SAL_CALL SdGenericDrawPage::getSupportedServiceNames()
 {
     return comphelper::concatSequences(
         SvxFmDrawPage::getSupportedServiceNames(),
-        std::initializer_list<OUStringLiteral>{ u"com.sun.star.drawing.GenericDrawPage",
+        std::initializer_list<std::u16string_view>{ u"com.sun.star.drawing.GenericDrawPage",
                                           u"com.sun.star.document.LinkTarget",
                                           u"com.sun.star.document.LinkTargetSupplier" });
 }
@@ -2192,7 +2193,7 @@ Sequence< OUString > SAL_CALL SdDrawPage::getSupportedServiceNames()
 
     throwIfDisposed();
 
-    std::vector<OUStringLiteral> aAdd{ u"com.sun.star.drawing.DrawPage" };
+    std::vector<std::u16string_view> aAdd{ u"com.sun.star.drawing.DrawPage" };
 
     if( IsImpressDocument() )
         aAdd.emplace_back(u"com.sun.star.presentation.DrawPage");
@@ -2714,7 +2715,7 @@ Sequence< OUString > SAL_CALL SdMasterPage::getSupportedServiceNames()
 
     throwIfDisposed();
 
-    std::vector<OUStringLiteral> aAdd{ u"com.sun.star.drawing.MasterPage" };
+    std::vector<std::u16string_view> aAdd{ u"com.sun.star.drawing.MasterPage" };
 
     if( SvxFmDrawPage::mpPage && static_cast<SdPage*>(SvxFmDrawPage::mpPage)->GetPageKind() == PageKind::Handout )
         aAdd.emplace_back(u"com.sun.star.presentation.HandoutMasterPage");

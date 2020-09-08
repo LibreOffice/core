@@ -175,7 +175,6 @@ namespace {
 
 // Pane URLS.
 
-const OUStringLiteral FrameworkHelper::msPaneURLPrefix(u"private:resource/pane/");
 const OUString FrameworkHelper::msCenterPaneURL( msPaneURLPrefix + "CenterPane");
 const OUString FrameworkHelper::msFullScreenPaneURL( msPaneURLPrefix + "FullScreenPane");
 const OUString FrameworkHelper::msLeftImpressPaneURL( msPaneURLPrefix + "LeftImpressPane");
@@ -183,7 +182,6 @@ const OUString FrameworkHelper::msLeftDrawPaneURL( msPaneURLPrefix + "LeftDrawPa
 
 // View URLs.
 
-const OUStringLiteral FrameworkHelper::msViewURLPrefix(u"private:resource/view/");
 const OUString FrameworkHelper::msImpressViewURL( msViewURLPrefix + "ImpressView");
 const OUString FrameworkHelper::msDrawViewURL( msViewURLPrefix + "GraphicView");
 const OUString FrameworkHelper::msOutlineViewURL( msViewURLPrefix + "OutlineView");
@@ -195,20 +193,7 @@ const OUString FrameworkHelper::msSidebarViewURL( msViewURLPrefix + "SidebarView
 
 // Tool bar URLs.
 
-const OUStringLiteral FrameworkHelper::msToolBarURLPrefix(u"private:resource/toolbar/");
 const OUString FrameworkHelper::msViewTabBarURL( msToolBarURLPrefix + "ViewTabBar");
-
-// Task panel URLs.
-const OUStringLiteral FrameworkHelper::msTaskPanelURLPrefix( u"private:resource/toolpanel/" );
-
-// Event URLs.
-const OUStringLiteral FrameworkHelper::msResourceActivationRequestEvent( u"ResourceActivationRequested" );
-const OUStringLiteral FrameworkHelper::msResourceDeactivationRequestEvent( u"ResourceDeactivationRequest" );
-const OUStringLiteral FrameworkHelper::msResourceActivationEvent( u"ResourceActivation" );
-const OUStringLiteral FrameworkHelper::msResourceDeactivationEvent( u"ResourceDeactivation" );
-const OUStringLiteral FrameworkHelper::msResourceDeactivationEndEvent( u"ResourceDeactivationEnd" );
-const OUStringLiteral FrameworkHelper::msConfigurationUpdateStartEvent( u"ConfigurationUpdateStart" );
-const OUStringLiteral FrameworkHelper::msConfigurationUpdateEndEvent( u"ConfigurationUpdateEnd" );
 
 //----- helper ----------------------------------------------------------------
 namespace

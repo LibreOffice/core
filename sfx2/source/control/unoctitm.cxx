@@ -71,6 +71,7 @@
 
 #include <map>
 #include <memory>
+#include <string_view>
 
 #include <sal/log.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -1063,7 +1064,7 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
         }
         else
         {
-            aBuffer.append(aEvent.IsEnabled ? OUStringLiteral(u"enabled") : OUStringLiteral(u"disabled"));
+            aBuffer.append(aEvent.IsEnabled ? std::u16string_view(u"enabled") : std::u16string_view(u"disabled"));
         }
     }
     else if (aEvent.FeatureURL.Path == "Cut" ||
@@ -1166,7 +1167,7 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
              aEvent.FeatureURL.Path == "Intersect" ||
              aEvent.FeatureURL.Path == "ResetAttributes")
     {
-        aBuffer.append(aEvent.IsEnabled ? OUStringLiteral(u"enabled") : OUStringLiteral(u"disabled"));
+        aBuffer.append(aEvent.IsEnabled ? std::u16string_view(u"enabled") : std::u16string_view(u"disabled"));
     }
     else if (aEvent.FeatureURL.Path == "AssignLayout" ||
              aEvent.FeatureURL.Path == "StatusSelectionMode" ||

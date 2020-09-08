@@ -24,7 +24,7 @@
 #include <strings.hxx>
 
 #include <algorithm>
-
+#include <string_view>
 
 namespace rptui
 {
@@ -230,7 +230,7 @@ namespace rptui
     void OPropertyInfoService::getExcludeProperties(::std::vector< beans::Property >& _rExcludeProperties,const css::uno::Reference< css::inspection::XPropertyHandler >& _xFormComponentHandler)
     {
         const uno::Sequence< beans::Property > aProps = _xFormComponentHandler->getSupportedProperties();
-        static const OUStringLiteral pExcludeProperties[] =
+        static const std::u16string_view pExcludeProperties[] =
         {
                 u"Enabled",
                 u"Printable",

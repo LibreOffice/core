@@ -35,19 +35,6 @@
 
 using namespace webdav_ucp;
 
-const OUStringLiteral DAVProperties::CREATIONDATE(u"DAV:creationdate");
-const OUStringLiteral DAVProperties::DISPLAYNAME(u"DAV:displayname");
-const OUStringLiteral DAVProperties::GETCONTENTLANGUAGE(u"DAV:getcontentlanguage");
-const OUStringLiteral DAVProperties::GETCONTENTLENGTH(u"DAV:getcontentlength");
-const OUStringLiteral DAVProperties::GETCONTENTTYPE(u"DAV:getcontenttype");
-const OUStringLiteral DAVProperties::GETETAG(u"DAV:getetag");
-const OUStringLiteral DAVProperties::GETLASTMODIFIED(u"DAV:getlastmodified");
-const OUStringLiteral DAVProperties::LOCKDISCOVERY(u"DAV:lockdiscovery");
-const OUStringLiteral DAVProperties::RESOURCETYPE(u"DAV:resourcetype");
-const OUStringLiteral DAVProperties::SOURCE(u"DAV:source");
-const OUStringLiteral DAVProperties::SUPPORTEDLOCK(u"DAV:supportedlock");
-const OUStringLiteral DAVProperties::EXECUTABLE(u"http://apache.org/dav/props/executable");
-
 void DAVProperties::createNeonPropName( const OUString & rFullName,
                                         NeonPropName & rName )
 {

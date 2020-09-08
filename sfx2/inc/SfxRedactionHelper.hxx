@@ -19,6 +19,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 
+#include <string_view>
 #include <vector>
 
 using namespace ::com::sun::star;
@@ -126,7 +127,7 @@ public:
                                   const RedactionTarget* pTarget);
 
 private:
-    static constexpr OUStringLiteral m_aPredefinedTargets[6] = {
+    static constexpr std::u16string_view m_aPredefinedTargets[6] = {
         u"\\b(?:\\d[ -]*?){13,16}\\b", //Credit card numbers
         u"\\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}\\b", //Email addresses
         u"\\b(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"

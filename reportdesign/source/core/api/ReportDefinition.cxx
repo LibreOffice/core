@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <vector>
+#include <string_view>
 
 #include <ReportDefinition.hxx>
 
@@ -2109,7 +2110,7 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstance( co
 
 uno::Sequence< OUString > SAL_CALL OReportDefinition::getAvailableServiceNames()
 {
-    static const OUStringLiteral aSvxComponentServiceNameList[] =
+    static const std::u16string_view aSvxComponentServiceNameList[] =
     {
         u"com.sun.star.form.component.FixedText",
         u"com.sun.star.form.component.DatabaseImageControl",

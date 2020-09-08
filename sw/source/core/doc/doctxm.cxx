@@ -1721,7 +1721,8 @@ void SwTOXBaseSection::UpdatePageNum_( SwTextNode* pNd,
     // collect starts end ends of main entry character style
     std::unique_ptr< std::vector<sal_uInt16> > xCharStyleIdx(pMainEntryNums ? new std::vector<sal_uInt16> : nullptr);
 
-    OUString sSrchStr = OUStringChar(C_NUM_REPL) + S_PAGE_DELI + OUStringChar(C_NUM_REPL);
+    OUString sSrchStr
+        = OUStringChar(C_NUM_REPL) + SwTOXMark::S_PAGE_DELI + OUStringChar(C_NUM_REPL);
     sal_Int32 nStartPos = pNd->GetText().indexOf(sSrchStr);
     sSrchStr = OUStringChar(C_NUM_REPL) + OUStringChar(C_END_PAGE_NUM);
     sal_Int32 nEndPos = pNd->GetText().indexOf(sSrchStr);
@@ -1786,7 +1787,7 @@ void SwTOXBaseSection::UpdatePageNum_( SwTextNode* pNd,
                 else if (nCount) //#58127# If nCount == 0, then the only PageNumber is already in aNumStr!
                 {
                     if (nCount == 1 )
-                        aNumStr += S_PAGE_DELI;
+                        aNumStr += SwTOXMark::S_PAGE_DELI;
                     else
                         aNumStr += "-";
 
@@ -1795,7 +1796,7 @@ void SwTOXBaseSection::UpdatePageNum_( SwTextNode* pNd,
 
                 // Create new String
                 nBeg     = rNums[i];
-                aNumStr += S_PAGE_DELI;
+                aNumStr += SwTOXMark::S_PAGE_DELI;
                 //the change of the character style must apply after sPageDeli is appended
                 if (xCharStyleIdx && bMainEntryChanges)
                 {
@@ -1810,7 +1811,7 @@ void SwTOXBaseSection::UpdatePageNum_( SwTextNode* pNd,
         {   // Insert all Numbers
             aNumStr += aType.GetNumStr( rNums[i] );
             if (i+1 != rNums.size())
-                aNumStr += S_PAGE_DELI;
+                aNumStr += SwTOXMark::S_PAGE_DELI;
         }
     }
     // Flush when ending and the following old values
@@ -1826,7 +1827,7 @@ void SwTOXBaseSection::UpdatePageNum_( SwTextNode* pNd,
             if(nCount >= 2)
                 aNumStr += "-";
             else if(nCount == 1)
-                aNumStr += S_PAGE_DELI;
+                aNumStr += SwTOXMark::S_PAGE_DELI;
             //#58127# If nCount == 0, then the only PageNumber is already in aNumStr!
             if(nCount)
                 aNumStr += rDescs[i-1]->GetNumType().GetNumStr( nBeg+nCount );

@@ -98,7 +98,7 @@ sal_Unicode lclGetBuiltinIdFromPrefixedName( const OUString& rModelName )
         {
             OUString aBaseName = lclGetBaseName( cBuiltinId );
             sal_Int32 nBaseNameLen = aBaseName.getLength();
-            if( (rModelName.getLength() == spcOoxPrefix.size + nBaseNameLen) && rModelName.matchIgnoreAsciiCase( aBaseName, spcOoxPrefix.size ) )
+            if( (rModelName.getLength() == spcOoxPrefix.getLength() + nBaseNameLen) && rModelName.matchIgnoreAsciiCase( aBaseName, spcOoxPrefix.getLength() ) )
                 return cBuiltinId;
         }
     }

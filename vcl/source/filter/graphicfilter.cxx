@@ -64,6 +64,7 @@
 #include <unotools/ucbhelper.hxx>
 #include <vector>
 #include <memory>
+#include <string_view>
 
 #include "FilterConfigCache.hxx"
 #include "graphicfilter_internal.hxx"
@@ -1385,7 +1386,7 @@ void GraphicFilter::preload()
 {
     sal_Int32 nTokenCount = comphelper::string::getTokenCount(aFilterPath, ';');
     ImpFilterLibCache& rCache = Cache::get();
-    static const std::initializer_list<OUStringLiteral> aFilterNames = {
+    static const std::initializer_list<std::u16string_view> aFilterNames = {
         u"icd", u"idx", u"ime", u"ipb", u"ipd", u"ips", u"ipt", u"ipx", u"ira", u"itg", u"iti",
     };
 

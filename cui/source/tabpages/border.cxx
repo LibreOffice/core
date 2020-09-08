@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <sfx2/objsh.hxx>
 #include <svx/svxids.hrc>
 
@@ -275,7 +279,7 @@ SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogControlle
     , m_xRemoveAdjcentCellBordersCB(m_xBuilder->weld_check_button("rmadjcellborders"))
     , m_xRemoveAdjcentCellBordersFT(m_xBuilder->weld_label("rmadjcellbordersft"))
 {
-    static std::vector<OUStringLiteral> aBorderImageIds;
+    static std::vector<std::u16string_view> aBorderImageIds;
 
     if (aBorderImageIds.empty())
     {
@@ -323,7 +327,7 @@ SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogControlle
     for (auto const & rImageId : aBorderImageIds)
         m_aBorderImgVec.emplace_back(StockImage::Yes, rImageId);
 
-    static std::vector<OUStringLiteral> aShadowImageIds;
+    static std::vector<std::u16string_view> aShadowImageIds;
     if (aShadowImageIds.empty())
     {
         if (comphelper::LibreOfficeKit::isActive())

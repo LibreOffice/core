@@ -20,7 +20,7 @@
 void f(std::ostream& s1)
 {
     static constexpr char foo[] = "foo";
-    static char16_t const foou[] = u"foo";
+    static constexpr char16_t foou[] = u"foo";
     s1 << "foo"
        << "foo";
     // expected-error@-1 {{replace '<<' between string literals with juxtaposition}}
@@ -37,9 +37,6 @@ void f(std::ostream& s1)
     s1 << "foo" << OUString(FOO);
     // expected-error@-1 {{replace '<<' between string literals with juxtaposition}}
     s1 << "foo" << OUString(foo);
-    s1 << "foo" << OUStringLiteral(u"foo"); //TODO: warn too, OUStringLiteral wrapped in OUString
-    s1 << "foo" << OUStringLiteral(FOOu); //TODO: warn too, OUStringLiteral wrapped in OUString
-    s1 << "foo" << OUStringLiteral(foou);
     OString s2;
     s2 = "foo" + OString("foo");
     // expected-error@-1 {{replace '+' between string literals with juxtaposition}}

@@ -10,9 +10,6 @@ excludelist:
     extensions/source/abpilot/unodialogabp.cxx:
     # Needed for direct member access
     - com/sun/star/awt/XWindow.hpp
-    extensions/source/bibliography/bibmod.cxx:
-    # Needed for STATIC_USTRING macro + extern string magic to work at linking time
-    - bibprop.hxx
     extensions/source/bibliography/framectr.cxx:
     # Don't propose hxx -> h change in URE libs
     - cppuhelper/interfacecontainer.hxx

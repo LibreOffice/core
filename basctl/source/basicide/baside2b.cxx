@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <cassert>
+#include <string_view>
 
 #include <helpids.h>
 #include <iderid.hxx>
@@ -1417,7 +1418,7 @@ void BreakPointWindow::ShowMarker(vcl::RenderContext& rRenderContext)
     Size const aOutSz = GetOutputSize();
     long const nLineHeight = GetTextHeight();
 
-    Image aMarker = GetImage(bErrorMarker ? OUStringLiteral(u"" RID_BMP_ERRORMARKER) : OUStringLiteral(u"" RID_BMP_STEPMARKER));
+    Image aMarker = GetImage(bErrorMarker ? std::u16string_view(u"" RID_BMP_ERRORMARKER) : std::u16string_view(u"" RID_BMP_STEPMARKER));
 
     Size aMarkerSz(aMarker.GetSizePixel());
     aMarkerSz = rRenderContext.PixelToLogic(aMarkerSz);

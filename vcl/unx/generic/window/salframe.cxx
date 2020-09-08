@@ -18,6 +18,7 @@
  */
 
 #include <string.h>
+#include <string_view>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -187,7 +188,7 @@ typedef std::vector< unsigned long > NetWmIconData;
 
 namespace
 {
-    const OUStringLiteral SV_ICON_SIZE48[] =
+    const std::u16string_view SV_ICON_SIZE48[] =
     {
         u"" MAINAPP_48_8,
         u"" MAINAPP_48_8,
@@ -205,7 +206,7 @@ namespace
         u"" ODF_48_8
     };
 
-    const OUStringLiteral SV_ICON_SIZE32[] =
+    const std::u16string_view SV_ICON_SIZE32[] =
     {
         u"" MAINAPP_32_8,
         u"" MAINAPP_32_8,
@@ -223,7 +224,7 @@ namespace
         u"" ODF_32_8
     };
 
-    const OUStringLiteral SV_ICON_SIZE16[] =
+    const std::u16string_view SV_ICON_SIZE16[] =
     {
         u"" MAINAPP_16_8,
         u"" MAINAPP_16_8,

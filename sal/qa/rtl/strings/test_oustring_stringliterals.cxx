@@ -174,19 +174,19 @@ void test::oustring::StringLiterals::checkBuffer()
 namespace {
 
 rtl::OUString conditional(bool flag) {
-    return flag
-        ? rtlunittest::OUStringLiteral(u"a")
-        : rtlunittest::OUStringLiteral(u"bb");
+    return rtl::OUString::Concat(flag ? std::u16string_view(u"a") : std::u16string_view(u"bb"))
+        + "c";
 }
 
 }
 
 void test::oustring::StringLiterals::checkOUStringLiteral()
 {
-    CPPUNIT_ASSERT(bool(conditional(true) == "a"));
-    CPPUNIT_ASSERT(bool(conditional(false) == "bb"));
+    CPPUNIT_ASSERT(bool(conditional(true) == "ac"));
+    CPPUNIT_ASSERT(bool(conditional(false) == "bbc"));
 
-    rtl::OUString s1(rtlunittest::OUStringLiteral(u"abc"));
+    static constexpr rtlunittest::OUStringLiteral s1lit(u"abc");
+    rtl::OUString s1(s1lit);
     CPPUNIT_ASSERT_EQUAL(rtl::OUString("abc"), s1);
     s1 = rtlunittest::OUStringLiteral(u"de");
     CPPUNIT_ASSERT_EQUAL(rtl::OUString("de"), s1);
@@ -400,6 +400,10 @@ void test::oustring::StringLiterals::checkEmbeddedNul() {
     CPPUNIT_ASSERT(s.startsWith(u"foo\0hidden"));
     CPPUNIT_ASSERT(!s.startsWith(u"foo\0hidden"s));
     CPPUNIT_ASSERT(!s.startsWith(u"foo\0hidden"sv));
+/*TODO:*/
+    CPPUNIT_ASSERT(!s.startsWith(rtlunittest::OUStringLiteral(a)));
+    CPPUNIT_ASSERT(!s.startsWith(rtlunittest::OUStringLiteral(u"foo\0hidden")));
+/*TODO*/
 }
 
 } // namespace

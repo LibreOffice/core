@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "GenericConfigurationChangeRequest.hxx"
 
 #include <framework/FrameworkHelper.hxx>
@@ -62,8 +66,9 @@ void SAL_CALL GenericConfigurationChangeRequest::execute (
 
 OUString SAL_CALL GenericConfigurationChangeRequest::getName()
 {
-    return "GenericConfigurationChangeRequest "
-        + (meMode==Activation ? OUStringLiteral(u"activate ") : OUStringLiteral(u"deactivate "))
+    return OUString::Concat("GenericConfigurationChangeRequest ")
+        + (meMode==Activation
+           ? std::u16string_view(u"activate ") : std::u16string_view(u"deactivate "))
         + FrameworkHelper::ResourceIdToString(mxResourceId);
 }
 

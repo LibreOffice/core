@@ -132,6 +132,7 @@
 #include <UndoEnv.hxx>
 
 #include <memory>
+#include <string_view>
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <unotools/confignode.hxx>
@@ -2039,7 +2040,7 @@ void OReportController::onLoadedMenu(const Reference< frame::XLayoutManager >& _
     if ( !_xLayoutManager.is() )
         return;
 
-    static const OUStringLiteral s_sMenu[] = {
+    static const std::u16string_view s_sMenu[] = {
          u"private:resource/statusbar/statusbar"
         ,u"private:resource/toolbar/reportcontrols"
         ,u"private:resource/toolbar/drawbar"

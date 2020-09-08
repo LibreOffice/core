@@ -16,6 +16,11 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "DomainMapperTableHandler.hxx"
 #include "DomainMapper_Impl.hxx"
 #include "StyleSheetTable.hxx"
@@ -1466,7 +1471,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
                 {
                     if (!aMerges.empty())
                     {
-                        static const std::vector<OUStringLiteral> aBorderNames
+                        static const std::vector<std::u16string_view> aBorderNames
                             = { u"TopBorder", u"LeftBorder", u"BottomBorder", u"RightBorder" };
 
                         // Perform horizontal merges in reverse order, so the fact that merging changes the position of cells won't cause a problem for us.

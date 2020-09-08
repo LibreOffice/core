@@ -13,6 +13,8 @@
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
 #include <sal/log.hxx>
+
+#include <string_view>
 #include <vector>
 
 #include "MDatabaseMetaDataHelper.hxx"
@@ -795,7 +797,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsBatchUpdates(  )
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  )
 {
     // there exists no possibility to get table types so we have to check
-    static const OUStringLiteral sTableTypes[] =
+    static const std::u16string_view sTableTypes[] =
     {
         u"TABLE",
         u"VIEW"

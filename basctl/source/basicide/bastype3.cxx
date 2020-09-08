@@ -26,6 +26,7 @@
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <deque>
+#include <string_view>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
 
@@ -101,7 +102,7 @@ IMPL_LINK(SbTreeListBox, RequestingChildrenHdl, const weld::TreeIter&, rEntry, b
 
                 // exchange image
                 const bool bDlgMode = (nMode & BrowseMode::Dialogs) && !(nMode & BrowseMode::Modules);
-                auto const aImage(bDlgMode ? OUStringLiteral(u"" RID_BMP_DLGLIB) : OUStringLiteral(u"" RID_BMP_MODLIB));
+                auto const aImage(bDlgMode ? std::u16string_view(u"" RID_BMP_DLGLIB) : std::u16string_view(u"" RID_BMP_MODLIB));
                 SetEntryBitmaps(rEntry, aImage);
             }
             else

@@ -41,7 +41,7 @@ const char SHARE_UNO_PACKAGES_URI[] =
     "vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE";
 
 const char USER[] = "user";
-const char16_t USER_URI[] =
+constexpr OUStringLiteral USER_URI =
     u"vnd.sun.star.expand:${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
 
 
@@ -112,7 +112,7 @@ ScriptingFrameworkURIHelper::initBaseURI()
     else if ( m_sLocation == "user:uno_packages" )
     {
         test = "uno_packages";
-        uri = OUStringLiteral(USER_URI) + "/user/uno_packages/cache";
+        uri = USER_URI + "/user/uno_packages/cache";
     }
     else if (m_sLocation == SHARE)
     {
