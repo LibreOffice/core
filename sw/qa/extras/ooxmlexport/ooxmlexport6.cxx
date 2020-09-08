@@ -976,7 +976,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSyncedRelativePercent, "tdf93676-1.odt")
     assertXPath(pXmlDoc, "//wp14:pctHeight", 0);
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf107119, "tdf107119.docx")
+DECLARE_OOXMLEXPORT_TEST(testTdf107119, "tdf107119.docx")
 {
     uno::Reference<beans::XPropertySet> XPropsWrap(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_PARALLEL, getProperty<text::WrapTextMode>(XPropsWrap, "Surround"));
