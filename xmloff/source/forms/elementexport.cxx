@@ -62,6 +62,7 @@
 #include <sal/log.hxx>
 
 #include <algorithm>
+#include <string_view>
 
 namespace xmloff
 {
@@ -1122,7 +1123,7 @@ namespace xmloff
             {   // attribute flags
                 SCAFlags::GroupName
             };
-            static const OUStringLiteral pStringPropertyNames[] =
+            static const std::u16string_view pStringPropertyNames[] =
             {   // property names
                 u"" PROPERTY_GROUP_NAME
             };

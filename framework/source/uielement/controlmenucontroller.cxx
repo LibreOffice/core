@@ -35,6 +35,7 @@
 #include <toolkit/awt/vclxmenu.hxx>
 #include <osl/mutex.hxx>
 #include <memory>
+#include <string_view>
 #include <unordered_map>
 
 #include <bitmaps.hlst>
@@ -65,7 +66,7 @@ static const char* aCommands[] =
     ".uno:ConvertToNavigationBar"
 };
 
-const OUStringLiteral aImgIds[] =
+const std::u16string_view aImgIds[] =
 {
     u"" RID_SVXBMP_EDITBOX,
     u"" RID_SVXBMP_BUTTON,

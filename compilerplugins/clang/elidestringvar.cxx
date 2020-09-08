@@ -125,7 +125,7 @@ public:
             {
                 auto const e2 = e1->getArg(0);
                 if (loplugin::TypeCheck(e2->getType())
-                        .Struct("OUStringLiteral")
+                        .Class("OUStringLiteral")
                         .Namespace("rtl")
                         .GlobalNamespace())
                 {

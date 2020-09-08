@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <sal/macros.h>
 #include <svx/fmdmod.hxx>
 #include <fmservs.hxx>
@@ -56,7 +60,7 @@ using namespace ::svxform;
 
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL SvxFmMSFactory::getAvailableServiceNames()
 {
-    static const OUStringLiteral aSvxComponentServiceNameList[] =
+    static const std::u16string_view aSvxComponentServiceNameList[] =
     {
         u"" FM_SUN_COMPONENT_TEXTFIELD,
         u"" FM_SUN_COMPONENT_FORM,

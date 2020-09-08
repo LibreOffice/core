@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "ChartColorWrapper.hxx"
 
 #include <ObjectIdentifier.hxx>
@@ -97,7 +101,7 @@ void ChartColorWrapper::updateModel(const css::uno::Reference<css::frame::XModel
 void ChartColorWrapper::updateData()
 {
     static const OUStringLiteral aLineColor = u"LineColor";
-    static const OUStringLiteral aCommands[2] = {u".uno:XLineColor", u".uno:FillColor"};
+    static const std::u16string_view aCommands[2] = {u".uno:XLineColor", u".uno:FillColor"};
 
     css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
     if (!xPropSet.is())

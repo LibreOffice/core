@@ -69,7 +69,7 @@ void test::oustring::StringConcat::checkConcat()
     CPPUNIT_ASSERT_EQUAL( OUString( "foobar" ), OUString( OUStringBuffer( "foo" ) + "bar" ));
     CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUStringBuffer, const char[ 4 ] > )), typeid( OUStringBuffer( "foo" ) + "bar" ));
     CPPUNIT_ASSERT_EQUAL( OUString( "foobar" ), OUString( OUStringLiteral( u"foo" ) + "bar" ));
-    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUStringLiteral, const char[ 4 ] > )), typeid( OUStringLiteral( u"foo" ) + "bar" ));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUStringLiteral<4>, const char[ 4 ] > )), typeid( OUStringLiteral( u"foo" ) + "bar" ));
     const char d1[] = "xyz";
     CPPUNIT_ASSERT_EQUAL( OUString( "fooxyz" ), OUString( OUString( "foo" ) + d1 ));
     CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, const char[ 4 ] > )), typeid( OUString( "foo" ) + d1 ));

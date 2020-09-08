@@ -5020,7 +5020,6 @@ framework/source/fwi/classes/protocolhandlercache.cxx
 framework/source/fwi/helper/mischelper.cxx
 framework/source/fwi/helper/shareablemutex.cxx
 framework/source/fwi/jobs/configaccess.cxx
-framework/source/fwi/jobs/jobconst.cxx
 framework/source/fwi/threadhelp/transactionmanager.cxx
 framework/source/fwi/uielement/constitemcontainer.cxx
 framework/source/fwi/uielement/itemcontainer.cxx

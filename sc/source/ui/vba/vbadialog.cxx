@@ -16,6 +16,11 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "vbadialog.hxx"
 
 #include <sal/macros.h>
@@ -23,7 +28,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-const OUStringLiteral aStringList[]=
+const std::u16string_view aStringList[]=
 {
     u".uno:Open",
     u".uno:FormatCellDialog",

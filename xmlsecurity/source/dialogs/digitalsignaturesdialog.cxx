@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <digitalsignaturesdialog.hxx>
 #include <certificatechooser.hxx>
 #include <certificateviewer.hxx>
@@ -480,7 +484,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, CertMgrButtonHdl, weld::Button&, void)
     if (aPath.isEmpty())
         return;
 #else
-    static const OUStringLiteral aGUIServers[] = { u"kleopatra", u"seahorse", u"gpa", u"kgpg" };
+    static const std::u16string_view aGUIServers[] = { u"kleopatra", u"seahorse", u"gpa", u"kgpg" };
     const char* cPath = getenv("PATH");
     if (!cPath)
         return;

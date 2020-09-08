@@ -37,6 +37,7 @@
 
 #include <initializer_list>
 #include <memory>
+#include <string_view>
 
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
@@ -244,7 +245,7 @@ void SbTreeListBox::ImpCreateLibEntries(const weld::TreeIter& rIter, const Scrip
             // create tree list box entry
             OUString sId;
             if ( ( nMode & BrowseMode::Dialogs ) && !( nMode & BrowseMode::Modules ) )
-                sId = bLoaded ? OUStringLiteral(u"" RID_BMP_DLGLIB) : OUStringLiteral(u"" RID_BMP_DLGLIBNOTLOADED);
+                sId = bLoaded ? std::u16string_view(u"" RID_BMP_DLGLIB) : std::u16string_view(u"" RID_BMP_DLGLIBNOTLOADED);
             else
                 sId = bLoaded ? OUStringLiteral(u"" RID_BMP_MODLIB) : OUStringLiteral(u"" RID_BMP_MODLIBNOTLOADED);
             std::unique_ptr<weld::TreeIter> xLibRootEntry(m_xControl->make_iterator(&rIter));

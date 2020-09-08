@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <certificatechooser.hxx>
 #include <certificateviewer.hxx>
 #include <com/sun/star/security/XCertificate.hpp>
@@ -356,7 +360,7 @@ void CertificateViewerCertPathTP::InsertCert(const weld::TreeIter* pParent, cons
                                              const css::uno::Reference< css::security::XCertificate >& rxCert,
                                              bool bValid)
 {
-    auto const sImage = bValid ? OUStringLiteral(u"" BMP_CERT_OK) : OUStringLiteral(u"" BMP_CERT_NOT_OK);
+    auto const sImage = bValid ? std::u16string_view(u"" BMP_CERT_OK) : std::u16string_view(u"" BMP_CERT_NOT_OK);
     maUserData.emplace_back(std::make_unique<CertPath_UserData>(rxCert, bValid));
     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(maUserData.back().get())));
     mxCertPathLB->insert(pParent, -1, &rName, &sId, nullptr, nullptr, false, mxScratchIter.get());

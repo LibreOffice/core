@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdview.hxx>
@@ -71,7 +75,7 @@ const ScContentId pTypeList[int(ScContentId::LAST) + 1] =
     ScContentId::DRAWING
 };
 
-const OUStringLiteral aContentBmps[]=
+const std::u16string_view aContentBmps[]=
 {
     u"" RID_BMP_CONTENT_TABLE,
     u"" RID_BMP_CONTENT_RANGENAME,
