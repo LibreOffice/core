@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "98d833db_6dbeabf7",
+        "filename": "starmath/inc/caret.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-09-08T06:17:46Z",
+      "side": 1,
+      "message": "this is fine, just be aware that in C++ it has some odd side-effects, like disabling the generating of the default assignment operator.",
+      "revId": "2d79427c9963e65461559ba55821f2191525c123",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
