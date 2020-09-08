@@ -2071,11 +2071,13 @@ void MessageDialog::create_message_area()
             case VclMessageType::Error:
                 m_pImage->SetImage(GetStandardErrorBoxImage());
                 break;
+            case VclMessageType::Other:
+                break;
         }
         m_pImage->set_grid_left_attach(0);
         m_pImage->set_grid_top_attach(0);
         m_pImage->set_valign(VclAlign::Start);
-        m_pImage->Show();
+        m_pImage->Show(m_eMessageType != VclMessageType::Other);
 
         WinBits nWinStyle = WB_CLIPCHILDREN | WB_LEFT | WB_VCENTER | WB_NOLABEL | WB_NOTABSTOP;
 
@@ -2227,6 +2229,9 @@ MessageDialog::MessageDialog(vcl::Window* pParent,
         case VclMessageType::Error:
             SetText(GetStandardErrorBoxText());
             break;
+        case VclMessageType::Other:
+            SetText(Application::GetDisplayName());
+            break;
     }
 }
 
@@ -2296,6 +2301,8 @@ bool MessageDialog::set_property(const OString &rKey, const OUString &rValue)
             eMode = VclMessageType::Question;
         else if (rValue == "error")
             eMode = VclMessageType::Error;
+        else if (rValue == "other")
+            eMode = VclMessageType::Other;
         else
         {
             SAL_WARN("vcl.layout", "unknown message type mode" << rValue);
