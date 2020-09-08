@@ -48,8 +48,9 @@ constexpr TypedWhichId<SfxStringItem>      SCHATTR_DATADESCR_SEPARATOR          
 constexpr TypedWhichId<SfxInt32Item>       SCHATTR_DATADESCR_PLACEMENT            (SCHATTR_DATADESCR_START + 6);
 constexpr TypedWhichId<SfxIntegerListItem> SCHATTR_DATADESCR_AVAILABLE_PLACEMENTS (SCHATTR_DATADESCR_START + 7);
 constexpr TypedWhichId<SfxBoolItem>        SCHATTR_DATADESCR_NO_PERCENTVALUE      (SCHATTR_DATADESCR_START + 8); //percentage values should not be offered
-constexpr TypedWhichId<SfxUInt32Item>      SCHATTR_PERCENT_NUMBERFORMAT_VALUE     (SCHATTR_DATADESCR_START + 9);
-constexpr TypedWhichId<SfxBoolItem>        SCHATTR_PERCENT_NUMBERFORMAT_SOURCE    (SCHATTR_DATADESCR_START + 10);
+constexpr TypedWhichId<SfxBoolItem>        SCHATTR_DATADESCR_CUSTOM_LEADER_LINES  (SCHATTR_DATADESCR_START + 9);
+constexpr TypedWhichId<SfxUInt32Item>      SCHATTR_PERCENT_NUMBERFORMAT_VALUE     (SCHATTR_DATADESCR_START + 10);
+constexpr TypedWhichId<SfxBoolItem>        SCHATTR_PERCENT_NUMBERFORMAT_SOURCE    (SCHATTR_DATADESCR_START + 11);
 constexpr sal_uInt16                       SCHATTR_DATADESCR_END                  (SCHATTR_PERCENT_NUMBERFORMAT_SOURCE);
 
 //legend
