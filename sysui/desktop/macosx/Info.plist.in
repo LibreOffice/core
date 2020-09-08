@@ -1914,6 +1914,8 @@
             </array>
             <key>CFBundleTypeRole</key>
             <string>Editor</string>
+            <key>LSHandlerRank</key>
+            <string>Alternate</string>
         </dict>
     </array>
     <key>CFBundleExecutable</key>
