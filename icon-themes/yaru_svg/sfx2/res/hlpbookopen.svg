@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="16"
+   width="16"
+   version="1.1"
+   id="svg10"
+   sodipodi:docname="hlpbookopen.svg"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
+   inkscape:export-filename="/home/jupiter007/Libreoffice yaru theme fullcolor/build/sfx2/res/hlpbookopen.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
+  <metadata
+     id="metadata16">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs14" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1011"
+     id="namedview12"
+     showgrid="false"
+     inkscape:zoom="14.75"
+     inkscape:cx="-23.627119"
+     inkscape:cy="7.7288136"
+     inkscape:window-x="0"
+     inkscape:window-y="32"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg10" />
+  <circle
+     style="opacity:1;fill:#1a7fd4;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="path819"
+     cx="8"
+     cy="8"
+     r="6" />
+  <path
+     inkscape:connector-curvature="0"
+     id="text4098-9-0"
+     d="m 8.1482825,4.0010416 6.093e-4,5.887e-4 C 7.7811228,4.0016597 7.4332408,4.0423667 7.1052397,4.1234859 6.8074712,4.1988245 6.5436884,4.3016836 6.2999998,4.4206077 L 6.54891,5.0858336 c 0.4746188,-0.232774 0.9614537,-0.360192 1.4598042,-0.360192 0.4189852,0 0.7513427,0.107009 0.9801709,0.327774 0.2257944,0.210351 0.3401624,0.491096 0.3401624,0.823903 0,0.20749 -0.05027,0.401706 -0.1499688,0.57852 -0.089144,0.171881 -0.2060228,0.335598 -0.3502644,0.490454 -0.1412804,0.151661 -0.2901707,0.303291 -0.4469878,0.454804 l -6.093e-4,5.89e-4 -0.00182,5.89e-4 c -0.152833,0.140281 -0.2979945,0.295497 -0.4359726,0.465842 l -6.032e-4,5.88e-4 -2.924e-4,5.83e-4 c -0.1357116,0.160261 -0.2485325,0.334956 -0.339151,0.524439 -0.080669,0.18479 -0.1220819,0.391557 -0.1220819,0.622953 0,0.138785 0.016634,0.268965 0.038994,0.39603 h 0.750057 c -6.093e-4,-0.01554 -0.00426,-0.02943 -0.00426,-0.04556 v -0.124393 c 0,-0.25831 0.053069,-0.49312 0.1600767,-0.700481 0.1039736,-0.208656 0.2322763,-0.398474 0.3845237,-0.569054 l 6.093e-4,-5.83e-4 c 2.864e-4,-2.76e-4 2.864e-4,-5.71e-4 6.094e-4,-0.0018 0.1502489,-0.175587 0.3162967,-0.343212 0.4977103,-0.503232 0.17657,-0.155769 0.337603,-0.318944 0.483167,-0.489188 0.143992,-0.168409 0.2647935,-0.347583 0.3632055,-0.537513 v -2.77e-4 c 0.09546,-0.191643 0.14401,-0.408688 0.14401,-0.654594 0,-0.194587 -0.03338,-0.397674 -0.101464,-0.609467 l -6.1e-4,-0.0018 -2.85e-4,-0.0018 C 10.138722,4.9594336 10.029033,4.7679196 9.8656605,4.5957146 9.7038295,4.4251405 9.4849195,4.2846768 9.2053445,4.1751715 l -0.0018,-5.828e-4 -0.0018,-5.828e-4 C 8.935713,4.0597913 8.5841022,4.000029 8.1476366,3.9999996 Z m -0.186148,6.6420404 c -0.2241368,0 -0.3874976,0.06615 -0.5122725,0.200067 -0.1281443,0.137555 -0.1895965,0.292559 -0.1895965,0.478439 0,0.18588 0.061489,0.341178 0.1895965,0.47874 C 7.5746369,11.93428 7.7379977,12 7.9621345,12 c 0.2241429,0 0.3877777,-0.06575 0.512571,-0.199672 0.1281199,-0.13755 0.1895843,-0.29286 0.1895843,-0.47874 0,-0.18588 -0.061428,-0.340884 -0.1895843,-0.478439 -0.1247933,-0.133966 -0.2884281,-0.200067 -0.512571,-0.200067 z"
+     style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:72.03643799px;line-height:125%;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu Medium';text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;display:inline;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;enable-background:new" />
+</svg>

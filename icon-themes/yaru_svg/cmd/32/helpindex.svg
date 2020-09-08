@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="32"
+   viewBox="0 0 32 32"
+   width="32"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="helpindex.svg"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   inkscape:export-filename="/home/jupiter007/Libreoffice yaru theme fullcolor/build/cmd/32/helpindex.png"
+   inkscape:export-xdpi="95"
+   inkscape:export-ydpi="95">
+  <metadata
+     id="metadata10">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1011"
+     id="namedview6"
+     showgrid="true"
+     inkscape:zoom="20.85965"
+     inkscape:cx="14.228074"
+     inkscape:cy="14.634995"
+     inkscape:window-x="1920"
+     inkscape:window-y="32"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4">
+    <inkscape:grid
+       type="xygrid"
+       id="grid825" />
+  </sodipodi:namedview>
+  <circle
+     style="opacity:1;fill:#1a7fd4;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="path819"
+     cx="16"
+     cy="16"
+     r="12" />
+  <path
+     inkscape:connector-curvature="0"
+     id="text4098-9-0"
+     d="m 16.229892,9.0018233 0.0011,0.00103 C 15.588305,9.0029046 14.980371,9.0741413 14.40718,9.2160996 13.886822,9.3479424 13.425853,9.5279461 13,9.7360627 l 0.434977,1.1641453 c 0.82941,-0.407353 1.680169,-0.630336 2.55105,-0.630336 0.732189,0 1.312993,0.187267 1.712877,0.573604 0.394582,0.368115 0.594443,0.859419 0.594443,1.44183 0,0.363109 -0.08784,0.702986 -0.262074,1.012411 -0.155782,0.300792 -0.360031,0.587296 -0.612097,0.858294 -0.246892,0.265407 -0.507081,0.53076 -0.781124,0.795908 l -0.0011,10e-4 -0.0031,0.001 c -0.267067,0.245491 -0.520741,0.517119 -0.761863,0.815223 l -0.0011,10e-4 -5.11e-4,10e-4 c -0.23716,0.280458 -0.434318,0.586174 -0.592677,0.917768 -0.140971,0.323384 -0.213341,0.685225 -0.213341,1.090168 0,0.242875 0.02907,0.470689 0.06814,0.693054 h 1.310746 c -0.0011,-0.02719 -0.0075,-0.05151 -0.0075,-0.07973 v -0.217687 c 0,-0.452043 0.09274,-0.862962 0.279738,-1.225843 0.181708,-0.365147 0.405921,-0.697329 0.671979,-0.995844 l 0.0011,-10e-4 c 5.01e-4,-4.83e-4 5.01e-4,-9.99e-4 0.0011,-0.0031 0.262565,-0.307282 0.552739,-0.600626 0.869764,-0.88066 0.308561,-0.272596 0.589971,-0.558152 0.844349,-0.85608 0.251629,-0.294715 0.462735,-0.60827 0.634711,-0.940648 v -4.85e-4 c 0.166813,-0.335375 0.251662,-0.715202 0.251662,-1.14554 0,-0.340525 -0.05834,-0.695927 -0.177311,-1.066565 l -0.0011,-0.0031 -5e-4,-0.003 C 19.708284,10.679009 19.516603,10.34386 19.231104,10.042501 18.948299,9.7439964 18.565748,9.4981855 18.077182,9.3065503 l -0.0031,-0.00102 -0.0031,-0.00102 C 17.60595,9.104635 16.991499,9.0000513 16.228764,9 Z M 15.904593,20.625393 c -0.391685,0 -0.677163,0.115756 -0.895211,0.350117 -0.223935,0.240722 -0.331326,0.511978 -0.331326,0.837269 0,0.32529 0.10745,0.597062 0.331326,0.837794 C 15.22743,22.88499 15.512908,23 15.904593,23 c 0.391696,0 0.677653,-0.115069 0.895732,-0.349427 0.223893,-0.240712 0.331305,-0.512504 0.331305,-0.837794 0,-0.325291 -0.107345,-0.596547 -0.331305,-0.837269 -0.218079,-0.234439 -0.504036,-0.350117 -0.895732,-0.350117 z"
+     style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:72.03643799px;line-height:125%;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu Medium';text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1.42278707;enable-background:new" />
+</svg>

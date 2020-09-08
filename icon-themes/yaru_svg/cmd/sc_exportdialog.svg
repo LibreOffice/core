@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 16 16"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="sc_exportdialog.svg"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
+   inkscape:export-filename="/home/jupiter007/Libreoffice yaru theme fullcolor/build/cmd/sc_exportdialog.png"
+   inkscape:export-xdpi="95"
+   inkscape:export-ydpi="95">
+  <metadata
+     id="metadata10">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1011"
+     id="namedview6"
+     showgrid="true"
+     inkscape:zoom="32"
+     inkscape:cx="0.300009"
+     inkscape:cy="6.1401571"
+     inkscape:window-x="1920"
+     inkscape:window-y="32"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4">
+    <inkscape:grid
+       type="xygrid"
+       id="grid817" />
+  </sodipodi:namedview>
+  <path
+     inkscape:export-ydpi="96"
+     inkscape:export-xdpi="96"
+     inkscape:export-filename="/home/stuart/yaru/icons/Suru/24x24/legacy/document-import.png"
+     sodipodi:nodetypes="cccccccc"
+     id="path832"
+     d="M 4,7 H 8 V 5 c 0,0 3,0.9999996 6,3 -3,2 -6,3 -6,3 V 9 H 4 Z"
+     style="display:inline;opacity:0.6;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;enable-background:new"
+     inkscape:connector-curvature="0" />
+  <path
+     inkscape:connector-curvature="0"
+     style="display:inline;opacity:1;fill:#e97cc8;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.88059698;enable-background:new"
+     d="M 4,7 H 8 V 5 c 0,0 3,0.9999996 6,3 -3,2 -6,3 -6,3 V 9 H 4 Z"
+     id="rect11148-3-5-5-7-0"
+     sodipodi:nodetypes="cccccccc"
+     inkscape:export-filename="/home/stuart/yaru/icons/Suru/24x24/legacy/document-import.png"
+     inkscape:export-xdpi="96"
+     inkscape:export-ydpi="96" />
+  <rect
+     style="opacity:0.6;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2.23606777;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="rect850"
+     width="1"
+     height="10"
+     x="2"
+     y="3" />
+  <circle
+     style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="path824-1"
+     cx="11.5"
+     cy="12.5"
+     r="1.5" />
+  <circle
+     style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="path824"
+     cx="11.5"
+     cy="14.5"
+     r="1.5" />
+  <path
+     inkscape:connector-curvature="0"
+     style="display:block;fill:#b3b3b3;fill-opacity:1;stroke:#6d6d6d;stroke-width:0.61683768;stroke-linejoin:round;stroke-opacity:1"
+     d="m 9.5757186,8.6118817 c -0.1375,0.05 -0.204,0.1925 -0.154,0.33 l 0.2496,0.6864 c -0.2767,0.1878 -0.5042,0.4150003 -0.7114,0.6672003 l -0.6802,-0.3156003 c -0.1317,-0.0642 -0.2813,-0.0098 -0.341,0.1240003 l -0.5250003,1.125 c -0.0642,0.1317 -0.0098,0.2813 0.1240003,0.341 l 0.6788,0.3186 c -0.0602,0.3208 -0.0867,0.6418 -0.0544,0.9738 l -0.6864003,0.2496 c -0.1375,0.05 -0.204,0.1925 -0.154,0.33 l 0.4240003,1.166 c 0.05,0.1375 0.1925,0.204 0.33,0.154 l 0.6864,-0.2496 c 0.1878,0.2767 0.415,0.5042 0.6672,0.7114 l -0.3171,0.6795 c -0.0642,0.1317 -0.0098,0.2813 0.124,0.341 l 1.1250004,0.525 c 0.1317,0.0642 0.2813,0.0098 0.341,-0.124 l 0.3186,-0.6788 c 0.3208,0.0602 0.6418,0.0867 0.9738,0.0544 l 0.25,0.6875 c 0.05,0.1375 0.1925,0.204 0.33,0.154 l 1.166,-0.424 c 0.1375,-0.05 0.204,-0.1925 0.154,-0.33 l -0.2496,-0.6864 c 0.2767,-0.1878 0.5042,-0.415 0.7114,-0.6672 l 0.6795,0.3171 c 0.1317,0.0642 0.2813,0.0098 0.341,-0.124 l 0.525,-1.125 c 0.0642,-0.1317 0.0098,-0.2813 -0.124,-0.341 l -0.6788,-0.3186 c 0.0602,-0.3208 0.0867,-0.6418 0.0544,-0.9738 l 0.6875,-0.25 c 0.1375,-0.05 0.204,-0.1925 0.154,-0.33 l -0.424,-1.166 c -0.05,-0.1375 -0.1925,-0.204 -0.33,-0.154 l -0.6864,0.2496 c -0.1878,-0.2767 -0.415,-0.5042 -0.6672,-0.7114003 l 0.3171,-0.6795 c 0.0642,-0.1317 0.0098,-0.2813 -0.124,-0.341 l -1.125,-0.525 c -0.1317,-0.0642 -0.2813,-0.0098 -0.341,0.124 l -0.3186,0.6788 c -0.3208,-0.0602 -0.6418,-0.0867 -0.9738,-0.0544 l -0.2504,-0.6886 c -0.05,-0.1375 -0.1925,-0.204 -0.33,-0.154 z m 1.6830004,2.8130003 c 0.6072,-0.2208 1.2792,0.0928 1.5,0.7 0.2208,0.6072 -0.0928,1.2792 -0.7,1.5 -0.6072,0.2208 -1.2792,-0.0928 -1.5,-0.7 -0.2208,-0.6072 0.0928,-1.2792 0.7,-1.5 z"
+     display="block"
+     id="path34" />
+</svg>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 16 16"
+   version="1.1"
+   id="svg48"
+   sodipodi:docname="sc_menubar.svg"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
+   inkscape:export-filename="/home/jupiter007/Libreoffice yaru theme fullcolor/build/cmd/sc_menubar.png"
+   inkscape:export-xdpi="95"
+   inkscape:export-ydpi="95"><metadata
+   id="metadata52">
+  <rdf:RDF>
+    <cc:Work
+       rdf:about="">
+      <dc:format>image/svg+xml</dc:format>
+      <dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+    </cc:Work>
+  </rdf:RDF>
+</metadata>
+<sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="1920"
+   inkscape:window-height="1011"
+   id="namedview50"
+   showgrid="true"
+   inkscape:zoom="41.7193"
+   inkscape:cx="9.812685"
+   inkscape:cy="7.0117346"
+   inkscape:window-x="1920"
+   inkscape:window-y="32"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="svg48">
+  <inkscape:grid
+     type="xygrid"
+     id="grid862" />
+</sodipodi:namedview>
+<defs
+   id="defs20">
+  <linearGradient
+     id="a"
+     gradientTransform="matrix(.4922 0 0 .4584 4.83 -4.56)"
+     gradientUnits="userSpaceOnUse"
+     x1="23.732"
+     x2="23.732"
+     y1="5.394"
+     y2="39.735">
+    <stop
+       offset="0"
+       stop-color="#90dbec"
+       id="stop2" />
+    <stop
+       offset=".262"
+       stop-color="#55c1ec"
+       id="stop4" />
+    <stop
+       offset=".705"
+       stop-color="#3689e6"
+       id="stop6" />
+    <stop
+       offset="1"
+       stop-color="#2b63a0"
+       id="stop8" />
+  </linearGradient>
+  <linearGradient
+     id="b"
+     gradientTransform="matrix(0 -.41844 .4493 0 -8.663 16.39)"
+     gradientUnits="userSpaceOnUse"
+     x1="32.013"
+     x2="31.966"
+     y1="43.176"
+     y2="61.653">
+    <stop
+       offset="0"
+       stop-color="#fff"
+       id="stop11" />
+    <stop
+       offset=".191"
+       stop-color="#fff"
+       stop-opacity=".235"
+       id="stop13" />
+    <stop
+       offset=".9"
+       stop-color="#fff"
+       stop-opacity=".157"
+       id="stop15" />
+    <stop
+       offset="1"
+       stop-color="#fff"
+       stop-opacity=".392"
+       id="stop17" />
+  </linearGradient>
+</defs>
+
+
+
+/&gt;<path
+   d="m 3.97375,1.5 c -0.817,0 -1.474,0.657 -1.474,1.474 L 2.5,13.5 h 11 L 13.49975,2.974 C 13.499731,2.157 12.84275,1.5 12.02575,1.5 Z"
+   id="path22"
+   inkscape:connector-curvature="0"
+   style="fill:#ffffff;stroke:#8c8c8c"
+   sodipodi:nodetypes="ssccsss" />
+<path
+   d="m 2.99975,6 h 10 L 13,13 H 3 Z"
+   id="path26"
+   inkscape:connector-curvature="0"
+   style="fill:#ffffff"
+   sodipodi:nodetypes="ccccc" />
+<path
+   d="m 2.99975,5.5 h 10"
+   id="path28"
+   inkscape:connector-curvature="0"
+   style="fill:none;stroke:#8c8c8c"
+   sodipodi:nodetypes="cc" />
+<path
+   style="fill:#8c8c8c;stroke-width:2"
+   d="m 8.99925,3 h -2 v 2 h 2 z"
+   id="path841"
+   inkscape:connector-curvature="0"
+   sodipodi:nodetypes="ccccc" />
+<path
+   style="fill:#ff0000;stroke-width:2.0002501"
+   d="m 11.99975,3 h -2.0005 v 2 h 2.0005 z"
+   id="path30"
+   inkscape:connector-curvature="0"
+   sodipodi:nodetypes="ccccc" />
+<path
+   style="fill:#d85eca;fill-opacity:1;stroke-width:1.03507984"
+   d="m 1.00025,6 v 1 3 1 h 12.9995 1 V 6 h -1 -11.9995 z m 1,1 h 11.9995 v 3 H 2.00025 Z"
+   id="path32"
+   inkscape:connector-curvature="0"
+   sodipodi:nodetypes="ccccccccccccccc" />
+<path
+   d="m 2.00025,7 h 11.9995 v 3 H 2.00025 Z"
+   id="path34"
+   inkscape:connector-curvature="0"
+   style="opacity:1;fill:#ebaee4;fill-opacity:1;stroke-width:1.03772902"
+   sodipodi:nodetypes="ccccc" />
+</svg>

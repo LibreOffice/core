@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 16 16"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="sc_label.svg"
+   inkscape:export-filename="/home/jupiter007/Libreoffice yaru theme fullcolor/build/cmd/sc_label.png"
+   inkscape:export-xdpi="95"
+   inkscape:export-ydpi="95"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"><metadata
+   id="metadata10">
+  <rdf:RDF>
+    <cc:Work
+       rdf:about="">
+      <dc:format>image/svg+xml</dc:format>
+      <dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      <dc:title></dc:title>
+    </cc:Work>
+  </rdf:RDF>
+</metadata>
+<defs
+   id="defs8">
+  <linearGradient
+     gradientTransform="translate(1.4999611,-0.49995964)"
+     id="c"
+     gradientUnits="userSpaceOnUse"
+     x1="9.4372311"
+     x2="9.4372311"
+     y1="2.9152811"
+     y2="14.856069">
+    <stop
+       offset="0"
+       stop-color="#fff4e9"
+       id="stop16" />
+    <stop
+       offset="1"
+       stop-color="#e7d6c5"
+       id="stop18" />
+  </linearGradient>
+</defs>
+<sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="1920"
+   inkscape:window-height="1011"
+   id="namedview6"
+   showgrid="false"
+   inkscape:zoom="32"
+   inkscape:cx="5.2011881"
+   inkscape:cy="6.8270773"
+   inkscape:window-x="0"
+   inkscape:window-y="32"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="svg4"
+   inkscape:snap-bbox="true"
+   inkscape:bbox-paths="true"
+   inkscape:snap-nodes="true"
+   inkscape:snap-others="false"
+   inkscape:snap-page="true"
+   inkscape:bbox-nodes="true"
+   showborder="true"
+   inkscape:pagecheckerboard="false">
+  <inkscape:grid
+     type="xygrid"
+     id="grid829" />
+  <inkscape:grid
+     type="xygrid"
+     id="grid824"
+     spacingx="0.5"
+     spacingy="0.5"
+     dotted="true" />
+</sodipodi:namedview>
+
+/&gt;<path
+   sodipodi:nodetypes="ccccccccccc"
+   inkscape:connector-curvature="0"
+   id="path828"
+   d="m 3.4580722,11.127714 1.414214,1.414214 c 1.4142135,1.414213 2.1213196,2.12132 3.5355338,0.707107 L 12.93934,8.7175144 C 13.646447,8.0104074 14,7.6568543 14,6.9497475 V 3.4142135 C 14,2.7071068 13.292893,2.0000001 12.585786,2.0000001 L 9.0502526,2 c -0.7071069,10e-8 -1.0606601,0.3535533 -1.7677671,1.0606603 L 2.7509656,7.5921802 C 1.3367521,9.0063939 2.0438588,9.7135006 3.4580722,11.127714 Z"
+   style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;opacity:0.6;stroke-miterlimit:4;stroke-dasharray:none" />
+<path
+   style="fill:#ffd9b2;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+   d="m 3.4580722,11.127714 1.414214,1.414214 c 1.4142135,1.414213 2.1213196,2.12132 3.5355338,0.707107 L 12.93934,8.7175144 C 13.646447,8.0104074 14,7.6568543 14,6.9497475 V 3.4142135 C 14,2.7071068 13.292893,2.0000001 12.585786,2.0000001 L 9.0502526,2 c -0.7071069,10e-8 -1.0606601,0.3535533 -1.7677671,1.0606603 L 2.7509656,7.5921802 C 1.3367521,9.0063939 2.0438588,9.7135006 3.4580722,11.127714 Z"
+   id="path822"
+   inkscape:connector-curvature="0"
+   sodipodi:nodetypes="ccccccccccc" />
+<circle
+   r="1"
+   cy="5"
+   cx="11"
+   id="circle835"
+   style="opacity:0.6;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+<circle
+   style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+   id="path833"
+   cx="11"
+   cy="5"
+   r="1" />
+</svg>

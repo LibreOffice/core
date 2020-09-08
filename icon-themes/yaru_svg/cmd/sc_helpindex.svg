@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 16 16"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="sc_helpindex.svg"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   inkscape:export-filename="/home/jupiter007/Libreoffice yaru theme fullcolor/build/cmd/sc_helpindex.png"
+   inkscape:export-xdpi="95"
+   inkscape:export-ydpi="95">
+  <metadata
+     id="metadata10">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1011"
+     id="namedview6"
+     showgrid="true"
+     inkscape:zoom="41.7193"
+     inkscape:cx="3.5215931"
+     inkscape:cy="7.3657899"
+     inkscape:window-x="1920"
+     inkscape:window-y="32"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4">
+    <inkscape:grid
+       type="xygrid"
+       id="grid825" />
+  </sodipodi:namedview>
+  <circle
+     style="opacity:1;fill:#1a7fd4;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="path819"
+     cx="8"
+     cy="8"
+     r="6" />
+  <path
+     inkscape:connector-curvature="0"
+     id="text4098-9-0"
+     d="m 8.1482827,4.001042 6.093e-4,5.887e-4 C 7.781123,4.0016601 7.433241,4.0423671 7.1052399,4.1234863 6.8074714,4.1988249 6.5436886,4.301684 6.3,4.4206081 L 6.5489102,5.085834 C 7.023529,4.8530603 7.5103639,4.7256416 8.0087144,4.7256416 c 0.4189852,0 0.7513427,0.1070093 0.9801709,0.3277741 0.225794,0.2103511 0.340162,0.4910959 0.340162,0.8239031 0,0.2074903 -0.050266,0.4017057 -0.1499684,0.5785203 C 9.0899348,6.62772 8.9730561,6.7914365 8.8288145,6.9462929 8.6875341,7.0979537 8.5386438,7.249584 8.3818267,7.401097 l -6.093e-4,5.892e-4 -0.00182,5.885e-4 C 8.2265644,7.5425557 8.0814029,7.6977715 7.9434248,7.8681166 l -6.032e-4,5.885e-4 -2.924e-4,5.825e-4 C 7.8068176,8.029549 7.6939967,8.2042439 7.6033782,8.3937266 7.5227091,8.5785173 7.4812963,8.7852836 7.4812963,9.0166797 c 0,0.1387855 0.016634,0.2689648 0.038994,0.3960304 h 0.750057 c -6.093e-4,-0.015538 -0.00426,-0.029432 -0.00426,-0.045562 v -0.124393 c 0,-0.2583098 0.053069,-0.4931204 0.1600767,-0.7004812 C 8.5301376,8.3336183 8.6584403,8.1438001 8.8106877,7.97322 l 6.093e-4,-5.832e-4 c 2.864e-4,-2.763e-4 2.864e-4,-5.712e-4 6.094e-4,-0.0018 C 8.9621553,7.7952496 9.1282031,7.6276247 9.3096167,7.467605 9.4861867,7.3118359 9.6472201,7.1486613 9.7927841,6.9784168 9.936776,6.8100083 10.057578,6.6308336 10.15599,6.4409035 V 6.4406266 C 10.251447,6.2489836 10.3,6.0319392 10.3,5.7860325 10.3,5.5914461 10.266616,5.3883592 10.198536,5.1765658 l -6.1e-4,-0.00176 -2.85e-4,-0.00176 C 10.138723,4.9594337 10.029034,4.7679202 9.865661,4.5957152 9.7038294,4.4251409 9.4849201,4.2846772 9.205345,4.1751719 L 9.203525,4.1745891 9.201705,4.1740063 C 8.9357132,4.0597917 8.5841024,4.0000294 8.1476368,4 Z m -0.186148,6.64204 c -0.2241368,0 -0.3874976,0.06615 -0.5122725,0.200067 -0.1281443,0.137555 -0.1895965,0.292559 -0.1895965,0.478439 0,0.18588 0.061489,0.341178 0.1895965,0.47874 C 7.5746371,11.93428 7.7379979,12 7.9621347,12 c 0.2241429,0 0.3877777,-0.06575 0.512571,-0.199672 0.1281199,-0.13755 0.1895843,-0.29286 0.1895843,-0.47874 0,-0.18588 -0.061428,-0.340884 -0.1895843,-0.478439 -0.1247933,-0.133966 -0.2884281,-0.200067 -0.512571,-0.200067 z"
+     style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:72.03643799px;line-height:125%;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu Medium';text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;display:inline;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.5;enable-background:new;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none" />
+</svg>

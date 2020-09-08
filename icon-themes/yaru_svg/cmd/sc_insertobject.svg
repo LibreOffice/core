@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 16 16"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="sc_insertobject.svg"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
+   inkscape:export-filename="/home/jupiter007/Libreoffice yaru theme fullcolor/build/cmd/sc_insertobject.png"
+   inkscape:export-xdpi="95"
+   inkscape:export-ydpi="95"><metadata
+   id="metadata10">
+  <rdf:RDF>
+    <cc:Work
+       rdf:about="">
+      <dc:format>image/svg+xml</dc:format>
+      <dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+    </cc:Work>
+  </rdf:RDF>
+</metadata>
+<defs
+   id="defs8">
+  <clipPath
+     clipPathUnits="userSpaceOnUse"
+     id="clipPath983-6">
+    <path
+       sodipodi:nodetypes="scccssscsss"
+       inkscape:connector-curvature="0"
+       id="path985-0"
+       d="m 325.09646,237 c -2.80769,0 -3.10979,0.28839 -3.09603,3.10176 V 244 v 3.89824 c -0.0138,2.81337 0.28834,3.10176 3.09603,3.10176 h 5.8075 C 333.71166,251 334,250.71165 334,247.89824 V 244 240.10176 C 334,237.28836 333.71165,237 330.90396,237 Z"
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;fill:#46a926;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker:none;enable-background:accumulate" />
+  </clipPath>
+  <linearGradient
+     id="linearGradient3976">
+    <stop
+       offset="0"
+       style="stop-color:#626262;stop-opacity:1"
+       id="stop3972" />
+    <stop
+       offset="1"
+       style="stop-color:#4e4e4e;stop-opacity:1"
+       id="stop3974" />
+  </linearGradient>
+</defs>
+<sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="1920"
+   inkscape:window-height="1011"
+   id="namedview6"
+   showgrid="true"
+   inkscape:zoom="20.85965"
+   inkscape:cx="-0.69609826"
+   inkscape:cy="5.3234602"
+   inkscape:window-x="0"
+   inkscape:window-y="32"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="svg4">
+  <inkscape:grid
+     type="xygrid"
+     id="grid823" />
+</sodipodi:namedview>
+
+
+
+/&gt;<path
+   sodipodi:nodetypes="ccccccccc"
+   style="opacity:1;fill:#6d6d6d;stroke:#6d6d6d;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;fill-opacity:1;stroke-opacity:1"
+   id="path815"
+   d="M 2.9999999,12 V 3.9999998 c 0,-2 1,-2 3,-2 L 10,2 c 2,0 3,0 3,2 v 8 c 0,2 -1,2 -3,2 H 5.9999999 c -2,0 -3,0 -3,-2 z"
+   inkscape:connector-curvature="0" />
+<path
+   inkscape:connector-curvature="0"
+   d="M 2.9999999,12 V 3.9999998 c 0,-2 1,-2 3,-2 H 10 l 3,3 V 12 c 0,2 -1,2 -3,2 H 5.9999999 c -2,0 -3,0 -3,-2 z"
+   id="path2"
+   style="fill:#ffffff"
+   sodipodi:nodetypes="ccccccccc" />
+<path
+   inkscape:connector-curvature="0"
+   id="path851"
+   d="m 1.9999998,8 v 3.89844 C 1.9861998,14.71181 2.2880098,15 5.0956998,15 H 10.9043 C 13.712,15 14,14.71185 14,11.89844 V 8 Z"
+   style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:0.1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;enable-background:accumulate" />
+</svg>

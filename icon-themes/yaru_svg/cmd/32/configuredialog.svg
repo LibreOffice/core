@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="32"
+   viewBox="0 0 32 32"
+   width="32"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="configuredialog.svg"
+   inkscape:export-filename="/home/jupiter007/Libreoffice yaru theme fullcolor/build/cmd/32/configuredialog.png"
+   inkscape:export-xdpi="95"
+   inkscape:export-ydpi="95"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)">
+  <metadata
+     id="metadata10">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1011"
+     id="namedview6"
+     showgrid="false"
+     inkscape:zoom="7.375"
+     inkscape:cx="0.88135593"
+     inkscape:cy="16"
+     inkscape:window-x="0"
+     inkscape:window-y="32"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4" />
+  <path
+     inkscape:connector-curvature="0"
+     style="opacity:1;fill:#924d8b;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.00104881;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+     d="m 9.5000002,4.0000002 c -3.0470004,0 -5.5000003,2.453 -5.5000003,5.4999999 C 3.9999999,12.547 6.4529998,15 9.5000002,15 H 22.5 C 25.547,15 28,12.547 28,9.5000001 28,6.4530002 25.547,4.0000002 22.5,4.0000002 Z m 12.9999998,2 c 1.939,0 3.5,1.5609999 3.5,3.4999999 C 26,11.439 24.439,13 22.5,13 20.561,13 19,11.439 19,9.5000001 c 0,-1.939 1.561,-3.4999999 3.5,-3.4999999 z"
+     id="rect819" />
+  <path
+     id="path825"
+     d="m 22.5,17 c 3.047,0 5.5,2.453 5.5,5.5 0,3.047 -2.453,5.5 -5.5,5.5 H 9.5000001 c -3.0470003,0 -5.5000003,-2.453 -5.5000003,-5.5 0,-3.047 2.453,-5.5 5.5000003,-5.5 z M 9.5000001,19 c -1.9390003,0 -3.5000003,1.561 -3.5000003,3.5 0,1.939 1.561,3.5 3.5000003,3.5 C 11.439,26 13,24.439 13,22.5 13,20.561 11.439,19 9.5000001,19 Z"
+     style="opacity:1;fill:#924d8b;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.00104881;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+     inkscape:connector-curvature="0" />
+  <circle
+     style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="path814"
+     cx="22.5"
+     cy="9.5"
+     r="3.5" />
+  <circle
+     r="3.5"
+     cy="22.5"
+     cx="9.5"
+     id="circle816"
+     style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+</svg>
