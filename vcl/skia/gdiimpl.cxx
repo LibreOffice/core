@@ -1681,7 +1681,7 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
             canvas->drawImage(rSkiaBitmap.GetSkImage(), 0, 0, &paint);
         }
     }
-    assert(!mXorMode);
+    addXorRegion(SkRect::MakeWH(GetWidth(), GetHeight())); // can't tell, use whole area
     postDraw();
     return true;
 }
