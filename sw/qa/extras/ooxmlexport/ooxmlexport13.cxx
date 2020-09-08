@@ -715,7 +715,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTextInput, "textinput.odt")
     CPPUNIT_ASSERT_EQUAL(4, nElements);
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf123460, "tdf123460.docx")
+DECLARE_OOXMLEXPORT_TEST(testTdf123460, "tdf123460.docx")
 {
     // check paragraph mark deletion at terminating moveFrom
     CPPUNIT_ASSERT_EQUAL(true,getParagraph( 2 )->getString().startsWith("Nunc"));
@@ -754,7 +754,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf125298, "tdf125298_crossreflink_nonas
     CPPUNIT_ASSERT_EQUAL(expectedFieldName2, fieldName2);
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf121784, "tdf121784.docx")
+DECLARE_OOXMLEXPORT_TEST(testTdf121784, "tdf121784.docx")
 {
     // check tracked insertion of footnotes
     CPPUNIT_ASSERT_EQUAL( OUString( "Text1" ), getParagraph( 1 )->getString());
