@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="24"
+   height="24"
+   version="1.1"
+   viewBox="0 0 6.3499636 6.3499636"
+   id="svg4636"
+   sodipodi:docname="recentdoc_remove_highlighted.svg"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   inkscape:export-filename="/home/jupiter007/Téléchargements/libreoffice yaru/images_breeze/res/recentdoc_remove_highlighted.png"
+   inkscape:export-xdpi="95"
+   inkscape:export-ydpi="95">
+  <metadata
+     id="metadata4642">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs4640" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1011"
+     id="namedview4638"
+     showgrid="true"
+     inkscape:zoom="30.341309"
+     inkscape:cx="4.0230367"
+     inkscape:cy="9.7431649"
+     inkscape:window-x="0"
+     inkscape:window-y="32"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4636">
+    <inkscape:grid
+       type="xygrid"
+       id="grid5187" />
+  </sodipodi:namedview>
+  <g
+     transform="translate(0.26456383,-290.915)"
+     id="g4634">
+    <circle
+       cx="2.9103999"
+       cy="294.09"
+       r="2.6458001"
+       id="circle4626"
+       style="fill:#fa6140;stroke-width:0.66123003" />
+    <g
+       transform="rotate(-45,2.9104,294.09)"
+       id="g4632"
+       style="fill:#ffffff;stroke-width:0.28984001">
+      <rect
+         x="1.3229001"
+         y="293.95999"
+         width="3.175"
+         height="0.26458001"
+         id="rect4628" />
+      <rect
+         transform="rotate(-90)"
+         x="-295.67999"
+         y="2.7781"
+         width="3.175"
+         height="0.26458001"
+         id="rect4630" />
+    </g>
+  </g>
+</svg>

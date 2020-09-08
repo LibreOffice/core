@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 24 24"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="lc_symbolshapes.left-brace.svg"
+   inkscape:export-filename="/home/jupiter007/Libreoffice yaru theme fullcolor/build/cmd/lc_symbolshapes.left-brace.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)">
+  <metadata
+     id="metadata10">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1011"
+     id="namedview6"
+     showgrid="false"
+     inkscape:zoom="9.8333333"
+     inkscape:cx="0.86440678"
+     inkscape:cy="11.542373"
+     inkscape:window-x="0"
+     inkscape:window-y="32"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4" />
+  <path
+     style="fill:#000000;stroke:#000000;opacity:0.6;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-linejoin:round"
+     id="path817"
+     fill="#232629"
+     d="m14.015625 4c-1.77683 0-2.5.6966-2.5 2.5v2.4375c0 1.1138-.04982 2.40625-1.03125 2.40625h-.5v1.3125h.5c.98148 0 1.03125 1.29245 1.03125 2.40625v2.4375c0 1.8034.72317 2.5 2.5 2.5v-1.1875c-1.18455 0-1.1875-.48615-1.1875-2.21875v-2c0-.8309-.22033-2.08105-1.21875-2.59375.99842-.5127 1.21875-1.7315 1.21875-2.5625v-2.03125c0-1.7326.0029-2.21875 1.1875-2.21875z" />
+  <path
+     d="m14.015625 4c-1.77683 0-2.5.6966-2.5 2.5v2.4375c0 1.1138-.04982 2.40625-1.03125 2.40625h-.5v1.3125h.5c.98148 0 1.03125 1.29245 1.03125 2.40625v2.4375c0 1.8034.72317 2.5 2.5 2.5v-1.1875c-1.18455 0-1.1875-.48615-1.1875-2.21875v-2c0-.8309-.22033-2.08105-1.21875-2.59375.99842-.5127 1.21875-1.7315 1.21875-2.5625v-2.03125c0-1.7326.0029-2.21875 1.1875-2.21875z"
+     fill="#232629"
+     id="path2"
+     style="fill:#ffffff" />
+</svg>

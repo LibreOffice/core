@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 24 24"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="lc_starshapes.signet.svg"
+   inkscape:export-filename="/home/jupiter007/Libreoffice yaru theme fullcolor/build/cmd/lc_starshapes.signet.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)">
+  <metadata
+     id="metadata10">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1011"
+     id="namedview6"
+     showgrid="false"
+     inkscape:zoom="9.8333333"
+     inkscape:cx="0.66101695"
+     inkscape:cy="12"
+     inkscape:window-x="1920"
+     inkscape:window-y="32"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4" />
+  <path
+     style="fill:#000000;stroke:#000000;opacity:0.6;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-linejoin:round"
+     id="path817"
+     fill="#232629"
+     d="m11.5 4c-1.035801 0-1.240311 1.8008656-2.1972656 2.1972656-.9563597.3961-2.3735026-.732-3.1054688 0-.7319663.732.3961369 2.1490688 0 3.1054688-.3963845.9567996-2.1972656 1.1613656-2.1972656 2.1972656s1.8008811 1.240266 2.1972656 2.197266c.3961369.9562-.7319663 2.373468 0 3.105468.7319662.7319 2.1491091-.3962 3.1054688 0 .9569546.3963 1.1614646 2.197266 2.1972656 2.197266 1.0358 0 1.240311-1.800966 2.197266-2.197266.01833-.01833.063573-.046335.089843-.015625l3.212891 3.212891 1-2 2-1c.01282-.02765-1.905869-1.422762-3.224609-2.419922-.05556-.312308-.082537-.617416.027343-.882812.396466-.957 2.197266-1.161366 2.197266-2.197266s-1.800883-1.240466-2.197266-2.1972656c-.396136-.9564.731966-2.3734688 0-3.1054688s-2.149108.3961-3.105468 0c-.956955-.3964-1.161466-2.1972656-2.197266-2.1972656zm0 4c1.932997 0 3.5 1.5670034 3.5 3.5 0 1.932997-1.567003 3.5-3.5 3.5-1.9329966 0-3.5-1.567003-3.5-3.5 0-1.9329966 1.5670034-3.5 3.5-3.5z" />
+  <path
+     d="m11.5 4c-1.035801 0-1.240311 1.8008656-2.1972656 2.1972656-.9563597.3961-2.3735026-.732-3.1054688 0-.7319663.732.3961369 2.1490688 0 3.1054688-.3963845.9567996-2.1972656 1.1613656-2.1972656 2.1972656s1.8008811 1.240266 2.1972656 2.197266c.3961369.9562-.7319663 2.373468 0 3.105468.7319662.7319 2.1491091-.3962 3.1054688 0 .9569546.3963 1.1614646 2.197266 2.1972656 2.197266 1.0358 0 1.240311-1.800966 2.197266-2.197266.01833-.01833.063573-.046335.089843-.015625l3.212891 3.212891 1-2 2-1c.01282-.02765-1.905869-1.422762-3.224609-2.419922-.05556-.312308-.082537-.617416.027343-.882812.396466-.957 2.197266-1.161366 2.197266-2.197266s-1.800883-1.240466-2.197266-2.1972656c-.396136-.9564.731966-2.3734688 0-3.1054688s-2.149108.3961-3.105468 0c-.956955-.3964-1.161466-2.1972656-2.197266-2.1972656zm0 4c1.932997 0 3.5 1.5670034 3.5 3.5 0 1.932997-1.567003 3.5-3.5 3.5-1.9329966 0-3.5-1.567003-3.5-3.5 0-1.9329966 1.5670034-3.5 3.5-3.5z"
+     fill="#232629"
+     id="path2"
+     style="fill:#ffffff" />
+</svg>

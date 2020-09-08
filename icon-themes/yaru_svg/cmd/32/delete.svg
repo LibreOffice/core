@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 32 32"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="delete.svg"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
+   inkscape:export-filename="/home/jupiter007/Libreoffice yaru theme fullcolor/build/cmd/32/delete.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
+  <metadata
+     id="metadata10">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1011"
+     id="namedview6"
+     showgrid="true"
+     inkscape:zoom="20.85965"
+     inkscape:cx="7.7159877"
+     inkscape:cy="18.291238"
+     inkscape:window-x="0"
+     inkscape:window-y="32"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4">
+    <inkscape:grid
+       type="xygrid"
+       id="grid831" />
+  </sodipodi:namedview>
+  <rect
+     style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="rect818"
+     width="14"
+     height="16"
+     x="9"
+     y="11" />
+  <rect
+     style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="rect816"
+     width="6"
+     height="2"
+     x="13"
+     y="5" />
+  <path
+     inkscape:connector-curvature="0"
+     d="M 16,4 C 14.9,4 12.355,4.32 12.355,4.32 L 12,4.428 11.998,7.236 C 10.96837,7.4184578 8.9646558,8.5916832 8.002,9 L 8,10 H 6 v 1 h 2 v 14.999066 c 0,0.439 0.04,0.788 0.15,1.082 0.111,0.294 0.311,0.528 0.563,0.668 0.503,0.28 1.12,0.249927 1.953,0.25 L 21.334,28 c 0.833,7.3e-5 1.45,0.03 1.953,-0.25 0.252,-0.14 0.45,-0.374 0.56,-0.668 C 23.957,26.788 24,26.439 24,26 V 12 h -1 v 14 c 0,0.376 -0.04,0.603 -0.088,0.729 -0.034,0.09 -0.078,0.129 -0.11,0.146 -0.173,0.097 -0.611,0.125075 -1.468,0.125 l -10.668,-9.34e-4 c -0.857,-7.5e-5 -1.295,-0.028 -1.469,-0.125 -0.05383,-0.03368 -0.09389,-0.08544 -0.113,-0.146 v -0.002 C 9.038,26.604066 9,26.378066 9,25.999066 v -0.002 V 11 H 26 V 10 H 24 L 24.002,9 C 23.038777,8.5913374 21.028361,7.4181027 19.998,7.236 L 20,4.45 19.67,4.331 c 0,0 -2.413,-0.33 -3.67,-0.33 z m 0,1 c 0.89,0 2.79,0.155 3,0.22 L 18.998,7.084 C 18.500519,7.0293399 16.500473,7.0012999 16,7 15.498,7 13.497,7.032 12.998,7.086 L 13,5.227 C 13.266,5.157 15.272,5 16,5 Z m -4,8 v 9 h 1 v -9 z m 3.5,0 v 9 h 1 v -9 z m 3.5,0 v 9 h 1 v -9 z"
+     font-size="15"
+     font-weight="400"
+     letter-spacing="0"
+     style="font-weight:400;font-size:15px;line-height:125%;font-family:Ubuntu;-inkscape-font-specification:Ubuntu;text-align:center;letter-spacing:0;word-spacing:0;text-anchor:middle;fill:#c7162b;fill-opacity:1"
+     word-spacing="0"
+     id="path2-2"
+     sodipodi:nodetypes="ccccccccccccsscsccccccsscccscccccccccccscccccsccccccccccccccc" />
+</svg>

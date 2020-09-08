@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="16"
+   viewBox="0 0 4.2333333 4.2333334"
+   width="16"
+   version="1.1"
+   id="svg42"
+   sodipodi:docname="sc_pushbutton.svg"
+   inkscape:export-filename="/home/jupiter007/Libreoffice yaru theme fullcolor/build/cmd/sc_pushbutton.png"
+   inkscape:export-xdpi="95"
+   inkscape:export-ydpi="95"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)">
+  <metadata
+     id="metadata48">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs46" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1011"
+     id="namedview44"
+     showgrid="false"
+     inkscape:zoom="14.75"
+     inkscape:cx="0.44067797"
+     inkscape:cy="8"
+     inkscape:window-x="0"
+     inkscape:window-y="32"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg42" />
+  <linearGradient
+     id="a"
+     gradientUnits="userSpaceOnUse"
+     x1="26.459"
+     x2="26.459"
+     y1="5.219"
+     y2="25.081">
+    <stop
+       offset="0"
+       stop-color="#fff"
+       id="stop2" />
+    <stop
+       offset=".063"
+       stop-color="#fff"
+       stop-opacity=".235"
+       id="stop4" />
+    <stop
+       offset=".951"
+       stop-color="#fff"
+       stop-opacity=".157"
+       id="stop6" />
+    <stop
+       offset="1"
+       stop-color="#fff"
+       stop-opacity=".392"
+       id="stop8" />
+  </linearGradient>
+  <linearGradient
+     id="b"
+     gradientTransform="matrix(3.54885 0 0 1 -822.227 -30.258)"
+     gradientUnits="userSpaceOnUse"
+     x1="236.195"
+     x2="236.195"
+     y1="35.804"
+     y2="53.804">
+    <stop
+       offset="0"
+       stop-color="#f4f4f4"
+       stop-opacity=".746"
+       id="stop11" />
+    <stop
+       offset=".5"
+       stop-color="#f7f7f7"
+       id="stop13" />
+    <stop
+       offset="1"
+       stop-color="#dcdcdc"
+       id="stop15" />
+  </linearGradient>
+  <path
+     d="m.404 1.193c-.147 0-.264.118-.265.264l-.007 1.32c0 .14.11.255.25.263l3.455-.005c.147 0 .264-.118.265-.265l.006-1.32c0-.14-.11-.254-.25-.263z"
+     style="opacity:.2;fill:none;stroke:#000;stroke-width:.26458;stroke-linecap:round;stroke-linejoin:round"
+     id="path18" />
+  <path
+     d="m4.01 5.558c-1.11 0-2.018.892-2 2l.122 7.897c.017 1.108.892 2 2 2h24.093c1.108 0 2.017-.892 2-2l-.123-7.897c-.018-1.108-.892-2-2-2z"
+     fill="url(#b)"
+     transform="matrix(.1323 0 0 .1323 0 .59)"
+     id="path20" />
+  <path
+     d="m28.54 6.052-24.986.008c-.554 0-.997.445-1 1l-.043 8.935c0 .537.423.964.952.99h25.027c.554 0 .997-.445 1-1l.042-8.935c.003-.552-.442-.994-.992-.998z"
+     fill="none"
+     stroke="url(#a)"
+     stroke-linecap="round"
+     stroke-linejoin="round"
+     transform="matrix(.1323 0 0 .1323 0 .59)"
+     id="path22" />
+  <g
+     fill="#fbfbfb"
+     id="g30">
+    <path
+       d="m1.323 2.117h.264v.264h-.264zm.264-.265h.265v.265h-.265zm.265.265h.265v.264h-.265z"
+       id="path24" />
+    <path
+       d="m1.323 2.38h.264v.266h-.264zm.529 0h.265v.266h-.265zm-.265.266h.265v.264h-.265zm.793-.794h.266v.265h-.266zm0 .265h.266v.264h-.266z"
+       id="path26" />
+    <path
+       d="m2.38 2.38h.266v.266h-.266zm0 .266h.266v.264h-.266zm.53-.794h.265v.265h-.265zm-.264.265h.264v.264h-.264zm.264.263h.265v.266h-.265zm0 .266h.265v.264h-.265z"
+       id="path28" />
+  </g>
+  <g
+     fill="#7c7c7c"
+     id="g40">
+    <path
+       d="m1.323 1.852h.264v.265h-.264zm.264-.264h.265v.264h-.265zm.265.264h.265v.265h-.265zm-.529.265h.264v.264h-.264zm.529 0h.265v.264h-.265z"
+       id="path32" />
+    <path
+       d="m1.587 2.38h.265v.266h-.265zm.793-.792h.266v.264h-.266zm0 .264h.266v.265h-.266zm0 .265h.266v.264h-.266z"
+       id="path34" />
+    <path
+       d="m2.38 2.38h.266v.266h-.266zm.53-.792h.265v.264h-.265zm-.264.264h.264v.265h-.264zm.264.265h.265v.264h-.265z"
+       id="path36" />
+    <path
+       d="m2.91 2.38h.265v.266h-.265z"
+       id="path38" />
+  </g>
+</svg>
