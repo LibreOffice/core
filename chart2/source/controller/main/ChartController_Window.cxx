@@ -1512,8 +1512,29 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
                     if( !m_aSelection.getSelectedCID().isEmpty() )
                     {
                         //move chart objects
-                        bReturn = impl_moveOrResizeObject(
-                            m_aSelection.getSelectedCID(), MOVE_OBJECT, fShiftAmountX, fShiftAmountY );
+                        if (eObjectType == OBJECTTYPE_DATA_LABEL)
+                        {
+                            SdrObject* pObj = pDrawViewWrapper->getSelectedObject();
+                            if (pObj)
+                            {
+                                tools::Rectangle aRect = pObj->GetSnapRect();
+                                awt::Size aPageSize(ChartModelHelper::getPageSize(getModel()));
+                                if ((fShiftAmountX > 0.0 && (aRect.getX() + fShiftAmountX + aRect.getWidth() > aPageSize.Width)) ||
+                                    (fShiftAmountX < 0.0 && (aRect.getX() + fShiftAmountX < 0)) ||
+                                    (fShiftAmountY > 0.0 && (aRect.getY() + fShiftAmountY + aRect.getHeight() > aPageSize.Height)) ||
+                                    (fShiftAmountY < 0.0 && (aRect.getY() + fShiftAmountY < 0)))
+                                    bReturn = false;
+                                else
+                                    bReturn = PositionAndSizeHelper::moveObject(
+                                        m_aSelection.getSelectedCID(), getModel(),
+                                        awt::Rectangle(aRect.getX() + fShiftAmountX, aRect.getY() + fShiftAmountY, aRect.getWidth(), aRect.getHeight()),
+                                        awt::Rectangle(aRect.getX(), aRect.getY(), 0, 0),
+                                        awt::Rectangle(0, 0, aPageSize.Width, aPageSize.Height));
+                            }
+                        }
+                        else
+                            bReturn = impl_moveOrResizeObject(
+                                m_aSelection.getSelectedCID(), MOVE_OBJECT, fShiftAmountX, fShiftAmountY );
                     }
                     else
                     {
@@ -1765,12 +1786,6 @@ bool ChartController::impl_moveOrResizeObject(
 {
     bool bResult = false;
     bool bNeedResize = ( eType == CENTERED_RESIZE_OBJECT );
-    ObjectType eObjectType = ObjectIdentifier::getObjectType(rCID);
-
-    /*TODO: Move data label objects with arrow-keys,
-    in that case we have to use CustomLabelPosition instead of RelativePosition!*/
-    if( eObjectType == OBJECTTYPE_DATA_LABEL )
-        return bResult;
 
     uno::Reference< frame::XModel > xChartModel( getModel() );
     uno::Reference< beans::XPropertySet > xObjProp(
@@ -1830,6 +1845,7 @@ bool ChartController::impl_moveOrResizeObject(
             if( bNeedResize )
                 eActionType = ActionDescriptionProvider::ActionType::Resize;
 
+            ObjectType eObjectType = ObjectIdentifier::getObjectType( rCID );
             UndoGuard aUndoGuard( ActionDescriptionProvider::createDescription(
                     eActionType, ObjectNameProvider::getName( eObjectType )), m_xUndoManager );
             {
