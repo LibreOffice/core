@@ -552,13 +552,29 @@ void ValueSet::RemoveItem( sal_uInt16 nItemId )
     QueueReformat();
 }
 
+void ValueSet::TurnOffScrollBar()
+{
+    mxScrolledWindow->set_vpolicy(VclPolicyType::NEVER);
+    weld::DrawingArea* pDrawingArea = GetDrawingArea();
+    Size aPrefSize(pDrawingArea->get_preferred_size());
+    pDrawingArea->set_size_request(aPrefSize.Width() + GetScrollWidth(), aPrefSize.Height());
+}
+
+void ValueSet::TurnOnScrollBar()
+{
+    mxScrolledWindow->set_vpolicy(VclPolicyType::ALWAYS);
+    weld::DrawingArea* pDrawingArea = GetDrawingArea();
+    Size aPrefSize(pDrawingArea->get_preferred_size());
+    pDrawingArea->set_size_request(aPrefSize.Width() - GetScrollWidth(), aPrefSize.Height());
+}
+
 void ValueSet::RecalcScrollBar()
 {
     // reset scrolled window state to initial value
     // so it will get configured to the right adjustment
     WinBits nStyle = GetStyle();
     if (mxScrolledWindow && (nStyle & WB_VSCROLL))
-        mxScrolledWindow->set_vpolicy(VclPolicyType::NEVER);
+        TurnOffScrollBar();
 }
 
 void ValueSet::Clear()
@@ -854,11 +870,7 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
     long nNoneSpace;
 
     if (mxScrolledWindow && !(nStyle & WB_VSCROLL) && mxScrolledWindow->get_vpolicy() != VclPolicyType::NEVER)
-    {
-        mxScrolledWindow->set_vpolicy(VclPolicyType::NEVER);
-        Size aPrefSize(GetDrawingArea()->get_preferred_size());
-        GetDrawingArea()->set_size_request(aPrefSize.Width() + GetScrollWidth(), aPrefSize.Height());
-    }
+        TurnOffScrollBar();
 
     // calculate item offset
     if (nStyle & WB_ITEMBORDER)
@@ -1008,11 +1020,7 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
         }
 
         if (mxScrolledWindow && mxScrolledWindow->get_vpolicy() != VclPolicyType::NEVER)
-        {
-            mxScrolledWindow->set_vpolicy(VclPolicyType::NEVER);
-            Size aPrefSize(GetDrawingArea()->get_preferred_size());
-            GetDrawingArea()->set_size_request(aPrefSize.Width() + GetScrollWidth(), aPrefSize.Height());
-        }
+            TurnOffScrollBar();
     }
     else
     {
@@ -1164,11 +1172,7 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
             }
 
             if (bTurnScrollbarOn)
-            {
-                mxScrolledWindow->set_vpolicy(VclPolicyType::ALWAYS);
-                Size aPrefSize(GetDrawingArea()->get_preferred_size());
-                GetDrawingArea()->set_size_request(aPrefSize.Width() - GetScrollWidth(), aPrefSize.Height());
-            }
+                TurnOnScrollBar();
         }
     }
 
