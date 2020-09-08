@@ -571,7 +571,7 @@ DECLARE_OOXMLEXPORT_TEST(testNegativeCellMarginTwips, "negative-cell-margin-twip
     CPPUNIT_ASSERT( width.toInt32() > 0 );
 }
 
-DECLARE_OOXMLIMPORT_TEST(testFdo38414, "fdo38414.docx" )
+DECLARE_OOXMLEXPORT_TEST(testFdo38414, "fdo38414.docx" )
 {
     // The cells in the last (4th) column were merged properly and so the result didn't have the same height.
     // (Since w:gridBefore is worked around by faking another cell in the row, so column count is thus 5
