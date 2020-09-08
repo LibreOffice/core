@@ -15,11 +15,7 @@
 
 #include <sfx2/childwin.hxx>
 #include <sfx2/dllapi.h>
-
-class FixedImage;
-class FixedText;
-class Button;
-class PushButton;
+#include <vcl/InterimItemWindow.hxx>
 
 // These must match the values in offapi/com/sun/star/frame/InfobarType.idl
 enum class InfobarType
@@ -57,44 +53,59 @@ public:
     void Update();
 };
 
+class ExtraButton;
+
 /** Class representing a single InfoBar to be added in a SfxInfoBarContainerWindow.
   */
-class SFX2_DLLPUBLIC SfxInfoBarWindow final : public vcl::Window
+class SFX2_DLLPUBLIC SfxInfoBarWindow final : public InterimItemWindow
 {
 private:
     OUString m_sId;
     InfobarType m_eType;
-    VclPtr<FixedImage> m_pImage;
-    VclPtr<FixedText> m_pPrimaryMessage;
-    VclPtr<FixedText> m_pSecondaryMessage;
-    VclPtr<Button> m_pCloseBtn;
-    std::vector<VclPtr<PushButton>> m_aActionBtns;
+    Size m_aSize;
+    Size m_aMessageSize;
+    Size m_aOrigMessageSize;
+    bool m_bLayingOut;
+    std::unique_ptr<weld::Image> m_xImage;
+    std::unique_ptr<weld::Label> m_xPrimaryMessage;
+    std::unique_ptr<weld::TextView> m_xSecondaryMessage;
+    std::unique_ptr<weld::Container> m_xButtonBox;
+    std::unique_ptr<weld::Toolbar> m_xCloseBtn;
+    std::vector<std::unique_ptr<ExtraButton>> m_aActionBtns;
+
+    DECL_LINK(SizeAllocHdl, const Size&, void);
 
     void SetForeAndBackgroundColors(InfobarType eType);
+    void SetCloseButtonImage();
 
 public:
     SfxInfoBarWindow(vcl::Window* parent, const OUString& sId, const OUString& sPrimaryMessage,
                      const OUString& sSecondaryMessage, InfobarType InfobarType,
-                     WinBits nMessageStyle, bool bShowCloseButton);
+                     bool bShowCloseButton);
+    Size DoLayout();
+    virtual void Layout() override;
     virtual ~SfxInfoBarWindow() override;
     virtual void dispose() override;
 
     const OUString& getId() const { return m_sId; }
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
-    virtual void Resize() override;
     void Update(const OUString& sPrimaryMessage, const OUString& sSecondaryMessage,
                 InfobarType eType);
     basegfx::BColor m_aBackgroundColor;
     basegfx::BColor m_aForegroundColor;
 
     /** Add button to Infobar.
-         * Infobar takes ownership of the button so the button is
-         * destroyed when the infobar gets destroyed.
-         */
-    void addButton(PushButton* pButton);
+      * Infobar takes ownership of the button so the button is
+      * destroyed when the infobar gets destroyed.
+      *
+      * The optional "pCommand" is used by extensions, via XInfobarProvider, to
+      * dispatch pCommand on click.
+      */
+    weld::Button& addButton(const OUString* pCommand = nullptr);
+
+    void SetCommandHandler(weld::Button& rBtn, const OUString& aCommand);
 
 private:
-    DECL_LINK(CloseHandler, Button*, void);
+    DECL_LINK(CloseHandler, const OString&, void);
 };
 
 class SfxInfoBarContainerWindow final : public vcl::Window
@@ -102,6 +113,10 @@ class SfxInfoBarContainerWindow final : public vcl::Window
 private:
     SfxInfoBarContainerChild* m_pChildWin;
     std::vector<VclPtr<SfxInfoBarWindow>> m_pInfoBars;
+    Idle m_aLayoutIdle;
+    bool m_bResizing;
+
+    DECL_LINK(DoUpdateLayout, Timer*, void);
 
 public:
     SfxInfoBarContainerWindow(SfxInfoBarContainerChild* pChildWin);
@@ -110,11 +125,13 @@ public:
 
     VclPtr<SfxInfoBarWindow> appendInfoBar(const OUString& sId, const OUString& sPrimaryMessage,
                                            const OUString& sSecondaryMessage, InfobarType ibType,
-                                           WinBits nMessageStyle, bool bShowCloseButton);
+                                           bool bShowCloseButton);
     VclPtr<SfxInfoBarWindow> getInfoBar(const OUString& sId);
     bool hasInfoBarWithID(const OUString& sId);
     void removeInfoBar(VclPtr<SfxInfoBarWindow> const& pInfoBar);
     static bool isInfobarEnabled(const OUString& sId);
+
+    void TriggerUpdateLayout();
 
     virtual void Resize() override;
 };
