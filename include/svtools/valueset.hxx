@@ -255,6 +255,8 @@ private:
     SVT_DLLPRIVATE void         QueueReformat();
     SVT_DLLPRIVATE void         SetFirstLine(sal_uInt16 nNewFirstLine); // set mnFirstLine and update scrollbar to match
     SVT_DLLPRIVATE void         RecalcScrollBar();
+    SVT_DLLPRIVATE void         TurnOffScrollBar();
+    SVT_DLLPRIVATE void         TurnOnScrollBar();
     DECL_DLLPRIVATE_LINK(ImplScrollHdl, weld::ScrolledWindow&, void);
 
     Size           GetLargestItemSize();
