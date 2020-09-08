@@ -50,10 +50,10 @@ namespace com::sun::star::frame { struct DispatchDescriptor; }
 namespace com::sun::star::ui { class XContextMenuInterceptor; }
 namespace com::sun::star::ui { class XSidebarProvider; }
 namespace com::sun::star::util { struct URL; }
+namespace weld { class Button; }
 
 struct  IMPL_SfxBaseController_DataContainer    ;   // impl. struct to hold member of class SfxBaseController
 
-class Button;
 class NotifyEvent;
 class SfxViewFrame;
 class SfxViewShell;
@@ -207,7 +207,7 @@ private:
     SAL_DLLPRIVATE SfxViewFrame& GetViewFrame_Impl() const;
     SAL_DLLPRIVATE void ShowInfoBars( );
 
-    DECL_LINK( CheckOutHandler, Button*, void );
+    DECL_LINK( CheckOutHandler, weld::Button&, void );
 
     std::unique_ptr<IMPL_SfxBaseController_DataContainer>   m_pData ;
 
