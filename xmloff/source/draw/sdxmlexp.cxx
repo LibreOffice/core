@@ -2400,13 +2400,11 @@ void SdXMLExport::addDataStyle(const sal_Int32 nNumberFormat, bool bTimeFormat )
 
     if( bTimeFormat )
     {
-        if( maUsedTimeStyles.count( nFormat ) == 0 )
-            maUsedTimeStyles.insert( nFormat );
+        maUsedTimeStyles.insert( nFormat );
     }
     else
     {
-        if( maUsedDateStyles.count( nFormat ) == 0 )
-            maUsedDateStyles.insert( nFormat );
+        maUsedDateStyles.insert( nFormat );
     }
 }
 
