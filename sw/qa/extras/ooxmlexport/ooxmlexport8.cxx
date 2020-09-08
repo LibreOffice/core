@@ -22,6 +22,7 @@
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
+#include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -53,6 +54,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <xmloff/odffields.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 
 #include <IDocumentMarkAccess.hxx>
 #include <IMark.hxx>
@@ -504,6 +506,39 @@ DECLARE_OOXMLEXPORT_TEST(testTDF91122, "tdf91122.docx")
         xShapeProperties->getPropertyValue("VertOrient") >>= nValue;
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong vertical orientation", text::VertOrientation::TOP, nValue);
     }
+}
+
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo76803, "fdo76803.docx")
+{
+    // The ContourPolyPolygon was wrong
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
+
+    drawing::PointSequenceSequence rContour = getProperty<drawing::PointSequenceSequence>(xPropertySet, "ContourPolyPolygon");
+    basegfx::B2DPolyPolygon aPolyPolygon(basegfx::utils::UnoPointSequenceSequenceToB2DPolyPolygon(rContour));
+
+    // We've got exactly one polygon inside
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(1), aPolyPolygon.count());
+
+    // Now check it deeply
+    basegfx::B2DPolygon aPolygon(aPolyPolygon.getB2DPolygon(0));
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(4), aPolygon.count());
+
+    CPPUNIT_ASSERT_EQUAL(double(-149), aPolygon.getB2DPoint(0).getX());
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: -35
+    // - Actual  : -67
+    // i.e. the cropping did not influence the wrap polygon during export.
+    CPPUNIT_ASSERT_EQUAL(double(-35), aPolygon.getB2DPoint(0).getY());
+
+    CPPUNIT_ASSERT_EQUAL(double(-149), aPolygon.getB2DPoint(1).getX());
+    CPPUNIT_ASSERT_EQUAL(double(3511), aPolygon.getB2DPoint(1).getY());
+
+    CPPUNIT_ASSERT_EQUAL(double(16889), aPolygon.getB2DPoint(2).getX());
+    CPPUNIT_ASSERT_EQUAL(double(3511), aPolygon.getB2DPoint(2).getY());
+
+    CPPUNIT_ASSERT_EQUAL(double(16889), aPolygon.getB2DPoint(3).getX());
+    CPPUNIT_ASSERT_EQUAL(double(-35), aPolygon.getB2DPoint(3).getY());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTDF91260, "tdf91260.docx")

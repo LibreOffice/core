@@ -55,7 +55,6 @@
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <o3tl/cppunittraitshelper.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -1156,39 +1155,6 @@ DECLARE_OOXMLIMPORT_TEST(testFdo75722dml, "fdo75722-dml.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5457), aSize.Width);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3447), aSize.Height);
     CPPUNIT_ASSERT_EQUAL(sal_Int64(3128), nRot);
-}
-
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo76803, "fdo76803.docx")
-{
-    // The ContourPolyPolygon was wrong
-    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
-
-    drawing::PointSequenceSequence rContour = getProperty<drawing::PointSequenceSequence>(xPropertySet, "ContourPolyPolygon");
-    basegfx::B2DPolyPolygon aPolyPolygon(basegfx::utils::UnoPointSequenceSequenceToB2DPolyPolygon(rContour));
-
-    // We've got exactly one polygon inside
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(1), aPolyPolygon.count());
-
-    // Now check it deeply
-    basegfx::B2DPolygon aPolygon(aPolyPolygon.getB2DPolygon(0));
-
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(4), aPolygon.count());
-
-    CPPUNIT_ASSERT_EQUAL(double(-149), aPolygon.getB2DPoint(0).getX());
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: -35
-    // - Actual  : -67
-    // i.e. the cropping did not influence the wrap polygon during export.
-    CPPUNIT_ASSERT_EQUAL(double(-35), aPolygon.getB2DPoint(0).getY());
-
-    CPPUNIT_ASSERT_EQUAL(double(-149), aPolygon.getB2DPoint(1).getX());
-    CPPUNIT_ASSERT_EQUAL(double(3511), aPolygon.getB2DPoint(1).getY());
-
-    CPPUNIT_ASSERT_EQUAL(double(16889), aPolygon.getB2DPoint(2).getX());
-    CPPUNIT_ASSERT_EQUAL(double(3511), aPolygon.getB2DPoint(2).getY());
-
-    CPPUNIT_ASSERT_EQUAL(double(16889), aPolygon.getB2DPoint(3).getX());
-    CPPUNIT_ASSERT_EQUAL(double(-35), aPolygon.getB2DPoint(3).getY());
 }
 
 DECLARE_OOXMLIMPORT_TEST(testUnbalancedColumnsCompat, "unbalanced-columns-compat.docx")
