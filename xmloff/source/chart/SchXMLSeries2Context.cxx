@@ -915,7 +915,7 @@ void SchXMLSeries2Context::setStylesToSeries( SeriesDefaultsAndStyles& rSeriesDe
             auto pItLabel
                 = std::find_if(rSeriesDefaultsAndStyles.maSeriesStyleVector.begin(),
                                rSeriesDefaultsAndStyles.maSeriesStyleVector.end(),
-                               [seriesStyle](const DataRowPointStyle& rStyle) {
+                               [&seriesStyle](const DataRowPointStyle& rStyle) {
                                    return rStyle.meType == DataRowPointStyle::DATA_LABEL_SERIES
                                           && rStyle.msStyleNameOfParent == seriesStyle.msStyleName;
                                });
@@ -1179,7 +1179,7 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
                     auto pItLabel = std::find_if(
                         rSeriesDefaultsAndStyles.maSeriesStyleVector.begin(),
                         rSeriesDefaultsAndStyles.maSeriesStyleVector.end(),
-                        [seriesStyle](const DataRowPointStyle& rStyle) {
+                        [&seriesStyle](const DataRowPointStyle& rStyle) {
                             return rStyle.meType == DataRowPointStyle::DATA_LABEL_POINT
                                    && rStyle.msStyleNameOfParent == seriesStyle.msStyleName;
                         });
