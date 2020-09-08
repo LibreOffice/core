@@ -52,6 +52,24 @@
       "revId": "1d465aa0159327f2666d02af4db7f1d8e5fbca8a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6431f7a5_ebae3ede",
+        "filename": "formula/source/core/api/FormulaCompiler.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 2329,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-09-08T07:13:45Z",
+      "side": 1,
+      "message": "Thanks for the hint.\nI extracted this part of the patch to https://gerrit.libreoffice.org/c/core/+/102218 .",
+      "parentUuid": "eef9676e_c583c01c",
+      "revId": "1d465aa0159327f2666d02af4db7f1d8e5fbca8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
