@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "c5a5f158_eb14076d",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 5626,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2020-09-08T11:53:01Z",
+      "side": 1,
+      "message": "I see. It might be better to say something like \"Word seems to always dump the same tags for OLE shape types. If that turns out to be false, this function will need to be adapted.\" in the comments.",
+      "parentUuid": "407ee8f1_9606d008",
+      "revId": "34fa9f7a381e5f8b3a28a7f29e6e2867872d0bd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8a846cd4_f52d5e9f",
         "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
         "patchSetId": 3
@@ -69,6 +87,24 @@
       "revId": "34fa9f7a381e5f8b3a28a7f29e6e2867872d0bd0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7693803_149d2a4f",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 5722,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2020-09-08T11:53:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c33af94f_8e73f663",
+      "revId": "34fa9f7a381e5f8b3a28a7f29e6e2867872d0bd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -107,6 +143,24 @@
     },
     {
       "key": {
+        "uuid": "02b028c4_46b932c3",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 5730,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2020-09-08T11:53:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "669d8ff2_b588b0d2",
+      "revId": "34fa9f7a381e5f8b3a28a7f29e6e2867872d0bd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "67c38d02_b3382525",
         "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
         "patchSetId": 3
@@ -139,6 +193,24 @@
       "revId": "34fa9f7a381e5f8b3a28a7f29e6e2867872d0bd0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a39d6669_44be62b0",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 5774,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2020-09-08T11:53:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c052074c_bdee7590",
+      "revId": "34fa9f7a381e5f8b3a28a7f29e6e2867872d0bd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
