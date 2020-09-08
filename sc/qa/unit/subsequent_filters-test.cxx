@@ -231,6 +231,7 @@ public:
     void testTdf98844();
     void testTdf100458();
     void testTdf118561();
+    void testTdf125099();
     void testTdf134455();
     void testTdf119533();
     void testTdf127982();
@@ -398,6 +399,7 @@ public:
     CPPUNIT_TEST(testTdf98844);
     CPPUNIT_TEST(testTdf100458);
     CPPUNIT_TEST(testTdf118561);
+    CPPUNIT_TEST(testTdf125099);
     CPPUNIT_TEST(testTdf134455);
     CPPUNIT_TEST(testTdf119533);
     CPPUNIT_TEST(testTdf127982);
@@ -3841,6 +3843,27 @@ void ScFiltersTest::testTdf118561()
     CPPUNIT_ASSERT_EQUAL(OUString("fruits"), rDoc.GetString(ScAddress(4,1,1)));
     CPPUNIT_ASSERT_EQUAL(OUString("apple"), rDoc.GetString(ScAddress(5,1,1)));
     CPPUNIT_ASSERT_EQUAL(OUString("hat"), rDoc.GetString(ScAddress(6,1,1)));
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf125099()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf125099.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("03:53:46"), rDoc.GetString(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("03:23:59"), rDoc.GetString(ScAddress(0,1,0)));
+
+    xDocSh->DoHardRecalc();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("03:53:46"), rDoc.GetString(ScAddress(0,0,0)));
+
+    // Without the fix in place, this would have failed with
+    // - Expected: 03:24:00
+    // - Actual  : 03:23:59
+    CPPUNIT_ASSERT_EQUAL(OUString("03:24:00"), rDoc.GetString(ScAddress(0,1,0)));
 
     xDocSh->DoClose();
 }
