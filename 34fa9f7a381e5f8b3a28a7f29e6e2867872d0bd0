@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c45c5393_249f9fb9",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 5626,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2020-09-08T11:10:11Z",
+      "side": 1,
+      "message": "If Word needs these tags (and it does), then this function is necessary. I don\u0027t see why it should be refactored later on.",
+      "revId": "34fa9f7a381e5f8b3a28a7f29e6e2867872d0bd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a846cd4_f52d5e9f",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 5722,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2020-09-08T11:10:11Z",
+      "side": 1,
+      "message": "(Unresolved from gerrit #101881)\nIs DOUBLE really supposed to be the same thing as DOUBLE_THIN?",
+      "revId": "34fa9f7a381e5f8b3a28a7f29e6e2867872d0bd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca2a0535_cc37504d",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 5730,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2020-09-08T11:10:11Z",
+      "side": 1,
+      "message": "(Unresolved from gerrit #101881)\nThese special styles might need their own separate bug ticket.",
+      "revId": "34fa9f7a381e5f8b3a28a7f29e6e2867872d0bd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67c38d02_b3382525",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 5774,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2020-09-08T11:10:11Z",
+      "side": 1,
+      "message": "(Unresolved from gerrit #101881)\nAre you sure you need the \"/ 20\" unit conversion here?",
+      "revId": "34fa9f7a381e5f8b3a28a7f29e6e2867872d0bd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
