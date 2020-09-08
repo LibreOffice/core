@@ -69,12 +69,12 @@ void test::ostring::StringConcat::checkConcat()
     CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OStringBuffer, const char[ 4 ] > )), typeid( OStringBuffer( "foo" ) + "bar" ));
     CPPUNIT_ASSERT_EQUAL( OString( "foobar" ), OString( OStringLiteral( "foo" ) + "bar" ));
     CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OStringLiteral<4>, const char[ 4 ] > )), typeid( OStringLiteral<4>( "foo" ) + "bar" ));
-        //TODO: the explicit OUStringLiteral<4> template argument in the unevaluated typeid context
+        //TODO: the explicit OStringLiteral<4> template argument in the unevaluated typeid context
         // is needed by some GCC versions, see <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96878>
         // "Failed class template argument deduction in unevaluated, parenthesized context"
     CPPUNIT_ASSERT_EQUAL( OString( "foobar" ), OString( OStringLiteral( "foo" ) + static_cast<const char*>("bar") ));
     CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OStringLiteral<4>, const char* > )), typeid( OStringLiteral<4>( "foo" ) + static_cast<const char*>("bar") ));
-        //TODO: the explicit OUStringLiteral<4> template argument in the unevaluated typeid context
+        //TODO: the explicit OStringLiteral<4> template argument in the unevaluated typeid context
         // is needed by some GCC versions, see <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96878>
         // "Failed class template argument deduction in unevaluated, parenthesized context"
     const char d1[] = "xyz";
