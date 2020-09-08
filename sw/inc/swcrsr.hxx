@@ -25,6 +25,7 @@
 
 class SfxItemSet;
 struct SwCursor_SavePos;
+class SvxSearchItem;
 namespace i18nutil {
     struct SearchOptions2;
 }
@@ -37,7 +38,8 @@ const int FIND_NO_RING      = 2;
 
 struct SwFindParas
 {
-    virtual int DoFind(SwPaM &, SwMoveFnCollection const &, const SwPaM&, bool) = 0;
+    // @param xSearchItem allocate in parent so we can do so outside the calling loop
+    virtual int DoFind(SwPaM &, SwMoveFnCollection const &, const SwPaM&, bool, std::unique_ptr<SvxSearchItem>& xSearchItem) = 0;
     virtual bool IsReplaceMode() const = 0;
 
 protected:
