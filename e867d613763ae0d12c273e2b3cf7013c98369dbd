@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "14f15f78_0db9d2b1",
+        "filename": "sc/source/filter/xcl97/xcl97rec.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1282,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-09-08T12:41:56Z",
+      "side": 1,
+      "message": "use aGrabBag.is() to avoid of null references",
+      "range": {
+        "startLine": 1282,
+        "startChar": 12,
+        "endLine": 1282,
+        "endChar": 34
+      },
+      "revId": "e867d613763ae0d12c273e2b3cf7013c98369dbd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
