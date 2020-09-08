@@ -496,7 +496,6 @@ void AssignmentPersistentData::ImplCommit()
         m_xFieldScroller = m_xBuilder->weld_scrolled_window("scrollwindow");
         m_xFieldScroller->set_user_managed_scrolling();
         m_xGrid = m_xBuilder->weld_widget("grid");
-        m_xFieldScroller->set_size_request(-1, m_xGrid->get_preferred_size().Height());
 
         for (sal_Int32 row=0; row<FIELD_PAIRS_VISIBLE; ++row)
         {
@@ -597,6 +596,8 @@ void AssignmentPersistentData::ImplCommit()
 
         // initialize the field controls
         resetFields();
+        // tdf#136494 wait until contents are filled before getting preferred height
+        m_xFieldScroller->set_size_request(-1, m_xGrid->get_preferred_size().Height());
         m_xFieldScroller->vadjustment_set_value(0);
         m_pImpl->nFieldScrollPos = -1;
         implScrollFields(0, false, false);
