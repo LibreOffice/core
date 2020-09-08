@@ -2374,7 +2374,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
             // Append bookmarks in this range after flys, exclusive of final
             // position of this range
             AppendBookmarks( rNode, nCurrentPos, nNextAttr - nCurrentPos );
-            //Sadly only possible for word in main document text
+            // Sadly only possible for main or glossary document parts: ECMA-376 Part 1 sect. 11.3.2
             if ( m_nTextTyp == TXT_MAINTEXT )
                 AppendAnnotationMarks(aAttrIter, nCurrentPos, nNextAttr - nCurrentPos);
 
