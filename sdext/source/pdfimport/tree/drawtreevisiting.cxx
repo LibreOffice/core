@@ -35,6 +35,7 @@
 #include <com/sun/star/i18n/DirectionProperty.hpp>
 
 #include <string.h>
+#include <string_view>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -1034,7 +1035,7 @@ void DrawXmlFinalizer::visit( PageElement& elem, const std::list< std::unique_pt
     aPageLayoutProps[ "fo:margin-right" ]   =  unitMMString( right_margin );
     aPageLayoutProps[ "fo:page-width" ]     =  unitMMString( page_width );
     aPageLayoutProps[ "fo:page-height" ]    =  unitMMString( page_height );
-    aPageLayoutProps[ "style:print-orientation" ]= elem.w < elem.h ? OUStringLiteral(u"portrait") : OUStringLiteral(u"landscape");
+    aPageLayoutProps[ "style:print-orientation" ]= elem.w < elem.h ? std::u16string_view(u"portrait") : std::u16string_view(u"landscape");
     aPageLayoutProps[ "style:writing-mode" ]= "lr-tb";
 
     StyleContainer::Style aStyle( "style:page-layout", aPageProps);

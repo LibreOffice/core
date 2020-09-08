@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <initializer_list>
+#include <string_view>
 
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
@@ -404,7 +405,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DSceneObject::getSupportedServiceNames()
 {
     return comphelper::concatSequences(
         SvxShape::getSupportedServiceNames(),
-        std::initializer_list<OUStringLiteral>{ u"com.sun.star.drawing.Shape3DScene" });
+        std::initializer_list<std::u16string_view>{ u"com.sun.star.drawing.Shape3DScene" });
 }
 
 Svx3DCubeObject::Svx3DCubeObject(SdrObject* pObj)
@@ -524,7 +525,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DCubeObject::getSupportedServiceNames()
 {
     return comphelper::concatSequences(
         SvxShape::getSupportedServiceNames(),
-        std::initializer_list<OUStringLiteral>{ u"com.sun.star.drawing.Shape3D",
+        std::initializer_list<std::u16string_view>{ u"com.sun.star.drawing.Shape3D",
                                           u"com.sun.star.drawing.Shape3DCube" });
 }
 
@@ -629,7 +630,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DSphereObject::getSupportedServiceNames()
 {
     return comphelper::concatSequences(
         SvxShape::getSupportedServiceNames(),
-        std::initializer_list<OUStringLiteral>{ u"com.sun.star.drawing.Shape3D",
+        std::initializer_list<std::u16string_view>{ u"com.sun.star.drawing.Shape3D",
                                           u"com.sun.star.drawing.Shape3DSphere" });
 }
 
@@ -809,7 +810,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DLatheObject::getSupportedServiceNames()
 {
     return comphelper::concatSequences(
         SvxShape::getSupportedServiceNames(),
-        std::initializer_list<OUStringLiteral>{ u"com.sun.star.drawing.Shape3D",
+        std::initializer_list<std::u16string_view>{ u"com.sun.star.drawing.Shape3D",
                                           u"com.sun.star.drawing.Shape3DLathe" });
 }
 
@@ -892,7 +893,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DExtrudeObject::getSupportedServiceNames(
 {
     return comphelper::concatSequences(
         SvxShape::getSupportedServiceNames(),
-        std::initializer_list<OUStringLiteral>{ u"com.sun.star.drawing.Shape3D",
+        std::initializer_list<std::u16string_view>{ u"com.sun.star.drawing.Shape3D",
                                           u"com.sun.star.drawing.Shape3DExtrude" });
 }
 
@@ -1028,7 +1029,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DPolygonObject::getSupportedServiceNames(
 {
     return comphelper::concatSequences(
         SvxShape::getSupportedServiceNames(),
-        std::initializer_list<OUStringLiteral>{ u"com.sun.star.drawing.Shape3D",
+        std::initializer_list<std::u16string_view>{ u"com.sun.star.drawing.Shape3D",
                                           u"com.sun.star.drawing.Shape3DPolygon" });
 }
 

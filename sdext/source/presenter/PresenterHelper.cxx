@@ -28,11 +28,11 @@ using namespace ::com::sun::star::presentation;
 
 namespace sdext::presenter {
 
-const OUStringLiteral PresenterHelper::msPaneURLPrefix( u"private:resource/pane/");
+const OUStringLiteral msPaneURLPrefix( u"private:resource/pane/");
 const OUString PresenterHelper::msCenterPaneURL( msPaneURLPrefix + "CenterPane");
 const OUString PresenterHelper::msFullScreenPaneURL( msPaneURLPrefix + "FullScreenPane");
 
-const OUStringLiteral PresenterHelper::msViewURLPrefix( u"private:resource/view/");
+const OUStringLiteral msViewURLPrefix( u"private:resource/view/");
 const OUString PresenterHelper::msPresenterScreenURL( msViewURLPrefix + "PresenterScreen");
 const OUString PresenterHelper::msSlideSorterURL( msViewURLPrefix + "SlideSorter");
 

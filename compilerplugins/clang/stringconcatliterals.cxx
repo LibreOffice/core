@@ -27,7 +27,9 @@ Expr const * stripCtor(Expr const * expr) {
         return expr;
     }
     auto qt = loplugin::DeclCheck(e2->getConstructor());
-    if (qt.MemberFunction().Class("OStringLiteral").Namespace("rtl").GlobalNamespace()) {
+    if (qt.MemberFunction().Class("OStringLiteral").Namespace("rtl").GlobalNamespace()
+        || qt.MemberFunction().Class("OUStringLiteral").Namespace("rtl").GlobalNamespace())
+    {
         if (e2->getNumArgs() == 1) {
             return e2->getArg(0)->IgnoreParenImpCasts();
         }
@@ -36,8 +38,7 @@ Expr const * stripCtor(Expr const * expr) {
     if (!((qt.MemberFunction().Class("OString").Namespace("rtl")
            .GlobalNamespace())
           || (qt.MemberFunction().Class("OUString").Namespace("rtl")
-              .GlobalNamespace())
-          || qt.MemberFunction().Struct("OUStringLiteral").Namespace("rtl").GlobalNamespace()))
+              .GlobalNamespace())))
     {
         return expr;
     }

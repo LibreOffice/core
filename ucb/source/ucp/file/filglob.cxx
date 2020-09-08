@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "filglob.hxx"
 #include "filerror.hxx"
 #include "bc.hxx"
@@ -498,8 +502,8 @@ namespace fileaccess {
             Sequence< OUString > aSeq( 1 );
             aSeq[0] =
                 ( errorCode == TASKHANDLING_NONAMESET_INSERT_COMMAND )  ?
-                OUStringLiteral(u"Title")               :
-                OUStringLiteral(u"ContentType");
+                std::u16string_view(u"Title")               :
+                std::u16string_view(u"ContentType");
 
             aAny <<= MissingPropertiesException(
                 "a property is missing, necessary to create a content",

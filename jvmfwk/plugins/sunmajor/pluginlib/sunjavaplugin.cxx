@@ -35,6 +35,7 @@
 
 #include <cassert>
 #include <memory>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -466,7 +467,7 @@ javaPluginError jfw_plugin_getJavaInfosFromPath(
 // think it should be, do nothing, and just let the implicit loading
 // that happens when loading the JVM take care of it.
 
-static void load_msvcr(OUString const & jvm_dll, OUStringLiteral msvcr)
+static void load_msvcr(OUString const & jvm_dll, std::u16string_view msvcr)
 {
     // First check if msvcr71.dll is in the same folder as jvm.dll. It
     // normally isn't, at least up to 1.6.0_22, but who knows if it
@@ -575,7 +576,7 @@ static void do_msvcr_magic(OUString const &jvm_dll)
            imports->Name != 0 &&
            imports->Name + VAtoPhys < static_cast<DWORD>(st.st_size))
     {
-        static OUStringLiteral msvcrts[] =
+        static std::u16string_view msvcrts[] =
         {
             u"msvcr71.dll",
             u"msvcr100.dll"
@@ -585,7 +586,7 @@ static void do_msvcr_magic(OUString const &jvm_dll)
         for (size_t i = 0; i < SAL_N_ELEMENTS(msvcrts); ++i)
         {
             if (0 == rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
-                    msvcrts[i].data, msvcrts[i].size,
+                    msvcrts[i].data(), msvcrts[i].size(),
                     importName, importNameLen))
             {
                 load_msvcr(Module, msvcrts[i]);

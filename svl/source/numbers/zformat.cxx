@@ -2855,7 +2855,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
 
     if (fNum > D_MAX_U_INT32 || rInfo.nCntExp > 9) // Too large
     {
-        sBuff = ImpSvNumberformatScan::GetErrorString();
+        sBuff = ImpSvNumberformatScan::sErrStr;
         return false;
     }
     if (rInfo.nCntExp == 0)
@@ -2873,7 +2873,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
 
         if (fNum1 > D_MAX_U_INT32)
         {
-            sBuff = ImpSvNumberformatScan::GetErrorString();
+            sBuff = ImpSvNumberformatScan::sErrStr;
             return false;
         }
         nFrac = static_cast<sal_uInt64>(floor(fNum1));
@@ -3080,7 +3080,7 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
         }
         if (fTime > D_MAX_U_INT32)
         {
-            sBuff = ImpSvNumberformatScan::GetErrorString();
+            sBuff = ImpSvNumberformatScan::sErrStr;
             return false;
         }
         sal_uInt32 nSeconds = static_cast<sal_uInt32>(fTime);
@@ -4261,7 +4261,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
         }
         else
         {
-            sStr = ImpSvNumberformatScan::GetErrorString();
+            sStr = ImpSvNumberformatScan::sErrStr;
             return false;
         }
     }

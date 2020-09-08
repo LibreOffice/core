@@ -8,6 +8,7 @@
  */
 
 #include <memory>
+#include <string_view>
 #include "ucalc.hxx"
 #include "helper/debughelper.hxx"
 #include "helper/qahelper.hxx"
@@ -2601,7 +2602,7 @@ void Test::testSharedFormulaCutCopyMoveWithRef()
     }
 
     // Check formulas in C1:C4 after Paste.
-    const OUStringLiteral sForm[] = { u"=SUM(A1:B1)", u"=SUM(A2:B2)", u"=SUM(A1:B1)", u"=SUM(A4:B4)" };
+    const std::u16string_view sForm[] = { u"=SUM(A1:B1)", u"=SUM(A2:B2)", u"=SUM(A1:B1)", u"=SUM(A4:B4)" };
     for (SCROW i=0; i < 4; ++i)
     {
         OUString aFormula;
