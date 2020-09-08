@@ -11,6 +11,9 @@
 #define INCLUDED_VCL_WELDUTILS_HXX
 
 #include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/compbase.hxx>
@@ -154,6 +157,32 @@ public:
     {
         m_aPaintListeners.removeInterface(rListener);
     }
+};
+
+class VCL_DLLPUBLIC WidgetStatusListener final
+    : public cppu::WeakImplHelper<css::frame::XStatusListener>
+{
+public:
+    WidgetStatusListener(weld::Widget* widget, const OUString& rCommand);
+
+private:
+    weld::Widget* mWidget; /** The widget on which actions are performed */
+
+    /** Dispatcher. Need to keep a reference to it as long as this StatusListener exists. */
+    css::uno::Reference<css::frame::XDispatch> mxDispatch;
+    css::util::URL maCommandURL;
+    css::uno::Reference<css::frame::XFrame> mxFrame;
+
+public:
+    void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
+
+    void SAL_CALL disposing(const css::lang::EventObject& /*Source*/) override;
+
+    const css::uno::Reference<css::frame::XFrame>& getFrame() { return mxFrame; }
+
+    void startListening();
+
+    void dispose();
 };
 
 class VCL_DLLPUBLIC EntryFormatter : public Formatter

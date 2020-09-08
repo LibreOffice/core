@@ -22,6 +22,7 @@ sfx2/uiconfig/ui/documentinfopage.ui://GtkLabel[@id='showtype'] orphan-label
 sfx2/uiconfig/ui/documentinfopage.ui://GtkLabel[@id='showtemplate'] orphan-label
 sfx2/uiconfig/ui/documentinfopage.ui://GtkImage[@id='icon'] no-labelled-by
 sfx2/uiconfig/ui/documentinfopage.ui://GtkLabel[@id='nameed'] orphan-label
+sfx2/uiconfig/ui/extrabutton.ui://GtkButton[@id='button'] button-no-label
 sfx2/uiconfig/ui/helpindexpage.ui://GtkEntry[@id='termentry'] no-labelled-by
 sfx2/uiconfig/ui/helpwindow.ui://GtkCheckButton[@id='checkbutton'] button-no-label
 sfx2/uiconfig/ui/helpwindow.ui://GtkToolButton[@id='index'] button-no-label
