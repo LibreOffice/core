@@ -4380,7 +4380,7 @@ void SbRtl_MsgBox(StarBASIC *, SbxArray & rPar, bool)
     vcl::Window* pParentWin = Application::GetDefDialogParent();
     weld::Widget* pParent = pParentWin ? pParentWin->GetFrameWeld() : nullptr;
 
-    VclMessageType eType = VclMessageType::Info;
+    VclMessageType eType = VclMessageType::Other;
 
     switch (nDialogType)
     {
@@ -4394,7 +4394,6 @@ void SbRtl_MsgBox(StarBASIC *, SbxArray & rPar, bool)
             eType = VclMessageType::Warning;
             break;
         case 64:
-        default:
             eType = VclMessageType::Info;
             break;
     }

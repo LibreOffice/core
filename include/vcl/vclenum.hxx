@@ -258,7 +258,8 @@ enum class VclMessageType
     Info,
     Warning,
     Question,
-    Error
+    Error,
+    Other
 };
 
 enum class VclSizeGroupMode
