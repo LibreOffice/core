@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <string_view>
 
 ScFormulaListener::ScFormulaListener(ScFormulaCell* pCell):
     mbDirty(false),
@@ -1228,102 +1229,102 @@ size_t ScIconSetFormat::size() const
 
 namespace {
 
-const OUStringLiteral a3TrafficLights1[] = {
+const std::u16string_view a3TrafficLights1[] = {
     u"" BMP_ICON_SET_CIRCLES1_RED, u"" BMP_ICON_SET_CIRCLES1_YELLOW, u"" BMP_ICON_SET_CIRCLES1_GREEN
 };
 
-const OUStringLiteral a3TrafficLights2[] = {
+const std::u16string_view a3TrafficLights2[] = {
     u"" BMP_ICON_SET_TRAFFICLIGHTS_RED, u"" BMP_ICON_SET_TRAFFICLIGHTS_YELLOW, u"" BMP_ICON_SET_TRAFFICLIGHTS_GREEN
 };
 
-const OUStringLiteral a3Arrows[] = {
+const std::u16string_view a3Arrows[] = {
     u"" BMP_ICON_SET_COLORARROWS_DOWN, u"" BMP_ICON_SET_COLORARROWS_SAME, u"" BMP_ICON_SET_COLORARROWS_UP
 };
 
-const OUStringLiteral a3ArrowsGray[] = {
+const std::u16string_view a3ArrowsGray[] = {
     u"" BMP_ICON_SET_GRAYARROWS_DOWN, u"" BMP_ICON_SET_GRAYARROWS_SAME, u"" BMP_ICON_SET_GRAYARROWS_UP
 };
 
-const OUStringLiteral a3Flags[] = {
+const std::u16string_view a3Flags[] = {
     u"" BMP_ICON_SET_FLAGS_RED, u"" BMP_ICON_SET_FLAGS_YELLOW, u"" BMP_ICON_SET_FLAGS_GREEN
 };
 
-const OUStringLiteral a3Smilies[] = {
+const std::u16string_view a3Smilies[] = {
     u"" BMP_ICON_SET_POSITIVE_YELLOW_SMILIE, u"" BMP_ICON_SET_NEUTRAL_YELLOW_SMILIE, u"" BMP_ICON_SET_NEGATIVE_YELLOW_SMILIE
 };
 
-const OUStringLiteral a3ColorSmilies[] = {
+const std::u16string_view a3ColorSmilies[] = {
     u"" BMP_ICON_SET_POSITIVE_GREEN_SMILIE, u"" BMP_ICON_SET_NEUTRAL_YELLOW_SMILIE, u"" BMP_ICON_SET_NEGATIVE_RED_SMILIE
 };
 
-const OUStringLiteral a3Stars[] = {
+const std::u16string_view a3Stars[] = {
     u"" BMP_ICON_SET_STARS_EMPTY, u"" BMP_ICON_SET_STARS_HALF, u"" BMP_ICON_SET_STARS_FULL
 };
 
-const OUStringLiteral a3Triangles[] = {
+const std::u16string_view a3Triangles[] = {
     u"" BMP_ICON_SET_TRIANGLES_DOWN, u"" BMP_ICON_SET_TRIANGLES_SAME, u"" BMP_ICON_SET_TRIANGLES_UP
 };
 
-const OUStringLiteral a4Arrows[] = {
+const std::u16string_view a4Arrows[] = {
     u"" BMP_ICON_SET_COLORARROWS_DOWN, u"" BMP_ICON_SET_COLORARROWS_SLIGHTLY_DOWN, u"" BMP_ICON_SET_COLORARROWS_SLIGHTLY_UP, u"" BMP_ICON_SET_COLORARROWS_UP
 };
 
-const OUStringLiteral a4ArrowsGray[] = {
+const std::u16string_view a4ArrowsGray[] = {
     u"" BMP_ICON_SET_GRAYARROWS_DOWN, u"" BMP_ICON_SET_GRAYARROWS_SLIGHTLY_DOWN, u"" BMP_ICON_SET_GRAYARROWS_SLIGHTLY_UP, u"" BMP_ICON_SET_GRAYARROWS_UP
 };
 
-const OUStringLiteral a5Arrows[] = {
+const std::u16string_view a5Arrows[] = {
     u"" BMP_ICON_SET_COLORARROWS_DOWN, u"" BMP_ICON_SET_COLORARROWS_SLIGHTLY_DOWN,
     u"" BMP_ICON_SET_COLORARROWS_SAME, u"" BMP_ICON_SET_COLORARROWS_SLIGHTLY_UP, u"" BMP_ICON_SET_COLORARROWS_UP
 };
 
-const OUStringLiteral a5ArrowsGray[] = {
+const std::u16string_view a5ArrowsGray[] = {
     u"" BMP_ICON_SET_GRAYARROWS_DOWN, u"" BMP_ICON_SET_GRAYARROWS_SLIGHTLY_DOWN,
     u"" BMP_ICON_SET_GRAYARROWS_SAME, u"" BMP_ICON_SET_GRAYARROWS_SLIGHTLY_UP, u"" BMP_ICON_SET_GRAYARROWS_UP
 };
 
-const OUStringLiteral a4TrafficLights[] = {
+const std::u16string_view a4TrafficLights[] = {
     u"" BMP_ICON_SET_CIRCLES1_GRAY, u"" BMP_ICON_SET_CIRCLES1_RED,
     u"" BMP_ICON_SET_CIRCLES1_YELLOW, u"" BMP_ICON_SET_CIRCLES1_GREEN
 };
 
-const OUStringLiteral a5Quarters[] = {
+const std::u16string_view a5Quarters[] = {
     u"" BMP_ICON_SET_PIES_EMPTY, u"" BMP_ICON_SET_PIES_ONE_QUARTER, u"" BMP_ICON_SET_PIES_HALF,
     u"" BMP_ICON_SET_PIES_THREE_QUARTER, u"" BMP_ICON_SET_PIES_FULL,
 };
 
-const OUStringLiteral a5Boxes[] = {
+const std::u16string_view a5Boxes[] = {
     u"" BMP_ICON_SET_SQUARES_EMPTY, u"" BMP_ICON_SET_SQUARES_ONE_QUARTER,
     u"" BMP_ICON_SET_SQUARES_HALF, u"" BMP_ICON_SET_SQUARES_THREE_QUARTER,
     u"" BMP_ICON_SET_SQUARES_FULL
 };
 
-const OUStringLiteral a3Symbols1[] = {
+const std::u16string_view a3Symbols1[] = {
     u"" BMP_ICON_SET_SYMBOLS1_CROSS, u"" BMP_ICON_SET_SYMBOLS1_EXCLAMATION_MARK, u"" BMP_ICON_SET_SYMBOLS1_CHECK
 };
 
-const OUStringLiteral a3Signs[] = {
+const std::u16string_view a3Signs[] = {
     u"" BMP_ICON_SET_SHAPES_DIAMOND, u"" BMP_ICON_SET_SHAPES_TRIANGLE, u"" BMP_ICON_SET_SHAPES_CIRCLE
 };
 
-const OUStringLiteral a4RedToBlack[] = {
+const std::u16string_view a4RedToBlack[] = {
     u"" BMP_ICON_SET_CIRCLES2_DARK_GRAY, u"" BMP_ICON_SET_CIRCLES2_LIGHT_GRAY,
     u"" BMP_ICON_SET_CIRCLES2_LIGHT_RED, u"" BMP_ICON_SET_CIRCLES2_DARK_RED
 };
 
-const OUStringLiteral a4Ratings[] = {
+const std::u16string_view a4Ratings[] = {
     u"" BMP_ICON_SET_BARS_ONE_QUARTER, u"" BMP_ICON_SET_BARS_HALF,
     u"" BMP_ICON_SET_BARS_THREE_QUARTER, u"" BMP_ICON_SET_BARS_FULL
 };
 
-const OUStringLiteral a5Ratings[] = {
+const std::u16string_view a5Ratings[] = {
     u"" BMP_ICON_SET_BARS_EMPTY, u"" BMP_ICON_SET_BARS_ONE_QUARTER, u"" BMP_ICON_SET_BARS_HALF,
     u"" BMP_ICON_SET_BARS_THREE_QUARTER, u"" BMP_ICON_SET_BARS_FULL
 };
 
 struct ScIconSetBitmapMap {
     ScIconSetType eType;
-    const OUStringLiteral* pBitmaps;
+    const std::u16string_view* pBitmaps;
 };
 
 const ScIconSetBitmapMap aBitmapMap[] = {

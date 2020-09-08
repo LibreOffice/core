@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
 
 #include <svl/flagitem.hxx>
 #include <svl/poolitem.hxx>
@@ -40,7 +43,7 @@ bool SfxFlagItem::GetPresentation
 {
     rText.clear();
     for ( sal_uInt8 nFlag = 0; nFlag < GetFlagCount(); ++nFlag )
-        rText += GetFlag(nFlag) ? OUStringLiteral(u"true") : OUStringLiteral(u"false");
+        rText += GetFlag(nFlag) ? std::u16string_view(u"true") : std::u16string_view(u"false");
     return true;
 }
 

@@ -51,7 +51,6 @@
 #include "bibresid.hxx"
 #include "bibmod.hxx"
 #include "bibview.hxx"
-#include "bibprop.hxx"
 #include "toolbar.hxx"
 #include "bibconfig.hxx"
 #include "bibbeam.hxx"
@@ -71,6 +70,11 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
+
+// PropertyNames
+constexpr OUStringLiteral FM_PROP_LABEL = u"Label";
+constexpr OUStringLiteral FM_PROP_CONTROLSOURCE = u"DataField";
+constexpr OUStringLiteral FM_PROP_NAME = u"Name";
 
 static Reference< XConnection > getConnection(const OUString& _rURL)
 {

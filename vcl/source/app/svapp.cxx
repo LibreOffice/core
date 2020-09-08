@@ -73,6 +73,7 @@
 #include <osl/process.h>
 
 #include <cassert>
+#include <string_view>
 #include <utility>
 #include <thread>
 
@@ -1138,8 +1139,8 @@ OUString Application::GetHWOSConfInfo(const int bSelection, const bool bLocalize
     ImplSVData* pSVData = ImplGetSVData();
     OUStringBuffer aDetails;
 
-    const auto appendDetails = [&aDetails](const OUStringLiteral& sep, auto&& val) {
-        if (!aDetails.isEmpty() && sep.getLength())
+    const auto appendDetails = [&aDetails](std::u16string_view sep, auto&& val) {
+        if (!aDetails.isEmpty() && !sep.empty())
             aDetails.append(sep);
         aDetails.append(std::move(val));
     };

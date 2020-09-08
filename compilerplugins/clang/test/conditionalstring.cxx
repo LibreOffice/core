@@ -13,17 +13,14 @@
 
 void f(OUString s, bool b)
 {
-    // expected-error@+2 {{replace 2nd operand of conditional expression with `rtl::OUStringLiteral` [loplugin:conditionalstring]}}
+    // expected-error@+2 {{replace 2nd operand of conditional expression with `std::u16string_view` [loplugin:conditionalstring]}}
     // expected-note@+1 {{conditional expression is here [loplugin:conditionalstring]}}
     s += (b ? OUString("a") : throw 0);
-    // expected-error@+2 {{replace 2nd operand of conditional expression with `rtl::OUStringLiteral` [loplugin:conditionalstring]}}
-    // expected-note@+1 {{conditional expression is here [loplugin:conditionalstring]}}
-    s += (b ? OUString("a") : OUStringLiteral(u"b"));
-    // expected-error@+1 {{replace both 2nd and 3rd operands of conditional expression with `rtl::OUStringLiteral` [loplugin:conditionalstring]}}
+    // expected-error@+1 {{replace both 2nd and 3rd operands of conditional expression with `std::u16string_view` [loplugin:conditionalstring]}}
     b = (b ? ("x") : (OUString(("y")))) == s;
-    // expected-error@+1 {{replace both 2nd and 3rd operands of conditional expression with `rtl::OUStringLiteral` [loplugin:conditionalstring]}}
+    // expected-error@+1 {{replace both 2nd and 3rd operands of conditional expression with `std::u16string_view` [loplugin:conditionalstring]}}
     b = operator==(s, b ? OUString("x") : OUString("y"));
-    // expected-error@+1 {{replace both 2nd and 3rd operands of conditional expression with `rtl::OUStringLiteral` [loplugin:conditionalstring]}}
+    // expected-error@+1 {{replace both 2nd and 3rd operands of conditional expression with `std::u16string_view` [loplugin:conditionalstring]}}
     s.operator+=(b ? OUString("x") : OUString("y"));
 }
 

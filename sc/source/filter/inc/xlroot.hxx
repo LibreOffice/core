@@ -80,7 +80,7 @@ struct XclRootData
     OUString            maDocUrl;           /// Document URL of imported/exported file.
     OUString            maBasePath;         /// Base path of imported/exported file (path of maDocUrl).
     OUString            maUserName;         /// Current user name.
-    static const OUStringLiteral gaDefPassword; /// The default password used for stream encryption.
+    static constexpr OUStringLiteral gaDefPassword = u"VelvetSweatshop"; /// The default password used for stream encryption.
     rtl_TextEncoding    meTextEnc;          /// Text encoding to import/export byte strings.
     LanguageType        meSysLang;          /// System language.
     LanguageType        meDocLang;          /// Document language (import: from file, export: from system).
@@ -174,7 +174,7 @@ public:
     const OUString& GetUserName() const { return mrData.maUserName; }
 
     /** Returns the default password used for stream encryption. */
-    static const OUStringLiteral& GetDefaultPassword() { return XclRootData::gaDefPassword; }
+    static OUString GetDefaultPassword() { return XclRootData::gaDefPassword; }
     /** Requests and verifies a password from the medium or the user. */
     css::uno::Sequence< css::beans::NamedValue >
         RequestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier ) const;

@@ -2225,7 +2225,7 @@ OUString OSelectionBrowseBox::GetCellContents(sal_Int32 nCellIndex, sal_uInt16 n
     switch (nCellIndex)
     {
         case BROW_VIS_ROW :
-            return pEntry->IsVisible() ? OUStringLiteral(u"1") : OUStringLiteral(u"0");
+            return pEntry->IsVisible() ? std::u16string_view(u"1") : std::u16string_view(u"0");
         case BROW_ORDER_ROW:
         {
             sal_Int32 nIdx = m_pOrderCell->get_widget().get_active();

@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <oox/dump/oledumper.hxx>
 
 #include <rtl/tencinfo.h>
@@ -1830,7 +1834,7 @@ bool VbaContainerStorageObject::isFormStorage( const OUString& rStrgPath ) const
         if( (aId.getLength() == 2) && (aId[ 0 ] == '0') )
             aId = aId.copy( 1 );
         sal_Int32 nId = aId.toInt32();
-        if( (nId > 0) && (OUString::number( nId ) == aId) )
+        if( (nId > 0) && (std::u16string_view(OUString::number( nId )) == aId) )
             for (auto const& siteInfo : maFormData.maSiteInfos)
                 if( siteInfo.mnId == nId )
                     return true;

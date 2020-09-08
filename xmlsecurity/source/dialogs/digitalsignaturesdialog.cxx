@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <digitalsignaturesdialog.hxx>
 #include <certificatechooser.hxx>
 #include <certificateviewer.hxx>
@@ -455,7 +459,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, CertMgrButtonHdl, weld::Button&, void)
     // FIXME: call GpgME::dirInfo("bindir") somewhere in
     // SecurityEnvironmentGpg or whatnot
     // FIXME: perhaps poke GpgME for uiserver, and hope it returns something useful?
-    static const OUStringLiteral aGUIServers[] = { u"Gpg4win\\kleopatra.exe",
+    static const std::u16string_view aGUIServers[] = { u"Gpg4win\\kleopatra.exe",
                                                    u"Gpg4win\\bin\\kleopatra.exe",
                                                    u"GNU\\GnuPG\\kleopatra.exe",
                                                    u"GNU\\GnuPG\\launch-gpa.exe",
@@ -480,7 +484,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, CertMgrButtonHdl, weld::Button&, void)
     if (aPath.isEmpty())
         return;
 #else
-    static const OUStringLiteral aGUIServers[] = { u"kleopatra", u"seahorse", u"gpa", u"kgpg" };
+    static const std::u16string_view aGUIServers[] = { u"kleopatra", u"seahorse", u"gpa", u"kgpg" };
     const char* cPath = getenv("PATH");
     if (!cPath)
         return;

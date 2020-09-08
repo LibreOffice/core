@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <memory>
+#include <string_view>
 #include <utility>
 
 #include <com/sun/star/style/XStyle.hpp>
@@ -805,7 +806,7 @@ SdAnimationInfo* SdXShape::GetAnimationInfo( bool bCreate ) const
 
 uno::Sequence< OUString > SAL_CALL SdXShape::getSupportedServiceNames()
 {
-    std::vector<OUStringLiteral> aAdd{ u"com.sun.star.presentation.Shape",
+    std::vector<std::u16string_view> aAdd{ u"com.sun.star.presentation.Shape",
                                        u"com.sun.star.document.LinkTarget" };
 
     SdrObject* pObj = mpShape->GetSdrObject();

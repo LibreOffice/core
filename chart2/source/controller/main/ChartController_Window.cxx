@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <ChartController.hxx>
 #include <PositionAndSizeHelper.hxx>
 #include <ObjectIdentifier.hxx>
@@ -1015,7 +1019,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
         OUString aMenuName;
         if ( isShapeContext() )
             // #i12587# support for shapes in chart
-            aMenuName = m_pDrawViewWrapper->IsTextEdit() ? OUStringLiteral( u"drawtext" ) : OUStringLiteral( u"draw" );
+            aMenuName = m_pDrawViewWrapper->IsTextEdit() ? std::u16string_view( u"drawtext" ) : std::u16string_view( u"draw" );
         else
         {
             // todo: the context menu should be specified by an xml file in uiconfig

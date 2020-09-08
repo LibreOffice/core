@@ -16,6 +16,11 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <DataProviderHandler.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/sequence.hxx>
@@ -257,9 +262,9 @@ inspection::LineDescriptor SAL_CALL DataProviderHandler::describePropertyLine(co
     if ( nId != -1 )
     {
         aOut.Category = (OPropertyInfoService::getPropertyUIFlags(nId ) & PropUIFlags::DataProperty) ?
-                                    OUStringLiteral(u"Data")
+                                    std::u16string_view(u"Data")
                                                         :
-                                    OUStringLiteral(u"General");
+                                    std::u16string_view(u"General");
         aOut.HelpURL = HelpIdUrl::getHelpURL( OPropertyInfoService::getPropertyHelpId( nId ) );
         aOut.DisplayName = OPropertyInfoService::getPropertyTranslation(nId);
     }
@@ -342,7 +347,7 @@ uno::Sequence< beans::Property > SAL_CALL DataProviderHandler::getSupportedPrope
     {
         rptui::OPropertyInfoService::getExcludeProperties( aNewProps, m_xFormComponentHandler );
         beans::Property aValue;
-        static const OUStringLiteral s_pProperties[] =
+        static const std::u16string_view s_pProperties[] =
         {
              u"" PROPERTY_CHARTTYPE
             ,u"" PROPERTY_MASTERFIELDS

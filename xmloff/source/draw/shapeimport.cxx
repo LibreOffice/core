@@ -45,6 +45,7 @@
 #include "ximplink.hxx"
 
 #include <map>
+#include <string_view>
 #include <vector>
 
 namespace {
@@ -110,10 +111,10 @@ struct XMLShapeImportHelperImpl
     bool                        mbIsPresentationShapesSupported;
 };
 
-const OUStringLiteral gsStartShape(u"StartShape");
-const OUStringLiteral gsEndShape(u"EndShape");
-const OUStringLiteral gsStartGluePointIndex(u"StartGluePointIndex");
-const OUStringLiteral gsEndGluePointIndex(u"EndGluePointIndex");
+const std::u16string_view gsStartShape(u"StartShape");
+const std::u16string_view gsEndShape(u"EndShape");
+const std::u16string_view gsStartGluePointIndex(u"StartGluePointIndex");
+const std::u16string_view gsEndGluePointIndex(u"EndGluePointIndex");
 
 XMLShapeImportHelper::XMLShapeImportHelper(
         SvXMLImport& rImporter,

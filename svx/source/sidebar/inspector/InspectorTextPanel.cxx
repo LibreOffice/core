@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <svx/sidebar/InspectorTextPanel.hxx>
 
 #include <svl/languageoptions.hxx>
@@ -86,7 +90,8 @@ static bool GetPropertyValues(const OUString& rPropName, const uno::Any& rAny, O
     else if (double fValue; rAny >>= fValue)
     {
         if (rPropName.indexOf("Weight") != -1)
-            rString = (fValue > 100) ? OUStringLiteral(u"bold") : OUStringLiteral(u"normal");
+            rString
+                = (fValue > 100) ? std::u16string_view(u"bold") : std::u16string_view(u"normal");
         else
             rString = OUString::number((round(fValue * 100)) / 100.00);
     }

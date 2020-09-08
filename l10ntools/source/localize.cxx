@@ -23,6 +23,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <string>
+#include <string_view>
 #include <map>
 #include <vector>
 #include <algorithm>
@@ -47,7 +48,7 @@ using namespace std;
 namespace {
 
 bool matchList(
-    const OUString& rUrl, const OUStringLiteral* pList, size_t nLength)
+    const OUString& rUrl, const std::u16string_view* pList, size_t nLength)
 {
     for (size_t i = 0; i != nLength; ++i) {
         if (rUrl.endsWith(pList[i])) {
@@ -58,7 +59,7 @@ bool matchList(
 }
 
 bool passesNegativeList(const OUString& rUrl) {
-    static const OUStringLiteral list[] = {
+    static const std::u16string_view list[] = {
         u"/desktop/test/deployment/passive/help/en/help.tree",
         u"/desktop/test/deployment/passive/help/en/main.xhp",
         u"/dictionaries.xcu",
@@ -76,7 +77,7 @@ bool passesNegativeList(const OUString& rUrl) {
 }
 
 bool passesPositiveList(const OUString& rUrl) {
-    static const OUStringLiteral list[] = {
+    static const std::u16string_view list[] = {
         u"/description.xml"
     };
     return matchList(rUrl, list, SAL_N_ELEMENTS(list));
@@ -173,20 +174,20 @@ OString gDestRoot;
 bool handleFile(const OString& rProject, const OUString& rUrl, const OString& rPotDir)
 {
     struct Command {
-        OUStringLiteral extension;
+        std::u16string_view extension;
         std::string executable;
         bool positive;
     };
     static Command const commands[] = {
-        { OUStringLiteral(u".hrc"), "hrcex", false },
-        { OUStringLiteral(u".ulf"), "ulfex", false },
-        { OUStringLiteral(u".xcu"), "cfgex", false },
-        { OUStringLiteral(u".xrm"), "xrmex", false },
-        { OUStringLiteral(u"description.xml"), "xrmex", true },
-        { OUStringLiteral(u".xhp"), "helpex", false },
-        { OUStringLiteral(u".properties"), "propex", false },
-        { OUStringLiteral(u".ui"), "uiex", false },
-        { OUStringLiteral(u".tree"), "treex", false } };
+        { std::u16string_view(u".hrc"), "hrcex", false },
+        { std::u16string_view(u".ulf"), "ulfex", false },
+        { std::u16string_view(u".xcu"), "cfgex", false },
+        { std::u16string_view(u".xrm"), "xrmex", false },
+        { std::u16string_view(u"description.xml"), "xrmex", true },
+        { std::u16string_view(u".xhp"), "helpex", false },
+        { std::u16string_view(u".properties"), "propex", false },
+        { std::u16string_view(u".ui"), "uiex", false },
+        { std::u16string_view(u".tree"), "treex", false } };
     for (size_t i = 0; i != SAL_N_ELEMENTS(commands); ++i)
     {
         if (rUrl.endsWith(commands[i].extension) &&

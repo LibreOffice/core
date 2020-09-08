@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
 
 #include <svtools/colorcfg.hxx>
 #include <com/sun/star/uno/Any.hxx>
@@ -102,61 +105,61 @@ uno::Sequence< OUString> GetPropertyNames(const OUString& rScheme)
 {
     struct ColorConfigEntryData_Impl
     {
-        OUStringLiteral cName;
+        std::u16string_view cName;
         bool            bCanBeVisible;
     };
     static const ColorConfigEntryData_Impl cNames[] =
     {
-        { OUStringLiteral(u"/DocColor")        ,false },
-        { OUStringLiteral(u"/DocBoundaries")   ,true },
-        { OUStringLiteral(u"/AppBackground")   ,false },
-        { OUStringLiteral(u"/ObjectBoundaries"),true },
-        { OUStringLiteral(u"/TableBoundaries") ,true },
-        { OUStringLiteral(u"/FontColor")     ,false },
-        { OUStringLiteral(u"/Links")           ,true },
-        { OUStringLiteral(u"/LinksVisited")    ,true },
-        { OUStringLiteral(u"/Spell")     ,false },
-        { OUStringLiteral(u"/SmartTags")     ,false },
-        { OUStringLiteral(u"/Shadow")        , true },
-        { OUStringLiteral(u"/WriterTextGrid")  ,false },
-        { OUStringLiteral(u"/WriterFieldShadings"),true },
-        { OUStringLiteral(u"/WriterIdxShadings")     ,true },
-        { OUStringLiteral(u"/WriterDirectCursor")    ,true },
-        { OUStringLiteral(u"/WriterScriptIndicator")    ,false },
-        { OUStringLiteral(u"/WriterSectionBoundaries")    ,true },
-        { OUStringLiteral(u"/WriterHeaderFooterMark")    ,false },
-        { OUStringLiteral(u"/WriterPageBreaks")    ,false },
-        { OUStringLiteral(u"/HTMLSGML")        ,false },
-        { OUStringLiteral(u"/HTMLComment")     ,false },
-        { OUStringLiteral(u"/HTMLKeyword")     ,false },
-        { OUStringLiteral(u"/HTMLUnknown")     ,false },
-        { OUStringLiteral(u"/CalcGrid")        ,false },
-        { OUStringLiteral(u"/CalcPageBreak"), false },
-        { OUStringLiteral(u"/CalcPageBreakManual"), false },
-        { OUStringLiteral(u"/CalcPageBreakAutomatic"), false },
-        { OUStringLiteral(u"/CalcDetective")   ,false },
-        { OUStringLiteral(u"/CalcDetectiveError")   ,false },
-        { OUStringLiteral(u"/CalcReference")   ,false },
-        { OUStringLiteral(u"/CalcNotesBackground") ,false },
-        { OUStringLiteral(u"/CalcValue") ,false },
-        { OUStringLiteral(u"/CalcFormula") ,false },
-        { OUStringLiteral(u"/CalcText") ,false },
-        { OUStringLiteral(u"/CalcProtectedBackground") ,false },
-        { OUStringLiteral(u"/DrawGrid")        ,true },
-        { OUStringLiteral(u"/BASICIdentifier"),  false },
-        { OUStringLiteral(u"/BASICComment")   ,  false },
-        { OUStringLiteral(u"/BASICNumber")    ,  false },
-        { OUStringLiteral(u"/BASICString")    ,  false },
-        { OUStringLiteral(u"/BASICOperator")  ,  false },
-        { OUStringLiteral(u"/BASICKeyword")   ,  false },
-        { OUStringLiteral(u"/BASICError"),  false },
-        { OUStringLiteral(u"/SQLIdentifier"),  false },
-        { OUStringLiteral(u"/SQLNumber"),  false },
-        { OUStringLiteral(u"/SQLString"),  false },
-        { OUStringLiteral(u"/SQLOperator"),  false },
-        { OUStringLiteral(u"/SQLKeyword"),  false },
-        { OUStringLiteral(u"/SQLParameter"),  false },
-        { OUStringLiteral(u"/SQLComment"),  false }
+        { std::u16string_view(u"/DocColor")        ,false },
+        { std::u16string_view(u"/DocBoundaries")   ,true },
+        { std::u16string_view(u"/AppBackground")   ,false },
+        { std::u16string_view(u"/ObjectBoundaries"),true },
+        { std::u16string_view(u"/TableBoundaries") ,true },
+        { std::u16string_view(u"/FontColor")     ,false },
+        { std::u16string_view(u"/Links")           ,true },
+        { std::u16string_view(u"/LinksVisited")    ,true },
+        { std::u16string_view(u"/Spell")     ,false },
+        { std::u16string_view(u"/SmartTags")     ,false },
+        { std::u16string_view(u"/Shadow")        , true },
+        { std::u16string_view(u"/WriterTextGrid")  ,false },
+        { std::u16string_view(u"/WriterFieldShadings"),true },
+        { std::u16string_view(u"/WriterIdxShadings")     ,true },
+        { std::u16string_view(u"/WriterDirectCursor")    ,true },
+        { std::u16string_view(u"/WriterScriptIndicator")    ,false },
+        { std::u16string_view(u"/WriterSectionBoundaries")    ,true },
+        { std::u16string_view(u"/WriterHeaderFooterMark")    ,false },
+        { std::u16string_view(u"/WriterPageBreaks")    ,false },
+        { std::u16string_view(u"/HTMLSGML")        ,false },
+        { std::u16string_view(u"/HTMLComment")     ,false },
+        { std::u16string_view(u"/HTMLKeyword")     ,false },
+        { std::u16string_view(u"/HTMLUnknown")     ,false },
+        { std::u16string_view(u"/CalcGrid")        ,false },
+        { std::u16string_view(u"/CalcPageBreak"), false },
+        { std::u16string_view(u"/CalcPageBreakManual"), false },
+        { std::u16string_view(u"/CalcPageBreakAutomatic"), false },
+        { std::u16string_view(u"/CalcDetective")   ,false },
+        { std::u16string_view(u"/CalcDetectiveError")   ,false },
+        { std::u16string_view(u"/CalcReference")   ,false },
+        { std::u16string_view(u"/CalcNotesBackground") ,false },
+        { std::u16string_view(u"/CalcValue") ,false },
+        { std::u16string_view(u"/CalcFormula") ,false },
+        { std::u16string_view(u"/CalcText") ,false },
+        { std::u16string_view(u"/CalcProtectedBackground") ,false },
+        { std::u16string_view(u"/DrawGrid")        ,true },
+        { std::u16string_view(u"/BASICIdentifier"),  false },
+        { std::u16string_view(u"/BASICComment")   ,  false },
+        { std::u16string_view(u"/BASICNumber")    ,  false },
+        { std::u16string_view(u"/BASICString")    ,  false },
+        { std::u16string_view(u"/BASICOperator")  ,  false },
+        { std::u16string_view(u"/BASICKeyword")   ,  false },
+        { std::u16string_view(u"/BASICError"),  false },
+        { std::u16string_view(u"/SQLIdentifier"),  false },
+        { std::u16string_view(u"/SQLNumber"),  false },
+        { std::u16string_view(u"/SQLString"),  false },
+        { std::u16string_view(u"/SQLOperator"),  false },
+        { std::u16string_view(u"/SQLKeyword"),  false },
+        { std::u16string_view(u"/SQLParameter"),  false },
+        { std::u16string_view(u"/SQLComment"),  false }
     };
 
     uno::Sequence<OUString> aNames(2 * ColorConfigEntryCount);

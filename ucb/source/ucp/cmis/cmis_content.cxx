@@ -8,6 +8,7 @@
  */
 
 #include <cstdio>
+#include <string_view>
 
 #include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -1715,8 +1716,8 @@ namespace cmis
         try
         {
             sRet = isFolder( uno::Reference< ucb::XCommandEnvironment >() )
-                ? OUStringLiteral(u"" CMIS_FOLDER_TYPE)
-                : OUStringLiteral(u"" CMIS_FILE_TYPE);
+                ? std::u16string_view(u"" CMIS_FOLDER_TYPE)
+                : std::u16string_view(u"" CMIS_FILE_TYPE);
         }
         catch (const uno::RuntimeException&)
         {

@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "rtfdocumentimpl.hxx"
 
 #include <com/sun/star/document/DocumentProperties.hpp>
@@ -363,7 +367,9 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 for (const auto& rProperty : m_aStates.top().getShape().getProperties())
                 {
                     if (rProperty.first == "shapeType"
-                        && rProperty.second == OUString::number(ESCHER_ShpInst_PictureFrame))
+                        && rProperty.second
+                               == std::u16string_view(
+                                      OUString::number(ESCHER_ShpInst_PictureFrame)))
                     {
                         bPictureFrame = true;
                         break;

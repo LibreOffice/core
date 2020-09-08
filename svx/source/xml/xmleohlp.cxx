@@ -44,6 +44,7 @@
 #include <svx/xmleohlp.hxx>
 #include <map>
 #include <memory>
+#include <string_view>
 
 using namespace ::osl;
 using namespace ::cppu;
@@ -116,8 +117,8 @@ void SAL_CALL OutputStorageWrapper_Impl::closeOutput()
     bStreamClosed = true;
 }
 
-const OUStringLiteral gaReplacementGraphicsContainerStorageName( u"" XML_CONTAINERSTORAGE_NAME );
-const OUStringLiteral gaReplacementGraphicsContainerStorageName60( u"" XML_CONTAINERSTORAGE_NAME_60 );
+const std::u16string_view gaReplacementGraphicsContainerStorageName( u"" XML_CONTAINERSTORAGE_NAME );
+const std::u16string_view gaReplacementGraphicsContainerStorageName60( u"" XML_CONTAINERSTORAGE_NAME_60 );
 
 SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper() :
     WeakComponentImplHelper< XEmbeddedObjectResolver, XNameAccess >( maMutex ),

@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #ifdef _WIN32
 #include <prewin.h>
 #include <postwin.h>
@@ -688,89 +692,89 @@ std::pair<WinBits,MessBoxStyle> ImplGetWinBits( sal_uInt32 nComponentAttribs, Wi
 
 struct ComponentInfo
 {
-    OUStringLiteral sName;
+    std::u16string_view sName;
     WindowType      nWinType;
 };
 
 ComponentInfo const aComponentInfos [] =
 {
-    { OUStringLiteral(u"animatedimages"),     WindowType::CONTROL },
-    { OUStringLiteral(u"buttondialog"),       WindowType::BUTTONDIALOG },
-    { OUStringLiteral(u"cancelbutton"),       WindowType::CANCELBUTTON },
-    { OUStringLiteral(u"checkbox"),           WindowType::CHECKBOX },
-    { OUStringLiteral(u"combobox"),           WindowType::COMBOBOX },
-    { OUStringLiteral(u"control"),            WindowType::CONTROL },
-    { OUStringLiteral(u"currencybox"),        WindowType::CURRENCYBOX },
-    { OUStringLiteral(u"currencyfield"),      WindowType::CURRENCYFIELD },
-    { OUStringLiteral(u"datebox"),            WindowType::DATEBOX },
-    { OUStringLiteral(u"datefield"),          WindowType::CONTROL },
-    { OUStringLiteral(u"dialog"),             WindowType::DIALOG },
-    { OUStringLiteral(u"dockingarea"),        WindowType::DOCKINGAREA },
-    { OUStringLiteral(u"dockingwindow"),      WindowType::DOCKINGWINDOW },
-    { OUStringLiteral(u"edit"),               WindowType::EDIT },
-    { OUStringLiteral(u"errorbox"),           WindowType::ERRORBOX },
-    { OUStringLiteral(u"filecontrol"),        WindowType::CONTROL },
-    { OUStringLiteral(u"fixedbitmap"),        WindowType::FIXEDBITMAP },
-    { OUStringLiteral(u"fixedhyperlink"),     WindowType::CONTROL },
-    { OUStringLiteral(u"fixedimage"),         WindowType::FIXEDIMAGE },
-    { OUStringLiteral(u"fixedline"),          WindowType::FIXEDLINE },
-    { OUStringLiteral(u"fixedtext"),          WindowType::FIXEDTEXT },
-    { OUStringLiteral(u"floatingwindow"),     WindowType::FLOATINGWINDOW },
-    { OUStringLiteral(u"formattedfield"),     WindowType::CONTROL },
-    { OUStringLiteral(u"frame"),              WindowType::GROUPBOX },
-    { OUStringLiteral(u"framewindow"),        WindowType::TOOLKIT_FRAMEWINDOW },
-    { OUStringLiteral(u"groupbox"),           WindowType::GROUPBOX },
-    { OUStringLiteral(u"helpbutton"),         WindowType::HELPBUTTON },
-    { OUStringLiteral(u"imagebutton"),        WindowType::IMAGEBUTTON },
-    { OUStringLiteral(u"infobox"),            WindowType::INFOBOX },
-    { OUStringLiteral(u"listbox"),            WindowType::LISTBOX },
-    { OUStringLiteral(u"longcurrencybox"),    WindowType::LONGCURRENCYBOX },
-    { OUStringLiteral(u"longcurrencyfield"),  WindowType::CONTROL },
-    { OUStringLiteral(u"menubutton"),         WindowType::MENUBUTTON },
-    { OUStringLiteral(u"messbox"),            WindowType::MESSBOX },
-    { OUStringLiteral(u"metricbox"),          WindowType::METRICBOX },
-    { OUStringLiteral(u"metricfield"),        WindowType::METRICFIELD },
-    { OUStringLiteral(u"modelessdialog"),     WindowType::MODELESSDIALOG },
-    { OUStringLiteral(u"morebutton"),         WindowType::MOREBUTTON },
-    { OUStringLiteral(u"multilineedit"),      WindowType::MULTILINEEDIT },
-    { OUStringLiteral(u"multilistbox"),       WindowType::MULTILISTBOX },
-    { OUStringLiteral(u"numericbox"),         WindowType::NUMERICBOX },
-    { OUStringLiteral(u"numericfield"),       WindowType::CONTROL },
-    { OUStringLiteral(u"okbutton"),           WindowType::OKBUTTON },
-    { OUStringLiteral(u"patternbox"),         WindowType::PATTERNBOX },
-    { OUStringLiteral(u"patternfield"),       WindowType::PATTERNFIELD },
-    { OUStringLiteral(u"progressbar"),        WindowType::CONTROL },
-    { OUStringLiteral(u"pushbutton"),         WindowType::PUSHBUTTON },
-    { OUStringLiteral(u"querybox"),           WindowType::QUERYBOX },
-    { OUStringLiteral(u"radiobutton"),        WindowType::RADIOBUTTON },
-    { OUStringLiteral(u"roadmap"),            WindowType::CONTROL },
-    { OUStringLiteral(u"scrollbar"),          WindowType::SCROLLBAR },
-    { OUStringLiteral(u"scrollbarbox"),       WindowType::SCROLLBARBOX },
-    { OUStringLiteral(u"spinbutton"),         WindowType::SPINBUTTON },
-    { OUStringLiteral(u"spinfield"),          WindowType::SPINFIELD },
-    { OUStringLiteral(u"splitter"),           WindowType::SPLITTER },
-    { OUStringLiteral(u"splitwindow"),        WindowType::SPLITWINDOW },
-    { OUStringLiteral(u"statusbar"),          WindowType::STATUSBAR },
-    { OUStringLiteral(u"systemchildwindow"),  WindowType::TOOLKIT_SYSTEMCHILDWINDOW },
-    { OUStringLiteral(u"tabcontrol"),         WindowType::TABCONTROL },
-    { OUStringLiteral(u"tabdialog"),          WindowType::TABDIALOG },
-    { OUStringLiteral(u"tabpage"),            WindowType::TABPAGE },
-    { OUStringLiteral(u"tabpagecontainer"),   WindowType::CONTROL },
-    { OUStringLiteral(u"tabpagemodel"),       WindowType::TABPAGE },
-    { OUStringLiteral(u"timebox"),            WindowType::TIMEBOX },
-    { OUStringLiteral(u"timefield"),          WindowType::TIMEFIELD },
-    { OUStringLiteral(u"toolbox"),            WindowType::TOOLBOX },
-    { OUStringLiteral(u"tree"),               WindowType::CONTROL },
-    { OUStringLiteral(u"tristatebox"),        WindowType::TRISTATEBOX },
-    { OUStringLiteral(u"warningbox"),         WindowType::WARNINGBOX },
-    { OUStringLiteral(u"window"),             WindowType::WINDOW },
-    { OUStringLiteral(u"workwindow"),         WindowType::WORKWINDOW }
+    { std::u16string_view(u"animatedimages"),     WindowType::CONTROL },
+    { std::u16string_view(u"buttondialog"),       WindowType::BUTTONDIALOG },
+    { std::u16string_view(u"cancelbutton"),       WindowType::CANCELBUTTON },
+    { std::u16string_view(u"checkbox"),           WindowType::CHECKBOX },
+    { std::u16string_view(u"combobox"),           WindowType::COMBOBOX },
+    { std::u16string_view(u"control"),            WindowType::CONTROL },
+    { std::u16string_view(u"currencybox"),        WindowType::CURRENCYBOX },
+    { std::u16string_view(u"currencyfield"),      WindowType::CURRENCYFIELD },
+    { std::u16string_view(u"datebox"),            WindowType::DATEBOX },
+    { std::u16string_view(u"datefield"),          WindowType::CONTROL },
+    { std::u16string_view(u"dialog"),             WindowType::DIALOG },
+    { std::u16string_view(u"dockingarea"),        WindowType::DOCKINGAREA },
+    { std::u16string_view(u"dockingwindow"),      WindowType::DOCKINGWINDOW },
+    { std::u16string_view(u"edit"),               WindowType::EDIT },
+    { std::u16string_view(u"errorbox"),           WindowType::ERRORBOX },
+    { std::u16string_view(u"filecontrol"),        WindowType::CONTROL },
+    { std::u16string_view(u"fixedbitmap"),        WindowType::FIXEDBITMAP },
+    { std::u16string_view(u"fixedhyperlink"),     WindowType::CONTROL },
+    { std::u16string_view(u"fixedimage"),         WindowType::FIXEDIMAGE },
+    { std::u16string_view(u"fixedline"),          WindowType::FIXEDLINE },
+    { std::u16string_view(u"fixedtext"),          WindowType::FIXEDTEXT },
+    { std::u16string_view(u"floatingwindow"),     WindowType::FLOATINGWINDOW },
+    { std::u16string_view(u"formattedfield"),     WindowType::CONTROL },
+    { std::u16string_view(u"frame"),              WindowType::GROUPBOX },
+    { std::u16string_view(u"framewindow"),        WindowType::TOOLKIT_FRAMEWINDOW },
+    { std::u16string_view(u"groupbox"),           WindowType::GROUPBOX },
+    { std::u16string_view(u"helpbutton"),         WindowType::HELPBUTTON },
+    { std::u16string_view(u"imagebutton"),        WindowType::IMAGEBUTTON },
+    { std::u16string_view(u"infobox"),            WindowType::INFOBOX },
+    { std::u16string_view(u"listbox"),            WindowType::LISTBOX },
+    { std::u16string_view(u"longcurrencybox"),    WindowType::LONGCURRENCYBOX },
+    { std::u16string_view(u"longcurrencyfield"),  WindowType::CONTROL },
+    { std::u16string_view(u"menubutton"),         WindowType::MENUBUTTON },
+    { std::u16string_view(u"messbox"),            WindowType::MESSBOX },
+    { std::u16string_view(u"metricbox"),          WindowType::METRICBOX },
+    { std::u16string_view(u"metricfield"),        WindowType::METRICFIELD },
+    { std::u16string_view(u"modelessdialog"),     WindowType::MODELESSDIALOG },
+    { std::u16string_view(u"morebutton"),         WindowType::MOREBUTTON },
+    { std::u16string_view(u"multilineedit"),      WindowType::MULTILINEEDIT },
+    { std::u16string_view(u"multilistbox"),       WindowType::MULTILISTBOX },
+    { std::u16string_view(u"numericbox"),         WindowType::NUMERICBOX },
+    { std::u16string_view(u"numericfield"),       WindowType::CONTROL },
+    { std::u16string_view(u"okbutton"),           WindowType::OKBUTTON },
+    { std::u16string_view(u"patternbox"),         WindowType::PATTERNBOX },
+    { std::u16string_view(u"patternfield"),       WindowType::PATTERNFIELD },
+    { std::u16string_view(u"progressbar"),        WindowType::CONTROL },
+    { std::u16string_view(u"pushbutton"),         WindowType::PUSHBUTTON },
+    { std::u16string_view(u"querybox"),           WindowType::QUERYBOX },
+    { std::u16string_view(u"radiobutton"),        WindowType::RADIOBUTTON },
+    { std::u16string_view(u"roadmap"),            WindowType::CONTROL },
+    { std::u16string_view(u"scrollbar"),          WindowType::SCROLLBAR },
+    { std::u16string_view(u"scrollbarbox"),       WindowType::SCROLLBARBOX },
+    { std::u16string_view(u"spinbutton"),         WindowType::SPINBUTTON },
+    { std::u16string_view(u"spinfield"),          WindowType::SPINFIELD },
+    { std::u16string_view(u"splitter"),           WindowType::SPLITTER },
+    { std::u16string_view(u"splitwindow"),        WindowType::SPLITWINDOW },
+    { std::u16string_view(u"statusbar"),          WindowType::STATUSBAR },
+    { std::u16string_view(u"systemchildwindow"),  WindowType::TOOLKIT_SYSTEMCHILDWINDOW },
+    { std::u16string_view(u"tabcontrol"),         WindowType::TABCONTROL },
+    { std::u16string_view(u"tabdialog"),          WindowType::TABDIALOG },
+    { std::u16string_view(u"tabpage"),            WindowType::TABPAGE },
+    { std::u16string_view(u"tabpagecontainer"),   WindowType::CONTROL },
+    { std::u16string_view(u"tabpagemodel"),       WindowType::TABPAGE },
+    { std::u16string_view(u"timebox"),            WindowType::TIMEBOX },
+    { std::u16string_view(u"timefield"),          WindowType::TIMEFIELD },
+    { std::u16string_view(u"toolbox"),            WindowType::TOOLBOX },
+    { std::u16string_view(u"tree"),               WindowType::CONTROL },
+    { std::u16string_view(u"tristatebox"),        WindowType::TRISTATEBOX },
+    { std::u16string_view(u"warningbox"),         WindowType::WARNINGBOX },
+    { std::u16string_view(u"window"),             WindowType::WINDOW },
+    { std::u16string_view(u"workwindow"),         WindowType::WORKWINDOW }
 };
 
 bool ComponentInfoFindCompare( const ComponentInfo & lhs, const OUString & s)
 {
     return rtl_ustr_compareIgnoreAsciiCase_WithLength(s.pData->buffer, s.pData->length,
-                lhs.sName.data, lhs.sName.size) > 0;
+                lhs.sName.data(), lhs.sName.size()) > 0;
 }
 
 WindowType ImplGetComponentType( const OUString& rServiceName )
@@ -782,7 +786,8 @@ WindowType ImplGetComponentType( const OUString& rServiceName )
                     [](const ComponentInfo & lhs, const ComponentInfo & rhs) {
                         return
                             rtl_ustr_compare_WithLength(
-                                lhs.sName.data, lhs.sName.size, rhs.sName.data, rhs.sName.size)
+                                lhs.sName.data(), lhs.sName.size(), rhs.sName.data(),
+                                rhs.sName.size())
                             < 0;
                     } ) );
         bSorted = true;
@@ -797,7 +802,7 @@ WindowType ImplGetComponentType( const OUString& rServiceName )
     auto it = std::lower_bound( std::begin(aComponentInfos), std::end(aComponentInfos), sSearch,
                                 ComponentInfoFindCompare );
     if (it != std::end(aComponentInfos) &&
-        rtl_ustr_compareIgnoreAsciiCase_WithLength(sSearch.pData->buffer, sSearch.pData->length, it->sName.data, it->sName.size) == 0)
+        rtl_ustr_compareIgnoreAsciiCase_WithLength(sSearch.pData->buffer, sSearch.pData->length, it->sName.data(), it->sName.size()) == 0)
         return it->nWinType;
     return WindowType::NONE;
 }

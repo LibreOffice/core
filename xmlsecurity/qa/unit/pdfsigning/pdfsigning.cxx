@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
 
@@ -427,7 +431,7 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testSigningCertificateAttribute)
 /// Test that we accept files which are supposed to be good.
 CPPUNIT_TEST_FIXTURE(PDFSigningTest, testGood)
 {
-    const std::initializer_list<OUStringLiteral> aNames = {
+    const std::initializer_list<std::u16string_view> aNames = {
         // We failed to determine if this is good or bad.
         u"good-non-detached.pdf",
         // Boolean value for dictionary key caused read error.
@@ -449,7 +453,7 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testGood)
 /// Test that we don't crash / loop while tokenizing these files.
 CPPUNIT_TEST_FIXTURE(PDFSigningTest, testTokenize)
 {
-    const std::initializer_list<OUStringLiteral> aNames = {
+    const std::initializer_list<std::u16string_view> aNames = {
         // We looped on this broken input.
         u"no-eof.pdf",
         // ']' in a name token was mishandled.
