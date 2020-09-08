@@ -921,10 +921,15 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
     // calculate number of rows
     mbScroll = false;
 
+    auto nOldLines = mnLines;
     // Floor( (M+N-1)/N )==Ceiling( M/N )
     mnLines = (static_cast<long>(nItemCount) + mnCols - 1) / mnCols;
     if (mnLines <= 0)
         mnLines = 1;
+
+    bool bAdjustmentOutOfDate = nOldLines != mnLines;
+
+    auto nOldVisLines = mnVisLines;
 
     long nCalcHeight = aWinSize.Height() - nNoneHeight;
     if (mnUserVisLines)
@@ -941,6 +946,8 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
     {
         mnVisLines = mnLines;
     }
+
+    bAdjustmentOutOfDate |= nOldVisLines != mnVisLines;
 
     if (mnLines > mnVisLines)
         mbScroll = true;
@@ -1144,16 +1151,24 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
         }
 
         // arrange ScrollBar, set values and show it
-        if (mxScrolledWindow && (nStyle & WB_VSCROLL) && mxScrolledWindow->get_vpolicy() != VclPolicyType::ALWAYS)
+        if (mxScrolledWindow && (nStyle & WB_VSCROLL))
         {
-            long nPageSize = mnVisLines;
-            if (nPageSize < 1)
-                nPageSize = 1;
-            mxScrolledWindow->vadjustment_configure(mnFirstLine, 0, mnLines, 1,
-                                                    mnVisLines, nPageSize);
-            mxScrolledWindow->set_vpolicy(VclPolicyType::ALWAYS);
-            Size aPrefSize(GetDrawingArea()->get_preferred_size());
-            GetDrawingArea()->set_size_request(aPrefSize.Width() - GetScrollWidth(), aPrefSize.Height());
+            bool bTurnScrollbarOn = mxScrolledWindow->get_vpolicy() != VclPolicyType::ALWAYS;
+            if (bAdjustmentOutOfDate || bTurnScrollbarOn)
+            {
+                long nPageSize = mnVisLines;
+                if (nPageSize < 1)
+                    nPageSize = 1;
+                mxScrolledWindow->vadjustment_configure(mnFirstLine, 0, mnLines, 1,
+                                                        mnVisLines, nPageSize);
+            }
+
+            if (bTurnScrollbarOn)
+            {
+                mxScrolledWindow->set_vpolicy(VclPolicyType::ALWAYS);
+                Size aPrefSize(GetDrawingArea()->get_preferred_size());
+                GetDrawingArea()->set_size_request(aPrefSize.Width() - GetScrollWidth(), aPrefSize.Height());
+            }
         }
     }
 
