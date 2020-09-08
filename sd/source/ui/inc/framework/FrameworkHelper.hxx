@@ -56,7 +56,7 @@ class FrameworkHelper
 {
 public:
     // URLs of frequently used panes.
-    static const OUStringLiteral msPaneURLPrefix;
+    static constexpr OUStringLiteral msPaneURLPrefix = u"private:resource/pane/";
     static const OUString msCenterPaneURL;
     static const OUString msFullScreenPaneURL;
     static const OUString msLeftImpressPaneURL;
@@ -64,7 +64,7 @@ public:
     static const OUString msSidebarPaneURL;
 
     // URLs of frequently used views.
-    static const OUStringLiteral msViewURLPrefix;
+    static constexpr OUStringLiteral msViewURLPrefix = u"private:resource/view/";
     static const OUString msImpressViewURL;
     static const OUString msDrawViewURL;
     static const OUString msOutlineViewURL;
@@ -75,11 +75,11 @@ public:
     static const OUString msSidebarViewURL;
 
     // URLs of frequently used tool bars.
-    static const OUStringLiteral msToolBarURLPrefix;
+    static constexpr OUStringLiteral msToolBarURLPrefix = u"private:resource/toolbar/";
     static const OUString msViewTabBarURL;
 
     // URLs of task panels.
-    static const OUStringLiteral msTaskPanelURLPrefix;
+    static constexpr OUStringLiteral msTaskPanelURLPrefix = u"private:resource/toolpanel/";
     static const OUString msAllMasterPagesTaskPanelURL;
     static const OUString msRecentMasterPagesTaskPanelURL;
     static const OUString msUsedMasterPagesTaskPanelURL;
@@ -89,17 +89,21 @@ public:
     static const OUString msSlideTransitionTaskPanelURL;
 
     // Names of frequently used events.
-    static const OUStringLiteral msResourceActivationRequestEvent;
-    static const OUStringLiteral msResourceDeactivationRequestEvent;
-    static const OUStringLiteral msResourceActivationEvent;
-    static const OUStringLiteral msResourceDeactivationEvent;
-    static const OUStringLiteral msResourceDeactivationEndEvent;
-    static const OUStringLiteral msConfigurationUpdateStartEvent;
-    static const OUStringLiteral msConfigurationUpdateEndEvent;
+    static constexpr OUStringLiteral msResourceActivationRequestEvent
+        = u"ResourceActivationRequested";
+    static constexpr OUStringLiteral msResourceDeactivationRequestEvent
+        = u"ResourceDeactivationRequest";
+    static constexpr OUStringLiteral msResourceActivationEvent = u"ResourceActivation";
+    static constexpr OUStringLiteral msResourceDeactivationEvent = u"ResourceDeactivation";
+    static constexpr OUStringLiteral msResourceDeactivationEndEvent = u"ResourceDeactivationEnd";
+    static constexpr OUStringLiteral msConfigurationUpdateStartEvent = u"ConfigurationUpdateStart";
+    static constexpr OUStringLiteral msConfigurationUpdateEndEvent = u"ConfigurationUpdateEnd";
 
     // Service names of the common controllers.
-    static const OUStringLiteral msModuleControllerService;
-    static const OUStringLiteral msConfigurationControllerService;
+    static constexpr OUStringLiteral msModuleControllerService
+        = u"com.sun.star.drawing.framework.ModuleController";
+    static constexpr OUStringLiteral msConfigurationControllerService
+        = u"com.sun.star.drawing.framework.ConfigurationController";
 
     /** Return the FrameworkHelper object that is associated with the given
         ViewShellBase.  If such an object does not yet exist, a new one is

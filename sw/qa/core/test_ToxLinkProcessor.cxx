@@ -40,18 +40,14 @@ public:
         SwGlobals::ensure();
     }
 
-    static const OUStringLiteral STYLE_NAME_1;
-    static const OUStringLiteral STYLE_NAME_2;
+    static constexpr OUStringLiteral STYLE_NAME_1 = u"anyStyle1";
+    static constexpr OUStringLiteral STYLE_NAME_2 = u"anyStyle2";
     static const sal_uInt16 POOL_ID_1;
     static const sal_uInt16 POOL_ID_2;
-    static const OUStringLiteral URL_1;
-    static const OUStringLiteral URL_2;
+    static constexpr OUStringLiteral URL_1 = u"anyUrl1";
+    static constexpr OUStringLiteral URL_2 = u"anyUrl2";
 };
 
-const OUStringLiteral ToxLinkProcessorTest::STYLE_NAME_1 = u"anyStyle1";
-const OUStringLiteral ToxLinkProcessorTest::STYLE_NAME_2 = u"anyStyle2";
-const OUStringLiteral ToxLinkProcessorTest::URL_1 = u"anyUrl1";
-const OUStringLiteral ToxLinkProcessorTest::URL_2 = u"anyUrl2";
 const sal_uInt16 ToxLinkProcessorTest::POOL_ID_1 = 42;
 const sal_uInt16 ToxLinkProcessorTest::POOL_ID_2 = 43;
 

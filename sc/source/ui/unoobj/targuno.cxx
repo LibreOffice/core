@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svl/itemprop.hxx>
 #include <svl/hint.hxx>
@@ -199,7 +203,7 @@ void SAL_CALL ScLinkTargetTypeObj::setPropertyValue(const OUString& /* aProperty
     //! exception?
 }
 
-const OUStringLiteral aContentBmps[]=
+const std::u16string_view aContentBmps[]=
 {
     u"" RID_BMP_CONTENT_TABLE,
     u"" RID_BMP_CONTENT_RANGENAME,

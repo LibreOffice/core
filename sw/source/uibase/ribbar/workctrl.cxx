@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <i18nutil/unicode.hxx>
 #include <vcl/InterimItemWindow.hxx>
 #include <sfx2/dispatch.hxx>
@@ -175,7 +179,7 @@ static sal_uInt16 aNavigationInsertIds[ NAVI_ENTRIES ] =
     NID_TABLE_FORMULA_ERROR
 };
 
-OUStringLiteral const aNavigationImgIds[ NAVI_ENTRIES ] =
+std::u16string_view const aNavigationImgIds[ NAVI_ENTRIES ] =
 {
     u"" RID_BMP_RIBBAR_TBL,
     u"" RID_BMP_RIBBAR_FRM,

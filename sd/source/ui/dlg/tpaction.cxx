@@ -48,7 +48,6 @@
 #include <View.hxx>
 #include <sdresid.hxx>
 #include <tpaction.hxx>
-#include <strmname.h>
 #include <ViewShell.hxx>
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
@@ -63,6 +62,9 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 
 #define DOCUMENT_TOKEN '#'
+
+// XML content stream
+const OUStringLiteral pStarDrawXMLContent( u"content.xml" );
 
 /**
  * Constructor of the Tab dialog: appends the pages to the dialog

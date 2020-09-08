@@ -52,6 +52,7 @@
 
 #include <initializer_list>
 #include <memory>
+#include <string_view>
 
 using namespace ::cppu;
 using namespace ::com::sun::star;
@@ -2160,7 +2161,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextBase::getSupportedServiceNames_Stat
 {
     return comphelper::concatSequences(
         SvxUnoTextRangeBase::getSupportedServiceNames_Static(),
-        std::initializer_list<OUStringLiteral>{ u"com.sun.star.text.Text" });
+        std::initializer_list<std::u16string_view>{ u"com.sun.star.text.Text" });
 }
 
 namespace

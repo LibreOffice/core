@@ -29,6 +29,7 @@
 #include <oox/token/tokens.hxx>
 
 #include <initializer_list>
+#include <string_view>
 
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -520,7 +521,7 @@ ShapeExport& ShapeExport::WriteGroupShape(const uno::Reference<drawing::XShape>&
 
 static bool lcl_IsOnDenylist(OUString const & rShapeType)
 {
-    static const std::initializer_list<OUStringLiteral> vDenylist = {
+    static const std::initializer_list<std::u16string_view> vDenylist = {
         u"block-arc",
         u"rectangle",
         u"ellipse",
@@ -587,7 +588,7 @@ static bool lcl_IsOnDenylist(OUString const & rShapeType)
 
 static bool lcl_IsOnAllowlist(OUString const & rShapeType)
 {
-    static const std::initializer_list<OUStringLiteral> vAllowlist = {
+    static const std::initializer_list<std::u16string_view> vAllowlist = {
         u"heart",
         u"puzzle"
     };

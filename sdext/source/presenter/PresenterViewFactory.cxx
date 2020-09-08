@@ -33,19 +33,6 @@ using namespace ::com::sun::star::drawing::framework;
 
 namespace sdext::presenter {
 
-const OUStringLiteral PresenterViewFactory::msCurrentSlidePreviewViewURL(
-    u"private:resource/view/Presenter/CurrentSlidePreview");
-const OUStringLiteral PresenterViewFactory::msNextSlidePreviewViewURL(
-    u"private:resource/view/Presenter/NextSlidePreview");
-const OUStringLiteral PresenterViewFactory::msNotesViewURL(
-    u"private:resource/view/Presenter/Notes");
-const OUStringLiteral PresenterViewFactory::msToolBarViewURL(
-    u"private:resource/view/Presenter/ToolBar");
-const OUStringLiteral PresenterViewFactory::msSlideSorterURL(
-    u"private:resource/view/Presenter/SlideSorter");
-const OUStringLiteral PresenterViewFactory::msHelpViewURL(
-    u"private:resource/view/Presenter/Help");
-
 namespace {
 
 /** By default the PresenterSlidePreview shows the preview of the current

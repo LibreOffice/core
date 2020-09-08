@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <vcl/taskpanelist.hxx>
 #include <vcl/settings.hxx>
 
@@ -597,7 +601,7 @@ void ScOutlineWindow::HideFocus()
     }
 }
 
-const OUStringLiteral aLevelBmps[]=
+const std::u16string_view aLevelBmps[]=
 {
     u"" RID_BMP_LEVEL1,
     u"" RID_BMP_LEVEL2,

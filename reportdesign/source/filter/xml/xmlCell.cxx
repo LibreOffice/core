@@ -118,7 +118,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLCell::createFastCh
     css::uno::Reference< css::xml::sax::XFastContextHandler > xContext;
     ORptFilter& rImport = GetOwnImport();
     Reference<XMultiServiceFactory> xFactor(rImport.GetModel(),uno::UNO_QUERY);
-    static const char16_t s_sStringConcat[] = u" & ";
+    static constexpr char16_t s_sStringConcat[] = u" & ";
 
     switch( nElement )
     {

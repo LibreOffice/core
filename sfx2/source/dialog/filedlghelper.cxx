@@ -18,6 +18,8 @@
  */
 
 #include <memory>
+#include <string_view>
+
 #include <sfx2/filedlghelper.hxx>
 #include <sal/types.h>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -121,13 +123,13 @@ namespace
     }
 }
 
-static const OUStringLiteral* GetLastFilterConfigId( FileDialogHelper::Context _eContext )
+static const std::u16string_view* GetLastFilterConfigId( FileDialogHelper::Context _eContext )
 {
-    static const OUStringLiteral aSD_EXPORT_IDENTIFIER(u"SdExportLastFilter");
-    static const OUStringLiteral aSI_EXPORT_IDENTIFIER(u"SiExportLastFilter");
-    static const OUStringLiteral aSW_EXPORT_IDENTIFIER(u"SwExportLastFilter");
+    static const std::u16string_view aSD_EXPORT_IDENTIFIER(u"SdExportLastFilter");
+    static const std::u16string_view aSI_EXPORT_IDENTIFIER(u"SiExportLastFilter");
+    static const std::u16string_view aSW_EXPORT_IDENTIFIER(u"SwExportLastFilter");
 
-    const OUStringLiteral* pRet = nullptr;
+    const std::u16string_view* pRet = nullptr;
 
     switch( _eContext )
     {
@@ -344,7 +346,7 @@ void FileDialogHelper_Impl::LoadLastUsedFilter( const OUString& _rContextIdentif
 
 void FileDialogHelper_Impl::SaveLastUsedFilter()
 {
-    const OUStringLiteral* pConfigId = GetLastFilterConfigId( meContext );
+    const std::u16string_view* pConfigId = GetLastFilterConfigId( meContext );
     if( pConfigId )
         SvtViewOptions( EViewType::Dialog, IODLG_CONFIGNAME ).SetUserItem( *pConfigId,
                             makeAny( getFilterWithExtension( getFilter() ) ) );
@@ -2255,7 +2257,7 @@ void FileDialogHelper_Impl::SetContext( FileDialogHelper::Context _eNewContext )
 {
     meContext = _eNewContext;
 
-    const OUStringLiteral* pConfigId = GetLastFilterConfigId( _eNewContext );
+    const std::u16string_view* pConfigId = GetLastFilterConfigId( _eNewContext );
     if( pConfigId )
         LoadLastUsedFilter( *pConfigId );
 }

@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <hintids.hxx>
 #include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
@@ -1752,9 +1756,9 @@ static Writer& OutCSS1_SwFootnoteInfo( Writer& rWrt, const SwEndNoteInfo& rInfo,
 
     if( bHasNotes )
     {
-        aSelector = OOO_STRING_SVTOOLS_HTML_anchor "." +
-                    ( bEndNote ? OUStringLiteral(u"" OOO_STRING_SVTOOLS_HTML_sdendnote_anc)
-                               : OUStringLiteral(u"" OOO_STRING_SVTOOLS_HTML_sdfootnote_anc) );
+        aSelector = OUString::Concat(OOO_STRING_SVTOOLS_HTML_anchor ".") +
+                    ( bEndNote ? std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_sdendnote_anc)
+                               : std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_sdfootnote_anc) );
         SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
                              &aSelector );
         rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_font_size,
@@ -1783,9 +1787,10 @@ static Writer& OutCSS1_SwFootnoteInfo( Writer& rWrt, const SwEndNoteInfo& rInfo,
         }
         if( aItemSet.Count() )
         {
-            aSelector = OOO_STRING_SVTOOLS_HTML_anchor "." +
-                        ( bEndNote ? OUStringLiteral(u"" OOO_STRING_SVTOOLS_HTML_sdendnote_sym)
-                                   : OUStringLiteral(u"" OOO_STRING_SVTOOLS_HTML_sdfootnote_sym));
+            aSelector = OUString::Concat(OOO_STRING_SVTOOLS_HTML_anchor ".") +
+                        ( bEndNote ? std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_sdendnote_sym)
+                                   : std::u16string_view(
+                                       u"" OOO_STRING_SVTOOLS_HTML_sdfootnote_sym));
             if( OutCSS1Rule( rHTMLWrt, aSelector, aItemSet, true, false ))
                 rHTMLWrt.m_aScriptTextStyles.insert( pSymCharFormat->GetName() );
         }
