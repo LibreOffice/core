@@ -47,7 +47,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf123621, "tdf123621.docx")
         "/wp:positionV/wp:posOffset", "1080135");
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf131801, "tdf131801.docx")
+DECLARE_OOXMLEXPORT_TEST(testTdf131801, "tdf131801.docx")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
@@ -503,7 +503,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf134063, "tdf134063.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(720), getXPath(pDump, "//page[1]/body/txt[1]/Text[3]", "nWidth").toInt32());
 }
 
-DECLARE_OOXMLIMPORT_TEST(TestTdf135653, "tdf135653.docx")
+DECLARE_OOXMLEXPORT_TEST(TestTdf135653, "tdf135653.docx")
 {
     uno::Reference<beans::XPropertySet> xOLEProps(getShape(1), uno::UNO_QUERY_THROW);
     drawing::FillStyle nFillStyle = static_cast<drawing::FillStyle>(-1);
@@ -579,22 +579,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testRelativeAnchorHeightFromBottomMarginHasF
     assertXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "height", "1147");
 }
 
-DECLARE_OOXMLIMPORT_TEST(TestTdf112342, "tdf112342.docx")
-{
-    //Get the last para
-    uno::Reference<text::XTextRange> xPara = getParagraph(3);
-    auto xCur = xPara->getText()->createTextCursor();
-    //Go to the end of it
-    xCur->gotoEnd(false);
-    //And let's remove the last 2 chars (the last para with its char).
-    xCur->goLeft(2, true);
-    xCur->setString("");
-
-    //If the second paragraph on the second page, this will be passed.
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Page break does not match", 2, getPages());
-}
-
-DECLARE_OOXMLIMPORT_TEST(TestTdf132483, "tdf132483.docx")
+DECLARE_OOXMLEXPORT_TEST(TestTdf132483, "tdf132483.docx")
 {
     uno::Reference<beans::XPropertySet> xOLEProps(getShape(1), uno::UNO_QUERY_THROW);
     sal_Int16 nVRelPos = -1;

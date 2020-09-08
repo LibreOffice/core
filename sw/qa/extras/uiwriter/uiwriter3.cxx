@@ -191,6 +191,23 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134404)
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf112342)
+{
+    load(DATA_DIRECTORY, "tdf112342.docx");
+
+    //Get the last para
+    uno::Reference<text::XTextRange> xPara = getParagraph(3);
+    auto xCur = xPara->getText()->createTextCursor();
+    //Go to the end of it
+    xCur->gotoEnd(false);
+    //And let's remove the last 2 chars (the last para with its char).
+    xCur->goLeft(2, true);
+    xCur->setString("");
+
+    //If the second paragraph on the second page, this will be passed.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Page break does not match", 2, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132321)
 {
     load(DATA_DIRECTORY, "tdf132321.odt");
