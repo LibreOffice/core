@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0786ad37_0bd6d7db",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport15.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2020-09-08T10:38:55Z",
+      "side": 1,
+      "message": "you are declaring a OOXMLIMPORT_TEST in a ooxmlexport file.",
+      "range": {
+        "startLine": 128,
+        "startChar": 0,
+        "endLine": 128,
+        "endChar": 24
+      },
+      "revId": "bf1423659723dbf47c227bc265a6c6c23a52bd2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
