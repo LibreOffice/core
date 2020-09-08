@@ -184,8 +184,7 @@ public:
     /** Draw the caret */
     void Draw(OutputDevice& pDev, Point Offset, bool isCaretVisible);
 
-    bool IsAtTailOfBracket(SmBracketType eBracketType, SmBraceNode** ppBraceNode) const;
-    void MoveAfterBracket(SmBraceNode* pBraceNode);
+    bool IsAtTailOfBracket(SmBracketType eBracketType) const;
 
 private:
     friend class SmDocShell;
