@@ -111,6 +111,29 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135595_HFtableWrap, "tdf135595_HFtableWrap.odt")
     CPPUNIT_ASSERT_MESSAGE("Image must be contained inside the table cell", nRowHeight > 2000);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf135943_shapeWithText_L0c15,
+                         "tdf135943_shapeWithText_LayoutInCell0_compat15.docx")
+{
+    // With compat15, layoutinCell ought to be ignored/forced to true.
+    // HOWEVER, currently only the shape is correctly placed, while its text is un-synced separately.
+    // So to prevent this ugly mess, just leave everything together in the historical (wrong) spot.
+    xmlDocUniquePtr pDump = parseLayoutDump();
+    sal_Int32 nFrameLeft = getXPath(pDump, "//anchored/SwAnchoredDrawObject/bounds", "left").toInt32();
+    sal_Int32 nFrameRight = getXPath(pDump, "//anchored/SwAnchoredDrawObject/bounds", "right").toInt32();
+    sal_Int32 nTextLeft = getXPath(pDump, "//anchored/fly/infos/bounds", "left").toInt32();
+    sal_Int32 nTextRight = getXPath(pDump, "//anchored/fly/infos/bounds", "right").toInt32();
+    // The text must be inside of its frame boundaries
+    CPPUNIT_ASSERT(nFrameRight >= nTextRight);
+    CPPUNIT_ASSERT(nFrameLeft <= nTextLeft);
+    // LayoutInCell: The text must fit inside cell A1 //cell[1]/info/bounds/right = 4703
+    //CPPUNIT_ASSERT(nTextRight < 4704);
+
+    uno::Reference<beans::XPropertySet> xShapeProperties(getShape(1), uno::UNO_QUERY);
+    bool bValue;
+    xShapeProperties->getPropertyValue("IsFollowingTextFlow") >>= bValue;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("YOU FIXED ME? LayoutInCell ought to be true", false, bValue);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf135595_HFtableWrap_c12, "tdf135595_HFtableWrap_c12.docx")
 {
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
