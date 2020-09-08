@@ -330,7 +330,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf115719, "tdf115719.docx")
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf115719b, "tdf115719b.docx")
+DECLARE_OOXMLEXPORT_TEST(testTdf115719b, "tdf115719b.docx")
 {
     // This is similar to testTdf115719, but here the left textbox is not aligned "from left, by
     // 0cm" but simply aligned to left, which is a different codepath.
@@ -832,7 +832,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf118521_marginsLR, "tdf118521_marginsLR.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(882), getProperty<sal_Int32>(getParagraph(2), "ParaFirstLineIndent"));
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf104797, "tdf104797.docx")
+DECLARE_OOXMLEXPORT_TEST(testTdf104797, "tdf104797.docx")
 {
     // check moveFrom and moveTo
     CPPUNIT_ASSERT_EQUAL( OUString( "Will this sentence be duplicated?" ), getParagraph( 1 )->getString());
@@ -1289,7 +1289,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123189_tableBackground, "table-black_fill.docx")
     CPPUNIT_ASSERT_EQUAL(COL_TRANSPARENT, Color(getProperty<sal_uInt32>(xCell, "BackColor")));
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf116084, "tdf116084.docx")
+DECLARE_OOXMLEXPORT_TEST(testTdf116084, "tdf116084.docx")
 {
     // tracked line is not a single text portion: w:del is recognized within w:ins
     CPPUNIT_ASSERT_EQUAL( OUString( "" ), getRun( getParagraph( 1 ), 1 )->getString());
@@ -1297,7 +1297,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf116084, "tdf116084.docx")
     CPPUNIT_ASSERT_EQUAL( OUString( "There should be a better start to this. " ), getRun( getParagraph( 1 ), 2 )->getString());
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf121176, "tdf121176.docx")
+DECLARE_OOXMLEXPORT_TEST(testTdf121176, "tdf121176.docx")
 {
     // w:del is imported correctly when it is in a same size w:ins
     CPPUNIT_ASSERT_EQUAL( OUString( "" ), getRun( getParagraph( 1 ), 1 )->getString());
@@ -1305,7 +1305,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf121176, "tdf121176.docx")
     CPPUNIT_ASSERT_EQUAL( OUString( "must" ), getRun( getParagraph( 1 ), 2 )->getString());
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf123054, "tdf123054.docx")
+DECLARE_OOXMLEXPORT_TEST(testTdf123054, "tdf123054.docx")
 {
     CPPUNIT_ASSERT_EQUAL(OUString("No Spacing"),
                          getProperty<OUString>(getParagraph(20), "ParaStyleName"));
