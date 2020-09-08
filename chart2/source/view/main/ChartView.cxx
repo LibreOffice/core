@@ -2434,8 +2434,6 @@ void ChartView::impl_refreshAddIn()
     }
 }
 
-static const char* envChartDummyFactory = getenv("CHART_DUMMY_FACTORY");
-
 void ChartView::createShapes()
 {
     SolarMutexGuard aSolarGuard;

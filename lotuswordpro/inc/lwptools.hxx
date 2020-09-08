@@ -73,7 +73,6 @@
 // 01/19/2005
 const sal_uInt32 UNITS_PER_INCH = 65536L * 72L;
 const double CM_PER_INCH = 2.54;
-const double INCHT_PER_CM = 1.0 / CM_PER_INCH;
 //end
 
 const double POINTS_PER_INCH = 72.27;

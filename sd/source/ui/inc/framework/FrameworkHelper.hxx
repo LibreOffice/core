@@ -61,7 +61,6 @@ public:
     static const OUString msFullScreenPaneURL;
     static const OUString msLeftImpressPaneURL;
     static const OUString msLeftDrawPaneURL;
-    static const OUString msSidebarPaneURL;
 
     // URLs of frequently used views.
     static const OUStringLiteral msViewURLPrefix;
@@ -80,13 +79,6 @@ public:
 
     // URLs of task panels.
     static const OUStringLiteral msTaskPanelURLPrefix;
-    static const OUString msAllMasterPagesTaskPanelURL;
-    static const OUString msRecentMasterPagesTaskPanelURL;
-    static const OUString msUsedMasterPagesTaskPanelURL;
-    static const OUString msLayoutTaskPanelURL;
-    static const OUString msTableDesignPanelURL;
-    static const OUString msCustomAnimationTaskPanelURL;
-    static const OUString msSlideTransitionTaskPanelURL;
 
     // Names of frequently used events.
     static const OUStringLiteral msResourceActivationRequestEvent;
@@ -96,10 +88,6 @@ public:
     static const OUStringLiteral msResourceDeactivationEndEvent;
     static const OUStringLiteral msConfigurationUpdateStartEvent;
     static const OUStringLiteral msConfigurationUpdateEndEvent;
-
-    // Service names of the common controllers.
-    static const OUStringLiteral msModuleControllerService;
-    static const OUStringLiteral msConfigurationControllerService;
 
     /** Return the FrameworkHelper object that is associated with the given
         ViewShellBase.  If such an object does not yet exist, a new one is

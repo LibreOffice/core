@@ -48,7 +48,6 @@ GtkStyleContext* GtkSalGraphics::mpCheckButtonCheckStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpRadioButtonStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpRadioButtonRadioStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpSpinStyle = nullptr;
-GtkStyleContext* GtkSalGraphics::mpSpinEntryStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpSpinUpStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpSpinDownStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpComboboxStyle = nullptr;
@@ -3616,7 +3615,6 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     gSpinBox = gtk_spin_button_new(nullptr, 0, 0);
     gtk_container_add(GTK_CONTAINER(gDumbContainer), gSpinBox);
     mpSpinStyle = createStyleContext(set_object_name, GtkControlPart::SpinButton);
-    mpSpinEntryStyle = createStyleContext(set_object_name, GtkControlPart::SpinButtonEntry);
     mpSpinUpStyle = createStyleContext(set_object_name, GtkControlPart::SpinButtonUpButton);
     mpSpinDownStyle = createStyleContext(set_object_name, GtkControlPart::SpinButtonDownButton);
 

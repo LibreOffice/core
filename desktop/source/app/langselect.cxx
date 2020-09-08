@@ -47,8 +47,6 @@ namespace desktop::langselect {
 
 namespace {
 
-OUString foundLocale;
-
 void setMsLangIdFallback(OUString const & locale) {
     // #i32939# setting of default document language
     // See #i42730# for rules for determining source of settings
@@ -141,7 +139,6 @@ bool prepareLocale() {
     LanguageTag docTag(LANGUAGE_SYSTEM);
     setMsLangIdFallback(docTag.getBcp47());
 
-    foundLocale = locale;
     return true;
 }
 

@@ -55,19 +55,6 @@ enum SvXMLTokenMapAttrs
 
 }
 
-const SvXMLTokenMapEntry aDashStyleAttrTokenMap[] =
-{
-    { XML_NAMESPACE_DRAW, XML_NAME,             XML_TOK_DASH_NAME },
-    { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME,     XML_TOK_DASH_DISPLAY_NAME },
-    { XML_NAMESPACE_DRAW, XML_STYLE,            XML_TOK_DASH_STYLE },
-    { XML_NAMESPACE_DRAW, XML_DOTS1,            XML_TOK_DASH_DOTS1 },
-    { XML_NAMESPACE_DRAW, XML_DOTS1_LENGTH,     XML_TOK_DASH_DOTS1LEN },
-    { XML_NAMESPACE_DRAW, XML_DOTS2,            XML_TOK_DASH_DOTS2 },
-    { XML_NAMESPACE_DRAW, XML_DOTS2_LENGTH,     XML_TOK_DASH_DOTS2LEN },
-    { XML_NAMESPACE_DRAW, XML_DISTANCE,         XML_TOK_DASH_DISTANCE },
-    XML_TOKEN_MAP_END
-};
-
 SvXMLEnumMapEntry<drawing::DashStyle> const pXML_DashStyle_Enum[] =
 {
     { XML_RECT,         drawing::DashStyle_RECT },

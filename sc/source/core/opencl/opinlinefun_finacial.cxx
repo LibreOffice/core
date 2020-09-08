@@ -40,28 +40,6 @@ std::string Round =
 "    return fValue;\n"
 "}\n";
 
-std::string GetPMTDecl =
-"double GetPMT( double fRate, double fNper, double fPv, double fFv, int nPayType );\n";
-
-std::string GetPMT=
-"double GetPMT( double fRate, double fNper, double fPv, double fFv, int nPayType )\n"
-"{\n"
-"    double      fPmt;\n"
-"    if( fRate == 0.0 )\n"
-"        fPmt = ( fPv + fFv ) / fNper;\n"
-"    else\n"
-"    {\n"
-"        double  fTerm = pow( 1.0 + fRate, fNper );\n"
-"        if( nPayType > 0 )\n"
-"            fPmt = ( fFv * fRate / ( fTerm - 1.0 ) + fPv * fRate / ( 1.0 - 1."
-"0 / fTerm ) ) / ( 1.0 + fRate );\n"
-"        else\n"
-"            fPmt = fFv * fRate / ( fTerm - 1.0 ) + fPv * fRate /( 1.0 - 1.0 "
-"/ fTerm );\n"
-"    }\n"
-"    return -fPmt;\n"
-"}\n";
-
 std::string GetPMT_newDecl =
 "double GetPMT_new( double fRate, double fNper, double fPv, double fFv,"
 "int nPayType );\n";
@@ -304,22 +282,6 @@ std::string ScaDate=
 "        int nLastDay = DaysInMonth( *nMonth, *nYear );\n"
 "        *nDay = *bLastDay ? nLastDay : min( *nOrigDay, nLastDay );\n"
 "    }\n"
-"}\n";
-
-std::string ScaDate2Decl=
-"void ScaDate2( int nNullDate, int nDate, int nBase,int *bLastDayMode,int *"
-"bLastDay,int *b30Days,int *bUSMode);\n";
-
-std::string ScaDate2=
-"void ScaDate2( int nNullDate, int nDate, int nBase,int *bLastDayMode,int *"
-"bLastDay,int *b30Days,int *bUSMode)\n"
-"{\n"
-"    int nOrigDay=0,  nMonth=0,  nYear=0;\n"
-"    DaysToDate( nNullDate + nDate, &nOrigDay, &nMonth, &nYear );\n"
-"    *bLastDayMode = (nBase != 5);\n"
-"    *bLastDay = (nOrigDay >= DaysInMonth( nMonth, nYear ));\n"
-"    *b30Days = (nBase == 0) || (nBase == 4);\n"
-"    *bUSMode = (nBase == 0);\n"
 "}\n";
 
 std::string lcl_GetCouppcdDecl=

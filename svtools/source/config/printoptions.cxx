@@ -57,9 +57,6 @@ using namespace ::utl;
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
 
-static SvtPrintOptions_Impl*   pPrinterOptionsDataContainer = nullptr;
-static SvtPrintOptions_Impl*   pPrintFileOptionsDataContainer = nullptr;
-
 SvtPrintOptions_Impl*   SvtPrinterOptions::m_pStaticDataContainer = nullptr;
 sal_Int32               SvtPrinterOptions::m_nRefCount = 0;
 
@@ -448,7 +445,6 @@ SvtPrinterOptions::SvtPrinterOptions()
     if( m_pStaticDataContainer == nullptr )
     {
         m_pStaticDataContainer = new SvtPrintOptions_Impl( ROOTNODE_START "/Printer" );
-        pPrinterOptionsDataContainer = m_pStaticDataContainer;
         svtools::ItemHolder2::holdConfigItem(EItem::PrintOptions);
     }
 
@@ -467,7 +463,6 @@ SvtPrinterOptions::~SvtPrinterOptions()
     {
         delete m_pStaticDataContainer;
         m_pStaticDataContainer = nullptr;
-        pPrinterOptionsDataContainer = nullptr;
     }
 }
 
@@ -481,8 +476,6 @@ SvtPrintFileOptions::SvtPrintFileOptions()
     if( m_pStaticDataContainer == nullptr )
     {
         m_pStaticDataContainer = new SvtPrintOptions_Impl( ROOTNODE_START "/File" );
-        pPrintFileOptionsDataContainer = m_pStaticDataContainer;
-
         svtools::ItemHolder2::holdConfigItem(EItem::PrintFileOptions);
     }
 
@@ -501,7 +494,6 @@ SvtPrintFileOptions::~SvtPrintFileOptions()
     {
         delete m_pStaticDataContainer;
         m_pStaticDataContainer = nullptr;
-        pPrintFileOptionsDataContainer = nullptr;
     }
 }
 

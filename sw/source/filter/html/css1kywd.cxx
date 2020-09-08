@@ -21,12 +21,8 @@
 
 const char* const sCSS_mimetype = "text/css";
 
-const char* const sCSS1_import = "import";
-
 const char* const sCSS1_page = "page";
 //const char* const sCSS1_media = "media";
-
-const char* const sCSS1_important = "important";
 
 const char* const sCSS1_link = "link";
 const char* const sCSS1_visited = "visited";
@@ -37,7 +33,6 @@ const char* const sCSS1_right = "right";
 const char* const sCSS1_first = "first";
 
 const char* const sCSS1_url = "url";
-const char* const sCSS1_rgb = "rgb";
 
 const char* const sCSS1_UNIT_pt = "pt";
 const char* const sCSS1_UNIT_mm = "mm";
@@ -45,8 +40,6 @@ const char* const sCSS1_UNIT_cm = "cm";
 const char* const sCSS1_UNIT_pc = "pc";
 const char* const sCSS1_UNIT_inch = "in";
 const char* const sCSS1_UNIT_px = "px";
-const char* const sCSS1_UNIT_em = "em";
-const char* const sCSS1_UNIT_ex = "ex";
 
 // Strings for font properties
 
@@ -78,8 +71,6 @@ const char* const sCSS1_PV_demi_light = "demi-light";
 const char* const sCSS1_PV_demi_bold = "demi-bold";
 const char* const sCSS1_PV_bold = "bold";
 const char* const sCSS1_PV_extra_bold = "extra-bold";
-const char* const sCSS1_PV_lighter = "lighter";
-const char* const sCSS1_PV_bolder = "bolder";
 
 const char* const sCSS1_P_text_transform = "text-transform";
 
@@ -88,17 +79,6 @@ const char* const sCSS1_PV_uppercase = "uppercase";
 const char* const sCSS1_PV_lowercase = "lowercase";
 
 const char* const sCSS1_P_font_size = "font-size";
-
-const char* const sCSS1_PV_xx_small = "xx-small";
-const char* const sCSS1_PV_x_small = "x-small";
-const char* const sCSS1_PV_small = "small";
-const char* const sCSS1_PV_medium = "medium";
-const char* const sCSS1_PV_large = "large";
-const char* const sCSS1_PV_x_large = "x-large";
-const char* const sCSS1_PV_xx_large = "xx-large";
-
-const char* const sCSS1_PV_larger = "larger";
-const char* const sCSS1_PV_smaller = "smaller";
 
 const char* const sCSS1_P_font = "font";
 
@@ -112,8 +92,6 @@ const char* const sCSS1_P_background_color = "background-color";
 const char* const sCSS1_PV_transparent = "transparent";
 
 const char* const sCSS1_PV_repeat = "repeat";
-const char* const sCSS1_PV_repeat_x = "repeat-x";
-const char* const sCSS1_PV_repeat_y = "repeat-y";
 const char* const sCSS1_PV_no_repeat = "no-repeat";
 
 const char* const sCSS1_PV_top = "top";
@@ -175,10 +153,6 @@ const char* const sCSS1_P_border_top = "border-top";
 const char* const sCSS1_P_border_bottom = "border-bottom";
 const char* const sCSS1_P_border = "border";
 
-const char* const sCSS1_PV_thin = "thin";
-//const char* const sCSS1_PV_medium = "medium";
-const char* const sCSS1_PV_thick = "thick";
-
 //const char* const sCSS1_PV_none = "none";
 const char* const sCSS1_PV_dotted = "dotted";
 const char* const sCSS1_PV_dashed = "dashed";
@@ -203,8 +177,6 @@ const char* const sCSS1_P_column_count = "column-count";
 const char* const sCSS1_P_position = "position";
 
 const char* const sCSS1_PV_absolute = "absolute";
-const char* const sCSS1_PV_relative = "relative";
-const char* const sCSS1_PV_static = "static";
 
 const char* const sCSS1_P_left = "left";
 
@@ -229,8 +201,6 @@ const char* const sCSS1_PV_landscape = "landscape";
 
 //const char* const sCSS1_PV_crop = "crop";
 //const char* const sCSS1_PV_cross = "cross";
-
-const char* const sCSS1_class_abs_pos = "sd-abs-pos";
 
 const char* const sCSS1_P_so_language = "so-language";
 

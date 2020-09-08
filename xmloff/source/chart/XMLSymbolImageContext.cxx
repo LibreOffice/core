@@ -43,15 +43,6 @@ enum SvXMLTokenMapAttrs
 
 }
 
-const SvXMLTokenMapEntry aSymbolImageAttrTokenMap[] =
-{
-    { XML_NAMESPACE_XLINK,  ::xmloff::token::XML_HREF,     XML_TOK_SYMBOL_IMAGE_HREF    },
-    { XML_NAMESPACE_XLINK,  ::xmloff::token::XML_TYPE,     XML_TOK_SYMBOL_IMAGE_TYPE    },
-    { XML_NAMESPACE_XLINK,  ::xmloff::token::XML_ACTUATE,  XML_TOK_SYMBOL_IMAGE_ACTUATE },
-    { XML_NAMESPACE_XLINK,  ::xmloff::token::XML_SHOW,     XML_TOK_SYMBOL_IMAGE_SHOW },
-    XML_TOKEN_MAP_END
-};
-
 XMLSymbolImageContext::XMLSymbolImageContext(
     SvXMLImport& rImport, sal_Int32 nElement,
     const XMLPropertyState& rProp,

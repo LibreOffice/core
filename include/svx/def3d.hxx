@@ -23,7 +23,6 @@
 #include <o3tl/typed_flags_set.hxx>
 
 const double fPiDiv180 = 0.01745329251994;
-const double EPSILON = 1e-06;
 
 #define DEG2RAD(fAngle) (fPiDiv180 * (fAngle))
 

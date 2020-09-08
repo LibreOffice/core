@@ -103,6 +103,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/unusedmember \
     compilerplugins/clang/test/unusedvariablecheck \
     compilerplugins/clang/test/unusedvariablemore \
+    compilerplugins/clang/test/unusedvarsglobal \
     compilerplugins/clang/test/useuniqueptr \
     compilerplugins/clang/test/vclwidgets \
     compilerplugins/clang/test/weakbase \

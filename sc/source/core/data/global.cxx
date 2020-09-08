@@ -91,7 +91,6 @@ OUString        ScGlobal::aStrClipDocName;
 
 std::unique_ptr<SvxBrushItem> ScGlobal::xEmptyBrushItem;
 std::unique_ptr<SvxBrushItem> ScGlobal::xButtonBrushItem;
-std::unique_ptr<SvxBrushItem> ScGlobal::xEmbeddedBrushItem;
 
 std::unique_ptr<ScFunctionList> ScGlobal::xStarCalcFunctionList;
 std::unique_ptr<ScFunctionMgr> ScGlobal::xStarCalcFunctionMgr;
@@ -442,7 +441,6 @@ void ScGlobal::Init()
 
     xEmptyBrushItem = std::make_unique<SvxBrushItem>( COL_TRANSPARENT, ATTR_BACKGROUND );
     xButtonBrushItem = std::make_unique<SvxBrushItem>( Color(), ATTR_BACKGROUND );
-    xEmbeddedBrushItem = std::make_unique<SvxBrushItem>( COL_LIGHTCYAN, ATTR_BACKGROUND );
 
     InitPPT();
     //ScCompiler::InitSymbolsNative();
@@ -539,7 +537,6 @@ void ScGlobal::Clear()
 
     xEmptyBrushItem.reset();
     xButtonBrushItem.reset();
-    xEmbeddedBrushItem.reset();
     xEnglishFormatter.reset();
     delete pCaseTransliteration.load(); pCaseTransliteration = nullptr;
     delete pTransliteration.load(); pTransliteration = nullptr;

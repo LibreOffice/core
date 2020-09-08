@@ -24,11 +24,7 @@
 
 extern const char* const sCSS_mimetype;
 
-extern const char* const sCSS1_import;
-
 extern const char* const sCSS1_page;
-
-extern const char* const sCSS1_important;
 
 extern const char* const sCSS1_link;
 extern const char* const sCSS1_visited;
@@ -39,7 +35,6 @@ extern const char* const sCSS1_right;
 extern const char* const sCSS1_first;
 
 extern const char* const sCSS1_url;
-extern const char* const sCSS1_rgb;
 
 extern const char* const sCSS1_UNIT_pt;
 extern const char* const sCSS1_UNIT_mm;
@@ -47,8 +42,6 @@ extern const char* const sCSS1_UNIT_cm;
 extern const char* const sCSS1_UNIT_pc;
 extern const char* const sCSS1_UNIT_inch;
 extern const char* const sCSS1_UNIT_px;
-extern const char* const sCSS1_UNIT_em;
-extern const char* const sCSS1_UNIT_ex;
 
 // Strings for font properties
 
@@ -86,21 +79,8 @@ extern const char* const sCSS1_PV_demi_light;
 extern const char* const sCSS1_PV_demi_bold;
 extern const char* const sCSS1_PV_bold;
 extern const char* const sCSS1_PV_extra_bold;
-extern const char* const sCSS1_PV_lighter;
-extern const char* const sCSS1_PV_bolder;
 
 extern const char* const sCSS1_P_font_size;
-
-extern const char* const sCSS1_PV_xx_small;
-extern const char* const sCSS1_PV_x_small;
-extern const char* const sCSS1_PV_small;
-extern const char* const sCSS1_PV_medium;
-extern const char* const sCSS1_PV_large;
-extern const char* const sCSS1_PV_x_large;
-extern const char* const sCSS1_PV_xx_large;
-
-extern const char* const sCSS1_PV_larger;
-extern const char* const sCSS1_PV_smaller;
 
 extern const char* const sCSS1_P_font;
 
@@ -114,8 +94,6 @@ extern const char* const sCSS1_P_background_color;
 extern const char* const sCSS1_PV_transparent;
 
 extern const char* const sCSS1_PV_repeat;
-extern const char* const sCSS1_PV_repeat_x;
-extern const char* const sCSS1_PV_repeat_y;
 extern const char* const sCSS1_PV_no_repeat;
 
 extern const char* const sCSS1_PV_top;
@@ -178,10 +156,6 @@ extern const char* const sCSS1_P_border_top;
 extern const char* const sCSS1_P_border_bottom;
 extern const char* const sCSS1_P_border;
 
-extern const char* const sCSS1_PV_thin;
-//extern const char* const sCSS1_PV_medium;
-extern const char* const sCSS1_PV_thick;
-
 //extern const char* const sCSS1_PV_none;
 extern const char* const sCSS1_PV_dotted;
 extern const char* const sCSS1_PV_dashed;
@@ -206,8 +180,6 @@ extern const char* const sCSS1_P_column_count;
 extern const char* const sCSS1_P_position;
 
 extern const char* const sCSS1_PV_absolute;
-extern const char* const sCSS1_PV_relative;
-extern const char* const sCSS1_PV_static;
 
 extern const char* const sCSS1_P_left;
 
@@ -233,8 +205,6 @@ extern const char* const sCSS1_PV_landscape;
 //extern const char* const sCSS1_PV_crop;
 //extern const char* const sCSS1_PV_cross;
 
-
-extern const char* const sCSS1_class_abs_pos;
 
 extern const char* const sCSS1_P_so_language;
 extern const char* const sCSS1_P_direction;

@@ -1,280 +1,38 @@
-basic/source/classes/sbxmod.cxx:1714
-    (anonymous namespace)::ErrorHdlResetter aErrHdl
 canvas/workben/canvasdemo.cxx:672
     (anonymous namespace)::DemoApp aApp
-chart2/source/view/main/DrawModelWrapper.cxx:82
-    E3dObjFactory aObjFactory
 connectivity/source/drivers/evoab2/EApi.h:52
     gconstpointer (*)(EContact *, EContactField) e_contact_get_const
-connectivity/source/drivers/postgresql/pq_baseresultset.hxx:52
-    sal_Int32 BASERESULTSET_CURSOR_NAME
-connectivity/source/drivers/postgresql/pq_preparedstatement.hxx:55
-    sal_Int32 PREPARED_STATEMENT_CURSOR_NAME
-connectivity/source/drivers/postgresql/pq_statement.hxx:53
-    sal_Int32 STATEMENT_CURSOR_NAME
 cppu/source/uno/check.cxx:315
     (anonymous namespace)::BinaryCompatible_Impl aTest
-dbaccess/source/filter/xml/xmlfilter.cxx:230
-    dbaxml::(anonymous namespace)::FocusWindowWaitGuard aWindowFocusGuard
-dbaccess/source/ui/inc/TypeInfo.hxx:31
-    sal_uInt16 TYPE_UNKNOWN
-desktop/source/app/sofficemain.cxx:71
-    desktop::Desktop aDesktop
-desktop/source/splash/unxsplash.hxx:33
-    desktop::UnxSplashScreen * m_pINSTANCE
-desktop/source/splash/unxsplash.hxx:35
-    osl::Mutex m_aMutex
-desktop/unx/source/splashx.c:301
-    uint32_t tmp
-desktop/unx/source/splashx.c:315
-    uint32_t tmp
-desktop/unx/source/splashx.c:334
-    uint32_t tmp
-desktop/unx/source/splashx.c:343
-    uint32_t tmp
-drawinglayer/source/tools/emfppen.hxx:31
-    sal_uInt32 EmfPlusLineJoinTypeMiter
-drawinglayer/source/tools/emfppen.hxx:36
-    sal_Int32 EmfPlusLineStyleSolid
-extensions/source/scanner/sane.cxx:712
-    int __d0
-extensions/source/scanner/sane.cxx:712
-    int __d1
-filter/source/pdf/pdffilter.cxx:222
-    (anonymous namespace)::FocusWindowWaitCursor aCur
 framework/source/services/ContextChangeEventMultiplexer.cxx:381
     framework::(anonymous namespace)::Hook g_hook
-framework/source/uiconfiguration/windowstateconfiguration.cxx:63
-    sal_Int16 PROPERTY_LOCKED
 hwpfilter/source/nodes.h:92
     int count
-i18nlangtag/source/languagetag/languagetag.cxx:848
-    Runner aRunner
-include/editeng/flditem.hxx:43
-    sal_Int32 UNKNOWN_FIELD
-include/oox/helper/helper.hxx:87
-    sal_Int16 API_LINE_SOLID
-include/oox/helper/helper.hxx:92
-    sal_Int16 API_LINE_NONE
-include/oox/helper/helper.hxx:98
-    sal_Int16 API_ESCAPE_NONE
-include/oox/ole/axcontrol.hxx:123
-    sal_Int32 AX_PICALIGN_TOPLEFT
-include/vcl/EnumContext.hxx:139
-    sal_Int32 OptimalMatch
-lotuswordpro/source/filter/LotusWordProImportFilter.cxx:74
-    uno::Reference<XDocumentHandler> xHandler
-lotuswordpro/source/filter/lwpsilverbullet.hxx:71
-    sal_uInt16 NUMCHAR_none
-oox/source/dump/oledumper.cxx:163
-    sal_uInt16 OLEPROP_TYPE_SIMPLE
-oox/source/ole/olehelper.cxx:67
-    sal_uInt32 OLE_COLORTYPE_CLIENT
 pyuno/source/loader/pyuno_loader.cxx:240
     pyuno_loader::(anonymous namespace)::PythonInit s_Init
-pyuno/source/module/pyuno.cxx:1505
-    pyuno::Runtime runtime
 pyuno/source/module/pyuno_gc.cxx:45
     pyuno::(anonymous namespace)::StaticDestructorGuard guard
-pyuno/source/module/pyuno_struct.cxx:251
-    pyuno::Runtime runtime
 sal/osl/all/utility.cxx:45
     osl::(anonymous namespace)::OGlobalTimer aGlobalTimer
 sal/qa/osl/file/osl_File.cxx:5199
     (anonymous namespace)::GlobalObject theGlobalObject
-sal/qa/osl/pipe/osl_Pipe.cxx:875
-    osl_StreamPipe::(anonymous namespace)::Pipe_DataSink_Thread myDataSinkThread
-sal/qa/OStringBuffer/rtl_String_Const.h:118
-    sal_Int32 kTestStr25Len
 sal/rtl/cmdargs.cxx:46
     (anonymous namespace)::ArgHolder argHolder
-salhelper/qa/test_api.cxx:171
-    salhelper::ORealDynamicLoader * p
-sc/qa/unit/tiledrendering/tiledrendering.cxx:612
-    (anonymous namespace)::ViewCallback aView2
-sc/qa/unit/tiledrendering/tiledrendering.cxx:651
-    (anonymous namespace)::ViewCallback aView2
-sc/qa/unit/tiledrendering/tiledrendering.cxx:746
-    (anonymous namespace)::ViewCallback aView1
-sc/qa/unit/tiledrendering/tiledrendering.cxx:758
-    (anonymous namespace)::ViewCallback aView2
-sc/qa/unit/tiledrendering/tiledrendering.cxx:780
-    (anonymous namespace)::ViewCallback aView1
-sc/qa/unit/tiledrendering/tiledrendering.cxx:1152
-    (anonymous namespace)::ViewCallback aView1
-sc/qa/unit/tiledrendering/tiledrendering.cxx:1158
-    (anonymous namespace)::ViewCallback aView2
-sc/qa/unit/tiledrendering/tiledrendering.cxx:1216
-    (anonymous namespace)::ViewCallback aView1
-sc/qa/unit/tiledrendering/tiledrendering.cxx:1222
-    (anonymous namespace)::ViewCallback aView2
-sc/qa/unit/ucalc_sort.cxx:1027
-    SortRefNoUpdateSetter aUpdateSet
-sc/qa/unit/ucalc_sort.cxx:1336
-    SortRefNoUpdateSetter aUpdateSet
-sc/qa/unit/ucalc_sort.cxx:1474
-    SortRefNoUpdateSetter aUpdateSet
-sc/qa/unit/ucalc_sort.cxx:1674
-    SortRefNoUpdateSetter aUpdateSet
-sc/source/filter/inc/biffhelper.hxx:401
-    sal_uInt16 BIFF2_ID_DIMENSION
-sc/source/filter/inc/biffhelper.hxx:539
-    sal_uInt16 BIFF_ID_OBJEND
-sc/source/filter/inc/biffhelper.hxx:575
-    sal_uInt8 BIFF_DATATYPE_EMPTY
-sc/source/filter/inc/biffhelper.hxx:581
-    sal_uInt8 BIFF_BOOLERR_BOOL
-sc/source/filter/inc/defnamesbuffer.hxx:37
-    sal_Unicode BIFF_DEFNAME_CONSOLIDATEAREA
-sc/source/filter/inc/formulabase.hxx:61
-    sal_uInt8 BIFF_TOKID_NONE
-sc/source/filter/inc/formulabase.hxx:96
-    sal_uInt8 BIFF_TOKID_ARRAY
-sc/source/filter/inc/formulabase.hxx:121
-    sal_uInt8 BIFF_TOK_ARRAY_DOUBLE
-sc/source/filter/inc/formulabase.hxx:139
-    sal_uInt8 BIFF_TOK_ATTR_SPACE_SP
-sc/source/filter/inc/xlchart.hxx:198
-    sal_uInt16 EXC_CHFRBLOCK_FRAME_STANDARD
-sc/source/filter/inc/xlchart.hxx:227
-    sal_uInt16 EXC_CHSERIES_DATE
-sc/source/filter/inc/xlchart.hxx:335
-    sal_uInt8 EXC_CHLEGEND_CLOSE
-sc/source/filter/inc/xlchart.hxx:386
-    sal_uInt16 EXC_CHCHARTLINE_DROP
-sc/source/filter/inc/xlchart.hxx:453
-    sal_uInt16 EXC_CHDEFTEXT_TEXTLABEL
-sc/source/filter/inc/xlchart.hxx:641
-    sal_uInt16 EXC_CHFRAMEPOS_POINTS
-sc/source/filter/inc/xlchart.hxx:682
-    sal_uInt8 EXC_CHSERERR_END_BLANK
-sc/source/filter/inc/xlconst.hxx:127
-    sal_Int32 EXC_RK_DBL
-sc/source/filter/inc/xlcontent.hxx:40
-    sal_uInt16 EXC_FILEPASS_BIFF5
-sc/source/filter/inc/xlescher.hxx:99
-    sal_uInt8 EXC_OBJ_ARROW_NONE
-sc/source/filter/inc/xlescher.hxx:105
-    sal_uInt8 EXC_OBJ_ARROW_NARROW
-sc/source/filter/inc/xlescher.hxx:197
-    sal_uInt16 EXC_OBJ_DROPDOWN_LISTBOX
-sc/source/filter/inc/xlname.hxx:48
-    sal_Unicode EXC_BUILTIN_CONSOLIDATEAREA
-sc/source/filter/oox/externallinkbuffer.cxx:52
-    sal_uInt16 BIFF12_EXTERNALBOOK_BOOK
-sc/source/filter/oox/stylesbuffer.cxx:135
-    sal_uInt8 BIFF12_COLOR_AUTO
-sc/source/filter/oox/stylesbuffer.cxx:163
-    sal_uInt16 BIFF12_DXF_FILL_PATTERN
-sc/source/filter/oox/stylesbuffer.cxx:203
-    sal_uInt8 BIFF_FONTUNDERL_NONE
-sc/source/ui/vba/excelvbahelper.cxx:160
-    ooo::vba::excel::(anonymous namespace)::PasteCellsWarningReseter resetWarningBox
-sc/source/ui/vba/excelvbahelper.cxx:211
-    ooo::vba::excel::(anonymous namespace)::PasteCellsWarningReseter resetWarningBox
-sd/qa/unit/tiledrendering/tiledrendering.cxx:1462
-    (anonymous namespace)::ViewCallback aView1
-sd/qa/unit/tiledrendering/tiledrendering.cxx:1915
-    (anonymous namespace)::ViewCallback aView1
-sd/qa/unit/tiledrendering/tiledrendering.cxx:1923
-    (anonymous namespace)::ViewCallback aView2
-sd/source/ui/animations/CustomAnimationDialog.hxx:29
-    sal_Int32 nHandleSound
-sd/source/ui/inc/MasterPageObserver.hxx:79
-    osl::Mutex maMutex
-sd/source/ui/sidebar/PanelFactory.cxx:47
-    Reference<lang::XEventListener> mxControllerDisposeListener
-sfx2/source/appl/shutdownicon.cxx:663
-    sal_Int32 PROPHANDLE_TERMINATEVETOSTATE
-sfx2/source/doc/objstor.cxx:573
-    FontLockGuard aFontLockGuard
-sfx2/source/view/lokhelper.cxx:127
-    (anonymous namespace)::DisableCallbacks dc
 soltools/cpp/cpp.h:239
     int Lflag
 soltools/mkdepend/parse.c:40
     symhash * maininclist
 soltools/mkdepend/pr.c:34
     int width
-starmath/source/mathmlimport.cxx:2717
-    uno::Reference<beans::XPropertySet> xInfoSet
-svl/qa/unit/items/test_IndexedStyleSheets.cxx:74
-    svl::IndexedStyleSheets iss
-svtools/source/control/inettbc.cxx:87
-    osl::Mutex * pDirMutex
-svx/source/gallery2/galctrl.cxx:244
-    GalleryProgress aProgress
 svx/source/gengal/gengal.cxx:323
     (anonymous namespace)::GalApp aGalApp
-sw/inc/calc.hxx:88
-    char [] sCalc_Tdif
-sw/inc/poolfmt.hxx:64
-    sal_uInt16 POOL_FMT
-sw/inc/swtypes.hxx:101
-    SwPathFinder * pPathFinder
-sw/inc/viewsh.hxx:167
-    vcl::DeleteOnDeinit<VclPtr<vcl::Window> > mpCareWindow
-sw/qa/extras/ooxmlexport/ooxmlexport8.cxx:405
-    BorderTest borderTest
-sw/qa/extras/rtfexport/rtfexport2.cxx:548
-    BorderTest borderTest
-sw/qa/extras/ww8export/ww8export.cxx:266
-    BorderTest borderTest
-sw/source/core/layout/paintfrm.cxx:3922
-    (anonymous namespace)::BorderLinesGuard blg
-sw/source/core/text/frmform.cxx:1801
-    (anonymous namespace)::FormatLevel aLevel
-sw/source/core/view/viewsh.cxx:706
-    SwSaveSetLRUOfst aSaveLRU
-sw/source/core/view/viewsh.cxx:983
-    SwSaveSetLRUOfst aSaveLRU
-sw/source/filter/basflt/shellio.cxx:733
-    SwPauseThreadStarting aPauseThreadStarting
-sw/source/filter/html/swhtml.cxx:5596
-    (anonymous namespace)::FontCacheGuard aFontCacheGuard
-sw/source/filter/ww8/rtfsdrexport.cxx:489
-    char *[] pShapeTypes
-sw/source/filter/ww8/ww8par.cxx:6264
-    (anonymous namespace)::FontCacheGuard aFontCacheGuard
-sw/source/filter/xml/xmlexp.cxx:98
-    SwPauseThreadStarting aPauseThreadStarting
-sw/source/uibase/inc/initui.hxx:33
-    SwThesaurus * pThes
-sw/source/uibase/lingu/hhcwrp.cxx:123
-    (anonymous namespace)::SwKeepConversionDirectionStateContext aContext
-sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx:326
-    svx::sidebar::TreeNode aChild
 vcl/backendtest/VisualBackendTest.cxx:745
     (anonymous namespace)::VisualBackendTestApp aApplication
-vcl/inc/driverblocklist.hxx:96
-    uint64_t allDriverVersions
-vcl/qa/cppunit/BitmapScaleTest.cxx:288
-    BitmapSymmetryCheck aBitmapSymmetryCheck
-vcl/source/outdev/font.cxx:156
-    (anonymous namespace)::UpdateFontsGuard aUpdateFontsGuard
 vcl/source/uipreviewer/previewer.cxx:113
     (anonymous namespace)::UIPreviewApp aApp
-vcl/unx/generic/app/saldata.cxx:314
-    int __d0
-vcl/unx/generic/app/saldata.cxx:314
-    int __d1
-vcl/unx/generic/app/saldata.cxx:315
-    int __d1
-vcl/unx/generic/app/saldata.cxx:315
-    int __d0
 vcl/workben/icontest.cxx:216
     (anonymous namespace)::IconTestApp aApp
 vcl/workben/mtfdemo.cxx:162
     (anonymous namespace)::DemoMtfApp aApp
 vcl/workben/vcldemo.cxx:2445
     (anonymous namespace)::DemoApp aApp
-writerfilter/source/dmapper/DomainMapperTableHandler.cxx:825
-    std::optional<PropertyMap::Property> oRowCellBorder
-writerfilter/source/dmapper/TagLogger.hxx:35
-    tools::SvRef<TagLogger> instance
-xmloff/inc/PageMasterStyleMap.hxx:193
-    XMLPropertyMapEntry [] aXMLPageMasterHeaderImportStyleMap
-xmloff/inc/PageMasterStyleMap.hxx:194
-    XMLPropertyMapEntry [] aXMLPageMasterFooterImportStyleMap
-xmloff/inc/XMLChartPropertySetMapper.hxx:28
-    XMLPropertyMapEntry [] aXMLChartPropMap

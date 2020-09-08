@@ -54,8 +54,6 @@ class SVXCORE_DLLPUBLIC XOutBitmap
 {
 public:
 
-    static GraphicFilter* pGrfFilter;
-
     static Graphic      MirrorGraphic( const Graphic& rGraphic, const BmpMirrorFlags nMirrorFlags );
     static Animation    MirrorAnimation( const Animation& rAnimation, bool bHMirr, bool bVMirr );
     static ErrCode      WriteGraphic( const Graphic& rGraphic, OUString& rFileName,

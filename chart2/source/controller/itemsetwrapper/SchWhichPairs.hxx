@@ -146,28 +146,6 @@ const sal_uInt16 nRowWhichPairs[] =
     0
 };
 
-const sal_uInt16 nAreaWhichPairs[] =
-{
-    XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
-    XATTR_FILL_FIRST, XATTR_FILL_LAST,              //  1000 -  1016  svx/xdef.hxx
-    SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST,      //  1067 -  1078  svx/svddef.hxx
-    0
-};
-
-const sal_uInt16 nTextWhichPairs[] =
-{
-    CHARACTER_WHICHPAIRS,
-    SCHATTR_TEXT_START, SCHATTR_TEXT_END,
-    0
-};
-
-const sal_uInt16 nTextOrientWhichPairs[] =
-{
-    CHARACTER_WHICHPAIRS,
-    SCHATTR_TEXT_START, SCHATTR_TEXT_END,
-    0
-};
-
 const sal_uInt16 nStatWhichPairs[]=
 {
     SCHATTR_STAT_START, SCHATTR_STAT_END,           //    45 -    52  sch/schattr.hxx
@@ -196,27 +174,11 @@ const sal_uInt16 nLinePropertyWhichPairs[] =
     0
 };
 
-const sal_uInt16 nFillPropertyWhichPairs[] =
-{
-    XATTR_FILL_FIRST, XATTR_FILL_LAST,              //  1000 -  1016  svx/xdef.hxx
-    SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST,      //  1067 -  1078  svx/svddef.hxx
-    0
-};
-
 const sal_uInt16 nLineAndFillPropertyWhichPairs[] =
 {
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
     XATTR_FILL_FIRST, XATTR_FILL_LAST,              //  1000 -  1016  svx/xdef.hxx
     SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST,      //  1067 -  1078  svx/svddef.hxx
-    0
-};
-
-const sal_uInt16 nChartStyleWhichPairs[] =
-{
-    SCHATTR_STYLE_SHAPE,                  SCHATTR_STYLE_SHAPE,
-    SCHATTR_NUM_OF_LINES_FOR_BAR,         SCHATTR_NUM_OF_LINES_FOR_BAR,
-    SCHATTR_SPLINE_ORDER,                 SCHATTR_SPLINE_ORDER,
-    SCHATTR_SPLINE_RESOLUTION,            SCHATTR_SPLINE_RESOLUTION,
     0
 };
 

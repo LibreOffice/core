@@ -66,13 +66,6 @@ enum TileOffset
 
 }
 
-const sal_uInt16 SvxBitmapTabPage::pBitmapRanges[] =
-{
-    SID_ATTR_TRANSFORM_WIDTH,
-    SID_ATTR_TRANSFORM_HEIGHT,
-    0
-};
-
 SvxBitmapTabPage::SvxBitmapTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
     : SfxTabPage(pPage, pController, "cui/ui/bitmaptabpage.ui", "BitmapTabPage", &rInAttrs)
     , m_rOutAttrs(rInAttrs)

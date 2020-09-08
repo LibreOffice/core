@@ -488,7 +488,6 @@ public:
 
 class SvxBitmapTabPage : public SfxTabPage
 {
-    static const sal_uInt16 pBitmapRanges[];
 private:
 
     const SfxItemSet&          m_rOutAttrs;
