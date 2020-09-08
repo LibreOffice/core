@@ -174,10 +174,10 @@ public:
     }
 
     /** @overload @since LibreOffice 5.4 */
-    OUStringBuffer(OUStringLiteral const & literal):
-        pData(nullptr), nCapacity(literal.size + 16) //TODO: check for overflow
+    template<std::size_t N> OUStringBuffer(OUStringLiteral<N> const & literal):
+        pData(nullptr), nCapacity(literal.getLength() + 16) //TODO: check for overflow
     {
-        rtl_uStringbuffer_newFromStr_WithLength(&pData, literal.data, literal.size);
+        rtl_uStringbuffer_newFromStr_WithLength(&pData, literal.getStr(), literal.getLength());
     }
 #endif
 
@@ -315,13 +315,13 @@ public:
     }
 
     /** @overload @since LibreOffice 5.4 */
-    OUStringBuffer & operator =(OUStringLiteral const & literal) {
-        sal_Int32 const n = literal.size;
+    template<std::size_t N> OUStringBuffer & operator =(OUStringLiteral<N> const & literal) {
+        sal_Int32 const n = literal.getLength();
         if (n >= nCapacity) {
             ensureCapacity(n + 16); //TODO: check for overflow
         }
         std::memcpy(
-            pData->buffer, literal.data,
+            pData->buffer, literal.getStr(),
             (n + 1) * sizeof (sal_Unicode)); //TODO: check for overflow
         pData->length = n;
         return *this;
@@ -659,8 +659,8 @@ public:
     }
 
     /** @overload @since LibreOffice 5.4 */
-    OUStringBuffer & append(OUStringLiteral const & literal) {
-        return append(literal.data, literal.size);
+    template<std::size_t N> OUStringBuffer & append(OUStringLiteral<N> const & literal) {
+        return append(literal.getStr(), literal.getLength());
     }
 #endif
 
@@ -1037,8 +1037,9 @@ public:
     }
 
     /** @overload @since LibreOffice 5.4 */
-    OUStringBuffer & insert(sal_Int32 offset, OUStringLiteral const & literal) {
-        return insert(offset, literal.data, literal.size);
+    template<std::size_t N>
+    OUStringBuffer & insert(sal_Int32 offset, OUStringLiteral<N> const & literal) {
+        return insert(offset, literal.getStr(), literal.getLength());
     }
 #endif
 
@@ -1446,12 +1447,13 @@ public:
     }
 
     /** @overload @since LibreOffice 5.4 */
-    sal_Int32 indexOf(OUStringLiteral const & literal, sal_Int32 fromIndex = 0)
+    template<std::size_t N>
+    sal_Int32 indexOf(OUStringLiteral<N> const & literal, sal_Int32 fromIndex = 0)
         const
     {
         sal_Int32 n = rtl_ustr_indexOfStr_WithLength(
-            pData->buffer + fromIndex, pData->length - fromIndex, literal.data,
-            literal.size);
+            pData->buffer + fromIndex, pData->length - fromIndex, literal.getStr(),
+            literal.getLength());
         return n < 0 ? n : n + fromIndex;
     }
 #endif
@@ -1534,9 +1536,9 @@ public:
     }
 
     /** @overload @since LibreOffice 5.4 */
-    sal_Int32 lastIndexOf(OUStringLiteral const & literal) const {
+    template<std::size_t N> sal_Int32 lastIndexOf(OUStringLiteral<N> const & literal) const {
         return rtl_ustr_lastIndexOfStr_WithLength(
-            pData->buffer, pData->length, literal.data, literal.size);
+            pData->buffer, pData->length, literal.getStr(), literal.getLength());
     }
 #endif
 

@@ -27,6 +27,8 @@
 
 #include <algorithm>
 #include <math.h>
+#include <string_view>
+
 #include <frmselimpl.hxx>
 #include <AccessibleFrameSelector.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
@@ -302,7 +304,7 @@ void FrameSelectorImpl::InitColors()
     maHCLineCol = rSettings.GetLabelTextColor();
 }
 
-const OUStringLiteral aImageIds[] =
+const std::u16string_view aImageIds[] =
 {
     u"" RID_SVXBMP_FRMSEL_ARROW1,
     u"" RID_SVXBMP_FRMSEL_ARROW2,

@@ -75,7 +75,6 @@ namespace sw {
 
 extern const sal_Unicode C_NUM_REPL;
 extern const sal_Unicode C_END_PAGE_NUM;
-extern const OUStringLiteral S_PAGE_DELI;
 
 class SW_DLLPUBLIC SwTOXMark final
     : public SfxPoolItem
@@ -168,6 +167,8 @@ public:
     SAL_DLLPRIVATE void SetXTOXMark(css::uno::Reference<css::text::XDocumentIndexMark> const& xMark)
             { m_wXDocumentIndexMark = xMark; }
     void RegisterToTOXType( SwTOXType& rMark );
+
+    static constexpr OUStringLiteral S_PAGE_DELI = u", ";
 };
 
 // index types

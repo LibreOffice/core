@@ -15,8 +15,8 @@
 #include "compat.hxx"
 #include "plugin.hxx"
 
-// Find uses of OUString in conditional expressions that could be rewritten as OUStringLiteral, as
-// in
+// Find uses of OUString in conditional expressions that could be rewritten as std::u16string_view,
+// as in
 //
 //   s += (b ? OUString("xy") : OUString(z");
 
@@ -73,11 +73,11 @@ public:
             return true;
         }
         //TODO: Instead of a hardcoded list of functions, check that `fn` has overloads taking
-        // OUString and OUStringLiteral, respectively (and operator + is even more complicated than
-        // that, going via ToStringHelper<OUStringLiteral> specialization; the getNumArgs checks for
-        // the various functions are meant to guard against the unlikely case that the affected
-        // parameters get defaulted in the future; overloaded operators cannot generally have
-        // defaulted parameters):
+        // OUString and std::u16string_view, respectively (and operator + is even more complicated
+        // than that, going via ToStringHelper<std::u16string_view> specialization; the getNumArgs
+        // checks for the various functions are meant to guard against the unlikely case that the
+        // affected parameters get defaulted in the future; overloaded operators cannot generally
+        // have defaulted parameters):
         loplugin::DeclCheck const dc(fn);
         if (dc.Operator(OO_Equal).Class("OUString").Namespace("rtl").GlobalNamespace())
         {
@@ -358,7 +358,7 @@ private:
     enum class Kind
     {
         OUStringFromLiteral,
-        OUStringLiteralOrVoid,
+        StringViewOrVoid,
         Other
     };
 
@@ -373,9 +373,11 @@ private:
     Kind getKind(Expr const* expr)
     {
         auto const tc = loplugin::TypeCheck(ignoreImplicit(expr)->getType());
-        if (tc.Struct("OUStringLiteral").Namespace("rtl").GlobalNamespace() || tc.Void())
+        if (tc.ClassOrStruct("basic_string_view").StdNamespace() //TODO: check explicitly for
+            // std::basic_string_view<char16_t>
+            || tc.Void())
         {
-            return Kind::OUStringLiteralOrVoid;
+            return Kind::StringViewOrVoid;
         }
         if (loplugin::TypeCheck(expr->getType())
                 .Class("OUString")
@@ -423,8 +425,7 @@ private:
             return;
         }
         auto const k2 = getKind(cond->getFalseExpr());
-        if (k2 == Kind::Other
-            || (k1 == Kind::OUStringLiteralOrVoid && k2 == Kind::OUStringLiteralOrVoid))
+        if (k2 == Kind::Other || (k1 == Kind::StringViewOrVoid && k2 == Kind::StringViewOrVoid))
         {
             return;
         }
@@ -432,20 +433,20 @@ private:
         {
             report(DiagnosticsEngine::Warning,
                    ("replace both 2nd and 3rd operands of conditional expression with"
-                    " `rtl::OUStringLiteral`"),
+                    " `std::u16string_view`"),
                    cond->getExprLoc())
                 << cond->getSourceRange();
         }
         else
         {
-            assert((k1 == Kind::OUStringFromLiteral && k2 == Kind::OUStringLiteralOrVoid)
-                   || (k1 == Kind::OUStringLiteralOrVoid && k2 == Kind::OUStringFromLiteral));
+            assert((k1 == Kind::OUStringFromLiteral && k2 == Kind::StringViewOrVoid)
+                   || (k1 == Kind::StringViewOrVoid && k2 == Kind::OUStringFromLiteral));
             auto const second = k1 == Kind::OUStringFromLiteral;
             auto const sub
                 = (second ? cond->getTrueExpr() : cond->getFalseExpr())->IgnoreParenImpCasts();
             report(DiagnosticsEngine::Warning,
                    ("replace %select{2nd|3rd}0 operand of conditional expression with"
-                    " `rtl::OUStringLiteral`"),
+                    " `std::u16string_view`"),
                    sub->getExprLoc())
                 << (second ? 0 : 1) << sub->getSourceRange();
             report(DiagnosticsEngine::Note, "conditional expression is here", cond->getExprLoc())

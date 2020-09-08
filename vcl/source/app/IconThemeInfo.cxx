@@ -13,10 +13,8 @@
 #include <stdexcept>
 #include <algorithm>
 
-// constants for theme ids and display names. Only the theme id for high contrast is used
-// outside of this class and hence made public.
-
-const OUStringLiteral vcl::IconThemeInfo::HIGH_CONTRAST_ID(u"sifr");
+// constants for theme ids and display names. (The theme id for high contrast is used
+// outside of this class and hence made public in IconThemeInfo.)
 
 namespace {
 

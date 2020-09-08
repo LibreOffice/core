@@ -25,6 +25,7 @@
 #include <helpids.h>
 
 #include <algorithm>
+#include <string_view>
 
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
@@ -182,7 +183,7 @@ uno::Reference<media::XPlayer> MediaWindowImpl::createPlayer(const OUString& rUR
     {
         uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
 
-        static OUStringLiteral aServiceManagers[] =
+        static std::u16string_view aServiceManagers[] =
         {
             u"" AVMEDIA_MANAGER_SERVICE_PREFERRED,
             u"" AVMEDIA_MANAGER_SERVICE_NAME,

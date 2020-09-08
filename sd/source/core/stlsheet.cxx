@@ -61,6 +61,7 @@
 
 #include <cstddef>
 #include <memory>
+#include <string_view>
 
 using ::osl::MutexGuard;
 using ::osl::ClearableMutexGuard;
@@ -572,42 +573,42 @@ namespace
 {
 struct ApiNameMap
 {
-    OUStringLiteral mpApiName;
+    std::u16string_view mpApiName;
     sal_uInt32 mnHelpId;
 } const pApiNameMap[]
-    = { { OUStringLiteral(u"title"), HID_PSEUDOSHEET_TITLE },
-        { OUStringLiteral(u"subtitle"), HID_PSEUDOSHEET_SUBTITLE },
-        { OUStringLiteral(u"background"), HID_PSEUDOSHEET_BACKGROUND },
-        { OUStringLiteral(u"backgroundobjects"), HID_PSEUDOSHEET_BACKGROUNDOBJECTS },
-        { OUStringLiteral(u"notes"), HID_PSEUDOSHEET_NOTES },
-        { OUStringLiteral(u"standard"), HID_STANDARD_STYLESHEET_NAME },
-        { OUStringLiteral(u"objectwithoutfill"), HID_POOLSHEET_OBJWITHOUTFILL },
+    = { { std::u16string_view(u"title"), HID_PSEUDOSHEET_TITLE },
+        { std::u16string_view(u"subtitle"), HID_PSEUDOSHEET_SUBTITLE },
+        { std::u16string_view(u"background"), HID_PSEUDOSHEET_BACKGROUND },
+        { std::u16string_view(u"backgroundobjects"), HID_PSEUDOSHEET_BACKGROUNDOBJECTS },
+        { std::u16string_view(u"notes"), HID_PSEUDOSHEET_NOTES },
+        { std::u16string_view(u"standard"), HID_STANDARD_STYLESHEET_NAME },
+        { std::u16string_view(u"objectwithoutfill"), HID_POOLSHEET_OBJWITHOUTFILL },
 
-        { OUStringLiteral(u"Text"), HID_POOLSHEET_TEXT },
-        { OUStringLiteral(u"A4"), HID_POOLSHEET_A4 },
-        { OUStringLiteral(u"Title A4"), HID_POOLSHEET_A4_TITLE },
-        { OUStringLiteral(u"Heading A4"), HID_POOLSHEET_A4_HEADLINE },
-        { OUStringLiteral(u"Text A4"), HID_POOLSHEET_A4_TEXT },
-        { OUStringLiteral(u"A4"), HID_POOLSHEET_A0 },
-        { OUStringLiteral(u"Title A0"), HID_POOLSHEET_A0_TITLE },
-        { OUStringLiteral(u"Heading A0"), HID_POOLSHEET_A0_HEADLINE },
-        { OUStringLiteral(u"Text A0"), HID_POOLSHEET_A0_TEXT },
+        { std::u16string_view(u"Text"), HID_POOLSHEET_TEXT },
+        { std::u16string_view(u"A4"), HID_POOLSHEET_A4 },
+        { std::u16string_view(u"Title A4"), HID_POOLSHEET_A4_TITLE },
+        { std::u16string_view(u"Heading A4"), HID_POOLSHEET_A4_HEADLINE },
+        { std::u16string_view(u"Text A4"), HID_POOLSHEET_A4_TEXT },
+        { std::u16string_view(u"A4"), HID_POOLSHEET_A0 },
+        { std::u16string_view(u"Title A0"), HID_POOLSHEET_A0_TITLE },
+        { std::u16string_view(u"Heading A0"), HID_POOLSHEET_A0_HEADLINE },
+        { std::u16string_view(u"Text A0"), HID_POOLSHEET_A0_TEXT },
 
-        { OUStringLiteral(u"Graphic"), HID_POOLSHEET_GRAPHIC },
-        { OUStringLiteral(u"Shapes"), HID_POOLSHEET_SHAPES },
-        { OUStringLiteral(u"Filled"), HID_POOLSHEET_FILLED },
-        { OUStringLiteral(u"Filled Blue"), HID_POOLSHEET_FILLED_BLUE },
-        { OUStringLiteral(u"Filled Green"), HID_POOLSHEET_FILLED_GREEN },
-        { OUStringLiteral(u"Filled Red"), HID_POOLSHEET_FILLED_RED },
-        { OUStringLiteral(u"Filled Yellow"), HID_POOLSHEET_FILLED_YELLOW },
-        { OUStringLiteral(u"Outlined"), HID_POOLSHEET_OUTLINE },
-        { OUStringLiteral(u"Outlined Blue"), HID_POOLSHEET_OUTLINE_BLUE },
-        { OUStringLiteral(u"Outlined Green"), HID_POOLSHEET_OUTLINE_GREEN },
-        { OUStringLiteral(u"Outlined Red"), HID_POOLSHEET_OUTLINE_RED },
-        { OUStringLiteral(u"Outlined Yellow"), HID_POOLSHEET_OUTLINE_YELLOW },
-        { OUStringLiteral(u"Lines"), HID_POOLSHEET_LINES },
-        { OUStringLiteral(u"Arrow Line"), HID_POOLSHEET_MEASURE },
-        { OUStringLiteral(u"Arrow Dashed"), HID_POOLSHEET_LINES_DASHED }
+        { std::u16string_view(u"Graphic"), HID_POOLSHEET_GRAPHIC },
+        { std::u16string_view(u"Shapes"), HID_POOLSHEET_SHAPES },
+        { std::u16string_view(u"Filled"), HID_POOLSHEET_FILLED },
+        { std::u16string_view(u"Filled Blue"), HID_POOLSHEET_FILLED_BLUE },
+        { std::u16string_view(u"Filled Green"), HID_POOLSHEET_FILLED_GREEN },
+        { std::u16string_view(u"Filled Red"), HID_POOLSHEET_FILLED_RED },
+        { std::u16string_view(u"Filled Yellow"), HID_POOLSHEET_FILLED_YELLOW },
+        { std::u16string_view(u"Outlined"), HID_POOLSHEET_OUTLINE },
+        { std::u16string_view(u"Outlined Blue"), HID_POOLSHEET_OUTLINE_BLUE },
+        { std::u16string_view(u"Outlined Green"), HID_POOLSHEET_OUTLINE_GREEN },
+        { std::u16string_view(u"Outlined Red"), HID_POOLSHEET_OUTLINE_RED },
+        { std::u16string_view(u"Outlined Yellow"), HID_POOLSHEET_OUTLINE_YELLOW },
+        { std::u16string_view(u"Lines"), HID_POOLSHEET_LINES },
+        { std::u16string_view(u"Arrow Line"), HID_POOLSHEET_MEASURE },
+        { std::u16string_view(u"Arrow Dashed"), HID_POOLSHEET_LINES_DASHED }
       };
 
 OUString GetApiNameForHelpId(sal_uLong nId)

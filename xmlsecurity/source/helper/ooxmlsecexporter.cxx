@@ -11,6 +11,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <string_view>
 
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
@@ -86,19 +87,19 @@ public:
 
 bool OOXMLSecExporter::Impl::isOOXMLDenylist(const OUString& rStreamName)
 {
-    static const std::initializer_list<OUStringLiteral> vDenylist
+    static const std::initializer_list<std::u16string_view> vDenylist
         = { u"/%5BContent_Types%5D.xml", u"/docProps/app.xml", u"/docProps/core.xml",
             // Don't attempt to sign other signatures for now.
             u"/_xmlsignatures" };
     // Just check the prefix, as we don't care about the content type part of the stream name.
-    return std::any_of(vDenylist.begin(), vDenylist.end(), [&](const OUStringLiteral& rLiteral) {
-        return rStreamName.startsWith(rLiteral);
-    });
+    return std::any_of(
+        vDenylist.begin(), vDenylist.end(),
+        [&](const std::u16string_view& rLiteral) { return rStreamName.startsWith(rLiteral); });
 }
 
 bool OOXMLSecExporter::Impl::isOOXMLRelationDenylist(const OUString& rRelationName)
 {
-    static const std::initializer_list<OUStringLiteral> vDenylist = {
+    static const std::initializer_list<std::u16string_view> vDenylist = {
         u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties",
         u"http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties",
         u"http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/origin"

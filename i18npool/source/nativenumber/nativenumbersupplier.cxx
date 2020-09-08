@@ -648,15 +648,15 @@ OUString NativeNumberSupplierService::getNativeNumberString(const OUString& aNum
 
         struct CasingEntry
         {
-            OUStringLiteral aLiteral;
+            std::u16string_view aLiteral;
             WhichCasing     eCasing;
         };
 
         static const CasingEntry Casings[] =
         {
-            { OUStringLiteral(u"capitalize"), CAPITALIZE },
-            { OUStringLiteral(u"upper"), UPPER },
-            { OUStringLiteral(u"title"), TITLE }
+            { std::u16string_view(u"capitalize"), CAPITALIZE },
+            { std::u16string_view(u"upper"), UPPER },
+            { std::u16string_view(u"title"), TITLE }
         };
 
         sal_Int32 nStripCase = 0;
@@ -665,7 +665,7 @@ OUString NativeNumberSupplierService::getNativeNumberString(const OUString& aNum
         {
             if (rNativeNumberParams.startsWith( Casings[nCasing].aLiteral))
             {
-                nStripCase = Casings[nCasing].aLiteral.size;
+                nStripCase = Casings[nCasing].aLiteral.size();
                 break;
             }
         }

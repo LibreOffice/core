@@ -91,6 +91,7 @@
 
 #include <cassert>
 #include <memory>
+#include <string_view>
 
 using namespace ::com::sun::star;
 
@@ -1892,7 +1893,7 @@ OUString ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
                 }
                 if ( bRefStrValid )
                 {
-                    if ( OUString::number(nSoundRef) == aRefStr )
+                    if ( std::u16string_view(OUString::number(nSoundRef)) == aRefStr )
                     {
                         rStCtrl.Seek( nOldPos2 );
                         if ( SeekToRec( rStCtrl, PPT_PST_CString, nStrLen ) )

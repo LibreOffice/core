@@ -30,10 +30,8 @@ namespace sdext::presenter {
 */
 namespace PresenterHelper
 {
-    extern const OUStringLiteral msPaneURLPrefix;
+    extern const OUString msCenterPaneURL;
     extern const OUString msFullScreenPaneURL;
-
-    extern const OUStringLiteral msViewURLPrefix;
 
     /** Return the slide show controller of a running presentation that has
         the same document as the given framework controller.

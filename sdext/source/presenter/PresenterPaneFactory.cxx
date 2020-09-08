@@ -33,17 +33,6 @@ using namespace ::com::sun::star::drawing::framework;
 
 namespace sdext::presenter {
 
-const OUStringLiteral PresenterPaneFactory::msCurrentSlidePreviewPaneURL(
-    u"private:resource/pane/Presenter/Pane1");
-const OUStringLiteral PresenterPaneFactory::msNextSlidePreviewPaneURL(
-    u"private:resource/pane/Presenter/Pane2");
-const OUStringLiteral PresenterPaneFactory::msNotesPaneURL(
-    u"private:resource/pane/Presenter/Pane3");
-const OUStringLiteral PresenterPaneFactory::msToolBarPaneURL(
-    u"private:resource/pane/Presenter/Pane4");
-const OUStringLiteral PresenterPaneFactory::msSlideSorterPaneURL(
-    u"private:resource/pane/Presenter/Pane5");
-
 //===== PresenterPaneFactory ==================================================
 
 Reference<drawing::framework::XResourceFactory> PresenterPaneFactory::Create (

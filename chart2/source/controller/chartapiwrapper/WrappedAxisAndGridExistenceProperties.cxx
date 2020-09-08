@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "WrappedAxisAndGridExistenceProperties.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
@@ -342,14 +346,14 @@ WrappedAxisLabelExistenceProperty::WrappedAxisLabelExistenceProperty(bool bMain,
     switch( m_nDimensionIndex )
     {
         case 0:
-            m_aOuterName = m_bMain ? OUStringLiteral(u"HasXAxisDescription") : OUStringLiteral(u"HasSecondaryXAxisDescription");
+            m_aOuterName = m_bMain ? std::u16string_view(u"HasXAxisDescription") : std::u16string_view(u"HasSecondaryXAxisDescription");
             break;
         case 2:
             OSL_ENSURE(m_bMain,"there is no description available for a secondary z axis");
             m_aOuterName = "HasZAxisDescription";
             break;
         default:
-            m_aOuterName = m_bMain ? OUStringLiteral(u"HasYAxisDescription") : OUStringLiteral(u"HasSecondaryYAxisDescription");
+            m_aOuterName = m_bMain ? std::u16string_view(u"HasYAxisDescription") : std::u16string_view(u"HasSecondaryYAxisDescription");
             break;
     }
 }

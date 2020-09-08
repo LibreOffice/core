@@ -18,6 +18,8 @@
  */
 
 #include <memory>
+#include <string_view>
+
 #include <config_features.h>
 #include <config_feature_opencl.h>
 #include <config_feature_desktop.h>
@@ -136,7 +138,7 @@ namespace {
 
 struct ModuleToGroupNameMap_Impl
 {
-    OUStringLiteral m_pModule;
+    std::u16string_view m_pModule;
     OUString    m_sGroupName;
     sal_uInt16  m_nNodeId;
 };
