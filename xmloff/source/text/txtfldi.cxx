@@ -81,8 +81,8 @@ using namespace ::xmloff::token;
 
 
 // service prefix and service names
-const char16_t sAPI_textfield_prefix[]  = u"com.sun.star.text.TextField.";
-const char16_t sAPI_fieldmaster_prefix[] = u"com.sun.star.text.FieldMaster.";
+constexpr char16_t sAPI_textfield_prefix[]  = u"com.sun.star.text.TextField.";
+constexpr char16_t sAPI_fieldmaster_prefix[] = u"com.sun.star.text.FieldMaster.";
 const char sAPI_presentation_prefix[] = "com.sun.star.presentation.TextField.";
 
 const char sAPI_date_time[]                 = "DateTime";

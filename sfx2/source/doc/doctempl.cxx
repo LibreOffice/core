@@ -19,6 +19,8 @@
 
 
 #include <limits.h>
+#include <string_view>
+
 #include <com/sun/star/uno/Any.h>
 #include <osl/mutex.hxx>
 #include <sal/log.hxx>
@@ -458,7 +460,7 @@ OUString SfxDocumentTemplates::GetTemplateTargetURLFromComponent( const OUString
 */
 OUString SfxDocumentTemplates::ConvertResourceString(const OUString& rString)
 {
-    static const OUStringLiteral aTemplateNames[] =
+    static const std::u16string_view aTemplateNames[] =
     {
         u"" STR_TEMPLATE_NAME1_DEF,
         u"" STR_TEMPLATE_NAME2_DEF,

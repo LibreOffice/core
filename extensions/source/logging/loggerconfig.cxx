@@ -20,6 +20,7 @@
 
 #include "loggerconfig.hxx"
 #include <stdio.h>
+#include <string_view>
 
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -75,7 +76,7 @@ namespace logging
         {
             struct Variable
             {
-                OUStringLiteral pVariablePattern;
+                std::u16string_view pVariablePattern;
                 OUString sVariableValue;
             };
 
@@ -115,11 +116,11 @@ namespace logging
 
             Variable const aVariables[] =
             {
-                {OUStringLiteral(u"$(loggername)"), sLoggerName},
-                {OUStringLiteral(u"$(date)"), sDate},
-                {OUStringLiteral(u"$(time)"), sTime},
-                {OUStringLiteral(u"$(datetime)"), sDateTime},
-                {OUStringLiteral(u"$(pid)"), aPID}
+                {std::u16string_view(u"$(loggername)"), sLoggerName},
+                {std::u16string_view(u"$(date)"), sDate},
+                {std::u16string_view(u"$(time)"), sTime},
+                {std::u16string_view(u"$(datetime)"), sDateTime},
+                {std::u16string_view(u"$(pid)"), aPID}
             };
 
             for (Variable const & aVariable : aVariables)
@@ -127,7 +128,7 @@ namespace logging
                 sal_Int32 nVariableIndex = _inout_rFileURL.indexOf( aVariable.pVariablePattern );
                 if  (nVariableIndex >= 0)
                 {
-                    _inout_rFileURL = _inout_rFileURL.replaceAt( nVariableIndex, aVariable.pVariablePattern.size, aVariable.sVariableValue );
+                    _inout_rFileURL = _inout_rFileURL.replaceAt( nVariableIndex, aVariable.pVariablePattern.size(), aVariable.sVariableValue );
                 }
             }
         }

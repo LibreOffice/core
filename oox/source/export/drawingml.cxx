@@ -41,6 +41,8 @@
 #include <i18nlangtag/languagetag.hxx>
 
 #include <numeric>
+#include <string_view>
+
 #include <com/sun/star/awt/CharSet.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
@@ -2900,7 +2902,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
     OUString sPresetWarp(PresetGeometryTypeNames::GetMsoName(sShapeType));
     // ODF may have user defined TextPath, use "textPlain" as ersatz.
     if (sPresetWarp.isEmpty())
-        sPresetWarp = bIsFontworkShape ? OUStringLiteral(u"textPlain") : OUStringLiteral(u"textNoShape");
+        sPresetWarp = bIsFontworkShape ? std::u16string_view(u"textPlain") : std::u16string_view(u"textNoShape");
 
     bool bFromWordArt = !bScaleX
                         && ( sPresetWarp == "textArchDown" || sPresetWarp == "textArchUp"

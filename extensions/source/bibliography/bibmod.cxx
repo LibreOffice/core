@@ -20,7 +20,6 @@
 #include <unotools/resmgr.hxx>
 
 #include "bibmod.hxx"
-#include "bibprop.hxx"
 #include "bibresid.hxx"
 #include "datman.hxx"
 #include "bibconfig.hxx"
@@ -86,11 +85,5 @@ BibConfig*  BibModul::GetConfig()
         pBibConfig = new BibConfig;
     return pBibConfig;
 }
-
-
-// PropertyNames
-const OUStringLiteral FM_PROP_LABEL = u"Label";
-const OUStringLiteral FM_PROP_CONTROLSOURCE = u"DataField";
-const OUStringLiteral FM_PROP_NAME = u"Name";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

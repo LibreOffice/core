@@ -330,7 +330,7 @@ bool StringAdd::isSideEffectFree(Expr const* expr)
                 return true;
         // Expr::HasSideEffects does not like stuff that passes through OUStringLiteral
         auto dc2 = loplugin::DeclCheck(constructExpr->getConstructor()->getParent());
-        if (dc2.Struct("OUStringLiteral").Namespace("rtl").GlobalNamespace())
+        if (dc2.Class("OUStringLiteral").Namespace("rtl").GlobalNamespace())
             return true;
     }
 
@@ -338,7 +338,7 @@ bool StringAdd::isSideEffectFree(Expr const* expr)
     if (auto functionalCastExpr = dyn_cast<CXXFunctionalCastExpr>(expr))
     {
         auto tc = loplugin::TypeCheck(functionalCastExpr->getType());
-        if (tc.Struct("OUStringLiteral").Namespace("rtl").GlobalNamespace())
+        if (tc.Class("OUStringLiteral").Namespace("rtl").GlobalNamespace())
             return isSideEffectFree(functionalCastExpr->getSubExpr());
     }
 

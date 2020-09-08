@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <config_folders.h>
 
 #include <vcl/svapp.hxx>
@@ -259,7 +263,7 @@ void printf_package(
         if (reg.IsAmbiguous)
             value = "unknown";
         else
-            value = reg.Value ? OUStringLiteral(u"yes") : OUStringLiteral(u"no");
+            value = reg.Value ? std::u16string_view(u"yes") : std::u16string_view(u"no");
     }
     else
         value = "n/a";

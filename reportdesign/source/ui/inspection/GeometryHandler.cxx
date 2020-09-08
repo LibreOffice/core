@@ -21,6 +21,7 @@
 
 #include <iterator>
 #include <map>
+#include <string_view>
 
 #include <GeometryHandler.hxx>
 
@@ -806,9 +807,9 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
     if ( nId != -1 )
     {
         aOut.Category = (OPropertyInfoService::getPropertyUIFlags(nId ) & PropUIFlags::DataProperty) ?
-                                    OUStringLiteral(u"Data")
+                                    std::u16string_view(u"Data")
                                                         :
-                                    OUStringLiteral(u"General");
+                                    std::u16string_view(u"General");
         aOut.HelpURL = HelpIdUrl::getHelpURL( OPropertyInfoService::getPropertyHelpId( nId ) );
         aOut.DisplayName = OPropertyInfoService::getPropertyTranslation(nId);
     }

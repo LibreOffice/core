@@ -697,7 +697,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 SfxItemPropertyMapEntry* aTextDefaultMap_Impl = GetTextDefaultPropertyMap();
                 m_aMapEntriesArr[nPropertyId] = aTextDefaultMap_Impl;
                 for( SfxItemPropertyMapEntry * pMap = aTextDefaultMap_Impl;
-                     pMap->aName.getLength(); ++pMap )
+                     !pMap->aName.empty(); ++pMap )
                 {
                     // UNO_NAME_PAGE_DESC_NAME should keep its MAYBEVOID flag
                     if (RES_PAGEDESC != pMap->nWID || MID_PAGEDESC_PAGEDESCNAME != pMap->nMemberId)

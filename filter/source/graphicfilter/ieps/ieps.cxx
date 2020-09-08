@@ -36,6 +36,7 @@
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <o3tl/safeint.hxx>
 #include <memory>
+#include <string_view>
 
 class FilterConfigItem;
 
@@ -303,7 +304,7 @@ static void WriteFileInThread(void *wData)
 
 static bool RenderAsBMPThroughHelper(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
                                      Graphic& rGraphic,
-                                     std::initializer_list<OUStringLiteral> aProgNames,
+                                     std::initializer_list<std::u16string_view> aProgNames,
                                      rtl_uString* pArgs[], size_t nArgs)
 {
     oslProcess aProcess = nullptr;

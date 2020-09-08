@@ -28,10 +28,8 @@ using namespace ::com::sun::star::presentation;
 
 namespace sdext::presenter {
 
-const OUStringLiteral PresenterHelper::msPaneURLPrefix( u"private:resource/pane/");
+const OUStringLiteral msPaneURLPrefix( u"private:resource/pane/");
 const OUString PresenterHelper::msFullScreenPaneURL( msPaneURLPrefix + "FullScreenPane");
-
-const OUStringLiteral PresenterHelper::msViewURLPrefix( u"private:resource/view/");
 
 Reference<presentation::XSlideShowController> PresenterHelper::GetSlideShowController (
     const Reference<frame::XController>& rxController)

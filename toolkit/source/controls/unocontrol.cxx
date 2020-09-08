@@ -41,6 +41,7 @@
 
 #include <algorithm>
 #include <map>
+#include <string_view>
 #include <vector>
 
 using namespace ::com::sun::star;
@@ -1393,7 +1394,7 @@ void UnoControl::setDesignMode( sal_Bool bOn )
         maAccessibleContext.clear();
 
         aModeChangeEvent.Source = *this;
-        aModeChangeEvent.NewMode = mbDesignMode ? OUStringLiteral(u"design") : OUStringLiteral(u"alive" );
+        aModeChangeEvent.NewMode = mbDesignMode ? std::u16string_view(u"design") : std::u16string_view(u"alive" );
     }
 
     // dispose current AccessibleContext, if we have one - without Mutex lock

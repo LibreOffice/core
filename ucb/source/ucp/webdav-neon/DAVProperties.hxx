@@ -37,18 +37,18 @@ namespace webdav_ucp
 
 struct DAVProperties
 {
-    static const OUStringLiteral CREATIONDATE;
-    static const OUStringLiteral DISPLAYNAME;
-    static const OUStringLiteral GETCONTENTLANGUAGE;
-    static const OUStringLiteral GETCONTENTLENGTH;
-    static const OUStringLiteral GETCONTENTTYPE;
-    static const OUStringLiteral GETETAG;
-    static const OUStringLiteral GETLASTMODIFIED;
-    static const OUStringLiteral LOCKDISCOVERY;
-    static const OUStringLiteral RESOURCETYPE;
-    static const OUStringLiteral SOURCE;
-    static const OUStringLiteral SUPPORTEDLOCK;
-    static const OUStringLiteral EXECUTABLE;
+    static constexpr OUStringLiteral CREATIONDATE = u"DAV:creationdate";
+    static constexpr OUStringLiteral DISPLAYNAME = u"DAV:displayname";
+    static constexpr OUStringLiteral GETCONTENTLANGUAGE = u"DAV:getcontentlanguage";
+    static constexpr OUStringLiteral GETCONTENTLENGTH = u"DAV:getcontentlength";
+    static constexpr OUStringLiteral GETCONTENTTYPE = u"DAV:getcontenttype";
+    static constexpr OUStringLiteral GETETAG = u"DAV:getetag";
+    static constexpr OUStringLiteral GETLASTMODIFIED = u"DAV:getlastmodified";
+    static constexpr OUStringLiteral LOCKDISCOVERY = u"DAV:lockdiscovery";
+    static constexpr OUStringLiteral RESOURCETYPE = u"DAV:resourcetype";
+    static constexpr OUStringLiteral SOURCE = u"DAV:source";
+    static constexpr OUStringLiteral SUPPORTEDLOCK = u"DAV:supportedlock";
+    static constexpr OUStringLiteral EXECUTABLE = u"http://apache.org/dav/props/executable";
 
     static void createNeonPropName( const OUString & rFullName,
                                     NeonPropName & rName );

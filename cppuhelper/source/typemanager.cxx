@@ -15,6 +15,7 @@
 #include <cstring>
 #include <set>
 #include <stack>
+#include <string_view>
 #include <vector>
 
 #include <com/sun/star/container/NoSuchElementException.hpp>
@@ -1802,27 +1803,27 @@ cppuhelper::TypeManager::TypeManager():
 css::uno::Any cppuhelper::TypeManager::find(OUString const & name) {
     //TODO: caching? (here or in unoidl::Manager?)
     struct Simple {
-        OUStringLiteral name;
+        std::u16string_view name;
         css::uno::TypeClass typeClass;
     };
     static Simple const simple[] = {
-        { OUStringLiteral(u"void"), css::uno::TypeClass_VOID },
-        { OUStringLiteral(u"boolean"), css::uno::TypeClass_BOOLEAN },
-        { OUStringLiteral(u"byte"), css::uno::TypeClass_BYTE },
-        { OUStringLiteral(u"short"), css::uno::TypeClass_SHORT },
-        { OUStringLiteral(u"unsigned short"),
+        { std::u16string_view(u"void"), css::uno::TypeClass_VOID },
+        { std::u16string_view(u"boolean"), css::uno::TypeClass_BOOLEAN },
+        { std::u16string_view(u"byte"), css::uno::TypeClass_BYTE },
+        { std::u16string_view(u"short"), css::uno::TypeClass_SHORT },
+        { std::u16string_view(u"unsigned short"),
           css::uno::TypeClass_UNSIGNED_SHORT },
-        { OUStringLiteral(u"long"), css::uno::TypeClass_LONG },
-        { OUStringLiteral(u"unsigned long"), css::uno::TypeClass_UNSIGNED_LONG },
-        { OUStringLiteral(u"hyper"), css::uno::TypeClass_HYPER },
-        { OUStringLiteral(u"unsigned hyper"),
+        { std::u16string_view(u"long"), css::uno::TypeClass_LONG },
+        { std::u16string_view(u"unsigned long"), css::uno::TypeClass_UNSIGNED_LONG },
+        { std::u16string_view(u"hyper"), css::uno::TypeClass_HYPER },
+        { std::u16string_view(u"unsigned hyper"),
           css::uno::TypeClass_UNSIGNED_HYPER },
-        { OUStringLiteral(u"float"), css::uno::TypeClass_FLOAT },
-        { OUStringLiteral(u"double"), css::uno::TypeClass_DOUBLE },
-        { OUStringLiteral(u"char"), css::uno::TypeClass_CHAR },
-        { OUStringLiteral(u"string"), css::uno::TypeClass_STRING },
-        { OUStringLiteral(u"type"), css::uno::TypeClass_TYPE },
-        { OUStringLiteral(u"any"), css::uno::TypeClass_ANY } };
+        { std::u16string_view(u"float"), css::uno::TypeClass_FLOAT },
+        { std::u16string_view(u"double"), css::uno::TypeClass_DOUBLE },
+        { std::u16string_view(u"char"), css::uno::TypeClass_CHAR },
+        { std::u16string_view(u"string"), css::uno::TypeClass_STRING },
+        { std::u16string_view(u"type"), css::uno::TypeClass_TYPE },
+        { std::u16string_view(u"any"), css::uno::TypeClass_ANY } };
     for (std::size_t i = 0; i != SAL_N_ELEMENTS(simple); ++i) {
         if (name == simple[i].name) {
             return css::uno::makeAny<

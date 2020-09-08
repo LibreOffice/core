@@ -77,7 +77,7 @@ private:
     ReturnFallback(const std::vector<IconThemeInfo>& installedThemes);
 
     /** The name of the icon theme which is used as fallback */
-    static const OUStringLiteral FALLBACK_ICON_THEME_ID;
+    static constexpr OUStringLiteral FALLBACK_ICON_THEME_ID = u"colibre";
 
 
     static OUString

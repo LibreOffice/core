@@ -628,8 +628,10 @@ namespace fileaccess
 
     public:
 
-        static const OUStringLiteral FolderContentType;
-        static const OUStringLiteral FileContentType;
+        static constexpr OUStringLiteral FolderContentType =
+            u"application/vnd.sun.staroffice.fsys-folder";
+        static constexpr OUStringLiteral FileContentType =
+            u"application/vnd.sun.staroffice.fsys-file";
 
 
     private:

@@ -18,7 +18,7 @@
 namespace test1
 {
 static const char XXX1[] = "xxx";
-static const char16_t XXX1u[] = u"xxx";
+static constexpr char16_t XXX1u[] = u"xxx";
 static const char XXX2[] = "xxx";
 void f1(OUString s1, int i, OString o)
 {

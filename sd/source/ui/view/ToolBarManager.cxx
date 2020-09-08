@@ -328,22 +328,6 @@ private:
 
 //===== ToolBarManager ========================================================
 
-const OUStringLiteral ToolBarManager::msToolBar(u"toolbar");
-const OUStringLiteral ToolBarManager::msOptionsToolBar(u"optionsbar");
-const OUStringLiteral ToolBarManager::msCommonTaskToolBar(u"commontaskbar");
-const OUStringLiteral ToolBarManager::msViewerToolBar(u"viewerbar");
-const OUStringLiteral ToolBarManager::msSlideSorterToolBar(u"slideviewtoolbar");
-const OUStringLiteral ToolBarManager::msSlideSorterObjectBar(u"slideviewobjectbar");
-const OUStringLiteral ToolBarManager::msOutlineToolBar(u"outlinetoolbar");
-const OUStringLiteral ToolBarManager::msMasterViewToolBar(u"masterviewtoolbar");
-const OUStringLiteral ToolBarManager::msDrawingObjectToolBar(u"drawingobjectbar");
-const OUStringLiteral ToolBarManager::msGluePointsToolBar(u"gluepointsobjectbar");
-const OUStringLiteral ToolBarManager::msTextObjectBar(u"textobjectbar");
-const OUStringLiteral ToolBarManager::msBezierObjectBar(u"bezierobjectbar");
-const OUStringLiteral ToolBarManager::msGraphicObjectBar(u"graphicobjectbar");
-const OUStringLiteral ToolBarManager::msMediaObjectBar(u"mediaobjectbar");
-const OUStringLiteral ToolBarManager::msTableObjectBar(u"tableobjectbar");
-
 std::shared_ptr<ToolBarManager> ToolBarManager::Create (
     ViewShellBase& rBase,
     const std::shared_ptr<sd::tools::EventMultiplexer>& rpMultiplexer,

@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <cstddef>
+#include <string_view>
 #include <utility>
 
 #include <WPFTEncodingDialog.hxx>
@@ -28,7 +29,7 @@ namespace writerperfect
 {
 namespace
 {
-std::pair<OUStringLiteral, OUStringLiteral> const s_encodings[]
+std::pair<std::u16string_view, std::u16string_view> const s_encodings[]
     = { { u"MacArabic", u"Arabic (Apple Macintosh)" },
         { u"CP864", u"Arabic (DOS/OS2-864)" },
         { u"CP1006", u"Arabic (IBM-1006)" },

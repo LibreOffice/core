@@ -56,7 +56,7 @@ SfxItemPropertyMap_Impl::SfxItemPropertyMap_Impl( const SfxItemPropertyMap_Impl*
 SfxItemPropertyMap::SfxItemPropertyMap( const SfxItemPropertyMapEntry* pEntries ) :
     m_pImpl( new SfxItemPropertyMap_Impl )
 {
-    while( pEntries->aName.getLength() )
+    while( !pEntries->aName.empty() )
     {
         (*m_pImpl) [ pEntries->aName ] = pEntries;
         ++pEntries;

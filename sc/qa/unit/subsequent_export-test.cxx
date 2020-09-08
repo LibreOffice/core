@@ -3530,7 +3530,7 @@ void ScExportTest::testSupBookVirtualPathXLS()
 #ifdef _WIN32
     aFormula = aFormula.copy(0, 9) + aFormula.copy(12); // strip drive letter, e.g. 'C:/'
 #endif
-    OUString aExpectedFormula = OUStringLiteral(u"'file:///home/timar/Documents/external.xls'#$Sheet1.A1");
+    OUString aExpectedFormula = "'file:///home/timar/Documents/external.xls'#$Sheet1.A1";
     if (aFormula != aExpectedFormula)
     {
         CppUnit::Asserter::failNotEqual(to_std_string(aExpectedFormula),

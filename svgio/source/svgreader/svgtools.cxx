@@ -29,12 +29,6 @@
 
 namespace svgio::svgreader
 {
-        // common non-token strings
-        const OUStringLiteral commonStrings::aStrUserSpaceOnUse(u"userSpaceOnUse");
-        const OUStringLiteral commonStrings::aStrObjectBoundingBox(u"objectBoundingBox");
-        const OUStringLiteral commonStrings::aStrNonzero(u"nonzero");
-        const OUStringLiteral commonStrings::aStrEvenOdd(u"evenodd");
-
         basegfx::B2DHomMatrix SvgAspectRatio::createLinearMapping(const basegfx::B2DRange& rTarget, const basegfx::B2DRange& rSource)
         {
             basegfx::B2DHomMatrix aRetval;

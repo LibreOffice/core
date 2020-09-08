@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -112,7 +116,7 @@ std::unique_ptr<weld::TreeIter> SwChangeDBDlg::Insert(const OUString& rDBName)
     OUString sUserData = rDBName.getToken(0, DB_DELIM, nIdx);
     sal_Int32 nCommandType = sUserData.toInt32();
 
-    OUString rToInsert = nCommandType ? OUStringLiteral(u"" RID_BMP_DBQUERY) : OUStringLiteral(u"" RID_BMP_DBTABLE);
+    OUString rToInsert = nCommandType ? std::u16string_view(u"" RID_BMP_DBQUERY) : std::u16string_view(u"" RID_BMP_DBTABLE);
 
     std::unique_ptr<weld::TreeIter> xIter(m_xUsedDBTLB->make_iterator());
     if (m_xUsedDBTLB->get_iter_first(*xIter))

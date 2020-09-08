@@ -49,7 +49,6 @@
 
 #include <app.hrc>
 #include <strings.hrc>
-#include <strmname.h>
 #include <FrameView.hxx>
 #include <optsitem.hxx>
 #include <Outliner.hxx>
@@ -80,6 +79,11 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using ::sd::framework::FrameworkHelper;
+
+// PowerPoint-Filter
+const OUStringLiteral pFilterPowerPoint97( u"MS PowerPoint 97" );
+const OUStringLiteral pFilterPowerPoint97Template( u"MS PowerPoint 97 Vorlage" );
+const OUStringLiteral pFilterPowerPoint97AutoPlay( u"MS PowerPoint 97 AutoPlay" );
 
 namespace sd {
 

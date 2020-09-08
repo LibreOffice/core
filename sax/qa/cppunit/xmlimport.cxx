@@ -256,7 +256,7 @@ class DummyTokenHandler : public sax_fastparser::FastTokenHandlerBase
 {
 public:
     const static std::string_view tokens[];
-    const static OUStringLiteral namespaceURIs[];
+    const static std::u16string_view namespaceURIs[];
     const static std::string_view namespacePrefixes[];
 
     // XFastTokenHandler
@@ -273,7 +273,7 @@ const std::string_view DummyTokenHandler::tokens[] = {
     "document", "spacing",
     "Player", "Height" };
 
-const OUStringLiteral DummyTokenHandler::namespaceURIs[] = {
+const std::u16string_view DummyTokenHandler::namespaceURIs[] = {
     u"http://www.w3.org/2000/09/xmldsig#",
     u"http://schemas.openxmlformats.org/wordprocessingml/2006/main/",
     u"xyzsports.com/players/football/" };

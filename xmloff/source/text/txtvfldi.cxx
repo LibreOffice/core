@@ -52,7 +52,7 @@
 
 
 // service names
-const char16_t sAPI_fieldmaster_prefix[] = u"com.sun.star.text.FieldMaster.";
+constexpr char16_t sAPI_fieldmaster_prefix[] = u"com.sun.star.text.FieldMaster.";
 const char sAPI_get_expression[]     = "GetExpression";
 const char sAPI_set_expression[]     = "SetExpression";
 const char sAPI_user[]               = "User";

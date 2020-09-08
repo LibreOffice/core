@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -60,7 +64,7 @@ class ImageButtonHdl;
 const sal_uInt16 gButtonSlots[] = { SID_INSERT_TABLE, SID_INSERT_DIAGRAM, SID_INSERT_GRAPHIC, SID_INSERT_AVMEDIA };
 static const char* gButtonToolTips[] = { STR_INSERT_TABLE, STR_INSERT_CHART, STR_INSERT_PICTURE, STR_INSERT_MOVIE };
 
-const OUStringLiteral aSmallPlaceHolders[] =
+const std::u16string_view aSmallPlaceHolders[] =
 {
     u"" BMP_PLACEHOLDER_TABLE_SMALL,
     u"" BMP_PLACEHOLDER_CHART_SMALL,
@@ -72,7 +76,7 @@ const OUStringLiteral aSmallPlaceHolders[] =
     u"" BMP_PLACEHOLDER_MOVIE_SMALL_HOVER
 };
 
-const OUStringLiteral aBigPlaceHolders[] =
+const std::u16string_view aBigPlaceHolders[] =
 {
     u"" BMP_PLACEHOLDER_TABLE_LARGE,
     u"" BMP_PLACEHOLDER_CHART_LARGE,

@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <svl/visitem.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <osl/diagnose.h>
@@ -36,7 +40,7 @@ bool SfxVisibilityItem::GetPresentation(SfxItemPresentation,
                                         OUString & rText,
                                         const IntlWrapper&) const
 {
-    rText = m_nValue.bVisible ? OUStringLiteral(u"TRUE") : OUStringLiteral(u"FALSE");
+    rText = m_nValue.bVisible ? std::u16string_view(u"TRUE") : std::u16string_view(u"FALSE");
     return true;
 }
 
