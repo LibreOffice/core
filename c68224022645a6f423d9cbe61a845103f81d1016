@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1e1f0748_3be0c832",
+        "filename": "sw/source/core/access/AccessibilityCheck.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 670,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-08T08:37:43Z",
+      "side": 1,
+      "message": "A typo.\n\nPlease also add a comment that this is part of the check that applies to Writer\u0027s frames; and also add a counterpart comment in the object check, that it applies to draw objects like text boxes and shapes. So that it is clear that the two checks are for different types of floating texts.",
+      "range": {
+        "startLine": 670,
+        "startChar": 9,
+        "endLine": 670,
+        "endChar": 10
+      },
+      "revId": "c68224022645a6f423d9cbe61a845103f81d1016",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
