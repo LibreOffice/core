@@ -199,6 +199,8 @@ struct DataRowPointStyle
     // ctor for use in import of <chart:data-label> as child of <chart:series>
     DataRowPointStyle(StyleType eType, const OUString& sStyleName, sal_Int32 nAttachedAxis = 0)
         : meType(eType)
+        , m_nPointIndex(0)
+        , m_nPointRepeat(0)
         , msStyleName(sStyleName)
         , mnAttachedAxis(nAttachedAxis)
         , mbSymbolSizeForSeriesIsMissingInFile(false)
