@@ -589,15 +589,21 @@ bool ScValidationData::IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos
             break;
 
         case SC_VALID_TEXTLEN:
-            bOk = !bIsVal;          // only Text
-            if ( bOk )
+            bOk = !bIsVal;
+            if (bOk) // Text
             {
                 double nLenVal = static_cast<double>(aString.getLength());
                 ScRefCellValue aTmpCell(nLenVal);
                 bOk = IsCellValid(aTmpCell, rPos);
             }
+            else     // Number
+            {
+                const ScPatternAttr* pPattern
+                    = mpDoc->GetPattern(rPos.Col(), rPos.Row(), rPos.Tab());
+                aString = rCell.getString(mpDoc);
+                bOk = IsDataValid(aString, *pPattern, rPos);
+            }
             break;
-
         default:
             OSL_FAIL("not yet done");
             break;
