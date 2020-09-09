@@ -2093,6 +2093,7 @@ RTFReferenceTable::Entries_t RTFDocumentImpl::deduplicateStyleTable()
     for (auto const& it : m_aStyleTableEntries)
     {
         auto pStyle = it.second;
+        ret[it.first] = pStyle;
         // ugly downcasts here, but can't easily replace the members with
         // RTFReferenceProperties because dmapper wants SvRef<Properties> anyway
         RTFValue::Pointer_t const pBasedOn(
@@ -2101,6 +2102,10 @@ RTFReferenceTable::Entries_t RTFDocumentImpl::deduplicateStyleTable()
         if (pBasedOn)
         {
             int const nBasedOn(pBasedOn->getInt());
+            // don't deduplicate yourself - especially a potential problem for the default style.
+            if (it.first == nBasedOn)
+                continue;
+
             auto const itParent(m_aStyleTableEntries.find(nBasedOn)); // definition as read!
             if (itParent != m_aStyleTableEntries.end())
             {
@@ -2120,14 +2125,13 @@ RTFReferenceTable::Entries_t RTFDocumentImpl::deduplicateStyleTable()
                             static_cast<RTFReferenceProperties&>(*itParent->second).getAttributes(),
                             nStyleType));
 
-                pStyle = new RTFReferenceProperties(attributes, sprms);
+                ret[it.first] = new RTFReferenceProperties(attributes, sprms);
             }
             else
             {
                 SAL_WARN("writerfilter.rtf", "parent style not found: " << nBasedOn);
             }
         }
-        ret[it.first] = pStyle;
     }
     assert(ret.size() == m_aStyleTableEntries.size());
     return ret;
