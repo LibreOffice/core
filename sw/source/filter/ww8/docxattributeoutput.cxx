@@ -5825,6 +5825,17 @@ OString DocxAttributeOutput::GetOLEStyle(const SwFlyFrameFormat& rFormat, const 
                         "pt;height:" + OString::number( double( rSize.Height() ) / 20 ) +
                         "pt"; //from VMLExport::AddRectangleDimensions(), it does: value/20
 
+    const SvxLRSpaceItem& rLRSpace = rFormat.GetLRSpace();
+    if (rLRSpace.IsExplicitZeroMarginValLeft() || rLRSpace.GetLeft())
+        sShapeStyle += ";mso-wrap-distance-left:" + OString::number(double(rLRSpace.GetLeft()) / 20) + "pt";
+    if (rLRSpace.IsExplicitZeroMarginValRight() || rLRSpace.GetRight())
+        sShapeStyle += ";mso-wrap-distance-right:" + OString::number(double(rLRSpace.GetRight()) / 20) + "pt";
+    const SvxULSpaceItem& rULSpace = rFormat.GetULSpace();
+    if (rULSpace.GetUpper())
+        sShapeStyle += ";mso-wrap-distance-top:" + OString::number(double(rULSpace.GetUpper()) / 20) + "pt";
+    if (rULSpace.GetLower())
+        sShapeStyle += ";mso-wrap-distance-bottom:" + OString::number(double(rULSpace.GetLower()) / 20) + "pt";
+
     //Export anchor setting, if it exists
     if (!aPos.isEmpty() && !aAnch.isEmpty())
         sShapeStyle = aPos + sShapeStyle  + aAnch;
