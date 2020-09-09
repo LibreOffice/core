@@ -2101,6 +2101,10 @@ RTFReferenceTable::Entries_t RTFDocumentImpl::deduplicateStyleTable()
         if (pBasedOn)
         {
             int const nBasedOn(pBasedOn->getInt());
+            // don't deduplicate yourself - especially a potential problem for the default style.
+            if (it.first == nBasedOn)
+                continue;
+
             auto const itParent(m_aStyleTableEntries.find(nBasedOn)); // definition as read!
             if (itParent != m_aStyleTableEntries.end())
             {
