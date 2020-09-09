@@ -59,6 +59,8 @@ struct ScSheetLimits final : public salhelper::SimpleReferenceObject
 
     // equivalent of MAXROWCOUNT in address.hxx
     SCROW GetMaxRowCount() const { return mnMaxRow + 1; }
+    // equivalent of MAXCOLCOUNT in address.hxx
+    SCCOL GetMaxColCount() const { return mnMaxCol + 1; }
 };
 
 #endif

@@ -47,11 +47,17 @@
 using namespace com::sun::star;
 
 //  maximum values for UI
-#define SCNAV_MAXCOL        (MAXCOLCOUNT)
+static SCCOL SCNAV_MAXCOL(const ScSheetLimits& rLimits) { return rLimits.GetMaxColCount(); }
 // macro is sufficient since only used in ctor
-#define SCNAV_COLDIGITS     (static_cast<sal_Int32>( floor( log10( static_cast<double>(SCNAV_MAXCOL)))) + 1)   // 1...256...18278
+static sal_Int32 SCNAV_COLDIGITS(const ScSheetLimits& rLimits)
+{
+    return static_cast<sal_Int32>( floor( log10( static_cast<double>(SCNAV_MAXCOL(rLimits)))) ) + 1;   // 1...256...18278
+}
 // precomputed constant because it is used in every change of spin button field
-const sal_Int32 SCNAV_COLLETTERS = ::ScColToAlpha(SCNAV_MAXCOL).getLength();    // A...IV...ZZZ
+static sal_Int32 SCNAV_COLLETTERS(const ScSheetLimits& rLimits)
+{
+    return ::ScColToAlpha(SCNAV_MAXCOL(rLimits)).getLength();    // A...IV...ZZZ
+}
 
 static SCROW SCNAV_MAXROW(const ScSheetLimits& rSheetLimits)
 {
@@ -72,10 +78,10 @@ void ScNavigatorDlg::ReleaseFocus()
 
 namespace
 {
-    SCCOL NumToAlpha(SCCOL nColNo, OUString& rStr)
+    SCCOL NumToAlpha(const ScSheetLimits& rSheetLimits, SCCOL nColNo, OUString& rStr)
     {
-        if ( nColNo > SCNAV_MAXCOL )
-            nColNo = SCNAV_MAXCOL;
+        if ( nColNo > SCNAV_MAXCOL(rSheetLimits) )
+            nColNo = SCNAV_MAXCOL(rSheetLimits);
         else if ( nColNo < 1 )
             nColNo = 1;
 
@@ -95,10 +101,11 @@ namespace
             if (::AlphaToCol( rDoc, nColumn, rStr))
                 ++nColumn;
 
-            if ( (rStr.getLength() > SCNAV_COLLETTERS) || (nColumn > SCNAV_MAXCOL) )
+            if ( (rStr.getLength() > SCNAV_COLLETTERS(rDoc.GetSheetLimits())) ||
+                 (nColumn > SCNAV_MAXCOL(rDoc.GetSheetLimits())) )
             {
-                nColumn = SCNAV_MAXCOL;
-                NumToAlpha( nColumn, rStr );
+                nColumn = SCNAV_MAXCOL(rDoc.GetSheetLimits());
+                NumToAlpha( rDoc.GetSheetLimits(), nColumn, rStr );
             }
         }
         else
@@ -107,12 +114,12 @@ namespace
         return nColumn;
     }
 
-    SCCOL NumStrToAlpha(OUString& rStr)
+    SCCOL NumStrToAlpha(const ScSheetLimits& rSheetLimits, OUString& rStr)
     {
         SCCOL  nColumn = 0;
 
         if ( CharClass::isAsciiNumeric(rStr) )
-            nColumn = NumToAlpha( static_cast<SCCOL>(rStr.toInt32()), rStr );
+            nColumn = NumToAlpha( rSheetLimits, static_cast<SCCOL>(rStr.toInt32()), rStr );
         else
             rStr.clear();
 
@@ -130,13 +137,12 @@ IMPL_LINK(ScNavigatorDlg, ParseRowInputHdl, int*, result, bool)
     {
         //  nKeyGroup is no longer set at VCL, in cause of lack of keyinput
 
+        ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current() );
+        auto& rDoc = *pViewSh->GetViewData().GetDocument();
         if ( CharClass::isAsciiNumeric(aStrCol) )
-            nCol = NumStrToAlpha( aStrCol );
+            nCol = NumStrToAlpha( rDoc.GetSheetLimits(), aStrCol );
         else
-        {
-            ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current()  );
-            nCol = AlphaToNum( *pViewSh->GetViewData().GetDocument(), aStrCol );
-        }
+            nCol = AlphaToNum( rDoc, aStrCol );
     }
     else
         nCol = 0;
@@ -349,8 +355,8 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, vcl::Window* pParent)
     //max rows is 1,000,000, which is too long for typical use
     m_xEdRow->connect_activate(LINK(this, ScNavigatorDlg, ExecuteRowHdl));
 
-    m_xEdCol->set_range(1, SCNAV_MAXCOL);
-    m_xEdCol->set_width_chars(SCNAV_COLDIGITS);   // 1...256...18278 or A...IV...ZZZ
+    m_xEdCol->set_range(1, SCNAV_MAXCOL(pDoc->GetSheetLimits()));
+    m_xEdCol->set_width_chars(SCNAV_COLDIGITS(pDoc->GetSheetLimits()));   // 1...256...18278 or A...IV...ZZZ
     m_xEdCol->connect_activate(LINK(this, ScNavigatorDlg, ExecuteColHdl));
     m_xEdCol->connect_output(LINK(this, ScNavigatorDlg, FormatRowOutputHdl));
     m_xEdCol->connect_input(LINK(this, ScNavigatorDlg, ParseRowInputHdl));
