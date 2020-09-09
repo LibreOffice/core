@@ -691,8 +691,7 @@ DECLARE_OOXMLEXPORT_TEST(testImageSpaceSettings, "tdf135047_ImageSpaceSettings.f
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:drawing/wp:anchor", "distR", "90170");
 }
 
-// TODO: change this to an export test once wrap distance export (TDF#135663) is implemented
-DECLARE_OOXMLIMPORT_TEST(testTdf13660, "tdf135660.docx")
+DECLARE_OOXMLEXPORT_TEST(testTdf135660, "tdf135660.docx")
 {
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     const uno::Reference<drawing::XShape> xShape = getShape(1);
