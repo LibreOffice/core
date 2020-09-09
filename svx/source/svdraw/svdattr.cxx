@@ -940,6 +940,16 @@ SfxPoolItem* SdrTextFitToSizeTypeItem::CreateDefault() { return new SdrTextFitTo
 
 SdrTextFitToSizeTypeItem* SdrTextFitToSizeTypeItem::Clone(SfxItemPool* /*pPool*/) const         { return new SdrTextFitToSizeTypeItem(*this); }
 
+bool SdrTextFitToSizeTypeItem::operator==(const SfxPoolItem& rItem) const
+{
+    if (!SfxEnumItem<css::drawing::TextFitToSizeType>::operator==(rItem))
+    {
+        return false;
+    }
+
+    return m_nMaxScale == static_cast<const SdrTextFitToSizeTypeItem&>(rItem).m_nMaxScale;
+}
+
 sal_uInt16 SdrTextFitToSizeTypeItem::GetValueCount() const { return 4; }
 
 OUString SdrTextFitToSizeTypeItem::GetValueTextByPos(sal_uInt16 nPos)

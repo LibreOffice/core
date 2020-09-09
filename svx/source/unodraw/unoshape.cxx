@@ -2411,6 +2411,19 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
         break;
     }
 
+    case OWN_ATTR_TEXTFITTOSIZESCALE:
+    {
+        sal_Int16 nMaxScale = 0;
+        if (rValue >>= nMaxScale)
+        {
+            SdrTextFitToSizeTypeItem aItem(GetSdrObject()->GetMergedItem(SDRATTR_TEXT_FITTOSIZE));
+            aItem.SetMaxScale(nMaxScale);
+            GetSdrObject()->SetMergedItem(aItem);
+            return true;
+        }
+        break;
+    }
+
     // #i68101#
     case OWN_ATTR_MISC_OBJ_TITLE:
     {
