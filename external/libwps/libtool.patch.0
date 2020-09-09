@@ -1,11 +1,12 @@
 --- ltmain.sh.sav	2018-08-02 14:21:34.000000000 +0200
 +++ ltmain.sh	2019-05-05 22:04:15.433588776 +0200
-@@ -7277,7 +7277,7 @@ func_mode_link ()
+@@ -7277,7 +7277,8 @@ func_mode_link ()
+       # -stdlib=*            select c++ std lib with clang
        -64|-mips[0-9]|-r[0-9][0-9]*|-xarch=*|-xtarget=*|+DA*|+DD*|-q*|-m*| \
        -t[45]*|-txscale*|-p|-pg|--coverage|-fprofile-*|-F*|@*|-tp=*|--sysroot=*| \
-       -O*|-g*|-flto*|-fwhopr*|-fuse-linker-plugin|-fstack-protector*|-stdlib=*| \
--      -fsanitize=*)
-+      -fsanitize=*|-fuse-ld=*|--ld-path=*)
+-      -O*|-g*|-flto*|-fwhopr*|-fuse-linker-plugin|-fstack-protector*|-stdlib=*)
++      -O*|-g*|-flto*|-fwhopr*|-fuse-linker-plugin|-fstack-protector*|-stdlib=*| \
++      -fuse-ld=*|--ld-path=*)
          func_quote_for_eval "$arg"
  	arg=$func_quote_for_eval_result
          func_append compile_command " $arg"
