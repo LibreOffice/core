@@ -47,7 +47,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
-                <property name="image_position">top</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="close-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="fmsearchdialog|extended_tip|close">Closes the dialog. The settings of the last search will be saved until you quit %PRODUCTNAME.</property>
