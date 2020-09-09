@@ -268,6 +268,24 @@ struct ConstCharArrayDetector<sal_Unicode const [N], T> {
         sal_Unicode const (& literal)[N])
     { return literal; }
 };
+
+#if defined(__COVERITY__)
+//to silence over zealous warnings that the loop is logically dead
+//for the single char case
+template<typename T>
+struct ConstCharArrayDetector<sal_Unicode const [1], T> {
+    using TypeUtf16 = T;
+    static constexpr bool const ok = true;
+    static constexpr std::size_t const length = 0;
+    static constexpr bool isValid(sal_Unicode const (& literal)[1]) {
+        return literal[0] == '\0';
+    }
+    static constexpr sal_Unicode const * toPointer(
+        sal_Unicode const (& literal)[1])
+    { return literal; }
+};
+#endif
+
 template<typename T> struct ConstCharArrayDetector<
     OUStringChar,
     T>
