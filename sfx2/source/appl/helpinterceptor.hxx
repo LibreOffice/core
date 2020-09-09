@@ -53,7 +53,7 @@ friend class SfxHelpWindow_Impl;
 
     std::vector<OUString>       m_vHistoryUrls;
     VclPtr<SfxHelpWindow_Impl>  m_pWindow;
-    sal_uIntPtr                 m_nCurPos;
+    size_t                      m_nCurPos;
     OUString                    m_aCurrentURL;
 
     void                        addURL( const OUString& rURL );

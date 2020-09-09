@@ -187,12 +187,12 @@ void SAL_CALL HelpInterceptor_Impl::dispatch(
     if ( m_vHistoryUrls.empty() )
         return;
 
-    sal_uIntPtr nPos = ( bBack && m_nCurPos > 0 ) ? --m_nCurPos
+    size_t nPos = ( bBack && m_nCurPos > 0 ) ? --m_nCurPos
                                             : ( !bBack && m_nCurPos < m_vHistoryUrls.size() - 1 )
                                             ? ++m_nCurPos
-                                            : ULONG_MAX;
+                                            : std::numeric_limits<std::size_t>::max();
 
-    if ( nPos < ULONG_MAX )
+    if ( nPos < std::numeric_limits<std::size_t>::max() )
     {
         m_pWindow->loadHelpContent(m_vHistoryUrls[nPos], false); // false => don't add item to history again!
     }
