@@ -88,6 +88,24 @@
     },
     {
       "key": {
+        "uuid": "4be2c011_560fcbdc",
+        "filename": "sd/sdi/_drvwsh.sdi",
+        "patchSetId": 1
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-09-09T09:24:19Z",
+      "side": 1,
+      "message": "I think this is wrong in ObjectAlign too. This just overrides the GroupId that was set in svx.sdi, and results with the command being placed under the \"Documents\" category in the customization dialog, which makes no sense. And \"Export;\" is likely not needed too. At least let\u0027s not copy this to new slots, if they appear to work without it.",
+      "parentUuid": "a6647635_ae1daa93",
+      "revId": "12dff2152fc6d1fed35ba924274f56238f5e2c1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1d21e4ed_5d285b84",
         "filename": "sd/source/ui/view/drviews2.cxx",
         "patchSetId": 1
@@ -140,6 +158,24 @@
       "side": 1,
       "message": "With the drawback that you cannot expand the menu and see what\u0027s possible. Would prefer that for the toolbar but dislike it in case of popup menus where the menu is empty if less than 3 objects are selected. So I\u0027m a bit split here.",
       "parentUuid": "c8f4a620_d36a17cc",
+      "revId": "12dff2152fc6d1fed35ba924274f56238f5e2c1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d17c45a0_487aed1b",
+        "filename": "sd/source/ui/view/drviewsj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-09-09T09:24:19Z",
+      "side": 1,
+      "message": "IIRC the behavior of menus is to *not* disable items with sub menus just because their command is disabled. I suggest you to try it.",
+      "parentUuid": "70b71f19_8197174d",
       "revId": "12dff2152fc6d1fed35ba924274f56238f5e2c1f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
