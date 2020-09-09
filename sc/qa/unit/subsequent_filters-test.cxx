@@ -273,6 +273,7 @@ public:
     void testPreviewMissingObjLink();
     void testShapeRotationImport();
     void testShapeDisplacementOnRotationImport();
+    void testTextLengthDataValidityXLSX();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -436,6 +437,7 @@ public:
     CPPUNIT_TEST(testPreviewMissingObjLink);
     CPPUNIT_TEST(testShapeRotationImport);
     CPPUNIT_TEST(testShapeDisplacementOnRotationImport);
+    CPPUNIT_TEST(testTextLengthDataValidityXLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -4756,6 +4758,30 @@ void ScFiltersTest::testShapeDisplacementOnRotationImport()
     awt::Rectangle aRectangle = aRectProp.get<awt::Rectangle>();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aRectangle.X);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aRectangle.Y);
+}
+
+void ScFiltersTest::testTextLengthDataValidityXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("textLengthDataValidity.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load textLengthDataValidity.xlsx", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    const ScValidationData* pData = rDoc.GetValidationEntry(1);
+
+    ScRefCellValue aCellA1;
+    aCellA1.assign(rDoc, ScAddress(0, 0, 0));  //A1
+
+    ScRefCellValue aCellA2;
+    aCellA2.assign(rDoc, ScAddress(0, 1, 0));  //A2
+
+    bool bValidA1 = pData->IsDataValid(aCellA1, ScAddress(0, 0, 0));
+    bool bValidA2 = pData->IsDataValid(aCellA2, ScAddress(0, 1, 0));
+
+    CPPUNIT_ASSERT_EQUAL(true, bValidA1);
+    CPPUNIT_ASSERT_EQUAL(true, bValidA2);
+
+    xDocSh->DoClose();
 }
 
 ScFiltersTest::ScFiltersTest()

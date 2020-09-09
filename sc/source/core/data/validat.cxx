@@ -596,8 +596,13 @@ bool ScValidationData::IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos
                 ScRefCellValue aTmpCell(nLenVal);
                 bOk = IsCellValid(aTmpCell, rPos);
             }
+            if ( !bOk )
+            {
+                double nLenVal = std::to_string(static_cast<int>(nVal)).length();
+                ScRefCellValue aTmpCell(nLenVal);
+                bOk = IsCellValid(aTmpCell, rPos);
+            }
             break;
-
         default:
             OSL_FAIL("not yet done");
             break;
