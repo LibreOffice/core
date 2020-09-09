@@ -27,6 +27,7 @@
   <object class="GtkAdjustment" id="adjustmentSpinDegrees">
     <property name="upper">359</property>
     <property name="step_increment">5</property>
+    <property name="page_increment">10</property>
   </object>
   <object class="GtkGrid" id="PosSizePropertyPanel">
     <property name="visible">True</property>
