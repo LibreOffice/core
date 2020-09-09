@@ -6802,12 +6802,20 @@ if test "$GCC" = yes; then
 fi
 AC_SUBST([HAVE_GCC_FNO_SIZED_DEALLOCATION])
 
-AC_MSG_CHECKING([whether $CXX_BASE supports C++20 consteval])
+AC_MSG_CHECKING([whether $CXX_BASE supports a working C++20 consteval])
+dnl ...that does not suffer from <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96994> "Missing code
+dnl from consteval constructor initializing const variable":
 AC_LANG_PUSH([C++])
 save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
-AC_COMPILE_IFELSE([AC_LANG_SOURCE([
-        consteval int f() { return 0; }
+AC_RUN_IFELSE([AC_LANG_PROGRAM([
+        struct S {
+            consteval S() { i = 1; }
+            int i = 0;
+        };
+        S const s;
+    ], [
+        return (s.i == 1) ? 0 : 1;
     ])], [
         AC_DEFINE([HAVE_CPP_CONSTEVAL],[1])
         AC_MSG_RESULT([yes])
