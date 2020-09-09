@@ -227,6 +227,7 @@ public:
 
     void testBnc762542();
 
+    void testTdf136364();
     void testTdf103734();
     void testTdf98844();
     void testTdf100458();
@@ -395,6 +396,7 @@ public:
 
     CPPUNIT_TEST(testHiddenSheetsXLSX);
 
+    CPPUNIT_TEST(testTdf136364);
     CPPUNIT_TEST(testTdf103734);
     CPPUNIT_TEST(testTdf98844);
     CPPUNIT_TEST(testTdf100458);
@@ -3782,6 +3784,30 @@ void ScFiltersTest::testRelFormulaValidationXLS()
 
     checkValidationFormula(ScAddress(3, 4, 0), rDoc, "C5");
     checkValidationFormula(ScAddress(5, 8, 0), rDoc, "D7");
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf136364()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf136364.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Without the fix in place, it would have failed with
+    // - Expected: =SUM((B2:B3~C4:C5~D6:D7))
+    // - Actual  : =SUM((B2:B3~C4:C5,D6:D7))
+    OUString aFormula;
+    rDoc.GetFormula(4, 0, 0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM((B2:B3~C4:C5~D6:D7))"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(27.0, rDoc.GetValue(ScAddress(4,0,0)));
+
+    // - Expected: =SUM((B2~C4~D6))
+    // - Actual  : =SUM((B2~C4,D6))
+    rDoc.GetFormula(4, 1, 0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM((B2~C4~D6))"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(12.0, rDoc.GetValue(ScAddress(4,1,0)));
 
     xDocSh->DoClose();
 }
