@@ -82,7 +82,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
-                <property name="image_position">top</property>
               </object>
               <packing>
                 <property name="expand">False</property>
