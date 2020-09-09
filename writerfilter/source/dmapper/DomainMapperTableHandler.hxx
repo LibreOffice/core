@@ -91,6 +91,8 @@ public:
 
     void ApplyParagraphPropertiesFromTableStyle(TableParagraph rParaProp, std::vector< PropertyIds > aAllTableProperties, css::beans::PropertyValues rCellProperties);
 
+    void ConvertFormulaRanges(const css::uno::Reference<css::text::XTextTable> & xTable);
+
     /// Handle end of table.
     void endTable(unsigned int nestedTableLevel, bool bTableStartsAtCellStart);
     /**
