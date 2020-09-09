@@ -3044,7 +3044,9 @@ SwDrawFrameFormat* DocumentContentOperationsManager::InsertDrawObj(
         eAnchorId = aAnch.GetAnchorId();
         if ( eAnchorId == RndStdIds::FLY_AT_FLY )
         {
-            SwPosition aPos( *rRg.GetNode().FindFlyStartNode() );
+            const SwStartNode* pStartNode = rRg.GetNode().FindFlyStartNode();
+            assert(pStartNode);
+            SwPosition aPos(*pStartNode);
             aAnch.SetAnchor( &aPos );
         }
         else
