@@ -1260,7 +1260,8 @@ void SdrTextObj::ImpAutoFitText( SdrOutliner& rOutliner ) const
                     IsVerticalWriting() );
 }
 
-void SdrTextObj::ImpAutoFitText( SdrOutliner& rOutliner, const Size& rTextSize, bool bIsVerticalWriting )
+void SdrTextObj::ImpAutoFitText(SdrOutliner& rOutliner, const Size& rTextSize,
+                                bool bIsVerticalWriting) const
 {
     // EditEngine formatting is unstable enough for
     // line-breaking text that we need some more samples
@@ -1314,6 +1315,13 @@ void SdrTextObj::ImpAutoFitText( SdrOutliner& rOutliner, const Size& rTextSize, 
                                               std::min(sal_uInt16(100),nCurrStretchY));
             SAL_INFO("svx", "zoom is " << nCurrStretchX);
         }
+    }
+
+    const SdrTextFitToSizeTypeItem& rItem = GetObjectItem(SDRATTR_TEXT_FITTOSIZE);
+    if (rItem.GetMaxScale() > 0)
+    {
+        nMinStretchX = std::min<sal_uInt16>(rItem.GetMaxScale(), nMinStretchX);
+        nMinStretchY = std::min<sal_uInt16>(rItem.GetMaxScale(), nMinStretchY);
     }
 
     SAL_INFO("svx", "final zoom is " << nMinStretchX);

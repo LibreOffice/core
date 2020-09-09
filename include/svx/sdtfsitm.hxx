@@ -38,7 +38,13 @@ public:
     SdrTextFitToSizeTypeItem(
             css::drawing::TextFitToSizeType const eFit = css::drawing::TextFitToSizeType_NONE)
         : SfxEnumItem(SDRATTR_TEXT_FITTOSIZE, eFit) {}
+    SdrTextFitToSizeTypeItem(const SdrTextFitToSizeTypeItem& rItem)
+        : SfxEnumItem(rItem),
+        m_nMaxScale(rItem.GetMaxScale())
+    {
+    }
     virtual SdrTextFitToSizeTypeItem* Clone(SfxItemPool* pPool=nullptr) const override;
+    bool operator==(const SfxPoolItem& rItem) const override;
     virtual sal_uInt16       GetValueCount() const override;
 
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
@@ -49,6 +55,10 @@ public:
     virtual bool             HasBoolValue() const override;
     virtual bool             GetBoolValue() const override;
     virtual void             SetBoolValue(bool bVal) override;
+    void SetMaxScale(sal_Int16 nMaxScale) { m_nMaxScale = nMaxScale; }
+    sal_Int16 GetMaxScale() const { return m_nMaxScale; }
+private:
+    sal_Int16 m_nMaxScale = 0;
 };
 
 #endif
