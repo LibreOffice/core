@@ -1220,9 +1220,9 @@ short ScTable::CompareCell(
                 bool bNaturalSort = aSortParam.bNaturalSort;    // natural sort
                 bool bCaseSens    = aSortParam.bCaseSens;       // case sensitivity
 
-                if (bUserDef)
+                ScUserList* pList = ScGlobal::GetUserList();
+                if (bUserDef && pList && pList->size() > aSortParam.nUserIndex)
                 {
-                    ScUserList* pList = ScGlobal::GetUserList();
                     const ScUserListData* pData = (*pList)[aSortParam.nUserIndex];
 
                     if (pData)
