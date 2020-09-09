@@ -1,0 +1,34 @@
+<<<<<<< HEAD   (ee05ab tdf#119286 speed up find/replace)
+=======
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+* This file is part of the LibreOffice project.
+*
+* This Source Code Form is subject to the terms of the Mozilla Public
+* License, v. 2.0. If a copy of the MPL was not distributed with this
+* file, You can obtain one at http://mozilla.org/MPL/2.0/.
+-->
+
+<!--
+    entry attributes:
+    os - "all", "7", "8", "8_1", "10", "linux"
+    vendor - "all", "intel", "amd", "nvidia", "microsoft"
+    compare - "less", "less_equal", "greater", "greater_equal", "equal", "not_equal", "between_exclusive", "between_inclusive", "between_inclusive_start"
+    version
+    minVersion
+    maxVersion
+-->
+
+<root>
+    <allowlist>
+    </allowlist>
+    <denylist>
+        <entry os="all" vendor="intel" compare="less_equal" version="0.16.2">
+            <device id="all"/>
+        </entry>
+        <entry os="all" vendor="amd" compare="less_equal" version="2.0.49">
+            <device id="all"/>
+        </entry>
+    </denylist>
+</root>
+>>>>>>> CHANGE (3f620e blacklist amd driver with vulkan version <= 2.0.49 (tdf#1365)
