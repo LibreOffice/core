@@ -380,8 +380,20 @@
                     </xsl:apply-templates>
                     <!-- the footnote symbol is the prefix for a footnote in the footer -->
                     <xsl:copy-of select="$footnotePrefix"/>
-                    <!-- start floating of frame (and siblings) -->
-                    <xsl:apply-templates select="node()[1]" mode="frameFloating">
+                    <!-- deal with none draw:frame ahead of the <draw:frame> -->
+                    <xsl:if test="name(node()[1]) != 'draw:frame'">
+                        <xsl:apply-templates select="node()[1]" mode="frameFloating">
+                            <xsl:with-param name="globalData" select="$globalData" />
+                            <xsl:with-param name="previousFrameWidths" select="0"/>
+                            <xsl:with-param name="previousFrameHeights" select="0"/>
+                            <!-- 2DO for me (Svante) - Not used, uncertain 4now...
+                            <xsl:with-param name="pageMarginLeft">
+                                <xsl:call-template name="getPageMarginLeft"/>
+                            </xsl:with-param>-->
+                        </xsl:apply-templates>
+                    </xsl:if>
+                    <!-- start floating of frames (each take care of its siblings till next draw:frame) -->
+                    <xsl:apply-templates select="draw:frame" mode="frameFloating">
                         <xsl:with-param name="globalData" select="$globalData" />
                         <xsl:with-param name="previousFrameWidths" select="0"/>
                         <xsl:with-param name="previousFrameHeights" select="0"/>
@@ -882,7 +894,7 @@
             <xsl:with-param name="previousFrameWidths" select="$previousFrameWidths"/>
             <xsl:with-param name="parentMarginLeft" select="$parentMarginLeft"/>
             <xsl:with-param name="leftPosition" select="$leftPosition"/>
-            <xsl:with-param name="createDiv" select="$createDiv"/>
+            <xsl:with-param name="createDiv" select="false()"/>
             <xsl:with-param name="noDivBefore" select="$noDivBefore"/>
         </xsl:apply-templates>
     </xsl:template>
@@ -1055,7 +1067,7 @@
             <xsl:with-param name="previousFrameWidths" select="$previousFrameWidths + $svgWidth"/>
             <xsl:with-param name="parentMarginLeft" select="$parentMarginLeftNew"/>
             <xsl:with-param name="leftPosition" select="$leftPosition"/>
-            <xsl:with-param name="createDiv" select="true()"/>
+            <xsl:with-param name="createDiv" select="false()"/>
             <xsl:with-param name="noDivBefore" select="false()"/>
         </xsl:apply-templates>
                 <!--
