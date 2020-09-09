@@ -351,7 +351,7 @@
     { u"" UNO_NAME_MISC_OBJ_SIZEPROTECT,  SDRATTR_OBJSIZEPROTECT          , cppu::UnoType<bool>::get(),                      0,  0},\
     { u"UINameSingular",               OWN_ATTR_UINAME_SINGULAR        , ::cppu::UnoType<OUString>::get(),    css::beans::PropertyAttribute::READONLY,   0}, \
     { u"UINamePlural",                 OWN_ATTR_UINAME_PLURAL          , ::cppu::UnoType<OUString>::get(),    css::beans::PropertyAttribute::READONLY,   0}, \
-    { u"TextFitToSizeScale", OWN_ATTR_TEXTFITTOSIZESCALE, ::cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::READONLY, 0}, \
+    { u"TextFitToSizeScale", OWN_ATTR_TEXTFITTOSIZESCALE, ::cppu::UnoType<sal_Int16>::get(), 0, 0}, \
     /* #i68101# */ \
     { u"" UNO_NAME_MISC_OBJ_TITLE,        OWN_ATTR_MISC_OBJ_TITLE         , ::cppu::UnoType<OUString>::get(),    0,  0}, \
     { u"" UNO_NAME_MISC_OBJ_DESCRIPTION,  OWN_ATTR_MISC_OBJ_DESCRIPTION   , ::cppu::UnoType<OUString>::get(),    0,  0},
