@@ -3,6 +3,8 @@
   <block-list:block block-list:abbreviated-name=".5" block-list:name="½"/>
   <block-list:block block-list:abbreviated-name=".*(C)" block-list:name="©"/>
   <block-list:block block-list:abbreviated-name=".*(R)" block-list:name="®"/>
+  <block-list:block block-list:abbreviated-name=".*(주)" block-list:name="㈜"/>
+  <block-list:block block-list:abbreviated-name=".*(KS)" block-list:name="㉿"/>
   <block-list:block block-list:abbreviated-name="1/2" block-list:name="½"/>
   <block-list:block block-list:abbreviated-name="1/4" block-list:name="¼"/>
   <block-list:block block-list:abbreviated-name="3/4" block-list:name="¾"/>
