@@ -64,23 +64,17 @@ char const * const SyntaxStrings[] = {
 "\t|",
 "\ttypedef type identifier\n",
 
-"\titem-method:",
-"\titem identifier item-method-args\n",
-
 "\titem-method-args:",
 "\t( { item parameter-name SLOT_ID } )\n",
 
 "\tslot definition:",
 "\titem identifier SLOT_ID [ item-method-args ]",
-"\t'['\n",
-
-"\t\titem-method-args",
+"\t'['",
 "\t\tAccelConfig, MenuConfig, ToolbarConfig",
 "\t\tAutoUpdate",
 "\t\tContainer",
 "\t\tExecMethod     = Identifier",
 "\t\tFastCall",
-"\t\tGet, Set",
 "\t\tGroupId        = Identifier",
 "\t\tReadOnlyDoc*",
 "\t\tRecordPerSet*, RecordPerItem, NoRecord",
