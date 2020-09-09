@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1bafd507_18d22cef",
+        "filename": "sw/source/core/layout/objectformattertxtfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 740,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-09-09T19:34:08Z",
+      "side": 1,
+      "message": "whenever I see stuff like this and Lock/Unlock, I wonder what happens if we recurse anywhere - then we run the risk of calling Unlock or Allow and now we have part of the call sequence where it is turned on again.\n\nI stuck some asserts in and pushed a change to see what happens:\nhttps://gerrit.libreoffice.org/c/core/+/102337",
+      "revId": "3511d83cfd82e55f1f984984a14991b8bce4566a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
