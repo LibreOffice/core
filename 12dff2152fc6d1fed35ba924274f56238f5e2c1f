@@ -70,6 +70,24 @@
     },
     {
       "key": {
+        "uuid": "a6647635_ae1daa93",
+        "filename": "sd/sdi/_drvwsh.sdi",
+        "patchSetId": 1
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-09-09T08:04:35Z",
+      "side": 1,
+      "message": "Don\u0027t ask me why. I just copy what real programmers did before. The prototype was ObjectAlign, which has this slot description.",
+      "parentUuid": "ed149a80_fc017feb",
+      "revId": "12dff2152fc6d1fed35ba924274f56238f5e2c1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1d21e4ed_5d285b84",
         "filename": "sd/source/ui/view/drviews2.cxx",
         "patchSetId": 1
@@ -104,6 +122,24 @@
       "writtenOn": "2020-09-08T19:39:39Z",
       "side": 1,
       "message": "I think the new SID_DISTRIBUTE should also be handled in this method.",
+      "revId": "12dff2152fc6d1fed35ba924274f56238f5e2c1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70b71f19_8197174d",
+        "filename": "sd/source/ui/view/drviewsj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-09-09T08:04:35Z",
+      "side": 1,
+      "message": "With the drawback that you cannot expand the menu and see what\u0027s possible. Would prefer that for the toolbar but dislike it in case of popup menus where the menu is empty if less than 3 objects are selected. So I\u0027m a bit split here.",
+      "parentUuid": "c8f4a620_d36a17cc",
       "revId": "12dff2152fc6d1fed35ba924274f56238f5e2c1f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
