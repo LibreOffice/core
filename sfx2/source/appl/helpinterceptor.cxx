@@ -50,10 +50,7 @@ void HelpInterceptor_Impl::addURL( const OUString& rURL )
     size_t nCount = m_vHistoryUrls.size();
     if ( nCount && m_nCurPos < ( nCount - 1 ) )
     {
-        for ( size_t i = nCount - 1; i > m_nCurPos; i-- )
-        {
-            m_vHistoryUrls.erase( m_vHistoryUrls.begin() + i );
-        }
+        m_vHistoryUrls.resize(m_nCurPos + 1);
     }
     Reference<XFrame> xFrame(m_xIntercepted, UNO_QUERY);
     Reference<XController> xController;
