@@ -589,14 +589,26 @@ bool ScValidationData::IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos
             break;
 
         case SC_VALID_TEXTLEN:
+        {
+            double nLenVal;
             bOk = !bIsVal;          // only Text
             if ( bOk )
             {
-                double nLenVal = static_cast<double>(aString.getLength());
-                ScRefCellValue aTmpCell(nLenVal);
-                bOk = IsCellValid(aTmpCell, rPos);
+                nLenVal = static_cast<double>(aString.getLength());
             }
-            break;
+            else
+            {
+                const ScPatternAttr* pPattern
+                    = mpDoc->GetPattern(rPos.Col(), rPos.Row(), rPos.Tab());
+                SvNumberFormatter* pFormatter = GetDocument()->GetFormatTable();
+                sal_uInt32 nFormat = pPattern->GetNumberFormat(pFormatter);
+                pFormatter->GetInputLineString(nVal, nFormat, aString);
+                nLenVal = static_cast<double>(aString.getLength());
+            }
+            ScRefCellValue aTmpCell(nLenVal);
+            bOk = IsCellValid(aTmpCell, rPos);
+        }
+        break;
 
         default:
             OSL_FAIL("not yet done");
