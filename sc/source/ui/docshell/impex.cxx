@@ -2041,17 +2041,29 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                 if ( bData && *p == ';' && *(p+1) == 'P' )
                 {
                     OUString aCode( p+2 );
-                    // unescape doubled semicolons
-                    aCode = aCode.replaceAll(";;", ";");
-                    // get rid of Xcl escape characters
-                    aCode = aCode.replaceAll("\x1b", "");
-                    sal_Int32 nCheckPos;
-                    SvNumFormatType nType;
+
                     sal_uInt32 nKey;
-                    pDoc->GetFormatTable()->PutandConvertEntry( aCode, nCheckPos, nType, nKey,
-                                                                LANGUAGE_ENGLISH_US, ScGlobal::eLnge, false);
+                    sal_Int32 nCheckPos;
+
+                    if (aCode.getLength() > 2048 && utl::ConfigManager::IsFuzzing())
+                    {
+                        // consider an excessive length as a failure when fuzzing
+                        nCheckPos = 1;
+                    }
+                    else
+                    {
+                        // unescape doubled semicolons
+                        aCode = aCode.replaceAll(";;", ";");
+                        // get rid of Xcl escape characters
+                        aCode = aCode.replaceAll("\x1b", "");
+                        SvNumFormatType nType;
+                        pDoc->GetFormatTable()->PutandConvertEntry( aCode, nCheckPos, nType, nKey,
+                                                                    LANGUAGE_ENGLISH_US, ScGlobal::eLnge, false);
+                    }
+
                     if ( nCheckPos )
                         nKey = 0;
+
                     aFormats.push_back( nKey );
                 }
             }
