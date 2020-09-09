@@ -11,7 +11,6 @@
 #include <unotest/macros_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 

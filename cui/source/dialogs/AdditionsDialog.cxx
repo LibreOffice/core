@@ -11,47 +11,33 @@
 
 #include <AdditionsDialog.hxx>
 
-#include <rtl/ustrbuf.hxx>
-#include <unordered_set>
 #include <sal/log.hxx>
 
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/inspection/PropertyLineElement.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
-#include <rtl/strbuf.hxx>
-#include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <vcl/mnemonic.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <unotools/textsearch.hxx>
 
-#include <com/sun/star/task/InteractionHandler.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
-#include <com/sun/star/xml/sax/Parser.hpp>
 #include <ucbhelper/content.hxx>
-#include <comphelper/simplefileaccessinteraction.hxx>
 
 #include <com/sun/star/deployment/DeploymentException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <com/sun/star/frame/TerminationVetoException.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 
 #include <com/sun/star/task/XInteractionApprove.hpp>
-#include <cppuhelper/implbase.hxx>
 
 //cURL
 #include <curl/curl.h>
