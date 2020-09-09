@@ -80,39 +80,33 @@ interface BaseTextDocument
     [
         ExecMethod = Execute;
     ]
-     //No Export
+
     SID_STYLE_FAMILY1
     [
-        Export = FALSE ;
         StateMethod = StateStyleSheet ;
     ]
 
     SID_STYLE_FAMILY2
     [
-        Export = FALSE ;
         StateMethod = StateStyleSheet ;
     ]
 
     SID_STYLE_FAMILY3
     [
-        Export = FALSE ;
         StateMethod = StateStyleSheet ;
     ]
 
     SID_STYLE_FAMILY4
     [
-        Export = FALSE ;
         StateMethod = StateStyleSheet ;
     ]
     SID_STYLE_FAMILY5
     [
-        Export = FALSE ;
         StateMethod = StateStyleSheet ;
     ]
 
     SID_STYLE_FAMILY6
     [
-        Export = FALSE ;
         StateMethod = StateStyleSheet ;
     ]
 

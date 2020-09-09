@@ -17,11 +17,9 @@
  */
 interface Pivot
 {
-    // not accessible from Basic, therefore everything with Export = FALSE
-
-    SID_PIVOT_RECALC    [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
-    SID_PIVOT_KILL      [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
-        SID_DP_FILTER           [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_PIVOT_RECALC    [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_PIVOT_KILL      [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_DP_FILTER       [ ExecMethod = Execute; StateMethod = GetState; ]
 }
 
 shell ScPivotShell

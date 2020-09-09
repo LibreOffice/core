@@ -28,7 +28,6 @@ shell SwGrfShell : SwBaseShell
     // RotGrfFlyFrame: need SID_OBJECT_ROTATE for FlyFrames with graphic
     SID_OBJECT_ROTATE
     [
-        Export = FALSE;
         ExecMethod = Execute ;
         StateMethod = GetAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";

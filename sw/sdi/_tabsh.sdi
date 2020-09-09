@@ -162,7 +162,6 @@ interface BaseTextTable
 
     FN_TABLE_INSERT_COL_DLG  // status(final|play)
     [
-        Export = FALSE ;
         ExecMethod = Execute ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
@@ -191,7 +190,6 @@ interface BaseTextTable
 
     FN_TABLE_INSERT_ROW_DLG  // status(final|play)
     [
-        Export = FALSE ;
         ExecMethod = Execute ;
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
@@ -333,7 +331,6 @@ interface BaseTextTable
     [
         ExecMethod = ExecTableStyle ;
         StateMethod = GetLineStyleState ;
-        Export = FALSE;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
@@ -410,11 +407,9 @@ interface BaseTextTable
         StateMethod = NoState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
-// Slots without export
 
     FN_INSERT_TABLE
     [
-        Export = FALSE ;
         ExecMethod = Execute ;
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";

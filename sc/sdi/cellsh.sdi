@@ -293,7 +293,6 @@ interface CellMovement
         SfxInt16Item By FN_PARAM_1
     )
     [
-        Export = FALSE ;
         ExecMethod = ExecuteCursorSel ;
         StateMethod = GetStateCursor ;
     ]

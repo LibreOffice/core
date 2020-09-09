@@ -192,13 +192,11 @@ interface BaseText
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        Export = FALSE;
     ]
     FN_INSERT_PAGEFOOTER    // status(final|play|rec)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        Export = FALSE;
     ]
 
     FN_INSERT_STRING // status(final|play|rec)
@@ -865,7 +863,6 @@ interface BaseText
         ExecMethod = ExecField ;
         StateMethod = StateField ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-        Export = FALSE ;
     ]
 
     FN_INSERT_FLD_PGNUMBER
@@ -922,7 +919,6 @@ interface BaseText
     ]
     FN_EXECUTE_MACROFIELD // status()
     [
-        Export = FALSE ;
         ExecMethod = ExecField ;
         StateMethod = StateField ;
     ]
@@ -1009,195 +1005,163 @@ interface BaseText
         ExecMethod = ExecField ;
         StateMethod = StateField;
     ]
-     // slots with Export = FALSE
-     //Slots without export
     FN_CHAR_LEFT_SEL
     [
         ExecMethod = ExecBasicMove ;
         StateMethod = NoState ;
-        Export = FALSE ;
     ]
     FN_CHAR_RIGHT_SEL
     [
         ExecMethod = ExecBasicMove ;
         StateMethod = NoState ;
-        Export = FALSE ;
     ]
     FN_LINE_UP_SEL
     [
         ExecMethod = ExecBasicMove ;
         StateMethod = NoState ;
-        Export = FALSE ;
     ]
     FN_LINE_DOWN_SEL
     [
         ExecMethod = ExecBasicMove;
         StateMethod = NoState ;
-        Export = FALSE ;
     ]
     FN_START_OF_NEXT_PAGE_SEL
     [
         ExecMethod = ExecMovePage;
         StateMethod = NoState ;
-        Export = FALSE ;
     ]
     FN_END_OF_NEXT_PAGE_SEL
     [
         ExecMethod = ExecMovePage ;
         StateMethod = NoState ;
-        Export = FALSE ;
     ]
     FN_START_OF_PREV_PAGE_SEL
     [
         ExecMethod = ExecMovePage ;
         StateMethod = NoState ;
-        Export = FALSE ;
     ]
     FN_END_OF_PREV_PAGE_SEL
     [
         ExecMethod = ExecMovePage ;
         StateMethod = NoState ;
-        Export = FALSE ;
     ]
     FN_START_OF_PAGE_SEL
     [
         ExecMethod = ExecMovePage ;
         StateMethod = NoState ;
-        Export = FALSE ;
     ]
     FN_END_OF_PAGE_SEL
     [
         ExecMethod = ExecMovePage ;
         StateMethod = NoState ;
-        Export = FALSE ;
     ]
     FN_NEXT_WORD_SEL
     [
         ExecMethod = ExecMoveLingu ;
         StateMethod = NoState ;
-        Export = FALSE ;
     ]
     FN_START_OF_PARA_SEL
     [
         ExecMethod = ExecMoveLingu ;
         StateMethod = NoState ;
-        Export = FALSE ;
     ]
     FN_END_OF_PARA_SEL
     [
         ExecMethod = ExecMoveLingu ;
         StateMethod = NoState ;
-        Export = FALSE ;
     ]
     FN_PREV_WORD_SEL
     [
         ExecMethod = ExecMoveLingu ;
         StateMethod = NoState ;
-        Export = FALSE ;
     ]
     FN_NEXT_SENT_SEL
     [
         ExecMethod = ExecMoveLingu ;
         StateMethod = NoState ;
-        Export = FALSE ;
     ]
     FN_START_OF_LINE_SEL
     [
         ExecMethod = ExecMove ;
         StateMethod = NoState ;
-        Export = FALSE ;
     ]
     FN_END_OF_LINE_SEL
     [
         ExecMethod = ExecMove ;
         StateMethod = NoState ;
-        Export = FALSE ;
     ]
     FN_START_OF_DOCUMENT_SEL
     [
         ExecMethod = ExecMove ;
         StateMethod = NoState ;
-        Export = FALSE ;
     ]
     FN_END_OF_DOCUMENT_SEL
     [
         ExecMethod = ExecMove ;
         StateMethod = NoState ;
-        Export = FALSE ;
     ]
     FN_PREV_SENT_SEL
     [
         ExecMethod = ExecMoveLingu ;
         StateMethod = NoState ;
-        Export = FALSE ;
     ]
     FN_QRY_INSERT
     [
         ExecMethod = ExecDB ;
         StateMethod = NoState ;
-        Export = FALSE ;
     ]
     FN_QRY_MERGE_FIELD
     [
         ExecMethod = ExecDB ;
         StateMethod = NoState ;
-        Export = FALSE ;
     ]
     FN_QRY_INSERT_FIELD
     [
         ExecMethod = ExecDB ;
         StateMethod = NoState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-        Export = FALSE ;
     ]
     SID_ATTR_PARA_ADJUST_LEFT
     [
         ExecMethod = ExecParaAttr ;
         StateMethod = GetAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-        Export = FALSE ;
     ]
     SID_ATTR_PARA_ADJUST_RIGHT
     [
         ExecMethod = ExecParaAttr ;
         StateMethod = GetAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-        Export = FALSE ;
     ]
     SID_ATTR_PARA_ADJUST_CENTER
     [
         ExecMethod = ExecParaAttr ;
         StateMethod = GetAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-        Export = FALSE ;
     ]
     SID_ATTR_PARA_ADJUST_BLOCK
     [
         ExecMethod = ExecParaAttr ;
         StateMethod = GetAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-        Export = FALSE ;
     ]
     SID_ATTR_PARA_LINESPACE_10
     [
         ExecMethod = ExecParaAttr ;
         StateMethod = GetAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-        Export = FALSE ;
     ]
     SID_ATTR_PARA_LINESPACE_15
     [
         ExecMethod = ExecParaAttr ;
         StateMethod = GetAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-        Export = FALSE ;
     ]
     SID_ATTR_PARA_LINESPACE_20
     [
         ExecMethod = ExecParaAttr ;
         StateMethod = GetAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-        Export = FALSE ;
     ]
     SID_ATTR_PARA_ADJUST // status(final|play)
     [

@@ -17,21 +17,19 @@
  */
 interface TablePrintPreview
 {
-    // not accessible from Basic, therefore everything with Export = FALSE
-
-    SID_FORMATPAGE          [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
-    SID_STATUS_PAGESTYLE    [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
-    SID_HFEDIT              [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
-    SID_ATTR_ZOOM           [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
-    FID_SCALE               [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
-    SID_STATUS_DOCPOS       [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
-    SID_PREVIEW_NEXT        [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
-    SID_PREVIEW_PREVIOUS    [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
-    SID_PREVIEW_FIRST       [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
-    SID_PREVIEW_LAST        [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
-    SID_PREVIEW_MARGIN      [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
-    SID_PREVIEW_SCALINGFACTOR   [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
-    SID_ATTR_ZOOMSLIDER     [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_FORMATPAGE          [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_STATUS_PAGESTYLE    [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_HFEDIT              [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_ATTR_ZOOM           [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_SCALE               [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_STATUS_DOCPOS       [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_PREVIEW_NEXT        [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_PREVIEW_PREVIOUS    [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_PREVIEW_FIRST       [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_PREVIEW_LAST        [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_PREVIEW_MARGIN      [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_PREVIEW_SCALINGFACTOR   [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_ATTR_ZOOMSLIDER     [ ExecMethod = Execute; StateMethod = GetState; ]
 
     SfxVoidItem GoUpBlock SID_CURSORPAGEUP
     (
@@ -40,7 +38,6 @@ interface TablePrintPreview
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        Export = FALSE;
         GroupId = SfxGroupId::Intern ;
     ]
 
@@ -51,12 +48,11 @@ interface TablePrintPreview
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        Export = FALSE;
         GroupId = SfxGroupId::Intern ;
     ]
 
-    SID_CURSORHOME  [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
-    SID_CURSOREND   [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_CURSORHOME  [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_CURSOREND   [ ExecMethod = Execute; StateMethod = GetState; ]
 
     SfxVoidItem GoDown SID_CURSORDOWN
     (
@@ -65,7 +61,6 @@ interface TablePrintPreview
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        Export = FALSE;
         GroupId = SfxGroupId::Intern ;
     ]
     SfxVoidItem GoUp SID_CURSORUP
@@ -75,7 +70,6 @@ interface TablePrintPreview
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        Export = FALSE;
         GroupId = SfxGroupId::Intern ;
     ]
     SfxVoidItem GoLeft SID_CURSORLEFT
@@ -85,7 +79,6 @@ interface TablePrintPreview
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        Export = FALSE;
         GroupId = SfxGroupId::Intern ;
     ]
 
@@ -96,7 +89,6 @@ interface TablePrintPreview
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        Export = FALSE;
         GroupId = SfxGroupId::Intern ;
     ]
 
@@ -104,7 +96,6 @@ interface TablePrintPreview
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        Export = FALSE;
         GroupId = SfxGroupId::Intern ;
     ]
 
@@ -112,7 +103,6 @@ interface TablePrintPreview
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        Export = FALSE;
         GroupId = SfxGroupId::Intern ;
     ]
 
@@ -120,7 +110,6 @@ interface TablePrintPreview
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        Export = FALSE;
         GroupId = SfxGroupId::Intern ;
     ]
 
@@ -128,24 +117,23 @@ interface TablePrintPreview
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        Export = FALSE;
         GroupId = SfxGroupId::Intern ;
     ]
-    SID_PREVIEW_ZOOMIN  [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
-    SID_PREVIEW_ZOOMOUT [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
-    SID_REPAINT         [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
-    SID_UNDO            [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
-    SID_REDO            [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
-    SID_REPEAT          [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
-    SID_PRINTPREVIEW    [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ] // ole() api()
-    SID_PREVIEW_CLOSE   [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
-    SID_CANCEL          [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_PREVIEW_ZOOMIN  [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_PREVIEW_ZOOMOUT [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_REPAINT         [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_UNDO            [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_REDO            [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_REPEAT          [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_PRINTPREVIEW    [ ExecMethod = Execute; StateMethod = GetState; ] // ole() api()
+    SID_PREVIEW_CLOSE   [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_CANCEL          [ ExecMethod = Execute; StateMethod = GetState; ]
 
-    SID_SAVEDOC         [ StateMethod = GetState; Export = FALSE; ]
-    SID_SAVEASDOC       [ StateMethod = GetState; Export = FALSE; ]
-    SID_MAIL_SENDDOC    [ StateMethod = GetState; Export = FALSE; ]
-    SID_VIEW_DATA_SOURCE_BROWSER [ StateMethod = GetState; Export = FALSE; ]
-    SID_QUITAPP         [ StateMethod = GetState; Export = FALSE; ]
+    SID_SAVEDOC         [ StateMethod = GetState; ]
+    SID_SAVEASDOC       [ StateMethod = GetState; ]
+    SID_MAIL_SENDDOC    [ StateMethod = GetState; ]
+    SID_VIEW_DATA_SOURCE_BROWSER [ StateMethod = GetState; ]
+    SID_QUITAPP         [ StateMethod = GetState; ]
 }
 
 

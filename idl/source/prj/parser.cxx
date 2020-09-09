@@ -386,7 +386,6 @@ void SvIdlParser::ReadSlotAttribute( SvMetaSlot& rSlot )
     ReadIfIdAttribute(rSlot.aStateMethod, SvHash_StateMethod() );
     ReadStringSvIdl( SvHash_DisableFlags(), rInStm, rSlot.aDisableFlags );
     ReadIfBoolAttribute(rSlot.aReadOnlyDoc, SvHash_ReadOnlyDoc() );
-    ReadIfBoolAttribute(rSlot.aExport, SvHash_Export() );
 
     ReadIfBoolAttribute(rSlot.aToggle, SvHash_Toggle() );
     ReadIfBoolAttribute(rSlot.aAutoUpdate, SvHash_AutoUpdate() );

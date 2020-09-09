@@ -91,7 +91,6 @@ interface ImpressEditView : DrawView
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
-        Export = FALSE ;
     ]
     SID_ANIMATOR_INIT // ole : no, status : ?
     [

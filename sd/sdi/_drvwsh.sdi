@@ -290,7 +290,6 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
         GroupId = SfxGroupId::Document ;
-        Export ,
         MenuConfig , AccelConfig , ToolBoxConfig ;
     ]
     SID_CHARMAP // ole : no, status : ?
@@ -360,7 +359,7 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
         GroupId = SfxGroupId::Insert ;
-        Export , Asynchron ,
+        Asynchron ,
         MenuConfig , AccelConfig , ToolBoxConfig ;
     ]
     SID_MANAGE_LINKS // ole : no, status : ?
@@ -384,7 +383,7 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
         GroupId = SfxGroupId::Document ;
-        Export , Asynchron ,
+        Asynchron ,
         MenuConfig , AccelConfig , ToolBoxConfig ;
     ]
     SID_BMPMASK // ole : yes, status : ?
@@ -1247,7 +1246,6 @@ interface DrawView
     [
         StateMethod = GetMenuState ;
         GroupId = SfxGroupId::Document ;
-        Export ;
     ]
 
     SID_ZOOM_TOOLBOX // ole : no, status : ?
@@ -1314,7 +1312,6 @@ interface DrawView
     [
         ExecMethod = FuPermanent ;
         StateMethod = GetMenuState ;
-        Export = FALSE ;
         ReadOnlyDoc = TRUE ;
     ]
 
@@ -1467,13 +1464,11 @@ interface DrawView
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
-        Export = FALSE ;
     ]
     SID_STYLE_FAMILY3 // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
-        Export = FALSE ;
     ]
     SID_STYLE_NEW // ole : no, status : ?
     [
@@ -1636,7 +1631,6 @@ interface DrawView
     [
         ExecMethod = ExecStatusBar ;
         StateMethod = GetStatusBarState ;
-        Export ;
     ]
     SID_STATUS_PAGE // ole : no, status : ?
     [
@@ -1854,14 +1848,10 @@ interface DrawView
         ExecMethod = FuSupport ;
         StateMethod = GetMenuState ;
     ]
-     // problem with SID_ATTR_FILL_STYLE:
-     // former XFillStyle, now property FillStyle (Get/Set)
-     // therefore Export = FALSE !
     SID_SETFILLSTYLE // ole : no, status : play rec
     [
         ExecMethod = AttrExec ;
         StateMethod = AttrState ;
-        Export = FALSE ;
     ]
     SID_GETFILLSTYLE // ole : no, status : play rec
     [
@@ -1878,29 +1868,20 @@ interface DrawView
         ExecMethod = AttrExec ;
         StateMethod = AttrState ;
     ]
-     // problem with SID_ATTR_LINE_WIDTH:
-     // former XLineWidth, now property LineWidth (Get/Set)
-     // therefore Export = FALSE !
     SID_SETLINEWIDTH // ole : no, status : play rec
     [
         ExecMethod = AttrExec ;
         StateMethod = AttrState ;
-        Export = FALSE ;
     ]
     SID_GETLINEWIDTH // ole : no, status : play rec
     [
         ExecMethod = AttrExec ;
         StateMethod = AttrState ;
     ]
-     //DB: FillColor -> SetFillColor
-     // problem with SID_ATTR_FILL_COLOR:
-     // former XFillColor, now property FillColor (Get/Set)
-     // therefore Export = FALSE !
     SID_SETFILLCOLOR // ole : no, status : play rec
     [
         ExecMethod = AttrExec ;
         StateMethod = AttrState ;
-        Export = FALSE ;
     ]
     SID_SETLINECOLOR // ole : no, status : play rec
     [

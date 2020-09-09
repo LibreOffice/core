@@ -233,13 +233,11 @@ interface FormulaView
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        Export = FALSE ;
     ]
     SID_IMPORT_MATHML_CLIPBOARD //idlpp ole : no , status : no
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        Export = FALSE ;
     ]
     //idlpp no menu entry, so no texts
     SID_ATTR_ZOOM //idlpp ole : no , status : no

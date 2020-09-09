@@ -216,13 +216,11 @@ interface BaseTextSelection
 
     SID_GALLERY_FORMATS // status()
     [
-        Export = FALSE ;
         ExecMethod = Execute ;
     ]
 
     SID_GALLERY_ENABLE_ADDCOPY
     [
-        Export = FALSE;
         StateMethod = GetState;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
@@ -485,14 +483,11 @@ interface BaseTextSelection
         StateMethod = GetState ;
     ]
 
-// from here on Export = FALSE
-
     FN_FRAME_WRAP   // status()
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-        Export = FALSE;
     ]
 
     FN_FRAME_WRAP_IDEAL // status()
@@ -500,7 +495,6 @@ interface BaseTextSelection
         ExecMethod = Execute ;
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-        Export = FALSE;
     ]
 
     FN_FRAME_NOWRAP   // status()
@@ -508,7 +502,6 @@ interface BaseTextSelection
         ExecMethod = Execute ;
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-        Export = FALSE;
     ]
 
     FN_FRAME_WRAPTHRU   // status()
@@ -516,7 +509,6 @@ interface BaseTextSelection
         ExecMethod = Execute ;
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-        Export = FALSE;
     ]
 
     FN_FRAME_WRAPTHRU_TRANSP // status()
@@ -524,7 +516,6 @@ interface BaseTextSelection
         ExecMethod = Execute ;
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-        Export = FALSE;
     ]
 
     FN_FRAME_WRAPTHRU_TOGGLE // status()
@@ -532,7 +523,6 @@ interface BaseTextSelection
         ExecMethod = Execute ;
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-        Export = FALSE;
     ]
 
     FN_FRAME_WRAP_CONTOUR // status()
@@ -540,7 +530,6 @@ interface BaseTextSelection
         ExecMethod = Execute ;
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-        Export = FALSE;
     ]
 
     FN_WRAP_ANCHOR_ONLY // status()
@@ -548,7 +537,6 @@ interface BaseTextSelection
         ExecMethod = Execute ;
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-        Export = FALSE;
     ]
 
     FN_FRAME_WRAP_LEFT // status()
@@ -556,7 +544,6 @@ interface BaseTextSelection
         ExecMethod = Execute ;
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-        Export = FALSE;
     ]
 
     FN_FRAME_WRAP_RIGHT // status()
@@ -564,7 +551,6 @@ interface BaseTextSelection
         ExecMethod = Execute ;
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-        Export = FALSE;
     ]
 
     SID_GALLERY_BG_BRUSH
@@ -572,7 +558,6 @@ interface BaseTextSelection
         ExecMethod = ExecuteGallery;
         StateMethod = GetGalleryState;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-        Export = FALSE;
     ]
     SID_ATTR_BORDER_SHADOW // status(final|play)
     [

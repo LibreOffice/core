@@ -49,7 +49,6 @@ public:
     SvMetaSlot*      pNextSlot;
     sal_uLong        nListPos;
     SvBOOL           aReadOnlyDoc;
-    SvBOOL           aExport;
 
     void            WriteSlot( const OString& rShellName,
                             sal_uInt16 nCount, const OString& rSlotId,
@@ -103,8 +102,6 @@ public:
     bool                GetFastCall() const;
     bool                GetContainer() const;
     bool                GetReadOnlyDoc() const;
-    bool                GetExport() const;
-    bool                GetHidden() const;
 
     sal_uLong           GetListPos() const
                         { return nListPos; }

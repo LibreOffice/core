@@ -467,7 +467,6 @@ interface BaseTextEditView
     ]
     SID_ATTR_PAGE_MAXSIZE // status()
     [
-        Export = FALSE ;
         ExecMethod = Execute ;
     ]
     SID_ATTR_PAGE_PAPERBIN // status(final|play)
@@ -625,7 +624,6 @@ interface BaseTextEditView
     [
         ExecMethod = ExecSearch ;
         StateMethod = StateSearch ;
-        Export = FALSE;
     ]
     FN_REPEAT_SEARCH // status(final|play)
     [
@@ -668,48 +666,40 @@ interface BaseTextEditView
     [
         ExecMethod = ExecTabWin;
     ]
-    // from here  Export = FALSE;
     FID_SEARCH_ON // status()
     [
         ExecMethod = ExecSearch ;
-        Export = FALSE;
     ]
     FID_SEARCH_OFF // status()
     [
         ExecMethod = ExecSearch ;
-        Export = FALSE;
     ]
     FN_INSERT_CTRL
     [
-        Export = FALSE;
     ]
 
     SID_ATTR_DEFTABSTOP
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        Export = FALSE;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_ATTR_LANGUAGE
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        Export = FALSE;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_ATTR_CHAR_CJK_LANGUAGE
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        Export = FALSE;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_ATTR_CHAR_CTL_LANGUAGE
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        Export = FALSE;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
@@ -826,43 +816,36 @@ interface BaseTextEditView
     [
         ExecMethod = ExecViewOptions ;
         StateMethod = StateViewOptions ;
-        Export = FALSE;
     ]
 
     FN_VIEW_HIDE_WHITESPACE
     [
         ExecMethod = ExecViewOptions ;
         StateMethod = StateViewOptions ;
-        Export = FALSE;
     ]
 
     FN_VIEW_SHOW_WHITESPACE
     [
         ExecMethod = ExecViewOptions ;
         StateMethod = StateViewOptions ;
-        Export = FALSE;
     ]
 
     SID_TOGGLE_NOTES
     [
         ExecMethod = ExecViewOptions ;
         StateMethod = StateViewOptions ;
-        Export = FALSE;
     ]
 
     SID_TOGGLE_RESOLVED_NOTES
     [
         ExecMethod = ExecViewOptions ;
         StateMethod = StateViewOptions ;
-        Export = FALSE;
     ]
 
-     // Everything from here can be removed (Export = FALSE;), if the previous works
     FN_RULER // status()
     [
         ExecMethod = ExecViewOptions ;
         StateMethod = StateViewOptions ;
-        Export = FALSE;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
@@ -870,41 +853,35 @@ interface BaseTextEditView
     [
         ExecMethod = ExecViewOptions ;
         StateMethod = StateViewOptions ;
-        Export = FALSE;
     ]
 
     FN_VIEW_GRAPHIC // status()
     [
         ExecMethod = ExecViewOptions ;
         StateMethod = StateViewOptions ;
-        Export = FALSE ;
     ]
     FN_VIEW_FIELDS // status()
     [
         ExecMethod = ExecViewOptions ;
         StateMethod = StateViewOptions ;
-        Export = FALSE;
     ]
 
     FN_VIEW_FIELDNAME // status()
     [
         ExecMethod = ExecViewOptions ;
         StateMethod = StateViewOptions ;
-        Export = FALSE;
     ]
 
     FN_VIEW_MARKS // status()
     [
         ExecMethod = ExecViewOptions ;
         StateMethod = StateViewOptions ;
-        Export = FALSE;
     ]
 
     FN_VIEW_META_CHARS // status()
     [
         ExecMethod = ExecViewOptions ;
         StateMethod = StateViewOptions ;
-        Export = FALSE;
     ]
 
     FN_VIEW_TABLEGRID // status()
@@ -933,7 +910,6 @@ interface BaseTextEditView
     [
         ExecMethod = ExecViewOptions ;
         StateMethod = StateViewOptions ;
-        Export = FALSE;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
@@ -941,14 +917,12 @@ interface BaseTextEditView
     [
         ExecMethod = ExecViewOptions ;
         StateMethod = StateViewOptions ;
-        Export = FALSE;
     ]
 
     FN_VSCROLLBAR // status()
     [
         ExecMethod = ExecViewOptions ;
         StateMethod = StateViewOptions ;
-        Export = FALSE;
     ]
 
     FN_SHADOWCURSOR // status(final|play)
@@ -967,7 +941,6 @@ interface BaseTextEditView
     [
         ExecMethod = ExecViewOptions ;
         StateMethod = StateViewOptions ;
-        Export = FALSE;
         MenuConfig , AccelConfig , ToolBoxConfig ;
     ]
 
@@ -975,7 +948,6 @@ interface BaseTextEditView
     [
         ExecMethod = ExecViewOptions ;
         StateMethod = StateViewOptions ;
-        Export = FALSE;
         MenuConfig , AccelConfig , ToolBoxConfig ;
     ]
 

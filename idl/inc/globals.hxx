@@ -51,7 +51,6 @@ struct SvGlobalHashNames
     SvStringHashEntry* MM_ExecMethod;
     SvStringHashEntry* MM_StateMethod;
     SvStringHashEntry* MM_GroupId;
-    SvStringHashEntry* MM_Export;
     SvStringHashEntry* MM_define;
     SvStringHashEntry* MM_MenuConfig;
     SvStringHashEntry* MM_ToolBoxConfig;
@@ -112,7 +111,6 @@ HASH_INLINE(StateMethod)
 HASH_INLINE(GroupId)
 HASH_INLINE(float)
 HASH_INLINE(double)
-HASH_INLINE(Export)
 HASH_INLINE(define)
 HASH_INLINE(MenuConfig)
 HASH_INLINE(ToolBoxConfig)

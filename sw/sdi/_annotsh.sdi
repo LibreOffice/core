@@ -451,7 +451,6 @@ interface _Annotation
     [
         ExecMethod = ExecSearch ;
         StateMethod = StateSearch ;
-        Export = FALSE;
     ]
     FN_REPEAT_SEARCH // status(final|play)
     [
@@ -474,15 +473,12 @@ interface _Annotation
         ExecMethod = ExecSearch ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
-      // from here on Export = FALSE;
     FID_SEARCH_ON // status()
     [
         ExecMethod = ExecSearch ;
-        Export = FALSE;
     ]
     FID_SEARCH_OFF // status()
     [
         ExecMethod = ExecSearch ;
-        Export = FALSE;
     ]
 }

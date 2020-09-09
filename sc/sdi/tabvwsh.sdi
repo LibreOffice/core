@@ -52,7 +52,7 @@ interface BaseSelection
     // insert objects {
 
     SID_INSERT_GRAPHIC          [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
-    SID_INSERT_FRAME            [ ExecMethod = ExecDraw; StateMethod = GetDrawState; Export = FALSE; ]
+    SID_INSERT_FRAME            [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
     SID_INSERT_OBJECT           [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
     SID_INSERT_FLOATINGFRAME    [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
     SID_INSERT_AVMEDIA          [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
@@ -151,13 +151,11 @@ interface TableEditView
     [
         ExecMethod = ExecuteSave ;
         StateMethod = GetSaveState ;
-        Export = FALSE ;
     ]
     SID_SAVEASDOC
     [
         ExecMethod = ExecuteSave ;
         StateMethod = GetSaveState ;
-        Export = FALSE ;
     ]
     // has indeed a SW in his name but is also used in Calc
     SID_CREATE_SW_DRAWVIEW [ ExecMethod = Execute; ]
@@ -201,9 +199,9 @@ interface TableEditView
 
     //  view options for drawing layer are needed here because they
     //  can be set without a drawing object selected (#75361#)
-    SID_GRID_VISIBLE    [ ExecMethod = ExecDrawOpt; StateMethod = GetDrawOptState; Export = FALSE; ]
-    SID_GRID_USE        [ ExecMethod = ExecDrawOpt; StateMethod = GetDrawOptState; Export = FALSE; ]
-    SID_HELPLINES_MOVE  [ ExecMethod = ExecDrawOpt; StateMethod = GetDrawOptState; Export = FALSE; ]
+    SID_GRID_VISIBLE    [ ExecMethod = ExecDrawOpt; StateMethod = GetDrawOptState; ]
+    SID_GRID_USE        [ ExecMethod = ExecDrawOpt; StateMethod = GetDrawOptState; ]
+    SID_HELPLINES_MOVE  [ ExecMethod = ExecDrawOpt; StateMethod = GetDrawOptState; ]
 
     SID_GETUNDOSTRINGS  [ StateMethod = GetUndoState; ]
     SID_GETREDOSTRINGS  [ StateMethod = GetUndoState; ]

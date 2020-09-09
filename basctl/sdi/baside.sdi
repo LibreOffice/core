@@ -135,7 +135,6 @@ shell basctl_Shell
     FID_SEARCH_ON // status()
     [
         ExecMethod = ExecuteSearch;
-        Export = FALSE;
     ]
 
     FID_SEARCH_OFF
