@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.22.2 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="SelectSourceDialog">
@@ -11,6 +11,9 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox3">
         <property name="can_focus">False</property>
@@ -57,7 +60,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
-                <property name="image_position">top</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -121,6 +123,7 @@
                           <object class="GtkComboBoxText" id="rangelb">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
                             <accessibility>
                               <relation type="labelled-by" target="namedrange"/>
                             </accessibility>
@@ -232,9 +235,6 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="SelectSourceDialog-atkobject">
         <property name="AtkObject::accessible-description" translatable="yes" context="selectsource|extended_tip|SelectSourceDialog">Opens a dialog where you can select the source for your pivot table, and then create your table.</property>
