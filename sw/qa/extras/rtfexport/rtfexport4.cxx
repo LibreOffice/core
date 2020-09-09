@@ -331,6 +331,15 @@ DECLARE_RTFEXPORT_TEST(testTdf129522_removeShadowStyle, "tdf129522_removeShadowS
     CPPUNIT_ASSERT(sal_uInt32(0) != aBorderLine.LineWidth);
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf136587_noStyleName, "tdf136587_noStyleName.rtf")
+{
+    uno::Reference<container::XNameAccess> paragraphStyles = getStyles("ParagraphStyles");
+    uno::Reference<beans::XPropertySet> xStyleProps(paragraphStyles->getByName("Style15"),
+                                                    uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER),
+                         getProperty<sal_Int16>(xStyleProps, "ParaAdjust"));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testPageBorder)
 {
     load(mpTestDocumentPath, "page-border.rtf");
