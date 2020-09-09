@@ -4276,7 +4276,7 @@ OUString DomainMapper_Impl::convertFieldFormula(const OUString& input) {
     usInput = rmatch2.replaceAll(icu::UnicodeString("<$1>"), status);
 
     /* Cell references must be upper case */
-    icu::RegexMatcher rmatch3("<[a-z]{1,3}[0-9]+>", usInput, rMatcherFlags, status);
+    icu::RegexMatcher rmatch3("(<[a-z]{1,3}[0-9]+>|\\b(above|below|left|right)\\b)", usInput, rMatcherFlags, status);
     icu::UnicodeString replacedCellRefs;
     while (rmatch3.find(status) && status.isSuccess()) {
         rmatch3.appendReplacement(replacedCellRefs, rmatch3.group(status).toUpper(), status);
@@ -4290,6 +4290,10 @@ OUString DomainMapper_Impl::convertFieldFormula(const OUString& input) {
     /* Fix up user defined names */
     icu::RegexMatcher rmatch5("\\bDEFINED\\s*\\(<([A-Z]+[0-9]+)>\\)", usInput, rMatcherFlags, status);
     usInput = rmatch5.replaceAll(icu::UnicodeString("DEFINED($1)"), status);
+
+    /* Prepare replace of ABOVE/BELOW/LEFT/RIGHT by adding spaces around them */
+    icu::RegexMatcher rmatch6("\\b(ABOVE|BELOW|LEFT|RIGHT)\\b", usInput, rMatcherFlags, status);
+    usInput = rmatch6.replaceAll(icu::UnicodeString(" $1 "), status);
 
     return OUString(usInput.getTerminatedBuffer());
 }

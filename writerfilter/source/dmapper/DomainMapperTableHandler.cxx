@@ -27,6 +27,7 @@
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/SizeType.hpp>
+#include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -41,6 +42,8 @@
 #include <tools/diagnose_ex.h>
 #include <comphelper/sequence.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <boost/lexical_cast.hpp>
 
 #ifdef DBG_UTIL
 #include "PropertyMapHelper.hxx"
@@ -1213,6 +1216,147 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
     }
 }
 
+// convert formula range identifier ABOVE, BELOW, LEFT and RIGHT
+static void lcl_convertFormulaRanges(const uno::Reference<text::XTextTable> & xTable)
+{
+    uno::Reference<table::XCellRange> xCellRange(xTable, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xTableRows(xTable->getRows(), uno::UNO_QUERY_THROW);
+    sal_Int32 nRows = xTableRows->getCount();
+    for (sal_Int32 nRow = 0; nRow < nRows; ++nRow)
+    {
+        sal_Int16 nCol = 0;
+        while (++nCol)
+        {
+            try
+            {
+                uno::Reference<beans::XPropertySet> xCellProperties(xCellRange->getCellByPosition(nCol, nRow), uno::UNO_QUERY_THROW);
+                uno::Sequence<beans::PropertyValue> aCellGrabBag;
+                xCellProperties->getPropertyValue("CellInteropGrabBag") >>= aCellGrabBag;
+                OUString sFormula;
+                bool bReplace = false;
+                for (const auto& rProp : std::as_const(aCellGrabBag))
+                {
+                    if ( rProp.Name == "CellFormulaConverted" )
+                    {
+                        rProp.Value >>= sFormula;
+                        struct RangeDirection
+                        {
+                            OUString m_sName;
+                            sal_Int16 m_nCol;
+                            sal_Int16 m_nRow;
+                        };
+                        static const RangeDirection pDirections[] =
+                        {
+                            { OUString(" LEFT "), -1, 0},
+                            { OUString(" RIGHT "), 1, 0},
+                            { OUString(" ABOVE "), 0, -1},
+                            { OUString(" BELOW "), 0, 1 }
+                        };
+                        for (const RangeDirection& rRange : pDirections)
+                        {
+                            if ( sFormula.indexOf(rRange.m_sName) > -1 )
+                            {
+                                // range starts at the first cell above/below/left/right, but ends at the
+                                // table border or at the first non-value cell after a value cell
+                                bool bFoundFirst = false;
+                                OUString sNextCell;
+                                OUString sLastCell;
+                                OUString sLastValueCell;
+                                // walk through the cells of the range
+                                try
+                                {
+                                    sal_Int32 nCell = 0;
+                                    while (++nCell)
+                                    {
+                                        uno::Reference<beans::XPropertySet> xCell(
+                                                xCellRange->getCellByPosition(nCol + nCell * rRange.m_nCol, nRow + nCell * rRange.m_nRow),
+                                                uno::UNO_QUERY_THROW);
+                                        // empty cell or cell with text content is end of the range
+                                        uno::Reference<text::XText> xText(xCell, uno::UNO_QUERY_THROW);
+                                        sLastCell = xCell->getPropertyValue("CellName").get<OUString>();
+                                        if (sNextCell.isEmpty())
+                                            sNextCell = sLastCell;
+                                        try
+                                        {
+                                            // accept numbers with comma and percent
+                                            OUString sCellText = xText->getString().replace(',', '.');
+                                            if (sCellText.endsWith("%"))
+                                                sCellText = sCellText.copy(0, sCellText.getLength()-1);
+                                            boost::lexical_cast<double>(sCellText);
+                                        }
+                                        catch( boost::bad_lexical_cast const& )
+                                        {
+                                            if ( !bFoundFirst )
+                                            {
+                                                // still search value cells
+                                                continue;
+                                            }
+                                            else
+                                            {
+                                                // end of range
+                                                break;
+                                            }
+                                        }
+                                        sLastValueCell = sLastCell;
+                                        bFoundFirst = true;
+                                    }
+                                }
+                                catch ( const lang::IndexOutOfBoundsException & )
+                                {
+                                }
+
+                                if ( !sNextCell.isEmpty() )
+                                {
+                                    OUString sRange = "<" + sNextCell + ":" +
+                                            ( sLastValueCell.isEmpty() ? sLastCell : sLastValueCell ) + ">";
+                                    sFormula = sFormula.replaceAll(rRange.m_sName, sRange);
+                                    bReplace = true;
+                                }
+                            }
+                        }
+
+                        // update formula field
+                        if (bReplace)
+                        {
+                            uno::Reference<text::XText> xCell(xCellRange->getCellByPosition(nCol, nRow), uno::UNO_QUERY);
+                            uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xCell, uno::UNO_QUERY);
+                            uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+                            uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParaEnum->nextElement(), uno::UNO_QUERY);
+                            uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+                            while ( xRunEnum->hasMoreElements() )
+                            {
+                                uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
+                                uno::Reference< beans::XPropertySet > xRunProperties( xRun, uno::UNO_QUERY_THROW );
+                                if ( xRunProperties->getPropertyValue("TextPortionType") == uno::makeAny(OUString("TextField")) )
+                                {
+                                    uno::Reference<text::XTextField> const xField(xRunProperties->getPropertyValue("TextField").get<uno::Reference<text::XTextField>>());
+                                    uno::Reference< beans::XPropertySet > xFieldProperties( xField, uno::UNO_QUERY_THROW );
+                                    // cell can contain multiple text fields, but only one is handled now (~formula cell)
+                                    if ( rProp.Value != xFieldProperties->getPropertyValue("Content") )
+                                        continue;
+                                    xFieldProperties->setPropertyValue("Content", uno::makeAny(sFormula));
+                                    // update grab bag
+                                    auto aGrabBag = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aCellGrabBag);
+                                    beans::PropertyValue aValue;
+                                    aValue.Name = "CellFormulaConverted";
+                                    aValue.Value <<= sFormula;
+                                    aGrabBag.push_back(aValue);
+                                    xCellProperties->setPropertyValue("CellInteropGrabBag", uno::makeAny(comphelper::containerToSequence(aGrabBag)));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch ( const lang::IndexOutOfBoundsException & )
+            {
+                // jump to next table row
+                break;
+            }
+        }
+    }
+}
+
 void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTableStartsAtCellStart)
 {
 #ifdef DBG_UTIL
@@ -1367,6 +1511,9 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
                             }
                         }
                     }
+
+                    // convert special range IDs ABOVE, BELOW, LEFT and RIGHT
+                    lcl_convertFormulaRanges(xTable);
                 }
             }
         }
