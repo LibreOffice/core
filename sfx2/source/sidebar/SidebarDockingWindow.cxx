@@ -108,6 +108,9 @@ public:
             SAL_WARN("sfx.sidebar", rError.message());
         }
     }
+
+    vcl::LOKWindowId GetLastLOKWindow() { return m_LastLOKWindowId; }
+
 };
 
 SidebarDockingWindow::SidebarDockingWindow(SfxBindings* pSfxBindings, SidebarChildWindow& rChildWindow,
@@ -207,7 +210,11 @@ void SidebarDockingWindow::NotifyResize()
         SetLOKNotifier(pCurrentView);
     }
 
-    mpIdleNotify->Start();
+    if (mpIdleNotify->GetLastLOKWindow() == 0)
+    {
+        mpIdleNotify->Start();
+    }
+
 }
 
 SfxChildAlignment SidebarDockingWindow::CheckAlignment (
