@@ -6819,7 +6819,7 @@ AC_RUN_IFELSE([AC_LANG_PROGRAM([
     ])], [
         AC_DEFINE([HAVE_CPP_CONSTEVAL],[1])
         AC_MSG_RESULT([yes])
-    ], [AC_MSG_RESULT([no])])
+    ], [AC_MSG_RESULT([no])], [AC_MSG_RESULT([assumed no (cross compiling)])])
 CXXFLAGS=$save_CXXFLAGS
 AC_LANG_POP([C++])
 
