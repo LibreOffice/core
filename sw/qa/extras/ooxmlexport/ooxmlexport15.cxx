@@ -584,6 +584,23 @@ DECLARE_OOXMLEXPORT_TEST(testImageSpaceSettings, "tdf135047_ImageSpaceSettings.f
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:drawing/wp:anchor", "distR", "90170");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf135663, "tdf135663.odt")
+{
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+
+    const OUString sStyle1 = getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:object[1]/v:shape", "style");
+    CPPUNIT_ASSERT(sStyle1.indexOf("mso-wrap-distance-left:14.15pt") > -1);
+    CPPUNIT_ASSERT(sStyle1.indexOf("mso-wrap-distance-right:17pt") > -1);
+    CPPUNIT_ASSERT(sStyle1.indexOf("mso-wrap-distance-top:8.5pt") > -1);
+    CPPUNIT_ASSERT(sStyle1.indexOf("mso-wrap-distance-bottom:11.35pt") > -1);
+
+    const OUString sStyle2 = getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:object[2]/v:shape", "style");
+    CPPUNIT_ASSERT(sStyle2.indexOf("mso-wrap-distance-left") == -1);
+    CPPUNIT_ASSERT(sStyle2.indexOf("mso-wrap-distance-right") == -1);
+    CPPUNIT_ASSERT(sStyle2.indexOf("mso-wrap-distance-top") == -1);
+    CPPUNIT_ASSERT(sStyle2.indexOf("mso-wrap-distance-bottom") == -1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
