@@ -456,6 +456,21 @@ void Test::testColumnIterator() // tdf#118620
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testTdf90698()
+{
+    CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));
+    m_pDoc->SetString(ScAddress(0,0,0), "=(1;2)");
+
+    // Without the fix in place, this would have failed with
+    // - Expected: =(1;2)
+    // - Actual  : =(1~2)
+    OUString aFormula;
+    m_pDoc->GetFormula(0,0,0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=(1;2)"), aFormula);
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testTdf135249()
 {
     CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));
