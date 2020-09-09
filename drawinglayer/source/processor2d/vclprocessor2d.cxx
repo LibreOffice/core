@@ -135,6 +135,10 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
                 rTextCandidate.getFontAttribute(), aFontScaling.getX(), aFontScaling.getY(),
                 fRotate, rTextCandidate.getLocale()));
 
+            // Don't draw fonts without height
+            if (aFont.GetFontHeight() <= 0)
+                return;
+
             // set FillColor Attribute
             const Color aFillColor(rTextCandidate.getTextFillColor());
             if (aFillColor != COL_TRANSPARENT)
@@ -142,10 +146,6 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
                 aFont.SetFillColor(aFillColor);
                 aFont.SetTransparent(false);
             }
-
-            // Don't draw fonts without height
-            if (aFont.GetFontHeight() <= 0)
-                return;
 
             // handle additional font attributes
             const primitive2d::TextDecoratedPortionPrimitive2D* pTCPP
