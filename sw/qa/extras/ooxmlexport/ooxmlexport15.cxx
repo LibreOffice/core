@@ -299,6 +299,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135216_evenOddFooter, "tdf135216_evenOddFooter.o
     getParagraph(2, "2");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf136589_paraHadField, "tdf136589_paraHadField.docx")
+{
+    // The section break should not add an additional CR - which equals an empty page two.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf133370_columnBreak, "tdf133370_columnBreak.odt")
 {
     // Since non-DOCX formats ignores column breaks in non-column situations, don't export to docx.

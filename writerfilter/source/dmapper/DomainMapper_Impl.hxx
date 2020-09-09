@@ -1074,6 +1074,7 @@ private:
     std::vector<css::uno::Reference< css::drawing::XShape > > m_vTextFramesForChaining ;
     /// Current paragraph had at least one field in it.
     bool m_bParaHadField;
+    bool m_bSaveParaHadField;
     css::uno::Reference<css::beans::XPropertySet> m_xPreviousParagraph;
     /// Current paragraph has automatic before spacing.
     bool m_bParaAutoBefore;

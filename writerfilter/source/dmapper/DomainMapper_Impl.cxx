@@ -313,6 +313,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsActualParagraphFramed( false ),
         m_vTextFramesForChaining(),
         m_bParaHadField(false),
+        m_bSaveParaHadField(false),
         m_bParaAutoBefore(false),
         m_bFirstParagraphInCell(true),
         m_bSaveFirstParagraphInCell(false),
@@ -2438,6 +2439,7 @@ void DomainMapper_Impl::appendGlossaryEntry()
 
 void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType)
 {
+    m_bSaveParaHadField = m_bParaHadField;
     m_aHeaderFooterStack.push(HeaderFooterContext(m_bTextInserted, m_nTableDepth));
     m_bTextInserted = false;
     m_nTableDepth = 0;
@@ -2538,6 +2540,8 @@ void DomainMapper_Impl::PopPageHeaderFooter()
         m_nTableDepth = m_aHeaderFooterStack.top().getTableDepth();
         m_aHeaderFooterStack.pop();
     }
+
+    m_bParaHadField = m_bSaveParaHadField;
 }
 
 void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
