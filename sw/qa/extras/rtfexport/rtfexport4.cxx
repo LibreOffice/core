@@ -338,6 +338,9 @@ DECLARE_RTFEXPORT_TEST(testTdf136587_noStyleName, "tdf136587_noStyleName.rtf")
                                                     uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER),
                          getProperty<sal_Int16>(xStyleProps, "ParaAdjust"));
+
+    xStyleProps.set(paragraphStyles->getByName("Default Paragraph Style"), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(32.0f, getProperty<float>(xStyleProps, "CharHeight"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testPageBorder)
