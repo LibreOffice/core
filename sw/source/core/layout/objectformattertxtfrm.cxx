@@ -737,6 +737,7 @@ void SwObjectFormatterTextFrame::FormatAnchorFrameAndItsPrevs( SwTextFrame& _rAn
         {
             // #i44049#
             _rAnchorTextFrame.LockJoin();
+            _rAnchorTextFrame.ForbidDelete();
             SwFrame* pColFrame = pColFrameOfAnchor->GetUpper()->GetLower();
             while ( pColFrame != pColFrameOfAnchor )
             {
@@ -755,6 +756,7 @@ void SwObjectFormatterTextFrame::FormatAnchorFrameAndItsPrevs( SwTextFrame& _rAn
             }
             // #i44049#
             _rAnchorTextFrame.UnlockJoin();
+            _rAnchorTextFrame.AllowDelete();
         }
     }
 
