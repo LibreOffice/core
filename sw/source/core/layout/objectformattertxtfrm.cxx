@@ -737,6 +737,7 @@ void SwObjectFormatterTextFrame::FormatAnchorFrameAndItsPrevs( SwTextFrame& _rAn
         {
             // #i44049#
             _rAnchorTextFrame.LockJoin();
+            SwFrameDeleteGuard aDeleteGuard(&_rAnchorTextFrame);
             SwFrame* pColFrame = pColFrameOfAnchor->GetUpper()->GetLower();
             while ( pColFrame != pColFrameOfAnchor )
             {
