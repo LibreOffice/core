@@ -99,8 +99,8 @@ interface FormatForSelection
     SID_TEXTDIRECTION_TOP_TO_BOTTOM [ ExecMethod = ExecuteTextDirection; StateMethod = GetTextDirectionState; ]
     SID_ATTR_PARA_LEFT_TO_RIGHT     [ ExecMethod = ExecuteTextDirection; StateMethod = GetTextDirectionState; ]
     SID_ATTR_PARA_RIGHT_TO_LEFT     [ ExecMethod = ExecuteTextDirection; StateMethod = GetTextDirectionState; ]
-    SID_VERTICALTEXT_STATE          [ StateMethod = GetTextDirectionState ; Export = FALSE; ]
-    SID_CTLFONT_STATE               [ StateMethod = GetTextDirectionState ; Export = FALSE; ]
+    SID_VERTICALTEXT_STATE          [ StateMethod = GetTextDirectionState ; ]
+    SID_CTLFONT_STATE               [ StateMethod = GetTextDirectionState ; ]
 
     SID_ATTR_NUMBERFORMAT_VALUE       [ ExecMethod = ExecuteNumFormat; StateMethod = GetNumFormatState;]
     SID_NUMBER_FORMAT       [ ExecMethod = ExecuteNumFormat; StateMethod = GetNumFormatState; ]

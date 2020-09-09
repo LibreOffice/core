@@ -27,7 +27,6 @@ interface TextEditView : BaseTextEditView
     FN_INSERT_OBJ_CTRL
     [
         StateMethod = GetState ;
-        Export = FALSE ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     FN_INSERT_CAPTION // status()

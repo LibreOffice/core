@@ -20,7 +20,6 @@ interface BaseTextFrame
 {
     SID_ATTR_FILL_STYLE
     [
-        Export = FALSE;
         ExecMethod = ExecDrawAttrArgsTextFrame;
         StateMethod = GetDrawAttrStateTextFrame;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
@@ -28,7 +27,6 @@ interface BaseTextFrame
 
     SID_ATTR_FILL_COLOR
     [
-        Export = FALSE;
         ExecMethod = ExecDrawAttrArgsTextFrame;
         StateMethod = GetDrawAttrStateTextFrame;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
@@ -36,7 +34,6 @@ interface BaseTextFrame
 
     SID_ATTR_FILL_GRADIENT
     [
-        Export = FALSE;
         ExecMethod = ExecDrawAttrArgsTextFrame;
         StateMethod = GetDrawAttrStateTextFrame;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
@@ -44,7 +41,6 @@ interface BaseTextFrame
 
     SID_ATTR_FILL_HATCH
     [
-        Export = FALSE;
         ExecMethod = ExecDrawAttrArgsTextFrame;
         StateMethod = GetDrawAttrStateTextFrame;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
@@ -52,7 +48,6 @@ interface BaseTextFrame
 
     SID_ATTR_FILL_BITMAP
     [
-        Export = FALSE;
         ExecMethod = ExecDrawAttrArgsTextFrame;
         StateMethod = GetDrawAttrStateTextFrame;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
@@ -60,7 +55,6 @@ interface BaseTextFrame
 
     SID_ATTR_FILL_TRANSPARENCE
     [
-        Export = FALSE;
         ExecMethod = ExecDrawAttrArgsTextFrame;
         StateMethod = GetDrawAttrStateTextFrame;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
@@ -68,7 +62,6 @@ interface BaseTextFrame
 
     SID_ATTR_FILL_FLOATTRANSPARENCE
     [
-        Export = FALSE;
         ExecMethod = ExecDrawAttrArgsTextFrame;
         StateMethod = GetDrawAttrStateTextFrame;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
@@ -278,7 +271,6 @@ interface BaseTextFrame
     [
         ExecMethod = ExecFrameStyle ;
         StateMethod = GetLineStyleState ;
-        Export = FALSE;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
@@ -371,13 +363,11 @@ interface BaseTextFrame
         ]
 
 // Query functions for ImageMaps
-// Slots without export
 
     FN_INSERT_FRAME
     [
         ExecMethod = Execute ;
         StateMethod = StateInsert ;
-        Export = False;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
@@ -386,7 +376,6 @@ interface BaseTextFrame
         ExecMethod = ExecFrameStyle ;
         StateMethod = GetLineStyleState ;
         GroupId = SfxGroupId::Frame;
-        Export = False;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 

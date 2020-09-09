@@ -198,19 +198,16 @@ interface OutlineView
     [
         ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
-        Export ;
     ]
     SID_CHAR_DLG // ole : no, status : ?
     [
         ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
-         //        Export ;
     ]
     SID_CHAR_DLG_EFFECT // wj for sym2_1876
     [
         ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
-         //        Export ;
     ]
     SID_SELECTALL // ole : no, status : ?
     [

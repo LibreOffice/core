@@ -37,7 +37,6 @@ interface TextBezier : TextSelection
 
     SID_BEZIER_MOVE
     [
-        Export = FALSE;
         ExecMethod = Execute ;
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
@@ -45,7 +44,6 @@ interface TextBezier : TextSelection
 
     SID_BEZIER_INSERT
     [
-        Export = FALSE;
         ExecMethod = Execute ;
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
@@ -53,7 +51,6 @@ interface TextBezier : TextSelection
 
     SID_BEZIER_DELETE
     [
-        Export = FALSE;
         ExecMethod = Execute ;
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
@@ -61,7 +58,6 @@ interface TextBezier : TextSelection
 
     SID_BEZIER_CUTLINE
     [
-        Export = FALSE;
         ExecMethod = Execute ;
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
@@ -69,7 +65,6 @@ interface TextBezier : TextSelection
 
     SID_BEZIER_CONVERT
     [
-        Export = FALSE;
         ExecMethod = Execute ;
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
@@ -77,7 +72,6 @@ interface TextBezier : TextSelection
 
     SID_BEZIER_EDGE
     [
-        Export = FALSE;
         ExecMethod = Execute ;
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
@@ -85,7 +79,6 @@ interface TextBezier : TextSelection
 
     SID_BEZIER_SMOOTH
     [
-        Export = FALSE;
         ExecMethod = Execute ;
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
@@ -93,7 +86,6 @@ interface TextBezier : TextSelection
 
     SID_BEZIER_SYMMTR
     [
-        Export = FALSE;
         ExecMethod = Execute ;
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
@@ -101,7 +93,6 @@ interface TextBezier : TextSelection
 
     SID_BEZIER_CLOSE
     [
-        Export = FALSE;
         ExecMethod = Execute ;
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
@@ -109,7 +100,6 @@ interface TextBezier : TextSelection
 
     SID_BEZIER_ELIMINATE_POINTS
     [
-        Export = FALSE;
         ExecMethod = Execute ;
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";

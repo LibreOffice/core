@@ -31,7 +31,6 @@ SvMetaSlot::SvMetaSlot()
     , pNextSlot(nullptr)
     , nListPos(0)
     , aReadOnlyDoc ( true )
-    , aExport( true )
 {
 }
 
@@ -42,7 +41,6 @@ SvMetaSlot::SvMetaSlot( SvMetaType * pType )
     , pNextSlot(nullptr)
     , nListPos(0)
     , aReadOnlyDoc ( true )
-    , aExport( true )
 {
 }
 
@@ -50,23 +48,6 @@ bool SvMetaSlot::GetReadOnlyDoc() const
 {
     if( aReadOnlyDoc.IsSet() || !GetRef() ) return aReadOnlyDoc;
     return static_cast<SvMetaSlot *>(GetRef())->GetReadOnlyDoc();
-}
-
-bool SvMetaSlot::GetExport() const
-{
-    if( aExport.IsSet() || !GetRef() ) return aExport;
-    return static_cast<SvMetaSlot *>(GetRef())->GetExport();
-}
-
-bool SvMetaSlot::GetHidden() const
-{
-    // when export is set, but hidden is not the default is used
-    if ( aExport.IsSet() )
-        return !aExport;
-    else if( !GetRef() )
-        return false;
-    else
-        return static_cast<SvMetaSlot *>(GetRef())->GetHidden();
 }
 
 bool SvMetaSlot::IsVariable() const
@@ -191,7 +172,6 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
     aStateMethod.ReadSvIdl( SvHash_StateMethod(), rInStm );
     ReadStringSvIdl( SvHash_DisableFlags(), rInStm, aDisableFlags );
     aReadOnlyDoc.ReadSvIdl( SvHash_ReadOnlyDoc(), rInStm );
-    aExport.ReadSvIdl( SvHash_Export(), rInStm );
     aToggle.ReadSvIdl( SvHash_Toggle(), rInStm );
     aAutoUpdate.ReadSvIdl( SvHash_AutoUpdate(), rInStm );
     aAsynchron.ReadSvIdl( SvHash_Asynchron(), rInStm );
@@ -357,9 +337,6 @@ void SvMetaSlot::WriteSlotStubs( const OString& rShellName,
                                 std::vector<OString> & rList,
                                 SvStream & rOutStm ) const
 {
-    if ( !GetExport() && !GetHidden() )
-        return;
-
     OString aMethodName( GetExecMethod() );
     if ( !aMethodName.isEmpty() &&
          aMethodName != "NoExec" )
@@ -416,9 +393,6 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
                             size_t nStart,
                             SvIdlDataBase & rBase, SvStream & rOutStm )
 {
-    if ( !GetExport() && !GetHidden() )
-        return;
-
     rOutStm.WriteCharPtr( "// Slot Nr. " )
        .WriteOString( OString::number(nListPos) )
        .WriteCharPtr( " : " );
@@ -596,9 +570,6 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
 
 sal_uInt16 SvMetaSlot::WriteSlotParamArray( SvIdlDataBase & rBase, SvStream & rOutStm ) const
 {
-    if ( !GetExport() && !GetHidden() )
-        return 0;
-
     if( IsMethod() )
     {
         SvMetaType * pType = GetType();

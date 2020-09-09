@@ -79,7 +79,6 @@ char const * const SyntaxStrings[] = {
 "\t\tAutoUpdate",
 "\t\tContainer",
 "\t\tExecMethod     = Identifier",
-"\t\tExport*",
 "\t\tFastCall",
 "\t\tGet, Set",
 "\t\tGroupId        = Identifier",

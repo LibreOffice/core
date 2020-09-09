@@ -21,26 +21,22 @@ interface TextDraw : TextDrawBase
     [
         ExecMethod = ExecDrawAttrArgs ;
         StateMethod = DisableState ;
-        Export = FALSE;
     ]
 
     SID_ATTR_LINE_START
     [
         ExecMethod = ExecDrawAttrArgs ;
         StateMethod = GetDrawAttrState ;
-        Export = FALSE;
     ]
 
     SID_ATTR_LINE_END
     [
         ExecMethod = ExecDrawAttrArgs ;
         StateMethod = GetDrawAttrState ;
-        Export = FALSE;
     ]
 
     SID_ATTR_LINE_STYLE
     [
-        Export = FALSE;
         ExecMethod = ExecDrawAttrArgs ;
         StateMethod = GetDrawAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
@@ -55,7 +51,6 @@ interface TextDraw : TextDrawBase
 
     SID_ATTR_LINE_TRANSPARENCE
     [
-        Export = FALSE;
         ExecMethod = ExecDrawAttrArgs ;
         StateMethod = GetDrawAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
@@ -63,7 +58,6 @@ interface TextDraw : TextDrawBase
 
     SID_ATTR_LINE_JOINT
     [
-        Export = FALSE;
         ExecMethod = ExecDrawAttrArgs ;
         StateMethod = GetDrawAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
@@ -71,7 +65,6 @@ interface TextDraw : TextDrawBase
 
     SID_ATTR_LINE_CAP
     [
-        Export = FALSE;
         ExecMethod = ExecDrawAttrArgs ;
         StateMethod = GetDrawAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
@@ -116,13 +109,11 @@ interface TextDraw : TextDrawBase
     [
         ExecMethod = ExecDrawAttrArgs ;
         StateMethod = GetDrawAttrState ;
-        Export = FALSE;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_ATTR_LINE_COLOR
     [
-        Export = FALSE;
         ExecMethod = ExecDrawAttrArgs ;
         StateMethod = GetDrawAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
@@ -130,7 +121,6 @@ interface TextDraw : TextDrawBase
 
     SID_ATTR_FILL_STYLE
     [
-        Export = FALSE;
         ExecMethod = ExecDrawAttrArgs ;
         StateMethod = GetDrawAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
@@ -138,7 +128,6 @@ interface TextDraw : TextDrawBase
 
     SID_ATTR_FILL_COLOR
     [
-        Export = FALSE;
         ExecMethod = ExecDrawAttrArgs ;
         StateMethod = GetDrawAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
@@ -146,7 +135,6 @@ interface TextDraw : TextDrawBase
 
     SID_ATTR_FILL_GRADIENT
     [
-        Export = FALSE;
         ExecMethod = ExecDrawAttrArgs ;
         StateMethod = GetDrawAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
@@ -154,7 +142,6 @@ interface TextDraw : TextDrawBase
 
     SID_ATTR_FILL_HATCH
     [
-        Export = FALSE;
         ExecMethod = ExecDrawAttrArgs ;
         StateMethod = GetDrawAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
@@ -162,7 +149,6 @@ interface TextDraw : TextDrawBase
 
     SID_ATTR_FILL_BITMAP
     [
-        Export = FALSE;
         ExecMethod = ExecDrawAttrArgs ;
         StateMethod = GetDrawAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
@@ -170,7 +156,6 @@ interface TextDraw : TextDrawBase
 
     SID_ATTR_FILL_TRANSPARENCE
     [
-        Export = FALSE;
         ExecMethod = ExecDrawAttrArgs ;
         StateMethod = GetDrawAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
@@ -178,7 +163,6 @@ interface TextDraw : TextDrawBase
 
     SID_ATTR_FILL_FLOATTRANSPARENCE
     [
-        Export = FALSE;
         ExecMethod = ExecDrawAttrArgs ;
         StateMethod = GetDrawAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
@@ -186,7 +170,6 @@ interface TextDraw : TextDrawBase
 
     SID_ATTR_GLOW_COLOR
     [
-        Export = FALSE;
         ExecMethod = ExecDrawAttrArgs ;
         StateMethod = GetDrawAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
@@ -194,7 +177,6 @@ interface TextDraw : TextDrawBase
 
     SID_ATTR_GLOW_RADIUS
     [
-        Export = FALSE;
         ExecMethod = ExecDrawAttrArgs ;
         StateMethod = GetDrawAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
@@ -202,7 +184,6 @@ interface TextDraw : TextDrawBase
 
     SID_ATTR_GLOW_TRANSPARENCY
     [
-        Export = FALSE;
         ExecMethod = ExecDrawAttrArgs ;
         StateMethod = GetDrawAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
@@ -210,7 +191,6 @@ interface TextDraw : TextDrawBase
 
     SID_ATTR_SOFTEDGE_RADIUS
     [
-        Export = FALSE;
         ExecMethod = ExecDrawAttrArgs ;
         StateMethod = GetDrawAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
@@ -256,7 +236,6 @@ interface TextDraw : TextDrawBase
 
     SID_OBJECT_ROTATE
     [
-        Export = FALSE;
         ExecMethod = Execute ;
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
@@ -264,7 +243,6 @@ interface TextDraw : TextDrawBase
 
     SID_BEZIER_EDIT
     [
-        Export = FALSE;
         ExecMethod = Execute ;
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
@@ -448,8 +426,6 @@ interface TextDraw : TextDrawBase
 shell SwDrawShell : SwDrawBaseShell
 {
         import TextDraw;
-
-     // no export
 
     SID_FORMTEXT_STYLE
     [
