@@ -158,7 +158,7 @@
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">-2</property>
     <property name="upper">10000</property>
-    <property name="step_increment">0.10000000000000001</property>
+    <property name="step_increment">0.1</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkImage" id="image_spacing_1">
