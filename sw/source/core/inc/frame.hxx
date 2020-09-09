@@ -902,8 +902,8 @@ public:
     void RegisterToFormat( SwFormat& rFormat );
     void ValidateThisAndAllLowers( const sal_uInt16 nStage );
 
-    void ForbidDelete()      { mbForbidDelete = true; }
-    void AllowDelete()    { mbForbidDelete = false; }
+    void ForbidDelete() { assert(!mbForbidDelete && "don't support doing this recursively"); mbForbidDelete = true; }
+    void AllowDelete()  { assert(mbForbidDelete && "don't support doing this recursively"); mbForbidDelete = false; }
 
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const;
     bool supportsFullDrawingLayerFillAttributeSet() const;

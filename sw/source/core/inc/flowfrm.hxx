@@ -136,8 +136,8 @@ protected:
     */
     sal_uInt8 BwdMoveNecessary( const SwPageFrame *pPage, const SwRect &rRect );
 
-    void LockJoin()   { m_bLockJoin = true;  }
-    void UnlockJoin() { m_bLockJoin = false; }
+    void LockJoin()   { assert(!m_bLockJoin && "don't support doing this recursively"); m_bLockJoin = true;  }
+    void UnlockJoin() { assert(m_bLockJoin && "don't support doing this recursively"); m_bLockJoin = false; }
 
     bool CheckMoveFwd( bool& rbMakePage, bool bKeep, bool bIgnoreMyOwnKeepValue );
     bool MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways = false );
