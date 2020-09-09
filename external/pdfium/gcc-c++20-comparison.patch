@@ -1,0 +1,18 @@
+--- core/fxcrt/retain_ptr.h
++++ core/fxcrt/retain_ptr.h
+@@ -135,6 +135,7 @@
+   mutable intptr_t m_nRefCount = 0;
+ };
+ 
++#if !(defined __GNUC__ && !defined __clang__ && __cplusplus > 201703L)
+ template <typename T, typename U>
+ inline bool operator==(const U* lhs, const RetainPtr<T>& rhs) {
+   return rhs == lhs;
+@@ -144,6 +144,7 @@
+ inline bool operator!=(const U* lhs, const RetainPtr<T>& rhs) {
+   return rhs != lhs;
+ }
++#endif
+ 
+ }  // namespace fxcrt
+ 
