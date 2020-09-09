@@ -280,6 +280,7 @@ public:
     void testShapeRotationImport();
     void testShapeDisplacementOnRotationImport();
     void testTextBoxBodyUpright();
+    void testTextLengthDataValidityXLSX();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -450,6 +451,7 @@ public:
     CPPUNIT_TEST(testShapeRotationImport);
     CPPUNIT_TEST(testShapeDisplacementOnRotationImport);
     CPPUNIT_TEST(testTextBoxBodyUpright);
+    CPPUNIT_TEST(testTextLengthDataValidityXLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -4953,6 +4955,44 @@ void ScFiltersTest::testTextBoxBodyUpright()
         }
     }
     CPPUNIT_ASSERT_EQUAL(sal_Int32(90), nAngle);
+}
+
+void ScFiltersTest::testTextLengthDataValidityXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("textLengthDataValidity.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load textLengthDataValidity.xlsx", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    const ScValidationData* pData = rDoc.GetValidationEntry(1);
+
+    ScRefCellValue aCellA1; // A1 = 1234(numeric value)
+    ScAddress aValBaseAddrA1( 0,0,0 );
+    aCellA1.assign(rDoc, aValBaseAddrA1);
+    bool bValidA1 = pData->IsDataValid(aCellA1, aValBaseAddrA1);
+
+    ScRefCellValue aCellA2; // A2 = 1234(numeric value format as text)
+    ScAddress aValBaseAddrA2( 0,1,0 );
+    aCellA2.assign(rDoc, aValBaseAddrA2);
+    bool bValidA2 = pData->IsDataValid(aCellA2, aValBaseAddrA2);
+
+    ScRefCellValue aCellA3; // A3 = 1234.00(numeric value)
+    ScAddress aValBaseAddrA3( 0,2,0 );
+    aCellA3.assign(rDoc, aValBaseAddrA3);
+    bool bValidA3 = pData->IsDataValid(aCellA3, aValBaseAddrA3);
+
+    ScRefCellValue aCellA4; // A4 = 12.3(numeric value)
+    ScAddress aValBaseAddrA4( 0,3,0 );
+    aCellA4.assign(rDoc, aValBaseAddrA4);
+    bool bValidA4 = pData->IsDataValid(aCellA4, aValBaseAddrA4);
+
+    // True if text length = 4
+    CPPUNIT_ASSERT_EQUAL(true, bValidA1);
+    CPPUNIT_ASSERT_EQUAL(true, bValidA2);
+    CPPUNIT_ASSERT_EQUAL(true, bValidA3);
+    CPPUNIT_ASSERT_EQUAL(true, bValidA4);
+
+    xDocSh->DoClose();
 }
 
 ScFiltersTest::ScFiltersTest()
