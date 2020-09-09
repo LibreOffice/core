@@ -622,6 +622,15 @@ void SwRedlineTable::Remove( size_type nP )
 
 void SwRedlineTable::DeleteAndDestroyAll()
 {
+    // Disable since usability is very low beyond some small number of changes.
+    static bool bDisableRedlineComments = getenv("DISABLE_REDLINE") != nullptr;
+    if (!comphelper::LibreOfficeKit::isActive() || bDisableRedlineComments)
+    {
+        for (auto const& elem : maVector)
+            delete elem;
+        maVector.clear();
+        return;
+    }
     while (!maVector.empty())
     {
         auto const pRedline = maVector.back();
