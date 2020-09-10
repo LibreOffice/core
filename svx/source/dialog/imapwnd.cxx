@@ -183,7 +183,7 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
 
     switch( pIMapObj->GetType() )
     {
-        case IMAP_OBJ_RECTANGLE:
+        case IMapObjectType::Rectangle:
         {
             const IMapRectangleObject* pIMapRectObj = static_cast<const IMapRectangleObject*>(pIMapObj);
             tools::Rectangle               aDrawRect( pIMapRectObj->GetRectangle( false ) );
@@ -196,7 +196,7 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
         }
         break;
 
-        case IMAP_OBJ_CIRCLE:
+        case IMapObjectType::Circle:
         {
             const IMapCircleObject*   pIMapCircleObj = static_cast<const IMapCircleObject*>(pIMapObj);
             const Point         aCenter( pIMapCircleObj->GetCenter( false ) );
@@ -217,7 +217,7 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
         }
         break;
 
-        case IMAP_OBJ_POLYGON:
+        case IMapObjectType::Polygon:
         {
             const IMapPolygonObject*  pIMapPolyObj = static_cast<const IMapPolygonObject*>(pIMapObj);
 

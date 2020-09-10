@@ -1699,7 +1699,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                     for (sal_uInt16 nArea = 0; nArea < nAreaCount; nArea++)
                     {
                         IMapObject* pArea = rIMap.GetIMapObject(nArea);
-                        sal_uInt16 nType = pArea->GetType();
+                        IMapObjectType nType = pArea->GetType();
                         OUString aURL( pArea->GetURL() );
 
                         // if necessary, convert page and object names into the
@@ -1723,7 +1723,7 @@ bool HtmlExport::CreateHtmlForPresPages()
 
                         switch(nType)
                         {
-                            case IMAP_OBJ_RECTANGLE:
+                            case IMapObjectType::Rectangle:
                             {
                                 ::tools::Rectangle aArea(static_cast<IMapRectangleObject*>(pArea)->
                                                  GetRectangle(false));
@@ -1740,7 +1740,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                             }
                             break;
 
-                            case IMAP_OBJ_CIRCLE:
+                            case IMapObjectType::Circle:
                             {
                                 Point aCenter(static_cast<IMapCircleObject*>(pArea)->
                                                  GetCenter(false));
@@ -1758,7 +1758,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                             }
                             break;
 
-                            case IMAP_OBJ_POLYGON:
+                            case IMapObjectType::Polygon:
                             {
                                 tools::Polygon aArea(static_cast<IMapPolygonObject*>(pArea)->GetPolygon(false));
                                 aStr.append(CreateHTMLPolygonArea(::basegfx::B2DPolyPolygon(aArea.getB2DPolygon()),
@@ -1770,7 +1770,7 @@ bool HtmlExport::CreateHtmlForPresPages()
 
                             default:
                             {
-                                SAL_INFO("sd", "unknown IMAP_OBJ_type");
+                                SAL_INFO("sd", "unknown IMapObjectType");
                             }
                             break;
                         }

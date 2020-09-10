@@ -162,15 +162,15 @@ void ImageMap::ImpWriteCERN( SvStream& rOStm ) const
 
         switch( pObj->GetType() )
         {
-            case IMAP_OBJ_RECTANGLE:
+            case IMapObjectType::Rectangle:
                 static_cast<IMapRectangleObject*>( pObj )->WriteCERN( rOStm );
             break;
 
-            case IMAP_OBJ_CIRCLE:
+            case IMapObjectType::Circle:
                 static_cast<IMapCircleObject*>( pObj )->WriteCERN( rOStm );
             break;
 
-            case IMAP_OBJ_POLYGON:
+            case IMapObjectType::Polygon:
                 static_cast<IMapPolygonObject*>( pObj )->WriteCERN( rOStm );
             break;
 
@@ -190,15 +190,15 @@ void ImageMap::ImpWriteNCSA( SvStream& rOStm  ) const
 
         switch( pObj->GetType() )
         {
-            case IMAP_OBJ_RECTANGLE:
+            case IMapObjectType::Rectangle:
                 static_cast<IMapRectangleObject*>( pObj )->WriteNCSA( rOStm );
             break;
 
-            case IMAP_OBJ_CIRCLE:
+            case IMapObjectType::Circle:
                 static_cast<IMapCircleObject*>( pObj )->WriteNCSA( rOStm );
             break;
 
-            case IMAP_OBJ_POLYGON:
+            case IMapObjectType::Polygon:
                 static_cast<IMapPolygonObject*>( pObj )->WriteNCSA( rOStm );
             break;
 

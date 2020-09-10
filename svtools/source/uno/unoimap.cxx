@@ -73,7 +73,7 @@ class SvUnoImageMapObject : public OWeakAggObject,
                             public XUnoTunnel
 {
 public:
-    SvUnoImageMapObject( sal_uInt16 nType, const SvEventDescription* pSupportedMacroItems );
+    SvUnoImageMapObject( IMapObjectType nType, const SvEventDescription* pSupportedMacroItems );
     SvUnoImageMapObject( const IMapObject& rMapObject, const SvEventDescription* pSupportedMacroItems );
 
     UNO3_GETIMPLEMENTATION_DECL( SvUnoImageMapObject )
@@ -105,10 +105,10 @@ public:
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
 private:
-    static rtl::Reference<PropertySetInfo> createPropertySetInfo( sal_uInt16 nType );
+    static rtl::Reference<PropertySetInfo> createPropertySetInfo( IMapObjectType nType );
 
 
-    sal_uInt16 mnType;
+    IMapObjectType mnType;
 
     OUString maURL;
     OUString maAltText;
@@ -126,11 +126,11 @@ private:
 
 UNO3_GETIMPLEMENTATION_IMPL( SvUnoImageMapObject );
 
-rtl::Reference<PropertySetInfo> SvUnoImageMapObject::createPropertySetInfo( sal_uInt16 nType )
+rtl::Reference<PropertySetInfo> SvUnoImageMapObject::createPropertySetInfo( IMapObjectType nType )
 {
     switch( nType )
     {
-    case IMAP_OBJ_POLYGON:
+    case IMapObjectType::Polygon:
         {
             static PropertyMapEntry const aPolygonObj_Impl[] =
             {
@@ -146,7 +146,7 @@ rtl::Reference<PropertySetInfo> SvUnoImageMapObject::createPropertySetInfo( sal_
 
             return rtl::Reference<PropertySetInfo>(new PropertySetInfo( aPolygonObj_Impl ));
         }
-    case IMAP_OBJ_CIRCLE:
+    case IMapObjectType::Circle:
         {
             static PropertyMapEntry const aCircleObj_Impl[] =
             {
@@ -163,7 +163,7 @@ rtl::Reference<PropertySetInfo> SvUnoImageMapObject::createPropertySetInfo( sal_
 
             return rtl::Reference<PropertySetInfo>(new PropertySetInfo( aCircleObj_Impl ));
         }
-    case IMAP_OBJ_RECTANGLE:
+    case IMapObjectType::Rectangle:
     default:
         {
             static PropertyMapEntry const aRectangleObj_Impl[] =
@@ -183,7 +183,7 @@ rtl::Reference<PropertySetInfo> SvUnoImageMapObject::createPropertySetInfo( sal_
     }
 }
 
-SvUnoImageMapObject::SvUnoImageMapObject( sal_uInt16 nType, const SvEventDescription* pSupportedMacroItems )
+SvUnoImageMapObject::SvUnoImageMapObject( IMapObjectType nType, const SvEventDescription* pSupportedMacroItems )
 :   PropertySetHelper( createPropertySetInfo( nType ) ),
     mnType( nType )
 ,   mbIsActive( true )
@@ -207,7 +207,7 @@ SvUnoImageMapObject::SvUnoImageMapObject( const IMapObject& rMapObject, const Sv
 
     switch( mnType )
     {
-    case IMAP_OBJ_RECTANGLE:
+    case IMapObjectType::Rectangle:
         {
             const tools::Rectangle aRect( static_cast<const IMapRectangleObject*>(&rMapObject)->GetRectangle(false) );
             maBoundary.X = aRect.Left();
@@ -216,7 +216,7 @@ SvUnoImageMapObject::SvUnoImageMapObject( const IMapObject& rMapObject, const Sv
             maBoundary.Height = aRect.GetHeight();
         }
         break;
-    case IMAP_OBJ_CIRCLE:
+    case IMapObjectType::Circle:
         {
             mnRadius = static_cast<sal_Int32>(static_cast<const IMapCircleObject*>(&rMapObject)->GetRadius(false));
             const Point aPoint( static_cast<const IMapCircleObject*>(&rMapObject)->GetCenter(false) );
@@ -225,7 +225,7 @@ SvUnoImageMapObject::SvUnoImageMapObject( const IMapObject& rMapObject, const Sv
             maCenter.Y = aPoint.Y();
         }
         break;
-    case IMAP_OBJ_POLYGON:
+    case IMapObjectType::Polygon:
     default:
         {
             const tools::Polygon aPoly( static_cast<const IMapPolygonObject*>(&rMapObject)->GetPolygon(false) );
@@ -260,21 +260,21 @@ std::unique_ptr<IMapObject> SvUnoImageMapObject::createIMapObject() const
 
     switch( mnType )
     {
-    case IMAP_OBJ_RECTANGLE:
+    case IMapObjectType::Rectangle:
         {
             const tools::Rectangle aRect( maBoundary.X, maBoundary.Y, maBoundary.X + maBoundary.Width - 1, maBoundary.Y + maBoundary.Height - 1 );
             pNewIMapObject.reset(new IMapRectangleObject( aRect, aURL, aAltText, aDesc, aTarget, aName, mbIsActive, false ));
         }
         break;
 
-    case IMAP_OBJ_CIRCLE:
+    case IMapObjectType::Circle:
         {
             const Point aCenter( maCenter.X, maCenter.Y );
             pNewIMapObject.reset(new IMapCircleObject( aCenter, mnRadius, aURL, aAltText, aDesc, aTarget, aName, mbIsActive, false ));
         }
         break;
 
-    case IMAP_OBJ_POLYGON:
+    case IMapObjectType::Polygon:
     default:
         {
             const sal_uInt16 nCount = static_cast<sal_uInt16>(maPolygon.getLength());
@@ -368,14 +368,14 @@ Sequence< OUString > SAL_CALL SvUnoImageMapObject::getSupportedServiceNames()
     aSNS.getArray()[0] = "com.sun.star.image.ImageMapObject";
     switch( mnType )
     {
-    case IMAP_OBJ_POLYGON:
+    case IMapObjectType::Polygon:
     default:
         aSNS.getArray()[1] = "com.sun.star.image.ImageMapPolygonObject";
         break;
-    case IMAP_OBJ_RECTANGLE:
+    case IMapObjectType::Rectangle:
         aSNS.getArray()[1] = "com.sun.star.image.ImageMapRectangleObject";
         break;
-    case IMAP_OBJ_CIRCLE:
+    case IMapObjectType::Circle:
         aSNS.getArray()[1] = "com.sun.star.image.ImageMapCircleObject";
         break;
     }
@@ -386,12 +386,12 @@ OUString SAL_CALL SvUnoImageMapObject::getImplementationName()
 {
     switch( mnType )
     {
-    case IMAP_OBJ_POLYGON:
+    case IMapObjectType::Polygon:
     default:
         return "org.openoffice.comp.svt.ImageMapPolygonObject";
-    case IMAP_OBJ_CIRCLE:
+    case IMapObjectType::Circle:
         return "org.openoffice.comp.svt.ImageMapCircleObject";
-    case IMAP_OBJ_RECTANGLE:
+    case IMapObjectType::Rectangle:
         return "org.openoffice.comp.svt.ImageMapRectangleObject";
     }
 }
@@ -687,17 +687,17 @@ void SvUnoImageMap::fillImageMap( ImageMap& rMap ) const
 
 Reference< XInterface > SvUnoImageMapRectangleObject_createInstance( const SvEventDescription* pSupportedMacroItems )
 {
-    return static_cast<XWeak*>(new SvUnoImageMapObject( IMAP_OBJ_RECTANGLE, pSupportedMacroItems ));
+    return static_cast<XWeak*>(new SvUnoImageMapObject( IMapObjectType::Rectangle, pSupportedMacroItems ));
 }
 
 Reference< XInterface > SvUnoImageMapCircleObject_createInstance( const SvEventDescription* pSupportedMacroItems )
 {
-    return static_cast<XWeak*>(new SvUnoImageMapObject( IMAP_OBJ_CIRCLE, pSupportedMacroItems ));
+    return static_cast<XWeak*>(new SvUnoImageMapObject( IMapObjectType::Circle, pSupportedMacroItems ));
 }
 
 Reference< XInterface > SvUnoImageMapPolygonObject_createInstance( const SvEventDescription* pSupportedMacroItems )
 {
-    return static_cast<XWeak*>(new SvUnoImageMapObject( IMAP_OBJ_POLYGON, pSupportedMacroItems ));
+    return static_cast<XWeak*>(new SvUnoImageMapObject( IMapObjectType::Polygon, pSupportedMacroItems ));
 }
 
 Reference< XInterface > SvUnoImageMap_createInstance()
