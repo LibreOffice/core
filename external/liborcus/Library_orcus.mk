@@ -85,6 +85,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,orcus,\
 	UnpackedTarball/liborcus/src/liborcus/odf_tokens \
 	UnpackedTarball/liborcus/src/liborcus/ods_content_xml_context \
 	UnpackedTarball/liborcus/src/liborcus/ods_content_xml_handler \
+	UnpackedTarball/liborcus/src/liborcus/ods_dde_links_context \
 	UnpackedTarball/liborcus/src/liborcus/ods_session_data \
 	UnpackedTarball/liborcus/src/liborcus/ooxml_content_types \
 	UnpackedTarball/liborcus/src/liborcus/ooxml_global \
@@ -103,6 +104,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,orcus,\
 	UnpackedTarball/liborcus/src/liborcus/orcus_xls_xml \
 	UnpackedTarball/liborcus/src/liborcus/orcus_xlsx \
 	UnpackedTarball/liborcus/src/liborcus/orcus_xml \
+	UnpackedTarball/liborcus/src/liborcus/orcus_xml_impl \
 	UnpackedTarball/liborcus/src/liborcus/orcus_xml_map_def \
 	UnpackedTarball/liborcus/src/liborcus/session_context \
 	UnpackedTarball/liborcus/src/liborcus/spreadsheet_iface_util \
@@ -134,7 +136,9 @@ $(eval $(call gb_Library_add_generated_exception_objects,orcus,\
 	UnpackedTarball/liborcus/src/liborcus/xml_simple_stream_handler \
 	UnpackedTarball/liborcus/src/liborcus/xml_stream_handler \
 	UnpackedTarball/liborcus/src/liborcus/xml_stream_parser \
+	UnpackedTarball/liborcus/src/liborcus/xml_structure_mapper \
 	UnpackedTarball/liborcus/src/liborcus/xml_structure_tree \
+	UnpackedTarball/liborcus/src/liborcus/xpath_parser \
 	UnpackedTarball/liborcus/src/liborcus/yaml_document_tree \
 ))
 

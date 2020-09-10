@@ -1,11 +1,11 @@
---- ltmain.sh.sav	2018-09-14 23:47:13.000000000 +0200
-+++ ltmain.sh	2019-05-05 23:11:30.406904472 +0200
-@@ -7278,7 +7278,7 @@ func_mode_link ()
+--- ltmain.sh.orig	2020-09-09 21:20:23.069433984 -0400
++++ ltmain.sh	2020-09-09 21:27:13.168073996 -0400
+@@ -7373,7 +7373,7 @@
        -64|-mips[0-9]|-r[0-9][0-9]*|-xarch=*|-xtarget=*|+DA*|+DD*|-q*|-m*| \
        -t[45]*|-txscale*|-p|-pg|--coverage|-fprofile-*|-F*|@*|-tp=*|--sysroot=*| \
        -O*|-g*|-flto*|-fwhopr*|-fuse-linker-plugin|-fstack-protector*|-stdlib=*| \
--      -specs=*|-fsanitize=*)
-+      -specs=*|-fsanitize=*|-fuse-ld=*|--ld-path=*)
+-      -specs=*|-fsanitize=*|-fuse-ld=*|-static-*|-fcilkplus)
++      -specs=*|-fsanitize=*|-fuse-ld=*|--ld-path=*|-static-*|-fcilkplus)
          func_quote_for_eval "$arg"
  	arg=$func_quote_for_eval_result
          func_append compile_command " $arg"
