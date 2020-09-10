@@ -1530,6 +1530,20 @@ DECLARE_ODFEXPORT_TEST(testWhitespace, "whitespace.odt")
     CPPUNIT_ASSERT(!xPortions->hasMoreElements());
 }
 
+DECLARE_ODFEXPORT_TEST(testTdf136645, "tdf136645.odt")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    // Without the fix in place, this would have failed with
+    //- Expected: 2640
+    //- Actual  : 3000
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2640), parseDump("/root/page/body/section/column[1]/body/infos/bounds", "width").toInt32());
+
+    //- Expected: 6000
+    //- Actual  : 6360
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6000), parseDump("/root/page/body/section/column[2]/body/infos/bounds", "width").toInt32());
+}
+
 DECLARE_ODFEXPORT_TEST(testBtlrCell, "btlr-cell.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
