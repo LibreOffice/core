@@ -408,7 +408,8 @@ void SearchAndParseThread::CheckInstalledExtensions()
                     else
                     {
                         rInfo->m_xButtonInstall->set_sensitive(false);
-                        rInfo->m_xButtonInstall->set_label("Installed");
+                        rInfo->m_xButtonInstall->set_label(
+                            CuiResId(RID_SVXSTR_ADDITIONS_INSTALLEDBUTTON));
                     }
                 }
             }
@@ -756,14 +757,14 @@ IMPL_LINK_NOARG(AdditionsItem, ShowMoreHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(AdditionsItem, InstallHdl, weld::Button&, void)
 {
-    m_xButtonInstall->set_label("Installing");
+    m_xButtonInstall->set_label(CuiResId(RID_SVXSTR_ADDITIONS_INSTALLING));
     m_xButtonInstall->set_sensitive(false);
     OUString aExtensionFile;
     bool bResult = getExtensionFile(aExtensionFile); // info vector json data
 
     if (!bResult)
     {
-        m_xButtonInstall->set_label("Install");
+        m_xButtonInstall->set_label(CuiResId(RID_SVXSTR_ADDITIONS_INSTALLBUTTON));
         m_xButtonInstall->set_sensitive(true);
 
         SAL_INFO("cui.dialogs", "Couldn't get the extension file.");
@@ -778,36 +779,36 @@ IMPL_LINK_NOARG(AdditionsItem, InstallHdl, weld::Button&, void)
     {
         m_pParentDialog->m_xExtensionManager->addExtension(
             aExtensionFile, uno::Sequence<beans::NamedValue>(), "user", xAbortChannel, xCmdEnv);
-        m_xButtonInstall->set_label("Installed");
+        m_xButtonInstall->set_label(CuiResId(RID_SVXSTR_ADDITIONS_INSTALLEDBUTTON));
     }
     catch (const ucb::CommandFailedException)
     {
         SAL_WARN("cui.dialogs", "Additions: addExtension CommandFailedException occurred.");
-        m_xButtonInstall->set_label("Install");
+        m_xButtonInstall->set_label(CuiResId(RID_SVXSTR_ADDITIONS_INSTALLBUTTON));
         m_xButtonInstall->set_sensitive(true);
     }
     catch (const ucb::CommandAbortedException)
     {
         SAL_WARN("cui.dialogs", "Additions: addExtension CommandAbortedException occurred.");
-        m_xButtonInstall->set_label("Install");
+        m_xButtonInstall->set_label(CuiResId(RID_SVXSTR_ADDITIONS_INSTALLBUTTON));
         m_xButtonInstall->set_sensitive(true);
     }
     catch (const deployment::DeploymentException)
     {
         SAL_WARN("cui.dialogs", "Additions: addExtension DeploymentException occurred.");
-        m_xButtonInstall->set_label("Install");
+        m_xButtonInstall->set_label(CuiResId(RID_SVXSTR_ADDITIONS_INSTALLBUTTON));
         m_xButtonInstall->set_sensitive(true);
     }
     catch (const lang::IllegalArgumentException)
     {
         SAL_WARN("cui.dialogs", "Additions: addExtension IllegalArgumentException occurred.");
-        m_xButtonInstall->set_label("Install");
+        m_xButtonInstall->set_label(CuiResId(RID_SVXSTR_ADDITIONS_INSTALLBUTTON));
         m_xButtonInstall->set_sensitive(true);
     }
     catch (const css::uno::Exception)
     {
         SAL_WARN("cui.dialogs", "Additions: addExtension Exception occurred.");
-        m_xButtonInstall->set_label("Install");
+        m_xButtonInstall->set_label(CuiResId(RID_SVXSTR_ADDITIONS_INSTALLBUTTON));
         m_xButtonInstall->set_sensitive(true);
     }
 }
