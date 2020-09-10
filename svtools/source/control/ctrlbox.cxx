@@ -544,16 +544,8 @@ IMPL_LINK_NOARG(FontNameBox, UpdateHdl, Timer*, void)
         maUpdateIdle.Start();
 }
 
-static void DrawPreview(const FontMetric& rFontMetric, const Point& rTopLeft, OutputDevice& rDevice, bool bSelected)
+static void DrawPreview(const FontMetric& rFontMetric, const Point& rTopLeft, OutputDevice& rDevice)
 {
-    rDevice.Push(PushFlags::TEXTCOLOR);
-
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    if (bSelected)
-        rDevice.SetTextColor(rStyleSettings.GetHighlightTextColor());
-    else
-        rDevice.SetTextColor(rStyleSettings.GetDialogTextColor());
-
     long nX = rTopLeft.X();
     long nH = gUserItemSz.Height();
 
@@ -721,7 +713,6 @@ static void DrawPreview(const FontMetric& rFontMetric, const Point& rTopLeft, Ou
     }
 
     rDevice.SetFont(aOldFont);
-    rDevice.Pop();
 }
 
 OutputDevice& FontNameBox::CachePreview(size_t nIndex, Point* pTopLeft)
@@ -750,15 +741,18 @@ OutputDevice& FontNameBox::CachePreview(size_t nIndex, Point* pTopLeft)
     {
         if (nPage >= gFontPreviewVirDevs.size())
         {
+            const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
             gFontPreviewVirDevs.emplace_back(m_xComboBox->create_render_virtual_device());
             VirtualDevice& rDevice = *gFontPreviewVirDevs.back();
+            rDevice.SetBackground(rStyleSettings.GetFieldColor());
+            rDevice.SetTextColor(rStyleSettings.GetDialogTextColor());
             rDevice.SetOutputSizePixel(Size(gUserItemSz.Width(), gUserItemSz.Height() * gPreviewsPerDevice));
             if (vcl::Window* pDefaultDevice = dynamic_cast<vcl::Window*>(Application::GetDefaultDevice()))
                 pDefaultDevice->SetPointFont(rDevice, m_xComboBox->get_font());
             assert(gFontPreviewVirDevs.size() == nPage + 1);
         }
 
-        DrawPreview(rFontMetric, aTopLeft, *gFontPreviewVirDevs.back(), false);
+        DrawPreview(rFontMetric, aTopLeft, *gFontPreviewVirDevs.back());
     }
 
     if (pTopLeft)
@@ -783,7 +777,7 @@ IMPL_LINK(FontNameBox, CustomRenderHdl, weld::ComboBox::render_args, aPayload, v
     if (bSelected)
     {
         const FontMetric& rFontMetric = (*mpFontList)[nIndex];
-        DrawPreview(rFontMetric, aDestPoint, rRenderContext, true);
+        DrawPreview(rFontMetric, aDestPoint, rRenderContext);
     }
     else
     {
