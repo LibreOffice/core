@@ -829,7 +829,9 @@ public:
 
     VclPtr<VirtualDevice> create_render_virtual_device() const override
     {
-        return VclPtr<VirtualDevice>::Create();
+        auto xRet = VclPtr<VirtualDevice>::Create();
+        xRet->SetBackground(Application::GetSettings().GetStyleSettings().GetFieldColor());
+        return xRet;
     }
 
     virtual void set_item_menu(const OString& rIdent, weld::Menu* pMenu) override
