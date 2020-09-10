@@ -59,6 +59,15 @@ You can also use 'visualbackendtest' to visually check some operations. Use some
 SAL_SKIA=raster SAL_ENABLESKIA=1 SAL_USE_VCLPLUGIN=gen [srcdir]/bin/run visualbackendtest
 
 
+Thread safety:
+==============
+
+SolarMutex must be held for most operations (asserted in SkiaSalGraphicsImpl::preDraw() and
+in SkiaZone constructor). The reason for this is that this restriction does not appear to be
+a problem, so there's no need to verify thread safety of the code (including the Skia library).
+There's probably no fundamental reason why the code couldn't be made thread-safe.
+
+
 GrDirectContext sharing:
 ========================
 
