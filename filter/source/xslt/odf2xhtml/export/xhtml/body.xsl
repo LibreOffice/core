@@ -386,6 +386,8 @@
                             <xsl:with-param name="globalData" select="$globalData" />
                             <xsl:with-param name="previousFrameWidths" select="0"/>
                             <xsl:with-param name="previousFrameHeights" select="0"/>
+                            <xsl:with-param name="leftPosition" select="0" />
+                            <xsl:with-param name="stopAtFirstFrame" select="true()" />
                             <!-- 2DO for me (Svante) - Not used, uncertain 4now...
                             <xsl:with-param name="pageMarginLeft">
                                 <xsl:call-template name="getPageMarginLeft"/>
@@ -397,6 +399,8 @@
                         <xsl:with-param name="globalData" select="$globalData" />
                         <xsl:with-param name="previousFrameWidths" select="0"/>
                         <xsl:with-param name="previousFrameHeights" select="0"/>
+                        <xsl:with-param name="leftPosition" select="0"/>
+
                         <!-- 2DO for me (Svante) - Not used, uncertain 4now...
                         <xsl:with-param name="pageMarginLeft">
                             <xsl:call-template name="getPageMarginLeft"/>
@@ -791,16 +795,12 @@
         <xsl:param name="globalData"/>
         <xsl:param name="previousFrameWidths" select="0"/>
         <xsl:param name="previousFrameHeights" select="0" />
-        <!-- it becomes true for siblings after a draw:frame  -->
-        <xsl:param name="createDiv" select="false()"/>
-        <xsl:param name="noDivBefore" select="true()"/>
-        <xsl:param name="leftPosition" />
+        <xsl:param name="leftPosition" select="0" />
         <xsl:param name="parentMarginLeft" />
-        <xsl:param name="frameAlignedToParagraphWithSvgY" />
+        <xsl:param name="stopAtFirstFrame" select="false()" />
 
         <xsl:choose>
-            <xsl:when test="name() = 'draw:frame'">
-                <xsl:copy-of select="$frameAlignedToParagraphWithSvgY"/>
+            <xsl:when test="name() = 'draw:frame' and not($stopAtFirstFrame)">
 
                 <!-- if the first node is a draw:frame create a div -->
                 <xsl:call-template name="createDrawFrame">
@@ -814,14 +814,14 @@
             <xsl:otherwise>
                 <xsl:variable name="nextSiblingIsFrame" select="name(following-sibling::node()[1]) = 'draw:frame'"/>
                 <xsl:choose>
-                    <xsl:when test="$createDiv and normalize-space(.) != ''">
+                    <xsl:when test="normalize-space(.) != ''">
                         <!-- every following frame sibling till the next draw:frame
                             have to be incapuslated within a div with left indent.
                             To be moved altogether according the indent (usually right) -->
                         <xsl:comment>Next 'div' added for floating.</xsl:comment>
                         <xsl:element name="div">
                             <xsl:attribute name="style">
-                                <xsl:text>position:relative; left:</xsl:text>
+                                <xsl:text>display:inline; position:relative; left:</xsl:text>
                                 <xsl:value-of select="$leftPosition"/>
                                 <xsl:text>cm;</xsl:text>
                             </xsl:attribute>
@@ -836,42 +836,38 @@
                                     <xsl:with-param name="previousFrameHeights" select="$previousFrameHeights"/>
                                     <xsl:with-param name="parentMarginLeft" select="$parentMarginLeft"/>
                                     <xsl:with-param name="leftPosition" select="$leftPosition"/>
-                                    <xsl:with-param name="createDiv" select="false()"/>
-                                    <xsl:with-param name="noDivBefore" select="$noDivBefore"/>
-                                    <xsl:with-param name="frameAlignedToParagraphWithSvgY" select="$frameAlignedToParagraphWithSvgY"/>
+                                    <xsl:with-param name="stopAtFirstFrame" select="$stopAtFirstFrame" />
                                 </xsl:apply-templates>
                             </xsl:if>
                         </xsl:element>
-                        <xsl:copy-of select="$frameAlignedToParagraphWithSvgY"/>
 
                         <!-- Other draw:frame will be created outside of the div element  -->
-                        <xsl:apply-templates select="following-sibling::draw:frame[1]" mode="frameFloating">
-                            <xsl:with-param name="globalData" select="$globalData"/>
-                            <xsl:with-param name="previousFrameWidths" select="$previousFrameWidths"/>
-                            <xsl:with-param name="previousFrameHeights" select="$previousFrameHeights"/>
-                            <xsl:with-param name="parentMarginLeft" select="$parentMarginLeft"/>
-                            <xsl:with-param name="leftPosition" select="$leftPosition"/>
-                            <xsl:with-param name="frameAlignedToParagraphWithSvgY" select="$frameAlignedToParagraphWithSvgY"/>
-                        </xsl:apply-templates>
+                        <xsl:if test="nextSiblingIsFrame and not(stopAtFirstFrame)">
+                            <xsl:apply-templates select="following-sibling::draw:frame[1]" mode="frameFloating">
+                                <xsl:with-param name="globalData" select="$globalData"/>
+                                <xsl:with-param name="previousFrameWidths" select="$previousFrameWidths"/>
+                                <xsl:with-param name="previousFrameHeights" select="$previousFrameHeights"/>
+                                <xsl:with-param name="parentMarginLeft" select="$parentMarginLeft"/>
+                                <xsl:with-param name="leftPosition" select="$leftPosition"/>
+                                <xsl:with-param name="stopAtFirstFrame" select="$stopAtFirstFrame" />
+                            </xsl:apply-templates>
+                        </xsl:if>
                     </xsl:when>
-                    <xsl:when test="not($createDiv)">
+                    <xsl:otherwise>
                         <xsl:apply-templates select=".">
                             <xsl:with-param name="globalData" select="$globalData"/>
-                            <xsl:with-param name="frameAlignedToParagraphWithSvgY" select="$frameAlignedToParagraphWithSvgY"/>
                         </xsl:apply-templates>
-                        <xsl:if test="not($nextSiblingIsFrame) or $noDivBefore">
+                        <xsl:if test="not($nextSiblingIsFrame)">
                             <xsl:apply-templates select="following-sibling::node()[1]" mode="frameFloating">
                                 <xsl:with-param name="globalData" select="$globalData"/>
                                 <xsl:with-param name="previousFrameWidths" select="$previousFrameWidths"/>
                                 <xsl:with-param name="previousFrameHeights" select="$previousFrameHeights"/>
                                 <xsl:with-param name="parentMarginLeft" select="$parentMarginLeft"/>
                                 <xsl:with-param name="leftPosition" select="$leftPosition"/>
-                                <xsl:with-param name="createDiv" select="false()"/>
-                                <xsl:with-param name="noDivBefore" select="$noDivBefore"/>
-                                <xsl:with-param name="frameAlignedToParagraphWithSvgY" select="$frameAlignedToParagraphWithSvgY"/>
+                                <xsl:with-param name="stopAtFirstFrame" select="$stopAtFirstFrame" />
                             </xsl:apply-templates>
                         </xsl:if>
-                    </xsl:when>
+                    </xsl:otherwise>
                 </xsl:choose>
             </xsl:otherwise>
         </xsl:choose>
@@ -882,20 +878,16 @@
         <xsl:param name="globalData"/>
         <xsl:param name="previousFrameWidths" select="0"/>
         <xsl:param name="previousFrameHeights" select="0" />
-        <!-- it becomes true for siblings after a draw:frame  -->
-        <xsl:param name="createDiv" select="false()"/>
-        <xsl:param name="noDivBefore" select="true()"/>
         <xsl:param name="leftPosition" />
         <xsl:param name="parentMarginLeft" />
-        <xsl:param name="frameAlignedToParagraphWithSvgY" />
+        <xsl:param name="stopAtFirstFrame" select="false()" />
 
         <xsl:apply-templates select="following-sibling::node()[1]" mode="frameFloating">
             <xsl:with-param name="globalData" select="$globalData"/>
             <xsl:with-param name="previousFrameWidths" select="$previousFrameWidths"/>
             <xsl:with-param name="parentMarginLeft" select="$parentMarginLeft"/>
             <xsl:with-param name="leftPosition" select="$leftPosition"/>
-            <xsl:with-param name="createDiv" select="false()"/>
-            <xsl:with-param name="noDivBefore" select="$noDivBefore"/>
+            <xsl:with-param name="stopAtFirstFrame" select="$stopAtFirstFrame" />
         </xsl:apply-templates>
     </xsl:template>
 
@@ -953,6 +945,7 @@
         <xsl:param name="previousFrameWidths" select="0"/>
         <xsl:param name="previousFrameHeights" select="0" />
         <xsl:param name="parentMarginLeft"/>
+        <xsl:param name="stopAtFirstFrame" select="false()" />
 
         <xsl:variable name="parentMarginLeftNew">
             <xsl:choose>
@@ -971,7 +964,7 @@
                     </xsl:choose>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:value-of select="$parentMarginLeft"/>
+                    <xsl:value-of select="normalize-space($parentMarginLeft)" />
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
@@ -1024,37 +1017,6 @@
                 </xsl:element>
             </xsl:if>
         </xsl:if>
-
-
-      <!--
-        <xsl:variable name="followingSibling" select="following-sibling::node()[1]"/>
-        <xsl:choose>
-           HEURISTIC: if the frame is anchored on a paragraph and the above gab is big enough to hold a text line,
-                move it behind the text
-            <xsl:when test="@text:anchor-type='paragraph' and
-                (
-                    ($svgY &gt; 0.5) or
-                    ($svgX &gt; 4)
-                ) and normalize-space($followingSibling) != ''">
-                <xsl:apply-templates select="$followingSibling" mode="frameFloating">
-                    <xsl:with-param name="globalData" select="$globalData"/>
-                    <xsl:with-param name="previousFrameWidths" select="$previousFrameWidths + $svgWidth"/>
-                    <xsl:with-param name="parentMarginLeft" select="$parentMarginLeftNew"/>
-                    <xsl:with-param name="leftPosition" select="$leftPosition"/>
-                    <xsl:with-param name="createDiv" select="true()"/>
-                    <xsl:with-param name="noDivBefore" select="false()"/>
-                    <xsl:with-param name="frameAlignedToParagraphWithSvgY">
-                        <xsl:call-template name="createDrawFrame2">
-                            <xsl:with-param name="globalData" select="$globalData"/>
-                            <xsl:with-param name="previousFrameWidths" select="$previousFrameWidths + $svgWidth"/>
-                            <xsl:with-param name="parentMarginLeftNew" select="$parentMarginLeftNew"/>
-                            <xsl:with-param name="leftPosition" select="$leftPosition"/>
-                            <xsl:with-param name="svgY" select="$svgY"/>
-                        </xsl:call-template>
-                    </xsl:with-param>
-                </xsl:apply-templates>
-            </xsl:when>
-            <xsl:otherwise>-->
         <xsl:call-template name="createDrawFrame2">
             <xsl:with-param name="globalData" select="$globalData"/>
             <xsl:with-param name="previousFrameWidths" select="$previousFrameWidths + $svgWidth"/>
@@ -1067,13 +1029,8 @@
             <xsl:with-param name="previousFrameWidths" select="$previousFrameWidths + $svgWidth"/>
             <xsl:with-param name="parentMarginLeft" select="$parentMarginLeftNew"/>
             <xsl:with-param name="leftPosition" select="$leftPosition"/>
-            <xsl:with-param name="createDiv" select="false()"/>
-            <xsl:with-param name="noDivBefore" select="false()"/>
+            <xsl:with-param name="stopAtFirstFrame" select="$stopAtFirstFrame" />
         </xsl:apply-templates>
-                <!--
-
-            </xsl:otherwise>
-        </xsl:choose> -->
     </xsl:template>
 
     <xsl:template name="createDrawFrame2">
@@ -1101,13 +1058,7 @@
                     replacement image and keep only the id attribute.
                     See fdo#66645 -->
                     <xsl:apply-templates select="@draw:name"/>
-                        <xsl:text> </xsl:text>
                     <xsl:apply-templates select="draw:object[1]"/>
-                    <!-- TODO: do not always add a space after the formula,
-                    for example when it is followed by a comma, period,
-                    dash etc This will probably require using regexp
-                    features like xsl:analyze-string -->
-                    <xsl:text> </xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:attribute name="style">
@@ -3045,6 +2996,11 @@
         <xsl:attribute name="{local-name()}">
             <xsl:value-of select="."/>
         </xsl:attribute>
+    </xsl:template>
+
+    <!-- our mathml should always be inline the text flow -->
+    <xsl:template match="@display" mode="math">
+        <xsl:attribute name="{local-name()}">inline</xsl:attribute>
     </xsl:template>
 
     <!-- Ignore semantic annotations -->
