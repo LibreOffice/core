@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0212b684_588ac773",
+        "filename": "sc/source/ui/navipi/navipi.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-10T06:35:01Z",
+      "side": 1,
+      "message": "This comment looks obsoleted now :-)",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 46
+      },
+      "revId": "722aa442977e5ca27ab05b4299d26346b5a4e883",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4dd1020_fae464a3",
+        "filename": "sc/source/ui/navipi/navipi.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-10T06:35:01Z",
+      "side": 1,
+      "message": "And this",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 56,
+        "endChar": 79
+      },
+      "revId": "722aa442977e5ca27ab05b4299d26346b5a4e883",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
