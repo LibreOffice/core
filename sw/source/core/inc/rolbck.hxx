@@ -408,7 +408,7 @@ public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
-class SwRegHistory : public SwClient
+class SwRegHistory final: public SwClient
 {
 private:
     o3tl::sorted_vector<sal_uInt16> m_WhichIdSet;
@@ -417,13 +417,11 @@ private:
 
     void MakeSetWhichIds();
 
-protected:
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
-
 public:
     SwRegHistory( SwHistory* pHst );
     SwRegHistory( const SwNode& rNd, SwHistory* pHst );
     SwRegHistory( SwModify* pRegIn, const SwNode& rNd, SwHistory* pHst );
+    virtual void SwClientNotify(const SwModify&, const SfxHint& rHint) override;
 
     /// @return true if at least 1 item was inserted
     bool InsertItems( const SfxItemSet& rSet,
