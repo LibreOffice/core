@@ -1204,7 +1204,7 @@ void SwTOXBaseSection::UpdateMarks(const SwTOXInternational& rIntl,
     const TOXTypes eTOXTyp = GetTOXType()->GetType();
     std::vector<std::reference_wrapper<SwTextTOXMark>> vMarks;
     pType->CollectTextTOXMarksForLayout(vMarks, pLayout);
-    for(auto rMark: vMarks)
+    for(auto& rMark: vMarks)
     {
         ::SetProgressState(0, pShell);
         auto& rNode = rMark.get().GetTextNode();
