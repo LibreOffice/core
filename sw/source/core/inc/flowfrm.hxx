@@ -117,7 +117,7 @@ protected:
     SwFlowFrame *m_pFollow;
     SwFlowFrame *m_pPrecede;
 
-    bool m_bLockJoin  :1; // if true than joins (and thus deletes) are prohibited!
+    int  m_nLockJoin; // if true than joins (and thus deletes) are prohibited!
     bool m_bUndersized:1; // I am smaller than needed
     bool m_bFlyLock   :1; // stop positioning of at-character flyframes
 
@@ -136,8 +136,8 @@ protected:
     */
     sal_uInt8 BwdMoveNecessary( const SwPageFrame *pPage, const SwRect &rRect );
 
-    void LockJoin()   { m_bLockJoin = true;  }
-    void UnlockJoin() { m_bLockJoin = false; }
+    void LockJoin()   { m_nLockJoin++;  }
+    void UnlockJoin() { assert(m_nLockJoin > 0 && "unbalanced unlocking"); m_nLockJoin--; }
 
     bool CheckMoveFwd( bool& rbMakePage, bool bKeep, bool bIgnoreMyOwnKeepValue );
     bool MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways = false );
@@ -172,8 +172,8 @@ public:
     const SwFlowFrame *GetPrecede() const { return m_pPrecede; }
           SwFlowFrame *GetPrecede()       { return m_pPrecede; }
 
-    bool IsJoinLocked() const { return m_bLockJoin; }
-    bool IsAnyJoinLocked() const { return m_bLockJoin || HasLockedFollow(); }
+    bool IsJoinLocked() const { return m_nLockJoin > 0; }
+    bool IsAnyJoinLocked() const { return m_nLockJoin > 0 || HasLockedFollow(); }
 
     bool IsPageBreak( bool bAct ) const;
     bool IsColBreak( bool bAct ) const;

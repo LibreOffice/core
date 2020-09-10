@@ -71,7 +71,7 @@ SwFlowFrame::SwFlowFrame( SwFrame &rFrame ) :
     m_rThis( rFrame ),
     m_pFollow( nullptr ),
     m_pPrecede( nullptr ),
-    m_bLockJoin( false ),
+    m_nLockJoin( 0 ),
     m_bUndersized( false ),
     m_bFlyLock( false )
 {}
