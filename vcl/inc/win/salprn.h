@@ -78,7 +78,7 @@ public:
     WinSalPrinter*          mpNextPrinter;          // next printing printer
     HDC                     mhDC;                   // printer hdc
     SalPrinterError         mnError;                // error code
-    sal_uIntPtr             mnCopies;               // copies
+    sal_uInt32              mnCopies;               // copies
     bool                    mbCollate;              // collated copies
     bool                    mbAbort;                // Job Aborted
 
