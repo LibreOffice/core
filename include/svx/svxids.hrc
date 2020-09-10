@@ -200,7 +200,6 @@ class SfxStringItem;
 #define SID_ATTR_POSTIT_DATE                            TypedWhichId<SvxPostItDateItem>( SID_SVX_START + 45 )
 #define SID_ATTR_POSTIT_TEXT                            TypedWhichId<SvxPostItTextItem>( SID_SVX_START + 46 )
 #define SID_ATTR_POSTIT_ID                              TypedWhichId<SvxPostItIdItem>( SID_SVX_START + 47 )
-// free
 
 // CAUTION! Range <48 .. 49> used by EditEngine (!)
 
@@ -241,7 +240,7 @@ class SfxStringItem;
 #define SID_ATTR_TRANSFORM_ROT_Y                        TypedWhichId<SfxInt32Item>( SID_SVX_START + 94 )
 #define SID_ATTR_TRANSFORM_ANGLE                        TypedWhichId<SfxInt32Item>( SID_SVX_START + 95 )
 #define SID_ATTR_TRANSFORM_DELTA_ANGLE                  TypedWhichId<SfxInt32Item>( SID_SVX_START + 96 )
-// CAUTION! Range <96..100> used by SFX2 (!)
+// CAUTION! Range <96..100> used by SFX2 (!) // 96 is used above?
 #define SID_SIZE_ALL                                    ( SID_SVX_START + 101 )
 #define SID_DRAW_LINE                                   ( SID_SVX_START + 102 )
 #define SID_DRAW_XLINE                                  ( SID_SVX_START + 103 )
@@ -421,6 +420,11 @@ class SfxStringItem;
 #define SID_CONTOUR_EXEC                                ( SID_SVX_START + 335 )
 
 //#define SID_SIDEBAR                                   ( SID_SVX_START + 336 )   -> sfxsids.hrc
+
+#define SID_ATTR_POSTIT_X                           TypedWhichId<SvxPostItTextItem>( SID_SVX_START + 337 )
+#define SID_ATTR_POSTIT_Y                             TypedWhichId<SvxPostItTextItem>( SID_SVX_START + 338 )
+
+// free?
 
 #define SID_SB_CONNECTIONPOOLING                        ( SID_SVX_START + 348 )
 #define SID_SB_DBREGISTEROPTIONS                        ( SID_SVX_START + 349 )
