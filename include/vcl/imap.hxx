@@ -58,7 +58,7 @@ private:
     static OUString     ImpReadNCSAURL( const char** ppStr );
     static Point        ImpReadNCSACoords( const char** ppStr );
 
-    static sal_uLong    ImpDetectFormat( SvStream& rIStm );
+    static IMapFormat   ImpDetectFormat( SvStream& rIStm );
 
 public:
 
@@ -113,8 +113,8 @@ public:
     void                Write ( SvStream& rOStm ) const;
     void                Read( SvStream& rIStm );
 
-    void                Write( SvStream& rOStm, sal_uLong nFormat ) const;
-    sal_uLong           Read( SvStream& rIStm, sal_uLong nFormat );
+    void                Write( SvStream& rOStm, IMapFormat nFormat ) const;
+    sal_uLong           Read( SvStream& rIStm, IMapFormat nFormat );
 };
 
 class IMapCompat

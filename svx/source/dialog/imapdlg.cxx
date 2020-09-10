@@ -383,7 +383,7 @@ void SvxIMapDlg::DoOpen()
 
     if( pIStm )
     {
-        aLoadIMap.Read( *pIStm, IMAP_FORMAT_DETECT );
+        aLoadIMap.Read( *pIStm, IMapFormat::Detect );
 
         if( pIStm->GetError() )
         {
@@ -421,21 +421,21 @@ bool SvxIMapDlg::DoSave()
     {
         const OUString    aFilter( aDlg.GetCurrentFilter() );
         OUString          aExt;
-        sal_uLong         nFormat;
+        IMapFormat        nFormat;
 
         if ( aFilter == aBinFilter )
         {
-            nFormat = IMAP_FORMAT_BIN;
+            nFormat = IMapFormat::Binary;
             aExt = "sip";
         }
         else if ( aFilter == aCERNFilter )
         {
-            nFormat = IMAP_FORMAT_CERN;
+            nFormat = IMapFormat::CERN;
             aExt = "map";
         }
         else if ( aFilter == aNCSAFilter )
         {
-            nFormat = IMAP_FORMAT_NCSA;
+            nFormat = IMapFormat::NCSA;
             aExt = "map";
         }
         else

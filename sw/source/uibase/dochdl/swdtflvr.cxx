@@ -2884,7 +2884,7 @@ bool SwTransferable::PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
         if( pStream != nullptr  &&
             !pStream->GetError()  &&
             // mba: no BaseURL for clipboard functionality
-            aMap.Read( *pStream, IMAP_FORMAT_DETECT ) == IMAP_ERR_OK &&
+            aMap.Read( *pStream, IMapFormat::Detect ) == IMAP_ERR_OK &&
             aMap.GetIMapObjectCount() )
         {
             SfxItemSet aSet( rSh.GetAttrPool(), svl::Items<RES_URL, RES_URL>{} );

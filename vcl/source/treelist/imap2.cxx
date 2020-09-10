@@ -139,13 +139,13 @@ void IMapPolygonObject::WriteNCSA( SvStream& rOStm  ) const
     rOStm.WriteLine(aStrBuf.makeStringAndClear());
 }
 
-void ImageMap::Write( SvStream& rOStm, sal_uLong nFormat ) const
+void ImageMap::Write( SvStream& rOStm, IMapFormat nFormat ) const
 {
     switch( nFormat )
     {
-        case IMAP_FORMAT_BIN : Write( rOStm ); break;
-        case IMAP_FORMAT_CERN : ImpWriteCERN( rOStm ); break;
-        case IMAP_FORMAT_NCSA : ImpWriteNCSA( rOStm ); break;
+        case IMapFormat::Binary : Write( rOStm ); break;
+        case IMapFormat::CERN : ImpWriteCERN( rOStm ); break;
+        case IMapFormat::NCSA : ImpWriteNCSA( rOStm ); break;
 
         default:
         break;
@@ -208,18 +208,18 @@ void ImageMap::ImpWriteNCSA( SvStream& rOStm  ) const
     }
 }
 
-sal_uLong ImageMap::Read( SvStream& rIStm, sal_uLong nFormat  )
+sal_uLong ImageMap::Read( SvStream& rIStm, IMapFormat nFormat  )
 {
     sal_uLong nRet = IMAP_ERR_FORMAT;
 
-    if ( nFormat == IMAP_FORMAT_DETECT )
+    if ( nFormat == IMapFormat::Detect )
         nFormat = ImpDetectFormat( rIStm );
 
     switch ( nFormat )
     {
-        case IMAP_FORMAT_BIN    : Read( rIStm ); break;
-        case IMAP_FORMAT_CERN   : ImpReadCERN( rIStm ); break;
-        case IMAP_FORMAT_NCSA   : ImpReadNCSA( rIStm ); break;
+        case IMapFormat::Binary : Read( rIStm ); break;
+        case IMapFormat::CERN   : ImpReadCERN( rIStm ); break;
+        case IMapFormat::NCSA   : ImpReadNCSA( rIStm ); break;
 
         default:
         break;
@@ -486,10 +486,10 @@ Point ImageMap::ImpReadNCSACoords( const char** ppStr )
     return aPt;
 }
 
-sal_uLong ImageMap::ImpDetectFormat( SvStream& rIStm )
+IMapFormat ImageMap::ImpDetectFormat( SvStream& rIStm )
 {
     sal_uInt64  nPos = rIStm.Tell();
-    sal_uLong   nRet = IMAP_FORMAT_BIN;
+    IMapFormat  nRet = IMapFormat::Binary;
     char    cMagic[6];
 
     rIStm.ReadBytes(cMagic, sizeof(cMagic));
@@ -513,10 +513,10 @@ sal_uLong ImageMap::ImpDetectFormat( SvStream& rIStm )
                 if ( ( aStr.indexOf('(') != -1 ) &&
                      ( aStr.indexOf(')') != -1 ) )
                 {
-                    nRet = IMAP_FORMAT_CERN;
+                    nRet = IMapFormat::CERN;
                 }
                 else
-                    nRet = IMAP_FORMAT_NCSA;
+                    nRet = IMapFormat::NCSA;
 
                 break;
             }
