@@ -866,7 +866,8 @@ void GtkSalFrame::InitCommon()
     gtk_widget_set_redraw_on_allocate(GTK_WIDGET(m_pFixedContainer), false);
 
     // connect signals
-    g_signal_connect( G_OBJECT(m_pWindow), "style-updated", G_CALLBACK(signalStyleUpdated), this );
+    // use pEventWidget instead of m_pWindow to avoid infinite event loop under Linux Mint Mate 18.3
+    g_signal_connect( G_OBJECT(pEventWidget), "style-updated", G_CALLBACK(signalStyleUpdated), this );
     gtk_widget_set_has_tooltip(pEventWidget, true);
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "query-tooltip", G_CALLBACK(signalTooltipQuery), this ));
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "button-press-event", G_CALLBACK(signalButton), this ));
