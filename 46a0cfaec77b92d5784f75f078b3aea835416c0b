@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5e450564_45e92669",
+        "filename": "include/oox/export/vmlexport.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2020-09-10T14:01:07Z",
+      "side": 1,
+      "message": "It doesn\u0027t make much sense to pass a bool as a reference... You can simply pass it by value instead. :)",
+      "revId": "46a0cfaec77b92d5784f75f078b3aea835416c0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce840a0c_13c7f4f3",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 5548,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2020-09-10T14:01:07Z",
+      "side": 1,
+      "message": "This looks like a revert of gerrit.libreoffice.org/c/core/+/101711/6/sw/source/filter/ww8/docxattributeoutput.cxx\n\nWhy is this needed?",
+      "revId": "46a0cfaec77b92d5784f75f078b3aea835416c0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
