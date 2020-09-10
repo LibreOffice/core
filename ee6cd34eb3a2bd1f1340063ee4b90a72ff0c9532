@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c22bc132_01d0434c",
+        "filename": "sw/source/core/layout/anchoreddrawobject.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 685,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-10T14:55:08Z",
+      "side": 1,
+      "message": "Unconditionally using an expensive dynamic_cast is not optimal for cases when it would only be used in some special conditions, like here. Better only do it only conditionally:\n\n    bool bCheck \u003d GetDrawObj( )-\u003eGetRelativeHeight( );\n    if (bCheck)\n    {\n        auto pObjCustomShape \u003d dynamic_cast\u003cconst SdrObjCustomShape*\u003e(GetDrawObj());\n        bCheck \u003d !pObjCustomShape || !pObjCustomShape-\u003eIsAutoGrowHeight();\n    }\n    if (bCheck) ...",
+      "range": {
+        "startLine": 685,
+        "startChar": 31,
+        "endLine": 685,
+        "endChar": 43
+      },
+      "revId": "ee6cd34eb3a2bd1f1340063ee4b90a72ff0c9532",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
