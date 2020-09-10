@@ -327,19 +327,28 @@ DECLARE_OOXMLEXPORT_TEST(testTdf134260, "tdf134260.docx")
     // - Expected: 0
     // - Actual  : 1270
 
-    auto xNumLevels
-        = getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(3), "NumberingRules");
+    auto xNum1Levels
+        = getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(1), "NumberingRules");
 
-    sal_Int32 nTabPosExpected = mbExported ? 1270 : 0;
     CPPUNIT_ASSERT_EQUAL(
-        nTabPosExpected,
-        comphelper::SequenceAsHashMap(xNumLevels->getByIndex(0))["ListtabStopPosition"]
+        sal_Int32(0),
+        comphelper::SequenceAsHashMap(xNum1Levels->getByIndex(0))["ListtabStopPosition"]
             .get<sal_Int32>());
 
-    nTabPosExpected = mbExported ? 2598 : 0;
+    auto xNum2Levels
+        = getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(2), "NumberingRules");
+
     CPPUNIT_ASSERT_EQUAL(
-        nTabPosExpected,
-        comphelper::SequenceAsHashMap(xNumLevels->getByIndex(1))["ListtabStopPosition"]
+        sal_Int32(0),
+        comphelper::SequenceAsHashMap(xNum2Levels->getByIndex(0))["ListtabStopPosition"]
+            .get<sal_Int32>());
+
+    auto xNum3Levels
+        = getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(3), "NumberingRules");
+
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int32(0),
+        comphelper::SequenceAsHashMap(xNum3Levels->getByIndex(0))["ListtabStopPosition"]
             .get<sal_Int32>());
 }
 

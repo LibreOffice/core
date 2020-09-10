@@ -581,18 +581,8 @@ void MSWordExportBase::NumberingLevel(
     {
         nIndentAt = static_cast<sal_Int16>(rFormat.GetIndentAt());
         nFirstLineIndex = static_cast<sal_Int16>(rFormat.GetFirstLineIndent());
-        nListTabPos = 0;
-        if ( rFormat.GetLabelFollowedBy() == SvxNumberFormat::LISTTAB )
-        {
-            nListTabPos = static_cast<sal_Int16>( rFormat.GetListtabPos() );
-
-            // Writer usually treats nIndentAt as a tabstop, but Word doesn't (at least for .doc and .rtf).
-            // NOTE: There will still be problems if the tabstop is only SLIGHTLY larger than the align-at position,
-            // i.e. if the tab position is not behind the numbering character. Oh well. Better design your document better.
-            const sal_Int32 nStart = nIndentAt + nFirstLineIndex; // nFirstLineIndex is a negative offset
-            if ( nListTabPos <= nStart )
-                nListTabPos = nIndentAt;
-        }
+        nListTabPos = rFormat.GetLabelFollowedBy() == SvxNumberFormat::LISTTAB?
+                      static_cast<sal_Int16>( rFormat.GetListtabPos() ) : 0;
     }
 
     AttrOutput().NumberingLevel( nLvl,

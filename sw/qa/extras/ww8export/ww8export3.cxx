@@ -147,18 +147,6 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testChicagoNumberingFootnote)
     CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf59674_numberingTabStop, "tdf59674_numberingTabStop.odt")
-{
-    // This bug is mainly for MS Word. The round-trip looked fine in LO. Test exporting a non-useless value.
-    auto xNum1Levels = getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(2), "NumberingRules");
-    sal_Int32 nTabPos2 = comphelper::SequenceAsHashMap(xNum1Levels->getByIndex(0))["ListtabStopPosition"].get<sal_Int32>();
-    xNum1Levels.set(getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(3), "NumberingRules"));
-    sal_Int32 nTabPos3 = comphelper::SequenceAsHashMap(xNum1Levels->getByIndex(0))["ListtabStopPosition"].get<sal_Int32>();
-
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1281), nTabPos2);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(5001), nTabPos3);  //previously 640
-}
-
 DECLARE_WW8EXPORT_TEST(testdf79553_lineNumbers, "tdf79553_lineNumbers.doc")
 {
     bool bValue = false;
