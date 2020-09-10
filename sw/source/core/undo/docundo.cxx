@@ -537,10 +537,8 @@ void UndoManager::AddUndoAction(std::unique_ptr<SfxUndoAction> pAction, bool bTr
     }
 
     // if the undo nodes array is too large, delete some actions
-    while (UNDO_ACTION_LIMIT < GetUndoNodes().Count())
-    {
-        RemoveOldestUndoAction();
-    }
+    if (UNDO_ACTION_LIMIT < GetUndoNodes().Count())
+        RemoveOldestUndoActions(GetUndoNodes().Count() - UNDO_ACTION_LIMIT);
 }
 
 namespace {
