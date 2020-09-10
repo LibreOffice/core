@@ -3039,14 +3039,14 @@ void DomainMapper::lcl_startParagraphGroup()
     if (m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH) != m_pImpl->GetTopContext())
         m_pImpl->PushProperties(CONTEXT_PARAGRAPH);
 
+    m_pImpl->StartParaInfo();
+
     if (m_pImpl->GetTopContext())
     {
-        if (!m_pImpl->IsInShape())
-        {
-            const OUString& sDefaultParaStyle = m_pImpl->GetDefaultParaStyleName();
-            m_pImpl->GetTopContext()->Insert( PROP_PARA_STYLE_NAME, uno::makeAny( sDefaultParaStyle ) );
-            m_pImpl->SetCurrentParaStyleName( sDefaultParaStyle );
-        }
+        const OUString& sDefaultParaStyle = m_pImpl->GetDefaultParaStyleName();
+        m_pImpl->GetTopContext()->Insert( PROP_PARA_STYLE_NAME, uno::makeAny( sDefaultParaStyle ) );
+        m_pImpl->SetCurrentParaStyleName( sDefaultParaStyle );
+
         if (m_pImpl->isBreakDeferred(PAGE_BREAK))
             m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_PAGE_BEFORE));
         else if (m_pImpl->isBreakDeferred(COLUMN_BREAK))
@@ -3069,6 +3069,8 @@ void DomainMapper::lcl_endParagraphGroup()
     //frame conversion has to be executed after table conversion
     m_pImpl->ExecuteFrameConversion();
     m_pImpl->SetIsOutsideAParagraph(true);
+
+    m_pImpl->EndParaInfo();
 }
 
 void DomainMapper::markLastParagraphInSection( )

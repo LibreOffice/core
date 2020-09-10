@@ -268,7 +268,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_sCurrentPermId(0),
         m_pLastSectionContext( ),
         m_pLastCharacterContext(),
-        m_sCurrentParaStyleName(),
         m_sDefaultParaStyleName(),
         m_bInStyleSheetImport( false ),
         m_bInAnyTableImport( false ),
@@ -438,7 +437,7 @@ void DomainMapper_Impl::SetDocumentSettingsProperty( const OUString& rPropName, 
 
 SectionInfo& DomainMapper_Impl::GetSectionInfo()
 {
-    assert (m_aSectionInfoStack.size() && "call to get sectionInfo before section started");
+    //assert (m_aSectionInfoStack.size() && "call to get sectionInfo before section started");
     if ( m_aSectionInfoStack.empty() )
     {
         m_aSectionInfoStack.emplace_back( SectionInfo("undefined") );
@@ -448,7 +447,7 @@ SectionInfo& DomainMapper_Impl::GetSectionInfo()
 
 const SectionInfo DomainMapper_Impl::GetSectionInfo() const
 {
-    assert (m_aSectionInfoStack.size() && "call to get sectionInfo before section started");
+    //assert (m_aSectionInfoStack.size() && "call to get sectionInfo before section started");
     return m_aSectionInfoStack.size() ? m_aSectionInfoStack.back() : SectionInfo("undefined");
 }
 
@@ -477,12 +476,13 @@ assert( m_aSectionInfoStack.size() < 3);// || (m_bStartTOC && m_aSectionInfoStac
     }
     else if ( m_aSectionInfoStack.size() == 1 )
         GetSectionInfo().sType = "text";
-    else
-        assert( false && "unknown section, not size 1");
-
+    //else
+      //  assert( false && "unknown section, not size 1");
+SAL_WARN("JCL","::startSEctionInfo type["<<GetSectionInfo().sType<<"]");
     assert (m_aSectionInfoStack.size() > 1
         || GetSectionInfo().sType == "text"
         || GetSectionInfo().sType == "TOC"
+        || GetSectionInfo().sType == "undefined" //happens during numbering list import ooxmlexport13
         );
 }
 //jcl2
@@ -495,6 +495,34 @@ SAL_WARN("JCL","::EndSectionInfo["<<m_aSectionInfoStack.back().sType<<"] size["<
         SAL_WARN("JCL","---["<<i<<"]: type["<<m_aSectionInfoStack[i].sType<<"]");
     //if ( !m_bStartTOC || m_aSectionInfoStack.size() == 1)
         m_aSectionInfoStack.pop_back();
+}
+
+ParaInfo& DomainMapper_Impl::GetParaInfo()
+{
+    SectionInfo& aSectionInfo = GetSectionInfo();
+    //assert( aSectionInfo.aParaInfoStack.size() && "call to get paraInfo before paragraph started" );
+    if ( aSectionInfo.aParaInfoStack.empty() )
+        aSectionInfo.aParaInfoStack.emplace_back( ParaInfo() );
+    return aSectionInfo.aParaInfoStack.back();
+}
+
+const ParaInfo DomainMapper_Impl::GetParaInfo() const
+{
+    const SectionInfo& aSectionInfo = GetSectionInfo();
+    //assert( aSectionInfo.aParaInfoStack.size() && "call to get paraInfo before paragraph started" );
+    return aSectionInfo.aParaInfoStack.size() ? aSectionInfo.aParaInfoStack.back() : ParaInfo();
+}
+
+void DomainMapper_Impl::StartParaInfo()
+{
+    GetSectionInfo().aParaInfoStack.emplace_back( ParaInfo() );
+}
+
+void DomainMapper_Impl::EndParaInfo()
+{
+    SectionInfo& aSectionInfo = GetSectionInfo();
+    assert( aSectionInfo.aParaInfoStack.size() );
+    aSectionInfo.aParaInfoStack.pop_back();
 }
 
 
@@ -612,7 +640,6 @@ void DomainMapper_Impl::RemoveLastParagraph( )
     {
     }
 }
-
 
 void DomainMapper_Impl::SetIsLastSectionGroup( bool bIsLast )
 {
@@ -887,13 +914,12 @@ uno::Sequence< style::TabStop > DomainMapper_Impl::GetCurrentTabStopAndClear()
 
 OUString DomainMapper_Impl::GetCurrentParaStyleName()
 {
-    OUString sName;
-    // use saved currParaStyleName as a fallback, in case no particular para style name applied.
-    // tdf#134784 except in the case of first paragraph of shapes to avoid bad fallback.
-    // TODO fix this "highly inaccurate" m_sCurrentParaStyleName
-    if ( !m_bIsFirstParaInShape )
-        sName = m_sCurrentParaStyleName;
+    // Having switched to GetParaInfo, the cached style name should always be valid.
+    OUString sName = GetParaInfo().sParaStyleName;
+    if ( !sName.isEmpty() )
+        return sName;
 
+    // The context should be moot with ParaInfo - but keeping just in case - it won't hurt.
     PropertyMapPtr pParaContext = GetTopContextOfType(CONTEXT_PARAGRAPH);
     if ( pParaContext && pParaContext->isSet(PROP_PARA_STYLE_NAME) )
         pParaContext->getProperty(PROP_PARA_STYLE_NAME)->second >>= sName;

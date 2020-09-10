@@ -423,14 +423,25 @@ struct SymbolData
     { }
 };
 
-//jcl1
-// Different sections can overlap during import,
-// and it is usually important to keep track of certain flags
-// about paragraphs or sections in a specific section.
-// Known sections are text | foot/endnotes | header/footers | comments
+struct ParaInfo
+{
+    OUString sParaStyleName;  // LO name of the applied style is cached for easy retrieval
+
+    ParaInfo()
+        : sParaStyleName()
+    {
+    }
+};
+
+/// Stores special status flags related to import's generic definition of a section
+// Known sections are text | foot/endnotes | TableOfContents | comments
+// Since different sections can overlap during import,
+// make sure a specialty section doesn't clobber the underlying section's settings.
+// This stack is new for LO 7.1. The intent is to slowly move existing flags into this new struct.
 struct SectionInfo
 {
-    OUString sType;
+    OUString sType; // just to help debug and test accuracy of predicted use of sections
+    std::deque<ParaInfo> aParaInfoStack;
     bool bDummyParaAddedForTable;
     bool bTextFrameInserted;
     bool bFirstPara;
@@ -529,7 +540,6 @@ private:
     PropertyMapPtr           m_pLastCharacterContext;
 
     ::std::vector<DeletableTabStop> m_aCurrentTabStops;
-    OUString                        m_sCurrentParaStyleName; //highly inaccurate. Overwritten by "overlapping" paragraphs like comments, flys.
     OUString                        m_sDefaultParaStyleName; //caches the ConvertedStyleName of the default paragraph style
     bool                            m_bInStyleSheetImport; //in import of fonts, styles, lists or lfos
     bool                            m_bInAnyTableImport; //in import of fonts, styles, lists or lfos
@@ -682,6 +692,14 @@ public:
     void SetIsTextFrameInserted( bool bIsInserted );
     bool GetIsTextFrameInserted() const;// { return m_bTextFrameInserted;}
 
+    void StartParaInfo();
+    void EndParaInfo();
+    ParaInfo& GetParaInfo();
+    const ParaInfo GetParaInfo() const;
+    void  SetCurrentParaStyleName(const OUString& sStringValue) {GetParaInfo().sParaStyleName = sStringValue;}
+    OUString GetCurrentParaStyleName();
+
+
     void SetIsPreviousParagraphFramed( bool bIsFramed ) { m_bIsPreviousParagraphFramed = bIsFramed; }
     bool GetIsPreviousParagraphFramed() const { return m_bIsPreviousParagraphFramed; }
     void SetParaSectpr(bool bParaSectpr);
@@ -781,8 +799,6 @@ public:
     void    IncorporateTabStop( const DeletableTabStop &aTabStop );
     css::uno::Sequence<css::style::TabStop> GetCurrentTabStopAndClear();
 
-    void            SetCurrentParaStyleName(const OUString& sStringValue) {m_sCurrentParaStyleName = sStringValue;}
-    OUString  GetCurrentParaStyleName();
     OUString  GetDefaultParaStyleName();
 
     // specified style - including inherited properties. Indicate whether paragraph defaults should be checked.
