@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkBox" id="container">
@@ -214,6 +214,19 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">.uno:Save</property>
         <property name="icon_name">document-save-symbolic</property>
+        <signal name="clicked" handler="btn_clicked" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="btn_saveas">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="no">.uno:SaveAs</property>
+        <property name="icon_name">document-save-as-symbolic</property>
         <signal name="clicked" handler="btn_clicked" swapped="no"/>
       </object>
       <packing>
