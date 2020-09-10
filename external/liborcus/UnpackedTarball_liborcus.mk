@@ -20,6 +20,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/gcc9.patch.0 \
 	external/liborcus/libtool.patch.0 \
 	external/liborcus/fix-pch.patch.0 \
+	external/liborcus/0001-Mark-all-untentionally-unused-variables.patch \
 ))
 
 ifeq ($(OS),WNT)
