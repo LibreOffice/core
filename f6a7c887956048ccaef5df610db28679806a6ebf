@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9fe303e0_6e0e4941",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-09-10T08:43:01Z",
+      "side": 1,
+      "message": "(see \u003chttps://bugs.documentfoundation.org/show_bug.cgi?id\u003d136639\u003e \"Syntax error in am translations ending in lone mnemonic \u0027_\u0027 prefix\")",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 40
+      },
+      "revId": "f6a7c887956048ccaef5df610db28679806a6ebf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
