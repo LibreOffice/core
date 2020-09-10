@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ea7fd95_07027fa5",
+        "filename": "sfx2/source/appl/helpinterceptor.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-09-10T14:30:35Z",
+      "side": 1,
+      "message": "what is probably more correct in this situation, is to do\n\n    m_vHistoryUrls.erase(\n        m_vHistoryUrls.begin() + m_nCurPos + 1,\n        m_vHistoryUrls.end());\n\nrather than relying on a side-effect of a different operation.",
+      "revId": "62dc4e14dd5306baf09502fbd72a6f14351220a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
