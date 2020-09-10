@@ -177,9 +177,19 @@ public:
      */
     ::std::queue< OUString > maAutoStyleNameQueue;
     void CollectAutoStyle(
-        const std::vector< XMLPropertyState >& aStates );
+        const std::vector< XMLPropertyState >& aStates, const bool bForDataLabel = false);
     void AddAutoStyleAttribute(
         const std::vector< XMLPropertyState >& aStates );
+
+    /** There is no internal equivalent for <chart:data-label>. It will be generated
+        on the fly on export. The flag in maDataLabelStyleFlagQueue tracks, whether
+        the style name at the same position in maAutoStyleNameQueue belongs to a
+        <style:style> element that must be exported as style of a <chart:data-label>
+        element. Make sure, both queue objects are handled parallel, esp. in
+        CollectAutoStyle and AddAutoStyleAttribute.
+     */
+    ::std::queue<bool>maDataLabelStyleFlagQueue;
+
 
     /// if bExportContent is false the auto-styles are collected
     void parseDocument( css::uno::Reference< css::chart::XChartDocument > const & rChartDoc,
@@ -2537,6 +2547,30 @@ namespace
     }
 }
 
+// ODF has the line and fill properties in a <style:style> element, which is referenced by the
+// <chart:data-label> element. But LibreOffice has them as special label properties of the series
+// or point respectively. The following array maps internal API name and ODF.
+struct API2ODFMapItem
+{
+    OUString sAPIName;
+    sal_uInt16 nNameSpace;  // from include/xmloff/xmlnamespace.hxx
+    OUString sLocalName;
+    API2ODFMapItem(const OUString& sAPI, const sal_uInt16 nNS, const OUString& sLocal)
+        : sAPIName(sAPI), nNameSpace(nNS), sLocalName(sLocal) {}
+};
+
+const API2ODFMapItem aLabelFoo2ODFArray[]
+    = { API2ODFMapItem("LabelBorderStyle", XML_NAMESPACE_DRAW, "stroke"),
+        API2ODFMapItem("LabelBorderWidth", XML_NAMESPACE_SVG, "stroke-width"),
+        API2ODFMapItem("LabelBorderColor", XML_NAMESPACE_SVG, "stroke-color"),
+        API2ODFMapItem("LabelBorderDashName", XML_NAMESPACE_DRAW, "stroke-dash"),
+        API2ODFMapItem("LabelBorderTransparency", XML_NAMESPACE_SVG, "stroke-opacity"),
+        API2ODFMapItem("LabelFillStyle", XML_NAMESPACE_DRAW, "fill"),
+        API2ODFMapItem("LabelFillBackground", XML_NAMESPACE_DRAW, "fill-hatch-solid"),
+        API2ODFMapItem("LabelFillHatchName", XML_NAMESPACE_DRAW, "fill-hatch-name"),
+        API2ODFMapItem("LabelFillColor", XML_NAMESPACE_DRAW, "fill-color")
+        };
+
 void SchXMLExportHelper_Impl::exportSeries(
     const Reference< chart2::XDiagram > & xNewDiagram,
     const awt::Size & rPageSize,
@@ -2552,6 +2586,7 @@ void SchXMLExportHelper_Impl::exportSeries(
     OUString aFirstYDomainRange;
 
     std::vector< XMLPropertyState > aPropertyStates;
+    std::vector< XMLPropertyState > aDataLabelPropertyStates;
 
     const Sequence< Reference< chart2::XCoordinateSystem > >
         aCooSysSeq( xBCooSysCnt->getCoordinateSystems());
@@ -2664,8 +2699,33 @@ void SchXMLExportHelper_Impl::exportSeries(
                                     lcl_exportNumberFormat( "PercentageNumberFormat", xPropSet, mrExport );
                                 }
 
-                                if( mxExpPropMapper.is())
+                                if (mxExpPropMapper.is())
+                                {
                                     aPropertyStates = mxExpPropMapper->Filter( xPropSet );
+
+                                    // Generate style for <chart:data-label> child element
+                                    if (nCurrentODFVersion >= SvtSaveOptions::ODFSVER_012)
+                                    {
+                                        const uno::Reference< beans::XPropertySetInfo > xInfo(xPropSet->getPropertySetInfo());
+                                        const uno::Reference< beans::XPropertyState > xPropState( xPropSet, uno::UNO_QUERY );
+                                        const rtl::Reference< XMLPropertySetMapper >& rPropertySetMapper(mxExpPropMapper->getPropertySetMapper());
+                                        if (xInfo.is() && xPropState.is() && rPropertySetMapper.is())
+                                        {
+                                            for (const auto& rIt : aLabelFoo2ODFArray)
+                                            {
+                                                if (!xInfo->hasPropertyByName(rIt.sAPIName)
+                                                    || xPropState->getPropertyState(rIt.sAPIName) != beans::PropertyState_DIRECT_VALUE)
+                                                    continue;
+                                                sal_Int32 nTargetIndex =
+                                                    rPropertySetMapper->GetEntryIndex(rIt.nNameSpace, rIt.sLocalName, 0);
+                                                if (nTargetIndex <0)
+                                                    continue;
+                                                XMLPropertyState aDataLabelStateItem(nTargetIndex, xPropSet->getPropertyValue(rIt.sAPIName));
+                                                aDataLabelPropertyStates.emplace_back(aDataLabelStateItem);
+                                            }
+                                        }
+                                    }
+                                }
                             }
 
                             if( bExportContent )
@@ -2746,13 +2806,29 @@ void SchXMLExportHelper_Impl::exportSeries(
 
                                 // open series element until end of for loop
                                 pSeries.reset(new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_SERIES, true, true ));
+
+                                // create <chart:data-label> child element if needed.
+                                // maDataLabelStyleFlagQueue has 'true' in that case.
+                                if (maDataLabelStyleFlagQueue.front())
+                                {
+                                    // write style name
+                                    AddAutoStyleAttribute(aDataLabelPropertyStates);
+                                    // Further content is for a <chart:data-label> element as child of
+                                    // a <chart:series> element not meaningful.
+                                    SvXMLElementExport(mrExport, XML_NAMESPACE_CHART, XML_DATA_LABEL, true, true);
+                                }
                             }
                             else    // autostyles
                             {
                                 CollectAutoStyle( aPropertyStates );
+                                // add the style for the to be <chart:data-label> too and remember
+                                // by second parameter, that it is for a data-label;
+                                if (!aDataLabelPropertyStates.empty())
+                                    CollectAutoStyle(aDataLabelPropertyStates, true);
                             }
                             // remove property states for autostyles
                             aPropertyStates.clear();
+                            aDataLabelPropertyStates.clear();
                         }
                     }
 
@@ -3551,10 +3627,14 @@ awt::Size SchXMLExportHelper_Impl::getPageSize( const Reference< chart2::XChartD
     return aSize;
 }
 
-void SchXMLExportHelper_Impl::CollectAutoStyle( const std::vector< XMLPropertyState >& aStates )
+void SchXMLExportHelper_Impl::CollectAutoStyle(const std::vector< XMLPropertyState >& aStates,
+                                               const bool bForDataLabel)
 {
-    if( !aStates.empty() )
+    if (!aStates.empty())
+    {
         maAutoStyleNameQueue.push( mrAutoStylePool.Add( XmlStyleFamily::SCH_CHART_ID, aStates ));
+        maDataLabelStyleFlagQueue.push(bForDataLabel);
+    }
 }
 
 void SchXMLExportHelper_Impl::AddAutoStyleAttribute( const std::vector< XMLPropertyState >& aStates )
@@ -3565,6 +3645,7 @@ void SchXMLExportHelper_Impl::AddAutoStyleAttribute( const std::vector< XMLPrope
 
         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_STYLE_NAME,  maAutoStyleNameQueue.front() );
         maAutoStyleNameQueue.pop();
+        maDataLabelStyleFlagQueue.pop();
     }
 }
 
