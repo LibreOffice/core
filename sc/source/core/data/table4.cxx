@@ -640,15 +640,31 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         pSrcPattern = aCol[nAtSrc].GetPattern(static_cast<SCROW>(nRow));
                     bGetPattern = false;
                     pStyleSheet = pSrcPattern->GetStyleSheet();
-                    //  do not transfer ATTR_MERGE / ATTR_MERGE_FLAG
+
+                    // Transfer cells mergedness (ATTR_MERGE / ATTR_MERGE_FLAG) too.. so cells size will be copied as well.
+                    // Problem caused by this should be handled before this.
+                    // Selection rectangle should be expanded so none of its cells sticking out from the rectangle.
+                    // Destination area should be pre-checked, and fill should be enabled only
+                    //   if it would not change cells mergedness except by merging only 1x1 cells.
+                    // Other things stored in ATTR_MERGE_FLAG, like autofilter button, will be deleted now,
+                    //   but may need to be repaired after the FillAuto.. like at ScDocument::Fill
                     const SfxItemSet& rSet = pSrcPattern->GetItemSet();
-                    if ( rSet.GetItemState(ATTR_MERGE, false) == SfxItemState::SET
-                            || rSet.GetItemState(ATTR_MERGE_FLAG, false) == SfxItemState::SET )
+                    if ( rSet.GetItemState(ATTR_MERGE_FLAG, false) == SfxItemState::SET )
                     {
-                        pNewPattern.reset( new ScPatternAttr( *pSrcPattern ));
-                        SfxItemSet& rNewSet = pNewPattern->GetItemSet();
-                        rNewSet.ClearItem(ATTR_MERGE);
-                        rNewSet.ClearItem(ATTR_MERGE_FLAG);
+                        ScMF nOldValue = pSrcPattern->GetItem(ATTR_MERGE_FLAG).GetValue();
+                        ScMF nOldValueMerge = nOldValue & (ScMF::Hor | ScMF::Ver);
+                        // keep only the merge flags
+                        if ( nOldValue != nOldValueMerge )
+                        {
+                            pNewPattern.reset(new ScPatternAttr(*pSrcPattern));
+                            SfxItemSet& rNewSet = pNewPattern->GetItemSet();
+                            if ( nOldValueMerge == ScMF::NONE )
+                                rNewSet.ClearItem(ATTR_MERGE_FLAG);
+                            else
+                                rNewSet.Put(ScMergeFlagAttr(nOldValueMerge));
+                        }
+                        else
+                            pNewPattern.reset();
                     }
                     else
                         pNewPattern.reset();
