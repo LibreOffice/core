@@ -102,8 +102,7 @@
                         <property name="draw_indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="nonbreak-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|nonbreak">Specifies that non-breaking spaces are shown as gray boxes. Non-breaking spaces are not broken at the end of a line and are entered with the Command+Shift+Spacebar
-Ctrl+Shift+Spacebar shortcut keys.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|nonbreak">Specifies that non-breaking spaces are shown as gray boxes. Non-breaking spaces are not broken at the end of a line and are entered with the Ctrl+Shift+Spacebar shortcut keys.</property>
                           </object>
                         </child>
                       </object>
