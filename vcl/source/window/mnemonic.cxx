@@ -27,6 +27,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <rtl/character.hxx>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 
@@ -64,6 +65,10 @@ sal_Unicode MnemonicGenerator::ImplFindMnemonic( const OUString& rKey )
     sal_Int32 nIndex = 0;
     while ( (nIndex = rKey.indexOf( m_cMnemonic, nIndex )) != -1 )
     {
+        if (nIndex == rKey.getLength() - 1) {
+            SAL_WARN("vcl", "key \"" << rKey << "\" ends in lone mnemonic prefix");
+            break;
+        }
         sal_Unicode cMnemonic = rKey[ nIndex+1 ];
         if ( cMnemonic != m_cMnemonic )
             return cMnemonic;
