@@ -293,20 +293,6 @@ long SdrEditView::GetMarkedObjRotate() const
     }
 
     return nRetval;
-    //sal_Bool b1st=true;
-    //sal_Bool bOk=true;
-    //long nAngle=0;
-    //sal_uIntPtr nMarkCount=GetMarkedObjectCount();
-    //for (sal_uIntPtr nm=0; nm<nMarkCount && bOk; nm++) {
-    //  SdrMark* pM=GetSdrMarkByIndex(nm);
-    //  SdrObject* pO=pM->GetMarkedSdrObj();
-    //  long nAngle2=pO->GetRotateAngle();
-    //  if (b1st) nAngle=nAngle2;
-    //  else if (nAngle2!=nAngle) bOk=false;
-    //  b1st=false;
-    //}
-    //if (!bOk) nAngle=0;
-    //return nAngle;
 }
 
 void SdrEditView::RotateMarkedObj(const Point& rRef, long nAngle, bool bCopy)
