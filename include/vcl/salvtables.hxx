@@ -1151,6 +1151,8 @@ private:
 
     void update_checkbutton_column_width(SvTreeListEntry* pEntry);
 
+    void InvalidateModelEntry(SvTreeListEntry* pEntry);
+
     void do_set_toggle(SvTreeListEntry* pEntry, TriState eState, int col);
 
     static TriState do_get_toggle(SvTreeListEntry* pEntry, int col);

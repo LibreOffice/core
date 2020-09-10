@@ -3237,6 +3237,37 @@ int SalInstanceTreeView::to_external_model(int col) const
     return col;
 }
 
+namespace
+{
+    class UpdateGuard
+    {
+    private:
+        SvTabListBox& m_rTreeView;
+        bool m_bOrigUpdate;
+        bool m_bOrigEnableInvalidate;
+
+    public:
+        UpdateGuard(SvTabListBox& rTreeView)
+            : m_rTreeView(rTreeView)
+            , m_bOrigUpdate(m_rTreeView.IsUpdateMode())
+            , m_bOrigEnableInvalidate(m_rTreeView.GetModel()->IsEnableInvalidate())
+        {
+            if (m_bOrigUpdate)
+                m_rTreeView.SetUpdateMode(false);
+            if (m_bOrigEnableInvalidate)
+                m_rTreeView.GetModel()->EnableInvalidate(false);
+        }
+
+        ~UpdateGuard()
+        {
+            if (m_bOrigUpdate)
+                m_rTreeView.SetUpdateMode(true);
+            if (m_bOrigEnableInvalidate)
+                m_rTreeView.GetModel()->EnableInvalidate(true);
+        }
+    };
+}
+
 bool SalInstanceTreeView::IsDummyEntry(SvTreeListEntry* pEntry) const
 {
     return m_xTreeView->GetEntryText(pEntry).trim() == "<dummy>";
@@ -3337,6 +3368,13 @@ void SalInstanceTreeView::update_checkbutton_column_width(SvTreeListEntry* pEntr
     m_xTreeView->CheckBoxInserted(pEntry);
 }
 
+void SalInstanceTreeView::InvalidateModelEntry(SvTreeListEntry* pEntry)
+{
+    if (!m_xTreeView->GetModel()->IsEnableInvalidate())
+        return;
+    m_xTreeView->ModelHasEntryInvalidated(pEntry);
+}
+
 void SalInstanceTreeView::do_set_toggle(SvTreeListEntry* pEntry, TriState eState, int col)
 {
     assert(col >= 0 && static_cast<unsigned>(col) < pEntry->ItemCount());
@@ -3363,7 +3401,7 @@ void SalInstanceTreeView::do_set_toggle(SvTreeListEntry* pEntry, TriState eState
             break;
     }
 
-    m_xTreeView->ModelHasEntryInvalidated(pEntry);
+    InvalidateModelEntry(pEntry);
 }
 
 TriState SalInstanceTreeView::do_get_toggle(SvTreeListEntry* pEntry, int col)
@@ -3802,7 +3840,7 @@ void SalInstanceTreeView::set_text(SvTreeListEntry* pEntry, const OUString& rTex
         assert(dynamic_cast<SvLBoxString*>(&rItem));
         static_cast<SvLBoxString&>(rItem).SetText(rText);
     }
-    m_xTreeView->ModelHasEntryInvalidated(pEntry);
+    InvalidateModelEntry(pEntry);
 }
 
 void SalInstanceTreeView::set_text(int pos, const OUString& rText, int col)
@@ -3822,8 +3860,7 @@ void SalInstanceTreeView::set_sensitive(SvTreeListEntry* pEntry, bool bSensitive
             if (rItem.GetType() == SvLBoxItemType::String)
             {
                 rItem.Enable(bSensitive);
-                m_xTreeView->ModelHasEntryInvalidated(pEntry);
-                break;
+                InvalidateModelEntry(pEntry);
             }
         }
         return;
@@ -3835,7 +3872,7 @@ void SalInstanceTreeView::set_sensitive(SvTreeListEntry* pEntry, bool bSensitive
     SvLBoxItem& rItem = pEntry->GetItem(col);
     rItem.Enable(bSensitive);
 
-    m_xTreeView->ModelHasEntryInvalidated(pEntry);
+    InvalidateModelEntry(pEntry);
 }
 
 void SalInstanceTreeView::set_sensitive(int pos, bool bSensitive, int col)
@@ -3894,7 +3931,7 @@ void SalInstanceTreeView::set_text_emphasis(SvTreeListEntry* pEntry, bool bOn, i
     assert(dynamic_cast<SvLBoxString*>(&rItem));
     static_cast<SvLBoxString&>(rItem).Emphasize(bOn);
 
-    m_xTreeView->ModelHasEntryInvalidated(pEntry);
+    InvalidateModelEntry(pEntry);
 }
 
 void SalInstanceTreeView::set_text_emphasis(const weld::TreeIter& rIter, bool bOn, int col)
@@ -3930,7 +3967,7 @@ void SalInstanceTreeView::set_text_align(SvTreeListEntry* pEntry, double fAlign,
     assert(dynamic_cast<SvLBoxString*>(&rItem));
     static_cast<SvLBoxString&>(rItem).Align(fAlign);
 
-    m_xTreeView->ModelHasEntryInvalidated(pEntry);
+    InvalidateModelEntry(pEntry);
 }
 
 void SalInstanceTreeView::set_text_align(const weld::TreeIter& rIter, double fAlign, int col)
@@ -3995,7 +4032,7 @@ void SalInstanceTreeView::set_image(SvTreeListEntry* pEntry, const Image& rImage
     }
 
     m_xTreeView->SetEntryHeight(pEntry);
-    m_xTreeView->ModelHasEntryInvalidated(pEntry);
+    InvalidateModelEntry(pEntry);
 }
 
 void SalInstanceTreeView::set_image(int pos, const OUString& rImage, int col)
@@ -4272,6 +4309,8 @@ void SalInstanceTreeView::set_selection_mode(SelectionMode eMode)
 
 void SalInstanceTreeView::all_foreach(const std::function<bool(weld::TreeIter&)>& func)
 {
+    UpdateGuard aGuard(*m_xTreeView);
+
     SalInstanceTreeIter aVclIter(m_xTreeView->First());
     while (aVclIter.iter)
     {
