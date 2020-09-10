@@ -5,8 +5,6 @@
 #
 
 from uitest.framework import UITestCase
-import time
-from uitest.uihelper.common import get_state_as_dict, type_text
 
 class tdf93068(UITestCase):
 
@@ -14,7 +12,22 @@ class tdf93068(UITestCase):
 
         self.ui_test.create_doc_in_start_center("writer")
 
-        xWriterDoc = self.xUITest.getTopFocusWindow()
+        document = self.ui_test.get_component()
+
+        self.xUITest.getTopFocusWindow()
+
+        # tdf#135950: Character dialog crashes if multiple cells in a
+        # table are selected
+        self.ui_test.execute_dialog_through_command(".uno:InsertTable")
+        xDialog = self.xUITest.getTopFocusWindow()
+
+        xOkBtn = xDialog.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOkBtn)
+
+        self.xUITest.executeCommand(".uno:SelectAll")
+
+        # Check the table is selected
+        self.assertEqual("SwXTextTableCursor", document.CurrentSelection.getImplementationName())
 
         self.ui_test.execute_dialog_through_command(".uno:FontDialog")
         xFontDlg = self.xUITest.getTopFocusWindow()
@@ -32,5 +45,15 @@ class tdf93068(UITestCase):
         xDiscardBtn.executeAction("CLICK", tuple())
         xOKBtn = xFontDlg.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
+
+        self.xUITest.getTopFocusWindow()
+
+        # Check the table is still selected after closing the dialog
+        self.assertEqual("SwXTextTableCursor", document.CurrentSelection.getImplementationName())
+
+        self.xUITest.executeCommand(".uno:GoDown")
+
+        # Check the table is no longer selected
+        self.assertNotEqual("SwXTextTableCursor", document.CurrentSelection.getImplementationName())
 
         self.ui_test.close_doc()
