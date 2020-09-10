@@ -5,12 +5,12 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call 	gb_UITest_UITest,options))
+$(eval $(call 	gb_UITest_UITest,sw_options))
 
-$(eval $(call gb_UITest_add_modules,options,$(SRCDIR)/sw/qa/uitest,\
+$(eval $(call gb_UITest_add_modules,sw_options,$(SRCDIR)/sw/qa/uitest,\
 	options/ \
 ))
 
-$(eval $(call gb_UITest_set_defs,options, \
+$(eval $(call gb_UITest_set_defs,sw_options, \
     TDOC="$(SRCDIR)/sw/qa/uitest/writer_tests/data" \
 ))
