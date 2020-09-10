@@ -4575,6 +4575,8 @@ public:
 
     virtual void selected_foreach(const std::function<bool(weld::TreeIter&)>& func) override
     {
+        UpdateGuard aGuard(*m_xTreeView);
+
         SalInstanceTreeIter aVclIter(m_xTreeView->FirstSelected());
         while (aVclIter.iter)
         {
@@ -4586,6 +4588,8 @@ public:
 
     virtual void visible_foreach(const std::function<bool(weld::TreeIter&)>& func) override
     {
+        UpdateGuard aGuard(*m_xTreeView);
+
         SalInstanceTreeIter aVclIter(m_xTreeView->GetFirstEntryInView());
         while (aVclIter.iter)
         {
