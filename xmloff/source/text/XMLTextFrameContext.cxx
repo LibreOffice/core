@@ -355,7 +355,6 @@ class XMLTextFrameContext_Impl : public SvXMLImportContext
     OUString sStyleName;
     OUString sNextName;
     OUString sHRef;
-    OUString sFilterName;
     OUString sCode;
     OUString sMimeType;
     OUString sFrameName;
@@ -689,7 +688,7 @@ void XMLTextFrameContext_Impl::Create()
             xPropSet->setPropertyValue("Graphic", Any(xGraphic));
 
         // filter name
-        xPropSet->setPropertyValue( "GraphicFilter", Any(sFilterName) );
+        xPropSet->setPropertyValue( "GraphicFilter", Any(OUString()) );
 
         // rotation
         xPropSet->setPropertyValue( "GraphicRotation", Any(nRotation) );
@@ -1014,9 +1013,6 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             break;
         case XML_TOK_TEXT_FRAME_HREF:
             sHRef = rValue;
-            break;
-        case XML_TOK_TEXT_FRAME_FILTER_NAME:
-            sFilterName = rValue;
             break;
         case XML_TOK_TEXT_FRAME_TRANSFORM:
             {

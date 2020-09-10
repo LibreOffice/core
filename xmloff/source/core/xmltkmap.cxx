@@ -52,10 +52,16 @@ public:
 
 void SvXMLTokenMap_Impl::insert( const SvXMLTokenMapEntry& rEntry )
 {
-    m_aPrefixAndNameToTokenMap.insert( std::make_pair( std::make_pair( rEntry.nPrefixKey,
-                                       GetXMLToken( rEntry.eLocalName ) ), rEntry.nToken ) );
+    bool inserted = m_aPrefixAndNameToTokenMap.insert( std::make_pair( std::make_pair( rEntry.nPrefixKey,
+                                       GetXMLToken( rEntry.eLocalName ) ), rEntry.nToken ) ).second;
+    assert(inserted && "duplicate token");
+    (void)inserted;
     if( rEntry.nFastToken )
-        m_aFastTokenToTokenMap.insert( std::make_pair( rEntry.nFastToken, rEntry.nToken ) );
+    {
+        bool inserted2 = m_aFastTokenToTokenMap.insert( std::make_pair( rEntry.nFastToken, rEntry.nToken ) ).second;
+        assert(inserted2 && "duplicate token");
+        (void)inserted2;
+    }
 }
 
 sal_uInt16 SvXMLTokenMap_Impl::get( sal_uInt16 nKeyPrefix, const OUString& rLName ) const
