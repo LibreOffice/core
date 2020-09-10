@@ -6103,8 +6103,8 @@ short SwWW8ImplReader::ImportSprm(const sal_uInt8* pPos, sal_Int32 nMemLen, sal_
 
     const SprmReadInfo& rSprm = GetSprmReadInfo(nId);
 
-    sal_uInt16 nFixedLen = m_xSprmParser->DistanceToData(nId);
-    sal_uInt16 nL = m_xSprmParser->GetSprmSize(nId, pPos, nMemLen);
+    sal_Int32 nFixedLen = m_xSprmParser->DistanceToData(nId);
+    sal_Int32 nL = m_xSprmParser->GetSprmSize(nId, pPos, nMemLen);
 
     if (rSprm.pReadFnc)
         (this->*rSprm.pReadFnc)(nId, pPos + nFixedLen, nL - nFixedLen);

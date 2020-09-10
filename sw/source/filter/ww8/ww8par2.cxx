@@ -1842,9 +1842,9 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
             while (aSprmIter.GetSprms() && nullptr != (pParams = aSprmIter.GetCurrentParams()))
             {
                 sal_uInt16 nId = aSprmIter.GetCurrentId();
-                sal_uInt16 nFixedLen = aSprmParser.DistanceToData(nId);
-                sal_uInt16 nL = aSprmParser.GetSprmSize(nId, aSprmIter.GetSprms(), aSprmIter.GetRemLen());
-                sal_uInt16 nLen = nL - nFixedLen;
+                sal_Int32 nFixedLen = aSprmParser.DistanceToData(nId);
+                sal_Int32 nL = aSprmParser.GetSprmSize(nId, aSprmIter.GetSprms(), aSprmIter.GetRemLen());
+                sal_Int32 nLen = nL - nFixedLen;
                 wwTableSprm eSprm = GetTableSprm(nId, m_pIo->GetFib().GetFIBVersion());
                 switch (eSprm)
                 {

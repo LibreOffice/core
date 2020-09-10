@@ -131,11 +131,11 @@ public:
     /// Return the SPRM id at the beginning of this byte sequence
     sal_uInt16 GetSprmId(const sal_uInt8* pSp) const;
 
-    sal_uInt16 GetSprmSize(sal_uInt16 nId, const sal_uInt8* pSprm, sal_Int32 nRemLen) const;
+    sal_Int32 GetSprmSize(sal_uInt16 nId, const sal_uInt8* pSprm, sal_Int32 nRemLen) const;
 
     /// Get known len of a sprms head, the bytes of the sprm id + any bytes
     /// reserved to hold a variable length
-    sal_uInt16 DistanceToData(sal_uInt16 nId) const;
+    sal_Int32 DistanceToData(sal_uInt16 nId) const;
 
     /// Get len of a sprms data area, ignoring the bytes of the sprm id and
     /// ignoring any len bytes. Reports the remaining data after those bytes
@@ -146,7 +146,7 @@ public:
 
     /// Returns the offset to data of the first sprm of id nId, 0
     //  if not found. nLen must be the <= length of pSprms
-    SprmResult findSprmData(sal_uInt16 nId, sal_uInt8* pSprms, sal_uInt16 nLen) const;
+    SprmResult findSprmData(sal_uInt16 nId, sal_uInt8* pSprms, sal_Int32 nLen) const;
 };
 
 //Read a Pascal-style, i.e. single byte string length followed
@@ -264,7 +264,7 @@ private:
     const sal_uInt8* pSprms; // remaining part of the SPRMs ( == start of current SPRM)
     const sal_uInt8* pCurrentParams; // start of current SPRM's parameters
     sal_uInt16 nCurrentId;
-    sal_uInt16 nCurrentSize;
+    sal_Int32 nCurrentSize;
 
     sal_Int32 nRemLen;   // length of remaining SPRMs (including current SPRM)
 

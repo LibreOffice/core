@@ -928,8 +928,8 @@ SprmResult WW8SprmIter::FindSprm(sal_uInt16 nId, bool bFindFirst, const sal_uInt
     {
         if (GetCurrentId() == nId)
         {
-            sal_uInt16 nFixedLen =  mrSprmParser.DistanceToData(nId);
-            sal_uInt16 nL = mrSprmParser.GetSprmSize(nId, GetSprms(), GetRemLen());
+            sal_Int32 nFixedLen =  mrSprmParser.DistanceToData(nId);
+            sal_Int32 nL = mrSprmParser.GetSprmSize(nId, GetSprms(), GetRemLen());
             SprmResult aSprmResult(GetCurrentParams(), nL - nFixedLen);
             // typically pNextByteMatch is nullptr and we just return the first match
             // very occasionally we want one with a specific following byte
@@ -2981,8 +2981,8 @@ void WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm(sal_uInt16 nId,
     {
         if (aIter.GetCurrentId() == nId)
         {
-            sal_uInt16 nFixedLen = maSprmParser.DistanceToData(nId);
-            sal_uInt16 nL = maSprmParser.GetSprmSize(nId, aIter.GetSprms(), aIter.GetRemLen());
+            sal_Int32 nFixedLen = maSprmParser.DistanceToData(nId);
+            sal_Int32 nL = maSprmParser.GetSprmSize(nId, aIter.GetSprms(), aIter.GetRemLen());
             rResult.emplace_back(aIter.GetCurrentParams(), nL - nFixedLen);
         }
         aIter.advance();
@@ -3314,8 +3314,8 @@ void WW8PLCFx_Fc_FKP::HasSprm(sal_uInt16 nId, std::vector<SprmResult> &rResult)
     {
         if (aIter.GetCurrentId() == nId)
         {
-            sal_uInt16 nFixedLen = rSprmParser.DistanceToData(nId);
-            sal_uInt16 nL = rSprmParser.GetSprmSize(nId, aIter.GetSprms(), aIter.GetRemLen());
+            sal_Int32 nFixedLen = rSprmParser.DistanceToData(nId);
+            sal_Int32 nL = rSprmParser.GetSprmSize(nId, aIter.GetSprms(), aIter.GetRemLen());
             rResult.emplace_back(aIter.GetCurrentParams(), nL - nFixedLen);
         }
         aIter.advance();
@@ -3811,7 +3811,7 @@ bool WW8PLCFx_SEPX::Find4Sprms(sal_uInt16 nId1,sal_uInt16 nId2,sal_uInt16 nId3,s
         // Sprm found?
         const sal_uInt16 nCurrentId = maSprmParser.GetSprmId(pSp);
         sal_Int32 nRemLen = nSprmSiz - i;
-        const sal_uInt16 x = maSprmParser.GetSprmSize(nCurrentId, pSp, nRemLen);
+        const sal_Int32 x = maSprmParser.GetSprmSize(nCurrentId, pSp, nRemLen);
         bool bValid = x <= nRemLen;
         if (!bValid)
         {
@@ -3821,22 +3821,22 @@ bool WW8PLCFx_SEPX::Find4Sprms(sal_uInt16 nId1,sal_uInt16 nId2,sal_uInt16 nId3,s
         bool bOk = true;
         if( nCurrentId  == nId1 )
         {
-            sal_uInt16 nFixedLen = maSprmParser.DistanceToData(nId1);
+            sal_Int32 nFixedLen = maSprmParser.DistanceToData(nId1);
             r1 = SprmResult(pSp + nFixedLen, x - nFixedLen);
         }
         else if( nCurrentId  == nId2 )
         {
-            sal_uInt16 nFixedLen = maSprmParser.DistanceToData(nId2);
+            sal_Int32 nFixedLen = maSprmParser.DistanceToData(nId2);
             r2 = SprmResult(pSp + nFixedLen, x - nFixedLen);
         }
         else if( nCurrentId  == nId3 )
         {
-            sal_uInt16 nFixedLen = maSprmParser.DistanceToData(nId3);
+            sal_Int32 nFixedLen = maSprmParser.DistanceToData(nId3);
             r3 = SprmResult(pSp + nFixedLen, x - nFixedLen);
         }
         else if( nCurrentId  == nId4 )
         {
-            sal_uInt16 nFixedLen = maSprmParser.DistanceToData(nId4);
+            sal_Int32 nFixedLen = maSprmParser.DistanceToData(nId4);
             r4 = SprmResult(pSp + nFixedLen, x - nFixedLen);
         }
         else
@@ -5303,7 +5303,7 @@ void WW8PLCFMan::AdvSprm(short nIdx, bool bStart)
             if( p->pMemPos )
             {
                 // Length of last sprm
-                const sal_uInt16 nSprmL = maSprmParser.GetSprmSize(nLastId, p->pMemPos, p->nSprmsLen);
+                const sal_Int32 nSprmL = maSprmParser.GetSprmSize(nLastId, p->pMemPos, p->nSprmsLen);
 
                 // Reduce length of all sprms by length of last sprm
                 p->nSprmsLen -= nSprmL;
@@ -8407,7 +8407,7 @@ sal_uInt16 wwSprmParser::GetSprmId(const sal_uInt8* pSp) const
 }
 
 // with tokens and length byte
-sal_uInt16 wwSprmParser::GetSprmSize(sal_uInt16 nId, const sal_uInt8* pSprm, sal_Int32 nRemLen) const
+sal_Int32 wwSprmParser::GetSprmSize(sal_uInt16 nId, const sal_uInt8* pSprm, sal_Int32 nRemLen) const
 {
     return GetSprmTailLen(nId, pSprm, nRemLen) + 1 + mnDelta + SprmDataOfs(nId);
 }
@@ -8417,19 +8417,19 @@ sal_uInt8 wwSprmParser::SprmDataOfs(sal_uInt16 nId) const
     return GetSprmInfo(nId).nVari;
 }
 
-sal_uInt16 wwSprmParser::DistanceToData(sal_uInt16 nId) const
+sal_Int32 wwSprmParser::DistanceToData(sal_uInt16 nId) const
 {
     return 1 + mnDelta + SprmDataOfs(nId);
 }
 
 SprmResult wwSprmParser::findSprmData(sal_uInt16 nId, sal_uInt8* pSprms,
-    sal_uInt16 nLen) const
+    sal_Int32 nLen) const
 {
     while (nLen >= MinSprmLen())
     {
         const sal_uInt16 nCurrentId = GetSprmId(pSprms);
         // set pointer to data
-        sal_uInt16 nSize = GetSprmSize(nCurrentId, pSprms, nLen);
+        sal_Int32 nSize = GetSprmSize(nCurrentId, pSprms, nLen);
 
         bool bValid = nSize <= nLen;
 
@@ -8439,7 +8439,7 @@ SprmResult wwSprmParser::findSprmData(sal_uInt16 nId, sal_uInt8* pSprms,
 
         if (nCurrentId == nId && bValid) // Sprm found
         {
-            sal_uInt16 nFixedLen = DistanceToData(nId);
+            sal_Int32 nFixedLen = DistanceToData(nId);
             return SprmResult(pSprms + nFixedLen, nSize - nFixedLen);
         }
 
