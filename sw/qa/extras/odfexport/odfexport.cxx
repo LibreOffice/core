@@ -1126,6 +1126,17 @@ DECLARE_ODFEXPORT_TEST(testTextboxRoundedCorners, "textbox-rounded-corners.odt")
         assertXPath(pXmlDoc, "//draw:custom-shape/loext:table", "name", "Table1");
 }
 
+DECLARE_ODFEXPORT_TEST(testBookmarkReordered, "bookmarksReordered.odt")
+{
+    if (xmlDocPtr pXmlDoc = parseExport("content.xml"))
+    {
+        assertXPath(pXmlDoc, "//text:p[@text:style-name='P2']/text:bookmark-start[1]", "name",
+                    "WM(CMD 'setGroups' GROUPS 'Tag_Zeitraum')");
+        assertXPath(pXmlDoc, "//text:p[@text:style-name='P2']/text:bookmark-start[2]", "name",
+                    "WM(CMD 'insertFormValue' ID 'Datum')\n");
+    }
+}
+
 // test that import whitespace collapsing is compatible with old docs
 DECLARE_ODFEXPORT_TEST(testWhitespace, "whitespace.odt")
 {
