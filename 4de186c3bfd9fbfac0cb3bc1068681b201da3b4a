@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "83e08074_850cb0b0",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 5673,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-09-10T10:22:42Z",
+      "side": 1,
+      "message": "VMLExport::StartShape() has already had this in a more readable form, so it would be fine to use that instead of duplicating the copy-paste MSO DOCX shape definition.",
+      "range": {
+        "startLine": 5637,
+        "startChar": 0,
+        "endLine": 5673,
+        "endChar": 24
+      },
+      "revId": "4de186c3bfd9fbfac0cb3bc1068681b201da3b4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
