@@ -73,6 +73,7 @@ IMPL_LINK_NOARG(InterimItemWindow, DoLayout, Timer*, void) { Layout(); }
 
 void InterimItemWindow::Layout()
 {
+    m_aLayoutIdle.Stop();
     vcl::Window* pChild = GetWindow(GetWindowType::FirstChild);
     assert(pChild);
     VclContainer::setLayoutAllocation(*pChild, Point(0, 0), GetSizePixel());
