@@ -40,6 +40,7 @@ public:
     void testTdf126421();
     void testTdf107394();
     void testTdf53431_fillOnAutofilter();
+    void testTdf40993_fillMergedCells();
 
     CPPUNIT_TEST_SUITE(ScCopyPasteTest);
     CPPUNIT_TEST(testCopyPasteXLS);
@@ -48,10 +49,12 @@ public:
     CPPUNIT_TEST(testTdf126421);
     CPPUNIT_TEST(testTdf107394);
     CPPUNIT_TEST(testTdf53431_fillOnAutofilter);
+    CPPUNIT_TEST(testTdf40993_fillMergedCells);
     CPPUNIT_TEST_SUITE_END();
 
 private:
 
+    ScDocShellRef loadDocAndSetupModelViewController(const OUString& rFileName, sal_Int32 nFormat, bool bReadWrite);
     uno::Reference<uno::XInterface> m_xCalcComponent;
 };
 
@@ -433,7 +436,14 @@ static ScMF lcl_getMergeFlagOfCell(const ScDocument& rDoc, SCCOL nCol, SCROW nRo
     return rMergeFlag.GetValue();
 }
 
-void ScCopyPasteTest::testTdf53431_fillOnAutofilter()
+static ScAddress lcl_getMergeSizeOfCell(const ScDocument& rDoc, SCCOL nCol, SCROW nRow, SCTAB nTab)
+{
+    const SfxPoolItem& rPoolItem = rDoc.GetPattern(nCol, nRow, nTab)->GetItem(ATTR_MERGE);
+    const ScMergeAttr& rMerge = static_cast<const ScMergeAttr&>(rPoolItem);
+    return ScAddress(rMerge.GetColMerge(), rMerge.GetRowMerge(), nTab);
+}
+
+ScDocShellRef ScCopyPasteTest::loadDocAndSetupModelViewController(const OUString& rFileName, sal_Int32 nFormat, bool bReadWrite)
 {
     uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(::comphelper::getProcessComponentContext());
     CPPUNIT_ASSERT(xDesktop.is());
@@ -443,8 +453,8 @@ void ScCopyPasteTest::testTdf53431_fillOnAutofilter()
     CPPUNIT_ASSERT(xTargetFrame.is());
 
     // 1. Open the document
-    ScDocShellRef xDocSh = loadDoc("tdf53431_autofilterFilldown.", FORMAT_ODS, true);
-    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf53431_autofilterFilldown.ods.", xDocSh.is());
+    ScDocShellRef xDocSh = loadDoc(rFileName, nFormat, bReadWrite);
+    CPPUNIT_ASSERT_MESSAGE(OString("Failed to load " + OUStringToOString(rFileName, RTL_TEXTENCODING_UTF8)).getStr(), xDocSh.is());
 
     uno::Reference< frame::XModel2 > xModel2(xDocSh->GetModel(), UNO_QUERY);
     CPPUNIT_ASSERT(xModel2.is());
@@ -459,6 +469,12 @@ void ScCopyPasteTest::testTdf53431_fillOnAutofilter()
     xController->attachFrame(xTargetFrame);
     xModel2->setCurrentController(xController.get());
 
+    return xDocSh;
+}
+
+void ScCopyPasteTest::testTdf53431_fillOnAutofilter()
+{
+    ScDocShellRef xDocSh = loadDocAndSetupModelViewController("tdf53431_autofilterFilldown.", FORMAT_ODS, true);
     ScDocument& rDoc = xDocSh->GetDocument();
 
     // Get the document controller
@@ -492,6 +508,84 @@ void ScCopyPasteTest::testTdf53431_fillOnAutofilter()
     CPPUNIT_ASSERT((lcl_getMergeFlagOfCell(rDoc, 1, 1, 0) & ScMF::Auto));
     CPPUNIT_ASSERT((lcl_getMergeFlagOfCell(rDoc, 2, 1, 0) & ScMF::Auto));
     CPPUNIT_ASSERT(!(lcl_getMergeFlagOfCell(rDoc, 0, 1, 0) & ScMF::Auto));
+}
+
+void ScCopyPasteTest::testTdf40993_fillMergedCells()
+{
+    ScDocShellRef xDocSh = loadDocAndSetupModelViewController("tdf40993_fillMergedCells.", FORMAT_ODS, true);
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Get the document controller
+    ScTabViewShell* pView = xDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT(pView != nullptr);
+
+    // check content of the merged cell H11:I11
+    CPPUNIT_ASSERT_EQUAL(OUString("1.5"), rDoc.GetString(ScAddress(7, 10, 0)));
+
+    // fill operation on the merged cell should clone ATTR_MERGE and ATTR_MERGE_FLAG
+    // (as long as ATTR_MERGE_FLAG has only ScMF::Hor or ScMF::Ver)
+    //
+    // select merged cell
+    ScDocShell::GetViewData()->GetMarkData().SetMarkArea(ScRange(7, 10, 0, 8, 10, 0));
+    // copy its content in the next ten rows
+    pView->FillAuto(FILL_TO_BOTTOM, 7, 10, 8, 10, 10);
+    for (int i = 7; i < 9; i++)
+    {
+        ScMF nOriginFlag = lcl_getMergeFlagOfCell(rDoc, i, 10, 0);
+        ScAddress aOriginMerge = lcl_getMergeSizeOfCell(rDoc, i, 10, 0);
+
+        // ATTR_MERGE_FLAG: top left cell is NONE, the other cell shows horizontal overlapping
+        CPPUNIT_ASSERT_EQUAL(i == 7 ? ScMF::NONE : ScMF::Hor, nOriginFlag);
+
+        // ATTR_MERGE: top left cell contains the size of the
+        // merged area (2:1), the other cell doesn't
+        CPPUNIT_ASSERT_EQUAL(i == 7 ? ScAddress(2, 1, 0): ScAddress(0, 0, 0), aOriginMerge);
+
+        for (int j = 11; j < 21; j++)
+        {
+            // check copying of ATTR_MERGE and ATTR_MERGE_FLAG
+            CPPUNIT_ASSERT_EQUAL(lcl_getMergeFlagOfCell(rDoc, i, j, 0), nOriginFlag);
+            CPPUNIT_ASSERT_EQUAL(lcl_getMergeSizeOfCell(rDoc, i, j, 0), aOriginMerge);
+        }
+    }
+
+    CPPUNIT_ASSERT_EQUAL(lcl_getMergeFlagOfCell(rDoc, 7, 21, 0),
+                    lcl_getMergeFlagOfCell(rDoc, 7, 10, 0));
+    CPPUNIT_ASSERT(lcl_getMergeSizeOfCell(rDoc, 7, 21, 0) !=
+                    lcl_getMergeSizeOfCell(rDoc, 7, 10, 0));
+    CPPUNIT_ASSERT(lcl_getMergeFlagOfCell(rDoc, 8, 21, 0) !=
+                    lcl_getMergeFlagOfCell(rDoc, 8, 10, 0));
+    CPPUNIT_ASSERT_EQUAL(lcl_getMergeSizeOfCell(rDoc, 8, 21, 0),
+                    lcl_getMergeSizeOfCell(rDoc, 8, 10, 0));
+
+    // area A6:E9 with various merged cells copied vertically and horizontally
+    ScDocShell::GetViewData()->GetMarkData().SetMarkArea(ScRange(0, 5, 0, 4, 8, 0));
+    pView->FillAuto(FILL_TO_BOTTOM, 0, 5, 4, 8, 12);
+    ScDocShell::GetViewData()->GetMarkData().SetMarkArea(ScRange(0, 5, 0, 4, 8, 0));
+    pView->FillAuto(FILL_TO_RIGHT, 0, 5, 4, 8, 10);
+    for (int i = 0; i < 5; i++)
+    {
+        for (int j = 5; j < 9; j++)
+        {
+            ScMF nOriginFlag = lcl_getMergeFlagOfCell(rDoc, i, j, 0);
+            ScAddress aOriginMerge = lcl_getMergeSizeOfCell(rDoc, i, j, 0);
+            // copies contain the same ATTR_MERGE and ATTR_MERGE_FLAG
+            for (int k = 0; k < 12; k += 4)
+            {
+                CPPUNIT_ASSERT_EQUAL(lcl_getMergeFlagOfCell(rDoc, i, j + k, 0), nOriginFlag);
+                CPPUNIT_ASSERT_EQUAL(lcl_getMergeSizeOfCell(rDoc, i, j + k, 0), aOriginMerge);
+            }
+            for (int k = 0; k < 10; k += 5)
+            {
+                CPPUNIT_ASSERT_EQUAL(lcl_getMergeFlagOfCell(rDoc, i + k, j, 0), nOriginFlag);
+                CPPUNIT_ASSERT_EQUAL(lcl_getMergeSizeOfCell(rDoc, i + k, j, 0), aOriginMerge);
+            }
+        }
+    }
+    CPPUNIT_ASSERT_EQUAL(lcl_getMergeSizeOfCell(rDoc, 1, 5, 0), ScAddress(2, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(lcl_getMergeSizeOfCell(rDoc, 0, 5, 0), ScAddress(1, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(lcl_getMergeSizeOfCell(rDoc, 4, 6, 0), ScAddress(1, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(lcl_getMergeSizeOfCell(rDoc, 3, 5, 0), ScAddress(2, 1, 0));
 }
 
 ScCopyPasteTest::ScCopyPasteTest()

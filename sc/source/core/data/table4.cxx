@@ -640,15 +640,61 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         pSrcPattern = aCol[nAtSrc].GetPattern(static_cast<SCROW>(nRow));
                     bGetPattern = false;
                     pStyleSheet = pSrcPattern->GetStyleSheet();
-                    //  do not transfer ATTR_MERGE / ATTR_MERGE_FLAG
+                    // do transfer ATTR_MERGE / ATTR_MERGE_FLAG
+                    //
+                    // Note: ATTR_MERGE is an attribute of the top left cell of a merged area
+                    // containing the size of the area. ATTR_MERGE_FLAGs are attributes of the
+                    // other cells of a merged area, containing the information about also
+                    // overlapping, i.e. visibility of their content.
+                    //
+                    // TODO: extend the similar incomplete selections to a bounding rectangle to
+                    // avoid incomplete fill, where not all AUTO_MERGE_FLAGs are synchronized with
+                    // the copied ATTR_MERGE, resulting broken grid and visibility during run-time.
+                    //
+                    //  +--+        +--+--+
+                    //  |  |        |  |  |
+                    //  +--+--+     +--+--+
+                    //  |     | ->  |     |
+                    //  +--+--+     +--+--+
+                    //  |  |        |  |  |
+                    //  +--+        +--+--+
+                    //
+                    // TODO: protect incompatible merged cells of the destination area, for example
+                    // by skipping the fill operation.
+                    //
+                    // TODO: by dragging the fill handle select only the multiples of the height
+                    // of the originally selected area which is merged vertically to avoid of
+                    // incomplete fill.
+                    //
+                    //  +--+     +--+
+                    //  |XX|     |XX|
+                    //  +XX+     +XX+
+                    //  |XX| ->  |XX|
+                    //  +--+     +--+
+                    //  |  |     |  |
+                    //  +--+     +--+
+                    //           |  |
+                    //           +--+
+                    //
+                    // Other things stored in ATTR_MERGE_FLAG, like autofilter button, will be
+                    // deleted now, but may need to be repaired later, like at ScDocument::Fill.
                     const SfxItemSet& rSet = pSrcPattern->GetItemSet();
-                    if ( rSet.GetItemState(ATTR_MERGE, false) == SfxItemState::SET
-                            || rSet.GetItemState(ATTR_MERGE_FLAG, false) == SfxItemState::SET )
+                    if ( rSet.GetItemState(ATTR_MERGE_FLAG, false) == SfxItemState::SET )
                     {
-                        pNewPattern.reset( new ScPatternAttr( *pSrcPattern ));
-                        SfxItemSet& rNewSet = pNewPattern->GetItemSet();
-                        rNewSet.ClearItem(ATTR_MERGE);
-                        rNewSet.ClearItem(ATTR_MERGE_FLAG);
+                        ScMF nOldValue = pSrcPattern->GetItem(ATTR_MERGE_FLAG).GetValue();
+                        ScMF nOldValueMerge = nOldValue & (ScMF::Hor | ScMF::Ver);
+                        // keep only the merge flags
+                        if ( nOldValue != nOldValueMerge )
+                        {
+                            pNewPattern.reset(new ScPatternAttr(*pSrcPattern));
+                            SfxItemSet& rNewSet = pNewPattern->GetItemSet();
+                            if ( nOldValueMerge == ScMF::NONE )
+                                rNewSet.ClearItem(ATTR_MERGE_FLAG);
+                            else
+                                rNewSet.Put(ScMergeFlagAttr(nOldValueMerge));
+                        }
+                        else
+                            pNewPattern.reset();
                     }
                     else
                         pNewPattern.reset();
