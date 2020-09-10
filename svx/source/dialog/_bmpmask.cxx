@@ -589,7 +589,7 @@ sal_uInt16 SvxBmpMask::InitColorArrays( Color* pSrcCols, Color* pDstCols, sal_uI
     {
         pSrcCols[nCount] = m_xQSet4->GetItemColor( 1 );
         pDstCols[nCount] = m_xLbColor4->GetSelectEntryColor();
-        pTols[nCount++] = static_cast<sal_uIntPtr>(m_xSp4->get_value(FieldUnit::PERCENT));
+        pTols[nCount++] = static_cast<sal_uInt8>(m_xSp4->get_value(FieldUnit::PERCENT));
     }
 
     return nCount;
