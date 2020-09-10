@@ -231,6 +231,46 @@ CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testInsideOutsideVertAlignBott
     // Verify that the distance between the bottom of body and top of second shape is around 0cm. (align=inside)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(10), nBodyBottom - nSecondShapeInside);
 }
+
+CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testVMLVertAlignBottomMargin)
+{
+    // Load a document, with five shapes.
+    // The shapes align the top,center,bottom,outside and inside of page print area bottom.
+    // The height of page print area bottom is 4320 ~ 7.62cm.
+    // The size of shapes are 442 ~ 0.78cm
+    load(DATA_DIRECTORY, "vml-vertical-alignment.docx");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nBodyBottom = getXPath(pXmlDoc, "//body/infos/bounds", "bottom").toInt32(); //11803
+    sal_Int32 nPageBottom = getXPath(pXmlDoc, "//page/infos/bounds", "bottom").toInt32(); //16123
+
+    sal_Int32 nFirstVMLShapeInside
+        = getXPath(pXmlDoc, "//SwAnchoredDrawObject[1]/bounds", "top").toInt32(); //11802
+    sal_Int32 nSecondVMLShapeBottom
+        = getXPath(pXmlDoc, "//SwAnchoredDrawObject[2]/bounds", "bottom").toInt32(); //16124
+    sal_Int32 nThirdVMLShapeCenterBottom
+        = getXPath(pXmlDoc, "//SwAnchoredDrawObject[3]/bounds", "bottom").toInt32(); //14185
+    sal_Int32 nThirdVMLShapeCenterTop
+        = getXPath(pXmlDoc, "//SwAnchoredDrawObject[3]/bounds", "top").toInt32(); //13741
+    sal_Int32 nFourthVMLShapeTop
+        = getXPath(pXmlDoc, "//SwAnchoredDrawObject[4]/bounds", "top").toInt32(); //11802
+    sal_Int32 nFifthVMLShapeOutside
+        = getXPath(pXmlDoc, "//SwAnchoredDrawObject[5]/bounds", "bottom").toInt32(); //16124
+
+    // Verify that the distance between the bottom of body and top of first VMLshape is around 0cm. (align=inside)
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nBodyBottom - nFirstVMLShapeInside);
+    // Verify that the distance between the bottom of page and bottom of second VMLshape is around 0cm. (align=bottom)
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nSecondVMLShapeBottom - nPageBottom);
+    // Verify that the distance between the bottom of page and bottom of third VMLshape is around 3.4cm and
+    // verify that the distance between the bottom of body and top of third shape is around 3.4cm.(align=center)
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1938), nPageBottom - nThirdVMLShapeCenterBottom);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1938), nThirdVMLShapeCenterTop - nBodyBottom);
+    // Verify that the distance between the bottom of body and top of fourth VMLshape is around 0cm. (align=top)
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nBodyBottom - nFourthVMLShapeTop);
+    // Verify that the distance between the bottom of page and bottom of fifth shape is around 0cm. (align=outside)
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nFifthVMLShapeOutside - nPageBottom);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

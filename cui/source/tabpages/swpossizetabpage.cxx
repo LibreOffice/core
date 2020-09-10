@@ -308,7 +308,7 @@ static FrmMap aHCharHtmlAbsMap[] =
 // #i18732# - allow vertical alignment at page areas
 // #i22341# - handle <LB::RelChar> on its own
 constexpr auto VERT_CHAR_REL = LB::VertFrame|LB::VertPrintArea|
-                                      LB::RelPageFrame|LB::RelPagePrintArea;
+                                      LB::RelPageFrame|LB::RelPagePrintArea|LB::RelPagePrintAreaBottom;
 
 static FrmMap aVCharMap[] =
 {
@@ -323,7 +323,7 @@ static FrmMap aVCharMap[] =
     {SvxSwFramePosString::BOTTOM,        SvxSwFramePosString::BOTTOM,         VertOrientation::BOTTOM,        VERT_CHAR_REL|LB::RelChar},
     {SvxSwFramePosString::BELOW,         SvxSwFramePosString::BELOW,          VertOrientation::CHAR_BOTTOM,   LB::RelChar},
     {SvxSwFramePosString::CENTER_VERT,   SvxSwFramePosString::CENTER_VERT,    VertOrientation::CENTER,        VERT_CHAR_REL|LB::RelChar},
-    {SvxSwFramePosString::FROMTOP,       SvxSwFramePosString::FROMTOP,        VertOrientation::NONE,          VERT_CHAR_REL|LB::RelPagePrintAreaBottom},
+    {SvxSwFramePosString::FROMTOP,       SvxSwFramePosString::FROMTOP,        VertOrientation::NONE,          VERT_CHAR_REL},
     {SvxSwFramePosString::FROMBOTTOM,    SvxSwFramePosString::FROMBOTTOM,     VertOrientation::NONE,          LB::RelChar|LB::VertLine},
     {SvxSwFramePosString::TOP,           SvxSwFramePosString::TOP,            VertOrientation::LINE_TOP,      LB::VertLine},
     {SvxSwFramePosString::BOTTOM,        SvxSwFramePosString::BOTTOM,         VertOrientation::LINE_BOTTOM,   LB::VertLine},

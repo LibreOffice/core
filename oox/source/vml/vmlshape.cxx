@@ -608,6 +608,10 @@ static void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rType
         {
             rPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::PAGE_PRINT_AREA);
         }
+        else if (rTypeModel.maPositionVerticalRelative == "bottom-margin-area")
+        {
+            rPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::PAGE_PRINT_AREA_BOTTOM);
+        }
         else
         {
             rPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::FRAME);
@@ -663,9 +667,9 @@ static void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rType
     else if ( rTypeModel.maPositionVertical == "bottom" )
         rPropSet.setAnyProperty(PROP_VertOrient, makeAny(text::VertOrientation::BOTTOM));
     else if ( rTypeModel.maPositionVertical == "inside" )
-        rPropSet.setAnyProperty(PROP_VertOrient, makeAny(text::VertOrientation::LINE_TOP));
+        rPropSet.setAnyProperty(PROP_VertOrient, makeAny(text::VertOrientation::TOP));
     else if ( rTypeModel.maPositionVertical == "outside" )
-        rPropSet.setAnyProperty(PROP_VertOrient, makeAny(text::VertOrientation::LINE_BOTTOM));
+        rPropSet.setAnyProperty(PROP_VertOrient, makeAny(text::VertOrientation::BOTTOM));
 
     lcl_setSurround( rPropSet, rTypeModel, rGraphicHelper );
 }
