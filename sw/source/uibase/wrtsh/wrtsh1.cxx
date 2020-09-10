@@ -1927,6 +1927,19 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
             sText = GetView().GetPostItMgr()->GetAnswerText();
             GetView().GetPostItMgr()->RegisterAnswerText(OUString());
         }
+        else
+        {
+            const SvxPostItTextItem* pStartItem = rReq.GetArg<SvxPostItTextItem>(SID_ATTR_POSTIT_START);
+            const SvxPostItTextItem* pEndItem = rReq.GetArg<SvxPostItTextItem>(SID_ATTR_POSTIT_END);
+            // We allow Online users to begin a comment, click somewhere else and save comment. When comment is saved, its initial position is sent.
+            if (pStartItem && pEndItem)
+            {
+                sal_Int32 start = (*pStartItem).GetValue().toInt32();
+                sal_Int32 end = (*pStartItem).GetValue().toInt32();
+                Point point(start, end);
+                SwCursorShell::SetCursor(point);
+            }
+        }
 
         if ( HasSelection() && !IsTableMode() )
         {
