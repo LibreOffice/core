@@ -3182,6 +3182,37 @@ class SalInstanceTreeView;
 
 static SalInstanceTreeView* g_DragSource;
 
+namespace
+{
+    class UpdateGuard
+    {
+    private:
+        SvTabListBox& m_rTreeView;
+        bool m_bOrigUpdate;
+        bool m_bOrigEnableInvalidate;
+
+    public:
+        UpdateGuard(SvTabListBox& rTreeView)
+            : m_rTreeView(rTreeView)
+            , m_bOrigUpdate(m_rTreeView.IsUpdateMode())
+            , m_bOrigEnableInvalidate(m_rTreeView.GetModel()->IsEnableInvalidate())
+        {
+            if (m_bOrigUpdate)
+                m_rTreeView.SetUpdateMode(false);
+            if (m_bOrigEnableInvalidate)
+                m_rTreeView.GetModel()->EnableInvalidate(false);
+        }
+
+        ~UpdateGuard()
+        {
+            if (m_bOrigUpdate)
+                m_rTreeView.SetUpdateMode(true);
+            if (m_bOrigEnableInvalidate)
+                m_rTreeView.GetModel()->EnableInvalidate(true);
+        }
+    };
+}
+
 class SalInstanceTreeView : public SalInstanceContainer, public virtual weld::TreeView
 {
 private:
@@ -3249,6 +3280,13 @@ private:
         if (m_aCustomRenders.count(nCol))
             xCell->SetCustomRender();
         pEntry->AddItem(std::move(xCell));
+    }
+
+    void InvalidateModelEntry(SvTreeListEntry* pEntry)
+    {
+        if (!m_xTreeView->GetModel()->IsEnableInvalidate())
+            return;
+        m_xTreeView->ModelHasEntryInvalidated(pEntry);
     }
 
 public:
@@ -3714,7 +3752,7 @@ public:
             assert(dynamic_cast<SvLBoxString*>(&rItem));
             static_cast<SvLBoxString&>(rItem).SetText(rText);
         }
-        m_xTreeView->ModelHasEntryInvalidated(pEntry);
+        InvalidateModelEntry(pEntry);
     }
 
     virtual void set_text(int pos, const OUString& rText, int col) override
@@ -3738,7 +3776,7 @@ public:
                 if (rItem.GetType() == SvLBoxItemType::String)
                 {
                     rItem.Enable(bSensitive);
-                    m_xTreeView->ModelHasEntryInvalidated(pEntry);
+                    InvalidateModelEntry(pEntry);
                     break;
                 }
             }
@@ -3751,7 +3789,7 @@ public:
         SvLBoxItem& rItem = pEntry->GetItem(col);
         rItem.Enable(bSensitive);
 
-        m_xTreeView->ModelHasEntryInvalidated(pEntry);
+        InvalidateModelEntry(pEntry);
     }
 
     using SalInstanceWidget::set_sensitive;
@@ -3833,7 +3871,7 @@ public:
                 break;
         }
 
-        m_xTreeView->ModelHasEntryInvalidated(pEntry);
+        InvalidateModelEntry(pEntry);
     }
 
     virtual void set_toggle(int pos, TriState eState, int col) override
@@ -3864,7 +3902,7 @@ public:
         assert(dynamic_cast<SvLBoxString*>(&rItem));
         static_cast<SvLBoxString&>(rItem).Emphasize(bOn);
 
-        m_xTreeView->ModelHasEntryInvalidated(pEntry);
+        InvalidateModelEntry(pEntry);
     }
 
     virtual void set_text_emphasis(const weld::TreeIter& rIter, bool bOn, int col) override
@@ -3900,7 +3938,7 @@ public:
         assert(dynamic_cast<SvLBoxString*>(&rItem));
         static_cast<SvLBoxString&>(rItem).Align(fAlign);
 
-        m_xTreeView->ModelHasEntryInvalidated(pEntry);
+        InvalidateModelEntry(pEntry);
     }
 
     virtual void set_text_align(const weld::TreeIter& rIter, double fAlign, int col) override
@@ -3962,7 +4000,7 @@ public:
         }
 
         m_xTreeView->SetEntryHeight(pEntry);
-        m_xTreeView->ModelHasEntryInvalidated(pEntry);
+        InvalidateModelEntry(pEntry);
     }
 
     virtual void set_image(int pos, const OUString& rImage, int col) override
@@ -4303,6 +4341,8 @@ public:
 
     virtual void all_foreach(const std::function<bool(weld::TreeIter&)>& func) override
     {
+        UpdateGuard aGuard(*m_xTreeView);
+
         SalInstanceTreeIter aVclIter(m_xTreeView->First());
         while (aVclIter.iter)
         {
