@@ -125,11 +125,13 @@ XMLTextColumnContext_Impl::XMLTextColumnContext_Impl(
             }
             break;
         case XML_ELEMENT(FO, XML_START_INDENT):
+        case XML_ELEMENT(FO_COMPAT, XML_START_INDENT):
             if( GetImport().GetMM100UnitConverter().
                                 convertMeasureToCore( nVal, sValue ) )
                 aColumn.LeftMargin = nVal;
             break;
         case XML_ELEMENT(FO, XML_END_INDENT):
+        case XML_ELEMENT(FO_COMPAT, XML_END_INDENT):
             if( GetImport().GetMM100UnitConverter().
                                 convertMeasureToCore( nVal, sValue ) )
                 aColumn.RightMargin = nVal;
