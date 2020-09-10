@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a2f97a14_6f34adc8",
+        "filename": "sc/source/core/data/documen3.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1140,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-09-10T20:06:43Z",
+      "side": 1,
+      "message": "Nitpick: please, in future, when naming an object instance prefix with a..., the r... prefix is for references; so aRange would be correct here.",
+      "range": {
+        "startLine": 1140,
+        "startChar": 12,
+        "endLine": 1140,
+        "endChar": 18
+      },
+      "revId": "789abce00bbb1139eb4005f78b82478a17342048",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
