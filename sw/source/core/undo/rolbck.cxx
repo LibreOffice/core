@@ -1378,32 +1378,27 @@ SwRegHistory::SwRegHistory( const SwNode& rNd, SwHistory* pHst )
     MakeSetWhichIds();
 }
 
-void SwRegHistory::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
+void SwRegHistory::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    if ( !(m_pHistory && pNew && pOld != pNew) )
+    auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
+    if ( !(m_pHistory && pLegacyHint && pLegacyHint->m_pNew && pLegacyHint->m_pOld != pLegacyHint->m_pNew) )
         return;
 
-    if ( pNew->Which() < POOLATTR_END )
+    if ( pLegacyHint->m_pNew->Which() < POOLATTR_END )
     {
-        if(RES_UPDATE_ATTR == pNew->Which())
+        if(RES_UPDATE_ATTR == pLegacyHint->m_pNew->Which())
         {
-            // const SfxItemPool& rPool = static_cast< const SwUpdateAttr* >(pNew)->GetSfxItemPool();
-
-            m_pHistory->Add(
-                // rPool,
-                pOld,
-                pNew,
-                m_nNodeIndex);
+            m_pHistory->Add(pLegacyHint->m_pOld, pLegacyHint->m_pNew, m_nNodeIndex);
         }
         else
         {
             OSL_ENSURE(false, "Unexpected update attribute (!)");
         }
     }
-    else if (pOld && RES_ATTRSET_CHG == pNew->Which())
+    else if (pLegacyHint->m_pOld && RES_ATTRSET_CHG == pLegacyHint->m_pNew->Which())
     {
         std::unique_ptr<SwHistoryHint> pNewHstr;
-        const SfxItemSet& rSet = *static_cast< const SwAttrSetChg* >(pOld)->GetChgSet();
+        const SfxItemSet& rSet = *static_cast< const SwAttrSetChg* >(pLegacyHint->m_pOld)->GetChgSet();
 
         if ( 1 < rSet.Count() )
         {
