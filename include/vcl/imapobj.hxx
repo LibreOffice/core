@@ -38,10 +38,13 @@ class SvStream;
 #define IMAP_MIRROR_HORZ    0x00000001L
 #define IMAP_MIRROR_VERT    0x00000002L
 
-#define IMAP_FORMAT_BIN     0x00000001L
-#define IMAP_FORMAT_CERN    0x00000002L
-#define IMAP_FORMAT_NCSA    0x00000004L
-#define IMAP_FORMAT_DETECT  0xffffffffL
+enum class IMapFormat
+{
+    Binary  = 1,
+    CERN    = 2,
+    NCSA    = 3,
+    Detect  = 15,
+};
 
 #define IMAP_ERR_OK         0x00000000L
 #define IMAP_ERR_FORMAT     0x00000001L
