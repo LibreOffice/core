@@ -156,7 +156,7 @@ short SvInsertOleDlg::run()
 
     // fill listbox and select default
     m_xLbObjecttype->freeze();
-    for ( sal_uLong i = 0; i < m_pServers->Count(); i++ )
+    for ( size_t i = 0; i < m_pServers->Count(); i++ )
         m_xLbObjecttype->append_text((*m_pServers)[i].GetHumanName());
     m_xLbObjecttype->thaw();
     m_xLbObjecttype->select(0);

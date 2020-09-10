@@ -1198,7 +1198,7 @@ void SvxNumberFormatTabPage::SelFormatHdl_Impl(weld::Widget* pLb)
     // Format-ListBox ----------------------------------------------------
     if (pLb == m_xLbFormat.get())
     {
-        sal_uLong nSelPos = m_xLbFormat->get_selected_index();
+        int nSelPos = m_xLbFormat->get_selected_index();
         short nFmtLbSelPos = static_cast<short>(nSelPos);
 
         OUString aFormat = pNumFmtShell->GetFormat4Entry(nFmtLbSelPos);
