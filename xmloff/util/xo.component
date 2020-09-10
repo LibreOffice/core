@@ -63,10 +63,6 @@
       constructor="com_sun_star_comp_Chart_XMLOasisStylesImporter_get_implementation">
     <service name="com.sun.star.comp.Chart.XMLOasisStylesImporter"/>
   </implementation>
-  <implementation name="XMLDrawContentExportOOO"
-    constructor="com_sun_star_comp_Draw_XMLContentExporter_get_implementation">
-    <service name="com.sun.star.comp.Draw.XMLContentExporter"/>
-  </implementation>
   <implementation name="XMLDrawContentExportOasis"
     constructor="com_sun_star_comp_Draw_XMLOasisContentExporter_get_implementation">
     <service name="com.sun.star.comp.Draw.XMLOasisContentExporter"/>
