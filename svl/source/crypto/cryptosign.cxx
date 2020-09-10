@@ -966,14 +966,6 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
     digest.data = aHashResult.data();
     digest.len = aHashResult.size();
 
-#ifdef DBG_UTIL
-    {
-        FILE *out = fopen("PDFWRITER.hash.data", "wb");
-        fwrite(aHashResult.data(), SHA256_LENGTH, 1, out);
-        fclose(out);
-    }
-#endif
-
     PRTime now = PR_Now();
     NSSCMSSignedData *cms_sd;
     NSSCMSSignerInfo *cms_signer;
@@ -1022,31 +1014,14 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
             return false;
         }
 
-        // I have compared the ts_cms_output produced here with the cms_output produced below, with
-        // the DONTCALLADDUNAUTHATTR env var set (i.e. without actually calling
-        // my_NSS_CMSSignerInfo_AddUnauthAttr()), and they are identical.
-
-#ifdef DBG_UTIL
-        {
-            FILE *out = fopen("PDFWRITER.ts_cms.data", "wb");
-            fwrite(ts_cms_output.data, ts_cms_output.len, 1, out);
-            fclose(out);
-        }
-#endif
+        // I have compared the ts_cms_output produced here with the cms_output produced below when
+        // not actually calling my_NSS_CMSSignerInfo_AddUnauthAttr()), and they are identical.
 
         std::vector<unsigned char> aTsHashResult = comphelper::Hash::calculateHash(ts_cms_signer->encDigest.data, ts_cms_signer->encDigest.len, comphelper::HashType::SHA256);
         SECItem ts_digest;
         ts_digest.type = siBuffer;
         ts_digest.data = aTsHashResult.data();
         ts_digest.len = aTsHashResult.size();
-
-#ifdef DBG_UTIL
-        {
-            FILE *out = fopen("PDFWRITER.ts_hash.data", "wb");
-            fwrite(aTsHashResult.data(), SHA256_LENGTH, 1, out);
-            fclose(out);
-        }
-#endif
 
         unsigned char cOne = 1;
         src.version.type = siUnsignedInteger;
@@ -1088,14 +1063,6 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
         }
 
         SAL_INFO("svl.crypto", "request length=" << timestamp_request->len);
-
-#ifdef DBG_UTIL
-        {
-            FILE *out = fopen("PDFWRITER.timestampreq.data", "wb");
-            fwrite(timestamp_request->data, timestamp_request->len, 1, out);
-            fclose(out);
-        }
-#endif
 
         // Send time stamp request to TSA server, receive response
 
@@ -1187,14 +1154,6 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
 
         SAL_INFO("svl.crypto", "PDF signing: got response, length=" << response_buffer.getLength());
 
-#ifdef DBG_UTIL
-        {
-            FILE *out = fopen("PDFWRITER.reply.data", "wb");
-            fwrite(response_buffer.getStr(), response_buffer.getLength(), 1, out);
-            fclose(out);
-        }
-#endif
-
         curl_slist_free_all(slist);
         curl_easy_cleanup(curl);
         SECITEM_FreeItem(timestamp_request, PR_TRUE);
@@ -1251,11 +1210,6 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
 
         timestamp.encoded = PR_TRUE; // ???
 
-#ifdef DBG_UTIL
-        if (getenv("DONTCALLADDUNAUTHATTR"))
-            ;
-        else
-#endif
         if (my_NSS_CMSSignerInfo_AddUnauthAttr(cms_signer, &timestamp) != SECSuccess)
         {
             SAL_WARN("svl.crypto", "NSS_CMSSignerInfo_AddUnauthAttr failed");
@@ -1359,14 +1313,6 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
         SAL_WARN("svl.crypto", "NSS_CMSEncoder_Finish failed");
         return false;
     }
-
-#ifdef DBG_UTIL
-    {
-        FILE *out = fopen("PDFWRITER.cms.data", "wb");
-        fwrite(cms_output.data, cms_output.len, 1, out);
-        fclose(out);
-    }
-#endif
 
     if (cms_output.len*2 > MAX_SIGNATURE_CONTENT_LENGTH)
     {
@@ -1591,14 +1537,6 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
 
         SAL_INFO("svl.crypto", "Time stamp size is " << pTsContext->cbEncoded << " bytes");
 
-#ifdef DBG_UTIL
-        {
-            FILE *out = fopen("PDFWRITER.tstoken.data", "wb");
-            fwrite(pTsContext->pbEncoded, pTsContext->cbEncoded, 1, out);
-            fclose(out);
-        }
-#endif
-
         // I tried to use CryptMsgControl() with CMSG_CTRL_ADD_SIGNER_UNAUTH_ATTR to add the
         // timestamp, but that failed with "The parameter is incorrect". Probably it is too late to
         // modify the message once its data has already been encoded as part of the
@@ -1679,14 +1617,6 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
         CertFreeCertificateContext(pCertContext);
         return false;
     }
-
-#ifdef DBG_UTIL
-    {
-        FILE *out = fopen("PDFWRITER.signature.data", "wb");
-        fwrite(pSig.get(), nSigLen, 1, out);
-        fclose(out);
-    }
-#endif
 
     // Release resources
     if (pTsContext)
