@@ -170,7 +170,7 @@ $(eval $(call gb_Module_add_uicheck_targets,sw,\
 	UITest_sw_findSimilarity \
 	UITest_chapterNumbering \
 	UITest_librelogo \
-	UITest_options \
+	UITest_sw_options \
 	UITest_sw_ui_fmtui \
 	UITest_classification \
 	UITest_writer_macro_tests \
