@@ -175,8 +175,11 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
                     OUString aLocalName, aPrefix, aNamespace;
                     rNamespaceMap.GetKeyByAttrName( sAttrName, &aPrefix, &aLocalName,
                                                         &aNamespace );
-                    pUnknownItem->AddAttr( rAttrNamespacePrefix, aNamespace, aLocalName,
-                                           sValue );
+                    if ( !rAttrNamespacePrefix.isEmpty() )
+                        pUnknownItem->AddAttr( rAttrNamespacePrefix, aNamespace, aLocalName,
+                                               sValue );
+                    else
+                        pUnknownItem->AddAttr( aLocalName, sValue );
                 }
             }
         }
