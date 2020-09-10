@@ -242,7 +242,8 @@ public:
                     FillSimple( FillDir eDir );
     void            FillSeries( FillDir eDir, FillCmd eCmd, FillDateCmd eDateCmd,
                                 double fStart, double fStep, double fMax );
-    void            FillAuto( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
+    SC_DLLPUBLIC void
+                    FillAuto( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL nEndCol, SCROW nEndRow, sal_uLong nCount );
     void            FillCrossDblClick();
     void            ConvertFormulaToValue();
