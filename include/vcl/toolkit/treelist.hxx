@@ -134,6 +134,7 @@ public:
                         );
 
     void                EnableInvalidate( bool bEnable );
+    bool                IsEnableInvalidate() const { return mbEnableInvalidate; }
 
     // Notify all Listeners
     void                InvalidateEntry( SvTreeListEntry* );
