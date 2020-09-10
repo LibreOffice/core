@@ -289,7 +289,7 @@ public:
 
     /** removes the oldest Undo actions from the stack
     */
-    void            RemoveOldestUndoAction();
+    void            RemoveOldestUndoActions(sal_Int32 nNumToDelete);
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
