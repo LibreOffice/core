@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c31dbef7_913f6ae1",
+        "filename": "reportdesign/source/ui/report/ReportController.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1040,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-09-10T16:37:39Z",
+      "side": 1,
+      "message": "As we removed the dialog this will now do nothing, and break the Format \u003e Distribution.. command in the report builder. So we need the individual commands here too. The reportdesign module doesn\u0027t use sdi files, and the equivalent is OReportController::describeSupportedFeatures where you can list the commands. Then you can handle them in Execute and GetState methods as usual. Probably SID_DISTRIBUTION can also be replaced with the global SID_DISTRIBUTE_DLG.",
+      "revId": "3aaf510b76f85500e30cfde2b3100e591f59d773",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b82b692_361b4658",
+        "filename": "sd/uiconfig/sdraw/popupmenu/multiselect.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-09-10T16:37:39Z",
+      "side": 1,
+      "message": "Like in the menubar - no need to list the individual commands.",
+      "revId": "3aaf510b76f85500e30cfde2b3100e591f59d773",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "542a4283_3125b27f",
+        "filename": "sd/uiconfig/sdraw/toolbar/distributebar.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-09-10T16:37:39Z",
+      "side": 1,
+      "message": "Please change the license header like in Impress.",
+      "revId": "3aaf510b76f85500e30cfde2b3100e591f59d773",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c02a282d_e62faef8",
+        "filename": "sd/uiconfig/simpress/popupmenu/multiselect.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-09-10T16:37:39Z",
+      "side": 1,
+      "message": "Like in the menubar - no need to list the individual commands.",
+      "revId": "3aaf510b76f85500e30cfde2b3100e591f59d773",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
