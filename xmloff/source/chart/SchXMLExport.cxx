@@ -119,6 +119,7 @@ namespace
         sal_Int32  mnRepeat;
         CustomLabelSeq   mCustomLabelText;
         chart2::RelativePosition mCustomLabelPos;
+        OUString msDataLabelStyleName;
 
         SchXMLDataPointStruct() : mnRepeat( 1 ) {}
     };
@@ -177,9 +178,19 @@ public:
      */
     ::std::queue< OUString > maAutoStyleNameQueue;
     void CollectAutoStyle(
-        const std::vector< XMLPropertyState >& aStates );
+        const std::vector< XMLPropertyState >& aStates, const bool bForDataLabel = false);
     void AddAutoStyleAttribute(
         const std::vector< XMLPropertyState >& aStates );
+
+    /** There is no internal equivalent for <chart:data-label>. It will be generated
+        on the fly on export. The flag in maDataLabelStyleFlagQueue tracks, whether
+        the style name at the same position in maAutoStyleNameQueue belongs to a
+        <style:style> element that must be exported as style of a <chart:data-label>
+        element. Make sure, both queue objects are handled parallel, e.g. in
+        CollectAutoStyle and AddAutoStyleAttribute.
+     */
+    ::std::queue<bool>maDataLabelStyleFlagQueue;
+
 
     /// if bExportContent is false the auto-styles are collected
     void parseDocument( css::uno::Reference< css::chart::XChartDocument > const & rChartDoc,
@@ -226,7 +237,7 @@ public:
         const css::uno::Reference< css::chart2::XDiagram > & xDiagram,
         bool bExportContent );
 
-    void exportCustomLabel(const CustomLabelSeq & xCustomLabel);
+    void exportCustomLabel(const SchXMLDataPointStruct& rPoint);
     void exportCustomLabelPosition(const chart2::RelativePosition & xCustomLabelPosition);
 
     void exportRegressionCurve(
@@ -2537,6 +2548,33 @@ namespace
     }
 }
 
+namespace
+{
+// ODF has the line and fill properties in a <style:style> element, which is referenced by the
+// <chart:data-label> element. But LibreOffice has them as special label properties of the series
+// or point respectively. The following array maps internal API name and ODF.
+struct API2ODFMapItem
+{
+    OUString sAPIName;
+    sal_uInt16 nNameSpace;  // from include/xmloff/xmlnamespace.hxx
+    OUString sLocalName;
+    API2ODFMapItem(const OUString& sAPI, const sal_uInt16 nNS, const OUString& sLocal)
+        : sAPIName(sAPI), nNameSpace(nNS), sLocalName(sLocal) {}
+};
+
+const API2ODFMapItem aLabelFoo2ODFArray[]
+    = { API2ODFMapItem("LabelBorderStyle", XML_NAMESPACE_DRAW, "stroke"),
+        API2ODFMapItem("LabelBorderWidth", XML_NAMESPACE_SVG, "stroke-width"),
+        API2ODFMapItem("LabelBorderColor", XML_NAMESPACE_SVG, "stroke-color"),
+        API2ODFMapItem("LabelBorderDashName", XML_NAMESPACE_DRAW, "stroke-dash"),
+        API2ODFMapItem("LabelBorderTransparency", XML_NAMESPACE_SVG, "stroke-opacity"),
+        API2ODFMapItem("LabelFillStyle", XML_NAMESPACE_DRAW, "fill"),
+        API2ODFMapItem("LabelFillBackground", XML_NAMESPACE_DRAW, "fill-hatch-solid"),
+        API2ODFMapItem("LabelFillHatchName", XML_NAMESPACE_DRAW, "fill-hatch-name"),
+        API2ODFMapItem("LabelFillColor", XML_NAMESPACE_DRAW, "fill-color")
+        };
+}
+
 void SchXMLExportHelper_Impl::exportSeries(
     const Reference< chart2::XDiagram > & xNewDiagram,
     const awt::Size & rPageSize,
@@ -2552,6 +2590,7 @@ void SchXMLExportHelper_Impl::exportSeries(
     OUString aFirstYDomainRange;
 
     std::vector< XMLPropertyState > aPropertyStates;
+    std::vector< XMLPropertyState > aDataLabelPropertyStates;
 
     const Sequence< Reference< chart2::XCoordinateSystem > >
         aCooSysSeq( xBCooSysCnt->getCoordinateSystems());
@@ -2664,8 +2703,33 @@ void SchXMLExportHelper_Impl::exportSeries(
                                     lcl_exportNumberFormat( "PercentageNumberFormat", xPropSet, mrExport );
                                 }
 
-                                if( mxExpPropMapper.is())
+                                if (mxExpPropMapper.is())
+                                {
                                     aPropertyStates = mxExpPropMapper->Filter( xPropSet );
+
+                                    // Generate style for <chart:data-label> child element
+                                    if (nCurrentODFVersion >= SvtSaveOptions::ODFSVER_012)
+                                    {
+                                        const uno::Reference< beans::XPropertySetInfo > xInfo(xPropSet->getPropertySetInfo());
+                                        const uno::Reference< beans::XPropertyState > xPropState( xPropSet, uno::UNO_QUERY );
+                                        const rtl::Reference< XMLPropertySetMapper >& rPropertySetMapper(mxExpPropMapper->getPropertySetMapper());
+                                        if (xInfo.is() && xPropState.is() && rPropertySetMapper.is())
+                                        {
+                                            for (const auto& rIt : aLabelFoo2ODFArray)
+                                            {
+                                                if (!xInfo->hasPropertyByName(rIt.sAPIName)
+                                                    || xPropState->getPropertyState(rIt.sAPIName) != beans::PropertyState_DIRECT_VALUE)
+                                                    continue;
+                                                sal_Int32 nTargetIndex =
+                                                    rPropertySetMapper->GetEntryIndex(rIt.nNameSpace, rIt.sLocalName, 0);
+                                                if (nTargetIndex <0)
+                                                    continue;
+                                                XMLPropertyState aDataLabelStateItem(nTargetIndex, xPropSet->getPropertyValue(rIt.sAPIName));
+                                                aDataLabelPropertyStates.emplace_back(aDataLabelStateItem);
+                                            }
+                                        }
+                                    }
+                                }
                             }
 
                             if( bExportContent )
@@ -2746,13 +2810,29 @@ void SchXMLExportHelper_Impl::exportSeries(
 
                                 // open series element until end of for loop
                                 pSeries.reset(new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_SERIES, true, true ));
+
+                                // create <chart:data-label> child element if needed.
+                                // maDataLabelStyleFlagQueue has 'true' in that case.
+                                if (!maDataLabelStyleFlagQueue.empty() && maDataLabelStyleFlagQueue.front())
+                                {
+                                    // write style name
+                                    AddAutoStyleAttribute(aDataLabelPropertyStates);
+                                    // Further content does currently not exist for a <chart:data-label>
+                                    // element as child of a <chart:series>.
+                                    SvXMLElementExport(mrExport, XML_NAMESPACE_CHART, XML_DATA_LABEL, true, true);
+                                }
                             }
                             else    // autostyles
                             {
                                 CollectAutoStyle( aPropertyStates );
+                                // add the style for the to be <chart:data-label> too and remember
+                                // by second parameter, that it is for a data-label;
+                                if (!aDataLabelPropertyStates.empty())
+                                    CollectAutoStyle(aDataLabelPropertyStates, true);
                             }
                             // remove property states for autostyles
                             aPropertyStates.clear();
+                            aDataLabelPropertyStates.clear();
                         }
                     }
 
@@ -3235,6 +3315,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
     uno::Reference< chart2::XDataSeries > xSeries( xSeriesProperties, uno::UNO_QUERY );
 
     std::vector< XMLPropertyState > aPropertyStates;
+    std::vector< XMLPropertyState > aDataLabelPropertyStates;
 
     bool bVaryColorsByPoint = false;
     Sequence< sal_Int32 > aDataPointSeq;
@@ -3272,6 +3353,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
         for( nElement = 0; nElement < nSeriesLength; ++nElement )
         {
             aPropertyStates.clear();
+            aDataLabelPropertyStates.clear();
             uno::Reference< beans::XPropertySet > xPropSet;
             bool bExportNumFmt = false;
             if( aAttrPointSet.find( nElement ) != aEndIt )
@@ -3304,6 +3386,30 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                 }
 
                 aPropertyStates = mxExpPropMapper->Filter( xPropSet );
+
+                // Generate style for <chart:data-label> child element
+                if (nCurrentODFVersion >= SvtSaveOptions::ODFSVER_012)
+                {
+                    const uno::Reference< beans::XPropertySetInfo > xInfo(xPropSet->getPropertySetInfo());
+                    const uno::Reference< beans::XPropertyState > xPropState( xPropSet, uno::UNO_QUERY );
+                    const rtl::Reference< XMLPropertySetMapper >& rPropertySetMapper(mxExpPropMapper->getPropertySetMapper());
+                    if (xInfo.is() && xPropState.is() && rPropertySetMapper.is())
+                    {
+                        for (const auto& rIt : aLabelFoo2ODFArray)
+                        {
+                            if (!xInfo->hasPropertyByName(rIt.sAPIName)
+                                || xPropState->getPropertyState(rIt.sAPIName) != beans::PropertyState_DIRECT_VALUE)
+                                continue;
+                            sal_Int32 nTargetIndex =
+                                rPropertySetMapper->GetEntryIndex(rIt.nNameSpace, rIt.sLocalName, 0);
+                            if (nTargetIndex <0)
+                                continue;
+                            XMLPropertyState aDataLabelStateItem(nTargetIndex, xPropSet->getPropertyValue(rIt.sAPIName));
+                            aDataLabelPropertyStates.emplace_back(aDataLabelStateItem);
+                        }
+                    }
+                }
+
                 if( !aPropertyStates.empty() )
                 {
                     if( bExportContent )
@@ -3317,11 +3423,20 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                             aPoint.mCustomLabelText = lcl_getCustomLabelField(nElement, xSeries);
                         aPoint.mCustomLabelPos = lcl_getCustomLabelPosition(nElement, xSeries);
                         maAutoStyleNameQueue.pop();
+                        maDataLabelStyleFlagQueue.pop();
+                        if (!maDataLabelStyleFlagQueue.empty() && maDataLabelStyleFlagQueue.front())
+                        {
+                            aPoint.msDataLabelStyleName = maAutoStyleNameQueue.front();
+                            maAutoStyleNameQueue.pop();
+                            maDataLabelStyleFlagQueue.pop();
+                        }
                         aDataPointVector.push_back( aPoint );
                     }
                     else
                     {
                         CollectAutoStyle( aPropertyStates );
+                        if (!aDataLabelPropertyStates.empty())
+                            CollectAutoStyle(aDataLabelPropertyStates, true);
                     }
                 }
             }
@@ -3333,6 +3448,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
         for( sal_Int32 nCurrIndex : aDataPointSeq )
         {
             aPropertyStates.clear();
+            aDataLabelPropertyStates.clear();
             //assuming sorted indices in pPoints
 
             if( nCurrIndex<0 || nCurrIndex>=nSeriesLength )
@@ -3367,6 +3483,30 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                 }
 
                 aPropertyStates = mxExpPropMapper->Filter( xPropSet );
+
+                // Generate style for <chart:data-label> child element
+                if (nCurrentODFVersion >= SvtSaveOptions::ODFSVER_012)
+                {
+                    const uno::Reference< beans::XPropertySetInfo > xInfo(xPropSet->getPropertySetInfo());
+                    const uno::Reference< beans::XPropertyState > xPropState( xPropSet, uno::UNO_QUERY );
+                    const rtl::Reference< XMLPropertySetMapper >& rPropertySetMapper(mxExpPropMapper->getPropertySetMapper());
+                    if (xInfo.is() && xPropState.is() && rPropertySetMapper.is())
+                    {
+                        for (const auto& rIt : aLabelFoo2ODFArray)
+                        {
+                            if (!xInfo->hasPropertyByName(rIt.sAPIName)
+                                || xPropState->getPropertyState(rIt.sAPIName) != beans::PropertyState_DIRECT_VALUE)
+                                continue;
+                            sal_Int32 nTargetIndex =
+                                rPropertySetMapper->GetEntryIndex(rIt.nNameSpace, rIt.sLocalName, 0);
+                            if (nTargetIndex <0)
+                                continue;
+                            XMLPropertyState aDataLabelStateItem(nTargetIndex, xPropSet->getPropertyValue(rIt.sAPIName));
+                            aDataLabelPropertyStates.emplace_back(aDataLabelStateItem);
+                        }
+                    }
+                }
+
                 if( !aPropertyStates.empty() )
                 {
                     if( bExportContent )
@@ -3378,13 +3518,21 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                         aPoint.mCustomLabelText = lcl_getCustomLabelField(nCurrIndex, xSeries);
                         aPoint.mCustomLabelPos = lcl_getCustomLabelPosition(nCurrIndex, xSeries);
                         maAutoStyleNameQueue.pop();
-
+                        maDataLabelStyleFlagQueue.pop();
+                        if (!maDataLabelStyleFlagQueue.empty() && maDataLabelStyleFlagQueue.front())
+                        {
+                            aPoint.msDataLabelStyleName = maAutoStyleNameQueue.front();
+                            maAutoStyleNameQueue.pop();
+                            maDataLabelStyleFlagQueue.pop();
+                        }
                         aDataPointVector.push_back( aPoint );
                         nLastIndex = nCurrIndex;
                     }
                     else
                     {
                         CollectAutoStyle( aPropertyStates );
+                        if (!aDataLabelPropertyStates.empty())
+                            CollectAutoStyle(aDataLabelPropertyStates, true);
                     }
                     continue;
                 }
@@ -3422,7 +3570,8 @@ void SchXMLExportHelper_Impl::exportDataPoints(
         aPoint = rPoint;
 
         if( aPoint.maStyleName == aLastPoint.maStyleName && aLastPoint.mCustomLabelText.getLength() < 1 &&
-            aLastPoint.mCustomLabelPos.Primary == 0.0 && aLastPoint.mCustomLabelPos.Secondary == 0.0 )
+            aLastPoint.mCustomLabelPos.Primary == 0.0 && aLastPoint.mCustomLabelPos.Secondary == 0.0
+            && aPoint.msDataLabelStyleName == aLastPoint.msDataLabelStyleName)
             aPoint.mnRepeat += aLastPoint.mnRepeat;
         else if( aLastPoint.mnRepeat > 0 )
         {
@@ -3443,9 +3592,11 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                 }
             }
             nIndex++;
+            // adds loext relative pos attributes to <chart:data-point>
+            // ToDo svg:x and svg:y for <chart:data-label>
             exportCustomLabelPosition(aLastPoint.mCustomLabelPos);
             SvXMLElementExport aPointElem( mrExport, XML_NAMESPACE_CHART, XML_DATA_POINT, true, true );
-            exportCustomLabel(aLastPoint.mCustomLabelText);
+            exportCustomLabel(aLastPoint);
         }
         aLastPoint = aPoint;
     }
@@ -3469,19 +3620,24 @@ void SchXMLExportHelper_Impl::exportDataPoints(
         }
     }
 
+    // adds loext relative pos attributes to <chart:data-point>
+    // ToDo svg:x and svg:y for <chart:data-label>
     exportCustomLabelPosition(aLastPoint.mCustomLabelPos);
     SvXMLElementExport aPointElem( mrExport, XML_NAMESPACE_CHART, XML_DATA_POINT, true, true );
-    exportCustomLabel(aLastPoint.mCustomLabelText);
+    exportCustomLabel(aLastPoint);
 }
 
-void SchXMLExportHelper_Impl::exportCustomLabel( const CustomLabelSeq & xCustomLabel )
+void SchXMLExportHelper_Impl::exportCustomLabel(const SchXMLDataPointStruct& rPoint)
 {
-    if( xCustomLabel.getLength() < 1 )
+    if( rPoint.mCustomLabelText.getLength() < 1 && rPoint.msDataLabelStyleName.isEmpty())
         return; // nothing to export
 
+    if (!rPoint.msDataLabelStyleName.isEmpty())
+        mrExport.AddAttribute(XML_NAMESPACE_CHART, XML_STYLE_NAME, rPoint.msDataLabelStyleName);
+    // ToDo svg:x and svg:y for <chart:data-label>
     SvXMLElementExport aLabelElem( mrExport, XML_NAMESPACE_CHART, XML_DATA_LABEL, true, true);
     SvXMLElementExport aPara( mrExport, XML_NAMESPACE_TEXT, XML_P, true, false );
-    for( const Reference<chart2::XDataPointCustomLabelField>& label : xCustomLabel )
+    for (const Reference<chart2::XDataPointCustomLabelField>& label : rPoint.mCustomLabelText)
     {
         // TODO add style
         SvXMLElementExport aSpan( mrExport, XML_NAMESPACE_TEXT, XML_SPAN, true, false);
@@ -3551,10 +3707,14 @@ awt::Size SchXMLExportHelper_Impl::getPageSize( const Reference< chart2::XChartD
     return aSize;
 }
 
-void SchXMLExportHelper_Impl::CollectAutoStyle( const std::vector< XMLPropertyState >& aStates )
+void SchXMLExportHelper_Impl::CollectAutoStyle(const std::vector< XMLPropertyState >& aStates,
+                                               const bool bForDataLabel)
 {
-    if( !aStates.empty() )
+    if (!aStates.empty())
+    {
         maAutoStyleNameQueue.push( mrAutoStylePool.Add( XmlStyleFamily::SCH_CHART_ID, aStates ));
+        maDataLabelStyleFlagQueue.push(bForDataLabel);
+    }
 }
 
 void SchXMLExportHelper_Impl::AddAutoStyleAttribute( const std::vector< XMLPropertyState >& aStates )
@@ -3565,6 +3725,7 @@ void SchXMLExportHelper_Impl::AddAutoStyleAttribute( const std::vector< XMLPrope
 
         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_STYLE_NAME,  maAutoStyleNameQueue.front() );
         maAutoStyleNameQueue.pop();
+        maDataLabelStyleFlagQueue.pop();
     }
 }
 
