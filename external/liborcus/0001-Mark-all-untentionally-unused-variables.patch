@@ -1,0 +1,376 @@
+From 6d34c41b661a9e8dddf6d08bf1f3c1fd4f5581da Mon Sep 17 00:00:00 2001
+From: Kohei Yoshida <kohei.yoshida@gmail.com>
+Date: Fri, 11 Sep 2020 21:39:09 -0400
+Subject: [PATCH] Mark all untentionally unused variables.
+
+---
+ include/orcus/css_parser.hpp       | 70 ++++++++++++++++++++++++------
+ include/orcus/csv_parser.hpp       |  5 ++-
+ include/orcus/json_parser.hpp      | 15 +++++--
+ include/orcus/sax_parser.hpp       | 35 ++++++++++++---
+ include/orcus/sax_token_parser.hpp | 20 +++++++--
+ include/orcus/yaml_parser.hpp      | 10 ++++-
+ 6 files changed, 124 insertions(+), 31 deletions(-)
+
+diff --git a/include/orcus/css_parser.hpp b/include/orcus/css_parser.hpp
+index cdfae5e0..3e96980b 100644
+--- a/include/orcus/css_parser.hpp
++++ b/include/orcus/css_parser.hpp
+@@ -31,23 +31,44 @@ namespace orcus {
+ class css_handler
+ {
+ public:
+-    void at_rule_name(const char* p, size_t n) {}
++    void at_rule_name(const char* p, size_t n)
++    {
++        (void)p; (void)n;
++    }
+ 
+-    void simple_selector_type(const char* p, size_t n) {}
++    void simple_selector_type(const char* p, size_t n)
++    {
++        (void)p; (void)n;
++    }
+ 
+-    void simple_selector_class(const char* p, size_t n) {}
++    void simple_selector_class(const char* p, size_t n)
++    {
++        (void)p; (void)n;
++    }
+ 
+-    void simple_selector_pseudo_element(orcus::css::pseudo_element_t pe) {}
++    void simple_selector_pseudo_element(orcus::css::pseudo_element_t pe)
++    {
++        (void)pe;
++    }
+ 
+-    void simple_selector_pseudo_class(orcus::css::pseudo_class_t pc) {}
++    void simple_selector_pseudo_class(orcus::css::pseudo_class_t pc)
++    {
++        (void)pc;
++    }
+ 
+-    void simple_selector_id(const char* p, size_t n) {}
++    void simple_selector_id(const char* p, size_t n)
++    {
++        (void)p; (void)n;
++    }
+ 
+     void end_simple_selector() {}
+ 
+     void end_selector() {}
+ 
+-    void combinator(orcus::css::combinator_t combinator) {}
++    void combinator(orcus::css::combinator_t combinator)
++    {
++        (void)combinator;
++    }
+ 
+     /**
+      * Called at each property name.
+@@ -55,7 +76,10 @@ public:
+      * @param p pointer to the char-array containing the property name string.
+      * @param n length of the property name string.
+      */
+-    void property_name(const char* p, size_t n) {}
++    void property_name(const char* p, size_t n)
++    {
++        (void)p; (void)n;
++    }
+ 
+     /**
+      * Called at each ordinary property value string.
+@@ -63,7 +87,10 @@ public:
+      * @param p pointer to the char-array containing the value string.
+      * @param n length of the value string.
+      */
+-    void value(const char* p, size_t n) {}
++    void value(const char* p, size_t n)
++    {
++        (void)p; (void)n;
++    }
+ 
+     /**
+      * Called at each RGB color value of a property.
+@@ -72,7 +99,10 @@ public:
+      * @param green value of green (0-255)
+      * @param blue value of blue (0-255)
+      */
+-    void rgb(uint8_t red, uint8_t green, uint8_t blue) {}
++    void rgb(uint8_t red, uint8_t green, uint8_t blue)
++    {
++        (void)red; (void)green; (void)blue;
++    }
+ 
+     /**
+      * Called at each RGB color value of a property with alpha transparency
+@@ -83,7 +113,10 @@ public:
+      * @param blue value of blue (0-255)
+      * @param alpha alpha transparency value
+      */
+-    void rgba(uint8_t red, uint8_t green, uint8_t blue, double alpha) {}
++    void rgba(uint8_t red, uint8_t green, uint8_t blue, double alpha)
++    {
++        (void)red; (void)green; (void)blue; (void)alpha;
++    }
+ 
+     /**
+      * Called at each HSL color value of a property.
+@@ -92,7 +125,10 @@ public:
+      * @param sat saturation
+      * @param light lightness
+      */
+-    void hsl(uint8_t hue, uint8_t sat, uint8_t light) {}
++    void hsl(uint8_t hue, uint8_t sat, uint8_t light)
++    {
++        (void)hue; (void)sat; (void)light;
++    }
+ 
+     /**
+      * Called at each HSL color value of a property with alpha transparency
+@@ -103,7 +139,10 @@ public:
+      * @param light lightness
+      * @param alpha alpha value
+      */
+-    void hsla(uint8_t hue, uint8_t sat, uint8_t light, double alpha) {}
++    void hsla(uint8_t hue, uint8_t sat, uint8_t light, double alpha)
++    {
++        (void)hue; (void)sat; (void)light; (void)alpha;
++    }
+ 
+     /**
+      * Called at each URL value of a property.
+@@ -111,7 +150,10 @@ public:
+      * @param p pointer to the char-array containing the URL value string.
+      * @param n length of the URL value string.
+      */
+-    void url(const char* p, size_t n) {}
++    void url(const char* p, size_t n)
++    {
++        (void)p; (void)n;
++    }
+ 
+     /**
+      * Called when the parsing begins.
+diff --git a/include/orcus/csv_parser.hpp b/include/orcus/csv_parser.hpp
+index a873b0f2..27b4f924 100644
+--- a/include/orcus/csv_parser.hpp
++++ b/include/orcus/csv_parser.hpp
+@@ -47,7 +47,10 @@ public:
+      *                  the text content is guaranteed to be valid so long as
+      *                  the original CSV stream content is valid.
+      */
+-    void cell(const char* p, size_t n, bool transient) {}
++    void cell(const char* p, size_t n, bool transient)
++    {
++        (void)p; (void)n; (void)transient;
++    }
+ };
+ 
+ template<typename _Handler>
+diff --git a/include/orcus/json_parser.hpp b/include/orcus/json_parser.hpp
+index 51a3d7cc..ef22b3a8 100644
+--- a/include/orcus/json_parser.hpp
++++ b/include/orcus/json_parser.hpp
+@@ -54,7 +54,10 @@ public:
+      *                  pointer points to somewhere in the JSON stream being
+      *                  parsed.
+      */
+-    void object_key(const char* p, size_t len, bool transient) {}
++    void object_key(const char* p, size_t len, bool transient)
++    {
++        (void)p; (void)len; (void)transient;
++    }
+ 
+     /**
+      * Called when the closing curly brace of an object is encountered.
+@@ -87,14 +90,20 @@ public:
+      *                  pointer points to somewhere in the JSON stream being
+      *                  parsed.
+      */
+-    void string(const char* p, size_t len, bool transient) {}
++    void string(const char* p, size_t len, bool transient)
++    {
++        (void)p; (void)len; (void)transient;
++    }
+ 
+     /**
+      * Called when a numeric value is encountered.
+      *
+      * @param val numeric value.
+      */
+-    void number(double val) {}
++    void number(double val)
++    {
++        (void)val;
++    }
+ };
+ 
+ /**
+diff --git a/include/orcus/sax_parser.hpp b/include/orcus/sax_parser.hpp
+index 73c17d06..3b21bfdf 100644
+--- a/include/orcus/sax_parser.hpp
++++ b/include/orcus/sax_parser.hpp
+@@ -30,7 +30,10 @@ public:
+      *
+      * @param param struct containing doctype declaration data.
+      */
+-    void doctype(const orcus::sax::doctype_declaration& param) {}
++    void doctype(const orcus::sax::doctype_declaration& param)
++    {
++        (void)param;
++    }
+ 
+     /**
+      * Called when &lt;?... is encountered, where the '...' may be an
+@@ -39,28 +42,40 @@ public:
+      *
+      * @param decl name of the identifier.
+      */
+-    void start_declaration(const orcus::pstring& decl) {}
++    void start_declaration(const orcus::pstring& decl)
++    {
++        (void)decl;
++    }
+ 
+     /**
+      * Called when the closing tag (&gt;) of a &lt;?... ?&gt; is encountered.
+      *
+      * @param decl name of the identifier.
+      */
+-    void end_declaration(const orcus::pstring& decl) {}
++    void end_declaration(const orcus::pstring& decl)
++    {
++        (void)decl;
++    }
+ 
+     /**
+      * Called at the start of each element.
+      *
+      * @param elem information of the element being parsed.
+      */
+-    void start_element(const orcus::sax::parser_element& elem) {}
++    void start_element(const orcus::sax::parser_element& elem)
++    {
++        (void)elem;
++    }
+ 
+     /**
+      * Called at the end of each element.
+      *
+      * @param elem information of the element being parsed.
+      */
+-    void end_element(const orcus::sax::parser_element& elem) {}
++    void end_element(const orcus::sax::parser_element& elem)
++    {
++        (void)elem;
++    }
+ 
+     /**
+      * Called when a segment of a text content is parsed.  Each text content
+@@ -76,7 +91,10 @@ public:
+      *                  a non-text value or be interned within the scope of
+      *                  the callback</em>.
+      */
+-    void characters(const orcus::pstring& val, bool transient) {}
++    void characters(const orcus::pstring& val, bool transient)
++    {
++        (void)val; (void)transient;
++    }
+ 
+     /**
+      * Called upon parsing of an attribute of an element.  Note that <em>when
+@@ -86,7 +104,10 @@ public:
+      *
+      * @param attr struct containing attribute information.
+      */
+-    void attribute(const orcus::sax::parser_attribute& attr) {}
++    void attribute(const orcus::sax::parser_attribute& attr)
++    {
++        (void)attr;
++    }
+ };
+ 
+ /**
+diff --git a/include/orcus/sax_token_parser.hpp b/include/orcus/sax_token_parser.hpp
+index 1452bc27..6b1b1de4 100644
+--- a/include/orcus/sax_token_parser.hpp
++++ b/include/orcus/sax_token_parser.hpp
+@@ -71,7 +71,10 @@ public:
+      *
+      * @param decl struct containing the attributes of the XML declaration.
+      */
+-    void declaration(const orcus::xml_declaration_t& decl) {}
++    void declaration(const orcus::xml_declaration_t& decl)
++    {
++        (void)decl;
++    }
+ 
+     /**
+      * Called at the start of each element.
+@@ -79,7 +82,10 @@ public:
+      * @param elem struct containing the element's information as well as all
+      *             the attributes that belong to the element.
+      */
+-    void start_element(const orcus::xml_token_element_t& elem) {}
++    void start_element(const orcus::xml_token_element_t& elem)
++    {
++        (void)elem;
++    }
+ 
+     /**
+      * Called at the end of each element.
+@@ -87,7 +93,10 @@ public:
+      * @param elem struct containing the element's information as well as all
+      *             the attributes that belong to the element.
+      */
+-    void end_element(const orcus::xml_token_element_t& elem) {}
++    void end_element(const orcus::xml_token_element_t& elem)
++    {
++        (void)elem;
++    }
+ 
+     /**
+      * Called when a segment of a text content is parsed.  Each text content
+@@ -103,7 +112,10 @@ public:
+      *                  a non-text value or be interned within the scope of
+      *                  the callback</em>.
+      */
+-    void characters(const orcus::pstring& val, bool transient) {}
++    void characters(const orcus::pstring& val, bool transient)
++    {
++        (void)val; (void)transient;
++    }
+ };
+ 
+ /**
+diff --git a/include/orcus/yaml_parser.hpp b/include/orcus/yaml_parser.hpp
+index 797ebbec..8d16fbc7 100644
+--- a/include/orcus/yaml_parser.hpp
++++ b/include/orcus/yaml_parser.hpp
+@@ -72,14 +72,20 @@ public:
+      * @param p pointer to the first character of the string value.
+      * @param len length of the string value.
+      */
+-    void string(const char* p, size_t n) {}
++    void string(const char* p, size_t n)
++    {
++        (void)p; (void)n;
++    }
+ 
+     /**
+      * Called when a numeric value is encountered.
+      *
+      * @param val numeric value.
+      */
+-    void number(double val) {}
++    void number(double val)
++    {
++        (void)val;
++    }
+ 
+     /**
+      * Called when a boolean 'true' keyword is encountered.
+-- 
+2.25.1
+

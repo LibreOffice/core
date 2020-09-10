@@ -89,10 +89,9 @@ void populateTree(
        rTreeCtrl.set_image(*xEntry, rParam.maImgElementRepeat, -1);
     }
 
-    orcus::xml_structure_tree::entity_names_type aNames;
+    orcus::xml_structure_tree::entity_names_type aNames = rWalker.get_attributes();
 
     // Insert attributes.
-    rWalker.get_attributes(aNames);
     for (const orcus::xml_structure_tree::entity_name& rAttrName : aNames)
     {
         OUString sAttr(toString(rAttrName, rWalker));
@@ -106,7 +105,7 @@ void populateTree(
         rTreeCtrl.set_image(*xAttr, rParam.maImgAttribute, -1);
     }
 
-    rWalker.get_children(aNames);
+    aNames = rWalker.get_children();
 
     // Non-leaf if it has child elements, leaf otherwise.
     rEntryData.mbLeafNode = aNames.empty();
@@ -266,7 +265,7 @@ void ScOrcusXMLContextImpl::importXML(const ScOrcusImportXMLParam& rParam)
             std::for_each(rLink.maFieldPaths.begin(), rLink.maFieldPaths.end(),
                 [&filter](const OString& rFieldPath)
                 {
-                    filter.append_field_link(rFieldPath.getStr());
+                    filter.append_field_link(rFieldPath.getStr(), orcus::pstring());
                 }
             );
 
