@@ -21,6 +21,7 @@
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
 #include <unotools/ucbstreamhelper.hxx>
+#include <unotools/saveopt.hxx>
 
 #include <libxml/xpathInternals.h>
 
@@ -52,6 +53,8 @@ public:
     void testTdf128345Legend_CS_TG_axial_import();
     void testTdf135366LabelOnSeries();
     void testTdf135366LabelOnPoint();
+    void testTdf135366LabelExport();
+    void testTdf135366_CustomLabelText();
 
     CPPUNIT_TEST_SUITE(Chart2GeometryTest);
     CPPUNIT_TEST(testTdf135184RoundLineCap);
@@ -66,6 +69,8 @@ public:
     CPPUNIT_TEST(testTdf128345Legend_CS_TG_axial_import);
     CPPUNIT_TEST(testTdf135366LabelOnSeries);
     CPPUNIT_TEST(testTdf135366LabelOnPoint);
+    CPPUNIT_TEST(testTdf135366LabelExport);
+    CPPUNIT_TEST(testTdf135366_CustomLabelText);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -500,6 +505,57 @@ void Chart2GeometryTest::testTdf135366LabelOnPoint()
     xPropSet->getPropertyValue("LabelFillColor") >>= nFillColor;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("fill color gray, 14277081=#d9d9d9", nExpectedFillColor,
                                  nFillColor);
+}
+
+void Chart2GeometryTest::testTdf135366LabelExport()
+{
+    // Error was, that line and fill properties were not exported as
+    // graphic-properties of a <chart:data-label> element, but only
+    // as loext chart-properties of the <chart:data-point> element.
+    load("/chart2/qa/extras/data/odt/", "tdf135366_data_label_export.odt");
+    xmlDocUniquePtr pXmlDoc = parseExport("Object 1/content.xml", "writer8");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Find label style
+    const OString sLabelPath(
+        "//office:document-content/office:body/office:chart/chart:chart/chart:plot-area"
+        "/chart:series/chart:data-point[1]/chart:data-label/@chart:style-name");
+    const OUString sOULabelStyleName = getXPathContent(pXmlDoc, sLabelPath);
+
+    // Verify content of graphic properties of label style
+    const OString sStylePath(
+        "//office:document-content/office:automatic-styles/style:style[@style:name='"
+        + OU2O(sOULabelStyleName) + "']/style:graphic-properties");
+    assertXPath(pXmlDoc, sStylePath, 1);
+    assertXPath(pXmlDoc, sStylePath + "[@draw:fill='solid']");
+    assertXPath(pXmlDoc, sStylePath + "[@draw:fill-color='#5050a0']");
+    assertXPath(pXmlDoc, sStylePath + "[@draw:stroke='solid']");
+    assertXPath(pXmlDoc, sStylePath + "[@svg:stroke-width='0.254cm']");
+    assertXPath(pXmlDoc, sStylePath + "[@svg:stroke-color='#00ffff']");
+}
+
+void Chart2GeometryTest::testTdf135366_CustomLabelText()
+{
+    // Error was, that custom text in a data label was only exported in ODF extended,
+    // although the used <chart:data-label> element exists since ODF 1.2.
+    SvtSaveOptions aSaveOpt;
+    const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion(aSaveOpt.GetODFDefaultVersion());
+    aSaveOpt.SetODFDefaultVersion(SvtSaveOptions::ODFVER_012);
+    load("/chart2/qa/extras/data/pptx/", "tdf135366_CustomLabelText.pptx");
+    xmlDocUniquePtr pXmlDoc = parseExport("Object 1/content.xml", "impress8");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Find custom text. As of version 7.0 it is in a <text:span> element.
+    const OString sCustomTextPath(
+        "//office:document-content/office:body/office:chart/chart:chart/chart:plot-area"
+        "/chart:series/chart:data-point[2]/chart:data-label/text:p/text:span");
+    assertXPath(pXmlDoc, sCustomTextPath, 1);
+
+    // Verify text content
+    const OUString sOUTextContent = getXPathContent(pXmlDoc, sCustomTextPath);
+    CPPUNIT_ASSERT_EQUAL(OUString("Custom"), sOUTextContent);
+
+    aSaveOpt.SetODFDefaultVersion(nCurrentODFVersion);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2GeometryTest);
