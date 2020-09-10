@@ -1319,7 +1319,7 @@ static BOOL CALLBACK SalPrintAbortProc( HDC hPrnDC, int /* nError */ )
     return TRUE;
 }
 
-static DEVMODEW const * ImplSalSetCopies( DEVMODEW const * pDevMode, sal_uLong nCopies, bool bCollate )
+static DEVMODEW const * ImplSalSetCopies( DEVMODEW const * pDevMode, sal_uInt32 nCopies, bool bCollate )
 {
     if ( pDevMode && (nCopies > 1) )
     {
