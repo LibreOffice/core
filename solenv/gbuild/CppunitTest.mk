@@ -123,7 +123,7 @@ else
 		$(if $(gb_CppunitTest__interactive),, \
 			$(if $(value gb_CppunitTest_postprocess), \
 				rm -fr $@.core && mkdir $@.core && cd $@.core &&)) \
-		( \
+		{ \
 		$(if $(gb_CppunitTest_localized),for l in $(WITH_LANG_LIST) ; do LO_TEST_LOCALE="$$l" ) \
 		$(if $(gb_CppunitTest_PREGDBTRACE),$(gb_CppunitTest_PREGDBTRACE) &&) \
 		$(if $(gb_CppunitTest__vcl_no_svp), \
@@ -141,7 +141,7 @@ else
 		$(if $(gb_CppunitTest_POSTGDBTRACE), \
 			; RET=$$? && $(gb_CppunitTest_POSTGDBTRACE) && (exit $$RET)) \
 		$(if $(gb_CppunitTest_localized),|| exit $$?; done) \
-		) \
+		; } \
 		$(if $(gb_CppunitTest__interactive),, \
 			> $@.log 2>&1 \
 			|| ($(if $(value gb_CppunitTest_postprocess), \
