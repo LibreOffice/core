@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2f59ac2d_d1c7408b",
+        "filename": "include/oox/export/vmlexport.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2020-09-10T14:12:38Z",
+      "side": 1,
+      "message": "never mind, should i fix it?",
+      "parentUuid": "5e450564_45e92669",
+      "revId": "46a0cfaec77b92d5784f75f078b3aea835416c0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ce840a0c_13c7f4f3",
         "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
         "patchSetId": 5
@@ -30,6 +48,24 @@
       "writtenOn": "2020-09-10T14:01:07Z",
       "side": 1,
       "message": "This looks like a revert of gerrit.libreoffice.org/c/core/+/101711/6/sw/source/filter/ww8/docxattributeoutput.cxx\n\nWhy is this needed?",
+      "revId": "46a0cfaec77b92d5784f75f078b3aea835416c0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d96a222c_a1286a78",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 5548,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2020-09-10T14:12:38Z",
+      "side": 1,
+      "message": "nope, this is not a revert (or I don\u0027 t want revert) This part is unchanged and this state is in my local branch... I hope it will not change the master either.",
+      "parentUuid": "ce840a0c_13c7f4f3",
       "revId": "46a0cfaec77b92d5784f75f078b3aea835416c0b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
