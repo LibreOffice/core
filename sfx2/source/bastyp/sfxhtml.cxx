@@ -45,15 +45,15 @@ using namespace ::com::sun::star;
 
 
 // <INPUT TYPE=xxx>
-HTMLOptionEnum<sal_uInt16> const aAreaShapeOptEnums[] =
+HTMLOptionEnum<IMapObjectType> const aAreaShapeOptEnums[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_SH_rect,      IMAP_OBJ_RECTANGLE  },
-    { OOO_STRING_SVTOOLS_HTML_SH_rectangle, IMAP_OBJ_RECTANGLE  },
-    { OOO_STRING_SVTOOLS_HTML_SH_circ,      IMAP_OBJ_CIRCLE     },
-    { OOO_STRING_SVTOOLS_HTML_SH_circle,    IMAP_OBJ_CIRCLE     },
-    { OOO_STRING_SVTOOLS_HTML_SH_poly,      IMAP_OBJ_POLYGON    },
-    { OOO_STRING_SVTOOLS_HTML_SH_polygon,   IMAP_OBJ_POLYGON    },
-    { nullptr,                              0                   }
+    { OOO_STRING_SVTOOLS_HTML_SH_rect,      IMapObjectType::Rectangle  },
+    { OOO_STRING_SVTOOLS_HTML_SH_rectangle, IMapObjectType::Rectangle  },
+    { OOO_STRING_SVTOOLS_HTML_SH_circ,      IMapObjectType::Circle     },
+    { OOO_STRING_SVTOOLS_HTML_SH_circle,    IMapObjectType::Circle     },
+    { OOO_STRING_SVTOOLS_HTML_SH_poly,      IMapObjectType::Polygon    },
+    { OOO_STRING_SVTOOLS_HTML_SH_polygon,   IMapObjectType::Polygon    },
+    { nullptr,                              IMapObjectType::Rectangle  }
 };
 
 SfxHTMLParser::SfxHTMLParser( SvStream& rStream, bool bIsNewDoc,
@@ -104,7 +104,7 @@ bool SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const OUString& rBase
 {
     DBG_ASSERT( pImageMap, "ParseAreaOptions: no Image-Map" );
 
-    sal_uInt16 nShape = IMAP_OBJ_RECTANGLE;
+    IMapObjectType nShape = IMapObjectType::Rectangle;
     std::vector<sal_uInt32> aCoords;
     OUString aName, aHRef, aAlt, aTarget;
     bool bNoHRef = false;
@@ -173,7 +173,7 @@ IMAPOBJ_SETEVENT:
     bool bNewArea = true;
     switch( nShape )
     {
-    case IMAP_OBJ_RECTANGLE:
+    case IMapObjectType::Rectangle:
         if( aCoords.size() >=4 )
         {
             tools::Rectangle aRect( aCoords[0], aCoords[1],
@@ -185,7 +185,7 @@ IMAPOBJ_SETEVENT:
             pImageMap->InsertIMapObject( std::move(pMapRObj) );
         }
         break;
-    case IMAP_OBJ_CIRCLE:
+    case IMapObjectType::Circle:
         if( aCoords.size() >=3 )
         {
             Point aPoint( aCoords[0], aCoords[1] );
@@ -196,7 +196,7 @@ IMAPOBJ_SETEVENT:
             pImageMap->InsertIMapObject( std::move(pMapCObj) );
         }
         break;
-    case IMAP_OBJ_POLYGON:
+    case IMapObjectType::Polygon:
         if( aCoords.size() >=6 )
         {
             sal_uInt16 nCount = aCoords.size() / 2;

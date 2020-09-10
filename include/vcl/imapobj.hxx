@@ -26,11 +26,14 @@
 class Point;
 class SvStream;
 
-#define IMAP_OBJ_RECTANGLE  (sal_uInt16(0x0001))
-#define IMAP_OBJ_CIRCLE     (sal_uInt16(0x0002))
-#define IMAP_OBJ_POLYGON    (sal_uInt16(0x0003))
-#define IMAP_OBJ_VERSION    (sal_uInt16(0x0005))
+enum class IMapObjectType
+{
+    Rectangle = 1,
+    Circle    = 2,
+    Polygon   = 3
+};
 
+#define IMAP_OBJ_VERSION    (sal_uInt16(0x0005))
 #define IMAGE_MAP_VERSION   (sal_uInt16(0x0001))
 
 #define IMAPMAGIC           "SDIMAP"
@@ -90,7 +93,7 @@ public:
     IMapObject & operator =(IMapObject const &) = default;
     IMapObject & operator =(IMapObject &&) = default;
 
-    virtual sal_uInt16  GetType() const = 0;
+    virtual IMapObjectType GetType() const = 0;
     virtual bool        IsHit( const Point& rPoint ) const = 0;
 
     void                Write ( SvStream& rOStm ) const;

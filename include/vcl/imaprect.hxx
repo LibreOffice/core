@@ -47,7 +47,7 @@ public:
                                              bool bActive = true,
                                              bool bPixelCoords = true );
 
-    virtual sal_uInt16  GetType() const override;
+    virtual IMapObjectType GetType() const override;
     virtual bool        IsHit( const Point& rPoint ) const override;
 
     tools::Rectangle           GetRectangle( bool bPixelCoords = true ) const;
