@@ -6574,13 +6574,13 @@ bool SwMSDffManager::GetOLEStorageName(sal_uInt32 nOLEId, OUString& rStorageName
 
                     if (aDesc.nSprmsLen && aDesc.pMemPos) // Attributes present
                     {
-                        long nLen = aDesc.nSprmsLen;
+                        auto nLen = aDesc.nSprmsLen;
                         const sal_uInt8* pSprm = aDesc.pMemPos;
 
                         while (nLen >= 2 && !nPictureId)
                         {
                             sal_uInt16 nId = aSprmParser.GetSprmId(pSprm);
-                            sal_uInt16 nSL = aSprmParser.GetSprmSize(nId, pSprm, nLen);
+                            sal_Int32 nSL = aSprmParser.GetSprmSize(nId, pSprm, nLen);
 
                             if( nLen < nSL )
                                 break; // Not enough Bytes left
