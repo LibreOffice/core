@@ -172,6 +172,7 @@ public:
     void testTdf133190();
     void testTdf133191();
     void testTdf132594();
+    void testTdf136267();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -307,6 +308,7 @@ public:
     CPPUNIT_TEST(testTdf133190);
     CPPUNIT_TEST(testTdf133191);
     CPPUNIT_TEST(testTdf132594);
+    CPPUNIT_TEST(testTdf136267);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2814,6 +2816,15 @@ void Chart2ExportTest::testTdf132594()
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:cat", 1);
+}
+
+void Chart2ExportTest::testTdf136267()
+{
+    load("/chart2/qa/extras/data/xlsx/", "tdf136267.xlsx");
+    xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:cat/c:strRef/c:strCache/c:pt/c:v", "John");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
