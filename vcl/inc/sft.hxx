@@ -470,11 +470,13 @@ class TrueTypeFont;
  * @param  nLen    - size of memory buffer
  * @param  facenum - logical font number within a TTC file. This value is ignored
  *                   for TrueType fonts
- * @param  ttf     - array of TrueTypeFonts
+ * @param  ttf     - returns the opened TrueTypeFont
+ * @param  xCharMap  - optional parsed character map
  * @return value of SFErrCodes enum
  * @ingroup sft
  */
-    SFErrCodes VCL_DLLPUBLIC OpenTTFontBuffer(const void* pBuffer, sal_uInt32 nLen, sal_uInt32 facenum, TrueTypeFont** ttf);
+    SFErrCodes VCL_DLLPUBLIC OpenTTFontBuffer(const void* pBuffer, sal_uInt32 nLen, sal_uInt32 facenum,
+                                              TrueTypeFont** ttf, const FontCharMapRef xCharMap = nullptr);
 #if !defined(_WIN32)
 /**
  * TrueTypeFont constructor.
@@ -483,11 +485,13 @@ class TrueTypeFont;
  * @param  fname   - name of TrueType font file
  * @param  facenum - logical font number within a TTC file. This value is ignored
  *                   for TrueType fonts
- * @param  ttf     - array of TrueTypeFonts
+ * @param  ttf     - returns the opened TrueTypeFont
+ * @param  xCharMap  - optional parsed character map
  * @return value of SFErrCodes enum
  * @ingroup sft
  */
-    SFErrCodes VCL_DLLPUBLIC OpenTTFontFile(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf);
+    SFErrCodes VCL_DLLPUBLIC OpenTTFontFile(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf,
+                                            const FontCharMapRef xCharMap = nullptr);
 #endif
 
     bool VCL_DLLPUBLIC getTTCoverage(
@@ -728,7 +732,7 @@ protected:
     SFErrCodes indexGlyphData();
 
 public:
-    AbstractTrueTypeFont(const char* fileName = nullptr);
+    AbstractTrueTypeFont(const char* fileName = nullptr, const FontCharMapRef xCharMap = nullptr);
     virtual ~AbstractTrueTypeFont();
 
     const char* fileName() const { return m_pFileName; }
@@ -765,7 +769,7 @@ public:
 
         sal_uInt32  ntables;
 
-    TrueTypeFont(const char* pFileName = nullptr);
+    TrueTypeFont(const char* pFileName = nullptr, const FontCharMapRef xCharMap = nullptr);
     ~TrueTypeFont() override;
 
     SFErrCodes open(sal_uInt32 facenum);

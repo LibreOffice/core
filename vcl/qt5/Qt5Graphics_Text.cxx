@@ -137,14 +137,15 @@ class Qt5TrueTypeFont : public vcl::AbstractTrueTypeFont
     mutable QByteArray m_aFontTable[vcl::NUM_TAGS];
 
 public:
-    Qt5TrueTypeFont(const QRawFont& aRawFont);
+    Qt5TrueTypeFont(const Qt5FontFace& aFontFace, const QRawFont& aRawFont);
 
     bool hasTable(sal_uInt32 ord) const override;
     const sal_uInt8* table(sal_uInt32 ord, sal_uInt32& size) const override;
 };
 
-Qt5TrueTypeFont::Qt5TrueTypeFont(const QRawFont& aRawFont)
-    : m_aRawFont(aRawFont)
+Qt5TrueTypeFont::Qt5TrueTypeFont(const Qt5FontFace& aFontFace, const QRawFont& aRawFont)
+    : vcl::AbstractTrueTypeFont(nullptr, aFontFace.GetFontCharMap())
+    , m_aRawFont(aRawFont)
 {
     indexGlyphData();
 }
@@ -224,7 +225,8 @@ bool Qt5Graphics::CreateFontSubset(const OUString& rToFile, const PhysicalFontFa
         return false;
 
     // get the raw-bytes from the font to be subset
-    const QFont aFont = static_cast<const Qt5FontFace*>(pFontFace)->CreateFont();
+    const Qt5FontFace* pQt5FontFace = static_cast<const Qt5FontFace*>(pFontFace);
+    const QFont aFont = pQt5FontFace->CreateFont();
     const QRawFont aRawFont(QRawFont::fromFont(aFont));
     const QFontInfo aFontInfo(aFont);
     const OString aToFile(OUStringToOString(aSysPath, osl_getThreadTextEncoding()));
@@ -249,7 +251,7 @@ bool Qt5Graphics::CreateFontSubset(const OUString& rToFile, const PhysicalFontFa
     rInfo.m_nAscent = aRawFont.ascent();
     rInfo.m_nDescent = aRawFont.descent();
 
-    Qt5TrueTypeFont aTTF(aRawFont);
+    Qt5TrueTypeFont aTTF(*pQt5FontFace, aRawFont);
     int nXmin, nYmin, nXmax, nYmax;
     sal_uInt16 nMacStyleFlags;
     if (GetTTGlobalFontHeadInfo(&aTTF, nXmin, nYmin, nXmax, nYmax, nMacStyleFlags))
