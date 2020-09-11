@@ -240,7 +240,6 @@ bool Qt5Graphics::CreateFontSubset(const OUString& rToFile, const PhysicalFontFa
 
     sal_uInt16 aShortIDs[nGlyphCount + 1];
     sal_uInt8 aTempEncs[nGlyphCount + 1];
-    quint32 aQtGlyphId[nGlyphCount + 1];
 
     int nNotDef = -1;
 
@@ -250,7 +249,6 @@ bool Qt5Graphics::CreateFontSubset(const OUString& rToFile, const PhysicalFontFa
 
         sal_GlyphId aGlyphId(pGlyphIds[i]);
         aShortIDs[i] = static_cast<sal_uInt16>(aGlyphId);
-        aQtGlyphId[i] = aShortIDs[i];
         if (!aGlyphId && nNotDef < 0)
             nNotDef = i; // first NotDef glyph found
     }
@@ -263,22 +261,21 @@ bool Qt5Graphics::CreateFontSubset(const OUString& rToFile, const PhysicalFontFa
         // NotDef glyph must be in pos 0 => swap glyphids
         aShortIDs[nNotDef] = aShortIDs[0];
         aTempEncs[nNotDef] = aTempEncs[0];
-        aQtGlyphId[nNotDef] = aQtGlyphId[0];
         aShortIDs[0] = 0;
         aTempEncs[0] = 0;
-        aQtGlyphId[0] = 0;
     }
 
-    QPointF anAdvanceList[nGlyphCount];
-    if (!aRawFont.advancesForGlyphIndexes(aQtGlyphId, anAdvanceList, nGlyphCount))
+    std::unique_ptr<sal_uInt16[]> pGlyphMetrics
+        = GetTTSimpleGlyphMetrics(&aTTF, aShortIDs, nGlyphCount, false);
+    if (!pGlyphMetrics)
         return false;
 
-    QPointF nNotDefAdv = anAdvanceList[0];
-    anAdvanceList[0] = anAdvanceList[nNotDef];
-    anAdvanceList[nNotDef] = nNotDefAdv;
+    sal_uInt16 nNotDefAdv = pGlyphMetrics[0];
+    pGlyphMetrics[0] = pGlyphMetrics[nNotDef];
+    pGlyphMetrics[nNotDef] = nNotDefAdv;
 
     for (int i = 0; i < nOrigGlyphCount; ++i)
-        pGlyphWidths[i] = round(anAdvanceList[i].x());
+        pGlyphWidths[i] = pGlyphMetrics[i];
 
     // write subset into destination file
     Qt5TrueTypeFont aTTF(aRawFont);
