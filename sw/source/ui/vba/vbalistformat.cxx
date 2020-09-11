@@ -159,6 +159,9 @@ void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  )
             sal_Int32 nListtabStopPosition = SAL_MAX_INT32;
             sal_Int32 nFirstLineIndent = SAL_MAX_INT32;
             sal_Int32 nIndentAt = SAL_MAX_INT32;
+            sal_Int32 nLeftMargin = SAL_MAX_INT32;
+            sal_Int32 nSymbolTextDistance = SAL_MAX_INT32;
+            sal_Int32 nFirstLineOffset = SAL_MAX_INT32;
             OUString sCharStyleName, sBulletChar;
             css::awt::FontDescriptor aBulletFont;
             bool bHasFont;
@@ -177,18 +180,34 @@ void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  )
                 aLevelRule["NumberingType"] >>= nNumberingType;
                 // TODO: aLevelRule["Adjust"] >>= nAdjust; // HoriOrientation::LEFT/RIGHT/CENTER
                 aLevelRule["PositionAndSpaceMode"] >>= nPositionAndSpaceMode;
+
+                // for css::text::PositionAndSpaceMode::LABEL_ALIGNMENT
                 aLevelRule["LabelFollowedBy"] >>= nLabelFollowedBy;
                 aLevelRule["ListtabStopPosition"] >>= nListtabStopPosition;
                 aLevelRule["FirstLineIndent"] >>= nFirstLineIndent;
                 aLevelRule["IndentAt"] >>= nIndentAt;
+
+                // for css::text::PositionAndSpaceMode::LABEL_WIDTH_AND_POSITION
+                aLevelRule["LeftMargin"] >>= nLeftMargin;
+                aLevelRule["SymbolTextDistance"] >>= nSymbolTextDistance;
+                aLevelRule["FirstLineOffset"] >>= nFirstLineOffset;
+
                 aLevelRule["BulletChar"] >>= sBulletChar;
                 bHasFont = (aLevelRule["BulletFont"] >>= aBulletFont);
                 bHasColor = (aLevelRule["BulletColor"] >>= aBulletColor);
             }
 
-            if (nPositionAndSpaceMode == css::text::PositionAndSpaceMode::LABEL_ALIGNMENT
-                && nNumberingType != css::style::NumberingType::BITMAP) // TODO
+            if (nNumberingType != css::style::NumberingType::BITMAP) // TODO
             {
+                if (nPositionAndSpaceMode
+                    == css::text::PositionAndSpaceMode::LABEL_WIDTH_AND_POSITION)
+                {
+                    nIndentAt = nLeftMargin;
+                    nFirstLineIndent = nFirstLineOffset;
+                    nListtabStopPosition = nSymbolTextDistance;
+                    nLabelFollowedBy = SvxNumberFormat::LabelFollowedBy::LISTTAB;
+                }
+
                 switch (nLabelFollowedBy)
                 {
                     case SvxNumberFormat::LabelFollowedBy::LISTTAB:
@@ -277,7 +296,6 @@ void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  )
             }
             else
             {
-                // TODO: css::text::PositionAndSpaceMode::LABEL_WIDTH_AND_POSITION
                 continue; // for now, keep such lists as is
             }
             // In case of higher outline levels, each assignment of empty value just sets level 1
