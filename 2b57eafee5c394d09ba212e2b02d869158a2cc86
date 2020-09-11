@@ -68,6 +68,47 @@
       "revId": "2b57eafee5c394d09ba212e2b02d869158a2cc86",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06606e75_b94217df",
+        "filename": "sc/source/core/data/validat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-09-11T10:52:50Z",
+      "side": 1,
+      "message": "aString does not contain formatted display string, only cell content string *iff* the cell type or formula result is not numeric.",
+      "parentUuid": "9be7ed14_9814aae4",
+      "range": {
+        "startLine": 601,
+        "startChar": 33,
+        "endLine": 601,
+        "endChar": 71
+      },
+      "revId": "2b57eafee5c394d09ba212e2b02d869158a2cc86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42749fd7_a57c400f",
+        "filename": "sc/source/core/data/validat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-09-11T10:52:50Z",
+      "side": 1,
+      "message": "Casting to int is wrong. If minimum text length was set to 3 and input was 1.2 this would still result in invalid.",
+      "revId": "2b57eafee5c394d09ba212e2b02d869158a2cc86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
