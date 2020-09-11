@@ -1943,7 +1943,7 @@ cmd/sc_browseforward.png cmd/sc_nextrecord.png
 cmd/32/donation.png cmd/32/currencyfield.png
 cmd/lc_donation.png cmd/lc_currencyfield.png
 cmd/sc_donation.png cmd/sc_currencyfield.png
- 
+
 # Math
 cmd/32/symbolcatalogue.png cmd/32/insertsymbol.png
 cmd/lc_symbolcatalogue.png cmd/lc_insertsymbol.png
