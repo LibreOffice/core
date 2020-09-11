@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d6394792_0aa65dea",
+        "filename": "sc/source/ui/navipi/navipi.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-09-11T12:28:46Z",
+      "side": 1,
+      "message": "thanks, see\nhttps://gerrit.libreoffice.org/c/core/+/102464",
+      "parentUuid": "0212b684_588ac773",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 46
+      },
+      "revId": "722aa442977e5ca27ab05b4299d26346b5a4e883",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e4dd1020_fae464a3",
         "filename": "sc/source/ui/navipi/navipi.cxx",
         "patchSetId": 2
