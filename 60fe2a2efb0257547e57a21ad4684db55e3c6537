@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d5d57df4_8bc3f79f",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-11T08:06:29Z",
+      "side": 1,
+      "message": "Is this necessary/desirable for a consteval thing?",
+      "range": {
+        "startLine": 105,
+        "startChar": 71,
+        "endLine": 105,
+        "endChar": 78
+      },
+      "revId": "60fe2a2efb0257547e57a21ad4684db55e3c6537",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
