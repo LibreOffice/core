@@ -48,12 +48,10 @@ using namespace com::sun::star;
 
 //  maximum values for UI
 static SCCOL SCNAV_MAXCOL(const ScSheetLimits& rLimits) { return rLimits.GetMaxColCount(); }
-// macro is sufficient since only used in ctor
 static sal_Int32 SCNAV_COLDIGITS(const ScSheetLimits& rLimits)
 {
     return static_cast<sal_Int32>( floor( log10( static_cast<double>(SCNAV_MAXCOL(rLimits)))) ) + 1;   // 1...256...18278
 }
-// precomputed constant because it is used in every change of spin button field
 static sal_Int32 SCNAV_COLLETTERS(const ScSheetLimits& rLimits)
 {
     return ::ScColToAlpha(SCNAV_MAXCOL(rLimits)).getLength();    // A...IV...ZZZ
