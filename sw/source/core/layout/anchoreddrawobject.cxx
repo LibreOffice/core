@@ -682,9 +682,15 @@ SwRect SwAnchoredDrawObject::GetObjBoundRect() const
             nTargetWidth = nWidth * (*GetDrawObj( )->GetRelativeWidth());
         }
 
-        auto pObjCustomShape = dynamic_cast<const SdrObjCustomShape*>(GetDrawObj());
-        long nTargetHeight = aCurrObjRect.GetHeight( );
-        if ( GetDrawObj( )->GetRelativeHeight( ) && (!pObjCustomShape || !pObjCustomShape->IsAutoGrowHeight()) )
+        bool bCheck = GetDrawObj()->GetRelativeHeight();
+        if (bCheck)
+        {
+            auto pObjCustomShape = dynamic_cast<const SdrObjCustomShape*>(GetDrawObj());
+            bCheck = !pObjCustomShape || !pObjCustomShape->IsAutoGrowHeight();
+        }
+
+        long nTargetHeight = aCurrObjRect.GetHeight();
+        if (bCheck)
         {
             long nHeight = 0;
             if (GetDrawObj()->GetRelativeHeightRelation() == text::RelOrientation::FRAME)
