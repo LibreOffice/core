@@ -388,11 +388,9 @@ bool PPTWriterBase::CreateSlideMaster( sal_uInt32 nPageNum )
         return false;
     SetCurrentStyleSheet( nPageNum );
 
-    if ( !ImplGetPropertyValue( mXPagePropSet, "Background" ) )                // load background shape
-        return false;
     css::uno::Reference< css::beans::XPropertySet > aXBackgroundPropSet;
-    if ( !( mAny >>= aXBackgroundPropSet ) )
-        return false;
+    if (ImplGetPropertyValue(mXPagePropSet, "Background"))                // load background shape
+        mAny >>= aXBackgroundPropSet;
 
     ImplWriteSlideMaster( nPageNum, aXBackgroundPropSet );
 
