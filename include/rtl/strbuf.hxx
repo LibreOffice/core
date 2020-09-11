@@ -199,7 +199,7 @@ public:
                               The character array length must be greater or
                               equal than this value.
      */
-    OStringBuffer(const sal_Char * value, sal_Int32 length)
+    OStringBuffer(const char * value, sal_Int32 length)
         : pData(NULL)
         , nCapacity( length + 16 )
     {
@@ -429,7 +429,7 @@ public:
         @return     the character at the specified index of this string buffer.
     */
     SAL_DEPRECATED("use rtl::OStringBuffer::operator [] instead")
-    sal_Char charAt( sal_Int32 index )
+    char charAt( sal_Int32 index )
     {
         assert(index >= 0 && index < pData->length);
         return pData->buffer[ index ];
@@ -446,7 +446,7 @@ public:
         @param      ch      the new character.
      */
     SAL_DEPRECATED("use rtl::OStringBuffer::operator [] instead")
-    OStringBuffer & setCharAt(sal_Int32 index, sal_Char ch)
+    OStringBuffer & setCharAt(sal_Int32 index, char ch)
     {
         assert(index >= 0 && index < pData->length);
         pData->buffer[ index ] = ch;
@@ -456,7 +456,7 @@ public:
     /**
         Return a null terminated character array.
      */
-    const sal_Char* getStr() const SAL_RETURNS_NONNULL { return pData->buffer; }
+    const char* getStr() const SAL_RETURNS_NONNULL { return pData->buffer; }
 
     /**
       Access to individual characters.
@@ -467,7 +467,7 @@ public:
 
       @since LibreOffice 3.5
     */
-    sal_Char & operator [](sal_Int32 index)
+    char & operator [](sal_Int32 index)
     {
         assert(index >= 0 && index < pData->length);
         return pData->buffer[index];
@@ -549,7 +549,7 @@ public:
         @param len the number of characters to append; must be non-negative
         @return  this string buffer.
      */
-    OStringBuffer & append( const sal_Char * str, sal_Int32 len)
+    OStringBuffer & append( const char * str, sal_Int32 len)
     {
         assert( len == 0 || str != NULL ); // cannot assert that in rtl_stringbuffer_insert
         rtl_stringbuffer_insert( &pData, &nCapacity, getLength(), str, len );
@@ -600,7 +600,7 @@ public:
      */
     OStringBuffer & append(sal_Bool b)
     {
-        sal_Char sz[RTL_STR_MAX_VALUEOFBOOLEAN];
+        char sz[RTL_STR_MAX_VALUEOFBOOLEAN];
         return append( sz, rtl_str_valueOfBoolean( sz, b ) );
     }
 
@@ -619,7 +619,7 @@ public:
      */
     OStringBuffer & append(bool b)
     {
-        sal_Char sz[RTL_STR_MAX_VALUEOFBOOLEAN];
+        char sz[RTL_STR_MAX_VALUEOFBOOLEAN];
         return append( sz, rtl_str_valueOfBoolean( sz, b ) );
     }
 
@@ -643,7 +643,7 @@ public:
         @param   c   a <code>char</code>.
         @return  this string buffer.
      */
-    OStringBuffer & append(sal_Char c)
+    OStringBuffer & append(char c)
     {
         return append( &c, 1 );
     }
@@ -662,7 +662,7 @@ public:
      */
     OStringBuffer & append(sal_Int32 i, sal_Int16 radix = 10 )
     {
-        sal_Char sz[RTL_STR_MAX_VALUEOFINT32];
+        char sz[RTL_STR_MAX_VALUEOFINT32];
         return append( sz, rtl_str_valueOfInt32( sz, i, radix ) );
     }
 
@@ -680,7 +680,7 @@ public:
      */
     OStringBuffer & append(sal_Int64 l, sal_Int16 radix = 10 )
     {
-        sal_Char sz[RTL_STR_MAX_VALUEOFINT64];
+        char sz[RTL_STR_MAX_VALUEOFINT64];
         return append( sz, rtl_str_valueOfInt64( sz, l, radix ) );
     }
 
@@ -697,7 +697,7 @@ public:
      */
     OStringBuffer & append(float f)
     {
-        sal_Char sz[RTL_STR_MAX_VALUEOFFLOAT];
+        char sz[RTL_STR_MAX_VALUEOFFLOAT];
         return append( sz, rtl_str_valueOfFloat( sz, f ) );
     }
 
@@ -714,7 +714,7 @@ public:
      */
     OStringBuffer & append(double d)
     {
-        sal_Char sz[RTL_STR_MAX_VALUEOFDOUBLE];
+        char sz[RTL_STR_MAX_VALUEOFDOUBLE];
         return append( sz, rtl_str_valueOfDouble( sz, d ) );
     }
 
@@ -823,7 +823,7 @@ public:
         @param      len      the number of characters to append.
         @return     this string buffer.
      */
-    OStringBuffer & insert( sal_Int32 offset, const sal_Char * str, sal_Int32 len)
+    OStringBuffer & insert( sal_Int32 offset, const char * str, sal_Int32 len)
     {
         assert( len == 0 || str != NULL ); // cannot assert that in rtl_stringbuffer_insert
         rtl_stringbuffer_insert( &pData, &nCapacity, offset, str, len );
@@ -849,7 +849,7 @@ public:
      */
     OStringBuffer & insert(sal_Int32 offset, sal_Bool b)
     {
-        sal_Char sz[RTL_STR_MAX_VALUEOFBOOLEAN];
+        char sz[RTL_STR_MAX_VALUEOFBOOLEAN];
         return insert( offset, sz, rtl_str_valueOfBoolean( sz, b ) );
     }
 
@@ -874,7 +874,7 @@ public:
      */
     OStringBuffer & insert(sal_Int32 offset, bool b)
     {
-        sal_Char sz[RTL_STR_MAX_VALUEOFBOOLEAN];
+        char sz[RTL_STR_MAX_VALUEOFBOOLEAN];
         return insert( offset, sz, rtl_str_valueOfBoolean( sz, b ) );
     }
 
@@ -894,7 +894,7 @@ public:
         @param      c        a <code>char</code>.
         @return     this string buffer.
      */
-    OStringBuffer & insert(sal_Int32 offset, sal_Char c)
+    OStringBuffer & insert(sal_Int32 offset, char c)
     {
         return insert( offset, &c, 1 );
     }
@@ -919,7 +919,7 @@ public:
      */
     OStringBuffer & insert(sal_Int32 offset, sal_Int32 i, sal_Int16 radix = 10 )
     {
-        sal_Char sz[RTL_STR_MAX_VALUEOFINT32];
+        char sz[RTL_STR_MAX_VALUEOFINT32];
         return insert( offset, sz, rtl_str_valueOfInt32( sz, i, radix ) );
     }
 
@@ -943,7 +943,7 @@ public:
      */
     OStringBuffer & insert(sal_Int32 offset, sal_Int64 l, sal_Int16 radix = 10 )
     {
-        sal_Char sz[RTL_STR_MAX_VALUEOFINT64];
+        char sz[RTL_STR_MAX_VALUEOFINT64];
         return insert( offset, sz, rtl_str_valueOfInt64( sz, l, radix ) );
     }
 
@@ -966,7 +966,7 @@ public:
      */
     OStringBuffer insert(sal_Int32 offset, float f)
     {
-        sal_Char sz[RTL_STR_MAX_VALUEOFFLOAT];
+        char sz[RTL_STR_MAX_VALUEOFFLOAT];
         return insert( offset, sz, rtl_str_valueOfFloat( sz, f ) );
     }
 
@@ -989,7 +989,7 @@ public:
      */
     OStringBuffer & insert(sal_Int32 offset, double d)
     {
-        sal_Char sz[RTL_STR_MAX_VALUEOFDOUBLE];
+        char sz[RTL_STR_MAX_VALUEOFDOUBLE];
         return insert( offset, sz, rtl_str_valueOfDouble( sz, d ) );
     }
 

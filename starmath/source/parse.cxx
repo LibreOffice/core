@@ -967,7 +967,7 @@ void SmParser::NextToken() //Central part of the parser
         m_aCurToken.nLevel     = 5;
 
         // tdf#129372: we may have to deal with surrogate pairs
-        // (see https://en.wikipedia.org/wiki/Universal_Character_Set_characters#Surrogates)
+        // (see https://en.wikipedia.org/wiki/Univercharacter_Set_characters#Surrogates)
         // in this case, we must read 2 sal_Unicode instead of 1
         int nOffset(rtl::isSurrogate(m_aBufferString[nRealStart])? 2 : 1);
         m_aCurToken.aText      = m_aBufferString.copy( nRealStart, nOffset );

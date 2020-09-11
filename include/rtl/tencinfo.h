@@ -186,7 +186,7 @@ SAL_DLLPUBLIC rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromWindowsCharset(
     no mapping is applicable.
  */
 SAL_DLLPUBLIC rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset(
-        const sal_Char* pMimeCharset );
+        const char* pMimeCharset );
 
 /** Map from a Unix charset to a text encoding.
 
@@ -198,7 +198,7 @@ SAL_DLLPUBLIC rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset(
     no mapping is applicable.
  */
 SAL_DLLPUBLIC rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset(
-        const sal_Char* pUnixCharset );
+        const char* pUnixCharset );
 
 /** Map from a text encoding to the best matching numeric Windows charset.
 
@@ -232,7 +232,7 @@ SAL_DLLPUBLIC char const * SAL_CALL rtl_getMimeCharsetFromTextEncoding(
     @return
     The best matching MIME charset string, or null if none matches.
  */
-SAL_DLLPUBLIC const sal_Char* SAL_CALL rtl_getBestMimeCharsetFromTextEncoding(
+SAL_DLLPUBLIC const char* SAL_CALL rtl_getBestMimeCharsetFromTextEncoding(
         rtl_TextEncoding eTextEncoding );
 
 /** Map from a text encoding to the best matching Unix charset.
@@ -243,7 +243,7 @@ SAL_DLLPUBLIC const sal_Char* SAL_CALL rtl_getBestMimeCharsetFromTextEncoding(
     @return
     The best matching Unix charset string, or null if none matches.
  */
-SAL_DLLPUBLIC const sal_Char* SAL_CALL rtl_getBestUnixCharsetFromTextEncoding(
+SAL_DLLPUBLIC const char* SAL_CALL rtl_getBestUnixCharsetFromTextEncoding(
         rtl_TextEncoding eTextEncoding  );
 
 /** Map from a Windows code page to a text encoding.
