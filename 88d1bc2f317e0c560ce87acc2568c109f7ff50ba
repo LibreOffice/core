@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "263afb8b_0d238364",
+        "filename": "icon-themes/breeze/links.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 965,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-09-11T10:14:57Z",
+      "side": 1,
+      "message": ".uno:Distribute might not be needed after all, please watch the outcome of https://gerrit.libreoffice.org/c/core/+/102272 .",
+      "revId": "88d1bc2f317e0c560ce87acc2568c109f7ff50ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
