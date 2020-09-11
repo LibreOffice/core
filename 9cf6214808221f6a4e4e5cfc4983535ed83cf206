@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fb13eb4_c339b2b1",
+        "filename": "svtools/source/control/ctrltool.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-09-11T16:37:39Z",
+      "side": 1,
+      "message": "May there be some pb to assign an \"int\" element from mpSizeAry from \"long\" type nOldHeight ?",
+      "range": {
+        "startLine": 779,
+        "startChar": 36,
+        "endLine": 779,
+        "endChar": 46
+      },
+      "revId": "9cf6214808221f6a4e4e5cfc4983535ed83cf206",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
