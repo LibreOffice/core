@@ -282,6 +282,9 @@ namespace sdr::overlay
 
         tools::Rectangle OverlayManager::RangeToInvalidateRectangle(const basegfx::B2DRange& rRange) const
         {
+            if (rRange.isEmpty()) {
+                return {};
+            }
             if (getDrawinglayerOpt().IsAntiAliasing())
             {
                 // assume AA needs one pixel more and invalidate one pixel more
