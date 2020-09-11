@@ -680,7 +680,7 @@ class TrueTypeFont;
  * @return            true, if table data could be decoded
  * @ingroup sft
  */
-    VCL_DLLPUBLIC bool GetTTGlobalFontHeadInfo(AbstractTrueTypeFont *ttf, int& xMin, int& yMin, int& xMax, int& yMax, sal_uInt16& macStyle);
+    VCL_DLLPUBLIC bool GetTTGlobalFontHeadInfo(const AbstractTrueTypeFont *ttf, int& xMin, int& yMin, int& xMax, int& yMax, sal_uInt16& macStyle);
 
 /**
  * Returns fonts metrics.
