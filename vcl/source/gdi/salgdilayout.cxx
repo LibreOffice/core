@@ -936,7 +936,7 @@ void SalGraphics::GetGlyphWidths(const vcl::AbstractTrueTypeFont& rTTF,
             continue;
 
         sal_Ucs nUcsChar = static_cast<sal_Ucs>(nChar);
-        sal_uInt32 nGlyph = ::MapChar(&rTTF, nUcsChar);
+        sal_uInt32 nGlyph = xFCMap->GetGlyphIndex(nUcsChar);
         if (nGlyph > 0)
             rUnicodeEnc[nUcsChar] = nGlyph;
     }
