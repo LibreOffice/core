@@ -54,40 +54,36 @@
 #include <calbck.hxx>
 #include <frameformats.hxx>
 
-SwUndoFormatAttrHelper::SwUndoFormatAttrHelper( SwFormat& rFormat, bool bSvDrwPt )
-    : SwClient( &rFormat )
-    , m_bSaveDrawPt( bSvDrwPt )
+SwUndoFormatAttrHelper::SwUndoFormatAttrHelper(SwFormat& rFormat, bool bSvDrwPt)
+    : SwClient(&rFormat)
+    , m_rFormat(rFormat)
+    , m_bSaveDrawPt(bSvDrwPt)
 {
 }
 
-void SwUndoFormatAttrHelper::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
+void SwUndoFormatAttrHelper::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    if( !pOld )        return;
-
-    if ( pOld->Which() == RES_OBJECTDYING ) {
-        CheckRegistration( pOld );
-    } else if ( pNew ) {
-        const SwDoc& rDoc = *static_cast<SwFormat*>(GetRegisteredInNonConst())->GetDoc();
-        if( POOLATTR_END >= pOld->Which() ) {
-            if ( GetUndo() ) {
-                m_pUndo->PutAttr( *pOld, rDoc );
-            } else {
-                m_pUndo.reset( new SwUndoFormatAttr( *pOld,
-                                                  *static_cast<SwFormat*>(GetRegisteredInNonConst()), m_bSaveDrawPt ) );
-            }
-        } else if ( RES_ATTRSET_CHG == pOld->Which() ) {
-            if ( GetUndo() ) {
-                SfxItemIter aIter(
-                    *static_cast<const SwAttrSetChg*>(pOld)->GetChgSet() );
-                for (auto pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
-                {
-                    m_pUndo->PutAttr( *pItem, rDoc );
-                }
-            } else {
-                m_pUndo.reset( new SwUndoFormatAttr(
-                                   *static_cast<const SwAttrSetChg*>(pOld)->GetChgSet(),
-                                   *static_cast<SwFormat*>(GetRegisteredInNonConst()), m_bSaveDrawPt ) );
-            }
+    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
+    if(!pLegacy || !pLegacy->m_pOld)
+        return;
+    assert(pLegacy->m_pOld->Which() != RES_OBJECTDYING);
+    if(!pLegacy->m_pNew)
+        return;
+    const SwDoc& rDoc = *m_rFormat.GetDoc();
+    auto pOld = pLegacy->m_pOld;
+    if(POOLATTR_END >= pLegacy->m_pOld->Which()) {
+        if(!GetUndo())
+            m_pUndo.reset(new SwUndoFormatAttr(*pOld, m_rFormat, m_bSaveDrawPt));
+        else
+            m_pUndo->PutAttr(*pOld, rDoc);
+    } else if(RES_ATTRSET_CHG == pOld->Which()) {
+        auto& rChgSet = *static_cast<const SwAttrSetChg*>(pOld)->GetChgSet();
+        if(!GetUndo())
+            m_pUndo.reset(new SwUndoFormatAttr(rChgSet, m_rFormat, m_bSaveDrawPt));
+        else {
+            SfxItemIter aIter(rChgSet);
+            for(auto pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+                m_pUndo->PutAttr(*pItem, rDoc);
         }
     }
 }
