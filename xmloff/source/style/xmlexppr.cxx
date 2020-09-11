@@ -32,6 +32,7 @@
 #include <osl/diagnose.h>
 #include <list>
 #include <map>
+#include <o3tl/sorted_vector.hxx>
 
 #include <xmloff/xmlexppr.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -91,62 +92,36 @@ XMLPropTokens_Impl const aPropTokens[MAX_PROP_TYPES] =
 // if a state is available.
 // After that I call the method 'ContextFilter'.
 
-typedef std::list<XMLPropertyState> XMLPropertyStateList_Impl;
-
+struct ComparePropertyState
+{
+    bool operator()(XMLPropertyState const& lhs, XMLPropertyState const& rhs)
+    {
+        return lhs.mnIndex < rhs.mnIndex;
+    }
+};
 class XMLPropertyStates_Impl
 {
-    XMLPropertyStateList_Impl           aPropStates;
-    XMLPropertyStateList_Impl::iterator aLastItr;
-    sal_uInt32                          nCount;
+    o3tl::sorted_vector<XMLPropertyState, ComparePropertyState> aPropStates;
 public:
     XMLPropertyStates_Impl();
     void AddPropertyState(const XMLPropertyState& rPropState);
     void FillPropertyStateVector(std::vector<XMLPropertyState>& rVector);
 };
 
-XMLPropertyStates_Impl::XMLPropertyStates_Impl() :
-    aPropStates(),
-    nCount(0)
+XMLPropertyStates_Impl::XMLPropertyStates_Impl()
 {
-    aLastItr = aPropStates.begin();
 }
 
 void XMLPropertyStates_Impl::AddPropertyState(
         const XMLPropertyState& rPropState)
 {
-    XMLPropertyStateList_Impl::iterator aItr = aPropStates.begin();
-    bool bInserted(false);
-    if (nCount)
-    {
-        if (aLastItr->mnIndex < rPropState.mnIndex)
-            aItr = ++aLastItr;
-    }
-    do
-    {
-        // TODO: one path required only
-        if (aItr == aPropStates.end())
-        {
-            aLastItr = aPropStates.insert(aPropStates.end(), rPropState);
-            bInserted = true;
-            nCount++;
-        }
-        else if (aItr->mnIndex > rPropState.mnIndex)
-        {
-            aLastItr = aPropStates.insert(aItr, rPropState);
-            bInserted = true;
-            nCount++;
-        }
-    }
-    while(!bInserted && (aItr++ != aPropStates.end()));
+    aPropStates.insert(rPropState);
 }
 
 void XMLPropertyStates_Impl::FillPropertyStateVector(
         std::vector<XMLPropertyState>& rVector)
 {
-    if (nCount)
-    {
-        rVector.insert( rVector.begin(), aPropStates.begin(), aPropStates.end() );
-    }
+    rVector.insert( rVector.begin(), aPropStates.begin(), aPropStates.end() );
 }
 
 class FilterPropertyInfo_Impl
