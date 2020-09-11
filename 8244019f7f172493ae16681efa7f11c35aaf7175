@@ -16,6 +16,24 @@
       "revId": "8244019f7f172493ae16681efa7f11c35aaf7175",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8c30b8b_d1c0edeb",
+        "filename": "sc/source/core/tool/detfunc.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 1611,
+      "author": {
+        "id": 1002200
+      },
+      "writtenOn": "2020-09-11T19:11:20Z",
+      "side": 1,
+      "message": "Thanks for jumping in Eike 😊\nI am doing this in a separate commit, I thought it would be better that way. Will push on monday.",
+      "parentUuid": "fe25ea9a_aa7c50be",
+      "revId": "8244019f7f172493ae16681efa7f11c35aaf7175",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
