@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4a232968_d5c3ec2f",
+        "filename": "sc/source/filter/xcl97/xcl97rec.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1280,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-09-11T09:15:20Z",
+      "side": 1,
+      "message": "GetSdrObjectFromXShape() is the dedicated UNO core function for this.",
+      "range": {
+        "startLine": 1280,
+        "startChar": 0,
+        "endLine": 1280,
+        "endChar": 84
+      },
+      "revId": "e8b704c5df50e73fef818d47df36bb07fbf3f8ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bf475e4_9b299640",
+        "filename": "sc/source/filter/xcl97/xcl97rec.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1282,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-09-11T09:15:20Z",
+      "side": 1,
+      "message": "An XShape object is not always implemented as an SvxShape object. For example, a Java UNO extension can create its own XShape object written in Java, but we want to export that, too.",
+      "range": {
+        "startLine": 1281,
+        "startChar": 0,
+        "endLine": 1282,
+        "endChar": 15
+      },
+      "revId": "e8b704c5df50e73fef818d47df36bb07fbf3f8ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
