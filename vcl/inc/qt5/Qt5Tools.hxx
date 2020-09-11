@@ -151,4 +151,32 @@ sal_uInt16 GetMouseModCode(Qt::MouseButtons eButtons);
 
 QImage toQImage(const Image& rImage);
 
+template <typename charT, typename traits>
+inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& stream,
+                                                     const QString& rString)
+{
+    return stream << toOUString(rString);
+}
+
+template <typename charT, typename traits>
+inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& stream,
+                                                     const QRect& rRect)
+{
+    return stream << toRectangle(rRect);
+}
+
+template <typename charT, typename traits>
+inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& stream,
+                                                     const QSize& rSize)
+{
+    return stream << toSize(rSize);
+}
+
+template <typename charT, typename traits>
+inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& stream,
+                                                     const QPoint& rPoint)
+{
+    return stream << toPoint(rPoint);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
