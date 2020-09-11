@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "55faea55_37edfd5b",
+        "filename": "reportdesign/inc/rptui_slotid.hrc",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-09-11T07:11:12Z",
+      "side": 0,
+      "message": "Followed how ObjectAlign is implemented (taking all SID from svxid). But removing a command might break macros. We could add this SID+.uno: and make it a duplicate of svx/ *_DLG. Or am I overcautious?",
+      "revId": "ba4b3d5f7a0fe8d0d985e98897e041d59093d8b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
