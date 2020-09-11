@@ -4982,7 +4982,7 @@ void ScInterpreter::ScMatch()
                 if (nCmp == 0)
                 {
                     // exact match.  find the last item with the same value.
-                    lcl_GetLastMatch( nMid, aMatAcc, nMatCount, !bAscOrder);
+                    lcl_GetLastMatch( nMid, aMatAcc, nMatCount, false);
                     PushDouble( nMid+1);
                     return;
                 }
