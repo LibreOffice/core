@@ -65,6 +65,7 @@ namespace sax_fastparser {
 namespace utl { class MediaDescriptor; }
 
 namespace oox {
+namespace drawingml { class Shape; }
 namespace core {
 
 class FragmentHandler;
@@ -78,6 +79,10 @@ struct TextField {
 typedef std::vector< TextField > TextFieldStack;
 
 struct XmlFilterBaseImpl;
+
+using ShapePairs
+    = std::map<std::shared_ptr<drawingml::Shape>, css::uno::Reference<css::drawing::XShape>>;
+using NamedShapePairs = std::map<OUString, ShapePairs>;
 
 class OOX_DLLPUBLIC XmlFilterBase : public FilterBase
 {
@@ -241,6 +246,9 @@ public:
     /// Signal that an MSO 2007-created SmartArt was found, need to warn the
     /// user about it.
     void setMissingExtDrawing();
+
+    void setDiagramFontHeights(NamedShapePairs* pDiagramFontHeights);
+    NamedShapePairs* getDiagramFontHeights();
 
     void checkDocumentProperties(
             const css::uno::Reference<css::document::XDocumentProperties>& xDocProps);
