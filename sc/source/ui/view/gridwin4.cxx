@@ -1262,7 +1262,7 @@ namespace
         explicit ScLOKProxyObjectContact(
             sdr::contact::ObjectContact& rRealOC,
             SdrPageWindow& rPageWindow,
-            const sal_Char* pDebugName) :
+            const char* pDebugName) :
             ObjectContactOfPageView(rPageWindow, pDebugName),
             mrRealObjectContact(rRealOC)
         {
@@ -1290,7 +1290,7 @@ namespace
         }
 
         virtual sdr::contact::ObjectContact* createViewSpecificObjectContact(
-                SdrPageWindow& rPageWindow, const sal_Char* pDebugName) const override
+                SdrPageWindow& rPageWindow, const char* pDebugName) const override
         {
             if (!pScDrawView)
                 return SdrView::createViewSpecificObjectContact(rPageWindow, pDebugName);

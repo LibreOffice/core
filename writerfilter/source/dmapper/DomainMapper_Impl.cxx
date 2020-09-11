@@ -3248,7 +3248,7 @@ static sal_Int16 lcl_ParseNumberingType( const OUString& rCommand )
         //todo: might make sense to hash this list, too
         struct NumberingPairs
         {
-            const sal_Char* cWordName;
+            const char* cWordName;
             sal_Int16 nType;
         };
         static const NumberingPairs aNumberingPairs[] =
@@ -4470,8 +4470,8 @@ void DomainMapper_Impl::handleAuthor
     constexpr sal_uInt8 SET_DATE = 0x04;
     struct DocPropertyMap
     {
-        const sal_Char* pDocPropertyName;
-        const sal_Char* pServiceName;
+        const char* pDocPropertyName;
+        const char* pServiceName;
         sal_uInt8       nFlags;
     };
     static const DocPropertyMap aDocProperties[] =

@@ -63,7 +63,7 @@ void RtlConstAsciiMacro::MacroExpands( const Token& macro, const MacroDirective*
     }
 
 /* Remove use with the following ctor:
-    OUString( const sal_Char * value, sal_Int32 length,
+    OUString( const char * value, sal_Int32 length,
               rtl_TextEncoding encoding,
               sal_uInt32 convertFlags = OSTRING_TO_OUSTRING_CVTFLAGS )
    This means searching for CXXConstructExpr.

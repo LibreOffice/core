@@ -81,7 +81,7 @@ SAL_DLLPUBLIC oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_
 
     @since UDK 3.6
 */
-SAL_DLLPUBLIC oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 nRtldMode);
+SAL_DLLPUBLIC oslModule SAL_CALL osl_loadModuleAscii(const char *pModuleName, sal_Int32 nRtldMode);
 
 /** Load a module located relative to some other module.
 
@@ -190,7 +190,7 @@ SAL_DLLPUBLIC oslGenericFunction SAL_CALL osl_getFunctionSymbol(
     @see osl_getFunctionSymbol
 */
 SAL_DLLPUBLIC oslGenericFunction SAL_CALL osl_getAsciiFunctionSymbol(
-        oslModule Module, const sal_Char *pSymbol );
+        oslModule Module, const char *pSymbol );
 
 /** Lookup URL of module which is mapped at the specified address.
 

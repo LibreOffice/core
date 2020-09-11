@@ -180,7 +180,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_reverseCompare_WithLength(
  */
 
 SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_ustr_asciil_reverseEquals_WithLength(
-        const sal_Unicode * first, const sal_Char * second, sal_Int32 len ) SAL_THROW_EXTERN_C();
+        const sal_Unicode * first, const char * second, sal_Int32 len ) SAL_THROW_EXTERN_C();
 
 /** Compare two strings, ignoring the case of ASCII characters.
 
@@ -293,7 +293,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLe
     substring is greater than the second substring.
  */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_ascii_compare(
-        const sal_Unicode * first, const sal_Char * second ) SAL_THROW_EXTERN_C();
+        const sal_Unicode * first, const char * second ) SAL_THROW_EXTERN_C();
 
 /** Compare two strings.
 
@@ -322,7 +322,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_ascii_compare(
     substring is greater than the second substring.
  */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_ascii_compare_WithLength(
-        const sal_Unicode * first, sal_Int32 firstLen, const sal_Char * second ) SAL_THROW_EXTERN_C();
+        const sal_Unicode * first, sal_Int32 firstLen, const char * second ) SAL_THROW_EXTERN_C();
 
 /** Compare two strings with a maximum count of characters.
 
@@ -355,7 +355,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_ascii_compare_WithLength(
     substring is greater than the second substring.
  */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_ascii_shortenedCompare_WithLength(
-        const sal_Unicode * first, sal_Int32 firstLen, const sal_Char * second, sal_Int32 shortenedLen ) SAL_THROW_EXTERN_C();
+        const sal_Unicode * first, sal_Int32 firstLen, const char * second, sal_Int32 shortenedLen ) SAL_THROW_EXTERN_C();
 
 /** Compare two strings from back to front.
 
@@ -387,7 +387,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_ascii_shortenedCompare_WithLength(
     first string compares greater than the second string.
  */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_asciil_reverseCompare_WithLength(
-        const sal_Unicode * first, sal_Int32 firstLen, const sal_Char * second, sal_Int32 secondLen ) SAL_THROW_EXTERN_C();
+        const sal_Unicode * first, sal_Int32 firstLen, const char * second, sal_Int32 secondLen ) SAL_THROW_EXTERN_C();
 
 /** Compare two strings, ignoring the case of ASCII characters.
 
@@ -414,7 +414,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_asciil_reverseCompare_WithLength(
     string is greater than the second string.
  */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_ascii_compareIgnoreAsciiCase(
-        const sal_Unicode * first, const sal_Char * second ) SAL_THROW_EXTERN_C();
+        const sal_Unicode * first, const char * second ) SAL_THROW_EXTERN_C();
 
 /** Compare two strings, ignoring the case of ASCII characters.
 
@@ -445,7 +445,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_ascii_compareIgnoreAsciiCase(
     string is greater than the second string.
  */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength(
-        const sal_Unicode * first, sal_Int32 firstLen, const sal_Char * second ) SAL_THROW_EXTERN_C();
+        const sal_Unicode * first, sal_Int32 firstLen, const char * second ) SAL_THROW_EXTERN_C();
 
 /** Compare two strings, ignoring the case of ASCII characters.
 
@@ -516,7 +516,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengt
     substring is greater than the second substring.
  */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength(
-        const sal_Unicode * first, sal_Int32 firstLen, const sal_Char * second, sal_Int32 shortenedLen ) SAL_THROW_EXTERN_C();
+        const sal_Unicode * first, sal_Int32 firstLen, const char * second, sal_Int32 shortenedLen ) SAL_THROW_EXTERN_C();
 
 /** Return a hash code for a string.
 
@@ -1368,14 +1368,14 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uString_newFromSubString(
     a null-terminated ASCII character array.
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_uString_newFromAscii(
-        rtl_uString ** newStr, const sal_Char * value ) SAL_THROW_EXTERN_C();
+        rtl_uString ** newStr, const char * value ) SAL_THROW_EXTERN_C();
 
 /**
  @internal
  @since LibreOffice 3.6
 */
 SAL_DLLPUBLIC void SAL_CALL rtl_uString_newFromLiteral(
-        rtl_uString ** newStr, const sal_Char * value, sal_Int32 len,
+        rtl_uString ** newStr, const char * value, sal_Int32 len,
         sal_Int32 allocExtra ) SAL_THROW_EXTERN_C();
 
 /** Allocate a new string from an array of Unicode code points.
@@ -2216,7 +2216,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_uString_getToken(
     details.
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_string2UString(
-        rtl_uString ** newStr, const sal_Char * str, sal_Int32 len, rtl_TextEncoding encoding, sal_uInt32 convertFlags ) SAL_THROW_EXTERN_C();
+        rtl_uString ** newStr, const char * str, sal_Int32 len, rtl_TextEncoding encoding, sal_uInt32 convertFlags ) SAL_THROW_EXTERN_C();
 
 /* ======================================================================= */
 /* Interning methods */
@@ -2280,7 +2280,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uString_intern(
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_uString_internConvert(
                                          rtl_uString   ** newStr,
-                                         const sal_Char * str,
+                                         const char * str,
                                          sal_Int32        len,
                                          rtl_TextEncoding encoding,
                                          sal_uInt32       convertFlags,

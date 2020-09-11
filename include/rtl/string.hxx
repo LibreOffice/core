@@ -218,7 +218,7 @@ public:
 
       @param    value       a character.
     */
-    explicit OString( sal_Char value )
+    explicit OString( char value )
         : pData (NULL)
     {
         rtl_string_newFromStr_WithLength( &pData, &value, 1 );
@@ -284,7 +284,7 @@ public:
                             The character array length must be greater or
                             equal than this value.
     */
-    OString( const sal_Char * value, sal_Int32 length )
+    OString( const char * value, sal_Int32 length )
     {
         pData = NULL;
         rtl_string_newFromStr_WithLength( &pData, value, length );
@@ -529,7 +529,7 @@ public:
       @return a pointer to a null-terminated byte string representing the
       characters of this string object.
     */
-    const sal_Char * getStr() const SAL_RETURNS_NONNULL { return pData->buffer; }
+    const char * getStr() const SAL_RETURNS_NONNULL { return pData->buffer; }
 
     /**
       Access to individual characters.
@@ -540,7 +540,7 @@ public:
 
       @since LibreOffice 3.5
     */
-    sal_Char operator [](sal_Int32 index) const {
+    char operator [](sal_Int32 index) const {
         // silence spurious -Werror=strict-overflow warnings from GCC 4.8.2
         assert(index >= 0 && static_cast<sal_uInt32>(index) < static_cast<sal_uInt32>(getLength()));
         return getStr()[index];
@@ -637,7 +637,7 @@ public:
       @return   true if the strings are equal;
                 false, otherwise.
     */
-    bool equalsL( const sal_Char* value, sal_Int32 length ) const
+    bool equalsL( const char* value, sal_Int32 length ) const
     {
         if ( pData->length != length )
             return false;
@@ -744,7 +744,7 @@ public:
       @return   true if the strings are equal;
                 false, otherwise.
     */
-    bool equalsIgnoreAsciiCaseL( const sal_Char * asciiStr, sal_Int32 asciiStrLength ) const
+    bool equalsIgnoreAsciiCaseL( const char * asciiStr, sal_Int32 asciiStrLength ) const
     {
         if ( pData->length != asciiStrLength )
             return false;
@@ -1185,7 +1185,7 @@ public:
                 greater than or equal to fromIndex, or
                 -1 if the character does not occur.
     */
-    sal_Int32 indexOf( sal_Char ch, sal_Int32 fromIndex = 0 ) const
+    sal_Int32 indexOf( char ch, sal_Int32 fromIndex = 0 ) const
     {
         sal_Int32 ret = rtl_str_indexOfChar_WithLength( pData->buffer+fromIndex, pData->length-fromIndex, ch );
         return (ret < 0 ? ret : ret+fromIndex);
@@ -1200,7 +1200,7 @@ public:
                 character sequence represented by this string, or
                 -1 if the character does not occur.
     */
-    sal_Int32 lastIndexOf( sal_Char ch ) const
+    sal_Int32 lastIndexOf( char ch ) const
     {
         return rtl_str_lastIndexOfChar_WithLength( pData->buffer, pData->length, ch );
     }
@@ -1217,7 +1217,7 @@ public:
                 is less than fromIndex, or -1
                 if the character does not occur before that point.
     */
-    sal_Int32 lastIndexOf( sal_Char ch, sal_Int32 fromIndex ) const
+    sal_Int32 lastIndexOf( char ch, sal_Int32 fromIndex ) const
     {
         return rtl_str_lastIndexOfChar_WithLength( pData->buffer, fromIndex, ch );
     }
@@ -1429,7 +1429,7 @@ public:
       @return   a string derived from this string by replacing every
                 occurrence of oldChar with newChar.
     */
-    SAL_WARN_UNUSED_RESULT OString replace( sal_Char oldChar, sal_Char newChar ) const
+    SAL_WARN_UNUSED_RESULT OString replace( char oldChar, char newChar ) const
     {
         rtl_String* pNew = NULL;
         rtl_string_newReplace( &pNew, pData, oldChar, newChar );
@@ -1562,7 +1562,7 @@ public:
       @return   the token; if either token or index is negative, an empty token
                 is returned (and index is set to -1)
     */
-    OString getToken( sal_Int32 token, sal_Char cTok, sal_Int32& index ) const
+    OString getToken( sal_Int32 token, char cTok, sal_Int32& index ) const
     {
         rtl_String * pNew = NULL;
         index = rtl_string_getToken( &pNew, pData, token, cTok, index );
@@ -1572,7 +1572,7 @@ public:
     /**
       Returns a token from the string.
 
-      The same as getToken(sal_Int32, sal_Char, sal_Int32 &), but always passing
+      The same as getToken(sal_Int32, char, sal_Int32 &), but always passing
       in 0 as the start index in the third argument.
 
       @param count  the number of the token to return, starting with 0
@@ -1606,7 +1606,7 @@ public:
       @return   the first character from this string or 0, if this string
                 is empty.
     */
-    sal_Char toChar() const
+    char toChar() const
     {
         return pData->buffer[0];
     }
@@ -1748,7 +1748,7 @@ public:
     */
     static OString number( int i, sal_Int16 radix = 10 )
     {
-        sal_Char aBuf[RTL_STR_MAX_VALUEOFINT32];
+        char aBuf[RTL_STR_MAX_VALUEOFINT32];
         return OString(aBuf, rtl_str_valueOfInt32(aBuf, i, radix));
     }
     /// @overload
@@ -1773,14 +1773,14 @@ public:
     /// @since LibreOffice 4.1
     static OString number( long long ll, sal_Int16 radix = 10 )
     {
-        sal_Char aBuf[RTL_STR_MAX_VALUEOFINT64];
+        char aBuf[RTL_STR_MAX_VALUEOFINT64];
         return OString(aBuf, rtl_str_valueOfInt64(aBuf, ll, radix));
     }
     /// @overload
     /// @since LibreOffice 4.1
     static OString number( unsigned long long ll, sal_Int16 radix = 10 )
     {
-        sal_Char aBuf[RTL_STR_MAX_VALUEOFUINT64];
+        char aBuf[RTL_STR_MAX_VALUEOFUINT64];
         return OString(aBuf, rtl_str_valueOfUInt64(aBuf, ll, radix));
     }
 
@@ -1795,7 +1795,7 @@ public:
     */
     static OString number( float f )
     {
-        sal_Char aBuf[RTL_STR_MAX_VALUEOFFLOAT];
+        char aBuf[RTL_STR_MAX_VALUEOFFLOAT];
         return OString(aBuf, rtl_str_valueOfFloat(aBuf, f));
     }
 
@@ -1810,7 +1810,7 @@ public:
     */
     static OString number( double d )
     {
-        sal_Char aBuf[RTL_STR_MAX_VALUEOFDOUBLE];
+        char aBuf[RTL_STR_MAX_VALUEOFDOUBLE];
         return OString(aBuf, rtl_str_valueOfDouble(aBuf, d));
     }
 #endif
@@ -1844,7 +1844,7 @@ public:
     */
     static OString boolean( bool b )
     {
-        sal_Char aBuf[RTL_STR_MAX_VALUEOFBOOLEAN];
+        char aBuf[RTL_STR_MAX_VALUEOFBOOLEAN];
         return OString(aBuf, rtl_str_valueOfBoolean(aBuf, b));
     }
 
@@ -1855,7 +1855,7 @@ public:
       @return   a string with the string representation of the argument.
       @deprecated use operator, function or constructor taking char or sal_Unicode argument
     */
-    SAL_DEPRECATED("convert to OString or use directly") static OString valueOf( sal_Char c )
+    SAL_DEPRECATED("convert to OString or use directly") static OString valueOf( char c )
     {
         return OString( &c, 1 );
     }

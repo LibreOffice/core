@@ -201,7 +201,7 @@ def make_uno_type(val):
     if type_class == TypeClass.VOID:
         uno_type = VoidType()
     elif type_class == TypeClass.CHAR:
-        uno_type = PrimitiveType(type_class, name, 'sal_Char')
+        uno_type = PrimitiveType(type_class, name, 'char')
     elif type_class == TypeClass.BOOLEAN:
         uno_type = PrimitiveType(type_class, name, 'sal_Bool')
     elif type_class == TypeClass.BYTE:
