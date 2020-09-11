@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ccaef770_8767dd6f",
+        "filename": "chart2/source/inc/chartview/ChartSfxItemIds.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-09-11T13:10:49Z",
+      "side": 1,
+      "message": "LEADER_LINES",
+      "range": {
+        "startLine": 51,
+        "startChar": 68,
+        "endLine": 51,
+        "endChar": 79
+      },
+      "revId": "81d3ae68a91001188691f4458fe8b5e6aafe8509",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "124b1436_5ef88aa2",
+        "filename": "chart2/uiconfig/ui/dlg_DataLabel.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-09-11T13:10:49Z",
+      "side": 1,
+      "message": "see later",
+      "range": {
+        "startLine": 559,
+        "startChar": 117,
+        "endLine": 559,
+        "endChar": 142
+      },
+      "revId": "81d3ae68a91001188691f4458fe8b5e6aafe8509",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0145794_1dc05bce",
+        "filename": "chart2/uiconfig/ui/dlg_DataLabel.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-09-11T13:10:49Z",
+      "side": 1,
+      "message": "see later",
+      "range": {
+        "startLine": 581,
+        "startChar": 94,
+        "endLine": 581,
+        "endChar": 112
+      },
+      "revId": "81d3ae68a91001188691f4458fe8b5e6aafe8509",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1af7f436_c41b1cbe",
+        "filename": "chart2/uiconfig/ui/tp_DataLabel.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-09-11T13:10:49Z",
+      "side": 1,
+      "message": "\"_Connect displaced data labels to data points\"",
+      "range": {
+        "startLine": 491,
+        "startChar": 108,
+        "endLine": 491,
+        "endChar": 133
+      },
+      "revId": "81d3ae68a91001188691f4458fe8b5e6aafe8509",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd65716b_1c630b48",
+        "filename": "chart2/uiconfig/ui/tp_DataLabel.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-09-11T13:10:49Z",
+      "side": 1,
+      "message": "\"Leader Lines\"",
+      "range": {
+        "startLine": 513,
+        "startChar": 84,
+        "endLine": 513,
+        "endChar": 103
+      },
+      "revId": "81d3ae68a91001188691f4458fe8b5e6aafe8509",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
