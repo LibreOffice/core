@@ -22,6 +22,30 @@
       "revId": "4248581215997a9cff13289cb3f65525853ade22",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2a8041f_29feaf36",
+        "filename": "vcl/source/window/abstdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-09-11T12:09:00Z",
+      "side": 1,
+      "message": "You mean the\n\n  if (aDialogLibrary.loadRelative(...))\n\ncheck?  Either it\u0027s needless defensive programming, or there\u0027s plausible scenarios where cui isn\u0027t yet present, or can\u0027t be loaded for whatever reason (during whatever tests, or with the fuzzer machinery, ...).",
+      "parentUuid": "b9ac42fe_cdaf901d",
+      "range": {
+        "startLine": 50,
+        "startChar": 4,
+        "endLine": 50,
+        "endChar": 13
+      },
+      "revId": "4248581215997a9cff13289cb3f65525853ade22",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
