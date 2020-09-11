@@ -336,6 +336,35 @@ static size_t gPreviewsPerDevice;
 static std::vector<VclPtr<VirtualDevice>> gFontPreviewVirDevs;
 static std::vector<OUString> gRenderedFontNames;
 
+namespace
+{
+    void calcCustomItemSize(weld::ComboBox& rComboBox)
+    {
+        gUserItemSz = Size(rComboBox.get_approximate_digit_width() * 52, rComboBox.get_text_height());
+        gUserItemSz.setHeight(gUserItemSz.Height() * 16);
+        gUserItemSz.setHeight(gUserItemSz.Height() / 10);
+
+        size_t nMaxDeviceHeight = SAL_MAX_INT16 / 2; // see limitXCreatePixmap
+        gPreviewsPerDevice = nMaxDeviceHeight / gUserItemSz.Height();
+    }
+}
+
+IMPL_LINK(FontNameBox, SettingsChangedHdl, VclSimpleEvent&, rEvent, void)
+{
+    if (rEvent.GetId() != VclEventId::ApplicationDataChanged)
+        return;
+
+    DataChangedEvent* pData = static_cast<DataChangedEvent*>(static_cast<VclWindowEvent&>(rEvent).GetData());
+    if (pData->GetType() == DataChangedEventType::SETTINGS)
+    {
+        gFontPreviewVirDevs.clear();
+        gRenderedFontNames.clear();
+        calcCustomItemSize(*m_xComboBox);
+        if (mbWYSIWYG)
+            maUpdateIdle.Start();
+    }
+}
+
 FontNameBox::FontNameBox(std::unique_ptr<weld::ComboBox> p)
     : m_xComboBox(std::move(p))
     , mnPreviewProgress(0)
@@ -347,10 +376,14 @@ FontNameBox::FontNameBox(std::unique_ptr<weld::ComboBox> p)
 
     maUpdateIdle.SetPriority(TaskPriority::LOWEST);
     maUpdateIdle.SetInvokeHandler(LINK(this, FontNameBox, UpdateHdl));
+
+    Application::AddEventListener(LINK(this, FontNameBox, SettingsChangedHdl));
 }
 
 FontNameBox::~FontNameBox()
 {
+    Application::RemoveEventListener(LINK(this, FontNameBox, SettingsChangedHdl));
+
     if (mpFontList)
     {
         SaveMRUEntries (maFontMRUEntriesFile);
@@ -473,21 +506,9 @@ void FontNameBox::EnableWYSIWYG(bool bEnable)
         return;
     mbWYSIWYG = bEnable;
 
-    static bool bGlobalsInited;
-    if (mbWYSIWYG && !bGlobalsInited)
-    {
-        gUserItemSz = Size(m_xComboBox->get_approximate_digit_width() * 52, m_xComboBox->get_text_height());
-        gUserItemSz.setHeight(gUserItemSz.Height() * 16);
-        gUserItemSz.setHeight(gUserItemSz.Height() / 10);
-
-        size_t nMaxDeviceHeight = SAL_MAX_INT16 / 2; // see limitXCreatePixmap
-        gPreviewsPerDevice = nMaxDeviceHeight / gUserItemSz.Height();
-
-        bGlobalsInited = true;
-    }
-
     if (mbWYSIWYG)
     {
+        calcCustomItemSize(*m_xComboBox);
         m_xComboBox->connect_custom_get_size(LINK(this, FontNameBox, CustomGetSizeHdl));
         m_xComboBox->connect_custom_render(LINK(this, FontNameBox, CustomRenderHdl));
     }
@@ -499,9 +520,9 @@ void FontNameBox::EnableWYSIWYG(bool bEnable)
     m_xComboBox->set_custom_renderer(mbWYSIWYG);
 }
 
-IMPL_STATIC_LINK_NOARG(FontNameBox, CustomGetSizeHdl, OutputDevice&, Size)
+IMPL_LINK_NOARG(FontNameBox, CustomGetSizeHdl, OutputDevice&, Size)
 {
-    return gUserItemSz;
+    return mbWYSIWYG ? gUserItemSz : Size();
 }
 
 namespace
