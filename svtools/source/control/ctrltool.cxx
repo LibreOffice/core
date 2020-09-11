@@ -35,7 +35,7 @@
 #include <comphelper/lok.hxx>
 
 // Standard fontsizes for scalable Fonts
-const sal_IntPtr FontList::aStdSizeAry[] =
+const int FontList::aStdSizeAry[] =
 {
      60,
      70,
@@ -743,7 +743,7 @@ const FontMetric& FontList::GetFontMetric( sal_Handle hFontMetric )
     return *pInfo;
 }
 
-const sal_IntPtr* FontList::GetSizeAry( const FontMetric& rInfo ) const
+const int* FontList::GetSizeAry( const FontMetric& rInfo ) const
 {
     // first delete Size-Array
     mpSizeAry.reset();
@@ -769,7 +769,7 @@ const sal_IntPtr* FontList::GetSizeAry( const FontMetric& rInfo ) const
 
     int nRealCount = 0;
     long    nOldHeight = 0;
-    mpSizeAry.reset(new sal_IntPtr[nDevSizeCount+1] );
+    mpSizeAry.reset(new int[nDevSizeCount+1] );
     for (int i = 0; i < nDevSizeCount; ++i)
     {
         Size aSize = pDevice->GetDevFontSize( rInfo, i );
