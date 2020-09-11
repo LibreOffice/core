@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8fc4c94f_46c4ec97",
+        "filename": "sc/source/filter/xcl97/xcl97rec.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1282,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-09-11T09:31:36Z",
+      "side": 1,
+      "message": "See my previous comment...",
+      "range": {
+        "startLine": 1281,
+        "startChar": 2,
+        "endLine": 1282,
+        "endChar": 15
+      },
+      "revId": "4c43e1081269b4a5f6d16f502ea7ca962f367121",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
