@@ -54,6 +54,7 @@ ImplFontCharMap::ImplFontCharMap( const CmapResult& rCR )
 ,   mpGlyphIds( rCR.mpGlyphIds )
 ,   mnRangeCount( rCR.mnRangeCount )
 ,   mnCharCount( 0 )
+    , m_bSymbolic(rCR.mbSymbolic)
 {
     const sal_UCS4* pRangePtr = mpRangeCodes;
     for( int i = mnRangeCount; --i >= 0; pRangePtr += 2 )
@@ -428,6 +429,8 @@ bool FontCharMap::IsDefaultMap() const
 {
     return mpImplFontCharMap->isDefaultMap();
 }
+
+bool FontCharMap::isSymbolic() const { return mpImplFontCharMap->m_bSymbolic; }
 
 int FontCharMap::GetCharCount() const
 {
