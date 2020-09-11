@@ -160,19 +160,20 @@ public:
 };
 
 // helper class to receive changed attribute sets
-class SwUndoFormatAttrHelper : public SwClient
+class SwUndoFormatAttrHelper final : public SwClient
 {
+    SwFormat& m_rFormat;
     std::unique_ptr<SwUndoFormatAttr> m_pUndo;
     const bool m_bSaveDrawPt;
 
 public:
-    SwUndoFormatAttrHelper( SwFormat& rFormat, bool bSaveDrawPt = true );
+    SwUndoFormatAttrHelper(SwFormat& rFormat, bool bSaveDrawPt = true);
 
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
-    SwUndoFormatAttr* GetUndo() const  { return m_pUndo.get(); }
+    SwUndoFormatAttr* GetUndo() const { return m_pUndo.get(); }
     // release the undo object (so it is not deleted here), and return it
-    std::unique_ptr<SwUndoFormatAttr> ReleaseUndo()    { return std::move(m_pUndo); }
+    std::unique_ptr<SwUndoFormatAttr> ReleaseUndo() { return std::move(m_pUndo); }
 };
 
 class SwUndoMoveLeftMargin : public SwUndo, private SwUndRng
