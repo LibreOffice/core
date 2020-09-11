@@ -216,7 +216,7 @@ namespace
  * Takes the connection list from rLayoutNode, navigates from rFrom on an edge
  * of type nType, using a direction determined by bSourceToDestination.
  */
-OUString navigate(const LayoutNode& rLayoutNode, sal_Int32 nType, const OUString& rFrom,
+OUString navigate(LayoutNode& rLayoutNode, sal_Int32 nType, const OUString& rFrom,
                   bool bSourceToDestination)
 {
     for (const auto& rConnection : rLayoutNode.getDiagram().getData()->getConnections())
@@ -648,6 +648,16 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
 
                 nVertMin = std::min(aPos.Y, nVertMin);
                 nVertMax = std::max(aPos.Y + aSize.Height, nVertMax);
+
+                NamedShapePairs& rDiagramFontHeights
+                    = getLayoutNode().getDiagram().getShape()->getDiagramFontHeights();
+                auto it = rDiagramFontHeights.find(aCurrShape->getInternalName());
+                if (it != rDiagramFontHeights.end())
+                {
+                    // Internal name matches: put drawingml::Shape to the relevant group, for
+                    // syncronized font height handling.
+                    it->second.insert({ aCurrShape, {} });
+                }
             }
 
             // See if all vertical space is used or we have to center the content.
@@ -939,6 +949,20 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
                     if (rProperty[XML_h] > rShape->getSize().Height)
                     {
                         rProperty[XML_h] = rShape->getSize().Height;
+                    }
+                }
+
+                if (rConstraint.mnType == XML_primFontSz && rConstraint.mnFor == XML_des
+                    && rConstraint.mnOperator == XML_equ)
+                {
+                    NamedShapePairs& rDiagramFontHeights
+                        = getLayoutNode().getDiagram().getShape()->getDiagramFontHeights();
+                    auto it = rDiagramFontHeights.find(rConstraint.msForName);
+                    if (it == rDiagramFontHeights.end())
+                    {
+                        // Start tracking all shapes with this internal name: they'll have the same
+                        // font height.
+                        rDiagramFontHeights[rConstraint.msForName] = {};
                     }
                 }
 

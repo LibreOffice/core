@@ -29,6 +29,8 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+
+#include <oox/core/xmlfilterbase.hxx>
 #include <oox/dllapi.h>
 #include <oox/drawingml/color.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
@@ -239,6 +241,8 @@ public:
 
     void keepDiagramDrawing(::oox::core::XmlFilterBase& rFilterBase, const OUString& rFragmentPath);
 
+    oox::core::NamedShapePairs& getDiagramFontHeights() { return maDiagramFontHeights; }
+
 protected:
 
     enum FrameType
@@ -272,6 +276,7 @@ protected:
                             const basegfx::B2DHomMatrix& aTransformation );
 
     void                keepDiagramCompatibilityInfo();
+    void syncDiagramFontHeights();
     void                convertSmartArtToMetafile( ::oox::core::XmlFilterBase const& rFilterBase );
 
     css::uno::Reference< css::drawing::XShape >
@@ -377,6 +382,9 @@ private:
 
     /// The shape fill should be set to that of the slide background surface.
     bool mbUseBgFill = false;
+
+    /// For SmartArt, this contains groups of shapes: automatic font size is the same in each group.
+    oox::core::NamedShapePairs maDiagramFontHeights;
 };
 
 }

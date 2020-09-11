@@ -135,6 +135,11 @@ void Diagram::addTo( const ShapePtr & pParentShape )
     aChildren.insert(aChildren.begin(), pBackground);
 }
 
+Diagram::Diagram(const ShapePtr& pShape)
+    : mpShape(pShape)
+{
+}
+
 uno::Sequence<beans::PropertyValue> Diagram::getDomsAsPropertyValues() const
 {
     sal_Int32 length = maMainDomMap.size();
@@ -245,7 +250,7 @@ void loadDiagram( ShapePtr const & pShape,
                   const OUString& rColorStylePath,
                   const oox::core::Relations& rRelations )
 {
-    DiagramPtr pDiagram = std::make_shared<Diagram>();
+    DiagramPtr pDiagram = std::make_shared<Diagram>(pShape);
 
     DiagramDataPtr pData = std::make_shared<DiagramData>();
     pDiagram->setData( pData );
@@ -365,7 +370,7 @@ void loadDiagram(ShapePtr const& pShape,
                  const uno::Reference<xml::dom::XDocument>& colorDom,
                  core::XmlFilterBase& rFilter)
 {
-    DiagramPtr pDiagram = std::make_shared<Diagram>();
+    DiagramPtr pDiagram = std::make_shared<Diagram>(pShape);
 
     pDiagram->setData(pDiagramData);
 
