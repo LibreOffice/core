@@ -137,6 +137,27 @@ DECLARE_OOXMLIMPORT_TEST(testTdf103931, "tdf103931.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xTextSections->getCount());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf134260, "tdf134260.docx")
+{
+    auto xNumLevels
+        = getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(3), "NumberingRules");
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 1270
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int32(0),
+        comphelper::SequenceAsHashMap(xNumLevels->getByIndex(1))["ListtabStopPosition"]
+            .get<sal_Int32>());
+
+    //- Expected: 0
+    //- Actual  : 1905
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int32(0),
+        comphelper::SequenceAsHashMap(xNumLevels->getByIndex(1))["ListtabStopPosition"]
+            .get<sal_Int32>());
+}
+
 DECLARE_OOXMLIMPORT_TEST(testN751017, "n751017.docx")
 {
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
