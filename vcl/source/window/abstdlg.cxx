@@ -33,12 +33,14 @@ VclAbstractDialogFactory* VclAbstractDialogFactory::Create()
 {
     static auto fp = []() -> FuncPtrCreateDialogFactory {
 #ifndef DISABLE_DYNLOADING
-        static ::osl::Module aDialogLibrary;
+        ::osl::Module aDialogLibrary;
         if (aDialogLibrary.loadRelative(&thisModule, CUI_DLL_NAME,
                                         SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY))
         {
-            return reinterpret_cast<FuncPtrCreateDialogFactory>(
+            auto const p = reinterpret_cast<FuncPtrCreateDialogFactory>(
                 aDialogLibrary.getFunctionSymbol( "CreateDialogFactory" ) );
+            aDialogLibrary.release();
+            return p;
         }
         return nullptr;
 #else
