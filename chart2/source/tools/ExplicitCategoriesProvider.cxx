@@ -55,6 +55,7 @@ ExplicitCategoriesProvider::ExplicitCategoriesProvider( const Reference< chart2:
     {
         if( xCooSysModel.is() )
         {
+            // TODO: handle different category names on the primary and secondary category axis.
             uno::Reference< XAxis > xAxis( xCooSysModel->getAxisByDimension(0,0) );
             if( xAxis.is() )
             {
