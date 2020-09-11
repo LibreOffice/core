@@ -39,7 +39,11 @@ public:
         all codepoints in the Unicode BMP range, including surrogates.
      **/
     FontCharMap();
+
+    /** A new FontCharMap is created based on the CmapResult
+     */
     FontCharMap( const CmapResult& rCR );
+
     virtual ~FontCharMap() override;
 
     /** Get the default font character map
@@ -133,6 +137,8 @@ public:
     sal_UCS4            GetCharFromIndex( int nCharIndex ) const;
 
     int                 GetGlyphIndex( sal_UCS4 ) const;
+
+    bool isSymbolic() const;
 
 private:
     ImplFontCharMapRef mpImplFontCharMap;
