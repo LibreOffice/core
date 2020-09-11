@@ -5025,7 +5025,13 @@ void ScInterpreter::ScMatch()
 
                 if (nHitIndex > 0) // valid hit must be 2nd item or higher
                 {
+<<<<<<< HEAD   (908841 tdf#135565 prepare font preview virtual device)
                     PushDouble( nHitIndex); // non-exact match
+=======
+                    // exact match.  find the last item with the same value.
+                    lcl_GetLastMatch( nMid, aMatAcc, nMatCount, false);
+                    PushDouble( nMid+1);
+>>>>>>> CHANGE (6f80e2 Resolves: tdf#107459 MATCH() in descending sorted array find)
                     return;
                 }
 
