@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "87d2494d_300d2ed0",
+        "filename": "reportdesign/source/ui/report/ReportController.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1040,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-09-11T07:06:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c31dbef7_913f6ae1",
+      "revId": "3aaf510b76f85500e30cfde2b3100e591f59d773",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8b82b692_361b4658",
         "filename": "sd/uiconfig/sdraw/popupmenu/multiselect.xml",
         "patchSetId": 4
@@ -33,6 +51,24 @@
       "revId": "3aaf510b76f85500e30cfde2b3100e591f59d773",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28de154d_e03f006c",
+        "filename": "sd/uiconfig/sdraw/popupmenu/multiselect.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-09-11T07:06:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b82b692_361b4658",
+      "revId": "3aaf510b76f85500e30cfde2b3100e591f59d773",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "31c0662c_fb7195e1",
+        "filename": "sd/uiconfig/sdraw/toolbar/distributebar.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-09-11T07:06:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "542a4283_3125b27f",
+      "revId": "3aaf510b76f85500e30cfde2b3100e591f59d773",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c02a282d_e62faef8",
         "filename": "sd/uiconfig/simpress/popupmenu/multiselect.xml",
         "patchSetId": 4
@@ -67,6 +121,24 @@
       "revId": "3aaf510b76f85500e30cfde2b3100e591f59d773",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4abf3ef3_d2be1674",
+        "filename": "sd/uiconfig/simpress/popupmenu/multiselect.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-09-11T07:06:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c02a282d_e62faef8",
+      "revId": "3aaf510b76f85500e30cfde2b3100e591f59d773",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
