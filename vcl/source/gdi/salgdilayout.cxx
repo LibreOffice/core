@@ -896,11 +896,7 @@ OUString SalGraphics::getRenderBackendName() const
     return OUString();
 }
 
-#if defined(_WIN32) || defined(MACOSX) || defined(IOS)
-void SalGraphics::GetGlyphWidths(const vcl::TrueTypeFont& rTTF,
-#else
 void SalGraphics::GetGlyphWidths(const vcl::AbstractTrueTypeFont& rTTF,
-#endif
                                  const PhysicalFontFace& rFontFace, const bool bVertical,
                                  std::vector<sal_Int32>& rWidths, Ucs2UIntMap& rUnicodeEnc)
 {
@@ -940,11 +936,7 @@ void SalGraphics::GetGlyphWidths(const vcl::AbstractTrueTypeFont& rTTF,
             continue;
 
         sal_Ucs nUcsChar = static_cast<sal_Ucs>(nChar);
-#if defined(_WIN32) || defined(MACOSX) || defined(IOS)
-        sal_uInt32 nGlyph = MapChar(&rTTF, nUcsChar);
-#else
         sal_uInt32 nGlyph = xFCMap->GetGlyphIndex(nUcsChar);
-#endif
         if (nGlyph > 0)
             rUnicodeEnc[nUcsChar] = nGlyph;
     }

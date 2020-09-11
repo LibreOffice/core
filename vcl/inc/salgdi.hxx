@@ -619,11 +619,7 @@ protected:
     std::unique_ptr<vcl::WidgetDrawInterface> m_pWidgetDraw;
     vcl::WidgetDrawInterface* forWidget() { return m_pWidgetDraw ? m_pWidgetDraw.get() : this; }
 
-#if defined(_WIN32) || defined(MACOSX) || defined(IOS)
-    static void GetGlyphWidths(const vcl::TrueTypeFont& rTTF,
-#else
     static void GetGlyphWidths(const vcl::AbstractTrueTypeFont& rTTF,
-#endif
                                const PhysicalFontFace& rFontFace, bool bVertical,
                                std::vector<sal_Int32>& rWidths, Ucs2UIntMap& rUnicodeEnc);
 };
