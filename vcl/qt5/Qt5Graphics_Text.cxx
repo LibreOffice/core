@@ -309,9 +309,13 @@ const void* Qt5Graphics::GetEmbedFontData(const PhysicalFontFace*, long* /*pData
 
 void Qt5Graphics::FreeEmbedFontData(const void* /*pData*/, long /*nDataLen*/) {}
 
-void Qt5Graphics::GetGlyphWidths(const PhysicalFontFace* /*pPFF*/, bool /*bVertical*/,
-                                 std::vector<sal_Int32>& /*rWidths*/, Ucs2UIntMap& /*rUnicodeEnc*/)
+void Qt5Graphics::GetGlyphWidths(const PhysicalFontFace* pFontFace, bool bVertical,
+                                 std::vector<sal_Int32>& rWidths, Ucs2UIntMap& rUnicodeEnc)
 {
+    const Qt5FontFace* pQt5FontFace = static_cast<const Qt5FontFace*>(pFontFace);
+    const QRawFont aRawFont(QRawFont::fromFont(pQt5FontFace->CreateFont()));
+    Qt5TrueTypeFont aTTF(*pQt5FontFace, aRawFont);
+    SalGraphics::GetGlyphWidths(aTTF, *pFontFace, bVertical, rWidths, rUnicodeEnc);
 }
 
 namespace
