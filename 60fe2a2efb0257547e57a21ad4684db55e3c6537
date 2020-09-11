@@ -70,6 +70,30 @@
       "revId": "60fe2a2efb0257547e57a21ad4684db55e3c6537",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a9b7a60_c71dfa97",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-09-11T08:51:13Z",
+      "side": 1,
+      "message": "If any members would be left uninitialized by the ctor, the ctor call would no longer be a constant expression, so compilation should fail with the consteval ctor.",
+      "parentUuid": "6c0b0957_add01e0b",
+      "range": {
+        "startLine": 105,
+        "startChar": 71,
+        "endLine": 105,
+        "endChar": 78
+      },
+      "revId": "60fe2a2efb0257547e57a21ad4684db55e3c6537",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
