@@ -35,7 +35,7 @@ void VclEventListeners::Call( VclSimpleEvent& rEvent ) const
     if (VclWindowEvent* pWindowEvent = dynamic_cast<VclWindowEvent*>(&rEvent))
     {
         VclPtr<vcl::Window> xWin(pWindowEvent->GetWindow());
-        while ( aIter != aEnd && xWin && ! xWin->IsDisposed() )
+        while ( aIter != aEnd && (!xWin || !xWin->IsDisposed()) )
         {
             Link<VclSimpleEvent&,void> &rLink = *aIter;
             // check this hasn't been removed in some re-enterancy scenario fdo#47368
