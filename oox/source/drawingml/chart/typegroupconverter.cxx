@@ -271,7 +271,7 @@ Reference< XLabeledDataSequence > TypeGroupConverter::createCategorySequence()
         first series, even if it was empty. */
     for (auto const& elem : mrModel.maSeries)
     {
-        if( elem->maSources.has( SeriesModel::CATEGORIES ) && mrModel.mbCatAxisVisible)
+        if( elem->maSources.has( SeriesModel::CATEGORIES ) )
         {
             SeriesConverter aSeriesConv(*this, *elem);
             xLabeledSeq = aSeriesConv.createCategorySequence( "categories" );
@@ -286,7 +286,7 @@ Reference< XLabeledDataSequence > TypeGroupConverter::createCategorySequence()
         }
     }
     /* n#839727 Create Category Sequence when none are found */
-    if( !xLabeledSeq.is() && !mrModel.maSeries.empty() && mrModel.mbCatAxisVisible) {
+    if( !xLabeledSeq.is() && !mrModel.maSeries.empty() ) {
         if( nMaxValues < 0 )
             nMaxValues = 2;
         SeriesModel &aModel = *mrModel.maSeries.get(0);
