@@ -212,7 +212,10 @@ void AxisConverter::convertFromModel(
                         currently). */
                     aScaleData.AxisType = (bDateAxis && !mrModel.mbAuto) ? cssc2::AxisType::DATE : cssc2::AxisType::CATEGORY;
                     aScaleData.AutoDateAxis = mrModel.mbAuto;
-                    aScaleData.Categories = rTypeGroups.front()->createCategorySequence();
+                    /* TODO: create main category axis labels once, while InternalDataProvider
+                    can not handle different category names on the primary and secondary category axis. */
+                    if( nAxesSetIdx == 0 )
+                        aScaleData.Categories = rTypeGroups.front()->createCategorySequence();
                     /* set default ShiftedCategoryPosition values for some charttype,
                        because the XML can contain wrong CrossBetween value, if came from MSO */
                     if( rTypeGroups.front()->is3dChart() && (rTypeInfo.meTypeId == TYPEID_BAR || rTypeInfo.meTypeId == TYPEID_HORBAR || rTypeInfo.meTypeId == TYPEID_STOCK) )
