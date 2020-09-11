@@ -286,7 +286,7 @@ sal_uInt32 SvParser<T>::GetNextChar()
                    )
                 {
                     // no conversion shall take place
-                    c = reinterpret_cast<sal_uChar&>( c1 );
+                    c = reinterpret_cast<unsigned char&>( c1 );
                     nChars = 1;
                 }
                 else
@@ -390,7 +390,7 @@ sal_uInt32 SvParser<T>::GetNextChar()
 
                                     // There are still errors, so we use the first
                                     // character and restart after that.
-                                    c = reinterpret_cast<sal_uChar&>( sBuffer[0] );
+                                    c = reinterpret_cast<unsigned char&>( sBuffer[0] );
                                     rInput.SeekRel( -(nLen-1) );
                                     nChars = 1;
                                 }
@@ -412,7 +412,7 @@ sal_uInt32 SvParser<T>::GetNextChar()
                                 "there is no converted character and no error" );
                         // #73398#: If the character could not be converted,
                         // because a conversion is not available, do no conversion at all.
-                        c = reinterpret_cast<sal_uChar&>( c1 );
+                        c = reinterpret_cast<unsigned char&>( c1 );
                         nChars = 1;
 
                     }
