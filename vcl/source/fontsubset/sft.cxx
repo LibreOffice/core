@@ -35,6 +35,7 @@
 #include <unistd.h>
 #endif
 #include <sft.hxx>
+#include <impfontcharmap.hxx>
 #include "ttcr.hxx"
 #include "xlat.hxx"
 #include <rtl/crc.h>
@@ -164,18 +165,6 @@ static sal_uInt32 GetUInt32(const sal_uInt8 *ptr, size_t offset)
 
     return t;
 }
-
-#if defined(OSL_BIGENDIAN)
-#define Int16FromMOTA(a) (a)
-#define Int32FromMOTA(a) (a)
-#else
-static sal_uInt16 Int16FromMOTA(sal_uInt16 a) {
-  return static_cast<sal_uInt16>(static_cast<sal_uInt8>(a >> 8) | (static_cast<sal_uInt8>(a) << 8));
-}
-static sal_uInt32 Int32FromMOTA(sal_uInt32 a) {
-  return ((a>>24)&0xFF) | (((a>>8)&0xFF00) | ((a&0xFF00)<<8) | ((a&0xFF)<<24));
-}
-#endif
 
 static F16Dot16 fixedMul(F16Dot16 a, F16Dot16 b)
 {
@@ -1014,332 +1003,6 @@ static void GetNames(TrueTypeFont *t)
     }
 }
 
-namespace {
-
-enum cmapType {
-    CMAP_NOT_USABLE           = -1,
-    CMAP_MS_Symbol            = 10,
-    CMAP_MS_Unicode           = 11,
-    CMAP_MS_ShiftJIS          = 12,
-    CMAP_MS_PRC               = 13,
-    CMAP_MS_Big5              = 14,
-    CMAP_MS_Wansung           = 15,
-    CMAP_MS_Johab             = 16
-};
-
-}
-
-#define MISSING_GLYPH_INDEX 0
-
-static sal_uInt32 getGlyph0(const sal_uInt8* cmap, sal_uInt32, sal_uInt32 c) {
-    if (c <= 255) {
-        return *(cmap + 6 + c);
-    } else {
-        return MISSING_GLYPH_INDEX;
-    }
-}
-
-namespace {
-
-struct subHeader2 {
-    sal_uInt16 firstCode;
-    sal_uInt16 entryCount;
-    sal_uInt16 idDelta;
-    sal_uInt16 idRangeOffset;
-};
-
-}
-
-static sal_uInt32 getGlyph2(const sal_uInt8 *cmap, const sal_uInt32 nMaxCmapSize, sal_uInt32 c) {
-    sal_uInt16 const *CMAP2 = reinterpret_cast<sal_uInt16 const *>(cmap);
-    sal_uInt8 theHighByte;
-
-    sal_uInt8 theLowByte;
-    subHeader2 const * subHeader2s;
-    sal_uInt16 const * subHeader2Keys;
-    sal_uInt16 firstCode;
-    int k = -1;
-    sal_uInt32 ToReturn;
-
-    theHighByte = static_cast<sal_uInt8>((c >> 8) & 0x00ff);
-    theLowByte = static_cast<sal_uInt8>(c & 0x00ff);
-    subHeader2Keys = CMAP2 + 3;
-    subHeader2s = reinterpret_cast<subHeader2 const *>(subHeader2Keys + 256);
-    if(reinterpret_cast<sal_uInt8 const *>(&subHeader2Keys[theHighByte]) - cmap < int(nMaxCmapSize - 2))
-    {
-        k = Int16FromMOTA(subHeader2Keys[theHighByte]) / 8;
-        // check if the subheader record fits into available space
-        if(reinterpret_cast<sal_uInt8 const *>(&subHeader2s[k]) - cmap >= int(nMaxCmapSize - sizeof(subHeader2)))
-            k = -1;
-    }
-
-    if(k == 0) {
-        firstCode = Int16FromMOTA(subHeader2s[0].firstCode);
-        if(theLowByte >= firstCode && theLowByte < (firstCode + Int16FromMOTA(subHeader2s[k].entryCount))) {
-            sal_uInt16 const * pGlyph = (&(subHeader2s[0].idRangeOffset))
-                     + (Int16FromMOTA(subHeader2s[0].idRangeOffset)/2)             /* + offset        */
-                     + theLowByte                                                  /* + to_look       */
-                     - firstCode
-                     ;
-            if (reinterpret_cast<sal_uInt8 const *>(pGlyph) - cmap < int(nMaxCmapSize) - 4)
-                return *pGlyph;
-            else
-                return MISSING_GLYPH_INDEX;
-        } else {
-            return MISSING_GLYPH_INDEX;
-        }
-    } else if (k > 0) {
-        firstCode = Int16FromMOTA(subHeader2s[k].firstCode);
-        if(theLowByte >= firstCode && theLowByte < (firstCode + Int16FromMOTA(subHeader2s[k].entryCount))) {
-            ToReturn = *((&(subHeader2s[k].idRangeOffset))
-                         + (Int16FromMOTA(subHeader2s[k].idRangeOffset)/2)
-                         + theLowByte - firstCode);
-            if(ToReturn == 0) {
-                return MISSING_GLYPH_INDEX;
-            } else {
-                ToReturn += Int16FromMOTA(subHeader2s[k].idDelta);
-                return (ToReturn & 0xFFFF);
-            }
-        } else {
-            return MISSING_GLYPH_INDEX;
-        }
-    } else {
-        return MISSING_GLYPH_INDEX;
-    }
-}
-
-static sal_uInt32 getGlyph6(const sal_uInt8 *cmap, sal_uInt32, sal_uInt32 c) {
-    sal_uInt16 firstCode, lastCode, count;
-    sal_uInt16 const *CMAP6 = reinterpret_cast<sal_uInt16 const *>(cmap);
-
-    firstCode = Int16FromMOTA(*(CMAP6 + 3));
-    count = Int16FromMOTA(*(CMAP6 + 4));
-    lastCode = firstCode + count - 1;
-    if (c < firstCode || c > lastCode) {
-        return MISSING_GLYPH_INDEX;
-    } else {
-        return *((CMAP6 + 5)/*glyphIdArray*/ + (c - firstCode));
-    }
-}
-
-static sal_uInt16 GEbinsearch(sal_uInt16 const *ar, sal_uInt16 length, sal_uInt16 toSearch) {
-    signed int low, high, lastfound = 0xffff;
-    sal_uInt16 res;
-    if(length == sal_uInt16(0) || length == sal_uInt16(0xFFFF)) {
-        return sal_uInt16(0xFFFF);
-    }
-    low = 0;
-    high = length - 1;
-    while(high >= low) {
-        int mid = (high + low)/2;
-        res = Int16FromMOTA(*(ar+mid));
-        if(res >= toSearch) {
-            lastfound = mid;
-            high = --mid;
-        } else {
-            low = ++mid;
-        }
-    }
-    return static_cast<sal_uInt16>(lastfound);
-}
-
-static sal_uInt32 getGlyph4(const sal_uInt8 *cmap, const sal_uInt32 nMaxCmapSize, sal_uInt32 c) {
-    sal_uInt16  i;
-    int ToReturn;
-    sal_uInt16  segCount;
-    sal_uInt16 const * startCode;
-    sal_uInt16 const * endCode;
-    sal_uInt16 const * idDelta;
-    /* sal_uInt16 * glyphIdArray; */
-    sal_uInt16 const * idRangeOffset;
-    /*sal_uInt16 * glyphIndexArray;*/
-    sal_uInt16 const *CMAP4 = reinterpret_cast<sal_uInt16 const *>(cmap);
-    /* sal_uInt16  GEbinsearch(sal_uInt16 *ar, sal_uInt16 length, sal_uInt16 toSearch); */
-
-    segCount = Int16FromMOTA(*(CMAP4 + 3))/2;
-    endCode = CMAP4 + 7;
-    i = GEbinsearch(endCode, segCount, static_cast<sal_uInt16>(c));
-
-    if (i == sal_uInt16(0xFFFF)) {
-        return MISSING_GLYPH_INDEX;
-    }
-    startCode = endCode + segCount + 1;
-
-    if((reinterpret_cast<sal_uInt8 const *>(&startCode[i]) - cmap >= int(nMaxCmapSize - 2)) || Int16FromMOTA(startCode[i]) > c) {
-        return MISSING_GLYPH_INDEX;
-    }
-    idDelta = startCode + segCount;
-    idRangeOffset = idDelta + segCount;
-    /*glyphIndexArray = idRangeOffset + segCount;*/
-
-    if((reinterpret_cast<sal_uInt8 const *>(&idRangeOffset[i]) - cmap < int(nMaxCmapSize - 2)) && Int16FromMOTA(idRangeOffset[i]) != 0) {
-        sal_uInt16 const * pGlyphOffset = &(idRangeOffset[i]) + (Int16FromMOTA(idRangeOffset[i])/2 + (c - Int16FromMOTA(startCode[i])));
-        if(reinterpret_cast<sal_uInt8 const *>(pGlyphOffset) - cmap >= int(nMaxCmapSize - 2))
-            return MISSING_GLYPH_INDEX;
-        c = Int16FromMOTA(*pGlyphOffset);
-    }
-
-    ToReturn = (Int16FromMOTA(idDelta[i]) + c) & 0xFFFF;
-    return ToReturn;
-}
-
-static sal_uInt32 getGlyph12(const sal_uInt8 *pCmap, sal_uInt32, sal_uInt32 cChar) {
-    const sal_uInt32* pCMAP12 = reinterpret_cast<const sal_uInt32*>(pCmap);
-    int nLength = Int32FromMOTA( pCMAP12[1] );
-    int nGroups = Int32FromMOTA( pCMAP12[3] );
-    int nLower = 0;
-    int nUpper = nGroups;
-
-    if( nUpper > (nLength-16)/12 )
-        nUpper = (nLength-16)/12;
-
-    /* binary search in "segmented coverage" subtable */
-    while( nLower < nUpper ) {
-        int nIndex = (nLower + nUpper) / 2;
-        const sal_uInt32* pEntry = &pCMAP12[ 4 + 3*nIndex ];
-        sal_uInt32 cStart = Int32FromMOTA( pEntry[0] );
-        sal_uInt32 cLast  = Int32FromMOTA( pEntry[1] );
-        if( cChar < cStart )
-            nUpper = nIndex;
-        else if( cChar > cLast )
-            nLower = nIndex + 1;
-        else { /* found matching entry! */
-            sal_uInt32 nGlyph  = Int32FromMOTA( pEntry[2] );
-            nGlyph += cChar - cStart;
-            return nGlyph;
-        }
-    }
-
-    return MISSING_GLYPH_INDEX;
-}
-
-static void FindCmap(TrueTypeFont *ttf)
-{
-    sal_uInt32 table_size;
-    const sal_uInt8* table = ttf->table(O_cmap, table_size);
-    if (table_size < 4)
-    {
-        SAL_WARN("vcl.fonts", "Parsing error in " << OUString::createFromAscii(ttf->fileName()) <<
-                 "cmap table size too short");
-        return;
-    }
-    sal_uInt16 ncmaps = GetUInt16(table, 2);
-    sal_uInt32 AppleUni   = 0;              // Apple Unicode
-    sal_uInt32 ThreeZero  = 0;              /* MS Symbol            */
-    sal_uInt32 ThreeOne   = 0;              /* MS UCS-2             */
-    sal_uInt32 ThreeTwo   = 0;              /* MS ShiftJIS          */
-    sal_uInt32 ThreeThree = 0;              /* MS PRC               */
-    sal_uInt32 ThreeFour  = 0;              /* MS Big5              */
-    sal_uInt32 ThreeFive  = 0;              /* MS Wansung           */
-    sal_uInt32 ThreeSix   = 0;              /* MS Johab             */
-
-    const sal_uInt32 remaining_table_size = table_size-4;
-    const sal_uInt32 nMinRecordSize = 8;
-    const sal_uInt32 nMaxRecords = remaining_table_size / nMinRecordSize;
-    if (ncmaps > nMaxRecords)
-    {
-        SAL_WARN("vcl.fonts", "Parsing error in " << OUString::createFromAscii(ttf->fileName()) <<
-                 ": " << nMaxRecords << " max possible entries, but " <<
-                 ncmaps << " claimed, truncating");
-        ncmaps = nMaxRecords;
-    }
-
-    for (unsigned int i = 0; i < ncmaps; i++) {
-        /* sanity check, cmap entry must lie within table */
-        sal_uInt32 nLargestFixedOffsetPos = 8 + i * 8;
-        sal_uInt32 nMinSize = nLargestFixedOffsetPos + sizeof(sal_uInt32);
-        if (nMinSize > table_size)
-        {
-            SAL_WARN( "vcl.fonts", "Font " << OUString::createFromAscii(ttf->fileName()) << " claimed to have "
-                << ncmaps << " cmaps, but only space for " << i);
-            break;
-        }
-
-        sal_uInt16 pID = GetUInt16(table, 4 + i * 8);
-        sal_uInt16 eID = GetUInt16(table, 6 + i * 8);
-        sal_uInt32 offset = GetUInt32(table, nLargestFixedOffsetPos);
-
-         /* sanity check, cmap must lie within file */
-        if( (table - ttf->ptr) + offset > static_cast<sal_uInt32>(ttf->fsize) )
-            continue;
-
-        /* Unicode tables in Apple fonts */
-        if (pID == 0) {
-            AppleUni = offset;
-        }
-
-        if (pID == 3) {
-            switch (eID) {
-                case 0: ThreeZero  = offset; break;
-                case 10: // UCS-4
-                case 1: ThreeOne   = offset; break;
-                case 2: ThreeTwo   = offset; break;
-                case 3: ThreeThree = offset; break;
-                case 4: ThreeFour  = offset; break;
-                case 5: ThreeFive  = offset; break;
-                case 6: ThreeSix   = offset; break;
-            }
-        }
-    }
-
-    // fall back to AppleUnicode if there are no ThreeOne/Threezero tables
-    if( AppleUni && !ThreeZero && !ThreeOne)
-        ThreeOne = AppleUni;
-
-    if (ThreeOne) {
-        ttf->cmapType = CMAP_MS_Unicode;
-        ttf->cmap = table + ThreeOne;
-    } else if (ThreeTwo) {
-        ttf->cmapType = CMAP_MS_ShiftJIS;
-        ttf->cmap = table + ThreeTwo;
-    } else if (ThreeThree) {
-        ttf->cmapType = CMAP_MS_PRC;
-        ttf->cmap = table + ThreeThree;
-    } else if (ThreeFour) {
-        ttf->cmapType = CMAP_MS_Big5;
-        ttf->cmap = table + ThreeFour;
-    } else if (ThreeFive) {
-        ttf->cmapType = CMAP_MS_Wansung;
-        ttf->cmap = table + ThreeFive;
-    } else if (ThreeSix) {
-        ttf->cmapType = CMAP_MS_Johab;
-        ttf->cmap = table + ThreeSix;
-    } else if (ThreeZero) {
-        ttf->cmapType = CMAP_MS_Symbol;
-        ttf->cmap = table + ThreeZero;
-    } else {
-        ttf->cmapType = CMAP_NOT_USABLE;
-        ttf->cmap = nullptr;
-    }
-
-    if (ttf->cmapType != CMAP_NOT_USABLE) {
-        if( (ttf->cmap - ttf->ptr + 2U) > static_cast<sal_uInt32>(ttf->fsize) ) {
-            ttf->cmapType = CMAP_NOT_USABLE;
-            ttf->cmap = nullptr;
-        }
-    }
-
-    if (ttf->cmapType == CMAP_NOT_USABLE)        return;
-
-    switch (GetUInt16(ttf->cmap, 0)) {
-        case 0: ttf->mapper = getGlyph0; break;
-        case 2: ttf->mapper = getGlyph2; break;
-        case 4: ttf->mapper = getGlyph4; break;
-        case 6: ttf->mapper = getGlyph6; break;
-        case 12: ttf->mapper= getGlyph12; break;
-        default:
-#if OSL_DEBUG_LEVEL > 1
-            /*- if the cmap table is really broken */
-            SAL_WARN("vcl.fonts", ttf->fileName() << ": "
-                    << GetUInt16(ttf->cmap, 0)
-                    << " is not a recognized cmap format..");
-#endif
-            ttf->cmapType = CMAP_NOT_USABLE;
-            ttf->cmap = nullptr;
-            ttf->mapper = nullptr;
-    }
-}
-
 /*- Public functions */
 
 int CountTTCFonts(const char* fname)
@@ -1476,9 +1139,6 @@ TrueTypeFont::TrueTypeFont(const char* pFileName)
     , subfamily(nullptr)
     , usubfamily(nullptr)
     , ntables(0)
-    , cmap(nullptr)
-    , cmapType(0)
-    , mapper(nullptr)
 {
 }
 
@@ -1553,6 +1213,15 @@ SFErrCodes AbstractTrueTypeFont::indexGlyphData()
 
     table = this->table(O_vhea, table_size);
     m_nVertMetrics = (table && table_size >= 36) ? GetUInt16(table, 34) : 0;
+
+    if (!m_xCharMap.is())
+    {
+        CmapResult aCmapResult;
+        table = this->table(O_cmap, table_size);
+        if (!ParseCMAP(table, table_size, aCmapResult))
+            return SFErrCodes::TtFormat;
+        m_xCharMap = new FontCharMap(aCmapResult);
+    }
 
     return SFErrCodes::Ok;
 }
@@ -1695,16 +1364,11 @@ SFErrCodes TrueTypeFont::open(sal_uInt32 facenum)
     /* At this point TrueTypeFont is constructed, now need to verify the font format
        and read the basic font properties */
 
-    /* The following tables are absolutely required:
-     * maxp, head, name, cmap
-     */
-
     SFErrCodes ret = indexGlyphData();
     if (ret != SFErrCodes::Ok)
         return ret;
 
     GetNames(this);
-    FindCmap(this);
 
     return SFErrCodes::Ok;
 }
@@ -2268,33 +1932,6 @@ SFErrCodes CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
     return SFErrCodes::Ok;
 }
 
-#if defined(_WIN32) || defined(MACOSX) || defined(IOS)
-sal_uInt16 MapChar(TrueTypeFont const *ttf, sal_uInt16 ch)
-{
-    switch (ttf->cmapType) {
-        case CMAP_MS_Symbol:
-        {
-            const sal_uInt32 nMaxCmapSize = ttf->ptr + ttf->fsize - ttf->cmap;
-            if( ttf->mapper == getGlyph0 && ( ch & 0xf000 ) == 0xf000 )
-                ch &= 0x00ff;
-            return static_cast<sal_uInt16>(ttf->mapper(ttf->cmap, nMaxCmapSize, ch ));
-        }
-
-        case CMAP_MS_Unicode:   break;
-        case CMAP_MS_ShiftJIS:  ch = TranslateChar12(ch); break;
-        case CMAP_MS_PRC:       ch = TranslateChar13(ch); break;
-        case CMAP_MS_Big5:      ch = TranslateChar14(ch); break;
-        case CMAP_MS_Wansung:   ch = TranslateChar15(ch); break;
-        case CMAP_MS_Johab:     ch = TranslateChar16(ch); break;
-        default:                return 0;
-    }
-    const sal_uInt32 nMaxCmapSize = ttf->ptr + ttf->fsize - ttf->cmap;
-    ch = static_cast<sal_uInt16>(ttf->mapper(ttf->cmap, nMaxCmapSize, ch));
-    return ch;
-}
-#endif
-
-
 std::unique_ptr<sal_uInt16[]> GetTTSimpleGlyphMetrics(AbstractTrueTypeFont const *ttf, const sal_uInt16 *glyphArray, int nGlyphs, bool vertical)
 {
     const sal_uInt8* pTable;
@@ -2391,7 +2028,7 @@ void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info)
     info->subfamily = ttf->subfamily;
     info->usubfamily = ttf->usubfamily;
     info->psname = ttf->psname;
-    info->symbolEncoded = (ttf->cmapType == CMAP_MS_Symbol);
+    info->symbolEncoded = ttf->GetCharMap()->isSymbolic();
 
     sal_uInt32 table_size;
     const sal_uInt8* table = ttf->table(O_OS2, table_size);
