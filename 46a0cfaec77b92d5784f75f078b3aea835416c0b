@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "3d60bed7_1344afef",
+        "filename": "include/oox/export/vmlexport.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2020-09-11T06:43:01Z",
+      "side": 1,
+      "message": "It causes no problem, but if it\u0027s not too much work you could fix it before merging.",
+      "parentUuid": "2f59ac2d_d1c7408b",
+      "revId": "46a0cfaec77b92d5784f75f078b3aea835416c0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ce840a0c_13c7f4f3",
         "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
         "patchSetId": 5
@@ -69,6 +87,24 @@
       "revId": "46a0cfaec77b92d5784f75f078b3aea835416c0b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "396eebec_d58eed2e",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 5548,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2020-09-11T06:43:01Z",
+      "side": 1,
+      "message": "Wait, there\u0027s no actual change here... :o\nI looked at the diff between Patchset 4 and Patchset 5 and it showed me a difference. Nevermind.",
+      "parentUuid": "d96a222c_a1286a78",
+      "revId": "46a0cfaec77b92d5784f75f078b3aea835416c0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
