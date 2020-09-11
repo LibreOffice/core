@@ -20,6 +20,10 @@
 
 Directory gid_Dir_Shlxthdl
     ParentID = gid_Brand_Dir_Program;
+#ifdef BUILD_X64
+    DosName = "shlxthdl_x64";
+#else
     DosName = "shlxthdl";
+#endif
 End
 
