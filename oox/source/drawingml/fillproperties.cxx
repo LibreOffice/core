@@ -1021,7 +1021,7 @@ sal_Int32 ArtisticEffectProperties::getEffectToken( const OUString& sName )
     else if( sName == "amount" )
         return XML_amount;
 
-    SAL_WARN( "oox.drawingml", "ArtisticEffectProperties::getEffectToken - unexpected token name" );
+    SAL_WARN( "oox.drawingml", "ArtisticEffectProperties::getEffectToken - unexpected token name: " << sName );
     return XML_none;
 }
 
