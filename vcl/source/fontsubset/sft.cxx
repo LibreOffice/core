@@ -1021,7 +1021,8 @@ int CountTTCFonts(const char* fname)
 }
 
 #if !defined(_WIN32)
-SFErrCodes OpenTTFontFile( const char* fname, sal_uInt32 facenum, TrueTypeFont** ttf )
+SFErrCodes OpenTTFontFile(const char* fname, sal_uInt32 facenum, TrueTypeFont** ttf,
+                          const FontCharMapRef xCharMap)
 {
     SFErrCodes ret;
     int fd = -1;
@@ -1029,7 +1030,7 @@ SFErrCodes OpenTTFontFile( const char* fname, sal_uInt32 facenum, TrueTypeFont**
 
     if (!fname || !*fname) return SFErrCodes::BadFile;
 
-    *ttf = new TrueTypeFont(fname);
+    *ttf = new TrueTypeFont(fname, xCharMap);
     if( ! *ttf )
         return SFErrCodes::Memory;
 
@@ -1080,9 +1081,10 @@ cleanup:
 }
 #endif
 
-SFErrCodes OpenTTFontBuffer(const void* pBuffer, sal_uInt32 nLen, sal_uInt32 facenum, TrueTypeFont** ttf)
+SFErrCodes OpenTTFontBuffer(const void* pBuffer, sal_uInt32 nLen, sal_uInt32 facenum, TrueTypeFont** ttf,
+                            const FontCharMapRef xCharMap)
 {
-    *ttf = new TrueTypeFont();
+    *ttf = new TrueTypeFont(nullptr, xCharMap);
     if( *ttf == nullptr )
         return SFErrCodes::Memory;
 
@@ -1111,13 +1113,14 @@ bool withinBounds(sal_uInt32 tdoffset, sal_uInt32 moreoffset, sal_uInt32 len, sa
 }
 }
 
-AbstractTrueTypeFont::AbstractTrueTypeFont(const char* pFileName)
+AbstractTrueTypeFont::AbstractTrueTypeFont(const char* pFileName, const FontCharMapRef xCharMap)
     : m_pFileName(nullptr)
     , m_nGlyphs(0xFFFFFFFF)
     , m_pGlyphOffsets(nullptr)
     , m_nHorzMetrics(0)
     , m_nVertMetrics(0)
     , m_nUnitsPerEm(0)
+    , m_xCharMap(xCharMap)
 {
     if (pFileName)
         m_pFileName = strdup(pFileName);
@@ -1129,8 +1132,8 @@ AbstractTrueTypeFont::~AbstractTrueTypeFont()
     free(m_pGlyphOffsets);
 }
 
-TrueTypeFont::TrueTypeFont(const char* pFileName)
-    : AbstractTrueTypeFont(pFileName)
+TrueTypeFont::TrueTypeFont(const char* pFileName, const FontCharMapRef xCharMap)
+    : AbstractTrueTypeFont(pFileName, xCharMap)
     , fsize(-1)
     , ptr(nullptr)
     , psname(nullptr)
