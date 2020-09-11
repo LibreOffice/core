@@ -1089,8 +1089,8 @@ void FontSizeBox::Fill( const FontMetric* pFontMetric, const FontList* pList )
         return;
 
     // query font sizes
-    const sal_IntPtr* pTempAry;
-    const sal_IntPtr* pAry = nullptr;
+    const int* pTempAry;
+    const int* pAry = nullptr;
 
     if( pFontMetric )
     {
@@ -1130,8 +1130,8 @@ void FontSizeBox::Fill( const FontMetric* pFontMetric, const FontList* pList )
             sal_uLong nCount = aFontSizeNames.Count();
             for( sal_uLong i = 0; i < nCount; i++ )
             {
-                OUString    aSizeName = aFontSizeNames.GetIndexName( i );
-                sal_IntPtr  nSize = aFontSizeNames.GetIndexSize( i );
+                OUString aSizeName = aFontSizeNames.GetIndexName( i );
+                int nSize = aFontSizeNames.GetIndexSize( i );
                 OUString sId(OUString::number(-nSize)); // mark as special
                 m_xComboBox->insert(nPos, aSizeName, &sId, nullptr, nullptr);
                 nPos++;
