@@ -333,12 +333,14 @@ DECLARE_RTFEXPORT_TEST(testTdf129522_removeShadowStyle, "tdf129522_removeShadowS
 
 DECLARE_RTFEXPORT_TEST(testTdf136587_noStyleName, "tdf136587_noStyleName.rtf")
 {
+    // An exception stopped all style definitions.
     uno::Reference<container::XNameAccess> paragraphStyles = getStyles("ParagraphStyles");
     uno::Reference<beans::XPropertySet> xStyleProps(paragraphStyles->getByName("Style15"),
                                                     uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER),
                          getProperty<sal_Int16>(xStyleProps, "ParaAdjust"));
 
+    // The problem was that the default style wasn't imported at all, so the fontsize was only 12.
     xStyleProps.set(paragraphStyles->getByName("Default Paragraph Style"), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(32.0f, getProperty<float>(xStyleProps, "CharHeight"));
 }
