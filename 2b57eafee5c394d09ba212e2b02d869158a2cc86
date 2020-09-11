@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6334b178_b617b884",
+        "filename": "sc/source/core/data/validat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-09-11T10:42:30Z",
+      "side": 1,
+      "message": "if ( !bIsVal )",
+      "range": {
+        "startLine": 592,
+        "startChar": 0,
+        "endLine": 593,
+        "endChar": 22
+      },
+      "revId": "2b57eafee5c394d09ba212e2b02d869158a2cc86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98d12cb7_72ef78b5",
+        "filename": "sc/source/core/data/validat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 599,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-09-11T10:42:30Z",
+      "side": 1,
+      "message": "else",
+      "range": {
+        "startLine": 599,
+        "startChar": 0,
+        "endLine": 599,
+        "endChar": 23
+      },
+      "revId": "2b57eafee5c394d09ba212e2b02d869158a2cc86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9be7ed14_9814aae4",
+        "filename": "sc/source/core/data/validat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-09-11T10:42:30Z",
+      "side": 1,
+      "message": "Is this sure? I think, text length is length of the formatted numerical content, not result of this rounding. (Maybe it\u0027s enough to remove the condition before the old code, if aString contains the formatted content of the cell, including digits and percent sign etc.)",
+      "range": {
+        "startLine": 601,
+        "startChar": 33,
+        "endLine": 601,
+        "endChar": 71
+      },
+      "revId": "2b57eafee5c394d09ba212e2b02d869158a2cc86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
