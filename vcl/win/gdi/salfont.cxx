@@ -1749,44 +1749,7 @@ void WinSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
     if( nRC != SFErrCodes::Ok )
         return;
 
-    int nGlyphs = aSftTTF->glyphCount();
-    if( nGlyphs > 0 )
-    {
-        rWidths.resize(nGlyphs);
-        std::vector<sal_uInt16> aGlyphIds(nGlyphs);
-        for( int i = 0; i < nGlyphs; i++ )
-            aGlyphIds[i] = sal_uInt16(i);
-        std::unique_ptr<sal_uInt16[]> pMetrics = ::GetTTSimpleGlyphMetrics( aSftTTF.get(),
-                                                                    aGlyphIds.data(),
-                                                                    nGlyphs,
-                                                                    bVertical );
-        if( pMetrics )
-        {
-            for( int i = 0; i< nGlyphs; i++ )
-                rWidths[i] = pMetrics[i];
-            pMetrics.reset();
-            rUnicodeEnc.clear();
-        }
-        const WinFontFace* pWinFont = static_cast<const WinFontFace*>(pFont);
-        FontCharMapRef xFCMap = pWinFont->GetFontCharMap();
-        SAL_WARN_IF( !xFCMap.is() || !xFCMap->GetCharCount(), "vcl", "no map" );
-
-        int nCharCount = xFCMap->GetCharCount();
-        sal_uInt32 nChar = xFCMap->GetFirstChar();
-        for( int i = 0; i < nCharCount; i++ )
-        {
-            if( nChar < 0x00010000 )
-            {
-                sal_uInt16 nGlyph = ::MapChar( aSftTTF.get(),
-                                               static_cast<sal_Ucs>(nChar));
-                if( nGlyph )
-                    rUnicodeEnc[ static_cast<sal_Unicode>(nChar) ] = nGlyph;
-            }
-            nChar = xFCMap->GetNextChar( nChar );
-        }
-
-        xFCMap = nullptr;
-    }
+    SalGraphics::GetGlyphWidths(*aSftTTF.get(), *pFont, bVertical, rWidths, rUnicodeEnc);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
