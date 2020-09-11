@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "7c41d01a_a8a8f37b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-09-11T10:57:46Z",
+      "side": 1,
+      "message": "Note that \"number stored in text cell\" is not true for the bug scenario. It\u0027s still a numeric cell content but the cell was formatted as Text afterwards, only the next input in the Text formatted cell would result in text content.",
+      "range": {
+        "startLine": 9,
+        "startChar": 9,
+        "endLine": 9,
+        "endChar": 38
+      },
+      "revId": "2b57eafee5c394d09ba212e2b02d869158a2cc86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6334b178_b617b884",
         "filename": "sc/source/core/data/validat.cxx",
         "patchSetId": 1
