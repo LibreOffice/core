@@ -1272,7 +1272,8 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
 
     pFS->startElementNS(XML_p, XML_cSld);
 
-    ImplWriteBackground(pFS, aXBackgroundPropSet);
+    if (aXBackgroundPropSet)
+        ImplWriteBackground(pFS, aXBackgroundPropSet);
     WriteShapeTree(pFS, MASTER, true);
 
     pFS->endElementNS(XML_p, XML_cSld);
