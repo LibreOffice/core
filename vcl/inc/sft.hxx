@@ -42,6 +42,7 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/fontcapabilities.hxx>
+#include <vcl/fontcharmap.hxx>
 #include <i18nlangtag/lang.h>
 
 #include <array>
@@ -650,19 +651,6 @@ class TrueTypeFont;
  */
     VCL_DLLPUBLIC std::unique_ptr<sal_uInt16[]> GetTTSimpleGlyphMetrics(AbstractTrueTypeFont const *ttf, const sal_uInt16 *glyphArray, int nGlyphs, bool vertical);
 
-#if defined(_WIN32) || defined(MACOSX) || defined(IOS)
-/**
- * Maps a Unicode (UCS-2) character to a glyph ID and returns it. Missing glyph has
- * a glyphID of 0 so this function can be used to test if a character is encoded in the font.
- *
- * @param ttf         pointer to the TrueTypeFont structure
- * @param ch          Unicode (UCS-2) character
- * @return glyph ID, if the character is missing in the font, the return value is 0.
- * @ingroup sft
- */
-    VCL_DLLPUBLIC sal_uInt16 MapChar(TrueTypeFont const *ttf, sal_uInt16 ch);
-#endif
-
 /**
  * Returns global font information about the TrueType font.
  * @see TTGlobalFontInfo
@@ -734,6 +722,7 @@ class VCL_DLLPUBLIC AbstractTrueTypeFont
     sal_uInt32 m_nHorzMetrics;
     sal_uInt32 m_nVertMetrics; /* if not 0 => font has vertical metrics information */
     sal_uInt32 m_nUnitsPerEm;
+    FontCharMapRef m_xCharMap;
 
 protected:
     SFErrCodes indexGlyphData();
@@ -748,6 +737,7 @@ public:
     sal_uInt32 horzMetricCount() const { return m_nHorzMetrics; }
     sal_uInt32 vertMetricCount() const { return m_nVertMetrics; }
     sal_uInt32 unitsPerEm() const { return m_nUnitsPerEm; }
+    FontCharMapRef GetCharMap() const { return m_xCharMap; }
 
     virtual bool hasTable(sal_uInt32 ord) const = 0;
     virtual const sal_uInt8* table(sal_uInt32 ord, sal_uInt32& size) const = 0;
@@ -774,9 +764,6 @@ public:
         sal_Unicode *usubfamily;
 
         sal_uInt32  ntables;
-        const sal_uInt8* cmap;
-        int         cmapType;
-        sal_uInt32 (*mapper)(const sal_uInt8 *, sal_uInt32, sal_uInt32); /* character to glyphID translation function                          */
 
     TrueTypeFont(const char* pFileName = nullptr);
     ~TrueTypeFont() override;
