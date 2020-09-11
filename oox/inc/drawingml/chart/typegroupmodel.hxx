@@ -74,7 +74,6 @@ struct TypeGroupModel
     bool                mbSmooth;           /// True = smooth lines in line charts.
     bool                mbVaryColors;       /// True = different automatic colors for each point.
     bool                mbWireframe;        /// True = wireframe surface chart, false = filled surface chart.
-    bool                mbCatAxisVisible;   /// True = Category axis is visible.
 
     explicit            TypeGroupModel( sal_Int32 nTypeId, bool bMSO2007Doc );
                         ~TypeGroupModel();
