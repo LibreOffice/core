@@ -185,6 +185,7 @@ Shape::Shape( const ShapePtr& pSourceShape )
 , mnDataNodeType(pSourceShape->mnDataNodeType)
 , mfAspectRatio(pSourceShape->mfAspectRatio)
 , mbUseBgFill(pSourceShape->mbUseBgFill)
+, maDiagramFontHeights(pSourceShape->maDiagramFontHeights)
 {}
 
 Shape::~Shape()
@@ -294,6 +295,22 @@ void Shape::addShape(
                 keepDiagramCompatibilityInfo();
                 if( !SvtFilterOptions::Get().IsSmartArt2Shape() )
                     convertSmartArtToMetafile( rFilterBase );
+            }
+
+            NamedShapePairs* pNamedShapePairs = rFilterBase.getDiagramFontHeights();
+            if (xShape.is() && pNamedShapePairs)
+            {
+                auto itPairs = pNamedShapePairs->find(getInternalName());
+                if (itPairs != pNamedShapePairs->end())
+                {
+                    auto it = itPairs->second.find(shared_from_this());
+                    if (it != itPairs->second.end())
+                    {
+                        // Our drawingml::Shape is in the list of an internal name, remember the now
+                        // inserted XShape.
+                        it->second = xShape;
+                    }
+                }
             }
         }
     }
@@ -1537,6 +1554,44 @@ void Shape::keepDiagramCompatibilityInfo()
     catch( const Exception& )
     {
         TOOLS_WARN_EXCEPTION( "oox.drawingml", "Shape::keepDiagramCompatibilityInfo" );
+    }
+}
+
+void Shape::syncDiagramFontHeights()
+{
+    // Each name represents a group of shapes, for which the font height should have the same
+    // scaling.
+    for (const auto& rNameAndPairs : maDiagramFontHeights)
+    {
+        // Find out the minimum scale within this group.
+        const ShapePairs& rShapePairs = rNameAndPairs.second;
+        sal_Int16 nMinScale = 100;
+        for (const auto& rShapePair : rShapePairs)
+        {
+            uno::Reference<beans::XPropertySet> xPropertySet(rShapePair.second, uno::UNO_QUERY);
+            if (xPropertySet.is())
+            {
+                sal_Int16 nTextFitToSizeScale = 0;
+                xPropertySet->getPropertyValue("TextFitToSizeScale") >>= nTextFitToSizeScale;
+                if (nTextFitToSizeScale > 0 && nTextFitToSizeScale < nMinScale)
+                {
+                    nMinScale = nTextFitToSizeScale;
+                }
+            }
+        }
+
+        // Set that minimum scale for all members of the group.
+        if (nMinScale < 100)
+        {
+            for (const auto& rShapePair : rShapePairs)
+            {
+                uno::Reference<beans::XPropertySet> xPropertySet(rShapePair.second, uno::UNO_QUERY);
+                if (xPropertySet.is())
+                {
+                    xPropertySet->setPropertyValue("TextFitToSizeScale", uno::makeAny(nMinScale));
+                }
+            }
+        }
     }
 }
 
