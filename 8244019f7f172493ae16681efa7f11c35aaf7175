@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fe25ea9a_aa7c50be",
+        "filename": "sc/source/core/tool/detfunc.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 1611,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-09-11T14:48:09Z",
+      "side": 1,
+      "message": "Are you sure? What if pObject is actually a SdrCircObj* instead of SdrRectObj*? That now is unhandled.\n\nAlso, why not solve this properly and add enum SC_DETOBJ_RECT as it sounds it would be needed? Having type SC_DETOBJ_CIRCLE for a SdrRectObj looks very odd..",
+      "revId": "8244019f7f172493ae16681efa7f11c35aaf7175",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
