@@ -333,6 +333,16 @@ void SwTextFormatter::InsertPortion( SwTextFormatInfo &rInf,
             m_pCurr->Height( pPor->Height() );
         if( m_pCurr->GetAscent() < pPor->GetAscent() )
             m_pCurr->SetAscent( pPor->GetAscent() );
+
+        if (GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::MS_WORD_COMP_MIN_LINE_HEIGHT_BY_FLY))
+        {
+            // For DOCX with compat=14 the only shape in line defines height of the line inspite of used font
+            if (pLast->IsFlyCntPortion() && pPor->IsTextPortion() && pPor->GetLen() == TextFrameIndex(0))
+            {
+                m_pCurr->SetAscent(pLast->GetAscent());
+                m_pCurr->Height(pLast->Height());
+            }
+        }
     }
 
     // Sometimes chains are constructed (e.g. by hyphenate)
@@ -2296,7 +2306,8 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
     // tdf#116486: consider also the upper margin from getFramePrintArea because intersections
     //             with this additional space should lead to repositioning of paragraphs
     //             For compatibility we grab a related compat flag:
-    if (GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::ADD_VERTICAL_FLY_OFFSETS))
+    if (GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::ADD_VERTICAL_FLY_OFFSETS)
+        && IsFirstTextLine())
     {
         const long nUpper = m_pFrame->getFramePrintArea().Top();
         // Increase the rectangle

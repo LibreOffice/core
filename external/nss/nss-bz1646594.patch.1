@@ -1,0 +1,15 @@
+regression from https://bugzilla.mozilla.org/show_bug.cgi?id=1646594
+
+--- nss/nss/coreconf/arch.mk.orig2	2020-08-18 14:33:21.295252404 +0200
++++ nss/nss/coreconf/arch.mk	2020-08-18 14:33:46.360320806 +0200
+@@ -116,8 +116,10 @@
+ 	OS_RELEASE := $(word 1,$(OS_RELEASE)).$(word 2,$(OS_RELEASE))
+     endif
+     KERNEL = Linux
++ifneq ($(OS_TARGET),Android)
+     include $(CORE_DEPTH)/coreconf/Linux.mk
+ endif
++endif
+ 
+ # Since all uses of OS_ARCH that follow affect only userland, we can
+ # merge other Glibc systems with Linux here.

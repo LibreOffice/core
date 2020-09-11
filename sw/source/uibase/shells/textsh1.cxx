@@ -389,7 +389,11 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 aRewriter.AddRule( UndoArg3, sReplacement );
                 rWrtSh.StartUndo(SwUndoId::REPLACE, &aRewriter);
                 rWrtSh.GetCursor()->Normalize(false);
+
                 rWrtSh.ClearMark();
+                if( rWrtSh.IsInSelect() )  // cancel any in-progress keyboard selection as well
+                    rWrtSh.EndSelect();
+
                 for( sal_uInt32 i=aToggle.CharsToDelete(); i > 0; --i )
                     rWrtSh.DelLeft();
                 rWrtSh.Insert2( sReplacement );
@@ -1072,7 +1076,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 std::shared_ptr<SfxRequest> pRequest(new SfxRequest(rReq));
                 rReq.Ignore(); // the 'old' request is not relevant any more
 
-                pDlg->StartExecuteAsync([pDlg, &rWrtSh, pRequest, nDefDist](sal_Int32 nResult){
+                auto xPaM(std::make_shared<SwPaM>(*pPaM, nullptr)); // tdf#134439 make a copy to use at later apply
+                pDlg->StartExecuteAsync([pDlg, &rWrtSh, pRequest, nDefDist, xPaM](sal_Int32 nResult){
                     if (nResult == RET_OK)
                     {
                         // Apply defaults if necessary.
@@ -1102,7 +1107,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                             pSet->Put(SfxStringItem(FN_DROP_CHAR_STYLE_NAME, sCharStyleName));
                         }
 
-                        sw_ParagraphDialogResult(pSet, rWrtSh, *pRequest, rWrtSh.GetCursor());
+                        sw_ParagraphDialogResult(pSet, rWrtSh, *pRequest, xPaM.get());
                     }
                     pDlg->disposeOnce();
                 });

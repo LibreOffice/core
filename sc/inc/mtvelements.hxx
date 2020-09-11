@@ -167,6 +167,7 @@ public:
     ~TableColumnBlockPositionSet();
 
     ColumnBlockPosition* getBlockPosition( SCCOL nCol );
+    void invalidate(); // discards cached positions
 };
 
 ScRefCellValue toRefCell( const sc::CellStoreType::const_iterator& itPos, size_t nOffset );

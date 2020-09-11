@@ -251,7 +251,8 @@ bool SbiScanner::NextSym()
         do
         {
             nLineTempIdx++;
-        } while (nLineTempIdx < aLine.getLength() && !BasicCharClass::isWhitespace(aLine[nLineTempIdx]) && aLine[nLineTempIdx] != '#');
+        } while (nLineTempIdx < aLine.getLength() && !BasicCharClass::isWhitespace(aLine[nLineTempIdx])
+            && aLine[nLineTempIdx] != '#' && aLine[nLineTempIdx] != ',');
         // leave it if it is a date literal - it will be handled later
         if (nLineTempIdx >= aLine.getLength() || aLine[nLineTempIdx] != '#')
         {

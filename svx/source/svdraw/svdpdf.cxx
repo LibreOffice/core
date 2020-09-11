@@ -145,6 +145,7 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools:
     , mnPageCount(0)
     , mdPageWidthPts(0)
     , mdPageHeightPts(0)
+    , mpPDFium(vcl::pdf::PDFiumLibrary::get())
 {
     mpVD->EnableOutput(false);
     mpVD->SetLineColor();
@@ -157,13 +158,6 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools:
     mpTextAttr = std::make_unique<SfxItemSet>(rModel.GetItemPool(),
                                               svl::Items<EE_ITEMS_START, EE_ITEMS_END>{});
     checkClip();
-
-    FPDF_LIBRARY_CONFIG aConfig;
-    aConfig.version = 2;
-    aConfig.m_pUserFontPaths = nullptr;
-    aConfig.m_pIsolate = nullptr;
-    aConfig.m_v8EmbedderSlot = 0;
-    FPDF_InitLibraryWithConfig(&aConfig);
 
     // Load the buffer using pdfium.
     mpPdfDocument = FPDF_LoadMemDocument(mpPdfData->data(), mpPdfData->size(),
@@ -197,11 +191,7 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools:
     mnPageCount = FPDF_GetPageCount(mpPdfDocument);
 }
 
-ImpSdrPdfImport::~ImpSdrPdfImport()
-{
-    FPDF_CloseDocument(mpPdfDocument);
-    FPDF_DestroyLibrary();
-}
+ImpSdrPdfImport::~ImpSdrPdfImport() { FPDF_CloseDocument(mpPdfDocument); }
 
 void ImpSdrPdfImport::DoObjects(SvdProgressInfo* pProgrInfo, sal_uInt32* pActionsToReport,
                                 int nPageIndex)
@@ -767,9 +757,9 @@ void ImpSdrPdfImport::ImportForm(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
     // Get the form matrix to perform correct translation/scaling of the form sub-objects.
     const Matrix aOldMatrix = mCurMatrix;
 
-    double a, b, c, d, e, f;
-    FPDFFormObj_GetMatrix(pPageObject, &a, &b, &c, &d, &e, &f);
-    mCurMatrix = Matrix(a, b, c, d, e, f);
+    FS_MATRIX matrix;
+    FPDFFormObj_GetMatrix(pPageObject, &matrix);
+    mCurMatrix = Matrix(matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f);
 
     const int nCount = FPDFFormObj_CountObjects(pPageObject);
     for (int nIndex = 0; nIndex < nCount; ++nIndex)
@@ -797,8 +787,8 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
     if (left == right || top == bottom)
         return;
 
-    double a, b, c, d, e, f;
-    FPDFTextObj_GetMatrix(pPageObject, &a, &b, &c, &d, &e, &f);
+    FS_MATRIX matrix;
+    FPDFTextObj_GetMatrix(pPageObject, &matrix);
     Matrix aTextMatrix(mCurMatrix);
 
     aTextMatrix.Transform(left, right, top, bottom);
@@ -816,8 +806,8 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
     OUString sText(pText.get(), nActualChars);
 
     const double dFontSize = FPDFTextObj_GetFontSize(pPageObject);
-    double dFontSizeH = fabs(sqrt2(a, c) * dFontSize);
-    double dFontSizeV = fabs(sqrt2(b, d) * dFontSize);
+    double dFontSizeH = fabs(sqrt2(matrix.a, matrix.c) * dFontSize);
+    double dFontSizeV = fabs(sqrt2(matrix.b, matrix.d) * dFontSize);
     dFontSizeH = lcl_PointToPixel(dFontSizeH);
     dFontSizeV = lcl_PointToPixel(dFontSizeV);
     dFontSizeH = lcl_ToLogic(dFontSizeH);
@@ -860,6 +850,7 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
             break;
         case FPDF_TEXTRENDERMODE_STROKE:
         case FPDF_TEXTRENDERMODE_STROKE_CLIP:
+        case FPDF_TEXTRENDERMODE_UNKNOWN:
             break;
         case FPDF_TEXTRENDERMODE_INVISIBLE:
         case FPDF_TEXTRENDERMODE_CLIP:
@@ -1032,9 +1023,9 @@ void ImpSdrPdfImport::ImportImage(FPDF_PAGEOBJECT pPageObject, int /*nPageObject
 
 void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int /*nPageObjectIndex*/)
 {
-    double a, b, c, d, e, f;
-    FPDFPath_GetMatrix(pPageObject, &a, &b, &c, &d, &e, &f);
-    Matrix aPathMatrix(a, b, c, d, e, f);
+    FS_MATRIX matrix;
+    FPDFPath_GetMatrix(pPageObject, &matrix);
+    Matrix aPathMatrix(matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f);
     aPathMatrix.Concatinate(mCurMatrix);
 
     basegfx::B2DPolyPolygon aPolyPoly;

@@ -46,9 +46,10 @@ public:
 
     /// convert input string to number
     bool IsNumberFormat( const OUString& rString,            /// input string
-                         SvNumFormatType& F_Type,                      /// format type (in + out)
+                         SvNumFormatType& F_Type,            /// format type (in + out)
                          double& fOutNumber,                 /// value determined (out)
-                         const SvNumberformat* pFormat);     /// number format to which compare against
+                         const SvNumberformat* pFormat,      /// number format to which compare against
+                         SvNumInputOptions eInputOptions);
 
     /// after IsNumberFormat: get decimal position
     short   GetDecPos() const { return nDecPos; }
@@ -321,7 +322,8 @@ private:
      */
     bool GetTimeRef( double& fOutNumber,                     // result as double
                      sal_uInt16 nIndex,                      // Index of hour in input
-                     sal_uInt16 nCnt ) const;                // Count of time substrings in input
+                     sal_uInt16 nCnt,                        // Count of time substrings in input
+                     SvNumInputOptions eInputOptions ) const;
     sal_uInt16 ImplGetDay  ( sal_uInt16 nIndex ) const;      // Day input, 0 if no match
     sal_uInt16 ImplGetMonth( sal_uInt16 nIndex ) const;      // Month input, zero based return, NumberOfMonths if no match
     sal_uInt16 ImplGetYear ( sal_uInt16 nIndex );   // Year input, 0 if no match

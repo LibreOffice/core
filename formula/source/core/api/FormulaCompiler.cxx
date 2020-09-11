@@ -308,7 +308,7 @@ bool isRangeResultOpCode( OpCode eOp )
     @param  bRight
             If bRPN==false, bRight==false means opcodes for left side are
             checked, bRight==true means opcodes for right side. If bRPN==true
-            it doesn't matter.
+            it doesn't matter except for the ocSep converted to ocUnion case.
  */
 bool isPotentialRangeType( FormulaToken const * pToken, bool bRPN, bool bRight )
 {
@@ -329,6 +329,10 @@ bool isPotentialRangeType( FormulaToken const * pToken, bool bRPN, bool bRight )
         case svExternalDoubleRef:
         case svExternalName:        // could be range
             return true;
+        case svSep:
+            // A special case if a previous ocSep was converted to ocUnion it
+            // stays svSep instead of svByte.
+            return bRPN && !bRight && pToken->GetOpCode() == ocUnion;
         default:
             // Separators are not part of RPN and right opcodes need to be
             // other StackVar types or functions and thus svByte.
@@ -1410,6 +1414,7 @@ void FormulaCompiler::Factor()
                         && ((p = pCode[-1]) != nullptr) && isPotentialRangeType( p, true, true))
                 {
                     pFacToken->NewOpCode( ocUnion, FormulaToken::PrivateAccess());
+                    // XXX NOTE: the token's eType is still svSep here!
                     PutCode( pFacToken);
                 }
             }

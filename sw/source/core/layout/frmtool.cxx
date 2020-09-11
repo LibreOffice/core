@@ -1052,7 +1052,15 @@ static bool IsShown(sal_uLong const nIndex,
     {
         return false;
     }
-    if (pIter && rAnch.GetAnchorId() != RndStdIds::FLY_AT_PARA)
+    if (rAnch.GetAnchorId() == RndStdIds::FLY_AT_PARA)
+    {
+        return pIter == nullptr // not merged
+            || pIter != pEnd    // at least one char visible in node
+            || !IsSelectFrameAnchoredAtPara(rAnchor,
+                    SwPosition(const_cast<SwTextNode&>(*pFirstNode), 0),
+                    SwPosition(const_cast<SwTextNode&>(*pLastNode), pLastNode->Len()));
+    }
+    if (pIter)
     {
         // note: frames are not sorted by anchor position.
         assert(pEnd);
@@ -1274,6 +1282,17 @@ bool IsAnchoredObjShown(SwTextFrame const& rFrame, SwFormatAnchor const& rAnchor
         ret = false;
         auto const pAnchor(rAnchor.GetContentAnchor());
         auto iterFirst(pMergedPara->extents.cbegin());
+        if (iterFirst == pMergedPara->extents.end()
+            && (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA
+                || rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR))
+        {
+            ret = (&pAnchor->nNode.GetNode() == pMergedPara->pFirstNode
+                    && (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA
+                        || pAnchor->nContent == 0))
+                || (&pAnchor->nNode.GetNode() == pMergedPara->pLastNode
+                    && (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA
+                        || pAnchor->nContent == pMergedPara->pLastNode->Len()));
+        }
         auto iter(iterFirst);
         SwTextNode const* pNode(pMergedPara->pFirstNode);
         for ( ; ; ++iter)
@@ -1379,6 +1398,8 @@ void RecreateStartTextFrames(SwTextNode & rNode)
             ? *pFrame->GetMergedPara()->pFirstNode
             : rNode);
         assert(rFirstNode.GetIndex() <= rNode.GetIndex());
+        // clear old one first to avoid DelFrames confusing updates & asserts...
+        pFrame->SetMergedPara(nullptr);
         pFrame->SetMergedPara(sw::CheckParaRedlineMerge(
                     *pFrame, rFirstNode, eMode));
         eMode = sw::FrameMode::New; // Existing is not idempotent!
@@ -1613,6 +1634,10 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                 pPageMaker->CheckInsert( nIndex );
 
             pFrame->InsertBehind( pLay, pPrv );
+            if (pPage) // would null in SwCellFrame ctor
+            {   // tdf#134931 call ResetTurbo(); not sure if Paste() would be
+                pFrame->InvalidatePage(pPage); // better than InsertBehind()?
+            }
             // #i27138#
             // notify accessibility paragraphs objects about changed
             // CONTENT_FLOWS_FROM/_TO relation.

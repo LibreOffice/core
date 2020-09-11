@@ -897,6 +897,7 @@ ErrCode SwWriter::Write( WriterRef const & rxWriter, const OUString* pRealFileNa
 
     if ( xDoc.is() )
     {
+        pTempCursor.reset();
         xDoc.clear();
         bWriteAll = false;
     }

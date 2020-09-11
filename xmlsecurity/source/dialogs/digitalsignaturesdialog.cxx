@@ -531,6 +531,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
     size_t nInfos = maSignatureManager.getCurrentSignatureInformations().size();
     size_t nValidSigs = 0, nValidCerts = 0;
     bool bAllNewSignatures = true;
+    bool bSomePartial = false;
 
     if( nInfos )
     {
@@ -605,11 +606,24 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
 
             if ( bSigValid )
             {
-                bSigValid = DocumentSignatureHelper::checkIfAllFilesAreSigned(
-                      aElementsToBeVerified, rInfo, mode);
+                if (maSignatureManager.getStore().is())
+                {
+                    // ZIP based.
+                    bSigValid = DocumentSignatureHelper::checkIfAllFilesAreSigned(
+                          aElementsToBeVerified, rInfo, mode);
+                }
+                else
+                {
+                    // Assume PDF.
+                    bSigValid = !rInfo.bPartialDocumentSignature;
+                }
 
                 if( bSigValid )
                     nValidSigs++;
+                else
+                {
+                    bSomePartial = true;
+                }
             }
 
             OUString sImage;
@@ -663,8 +677,8 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
 
     bool bShowInvalidState = nInfos && !bAllSigsValid;
 
-    m_xSigsInvalidImg->set_visible( bShowInvalidState );
-    m_xSigsInvalidFI->set_visible( bShowInvalidState );
+    m_xSigsInvalidImg->set_visible( bShowInvalidState && !bSomePartial);
+    m_xSigsInvalidFI->set_visible( bShowInvalidState && !bSomePartial);
 
     bool bShowNotValidatedState = nInfos && bAllSigsValid && !bAllCertsValid;
 
@@ -673,8 +687,8 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
 
     //bAllNewSignatures is always true if we are not in document mode
     bool bShowOldSignature = nInfos && bAllSigsValid && bAllCertsValid && !bAllNewSignatures;
-    m_xSigsOldSignatureImg->set_visible(bShowOldSignature);
-    m_xSigsOldSignatureFI->set_visible(bShowOldSignature);
+    m_xSigsOldSignatureImg->set_visible(bShowOldSignature || bSomePartial);
+    m_xSigsOldSignatureFI->set_visible(bShowOldSignature || bSomePartial);
 
     SignatureHighlightHdl(*m_xSignaturesLB);
 }

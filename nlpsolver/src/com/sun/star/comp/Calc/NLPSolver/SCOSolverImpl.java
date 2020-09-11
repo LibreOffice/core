@@ -90,6 +90,11 @@ public final class SCOSolverImpl extends BaseEvolutionarySolver
     public void solve() {
         initializeSolve();
 
+        if (m_problemEncoder == null)
+        {
+            return;
+        }
+
         //Init:
         int swarmSize = m_swarmSize.getValue();
         SCAgent[] agents = new SCAgent[swarmSize];

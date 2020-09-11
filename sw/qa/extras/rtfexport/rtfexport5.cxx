@@ -1139,6 +1139,45 @@ DECLARE_RTFEXPORT_TEST(testTdf116371, "tdf116371.odt")
     CPPUNIT_ASSERT_DOUBLES_EQUAL(4700.0, getProperty<double>(xShape, "RotateAngle"), 10);
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf133437, "tdf133437.rtf")
+{
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
+
+    // Check total amount of shapes
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(560), xDraws->getCount()); // 285 \shp + 275 \poswX
+
+    xmlDocPtr pDump = parseLayoutDump();
+    // Count shapes on first page
+    {
+        xmlXPathObjectPtr pXmlObj
+            = getXPathNode(pDump, "/root/page[1]/body/txt[1]/anchored/SwAnchoredDrawObject");
+        xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
+        sal_Int32 shapesOnPage = xmlXPathNodeSetGetLength(pXmlNodes);
+        xmlXPathFreeObject(pXmlObj);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(79), shapesOnPage);
+    }
+    // Second page
+    {
+        xmlXPathObjectPtr pXmlObj
+            = getXPathNode(pDump, "/root/page[2]/body/txt[2]/anchored/SwAnchoredDrawObject");
+        xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
+        sal_Int32 shapesOnPage = xmlXPathNodeSetGetLength(pXmlNodes);
+        xmlXPathFreeObject(pXmlObj);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(120), shapesOnPage);
+    }
+    // Third page
+    {
+        xmlXPathObjectPtr pXmlObj
+            = getXPathNode(pDump, "/root/page[3]/body/txt[2]/anchored/SwAnchoredDrawObject");
+        xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
+        sal_Int32 shapesOnPage = xmlXPathNodeSetGetLength(pXmlNodes);
+        xmlXPathFreeObject(pXmlObj);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(86), shapesOnPage);
+    }
+}
+
 DECLARE_RTFEXPORT_TEST(testTdf128320, "tdf128320.odt")
 {
     // Shape does exist in RTF output

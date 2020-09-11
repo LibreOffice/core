@@ -1488,9 +1488,9 @@ short ScTable::CompareCell(
                 bool bNaturalSort = aSortParam.bNaturalSort;    // natural sort
                 bool bCaseSens    = aSortParam.bCaseSens;       // case sensitivity
 
-                if (bUserDef)
+                ScUserList* pList = ScGlobal::GetUserList();
+                if (bUserDef && pList && pList->size() > aSortParam.nUserIndex )
                 {
-                    ScUserList* pList = ScGlobal::GetUserList();
                     const ScUserListData& rData = (*pList)[aSortParam.nUserIndex];
 
                     if ( bNaturalSort )
@@ -3131,6 +3131,8 @@ SCSIZE ScTable::Query(const ScQueryParam& rParamOrg, bool bKeepSub)
             if (bResult)
             {
                 CopyData( aParam.nCol1,j, aParam.nCol2,j, aParam.nDestCol,nOutRow,aParam.nDestTab );
+                if( nTab == aParam.nDestTab ) // copy to self, changes may invalidate caching position hints
+                    blockPos.invalidate();
                 ++nOutRow;
             }
         }

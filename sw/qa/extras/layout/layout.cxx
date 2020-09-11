@@ -470,6 +470,14 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf134272)
+{
+    SwDoc* pDoc = createDoc("tdf134472.odt");
+    CPPUNIT_ASSERT(pDoc);
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/header/txt[2]/infos/bounds", "height", "843");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
 {
     loadURL("private:factory/swriter", nullptr);
@@ -1129,6 +1137,67 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFootnote)
                     "PortionType::Text");
         assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[2]/txt[3]/Text[2]", "Portion", "az");
     }
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf116486)
+{
+    SwDoc* pDoc = createDoc("tdf116486.docx");
+    CPPUNIT_ASSERT(pDoc);
+    OUString aTop = parseDump("/root/page/body/txt/Special", "nHeight");
+    CPPUNIT_ASSERT_EQUAL(OUString("4006"), aTop);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128198)
+{
+    SwDoc* pDoc = createDoc("tdf128198-1.docx");
+    CPPUNIT_ASSERT(pDoc);
+    xmlDocPtr pLayout = parseLayoutDump();
+    // the problem was that line 5 was truncated at "this  "
+    // due to the fly anchored in previous paragraph
+    assertXPath(pLayout, "/root/page/body/txt[2]/LineBreak[5]", "Line",
+                "to access any service, any time, anywhere. From this  perspective, satellite "
+                "boasts some ");
+    assertXPath(pLayout, "/root/page/body/txt[2]/LineBreak[6]", "Line", "significant advantages. ");
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testNoLineBreakAtSlash)
+{
+    load(DATA_DIRECTORY, "no-line-break-at-slash.fodt");
+    xmlDocPtr pLayout = parseLayoutDump();
+
+    // the line break was between  "Foostrasse 13/c/" and "2"
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pLayout, "/root/page[1]/body/txt[1]/child::*[2]");
+    CPPUNIT_ASSERT_EQUAL(std::string("Text"), std::string(reinterpret_cast<char const*>(
+                                                  pXmlObj->nodesetval->nodeTab[0]->name)));
+    xmlXPathFreeObject(pXmlObj);
+    pXmlObj = getXPathNode(pLayout, "/root/page[1]/body/txt[1]/child::*[3]");
+    CPPUNIT_ASSERT_EQUAL(std::string("LineBreak"), std::string(reinterpret_cast<char const*>(
+                                                       pXmlObj->nodesetval->nodeTab[0]->name)));
+    xmlXPathFreeObject(pXmlObj);
+    pXmlObj = getXPathNode(pLayout, "/root/page[1]/body/txt[1]/child::*[4]");
+    CPPUNIT_ASSERT_EQUAL(std::string("Text"), std::string(reinterpret_cast<char const*>(
+                                                  pXmlObj->nodesetval->nodeTab[0]->name)));
+    xmlXPathFreeObject(pXmlObj);
+    pXmlObj = getXPathNode(pLayout, "/root/page[1]/body/txt[1]/child::*[5]");
+    CPPUNIT_ASSERT_EQUAL(std::string("Special"), std::string(reinterpret_cast<char const*>(
+                                                     pXmlObj->nodesetval->nodeTab[0]->name)));
+    xmlXPathFreeObject(pXmlObj);
+    pXmlObj = getXPathNode(pLayout, "/root/page[1]/body/txt[1]/child::*[6]");
+    CPPUNIT_ASSERT_EQUAL(std::string("Text"), std::string(reinterpret_cast<char const*>(
+                                                  pXmlObj->nodesetval->nodeTab[0]->name)));
+    xmlXPathFreeObject(pXmlObj);
+    pXmlObj = getXPathNode(pLayout, "/root/page[1]/body/txt[1]/child::*[7]");
+    CPPUNIT_ASSERT_EQUAL(std::string("LineBreak"), std::string(reinterpret_cast<char const*>(
+                                                       pXmlObj->nodesetval->nodeTab[0]->name)));
+    xmlXPathFreeObject(pXmlObj);
+    pXmlObj = getXPathNode(pLayout, "/root/page[1]/body/txt[1]/child::*[8]");
+    CPPUNIT_ASSERT_EQUAL(std::string("Finish"), std::string(reinterpret_cast<char const*>(
+                                                    pXmlObj->nodesetval->nodeTab[0]->name)));
+    xmlXPathFreeObject(pXmlObj);
+
+    assertXPath(pLayout, "/root/page[1]/body/txt[1]/Text[1]", "Portion", "Blah blah bla bla bla ");
+    assertXPath(pLayout, "/root/page[1]/body/txt[1]/Text[2]", "Portion", "Foostrasse");
+    assertXPath(pLayout, "/root/page[1]/body/txt[1]/Text[3]", "Portion", "13/c/2, etc.");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
@@ -2371,7 +2440,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf115630)
                    "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/push[3]/polyline[1]/point[2]",
                    "x")
               .toInt32();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2886), nXRight - nXLeft);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2895, nXRight - nXLeft, 50);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf108021)
@@ -2604,7 +2673,23 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf129095)
     xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    // check the inner chart area visibility with testing the X axis label
+    // check the inner chart area (relative size) visibility with testing the X axis label
+    assertXPathContent(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray/text",
+                       "Category 1");
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf132956)
+{
+    SwDoc* pDoc = createDoc("tdf132956.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // check the inner chart area (default size) visibility with testing the X axis label
     assertXPathContent(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray/text",
                        "Category 1");
 }
@@ -3825,6 +3910,25 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testContinuousEndnotesMoveBackwards)
     assertXPath(pLayout, "/root/page[1]/ftncont", 0);
     // All endnotes are in a container on page 2.
     assertXPath(pLayout, "/root/page[2]/ftncont", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf134548)
+{
+    createDoc("tdf134548.odt");
+
+    // Second paragraph has two non zero width tabs in beginning of line
+    {
+        OUString sNodeType = parseDump("/root/page/body/txt[2]/Text[1]", "nType");
+        CPPUNIT_ASSERT_EQUAL(OUString("PortionType::TabLeft"), sNodeType);
+        sal_Int32 nWidth = parseDump("/root/page/body/txt[2]/Text[1]", "nWidth").toInt32();
+        CPPUNIT_ASSERT_GREATER(sal_Int32(0), nWidth);
+    }
+    {
+        OUString sNodeType = parseDump("/root/page/body/txt[2]/Text[2]", "nType");
+        CPPUNIT_ASSERT_EQUAL(OUString("PortionType::TabLeft"), sNodeType);
+        sal_Int32 nWidth = parseDump("/root/page/body/txt[2]/Text[2]", "nWidth").toInt32();
+        CPPUNIT_ASSERT_GREATER(sal_Int32(0), nWidth);
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -35,6 +35,21 @@ protected:
     }
 };
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf128197)
+{
+    load(mpTestDocumentPath, "128197_compat14.docx");
+    xmlDocPtr pLayout14 = parseLayoutDump();
+    sal_Int32 nHeight14 = getXPath(pLayout14, "//page[1]/body/txt[1]/infos/bounds", "height").toInt32();
+
+    load(mpTestDocumentPath, "128197_compat15.docx");
+    xmlDocPtr pLayout15 = parseLayoutDump();
+    sal_Int32 nHeight15 = getXPath(pLayout15, "//page[1]/body/txt[1]/infos/bounds", "height").toInt32();
+
+    // In compat mode=14 second line has size of the shape thus entire paragraph height is smaller
+    // So nHeight14 < nHeight15
+    CPPUNIT_ASSERT_LESS(nHeight15, nHeight14);
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf78749, "tdf78749.docx")
 {
     //Shape lost the background image before, now check if it still has...
@@ -239,16 +254,14 @@ DECLARE_OOXMLIMPORT_TEST(testTdf125038c, "tdf125038c.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf83309, "tdf83309.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
-    OUString sNodeType;
+    // Important: bug case had 4 pages
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
 
     // First paragraph does not have tab before
-    sNodeType = parseDump("/root/page/body/txt[1]/Text[1]", "nType");
+    // (same applies to all paragraphs in doc, but lets assume they are
+    // behave same way)
+    OUString sNodeType = parseDump("/root/page[1]/body/txt[1]/Text[1]", "nType");
     CPPUNIT_ASSERT_EQUAL(OUString("PortionType::Text"), sNodeType);
-
-    // Second paragraph starts with tab
-    sNodeType = parseDump("/root/page/body/txt[2]/Text[1]", "nType");
-    CPPUNIT_ASSERT_EQUAL(OUString("PortionType::TabLeft"), sNodeType);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf121661, "tdf121661.docx")

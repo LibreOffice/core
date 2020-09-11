@@ -758,8 +758,7 @@ void Qt5Frame::ToTop(SalFrameToTop nFlags)
         pWidget->raise();
     if ((nFlags & SalFrameToTop::RestoreWhenMin) || (nFlags & SalFrameToTop::ForegroundTask))
         pWidget->activateWindow();
-    else if ((nFlags & (SalFrameToTop::GrabFocus | SalFrameToTop::GrabFocusOnly))
-             && pWidget->isVisible())
+    else if ((nFlags & SalFrameToTop::GrabFocus) || (nFlags & SalFrameToTop::GrabFocusOnly))
     {
         pWidget->activateWindow();
         pWidget->setFocus();

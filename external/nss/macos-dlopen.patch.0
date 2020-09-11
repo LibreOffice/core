@@ -1,14 +1,14 @@
 --- nspr/pr/src/linking/prlink.c
 +++ nspr/pr/src/linking/prlink.c
-@@ -793,7 +793,7 @@
-         /* ensure the file exists if it contains a slash character i.e. path */
-         /* DARWIN's dlopen ignores the provided path and checks for the */
-         /* plain filename in DYLD_LIBRARY_PATH */
--        if (strchr(name, PR_DIRECTORY_SEPARATOR) == NULL ||
-+        if (strchr(name, PR_DIRECTORY_SEPARATOR) == NULL || strncmp(name, "@loader_path/", 13) == 0 ||
-             PR_Access(name, PR_ACCESS_EXISTS) == PR_SUCCESS) {
-             h = dlopen(name, dl_flags);
-         }
+@@ -799,7 +799,7 @@
+          * The reason is that DARWIN's dlopen ignores the provided path
+          * and checks for the plain filename in DYLD_LIBRARY_PATH,
+          * which could load an unexpected version of a library. */
+-        if (strchr(name, PR_DIRECTORY_SEPARATOR) == NULL) {
++        if (strchr(name, PR_DIRECTORY_SEPARATOR) == NULL || strncmp(name, "@loader_path/", 13) == 0) {
+           /* no slash, allow to load from any location */
+           okToLoad = PR_TRUE;
+         } else {
 --- nss/lib/libpkix/pkix_pl_nss/module/pkix_pl_httpcertstore.c
 +++ nss/lib/libpkix/pkix_pl_nss/module/pkix_pl_httpcertstore.c
 @@ -224,7 +224,11 @@

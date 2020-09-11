@@ -64,6 +64,7 @@ class ScRecursionHelper
     bool                                bInIterationReturn;
     bool                                bConverging;
     bool                                bGroupsIndependent;
+    bool                                bAbortingDependencyComputation;
     std::vector< ScFormulaCell* >       aTemporaryGroupCells;
     std::unordered_set< ScFormulaCellGroup* >* pFGSet;
 
@@ -77,8 +78,8 @@ public:
     void    IncRecursionCount()             { ++nRecursionCount; }
     void    DecRecursionCount()             { --nRecursionCount; }
     sal_uInt16 GetDepComputeLevel() const   { return nDependencyComputationLevel; }
-    void    IncDepComputeLevel()            { ++nDependencyComputationLevel; }
-    void    DecDepComputeLevel()            { --nDependencyComputationLevel; }
+    void    IncDepComputeLevel();
+    void    DecDepComputeLevel();
     /// A pure recursion return, no iteration.
     bool    IsInRecursionReturn() const     { return bInRecursionReturn &&
         !bInIterationReturn; }
@@ -116,6 +117,11 @@ public:
     bool AnyCycleMemberInDependencyEvalMode(ScFormulaCell* pCell);
     bool AnyParentFGInCycle();
     void SetFormulaGroupDepEvalMode(bool bSet);
+    // When dependency computation detects a cycle, it may not compute proper cell values.
+    // This sets a flag that ScFormulaCell will use to avoid setting those new values
+    // and resetting the dirty flag, until the dependency computation bails out.
+    void AbortDependencyComputation();
+    bool IsAbortingDependencyComputation() const { return bAbortingDependencyComputation; }
 
     void AddTemporaryGroupCell(ScFormulaCell* cell);
     void CleanTemporaryGroupCells();

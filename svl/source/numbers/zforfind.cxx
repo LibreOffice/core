@@ -949,7 +949,9 @@ inline bool ImpSvNumberInputScan::GetNextNumber( sal_uInt16& i, sal_uInt16& j ) 
 
 bool ImpSvNumberInputScan::GetTimeRef( double& fOutNumber,
                                        sal_uInt16 nIndex, // j-value of the first numeric time part of input, default 0
-                                       sal_uInt16 nCnt ) const // count of numeric time parts
+                                       sal_uInt16 nCnt,   // count of numeric time parts
+                                       SvNumInputOptions eInputOptions
+                                     ) const
 {
     bool bRet = true;
     sal_uInt16 nHour;
@@ -978,6 +980,9 @@ bool ImpSvNumberInputScan::GetTimeRef( double& fOutNumber,
         SAL_WARN( "svl.numbers", "ImpSvNumberInputScan::GetTimeRef: bad number index");
     }
 
+    // 0:123 or 0:0:123 or 0:123:59 is valid
+    bool bAllowDuration = (nHour == 0 && !nAmPm);
+
     if (nAmPm && nHour > 12) // not a valid AM/PM clock time
     {
         bRet = false;
@@ -998,14 +1003,18 @@ bool ImpSvNumberInputScan::GetTimeRef( double& fOutNumber,
     else if (nIndex - nStartIndex < nCnt)
     {
         nMinute = static_cast<sal_uInt16>(sStrArray[nNums[nIndex++]].toInt32());
-        if (nIndex > 1 && nMinute > 59)
-            bRet = false;   // 1:60 or 1:123 is invalid, 123:1 is valid
+        if (!(eInputOptions & SvNumInputOptions::LAX_TIME) && !bAllowDuration
+                && nIndex > 1 && nMinute > 59)
+            bRet = false;   // 1:60 or 1:123 is invalid, 123:1 or 0:123 is valid
+        if (bAllowDuration)
+            bAllowDuration = (nMinute == 0);
     }
     if (nIndex - nStartIndex < nCnt)
     {
         nSecond = static_cast<sal_uInt16>(sStrArray[nNums[nIndex++]].toInt32());
-        if (nIndex > 1 && nSecond > 59 && !(nHour == 23 && nMinute == 59 && nSecond == 60))
-            bRet = false;   // 1:60 or 1:123 or 1:1:123 is invalid, 123:1 or 123:1:1 is valid, or leap second
+        if (!(eInputOptions & SvNumInputOptions::LAX_TIME) && !bAllowDuration
+                && nIndex > 1 && nSecond > 59 && !(nHour == 23 && nMinute == 59 && nSecond == 60))
+            bRet = false;   // 1:60 or 1:123 or 1:1:123 is invalid, 123:1 or 123:1:1 or 0:0:123 is valid, or leap second
     }
     if (nIndex - nStartIndex < nCnt)
     {
@@ -2383,14 +2392,13 @@ bool ImpSvNumberInputScan::ScanStartString( const OUString& rString )
                 }
             }
         }
+        // Skip one trailing '-' or '/' character to recognize June-2007
+        if (nMonth && nPos + 1 == rString.getLength())
+        {
+            SkipChar('-', rString, nPos) || SkipChar('/', rString, nPos);
+        }
     }
 
-    // skip any trailing '-' or '/' chars
-    if (nPos < rString.getLength())
-    {
-        while (SkipChar ('-', rString, nPos) || SkipChar ('/', rString, nPos))
-            ; // do nothing
-    }
     if (nPos < rString.getLength()) // not everything consumed
     {
         // Does input StartString equal StartString of format?
@@ -3649,9 +3657,10 @@ void ImpSvNumberInputScan::ChangeNullDate( const sal_uInt16 Day,
  * Does rString represent a number (also date, time et al)
  */
 bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // string to be analyzed
-                                           SvNumFormatType& F_Type,                   // IN: old type, OUT: new type
+                                           SvNumFormatType& F_Type,         // IN: old type, OUT: new type
                                            double& fOutNumber,              // OUT: number if convertible
-                                           const SvNumberformat* pFormat )  // maybe a number format to match against
+                                           const SvNumberformat* pFormat,   // maybe a number format to match against
+                                           SvNumInputOptions eInputOptions )
 {
     OUString aString;
     bool res; // return value
@@ -4052,7 +4061,7 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
             break;
 
         case SvNumFormatType::TIME:
-            res = GetTimeRef(fOutNumber, 0, nNumericsCnt);
+            res = GetTimeRef(fOutNumber, 0, nNumericsCnt, eInputOptions);
             if ( nSign < 0 )
             {
                 fOutNumber = -fOutNumber;
@@ -4068,7 +4077,7 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
             if ( res )
             {
                 double fTime;
-                res = GetTimeRef( fTime, k, nNumericsCnt - k );
+                res = GetTimeRef( fTime, k, nNumericsCnt - k, eInputOptions);
                 fOutNumber += fTime;
             }
             break;

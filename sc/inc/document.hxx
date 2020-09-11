@@ -805,8 +805,8 @@ public:
                                                   bool bRemoveAutoFilter = false );
     const ScDBData*              GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion) const;
     ScDBData*                    GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion);
-    const ScDBData*              GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
-    ScDBData*                    GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
+    SC_DLLPUBLIC const ScDBData* GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
+    SC_DLLPUBLIC ScDBData*       GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
     void                         RefreshDirtyTableColumnNames();
     SC_DLLPUBLIC sc::ExternalDataMapper& GetExternalDataMapper();
 
@@ -1536,7 +1536,7 @@ public:
                                                SCTAB nTab, InsertDeleteFlags nDelFlag);
     void                         DeleteAreaTab(const ScRange& rRange, InsertDeleteFlags nDelFlag);
 
-    void                         CopyToClip( const ScClipParam& rClipParam, ScDocument* pClipDoc,
+    SC_DLLPUBLIC void            CopyToClip( const ScClipParam& rClipParam, ScDocument* pClipDoc,
                                              const ScMarkData* pMarks, bool bKeepScenarioFlags,
                                              bool bIncludeObjects );
 
@@ -1587,7 +1587,7 @@ public:
 
     /** If pDestRanges is given it overrides rDestRange, rDestRange in this
         case is the overall encompassing range. */
-    void                CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMark,
+    SC_DLLPUBLIC void   CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMark,
                                         InsertDeleteFlags nInsFlag,
                                         ScDocument* pRefUndoDoc,
                                         ScDocument* pClipDoc,

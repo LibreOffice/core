@@ -880,7 +880,10 @@ void CheckResetRedlineMergeFlag(SwTextNode & rNode, Recreate const eRecreateMerg
     if (eRecreateMerged != sw::Recreate::No)
     {
         SwTextNode * pMergeNode(&rNode);
-        if (eRecreateMerged == sw::Recreate::Predecessor)
+        if (eRecreateMerged == sw::Recreate::Predecessor
+            // tdf#135018 check that there is a predecessor node, i.e. rNode
+            // isn't the first node after the body start node
+            && rNode.GetNodes()[rNode.GetIndex() - 1]->StartOfSectionIndex() != 0)
         {
             for (sal_uLong i = rNode.GetIndex() - 1; ; --i)
             {
@@ -2010,7 +2013,7 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
 {
     CHECK_SWPHINTS_IF_FRM(this);
     CHECK_SWPHINTS(pDest);
-    const sal_Int32 nTextStartIdx = rStart.GetIndex();
+    sal_Int32 nTextStartIdx = rStart.GetIndex();
     sal_Int32 nDestStart = rDestStart.GetIndex();      // remember old Pos
 
     if (pDest->GetDoc()->IsClipBoard() && GetNum())
@@ -2101,6 +2104,7 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
 
     // Fetch end only now, because copying into self updates the start index
     // and all attributes
+    nTextStartIdx = rStart.GetIndex();
     const sal_Int32 nEnd = nTextStartIdx + nLen;
 
     // 2. copy attributes
@@ -2248,10 +2252,8 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
         std::reverse(metaFieldRanges.begin(), metaFieldRanges.end());
         for (const auto& pair : metaFieldRanges)
         {
-            const SwIndex aIdx(pDest, std::max<sal_Int32>(pair.first - nTextStartIdx, 0));
-            const sal_Int32 nCount = pair.second - pair.first;
-            if (nCount > 0)
-                pDest->EraseText(aIdx, nCount);
+            const SwIndex aIdx(pDest, pair.first);
+            pDest->EraseText(aIdx, pair.second - pair.first);
         }
     }
 

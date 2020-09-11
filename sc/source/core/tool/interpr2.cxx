@@ -935,7 +935,7 @@ void ScInterpreter::ScGetTimeValue()
     OUString aInputString = GetString().getString();
     sal_uInt32 nFIndex = 0;                 // damit default Land/Spr.
     double fVal;
-    if (pFormatter->IsNumberFormat(aInputString, nFIndex, fVal))
+    if (pFormatter->IsNumberFormat(aInputString, nFIndex, fVal, SvNumInputOptions::LAX_TIME))
     {
         SvNumFormatType eType = pFormatter->GetType(nFIndex);
         if (eType == SvNumFormatType::TIME || eType == SvNumFormatType::DATETIME)

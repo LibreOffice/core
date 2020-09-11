@@ -1,9 +1,10 @@
 --- a/a/nss/lib/zlib/gzguts.h	2010-08-22 03:07:03.000000000 +0200
 +++ b/b/nss/lib/zlib/gzguts.h	2012-07-17 08:52:14.821552788 +0200
-@@ -26,6 +26,9 @@
- #  include <limits.h>
+@@ -26,6 +26,10 @@
+ #  define write _write
+ #  define close _close
  #endif
- #include <fcntl.h>
++
 +#ifndef _WIN32
 +#include <unistd.h>
 +#endif

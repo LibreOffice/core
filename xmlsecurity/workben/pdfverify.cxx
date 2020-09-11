@@ -23,6 +23,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/filter/pdfdocument.hxx>
+#include <comphelper/scopeguard.hxx>
 
 #include <pdfio/pdfdocument.hxx>
 
@@ -80,11 +81,11 @@ int pdfVerify(int nArgc, char** pArgv)
                                                                     uno::UNO_QUERY);
     comphelper::setProcessServiceFactory(xMultiServiceFactory);
 
+    InitVCL();
+    comphelper::ScopeGuard g([] { DeInitVCL(); });
     if (nArgc > 3 && OString(pArgv[3]) == "-p")
     {
-        InitVCL();
         generatePreview(pArgv[1], pArgv[2]);
-        DeInitVCL();
         return 0;
     }
 
@@ -159,8 +160,8 @@ int pdfVerify(int nArgc, char** pArgv)
             for (size_t i = 0; i < aSignatures.size(); ++i)
             {
                 SignatureInformation aInfo(i);
-                bool bLast = i == aSignatures.size() - 1;
-                if (!xmlsecurity::pdfio::ValidateSignature(aStream, aSignatures[i], aInfo, bLast))
+                if (!xmlsecurity::pdfio::ValidateSignature(aStream, aSignatures[i], aInfo,
+                                                           aDocument))
                 {
                     SAL_WARN("xmlsecurity.pdfio", "failed to determine digest match");
                     return 1;
@@ -169,6 +170,8 @@ int pdfVerify(int nArgc, char** pArgv)
                 bool bSuccess
                     = aInfo.nStatus == xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
                 std::cerr << "signature #" << i << ": digest match? " << bSuccess << std::endl;
+                std::cerr << "signature #" << i << ": partial? " << aInfo.bPartialDocumentSignature
+                          << std::endl;
             }
         }
 

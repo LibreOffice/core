@@ -41,6 +41,7 @@
 #include <scmod.hxx>
 #include <dpcache.hxx>
 #include <dpobject.hxx>
+#include <clipparam.hxx>
 
 #include <svx/svdpage.hxx>
 #include <svx/svdograf.hxx>
@@ -195,6 +196,12 @@ public:
     void testPreserveTextWhitespace2XLSX();
     void testTextDirectionXLSX();
 
+    xmlDocPtr testTdf95640(const OUString& rFileName, sal_Int32 nSourceFormat,
+                           sal_Int32 nDestFormat);
+    void testTdf95640_ods_to_xlsx();
+    void testTdf95640_ods_to_xlsx_with_standard_list();
+    void testTdf95640_xlsx_to_xlsx();
+
     void testRefStringXLSX();
     void testRefStringConfigXLSX();
     void testRefStringUnspecified();
@@ -227,6 +234,7 @@ public:
     void testTdf126177XLSX();
     void testCommentTextVAlignment();
     void testCommentTextHAlignment();
+    void testValidationCopyPaste();
 
     void testXltxExport();
     void testRotatedImageODS();
@@ -326,6 +334,9 @@ public:
     CPPUNIT_TEST(testMoveCellAnchoredShapesODS);
     CPPUNIT_TEST(testMatrixMultiplicationXLSX);
     CPPUNIT_TEST(testTextDirectionXLSX);
+    CPPUNIT_TEST(testTdf95640_ods_to_xlsx);
+    CPPUNIT_TEST(testTdf95640_ods_to_xlsx_with_standard_list);
+    CPPUNIT_TEST(testTdf95640_xlsx_to_xlsx);
 
     CPPUNIT_TEST(testRefStringXLSX);
     CPPUNIT_TEST(testRefStringConfigXLSX);
@@ -359,6 +370,7 @@ public:
     CPPUNIT_TEST(testTdf126177XLSX);
     CPPUNIT_TEST(testCommentTextVAlignment);
     CPPUNIT_TEST(testCommentTextHAlignment);
+    CPPUNIT_TEST(testValidationCopyPaste);
 
     CPPUNIT_TEST(testXltxExport);
     CPPUNIT_TEST(testRotatedImageODS);
@@ -3954,6 +3966,60 @@ void ScExportTest::testTextDirectionXLSX()
     assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[3]/x:alignment", "readingOrder", "2");//RTL
 }
 
+xmlDocPtr ScExportTest::testTdf95640(const OUString& rFileName, sal_Int32 nSourceFormat,
+                                     sal_Int32 nDestFormat)
+{
+    ScDocShellRef xShell = loadDoc(rFileName, nSourceFormat);
+    CPPUNIT_ASSERT(xShell);
+
+    auto pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), nDestFormat);
+    xShell->DoClose();
+
+    return XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+}
+
+void ScExportTest::testTdf95640_ods_to_xlsx()
+{
+    // Roundtripping sort options with user defined list to XLSX
+    xmlDocPtr pDoc = testTdf95640("tdf95640.", FORMAT_ODS, FORMAT_XLSX);
+
+    assertXPath(pDoc, "//x:worksheet/x:autoFilter", "ref", "A1:B4");
+
+    assertXPath(pDoc, "//x:worksheet/x:autoFilter/x:sortState/x:sortCondition", "ref", "A2:A4");
+
+    assertXPath(pDoc, "//x:worksheet/x:autoFilter/x:sortState/x:sortCondition", "customList",
+                "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec");
+}
+
+void ScExportTest::testTdf95640_ods_to_xlsx_with_standard_list()
+{
+    // Roundtripping sort options with user defined list to XLSX
+    xmlDocPtr pDoc = testTdf95640("tdf95640_standard_list.", FORMAT_ODS, FORMAT_XLSX);
+
+    assertXPath(pDoc, "//x:worksheet/x:autoFilter", "ref", "A1:B4");
+
+    assertXPath(pDoc, "//x:worksheet/x:autoFilter/x:sortState/x:sortCondition", "ref", "A2:A4");
+
+    assertXPath(pDoc, "//x:worksheet/x:autoFilter/x:sortState/x:sortCondition", "customList",
+                "Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday");
+}
+
+void ScExportTest::testTdf95640_xlsx_to_xlsx()
+{
+    // XLSX Roundtripping sort options with custom sort list - note
+    // that compared to ODS source documents above, here we _actually_
+    // can use custom lists (beyond the global user defines), like
+    // low, medium, high
+    xmlDocPtr pDoc = testTdf95640("tdf95640.", FORMAT_XLSX, FORMAT_XLSX);
+
+    assertXPath(pDoc, "//x:worksheet/x:autoFilter", "ref", "A1:B4");
+
+    assertXPath(pDoc, "//x:worksheet/x:autoFilter/x:sortState/x:sortCondition", "ref", "A2:A4");
+
+    assertXPath(pDoc, "//x:worksheet/x:autoFilter/x:sortState/x:sortCondition", "customList",
+                "Low,Medium,High");
+}
+
 void ScExportTest::testTdf88657ODS()
 {
     ScDocShellRef xDocSh = loadDoc("tdf88657.", FORMAT_ODS);
@@ -4344,6 +4410,42 @@ void ScExportTest::testTdf91634XLSX()
     CPPUNIT_ASSERT(pXmlRels);
     assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId1']", "Target", "https://www.google.com/");
     assertXPath(pXmlRels, "/r:Relationships/r:Relationship[@Id='rId1']", "TargetMode", "External");
+}
+
+void ScExportTest::testValidationCopyPaste()
+{
+    ScDocShellRef xDocSh = loadDoc("validation-copypaste.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh.is());
+    ScDocument& rSrcDoc = xDocSh->GetDocument();
+
+    // Copy B1 from src doc to clip
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    ScRange aSrcRange(1, 0, 1);
+    ScClipParam aClipParam(aSrcRange, false);
+    ScMarkData aMark(rSrcDoc.MaxRow(), rSrcDoc.MaxCol());
+    aMark.SetMarkArea(aSrcRange);
+    rSrcDoc.CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
+
+    // Create second document, paste B1 from clip
+    ScDocShell* pShell2
+        = new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS
+                         | SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
+    pShell2->DoInitNew();
+    ScDocument& rDestDoc = pShell2->GetDocument();
+    ScRange aDstRange(1, 0, 0);
+    ScMarkData aMark2(rDestDoc.MaxRow(), rDestDoc.MaxCol());
+    aMark2.SetMarkArea(aDstRange);
+    rDestDoc.CopyFromClip(aDstRange, aMark2, InsertDeleteFlags::ALL, nullptr, &aClipDoc);
+
+    // save as XLSX
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(&(*pShell2), FORMAT_XLSX);
+
+    // check validation
+    xmlDocPtr pDoc
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pDoc);
+    assertXPathContent(pDoc, "/x:worksheet/x:dataValidations/x:dataValidation/x:formula1", "#REF!");
 }
 
 void ScExportTest::testTdf115159()

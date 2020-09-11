@@ -18,8 +18,8 @@
 -core_abspath = '$(if $(findstring :,$(1)),$(1),$(if $(filter /%,$(1)),$(1),$(PWD)/$(1)))'
 +core_abspath = '$(if $(findstring :,$(1)),$(1),$(if $(filter /%,$(shell cygpath -m $(1))),$(1),$(shell cygpath -m $(PWD)/$(1))))'
  
- $(OBJDIR)/$(PROG_PREFIX)%$(OBJ_SUFFIX): %.c
- 	@$(MAKE_OBJDIR)
+ $(OBJDIR)/$(PROG_PREFIX)%$(OBJ_SUFFIX): %.c | $$(@D)/d
+ ifdef USE_NT_C_SYNTAX
 --- a/a/nspr/pr/include/md/_win95.h
 +++ b/b/nspr/pr/include/md/_win95.h
 @@ -312,7 +312,7 @@
