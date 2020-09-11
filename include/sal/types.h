@@ -115,12 +115,6 @@ typedef unsigned char       sal_uInt8;
 */
 typedef char sal_Char;
 
-/** A legacy synonym for `signed char`.
-
-    @deprecated use plain `signed char` instead.
-*/
-typedef signed char sal_sChar;
-
 /** A legacy synonym for `unsigned char`.
 
     @deprecated use plain `unsigned char` instead.
