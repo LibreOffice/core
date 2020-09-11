@@ -22,6 +22,30 @@
       "revId": "9cf6214808221f6a4e4e5cfc4983535ed83cf206",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4edd275a_acd98c07",
+        "filename": "svtools/source/control/ctrltool.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-09-11T18:50:47Z",
+      "side": 1,
+      "message": "it would have to be a huge value to make a difference and these are more human-scale values that are surely unlikely to read the thousands at the extreme.",
+      "parentUuid": "3fb13eb4_c339b2b1",
+      "range": {
+        "startLine": 779,
+        "startChar": 36,
+        "endLine": 779,
+        "endChar": 46
+      },
+      "revId": "9cf6214808221f6a4e4e5cfc4983535ed83cf206",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
