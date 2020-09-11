@@ -151,16 +151,16 @@ void XMLPropertyStates_Impl::FillPropertyStateVector(
 
 class FilterPropertyInfo_Impl
 {
-    const OUString     sApiName;
-    std::list<sal_uInt32>   aIndexes;
+    OUString                msApiName;
+    std::vector<sal_uInt32> maIndexes;
 
 public:
 
     FilterPropertyInfo_Impl( const OUString& rApiName,
                              const sal_uInt32 nIndex);
 
-    const OUString& GetApiName() const { return sApiName; }
-    std::list<sal_uInt32>& GetIndexes() { return aIndexes; }
+    const OUString& GetApiName() const { return msApiName; }
+    std::vector<sal_uInt32>& GetIndexes() { return maIndexes; }
 
     // for sort
     bool operator< ( const FilterPropertyInfo_Impl& rArg ) const
@@ -172,9 +172,9 @@ public:
 FilterPropertyInfo_Impl::FilterPropertyInfo_Impl(
         const OUString& rApiName,
         const sal_uInt32 nIndex ) :
-    sApiName( rApiName )
+    msApiName( rApiName )
 {
-    aIndexes.push_back(nIndex);
+    maIndexes.push_back(nIndex);
 }
 
 typedef std::list<FilterPropertyInfo_Impl> FilterPropertyInfoList_Impl;
@@ -242,7 +242,12 @@ const uno::Sequence<OUString>& FilterPropertiesInfo_Impl::GetApiNames()
                 if ( aOld->GetApiName() == aCurrent->GetApiName() )
                 {
                     // if equal: merge index lists
-                    aOld->GetIndexes().merge( aCurrent->GetIndexes() );
+                    std::vector<sal_uInt32> aMerged;
+                    std::merge(aOld->GetIndexes().begin(), aOld->GetIndexes().end(),
+                               aCurrent->GetIndexes().begin(), aCurrent->GetIndexes().end(),
+                               std::back_inserter(aMerged));
+                    aOld->GetIndexes() = std::move(aMerged);
+                    aCurrent->GetIndexes().clear();
                     // erase element, and continue with next
                     aCurrent = aPropInfos.erase( aCurrent );
                     nCount--;
