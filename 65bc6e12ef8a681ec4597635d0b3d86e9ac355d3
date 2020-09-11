@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4fcb7068_f7ad8246",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 5837,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-09-11T15:28:47Z",
+      "side": 1,
+      "message": "Could you fix this typo as part of your next commit, please?",
+      "range": {
+        "startLine": 5837,
+        "startChar": 63,
+        "endLine": 5837,
+        "endChar": 71
+      },
+      "revId": "65bc6e12ef8a681ec4597635d0b3d86e9ac355d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
