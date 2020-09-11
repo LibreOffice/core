@@ -409,10 +409,23 @@ void PPTShape::addShape(
             // if this is a group shape, we have to add also each child shape
             Reference<XShapes> xShapes(xShape, UNO_QUERY);
             if (xShapes.is())
+            {
+                if (meFrameType == FRAMETYPE_DIAGRAM)
+                {
+                    rFilterBase.setDiagramFontHeights(&getDiagramFontHeights());
+                }
                 addChildren( rFilterBase, *this, pTheme, xShapes, pShapeMap, aTransformation );
+                if (meFrameType == FRAMETYPE_DIAGRAM)
+                {
+                    rFilterBase.setDiagramFontHeights(nullptr);
+                }
+            }
 
             if (meFrameType == FRAMETYPE_DIAGRAM)
+            {
                 keepDiagramCompatibilityInfo();
+                syncDiagramFontHeights();
+            }
         }
     }
     catch (const Exception&)

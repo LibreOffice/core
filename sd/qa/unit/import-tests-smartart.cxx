@@ -111,6 +111,7 @@ public:
     void testFillColorList();
     void testTdf134221();
     void testLinearRule();
+    void testAutofitSync();
 
     CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
 
@@ -159,6 +160,7 @@ public:
     CPPUNIT_TEST(testFillColorList);
     CPPUNIT_TEST(testTdf134221);
     CPPUNIT_TEST(testLinearRule);
+    CPPUNIT_TEST(testAutofitSync);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1560,6 +1562,34 @@ void SdImportTestSmartArt::testLinearRule()
     // - Actual  : 20183
     // i.e. the arrow height was larger than the canvas given to the smartart on slide 1.
     CPPUNIT_ASSERT_LESSEQUAL(static_cast<sal_Int32>(10092), xShape->getSize().Height);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testAutofitSync()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/smartart-autofit-sync.pptx"), PPTX);
+
+    uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xMiddle = getChildShape(xDiagram, 2);
+    uno::Reference<beans::XPropertySet> xFirstInner(getChildShape(getChildShape(xMiddle, 0), 0),
+                                                    uno::UNO_QUERY);
+    sal_Int16 nFirstScale = 0;
+    CPPUNIT_ASSERT(xFirstInner->getPropertyValue("TextFitToSizeScale") >>= nFirstScale);
+    CPPUNIT_ASSERT_GREATER(static_cast<sal_Int16>(0), nFirstScale);
+    uno::Reference<beans::XPropertySet> xSecondInner(getChildShape(getChildShape(xMiddle, 2), 0),
+                                                     uno::UNO_QUERY);
+    sal_Int16 nSecondScale = 0;
+    CPPUNIT_ASSERT(xSecondInner->getPropertyValue("TextFitToSizeScale") >>= nSecondScale);
+    CPPUNIT_ASSERT_GREATER(static_cast<sal_Int16>(0), nSecondScale);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 56
+    // - Actual  : 100
+    // i.e. the left shape had no scale-down and the right shape was scaled down, even if it was
+    // requested that their scaling matches.
+    CPPUNIT_ASSERT_EQUAL(nSecondScale, nFirstScale);
 
     xDocShRef->DoClose();
 }
