@@ -1353,11 +1353,9 @@ static OUString lcl_GetUniqueFlyName(const SwDoc* pDoc, const char* pDefStrId, s
             if (pObj)
                 lcl_collectUsedNums(aUsedNums, nNmLen, *pObj, aName);
         }
-        else
-        {
-            OUString sName = pFlyFormat->GetName();
-            lcl_collectUsedNums(aUsedNums, nNmLen, sName, aName);
-        }
+
+        OUString sName = pFlyFormat->GetName();
+        lcl_collectUsedNums(aUsedNums, nNmLen, sName, aName);
     }
 
     // All numbers are flagged accordingly, so determine the right one
