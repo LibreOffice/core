@@ -66,10 +66,11 @@
 
 // We don't want to end up with 2GB read in one line just because of malformed
 // multiline fields, so chop it _somewhere_, which is twice supported columns
-// times maximum cell content length, 2*1024*64K=128M, and because it's
-// sal_Unicode that's 256MB. If it's 2GB of data without LF we're out of luck
-// anyway.
-const sal_Int32 nArbitraryLineLengthLimit = 2 * MAXCOLCOUNT * 65536;
+// times arbitrary maximum cell content length, 2*1024*64K=128M, and because
+// it's sal_Unicode that's 256MB. If it's 2GB of data without LF we're out of
+// luck anyway.
+constexpr sal_Int32 nArbitraryCellLengthLimit = SAL_MAX_UINT16;
+constexpr sal_Int32 nArbitraryLineLengthLimit = 2 * MAXCOLCOUNT * nArbitraryCellLengthLimit;
 
 namespace
 {
@@ -632,15 +633,15 @@ static QuoteType lcl_isEscapedOrFieldEndQuote( sal_Int32 nQuotes, const sal_Unic
  */
 static bool lcl_appendLineData( OUString& rField, const sal_Unicode* p1, const sal_Unicode* p2 )
 {
-    OSL_ENSURE( rField.getLength() + (p2 - p1) <= SAL_MAX_UINT16, "lcl_appendLineData: data overflow");
-    if (rField.getLength() + (p2 - p1) <= SAL_MAX_UINT16)
+    if (rField.getLength() + (p2 - p1) <= nArbitraryCellLengthLimit)
     {
         rField += OUString( p1, sal::static_int_cast<sal_Int32>( p2 - p1 ) );
         return true;
     }
     else
     {
-        rField += OUString( p1, SAL_MAX_UINT16 - rField.getLength() );
+        SAL_WARN( "sc", "lcl_appendLineData: data overflow");
+        rField += OUString( p1, nArbitraryCellLengthLimit - rField.getLength() );
         return false;
     }
 }
@@ -1274,26 +1275,26 @@ static OUString lcl_GetFixed( const OUString& rLine, sal_Int32 nStart, sal_Int32
     rbIsQuoted = (pStr[nStart] == '"' && pStr[nSpace-1] == '"');
     if (rbIsQuoted)
     {
-        bool bFits = (nSpace - nStart - 3 <= SAL_MAX_UINT16);
-        OSL_ENSURE( bFits, "lcl_GetFixed: line doesn't fit into data");
+        bool bFits = (nSpace - nStart - 3 <= nArbitraryCellLengthLimit);
         if (bFits)
             return rLine.copy(nStart+1, std::max< sal_Int32 >(0, nSpace-nStart-2));
         else
         {
+            SAL_WARN( "sc", "lcl_GetFixed: line doesn't fit into data");
             rbOverflowCell = true;
-            return rLine.copy(nStart+1, SAL_MAX_UINT16);
+            return rLine.copy(nStart+1, nArbitraryCellLengthLimit);
         }
     }
     else
     {
-        bool bFits = (nSpace - nStart <= SAL_MAX_UINT16);
-        OSL_ENSURE( bFits, "lcl_GetFixed: line doesn't fit into data");
+        bool bFits = (nSpace - nStart <= nArbitraryCellLengthLimit);
         if (bFits)
             return rLine.copy(nStart, nSpace-nStart);
         else
         {
+            SAL_WARN( "sc", "lcl_GetFixed: line doesn't fit into data");
             rbOverflowCell = true;
-            return rLine.copy(nStart, SAL_MAX_UINT16);
+            return rLine.copy(nStart, nArbitraryCellLengthLimit);
         }
     }
 }
