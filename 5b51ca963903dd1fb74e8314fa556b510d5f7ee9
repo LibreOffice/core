@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7374c783_fb5635e4",
+        "filename": "xmloff/source/style/xmlexppr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-11T08:38:50Z",
+      "side": 1,
+      "message": "I seem to remember some commits turning these into \"foo::foo() \u003d default\"; no idea if that has some benefit, but if yes, can it be put into a plugin maybe?",
+      "range": {
+        "startLine": 111,
+        "startChar": 0,
+        "endLine": 113,
+        "endChar": 1
+      },
+      "revId": "5b51ca963903dd1fb74e8314fa556b510d5f7ee9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
