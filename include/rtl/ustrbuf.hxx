@@ -710,7 +710,7 @@ public:
         @param   str   the 8-Bit ASCII characters to be appended.
         @return  this string buffer.
      */
-    OUStringBuffer & appendAscii( const sal_Char * str )
+    OUStringBuffer & appendAscii( const char * str )
     {
         return appendAscii( str, rtl_str_getLength( str ) );
     }
@@ -733,7 +733,7 @@ public:
         @param len the number of characters to append; must be non-negative
         @return  this string buffer.
      */
-    OUStringBuffer & appendAscii( const sal_Char * str, sal_Int32 len)
+    OUStringBuffer & appendAscii( const char * str, sal_Int32 len)
     {
         rtl_uStringbuffer_insert_ascii( &pData, &nCapacity, getLength(), str, len );
         return *this;
