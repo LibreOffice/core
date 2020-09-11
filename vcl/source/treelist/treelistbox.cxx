@@ -3390,7 +3390,6 @@ void SvTreeListBox::InitSettings()
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     vcl::Font aFont = rStyleSettings.GetFieldFont();
-    aFont.SetColor(rStyleSettings.GetWindowTextColor());
     SetPointFont(*this, aFont);
     AdjustEntryHeightAndRecalc();
 
