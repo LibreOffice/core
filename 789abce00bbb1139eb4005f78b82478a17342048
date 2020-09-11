@@ -22,6 +22,30 @@
       "revId": "789abce00bbb1139eb4005f78b82478a17342048",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "248bc606_0e9dd861",
+        "filename": "sc/source/core/data/documen3.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1140,
+      "author": {
+        "id": 1002677
+      },
+      "writtenOn": "2020-09-11T11:33:53Z",
+      "side": 1,
+      "message": "Sorry, i just blindly copy-pasted the name from an other place where it was a reference.\nThx for reporting, i will fix it soon.",
+      "parentUuid": "a2f97a14_6f34adc8",
+      "range": {
+        "startLine": 1140,
+        "startChar": 12,
+        "endLine": 1140,
+        "endChar": 18
+      },
+      "revId": "789abce00bbb1139eb4005f78b82478a17342048",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
