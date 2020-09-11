@@ -24,7 +24,7 @@ gperf_header = """%language=C++
 %struct-type
 struct xmltoken
 {
-  const sal_Char *name; XMLTokenEnum nToken;
+  const char *name; XMLTokenEnum nToken;
 };
 %%
 """

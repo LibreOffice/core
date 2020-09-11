@@ -39,9 +39,9 @@ namespace math {
  */
 inline rtl::OString doubleToString(double fValue, rtl_math_StringFormat eFormat,
                                    sal_Int32 nDecPlaces,
-                                   sal_Char cDecSeparator,
+                                   char cDecSeparator,
                                    sal_Int32 const * pGroups,
-                                   sal_Char cGroupSeparator,
+                                   char cGroupSeparator,
                                    bool bEraseTrailingDecZeros = false)
 {
     rtl::OString aResult;
@@ -55,7 +55,7 @@ inline rtl::OString doubleToString(double fValue, rtl_math_StringFormat eFormat,
  */
 inline rtl::OString doubleToString(double fValue, rtl_math_StringFormat eFormat,
                                    sal_Int32 nDecPlaces,
-                                   sal_Char cDecSeparator,
+                                   char cDecSeparator,
                                    bool bEraseTrailingDecZeros = false)
 {
     rtl::OString aResult;
@@ -71,8 +71,8 @@ inline rtl::OString doubleToString(double fValue, rtl_math_StringFormat eFormat,
 */
 inline void doubleToStringBuffer(
     rtl::OStringBuffer& rBuffer, double fValue, rtl_math_StringFormat eFormat,
-    sal_Int32 nDecPlaces, sal_Char cDecSeparator, sal_Int32 const * pGroups,
-    sal_Char cGroupSeparator, bool bEraseTrailingDecZeros = false)
+    sal_Int32 nDecPlaces, char cDecSeparator, sal_Int32 const * pGroups,
+    char cGroupSeparator, bool bEraseTrailingDecZeros = false)
 {
     rtl_String ** pData;
     sal_Int32 * pCapacity;
@@ -89,7 +89,7 @@ inline void doubleToStringBuffer(
 */
 inline void doubleToStringBuffer(
     rtl::OStringBuffer& rBuffer, double fValue, rtl_math_StringFormat eFormat,
-    sal_Int32 nDecPlaces, sal_Char cDecSeparator,
+    sal_Int32 nDecPlaces, char cDecSeparator,
     bool bEraseTrailingDecZeros = false)
 {
     rtl_String ** pData;
@@ -170,12 +170,12 @@ inline void doubleToUStringBuffer( rtl::OUStringBuffer& rBuffer, double fValue,
 /** A wrapper around rtl_math_stringToDouble.
  */
 inline double stringToDouble(rtl::OString const & rString,
-                             sal_Char cDecSeparator, sal_Char cGroupSeparator,
+                             char cDecSeparator, char cGroupSeparator,
                              rtl_math_ConversionStatus * pStatus = NULL,
                              sal_Int32 * pParsedEnd = NULL)
 {
-    sal_Char const * pBegin = rString.getStr();
-    sal_Char const * pEnd;
+    char const * pBegin = rString.getStr();
+    char const * pEnd;
     double fResult = rtl_math_stringToDouble(pBegin,
                                              pBegin + rString.getLength(),
                                              cDecSeparator, cGroupSeparator,

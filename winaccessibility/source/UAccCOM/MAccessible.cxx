@@ -2911,7 +2911,7 @@ void CMAccessible::ConvertAnyToVariant(const css::uno::Any &rAnyVal, VARIANT *pv
         {
         case TypeClass_CHAR:
             pvData->vt = VT_UI1;
-            memcpy(&pvData->bVal, rAnyVal.getValue(), sizeof(sal_Char));
+            memcpy(&pvData->bVal, rAnyVal.getValue(), sizeof(char));
             break;
 
         case TypeClass_BOOLEAN:

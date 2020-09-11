@@ -67,8 +67,6 @@ bool ConvertValueOf::VisitCallExpr( const CallExpr* call )
                 string arg0 = func->getParamDecl( 0 )->getType().getAsString();
                 if( arg0 == "sal_Bool" )
                     replaceText( call->getCallee()->getSourceRange(), "OString::boolean" );
-                else if( arg0 == "sal_Char" )
-                    replaceText( call->getCallee()->getSourceRange(), "OString" );
                 else
                     {
                     replaceText( call->getCallee()->getSourceRange(), "OString::number" );
@@ -116,7 +114,7 @@ void ConvertValueOf::removeCast( const Expr* arg )
         if( cast->getType()->isIntegerType() && castFrom->getType()->isIntegerType())
             {
             string fromType = castFrom->getType().getAsString();
-            if( fromType != "sal_Bool" && fromType != "bool" && fromType != "sal_Char" && fromType != "sal_Unicode" )
+            if( fromType != "sal_Bool" && fromType != "bool" && fromType != "sal_Unicode" )
                 {
                 if( const CXXFunctionalCastExpr* funcCast = dyn_cast< CXXFunctionalCastExpr >( cast ))
                     {
