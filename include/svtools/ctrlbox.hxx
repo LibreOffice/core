@@ -30,10 +30,11 @@
 
 namespace weld { class CustomWeld; }
 
-class VirtualDevice;
 class BitmapEx;
 class BorderWidthImpl;
 class FontList;
+class VclSimpleEvent;
+class VirtualDevice;
 
 /** Utility class storing the border line width, style and colors. The widths
     are defined in Twips.
@@ -339,7 +340,8 @@ private:
     SVT_DLLPRIVATE void         ImplDestroyFontList();
 
     DECL_LINK(CustomRenderHdl, weld::ComboBox::render_args, void);
-    DECL_STATIC_LINK(FontNameBox, CustomGetSizeHdl, OutputDevice&, Size);
+    DECL_LINK(CustomGetSizeHdl, OutputDevice&, Size);
+    DECL_LINK(SettingsChangedHdl, VclSimpleEvent&, void);
     DECL_LINK(UpdateHdl, Timer*, void);
 
     void            LoadMRUEntries( const OUString& aFontMRUEntriesFile );
