@@ -1543,7 +1543,7 @@ public:
 
     ~ScopedTrueTypeFont();
 
-    SFErrCodes open(void const * pBuffer, sal_uInt32 nLen, sal_uInt32 nFaceNum);
+    SFErrCodes open(void const * pBuffer, sal_uInt32 nLen, sal_uInt32 nFaceNum, const FontCharMapRef xCharMap = nullptr);
 
     TrueTypeFont * get() const { return m_pFont; }
     TrueTypeFont* operator->() { return m_pFont; }
@@ -1561,10 +1561,10 @@ ScopedTrueTypeFont::~ScopedTrueTypeFont()
 }
 
 SFErrCodes ScopedTrueTypeFont::open(void const * pBuffer, sal_uInt32 nLen,
-                             sal_uInt32 nFaceNum)
+                             sal_uInt32 nFaceNum, const FontCharMapRef xCharMap)
 {
     OSL_ENSURE(m_pFont == nullptr, "already open");
-    return OpenTTFontBuffer(pBuffer, nLen, nFaceNum, &m_pFont);
+    return OpenTTFontBuffer(pBuffer, nLen, nFaceNum, &m_pFont, xCharMap);
 }
 
 bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
@@ -1629,7 +1629,7 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
         nFaceNum = ~0U;  // indicate "TTC font extracts only"
 
     ScopedTrueTypeFont aSftTTF;
-    SFErrCodes nRC = aSftTTF.open( xRawFontData.get(), xRawFontData.size(), nFaceNum );
+    SFErrCodes nRC = aSftTTF.open( xRawFontData.get(), xRawFontData.size(), nFaceNum, pFont->GetFontCharMap());
     if( nRC != SFErrCodes::Ok )
         return false;
 
@@ -1745,7 +1745,7 @@ void WinSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
         nFaceNum = ~0U;  // indicate "TTC font extracts only"
 
     ScopedTrueTypeFont aSftTTF;
-    SFErrCodes nRC = aSftTTF.open( xRawFontData.get(), xRawFontData.size(), nFaceNum );
+    SFErrCodes nRC = aSftTTF.open(xRawFontData.get(), xRawFontData.size(), nFaceNum, pFont->GetFontCharMap());
     if( nRC != SFErrCodes::Ok )
         return;
 
