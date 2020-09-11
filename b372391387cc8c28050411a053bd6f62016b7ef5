@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2aa67dc9_444f47e0",
+        "filename": "sw/qa/extras/rtfexport/rtfexport4.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-09-11T07:50:52Z",
+      "side": 1,
+      "message": "Care to document how this test failed without the fix? See e.g. testTbrlFrame in this file for an example. I found these comments of great help when I change something and I need to understand if my change broke exactly what the test is trying to assert or there is now a 3rd state.",
+      "revId": "b372391387cc8c28050411a053bd6f62016b7ef5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
