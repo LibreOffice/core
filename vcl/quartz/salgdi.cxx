@@ -763,51 +763,7 @@ void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bV
     if( nRC != SFErrCodes::Ok )
         return;
 
-    const int nGlyphCount = pSftFont->glyphCount();
-    if( nGlyphCount > 0 )
-    {
-        // get glyph metrics
-        rGlyphWidths.resize(nGlyphCount);
-        std::vector<sal_uInt16> aGlyphIds(nGlyphCount);
-        for( int i = 0; i < nGlyphCount; i++ )
-        {
-            aGlyphIds[i] = static_cast<sal_uInt16>(i);
-        }
-
-        std::unique_ptr<sal_uInt16[]> pGlyphMetrics = ::GetTTSimpleGlyphMetrics( pSftFont, aGlyphIds.data(),
-                                                                               nGlyphCount, bVertical );
-        if( pGlyphMetrics )
-        {
-            for( int i = 0; i < nGlyphCount; ++i )
-            {
-                rGlyphWidths[i] = pGlyphMetrics[i];
-            }
-            pGlyphMetrics.reset();
-        }
-
-        rtl::Reference<CoreTextFontFace> rCTFontData(new CoreTextFontFace(*pFontData, pFontData->GetFontId()));
-        FontCharMapRef xFCMap = rCTFontData->GetFontCharMap();
-        SAL_WARN_IF( !xFCMap.is() || !xFCMap->GetCharCount(), "vcl", "no charmap" );
-
-        // get unicode<->glyph encoding
-        // TODO? avoid sft mapping by using the xFCMap itself
-        int nCharCount = xFCMap->GetCharCount();
-        sal_uInt32 nChar = xFCMap->GetFirstChar();
-        for( ; --nCharCount >= 0; nChar = xFCMap->GetNextChar( nChar ) )
-        {
-            if( nChar > 0xFFFF ) // TODO: allow UTF-32 chars
-                break;
-
-            sal_Ucs nUcsChar = static_cast<sal_Ucs>(nChar);
-            sal_uInt32 nGlyph = ::MapChar( pSftFont, nUcsChar );
-            if( nGlyph > 0 )
-            {
-                rUnicodeEnc[ nUcsChar ] = nGlyph;
-            }
-        }
-
-        xFCMap = nullptr;
-    }
+    SalGraphics::GetGlyphWidths(*pSftFont, *pFontData, bVertical, rGlyphWidths, rUnicodeEnc);
 
     ::CloseTTFont( pSftFont );
 }

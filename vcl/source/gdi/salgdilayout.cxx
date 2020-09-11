@@ -28,8 +28,10 @@
 #include <svsys.h>
 #endif
 #endif
+#include <PhysicalFontFace.hxx>
 #include <salgdi.hxx>
 #include <salframe.hxx>
+#include <sft.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <FileDefinitionWidgetDraw.hxx>
@@ -892,6 +894,54 @@ OUString SalGraphics::getRenderBackendName() const
     if (GetImpl())
         return GetImpl()->getRenderBackendName();
     return OUString();
+}
+
+void SalGraphics::GetGlyphWidths(const vcl::AbstractTrueTypeFont& rTTF, const PhysicalFontFace& rFontFace,
+                                 const bool bVertical, std::vector< sal_Int32 >& rWidths,
+                                 Ucs2UIntMap& rUnicodeEnc) const
+{
+    rWidths.clear();
+    rUnicodeEnc.clear();
+
+    const int nGlyphCount = rTTF.glyphCount();
+    if (nGlyphCount <= 0)
+        return;
+
+    FontCharMapRef xFCMap = rFontFace.GetFontCharMap();
+    if (!xFCMap.is() || !xFCMap->GetCharCount())
+    {
+        SAL_WARN("vcl.fonts", "no charmap");
+        return;
+    }
+
+    // get glyph metrics
+    rWidths.resize(nGlyphCount);
+    std::vector<sal_uInt16> aGlyphIds(nGlyphCount);
+    for (int i = 0; i < nGlyphCount; i++)
+        aGlyphIds[i] = static_cast<sal_uInt16>(i);
+
+    std::unique_ptr<sal_uInt16[]> pGlyphMetrics
+        = GetTTSimpleGlyphMetrics(&rTTF, aGlyphIds.data(), nGlyphCount, bVertical);
+    if (pGlyphMetrics)
+    {
+        for (int i = 0; i < nGlyphCount; ++i)
+            rWidths[i] = pGlyphMetrics[i];
+        pGlyphMetrics.reset();
+    }
+
+    // get unicode<->glyph encoding
+    int nCharCount = xFCMap->GetCharCount();
+    sal_uInt32 nChar = xFCMap->GetFirstChar();
+    for (; --nCharCount >= 0; nChar = xFCMap->GetNextChar(nChar))
+    {
+        if (nChar > 0xFFFF)
+            continue;
+
+        sal_Ucs nUcsChar = static_cast<sal_Ucs>(nChar);
+        sal_uInt32 nGlyph = ::MapChar(&rTTF, nUcsChar);
+        if (nGlyph > 0)
+            rUnicodeEnc[nUcsChar] = nGlyph;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
