@@ -46,6 +46,30 @@
       "revId": "60fe2a2efb0257547e57a21ad4684db55e3c6537",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c0b0957_add01e0b",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-11T08:18:47Z",
+      "side": 1,
+      "message": "My question is: why would we want to drop the initialization, that would only result in random garbage in the compiled binaries where currently zeroes would be? So the result on this drop would be binaries differing in these places randomly, without any positive impact on any aspect?",
+      "parentUuid": "206c66e1_2d91701a",
+      "range": {
+        "startLine": 105,
+        "startChar": 71,
+        "endLine": 105,
+        "endChar": 78
+      },
+      "revId": "60fe2a2efb0257547e57a21ad4684db55e3c6537",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
