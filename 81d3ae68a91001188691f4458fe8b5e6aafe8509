@@ -94,6 +94,30 @@
     },
     {
       "key": {
+        "uuid": "9eed11fe_b56a3dc3",
+        "filename": "chart2/uiconfig/ui/tp_DataLabel.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-09-11T13:16:11Z",
+      "side": 1,
+      "message": "I think, this is more understandable with the title \"Leader lines\", than \"custom leader lines\" or \"labels in custom positions\". We will write about \"custom alignment/custom position or manually positioned labels\"  in the associated help item.",
+      "parentUuid": "1af7f436_c41b1cbe",
+      "range": {
+        "startLine": 491,
+        "startChar": 108,
+        "endLine": 491,
+        "endChar": 133
+      },
+      "revId": "81d3ae68a91001188691f4458fe8b5e6aafe8509",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dd65716b_1c630b48",
         "filename": "chart2/uiconfig/ui/tp_DataLabel.ui",
         "patchSetId": 5
