@@ -321,37 +321,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf133000_numStyleFormatting, "tdf133000_numStyleFo
     CPPUNIT_ASSERT( nLevel1Margin < nLevel2Margin );
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf134260, "tdf134260.docx")
-{
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 0
-    // - Actual  : 1270
-
-    auto xNum1Levels
-        = getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(1), "NumberingRules");
-
-    CPPUNIT_ASSERT_EQUAL(
-        sal_Int32(0),
-        comphelper::SequenceAsHashMap(xNum1Levels->getByIndex(0))["ListtabStopPosition"]
-            .get<sal_Int32>());
-
-    auto xNum2Levels
-        = getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(2), "NumberingRules");
-
-    CPPUNIT_ASSERT_EQUAL(
-        sal_Int32(0),
-        comphelper::SequenceAsHashMap(xNum2Levels->getByIndex(0))["ListtabStopPosition"]
-            .get<sal_Int32>());
-
-    auto xNum3Levels
-        = getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(3), "NumberingRules");
-
-    CPPUNIT_ASSERT_EQUAL(
-        sal_Int32(0),
-        comphelper::SequenceAsHashMap(xNum3Levels->getByIndex(0))["ListtabStopPosition"]
-            .get<sal_Int32>());
-}
-
 DECLARE_ODFEXPORT_TEST(testArabicZeroNumbering, "arabic-zero-numbering.docx")
 {
     auto xNumberingRules
@@ -376,6 +345,24 @@ DECLARE_ODFEXPORT_TEST(testArabicZero3Numbering, "arabic-zero3-numbering.docx")
     // i.e. numbering type was ARABIC, not ARABIC_ZERO3.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(style::NumberingType::ARABIC_ZERO3),
                          aMap["NumberingType"].get<sal_uInt16>());
+}
+
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf136644, "tdf136644.docx")
+{
+    xmlDocUniquePtr pXmlDoc = parseExport("word/numbering.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Without the fix in place, the tabs' position wouldn't have been 0
+    assertXPath(pXmlDoc, "//w:numbering/w:abstractNum[@w:abstractNumId='1']/w:lvl[@w:ilvl='0']/w:pPr/w:tabs/w:tab",
+                "pos", "0");
+    assertXPath(pXmlDoc, "//w:numbering/w:abstractNum[@w:abstractNumId='2']/w:lvl[@w:ilvl='0']/w:pPr/w:tabs/w:tab",
+                "pos", "0");
+    assertXPath(pXmlDoc, "//w:numbering/w:abstractNum[@w:abstractNumId='3']/w:lvl[@w:ilvl='0']/w:pPr/w:tabs/w:tab",
+                "pos", "0");
+    assertXPath(pXmlDoc, "//w:numbering/w:abstractNum[@w:abstractNumId='4']/w:lvl[@w:ilvl='0']/w:pPr/w:tabs/w:tab",
+                "pos", "0");
+    assertXPath(pXmlDoc, "//w:numbering/w:abstractNum[@w:abstractNumId='5']/w:lvl[@w:ilvl='0']/w:pPr/w:tabs/w:tab",
+                "pos", "0");
 }
 
 DECLARE_ODFEXPORT_TEST(testArabicZero4Numbering, "arabic-zero4-numbering.docx")
