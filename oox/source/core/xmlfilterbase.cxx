@@ -180,6 +180,7 @@ struct XmlFilterBaseImpl
     RelationsMap                   maRelationsMap;
     TextFieldStack                 maTextFieldStack;
     const NamespaceMap&            mrNamespaceMap;
+    NamedShapePairs* mpDiagramFontHeights = nullptr;
 
     /// @throws RuntimeException
     explicit            XmlFilterBaseImpl();
@@ -956,6 +957,13 @@ void XmlFilterBase::setMissingExtDrawing()
 {
     mbMissingExtDrawing = true;
 }
+
+void XmlFilterBase::setDiagramFontHeights(NamedShapePairs* pDiagramFontHeights)
+{
+    mxImpl->mpDiagramFontHeights = pDiagramFontHeights;
+}
+
+NamedShapePairs* XmlFilterBase::getDiagramFontHeights() { return mxImpl->mpDiagramFontHeights; }
 
 OUString XmlFilterBase::getNamespaceURL(sal_Int32 nNSID) const
 {

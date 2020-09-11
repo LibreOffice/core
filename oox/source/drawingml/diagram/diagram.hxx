@@ -49,7 +49,10 @@ typedef std::map<const dgm::Point*, ShapePtr> PresPointShapeMap;
 class DiagramLayout
 {
 public:
-    DiagramLayout(const Diagram& rDgm) : mrDgm(rDgm) {}
+    DiagramLayout(Diagram& rDgm)
+        : mrDgm(rDgm)
+    {
+    }
     void setDefStyle( const OUString & sDefStyle )
         { msDefStyle = sDefStyle; }
     void setMinVer( const OUString & sMinVer )
@@ -60,8 +63,7 @@ public:
         { msTitle = sTitle; }
     void setDesc( const OUString & sDesc )
         { msDesc = sDesc; }
-    const Diagram& getDiagram() const
-        { return mrDgm; }
+    Diagram& getDiagram() { return mrDgm; }
     LayoutNodePtr & getNode()
         { return mpNode; }
     const LayoutNodePtr & getNode() const
@@ -80,7 +82,7 @@ public:
         { return maPresPointShapeMap; }
 
 private:
-    const Diagram& mrDgm;
+    Diagram& mrDgm;
     OUString msDefStyle;
     OUString msMinVer;
     OUString msUniqueId;
@@ -128,6 +130,7 @@ typedef std::map<OUString,DiagramColor> DiagramColorMap;
 class Diagram
 {
 public:
+    explicit Diagram(const ShapePtr& pShape);
     void setData( const DiagramDataPtr & pData )
         { mpData = pData; }
     const DiagramDataPtr& getData() const
@@ -146,7 +149,10 @@ public:
     void addTo( const ShapePtr & pShape );
 
     css::uno::Sequence<css::beans::PropertyValue> getDomsAsPropertyValues() const;
+    ShapePtr getShape() { return mpShape; }
+
 private:
+    ShapePtr mpShape;
     DiagramDataPtr                 mpData;
     DiagramLayoutPtr               mpLayout;
     DiagramQStyleMap               maStyles;
