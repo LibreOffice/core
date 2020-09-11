@@ -162,8 +162,8 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
     // setup font size array
     m_pHeightArray.reset();
 
-    const sal_IntPtr* pTempAry;
-    const sal_IntPtr* pAry = pFontList->GetSizeAry( aFontMetric );
+    const int* pTempAry;
+    const int* pAry = pFontList->GetSizeAry( aFontMetric );
     sal_uInt16 nSizeCount = 0;
     while ( pAry[nSizeCount] )
         nSizeCount++;
