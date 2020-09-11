@@ -16,6 +16,24 @@
       "revId": "ba4b3d5f7a0fe8d0d985e98897e041d59093d8b0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5be7dffc_7700d2e9",
+        "filename": "reportdesign/inc/rptui_slotid.hrc",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-09-11T10:08:52Z",
+      "side": 0,
+      "message": "Not sure macros are even possible in the report builder. But too much energy spent on those \ncompat. concerns, so let\u0027s just keep it as it is now, leaving it for someone else to decide what to do in a future commit.",
+      "parentUuid": "55faea55_37edfd5b",
+      "revId": "ba4b3d5f7a0fe8d0d985e98897e041d59093d8b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
