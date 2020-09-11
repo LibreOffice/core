@@ -49,6 +49,7 @@ private:
     const sal_uInt16*   mpGlyphIds;       // individual glyphid mappings
     int                 mnRangeCount;
     int                 mnCharCount;      // covered codepoints
+    const bool m_bSymbolic;
 };
 
 bool VCL_DLLPUBLIC ParseCMAP( const unsigned char* pRawData, int nRawLength, CmapResult& );
