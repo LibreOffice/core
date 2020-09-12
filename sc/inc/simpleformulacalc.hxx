@@ -27,7 +27,7 @@ private:
     bool mbCalculated;
     std::unique_ptr<ScTokenArray> mpCode;
     ScAddress maAddr;
-    ScDocument* mpDoc;
+    ScDocument& mrDoc;
     ScFormulaResult maResult;
     formula::FormulaGrammar::Grammar maGram;
     bool mbMatrixResult;
@@ -36,7 +36,7 @@ private:
     bool mbMatrixFormula;
 
 public:
-    ScSimpleFormulaCalculator(ScDocument* pDoc, const ScAddress& rAddr,
+    ScSimpleFormulaCalculator(ScDocument& rDoc, const ScAddress& rAddr,
             const OUString& rFormula, bool bMatrixFormula,
             formula::FormulaGrammar::Grammar eGram = formula::FormulaGrammar::GRAM_DEFAULT);
     ~ScSimpleFormulaCalculator();
