@@ -298,7 +298,7 @@ void ScFormulaDlg::Close()
 bool ScFormulaDlg::calculateValue( const OUString& rStrExp, OUString& rStrResult, bool bMatrixFormula )
 {
     std::unique_ptr<ScSimpleFormulaCalculator> pFCell( new ScSimpleFormulaCalculator(
-                m_pDoc, m_CursorPos, rStrExp, bMatrixFormula));
+                *m_pDoc, m_CursorPos, rStrExp, bMatrixFormula));
     pFCell->SetLimitString(true);
 
     // HACK! to avoid neither #REF! from ColRowNames
@@ -313,7 +313,7 @@ bool ScFormulaDlg::calculateValue( const OUString& rStrExp, OUString& rStrResult
             // ==0: would be an area if...
             OUString aBraced = "(" + rStrExp + ")";
             pFCell.reset( new ScSimpleFormulaCalculator(
-                        m_pDoc, m_CursorPos, aBraced, bMatrixFormula));
+                        *m_pDoc, m_CursorPos, aBraced, bMatrixFormula));
             pFCell->SetLimitString(true);
         }
         else

@@ -17,19 +17,19 @@
 
 #define DISPLAY_LEN 15
 
-ScSimpleFormulaCalculator::ScSimpleFormulaCalculator( ScDocument* pDoc, const ScAddress& rAddr,
+ScSimpleFormulaCalculator::ScSimpleFormulaCalculator( ScDocument& rDoc, const ScAddress& rAddr,
         const OUString& rFormula, bool bMatrixFormula, formula::FormulaGrammar::Grammar eGram )
     : mnFormatType(SvNumFormatType::ALL)
     , mbCalculated(false)
     , maAddr(rAddr)
-    , mpDoc(pDoc)
+    , mrDoc(rDoc)
     , maGram(eGram)
     , mbMatrixResult(false)
     , mbLimitString(false)
     , mbMatrixFormula(bMatrixFormula)
 {
     // compile already here
-    ScCompiler aComp(mpDoc, maAddr, eGram, true, bMatrixFormula);
+    ScCompiler aComp(&mrDoc, maAddr, eGram, true, bMatrixFormula);
     mpCode = aComp.CompileString(rFormula);
     if(mpCode->GetCodeError() == FormulaError::NONE && mpCode->GetLen())
         aComp.CompileTokenArray();
@@ -46,17 +46,17 @@ void ScSimpleFormulaCalculator::Calculate()
 
     mbCalculated = true;
 
-    ScInterpreter aInt(mpDoc->GetFormulaCell( maAddr ), mpDoc, mpDoc->GetNonThreadedContext(), maAddr, *mpCode);
+    ScInterpreter aInt(mrDoc.GetFormulaCell( maAddr ), &mrDoc, mrDoc.GetNonThreadedContext(), maAddr, *mpCode);
     if (mbMatrixFormula)
         aInt.AssertFormulaMatrix();
 
-    std::unique_ptr<sfx2::LinkManager> pNewLinkMgr( new sfx2::LinkManager(mpDoc->GetDocumentShell()) );
+    std::unique_ptr<sfx2::LinkManager> pNewLinkMgr( new sfx2::LinkManager(mrDoc.GetDocumentShell()) );
     aInt.SetLinkManager( pNewLinkMgr.get() );
 
     formula::StackVar aIntType = aInt.Interpret();
     if ( aIntType == formula::svMatrixCell )
     {
-        ScCompiler aComp(mpDoc, maAddr, maGram);
+        ScCompiler aComp(&mrDoc, maAddr, maGram);
         OUStringBuffer aStr;
         aComp.CreateStringFromToken(aStr, aInt.GetResultToken().get());
 
