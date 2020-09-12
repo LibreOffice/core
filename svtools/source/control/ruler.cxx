@@ -1915,7 +1915,7 @@ void Ruler::ImplEndDrag()
 
 void Ruler::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if ( rMEvt.IsLeft() || IsTracking() )
+    if ( !rMEvt.IsLeft() || IsTracking() )
         return;
 
     Point   aMousePos = rMEvt.GetPosPixel();
