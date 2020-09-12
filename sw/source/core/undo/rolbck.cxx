@@ -820,7 +820,7 @@ void SwHistoryTextFieldmark::ResetInDoc(SwDoc* pDoc)
 }
 
 SwHistorySetAttrSet::SwHistorySetAttrSet( const SfxItemSet& rSet,
-                        sal_uLong nNodePos, const std::set<sal_uInt16> &rSetArr )
+                        sal_uLong nNodePos, const o3tl::sorted_vector<sal_uInt16> &rSetArr )
     : SwHistoryHint( HSTRY_SETATTRSET )
     , m_OldSet( rSet )
     , m_ResetArray( 0, 4 )
