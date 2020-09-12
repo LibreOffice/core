@@ -36,8 +36,14 @@ published constants RenderingCapabilities
 
     /** The implementation is able to store the data persistent in the system
         so that it does not get lost when the source application no longer exist.
+        @deprecated since 7.1, rather use "Persistent" const
     */
     const byte Persistant = 2;
+
+    /** The implementation is able to store the data persistent in the system
+        so that it does not get lost when the source application no longer exist.
+    */
+    const byte Persistent = 2;
 };
 
 
