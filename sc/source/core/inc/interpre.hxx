@@ -167,7 +167,7 @@ public:
     /** Detect if string should be used as regular expression or wildcard
         expression or literal string.
      */
-    static utl::SearchParam::SearchType DetectSearchType( const OUString& rStr, const ScDocument* pDoc );
+    static utl::SearchParam::SearchType DetectSearchType( const OUString& rStr, const ScDocument& rDoc );
 
     /// Fail safe division, returning a FormulaError::DivisionByZero coded into a double
     /// if denominator is 0.0
