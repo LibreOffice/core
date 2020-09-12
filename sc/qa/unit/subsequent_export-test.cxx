@@ -41,6 +41,8 @@
 #include <scmod.hxx>
 #include <dpcache.hxx>
 #include <dpobject.hxx>
+#include <stlpool.hxx>
+#include <attrib.hxx>
 
 #include <svx/svdpage.hxx>
 #include <svx/svdograf.hxx>
