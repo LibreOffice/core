@@ -1700,7 +1700,7 @@ void ScInputHandler::LOKPasteFunctionData(const OUString& rFunctionName)
 }
 
 // Calculate selection and display as tip help
-static OUString lcl_Calculate( const OUString& rFormula, ScDocument* pDoc, const ScAddress &rPos )
+static OUString lcl_Calculate( const OUString& rFormula, ScDocument& rDoc, const ScAddress &rPos )
 {
     //TODO: Merge with ScFormulaDlg::CalcValue and move into Document!
     // Quotation marks for Strings are only inserted here.
@@ -1708,7 +1708,7 @@ static OUString lcl_Calculate( const OUString& rFormula, ScDocument* pDoc, const
     if(rFormula.isEmpty())
         return OUString();
 
-    std::unique_ptr<ScSimpleFormulaCalculator> pCalc( new ScSimpleFormulaCalculator( pDoc, rPos, rFormula, false ) );
+    std::unique_ptr<ScSimpleFormulaCalculator> pCalc( new ScSimpleFormulaCalculator( &rDoc, rPos, rFormula, false ) );
 
     // FIXME: HACK! In order to not get a #REF! for ColRowNames, if a name is actually inserted as a Range
     // into the whole Formula, but is interpreted as a single cell reference when displaying it on its own
@@ -1720,7 +1720,7 @@ static OUString lcl_Calculate( const OUString& rFormula, ScDocument* pDoc, const
         {   // ==1: Single one is as a Parameter always a Range
             // ==0: It might be one, if ...
             OUString aBraced = "(" + rFormula + ")";
-            pCalc.reset( new ScSimpleFormulaCalculator( pDoc, rPos, aBraced, false ) );
+            pCalc.reset( new ScSimpleFormulaCalculator( &rDoc, rPos, aBraced, false ) );
         }
         else
             bColRowName = false;
@@ -1730,7 +1730,7 @@ static OUString lcl_Calculate( const OUString& rFormula, ScDocument* pDoc, const
     if ( nErrCode != FormulaError::NONE )
         return ScGlobal::GetErrorString(nErrCode);
 
-    SvNumberFormatter& aFormatter = *(pDoc->GetFormatTable());
+    SvNumberFormatter& aFormatter = *rDoc.GetFormatTable();
     OUString aValue;
     if ( pCalc->IsValue() )
     {
@@ -1772,7 +1772,7 @@ void ScInputHandler::FormulaPreview()
         if (aPart.isEmpty())
             aPart = mpEditEngine->GetText(0);
         ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocShell()->GetDocument();
-        aValue = lcl_Calculate( aPart, &rDoc, aCursorPos );
+        aValue = lcl_Calculate( aPart, rDoc, aCursorPos );
     }
 
     if (!aValue.isEmpty())
