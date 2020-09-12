@@ -3005,6 +3005,8 @@ void DomainMapper::data(const sal_uInt8* /*buf*/, size_t /*len*/)
 
 void DomainMapper::lcl_startSectionGroup()
 {
+    m_pImpl->StartSectionInfo();
+
     if (!m_pImpl->isInIndexContext() && !m_pImpl->isInBibliographyContext())
     {
         m_pImpl->PushProperties(CONTEXT_SECTION);
@@ -3015,37 +3017,38 @@ void DomainMapper::lcl_startSectionGroup()
 
 void DomainMapper::lcl_endSectionGroup()
 {
-    if (m_pImpl->isInIndexContext() || m_pImpl->isInBibliographyContext())
-        return;
-
-    m_pImpl->CheckUnregisteredFrameConversion();
-    m_pImpl->ExecuteFrameConversion();
-    // When pasting, it's fine to not have any paragraph inside the document at all.
-    if (m_pImpl->GetIsFirstParagraphInSection() && m_pImpl->IsNewDoc())
+    if (!m_pImpl->isInIndexContext() && !m_pImpl->isInBibliographyContext())
     {
-        // This section has no paragraph at all (e.g. they are all actually in a frame).
-        // If this section has a page break, there would be nothing to apply to the page
-        // style, so force a dummy paragraph.
-        lcl_startParagraphGroup();
-        lcl_startCharacterGroup();
-        sal_uInt8 const sBreak[] = { 0xd };
-        lcl_text(sBreak, 1);
-        lcl_endCharacterGroup();
-        lcl_endParagraphGroup();
+        m_pImpl->CheckUnregisteredFrameConversion();
+        m_pImpl->ExecuteFrameConversion();
+        // When pasting, it's fine to not have any paragraph inside the document at all.
+        if (m_pImpl->GetIsFirstParagraphInSection() && m_pImpl->IsNewDoc())
+        {
+            // This section has no paragraph at all (e.g. they are all actually in a frame).
+            // If this section has a page break, there would be nothing to apply to the page
+            // style, so force a dummy paragraph.
+            lcl_startParagraphGroup();
+            lcl_startCharacterGroup();
+            sal_uInt8 const sBreak[] = { 0xd };
+            lcl_text(sBreak, 1);
+            lcl_endCharacterGroup();
+            lcl_endParagraphGroup();
+        }
+        PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_SECTION);
+        SectionPropertyMap* pSectionContext = dynamic_cast< SectionPropertyMap* >( pContext.get() );
+        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+        if(pSectionContext)
+        {
+            pSectionContext->CloseSectionGroup( *m_pImpl );
+            // Remove the dummy paragraph if added for
+            // handling the section properties if section starts with a table
+            if (m_pImpl->GetIsDummyParaAddedForTableInSection())
+                m_pImpl->RemoveDummyParaForTableInSection();
+        }
+        m_pImpl->SetIsTextFrameInserted( false );
+        m_pImpl->PopProperties(CONTEXT_SECTION);
     }
-    PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_SECTION);
-    SectionPropertyMap* pSectionContext = dynamic_cast< SectionPropertyMap* >( pContext.get() );
-    OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-    if(pSectionContext)
-    {
-        pSectionContext->CloseSectionGroup( *m_pImpl );
-        // Remove the dummy paragraph if added for
-        // handling the section properties if section starts with a table
-        if (m_pImpl->GetIsDummyParaAddedForTableInSection())
-            m_pImpl->RemoveDummyParaForTableInSection();
-    }
-    m_pImpl->SetIsTextFrameInserted( false );
-    m_pImpl->PopProperties(CONTEXT_SECTION);
+    m_pImpl->EndSectionInfo();
 }
 
 void DomainMapper::lcl_startParagraphGroup()
