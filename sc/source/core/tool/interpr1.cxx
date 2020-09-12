@@ -4933,7 +4933,7 @@ void ScInterpreter::ScMatch()
             if ( bIsVBAMode )
                 rParam.eSearchType = utl::SearchParam::SearchType::Wildcard;
             else
-                rParam.eSearchType = DetectSearchType(rEntry.GetQueryItem().maString.getString(), &mrDoc);
+                rParam.eSearchType = DetectSearchType(rEntry.GetQueryItem().maString.getString(), mrDoc);
         }
 
         if (pMatSrc) // The source data is matrix array.
@@ -5475,7 +5475,7 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
             {
                 rParam.FillInExcelSyntax(mrDoc.GetSharedStringPool(), aString.getString(), 0, pFormatter);
                 if (rItem.meType == ScQueryEntry::ByString)
-                    rParam.eSearchType = DetectSearchType(rItem.maString.getString(), &mrDoc);
+                    rParam.eSearchType = DetectSearchType(rItem.maString.getString(), mrDoc);
             }
             ScAddress aAdr;
             aAdr.SetTab( nTab3 );
@@ -5789,7 +5789,7 @@ void ScInterpreter::ScCountIf()
             {
                 rParam.FillInExcelSyntax(mrDoc.GetSharedStringPool(), aString.getString(), 0, pFormatter);
                 if (rItem.meType == ScQueryEntry::ByString)
-                    rParam.eSearchType = DetectSearchType(rItem.maString.getString(), &mrDoc);
+                    rParam.eSearchType = DetectSearchType(rItem.maString.getString(), mrDoc);
             }
             rParam.nCol1  = nCol1;
             rParam.nCol2  = nCol2;
@@ -6134,7 +6134,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
             {
                 rParam.FillInExcelSyntax(mrDoc.GetSharedStringPool(), aString.getString(), 0, pFormatter);
                 if (rItem.meType == ScQueryEntry::ByString)
-                    rParam.eSearchType = DetectSearchType(rItem.maString.getString(), &mrDoc);
+                    rParam.eSearchType = DetectSearchType(rItem.maString.getString(), mrDoc);
             }
             rParam.nCol1  = nCol1;
             rParam.nCol2  = nCol2;
@@ -7079,7 +7079,7 @@ void ScInterpreter::ScLookup()
     rEntry.nField = nCol1;
     ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
     if (rItem.meType == ScQueryEntry::ByString)
-        aParam.eSearchType = DetectSearchType(rItem.maString.getString(), &mrDoc);
+        aParam.eSearchType = DetectSearchType(rItem.maString.getString(), mrDoc);
 
     ScQueryCellIterator aCellIter(&mrDoc, mrContext, nTab1, aParam, false);
     SCCOL nC;
@@ -7310,7 +7310,7 @@ void ScInterpreter::CalculateLookup(bool bHLookup)
 
     ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
     if (rItem.meType == ScQueryEntry::ByString)
-        aParam.eSearchType = DetectSearchType(rItem.maString.getString(), &mrDoc);
+        aParam.eSearchType = DetectSearchType(rItem.maString.getString(), mrDoc);
     if (pMat)
     {
         SCSIZE nMatCount = bHLookup ? nC : nR;
@@ -7798,7 +7798,7 @@ std::unique_ptr<ScDBQueryParamBase> ScInterpreter::GetDBParams( bool& rMissingFi
                 rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
 
                 if (!bNumber && pParam->eSearchType == utl::SearchParam::SearchType::Normal)
-                    pParam->eSearchType = DetectSearchType(aQueryStr, &mrDoc);
+                    pParam->eSearchType = DetectSearchType(aQueryStr, mrDoc);
             }
             return pParam;
         }
@@ -9237,7 +9237,7 @@ void ScInterpreter::ScSearchB()
         // search aSubStr for asStr
         sal_Int32 nPos = 0;
         sal_Int32 nEndPos = aSubStr.getLength();
-        utl::SearchParam::SearchType eSearchType = DetectSearchType( asStr, &mrDoc );
+        utl::SearchParam::SearchType eSearchType = DetectSearchType( asStr, mrDoc );
         utl::SearchParam sPar( asStr, eSearchType, false, '~', false );
         utl::TextSearch sT( sPar, *ScGlobal::getCharClassPtr() );
         if ( !sT.SearchForward( aSubStr, &nPos, &nEndPos ) )
@@ -9313,7 +9313,7 @@ void ScInterpreter::ScSearch()
         PushNoValue();
     else
     {
-        utl::SearchParam::SearchType eSearchType = DetectSearchType( SearchStr, &mrDoc );
+        utl::SearchParam::SearchType eSearchType = DetectSearchType( SearchStr, mrDoc );
         utl::SearchParam sPar(SearchStr, eSearchType, false, '~', false);
         utl::TextSearch sT( sPar, *ScGlobal::getCharClassPtr() );
         bool bBool = sT.SearchForward(sStr, &nPos, &nEndPos);
@@ -9917,23 +9917,12 @@ bool ScInterpreter::MayBeWildcard( const OUString& rStr )
     return false;
 }
 
-utl::SearchParam::SearchType ScInterpreter::DetectSearchType( const OUString& rStr, const ScDocument* pDoc )
+utl::SearchParam::SearchType ScInterpreter::DetectSearchType( const OUString& rStr, const ScDocument& rDoc )
 {
-    if (pDoc)
-    {
-        if (pDoc->GetDocOptions().IsFormulaWildcardsEnabled())
-            return MayBeWildcard( rStr ) ? utl::SearchParam::SearchType::Wildcard : utl::SearchParam::SearchType::Normal;
-        if (pDoc->GetDocOptions().IsFormulaRegexEnabled())
-            return MayBeRegExp( rStr ) ? utl::SearchParam::SearchType::Regexp : utl::SearchParam::SearchType::Normal;
-    }
-    else
-    {
-        /* TODO: obtain the global config for this rare case? */
-        if (MayBeRegExp( rStr, true))
-            return utl::SearchParam::SearchType::Regexp;
-        if (MayBeWildcard( rStr ))
-            return utl::SearchParam::SearchType::Wildcard;
-    }
+    if (rDoc.GetDocOptions().IsFormulaWildcardsEnabled())
+        return MayBeWildcard( rStr ) ? utl::SearchParam::SearchType::Wildcard : utl::SearchParam::SearchType::Normal;
+    if (rDoc.GetDocOptions().IsFormulaRegexEnabled())
+        return MayBeRegExp( rStr ) ? utl::SearchParam::SearchType::Regexp : utl::SearchParam::SearchType::Normal;
     return utl::SearchParam::SearchType::Normal;
 }
 
