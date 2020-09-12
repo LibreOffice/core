@@ -46,7 +46,7 @@ void ScSimpleFormulaCalculator::Calculate()
 
     mbCalculated = true;
 
-    ScInterpreter aInt(mrDoc.GetFormulaCell( maAddr ), &mrDoc, mrDoc.GetNonThreadedContext(), maAddr, *mpCode);
+    ScInterpreter aInt(mrDoc.GetFormulaCell( maAddr ), mrDoc, mrDoc.GetNonThreadedContext(), maAddr, *mpCode);
     if (mbMatrixFormula)
         aInt.AssertFormulaMatrix();
 

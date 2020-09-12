@@ -1928,7 +1928,7 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
         }
         else
         {
-            pScopedInterpreter.reset(new ScInterpreter( this, pDocument, rContext, aPos, *pCode ));
+            pScopedInterpreter.reset(new ScInterpreter( this, *pDocument, rContext, aPos, *pCode ));
             pInterpreter = pScopedInterpreter.get();
         }
 
@@ -2354,7 +2354,7 @@ void ScFormulaCell::HandleStuffAfterParallelCalculation(ScInterpreter* pInterpre
         pInterpreter->Init(this, aPos, *pCode);
     else
     {
-        pScopedInterpreter.reset(new ScInterpreter( this, pDocument, pDocument->GetNonThreadedContext(), aPos, *pCode ));
+        pScopedInterpreter.reset(new ScInterpreter( this, *pDocument, pDocument->GetNonThreadedContext(), aPos, *pCode ));
         pInterpreter = pScopedInterpreter.get();
     }
 
@@ -4928,7 +4928,7 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
             {
                 context = aContextGetterGuard.GetInterpreterContextForThreadIdx(i);
                 assert(!context->pInterpreter);
-                aInterpreters[i].reset(new ScInterpreter(this, pDocument, *context, mxGroup->mpTopCell->aPos, *pCode, true));
+                aInterpreters[i].reset(new ScInterpreter(this, *pDocument, *context, mxGroup->mpTopCell->aPos, *pCode, true));
                 context->pInterpreter = aInterpreters[i].get();
                 ScDocument::SetupFromNonThreadedContext(*context, i);
                 rThreadPool.pushTask(std::make_unique<Executor>(aTag, i, nThreadCount, pDocument, context, mxGroup->mpTopCell->aPos,
@@ -5181,14 +5181,14 @@ bool ScFormulaCell::InterpretInvariantFormulaGroup()
 
         ScCompiler aComp(pDocument, aPos, aCode, pDocument->GetGrammar(), true, cMatrixFlag != ScMatrixMode::NONE);
         aComp.CompileTokenArray(); // Create RPN token array.
-        ScInterpreter aInterpreter(this, pDocument, pDocument->GetNonThreadedContext(), aPos, aCode);
+        ScInterpreter aInterpreter(this, *pDocument, pDocument->GetNonThreadedContext(), aPos, aCode);
         aInterpreter.Interpret();
         aResult.SetToken(aInterpreter.GetResultToken().get());
     }
     else
     {
         // Formula contains no references.
-        ScInterpreter aInterpreter(this, pDocument, pDocument->GetNonThreadedContext(), aPos, *pCode);
+        ScInterpreter aInterpreter(this, *pDocument, pDocument->GetNonThreadedContext(), aPos, *pCode);
         aInterpreter.Interpret();
         aResult.SetToken(aInterpreter.GetResultToken().get());
     }

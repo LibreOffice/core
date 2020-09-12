@@ -2490,7 +2490,7 @@ void ScInterpreter::ScZTest()
         {
             ScAddress aAdr;
             PopSingleRef( aAdr );
-            ScRefCellValue aCell(*pDok, aAdr);
+            ScRefCellValue aCell(mrDoc, aAdr);
             if (aCell.hasNumeric())
             {
                 fVal = GetCellValue(aAdr, aCell);
@@ -2510,7 +2510,7 @@ void ScInterpreter::ScZTest()
                 ScRange aRange;
                 FormulaError nErr = FormulaError::NONE;
                 PopDoubleRef( aRange, nParam, nRefInList);
-                ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags );
+                ScValueIterator aValIter( &mrDoc, aRange, mnSubTotalFlags );
                 if (aValIter.GetFirst(fVal, nErr))
                 {
                     fSum += fVal;
@@ -2942,7 +2942,7 @@ void ScInterpreter::ScHarMean()
             case svSingleRef :
             {
                 PopSingleRef( aAdr );
-                ScRefCellValue aCell(*pDok, aAdr);
+                ScRefCellValue aCell(mrDoc, aAdr);
                 if (aCell.hasNumeric())
                 {
                     double x = GetCellValue(aAdr, aCell);
@@ -2962,7 +2962,7 @@ void ScInterpreter::ScHarMean()
                 FormulaError nErr = FormulaError::NONE;
                 PopDoubleRef( aRange, nParamCount, nRefInList);
                 double nCellVal;
-                ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags );
+                ScValueIterator aValIter( &mrDoc, aRange, mnSubTotalFlags );
                 if (aValIter.GetFirst(nCellVal, nErr))
                 {
                     if (nCellVal > 0.0)
@@ -3072,7 +3072,7 @@ void ScInterpreter::ScGeoMean()
             case svSingleRef :
             {
                 PopSingleRef( aAdr );
-                ScRefCellValue aCell(*pDok, aAdr);
+                ScRefCellValue aCell(mrDoc, aAdr);
                 if (aCell.hasNumeric())
                 {
                     double x = GetCellValue(aAdr, aCell);
@@ -3100,7 +3100,7 @@ void ScInterpreter::ScGeoMean()
                 FormulaError nErr = FormulaError::NONE;
                 PopDoubleRef( aRange, nParamCount, nRefInList);
                 double nCellVal;
-                ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags );
+                ScValueIterator aValIter(&mrDoc, aRange, mnSubTotalFlags);
                 if (aValIter.GetFirst(nCellVal, nErr))
                 {
                     if (nCellVal > 0.0)
@@ -3251,7 +3251,7 @@ bool ScInterpreter::CalculateSkew(double& fSum,double& fCount,double& vSum,std::
             case svSingleRef :
             {
                 PopSingleRef( aAdr );
-                ScRefCellValue aCell(*pDok, aAdr);
+                ScRefCellValue aCell(mrDoc, aAdr);
                 if (aCell.hasNumeric())
                 {
                     fVal = GetCellValue(aAdr, aCell);
@@ -3266,7 +3266,7 @@ bool ScInterpreter::CalculateSkew(double& fSum,double& fCount,double& vSum,std::
             {
                 PopDoubleRef( aRange, nParamCount, nRefInList);
                 FormulaError nErr = FormulaError::NONE;
-                ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags );
+                ScValueIterator aValIter( &mrDoc, aRange, mnSubTotalFlags );
                 if (aValIter.GetFirst(fVal, nErr))
                 {
                     fSum += fVal;
@@ -3870,7 +3870,7 @@ std::vector<double> ScInterpreter::GetTopNumberArray( SCSIZE& rCol, SCSIZE& rRow
         {
             ScAddress aAdr;
             PopSingleRef(aAdr);
-            ScRefCellValue aCell(*pDok, aAdr);
+            ScRefCellValue aCell(mrDoc, aAdr);
             if (aCell.hasNumeric())
             {
                 aArray.push_back(GetCellValue(aAdr, aCell));
@@ -3901,7 +3901,7 @@ std::vector<double> ScInterpreter::GetTopNumberArray( SCSIZE& rCol, SCSIZE& rRow
 
             FormulaError nErr = FormulaError::NONE;
             double fCellVal;
-            ScValueIterator aValIter(pDok, aRange, mnSubTotalFlags);
+            ScValueIterator aValIter(&mrDoc, aRange, mnSubTotalFlags);
             if (aValIter.GetFirst(fCellVal, nErr))
             {
                 do
@@ -3961,7 +3961,7 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
             case svSingleRef :
             {
                 PopSingleRef( aAdr );
-                ScRefCellValue aCell(*pDok, aAdr);
+                ScRefCellValue aCell(mrDoc, aAdr);
                 if (bIgnoreErrVal && aCell.hasError())
                     ;   // nothing
                 else if (aCell.hasNumeric())
@@ -3982,7 +3982,7 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
 
                 FormulaError nErr = FormulaError::NONE;
                 double fCellVal;
-                ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags );
+                ScValueIterator aValIter( &mrDoc, aRange, mnSubTotalFlags );
                 if (aValIter.GetFirst( fCellVal, nErr))
                 {
                     if (bIgnoreErrVal)
@@ -4128,7 +4128,7 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
 void ScInterpreter::GetSortArray( sal_uInt8 nParamCount, vector<double>& rSortArray, vector<long>* pIndexOrder, bool bConvertTextInArray, bool bAllowEmptyArray )
 {
     GetNumberSequenceArray( nParamCount, rSortArray, bConvertTextInArray );
-    if (rSortArray.size() > MAX_COUNT_DOUBLE_FOR_SORT(pDok->GetSheetLimits()))
+    if (rSortArray.size() > MAX_COUNT_DOUBLE_FOR_SORT(mrDoc.GetSheetLimits()))
         SetError( FormulaError::MatrixSize);
     else if ( rSortArray.empty() )
     {
@@ -4306,7 +4306,7 @@ void ScInterpreter::ScAveDev()
             case svSingleRef :
             {
                 PopSingleRef( aAdr );
-                ScRefCellValue aCell(*pDok, aAdr);
+                ScRefCellValue aCell(mrDoc, aAdr);
                 if (aCell.hasNumeric())
                 {
                     rVal += GetCellValue(aAdr, aCell);
@@ -4320,7 +4320,7 @@ void ScInterpreter::ScAveDev()
                 FormulaError nErr = FormulaError::NONE;
                 double nCellVal;
                 PopDoubleRef( aRange, nParam, nRefInList);
-                ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags );
+                ScValueIterator aValIter( &mrDoc, aRange, mnSubTotalFlags );
                 if (aValIter.GetFirst(nCellVal, nErr))
                 {
                     rVal += nCellVal;
@@ -4388,7 +4388,7 @@ void ScInterpreter::ScAveDev()
             case svSingleRef :
             {
                 PopSingleRef( aAdr );
-                ScRefCellValue aCell(*pDok, aAdr);
+                ScRefCellValue aCell(mrDoc, aAdr);
                 if (aCell.hasNumeric())
                     rVal += fabs(GetCellValue(aAdr, aCell) - nMiddle);
             }
@@ -4399,7 +4399,7 @@ void ScInterpreter::ScAveDev()
                 FormulaError nErr = FormulaError::NONE;
                 double nCellVal;
                 PopDoubleRef( aRange, nParam, nRefInList);
-                ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags );
+                ScValueIterator aValIter( &mrDoc, aRange, mnSubTotalFlags );
                 if (aValIter.GetFirst(nCellVal, nErr))
                 {
                     rVal += (fabs(nCellVal - nMiddle));

@@ -159,7 +159,7 @@ void ScInterpreter::ScGCD()
                 FormulaError nErr = FormulaError::NONE;
                 PopDoubleRef( aRange, nParamCount, nRefInList);
                 double nCellVal;
-                ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags );
+                ScValueIterator aValIter( &mrDoc, aRange, mnSubTotalFlags );
                 if (aValIter.GetFirst(nCellVal, nErr))
                 {
                     do
@@ -236,7 +236,7 @@ void ScInterpreter:: ScLCM()
                 FormulaError nErr = FormulaError::NONE;
                 PopDoubleRef( aRange, nParamCount, nRefInList);
                 double nCellVal;
-                ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags );
+                ScValueIterator aValIter( &mrDoc, aRange, mnSubTotalFlags );
                 if (aValIter.GetFirst(nCellVal, nErr))
                 {
                     do
@@ -353,7 +353,7 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
     if (!bCalcAsShown)
     {
         // Use fast array fill.
-        pDok->FillMatrix(*pMat, nTab1, nCol1, nRow1, nCol2, nRow2);
+        mrDoc.FillMatrix(*pMat, nTab1, nCol1, nRow1, nCol2, nRow2);
     }
     else
     {
@@ -372,7 +372,7 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
         SCROW nThisRow = nRow2;
         SCCOL nThisCol = nCol1 - 1;
 
-        ScCellIterator aCellIter( pDok, ScRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2));
+        ScCellIterator aCellIter( &mrDoc, ScRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2));
         for (bool bHas = aCellIter.first(); bHas; bHas = aCellIter.next())
         {
             nThisCol = aCellIter.GetPos().Col();
@@ -422,14 +422,14 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
                     // TODO: this could be moved to ScCellIterator to take
                     // advantage of the faster ScAttrArray_IterGetNumberFormat.
                     const ScAddress aAdr( nThisCol, nThisRow, nTab1);
-                    const sal_uInt32 nNumFormat = pDok->GetNumberFormat( mrContext, aAdr);
-                    fVal = pDok->RoundValueAsShown( fVal, nNumFormat, &mrContext);
+                    const sal_uInt32 nNumFormat = mrDoc.GetNumberFormat( mrContext, aAdr);
+                    fVal = mrDoc.RoundValueAsShown( fVal, nNumFormat, &mrContext);
                 }
                 pMat->PutDouble( fVal, nMatCol, nMatRow);
             }
             else if (aCell.hasString())
             {
-                pMat->PutString( mrStrPool.intern( aCell.getString( pDok)), nMatCol, nMatRow);
+                pMat->PutString( mrStrPool.intern( aCell.getString(&mrDoc)), nMatCol, nMatRow);
             }
             else
             {
@@ -471,7 +471,7 @@ ScMatrixRef ScInterpreter::GetMatrix()
             pMat = GetNewMat(1, 1);
             if (pMat)
             {
-                ScRefCellValue aCell(*pDok, aAdr);
+                ScRefCellValue aCell(mrDoc, aAdr);
                 if (aCell.hasEmptyValue())
                     pMat->PutEmpty(0, 0);
                 else if (aCell.hasNumeric())
@@ -631,7 +631,7 @@ void ScInterpreter::ScMatValue()
         {
             ScAddress aAdr;
             PopSingleRef( aAdr );
-            ScRefCellValue aCell(*pDok, aAdr);
+            ScRefCellValue aCell(mrDoc, aAdr);
             if (aCell.meType == CELLTYPE_FORMULA)
             {
                 FormulaError nErrCode = aCell.mpFormula->GetErrCode();
@@ -662,7 +662,7 @@ void ScInterpreter::ScMatValue()
             {
                 ScAddress aAdr( sal::static_int_cast<SCCOL>( nCol1 + nR ),
                                 sal::static_int_cast<SCROW>( nRow1 + nC ), nTab1 );
-                ScRefCellValue aCell(*pDok, aAdr);
+                ScRefCellValue aCell(mrDoc, aAdr);
                 if (aCell.hasNumeric())
                     PushDouble(GetCellValue(aAdr, aCell));
                 else
@@ -1222,7 +1222,7 @@ ScMatrixRef ScInterpreter::MatConcat(const ScMatrixRef& pMat1, const ScMatrixRef
     ScMatrixRef xResMat = GetNewMat(nMinC, nMinR);
     if (xResMat)
     {
-        xResMat->MatConcat(nMinC, nMinR, pMat1, pMat2, *pFormatter, pDok->GetSharedStringPool());
+        xResMat->MatConcat(nMinC, nMinR, pMat1, pMat2, *pFormatter, mrDoc.GetSharedStringPool());
     }
     return xResMat;
 }
@@ -3218,7 +3218,7 @@ void ScInterpreter::ScMatRef()
     ScAddress aAdr;
     PopSingleRef( aAdr );
 
-    ScRefCellValue aCell(*pDok, aAdr);
+    ScRefCellValue aCell(mrDoc, aAdr);
 
     if (aCell.meType != CELLTYPE_FORMULA)
     {
@@ -3268,7 +3268,7 @@ void ScInterpreter::ScMatRef()
             else
             {
                 // Determine nFuncFmtType type before PushDouble().
-                pDok->GetNumberFormatInfo(mrContext, nCurFmtType, nCurFmtIndex, aAdr);
+                mrDoc.GetNumberFormatInfo(mrContext, nCurFmtType, nCurFmtIndex, aAdr);
                 nFuncFmtType = nCurFmtType;
                 nFuncFmtIndex = nCurFmtIndex;
                 PushDouble(nMatVal.fVal);  // handles DoubleError
@@ -3278,7 +3278,7 @@ void ScInterpreter::ScMatRef()
     else
     {
         // Determine nFuncFmtType type before PushDouble().
-        pDok->GetNumberFormatInfo(mrContext, nCurFmtType, nCurFmtIndex, aAdr);
+        mrDoc.GetNumberFormatInfo(mrContext, nCurFmtType, nCurFmtIndex, aAdr);
         nFuncFmtType = nCurFmtType;
         nFuncFmtIndex = nCurFmtIndex;
         // If not a result matrix, obtain the cell value.
@@ -3311,7 +3311,7 @@ void ScInterpreter::ScInfo()
     else if( aStr == "NUMFILE" )
         PushDouble( 1 );
     else if( aStr == "RECALC" )
-        PushString( ScResId( pDok->GetAutoCalc() ? STR_RECALC_AUTO : STR_RECALC_MANUAL ) );
+        PushString( ScResId( mrDoc.GetAutoCalc() ? STR_RECALC_AUTO : STR_RECALC_MANUAL ) );
     else if (aStr == "DIRECTORY" || aStr == "MEMAVAIL" || aStr == "MEMUSED" || aStr == "ORIGIN" || aStr == "TOTMEM")
         PushNA();
     else
