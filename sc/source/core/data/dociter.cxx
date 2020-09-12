@@ -750,7 +750,7 @@ ScDBQueryDataIterator::Value::Value() :
     ::rtl::math::setNan(&mfValue);
 }
 
-ScDBQueryDataIterator::ScDBQueryDataIterator(ScDocument* pDocument, const ScInterpreterContext& rContext, std::unique_ptr<ScDBQueryParamBase> pParam) :
+ScDBQueryDataIterator::ScDBQueryDataIterator(ScDocument& rDocument, const ScInterpreterContext& rContext, std::unique_ptr<ScDBQueryParamBase> pParam) :
     mpParam (std::move(pParam))
 {
     switch (mpParam->GetType())
@@ -758,7 +758,7 @@ ScDBQueryDataIterator::ScDBQueryDataIterator(ScDocument* pDocument, const ScInte
         case ScDBQueryParamBase::INTERNAL:
         {
             ScDBQueryParamInternal* p = static_cast<ScDBQueryParamInternal*>(mpParam.get());
-            mpData.reset(new DataAccessInternal(p, pDocument, rContext));
+            mpData.reset(new DataAccessInternal(p, &rDocument, rContext));
         }
         break;
         case ScDBQueryParamBase::MATRIX:
