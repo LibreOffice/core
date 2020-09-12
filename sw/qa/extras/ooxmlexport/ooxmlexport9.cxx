@@ -1541,6 +1541,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104354_2, "tdf104354-2.docx")
     uno::Reference<text::XTextRange> xCell5(xTable2->getCellByName("A1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(getParagraphOfText(1, xCell5->getText()), "ParaTopMargin"));
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(getParagraphOfText(1, xCell5->getText()), "ParaBottomMargin"));
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("A dummy paragraph before the table should not exist", 5, getParagraphs());
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf115557, "tdf115557.docx")
