@@ -221,7 +221,7 @@ public:
                             const ScDocument* pDoc );
 
 /// String to RangeData core
-    static ScRangeData* GetRangeDataFromString(const OUString& rString, const SCTAB nTab, const ScDocument* pDoc);
+    static ScRangeData* GetRangeDataFromString(const OUString& rString, const SCTAB nTab, const ScDocument& rDoc);
 };
 
 class ScArea
