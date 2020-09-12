@@ -1336,7 +1336,7 @@ ScAddress ScConditionEntry::GetValidSrcPos() const
             for ( auto t: pFormula->References() )
             {
                 ScSingleRefData& rRef1 = *t->GetSingleRef();
-                ScAddress aAbs = rRef1.toAbs(mpDoc, aSrcPos);
+                ScAddress aAbs = rRef1.toAbs(*mpDoc, aSrcPos);
                 if (!rRef1.IsTabDeleted())
                 {
                     if (aAbs.Tab() < nMinTab)
@@ -1347,7 +1347,7 @@ ScAddress ScConditionEntry::GetValidSrcPos() const
                 if ( t->GetType() == svDoubleRef )
                 {
                     ScSingleRefData& rRef2 = t->GetDoubleRef()->Ref2;
-                    aAbs = rRef2.toAbs(mpDoc, aSrcPos);
+                    aAbs = rRef2.toAbs(*mpDoc, aSrcPos);
                     if (!rRef2.IsTabDeleted())
                     {
                         if (aAbs.Tab() < nMinTab)

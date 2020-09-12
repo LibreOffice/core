@@ -54,8 +54,8 @@ void ScFormulaListener::startListening(const ScTokenArray* pArr, const ScRange& 
         {
             case formula::svSingleRef:
             {
-                ScAddress aCell = t->GetSingleRef()->toAbs(mpDoc, rRange.aStart);
-                ScAddress aCell2 = t->GetSingleRef()->toAbs(mpDoc, rRange.aEnd);
+                ScAddress aCell = t->GetSingleRef()->toAbs(*mpDoc, rRange.aStart);
+                ScAddress aCell2 = t->GetSingleRef()->toAbs(*mpDoc, rRange.aEnd);
                 ScRange aRange(aCell, aCell2);
                 if (aRange.IsValid())
                     mpDoc->StartListeningArea(aRange, false, this);
@@ -65,10 +65,10 @@ void ScFormulaListener::startListening(const ScTokenArray* pArr, const ScRange& 
             {
                 const ScSingleRefData& rRef1 = *t->GetSingleRef();
                 const ScSingleRefData& rRef2 = *t->GetSingleRef2();
-                ScAddress aCell1 = rRef1.toAbs(mpDoc, rRange.aStart);
-                ScAddress aCell2 = rRef2.toAbs(mpDoc, rRange.aStart);
-                ScAddress aCell3 = rRef1.toAbs(mpDoc, rRange.aEnd);
-                ScAddress aCell4 = rRef2.toAbs(mpDoc, rRange.aEnd);
+                ScAddress aCell1 = rRef1.toAbs(*mpDoc, rRange.aStart);
+                ScAddress aCell2 = rRef2.toAbs(*mpDoc, rRange.aStart);
+                ScAddress aCell3 = rRef1.toAbs(*mpDoc, rRange.aEnd);
+                ScAddress aCell4 = rRef2.toAbs(*mpDoc, rRange.aEnd);
                 ScRange aRange1(aCell1, aCell3);
                 ScRange aRange2(aCell2, aCell4);
                 aRange1.ExtendTo(aRange2);

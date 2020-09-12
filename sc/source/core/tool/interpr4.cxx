@@ -1180,7 +1180,7 @@ void ScInterpreter::PopExternalSingleRef(
         return;
     }
 
-    ScAddress aAddr = rRef.toAbs(&mrDoc, aPos);
+    ScAddress aAddr = rRef.toAbs(mrDoc, aPos);
     ScExternalRefCache::CellFormat aFmt;
     ScExternalRefCache::TokenRef xNew = pRefMgr->getSingleRefToken(
         rFileId, rTabName, aAddr, &aPos, nullptr, &aFmt);
@@ -1281,7 +1281,7 @@ void ScInterpreter::GetExternalDoubleRef(
     }
 
     ScComplexRefData aData(rData);
-    ScRange aRange = aData.toAbs(&mrDoc, aPos);
+    ScRange aRange = aData.toAbs(mrDoc, aPos);
     if (!mrDoc.ValidColRow(aRange.aStart.Col(), aRange.aStart.Row()) || !mrDoc.ValidColRow(aRange.aEnd.Col(), aRange.aEnd.Row()))
     {
         SetError(FormulaError::NoRef);
@@ -3677,7 +3677,7 @@ void ScInterpreter::ScDBArea()
 void ScInterpreter::ScColRowNameAuto()
 {
     ScComplexRefData aRefData( *pCur->GetDoubleRef() );
-    ScRange aAbs = aRefData.toAbs(&mrDoc, aPos);
+    ScRange aAbs = aRefData.toAbs(mrDoc, aPos);
     if (!mrDoc.ValidRange(aAbs))
     {
         PushError( FormulaError::NoRef );

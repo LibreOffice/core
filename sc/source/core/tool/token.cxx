@@ -3544,7 +3544,7 @@ bool adjustSingleRefInName(
     ScSingleRefData& rRef, const sc::RefUpdateContext& rCxt, const ScAddress& rPos,
     ScComplexRefData* pEndOfComplex )
 {
-    ScAddress aAbs = rRef.toAbs(&rCxt.mrDoc, rPos);
+    ScAddress aAbs = rRef.toAbs(rCxt.mrDoc, rPos);
 
     if (aAbs.Tab() < rCxt.maRange.aStart.Tab() || rCxt.maRange.aEnd.Tab() < aAbs.Tab())
     {
@@ -3552,7 +3552,7 @@ bool adjustSingleRefInName(
         return false;
     }
 
-    if (!rCxt.maRange.In(rRef.toAbs(&rCxt.mrDoc, rPos)))
+    if (!rCxt.maRange.In(rRef.toAbs(rCxt.mrDoc, rPos)))
         return false;
 
     bool bChanged = false;
@@ -3611,7 +3611,7 @@ bool adjustDoubleRefInName(
     {
         if (rCxt.mnRowDelta > 0 && !rRef.Ref1.IsRowRel() && !rRef.Ref2.IsRowRel())
         {
-            ScRange aAbs = rRef.toAbs(&rCxt.mrDoc, rPos);
+            ScRange aAbs = rRef.toAbs(rCxt.mrDoc, rPos);
             // Expand only if at least two rows tall.
             if (aAbs.aStart.Row() < aAbs.aEnd.Row())
             {
@@ -3628,7 +3628,7 @@ bool adjustDoubleRefInName(
         }
         if (rCxt.mnColDelta > 0 && !rRef.Ref1.IsColRel() && !rRef.Ref2.IsColRel())
         {
-            ScRange aAbs = rRef.toAbs(&rCxt.mrDoc, rPos);
+            ScRange aAbs = rRef.toAbs(rCxt.mrDoc, rPos);
             // Expand only if at least two columns wide.
             if (aAbs.aStart.Col() < aAbs.aEnd.Col())
             {
@@ -3721,7 +3721,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
                                 // Don't modify relative references in names.
                                 break;
 
-                            ScAddress aAbs = rRef.toAbs(&rCxt.mrDoc, rPos);
+                            ScAddress aAbs = rRef.toAbs(rCxt.mrDoc, rPos);
 
                             if (aAbs.Col() < rCxt.maRange.aStart.Col() || rCxt.maRange.aEnd.Col() < aAbs.Col())
                                 // column of the reference is not in the deleted column range.
@@ -3750,7 +3750,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
                                 // Don't modify relative references in names.
                                 break;
 
-                            ScAddress aAbs = rRef.toAbs(&rCxt.mrDoc, rPos);
+                            ScAddress aAbs = rRef.toAbs(rCxt.mrDoc, rPos);
 
                             if (aAbs.Row() < rCxt.maRange.aStart.Row() || rCxt.maRange.aEnd.Row() < aAbs.Row())
                                 // row of the reference is not in the deleted row range.
@@ -3779,7 +3779,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
                 case svDoubleRef:
                     {
                         ScComplexRefData& rRef = *p->GetDoubleRef();
-                        ScRange aAbs = rRef.toAbs(&rCxt.mrDoc, rPos);
+                        ScRange aAbs = rRef.toAbs(rCxt.mrDoc, rPos);
 
                         if (aAbs.aStart.Tab() > rCxt.maRange.aEnd.Tab() || aAbs.aEnd.Tab() < rCxt.maRange.aStart.Tab())
                             // Sheet references not affected.
@@ -3991,7 +3991,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInMovedName( const sc::RefUpdat
                         if (rRef.IsColRel() || rRef.IsRowRel() || rRef.IsTabRel())
                             continue;
 
-                        ScAddress aAbs = rRef.toAbs(&rCxt.mrDoc, rPos);
+                        ScAddress aAbs = rRef.toAbs(rCxt.mrDoc, rPos);
                         if (aOldRange.In(aAbs))
                         {
                             ScAddress aErrorPos( ScAddress::UNINITIALIZED );
@@ -4010,7 +4010,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInMovedName( const sc::RefUpdat
                                 rRef.Ref2.IsColRel() || rRef.Ref2.IsRowRel() || rRef.Ref2.IsTabRel())
                             continue;
 
-                        ScRange aAbs = rRef.toAbs(&rCxt.mrDoc, rPos);
+                        ScRange aAbs = rRef.toAbs(rCxt.mrDoc, rPos);
                         if (aOldRange.In(aAbs))
                         {
                             ScRange aErrorRange( ScAddress::UNINITIALIZED );

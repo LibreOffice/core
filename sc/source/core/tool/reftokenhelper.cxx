@@ -135,7 +135,7 @@ bool ScRefTokenHelper::getRangeFromToken(
                 return false;
 
             const ScSingleRefData& rRefData = *pToken->GetSingleRef();
-            rRange.aStart = rRefData.toAbs(pDoc, rPos);
+            rRange.aStart = rRefData.toAbs(*pDoc, rPos);
             rRange.aEnd = rRange.aStart;
             return true;
         }
@@ -147,7 +147,7 @@ bool ScRefTokenHelper::getRangeFromToken(
                 return false;
 
             const ScComplexRefData& rRefData = *pToken->GetDoubleRef();
-            rRange = rRefData.toAbs(pDoc, rPos);
+            rRange = rRefData.toAbs(*pDoc, rPos);
             return true;
         }
         default:
@@ -343,7 +343,7 @@ private:
             if (!ScRefTokenHelper::getDoubleRefDataFromToken(aOldData, pOldToken))
                 continue;
 
-            ScRange aOld = aOldData.toAbs(pDoc, rPos), aNew = aData.toAbs(pDoc, rPos);
+            ScRange aOld = aOldData.toAbs(*pDoc, rPos), aNew = aData.toAbs(*pDoc, rPos);
 
             if (aNew.aStart.Tab() != aOld.aStart.Tab() || aNew.aEnd.Tab() != aOld.aEnd.Tab())
                 // Sheet ranges differ.
