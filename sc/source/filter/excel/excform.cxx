@@ -1050,7 +1050,7 @@ ConvErr ExcelToSc::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std:
 
                 ExcRelToScRel( nUINT16, nByte, aSRD, bRangeName );
 
-                rRangeList.Append(aSRD.toAbs(&GetDocImport().getDoc(), aEingPos), nTab);
+                rRangeList.Append(aSRD.toAbs(GetDocImport().getDoc(), aEingPos), nTab);
                 break;
             }
             case 0x45:
@@ -1080,7 +1080,7 @@ ConvErr ExcelToSc::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std:
                 else if( IsComplRowRange( nRowFirst, nRowLast ) )
                     SetComplRow( aCRD );
 
-                rRangeList.Append(aCRD.toAbs(&GetDocImport().getDoc(), aEingPos), nTab);
+                rRangeList.Append(aCRD.toAbs(GetDocImport().getDoc(), aEingPos), nTab);
             }
                 break;
             case 0x46:
@@ -1117,7 +1117,7 @@ ConvErr ExcelToSc::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std:
 
                 ExcRelToScRel( nUINT16, nByte, aSRD, bRNorSF );
 
-                rRangeList.Append(aSRD.toAbs(&GetDocImport().getDoc(), aEingPos), nTab);
+                rRangeList.Append(aSRD.toAbs(GetDocImport().getDoc(), aEingPos), nTab);
                 break;
             }
             case 0x4D:
@@ -1145,7 +1145,7 @@ ConvErr ExcelToSc::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std:
                 else if( IsComplRowRange( nRowFirst, nRowLast ) )
                     SetComplRow( aCRD );
 
-                rRangeList.Append(aCRD.toAbs(&GetDocImport().getDoc(), aEingPos), nTab);
+                rRangeList.Append(aCRD.toAbs(GetDocImport().getDoc(), aEingPos), nTab);
             }
                 break;
             case 0x49:
@@ -1215,10 +1215,10 @@ ConvErr ExcelToSc::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std:
                         aCRD.Ref2.SetAbsTab(static_cast<SCTAB>(nTabLast));
                         b3D = ( static_cast<SCTAB>(nTabLast) != aEingPos.Tab() );
                         aCRD.Ref2.SetFlag3D( b3D );
-                        rRangeList.Append(aCRD.toAbs(&GetDocImport().getDoc(), aEingPos), nTab);
+                        rRangeList.Append(aCRD.toAbs(GetDocImport().getDoc(), aEingPos), nTab);
                     }
                     else
-                        rRangeList.Append(aSRD.toAbs(&GetDocImport().getDoc(), aEingPos), nTab);
+                        rRangeList.Append(aSRD.toAbs(GetDocImport().getDoc(), aEingPos), nTab);
                 }
             }
 
@@ -1275,7 +1275,7 @@ ConvErr ExcelToSc::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std:
                     else if( IsComplRowRange( nRowFirst, nRowLast ) )
                         SetComplRow( aCRD );
 
-                    rRangeList.Append(aCRD.toAbs(&GetDocImport().getDoc(), aEingPos), nTab);
+                    rRangeList.Append(aCRD.toAbs(GetDocImport().getDoc(), aEingPos), nTab);
                 }//END in current Workbook
             }
                 break;

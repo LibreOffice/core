@@ -5162,7 +5162,7 @@ void ScCompiler::CreateStringFromSingleRef( OUStringBuffer& rBuffer, const Formu
     aRef.Ref1 = aRef.Ref2 = rRef;
     if ( eOp == ocColRowName )
     {
-        ScAddress aAbs = rRef.toAbs(pDoc, aPos);
+        ScAddress aAbs = rRef.toAbs(*pDoc, aPos);
         if (pDoc->HasStringData(aAbs.Col(), aAbs.Row(), aAbs.Tab()))
         {
             OUString aStr = pDoc->GetString(aAbs, mpInterpreterContext);
@@ -5179,7 +5179,7 @@ void ScCompiler::CreateStringFromSingleRef( OUStringBuffer& rBuffer, const Formu
     else if (pArr && (p = maArrIterator.PeekPrevNoSpaces()) && p->GetOpCode() == ocTableRefOpen)
     {
         OUString aStr;
-        ScAddress aAbs = rRef.toAbs(pDoc, aPos);
+        ScAddress aAbs = rRef.toAbs(*pDoc, aPos);
         const ScDBData* pData = pDoc->GetDBAtCursor( aAbs.Col(), aAbs.Row(), aAbs.Tab(), ScDBDataPortion::AREA);
         SAL_WARN_IF( !pData, "sc.core", "ScCompiler::CreateStringFromSingleRef - TableRef without ScDBData: " <<
                 aAbs.Format( ScRefFlags::VALID | ScRefFlags::TAB_3D, pDoc));
@@ -5367,7 +5367,7 @@ void ScCompiler::fillAddInToken(::std::vector< css::sheet::FormulaOpCodeMapEntry
 bool ScCompiler::HandleColRowName()
 {
     ScSingleRefData& rRef = *mpToken->GetSingleRef();
-    const ScAddress aAbs = rRef.toAbs(pDoc, aPos);
+    const ScAddress aAbs = rRef.toAbs(*pDoc, aPos);
     if (!pDoc->ValidAddress(aAbs))
     {
         SetError( FormulaError::NoRef );
@@ -5804,7 +5804,7 @@ bool ScCompiler::HandleTableRef()
                 {
                     case svSingleRef:
                         {
-                            aColRange.aStart = aColRange.aEnd = mpToken->GetSingleRef()->toAbs(pDoc, aPos);
+                            aColRange.aStart = aColRange.aEnd = mpToken->GetSingleRef()->toAbs(*pDoc, aPos);
                             if (    GetTokenIfOpCode( ocTableRefClose) && (nLevel--) &&
                                     GetTokenIfOpCode( ocRange) &&
                                     GetTokenIfOpCode( ocTableRefOpen) && (++nLevel) &&
@@ -5814,7 +5814,7 @@ bool ScCompiler::HandleTableRef()
                                     aColRange = ScRange( ScAddress::INITIALIZE_INVALID);
                                 else
                                 {
-                                    aColRange.aEnd = mpToken->GetSingleRef()->toAbs(pDoc, aPos);
+                                    aColRange.aEnd = mpToken->GetSingleRef()->toAbs(*pDoc, aPos);
                                     aColRange.PutInOrder();
                                     bCol2Rel = mpToken->GetSingleRef()->IsColRel();
                                     bCol2RelName = mpToken->GetSingleRef()->IsRelName();
@@ -6122,7 +6122,7 @@ void ScCompiler::ReplaceDoubleRefII(FormulaToken** ppDoubleRefTok)
     if (!rRange.Ref1.IsRowRel() && !rRange.Ref2.IsRowRel())
         return;
 
-    ScRange aAbsRange = rRange.toAbs(pDoc, aPos);
+    ScRange aAbsRange = rRange.toAbs(*pDoc, aPos);
     if (aAbsRange.aStart == aAbsRange.aEnd)
         return; // Nothing to do (trivial case).
 
@@ -6212,7 +6212,7 @@ static void lcl_GetColRowDeltas(const ScRange& rRange, SCCOL& rXDelta, SCROW& rY
 
 bool ScCompiler::AdjustSumRangeShape(const ScComplexRefData& rBaseRange, ScComplexRefData& rSumRange)
 {
-    ScRange aAbs = rSumRange.toAbs(pDoc, aPos);
+    ScRange aAbs = rSumRange.toAbs(*pDoc, aPos);
 
     // Current sum-range end col/row
     SCCOL nEndCol = aAbs.aEnd.Col();
@@ -6229,7 +6229,7 @@ bool ScCompiler::AdjustSumRangeShape(const ScComplexRefData& rBaseRange, ScCompl
 
     lcl_GetColRowDeltas(aAbs, nXDeltaSum, nYDeltaSum);
 
-    aAbs = rBaseRange.toAbs(pDoc, aPos);
+    aAbs = rBaseRange.toAbs(*pDoc, aPos);
     SCCOL nXDelta = 0;
     SCROW nYDelta = 0;
 

@@ -292,7 +292,7 @@ void ScRangeData::UpdateTranspose( const ScRange& rSource, const ScAddress& rDes
                 (!rRef.Ref2.IsColRel() && !rRef.Ref2.IsRowRel() &&
                     (!rRef.Ref2.IsFlag3D() || !rRef.Ref2.IsTabRel()))))
             {
-                ScRange aAbs = rRef.toAbs(pDoc, aPos);
+                ScRange aAbs = rRef.toAbs(*pDoc, aPos);
                 if (ScRefUpdate::UpdateTranspose(pDoc, rSource, rDest, aAbs) != UR_NOTHING)
                 {
                     rRef.SetRange(pDoc->GetSheetLimits(), aAbs, aPos);
@@ -324,7 +324,7 @@ void ScRangeData::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
                 (!rRef.Ref2.IsColRel() && !rRef.Ref2.IsRowRel() &&
                     (!rRef.Ref2.IsFlag3D() || !rRef.Ref2.IsTabRel()))))
             {
-                ScRange aAbs = rRef.toAbs(pDoc, aPos);
+                ScRange aAbs = rRef.toAbs(*pDoc, aPos);
                 if (ScRefUpdate::UpdateGrow(rArea, nGrowX, nGrowY, aAbs) != UR_NOTHING)
                 {
                     rRef.SetRange(pDoc->GetSheetLimits(), aAbs, aPos);
@@ -533,7 +533,7 @@ void ScRangeData::ValidateTabRefs()
     while ( ( t = aIter.GetNextReference() ) != nullptr )
     {
         ScSingleRefData& rRef1 = *t->GetSingleRef();
-        ScAddress aAbs = rRef1.toAbs(pDoc, aPos);
+        ScAddress aAbs = rRef1.toAbs(*pDoc, aPos);
         if ( rRef1.IsTabRel() && !rRef1.IsTabDeleted() )
         {
             if (aAbs.Tab() < nMinTab)
@@ -544,7 +544,7 @@ void ScRangeData::ValidateTabRefs()
         if ( t->GetType() == svDoubleRef )
         {
             ScSingleRefData& rRef2 = t->GetDoubleRef()->Ref2;
-            aAbs = rRef2.toAbs(pDoc, aPos);
+            aAbs = rRef2.toAbs(*pDoc, aPos);
             if ( rRef2.IsTabRel() && !rRef2.IsTabDeleted() )
             {
                 if (aAbs.Tab() < nMinTab)
@@ -576,7 +576,7 @@ void ScRangeData::ValidateTabRefs()
                 ScSingleRefData& rRef = *t->GetSingleRef();
                 if (!rRef.IsTabDeleted())
                 {
-                    ScAddress aAbs = rRef.toAbs(pDoc, aOldPos);
+                    ScAddress aAbs = rRef.toAbs(*pDoc, aOldPos);
                     rRef.SetAddress(pDoc->GetSheetLimits(), aAbs, aPos);
                 }
             }
@@ -586,12 +586,12 @@ void ScRangeData::ValidateTabRefs()
                 ScComplexRefData& rRef = *t->GetDoubleRef();
                 if (!rRef.Ref1.IsTabDeleted())
                 {
-                    ScAddress aAbs = rRef.Ref1.toAbs(pDoc, aOldPos);
+                    ScAddress aAbs = rRef.Ref1.toAbs(*pDoc, aOldPos);
                     rRef.Ref1.SetAddress(pDoc->GetSheetLimits(), aAbs, aPos);
                 }
                 if (!rRef.Ref2.IsTabDeleted())
                 {
-                    ScAddress aAbs = rRef.Ref2.toAbs(pDoc, aOldPos);
+                    ScAddress aAbs = rRef.Ref2.toAbs(*pDoc, aOldPos);
                     rRef.Ref2.SetAddress(pDoc->GetSheetLimits(), aAbs, aPos);
                 }
             }

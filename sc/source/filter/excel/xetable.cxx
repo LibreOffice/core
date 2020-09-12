@@ -167,7 +167,7 @@ XclExpArrayRef XclExpArrayBuffer::FindArray( const ScTokenArray& rScTokArr, cons
         return xRec;
 
     const ScSingleRefData& rRef = *pToken->GetSingleRef();
-    ScAddress aAbsPos = rRef.toAbs(&GetRoot().GetDoc(), rBasePos);
+    ScAddress aAbsPos = rRef.toAbs(GetRoot().GetDoc(), rBasePos);
     XclExpArrayMap::const_iterator it = maRecMap.find(aAbsPos);
 
     if (it != maRecMap.end())
