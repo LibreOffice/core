@@ -583,7 +583,8 @@ public:
     static SfxObjectShell*      CreateObjectByFactoryName( const OUString& rURL, SfxObjectCreateMode = SfxObjectCreateMode::STANDARD );
     static css::uno::Reference< css::lang::XComponent >
                                 CreateAndLoadComponent( const SfxItemSet& rSet );
-    static SfxObjectShell*      GetShellFromComponent( const css::uno::Reference< css::lang::XComponent >& xComp );
+    static SfxObjectShell* GetShellFromComponent(const css::uno::Reference< css::uno::XInterface >& xComp);
+    static SfxObjectShell* GetParentShell(const css::uno::Reference<css::uno::XInterface>& xChild);
     static OUString             GetServiceNameFromFactory( const OUString& rFact );
     bool                        IsInPlaceActive() const;
     bool                        IsUIActive() const;
@@ -759,7 +760,6 @@ public:
     SAL_DLLPRIVATE void SetProgress_Impl( SfxProgress *pProgress );
     SAL_DLLPRIVATE void PostActivateEvent_Impl( SfxViewFrame const * );
     SAL_DLLPRIVATE void SetActivateEvent_Impl(SfxEventHintId );
-    SAL_DLLPRIVATE SfxObjectShell* GetParentShellByModel_Impl();
 
     // configuration items
     SAL_DLLPRIVATE SignatureState ImplGetSignatureState( bool bScriptingContent = false );

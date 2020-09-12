@@ -991,17 +991,10 @@ SfxObjectShell* SfxObjectShell::CreateObject( const OUString& rServiceName, SfxO
     if ( !rServiceName.isEmpty() )
     {
         uno::Reference < frame::XModel > xDoc( ::comphelper::getProcessServiceFactory()->createInstance( rServiceName ), UNO_QUERY );
-        if ( xDoc.is() )
+        if (SfxObjectShell* pRet = SfxObjectShell::GetShellFromComponent(xDoc))
         {
-            uno::Reference < lang::XUnoTunnel > xObj( xDoc, UNO_QUERY );
-            uno::Sequence < sal_Int8 > aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
-            sal_Int64 nHandle = xObj->getSomething( aSeq );
-            if ( nHandle )
-            {
-                SfxObjectShell* pRet = reinterpret_cast< SfxObjectShell* >( sal::static_int_cast< sal_IntPtr >( nHandle ));
-                pRet->SetCreateMode_Impl( eCreateMode );
-                return pRet;
-            }
+            pRet->SetCreateMode_Impl(eCreateMode);
+            return pRet;
         }
     }
 
@@ -1036,23 +1029,37 @@ Reference<lang::XComponent> SfxObjectShell::CreateAndLoadComponent( const SfxIte
     return xComp;
 }
 
-SfxObjectShell* SfxObjectShell::GetShellFromComponent( const Reference<lang::XComponent>& xComp )
+SfxObjectShell* SfxObjectShell::GetShellFromComponent(const Reference<uno::XInterface>& xComp)
 {
     try
     {
         Reference<lang::XUnoTunnel> xTunnel(xComp, UNO_QUERY_THROW);
         Sequence <sal_Int8> aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
         sal_Int64 nHandle = xTunnel->getSomething( aSeq );
-        if (!nHandle)
-            return nullptr;
-
-        return reinterpret_cast< SfxObjectShell* >(sal::static_int_cast< sal_IntPtr >(  nHandle ));
+        if (nHandle)
+            return reinterpret_cast<SfxObjectShell*>(sal::static_int_cast<sal_IntPtr>(nHandle));
     }
     catch (const Exception&)
     {
     }
 
     return nullptr;
+}
+
+SfxObjectShell* SfxObjectShell::GetParentShell(const css::uno::Reference<css::uno::XInterface>& xChild)
+{
+    SfxObjectShell* pResult = nullptr;
+
+    try
+    {
+        if (css::uno::Reference<css::container::XChild> xChildModel{ xChild, css::uno::UNO_QUERY })
+            pResult = GetShellFromComponent(xChildModel->getParent());
+    }
+    catch (const Exception&)
+    {
+    }
+
+    return pResult;
 }
 
 void SfxObjectShell::SetInitialized_Impl( const bool i_fromInitNew )
