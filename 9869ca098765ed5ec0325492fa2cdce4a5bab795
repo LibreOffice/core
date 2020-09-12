@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a35fdaa6_caad641e",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport4.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 776,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-09-12T13:47:09Z",
+      "side": 1,
+      "message": "I was assuming this change was necessary on the backports branch; now it seems it breaks the build.\n\nI\u0027d simply back it out, build works here that change.",
+      "revId": "9869ca098765ed5ec0325492fa2cdce4a5bab795",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
