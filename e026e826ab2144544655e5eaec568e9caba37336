@@ -69,6 +69,24 @@
       "revId": "e026e826ab2144544655e5eaec568e9caba37336",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a05f134_18033cd9",
+        "filename": "reportdesign/uiconfig/dbreport/menubar/menubar.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-09-12T21:36:43Z",
+      "side": 1,
+      "message": "\u003e Don\u0027t get this (isn\u0027t it a main menu?)\n\nThe entry in Controller.xcu links .uno:DistributeSelection with the distributebar toolbar, so when you put that command in a menu (main or context), it gets a sub menu which is auto-filled with the contents of the toolbar. In case that menu item already has a sub menu, its content still erased and replaced by the toolbar content. Although such case (of a menu item with a sub menu attached and an entry in Controller.xcu at the same time) is not well supported, and its usage is discouraged. In case the toolbar can\u0027t be found (like in our case), then a warning about it is printed into the terminal, and the existing sub menu is left intact.\n\nThat\u0027s why I\u0027m suggesting to either have the toolbar in reportdesign, and just let the Controller.xcu mechanism do its job, or use .uno:Distribution which happens to not have an entry in Controller.xcu, and then manually define the sub menu in menubar.xml and report.xml, like we do now.\n\n\u003e I neither know what this report-thing is.\n\nOpen a DB in Base; in the left sidebar switch to \"Reports\", and click on \"Create Report in Design View...\"",
+      "parentUuid": "8d719a58_072281a4",
+      "revId": "e026e826ab2144544655e5eaec568e9caba37336",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
