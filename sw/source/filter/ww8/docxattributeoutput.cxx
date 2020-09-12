@@ -5762,7 +5762,7 @@ void DocxAttributeOutput::WriteOLEShape(const SwFlyFrameFormat& rFrameFormat, co
             break;
     }
     pAttr->addNS(XML_o, XML_ole, ""); //compulsory, even if it's empty
-    m_pSerializer->startElementNS(XML_v, XML_shape, pAttr);//Write the collected atttrs...
+    m_pSerializer->startElementNS(XML_v, XML_shape, pAttr);//Write the collected attrs...
 
     if (!sLineType.isEmpty() && !sDashType.isEmpty()) //If there is a line/dash style it is time to export it
     {
@@ -5834,7 +5834,7 @@ OString DocxAttributeOutput::GetOLEStyle(const SwFlyFrameFormat& rFormat, const 
 
 void DocxAttributeOutput::ExportOLESurround(const SwFormatSurround& rWrap)
 {
-    const bool bIsContour = rWrap.IsContour(); //Has the shape countour or not
+    const bool bIsContour = rWrap.IsContour(); //Has the shape contour or not
     OString sSurround;
     OString sSide;
 

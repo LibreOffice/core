@@ -655,7 +655,7 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
                 if (it != rDiagramFontHeights.end())
                 {
                     // Internal name matches: put drawingml::Shape to the relevant group, for
-                    // syncronized font height handling.
+                    // synchronized font height handling.
                     it->second.insert({ aCurrShape, {} });
                 }
             }
