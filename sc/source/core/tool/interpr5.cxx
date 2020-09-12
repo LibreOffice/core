@@ -159,7 +159,7 @@ void ScInterpreter::ScGCD()
                 FormulaError nErr = FormulaError::NONE;
                 PopDoubleRef( aRange, nParamCount, nRefInList);
                 double nCellVal;
-                ScValueIterator aValIter( &mrDoc, aRange, mnSubTotalFlags );
+                ScValueIterator aValIter( mrDoc, aRange, mnSubTotalFlags );
                 if (aValIter.GetFirst(nCellVal, nErr))
                 {
                     do
@@ -236,7 +236,7 @@ void ScInterpreter:: ScLCM()
                 FormulaError nErr = FormulaError::NONE;
                 PopDoubleRef( aRange, nParamCount, nRefInList);
                 double nCellVal;
-                ScValueIterator aValIter( &mrDoc, aRange, mnSubTotalFlags );
+                ScValueIterator aValIter( mrDoc, aRange, mnSubTotalFlags );
                 if (aValIter.GetFirst(nCellVal, nErr))
                 {
                     do

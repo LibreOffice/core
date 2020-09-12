@@ -97,9 +97,9 @@ static void ScAttrArray_IterGetNumberFormat( sal_uInt32& nFormat, const ScAttrAr
     nAttrEndRow = nRowEnd;
 }
 
-ScValueIterator::ScValueIterator( ScDocument* pDocument, const ScRange& rRange,
+ScValueIterator::ScValueIterator( ScDocument& rDocument, const ScRange& rRange,
             SubtotalFlags nSubTotalFlags, bool bTextZero )
-    : pDoc(pDocument)
+    : mrDoc(rDocument)
     , pContext(nullptr)
     , pAttrArray(nullptr)
     , nNumFormat(0) // Initialized in GetNumberFormat
@@ -112,16 +112,16 @@ ScValueIterator::ScValueIterator( ScDocument* pDocument, const ScRange& rRange,
     , mnSubTotalFlags(nSubTotalFlags)
     , nNumFmtType(SvNumFormatType::UNDEFINED)
     , bNumValid(false)
-    , bCalcAsShown(pDocument->GetDocOptions().IsCalcAsShown())
+    , bCalcAsShown(rDocument.GetDocOptions().IsCalcAsShown())
     , bTextAsZero(bTextZero)
     , mpCells(nullptr)
 {
-    SCTAB nDocMaxTab = pDocument->GetTableCount() - 1;
+    SCTAB nDocMaxTab = rDocument.GetTableCount() - 1;
 
-    if (!pDocument->ValidCol(maStartPos.Col())) maStartPos.SetCol(pDoc->MaxCol());
-    if (!pDocument->ValidCol(maEndPos.Col())) maEndPos.SetCol(pDoc->MaxCol());
-    if (!pDocument->ValidRow(maStartPos.Row())) maStartPos.SetRow(pDoc->MaxRow());
-    if (!pDocument->ValidRow(maEndPos.Row())) maEndPos.SetRow(pDoc->MaxRow());
+    if (!rDocument.ValidCol(maStartPos.Col())) maStartPos.SetCol(mrDoc.MaxCol());
+    if (!rDocument.ValidCol(maEndPos.Col())) maEndPos.SetCol(mrDoc.MaxCol());
+    if (!rDocument.ValidRow(maStartPos.Row())) maStartPos.SetRow(mrDoc.MaxRow());
+    if (!rDocument.ValidRow(maEndPos.Row())) maEndPos.SetRow(mrDoc.MaxRow());
     if (!ValidTab(maStartPos.Tab()) || maStartPos.Tab() > nDocMaxTab) maStartPos.SetTab(nDocMaxTab);
     if (!ValidTab(maEndPos.Tab()) || maEndPos.Tab() > nDocMaxTab) maEndPos.SetTab(nDocMaxTab);
 }
@@ -162,14 +162,14 @@ bool ScValueIterator::GetThis(double& rValue, FormulaError& rErr)
 
         ScColumn* pCol;
         if (!bNextColumn)
-            pCol = &(pDoc->maTabs[mnTab])->aCol[mnCol];
+            pCol = &(mrDoc.maTabs[mnTab])->aCol[mnCol];
         else
         {
             // Find the next available column.
             do
             {
                 ++mnCol;
-                if (mnCol > maEndPos.Col() || mnCol >= pDoc->maTabs[mnTab]->GetAllocatedColumnsCount())
+                if (mnCol > maEndPos.Col() || mnCol >= mrDoc.maTabs[mnTab]->GetAllocatedColumnsCount())
                 {
                     mnCol = maStartPos.Col();
                     ++mnTab;
@@ -179,7 +179,7 @@ bool ScValueIterator::GetThis(double& rValue, FormulaError& rErr)
                         return false; // Over and out
                     }
                 }
-                pCol = &(pDoc->maTabs[mnTab])->aCol[mnCol];
+                pCol = &(mrDoc.maTabs[mnTab])->aCol[mnCol];
             }
             while (pCol->IsEmptyData());
 
@@ -191,9 +191,9 @@ bool ScValueIterator::GetThis(double& rValue, FormulaError& rErr)
         SCROW nLastRow;
         // Skip all filtered or hidden rows, depending on mnSubTotalFlags
         if ( ( ( mnSubTotalFlags & SubtotalFlags::IgnoreFiltered ) &&
-               pDoc->RowFiltered( nCurRow, mnTab, nullptr, &nLastRow ) ) ||
+               mrDoc.RowFiltered( nCurRow, mnTab, nullptr, &nLastRow ) ) ||
              ( ( mnSubTotalFlags & SubtotalFlags::IgnoreHidden ) &&
-               pDoc->RowHidden( nCurRow, mnTab, nullptr, &nLastRow ) ) )
+               mrDoc.RowHidden( nCurRow, mnTab, nullptr, &nLastRow ) ) )
         {
             maCurPos = mpCells->position(maCurPos.first, nLastRow+1);
             continue;
@@ -209,8 +209,8 @@ bool ScValueIterator::GetThis(double& rValue, FormulaError& rErr)
                 if (bCalcAsShown)
                 {
                     ScAttrArray_IterGetNumberFormat(nNumFormat, pAttrArray,
-                        nAttrEndRow, pCol->pAttrArray.get(), nCurRow, pDoc, pContext);
-                    rValue = pDoc->RoundValueAsShown(rValue, nNumFormat, pContext);
+                        nAttrEndRow, pCol->pAttrArray.get(), nCurRow, &mrDoc, pContext);
+                    rValue = mrDoc.RoundValueAsShown(rValue, nNumFormat, pContext);
                 }
                 return true; // Found it!
             }
@@ -269,10 +269,10 @@ bool ScValueIterator::GetThis(double& rValue, FormulaError& rErr)
 
 void ScValueIterator::GetCurNumFmtInfo( const ScInterpreterContext& rContext, SvNumFormatType& nType, sal_uInt32& nIndex )
 {
-    if (!bNumValid && mnTab < pDoc->GetTableCount())
+    if (!bNumValid && mnTab < mrDoc.GetTableCount())
     {
         SCROW nCurRow = GetRow();
-        const ScColumn* pCol = &(pDoc->maTabs[mnTab])->aCol[mnCol];
+        const ScColumn* pCol = &(mrDoc.maTabs[mnTab])->aCol[mnCol];
         nNumFmtIndex = pCol->GetNumberFormat(rContext, nCurRow);
         nNumFmtType = rContext.GetNumberFormatType( nNumFmtIndex );
         bNumValid = true;
@@ -287,7 +287,7 @@ bool ScValueIterator::GetFirst(double& rValue, FormulaError& rErr)
     mnCol = maStartPos.Col();
     mnTab = maStartPos.Tab();
 
-    ScTable* pTab = pDoc->FetchTable(mnTab);
+    ScTable* pTab = mrDoc.FetchTable(mnTab);
     if (!pTab)
         return false;
 
