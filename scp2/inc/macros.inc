@@ -179,12 +179,12 @@ End
         Dir    = gid_Dir_Shlxthdl; \
     End
 
-#define SHLXTHDL_LIB_FILE_COMPONENTCONDITION(id,name,cond) \
+#define SHLXTHDL_X64_LIB_FILE_COMPONENTCONDITION(id,name,cond) \
     File id \
         Name = name; \
         LIB_FILE_BODY; \
         Styles = (PACKED); \
-        Dir    = gid_Dir_Shlxthdl; \
+        Dir    = gid_Dir_Shlxthdl_x64; \
         ComponentCondition = cond; \
     End
 

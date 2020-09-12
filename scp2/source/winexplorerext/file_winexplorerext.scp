@@ -23,3 +23,9 @@ Directory gid_Dir_Shlxthdl
     DosName = "shlxthdl";
 End
 
+#ifdef BUILD_X64
+Directory gid_Dir_Shlxthdl_x64
+    ParentID = gid_Dir_Shlxthdl;
+    DosName = ".";
+End
+#endif
