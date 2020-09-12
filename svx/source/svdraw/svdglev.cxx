@@ -297,7 +297,7 @@ void SdrGlueEditView::ImpCopyMarkedGluePoints()
             }
             for(const auto& rId : aIdsToErase)
                 rPts.erase(rId);
-            rPts.insert(aIdsToInsert.begin(), aIdsToInsert.end());
+            rPts.insert(aIdsToInsert);
         }
     }
     if( bUndo )

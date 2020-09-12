@@ -26,6 +26,7 @@
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <set>
+#include <o3tl/sorted_vector.hxx>
 
 namespace sdr
 {
@@ -41,15 +42,15 @@ public:
     /** returns true if the B2DPolyPolygon was changed.
         Warning: B2DPolyPolygon can be empty after this operation!
     */
-    bool DeletePoints( const std::set< sal_uInt16 >& rAbsPoints );
+    bool DeletePoints( const o3tl::sorted_vector< sal_uInt16 >& rAbsPoints );
 
     /** returns true if the B2DPolyPolygon was changed.
     */
-    bool SetSegmentsKind(SdrPathSegmentKind eKind, const std::set< sal_uInt16 >& rAbsPoints);
+    bool SetSegmentsKind(SdrPathSegmentKind eKind, const o3tl::sorted_vector< sal_uInt16 >& rAbsPoints);
 
     /** returns true if the B2DPolyPolygon was changed.
     */
-    bool SetPointsSmooth( basegfx::B2VectorContinuity eFlags, const std::set< sal_uInt16 >& rAbsPoints);
+    bool SetPointsSmooth( basegfx::B2VectorContinuity eFlags, const o3tl::sorted_vector< sal_uInt16 >& rAbsPoints);
 
     /** Outputs the relative position ( polygon number and point number in that polygon ) from the absolute point number.
         False is returned if the given absolute point is greater not inside this B2DPolyPolygon
