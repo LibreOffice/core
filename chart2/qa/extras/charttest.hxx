@@ -29,6 +29,7 @@
 
 #include <unotools/tempfile.hxx>
 #include <rtl/math.hxx>
+#include <svx/charthelper.hxx>
 
 #include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -204,6 +205,11 @@ Reference< lang::XComponent > getChartCompFromSheet( sal_Int32 nSheet, uno::Refe
 Reference< chart2::XChartDocument > getChartDocFromSheet( sal_Int32 nSheet, uno::Reference< lang::XComponent > const & xComponent )
 {
     uno::Reference< chart2::XChartDocument > xChartDoc ( getChartCompFromSheet(nSheet, xComponent), UNO_QUERY_THROW );
+
+    // Update the chart view, so that its draw page is updated and ready for the test
+    css::uno::Reference<css::frame::XModel> xModel(xChartDoc, css::uno::UNO_QUERY_THROW);
+    ChartHelper::updateChart(xModel);
+
     return xChartDoc;
 }
 
