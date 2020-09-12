@@ -43,7 +43,7 @@ Module gid_Module_Optional_Winexplorerext_x64
     Sortkey = "1210";
     Default = YES;
     Styles = (HIDDEN_ROOT);
-    Dirs = (gid_Dir_Shlxthdl);
+    Dirs = (gid_Dir_Shlxthdl_x64);
     Files = (auto_winexplorerextwin64_ALL);
 End
 #endif
