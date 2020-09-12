@@ -990,7 +990,7 @@ void SwLayHelper::CheckFlyCache_( SwPageFrame* pPage )
         ++mnFlyIdx;
 
     // sort cached objects on this page by ordnum
-    std::set< const SwFlyCache*, FlyCacheCompare > aFlyCacheSet;
+    o3tl::sorted_vector< const SwFlyCache*, FlyCacheCompare > aFlyCacheSet;
     size_t nIdx = mnFlyIdx;
 
     SwFlyCache* pFlyC;
@@ -1002,7 +1002,7 @@ void SwLayHelper::CheckFlyCache_( SwPageFrame* pPage )
     }
 
     // sort objects on this page by ordnum
-    std::set< const SdrObject*, SdrObjectCompare > aFlySet;
+    o3tl::sorted_vector< const SdrObject*, SdrObjectCompare > aFlySet;
     for (SwAnchoredObject* pAnchoredObj : rObjs)
     {
         if (SwFlyFrame *pFly = dynamic_cast<SwFlyFrame*>(pAnchoredObj))  // a text frame?
@@ -1022,8 +1022,7 @@ void SwLayHelper::CheckFlyCache_( SwPageFrame* pPage )
     if ( aFlyCacheSet.size() != aFlySet.size() )
         return;
 
-    std::set< const SdrObject*, SdrObjectCompare >::iterator aFlySetIt =
-            aFlySet.begin();
+    auto aFlySetIt = aFlySet.begin();
 
     for ( const SwFlyCache* pFlyCache : aFlyCacheSet )
     {
