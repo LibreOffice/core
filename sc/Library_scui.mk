@@ -39,6 +39,9 @@ $(eval $(call gb_Library_use_externals,scui,\
 	$(call gb_Helper_optional,OPENCL, \
 		clew) \
 	mdds_headers \
+	icui18n \
+	icuuc \
+	icu_headers \
 ))
 
 $(eval $(call gb_Library_use_libraries,scui,\
