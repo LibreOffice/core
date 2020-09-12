@@ -212,12 +212,12 @@ void ScFormulaReferenceHelper::ShowFormulaReference(const OUString& rStr)
             if(bDoubleRef)
             {
                 ScComplexRefData aRef( *pToken->GetDoubleRef() );
-                aRange = aRef.toAbs(pDoc, aPos);
+                aRange = aRef.toAbs(*pDoc, aPos);
             }
             else
             {
                 ScSingleRefData aRef( *pToken->GetSingleRef() );
-                aRange.aStart = aRef.toAbs(pDoc, aPos);
+                aRange.aStart = aRef.toAbs(*pDoc, aPos);
                 aRange.aEnd = aRange.aStart;
             }
             Color aColName=ScRangeFindList::GetColorName(nIndex++);

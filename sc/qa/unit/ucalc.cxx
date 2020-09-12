@@ -4648,7 +4648,7 @@ bool hasRange(const ScDocument* pDoc, const std::vector<ScTokenRef>& rRefTokens,
                 if (rRange.aStart != rRange.aEnd)
                     break;
 
-                ScAddress aThis = aData.toAbs(pDoc, rPos);
+                ScAddress aThis = aData.toAbs(*pDoc, rPos);
                 if (aThis == rRange.aStart)
                     return true;
             }
@@ -4656,7 +4656,7 @@ bool hasRange(const ScDocument* pDoc, const std::vector<ScTokenRef>& rRefTokens,
             case formula::svDoubleRef:
             {
                 ScComplexRefData aData = *p->GetDoubleRef();
-                ScRange aThis = aData.toAbs(pDoc, rPos);
+                ScRange aThis = aData.toAbs(*pDoc, rPos);
                 if (aThis == rRange)
                     return true;
             }

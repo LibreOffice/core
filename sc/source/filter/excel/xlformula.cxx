@@ -931,7 +931,7 @@ bool lclGetAddress( const ScDocument* pDoc, ScAddress& rAddress, const FormulaTo
     if( bIsSingleRef )
     {
         const ScSingleRefData& rRef = *rToken.GetSingleRef();
-        rAddress = rRef.toAbs(pDoc, rPos);
+        rAddress = rRef.toAbs(*pDoc, rPos);
         bIsSingleRef = !rRef.IsDeleted();
     }
     return bIsSingleRef;

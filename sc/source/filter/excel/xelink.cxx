@@ -2391,8 +2391,8 @@ void XclExpLinkManagerImpl8::FindExtSheet(
 
 void XclExpLinkManagerImpl8::StoreCellRange( const ScSingleRefData& rRef1, const ScSingleRefData& rRef2, const ScAddress& rPos )
 {
-    ScAddress aAbs1 = rRef1.toAbs(&GetRoot().GetDoc(), rPos);
-    ScAddress aAbs2 = rRef2.toAbs(&GetRoot().GetDoc(), rPos);
+    ScAddress aAbs1 = rRef1.toAbs(GetRoot().GetDoc(), rPos);
+    ScAddress aAbs2 = rRef2.toAbs(GetRoot().GetDoc(), rPos);
     if (!(!rRef1.IsDeleted() && !rRef2.IsDeleted() && (aAbs1.Tab() >= 0) && (aAbs2.Tab() >= 0)))
         return;
 

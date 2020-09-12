@@ -185,9 +185,9 @@ bool ScSingleRefData::ValidExternal(const ScDocument* pDoc) const
     return ColValid(pDoc) && RowValid(pDoc) && mnTab >= -1;
 }
 
-ScAddress ScSingleRefData::toAbs( const ScDocument* pDoc, const ScAddress& rPos ) const
+ScAddress ScSingleRefData::toAbs( const ScDocument& rDoc, const ScAddress& rPos ) const
 {
-    return toAbs(pDoc->GetSheetLimits(), rPos);
+    return toAbs(rDoc.GetSheetLimits(), rPos);
 }
 
 ScAddress ScSingleRefData::toAbs( ScSheetLimits& rLimits, const ScAddress& rPos ) const
@@ -485,9 +485,9 @@ bool ScComplexRefData::ValidExternal(const ScDocument* pDoc) const
     return Ref1.ValidExternal(pDoc) && Ref2.ColValid(pDoc) && Ref2.RowValid(pDoc) && Ref1.Tab() <= Ref2.Tab();
 }
 
-ScRange ScComplexRefData::toAbs( const ScDocument* pDoc, const ScAddress& rPos ) const
+ScRange ScComplexRefData::toAbs( const ScDocument& rDoc, const ScAddress& rPos ) const
 {
-    return toAbs(pDoc->GetSheetLimits(), rPos);
+    return toAbs(rDoc.GetSheetLimits(), rPos);
 }
 
 ScRange ScComplexRefData::toAbs( ScSheetLimits& rLimits, const ScAddress& rPos ) const

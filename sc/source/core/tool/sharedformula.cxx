@@ -411,7 +411,7 @@ void SharedFormulaUtil::startListeningAsGroup( sc::StartListeningContext& rCxt, 
             case formula::svSingleRef:
             {
                 const ScSingleRefData* pRef = t->GetSingleRef();
-                ScAddress aPos = pRef->toAbs(&rDoc, rTopCell.aPos);
+                ScAddress aPos = pRef->toAbs(rDoc, rTopCell.aPos);
                 ScFormulaCell** pp = ppSharedTop;
                 ScFormulaCell** ppEnd = ppSharedTop + xGroup->mnLength;
                 for (; pp != ppEnd; ++pp)
@@ -429,8 +429,8 @@ void SharedFormulaUtil::startListeningAsGroup( sc::StartListeningContext& rCxt, 
             {
                 const ScSingleRefData& rRef1 = *t->GetSingleRef();
                 const ScSingleRefData& rRef2 = *t->GetSingleRef2();
-                ScAddress aPos1 = rRef1.toAbs(&rDoc, rTopCell.aPos);
-                ScAddress aPos2 = rRef2.toAbs(&rDoc, rTopCell.aPos);
+                ScAddress aPos1 = rRef1.toAbs(rDoc, rTopCell.aPos);
+                ScAddress aPos2 = rRef2.toAbs(rDoc, rTopCell.aPos);
 
                 ScRange aOrigRange(aPos1, aPos2);
                 ScRange aListenedRange = aOrigRange;

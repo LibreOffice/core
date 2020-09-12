@@ -121,7 +121,7 @@ bool ScGroupTokenConverter::convert( const ScTokenArray& rCode, sc::FormulaLogge
                 ScSingleRefData aRef = *p->GetSingleRef();
                 if( aRef.IsDeleted())
                     return false;
-                ScAddress aRefPos = aRef.toAbs(&mrDoc, mrPos);
+                ScAddress aRefPos = aRef.toAbs(mrDoc, mrPos);
                 if (aRef.IsRowRel())
                 {
                     if (isSelfReferenceRelative(aRefPos, aRef.Row()))
@@ -192,7 +192,7 @@ bool ScGroupTokenConverter::convert( const ScTokenArray& rCode, sc::FormulaLogge
                 ScComplexRefData aRef = *p->GetDoubleRef();
                 if( aRef.IsDeleted())
                     return false;
-                ScRange aAbs = aRef.toAbs(&mrDoc, mrPos);
+                ScRange aAbs = aRef.toAbs(mrDoc, mrPos);
 
                 // Multiple sheets not handled by vector/matrix.
                 if (aRef.Ref1.Tab() != aRef.Ref2.Tab())

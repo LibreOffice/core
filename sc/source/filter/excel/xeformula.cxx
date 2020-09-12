@@ -1839,7 +1839,7 @@ SCTAB XclExpFmlaCompImpl::GetScTab( const ScSingleRefData& rRefData ) const
     if (!mxData->mpScBasePos)
         return SCTAB_INVALID;
 
-    return rRefData.toAbs(&GetRoot().GetDoc(), *mxData->mpScBasePos).Tab();
+    return rRefData.toAbs(GetRoot().GetDoc(), *mxData->mpScBasePos).Tab();
 }
 
 bool XclExpFmlaCompImpl::IsRef2D( const ScSingleRefData& rRefData, bool bCheck3DFlag ) const
@@ -1876,7 +1876,7 @@ void XclExpFmlaCompImpl::ConvertRefData(
     if( mxData->mpScBasePos )
     {
         // *** reference position exists (cell, matrix) - convert to absolute ***
-        ScAddress aAbs = rRefData.toAbs(&GetRoot().GetDoc(), *mxData->mpScBasePos);
+        ScAddress aAbs = rRefData.toAbs(GetRoot().GetDoc(), *mxData->mpScBasePos);
 
         // convert column index
         if (bTruncMaxCol && (aAbs.Col() == mnMaxScCol))
@@ -2060,7 +2060,7 @@ void XclExpFmlaCompImpl::ProcessExternalCellRef( const XclExpScToken& rTokData )
         sal_uInt16 nFileId = rTokData.mpScToken->GetIndex();
         OUString aTabName = rTokData.mpScToken->GetString().getString();
         if( mxData->mrCfg.mbFromCell && mxData->mpScBasePos )
-            mxData->mpLinkMgr->StoreCell(nFileId, aTabName, aRefData.toAbs(&GetRoot().GetDoc(), *mxData->mpScBasePos));
+            mxData->mpLinkMgr->StoreCell(nFileId, aTabName, aRefData.toAbs(GetRoot().GetDoc(), *mxData->mpScBasePos));
 
         // 1-based EXTERNSHEET index and 0-based Excel sheet indexes
         sal_uInt16 nExtSheet, nFirstSBTab, nLastSBTab;
@@ -2096,7 +2096,7 @@ void XclExpFmlaCompImpl::ProcessExternalRangeRef( const XclExpScToken& rTokData 
         sal_uInt16 nFileId = rTokData.mpScToken->GetIndex();
         OUString aTabName = rTokData.mpScToken->GetString().getString();
         if( mxData->mrCfg.mbFromCell && mxData->mpScBasePos )
-            mxData->mpLinkMgr->StoreCellRange(nFileId, aTabName, aRefData.toAbs(&GetRoot().GetDoc(), *mxData->mpScBasePos));
+            mxData->mpLinkMgr->StoreCellRange(nFileId, aTabName, aRefData.toAbs(GetRoot().GetDoc(), *mxData->mpScBasePos));
 
         // 1-based EXTERNSHEET index and 0-based Excel sheet indexes
         sal_uInt16 nExtSheet, nFirstSBTab, nLastSBTab;
@@ -2175,14 +2175,14 @@ void XclExpFmlaCompImpl::ProcessExternalName( const XclExpScToken& rTokData )
                             {
                                 ScSingleRefData aRefData = *pScToken->GetSingleRef();
                                 mxData->mpLinkMgr->StoreCell(
-                                    nFileId, pScToken->GetString().getString(), aRefData.toAbs(&GetRoot().GetDoc(), *mxData->mpScBasePos));
+                                    nFileId, pScToken->GetString().getString(), aRefData.toAbs(GetRoot().GetDoc(), *mxData->mpScBasePos));
                             }
                             break;
                             case svExternalDoubleRef:
                             {
                                 ScComplexRefData aRefData = *pScToken->GetDoubleRef();
                                 mxData->mpLinkMgr->StoreCellRange(
-                                    nFileId, pScToken->GetString().getString(), aRefData.toAbs(&GetRoot().GetDoc(), *mxData->mpScBasePos));
+                                    nFileId, pScToken->GetString().getString(), aRefData.toAbs(GetRoot().GetDoc(), *mxData->mpScBasePos));
                             }
                             break;
                             default:

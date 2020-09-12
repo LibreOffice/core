@@ -966,14 +966,14 @@ void Test::testFormulaRefData()
     aRef.InitAddress(ScAddress(6,5,0));
 
     aDoubleRef.Extend(pDoc->GetSheetLimits(), aRef, ScAddress());
-    ScRange aTest = aDoubleRef.toAbs(pDoc.get(), ScAddress());
+    ScRange aTest = aDoubleRef.toAbs(*pDoc, ScAddress());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong start position of extended range.", ScAddress(2,2,0), aTest.aStart);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong end position of extended range.", ScAddress(6,5,0), aTest.aEnd);
 
     ScComplexRefData aDoubleRef2;
     aDoubleRef2.InitRangeRel(pDoc.get(), ScRange(1,2,0,8,6,0), ScAddress(5,5,0));
     aDoubleRef.Extend(pDoc->GetSheetLimits(), aDoubleRef2, ScAddress(5,5,0));
-    aTest = aDoubleRef.toAbs(pDoc.get(), ScAddress(5,5,0));
+    aTest = aDoubleRef.toAbs(*pDoc, ScAddress(5,5,0));
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong start position of extended range.", ScAddress(1,2,0), aTest.aStart);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong end position of extended range.", ScAddress(8,6,0), aTest.aEnd);
@@ -1192,7 +1192,7 @@ void Test::testFormulaCompilerImplicitIntersection2Param()
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong type of token(third argument to SUMIF)", svDoubleRef, ppTokens[2]->GetType());
 
             ScComplexRefData aSumRangeData = *ppTokens[2]->GetDoubleRef();
-            ScRange aSumRange = aSumRangeData.toAbs(m_pDoc, rCase.aCellAddress);
+            ScRange aSumRange = aSumRangeData.toAbs(*m_pDoc, rCase.aCellAddress);
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong sum-range in RPN array", rCase.aSumRange, aSumRange);
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong IsRel type for start column address in sum-range", rCase.bStartColRel, aSumRangeData.Ref1.IsColRel());
@@ -1373,7 +1373,7 @@ void Test::testFormulaCompilerImplicitIntersection1ParamWithChange()
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong type of RPN token(argument to COS)", svSingleRef, ppRPNTokens[0]->GetType());
 
             ScSingleRefData aArgAddrRPN = *ppRPNTokens[0]->GetSingleRef();
-            ScAddress aArgAddrActual = aArgAddrRPN.toAbs(m_pDoc, rCase.aCellAddress);
+            ScAddress aArgAddrActual = aArgAddrRPN.toAbs(*m_pDoc, rCase.aCellAddress);
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Computed implicit intersection singleref is wrong", rCase.aArgAddr, aArgAddrActual);
         }
     }

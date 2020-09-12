@@ -57,7 +57,7 @@ void QProToSc::ReadSRD( const ScDocument* pDoc, ScSingleRefData& rSRD, sal_Int8 
     {
         rSRD.SetAbsTab(nPage);
     }
-    if (rSRD.toAbs(pDoc, aEingPos).Tab() != aEingPos.Tab())
+    if (rSRD.toAbs(*pDoc, aEingPos).Tab() != aEingPos.Tab())
         rSRD.SetFlag3D(true);
 }
 
