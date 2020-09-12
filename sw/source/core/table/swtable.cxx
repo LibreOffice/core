@@ -54,7 +54,7 @@
 #include <shellres.hxx>
 #include <viewsh.hxx>
 #include <redline.hxx>
-#include <list>
+#include <vector>
 #include <calbck.hxx>
 
 #ifdef DBG_UTIL
