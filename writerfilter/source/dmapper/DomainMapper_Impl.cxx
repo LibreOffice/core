@@ -284,7 +284,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bParaChanged( false ),
         m_bIsFirstParaInSection( true ),
         m_bIsFirstParaInSectionAfterRedline( true ),
-        m_bDummyParaAddedForTableInSection( false ),
         m_bTextFrameInserted(false),
         m_bIsPreviousParagraphFramed( false ),
         m_bIsLastParaInSection( false ),
@@ -435,6 +434,36 @@ void DomainMapper_Impl::SetDocumentSettingsProperty( const OUString& rPropName, 
         }
     }
 }
+
+SectionInfo& DomainMapper_Impl::GetSectionInfo()
+{
+    // The stack will be empty during numbering and styles import
+    // (and perhaps other times as well, but those two have been observed or inferred).
+    if ( m_aSectionInfoStack.empty() )
+    {
+        m_aSectionInfoStack.emplace_back( SectionInfo() );
+    }
+    return m_aSectionInfoStack.back();
+}
+
+const SectionInfo& DomainMapper_Impl::GetSectionInfo() const
+{
+    static SectionInfo aDefaults;
+    return m_aSectionInfoStack.size() ? m_aSectionInfoStack.back() : aDefaults;
+}
+
+void DomainMapper_Impl::StartSectionInfo()
+{
+    m_aSectionInfoStack.emplace_back( SectionInfo() );
+}
+
+void DomainMapper_Impl::EndSectionInfo()
+{
+    assert( m_aSectionInfoStack.size() );
+    m_aSectionInfoStack.pop_back();
+}
+
+
 void DomainMapper_Impl::RemoveDummyParaForTableInSection()
 {
     SetIsDummyParaAddedForTableInSection(false);
@@ -587,7 +616,12 @@ void DomainMapper_Impl::SetIsFirstParagraphInShape(bool bIsFirst)
 
 void DomainMapper_Impl::SetIsDummyParaAddedForTableInSection( bool bIsAdded )
 {
-    m_bDummyParaAddedForTableInSection = bIsAdded;
+    GetSectionInfo().bDummyParaAddedForTable = bIsAdded;
+}
+
+bool DomainMapper_Impl::GetIsDummyParaAddedForTableInSection() const
+{
+    return GetSectionInfo().bDummyParaAddedForTable;
 }
 
 
