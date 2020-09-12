@@ -285,7 +285,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bParaChanged( false ),
         m_bIsFirstParaInSection( true ),
         m_bIsFirstParaInSectionAfterRedline( true ),
-        m_bDummyParaAddedForTableInSection( false ),
         m_bTextFrameInserted(false),
         m_bIsPreviousParagraphFramed( false ),
         m_bIsLastParaInSection( false ),
@@ -436,6 +435,40 @@ void DomainMapper_Impl::SetDocumentSettingsProperty( const OUString& rPropName, 
         }
     }
 }
+
+SectionInfo& DomainMapper_Impl::GetSectionInfo()
+{
+    assert( m_aSectionInfoStack.size() && "Info-gathering: import looking for section info without sectionStart" );
+    // The stack will be empty during numbering import(LN_NUMBERING) and IsStyleSheetImport()
+    // (and perhaps other times as well, but these have been observed),
+    // so in those cases perhaps they shouldn't be making changes to section variables?
+    if ( m_aSectionInfoStack.empty() )
+    {
+        // Create a dummy section. It will be ignored when a real section starts.
+        m_aSectionInfoStack.emplace_back( SectionInfo() );
+    }
+    return m_aSectionInfoStack.back();
+}
+
+const SectionInfo& DomainMapper_Impl::GetSectionInfo() const
+{
+    assert( m_aSectionInfoStack.size() && "Info-gathering: import looking for const section info without sectionStart" );
+    static const SectionInfo aDefaults;
+    return m_aSectionInfoStack.size() ? m_aSectionInfoStack.back() : aDefaults;
+}
+
+void DomainMapper_Impl::StartSectionInfo()
+{
+    m_aSectionInfoStack.emplace_back( SectionInfo() );
+}
+
+void DomainMapper_Impl::EndSectionInfo()
+{
+    assert( m_aSectionInfoStack.size() && "Info-gathering: import allows sectionEnd without sectionStart" );
+    // No known examples of where corrupt documents could end-before-start, and import model ought to enforce that anyway.
+    m_aSectionInfoStack.pop_back();
+}
+
 void DomainMapper_Impl::RemoveDummyParaForTableInSection()
 {
     SetIsDummyParaAddedForTableInSection(false);
@@ -588,7 +621,12 @@ void DomainMapper_Impl::SetIsFirstParagraphInShape(bool bIsFirst)
 
 void DomainMapper_Impl::SetIsDummyParaAddedForTableInSection( bool bIsAdded )
 {
-    m_bDummyParaAddedForTableInSection = bIsAdded;
+    GetSectionInfo().bDummyParaAddedForTable = bIsAdded;
+}
+
+bool DomainMapper_Impl::GetIsDummyParaAddedForTableInSection() const
+{
+    return GetSectionInfo().bDummyParaAddedForTable;
 }
 
 
