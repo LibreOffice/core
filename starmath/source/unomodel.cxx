@@ -1063,15 +1063,8 @@ void SAL_CALL SmModel::setParent( const uno::Reference< uno::XInterface >& xPare
 {
     SolarMutexGuard aGuard;
     SfxBaseModel::setParent( xParent );
-    uno::Reference< lang::XUnoTunnel > xParentTunnel( xParent, uno::UNO_QUERY );
-    if ( xParentTunnel.is() )
-    {
-        SvGlobalName aSfxIdent( SFX_GLOBAL_CLASSID );
-        SfxObjectShell* pDoc = reinterpret_cast<SfxObjectShell *>(xParentTunnel->getSomething(
-                                        aSfxIdent.GetByteSequence() ) );
-        if ( pDoc )
-            GetObjectShell()->OnDocumentPrinterChanged( pDoc->GetDocumentPrinter() );
-    }
+    if (SfxObjectShell* pDoc = SfxObjectShell::GetShellFromComponent(xParent))
+        GetObjectShell()->OnDocumentPrinterChanged(pDoc->GetDocumentPrinter());
 }
 
 void SmModel::writeFormulaOoxml(

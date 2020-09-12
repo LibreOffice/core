@@ -57,6 +57,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
+#include <sfx2/objsh.hxx>
 
 #include <algorithm>
 
@@ -669,6 +670,9 @@ sal_Bool SAL_CALL ChartModel::isModified()
 void SAL_CALL ChartModel::setModified( sal_Bool bModified )
 {
     apphelper::LifeTimeGuard aGuard(m_aLifeTimeManager);
+    if (auto pPSh = SfxObjectShell::GetParentShell(static_cast<css::container::XChild*>(this));
+        pPSh && !pPSh->IsEnableSetModified())
+        return;
     if(!aGuard.startApiCall())//@todo ? is this a long lasting call??
         return; //behave passive if already disposed or closed or throw exception @todo?
     m_bModified = bModified;

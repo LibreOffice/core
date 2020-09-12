@@ -30,7 +30,6 @@
 #include <vcl/menu.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
-#include <tools/globname.hxx>
 #include <tools/svborder.hxx>
 #include <osl/diagnose.h>
 
@@ -691,15 +690,10 @@ void SfxFrame::Resize()
             SfxInPlaceClient* pClient = GetCurrentViewFrame()->GetViewShell() ? GetCurrentViewFrame()->GetViewShell()->GetUIActiveIPClient_Impl() : nullptr;
             if ( pClient )
             {
-                uno::Reference < lang::XUnoTunnel > xObj( pClient->GetObject()->getComponent(), uno::UNO_QUERY );
-                uno::Sequence < sal_Int8 > aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
-                sal_Int64 nHandle = (xObj.is()? xObj->getSomething( aSeq ): 0);
-                if ( nHandle )
-                {
-                    SfxObjectShell* pDoc = reinterpret_cast< SfxObjectShell* >( sal::static_int_cast< sal_IntPtr >( nHandle ));
-                    SfxViewFrame *pFrame = SfxViewFrame::GetFirst( pDoc );
-                    pWork = pFrame ? pFrame->GetFrame().GetWorkWindow_Impl() : nullptr;
-                }
+                SfxObjectShell* pDoc
+                    = SfxObjectShell::GetShellFromComponent(pClient->GetObject()->getComponent());
+                SfxViewFrame* pFrame = SfxViewFrame::GetFirst(pDoc);
+                pWork = pFrame ? pFrame->GetFrame().GetWorkWindow_Impl() : nullptr;
             }
 
             if ( pWork )
