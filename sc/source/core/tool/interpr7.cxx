@@ -297,14 +297,14 @@ void ScInterpreter::ScWebservice()
 
     if (!mpLinkManager)
     {
-        if (!pDok->IsFunctionAccess() || pDok->HasLinkFormulaNeedingCheck())
+        if (!mrDoc.IsFunctionAccess() || mrDoc.HasLinkFormulaNeedingCheck())
         {
             PushError( FormulaError::NoValue);
         }
         else
         {
             OUString aResult;
-            if (lcl_FunctionAccessLoadWebServiceLink( aResult, pDok, aURI))
+            if (lcl_FunctionAccessLoadWebServiceLink( aResult, &mrDoc, aURI))
                 PushString( aResult);
             else
                 PushError( FormulaError::NoValue);
@@ -316,8 +316,8 @@ void ScInterpreter::ScWebservice()
     pArr->AddRecalcMode( ScRecalcMode::ONLOAD_LENIENT );
 
     //  while the link is not evaluated, idle must be disabled (to avoid circular references)
-    bool bOldEnabled = pDok->IsIdleEnabled();
-    pDok->EnableIdle(false);
+    bool bOldEnabled = mrDoc.IsIdleEnabled();
+    mrDoc.EnableIdle(false);
 
     // Get/ Create link object
     ScWebServiceLink* pLink = lcl_GetWebServiceLink(mpLinkManager, aURI);
@@ -326,11 +326,11 @@ void ScInterpreter::ScWebservice()
 
     if (!pLink)
     {
-        pLink = new ScWebServiceLink(pDok, aURI);
+        pLink = new ScWebServiceLink(&mrDoc, aURI);
         mpLinkManager->InsertFileLink(*pLink, sfx2::SvBaseLinkObjectType::ClientFile, aURI);
         if ( mpLinkManager->GetLinks().size() == 1 )                    // the first one?
         {
-            SfxBindings* pBindings = pDok->GetViewBindings();
+            SfxBindings* pBindings = mrDoc.GetViewBindings();
             if (pBindings)
                 pBindings->Invalidate( SID_LINKS );             // Link-Manager enabled
         }
@@ -338,7 +338,7 @@ void ScInterpreter::ScWebservice()
         //if the document was just loaded, but the ScDdeLink entry was missing, then
         //don't update this link until the links are updated in response to the users
         //decision
-        if (!pDok->HasLinkFormulaNeedingCheck())
+        if (!mrDoc.HasLinkFormulaNeedingCheck())
         {
             pLink->Update();
         }
@@ -362,7 +362,7 @@ void ScInterpreter::ScWebservice()
     //  check the value
     if (pLink->HasResult())
         PushString(pLink->GetResult());
-    else if (pDok->HasLinkFormulaNeedingCheck())
+    else if (mrDoc.HasLinkFormulaNeedingCheck())
     {
         // If this formula cell is recalculated just after load and the
         // expression is exactly WEBSERVICE("literal_URI") (i.e. no other
@@ -400,7 +400,7 @@ void ScInterpreter::ScWebservice()
     else
         PushError(FormulaError::NoValue);
 
-    pDok->EnableIdle(bOldEnabled);
+    mrDoc.EnableIdle(bOldEnabled);
     mpLinkManager->CloseCachedComps();
 }
 
@@ -481,9 +481,9 @@ void ScInterpreter::ScDebugVar()
         // Set the number of pivot tables in the document.
 
         double fVal = 0.0;
-        if (pDok->HasPivotTable())
+        if (mrDoc.HasPivotTable())
         {
-            const ScDPCollection* pDPs = pDok->GetDPCollection();
+            const ScDPCollection* pDPs = mrDoc.GetDPCollection();
             fVal = pDPs->GetCount();
         }
         PushDouble(fVal);

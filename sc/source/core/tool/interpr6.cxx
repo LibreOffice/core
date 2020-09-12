@@ -675,9 +675,9 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                 }
 
                 if ( ( ( mnSubTotalFlags & SubtotalFlags::IgnoreFiltered ) &&
-                     pDok->RowFiltered( aAdr.Row(), aAdr.Tab() ) ) ||
+                     mrDoc.RowFiltered( aAdr.Row(), aAdr.Tab() ) ) ||
                      ( ( mnSubTotalFlags & SubtotalFlags::IgnoreHidden ) &&
-                       pDok->RowHidden( aAdr.Row(), aAdr.Tab() ) ) )
+                       mrDoc.RowHidden( aAdr.Row(), aAdr.Tab() ) ) )
                 {
                     break;
                 }
@@ -689,7 +689,7 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                         ++nCount;
                     break;
                 }
-                ScRefCellValue aCell(*pDok, aAdr);
+                ScRefCellValue aCell(mrDoc, aAdr);
                 if (!aCell.isEmpty())
                 {
                     if( eFunc == ifCOUNT2 )
@@ -810,7 +810,7 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                 }
                 if( eFunc == ifCOUNT2 )
                 {
-                    ScCellIterator aIter( pDok, aRange, mnSubTotalFlags );
+                    ScCellIterator aIter( &mrDoc, aRange, mnSubTotalFlags );
                     for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
                     {
                         if ( !aIter.isEmpty() )
@@ -833,7 +833,7 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                     if ( eFunc == ifSUM )
                     {
                         FuncSum aAction(mrContext);
-                        aSet.executeColumnAction( *pDok, aAction, fMem );
+                        aSet.executeColumnAction( mrDoc, aAction, fMem );
                         FormulaError nErr = aAction.getError();
                         if ( nErr != FormulaError::NONE )
                         {
@@ -848,7 +848,7 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                     else
                     {
                         FuncCount aAction(mrContext);
-                        aSet.executeColumnAction(*pDok, aAction);
+                        aSet.executeColumnAction(mrDoc, aAction);
                         nCount += aAction.getCount();
 
                         // Get the number format of the last iterated cell.
@@ -859,7 +859,7 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                 }
                 else
                 {
-                    ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags, bTextAsZero );
+                    ScValueIterator aValIter( &mrDoc, aRange, mnSubTotalFlags, bTextAsZero );
                     aValIter.SetInterpreterContext( &mrContext );
                     FormulaError nErr = FormulaError::NONE;
                     if (aValIter.GetFirst(fVal, nErr))

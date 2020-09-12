@@ -197,7 +197,7 @@ private:
     ScAddress   aPos;
     ScTokenArray* pArr;
     ScInterpreterContext& mrContext;
-    ScDocument* pDok;
+    ScDocument& mrDoc;
     sfx2::LinkManager* mpLinkManager;
     svl::SharedStringPool& mrStrPool;
     formula::FormulaConstTokenRef  xResult;
@@ -1006,7 +1006,7 @@ private:
     double GetTInv( double fAlpha, double fSize, int nType );
 
 public:
-    ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc, ScInterpreterContext& rContext,
+    ScInterpreter( ScFormulaCell* pCell, ScDocument& rDoc, ScInterpreterContext& rContext,
                     const ScAddress&, ScTokenArray&, bool bForGroupThreading = false );
     ~ScInterpreter();
 

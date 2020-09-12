@@ -1404,7 +1404,7 @@ void ScInterpreter::ScConcat_MS()
                 PopSingleRef( aAdr );
                 if ( nGlobalError != FormulaError::NONE )
                     break;
-                ScRefCellValue aCell( *pDok, aAdr );
+                ScRefCellValue aCell( mrDoc, aAdr );
                 if ( !aCell.isEmpty() )
                 {
                     if ( !aCell.hasEmptyValue() )
@@ -1447,7 +1447,7 @@ void ScInterpreter::ScConcat_MS()
                     {
                         aAdr.SetRow( nRow );
                         aAdr.SetCol( nCol );
-                        ScRefCellValue aCell( *pDok, aAdr );
+                        ScRefCellValue aCell( mrDoc, aAdr );
                         if ( !aCell.isEmpty() )
                         {
                             if ( !aCell.hasEmptyValue() )
@@ -1535,7 +1535,7 @@ void ScInterpreter::ScTextJoin_MS()
             PopSingleRef( aAdr );
             if ( nGlobalError != FormulaError::NONE )
                 break;
-            ScRefCellValue aCell( *pDok, aAdr );
+            ScRefCellValue aCell( mrDoc, aAdr );
             if ( !aCell.isEmpty() )
             {
                 if ( !aCell.hasEmptyValue() )
@@ -1576,7 +1576,7 @@ void ScInterpreter::ScTextJoin_MS()
                 {
                     aAdr.SetRow( nRow );
                     aAdr.SetCol( nCol );
-                    ScRefCellValue aCell( *pDok, aAdr );
+                    ScRefCellValue aCell( mrDoc, aAdr );
                     if ( !aCell.isEmpty() )
                     {
                         if ( !aCell.hasEmptyValue() )
@@ -1678,7 +1678,7 @@ void ScInterpreter::ScTextJoin_MS()
                 PopSingleRef( aAdr );
                 if ( nGlobalError != FormulaError::NONE )
                     break;
-                ScRefCellValue aCell( *pDok, aAdr );
+                ScRefCellValue aCell( mrDoc, aAdr );
                 OUString aStr;
                 if ( !aCell.isEmpty() )
                 {
@@ -1739,7 +1739,7 @@ void ScInterpreter::ScTextJoin_MS()
                     {
                         aAdr.SetRow( nRow );
                         aAdr.SetCol( nCol );
-                        ScRefCellValue aCell( *pDok, aAdr );
+                        ScRefCellValue aCell( mrDoc, aAdr );
                         if ( !aCell.isEmpty() )
                         {
                             if ( !aCell.hasEmptyValue() )
@@ -1947,7 +1947,7 @@ void ScInterpreter::ScSwitch_MS()
                 ScAddress aAdr;
                 if (!PopDoubleRefOrSingleRef( aAdr ))
                     break;
-                ScRefCellValue aCell( *pDok, aAdr );
+                ScRefCellValue aCell( mrDoc, aAdr );
                 isValue = !( aCell.hasString() || aCell.hasEmptyValue() || aCell.isEmpty() );
                 if ( isValue )
                     fRefVal = GetCellValue( aAdr, aCell);
