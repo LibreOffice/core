@@ -16,6 +16,24 @@
       "revId": "9869ca098765ed5ec0325492fa2cdce4a5bab795",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dcf2d74c_efe002e1",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport4.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 776,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2020-09-12T19:43:39Z",
+      "side": 1,
+      "message": "Sounds reasonable. As far as I understood Jürgen, the build failure presumably started showing up after merging current upstream libreoffice-6-4, so it might well be that change here was necessary in the past, but is no longer, since another change affecting this was also backported from master to -6-4.",
+      "parentUuid": "a35fdaa6_caad641e",
+      "revId": "9869ca098765ed5ec0325492fa2cdce4a5bab795",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
