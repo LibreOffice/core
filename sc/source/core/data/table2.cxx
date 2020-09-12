@@ -2599,10 +2599,9 @@ void ScTable::MergeSelectionPattern( ScMergePatternState& rState, const ScMarkDa
 
     for (const sc::ColRowSpan & rSpan : aSpans)
     {
-        SCCOL nEnd = ClampToAllocatedColumns(rSpan.mnEnd);
-        for (SCCOLROW i = rSpan.mnStart; i <= nEnd; ++i)
+        for (SCCOLROW i = rSpan.mnStart; i <= rSpan.mnEnd; ++i)
         {
-            aCol[i].MergeSelectionPattern( rState, rMark, bDeep );
+            CreateColumnIfNotExists(i).MergeSelectionPattern( rState, rMark, bDeep );
         }
     }
 }
@@ -2610,9 +2609,8 @@ void ScTable::MergeSelectionPattern( ScMergePatternState& rState, const ScMarkDa
 void ScTable::MergePatternArea( ScMergePatternState& rState, SCCOL nCol1, SCROW nRow1,
                                                     SCCOL nCol2, SCROW nRow2, bool bDeep ) const
 {
-    nCol2 = ClampToAllocatedColumns(nCol2);
     for (SCCOL i=nCol1; i<=nCol2; i++)
-        aCol[i].MergePatternArea( rState, nRow1, nRow2, bDeep );
+        CreateColumnIfNotExists(i).MergePatternArea( rState, nRow1, nRow2, bDeep );
 }
 
 void ScTable::MergeBlockFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLineInner, ScLineFlags& rFlags,
