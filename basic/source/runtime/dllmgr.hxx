@@ -42,7 +42,7 @@ public:
     void FreeDll(OUString const & library);
 
 private:
-#ifdef _WIN32
+#if defined(_WIN32) && !defined(_ARM64_)
     struct Impl;
 
     std::unique_ptr< Impl > impl_;
