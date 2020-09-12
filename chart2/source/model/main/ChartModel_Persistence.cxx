@@ -57,6 +57,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
+#include <sfx2/objsh.hxx>
 
 #include <algorithm>
 
@@ -668,6 +669,12 @@ sal_Bool SAL_CALL ChartModel::isModified()
 
 void SAL_CALL ChartModel::setModified( sal_Bool bModified )
 {
+    // tdf#77007: honor parent's IsEnableSetModified
+    // Check it before LifeTimeGuard, to avoid deadlocking solar mutex and this guard
+    if (auto pParentShell = SfxObjectShell::GetShellFromComponent(getParent());
+        pParentShell && !pParentShell->IsEnableSetModified())
+        return;
+
     apphelper::LifeTimeGuard aGuard(m_aLifeTimeManager);
     if(!aGuard.startApiCall())//@todo ? is this a long lasting call??
         return; //behave passive if already disposed or closed or throw exception @todo?
