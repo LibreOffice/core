@@ -1341,7 +1341,7 @@ void ScInterpreter::ScNPV()
                 {
                     ScAddress aAdr;
                     PopSingleRef( aAdr );
-                    ScRefCellValue aCell(*pDok, aAdr);
+                    ScRefCellValue aCell(mrDoc, aAdr);
                     if (!aCell.hasEmptyValue() && aCell.hasNumeric())
                     {
                         double fCellVal = GetCellValue(aAdr, aCell);
@@ -1356,7 +1356,7 @@ void ScInterpreter::ScNPV()
                     FormulaError nErr = FormulaError::NONE;
                     double fCellVal;
                     PopDoubleRef( aRange, nParamCount, nRefInList);
-                    ScHorizontalValueIterator aValIter( pDok, aRange );
+                    ScHorizontalValueIterator aValIter( &mrDoc, aRange );
                     while ((nErr == FormulaError::NONE) && aValIter.GetNext(fCellVal, nErr))
                     {
                         fVal += (fCellVal / pow(1.0 + fRate, fCount));
@@ -1446,7 +1446,7 @@ void ScInterpreter::ScIRR()
         double fDenom = 0.0;
         FormulaError nErr = FormulaError::NONE;
         PopDoubleRef( aRange );
-        ScValueIterator aValIter(pDok, aRange, mnSubTotalFlags);
+        ScValueIterator aValIter(&mrDoc, aRange, mnSubTotalFlags);
         if (aValIter.GetFirst(fValue, nErr))
         {
             double fCount = 0.0;
@@ -1557,7 +1557,7 @@ void ScInterpreter::ScMIRR()
         }
         else
         {
-            ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags );
+            ScValueIterator aValIter( &mrDoc, aRange, mnSubTotalFlags );
             double fCellValue;
             FormulaError nIterError = FormulaError::NONE;
 
@@ -2465,12 +2465,12 @@ void ScInterpreter::ScIntersect()
         ScRefList* pRefList = xRes->GetRefList();
         for (const auto& rRef1 : *x1->GetRefList())
         {
-            const ScAddress& r11 = rRef1.Ref1.toAbs(pDok, aPos);
-            const ScAddress& r12 = rRef1.Ref2.toAbs(pDok, aPos);
+            const ScAddress& r11 = rRef1.Ref1.toAbs(&mrDoc, aPos);
+            const ScAddress& r12 = rRef1.Ref2.toAbs(&mrDoc, aPos);
             for (const auto& rRef2 : *x2->GetRefList())
             {
-                const ScAddress& r21 = rRef2.Ref1.toAbs(pDok, aPos);
-                const ScAddress& r22 = rRef2.Ref2.toAbs(pDok, aPos);
+                const ScAddress& r21 = rRef2.Ref1.toAbs(&mrDoc, aPos);
+                const ScAddress& r22 = rRef2.Ref2.toAbs(&mrDoc, aPos);
                 SCCOL nCol1 = ::std::max( r11.Col(), r21.Col());
                 SCROW nRow1 = ::std::max( r11.Row(), r21.Row());
                 SCTAB nTab1 = ::std::max( r11.Tab(), r21.Tab());
@@ -2494,9 +2494,9 @@ void ScInterpreter::ScIntersect()
         {
             const ScComplexRefData& rRef = (*pRefList)[0];
             if (rRef.Ref1 == rRef.Ref2)
-                PushTempToken( new ScSingleRefToken(pDok->GetSheetLimits(), rRef.Ref1));
+                PushTempToken( new ScSingleRefToken(mrDoc.GetSheetLimits(), rRef.Ref1));
             else
-                PushTempToken( new ScDoubleRefToken(pDok->GetSheetLimits(), rRef));
+                PushTempToken( new ScDoubleRefToken(mrDoc.GetSheetLimits(), rRef));
         }
         else
             PushTokenRef( xRes);
@@ -2516,14 +2516,14 @@ void ScInterpreter::ScIntersect()
                 case svDoubleRef:
                 {
                     {
-                        const ScAddress& r = pt[i]->GetSingleRef()->toAbs(pDok, aPos);
+                        const ScAddress& r = pt[i]->GetSingleRef()->toAbs(&mrDoc, aPos);
                         nC1[i] = r.Col();
                         nR1[i] = r.Row();
                         nT1[i] = r.Tab();
                     }
                     if (sv[i] == svDoubleRef)
                     {
-                        const ScAddress& r = pt[i]->GetSingleRef2()->toAbs(pDok, aPos);
+                        const ScAddress& r = pt[i]->GetSingleRef2()->toAbs(&mrDoc, aPos);
                         nC2[i] = r.Col();
                         nR2[i] = r.Row();
                         nT2[i] = r.Tab();
@@ -2568,7 +2568,7 @@ void ScInterpreter::ScRangeFunc()
     // We explicitly tell extendRangeReference() to not reuse the token,
     // casting const away spares two clones.
     FormulaTokenRef xRes = extendRangeReference(
-            pDok->GetSheetLimits(), const_cast<FormulaToken&>(*x1), const_cast<FormulaToken&>(*x2), aPos, false);
+            mrDoc.GetSheetLimits(), const_cast<FormulaToken&>(*x1), const_cast<FormulaToken&>(*x2), aPos, false);
     if (!xRes)
         PushIllegalArgument();
     else
@@ -2677,16 +2677,16 @@ void ScInterpreter::ScStyle()
             nTimeOut = 0;
 
         // Execute request to apply template
-        if ( !pDok->IsClipOrUndo() )
+        if ( !mrDoc.IsClipOrUndo() )
         {
-            SfxObjectShell* pShell = pDok->GetDocumentShell();
+            SfxObjectShell* pShell = mrDoc.GetDocumentShell();
             if (pShell)
             {
                 // notify object shell directly!
                 bool bNotify = true;
                 if (aStyle2.isEmpty())
                 {
-                    const ScStyleSheet* pStyle = pDok->GetStyle(aPos.Col(), aPos.Row(), aPos.Tab());
+                    const ScStyleSheet* pStyle = mrDoc.GetStyle(aPos.Col(), aPos.Row(), aPos.Tab());
 
                     if (pStyle && pStyle->GetName() == aStyle1)
                         bNotify = false;
@@ -2757,7 +2757,7 @@ void ScInterpreter::ScDde()
     //  temporary documents (ScFunctionAccess) have no DocShell
     //  and no LinkManager -> abort
 
-    //sfx2::LinkManager* pLinkMgr = pDok->GetLinkManager();
+    //sfx2::LinkManager* pLinkMgr = mrDoc.GetLinkManager();
     if (!mpLinkManager)
     {
         PushNoValue();
@@ -2769,25 +2769,25 @@ void ScInterpreter::ScDde()
 
         //  while the link is not evaluated, idle must be disabled (to avoid circular references)
 
-    bool bOldEnabled = pDok->IsIdleEnabled();
-    pDok->EnableIdle(false);
+    bool bOldEnabled = mrDoc.IsIdleEnabled();
+    mrDoc.EnableIdle(false);
 
         // Get/ Create link object
 
     ScDdeLink* pLink = lcl_GetDdeLink( mpLinkManager, aAppl, aTopic, aItem, nMode );
 
     //TODO: Save Dde-links (in addition) more efficient at document !!!!!
-    //      ScDdeLink* pLink = pDok->GetDdeLink( aAppl, aTopic, aItem );
+    //      ScDdeLink* pLink = mrDoc.GetDdeLink( aAppl, aTopic, aItem );
 
     bool bWasError = ( pMyFormulaCell && pMyFormulaCell->GetRawError() != FormulaError::NONE );
 
     if (!pLink)
     {
-        pLink = new ScDdeLink( pDok, aAppl, aTopic, aItem, nMode );
+        pLink = new ScDdeLink( &mrDoc, aAppl, aTopic, aItem, nMode );
         mpLinkManager->InsertDDELink( pLink, aAppl, aTopic, aItem );
         if ( mpLinkManager->GetLinks().size() == 1 )                    // the first one?
         {
-            SfxBindings* pBindings = pDok->GetViewBindings();
+            SfxBindings* pBindings = mrDoc.GetViewBindings();
             if (pBindings)
                 pBindings->Invalidate( SID_LINKS );             // Link-Manager enabled
         }
@@ -2795,7 +2795,7 @@ void ScInterpreter::ScDde()
         //if the document was just loaded, but the ScDdeLink entry was missing, then
         //don't update this link until the links are updated in response to the users
         //decision
-        if (!pDok->HasLinkFormulaNeedingCheck())
+        if (!mrDoc.HasLinkFormulaNeedingCheck())
         {
                                 //TODO: evaluate asynchron ???
             pLink->TryUpdate(); //  TryUpdate doesn't call Update multiple times
@@ -2838,7 +2838,7 @@ void ScInterpreter::ScDde()
     else
         PushNA();
 
-    pDok->EnableIdle(bOldEnabled);
+    mrDoc.EnableIdle(bOldEnabled);
     mpLinkManager->CloseCachedComps();
 }
 
@@ -3218,7 +3218,7 @@ void ScInterpreter::ScHyperLink()
                 if ( !PopDoubleRefOrSingleRef( aAdr ) )
                     break;
 
-                ScRefCellValue aCell(*pDok, aAdr);
+                ScRefCellValue aCell(mrDoc, aAdr);
                 if (aCell.hasEmptyValue())
                     nResultType = ScMatValType::Empty;
                 else
@@ -3701,7 +3701,7 @@ void ScInterpreter::ScGetPivotData()
     // NOTE : MS Excel docs claim to use the 'most recent' which is not
     // exactly the same as what we do in ScDocument::GetDPAtBlock
     // However we do need to use GetDPABlock
-    ScDPObject* pDPObj = pDok->GetDPAtBlock(aBlock);
+    ScDPObject* pDPObj = mrDoc.GetDPAtBlock(aBlock);
     if (!pDPObj)
     {
         PushError(FormulaError::NoRef);

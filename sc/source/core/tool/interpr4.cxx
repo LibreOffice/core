@@ -92,10 +92,10 @@ thread_local bool ScInterpreter::bGlobalStackInUse = false;
 
 void ScInterpreter::ReplaceCell( ScAddress& rPos )
 {
-    size_t ListSize = pDok->m_TableOpList.size();
+    size_t ListSize = mrDoc.m_TableOpList.size();
     for ( size_t i = 0; i < ListSize; ++i )
     {
-        ScInterpreterTableOpParams *const pTOp = pDok->m_TableOpList[ i ];
+        ScInterpreterTableOpParams *const pTOp = mrDoc.m_TableOpList[ i ];
         if ( rPos == pTOp->aOld1 )
         {
             rPos = pTOp->aNew1;
@@ -115,10 +115,10 @@ bool ScInterpreter::IsTableOpInRange( const ScRange& rRange )
         return false;   // not considered to be a range in TableOp sense
 
     // we can't replace a single cell in a range
-    size_t ListSize = pDok->m_TableOpList.size();
+    size_t ListSize = mrDoc.m_TableOpList.size();
     for ( size_t i = 0; i < ListSize; ++i )
     {
-        ScInterpreterTableOpParams *const pTOp = pDok->m_TableOpList[ i ];
+        ScInterpreterTableOpParams *const pTOp = mrDoc.m_TableOpList[ i ];
         if ( rRange.In( pTOp->aOld1 ) )
             return true;
         if ( rRange.In( pTOp->aOld2 ) )
@@ -133,7 +133,7 @@ sal_uInt32 ScInterpreter::GetCellNumberFormat( const ScAddress& rPos, ScRefCellV
     FormulaError nErr;
     if (rCell.isEmpty())
     {
-        nFormat = pDok->GetNumberFormat( mrContext, rPos );
+        nFormat = mrDoc.GetNumberFormat( mrContext, rPos );
         nErr = FormulaError::NONE;
     }
     else
@@ -142,7 +142,7 @@ sal_uInt32 ScInterpreter::GetCellNumberFormat( const ScAddress& rPos, ScRefCellV
             nErr = rCell.mpFormula->GetErrCode();
         else
             nErr = FormulaError::NONE;
-        nFormat = pDok->GetNumberFormat( mrContext, rPos );
+        nFormat = mrDoc.GetNumberFormat( mrContext, rPos );
     }
 
     SetError(nErr);
@@ -154,8 +154,8 @@ double ScInterpreter::GetValueCellValue( const ScAddress& rPos, double fOrig )
 {
     if ( bCalcAsShown && fOrig != 0.0 )
     {
-        sal_uInt32 nFormat = pDok->GetNumberFormat( mrContext, rPos );
-        fOrig = pDok->RoundValueAsShown( fOrig, nFormat, &mrContext );
+        sal_uInt32 nFormat = mrDoc.GetNumberFormat( mrContext, rPos );
+        fOrig = mrDoc.RoundValueAsShown( fOrig, nFormat, &mrContext );
     }
     return fOrig;
 }
@@ -206,7 +206,7 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, ScRefCellValue&
                 if (pFCell->IsValue())
                 {
                     fValue = pFCell->GetValue();
-                    pDok->GetNumberFormatInfo( mrContext, nCurFmtType, nCurFmtIndex,
+                    mrDoc.GetNumberFormatInfo( mrContext, nCurFmtType, nCurFmtIndex,
                         rPos );
                 }
                 else
@@ -224,10 +224,10 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, ScRefCellValue&
         case CELLTYPE_VALUE:
         {
             fValue = rCell.mfValue;
-            nCurFmtIndex = pDok->GetNumberFormat( mrContext, rPos );
+            nCurFmtIndex = mrDoc.GetNumberFormat( mrContext, rPos );
             nCurFmtType = mrContext.GetNumberFormatType( nCurFmtIndex );
             if ( bCalcAsShown && fValue != 0.0 )
-                fValue = pDok->RoundValueAsShown( fValue, nCurFmtIndex, &mrContext );
+                fValue = mrDoc.RoundValueAsShown( fValue, nCurFmtIndex, &mrContext );
         }
         break;
         case  CELLTYPE_STRING:
@@ -235,7 +235,7 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, ScRefCellValue&
         {
             // SUM(A1:A2) differs from A1+A2. No good. But people insist on
             // it ... #i5658#
-            OUString aStr = rCell.getString(pDok);
+            OUString aStr = rCell.getString(&mrDoc);
             fValue = ConvertStringToValue( aStr );
         }
         break;
@@ -255,7 +255,7 @@ void ScInterpreter::GetCellString( svl::SharedString& rStr, ScRefCellValue& rCel
     {
         case CELLTYPE_STRING:
         case CELLTYPE_EDIT:
-            rStr = mrStrPool.intern(rCell.getString(pDok));
+            rStr = mrStrPool.intern(rCell.getString(&mrDoc));
         break;
         case CELLTYPE_FORMULA:
         {
@@ -316,7 +316,7 @@ bool ScInterpreter::CreateDoubleArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
             {
                 aAdr.SetCol( nCol );
 
-                ScRefCellValue aCell(*pDok, aAdr);
+                ScRefCellValue aCell(mrDoc, aAdr);
                 if (!aCell.isEmpty())
                 {
                     FormulaError  nErr = FormulaError::NONE;
@@ -394,7 +394,7 @@ bool ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
             SCCOL nCol = nCol1;
             while (nCol <= nCol2)
             {
-                ScRefCellValue aCell(*pDok, ScAddress(nCol, nRow, nTab));
+                ScRefCellValue aCell(mrDoc, ScAddress(nCol, nRow, nTab));
                 if (!aCell.isEmpty())
                 {
                     OUString  aStr;
@@ -404,7 +404,7 @@ bool ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                     {
                         case CELLTYPE_STRING:
                         case CELLTYPE_EDIT:
-                            aStr = aCell.getString(pDok);
+                            aStr = aCell.getString(&mrDoc);
                             break;
                         case CELLTYPE_FORMULA:
                             if (!aCell.mpFormula->IsValue())
@@ -495,7 +495,7 @@ bool ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
             while (nCol <= nCol2)
             {
                 aAdr.SetCol( nCol );
-                ScRefCellValue aCell(*pDok, aAdr);
+                ScRefCellValue aCell(mrDoc, aAdr);
                 if (!aCell.isEmpty())
                 {
                     FormulaError  nErr = FormulaError::NONE;
@@ -507,7 +507,7 @@ bool ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                     {
                         case CELLTYPE_STRING :
                         case CELLTYPE_EDIT :
-                            aStr = aCell.getString(pDok);
+                            aStr = aCell.getString(&mrDoc);
                             nType = 1;
                             break;
                         case CELLTYPE_VALUE :
@@ -689,12 +689,12 @@ void ScInterpreter::PushTokenRef( const formula::FormulaConstTokenRef& x )
 void ScInterpreter::PushCellResultToken( bool bDisplayEmptyAsString,
         const ScAddress & rAddress, SvNumFormatType * pRetTypeExpr, sal_uInt32 * pRetIndexExpr, bool bFinalResult )
 {
-    ScRefCellValue aCell(*pDok, rAddress);
+    ScRefCellValue aCell(mrDoc, rAddress);
     if (aCell.hasEmptyValue())
     {
         bool bInherited = (aCell.meType == CELLTYPE_FORMULA);
         if (pRetTypeExpr && pRetIndexExpr)
-            pDok->GetNumberFormatInfo(mrContext, *pRetTypeExpr, *pRetIndexExpr, rAddress);
+            mrDoc.GetNumberFormatInfo(mrContext, *pRetTypeExpr, *pRetIndexExpr, rAddress);
         PushTempToken( new ScEmptyCellToken( bInherited, bDisplayEmptyAsString));
         return;
     }
@@ -880,17 +880,17 @@ void ScInterpreter::SingleRefToVars( const ScSingleRefData & rRef,
     else
         rTab = rRef.Tab();
 
-    if( !pDok->ValidCol( rCol) || rRef.IsColDeleted() )
+    if( !mrDoc.ValidCol( rCol) || rRef.IsColDeleted() )
     {
         SetError( FormulaError::NoRef );
         rCol = 0;
     }
-    if( !pDok->ValidRow( rRow) || rRef.IsRowDeleted() )
+    if( !mrDoc.ValidRow( rRow) || rRef.IsRowDeleted() )
     {
         SetError( FormulaError::NoRef );
         rRow = 0;
     }
-    if( !ValidTab( rTab, pDok->GetTableCount() - 1) || rRef.IsTabDeleted() )
+    if( !ValidTab( rTab, mrDoc.GetTableCount() - 1) || rRef.IsTabDeleted() )
     {
         SetError( FormulaError::NoRef );
         rTab = 0;
@@ -931,7 +931,7 @@ void ScInterpreter::PopSingleRef( ScAddress& rAdr )
                     SCTAB nTab;
                     SingleRefToVars( *pRefData, nCol, nRow, nTab);
                     rAdr.Set( nCol, nRow, nTab );
-                    if (!pDok->m_TableOpList.empty())
+                    if (!mrDoc.m_TableOpList.empty())
                         ReplaceCell( rAdr );
                 }
                 break;
@@ -956,7 +956,7 @@ void ScInterpreter::DoubleRefToVars( const formula::FormulaToken* p,
         std::swap( rRow2, rRow1);
     if (rTab2 < rTab1)
         std::swap( rTab2, rTab1);
-    if (!pDok->m_TableOpList.empty())
+    if (!mrDoc.m_TableOpList.empty())
     {
         ScRange aRange( rCol1, rRow1, rTab1, rCol2, rRow2, rTab2 );
         if ( IsTableOpInRange( aRange ) )
@@ -983,7 +983,7 @@ ScDBRangeBase* ScInterpreter::PopDBDoubleRef()
             PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
             if (nGlobalError != FormulaError::NONE)
                 break;
-            return new ScDBInternalRange(pDok,
+            return new ScDBInternalRange(&mrDoc,
                 ScRange(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2));
         }
         case svMatrix:
@@ -996,7 +996,7 @@ ScDBRangeBase* ScInterpreter::PopDBDoubleRef()
                 PopExternalDoubleRef(pMat);
             if (nGlobalError != FormulaError::NONE)
                 break;
-            return new ScDBExternalRange(pDok, pMat);
+            return new ScDBExternalRange(&mrDoc, pMat);
         }
         default:
             SetError( FormulaError::IllegalParameter);
@@ -1039,7 +1039,7 @@ void ScInterpreter::DoubleRefToRange( const ScComplexRefData & rCRef,
     SingleRefToVars( rCRef.Ref2, nCol, nRow, nTab);
     rRange.aEnd.Set( nCol, nRow, nTab );
     rRange.PutInOrder();
-    if (!pDok->m_TableOpList.empty() && !bDontCheckForTableOp)
+    if (!mrDoc.m_TableOpList.empty() && !bDontCheckForTableOp)
     {
         if ( IsTableOpInRange( rRange ) )
             SetError( FormulaError::IllegalParameter );
@@ -1165,7 +1165,7 @@ void ScInterpreter::PopExternalSingleRef(
     if (nGlobalError != FormulaError::NONE)
         return;
 
-    ScExternalRefManager* pRefMgr = pDok->GetExternalRefManager();
+    ScExternalRefManager* pRefMgr = mrDoc.GetExternalRefManager();
     const OUString* pFile = pRefMgr->getExternalFileName(rFileId);
     if (!pFile)
     {
@@ -1180,7 +1180,7 @@ void ScInterpreter::PopExternalSingleRef(
         return;
     }
 
-    ScAddress aAddr = rRef.toAbs(pDok, aPos);
+    ScAddress aAddr = rRef.toAbs(&mrDoc, aPos);
     ScExternalRefCache::CellFormat aFmt;
     ScExternalRefCache::TokenRef xNew = pRefMgr->getSingleRefToken(
         rFileId, rTabName, aAddr, &aPos, nullptr, &aFmt);
@@ -1266,7 +1266,7 @@ void ScInterpreter::PopExternalDoubleRef(ScMatrixRef& rMat)
 void ScInterpreter::GetExternalDoubleRef(
     sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rData, ScExternalRefCache::TokenArrayRef& rArray)
 {
-    ScExternalRefManager* pRefMgr = pDok->GetExternalRefManager();
+    ScExternalRefManager* pRefMgr = mrDoc.GetExternalRefManager();
     const OUString* pFile = pRefMgr->getExternalFileName(nFileId);
     if (!pFile)
     {
@@ -1281,8 +1281,8 @@ void ScInterpreter::GetExternalDoubleRef(
     }
 
     ScComplexRefData aData(rData);
-    ScRange aRange = aData.toAbs(pDok, aPos);
-    if (!pDok->ValidColRow(aRange.aStart.Col(), aRange.aStart.Row()) || !pDok->ValidColRow(aRange.aEnd.Col(), aRange.aEnd.Row()))
+    ScRange aRange = aData.toAbs(&mrDoc, aPos);
+    if (!mrDoc.ValidColRow(aRange.aStart.Col(), aRange.aStart.Row()) || !mrDoc.ValidColRow(aRange.aEnd.Col(), aRange.aEnd.Row()))
     {
         SetError(FormulaError::NoRef);
         return;
@@ -1369,7 +1369,7 @@ void ScInterpreter::PopRefListPushMatrixOrRef()
             if (nEntries == 1)
             {
                 --sp;
-                PushTempTokenWithoutError( new ScDoubleRefToken( pDok->GetSheetLimits(), (*pv)[0] ));
+                PushTempTokenWithoutError( new ScDoubleRefToken( mrDoc.GetSheetLimits(), (*pv)[0] ));
             }
             else if (bMatrixFormula)
             {
@@ -1391,13 +1391,13 @@ void ScInterpreter::PopRefListPushMatrixOrRef()
                     if (nGlobalError == FormulaError::NONE)
                     {
                         ScAddress aAdr( nCol, nRow, nTab);
-                        ScRefCellValue aCell( *pDok, aAdr);
+                        ScRefCellValue aCell(mrDoc, aAdr);
                         if (aCell.hasError())
                             xMat->PutError( aCell.mpFormula->GetErrCode(), 0, i);
                         else if (aCell.hasEmptyValue())
                             xMat->PutEmpty( 0, i);
                         else if (aCell.hasString())
-                            xMat->PutString( mrStrPool.intern( aCell.getString( pDok)), 0, i);
+                            xMat->PutString( mrStrPool.intern( aCell.getString(&mrDoc)), 0, i);
                         else
                             xMat->PutDouble( aCell.getValue(), 0, i);
                     }
@@ -1791,7 +1791,7 @@ void ScInterpreter::PushStringBuffer( const sal_Unicode* pString )
 {
     if ( pString )
     {
-        svl::SharedString aSS = pDok->GetSharedStringPool().intern(OUString(pString));
+        svl::SharedString aSS = mrDoc.GetSharedStringPool().intern(OUString(pString));
         PushString(aSS);
     }
     else
@@ -1800,7 +1800,7 @@ void ScInterpreter::PushStringBuffer( const sal_Unicode* pString )
 
 void ScInterpreter::PushString( const OUString& rStr )
 {
-    PushString(pDok->GetSharedStringPool().intern(rStr));
+    PushString(mrDoc.GetSharedStringPool().intern(rStr));
 }
 
 void ScInterpreter::PushString( const svl::SharedString& rString )
@@ -1815,7 +1815,7 @@ void ScInterpreter::PushSingleRef(SCCOL nCol, SCROW nRow, SCTAB nTab)
     {
         ScSingleRefData aRef;
         aRef.InitAddress(ScAddress(nCol,nRow,nTab));
-        PushTempTokenWithoutError( new ScSingleRefToken( pDok->GetSheetLimits(), aRef ) );
+        PushTempTokenWithoutError( new ScSingleRefToken( mrDoc.GetSheetLimits(), aRef ) );
     }
 }
 
@@ -1826,7 +1826,7 @@ void ScInterpreter::PushDoubleRef(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
     {
         ScComplexRefData aRef;
         aRef.InitRange(ScRange(nCol1,nRow1,nTab1,nCol2,nRow2,nTab2));
-        PushTempTokenWithoutError( new ScDoubleRefToken( pDok->GetSheetLimits(), aRef ) );
+        PushTempTokenWithoutError( new ScDoubleRefToken( mrDoc.GetSheetLimits(), aRef ) );
     }
 }
 
@@ -1838,7 +1838,7 @@ void ScInterpreter::PushExternalSingleRef(
         ScSingleRefData aRef;
         aRef.InitAddress(ScAddress(nCol,nRow,nTab));
         PushTempTokenWithoutError( new ScExternalSingleRefToken(nFileId,
-                    pDok->GetSharedStringPool().intern( rTabName), aRef)) ;
+                    mrDoc.GetSharedStringPool().intern( rTabName), aRef)) ;
     }
 }
 
@@ -1851,7 +1851,7 @@ void ScInterpreter::PushExternalDoubleRef(
         ScComplexRefData aRef;
         aRef.InitRange(ScRange(nCol1,nRow1,nTab1,nCol2,nRow2,nTab2));
         PushTempTokenWithoutError( new ScExternalDoubleRefToken(nFileId,
-                    pDok->GetSharedStringPool().intern( rTabName), aRef) );
+                    mrDoc.GetSharedStringPool().intern( rTabName), aRef) );
     }
 }
 
@@ -1860,8 +1860,8 @@ void ScInterpreter::PushSingleRef( const ScRefAddress& rRef )
     if (!IfErrorPushError())
     {
         ScSingleRefData aRef;
-        aRef.InitFromRefAddress( pDok, rRef, aPos);
-        PushTempTokenWithoutError( new ScSingleRefToken( pDok->GetSheetLimits(), aRef ) );
+        aRef.InitFromRefAddress( &mrDoc, rRef, aPos);
+        PushTempTokenWithoutError( new ScSingleRefToken( mrDoc.GetSheetLimits(), aRef ) );
     }
 }
 
@@ -1870,8 +1870,8 @@ void ScInterpreter::PushDoubleRef( const ScRefAddress& rRef1, const ScRefAddress
     if (!IfErrorPushError())
     {
         ScComplexRefData aRef;
-        aRef.InitFromRefAddresses( pDok, rRef1, rRef2, aPos);
-        PushTempTokenWithoutError( new ScDoubleRefToken( pDok->GetSheetLimits(), aRef ) );
+        aRef.InitFromRefAddresses( &mrDoc, rRef1, rRef2, aPos);
+        PushTempTokenWithoutError( new ScDoubleRefToken( mrDoc.GetSheetLimits(), aRef ) );
     }
 }
 
@@ -2085,7 +2085,7 @@ double ScInterpreter::GetDouble()
         {
             ScAddress aAdr;
             PopSingleRef( aAdr );
-            ScRefCellValue aCell(*pDok, aAdr);
+            ScRefCellValue aCell(mrDoc, aAdr);
             nVal = GetCellValue(aAdr, aCell);
         }
         break;
@@ -2096,7 +2096,7 @@ double ScInterpreter::GetDouble()
             ScAddress aAdr;
             if ( nGlobalError == FormulaError::NONE && DoubleRefToPosSingleRef( aRange, aAdr ) )
             {
-                ScRefCellValue aCell(*pDok, aAdr);
+                ScRefCellValue aCell(mrDoc, aAdr);
                 nVal = GetCellValue(aAdr, aCell);
             }
             else
@@ -2268,7 +2268,7 @@ bool ScInterpreter::GetDoubleOrString( double& rDouble, svl::SharedString& rStri
                 rDouble = 0.0;
                 return true;    // caller needs to check nGlobalError
             }
-            ScRefCellValue aCell( *pDok, aAdr);
+            ScRefCellValue aCell( mrDoc, aAdr);
             if (aCell.hasNumeric())
             {
                 rDouble = GetCellValue( aAdr, aCell);
@@ -2330,7 +2330,7 @@ svl::SharedString ScInterpreter::GetString()
             PopSingleRef( aAdr );
             if (nGlobalError == FormulaError::NONE)
             {
-                ScRefCellValue aCell(*pDok, aAdr);
+                ScRefCellValue aCell(mrDoc, aAdr);
                 svl::SharedString aSS;
                 GetCellString(aSS, aCell);
                 return aSS;
@@ -2345,7 +2345,7 @@ svl::SharedString ScInterpreter::GetString()
             ScAddress aAdr;
             if ( nGlobalError == FormulaError::NONE && DoubleRefToPosSingleRef( aRange, aAdr ) )
             {
-                ScRefCellValue aCell(*pDok, aAdr);
+                ScRefCellValue aCell(mrDoc, aAdr);
                 svl::SharedString aSS;
                 GetCellString(aSS, aCell);
                 return aSS;
@@ -2491,7 +2491,7 @@ void ScInterpreter::ScDBGet()
     }
 
     pQueryParam->mbSkipString = false;
-    ScDBQueryDataIterator aValIter(pDok, mrContext, std::move(pQueryParam));
+    ScDBQueryDataIterator aValIter(&mrDoc, mrContext, std::move(pQueryParam));
     ScDBQueryDataIterator::Value aValue;
     if (!aValIter.GetFirst(aValue) || aValue.mnError != FormulaError::NONE)
     {
@@ -2673,14 +2673,14 @@ void ScInterpreter::ScExternal()
                         ScAddInAsync* pAs = ScAddInAsync::Get( nHandle );
                         if ( !pAs )
                         {
-                            pAs = new ScAddInAsync(nHandle, pLegacyFuncData, pDok);
+                            pAs = new ScAddInAsync(nHandle, pLegacyFuncData, &mrDoc);
                             pMyFormulaCell->StartListening( *pAs );
                         }
                         else
                         {
                             pMyFormulaCell->StartListening( *pAs );
-                            if ( !pAs->HasDocument( pDok ) )
-                                pAs->AddDocument( pDok );
+                            if ( !pAs->HasDocument( &mrDoc ) )
+                                pAs->AddDocument( &mrDoc );
                         }
                         if ( pAs->IsValid() )
                         {
@@ -2729,14 +2729,14 @@ void ScInterpreter::ScExternal()
 
         if ( aCall.NeedsCaller() && GetError() == FormulaError::NONE )
         {
-            SfxObjectShell* pShell = pDok->GetDocumentShell();
+            SfxObjectShell* pShell = mrDoc.GetDocumentShell();
             if (pShell)
                 aCall.SetCallerFromObjectShell( pShell );
             else
             {
                 // use temporary model object (without document) to supply options
                 aCall.SetCaller( static_cast<beans::XPropertySet*>(
-                                    new ScDocOptionsObj( pDok->GetDocOptions() ) ) );
+                                    new ScDocOptionsObj( mrDoc.GetDocOptions() ) ) );
             }
         }
 
@@ -2796,7 +2796,7 @@ void ScInterpreter::ScExternal()
                             {
                                 ScRange aRange;
                                 PopDoubleRef( aRange );
-                                if (!ScRangeToSequence::FillLongArray( aParam, pDok, aRange ))
+                                if (!ScRangeToSequence::FillLongArray( aParam, &mrDoc, aRange ))
                                     SetError(FormulaError::IllegalParameter);
                             }
                             break;
@@ -2827,7 +2827,7 @@ void ScInterpreter::ScExternal()
                             {
                                 ScRange aRange;
                                 PopDoubleRef( aRange );
-                                if (!ScRangeToSequence::FillDoubleArray( aParam, pDok, aRange ))
+                                if (!ScRangeToSequence::FillDoubleArray( aParam, &mrDoc, aRange ))
                                     SetError(FormulaError::IllegalParameter);
                             }
                             break;
@@ -2858,7 +2858,7 @@ void ScInterpreter::ScExternal()
                             {
                                 ScRange aRange;
                                 PopDoubleRef( aRange );
-                                if (!ScRangeToSequence::FillStringArray( aParam, pDok, aRange ))
+                                if (!ScRangeToSequence::FillStringArray( aParam, &mrDoc, aRange ))
                                     SetError(FormulaError::IllegalParameter);
                             }
                             break;
@@ -2889,7 +2889,7 @@ void ScInterpreter::ScExternal()
                                     ScAddress aAdr;
                                     if ( PopDoubleRefOrSingleRef( aAdr ) )
                                     {
-                                        ScRefCellValue aCell(*pDok, aAdr);
+                                        ScRefCellValue aCell(mrDoc, aAdr);
                                         if (aCell.hasString())
                                         {
                                             svl::SharedString aStr;
@@ -2909,7 +2909,7 @@ void ScInterpreter::ScExternal()
                             {
                                 ScRange aRange;
                                 PopDoubleRef( aRange );
-                                if (!ScRangeToSequence::FillMixedArray( aParam, pDok, aRange ))
+                                if (!ScRangeToSequence::FillMixedArray( aParam, &mrDoc, aRange ))
                                     SetError(FormulaError::IllegalParameter);
                             }
                             break;
@@ -2937,7 +2937,7 @@ void ScInterpreter::ScExternal()
                                 ScAddress aAdr;
                                 if ( PopDoubleRefOrSingleRef( aAdr ) )
                                 {
-                                    ScRefCellValue aCell(*pDok, aAdr);
+                                    ScRefCellValue aCell(mrDoc, aAdr);
                                     if (aCell.hasString())
                                     {
                                         svl::SharedString aStr;
@@ -2953,7 +2953,7 @@ void ScInterpreter::ScExternal()
                             {
                                 ScRange aRange;
                                 PopDoubleRef( aRange );
-                                if (!ScRangeToSequence::FillMixedArray( aParam, pDok, aRange ))
+                                if (!ScRangeToSequence::FillMixedArray( aParam, &mrDoc, aRange ))
                                     SetError(FormulaError::IllegalParameter);
                             }
                             break;
@@ -2976,7 +2976,7 @@ void ScInterpreter::ScExternal()
                                 PopSingleRef( aAdr );
                                 ScRange aRange( aAdr );
                                 uno::Reference<table::XCellRange> xObj =
-                                        ScCellRangeObj::CreateRangeFromDoc( pDok, aRange );
+                                        ScCellRangeObj::CreateRangeFromDoc( &mrDoc, aRange );
                                 if (xObj.is())
                                     aParam <<= xObj;
                                 else
@@ -2988,7 +2988,7 @@ void ScInterpreter::ScExternal()
                                 ScRange aRange;
                                 PopDoubleRef( aRange );
                                 uno::Reference<table::XCellRange> xObj =
-                                        ScCellRangeObj::CreateRangeFromDoc( pDok, aRange );
+                                        ScCellRangeObj::CreateRangeFromDoc( &mrDoc, aRange );
                                 if (xObj.is())
                                 {
                                     aParam <<= xObj;
@@ -3033,7 +3033,7 @@ void ScInterpreter::ScExternal()
                 bool bTemporaryListener = false;
                 if ( !pLis )
                 {
-                    pLis = ScAddInListener::CreateListener( xRes, pDok );
+                    pLis = ScAddInListener::CreateListener( xRes, &mrDoc );
                     if (pMyFormulaCell)
                         pMyFormulaCell->StartListening( *pLis );
                     else
@@ -3042,9 +3042,9 @@ void ScInterpreter::ScExternal()
                 else if (pMyFormulaCell)
                 {
                     pMyFormulaCell->StartListening( *pLis );
-                    if ( !pLis->HasDocument( pDok ) )
+                    if ( !pLis->HasDocument( &mrDoc ) )
                     {
-                        pLis->AddDocument( pDok );
+                        pLis->AddDocument( &mrDoc );
                     }
                 }
 
@@ -3205,7 +3205,7 @@ void ScInterpreter::ScMacro()
     sal_uInt8 nParamCount = GetByte();
     OUString aMacro( pCur->GetExternal() );
 
-    SfxObjectShell* pDocSh = pDok->GetDocumentShell();
+    SfxObjectShell* pDocSh = mrDoc.GetDocumentShell();
     if ( !pDocSh )
     {
         PushNoValue();      // without DocShell no CallBasic
@@ -3303,7 +3303,7 @@ void ScInterpreter::ScMacro()
                 if ( bUseVBAObjects )
                 {
                     ScRange aRange( aAdr );
-                    bOk = lcl_setVBARange( aRange, pDok, pPar );
+                    bOk = lcl_setVBARange( aRange, &mrDoc, pPar );
                 }
                 else
                 {
@@ -3330,7 +3330,7 @@ void ScInterpreter::ScMacro()
                     if ( bUseVBAObjects )
                     {
                         ScRange aRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
-                        bOk = lcl_setVBARange( aRange, pDok, pPar );
+                        bOk = lcl_setVBARange( aRange, &mrDoc, pPar );
                     }
                     else
                     {
@@ -3400,14 +3400,14 @@ void ScInterpreter::ScMacro()
     }
     if( bOk )
     {
-        pDok->LockTable( aPos.Tab() );
+        mrDoc.LockTable( aPos.Tab() );
         SbxVariableRef refRes = new SbxVariable;
-        pDok->IncMacroInterpretLevel();
+        mrDoc.IncMacroInterpretLevel();
         ErrCode eRet = pDocSh->CallBasic( aMacroStr, aBasicStr, refPar.get(), refRes.get() );
-        pDok->DecMacroInterpretLevel();
-        pDok->UnlockTable( aPos.Tab() );
+        mrDoc.DecMacroInterpretLevel();
+        mrDoc.UnlockTable( aPos.Tab() );
 
-        ScMacroManager* pMacroMgr = pDok->GetMacroManager();
+        ScMacroManager* pMacroMgr = mrDoc.GetMacroManager();
         if (pMacroMgr)
         {
             bVolatileMacro = pMacroMgr->GetUserFuncVolatile( pMethod->GetName() );
@@ -3521,7 +3521,7 @@ void ScInterpreter::ScMacro()
 bool ScInterpreter::SetSbxVariable( SbxVariable* pVar, const ScAddress& rPos )
 {
     bool bOk = true;
-    ScRefCellValue aCell(*pDok, rPos);
+    ScRefCellValue aCell(mrDoc, rPos);
     if (!aCell.isEmpty())
     {
         FormulaError nErr;
@@ -3534,7 +3534,7 @@ bool ScInterpreter::SetSbxVariable( SbxVariable* pVar, const ScAddress& rPos )
             break;
             case CELLTYPE_STRING :
             case CELLTYPE_EDIT :
-                pVar->PutString(aCell.getString(pDok));
+                pVar->PutString(aCell.getString(&mrDoc));
             break;
             case CELLTYPE_FORMULA :
                 nErr = aCell.mpFormula->GetErrCode();
@@ -3585,30 +3585,30 @@ void ScInterpreter::ScTableOp()
     PopSingleRef( pTableOp->aFormulaPos );
 
     pTableOp->bValid = true;
-    pDok->m_TableOpList.push_back(pTableOp.get());
-    pDok->IncInterpreterTableOpLevel();
+    mrDoc.m_TableOpList.push_back(pTableOp.get());
+    mrDoc.IncInterpreterTableOpLevel();
 
-    bool bReuseLastParams = (pDok->aLastTableOpParams == *pTableOp);
+    bool bReuseLastParams = (mrDoc.aLastTableOpParams == *pTableOp);
     if ( bReuseLastParams )
     {
-        pTableOp->aNotifiedFormulaPos = pDok->aLastTableOpParams.aNotifiedFormulaPos;
+        pTableOp->aNotifiedFormulaPos = mrDoc.aLastTableOpParams.aNotifiedFormulaPos;
         pTableOp->bRefresh = true;
         for ( const auto& rPos : pTableOp->aNotifiedFormulaPos )
         {   // emulate broadcast and indirectly collect cell pointers
-            ScRefCellValue aCell(*pDok, rPos);
+            ScRefCellValue aCell(mrDoc, rPos);
             if (aCell.meType == CELLTYPE_FORMULA)
                 aCell.mpFormula->SetTableOpDirty();
         }
     }
     else
     {   // broadcast and indirectly collect cell pointers and positions
-        pDok->SetTableOpDirty( pTableOp->aOld1 );
+        mrDoc.SetTableOpDirty( pTableOp->aOld1 );
         if ( nParamCount == 5 )
-            pDok->SetTableOpDirty( pTableOp->aOld2 );
+            mrDoc.SetTableOpDirty( pTableOp->aOld2 );
     }
     pTableOp->bCollectNotifications = false;
 
-    ScRefCellValue aCell(*pDok, pTableOp->aFormulaPos);
+    ScRefCellValue aCell(mrDoc, pTableOp->aFormulaPos);
     if (aCell.meType == CELLTYPE_FORMULA)
         aCell.mpFormula->SetDirtyVar();
     if (aCell.hasNumeric())
@@ -3623,10 +3623,10 @@ void ScInterpreter::ScTableOp()
     }
 
     auto const itr =
-        ::std::find(pDok->m_TableOpList.begin(), pDok->m_TableOpList.end(), pTableOp.get());
-    if (itr != pDok->m_TableOpList.end())
+        ::std::find(mrDoc.m_TableOpList.begin(), mrDoc.m_TableOpList.end(), pTableOp.get());
+    if (itr != mrDoc.m_TableOpList.end())
     {
-        pDok->m_TableOpList.erase(itr);
+        mrDoc.m_TableOpList.erase(itr);
     }
 
     // set dirty again once more to be able to recalculate original
@@ -3637,7 +3637,7 @@ void ScInterpreter::ScTableOp()
 
     // save these params for next incarnation
     if ( !bReuseLastParams )
-        pDok->aLastTableOpParams = *pTableOp;
+        mrDoc.aLastTableOpParams = *pTableOp;
 
     if (aCell.meType == CELLTYPE_FORMULA)
     {
@@ -3654,12 +3654,12 @@ void ScInterpreter::ScTableOp()
     }
     pTableOp.reset();
 
-    pDok->DecInterpreterTableOpLevel();
+    mrDoc.DecInterpreterTableOpLevel();
 }
 
 void ScInterpreter::ScDBArea()
 {
-    ScDBData* pDBData = pDok->GetDBCollection()->getNamedDBs().findByIndex(pCur->GetIndex());
+    ScDBData* pDBData = mrDoc.GetDBCollection()->getNamedDBs().findByIndex(pCur->GetIndex());
     if (pDBData)
     {
         ScComplexRefData aRefData;
@@ -3667,8 +3667,8 @@ void ScInterpreter::ScDBArea()
         ScRange aRange;
         pDBData->GetArea(aRange);
         aRange.aEnd.SetTab(aRange.aStart.Tab());
-        aRefData.SetRange(pDok->GetSheetLimits(), aRange, aPos);
-        PushTempToken( new ScDoubleRefToken( pDok->GetSheetLimits(), aRefData ) );
+        aRefData.SetRange(mrDoc.GetSheetLimits(), aRange, aPos);
+        PushTempToken( new ScDoubleRefToken( mrDoc.GetSheetLimits(), aRefData ) );
     }
     else
         PushError( FormulaError::NoName);
@@ -3677,8 +3677,8 @@ void ScInterpreter::ScDBArea()
 void ScInterpreter::ScColRowNameAuto()
 {
     ScComplexRefData aRefData( *pCur->GetDoubleRef() );
-    ScRange aAbs = aRefData.toAbs(pDok, aPos);
-    if (!pDok->ValidRange(aAbs))
+    ScRange aAbs = aRefData.toAbs(&mrDoc, aPos);
+    if (!mrDoc.ValidRange(aAbs))
     {
         PushError( FormulaError::NoRef );
         return;
@@ -3699,7 +3699,7 @@ void ScInterpreter::ScColRowNameAuto()
         // Expand to the data area. Only modify the end position.
         SCCOL nDACol1 = aAbs.aStart.Col(), nDACol2 = aAbs.aEnd.Col();
         SCROW nDARow1 = aAbs.aStart.Row(), nDARow2 = aAbs.aEnd.Row();
-        pDok->GetDataArea(aAbs.aStart.Tab(), nDACol1, nDARow1, nDACol2, nDARow2, true, false);
+        mrDoc.GetDataArea(aAbs.aStart.Tab(), nDACol1, nDARow1, nDACol2, nDARow2, true, false);
         aAbs.aEnd.SetCol(nDACol2);
         aAbs.aEnd.SetRow(nDARow2);
     }
@@ -3720,8 +3720,8 @@ void ScInterpreter::ScColRowNameAuto()
                 if ( nMyRow == nStartRow )
                 {   // take the rest under the name
                     nStartRow++;
-                    if ( nStartRow > pDok->MaxRow() )
-                        nStartRow = pDok->MaxRow();
+                    if ( nStartRow > mrDoc.MaxRow() )
+                        nStartRow = mrDoc.MaxRow();
                     aAbs.aStart.SetRow(nStartRow);
                 }
                 else
@@ -3746,8 +3746,8 @@ void ScInterpreter::ScColRowNameAuto()
                 if ( nMyCol == nStartCol )
                 {    // take the rest under the name
                     nStartCol++;
-                    if ( nStartCol > pDok->MaxCol() )
-                        nStartCol = pDok->MaxCol();
+                    if ( nStartCol > mrDoc.MaxCol() )
+                        nStartCol = mrDoc.MaxCol();
                     aAbs.aStart.SetCol(nStartCol);
                 }
                 else
@@ -3757,8 +3757,8 @@ void ScInterpreter::ScColRowNameAuto()
             }
         }
     }
-    aRefData.SetRange(pDok->GetSheetLimits(), aAbs, aPos);
-    PushTempToken( new ScDoubleRefToken( pDok->GetSheetLimits(), aRefData ) );
+    aRefData.SetRange(mrDoc.GetSheetLimits(), aAbs, aPos);
+    PushTempToken( new ScDoubleRefToken( mrDoc.GetSheetLimits(), aRefData ) );
 }
 
 // --- internals ------------------------------------------------------------
@@ -3774,15 +3774,15 @@ void ScInterpreter::ScTTT()
     PushError(FormulaError::NoValue);
 }
 
-ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc, ScInterpreterContext& rContext,
+ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument& rDoc, ScInterpreterContext& rContext,
         const ScAddress& rPos, ScTokenArray& r, bool bForGroupThreading )
     : aCode(r)
     , aPos(rPos)
     , pArr(&r)
     , mrContext(rContext)
-    , pDok(pDoc)
-    , mpLinkManager(pDok->GetLinkManager())
-    , mrStrPool(pDoc->GetSharedStringPool())
+    , mrDoc(rDoc)
+    , mpLinkManager(rDoc.GetLinkManager())
+    , mrStrPool(rDoc.GetSharedStringPool())
     , pJumpMatrix(nullptr)
     , pMyFormulaCell(pCell)
     , pFormatter(rContext.GetFormatTable())
@@ -3799,7 +3799,7 @@ ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc, ScInterpre
     , mnStringNoValueError(FormulaError::NoValue)
     , mnSubTotalFlags(SubtotalFlags::NONE)
     , cPar(0)
-    , bCalcAsShown(pDoc->GetDocOptions().IsCalcAsShown())
+    , bCalcAsShown(rDoc.GetDocOptions().IsCalcAsShown())
     , meVolatileType(r.IsRecalcModeAlways() ? VOLATILE : NOT_VOLATILE)
 {
     MergeCalcConfig();
@@ -3881,7 +3881,7 @@ const ScCalcConfig& ScInterpreter::GetGlobalConfig()
 void ScInterpreter::MergeCalcConfig()
 {
     maCalcConfig = GetOrCreateGlobalConfig();
-    maCalcConfig.MergeDocumentSpecific( pDok->GetCalcConfig());
+    maCalcConfig.MergeDocumentSpecific( mrDoc.GetCalcConfig());
 }
 
 void ScInterpreter::GlobalExit()
