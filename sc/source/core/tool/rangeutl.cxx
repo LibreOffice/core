@@ -896,9 +896,9 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
     rString = aRetStr.makeStringAndClear();
 }
 
-ScRangeData* ScRangeStringConverter::GetRangeDataFromString(const OUString& rString, const SCTAB nTab, const ScDocument* pDoc)
+ScRangeData* ScRangeStringConverter::GetRangeDataFromString(const OUString& rString, const SCTAB nTab, const ScDocument& rDoc)
 {
-    ScRangeName* pLocalRangeName = pDoc->GetRangeName(nTab);
+    ScRangeName* pLocalRangeName = rDoc.GetRangeName(nTab);
     ScRangeData* pData = nullptr;
     OUString aUpperName = ScGlobal::getCharClassPtr()->uppercase(rString);
     if(pLocalRangeName)
@@ -907,7 +907,7 @@ ScRangeData* ScRangeStringConverter::GetRangeDataFromString(const OUString& rStr
     }
     if (!pData)
     {
-        ScRangeName* pGlobalRangeName = pDoc->GetRangeName();
+        ScRangeName* pGlobalRangeName = rDoc.GetRangeName();
         if (pGlobalRangeName)
         {
             pData = pGlobalRangeName->findByUpperName(aUpperName);
