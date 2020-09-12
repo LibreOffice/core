@@ -35,10 +35,10 @@ Compare::Cell::Cell() :
 Compare::Compare() :
     meOp(SC_EQUAL), mbIgnoreCase(true) {}
 
-CompareOptions::CompareOptions( const ScDocument* pDoc, const ScQueryEntry& rEntry, utl::SearchParam::SearchType eSrchTyp ) :
+CompareOptions::CompareOptions( const ScDocument& rDoc, const ScQueryEntry& rEntry, utl::SearchParam::SearchType eSrchTyp ) :
     aQueryEntry(rEntry),
     eSearchType(eSrchTyp),
-    bMatchWholeCell(pDoc->GetDocOptions().IsMatchWholeCell())
+    bMatchWholeCell(rDoc.GetDocOptions().IsMatchWholeCell())
 {
     // Wildcard and Regex search work only with equal or not equal.
     if (eSearchType != utl::SearchParam::SearchType::Normal &&
