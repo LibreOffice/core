@@ -23,6 +23,7 @@
 
 #include <map>
 #include <memory>
+#include <set>
 
 #include <svx/svdmark.hxx>
 #include <svx/svdobj.hxx>

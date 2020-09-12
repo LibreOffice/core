@@ -42,6 +42,7 @@ private:
     typedef typename std::vector<Value>::iterator  iterator;
 public:
     typedef typename std::vector<Value>::const_iterator const_iterator;
+    typedef typename std::vector<Value>::const_reverse_iterator const_reverse_iterator;
     typedef typename std::vector<Value>::difference_type difference_type;
     typedef typename std::vector<Value>::size_type size_type;
 
@@ -98,9 +99,9 @@ public:
     }
 
     // like C++ 2011: erase with const_iterator (doesn't change sort order)
-    void erase(const_iterator const& position)
+    const_iterator erase(const_iterator const& position)
     {   // C++98 has vector::erase(iterator), so call that
-        m_vector.erase(m_vector.begin() + (position - m_vector.begin()));
+        return m_vector.erase(m_vector.begin() + (position - m_vector.begin()));
     }
 
     void erase(const_iterator const& first, const_iterator const& last)
@@ -157,6 +158,18 @@ public:
     const_iterator end() const
     {
         return m_vector.end();
+    }
+
+    // Only return a const iterator, so that the vector cannot be directly updated.
+    const_reverse_iterator rbegin() const
+    {
+        return m_vector.rbegin();
+    }
+
+    // Only return a const iterator, so that the vector cannot be directly updated.
+    const_reverse_iterator rend() const
+    {
+        return m_vector.rend();
     }
 
     const Value& front() const
