@@ -940,7 +940,7 @@ bool lclGetAddress( const ScDocument* pDoc, ScAddress& rAddress, const FormulaTo
 } // namespace
 
 bool XclTokenArrayHelper::GetMultipleOpRefs(
-    const ScDocument* pDoc,
+    const ScDocument& rDoc,
     XclMultipleOpRefs& rRefs, const ScTokenArray& rScTokArr, const ScAddress& rScPos )
 {
     rRefs.mbDblRefMode = false;
@@ -963,32 +963,32 @@ bool XclTokenArrayHelper::GetMultipleOpRefs(
                 eState = (eOpCode == ocOpen) ? stOpen : stError;
             break;
             case stOpen:
-                eState = lclGetAddress(pDoc, rRefs.maFmlaScPos, *aIt, rScPos) ? stFormula : stError;
+                eState = lclGetAddress(&rDoc, rRefs.maFmlaScPos, *aIt, rScPos) ? stFormula : stError;
             break;
             case stFormula:
                 eState = bIsSep ? stFormulaSep : stError;
             break;
             case stFormulaSep:
-                eState = lclGetAddress(pDoc, rRefs.maColFirstScPos, *aIt, rScPos) ? stColFirst : stError;
+                eState = lclGetAddress(&rDoc, rRefs.maColFirstScPos, *aIt, rScPos) ? stColFirst : stError;
             break;
             case stColFirst:
                 eState = bIsSep ? stColFirstSep : stError;
             break;
             case stColFirstSep:
-                eState = lclGetAddress(pDoc, rRefs.maColRelScPos, *aIt, rScPos) ? stColRel : stError;
+                eState = lclGetAddress(&rDoc, rRefs.maColRelScPos, *aIt, rScPos) ? stColRel : stError;
             break;
             case stColRel:
                 eState = bIsSep ? stColRelSep : ((eOpCode == ocClose) ? stClose : stError);
             break;
             case stColRelSep:
-                eState = lclGetAddress(pDoc, rRefs.maRowFirstScPos, *aIt, rScPos) ? stRowFirst : stError;
+                eState = lclGetAddress(&rDoc, rRefs.maRowFirstScPos, *aIt, rScPos) ? stRowFirst : stError;
                 rRefs.mbDblRefMode = true;
             break;
             case stRowFirst:
                 eState = bIsSep ? stRowFirstSep : stError;
             break;
             case stRowFirstSep:
-                eState = lclGetAddress(pDoc, rRefs.maRowRelScPos, *aIt, rScPos) ? stRowRel : stError;
+                eState = lclGetAddress(&rDoc, rRefs.maRowRelScPos, *aIt, rScPos) ? stRowRel : stError;
             break;
             case stRowRel:
                 eState = (eOpCode == ocClose) ? stClose : stError;

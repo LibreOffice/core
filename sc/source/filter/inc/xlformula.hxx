@@ -532,7 +532,7 @@ public:
         @descr  Requires that the formula contains a single MULTIPLE.OPERATION function call.
         Spaces in the formula are silently ignored.
         @return  true = Multiple operation found, and all references successfully extracted. */
-    static bool GetMultipleOpRefs( const ScDocument* pDoc, XclMultipleOpRefs& rRefs, const ScTokenArray& rScTokArr, const ScAddress& rScPos );
+    static bool GetMultipleOpRefs( const ScDocument& rDoc, XclMultipleOpRefs& rRefs, const ScTokenArray& rScTokArr, const ScAddress& rScPos );
 };
 
 inline sal_uInt8 XclTokenArrayHelper::GetTokenId( sal_uInt8 nBaseId, sal_uInt8 nTokenClass )

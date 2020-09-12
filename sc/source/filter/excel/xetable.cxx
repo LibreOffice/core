@@ -459,7 +459,7 @@ XclExpTableopRef XclExpTableopBuffer::CreateOrExtendTableop(
 
     // try to extract cell references of a multiple operations formula
     XclMultipleOpRefs aRefs;
-    if (XclTokenArrayHelper::GetMultipleOpRefs(&GetDoc(), aRefs, rScTokArr, rScPos))
+    if (XclTokenArrayHelper::GetMultipleOpRefs(GetDoc(), aRefs, rScTokArr, rScPos))
     {
         // try to find an existing TABLEOP record for this cell position
         for( size_t nPos = 0, nSize = maTableopList.GetSize(); !xRec && (nPos < nSize); ++nPos )
