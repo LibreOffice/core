@@ -32,7 +32,6 @@
 #include <svx/svdoutl.hxx>
 #include <svx/svxids.hrc>
 #include <svx/unoshape.hxx>
-#include <tools/globname.hxx>
 #include <editeng/fhgtitem.hxx>
 
 #include <com/sun/star/container/XChild.hpp>
@@ -58,38 +57,11 @@ namespace
         return nHitTolerance;
     }
 
-// this code is copied from sfx2/source/doc/objembed.cxx
-SfxObjectShell * lcl_GetParentObjectShell( const uno::Reference< frame::XModel > & xModel )
-{
-    SfxObjectShell* pResult = nullptr;
-
-    try
-    {
-        uno::Reference< container::XChild > xChildModel( xModel, uno::UNO_QUERY );
-        if ( xChildModel.is() )
-        {
-            uno::Reference< lang::XUnoTunnel > xParentTunnel( xChildModel->getParent(), uno::UNO_QUERY );
-            if ( xParentTunnel.is() )
-            {
-                SvGlobalName aSfxIdent( SFX_GLOBAL_CLASSID );
-                pResult = reinterpret_cast< SfxObjectShell * >(
-                    xParentTunnel->getSomething( aSfxIdent.GetByteSequence() ) );
-            }
-        }
-    }
-    catch( const uno::Exception& )
-    {
-        // TODO: error handling
-    }
-
-    return pResult;
-}
-
 // this code is copied from sfx2/source/doc/objembed.cxx. It is a workaround to
 // get the reference device (e.g. printer) from the parent document
 OutputDevice * lcl_GetParentRefDevice( const uno::Reference< frame::XModel > & xModel )
 {
-    SfxObjectShell * pParent = lcl_GetParentObjectShell( xModel );
+    SfxObjectShell* pParent = SfxObjectShell::GetParentShell(xModel);
     if ( pParent )
         return pParent->GetDocumentRefDev();
     return nullptr;

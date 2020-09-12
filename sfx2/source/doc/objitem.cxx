@@ -23,8 +23,6 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
-#include <tools/globname.hxx>
-
 
 SfxPoolItem* SfxObjectShellItem::CreateDefault() { return new SfxObjectShellItem; }
 
@@ -64,22 +62,7 @@ bool SfxObjectShellItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMembe
 
     if ( rVal >>= xModel )
     {
-        if ( xModel.is() )
-        {
-            css::uno::Reference< css::lang::XUnoTunnel > xTunnel( xModel, css::uno::UNO_QUERY );
-            if ( xTunnel.is() )
-            {
-                css::uno::Sequence < sal_Int8 > aSeq = SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence();
-                sal_Int64 nHandle = xTunnel->getSomething( aSeq );
-                if ( nHandle )
-                {
-                    pObjSh = reinterpret_cast< SfxObjectShell* >(sal::static_int_cast<sal_IntPtr>( nHandle ));
-                    return true;
-                }
-            }
-        }
-
-        pObjSh = nullptr;
+        pObjSh = SfxObjectShell::GetShellFromComponent(xModel);
         return true;
     }
 

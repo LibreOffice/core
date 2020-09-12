@@ -26,7 +26,6 @@
 #include <sfx2/event.hxx>
 
 #include <comphelper/fileformat.h>
-#include <tools/globname.hxx>
 #include <tools/fract.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/outdev.hxx>
@@ -35,36 +34,9 @@
 using namespace ::com::sun::star;
 
 
-// TODO/LATER: this workaround must be replaced by API in future if possible
-SfxObjectShell* SfxObjectShell::GetParentShellByModel_Impl()
-{
-    SfxObjectShell* pResult = nullptr;
-
-    try {
-        uno::Reference< container::XChild > xChildModel( GetModel(), uno::UNO_QUERY );
-        if ( xChildModel.is() )
-        {
-            uno::Reference< lang::XUnoTunnel > xParentTunnel( xChildModel->getParent(), uno::UNO_QUERY );
-            if ( xParentTunnel.is() )
-            {
-                SvGlobalName aSfxIdent( SFX_GLOBAL_CLASSID );
-                pResult = reinterpret_cast<SfxObjectShell*>(xParentTunnel->getSomething(
-                                                aSfxIdent.GetByteSequence() ) );
-            }
-        }
-    }
-    catch( uno::Exception& )
-    {
-        // TODO: error handling
-    }
-
-    return pResult;
-}
-
-
 Printer* SfxObjectShell::GetDocumentPrinter()
 {
-    SfxObjectShell* pParent = GetParentShellByModel_Impl();
+    SfxObjectShell* pParent = GetParentShell(GetModel());
     if ( pParent )
         return pParent->GetDocumentPrinter();
     return nullptr;
@@ -73,7 +45,7 @@ Printer* SfxObjectShell::GetDocumentPrinter()
 
 OutputDevice* SfxObjectShell::GetDocumentRefDev()
 {
-    SfxObjectShell* pParent = GetParentShellByModel_Impl();
+    SfxObjectShell* pParent = GetParentShell(GetModel());
     if ( pParent )
         return pParent->GetDocumentRefDev();
     return nullptr;

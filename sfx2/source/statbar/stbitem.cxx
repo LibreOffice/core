@@ -46,7 +46,6 @@
 #include <svl/intitem.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/convert.hxx>
-#include <tools/globname.hxx>
 #include <ctrlfactoryimpl.hxx>
 
 using namespace ::com::sun::star;
@@ -80,7 +79,6 @@ svt::StatusbarController* SfxStatusBarControllerFactory(
     uno::Reference < util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
     xTrans->parseStrict( aTargetURL );
 
-    SfxObjectShell* pObjShell = nullptr;
     uno::Reference < frame::XController > xController;
     uno::Reference < frame::XModel > xModel;
     if ( rFrame.is() )
@@ -90,18 +88,7 @@ svt::StatusbarController* SfxStatusBarControllerFactory(
             xModel = xController->getModel();
     }
 
-    if ( xModel.is() )
-    {
-        // Get tunnel from model to retrieve the SfxObjectShell pointer from it
-        css::uno::Reference < css::lang::XUnoTunnel > xObj( xModel, uno::UNO_QUERY );
-        css::uno::Sequence < sal_Int8 > aSeq = SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence();
-        if ( xObj.is() )
-        {
-            sal_Int64 nHandle = xObj->getSomething( aSeq );
-            if ( nHandle )
-                        pObjShell = reinterpret_cast< SfxObjectShell* >( sal::static_int_cast< sal_IntPtr >( nHandle ));
-        }
-    }
+    SfxObjectShell* pObjShell = SfxObjectShell::GetShellFromComponent(xModel);
 
     SfxModule*     pModule   = pObjShell ? pObjShell->GetModule() : nullptr;
     SfxSlotPool*   pSlotPool = nullptr;
