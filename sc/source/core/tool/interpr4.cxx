@@ -2491,7 +2491,7 @@ void ScInterpreter::ScDBGet()
     }
 
     pQueryParam->mbSkipString = false;
-    ScDBQueryDataIterator aValIter(&mrDoc, mrContext, std::move(pQueryParam));
+    ScDBQueryDataIterator aValIter(mrDoc, mrContext, std::move(pQueryParam));
     ScDBQueryDataIterator::Value aValue;
     if (!aValIter.GetFirst(aValue) || aValue.mnError != FormulaError::NONE)
     {
