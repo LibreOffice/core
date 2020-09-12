@@ -4387,8 +4387,6 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
             {
                 for ( ;nDepth < nLevels; nDepth++ )
                     aRule.SetLevel( nDepth, aNumberFormat );
-                if ( eNumRuleType == SvxNumRuleType::PRESENTATION_NUMBERING )
-                    aRule.SetLevel( 0, aNumberFormat );
             }
         }
         mpNumBulletItem[ i ] = new SvxNumBulletItem( aRule, EE_PARA_NUMBULLET );
