@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_ROLBCK_HXX
 
 #include <o3tl/deleter.hxx>
+#include <o3tl/sorted_vector.hxx>
 #include <svl/itemset.hxx>
 #include <tools/solar.h>
 #include <vcl/keycod.hxx>
@@ -29,7 +30,6 @@
 
 #include <memory>
 #include <vector>
-#include <set>
 
 namespace sfx2 {
     class MetadatableUndo;
@@ -310,7 +310,7 @@ class SwHistorySetAttrSet : public SwHistoryHint
 
 public:
     SwHistorySetAttrSet( const SfxItemSet& rSet, sal_uLong nNode,
-                         const std::set<sal_uInt16> &rSetArr );
+                         const o3tl::sorted_vector<sal_uInt16> &rSetArr );
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
 
 };
@@ -411,7 +411,7 @@ public:
 class SwRegHistory : public SwClient
 {
 private:
-    std::set<sal_uInt16> m_WhichIdSet;
+    o3tl::sorted_vector<sal_uInt16> m_WhichIdSet;
     SwHistory * const m_pHistory;
     sal_uLong m_nNodeIndex;
 
