@@ -37,7 +37,6 @@
 #include <unotools/tempfile.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
-#include <tools/globname.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
@@ -155,14 +154,9 @@ void SAL_CALL SfxPrintHelper::initialize( const css::uno::Sequence< css::uno::An
 
     css::uno::Reference < css::frame::XModel > xModel;
     aArguments[0] >>= xModel;
-    uno::Reference < lang::XUnoTunnel > xObj( xModel, uno::UNO_QUERY );
-    uno::Sequence < sal_Int8 > aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
-    sal_Int64 nHandle = xObj->getSomething( aSeq );
-    if ( nHandle )
-    {
-        m_pData->m_pObjectShell = reinterpret_cast< SfxObjectShell* >( sal::static_int_cast< sal_IntPtr >( nHandle ));
+    m_pData->m_pObjectShell = SfxObjectShell::GetShellFromComponent(xModel);
+    if (m_pData->m_pObjectShell)
         m_pData->StartListening(*m_pData->m_pObjectShell);
-    }
 }
 
 SfxPrintHelper::~SfxPrintHelper()

@@ -29,7 +29,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sfx2/objsh.hxx>
-#include <tools/globname.hxx>
 
 using namespace css;
 
@@ -69,11 +68,7 @@ OwnSubFilterService::OwnSubFilterService(const css::uno::Sequence< css::uno::Any
     if ( ( aArguments[1] >>= m_xStream ) && m_xStream.is()
       && ( aArguments[0] >>= m_xModel ) && m_xModel.is() )
     {
-        css::uno::Reference < css::lang::XUnoTunnel > xObj( m_xModel, uno::UNO_QUERY_THROW );
-        css::uno::Sequence < sal_Int8 > aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
-        sal_Int64 nHandle = xObj->getSomething( aSeq );
-        if ( nHandle )
-            m_pObjectShell = reinterpret_cast< SfxObjectShell* >( sal::static_int_cast< sal_IntPtr >( nHandle ));
+        m_pObjectShell = SfxObjectShell::GetShellFromComponent(m_xModel);
     }
 
     if ( !m_pObjectShell )

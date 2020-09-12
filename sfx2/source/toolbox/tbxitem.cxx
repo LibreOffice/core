@@ -47,7 +47,6 @@
 #include <vcl/taskpanelist.hxx>
 #include <vcl/event.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/globname.hxx>
 
 #include <vcl/InterimItemWindow.hxx>
 #include <sfx2/tbxctrl.hxx>
@@ -84,7 +83,6 @@ svt::ToolboxController* SfxToolBoxControllerFactory( const Reference< XFrame >& 
     if ( !aTargetURL.Arguments.isEmpty() )
         return nullptr;
 
-    SfxObjectShell* pObjShell = nullptr;
     Reference < XController > xController;
     Reference < XModel > xModel;
     if ( rFrame.is() )
@@ -94,19 +92,7 @@ svt::ToolboxController* SfxToolBoxControllerFactory( const Reference< XFrame >& 
             xModel = xController->getModel();
     }
 
-    if ( xModel.is() )
-    {
-        // Get tunnel from model to retrieve the SfxObjectShell pointer from it
-        css::uno::Reference < css::lang::XUnoTunnel > xObj( xModel, UNO_QUERY );
-        if ( xObj.is() )
-        {
-            css::uno::Sequence < sal_Int8 > aSeq = SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence();
-            sal_Int64 nHandle = xObj->getSomething( aSeq );
-            if ( nHandle )
-                pObjShell = reinterpret_cast< SfxObjectShell* >( sal::static_int_cast< sal_IntPtr >( nHandle ));
-        }
-    }
-
+    SfxObjectShell* pObjShell = SfxObjectShell::GetShellFromComponent(xModel);
     SfxModule*     pModule   = pObjShell ? pObjShell->GetModule() : nullptr;
     SfxSlotPool*   pSlotPool = nullptr;
 
