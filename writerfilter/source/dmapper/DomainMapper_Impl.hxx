@@ -423,6 +423,20 @@ struct SymbolData
     { }
 };
 
+//jcl1
+// Different sections can overlap during import,
+// and it is usually important to keep track of certain flags
+// about paragraphs or sections in a specific section.
+// Known sections are text | foot/endnotes | header/footers | comments
+struct SectionInfo
+{
+    OUString sType;
+
+    SectionInfo( OUString sSectionType = "" )
+        :sType(sSectionType)
+    { }
+};
+
 class DomainMapper;
 class DomainMapper_Impl final
 {
@@ -448,6 +462,7 @@ private:
     std::stack<AnchoredContext>                                                     m_aAnchoredStack;
     std::stack<HeaderFooterContext>                                                 m_aHeaderFooterStack;
     std::deque<FieldContextPtr> m_aFieldStack;
+    std::deque<SectionInfo> m_aSectionInfoStack;
     bool m_bForceGenericFields;
     bool                                                                            m_bSetUserFieldContent;
     bool                                                                            m_bSetCitation;
@@ -622,6 +637,13 @@ public:
     void StartParaMarkerChange( );
     void EndParaMarkerChange( );
     void ChainTextFrames();
+
+    //jcl2
+    SectionInfo& GetSectionInfo();
+    const SectionInfo GetSectionInfo() const;
+    void StartSectionInfo();
+    void EndSectionInfo();
+
 
     void RemoveDummyParaForTableInSection();
     void AddDummyParaForTableInSection();

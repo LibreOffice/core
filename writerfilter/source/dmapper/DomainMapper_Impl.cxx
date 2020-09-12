@@ -435,6 +435,69 @@ void DomainMapper_Impl::SetDocumentSettingsProperty( const OUString& rPropName, 
         }
     }
 }
+
+SectionInfo& DomainMapper_Impl::GetSectionInfo()
+{
+    assert (m_aSectionInfoStack.size() && "call to get sectionInfo before section started");
+    if ( m_aSectionInfoStack.empty() )
+    {
+        m_aSectionInfoStack.emplace_back( SectionInfo("undefined") );
+    }
+    return m_aSectionInfoStack.back();
+}
+
+const SectionInfo DomainMapper_Impl::GetSectionInfo() const
+{
+    assert (m_aSectionInfoStack.size() && "call to get sectionInfo before section started");
+    return m_aSectionInfoStack.size() ? m_aSectionInfoStack.back() : SectionInfo("undefined");
+}
+
+void DomainMapper_Impl::StartSectionInfo()
+{
+    // IsInTOC() is because of either IsInIndexContext or IsInBibliographyContext.
+
+    //if ( !m_bStartTOC || m_aSectionInfoStack.size() == 0 )
+        m_aSectionInfoStack.emplace_back( SectionInfo() );
+SAL_WARN("JCL","::StartSection size["<<m_aSectionInfoStack.size()<<"] in comments["<<m_bIsInComments<<"] endnote["<<m_bInFootOrEndnote<<"] HF["<<IsInHeaderFooter()<<"] TOC["<<m_bStartTOC<<"]["<<m_bStartedTOC<<"]");
+assert( m_aSectionInfoStack.size() < 3);// || (m_bStartTOC && m_aSectionInfoStack.size() < 6) );
+    GetSectionInfo().sType = "defining";
+    if ( m_bIsInComments )
+        GetSectionInfo().sType = "comment";
+    else if ( m_bInFootOrEndnote )
+        GetSectionInfo().sType = "endnote";
+    else if ( IsInHeaderFooter() )
+    {
+        GetSectionInfo().sType = "header";
+        assert (false && "headerFooter is a section after all. I thought it was, but determined it wasn't");
+    }
+    else if ( IsInTOC() )
+    {
+        GetSectionInfo().sType = "TOC";
+        // nope - I missed that ::handleTOC sets it by itself... assert ( isInIndexContext() || isInBibliographyContext() );
+    }
+    else if ( m_aSectionInfoStack.size() == 1 )
+        GetSectionInfo().sType = "text";
+    else
+        assert( false && "unknown section, not size 1");
+
+    assert (m_aSectionInfoStack.size() > 1
+        || GetSectionInfo().sType == "text"
+        || GetSectionInfo().sType == "TOC"
+        );
+}
+//jcl2
+
+void DomainMapper_Impl::EndSectionInfo()
+{
+    assert( m_aSectionInfoStack.size() );
+SAL_WARN("JCL","::EndSectionInfo["<<m_aSectionInfoStack.back().sType<<"] size["<<m_aSectionInfoStack.size()<<"]");
+    for ( int i = m_aSectionInfoStack.size()-2; i >= 0; --i )
+        SAL_WARN("JCL","---["<<i<<"]: type["<<m_aSectionInfoStack[i].sType<<"]");
+    //if ( !m_bStartTOC || m_aSectionInfoStack.size() == 1)
+        m_aSectionInfoStack.pop_back();
+}
+
+
 void DomainMapper_Impl::RemoveDummyParaForTableInSection()
 {
     SetIsDummyParaAddedForTableInSection(false);
