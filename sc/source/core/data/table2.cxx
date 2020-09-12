@@ -2574,10 +2574,9 @@ void ScTable::MergeSelectionPattern( ScMergePatternState& rState, const ScMarkDa
 
     for (const sc::ColRowSpan & rSpan : aSpans)
     {
-        SCCOL nEnd = ClampToAllocatedColumns(rSpan.mnEnd);
-        for (SCCOLROW i = rSpan.mnStart; i <= nEnd; ++i)
+        for (SCCOLROW i = rSpan.mnStart; i <= rSpan.mnEnd; ++i)
         {
-            aCol[i].MergeSelectionPattern( rState, rMark, bDeep );
+            CreateColumnIfNotExists(i).MergeSelectionPattern( rState, rMark, bDeep );
         }
     }
 }
