@@ -453,7 +453,7 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,  // multiple (repeate
 
 namespace {
 
-bool setCacheTableReferenced(const ScDocument* pDoc, formula::FormulaToken& rToken, ScExternalRefManager& rRefMgr, const ScAddress& rPos)
+bool setCacheTableReferenced(const ScDocument& rDoc, formula::FormulaToken& rToken, ScExternalRefManager& rRefMgr, const ScAddress& rPos)
 {
     switch (rToken.GetType())
     {
@@ -463,7 +463,7 @@ bool setCacheTableReferenced(const ScDocument* pDoc, formula::FormulaToken& rTok
         case svExternalDoubleRef:
         {
             const ScComplexRefData& rRef = *rToken.GetDoubleRef();
-            ScRange aAbs = rRef.toAbs(*pDoc, rPos);
+            ScRange aAbs = rRef.toAbs(rDoc, rPos);
             size_t nSheets = aAbs.aEnd.Tab() - aAbs.aStart.Tab() + 1;
             return rRefMgr.setCacheTableReferenced(
                     rToken.GetIndex(), rToken.GetString().getString(), nSheets);
@@ -500,7 +500,7 @@ bool ScDocument::MarkUsedExternalReferences( const ScTokenArray& rArr, const ScA
             if (!pRefMgr)
                 pRefMgr = GetExternalRefManager();
 
-            bAllMarked = setCacheTableReferenced(this, *t, *pRefMgr, rPos);
+            bAllMarked = setCacheTableReferenced(*this, *t, *pRefMgr, rPos);
         }
         else if (t->GetType() == svIndex)
         {
@@ -520,7 +520,7 @@ bool ScDocument::MarkUsedExternalReferences( const ScTokenArray& rArr, const ScA
                 if (!pRefMgr)
                     pRefMgr = GetExternalRefManager();
 
-                bAllMarked = setCacheTableReferenced(this, *t, *pRefMgr, rPos);
+                bAllMarked = setCacheTableReferenced(*this, *t, *pRefMgr, rPos);
             }
         }
     }
