@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "f8256148_1bc596d9",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/DrawImpressCommands.xcu",
+        "patchSetId": 5
+      },
+      "lineNbr": 2516,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-09-12T00:43:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48e0f5ea_7e529e08",
+      "revId": "e026e826ab2144544655e5eaec568e9caba37336",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1743913d_56910fd1",
         "filename": "reportdesign/uiconfig/dbreport/menubar/menubar.xml",
         "patchSetId": 5
@@ -30,6 +48,24 @@
       "writtenOn": "2020-09-11T10:08:52Z",
       "side": 1,
       "message": "This will work, but output warnings to the terminal about the missing toolbar. I would prefer that we either introduce the toolbar here, and then not list the commands in the menubar and context menu, or we just continue using .uno:Distribution for this submenu (see also the other comment).",
+      "revId": "e026e826ab2144544655e5eaec568e9caba37336",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d719a58_072281a4",
+        "filename": "reportdesign/uiconfig/dbreport/menubar/menubar.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-09-12T00:43:40Z",
+      "side": 1,
+      "message": "Don\u0027t get this (isn\u0027t it a main menu?), and I have to admit that I neither know what this report-thing is.",
+      "parentUuid": "1743913d_56910fd1",
       "revId": "e026e826ab2144544655e5eaec568e9caba37336",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true

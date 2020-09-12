@@ -34,6 +34,24 @@
       "revId": "ba4b3d5f7a0fe8d0d985e98897e041d59093d8b0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44797dca_dce730bb",
+        "filename": "reportdesign/inc/rptui_slotid.hrc",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-09-12T00:43:40Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "5be7dffc_7700d2e9",
+      "revId": "ba4b3d5f7a0fe8d0d985e98897e041d59093d8b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
