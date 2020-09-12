@@ -3489,7 +3489,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
         {   // recreate from previous node (could be merged now)
             if (SwTextNode *const pNode = aSavePos.GetNode().GetTextNode())
             {
-                std::unordered_set<SwTextFrame*> frames;
+                o3tl::sorted_vector<SwTextFrame*> frames;
                 SwTextNode *const pEndNode = rInsPos.GetNode().GetTextNode();
                 if (pEndNode)
                 {
