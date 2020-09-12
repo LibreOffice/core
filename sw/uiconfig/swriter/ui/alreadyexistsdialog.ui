@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.2 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkMessageDialog" id="AlreadyExistsDialog">
@@ -80,6 +80,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="alreadyexistsdialog|label1">Subject:</property>
                 <property name="use_underline">True</property>
+                <property name="mnemonic_widget">edit1</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -100,8 +101,5 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-5">ok</action-widget>
     </action-widgets>
-    <child>
-      <placeholder/>
-    </child>
   </object>
 </interface>
