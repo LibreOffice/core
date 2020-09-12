@@ -1,8 +1,6 @@
 sw/uiconfig/swriter/ui/abstractdialog.ui://GtkLabel[@id='label4'] orphan-label
 sw/uiconfig/swriter/ui/addentrydialog.ui://GtkEntry[@id='entry'] no-labelled-by
 sw/uiconfig/swriter/ui/asciifilterdialog.ui://GtkLabel[@id='label5'] orphan-label
-sw/uiconfig/swriter/ui/attachnamedialog.ui://GtkEntry[@id='edit1'] no-labelled-by
-sw/uiconfig/swriter/ui/attachnamedialog.ui://GtkLabel[@id='label2'] orphan-label
 sw/uiconfig/swriter/ui/authenticationsettingsdialog.ui://GtkLabel[@id='label1'] orphan-label
 sw/uiconfig/swriter/ui/authenticationsettingsdialog.ui://GtkLabel[@id='label2'] orphan-label
 sw/uiconfig/swriter/ui/authenticationsettingsdialog.ui://GtkLabel[@id='label3'] orphan-label
