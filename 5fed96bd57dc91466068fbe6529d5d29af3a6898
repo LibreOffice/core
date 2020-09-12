@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "778441ca_58822f00",
+        "filename": "solenv/flatpak-manifest.in",
+        "patchSetId": 1
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-09-12T08:40:34Z",
+      "side": 1,
+      "message": "Unfortunately, the tarball\u0027s name must always be updated in two locations.",
+      "range": {
+        "startLine": 381,
+        "startChar": 56,
+        "endLine": 381,
+        "endChar": 79
+      },
+      "revId": "5fed96bd57dc91466068fbe6529d5d29af3a6898",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
