@@ -99,6 +99,7 @@ DrawAnnotationContext::DrawAnnotationContext( SvXMLImport& rImport, const Refere
         switch( aIter.getToken() )
         {
             case XML_ELEMENT(SVG, XML_X):
+            case XML_ELEMENT(SVG_COMPAT, XML_X):
             {
                 sal_Int32 x;
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
@@ -107,6 +108,7 @@ DrawAnnotationContext::DrawAnnotationContext( SvXMLImport& rImport, const Refere
                 break;
             }
             case XML_ELEMENT(SVG, XML_Y):
+            case XML_ELEMENT(SVG_COMPAT, XML_Y):
             {
                 sal_Int32 y;
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
@@ -115,6 +117,7 @@ DrawAnnotationContext::DrawAnnotationContext( SvXMLImport& rImport, const Refere
                 break;
             }
             case XML_ELEMENT(SVG, XML_WIDTH):
+            case XML_ELEMENT(SVG_COMPAT, XML_WIDTH):
             {
                 sal_Int32 w;
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
@@ -123,6 +126,7 @@ DrawAnnotationContext::DrawAnnotationContext( SvXMLImport& rImport, const Refere
                 break;
             }
             case XML_ELEMENT(SVG, XML_HEIGHT):
+            case XML_ELEMENT(SVG_COMPAT, XML_HEIGHT):
             {
                 sal_Int32 h;
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
