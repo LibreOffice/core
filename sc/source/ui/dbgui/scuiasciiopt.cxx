@@ -37,6 +37,9 @@
 #include <miscuno.hxx>
 #include <osl/diagnose.h>
 
+#include <unicode/uclean.h>
+#include <unicode/ucsdet.h>
+
 //! TODO make dynamic
 const SCSIZE ASCIIDLG_MAXROWS                = MAXROWCOUNT;
 
@@ -380,41 +383,43 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, const OUString& aDatNa
     // Sniff for Unicode / not
     if( ePreselectUnicode == RTL_TEXTENCODING_DONTKNOW && mpDatStream )
     {
-        Seek( 0 );
-        mpDatStream->StartReadingUnicodeText( RTL_TEXTENCODING_DONTKNOW );
-        sal_uLong nUniPos = mpDatStream->Tell();
-        switch (nUniPos)
+        mpDatStream->Seek( 0 );
+        constexpr size_t buffsize = 4096;
+        sal_Int8 bytes[buffsize] = { 0 };
+        sal_Int32 nRead = mpDatStream->ReadBytes( bytes, buffsize );
+        mpDatStream->Seek( 0 );
+
+        if ( nRead > 0 )
         {
-            case 2:
-                ePreselectUnicode = RTL_TEXTENCODING_UNICODE;   // UTF-16
-                break;
-            case 3:
-                ePreselectUnicode = RTL_TEXTENCODING_UTF8;      // UTF-8
-                break;
-            case 0:
-                {
-                    sal_uInt16 n;
-                    mpDatStream->ReadUInt16( n );
-                    // Assume that normal ASCII/ANSI/ISO/etc. text doesn't start with
-                    // control characters except CR,LF,TAB
-                    if ( (n & 0xff00) < 0x2000 )
-                    {
-                        switch ( n & 0xff00 )
-                        {
-                            case 0x0900 :
-                            case 0x0a00 :
-                            case 0x0d00 :
-                                break;
-                            default:
-                                ePreselectUnicode = RTL_TEXTENCODING_UNICODE;   // UTF-16
-                        }
-                    }
-                    mpDatStream->Seek(0);
-                }
-                break;
-            default:
-                ;   // nothing
+            UErrorCode uerr = U_ZERO_ERROR;
+            UCharsetDetector* ucd = ucsdet_open( &uerr );
+            ucsdet_setText( ucd, reinterpret_cast<const char*>(bytes), nRead, &uerr );
+            const UCharsetMatch* match = ucsdet_detect( ucd, &uerr );
+            const char* pEncodingName = ucsdet_getName( match, &uerr );
+
+            if ( U_SUCCESS(uerr) && !strcmp("UTF-8", pEncodingName) )
+            {
+                ePreselectUnicode = RTL_TEXTENCODING_UTF8; // UTF-8
+                mpDatStream->StartReadingUnicodeText( RTL_TEXTENCODING_UTF8 );
+            }
+            else if ( U_SUCCESS(uerr) && !strcmp("UTF-16LE", pEncodingName) )
+            {
+                ePreselectUnicode = RTL_TEXTENCODING_UNICODE; // UTF-16LE
+                mpDatStream->SetEndian( SvStreamEndian::LITTLE );
+                mpDatStream->StartReadingUnicodeText( RTL_TEXTENCODING_UNICODE );
+            }
+            else if ( U_SUCCESS(uerr) && !strcmp("UTF-16BE", pEncodingName) )
+            {
+                ePreselectUnicode = RTL_TEXTENCODING_UNICODE; // UTF-16BE
+                mpDatStream->SetEndian(SvStreamEndian::BIG);
+                mpDatStream->StartReadingUnicodeText( RTL_TEXTENCODING_UNICODE );
+            }
+            else // other
+                mpDatStream->StartReadingUnicodeText( RTL_TEXTENCODING_DONTKNOW );
+
+            ucsdet_close( ucd );
         }
+
         mnStreamPos = mpDatStream->Tell();
     }
 
