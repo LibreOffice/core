@@ -1093,7 +1093,7 @@ void Test::testValueIterator()
     {
         const double aChecks[] = { 1.0, 2.0, 3.0 };
         size_t const nCheckLen = SAL_N_ELEMENTS(aChecks);
-        ScValueIterator aIter(m_pDoc, ScRange(1,2,0,3,2,0));
+        ScValueIterator aIter(*m_pDoc, ScRange(1,2,0,3,2,0));
         bool bHas = false;
         size_t nCheckPos = 0;
         double fVal;

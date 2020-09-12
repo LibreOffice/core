@@ -1446,7 +1446,7 @@ void ScInterpreter::ScIRR()
         double fDenom = 0.0;
         FormulaError nErr = FormulaError::NONE;
         PopDoubleRef( aRange );
-        ScValueIterator aValIter(&mrDoc, aRange, mnSubTotalFlags);
+        ScValueIterator aValIter(mrDoc, aRange, mnSubTotalFlags);
         if (aValIter.GetFirst(fValue, nErr))
         {
             double fCount = 0.0;
@@ -1557,7 +1557,7 @@ void ScInterpreter::ScMIRR()
         }
         else
         {
-            ScValueIterator aValIter( &mrDoc, aRange, mnSubTotalFlags );
+            ScValueIterator aValIter( mrDoc, aRange, mnSubTotalFlags );
             double fCellValue;
             FormulaError nIterError = FormulaError::NONE;
 
