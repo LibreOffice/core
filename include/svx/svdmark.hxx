@@ -21,12 +21,12 @@
 #define INCLUDED_SVX_SVDMARK_HXX
 
 #include <config_options.h>
+#include <o3tl/sorted_vector.hxx>
 #include <rtl/ustring.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/sdrobjectuser.hxx>
 
 #include <memory>
-#include <set>
 #include <vector>
 
 namespace tools { class Rectangle; }
@@ -35,7 +35,7 @@ class SdrObjList;
 class SdrObject;
 class SdrPageView;
 
-typedef std::set<sal_uInt16> SdrUShortCont;
+typedef o3tl::sorted_vector<sal_uInt16> SdrUShortCont;
 
 
 /**

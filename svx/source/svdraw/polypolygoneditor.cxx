@@ -30,11 +30,11 @@ PolyPolygonEditor::PolyPolygonEditor( const basegfx::B2DPolyPolygon& rPolyPolygo
 {
 }
 
-bool PolyPolygonEditor::DeletePoints( const std::set< sal_uInt16 >& rAbsPoints )
+bool PolyPolygonEditor::DeletePoints( const o3tl::sorted_vector< sal_uInt16 >& rAbsPoints )
 {
     bool bPolyPolyChanged = false;
 
-    std::set< sal_uInt16 >::const_reverse_iterator aIter( rAbsPoints.rbegin() );
+    auto aIter( rAbsPoints.rbegin() );
     for( ; aIter != rAbsPoints.rend(); ++aIter )
     {
         sal_uInt32 nPoly, nPnt;
@@ -62,11 +62,11 @@ bool PolyPolygonEditor::DeletePoints( const std::set< sal_uInt16 >& rAbsPoints )
     return bPolyPolyChanged;
 }
 
-bool PolyPolygonEditor::SetSegmentsKind(SdrPathSegmentKind eKind, const std::set< sal_uInt16 >& rAbsPoints )
+bool PolyPolygonEditor::SetSegmentsKind(SdrPathSegmentKind eKind, const o3tl::sorted_vector< sal_uInt16 >& rAbsPoints )
 {
     bool bPolyPolyChanged = false;
 
-    std::set< sal_uInt16 >::const_reverse_iterator aIter( rAbsPoints.rbegin() );
+    auto aIter( rAbsPoints.rbegin() );
     for( ; aIter != rAbsPoints.rend(); ++aIter )
     {
         sal_uInt32 nPolyNum, nPntNum;
@@ -122,11 +122,11 @@ bool PolyPolygonEditor::SetSegmentsKind(SdrPathSegmentKind eKind, const std::set
     return bPolyPolyChanged;
 }
 
-bool PolyPolygonEditor::SetPointsSmooth( basegfx::B2VectorContinuity eFlags, const std::set< sal_uInt16 >& rAbsPoints)
+bool PolyPolygonEditor::SetPointsSmooth( basegfx::B2VectorContinuity eFlags, const o3tl::sorted_vector< sal_uInt16 >& rAbsPoints)
 {
     bool bPolyPolygonChanged(false);
 
-    std::set< sal_uInt16 >::const_reverse_iterator aIter( rAbsPoints.rbegin() );
+    auto aIter( rAbsPoints.rbegin() );
     for( ; aIter != rAbsPoints.rend(); ++aIter )
     {
         sal_uInt32 nPolyNum, nPntNum;
