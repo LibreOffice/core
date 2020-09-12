@@ -2975,6 +2975,8 @@ void DomainMapper::data(const sal_uInt8* /*buf*/, size_t /*len*/)
 
 void DomainMapper::lcl_startSectionGroup()
 {
+    m_pImpl->StartSectionInfo();
+
     if (!m_pImpl->isInIndexContext() && !m_pImpl->isInBibliographyContext())
     {
         m_pImpl->PushProperties(CONTEXT_SECTION);
@@ -2986,7 +2988,10 @@ void DomainMapper::lcl_startSectionGroup()
 void DomainMapper::lcl_endSectionGroup()
 {
     if (m_pImpl->isInIndexContext() || m_pImpl->isInBibliographyContext())
+    {
+        m_pImpl->EndSectionInfo();
         return;
+    }
 
     m_pImpl->CheckUnregisteredFrameConversion();
     m_pImpl->ExecuteFrameConversion();
@@ -3016,6 +3021,7 @@ void DomainMapper::lcl_endSectionGroup()
     }
     m_pImpl->SetIsTextFrameInserted( false );
     m_pImpl->PopProperties(CONTEXT_SECTION);
+    m_pImpl->EndSectionInfo();
 }
 
 void DomainMapper::lcl_startParagraphGroup()

@@ -284,7 +284,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bParaChanged( false ),
         m_bIsFirstParaInSection( true ),
         m_bIsFirstParaInSectionAfterRedline( true ),
-        m_bDummyParaAddedForTableInSection( false ),
         m_bTextFrameInserted(false),
         m_bIsPreviousParagraphFramed( false ),
         m_bIsLastParaInSection( false ),
@@ -435,6 +434,53 @@ void DomainMapper_Impl::SetDocumentSettingsProperty( const OUString& rPropName, 
         }
     }
 }
+
+SectionInfo& DomainMapper_Impl::GetSectionInfo()
+{
+    assert (m_aSectionInfoStack.size() && "call to get sectionInfo before section started");
+    if ( m_aSectionInfoStack.empty() )
+    {
+        m_aSectionInfoStack.emplace_back( SectionInfo("undefined") );
+    }
+    return m_aSectionInfoStack.back();
+}
+
+const SectionInfo DomainMapper_Impl::GetSectionInfo() const
+{
+    assert (m_aSectionInfoStack.size() && "call to get sectionInfo before section started");
+    return m_aSectionInfoStack.size() ? m_aSectionInfoStack.back() : SectionInfo("undefined");
+}
+
+void DomainMapper_Impl::StartSectionInfo()
+{
+    m_aSectionInfoStack.emplace_back( SectionInfo() );
+    if ( m_bIsInComments )
+        GetSectionInfo().sType = "comment";
+    else if ( m_bInFootOrEndnote )
+        GetSectionInfo().sType = "endnote";
+    else if ( IsInTOC() )
+    {
+        // IsInTOC can also mean IsInIndexContext or IsInBibliographyContext.
+        GetSectionInfo().sType = "TOC";
+    }
+    else if ( m_aSectionInfoStack.size() == 1 )
+        GetSectionInfo().sType = "text";
+    else
+        assert( false && "unknown section, not size 1");
+
+    assert (m_aSectionInfoStack.size() > 1
+        || GetSectionInfo().sType == "text"
+        || GetSectionInfo().sType == "TOC"
+        );
+}
+
+void DomainMapper_Impl::EndSectionInfo()
+{
+    assert( m_aSectionInfoStack.size() );
+    m_aSectionInfoStack.pop_back();
+}
+
+
 void DomainMapper_Impl::RemoveDummyParaForTableInSection()
 {
     SetIsDummyParaAddedForTableInSection(false);
@@ -587,7 +633,12 @@ void DomainMapper_Impl::SetIsFirstParagraphInShape(bool bIsFirst)
 
 void DomainMapper_Impl::SetIsDummyParaAddedForTableInSection( bool bIsAdded )
 {
-    m_bDummyParaAddedForTableInSection = bIsAdded;
+    GetSectionInfo().bDummyParaAddedForTable = bIsAdded;
+}
+
+bool DomainMapper_Impl::GetIsDummyParaAddedForTableInSection() const
+{
+    return GetSectionInfo().bDummyParaAddedForTable;
 }
 
 

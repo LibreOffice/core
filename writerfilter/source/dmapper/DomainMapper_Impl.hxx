@@ -423,6 +423,23 @@ struct SymbolData
     { }
 };
 
+/// Stores special status flags related to import's generic definition of a section
+// Known sections are text | foot/endnotes | TableOfContents | comments
+// Since different sections can overlap during import,
+// make sure a specialty section doesn't clobber the underlying section's settings.
+// This stack is new for LO 7.1. The intent is to slowly move existing flags into this new struct.
+struct SectionInfo
+{
+    OUString sType; // just to help debug and test accuracy of predicted use of sections
+    bool bDummyParaAddedForTable;
+
+    SectionInfo(OUString sSectionType = "")
+        : sType(sSectionType)
+        , bDummyParaAddedForTable(false)
+    {
+    }
+};
+
 class DomainMapper;
 class DomainMapper_Impl final
 {
@@ -448,6 +465,7 @@ private:
     std::stack<AnchoredContext>                                                     m_aAnchoredStack;
     std::stack<HeaderFooterContext>                                                 m_aHeaderFooterStack;
     std::deque<FieldContextPtr> m_aFieldStack;
+    std::deque<SectionInfo> m_aSectionInfoStack;
     bool m_bForceGenericFields;
     bool                                                                            m_bSetUserFieldContent;
     bool                                                                            m_bSetCitation;
@@ -546,7 +564,6 @@ private:
     bool                            m_bIsFirstParaInSection;
     bool                            m_bIsFirstParaInSectionAfterRedline;
     bool                            m_bIsFirstParaInShape = false;
-    bool                            m_bDummyParaAddedForTableInSection;
     bool                            m_bTextFrameInserted;
     bool                            m_bIsPreviousParagraphFramed;
     bool                            m_bIsLastParaInSection;
@@ -623,6 +640,12 @@ public:
     void EndParaMarkerChange( );
     void ChainTextFrames();
 
+    SectionInfo& GetSectionInfo();
+    const SectionInfo GetSectionInfo() const;
+    void StartSectionInfo();
+    void EndSectionInfo();
+
+
     void RemoveDummyParaForTableInSection();
     void AddDummyParaForTableInSection();
     void RemoveLastParagraph( );
@@ -644,7 +667,7 @@ public:
     void SetIsFirstParagraphInShape(bool bIsFirst);
     bool GetIsFirstParagraphInShape() const { return m_bIsFirstParaInShape; }
     void SetIsDummyParaAddedForTableInSection( bool bIsAdded );
-    bool GetIsDummyParaAddedForTableInSection() const { return m_bDummyParaAddedForTableInSection;}
+    bool GetIsDummyParaAddedForTableInSection() const;
 
     /// Track if a textframe has been inserted into this section
     void SetIsTextFrameInserted( bool bIsInserted );
