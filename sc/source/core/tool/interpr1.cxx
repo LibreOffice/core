@@ -5487,7 +5487,7 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
             if (pQueryMatrix)
             {
                 // Never case-sensitive.
-                sc::CompareOptions aOptions( &mrDoc, rEntry, rParam.eSearchType);
+                sc::CompareOptions aOptions( mrDoc, rEntry, rParam.eSearchType);
                 ScMatrixRef pResultMatrix = QueryMat( pQueryMatrix, aOptions);
                 if (nGlobalError != FormulaError::NONE || !pResultMatrix)
                 {
@@ -5797,7 +5797,7 @@ void ScInterpreter::ScCountIf()
             if (pQueryMatrix)
             {
                 // Never case-sensitive.
-                sc::CompareOptions aOptions( &mrDoc, rEntry, rParam.eSearchType);
+                sc::CompareOptions aOptions( mrDoc, rEntry, rParam.eSearchType);
                 ScMatrixRef pResultMatrix = QueryMat( pQueryMatrix, aOptions);
                 if (nGlobalError != FormulaError::NONE || !pResultMatrix)
                 {
@@ -6144,7 +6144,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
             if (pQueryMatrix)
             {
                 // Never case-sensitive.
-                sc::CompareOptions aOptions(&mrDoc, rEntry, rParam.eSearchType);
+                sc::CompareOptions aOptions(mrDoc, rEntry, rParam.eSearchType);
                 ScMatrixRef pResultMatrix = QueryMat( pQueryMatrix, aOptions);
                 if (nGlobalError != FormulaError::NONE || !pResultMatrix)
                 {
