@@ -107,6 +107,7 @@ public:
     void testTdf99224();
     void testTdf92076();
     void testTdf59046();
+    void testTdf133502();
     void testTdf105739();
     void testPageBitmapWithTransparency();
     void testPptmContentType();
@@ -225,6 +226,7 @@ public:
     CPPUNIT_TEST(testTdf99224);
     CPPUNIT_TEST(testTdf92076);
     CPPUNIT_TEST(testTdf59046);
+    CPPUNIT_TEST(testTdf133502);
     CPPUNIT_TEST(testTdf105739);
     CPPUNIT_TEST(testPageBitmapWithTransparency);
     CPPUNIT_TEST(testPptmContentType);
@@ -1007,6 +1009,21 @@ void SdOOXMLExportTest2::testTdf59046()
     xShell->DoClose();
     xmlDocUniquePtr pXmlDocRels = parseExport(tempFile, "ppt/slides/slide1.xml");
     assertXPath(pXmlDocRels, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:custGeom/a:pathLst/a:path", 1);
+}
+
+void SdOOXMLExportTest2::testTdf133502()
+{
+    sd::DrawDocShellRef xShell = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/tdf133502.odp"), ODP);
+    utl::TempFile tempFile;
+    xShell = saveAndReload(xShell.get(), PPTX, &tempFile);
+    xShell->DoClose();
+    xmlDocUniquePtr pXmlDocRels = parseExport(tempFile, "ppt/comments/comment1.xml");
+
+    assertXPathContent(pXmlDocRels, "/p:cmLst/p:cm/p:text", "Test for creator-initials");
+
+    // Without the fix in place, the comment position would have been 0,0
+    assertXPath(pXmlDocRels, "/p:cmLst/p:cm/p:pos", "x", "2032");
+    assertXPath(pXmlDocRels, "/p:cmLst/p:cm/p:pos", "y", "1029");
 }
 
 void SdOOXMLExportTest2::testTdf105739()
