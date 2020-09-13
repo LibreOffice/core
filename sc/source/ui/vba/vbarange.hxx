@@ -164,7 +164,7 @@ public:
 
     /// @throws css::uno::RuntimeException
     static css::uno::Reference< ov::excel::XRange > CellsHelper(
-        const ScDocument* pDoc,
+        const ScDocument& rDoc,
         const css::uno::Reference< ov::XHelperInterface >& xParent,
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::table::XCellRange >& xRange,

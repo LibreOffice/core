@@ -1785,7 +1785,7 @@ ScRefFlags ScRange::ParseAny( const OUString& rString, const ScDocument* pDoc,
 }
 
 // Parse only full row references
-ScRefFlags ScRange::ParseCols( const ScDocument* pDoc,
+ScRefFlags ScRange::ParseCols( const ScDocument& rDoc,
                                const OUString& rStr,
                                const ScAddress::Details& rDetails )
 {
@@ -1802,11 +1802,11 @@ ScRefFlags ScRange::ParseCols( const ScDocument* pDoc,
     case formula::FormulaGrammar::CONV_OOO: // No full col refs in OOO yet, assume XL notation
     case formula::FormulaGrammar::CONV_XL_A1:
     case formula::FormulaGrammar::CONV_XL_OOX:
-        if (nullptr != (p = lcl_a1_get_col( pDoc, p, &aStart, &ignored, nullptr) ) )
+        if (nullptr != (p = lcl_a1_get_col( &rDoc, p, &aStart, &ignored, nullptr) ) )
         {
             if( p[0] == ':')
             {
-                if( nullptr != (p = lcl_a1_get_col( pDoc, p+1, &aEnd, &ignored, nullptr)))
+                if( nullptr != (p = lcl_a1_get_col( &rDoc, p+1, &aEnd, &ignored, nullptr)))
                 {
                     nRes = ScRefFlags::COL_VALID;
                 }
