@@ -583,7 +583,7 @@ ScTableValidationObj::ScTableValidationObj(const ScDocument* pDoc, sal_uLong nKe
         ClearData_Impl();       // Defaults
 }
 
-ScValidationData* ScTableValidationObj::CreateValidationData( ScDocument* pDoc,
+ScValidationData* ScTableValidationObj::CreateValidationData( ScDocument& rDoc,
                                             formula::FormulaGrammar::Grammar eGrammar ) const
 {
     //  ScValidationData = Core-Struktur
@@ -593,7 +593,7 @@ ScValidationData* ScTableValidationObj::CreateValidationData( ScDocument* pDoc,
 
     ScValidationData* pRet = new ScValidationData( static_cast<ScValidationMode>(nValMode),
                                                    nMode,
-                                                   aExpr1, aExpr2, pDoc, aSrcPos,
+                                                   aExpr1, aExpr2, &rDoc, aSrcPos,
                                                    maExprNmsp1, maExprNmsp2,
                                                    eGrammar1, eGrammar2 );
     pRet->SetIgnoreBlank(bIgnoreBlank);
@@ -601,15 +601,15 @@ ScValidationData* ScTableValidationObj::CreateValidationData( ScDocument* pDoc,
 
     if ( aTokens1.hasElements() )
     {
-        ScTokenArray aTokenArray(*pDoc);
-        if ( ScTokenConversion::ConvertToTokenArray(*pDoc, aTokenArray, aTokens1) )
+        ScTokenArray aTokenArray(rDoc);
+        if ( ScTokenConversion::ConvertToTokenArray(rDoc, aTokenArray, aTokens1) )
             pRet->SetFormula1(aTokenArray);
     }
 
     if ( aTokens2.hasElements() )
     {
-        ScTokenArray aTokenArray(*pDoc);
-        if ( ScTokenConversion::ConvertToTokenArray(*pDoc, aTokenArray, aTokens2) )
+        ScTokenArray aTokenArray(rDoc);
+        if ( ScTokenConversion::ConvertToTokenArray(rDoc, aTokenArray, aTokens2) )
             pRet->SetFormula2(aTokenArray);
     }
 

@@ -2353,7 +2353,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                                    formula::FormulaGrammar::mapAPItoGrammar( bEnglish, bXML));
 
                             std::unique_ptr<ScValidationData> pNewData(
-                                    pValidObj->CreateValidationData( &rDoc, eGrammar ));
+                                    pValidObj->CreateValidationData( rDoc, eGrammar ));
                             sal_uLong nIndex = rDoc.AddValidationEntry( *pNewData );
                             pNewData.reset();
 
