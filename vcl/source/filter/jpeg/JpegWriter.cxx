@@ -193,8 +193,14 @@ bool JPEGWriter::Write( const Graphic& rGraphic )
         mxStatusIndicator->start( OUString(), 100 );
     }
 
-    Color replaceColor = COL_WHITE;
-    Bitmap aGraphicBmp( rGraphic.GetBitmapEx().GetBitmap(&replaceColor) );
+    // This slightly weird logic is here to match the behaviour in ImpGraphic::ImplGetBitmap
+    // and is necessary to match pre-existing behaviour. We should probably pass down the expected
+    // background color for alpha from the higher layers.
+    Bitmap aGraphicBmp;
+    if (rGraphic.GetType() == GraphicType::Bitmap)
+        aGraphicBmp = rGraphic.GetBitmapEx().GetBitmap(COL_WHITE);
+    else
+        aGraphicBmp = rGraphic.GetBitmapEx().GetBitmap();
 
     if ( mbGreys )
     {
