@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "03435d96_8c2420ab",
+        "filename": "sc/source/ui/dbgui/scuiasciiopt.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1000392
+      },
+      "writtenOn": "2020-09-13T07:47:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4657216c_c45ae2ed",
+      "revId": "f9a0425c6c7ee84701a71c8638177393361c34bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf691488_a525cf39",
         "filename": "sc/source/ui/dbgui/scuiasciiopt.cxx",
         "patchSetId": 5
@@ -33,6 +51,24 @@
       "revId": "f9a0425c6c7ee84701a71c8638177393361c34bf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ddb59fb_3cf4ffa7",
+        "filename": "sc/source/ui/dbgui/scuiasciiopt.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1000392
+      },
+      "writtenOn": "2020-09-13T07:47:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf691488_a525cf39",
+      "revId": "f9a0425c6c7ee84701a71c8638177393361c34bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
