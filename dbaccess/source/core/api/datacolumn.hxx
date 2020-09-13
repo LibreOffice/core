@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_CORE_API_DATACOLUMN_HXX
-#define INCLUDED_DBACCESS_SOURCE_CORE_API_DATACOLUMN_HXX
+#pragma once
 
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -104,7 +103,5 @@ namespace dbaccess
         virtual void SAL_CALL updateNumericObject( const css::uno::Any& x, sal_Int32 scale ) override;
     };
 }
-
-#endif // INCLUDED_DBACCESS_SOURCE_CORE_API_DATACOLUMN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

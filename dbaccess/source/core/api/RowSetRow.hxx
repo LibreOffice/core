@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_DBACCESS_SOURCE_CORE_API_ROWSETROW_HXX
-#define INCLUDED_DBACCESS_SOURCE_CORE_API_ROWSETROW_HXX
+#pragma once
 
 #include <rtl/ref.hxx>
 #include <connectivity/CommonTools.hxx>
@@ -49,6 +48,5 @@ namespace dbaccess
     typedef ::rtl::Reference< ORowSetOldRowHelper > TORowSetOldRowHelperRef;
 
 }
-#endif // INCLUDED_DBACCESS_SOURCE_CORE_API_ROWSETROW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

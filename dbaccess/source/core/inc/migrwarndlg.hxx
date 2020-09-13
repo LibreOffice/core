@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_WARNDLG_HXX
-#define INCLUDED_DBACCESS_SOURCE_CORE_INC_WARNDLG_HXX
+#pragma once
 
 #include <vcl/weld.hxx>
 
@@ -21,7 +20,5 @@ public:
     MigrationWarnDialog(weld::Window* pParent);
 };
 }
-
-#endif // INCLUDED_DBACCESS_SOURCE_CORE_INC_WARNDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
