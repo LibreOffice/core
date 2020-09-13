@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4657216c_c45ae2ed",
+        "filename": "sc/source/ui/dbgui/scuiasciiopt.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-09-13T06:18:30Z",
+      "side": 1,
+      "message": "this doesn\u0027t need to be a variable, can be\n    constexpr size_t buffsize \u003d 4096;",
+      "revId": "f9a0425c6c7ee84701a71c8638177393361c34bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf691488_a525cf39",
+        "filename": "sc/source/ui/dbgui/scuiasciiopt.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-09-13T06:18:30Z",
+      "side": 1,
+      "message": "need to store the number of bytes actually read here, and pass that number into ucsdet_setText, otherwise, if the file has zero bytes, we end up passing nonsense data",
+      "revId": "f9a0425c6c7ee84701a71c8638177393361c34bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
