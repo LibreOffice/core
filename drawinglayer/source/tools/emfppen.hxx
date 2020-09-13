@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPPEN_HXX
-#define INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPPEN_HXX
+#pragma once
 
 #include "emfpbrush.hxx"
 #include <vector>
@@ -126,7 +125,5 @@ namespace emfplushelper
         static sal_Int8 lcl_convertLineJoinType(sal_uInt32 nEmfLineJoin);
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
