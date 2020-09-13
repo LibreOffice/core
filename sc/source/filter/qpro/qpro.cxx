@@ -34,7 +34,7 @@
 #include <scdll.hxx>
 #include <memory>
 
-ErrCode ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pStyle )
+ErrCode ScQProReader::readSheet( SCTAB nTab, ScDocument& rDoc, ScQProStyle *pStyle )
 {
     ErrCode eRet = ERRCODE_NONE;
     sal_uInt8  nCol, nDummy;
@@ -55,9 +55,9 @@ ErrCode ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSty
                 {
                     OUString aLabel(readString(nLen - 7));
                     nStyle = nStyle >> 3;
-                    pStyle->SetFormat( pDoc, nCol, nRow, nTab, nStyle );
-                    pDoc->EnsureTable(nTab);
-                    pDoc->SetTextCell(ScAddress(nCol,nRow,nTab), aLabel);
+                    pStyle->SetFormat( &rDoc, nCol, nRow, nTab, nStyle );
+                    rDoc.EnsureTable(nTab);
+                    rDoc.SetTextCell(ScAddress(nCol,nRow,nTab), aLabel);
                 }
                 else
                     eRet = SCERR_IMPORT_FORMAT;
@@ -71,16 +71,16 @@ ErrCode ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSty
             case 0x000c: // Blank cell
                 mpStream->ReadUChar( nCol ).ReadUChar( nDummy ).ReadUInt16( nRow ).ReadUInt16( nStyle );
                 nStyle = nStyle >> 3;
-                pStyle->SetFormat( pDoc, nCol, nRow, nTab, nStyle );
+                pStyle->SetFormat( &rDoc, nCol, nRow, nTab, nStyle );
                 break;
 
             case 0x000d:{ // Integer cell
                 sal_Int16 nValue;
                 mpStream->ReadUChar( nCol ).ReadUChar( nDummy ).ReadUInt16( nRow ).ReadUInt16( nStyle ).ReadInt16( nValue );
                 nStyle = nStyle >> 3;
-                pStyle->SetFormat( pDoc, nCol, nRow, nTab, nStyle );
-                pDoc->EnsureTable(nTab);
-                pDoc->SetValue(ScAddress(nCol,nRow,nTab), static_cast<double>(nValue));
+                pStyle->SetFormat( &rDoc, nCol, nRow, nTab, nStyle );
+                rDoc.EnsureTable(nTab);
+                rDoc.SetValue(ScAddress(nCol,nRow,nTab), static_cast<double>(nValue));
                 }
                 break;
 
@@ -88,9 +88,9 @@ ErrCode ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSty
                 double nValue;
                 mpStream->ReadUChar( nCol ).ReadUChar( nDummy ).ReadUInt16( nRow ).ReadUInt16( nStyle ).ReadDouble( nValue );
                 nStyle = nStyle >> 3;
-                pStyle->SetFormat( pDoc, nCol, nRow, nTab, nStyle );
-                pDoc->EnsureTable(nTab);
-                pDoc->SetValue(ScAddress(nCol,nRow,nTab), nValue);
+                pStyle->SetFormat( &rDoc, nCol, nRow, nTab, nStyle );
+                rDoc.EnsureTable(nTab);
+                rDoc.SetValue(ScAddress(nCol,nRow,nTab), nValue);
                 }
                 break;
 
@@ -108,17 +108,17 @@ ErrCode ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSty
                 ScAddress aAddr( nCol, nRow, nTab );
                 std::unique_ptr<ScTokenArray> pArray;
 
-                QProToSc aConv(*mpStream, pDoc->GetSharedStringPool(), aAddr);
-                if (ConvErr::OK != aConv.Convert( *pDoc, pArray ))
+                QProToSc aConv(*mpStream, rDoc.GetSharedStringPool(), aAddr);
+                if (ConvErr::OK != aConv.Convert( rDoc, pArray ))
                     eRet = SCERR_IMPORT_FORMAT;
                 else
                 {
-                    ScFormulaCell* pFormula = new ScFormulaCell(pDoc, aAddr, std::move(pArray));
+                    ScFormulaCell* pFormula = new ScFormulaCell(&rDoc, aAddr, std::move(pArray));
                     nStyle = nStyle >> 3;
                     pFormula->AddRecalcMode( ScRecalcMode::ONLOAD_ONCE );
-                    pStyle->SetFormat( pDoc, nCol, nRow, nTab, nStyle );
-                    pDoc->EnsureTable(nTab);
-                    pDoc->SetFormulaCell(ScAddress(nCol,nRow,nTab), pFormula);
+                    pStyle->SetFormat( &rDoc, nCol, nRow, nTab, nStyle );
+                    rDoc.EnsureTable(nTab);
+                    rDoc.SetFormulaCell(ScAddress(nCol,nRow,nTab), pFormula);
                 }
             }
             break;
@@ -187,7 +187,7 @@ ErrCode ScQProReader::parse( ScDocument *pDoc )
                         else
                             pDoc->InsertTab( nTab, aName );
                     }
-                    eRet = readSheet( nTab, pDoc, pStyleElement.get() );
+                    eRet = readSheet( nTab, *pDoc, pStyleElement.get() );
                     nTab++;
                 }
                 break;

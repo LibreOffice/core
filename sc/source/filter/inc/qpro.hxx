@@ -52,7 +52,7 @@ public:
 
     ErrCode parse( ScDocument *pDoc );
     ErrCode import( ScDocument *pDoc ); //parse + CalcAfterLoad
-    ErrCode readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pStyle );
+    ErrCode readSheet( SCTAB nTab, ScDocument& rDoc, ScQProStyle *pStyle );
 };
 #endif
 
