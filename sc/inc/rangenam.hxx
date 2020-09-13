@@ -83,7 +83,7 @@ private:
     void InitCode();
 public:
 
-    SC_DLLPUBLIC                ScRangeData( ScDocument* pDoc,
+    SC_DLLPUBLIC                ScRangeData( ScDocument& rDoc,
                                  const OUString& rName,
                                  const OUString& rSymbol,
                                  const ScAddress& rAdr = ScAddress(),

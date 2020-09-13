@@ -1511,7 +1511,7 @@ public:
                 ScXMLConverter::ConvertCellRangeAddress(aContent);
 
             ScRangeData* pData = new ScRangeData(
-                mpDoc, p->sName, aContent, aPos, nNewType, p->eGrammar);
+                *mpDoc, p->sName, aContent, aPos, nNewType, p->eGrammar);
             mrRangeName.insert(pData);
         }
     }
