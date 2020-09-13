@@ -154,7 +154,7 @@ ConvErr ExcelToSc8::Convert( std::unique_ptr<ScTokenArray>& rpTokArray, XclImpSt
     {
         aPool.Store( "-/-" );
         aPool >> aStack;
-        rpTokArray = aPool.GetTokenArray( &GetDocImport().getDoc(), aStack.Get());
+        rpTokArray = aPool.GetTokenArray( GetDocImport().getDoc(), aStack.Get());
         return ConvErr::OK;
     }
 
@@ -917,14 +917,14 @@ ConvErr ExcelToSc8::Convert( std::unique_ptr<ScTokenArray>& rpTokArray, XclImpSt
     {
         aPool << ocBad;
         aPool >> aStack;
-        rpTokArray = aPool.GetTokenArray( &GetDocImport().getDoc(), aStack.Get());
+        rpTokArray = aPool.GetTokenArray( GetDocImport().getDoc(), aStack.Get());
         eRet = ConvErr::Ni;
     }
     else if( aIn.GetRecPos() != nEndPos )
     {
         aPool << ocBad;
         aPool >> aStack;
-        rpTokArray = aPool.GetTokenArray( &GetDocImport().getDoc(), aStack.Get());
+        rpTokArray = aPool.GetTokenArray( GetDocImport().getDoc(), aStack.Get());
         eRet = ConvErr::Count;
     }
     else if( bArrayFormula )
@@ -934,7 +934,7 @@ ConvErr ExcelToSc8::Convert( std::unique_ptr<ScTokenArray>& rpTokArray, XclImpSt
     }
     else
     {
-        rpTokArray = aPool.GetTokenArray( &GetDocImport().getDoc(), aStack.Get());
+        rpTokArray = aPool.GetTokenArray( GetDocImport().getDoc(), aStack.Get());
         eRet = ConvErr::OK;
     }
 
@@ -1301,7 +1301,7 @@ void ExcelToSc8::ConvertExternName( std::unique_ptr<ScTokenArray>& rpArray, XclI
     {
         aPool.Store("-/-");
         aPool >> aStack;
-        rpArray = aPool.GetTokenArray( &GetDocImport().getDoc(), aStack.Get());
+        rpArray = aPool.GetTokenArray( GetDocImport().getDoc(), aStack.Get());
         return;
     }
 
@@ -1417,17 +1417,17 @@ void ExcelToSc8::ConvertExternName( std::unique_ptr<ScTokenArray>& rpArray, XclI
     {
         aPool << ocBad;
         aPool >> aStack;
-        rpArray = aPool.GetTokenArray( &GetDocImport().getDoc(), aStack.Get());
+        rpArray = aPool.GetTokenArray( GetDocImport().getDoc(), aStack.Get());
     }
     else if( rStrm.GetRecPos() != nEndPos )
     {
         aPool << ocBad;
         aPool >> aStack;
-        rpArray = aPool.GetTokenArray( &GetDocImport().getDoc(), aStack.Get());
+        rpArray = aPool.GetTokenArray( GetDocImport().getDoc(), aStack.Get());
     }
     else
     {
-        rpArray = aPool.GetTokenArray( &GetDocImport().getDoc(), aStack.Get());
+        rpArray = aPool.GetTokenArray( GetDocImport().getDoc(), aStack.Get());
     }
 
     rStrm.Seek(nEndPos);

@@ -391,7 +391,7 @@ ConvErr QProToSc::Convert( const ScDocument* pDoc, std::unique_ptr<ScTokenArray>
         }
         i++;
     }
-    pArray = aPool.GetTokenArray(pDoc, aStack.Get());
+    pArray = aPool.GetTokenArray(*pDoc, aStack.Get());
     return eRet;
 }
 
