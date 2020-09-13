@@ -152,7 +152,7 @@ void CopyFromClipContext::setSingleCell( const ScAddress& rSrcPos, const ScColum
         aRef.InitAddress(rSrcPos);
         aRef.SetFlag3D(true);
 
-        ScTokenArray aArr(mpClipDoc);
+        ScTokenArray aArr(*mpClipDoc);
         aArr.AddSingleReference(aRef);
         rSrcCell.set(new ScFormulaCell(mpClipDoc, rSrcPos, aArr));
         return;

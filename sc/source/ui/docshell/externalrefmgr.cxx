@@ -687,7 +687,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
 
             ScMatrixToken aToken(xMat);
             if (!pArray)
-                pArray = std::make_shared<ScTokenArray>(mxFakeDoc.get());
+                pArray = std::make_shared<ScTokenArray>(*mxFakeDoc);
             pArray->AddToken(aToken);
 
             bFirstTab = false;
@@ -1536,7 +1536,7 @@ static std::unique_ptr<ScTokenArray> convertToTokenArray(
 
     std::unique_ptr<ScRange> pUsedRange;
 
-    unique_ptr<ScTokenArray> pArray(new ScTokenArray(pSrcDoc));
+    unique_ptr<ScTokenArray> pArray(new ScTokenArray(*pSrcDoc));
     bool bFirstTab = true;
     vector<ScExternalRefCache::SingleRangeData>::iterator
         itrCache = rCacheData.begin(), itrCacheEnd = rCacheData.end();
@@ -1618,7 +1618,7 @@ static std::unique_ptr<ScTokenArray> lcl_fillEmptyMatrix(const ScDocument* pDoc,
     ScMatrixRef xMat = new ScMatrix(nC, nR);
 
     ScMatrixToken aToken(xMat);
-    unique_ptr<ScTokenArray> pArray(new ScTokenArray(pDoc));
+    unique_ptr<ScTokenArray> pArray(new ScTokenArray(*pDoc));
     pArray->AddToken(aToken);
     return pArray;
 }
@@ -2004,7 +2004,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokens(
     if (!pSrcDoc)
     {
         // Source document is not reachable.  Throw a reference error.
-        pArray = std::make_shared<ScTokenArray>(maRefCache.getFakeDoc());
+        pArray = std::make_shared<ScTokenArray>(*maRefCache.getFakeDoc());
         pArray->AddToken(FormulaErrorToken(FormulaError::NoRef));
         return pArray;
     }
@@ -2248,7 +2248,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokensFromSr
     if (!pSrcDoc->GetTable(rTabName, nTab1))
     {
         // specified table name doesn't exist in the source document.
-        pArray = std::make_shared<ScTokenArray>(pSrcDoc);
+        pArray = std::make_shared<ScTokenArray>(*pSrcDoc);
         pArray->AddToken(FormulaErrorToken(FormulaError::NoRef));
         return pArray;
     }
@@ -2296,7 +2296,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokensFromSr
     // register the source document with the link manager if it's a new
     // source.
 
-    ScExternalRefCache::TokenArrayRef pNew = std::make_shared<ScTokenArray>(pSrcDoc);
+    ScExternalRefCache::TokenArrayRef pNew = std::make_shared<ScTokenArray>(*pSrcDoc);
 
     ScTokenArray aCode(*pRangeData->GetCode());
     FormulaTokenArrayPlainIterator aIter(aCode);

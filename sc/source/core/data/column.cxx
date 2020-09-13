@@ -1291,7 +1291,7 @@ class CopyAsLinkHandler
         aRef.InitAddress(ScAddress(mrSrcCol.GetCol(), nRow, mrSrcCol.GetTab())); // Absolute reference.
         aRef.SetFlag3D(true);
 
-        ScTokenArray aArr(mrDestCol.GetDoc());
+        ScTokenArray aArr(*mrDestCol.GetDoc());
         aArr.AddSingleReference(aRef);
         return new ScFormulaCell(mrDestCol.GetDoc(), ScAddress(mrDestCol.GetCol(), nRow, mrDestCol.GetTab()), aArr);
     }

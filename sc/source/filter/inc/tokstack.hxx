@@ -410,7 +410,7 @@ inline TokenId TokenPool::Store()
 
 inline std::unique_ptr<ScTokenArray> TokenPool::GetTokenArray( const ScDocument *pDoc, const TokenId& rId )
 {
-    std::unique_ptr<ScTokenArray> pScToken( new ScTokenArray(pDoc) );
+    std::unique_ptr<ScTokenArray> pScToken( new ScTokenArray(*pDoc) );
 
     if( rId )
     {//...only if rId > 0!

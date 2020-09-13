@@ -317,7 +317,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
                     size_t nRanges = aErrorCells.size();
                     if ( nRanges )                          // found any?
                     {
-                        ScTokenArray aTokenArr(&rDoc);
+                        ScTokenArray aTokenArr(rDoc);
                         aTokenArr.AddOpCode( ocNotAvail );
                         aTokenArr.AddOpCode( ocOpen );
                         aTokenArr.AddOpCode( ocClose );

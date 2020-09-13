@@ -2164,7 +2164,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
             aRef.Ref2.SetAbsCol(nResCols[nResult]);
             aRef.Ref2.SetAbsRow(rRowEntry.nFuncEnd);
 
-            ScTokenArray aArr(pDocument);
+            ScTokenArray aArr(*pDocument);
             aArr.AddOpCode( ocSubTotal );
             aArr.AddOpCode( ocOpen );
             aArr.AddDouble( static_cast<double>(pResFunc[nResult]) );

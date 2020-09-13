@@ -2469,7 +2469,7 @@ void ScInterpreter::ScCellExternal()
     else if ( aInfoType == "ADDRESS" )
     {
         // ODF 1.2 says we need to always display address using the ODF A1 grammar.
-        ScTokenArray aArray(&mrDoc);
+        ScTokenArray aArray(mrDoc);
         aArray.AddExternalSingleReference(nFileId, svl::SharedString( aTabName), aRef); // string not interned
         ScCompiler aComp(&mrDoc, aPos, aArray, formula::FormulaGrammar::GRAM_ODFF_A1);
         OUString aStr;

@@ -2643,14 +2643,14 @@ XclTokenArrayRef XclExpFormulaCompiler::CreateFormula(
 
 XclTokenArrayRef XclExpFormulaCompiler::CreateFormula( XclFormulaType eType, const ScAddress& rScPos )
 {
-    ScTokenArray aScTokArr(&GetRoot().GetDoc());
+    ScTokenArray aScTokArr(GetRoot().GetDoc());
     lclPutCellToTokenArray( aScTokArr, rScPos, GetCurrScTab(), mxImpl->Is3DRefOnly( eType ) );
     return mxImpl->CreateFormula( eType, aScTokArr );
 }
 
 XclTokenArrayRef XclExpFormulaCompiler::CreateFormula( XclFormulaType eType, const ScRange& rScRange )
 {
-    ScTokenArray aScTokArr(&GetRoot().GetDoc());
+    ScTokenArray aScTokArr(GetRoot().GetDoc());
     lclPutRangeToTokenArray( aScTokArr, rScRange, GetCurrScTab(), mxImpl->Is3DRefOnly( eType ) );
     return mxImpl->CreateFormula( eType, aScTokArr );
 }
@@ -2661,7 +2661,7 @@ XclTokenArrayRef XclExpFormulaCompiler::CreateFormula( XclFormulaType eType, con
     if( nCount == 0 )
         return XclTokenArrayRef();
 
-    ScTokenArray aScTokArr(&GetRoot().GetDoc());
+    ScTokenArray aScTokArr(GetRoot().GetDoc());
     SCTAB nCurrScTab = GetCurrScTab();
     bool b3DRefOnly = mxImpl->Is3DRefOnly( eType );
     for( size_t nIdx = 0; nIdx < nCount; ++nIdx )

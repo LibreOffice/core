@@ -471,7 +471,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
 
     //  find function
 
-    ScTokenArray aTokenArr(pDoc);
+    ScTokenArray aTokenArr(*pDoc);
     if ( !lcl_AddFunctionToken( aTokenArr, aName,aCompiler ) )
     {
         // function not found
