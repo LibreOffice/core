@@ -1862,9 +1862,9 @@ bool ScTokenArray::IsValidReference( ScRange& rRange, const ScAddress& rPos ) co
     return ImplGetReference(rRange, rPos, true);
 }
 
-ScTokenArray::ScTokenArray(const ScDocument* pDoc) :
+ScTokenArray::ScTokenArray(const ScDocument& rDoc) :
     FormulaTokenArray(),
-    mxSheetLimits(&pDoc->GetSheetLimits()),
+    mxSheetLimits(&rDoc.GetSheetLimits()),
     mnHashValue(0)
 {
     ResetVectorState();

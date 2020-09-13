@@ -404,7 +404,7 @@ void LotusRangeList::Append( const ScDocument* pDoc, std::unique_ptr<LotusRange>
     auto pLRTmp = pLR.get();
     maRanges.push_back(std::move(pLR));
 
-    ScTokenArray    aTokArray(pDoc);
+    ScTokenArray    aTokArray(*pDoc);
 
     ScSingleRefData*    pSingRef = &aComplRef.Ref1;
 
@@ -427,7 +427,7 @@ void LotusRangeList::Append( const ScDocument* pDoc, std::unique_ptr<LotusRange>
 }
 
 RangeNameBufferWK3::RangeNameBufferWK3(const ScDocument* pDoc)
-    : pScTokenArray( new ScTokenArray(pDoc) )
+    : pScTokenArray( new ScTokenArray(*pDoc) )
 {
     nIntCount = 1;
 }

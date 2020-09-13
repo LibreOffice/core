@@ -74,7 +74,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
         // Copy ctor default-constructs pCode if it was NULL, so it's initialized here, too,
         // to ensure same behavior if unnecessary copying is left out.
 
-        pCode.reset( new ScTokenArray(pDoc) );
+        pCode.reset( new ScTokenArray(*pDoc) );
         pCode->SetFromRangeName(true);
     }
 }
@@ -103,7 +103,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                           const ScAddress& rTarget ) :
                 aName       ( rName ),
                 aUpperName  ( ScGlobal::getCharClassPtr()->uppercase( rName ) ),
-                pCode       ( new ScTokenArray(pDok) ),
+                pCode       ( new ScTokenArray(*pDok) ),
                 aPos        ( rTarget ),
                 eType       ( Type::Name ),
                 pDoc        ( pDok ),
@@ -125,7 +125,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
 ScRangeData::ScRangeData(const ScRangeData& rScRangeData, ScDocument* pDocument, const ScAddress* pPos) :
     aName   (rScRangeData.aName),
     aUpperName  (rScRangeData.aUpperName),
-    pCode       (rScRangeData.pCode ? rScRangeData.pCode->Clone().release() : new ScTokenArray(pDocument)),   // make real copy (not copy-ctor)
+    pCode       (rScRangeData.pCode ? rScRangeData.pCode->Clone().release() : new ScTokenArray(*pDocument)),   // make real copy (not copy-ctor)
     aPos        (pPos ? *pPos : rScRangeData.aPos),
     eType       (rScRangeData.eType),
     pDoc        (pDocument ? pDocument : rScRangeData.pDoc),

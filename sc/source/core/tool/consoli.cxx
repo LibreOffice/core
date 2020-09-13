@@ -477,7 +477,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
 
                                 aSRef.SetAddress(pDestDoc->GetSheetLimits(), ScAddress(aRef.nCol,aRef.nRow,aRef.nTab), ScAddress());
 
-                                ScTokenArray aRefArr(pDestDoc);
+                                ScTokenArray aRefArr(*pDestDoc);
                                 aRefArr.AddSingleReference(aSRef);
                                 aRefArr.AddOpCode(ocStop);
                                 ScAddress aDest( sal::static_int_cast<SCCOL>(nCol+nArrX),
@@ -496,7 +496,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                         aRange.aEnd.SetRow(nRow+nArrY+nNeeded-1);
                         aCRef.SetRange(pDestDoc->GetSheetLimits(), aRange, aDest);
 
-                        ScTokenArray aArr(pDestDoc);
+                        ScTokenArray aArr(*pDestDoc);
                         aArr.AddOpCode(eOpCode);            // selected function
                         aArr.AddOpCode(ocOpen);
                         aArr.AddDoubleReference(aCRef);

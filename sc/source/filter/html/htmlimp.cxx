@@ -104,7 +104,7 @@ void ScHTMLImport::InsertRangeName( ScDocument* pDoc, const OUString& rName, con
     aRefData.InitRange( rRange );
     aRefData.Ref1.SetFlag3D( true );
     aRefData.Ref2.SetFlag3D( aRefData.Ref2.Tab() != aRefData.Ref1.Tab() );
-    ScTokenArray aTokArray(pDoc);
+    ScTokenArray aTokArray(*pDoc);
     aTokArray.AddDoubleReference( aRefData );
     ScRangeData* pRangeData = new ScRangeData( pDoc, rName, aTokArray );
     pDoc->GetRangeName()->insert( pRangeData );

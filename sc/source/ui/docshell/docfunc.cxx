@@ -4358,7 +4358,7 @@ bool ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
         }
         else if ( rDoc.IsImportingXML() )
         {
-            ScTokenArray aCode(&rDoc);
+            ScTokenArray aCode(rDoc);
             aCode.AssignXMLString( rString,
                     ((eGrammar == formula::FormulaGrammar::GRAM_EXTERNAL) ? rFormulaNmsp : OUString()));
             rDoc.InsertMatrixFormula( nStartCol, nStartRow, nEndCol, nEndRow,

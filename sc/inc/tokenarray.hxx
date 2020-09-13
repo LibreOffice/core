@@ -62,7 +62,7 @@ class SAL_WARN_UNUSED SC_DLLPUBLIC ScTokenArray final : public formula::FormulaT
     void CheckForThreading( const formula::FormulaToken& r );
 
 public:
-    ScTokenArray(const ScDocument* pDoc);
+    ScTokenArray(const ScDocument& rDoc);
     ScTokenArray(ScSheetLimits&);
     /** Assignment with incrementing references of FormulaToken entries
         (not copied!) */

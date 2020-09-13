@@ -154,7 +154,7 @@ OUString SAL_CALL ScFormulaParserObj::printFormula(
     if (mpDocShell)
     {
         ScDocument& rDoc = mpDocShell->GetDocument();
-        ScTokenArray aCode(&rDoc);
+        ScTokenArray aCode(rDoc);
         (void)ScTokenConversion::ConvertToTokenArray( rDoc, aCode, aTokens );
         ScAddress aRefPos( ScAddress::UNINITIALIZED );
         ScUnoConversion::FillScAddress( aRefPos, rReferencePos );

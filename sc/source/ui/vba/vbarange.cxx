@@ -2002,7 +2002,7 @@ ScVbaRange::setFormulaArray(const uno::Any& rFormula)
     OUString sFormula;
     rFormula >>= sFormula;
     uno::Sequence<sheet::FormulaToken> aTokens = xParser->parseFormula( sFormula, aAddress );
-    ScTokenArray aTokenArray(&getScDocument());
+    ScTokenArray aTokenArray(getScDocument());
     (void)ScTokenConversion::ConvertToTokenArray( getScDocument(), aTokenArray, aTokens );
 
     getScDocShell()->GetDocFunc().EnterMatrix( getScRangeList()[0], nullptr, &aTokenArray, OUString(), true, true, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_API );

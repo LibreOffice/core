@@ -270,7 +270,7 @@ void ScMyTables::AddMatrixRange(
     maMatrixRangeList.push_back(aScRange);
 
     ScDocumentImport& rDoc = rImport.GetDoc();
-    ScTokenArray aCode(&rDoc.getDoc());
+    ScTokenArray aCode(rDoc.getDoc());
     aCode.AssignXMLString( rFormula,
             ((eGrammar == formula::FormulaGrammar::GRAM_EXTERNAL) ? rFormulaNmsp : OUString()));
     rDoc.setMatrixCells(aScRange, aCode, eGrammar);

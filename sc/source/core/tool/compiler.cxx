@@ -4502,7 +4502,7 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
     if( meGrammar == FormulaGrammar::GRAM_EXTERNAL )
         SetGrammar( FormulaGrammar::GRAM_PODF );
 
-    ScTokenArray aArr(pDoc);
+    ScTokenArray aArr(*pDoc);
     pArr = &aArr;
     maArrIterator = FormulaTokenArrayPlainIterator(*pArr);
     aFormula = comphelper::string::strip(rFormula, ' ');
@@ -4822,7 +4822,7 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
         table::CellAddress aReferencePos;
         ScUnoConversion::FillApiAddress( aReferencePos, aPos );
         uno::Sequence< sheet::FormulaToken > aTokenSeq = xParser->parseFormula( rFormula, aReferencePos );
-        ScTokenArray aTokenArray(pDoc);
+        ScTokenArray aTokenArray(*pDoc);
         if( ScTokenConversion::ConvertToTokenArray( *pDoc, aTokenArray, aTokenSeq ) )
         {
             // remember pArr, in case a subsequent CompileTokenArray() is executed.
@@ -4871,7 +4871,7 @@ bool ScCompiler::HandleRange()
             bool bAddPair = !(bBorder1 && bBorder2);
             if ( bAddPair )
             {
-                pNew = new ScTokenArray(pDoc);
+                pNew = new ScTokenArray(*pDoc);
                 pNew->AddOpCode( ocClose );
                 PushTokenArray( pNew, true );
             }
@@ -4894,7 +4894,7 @@ bool ScCompiler::HandleRange()
             maArrIterator.Reset();
             if ( bAddPair )
             {
-                pNew = new ScTokenArray(pDoc);
+                pNew = new ScTokenArray(*pDoc);
                 pNew->AddOpCode( ocOpen );
                 PushTokenArray( pNew, true );
             }
@@ -4905,7 +4905,7 @@ bool ScCompiler::HandleRange()
     {
         // No ScRangeData for an already compiled token can happen in BIFF .xls
         // import if the original range is not present in the document.
-        pNew = new ScTokenArray(pDoc);
+        pNew = new ScTokenArray(*pDoc);
         pNew->Add( new FormulaErrorToken( FormulaError::NoName));
         PushTokenArray( pNew, true );
         return GetToken();
@@ -5532,7 +5532,7 @@ bool ScCompiler::HandleColRowName()
             SetError(FormulaError::NoRef);
         else if (mbJumpCommandReorder)
         {
-            ScTokenArray* pNew = new ScTokenArray(pDoc);
+            ScTokenArray* pNew = new ScTokenArray(*pDoc);
             if ( bSingle )
             {
                 ScSingleRefData aRefData;
@@ -5588,7 +5588,7 @@ bool ScCompiler::HandleDbData()
         pDBData->GetArea(aRange);
         aRange.aEnd.SetTab(aRange.aStart.Tab());
         aRefData.SetRange(pDoc->GetSheetLimits(), aRange, aPos);
-        ScTokenArray* pNew = new ScTokenArray(pDoc);
+        ScTokenArray* pNew = new ScTokenArray(*pDoc);
         pNew->AddDoubleReference( aRefData );
         PushTokenArray( pNew, true );
         return GetToken();
@@ -5789,7 +5789,7 @@ bool ScCompiler::HandleTableRef()
                 }
             } while (eState != sStop);
         }
-        ScTokenArray* pNew = new ScTokenArray(pDoc);
+        ScTokenArray* pNew = new ScTokenArray(*pDoc);
         if (nError == FormulaError::NONE || nError == FormulaError::NoValue)
         {
             bool bCol2Rel = false;

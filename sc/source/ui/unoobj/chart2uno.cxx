@@ -2029,7 +2029,7 @@ sal_Bool SAL_CALL ScChart2DataProvider::createDataSequenceByFormulaTokensPossibl
     if (!aTokens.hasElements())
         return false;
 
-    ScTokenArray aCode(m_pDocument);
+    ScTokenArray aCode(*m_pDocument);
     if (!ScTokenConversion::ConvertToTokenArray(*m_pDocument, aCode, aTokens))
         return false;
 
@@ -2087,7 +2087,7 @@ ScChart2DataProvider::createDataSequenceByFormulaTokens(
     if (!aTokens.hasElements())
         return xResult;
 
-    ScTokenArray aCode(m_pDocument);
+    ScTokenArray aCode(*m_pDocument);
     if (!ScTokenConversion::ConvertToTokenArray(*m_pDocument, aCode, aTokens))
         return xResult;
 

@@ -1361,7 +1361,7 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
         return;
 
     // temporary formula string as string tokens
-    std::unique_ptr<ScTokenArray> pCode(new ScTokenArray(pDoc));
+    std::unique_ptr<ScTokenArray> pCode(new ScTokenArray(*pDoc));
 
     // Check the special case of a single error constant without leading
     // '=' and create an error formula cell without tokens.

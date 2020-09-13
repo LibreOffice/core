@@ -1095,7 +1095,7 @@ class CopyCellsFromClipHandler
         aRef.InitAddress(aSrcPos);
         aRef.SetFlag3D(true);
 
-        ScTokenArray aArr(mrCxt.getDestDoc());
+        ScTokenArray aArr(*mrCxt.getDestDoc());
         aArr.AddSingleReference(aRef);
 
         mrDestCol.SetFormulaCell(
@@ -1429,7 +1429,7 @@ void ScColumn::CopyFromClip(
             aRef.SetAbsRow(nDestRow - nDy); // Source row
             aDestPos.SetRow( nDestRow );
 
-            ScTokenArray aArr(GetDoc());
+            ScTokenArray aArr(*GetDoc());
             aArr.AddSingleReference( aRef );
             SetFormulaCell(nDestRow, new ScFormulaCell(pDocument, aDestPos, aArr));
         }
@@ -1585,7 +1585,7 @@ public:
             case sc::element_type_formula:
             {
                 // Combination of value and at least one formula -> Create formula
-                ScTokenArray aArr(mrDestColumn.GetDoc());
+                ScTokenArray aArr(*mrDestColumn.GetDoc());
 
                 // First row
                 aArr.AddDouble(f);
@@ -1643,7 +1643,7 @@ public:
             case sc::element_type_numeric:
             {
                 // Source is formula, and dest is value.
-                ScTokenArray aArr(mrDestColumn.GetDoc());
+                ScTokenArray aArr(*mrDestColumn.GetDoc());
 
                 // First row
                 lcl_AddCode(aArr, p);
@@ -1672,7 +1672,7 @@ public:
             case sc::element_type_formula:
             {
                 // Both are formulas.
-                ScTokenArray aArr(mrDestColumn.GetDoc());
+                ScTokenArray aArr(*mrDestColumn.GetDoc());
 
                 // First row
                 lcl_AddCode(aArr, p);
@@ -1752,7 +1752,7 @@ public:
                 break;
                 case sc::element_type_formula:
                 {
-                    ScTokenArray aArr(mrDestColumn.GetDoc());
+                    ScTokenArray aArr(*mrDestColumn.GetDoc());
 
                     // First row
                     ScFormulaCell* pSrc = sc::formula_block::at(*aPos.first->data, aPos.second);

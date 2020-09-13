@@ -783,7 +783,7 @@ bool ScValidationData::GetSelectionFromFormula(
     {
         for( nCol = 0; nCol < nCols ; nCol++ )
         {
-            ScTokenArray         aCondTokArr(pDocument);
+            ScTokenArray         aCondTokArr(*pDocument);
             std::unique_ptr<ScTypedStrData> pEntry;
             OUString               aValStr;
             ScMatrixValue nMatVal = pValues->Get( nCol, nRow);
@@ -938,7 +938,7 @@ bool ScValidationData::IsListValid( ScRefCellValue& rCell, const ScAddress& rPos
         if( !bIsValid )
         {
             // create a formula containing a single string or number
-            ScTokenArray aCondTokArr(GetDocument());
+            ScTokenArray aCondTokArr(*GetDocument());
             double fValue;
             OUString aStr(pString);
             if (GetDocument()->GetFormatTable()->IsNumberFormat(aStr, nFormat, fValue))

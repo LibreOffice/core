@@ -440,7 +440,7 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument& rRefDoc )
         // We can't use ScRange::Format here because in R1C1 mode we need
         // to display the reference position relative to the cursor
         // position.
-        ScTokenArray aArray(&rRefDoc);
+        ScTokenArray aArray(rRefDoc);
         ScComplexRefData aRefData;
         aRefData.InitRangeRel(&rRefDoc, rRef, m_CursorPos);
         if ((eRangeFlags & eColFlags) == eColFlags)
@@ -685,7 +685,7 @@ table::CellAddress ScFormulaDlg::getReferencePosition() const
 
 ::std::unique_ptr<formula::FormulaTokenArray> ScFormulaDlg::convertToTokenArray(const uno::Sequence< sheet::FormulaToken >& _aTokenList)
 {
-    ::std::unique_ptr<formula::FormulaTokenArray> pArray(new ScTokenArray(m_pDoc));
+    ::std::unique_ptr<formula::FormulaTokenArray> pArray(new ScTokenArray(*m_pDoc));
     pArray->Fill(_aTokenList, m_pDoc->GetSharedStringPool(), m_pDoc->GetExternalRefManager());
     return pArray;
 }
