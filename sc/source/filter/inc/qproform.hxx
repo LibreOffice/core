@@ -60,7 +60,7 @@ public:
     QProToSc( SvStream &aStr, svl::SharedStringPool& rSPool, const ScAddress& rRefPos );
     ConvErr Convert( const ScDocument& rDoc, std::unique_ptr<ScTokenArray>& pArray );
     void DoFunc( DefTokenId eOc, sal_uInt16 nArgs, const char* pExtString );
-    void ReadSRD( const ScDocument* pDoc, ScSingleRefData& rR, sal_Int8 nPage, sal_Int8 nCol, sal_uInt16 rRel );
+    void ReadSRD( const ScDocument& rDoc, ScSingleRefData& rR, sal_Int8 nPage, sal_Int8 nCol, sal_uInt16 rRel );
     void IncToken( TokenId &aParam );
     static DefTokenId IndexToToken( sal_uInt16 nToken );
     static QPRO_FUNC_TYPE IndexToType( sal_uInt8 nToken );
