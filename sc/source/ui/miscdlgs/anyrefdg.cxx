@@ -161,7 +161,7 @@ bool ScFormulaReferenceHelper::ParseWithNames( ScRangeList& rRanges, const OUStr
                 aRange.aEnd.SetTab( aRange.aStart.Tab() );
             rRanges.push_back( aRange );
         }
-        else if ( ScRangeUtil::MakeRangeFromName( aRangeStr, &rDoc, m_nRefTab, aRange, RUTL_NAMES, aDetails ) )
+        else if ( ScRangeUtil::MakeRangeFromName( aRangeStr, rDoc, m_nRefTab, aRange, RUTL_NAMES, aDetails ) )
             rRanges.push_back( aRange );
         else
             bError = true;

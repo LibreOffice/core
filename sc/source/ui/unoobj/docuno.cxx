@@ -1406,8 +1406,8 @@ static bool lcl_ParseTarget( const OUString& rTarget, ScRange& rTargetRange, too
         rTargetRange = aAddress;
         bRangeValid = true;             // cell reference
     }
-    else if ( ScRangeUtil::MakeRangeFromName( rTarget, &rDoc, nSourceTab, rTargetRange ) ||
-              ScRangeUtil::MakeRangeFromName( rTarget, &rDoc, nSourceTab, rTargetRange, RUTL_DBASE ) )
+    else if ( ScRangeUtil::MakeRangeFromName( rTarget, rDoc, nSourceTab, rTargetRange ) ||
+              ScRangeUtil::MakeRangeFromName( rTarget, rDoc, nSourceTab, rTargetRange, RUTL_DBASE ) )
     {
         bRangeValid = true;             // named range or database range
     }

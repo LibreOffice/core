@@ -234,7 +234,7 @@ bool ScRangeUtil::IsAbsPos( const OUString&   rPosStr,
 
 bool ScRangeUtil::MakeRangeFromName (
     const OUString& rName,
-    const ScDocument* pDoc,
+    const ScDocument& rDoc,
     SCTAB           nCurTab,
     ScRange&        rRange,
     RutlNameScope   eScope,
@@ -257,7 +257,7 @@ bool ScRangeUtil::MakeRangeFromName (
         if (nEndPos != -1 && nStartPos != -1)
         {
             OUString aSheetName = aName.copy(nStartPos+2, nEndPos-nStartPos-2);
-            if (pDoc->GetTable(aSheetName, nTable))
+            if (rDoc.GetTable(aSheetName, nTable))
             {
                 aName = aName.copy(0, nStartPos);
             }
@@ -265,13 +265,13 @@ bool ScRangeUtil::MakeRangeFromName (
                 nTable = nCurTab;
         }
         //then check for local range names
-        ScRangeName* pRangeNames = pDoc->GetRangeName( nTable );
+        ScRangeName* pRangeNames = rDoc.GetRangeName( nTable );
         ScRangeData* pData = nullptr;
         aName = ScGlobal::getCharClassPtr()->uppercase(aName);
         if ( pRangeNames )
             pData = pRangeNames->findByUpperName(aName);
         if (!pData)
-            pData = pDoc->GetRangeName()->findByUpperName(aName);
+            pData = rDoc.GetRangeName()->findByUpperName(aName);
         if (pData)
         {
             OUString         aStrArea;
@@ -280,7 +280,7 @@ bool ScRangeUtil::MakeRangeFromName (
 
             pData->GetSymbol( aStrArea );
 
-            if ( IsAbsArea( aStrArea, pDoc, nTable,
+            if ( IsAbsArea( aStrArea, &rDoc, nTable,
                             nullptr, &aStartPos, &aEndPos, rDetails ) )
             {
                 nTab       = aStartPos.Tab();
@@ -294,7 +294,7 @@ bool ScRangeUtil::MakeRangeFromName (
             {
                 CutPosString( aStrArea, aStrArea );
 
-                if ( IsAbsPos( aStrArea, pDoc, nTable,
+                if ( IsAbsPos( aStrArea, &rDoc, nTable,
                                           nullptr, &aStartPos, rDetails ) )
                 {
                     nTab       = aStartPos.Tab();
@@ -307,7 +307,7 @@ bool ScRangeUtil::MakeRangeFromName (
     }
     else if( eScope==RUTL_DBASE )
     {
-        ScDBCollection::NamedDBs& rDbNames = pDoc->GetDBCollection()->getNamedDBs();
+        ScDBCollection::NamedDBs& rDbNames = rDoc.GetDBCollection()->getNamedDBs();
         ScDBData* pData = rDbNames.findByUpperName(ScGlobal::getCharClassPtr()->uppercase(rName));
         if (pData)
         {

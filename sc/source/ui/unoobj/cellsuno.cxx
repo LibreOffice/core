@@ -4762,8 +4762,8 @@ uno::Reference<table::XCellRange>  ScCellRangeObj::getCellRangeByName(
         }
         else
         {
-            if ( ScRangeUtil::MakeRangeFromName( aName, &rDoc, nTab, aCellRange ) ||
-                 ScRangeUtil::MakeRangeFromName( aName, &rDoc, nTab, aCellRange, RUTL_DBASE ) )
+            if ( ScRangeUtil::MakeRangeFromName( aName, rDoc, nTab, aCellRange ) ||
+                 ScRangeUtil::MakeRangeFromName( aName, rDoc, nTab, aCellRange, RUTL_DBASE ) )
                 bFound = true;
         }
 
