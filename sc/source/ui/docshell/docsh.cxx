@@ -1192,7 +1192,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 sItStr = ScGlobal::GetCharsetString( RTL_TEXTENCODING_IBM_437 );
             }
 
-            ErrCode eError = ScFormatFilter::Get().ScImportLotus123( rMedium, &m_aDocument,
+            ErrCode eError = ScFormatFilter::Get().ScImportLotus123( rMedium, m_aDocument,
                                                 ScGlobal::GetCharsetValue(sItStr));
             if (eError != ERRCODE_NONE)
             {

@@ -261,7 +261,7 @@ public:
     ScFormatFilterPluginImpl();
     virtual ~ScFormatFilterPluginImpl();
     // various import filters
-    virtual ErrCode ScImportLotus123( SfxMedium&, ScDocument*, rtl_TextEncoding eSrc ) override;
+    virtual ErrCode ScImportLotus123( SfxMedium&, ScDocument&, rtl_TextEncoding eSrc ) override;
     virtual ErrCode ScImportQuattroPro(SvStream* pStream, ScDocument *pDoc) override;
     virtual ErrCode ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT ) override;
         // eFormat == EIF_AUTO  -> matching filter is used automatically
