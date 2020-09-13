@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QTABLEWINDOWDATA_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QTABLEWINDOWDATA_HXX
+#pragma once
 
 #include <TableWindowData.hxx>
 
@@ -34,7 +33,6 @@ namespace dbaui
         void SetAliasName(const OUString& rNewAlias) { SetWinName(rNewAlias); }
     };
 }
-#endif // INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QTABLEWINDOWDATA_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

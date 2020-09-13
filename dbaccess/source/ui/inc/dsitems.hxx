@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_DSITEMS_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_INC_DSITEMS_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -92,7 +91,5 @@ typedef sal_Int32   ItemID;
 
 #define DSID_FIRST_ITEM_ID  DSID_NAME
 #define DSID_LAST_ITEM_ID   DSID_RESPECTRESULTSETTYPE
-
-#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_DSITEMS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

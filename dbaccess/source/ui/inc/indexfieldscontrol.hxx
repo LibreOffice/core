@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_INDEXFIELDSCONTROL_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_INC_INDEXFIELDSCONTROL_HXX
+#pragma once
 
 #include <svtools/editbrowsebox.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
@@ -88,7 +87,5 @@ namespace dbaui
     };
 
 }   // namespace dbaui
-
-#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_INDEXFIELDSCONTROL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

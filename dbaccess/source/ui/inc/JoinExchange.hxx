@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_JOINEXCHANGE_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_INC_JOINEXCHANGE_HXX
+#pragma once
 
 #include "TableWindowListBox.hxx"
 
@@ -59,6 +58,5 @@ namespace dbaui
         virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
     };
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

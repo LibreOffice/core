@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_PROPERTYSTORAGE_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_INC_PROPERTYSTORAGE_HXX
+#pragma once
 
 #include <com/sun/star/uno/Any.hxx>
 #include <map>
@@ -51,7 +50,5 @@ namespace dbaui
     typedef std::map< sal_Int32, std::shared_ptr< SetItemPropertyStorage > >   PropertyValues;
 
 } // namespace dbaui
-
-#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_PROPERTYSTORAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

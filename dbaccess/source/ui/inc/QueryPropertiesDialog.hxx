@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYPROPERTIESDIALOG_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYPROPERTIESDIALOG_HXX
+#pragma once
 
 #include <vcl/weld.hxx>
 
@@ -42,7 +41,5 @@ private:
 };
 
 } ///dbaui namespace
-
-#endif /// INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYPROPERTIESDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

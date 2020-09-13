@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_DLG_DRIVERSETTINGS_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_DLG_DRIVERSETTINGS_HXX
+#pragma once
 
 #include <sfx2/tabdlg.hxx>
 
@@ -76,7 +75,5 @@ namespace dbaui
         static std::unique_ptr<SfxTabPage> CreateSpecialSettingsPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet );
     };
 }
-
-#endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_DRIVERSETTINGS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

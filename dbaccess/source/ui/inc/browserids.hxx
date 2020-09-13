@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_BROWSERIDS_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_INC_BROWSERIDS_HXX
+#pragma once
 
 #include <svx/svxids.hrc>
 #include <dbaccess_slotid.hrc>
@@ -96,7 +95,5 @@
 
 #define ID_BROWSER_INSERT_ROW               (SID_SBA_START + 46) // insert row
 
-
-#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_BROWSERIDS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

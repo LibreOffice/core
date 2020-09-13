@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_UNO_DBINTERACTION_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_UNO_DBINTERACTION_HXX
+#pragma once
 
 #include <cppuhelper/implbase.hxx>
 #include <connectivity/CommonTools.hxx>
@@ -166,7 +165,5 @@ namespace dbaui
     };
 
 }   // namespace dbaui
-
-#endif // INCLUDED_DBACCESS_SOURCE_UI_UNO_DBINTERACTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

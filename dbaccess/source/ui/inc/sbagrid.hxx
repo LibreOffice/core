@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_SBAGRID_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_INC_SBAGRID_HXX
+#pragma once
 
 #include <svx/fmgridcl.hxx>
 
@@ -287,6 +286,5 @@ namespace dbaui
         using FmGridControl::MouseButtonDown;
     };
 }
-#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_SBAGRID_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

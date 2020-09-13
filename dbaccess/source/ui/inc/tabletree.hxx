@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_TABLETREE_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_INC_TABLETREE_HXX
+#pragma once
 
 #include "imageprovider.hxx"
 #include "dbtreelistbox.hxx"
@@ -152,7 +151,5 @@ public:
 };
 
 }   // namespace dbaui
-
-#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_TABLETREE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
