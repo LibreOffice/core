@@ -94,7 +94,7 @@ LotusContext::LotusContext(ScDocument* pDocP, rtl_TextEncoding eQ)
     , maRangeNames()
     , eFirstType( Lotus123Typ::X)
     , eActType( Lotus123Typ::X)
-    , pRngNmBffWK3( new RangeNameBufferWK3(pDocP) )
+    , pRngNmBffWK3( new RangeNameBufferWK3(*pDocP) )
     , maAttrTable( *this )
 {
 }

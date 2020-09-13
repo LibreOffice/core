@@ -426,8 +426,8 @@ void LotusRangeList::Append( const ScDocument* pDoc, std::unique_ptr<LotusRange>
     nIdCnt++;
 }
 
-RangeNameBufferWK3::RangeNameBufferWK3(const ScDocument* pDoc)
-    : pScTokenArray( new ScTokenArray(*pDoc) )
+RangeNameBufferWK3::RangeNameBufferWK3(const ScDocument& rDoc)
+    : pScTokenArray( new ScTokenArray(rDoc) )
 {
     nIntCount = 1;
 }
