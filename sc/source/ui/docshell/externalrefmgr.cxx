@@ -1986,7 +1986,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokens(
         // Document already loaded in memory.
         vector<ScExternalRefCache::SingleRangeData> aCacheData;
         ScExternalRefCache::TokenArrayRef pArray =
-            getDoubleRefTokensFromSrcDoc(pSrcDoc, rTabName, aDataRange, aCacheData);
+            getDoubleRefTokensFromSrcDoc(*pSrcDoc, rTabName, aDataRange, aCacheData);
 
         // Put the data into cache.
         putRangeDataIntoCache(maRefCache, pArray, nFileId, rTabName, aCacheData, rRange, aDataRange);
@@ -2010,7 +2010,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokens(
     }
 
     vector<ScExternalRefCache::SingleRangeData> aCacheData;
-    pArray = getDoubleRefTokensFromSrcDoc(pSrcDoc, rTabName, aDataRange, aCacheData);
+    pArray = getDoubleRefTokensFromSrcDoc(*pSrcDoc, rTabName, aDataRange, aCacheData);
 
     // Put the data into cache.
     putRangeDataIntoCache(maRefCache, pArray, nFileId, rTabName, aCacheData, rRange, aDataRange);
@@ -2031,7 +2031,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokens(
     {
         // Document already loaded in memory.
         ScExternalRefCache::TokenArrayRef pArray =
-            getRangeNameTokensFromSrcDoc(nFileId, pSrcDoc, aName);
+            getRangeNameTokensFromSrcDoc(nFileId, *pSrcDoc, aName);
 
         if (pArray)
             // Cache this range name array.
@@ -2050,7 +2050,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokens(
         // failed to load document from disk.
         return ScExternalRefCache::TokenArrayRef();
 
-    pArray = getRangeNameTokensFromSrcDoc(nFileId, pSrcDoc, aName);
+    pArray = getRangeNameTokensFromSrcDoc(nFileId, *pSrcDoc, aName);
 
     if (pArray)
         // Cache this range name array.
@@ -2239,16 +2239,16 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefTokenFromSrcDoc(
 }
 
 ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokensFromSrcDoc(
-    const ScDocument* pSrcDoc, const OUString& rTabName, ScRange& rRange,
+    const ScDocument& rSrcDoc, const OUString& rTabName, ScRange& rRange,
     vector<ScExternalRefCache::SingleRangeData>& rCacheData)
 {
     ScExternalRefCache::TokenArrayRef pArray;
     SCTAB nTab1;
 
-    if (!pSrcDoc->GetTable(rTabName, nTab1))
+    if (!rSrcDoc.GetTable(rTabName, nTab1))
     {
         // specified table name doesn't exist in the source document.
-        pArray = std::make_shared<ScTokenArray>(*pSrcDoc);
+        pArray = std::make_shared<ScTokenArray>(rSrcDoc);
         pArray->AddToken(FormulaErrorToken(FormulaError::NoRef));
         return pArray;
     }
@@ -2265,7 +2265,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokensFromSr
     for (SCTAB i = 1; i < nTabSpan + 1; ++i)
     {
         OUString aTabName;
-        if (!pSrcDoc->GetName(nTab1 + 1, aTabName))
+        if (!rSrcDoc.GetName(nTab1 + 1, aTabName))
             // source document doesn't have any table by the specified name.
             break;
 
@@ -2276,16 +2276,16 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokensFromSr
     aRange.aStart.SetTab(nTab1);
     aRange.aEnd.SetTab(nTab1 + nTabSpan);
 
-    pArray = convertToTokenArray(mpDoc, *pSrcDoc, aRange, aCacheData);
+    pArray = convertToTokenArray(mpDoc, rSrcDoc, aRange, aCacheData);
     rRange = aRange;
     rCacheData.swap(aCacheData);
     return pArray;
 }
 
 ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokensFromSrcDoc(
-    sal_uInt16 nFileId, const ScDocument* pSrcDoc, OUString& rName)
+    sal_uInt16 nFileId, const ScDocument& rSrcDoc, OUString& rName)
 {
-    ScRangeName* pExtNames = pSrcDoc->GetRangeName();
+    ScRangeName* pExtNames = rSrcDoc.GetRangeName();
     OUString aUpperName = ScGlobal::getCharClassPtr()->uppercase(rName);
     const ScRangeData* pRangeData = pExtNames->findByUpperName(aUpperName);
     if (!pRangeData)
@@ -2296,7 +2296,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokensFromSr
     // register the source document with the link manager if it's a new
     // source.
 
-    ScExternalRefCache::TokenArrayRef pNew = std::make_shared<ScTokenArray>(*pSrcDoc);
+    ScExternalRefCache::TokenArrayRef pNew = std::make_shared<ScTokenArray>(rSrcDoc);
 
     ScTokenArray aCode(*pRangeData->GetCode());
     FormulaTokenArrayPlainIterator aIter(aCode);
@@ -2309,7 +2309,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokensFromSr
             {
                 const ScSingleRefData& rRef = *pToken->GetSingleRef();
                 OUString aTabName;
-                pSrcDoc->GetName(rRef.Tab(), aTabName);
+                rSrcDoc.GetName(rRef.Tab(), aTabName);
                 ScExternalSingleRefToken aNewToken(nFileId, svl::SharedString( aTabName),   // string not interned
                         *pToken->GetSingleRef());
                 pNew->AddToken(aNewToken);
@@ -2320,7 +2320,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokensFromSr
             {
                 const ScSingleRefData& rRef = *pToken->GetSingleRef();
                 OUString aTabName;
-                pSrcDoc->GetName(rRef.Tab(), aTabName);
+                rSrcDoc.GetName(rRef.Tab(), aTabName);
                 ScExternalDoubleRefToken aNewToken(nFileId, svl::SharedString( aTabName),   // string not interned
                         *pToken->GetDoubleRef());
                 pNew->AddToken(aNewToken);
