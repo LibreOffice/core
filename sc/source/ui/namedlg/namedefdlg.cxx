@@ -206,7 +206,7 @@ void ScNameDefDlg::AddPushed()
     {
         ScRangeData::Type nType = ScRangeData::Type::Name;
 
-        ScRangeData* pNewEntry = new ScRangeData( &mrDoc,
+        ScRangeData* pNewEntry = new ScRangeData( mrDoc,
                 aName,
                 aExpression,
                 maCursorPos,

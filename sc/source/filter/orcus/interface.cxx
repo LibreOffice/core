@@ -248,7 +248,7 @@ void ScOrcusNamedExpression::commit()
         return;
 
     ScRangeData* pRange = new ScRangeData(
-        &mrDoc.getDoc(), maName, maExpr, maBasePos, ScRangeData::Type::Name,
+        mrDoc.getDoc(), maName, maExpr, maBasePos, ScRangeData::Type::Name,
         mrGlobalSettings.getCalcGrammar());
 
     pNames->insert(pRange, false);
