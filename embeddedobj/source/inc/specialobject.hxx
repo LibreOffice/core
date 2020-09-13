@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EMBEDDEDOBJ_SOURCE_INC_SPECIALOBJECT_HXX
-#define INCLUDED_EMBEDDEDOBJ_SOURCE_INC_SPECIALOBJECT_HXX
+#pragma once
 
 #include <com/sun/star/awt/Size.hpp>
 
@@ -49,7 +48,5 @@ public:
 
     virtual void SAL_CALL doVerb( sal_Int32 nVerbID ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
