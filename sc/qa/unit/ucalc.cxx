@@ -1606,7 +1606,7 @@ void Test::testNamedRange()
     }
 
     // Test using another-sheet-local name, scope Sheet1.
-    ScRangeData* pLocal1 = new ScRangeData( m_pDoc, "local1", ScAddress(0,0,0));
+    ScRangeData* pLocal1 = new ScRangeData( *m_pDoc, "local1", ScAddress(0,0,0));
     ScRangeData* pLocal2 = new ScRangeData( m_pDoc, "local2", "$Sheet1.$A$1");
     ScRangeData* pLocal3 = new ScRangeData( m_pDoc, "local3", "Sheet1.$A$1");
     ScRangeData* pLocal4 = new ScRangeData( m_pDoc, "local4", "$A$1"); // implicit relative sheet reference
@@ -3336,12 +3336,12 @@ void Test::testCopyPaste()
     ScAddress aAdr (0, 0, 0);
 
     //create some range names, local and global
-    ScRangeData* pLocal1 = new ScRangeData( m_pDoc, "local1", aAdr);
-    ScRangeData* pLocal2 = new ScRangeData( m_pDoc, "local2", aAdr);
+    ScRangeData* pLocal1 = new ScRangeData( *m_pDoc, "local1", aAdr);
+    ScRangeData* pLocal2 = new ScRangeData( *m_pDoc, "local2", aAdr);
     ScRangeData* pLocal3 = new ScRangeData( m_pDoc, "local3", "$Sheet1.$A$1");
     ScRangeData* pLocal4 = new ScRangeData( m_pDoc, "local4", "Sheet1.$A$1");
     ScRangeData* pLocal5 = new ScRangeData( m_pDoc, "local5", "$A$1"); // implicit relative sheet reference
-    ScRangeData* pGlobal = new ScRangeData( m_pDoc, "global", aAdr);
+    ScRangeData* pGlobal = new ScRangeData( *m_pDoc, "global", aAdr);
     const OUString aGlobal2Symbol("$Sheet1.$A$1:$A$23");
     ScRangeData* pGlobal2 = new ScRangeData( m_pDoc, "global2", aGlobal2Symbol);
     std::unique_ptr<ScRangeName> pGlobalRangeName(new ScRangeName());
