@@ -559,7 +559,7 @@ public:
 
     SC_DLLPUBLIC ScRefFlags ParseAny( const OUString&, const ScDocument*,
                                       const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
-    SC_DLLPUBLIC ScRefFlags ParseCols( const ScDocument* pDoc,
+    SC_DLLPUBLIC ScRefFlags ParseCols( const ScDocument& rDoc,
                                        const OUString&,
                                        const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
     SC_DLLPUBLIC void ParseRows( const ScDocument& rDoc,
