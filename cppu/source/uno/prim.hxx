@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CPPU_SOURCE_UNO_PRIM_HXX
-#define INCLUDED_CPPU_SOURCE_UNO_PRIM_HXX
+#pragma once
 
 #include <typelib/typedescription.h>
 #include <typelib/typeclass.h>
@@ -150,7 +149,5 @@ inline bool _type_equals(
 }
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

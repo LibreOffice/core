@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CPPU_SOURCE_UNO_COPY_HXX
-#define INCLUDED_CPPU_SOURCE_UNO_COPY_HXX
+#pragma once
 
 #include "prim.hxx"
 #include "constr.hxx"
@@ -652,7 +651,5 @@ inline void _copyConstructData(
 }
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
