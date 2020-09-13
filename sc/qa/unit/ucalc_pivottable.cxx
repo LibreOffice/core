@@ -689,7 +689,7 @@ void Test::testPivotTableNamedSource()
     ScRangeName* pNames = m_pDoc->GetRangeName();
     CPPUNIT_ASSERT_MESSAGE("Failed to get global range name container.", pNames);
     ScRangeData* pName = new ScRangeData(
-        m_pDoc, aRangeName, aRangeStr);
+        *m_pDoc, aRangeName, aRangeStr);
     bool bSuccess = pNames->insert(pName);
     CPPUNIT_ASSERT_MESSAGE("Failed to insert a new name.", bSuccess);
 

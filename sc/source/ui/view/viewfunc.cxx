@@ -2865,7 +2865,7 @@ bool ScViewFunc::InsertName( const OUString& rName, const OUString& rSymbol,
 
     ScRangeData::Type nType = ScRangeData::Type::Name;
     auto pNewEntry = std::make_unique<ScRangeData>(
-        &rDoc, rName, rSymbol, ScAddress( GetViewData().GetCurX(),
+        rDoc, rName, rSymbol, ScAddress( GetViewData().GetCurX(),
         GetViewData().GetCurY(), nTab), nType );
     OUString aUpType = rType.toAsciiUpperCase();
     if ( aUpType.indexOf( 'P' ) != -1 )

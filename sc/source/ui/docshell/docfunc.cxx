@@ -5251,7 +5251,7 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
 
     if (bInsert)
     {
-        ScRangeData* pData = new ScRangeData( &rDoc, aName, aContent,
+        ScRangeData* pData = new ScRangeData( rDoc, aName, aContent,
                 ScAddress( nPosX, nPosY, nTab));
         if (!rList.insert(pData))
         {
