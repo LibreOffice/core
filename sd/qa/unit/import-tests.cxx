@@ -228,6 +228,7 @@ public:
     void testTdf127964();
     void testTdf106638();
     void testTdf113198();
+    void testTdf49856();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -335,6 +336,7 @@ public:
     CPPUNIT_TEST(testTdf128684);
     CPPUNIT_TEST(testTdf113198);
     CPPUNIT_TEST(testTdf119187);
+    CPPUNIT_TEST(testTdf49856);
     CPPUNIT_TEST(testShapeGlowEffectPPTXImpoer);
     CPPUNIT_TEST(testShapeBlurPPTXImport);
 
@@ -3170,6 +3172,22 @@ void SdImportTest::testTdf119187()
         const SdrTextVertAdjust eTVA = rSdrTextVertAdjustItem.GetValue();
         CPPUNIT_ASSERT_EQUAL(SDRTEXTVERTADJUST_TOP, eTVA);
     }
+}
+
+void SdImportTest::testTdf49856()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/ppt/tdf49856.ppt"), PPT);
+    const SdrPage *pPage = GetPage(1, xDocShRef);
+    SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>(pPage->GetObj(1));
+    CPPUNIT_ASSERT_MESSAGE("No text object", pTxtObj != nullptr);
+    const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
+    const SvxNumBulletItem *pNumFmt = aEdit.GetParaAttribs(2).GetItem(EE_PARA_NUMBULLET);
+    CPPUNIT_ASSERT(pNumFmt);
+    const sal_Unicode aBullet = pNumFmt->GetNumRule()->GetLevel(0).GetBulletChar();
+    CPPUNIT_ASSERT_EQUAL(OUString("More level 2"), aEdit.GetText(2));
+    CPPUNIT_ASSERT_EQUAL(u'\x2022', aBullet);
+
+    xDocShRef->DoClose();
 }
 
 void SdImportTest::testShapeGlowEffectPPTXImpoer()
