@@ -2321,7 +2321,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                             if (pFormat->getCount())
                             {
                                 auto pNew = std::make_unique<ScConditionalFormat>( 0, &rDoc );    // Index will be set on inserting
-                                pFormat->FillFormat( *pNew, &rDoc, eGrammar );
+                                pFormat->FillFormat( *pNew, rDoc, eGrammar );
                                 pNew->SetRange( aRanges );
                                 pDocShell->GetDocFunc().ReplaceConditionalFormat( 0, std::move(pNew), nTab, aRanges );
                             }

@@ -193,7 +193,7 @@ FormulaGrammar::Grammar lclResolveGrammar( FormulaGrammar::Grammar eExtGrammar, 
 } // namespace
 
 void ScTableConditionalFormat::FillFormat( ScConditionalFormat& rFormat,
-        ScDocument* pDoc, FormulaGrammar::Grammar eGrammar) const
+        ScDocument& rDoc, FormulaGrammar::Grammar eGrammar) const
 {
     //  ScConditionalFormat = Core-Struktur, has to be empty
 
@@ -208,22 +208,22 @@ void ScTableConditionalFormat::FillFormat( ScConditionalFormat& rFormat,
         FormulaGrammar::Grammar eGrammar2 = lclResolveGrammar( eGrammar, aData.meGrammar2 );
 
         ScCondFormatEntry* pCoreEntry = new ScCondFormatEntry( aData.meMode, aData.maExpr1, aData.maExpr2,
-            pDoc, aData.maPos, aData.maStyle, aData.maExprNmsp1, aData.maExprNmsp2, eGrammar1, eGrammar2 );
+            &rDoc, aData.maPos, aData.maStyle, aData.maExprNmsp1, aData.maExprNmsp2, eGrammar1, eGrammar2 );
 
         if ( !aData.maPosStr.isEmpty() )
             pCoreEntry->SetSrcString( aData.maPosStr );
 
         if ( aData.maTokens1.hasElements() )
         {
-            ScTokenArray aTokenArray(*pDoc);
-            if ( ScTokenConversion::ConvertToTokenArray(*pDoc, aTokenArray, aData.maTokens1) )
+            ScTokenArray aTokenArray(rDoc);
+            if ( ScTokenConversion::ConvertToTokenArray(rDoc, aTokenArray, aData.maTokens1) )
                 pCoreEntry->SetFormula1(aTokenArray);
         }
 
         if ( aData.maTokens2.hasElements() )
         {
-            ScTokenArray aTokenArray(*pDoc);
-            if ( ScTokenConversion::ConvertToTokenArray(*pDoc, aTokenArray, aData.maTokens2) )
+            ScTokenArray aTokenArray(rDoc);
+            if ( ScTokenConversion::ConvertToTokenArray(rDoc, aTokenArray, aData.maTokens2) )
                 pCoreEntry->SetFormula2(aTokenArray);
         }
         rFormat.AddEntry( pCoreEntry );

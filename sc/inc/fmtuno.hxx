@@ -83,7 +83,7 @@ public:
                                     SCTAB nTab, formula::FormulaGrammar::Grammar eGrammar);
     virtual                 ~ScTableConditionalFormat() override;
 
-    void                    FillFormat( ScConditionalFormat& rFormat, ScDocument* pDoc,
+    void                    FillFormat( ScConditionalFormat& rFormat, ScDocument& rDoc,
                                 formula::FormulaGrammar::Grammar eGrammar) const;
 
                             // XSheetConditionalEntries
