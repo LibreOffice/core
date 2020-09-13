@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_UTILS_HXX
-#define INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_UTILS_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -20,7 +19,5 @@ OUString getTableNameFromStmt(const OUString& sSql);
 
 void ensureFirebirdTableLength(const OUString& sName);
 }
-
-#endif // INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_UTILS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

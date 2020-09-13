@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_ROWINPUTBINARY_HXX
-#define INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_ROWINPUTBINARY_HXX
+#pragma once
 
 #include <vector>
 #include <tools/stream.hxx>
@@ -49,7 +48,5 @@ public:
 };
 
 } // namespace dbahsql
-
-#endif // INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_ROWINPUTBINARY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
