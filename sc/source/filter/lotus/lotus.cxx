@@ -40,7 +40,7 @@ ErrCode ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocume
 
     LotusContext aContext(*pDocument, eSrc);
 
-    ImportLotus aLotusImport(aContext, *pStream, pDocument, eSrc);
+    ImportLotus aLotusImport(aContext, *pStream, eSrc);
 
     ErrCode eRet;
     if (ScFilterOptions().GetWK3Flag())

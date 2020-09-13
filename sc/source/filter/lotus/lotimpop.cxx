@@ -40,10 +40,10 @@
 
 static osl::Mutex aLotImpSemaphore;
 
-ImportLotus::ImportLotus(LotusContext &rContext, SvStream& aStream, ScDocument* pDoc, rtl_TextEncoding eQ)
-    : ImportTyp(pDoc, eQ)
+ImportLotus::ImportLotus(LotusContext &rContext, SvStream& aStream, rtl_TextEncoding eQ)
+    : ImportTyp(&rContext.rDoc, eQ)
     , pIn(&aStream)
-    , aConv(rContext, *pIn, pDoc->GetSharedStringPool(), eQ, false)
+    , aConv(rContext, *pIn, rContext.rDoc.GetSharedStringPool(), eQ, false)
     , nTab(0)
     , nExtTab(0)
 {
