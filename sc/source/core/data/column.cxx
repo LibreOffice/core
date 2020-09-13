@@ -2340,7 +2340,7 @@ class UpdateRefOnNonCopy
         aUndoPos.IncRow();
         for (SCROW i = 1; i < nLength; ++i, aUndoPos.IncRow())
         {
-            pFC = new ScFormulaCell(mpUndoDoc, aUndoPos, xGroup);
+            pFC = new ScFormulaCell(*mpUndoDoc, aUndoPos, xGroup);
             aCells.push_back(pFC);
         }
 
