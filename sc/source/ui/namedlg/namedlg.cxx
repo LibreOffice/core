@@ -388,7 +388,7 @@ void ScNameDlg::NameModified()
     if ( m_xBtnPrintArea->get_active() ) nType |= ScRangeData::Type::PrintArea;
     if ( m_xBtnCriteria->get_active()  ) nType |= ScRangeData::Type::Criteria;
 
-    ScRangeData* pNewEntry = new ScRangeData( mpDoc, aNewName, aExpr,
+    ScRangeData* pNewEntry = new ScRangeData( *mpDoc, aNewName, aExpr,
             maCursorPos, nType);
     pNewEntry->SetIndex( nIndex);
     pNewRangeName->insert(pNewEntry, false /*bReuseFreeIndex*/);

@@ -44,7 +44,7 @@ using ::std::pair;
 
 // ScRangeData
 
-ScRangeData::ScRangeData( ScDocument* pDok,
+ScRangeData::ScRangeData( ScDocument& rDok,
                           const OUString& rName,
                           const OUString& rSymbol,
                           const ScAddress& rAddress,
@@ -54,7 +54,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                 aUpperName  ( ScGlobal::getCharClassPtr()->uppercase( rName ) ),
                 aPos        ( rAddress ),
                 eType       ( nType ),
-                pDoc        ( pDok ),
+                pDoc        ( &rDok ),
                 eTempGrammar( eGrammar ),
                 nIndex      ( 0 ),
                 bModified   ( false )
