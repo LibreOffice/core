@@ -221,7 +221,7 @@ void applyCellFormulas(
                 }
                 ++xGroup->mnLength;
 
-                pCell = new ScFormulaCell(&rDoc.getDoc(), aPos, xGroup);
+                pCell = new ScFormulaCell(rDoc.getDoc(), aPos, xGroup);
             }
             else
                 pCell = new ScFormulaCell(&rDoc.getDoc(), aPos, p->mpCell->GetCode()->Clone());

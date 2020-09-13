@@ -580,7 +580,7 @@ void ScColumn::CloneFormulaCell(
             xGroup->compileCode(*pDocument, aPos, pDocument->GetGrammar());
             for (size_t i = 0; i < nLen; ++i, aPos.IncRow())
             {
-                ScFormulaCell* pCell = new ScFormulaCell(pDocument, aPos, xGroup, pDocument->GetGrammar(), nMatrixFlag);
+                ScFormulaCell* pCell = new ScFormulaCell(*pDocument, aPos, xGroup, pDocument->GetGrammar(), nMatrixFlag);
                 if (nMatrixFlag == ScMatrixMode::Formula)
                     pCell->SetMatColsRows( nMatrixCols, nMatrixRows);
                 if (i == 0)
