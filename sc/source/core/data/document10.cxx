@@ -280,7 +280,7 @@ void ScDocument::PreprocessAllRangeNamesUpdate( const std::map<OUString, std::un
     }
 
     sc::EndListeningContext aEndListenCxt(*this);
-    sc::CompileFormulaContext aCompileCxt(this);
+    sc::CompileFormulaContext aCompileCxt(*this);
 
     for (const auto& rxTab : maTabs)
     {
@@ -292,7 +292,7 @@ void ScDocument::PreprocessAllRangeNamesUpdate( const std::map<OUString, std::un
 void ScDocument::PreprocessRangeNameUpdate()
 {
     sc::EndListeningContext aEndListenCxt(*this);
-    sc::CompileFormulaContext aCompileCxt(this);
+    sc::CompileFormulaContext aCompileCxt(*this);
 
     for (const auto& rxTab : maTabs)
     {
@@ -304,7 +304,7 @@ void ScDocument::PreprocessRangeNameUpdate()
 void ScDocument::PreprocessDBDataUpdate()
 {
     sc::EndListeningContext aEndListenCxt(*this);
-    sc::CompileFormulaContext aCompileCxt(this);
+    sc::CompileFormulaContext aCompileCxt(*this);
 
     for (const auto& rxTab : maTabs)
     {
@@ -316,7 +316,7 @@ void ScDocument::PreprocessDBDataUpdate()
 void ScDocument::CompileHybridFormula()
 {
     sc::StartListeningContext aStartListenCxt(*this);
-    sc::CompileFormulaContext aCompileCxt(this);
+    sc::CompileFormulaContext aCompileCxt(*this);
     for (const auto& rxTab : maTabs)
     {
         ScTable* p = rxTab.get();

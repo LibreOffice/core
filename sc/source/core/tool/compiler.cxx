@@ -1810,7 +1810,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
 ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, ScTokenArray& rArr,
                         bool bComputeII, bool bMatrixFlag, const ScInterpreterContext* pContext )
     : FormulaCompiler(rArr, bComputeII, bMatrixFlag),
-    pDoc(rCxt.getDoc()),
+    pDoc(&rCxt.getDoc()),
     aPos(rPos),
     mpFormatter(pContext? pContext->GetFormatTable() : pDoc->GetFormatTable()),
     mpInterpreterContext(pContext),
@@ -1855,7 +1855,7 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos, ScTokenArr
 ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos,
                         bool bComputeII, bool bMatrixFlag, const ScInterpreterContext* pContext )
     : FormulaCompiler(bComputeII, bMatrixFlag),
-    pDoc(rCxt.getDoc()),
+    pDoc(&rCxt.getDoc()),
     aPos(rPos),
     mpFormatter(pContext ? pContext->GetFormatTable() : pDoc ? pDoc->GetFormatTable() : nullptr),
     mpInterpreterContext(pContext),

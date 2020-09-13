@@ -3166,7 +3166,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                         if (!mpCompileFormulaCxt)
                         {
                             const formula::FormulaGrammar::Grammar eGrammar = pDoc->GetStorageGrammar();
-                            mpCompileFormulaCxt.reset(new sc::CompileFormulaContext(pDoc, eGrammar));
+                            mpCompileFormulaCxt.reset(new sc::CompileFormulaContext(*pDoc, eGrammar));
                         }
 
                         OUString aFormula = pFormulaCell->GetFormula(*mpCompileFormulaCxt);

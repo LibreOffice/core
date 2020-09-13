@@ -991,7 +991,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
 
             // Readjust self-contained absolute references to this sheet
             maTabs[nDestPos]->TestTabRefAbs(nSrcPos);
-            sc::CompileFormulaContext aFormulaCxt(this);
+            sc::CompileFormulaContext aFormulaCxt(*this);
             maTabs[nDestPos]->CompileAll(aFormulaCxt);
         }
 
