@@ -769,7 +769,7 @@ ScFormulaCell::ScFormulaCell(
 }
 
 ScFormulaCell::ScFormulaCell(
-    ScDocument* pDoc, const ScAddress& rPos, const ScFormulaCellGroupRef& xGroup,
+    ScDocument& rDoc, const ScAddress& rPos, const ScFormulaCellGroupRef& xGroup,
     const FormulaGrammar::Grammar eGrammar, ScMatrixMode cInd ) :
     mxGroup(xGroup),
     bDirty(true),
@@ -790,8 +790,8 @@ ScFormulaCell::ScFormulaCell(
     nSeenInIteration(0),
     nFormatType(xGroup->mnFormatType),
     eTempGrammar( eGrammar),
-    pCode(xGroup->mpCode ? xGroup->mpCode.get() : new ScTokenArray(pDoc)),
-    pDocument( pDoc ),
+    pCode(xGroup->mpCode ? xGroup->mpCode.get() : new ScTokenArray(&rDoc)),
+    pDocument( &rDoc ),
     pPrevious(nullptr),
     pNext(nullptr),
     pPreviousTrack(nullptr),

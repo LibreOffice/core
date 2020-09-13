@@ -193,7 +193,7 @@ public:
                    const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT,
                    ScMatrixMode cMatInd = ScMatrixMode::NONE );
 
-    ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos, const ScFormulaCellGroupRef& xGroup,
+    ScFormulaCell( ScDocument& rDoc, const ScAddress& rPos, const ScFormulaCellGroupRef& xGroup,
                    const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT,
                    ScMatrixMode = ScMatrixMode::NONE );
 
