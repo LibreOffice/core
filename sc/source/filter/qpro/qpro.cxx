@@ -127,10 +127,10 @@ ErrCode ScQProReader::readSheet( SCTAB nTab, ScDocument& rDoc, ScQProStyle *pSty
     return eRet;
 }
 
-ErrCode ScFormatFilterPluginImpl::ScImportQuattroPro(SvStream *pStream, ScDocument *pDoc)
+ErrCode ScFormatFilterPluginImpl::ScImportQuattroPro(SvStream *pStream, ScDocument& rDoc)
 {
     ScQProReader aReader(pStream);
-    ErrCode eRet = aReader.import( pDoc );
+    ErrCode eRet = aReader.import(rDoc);
     return eRet;
 }
 
@@ -155,7 +155,7 @@ ScQProReader::~ScQProReader()
         mpStream->SetBufferSize( 0 );
 }
 
-ErrCode ScQProReader::parse( ScDocument *pDoc )
+ErrCode ScQProReader::parse(ScDocument& rDoc)
 {
     ErrCode eRet = ERRCODE_NONE;
     sal_uInt16 nVersion;
@@ -183,11 +183,11 @@ ErrCode ScQProReader::parse( ScDocument *pDoc )
                     {
                         OUString aName = OUStringChar( sal_Unicode('A' + nTab) );
                         if (!nTab)
-                            pDoc->RenameTab( nTab, aName );
+                            rDoc.RenameTab( nTab, aName );
                         else
-                            pDoc->InsertTab( nTab, aName );
+                            rDoc.InsertTab( nTab, aName );
                     }
-                    eRet = readSheet( nTab, *pDoc, pStyleElement.get() );
+                    eRet = readSheet( nTab, rDoc, pStyleElement.get() );
                     nTab++;
                 }
                 break;
@@ -225,10 +225,10 @@ ErrCode ScQProReader::parse( ScDocument *pDoc )
     return eRet;
 }
 
-ErrCode ScQProReader::import( ScDocument *pDoc )
+ErrCode ScQProReader::import( ScDocument& rDoc)
 {
-    ErrCode eRet = parse(pDoc);
-    pDoc->CalcAfterLoad();
+    ErrCode eRet = parse(rDoc);
+    rDoc.CalcAfterLoad();
     return eRet;
 }
 
@@ -246,7 +246,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportQPW(SvStream &rStream)
     aDocument.SetHardRecalcState(ScDocument::HardRecalcState::ETERNAL);
 
     ScQProReader aReader(&rStream);
-    ErrCode eRet = aReader.parse(&aDocument);
+    ErrCode eRet = aReader.parse(aDocument);
     return eRet == ERRCODE_NONE;
 }
 
