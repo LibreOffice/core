@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DTRANS_SOURCE_WIN32_DTOBJ_MIMEATTRIB_HXX
-#define INCLUDED_DTRANS_SOURCE_WIN32_DTOBJ_MIMEATTRIB_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -28,7 +27,5 @@ const OUString PRE_WINDOWS_CODEPAGE ("windows");
 const OUString PRE_OEM_CODEPAGE     ("cp");
 const OUString CHARSET_UTF16        ("utf-16");
 const OUString CHARSET_UNICODE      ("unicode");
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

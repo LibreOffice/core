@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DTRANS_SOURCE_WIN32_DTOBJ_TXTCNVTHLP_HXX
-#define INCLUDED_DTRANS_SOURCE_WIN32_DTOBJ_TXTCNVTHLP_HXX
+#pragma once
 
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 
@@ -38,7 +37,5 @@ int WideCharToMultiByteEx( UINT cp_dest,
                            sal_uInt32 lenStr,
                            CStgTransferHelper& refDTransHelper,
                            BOOL bEnsureTrailingZero = TRUE );
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

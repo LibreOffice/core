@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DTRANS_SOURCE_WIN32_DTOBJ_DTRANSHELPER_HXX
-#define INCLUDED_DTRANS_SOURCE_WIN32_DTOBJ_DTRANSHELPER_HXX
+#pragma once
 
 #if !defined WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN
@@ -164,7 +163,5 @@ private:
     bool    m_bIsLocked;
     LPVOID  m_pGlobMem;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

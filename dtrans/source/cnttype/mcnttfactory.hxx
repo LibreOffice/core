@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DTRANS_SOURCE_CNTTYPE_MCNTTFACTORY_HXX
-#define INCLUDED_DTRANS_SOURCE_CNTTYPE_MCNTTFACTORY_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -46,7 +45,5 @@ public:
 
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
