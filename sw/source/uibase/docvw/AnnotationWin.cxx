@@ -284,8 +284,23 @@ bool SwAnnotationWin::IsResolved() const
 
 bool SwAnnotationWin::IsThreadResolved()
 {
-    // Not const because GetTopReplyNote isn't.
-    return GetTopReplyNote()->IsResolved();
+    /// First Get the top note
+    // then itereate downwards checking resolved status
+    SwAnnotationWin *pTopNote, *TopNote;
+    pTopNote = TopNote = GetTopReplyNote();
+    if (!pTopNote->IsResolved())
+        return false;
+
+    SwAnnotationWin* pSidebarWin = mrMgr.GetNextPostIt(KEY_PAGEDOWN, pTopNote);
+
+    while (pSidebarWin && pSidebarWin->GetTopReplyNote() == TopNote)
+    {
+        pTopNote = pSidebarWin;
+        if (!pTopNote->IsResolved())
+            return false;
+        pSidebarWin = mrMgr.GetNextPostIt(KEY_PAGEDOWN, pSidebarWin);
+    }
+    return true;
 }
 
 void SwAnnotationWin::UpdateData()

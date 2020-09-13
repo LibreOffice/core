@@ -178,7 +178,7 @@ void SwAnnotationWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
     }
 
     sal_uInt32 boxHeight = mpMetadataAuthor->GetSizePixel().Height() + mpMetadataDate->GetSizePixel().Height();
-    boxHeight += IsThreadResolved() ? mpMetadataResolved->GetSizePixel().Height() : 0;
+    boxHeight += IsResolved() ? mpMetadataResolved->GetSizePixel().Height() : 0;
 
     rRenderContext.SetLineColor();
     tools::Rectangle aRectangle(Point(mpMetadataAuthor->GetPosPixel().X() + mpMetadataAuthor->GetSizePixel().Width(),
@@ -573,7 +573,7 @@ void SwAnnotationWin::InitControls()
     mpSidebarTextControl->Show();
     mpMetadataAuthor->Show();
     mpMetadataDate->Show();
-    if(IsThreadResolved()) { mpMetadataResolved->Show(); }
+    if(IsResolved()) { mpMetadataResolved->Show(); }
     mpVScrollbar->Show();
 }
 
@@ -895,7 +895,7 @@ void SwAnnotationWin::DoResize()
 
     aHeight -= GetMetaHeight();
     mpMetadataAuthor->Show();
-    if(IsThreadResolved()) { mpMetadataResolved->Show(); }
+    if(IsResolved()) { mpMetadataResolved->Show(); }
     mpMetadataDate->Show();
     mpSidebarTextControl->SetQuickHelpText(OUString());
     unsigned int numFields = GetNumFields();
@@ -920,7 +920,7 @@ void SwAnnotationWin::DoResize()
                                          aHeight + aSizeOfMetadataControls.Height(),
                                          aSizeOfMetadataControls.Width(),
                                          aSizeOfMetadataControls.Height() );
-        if(IsThreadResolved()) {
+        if(IsResolved()) {
             mpMetadataResolved->setPosSizePixel( 0,
                                                  aHeight + aSizeOfMetadataControls.Height()*2,
                                                  aSizeOfMetadataControls.Width(),
@@ -1259,8 +1259,7 @@ void SwAnnotationWin::ExecuteCommand(sal_uInt16 nSlot)
             mnEventId = Application::PostUserEvent( LINK( this, SwAnnotationWin, DeleteHdl), nullptr, true );
             break;
         case FN_RESOLVE_NOTE:
-            GetTopReplyNote()->ToggleResolved();
-            mrMgr.UpdateResolvedStatus(GetTopReplyNote());
+            ToggleResolved();
             DoResize();
             Invalidate();
             mrMgr.LayoutPostIts();
@@ -1391,7 +1390,7 @@ sal_Int32 SwAnnotationWin::GetMetaHeight()
 
 sal_Int32 SwAnnotationWin::GetNumFields()
 {
-    return IsThreadResolved() ? 3 : 2;
+    return IsResolved() ? 3 : 2;
 }
 
 sal_Int32 SwAnnotationWin::GetMinimumSizeWithMeta() const

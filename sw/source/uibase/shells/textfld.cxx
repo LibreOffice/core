@@ -332,10 +332,10 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             const SvxPostItIdItem* pIdItem = rReq.GetArg<SvxPostItIdItem>(SID_ATTR_POSTIT_ID);
             if (pIdItem && !pIdItem->GetValue().isEmpty() && GetView().GetPostItMgr())
             {
-                GetView().GetPostItMgr()->ToggleResolvedForThread(pIdItem->GetValue().toUInt32());
+                GetView().GetPostItMgr()->ToggleResolved(pIdItem->GetValue().toUInt32());
             }
+            break;
         }
-        break;
         case FN_DELETE_ALL_NOTES:
             if ( GetView().GetPostItMgr() )
                 GetView().GetPostItMgr()->Delete();
