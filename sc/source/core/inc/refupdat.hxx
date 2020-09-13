@@ -56,7 +56,7 @@ public:
                                 sal_Int32 nDx, sal_Int32 nDy, sal_Int32 nDz,
                                 ScBigRange& rWhat );
 
-    static void MoveRelWrap( const ScDocument* pDoc, const ScAddress& rPos,
+    static void MoveRelWrap( const ScDocument& rDoc, const ScAddress& rPos,
                              SCCOL nMaxCol, SCROW nMaxRow, ScComplexRefData& rRef );
 
     static ScRefUpdateRes UpdateTranspose(

@@ -4999,9 +4999,9 @@ void ScCompiler::MoveRelWrap()
     for ( auto t: pArr->References() )
     {
         if ( t->GetType() == svSingleRef || t->GetType() == svExternalSingleRef )
-            ScRefUpdate::MoveRelWrap( pDoc, aPos, pDoc->MaxCol(), pDoc->MaxRow(), SingleDoubleRefModifier( *t->GetSingleRef() ).Ref() );
+            ScRefUpdate::MoveRelWrap( *pDoc, aPos, pDoc->MaxCol(), pDoc->MaxRow(), SingleDoubleRefModifier( *t->GetSingleRef() ).Ref() );
         else
-            ScRefUpdate::MoveRelWrap( pDoc, aPos, pDoc->MaxCol(), pDoc->MaxRow(), *t->GetDoubleRef() );
+            ScRefUpdate::MoveRelWrap( *pDoc, aPos, pDoc->MaxCol(), pDoc->MaxRow(), *t->GetDoubleRef() );
     }
 }
 
@@ -5013,9 +5013,9 @@ void ScCompiler::MoveRelWrap( const ScTokenArray& rArr, const ScDocument* pDoc, 
     for ( auto t: rArr.References() )
     {
         if ( t->GetType() == svSingleRef || t->GetType() == svExternalSingleRef )
-            ScRefUpdate::MoveRelWrap( pDoc, rPos, nMaxCol, nMaxRow, SingleDoubleRefModifier( *t->GetSingleRef() ).Ref() );
+            ScRefUpdate::MoveRelWrap( *pDoc, rPos, nMaxCol, nMaxRow, SingleDoubleRefModifier( *t->GetSingleRef() ).Ref() );
         else
-            ScRefUpdate::MoveRelWrap( pDoc, rPos, nMaxCol, nMaxRow, *t->GetDoubleRef() );
+            ScRefUpdate::MoveRelWrap( *pDoc, rPos, nMaxCol, nMaxRow, *t->GetDoubleRef() );
     }
 }
 
