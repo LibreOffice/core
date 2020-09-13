@@ -98,15 +98,15 @@ ScRangeData::ScRangeData( ScDocument* pDok,
     InitCode();
 }
 
-ScRangeData::ScRangeData( ScDocument* pDok,
+ScRangeData::ScRangeData( ScDocument& rDok,
                           const OUString& rName,
                           const ScAddress& rTarget ) :
                 aName       ( rName ),
                 aUpperName  ( ScGlobal::getCharClassPtr()->uppercase( rName ) ),
-                pCode       ( new ScTokenArray(*pDok) ),
+                pCode       ( new ScTokenArray(rDok) ),
                 aPos        ( rTarget ),
                 eType       ( Type::Name ),
-                pDoc        ( pDok ),
+                pDoc        ( &rDok ),
                 eTempGrammar( FormulaGrammar::GRAM_UNSPECIFIED ),
                 nIndex      ( 0 ),
                 bModified   ( false )

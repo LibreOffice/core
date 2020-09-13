@@ -94,7 +94,7 @@ public:
                                  const ScTokenArray& rArr,
                                  const ScAddress& rAdr = ScAddress(),
                                  Type nType = Type::Name );
-    SC_DLLPUBLIC                ScRangeData( ScDocument* pDoc,
+    SC_DLLPUBLIC                ScRangeData( ScDocument& rDoc,
                                  const OUString& rName,
                                  const ScAddress& rTarget );
                                 // rTarget is ABSPOS jump label
