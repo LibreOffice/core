@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_APP_CMDLINEHELP_HXX
-#define INCLUDED_DESKTOP_SOURCE_APP_CMDLINEHELP_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -27,7 +26,5 @@ namespace desktop
     void displayCmdlineHelp( OUString const & unknown );
     void displayVersion();
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

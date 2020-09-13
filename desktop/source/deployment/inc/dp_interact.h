@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_INTERACT_H
-#define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_INTERACT_H
+#pragma once
 
 #include <config_options.h>
 #include <rtl/ref.hxx>
@@ -136,7 +135,5 @@ public:
 };
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

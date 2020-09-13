@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_DIALOG2_HXX
-#define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_DIALOG2_HXX
+#pragma once
 
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
@@ -261,7 +260,5 @@ public:
 };
 
 } // namespace dp_gui
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

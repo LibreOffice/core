@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_APP_USERINSTALL_HXX
-#define INCLUDED_DESKTOP_SOURCE_APP_USERINSTALL_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -35,7 +34,5 @@ enum Status {
 Status finalize();
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

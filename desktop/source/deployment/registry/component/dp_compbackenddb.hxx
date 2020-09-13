@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_REGISTRY_COMPONENT_DP_COMPBACKENDDB_HXX
-#define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_REGISTRY_COMPONENT_DP_COMPBACKENDDB_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
@@ -90,7 +89,5 @@ public:
 
 }
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

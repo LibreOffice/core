@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_DESKTOP_SOURCE_MIGRATION_MIGRATION_IMPL_HXX
-#define INCLUDED_DESKTOP_SOURCE_MIGRATION_MIGRATION_IMPL_HXX
+#pragma once
 
 #include <memory>
 #include <unordered_map>
@@ -192,7 +191,5 @@ public:
     bool doMigration();
 };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

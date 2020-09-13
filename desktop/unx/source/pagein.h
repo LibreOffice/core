@@ -17,13 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_UNX_SOURCE_PAGEIN_H
-#define INCLUDED_DESKTOP_UNX_SOURCE_PAGEIN_H
+#pragma once
 
 #include <sal/config.h>
 
 void pagein_execute(char const* path, char const* file);
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

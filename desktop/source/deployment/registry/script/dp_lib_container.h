@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_REGISTRY_SCRIPT_DP_LIB_CONTAINER_H
-#define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_REGISTRY_SCRIPT_DP_LIB_CONTAINER_H
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -45,7 +44,5 @@ public:
 };
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

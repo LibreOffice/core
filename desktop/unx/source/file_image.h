@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_UNX_SOURCE_FILE_IMAGE_H
-#define INCLUDED_DESKTOP_UNX_SOURCE_FILE_IMAGE_H
+#pragma once
 
 #ifndef INCLUDED_STDDEF_H
 #include <stddef.h>
@@ -66,7 +65,5 @@ int file_image_close (
 #ifdef __cplusplus
 }
 #endif
-
-#endif /* INCLUDED_ODEP_IMAGE_H */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
