@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DTRANS_SOURCE_WIN32_DTOBJ_DATAFMTTRANSL_HXX
-#define INCLUDED_DTRANS_SOURCE_WIN32_DTOBJ_DATAFMTTRANSL_HXX
+#pragma once
 
 #include <com/sun/star/datatransfer/XDataFormatTranslator.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
@@ -61,7 +60,5 @@ private:
 private:
     css::uno::Reference< css::datatransfer::XDataFormatTranslator >   m_XDataFormatTranslator;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

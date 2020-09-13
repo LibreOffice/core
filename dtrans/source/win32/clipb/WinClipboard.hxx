@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DTRANS_SOURCE_WIN32_CLIPB_WINCLIPBOARD_HXX
-#define INCLUDED_DTRANS_SOURCE_WIN32_CLIPB_WINCLIPBOARD_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -117,7 +116,5 @@ private:
 
     friend class CWinClipbImpl;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
