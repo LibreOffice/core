@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CPPU_SOURCE_TYPELIB_HXX
-#define INCLUDED_CPPU_SOURCE_TYPELIB_HXX
+#pragma once
 
 extern "C" sal_Int32 typelib_typedescription_getAlignedUnoSize(
     const typelib_TypeDescription * pTypeDescription,
@@ -37,7 +36,5 @@ extern "C" void typelib_typedescriptionreference_getByName(
     typelib_TypeDescriptionReference ** ppRet,
     rtl_uString const * pName )
     SAL_THROW_EXTERN_C();
-
-#endif // INCLUDED_CPPU_SOURCE_TYPELIB_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
