@@ -622,6 +622,11 @@ protected:
     static void GetGlyphWidths(const vcl::AbstractTrueTypeFont& rTTF,
                                const PhysicalFontFace& rFontFace, bool bVertical,
                                std::vector<sal_Int32>& rWidths, Ucs2UIntMap& rUnicodeEnc);
+
+    static bool CreateFontSubset(vcl::AbstractTrueTypeFont& aTTF, const OString& rSysPath,
+                                 const bool bVertical, const sal_GlyphId* pGlyphIds,
+                                 const sal_uInt8* pEncoding, sal_Int32* pGlyphWidths,
+                                 int nGlyphCount);
 };
 
 bool SalGraphics::IsNativeControlSupported(ControlType eType, ControlPart ePart)

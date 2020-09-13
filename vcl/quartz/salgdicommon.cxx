@@ -145,7 +145,7 @@ static void AddPolyPolygonToPath( CGMutablePathRef xPath,
 bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
                                         const PhysicalFontFace* pFontData,
                                         const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
-                                        sal_Int32* pGlyphWidths, int nGlyphCount,
+                                        sal_Int32* pGlyphWidths, const int nGlyphCount,
                                         FontSubsetInfo& rInfo )
 {
     // TODO: move more of the functionality here into the generic subsetter code
@@ -153,17 +153,13 @@ bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
     // prepare the requested file name for writing the font-subset file
     OUString aSysPath;
     if( osl_File_E_None != osl_getSystemPathFromFileURL( rToFile.pData, &aSysPath.pData ) )
-    {
         return false;
-    }
 
     // get the raw-bytes from the font to be subset
     std::vector<unsigned char> aBuffer;
     bool bCffOnly = false;
     if( !GetRawFontData( pFontData, aBuffer, &bCffOnly ) )
-    {
         return false;
-    }
     const OString aToFile( OUStringToOString( aSysPath,
                                               osl_getThreadTextEncoding()));
 
@@ -190,11 +186,10 @@ bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
 
     // prepare data for psprint's font subsetter
     TrueTypeFont* pSftFont = nullptr;
-    SFErrCodes nRC = ::OpenTTFontBuffer( static_cast<void*>(aBuffer.data()), aBuffer.size(), 0, &pSftFont);
-    if( nRC != SFErrCodes::Ok )
-    {
+    if (::OpenTTFontBuffer( static_cast<void*>(aBuffer.data()), aBuffer.size(), 0, &pSftFont)
+            != SFErrCodes::Ok)
         return false;
-    }
+
     // get details about the subsetted font
     TTGlobalFontInfo aTTInfo;
     ::GetTTGlobalFontInfo( pSftFont, &aTTInfo );
@@ -206,86 +201,23 @@ bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
     rInfo.m_nCapHeight = aTTInfo.yMax; // Well ...
     rInfo.m_nAscent = aTTInfo.winAscent;
     rInfo.m_nDescent = aTTInfo.winDescent;
+
     // mac fonts usually do not have an OS2-table
     // => get valid ascent/descent values from other tables
     if( !rInfo.m_nAscent )
-    {
         rInfo.m_nAscent = +aTTInfo.typoAscender;
-    }
     if( !rInfo.m_nAscent )
-    {
         rInfo.m_nAscent = +aTTInfo.ascender;
-    }
     if( !rInfo.m_nDescent )
-    {
         rInfo.m_nDescent = +aTTInfo.typoDescender;
-    }
     if( !rInfo.m_nDescent )
-    {
         rInfo.m_nDescent = -aTTInfo.descender;
-    }
-
-    // subset glyphs and get their properties
-    // take care that subset fonts require the NotDef glyph in pos 0
-    int nOrigCount = nGlyphCount;
-    sal_uInt16 aShortIDs[ 257 ];
-    sal_uInt8 aTempEncs[ 257 ];
-    int nNotDef = -1;
-
-    assert( (nGlyphCount <= 256 && "too many glyphs for subsetting" ));
-
-    for( int i = 0; i < nGlyphCount; ++i )
-    {
-        aTempEncs[i] = pEncoding[i];
-
-        sal_GlyphId aGlyphId(pGlyphIds[i]);
-        aShortIDs[i] = static_cast<sal_uInt16>( aGlyphId );
-        if( !aGlyphId && nNotDef < 0 )
-        {
-            nNotDef = i; // first NotDef glyph found
-        }
-    }
-
-    if( nNotDef != 0 )
-    {
-        // add fake NotDef glyph if needed
-        if( nNotDef < 0 )
-        {
-            nNotDef = nGlyphCount++;
-        }
-        // NotDef glyph must be in pos 0 => swap glyphids
-        aShortIDs[ nNotDef ] = aShortIDs[0];
-        aTempEncs[ nNotDef ] = aTempEncs[0];
-        aShortIDs[0] = 0;
-        aTempEncs[0] = 0;
-    }
-
-    // TODO: where to get bVertical?
-    const bool bVertical = false;
-
-    // fill the pGlyphWidths array
-    // while making sure that the NotDef glyph is at index==0
-    std::unique_ptr<sal_uInt16[]> pGlyphMetrics = ::GetTTSimpleGlyphMetrics( pSftFont, aShortIDs,
-                                                                     nGlyphCount, bVertical );
-    if( !pGlyphMetrics )
-    {
-        return false;
-    }
-
-    sal_uInt16 nNotDefAdv = pGlyphMetrics[0];
-    pGlyphMetrics[0] = pGlyphMetrics[nNotDef];
-    pGlyphMetrics[nNotDef]  = nNotDefAdv;
-    for( int i = 0; i < nOrigCount; ++i )
-    {
-        pGlyphWidths[i] = pGlyphMetrics[i];
-    }
-    pGlyphMetrics.reset();
 
     // write subset into destination file
-    nRC = ::CreateTTFromTTGlyphs( pSftFont, aToFile.getStr(), aShortIDs,
-                                  aTempEncs, nGlyphCount );
+    bool bRet = SalGraphics::CreateFontSubset(*pSftFont, aToFile, false /* use FontSelectPattern? */,
+                                              pGlyphIds, pEncoding, pGlyphWidths, nGlyphCount);
     ::CloseTTFont(pSftFont);
-    return (nRC == SFErrCodes::Ok);
+    return bRet;
 }
 
 static void alignLinePoint( const SalPoint* i_pIn, float& o_fX, float& o_fY )

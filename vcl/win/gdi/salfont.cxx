@@ -1643,52 +1643,9 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
                                     Point( aTTInfo.xMax, aTTInfo.yMax ) );
     rInfo.m_nCapHeight  = aTTInfo.yMax; // Well ...
 
-    // subset TTF-glyphs and get their properties
-    // take care that subset fonts require the NotDef glyph in pos 0
-    int nOrigCount = nGlyphCount;
-    sal_uInt16    aShortIDs[ 256 ];
-    sal_uInt8 aTempEncs[ 256 ];
-
-    int nNotDef=-1, i;
-    for( i = 0; i < nGlyphCount; ++i )
-    {
-        aTempEncs[i] = pEncoding[i];
-        aShortIDs[i] = static_cast<sal_uInt16>(pGlyphIds[i]);
-        if (!aShortIDs[i])
-            if( nNotDef < 0 )
-                nNotDef = i; // first NotDef glyph found
-    }
-
-    if( nNotDef != 0 )
-    {
-        // add fake NotDef glyph if needed
-        if( nNotDef < 0 )
-            nNotDef = nGlyphCount++;
-
-        // NotDef glyph must be in pos 0 => swap glyphids
-        aShortIDs[ nNotDef ] = aShortIDs[0];
-        aTempEncs[ nNotDef ] = aTempEncs[0];
-        aShortIDs[0] = 0;
-        aTempEncs[0] = 0;
-    }
-    SAL_WARN_IF( nGlyphCount >= 257, "vcl", "too many glyphs for subsetting" );
-
-    // fill pWidth array
-    std::unique_ptr<sal_uInt16[]> pMetrics =
-        ::GetTTSimpleGlyphMetrics( aSftTTF.get(), aShortIDs, nGlyphCount, aIFSD.mbVertical );
-    if( !pMetrics )
-        return false;
-    sal_uInt16 nNotDefAdv = pMetrics[0];
-    pMetrics[0]         = pMetrics[nNotDef];
-    pMetrics[nNotDef]   = nNotDefAdv;
-    for( i = 0; i < nOrigCount; ++i )
-        pGlyphWidths[i] = pMetrics[i];
-    pMetrics.reset();
-
     // write subset into destination file
-    nRC = ::CreateTTFromTTGlyphs( aSftTTF.get(), aToFile.getStr(), aShortIDs,
-            aTempEncs, nGlyphCount );
-    return (nRC == SFErrCodes::Ok);
+    return SalGraphics::CreateFontSubset(*aSftTTF.get(), aToFile, aIFSD.mbVertical, pGlyphIds, pEncoding,
+                                         pGlyphWidths, nGlyphCount);
 }
 
 const void* WinSalGraphics::GetEmbedFontData(const PhysicalFontFace* pFont, long* pDataLen)
