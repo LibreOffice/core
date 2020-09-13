@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPCUSTOMLINECAP_HXX
-#define INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPCUSTOMLINECAP_HXX
+#pragma once
 
 #include <com/sun/star/rendering/StrokeAttributes.hpp>
 #include "emfphelperdata.hxx"
@@ -40,7 +39,5 @@ namespace emfplushelper
         void Read(SvStream& s, EmfPlusHelperData const & rR);
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

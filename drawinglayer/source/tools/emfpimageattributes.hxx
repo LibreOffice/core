@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPIMAGEATTRIBUTES_HXX
-#define INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPIMAGEATTRIBUTES_HXX
+#pragma once
 
 #include "emfphelperdata.hxx"
 #include <vector>
@@ -31,7 +30,5 @@ struct EMFPImageAttributes : public EMFPObject
     void Read(SvStream& s);
 };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
