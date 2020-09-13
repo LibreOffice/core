@@ -7,11 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_DESKTOP_INC_STRINGS_HRC
-#define INCLUDED_DESKTOP_INC_STRINGS_HRC
+#pragma once
 
 #define RID_APPTITLE "%PRODUCTNAME %PRODUCTVERSION%PRODUCTEXTENSION"
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

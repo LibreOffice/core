@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_LIB_LOKCLIPBOARD_HXX
-#define INCLUDED_DESKTOP_SOURCE_LIB_LOKCLIPBOARD_HXX
+#pragma once
 
 #include <vector>
 
@@ -111,7 +110,5 @@ public:
     /// Release a clipboard before its document dies, nViewId of -1 clears all.
     static void releaseClipboardForView(int nViewId);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

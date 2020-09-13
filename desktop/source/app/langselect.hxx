@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_APP_LANGSELECT_HXX
-#define INCLUDED_DESKTOP_SOURCE_APP_LANGSELECT_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -27,7 +26,5 @@ namespace desktop::langselect {
 bool prepareLocale();
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
