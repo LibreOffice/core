@@ -16,12 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_DBU_DLG_HRC
-#define INCLUDED_DBACCESS_SOURCE_UI_INC_DBU_DLG_HRC
+#pragma once
 
 #define WIZARD_PAGE_X       56
 #define WIZARD_PAGE_Y       30
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

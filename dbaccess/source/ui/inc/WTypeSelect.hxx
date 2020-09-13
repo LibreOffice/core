@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_WTYPESELECT_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_INC_WTYPESELECT_HXX
+#pragma once
 
 #include "FieldDescControl.hxx"
 #include "TypeInfo.hxx"
@@ -136,6 +135,5 @@ namespace dbaui
 
     typedef std::unique_ptr<OWizTypeSelect> (*TypeSelectionPageFactory)(weld::Container*, OCopyTableWizard*, SvStream&);
 }
-#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_WTYPESELECT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

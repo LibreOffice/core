@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_TYPEINFO_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_INC_TYPEINFO_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -118,7 +117,5 @@ const sal_uInt16 TYPE_BIT       = 31;
                                bool _bAutoIncrement,
                                bool& _brForceToType);
 }
-
-#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_TYPEINFO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

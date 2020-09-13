@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_DLGSAVE_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_INC_DLGSAVE_HXX
+#pragma once
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <o3tl/typed_flags_set.hxx>
@@ -77,8 +76,6 @@ namespace dbaui
         void implInit();
     };
 }
-
-#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_DLGSAVE_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

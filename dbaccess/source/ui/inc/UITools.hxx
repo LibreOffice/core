@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_UITOOLS_HXX
-#define INCLUDED_DBACCESS_SOURCE_UI_INC_UITOOLS_HXX
+#pragma once
 
 #include <connectivity/dbexception.hxx>
 #include <comphelper/stl_types.hxx>
@@ -391,6 +390,5 @@ namespace dbaui
     css::uno::Reference< css::util::XNumberFormatter > getNumberFormatter(const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
 
 }
-#endif // INCLUDED_DBACCESS_SOURCE_UI_INC_UITOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
