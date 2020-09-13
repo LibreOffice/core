@@ -41,7 +41,7 @@
 static osl::Mutex aLotImpSemaphore;
 
 ImportLotus::ImportLotus(LotusContext &rContext, SvStream& aStream, rtl_TextEncoding eQ)
-    : ImportTyp(&rContext.rDoc, eQ)
+    : ImportTyp(rContext.rDoc, eQ)
     , pIn(&aStream)
     , aConv(rContext, *pIn, rContext.rDoc.GetSharedStringPool(), eQ, false)
     , nTab(0)
@@ -105,8 +105,8 @@ void ImportLotus::Columnwidth( sal_uInt16 nRecLen )
     Read( nLTab );
     Read( nWindow2 );
 
-    if( !pD->HasTable( static_cast<SCTAB> (nLTab) ) )
-        pD->MakeTable( static_cast<SCTAB> (nLTab) );
+    if( !rD.HasTable( static_cast<SCTAB> (nLTab) ) )
+        rD.MakeTable( static_cast<SCTAB> (nLTab) );
 
     if( nWindow2 )
         return;
@@ -120,7 +120,7 @@ void ImportLotus::Columnwidth( sal_uInt16 nRecLen )
         Read( nCol );
         Read( nSpaces );
         // Attention: ambiguous Correction factor!
-        pD->SetColWidth( static_cast<SCCOL> (nCol), static_cast<SCTAB> (nLTab), static_cast<sal_uInt16>( TWIPS_PER_CHAR * 1.28 * nSpaces ) );
+        rD.SetColWidth( static_cast<SCCOL> (nCol), static_cast<SCTAB> (nLTab), static_cast<sal_uInt16>( TWIPS_PER_CHAR * 1.28 * nSpaces ) );
 
         nCnt--;
     }
@@ -147,7 +147,7 @@ void ImportLotus::Hiddencolumn( sal_uInt16 nRecLen )
     {
         Read( nCol );
 
-        pD->SetColHidden(static_cast<SCCOL>(nCol), static_cast<SCCOL>(nCol), static_cast<SCTAB>(nLTab), true);
+        rD.SetColHidden(static_cast<SCCOL>(nCol), static_cast<SCCOL>(nCol), static_cast<SCTAB>(nLTab), true);
         nCnt--;
     }
 }
@@ -178,8 +178,8 @@ void ImportLotus::Errcell()
 
     ScSetStringParam aParam;
     aParam.setTextInput();
-    pD->EnsureTable(aA.Tab());
-    pD->SetString(aA, "#ERR!", &aParam);
+    rD.EnsureTable(aA.Tab());
+    rD.SetString(aA, "#ERR!", &aParam);
 }
 
 void ImportLotus::Nacell()
@@ -190,8 +190,8 @@ void ImportLotus::Nacell()
 
     ScSetStringParam aParam;
     aParam.setTextInput();
-    pD->EnsureTable(aA.Tab());
-    pD->SetString(aA, "#NA!", &aParam);
+    rD.EnsureTable(aA.Tab());
+    rD.SetString(aA, "#NA!", &aParam);
 }
 
 void ImportLotus::Labelcell()
@@ -206,8 +206,8 @@ void ImportLotus::Labelcell()
 
     ScSetStringParam aParam;
     aParam.setTextInput();
-    pD->EnsureTable(aA.Tab());
-    pD->SetString(aA, aLabel, &aParam);
+    rD.EnsureTable(aA.Tab());
+    rD.SetString(aA, aLabel, &aParam);
 }
 
 void ImportLotus::Numbercell()
@@ -218,8 +218,8 @@ void ImportLotus::Numbercell()
     Read( aAddr );
     Read( fVal );
 
-    pD->EnsureTable(aAddr.Tab());
-    pD->SetValue(aAddr, fVal);
+    rD.EnsureTable(aAddr.Tab());
+    rD.SetValue(aAddr, fVal);
 }
 
 void ImportLotus::Smallnumcell()
@@ -230,8 +230,8 @@ void ImportLotus::Smallnumcell()
     Read( aAddr );
     Read( nVal );
 
-    pD->EnsureTable(aAddr.Tab());
-    pD->SetValue(aAddr, SnumToDouble(nVal));
+    rD.EnsureTable(aAddr.Tab());
+    rD.SetValue(aAddr, SnumToDouble(nVal));
 }
 
 void ImportLotus::Formulacell( sal_uInt16 n )
@@ -254,10 +254,10 @@ void ImportLotus::Formulacell( sal_uInt16 n )
     if (!aConv.good())
         return;
 
-    ScFormulaCell* pCell = pErg ? new ScFormulaCell(pD, aAddr, std::move(pErg)) : new ScFormulaCell(*pD, aAddr);
+    ScFormulaCell* pCell = pErg ? new ScFormulaCell(&rD, aAddr, std::move(pErg)) : new ScFormulaCell(rD, aAddr);
     pCell->AddRecalcMode( ScRecalcMode::ONLOAD_ONCE );
-    pD->EnsureTable(aAddr.Tab());
-    pD->SetFormulaCell(aAddr, pCell);
+    rD.EnsureTable(aAddr.Tab());
+    rD.SetFormulaCell(aAddr, pCell);
 }
 
 void ImportLotus::Read( OUString &r )
@@ -290,9 +290,9 @@ void ImportLotus::RowPresentation( sal_uInt16 nRecLen )
             nHeight *= 20;  // -> 32 * TWIPS
             nHeight /= 32;  // -> TWIPS
 
-            pD->SetRowFlags( static_cast<SCROW> (nRow), static_cast<SCTAB> (nLTab), pD->GetRowFlags( static_cast<SCROW> (nRow), static_cast<SCTAB> (nLTab) ) | CRFlags::ManualSize );
+            rD.SetRowFlags( static_cast<SCROW> (nRow), static_cast<SCTAB> (nLTab), rD.GetRowFlags( static_cast<SCROW> (nRow), static_cast<SCTAB> (nLTab) ) | CRFlags::ManualSize );
 
-            pD->SetRowHeight( static_cast<SCROW> (nRow), static_cast<SCTAB> (nLTab), nHeight );
+            rD.SetRowHeight( static_cast<SCROW> (nRow), static_cast<SCTAB> (nLTab), nHeight );
         }
 
         nCnt--;
@@ -313,10 +313,10 @@ void ImportLotus::NamedSheet()
         nLTab = 5;
 #endif
 
-    if (pD->HasTable(nLTab))
-        pD->RenameTab(nLTab, aName);
+    if (rD.HasTable(nLTab))
+        rD.RenameTab(nLTab, aName);
     else
-        pD->InsertTab(nLTab, aName);
+        rD.InsertTab(nLTab, aName);
 }
 
 void ImportLotus::Font_Face()
@@ -382,7 +382,7 @@ void ImportLotus::Row_( const sal_uInt16 nRecLen )
     SCTAB nDestTab(static_cast<SCTAB>(nExtTab));
 
     if( nHeight )
-        pD->SetRowHeight(nRow, nDestTab, nHeight);
+        rD.SetRowHeight(nRow, nDestTab, nHeight);
 
     while( nCntDwn )
     {
@@ -400,10 +400,10 @@ void ImportLotus::Row_( const sal_uInt16 nRecLen )
         {
             if( bCenter )
             {
-                if (pD->HasData(nColCnt, nRow, nDestTab))
+                if (rD.HasData(nColCnt, nRow, nDestTab))
                 {
                     // new Center after previous Center
-                    pD->DoMerge(nDestTab, nCenterStart, nRow, nCenterEnd, nRow);
+                    rD.DoMerge(nDestTab, nCenterStart, nRow, nCenterEnd, nRow);
                     nCenterStart = nColCnt;
                 }
             }
@@ -420,7 +420,7 @@ void ImportLotus::Row_( const sal_uInt16 nRecLen )
             if( bCenter )
             {
                 // possibly reset old Center
-                pD->DoMerge(nDestTab, nCenterStart, nRow, nCenterEnd, nRow);
+                rD.DoMerge(nDestTab, nCenterStart, nRow, nCenterEnd, nRow);
                 bCenter = false;
             }
         }
@@ -433,6 +433,6 @@ void ImportLotus::Row_( const sal_uInt16 nRecLen )
 
     if( bCenter )
         // possibly reset old Center
-        pD->DoMerge(nDestTab, nCenterStart, nRow, nCenterEnd, nRow);
+        rD.DoMerge(nDestTab, nCenterStart, nRow, nCenterEnd, nRow);
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

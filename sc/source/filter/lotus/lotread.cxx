@@ -56,7 +56,7 @@ ErrCode ImportLotus::parse()
     pIn->Seek( nNextRec );
 
     // start progressbar
-    ScfStreamProgressBar aPrgrsBar( *pIn, pD->GetDocumentShell() );
+    ScfStreamProgressBar aPrgrsBar( *pIn, rD.GetDocumentShell() );
     LotusContext &rContext = aConv.getContext();
     while( eCurrent != S_END )
     {
@@ -196,7 +196,7 @@ ErrCode ImportLotus::parse()
     }
 
     // TODO: eliminate stupid names
-    SCTAB       nTabs = pD->GetTableCount();
+    SCTAB       nTabs = rD.GetTableCount();
     SCTAB       nCnt;
     OUString aTabName;
     OUString aBaseName;
@@ -204,19 +204,19 @@ ErrCode ImportLotus::parse()
     {
         if( nTabs > 1 )
         {
-            pD->GetName( 0, aBaseName );
+            rD.GetName( 0, aBaseName );
             aBaseName = aBaseName.copy(0, aBaseName.getLength()-1);
         }
         for( nCnt = 1 ; nCnt < nTabs ; nCnt++ )
         {
-            SAL_WARN_IF( !pD->HasTable( nCnt ), "sc.filter",
+            SAL_WARN_IF( !rD.HasTable( nCnt ), "sc.filter",
                 "-ImportLotus::Read(): Where is my table?!" );
-            pD->GetName( nCnt, aTabName );
+            rD.GetName( nCnt, aTabName );
             if( aTabName == "temp" )
             {
                 aTabName = aBaseName;
-                pD->CreateValidTabName( aTabName );
-                pD->RenameTab( nCnt, aTabName );
+                rD.CreateValidTabName( aTabName );
+                rD.RenameTab( nCnt, aTabName );
             }
         }
     }
@@ -227,7 +227,7 @@ ErrCode ImportLotus::parse()
 ErrCode ImportLotus::Read()
 {
     ErrCode eRet = parse();
-    pD->CalcAfterLoad();
+    rD.CalcAfterLoad();
     return eRet;
 }
 
@@ -247,7 +247,7 @@ ErrCode ImportLotus::Read(SvStream& rIn)
     pIn->Seek( nNextRec );
 
     // start progressbar
-    ScfStreamProgressBar aPrgrsBar( *pIn, pD->GetDocumentShell() );
+    ScfStreamProgressBar aPrgrsBar( *pIn, rD.GetDocumentShell() );
     LotusContext &rContext = aConv.getContext();
     while( bRead )
     {

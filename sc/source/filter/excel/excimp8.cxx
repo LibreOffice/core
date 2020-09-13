@@ -156,30 +156,30 @@ ImportExcel8::~ImportExcel8()
 
 void ImportExcel8::Calccount()
 {
-    ScDocOptions    aOpt = pD->GetDocOptions();
+    ScDocOptions    aOpt = rD.GetDocOptions();
     aOpt.SetIterCount( aIn.ReaduInt16() );
-    pD->SetDocOptions( aOpt );
+    rD.SetDocOptions( aOpt );
 }
 
 void ImportExcel8::Precision()
 {
-    ScDocOptions aOpt = pD->GetDocOptions();
+    ScDocOptions aOpt = rD.GetDocOptions();
     aOpt.SetCalcAsShown( aIn.ReaduInt16() == 0 );
-    pD->SetDocOptions( aOpt );
+    rD.SetDocOptions( aOpt );
 }
 
 void ImportExcel8::Delta()
 {
-    ScDocOptions    aOpt = pD->GetDocOptions();
+    ScDocOptions    aOpt = rD.GetDocOptions();
     aOpt.SetIterEps( aIn.ReadDouble() );
-    pD->SetDocOptions( aOpt );
+    rD.SetDocOptions( aOpt );
 }
 
 void ImportExcel8::Iteration()
 {
-    ScDocOptions    aOpt = pD->GetDocOptions();
+    ScDocOptions    aOpt = rD.GetDocOptions();
     aOpt.SetIter( aIn.ReaduInt16() == 1 );
-    pD->SetDocOptions( aOpt );
+    rD.SetDocOptions( aOpt );
 }
 
 void ImportExcel8::Boundsheet()
@@ -199,17 +199,17 @@ void ImportExcel8::Boundsheet()
     SCTAB nScTab = nBdshtTab;
     if( nScTab > 0 )
     {
-        OSL_ENSURE( !pD->HasTable( nScTab ), "ImportExcel8::Boundsheet - sheet exists already" );
-        pD->MakeTable( nScTab );
+        OSL_ENSURE( !rD.HasTable( nScTab ), "ImportExcel8::Boundsheet - sheet exists already" );
+        rD.MakeTable( nScTab );
     }
 
     if( ( nGrbit & 0x0001 ) || ( nGrbit & 0x0002 ) )
-        pD->SetVisible( nScTab, false );
+        rD.SetVisible( nScTab, false );
 
-    if( !pD->RenameTab( nScTab, aName ) )
+    if( !rD.RenameTab( nScTab, aName ) )
     {
-        pD->CreateValidTabName( aName );
-        pD->RenameTab( nScTab, aName );
+        rD.CreateValidTabName( aName );
+        rD.RenameTab( nScTab, aName );
     }
 
     nBdshtTab++;
@@ -396,9 +396,9 @@ void ImportExcel8::PostDocLoad()
     ImportExcel::PostDocLoad();
 
     // check scenarios; Attention: This increases the table count of the document!!
-    if( !pD->IsClipboard() && !maScenList.aEntries.empty() )
+    if( !rD.IsClipboard() && !maScenList.aEntries.empty() )
     {
-        pD->UpdateChartListenerCollection();    // references in charts must be updated
+        rD.UpdateChartListenerCollection();    // references in charts must be updated
 
         maScenList.Apply( GetRoot() );
     }

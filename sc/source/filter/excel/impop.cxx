@@ -70,10 +70,11 @@
 
 using namespace ::com::sun::star;
 
-ImportTyp::ImportTyp( ScDocument* pDoc, rtl_TextEncoding eQ )
+ImportTyp::ImportTyp(ScDocument& rDoc, rtl_TextEncoding eQ)
+    : eQuellChar(eQ)
+    , rD(rDoc)
+
 {
-    eQuellChar = eQ;
-    pD = pDoc;
 }
 
 ImportTyp::~ImportTyp()
@@ -81,7 +82,7 @@ ImportTyp::~ImportTyp()
 }
 
 ImportExcel::ImportExcel( XclImpRootData& rImpData, SvStream& rStrm ):
-    ImportTyp( &rImpData.mrDoc, rImpData.meTextEnc ),
+    ImportTyp( rImpData.mrDoc, rImpData.meTextEnc ),
     XclImpRoot( rImpData ),
     maStrm( rStrm, GetRoot() ),
     aIn( maStrm ),
@@ -115,17 +116,17 @@ ImportExcel::ImportExcel( XclImpRootData& rImpData, SvStream& rStrm ):
     bTabTruncated = false;
 
     // Excel document per Default on 31.12.1899, accords to Excel settings with 1.1.1900
-    ScDocOptions aOpt = pD->GetDocOptions();
+    ScDocOptions aOpt = rD.GetDocOptions();
     aOpt.SetDate( 30, 12, 1899 );
-    pD->SetDocOptions( aOpt );
-    pD->GetFormatTable()->ChangeNullDate( 30, 12, 1899 );
+    rD.SetDocOptions( aOpt );
+    rD.GetFormatTable()->ChangeNullDate( 30, 12, 1899 );
 
-    ScDocOptions aDocOpt( pD->GetDocOptions() );
+    ScDocOptions aDocOpt( rD.GetDocOptions() );
     aDocOpt.SetIgnoreCase( true );              // always in Excel
     aDocOpt.SetFormulaRegexEnabled( false );    // regular expressions? what's that?
     aDocOpt.SetFormulaWildcardsEnabled( true ); // Excel uses wildcard expressions
     aDocOpt.SetLookUpColRowNames( false );      // default: no natural language refs
-    pD->SetDocOptions( aDocOpt );
+    rD.SetDocOptions( aDocOpt );
 }
 
 ImportExcel::~ImportExcel()
@@ -362,8 +363,8 @@ void ImportExcel::ReadBoolErr()
     double fValue;
     std::unique_ptr<ScTokenArray> pScTokArr = ErrorToFormula( nType != EXC_BOOLERR_BOOL, nValue, fValue );
     ScFormulaCell* pCell = pScTokArr
-        ? new ScFormulaCell(pD, aScPos, std::move(pScTokArr))
-        : new ScFormulaCell(*pD, aScPos);
+        ? new ScFormulaCell(&rD, aScPos, std::move(pScTokArr))
+        : new ScFormulaCell(rD, aScPos);
     pCell->SetHybridDouble( fValue );
     GetDocImport().setFormulaCell(aScPos, pCell);
 }
@@ -480,8 +481,8 @@ void ImportExcel::Columndefault()
 
     nColMac--;
 
-    if( nColMac > pD->MaxCol() )
-        nColMac = static_cast<sal_uInt16>(pD->MaxCol());
+    if( nColMac > rD.MaxCol() )
+        nColMac = static_cast<sal_uInt16>(rD.MaxCol());
 
     for( sal_uInt16 nCol = nColMic ; nCol <= nColMac ; nCol++ )
     {
@@ -541,10 +542,10 @@ void ImportExcel::Rec1904()
 
     if( n1904 )
     {// 1904 date system
-        ScDocOptions aOpt = pD->GetDocOptions();
+        ScDocOptions aOpt = rD.GetDocOptions();
         aOpt.SetDate( 1, 1, 1904 );
-        pD->SetDocOptions( aOpt );
-        pD->GetFormatTable()->ChangeNullDate( 1, 1, 1904 );
+        rD.SetDocOptions( aOpt );
+        rD.GetFormatTable()->ChangeNullDate( 1, 1, 1904 );
     }
 }
 
@@ -582,8 +583,8 @@ void ImportExcel::Colwidth()
     nColWidth = aIn.ReaduInt16();
 
 //TODO: add a check for the unlikely case of changed MAXCOL (-> XclImpAddressConverter)
-//   if( nColLast > pD->MaxCol() )
-//       nColLast = static_cast<sal_uInt16>(pD->MaxCol());
+//   if( nColLast > rD.MaxCol() )
+//       nColLast = static_cast<sal_uInt16>(rD.MaxCol());
 
     sal_uInt16 nScWidth = XclTools::GetScColumnWidth( nColWidth, GetCharWidth() );
     pColRowBuff->SetWidthRange( nColFirst, nColLast, nScWidth );
@@ -661,11 +662,11 @@ void ImportExcel::Colinfo()
     nXF = aIn.ReaduInt16();
     nOpt = aIn.ReaduInt16();
 
-    if( nColFirst > pD->MaxCol() )
+    if( nColFirst > rD.MaxCol() )
         return;
 
-    if( nColLast > pD->MaxCol() )
-        nColLast = static_cast<sal_uInt16>(pD->MaxCol());
+    if( nColLast > rD.MaxCol() )
+        nColLast = static_cast<sal_uInt16>(rD.MaxCol());
 
     bool bHidden = ::get_flag( nOpt, EXC_COLINFO_HIDDEN );
     bool bCollapsed = ::get_flag( nOpt, EXC_COLINFO_COLLAPSED );
@@ -708,17 +709,17 @@ void ImportExcel::Boundsheet()
     SCTAB nScTab = nBdshtTab;
     if( nScTab > 0 )
     {
-        OSL_ENSURE( !pD->HasTable( nScTab ), "ImportExcel::Boundsheet - sheet exists already" );
-        pD->MakeTable( nScTab );
+        OSL_ENSURE( !rD.HasTable( nScTab ), "ImportExcel::Boundsheet - sheet exists already" );
+        rD.MakeTable( nScTab );
     }
 
     if( ( nGrbit & 0x0001 ) || ( nGrbit & 0x0002 ) )
-        pD->SetVisible( nScTab, false );
+        rD.SetVisible( nScTab, false );
 
-    if( !pD->RenameTab( nScTab, aName ) )
+    if( !rD.RenameTab( nScTab, aName ) )
     {
-        pD->CreateValidTabName( aName );
-        pD->RenameTab( nScTab, aName );
+        rD.CreateValidTabName( aName );
+        rD.RenameTab( nScTab, aName );
     }
 
     nBdshtTab++;
@@ -758,7 +759,7 @@ void ImportExcel::Hideobj()
 
     nHide = aIn.ReaduInt16();
 
-    ScViewOptions aOpts( pD->GetViewOptions() );
+    ScViewOptions aOpts( rD.GetViewOptions() );
 
     switch( nHide )
     {
@@ -783,7 +784,7 @@ void ImportExcel::Hideobj()
     aOpts.SetObjMode( VOBJ_TYPE_CHART, eChart );
     aOpts.SetObjMode( VOBJ_TYPE_DRAW,  eDraw );
 
-    pD->SetViewOptions( aOpts );
+    rD.SetViewOptions( aOpts );
 }
 
 void ImportExcel::Standardwidth()
@@ -842,7 +843,7 @@ void ImportExcel::Shrfmla()
 
     ScDocumentImport& rDoc = GetDocImport();
 
-    ScFormulaCell* pCell = new ScFormulaCell(pD, aPos, std::move(pResult));
+    ScFormulaCell* pCell = new ScFormulaCell(&rD, aPos, std::move(pResult));
     pCell->GetCode()->WrapReference(aPos, EXC_MAXCOL8, EXC_MAXROW8);
     rDoc.getDoc().CheckLinkFormulaNeedingCheck( *pCell->GetCode());
     rDoc.getDoc().EnsureTable(aPos.Tab());
@@ -1124,7 +1125,7 @@ void ImportExcel::TableOp()
     else
     {
         bTabTruncated = true;
-        GetTracer().TraceInvalidRow(nLastRow, pD->MaxRow());
+        GetTracer().TraceInvalidRow(nLastRow, rD.MaxRow());
     }
 }
 
@@ -1189,15 +1190,15 @@ void ImportExcel::EndSheet()
 void ImportExcel::NewTable()
 {
     SCTAB nTab = GetCurrScTab();
-    if( nTab > 0 && !pD->HasTable( nTab ) )
-        pD->MakeTable( nTab );
+    if( nTab > 0 && !rD.HasTable( nTab ) )
+        rD.MakeTable( nTab );
 
     if (nTab == 0 && GetBiff() == EXC_BIFF2)
     {
         // For Excel 2.1 Worksheet file, we need to set the file name as the
         // sheet name.
         INetURLObject aURL(GetDocUrl());
-        pD->RenameTab(0, aURL.getBase());
+        rD.RenameTab(0, aURL.getBase());
     }
 
     pExcRoot->pShrfmlaBuff->Clear();
@@ -1287,7 +1288,7 @@ void ImportExcel::PostDocLoad()
     // root data owns the extended document options -> create a new object
     GetDoc().SetExtDocOptions( std::make_unique<ScExtDocOptions>( GetExtDocOptions() ) );
 
-    const SCTAB     nLast = pD->GetTableCount();
+    const SCTAB     nLast = rD.GetTableCount();
     const ScRange*      p;
 
     if( pExcRoot->pPrintRanges->HasRanges() )
@@ -1297,17 +1298,17 @@ void ImportExcel::PostDocLoad()
             p = pExcRoot->pPrintRanges->First(n);
             if( p )
             {
-                pD->ClearPrintRanges( n );
+                rD.ClearPrintRanges( n );
                 while( p )
                 {
-                    pD->AddPrintRange( n, *p );
+                    rD.AddPrintRange( n, *p );
                     p = pExcRoot->pPrintRanges->Next();
                 }
             }
             else
             {
                 // #i4063# no print ranges -> print entire sheet
-                pD->SetPrintEntireSheet( n );
+                rD.SetPrintEntireSheet( n );
             }
         }
         GetTracer().TracePrintRange();
@@ -1326,15 +1327,15 @@ void ImportExcel::PostDocLoad()
 
             while( p )
             {
-                if( p->aStart.Col() == 0 && p->aEnd.Col() == pD->MaxCol() && bRowVirgin )
+                if( p->aStart.Col() == 0 && p->aEnd.Col() == rD.MaxCol() && bRowVirgin )
                 {
-                    pD->SetRepeatRowRange( n, std::unique_ptr<ScRange>(new ScRange(*p)) );
+                    rD.SetRepeatRowRange( n, std::unique_ptr<ScRange>(new ScRange(*p)) );
                     bRowVirgin = false;
                 }
 
-                if( p->aStart.Row() == 0 && p->aEnd.Row() == pD->MaxRow() && bColVirgin )
+                if( p->aStart.Row() == 0 && p->aEnd.Row() == rD.MaxRow() && bColVirgin )
                 {
-                    pD->SetRepeatColRange( n, std::unique_ptr<ScRange>(new ScRange(*p)) );
+                    rD.SetRepeatColRange( n, std::unique_ptr<ScRange>(new ScRange(*p)) );
                     bColVirgin = false;
                 }
 
