@@ -167,7 +167,7 @@ void ImportLotus::Userrange()
     Read( aScRange );
 
     LotusContext &rContext = aConv.getContext();
-    rContext.pRngNmBffWK3->Add( &rContext.rDoc, aName, aScRange );
+    rContext.pRngNmBffWK3->Add( rContext.rDoc, aName, aScRange );
 }
 
 void ImportLotus::Errcell()
