@@ -228,21 +228,21 @@ namespace {
 // Allow for a year's calendar (366).
 const sal_uInt16 MAXRECURSION = 400;
 
-typedef SCCOLROW(*DimensionSelector)(const ScDocument*, const ScAddress&, const ScSingleRefData&);
+typedef SCCOLROW(*DimensionSelector)(const ScDocument&, const ScAddress&, const ScSingleRefData&);
 
-SCCOLROW lcl_GetCol(const ScDocument* pDoc, const ScAddress& rPos, const ScSingleRefData& rData)
+SCCOLROW lcl_GetCol(const ScDocument& rDoc, const ScAddress& rPos, const ScSingleRefData& rData)
 {
-    return rData.toAbs(*pDoc, rPos).Col();
+    return rData.toAbs(rDoc, rPos).Col();
 }
 
-SCCOLROW lcl_GetRow(const ScDocument* pDoc, const ScAddress& rPos, const ScSingleRefData& rData)
+SCCOLROW lcl_GetRow(const ScDocument& rDoc, const ScAddress& rPos, const ScSingleRefData& rData)
 {
-    return rData.toAbs(*pDoc, rPos).Row();
+    return rData.toAbs(rDoc, rPos).Row();
 }
 
-SCCOLROW lcl_GetTab(const ScDocument* pDoc, const ScAddress& rPos, const ScSingleRefData& rData)
+SCCOLROW lcl_GetTab(const ScDocument& rDoc, const ScAddress& rPos, const ScSingleRefData& rData)
 {
-    return rData.toAbs(*pDoc, rPos).Tab();
+    return rData.toAbs(rDoc, rPos).Tab();
 }
 
 /** Check if both references span the same range in selected dimension.
@@ -253,8 +253,8 @@ lcl_checkRangeDimension(
     const ScAddress& rPos, const SingleDoubleRefProvider& rRef1, const SingleDoubleRefProvider& rRef2,
     const DimensionSelector aWhich)
 {
-    return aWhich(pDoc, rPos, rRef1.Ref1) == aWhich(pDoc, rPos, rRef2.Ref1) &&
-        aWhich(pDoc, rPos, rRef1.Ref2) == aWhich(pDoc, rPos, rRef2.Ref2);
+    return aWhich(*pDoc, rPos, rRef1.Ref1) == aWhich(*pDoc, rPos, rRef2.Ref1) &&
+        aWhich(*pDoc, rPos, rRef1.Ref2) == aWhich(*pDoc, rPos, rRef2.Ref2);
 }
 
 bool
@@ -312,18 +312,18 @@ lcl_checkRangeDimensions(
 
 class LessByReference
 {
-    const ScDocument* mpDoc;
+    const ScDocument& mrDoc;
     ScAddress         maPos;
     DimensionSelector maFunc;
 public:
-    LessByReference(const ScDocument* pDoc, const ScAddress& rPos, const DimensionSelector& rFunc) :
-        mpDoc(pDoc), maPos(rPos), maFunc(rFunc) {}
+    LessByReference(const ScDocument& rDoc, const ScAddress& rPos, const DimensionSelector& rFunc) :
+        mrDoc(rDoc), maPos(rPos), maFunc(rFunc) {}
 
     bool operator() (const formula::FormulaToken* pRef1, const formula::FormulaToken* pRef2)
     {
         const SingleDoubleRefProvider aRef1(*pRef1);
         const SingleDoubleRefProvider aRef2(*pRef2);
-        return maFunc(mpDoc, maPos, aRef1.Ref1) < maFunc(mpDoc, maPos, aRef2.Ref1);
+        return maFunc(mrDoc, maPos, aRef1.Ref1) < maFunc(mrDoc, maPos, aRef2.Ref1);
     }
 };
 
@@ -334,24 +334,24 @@ public:
  */
 class AdjacentByReference
 {
-    const ScDocument* mpDoc;
+    const ScDocument& mrDoc;
     ScAddress         maPos;
     DimensionSelector maFunc;
 public:
-    AdjacentByReference(const ScDocument* pDoc, const ScAddress& rPos, DimensionSelector aFunc) :
-        mpDoc(pDoc), maPos(rPos), maFunc(aFunc) {}
+    AdjacentByReference(const ScDocument& rDoc, const ScAddress& rPos, DimensionSelector aFunc) :
+        mrDoc(rDoc), maPos(rPos), maFunc(aFunc) {}
 
     bool operator() (const formula::FormulaToken* p1, const formula::FormulaToken* p2)
     {
         const SingleDoubleRefProvider aRef1(*p1);
         const SingleDoubleRefProvider aRef2(*p2);
-        return maFunc(mpDoc, maPos, aRef2.Ref1) - maFunc(mpDoc, maPos, aRef1.Ref2) == 1;
+        return maFunc(mrDoc, maPos, aRef2.Ref1) - maFunc(mrDoc, maPos, aRef1.Ref2) == 1;
     }
 };
 
 bool
 lcl_checkIfAdjacent(
-    const ScDocument* pDoc,
+    const ScDocument& rDoc,
     const ScAddress& rPos, const std::vector<formula::FormulaToken*>& rReferences, const DimensionSelector aWhich)
 {
     auto aBegin(rReferences.cbegin());
@@ -359,7 +359,7 @@ lcl_checkIfAdjacent(
     auto aBegin1(aBegin);
     ++aBegin1;
     --aEnd;
-    return std::equal(aBegin, aEnd, aBegin1, AdjacentByReference(pDoc, rPos, aWhich));
+    return std::equal(aBegin, aEnd, aBegin1, AdjacentByReference(rDoc, rPos, aWhich));
 }
 
 void
@@ -412,8 +412,8 @@ lcl_refListFormsOneRange(
         }
 
         // Sort the references by start of range
-        std::sort(rReferences.begin(), rReferences.end(), LessByReference(pDoc, rPos, aWhich));
-        if (lcl_checkIfAdjacent(pDoc, rPos, rReferences, aWhich))
+        std::sort(rReferences.begin(), rReferences.end(), LessByReference(*pDoc, rPos, aWhich));
+        if (lcl_checkIfAdjacent(*pDoc, rPos, rReferences, aWhich))
         {
             lcl_fillRangeFromRefList(*pDoc, rPos, rReferences, rRange);
             return true;
