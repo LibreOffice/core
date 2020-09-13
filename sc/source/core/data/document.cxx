@@ -3959,7 +3959,7 @@ void ScDocument::CalcAll()
 
 void ScDocument::CompileAll()
 {
-    sc::CompileFormulaContext aCxt(this);
+    sc::CompileFormulaContext aCxt(*this);
     for (const auto& a : maTabs)
     {
         if (a)
@@ -3977,7 +3977,7 @@ void ScDocument::CompileXML()
     ScProgress aProgress( GetDocumentShell(), ScResId(
                 STR_PROGRESS_CALCULATING ), GetXMLImportedFormulaCount(), true );
 
-    sc::CompileFormulaContext aCxt(this);
+    sc::CompileFormulaContext aCxt(*this);
 
     // set AutoNameCache to speed up automatic name lookup
     OSL_ENSURE( !pAutoNameCache, "AutoNameCache already set" );
@@ -4013,7 +4013,7 @@ void ScDocument::CompileXML()
 bool ScDocument::CompileErrorCells(FormulaError nErrCode)
 {
     bool bCompiled = false;
-    sc::CompileFormulaContext aCxt(this);
+    sc::CompileFormulaContext aCxt(*this);
     for (const auto& a : maTabs)
     {
         if (!a)
@@ -4032,7 +4032,7 @@ void ScDocument::CalcAfterLoad( bool bStartListening )
         return;     // the calculation is then only performed when inserting into the real document
 
     bCalcingAfterLoad = true;
-    sc::CompileFormulaContext aCxt(this);
+    sc::CompileFormulaContext aCxt(*this);
     {
         for (const auto& a : maTabs)
         {

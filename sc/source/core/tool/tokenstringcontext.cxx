@@ -104,14 +104,14 @@ TokenStringContext::TokenStringContext( const ScDocument* pDoc, formula::Formula
     }
 }
 
-CompileFormulaContext::CompileFormulaContext( ScDocument* pDoc ) :
-    mpDoc(pDoc), meGram(pDoc->GetGrammar())
+CompileFormulaContext::CompileFormulaContext( ScDocument& rDoc ) :
+    mrDoc(rDoc), meGram(rDoc.GetGrammar())
 {
     updateTabNames();
 }
 
-CompileFormulaContext::CompileFormulaContext( ScDocument* pDoc, formula::FormulaGrammar::Grammar eGram ) :
-    mpDoc(pDoc), meGram(eGram)
+CompileFormulaContext::CompileFormulaContext( ScDocument& rDoc, formula::FormulaGrammar::Grammar eGram ) :
+    mrDoc(rDoc), meGram(eGram)
 {
     updateTabNames();
 }
@@ -119,7 +119,7 @@ CompileFormulaContext::CompileFormulaContext( ScDocument* pDoc, formula::Formula
 void CompileFormulaContext::updateTabNames()
 {
     // Fetch all sheet names.
-    maTabNames = mpDoc->GetAllTableNames();
+    maTabNames = mrDoc.GetAllTableNames();
     {
         for (auto& rTabName : maTabNames)
             ScCompiler::CheckTabQuotes(rTabName, formula::FormulaGrammar::extractRefConvention(meGram));

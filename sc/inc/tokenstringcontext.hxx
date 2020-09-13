@@ -48,22 +48,22 @@ struct SC_DLLPUBLIC TokenStringContext
 
 class SC_DLLPUBLIC CompileFormulaContext
 {
-    ScDocument* mpDoc;
+    ScDocument& mrDoc;
     formula::FormulaGrammar::Grammar meGram;
     std::vector<OUString> maTabNames;
 
     void updateTabNames();
 
 public:
-    CompileFormulaContext( ScDocument* pDoc );
-    CompileFormulaContext( ScDocument* pDoc, formula::FormulaGrammar::Grammar eGram );
+    CompileFormulaContext( ScDocument& rDoc );
+    CompileFormulaContext( ScDocument& rDoc, formula::FormulaGrammar::Grammar eGram );
 
     formula::FormulaGrammar::Grammar getGrammar() const { return meGram;}
     void setGrammar( formula::FormulaGrammar::Grammar eGram );
 
     const std::vector<OUString>& getTabNames() const { return maTabNames;}
 
-    ScDocument* getDoc() { return mpDoc;}
+    ScDocument& getDoc() { return mrDoc;}
 };
 
 }

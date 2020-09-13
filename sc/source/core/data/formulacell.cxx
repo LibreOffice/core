@@ -1038,7 +1038,7 @@ OUString ScFormulaCell::GetFormula( sc::CompileFormulaContext& rCxt, const ScInt
     OUStringBuffer aBuf;
     if (pCode->GetCodeError() != FormulaError::NONE && !pCode->GetLen())
     {
-        ScTokenArray aCode(rCxt.getDoc());
+        ScTokenArray aCode(&rCxt.getDoc());
         aCode.AddToken( FormulaErrorToken( pCode->GetCodeError()));
         ScCompiler aComp(rCxt, aPos, aCode, false, false, pContext);
         aComp.CreateStringFromTokenArray(aBuf);
