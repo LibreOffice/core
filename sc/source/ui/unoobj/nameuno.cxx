@@ -331,7 +331,7 @@ void SAL_CALL ScNamedRangeObj::setTokens( const uno::Sequence<sheet::FormulaToke
     SolarMutexGuard aGuard;
     if( pDocShell )
     {
-        ScTokenArray aTokenArray(&pDocShell->GetDocument());
+        ScTokenArray aTokenArray(pDocShell->GetDocument());
         (void)ScTokenConversion::ConvertToTokenArray( pDocShell->GetDocument(), aTokenArray, rTokens );
         // GRAM_API for API compatibility.
         Modify_Impl( nullptr, &aTokenArray, nullptr, nullptr, nullptr, formula::FormulaGrammar::GRAM_API );

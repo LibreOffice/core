@@ -810,7 +810,7 @@ OUString ScViewFunc::GetAutoSumFormula( const ScRangeList& rRangeList, bool bSub
 {
     ScViewData& rViewData = GetViewData();
     ScDocument* pDoc = rViewData.GetDocument();
-    std::unique_ptr<ScTokenArray> pArray(new ScTokenArray(pDoc));
+    std::unique_ptr<ScTokenArray> pArray(new ScTokenArray(*pDoc));
 
     pArray->AddOpCode(bSubTotal ? ocSubTotal : eCode);
     pArray->AddOpCode(ocOpen);

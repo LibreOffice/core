@@ -813,7 +813,7 @@ class TransClipHandler
         aRef.InitAddress(aSrcPos); // Absolute reference.
         aRef.SetFlag3D(true);
 
-        ScTokenArray aArr(&mrClipTab.GetDoc());
+        ScTokenArray aArr(mrClipTab.GetDoc());
         aArr.AddSingleReference(aRef);
         return new ScFormulaCell(&mrClipTab.GetDoc(), rDestPos, aArr);
     }
@@ -912,7 +912,7 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 ScSingleRefData aRef;
                 aRef.InitAddress(ScAddress(nCol,nRow,nTab));
                 aRef.SetFlag3D(true);
-                ScTokenArray aArr(pDestDoc);
+                ScTokenArray aArr(*pDestDoc);
                 aArr.AddSingleReference( aRef );
 
                 pTransClip->SetFormulaCell(
