@@ -1386,7 +1386,7 @@ static OutputDevice* lcl_GetRenderDevice( const uno::Sequence<beans::PropertyVal
 }
 
 static bool lcl_ParseTarget( const OUString& rTarget, ScRange& rTargetRange, tools::Rectangle& rTargetRect,
-                        bool& rIsSheet, ScDocument* pDoc, SCTAB nSourceTab )
+                        bool& rIsSheet, ScDocument& rDoc, SCTAB nSourceTab )
 {
     // test in same order as in SID_CURRENTCELL execute
 
@@ -1397,28 +1397,28 @@ static bool lcl_ParseTarget( const OUString& rTarget, ScRange& rTargetRange, too
     bool bRangeValid = false;
     bool bRectValid = false;
 
-    if ( rTargetRange.Parse( rTarget, pDoc ) & ScRefFlags::VALID )
+    if ( rTargetRange.Parse( rTarget, &rDoc ) & ScRefFlags::VALID )
     {
         bRangeValid = true;             // range reference
     }
-    else if ( aAddress.Parse( rTarget, pDoc ) & ScRefFlags::VALID )
+    else if ( aAddress.Parse( rTarget, &rDoc ) & ScRefFlags::VALID )
     {
         rTargetRange = aAddress;
         bRangeValid = true;             // cell reference
     }
-    else if ( ScRangeUtil::MakeRangeFromName( rTarget, pDoc, nSourceTab, rTargetRange ) ||
-              ScRangeUtil::MakeRangeFromName( rTarget, pDoc, nSourceTab, rTargetRange, RUTL_DBASE ) )
+    else if ( ScRangeUtil::MakeRangeFromName( rTarget, &rDoc, nSourceTab, rTargetRange ) ||
+              ScRangeUtil::MakeRangeFromName( rTarget, &rDoc, nSourceTab, rTargetRange, RUTL_DBASE ) )
     {
         bRangeValid = true;             // named range or database range
     }
     else if ( comphelper::string::isdigitAsciiString(rTarget) &&
-              ( nNumeric = rTarget.toInt32() ) > 0 && nNumeric <= pDoc->MaxRow()+1 )
+              ( nNumeric = rTarget.toInt32() ) > 0 && nNumeric <= rDoc.MaxRow()+1 )
     {
         // row number is always mapped to cell A(row) on the same sheet
         rTargetRange = ScAddress( 0, static_cast<SCROW>(nNumeric-1), nSourceTab );     // target row number is 1-based
         bRangeValid = true;             // row number
     }
-    else if ( pDoc->GetTable( rTarget, nNameTab ) )
+    else if ( rDoc.GetTable( rTarget, nNameTab ) )
     {
         rTargetRange = ScAddress(0,0,nNameTab);
         bRangeValid = true;             // sheet name
@@ -1428,10 +1428,10 @@ static bool lcl_ParseTarget( const OUString& rTarget, ScRange& rTargetRange, too
     {
         // look for named drawing object
 
-        ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+        ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
         if ( pDrawLayer )
         {
-            SCTAB nTabCount = pDoc->GetTableCount();
+            SCTAB nTabCount = rDoc.GetTableCount();
             for (SCTAB i=0; i<nTabCount && !bRangeValid; i++)
             {
                 SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(i));
@@ -1445,7 +1445,7 @@ static bool lcl_ParseTarget( const OUString& rTarget, ScRange& rTargetRange, too
                         if ( ScDrawLayer::GetVisibleName( pObject ) == rTarget )
                         {
                             rTargetRect = pObject->GetLogicRect();              // 1/100th mm
-                            rTargetRange = pDoc->GetRange( i, rTargetRect );    // underlying cells
+                            rTargetRange = rDoc.GetRange( i, rTargetRect );    // underlying cells
                             bRangeValid = bRectValid = true;                    // rectangle is valid
                         }
                         pObject = aIter.Next();
@@ -1457,9 +1457,9 @@ static bool lcl_ParseTarget( const OUString& rTarget, ScRange& rTargetRange, too
     if ( bRangeValid && !bRectValid )
     {
         //  get rectangle for cell range
-        rTargetRect = pDoc->GetMMRect( rTargetRange.aStart.Col(), rTargetRange.aStart.Row(),
-                                       rTargetRange.aEnd.Col(),   rTargetRange.aEnd.Row(),
-                                       rTargetRange.aStart.Tab() );
+        rTargetRect = rDoc.GetMMRect( rTargetRange.aStart.Col(), rTargetRange.aStart.Row(),
+                                      rTargetRange.aEnd.Col(),   rTargetRange.aEnd.Row(),
+                                      rTargetRange.aStart.Tab() );
     }
 
     return bRangeValid;
@@ -2225,7 +2225,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
             ScRange aTargetRange;
             tools::Rectangle aTargetRect;      // 1/100th mm
             bool bIsSheet = false;
-            bool bValid = lcl_ParseTarget( aTarget, aTargetRange, aTargetRect, bIsSheet, &rDoc, nTab );
+            bool bValid = lcl_ParseTarget( aTarget, aTargetRange, aTargetRect, bIsSheet, rDoc, nTab );
 
             if ( bValid )
             {
