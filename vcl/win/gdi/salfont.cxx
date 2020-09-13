@@ -1605,17 +1605,12 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
     // check if the font has a CFF-table
     const DWORD nCffTag = CalcTag( "CFF " );
     const RawFontData aRawCffData( getHDC(), nCffTag );
-    if( aRawCffData.get() )
+    if (aRawCffData.get())
     {
         pWinFontData->UpdateFromHDC( getHDC() );
-
-        // provide a font subset from the CFF-table
-        FILE* pOutFile = fopen( aToFile.getStr(), "wb" );
-        rInfo.LoadFont( FontType::CFF_FONT, aRawCffData.get(), aRawCffData.size() );
-        bool bRC = rInfo.CreateFontSubset( FontType::TYPE1_PFB, pOutFile, nullptr,
-                pGlyphIds, pEncoding, nGlyphCount, pGlyphWidths );
-        fclose( pOutFile );
-        return bRC;
+        return SalGraphics::CreateCFFfontSubset(aRawCffData.get(), aRawCffData.size(), aToFile,
+                                                pGlyphIds, pEncoding, pGlyphWidths, nGlyphCount,
+                                                rInfo);
     }
 
     // get raw font file data
@@ -1635,60 +1630,12 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
 
     TTGlobalFontInfo aTTInfo;
     ::GetTTGlobalFontInfo( aSftTTF.get(), &aTTInfo );
-    rInfo.m_nFontType   = FontType::SFNT_TTF;
-    rInfo.m_aPSName     = ImplSalGetUniString( aTTInfo.psname );
-    rInfo.m_nAscent     = aTTInfo.winAscent;
-    rInfo.m_nDescent    = aTTInfo.winDescent;
-    rInfo.m_aFontBBox   = tools::Rectangle( Point( aTTInfo.xMin, aTTInfo.yMin ),
-                                    Point( aTTInfo.xMax, aTTInfo.yMax ) );
-    rInfo.m_nCapHeight  = aTTInfo.yMax; // Well ...
-
-    // subset TTF-glyphs and get their properties
-    // take care that subset fonts require the NotDef glyph in pos 0
-    int nOrigCount = nGlyphCount;
-    sal_uInt16    aShortIDs[ 256 ];
-    sal_uInt8 aTempEncs[ 256 ];
-
-    int nNotDef=-1, i;
-    for( i = 0; i < nGlyphCount; ++i )
-    {
-        aTempEncs[i] = pEncoding[i];
-        aShortIDs[i] = static_cast<sal_uInt16>(pGlyphIds[i]);
-        if (!aShortIDs[i])
-            if( nNotDef < 0 )
-                nNotDef = i; // first NotDef glyph found
-    }
-
-    if( nNotDef != 0 )
-    {
-        // add fake NotDef glyph if needed
-        if( nNotDef < 0 )
-            nNotDef = nGlyphCount++;
-
-        // NotDef glyph must be in pos 0 => swap glyphids
-        aShortIDs[ nNotDef ] = aShortIDs[0];
-        aTempEncs[ nNotDef ] = aTempEncs[0];
-        aShortIDs[0] = 0;
-        aTempEncs[0] = 0;
-    }
-    SAL_WARN_IF( nGlyphCount >= 257, "vcl", "too many glyphs for subsetting" );
-
-    // fill pWidth array
-    std::unique_ptr<sal_uInt16[]> pMetrics =
-        ::GetTTSimpleGlyphMetrics( aSftTTF.get(), aShortIDs, nGlyphCount, aIFSD.mbVertical );
-    if( !pMetrics )
-        return false;
-    sal_uInt16 nNotDefAdv = pMetrics[0];
-    pMetrics[0]         = pMetrics[nNotDef];
-    pMetrics[nNotDef]   = nNotDefAdv;
-    for( i = 0; i < nOrigCount; ++i )
-        pGlyphWidths[i] = pMetrics[i];
-    pMetrics.reset();
+    OUString aPSName = ImplSalGetUniString(aTTInfo.psname);
+    FillFontSubsetInfo(aTTInfo, aPSName, rInfo);
 
     // write subset into destination file
-    nRC = ::CreateTTFromTTGlyphs( aSftTTF.get(), aToFile.getStr(), aShortIDs,
-            aTempEncs, nGlyphCount );
-    return (nRC == SFErrCodes::Ok);
+    return SalGraphics::CreateTTFfontSubset(*aSftTTF.get(), aToFile, aIFSD.mbVertical, pGlyphIds,
+                                            pEncoding, pGlyphWidths, nGlyphCount);
 }
 
 const void* WinSalGraphics::GetEmbedFontData(const PhysicalFontFace* pFont, long* pDataLen)
