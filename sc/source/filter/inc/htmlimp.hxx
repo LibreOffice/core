@@ -25,7 +25,7 @@
 class ScHTMLImport : public ScEEImport
 {
 private:
-    static void         InsertRangeName( ScDocument* pDoc, const OUString& rName, const ScRange& rRange );
+    static void         InsertRangeName( ScDocument& rDoc, const OUString& rName, const ScRange& rRange );
 
 public:
     ScHTMLImport( ScDocument* pDoc, const OUString& rBaseURL, const ScRange& rRange, bool bCalcWidthHeight );

@@ -98,16 +98,16 @@ ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const S
         mpParser.reset( new ScHTMLQueryParser( mpEngine.get(), pDocP ));
 }
 
-void ScHTMLImport::InsertRangeName( ScDocument* pDoc, const OUString& rName, const ScRange& rRange )
+void ScHTMLImport::InsertRangeName( ScDocument& rDoc, const OUString& rName, const ScRange& rRange )
 {
     ScComplexRefData aRefData;
     aRefData.InitRange( rRange );
     aRefData.Ref1.SetFlag3D( true );
     aRefData.Ref2.SetFlag3D( aRefData.Ref2.Tab() != aRefData.Ref1.Tab() );
-    ScTokenArray aTokArray(*pDoc);
+    ScTokenArray aTokArray(rDoc);
     aTokArray.AddDoubleReference( aRefData );
-    ScRangeData* pRangeData = new ScRangeData( pDoc, rName, aTokArray );
-    pDoc->GetRangeName()->insert( pRangeData );
+    ScRangeData* pRangeData = new ScRangeData( &rDoc, rName, aTokArray );
+    rDoc.GetRangeName()->insert( pRangeData );
 }
 
 void ScHTMLImport::WriteToDocument(
@@ -160,10 +160,10 @@ void ScHTMLImport::WriteToDocument(
     ScRange aNewRange( maRange.aStart );
     aNewRange.aEnd.IncCol( static_cast<SCCOL>(pGlobTable->GetDocSize( tdCol )) - 1 );
     aNewRange.aEnd.IncRow( pGlobTable->GetDocSize( tdRow ) - 1 );
-    InsertRangeName( mpDoc, ScfTools::GetHTMLDocName(), aNewRange );
+    InsertRangeName( *mpDoc, ScfTools::GetHTMLDocName(), aNewRange );
 
     // 2 - all tables
-    InsertRangeName( mpDoc, ScfTools::GetHTMLTablesName(), ScRange( maRange.aStart ) );
+    InsertRangeName( *mpDoc, ScfTools::GetHTMLTablesName(), ScRange( maRange.aStart ) );
 
     // 3 - single tables
     SCCOL nColDiff = maRange.aStart.Col();
@@ -181,13 +181,13 @@ void ScHTMLImport::WriteToDocument(
             assert(!"can't move");
         }
         // insert table number as name
-        InsertRangeName( mpDoc, ScfTools::GetNameFromHTMLIndex( nTableId ), aNewRange );
+        InsertRangeName( *mpDoc, ScfTools::GetNameFromHTMLIndex( nTableId ), aNewRange );
         // insert table id as name
         if (!pTable->GetTableName().isEmpty())
         {
             OUString aName( ScfTools::GetNameFromHTMLName( pTable->GetTableName() ) );
             if (!mpDoc->GetRangeName()->findByUpperName(ScGlobal::getCharClassPtr()->uppercase(aName)))
-                InsertRangeName( mpDoc, aName, aNewRange );
+                InsertRangeName( *mpDoc, aName, aNewRange );
         }
     }
 }
