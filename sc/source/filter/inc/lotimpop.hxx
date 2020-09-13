@@ -72,7 +72,7 @@ private:
     inline void         Skip( const sal_uInt16 nNumBytes );
 
 public:
-    ImportLotus(LotusContext& rContext, SvStream&, ScDocument*, rtl_TextEncoding eSrc);
+    ImportLotus(LotusContext& rContext, SvStream&, rtl_TextEncoding eSrc);
 
     virtual             ~ImportLotus() override;
 
