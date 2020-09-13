@@ -1551,6 +1551,31 @@ void SwPostItMgr::Delete(sal_uInt32 nPostItId)
     LayoutPostIts();
 }
 
+void SwPostItMgr::ToggleResolved(sal_uInt32 nPostItId)
+{
+    mpWrtShell->StartAllAction();
+
+    SwRewriter aRewriter;
+    aRewriter.AddRule(UndoArg1, SwResId(STR_CONTENT_TYPE_SINGLE_POSTIT));
+
+    // We have no undo ID at the moment.
+
+    IsPostitFieldWithPostitId aFilter(nPostItId);
+    FieldDocWatchingStack aStack(mvPostItFields, *mpView->GetDocShell(), aFilter);
+    const SwFormatField* pField = aStack.pop();
+    // pField now contains our AnnotationWin object
+    if (pField) {
+        SwAnnotationWin* pWin = GetSidebarWin(pField);
+        pWin->ToggleResolved();
+    }
+
+    PrepareView();
+    mpWrtShell->EndAllAction();
+    mbLayout = true;
+    CalcRects();
+    LayoutPostIts();
+}
+
 void SwPostItMgr::ToggleResolvedForThread(sal_uInt32 nPostItId)
 {
     mpWrtShell->StartAllAction();
@@ -2424,7 +2449,7 @@ void SwPostItMgr::ShowHideResolvedNotes(bool visible) {
     {
         for(auto b = pPage->mvSidebarItems.begin(); b!= pPage->mvSidebarItems.end(); ++b)
         {
-            if ((*b)->pPostIt->IsThreadResolved())
+            if ((*b)->pPostIt->IsResolved())
             {
                 (*b)->pPostIt->SetResolved(true);
                 (*b)->pPostIt->GetSidebarItem().bShow = visible;
