@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EMBEDDEDOBJ_SOURCE_MSOLE_MTNOTIFICATION_HXX
-#define INCLUDED_EMBEDDEDOBJ_SOURCE_MSOLE_MTNOTIFICATION_HXX
+#pragma once
 
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/awt/XCallback.hpp>
@@ -45,7 +44,5 @@ public:
     MainThreadNotificationRequest( const ::rtl::Reference< OleEmbeddedObject >& xObj, sal_uInt16 nNotificationType, sal_uInt32 nAspect = 0 );
     ~MainThreadNotificationRequest() override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

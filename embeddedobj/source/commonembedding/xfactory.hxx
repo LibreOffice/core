@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EMBEDDEDOBJ_SOURCE_COMMONEMBEDDING_XFACTORY_HXX
-#define INCLUDED_EMBEDDEDOBJ_SOURCE_COMMONEMBEDDING_XFACTORY_HXX
+#pragma once
 
 #include <com/sun/star/embed/XEmbeddedObjectCreator.hpp>
 #include <com/sun/star/embed/XLinkFactory.hpp>
@@ -91,7 +90,5 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
