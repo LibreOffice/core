@@ -219,7 +219,6 @@ bool Qt5Graphics::CreateFontSubset(const OUString& rToFile, const PhysicalFontFa
                                    const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
                                    sal_Int32* pGlyphWidths, int nGlyphCount, FontSubsetInfo& rInfo)
 {
-    // prepare the requested file name for writing the font-subset file
     OUString aSysPath;
     if (osl_File_E_None != osl_getSystemPathFromFileURL(rToFile.pData, &aSysPath.pData))
         return false;
@@ -228,23 +227,16 @@ bool Qt5Graphics::CreateFontSubset(const OUString& rToFile, const PhysicalFontFa
     const Qt5FontFace* pQt5FontFace = static_cast<const Qt5FontFace*>(pFontFace);
     const QFont aFont = pQt5FontFace->CreateFont();
     const QRawFont aRawFont(QRawFont::fromFont(aFont));
-    const QFontInfo aFontInfo(aFont);
     const OString aToFile(OUStringToOString(aSysPath, osl_getThreadTextEncoding()));
-    const int nOrigGlyphCount = nGlyphCount;
 
+    // handle CFF-subsetting
     QByteArray aCFFtable = aRawFont.fontTable("CFF ");
     if (!aCFFtable.isEmpty())
-    {
-        FILE* pOutFile = fopen(aToFile.getStr(), "wb");
-        rInfo.LoadFont(FontType::CFF_FONT, reinterpret_cast<const sal_uInt8*>(aCFFtable.data()),
-                       aCFFtable.size());
-        bool bRet = rInfo.CreateFontSubset(FontType::TYPE1_PFB, pOutFile, nullptr, pGlyphIds,
-                                           pEncoding, nGlyphCount, pGlyphWidths);
-        fclose(pOutFile);
-        return bRet;
-    }
+        return SalGraphics::CreateCFFfontSubset(
+            reinterpret_cast<const sal_uInt8*>(aCFFtable.data()), aCFFtable.size(), aToFile,
+            pGlyphIds, pEncoding, pGlyphWidths, nGlyphCount, rInfo);
 
-    // get details about the subsetted font
+    // fill details about the subsetted font
     rInfo.m_nFontType = FontType::SFNT_TTF;
     rInfo.m_aPSName = toOUString(aRawFont.familyName());
     rInfo.m_nCapHeight = aRawFont.capHeight();
@@ -257,49 +249,8 @@ bool Qt5Graphics::CreateFontSubset(const OUString& rToFile, const PhysicalFontFa
     if (GetTTGlobalFontHeadInfo(&aTTF, nXmin, nYmin, nXmax, nYmax, nMacStyleFlags))
         rInfo.m_aFontBBox = tools::Rectangle(Point(nXmin, nYmin), Point(nXmax, nYmax));
 
-    sal_uInt16 aShortIDs[nGlyphCount + 1];
-    sal_uInt8 aTempEncs[nGlyphCount + 1];
-
-    int nNotDef = -1;
-
-    for (int i = 0; i < nGlyphCount; ++i)
-    {
-        aTempEncs[i] = pEncoding[i];
-
-        sal_GlyphId aGlyphId(pGlyphIds[i]);
-        aShortIDs[i] = static_cast<sal_uInt16>(aGlyphId);
-        if (!aGlyphId && nNotDef < 0)
-            nNotDef = i; // first NotDef glyph found
-    }
-
-    if (nNotDef != 0)
-    {
-        // add fake NotDef glyph if needed
-        if (nNotDef < 0)
-            nNotDef = nGlyphCount++;
-        // NotDef glyph must be in pos 0 => swap glyphids
-        aShortIDs[nNotDef] = aShortIDs[0];
-        aTempEncs[nNotDef] = aTempEncs[0];
-        aShortIDs[0] = 0;
-        aTempEncs[0] = 0;
-    }
-
-    std::unique_ptr<sal_uInt16[]> pGlyphMetrics
-        = GetTTSimpleGlyphMetrics(&aTTF, aShortIDs, nGlyphCount, false);
-    if (!pGlyphMetrics)
-        return false;
-
-    sal_uInt16 nNotDefAdv = pGlyphMetrics[0];
-    pGlyphMetrics[0] = pGlyphMetrics[nNotDef];
-    pGlyphMetrics[nNotDef] = nNotDefAdv;
-
-    for (int i = 0; i < nOrigGlyphCount; ++i)
-        pGlyphWidths[i] = pGlyphMetrics[i];
-
-    // write subset into destination file
-    vcl::SFErrCodes nRC
-        = vcl::CreateTTFromTTGlyphs(&aTTF, aToFile.getStr(), aShortIDs, aTempEncs, nGlyphCount);
-    return (nRC == vcl::SFErrCodes::Ok);
+    return SalGraphics::CreateTTFfontSubset(aTTF, aToFile, false /* use FontSelectPattern? */,
+                                            pGlyphIds, pEncoding, pGlyphWidths, nGlyphCount);
 }
 
 const void* Qt5Graphics::GetEmbedFontData(const PhysicalFontFace*, long* /*pDataLen*/)
