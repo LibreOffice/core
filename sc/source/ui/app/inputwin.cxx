@@ -2466,7 +2466,7 @@ void ScPosWnd::DoEnter()
                         ScRangeName aNewRanges( *pNames );
                         ScAddress aCursor( rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo() );
                         OUString aContent(aSelection.Format(rDoc, ScRefFlags::RANGE_ABS_3D, rDoc.GetAddressConvention()));
-                        ScRangeData* pNew = new ScRangeData( &rDoc, aText, aContent, aCursor );
+                        ScRangeData* pNew = new ScRangeData( rDoc, aText, aContent, aCursor );
                         if ( aNewRanges.insert(pNew) )
                         {
                             pDocShell->GetDocFunc().ModifyRangeNames( aNewRanges );

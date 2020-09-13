@@ -193,7 +193,7 @@ void ScNamedRangeObj::Modify_Impl( const OUString* pNewName, const ScTokenArray*
     if (pNewTokens)
         pNew = new ScRangeData( &rDoc, aInsName, *pNewTokens, aPos, nType );
     else
-        pNew = new ScRangeData( &rDoc, aInsName, aContent, aPos, nType, eGrammar );
+        pNew = new ScRangeData( rDoc, aInsName, aContent, aPos, nType, eGrammar );
 
     pNew->SetIndex( pOld->GetIndex() );
 
@@ -492,7 +492,7 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const OUString& aName,
         {
             std::unique_ptr<ScRangeName> pNewRanges(new ScRangeName( *pNames ));
             // GRAM_API for API compatibility.
-            ScRangeData* pNew = new ScRangeData( &rDoc, aName, aContent,
+            ScRangeData* pNew = new ScRangeData( rDoc, aName, aContent,
                                                 aPos, nNewType,formula::FormulaGrammar::GRAM_API );
             if ( pNewRanges->insert(pNew) )
             {

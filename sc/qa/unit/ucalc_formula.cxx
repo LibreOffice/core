@@ -115,7 +115,7 @@ void Test::testFormulaCreateStringFromTokens()
     for (size_t i = 0; i < SAL_N_ELEMENTS(aNames); ++i)
     {
         ScRangeData* pName = new ScRangeData(
-            m_pDoc, OUString::createFromAscii(aNames[i].pName), OUString::createFromAscii(aNames[i].pExpr),
+            *m_pDoc, OUString::createFromAscii(aNames[i].pName), OUString::createFromAscii(aNames[i].pExpr),
             ScAddress(0,0,0), ScRangeData::Type::Name, formula::FormulaGrammar::GRAM_NATIVE);
 
         if (aNames[i].bGlobal)
@@ -3304,7 +3304,7 @@ void Test::testFormulaRefUpdateName()
     ScRangeName* pGlobalNames = m_pDoc->GetRangeName();
     CPPUNIT_ASSERT_MESSAGE("Failed to obtain global named expression object.", pGlobalNames);
     ScRangeData* pName = new ScRangeData(
-        m_pDoc, "ToLeft", "RC[-1]", ScAddress(2,1,0),
+        *m_pDoc, "ToLeft", "RC[-1]", ScAddress(2,1,0),
         ScRangeData::Type::Name, formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1);
 
     bool bInserted = pGlobalNames->insert(pName);
@@ -3347,7 +3347,7 @@ void Test::testFormulaRefUpdateName()
 
     // Insert a new named expression that references these values as absolute range.
     pName = new ScRangeData(
-        m_pDoc, "MyRange", "$B$10:$B$12", ScAddress(0,0,0), ScRangeData::Type::Name, formula::FormulaGrammar::GRAM_NATIVE);
+        *m_pDoc, "MyRange", "$B$10:$B$12", ScAddress(0,0,0), ScRangeData::Type::Name, formula::FormulaGrammar::GRAM_NATIVE);
     bInserted = pGlobalNames->insert(pName);
     CPPUNIT_ASSERT_MESSAGE("Failed to insert a new name.", bInserted);
 
@@ -3404,7 +3404,7 @@ void Test::testFormulaRefUpdateName()
     pGlobalNames->clear();
 
     pName = new ScRangeData(
-        m_pDoc, "MyRange", "$B$1:$C$6", ScAddress(0,0,0), ScRangeData::Type::Name, formula::FormulaGrammar::GRAM_NATIVE);
+        *m_pDoc, "MyRange", "$B$1:$C$6", ScAddress(0,0,0), ScRangeData::Type::Name, formula::FormulaGrammar::GRAM_NATIVE);
     bInserted = pGlobalNames->insert(pName);
     CPPUNIT_ASSERT_MESSAGE("Failed to insert a new name.", bInserted);
     pName->GetSymbol(aExpr);
@@ -3871,7 +3871,7 @@ void Test::testFormulaRefUpdateNameCopySheet()
 
     m_pDoc->InsertTab(0, "Test2");
     // Local name referencing sheet Test2.
-    bInserted = m_pDoc->GetRangeName(0)->insert( new ScRangeData( m_pDoc, "localname", "$Test2.$A$1"));
+    bInserted = m_pDoc->GetRangeName(0)->insert( new ScRangeData( *m_pDoc, "localname", "$Test2.$A$1"));
     CPPUNIT_ASSERT(bInserted);
     m_pDoc->SetString(ScAddress(0,0,0), "=SHEET()");
     m_pDoc->SetString(ScAddress(1,0,0), "=localname");
@@ -6061,7 +6061,7 @@ void Test::testFunc_MATCH_INDIRECT()
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calculation.
 
     ScRangeName* pGlobalNames = m_pDoc->GetRangeName();
-    ScRangeData* pRangeData = new ScRangeData( m_pDoc, "RoleAssignment", "$D$4:$D$13");
+    ScRangeData* pRangeData = new ScRangeData( *m_pDoc, "RoleAssignment", "$D$4:$D$13");
     pGlobalNames->insert(pRangeData);
 
     // D6: data to match, in 3rd row of named range.
@@ -6614,7 +6614,7 @@ void Test::testExternalRangeName()
     rExtDoc.SetValue(0, 0, 0, 123.456);
 
     ScRangeName* pRangeName = rExtDoc.GetRangeName();
-    ScRangeData* pRangeData = new ScRangeData(&rExtDoc, "ExternalName",
+    ScRangeData* pRangeData = new ScRangeData(rExtDoc, "ExternalName",
             "$Data1.$A$1");
     pRangeName->insert(pRangeData);
 
@@ -7116,7 +7116,7 @@ void Test::testFuncTableRef()
             // range definition to test later use of [#This Row] results in
             // proper rows.
             ScRangeData* pName = new ScRangeData(
-                    m_pDoc, OUString::createFromAscii(aNames[i].pName), OUString::createFromAscii(aNames[i].pExpr),
+                    *m_pDoc, OUString::createFromAscii(aNames[i].pName), OUString::createFromAscii(aNames[i].pExpr),
                     ScAddress(2,4,0), ScRangeData::Type::Name, formula::FormulaGrammar::GRAM_NATIVE);
             bool bInserted = pGlobalNames->insert(pName);
             CPPUNIT_ASSERT_MESSAGE(
@@ -7290,7 +7290,7 @@ void Test::testFuncTableRef()
             // range definition to test later use of [#This Row] results in
             // proper rows.
             ScRangeData* pName = new ScRangeData(
-                    m_pDoc, OUString::createFromAscii(aHlNames[i].pName), OUString::createFromAscii(aHlNames[i].pExpr),
+                    *m_pDoc, OUString::createFromAscii(aHlNames[i].pName), OUString::createFromAscii(aHlNames[i].pExpr),
                     ScAddress(6,12,0), ScRangeData::Type::Name, formula::FormulaGrammar::GRAM_NATIVE);
             bool bInserted = pGlobalNames->insert(pName);
             CPPUNIT_ASSERT_MESSAGE(
@@ -8673,9 +8673,9 @@ void Test::testIntersectionOpExcel()
 
     ScRangeName* pGlobalNames = m_pDoc->GetRangeName();
     // Horizontal cell range covering C2.
-    pGlobalNames->insert( new ScRangeData( m_pDoc, "horz", "$B$2:$D$2"));
+    pGlobalNames->insert( new ScRangeData( *m_pDoc, "horz", "$B$2:$D$2"));
     // Vertical cell range covering C2.
-    pGlobalNames->insert( new ScRangeData( m_pDoc, "vert", "$C$1:$C$3"));
+    pGlobalNames->insert( new ScRangeData( *m_pDoc, "vert", "$C$1:$C$3"));
     // Data in C2.
     m_pDoc->SetValue(2,1,0, 1.0);
 
