@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_MODELIMPL_HXX
-#define INCLUDED_DBACCESS_SOURCE_CORE_INC_MODELIMPL_HXX
+#pragma once
 
 #include "ContentHelper.hxx"
 #include "documentevents.hxx"
@@ -539,7 +538,5 @@ public:
 };
 
 }   // namespace dbaccess
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

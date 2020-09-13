@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_DBACCESS_SOURCE_CORE_API_CACHESET_HXX
-#define INCLUDED_DBACCESS_SOURCE_CORE_API_CACHESET_HXX
+#pragma once
 
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
@@ -169,6 +168,5 @@ namespace dbaccess
         virtual void fillMissingValues(ORowSetValueVector::Vector& io_aRow) const;
     };
 }
-#endif // INCLUDED_DBACCESS_SOURCE_CORE_API_CACHESET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_DBACCESS_SOURCE_CORE_API_ROWSETCACHE_HXX
-#define INCLUDED_DBACCESS_SOURCE_CORE_API_ROWSETCACHE_HXX
+#pragma once
 
 #include <connectivity/CommonTools.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -187,6 +186,5 @@ namespace dbaccess
         void reset(const css::uno::Reference< css::sdbc::XResultSet>& _xDriverSet);
     };
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
