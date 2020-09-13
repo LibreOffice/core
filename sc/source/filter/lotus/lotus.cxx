@@ -28,7 +28,7 @@
 #include <filtopt.hxx>
 #include <ftools.hxx>
 
-ErrCode ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocument* pDocument, rtl_TextEncoding eSrc )
+ErrCode ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocument& rDocument, rtl_TextEncoding eSrc )
 {
     SvStream* pStream = rMedium.GetInStream();
     if (!pStream)
@@ -38,7 +38,7 @@ ErrCode ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocume
 
     pStream->SetBufferSize( 32768 );
 
-    LotusContext aContext(*pDocument, eSrc);
+    LotusContext aContext(rDocument, eSrc);
 
     ImportLotus aLotusImport(aContext, *pStream, eSrc);
 
@@ -53,7 +53,7 @@ ErrCode ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocume
     {
         pStream->Seek( 0 );
         pStream->SetBufferSize( 32768 );
-        assert(pDocument == &aContext.rDoc);
+        assert(&rDocument == &aContext.rDoc);
         eRet = ScImportLotus123old(aContext, *pStream, eSrc);
         pStream->SetBufferSize( 0 );
         return eRet;
