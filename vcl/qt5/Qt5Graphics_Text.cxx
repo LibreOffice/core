@@ -231,6 +231,18 @@ bool Qt5Graphics::CreateFontSubset(const OUString& rToFile, const PhysicalFontFa
     const OString aToFile(OUStringToOString(aSysPath, osl_getThreadTextEncoding()));
     const int nOrigGlyphCount = nGlyphCount;
 
+    QByteArray aCFFtable = aRawFont.fontTable("CFF ");
+    if (!aCFFtable.isEmpty())
+    {
+        FILE* pOutFile = fopen(aToFile.getStr(), "wb");
+        rInfo.LoadFont(FontType::CFF_FONT, reinterpret_cast<const sal_uInt8*>(aCFFtable.data()),
+                       aCFFtable.size());
+        bool bRet = rInfo.CreateFontSubset(FontType::TYPE1_PFB, pOutFile, nullptr, pGlyphIds,
+                                           pEncoding, nGlyphCount, pGlyphWidths);
+        fclose(pOutFile);
+        return bRet;
+    }
+
     // get details about the subsetted font
     rInfo.m_nFontType = FontType::SFNT_TTF;
     rInfo.m_aPSName = toOUString(aRawFont.familyName());
