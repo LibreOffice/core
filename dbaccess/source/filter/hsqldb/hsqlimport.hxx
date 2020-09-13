@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_HSQLIMPORT_HXX
-#define INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_HSQLIMPORT_HXX
+#pragma once
 
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
@@ -57,7 +56,5 @@ public:
     void importHsqlDatabase(weld::Window* pParent);
 };
 }
-
-#endif // INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_HSQLIMPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

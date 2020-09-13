@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_HSQLBINARYNODE_HXX
-#define INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_HSQLBINARYNODE_HXX
+#pragma once
 
 #include <vector>
 
@@ -60,7 +59,5 @@ public:
                                        sal_Int32 nIndexCount);
 };
 }
-
-#endif // INCLUDED_DBACCESS_SOURCE_FILTER_HSQLDB_HSQLBINARYNODE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLSTYLEIMPORT_HXX
-#define INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLSTYLEIMPORT_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -96,6 +95,5 @@ namespace dbaxml
         sal_Int32 GetIndex(const sal_Int16 nContextID);
     };
 } // dbaxml
-#endif // INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLSTYLEIMPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
