@@ -109,7 +109,7 @@ ErrCode ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSty
                 std::unique_ptr<ScTokenArray> pArray;
 
                 QProToSc aConv(*mpStream, pDoc->GetSharedStringPool(), aAddr);
-                if (ConvErr::OK != aConv.Convert( pDoc, pArray ))
+                if (ConvErr::OK != aConv.Convert( *pDoc, pArray ))
                     eRet = SCERR_IMPORT_FORMAT;
                 else
                 {

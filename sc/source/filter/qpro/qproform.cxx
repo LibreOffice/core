@@ -188,7 +188,7 @@ do { \
         break;          /* switch */ \
     }
 
-ConvErr QProToSc::Convert( const ScDocument* pDoc, std::unique_ptr<ScTokenArray>& pArray )
+ConvErr QProToSc::Convert( const ScDocument& rDoc, std::unique_ptr<ScTokenArray>& pArray )
 {
     sal_uInt8 nFmla[ nBufSize ];
     sal_uInt8 nArgArray[ nBufSize ] = {0};
@@ -320,17 +320,17 @@ ConvErr QProToSc::Convert( const ScDocument* pDoc, std::unique_ptr<ScTokenArray>
             case FT_Cref : // Single cell reference
                 maIn.ReadUInt16( nNote ).ReadSChar( nCol ).ReadSChar( nPage ).ReadUInt16( nRelBits );
                 SAFEREAD_OR_BREAK( maIn, i, nRef, eRet, ConvErr::Count);
-                ReadSRD( pDoc, aSRD, nPage, nCol, nRelBits );
+                ReadSRD( &rDoc, aSRD, nPage, nCol, nRelBits );
                 aStack << aPool.Store( aSRD );
                 break;
 
             case FT_Range: // Block reference
                 maIn.ReadUInt16( nNote ).ReadSChar( nCol ).ReadSChar( nPage ).ReadUInt16( nRelBits );
                 SAFEREAD_OR_BREAK( maIn, i, nRef, eRet, ConvErr::Count);
-                ReadSRD( pDoc, aCRD.Ref1, nPage, nCol, nRelBits );
+                ReadSRD( &rDoc, aCRD.Ref1, nPage, nCol, nRelBits );
                 maIn.ReadSChar( nCol ).ReadSChar( nPage ).ReadUInt16( nRelBits );
                 SAFEREAD_OR_BREAK( maIn, i, nRef, eRet, ConvErr::Count);
-                ReadSRD( pDoc, aCRD.Ref2, nPage, nCol, nRelBits );
+                ReadSRD( &rDoc, aCRD.Ref2, nPage, nCol, nRelBits );
                 // Sheet name of second corner is not displayed if identical
                 if (aCRD.Ref1.IsFlag3D() && aCRD.Ref1.Tab() == aCRD.Ref2.Tab() &&
                         aCRD.Ref1.IsTabRel() == aCRD.Ref2.IsTabRel())
@@ -391,7 +391,7 @@ ConvErr QProToSc::Convert( const ScDocument* pDoc, std::unique_ptr<ScTokenArray>
         }
         i++;
     }
-    pArray = aPool.GetTokenArray(*pDoc, aStack.Get());
+    pArray = aPool.GetTokenArray(rDoc, aStack.Get());
     return eRet;
 }
 
