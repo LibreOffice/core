@@ -38,7 +38,7 @@ ErrCode ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocume
 
     pStream->SetBufferSize( 32768 );
 
-    LotusContext aContext(pDocument, eSrc);
+    LotusContext aContext(*pDocument, eSrc);
 
     ImportLotus aLotusImport(aContext, *pStream, pDocument, eSrc);
 
@@ -53,7 +53,7 @@ ErrCode ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocume
     {
         pStream->Seek( 0 );
         pStream->SetBufferSize( 32768 );
-        assert(pDocument == aContext.pDoc);
+        assert(pDocument == &aContext.rDoc);
         eRet = ScImportLotus123old(aContext, *pStream, eSrc);
         pStream->SetBufferSize( 0 );
         return eRet;
@@ -81,11 +81,11 @@ ErrCode ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocume
     return eRet;
 }
 
-LotusContext::LotusContext(ScDocument* pDocP, rtl_TextEncoding eQ)
+LotusContext::LotusContext(ScDocument& rDocP, rtl_TextEncoding eQ)
     : eTyp(eWK_UNKNOWN)
     , bEOF(false)
     , eCharset(eQ)
-    , pDoc(pDocP)
+    , rDoc(rDocP)
     , pAttrRight(nullptr)
     , pAttrLeft(nullptr)
     , pAttrCenter(nullptr)
@@ -95,7 +95,7 @@ LotusContext::LotusContext(ScDocument* pDocP, rtl_TextEncoding eQ)
     , maRangeNames()
     , eFirstType( Lotus123Typ::X)
     , eActType( Lotus123Typ::X)
-    , pRngNmBffWK3( new RangeNameBufferWK3(*pDocP) )
+    , pRngNmBffWK3( new RangeNameBufferWK3(rDocP) )
     , maAttrTable( *this )
 {
 }

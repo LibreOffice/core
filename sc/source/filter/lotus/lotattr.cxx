@@ -50,7 +50,7 @@ LotAttrCache::ENTRY::~ENTRY ()
 LotAttrCache::LotAttrCache (LotusContext& rContext)
     : mrContext(rContext)
 {
-    pDocPool = rContext.pDoc->GetPool();
+    pDocPool = rContext.rDoc.GetPool();
 
     pColTab.reset( new Color [ 8 ] );
     pColTab[ 0 ] = COL_WHITE;
@@ -214,12 +214,12 @@ void LotAttrCol::SetAttr( const ScDocument* pDoc, const SCROW nRow, const ScPatt
 
 void LotAttrCol::Apply(LotusContext& rContext, const SCCOL nColNum, const SCTAB nTabNum)
 {
-    ScDocument*     pDoc = rContext.pDoc;
+    ScDocument& rDoc = rContext.rDoc;
 
     for (const auto& rxEntry : aEntries)
     {
-        pDoc->ApplyPatternAreaTab(nColNum, rxEntry->nFirstRow, nColNum, rxEntry->nLastRow,
-                                  nTabNum, *(rxEntry->pPattAttr));
+        rDoc.ApplyPatternAreaTab(nColNum, rxEntry->nFirstRow, nColNum, rxEntry->nLastRow,
+                                 nTabNum, *(rxEntry->pPattAttr));
     }
 }
 
@@ -238,13 +238,13 @@ void LotAttrTable::SetAttr( LotusContext& rContext, const SCCOL nColFirst, const
     SCCOL nColCnt;
 
     for( nColCnt = nColFirst ; nColCnt <= nColLast ; nColCnt++ )
-        pCols[ nColCnt ].SetAttr( rContext.pDoc, nRow, rPattAttr );
+        pCols[ nColCnt ].SetAttr( &rContext.rDoc, nRow, rPattAttr );
 }
 
 void LotAttrTable::Apply(LotusContext& rContext, const SCTAB nTabNum)
 {
     SCCOL nColCnt;
-    for( nColCnt = 0 ; nColCnt <= aAttrCache.mrContext.pDoc->MaxCol() ; nColCnt++ )
+    for( nColCnt = 0 ; nColCnt <= aAttrCache.mrContext.rDoc.MaxCol() ; nColCnt++ )
         pCols[ nColCnt ].Apply(rContext, nColCnt, nTabNum);     // does a Clear() at end
 }
 

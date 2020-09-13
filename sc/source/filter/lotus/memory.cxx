@@ -29,7 +29,7 @@
 
 bool MemNew(LotusContext &rContext)
 {
-    rContext.pValueFormCache = new FormCache(rContext.pDoc);
+    rContext.pValueFormCache = new FormCache(&rContext.rDoc);
 
     // for tool.cxx::PutFormString()
     rContext.pAttrRight = new SvxHorJustifyItem( SvxCellHorJustify::Right, ATTR_HOR_JUSTIFY );
