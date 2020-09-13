@@ -42,7 +42,7 @@ struct LotusContext
     WKTYP            eTyp;          // type of file being processed
     bool             bEOF;          // shows end of file
     rtl_TextEncoding eCharset;
-    ScDocument*      pDoc;          // pointer to access document
+    ScDocument&      rDoc;          // reference to access document
     std::map<sal_uInt16, ScPatternAttr> aLotusPatternPool;
 
     SvxHorJustifyItem *pAttrRight, *pAttrLeft, *pAttrCenter, *pAttrRepeat, *pAttrStandard;
@@ -57,7 +57,7 @@ struct LotusContext
     LotusFontBuffer     maFontBuff;
     LotAttrTable        maAttrTable;
 
-    LotusContext(ScDocument* pDocP, rtl_TextEncoding eQ);
+    LotusContext(ScDocument& rDocP, rtl_TextEncoding eQ);
 };
 
 #endif

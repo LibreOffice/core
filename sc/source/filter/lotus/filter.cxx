@@ -120,7 +120,7 @@ generate_Opcodes(LotusContext &rContext, SvStream& aStream,
     if (!aStream.good())
         nErr = SCERR_IMPORT_FORMAT;
     else if (nErr == ERRCODE_NONE)
-        rContext.pDoc->CalcAfterLoad();
+        rContext.rDoc.CalcAfterLoad();
 
     return nErr;
 }
@@ -199,7 +199,7 @@ ErrCode ScImportLotus123old(LotusContext& rContext, SvStream& aStream, rtl_TextE
     //scGetPageFormat( 0, &aPage );
 
     // start progressbar
-    ScfStreamProgressBar aPrgrsBar( aStream, rContext.pDoc->GetDocumentShell() );
+    ScfStreamProgressBar aPrgrsBar( aStream, rContext.rDoc.GetDocumentShell() );
 
     // detect file type
     rContext.eTyp = ScanVersion(aStream);

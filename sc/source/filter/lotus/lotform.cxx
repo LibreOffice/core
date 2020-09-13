@@ -436,7 +436,7 @@ void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest 
 
         if( nBytesLeft < 0 )
         {
-            rpErg = aPool.GetTokenArray(m_rContext.pDoc, aStack.Get());
+            rpErg = aPool.GetTokenArray(&m_rContext.rDoc, aStack.Get());
             return;
         }
 
@@ -552,12 +552,12 @@ void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest 
             // for > WK3
             case FT_Cref:
                 Read( nRelBits );
-                ReadSRD( m_rContext.pDoc, rR, nRelBits );
+                ReadSRD( &m_rContext.rDoc, rR, nRelBits );
                 aStack << aPool.Store( rR );
                 break;
             case FT_Rref:
                 Read( nRelBits );
-                ReadCRD( m_rContext.pDoc, aCRD, nRelBits );
+                ReadCRD( &m_rContext.rDoc, aCRD, nRelBits );
                 aStack << aPool.Store( aCRD );
                 break;
             case FT_Nrref:
@@ -655,7 +655,7 @@ void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest 
         }
     }
 
-    rpErg = aPool.GetTokenArray( m_rContext.pDoc, aStack.Get());
+    rpErg = aPool.GetTokenArray( &m_rContext.rDoc, aStack.Get());
 
     SAL_WARN_IF( nBytesLeft < 0, "sc.filter", "*LotusToSc::Convert(): processed too much!");
     SAL_WARN_IF( nBytesLeft > 0, "sc.filter", "*LotusToSc::Convert(): what happens with the rest?" );

@@ -167,7 +167,7 @@ void ImportLotus::Userrange()
     Read( aScRange );
 
     LotusContext &rContext = aConv.getContext();
-    rContext.pRngNmBffWK3->Add( rContext.pDoc, aName, aScRange );
+    rContext.pRngNmBffWK3->Add( &rContext.rDoc, aName, aScRange );
 }
 
 void ImportLotus::Errcell()
@@ -372,7 +372,7 @@ void ImportLotus::Row_( const sal_uInt16 nRecLen )
 
     sal_uInt16 nTmpRow(0);
     Read(nTmpRow);
-    SCROW nRow(rContext.pDoc->SanitizeRow(static_cast<SCROW>(nTmpRow)));
+    SCROW nRow(rContext.rDoc.SanitizeRow(static_cast<SCROW>(nTmpRow)));
     sal_uInt16 nHeight(0);
     Read(nHeight);
 

@@ -75,30 +75,30 @@ void PutFormString(LotusContext& rContext, SCCOL nCol, SCROW nRow, SCTAB nTab, c
     if (!pString)
         return;
 
-    nCol = rContext.pDoc->SanitizeCol(nCol);
-    nRow = rContext.pDoc->SanitizeRow(nRow);
+    nCol = rContext.rDoc.SanitizeCol(nCol);
+    nRow = rContext.rDoc.SanitizeRow(nRow);
     nTab = SanitizeTab(nTab);
 
-    rContext.pDoc->ApplyAttr( nCol, nRow, nTab, *pJustify );
+    rContext.rDoc.ApplyAttr( nCol, nRow, nTab, *pJustify );
     ScSetStringParam aParam;
     aParam.setTextInput();
-    rContext.pDoc->SetString(ScAddress(nCol,nRow,nTab), OUString(pString, strlen(pString), rContext.eCharset), &aParam);
+    rContext.rDoc.SetString(ScAddress(nCol,nRow,nTab), OUString(pString, strlen(pString), rContext.eCharset), &aParam);
 }
 
 void SetFormat(LotusContext& rContext, SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt8 nFormat, sal_uInt8 nSt)
 {
-    nCol = rContext.pDoc->SanitizeCol(nCol);
-    nRow = rContext.pDoc->SanitizeRow(nRow);
+    nCol = rContext.rDoc.SanitizeCol(nCol);
+    nRow = rContext.rDoc.SanitizeRow(nRow);
     nTab = SanitizeTab(nTab);
 
     //  PREC:   nSt = default number of decimal places
-    rContext.pDoc->ApplyAttr(nCol, nRow, nTab, *(rContext.pValueFormCache->GetAttr(nFormat, nSt)));
+    rContext.rDoc.ApplyAttr(nCol, nRow, nTab, *(rContext.pValueFormCache->GetAttr(nFormat, nSt)));
 
     ScProtectionAttr aAttr;
 
     aAttr.SetProtection( nFormat & 0x80 );
 
-    rContext.pDoc->ApplyAttr( nCol, nRow, nTab, aAttr );
+    rContext.rDoc.ApplyAttr( nCol, nRow, nTab, aAttr );
 }
 
 double SnumToDouble( sal_Int16 nVal )
