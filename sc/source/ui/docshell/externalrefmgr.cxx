@@ -1611,14 +1611,14 @@ static std::unique_ptr<ScTokenArray> convertToTokenArray(
     return pArray;
 }
 
-static std::unique_ptr<ScTokenArray> lcl_fillEmptyMatrix(const ScDocument* pDoc, const ScRange& rRange)
+static std::unique_ptr<ScTokenArray> lcl_fillEmptyMatrix(const ScDocument& rDoc, const ScRange& rRange)
 {
     SCSIZE nC = static_cast<SCSIZE>(rRange.aEnd.Col()-rRange.aStart.Col()+1);
     SCSIZE nR = static_cast<SCSIZE>(rRange.aEnd.Row()-rRange.aStart.Row()+1);
     ScMatrixRef xMat = new ScMatrix(nC, nR);
 
     ScMatrixToken aToken(xMat);
-    unique_ptr<ScTokenArray> pArray(new ScTokenArray(*pDoc));
+    unique_ptr<ScTokenArray> pArray(new ScTokenArray(rDoc));
     pArray->AddToken(aToken);
     return pArray;
 }
@@ -1801,7 +1801,7 @@ void putRangeDataIntoCache(
     else
     {
         // Array is empty.  Fill it with an empty matrix of the required size.
-        pArray = lcl_fillEmptyMatrix(rRefCache.getFakeDoc(), rCacheRange);
+        pArray = lcl_fillEmptyMatrix(*rRefCache.getFakeDoc(), rCacheRange);
 
         // Make sure to set this range 'cached', to prevent unnecessarily
         // accessing the src document time and time again.
