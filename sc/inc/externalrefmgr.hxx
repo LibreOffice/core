@@ -727,7 +727,7 @@ private:
     /**
      * Retrieve a range token array from a source document instance.
      *
-     * @param pSrcDoc pointer to the source document instance.
+     * @param rSrcDoc reference to the source document instance.
      * @param rTabName name of the first table.
      * @param rRange range specified.  Upon successful retrieval, this range
      *               gets modified to contain the correct table IDs, and in
@@ -739,14 +739,14 @@ private:
      * @return range token array
      */
     ScExternalRefCache::TokenArrayRef getDoubleRefTokensFromSrcDoc(
-        const ScDocument* pSrcDoc, const OUString& rTabName, ScRange& rRange,
+        const ScDocument& rSrcDoc, const OUString& rTabName, ScRange& rRange,
         ::std::vector<ScExternalRefCache::SingleRangeData>& rCacheData);
 
     /**
      * Retrieve range name token array from a source document instance.
      *
      * @param nFileId file ID of the source document.
-     * @param pSrcDoc pointer to the source document instance
+     * @param rSrcDoc reference to the source document instance
      * @param rName range name to retrieve.  Note that the range name lookup
      *              is case <i>in</i>-sensitive, and upon successful retrieval
      *              of the range name array, this name gets updated to the
@@ -755,7 +755,7 @@ private:
      * @return range name token array
      */
     static ScExternalRefCache::TokenArrayRef getRangeNameTokensFromSrcDoc(
-        sal_uInt16 nFileId, const ScDocument* pSrcDoc, OUString& rName);
+        sal_uInt16 nFileId, const ScDocument& rSrcDoc, OUString& rName);
 
     ScDocument* getInMemorySrcDocument(sal_uInt16 nFileId);
     ScDocument* getSrcDocument(sal_uInt16 nFileId);
