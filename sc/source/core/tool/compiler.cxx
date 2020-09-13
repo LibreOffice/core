@@ -5007,15 +5007,15 @@ void ScCompiler::MoveRelWrap()
 
 // Wrap-adjust relative references of a RangeName to current position,
 // don't call for other token arrays!
-void ScCompiler::MoveRelWrap( const ScTokenArray& rArr, const ScDocument* pDoc, const ScAddress& rPos,
+void ScCompiler::MoveRelWrap( const ScTokenArray& rArr, const ScDocument& rDoc, const ScAddress& rPos,
                               SCCOL nMaxCol, SCROW nMaxRow )
 {
     for ( auto t: rArr.References() )
     {
         if ( t->GetType() == svSingleRef || t->GetType() == svExternalSingleRef )
-            ScRefUpdate::MoveRelWrap( *pDoc, rPos, nMaxCol, nMaxRow, SingleDoubleRefModifier( *t->GetSingleRef() ).Ref() );
+            ScRefUpdate::MoveRelWrap( rDoc, rPos, nMaxCol, nMaxRow, SingleDoubleRefModifier( *t->GetSingleRef() ).Ref() );
         else
-            ScRefUpdate::MoveRelWrap( *pDoc, rPos, nMaxCol, nMaxRow, *t->GetDoubleRef() );
+            ScRefUpdate::MoveRelWrap( rDoc, rPos, nMaxCol, nMaxRow, *t->GetDoubleRef() );
     }
 }
 

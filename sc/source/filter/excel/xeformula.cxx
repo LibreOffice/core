@@ -597,7 +597,7 @@ void XclExpFmlaCompImpl::Init( XclFormulaType eType, const ScTokenArray& rScTokA
             {
                 // clone the passed token array, convert references relative to current cell position
                 mxData->mxOwnScTokArr = rScTokArr.Clone();
-                ScCompiler::MoveRelWrap( *mxData->mxOwnScTokArr, &GetDoc(), *pScBasePos, GetDoc().MaxCol(), GetDoc().MaxRow() );
+                ScCompiler::MoveRelWrap( *mxData->mxOwnScTokArr, GetDoc(), *pScBasePos, GetDoc().MaxCol(), GetDoc().MaxRow() );
                 // don't remember pScBasePos in mxData->mpScBasePos, shared formulas use real relative refs
             }
         break;
