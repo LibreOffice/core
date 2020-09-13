@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_EDITENG_INC_UNITS_HRC
-#define INCLUDED_EDITENG_INC_UNITS_HRC
+#pragma once
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
@@ -39,7 +38,5 @@ const char* RID_SVXITEMS_JUSTMETHOD[] =
     NC_("RID_SVXITEMS_JUSTMETHOD_AUTO", "Automatic Justify"),
     NC_("RID_SVXITEMS_JUSTMETHOD_DISTRIBUTE", "Distributed Justify")
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

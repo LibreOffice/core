@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_SOURCE_OUTLINER_OUTLUNDO_HXX
-#define INCLUDED_EDITENG_SOURCE_OUTLINER_OUTLUNDO_HXX
+#pragma once
 
 #include <editeng/outliner.hxx>
 #include <editeng/editund2.hxx>
@@ -115,7 +114,5 @@ public:
     Outliner* pOutliner;
     sal_Int32 nCount;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

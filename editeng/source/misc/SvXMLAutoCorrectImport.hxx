@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_EDITENG_SOURCE_MISC_SVXMLAUTOCORRECTIMPORT_HXX
-#define INCLUDED_EDITENG_SOURCE_MISC_SVXMLAUTOCORRECTIMPORT_HXX
+#pragma once
 
 #include <sot/storage.hxx>
 #include <xmloff/xmlictxt.hxx>
@@ -118,7 +117,5 @@ public:
     virtual ~SvXMLExceptionContext() override;
 };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
