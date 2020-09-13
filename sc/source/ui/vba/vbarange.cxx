@@ -2361,7 +2361,7 @@ ScVbaRange::Rows(const uno::Any& aIndex )
         {
             ScAddress::Details dDetails( formula::FormulaGrammar::CONV_XL_A1, 0, 0 );
             ScRange tmpRange;
-            tmpRange.ParseRows( &getScDocument(), sAddress, dDetails );
+            tmpRange.ParseRows( getScDocument(), sAddress, dDetails );
             SCROW nStartRow = tmpRange.aStart.Row();
             SCROW nEndRow = tmpRange.aEnd.Row();
 

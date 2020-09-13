@@ -1844,7 +1844,7 @@ ScRefFlags ScRange::ParseCols( const ScDocument* pDoc,
 }
 
 // Parse only full row references
-void ScRange::ParseRows( const ScDocument* pDoc,
+void ScRange::ParseRows( const ScDocument& rDoc,
                                const OUString& rStr,
                                const ScAddress::Details& rDetails )
 {
@@ -1860,11 +1860,11 @@ void ScRange::ParseRows( const ScDocument* pDoc,
     case formula::FormulaGrammar::CONV_OOO: // No full row refs in OOO yet, assume XL notation
     case formula::FormulaGrammar::CONV_XL_A1:
     case formula::FormulaGrammar::CONV_XL_OOX:
-        if (nullptr != (p = lcl_a1_get_row( pDoc, p, &aStart, &ignored, nullptr) ) )
+        if (nullptr != (p = lcl_a1_get_row( &rDoc, p, &aStart, &ignored, nullptr) ) )
         {
             if( p[0] == ':')
             {
-                lcl_a1_get_row( pDoc, p+1, &aEnd, &ignored, nullptr);
+                lcl_a1_get_row( &rDoc, p+1, &aEnd, &ignored, nullptr);
             }
             else
             {
@@ -1875,13 +1875,13 @@ void ScRange::ParseRows( const ScDocument* pDoc,
 
     case formula::FormulaGrammar::CONV_XL_R1C1:
         if ((p[0] == 'R' || p[0] == 'r') &&
-            nullptr != (p = lcl_r1c1_get_row( pDoc->GetSheetLimits(), p, rDetails, &aStart, &ignored )))
+            nullptr != (p = lcl_r1c1_get_row( rDoc.GetSheetLimits(), p, rDetails, &aStart, &ignored )))
         {
             if( p[0] == ':')
             {
                 if( p[1] == 'R' || p[1] == 'r' )
                 {
-                    lcl_r1c1_get_row( pDoc->GetSheetLimits(), p+1, rDetails, &aEnd, &ignored );
+                    lcl_r1c1_get_row( rDoc.GetSheetLimits(), p+1, rDetails, &aEnd, &ignored );
                 }
             }
             else
