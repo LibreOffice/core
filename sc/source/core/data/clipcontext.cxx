@@ -216,7 +216,7 @@ void CopyFromClipContext::setSingleCell( const ScAddress& rSrcPos, const ScColum
                 else
                 {
                     // Turn this into a formula cell with just the error code.
-                    ScFormulaCell* pErrCell = new ScFormulaCell(mpClipDoc, rSrcPos);
+                    ScFormulaCell* pErrCell = new ScFormulaCell(*mpClipDoc, rSrcPos);
                     pErrCell->SetErrCode(nErr);
                     rSrcCell.set(pErrCell);
                 }
