@@ -463,7 +463,7 @@ public:
     const ScAddress& GetPos() const { return aPos; }
 
     void MoveRelWrap();
-    static void MoveRelWrap( const ScTokenArray& rArr, const ScDocument* pDoc, const ScAddress& rPos,
+    static void MoveRelWrap( const ScTokenArray& rArr, const ScDocument& rDoc, const ScAddress& rPos,
                              SCCOL nMaxCol, SCROW nMaxRow );
 
     /** If the character is allowed as tested by nFlags (SC_COMPILER_C_...
