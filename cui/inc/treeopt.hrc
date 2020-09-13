@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CUI_INC_TREEOPT_HRC
-#define INCLUDED_CUI_INC_TREEOPT_HRC
+#pragma once
 
 #include <sal/types.h>
 #include <sfx2/pageids.hxx>
@@ -155,7 +154,5 @@ const std::pair<const char*, sal_uInt16> SID_SB_STARBASEOPTIONS_RES[] =
     { NC_("SID_SB_STARBASEOPTIONS_RES", "Connections"), SID_SB_CONNECTIONPOOLING },
     { NC_("SID_SB_STARBASEOPTIONS_RES", "Databases"), SID_SB_DBREGISTEROPTIONS }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

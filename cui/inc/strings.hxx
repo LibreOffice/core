@@ -7,11 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CUI_INC_STRINGS_HXX
-#define INCLUDED_CUI_INC_STRINGS_HXX
+#pragma once
 
 #define RID_SVXSTR_KEY_BASIC_PATH   "BASIC"
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

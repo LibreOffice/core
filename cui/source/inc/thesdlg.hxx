@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CUI_SOURCE_INC_THESDLG_HXX
-#define INCLUDED_CUI_SOURCE_INC_THESDLG_HXX
+#pragma once
 
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 
@@ -76,7 +75,5 @@ public:
     void            SetWindowTitle( LanguageType nLanguage );
     OUString        GetWord() const;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

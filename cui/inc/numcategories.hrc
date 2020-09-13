@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CUI_INC_NUM_CATEGORIES_HRC
-#define INCLUDED_CUI_INC_NUM_CATEGORIES_HRC
+#pragma once
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
@@ -26,7 +25,5 @@ const char* NUM_CATEGORIES[] =
     NC_("numberingformatpage|liststore1", "Boolean Value"),
     NC_("numberingformatpage|liststore1", "Text")
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

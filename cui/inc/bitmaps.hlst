@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CUI_INC_BITMAPS_HRC
-#define INCLUDED_CUI_INC_BITMAPS_HRC
+#pragma once
 
 #define RID_SVXBMP_CELL_NONE            "svx/res/pr01.png"
 #define RID_SVXBMP_CELL_NONE_32         "svx/res/border_cell_none_32.png"
@@ -77,7 +76,5 @@
 
 #define RID_SVXBMP_COMPONENT            "res/component_16.png"
 #define RID_SVXBMP_MACRO                "svx/res/id018.png"
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

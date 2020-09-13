@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CUI_SOURCE_INC_PASTEDLG_HXX
-#define INCLUDED_CUI_SOURCE_INC_PASTEDLG_HXX
+#pragma once
 
 #include <map>
 #include <sot/formats.hxx>
@@ -70,7 +69,5 @@ public:
      */
     SotClipboardFormatId GetFormat( const TransferableDataHelper& aHelper);
 };
-
-#endif // INCLUDED_CUI_SOURCE_INC_PASTEDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

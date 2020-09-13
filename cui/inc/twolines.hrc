@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CUI_INC_TWO_LINES_HRC
-#define INCLUDED_CUI_INC_TWO_LINES_HRC
+#pragma once
 
 #include <sal/types.h>
 
@@ -42,7 +41,5 @@ const std::pair<const char*, sal_uInt16> TWOLINE_CLOSE[] =
     { NC_("twolinespage|liststore2", "}"), CHRDLG_ENCLOSE_CURVED },
     { NC_("twolinespage|liststore2", "Other Characters..."), CHRDLG_ENCLOSE_SPECIAL_CHAR }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
