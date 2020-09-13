@@ -1517,7 +1517,7 @@ static FormulaToken* convertToToken( ScDocument* pHostDoc, const ScDocument* pSr
 }
 
 static std::unique_ptr<ScTokenArray> convertToTokenArray(
-    ScDocument* pHostDoc, const ScDocument* pSrcDoc, ScRange& rRange, vector<ScExternalRefCache::SingleRangeData>& rCacheData )
+    ScDocument* pHostDoc, const ScDocument& rSrcDoc, ScRange& rRange, vector<ScExternalRefCache::SingleRangeData>& rCacheData )
 {
     ScAddress& s = rRange.aStart;
     ScAddress& e = rRange.aEnd;
@@ -1536,7 +1536,7 @@ static std::unique_ptr<ScTokenArray> convertToTokenArray(
 
     std::unique_ptr<ScRange> pUsedRange;
 
-    unique_ptr<ScTokenArray> pArray(new ScTokenArray(*pSrcDoc));
+    unique_ptr<ScTokenArray> pArray(new ScTokenArray(rSrcDoc));
     bool bFirstTab = true;
     vector<ScExternalRefCache::SingleRangeData>::iterator
         itrCache = rCacheData.begin(), itrCacheEnd = rCacheData.end();
@@ -1547,7 +1547,7 @@ static std::unique_ptr<ScTokenArray> convertToTokenArray(
         SCCOL nDataCol1 = nCol1, nDataCol2 = nCol2;
         SCROW nDataRow1 = nRow1, nDataRow2 = nRow2;
         bool bShrunk;
-        if (!pSrcDoc->ShrinkToUsedDataArea( bShrunk, nTab, nDataCol1, nDataRow1, nDataCol2, nDataRow2, false))
+        if (!rSrcDoc.ShrinkToUsedDataArea( bShrunk, nTab, nDataCol1, nDataRow1, nDataCol2, nDataRow2, false))
             // no data within specified range.
             continue;
 
@@ -1573,7 +1573,7 @@ static std::unique_ptr<ScTokenArray> convertToTokenArray(
         xMat->GetDimensions( nMatCols, nMatRows);
         if (nMatCols == nMatrixColumns && nMatRows == nMatrixRows)
         {
-            pSrcDoc->FillMatrix(*xMat, nTab, nCol1, nRow1, nCol2, nRow2, &pHostDoc->GetSharedStringPool());
+            rSrcDoc.FillMatrix(*xMat, nTab, nCol1, nRow1, nCol2, nRow2, &pHostDoc->GetSharedStringPool());
         }
         else if ((nCol1 == 0 && nCol2 == MAXCOL) || (nRow1 == 0 && nRow2 == MAXROW))
         {
@@ -1585,7 +1585,7 @@ static std::unique_ptr<ScTokenArray> convertToTokenArray(
                 xMat = new ScMatrix( nMatrixColumns, nMatrixRows);
                 xMat->GetDimensions( nMatCols, nMatRows);
                 if (nMatCols == nMatrixColumns && nMatRows == nMatrixRows)
-                    pSrcDoc->FillMatrix(*xMat, nTab, nDataCol1, nDataRow1, nDataCol2, nDataRow2, &pHostDoc->GetSharedStringPool());
+                    rSrcDoc.FillMatrix(*xMat, nTab, nDataCol1, nDataRow1, nDataCol2, nDataRow2, &pHostDoc->GetSharedStringPool());
             }
         }
 
@@ -2276,7 +2276,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokensFromSr
     aRange.aStart.SetTab(nTab1);
     aRange.aEnd.SetTab(nTab1 + nTabSpan);
 
-    pArray = convertToTokenArray(mpDoc, pSrcDoc, aRange, aCacheData);
+    pArray = convertToTokenArray(mpDoc, *pSrcDoc, aRange, aCacheData);
     rRange = aRange;
     rCacheData.swap(aCacheData);
     return pArray;
