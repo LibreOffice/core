@@ -557,7 +557,7 @@ void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest 
                 break;
             case FT_Rref:
                 Read( nRelBits );
-                ReadCRD( &m_rContext.rDoc, aCRD, nRelBits );
+                ReadCRD( m_rContext.rDoc, aCRD, nRelBits );
                 aStack << aPool.Store( aCRD );
                 break;
             case FT_Nrref:
