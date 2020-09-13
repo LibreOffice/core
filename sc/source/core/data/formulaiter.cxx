@@ -33,17 +33,17 @@ ScDetectiveRefIter::ScDetectiveRefIter( const ScDocument* pDoc, ScFormulaCell* p
 {
 }
 
-static bool lcl_ScDetectiveRefIter_SkipRef( const ScDocument* pDoc, formula::FormulaToken* p, const ScAddress& rPos )
+static bool lcl_ScDetectiveRefIter_SkipRef( const ScDocument& rDoc, formula::FormulaToken* p, const ScAddress& rPos )
 {
     ScSingleRefData& rRef1 = *p->GetSingleRef();
-    ScAddress aAbs1 = rRef1.toAbs(*pDoc, rPos);
-    if (!pDoc->ValidAddress(aAbs1))
+    ScAddress aAbs1 = rRef1.toAbs(rDoc, rPos);
+    if (!rDoc.ValidAddress(aAbs1))
         return true;
     if ( p->GetType() == svDoubleRef || p->GetType() == svExternalDoubleRef )
     {
         ScSingleRefData& rRef2 = p->GetDoubleRef()->Ref2;
-        ScAddress aAbs2 = rRef2.toAbs(*pDoc, rPos);
-        if (!pDoc->ValidAddress(aAbs2))
+        ScAddress aAbs2 = rRef2.toAbs(rDoc, rPos);
+        if (!rDoc.ValidAddress(aAbs2))
             return true;
     }
     return false;
@@ -67,7 +67,7 @@ bool ScDetectiveRefIter::GetNextRef( ScRange& rRange )
 formula::FormulaToken* ScDetectiveRefIter::GetNextRefToken()
 {
     formula::FormulaToken* p = maIter.GetNextReferenceRPN();
-    while (p && lcl_ScDetectiveRefIter_SkipRef(mpDoc, p, aPos))
+    while (p && lcl_ScDetectiveRefIter_SkipRef(*mpDoc, p, aPos))
     {
         p = maIter.GetNextReferenceRPN();
     }
