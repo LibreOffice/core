@@ -101,7 +101,7 @@ class ScFormatFilter {
 
 struct LotusContext;
 
-ErrCode ScImportLotus123old(LotusContext& rContext, SvStream&, ScDocument*, rtl_TextEncoding eSrc);
+ErrCode ScImportLotus123old(LotusContext& rContext, SvStream&, rtl_TextEncoding eSrc);
 
 #endif
 

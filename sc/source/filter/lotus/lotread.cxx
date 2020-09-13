@@ -328,7 +328,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportWKS(SvStream& rStream)
     if (eRet == ErrCode(0xFFFFFFFF))
     {
         rStream.Seek(0);
-        eRet = ScImportLotus123old(aContext, rStream, &aDocument, RTL_TEXTENCODING_ASCII_US);
+        eRet = ScImportLotus123old(aContext, rStream, RTL_TEXTENCODING_ASCII_US);
     }
 
     return eRet == ERRCODE_NONE;
