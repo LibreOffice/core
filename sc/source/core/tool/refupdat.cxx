@@ -460,10 +460,10 @@ ScRefUpdateRes ScRefUpdate::Update( UpdateRefMode eUpdateRefMode,
     return eRet;
 }
 
-void ScRefUpdate::MoveRelWrap( const ScDocument* pDoc, const ScAddress& rPos,
+void ScRefUpdate::MoveRelWrap( const ScDocument& rDoc, const ScAddress& rPos,
                                SCCOL nMaxCol, SCROW nMaxRow, ScComplexRefData& rRef )
 {
-    ScRange aAbsRange = rRef.toAbs(*pDoc, rPos);
+    ScRange aAbsRange = rRef.toAbs(rDoc, rPos);
     if( rRef.Ref1.IsColRel() )
     {
         SCCOL nCol = aAbsRange.aStart.Col();
@@ -488,7 +488,7 @@ void ScRefUpdate::MoveRelWrap( const ScDocument* pDoc, const ScAddress& rPos,
         lcl_MoveItWrap(nRow, nMaxRow);
         aAbsRange.aEnd.SetRow(nRow);
     }
-    SCTAB nMaxTab = pDoc->GetTableCount() - 1;
+    SCTAB nMaxTab = rDoc.GetTableCount() - 1;
     if( rRef.Ref1.IsTabRel() )
     {
         SCTAB nTab = aAbsRange.aStart.Tab();
@@ -503,7 +503,7 @@ void ScRefUpdate::MoveRelWrap( const ScDocument* pDoc, const ScAddress& rPos,
     }
 
     aAbsRange.PutInOrder();
-    rRef.SetRange(pDoc->GetSheetLimits(), aAbsRange, rPos);
+    rRef.SetRange(rDoc.GetSheetLimits(), aAbsRange, rPos);
 }
 
 void ScRefUpdate::DoTranspose( SCCOL& rCol, SCROW& rRow, SCTAB& rTab,
