@@ -251,7 +251,7 @@ public:
         TokenId                     StoreExtRef( sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef );
         TokenId                     StoreExtRef( sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef );
 
-        std::unique_ptr<ScTokenArray> GetTokenArray( const ScDocument* pDoc, const TokenId& rId );
+        std::unique_ptr<ScTokenArray> GetTokenArray( const ScDocument& rDoc, const TokenId& rId );
         void                        Reset();
         bool                        IsSingleOp( const TokenId& rId, const DefTokenId eId ) const;
         const OUString*             GetExternal( const TokenId& rId ) const;
@@ -408,9 +408,9 @@ inline TokenId TokenPool::Store()
     return nId;
 }
 
-inline std::unique_ptr<ScTokenArray> TokenPool::GetTokenArray( const ScDocument *pDoc, const TokenId& rId )
+inline std::unique_ptr<ScTokenArray> TokenPool::GetTokenArray( const ScDocument& rDoc, const TokenId& rId )
 {
-    std::unique_ptr<ScTokenArray> pScToken( new ScTokenArray(*pDoc) );
+    std::unique_ptr<ScTokenArray> pScToken( new ScTokenArray(rDoc) );
 
     if( rId )
     {//...only if rId > 0!

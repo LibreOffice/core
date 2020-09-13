@@ -197,7 +197,7 @@ std::unique_ptr<ScTokenArray> ExcelToSc::GetDummy()
 {
     aPool.Store( "Dummy()" );
     aPool >> aStack;
-    return aPool.GetTokenArray( &GetDocImport().getDoc(), aStack.Get());
+    return aPool.GetTokenArray( GetDocImport().getDoc(), aStack.Get());
 }
 
 // if bAllowArrays is false stream seeks to first byte after <nFormulaLen>
@@ -223,7 +223,7 @@ ConvErr ExcelToSc::Convert( std::unique_ptr<ScTokenArray>& pResult, XclImpStream
     {
         aPool.Store( "-/-" );
         aPool >> aStack;
-        pResult = aPool.GetTokenArray( &GetDocImport().getDoc(), aStack.Get());
+        pResult = aPool.GetTokenArray( GetDocImport().getDoc(), aStack.Get());
         return ConvErr::OK;
     }
 
@@ -860,14 +860,14 @@ ConvErr ExcelToSc::Convert( std::unique_ptr<ScTokenArray>& pResult, XclImpStream
     {
         aPool << ocBad;
         aPool >> aStack;
-        pResult = aPool.GetTokenArray( &GetDocImport().getDoc(), aStack.Get());
+        pResult = aPool.GetTokenArray( GetDocImport().getDoc(), aStack.Get());
         eRet = ConvErr::Ni;
     }
     else if( aIn.GetRecPos() != nEndPos )
     {
         aPool << ocBad;
         aPool >> aStack;
-        pResult = aPool.GetTokenArray( &GetDocImport().getDoc(), aStack.Get());
+        pResult = aPool.GetTokenArray( GetDocImport().getDoc(), aStack.Get());
         eRet = ConvErr::Count;
     }
     else if( bArrayFormula )
@@ -877,7 +877,7 @@ ConvErr ExcelToSc::Convert( std::unique_ptr<ScTokenArray>& pResult, XclImpStream
     }
     else
     {
-        pResult = aPool.GetTokenArray( &GetDocImport().getDoc(), aStack.Get());
+        pResult = aPool.GetTokenArray( GetDocImport().getDoc(), aStack.Get());
         eRet = ConvErr::OK;
     }
 
@@ -1692,7 +1692,7 @@ std::unique_ptr<ScTokenArray> ExcelToSc::GetBoolErr( XclBoolError eType )
 
     aPool >> aStack;
 
-    std::unique_ptr<ScTokenArray> pResult = aPool.GetTokenArray( &GetDocImport().getDoc(), aStack.Get());
+    std::unique_ptr<ScTokenArray> pResult = aPool.GetTokenArray( GetDocImport().getDoc(), aStack.Get());
     if( nError != FormulaError::NONE )
         pResult->SetCodeError( nError );
 
