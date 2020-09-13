@@ -738,7 +738,7 @@ ErrCode ImportExcel::Read()
                             break;
                             case Biff5V:
                             default:
-                                pD->SetVisible( GetCurrScTab(), false );
+                                rD.SetVisible( GetCurrScTab(), false );
                                 ePrev = eCurrent;
                                 eCurrent = Z_Biffn0;
                         }
@@ -779,7 +779,7 @@ ErrCode ImportExcel::Read()
             AdjustRowHeight();
         PostDocLoad();
 
-        pD->CalcAfterLoad(false);
+        rD.CalcAfterLoad(false);
 
         const XclImpAddressConverter& rAddrConv = GetAddressConverter();
         if( rAddrConv.IsTabTruncated() )
@@ -910,7 +910,7 @@ ErrCode ImportExcel8::Read()
                     case Biff8V:    // VB module
                     default:
                         // TODO: do not create a sheet in the Calc document
-                        pD->SetVisible( nScTab, false );
+                        rD.SetVisible( nScTab, false );
                         XclTools::SkipSubStream( maStrm );
                         IncCurrScTab();
                     }
@@ -1285,12 +1285,12 @@ ErrCode ImportExcel8::Read()
         // Excel documents look much better without this call; better in the
         // sense that the row heights are identical to the original heights in
         // Excel.
-        if ( !pD->IsAdjustHeightLocked())
+        if ( !rD.IsAdjustHeightLocked())
             AdjustRowHeight();
 #endif
         PostDocLoad();
 
-        pD->CalcAfterLoad(false);
+        rD.CalcAfterLoad(false);
 
         // import change tracking data
         XclImpChangeTrack aImpChTr( GetRoot(), maStrm );

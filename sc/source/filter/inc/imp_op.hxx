@@ -44,10 +44,10 @@ class ImportTyp
 {
 protected:
     rtl_TextEncoding    eQuellChar;     // source (Quelle) character set
-    ScDocument*         pD;             // document
+    ScDocument&         rD;             // document
 
 public:
-                        ImportTyp( ScDocument*, rtl_TextEncoding eSrc );
+                        ImportTyp( ScDocument&, rtl_TextEncoding eSrc );
     virtual             ~ImportTyp();
 };
 

@@ -123,11 +123,11 @@ void ImportExcel::Formula(
                 ScFormulaCell* pCell;
                 if (pSharedCode->NeedsWrapReference(aScPos, EXC_MAXCOL8, EXC_MAXROW8))
                 {
-                    pCell = new ScFormulaCell(pD, aScPos, pSharedCode->Clone());
+                    pCell = new ScFormulaCell(&rD, aScPos, pSharedCode->Clone());
                     pCell->GetCode()->WrapReference(aScPos, EXC_MAXCOL8, EXC_MAXROW8);
                 }
                 else
-                    pCell = new ScFormulaCell(pD, aScPos, *pSharedCode);
+                    pCell = new ScFormulaCell(&rD, aScPos, *pSharedCode);
                 rDoc.getDoc().EnsureTable(aScPos.Tab());
                 rDoc.setFormulaCell(aScPos, pCell);
                 pCell->SetNeedNumberFormat(false);
