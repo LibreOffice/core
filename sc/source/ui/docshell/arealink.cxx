@@ -179,12 +179,12 @@ bool ScAreaLink::IsEqual( const OUString& rFile, const OUString& rFilter, const 
             aSourceArea == rSource && aDestArea.aStart == rDest.aStart;
 }
 
-// find a range with name >rAreaName< in >pSrcDoc<, return it in >rRange<
-bool ScAreaLink::FindExtRange( ScRange& rRange, const ScDocument* pSrcDoc, const OUString& rAreaName )
+// find a range with name >rAreaName< in >rSrcDoc<, return it in >rRange<
+bool ScAreaLink::FindExtRange( ScRange& rRange, const ScDocument& rSrcDoc, const OUString& rAreaName )
 {
     bool bFound = false;
     OUString aUpperName = ScGlobal::getCharClassPtr()->uppercase(rAreaName);
-    ScRangeName* pNames = pSrcDoc->GetRangeName();
+    ScRangeName* pNames = rSrcDoc.GetRangeName();
     if (pNames)         // named ranges
     {
         const ScRangeData* p = pNames->findByUpperName(aUpperName);
@@ -193,7 +193,7 @@ bool ScAreaLink::FindExtRange( ScRange& rRange, const ScDocument* pSrcDoc, const
     }
     if (!bFound)        // database ranges
     {
-        ScDBCollection* pDBColl = pSrcDoc->GetDBCollection();
+        ScDBCollection* pDBColl = rSrcDoc.GetDBCollection();
         if (pDBColl)
         {
             const ScDBData* pDB = pDBColl->getNamedDBs().findByUpperName(aUpperName);
@@ -210,8 +210,8 @@ bool ScAreaLink::FindExtRange( ScRange& rRange, const ScDocument* pSrcDoc, const
     }
     if (!bFound)        // direct reference (range or cell)
     {
-        ScAddress::Details aDetails(pSrcDoc->GetAddressConvention(), 0, 0);
-        if ( rRange.ParseAny( rAreaName, pSrcDoc, aDetails ) & ScRefFlags::VALID )
+        ScAddress::Details aDetails(rSrcDoc.GetAddressConvention(), 0, 0);
+        if ( rRange.ParseAny( rAreaName, &rSrcDoc, aDetails ) & ScRefFlags::VALID )
             bFound = true;
     }
     return bFound;
@@ -291,7 +291,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
         do
         {
             ScRange aTokenRange;
-            if( FindExtRange( aTokenRange, &rSrcDoc, aTempArea.getToken( 0, ';', nIdx ) ) )
+            if( FindExtRange( aTokenRange, rSrcDoc, aTempArea.getToken( 0, ';', nIdx ) ) )
             {
                 aSourceRanges.push_back( aTokenRange);
                 // columns: find maximum
