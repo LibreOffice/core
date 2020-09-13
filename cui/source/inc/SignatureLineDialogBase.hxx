@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_CUI_INC_SIGNATURELINEDIALOGBASE_HXX
-#define INCLUDED_CUI_INC_SIGNATURELINEDIALOGBASE_HXX
+#pragma once
 
 #include <vcl/weld.hxx>
 
@@ -27,7 +26,5 @@ protected:
     virtual void Apply() = 0;
     static OUString getCDataString(const OUString& rString);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

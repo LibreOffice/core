@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CUI_SOURCE_INC_MACROASS_HXX
-#define INCLUDED_CUI_SOURCE_INC_MACROASS_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -86,7 +85,5 @@ public:
         return static_cast<SfxMacroTabPage*>(m_xSfxPage.get());
     }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

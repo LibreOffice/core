@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CUI_SOURCE_INC_AUTOCDLG_HXX
-#define INCLUDED_CUI_SOURCE_INC_AUTOCDLG_HXX
+#pragma once
 
 #include <sfx2/tabdlg.hxx>
 #include <svx/langbox.hxx>
@@ -411,7 +410,5 @@ public:
     virtual void        Reset( const SfxItemSet* rSet ) override;
     virtual void        ActivatePage( const SfxItemSet& ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

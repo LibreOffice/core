@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CUI_SOURCE_INC_HEADERTABLISTBOX_HXX
-#define INCLUDED_CUI_SOURCE_INC_HEADERTABLISTBOX_HXX
+#pragma once
 
 #include <vcl/weld.hxx>
 
@@ -36,7 +35,5 @@ public:
         return *m_xTreeView;
     }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

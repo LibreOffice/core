@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CUI_SOURCE_INC_HELPID_HRC
-#define INCLUDED_CUI_SOURCE_INC_HELPID_HRC
+#pragma once
 
 #define HID_OPTIONS_COLORCONFIG_SAVE_SCHEME "CUI_HID_OPTIONS_COLORCONFIG_SAVE_SCHEME"
 #define HID_OFA_FONT_SUBST_CLB "CUI_HID_OFA_FONT_SUBST_CLB"
@@ -40,7 +39,5 @@
 #define HID_SVX_TOPLEVELLISTBOX "CUI_HID_SVX_TOPLEVELLISTBOX"
 #define HID_SVX_DESCFIELD "CUI_HID_SVX_DESCFIELD"
 #define HID_MACRO_HEADERTABLISTBOX "CUI_HID_MACRO_HEADERTABLISTBOX"
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
