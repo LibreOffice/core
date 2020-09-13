@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_LIB_LOKINTERACTIONHANDLER_HXX
-#define INCLUDED_DESKTOP_SOURCE_LIB_LOKINTERACTIONHANDLER_HXX
+#pragma once
 
 #include <osl/conditn.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -98,7 +97,5 @@ public:
 
     virtual sal_Bool SAL_CALL handleInteractionRequest(const ::com::sun::star::uno::Reference<::com::sun::star::task::XInteractionRequest>& Request) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

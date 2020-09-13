@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_MANAGER_DP_COMMANDENVIRONMENTS_HXX
-#define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_MANAGER_DP_COMMANDENVIRONMENTS_HXX
+#pragma once
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -136,7 +135,5 @@ public:
 };
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

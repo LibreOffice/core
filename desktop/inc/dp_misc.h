@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_INC_DP_MISC_H
-#define INCLUDED_DESKTOP_INC_DP_MISC_H
+#pragma once
 
 #include <osl/mutex.hxx>
 #include <osl/process.h>
@@ -149,7 +148,5 @@ void disposeBridges(
         const & ctx);
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

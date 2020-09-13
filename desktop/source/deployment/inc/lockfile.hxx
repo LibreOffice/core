@@ -32,8 +32,7 @@
  *
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_LOCKFILE_HXX
-#define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_LOCKFILE_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -86,7 +85,5 @@ namespace desktop {
     };
 
 }
-
-#endif // INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_LOCKFILE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

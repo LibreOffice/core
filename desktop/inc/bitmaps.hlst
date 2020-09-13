@@ -7,14 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_DESKTOP_INC_BITMAPS_HRC
-#define INCLUDED_DESKTOP_INC_BITMAPS_HRC
+#pragma once
 
 #define RID_BMP_WARNING             "desktop/res/caution_16.png"
 #define RID_BMP_LOCKED              "desktop/res/lock_16.png"
 #define RID_BMP_SHARED              "desktop/res/shared_16.png"
 #define RID_BMP_EXTENSION           "desktop/res/extension_32.png"
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_MANAGER_DP_MANAGER_H
-#define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_MANAGER_DP_MANAGER_H
+#pragma once
 
 #include <dp_misc.h>
 #include "dp_activepackages.hxx"
@@ -229,7 +228,5 @@ inline void PackageManagerImpl::logIntern( css::uno::Any const & status )
 }
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

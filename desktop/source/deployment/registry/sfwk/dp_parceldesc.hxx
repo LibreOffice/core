@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_REGISTRY_SFWK_DP_PARCELDESC_HXX
-#define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_REGISTRY_SFWK_DP_PARCELDESC_HXX
+#pragma once
 
 #include <cppuhelper/implbase.hxx>
 
@@ -61,7 +60,5 @@ public:
 }
 
 
-
-#endif // INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_REGISTRY_SFWK_DP_PARCELDESC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
