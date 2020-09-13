@@ -3233,7 +3233,7 @@ bool checkCompileColRowName(
 }
 
 void setOldCodeToUndo(
-    ScDocument* pUndoDoc, const ScAddress& aUndoPos, const ScTokenArray* pOldCode, FormulaGrammar::Grammar eTempGrammar, ScMatrixMode cMatrixFlag)
+    ScDocument& rUndoDoc, const ScAddress& aUndoPos, const ScTokenArray* pOldCode, FormulaGrammar::Grammar eTempGrammar, ScMatrixMode cMatrixFlag)
 {
     // Copy the cell to aUndoPos, which is its current position in the document,
     // so this works when UpdateReference is called before moving the cells
@@ -3242,15 +3242,15 @@ void setOldCodeToUndo(
 
     // If there is already a formula cell in the undo document, don't overwrite it,
     // the first (oldest) is the important cell.
-    if (pUndoDoc->GetCellType(aUndoPos) == CELLTYPE_FORMULA)
+    if (rUndoDoc.GetCellType(aUndoPos) == CELLTYPE_FORMULA)
         return;
 
     ScFormulaCell* pFCell =
         new ScFormulaCell(
-            pUndoDoc, aUndoPos, pOldCode ? *pOldCode : ScTokenArray(*pUndoDoc), eTempGrammar, cMatrixFlag);
+            &rUndoDoc, aUndoPos, pOldCode ? *pOldCode : ScTokenArray(rUndoDoc), eTempGrammar, cMatrixFlag);
 
     pFCell->SetResultToken(nullptr);  // to recognize it as changed later (Cut/Paste!)
-    pUndoDoc->SetFormulaCell(aUndoPos, pFCell);
+    rUndoDoc.SetFormulaCell(aUndoPos, pFCell);
 }
 
 }
@@ -3343,7 +3343,7 @@ bool ScFormulaCell::UpdateReferenceOnShift(
     bool bNeedDirty = (bValChanged || bRecompile || bOnRefMove);
 
     if (pUndoDoc && (bValChanged || bOnRefMove))
-        setOldCodeToUndo(pUndoDoc, aUndoPos, pOldCode.get(), eTempGrammar, cMatrixFlag);
+        setOldCodeToUndo(*pUndoDoc, aUndoPos, pOldCode.get(), eTempGrammar, cMatrixFlag);
 
     bCompile |= bRecompile;
     if (bCompile)
@@ -3477,7 +3477,7 @@ bool ScFormulaCell::UpdateReferenceOnMove(
         bNeedDirty = true;
 
     if (pUndoDoc && !bCellInMoveTarget && (bValChanged || bRefModified || bOnRefMove))
-        setOldCodeToUndo(pUndoDoc, aUndoPos, pOldCode.get(), eTempGrammar, cMatrixFlag);
+        setOldCodeToUndo(*pUndoDoc, aUndoPos, pOldCode.get(), eTempGrammar, cMatrixFlag);
 
     bValChanged = false;
 
@@ -3548,7 +3548,7 @@ bool ScFormulaCell::UpdateReferenceOnCopy(
     bool bNeedDirty = bOnRefMove;
 
     if (pUndoDoc && bOnRefMove)
-        setOldCodeToUndo(pUndoDoc, aUndoPos, pOldCode.get(), eTempGrammar, cMatrixFlag);
+        setOldCodeToUndo(*pUndoDoc, aUndoPos, pOldCode.get(), eTempGrammar, cMatrixFlag);
 
     if (bCompile)
     {
