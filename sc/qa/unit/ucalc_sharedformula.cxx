@@ -1051,7 +1051,7 @@ void Test::testSharedFormulasDeleteColumns()
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), pSRef->toAbs(*m_pDoc, ScAddress(1,0,0)).Row());
 
     // The formula string should show #REF! in lieu of the column position (only for Calc A1 syntax).
-    sc::CompileFormulaContext aCFCxt(m_pDoc, FormulaGrammar::GRAM_ENGLISH);
+    sc::CompileFormulaContext aCFCxt(*m_pDoc, FormulaGrammar::GRAM_ENGLISH);
     CPPUNIT_ASSERT_EQUAL(OUString("=#REF!1"), pFC->GetFormula(aCFCxt));
 
     SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();

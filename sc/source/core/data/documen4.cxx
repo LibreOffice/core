@@ -555,7 +555,7 @@ void ScDocument::ReplaceStyle(const SvxSearchItem& rSearchItem,
 
 void ScDocument::CompileDBFormula()
 {
-    sc::CompileFormulaContext aCxt(this);
+    sc::CompileFormulaContext aCxt(*this);
     for (auto& rxTab : maTabs)
     {
         if (rxTab)
@@ -565,7 +565,7 @@ void ScDocument::CompileDBFormula()
 
 void ScDocument::CompileColRowNameFormula()
 {
-    sc::CompileFormulaContext aCxt(this);
+    sc::CompileFormulaContext aCxt(*this);
     for (auto& rxTab : maTabs)
     {
         if (rxTab)

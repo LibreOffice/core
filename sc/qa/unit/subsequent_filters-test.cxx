@@ -3434,7 +3434,7 @@ void ScFiltersTest::testVBAUserFunctionXLSM()
     ScFormulaCell* pFC = rDoc.GetFormulaCell(ScAddress(0,0,0));
     CPPUNIT_ASSERT(pFC);
 
-    sc::CompileFormulaContext aCxt(&rDoc);
+    sc::CompileFormulaContext aCxt(rDoc);
     OUString aFormula = pFC->GetFormula(aCxt);
 
     CPPUNIT_ASSERT_EQUAL(OUString("=MYFUNC()"), aFormula);
