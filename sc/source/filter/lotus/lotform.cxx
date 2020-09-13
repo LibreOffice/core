@@ -317,7 +317,7 @@ void LotusToSc::LotusRelToScRel( sal_uInt16 nCol, sal_uInt16 nRow, ScSingleRefDa
         rSRD.SetAbsRow(static_cast<SCROW>(nRow));
 }
 
-void LotusToSc::ReadSRD( const ScDocument* pDoc, ScSingleRefData& rSRD, sal_uInt8 nRelBit )
+void LotusToSc::ReadSRD( const ScDocument& rDoc, ScSingleRefData& rSRD, sal_uInt8 nRelBit )
 {
     sal_uInt8           nTab, nCol;
     sal_uInt16          nRow;
@@ -333,7 +333,7 @@ void LotusToSc::ReadSRD( const ScDocument* pDoc, ScSingleRefData& rSRD, sal_uInt
     rSRD.SetTabRel( ( ( nRelBit & 0x04) != 0 ) || !b3D );
     rSRD.SetFlag3D( b3D );
 
-    rSRD.SetAddress(pDoc->GetSheetLimits(), ScAddress(nCol, nRow, nTab), aEingPos);
+    rSRD.SetAddress(rDoc.GetSheetLimits(), ScAddress(nCol, nRow, nTab), aEingPos);
 }
 
 void LotusToSc::IncToken( TokenId &rParam )
@@ -552,7 +552,7 @@ void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest 
             // for > WK3
             case FT_Cref:
                 Read( nRelBits );
-                ReadSRD( &m_rContext.rDoc, rR, nRelBits );
+                ReadSRD( m_rContext.rDoc, rR, nRelBits );
                 aStack << aPool.Store( rR );
                 break;
             case FT_Rref:

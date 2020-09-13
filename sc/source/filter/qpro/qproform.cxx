@@ -26,7 +26,7 @@
 #include <formel.hxx>
 #include <tokstack.hxx>
 
-void QProToSc::ReadSRD( const ScDocument* pDoc, ScSingleRefData& rSRD, sal_Int8 nPage, sal_Int8 nCol, sal_uInt16 nRelBit )
+void QProToSc::ReadSRD( const ScDocument& rDoc, ScSingleRefData& rSRD, sal_Int8 nPage, sal_Int8 nCol, sal_uInt16 nRelBit )
 {
     sal_uInt16 nTmp = nRelBit & 0x1fff;
     rSRD.InitAddress( ScAddress( nCol, (~nTmp + 1), 0 ) );
@@ -57,7 +57,7 @@ void QProToSc::ReadSRD( const ScDocument* pDoc, ScSingleRefData& rSRD, sal_Int8 
     {
         rSRD.SetAbsTab(nPage);
     }
-    if (rSRD.toAbs(*pDoc, aEingPos).Tab() != aEingPos.Tab())
+    if (rSRD.toAbs(rDoc, aEingPos).Tab() != aEingPos.Tab())
         rSRD.SetFlag3D(true);
 }
 
@@ -320,17 +320,17 @@ ConvErr QProToSc::Convert( const ScDocument& rDoc, std::unique_ptr<ScTokenArray>
             case FT_Cref : // Single cell reference
                 maIn.ReadUInt16( nNote ).ReadSChar( nCol ).ReadSChar( nPage ).ReadUInt16( nRelBits );
                 SAFEREAD_OR_BREAK( maIn, i, nRef, eRet, ConvErr::Count);
-                ReadSRD( &rDoc, aSRD, nPage, nCol, nRelBits );
+                ReadSRD( rDoc, aSRD, nPage, nCol, nRelBits );
                 aStack << aPool.Store( aSRD );
                 break;
 
             case FT_Range: // Block reference
                 maIn.ReadUInt16( nNote ).ReadSChar( nCol ).ReadSChar( nPage ).ReadUInt16( nRelBits );
                 SAFEREAD_OR_BREAK( maIn, i, nRef, eRet, ConvErr::Count);
-                ReadSRD( &rDoc, aCRD.Ref1, nPage, nCol, nRelBits );
+                ReadSRD( rDoc, aCRD.Ref1, nPage, nCol, nRelBits );
                 maIn.ReadSChar( nCol ).ReadSChar( nPage ).ReadUInt16( nRelBits );
                 SAFEREAD_OR_BREAK( maIn, i, nRef, eRet, ConvErr::Count);
-                ReadSRD( &rDoc, aCRD.Ref2, nPage, nCol, nRelBits );
+                ReadSRD( rDoc, aCRD.Ref2, nPage, nCol, nRelBits );
                 // Sheet name of second corner is not displayed if identical
                 if (aCRD.Ref1.IsFlag3D() && aCRD.Ref1.Tab() == aCRD.Ref2.Tab() &&
                         aCRD.Ref1.IsTabRel() == aCRD.Ref2.IsTabRel())
