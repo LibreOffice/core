@@ -72,7 +72,7 @@ public:
                                   ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 );
 
     static bool MakeRangeFromName( const OUString& rName,
-                                    const ScDocument* pDoc,
+                                   const ScDocument& rDoc,
                                     SCTAB           nCurTab,
                                     ScRange&        rRange,
                                   RutlNameScope eScope=RUTL_NAMES,

@@ -2330,9 +2330,9 @@ static ScNameInputType lcl_GetInputType( const OUString& rText )
             eRet = SC_NAME_INPUT_RANGE;
         else if ( aAddress.Parse( rText, pDoc, eConv ) & ScRefFlags::VALID )
             eRet = SC_NAME_INPUT_CELL;
-        else if ( ScRangeUtil::MakeRangeFromName( rText, pDoc, nTab, aRange, RUTL_NAMES, eConv ) )
+        else if ( ScRangeUtil::MakeRangeFromName( rText, *pDoc, nTab, aRange, RUTL_NAMES, eConv ) )
             eRet = SC_NAME_INPUT_NAMEDRANGE;
-        else if ( ScRangeUtil::MakeRangeFromName( rText, pDoc, nTab, aRange, RUTL_DBASE, eConv ) )
+        else if ( ScRangeUtil::MakeRangeFromName( rText, *pDoc, nTab, aRange, RUTL_DBASE, eConv ) )
             eRet = SC_NAME_INPUT_DATABASE;
         else if ( comphelper::string::isdigitAsciiString( rText ) &&
                   ( nNumeric = rText.toInt32() ) > 0 && nNumeric <= pDoc->MaxRow()+1 )

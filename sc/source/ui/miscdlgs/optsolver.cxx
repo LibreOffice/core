@@ -762,7 +762,7 @@ bool ScOptSolverDlg::ParseRef( ScRange& rRange, const OUString& rInput, bool bAl
             rRange.aEnd.SetTab( rRange.aStart.Tab() );
         return ( bAllowRange || rRange.aStart == rRange.aEnd );
     }
-    else if ( ScRangeUtil::MakeRangeFromName( rInput, &mrDoc, mnCurTab, rRange, RUTL_NAMES, aDetails ) )
+    else if ( ScRangeUtil::MakeRangeFromName( rInput, mrDoc, mnCurTab, rRange, RUTL_NAMES, aDetails ) )
         return ( bAllowRange || rRange.aStart == rRange.aEnd );
 
     return false;   // not recognized
