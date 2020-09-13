@@ -178,7 +178,7 @@ public:
     ScFormulaCell* Clone() const;
     ScFormulaCell* Clone( const ScAddress& rPos ) const;
 
-    ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos );
+    ScFormulaCell( ScDocument& rDoc, const ScAddress& rPos );
 
     /**
      * Transfer the ownership of the passed token array instance to the

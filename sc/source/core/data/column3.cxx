@@ -1275,7 +1275,7 @@ public:
                                     insertRefCell(nSrcRow, nSrcRow + mnRowOffset);
                                 else
                                 {
-                                    ScFormulaCell* pErrCell = new ScFormulaCell(mrDestCol.GetDoc(), aDestPos);
+                                    ScFormulaCell* pErrCell = new ScFormulaCell(*mrDestCol.GetDoc(), aDestPos);
                                     pErrCell->SetErrCode(nErr);
                                     mrDestCol.SetFormulaCell(
                                         maDestBlockPos, nSrcRow + mnRowOffset, pErrCell);
@@ -1542,7 +1542,7 @@ class MixDataHandler
         {
             ScAddress aPos(mrDestColumn.GetCol(), nDestRow, mrDestColumn.GetTab());
 
-            ScFormulaCell* pFC = new ScFormulaCell(mrDestColumn.GetDoc(), aPos);
+            ScFormulaCell* pFC = new ScFormulaCell(*mrDestColumn.GetDoc(), aPos);
             pFC->SetErrCode(FormulaError::NoValue);
 
             miNewCellsPos = maNewCells.set(miNewCellsPos, nDestRow-mnRowOffset, pFC);
@@ -2811,7 +2811,7 @@ void ScColumn::SetError( SCROW nRow, const FormulaError nError)
     if (!GetDoc()->ValidRow(nRow))
         return;
 
-    ScFormulaCell* pCell = new ScFormulaCell(GetDoc(), ScAddress(nCol, nRow, nTab));
+    ScFormulaCell* pCell = new ScFormulaCell(*GetDoc(), ScAddress(nCol, nRow, nTab));
     pCell->SetErrCode(nError);
 
     std::vector<SCROW> aNewSharedRows;

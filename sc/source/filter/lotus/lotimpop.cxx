@@ -254,7 +254,7 @@ void ImportLotus::Formulacell( sal_uInt16 n )
     if (!aConv.good())
         return;
 
-    ScFormulaCell* pCell = pErg ? new ScFormulaCell(pD, aAddr, std::move(pErg)) : new ScFormulaCell(pD, aAddr);
+    ScFormulaCell* pCell = pErg ? new ScFormulaCell(pD, aAddr, std::move(pErg)) : new ScFormulaCell(*pD, aAddr);
     pCell->AddRecalcMode( ScRecalcMode::ONLOAD_ONCE );
     pD->EnsureTable(aAddr.Tab());
     pD->SetFormulaCell(aAddr, pCell);

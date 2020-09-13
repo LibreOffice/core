@@ -363,7 +363,7 @@ void ImportExcel::ReadBoolErr()
     std::unique_ptr<ScTokenArray> pScTokArr = ErrorToFormula( nType != EXC_BOOLERR_BOOL, nValue, fValue );
     ScFormulaCell* pCell = pScTokArr
         ? new ScFormulaCell(pD, aScPos, std::move(pScTokArr))
-        : new ScFormulaCell(pD, aScPos);
+        : new ScFormulaCell(*pD, aScPos);
     pCell->SetHybridDouble( fValue );
     GetDocImport().setFormulaCell(aScPos, pCell);
 }

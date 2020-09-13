@@ -603,7 +603,7 @@ void ScFormulaCellGroup::endAllGroupListening( ScDocument& rDoc )
     mpImpl->m_AreaListeners.clear();
 }
 
-ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos ) :
+ScFormulaCell::ScFormulaCell( ScDocument& rDoc, const ScAddress& rPos ) :
     bDirty(false),
     bTableOpDirty(false),
     bChanged(false),
@@ -622,8 +622,8 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos ) :
     nSeenInIteration(0),
     nFormatType(SvNumFormatType::NUMBER),
     eTempGrammar(formula::FormulaGrammar::GRAM_DEFAULT),
-    pCode(new ScTokenArray(*pDoc)),
-    pDocument(pDoc),
+    pCode(new ScTokenArray(rDoc)),
+    pDocument(&rDoc),
     pPrevious(nullptr),
     pNext(nullptr),
     pPreviousTrack(nullptr),

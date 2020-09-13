@@ -6200,7 +6200,7 @@ void SAL_CALL ScCellObj::setFormulaString( const OUString& aFormula)
     ScDocShell *pDocSh = GetDocShell();
     if( pDocSh )
     {
-        ScFormulaCell* pCell = new ScFormulaCell( &pDocSh->GetDocument(), aCellPos );
+        ScFormulaCell* pCell = new ScFormulaCell( pDocSh->GetDocument(), aCellPos );
         pCell->SetHybridFormula( aFormula, formula::FormulaGrammar::GRAM_NATIVE );
         pDocSh->GetDocFunc().SetFormulaCell(aCellPos, pCell, false);
     }
