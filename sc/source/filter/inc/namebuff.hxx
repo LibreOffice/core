@@ -99,13 +99,13 @@ private:
 public:
     RangeNameBufferWK3(const ScDocument& rDoc);
     ~RangeNameBufferWK3();
-    void                    Add( const ScDocument* pDoc, const OUString& rName, const ScComplexRefData& rCRD );
-    inline void             Add( const ScDocument* pDoc, const OUString& rName, const ScRange& aScRange );
+    void                    Add( const ScDocument& rDoc, const OUString& rName, const ScComplexRefData& rCRD );
+    inline void             Add( const ScDocument& rDoc, const OUString& rName, const ScRange& aScRange );
     bool                    FindRel( const OUString& rRef, sal_uInt16& rIndex );
     bool                    FindAbs( const OUString& rRef, sal_uInt16& rIndex );
 };
 
-inline void RangeNameBufferWK3::Add( const ScDocument* pDoc, const OUString& rName, const ScRange& aScRange )
+inline void RangeNameBufferWK3::Add( const ScDocument& rDoc, const OUString& rName, const ScRange& aScRange )
 {
     ScComplexRefData        aCRD;
     ScSingleRefData*        pSRD;
@@ -118,7 +118,7 @@ inline void RangeNameBufferWK3::Add( const ScDocument* pDoc, const OUString& rNa
     pSRD->InitAddress(aScRange.aEnd);
     pSRD->SetFlag3D(true);
 
-    Add( pDoc, rName, aCRD );
+    Add( rDoc, rName, aCRD );
 }
 
 class ExtSheetBuffer : public ExcRoot

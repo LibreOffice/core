@@ -436,7 +436,7 @@ RangeNameBufferWK3::~RangeNameBufferWK3()
 {
 }
 
-void RangeNameBufferWK3::Add( const ScDocument* pDoc, const OUString& rOrgName, const ScComplexRefData& rCRD )
+void RangeNameBufferWK3::Add( const ScDocument& rDoc, const OUString& rOrgName, const ScComplexRefData& rCRD )
 {
     Entry aInsert( rOrgName, rCRD );
 
@@ -444,8 +444,8 @@ void RangeNameBufferWK3::Add( const ScDocument* pDoc, const OUString& rOrgName, 
 
     const ScSingleRefData& rRef1 = rCRD.Ref1;
     const ScSingleRefData& rRef2 = rCRD.Ref2;
-    ScAddress aAbs1 = rRef1.toAbs(*pDoc, ScAddress());
-    ScAddress aAbs2 = rRef2.toAbs(*pDoc, ScAddress());
+    ScAddress aAbs1 = rRef1.toAbs(rDoc, ScAddress());
+    ScAddress aAbs2 = rRef2.toAbs(rDoc, ScAddress());
     if (aAbs1 == aAbs2)
     {
         pScTokenArray->AddSingleReference( rCRD.Ref1 );
