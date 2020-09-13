@@ -95,10 +95,10 @@ ContextHandlerRef ExtConditionalFormattingContext::onCreateContext(sal_Int32 nEl
         ScFormatEntry& rFormat = **maEntries.rbegin();
         assert(rFormat.GetType() == ScFormatEntry::Type::Iconset);
         ScIconSetFormat& rIconSet = static_cast<ScIconSetFormat&>(rFormat);
-        ScDocument* pDoc = &getScDocument();
+        ScDocument& rDoc = getScDocument();
         SCTAB nTab = getSheetIndex();
         ScAddress aPos(0, 0, nTab);
-        mpCurrentRule->SetData(&rIconSet, pDoc, aPos);
+        mpCurrentRule->SetData(&rIconSet, &rDoc, aPos);
         mpCurrentRule.reset();
     }
     if (nElement == XLS14_TOKEN(cfRule))
@@ -124,9 +124,9 @@ ContextHandlerRef ExtConditionalFormattingContext::onCreateContext(sal_Int32 nEl
         }
         else if (aType == "iconSet")
         {
-            ScDocument* pDoc = &getScDocument();
+            ScDocument& rDoc = getScDocument();
             mpCurrentRule.reset(new IconSetRule(*this));
-            maEntries.push_back(std::make_unique<ScIconSetFormat>(pDoc));
+            maEntries.push_back(std::make_unique<ScIconSetFormat>(&rDoc));
             return new IconSetContext(*this, mpCurrentRule.get());
         }
         else if (aType == "cellIs")
@@ -192,8 +192,8 @@ void ExtConditionalFormattingContext::onEndElement()
         case XM_TOKEN(sqref):
         {
             ScRangeList aRange;
-            ScDocument* pDoc = &getScDocument();
-            bool bSuccess = ScRangeStringConverter::GetRangeListFromString(aRange, aChars, pDoc, formula::FormulaGrammar::CONV_XL_OOX);
+            ScDocument& rDoc = getScDocument();
+            bool bSuccess = ScRangeStringConverter::GetRangeListFromString(aRange, aChars, &rDoc, formula::FormulaGrammar::CONV_XL_OOX);
             if (!bSuccess || aRange.empty())
                 break;
 
@@ -210,7 +210,7 @@ void ExtConditionalFormattingContext::onEndElement()
                 {
                     ScAddress rPos = aRange.GetTopLeftCorner();
                     rStyle = getStyles().createExtDxfStyle(rStyleIdx);
-                    ScCondFormatEntry* pEntry = new ScCondFormatEntry(eOperator, rFormula, "", pDoc,
+                    ScCondFormatEntry* pEntry = new ScCondFormatEntry(eOperator, rFormula, "", &rDoc,
                                                                       rPos, rStyle, "", "",
                                                                       formula::FormulaGrammar::GRAM_OOXML ,
                                                                       formula::FormulaGrammar::GRAM_OOXML,
@@ -318,9 +318,9 @@ ContextHandlerRef ExtGlobalWorkbookContext::onCreateContext( sal_Int32 nElement,
 {
     if (nElement == LOEXT_TOKEN(extCalcPr))
     {
-        ScDocument* pDoc = &getScDocument();
+        ScDocument& rDoc = getScDocument();
         sal_Int32 nToken = rAttribs.getToken( XML_stringRefSyntax, XML_CalcA1 );
-        ScCalcConfig aCalcConfig = pDoc->GetCalcConfig();
+        ScCalcConfig aCalcConfig = rDoc.GetCalcConfig();
 
         switch( nToken )
         {
@@ -340,7 +340,7 @@ ContextHandlerRef ExtGlobalWorkbookContext::onCreateContext( sal_Int32 nElement,
                 aCalcConfig.SetStringRefSyntax( formula::FormulaGrammar::CONV_UNSPECIFIED );
                break;
         }
-        pDoc->SetCalcConfig(aCalcConfig);
+        rDoc.SetCalcConfig(aCalcConfig);
     }
 
     return this;
