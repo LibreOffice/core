@@ -2146,12 +2146,12 @@ ScVbaRange::Cells( const uno::Any &nRowIndex, const uno::Any &nColumnIndex )
 
     // Performance: Use a common helper method for ScVbaRange::Cells and ScVbaWorksheet::Cells,
     // instead of creating a new ScVbaRange object in often-called ScVbaWorksheet::Cells
-    return CellsHelper( &getScDocument(), mxParent, mxContext, mxRange, nRowIndex, nColumnIndex );
+    return CellsHelper( getScDocument(), mxParent, mxContext, mxRange, nRowIndex, nColumnIndex );
 }
 
 // static
 uno::Reference< excel::XRange >
-ScVbaRange::CellsHelper( const ScDocument* pDoc,
+ScVbaRange::CellsHelper( const ScDocument& rDoc,
                          const uno::Reference< ov::XHelperInterface >& xParent,
                          const uno::Reference< uno::XComponentContext >& xContext,
                          const uno::Reference< css::table::XCellRange >& xRange,
@@ -2186,7 +2186,7 @@ ScVbaRange::CellsHelper( const ScDocument* pDoc,
         {
             ScAddress::Details dDetails( formula::FormulaGrammar::CONV_XL_A1, 0, 0 );
             ScRange tmpRange;
-            ScRefFlags flags = tmpRange.ParseCols( pDoc, sCol, dDetails );
+            ScRefFlags flags = tmpRange.ParseCols( rDoc, sCol, dDetails );
             if ( (flags & ScRefFlags::COL_VALID) == ScRefFlags::ZERO )
                throw uno::RuntimeException();
             nColumn = tmpRange.aStart.Col() + 1;
@@ -2405,7 +2405,7 @@ ScVbaRange::Columns(const uno::Any& aIndex )
         {
             ScAddress::Details dDetails( formula::FormulaGrammar::CONV_XL_A1, 0, 0 );
             ScRange tmpRange;
-            tmpRange.ParseCols( &getScDocument(), sAddress, dDetails );
+            tmpRange.ParseCols( getScDocument(), sAddress, dDetails );
             SCCOL nStartCol = tmpRange.aStart.Col();
             SCCOL nEndCol = tmpRange.aEnd.Col();
 
