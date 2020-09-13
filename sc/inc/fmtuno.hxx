@@ -194,7 +194,7 @@ public:
                                                 const formula::FormulaGrammar::Grammar eGrammar);
     virtual                 ~ScTableValidationObj() override;
 
-    ScValidationData*       CreateValidationData( ScDocument* pDoc,
+    ScValidationData*       CreateValidationData( ScDocument& rDoc,
                                                 formula::FormulaGrammar::Grammar eGrammar ) const;
 
                             // XSheetCondition
