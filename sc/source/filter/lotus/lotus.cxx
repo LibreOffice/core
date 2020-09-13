@@ -53,7 +53,8 @@ ErrCode ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocume
     {
         pStream->Seek( 0 );
         pStream->SetBufferSize( 32768 );
-        eRet = ScImportLotus123old(aContext, *pStream, pDocument, eSrc);
+        assert(pDocument == aContext.pDoc);
+        eRet = ScImportLotus123old(aContext, *pStream, eSrc);
         pStream->SetBufferSize( 0 );
         return eRet;
     }

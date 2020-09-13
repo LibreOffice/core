@@ -182,12 +182,11 @@ static WKTYP ScanVersion(SvStream& aStream)
     return eWK_UNKNOWN;
 }
 
-ErrCode ScImportLotus123old(LotusContext& rContext, SvStream& aStream, ScDocument* pDocument, rtl_TextEncoding eSrc )
+ErrCode ScImportLotus123old(LotusContext& rContext, SvStream& aStream, rtl_TextEncoding eSrc )
 {
     aStream.Seek( 0 );
 
     // make document pointer global
-    rContext.pDoc = pDocument;
     rContext.bEOF = false;
     rContext.eCharset = eSrc;
 
@@ -200,7 +199,7 @@ ErrCode ScImportLotus123old(LotusContext& rContext, SvStream& aStream, ScDocumen
     //scGetPageFormat( 0, &aPage );
 
     // start progressbar
-    ScfStreamProgressBar aPrgrsBar( aStream, pDocument->GetDocumentShell() );
+    ScfStreamProgressBar aPrgrsBar( aStream, rContext.pDoc->GetDocumentShell() );
 
     // detect file type
     rContext.eTyp = ScanVersion(aStream);
