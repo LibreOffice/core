@@ -189,7 +189,7 @@ void ScRangeData::CompileUnresolvedXML( sc::CompileFormulaContext& rCxt )
         // Don't let the compiler set an error for unknown names on final
         // compile, errors are handled by the interpreter thereafter.
         CompileRangeData( aSymbol, false);
-        rCxt.getDoc()->CheckLinkFormulaNeedingCheck( *pCode);
+        rCxt.getDoc().CheckLinkFormulaNeedingCheck( *pCode);
     }
 }
 
