@@ -249,23 +249,23 @@ SCCOLROW lcl_GetTab(const ScDocument& rDoc, const ScAddress& rPos, const ScSingl
  */
 bool
 lcl_checkRangeDimension(
-    const ScDocument* pDoc,
+    const ScDocument& rDoc,
     const ScAddress& rPos, const SingleDoubleRefProvider& rRef1, const SingleDoubleRefProvider& rRef2,
     const DimensionSelector aWhich)
 {
-    return aWhich(*pDoc, rPos, rRef1.Ref1) == aWhich(*pDoc, rPos, rRef2.Ref1) &&
-        aWhich(*pDoc, rPos, rRef1.Ref2) == aWhich(*pDoc, rPos, rRef2.Ref2);
+    return aWhich(rDoc, rPos, rRef1.Ref1) == aWhich(rDoc, rPos, rRef2.Ref1) &&
+        aWhich(rDoc, rPos, rRef1.Ref2) == aWhich(rDoc, rPos, rRef2.Ref2);
 }
 
 bool
 lcl_checkRangeDimensions(
-    const ScDocument* pDoc,
+    const ScDocument& rDoc,
     const ScAddress& rPos, const SingleDoubleRefProvider& rRef1, const SingleDoubleRefProvider& rRef2,
     bool& bCol, bool& bRow, bool& bTab)
 {
-    const bool bSameCols(lcl_checkRangeDimension(pDoc, rPos, rRef1, rRef2, lcl_GetCol));
-    const bool bSameRows(lcl_checkRangeDimension(pDoc, rPos, rRef1, rRef2, lcl_GetRow));
-    const bool bSameTabs(lcl_checkRangeDimension(pDoc, rPos, rRef1, rRef2, lcl_GetTab));
+    const bool bSameCols(lcl_checkRangeDimension(rDoc, rPos, rRef1, rRef2, lcl_GetCol));
+    const bool bSameRows(lcl_checkRangeDimension(rDoc, rPos, rRef1, rRef2, lcl_GetRow));
+    const bool bSameTabs(lcl_checkRangeDimension(rDoc, rPos, rRef1, rRef2, lcl_GetTab));
 
     // Test if exactly two dimensions are equal
     if (int(bSameCols) + int(bSameRows) + int(bSameTabs) == 2)
@@ -283,7 +283,7 @@ lcl_checkRangeDimensions(
  */
 bool
 lcl_checkRangeDimensions(
-    const ScDocument* pDoc, const ScAddress& rPos,
+    const ScDocument& rDoc, const ScAddress& rPos,
     const std::vector<formula::FormulaToken*>::const_iterator& rBegin,
     const std::vector<formula::FormulaToken*>::const_iterator& rEnd,
     bool& bCol, bool& bRow, bool& bTab)
@@ -294,7 +294,7 @@ lcl_checkRangeDimensions(
     bool bOk(false);
     {
         const SingleDoubleRefProvider aRefCur(**aCur);
-        bOk = lcl_checkRangeDimensions(pDoc, rPos, aRef, aRefCur, bCol, bRow, bTab);
+        bOk = lcl_checkRangeDimensions(rDoc, rPos, aRef, aRefCur, bCol, bRow, bTab);
     }
     while (bOk && aCur != rEnd)
     {
@@ -302,7 +302,7 @@ lcl_checkRangeDimensions(
         bool bColTmp(false);
         bool bRowTmp(false);
         bool bTabTmp(false);
-        bOk = lcl_checkRangeDimensions(pDoc, rPos, aRef, aRefCur, bColTmp, bRowTmp, bTabTmp);
+        bOk = lcl_checkRangeDimensions(rDoc, rPos, aRef, aRefCur, bColTmp, bRowTmp, bTabTmp);
         bOk = bOk && (bCol == bColTmp && bRow == bRowTmp && bTab == bTabTmp);
         ++aCur;
     }
@@ -390,7 +390,7 @@ lcl_refListFormsOneRange(
     bool bCell(false);
     bool bRow(false);
     bool bTab(false);
-    if (lcl_checkRangeDimensions(pDoc, rPos, rReferences.begin(), rReferences.end(), bCell, bRow, bTab))
+    if (lcl_checkRangeDimensions(*pDoc, rPos, rReferences.begin(), rReferences.end(), bCell, bRow, bTab))
     {
         DimensionSelector aWhich;
         if (bCell)
