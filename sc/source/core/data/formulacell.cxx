@@ -364,15 +364,15 @@ lcl_checkIfAdjacent(
 
 void
 lcl_fillRangeFromRefList(
-    const ScDocument* pDoc,
+    const ScDocument& rDoc,
     const ScAddress& aPos, const std::vector<formula::FormulaToken*>& rReferences, ScRange& rRange)
 {
     const ScSingleRefData aStart(
             SingleDoubleRefProvider(*rReferences.front()).Ref1);
-    rRange.aStart = aStart.toAbs(*pDoc, aPos);
+    rRange.aStart = aStart.toAbs(rDoc, aPos);
     const ScSingleRefData aEnd(
             SingleDoubleRefProvider(*rReferences.back()).Ref2);
-    rRange.aEnd = aEnd.toAbs(*pDoc, aPos);
+    rRange.aEnd = aEnd.toAbs(rDoc, aPos);
 }
 
 bool
@@ -383,7 +383,7 @@ lcl_refListFormsOneRange(
 {
     if (rReferences.size() == 1)
     {
-        lcl_fillRangeFromRefList(pDoc, rPos, rReferences, rRange);
+        lcl_fillRangeFromRefList(*pDoc, rPos, rReferences, rRange);
         return true;
     }
 
@@ -415,7 +415,7 @@ lcl_refListFormsOneRange(
         std::sort(rReferences.begin(), rReferences.end(), LessByReference(pDoc, rPos, aWhich));
         if (lcl_checkIfAdjacent(pDoc, rPos, rReferences, aWhich))
         {
-            lcl_fillRangeFromRefList(pDoc, rPos, rReferences, rRange);
+            lcl_fillRangeFromRefList(*pDoc, rPos, rReferences, rRange);
             return true;
         }
     }
