@@ -1465,7 +1465,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
         }
         else if (aFltName == pFilterQPro6)
         {
-            ErrCode eError = ScFormatFilter::Get().ScImportQuattroPro(rMedium.GetInStream(), &m_aDocument);
+            ErrCode eError = ScFormatFilter::Get().ScImportQuattroPro(rMedium.GetInStream(), m_aDocument);
             if (eError != ERRCODE_NONE)
             {
                 if (!GetError())

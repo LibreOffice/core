@@ -58,7 +58,7 @@ class SAL_DLLPUBLIC_RTTI ScFormatFilterPlugin {
   public:
     // various import filters
     virtual ErrCode ScImportLotus123( SfxMedium&, ScDocument&, rtl_TextEncoding eSrc ) = 0;
-    virtual ErrCode ScImportQuattroPro(SvStream* pStream, ScDocument *pDoc) = 0;
+    virtual ErrCode ScImportQuattroPro(SvStream* pStream, ScDocument& rDoc) = 0;
     virtual ErrCode ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT ) = 0;
         // eFormat == EIF_AUTO  -> matching filter is used automatically
         // eFormat == EIF_BIFF5 -> only Biff5 stream is read successfully (in an Excel97 doc, too)
