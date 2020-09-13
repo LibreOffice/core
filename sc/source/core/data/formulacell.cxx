@@ -377,20 +377,20 @@ lcl_fillRangeFromRefList(
 
 bool
 lcl_refListFormsOneRange(
-        const ScDocument* pDoc,
+        const ScDocument& rDoc,
         const ScAddress& rPos, std::vector<formula::FormulaToken*>& rReferences,
         ScRange& rRange)
 {
     if (rReferences.size() == 1)
     {
-        lcl_fillRangeFromRefList(*pDoc, rPos, rReferences, rRange);
+        lcl_fillRangeFromRefList(rDoc, rPos, rReferences, rRange);
         return true;
     }
 
     bool bCell(false);
     bool bRow(false);
     bool bTab(false);
-    if (lcl_checkRangeDimensions(*pDoc, rPos, rReferences.begin(), rReferences.end(), bCell, bRow, bTab))
+    if (lcl_checkRangeDimensions(rDoc, rPos, rReferences.begin(), rReferences.end(), bCell, bRow, bTab))
     {
         DimensionSelector aWhich;
         if (bCell)
@@ -412,10 +412,10 @@ lcl_refListFormsOneRange(
         }
 
         // Sort the references by start of range
-        std::sort(rReferences.begin(), rReferences.end(), LessByReference(*pDoc, rPos, aWhich));
-        if (lcl_checkIfAdjacent(*pDoc, rPos, rReferences, aWhich))
+        std::sort(rReferences.begin(), rReferences.end(), LessByReference(rDoc, rPos, aWhich));
+        if (lcl_checkIfAdjacent(rDoc, rPos, rReferences, aWhich))
         {
-            lcl_fillRangeFromRefList(*pDoc, rPos, rReferences, rRange);
+            lcl_fillRangeFromRefList(rDoc, rPos, rReferences, rRange);
             return true;
         }
     }
@@ -3086,7 +3086,7 @@ ScFormulaCell::HasRefListExpressibleAsOneReference(ScRange& rRange) const
         if (pFunction && !aIter.GetNextReferenceRPN()
                 && (pFunction->GetParamCount() == aReferences.size()))
         {
-            return lcl_refListFormsOneRange(pDocument, aPos, aReferences, rRange);
+            return lcl_refListFormsOneRange(*pDocument, aPos, aReferences, rRange);
         }
     }
     return false;
