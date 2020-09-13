@@ -1466,7 +1466,7 @@ class CopyByCloneHandler
             if (nErr != FormulaError::NONE)
             {
                 // error codes are cloned with values
-                ScFormulaCell* pErrCell = new ScFormulaCell(mrDestCol.GetDoc(), aDestPos);
+                ScFormulaCell* pErrCell = new ScFormulaCell(*mrDestCol.GetDoc(), aDestPos);
                 pErrCell->SetErrCode(nErr);
                 mrDestCol.SetFormulaCell(maDestPos, nRow, pErrCell, meListenType);
                 setDefaultAttrToDest(nRow);
