@@ -29,6 +29,7 @@
 #endif
 #endif
 #include <PhysicalFontFace.hxx>
+#include <fontsubset.hxx>
 #include <salgdi.hxx>
 #include <salframe.hxx>
 #include <sft.hxx>
@@ -940,6 +941,113 @@ void SalGraphics::GetGlyphWidths(const vcl::AbstractTrueTypeFont& rTTF,
         if (nGlyph > 0)
             rUnicodeEnc[nUcsChar] = nGlyph;
     }
+}
+
+bool SalGraphics::CreateTTFfontSubset(vcl::AbstractTrueTypeFont& rTTF, const OString& rSysPath,
+                                   const bool bVertical, const sal_GlyphId* pGlyphIds,
+                                   const sal_uInt8* pEncoding, sal_Int32* pGlyphWidths,
+                                   const int nOrigGlyphCount)
+{
+    // Multiple questions:
+    // - Why is there a glyph limit?
+    //   MacOS used to handle 257 glyphs...
+    //   Also the much more complex PrintFontManager variant has this limit.
+    //   Also the very first implementation has the limit in
+    //   commit 8789ed701e98031f2a1657ea0dfd6f7a0b050992
+    // - Why doesn't the PrintFontManager care about the fake glpyh? It
+    //   is used on all unx platforms to create the subset font.
+    // - Should the SAL_WARN actually be asserts, like on MacOS?
+    if (nOrigGlyphCount > 256)
+    {
+        SAL_WARN("vcl.fonts", "too many glyphs for subsetting");
+        return false;
+    }
+
+    int nGlyphCount = nOrigGlyphCount;
+    sal_uInt16 aShortIDs[256];
+    sal_uInt8 aTempEncs[256];
+
+    // handle the undefined / first font glyph
+    int nNotDef = -1, i;
+    for (i = 0; i < nGlyphCount; ++i)
+    {
+        aTempEncs[i] = pEncoding[i];
+        aShortIDs[i] = static_cast<sal_uInt16>(pGlyphIds[i]);
+        if (!aShortIDs[i])
+            if (nNotDef < 0)
+                nNotDef = i;
+    }
+
+    // nNotDef glyph must be in pos 0 => swap glyphids
+    if (nNotDef != 0)
+    {
+        if (nNotDef < 0)
+        {
+            if (nGlyphCount == 256)
+            {
+                SAL_WARN("vcl.fonts", "too many glyphs for subsetting");
+                return false;
+            }
+            nNotDef = nGlyphCount++;
+        }
+
+        aShortIDs[nNotDef] = aShortIDs[0];
+        aTempEncs[nNotDef] = aTempEncs[0];
+        aShortIDs[0] = 0;
+        aTempEncs[0] = 0;
+    }
+
+    std::unique_ptr<sal_uInt16[]> pMetrics
+        = GetTTSimpleGlyphMetrics(&rTTF, aShortIDs, nGlyphCount, bVertical);
+    if (!pMetrics)
+        return false;
+
+    sal_uInt16 nNotDefAdv = pMetrics[0];
+    pMetrics[0] = pMetrics[nNotDef];
+    pMetrics[nNotDef] = nNotDefAdv;
+    for (i = 0; i < nOrigGlyphCount; ++i)
+        pGlyphWidths[i] = pMetrics[i];
+    pMetrics.reset();
+
+    // write subset into destination file
+    return (CreateTTFromTTGlyphs(&rTTF, rSysPath.getStr(), aShortIDs, aTempEncs, nGlyphCount)
+            == vcl::SFErrCodes::Ok);
+}
+
+bool SalGraphics::CreateCFFfontSubset(const unsigned char* pFontBytes, int nByteLength,
+                                      const OString& rSysPath, const sal_GlyphId* pGlyphIds,
+                                      const sal_uInt8* pEncoding, sal_Int32* pGlyphWidths,
+                                      int nGlyphCount, FontSubsetInfo& rInfo)
+{
+    FILE* pOutFile = fopen(rSysPath.getStr(), "wb");
+    rInfo.LoadFont(FontType::CFF_FONT, pFontBytes, nByteLength);
+    bool bRet = rInfo.CreateFontSubset(FontType::TYPE1_PFB, pOutFile, nullptr, pGlyphIds, pEncoding,
+                                       nGlyphCount, pGlyphWidths);
+    fclose(pOutFile);
+    return bRet;
+}
+
+void SalGraphics::FillFontSubsetInfo(const vcl::TTGlobalFontInfo& rTTInfo, const OUString& pPSName,
+                                     FontSubsetInfo& rInfo)
+{
+    rInfo.m_aPSName = pPSName;
+    rInfo.m_nFontType = FontType::SFNT_TTF;
+    rInfo.m_aFontBBox
+        = tools::Rectangle(Point(rTTInfo.xMin, rTTInfo.yMin), Point(rTTInfo.xMax, rTTInfo.yMax));
+    rInfo.m_nCapHeight = rTTInfo.yMax; // Well ...
+    rInfo.m_nAscent = rTTInfo.winAscent;
+    rInfo.m_nDescent = rTTInfo.winDescent;
+
+    // mac fonts usually do not have an OS2-table
+    // => get valid ascent/descent values from other tables
+    if (!rInfo.m_nAscent)
+        rInfo.m_nAscent = +rTTInfo.typoAscender;
+    if (!rInfo.m_nAscent)
+        rInfo.m_nAscent = +rTTInfo.ascender;
+    if (!rInfo.m_nDescent)
+        rInfo.m_nDescent = +rTTInfo.typoDescender;
+    if (!rInfo.m_nDescent)
+        rInfo.m_nDescent = -rTTInfo.descender;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

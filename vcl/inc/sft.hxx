@@ -144,7 +144,7 @@ namespace vcl
 
 /** Return value of GetTTGlobalFontInfo() */
 
-    typedef struct {
+    typedef struct TTGlobalFontInfo_ {
         char *family;             /**< family name                                             */
         sal_Unicode *ufamily;     /**< family name UCS2                                         */
         char *subfamily;          /**< subfamily name                                          */

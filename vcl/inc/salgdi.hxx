@@ -57,6 +57,7 @@ namespace basegfx {
 namespace vcl
 {
 class AbstractTrueTypeFont;
+typedef struct TTGlobalFontInfo_ TTGlobalFontInfo;
 }
 
 typedef sal_Unicode sal_Ucs; // TODO: use sal_UCS4 instead of sal_Unicode
@@ -622,6 +623,19 @@ protected:
     static void GetGlyphWidths(const vcl::AbstractTrueTypeFont& rTTF,
                                const PhysicalFontFace& rFontFace, bool bVertical,
                                std::vector<sal_Int32>& rWidths, Ucs2UIntMap& rUnicodeEnc);
+
+    static bool CreateTTFfontSubset(vcl::AbstractTrueTypeFont& aTTF, const OString& rSysPath,
+                                    const bool bVertical, const sal_GlyphId* pGlyphIds,
+                                    const sal_uInt8* pEncoding, sal_Int32* pGlyphWidths,
+                                    int nGlyphCount);
+
+    static bool CreateCFFfontSubset(const unsigned char* pFontBytes, int nByteLength,
+                                    const OString& rSysPath, const sal_GlyphId* pGlyphIds,
+                                    const sal_uInt8* pEncoding, sal_Int32* pGlyphWidths,
+                                    int nGlyphCount, FontSubsetInfo& rInfo);
+
+    static void FillFontSubsetInfo(const vcl::TTGlobalFontInfo& rTTInfo, const OUString& pPSName,
+                                   FontSubsetInfo& rInfo);
 };
 
 bool SalGraphics::IsNativeControlSupported(ControlType eType, ControlPart ePart)
