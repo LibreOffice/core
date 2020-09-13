@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c051c7a8_eba2ecf7",
+        "filename": "cui/source/inc/cfgutil.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-09-13T08:08:22Z",
+      "side": 1,
+      "message": "This appears to be unused.",
+      "revId": "03f51176e2de39eef15bad604500a06a49211032",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
