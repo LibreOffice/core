@@ -8092,8 +8092,8 @@ void ScInterpreter::ScIndirect()
     OUString sRefStr = GetString().getString();
     ScRefAddress aRefAd, aRefAd2;
     ScAddress::ExternalInfo aExtInfo;
-    if ( ConvertDoubleRef(&mrDoc, sRefStr, nTab, aRefAd, aRefAd2, aDetails, &aExtInfo) ||
-         ( bTryXlA1 && ConvertDoubleRef(&mrDoc, sRefStr, nTab, aRefAd,
+    if ( ConvertDoubleRef(mrDoc, sRefStr, nTab, aRefAd, aRefAd2, aDetails, &aExtInfo) ||
+         ( bTryXlA1 && ConvertDoubleRef(mrDoc, sRefStr, nTab, aRefAd,
                                         aRefAd2, aDetailsXlA1, &aExtInfo) ) )
     {
         if (aExtInfo.mbExternal)

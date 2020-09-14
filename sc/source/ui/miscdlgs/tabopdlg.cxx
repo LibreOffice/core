@@ -213,7 +213,7 @@ static bool lcl_Parse( const OUString& rString, const ScDocument& rDoc, SCTAB nC
     bool bRet = false;
     const formula::FormulaGrammar::AddressConvention eConv = rDoc.GetAddressConvention();
     if ( rString.indexOf(':') != -1 )
-        bRet = ConvertDoubleRef( &rDoc, rString, nCurTab, rStart, rEnd, eConv );
+        bRet = ConvertDoubleRef( rDoc, rString, nCurTab, rStart, rEnd, eConv );
     else
     {
         bRet = ConvertSingleRef( &rDoc, rString, nCurTab, rStart, eConv );

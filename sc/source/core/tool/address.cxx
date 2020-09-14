@@ -1515,7 +1515,7 @@ bool ConvertSingleRef( const ScDocument* pDoc, const OUString& rRefString,
     return bRet;
 }
 
-bool ConvertDoubleRef( const ScDocument* pDoc, const OUString& rRefString, SCTAB nDefTab,
+bool ConvertDoubleRef( const ScDocument& rDoc, const OUString& rRefString, SCTAB nDefTab,
                        ScRefAddress& rStartRefAddress, ScRefAddress& rEndRefAddress,
                        const ScAddress::Details& rDetails,
                        ScAddress::ExternalInfo* pExtInfo /* = NULL */ )
@@ -1524,7 +1524,7 @@ bool ConvertDoubleRef( const ScDocument* pDoc, const OUString& rRefString, SCTAB
     if (pExtInfo || (ScGlobal::FindUnquoted( rRefString, SC_COMPILER_FILE_TAB_SEP) == -1))
     {
         ScRange aRange( ScAddress( 0, 0, nDefTab));
-        ScRefFlags nRes = aRange.Parse( rRefString, pDoc, rDetails, pExtInfo);
+        ScRefFlags nRes = aRange.Parse( rRefString, &rDoc, rDetails, pExtInfo);
         if ( nRes & ScRefFlags::VALID )
         {
             rStartRefAddress.Set( aRange.aStart,

@@ -56,7 +56,7 @@ bool ScRangeUtil::MakeArea( const OUString&   rAreaStr,
         aStrArea += ":" + rAreaStr.copy( nPointPos+1 ); // do not include '.' in copy
     }
 
-    bSuccess = ConvertDoubleRef( &rDoc, aStrArea, nTab, startPos, endPos, rDetails );
+    bSuccess = ConvertDoubleRef( rDoc, aStrArea, nTab, startPos, endPos, rDetails );
 
     if ( bSuccess )
         rArea = ScArea( startPos.Tab(),
@@ -179,7 +179,7 @@ bool ScRangeUtil::IsAbsArea( const OUString&  rAreaStr,
     ScRefAddress    startPos;
     ScRefAddress    endPos;
 
-    bool bIsAbsArea = ConvertDoubleRef( &rDoc, rAreaStr, nTab, startPos, endPos, rDetails );
+    bool bIsAbsArea = ConvertDoubleRef( rDoc, rAreaStr, nTab, startPos, endPos, rDetails );
 
     if ( bIsAbsArea )
     {
