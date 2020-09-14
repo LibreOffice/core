@@ -184,7 +184,7 @@ class ScFormulaListener final : public SvtListener
 {
 private:
     mutable bool mbDirty;
-    ScDocument* mpDoc;
+    ScDocument& mrDoc;
     std::function<void()> maCallbackFunction;
 
     void startListening(const ScTokenArray* pTokens, const ScRange& rPos);
@@ -192,8 +192,8 @@ private:
 
 public:
     explicit ScFormulaListener(ScFormulaCell* pCell);
-    explicit ScFormulaListener(ScDocument* pDoc);
-    explicit ScFormulaListener(ScDocument* pDoc, const ScRangeList& rRange);
+    explicit ScFormulaListener(ScDocument& rDoc);
+    explicit ScFormulaListener(ScDocument& rDoc, const ScRangeList& rRange);
     virtual ~ScFormulaListener() override;
 
     void Notify( const SfxHint& rHint ) override;
@@ -348,7 +348,7 @@ class SC_DLLPUBLIC ScConditionEntry : public ScFormatEntry
 public:
             ScConditionEntry( ScConditionMode eOper,
                                 const OUString& rExpr1, const OUString& rExpr2,
-                                ScDocument* pDocument, const ScAddress& rPos,
+                                ScDocument& rDocument, const ScAddress& rPos,
                                 const OUString& rExprNmsp1, const OUString& rExprNmsp2,
                                 formula::FormulaGrammar::Grammar eGrammar1,
                                 formula::FormulaGrammar::Grammar eGrammar2,
@@ -454,7 +454,7 @@ class SC_DLLPUBLIC ScCondFormatEntry final : public ScConditionEntry
 public:
             ScCondFormatEntry( ScConditionMode eOper,
                                 const OUString& rExpr1, const OUString& rExpr2,
-                                ScDocument* pDocument, const ScAddress& rPos,
+                                ScDocument& rDocument, const ScAddress& rPos,
                                 const OUString& rStyle,
                                 const OUString& rExprNmsp1 = EMPTY_OUSTRING,
                                 const OUString& rExprNmsp2 = EMPTY_OUSTRING,

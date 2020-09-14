@@ -4226,7 +4226,7 @@ void Test::testFormulaRefUpdateValidity()
 
     // Set validity in A2.
     ScValidationData aData(
-        SC_VALID_LIST, ScConditionMode::Equal, "C2:C4", "", m_pDoc, ScAddress(0,1,0), "", "",
+        SC_VALID_LIST, ScConditionMode::Equal, "C2:C4", "", *m_pDoc, ScAddress(0,1,0), "", "",
         m_pDoc->GetGrammar(), m_pDoc->GetGrammar());
 
     sal_uLong nIndex = m_pDoc->AddValidationEntry(aData);

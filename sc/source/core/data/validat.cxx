@@ -61,11 +61,11 @@ using namespace formula;
 
 ScValidationData::ScValidationData( ScValidationMode eMode, ScConditionMode eOper,
                                     const OUString& rExpr1, const OUString& rExpr2,
-                                    ScDocument* pDocument, const ScAddress& rPos,
+                                    ScDocument& rDocument, const ScAddress& rPos,
                                     const OUString& rExprNmsp1, const OUString& rExprNmsp2,
                                     FormulaGrammar::Grammar eGrammar1,
                                     FormulaGrammar::Grammar eGrammar2 )
-    : ScConditionEntry( eOper, rExpr1, rExpr2, pDocument, rPos, rExprNmsp1,
+    : ScConditionEntry( eOper, rExpr1, rExpr2, rDocument, rPos, rExprNmsp1,
                         rExprNmsp2, eGrammar1, eGrammar2 )
     , nKey( 0 )
     , eDataMode( eMode )
@@ -127,7 +127,7 @@ ScValidationData::~ScValidationData()
 
 bool ScValidationData::IsEmpty() const
 {
-    ScValidationData aDefault( SC_VALID_ANY, ScConditionMode::Equal, "", "", GetDocument(), ScAddress() );
+    ScValidationData aDefault( SC_VALID_ANY, ScConditionMode::Equal, "", "", *GetDocument(), ScAddress() );
     return EqualEntries( aDefault );
 }
 

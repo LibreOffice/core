@@ -1327,7 +1327,7 @@ void checkValiditationEntries( const ValDataTestParams& rVDTParams )
     //create expected data validation entry
     ScValidationData aValData(
         rVDTParams.eValMode, rVDTParams.eCondOp, rVDTParams.aStrVal1,
-        rVDTParams.aStrVal2, &rDoc, rVDTParams.aPosition, EMPTY_OUSTRING,
+        rVDTParams.aStrVal2, rDoc, rVDTParams.aPosition, EMPTY_OUSTRING,
         EMPTY_OUSTRING, rDoc.GetStorageGrammar(), rDoc.GetStorageGrammar()
     );
     aValData.SetIgnoreBlank( true );

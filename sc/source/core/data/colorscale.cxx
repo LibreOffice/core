@@ -25,27 +25,27 @@
 
 ScFormulaListener::ScFormulaListener(ScFormulaCell* pCell):
     mbDirty(false),
-    mpDoc(pCell->GetDocument())
+    mrDoc(*pCell->GetDocument())
 {
     startListening( pCell->GetCode(), pCell->aPos );
 }
 
-ScFormulaListener::ScFormulaListener(ScDocument* pDoc):
+ScFormulaListener::ScFormulaListener(ScDocument& rDoc):
     mbDirty(false),
-    mpDoc(pDoc)
+    mrDoc(rDoc)
 {
 }
 
-ScFormulaListener::ScFormulaListener(ScDocument* pDoc, const ScRangeList& rRange):
+ScFormulaListener::ScFormulaListener(ScDocument& rDoc, const ScRangeList& rRange):
     mbDirty(false),
-    mpDoc(pDoc)
+    mrDoc(rDoc)
 {
     startListening(rRange);
 }
 
 void ScFormulaListener::startListening(const ScTokenArray* pArr, const ScRange& rRange)
 {
-    if (!pArr || mpDoc->IsClipOrUndo())
+    if (!pArr || mrDoc.IsClipOrUndo())
         return;
 
     for ( auto t: pArr->References() )
@@ -54,21 +54,21 @@ void ScFormulaListener::startListening(const ScTokenArray* pArr, const ScRange& 
         {
             case formula::svSingleRef:
             {
-                ScAddress aCell = t->GetSingleRef()->toAbs(*mpDoc, rRange.aStart);
-                ScAddress aCell2 = t->GetSingleRef()->toAbs(*mpDoc, rRange.aEnd);
+                ScAddress aCell = t->GetSingleRef()->toAbs(mrDoc, rRange.aStart);
+                ScAddress aCell2 = t->GetSingleRef()->toAbs(mrDoc, rRange.aEnd);
                 ScRange aRange(aCell, aCell2);
                 if (aRange.IsValid())
-                    mpDoc->StartListeningArea(aRange, false, this);
+                    mrDoc.StartListeningArea(aRange, false, this);
             }
             break;
             case formula::svDoubleRef:
             {
                 const ScSingleRefData& rRef1 = *t->GetSingleRef();
                 const ScSingleRefData& rRef2 = *t->GetSingleRef2();
-                ScAddress aCell1 = rRef1.toAbs(*mpDoc, rRange.aStart);
-                ScAddress aCell2 = rRef2.toAbs(*mpDoc, rRange.aStart);
-                ScAddress aCell3 = rRef1.toAbs(*mpDoc, rRange.aEnd);
-                ScAddress aCell4 = rRef2.toAbs(*mpDoc, rRange.aEnd);
+                ScAddress aCell1 = rRef1.toAbs(mrDoc, rRange.aStart);
+                ScAddress aCell2 = rRef2.toAbs(mrDoc, rRange.aStart);
+                ScAddress aCell3 = rRef1.toAbs(mrDoc, rRange.aEnd);
+                ScAddress aCell4 = rRef2.toAbs(mrDoc, rRange.aEnd);
                 ScRange aRange1(aCell1, aCell3);
                 ScRange aRange2(aCell2, aCell4);
                 aRange1.ExtendTo(aRange2);
@@ -78,14 +78,14 @@ void ScFormulaListener::startListening(const ScTokenArray* pArr, const ScRange& 
                     {   // automagically
                         if ( rRef1.IsColRel() )
                         {   // ColName
-                            aRange1.aEnd.SetRow(mpDoc->MaxRow());
+                            aRange1.aEnd.SetRow(mrDoc.MaxRow());
                         }
                         else
                         {   // RowName
-                            aRange1.aEnd.SetCol(mpDoc->MaxCol());
+                            aRange1.aEnd.SetCol(mrDoc.MaxCol());
                         }
                     }
-                    mpDoc->StartListeningArea(aRange1, false, this);
+                    mrDoc.StartListeningArea(aRange1, false, this);
                 }
             }
             break;
@@ -97,14 +97,14 @@ void ScFormulaListener::startListening(const ScTokenArray* pArr, const ScRange& 
 
 void ScFormulaListener::startListening(const ScRangeList& rRange)
 {
-    if (mpDoc->IsClipOrUndo())
+    if (mrDoc.IsClipOrUndo())
         return;
 
     size_t nLength = rRange.size();
     for (size_t i = 0; i < nLength; ++i)
     {
         const ScRange& aRange = rRange[i];
-        mpDoc->StartListeningArea(aRange, false, this);
+        mrDoc.StartListeningArea(aRange, false, this);
     }
 }
 
@@ -120,7 +120,7 @@ void ScFormulaListener::setCallback(const std::function<void()>& aCallback)
 
 void ScFormulaListener::stopListening()
 {
-    if (mpDoc->IsClipOrUndo())
+    if (mrDoc.IsClipOrUndo())
         return;
 
     EndListeningAll();
@@ -341,7 +341,7 @@ void ScColorScaleEntry::setListener()
             || meType == COLORSCALE_MIN || meType == COLORSCALE_MAX
             || meType == COLORSCALE_AUTO)
     {
-        mpListener.reset(new ScFormulaListener(mpFormat->GetDocument(), mpFormat->GetRange()));
+        mpListener.reset(new ScFormulaListener(*mpFormat->GetDocument(), mpFormat->GetRange()));
         mpListener->setCallback([&]() { mpFormat->DoRepaint();});
     }
 }

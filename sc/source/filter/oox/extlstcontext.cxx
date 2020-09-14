@@ -210,7 +210,7 @@ void ExtConditionalFormattingContext::onEndElement()
                 {
                     ScAddress rPos = aRange.GetTopLeftCorner();
                     rStyle = getStyles().createExtDxfStyle(rStyleIdx);
-                    ScCondFormatEntry* pEntry = new ScCondFormatEntry(eOperator, rFormula, "", &rDoc,
+                    ScCondFormatEntry* pEntry = new ScCondFormatEntry(eOperator, rFormula, "", rDoc,
                                                                       rPos, rStyle, "", "",
                                                                       formula::FormulaGrammar::GRAM_OOXML ,
                                                                       formula::FormulaGrammar::GRAM_OOXML,
