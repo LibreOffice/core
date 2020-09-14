@@ -79,7 +79,7 @@ ScRangeData::ScRangeData( ScDocument& rDok,
     }
 }
 
-ScRangeData::ScRangeData( ScDocument* pDok,
+ScRangeData::ScRangeData( ScDocument& rDok,
                           const OUString& rName,
                           const ScTokenArray& rArr,
                           const ScAddress& rAddress,
@@ -89,7 +89,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                 pCode       ( new ScTokenArray( rArr ) ),
                 aPos        ( rAddress ),
                 eType       ( nType ),
-                pDoc        ( pDok ),
+                pDoc        ( &rDok ),
                 eTempGrammar( FormulaGrammar::GRAM_UNSPECIFIED ),
                 nIndex      ( 0 ),
                 bModified   ( false )

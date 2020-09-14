@@ -361,7 +361,7 @@ ScRangeData* lcl_addNewByNameAndTokens( ScDocument& rDoc, ScRangeName* pNames, c
     if ( nUnoType & NamedRangeFlag::ROW_HEADER )         nNewType |= ScRangeData::Type::RowHeader;
     ScTokenArray aTokenArray(rDoc);
     (void)ScTokenConversion::ConvertToTokenArray( rDoc, aTokenArray, rTokens );
-    ScRangeData* pNew = new ScRangeData( &rDoc, rName, aTokenArray, ScAddress(), nNewType );
+    ScRangeData* pNew = new ScRangeData( rDoc, rName, aTokenArray, ScAddress(), nNewType );
     pNew->GuessPosition();
     if ( nIndex )
         pNew->SetIndex( nIndex );

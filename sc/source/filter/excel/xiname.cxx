@@ -236,7 +236,7 @@ void XclImpName::ConvertTokens()
 void XclImpName::InsertName(const ScTokenArray* pArray)
 {
     // create the Calc name data
-    ScRangeData* pData = new ScRangeData(&GetDoc(), maScName, *pArray, ScAddress(), meNameType);
+    ScRangeData* pData = new ScRangeData(GetDoc(), maScName, *pArray, ScAddress(), meNameType);
     pData->GuessPosition();             // calculate base position for relative refs
     pData->SetIndex( mnNameIndex );     // used as unique identifier in formulas
     if (mnXclTab == EXC_NAME_GLOBAL)

@@ -191,7 +191,7 @@ void ScNamedRangeObj::Modify_Impl( const OUString* pNewName, const ScTokenArray*
 
     ScRangeData* pNew = nullptr;
     if (pNewTokens)
-        pNew = new ScRangeData( &rDoc, aInsName, *pNewTokens, aPos, nType );
+        pNew = new ScRangeData( rDoc, aInsName, *pNewTokens, aPos, nType );
     else
         pNew = new ScRangeData( rDoc, aInsName, aContent, aPos, nType, eGrammar );
 
