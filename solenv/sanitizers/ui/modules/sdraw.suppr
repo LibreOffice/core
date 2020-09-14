@@ -4,7 +4,5 @@ sd/uiconfig/sdraw/ui/breakdialog.ui://GtkLabel[@id='label3'] orphan-label
 sd/uiconfig/sdraw/ui/breakdialog.ui://GtkLabel[@id='metafiles'] orphan-label
 sd/uiconfig/sdraw/ui/breakdialog.ui://GtkLabel[@id='metaobjects'] orphan-label
 sd/uiconfig/sdraw/ui/breakdialog.ui://GtkLabel[@id='drawingobjects'] orphan-label
-sd/uiconfig/sdraw/ui/insertlayer.ui://GtkEntry[@id='name'] no-labelled-by
-sd/uiconfig/sdraw/ui/insertlayer.ui://GtkEntry[@id='title'] no-labelled-by
 sd/uiconfig/sdraw/ui/namedesign.ui://GtkEntry[@id='entry'] no-labelled-by
 sd/uiconfig/sdraw/ui/paranumberingtab.ui://GtkSpinButton[@id='spinbuttonNF_NEW_START'] no-labelled-by
