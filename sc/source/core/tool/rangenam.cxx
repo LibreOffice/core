@@ -54,7 +54,7 @@ ScRangeData::ScRangeData( ScDocument& rDok,
                 aUpperName  ( ScGlobal::getCharClassPtr()->uppercase( rName ) ),
                 aPos        ( rAddress ),
                 eType       ( nType ),
-                pDoc        ( &rDok ),
+                rDoc        ( rDok ),
                 eTempGrammar( eGrammar ),
                 nIndex      ( 0 ),
                 bModified   ( false )
@@ -63,10 +63,10 @@ ScRangeData::ScRangeData( ScDocument& rDok,
     {
         // Let the compiler set an error on unknown names for a subsequent
         // CompileUnresolvedXML().
-        const bool bImporting = pDoc->IsImportingXML();
+        const bool bImporting = rDoc.IsImportingXML();
         CompileRangeData( rSymbol, bImporting);
         if (bImporting)
-            pDoc->CheckLinkFormulaNeedingCheck( *pCode);
+            rDoc.CheckLinkFormulaNeedingCheck( *pCode);
     }
     else
     {
@@ -74,7 +74,7 @@ ScRangeData::ScRangeData( ScDocument& rDok,
         // Copy ctor default-constructs pCode if it was NULL, so it's initialized here, too,
         // to ensure same behavior if unnecessary copying is left out.
 
-        pCode.reset( new ScTokenArray(*pDoc) );
+        pCode.reset( new ScTokenArray(rDoc) );
         pCode->SetFromRangeName(true);
     }
 }
@@ -89,7 +89,7 @@ ScRangeData::ScRangeData( ScDocument& rDok,
                 pCode       ( new ScTokenArray( rArr ) ),
                 aPos        ( rAddress ),
                 eType       ( nType ),
-                pDoc        ( &rDok ),
+                rDoc        ( rDok ),
                 eTempGrammar( FormulaGrammar::GRAM_UNSPECIFIED ),
                 nIndex      ( 0 ),
                 bModified   ( false )
@@ -106,7 +106,7 @@ ScRangeData::ScRangeData( ScDocument& rDok,
                 pCode       ( new ScTokenArray(rDok) ),
                 aPos        ( rTarget ),
                 eType       ( Type::Name ),
-                pDoc        ( &rDok ),
+                rDoc        ( rDok ),
                 eTempGrammar( FormulaGrammar::GRAM_UNSPECIFIED ),
                 nIndex      ( 0 ),
                 bModified   ( false )
@@ -116,7 +116,7 @@ ScRangeData::ScRangeData( ScDocument& rDok,
     aRefData.SetFlag3D( true );
     pCode->AddSingleReference( aRefData );
     pCode->SetFromRangeName(true);
-    ScCompiler aComp( pDoc, aPos, *pCode, pDoc->GetGrammar() );
+    ScCompiler aComp( &rDoc, aPos, *pCode, rDoc.GetGrammar() );
     aComp.CompileTokenArray();
     if ( pCode->GetCodeError() == FormulaError::NONE )
         eType |= Type::AbsPos;
@@ -128,7 +128,7 @@ ScRangeData::ScRangeData(const ScRangeData& rScRangeData, ScDocument* pDocument,
     pCode       (rScRangeData.pCode ? rScRangeData.pCode->Clone().release() : new ScTokenArray(*pDocument)),   // make real copy (not copy-ctor)
     aPos        (pPos ? *pPos : rScRangeData.aPos),
     eType       (rScRangeData.eType),
-    pDoc        (pDocument ? pDocument : rScRangeData.pDoc),
+    rDoc        (pDocument ? *pDocument : rScRangeData.rDoc),
     eTempGrammar(rScRangeData.eTempGrammar),
     nIndex      (rScRangeData.nIndex),
     bModified   (rScRangeData.bModified)
@@ -150,7 +150,7 @@ void ScRangeData::CompileRangeData( const OUString& rSymbol, bool bSetError )
         eTempGrammar = FormulaGrammar::GRAM_NATIVE;
     }
 
-    ScCompiler aComp( pDoc, aPos, eTempGrammar );
+    ScCompiler aComp( &rDoc, aPos, eTempGrammar );
     if (bSetError)
         aComp.SetExtendedErrorDetection( ScCompiler::EXTENDED_ERROR_DETECTION_NAME_NO_BREAK);
     pCode = aComp.CompileString( rSymbol );
@@ -170,7 +170,7 @@ void ScRangeData::CompileRangeData( const OUString& rSymbol, bool bSetError )
             eType = eType | Type::AbsArea;
     }
     // For manual input set an error for an incomplete formula.
-    if (!pDoc->IsImportingXML())
+    if (!rDoc.IsImportingXML())
     {
         aComp.CompileTokenArray();
         pCode->DelRPN();
@@ -245,14 +245,14 @@ void ScRangeData::GuessPosition()
 
 void ScRangeData::GetSymbol( OUString& rSymbol, const FormulaGrammar::Grammar eGrammar ) const
 {
-    ScCompiler aComp(pDoc, aPos, *pCode, eGrammar);
+    ScCompiler aComp(&rDoc, aPos, *pCode, eGrammar);
     aComp.CreateStringFromTokenArray( rSymbol );
 }
 
 void ScRangeData::GetSymbol( OUString& rSymbol, const ScAddress& rPos, const FormulaGrammar::Grammar eGrammar ) const
 {
     OUString aStr;
-    ScCompiler aComp(pDoc, rPos, *pCode, eGrammar);
+    ScCompiler aComp(&rDoc, rPos, *pCode, eGrammar);
     aComp.CreateStringFromTokenArray( aStr );
     rSymbol = aStr;
 }
@@ -260,7 +260,7 @@ void ScRangeData::GetSymbol( OUString& rSymbol, const ScAddress& rPos, const For
 void ScRangeData::UpdateSymbol( OUStringBuffer& rBuffer, const ScAddress& rPos )
 {
     std::unique_ptr<ScTokenArray> pTemp( pCode->Clone() );
-    ScCompiler aComp(pDoc, rPos, *pTemp, formula::FormulaGrammar::GRAM_DEFAULT);
+    ScCompiler aComp(&rDoc, rPos, *pTemp, formula::FormulaGrammar::GRAM_DEFAULT);
     aComp.MoveRelWrap();
     aComp.CreateStringFromTokenArray( rBuffer );
 }
@@ -292,10 +292,10 @@ void ScRangeData::UpdateTranspose( const ScRange& rSource, const ScAddress& rDes
                 (!rRef.Ref2.IsColRel() && !rRef.Ref2.IsRowRel() &&
                     (!rRef.Ref2.IsFlag3D() || !rRef.Ref2.IsTabRel()))))
             {
-                ScRange aAbs = rRef.toAbs(*pDoc, aPos);
-                if (ScRefUpdate::UpdateTranspose(pDoc, rSource, rDest, aAbs) != UR_NOTHING)
+                ScRange aAbs = rRef.toAbs(rDoc, aPos);
+                if (ScRefUpdate::UpdateTranspose(&rDoc, rSource, rDest, aAbs) != UR_NOTHING)
                 {
-                    rRef.SetRange(pDoc->GetSheetLimits(), aAbs, aPos);
+                    rRef.SetRange(rDoc.GetSheetLimits(), aAbs, aPos);
                     bChanged = true;
                 }
             }
@@ -324,10 +324,10 @@ void ScRangeData::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
                 (!rRef.Ref2.IsColRel() && !rRef.Ref2.IsRowRel() &&
                     (!rRef.Ref2.IsFlag3D() || !rRef.Ref2.IsTabRel()))))
             {
-                ScRange aAbs = rRef.toAbs(*pDoc, aPos);
+                ScRange aAbs = rRef.toAbs(rDoc, aPos);
                 if (ScRefUpdate::UpdateGrow(rArea, nGrowX, nGrowY, aAbs) != UR_NOTHING)
                 {
-                    rRef.SetRange(pDoc->GetSheetLimits(), aAbs, aPos);
+                    rRef.SetRange(rDoc.GetSheetLimits(), aAbs, aPos);
                     bChanged = true;
                 }
             }
@@ -533,7 +533,7 @@ void ScRangeData::ValidateTabRefs()
     while ( ( t = aIter.GetNextReference() ) != nullptr )
     {
         ScSingleRefData& rRef1 = *t->GetSingleRef();
-        ScAddress aAbs = rRef1.toAbs(*pDoc, aPos);
+        ScAddress aAbs = rRef1.toAbs(rDoc, aPos);
         if ( rRef1.IsTabRel() && !rRef1.IsTabDeleted() )
         {
             if (aAbs.Tab() < nMinTab)
@@ -544,7 +544,7 @@ void ScRangeData::ValidateTabRefs()
         if ( t->GetType() == svDoubleRef )
         {
             ScSingleRefData& rRef2 = t->GetDoubleRef()->Ref2;
-            aAbs = rRef2.toAbs(*pDoc, aPos);
+            aAbs = rRef2.toAbs(rDoc, aPos);
             if ( rRef2.IsTabRel() && !rRef2.IsTabDeleted() )
             {
                 if (aAbs.Tab() < nMinTab)
@@ -555,7 +555,7 @@ void ScRangeData::ValidateTabRefs()
         }
     }
 
-    SCTAB nTabCount = pDoc->GetTableCount();
+    SCTAB nTabCount = rDoc.GetTableCount();
     if ( nMaxTab < nTabCount || nMinTab <= 0 )
         return;
 
@@ -576,8 +576,8 @@ void ScRangeData::ValidateTabRefs()
                 ScSingleRefData& rRef = *t->GetSingleRef();
                 if (!rRef.IsTabDeleted())
                 {
-                    ScAddress aAbs = rRef.toAbs(*pDoc, aOldPos);
-                    rRef.SetAddress(pDoc->GetSheetLimits(), aAbs, aPos);
+                    ScAddress aAbs = rRef.toAbs(rDoc, aOldPos);
+                    rRef.SetAddress(rDoc.GetSheetLimits(), aAbs, aPos);
                 }
             }
             break;
@@ -586,13 +586,13 @@ void ScRangeData::ValidateTabRefs()
                 ScComplexRefData& rRef = *t->GetDoubleRef();
                 if (!rRef.Ref1.IsTabDeleted())
                 {
-                    ScAddress aAbs = rRef.Ref1.toAbs(*pDoc, aOldPos);
-                    rRef.Ref1.SetAddress(pDoc->GetSheetLimits(), aAbs, aPos);
+                    ScAddress aAbs = rRef.Ref1.toAbs(rDoc, aOldPos);
+                    rRef.Ref1.SetAddress(rDoc.GetSheetLimits(), aAbs, aPos);
                 }
                 if (!rRef.Ref2.IsTabDeleted())
                 {
-                    ScAddress aAbs = rRef.Ref2.toAbs(*pDoc, aOldPos);
-                    rRef.Ref2.SetAddress(pDoc->GetSheetLimits(), aAbs, aPos);
+                    ScAddress aAbs = rRef.Ref2.toAbs(rDoc, aOldPos);
+                    rRef.Ref2.SetAddress(rDoc.GetSheetLimits(), aAbs, aPos);
                 }
             }
             break;

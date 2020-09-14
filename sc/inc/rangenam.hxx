@@ -74,7 +74,7 @@ private:
                     pCode;
     ScAddress       aPos;
     Type            eType;
-    ScDocument*     pDoc;
+    ScDocument&     rDoc;
     formula::FormulaGrammar::Grammar    eTempGrammar;   // needed for unresolved XML compiles
     sal_uInt16      nIndex;
     bool            bModified;          // is set/cleared by UpdateReference
