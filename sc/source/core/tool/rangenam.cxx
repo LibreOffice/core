@@ -419,7 +419,7 @@ void ScRangeData::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt, SCTAB nLocal
     aPos.SetTab(rCxt.getNewTab(aPos.Tab()));
 }
 
-void ScRangeData::MakeValidName( const ScDocument* pDoc, OUString& rName )
+void ScRangeData::MakeValidName( const ScDocument& rDoc, OUString& rName )
 {
 
     // strip leading invalid characters
@@ -451,8 +451,8 @@ void ScRangeData::MakeValidName( const ScDocument* pDoc, OUString& rName )
         ScAddress::Details details( static_cast<FormulaGrammar::AddressConvention>( nConv ) );
         // Don't check Parse on VALID, any partial only VALID may result in
         // #REF! during compile later!
-        while (aRange.Parse(rName, pDoc, details) != ScRefFlags::ZERO ||
-                aAddr.Parse(rName, pDoc, details) != ScRefFlags::ZERO)
+        while (aRange.Parse(rName, &rDoc, details) != ScRefFlags::ZERO ||
+                aAddr.Parse(rName, &rDoc, details) != ScRefFlags::ZERO)
         {
             // Range Parse is partially valid also with invalid sheet name,
             // Address Parse ditto, during compile name would generate a #REF!
