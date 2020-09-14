@@ -250,7 +250,7 @@ void ScLinkedAreaDlg::UpdateSourceRanges()
             m_xLbRanges->append_text("CSV_all");
         }
 
-        ScAreaNameIterator aIter(&m_pSourceShell->GetDocument());
+        ScAreaNameIterator aIter(m_pSourceShell->GetDocument());
         ScRange aDummy;
         OUString aName;
         while ( aIter.Next( aName, aDummy ) )

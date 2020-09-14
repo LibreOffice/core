@@ -257,7 +257,7 @@ private:
     bool            bFirstPass;
 
 public:
-            ScAreaNameIterator( const ScDocument* pDoc );
+    ScAreaNameIterator( const ScDocument& rDoc );
 
     bool Next( OUString& rName, ScRange& rRange );
     bool WasDBName() const { return !bFirstPass; }

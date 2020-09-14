@@ -544,7 +544,7 @@ void ScTabPageSortOptions::Init()
         m_xLbOutPos->append_text(aStrUndefined);
         m_xLbOutPos->set_sensitive(false);
 
-        ScAreaNameIterator aIter( pDoc );
+        ScAreaNameIterator aIter( *pDoc );
         OUString aName;
         ScRange aRange;
         while ( aIter.Next( aName, aRange ) )

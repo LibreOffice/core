@@ -105,7 +105,7 @@ void ScFilterOptionsMgr::Init()
         pLbCopyArea->clear();
         pLbCopyArea->append_text(rStrUndefined);
 
-        ScAreaNameIterator aIter( pDoc );
+        ScAreaNameIterator aIter( *pDoc );
         OUString aName;
         ScRange aRange;
         while ( aIter.Next( aName, aRange ) )

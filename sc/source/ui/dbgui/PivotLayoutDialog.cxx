@@ -225,7 +225,7 @@ void ScPivotLayoutDialog::SetupSource()
     // Setup Named Ranges
     bool bIsNamedRange = false;
 
-    ScAreaNameIterator aIterator(&mrDocument);
+    ScAreaNameIterator aIterator(mrDocument);
     OUString aEachName;
     ScRange aEachRange;
 
@@ -265,7 +265,7 @@ void ScPivotLayoutDialog::SetupDestination()
     mxDestinationListBox->clear();
 
     // Fill up named ranges
-    ScAreaNameIterator aIterator(&mrDocument);
+    ScAreaNameIterator aIterator(mrDocument);
     OUString aName;
     ScRange aRange;
 
