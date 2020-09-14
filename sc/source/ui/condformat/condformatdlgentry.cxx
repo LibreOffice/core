@@ -1323,7 +1323,7 @@ public:
         mxGrid->set_grid_top_attach(nTop);
     }
 
-    ScColorScaleEntry* CreateEntry(ScDocument* pDoc, const ScAddress& rPos) const;
+    ScColorScaleEntry* CreateEntry(ScDocument& rDoc, const ScAddress& rPos) const;
 
     void SetFirstEntry();
 };
@@ -1373,7 +1373,7 @@ ScIconSetFrmtDataEntry::~ScIconSetFrmtDataEntry()
     mpContainer->move(mxGrid.get(), nullptr);
 }
 
-ScColorScaleEntry* ScIconSetFrmtDataEntry::CreateEntry(ScDocument* pDoc, const ScAddress& rPos) const
+ScColorScaleEntry* ScIconSetFrmtDataEntry::CreateEntry(ScDocument& rDoc, const ScAddress& rPos) const
 {
     sal_Int32 nPos = mxLbEntryType->get_active();
     OUString aText = mxEdEntry->get_text();
@@ -1381,7 +1381,7 @@ ScColorScaleEntry* ScIconSetFrmtDataEntry::CreateEntry(ScDocument* pDoc, const S
 
     sal_uInt32 nIndex = 0;
     double nVal = 0;
-    SvNumberFormatter* pNumberFormatter = pDoc->GetFormatTable();
+    SvNumberFormatter* pNumberFormatter = rDoc.GetFormatTable();
     (void)pNumberFormatter->IsNumberFormat(aText, nIndex, nVal);
     pEntry->SetValue(nVal);
 
@@ -1398,7 +1398,7 @@ ScColorScaleEntry* ScIconSetFrmtDataEntry::CreateEntry(ScDocument* pDoc, const S
             break;
         case 3:
             pEntry->SetType(COLORSCALE_FORMULA);
-            pEntry->SetFormula(aText, *pDoc, rPos, pDoc->GetGrammar());
+            pEntry->SetFormula(aText, rDoc, rPos, rDoc.GetGrammar());
             break;
         default:
             assert(false);
@@ -1516,7 +1516,7 @@ ScFormatEntry* ScIconSetFrmtEntry::GetEntry() const
     pData->eIconSetType = static_cast<ScIconSetType>(mxLbIconSetType->get_active());
     for(const auto& rxEntry : maEntries)
     {
-        pData->m_Entries.emplace_back(rxEntry->CreateEntry(mpDoc, maPos));
+        pData->m_Entries.emplace_back(rxEntry->CreateEntry(*mpDoc, maPos));
     }
     pFormat->SetIconSetData(pData);
 
