@@ -752,6 +752,7 @@
 #define FN_REPLY                    (FN_NOTES+7)
 #define FN_FORMAT_ALL_NOTES         (FN_NOTES+8)
 #define FN_RESOLVE_NOTE             (FN_NOTES+9)
+#define FN_RESOLVE_NOTE_THREAD      (FN_NOTES+10)
 
 // Region: Parameter
 #define FN_PARAM_MOVE_COUNT         (FN_PARAM+2)
