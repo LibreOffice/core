@@ -1493,7 +1493,7 @@ static ScRefFlags lcl_ScAddress_Parse ( const sal_Unicode* p, const ScDocument* 
     }
 }
 
-bool ConvertSingleRef( const ScDocument* pDoc, const OUString& rRefString,
+bool ConvertSingleRef( const ScDocument& rDoc, const OUString& rRefString,
                        SCTAB nDefTab, ScRefAddress& rRefAddress,
                        const ScAddress::Details& rDetails,
                        ScAddress::ExternalInfo* pExtInfo /* = NULL */ )
@@ -1502,7 +1502,7 @@ bool ConvertSingleRef( const ScDocument* pDoc, const OUString& rRefString,
     if (pExtInfo || (ScGlobal::FindUnquoted( rRefString, SC_COMPILER_FILE_TAB_SEP) == -1))
     {
         ScAddress aAddr( 0, 0, nDefTab );
-        ScRefFlags nRes = aAddr.Parse( rRefString, pDoc, rDetails, pExtInfo);
+        ScRefFlags nRes = aAddr.Parse( rRefString, &rDoc, rDetails, pExtInfo);
         if ( nRes & ScRefFlags::VALID )
         {
             rRefAddress.Set( aAddr,

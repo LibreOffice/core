@@ -128,9 +128,9 @@ bool ScRangeUtil::IsAbsTabArea( const OUString&   rAreaStr,
         aStartPosStr = aTempAreaStr.copy( 0,           nColonPos  );
         aEndPosStr   = aTempAreaStr.copy( nColonPos+1 );
 
-        if ( ConvertSingleRef( pDoc, aStartPosStr, 0, aStartPos, rDetails ) )
+        if ( ConvertSingleRef( *pDoc, aStartPosStr, 0, aStartPos, rDetails ) )
         {
-            if ( ConvertSingleRef( pDoc, aEndPosStr, aStartPos.Tab(), aEndPos, rDetails ) )
+            if ( ConvertSingleRef( *pDoc, aEndPosStr, aStartPos.Tab(), aEndPos, rDetails ) )
             {
                 aStartPos.SetRelCol( false );
                 aStartPos.SetRelRow( false );
@@ -216,7 +216,7 @@ bool ScRangeUtil::IsAbsPos( const OUString&   rPosStr,
 {
     ScRefAddress    thePos;
 
-    bool bIsAbsPos = ConvertSingleRef( &rDoc, rPosStr, nTab, thePos, rDetails );
+    bool bIsAbsPos = ConvertSingleRef( rDoc, rPosStr, nTab, thePos, rDetails );
     thePos.SetRelCol( false );
     thePos.SetRelRow( false );
     thePos.SetRelTab( false );
