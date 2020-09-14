@@ -1756,7 +1756,7 @@ static OUString lcl_Calculate( const OUString& rFormula, ScDocument& rDoc, const
     }
 
     ScRange aTestRange;
-    if ( bColRowName || (aTestRange.Parse(rFormula) & ScRefFlags::VALID) )
+    if ( bColRowName || (aTestRange.Parse(rFormula, &rDoc) & ScRefFlags::VALID) )
         aValue += " ...";
 
     return aValue;
