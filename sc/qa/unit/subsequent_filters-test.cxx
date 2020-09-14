@@ -222,6 +222,7 @@ public:
     void testHiddenSheetsXLSX();
     void testRelFormulaValidationXLS();
     void testTdf130132();
+    void testTdf133327();
     void testColumnStyle2XLSX();
     void testAutofilterXLSX();
 
@@ -389,6 +390,7 @@ public:
     CPPUNIT_TEST(testRefStringXLSX);
     CPPUNIT_TEST(testRelFormulaValidationXLS);
     CPPUNIT_TEST(testTdf130132);
+    CPPUNIT_TEST(testTdf133327);
     CPPUNIT_TEST(testColumnStyle2XLSX);
     CPPUNIT_TEST(testAutofilterXLSX);
 
@@ -3570,6 +3572,25 @@ void ScFiltersTest::testTdf130132()
         // background colour is yellow
         CPPUNIT_ASSERT_EQUAL(Color(255, 255, 0), rColor);
     }
+}
+
+void ScFiltersTest::testTdf133327()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf133327.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    const ScPatternAttr* pAttr = rDoc.GetPattern(250, 1, 0);
+
+    const SfxPoolItem& rItem = pAttr->GetItem(ATTR_BACKGROUND);
+    const SvxBrushItem& rBackground = static_cast<const SvxBrushItem&>(rItem);
+    const Color& rColor = rBackground.GetColor();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Color: R:255 G:255 B: 0
+    // - Actual  : Color: R:255 G:255 B: 255
+    CPPUNIT_ASSERT_EQUAL(Color(255, 255, 0), rColor);
 }
 
 void ScFiltersTest::testColumnStyle2XLSX()
