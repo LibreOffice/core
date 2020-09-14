@@ -115,7 +115,7 @@ ScDrawTextObjectBar::ScDrawTextObjectBar(ScViewData* pData) :
     //  At the switching-over the UndoManager is changed to edit mode
     SfxUndoManager* pMgr = pViewData->GetSfxDocShell()->GetUndoManager();
     SetUndoManager( pMgr );
-    if ( !pViewData->GetDocument()->IsUndoEnabled() )
+    if ( !pViewData->GetDocument().IsUndoEnabled() )
     {
         pMgr->SetMaxUndoActionCount( 0 );
     }
@@ -1158,7 +1158,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
         if ( eAttrDir == SvxFrameDirection::Environment )
         {
             //  get "environment" direction from page style
-            if ( pViewData->GetDocument()->GetEditTextDirection( pViewData->GetTabNo() ) == EEHorizontalTextDirection::R2L )
+            if ( pViewData->GetDocument().GetEditTextDirection( pViewData->GetTabNo() ) == EEHorizontalTextDirection::R2L )
                 eAttrDir = SvxFrameDirection::Horizontal_RL_TB;
             else
                 eAttrDir = SvxFrameDirection::Horizontal_LR_TB;

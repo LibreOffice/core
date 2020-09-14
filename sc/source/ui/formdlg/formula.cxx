@@ -85,7 +85,7 @@ ScFormulaDlg::ScFormulaDlg(SfxBindings* pB, SfxChildWindow* pCW,
         }
     }
 
-    m_pDoc = pViewData->GetDocument();
+    m_pDoc = &pViewData->GetDocument();
     m_xParser.set(ScServiceProvider::MakeInstance(ScServiceProvider::Type::FORMULAPARS,
                                                   static_cast<ScDocShell*>(m_pDoc->GetDocumentShell())),uno::UNO_QUERY);
     uno::Reference< beans::XPropertySet> xSet(m_xParser,uno::UNO_QUERY);
@@ -114,7 +114,7 @@ ScFormulaDlg::ScFormulaDlg(SfxBindings* pB, SfxChildWindow* pCW,
 
     pScMod->SetRefInputHdl(pInputHdl);
 
-    m_pDoc = pViewData->GetDocument();
+    m_pDoc = &pViewData->GetDocument();
     SCCOL nCol = pViewData->GetCurX();
     SCROW nRow = pViewData->GetCurY();
     SCTAB nTab = pViewData->GetTabNo();

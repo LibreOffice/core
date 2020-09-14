@@ -49,7 +49,7 @@ ScRandomNumberGeneratorDialog::ScRandomNumberGeneratorDialog(
                           "modules/scalc/ui/randomnumbergenerator.ui",
                           "RandomNumberGeneratorDialog")
     , mpViewData(pViewData)
-    , mrDoc(*pViewData->GetDocument())
+    , mrDoc(pViewData->GetDocument())
     , mbDialogLostFocus(false)
     , mxInputRangeText(m_xBuilder->weld_label("cell-range-label"))
     , mxInputRangeEdit(new formula::RefEdit(m_xBuilder->weld_entry("cell-range-edit")))

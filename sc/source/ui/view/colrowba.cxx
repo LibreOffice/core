@@ -51,7 +51,7 @@ static OUString lcl_MetricString( long nTwips, const OUString& rText )
 ScColBar::ScColBar( vcl::Window* pParent, ScHSplitPos eWhich,
                     ScHeaderFunctionSet* pFuncSet, ScHeaderSelectionEngine* pEng,
                     ScTabView* pTab ) :
-            ScHeaderControl( pParent, pEng, pTab->GetViewData().GetDocument()->MaxCol()+1, false, pTab ),
+            ScHeaderControl( pParent, pEng, pTab->GetViewData().GetDocument().MaxCol()+1, false, pTab ),
             meWhich( eWhich ),
             mpFuncSet( pFuncSet )
 {
@@ -70,17 +70,17 @@ SCCOLROW ScColBar::GetPos() const
 sal_uInt16 ScColBar::GetEntrySize( SCCOLROW nEntryNo ) const
 {
     const ScViewData& rViewData = pTabView->GetViewData();
-    ScDocument* pDoc = rViewData.GetDocument();
+    ScDocument& rDoc = rViewData.GetDocument();
     SCTAB nTab = rViewData.GetTabNo();
-    if (pDoc->ColHidden(static_cast<SCCOL>(nEntryNo), nTab))
+    if (rDoc.ColHidden(static_cast<SCCOL>(nEntryNo), nTab))
         return 0;
     else
-        return static_cast<sal_uInt16>(ScViewData::ToPixel( pDoc->GetColWidth( static_cast<SCCOL>(nEntryNo), nTab ), rViewData.GetPPTX() ));
+        return static_cast<sal_uInt16>(ScViewData::ToPixel( rDoc.GetColWidth( static_cast<SCCOL>(nEntryNo), nTab ), rViewData.GetPPTX() ));
 }
 
 OUString ScColBar::GetEntryText( SCCOLROW nEntryNo ) const
 {
-    return pTabView->GetViewData().GetDocument()->GetAddressConvention() == formula::FormulaGrammar::CONV_XL_R1C1
+    return pTabView->GetViewData().GetDocument().GetAddressConvention() == formula::FormulaGrammar::CONV_XL_R1C1
         ? OUString::number(nEntryNo + 1)
         : ScColToAlpha( static_cast<SCCOL>(nEntryNo) );
 }
@@ -105,16 +105,16 @@ void ScColBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
     std::vector<sc::ColRowSpan> aRanges;
     if ( rMark.IsColumnMarked( static_cast<SCCOL>(nPos) ) )
     {
-        ScDocument* pDoc = rViewData.GetDocument();
+        ScDocument& rDoc = rViewData.GetDocument();
         SCCOL nStart = 0;
-        while (nStart<=pDoc->MaxCol())
+        while (nStart<=rDoc.MaxCol())
         {
-            while (nStart<pDoc->MaxCol() && !rMark.IsColumnMarked(nStart))
+            while (nStart<rDoc.MaxCol() && !rMark.IsColumnMarked(nStart))
                 ++nStart;
             if (rMark.IsColumnMarked(nStart))
             {
                 SCCOL nEnd = nStart;
-                while (nEnd<pDoc->MaxCol() && rMark.IsColumnMarked(nEnd))
+                while (nEnd<rDoc.MaxCol() && rMark.IsColumnMarked(nEnd))
                     ++nEnd;
                 if (!rMark.IsColumnMarked(nEnd))
                     --nEnd;
@@ -122,7 +122,7 @@ void ScColBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
                 nStart = nEnd+1;
             }
             else
-                nStart = pDoc->MaxCol()+1;
+                nStart = rDoc.MaxCol()+1;
         }
     }
     else
@@ -205,13 +205,13 @@ OUString ScColBar::GetDragHelp( long nVal )
 bool ScColBar::IsLayoutRTL() const        // override only for columns
 {
     const ScViewData& rViewData = pTabView->GetViewData();
-    return rViewData.GetDocument()->IsLayoutRTL( rViewData.GetTabNo() );
+    return rViewData.GetDocument().IsLayoutRTL( rViewData.GetTabNo() );
 }
 
 ScRowBar::ScRowBar( vcl::Window* pParent, ScVSplitPos eWhich,
                     ScHeaderFunctionSet* pFuncSet, ScHeaderSelectionEngine* pEng,
                     ScTabView* pTab ) :
-            ScHeaderControl( pParent, pEng, pTab->GetViewData().GetDocument()->MaxRow()+1, true, pTab ),
+            ScHeaderControl( pParent, pEng, pTab->GetViewData().GetDocument().MaxRow()+1, true, pTab ),
             meWhich( eWhich ),
             mpFuncSet( pFuncSet )
 {
@@ -230,13 +230,13 @@ SCCOLROW ScRowBar::GetPos() const
 sal_uInt16 ScRowBar::GetEntrySize( SCCOLROW nEntryNo ) const
 {
     const ScViewData& rViewData = pTabView->GetViewData();
-    ScDocument* pDoc = rViewData.GetDocument();
+    ScDocument& rDoc = rViewData.GetDocument();
     SCTAB nTab = rViewData.GetTabNo();
     SCROW nLastRow = -1;
-    if (pDoc->RowHidden(nEntryNo, nTab, nullptr, &nLastRow))
+    if (rDoc.RowHidden(nEntryNo, nTab, nullptr, &nLastRow))
         return 0;
     else
-        return static_cast<sal_uInt16>(ScViewData::ToPixel( pDoc->GetOriginalHeight( nEntryNo,
+        return static_cast<sal_uInt16>(ScViewData::ToPixel( rDoc.GetOriginalHeight( nEntryNo,
                     nTab ), rViewData.GetPPTY() ));
 }
 
@@ -265,16 +265,16 @@ void ScRowBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
     std::vector<sc::ColRowSpan> aRanges;
     if ( rMark.IsRowMarked( nPos ) )
     {
-        ScDocument* pDoc = rViewData.GetDocument();
+        ScDocument& rDoc = rViewData.GetDocument();
         SCROW nStart = 0;
-        while (nStart<=pDoc->MaxRow())
+        while (nStart<=rDoc.MaxRow())
         {
-            while (nStart<pDoc->MaxRow() && !rMark.IsRowMarked(nStart))
+            while (nStart<rDoc.MaxRow() && !rMark.IsRowMarked(nStart))
                 ++nStart;
             if (rMark.IsRowMarked(nStart))
             {
                 SCROW nEnd = nStart;
-                while (nEnd<pDoc->MaxRow() && rMark.IsRowMarked(nEnd))
+                while (nEnd<rDoc.MaxRow() && rMark.IsRowMarked(nEnd))
                     ++nEnd;
                 if (!rMark.IsRowMarked(nEnd))
                     --nEnd;
@@ -282,7 +282,7 @@ void ScRowBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
                 nStart = nEnd+1;
             }
             else
-                nStart = pDoc->MaxRow()+1;
+                nStart = rDoc.MaxRow()+1;
         }
     }
     else
@@ -365,15 +365,15 @@ OUString ScRowBar::GetDragHelp( long nVal )
 SCCOLROW ScRowBar::GetHiddenCount( SCCOLROW nEntryNo ) const // override only for rows
 {
     const ScViewData& rViewData = pTabView->GetViewData();
-    ScDocument* pDoc = rViewData.GetDocument();
+    ScDocument& rDoc = rViewData.GetDocument();
     SCTAB nTab = rViewData.GetTabNo();
-    return pDoc->GetHiddenRowCount( nEntryNo, nTab );
+    return rDoc.GetHiddenRowCount( nEntryNo, nTab );
 }
 
 bool ScRowBar::IsMirrored() const // override only for rows
 {
     const ScViewData& rViewData = pTabView->GetViewData();
-    return rViewData.GetDocument()->IsLayoutRTL( rViewData.GetTabNo() );
+    return rViewData.GetDocument().IsLayoutRTL( rViewData.GetTabNo() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

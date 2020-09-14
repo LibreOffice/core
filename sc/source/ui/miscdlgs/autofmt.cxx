@@ -424,9 +424,9 @@ void ScAutoFmtPreview::Init()
 void ScAutoFmtPreview::DetectRTL(const ScViewData *pViewData)
 {
     SCTAB nCurrentTab = pViewData->GetTabNo();
-    ScDocument* pDoc = pViewData->GetDocument();
-    mbRTL = pDoc->IsLayoutRTL(nCurrentTab);
-    xBreakIter = pDoc->GetBreakIterator();
+    ScDocument& rDoc = pViewData->GetDocument();
+    mbRTL = rDoc.IsLayoutRTL(nCurrentTab);
+    xBreakIter = rDoc.GetBreakIterator();
 }
 
 void ScAutoFmtPreview::CalcCellArray( bool bFitWidthP )

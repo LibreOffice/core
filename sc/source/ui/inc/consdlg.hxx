@@ -48,7 +48,7 @@ private:
 
     ScConsolidateParam  theConsData;
     ScViewData&         rViewData;
-    ScDocument*         pDoc;
+    ScDocument&         rDoc;
     std::unique_ptr<ScAreaData[]> pAreaData;
     size_t              nAreaDataCount;
     sal_uInt16          nWhichCons;

@@ -51,7 +51,7 @@ public:
     weld::Container* GetContainer() { return mxGrid.get(); }
     ~ScCondFormatList();
 
-    void init(ScDocument* pDoc, const ScConditionalFormat* pFormat,
+    void init(ScDocument& rDoc, const ScConditionalFormat* pFormat,
         const ScRangeList& rRanges, const ScAddress& rPos,
         condformat::dialog::ScCondFormatDialogType eType);
 

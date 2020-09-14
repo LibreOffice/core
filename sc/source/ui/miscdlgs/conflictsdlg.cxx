@@ -343,7 +343,7 @@ ScConflictsDlg::ScConflictsDlg(weld::Window* pParent, ScViewData* pViewData, ScD
     , m_xLbConflicts(new SvxRedlinTable(m_xBuilder->weld_tree_view("container"), nullptr))
 {
     OSL_ENSURE( mpViewData, "ScConflictsDlg CTOR: mpViewData is null!" );
-    mpOwnDoc = ( mpViewData ? mpViewData->GetDocument() : nullptr );
+    mpOwnDoc = ( mpViewData ? &mpViewData->GetDocument() : nullptr );
     OSL_ENSURE( mpOwnDoc, "ScConflictsDlg CTOR: mpOwnDoc is null!" );
     mpOwnTrack = ( mpOwnDoc ? mpOwnDoc->GetChangeTrack() : nullptr );
     OSL_ENSURE( mpOwnTrack, "ScConflictsDlg CTOR: mpOwnTrack is null!" );

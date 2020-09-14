@@ -106,10 +106,10 @@ void ScTabView::Init()
         explicitly because the parent frame window is already RTL disabled. */
     pTabControl->EnableRTL( AllSettings::GetLayoutRTL() );
 
-    InitScrollBar( *aHScrollLeft,    aViewData.GetDocument()->MaxCol()+1 );
-    InitScrollBar( *aHScrollRight,   aViewData.GetDocument()->MaxCol()+1 );
-    InitScrollBar( *aVScrollTop,     aViewData.GetDocument()->MaxRow()+1 );
-    InitScrollBar( *aVScrollBottom,  aViewData.GetDocument()->MaxRow()+1 );
+    InitScrollBar( *aHScrollLeft,    aViewData.GetDocument().MaxCol()+1 );
+    InitScrollBar( *aHScrollRight,   aViewData.GetDocument().MaxCol()+1 );
+    InitScrollBar( *aVScrollTop,     aViewData.GetDocument().MaxRow()+1 );
+    InitScrollBar( *aVScrollBottom,  aViewData.GetDocument().MaxRow()+1 );
     /*  #i97900# scrollbars remain in correct RTL mode, needed mirroring etc.
         is now handled correctly at the respective places. */
 
@@ -225,7 +225,7 @@ void ScTabView::MakeDrawView( TriState nForceDesignMode )
     if (pDrawView)
         return;
 
-    ScDrawLayer* pLayer = aViewData.GetDocument()->GetDrawLayer();
+    ScDrawLayer* pLayer = aViewData.GetDocument().GetDrawLayer();
     OSL_ENSURE(pLayer, "Where is the Draw Layer ??");
 
     sal_uInt16 i;
@@ -320,7 +320,7 @@ void ScTabView::TabChanged( bool bSameTabButMoved )
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     ScModelObj* pModelObj = pDocSh ? comphelper::getUnoTunnelImplementation<ScModelObj>( pDocSh->GetModel()) : nullptr;
 
-    if (!(pModelObj && GetViewData().GetDocument()))
+    if (!pModelObj)
         return;
 
     Size aDocSize = pModelObj->getDocumentSize();
@@ -345,7 +345,7 @@ void ScTabView::UpdateLayerLocks()
 
     SCTAB nTab = aViewData.GetTabNo();
     bool bEx = aViewData.GetViewShell()->IsDrawSelMode();
-    bool bProt = aViewData.GetDocument()->IsTabProtected( nTab ) ||
+    bool bProt = aViewData.GetDocument().IsTabProtected( nTab ) ||
                  aViewData.GetSfxDocShell()->IsReadOnly();
     bool bShared = aViewData.GetDocShell()->IsDocShared();
 
@@ -502,10 +502,10 @@ void ScTabView::DrawEnableAnim(bool bSet)
             pDrawView->SetAnimationEnabled();
 
             //  animated GIFs must be restarted:
-            ScDocument* pDoc = aViewData.GetDocument();
+            ScDocument& rDoc = aViewData.GetDocument();
             for (i=0; i<4; i++)
                 if ( pGridWin[i] && pGridWin[i]->IsVisible() )
-                    pDoc->StartAnimations( aViewData.GetTabNo() );
+                    rDoc.StartAnimations( aViewData.GetTabNo() );
         }
     }
     else
@@ -572,8 +572,8 @@ void ScTabView::MakeVisible( const tools::Rectangle& rHMMRect )
     if (!(nScrollX || nScrollY))
         return;
 
-    ScDocument* pDoc = aViewData.GetDocument();
-    if ( pDoc->IsNegativePage( nTab ) )
+    ScDocument& rDoc = aViewData.GetDocument();
+    if ( rDoc.IsNegativePage( nTab ) )
         nScrollX = -nScrollX;
 
     double nPPTX = aViewData.GetPPTX();
@@ -585,9 +585,9 @@ void ScTabView::MakeVisible( const tools::Rectangle& rHMMRect )
     long nLinesX=0, nLinesY=0;      // columns/rows - scroll at least nScrollX/Y
 
     if (nScrollX > 0)
-        while (nScrollX > 0 && nPosX < pDoc->MaxCol())
+        while (nScrollX > 0 && nPosX < rDoc.MaxCol())
         {
-            nScrollX -= static_cast<long>( pDoc->GetColWidth(nPosX, nTab) * nPPTX );
+            nScrollX -= static_cast<long>( rDoc.GetColWidth(nPosX, nTab) * nPPTX );
             ++nPosX;
             ++nLinesX;
         }
@@ -595,14 +595,14 @@ void ScTabView::MakeVisible( const tools::Rectangle& rHMMRect )
         while (nScrollX < 0 && nPosX > 0)
         {
             --nPosX;
-            nScrollX += static_cast<long>( pDoc->GetColWidth(nPosX, nTab) * nPPTX );
+            nScrollX += static_cast<long>( rDoc.GetColWidth(nPosX, nTab) * nPPTX );
             --nLinesX;
         }
 
     if (nScrollY > 0)
-        while (nScrollY > 0 && nPosY < pDoc->MaxRow())
+        while (nScrollY > 0 && nPosY < rDoc.MaxRow())
         {
-            nScrollY -= static_cast<long>( pDoc->GetRowHeight(nPosY, nTab) * nPPTY );
+            nScrollY -= static_cast<long>( rDoc.GetRowHeight(nPosY, nTab) * nPPTY );
             ++nPosY;
             ++nLinesY;
         }
@@ -610,7 +610,7 @@ void ScTabView::MakeVisible( const tools::Rectangle& rHMMRect )
         while (nScrollY < 0 && nPosY > 0)
         {
             --nPosY;
-            nScrollY += static_cast<long>( pDoc->GetRowHeight(nPosY, nTab) * nPPTY );
+            nScrollY += static_cast<long>( rDoc.GetRowHeight(nPosY, nTab) * nPPTY );
             --nLinesY;
         }
 

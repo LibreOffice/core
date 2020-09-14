@@ -51,11 +51,11 @@ ScCondFormatList::~ScCondFormatList()
     Freeze();
 }
 
-void ScCondFormatList::init(ScDocument* pDoc,
+void ScCondFormatList::init(ScDocument& rDoc,
         const ScConditionalFormat* pFormat, const ScRangeList& rRanges,
         const ScAddress& rPos, condformat::dialog::ScCondFormatDialogType eType)
 {
-    mpDoc = pDoc;
+    mpDoc = &rDoc;
     maPos = rPos;
     maRanges = rRanges;
 
@@ -440,8 +440,8 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
     }
     else if (!mpDlgItem->IsManaged())
     {
-        ScDocument* pDoc = mpViewData->GetDocument();
-        pFormat = pDoc->GetCondFormList(mpViewData->GetTabNo())->GetFormat ( mnKey );
+        ScDocument& rDoc = mpViewData->GetDocument();
+        pFormat = rDoc.GetCondFormList(mpViewData->GetTabNo())->GetFormat ( mnKey );
     }
 
     ScRangeList aRange;
@@ -474,8 +474,8 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
     mxEdRange->SetGetFocusHdl( LINK( this, ScCondFormatDlg, RangeGetFocusHdl ) );
 
     OUString aRangeString;
-    const ScDocument* pDoc = pViewData->GetDocument();
-    aRange.Format(aRangeString, ScRefFlags::VALID, *pDoc, pDoc->GetAddressConvention());
+    const ScDocument& rDoc = pViewData->GetDocument();
+    aRange.Format(aRangeString, ScRefFlags::VALID, rDoc, rDoc.GetAddressConvention());
     mxEdRange->SetText(aRangeString);
 
     msBaseTitle = m_xDialog->get_title();
@@ -547,9 +547,9 @@ void ScCondFormatDlg::SetReference(const ScRange& rRef, ScDocument&)
     else
         nFlags = ScRefFlags::RANGE_ABS;
 
-    const ScDocument* pDoc = mpViewData->GetDocument();
-    OUString aRefStr(rRef.Format(*pDoc, nFlags,
-        ScAddress::Details(pDoc->GetAddressConvention(), 0, 0)));
+    const ScDocument& rDoc = mpViewData->GetDocument();
+    OUString aRefStr(rRef.Format(rDoc, nFlags,
+        ScAddress::Details(rDoc.GetAddressConvention(), 0, 0)));
     if (pEdit != mxEdRange.get())
     {
         Selection sel = pEdit->GetSelection();
@@ -570,8 +570,8 @@ std::unique_ptr<ScConditionalFormat> ScCondFormatDlg::GetConditionalFormat() con
         return nullptr;
 
     ScRangeList aRange;
-    ScRefFlags nFlags = aRange.Parse(aRangeStr, *mpViewData->GetDocument(),
-        mpViewData->GetDocument()->GetAddressConvention(), maPos.Tab());
+    ScRefFlags nFlags = aRange.Parse(aRangeStr, mpViewData->GetDocument(),
+        mpViewData->GetDocument().GetAddressConvention(), maPos.Tab());
     mxCondFormList->SetRange(aRange);
     std::unique_ptr<ScConditionalFormat> pFormat = mxCondFormList->GetConditionalFormat();
 
@@ -671,8 +671,8 @@ IMPL_LINK(ScCondFormatDlg, EdRangeModifyHdl, formula::RefEdit&, rEdit, void)
 {
     OUString aRangeStr = rEdit.GetText();
     ScRangeList aRange;
-    ScRefFlags nFlags = aRange.Parse(aRangeStr, *mpViewData->GetDocument(),
-        mpViewData->GetDocument()->GetAddressConvention());
+    ScRefFlags nFlags = aRange.Parse(aRangeStr, mpViewData->GetDocument(),
+        mpViewData->GetDocument().GetAddressConvention());
     if(nFlags & ScRefFlags::VALID)
     {
         rEdit.GetWidget()->set_message_type(weld::EntryMessageType::Normal);

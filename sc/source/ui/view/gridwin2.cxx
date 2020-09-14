@@ -53,9 +53,9 @@ using std::vector;
 
 DataPilotFieldOrientation ScGridWindow::GetDPFieldOrientation( SCCOL nCol, SCROW nRow ) const
 {
-    ScDocument* pDoc = pViewData->GetDocument();
+    ScDocument& rDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
-    ScDPObject* pDPObj = pDoc->GetDPAtCursor(nCol, nRow, nTab);
+    ScDPObject* pDPObj = rDoc.GetDPAtCursor(nCol, nRow, nTab);
     if (!pDPObj)
         return DataPilotFieldOrientation_HIDDEN;
 
@@ -103,24 +103,24 @@ bool ScGridWindow::DoPageFieldSelection( SCCOL nCol, SCROW nRow )
 
 bool ScGridWindow::DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt )
 {
-    ScDocument* pDoc = pViewData->GetDocument();
+    ScDocument& rDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
     Point aScrPos  = pViewData->GetScrPos(nCol, nRow, eWhich);
     Point aDiffPix = rMEvt.GetPosPixel();
 
     aDiffPix -= aScrPos;
-    bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+    bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
     if ( bLayoutRTL )
         aDiffPix.setX( -aDiffPix.X() );
 
     long nSizeX, nSizeY;
     pViewData->GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
     // The button height should not use the merged cell height, should still use single row height
-    nSizeY = ScViewData::ToPixel(pDoc->GetRowHeight(nRow, nTab), pViewData->GetPPTY());
+    nSizeY = ScViewData::ToPixel(rDoc.GetRowHeight(nRow, nTab), pViewData->GetPPTY());
     Size aScrSize(nSizeX-1, nSizeY-1);
 
     // Check if the mouse cursor is clicking on the popup arrow box.
-    mpFilterButton.reset(new ScDPFieldButton(this, &GetSettings().GetStyleSettings(), &pViewData->GetZoomY(), pDoc));
+    mpFilterButton.reset(new ScDPFieldButton(this, &GetSettings().GetStyleSettings(), &pViewData->GetZoomY(), &rDoc));
     mpFilterButton->setBoundingBox(aScrPos, aScrSize, bLayoutRTL);
     mpFilterButton->setPopupLeft(bLayoutRTL);   // #i114944# AutoFilter button is left-aligned in RTL
     Point aPopupPos;
@@ -147,10 +147,10 @@ bool ScGridWindow::DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent&
 
 void ScGridWindow::DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt, bool bButton, bool bPopup )
 {
-    ScDocument* pDoc = pViewData->GetDocument();
+    ScDocument& rDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
 
-    ScDPObject* pDPObj  = pDoc->GetDPAtCursor(nCol, nRow, nTab);
+    ScDPObject* pDPObj  = rDoc.GetDPAtCursor(nCol, nRow, nTab);
 
     if (pDPObj)
     {
@@ -206,7 +206,7 @@ void ScGridWindow::DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& 
                     pViewData->GetViewShell()->GetFrameWeld(), aArgSet, nSrcTab));
             if ( pDlg->Execute() == RET_OK )
             {
-                ScSheetSourceDesc aNewDesc(pDoc);
+                ScSheetSourceDesc aNewDesc(&rDoc);
                 if (pDesc)
                     aNewDesc = *pDesc;
 
@@ -342,7 +342,7 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, bool bMove )
 bool ScGridWindow::DPTestFieldPopupArrow(
     const MouseEvent& rMEvt, const ScAddress& rPos, const ScAddress& rDimPos, ScDPObject* pDPObj)
 {
-    bool bLayoutRTL = pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
+    bool bLayoutRTL = pViewData->GetDocument().IsLayoutRTL( pViewData->GetTabNo() );
 
     // Get the geometry of the cell.
     Point aScrPos = pViewData->GetScrPos(rPos.Col(), rPos.Row(), eWhich);
@@ -467,7 +467,7 @@ void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScr
     const ScDPLabelData& rLabelData = pDPData->maLabels;
 
     mpDPFieldPopup.disposeAndClear();
-    mpDPFieldPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, pViewData->GetDocument(), bDimOrientNotPage));
+    mpDPFieldPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, &pViewData->GetDocument(), bDimOrientNotPage));
 
     ScCheckListMenuControl& rControl = mpDPFieldPopup->get_widget();
     rControl.setExtendedData(std::move(pDPData));
@@ -532,7 +532,7 @@ void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScr
 
     ScCheckListMenuControl::Config aConfig;
     aConfig.mbAllowEmptySet = false;
-    aConfig.mbRTL = pViewData->GetDocument()->IsLayoutRTL(pViewData->GetTabNo());
+    aConfig.mbRTL = pViewData->GetDocument().IsLayoutRTL(pViewData->GetTabNo());
     rControl.setConfig(aConfig);
     if (IsMouseCaptured())
         ReleaseMouse();
@@ -610,7 +610,7 @@ T lcl_getValidValue(T value, T defvalue)
 
 bool ScGridWindow::UpdateVisibleRange()
 {
-    ScDocument const& rDoc = *pViewData->GetDocument();
+    ScDocument const& rDoc = pViewData->GetDocument();
     SCCOL nPosX = 0;
     SCROW nPosY = 0;
     SCCOL nXRight = rDoc.MaxCol();

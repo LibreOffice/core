@@ -30,7 +30,7 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* 
         const ScAddress& aCursorPos, const bool bUndo )
     : ScAnyRefDlgController( pB, pCW, pParent, "modules/scalc/ui/definename.ui", "DefineNameDialog")
     , mbUndo( bUndo )
-    , mrDoc(*pViewData->GetDocument())
+    , mrDoc(pViewData->GetDocument())
     , mpDocShell ( pViewData->GetDocShell() )
     , maCursorPos( aCursorPos )
     , maGlobalNameStr  ( ScResId(STR_GLOBAL_SCOPE) )

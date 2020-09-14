@@ -107,7 +107,7 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
     }
 
     SCCOLROW nRTLSign = 1;
-    if ( pData->GetDocument()->IsLayoutRTL( pData->GetTabNo() ) )
+    if ( pData->GetDocument().IsLayoutRTL( pData->GetTabNo() ) )
     {
         //! evaluate cursor movement option?
         nRTLSign = -1;
@@ -266,7 +266,7 @@ void ScCellShell::ExecuteCursorSel( SfxRequest& rReq )
     SCROW nMovY = nRepeat;
     // Horizontal direction depends on whether or not the UI language is RTL.
     SCCOL nMovX = nRepeat;
-    if (GetViewData()->GetDocument()->IsLayoutRTL(GetViewData()->GetTabNo()))
+    if (GetViewData()->GetDocument().IsLayoutRTL(GetViewData()->GetTabNo()))
     {
         // mirror horizontal movement for right-to-left mode.
         nMovX = -nRepeat;

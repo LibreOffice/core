@@ -45,9 +45,9 @@ void ScTabViewShell::InsertURLButton( const OUString& rName, const OUString& rUR
     // protected sheet ?
 
     ScViewData& rViewData = GetViewData();
-    ScDocument* pDoc = rViewData.GetDocument();
+    ScDocument& rDoc = rViewData.GetDocument();
     SCTAB nTab = rViewData.GetTabNo();
-    if ( pDoc->IsTabProtected(nTab) )
+    if ( rDoc.IsTabProtected(nTab) )
     {
         ErrorMessage(STR_PROTECTIONERR);
         return;
@@ -78,7 +78,7 @@ void ScTabViewShell::InsertURLButton( const OUString& rName, const OUString& rUR
 
     xPropSet->setPropertyValue("Label", uno::Any(rName) );
 
-    OUString aTmp = INetURLObject::GetAbsURL( pDoc->GetDocumentShell()->GetMedium()->GetBaseURL(), rURL );
+    OUString aTmp = INetURLObject::GetAbsURL( rDoc.GetDocumentShell()->GetMedium()->GetBaseURL(), rURL );
     xPropSet->setPropertyValue("TargetURL", uno::Any(aTmp) );
 
     if( !rTarget.isEmpty() )
@@ -104,7 +104,7 @@ void ScTabViewShell::InsertURLButton( const OUString& rName, const OUString& rUR
     // Size as in 3.1:
     Size aSize = GetActiveWin()->PixelToLogic(Size(140, 20));
 
-    if ( pDoc->IsNegativePage(nTab) )
+    if ( rDoc.IsNegativePage(nTab) )
         aPos.AdjustX( -(aSize.Width()) );
 
     pObj->SetLogicRect(tools::Rectangle(aPos, aSize));

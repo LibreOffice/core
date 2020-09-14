@@ -320,11 +320,11 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
                 bool bFound = false;
                 ScViewData& rViewData = GetViewData();
-                ScDocument* pDoc      = rViewData.GetDocument();
+                ScDocument& rDoc      = rViewData.GetDocument();
                 ScMarkData& rMark     = rViewData.GetMarkData();
                 ScRange     aScRange;
                 ScAddress   aScAddress;
-                ScRefFlagsAndType aResult = lcl_ParseRangeOrAddress(aScRange, aScAddress, aAddress, pDoc);
+                ScRefFlagsAndType aResult = lcl_ParseRangeOrAddress(aScRange, aScAddress, aAddress, &rDoc);
                 ScRefFlags  nResult = aResult.nResult;
                 SCTAB       nTab = rViewData.GetTabNo();
                 bool        bMark = true;
@@ -367,9 +367,9 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 // Is it a named area (first named ranges then database ranges)?
                 else
                 {
-                    formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
-                    if( ScRangeUtil::MakeRangeFromName( aAddress, *pDoc, nTab, aScRange, RUTL_NAMES, eConv ) ||
-                        ScRangeUtil::MakeRangeFromName( aAddress, *pDoc, nTab, aScRange, RUTL_DBASE, eConv ) )
+                    formula::FormulaGrammar::AddressConvention eConv = rDoc.GetAddressConvention();
+                    if( ScRangeUtil::MakeRangeFromName( aAddress, rDoc, nTab, aScRange, RUTL_NAMES, eConv ) ||
+                        ScRangeUtil::MakeRangeFromName( aAddress, rDoc, nTab, aScRange, RUTL_DBASE, eConv ) )
                     {
                         nResult |= ScRefFlags::VALID;
                         if( aScRange.aStart.Tab() != nTab )
@@ -383,7 +383,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 if ( !(nResult & ScRefFlags::VALID) && comphelper::string::isdigitAsciiString(aAddress) )
                 {
                     sal_Int32 nNumeric = aAddress.toInt32();
-                    if ( nNumeric > 0 && nNumeric <= pDoc->MaxRow()+1 )
+                    if ( nNumeric > 0 && nNumeric <= rDoc.MaxRow()+1 )
                     {
                         // one-based row numbers
 
@@ -396,7 +396,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     }
                 }
 
-                if ( !pDoc->ValidRow(aScRange.aStart.Row()) || !pDoc->ValidRow(aScRange.aEnd.Row()) )
+                if ( !rDoc.ValidRow(aScRange.aStart.Row()) || !rDoc.ValidRow(aScRange.aEnd.Row()) )
                     nResult = ScRefFlags::ZERO;
 
                 // we have found something
@@ -438,7 +438,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     // and set cursor
 
                     // consider merged cells:
-                    pDoc->SkipOverlapped(nCol, nRow, nTab);
+                    rDoc.SkipOverlapped(nCol, nRow, nTab);
 
                     // navigator calls are not part of the API!!!
 
@@ -475,7 +475,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     // if it is a sheet name, then switch (for Navigator/URL)
 
                     SCTAB nNameTab;
-                    if ( pDoc->GetTable( aAddress, nNameTab ) )
+                    if ( rDoc.GetTable( aAddress, nNameTab ) )
                     {
                         bFound = true;
                         if ( nNameTab != nTab )
@@ -508,8 +508,8 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             {
                 // sheet for basic is one-based
                 SCTAB nTab = static_cast<const SfxUInt16Item&>(pReqArgs->Get(nSlot)).GetValue() - 1;
-                ScDocument* pDoc = GetViewData().GetDocument();
-                if ( nTab < pDoc->GetTableCount() )
+                ScDocument& rDoc = GetViewData().GetDocument();
+                if ( nTab < rDoc.GetTableCount() )
                 {
                     SetTabNo( nTab );
                     rBindings.Update( nSlot );
@@ -835,7 +835,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case SID_SELECT_TABLES:
         {
             ScViewData& rViewData = GetViewData();
-            ScDocument& rDoc = *rViewData.GetDocument();
+            ScDocument& rDoc = rViewData.GetDocument();
             ScMarkData& rMark = rViewData.GetMarkData();
             SCTAB nTabCount = rDoc.GetTableCount();
             SCTAB nTab;
@@ -1098,20 +1098,20 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
         case FID_PROTECT_DOC:
             {
-                ScDocument*         pDoc = GetViewData().GetDocument();
+                ScDocument& rDoc = GetViewData().GetDocument();
 
                 if( pReqArgs )
                 {
                     const SfxPoolItem* pItem;
                     if( pReqArgs->HasItem( FID_PROTECT_DOC, &pItem ) &&
-                        static_cast<const SfxBoolItem*>(pItem)->GetValue() == pDoc->IsDocProtected() )
+                        static_cast<const SfxBoolItem*>(pItem)->GetValue() == rDoc.IsDocProtected() )
                     {
                         rReq.Ignore();
                         break;
                     }
                 }
 
-                ScDocProtection* pProtect = pDoc->GetDocProtection();
+                ScDocProtection* pProtect = rDoc.GetDocProtection();
                 if (pProtect && pProtect->isProtected())
                 {
                     bool bCancel = false;
@@ -1165,9 +1165,9 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
         case FID_PROTECT_TABLE:
         {
-            ScDocument* pDoc = GetViewData().GetDocument();
+            ScDocument& rDoc = GetViewData().GetDocument();
             SCTAB       nTab = GetViewData().GetTabNo();
-            bool        bOldProtection = pDoc->IsTabProtected(nTab);
+            bool        bOldProtection = rDoc.IsTabProtected(nTab);
 
             if( pReqArgs )
             {
@@ -1186,7 +1186,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             {
                 // Unprotect a protected sheet.
 
-                ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
+                ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
                 if (pProtect && pProtect->isProtectedWithPass())
                 {
                     OUString aText( ScResId(SCSTR_PASSWORDOPT) );
@@ -1218,7 +1218,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
                 ScTableProtectionDlg aDlg(GetFrameWeld());
 
-                ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
+                ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
                 if (pProtect)
                     aDlg.SetDialogData(*pProtect);
 

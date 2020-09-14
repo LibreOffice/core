@@ -89,7 +89,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
     m_xBtnUnique->set_active( !theQueryData.bDuplicate );
 
     pViewData   = rQueryItem.GetViewData();
-    pDoc        = pViewData ? pViewData->GetDocument() : nullptr;
+    pDoc        = pViewData ? &pViewData->GetDocument() : nullptr;
 
     // for easier access:
     aFieldLbArr  [0] = m_xLbField1.get();
@@ -307,7 +307,7 @@ const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
     sal_Int32          nConnect1 = m_xLbConnect1->get_active();
     sal_Int32          nConnect2 = m_xLbConnect2->get_active();
 
-    svl::SharedStringPool& rPool = pViewData->GetDocument()->GetSharedStringPool();
+    svl::SharedStringPool& rPool = pViewData->GetDocument().GetSharedStringPool();
 
     for ( SCSIZE i=0; i<3; i++ )
     {

@@ -52,8 +52,8 @@ ScDBFunc::~ScDBFunc()
 
 void ScDBFunc::GotoDBArea( const OUString& rDBName )
 {
-    ScDocument* pDoc = GetViewData().GetDocument();
-    ScDBCollection* pDBCol = pDoc->GetDBCollection();
+    ScDocument& rDoc = GetViewData().GetDocument();
+    ScDBCollection* pDBCol = rDoc.GetDBCollection();
     ScDBData* pData = pDBCol->getNamedDBs().findByUpperName(ScGlobal::getCharClassPtr()->uppercase(rDBName));
     if (!pData)
         return;
@@ -278,7 +278,7 @@ void ScDBFunc::ToggleAutoFilter()
     ScDocShellModificator aModificator( *pDocSh );
 
     ScQueryParam    aParam;
-    ScDocument*     pDoc    = GetViewData().GetDocument();
+    ScDocument&     rDoc    = GetViewData().GetDocument();
     ScDBData*       pDBData = GetDBData(false, SC_DB_AUTOFILTER, ScGetDBSelection::RowDown);
 
     pDBData->SetByRow( true );              //! undo, retrieve beforehand ??
@@ -296,7 +296,7 @@ void ScDBFunc::ToggleAutoFilter()
 
     for (nCol=aParam.nCol1; nCol<=aParam.nCol2 && bHasAuto; nCol++)
     {
-        nFlag = pDoc->GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG )->GetValue();
+        nFlag = rDoc.GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG )->GetValue();
 
         if ( !(nFlag & ScMF::Auto) )
             bHasAuto = false;
@@ -308,8 +308,8 @@ void ScDBFunc::ToggleAutoFilter()
 
         for (nCol=aParam.nCol1; nCol<=aParam.nCol2; nCol++)
         {
-            nFlag = pDoc->GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG )->GetValue();
-            pDoc->ApplyAttr( nCol, nRow, nTab, ScMergeFlagAttr( nFlag & ~ScMF::Auto ) );
+            nFlag = rDoc.GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG )->GetValue();
+            rDoc.ApplyAttr( nCol, nRow, nTab, ScMergeFlagAttr( nFlag & ~ScMF::Auto ) );
         }
 
         // use a list action for the AutoFilter buttons (ScUndoAutoFilter) and the filter operation
@@ -338,9 +338,9 @@ void ScDBFunc::ToggleAutoFilter()
     }
     else                                    // show filter buttons
     {
-        if ( !pDoc->IsBlockEmpty( nTab,
-                                  aParam.nCol1, aParam.nRow1,
-                                  aParam.nCol2, aParam.nRow2 ) )
+        if ( !rDoc.IsBlockEmpty( nTab,
+                                 aParam.nCol1, aParam.nRow1,
+                                 aParam.nCol2, aParam.nRow2 ) )
         {
             if (!bHeader)
             {
@@ -364,8 +364,8 @@ void ScDBFunc::ToggleAutoFilter()
 
             for (nCol=aParam.nCol1; nCol<=aParam.nCol2; nCol++)
             {
-                nFlag = pDoc->GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG )->GetValue();
-                pDoc->ApplyAttr( nCol, nRow, nTab, ScMergeFlagAttr( nFlag | ScMF::Auto ) );
+                nFlag = rDoc.GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG )->GetValue();
+                rDoc.ApplyAttr( nCol, nRow, nTab, ScMergeFlagAttr( nFlag | ScMF::Auto ) );
             }
             pDocSh->PostPaint(ScRange(aParam.nCol1, nRow, nTab, aParam.nCol2, nRow, nTab),
                               PaintPartFlags::Grid);
@@ -431,8 +431,8 @@ void ScDBFunc::HideAutoFilter()
 
 bool ScDBFunc::ImportData( const ScImportParam& rParam )
 {
-    ScDocument* pDoc = GetViewData().GetDocument();
-    ScEditableTester aTester( pDoc, GetViewData().GetTabNo(), rParam.nCol1,rParam.nRow1,
+    ScDocument& rDoc = GetViewData().GetDocument();
+    ScEditableTester aTester( &rDoc, GetViewData().GetTabNo(), rParam.nCol1,rParam.nRow1,
                                                             rParam.nCol2,rParam.nRow2 );
     if ( !aTester.IsEditable() )
     {

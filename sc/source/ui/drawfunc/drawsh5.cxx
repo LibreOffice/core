@@ -495,7 +495,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                                 {
                                     //  graphics objects must have names
                                     //  (all graphics are supposed to be in the navigator)
-                                    ScDrawLayer* pModel = pViewData->GetDocument()->GetDrawLayer();
+                                    ScDrawLayer* pModel = pViewData->GetDocument().GetDrawLayer();
 
                                     if(pModel)
                                     {
@@ -611,7 +611,7 @@ IMPL_LINK( ScDrawShell, NameObjectHdl, AbstractSvxObjectNameDialog&, rDialog, bo
     OUString aName;
     rDialog.GetName( aName );
 
-    ScDrawLayer* pModel = pViewData->GetDocument()->GetDrawLayer();
+    ScDrawLayer* pModel = pViewData->GetDocument().GetDrawLayer();
     if ( !aName.isEmpty() && pModel )
     {
         SCTAB nDummyTab;

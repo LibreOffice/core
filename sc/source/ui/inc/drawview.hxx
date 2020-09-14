@@ -35,7 +35,7 @@ class ScDrawView final : public FmFormView
 {
     ScViewData*             pViewData;
     VclPtr<OutputDevice>    pDev;                   //! needed ?
-    ScDocument*             pDoc;
+    ScDocument&             rDoc;
     SCTAB                   nTab;
     Fraction                aScaleX;                // Factor for Drawing-MapMode
     Fraction                aScaleY;

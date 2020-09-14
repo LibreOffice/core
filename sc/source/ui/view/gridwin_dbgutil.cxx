@@ -41,11 +41,11 @@ void dumpScDrawObjData(const ScGridWindow& rWindow, const ScDrawObjData& rData, 
 
 void ScGridWindow::dumpColumnInformationPixel()
 {
-    ScDocument* pDoc = pViewData->GetDocument();
+    ScDocument& rDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
     for (SCCOL nCol = 0; nCol <= 20; ++nCol)
     {
-        sal_uInt16 nWidth = pDoc->GetColWidth(nCol, nTab);
+        sal_uInt16 nWidth = rDoc.GetColWidth(nCol, nTab);
         long nPixel = LogicToPixel(Point(nWidth, 0), MapMode(MapUnit::MapTwip)).getX();
         std::cout << "Column: " << nCol << ", Width: " << nPixel << "px" << std::endl;
     }
@@ -53,11 +53,11 @@ void ScGridWindow::dumpColumnInformationPixel()
 
 void ScGridWindow::dumpColumnInformationHmm()
 {
-    ScDocument* pDoc = pViewData->GetDocument();
+    ScDocument& rDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
     for (SCCOL nCol = 0; nCol <= 20; ++nCol)
     {
-        sal_uInt16 nWidth = pDoc->GetColWidth(nCol, nTab);
+        sal_uInt16 nWidth = rDoc.GetColWidth(nCol, nTab);
         long nPixel = LogicToLogic(Point(nWidth, 0), MapMode(MapUnit::MapTwip), MapMode(MapUnit::Map100thMM)).getX();
         std::cout << "Column: " << nCol << ", Width: " << nPixel << "hmm" << std::endl;
     }
@@ -65,7 +65,7 @@ void ScGridWindow::dumpColumnInformationHmm()
 
 void ScGridWindow::dumpCellProperties()
 {
-    ScDocument* pDoc = pViewData->GetDocument();
+    ScDocument& rDoc = pViewData->GetDocument();
     const ScMarkData& rMark = pViewData->GetMarkData();
     SCTAB nTab = pViewData->GetTabNo();
 
@@ -105,7 +105,7 @@ void ScGridWindow::dumpCellProperties()
         {
             for (SCROW nRow = rRange.aStart.Row(); nRow <= rRange.aEnd.Row(); ++nRow)
             {
-                const ScPatternAttr* pPatternAttr = pDoc->GetPattern(nCol, nRow, nTab);
+                const ScPatternAttr* pPatternAttr = rDoc.GetPattern(nCol, nRow, nTab);
                 xmlTextWriterStartElement(writer, BAD_CAST("cell"));
                 xmlTextWriterWriteAttribute(writer, BAD_CAST("column"), BAD_CAST(OString::number(nCol).getStr()));
                 xmlTextWriterWriteAttribute(writer, BAD_CAST("row"), BAD_CAST(OString::number(nRow).getStr()));
@@ -126,8 +126,8 @@ void ScGridWindow::dumpCellProperties()
 
 void ScGridWindow::dumpGraphicInformation()
 {
-    ScDocument* pDoc = pViewData->GetDocument();
-    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    ScDocument& rDoc = pViewData->GetDocument();
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
     if (!pDrawLayer)
         return;
 
@@ -156,8 +156,8 @@ void ScGridWindow::dumpColumnCellStorage()
     // Get the current cursor position.
     ScAddress aCurPos = pViewData->GetCurPos();
 
-    ScDocument* pDoc = pViewData->GetDocument();
-    const ScDPObject* pDP = pDoc->GetDPAtCursor(aCurPos.Col(), aCurPos.Row(), aCurPos.Tab());
+    ScDocument& rDoc = pViewData->GetDocument();
+    const ScDPObject* pDP = rDoc.GetDPAtCursor(aCurPos.Col(), aCurPos.Row(), aCurPos.Tab());
     if (pDP)
     {
         // Dump the pivot table info if the cursor is over a pivot table.
@@ -167,7 +167,7 @@ void ScGridWindow::dumpColumnCellStorage()
     }
 
     // Dump the column cell storage info.
-    pDoc->DumpColumnStorage(aCurPos.Tab(), aCurPos.Col());
+    rDoc.DumpColumnStorage(aCurPos.Tab(), aCurPos.Col());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

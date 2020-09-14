@@ -366,7 +366,7 @@ ScDocument* ScAccessibleCell::GetDocument(ScTabViewShell* pViewShell)
 {
     ScDocument* pDoc = nullptr;
     if (pViewShell)
-        pDoc = pViewShell->GetViewData().GetDocument();
+        pDoc = &pViewShell->GetViewData().GetDocument();
     return pDoc;
 }
 

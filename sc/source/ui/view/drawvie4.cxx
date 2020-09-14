@@ -334,7 +334,7 @@ void ScDrawView::DoCopy()
     const SdrMarkList& rMarkList = GetMarkedObjectList();
     std::vector<ScRange> aRanges;
     bool bAnyOle = false, bOneOle = false;
-    getOleSourceRanges( rMarkList, bAnyOle, bOneOle, &aRanges, pDoc );
+    getOleSourceRanges( rMarkList, bAnyOle, bOneOle, &aRanges, &rDoc );
 
     // update ScGlobal::xDrawClipDocShellRef
     ScDrawLayer::SetGlobalDrawPersist( ScTransferObj::SetDrawClipDoc( bAnyOle ) );
@@ -344,7 +344,7 @@ void ScDrawView::DoCopy()
         // document. We need to do this before CreateMarkedObjModel() below.
         ScDocShellRef xDocSh = ScGlobal::xDrawClipDocShellRef;
         ScDocument& rClipDoc = xDocSh->GetDocument();
-        copyChartRefDataToClipDoc(pDoc, &rClipDoc, aRanges);
+        copyChartRefDataToClipDoc(&rDoc, &rClipDoc, aRanges);
     }
     std::unique_ptr<SdrModel> pModel(CreateMarkedObjModel());
     ScDrawLayer::SetGlobalDrawPersist(nullptr);
@@ -418,14 +418,14 @@ void ScDrawView::CalcNormScale( Fraction& rFractX, Fraction& rFractY ) const
 
     SCCOL nEndCol = 0;
     SCROW nEndRow = 0;
-    pDoc->GetTableArea( nTab, nEndCol, nEndRow );
+    rDoc.GetTableArea( nTab, nEndCol, nEndRow );
     if (nEndCol<20)
         nEndCol = 20;
     if (nEndRow<20)
         nEndRow = 1000;
 
     Fraction aZoom(1,1);
-    ScDrawUtil::CalcScale( pDoc, nTab, 0,0, nEndCol,nEndRow, pDev, aZoom,aZoom,
+    ScDrawUtil::CalcScale( &rDoc, nTab, 0,0, nEndCol,nEndRow, pDev, aZoom,aZoom,
                             nPPTX, nPPTY, rFractX,rFractY );
 }
 
@@ -549,7 +549,7 @@ void ScDrawView::FitToCellSize()
 
     std::unique_ptr<SdrUndoGroup> pUndoGroup(new SdrUndoGroup(*GetModel()));
     tools::Rectangle aGraphicRect = pObj->GetSnapRect();
-    tools::Rectangle aCellRect = ScDrawLayer::GetCellRect( *pDoc, pObjData->maStart, true);
+    tools::Rectangle aCellRect = ScDrawLayer::GetCellRect( rDoc, pObjData->maStart, true);
 
     // For graphic objects, we want to keep the aspect ratio
     if (pObj->shouldKeepAspectRatio())

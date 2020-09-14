@@ -180,7 +180,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
     sal_uInt16              nSlot       = rReq.GetSlot();
     vcl::Window*             pWin        = pViewData->GetActiveWin();
     ScDrawView*         pView       = pViewData->GetScDrawView();
-    SdrModel*           pDoc        = pViewData->GetDocument()->GetDrawLayer();
+    SdrModel*           pDoc        = pViewData->GetDocument().GetDrawLayer();
 
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     const size_t nMarkCount = rMarkList.GetMarkCount();
@@ -484,7 +484,7 @@ void ScDrawShell::ExecuteLineDlg( const SfxRequest& rReq )
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxLineTabDialog( pViewData->GetDialogParent(),
                 &aNewAttr,
-            pViewData->GetDocument()->GetDrawLayer(),
+            pViewData->GetDocument().GetDrawLayer(),
             pObj,
             bHasMarked));
 
@@ -518,7 +518,7 @@ void ScDrawShell::ExecuteAreaDlg( const SfxRequest& rReq )
     weld::Window* pWin = pViewData->GetDialogParent();
     VclPtr<AbstractSvxAreaTabDialog> pDlg(pFact->CreateSvxAreaTabDialog(
         pWin, &aNewAttr,
-        pViewData->GetDocument()->GetDrawLayer(), true));
+        pViewData->GetDocument().GetDrawLayer(), true));
 
     pDlg->StartExecuteAsync([=](sal_Int32 nResult){
         if ( nResult == RET_OK )
