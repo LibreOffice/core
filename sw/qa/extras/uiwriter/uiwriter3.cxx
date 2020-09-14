@@ -1317,7 +1317,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf128782)
     CPPUNIT_ASSERT_EQUAL(aPos[0].Y, xShape1->getPosition().Y);
     CPPUNIT_ASSERT_EQUAL(aPos[1].X, xShape2->getPosition().X);
     //Y position in shape 2 has changed
-    CPPUNIT_ASSERT(aPos[1].Y != xShape2->getPosition().Y);
+    CPPUNIT_ASSERT(aPos[1].Y < xShape2->getPosition().Y);
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
     Scheduler::ProcessEventsToIdle();
@@ -1328,6 +1328,50 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf128782)
     // Shape2 has come back to the original position
     // without the fix in place, it would have failed
     CPPUNIT_ASSERT_EQUAL(aPos[1].Y, xShape2->getPosition().Y);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135623)
+{
+    load(DATA_DIRECTORY, "tdf135623.docx");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+
+    uno::Reference<drawing::XShape> xShape1 = getShape(1);
+    uno::Reference<drawing::XShape> xShape2 = getShape(2);
+
+    awt::Point aPos[2];
+    aPos[0] = xShape1->getPosition();
+    aPos[1] = xShape2->getPosition();
+
+    //select shape 1 and move it down
+    dispatchCommand(mxComponent, ".uno:JumpToNextFrame", {});
+    Scheduler::ProcessEventsToIdle();
+
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(aPos[0].X, xShape1->getPosition().X);
+    //Y position in shape 1 has changed
+    CPPUNIT_ASSERT(aPos[0].Y < xShape1->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(aPos[1].X, xShape2->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(aPos[1].Y, xShape2->getPosition().Y);
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(aPos[0].X, xShape1->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(aPos[0].Y, xShape1->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(aPos[1].X, xShape2->getPosition().X);
+
+    // Without the fix in place, this test would have failed here
+    // - Expected: 1351
+    // - Actual  : 2233
+    CPPUNIT_ASSERT_EQUAL(aPos[1].Y, xShape2->getPosition().Y);
+
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133490)
