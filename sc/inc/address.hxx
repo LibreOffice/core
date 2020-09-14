@@ -959,7 +959,7 @@ template< typename T > inline void PutInOrder( T& nStart, T& nEnd )
     }
 }
 
-bool ConvertSingleRef( const ScDocument* pDocument, const OUString& rRefString,
+bool ConvertSingleRef( const ScDocument& pDocument, const OUString& rRefString,
                        SCTAB nDefTab, ScRefAddress& rRefAddress,
                        const ScAddress::Details& rDetails,
                        ScAddress::ExternalInfo* pExtInfo = nullptr );

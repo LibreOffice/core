@@ -216,7 +216,7 @@ static bool lcl_Parse( const OUString& rString, const ScDocument& rDoc, SCTAB nC
         bRet = ConvertDoubleRef( rDoc, rString, nCurTab, rStart, rEnd, eConv );
     else
     {
-        bRet = ConvertSingleRef( &rDoc, rString, nCurTab, rStart, eConv );
+        bRet = ConvertSingleRef( rDoc, rString, nCurTab, rStart, eConv );
         rEnd = rStart;
     }
     return bRet;
@@ -250,7 +250,7 @@ IMPL_LINK(ScTabOpDlg, BtnHdl, weld::Button&, rBtn, void)
             const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
             if (!m_xEdRowCell->GetText().isEmpty())
             {
-                if (!ConvertSingleRef( pDoc, m_xEdRowCell->GetText(), nCurTab,
+                if (!ConvertSingleRef( *pDoc, m_xEdRowCell->GetText(), nCurTab,
                                        theRowCell, eConv ))
                     nError = TABOPERR_WRONGROW;
                 else
@@ -264,7 +264,7 @@ IMPL_LINK(ScTabOpDlg, BtnHdl, weld::Button&, rBtn, void)
             }
             if (!m_xEdColCell->GetText().isEmpty())
             {
-                if (!ConvertSingleRef( pDoc, m_xEdColCell->GetText(), nCurTab,
+                if (!ConvertSingleRef( *pDoc, m_xEdColCell->GetText(), nCurTab,
                                        theColCell, eConv ))
                     nError = TABOPERR_WRONGCOL;
                 else
@@ -272,7 +272,7 @@ IMPL_LINK(ScTabOpDlg, BtnHdl, weld::Button&, rBtn, void)
                     if (eMode == ScTabOpParam::Row)                         // both
                     {
                         eMode = ScTabOpParam::Both;
-                        ConvertSingleRef( pDoc, m_xEdFormulaRange->GetText(), nCurTab,
+                        ConvertSingleRef( *pDoc, m_xEdFormulaRange->GetText(), nCurTab,
                                           theFormulaCell, eConv );
                     }
                     else if (theFormulaCell.Row() != theFormulaEnd.Row())

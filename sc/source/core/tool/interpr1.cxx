@@ -8106,8 +8106,8 @@ void ScInterpreter::ScIndirect()
         else
             PushDoubleRef( aRefAd, aRefAd2);
     }
-    else if ( ConvertSingleRef(&mrDoc, sRefStr, nTab, aRefAd, aDetails, &aExtInfo) ||
-              ( bTryXlA1 && ConvertSingleRef (&mrDoc, sRefStr, nTab, aRefAd,
+    else if ( ConvertSingleRef(mrDoc, sRefStr, nTab, aRefAd, aDetails, &aExtInfo) ||
+              ( bTryXlA1 && ConvertSingleRef (mrDoc, sRefStr, nTab, aRefAd,
                                               aDetailsXlA1, &aExtInfo) ) )
     {
         if (aExtInfo.mbExternal)
