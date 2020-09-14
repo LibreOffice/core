@@ -2517,15 +2517,11 @@ static SwTwips lcl_CalcAutoWidth( const SwLayoutFrame& rFrame )
     // No autowidth defined for columned frames
     if ( !pFrame || pFrame->IsColumnFrame() )
         return nRet;
-    // tdf#124423 In Microsoft compatibility mode: widen the frame to max (PrintArea of the frame it anchored to) if it contains at least 2 paragraphs.
-    if (rFrame.GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::FRAME_AUTOWIDTH_WITH_MORE_PARA) && pFrame && pFrame->GetNext())
-    {
-        const SwFrame* pFrameRect = rFrame.IsFlyFrame() ? static_cast<const SwFlyFrame*>(&rFrame)->GetAnchorFrame() : pFrame->FindPageFrame();
-        return rFrame.IsVertical() ? pFrameRect->getFramePrintArea().Height() : pFrameRect->getFramePrintArea().Width();
-    }
 
+    int nParagraphCount = 0;
     while ( pFrame )
     {
+        nParagraphCount++;
         if ( pFrame->IsSctFrame() )
         {
             nMin = lcl_CalcAutoWidth( *static_cast<const SwSectionFrame*>(pFrame) );
@@ -2560,6 +2556,18 @@ static SwTwips lcl_CalcAutoWidth( const SwLayoutFrame& rFrame )
             nRet = nMin;
 
         pFrame = pFrame->GetNext();
+    }
+
+    // tdf#124423 In Microsoft compatibility mode: widen the frame to max (PrintArea of the frame it anchored to) if it contains at least 2 paragraphs,
+    // or 1 paragraph wider then its parent area.
+    if (rFrame.GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::FRAME_AUTOWIDTH_WITH_MORE_PARA))
+    {
+        const SwFrame* pFrameRect = rFrame.IsFlyFrame() ? static_cast<const SwFlyFrame*>(&rFrame)->GetAnchorFrame() : rFrame.Lower()->FindPageFrame();
+        SwTwips nParentWidth = rFrame.IsVertical() ? pFrameRect->getFramePrintArea().Height() : pFrameRect->getFramePrintArea().Width();
+        if (nParagraphCount > 1 || nRet > nParentWidth)
+        {
+            return nParentWidth;
+        }
     }
 
     return nRet;
