@@ -89,15 +89,15 @@ public:
                                 formula::FormulaGrammar::Grammar eGrammar2 = formula::FormulaGrammar::GRAM_DEFAULT );
             ScValidationData( ScValidationMode eMode, ScConditionMode eOper,
                                 const ScTokenArray* pArr1, const ScTokenArray* pArr2,
-                                ScDocument* pDocument, const ScAddress& rPos );
+                                ScDocument& rDocument, const ScAddress& rPos );
             ScValidationData( const ScValidationData& r );
-            ScValidationData( ScDocument* pDocument, const ScValidationData& r );
+            ScValidationData( ScDocument& rDocument, const ScValidationData& r );
     virtual ~ScValidationData() override;
 
     ScValidationData* Clone() const     // real copy
-                    { return new ScValidationData( GetDocument(), *this ); }
+                    { return new ScValidationData( *GetDocument(), *this ); }
     ScValidationData* Clone(ScDocument* pNew) const override
-                    { return new ScValidationData( pNew, *this ); }
+                    { return new ScValidationData( *pNew, *this ); }
 
     void            ResetInput();
     void            ResetError();

@@ -202,8 +202,8 @@ ScConditionEntry::ScConditionEntry( const ScConditionEntry& r ) :
     // Formula cells are created at IsValid
 }
 
-ScConditionEntry::ScConditionEntry( ScDocument* pDocument, const ScConditionEntry& r ) :
-    ScFormatEntry(pDocument),
+ScConditionEntry::ScConditionEntry( ScDocument& rDocument, const ScConditionEntry& r ) :
+    ScFormatEntry(&rDocument),
     eOp(r.eOp),
     nOptions(r.nOptions),
     nVal1(r.nVal1),
@@ -221,7 +221,7 @@ ScConditionEntry::ScConditionEntry( ScDocument* pDocument, const ScConditionEntr
     bRelRef1(r.bRelRef1),
     bRelRef2(r.bRelRef2),
     bFirstRun(true),
-    mpListener(new ScFormulaListener(*pDocument)),
+    mpListener(new ScFormulaListener(rDocument)),
     eConditionType( r.eConditionType),
     pCondFormat(r.pCondFormat)
 {
@@ -266,8 +266,8 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
 
 ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
                                 const ScTokenArray* pArr1, const ScTokenArray* pArr2,
-                                ScDocument* pDocument, const ScAddress& rPos ) :
-    ScFormatEntry(pDocument),
+                                ScDocument& rDocument, const ScAddress& rPos ) :
+    ScFormatEntry(&rDocument),
     eOp(eOper),
     nOptions(0),
     nVal1(0.0),
@@ -280,7 +280,7 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
     bRelRef1(false),
     bRelRef2(false),
     bFirstRun(true),
-    mpListener(new ScFormulaListener(*pDocument)),
+    mpListener(new ScFormulaListener(rDocument)),
     eConditionType(ScFormatEntry::Type::Condition),
     pCondFormat(nullptr)
 {
@@ -1390,7 +1390,7 @@ bool ScConditionEntry::MarkUsedExternalReferences() const
 
 ScFormatEntry* ScConditionEntry::Clone(ScDocument* pDoc) const
 {
-    return new ScConditionEntry(pDoc, *this);
+    return new ScConditionEntry(*pDoc, *this);
 }
 
 ScConditionMode ScConditionEntry::GetModeFromApi(css::sheet::ConditionOperator nOperation)
@@ -1468,9 +1468,9 @@ ScCondFormatEntry::ScCondFormatEntry( ScConditionMode eOper,
 
 ScCondFormatEntry::ScCondFormatEntry( ScConditionMode eOper,
                                         const ScTokenArray* pArr1, const ScTokenArray* pArr2,
-                                        ScDocument* pDocument, const ScAddress& rPos,
+                                        ScDocument& rDocument, const ScAddress& rPos,
                                         const OUString& rStyle ) :
-    ScConditionEntry( eOper, pArr1, pArr2, pDocument, rPos ),
+    ScConditionEntry( eOper, pArr1, pArr2, rDocument, rPos ),
     aStyleName( rStyle )
 {
 }
@@ -1482,8 +1482,8 @@ ScCondFormatEntry::ScCondFormatEntry( const ScCondFormatEntry& r ) :
 {
 }
 
-ScCondFormatEntry::ScCondFormatEntry( ScDocument* pDocument, const ScCondFormatEntry& r ) :
-    ScConditionEntry( pDocument, r ),
+ScCondFormatEntry::ScCondFormatEntry( ScDocument& rDocument, const ScCondFormatEntry& r ) :
+    ScConditionEntry( rDocument, r ),
     aStyleName( r.aStyleName ),
     eCondFormatType( r.eCondFormatType)
 {
@@ -1508,7 +1508,7 @@ void ScCondFormatEntry::DataChanged() const
 
 ScFormatEntry* ScCondFormatEntry::Clone( ScDocument* pDoc ) const
 {
-    return new ScCondFormatEntry( pDoc, *this );
+    return new ScCondFormatEntry( *pDoc, *this );
 }
 
 void ScConditionEntry::CalcAll()
