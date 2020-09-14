@@ -345,11 +345,13 @@ private:
     SAL_DLLPRIVATE void          EnsureTabDataSize(size_t nSize);
     SAL_DLLPRIVATE void          UpdateCurrentTab();
 
-public:
-                    ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh );
-                    ~ScViewData() COVERITY_NOEXCEPT_FALSE;
-
+    ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh );
     void            InitData(ScDocument& rDocument);
+
+public:
+    ScViewData( ScDocShell& rDocSh, ScTabViewShell* pViewSh );
+    ScViewData( ScDocument& rDoc );
+    ~ScViewData() COVERITY_NOEXCEPT_FALSE;
 
     ScDocShell*     GetDocShell() const     { return pDocShell; }
     ScDocFunc&      GetDocFunc() const;
