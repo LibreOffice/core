@@ -1267,6 +1267,13 @@ void SwAnnotationWin::ExecuteCommand(sal_uInt16 nSlot)
             Invalidate();
             mrMgr.LayoutPostIts();
             break;
+        case FN_RESOLVE_NOTE_THREAD:
+            GetTopReplyNote()->SetResolved(!IsThreadResolved());
+            mrMgr.UpdateResolvedStatus(GetTopReplyNote());
+            DoResize();
+            Invalidate();
+            mrMgr.LayoutPostIts();
+            break;
         case FN_FORMAT_ALL_NOTES:
         case FN_DELETE_ALL_NOTES:
         case FN_HIDE_ALL_NOTES:
