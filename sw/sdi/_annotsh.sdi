@@ -66,6 +66,12 @@ interface _Annotation
         StateMethod = GetNoteState ;
     ]
 
+    FN_RESOLVE_NOTE_THREAD
+    [
+        ExecMethod = NoteExec ;
+        StateMethod = GetNoteState ;
+    ]
+
     FN_POSTIT
         [
                 ExecMethod = NoteExec ;

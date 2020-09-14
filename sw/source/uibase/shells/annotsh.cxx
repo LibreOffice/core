@@ -1088,6 +1088,7 @@ void SwAnnotationShell::NoteExec(SfxRequest const &rReq)
         case FN_POSTIT:
         case FN_DELETE_COMMENT:
         case FN_RESOLVE_NOTE:
+        case FN_RESOLVE_NOTE_THREAD:
             if ( pPostItMgr->HasActiveSidebarWin() )
                 pPostItMgr->GetActiveSidebarWin()->ExecuteCommand(nSlot);
             break;
@@ -1156,6 +1157,20 @@ void SwAnnotationShell::GetNoteState(SfxItemSet &rSet)
                 else
                 {
                     SfxBoolItem aBool(nWhich, pPostItMgr->GetActiveSidebarWin()->IsResolved());
+                    rSet.Put( aBool );
+                }
+                break;
+            }
+        case FN_RESOLVE_NOTE_THREAD:
+            {
+                if( !pPostItMgr
+                    || !pPostItMgr->HasActiveAnnotationWin() )
+                {
+                    rSet.DisableItem(nWhich);
+                }
+                else
+                {
+                    SfxBoolItem aBool(nWhich, pPostItMgr->GetActiveSidebarWin()->IsThreadResolved());
                     rSet.Put( aBool );
                 }
                 break;

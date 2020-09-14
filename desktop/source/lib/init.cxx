@@ -2700,6 +2700,7 @@ static void doc_iniUnoCommands ()
         OUString(".uno:DeleteAnnotation"),
         OUString(".uno:ReplyComment"),
         OUString(".uno:ResolveComment"),
+        OUString(".uno:ResolveCommentThread"),
         OUString(".uno:InsertRowsBefore"),
         OUString(".uno:InsertRowsAfter"),
         OUString(".uno:InsertColumnsBefore"),

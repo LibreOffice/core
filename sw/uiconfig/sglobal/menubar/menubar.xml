@@ -145,6 +145,7 @@
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:ReplyComment" menu:style="text"/>
           <menu:menuitem menu:id=".uno:ResolveComment" menu:style="text"/>
+          <menu:menuitem menu:id=".uno:ResolveCommentThread" menu:style="text"/>
           <menu:menuitem menu:id=".uno:DeleteComment" menu:style="text"/>
           <menu:menuitem menu:id=".uno:DeleteAuthor" menu:style="text"/>
           <menu:menuitem menu:id=".uno:DeleteAllNotes" menu:style="text"/>
