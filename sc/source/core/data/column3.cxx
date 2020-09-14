@@ -380,19 +380,19 @@ public:
 
 class DetachFormulaCellsHandler
 {
-    ScDocument* mpDoc;
+    ScDocument& mrDoc;
     sc::EndListeningContext* mpCxt;
 
 public:
-    DetachFormulaCellsHandler( ScDocument* pDoc, sc::EndListeningContext* pCxt ) :
-        mpDoc(pDoc), mpCxt(pCxt) {}
+    DetachFormulaCellsHandler( ScDocument& rDoc, sc::EndListeningContext* pCxt ) :
+        mrDoc(rDoc), mpCxt(pCxt) {}
 
     void operator() (size_t /*nRow*/, ScFormulaCell* pCell)
     {
         if (mpCxt)
             pCell->EndListeningTo(*mpCxt);
         else
-            pCell->EndListeningTo(*mpDoc);
+            pCell->EndListeningTo(mrDoc);
     }
 };
 
@@ -459,7 +459,7 @@ void ScColumn::DetachFormulaCells(
     if (GetDoc()->IsClipOrUndo())
         return;
 
-    DetachFormulaCellsHandler aFunc(GetDoc(), nullptr);
+    DetachFormulaCellsHandler aFunc(*GetDoc(), nullptr);
     sc::ProcessFormula(aPos.first, maCells, nRow, nNextTopRow-1, aFunc);
 }
 
@@ -542,7 +542,7 @@ void ScColumn::DetachFormulaCells( sc::EndListeningContext& rCxt, SCROW nRow1, S
     if (GetDoc()->IsClipOrUndo())
         return;
 
-    DetachFormulaCellsHandler aFunc(GetDoc(), &rCxt);
+    DetachFormulaCellsHandler aFunc(*GetDoc(), &rCxt);
     sc::ProcessFormula(it, maCells, nRow1, nRow2, aFunc);
 }
 
