@@ -5507,11 +5507,16 @@ fi
 AC_SUBST(BUILDING_PCH_WITH_OBJ)
 
 PCH_MODULES_CODEGEN=
+PCH_NO_MODULES_CODEGEN=
 if test -n "$BUILDING_PCH_WITH_OBJ"; then
     AC_MSG_CHECKING([whether $CC supports -Xclang -fmodules-codegen])
     save_CFLAGS=$CFLAGS
     CFLAGS="$CFLAGS -Werror -Xclang -fmodules-codegen"
-    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ PCH_MODULES_CODEGEN="-Xclang -fmodules-codegen" ],[])
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],
+        [
+        PCH_MODULES_CODEGEN="-Xclang -fmodules-codegen"
+        PCH_NO_MODULES_CODEGEN="-Xclang -fno-modules-codegen"
+        ],[])
     CFLAGS=$save_CFLAGS
     if test -n "$PCH_MODULES_CODEGEN"; then
         AC_MSG_RESULT(yes)
@@ -5521,6 +5526,7 @@ if test -n "$BUILDING_PCH_WITH_OBJ"; then
     CFLAGS=$save_CFLAGS
 fi
 AC_SUBST(PCH_MODULES_CODEGEN)
+AC_SUBST(PCH_NO_MODULES_CODEGEN)
 PCH_MODULES_DEBUGINFO=
 if test -n "$BUILDING_PCH_WITH_OBJ"; then
     AC_MSG_CHECKING([whether $CC supports -Xclang -fmodules-debuginfo])
