@@ -979,6 +979,14 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf132271, "tdf132271.docx")
     assertXPath(pXmlDoc, "//w:ins", 2);
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf136667, "tdf136667.docx")
+{
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // import change tracking in floating tables
+    assertXPath(pXmlDoc, "//w:del", 2);
+    assertXPath(pXmlDoc, "//w:ins", 4);
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128156, "tdf128156.docx")
 {
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
