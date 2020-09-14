@@ -18,6 +18,13 @@
 
 #include <comphelper/propertysequence.hxx>
 #include <svl/srchitem.hxx>
+#include <vcl/scheduler.hxx>
+
+#include <docsh.hxx>
+#include <unotxdoc.hxx>
+#include <wrtsh.hxx>
+
+char const DATA_DIRECTORY[] = "/sw/qa/core/crsr/data/";
 
 /// Covers sw/source/core/crsr/ fixes.
 class SwCoreCrsrTest : public SwModelTestBase
@@ -73,6 +80,28 @@ CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testFindReplace)
     // - Actual  : foo
     // i.e. the foo on the second line was not replaced.
     CPPUNIT_ASSERT_EQUAL(OUString("bar"), aActualStart);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testSelAllStartsWithTable)
+{
+    load(DATA_DIRECTORY, "sel-all-starts-with-table.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDocShell* pDocShell = pTextDoc->GetDocShell();
+    SwDoc* pDoc = pDocShell->GetDoc();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDoc->GetTableFrameFormatCount(/*bUsed=*/true));
+
+    pWrtShell->SelAll();
+    pWrtShell->SelAll();
+    Scheduler::ProcessEventsToIdle();
+    pWrtShell->DelLeft();
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 1
+    // i.e. the table selection was lost and the table was not deleted.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pDoc->GetTableFrameFormatCount(/*bUsed=*/true));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
