@@ -2813,6 +2813,24 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
     else if( bVertical && eHorizontalAlignment == TextHorizontalAdjust_LEFT )
         sVerticalAlignment = "b";
 
+    bool isUpright = false;
+    if (GetProperty(rXPropSet, "InteropGrabBag"))
+    {
+        if (rXPropSet->getPropertySetInfo()->hasPropertyByName("InteropGrabBag"))
+        {
+            uno::Sequence<beans::PropertyValue> aGrabBag;
+            rXPropSet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+            for (auto& aProp : aGrabBag)
+            {
+                if (aProp.Name == "Upright")
+                {
+                    aProp.Value >>= isUpright;
+                    break;
+                }
+            }
+        }
+    }
+
     bool bHasWrap = false;
     bool bWrap = false;
     // Only custom shapes obey the TextWordWrap option, normal text always wraps.
@@ -2844,7 +2862,12 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
                                XML_anchor, sVerticalAlignment,
                                XML_anchorCtr, bHorizontalCenter ? "1" : nullptr,
                                XML_vert, sWritingMode,
+<<<<<<< HEAD   (3f9a5f tdf#136667 DOCX import: fix crash of floating tables)
                                XML_rot, ((nTextPreRotateAngle + nTextRotateAngle) != 0) ? oox::drawingml::calcRotationValue( (nTextPreRotateAngle + nTextRotateAngle) * 100 ).getStr() : nullptr );
+=======
+                               XML_upright, isUpright ? "1" : "0",
+                               XML_rot, sax_fastparser::UseIf(oox::drawingml::calcRotationValue((nTextPreRotateAngle + nTextRotateAngle) * 100), (nTextPreRotateAngle + nTextRotateAngle) != 0));
+>>>>>>> CHANGE (d3094b tdf#123610 DOCX shape import: keep text upright)
         if (bIsFontworkShape)
         {
             if (aAdjustmentSeq.hasElements())
