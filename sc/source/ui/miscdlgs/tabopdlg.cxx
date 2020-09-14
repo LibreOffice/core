@@ -207,16 +207,16 @@ void ScTabOpDlg::RaiseError( ScTabOpErr eError )
     pEd->GrabFocus();
 }
 
-static bool lcl_Parse( const OUString& rString, const ScDocument* pDoc, SCTAB nCurTab,
+static bool lcl_Parse( const OUString& rString, const ScDocument& rDoc, SCTAB nCurTab,
                 ScRefAddress& rStart, ScRefAddress& rEnd )
 {
     bool bRet = false;
-    const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
+    const formula::FormulaGrammar::AddressConvention eConv = rDoc.GetAddressConvention();
     if ( rString.indexOf(':') != -1 )
-        bRet = ConvertDoubleRef( pDoc, rString, nCurTab, rStart, rEnd, eConv );
+        bRet = ConvertDoubleRef( &rDoc, rString, nCurTab, rStart, rEnd, eConv );
     else
     {
-        bRet = ConvertSingleRef( pDoc, rString, nCurTab, rStart, eConv );
+        bRet = ConvertSingleRef( &rDoc, rString, nCurTab, rStart, eConv );
         rEnd = rStart;
     }
     return bRet;
@@ -242,7 +242,7 @@ IMPL_LINK(ScTabOpDlg, BtnHdl, weld::Button&, rBtn, void)
         else if (m_xEdRowCell->GetText().isEmpty() &&
                  m_xEdColCell->GetText().isEmpty())
             nError = TABOPERR_NOCOLROW;
-        else if ( !lcl_Parse( m_xEdFormulaRange->GetText(), pDoc, nCurTab,
+        else if ( !lcl_Parse( m_xEdFormulaRange->GetText(), *pDoc, nCurTab,
                                 theFormulaCell, theFormulaEnd ) )
             nError = TABOPERR_WRONGFORMULA;
         else
