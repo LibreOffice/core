@@ -938,7 +938,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         if ( pOutSet->GetItemState( FID_VALID_ERRTEXT, true, &pItem ) == SfxItemState::SET )
                             aErrText = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
-                        ScValidationData aData( eMode, eOper, aExpr1, aExpr2, pDoc, aCursorPos );
+                        ScValidationData aData( eMode, eOper, aExpr1, aExpr2, *pDoc, aCursorPos );
                         aData.SetIgnoreBlank( bBlank );
                         aData.SetListType( nListType );
 
