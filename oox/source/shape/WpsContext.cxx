@@ -96,6 +96,17 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                     }
                 }
 
+                if (bool nUpright = rAttribs.getBool(XML_upright, 0))
+                {
+                    uno::Sequence<beans::PropertyValue> aGrabBag;
+                    xPropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+                    sal_Int32 length = aGrabBag.getLength();
+                    aGrabBag.realloc(length + 1);
+                    aGrabBag[length].Name = "Upright";
+                    aGrabBag[length].Value <<= nUpright;
+                    xPropertySet->setPropertyValue("InteropGrabBag", uno::makeAny(aGrabBag));
+                }
+
                 if (xServiceInfo.is())
                 {
                     // Handle inset attributes for Writer textframes.

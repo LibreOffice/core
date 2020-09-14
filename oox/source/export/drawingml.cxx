@@ -116,6 +116,7 @@
 #include <svx/unoshape.hxx>
 #include <svx/EnhancedCustomShape2d.hxx>
 #include <drawingml/presetgeometrynames.hxx>
+#include <fstream>
 
 using namespace ::css;
 using namespace ::css::beans;
@@ -2923,6 +2924,24 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
     else if( bVertical && eHorizontalAlignment == TextHorizontalAdjust_LEFT )
         sVerticalAlignment = "b";
 
+    bool isUpright = false;
+    if (GetProperty(rXPropSet, "InteropGrabBag"))
+    {
+        if (rXPropSet->getPropertySetInfo()->hasPropertyByName("InteropGrabBag"))
+        {
+            uno::Sequence<beans::PropertyValue> aGrabBag;
+            rXPropSet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+            for (auto aProp : aGrabBag)
+            {
+                if (aProp.Name == "Upright")
+                {
+                    aProp.Value >>= isUpright;
+                    break;
+                }
+            }
+        }
+    }
+
     bool bHasWrap = false;
     bool bWrap = false;
     // Only custom shapes obey the TextWordWrap option, normal text always wraps.
@@ -2954,6 +2973,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
                                XML_anchor, sVerticalAlignment,
                                XML_anchorCtr, sax_fastparser::UseIf("1", bHorizontalCenter),
                                XML_vert, sWritingMode,
+                               XML_upright, isUpright ? "1" : "0",
                                XML_rot, sax_fastparser::UseIf(oox::drawingml::calcRotationValue((nTextPreRotateAngle + nTextRotateAngle) * 100), (nTextPreRotateAngle + nTextRotateAngle) != 0));
         if (bIsFontworkShape)
         {
