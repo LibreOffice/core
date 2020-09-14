@@ -1142,6 +1142,16 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testRelativeAnchorWidthFromInsideOutsideMarg
     assertXPath(pXmlDoc, "(//SwAnchoredDrawObject)[4]/bounds", "width", "1440");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testBodyPrUpright, "tdf123610_handle_upright.docx")
+{
+    // tdf#123610: Check grab-bag attribute upright to keep text upright regardless of shape rotation.
+
+    xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
+
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"
+        "/a:graphic/a:graphicData/wps:wsp/wps:bodyPr", "upright", "1");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
