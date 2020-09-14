@@ -101,7 +101,7 @@ void Test::testCondFormatINSDEL()
     auto pFormat = std::make_unique<ScConditionalFormat>(1, m_pDoc);
     ScRangeList aRangeList(ScRange(0,0,0,0,3,0));
     pFormat->SetRange(aRangeList);
-    ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Direct,"=B2","",m_pDoc,ScAddress(0,0,0),ScResId(STR_STYLENAME_RESULT));
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Direct,"=B2","",*m_pDoc,ScAddress(0,0,0),ScResId(STR_STYLENAME_RESULT));
     pFormat->AddEntry(pEntry);
 
     m_pDoc->AddCondFormatData(pFormat->GetRange(), 0, 1);
@@ -127,7 +127,7 @@ void Test::testCondFormatInsertCol()
     ScRangeList aRangeList(ScRange(0,0,0,3,3,0));
     pFormat->SetRange(aRangeList);
 
-    ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Direct,"=B2","",m_pDoc,ScAddress(0,0,0),ScResId(STR_STYLENAME_RESULT));
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Direct,"=B2","",*m_pDoc,ScAddress(0,0,0),ScResId(STR_STYLENAME_RESULT));
     pFormat->AddEntry(pEntry);
 
     m_pDoc->AddCondFormatData(pFormat->GetRange(), 0, 1);
@@ -150,7 +150,7 @@ void Test::testCondFormatInsertRow()
     ScRangeList aRangeList(ScRange(0,0,0,3,3,0));
     pFormat->SetRange(aRangeList);
 
-    ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Direct,"=B2","",m_pDoc,ScAddress(0,0,0),ScResId(STR_STYLENAME_RESULT));
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Direct,"=B2","",*m_pDoc,ScAddress(0,0,0),ScResId(STR_STYLENAME_RESULT));
     pFormat->AddEntry(pEntry);
 
     m_pDoc->AddCondFormatData(pFormat->GetRange(), 0, 1);
@@ -177,7 +177,7 @@ void Test::testCondFormatInsertDeleteSheets()
 
     // Add condition in which if the value equals 2, set the "Result" style.
     ScCondFormatEntry* pEntry = new ScCondFormatEntry(
-        ScConditionMode::Equal, "=2", "" , m_pDoc, ScAddress(0,0,0), ScResId(STR_STYLENAME_RESULT));
+        ScConditionMode::Equal, "=2", "" , *m_pDoc, ScAddress(0,0,0), ScResId(STR_STYLENAME_RESULT));
     pFormatTmp->AddEntry(pEntry);
 
     // Apply the format to the range.
@@ -280,7 +280,7 @@ void Test::testCondCopyPaste()
     ScRangeList aRangeList(aCondFormatRange);
     pFormat->SetRange(aRangeList);
 
-    ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Direct,"=B2","",m_pDoc,ScAddress(0,0,0),ScResId(STR_STYLENAME_RESULT));
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Direct,"=B2","",*m_pDoc,ScAddress(0,0,0),ScResId(STR_STYLENAME_RESULT));
     pFormat->AddEntry(pEntry);
     sal_uLong nIndex = m_pDoc->AddCondFormat(std::move(pFormat), 0);
 
@@ -319,7 +319,7 @@ void Test::testCondCopyPasteSingleCell()
     ScRangeList aRangeList(aCondFormatRange);
     pFormat->SetRange(aRangeList);
 
-    ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Direct,"=B2","",m_pDoc,ScAddress(0,0,0),ScResId(STR_STYLENAME_RESULT));
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Direct,"=B2","",*m_pDoc,ScAddress(0,0,0),ScResId(STR_STYLENAME_RESULT));
     pFormat->AddEntry(pEntry);
     sal_uLong nIndex = m_pDoc->AddCondFormat(std::move(pFormat), 0);
 
@@ -358,7 +358,7 @@ void Test::testCondCopyPasteSingleCellToRange()
     ScRangeList aRangeList(aCondFormatRange);
     pFormat->SetRange(aRangeList);
 
-    ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Direct,"=B2","",m_pDoc,ScAddress(0,0,0),ScResId(STR_STYLENAME_RESULT));
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Direct,"=B2","",*m_pDoc,ScAddress(0,0,0),ScResId(STR_STYLENAME_RESULT));
     pFormat->AddEntry(pEntry);
     sal_uLong nIndex = m_pDoc->AddCondFormat(std::move(pFormat), 0);
 
@@ -403,7 +403,7 @@ void Test::testCondCopyPasteSingleCellIntoSameFormatRange()
     ScRangeList aRangeList(aCondFormatRange);
     pFormat->SetRange(aRangeList);
 
-    ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Direct, "=B2", "", m_pDoc, ScAddress(0, 0, 0), ScResId(STR_STYLENAME_RESULT));
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Direct, "=B2", "", *m_pDoc, ScAddress(0, 0, 0), ScResId(STR_STYLENAME_RESULT));
     pFormat->AddEntry(pEntry);
     sal_uLong nIndex = m_pDoc->AddCondFormat(std::move(pFormat), 0);
 
@@ -440,7 +440,7 @@ void Test::testCondCopyPasteSingleRowToRange()
     ScRangeList aRangeList(aCondFormatRange);
     pFormat->SetRange(aRangeList);
 
-    ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Direct,"=B2","",m_pDoc,ScAddress(0,0,0),ScResId(STR_STYLENAME_RESULT));
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Direct,"=B2","",*m_pDoc,ScAddress(0,0,0),ScResId(STR_STYLENAME_RESULT));
     pFormat->AddEntry(pEntry);
     auto pFormatTmp = pFormat.get();
     m_pDoc->AddCondFormat(std::move(pFormat), 0);
@@ -472,7 +472,7 @@ void Test::testCondCopyPasteSingleRowToRange2()
     ScRangeList aRangeList(aCondFormatRange);
     pFormat->SetRange(aRangeList);
 
-    ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Direct,"=B2","",m_pDoc,ScAddress(0,0,0),ScResId(STR_STYLENAME_RESULT));
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Direct,"=B2","",*m_pDoc,ScAddress(0,0,0),ScResId(STR_STYLENAME_RESULT));
     pFormat->AddEntry(pEntry);
     m_pDoc->AddCondFormat(std::move(pFormat), 0);
 
@@ -502,7 +502,7 @@ void Test::testCondCopyPasteSheetBetweenDoc()
     ScRangeList aRangeList(aCondFormatRange);
     pFormat->SetRange(aRangeList);
 
-    ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Direct,"=B2","",m_pDoc,ScAddress(0,0,0),ScResId(STR_STYLENAME_RESULT));
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Direct,"=B2","",*m_pDoc,ScAddress(0,0,0),ScResId(STR_STYLENAME_RESULT));
     pFormat->AddEntry(pEntry);
     m_pDoc->AddCondFormat(std::move(pFormat), 0);
 
@@ -524,7 +524,7 @@ void Test::testCondCopyPasteSheet()
     ScRangeList aRangeList(aCondFormatRange);
     pFormat->SetRange(aRangeList);
 
-    ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Direct,"=B2","",m_pDoc,ScAddress(0,0,0),ScResId(STR_STYLENAME_RESULT));
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Direct,"=B2","",*m_pDoc,ScAddress(0,0,0),ScResId(STR_STYLENAME_RESULT));
     pFormat->AddEntry(pEntry);
     m_pDoc->AddCondFormat(std::move(pFormat), 0);
 
@@ -749,7 +749,7 @@ void Test::testCondFormatEndsWithStr()
 {
     m_pDoc->InsertTab(0, "Test");
 
-    ScConditionEntry aEntry(ScConditionMode::EndsWith, "\"TestString\"", "", m_pDoc, ScAddress(),
+    ScConditionEntry aEntry(ScConditionMode::EndsWith, "\"TestString\"", "", *m_pDoc, ScAddress(),
             "", "", formula::FormulaGrammar::GRAM_DEFAULT, formula::FormulaGrammar::GRAM_DEFAULT);
 
     svl::SharedStringPool& rStringPool = m_pDoc->GetSharedStringPool();
@@ -767,7 +767,7 @@ void Test::testCondFormatEndsWithVal()
 {
     m_pDoc->InsertTab(0, "Test");
 
-    ScConditionEntry aEntry(ScConditionMode::EndsWith, "2", "", m_pDoc, ScAddress(),
+    ScConditionEntry aEntry(ScConditionMode::EndsWith, "2", "", *m_pDoc, ScAddress(),
             "", "", formula::FormulaGrammar::GRAM_DEFAULT, formula::FormulaGrammar::GRAM_DEFAULT);
 
     for (sal_Int32 i = 0; i < 15; ++i)
@@ -791,7 +791,7 @@ void Test::testFormulaListenerSingleCellToSingleCell()
 
     std::unique_ptr<ScTokenArray> pTokenArray(aCompiler.CompileString("A1"));
 
-    ScFormulaListener aListener(m_pDoc);
+    ScFormulaListener aListener(*m_pDoc);
 
     aListener.addTokenArray(pTokenArray.get(), ScAddress(10, 10, 0));
 
@@ -809,7 +809,7 @@ void Test::testFormulaListenerSingleCellToMultipleCells()
 
     std::unique_ptr<ScTokenArray> pTokenArray(aCompiler.CompileString("A1"));
 
-    ScFormulaListener aListener(m_pDoc);
+    ScFormulaListener aListener(*m_pDoc);
 
     aListener.addTokenArray(pTokenArray.get(), ScAddress(10, 10, 0));
 
@@ -827,7 +827,7 @@ void Test::testFormulaListenerMultipleCellsToSingleCell()
 
     std::unique_ptr<ScTokenArray> pTokenArray(aCompiler.CompileString("A1"));
 
-    ScFormulaListener aListener(m_pDoc);
+    ScFormulaListener aListener(*m_pDoc);
 
     aListener.addTokenArray(pTokenArray.get(), ScAddress(10, 10, 0));
 
@@ -845,7 +845,7 @@ void Test::testFormulaListenerMultipleCellsToMultipleCells()
 
     std::unique_ptr<ScTokenArray> pTokenArray(aCompiler.CompileString("A1"));
 
-    ScFormulaListener aListener(m_pDoc);
+    ScFormulaListener aListener(*m_pDoc);
 
     aListener.addTokenArray(pTokenArray.get(), ScAddress(10, 10, 0));
 
@@ -862,7 +862,7 @@ void Test::testFormulaListenerUpdateInsertTab()
     ScCompiler aCompiler(m_pDoc, ScAddress(10, 10, 0), formula::FormulaGrammar::GRAM_ENGLISH);
     std::unique_ptr<ScTokenArray> pTokenArray(aCompiler.CompileString("A1"));
 
-    ScFormulaListener aListener(m_pDoc);
+    ScFormulaListener aListener(*m_pDoc);
     aListener.addTokenArray(pTokenArray.get(), ScAddress(10, 10, 0));
     CPPUNIT_ASSERT(!aListener.NeedsRepaint());
 
@@ -887,7 +887,7 @@ void Test::testFormulaListenerUpdateDeleteTab()
     ScCompiler aCompiler(m_pDoc, ScAddress(10, 10, 1), formula::FormulaGrammar::GRAM_ENGLISH);
     std::unique_ptr<ScTokenArray> pTokenArray(aCompiler.CompileString("A1"));
 
-    ScFormulaListener aListener(m_pDoc);
+    ScFormulaListener aListener(*m_pDoc);
     aListener.addTokenArray(pTokenArray.get(), ScAddress(10, 10, 1));
     CPPUNIT_ASSERT(!aListener.NeedsRepaint());
 
@@ -905,7 +905,7 @@ void Test::testCondFormatUpdateMoveTab()
     m_pDoc->InsertTab(0, "test");
     m_pDoc->InsertTab(1, "Test2");
 
-    ScConditionEntry* pEntry = new ScConditionEntry(ScConditionMode::Equal, "A1", "", m_pDoc, ScAddress(10, 10, 0), "", "", formula::FormulaGrammar::GRAM_DEFAULT, formula::FormulaGrammar::GRAM_DEFAULT);
+    ScConditionEntry* pEntry = new ScConditionEntry(ScConditionMode::Equal, "A1", "", *m_pDoc, ScAddress(10, 10, 0), "", "", formula::FormulaGrammar::GRAM_DEFAULT, formula::FormulaGrammar::GRAM_DEFAULT);
 
     auto pFormat = std::make_unique<ScConditionalFormat>(0, m_pDoc);
     pFormat->SetRange(ScRange(10, 10, 0, 10, 12, 0));
@@ -941,7 +941,7 @@ void Test::testCondFormatUpdateInsertTab()
 {
     m_pDoc->InsertTab(0, "test");
 
-    ScConditionEntry* pEntry = new ScConditionEntry(ScConditionMode::Equal, "A1", "", m_pDoc, ScAddress(10, 10, 0), "", "", formula::FormulaGrammar::GRAM_DEFAULT, formula::FormulaGrammar::GRAM_DEFAULT);
+    ScConditionEntry* pEntry = new ScConditionEntry(ScConditionMode::Equal, "A1", "", *m_pDoc, ScAddress(10, 10, 0), "", "", formula::FormulaGrammar::GRAM_DEFAULT, formula::FormulaGrammar::GRAM_DEFAULT);
 
     auto pFormat = std::make_unique<ScConditionalFormat>(0, m_pDoc);
     pFormat->SetRange(ScRange(10, 10, 0, 10, 12, 0));
@@ -981,7 +981,7 @@ void Test::testCondFormatUpdateDeleteTab()
     m_pDoc->InsertTab(0, "test");
     m_pDoc->InsertTab(1, "Test2");
 
-    ScConditionEntry* pEntry = new ScConditionEntry(ScConditionMode::Equal, "A1", "", m_pDoc, ScAddress(10, 10, 1), "", "", formula::FormulaGrammar::GRAM_DEFAULT, formula::FormulaGrammar::GRAM_DEFAULT);
+    ScConditionEntry* pEntry = new ScConditionEntry(ScConditionMode::Equal, "A1", "", *m_pDoc, ScAddress(10, 10, 1), "", "", formula::FormulaGrammar::GRAM_DEFAULT, formula::FormulaGrammar::GRAM_DEFAULT);
 
     auto pFormat = std::make_unique<ScConditionalFormat>(0, m_pDoc);
     pFormat->SetRange(ScRange(10, 10, 1, 10, 12, 1));
@@ -1014,7 +1014,7 @@ void Test::testCondFormatUpdateReference()
     m_pDoc->InsertTab(0, "test");
     m_pDoc->InsertTab(1, "Test2");
 
-    ScConditionEntry* pEntry = new ScConditionEntry(ScConditionMode::Equal, "A1", "", m_pDoc, ScAddress(10, 10, 0), "", "", formula::FormulaGrammar::GRAM_DEFAULT, formula::FormulaGrammar::GRAM_DEFAULT);
+    ScConditionEntry* pEntry = new ScConditionEntry(ScConditionMode::Equal, "A1", "", *m_pDoc, ScAddress(10, 10, 0), "", "", formula::FormulaGrammar::GRAM_DEFAULT, formula::FormulaGrammar::GRAM_DEFAULT);
 
     auto pFormat = std::make_unique<ScConditionalFormat>(0, m_pDoc);
     pFormat->SetRange(ScRange(10, 10, 0, 10, 12, 0));
@@ -1038,7 +1038,7 @@ void Test::testCondFormatUpdateReferenceDelRow()
 {
     m_pDoc->InsertTab(0, "test");
 
-    ScConditionEntry* pEntry = new ScConditionEntry(ScConditionMode::Equal, "B6", "", m_pDoc, ScAddress(0, 5, 0), "", "", formula::FormulaGrammar::GRAM_DEFAULT, formula::FormulaGrammar::GRAM_DEFAULT);
+    ScConditionEntry* pEntry = new ScConditionEntry(ScConditionMode::Equal, "B6", "", *m_pDoc, ScAddress(0, 5, 0), "", "", formula::FormulaGrammar::GRAM_DEFAULT, formula::FormulaGrammar::GRAM_DEFAULT);
 
     auto pFormat = std::make_unique<ScConditionalFormat>(0, m_pDoc);
     pFormat->SetRange(ScRange(0, 5, 0, 0, 5, 0));
@@ -1059,7 +1059,7 @@ void Test::testCondFormatUpdateReferenceInsRow()
 {
     m_pDoc->InsertTab(0, "test");
 
-    ScConditionEntry* pEntry = new ScConditionEntry(ScConditionMode::Equal, "B6", "", m_pDoc, ScAddress(0, 5, 0), "", "", formula::FormulaGrammar::GRAM_DEFAULT, formula::FormulaGrammar::GRAM_DEFAULT);
+    ScConditionEntry* pEntry = new ScConditionEntry(ScConditionMode::Equal, "B6", "", *m_pDoc, ScAddress(0, 5, 0), "", "", formula::FormulaGrammar::GRAM_DEFAULT, formula::FormulaGrammar::GRAM_DEFAULT);
 
     auto pFormat = std::make_unique<ScConditionalFormat>(0, m_pDoc);
     pFormat->SetRange(ScRange(0, 5, 0, 0, 5, 0));
@@ -1080,7 +1080,7 @@ void Test::testCondFormatUndoList()
 {
     m_pDoc->InsertTab(0, "test");
 
-    ScConditionEntry* pEntry = new ScConditionEntry(ScConditionMode::Equal, "B6", "", m_pDoc, ScAddress(0, 5, 0), "", "", formula::FormulaGrammar::GRAM_DEFAULT, formula::FormulaGrammar::GRAM_DEFAULT);
+    ScConditionEntry* pEntry = new ScConditionEntry(ScConditionMode::Equal, "B6", "", *m_pDoc, ScAddress(0, 5, 0), "", "", formula::FormulaGrammar::GRAM_DEFAULT, formula::FormulaGrammar::GRAM_DEFAULT);
 
     auto pFormat = std::make_unique<ScConditionalFormat>(0, m_pDoc);
     pFormat->AddEntry(pEntry);
@@ -1128,7 +1128,7 @@ sal_uInt32 addSingleCellCondFormat(ScDocument* pDoc, const ScAddress& rAddr, sal
     pFormat->SetRange(aRangeList);
 
     ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Direct, rCondition, "",
-            pDoc, ScAddress(0,0,0), ScResId(STR_STYLENAME_RESULT));
+            *pDoc, ScAddress(0,0,0), ScResId(STR_STYLENAME_RESULT));
     pFormat->AddEntry(pEntry);
     return pDoc->AddCondFormat(std::move(pFormat), 0);
 }
@@ -1245,7 +1245,7 @@ void Test::testCondFormatVolatileFunctionRecalc()
     ScRangeList aRangeList(ScRange(0,0,0,10,0,0));
     pFormat->SetRange(aRangeList);
 
-    ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Greater,"RAND()","",m_pDoc,ScAddress(0,0,0),ScResId(STR_STYLENAME_RESULT));
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Greater,"RAND()","",*m_pDoc,ScAddress(0,0,0),ScResId(STR_STYLENAME_RESULT));
     pEntry->SetParent(pFormat.get());
 
     m_pDoc->AddCondFormatData(pFormat->GetRange(), 0, 1);

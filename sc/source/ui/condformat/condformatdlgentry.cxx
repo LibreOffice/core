@@ -239,7 +239,7 @@ ScFormatEntry* ScConditionFrmtEntry::createConditionEntry() const
         }
     }
 
-    ScFormatEntry* pEntry = new ScCondFormatEntry(eMode, aExpr1, aExpr2, mpDoc, maPos, mxLbStyle->get_active_text());
+    ScFormatEntry* pEntry = new ScCondFormatEntry(eMode, aExpr1, aExpr2, *mpDoc, maPos, mxLbStyle->get_active_text());
     return pEntry;
 }
 
@@ -543,7 +543,7 @@ ScFormatEntry* ScFormulaFrmtEntry::createFormulaEntry() const
     if(aFormula.isEmpty())
         return nullptr;
 
-    ScFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Direct, aFormula, OUString(), mpDoc, maPos, mxLbStyle->get_active_text());
+    ScFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Direct, aFormula, OUString(), *mpDoc, maPos, mxLbStyle->get_active_text());
     return pEntry;
 }
 

@@ -208,7 +208,7 @@ void ScTableConditionalFormat::FillFormat( ScConditionalFormat& rFormat,
         FormulaGrammar::Grammar eGrammar2 = lclResolveGrammar( eGrammar, aData.meGrammar2 );
 
         ScCondFormatEntry* pCoreEntry = new ScCondFormatEntry( aData.meMode, aData.maExpr1, aData.maExpr2,
-            &rDoc, aData.maPos, aData.maStyle, aData.maExprNmsp1, aData.maExprNmsp2, eGrammar1, eGrammar2 );
+            rDoc, aData.maPos, aData.maStyle, aData.maExprNmsp1, aData.maExprNmsp2, eGrammar1, eGrammar2 );
 
         if ( !aData.maPosStr.isEmpty() )
             pCoreEntry->SetSrcString( aData.maPosStr );
@@ -593,7 +593,7 @@ ScValidationData* ScTableValidationObj::CreateValidationData( ScDocument& rDoc,
 
     ScValidationData* pRet = new ScValidationData( static_cast<ScValidationMode>(nValMode),
                                                    nMode,
-                                                   aExpr1, aExpr2, &rDoc, aSrcPos,
+                                                   aExpr1, aExpr2, rDoc, aSrcPos,
                                                    maExprNmsp1, maExprNmsp2,
                                                    eGrammar1, eGrammar2 );
     pRet->SetIgnoreBlank(bIgnoreBlank);

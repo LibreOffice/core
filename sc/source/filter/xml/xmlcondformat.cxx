@@ -823,7 +823,7 @@ ScXMLCondContext::ScXMLCondContext( ScXMLImport& rImport,
     ScConditionMode eMode;
     GetConditionData(sExpression, eMode, aExpr1, aExpr2);
 
-    ScCondFormatEntry* pFormatEntry = new ScCondFormatEntry(eMode, aExpr1, aExpr2, GetScImport().GetDocument(), ScAddress(), sStyle,
+    ScCondFormatEntry* pFormatEntry = new ScCondFormatEntry(eMode, aExpr1, aExpr2, *GetScImport().GetDocument(), ScAddress(), sStyle,
                                                         OUString(), OUString(), formula::FormulaGrammar::GRAM_ODFF, formula::FormulaGrammar::GRAM_ODFF);
     pFormatEntry->SetSrcString(sAddress);
 

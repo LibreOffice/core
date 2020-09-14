@@ -477,27 +477,27 @@ void ScCondFormatObj::createEntry(const sal_Int32 nType, const sal_Int32 nPos)
         throw lang::IllegalArgumentException();
 
     ScFormatEntry* pNewEntry = nullptr;
-    ScDocument* pDoc = &mpDocShell->GetDocument();
+    ScDocument& rDoc = mpDocShell->GetDocument();
     switch (nType)
     {
         case sheet::ConditionEntryType::CONDITION:
             pNewEntry = new ScCondFormatEntry(ScConditionMode::Equal, "", "",
-                    pDoc, pFormat->GetRange().GetTopLeftCorner(), "");
+                    rDoc, pFormat->GetRange().GetTopLeftCorner(), "");
         break;
         case sheet::ConditionEntryType::COLORSCALE:
-            pNewEntry = new ScColorScaleFormat(pDoc);
+            pNewEntry = new ScColorScaleFormat(&rDoc);
             static_cast<ScColorScaleFormat*>(pNewEntry)->EnsureSize();
         break;
         case sheet::ConditionEntryType::DATABAR:
-            pNewEntry = new ScDataBarFormat(pDoc);
+            pNewEntry = new ScDataBarFormat(&rDoc);
             static_cast<ScDataBarFormat*>(pNewEntry)->EnsureSize();
         break;
         case sheet::ConditionEntryType::ICONSET:
-            pNewEntry = new ScIconSetFormat(pDoc);
+            pNewEntry = new ScIconSetFormat(&rDoc);
             static_cast<ScIconSetFormat*>(pNewEntry)->EnsureSize();
         break;
         case sheet::ConditionEntryType::DATE:
-            pNewEntry = new ScCondDateFormatEntry(pDoc);
+            pNewEntry = new ScCondDateFormatEntry(&rDoc);
         break;
         default:
             SAL_WARN("sc", "unknown conditional format type");

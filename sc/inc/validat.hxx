@@ -83,7 +83,7 @@ private:
 public:
             ScValidationData( ScValidationMode eMode, ScConditionMode eOper,
                                 const OUString& rExpr1, const OUString& rExpr2,
-                                ScDocument* pDocument, const ScAddress& rPos,
+                                ScDocument& rDocument, const ScAddress& rPos,
                                 const OUString& rExprNmsp1 = EMPTY_OUSTRING, const OUString& rExprNmsp2 = EMPTY_OUSTRING,
                                 formula::FormulaGrammar::Grammar eGrammar1 = formula::FormulaGrammar::GRAM_DEFAULT,
                                 formula::FormulaGrammar::Grammar eGrammar2 = formula::FormulaGrammar::GRAM_DEFAULT );
