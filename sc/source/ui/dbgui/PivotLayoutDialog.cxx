@@ -418,7 +418,7 @@ void ScPivotLayoutDialog::UpdateSourceRange()
             ScRefAddress aStart;
             ScRefAddress aEnd;
 
-            ConvertDoubleRef(&mrDocument, aSourceString, 1, aStart, aEnd, maAddressDetails);
+            ConvertDoubleRef(mrDocument, aSourceString, 1, aStart, aEnd, maAddressDetails);
             aSourceRange.aStart = aStart.GetAddress();
             aSourceRange.aEnd = aEnd.GetAddress();
         }

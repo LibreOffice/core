@@ -964,7 +964,7 @@ bool ConvertSingleRef( const ScDocument* pDocument, const OUString& rRefString,
                        const ScAddress::Details& rDetails,
                        ScAddress::ExternalInfo* pExtInfo = nullptr );
 
-bool ConvertDoubleRef( const ScDocument* pDocument, const OUString& rRefString,
+bool ConvertDoubleRef( const ScDocument& rDocument, const OUString& rRefString,
                        SCTAB nDefTab, ScRefAddress& rStartRefAddress,
                        ScRefAddress& rEndRefAddress,
                        const ScAddress::Details& rDetails,
