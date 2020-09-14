@@ -7901,7 +7901,7 @@ fi
 AC_SUBST(JAVADOC)
 AC_SUBST(JAVADOCISGJDOC)
 
-if test "$ENABLE_JAVA" != ""; then
+if test "$ENABLE_JAVA" != "" -a \( "$cross_compiling" != "yes" -o -n "$with_jdk_home" \); then
     # check if JAVA_HOME was (maybe incorrectly?) set automatically to /usr
     if test "$JAVA_HOME" = "/usr" -a "x$with_jdk_home" = "x"; then
         if basename $(readlink $(readlink $JAVACOMPILER)) >/dev/null 2>/dev/null; then
