@@ -476,7 +476,7 @@ void ScChartObj::GetData_Impl( ScRangeListRef& rRanges, bool& rColHeaders, bool&
                     rColHeaders=bHasCategories;
                     rRowHeaders=bFirstCellAsLabel;
                 }
-                rRanges->Parse( aRanges, &rDoc);
+                rRanges->Parse( aRanges, rDoc);
             }
             bFound = true;
         }

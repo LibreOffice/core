@@ -212,7 +212,7 @@ IMPL_LINK_NOARG(ScHighlightChgDlg, OKBtnHdl, weld::Button&, void)
     aChangeViewSet.SetHasComment(m_xFilterCtr->IsComment());
     aChangeViewSet.SetTheComment(m_xFilterCtr->GetComment());
     ScRangeList aLocalRangeList;
-    aLocalRangeList.Parse(m_xFilterCtr->GetRange(), pDoc);
+    aLocalRangeList.Parse(m_xFilterCtr->GetRange(), *pDoc);
     aChangeViewSet.SetTheRangeList(aLocalRangeList);
     aChangeViewSet.AdjustDateMode( *pDoc );
     pDoc->SetChangeViewSettings(aChangeViewSet);

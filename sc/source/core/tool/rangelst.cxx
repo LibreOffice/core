@@ -103,7 +103,7 @@ ScRangeList::~ScRangeList()
 {
 }
 
-ScRefFlags ScRangeList::Parse( const OUString& rStr, const ScDocument* pDoc,
+ScRefFlags ScRangeList::Parse( const OUString& rStr, const ScDocument& rDoc,
                            formula::FormulaGrammar::AddressConvention eConv,
                            SCTAB nDefaultTab, sal_Unicode cDelimiter )
 {
@@ -114,14 +114,14 @@ ScRefFlags ScRangeList::Parse( const OUString& rStr, const ScDocument* pDoc,
 
         ScRefFlags nResult = ~ScRefFlags::ZERO;    // set all bits
         ScRange aRange;
-        const SCTAB nTab = pDoc ? nDefaultTab : 0;
+        const SCTAB nTab = nDefaultTab;
 
         sal_Int32 nPos = 0;
         do
         {
             const OUString aOne = rStr.getToken( 0, cDelimiter, nPos );
             aRange.aStart.SetTab( nTab );   // default tab if not specified
-            ScRefFlags nRes = aRange.ParseAny( aOne, pDoc, eConv );
+            ScRefFlags nRes = aRange.ParseAny( aOne, &rDoc, eConv );
             ScRefFlags nEndRangeBits = ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID;
             ScRefFlags nTmp1 = nRes & ScRefFlags::BITS;
             ScRefFlags nTmp2 = nRes & nEndRangeBits;

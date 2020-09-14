@@ -41,7 +41,7 @@ public:
     ScRangeList& operator=(const ScRangeList& rList);
     ScRangeList& operator=(ScRangeList&& rList) noexcept;
 
-    ScRefFlags      Parse( const OUString&, const ScDocument*,
+    ScRefFlags      Parse( const OUString&, const ScDocument&,
                            formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO,
                            SCTAB nDefaultTab = 0, sal_Unicode cDelimiter = 0 );
 

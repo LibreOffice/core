@@ -570,7 +570,7 @@ std::unique_ptr<ScConditionalFormat> ScCondFormatDlg::GetConditionalFormat() con
         return nullptr;
 
     ScRangeList aRange;
-    ScRefFlags nFlags = aRange.Parse(aRangeStr, mpViewData->GetDocument(),
+    ScRefFlags nFlags = aRange.Parse(aRangeStr, *mpViewData->GetDocument(),
         mpViewData->GetDocument()->GetAddressConvention(), maPos.Tab());
     mxCondFormList->SetRange(aRange);
     std::unique_ptr<ScConditionalFormat> pFormat = mxCondFormList->GetConditionalFormat();
@@ -671,7 +671,7 @@ IMPL_LINK(ScCondFormatDlg, EdRangeModifyHdl, formula::RefEdit&, rEdit, void)
 {
     OUString aRangeStr = rEdit.GetText();
     ScRangeList aRange;
-    ScRefFlags nFlags = aRange.Parse(aRangeStr, mpViewData->GetDocument(),
+    ScRefFlags nFlags = aRange.Parse(aRangeStr, *mpViewData->GetDocument(),
         mpViewData->GetDocument()->GetAddressConvention());
     if(nFlags & ScRefFlags::VALID)
     {

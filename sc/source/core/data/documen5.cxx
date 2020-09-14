@@ -163,6 +163,7 @@ uno::Reference< chart2::XChartDocument > ScDocument::GetChartByName( const OUStr
     }
     return xReturn;
 }
+
 void ScDocument::GetChartRanges( const OUString& rChartName, ::std::vector< ScRangeList >& rRangesVector, const ScDocument* pSheetNameDoc )
 {
     rRangesVector.clear();
@@ -174,7 +175,7 @@ void ScDocument::GetChartRanges( const OUString& rChartName, ::std::vector< ScRa
         for(const OUString & aRangeString : aRangeStrings)
         {
             ScRangeList aRanges;
-            aRanges.Parse( aRangeString, pSheetNameDoc, pSheetNameDoc->GetAddressConvention() );
+            aRanges.Parse( aRangeString, *pSheetNameDoc, pSheetNameDoc->GetAddressConvention() );
             rRangesVector.push_back(aRanges);
         }
     }
@@ -228,7 +229,7 @@ void ScDocument::GetOldChartParameters( const OUString& rName,
                     OUString aRangesStr;
                     lcl_GetChartParameters( xChartDoc, aRangesStr, eDataRowSource, bHasCategories, bFirstCellAsLabel );
 
-                    rRanges.Parse( aRangesStr, this );
+                    rRanges.Parse( aRangesStr, *this );
                     if ( eDataRowSource == chart::ChartDataRowSource_COLUMNS )
                     {
                         rRowHeaders = bHasCategories;
@@ -284,7 +285,7 @@ void ScDocument::UpdateChartArea( const OUString& rChartName,
                         // append to old ranges, keep other settings
 
                         aNewRanges = new ScRangeList;
-                        aNewRanges->Parse( aRangesStr, this );
+                        aNewRanges->Parse( aRangesStr, *this );
 
                         for ( size_t nAdd = 0, nAddCount = rNewList->size(); nAdd < nAddCount; ++nAdd )
                             aNewRanges->push_back( (*rNewList)[nAdd] );
