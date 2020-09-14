@@ -258,7 +258,7 @@ void ScViewFunc::DoRefConversion()
                     nLen -= 2;
                     aOld = aOld.copy( 1, nLen);
                 }
-                ScRefFinder aFinder( aOld, aIter.GetPos(), pDoc, pDoc->GetAddressConvention() );
+                ScRefFinder aFinder( aOld, aIter.GetPos(), *pDoc, pDoc->GetAddressConvention() );
                 aFinder.ToggleRel( 0, nLen );
                 if (aFinder.GetFound())
                 {

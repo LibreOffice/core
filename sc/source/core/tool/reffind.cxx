@@ -204,10 +204,10 @@ void ExpandToText(const sal_Unicode* p, sal_Int32 nLen, sal_Int32& rStartPos, sa
 
 ScRefFinder::ScRefFinder(
     const OUString& rFormula, const ScAddress& rPos,
-    ScDocument* pDoc, formula::FormulaGrammar::AddressConvention eConvP) :
+    ScDocument& rDoc, formula::FormulaGrammar::AddressConvention eConvP) :
     maFormula(rFormula),
     meConv(eConvP),
-    mpDoc(pDoc),
+    mrDoc(rDoc),
     maPos(rPos),
     mnFound(0),
     mnSelStart(0),
@@ -269,7 +269,7 @@ void ScRefFinder::ToggleRel( sal_Int32 nStartPos, sal_Int32 nEndPos )
         // Check the validity of the expression, and toggle the relative flag.
         ScAddress::Details aDetails(meConv, maPos.Row(), maPos.Col());
         ScAddress::ExternalInfo aExtInfo;
-        ScRefFlags nResult = aAddr.Parse(aExpr, mpDoc, aDetails, &aExtInfo);
+        ScRefFlags nResult = aAddr.Parse(aExpr, &mrDoc, aDetails, &aExtInfo);
         if ( nResult & ScRefFlags::VALID )
         {
             ScRefFlags nFlags;
@@ -292,10 +292,10 @@ void ScRefFinder::ToggleRel( sal_Int32 nStartPos, sal_Int32 nEndPos )
                 {
                     OUString aRef = aExpr.copy(nSep+1);
                     OUString aExtDocNameTabName = aExpr.copy(0, nSep+1);
-                    nResult = aAddr.Parse(aRef, mpDoc, aDetails);
+                    nResult = aAddr.Parse(aRef, &mrDoc, aDetails);
                     aAddr.SetTab(0); // force to first tab to avoid error on checking
                     nFlags = lcl_NextFlags( nResult );
-                    aExpr = aExtDocNameTabName + aAddr.Format(nFlags, mpDoc, aDetails);
+                    aExpr = aExtDocNameTabName + aAddr.Format(nFlags, &mrDoc, aDetails);
                 }
                 else
                 {
@@ -305,7 +305,7 @@ void ScRefFinder::ToggleRel( sal_Int32 nStartPos, sal_Int32 nEndPos )
             else
             {
                 nFlags = lcl_NextFlags( nResult );
-                aExpr = aAddr.Format(nFlags, mpDoc, aDetails);
+                aExpr = aAddr.Format(nFlags, &mrDoc, aDetails);
             }
 
             sal_Int32 nAbsStart = nStartPos+aResult.getLength()+aSep.getLength();
