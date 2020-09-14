@@ -273,8 +273,7 @@ class SwXRedlinePortion : public SwXTextPortion
 private:
     SwRangeRedline const& m_rRedline;
 
-    /// @throws css::uno::RuntimeException
-    void Validate();
+    bool Validate();
 
     using SwXTextPortion::GetPropertyValue;
 
