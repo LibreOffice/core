@@ -174,7 +174,7 @@ ScColorScaleEntry::ScColorScaleEntry(const ScColorScaleEntry& rEntry):
     if(rEntry.mpCell)
     {
         mpCell.reset(new ScFormulaCell(*rEntry.mpCell, *rEntry.mpCell->GetDocument(), rEntry.mpCell->aPos, ScCloneFlags::NoMakeAbsExternal));
-        mpCell->StartListeningTo( mpCell->GetDocument() );
+        mpCell->StartListeningTo( *mpCell->GetDocument() );
         mpListener.reset(new ScFormulaListener(mpCell.get()));
     }
 }
@@ -190,7 +190,7 @@ ScColorScaleEntry::ScColorScaleEntry(ScDocument* pDoc, const ScColorScaleEntry& 
     if(rEntry.mpCell)
     {
         mpCell.reset(new ScFormulaCell(*rEntry.mpCell, *rEntry.mpCell->GetDocument(), rEntry.mpCell->aPos, ScCloneFlags::NoMakeAbsExternal));
-        mpCell->StartListeningTo( pDoc );
+        mpCell->StartListeningTo( *pDoc );
         mpListener.reset(new ScFormulaListener(mpCell.get()));
         if (mpFormat)
             mpListener->setCallback([&]() { mpFormat->DoRepaint();});
@@ -206,7 +206,7 @@ ScColorScaleEntry::~ScColorScaleEntry() COVERITY_NOEXCEPT_FALSE
 void ScColorScaleEntry::SetFormula( const OUString& rFormula, ScDocument* pDoc, const ScAddress& rAddr, formula::FormulaGrammar::Grammar eGrammar )
 {
     mpCell.reset(new ScFormulaCell( pDoc, rAddr, rFormula, eGrammar ));
-    mpCell->StartListeningTo( pDoc );
+    mpCell->StartListeningTo( *pDoc );
     mpListener.reset(new ScFormulaListener(mpCell.get()));
     if (mpFormat)
         mpListener->setCallback([&]() { mpFormat->DoRepaint();});
