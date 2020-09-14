@@ -65,16 +65,17 @@ namespace {
 
 class SwLinguIter
 {
-    SwEditShell *pSh;
+    SwEditShell* m_pSh;
     std::unique_ptr<SwPosition> m_pStart;
     std::unique_ptr<SwPosition> m_pEnd;
     std::unique_ptr<SwPosition> m_pCurr;
     std::unique_ptr<SwPosition> m_pCurrX;
-    sal_uInt16 nCursorCnt;
+    sal_uInt16 m_nCursorCount;
+
 public:
     SwLinguIter();
 
-    SwEditShell *GetSh()             { return pSh; }
+    SwEditShell* GetSh() { return m_pSh; }
 
     const SwPosition *GetEnd() const { return m_pEnd.get(); }
     void SetEnd(SwPosition* pNew) { m_pEnd.reset(pNew); }
@@ -88,7 +89,7 @@ public:
     const SwPosition *GetCurrX() const { return m_pCurrX.get(); }
     void SetCurrX(SwPosition* pNew) { m_pCurrX.reset(pNew); }
 
-    sal_uInt16& GetCursorCnt(){ return nCursorCnt; }
+    sal_uInt16& GetCursorCnt() { return m_nCursorCount; }
 
     // for the UI:
     void Start_( SwEditShell *pSh, SwDocPositions eStart,
@@ -112,11 +113,11 @@ namespace {
 
 class SwSpellIter : public SwLinguIter
 {
-    uno::Reference< XSpellChecker1 >    xSpeller;
-    svx::SpellPortions                aLastPortions;
+    uno::Reference<XSpellChecker1> m_xSpeller;
+    svx::SpellPortions m_aLastPortions;
 
-    SpellContentPositions               aLastPositions;
-    bool                                bBackToStartOfSentence;
+    SpellContentPositions m_aLastPositions;
+    bool m_bBackToStartOfSentence;
 
     void    CreatePortion(uno::Reference< XSpellAlternatives > const & xAlt,
                 linguistic2::ProofreadingResult* pGrammarResult,
@@ -126,8 +127,10 @@ class SwSpellIter : public SwLinguIter
                        linguistic2::ProofreadingResult* pGrammarResult,
                        const SpellContentPositions& rDeletedRedlines);
 public:
-    SwSpellIter() :
-        bBackToStartOfSentence(false) {}
+    SwSpellIter()
+        : m_bBackToStartOfSentence(false)
+    {
+    }
 
     void Start( SwEditShell *pSh, SwDocPositions eStart, SwDocPositions eEnd );
 
@@ -135,17 +138,18 @@ public:
 
     bool                                SpellSentence(svx::SpellPortions& rPortions, bool bIsGrammarCheck);
     void                                ToSentenceStart();
-    const svx::SpellPortions&           GetLastPortions() const { return aLastPortions;}
-    const SpellContentPositions&        GetLastPositions() const {return aLastPositions;}
+    const svx::SpellPortions& GetLastPortions() const { return m_aLastPortions; }
+    const SpellContentPositions& GetLastPositions() const { return m_aLastPositions; }
 };
 
 /// used for text conversion
 class SwConvIter : public SwLinguIter
 {
-    SwConversionArgs &rArgs;
+    SwConversionArgs& m_rArgs;
+
 public:
-    explicit SwConvIter(SwConversionArgs &rConvArgs)
-        : rArgs(rConvArgs)
+    explicit SwConvIter(SwConversionArgs& rConvArgs)
+        : m_rArgs(rConvArgs)
     {
     }
 
@@ -161,11 +165,16 @@ class SwHyphIter : public SwLinguIter
     SwTextFrame  *m_pLastFrame;
     friend SwTextFrame * sw::SwHyphIterCacheLastTextFrame(SwTextNode const * pNode, const sw::Creator& rCreator);
 
-    bool bOldIdle;
+    bool m_bOldIdle;
     static void DelSoftHyph( SwPaM &rPam );
 
 public:
-    SwHyphIter() : m_pLastNode(nullptr), m_pLastFrame(nullptr), bOldIdle(false) {}
+    SwHyphIter()
+        : m_pLastNode(nullptr)
+        , m_pLastFrame(nullptr)
+        , m_bOldIdle(false)
+    {
+    }
 
     void Start( SwEditShell *pSh, SwDocPositions eStart, SwDocPositions eEnd );
     void End();
@@ -186,8 +195,8 @@ static SwConvIter*  g_pConvIter = nullptr;
 static SwHyphIter*  g_pHyphIter = nullptr;
 
 SwLinguIter::SwLinguIter()
-    : pSh(nullptr)
-    , nCursorCnt(0)
+    : m_pSh(nullptr)
+    , m_nCursorCount(0)
 {
     // TODO missing: ensurance of re-entrance, OSL_ENSURE( etc.
 }
@@ -196,44 +205,44 @@ void SwLinguIter::Start_( SwEditShell *pShell, SwDocPositions eStart,
                             SwDocPositions eEnd )
 {
     // TODO missing: ensurance of re-entrance, locking
-    if( pSh )
+    if (m_pSh)
         return;
 
     bool bSetCurr;
 
-    pSh = pShell;
+    m_pSh = pShell;
 
-    CurrShell aCurr( pSh );
+    CurrShell aCurr(m_pSh);
 
     OSL_ENSURE(!m_pEnd, "SwLinguIter::Start_ without End?");
 
-    SwPaM *pCursor = pSh->GetCursor();
+    SwPaM* pCursor = m_pSh->GetCursor();
 
     if( pShell->HasSelection() || pCursor != pCursor->GetNext() )
     {
         bSetCurr = nullptr != GetCurr();
-        nCursorCnt = pSh->GetCursorCnt();
-        if( pSh->IsTableMode() )
-            pSh->TableCursorToCursor();
+        m_nCursorCount = m_pSh->GetCursorCnt();
+        if (m_pSh->IsTableMode())
+            m_pSh->TableCursorToCursor();
 
-        pSh->Push();
+        m_pSh->Push();
         sal_uInt16 n;
-        for( n = 0; n < nCursorCnt; ++n )
+        for (n = 0; n < m_nCursorCount; ++n)
         {
-            pSh->Push();
-            pSh->DestroyCursor();
+            m_pSh->Push();
+            m_pSh->DestroyCursor();
         }
-        pSh->Pop(SwCursorShell::PopMode::DeleteCurrent);
+        m_pSh->Pop(SwCursorShell::PopMode::DeleteCurrent);
     }
     else
     {
         bSetCurr = false;
-        nCursorCnt = 1;
-        pSh->Push();
-        pSh->SetLinguRange( eStart, eEnd );
+        m_nCursorCount = 1;
+        m_pSh->Push();
+        m_pSh->SetLinguRange(eStart, eEnd);
     }
 
-    pCursor = pSh->GetCursor();
+    pCursor = m_pSh->GetCursor();
     if ( *pCursor->GetPoint() > *pCursor->GetMark() )
         pCursor->Exchange();
 
@@ -252,24 +261,24 @@ void SwLinguIter::Start_( SwEditShell *pShell, SwDocPositions eStart,
 
 void SwLinguIter::End_(bool bRestoreSelection)
 {
-    if( !pSh )
+    if (!m_pSh)
         return;
 
     OSL_ENSURE(m_pEnd, "SwLinguIter::End_ without end?");
     if(bRestoreSelection)
     {
-        while( nCursorCnt-- )
-            pSh->Pop(SwCursorShell::PopMode::DeleteCurrent);
+        while (m_nCursorCount--)
+            m_pSh->Pop(SwCursorShell::PopMode::DeleteCurrent);
 
-        pSh->KillPams();
-        pSh->ClearMark();
+        m_pSh->KillPams();
+        m_pSh->ClearMark();
     }
     m_pStart.reset();
     m_pEnd.reset();
     m_pCurr.reset();
     m_pCurrX.reset();
 
-    pSh = nullptr;
+    m_pSh = nullptr;
 }
 
 void SwSpellIter::Start( SwEditShell *pShell, SwDocPositions eStart,
@@ -278,11 +287,11 @@ void SwSpellIter::Start( SwEditShell *pShell, SwDocPositions eStart,
     if( GetSh() )
         return;
 
-    xSpeller = ::GetSpellChecker();
-    if ( xSpeller.is() )
+    m_xSpeller = ::GetSpellChecker();
+    if (m_xSpeller.is())
         Start_( pShell, eStart, eEnd );
-    aLastPortions.clear();
-    aLastPositions.clear();
+    m_aLastPortions.clear();
+    m_aLastPositions.clear();
 }
 
 // This method is the origin of SwEditShell::SpellContinue()
@@ -308,8 +317,9 @@ uno::Any SwSpellIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
 
         *pMySh->GetCursor()->GetPoint() = *GetCurr();
         *pMySh->GetCursor()->GetMark() = *GetEnd();
-        pMySh->GetDoc()->Spell(*pMySh->GetCursor(),
-            xSpeller, pPageCnt, pPageSt, false, pMySh->GetLayout()) >>= xSpellRet;
+        pMySh->GetDoc()->Spell(*pMySh->GetCursor(), m_xSpeller, pPageCnt, pPageSt, false,
+                               pMySh->GetLayout())
+            >>= xSpellRet;
         bGoOn = GetCursorCnt() > 1;
         if( xSpellRet.is() )
         {
@@ -374,8 +384,9 @@ uno::Any SwConvIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
 
         // call function to find next text portion to be converted
         uno::Reference< linguistic2::XSpellChecker1 > xEmpty;
-        pMySh->GetDoc()->Spell( *pMySh->GetCursor(),
-            xEmpty, pPageCnt, pPageSt, false, pMySh->GetLayout(), &rArgs) >>= aConvText;
+        pMySh->GetDoc()->Spell(*pMySh->GetCursor(), xEmpty, pPageCnt, pPageSt, false,
+                               pMySh->GetLayout(), &m_rArgs)
+            >>= aConvText;
 
         bGoOn = GetCursorCnt() > 1;
         if( !aConvText.isEmpty() )
@@ -437,7 +448,7 @@ void SwHyphIter::Start( SwEditShell *pShell, SwDocPositions eStart, SwDocPositio
     }
 
     // nothing to do (at least not in the way as in the "else" part)
-    bOldIdle = pShell->GetViewOptions()->IsIdle();
+    m_bOldIdle = pShell->GetViewOptions()->IsIdle();
     pShell->GetViewOptions()->SetIdle( false );
     Start_( pShell, eStart, eEnd );
 }
@@ -447,7 +458,7 @@ void SwHyphIter::End()
 {
     if( !GetSh() )
         return;
-    GetSh()->GetViewOptions()->SetIdle( bOldIdle );
+    GetSh()->GetViewOptions()->SetIdle(m_bOldIdle);
     End_();
 }
 
@@ -1293,8 +1304,8 @@ static SpellContentPosition  lcl_FindNextDeletedRedline(
 bool SwSpellIter::SpellSentence(svx::SpellPortions& rPortions, bool bIsGrammarCheck)
 {
     bool bRet = false;
-    aLastPortions.clear();
-    aLastPositions.clear();
+    m_aLastPortions.clear();
+    m_aLastPositions.clear();
 
     SwEditShell *pMySh = GetSh();
     if( !pMySh )
@@ -1314,14 +1325,13 @@ bool SwSpellIter::SpellSentence(svx::SpellPortions& rPortions, bool bIsGrammarCh
         *pCursor->GetPoint() = *GetCurr();
         *pCursor->GetMark() = *GetEnd();
 
-        if( bBackToStartOfSentence )
+        if (m_bBackToStartOfSentence)
         {
             pMySh->GoStartSentence();
-            bBackToStartOfSentence = false;
+            m_bBackToStartOfSentence = false;
         }
-        uno::Any aSpellRet =
-        pMySh->GetDoc()->Spell(*pCursor,
-            xSpeller, nullptr, nullptr, bIsGrammarCheck, pMySh->GetLayout());
+        uno::Any aSpellRet = pMySh->GetDoc()->Spell(*pCursor, m_xSpeller, nullptr, nullptr,
+                                                    bIsGrammarCheck, pMySh->GetLayout());
         aSpellRet >>= xSpellRet;
         aSpellRet >>= aGrammarResult;
         bGoOn = GetCursorCnt() > 1;
@@ -1420,8 +1430,9 @@ bool SwSpellIter::SpellSentence(svx::SpellPortions& rPortions, bool bIsGrammarCh
             {
                 xSpellRet = nullptr;
                 // don't search for grammar errors here anymore!
-                pMySh->GetDoc()->Spell(*pCursor,
-                    xSpeller, nullptr, nullptr, false, pMySh->GetLayout()) >>= xSpellRet;
+                pMySh->GetDoc()->Spell(*pCursor, m_xSpeller, nullptr, nullptr, false,
+                                       pMySh->GetLayout())
+                    >>= xSpellRet;
                 if ( *pCursor->GetPoint() > *pCursor->GetMark() )
                     pCursor->Exchange();
                 SetCurr( new SwPosition( *pCursor->GetPoint() ));
@@ -1478,7 +1489,7 @@ bool SwSpellIter::SpellSentence(svx::SpellPortions& rPortions, bool bIsGrammarCh
         }
         // restore the 'global' end
         SetEnd( new SwPosition(aSaveEndPos) );
-        rPortions = aLastPortions;
+        rPortions = m_aLastPortions;
         bRet = true;
     }
     else
@@ -1491,10 +1502,7 @@ bool SwSpellIter::SpellSentence(svx::SpellPortions& rPortions, bool bIsGrammarCh
     return bRet;
 }
 
-void SwSpellIter::ToSentenceStart()
-{
-    bBackToStartOfSentence = true;
-}
+void SwSpellIter::ToSentenceStart() { m_bBackToStartOfSentence = true; }
 
 static LanguageType lcl_GetLanguage(SwEditShell& rSh)
 {
@@ -1551,9 +1559,8 @@ void SwSpellIter::CreatePortion(uno::Reference< XSpellAlternatives > const & xAl
     SwPaM *pCursor = GetSh()->GetCursor();
     aPosition.nLeft = pCursor->Start()->nContent.GetIndex();
     aPosition.nRight = pCursor->End()->nContent.GetIndex();
-    aLastPortions.push_back(aPortion);
-    aLastPositions.push_back(aPosition);
-
+    m_aLastPortions.push_back(aPortion);
+    m_aLastPositions.push_back(aPosition);
 }
 
 void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > const & xAlt,
