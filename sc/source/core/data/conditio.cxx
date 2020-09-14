@@ -400,7 +400,7 @@ void ScConditionEntry::MakeCells( const ScAddress& rPos )
         // pFCell1 will hold a flat-copied ScTokenArray sharing ref-counted
         // code tokens with pFormula1
         pFCell1.reset( new ScFormulaCell(mpDoc, rPos, *pFormula1) );
-        pFCell1->StartListeningTo( mpDoc );
+        pFCell1->StartListeningTo( *mpDoc );
     }
 
     if ( pFormula2 && !pFCell2 && !bRelRef2 )
@@ -408,7 +408,7 @@ void ScConditionEntry::MakeCells( const ScAddress& rPos )
         // pFCell2 will hold a flat-copied ScTokenArray sharing ref-counted
         // code tokens with pFormula2
         pFCell2.reset( new ScFormulaCell(mpDoc, rPos, *pFormula2) );
-        pFCell2->StartListeningTo( mpDoc );
+        pFCell2->StartListeningTo( *mpDoc );
     }
 }
 

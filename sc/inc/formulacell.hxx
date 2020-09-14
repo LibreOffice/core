@@ -460,7 +460,7 @@ public:
     bool InterpretFormulaGroup(SCROW nStartOffset = -1, SCROW nEndOffset = -1);
 
     // nOnlyNames may be one or more of SC_LISTENING_NAMES_*
-    void StartListeningTo( ScDocument* pDoc );
+    void StartListeningTo( ScDocument& rDoc );
     void StartListeningTo( sc::StartListeningContext& rCxt );
     void EndListeningTo(
         ScDocument* pDoc, ScTokenArray* pArr = nullptr, ScAddress aPos = ScAddress() );
