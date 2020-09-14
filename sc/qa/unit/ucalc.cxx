@@ -2959,7 +2959,7 @@ void Test::testToggleRefFlag()
 
         OUString aFormula("=B100");
         ScAddress aPos(1, 5, 0);
-        ScRefFinder aFinder(aFormula, aPos, m_pDoc, formula::FormulaGrammar::CONV_OOO);
+        ScRefFinder aFinder(aFormula, aPos, *m_pDoc, formula::FormulaGrammar::CONV_OOO);
 
         // Original
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Does not equal the original text.", aFormula, aFinder.GetText());
@@ -2990,7 +2990,7 @@ void Test::testToggleRefFlag()
 
         OUString aFormula("=R2C1");
         ScAddress aPos(3, 5, 0);
-        ScRefFinder aFinder(aFormula, aPos, m_pDoc, formula::FormulaGrammar::CONV_XL_R1C1);
+        ScRefFinder aFinder(aFormula, aPos, *m_pDoc, formula::FormulaGrammar::CONV_XL_R1C1);
 
         // Original
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Does not equal the original text.", aFormula, aFinder.GetText());
@@ -3021,7 +3021,7 @@ void Test::testToggleRefFlag()
         // overlap the formula string at all (inspired by fdo#39135).
         OUString aFormula("=R1C1");
         ScAddress aPos(1, 1, 0);
-        ScRefFinder aFinder(aFormula, aPos, m_pDoc, formula::FormulaGrammar::CONV_XL_R1C1);
+        ScRefFinder aFinder(aFormula, aPos, *m_pDoc, formula::FormulaGrammar::CONV_XL_R1C1);
 
         // Original
         CPPUNIT_ASSERT_EQUAL(aFormula, aFinder.GetText());
@@ -3055,7 +3055,7 @@ void Test::testToggleRefFlag()
         // Calc A1:
         OUString aFormula("=A1+4");
         ScAddress aPos(1, 1, 0);
-        ScRefFinder aFinder(aFormula, aPos, m_pDoc, formula::FormulaGrammar::CONV_OOO);
+        ScRefFinder aFinder(aFormula, aPos, *m_pDoc, formula::FormulaGrammar::CONV_OOO);
 
         // Original
         CPPUNIT_ASSERT_EQUAL(aFormula, aFinder.GetText());

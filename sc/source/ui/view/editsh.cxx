@@ -535,7 +535,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     ESelection aSel = pEditView->GetSelection();    // current View
 
                     ScDocument* pDoc = pViewData->GetDocument();
-                    ScRefFinder aFinder(aText, pViewData->GetCurPos(), pDoc, pDoc->GetAddressConvention());
+                    ScRefFinder aFinder(aText, pViewData->GetCurPos(), *pDoc, pDoc->GetAddressConvention());
                     aFinder.ToggleRel( aSel.nStartPos, aSel.nEndPos );
                     if (aFinder.GetFound())
                     {
