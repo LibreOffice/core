@@ -124,9 +124,9 @@ ScPositionHelper::ScPositionHelper(ScDocument *pDoc, bool bColumn)
     mData.insert(std::make_pair(-1, 0));
 }
 
-void ScPositionHelper::setDocument(ScDocument *pDoc, bool bColumn)
+void ScPositionHelper::setDocument(ScDocument& rDoc, bool bColumn)
 {
-    MAX_INDEX = bColumn ? pDoc->MaxCol() : MAXTILEDROW;
+    MAX_INDEX = bColumn ? rDoc.MaxCol() : MAXTILEDROW;
 }
 
 void ScPositionHelper::insert(index_type nIndex, long nPos)
@@ -514,10 +514,10 @@ ScViewDataTable::ScViewDataTable(ScDocument *pDoc) :
     nPixPosY[0]=nPixPosY[1]=0;
 }
 
-void ScViewDataTable::InitData(ScDocument *pDoc)
+void ScViewDataTable::InitData(ScDocument& rDoc)
 {
-    aWidthHelper.setDocument(pDoc, true);
-    aHeightHelper.setDocument(pDoc, false);
+    aWidthHelper.setDocument(rDoc, true);
+    aHeightHelper.setDocument(rDoc, false);
 }
 
 void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSettings, const ScViewData& rViewData, SCTAB nTab) const
@@ -838,21 +838,21 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh ) :
         for ( auto & xTabData : maTabData )
         {
             if (xTabData)
-                xTabData->InitData( pDoc );
+                xTabData->InitData( *pDoc );
         }
     }
 
     CalcPPT();
 }
 
-void ScViewData::InitData( ScDocument* pDocument )
+void ScViewData::InitData(ScDocument& rDocument)
 {
-    pDoc = pDocument;
+    pDoc = &rDocument;
     *pOptions = pDoc->GetViewOptions();
     for ( auto & xTabData : maTabData )
     {
         if (xTabData)
-            xTabData->InitData( pDocument );
+            xTabData->InitData( rDocument );
     }
 }
 

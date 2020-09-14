@@ -100,7 +100,7 @@ void ScTransferObj::PaintToDev( OutputDevice* pDev, ScDocument* pDoc, double nPr
     tools::Rectangle aBound( Point(), pDev->GetOutputSize() );      //! use size from clip area?
 
     ScViewData aViewData(nullptr,nullptr);
-    aViewData.InitData( pDoc );
+    aViewData.InitData( *pDoc );
 
     aViewData.SetTabNo( rBlock.aEnd.Tab() );
     aViewData.SetScreen( rBlock.aStart.Col(), rBlock.aStart.Row(),
