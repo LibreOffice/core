@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba6c6686_3a822e34",
+        "filename": "sw/qa/extras/ooxmlimport/ooxmlimport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-09-14T07:37:32Z",
+      "side": 1,
+      "message": "This line is identical to the previous test, so I\u0027m not sure why a different value is expected. Iget the same 1905 result for both.",
+      "range": {
+        "startLine": 157,
+        "startChar": 8,
+        "endLine": 157,
+        "endChar": 87
+      },
+      "revId": "db995e08d1a013824d59e7369da82a70e01ee1c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

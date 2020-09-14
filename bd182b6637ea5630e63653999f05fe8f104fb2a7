@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1bfb7a6e_a11a7ea3",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport14.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-09-14T07:37:32Z",
+      "side": 1,
+      "message": "The tab stop position should not be zero though. I don\u0027t know what it ought to be, but position zero is at the page-margin, and the numbering certainly is not before the page margin, so the text starts much later than position zero.",
+      "range": {
+        "startLine": 355,
+        "startChar": 37,
+        "endLine": 355,
+        "endChar": 72
+      },
+      "revId": "bd182b6637ea5630e63653999f05fe8f104fb2a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
