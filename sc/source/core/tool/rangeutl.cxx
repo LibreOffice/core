@@ -702,12 +702,12 @@ void ScRangeStringConverter::GetStringFromRangeList(
 }
 
 static void lcl_appendCellAddress(
-    OUStringBuffer& rBuf, const ScDocument* pDoc, const ScAddress& rCell,
+    OUStringBuffer& rBuf, const ScDocument& rDoc, const ScAddress& rCell,
     const ScAddress::ExternalInfo& rExtInfo)
 {
     if (rExtInfo.mbExternal)
     {
-        ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
+        ScExternalRefManager* pRefMgr = rDoc.GetExternalRefManager();
         const OUString* pFilePath = pRefMgr->getExternalFileName(rExtInfo.mnFileId, true);
         if (!pFilePath)
             return;
@@ -721,18 +721,18 @@ static void lcl_appendCellAddress(
         ScRangeStringConverter::AppendTableName(rBuf, rExtInfo.maTabName);
         rBuf.append('.');
 
-        OUString aAddr(rCell.Format(ScRefFlags::ADDR_ABS, nullptr, pDoc->GetAddressConvention()));
+        OUString aAddr(rCell.Format(ScRefFlags::ADDR_ABS, nullptr, rDoc.GetAddressConvention()));
         rBuf.append(aAddr);
     }
     else
     {
-        OUString aAddr(rCell.Format(ScRefFlags::ADDR_ABS_3D, pDoc, pDoc->GetAddressConvention()));
+        OUString aAddr(rCell.Format(ScRefFlags::ADDR_ABS_3D, &rDoc, rDoc.GetAddressConvention()));
         rBuf.append(aAddr);
     }
 }
 
 static void lcl_appendCellRangeAddress(
-    OUStringBuffer& rBuf, const ScDocument* pDoc, const ScAddress& rCell1, const ScAddress& rCell2,
+    OUStringBuffer& rBuf, const ScDocument& rDoc, const ScAddress& rCell1, const ScAddress& rCell2,
     const ScAddress::ExternalInfo& rExtInfo1, const ScAddress::ExternalInfo& rExtInfo2)
 {
     if (rExtInfo1.mbExternal)
@@ -740,7 +740,7 @@ static void lcl_appendCellRangeAddress(
         OSL_ENSURE(rExtInfo2.mbExternal, "2nd address is not external!?");
         OSL_ENSURE(rExtInfo1.mnFileId == rExtInfo2.mnFileId, "File IDs do not match between 1st and 2nd addresses.");
 
-        ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
+        ScExternalRefManager* pRefMgr = rDoc.GetExternalRefManager();
         const OUString* pFilePath = pRefMgr->getExternalFileName(rExtInfo1.mnFileId, true);
         if (!pFilePath)
             return;
@@ -754,7 +754,7 @@ static void lcl_appendCellRangeAddress(
         ScRangeStringConverter::AppendTableName(rBuf, rExtInfo1.maTabName);
         rBuf.append('.');
 
-        OUString aAddr(rCell1.Format(ScRefFlags::ADDR_ABS, nullptr, pDoc->GetAddressConvention()));
+        OUString aAddr(rCell1.Format(ScRefFlags::ADDR_ABS, nullptr, rDoc.GetAddressConvention()));
         rBuf.append(aAddr);
 
         rBuf.append(":");
@@ -766,7 +766,7 @@ static void lcl_appendCellRangeAddress(
             rBuf.append('.');
         }
 
-        aAddr = rCell2.Format(ScRefFlags::ADDR_ABS, nullptr, pDoc->GetAddressConvention());
+        aAddr = rCell2.Format(ScRefFlags::ADDR_ABS, nullptr, rDoc.GetAddressConvention());
         rBuf.append(aAddr);
     }
     else
@@ -774,14 +774,14 @@ static void lcl_appendCellRangeAddress(
         ScRange aRange;
         aRange.aStart = rCell1;
         aRange.aEnd   = rCell2;
-        OUString aAddr(aRange.Format(*pDoc, ScRefFlags::RANGE_ABS_3D, pDoc->GetAddressConvention()));
+        OUString aAddr(aRange.Format(rDoc, ScRefFlags::RANGE_ABS_3D, rDoc.GetAddressConvention()));
         rBuf.append(aAddr);
     }
 }
 
-void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, const OUString& rXMLRange, const ScDocument* pDoc )
+void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, const OUString& rXMLRange, const ScDocument& rDoc )
 {
-    FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
+    FormulaGrammar::AddressConvention eConv = rDoc.GetAddressConvention();
     const sal_Unicode cSepNew = ScCompiler::GetNativeSymbolChar(ocSep);
 
     OUStringBuffer aRetStr;
@@ -830,27 +830,27 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
 
             ScAddress::ExternalInfo aExtInfo1, aExtInfo2;
             ScAddress aCell1, aCell2;
-            ScRefFlags nRet = aCell1.Parse(aBeginCell, pDoc, FormulaGrammar::CONV_OOO, &aExtInfo1);
+            ScRefFlags nRet = aCell1.Parse(aBeginCell, &rDoc, FormulaGrammar::CONV_OOO, &aExtInfo1);
             if ((nRet & ScRefFlags::VALID) == ScRefFlags::ZERO)
             {
                 // first cell is invalid.
                 if (eConv == FormulaGrammar::CONV_OOO)
                     continue;
 
-                nRet = aCell1.Parse(aBeginCell, pDoc, eConv, &aExtInfo1);
+                nRet = aCell1.Parse(aBeginCell, &rDoc, eConv, &aExtInfo1);
                 if ((nRet & ScRefFlags::VALID) == ScRefFlags::ZERO)
                     // first cell is really invalid.
                     continue;
             }
 
-            nRet = aCell2.Parse(aEndCell, pDoc, FormulaGrammar::CONV_OOO, &aExtInfo2);
+            nRet = aCell2.Parse(aEndCell, &rDoc, FormulaGrammar::CONV_OOO, &aExtInfo2);
             if ((nRet & ScRefFlags::VALID) == ScRefFlags::ZERO)
             {
                 // second cell is invalid.
                 if (eConv == FormulaGrammar::CONV_OOO)
                     continue;
 
-                nRet = aCell2.Parse(aEndCell, pDoc, eConv, &aExtInfo2);
+                nRet = aCell2.Parse(aEndCell, &rDoc, eConv, &aExtInfo2);
                 if ((nRet & ScRefFlags::VALID) == ScRefFlags::ZERO)
                     // second cell is really invalid.
                     continue;
@@ -867,17 +867,17 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
             else
                 aRetStr.append(cSepNew);
 
-            lcl_appendCellRangeAddress(aRetStr, pDoc, aCell1, aCell2, aExtInfo1, aExtInfo2);
+            lcl_appendCellRangeAddress(aRetStr, rDoc, aCell1, aCell2, aExtInfo1, aExtInfo2);
         }
         else
         {
             // Chart always saves ranges using CONV_OOO convention.
             ScAddress::ExternalInfo aExtInfo;
             ScAddress aCell;
-            ScRefFlags nRet = aCell.Parse(aToken, pDoc, ::formula::FormulaGrammar::CONV_OOO, &aExtInfo);
+            ScRefFlags nRet = aCell.Parse(aToken, &rDoc, ::formula::FormulaGrammar::CONV_OOO, &aExtInfo);
             if ((nRet & ScRefFlags::VALID) == ScRefFlags::ZERO )
             {
-                nRet = aCell.Parse(aToken, pDoc, eConv, &aExtInfo);
+                nRet = aCell.Parse(aToken, &rDoc, eConv, &aExtInfo);
                 if ((nRet & ScRefFlags::VALID) == ScRefFlags::ZERO)
                     continue;
             }
@@ -889,7 +889,7 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
             else
                 aRetStr.append(cSepNew);
 
-            lcl_appendCellAddress(aRetStr, pDoc, aCell, aExtInfo);
+            lcl_appendCellAddress(aRetStr, rDoc, aCell, aExtInfo);
         }
     }
 

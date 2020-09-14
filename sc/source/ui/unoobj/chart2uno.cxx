@@ -2212,7 +2212,7 @@ OUString SAL_CALL ScChart2DataProvider::convertRangeFromXML( const OUString& sXM
     }
 
     OUString aRet;
-    ScRangeStringConverter::GetStringFromXMLRangeString(aRet, sXMLRange, m_pDocument);
+    ScRangeStringConverter::GetStringFromXMLRangeString(aRet, sXMLRange, *m_pDocument);
     return aRet;
 }
 

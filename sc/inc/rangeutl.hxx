@@ -218,7 +218,7 @@ public:
     static void         GetStringFromXMLRangeString(
                             OUString& rString,
                             const OUString& rXMLRange,
-                            const ScDocument* pDoc );
+                            const ScDocument& rDoc );
 
 /// String to RangeData core
     static ScRangeData* GetRangeDataFromString(const OUString& rString, const SCTAB nTab, const ScDocument& rDoc);

@@ -68,7 +68,7 @@ void ScMyOLEFixer::CreateChartListener(ScDocument* pDoc,
     }
 
     OUString aRangeStr;
-    ScRangeStringConverter::GetStringFromXMLRangeString(aRangeStr, rRangeList, pDoc);
+    ScRangeStringConverter::GetStringFromXMLRangeString(aRangeStr, rRangeList, *pDoc);
     if (aRangeStr.isEmpty())
     {
         pDoc->AddOLEObjectToCollection(rName);
