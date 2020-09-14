@@ -125,7 +125,7 @@ void ScColumn::DeleteContent( SCROW nRow, bool bBroadcast )
     if (it->type == sc::element_type_formula)
     {
         ScFormulaCell* p = sc::formula_block::at(*it->data, aPos.second);
-        p->EndListeningTo(GetDoc());
+        p->EndListeningTo(*GetDoc());
         sc::SharedFormulaUtil::unshareFormulaCell(aPos, *p);
     }
     maCells.set_empty(nRow, nRow);
@@ -334,7 +334,7 @@ void ScColumn::DetachFormulaCell(
 
         // Have the dying formula cell stop listening.
         // If in a shared formula group this ends the group listening.
-        rCell.EndListeningTo(GetDoc());
+        rCell.EndListeningTo(*GetDoc());
     }
 
     sc::SharedFormulaUtil::unshareFormulaCell(aPos, rCell);
@@ -392,7 +392,7 @@ public:
         if (mpCxt)
             pCell->EndListeningTo(*mpCxt);
         else
-            pCell->EndListeningTo(mpDoc);
+            pCell->EndListeningTo(*mpDoc);
     }
 };
 

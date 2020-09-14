@@ -1211,7 +1211,7 @@ void ScFormulaCell::CompileTokenArray( bool bNoListening )
             bNoListening = true;
 
         if( !bNoListening && pCode->GetCodeLen() )
-            EndListeningTo( pDocument );
+            EndListeningTo( *pDocument );
         ScCompiler aComp(pDocument, aPos, *pCode, pDocument->GetGrammar(), true, cMatrixFlag != ScMatrixMode::NONE);
         bSubTotal = aComp.CompileTokenArray();
         if( pCode->GetCodeError() == FormulaError::NONE )
@@ -1251,7 +1251,7 @@ void ScFormulaCell::CompileTokenArray( sc::CompileFormulaContext& rCxt, bool bNo
             bNoListening = true;
 
         if( !bNoListening && pCode->GetCodeLen() )
-            EndListeningTo( pDocument );
+            EndListeningTo( *pDocument );
         ScCompiler aComp(rCxt, aPos, *pCode, true, cMatrixFlag != ScMatrixMode::NONE);
         bSubTotal = aComp.CompileTokenArray();
         if( pCode->GetCodeError() == FormulaError::NONE )
@@ -2317,7 +2317,7 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
                     if (pCode->IsRecalcModeAlways())
                     {
                         // The formula was previously volatile, but no more.
-                        EndListeningTo(pDocument);
+                        EndListeningTo(*pDocument);
                         pCode->SetExclusiveRecalcModeNormal();
                     }
                     else
@@ -2370,7 +2370,7 @@ void ScFormulaCell::HandleStuffAfterParallelCalculation(ScInterpreter* pInterpre
             if (pCode->IsRecalcModeAlways())
             {
                 // The formula was previously volatile, but no more.
-                EndListeningTo(pDocument);
+                EndListeningTo(*pDocument);
                 pCode->SetExclusiveRecalcModeNormal();
             }
             else
@@ -2465,7 +2465,7 @@ void ScFormulaCell::Notify( const SfxHint& rHint )
             break;
             case sc::RefHint::StopListening:
             {
-                EndListeningTo( pDocument);
+                EndListeningTo(*pDocument);
             }
             break;
             default:
@@ -3336,7 +3336,7 @@ bool ScFormulaCell::UpdateReferenceOnShift(
                 || (bValChanged && bInDeleteUndo) || bHasRelName);
 
         if ( bNewListening )
-            EndListeningTo(pDocument, pOldCode.get(), aOldPos);
+            EndListeningTo(*pDocument, pOldCode.get(), aOldPos);
     }
 
     // NeedDirty for changes except for Copy and Move/Insert without RelNames
@@ -3467,7 +3467,7 @@ bool ScFormulaCell::UpdateReferenceOnMove(
             && !(pDocument->IsInsertingFromOtherDoc() && rCxt.maRange.In(aPos));
 
         if ( bNewListening )
-            EndListeningTo(pDocument, pOldCode.get(), aOldPos);
+            EndListeningTo(*pDocument, pOldCode.get(), aOldPos);
     }
 
     bool bNeedDirty = false;
@@ -3614,7 +3614,7 @@ void ScFormulaCell::UpdateInsertTab( const sc::RefUpdateInsertTabContext& rCxt )
         return;
     }
 
-    EndListeningTo( pDocument );
+    EndListeningTo( *pDocument );
     ScAddress aOldPos = aPos;
     // IncTab _after_ EndListeningTo and _before_ Compiler UpdateInsertTab!
     if (bPosChanged)
@@ -3643,7 +3643,7 @@ void ScFormulaCell::UpdateDeleteTab( const sc::RefUpdateDeleteTabContext& rCxt )
         return;
     }
 
-    EndListeningTo( pDocument );
+    EndListeningTo( *pDocument );
     // IncTab _after_ EndListeningTo and _before_ Compiler UpdateDeleteTab!
     ScAddress aOldPos = aPos;
     if (bPosChanged)
@@ -3669,7 +3669,7 @@ void ScFormulaCell::UpdateMoveTab( const sc::RefUpdateMoveTabContext& rCxt, SCTA
         return;
     }
 
-    EndListeningTo(pDocument);
+    EndListeningTo(*pDocument);
     ScAddress aOldPos = aPos;
     // SetTab _after_ EndListeningTo and _before_ Compiler UpdateMoveTab !
     aPos.SetTab(nTabNo);
@@ -3798,7 +3798,7 @@ void ScFormulaCell::TransposeReference()
 void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rDest,
                                         ScDocument* pUndoDoc )
 {
-    EndListeningTo( pDocument );
+    EndListeningTo( *pDocument );
 
     ScAddress aOldPos = aPos;
     bool bPosChanged = false; // Whether this cell has been moved
@@ -3868,7 +3868,7 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
 
 void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
 {
-    EndListeningTo( pDocument );
+    EndListeningTo( *pDocument );
 
     bool bRefChanged = false;
 
@@ -5356,23 +5356,23 @@ void endListeningArea(
 
 }
 
-void ScFormulaCell::EndListeningTo( ScDocument* pDoc, ScTokenArray* pArr,
+void ScFormulaCell::EndListeningTo( ScDocument& rDoc, ScTokenArray* pArr,
         ScAddress aCellPos )
 {
     if (mxGroup)
-        mxGroup->endAllGroupListening(*pDoc);
+        mxGroup->endAllGroupListening(rDoc);
 
-    if (pDoc->IsClipOrUndo() || IsInChangeTrack())
+    if (rDoc.IsClipOrUndo() || IsInChangeTrack())
         return;
 
     if (!HasBroadcaster())
         return;
 
-    pDoc->SetDetectiveDirty(true);  // It has changed something
+    rDoc.SetDetectiveDirty(true);  // It has changed something
 
     if ( GetCode()->IsRecalcModeAlways() )
     {
-        pDoc->EndListeningArea(BCA_LISTEN_ALWAYS, false, this);
+        rDoc.EndListeningArea(BCA_LISTEN_ALWAYS, false, this);
         return;
     }
 
@@ -5391,11 +5391,11 @@ void ScFormulaCell::EndListeningTo( ScDocument* pDoc, ScTokenArray* pArr,
             {
                 ScAddress aCell = t->GetSingleRef()->toAbs(*pDocument, aCellPos);
                 if (aCell.IsValid())
-                    pDoc->EndListeningCell(aCell, this);
+                    rDoc.EndListeningCell(aCell, this);
             }
             break;
             case svDoubleRef:
-                endListeningArea(this, *pDoc, aCellPos, *t);
+                endListeningArea(this, rDoc, aCellPos, *t);
             break;
             default:
                 ;   // nothing
