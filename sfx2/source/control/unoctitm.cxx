@@ -1073,6 +1073,7 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
              aEvent.FeatureURL.Path == "InsertAnnotation" ||
              aEvent.FeatureURL.Path == "DeleteAnnotation" ||
              aEvent.FeatureURL.Path == "ResolveAnnotation" ||
+             aEvent.FeatureURL.Path == "ResolveAnnotationThread" ||
              aEvent.FeatureURL.Path == "InsertRowsBefore" ||
              aEvent.FeatureURL.Path == "InsertRowsAfter" ||
              aEvent.FeatureURL.Path == "InsertColumnsBefore" ||
