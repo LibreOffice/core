@@ -200,7 +200,7 @@ ScColorScaleEntry::ScColorScaleEntry(ScDocument* pDoc, const ScColorScaleEntry& 
 ScColorScaleEntry::~ScColorScaleEntry() COVERITY_NOEXCEPT_FALSE
 {
     if(mpCell)
-        mpCell->EndListeningTo(mpCell->GetDocument());
+        mpCell->EndListeningTo(*mpCell->GetDocument());
 }
 
 void ScColorScaleEntry::SetFormula( const OUString& rFormula, ScDocument* pDoc, const ScAddress& rAddr, formula::FormulaGrammar::Grammar eGrammar )

@@ -463,7 +463,7 @@ public:
     void StartListeningTo( ScDocument& rDoc );
     void StartListeningTo( sc::StartListeningContext& rCxt );
     void EndListeningTo(
-        ScDocument* pDoc, ScTokenArray* pArr = nullptr, ScAddress aPos = ScAddress() );
+        ScDocument& rDoc, ScTokenArray* pArr = nullptr, ScAddress aPos = ScAddress() );
     void EndListeningTo( sc::EndListeningContext& rCxt );
 
     bool IsShared() const;
