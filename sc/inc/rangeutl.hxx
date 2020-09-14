@@ -42,7 +42,7 @@ public:
 
     static bool MakeArea        ( const OUString&   rAreaStr,
                                   ScArea&           rArea,
-                                  const ScDocument* pDoc,
+                                  const ScDocument& rDoc,
                                   SCTAB         nTab,
                                   ScAddress::Details const & rDetails );
 
