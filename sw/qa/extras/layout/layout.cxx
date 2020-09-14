@@ -4425,17 +4425,21 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf135035)
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     sal_Int32 nFly1Width = getXPath(pXmlDoc, "(//fly)[1]/infos/prtBounds", "width").toInt32();
     sal_Int32 nFly2Width = getXPath(pXmlDoc, "(//fly)[2]/infos/prtBounds", "width").toInt32();
+    sal_Int32 nFly3Width = getXPath(pXmlDoc, "(//fly)[3]/infos/prtBounds", "width").toInt32();
     sal_Int32 nParentWidth = getXPath(pXmlDoc, "(//txt)[1]/infos/prtBounds", "width").toInt32();
     CPPUNIT_ASSERT_EQUAL(nParentWidth, nFly2Width);
+    CPPUNIT_ASSERT_EQUAL(nParentWidth, nFly3Width);
     CPPUNIT_ASSERT_LESS(nParentWidth / 2, nFly1Width);
 
     createDoc("tdf135035.odt");
     pXmlDoc = parseLayoutDump();
     nFly1Width = getXPath(pXmlDoc, "(//fly)[1]/infos/prtBounds", "width").toInt32();
     nFly2Width = getXPath(pXmlDoc, "(//fly)[2]/infos/prtBounds", "width").toInt32();
+    nFly3Width = getXPath(pXmlDoc, "(//fly)[3]/infos/prtBounds", "width").toInt32();
     nParentWidth = getXPath(pXmlDoc, "(//txt)[1]/infos/prtBounds", "width").toInt32();
     CPPUNIT_ASSERT_LESS(nParentWidth / 2, nFly2Width);
     CPPUNIT_ASSERT_LESS(nParentWidth / 2, nFly1Width);
+    CPPUNIT_ASSERT_GREATER(nParentWidth, nFly3Width);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
