@@ -62,7 +62,7 @@ public:
     static ScRefUpdateRes UpdateTranspose(
         const ScDocument& rDoc, const ScRange& rSource, const ScAddress& rDest, ScRange& rRef );
 
-    static void DoTranspose( SCCOL& rCol, SCROW& rRow, SCTAB& rTab, const ScDocument* pDoc,
+    static void DoTranspose( SCCOL& rCol, SCROW& rRow, SCTAB& rTab, const ScDocument& rDoc,
                                 const ScRange& rSource, const ScAddress& rDest );
 
     static ScRefUpdateRes UpdateGrow(

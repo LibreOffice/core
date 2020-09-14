@@ -3813,7 +3813,7 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
         SCCOL nRelPosX = aOldPos.Col();
         SCROW nRelPosY = aOldPos.Row();
         SCTAB nRelPosZ = aOldPos.Tab();
-        ScRefUpdate::DoTranspose( nRelPosX, nRelPosY, nRelPosZ, pDocument, aDestRange, rSource.aStart );
+        ScRefUpdate::DoTranspose( nRelPosX, nRelPosY, nRelPosZ, *pDocument, aDestRange, rSource.aStart );
         aOldPos.Set( nRelPosX, nRelPosY, nRelPosZ );
         bPosChanged = true;
     }

@@ -507,13 +507,13 @@ void ScRefUpdate::MoveRelWrap( const ScDocument& rDoc, const ScAddress& rPos,
 }
 
 void ScRefUpdate::DoTranspose( SCCOL& rCol, SCROW& rRow, SCTAB& rTab,
-                        const ScDocument* pDoc, const ScRange& rSource, const ScAddress& rDest )
+                        const ScDocument& rDoc, const ScRange& rSource, const ScAddress& rDest )
 {
     SCTAB nDz = rDest.Tab() - rSource.aStart.Tab();
     if (nDz)
     {
         SCTAB nNewTab = rTab+nDz;
-        SCTAB nCount = pDoc->GetTableCount();
+        SCTAB nCount = rDoc.GetTableCount();
         while (nNewTab<0) nNewTab = sal::static_int_cast<SCTAB>( nNewTab + nCount );
         while (nNewTab>=nCount) nNewTab = sal::static_int_cast<SCTAB>( nNewTab - nCount );
         rTab = nNewTab;
@@ -542,8 +542,8 @@ ScRefUpdateRes ScRefUpdate::UpdateTranspose(
         SCCOL nCol1 = rRef.aStart.Col(), nCol2 = rRef.aEnd.Col();
         SCROW nRow1 = rRef.aStart.Row(), nRow2 = rRef.aEnd.Row();
         SCTAB nTab1 = rRef.aStart.Tab(), nTab2 = rRef.aEnd.Tab();
-        DoTranspose(nCol1, nRow1, nTab1, &rDoc, rSource, rDest);
-        DoTranspose(nCol2, nRow2, nTab2, &rDoc, rSource, rDest);
+        DoTranspose(nCol1, nRow1, nTab1, rDoc, rSource, rDest);
+        DoTranspose(nCol2, nRow2, nTab2, rDoc, rSource, rDest);
         rRef.aStart = ScAddress(nCol1, nRow1, nTab1);
         rRef.aEnd = ScAddress(nCol2, nRow2, nTab2);
         eRet = UR_UPDATED;
