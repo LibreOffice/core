@@ -355,10 +355,10 @@ public:
                                 Type eType = Type::Condition );
             ScConditionEntry( ScConditionMode eOper,
                                 const ScTokenArray* pArr1, const ScTokenArray* pArr2,
-                                ScDocument* pDocument, const ScAddress& rPos );
+                                ScDocument& rDocument, const ScAddress& rPos );
             ScConditionEntry( const ScConditionEntry& r );  // flat copy of formulas
             // true copy of formulas (for Ref-Undo):
-            ScConditionEntry( ScDocument* pDocument, const ScConditionEntry& r );
+            ScConditionEntry( ScDocument& rDocument, const ScConditionEntry& r );
     virtual ~ScConditionEntry() override;
 
     bool            IsEqual( const ScFormatEntry& r, bool bIgnoreSrcPos ) const override;
@@ -463,10 +463,10 @@ public:
                                 Type eType = Type::Condition);
             ScCondFormatEntry( ScConditionMode eOper,
                                 const ScTokenArray* pArr1, const ScTokenArray* pArr2,
-                                ScDocument* pDocument, const ScAddress& rPos,
+                                ScDocument& rDocument, const ScAddress& rPos,
                                 const OUString& rStyle );
             ScCondFormatEntry( const ScCondFormatEntry& r );
-            ScCondFormatEntry( ScDocument* pDocument, const ScCondFormatEntry& r );
+            ScCondFormatEntry( ScDocument& rDocument, const ScCondFormatEntry& r );
     virtual ~ScCondFormatEntry() override;
 
     bool            IsEqual( const ScFormatEntry& r, bool bIgnoreSrcPos ) const override;

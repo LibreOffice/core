@@ -78,8 +78,8 @@ ScValidationData::ScValidationData( ScValidationMode eMode, ScConditionMode eOpe
 
 ScValidationData::ScValidationData( ScValidationMode eMode, ScConditionMode eOper,
                                     const ScTokenArray* pArr1, const ScTokenArray* pArr2,
-                                    ScDocument* pDocument, const ScAddress& rPos )
-    : ScConditionEntry( eOper, pArr1, pArr2, pDocument, rPos )
+                                    ScDocument& rDocument, const ScAddress& rPos )
+    : ScConditionEntry( eOper, pArr1, pArr2, rDocument, rPos )
     , nKey( 0 )
     , eDataMode( eMode )
     , bShowInput(false)
@@ -105,8 +105,8 @@ ScValidationData::ScValidationData( const ScValidationData& r )
     //  Formulae copied by RefCount
 }
 
-ScValidationData::ScValidationData( ScDocument* pDocument, const ScValidationData& r )
-    : ScConditionEntry( pDocument, r )
+ScValidationData::ScValidationData( ScDocument& rDocument, const ScValidationData& r )
+    : ScConditionEntry( rDocument, r )
     , nKey( r.nKey )
     , eDataMode( r.eDataMode )
     , bShowInput( r.bShowInput )
@@ -905,7 +905,7 @@ bool ScValidationData::FillSelectionList(std::vector<ScTypedStrData>& rStrColl, 
 bool ScValidationData::IsEqualToTokenArray( ScRefCellValue& rCell, const ScAddress& rPos, const ScTokenArray& rTokArr ) const
 {
     // create a condition entry that tests on equality and set the passed token array
-    ScConditionEntry aCondEntry( ScConditionMode::Equal, &rTokArr, nullptr, GetDocument(), rPos );
+    ScConditionEntry aCondEntry( ScConditionMode::Equal, &rTokArr, nullptr, *GetDocument(), rPos );
     return aCondEntry.IsCellValid(rCell, rPos);
 }
 

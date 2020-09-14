@@ -846,7 +846,7 @@ void CondFormatRule::finalizeImport()
     {
         ScDocument& rDoc = getScDocument();
         OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
-        ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, nullptr, nullptr, &rDoc, aPos, aStyleName );
+        ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, nullptr, nullptr, rDoc, aPos, aStyleName );
         mpFormat->AddEntry(pNewEntry);
     }
     else if( eOperator == ScConditionMode::BeginsWith || eOperator == ScConditionMode::EndsWith ||
@@ -857,7 +857,7 @@ void CondFormatRule::finalizeImport()
         svl::SharedStringPool& rSPool = rDoc.GetSharedStringPool();
         aTokenArray.AddString(rSPool.intern(maModel.maText));
         OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
-        ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, &aTokenArray, nullptr, &rDoc, aPos, aStyleName );
+        ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, &aTokenArray, nullptr, rDoc, aPos, aStyleName );
         mpFormat->AddEntry(pNewEntry);
     }
     else if( (eOperator != ScConditionMode::NONE) && !maModel.maFormulas.empty() )
@@ -876,7 +876,7 @@ void CondFormatRule::finalizeImport()
         ScTokenConversion::ConvertToTokenArray( rDoc, aTokenArray, maModel.maFormulas[ 0 ] );
         rDoc.CheckLinkFormulaNeedingCheck( aTokenArray);
         ScCondFormatEntry* pNewEntry = new ScCondFormatEntry(eOperator,
-                                            &aTokenArray, pTokenArray2.get(), &rDoc, aPos, aStyleName);
+                                            &aTokenArray, pTokenArray2.get(), rDoc, aPos, aStyleName);
         mpFormat->AddEntry(pNewEntry);
     }
     else if ( eOperator == ScConditionMode::Top10 || eOperator == ScConditionMode::Bottom10 ||
@@ -886,7 +886,7 @@ void CondFormatRule::finalizeImport()
         ScTokenArray aTokenArray(rDoc);
         aTokenArray.AddDouble( maModel.mnRank );
         OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
-        ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, &aTokenArray, nullptr, &rDoc, aPos, aStyleName );
+        ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, &aTokenArray, nullptr, rDoc, aPos, aStyleName );
         mpFormat->AddEntry(pNewEntry);
     }
     else if( eOperator == ScConditionMode::AboveAverage || eOperator == ScConditionMode::BelowAverage ||
@@ -897,14 +897,14 @@ void CondFormatRule::finalizeImport()
         ScTokenArray aTokenArrayDev(rDoc);
         aTokenArrayDev.AddDouble( maModel.mnStdDev );
         OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
-        ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, &aTokenArrayDev, nullptr, &rDoc, aPos, aStyleName );
+        ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, &aTokenArrayDev, nullptr, rDoc, aPos, aStyleName );
         mpFormat->AddEntry(pNewEntry);
     }
     else if( eOperator == ScConditionMode::Duplicate || eOperator == ScConditionMode::NotDuplicate )
     {
         ScDocument& rDoc = getScDocument();
         OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
-        ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, nullptr, nullptr, &rDoc, aPos, aStyleName );
+        ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, nullptr, nullptr, rDoc, aPos, aStyleName );
         mpFormat->AddEntry(pNewEntry);
     }
     else if( maModel.mnType == XML_timePeriod )
