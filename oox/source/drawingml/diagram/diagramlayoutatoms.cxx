@@ -478,6 +478,54 @@ void ApplyConstraintToLayout(const Constraint& rConstraint, LayoutPropertyMap& r
             = rConstraint.mfValue * fUnitFactor;
     }
 }
+
+/// Does the first data node of this shape have customized text properties?
+bool HasCustomText(const ShapePtr& rShape, LayoutNode& rLayoutNode)
+{
+    const PresPointShapeMap& rPresPointShapeMap
+        = rLayoutNode.getDiagram().getLayout()->getPresPointShapeMap();
+    const DiagramData::StringMap& rPresOfNameMap
+        = rLayoutNode.getDiagram().getData()->getPresOfNameMap();
+    const DiagramData::PointNameMap& rPointNameMap
+        = rLayoutNode.getDiagram().getData()->getPointNameMap();
+    // Get the first presentation node of the shape.
+    const dgm::Point* pPresNode = nullptr;
+    for (const auto& rPair : rPresPointShapeMap)
+    {
+        if (rPair.second == rShape)
+        {
+            pPresNode = rPair.first;
+            break;
+        }
+    }
+    // Get the first data node of the presentation node.
+    dgm::Point* pDataNode = nullptr;
+    if (pPresNode)
+    {
+        auto itPresToData = rPresOfNameMap.find(pPresNode->msModelId);
+        if (itPresToData != rPresOfNameMap.end())
+        {
+            for (const auto& rPair : itPresToData->second)
+            {
+                const DiagramData::SourceIdAndDepth& rItem = rPair.second;
+                auto it = rPointNameMap.find(rItem.msSourceId);
+                if (it != rPointNameMap.end())
+                {
+                    pDataNode = it->second;
+                    break;
+                }
+            }
+        }
+    }
+
+    // If we have a data node, see if its text is customized or not.
+    if (pDataNode)
+    {
+        return pDataNode->mbCustomText;
+    }
+
+    return false;
+}
 }
 
 void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>& rConstraints,
@@ -1452,7 +1500,13 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
                         if (!aRun->getTextCharacterProperties().moHeight.has())
                             aRun->getTextCharacterProperties().moHeight = fFontSize * 100;
             }
-            pTextBody->getTextProperties().maPropertyMap.setProperty(PROP_TextFitToSize, drawing::TextFitToSizeType_AUTOFIT);
+
+            if (!HasCustomText(rShape, getLayoutNode()))
+            {
+                // No customized text properties: enable autofit.
+                pTextBody->getTextProperties().maPropertyMap.setProperty(
+                    PROP_TextFitToSize, drawing::TextFitToSizeType_AUTOFIT);
+            }
 
             // ECMA-376-1:2016 21.4.7.5 ST_AutoTextRotation (Auto Text Rotation)
             const sal_Int32 nautoTxRot = maMap.count(XML_autoTxRot) ? maMap.find(XML_autoTxRot)->second : XML_upr;

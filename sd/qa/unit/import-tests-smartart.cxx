@@ -1591,6 +1591,17 @@ void SdImportTestSmartArt::testAutofitSync()
     // requested that their scaling matches.
     CPPUNIT_ASSERT_EQUAL(nSecondScale, nFirstScale);
 
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0 (drawing::TextFitToSizeType_NONE)
+    // - Actual  : 3 (TextFitToSizeType_AUTOFIT)
+    // i.e. the 3rd shape had font size as direct formatting, but its automatic text scale was not
+    // disabled.
+    uno::Reference<beans::XPropertySet> xThirdInner(getChildShape(getChildShape(xMiddle, 4), 0),
+                                                     uno::UNO_QUERY);
+    drawing::TextFitToSizeType eType{};
+    CPPUNIT_ASSERT(xThirdInner->getPropertyValue("TextFitToSize") >>= eType);
+    CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_NONE, eType);
+
     xDocShRef->DoClose();
 }
 
