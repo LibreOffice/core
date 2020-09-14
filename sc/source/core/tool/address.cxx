@@ -1768,16 +1768,16 @@ ScRefFlags ScRange::Parse( const OUString& rString, const ScDocument* pDoc,
 }
 
 // Accept a full range, or an address
-ScRefFlags ScRange::ParseAny( const OUString& rString, const ScDocument* pDoc,
+ScRefFlags ScRange::ParseAny( const OUString& rString, const ScDocument& rDoc,
                               const ScAddress::Details& rDetails )
 {
-    ScRefFlags nRet = Parse( rString, pDoc, rDetails );
+    ScRefFlags nRet = Parse( rString, &rDoc, rDetails );
     const ScRefFlags nValid = ScRefFlags::VALID | ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID;
 
     if ( (nRet & nValid) != nValid )
     {
         ScAddress aAdr(aStart);//initialize with currentPos as fallback for table number
-        nRet = aAdr.Parse( rString, pDoc, rDetails );
+        nRet = aAdr.Parse( rString, &rDoc, rDetails );
         if ( nRet & ScRefFlags::VALID )
             aStart = aEnd = aAdr;
     }

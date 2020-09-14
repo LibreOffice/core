@@ -4322,7 +4322,7 @@ static bool lcl_FindRangeOrEntry( const ScNamedEntryArr_Impl& rNamedEntries,
     //  range contained in selection? (sheet must be specified)
 
     ScRange aCellRange;
-    ScRefFlags nParse = aCellRange.ParseAny( rName, &pDocSh->GetDocument() );
+    ScRefFlags nParse = aCellRange.ParseAny( rName, pDocSh->GetDocument() );
     if ( (nParse & ( ScRefFlags::VALID | ScRefFlags::TAB_3D ))
                == ( ScRefFlags::VALID | ScRefFlags::TAB_3D ))
     {
@@ -4750,7 +4750,7 @@ uno::Reference<table::XCellRange>  ScCellRangeObj::getCellRangeByName(
 
         ScRange aCellRange;
         bool bFound = false;
-        ScRefFlags nParse = aCellRange.ParseAny( aName, &rDoc, rDetails );
+        ScRefFlags nParse = aCellRange.ParseAny( aName, rDoc, rDetails );
         if ( nParse & ScRefFlags::VALID )
         {
             if ( !(nParse & ScRefFlags::TAB_3D) )   // no sheet specified -> this sheet

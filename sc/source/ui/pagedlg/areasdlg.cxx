@@ -419,7 +419,7 @@ void ScPrintAreasDlg::Impl_FillLists()
         OUString aName = rEntry.second->GetName();
         OUString aSymbol;
         rEntry.second->GetSymbol(aSymbol);
-        if (aRange.ParseAny(aSymbol, pDoc, eConv) & ScRefFlags::VALID)
+        if (aRange.ParseAny(aSymbol, *pDoc, eConv) & ScRefFlags::VALID)
         {
             if (rEntry.second->HasType(ScRangeData::Type::PrintArea))
             {

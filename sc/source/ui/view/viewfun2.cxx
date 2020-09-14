@@ -1048,7 +1048,7 @@ void ScViewFunc::SetPrintRanges( bool bEntireSheet, const OUString* pPrint,
                 do
                 {
                     const OUString aToken = pPrint->getToken(0, sep, nPos);
-                    if ( aRange.ParseAny( aToken, &rDoc, aDetails ) & ScRefFlags::VALID )
+                    if ( aRange.ParseAny( aToken, rDoc, aDetails ) & ScRefFlags::VALID )
                         rDoc.AddPrintRange( nTab, aRange );
                 }
                 while (nPos >= 0);
@@ -1080,7 +1080,7 @@ void ScViewFunc::SetPrintRanges( bool bEntireSheet, const OUString* pPrint,
             if ( pRepCol->isEmpty() )
                 rDoc.SetRepeatColRange( nTab, nullptr );
             else
-                if ( aRange.ParseAny( *pRepCol, &rDoc, aDetails ) & ScRefFlags::VALID )
+                if ( aRange.ParseAny( *pRepCol, rDoc, aDetails ) & ScRefFlags::VALID )
                     rDoc.SetRepeatColRange( nTab, std::unique_ptr<ScRange>(new ScRange(aRange)) );
         }
 
@@ -1091,7 +1091,7 @@ void ScViewFunc::SetPrintRanges( bool bEntireSheet, const OUString* pPrint,
             if ( pRepRow->isEmpty() )
                 rDoc.SetRepeatRowRange( nTab, nullptr );
             else
-                if ( aRange.ParseAny( *pRepRow, &rDoc, aDetails ) & ScRefFlags::VALID )
+                if ( aRange.ParseAny( *pRepRow, rDoc, aDetails ) & ScRefFlags::VALID )
                     rDoc.SetRepeatRowRange( nTab, std::unique_ptr<ScRange>(new ScRange(aRange)) );
         }
     }

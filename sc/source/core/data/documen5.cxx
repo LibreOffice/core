@@ -381,7 +381,7 @@ void ScDocument::RestoreChartListener( const OUString& rName )
     {
         ScRange aRange;
         ScAddress::Details aDetails(GetAddressConvention(), 0, 0);
-        if ( aRange.ParseAny( rRepresentation, this, aDetails ) & ScRefFlags::VALID )
+        if ( aRange.ParseAny( rRepresentation, *this, aDetails ) & ScRefFlags::VALID )
             aRanges->push_back( aRange );
     }
 

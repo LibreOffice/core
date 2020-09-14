@@ -479,7 +479,7 @@ bool XclImpExtName::CreateOleData(ScDocument& rDoc, const OUString& rUrl,
         return false;
 
     ScRange aRange;
-    ScRefFlags nRes = aRange.ParseAny(aRangeStr, &rDoc, formula::FormulaGrammar::CONV_XL_R1C1);
+    ScRefFlags nRes = aRange.ParseAny(aRangeStr, rDoc, formula::FormulaGrammar::CONV_XL_R1C1);
     if ((nRes & ScRefFlags::VALID) == ScRefFlags::ZERO)
         return false;
 
