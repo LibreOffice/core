@@ -738,14 +738,13 @@ protected:
 
 public:
 
-
     SwXMLStylesContext_Impl(
             SwXMLImport& rImport,
             bool bAuto );
 
     virtual bool InsertStyleFamily( XmlStyleFamily nFamily ) const override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 }
@@ -929,7 +928,7 @@ OUString SwXMLStylesContext_Impl::GetServiceName( XmlStyleFamily nFamily ) const
     return SvXMLStylesContext::GetServiceName( nFamily );
 }
 
-void SwXMLStylesContext_Impl::EndElement()
+void SwXMLStylesContext_Impl::endFastElement(sal_Int32 )
 {
     GetSwImport().InsertStyles( IsAutomaticStyle() );
 }
