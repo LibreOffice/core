@@ -35,7 +35,7 @@ using namespace ::com::sun::star;
 
 bool ScRangeUtil::MakeArea( const OUString&   rAreaStr,
                             ScArea&         rArea,
-                            const ScDocument* pDoc,
+                            const ScDocument& rDoc,
                             SCTAB           nTab,
                             ScAddress::Details const & rDetails )
 {
@@ -56,7 +56,7 @@ bool ScRangeUtil::MakeArea( const OUString&   rAreaStr,
         aStrArea += ":" + rAreaStr.copy( nPointPos+1 ); // do not include '.' in copy
     }
 
-    bSuccess = ConvertDoubleRef( pDoc, aStrArea, nTab, startPos, endPos, rDetails );
+    bSuccess = ConvertDoubleRef( &rDoc, aStrArea, nTab, startPos, endPos, rDetails );
 
     if ( bSuccess )
         rArea = ScArea( startPos.Tab(),

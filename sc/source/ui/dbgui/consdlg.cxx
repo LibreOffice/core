@@ -347,7 +347,7 @@ IMPL_LINK_NOARG(ScConsolidateDlg, OkHdl, weld::Button&, void)
             for ( sal_Int32 i=0; i<nDataAreaCount; ++i )
             {
                 ScRangeUtil::MakeArea(m_xLbConsAreas->get_text(i),
-                                      pDataAreas[i], pDoc, nTab, eConv);
+                                      pDataAreas[i], *pDoc, nTab, eConv);
             }
 
             theOutParam.nCol            = aDestAddress.Col();
