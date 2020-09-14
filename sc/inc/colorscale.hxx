@@ -62,7 +62,7 @@ public:
     void SetColor(const Color&);
     double GetValue() const;
     void SetValue(double nValue);
-    void SetFormula(const OUString& rFormula, ScDocument* pDoc, const ScAddress& rAddr,
+    void SetFormula(const OUString& rFormula, ScDocument& rDoc, const ScAddress& rAddr,
             formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT);
 
     void UpdateReference( const sc::RefUpdateContext& rCxt );

@@ -699,7 +699,7 @@ void SetColorScaleEntry(ScColorScaleEntry* pEntry, const weld::ComboBox& rType, 
             }
             break;
         case COLORSCALE_FORMULA:
-            pEntry->SetFormula(rValue.get_text(), pDoc, rPos);
+            pEntry->SetFormula(rValue.get_text(), *pDoc, rPos);
             break;
         default:
             break;
@@ -1398,7 +1398,7 @@ ScColorScaleEntry* ScIconSetFrmtDataEntry::CreateEntry(ScDocument* pDoc, const S
             break;
         case 3:
             pEntry->SetType(COLORSCALE_FORMULA);
-            pEntry->SetFormula(aText, pDoc, rPos, pDoc->GetGrammar());
+            pEntry->SetFormula(aText, *pDoc, rPos, pDoc->GetGrammar());
             break;
         default:
             assert(false);
