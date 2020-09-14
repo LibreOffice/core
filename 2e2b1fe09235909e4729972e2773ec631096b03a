@@ -16,6 +16,24 @@
       "revId": "2e2b1fe09235909e4729972e2773ec631096b03a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ecf80e4_a20e4a92",
+        "filename": "sw/source/core/undo/unattr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2020-09-14T07:38:09Z",
+      "side": 1,
+      "message": "Due to amount of regressions this seems better to keep assert in debug mode to see early upcoming undo/redo problems.\nSAL_WARN - just backup plan for non-debug configurations with logging enabled. Removed now",
+      "parentUuid": "c58dc98b_4e7cdb45",
+      "revId": "2e2b1fe09235909e4729972e2773ec631096b03a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
