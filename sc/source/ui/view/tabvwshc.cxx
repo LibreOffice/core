@@ -133,7 +133,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
     if(pCW)
         pCW->SetHideNotDelete(true);
 
-    ScDocument* pDoc = GetViewData().GetDocument();
+    ScDocument& rDoc = GetViewData().GetDocument();
 
     switch( nSlotId )
     {
@@ -210,7 +210,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
             if (!mbInSwitch)
             {
                 std::map<OUString, ScRangeName*> aRangeMap;
-                pDoc->GetRangeNameMap(aRangeMap);
+                rDoc.GetRangeNameMap(aRangeMap);
                 xResult = std::make_shared<ScNameDefDlg>(pB, pCW, pParent, &GetViewData(), aRangeMap,
                                 ScAddress(GetViewData().GetCurX(),
                                           GetViewData().GetCurY(),
@@ -256,7 +256,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
             ScAddress   aCurPos( rViewData.GetCurX(),
                                  rViewData.GetCurY(),
                                  rViewData.GetTabNo());
-            xResult = std::make_shared<ScSolverDlg>(pB, pCW, pParent, rViewData.GetDocument(), aCurPos);
+            xResult = std::make_shared<ScSolverDlg>(pB, pCW, pParent, &rViewData.GetDocument(), aCurPos);
             break;
         }
         case SID_OPENDLG_TABOP:
@@ -266,7 +266,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
                                       rViewData.GetCurY(),
                                       rViewData.GetTabNo());
 
-            xResult = std::make_shared<ScTabOpDlg>(pB, pCW, pParent, rViewData.GetDocument(), aCurPos);
+            xResult = std::make_shared<ScTabOpDlg>(pB, pCW, pParent, &rViewData.GetDocument(), aCurPos);
             break;
         }
         case SID_OPENDLG_CONSOLIDATE:
@@ -276,7 +276,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
                                 SCITEM_CONSOLIDATEDATA>{} );
 
             const ScConsolidateParam* pDlgData =
-                            pDoc->GetConsolidateDlgData();
+                            rDoc.GetConsolidateDlgData();
 
             if ( !pDlgData )
             {
@@ -315,7 +315,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
                                      SCITEM_QUERYDATA>{} );
 
             ScDBData* pDBData = GetDBData(false, SC_DB_MAKE, ScGetDBSelection::RowDown);
-            pDBData->ExtendDataArea(pDoc);
+            pDBData->ExtendDataArea(&rDoc);
             pDBData->GetQueryParam( aQueryParam );
 
             ScRange aArea;
@@ -340,7 +340,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
                                      SCITEM_QUERYDATA>{} );
 
             ScDBData* pDBData = GetDBData(false, SC_DB_MAKE, ScGetDBSelection::RowDown);
-            pDBData->ExtendDataArea(pDoc);
+            pDBData->ExtendDataArea(&rDoc);
             pDBData->GetQueryParam( aQueryParam );
 
             ScRange aArea;
@@ -375,7 +375,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         }
         case SID_MANAGE_XML_SOURCE:
         {
-            xResult = std::make_shared<ScXMLSourceDlg>(pB, pCW, pParent, pDoc);
+            xResult = std::make_shared<ScXMLSourceDlg>(pB, pCW, pParent, &rDoc);
             break;
         }
         case SID_OPENDLG_PIVOTTABLE:
@@ -387,7 +387,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
                 // Check for an existing datapilot output.
                 ScViewData& rViewData = GetViewData();
                 rViewData.SetRefTabNo( rViewData.GetTabNo() );
-                ScDPObject* pObj = pDoc->GetDPAtCursor(rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo());
+                ScDPObject* pObj = rDoc.GetDPAtCursor(rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo());
                 xResult = std::make_shared<ScPivotLayoutDialog>(pB, pCW, pParent, &rViewData, pDialogDPObject.get(), pObj == nullptr);
             }
 
@@ -600,7 +600,7 @@ void ScTabViewShell::notifyAllViewsSheetGeomInvalidation(SfxViewShell* pForViewS
 bool ScTabViewShell::UseSubTotal(ScRangeList* pRangeList)
 {
     bool bSubTotal = false;
-    ScDocument* pDoc = GetViewData().GetDocument();
+    ScDocument& rDoc = GetViewData().GetDocument();
     size_t nRangeCount (pRangeList->size());
     size_t nRangeIndex (0);
     while (!bSubTotal && nRangeIndex < nRangeCount)
@@ -614,7 +614,7 @@ bool ScTabViewShell::UseSubTotal(ScRangeList* pRangeList)
             SCROW nRow(rRange.aStart.Row());
             while (!bSubTotal && nRow <= nRowEnd)
             {
-                if (pDoc->RowFiltered(nRow, nTab))
+                if (rDoc.RowFiltered(nRow, nTab))
                     bSubTotal = true;
                 else
                     ++nRow;
@@ -626,7 +626,7 @@ bool ScTabViewShell::UseSubTotal(ScRangeList* pRangeList)
 
     if (!bSubTotal)
     {
-        const ScDBCollection::NamedDBs& rDBs = pDoc->GetDBCollection()->getNamedDBs();
+        const ScDBCollection::NamedDBs& rDBs = rDoc.GetDBCollection()->getNamedDBs();
         for (const auto& rxDB : rDBs)
         {
             const ScDBData& rDB = *rxDB;
@@ -660,7 +660,7 @@ OUString ScTabViewShell::DoAutoSum(bool& rRangeFinder, bool& rSubTotal, const Op
         ScRangeList aMarkRangeList;
         rRangeFinder = rSubTotal = false;
         rMark.FillRangeListWithMarks( &aMarkRangeList, false );
-        ScDocument* pDoc = GetViewData().GetDocument();
+        ScDocument& rDoc = GetViewData().GetDocument();
 
         // check if one of the marked ranges is empty
         bool bEmpty = false;
@@ -668,7 +668,7 @@ OUString ScTabViewShell::DoAutoSum(bool& rRangeFinder, bool& rSubTotal, const Op
         for ( size_t i = 0; i < nCount; ++i )
         {
             const ScRange & rRange( aMarkRangeList[i] );
-            if ( pDoc->IsBlockEmpty( rRange.aStart.Tab(),
+            if ( rDoc.IsBlockEmpty( rRange.aStart.Tab(),
                  rRange.aStart.Col(), rRange.aStart.Row(),
                  rRange.aEnd.Col(), rRange.aEnd.Row() ) )
             {

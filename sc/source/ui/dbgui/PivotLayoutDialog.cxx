@@ -74,7 +74,7 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
     , maPivotTableObject(*pPivotTableObject)
     , mpPreviouslyFocusedListBox(nullptr)
     , mpViewData(pViewData)
-    , mrDocument(*pViewData->GetDocument())
+    , mrDocument(pViewData->GetDocument())
     , mbNewPivotTable(bNewPivotTable)
     , maAddressDetails(mrDocument.GetAddressConvention(), 0, 0)
     , mbDialogLostFocus(false)

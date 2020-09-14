@@ -72,7 +72,7 @@ ScVbaNames::~ScVbaNames()
 {
 }
 
-ScDocument *
+ScDocument&
 ScVbaNames::getScDocument()
 {
     uno::Reference< frame::XModel > xModel( getModel() , uno::UNO_SET_THROW );
@@ -104,12 +104,12 @@ ScVbaNames::Add( const css::uno::Any& Name ,
         NameLocal >>= sName;
     if ( !sName.isEmpty() )
     {
-        if ( ScRangeData::IsNameValid( sName , getScDocument() )  != ScRangeData::NAME_VALID )
+        if ( ScRangeData::IsNameValid( sName , &getScDocument() )  != ScRangeData::NAME_VALID )
         {
             const sal_Int32 nIndex{ sName.indexOf('!') };
             if (nIndex>=0)
                 sName = sName.copy(nIndex+1);
-            if ( ScRangeData::IsNameValid( sName , getScDocument() ) != ScRangeData::NAME_VALID )
+            if ( ScRangeData::IsNameValid( sName , &getScDocument() ) != ScRangeData::NAME_VALID )
                 throw uno::RuntimeException( "This Name is not valid ." );
         }
     }
@@ -149,7 +149,7 @@ ScVbaNames::Add( const css::uno::Any& Name ,
         if ( !xRange.is() && !sFormula.isEmpty() )
         {
             ScAddress aBlank;
-            ScCompiler aComp( getScDocument(), aBlank, eGram );
+            ScCompiler aComp( &getScDocument(), aBlank, eGram );
             std::unique_ptr<ScTokenArray> pTokens(aComp.CompileString(sFormula));
             if ( pTokens )
             {

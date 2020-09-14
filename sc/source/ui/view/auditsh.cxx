@@ -47,7 +47,7 @@ ScAuditingShell::ScAuditingShell(ScViewData* pData) :
     SetPool( &pViewData->GetViewShell()->GetPool() );
     SfxUndoManager* pMgr = pViewData->GetSfxDocShell()->GetUndoManager();
     SetUndoManager( pMgr );
-    if ( !pViewData->GetDocument()->IsUndoEnabled() )
+    if ( !pViewData->GetDocument().IsUndoEnabled() )
     {
         pMgr->SetMaxUndoActionCount( 0 );
     }

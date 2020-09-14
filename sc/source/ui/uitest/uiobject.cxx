@@ -34,19 +34,19 @@
 
 namespace {
 
-ScAddress get_address_from_string(const ScDocument* pDoc, const OUString& rStr)
+ScAddress get_address_from_string(const ScDocument& rDoc, const OUString& rStr)
 {
     ScAddress aAddr;
     sal_Int32 nOffset = 0;
-    ScRangeStringConverter::GetAddressFromString(aAddr, rStr, pDoc, formula::FormulaGrammar::CONV_OOO, nOffset);
+    ScRangeStringConverter::GetAddressFromString(aAddr, rStr, &rDoc, formula::FormulaGrammar::CONV_OOO, nOffset);
     return aAddr;
 }
 
-ScRange get_range_from_string(const ScDocument* pDoc, const OUString& rStr)
+ScRange get_range_from_string(const ScDocument& rDoc, const OUString& rStr)
 {
     ScRange aRange;
     sal_Int32 nOffset = 0;
-    ScRangeStringConverter::GetRangeFromString(aRange, rStr, pDoc, formula::FormulaGrammar::CONV_OOO, nOffset);
+    ScRangeStringConverter::GetRangeFromString(aRange, rStr, &rDoc, formula::FormulaGrammar::CONV_OOO, nOffset);
 
     return aRange;
 }
@@ -75,15 +75,15 @@ StringMap ScGridWinUIObject::get_state()
 
     ScRangeList aMarkedArea = mxGridWindow->getViewData()->GetMarkData().GetMarkedRanges();
     OUString aMarkedAreaString;
-    ScRangeStringConverter::GetStringFromRangeList(aMarkedAreaString, &aMarkedArea, mxGridWindow->getViewData()->GetDocument(), formula::FormulaGrammar::CONV_OOO);
+    ScRangeStringConverter::GetStringFromRangeList(aMarkedAreaString, &aMarkedArea, &mxGridWindow->getViewData()->GetDocument(), formula::FormulaGrammar::CONV_OOO);
 
     aMap["MarkedArea"] = aMarkedAreaString;
 
-    ScDocument* pDoc = mxGridWindow->getViewData()->GetDocument();
+    ScDocument& rDoc = mxGridWindow->getViewData()->GetDocument();
     ScAddress aPos( mxGridWindow->getViewData()->GetCurX() , mxGridWindow->getViewData()->GetCurY() , mxGridWindow->getViewData()->GetTabNo() );
-    if ( pDoc->HasNote( aPos ) )
+    if ( rDoc.HasNote( aPos ) )
     {
-        ScPostIt* pNote = pDoc->GetNote(aPos);
+        ScPostIt* pNote = rDoc.GetNote(aPos);
         assert(pNote);
         aMap["CurrentCellCommentText"] = pNote->GetText();
     }
@@ -270,9 +270,9 @@ void ScGridWinUIObject::execute(const OUString& rAction,
         {
             auto itr = rParameters.find("SETTEXT");
             const OUString rStr = itr->second;
-            ScDocument* pDoc = mxGridWindow->getViewData()->GetDocument();
+            ScDocument& rDoc = mxGridWindow->getViewData()->GetDocument();
             ScAddress aPos( mxGridWindow->getViewData()->GetCurX() , mxGridWindow->getViewData()->GetCurY() , mxGridWindow->getViewData()->GetTabNo() );
-            pDoc->GetOrCreateNote( aPos )->SetText( aPos , rStr );
+            rDoc.GetOrCreateNote( aPos )->SetText( aPos , rStr );
         }
     }
     else if (rAction == "SIDEBAR")
@@ -320,7 +320,7 @@ namespace {
 
 ScDrawLayer* get_draw_layer(VclPtr<ScGridWindow> const & xGridWindow)
 {
-    return xGridWindow->getViewData()->GetDocument()->GetDrawLayer();
+    return xGridWindow->getViewData()->GetDocument().GetDrawLayer();
 }
 
 SdrPage* get_draw_page(VclPtr<ScGridWindow> const & xGridWindow, SCTAB nTab)

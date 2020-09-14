@@ -433,11 +433,11 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 {
                     //  if string contains WEAK characters, set all fonts
                     SvtScriptType nSetScript;
-                    ScDocument* pDoc = pViewData->GetDocument();
-                    if ( pDoc->HasStringWeakCharacters( aString ) )
+                    ScDocument& rDoc = pViewData->GetDocument();
+                    if ( rDoc.HasStringWeakCharacters( aString ) )
                         nSetScript = SvtScriptType::LATIN | SvtScriptType::ASIAN | SvtScriptType::COMPLEX;
                     else
-                        nSetScript = pDoc->GetStringScriptType( aString );
+                        nSetScript = rDoc.GetStringScriptType( aString );
 
                     SfxItemSet aSet( pTableView->GetEmptyItemSet() );
                     SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONT, GetPool() );
@@ -534,8 +534,8 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     OUString aText = pEngine->GetText();
                     ESelection aSel = pEditView->GetSelection();    // current View
 
-                    ScDocument* pDoc = pViewData->GetDocument();
-                    ScRefFinder aFinder(aText, pViewData->GetCurPos(), *pDoc, pDoc->GetAddressConvention());
+                    ScDocument& rDoc = pViewData->GetDocument();
+                    ScRefFinder aFinder(aText, pViewData->GetCurPos(), rDoc, rDoc.GetAddressConvention());
                     aFinder.ToggleRel( aSel.nStartPos, aSel.nEndPos );
                     if (aFinder.GetFound())
                     {

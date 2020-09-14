@@ -505,7 +505,7 @@ void ScVbaWorksheets::PrintPreview( const css::uno::Any& /*EnableChanges*/ )
 
     ScPreviewShell* pPrvShell = static_cast<  ScPreviewShell* >( pShell );
     ScPreview* pPrvView = pPrvShell->GetPreview();
-    const ScDocument& rDoc = *pViewShell->GetViewData().GetDocument();
+    const ScDocument& rDoc = pViewShell->GetViewData().GetDocument();
     ScMarkData aMarkData(rDoc.GetSheetLimits());
     sal_Int32 nElems = getCount();
     for ( sal_Int32 nItem = 1; nItem <= nElems; ++nItem )

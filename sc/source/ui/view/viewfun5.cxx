@@ -77,8 +77,8 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                     const uno::Reference<datatransfer::XTransferable>& rxTransferable,
                     SCCOL nPosX, SCROW nPosY, const Point* pLogicPos, bool bLink, bool bAllowDialogs )
 {
-    ScDocument* pDoc = GetViewData().GetDocument();
-    pDoc->SetPastingDrawFromOtherDoc( true );
+    ScDocument& rDoc = GetViewData().GetDocument();
+    rDoc.SetPastingDrawFromOtherDoc( true );
 
     Point aPos;                     //  inserting position (1/100 mm)
     if (pLogicPos)
@@ -95,10 +95,10 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
             SCTAB nTab = GetViewData().GetTabNo();
             long nXT = 0;
             for (SCCOL i=0; i<nPosX; i++)
-                nXT += pDoc->GetColWidth(i,nTab);
-            if (pDoc->IsNegativePage(nTab))
+                nXT += rDoc.GetColWidth(i,nTab);
+            if (rDoc.IsNegativePage(nTab))
                 nXT = -nXT;
-            sal_uLong nYT = pDoc->GetRowHeight( 0, nPosY-1, nTab);
+            sal_uLong nYT = rDoc.GetRowHeight( 0, nPosY-1, nTab);
             aPos = Point( static_cast<long>(nXT * HMM_PER_TWIPS), static_cast<long>(nYT * HMM_PER_TWIPS) );
         }
     }
@@ -296,7 +296,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
         else
         {
             ScAddress aCellPos( nPosX, nPosY, GetViewData().GetTabNo() );
-            auto pObj = std::make_shared<ScImportExport>(GetViewData().GetDocument(), aCellPos);
+            auto pObj = std::make_shared<ScImportExport>(&GetViewData().GetDocument(), aCellPos);
             pObj->SetOverwriting( true );
 
 
@@ -351,7 +351,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
 
                     bAllowDialogs = bAllowDialogs && !SC_MOD()->IsInExecuteDrop();
 
-                    pDlg->StartExecuteAsync([this, pDlg, pDoc, pStrm, nFormatId, pStrBuffer, pObj, bAllowDialogs](sal_Int32 nResult){
+                    pDlg->StartExecuteAsync([this, pDlg, &rDoc, pStrm, nFormatId, pStrBuffer, pObj, bAllowDialogs](sal_Int32 nResult){
                         bool bShowErrorDialog = bAllowDialogs;
                         if (RET_OK == nResult)
                         {
@@ -376,7 +376,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                         InvalidateAttribs();
                         GetViewData().UpdateInputHandler();
 
-                        pDoc->SetPastingDrawFromOtherDoc( false );
+                        rDoc.SetPastingDrawFromOtherDoc( false );
 
                         if (bShowErrorDialog)
                             ErrorMessage(STR_PASTE_ERROR);
@@ -424,7 +424,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
             else
             {
                 ScAddress aCellPos( nPosX,nPosY,nTab );
-                sTarget = aCellPos.Format(ScRefFlags::ADDR_ABS_3D, pDoc, pDoc->GetAddressConvention());
+                sTarget = aCellPos.Format(ScRefFlags::ADDR_ABS_3D, &rDoc, rDoc.GetAddressConvention());
             }
             SfxStringItem aTarget(FN_PARAM_1, sTarget);
 
@@ -562,7 +562,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
         {
             std::unique_ptr<ScDocument> pInsDoc(new ScDocument( SCDOCMODE_CLIP ));
             SCTAB nSrcTab = 0;      // Biff5 in clipboard: always sheet 0
-            pInsDoc->ResetClip( pDoc, nSrcTab );
+            pInsDoc->ResetClip( &rDoc, nSrcTab );
 
             SfxMedium aMed;
             aMed.GetItemSet()->Put( SfxUnoAnyItem( SID_INPUTSTREAM, uno::makeAny( xStm ) ) );
@@ -644,7 +644,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
         bRet = PasteBookmark( nFormatId, rxTransferable, nPosX, nPosY );
     }
 
-    pDoc->SetPastingDrawFromOtherDoc( false );
+    rDoc.SetPastingDrawFromOtherDoc( false );
 
     return bRet;
 }
@@ -728,7 +728,7 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
         // uses Calc A1 syntax even when another formula syntax is specified
         // in the UI.
         EnterMatrix("='"
-            + ScGlobal::GetAbsDocName(pTopic, GetViewData().GetDocument()->GetDocumentShell())
+            + ScGlobal::GetAbsDocName(pTopic, GetViewData().GetDocument().GetDocumentShell())
             + "'#" + pItem
                 , ::formula::FormulaGrammar::GRAM_NATIVE);
         return true;

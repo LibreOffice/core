@@ -107,8 +107,8 @@ void lcl_ChartInit(const uno::Reference <embed::XEmbeddedObject>& xObj, ScViewDa
             PutInOrder( nRow1, nRow2 );
             if (nCol2 >= nCol1 || nRow2 >= nRow1)
             {
-                ScDocument* pDoc = pViewData->GetDocument();
-                pDoc->LimitChartArea( nTab1, nCol1,nRow1, nCol2,nRow2 );
+                ScDocument& rDoc = pViewData->GetDocument();
+                rDoc.LimitChartArea( nTab1, nCol1,nRow1, nCol2,nRow2 );
 
                 ScRange aRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
                 aRangeString = aRange.Format(rScDoc, ScRefFlags::RANGE_ABS_3D, rScDoc.GetAddressConvention());
@@ -341,7 +341,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView*
             ScViewData& rData = rViewSh.GetViewData();
 
             Point aPnt = rViewSh.GetInsertPos();
-            if ( rData.GetDocument()->IsNegativePage( rData.GetTabNo() ) )
+            if ( rData.GetDocument().IsNegativePage( rData.GetTabNo() ) )
                 aPnt.AdjustX( -(aSize.Width()) );      // move position to left edge
             tools::Rectangle aRect (aPnt, aSize);
             SdrOle2Obj* pObj = new SdrOle2Obj(
@@ -429,10 +429,10 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
     }
     else
     {
-        ScDocument* pDocument = rViewSh.GetViewData().GetDocument();
-        ScDPObject* pObject = pDocument->GetDPAtCursor(rViewSh.GetViewData().GetCurX(),
-                                                       rViewSh.GetViewData().GetCurY(),
-                                                       rViewSh.GetViewData().GetTabNo());
+        ScDocument& rDocument = rViewSh.GetViewData().GetDocument();
+        ScDPObject* pObject = rDocument.GetDPAtCursor(rViewSh.GetViewData().GetCurX(),
+                                                      rViewSh.GetViewData().GetCurY(),
+                                                      rViewSh.GetViewData().GetTabNo());
         if (pObject)
         {
             aRangeString = pObject->GetName();
@@ -453,7 +453,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
             ScRangeList aRanges;
             aMultiMark.FillRangeListWithMarks( &aRanges, false );
             OUString aStr;
-            aRanges.Format( aStr, ScRefFlags::RANGE_ABS_3D, *pDocument, pDocument->GetAddressConvention() );
+            aRanges.Format( aStr, ScRefFlags::RANGE_ABS_3D, rDocument, rDocument.GetAddressConvention() );
             aRangeString = aStr;
 
             // get "total" range for positioning

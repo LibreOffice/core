@@ -330,8 +330,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 {
                     OUString aStr = static_cast<const SfxStringItem&>(pReqArgs->
                                     Get( SID_INSERT_MATRIX )).GetValue();
-                    ScDocument* pDoc = GetViewData()->GetDocument();
-                    pTabViewShell->EnterMatrix( aStr, pDoc->GetGrammar() );
+                    ScDocument& rDoc = GetViewData()->GetDocument();
+                    pTabViewShell->EnterMatrix( aStr, rDoc.GetGrammar() );
                     rReq.Done();
                 }
             }
@@ -400,8 +400,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     }
                     else
                     {
-                        ScDocument* pDoc = GetViewData()->GetDocument();
-                        pTabViewShell->EnterMatrix( aString, pDoc->GetGrammar() );
+                        ScDocument& rDoc = GetViewData()->GetDocument();
+                        pTabViewShell->EnterMatrix( aString, rDoc.GetGrammar() );
                         rReq.Done();
                     }
                 }
@@ -534,11 +534,11 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
         case SID_SCENARIOS:
             {
-                ScDocument* pDoc = GetViewData()->GetDocument();
+                ScDocument& rDoc = GetViewData()->GetDocument();
                 ScMarkData& rMark = GetViewData()->GetMarkData();
                 SCTAB nTab = GetViewData()->GetTabNo();
 
-                if ( pDoc->IsScenario(nTab) )
+                if ( rDoc.IsScenario(nTab) )
                 {
                     rMark.MarkToMulti();
                     if ( rMark.IsMultiMarked() )
@@ -581,7 +581,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         ScScenarioFlags nFlags;
 
                         OUString aTmp;
-                        pDoc->GetName(nTab, aTmp);
+                        rDoc.GetName(nTab, aTmp);
                         aBaseName = aTmp + "_" + ScResId(STR_SCENARIO) + "_";
 
                         //  first test, if the prefix is recognised as valid,
@@ -589,7 +589,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         bool bPrefix = ScDocument::ValidTabName( aBaseName );
                         OSL_ENSURE(bPrefix, "invalid sheet name");
 
-                        while ( pDoc->IsScenario(nTab+i) )
+                        while ( rDoc.IsScenario(nTab+i) )
                             i++;
 
                         bool bValid;
@@ -598,9 +598,9 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         {
                             aName = aBaseName + OUString::number( i );
                             if (bPrefix)
-                                bValid = pDoc->ValidNewTabName( aName );
+                                bValid = rDoc.ValidNewTabName( aName );
                             else
-                                bValid = !pDoc->GetTable( aName, nDummy );
+                                bValid = !rDoc.GetTable( aName, nDummy );
                             ++i;
                         }
                         while ( !bValid && i <= MAXTAB + 2 );
@@ -624,7 +624,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         }
                         else
                         {
-                            bool bSheetProtected = pDoc->IsTabProtected(nTab);
+                            bool bSheetProtected = rDoc.IsTabProtected(nTab);
                             ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
                             ScopedVclPtr<AbstractScNewScenarioDlg> pNewDlg(pFact->CreateScNewScenarioDlg(pTabViewShell->GetFrameWeld(), aName, false, bSheetProtected));
@@ -693,7 +693,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 {
                     ScViewData* pData      = GetViewData();
                     FieldUnit   eMetric    = SC_MOD()->GetAppOptions().GetAppMetric();
-                    sal_uInt16      nCurHeight = pData->GetDocument()->
+                    sal_uInt16      nCurHeight = pData->GetDocument().
                                                 GetRowHeight( pData->GetCurY(),
                                                               pData->GetTabNo() );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
@@ -792,7 +792,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 {
                     FieldUnit   eMetric    = SC_MOD()->GetAppOptions().GetAppMetric();
                     ScViewData* pData      = GetViewData();
-                    sal_uInt16      nCurHeight = pData->GetDocument()->
+                    sal_uInt16      nCurHeight = pData->GetDocument().
                                                 GetColWidth( pData->GetCurX(),
                                                              pData->GetTabNo() );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
@@ -882,7 +882,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
         case FID_MERGE_OFF:
         case FID_MERGE_TOGGLE:
         {
-            if ( !GetViewData()->GetDocument()->GetChangeTrack() )
+            if ( !GetViewData()->GetDocument().GetChangeTrack() )
             {
                 // test whether to merge or to split
                 bool bMerge = false;

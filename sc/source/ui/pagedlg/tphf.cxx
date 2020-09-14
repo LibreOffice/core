@@ -59,9 +59,9 @@ ScHFPage::ScHFPage(weld::Container* pPage, weld::DialogController* pController, 
     if ( pViewSh )
     {
         ScViewData& rViewData = pViewSh->GetViewData();
-        ScDocument* pDoc      = rViewData.GetDocument();
+        ScDocument& rDoc      = rViewData.GetDocument();
 
-        aStrPageStyle = pDoc->GetPageStyle( rViewData.GetTabNo() );
+        aStrPageStyle = rDoc.GetPageStyle( rViewData.GetTabNo() );
     }
 
     m_xBtnEdit->connect_clicked(LINK(this, ScHFPage, BtnHdl));

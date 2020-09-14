@@ -281,10 +281,10 @@ long ScPositionHelper::computePosition(index_type nIndex, const std::function<lo
 }
 
 ScBoundsProvider::ScBoundsProvider(const ScViewData &rView, SCTAB nT, bool bColHeader)
-    : pDoc(rView.GetDocument())
+    : rDoc(rView.GetDocument())
     , nTab(nT)
     , bColumnHeader(bColHeader)
-    , MAX_INDEX(bColHeader ? pDoc->MaxCol() : MAXTILEDROW)
+    , MAX_INDEX(bColHeader ? rDoc.MaxCol() : MAXTILEDROW)
     , mfPPTX(rView.GetPPTX())
     , mfPPTY(rView.GetPPTY())
     , nFirstIndex(-1)
@@ -323,7 +323,7 @@ void ScBoundsProvider::GetEndIndexAndPosition(SCROW& nIndex, long& nPosition) co
 
 long ScBoundsProvider::GetSize(index_type nIndex) const
 {
-    const sal_uInt16 nSize = bColumnHeader ? pDoc->GetColWidth(nIndex, nTab) : pDoc->GetRowHeight(nIndex, nTab);
+    const sal_uInt16 nSize = bColumnHeader ? rDoc.GetColWidth(nIndex, nTab) : rDoc.GetRowHeight(nIndex, nTab);
     return ScViewData::ToPixel(nSize, bColumnHeader ? mfPPTX : mfPPTY);
 }
 
@@ -588,7 +588,7 @@ void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>
     pSettings[SC_TABLE_SHOWGRID].Value <<= bShowGrid;
 
     // Common SdrModel processing
-    rViewData.GetDocument()->GetDrawLayer()->WriteUserDataSequence(rSettings);
+    rViewData.GetDocument().GetDrawLayer()->WriteUserDataSequence(rSettings);
 }
 
 void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>& aSettings, ScViewData& rViewData, SCTAB nTab, bool& rHasZoom )
@@ -609,12 +609,12 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
         if (sName == SC_CURSORPOSITIONX)
         {
             rSetting.Value >>= nTemp32;
-            nCurX = rViewData.GetDocument()->SanitizeCol( static_cast<SCCOL>(nTemp32));
+            nCurX = rViewData.GetDocument().SanitizeCol( static_cast<SCCOL>(nTemp32));
         }
         else if (sName == SC_CURSORPOSITIONY)
         {
             rSetting.Value >>= nTemp32;
-            nCurY = rViewData.GetDocument()->SanitizeRow( static_cast<SCROW>(nTemp32));
+            nCurY = rViewData.GetDocument().SanitizeRow( static_cast<SCROW>(nTemp32));
         }
         else if (sName == SC_HORIZONTALSPLITMODE)
         {
@@ -654,22 +654,22 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
         else if (sName == SC_POSITIONLEFT)
         {
             rSetting.Value >>= nTemp32;
-            nPosX[SC_SPLIT_LEFT] = rViewData.GetDocument()->SanitizeCol( static_cast<SCCOL>(nTemp32));
+            nPosX[SC_SPLIT_LEFT] = rViewData.GetDocument().SanitizeCol( static_cast<SCCOL>(nTemp32));
         }
         else if (sName == SC_POSITIONRIGHT)
         {
             rSetting.Value >>= nTemp32;
-            nPosX[SC_SPLIT_RIGHT] = rViewData.GetDocument()->SanitizeCol( static_cast<SCCOL>(nTemp32));
+            nPosX[SC_SPLIT_RIGHT] = rViewData.GetDocument().SanitizeCol( static_cast<SCCOL>(nTemp32));
         }
         else if (sName == SC_POSITIONTOP)
         {
             rSetting.Value >>= nTemp32;
-            nPosY[SC_SPLIT_TOP] = rViewData.GetDocument()->SanitizeRow( static_cast<SCROW>(nTemp32));
+            nPosY[SC_SPLIT_TOP] = rViewData.GetDocument().SanitizeRow( static_cast<SCROW>(nTemp32));
         }
         else if (sName == SC_POSITIONBOTTOM)
         {
             rSetting.Value >>= nTemp32;
-            nPosY[SC_SPLIT_BOTTOM] = rViewData.GetDocument()->SanitizeRow( static_cast<SCROW>(nTemp32));
+            nPosY[SC_SPLIT_BOTTOM] = rViewData.GetDocument().SanitizeRow( static_cast<SCROW>(nTemp32));
         }
         else if (sName == SC_ZOOMTYPE)
         {
@@ -708,21 +708,21 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
             rSetting.Value >>= aColor;
             if (aColor != COL_AUTO)
             {
-                ScDocument* pDoc = rViewData.GetDocument();
-                pDoc->SetTabBgColor(nTab, aColor);
+                ScDocument& rDoc = rViewData.GetDocument();
+                rDoc.SetTabBgColor(nTab, aColor);
             }
         }
         // Fallback to common SdrModel processing
-        else rViewData.GetDocument()->GetDrawLayer()->ReadUserDataSequenceValue(&rSetting);
+        else rViewData.GetDocument().GetDrawLayer()->ReadUserDataSequenceValue(&rSetting);
     }
 
     if (eHSplitMode == SC_SPLIT_FIX)
-        nFixPosX = rViewData.GetDocument()->SanitizeCol( static_cast<SCCOL>( bHasHSplitInTwips ? nTempPosHTw : nTempPosH ));
+        nFixPosX = rViewData.GetDocument().SanitizeCol( static_cast<SCCOL>( bHasHSplitInTwips ? nTempPosHTw : nTempPosH ));
     else
         nHSplitPos = bHasHSplitInTwips ? static_cast< long >( nTempPosHTw * rViewData.GetPPTX() ) : nTempPosH;
 
     if (eVSplitMode == SC_SPLIT_FIX)
-        nFixPosY = rViewData.GetDocument()->SanitizeRow( static_cast<SCROW>( bHasVSplitInTwips ? nTempPosVTw : nTempPosV ));
+        nFixPosY = rViewData.GetDocument().SanitizeRow( static_cast<SCROW>( bHasVSplitInTwips ? nTempPosVTw : nTempPosV ));
     else
         nVSplitPos = bHasVSplitInTwips ? static_cast< long >( nTempPosVTw * rViewData.GetPPTY() ) : nTempPosV;
 
@@ -867,15 +867,12 @@ void ScViewData::InitData(ScDocument& rDocument)
     }
 }
 
-ScDocument* ScViewData::GetDocument() const
+ScDocument& ScViewData::GetDocument() const
 {
     if (pDoc)
-        return pDoc;
-    else if (pDocShell)
-        return &pDocShell->GetDocument();
-
-    OSL_FAIL("no document on ViewData");
-    return nullptr;
+        return *pDoc;
+    assert(pDocShell && "we must have one of pDoc and pDocShell");
+    return pDocShell->GetDocument();
 }
 
 ScViewData::~ScViewData() COVERITY_NOEXCEPT_FALSE
@@ -1164,7 +1161,7 @@ ScMarkType ScViewData::GetSimpleArea( ScRange & rRange, ScMarkData & rNewMark ) 
         if ( rNewMark.IsMarked() && !rNewMark.IsMultiMarked() )
         {
             rNewMark.GetMarkArea( rRange );
-            if (ScViewUtil::HasFiltered( rRange, GetDocument()))
+            if (ScViewUtil::HasFiltered( rRange, &GetDocument()))
                 eMarkType = SC_MARK_SIMPLE_FILTERED;
             else
                 eMarkType = SC_MARK_SIMPLE;
@@ -1808,7 +1805,7 @@ void ScViewData::EditGrowX()
     bool bLOKPrintTwips = bLOKActive && comphelper::LibreOfficeKit::isCompatFlagSet(
             comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
 
-    ScDocument* pLocalDoc = GetDocument();
+    ScDocument& rLocalDoc = GetDocument();
 
     ScSplitPos eWhich = GetActivePart();
     ScHSplitPos eHWhich = WhichH(eWhich);
@@ -1817,7 +1814,7 @@ void ScViewData::EditGrowX()
     if ( !pCurView || !bEditActive[eWhich])
         return;
 
-    bool bLayoutRTL = pLocalDoc->IsLayoutRTL( nTabNo );
+    bool bLayoutRTL = rLocalDoc.IsLayoutRTL( nTabNo );
 
     ScEditEngineDefaulter* pEngine =
         static_cast<ScEditEngineDefaulter*>( pCurView->GetEditEngine() );
@@ -1846,7 +1843,7 @@ void ScViewData::EditGrowX()
     bool bAsianVertical = pEngine->IsVertical();
 
     //  get bGrow... variables the same way as in SetEditEngine
-    const ScPatternAttr* pPattern = pLocalDoc->GetPattern( nEditCol, nEditRow, nTabNo );
+    const ScPatternAttr* pPattern = rLocalDoc.GetPattern( nEditCol, nEditRow, nTabNo );
     SvxCellHorJustify eJust = pPattern->GetItem( ATTR_HOR_JUSTIFY ).GetValue();
     bool bGrowCentered = ( eJust == SvxCellHorJustify::Center );
     bool bGrowToLeft = ( eJust == SvxCellHorJustify::Right );      // visual left
@@ -1866,7 +1863,7 @@ void ScViewData::EditGrowX()
             if ( nEditStartCol > nLeft )
             {
                 --nEditStartCol;
-                long nColWidth = pLocalDoc->GetColWidth( nEditStartCol, nTabNo );
+                long nColWidth = rLocalDoc.GetColWidth( nEditStartCol, nTabNo );
                 long nLeftPix = ToPixel( nColWidth, nPPTX );
                 nLogicLeft = pWin->PixelToLogic(Size(nLeftPix,0)).Width();
                 if (bLOKPrintTwips)
@@ -1877,7 +1874,7 @@ void ScViewData::EditGrowX()
             if ( nEditEndCol < nRight )
             {
                 ++nEditEndCol;
-                long nColWidth = pLocalDoc->GetColWidth( nEditEndCol, nTabNo );
+                long nColWidth = rLocalDoc.GetColWidth( nEditEndCol, nTabNo );
                 long nRightPix = ToPixel( nColWidth, nPPTX );
                 nLogicRight = pWin->PixelToLogic(Size(nRightPix,0)).Width();
                 if (bLOKPrintTwips)
@@ -1918,7 +1915,7 @@ void ScViewData::EditGrowX()
         while (aArea.GetWidth() + 0 < nTextWidth && nEditStartCol > nLeft)
         {
             --nEditStartCol;
-            long nColWidth = pLocalDoc->GetColWidth( nEditStartCol, nTabNo );
+            long nColWidth = rLocalDoc.GetColWidth( nEditStartCol, nTabNo );
             long nPix = ToPixel( nColWidth, nPPTX );
             long nLogicWidth = pWin->PixelToLogic(Size(nPix,0)).Width();
             long& nLogicWidthPTwips = nColWidth;
@@ -1960,7 +1957,7 @@ void ScViewData::EditGrowX()
         while (aArea.GetWidth() + 0 < nTextWidth && nEditEndCol < nRight)
         {
             ++nEditEndCol;
-            long nColWidth = pLocalDoc->GetColWidth( nEditEndCol, nTabNo );
+            long nColWidth = rLocalDoc.GetColWidth( nEditEndCol, nTabNo );
             long nPix = ToPixel( nColWidth, nPPTX );
             long nLogicWidth = pWin->PixelToLogic(Size(nPix,0)).Width();
             long& nLogicWidthPTwips = nColWidth;
@@ -2157,8 +2154,8 @@ void ScViewData::EditGrowY( bool bInitial )
     while (aArea.GetHeight() + nAllowedExtra < nTextHeight && nEditEndRow < nBottom && !bMaxReached)
     {
         ++nEditEndRow;
-        ScDocument* pLocalDoc = GetDocument();
-        long nRowHeight = pLocalDoc->GetRowHeight( nEditEndRow, nTabNo );
+        ScDocument& rLocalDoc = GetDocument();
+        long nRowHeight = rLocalDoc.GetRowHeight( nEditEndRow, nTabNo );
         long nPix = ToPixel( nRowHeight, nPPTY );
         aArea.AdjustBottom(pWin->PixelToLogic(Size(0,nPix)).Height() );
         if (bLOKPrintTwips)
@@ -3639,7 +3636,7 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
             uno::Sequence <beans::PropertyValue> aTableViewSettings;
             maTabData[nTab]->WriteUserDataSequence(aTableViewSettings, *this, nTab);
             OUString sTabName;
-            GetDocument()->GetName( nTab, sTabName );
+            GetDocument().GetName( nTab, sTabName );
             try
             {
                 xNameContainer->insertByName(sTabName, uno::Any(aTableViewSettings));
@@ -3659,7 +3656,7 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
     pSettings[SC_TABLE_VIEWSETTINGS].Value <<= xNameContainer;
 
     OUString sName;
-    GetDocument()->GetName( nTabNo, sName );
+    GetDocument().GetName( nTabNo, sName );
     pSettings[SC_ACTIVE_TABLE].Name = SC_ACTIVETABLE;
     pSettings[SC_ACTIVE_TABLE].Value <<= sName;
     pSettings[SC_HORIZONTAL_SCROLL_BAR_WIDTH].Name = SC_HORIZONTALSCROLLBARWIDTH;
@@ -3716,18 +3713,18 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
     }
 
     // Common SdrModel processing
-    GetDocument()->GetDrawLayer()->WriteUserDataSequence(rSettings);
+    GetDocument().GetDrawLayer()->WriteUserDataSequence(rSettings);
 }
 
 void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>& rSettings)
 {
-    std::vector<bool> aHasZoomVect( GetDocument()->GetTableCount(), false );
+    std::vector<bool> aHasZoomVect( GetDocument().GetTableCount(), false );
 
     sal_Int32 nTemp32(0);
     sal_Int16 nTemp16(0);
     bool bPageMode(false);
 
-    EnsureTabDataSize(GetDocument()->GetTableCount());
+    EnsureTabDataSize(GetDocument().GetTableCount());
 
     for (const auto& rSetting : rSettings)
     {
@@ -3742,7 +3739,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
                 for (const OUString& sTabName : aNames)
                 {
                     SCTAB nTab(0);
-                    if (GetDocument()->GetTable(sTabName, nTab))
+                    if (GetDocument().GetTable(sTabName, nTab))
                     {
                         uno::Any aAny = xNameContainer->getByName(sTabName);
                         uno::Sequence<beans::PropertyValue> aTabSettings;
@@ -3766,7 +3763,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
             if(rSetting.Value >>= sTabName)
             {
                 SCTAB nTab(0);
-                if (GetDocument()->GetTable(sTabName, nTab))
+                if (GetDocument().GetTable(sTabName, nTab))
                     nTabNo = nTab;
             }
         }
@@ -3867,7 +3864,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
             else if ( sName == SC_UNO_RASTERSYNC )
                 aGridOpt.SetSynchronize( ScUnoHelpFunctions::GetBoolFromAny( rSetting.Value ) );
             // Fallback to common SdrModel processing
-            else GetDocument()->GetDrawLayer()->ReadUserDataSequenceValue(&rSetting);
+            else GetDocument().GetDrawLayer()->ReadUserDataSequenceValue(&rSetting);
 
             pOptions->SetGridOptions(aGridOpt);
         }
@@ -3938,15 +3935,15 @@ bool ScViewData::UpdateFixX( SCTAB nTab )                   // true = value chan
     if (!pView || maTabData[nTab]->eHSplitMode != SC_SPLIT_FIX)
         return false;
 
-    ScDocument* pLocalDoc = GetDocument();
-    if (!pLocalDoc->HasTable(nTab))          // if called from reload, the sheet may not exist
+    ScDocument& rLocalDoc = GetDocument();
+    if (!rLocalDoc.HasTable(nTab))          // if called from reload, the sheet may not exist
         return false;
 
     SCCOL nFix = maTabData[nTab]->nFixPosX;
     long nNewPos = 0;
     for (SCCOL nX=maTabData[nTab]->nPosX[SC_SPLIT_LEFT]; nX<nFix; nX++)
     {
-        sal_uInt16 nTSize = pLocalDoc->GetColWidth( nX, nTab );
+        sal_uInt16 nTSize = rLocalDoc.GetColWidth( nX, nTab );
         if (nTSize)
         {
             long nPix = ToPixel( nTSize, nPPTX );
@@ -3973,15 +3970,15 @@ bool ScViewData::UpdateFixY( SCTAB nTab )               // true = value changed
     if (!pView || maTabData[nTab]->eVSplitMode != SC_SPLIT_FIX)
         return false;
 
-    ScDocument* pLocalDoc = GetDocument();
-    if (!pLocalDoc->HasTable(nTab))          // if called from reload, the sheet may not exist
+    ScDocument& rLocalDoc = GetDocument();
+    if (!rLocalDoc.HasTable(nTab))          // if called from reload, the sheet may not exist
         return false;
 
     SCROW nFix = maTabData[nTab]->nFixPosY;
     long nNewPos = 0;
     for (SCROW nY=maTabData[nTab]->nPosY[SC_SPLIT_TOP]; nY<nFix; nY++)
     {
-        sal_uInt16 nTSize = pLocalDoc->GetRowHeight( nY, nTab );
+        sal_uInt16 nTSize = rLocalDoc.GetRowHeight( nY, nTab );
         if (nTSize)
         {
             long nPix = ToPixel( nTSize, nPPTY );
@@ -4002,8 +3999,8 @@ bool ScViewData::UpdateFixY( SCTAB nTab )               // true = value changed
 
 void ScViewData::UpdateOutlinerFlags( Outliner& rOutl ) const
 {
-    ScDocument* pLocalDoc = GetDocument();
-    bool bOnlineSpell = pLocalDoc->GetDocOptions().IsAutoSpell();
+    ScDocument& rLocalDoc = GetDocument();
+    bool bOnlineSpell = rLocalDoc.GetDocOptions().IsAutoSpell();
 
     EEControlBits nCntrl = rOutl.GetControlWord();
     nCntrl |= EEControlBits::MARKNONURLFIELDS;
@@ -4028,7 +4025,7 @@ void ScViewData::UpdateOutlinerFlags( Outliner& rOutl ) const
     }
 
     rOutl.SetDefaultHorizontalTextDirection(
-        pLocalDoc->GetEditTextDirection( nTabNo ) );
+        rLocalDoc.GetEditTextDirection( nTabNo ) );
 }
 
 ScAddress ScViewData::GetCurPos() const

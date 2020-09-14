@@ -137,15 +137,15 @@ void ScDBFunc::TestRemoveOutline( bool& rCol, bool& rRow )
     if (GetViewData().GetSimpleArea(nStartCol,nStartRow,nStartTab,nEndCol,nEndRow,nEndTab) == SC_MARK_SIMPLE)
     {
         SCTAB nTab = nStartTab;
-        ScDocument* pDoc = GetViewData().GetDocument();
-        ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
+        ScDocument& rDoc = GetViewData().GetDocument();
+        ScOutlineTable* pTable = rDoc.GetOutlineTable( nTab );
         if (pTable)
         {
             ScOutlineEntry* pEntry;
             SCCOLROW nStart;
             SCCOLROW nEnd;
-            bool bColMarked = ( nStartRow == 0 && nEndRow == pDoc->MaxRow() );
-            bool bRowMarked = ( nStartCol == 0 && nEndCol == pDoc->MaxCol() );
+            bool bColMarked = ( nStartRow == 0 && nEndRow == rDoc.MaxRow() );
+            bool bRowMarked = ( nStartCol == 0 && nEndCol == rDoc.MaxCol() );
 
             // columns
 
@@ -211,9 +211,9 @@ void ScDBFunc::RemoveAllOutlines( bool bRecord )
 
 void ScDBFunc::AutoOutline( )
 {
-    ScDocument* pDoc = GetViewData().GetDocument();
+    ScDocument& rDoc = GetViewData().GetDocument();
     SCTAB nTab = GetViewData().GetTabNo();
-    ScRange aRange( 0,0,nTab, pDoc->MaxCol(),pDoc->MaxRow(),nTab );     // the complete sheet, if nothing is marked
+    ScRange aRange( 0,0,nTab, rDoc.MaxCol(),rDoc.MaxRow(),nTab );     // the complete sheet, if nothing is marked
     ScMarkData& rMark = GetViewData().GetMarkData();
     if ( rMark.IsMarked() || rMark.IsMultiMarked() )
     {
@@ -315,9 +315,9 @@ bool ScDBFunc::OutlinePossible(bool bHide)
 
     if (GetViewData().GetSimpleArea(nStartCol,nStartRow,nStartTab,nEndCol,nEndRow,nEndTab) == SC_MARK_SIMPLE)
     {
-        ScDocument* pDoc = GetViewData().GetDocument();
+        ScDocument& rDoc = GetViewData().GetDocument();
         SCTAB nTab = GetViewData().GetTabNo();
-        ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
+        ScOutlineTable* pTable = rDoc.GetOutlineTable( nTab );
         if (pTable)
         {
             SCCOLROW nStart;
@@ -630,8 +630,8 @@ bool ScDBFunc::MakePivotTable(
     }
 
     ScDocShell* pDocSh  = GetViewData().GetDocShell();
-    ScDocument* pDoc    = GetViewData().GetDocument();
-    bool bUndo = pDoc->IsUndoEnabled();
+    ScDocument& rDoc    = GetViewData().GetDocument();
+    bool bUndo = rDoc.IsUndoEnabled();
 
     ScRange aDestRange = rDest;
     if ( bNewTable )
@@ -641,16 +641,16 @@ bool ScDBFunc::MakePivotTable(
         OUString aName( ScResId(STR_PIVOT_TABLE) );
         OUString aStr;
 
-        pDoc->GetName( nSrcTab, aStr );
+        rDoc.GetName( nSrcTab, aStr );
         aName += "_" + aStr + "_";
 
         SCTAB nNewTab = nSrcTab+1;
 
         SCTAB i=1;
-        while ( !pDoc->InsertTab( nNewTab, lcl_MakePivotTabName( aName, i ) ) && i <= MAXTAB )
+        while ( !rDoc.InsertTab( nNewTab, lcl_MakePivotTabName( aName, i ) ) && i <= MAXTAB )
             i++;
 
-        bool bAppend = ( nNewTab+1 == pDoc->GetTableCount() );
+        bool bAppend = ( nNewTab+1 == rDoc.GetTableCount() );
         if (bUndo)
         {
             pDocSh->GetUndoManager()->AddUndoAction(
@@ -663,7 +663,7 @@ bool ScDBFunc::MakePivotTable(
         aDestRange = ScRange( 0, 0, nNewTab );
     }
 
-    ScDPObject* pDPObj = pDoc->GetDPAtCursor(
+    ScDPObject* pDPObj = rDoc.GetDPAtCursor(
                             aDestRange.aStart.Col(), aDestRange.aStart.Row(), aDestRange.aStart.Tab() );
 
     ScDPObject aObj( rSource );
@@ -721,11 +721,11 @@ void ScDBFunc::DeletePivotTable()
 void ScDBFunc::RecalcPivotTable()
 {
     ScDocShell* pDocSh  = GetViewData().GetDocShell();
-    ScDocument* pDoc    = GetViewData().GetDocument();
+    ScDocument& rDoc    = GetViewData().GetDocument();
 
-    ScDPObject* pDPObj  = pDoc->GetDPAtCursor( GetViewData().GetCurX(),
-                                                  GetViewData().GetCurY(),
-                                                  GetViewData().GetTabNo() );
+    ScDPObject* pDPObj  = rDoc.GetDPAtCursor( GetViewData().GetCurX(),
+                                              GetViewData().GetCurY(),
+                                              GetViewData().GetTabNo() );
     if (pDPObj)
     {
         // Remove existing data cache for the data that this datapilot uses,
@@ -741,7 +741,7 @@ void ScDBFunc::RecalcPivotTable()
 
 void ScDBFunc::GetSelectedMemberList(ScDPUniqueStringSet& rEntries, long& rDimension)
 {
-    ScDPObject* pDPObj = GetViewData().GetDocument()->GetDPAtCursor( GetViewData().GetCurX(),
+    ScDPObject* pDPObj = GetViewData().GetDocument().GetDPAtCursor( GetViewData().GetCurX(),
                                         GetViewData().GetCurY(), GetViewData().GetTabNo() );
     if ( !pDPObj )
         return;
@@ -810,9 +810,9 @@ bool ScDBFunc::HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int32& 
     SCCOL nCurX = GetViewData().GetCurX();
     SCROW nCurY = GetViewData().GetCurY();
     SCTAB nTab = GetViewData().GetTabNo();
-    ScDocument* pDoc = GetViewData().GetDocument();
+    ScDocument& rDoc = GetViewData().GetDocument();
 
-    ScDPObject* pDPObj = pDoc->GetDPAtCursor( nCurX, nCurY, nTab );
+    ScDPObject* pDPObj = rDoc.GetDPAtCursor( nCurX, nCurY, nTab );
     if ( pDPObj )
     {
         ScDPUniqueStringSet aEntries;
@@ -891,19 +891,19 @@ bool ScDBFunc::HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int32& 
                     SCCOL nSelCol = aSelRange.aStart.Col();
                     SCROW nSelRow = aSelRange.aStart.Row();
                     SCTAB nSelTab = aSelRange.aStart.Tab();
-                    if ( pDoc->HasValueData( nSelCol, nSelRow, nSelTab ) )
+                    if ( rDoc.HasValueData( nSelCol, nSelRow, nSelTab ) )
                     {
-                        sal_uLong nIndex = pDoc->GetAttr(
+                        sal_uLong nIndex = rDoc.GetAttr(
                                         nSelCol, nSelRow, nSelTab, ATTR_VALUE_FORMAT)->GetValue();
-                        SvNumFormatType nType = pDoc->GetFormatTable()->GetType(nIndex);
+                        SvNumFormatType nType = rDoc.GetFormatTable()->GetType(nIndex);
                         if ( nType == SvNumFormatType::DATE || nType == SvNumFormatType::TIME || nType == SvNumFormatType::DATETIME )
                         {
                             bFound = true;
                             // use currently selected value for automatic limits
                             if( rOldInfo.mbAutoStart )
-                                rOldInfo.mfStart = pDoc->GetValue( aSelRange.aStart );
+                                rOldInfo.mfStart = rDoc.GetValue( aSelRange.aStart );
                             if( rOldInfo.mbAutoEnd )
-                                rOldInfo.mfEnd = pDoc->GetValue( aSelRange.aStart );
+                                rOldInfo.mfEnd = rDoc.GetValue( aSelRange.aStart );
                         }
                     }
                 }
@@ -923,9 +923,9 @@ bool ScDBFunc::HasSelectionForNumGroup( ScDPNumGroupInfo& rOldInfo )
     SCCOL nCurX = GetViewData().GetCurX();
     SCROW nCurY = GetViewData().GetCurY();
     SCTAB nTab = GetViewData().GetTabNo();
-    ScDocument* pDoc = GetViewData().GetDocument();
+    ScDocument& rDoc = GetViewData().GetDocument();
 
-    ScDPObject* pDPObj = pDoc->GetDPAtCursor( nCurX, nCurY, nTab );
+    ScDPObject* pDPObj = rDoc.GetDPAtCursor( nCurX, nCurY, nTab );
     if ( pDPObj )
     {
         ScDPUniqueStringSet aEntries;
@@ -964,15 +964,15 @@ bool ScDBFunc::HasSelectionForNumGroup( ScDPNumGroupInfo& rOldInfo )
                 if ( (GetViewData().GetSimpleArea( aSelRange ) == SC_MARK_SIMPLE) &&
                         aSelRange.aStart == aSelRange.aEnd )
                 {
-                    if ( pDoc->HasValueData( aSelRange.aStart.Col(), aSelRange.aStart.Row(),
+                    if ( rDoc.HasValueData( aSelRange.aStart.Col(), aSelRange.aStart.Row(),
                                              aSelRange.aStart.Tab() ) )
                     {
                         bFound = true;
                         // use currently selected value for automatic limits
                         if( rOldInfo.mbAutoStart )
-                            rOldInfo.mfStart = pDoc->GetValue( aSelRange.aStart );
+                            rOldInfo.mfStart = rDoc.GetValue( aSelRange.aStart );
                         if( rOldInfo.mbAutoEnd )
-                            rOldInfo.mfEnd = pDoc->GetValue( aSelRange.aStart );
+                            rOldInfo.mfEnd = rDoc.GetValue( aSelRange.aStart );
                     }
                 }
             }
@@ -984,7 +984,7 @@ bool ScDBFunc::HasSelectionForNumGroup( ScDPNumGroupInfo& rOldInfo )
 
 void ScDBFunc::DateGroupDataPilot( const ScDPNumGroupInfo& rInfo, sal_Int32 nParts )
 {
-    ScDPObject* pDPObj = GetViewData().GetDocument()->GetDPAtCursor( GetViewData().GetCurX(),
+    ScDPObject* pDPObj = GetViewData().GetDocument().GetDPAtCursor( GetViewData().GetCurX(),
                                         GetViewData().GetCurY(), GetViewData().GetTabNo() );
     if (!pDPObj)
         return;
@@ -1082,7 +1082,7 @@ void ScDBFunc::DateGroupDataPilot( const ScDPNumGroupInfo& rInfo, sal_Int32 nPar
 
 void ScDBFunc::NumGroupDataPilot( const ScDPNumGroupInfo& rInfo )
 {
-    ScDPObject* pDPObj = GetViewData().GetDocument()->GetDPAtCursor( GetViewData().GetCurX(),
+    ScDPObject* pDPObj = GetViewData().GetDocument().GetDPAtCursor( GetViewData().GetCurX(),
                                         GetViewData().GetCurY(), GetViewData().GetTabNo() );
     if (!pDPObj)
         return;
@@ -1124,7 +1124,7 @@ void ScDBFunc::NumGroupDataPilot( const ScDPNumGroupInfo& rInfo )
 
 void ScDBFunc::GroupDataPilot()
 {
-    ScDPObject* pDPObj = GetViewData().GetDocument()->GetDPAtCursor( GetViewData().GetCurX(),
+    ScDPObject* pDPObj = GetViewData().GetDocument().GetDPAtCursor( GetViewData().GetCurX(),
                                         GetViewData().GetCurY(), GetViewData().GetTabNo() );
     if (!pDPObj)
         return;
@@ -1259,7 +1259,7 @@ void ScDBFunc::GroupDataPilot()
 
 void ScDBFunc::UngroupDataPilot()
 {
-    ScDPObject* pDPObj = GetViewData().GetDocument()->GetDPAtCursor( GetViewData().GetCurX(),
+    ScDPObject* pDPObj = GetViewData().GetDocument().GetDPAtCursor( GetViewData().GetCurX(),
                                         GetViewData().GetCurY(), GetViewData().GetTabNo() );
     if (!pDPObj)
         return;
@@ -1381,12 +1381,12 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const OUString& rString )
 {
     using namespace ::com::sun::star::sheet;
 
-    ScDocument* pDoc = GetViewData().GetDocument();
-    ScDPObject* pDPObj = pDoc->GetDPAtCursor( rPos.Col(), rPos.Row(), rPos.Tab() );
+    ScDocument& rDoc = GetViewData().GetDocument();
+    ScDPObject* pDPObj = rDoc.GetDPAtCursor( rPos.Col(), rPos.Row(), rPos.Tab() );
     if (!pDPObj)
         return;
 
-    OUString aOldText = pDoc->GetString(rPos.Col(), rPos.Row(), rPos.Tab());
+    OUString aOldText = rDoc.GetString(rPos.Col(), rPos.Row(), rPos.Tab());
 
     if ( aOldText == rString )
     {
@@ -1641,7 +1641,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const OUString& rString )
         pDPObj->SetSaveData( aData );
         if (bNeedReloadGroups)
         {
-            ScDPCollection* pDPs = pDoc->GetDPCollection();
+            ScDPCollection* pDPs = rDoc.GetDPCollection();
             if (pDPs)
             {
                 std::set<ScDPObject*> aRefs;
@@ -1817,9 +1817,9 @@ void ScDBFunc::DataPilotSort(ScDPObject* pDPObj, long nDimIndex, bool bAscending
 bool ScDBFunc::DataPilotMove( const ScRange& rSource, const ScAddress& rDest )
 {
     bool bRet = false;
-    ScDocument* pDoc = GetViewData().GetDocument();
-    ScDPObject* pDPObj = pDoc->GetDPAtCursor( rSource.aStart.Col(), rSource.aStart.Row(), rSource.aStart.Tab() );
-    if ( pDPObj && pDPObj == pDoc->GetDPAtCursor( rDest.Col(), rDest.Row(), rDest.Tab() ) )
+    ScDocument& rDoc = GetViewData().GetDocument();
+    ScDPObject* pDPObj = rDoc.GetDPAtCursor( rSource.aStart.Col(), rSource.aStart.Row(), rSource.aStart.Tab() );
+    if ( pDPObj && pDPObj == rDoc.GetDPAtCursor( rDest.Col(), rDest.Row(), rDest.Tab() ) )
     {
         sheet::DataPilotTableHeaderData aDestData;
         pDPObj->GetHeaderPositionData( rDest, aDestData );
@@ -1908,7 +1908,7 @@ bool ScDBFunc::HasSelectionForDrillDown( css::sheet::DataPilotFieldOrientation& 
 {
     bool bRet = false;
 
-    ScDPObject* pDPObj = GetViewData().GetDocument()->GetDPAtCursor( GetViewData().GetCurX(),
+    ScDPObject* pDPObj = GetViewData().GetDocument().GetDPAtCursor( GetViewData().GetCurX(),
                                         GetViewData().GetCurY(), GetViewData().GetTabNo() );
     if ( pDPObj )
     {
@@ -1943,7 +1943,7 @@ bool ScDBFunc::HasSelectionForDrillDown( css::sheet::DataPilotFieldOrientation& 
 
 void ScDBFunc::SetDataPilotDetails(bool bShow, const OUString* pNewDimensionName)
 {
-    ScDPObject* pDPObj = GetViewData().GetDocument()->GetDPAtCursor( GetViewData().GetCurX(),
+    ScDPObject* pDPObj = GetViewData().GetDocument().GetDPAtCursor( GetViewData().GetCurX(),
                                         GetViewData().GetCurY(), GetViewData().GetTabNo() );
     if ( !pDPObj )
         return;
@@ -2029,8 +2029,8 @@ void ScDBFunc::SetDataPilotDetails(bool bShow, const OUString* pNewDimensionName
 
 void ScDBFunc::ShowDataPilotSourceData( ScDPObject& rDPObj, const Sequence<sheet::DataPilotFieldFilter>& rFilters )
 {
-    ScDocument* pDoc = GetViewData().GetDocument();
-    if (pDoc->GetDocumentShell()->IsReadOnly())
+    ScDocument& rDoc = GetViewData().GetDocument();
+    if (rDoc.GetDocumentShell()->IsReadOnly())
     {
         ErrorMessage(STR_READONLYERR);
         return;
@@ -2053,7 +2053,7 @@ void ScDBFunc::ShowDataPilotSourceData( ScDPObject& rDPObj, const Sequence<sheet
     SCTAB nNewTab = GetViewData().GetTabNo();
 
     ScDocumentUniquePtr pInsDoc(new ScDocument(SCDOCMODE_CLIP));
-    pInsDoc->ResetClip( pDoc, nNewTab );
+    pInsDoc->ResetClip( &rDoc, nNewTab );
     for (SCROW nRow = 0; nRow < nRowSize; ++nRow)
     {
         for (SCCOL nCol = 0; nCol < nColSize; ++nCol)
@@ -2101,7 +2101,7 @@ void ScDBFunc::ShowDataPilotSourceData( ScDPObject& rDPObj, const Sequence<sheet
     pMgr->EnterListAction( aUndo, aUndo, 0, GetViewData().GetViewShell()->GetViewShellId() );
 
     OUString aNewTabName;
-    pDoc->CreateValidTabName(aNewTabName);
+    rDoc.CreateValidTabName(aNewTabName);
     if ( InsertTable(aNewTabName, nNewTab) )
         PasteFromClip( InsertDeleteFlags::ALL, pInsDoc.get() );
 
@@ -2115,9 +2115,9 @@ void ScDBFunc::RepeatDB( bool bRecord )
     SCCOL nCurX = GetViewData().GetCurX();
     SCROW nCurY = GetViewData().GetCurY();
     SCTAB nTab = GetViewData().GetTabNo();
-    ScDocument* pDoc = GetViewData().GetDocument();
+    ScDocument& rDoc = GetViewData().GetDocument();
     ScDBData* pDBData = GetDBData();
-    if (bRecord && !pDoc->IsUndoEnabled())
+    if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
 
     ScQueryParam aQueryParam;
@@ -2139,8 +2139,8 @@ void ScDBFunc::RepeatDB( bool bRecord )
         ScRange aNewQuery;
         if (bQuery && !aQueryParam.bInplace)
         {
-            ScDBData* pDest = pDoc->GetDBAtCursor( aQueryParam.nDestCol, aQueryParam.nDestRow,
-                                                    aQueryParam.nDestTab, ScDBDataPortion::TOP_LEFT );
+            ScDBData* pDest = rDoc.GetDBAtCursor( aQueryParam.nDestCol, aQueryParam.nDestRow,
+                                                  aQueryParam.nDestTab, ScDBDataPortion::TOP_LEFT );
             if (pDest && pDest->IsDoSize())
             {
                 pDest->GetArea( aOldQuery );
@@ -2164,9 +2164,9 @@ void ScDBFunc::RepeatDB( bool bRecord )
 
         if (bRecord)
         {
-            SCTAB nTabCount = pDoc->GetTableCount();
+            SCTAB nTabCount = rDoc.GetTableCount();
             pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
-            ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
+            ScOutlineTable* pTable = rDoc.GetOutlineTable( nTab );
             if (pTable)
             {
                 pUndoTab.reset(new ScOutlineTable( *pTable ));
@@ -2178,24 +2178,24 @@ void ScDBFunc::RepeatDB( bool bRecord )
                 pTable->GetColArray().GetRange( nOutStartCol, nOutEndCol );
                 pTable->GetRowArray().GetRange( nOutStartRow, nOutEndRow );
 
-                pUndoDoc->InitUndo( pDoc, nTab, nTab, true, true );
-                pDoc->CopyToDocument( static_cast<SCCOL>(nOutStartCol), 0, nTab, static_cast<SCCOL>(nOutEndCol), pDoc->MaxRow(), nTab, InsertDeleteFlags::NONE, false, *pUndoDoc );
-                pDoc->CopyToDocument( 0, nOutStartRow, nTab, pDoc->MaxCol(), nOutEndRow, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc );
+                pUndoDoc->InitUndo( &rDoc, nTab, nTab, true, true );
+                rDoc.CopyToDocument( static_cast<SCCOL>(nOutStartCol), 0, nTab, static_cast<SCCOL>(nOutEndCol), rDoc.MaxRow(), nTab, InsertDeleteFlags::NONE, false, *pUndoDoc );
+                rDoc.CopyToDocument( 0, nOutStartRow, nTab, rDoc.MaxCol(), nOutEndRow, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc );
             }
             else
-                pUndoDoc->InitUndo( pDoc, nTab, nTab, false, true );
+                pUndoDoc->InitUndo( &rDoc, nTab, nTab, false, true );
 
             // Record data range - including filter results
-            pDoc->CopyToDocument( 0,nStartRow,nTab, pDoc->MaxCol(),nEndRow,nTab, InsertDeleteFlags::ALL, false, *pUndoDoc );
+            rDoc.CopyToDocument( 0,nStartRow,nTab, rDoc.MaxCol(),nEndRow,nTab, InsertDeleteFlags::ALL, false, *pUndoDoc );
 
             // all formulas for reference
-            pDoc->CopyToDocument( 0,0,0, pDoc->MaxCol(),pDoc->MaxRow(),nTabCount-1, InsertDeleteFlags::FORMULA, false, *pUndoDoc );
+            rDoc.CopyToDocument( 0,0,0, rDoc.MaxCol(),rDoc.MaxRow(),nTabCount-1, InsertDeleteFlags::FORMULA, false, *pUndoDoc );
 
             // data base and other ranges
-            ScRangeName* pDocRange = pDoc->GetRangeName();
+            ScRangeName* pDocRange = rDoc.GetRangeName();
             if (!pDocRange->empty())
                 pUndoRange.reset(new ScRangeName( *pDocRange ));
-            ScDBCollection* pDocDB = pDoc->GetDBCollection();
+            ScDBCollection* pDocDB = rDoc.GetDBCollection();
             if (!pDocDB->empty())
                 pUndoDB.reset(new ScDBCollection( *pDocDB ));
         }
@@ -2219,7 +2219,7 @@ void ScDBFunc::RepeatDB( bool bRecord )
             ScRange aAdvSource;
             if (pDBData->GetAdvancedQuerySource(aAdvSource))
             {
-                pDoc->CreateQueryParam(aAdvSource, aQueryParam);
+                rDoc.CreateQueryParam(aAdvSource, aQueryParam);
                 Query( aQueryParam, &aAdvSource, false );
             }
             else
@@ -2247,8 +2247,8 @@ void ScDBFunc::RepeatDB( bool bRecord )
             const ScRange* pNew = nullptr;
             if (bQuerySize)
             {
-                ScDBData* pDest = pDoc->GetDBAtCursor( aQueryParam.nDestCol, aQueryParam.nDestRow,
-                                                        aQueryParam.nDestTab, ScDBDataPortion::TOP_LEFT );
+                ScDBData* pDest = rDoc.GetDBAtCursor( aQueryParam.nDestCol, aQueryParam.nDestRow,
+                                                      aQueryParam.nDestTab, ScDBDataPortion::TOP_LEFT );
                 if (pDest)
                 {
                     pDest->GetArea( aNewQuery );
@@ -2268,7 +2268,7 @@ void ScDBFunc::RepeatDB( bool bRecord )
         }
 
         GetViewData().GetDocShell()->PostPaint(
-            ScRange(0, 0, nTab, pDoc->MaxCol(), pDoc->MaxRow(), nTab),
+            ScRange(0, 0, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab),
             PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top | PaintPartFlags::Size);
     }
     else        // "no not execute any operations"

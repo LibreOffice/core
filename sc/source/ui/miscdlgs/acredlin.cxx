@@ -74,7 +74,7 @@ ScAcceptChgDlg::ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Windo
     , aSelectionIdle("ScAcceptChgDlg SelectionIdle")
     , aReOpenIdle("ScAcceptChgDlg ReOpenIdle")
     , pViewData( ptrViewData )
-    , pDoc( ptrViewData->GetDocument() )
+    , pDoc( &ptrViewData->GetDocument() )
     , aStrInsertCols(ScResId(STR_CHG_INSERT_COLS))
     , aStrInsertRows(ScResId(STR_CHG_INSERT_ROWS))
     , aStrInsertTabs(ScResId(STR_CHG_INSERT_TABS))
@@ -159,9 +159,9 @@ void ScAcceptChgDlg::ReInit(ScViewData* ptrViewData)
 {
     pViewData=ptrViewData;
     if (pViewData)
-        pDoc=ptrViewData->GetDocument();
+        pDoc = &ptrViewData->GetDocument();
     else
-        pDoc=nullptr;
+        pDoc = nullptr;
 
     bNoSelection=false;
     bIgnoreMsg=false;

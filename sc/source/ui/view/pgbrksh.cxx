@@ -42,7 +42,7 @@ ScPageBreakShell::ScPageBreakShell( ScTabViewShell* pViewSh ) :
     ScViewData& rViewData = pViewSh->GetViewData();
     SfxUndoManager* pMgr = rViewData.GetSfxDocShell()->GetUndoManager();
     SetUndoManager( pMgr );
-    if ( !rViewData.GetDocument()->IsUndoEnabled() )
+    if ( !rViewData.GetDocument().IsUndoEnabled() )
     {
         pMgr->SetMaxUndoActionCount( 0 );
     }

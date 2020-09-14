@@ -54,7 +54,7 @@ ScPivotShell::ScPivotShell( ScTabViewShell* pViewSh ) :
     ScViewData& rViewData = pViewSh->GetViewData();
     SfxUndoManager* pMgr = rViewData.GetSfxDocShell()->GetUndoManager();
     SetUndoManager( pMgr );
-    if ( !rViewData.GetDocument()->IsUndoEnabled() )
+    if ( !rViewData.GetDocument().IsUndoEnabled() )
     {
         pMgr->SetMaxUndoActionCount( 0 );
     }
@@ -105,7 +105,7 @@ void ScPivotShell::Execute( const SfxRequest& rReq )
 
                 if( pDlg->Execute() == RET_OK )
                 {
-                    ScSheetSourceDesc aNewDesc(rViewData.GetDocument());
+                    ScSheetSourceDesc aNewDesc(&rViewData.GetDocument());
                     if( pDesc )
                         aNewDesc = *pDesc;
 
@@ -161,7 +161,7 @@ void ScPivotShell::GetState( SfxItemSet& rSet )
 ScDPObject* ScPivotShell::GetCurrDPObject()
 {
     const ScViewData& rViewData = pViewShell->GetViewData();
-    return rViewData.GetDocument()->GetDPAtCursor(
+    return rViewData.GetDocument().GetDPAtCursor(
         rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo() );
 }
 

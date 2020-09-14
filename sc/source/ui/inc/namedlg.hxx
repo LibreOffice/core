@@ -40,7 +40,7 @@ private:
     OUString maStrInfoDefault;
 
     ScViewData*     mpViewData;
-    ScDocument*     mpDoc;
+    ScDocument&     mrDoc;
     const ScAddress maCursorPos;
 
     bool mbDataChanged;

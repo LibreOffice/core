@@ -55,12 +55,12 @@ OUString ScTabViewShell::GetSelectionText( bool bWholeWord )
 
         if ( GetViewData().GetSimpleArea( aRange ) == SC_MARK_SIMPLE )
         {
-            ScDocument* pDoc = GetViewData().GetDocument();
+            ScDocument& rDoc = GetViewData().GetDocument();
             if ( bInFormatDialog && aRange.aStart.Row() != aRange.aEnd.Row() )
             {
                 // limit range to one data row
                 // (only when  the call comes from a format dialog)
-                ScHorizontalCellIterator aIter( pDoc, aRange.aStart.Tab(),
+                ScHorizontalCellIterator aIter( &rDoc, aRange.aStart.Tab(),
                     aRange.aStart.Col(), aRange.aStart.Row(),
                     aRange.aEnd.Col(), aRange.aEnd.Row() );
                 SCCOL nCol;
@@ -83,7 +83,7 @@ OUString ScTabViewShell::GetSelectionText( bool bWholeWord )
                 SCTAB nTab1, nTab2;
                 aRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
                 bool bShrunk;
-                pDoc->ShrinkToUsedDataArea( bShrunk, nTab1, nCol1, nRow1, nCol2, nRow2, false);
+                rDoc.ShrinkToUsedDataArea( bShrunk, nTab1, nCol1, nRow1, nCol2, nRow2, false);
                 if (bShrunk)
                 {
                     aRange.aStart.SetCol( nCol1 );
@@ -93,7 +93,7 @@ OUString ScTabViewShell::GetSelectionText( bool bWholeWord )
                 }
             }
 
-            ScImportExport aObj( pDoc, aRange );
+            ScImportExport aObj( &rDoc, aRange );
             aObj.SetFormulas( GetViewData().GetOptions().GetOption( VOPT_FORMULAS ) );
             OUString aExportOUString;
             /* TODO: STRING_TSVC under some circumstances? */

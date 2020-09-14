@@ -94,7 +94,7 @@ void ScCornerButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
 
     Window::Paint(rRenderContext, rRect);
 
-    bool bLayoutRTL = pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
+    bool bLayoutRTL = pViewData->GetDocument().IsLayoutRTL( pViewData->GetTabNo() );
     long nDarkX = bLayoutRTL ? 0 : nPosX;
 
     //  both buttons have the same look now - only dark right/bottom lines
@@ -145,7 +145,7 @@ namespace
 
 bool lcl_HasColOutline( const ScViewData& rViewData )
 {
-    const ScOutlineTable* pTable = rViewData.GetDocument()->GetOutlineTable(rViewData.GetTabNo());
+    const ScOutlineTable* pTable = rViewData.GetDocument().GetOutlineTable(rViewData.GetTabNo());
     if (pTable)
     {
         const ScOutlineArray& rArray = pTable->GetColArray();
@@ -157,7 +157,7 @@ bool lcl_HasColOutline( const ScViewData& rViewData )
 
 bool lcl_HasRowOutline( const ScViewData& rViewData )
 {
-    const ScOutlineTable* pTable = rViewData.GetDocument()->GetOutlineTable(rViewData.GetTabNo());
+    const ScOutlineTable* pTable = rViewData.GetDocument().GetOutlineTable(rViewData.GetTabNo());
     if (pTable)
     {
         const ScOutlineArray& rArray = pTable->GetRowArray();
@@ -229,7 +229,7 @@ void ScTabView::InitScrollBar( ScrollBar& rScrollBar, long nMaxVal )
     rScrollBar.SetScrollHdl( LINK(this, ScTabView, ScrollHdl) );
     rScrollBar.SetEndScrollHdl( LINK(this, ScTabView, EndScrollHdl) );
 
-    rScrollBar.EnableRTL( aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() ) );
+    rScrollBar.EnableRTL( aViewData.GetDocument().IsLayoutRTL( aViewData.GetTabNo() ) );
 }
 
 //  Scroll-Timer
@@ -280,7 +280,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
     if (bHasHint)
         RemoveHintWindow();
 
-    bool bLayoutRTL = aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() );
+    bool bLayoutRTL = aViewData.GetDocument().IsLayoutRTL( aViewData.GetTabNo() );
     long nTotalWidth = rSize.Width();
     if ( bLayoutRTL )
         nTotalWidth += 2*rOffset.X();
@@ -796,7 +796,7 @@ void ScTabView::GetBorderSize( SvBorder& rBorder, const Size& /* rSize */ )
     bool bOutlMode   = aViewData.IsOutlineMode();
     bool bHOutline   = bOutlMode && lcl_HasColOutline(aViewData);
     bool bVOutline   = bOutlMode && lcl_HasRowOutline(aViewData);
-    bool bLayoutRTL  = aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() );
+    bool bLayoutRTL  = aViewData.GetDocument().IsLayoutRTL( aViewData.GetTabNo() );
 
     rBorder = SvBorder();
 
@@ -1012,7 +1012,7 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll, void )
         nViewPos = aViewData.GetPosY( (pScroll == aVScrollTop.get()) ?
                                         SC_SPLIT_TOP : SC_SPLIT_BOTTOM );
 
-    bool bLayoutRTL = aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() );
+    bool bLayoutRTL = aViewData.GetDocument().IsLayoutRTL( aViewData.GetTabNo() );
 
     ScrollType eType = pScroll->GetType();
     if ( eType == ScrollType::Drag )
@@ -1146,7 +1146,7 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll, void )
 
 void ScTabView::ScrollX( long nDeltaX, ScHSplitPos eWhich, bool bUpdBars )
 {
-    ScDocument* pDoc = aViewData.GetDocument();
+    ScDocument& rDoc = aViewData.GetDocument();
     SCCOL nOldX = aViewData.GetPosX(eWhich);
     SCCOL nNewX = nOldX + static_cast<SCCOL>(nDeltaX);
     if ( nNewX < 0 )
@@ -1154,16 +1154,16 @@ void ScTabView::ScrollX( long nDeltaX, ScHSplitPos eWhich, bool bUpdBars )
         nDeltaX -= nNewX;
         nNewX = 0;
     }
-    if ( nNewX > pDoc->MaxCol() )
+    if ( nNewX > rDoc.MaxCol() )
     {
-        nDeltaX -= nNewX - pDoc->MaxCol();
-        nNewX = pDoc->MaxCol();
+        nDeltaX -= nNewX - rDoc.MaxCol();
+        nNewX = rDoc.MaxCol();
     }
 
     SCCOL nDir = ( nDeltaX > 0 ) ? 1 : -1;
     SCTAB nTab = aViewData.GetTabNo();
-    while ( pDoc->ColHidden(nNewX, nTab) &&
-            nNewX+nDir >= 0 && nNewX+nDir <= pDoc->MaxCol() )
+    while ( rDoc.ColHidden(nNewX, nTab) &&
+            nNewX+nDir >= 0 && nNewX+nDir <= rDoc.MaxCol() )
         nNewX = sal::static_int_cast<SCCOL>( nNewX + nDir );
 
     // freeze
@@ -1184,7 +1184,7 @@ void ScTabView::ScrollX( long nDeltaX, ScHSplitPos eWhich, bool bUpdBars )
 
     HideAllCursors();
 
-    if ( nNewX >= 0 && nNewX <= pDoc->MaxCol() && nDeltaX )
+    if ( nNewX >= 0 && nNewX <= rDoc.MaxCol() && nDeltaX )
     {
         SCCOL nTrackX = std::max( nOldX, nNewX );
 
@@ -1229,7 +1229,7 @@ void ScTabView::ScrollX( long nDeltaX, ScHSplitPos eWhich, bool bUpdBars )
 
 void ScTabView::ScrollY( long nDeltaY, ScVSplitPos eWhich, bool bUpdBars )
 {
-    ScDocument* pDoc = aViewData.GetDocument();
+    ScDocument& rDoc = aViewData.GetDocument();
     SCROW nOldY = aViewData.GetPosY(eWhich);
     SCROW nNewY = nOldY + static_cast<SCROW>(nDeltaY);
     if ( nNewY < 0 )
@@ -1237,16 +1237,16 @@ void ScTabView::ScrollY( long nDeltaY, ScVSplitPos eWhich, bool bUpdBars )
         nDeltaY -= nNewY;
         nNewY = 0;
     }
-    if ( nNewY > pDoc->MaxRow() )
+    if ( nNewY > rDoc.MaxRow() )
     {
-        nDeltaY -= nNewY - pDoc->MaxRow();
-        nNewY = pDoc->MaxRow();
+        nDeltaY -= nNewY - rDoc.MaxRow();
+        nNewY = rDoc.MaxRow();
     }
 
     SCROW nDir = ( nDeltaY > 0 ) ? 1 : -1;
     SCTAB nTab = aViewData.GetTabNo();
-    while ( pDoc->RowHidden(nNewY, nTab) &&
-            nNewY+nDir >= 0 && nNewY+nDir <= pDoc->MaxRow() )
+    while ( rDoc.RowHidden(nNewY, nTab) &&
+            nNewY+nDir >= 0 && nNewY+nDir <= rDoc.MaxRow() )
         nNewY += nDir;
 
     // freeze
@@ -1267,7 +1267,7 @@ void ScTabView::ScrollY( long nDeltaY, ScVSplitPos eWhich, bool bUpdBars )
 
     HideAllCursors();
 
-    if ( nNewY >= 0 && nNewY <= pDoc->MaxRow() && nDeltaY )
+    if ( nNewY >= 0 && nNewY <= rDoc.MaxRow() && nDeltaY )
     {
         SCROW nTrackY = std::max( nOldY, nNewY );
 
@@ -1328,11 +1328,11 @@ SCROW lcl_LastVisible( const ScViewData& rViewData )
     // If many rows are hidden at end of the document (what kind of idiot does that?),
     // then there should not be a switch to wide row headers because of this
     //! as a member to the document???
-    ScDocument* pDoc = rViewData.GetDocument();
+    ScDocument& rDoc = rViewData.GetDocument();
     SCTAB nTab = rViewData.GetTabNo();
 
-    SCROW nVis = pDoc->MaxRow();
-    while ( nVis > 0 && pDoc->GetRowHeight( nVis, nTab ) == 0 )
+    SCROW nVis = rDoc.MaxRow();
+    while ( nVis > 0 && rDoc.GetRowHeight( nVis, nTab ) == 0 )
         --nVis;
     return nVis;
 }
@@ -1344,8 +1344,8 @@ void ScTabView::UpdateHeaderWidth( const ScVSplitPos* pWhich, const SCROW* pPosY
     if (!pRowBar[SC_SPLIT_BOTTOM])
         return;
 
-    ScDocument* pDoc = aViewData.GetDocument();
-    SCROW nEndPos = pDoc->MaxRow();
+    ScDocument& rDoc = aViewData.GetDocument();
+    SCROW nEndPos = rDoc.MaxRow();
     if ( !aViewData.GetViewShell()->GetViewFrame()->GetFrame().IsInPlace() )
     {
         //  for OLE Inplace always MAXROW
@@ -1355,7 +1355,7 @@ void ScTabView::UpdateHeaderWidth( const ScVSplitPos* pWhich, const SCROW* pPosY
         else
             nEndPos = aViewData.GetPosY( SC_SPLIT_BOTTOM );
         nEndPos += aViewData.CellsAtY( nEndPos, 1, SC_SPLIT_BOTTOM ); // VisibleCellsY
-        if (nEndPos > pDoc->MaxRow())
+        if (nEndPos > rDoc.MaxRow())
             nEndPos = lcl_LastVisible( aViewData );
 
         if ( aViewData.GetVSplitMode() != SC_SPLIT_NONE )
@@ -1366,7 +1366,7 @@ void ScTabView::UpdateHeaderWidth( const ScVSplitPos* pWhich, const SCROW* pPosY
             else
                 nTopEnd = aViewData.GetPosY( SC_SPLIT_TOP );
             nTopEnd += aViewData.CellsAtY( nTopEnd, 1, SC_SPLIT_TOP );// VisibleCellsY
-            if (nTopEnd > pDoc->MaxRow())
+            if (nTopEnd > rDoc.MaxRow())
                 nTopEnd = lcl_LastVisible( aViewData );
 
             if ( nTopEnd > nEndPos )
@@ -1524,7 +1524,7 @@ void ScTabView::DoHSplit(long nSplitPos)
     //  nSplitPos is the real pixel position on the frame window,
     //  mirroring for RTL has to be done here.
 
-    bool bLayoutRTL = aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() );
+    bool bLayoutRTL = aViewData.GetDocument().IsLayoutRTL( aViewData.GetTabNo() );
     if ( bLayoutRTL )
         nSplitPos = pFrameWin->GetOutputSizePixel().Width() - nSplitPos - 1;
 
@@ -1566,9 +1566,9 @@ void ScTabView::DoHSplit(long nSplitPos)
         if ( nLeftWidth < 0 ) nLeftWidth = 0;
         nNewDelta = nOldDelta + aViewData.CellsAtX( nOldDelta, 1, SC_SPLIT_LEFT,
                         static_cast<sal_uInt16>(nLeftWidth) );
-        ScDocument* pDoc = aViewData.GetDocument();
-        if ( nNewDelta > pDoc->MaxCol() )
-            nNewDelta = pDoc->MaxCol();
+        ScDocument& rDoc = aViewData.GetDocument();
+        if ( nNewDelta > rDoc.MaxCol() )
+            nNewDelta = rDoc.MaxCol();
         aViewData.SetPosX( SC_SPLIT_RIGHT, nNewDelta );
         if ( nNewDelta > aViewData.GetCurX() )
             ActivatePart( (WhichV(aViewData.GetActivePart()) == SC_SPLIT_BOTTOM) ?
@@ -1639,9 +1639,9 @@ void ScTabView::DoVSplit(long nSplitPos)
         if ( nTopHeight < 0 ) nTopHeight = 0;
         nNewDelta = nOldDelta + aViewData.CellsAtY( nOldDelta, 1, SC_SPLIT_TOP,
                         static_cast<sal_uInt16>(nTopHeight) );
-        ScDocument* pDoc = aViewData.GetDocument();
-        if ( nNewDelta > pDoc->MaxRow() )
-            nNewDelta = pDoc->MaxRow();
+        ScDocument& rDoc = aViewData.GetDocument();
+        if ( nNewDelta > rDoc.MaxRow() )
+            nNewDelta = rDoc.MaxRow();
         aViewData.SetPosY( SC_SPLIT_BOTTOM, nNewDelta );
         if ( nNewDelta > aViewData.GetCurY() )
             ActivatePart( (WhichH(aViewData.GetActivePart()) == SC_SPLIT_LEFT) ?
@@ -1666,17 +1666,17 @@ void ScTabView::DoVSplit(long nSplitPos)
 
 Point ScTabView::GetInsertPos() const
 {
-    ScDocument* pDoc = aViewData.GetDocument();
+    ScDocument& rDoc = aViewData.GetDocument();
     SCCOL nCol = aViewData.GetCurX();
     SCROW nRow = aViewData.GetCurY();
     SCTAB nTab = aViewData.GetTabNo();
     long nPosX = 0;
     for (SCCOL i=0; i<nCol; i++)
-        nPosX += pDoc->GetColWidth(i,nTab);
+        nPosX += rDoc.GetColWidth(i,nTab);
     nPosX = static_cast<long>(nPosX * HMM_PER_TWIPS);
-    if ( pDoc->IsNegativePage( nTab ) )
+    if ( rDoc.IsNegativePage( nTab ) )
         nPosX = -nPosX;
-    long nPosY = static_cast<long>(pDoc->GetRowHeight( 0, nRow-1, nTab));
+    long nPosY = static_cast<long>(rDoc.GetRowHeight( 0, nRow-1, nTab));
     nPosY = static_cast<long>(nPosY * HMM_PER_TWIPS);
     return Point(nPosX,nPosY);
 }
@@ -1706,13 +1706,13 @@ Point ScTabView::GetChartInsertPos( const Size& rSize, const ScRange& rCellRange
         MapMode aDrawMode = pWin->GetDrawMapMode();
         tools::Rectangle aVisible( pWin->PixelToLogic( tools::Rectangle( Point(0,0), pWin->GetOutputSizePixel() ), aDrawMode ) );
 
-        ScDocument* pDoc = aViewData.GetDocument();
+        ScDocument& rDoc = aViewData.GetDocument();
         SCTAB nTab = aViewData.GetTabNo();
-        bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+        bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
         long nLayoutSign = bLayoutRTL ? -1 : 1;
 
-        long nDocX = static_cast<long>( static_cast<double>(pDoc->GetColOffset( pDoc->MaxCol() + 1, nTab )) * HMM_PER_TWIPS ) * nLayoutSign;
-        long nDocY = static_cast<long>( static_cast<double>(pDoc->GetRowOffset( pDoc->MaxRow() + 1, nTab )) * HMM_PER_TWIPS );
+        long nDocX = static_cast<long>( static_cast<double>(rDoc.GetColOffset( rDoc.MaxCol() + 1, nTab )) * HMM_PER_TWIPS ) * nLayoutSign;
+        long nDocY = static_cast<long>( static_cast<double>(rDoc.GetRowOffset( rDoc.MaxRow() + 1, nTab )) * HMM_PER_TWIPS );
 
         if ( aVisible.Left() * nLayoutSign > nDocX * nLayoutSign )
             aVisible.SetLeft( nDocX );
@@ -1725,7 +1725,7 @@ Point ScTabView::GetChartInsertPos( const Size& rSize, const ScRange& rCellRange
 
         //  get the logic position of the selection
 
-        tools::Rectangle aSelection = pDoc->GetMMRect( rCellRange.aStart.Col(), rCellRange.aStart.Row(),
+        tools::Rectangle aSelection = rDoc.GetMMRect( rCellRange.aStart.Col(), rCellRange.aStart.Row(),
                                                 rCellRange.aEnd.Col(), rCellRange.aEnd.Row(), nTab );
 
         long nLeftSpace = aSelection.Left() - aVisible.Left();
@@ -1824,9 +1824,9 @@ Point ScTabView::GetChartDialogPos( const Size& rDialogSize, const tools::Rectan
         tools::Rectangle aDesktop = pWin->GetDesktopRectPixel();
         Size aSpace = pWin->LogicToPixel( Size(8, 12), MapMode(MapUnit::MapAppFont));
 
-        ScDocument* pDoc = aViewData.GetDocument();
+        ScDocument& rDoc = aViewData.GetDocument();
         SCTAB nTab = aViewData.GetTabNo();
-        bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+        bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
 
         bool bCenterHor = false;
 
@@ -1920,7 +1920,7 @@ void ScTabView::FreezeSplitters( bool bFreeze, SplitMethod eSplitMethod, SCCOLRO
         ePos = SC_SPLIT_TOPLEFT;
     vcl::Window* pWin = pGridWin[ePos];
 
-    bool bLayoutRTL = aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() );
+    bool bLayoutRTL = aViewData.GetDocument().IsLayoutRTL( aViewData.GetTabNo() );
 
     if ( bFreeze )
     {
@@ -2204,7 +2204,7 @@ void ScTabView::StartDataSelect()
     // Do autofilter if the current cell has autofilter button.  Otherwise do
     // a normal data select popup.
     const ScMergeFlagAttr* pAttr =
-        aViewData.GetDocument()->GetAttr(
+        aViewData.GetDocument().GetAttr(
             nCol, nRow, aViewData.GetTabNo(), ATTR_MERGE_FLAG);
 
     if (pAttr->HasAutoFilter())
@@ -2289,13 +2289,13 @@ namespace
 
 long lcl_GetRowHeightPx(const ScViewData &rViewData, SCROW nRow, SCTAB nTab)
 {
-    const sal_uInt16 nSize = rViewData.GetDocument()->GetRowHeight(nRow, nTab);
+    const sal_uInt16 nSize = rViewData.GetDocument().GetRowHeight(nRow, nTab);
     return ScViewData::ToPixel(nSize, rViewData.GetPPTY());
 }
 
 long lcl_GetColWidthPx(const ScViewData &rViewData, SCCOL nCol, SCTAB nTab)
 {
-    const sal_uInt16 nSize = rViewData.GetDocument()->GetColWidth(nCol, nTab);
+    const sal_uInt16 nSize = rViewData.GetDocument().GetColWidth(nCol, nTab);
     return ScViewData::ToPixel(nSize, rViewData.GetPPTX());
 }
 
@@ -2536,11 +2536,11 @@ private:
 void lcl_ExtendTiledDimension(bool bColumn, const SCCOLROW nEnd, const SCCOLROW nExtra,
                               ScTabView& rTabView, ScViewData& rViewData)
 {
-    ScDocument* pDoc = rViewData.GetDocument();
+    ScDocument& rDoc = rViewData.GetDocument();
     // If we are approaching current max tiled row/col, signal a size changed event
     // and invalidate the involved area
     SCCOLROW nMaxTiledIndex = bColumn ? rViewData.GetMaxTiledCol() : rViewData.GetMaxTiledRow();
-    SCCOLROW nHardLimit = !bColumn ? MAXTILEDROW : pDoc ? pDoc->MaxCol() : MAXCOL;
+    SCCOLROW nHardLimit = !bColumn ? MAXTILEDROW : rDoc.MaxCol();
 
     if (nMaxTiledIndex >= nHardLimit)
         return;
@@ -2598,9 +2598,7 @@ void lcl_ExtendTiledDimension(bool bColumn, const SCCOLROW nEnd, const SCCOLROW 
 
 void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::JsonWriter& rJsonWriter)
 {
-    ScDocument* pDoc = aViewData.GetDocument();
-    if (!pDoc)
-        return;
+    ScDocument& rDoc = aViewData.GetDocument();
 
     if (rRectangle.IsEmpty())
         return;
@@ -2656,7 +2654,7 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
     // per each level store the index of the first group intersecting
     // [nStartRow, nEndRow] range
 
-    const ScOutlineTable* pTable = pDoc->GetOutlineTable(nTab);
+    const ScOutlineTable* pTable = rDoc.GetOutlineTable(nTab);
     const ScOutlineArray* pRowArray = pTable ? &(pTable->GetRowArray()) : nullptr;
     size_t nRowGroupDepth = 0;
     std::vector<size_t> aRowGroupIndexes;
@@ -2842,9 +2840,7 @@ OString ScTabView::getSheetGeometryData(bool bColumns, bool bRows, bool bSizes, 
         return aStream.str();
     };
 
-    ScDocument* pDoc = aViewData.GetDocument();
-    if (!pDoc)
-        return getJSONString(aTree).c_str();
+    ScDocument& rDoc = aViewData.GetDocument();
 
     if ((!bSizes && !bHidden && !bFiltered && !bGroups) ||
         (!bColumns && !bRows))
@@ -2893,7 +2889,7 @@ OString ScTabView::getSheetGeometryData(bool bColumns, bool bRows, bool bSizes, 
             if (!rGeomEntry.bEnabled)
                 continue;
 
-            OString aGeomDataEncoding = pDoc->dumpSheetGeomData(nTab, bDimIsCol, rGeomEntry.eType);
+            OString aGeomDataEncoding = rDoc.dumpSheetGeomData(nTab, bDimIsCol, rGeomEntry.eType);
             // TODO: Investigate if we can avoid the copy of the 'value' string in put().
             aDimTree.put(rGeomEntry.pKey, aGeomDataEncoding.getStr());
         }

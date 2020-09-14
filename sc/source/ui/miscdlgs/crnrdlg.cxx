@@ -61,7 +61,7 @@ ScColRowNameRangesDlg::ScColRowNameRangesDlg( SfxBindings* pB,
 
     : ScAnyRefDlgController(pB, pCW, pParent, "modules/scalc/ui/namerangesdialog.ui", "NameRangesDialog")
     , pViewData(ptrViewData)
-    , pDoc(ptrViewData->GetDocument())
+    , rDoc(ptrViewData->GetDocument())
     , bDlgLostFocus(false)
     , m_pEdActive(nullptr)
     , m_xLbRange(m_xBuilder->weld_tree_view("range"))
@@ -84,8 +84,8 @@ ScColRowNameRangesDlg::ScColRowNameRangesDlg( SfxBindings* pB,
     m_xRbAssign2->SetReferences(this, m_xEdAssign2.get());
     m_xEdAssign2->SetReferences(this, m_xDataFT.get());
 
-    xColNameRanges = pDoc->GetColNameRanges()->Clone();
-    xRowNameRanges = pDoc->GetRowNameRanges()->Clone();
+    xColNameRanges = rDoc.GetColNameRanges()->Clone();
+    xRowNameRanges = rDoc.GetRowNameRanges()->Clone();
     Init();
 }
 
@@ -165,11 +165,11 @@ void ScColRowNameRangesDlg::SetColRowData( const ScRange& rLabelRange, bool bRef
     SCCOL nCol2 = theCurArea.aEnd.Col();
     SCROW nRow1 = theCurArea.aStart.Row();
     SCROW nRow2 = theCurArea.aEnd.Row();
-    if ( (static_cast<SCCOLROW>(nCol2 - nCol1) >= nRow2 - nRow1) || (nCol1 == 0 && nCol2 == pDoc->MaxCol()) )
+    if ( (static_cast<SCCOLROW>(nCol2 - nCol1) >= nRow2 - nRow1) || (nCol1 == 0 && nCol2 == rDoc.MaxCol()) )
     {   // Column headers and the limiting case of the whole sheet
         m_xBtnColHead->set_active(true);
         m_xBtnRowHead->set_active(false);
-        if ( nRow2 == pDoc->MaxRow()  )
+        if ( nRow2 == rDoc.MaxRow()  )
         {
             if ( nRow1 == 0 )
                 bValid = false;     // limiting case of the whole sheet
@@ -182,14 +182,14 @@ void ScColRowNameRangesDlg::SetColRowData( const ScRange& rLabelRange, bool bRef
         else
         {   // Header at top, data below
             theCurData.aStart.SetRow( nRow2 + 1 );
-            theCurData.aEnd.SetRow( pDoc->MaxRow() );
+            theCurData.aEnd.SetRow( rDoc.MaxRow() );
         }
     }
     else
     {   // Column headers
         m_xBtnRowHead->set_active(true);
         m_xBtnColHead->set_active(false);
-        if ( nCol2 == pDoc->MaxCol() )
+        if ( nCol2 == rDoc.MaxCol() )
         {   // Header at the right, data to the left
             theCurData.aStart.SetCol( 0 );
             theCurData.aEnd.SetCol( nCol2 - 1 );
@@ -197,13 +197,13 @@ void ScColRowNameRangesDlg::SetColRowData( const ScRange& rLabelRange, bool bRef
         else
         {   // Header at the left, data to the right
             theCurData.aStart.SetCol( nCol2 + 1 );
-            theCurData.aEnd.SetCol( pDoc->MaxCol() );
+            theCurData.aEnd.SetCol( rDoc.MaxCol() );
         }
     }
     if ( bValid )
     {
-        const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
-        OUString aStr(theCurArea.Format(*pDoc, ScRefFlags::RANGE_ABS_3D, eConv));
+        const formula::FormulaGrammar::AddressConvention eConv = rDoc.GetAddressConvention();
+        OUString aStr(theCurArea.Format(rDoc, ScRefFlags::RANGE_ABS_3D, eConv));
 
         if(bRef)
             m_xEdAssign->SetRefString( aStr );
@@ -211,7 +211,7 @@ void ScColRowNameRangesDlg::SetColRowData( const ScRange& rLabelRange, bool bRef
             m_xEdAssign->SetText( aStr );
 
         m_xEdAssign->SetCursorAtLast();
-        aStr = theCurData.Format(*pDoc, ScRefFlags::RANGE_ABS_3D, eConv);
+        aStr = theCurData.Format(rDoc, ScRefFlags::RANGE_ABS_3D, eConv);
 
         if(bRef)
             m_xEdAssign2->SetRefString( aStr );
@@ -253,7 +253,7 @@ void ScColRowNameRangesDlg::AdjustColRowData( const ScRange& rDataRange, bool bR
             SCROW nRow1 = theCurArea.aStart.Row();
             SCROW nRow2 = theCurArea.aEnd.Row();
             if ( nRow1 > 0
-              && (theCurData.aEnd.Row() < nRow2 || nRow2 == pDoc->MaxRow()) )
+              && (theCurData.aEnd.Row() < nRow2 || nRow2 == rDoc.MaxRow()) )
             {   // Data above header
                 theCurData.aEnd.SetRow( nRow1 - 1 );
                 if ( theCurData.aStart.Row() > theCurData.aEnd.Row() )
@@ -276,7 +276,7 @@ void ScColRowNameRangesDlg::AdjustColRowData( const ScRange& rDataRange, bool bR
             SCCOL nCol1 = theCurArea.aStart.Col();
             SCCOL nCol2 = theCurArea.aEnd.Col();
             if ( nCol1 > 0
-              && (theCurData.aEnd.Col() < nCol2 || nCol2 == pDoc->MaxCol()) )
+              && (theCurData.aEnd.Col() < nCol2 || nCol2 == rDoc.MaxCol()) )
             {   // Data left of header
                 theCurData.aEnd.SetCol( nCol1 - 1 );
                 if ( theCurData.aStart.Col() > theCurData.aEnd.Col() )
@@ -290,7 +290,7 @@ void ScColRowNameRangesDlg::AdjustColRowData( const ScRange& rDataRange, bool bR
             }
         }
     }
-    OUString aStr(theCurData.Format(*pDoc, ScRefFlags::RANGE_ABS_3D, pDoc->GetAddressConvention()));
+    OUString aStr(theCurData.Format(rDoc, ScRefFlags::RANGE_ABS_3D, rDoc.GetAddressConvention()));
 
     if(bRef)
         m_xEdAssign2->SetRefString( aStr );
@@ -361,7 +361,7 @@ void ScColRowNameRangesDlg::UpdateNames()
     SCROW nRow2;
     SCTAB nTab2;
     OUString rString;
-    const ScAddress::Details aDetails(pDoc->GetAddressConvention());
+    const ScAddress::Details aDetails(rDoc.GetAddressConvention());
 
     OUString strDelim(" --- ");
     OUString aString = strDelim + ScResId( STR_COLUMN ) + strDelim;
@@ -369,12 +369,12 @@ void ScColRowNameRangesDlg::UpdateNames()
     if ( xColNameRanges->size() > 0 )
     {
         std::vector<const ScRangePair*> aSortArray(xColNameRanges->CreateNameSortedArray(
-               pDoc ));
+               &rDoc ));
         nCount = aSortArray.size();
         for ( j=0; j < nCount; j++ )
         {
             const ScRange aRange(aSortArray[j]->GetRange(0));
-            aString = aRange.Format(*pDoc, ScRefFlags::RANGE_ABS_3D, aDetails);
+            aString = aRange.Format(rDoc, ScRefFlags::RANGE_ABS_3D, aDetails);
 
             //@008 get range parameters from document
             aSortArray[j]->GetRange(0).GetVars( nCol1, nRow1, nTab1,
@@ -383,12 +383,12 @@ void ScColRowNameRangesDlg::UpdateNames()
             if(q>nCol2) q=nCol2;
             //@008 construct string
             OUStringBuffer strShow = " [";
-            rString = pDoc->GetString(nCol1, nRow1, nTab1);
+            rString = rDoc.GetString(nCol1, nRow1, nTab1);
             strShow.append(rString);
             for(SCCOL i=nCol1+1;i<=q;i++)
             {
                 strShow.append(", ");
-                rString = pDoc->GetString(i, nRow1, nTab1);
+                rString = rDoc.GetString(i, nRow1, nTab1);
                 strShow.append(rString);
             }
             if(q<nCol2) // Too long? Add ",..."
@@ -408,12 +408,12 @@ void ScColRowNameRangesDlg::UpdateNames()
     if ( xRowNameRanges->size() > 0 )
     {
         std::vector<const ScRangePair*> aSortArray(xRowNameRanges->CreateNameSortedArray(
-               pDoc ));
+               &rDoc ));
         nCount = aSortArray.size();
         for ( j=0; j < nCount; j++ )
         {
             const ScRange aRange(aSortArray[j]->GetRange(0));
-            aString = aRange.Format(*pDoc, ScRefFlags::RANGE_ABS_3D, aDetails);
+            aString = aRange.Format(rDoc, ScRefFlags::RANGE_ABS_3D, aDetails);
 
             //@008 Build string for rows below
             aSortArray[j]->GetRange(0).GetVars( nCol1, nRow1, nTab1,
@@ -421,12 +421,12 @@ void ScColRowNameRangesDlg::UpdateNames()
             SCROW q=nRow1+3;
             if(q>nRow2) q=nRow2;
             OUStringBuffer strShow = " [";
-            rString = pDoc->GetString(nCol1, nRow1, nTab1);
+            rString = rDoc.GetString(nCol1, nRow1, nTab1);
             strShow.append(rString);
             for(SCROW i=nRow1+1;i<=q;i++)
             {
                 strShow.append(", ");
-                rString = pDoc->GetString(nCol1, i, nTab1);
+                rString = rDoc.GetString(nCol1, i, nTab1);
                 strShow.append(rString);
             }
             if(q<nRow2)
@@ -455,16 +455,16 @@ void ScColRowNameRangesDlg::UpdateRangeData( const ScRange& rRange, bool bColNam
 
     if ( bFound )
     {
-        const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
+        const formula::FormulaGrammar::AddressConvention eConv = rDoc.GetAddressConvention();
         theCurArea = rRange;
-        OUString aStr(theCurArea.Format(*pDoc, ScRefFlags::RANGE_ABS_3D, eConv));
+        OUString aStr(theCurArea.Format(rDoc, ScRefFlags::RANGE_ABS_3D, eConv));
         m_xEdAssign->SetText( aStr );
         m_xBtnAdd->set_sensitive(false);
         m_xBtnRemove->set_sensitive(true);
         m_xBtnColHead->set_active(bColName);
         m_xBtnRowHead->set_active(!bColName);
         theCurData = pPair->GetRange(1);
-        aStr = theCurData.Format(*pDoc, ScRefFlags::RANGE_ABS_3D, eConv);
+        aStr = theCurData.Format(rDoc, ScRefFlags::RANGE_ABS_3D, eConv);
         m_xEdAssign2->SetText( aStr );
     }
     else
@@ -492,12 +492,12 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, OkBtnHdl, weld::Button&, void)
     AddBtnHdl(*m_xBtnAdd);
 
     // assign RangeLists to the references in the document
-    pDoc->GetColNameRangesRef() = xColNameRanges;
-    pDoc->GetRowNameRangesRef() = xRowNameRanges;
+    rDoc.GetColNameRangesRef() = xColNameRanges;
+    rDoc.GetRowNameRangesRef() = xRowNameRanges;
     // changed ranges need to take effect
-    pDoc->CompileColRowNameFormula();
+    rDoc.CompileColRowNameFormula();
     ScDocShell* pDocShell = pViewData->GetDocShell();
-    pDocShell->PostPaint(ScRange(0, 0, 0, pDoc->MaxCol(), pDoc->MaxRow(), MAXTAB), PaintPartFlags::Grid);
+    pDocShell->PostPaint(ScRange(0, 0, 0, rDoc.MaxCol(), rDoc.MaxRow(), MAXTAB), PaintPartFlags::Grid);
     pDocShell->SetDocumentModified();
 
     response(RET_OK);
@@ -517,10 +517,10 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, AddBtnHdl, weld::Button&, void)
     if (aNewArea.isEmpty() || aNewData.isEmpty())
         return;
 
-    const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
+    const formula::FormulaGrammar::AddressConvention eConv = rDoc.GetAddressConvention();
     ScRange aRange1, aRange2;
-    bool bOk1 = (aRange1.ParseAny( aNewArea, *pDoc, eConv ) & ScRefFlags::VALID) == ScRefFlags::VALID;
-    if ( bOk1 && (aRange2.ParseAny( aNewData, *pDoc, eConv ) & ScRefFlags::VALID) == ScRefFlags::VALID)
+    bool bOk1 = (aRange1.ParseAny( aNewArea, rDoc, eConv ) & ScRefFlags::VALID) == ScRefFlags::VALID;
+    if ( bOk1 && (aRange2.ParseAny( aNewData, rDoc, eConv ) & ScRefFlags::VALID) == ScRefFlags::VALID)
     {
         theCurArea = aRange1;
         AdjustColRowData( aRange2 );
@@ -690,10 +690,10 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1DataModifyHdl, formula::RefEdit&, v
 {
     OUString aNewArea( m_xEdAssign->GetText() );
     bool bValid = false;
-    if (!aNewArea.isEmpty() && pDoc)
+    if (!aNewArea.isEmpty())
     {
         ScRange aRange;
-        if ( (aRange.ParseAny(aNewArea, *pDoc, pDoc->GetAddressConvention() ) & ScRefFlags::VALID) == ScRefFlags::VALID)
+        if ( (aRange.ParseAny(aNewArea, rDoc, rDoc.GetAddressConvention() ) & ScRefFlags::VALID) == ScRefFlags::VALID)
         {
             SetColRowData( aRange );
             bValid = true;
@@ -725,7 +725,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range2DataModifyHdl, formula::RefEdit&, v
     if ( !aNewData.isEmpty() )
     {
         ScRange aRange;
-        if ( (aRange.ParseAny(aNewData, *pDoc, pDoc->GetAddressConvention() ) & ScRefFlags::VALID) == ScRefFlags::VALID)
+        if ( (aRange.ParseAny(aNewData, rDoc, rDoc.GetAddressConvention() ) & ScRefFlags::VALID) == ScRefFlags::VALID)
         {
             AdjustColRowData( aRange );
             m_xBtnAdd->set_sensitive(true);
@@ -745,15 +745,15 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, ColClickHdl, weld::Button&, void)
     if (!m_xBtnColHead->get_active())
         return;
 
-    if ( theCurArea.aStart.Row() == 0 && theCurArea.aEnd.Row() == pDoc->MaxRow() )
+    if ( theCurArea.aStart.Row() == 0 && theCurArea.aEnd.Row() == rDoc.MaxRow() )
     {
-        theCurArea.aEnd.SetRow( pDoc->MaxRow() - 1 );
-        OUString aStr(theCurArea.Format(*pDoc, ScRefFlags::RANGE_ABS_3D, pDoc->GetAddressConvention()));
+        theCurArea.aEnd.SetRow( rDoc.MaxRow() - 1 );
+        OUString aStr(theCurArea.Format(rDoc, ScRefFlags::RANGE_ABS_3D, rDoc.GetAddressConvention()));
         m_xEdAssign->SetText( aStr );
     }
     ScRange aRange( theCurData );
-    aRange.aStart.SetRow( std::min( static_cast<long>(theCurArea.aEnd.Row() + 1), static_cast<long>(pDoc->MaxRow()) ) );
-    aRange.aEnd.SetRow( pDoc->MaxRow() );
+    aRange.aStart.SetRow( std::min( static_cast<long>(theCurArea.aEnd.Row() + 1), static_cast<long>(rDoc.MaxRow()) ) );
+    aRange.aEnd.SetRow( rDoc.MaxRow() );
     AdjustColRowData( aRange );
 }
 
@@ -763,15 +763,15 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, RowClickHdl, weld::Button&, void)
     if (!m_xBtnRowHead->get_active())
         return;
 
-    if ( theCurArea.aStart.Col() == 0 && theCurArea.aEnd.Col() == pDoc->MaxCol() )
+    if ( theCurArea.aStart.Col() == 0 && theCurArea.aEnd.Col() == rDoc.MaxCol() )
     {
-        theCurArea.aEnd.SetCol( pDoc->MaxCol() - 1 );
-        OUString aStr(theCurArea.Format(*pDoc, ScRefFlags::RANGE_ABS_3D, pDoc->GetAddressConvention()));
+        theCurArea.aEnd.SetCol( rDoc.MaxCol() - 1 );
+        OUString aStr(theCurArea.Format(rDoc, ScRefFlags::RANGE_ABS_3D, rDoc.GetAddressConvention()));
         m_xEdAssign->SetText( aStr );
     }
     ScRange aRange( theCurData );
-    aRange.aStart.SetCol( static_cast<SCCOL>(std::min( static_cast<long>(theCurArea.aEnd.Col() + 1), static_cast<long>(pDoc->MaxCol()) )) );
-    aRange.aEnd.SetCol( pDoc->MaxCol() );
+    aRange.aStart.SetCol( static_cast<SCCOL>(std::min( static_cast<long>(theCurArea.aEnd.Col() + 1), static_cast<long>(rDoc.MaxCol()) )) );
+    aRange.aEnd.SetCol( rDoc.MaxCol() );
     AdjustColRowData( aRange );
 }
 

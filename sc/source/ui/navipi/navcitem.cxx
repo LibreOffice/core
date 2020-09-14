@@ -51,7 +51,7 @@ void ScNavigatorControllerItem::StateChanged( sal_uInt16 /* nSID */, SfxItemStat
                     const OUString&  aAddress( pCellPosItem->GetValue() );
                     ScAddress aScAddress;
                     ScViewData* pViewData = rNavigatorDlg.GetViewData();
-                    aScAddress.Parse(aAddress, pViewData ? pViewData->GetDocument() : nullptr);
+                    aScAddress.Parse(aAddress, pViewData ? &pViewData->GetDocument() : nullptr);
 
                     SCCOL nCol = aScAddress.Col()+1;
                     SCROW nRow = aScAddress.Row()+1;
