@@ -240,7 +240,7 @@ ScColorScaleEntry* ConvertToModel( const ColorScaleRuleModelEntry& rEntry, ScDoc
         if(!rEntry.maFormula.isEmpty())
         {
             pEntry->SetType(COLORSCALE_FORMULA);
-            pEntry->SetFormula(rEntry.maFormula, pDoc, rAddr, formula::FormulaGrammar::GRAM_ENGLISH_XL_A1);
+            pEntry->SetFormula(rEntry.maFormula, *pDoc, rAddr, formula::FormulaGrammar::GRAM_ENGLISH_XL_A1);
         }
 
         return pEntry;

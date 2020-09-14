@@ -42,7 +42,7 @@ void GetType(const weld::ComboBox& rLstBox, const weld::Entry& rEd, ScColorScale
             pEntry->SetValue(nVal);
             break;
         case COLORSCALE_FORMULA:
-            pEntry->SetFormula(rEd.get_text(), pDoc, rPos);
+            pEntry->SetFormula(rEd.get_text(), *pDoc, rPos);
             break;
     }
 }
