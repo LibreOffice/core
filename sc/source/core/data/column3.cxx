@@ -644,7 +644,7 @@ void ScColumn::AttachNewFormulaCell(
         }
         break;
         case sc::SingleCellListening:
-            rCell.StartListeningTo(pDocument);
+            rCell.StartListeningTo(*pDocument);
             StartListeningUnshared( rNewSharedRows);
         break;
         case sc::NoListening:
