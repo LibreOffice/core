@@ -138,7 +138,7 @@ private:
 
 public:
     ScPositionHelper(ScDocument *pDoc, bool bColumn);
-    void setDocument(ScDocument *pDoc, bool bColumn);
+    void setDocument(ScDocument& rDoc, bool bColumn);
 
     void insert(index_type nIndex, long nPos);
     void removeByIndex(index_type nIndex);
@@ -247,7 +247,7 @@ private:
     bool            mbOldCursorValid;           // "virtual" Cursor position when combined
                     ScViewDataTable(ScDocument *pDoc = nullptr);
 
-    void            InitData(ScDocument *pDoc);
+    void            InitData(ScDocument& rDoc);
     void            WriteUserDataSequence(
                         css::uno::Sequence <css::beans::PropertyValue>& rSettings,
                         const ScViewData& rViewData, SCTAB nTab ) const;
@@ -349,7 +349,7 @@ public:
                     ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh );
                     ~ScViewData() COVERITY_NOEXCEPT_FALSE;
 
-    void            InitData( ScDocument* pDocument );
+    void            InitData(ScDocument& rDocument);
 
     ScDocShell*     GetDocShell() const     { return pDocShell; }
     ScDocFunc&      GetDocFunc() const;
