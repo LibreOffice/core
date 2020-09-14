@@ -89,7 +89,7 @@ public:
                                  const ScAddress& rAdr = ScAddress(),
                                  Type nType = Type::Name,
                                  const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT );
-    SC_DLLPUBLIC                ScRangeData( ScDocument* pDoc,
+    SC_DLLPUBLIC                ScRangeData( ScDocument& rDoc,
                                  const OUString& rName,
                                  const ScTokenArray& rArr,
                                  const ScAddress& rAdr = ScAddress(),
