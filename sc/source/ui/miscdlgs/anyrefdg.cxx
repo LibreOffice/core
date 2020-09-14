@@ -152,7 +152,7 @@ bool ScFormulaReferenceHelper::ParseWithNames( ScRangeList& rRanges, const OUStr
         ScRange aRange;
         OUString aRangeStr( rStr.getToken( 0, ';', nIdx ) );
 
-        ScRefFlags nFlags = aRange.ParseAny( aRangeStr, &rDoc, aDetails );
+        ScRefFlags nFlags = aRange.ParseAny( aRangeStr, rDoc, aDetails );
         if ( nFlags & ScRefFlags::VALID )
         {
             if ( (nFlags & ScRefFlags::TAB_3D) == ScRefFlags::ZERO )

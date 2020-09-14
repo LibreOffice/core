@@ -412,7 +412,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl, weld::Button&, void)
         //  because editing can be done now, parsing is needed first
         ScRange aTmpRange;
         OUString aText = m_xEdAssign->GetText();
-        if ( aTmpRange.ParseAny( aText, &rDoc, aAddrDetails ) & ScRefFlags::VALID )
+        if ( aTmpRange.ParseAny( aText, rDoc, aAddrDetails ) & ScRefFlags::VALID )
         {
             theCurArea = aTmpRange;
             ScAddress aStart = theCurArea.aStart;
@@ -614,7 +614,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, AssModifyHdl, formula::RefEdit&, void)
 
     ScRange aTmpRange;
     OUString aText = m_xEdAssign->GetText();
-    if ( aTmpRange.ParseAny( aText, &rDoc, aAddrDetails ) & ScRefFlags::VALID )
+    if ( aTmpRange.ParseAny( aText, rDoc, aAddrDetails ) & ScRefFlags::VALID )
         theCurArea = aTmpRange;
 
     if (!aText.isEmpty() && !m_xEdName->get_active_text().isEmpty())
