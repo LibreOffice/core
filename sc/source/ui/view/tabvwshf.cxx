@@ -61,10 +61,10 @@ using namespace com::sun::star;
 void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 {
     ScViewData& rViewData   = GetViewData();
-    ScDocument* pDoc        = rViewData.GetDocument();
+    ScDocument& rDoc        = rViewData.GetDocument();
 
     SCTAB       nCurrentTab = rViewData.GetTabNo();
-    SCTAB       nTabCount   = pDoc->GetTableCount();
+    SCTAB       nTabCount   = rDoc.GetTableCount();
     sal_uInt16  nSlot       = rReq.GetSlot();
     const SfxItemSet* pReqArgs = rReq.GetArgs();
 
@@ -75,7 +75,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
         case FID_TABLE_VISIBLE:
             {
                 OUString aName;
-                pDoc->GetName( nCurrentTab, aName );
+                rDoc.GetName( nCurrentTab, aName );
 
                 bool bVisible=true;
                 if( pReqArgs != nullptr )
@@ -87,7 +87,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                 if( ! bVisible )            // fade out
                 {
-                    if ( pDoc->IsDocEditable() )
+                    if ( rDoc.IsDocEditable() )
                     {
                         ScMarkData& rMark = rViewData.GetMarkData();
                         HideTable( rMark );
@@ -104,7 +104,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
         case FID_TABLE_HIDE:
             {
-                if ( pDoc->IsDocEditable() )
+                if ( rDoc.IsDocEditable() )
                 {
                     ScMarkData& rMark = rViewData.GetMarkData();
                     HideTable( rMark );
@@ -139,9 +139,9 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     bool bFirst = true;
                     for ( SCTAB i=0; i != nTabCount; i++ )
                     {
-                        if (!pDoc->IsVisible(i))
+                        if (!rDoc.IsVisible(i))
                         {
-                            pDoc->GetName( i, aTabName );
+                            rDoc.GetName( i, aTabName );
                             pDlg->Insert( aTabName, bFirst );
                             bFirst = false;
                         }
@@ -176,7 +176,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 SCTAB   nTabSelCount = rMark.GetSelectCount();
                 SCTAB   nTabNr       = nCurrentTab;
 
-                if ( !pDoc->IsDocEditable() )
+                if ( !rDoc.IsDocEditable() )
                     break;                          // locked
 
                 if ( pReqArgs != nullptr )             // from basic
@@ -189,7 +189,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                          pReqArgs->HasItem( nSlot, &pNameItem ) )
                     {
                         OUString aName = static_cast<const SfxStringItem*>(pNameItem)->GetValue();
-                        pDoc->CreateValidTabName(aName);
+                        rDoc.CreateValidTabName(aName);
 
                         // sheet number from basic: 1-based
                         // 0 is special, means adding at the end
@@ -241,7 +241,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                                     for(SCTAB j=nCurrentTab+1;j<nTabCount;j++)
                                     {
-                                        if(!pDoc->IsScenario(j))
+                                        if(!rDoc.IsScenario(j))
                                         {
                                             nTabAfter=j;
                                             break;
@@ -279,7 +279,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                                 for(SCTAB j=nSelHigh+1;j<nTabCount;j++)
                                 {
-                                    if(!pDoc->IsScenario(j))
+                                    if(!rDoc.IsScenario(j))
                                     {
                                         nTabAfter=j;
                                         break;
@@ -323,11 +323,11 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 ScMarkData& rMark = rViewData.GetMarkData();
                 SCTAB nTabSelCount = rMark.GetSelectCount();
 
-                if ( !pDoc->IsDocEditable() )
+                if ( !rDoc.IsDocEditable() )
                     break; // everything locked
 
                 if ( nSlot != FID_TAB_APPEND &&
-                        ( pDoc->IsTabProtected( nTabNr ) || nTabSelCount > 1 ) )
+                        ( rDoc.IsTabProtected( nTabNr ) || nTabSelCount > 1 ) )
                     break; // no rename
 
                 if( pReqArgs != nullptr )
@@ -376,13 +376,13 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     {
                         case FID_TAB_APPEND:
                             aDlgTitle = ScResId(SCSTR_APDTABLE);
-                            pDoc->CreateValidTabName( aName );
+                            rDoc.CreateValidTabName( aName );
                             pHelpId = HID_SC_APPEND_NAME;
                             break;
 
                         case FID_TAB_RENAME:
                             aDlgTitle = ScResId(SCSTR_RENAMETAB);
-                            pDoc->GetName( rViewData.GetTabNo(), aName );
+                            rDoc.GetName( rViewData.GetTabNo(), aName );
                             pHelpId = HID_SC_RENAME_NAME;
                             break;
                     }
@@ -441,7 +441,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
         case FID_TAB_MOVE:
             {
-                if ( pDoc->GetChangeTrack() != nullptr )
+                if ( rDoc.GetChangeTrack() != nullptr )
                     break;    // if ChangeTracking is active, then no TabMove
 
                 bool   bDoIt = false;
@@ -453,7 +453,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                 if( pReqArgs != nullptr )
                 {
-                    SCTAB nTableCount = pDoc->GetTableCount();
+                    SCTAB nTableCount = rDoc.GetTableCount();
                     const SfxPoolItem* pItem;
 
                     if( pReqArgs->HasItem( FID_TAB_MOVE, &pItem ) )
@@ -508,14 +508,14 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 else
                 {
                     OUString aDefaultName;
-                    pDoc->GetName( rViewData.GetTabNo(), aDefaultName );
+                    rDoc.GetName( rViewData.GetTabNo(), aDefaultName );
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
                     ScopedVclPtr<AbstractScMoveTableDlg> pDlg(pFact->CreateScMoveTableDlg(GetFrameWeld(),
                         aDefaultName));
 
-                    SCTAB nTableCount = pDoc->GetTableCount();
+                    SCTAB nTableCount = rDoc.GetTableCount();
                     ScMarkData& rMark       = GetViewData().GetMarkData();
                     SCTAB       nTabSelCount = rMark.GetSelectCount();
 
@@ -595,9 +595,9 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 if (!bDoIt)
                 {
                     bool bTabWithPivotTable = false;
-                    if (pDoc->HasPivotTable())
+                    if (rDoc.HasPivotTable())
                     {
-                        const ScDPCollection* pDPs = pDoc->GetDPCollection();
+                        const ScDPCollection* pDPs = rDoc.GetDPCollection();
                         if (pDPs)
                         {
                             const ScMarkData::MarkedTabsType& rSelectedTabs = rViewData.GetMarkData().GetSelectedTabs();
@@ -658,7 +658,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         ScMarkData& rMark = rViewData.GetMarkData();
                         for (SCTAB i = 0; i < nTabCount; i++)
                         {
-                            if (rMark.GetTableSelect(i) && !pDoc->IsTabProtected(i))
+                            if (rMark.GetTableSelect(i) && !rDoc.IsTabProtected(i))
                             {
                                 TheTabs.push_back(i);
                                 bTabFlag = true;
@@ -684,7 +684,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
             {
                 ScDocShell* pDocSh = rViewData.GetDocShell();
                 ScDocFunc &rFunc = pDocSh->GetDocFunc();
-                bool bSet = !pDoc->IsLayoutRTL( nCurrentTab );
+                bool bSet = !rDoc.IsLayoutRTL( nCurrentTab );
 
                 const ScMarkData& rMark = rViewData.GetMarkData();
                 if ( rMark.GetSelectCount() != 0 )
@@ -724,10 +724,10 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 SCTAB nTabNr = rViewData.GetTabNo();
                 ScMarkData& rMark = rViewData.GetMarkData();
                 SCTAB nTabSelCount = rMark.GetSelectCount();
-                if ( !pDoc->IsDocEditable() )
+                if ( !rDoc.IsDocEditable() )
                     break;
 
-                if ( pDoc->IsTabProtected( nTabNr ) ) // ||nTabSelCount > 1
+                if ( rDoc.IsTabProtected( nTabNr ) ) // ||nTabSelCount > 1
                     break;
 
                 if( pReqArgs != nullptr )
@@ -745,7 +745,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                             pTabColorList(new ScUndoTabColorInfo::List);
                         for (const auto& rTab : rMark)
                         {
-                            if ( !pDoc->IsTabProtected(rTab) )
+                            if ( !rDoc.IsTabProtected(rTab) )
                             {
                                 ScUndoTabColorInfo aTabColorInfo(rTab);
                                 aTabColorInfo.maNewTabBgColor = aColor;
@@ -768,7 +768,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     sal_uInt16      nRet    = RET_OK; /// temp
                     bool        bDone   = false; /// temp
 
-                    Color aTabBgColor = pDoc->GetTabBgColor( nCurrentTab );
+                    Color aTabBgColor = rDoc.GetTabBgColor( nCurrentTab );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     ScopedVclPtr<AbstractScTabBgColorDlg> pDlg(pFact->CreateScTabBgColorDlg(
                                                                 GetFrameWeld(),
@@ -788,7 +788,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                             {
                                 for (const auto& rTab : rMark)
                                 {
-                                    if ( !pDoc->IsTabProtected(rTab) )
+                                    if ( !rDoc.IsTabProtected(rTab) )
                                     {
                                         ScUndoTabColorInfo aTabColorInfo(rTab);
                                         aTabColorInfo.maNewTabBgColor = aSelectedColor;
@@ -846,12 +846,12 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
 {
     ScViewData& rViewData   = GetViewData();
-    ScDocument* pDoc        = rViewData.GetDocument();
+    ScDocument& rDoc        = rViewData.GetDocument();
     ScDocShell* pDocShell   = rViewData.GetDocShell();
     ScMarkData& rMark       = GetViewData().GetMarkData();
     SCTAB       nTab        = rViewData.GetTabNo();
 
-    SCTAB nTabCount = pDoc->GetTableCount();
+    SCTAB nTabCount = rDoc.GetTableCount();
     SCTAB nTabSelCount = rMark.GetSelectCount();
 
     SfxWhichIter    aIter(rSet);
@@ -863,7 +863,7 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
         {
 
             case FID_TABLE_VISIBLE:
-                rSet.Put( SfxBoolItem( nWhich, pDoc->IsVisible(nTab) ));
+                rSet.Put( SfxBoolItem( nWhich, rDoc.IsVisible(nTab) ));
                 break;
 
             case FID_TABLE_HIDE:
@@ -871,9 +871,9 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
                     sal_uInt16 nVis = 0;
                     // enable menu : check to make sure we won't hide all sheets. we need at least one visible at all times.
                     for ( SCTAB i=0; i < nTabCount && nVis<nTabSelCount + 1; i++ )
-                        if (pDoc->IsVisible(i))
+                        if (rDoc.IsVisible(i))
                             ++nVis;
-                    if ( nVis<=nTabSelCount || !pDoc->IsDocEditable() )
+                    if ( nVis<=nTabSelCount || !rDoc.IsDocEditable() )
                         rSet.DisableItem( nWhich );
                 }
                 break;
@@ -882,25 +882,25 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
                 {
                     bool bHasHidden = false;
                     for ( SCTAB i=0; i < nTabCount && !bHasHidden; i++ )
-                        if (!pDoc->IsVisible(i))
+                        if (!rDoc.IsVisible(i))
                             bHasHidden = true;
-                    if ( !bHasHidden || pDoc->IsDocProtected() || nTabSelCount > 1 )
+                    if ( !bHasHidden || rDoc.IsDocProtected() || nTabSelCount > 1 )
                         rSet.DisableItem( nWhich );
                 }
                 break;
 
             case FID_DELETE_TABLE:
                 {
-                    if ( pDoc->GetChangeTrack() )
+                    if ( rDoc.GetChangeTrack() )
                         rSet.DisableItem( nWhich );
                     else
                     {
                         sal_uInt16 nVis = 0;
                         for ( SCTAB i=0; i < nTabCount && nVis<2; i++ )
-                            if (pDoc->IsVisible(i))
+                            if (rDoc.IsVisible(i))
                                 ++nVis;
-                        if (   pDoc->IsTabProtected(nTab)
-                            || !pDoc->IsDocEditable()
+                        if (   rDoc.IsTabProtected(nTab)
+                            || !rDoc.IsDocEditable()
                             || nVis < 2
                             || nTabSelCount == nTabCount)
                             rSet.DisableItem( nWhich );
@@ -911,15 +911,15 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
             case FID_INS_TABLE:
             case FID_INS_TABLE_EXT:
             case FID_TAB_APPEND:
-                if ( !pDoc->IsDocEditable() ||
+                if ( !rDoc.IsDocEditable() ||
                      nTabCount > MAXTAB ||
                      ( nWhich == FID_INS_TABLE_EXT && pDocShell && pDocShell->IsDocShared() ) )
                     rSet.DisableItem( nWhich );
                 break;
 
             case FID_TAB_MOVE:
-                if (   !pDoc->IsDocEditable()
-                    || pDoc->GetChangeTrack() != nullptr
+                if (   !rDoc.IsDocEditable()
+                    || rDoc.GetChangeTrack() != nullptr
                     || nTabCount > MAXTAB)
                     rSet.DisableItem( nWhich );
                 break;
@@ -928,8 +928,8 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
             //  FID_TAB_RENAME      - "name"-property for Basic
 
             case FID_TAB_MENU_RENAME:
-                if ( !pDoc->IsDocEditable() ||
-                     pDoc->IsTabProtected(nTab) ||nTabSelCount > 1 ||
+                if ( !rDoc.IsDocEditable() ||
+                     rDoc.IsTabProtected(nTab) ||nTabSelCount > 1 ||
                      ( pDocShell && pDocShell->IsDocShared() ) )
                     rSet.DisableItem( nWhich );
                 break;
@@ -937,7 +937,7 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
             case FID_TAB_RENAME:
                 {
                     OUString aTabName;
-                    pDoc->GetName( nTab, aTabName );
+                    rDoc.GetName( nTab, aTabName );
 
                     rSet.Put( SfxStringItem( nWhich, aTabName ));
 
@@ -950,22 +950,22 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
                     if ( !aLangOpt.IsCTLFontEnabled() )
                         rSet.DisableItem( nWhich );
                     else
-                        rSet.Put( SfxBoolItem( nWhich, pDoc->IsLayoutRTL( nTab ) ) );
+                        rSet.Put( SfxBoolItem( nWhich, rDoc.IsLayoutRTL( nTab ) ) );
                 }
                 break;
 
             case FID_TAB_MENU_SET_TAB_BG_COLOR:
                 {
-                    if ( !pDoc->IsDocEditable()
+                    if ( !rDoc.IsDocEditable()
                         || ( pDocShell && pDocShell->IsDocShared() )
-                        || pDoc->IsTabProtected(nTab) )
+                        || rDoc.IsTabProtected(nTab) )
                         rSet.DisableItem( nWhich );
                 }
                 break;
 
             case FID_TAB_SET_TAB_BG_COLOR:
                 {
-                    Color aColor = pDoc->GetTabBgColor( nTab );
+                    Color aColor = rDoc.GetTabBgColor( nTab );
                     rSet.Put( SvxColorItem( aColor, nWhich ) );
                 }
                 break;

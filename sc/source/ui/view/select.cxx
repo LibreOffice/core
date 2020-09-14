@@ -342,16 +342,16 @@ void ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, bool /* bDon
     {
         bool bLeft, bTop;
         pViewData->GetMouseQuadrant( aEffPos, GetWhich(), nPosX, nPosY, bLeft, bTop );
-        ScDocument* pDoc = pViewData->GetDocument();
+        ScDocument& rDoc = pViewData->GetDocument();
         SCTAB nTab = pViewData->GetTabNo();
         if ( bLeft && !bRightScroll )
-            do --nPosX; while ( nPosX>=0 && pDoc->ColHidden( nPosX, nTab ) );
+            do --nPosX; while ( nPosX>=0 && rDoc.ColHidden( nPosX, nTab ) );
         if ( bTop && !bBottomScroll )
         {
             if (--nPosY >= 0)
             {
-                nPosY = pDoc->LastVisibleRow(0, nPosY, nTab);
-                if (!pDoc->ValidRow(nPosY))
+                nPosY = rDoc.LastVisibleRow(0, nPosY, nTab);
+                if (!rDoc.ValidRow(nPosY))
                     nPosY = -1;
             }
         }
@@ -418,14 +418,14 @@ bool ScViewFunctionSet::SetCursorAtCell( SCCOL nPosX, SCROW nPosY, bool bScroll 
 {
     ScTabView* pView = pViewData->GetView();
     SCTAB nTab = pViewData->GetTabNo();
-    ScDocument* pDoc = pViewData->GetDocument();
+    ScDocument& rDoc = pViewData->GetDocument();
 
-    if ( pDoc->IsTabProtected(nTab) )
+    if ( rDoc.IsTabProtected(nTab) )
     {
         if (nPosX < 0 || nPosY < 0)
             return false;
 
-        ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
+        ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
         if (!pProtect)
             return false;
 
@@ -435,7 +435,7 @@ bool ScViewFunctionSet::SetCursorAtCell( SCCOL nPosX, SCROW nPosY, bool bScroll 
         if ( bSkipProtected && bSkipUnprotected )
             return false;
 
-        bool bCellProtected = pDoc->HasAttrib(nPosX, nPosY, nTab, nPosX, nPosY, nTab, HasAttrFlags::Protected);
+        bool bCellProtected = rDoc.HasAttrib(nPosX, nPosY, nTab, nPosX, nPosY, nTab, HasAttrFlags::Protected);
         if ( (bCellProtected && bSkipProtected) || (!bCellProtected && bSkipUnprotected) )
             // Don't select this cell!
             return false;
@@ -504,8 +504,8 @@ bool ScViewFunctionSet::SetCursorAtCell( SCCOL nPosX, SCROW nPosY, bool bScroll 
 
             long nSizeX = 0;
             for (SCCOL i=nPosX+1; i<=nEndX; i++)
-                nSizeX += pDoc->GetColWidth( i, nTab );
-            long nSizeY = static_cast<long>(pDoc->GetRowHeight( nPosY+1, nEndY, nTab ));
+                nSizeX += rDoc.GetColWidth( i, nTab );
+            long nSizeY = static_cast<long>(rDoc.GetRowHeight( nPosY+1, nEndY, nTab ));
 
             SCCOL nDelStartX = nStartX;
             SCROW nDelStartY = nStartY;
@@ -555,13 +555,13 @@ bool ScViewFunctionSet::SetCursorAtCell( SCCOL nPosX, SCROW nPosY, bool bScroll 
             {
                 //  in SetCursorAtPoint hidden columns are skipped.
                 //  They must be skipped here too, or the result will always be the first hidden column.
-                do ++nPosX; while ( nPosX<nStartX && pDoc->ColHidden(nPosX, nTab) );
+                do ++nPosX; while ( nPosX<nStartX && rDoc.ColHidden(nPosX, nTab) );
                 for (SCCOL i=nPosX; i<nStartX; i++)
-                    nSizeX += pDoc->GetColWidth( i, nTab );
+                    nSizeX += rDoc.GetColWidth( i, nTab );
             }
             else
                 for (SCCOL i=nEndX+1; i<=nPosX; i++)
-                    nSizeX += pDoc->GetColWidth( i, nTab );
+                    nSizeX += rDoc.GetColWidth( i, nTab );
 
             long nSizeY = 0;
             if ( bNegY )
@@ -570,14 +570,14 @@ bool ScViewFunctionSet::SetCursorAtCell( SCCOL nPosX, SCROW nPosY, bool bScroll 
                 //  They must be skipped here too, or the result will always be the first hidden row.
                 if (++nPosY < nStartY)
                 {
-                    nPosY = pDoc->FirstVisibleRow(nPosY, nStartY-1, nTab);
-                    if (!pDoc->ValidRow(nPosY))
+                    nPosY = rDoc.FirstVisibleRow(nPosY, nStartY-1, nTab);
+                    if (!rDoc.ValidRow(nPosY))
                         nPosY = nStartY;
                 }
-                nSizeY += pDoc->GetRowHeight( nPosY, nStartY-1, nTab );
+                nSizeY += rDoc.GetRowHeight( nPosY, nStartY-1, nTab );
             }
             else
-                nSizeY += pDoc->GetRowHeight( nEndY+1, nPosY, nTab );
+                nSizeY += rDoc.GetRowHeight( nEndY+1, nPosY, nTab );
 
             if ( nSizeX > nSizeY )          // Fill only ever in one direction
             {
@@ -606,9 +606,9 @@ bool ScViewFunctionSet::SetCursorAtCell( SCCOL nPosX, SCROW nPosY, bool bScroll 
         ScFillMode nMode = pViewData->GetFillMode();
         if ( nMode == ScFillMode::EMBED_LT || nMode == ScFillMode::EMBED_RB )
         {
-            OSL_ENSURE( pDoc->IsEmbedded(), "!pDoc->IsEmbedded()" );
+            OSL_ENSURE( rDoc.IsEmbedded(), "!rDoc.IsEmbedded()" );
             ScRange aRange;
-            pDoc->GetEmbedded( aRange);
+            rDoc.GetEmbedded( aRange);
             ScRefType eRefMode = (nMode == ScFillMode::EMBED_LT) ? SC_REFTYPE_EMBED_LT : SC_REFTYPE_EMBED_RB;
             if (pViewData->GetRefType() != eRefMode)
             {

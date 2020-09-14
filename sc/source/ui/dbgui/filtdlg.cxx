@@ -162,7 +162,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
     m_xBtnRemove4->connect_clicked( LINK( this, ScFilterDlg, BtnRemoveHdl ) );
 
     pViewData   = rQueryItem.GetViewData();
-    pDoc        = pViewData ? pViewData->GetDocument() : nullptr;
+    pDoc        = pViewData ? &pViewData->GetDocument() : nullptr;
     nSrcTab     = pViewData ? pViewData->GetTabNo() : static_cast<SCTAB>(0);
 
     // for easier access:
@@ -1325,7 +1325,7 @@ void ScFilterDlg::SetValString( const OUString& rQueryStr, const ScQueryEntry::I
 {
     if (rQueryStr.isEmpty())
     {
-        pDoc = pViewData ? pViewData->GetDocument() : nullptr;
+        pDoc = pViewData ? &pViewData->GetDocument() : nullptr;
         if (rItem.meType == ScQueryEntry::ByValue)
         {
             if (pDoc)

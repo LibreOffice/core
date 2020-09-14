@@ -32,7 +32,7 @@ ScStatisticsTwoVariableDialog::ScStatisticsTwoVariableDialog(
     , mxOutputRangeEdit(new formula::RefEdit(m_xBuilder->weld_entry("output-range-edit")))
     , mxOutputRangeButton(new formula::RefButton(m_xBuilder->weld_button("output-range-button")))
     , mViewData(pViewData)
-    , mDocument(*pViewData->GetDocument())
+    , mDocument(pViewData->GetDocument())
     , mVariable1Range(ScAddress::INITIALIZE_INVALID)
     , mVariable2Range(ScAddress::INITIALIZE_INVALID)
     , mAddressDetails(mDocument.GetAddressConvention(), 0, 0 )

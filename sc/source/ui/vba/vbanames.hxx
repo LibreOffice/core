@@ -38,7 +38,7 @@ class ScVbaNames final : public ScVbaNames_BASE
 public:
     ScVbaNames( const css::uno::Reference< ov::XHelperInterface >& xParent,  const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::sheet::XNamedRanges >& xNames , const css::uno::Reference< css::frame::XModel >& xModel );
 
-    ScDocument* getScDocument();
+    ScDocument& getScDocument();
 
     virtual ~ScVbaNames() override;
 

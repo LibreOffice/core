@@ -105,8 +105,8 @@ SFX_IMPL_NAMED_VIEWFACTORY( ScTabViewShell, "Default" )
 OUString ScTabViewShell::GetFormula(const ScAddress& rAddress)
 {
     OUString sFormula;
-    ScDocument* pDoc = GetViewData().GetDocument();
-    ScRefCellValue aCell(*pDoc, rAddress);
+    ScDocument& rDoc = GetViewData().GetDocument();
+    ScRefCellValue aCell(rDoc, rAddress);
     if (!aCell.isEmpty() && aCell.meType == CELLTYPE_FORMULA)
     {
         aCell.mpFormula->GetFormula( sFormula);

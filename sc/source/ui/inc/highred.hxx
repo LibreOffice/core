@@ -33,7 +33,7 @@ class ScHighlightChgDlg : public ScAnyRefDlgController
 {
 private:
     ScViewData*             pViewData;
-    ScDocument*             pDoc;
+    ScDocument&             rDoc;
     ScChangeViewSettings    aChangeViewSet;
 
     std::unique_ptr<weld::CheckButton> m_xHighlightBox;

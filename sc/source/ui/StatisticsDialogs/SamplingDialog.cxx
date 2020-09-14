@@ -25,7 +25,7 @@ ScSamplingDialog::ScSamplingDialog(SfxBindings* pSfxBindings, SfxChildWindow* pC
                           "modules/scalc/ui/samplingdialog.ui", "SamplingDialog")
     , mpActiveEdit(nullptr)
     , mViewData(pViewData)
-    , mDocument(*pViewData->GetDocument())
+    , mDocument(pViewData->GetDocument())
     , mInputRange(ScAddress::INITIALIZE_INVALID)
     , mAddressDetails(mDocument.GetAddressConvention(), 0, 0)
     , mOutputAddress(ScAddress::INITIALIZE_INVALID)

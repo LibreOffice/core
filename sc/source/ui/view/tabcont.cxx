@@ -46,28 +46,28 @@ ScTabControl::ScTabControl( vcl::Window* pParent, ScViewData* pData )
     , nSelPageIdByMouse(TabBar::PAGE_NOT_FOUND)
     , bErrorShown(false)
 {
-    ScDocument* pDoc = pViewData->GetDocument();
+    ScDocument& rDoc = pViewData->GetDocument();
 
     OUString aString;
     Color aTabBgColor;
-    SCTAB nCount = pDoc->GetTableCount();
+    SCTAB nCount = rDoc.GetTableCount();
     for (SCTAB i=0; i<nCount; i++)
     {
-        if (pDoc->IsVisible(i))
+        if (rDoc.IsVisible(i))
         {
-            if (pDoc->GetName(i,aString))
+            if (rDoc.GetName(i,aString))
             {
-                if ( pDoc->IsScenario(i) )
+                if ( rDoc.IsScenario(i) )
                     InsertPage( static_cast<sal_uInt16>(i)+1, aString, TabBarPageBits::Blue);
                 else
                     InsertPage( static_cast<sal_uInt16>(i)+1, aString );
 
-                if ( pDoc->IsTabProtected(i) )
+                if ( rDoc.IsTabProtected(i) )
                     SetProtectionSymbol(static_cast<sal_uInt16>(i)+1, true);
 
-                if ( !pDoc->IsDefaultTabBgColor(i) )
+                if ( !rDoc.IsDefaultTabBgColor(i) )
                 {
-                    aTabBgColor = pDoc->GetTabBgColor(i);
+                    aTabBgColor = rDoc.GetTabBgColor(i);
                     SetTabBgColor( static_cast<sal_uInt16>(i)+1, aTabBgColor );
                 }
             }
@@ -94,14 +94,14 @@ IMPL_LINK(ScTabControl, ShowPageList, const CommandEvent &, rEvent, void)
 
     sal_uInt16 nCurPageId = GetCurPageId();
 
-    ScDocument* pDoc = pViewData->GetDocument();
-    SCTAB nCount = pDoc->GetTableCount();
+    ScDocument& rDoc = pViewData->GetDocument();
+    SCTAB nCount = rDoc.GetTableCount();
     for (SCTAB i=0; i<nCount; ++i)
     {
-        if (pDoc->IsVisible(i))
+        if (rDoc.IsVisible(i))
         {
             OUString aString;
-            if (pDoc->GetName(i, aString))
+            if (rDoc.GetName(i, aString))
             {
                 sal_uInt16 nId = static_cast<sal_uInt16>(i)+1;
                 aPopup->InsertItem(nId, aString, MenuItemBits::CHECKABLE);
@@ -144,15 +144,15 @@ SCTAB ScTabControl::GetPrivatDropPos(const Point& rPos )
 
     if(nPos !=0 )
     {
-        ScDocument* pDoc = pViewData->GetDocument();
+        ScDocument& rDoc = pViewData->GetDocument();
 
-        SCTAB nCount = pDoc->GetTableCount();
+        SCTAB nCount = rDoc.GetTableCount();
 
         sal_uInt16 nViewPos=0;
         nRealPos = nCount;
         for (SCTAB i=0; i<nCount; i++)
         {
-            if (pDoc->IsVisible(i))
+            if (rDoc.IsVisible(i))
             {
                 nViewPos++;
                 if(nViewPos==nPos)
@@ -160,7 +160,7 @@ SCTAB ScTabControl::GetPrivatDropPos(const Point& rPos )
                     SCTAB j;
                     for (j=i+1; j<nCount; j++)
                     {
-                        if (pDoc->IsVisible(j))
+                        if (rDoc.IsVisible(j))
                         {
                             break;
                         }
@@ -225,13 +225,13 @@ void ScTabControl::AddTabClick()
     TabBar::AddTabClick();
 
     // Insert a new sheet at the right end, with default name.
-    ScDocument* pDoc = pViewData->GetDocument();
+    ScDocument& rDoc = pViewData->GetDocument();
     ScModule* pScMod = SC_MOD();
-    if (!pDoc->IsDocEditable() || pScMod->IsTableLocked())
+    if (!rDoc.IsDocEditable() || pScMod->IsTableLocked())
         return;
     OUString aName;
-    pDoc->CreateValidTabName(aName);
-    SCTAB nTabCount = pDoc->GetTableCount();
+    rDoc.CreateValidTabName(aName);
+    SCTAB nTabCount = rDoc.GetTableCount();
     pViewData->GetViewShell()->InsertTable(aName, nTabCount);
 }
 
@@ -244,9 +244,9 @@ void ScTabControl::Select()
     nMouseClickPageId = TabBar::PAGE_NOT_FOUND;
 
     ScModule* pScMod = SC_MOD();
-    ScDocument* pDoc = pViewData->GetDocument();
+    ScDocument& rDoc = pViewData->GetDocument();
     ScMarkData& rMark = pViewData->GetMarkData();
-    SCTAB nCount = pDoc->GetTableCount();
+    SCTAB nCount = rDoc.GetTableCount();
     SCTAB i;
 
     if ( pScMod->IsTableLocked() )      // may not be switched now ?
@@ -314,16 +314,16 @@ void ScTabControl::Select()
             ScRange aRange(
                     pViewData->GetRefStartX(), pViewData->GetRefStartY(), pViewData->GetRefStartZ(),
                     pViewData->GetRefEndX(), pViewData->GetRefEndY(), pViewData->GetRefEndZ() );
-            pScMod->SetReference( aRange, *pDoc, &rMark );
+            pScMod->SetReference( aRange, rDoc, &rMark );
             pScMod->EndReference();                     // due to Auto-Hide
         }
 }
 
 void ScTabControl::UpdateInputContext()
 {
-    ScDocument* pDoc = pViewData->GetDocument();
+    ScDocument& rDoc = pViewData->GetDocument();
     WinBits nStyle = GetStyle();
-    if (pDoc->GetDocumentShell()->IsReadOnly())
+    if (rDoc.GetDocumentShell()->IsReadOnly())
         // no insert sheet tab for readonly doc.
         SetStyle(nStyle & ~WB_INSERTTAB);
     else
@@ -332,11 +332,11 @@ void ScTabControl::UpdateInputContext()
 
 void ScTabControl::UpdateStatus()
 {
-    ScDocument* pDoc = pViewData->GetDocument();
+    ScDocument& rDoc = pViewData->GetDocument();
     ScMarkData& rMark = pViewData->GetMarkData();
     bool bActive = pViewData->IsActive();
 
-    SCTAB nCount = pDoc->GetTableCount();
+    SCTAB nCount = rDoc.GetTableCount();
     SCTAB i;
     OUString aString;
     SCTAB nMaxCnt = std::max( nCount, static_cast<SCTAB>(GetMaxId()) );
@@ -345,10 +345,10 @@ void ScTabControl::UpdateStatus()
     bool bModified = false;                                     // sheet name
     for (i=0; i<nMaxCnt && !bModified; i++)
     {
-        if (pDoc->IsVisible(i))
+        if (rDoc.IsVisible(i))
         {
-            pDoc->GetName(i,aString);
-            aTabBgColor = pDoc->GetTabBgColor(i);
+            rDoc.GetName(i,aString);
+            aTabBgColor = rDoc.GetTabBgColor(i);
         }
         else
         {
@@ -364,21 +364,21 @@ void ScTabControl::UpdateStatus()
         Clear();
         for (i=0; i<nCount; i++)
         {
-            if (pDoc->IsVisible(i))
+            if (rDoc.IsVisible(i))
             {
-                if (pDoc->GetName(i,aString))
+                if (rDoc.GetName(i,aString))
                 {
-                    if ( pDoc->IsScenario(i) )
+                    if ( rDoc.IsScenario(i) )
                         InsertPage(static_cast<sal_uInt16>(i)+1, aString, TabBarPageBits::Blue);
                     else
                         InsertPage( static_cast<sal_uInt16>(i)+1, aString );
 
-                    if ( pDoc->IsTabProtected(i) )
+                    if ( rDoc.IsTabProtected(i) )
                         SetProtectionSymbol(static_cast<sal_uInt16>(i)+1, true);
 
-                    if ( !pDoc->IsDefaultTabBgColor(i) )
+                    if ( !rDoc.IsDefaultTabBgColor(i) )
                     {
-                        aTabBgColor = pDoc->GetTabBgColor(i);
+                        aTabBgColor = rDoc.GetTabBgColor(i);
                         SetTabBgColor(static_cast<sal_uInt16>(i)+1, aTabBgColor );
                     }
                 }
@@ -530,10 +530,10 @@ sal_Int8 ScTabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     EndSwitchPage();
 
-    ScDocument* pDoc = pViewData->GetDocument();
+    ScDocument& rDoc = pViewData->GetDocument();
     const ScDragData& rData = SC_MOD()->GetDragData();
     if ( rData.pCellTransfer && (rData.pCellTransfer->GetDragSourceFlags() & ScDragSrc::Table) &&
-            rData.pCellTransfer->GetSourceDocument() == pDoc )
+            rData.pCellTransfer->GetSourceDocument() == &rDoc )
     {
         // moving of tables within the document
         SCTAB nPos = GetPrivatDropPos( rEvt.maPosPixel );
@@ -546,10 +546,10 @@ sal_Int8 ScTabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
         }
         else
         {
-            if ( !pDoc->GetChangeTrack() && pDoc->IsDocEditable() )
+            if ( !rDoc.GetChangeTrack() && rDoc.IsDocEditable() )
             {
                 //! use table selection from the tab control where dragging was started?
-                pViewData->GetView()->MoveTable( lcl_DocShellNr(pDoc), nPos, rEvt.mnAction != DND_ACTION_MOVE );
+                pViewData->GetView()->MoveTable( lcl_DocShellNr(&rDoc), nPos, rEvt.mnAction != DND_ACTION_MOVE );
 
                 rData.pCellTransfer->SetDragWasInternal();          // don't delete
                 return DND_ACTION_COPY;
@@ -569,13 +569,13 @@ sal_Int8 ScTabControl::AcceptDrop( const AcceptDropEvent& rEvt )
         return rEvt.mnAction;
     }
 
-    const ScDocument* pDoc = pViewData->GetDocument();
+    const ScDocument& rDoc = pViewData->GetDocument();
     const ScDragData& rData = SC_MOD()->GetDragData();
     if ( rData.pCellTransfer && (rData.pCellTransfer->GetDragSourceFlags() & ScDragSrc::Table) &&
-            rData.pCellTransfer->GetSourceDocument() == pDoc )
+            rData.pCellTransfer->GetSourceDocument() == &rDoc )
     {
         // moving of tables within the document
-        if ( !pDoc->GetChangeTrack() && pDoc->IsDocEditable() )
+        if ( !rDoc.GetChangeTrack() && rDoc.IsDocEditable() )
         {
             ShowDropPos( rEvt.maPosPixel );
             return rEvt.mnAction;
@@ -592,7 +592,7 @@ sal_Int8 ScTabControl::AcceptDrop( const AcceptDropEvent& rEvt )
 
 bool ScTabControl::StartRenaming()
 {
-    return pViewData->GetDocument()->IsDocEditable();
+    return pViewData->GetDocument().IsDocEditable();
 }
 
 TabBarAllowRenamingReturnCode ScTabControl::AllowRenaming()

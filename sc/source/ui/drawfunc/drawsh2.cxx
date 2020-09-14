@@ -69,7 +69,7 @@ ScDrawShell::ScDrawShell( ScViewData* pData ) :
     SetPool( &pViewData->GetScDrawView()->GetModel()->GetItemPool() );
     SfxUndoManager* pMgr = pViewData->GetSfxDocShell()->GetUndoManager();
     SetUndoManager( pMgr );
-    if ( !pViewData->GetDocument()->IsUndoEnabled() )
+    if ( !pViewData->GetDocument().IsUndoEnabled() )
     {
         pMgr->SetMaxUndoActionCount( 0 );
     }

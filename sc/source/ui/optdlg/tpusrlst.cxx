@@ -105,7 +105,7 @@ void ScTpUserLists::Init()
         SCROW   nEndRow     = 0;
 
         pViewData = &pViewSh->GetViewData();
-        pDoc = pViewData->GetDocument();
+        pDoc = &pViewData->GetDocument();
 
         pViewData->GetSimpleArea( nStartCol, nStartRow, nStartTab,
                                   nEndCol,   nEndRow,  nEndTab );

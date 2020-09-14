@@ -323,12 +323,12 @@ ScChildrenShapes::ScChildrenShapes(ScAccessibleDocument* pAccessibleDocument, Sc
         return;
 
     ScViewData& rViewData = pViewShell->GetViewData();
-    SfxBroadcaster* pDrawBC = rViewData.GetDocument()->GetDrawBroadcaster();
+    SfxBroadcaster* pDrawBC = rViewData.GetDocument().GetDrawBroadcaster();
     if (pDrawBC)
     {
         StartListening(*pDrawBC);
 
-        maShapeTreeInfo.SetModelBroadcaster( new ScDrawModelBroadcaster(rViewData.GetDocument()->GetDrawLayer()) );
+        maShapeTreeInfo.SetModelBroadcaster( new ScDrawModelBroadcaster(rViewData.GetDocument().GetDrawLayer()) );
         maShapeTreeInfo.SetSdrView(rViewData.GetScDrawView());
         maShapeTreeInfo.SetController(nullptr);
         maShapeTreeInfo.SetDevice(pViewShell->GetWindowByPos(meSplitPos));
@@ -342,7 +342,7 @@ ScChildrenShapes::~ScChildrenShapes()
         delete pShapeData;
     if (mpViewShell)
     {
-        SfxBroadcaster* pDrawBC = mpViewShell->GetViewData().GetDocument()->GetDrawBroadcaster();
+        SfxBroadcaster* pDrawBC = mpViewShell->GetViewData().GetDocument().GetDrawBroadcaster();
         if (pDrawBC)
             EndListening(*pDrawBC);
     }
@@ -356,12 +356,12 @@ void ScChildrenShapes::SetDrawBroadcaster()
         return;
 
     ScViewData& rViewData = mpViewShell->GetViewData();
-    SfxBroadcaster* pDrawBC = rViewData.GetDocument()->GetDrawBroadcaster();
+    SfxBroadcaster* pDrawBC = rViewData.GetDocument().GetDrawBroadcaster();
     if (pDrawBC)
     {
         StartListening(*pDrawBC, DuplicateHandling::Prevent);
 
-        maShapeTreeInfo.SetModelBroadcaster( new ScDrawModelBroadcaster(rViewData.GetDocument()->GetDrawLayer()) );
+        maShapeTreeInfo.SetModelBroadcaster( new ScDrawModelBroadcaster(rViewData.GetDocument().GetDrawLayer()) );
         maShapeTreeInfo.SetSdrView(rViewData.GetScDrawView());
         maShapeTreeInfo.SetController(nullptr);
         maShapeTreeInfo.SetDevice(mpViewShell->GetWindowByPos(meSplitPos));
@@ -874,10 +874,9 @@ SdrPage* ScChildrenShapes::GetDrawPage() const
     SdrPage* pDrawPage = nullptr;
     if (mpViewShell)
     {
-        ScDocument* pDoc = mpViewShell->GetViewData().GetDocument();
-        if (pDoc && pDoc->GetDrawLayer())
+        ScDocument& rDoc = mpViewShell->GetViewData().GetDocument();
+        if (ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer())
         {
-            ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
             if (pDrawLayer->HasObjects() && (pDrawLayer->GetPageCount() > nTab))
                 pDrawPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(static_cast<sal_Int16>(nTab)));
         }
@@ -2198,7 +2197,7 @@ OUString ScAccessibleDocument::GetCurrentCellDescription()
 
 ScDocument *ScAccessibleDocument::GetDocument() const
 {
-    return mpViewShell ? mpViewShell->GetViewData().GetDocument() : nullptr;
+    return mpViewShell ? &mpViewShell->GetViewData().GetDocument() : nullptr;
 }
 
 ScAddress   ScAccessibleDocument::GetCurCellAddress() const

@@ -655,7 +655,7 @@ void ScTiledRenderingTest::testViewLock()
     const ScViewData* pViewData = ScDocShell::GetViewData();
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
     CPPUNIT_ASSERT(pViewShell);
-    SdrModel* pDrawModel = pViewData->GetDocument()->GetDrawLayer();
+    SdrModel* pDrawModel = pViewData->GetDocument().GetDrawLayer();
     SdrPage* pDrawPage = pDrawModel->GetPage(0);
     SdrObject* pObject = pDrawPage->GetObj(0);
     SdrView* pView = pViewShell->GetScDrawView();
@@ -838,7 +838,7 @@ void ScTiledRenderingTest::testCreateViewGraphicSelection()
     const ScViewData* pViewData = ScDocShell::GetViewData();
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
     CPPUNIT_ASSERT(pViewShell);
-    SdrModel* pDrawModel = pViewData->GetDocument()->GetDrawLayer();
+    SdrModel* pDrawModel = pViewData->GetDocument().GetDrawLayer();
     SdrPage* pDrawPage = pDrawModel->GetPage(0);
     SdrObject* pObject = pDrawPage->GetObj(0);
     SdrView* pView = pViewShell->GetScDrawView();

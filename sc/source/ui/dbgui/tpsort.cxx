@@ -317,10 +317,7 @@ void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
     if ( !pViewData )
         return;
 
-    ScDocument* pDoc = pViewData->GetDocument();
-
-    if ( !pDoc )
-        return;
+    ScDocument& rDoc = pViewData->GetDocument();
 
     for (sal_uInt16 j = nStartField; j < nSortKeyCount; ++j)
     {
@@ -339,12 +336,12 @@ void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
     if ( bSortByRows )
     {
         OUString  aFieldName;
-        SCCOL   nMaxCol = pDoc->ClampToAllocatedColumns(nTab, aSortData.nCol2);
+        SCCOL   nMaxCol = rDoc.ClampToAllocatedColumns(nTab, aSortData.nCol2);
         SCCOL   col;
 
         for ( col=nFirstSortCol; col<=nMaxCol && i<SC_MAXFIELDS; col++ )
         {
-            aFieldName = pDoc->GetString(col, nFirstSortRow, nTab);
+            aFieldName = rDoc.GetString(col, nFirstSortRow, nTab);
             if ( !bHasHeader || aFieldName.isEmpty() )
             {
                 aFieldName = ScGlobal::ReplaceOrAppend( aStrColumn, "%1", ScColToAlpha( col ));
@@ -365,7 +362,7 @@ void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
 
         for ( row=nFirstSortRow; row<=nMaxRow && i<SC_MAXFIELDS; row++ )
         {
-            aFieldName = pDoc->GetString(nFirstSortCol, row, nTab);
+            aFieldName = rDoc.GetString(nFirstSortCol, row, nTab);
             if ( !bHasHeader || aFieldName.isEmpty() )
             {
                 aFieldName = ScGlobal::ReplaceOrAppend( aStrRow, "%1", OUString::number( row+1));
@@ -530,7 +527,7 @@ void ScTabPageSortOptions::Init()
     m_xLbLanguage->connect_changed( LINK( this, ScTabPageSortOptions, FillAlgorHdl ) );
 
     pViewData = rSortItem.GetViewData();
-    pDoc      = pViewData ? pViewData->GetDocument() : nullptr;
+    pDoc      = pViewData ? &pViewData->GetDocument() : nullptr;
 
     OSL_ENSURE( pViewData, "ViewData not found! :-/" );
 

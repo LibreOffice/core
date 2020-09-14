@@ -82,7 +82,7 @@ void ScDrawView::Construct()
         ShowSdrPage(GetModel()->GetPage(nViewTab));
 
         bool bEx = pViewData->GetViewShell()->IsDrawSelMode();
-        bool bProt = pDoc->IsTabProtected( nViewTab ) ||
+        bool bProt = rDoc.IsTabProtected( nViewTab ) ||
                      pViewData->GetSfxDocShell()->IsReadOnly();
 
         SdrLayer* pLayer;
@@ -318,14 +318,14 @@ void ScDrawView::RecalcScale()
 
     SCCOL nEndCol = 0;
     SCROW nEndRow = 0;
-    pDoc->GetTableArea( nTab, nEndCol, nEndRow );
+    rDoc.GetTableArea( nTab, nEndCol, nEndRow );
     if (nEndCol<20)
         nEndCol = 20;
     if (nEndRow<20)
         nEndRow = 20;
 
     ScDrawUtil::CalcScale(
-        pDoc, nTab, 0, 0, nEndCol, nEndRow, pDev, aZoomX, aZoomY, nPPTX, nPPTY,
+        &rDoc, nTab, 0, 0, nEndCol, nEndRow, pDev, aZoomX, aZoomY, nPPTX, nPPTY,
         aScaleX, aScaleY);
 
     // clear all evtl existing GridOffset vectors
@@ -647,11 +647,11 @@ void ScDrawView::UpdateUserViewOptions()
 
 SdrObject* ScDrawView::GetObjectByName(const OUString& rName)
 {
-    SfxObjectShell* pShell = pDoc->GetDocumentShell();
+    SfxObjectShell* pShell = rDoc.GetDocumentShell();
     if (pShell)
     {
         SdrModel* pDrawLayer = GetModel();
-        sal_uInt16 nTabCount = pDoc->GetTableCount();
+        sal_uInt16 nTabCount = rDoc.GetTableCount();
         for (sal_uInt16 i=0; i<nTabCount; i++)
         {
             SdrPage* pPage = pDrawLayer->GetPage(i);
@@ -680,11 +680,11 @@ void ScDrawView::SelectCurrentViewObject( const OUString& rName )
 {
     sal_uInt16 nObjectTab = 0;
     SdrObject* pFound = nullptr;
-    SfxObjectShell* pShell = pDoc->GetDocumentShell();
+    SfxObjectShell* pShell = rDoc.GetDocumentShell();
     if (pShell)
     {
         SdrModel* pDrawLayer = GetModel();
-        sal_uInt16 nTabCount = pDoc->GetTableCount();
+        sal_uInt16 nTabCount = rDoc.GetTableCount();
         for (sal_uInt16 i=0; i<nTabCount && !pFound; i++)
         {
             SdrPage* pPage = pDrawLayer->GetPage(i);
@@ -715,7 +715,7 @@ void ScDrawView::SelectCurrentViewObject( const OUString& rName )
     pView->ScrollToObject( pFound );
     if ( pFound->GetLayer() == SC_LAYER_BACK &&
             !pViewData->GetViewShell()->IsDrawSelMode() &&
-            !pDoc->IsTabProtected( nTab ) &&
+            !rDoc.IsTabProtected( nTab ) &&
             !pViewData->GetSfxDocShell()->IsReadOnly() )
     {
         SdrLayer* pLayer = GetModel()->GetLayerAdmin().GetLayerPerID(SC_LAYER_BACK);
@@ -734,11 +734,11 @@ bool ScDrawView::SelectObject( const OUString& rName )
     SCTAB nObjectTab = 0;
     SdrObject* pFound = nullptr;
 
-    SfxObjectShell* pShell = pDoc->GetDocumentShell();
+    SfxObjectShell* pShell = rDoc.GetDocumentShell();
     if (pShell)
     {
         SdrModel* pDrawLayer = GetModel();
-        SCTAB nTabCount = pDoc->GetTableCount();
+        SCTAB nTabCount = rDoc.GetTableCount();
         for (SCTAB i=0; i<nTabCount && !pFound; i++)
         {
             SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(i));
@@ -775,7 +775,7 @@ bool ScDrawView::SelectObject( const OUString& rName )
             (this is reversed in MarkListHasChanged when nothing is selected) */
         if ( pFound->GetLayer() == SC_LAYER_BACK &&
                 !pViewData->GetViewShell()->IsDrawSelMode() &&
-                !pDoc->IsTabProtected( nTab ) &&
+                !rDoc.IsTabProtected( nTab ) &&
                 !pViewData->GetSfxDocShell()->IsReadOnly() )
         {
             LockBackgroundLayer(false);
@@ -857,13 +857,13 @@ void ScDrawView::DeleteMarked()
     ScDrawObjData* pCaptData = nullptr;
     if( SdrObject* pCaptObj = GetMarkedNoteCaption( &pCaptData ) )
     {
-        ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+        ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
         ScDocShell* pDocShell = pViewData ? pViewData->GetDocShell() : nullptr;
         SfxUndoManager* pUndoMgr = pDocShell ? pDocShell->GetUndoManager() : nullptr;
-        bool bUndo = pDrawLayer && pDocShell && pUndoMgr && pDoc->IsUndoEnabled();
+        bool bUndo = pDrawLayer && pDocShell && pUndoMgr && rDoc.IsUndoEnabled();
 
         // remove the cell note from document, we are its owner now
-        std::unique_ptr<ScPostIt> pNote = pDoc->ReleaseNote( pCaptData->maStart );
+        std::unique_ptr<ScPostIt> pNote = rDoc.ReleaseNote( pCaptData->maStart );
         OSL_ENSURE( pNote, "ScDrawView::DeleteMarked - cell note missing in document" );
         if( pNote )
         {
@@ -951,13 +951,13 @@ void ScDrawView::SyncForGrid( SdrObject* pObj )
         ScDrawLayer::GetCellAnchorFromPosition(
             aObjRect,
             aAnchor,
-            *pDoc,
+            rDoc,
             GetTab());
         aOldStt = aAnchor.maStart;
     }
     MapMode aDrawMode = pGridWin->GetDrawMapMode();
     // find pos anchor position
-    Point aOldPos( pDoc->GetColOffset( aOldStt.Col(), aOldStt.Tab()  ), pDoc->GetRowOffset( aOldStt.Row(), aOldStt.Tab() ) );
+    Point aOldPos( rDoc.GetColOffset( aOldStt.Col(), aOldStt.Tab()  ), rDoc.GetRowOffset( aOldStt.Row(), aOldStt.Tab() ) );
     aOldPos.setX( sc::TwipsToHMM( aOldPos.X() ) );
     aOldPos.setY( sc::TwipsToHMM( aOldPos.Y() ) );
     // find position of same point on the screen ( e.g. grid )
@@ -965,7 +965,7 @@ void ScDrawView::SyncForGrid( SdrObject* pObj )
     Point aCurPosHmm = pGridWin->PixelToLogic(aCurPos, aDrawMode );
     Point aGridOff = aCurPosHmm - aOldPos;
     // fdo#63878 Fix the X position for RTL Sheet
-    if( pDoc->IsNegativePage( GetTab() ) )
+    if( rDoc.IsNegativePage( GetTab() ) )
         aGridOff.setX( aCurPosHmm.getX() + aOldPos.getX() );
 }
 
@@ -1026,7 +1026,7 @@ bool ScDrawView::calculateGridOffsetForSdrObject(
         ScDrawLayer::GetCellAnchorFromPosition(
             aObjRect,
             aAnchor,
-            *pDoc,
+            rDoc,
             GetTab());
         aOldStt = aAnchor.maStart;
     }
@@ -1034,7 +1034,7 @@ bool ScDrawView::calculateGridOffsetForSdrObject(
     MapMode aDrawMode = pGridWin->GetDrawMapMode();
 
     // find pos anchor position
-    Point aOldPos(pDoc->GetColOffset(aOldStt.Col(), aOldStt.Tab()), pDoc->GetRowOffset(aOldStt.Row(), aOldStt.Tab()));
+    Point aOldPos(rDoc.GetColOffset(aOldStt.Col(), aOldStt.Tab()), rDoc.GetRowOffset(aOldStt.Row(), aOldStt.Tab()));
     aOldPos.setX(sc::TwipsToHMM(aOldPos.X()));
     aOldPos.setY(sc::TwipsToHMM(aOldPos.Y()));
 
@@ -1045,7 +1045,7 @@ bool ScDrawView::calculateGridOffsetForSdrObject(
     Point aGridOff(aCurPosHmm - aOldPos);
 
     // fdo#63878 Fix the X position for RTL Sheet
-    if(pDoc->IsNegativePage(GetTab()))
+    if(rDoc.IsNegativePage(GetTab()))
     {
         aGridOff.setX(aCurPosHmm.getX() + aOldPos.getX());
     }
@@ -1075,14 +1075,14 @@ bool ScDrawView::calculateGridOffsetForB2DRange(
     ScDrawLayer::GetCellAnchorFromPosition(
         aRectangle,
         aAnchor,
-        *pDoc,
+        rDoc,
         GetTab());
     ScAddress aOldStt(aAnchor.maStart);
 
     MapMode aDrawMode = pGridWin->GetDrawMapMode();
 
     // find pos anchor position
-    Point aOldPos(pDoc->GetColOffset(aOldStt.Col(), aOldStt.Tab()), pDoc->GetRowOffset(aOldStt.Row(), aOldStt.Tab()));
+    Point aOldPos(rDoc.GetColOffset(aOldStt.Col(), aOldStt.Tab()), rDoc.GetRowOffset(aOldStt.Row(), aOldStt.Tab()));
     aOldPos.setX(sc::TwipsToHMM(aOldPos.X()));
     aOldPos.setY(sc::TwipsToHMM(aOldPos.Y()));
 
@@ -1093,7 +1093,7 @@ bool ScDrawView::calculateGridOffsetForB2DRange(
     Point aGridOff(aCurPosHmm - aOldPos);
 
     // fdo#63878 Fix the X position for RTL Sheet
-    if(pDoc->IsNegativePage(GetTab()))
+    if(rDoc.IsNegativePage(GetTab()))
     {
         aGridOff.setX(aCurPosHmm.getX() + aOldPos.getX());
     }
@@ -1106,7 +1106,7 @@ bool ScDrawView::calculateGridOffsetForB2DRange(
 // support enhanced text edit for draw objects
 SdrUndoManager* ScDrawView::getSdrUndoManagerForEnhancedTextEdit() const
 {
-    return pDoc ? dynamic_cast< SdrUndoManager* >(pDoc->GetUndoManager()) : nullptr;
+    return dynamic_cast<SdrUndoManager*>(rDoc.GetUndoManager());
 }
 
 // #i123922# helper to apply a Graphic to an existing SdrObject
