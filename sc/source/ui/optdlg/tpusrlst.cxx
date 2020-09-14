@@ -654,7 +654,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, weld::Button&, rBtn, void )
             if ( !bAreaOk )
             {
                 bAreaOk = ScRangeUtil::IsAbsPos(  theAreaStr,
-                                                 pDoc,
+                                                 *pDoc,
                                                  pViewData->GetTabNo(),
                                                  &theAreaStr,
                                                  &theStartPos,
