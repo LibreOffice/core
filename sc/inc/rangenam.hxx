@@ -153,7 +153,7 @@ public:
 
     void            ValidateTabRefs();
 
-    static void     MakeValidName( const ScDocument* pDoc, OUString& rName );
+    static void     MakeValidName( const ScDocument& rDoc, OUString& rName );
 
     SC_DLLPUBLIC static IsNameValidType     IsNameValid( const OUString& rName, const ScDocument* pDoc );
 

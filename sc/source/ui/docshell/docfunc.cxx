@@ -5208,7 +5208,7 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
         return;
 
     OUString aName = rDoc.GetString(nPosX, nPosY, nTab);
-    ScRangeData::MakeValidName(&rDoc, aName);
+    ScRangeData::MakeValidName(rDoc, aName);
     if (aName.isEmpty())
         return;
 
