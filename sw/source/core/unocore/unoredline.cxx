@@ -197,7 +197,10 @@ static uno::Sequence<beans::PropertyValue> lcl_GetSuccessorProperties(const SwRa
 uno::Any SwXRedlinePortion::getPropertyValue( const OUString& rPropertyName )
 {
     SolarMutexGuard aGuard;
-    Validate();
+    if (!Validate())
+    {
+        return uno::Any();
+    }
     uno::Any aRet;
     if(rPropertyName == UNO_NAME_REDLINE_TEXT)
     {
@@ -225,7 +228,7 @@ uno::Any SwXRedlinePortion::getPropertyValue( const OUString& rPropertyName )
     return aRet;
 }
 
-void SwXRedlinePortion::Validate()
+bool SwXRedlinePortion::Validate()
 {
     SwUnoCursor& rUnoCursor = GetCursor();
     //search for the redline
@@ -233,9 +236,11 @@ void SwXRedlinePortion::Validate()
     const SwRedlineTable& rRedTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
     bool bFound = false;
     for(size_t nRed = 0; nRed < rRedTable.size() && !bFound; nRed++)
+    {
         bFound = &m_rRedline == rRedTable[nRed];
-    if(!bFound)
-        throw uno::RuntimeException();
+    }
+    return bFound;
+    // don't throw; the only caller can return void instead
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL SwXRedlinePortion::getImplementationId(  )
