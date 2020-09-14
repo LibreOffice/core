@@ -1149,7 +1149,7 @@ ScVbaRange::getCellRangesForAddress( ScRefFlags& rResFlags, const OUString& sAdd
     if ( pDocSh )
     {
         ScDocument& rDoc = pDocSh->GetDocument();
-        rResFlags = rCellRanges.Parse( sAddress, &rDoc, eConv, 0, cDelimiter );
+        rResFlags = rCellRanges.Parse( sAddress, rDoc, eConv, 0, cDelimiter );
         if ( rResFlags & ScRefFlags::VALID )
         {
             return true;

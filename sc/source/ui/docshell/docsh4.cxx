@@ -360,7 +360,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 if (!bValid)
                 {
                     aRangeListRef = new ScRangeList;
-                    aRangeListRef->Parse( aRangeName, &rDoc );
+                    aRangeListRef->Parse( aRangeName, rDoc );
                     if ( !aRangeListRef->empty() )
                     {
                         bMultiRange = true;

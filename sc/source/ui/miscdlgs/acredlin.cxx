@@ -865,7 +865,7 @@ IMPL_LINK( ScAcceptChgDlg, FilterHandle, SvxTPFilter*, pRef, void )
     {
         ClearView();
         aRangeList.RemoveAll();
-        aRangeList.Parse(pTPFilter->GetRange(),pDoc);
+        aRangeList.Parse(pTPFilter->GetRange(), *pDoc);
         UpdateView();
     }
 }

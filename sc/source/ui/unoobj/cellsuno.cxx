@@ -4378,7 +4378,7 @@ void SAL_CALL ScCellRangesObj::removeByName( const OUString& aName )
     {
         //  deselect any ranges (parsed or named entry)
         ScRangeList aDiff;
-        bool bValid = ( aDiff.Parse( aName, &pDocSh->GetDocument() ) & ScRefFlags::VALID )
+        bool bValid = ( aDiff.Parse( aName, pDocSh->GetDocument() ) & ScRefFlags::VALID )
                                                                        == ScRefFlags::VALID;
         if (!bValid)
         {
