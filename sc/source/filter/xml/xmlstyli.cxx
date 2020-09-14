@@ -394,7 +394,7 @@ ScCondFormatEntry* ScXMLMapContext::CreateConditionEntry()
     ScConditionMode eMode = ScConditionEntry::GetModeFromApi(aParseResult.meOperator);
     ScDocument* pDoc = GetScImport().GetDocument();
 
-    ScCondFormatEntry* pEntry =  new ScCondFormatEntry(eMode, aParseResult.maOperand1, aParseResult.maOperand2, pDoc, ScAddress(), msApplyStyle,
+    ScCondFormatEntry* pEntry =  new ScCondFormatEntry(eMode, aParseResult.maOperand1, aParseResult.maOperand2, *pDoc, ScAddress(), msApplyStyle,
                                                     OUString(), OUString(), eGrammar, eGrammar);
 
     pEntry->SetSrcString(msBaseCell);

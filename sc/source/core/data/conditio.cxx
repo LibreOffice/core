@@ -188,7 +188,7 @@ ScConditionEntry::ScConditionEntry( const ScConditionEntry& r ) :
     bRelRef1(r.bRelRef1),
     bRelRef2(r.bRelRef2),
     bFirstRun(true),
-    mpListener(new ScFormulaListener(r.mpDoc)),
+    mpListener(new ScFormulaListener(*r.mpDoc)),
     eConditionType( r.eConditionType ),
     pCondFormat(r.pCondFormat)
 {
@@ -221,7 +221,7 @@ ScConditionEntry::ScConditionEntry( ScDocument* pDocument, const ScConditionEntr
     bRelRef1(r.bRelRef1),
     bRelRef2(r.bRelRef2),
     bFirstRun(true),
-    mpListener(new ScFormulaListener(pDocument)),
+    mpListener(new ScFormulaListener(*pDocument)),
     eConditionType( r.eConditionType),
     pCondFormat(r.pCondFormat)
 {
@@ -236,11 +236,11 @@ ScConditionEntry::ScConditionEntry( ScDocument* pDocument, const ScConditionEntr
 }
 
 ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
-        const OUString& rExpr1, const OUString& rExpr2, ScDocument* pDocument, const ScAddress& rPos,
+        const OUString& rExpr1, const OUString& rExpr2, ScDocument& rDocument, const ScAddress& rPos,
         const OUString& rExprNmsp1, const OUString& rExprNmsp2,
         FormulaGrammar::Grammar eGrammar1, FormulaGrammar::Grammar eGrammar2,
         Type eType ) :
-    ScFormatEntry(pDocument),
+    ScFormatEntry(&rDocument),
     eOp(eOper),
     nOptions(0),
     nVal1(0.0),
@@ -255,7 +255,7 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
     bRelRef1(false),
     bRelRef2(false),
     bFirstRun(true),
-    mpListener(new ScFormulaListener(pDocument)),
+    mpListener(new ScFormulaListener(rDocument)),
     eConditionType(eType),
     pCondFormat(nullptr)
 {
@@ -280,7 +280,7 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
     bRelRef1(false),
     bRelRef2(false),
     bFirstRun(true),
-    mpListener(new ScFormulaListener(pDocument)),
+    mpListener(new ScFormulaListener(*pDocument)),
     eConditionType(ScFormatEntry::Type::Condition),
     pCondFormat(nullptr)
 {
@@ -1454,13 +1454,13 @@ bool ScConditionEntry::NeedsRepaint() const
 
 ScCondFormatEntry::ScCondFormatEntry( ScConditionMode eOper,
                                         const OUString& rExpr1, const OUString& rExpr2,
-                                        ScDocument* pDocument, const ScAddress& rPos,
+                                        ScDocument& rDocument, const ScAddress& rPos,
                                         const OUString& rStyle,
                                         const OUString& rExprNmsp1, const OUString& rExprNmsp2,
                                         FormulaGrammar::Grammar eGrammar1,
                                         FormulaGrammar::Grammar eGrammar2,
                                         ScFormatEntry::Type eType ) :
-    ScConditionEntry( eOper, rExpr1, rExpr2, pDocument, rPos, rExprNmsp1, rExprNmsp2, eGrammar1, eGrammar2, eType ),
+    ScConditionEntry( eOper, rExpr1, rExpr2, rDocument, rPos, rExprNmsp1, rExprNmsp2, eGrammar1, eGrammar2, eType ),
     aStyleName( rStyle ),
     eCondFormatType( eType )
 {
