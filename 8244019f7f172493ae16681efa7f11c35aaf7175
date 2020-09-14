@@ -34,6 +34,24 @@
       "revId": "8244019f7f172493ae16681efa7f11c35aaf7175",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "efabed06_b2f77558",
+        "filename": "sc/source/core/tool/detfunc.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 1611,
+      "author": {
+        "id": 1002532
+      },
+      "writtenOn": "2020-09-14T06:07:25Z",
+      "side": 1,
+      "message": "Hi Eike,\nThe SdrCircObj is derived from SdrRectObj, so we extended the handled objects 😊. So, there is no unhandled case.\nBut, you are right, the nice solution is to create a new enum, and to handle it separately with required enum values.",
+      "parentUuid": "c8c30b8b_d1c0edeb",
+      "revId": "8244019f7f172493ae16681efa7f11c35aaf7175",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
