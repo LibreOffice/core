@@ -70,7 +70,7 @@ class MyService1Impl
 {
     oslInterlockedCount m_refcount;
     OUString m_sData;
-    // it's good practise to store the context for further use when you use
+    // it's good practice to store the context for further use when you use
     // other UNO API's in your implementation
     Reference< XComponentContext > m_xContext;
 public:
