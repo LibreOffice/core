@@ -926,17 +926,6 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
             // the line had a scheme color and the user didn't change it
             WriteSolidFill( sColorFillScheme, aTransformations );
         }
-        // tdf#77236: I do not understand why this condition is required.
-        // The original docx document of bug tdf#77236 includes the native colors in both places,
-        // so, I think, we can export this color too (not only schema ones).
-        //else if( aStyleProperties.hasElements() )
-        //{
-        //    if( nColor != nStyleColor )
-        //        // the line style defines some color but it wasn't being used
-        //        WriteSolidFill( nColor );
-        //    // in case the shape used the style color and the user didn't change it,
-        //    // we must not write a <a: solidFill> tag.
-        //}
         else
         {
             WriteSolidFill( nColor, nColorAlpha );
