@@ -1955,6 +1955,7 @@ void SwDoc::dumpAsXml(xmlTextWriterPtr pWriter) const
     mpFrameFormatTable->dumpAsXml(pWriter, "frmFormatTable");
     mpSpzFrameFormatTable->dumpAsXml(pWriter, "spzFrameFormatTable");
     mpSectionFormatTable->dumpAsXml(pWriter);
+    mpTableFrameFormatTable->dumpAsXml(pWriter, "tableFrameFormatTable");
     mpNumRuleTable->dumpAsXml(pWriter);
     getIDocumentRedlineAccess().GetRedlineTable().dumpAsXml(pWriter);
     getIDocumentRedlineAccess().GetExtraRedlineTable().dumpAsXml(pWriter);
