@@ -203,10 +203,10 @@ ScColorScaleEntry::~ScColorScaleEntry() COVERITY_NOEXCEPT_FALSE
         mpCell->EndListeningTo(*mpCell->GetDocument());
 }
 
-void ScColorScaleEntry::SetFormula( const OUString& rFormula, ScDocument* pDoc, const ScAddress& rAddr, formula::FormulaGrammar::Grammar eGrammar )
+void ScColorScaleEntry::SetFormula( const OUString& rFormula, ScDocument& rDoc, const ScAddress& rAddr, formula::FormulaGrammar::Grammar eGrammar )
 {
-    mpCell.reset(new ScFormulaCell( pDoc, rAddr, rFormula, eGrammar ));
-    mpCell->StartListeningTo( *pDoc );
+    mpCell.reset(new ScFormulaCell( &rDoc, rAddr, rFormula, eGrammar ));
+    mpCell->StartListeningTo( rDoc );
     mpListener.reset(new ScFormulaListener(mpCell.get()));
     if (mpFormat)
         mpListener->setCallback([&]() { mpFormat->DoRepaint();});
