@@ -934,9 +934,9 @@ bool ScArea::operator==( const ScArea& r ) const
             && (nRowEnd     == r.nRowEnd) );
 }
 
-ScAreaNameIterator::ScAreaNameIterator( const ScDocument* pDoc ) :
-    pRangeName(pDoc->GetRangeName()),
-    pDBCollection(pDoc->GetDBCollection()),
+ScAreaNameIterator::ScAreaNameIterator( const ScDocument& rDoc ) :
+    pRangeName(rDoc.GetRangeName()),
+    pDBCollection(rDoc.GetDBCollection()),
     bFirstPass(true)
 {
     if (pRangeName)

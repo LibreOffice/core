@@ -188,7 +188,7 @@ void ScConsolidateDlg::Init()
         OUString aStrName;
         sal_uInt16 nAt = 0;
         ScRange aRange;
-        ScAreaNameIterator aIter( pDoc );
+        ScAreaNameIterator aIter( *pDoc );
         while ( aIter.Next( aStrName, aRange ) )
         {
             OUString aStrArea(aRange.Format(*pDoc, ScRefFlags::ADDR_ABS_3D, eConv));
