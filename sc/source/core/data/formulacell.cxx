@@ -3838,7 +3838,7 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
             SingleDoubleRefModifier aMod(*t);
             ScComplexRefData& rRef = aMod.Ref();
             ScRange aAbs = rRef.toAbs(*pDocument, aOldPos);
-            bool bMod = (ScRefUpdate::UpdateTranspose(pDocument, rSource, rDest, aAbs) != UR_NOTHING || bPosChanged);
+            bool bMod = (ScRefUpdate::UpdateTranspose(*pDocument, rSource, rDest, aAbs) != UR_NOTHING || bPosChanged);
             if (bMod)
             {
                 rRef.SetRange(pDocument->GetSheetLimits(), aAbs, aPos); // based on the new anchor position.

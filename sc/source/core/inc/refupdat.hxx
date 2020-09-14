@@ -60,7 +60,7 @@ public:
                              SCCOL nMaxCol, SCROW nMaxRow, ScComplexRefData& rRef );
 
     static ScRefUpdateRes UpdateTranspose(
-        const ScDocument* pDoc, const ScRange& rSource, const ScAddress& rDest, ScRange& rRef );
+        const ScDocument& rDoc, const ScRange& rSource, const ScAddress& rDest, ScRange& rRef );
 
     static void DoTranspose( SCCOL& rCol, SCROW& rRow, SCTAB& rTab, const ScDocument* pDoc,
                                 const ScRange& rSource, const ScAddress& rDest );
