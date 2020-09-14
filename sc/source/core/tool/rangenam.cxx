@@ -293,7 +293,7 @@ void ScRangeData::UpdateTranspose( const ScRange& rSource, const ScAddress& rDes
                     (!rRef.Ref2.IsFlag3D() || !rRef.Ref2.IsTabRel()))))
             {
                 ScRange aAbs = rRef.toAbs(rDoc, aPos);
-                if (ScRefUpdate::UpdateTranspose(&rDoc, rSource, rDest, aAbs) != UR_NOTHING)
+                if (ScRefUpdate::UpdateTranspose(rDoc, rSource, rDest, aAbs) != UR_NOTHING)
                 {
                     rRef.SetRange(rDoc.GetSheetLimits(), aAbs, aPos);
                     bChanged = true;

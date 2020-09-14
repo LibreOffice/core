@@ -531,7 +531,7 @@ void ScRefUpdate::DoTranspose( SCCOL& rCol, SCROW& rRow, SCTAB& rTab,
 }
 
 ScRefUpdateRes ScRefUpdate::UpdateTranspose(
-    const ScDocument* pDoc, const ScRange& rSource, const ScAddress& rDest, ScRange& rRef )
+    const ScDocument& rDoc, const ScRange& rSource, const ScAddress& rDest, ScRange& rRef )
 {
     ScRefUpdateRes eRet = UR_NOTHING;
     if (rRef.aStart.Col() >= rSource.aStart.Col() && rRef.aEnd.Col() <= rSource.aEnd.Col() &&
@@ -542,8 +542,8 @@ ScRefUpdateRes ScRefUpdate::UpdateTranspose(
         SCCOL nCol1 = rRef.aStart.Col(), nCol2 = rRef.aEnd.Col();
         SCROW nRow1 = rRef.aStart.Row(), nRow2 = rRef.aEnd.Row();
         SCTAB nTab1 = rRef.aStart.Tab(), nTab2 = rRef.aEnd.Tab();
-        DoTranspose(nCol1, nRow1, nTab1, pDoc, rSource, rDest);
-        DoTranspose(nCol2, nRow2, nTab2, pDoc, rSource, rDest);
+        DoTranspose(nCol1, nRow1, nTab1, &rDoc, rSource, rDest);
+        DoTranspose(nCol2, nRow2, nTab2, &rDoc, rSource, rDest);
         rRef.aStart = ScAddress(nCol1, nRow1, nTab1);
         rRef.aEnd = ScAddress(nCol2, nRow2, nTab2);
         eRet = UR_UPDATED;
