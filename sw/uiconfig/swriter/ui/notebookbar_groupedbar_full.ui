@@ -330,6 +330,13 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="MenuComments-ResolveCommentThread">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ResolveCommentThread</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="MenuComments-DeleteAuthor">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
