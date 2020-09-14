@@ -122,7 +122,7 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
     m_xEdFilterArea->SetModifyHdl  ( LINK( this, ScSpecialFilterDlg, FilterAreaModHdl ) );
 
     pViewData   = rQueryItem.GetViewData();
-    pDoc        = pViewData ? pViewData->GetDocument()  : nullptr;
+    pDoc        = pViewData ? &pViewData->GetDocument() : nullptr;
 
     m_xEdFilterArea->SetText( EMPTY_OUSTRING );      // may be overwritten below
 

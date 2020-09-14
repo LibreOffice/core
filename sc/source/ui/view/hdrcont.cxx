@@ -569,8 +569,8 @@ bool ScHeaderControl::IsSelectionAllowed(SCCOLROW nPos) const
 
     ScViewData& rViewData = pViewSh->GetViewData();
     sal_uInt16 nTab = rViewData.GetTabNo();
-    ScDocument* pDoc = rViewData.GetDocument();
-    const ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
+    ScDocument& rDoc = rViewData.GetDocument();
+    const ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
     bool bSelectAllowed = true;
     if ( pProtect && pProtect->isProtected() )
     {
@@ -580,13 +580,13 @@ bool ScHeaderControl::IsSelectionAllowed(SCCOLROW nPos) const
         {
             // row header
             SCROW nRPos = static_cast<SCROW>(nPos);
-            bCellsProtected = pDoc->HasAttrib(0, nRPos, nTab, pDoc->MaxCol(), nRPos, nTab, HasAttrFlags::Protected);
+            bCellsProtected = rDoc.HasAttrib(0, nRPos, nTab, rDoc.MaxCol(), nRPos, nTab, HasAttrFlags::Protected);
         }
         else
         {
             // column header
             SCCOL nCPos = static_cast<SCCOL>(nPos);
-            bCellsProtected = pDoc->HasAttrib(nCPos, 0, nTab, nCPos, pDoc->MaxRow(), nTab, HasAttrFlags::Protected);
+            bCellsProtected = rDoc.HasAttrib(nCPos, 0, nTab, nCPos, rDoc.MaxRow(), nTab, HasAttrFlags::Protected);
         }
 
         bool bSelProtected   = pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
@@ -622,16 +622,16 @@ void ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
         if( !rMEvt.IsShift() )
             pTabView->DoneRefMode( rMEvt.IsMod1() );
         ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
-        ScDocument* pDoc = pViewSh->GetViewData().GetDocument();
+        ScDocument& rDoc = pViewSh->GetViewData().GetDocument();
         if( !bVertical )
         {
             pTabView->InitRefMode( nHitNo, 0, nTab, SC_REFTYPE_REF );
-            pTabView->UpdateRef( nHitNo, pDoc->MaxRow(), nTab );
+            pTabView->UpdateRef( nHitNo, rDoc.MaxRow(), nTab );
         }
         else
         {
             pTabView->InitRefMode( 0, nHitNo, nTab, SC_REFTYPE_REF );
-            pTabView->UpdateRef( pDoc->MaxCol(), nHitNo, nTab );
+            pTabView->UpdateRef( rDoc.MaxCol(), nHitNo, nTab );
         }
         bInRefMode = true;
         return;
@@ -772,11 +772,11 @@ void ScHeaderControl::MouseMove( const MouseEvent& rMEvt )
         SCCOLROW nHitNo = GetMousePos( rMEvt, bTmp );
         SCTAB nTab = pTabView->GetViewData().GetTabNo();
         ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
-        ScDocument* pDoc = pViewSh->GetViewData().GetDocument();
+        ScDocument& rDoc = pViewSh->GetViewData().GetDocument();
         if( !bVertical )
-            pTabView->UpdateRef( nHitNo, pDoc->MaxRow(), nTab );
+            pTabView->UpdateRef( nHitNo, rDoc.MaxRow(), nTab );
         else
-            pTabView->UpdateRef( pDoc->MaxCol(), nHitNo, nTab );
+            pTabView->UpdateRef( rDoc.MaxCol(), nHitNo, nTab );
 
         return;
     }
@@ -852,14 +852,14 @@ void ScHeaderControl::Command( const CommandEvent& rCEvt )
                     return;
 
                 SCTAB nTab = rViewData.GetTabNo();
-                ScDocument* pDoc = pViewSh->GetViewData().GetDocument();
+                ScDocument& rDoc = pViewSh->GetViewData().GetDocument();
                 ScRange aNewRange;
                 if ( bVertical )
                     aNewRange = ScRange( 0, sal::static_int_cast<SCROW>(nPos), nTab,
-                                         pDoc->MaxCol(), sal::static_int_cast<SCROW>(nPos), nTab );
+                                         rDoc.MaxCol(), sal::static_int_cast<SCROW>(nPos), nTab );
                 else
                     aNewRange = ScRange( sal::static_int_cast<SCCOL>(nPos), 0, nTab,
-                                         sal::static_int_cast<SCCOL>(nPos), pDoc->MaxRow(), nTab );
+                                         sal::static_int_cast<SCCOL>(nPos), rDoc.MaxRow(), nTab );
 
                 // see if any part of the range is already selected
                 ScRangeList aRanges;

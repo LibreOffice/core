@@ -128,7 +128,7 @@ void ScNewScenarioDlg::SetScenarioData(const OUString& rName, const OUString& rC
 IMPL_LINK_NOARG(ScNewScenarioDlg, OkHdl, weld::Button&, void)
 {
     OUString      aName = comphelper::string::strip(m_xEdName->get_text(), ' ');
-    ScDocument* pDoc    = static_cast<ScTabViewShell*>(SfxViewShell::Current())->GetViewData().GetDocument();
+    ScDocument& rDoc    = static_cast<ScTabViewShell*>(SfxViewShell::Current())->GetViewData().GetDocument();
 
     m_xEdName->set_text(aName);
 
@@ -140,7 +140,7 @@ IMPL_LINK_NOARG(ScNewScenarioDlg, OkHdl, weld::Button&, void)
         xInfoBox->run();
         m_xEdName->grab_focus();
     }
-    else if ( !bIsEdit && !pDoc->ValidNewTabName( aName ) )
+    else if ( !bIsEdit && !rDoc.ValidNewTabName( aName ) )
     {
         std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                       VclMessageType::Info, VclButtonsType::Ok,

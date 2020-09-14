@@ -98,12 +98,11 @@ static bool lcl_GetTextToColumnsRange( const ScViewData* pData, ScRange& rRange,
         bRet = true;
     }
 
-    const ScDocument* pDoc = pData->GetDocument();
-    OSL_ENSURE( pDoc, "lcl_GetTextToColumnsRange: pDoc is null!" );
+    const ScDocument& rDoc = pData->GetDocument();
 
     if ( bDoEmptyCheckOnly )
     {
-        if ( bRet && pDoc->IsBlockEmpty( rRange.aStart.Tab(), rRange.aStart.Col(),
+        if ( bRet && rDoc.IsBlockEmpty( rRange.aStart.Tab(), rRange.aStart.Col(),
                                          rRange.aStart.Row(), rRange.aEnd.Col(),
                                          rRange.aEnd.Row() ) )
         {
@@ -116,7 +115,7 @@ static bool lcl_GetTextToColumnsRange( const ScViewData* pData, ScRange& rRange,
         SCCOL nStartCol = rRange.aStart.Col(), nEndCol = rRange.aEnd.Col();
         SCROW nStartRow = rRange.aStart.Row(), nEndRow = rRange.aEnd.Row();
         bool bShrunk = false;
-        pDoc->ShrinkToUsedDataArea( bShrunk, rRange.aStart.Tab(), nStartCol, nStartRow,
+        rDoc.ShrinkToUsedDataArea( bShrunk, rRange.aStart.Tab(), nStartCol, nStartRow,
                                    nEndCol, nEndRow, false, false, true );
         if ( bShrunk )
         {
@@ -132,7 +131,7 @@ static bool lcl_GetSortParam( const ScViewData* pData, const ScSortParam& rSortP
 {
     ScTabViewShell* pTabViewShell   = pData->GetViewShell();
     ScDBData*   pDBData             = pTabViewShell->GetDBData();
-    ScDocument* pDoc                = pData->GetDocument();
+    ScDocument& rDoc                = pData->GetDocument();
     SCTAB nTab                      = pData->GetTabNo();
     ScDirection eFillDir            = DIR_TOP;
     bool  bSort                     = true;
@@ -143,14 +142,14 @@ static bool lcl_GetSortParam( const ScViewData* pData, const ScSortParam& rSortP
     if( rSortParam.nRow1 != rSortParam.nRow2 )
         eFillDir = DIR_TOP;
 
-    if( rSortParam.nRow2 == pDoc->MaxRow() )
+    if( rSortParam.nRow2 == rDoc.MaxRow() )
     {
         // Assume that user selected entire column(s), but cater for the
         // possibility that the start row is not the first row.
-        SCSIZE nCount = pDoc->GetEmptyLinesInBlock( rSortParam.nCol1, rSortParam.nRow1, nTab,
+        SCSIZE nCount = rDoc.GetEmptyLinesInBlock( rSortParam.nCol1, rSortParam.nRow1, nTab,
                                                     rSortParam.nCol2, rSortParam.nRow2, nTab, eFillDir );
         aExternalRange = ScRange( rSortParam.nCol1,
-                ::std::min( rSortParam.nRow1 + sal::static_int_cast<SCROW>( nCount ), pDoc->MaxRow()), nTab,
+                ::std::min( rSortParam.nRow1 + sal::static_int_cast<SCROW>( nCount ), rDoc.MaxRow()), nTab,
                 rSortParam.nCol2, rSortParam.nRow2, nTab);
         aExternalRange.PutInOrder();
     }
@@ -167,7 +166,7 @@ static bool lcl_GetSortParam( const ScViewData* pData, const ScSortParam& rSortP
     SCCOL nStartCol = aExternalRange.aStart.Col();
     SCROW nEndRow   = aExternalRange.aEnd.Row();
     SCCOL nEndCol   = aExternalRange.aEnd.Col();
-    pDoc->GetDataArea( aExternalRange.aStart.Tab(), nStartCol, nStartRow, nEndCol, nEndRow, false, false );
+    rDoc.GetDataArea( aExternalRange.aStart.Tab(), nStartCol, nStartRow, nEndCol, nEndRow, false, false );
     aExternalRange.aStart.SetRow( nStartRow );
     aExternalRange.aStart.SetCol( nStartCol );
     aExternalRange.aEnd.SetRow( nEndRow );
@@ -179,10 +178,10 @@ static bool lcl_GetSortParam( const ScViewData* pData, const ScSortParam& rSortP
          (rSortParam.nRow1 == rSortParam.nRow2 && aExternalRange.aStart.Row() != aExternalRange.aEnd.Row())))
     {
         pTabViewShell->AddHighlightRange( aExternalRange,COL_LIGHTBLUE );
-        OUString aExtendStr( aExternalRange.Format(*pDoc, ScRefFlags::VALID));
+        OUString aExtendStr( aExternalRange.Format(rDoc, ScRefFlags::VALID));
 
         ScRange aCurrentRange( rSortParam.nCol1, rSortParam.nRow1, nTab, rSortParam.nCol2, rSortParam.nRow2, nTab );
-        OUString aCurrentStr(aCurrentRange.Format(*pDoc, ScRefFlags::VALID));
+        OUString aCurrentStr(aCurrentRange.Format(rDoc, ScRefFlags::VALID));
 
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
@@ -386,10 +385,10 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 {
                     SCCOL nCol  = GetViewData()->GetCurX();
                     SCCOL nTab  = GetViewData()->GetTabNo();
-                    ScDocument* pDoc    = GetViewData()->GetDocument();
+                    ScDocument& rDoc = GetViewData()->GetDocument();
 
                     pDBData->GetSortParam( aSortParam );
-                    bool bHasHeader = pDoc->HasColHeader( aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, nTab );
+                    bool bHasHeader = rDoc.HasColHeader( aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, nTab );
 
                     if( nCol < aSortParam.nCol1 )
                         nCol = aSortParam.nCol1;
@@ -435,10 +434,10 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                     if( lcl_GetSortParam( pData, aSortParam ) )
                     {
-                        ScDocument* pDoc = GetViewData()->GetDocument();
+                        ScDocument& rDoc = GetViewData()->GetDocument();
 
                         pDBData->GetSortParam( aSortParam );
-                        bool bHasHeader = pDoc->HasColHeader( aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, pData->GetTabNo() );
+                        bool bHasHeader = rDoc.HasColHeader( aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, pData->GetTabNo() );
                         if( bHasHeader )
                             aSortParam.bHasHeader = bHasHeader;
 
@@ -504,11 +503,11 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                     if( lcl_GetSortParam( pData, aSortParam ) )
                     {
-                        ScDocument* pDoc = GetViewData()->GetDocument();
+                        ScDocument& rDoc = GetViewData()->GetDocument();
                         SfxItemSet  aArgSet( GetPool(), svl::Items<SCITEM_SORTDATA, SCITEM_SORTDATA>{} );
 
                         pDBData->GetSortParam( aSortParam );
-                        bool bHasHeader = pDoc->HasColHeader( aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, pData->GetTabNo() );
+                        bool bHasHeader = rDoc.HasColHeader( aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, pData->GetTabNo() );
                         if( bHasHeader )
                             aSortParam.bHasHeader = bHasHeader;
 
@@ -702,8 +701,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 }
                 else
                 {
-                    ScDocument*     pDoc   = GetViewData()->GetDocument();
-                    ScDBCollection* pDBCol = pDoc->GetDBCollection();
+                    ScDocument& rDoc   = GetViewData()->GetDocument();
+                    ScDBCollection* pDBCol = rDoc.GetDBCollection();
 
                     if ( pDBCol )
                     {
@@ -729,8 +728,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
         case SID_DATA_STREAMS:
         {
             sc::DataStreamDlg aDialog(GetViewData()->GetDocShell(), pTabViewShell->GetFrameWeld());
-            ScDocument *pDoc = GetViewData()->GetDocument();
-            sc::DocumentLinkManager& rMgr = pDoc->GetDocLinkManager();
+            ScDocument& rDoc = GetViewData()->GetDocument();
+            sc::DocumentLinkManager& rMgr = rDoc.GetDocLinkManager();
             sc::DataStream* pStrm = rMgr.getDataStream();
             if (pStrm)
                 aDialog.Init(*pStrm);
@@ -741,8 +740,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
         break;
         case SID_DATA_STREAMS_PLAY:
         {
-            ScDocument *pDoc = GetViewData()->GetDocument();
-            sc::DocumentLinkManager& rMgr = pDoc->GetDocLinkManager();
+            ScDocument& rDoc = GetViewData()->GetDocument();
+            sc::DocumentLinkManager& rMgr = rDoc.GetDocLinkManager();
             sc::DataStream* pStrm = rMgr.getDataStream();
             if (pStrm)
                 pStrm->StartImport();
@@ -750,8 +749,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
         break;
         case SID_DATA_STREAMS_STOP:
         {
-            ScDocument *pDoc = GetViewData()->GetDocument();
-            sc::DocumentLinkManager& rMgr = pDoc->GetDocLinkManager();
+            ScDocument& rDoc = GetViewData()->GetDocument();
+            sc::DocumentLinkManager& rMgr = rDoc.GetDocLinkManager();
             sc::DataStream* pStrm = rMgr.getDataStream();
             if (pStrm)
                 pStrm->StopImport();
@@ -761,21 +760,21 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
         {
             auto xDoc = o3tl::make_shared<ScDocument>();
             xDoc->InsertTab(0, "test");
-            ScDocument* pDoc = GetViewData()->GetDocument();
-            ScDataProviderDlg aDialog(pTabViewShell->GetDialogParent(), xDoc, pDoc);
+            ScDocument& rDoc = GetViewData()->GetDocument();
+            ScDataProviderDlg aDialog(pTabViewShell->GetDialogParent(), xDoc, &rDoc);
             if (aDialog.run() == RET_OK)
             {
-                aDialog.import(pDoc);
+                aDialog.import(&rDoc);
             }
         }
         break;
         case SID_DATA_PROVIDER_REFRESH:
         {
-            ScDocument* pDoc = GetViewData()->GetDocument();
-            auto& rDataMapper = pDoc->GetExternalDataMapper();
+            ScDocument& rDoc = GetViewData()->GetDocument();
+            auto& rDataMapper = rDoc.GetExternalDataMapper();
             for (auto& rDataSource : rDataMapper.getDataSources())
             {
-                rDataSource.refresh(pDoc, false);
+                rDataSource.refresh(&rDoc, false);
             }
         }
         break;
@@ -805,16 +804,16 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     ScValidErrorStyle eErrStyle = SC_VALERR_STOP;
                     OUString aErrTitle, aErrText;
 
-                    ScDocument* pDoc = GetViewData()->GetDocument();
+                    ScDocument& rDoc = GetViewData()->GetDocument();
                     SCCOL nCurX = GetViewData()->GetCurX();
                     SCROW nCurY = GetViewData()->GetCurY();
                     SCTAB nTab = GetViewData()->GetTabNo();
                     ScAddress aCursorPos( nCurX, nCurY, nTab );
-                    sal_uLong nIndex = pDoc->GetAttr(
+                    sal_uLong nIndex = rDoc.GetAttr(
                                 nCurX, nCurY, nTab, ATTR_VALIDDATA )->GetValue();
                     if ( nIndex )
                     {
-                        const ScValidationData* pOldData = pDoc->GetValidationEntry( nIndex );
+                        const ScValidationData* pOldData = rDoc.GetValidationEntry( nIndex );
                         if ( pOldData )
                         {
                             eMode = pOldData->GetDataMode();
@@ -824,7 +823,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             {
                                 SvNumFormatType nType = ( eMode == SC_VALID_DATE ) ? SvNumFormatType::DATE
                                                                          : SvNumFormatType::TIME;
-                                nNumFmt = pDoc->GetFormatTable()->GetStandardFormat(
+                                nNumFmt = rDoc.GetFormatTable()->GetStandardFormat(
                                                                     nType, ScGlobal::eLnge );
                             }
                             aExpr1 = pOldData->GetExpression( aCursorPos, 0, nNumFmt );
@@ -873,7 +872,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             {
                                 sal_uInt32 nNumIndex = 0;
                                 double nVal;
-                                if (pDoc->GetFormatTable()->IsNumberFormat(aTemp1, nNumIndex, nVal))
+                                if (rDoc.GetFormatTable()->IsNumberFormat(aTemp1, nNumIndex, nVal))
                                     aExpr1 = ::rtl::math::doubleToUString( nVal,
                                             rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
                                             ScGlobal::getLocaleDataPtr()->getNumDecimalSep()[0], true);
@@ -890,7 +889,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             {
                                 sal_uInt32 nNumIndex = 0;
                                 double nVal;
-                                if (pDoc->GetFormatTable()->IsNumberFormat(aTemp2, nNumIndex, nVal))
+                                if (rDoc.GetFormatTable()->IsNumberFormat(aTemp2, nNumIndex, nVal))
                                     aExpr2 = ::rtl::math::doubleToUString( nVal,
                                             rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
                                             ScGlobal::getLocaleDataPtr()->getNumDecimalSep()[0], true);
@@ -938,7 +937,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         if ( pOutSet->GetItemState( FID_VALID_ERRTEXT, true, &pItem ) == SfxItemState::SET )
                             aErrText = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
-                        ScValidationData aData( eMode, eOper, aExpr1, aExpr2, *pDoc, aCursorPos );
+                        ScValidationData aData( eMode, eOper, aExpr1, aExpr2, rDoc, aCursorPos );
                         aData.SetIgnoreBlank( bBlank );
                         aData.SetListType( nListType );
 
@@ -966,10 +965,9 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                 if ( lcl_GetTextToColumnsRange( pData, aRange, false ) )
                 {
-                    ScDocument* pDoc = pData->GetDocument();
-                    OSL_ENSURE( pDoc, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pDoc is null!" );
+                    ScDocument& rDoc = pData->GetDocument();
 
-                    ScImportExport aExport( pDoc, aRange );
+                    ScImportExport aExport( &rDoc, aRange );
                     aExport.SetExportTextOptions( ScExportTextOptions( ScExportTextOptions::None, 0, false ) );
 
                     // #i87703# text to columns fails with tab separator
@@ -992,7 +990,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         OUString aUndo = ScResId( STR_UNDO_TEXTTOCOLUMNS );
                         pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, pData->GetViewShell()->GetViewShellId() );
 
-                        ScImportExport aImport( pDoc, aRange.aStart );
+                        ScImportExport aImport( &rDoc, aRange.aStart );
                         ScAsciiOptions aOptions;
                         pDlg->GetOptions( aOptions );
                         pDlg->SaveParameters();
@@ -1191,8 +1189,8 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
             break;
             case SID_DATA_PROVIDER_REFRESH:
             {
-                ScDocument* pDoc = GetViewData()->GetDocument();
-                auto& rDataMapper = pDoc->GetExternalDataMapper();
+                ScDocument& rViewDoc = GetViewData()->GetDocument();
+                auto& rDataMapper = rViewDoc.GetExternalDataMapper();
                 if (rDataMapper.getDataSources().empty())
                     rSet.DisableItem(nWhich);
             }

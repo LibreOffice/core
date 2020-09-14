@@ -131,7 +131,7 @@ ScDbNameDlg::ScDbNameDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pPa
     : ScAnyRefDlgController(pB, pCW, pParent,
         "modules/scalc/ui/definedatabaserangedialog.ui", "DefineDatabaseRangeDialog")
     , pViewData(ptrViewData)
-    , rDoc(*ptrViewData->GetDocument())
+    , rDoc(ptrViewData->GetDocument())
     , bRefInputMode(false)
     , aAddrDetails(rDoc.GetAddressConvention(), 0, 0)
     , aLocalDbCol(*(rDoc.GetDBCollection()))

@@ -1770,7 +1770,7 @@ bool ScUndoUseScenario::CanRepeat(SfxRepeatTarget& rTarget) const
     if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
     {
         ScViewData& rViewData = static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->GetViewData();
-        return !rViewData.GetDocument()->IsScenario( rViewData.GetTabNo() );
+        return !rViewData.GetDocument().IsScenario( rViewData.GetTabNo() );
     }
     return false;
 }

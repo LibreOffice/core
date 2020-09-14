@@ -46,8 +46,8 @@ bool lcl_checkClassification(ScDocument* pSourceDoc, const ScDocument* pDestinat
 void ScClipUtil::PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTabViewShell, bool bShowDialog )
 {
     const ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard(ScTabViewShell::GetClipData(pViewData->GetActiveWin()));
-    ScDocument* pThisDoc = pViewData->GetDocument();
-    ScDPObject* pDPObj = pThisDoc->GetDPAtCursor( pViewData->GetCurX(),
+    ScDocument& rThisDoc = pViewData->GetDocument();
+    ScDPObject* pDPObj = rThisDoc.GetDPAtCursor( pViewData->GetCurX(),
                          pViewData->GetCurY(), pViewData->GetTabNo() );
     if ( pOwnClip && pDPObj )
     {
@@ -84,7 +84,7 @@ void ScClipUtil::PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTab
                 // For multi-range paste, we paste values by default.
                 nFlags &= ~InsertDeleteFlags::FORMULA;
 
-            if (lcl_checkClassification(pClipDoc, pThisDoc))
+            if (lcl_checkClassification(pClipDoc, &rThisDoc))
                 pTabViewShell->PasteFromClip( nFlags, pClipDoc,
                         ScPasteFunc::NONE, false, false, false, INS_NONE, InsertDeleteFlags::NONE,
                         bShowDialog );      // allow warning dialog

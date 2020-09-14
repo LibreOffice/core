@@ -88,7 +88,7 @@ static void lcl_LimitRect( tools::Rectangle& rRect, const tools::Rectangle& rVis
 static void lcl_DrawOneFrame( vcl::RenderContext* pDev, const tools::Rectangle& rInnerPixel,
                         const OUString& rTitle, const Color& rColor, bool bTextBelow,
                         double nPPTX, double nPPTY, const Fraction& rZoomY,
-                        ScDocument* pDoc, ScViewData* pButtonViewData, bool bLayoutRTL )
+                        ScDocument& rDoc, ScViewData* pButtonViewData, bool bLayoutRTL )
 {
     // pButtonViewData is only used to set the button size,
     // can otherwise be NULL!
@@ -113,7 +113,7 @@ static void lcl_DrawOneFrame( vcl::RenderContext* pDev, const tools::Rectangle& 
 
     //  use ScPatternAttr::GetFont only for font size
     vcl::Font aAttrFont;
-    pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN).
+    rDoc.GetPool()->GetDefaultItem(ATTR_PATTERN).
                                     GetFont(aAttrFont,SC_AUTOCOL_BLACK,pDev,&rZoomY);
 
     //  everything else from application font
@@ -187,29 +187,29 @@ static void lcl_DrawOneFrame( vcl::RenderContext* pDev, const tools::Rectangle& 
 static void lcl_DrawScenarioFrames( OutputDevice* pDev, ScViewData* pViewData, ScSplitPos eWhich,
                             SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 )
 {
-    ScDocument* pDoc = pViewData->GetDocument();
+    ScDocument& rDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
-    SCTAB nTabCount = pDoc->GetTableCount();
-    if ( nTab+1 >= nTabCount || !pDoc->IsScenario(nTab+1) || pDoc->IsScenario(nTab) )
+    SCTAB nTabCount = rDoc.GetTableCount();
+    if ( nTab+1 >= nTabCount || !rDoc.IsScenario(nTab+1) || rDoc.IsScenario(nTab) )
         return;
 
     if ( nX1 > 0 ) --nX1;
     if ( nY1>=2 ) nY1 -= 2;             // Hack: Header row affects two cells
     else if ( nY1 > 0 ) --nY1;
-    if ( nX2 < pDoc->MaxCol() ) ++nX2;
-    if ( nY2 < pDoc->MaxRow()-1 ) nY2 += 2;     // Hack: Header row affects two cells
-    else if ( nY2 < pDoc->MaxRow() ) ++nY2;
+    if ( nX2 < rDoc.MaxCol() ) ++nX2;
+    if ( nY2 < rDoc.MaxRow()-1 ) nY2 += 2;     // Hack: Header row affects two cells
+    else if ( nY2 < rDoc.MaxRow() ) ++nY2;
     ScRange aViewRange( nX1,nY1,nTab, nX2,nY2,nTab );
 
     //! cache the ranges in table!!!!
 
-    ScMarkData aMarks(pDoc->GetSheetLimits());
-    for (SCTAB i=nTab+1; i<nTabCount && pDoc->IsScenario(i); i++)
-        pDoc->MarkScenario( i, nTab, aMarks, false, ScScenarioFlags::ShowFrame );
+    ScMarkData aMarks(rDoc.GetSheetLimits());
+    for (SCTAB i=nTab+1; i<nTabCount && rDoc.IsScenario(i); i++)
+        rDoc.MarkScenario( i, nTab, aMarks, false, ScScenarioFlags::ShowFrame );
     ScRangeListRef xRanges = new ScRangeList;
     aMarks.FillRangeListWithMarks( xRanges.get(), false );
 
-    bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+    bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
     for (size_t j = 0, n = xRanges->size(); j < n; ++j)
@@ -217,7 +217,7 @@ static void lcl_DrawScenarioFrames( OutputDevice* pDev, ScViewData* pViewData, S
         ScRange aRange = (*xRanges)[j];
         // Always extend scenario frame to merged cells where no new non-covered cells
         // are framed
-        pDoc->ExtendTotalMerge( aRange );
+        rDoc.ExtendTotalMerge( aRange );
 
         //! -> Extend repaint when merging !!!
 
@@ -237,13 +237,13 @@ static void lcl_DrawScenarioFrames( OutputDevice* pDev, ScViewData* pViewData, S
 
             OUString aCurrent;
             Color aColor( COL_LIGHTGRAY );
-            for (SCTAB nAct=nTab+1; nAct<nTabCount && pDoc->IsScenario(nAct); nAct++)
-                if ( pDoc->IsActiveScenario(nAct) && pDoc->HasScenarioRange(nAct,aRange) )
+            for (SCTAB nAct=nTab+1; nAct<nTabCount && rDoc.IsScenario(nAct); nAct++)
+                if ( rDoc.IsActiveScenario(nAct) && rDoc.HasScenarioRange(nAct,aRange) )
                 {
                     OUString aDummyComment;
                     ScScenarioFlags nDummyFlags;
-                    pDoc->GetName( nAct, aCurrent );
-                    pDoc->GetScenarioData( nAct, aDummyComment, aColor, nDummyFlags );
+                    rDoc.GetName( nAct, aCurrent );
+                    rDoc.GetScenarioData( nAct, aDummyComment, aColor, nDummyFlags );
                 }
 
             if (aCurrent.isEmpty())
@@ -254,7 +254,7 @@ static void lcl_DrawScenarioFrames( OutputDevice* pDev, ScViewData* pViewData, S
             lcl_DrawOneFrame( pDev, tools::Rectangle( aStartPos, aEndPos ),
                                 aCurrent, aColor, bTextBelow,
                                 pViewData->GetPPTX(), pViewData->GetPPTY(), pViewData->GetZoomY(),
-                                pDoc, pViewData, bLayoutRTL );
+                                rDoc, pViewData, bLayoutRTL );
         }
     }
 }
@@ -361,8 +361,8 @@ void ScGridWindow::InvalidateLOKViewCursor(const tools::Rectangle& rCursorRect,
 
 void ScGridWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& rRect )
 {
-    ScDocument* pDoc = pViewData->GetDocument();
-    if ( pDoc->IsInInterpreter() )
+    ScDocument& rDoc = pViewData->GetDocument();
+    if ( rDoc.IsInInterpreter() )
     {
         // Via Reschedule, interpreted cells do not trigger Invalidate again,
         // otherwise for instance an error box would never appear (bug 36381).
@@ -400,7 +400,7 @@ void ScGridWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const tools::R
     double nPPTY = pViewData->GetPPTY();
 
     tools::Rectangle aMirroredPixel = aPixRect;
-    if ( pDoc->IsLayoutRTL( nTab ) )
+    if ( rDoc.IsLayoutRTL( nTab ) )
     {
         //  mirror and swap
         long nWidth = GetSizePixel().Width();
@@ -408,26 +408,26 @@ void ScGridWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const tools::R
         aMirroredPixel.SetRight( nWidth - 1 - aPixRect.Left() );
     }
 
-    long nScrX = ScViewData::ToPixel( pDoc->GetColWidth( nX1, nTab ), nPPTX );
-    while ( nScrX <= aMirroredPixel.Left() && nX1 < pDoc->MaxCol() )
+    long nScrX = ScViewData::ToPixel( rDoc.GetColWidth( nX1, nTab ), nPPTX );
+    while ( nScrX <= aMirroredPixel.Left() && nX1 < rDoc.MaxCol() )
     {
         ++nX1;
-        nScrX += ScViewData::ToPixel( pDoc->GetColWidth( nX1, nTab ), nPPTX );
+        nScrX += ScViewData::ToPixel( rDoc.GetColWidth( nX1, nTab ), nPPTX );
     }
     SCCOL nX2 = nX1;
-    while ( nScrX <= aMirroredPixel.Right() && nX2 < pDoc->MaxCol() )
+    while ( nScrX <= aMirroredPixel.Right() && nX2 < rDoc.MaxCol() )
     {
         ++nX2;
-        nScrX += ScViewData::ToPixel( pDoc->GetColWidth( nX2, nTab ), nPPTX );
+        nScrX += ScViewData::ToPixel( rDoc.GetColWidth( nX2, nTab ), nPPTX );
     }
 
     long nScrY = 0;
-    ScViewData::AddPixelsWhile( nScrY, aPixRect.Top(), nY1, pDoc->MaxRow(), nPPTY, pDoc, nTab);
+    ScViewData::AddPixelsWhile( nScrY, aPixRect.Top(), nY1, rDoc.MaxRow(), nPPTY, &rDoc, nTab);
     SCROW nY2 = nY1;
-    if (nScrY <= aPixRect.Bottom() && nY2 < pDoc->MaxRow())
+    if (nScrY <= aPixRect.Bottom() && nY2 < rDoc.MaxRow())
     {
         ++nY2;
-        ScViewData::AddPixelsWhile( nScrY, aPixRect.Bottom(), nY2, pDoc->MaxRow(), nPPTY, pDoc, nTab);
+        ScViewData::AddPixelsWhile( nScrY, aPixRect.Bottom(), nY2, rDoc.MaxRow(), nPPTY, &rDoc, nTab);
     }
 
     Draw( nX1,nY1,nX2,nY2, ScUpdateMode::Marks ); // don't continue with painting
@@ -437,7 +437,7 @@ void ScGridWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const tools::R
 
 void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMode eMode )
 {
-    ScDocument& rDoc = *pViewData->GetDocument();
+    ScDocument& rDoc = pViewData->GetDocument();
 
     // let's ignore the normal Draw() attempts when doing the tiled rendering,
     // all the rendering should go through PaintTile() in that case.
@@ -606,7 +606,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         bool bLogicText)
 {
     ScModule* pScMod = SC_MOD();
-    ScDocument& rDoc = *pViewData->GetDocument();
+    ScDocument& rDoc = pViewData->GetDocument();
     const ScViewOptions& rOpts = pViewData->GetOptions();
     bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
     bool bNoBackgroundAndGrid = bIsTiledRendering
@@ -1284,7 +1284,7 @@ namespace
     {
     public:
         ScLOKDrawView(OutputDevice* pOut, ScViewData& rData) :
-            FmFormView(*rData.GetDocument()->GetDrawLayer(), pOut),
+            FmFormView(*rData.GetDocument().GetDrawLayer(), pOut),
             pScDrawView(rData.GetScDrawView())
         {
         }
@@ -1354,7 +1354,7 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     const double fTileRightPixel = static_cast<double>(nTilePosX + nTileWidth) * nOutputWidth / nTileWidth;
 
     SCTAB nTab = pViewData->GetTabNo();
-    ScDocument* pDoc = pViewData->GetDocument();
+    ScDocument& rDoc = pViewData->GetDocument();
 
     const double fPPTX = pViewData->GetPPTX();
     const double fPPTY = pViewData->GetPPTY();
@@ -1384,8 +1384,8 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     nBottomRightTileCol++;
     nBottomRightTileRow++;
 
-    if (nBottomRightTileCol > pDoc->MaxCol())
-        nBottomRightTileCol = pDoc->MaxCol();
+    if (nBottomRightTileCol > rDoc.MaxCol())
+        nBottomRightTileCol = rDoc.MaxCol();
 
     if (nBottomRightTileRow > MAXTILEDROW)
         nBottomRightTileRow = MAXTILEDROW;
@@ -1393,7 +1393,7 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     // size of the document including drawings, charts, etc.
     SCCOL nEndCol = 0;
     SCROW nEndRow = 0;
-    pDoc->GetTiledRenderingArea(nTab, nEndCol, nEndRow);
+    rDoc.GetTiledRenderingArea(nTab, nEndCol, nEndRow);
 
     if (nEndCol < nBottomRightTileCol)
         nEndCol = nBottomRightTileCol;
@@ -1417,14 +1417,14 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     rDevice.SetMapMode(aAbsMode);
 
     ScTableInfo aTabInfo(nEndRow + 3);
-    pDoc->FillInfo(aTabInfo, nTopLeftTileCol, nTopLeftTileRow,
+    rDoc.FillInfo(aTabInfo, nTopLeftTileCol, nTopLeftTileRow,
                    nBottomRightTileCol, nBottomRightTileRow,
                    nTab, fPPTX, fPPTY, false, false);
 
 // FIXME: is this called some
 //        Point aScrPos = pViewData->GetScrPos( nX1, nY1, eWhich );
 
-    ScOutputData aOutputData(&rDevice, OUTTYPE_WINDOW, aTabInfo, pDoc, nTab,
+    ScOutputData aOutputData(&rDevice, OUTTYPE_WINDOW, aTabInfo, &rDoc, nTab,
                              -nTopLeftTileColOffset,
                              -nTopLeftTileRowOffset,
                              nTopLeftTileCol, nTopLeftTileRow,
@@ -1432,7 +1432,7 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
                              fPPTX, fPPTY, nullptr, nullptr);
 
     // setup the SdrPage so that drawinglayer works correctly
-    ScDrawLayer* pModel = pDoc->GetDrawLayer();
+    ScDrawLayer* pModel = rDoc.GetDrawLayer();
     if (pModel)
     {
         bool bPrintTwipsMsgs = comphelper::LibreOfficeKit::isCompatFlagSet(
@@ -1454,8 +1454,8 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     rDevice.SetMapMode(aOriginalMode);
 
     // Flag drawn formula cells "unchanged".
-    pDoc->ResetChanged(ScRange(nTopLeftTileCol, nTopLeftTileRow, nTab, nBottomRightTileCol, nBottomRightTileRow, nTab));
-    pDoc->PrepareFormulaCalc();
+    rDoc.ResetChanged(ScRange(nTopLeftTileCol, nTopLeftTileRow, nTab, nBottomRightTileCol, nBottomRightTileRow, nTab));
+    rDoc.PrepareFormulaCalc();
 
     pViewData->SetZoom(origZoomX, origZoomY, true);
     if (bChangeZoom)
@@ -1584,7 +1584,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
     if (!pPageData)
         return;
 
-    ScDocument* pDoc = pViewData->GetDocument();
+    ScDocument& rDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
     Size aWinSize = GetOutputSizePixel();
     const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
@@ -1595,14 +1595,14 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
     if ( nPageScript == SvtScriptType::NONE )
     {
         //  get script type of translated "Page" string only once
-        nPageScript = pDoc->GetStringScriptType( aPageStr );
+        nPageScript = rDoc.GetStringScriptType( aPageStr );
         if (nPageScript == SvtScriptType::NONE)
             nPageScript = ScGlobal::GetDefaultScriptType();
     }
 
     vcl::Font aFont;
     std::unique_ptr<ScEditEngineDefaulter> pEditEng;
-    const ScPatternAttr& rDefPattern = pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN);
+    const ScPatternAttr& rDefPattern = rDoc.GetPool()->GetDefaultItem(ATTR_PATTERN);
     if ( nPageScript == SvtScriptType::LATIN )
     {
         //  use single font and call DrawText directly
@@ -1670,7 +1670,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                 if ( nBreak >= nX1 && nBreak <= nX2+1 )
                 {
                     //! Search for hidden
-                    if (pDoc->HasColBreak(nBreak, nTab) & ScBreakType::Manual)
+                    if (rDoc.HasColBreak(nBreak, nTab) & ScBreakType::Manual)
                         rRenderContext.SetFillColor( aManual );
                     else
                         rRenderContext.SetFillColor( aAutomatic );
@@ -1689,7 +1689,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                 if ( nBreak >= nY1 && nBreak <= nY2+1 )
                 {
                     //! Search for hidden
-                    if (pDoc->HasRowBreak(nBreak, nTab) & ScBreakType::Manual)
+                    if (rDoc.HasRowBreak(nBreak, nTab) & ScBreakType::Manual)
                         rRenderContext.SetFillColor( aManual );
                     else
                         rRenderContext.SetFillColor( aAutomatic );
@@ -1783,8 +1783,8 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
 {
     aComboButton.SetOutputDevice( pContentDev );
 
-    ScDocument* pDoc = pViewData->GetDocument();
-    ScDPFieldButton aCellBtn(pContentDev, &GetSettings().GetStyleSettings(), &pViewData->GetZoomY(), pDoc);
+    ScDocument& rDoc = pViewData->GetDocument();
+    ScDPFieldButton aCellBtn(pContentDev, &GetSettings().GetStyleSettings(), &pViewData->GetZoomY(), &rDoc);
 
     SCCOL nCol;
     SCROW nRow;
@@ -1797,7 +1797,7 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
     RowInfo*        pRowInfo = rTabInfo.mpRowInfo.get();
     sal_uInt16      nArrCount = rTabInfo.mnArrCount;
 
-    bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+    bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
 
     Point aOldPos  = aComboButton.GetPosPixel();    // store state for MouseDown/Up
     Size  aOldSize = aComboButton.GetSizePixel();
@@ -1835,7 +1835,7 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
                     }
                     if (bNewData)
                     {
-                        pDBData = pDoc->GetDBAtCursor( nCol, nRow, nTab, ScDBDataPortion::AREA );
+                        pDBData = rDoc.GetDBAtCursor( nCol, nRow, nTab, ScDBDataPortion::AREA );
                         if (pDBData)
                             pDBData->GetQueryParam( *pQueryParam );
                         else
@@ -1871,9 +1871,9 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
                     SCROW nStartRow = nRow;
                     //if address(nCol,nRow) is not the start pos of the merge area, the value of the nSizeX will be incorrect, it will be the length of the cell.
                     //should first get the start pos of the merge area, then get the nSizeX through the start pos.
-                    pDoc->ExtendOverlapped(nStartCol, nStartRow,nCol, nRow, nTab);//get nStartCol,nStartRow
+                    rDoc.ExtendOverlapped(nStartCol, nStartRow,nCol, nRow, nTab);//get nStartCol,nStartRow
                     pViewData->GetMergeSizePixel( nStartCol, nStartRow, nSizeX, nSizeY );//get nSizeX
-                    nSizeY = ScViewData::ToPixel(pDoc->GetRowHeight(nRow, nTab), pViewData->GetPPTY());
+                    nSizeY = ScViewData::ToPixel(rDoc.GetRowHeight(nRow, nTab), pViewData->GetPPTY());
                     Point aScrPos = pViewData->GetScrPos( nCol, nRow, eWhich );
 
                     aCellBtn.setBoundingBox(aScrPos, Size(nSizeX-1, nSizeY-1), bLayoutRTL);
@@ -1904,7 +1904,7 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
                 long nPosY = aScrPos.Y();
                 // bLayoutRTL is handled in setBoundingBox
 
-                OUString aStr = pDoc->GetString(nCol, nRow, nTab);
+                OUString aStr = rDoc.GetString(nCol, nRow, nTab);
                 aCellBtn.setText(aStr);
                 aCellBtn.setBoundingBox(Point(nPosX, nPosY), Size(nSizeX-1, nSizeY-1), bLayoutRTL);
                 aCellBtn.setPopupLeft(false);   // DataPilot popup is always right-aligned for now
@@ -1934,9 +1934,9 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
 
 tools::Rectangle ScGridWindow::GetListValButtonRect( const ScAddress& rButtonPos )
 {
-    ScDocument* pDoc = pViewData->GetDocument();
+    ScDocument& rDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
-    bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+    bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
     ScDDComboBoxButton aButton( this );             // for optimal size
@@ -1950,19 +1950,19 @@ tools::Rectangle ScGridWindow::GetListValButtonRect( const ScAddress& rButtonPos
     pViewData->GetMergeSizePixel( nCol, nRow, nCellSizeX, nDummy );
 
     // for height, only the cell's row is used, excluding merged cells
-    long nCellSizeY = ScViewData::ToPixel( pDoc->GetRowHeight( nRow, nTab ), pViewData->GetPPTY() );
+    long nCellSizeY = ScViewData::ToPixel( rDoc.GetRowHeight( nRow, nTab ), pViewData->GetPPTY() );
     long nAvailable = nCellSizeX;
 
     //  left edge of next cell if there is a non-hidden next column
     SCCOL nNextCol = nCol + 1;
-    const ScMergeAttr* pMerge = pDoc->GetAttr( nCol,nRow,nTab, ATTR_MERGE );
+    const ScMergeAttr* pMerge = rDoc.GetAttr( nCol,nRow,nTab, ATTR_MERGE );
     if ( pMerge->GetColMerge() > 1 )
         nNextCol = nCol + pMerge->GetColMerge();    // next cell after the merged area
-    while ( nNextCol <= pDoc->MaxCol() && pDoc->ColHidden(nNextCol, nTab) )
+    while ( nNextCol <= rDoc.MaxCol() && rDoc.ColHidden(nNextCol, nTab) )
         ++nNextCol;
-    bool bNextCell = ( nNextCol <= pDoc->MaxCol() );
+    bool bNextCell = ( nNextCol <= rDoc.MaxCol() );
     if ( bNextCell )
-        nAvailable = ScViewData::ToPixel( pDoc->GetColWidth( nNextCol, nTab ), pViewData->GetPPTX() );
+        nAvailable = ScViewData::ToPixel( rDoc.GetColWidth( nNextCol, nTab ), pViewData->GetPPTX() );
 
     if ( nAvailable < aBtnSize.Width() )
         aBtnSize.setWidth( nAvailable );
@@ -1984,8 +1984,8 @@ tools::Rectangle ScGridWindow::GetListValButtonRect( const ScAddress& rButtonPos
 
 bool ScGridWindow::IsAutoFilterActive( SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
-    ScDocument*     pDoc    = pViewData->GetDocument();
-    ScDBData*       pDBData = pDoc->GetDBAtCursor( nCol, nRow, nTab, ScDBDataPortion::AREA );
+    ScDocument&     rDoc    = pViewData->GetDocument();
+    ScDBData*       pDBData = rDoc.GetDBAtCursor( nCol, nRow, nTab, ScDBDataPortion::AREA );
     ScQueryParam    aQueryParam;
 
     if ( pDBData )
@@ -2043,10 +2043,10 @@ void ScGridWindow::GetRectsAnyFor(const ScMarkData &rMarkData,
     ScMarkData aMultiMark( rMarkData );
     aMultiMark.SetMarking( false );
     aMultiMark.MarkToMulti();
-    ScDocument* pDoc = pViewData->GetDocument();
+    ScDocument& rDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
 
-    bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+    bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
     long nLayoutSign = bLayoutRTL ? -1 : 1;
     if ( !aMultiMark.IsMultiMarked() )
         return;
@@ -2063,7 +2063,7 @@ void ScGridWindow::GetRectsAnyFor(const ScMarkData &rMarkData,
     SCCOL nTestX2 = nX2;
     SCROW nTestY2 = nY2;
 
-    pDoc->ExtendMerge( nX1,nY1, nTestX2,nTestY2, nTab );
+    rDoc.ExtendMerge( nX1,nY1, nTestX2,nTestY2, nTab );
 
     SCCOL nPosX = pViewData->GetPosX( eHWhich );
     SCROW nPosY = pViewData->GetPosY( eVWhich );
@@ -2080,12 +2080,12 @@ void ScGridWindow::GetRectsAnyFor(const ScMarkData &rMarkData,
     {
         // limit the selection to only what is visible on the screen
         SCCOL nXRight = nPosX + pViewData->VisibleCellsX(eHWhich);
-        if (nXRight > pDoc->MaxCol())
-            nXRight = pDoc->MaxCol();
+        if (nXRight > rDoc.MaxCol())
+            nXRight = rDoc.MaxCol();
 
         SCROW nYBottom = nPosY + pViewData->VisibleCellsY(eVWhich);
-        if (nYBottom > pDoc->MaxRow())
-            nYBottom = pDoc->MaxRow();
+        if (nYBottom > rDoc.MaxRow())
+            nYBottom = rDoc.MaxRow();
 
         // is the selection visible at all?
         if (nX1 > nXRight || nY1 > nYBottom)
@@ -2100,7 +2100,7 @@ void ScGridWindow::GetRectsAnyFor(const ScMarkData &rMarkData,
     {
         SCCOL nMaxTiledCol;
         SCROW nMaxTiledRow;
-        pDoc->GetTiledRenderingArea(nTab, nMaxTiledCol, nMaxTiledRow);
+        rDoc.GetTiledRenderingArea(nTab, nMaxTiledCol, nMaxTiledRow);
 
         if (nX2 > nMaxTiledCol)
             nX2 = nMaxTiledCol;
@@ -2121,7 +2121,7 @@ void ScGridWindow::GetRectsAnyFor(const ScMarkData &rMarkData,
     {
         bool bFirstRow = ( nY == nPosY );                       // first visible row?
         bool bDoHidden = false;                                 // repeat hidden ?
-        sal_uInt16 nHeightTwips = pDoc->GetRowHeight( nY,nTab );
+        sal_uInt16 nHeightTwips = rDoc.GetRowHeight( nY,nTab );
         bool bDoRow = ( nHeightTwips != 0 );
         if (bDoRow)
         {
@@ -2146,7 +2146,7 @@ void ScGridWindow::GetRectsAnyFor(const ScMarkData &rMarkData,
             if (nX2 < nX1)                      // the rest of the merge
             {
                 SCCOL nStartX = nX1;
-                while ( pDoc->GetAttr(nStartX,nY,nTab,ATTR_MERGE_FLAG)->IsHorOverlapped() )
+                while ( rDoc.GetAttr(nStartX,nY,nTab,ATTR_MERGE_FLAG)->IsHorOverlapped() )
                     --nStartX;
                 if (nStartX <= nX2)
                     nLoopEndX = nX1;
@@ -2158,7 +2158,7 @@ void ScGridWindow::GetRectsAnyFor(const ScMarkData &rMarkData,
             long nScrX = aScrPos.X();
             for (SCCOL nX=nX1; nX<=nLoopEndX; nX++)
             {
-                long nWidth = pDoc->GetColWidth(nX, nTab);
+                long nWidth = rDoc.GetColWidth(nX, nTab);
                 if (!bInPrintTwips)
                     nWidth = ScViewData::ToPixel(nWidth, nPPTX);
 
@@ -2167,15 +2167,15 @@ void ScGridWindow::GetRectsAnyFor(const ScMarkData &rMarkData,
                     long nEndX = nScrX + ( nWidth - 1 ) * nLayoutSign;
 
                     SCROW nThisY = nY;
-                    const ScPatternAttr* pPattern = pDoc->GetPattern( nX, nY, nTab );
+                    const ScPatternAttr* pPattern = rDoc.GetPattern( nX, nY, nTab );
                     const ScMergeFlagAttr* pMergeFlag = &pPattern->GetItem(ATTR_MERGE_FLAG);
                     if ( pMergeFlag->IsVerOverlapped() && ( bDoHidden || bFirstRow ) )
                     {
                         while ( pMergeFlag->IsVerOverlapped() && nThisY > 0 &&
-                                (pDoc->RowHidden(nThisY-1, nTab) || bFirstRow) )
+                                (rDoc.RowHidden(nThisY-1, nTab) || bFirstRow) )
                         {
                             --nThisY;
-                            pPattern = pDoc->GetPattern( nX, nThisY, nTab );
+                            pPattern = rDoc.GetPattern( nX, nThisY, nTab );
                             pMergeFlag = &pPattern->GetItem(ATTR_MERGE_FLAG);
                         }
                     }
@@ -2187,7 +2187,7 @@ void ScGridWindow::GetRectsAnyFor(const ScMarkData &rMarkData,
                         while ( pMergeFlag->IsHorOverlapped() )
                         {
                             --nThisX;
-                            pPattern = pDoc->GetPattern( nThisX, nThisY, nTab );
+                            pPattern = rDoc.GetPattern( nThisX, nThisY, nTab );
                             pMergeFlag = &pPattern->GetItem(ATTR_MERGE_FLAG);
                         }
                     }

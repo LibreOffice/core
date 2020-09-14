@@ -391,8 +391,8 @@ void ScInputWindow::Select()
                     const OUString& rString = aTextWindow.GetTextString();
                     const sal_Int32 nLen = rString.getLength();
 
-                    ScDocument* pDoc = pViewSh->GetViewData().GetDocument();
-                    CellType eCellType = pDoc->GetCellType( pViewSh->GetViewData().GetCurPos() );
+                    ScDocument& rDoc = pViewSh->GetViewData().GetDocument();
+                    CellType eCellType = rDoc.GetCellType( pViewSh->GetViewData().GetCurPos() );
                     switch ( eCellType )
                     {
                         case CELLTYPE_VALUE:
@@ -1476,8 +1476,8 @@ void ScTextWnd::InitEditEngine()
     if ( mpViewShell )
     {
         pDocSh = mpViewShell->GetViewData().GetDocShell();
-        ScDocument* pDoc = mpViewShell->GetViewData().GetDocument();
-        pNew = std::make_unique<ScFieldEditEngine>(pDoc, pDoc->GetEnginePool(), pDoc->GetEditPool());
+        ScDocument& rDoc = mpViewShell->GetViewData().GetDocument();
+        pNew = std::make_unique<ScFieldEditEngine>(&rDoc, rDoc.GetEnginePool(), rDoc.GetEditPool());
     }
     else
         pNew = std::make_unique<ScFieldEditEngine>(nullptr, EditEngine::CreatePool(), nullptr, true);
@@ -2020,8 +2020,8 @@ void ScTextWnd::MakeDialogEditView()
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
     if ( pViewSh )
     {
-        ScDocument* pDoc = pViewSh->GetViewData().GetDocument();
-        pNew = std::make_unique<ScFieldEditEngine>(pDoc, pDoc->GetEnginePool(), pDoc->GetEditPool());
+        ScDocument& rDoc = pViewSh->GetViewData().GetDocument();
+        pNew = std::make_unique<ScFieldEditEngine>(&rDoc, rDoc.GetEnginePool(), rDoc.GetEditPool());
     }
     else
         pNew = std::make_unique<ScFieldEditEngine>(nullptr, EditEngine::CreatePool(), nullptr, true);
@@ -2313,9 +2313,9 @@ static ScNameInputType lcl_GetInputType( const OUString& rText )
     if ( pViewSh )
     {
         ScViewData& rViewData = pViewSh->GetViewData();
-        ScDocument* pDoc = rViewData.GetDocument();
+        ScDocument& rDoc = rViewData.GetDocument();
         SCTAB nTab = rViewData.GetTabNo();
-        formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
+        formula::FormulaGrammar::AddressConvention eConv = rDoc.GetAddressConvention();
 
         // test in same order as in SID_CURRENTCELL execute
 
@@ -2326,20 +2326,20 @@ static ScNameInputType lcl_GetInputType( const OUString& rText )
 
         if (rText == ScResId(STR_MANAGE_NAMES))
             eRet = SC_MANAGE_NAMES;
-        else if ( aRange.Parse( rText, pDoc, eConv ) & ScRefFlags::VALID )
+        else if ( aRange.Parse( rText, &rDoc, eConv ) & ScRefFlags::VALID )
             eRet = SC_NAME_INPUT_RANGE;
-        else if ( aAddress.Parse( rText, pDoc, eConv ) & ScRefFlags::VALID )
+        else if ( aAddress.Parse( rText, &rDoc, eConv ) & ScRefFlags::VALID )
             eRet = SC_NAME_INPUT_CELL;
-        else if ( ScRangeUtil::MakeRangeFromName( rText, *pDoc, nTab, aRange, RUTL_NAMES, eConv ) )
+        else if ( ScRangeUtil::MakeRangeFromName( rText, rDoc, nTab, aRange, RUTL_NAMES, eConv ) )
             eRet = SC_NAME_INPUT_NAMEDRANGE;
-        else if ( ScRangeUtil::MakeRangeFromName( rText, *pDoc, nTab, aRange, RUTL_DBASE, eConv ) )
+        else if ( ScRangeUtil::MakeRangeFromName( rText, rDoc, nTab, aRange, RUTL_DBASE, eConv ) )
             eRet = SC_NAME_INPUT_DATABASE;
         else if ( comphelper::string::isdigitAsciiString( rText ) &&
-                  ( nNumeric = rText.toInt32() ) > 0 && nNumeric <= pDoc->MaxRow()+1 )
+                  ( nNumeric = rText.toInt32() ) > 0 && nNumeric <= rDoc.MaxRow()+1 )
             eRet = SC_NAME_INPUT_ROW;
-        else if ( pDoc->GetTable( rText, nNameTab ) )
+        else if ( rDoc.GetTable( rText, nNameTab ) )
             eRet = SC_NAME_INPUT_SHEET;
-        else if ( ScRangeData::IsNameValid( rText, pDoc ) == ScRangeData::NAME_VALID )     // nothing found, create new range?
+        else if ( ScRangeData::IsNameValid( rText, &rDoc ) == ScRangeData::NAME_VALID )     // nothing found, create new range?
         {
             if ( rViewData.GetSimpleArea( aRange ) == SC_MARK_SIMPLE )
                 eRet = SC_NAME_INPUT_DEFINE;

@@ -236,16 +236,16 @@ VclPtr<VclAbstractDialog> ScScreenshotTest::createDialogByID(sal_uInt32 nID)
         case 14: // "modules/scalc/ui/formatcellsdialog.ui"
         {
             ScViewData& rViewData = mpViewShell->GetViewData();
-            ScDocument *pDoc = rViewData.GetDocument();
+            ScDocument& rDoc = rViewData.GetDocument();
 
             const ScPatternAttr *pAttr = mpViewShell->GetSelectionPattern();
             std::unique_ptr<SvxNumberInfoItem> pNumberInfoItem;
 
             mpItemSet.reset(new SfxItemSet(pAttr->GetItemSet()));
             mpItemSet->Put(SfxUInt32Item(ATTR_VALUE_FORMAT,
-                           pAttr->GetNumberFormat( pDoc->GetFormatTable() ) ) );
+                           pAttr->GetNumberFormat( rDoc.GetFormatTable() ) ) );
 
-            pNumberInfoItem = ScTabViewShell::MakeNumberInfoItem(pDoc, &rViewData);
+            pNumberInfoItem = ScTabViewShell::MakeNumberInfoItem(&rDoc, &rViewData);
 
             mpItemSet->MergeRange(SID_ATTR_NUMBERFORMAT_INFO, SID_ATTR_NUMBERFORMAT_INFO);
             mpItemSet->Put(*pNumberInfoItem);

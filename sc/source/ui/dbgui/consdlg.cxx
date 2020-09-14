@@ -75,7 +75,7 @@ ScConsolidateDlg::ScConsolidateDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::W
                                     ).GetData() )
     , rViewData       ( static_cast<ScTabViewShell*>(SfxViewShell::Current())->
                               GetViewData() )
-    , pDoc            ( static_cast<ScTabViewShell*>(SfxViewShell::Current())->
+    , rDoc            ( static_cast<ScTabViewShell*>(SfxViewShell::Current())->
                               GetViewData().GetDocument() )
     , nAreaDataCount  ( 0 )
     , nWhichCons      ( rArgSet.GetPool()->GetWhich( SID_CONSOLIDATE ) )
@@ -109,8 +109,6 @@ ScConsolidateDlg::~ScConsolidateDlg()
 
 void ScConsolidateDlg::Init()
 {
-    OSL_ENSURE( pDoc, "Error in Ctor" );
-
     OUString aStr;
     sal_uInt16 i=0;
 
@@ -148,23 +146,23 @@ void ScConsolidateDlg::Init()
 
     // read consolidation areas
     m_xLbConsAreas->clear();
-    const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
+    const formula::FormulaGrammar::AddressConvention eConv = rDoc.GetAddressConvention();
     for ( i=0; i<theConsData.nDataAreaCount; i++ )
     {
         const ScArea& rArea = theConsData.pDataAreas[i];
-        if ( rArea.nTab < pDoc->GetTableCount() )
+        if ( rArea.nTab < rDoc.GetTableCount() )
         {
             aStr = ScRange( rArea.nColStart, rArea.nRowStart, rArea.nTab,
-                    rArea.nColEnd, rArea.nRowEnd, rArea.nTab ).Format( *pDoc,
+                    rArea.nColEnd, rArea.nRowEnd, rArea.nTab ).Format( rDoc,
                         ScRefFlags::RANGE_ABS_3D, eConv );
             m_xLbConsAreas->append_text(aStr);
         }
     }
 
-    if ( theConsData.nTab < pDoc->GetTableCount() )
+    if ( theConsData.nTab < rDoc.GetTableCount() )
     {
         aStr = ScAddress( theConsData.nCol, theConsData.nRow, theConsData.nTab
-                ).Format( ScRefFlags::ADDR_ABS_3D, pDoc, eConv );
+                ).Format( ScRefFlags::ADDR_ABS_3D, &rDoc, eConv );
         m_xEdDestArea->SetText( aStr );
     }
     else
@@ -173,8 +171,8 @@ void ScConsolidateDlg::Init()
     // Use the ScAreaData helper class to save those range names from the
     // RangeNames and database ranges that appear in the ListBoxes.
 
-    ScRangeName*    pRangeNames  = pDoc->GetRangeName();
-    ScDBCollection* pDbNames     = pDoc->GetDBCollection();
+    ScRangeName*    pRangeNames  = rDoc.GetRangeName();
+    ScDBCollection* pDbNames     = rDoc.GetDBCollection();
     size_t nRangeCount = pRangeNames ? pRangeNames->size() : 0;
     size_t nDbCount = pDbNames ? pDbNames->getNamedDBs().size() : 0;
 
@@ -188,10 +186,10 @@ void ScConsolidateDlg::Init()
         OUString aStrName;
         sal_uInt16 nAt = 0;
         ScRange aRange;
-        ScAreaNameIterator aIter( *pDoc );
+        ScAreaNameIterator aIter( rDoc );
         while ( aIter.Next( aStrName, aRange ) )
         {
-            OUString aStrArea(aRange.Format(*pDoc, ScRefFlags::ADDR_ABS_3D, eConv));
+            OUString aStrArea(aRange.Format(rDoc, ScRefFlags::ADDR_ABS_3D, eConv));
             pAreaData[nAt++].Set( aStrName, aStrArea );
         }
     }
@@ -284,18 +282,17 @@ void ScConsolidateDlg::Deactivate()
 
 bool ScConsolidateDlg::VerifyEdit( formula::RefEdit* pEd )
 {
-    if ( !pDoc ||
-         ((pEd != m_xEdDataArea.get()) && (pEd != m_xEdDestArea.get())) )
+    if (pEd != m_xEdDataArea.get() && pEd != m_xEdDestArea.get())
         return false;
 
     SCTAB    nTab    = rViewData.GetTabNo();
     bool bEditOk = false;
     OUString theCompleteStr;
-    const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
+    const formula::FormulaGrammar::AddressConvention eConv = rDoc.GetAddressConvention();
 
     if ( pEd == m_xEdDataArea.get() )
     {
-        bEditOk = ScRangeUtil::IsAbsArea( pEd->GetText(), *pDoc,
+        bEditOk = ScRangeUtil::IsAbsArea( pEd->GetText(), rDoc,
                                          nTab, &theCompleteStr, nullptr, nullptr, eConv );
     }
     else if ( pEd == m_xEdDestArea.get() )
@@ -303,7 +300,7 @@ bool ScConsolidateDlg::VerifyEdit( formula::RefEdit* pEd )
         OUString aPosStr;
 
         ScRangeUtil::CutPosString( pEd->GetText(), aPosStr );
-        bEditOk = ScRangeUtil::IsAbsPos( aPosStr, *pDoc,
+        bEditOk = ScRangeUtil::IsAbsPos( aPosStr, rDoc,
                                         nTab, &theCompleteStr, nullptr, eConv );
     }
 
@@ -337,9 +334,9 @@ IMPL_LINK_NOARG(ScConsolidateDlg, OkHdl, weld::Button&, void)
         ScRefAddress aDestAddress;
         SCTAB       nTab = rViewData.GetTabNo();
         OUString    aDestPosStr( m_xEdDestArea->GetText() );
-        const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
+        const formula::FormulaGrammar::AddressConvention eConv = rDoc.GetAddressConvention();
 
-        if ( ScRangeUtil::IsAbsPos( aDestPosStr, *pDoc, nTab, nullptr, &aDestAddress, eConv ) )
+        if ( ScRangeUtil::IsAbsPos( aDestPosStr, rDoc, nTab, nullptr, &aDestAddress, eConv ) )
         {
             ScConsolidateParam  theOutParam( theConsData );
             std::unique_ptr<ScArea[]> pDataAreas(new ScArea[nDataAreaCount]);
@@ -347,7 +344,7 @@ IMPL_LINK_NOARG(ScConsolidateDlg, OkHdl, weld::Button&, void)
             for ( sal_Int32 i=0; i<nDataAreaCount; ++i )
             {
                 ScRangeUtil::MakeArea(m_xLbConsAreas->get_text(i),
-                                      pDataAreas[i], *pDoc, nTab, eConv);
+                                      pDataAreas[i], rDoc, nTab, eConv);
             }
 
             theOutParam.nCol            = aDestAddress.Col();
@@ -389,9 +386,9 @@ IMPL_LINK( ScConsolidateDlg, ClickHdl, weld::Button&, rBtn, void )
             OUString    aNewEntry( m_xEdDataArea->GetText() );
             std::unique_ptr<ScArea[]> ppAreas;
             sal_uInt16      nAreaCount = 0;
-            const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
+            const formula::FormulaGrammar::AddressConvention eConv = rDoc.GetAddressConvention();
 
-            if ( ScRangeUtil::IsAbsTabArea( aNewEntry, pDoc, &ppAreas, &nAreaCount, true, eConv ) )
+            if ( ScRangeUtil::IsAbsTabArea( aNewEntry, &rDoc, &ppAreas, &nAreaCount, true, eConv ) )
             {
                 // IsAbsTabArea() creates an array of ScArea pointers,
                 // which have been created dynamically as well.
@@ -402,7 +399,7 @@ IMPL_LINK( ScConsolidateDlg, ClickHdl, weld::Button&, rBtn, void )
                     const ScArea& rArea = ppAreas[i];
                     OUString aNewArea = ScRange( rArea.nColStart, rArea.nRowStart, rArea.nTab,
                             rArea.nColEnd, rArea.nRowEnd, rArea.nTab
-                            ).Format(*pDoc, ScRefFlags::RANGE_ABS_3D, eConv);
+                            ).Format(rDoc, ScRefFlags::RANGE_ABS_3D, eConv);
 
                     if (m_xLbConsAreas->find_text(aNewArea) == -1)
                     {

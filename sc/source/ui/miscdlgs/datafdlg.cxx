@@ -47,8 +47,8 @@ ScDataFormDlg::ScDataFormDlg(weld::Window* pParent, ScTabViewShell* pTabViewShel
     OSL_ENSURE( pTabViewShell, "pTabViewShell is NULL! :-/" );
     ScViewData& rViewData = pTabViewShell->GetViewData();
 
-    pDoc = rViewData.GetDocument();
-    if (pDoc)
+    pDoc = &rViewData.GetDocument();
+
     {
         ScRange aRange;
         rViewData.GetSimpleArea( aRange );

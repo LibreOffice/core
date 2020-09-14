@@ -54,7 +54,7 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParen
     , maStrMultiSelect(ScResId(STR_MULTI_SELECT))
 
     , mpViewData(ptrViewData)
-    , mpDoc(ptrViewData->GetDocument())
+    , mrDoc(ptrViewData->GetDocument())
     , maCursorPos(aCursorPos)
     , mbDataChanged(false)
     , mbCloseWithoutUndo(false)
@@ -83,7 +83,7 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParen
     if (!pRangeMap)
     {
         std::map<OUString, ScRangeName*> aRangeMap;
-        mpDoc->GetRangeNameMap(aRangeMap);
+        mrDoc.GetRangeNameMap(aRangeMap);
         for (const auto& [aTemp, pRangeName] : aRangeMap)
         {
             m_RangeMap.insert(std::make_pair(aTemp, std::make_unique<ScRangeName>(*pRangeName)));
@@ -102,8 +102,6 @@ ScNameDlg::~ScNameDlg()
 
 void ScNameDlg::Init()
 {
-    OSL_ENSURE( mpViewData && mpDoc, "ViewData or Document not found!" );
-
     //init UI
 
     std::unique_ptr<weld::TreeView> xTreeView(m_xBuilder->weld_tree_view("names"));
@@ -136,11 +134,11 @@ void ScNameDlg::Init()
     // Initialize scope list.
     m_xLbScope->append_text(maGlobalNameStr);
     m_xLbScope->set_active(0);
-    SCTAB n = mpDoc->GetTableCount();
+    SCTAB n = mrDoc.GetTableCount();
     for (SCTAB i = 0; i < n; ++i)
     {
         OUString aTabName;
-        mpDoc->GetName(i, aTabName);
+        mrDoc.GetName(i, aTabName);
         m_xLbScope->append_text(aTabName);
     }
 
@@ -250,7 +248,7 @@ bool ScNameDlg::IsNameValid()
 
     ScRangeName* pRangeName = GetRangeName( aScope );
 
-    if (ScRangeData::IsNameValid( aName, mpDoc ) != ScRangeData::NAME_VALID)
+    if (ScRangeData::IsNameValid( aName, &mrDoc ) != ScRangeData::NAME_VALID)
     {
         m_xFtInfo->set_label_type(weld::LabelType::Error);
         m_xFtInfo->set_label(maErrInvalidNameStr);
@@ -268,7 +266,7 @@ bool ScNameDlg::IsNameValid()
 
 bool ScNameDlg::IsFormulaValid()
 {
-    ScCompiler aComp( mpDoc, maCursorPos, mpDoc->GetGrammar());
+    ScCompiler aComp( &mrDoc, maCursorPos, mrDoc.GetGrammar());
     std::unique_ptr<ScTokenArray> pCode = aComp.CompileString(m_xEdAssign->GetText());
     if (pCode->GetCodeError() != FormulaError::NONE)
     {
@@ -388,7 +386,7 @@ void ScNameDlg::NameModified()
     if ( m_xBtnPrintArea->get_active() ) nType |= ScRangeData::Type::PrintArea;
     if ( m_xBtnCriteria->get_active()  ) nType |= ScRangeData::Type::Criteria;
 
-    ScRangeData* pNewEntry = new ScRangeData( *mpDoc, aNewName, aExpr,
+    ScRangeData* pNewEntry = new ScRangeData( mrDoc, aNewName, aExpr,
             maCursorPos, nType);
     pNewEntry->SetIndex( nIndex);
     pNewRangeName->insert(pNewEntry, false /*bReuseFreeIndex*/);

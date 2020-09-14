@@ -79,7 +79,7 @@ private:
     void                        InitSettings();
 
     /** Returns the calc document. */
-    ScDocument&          GetDoc() const { return *mrViewData.GetDocument(); }
+    ScDocument&          GetDoc() const { return mrViewData.GetDocument(); }
     /** Returns the current sheet index. */
     SCTAB                GetTab() const { return mrViewData.GetTabNo(); }
     /** Returns the outline array of the corresponding document. */

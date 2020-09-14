@@ -155,7 +155,7 @@ class ScBoundsProvider
     typedef ScPositionHelper::value_type value_type;
     typedef SCCOLROW index_type;
 
-    ScDocument* pDoc;
+    ScDocument& rDoc;
     const SCTAB nTab;
     const bool bColumnHeader;
     const index_type MAX_INDEX;
@@ -379,7 +379,7 @@ public:
     void            WriteUserDataSequence(css::uno::Sequence <css::beans::PropertyValue>& rSettings) const;
     void            ReadUserDataSequence(const css::uno::Sequence <css::beans::PropertyValue>& rSettings);
 
-    ScDocument*     GetDocument() const;
+    ScDocument&     GetDocument() const;
 
     bool            IsActive() const            { return bActive; }
     void            Activate(bool bActivate)    { bActive = bActivate; }

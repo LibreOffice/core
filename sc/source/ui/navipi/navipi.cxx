@@ -136,7 +136,7 @@ IMPL_LINK(ScNavigatorDlg, ParseRowInputHdl, int*, result, bool)
         //  nKeyGroup is no longer set at VCL, in cause of lack of keyinput
 
         ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current() );
-        auto& rDoc = *pViewSh->GetViewData().GetDocument();
+        auto& rDoc = pViewSh->GetViewData().GetDocument();
         if ( CharClass::isAsciiNumeric(aStrCol) )
             nCol = NumStrToAlpha( rDoc.GetSheetLimits(), aStrCol );
         else
@@ -347,14 +347,14 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, vcl::Window* pParent)
     set_id("NavigatorPanelParent"); // for uitests
 
     GetViewData();
-    ScDocument* pDoc = pViewData->GetDocument();
-    m_xEdRow->set_range(1, SCNAV_MAXROW(pDoc->GetSheetLimits()));
+    ScDocument& rDoc = pViewData->GetDocument();
+    m_xEdRow->set_range(1, SCNAV_MAXROW(rDoc.GetSheetLimits()));
     m_xEdRow->set_width_chars(5);
     //max rows is 1,000,000, which is too long for typical use
     m_xEdRow->connect_activate(LINK(this, ScNavigatorDlg, ExecuteRowHdl));
 
-    m_xEdCol->set_range(1, SCNAV_MAXCOL(pDoc->GetSheetLimits()));
-    m_xEdCol->set_width_chars(SCNAV_COLDIGITS(pDoc->GetSheetLimits()));   // 1...256...18278 or A...IV...ZZZ
+    m_xEdCol->set_range(1, SCNAV_MAXCOL(rDoc.GetSheetLimits()));
+    m_xEdCol->set_width_chars(SCNAV_COLDIGITS(rDoc.GetSheetLimits()));   // 1...256...18278 or A...IV...ZZZ
     m_xEdCol->connect_activate(LINK(this, ScNavigatorDlg, ExecuteColHdl));
     m_xEdCol->connect_output(LINK(this, ScNavigatorDlg, FormatRowOutputHdl));
     m_xEdCol->connect_input(LINK(this, ScNavigatorDlg, ParseRowInputHdl));
@@ -607,19 +607,19 @@ void ScNavigatorDlg::SetCurrentTableStr( const OUString& rName )
 {
     if (!GetViewData()) return;
 
-    ScDocument* pDoc = pViewData->GetDocument();
-    SCTAB nCount = pDoc->GetTableCount();
+    ScDocument& rDoc = pViewData->GetDocument();
+    SCTAB nCount = rDoc.GetTableCount();
     OUString aTabName;
     SCTAB nLastSheet = 0;
 
     for (SCTAB i = 0; i<nCount; i++)
     {
-        pDoc->GetName(i, aTabName);
+        rDoc.GetName(i, aTabName);
         if (aTabName == rName)
         {
             // Check if this is a Scenario sheet and if so select the sheet
             // where it belongs to, which is the previous non-Scenario sheet.
-            if (pDoc->IsScenario(i))
+            if (rDoc.IsScenario(i))
             {
                 SetCurrentTable(nLastSheet);
                 return;
@@ -632,7 +632,7 @@ void ScNavigatorDlg::SetCurrentTableStr( const OUString& rName )
         }
         else
         {
-            if (!pDoc->IsScenario(i))
+            if (!rDoc.IsScenario(i))
                 nLastSheet = i;
         }
     }

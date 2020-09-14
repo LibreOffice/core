@@ -48,7 +48,7 @@ void FuText::StopEditMode()
         pView->LockInternalLayer();
 
     ScViewData& rViewData = rViewShell.GetViewData();
-    ScDocument& rDoc = *rViewData.GetDocument();
+    ScDocument& rDoc = rViewData.GetDocument();
     ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
     OSL_ENSURE( pDrawLayer && (pDrawLayer == pDrDoc), "FuText::StopEditMode - missing or different drawing layers" );
 

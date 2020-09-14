@@ -117,7 +117,7 @@ void ScFormulaReferenceHelper::ShowSimpleReference(const OUString& rStr)
     if ( !pViewData )
         return;
 
-    ScDocument* pDoc=pViewData->GetDocument();
+    ScDocument& rDoc = pViewData->GetDocument();
     ScTabViewShell* pTabViewShell=pViewData->GetViewShell();
 
     ScRangeList aRangeList;
@@ -125,7 +125,7 @@ void ScFormulaReferenceHelper::ShowSimpleReference(const OUString& rStr)
     pTabViewShell->DoneRefMode();
     pTabViewShell->ClearHighlightRanges();
 
-    if( ParseWithNames( aRangeList, rStr, *pDoc ) )
+    if( ParseWithNames( aRangeList, rStr, rDoc ) )
     {
         for ( size_t i = 0, nRanges = aRangeList.size(); i < nRanges; ++i )
         {
@@ -193,7 +193,7 @@ void ScFormulaReferenceHelper::ShowFormulaReference(const OUString& rStr)
         return;
 
     const ScViewData& rViewData = pTabViewShell->GetViewData();
-    ScDocument* pDoc = rViewData.GetDocument();
+    ScDocument& rDoc = rViewData.GetDocument();
     pTabViewShell->DoneRefMode();
     pTabViewShell->ClearHighlightRanges();
 
@@ -212,12 +212,12 @@ void ScFormulaReferenceHelper::ShowFormulaReference(const OUString& rStr)
             if(bDoubleRef)
             {
                 ScComplexRefData aRef( *pToken->GetDoubleRef() );
-                aRange = aRef.toAbs(*pDoc, aPos);
+                aRange = aRef.toAbs(rDoc, aPos);
             }
             else
             {
                 ScSingleRefData aRef( *pToken->GetSingleRef() );
-                aRange.aStart = aRef.toAbs(*pDoc, aPos);
+                aRange.aStart = aRef.toAbs(rDoc, aPos);
                 aRange.aEnd = aRange.aStart;
             }
             Color aColName=ScRangeFindList::GetColorName(nIndex++);
@@ -296,9 +296,9 @@ void ScFormulaReferenceHelper::ReleaseFocus( formula::RefEdit* pEdit )
         return;
 
     const ScViewData& rViewData = pViewShell->GetViewData();
-    ScDocument* pDoc = rViewData.GetDocument();
+    ScDocument& rDoc = rViewData.GetDocument();
     ScRangeList aRangeList;
-    if( !ParseWithNames( aRangeList, m_pRefEdit->GetText(), *pDoc ) )
+    if( !ParseWithNames( aRangeList, m_pRefEdit->GetText(), rDoc ) )
         return;
 
     if ( !aRangeList.empty() )
@@ -309,7 +309,7 @@ void ScFormulaReferenceHelper::ReleaseFocus( formula::RefEdit* pEdit )
             rRange.aStart.Row(), SC_FOLLOW_JUMP, false, false );
         pViewShell->MoveCursorAbs( rRange.aEnd.Col(),
             rRange.aEnd.Row(), SC_FOLLOW_JUMP, true, false );
-        m_pDlg->SetReference( rRange, *pDoc );
+        m_pDlg->SetReference( rRange, rDoc );
     }
 }
 
@@ -319,13 +319,13 @@ void ScFormulaReferenceHelper::Init()
     if ( !pViewData )
         return;
 
-    ScDocument* pDoc = pViewData->GetDocument();
+    ScDocument& rDoc = pViewData->GetDocument();
     SCCOL nCol = pViewData->GetCurX();
     SCROW nRow = pViewData->GetCurY();
     SCTAB nTab = pViewData->GetTabNo();
     ScAddress aCursorPos( nCol, nRow, nTab );
 
-    m_pRefComp.reset( new ScCompiler( pDoc, aCursorPos, pDoc->GetGrammar()) );
+    m_pRefComp.reset( new ScCompiler( &rDoc, aCursorPos, rDoc.GetGrammar()) );
     m_pRefComp->EnableJumpCommandReorder(false);
     m_pRefComp->EnableStopOnError(false);
 

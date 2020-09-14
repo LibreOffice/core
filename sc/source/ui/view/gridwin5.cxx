@@ -48,7 +48,7 @@ bool ScGridWindow::ShowNoteMarker( SCCOL nPosX, SCROW nPosY, bool bKeyboard )
 {
     bool bDone = false;
 
-    ScDocument* pDoc = pViewData->GetDocument();
+    ScDocument& rDoc = pViewData->GetDocument();
     SCTAB       nTab = pViewData->GetTabNo();
     ScAddress   aCellPos( nPosX, nPosY, nTab );
 
@@ -57,8 +57,8 @@ bool ScGridWindow::ShowNoteMarker( SCCOL nPosX, SCROW nPosY, bool bKeyboard )
 
     // change tracking
 
-    ScChangeTrack* pTrack = pDoc->GetChangeTrack();
-    ScChangeViewSettings* pSettings = pDoc->GetChangeViewSettings();
+    ScChangeTrack* pTrack = rDoc.GetChangeTrack();
+    ScChangeViewSettings* pSettings = rDoc.GetChangeViewSettings();
     if ( pTrack && pTrack->GetFirst() && pSettings && pSettings->ShowChanges())
     {
         const ScChangeAction* pFound = nullptr;
@@ -68,7 +68,7 @@ bool ScGridWindow::ShowNoteMarker( SCCOL nPosX, SCROW nPosY, bool bKeyboard )
         while (pAction)
         {
             if ( pAction->IsVisible() &&
-                 ScViewUtil::IsActionShown( *pAction, *pSettings, *pDoc ) )
+                 ScViewUtil::IsActionShown( *pAction, *pSettings, rDoc ) )
             {
                 ScChangeActionType eType = pAction->GetType();
                 const ScBigRange& rBig = pAction->GetBigRange();
@@ -139,7 +139,7 @@ bool ScGridWindow::ShowNoteMarker( SCCOL nPosX, SCROW nPosY, bool bKeyboard )
                 aTrackText += aComStr + "\n( ";
             }
             OUString aTmp;
-            pFound->GetDescription(aTmp, pDoc);
+            pFound->GetDescription(aTmp, &rDoc);
             aTrackText += aTmp;
             if(!aComStr.isEmpty())
             {
@@ -149,7 +149,7 @@ bool ScGridWindow::ShowNoteMarker( SCCOL nPosX, SCROW nPosY, bool bKeyboard )
     }
 
     // Note, only if it is not already displayed on the Drawing Layer:
-    const ScPostIt* pNote = pDoc->GetNote( aCellPos );
+    const ScPostIt* pNote = rDoc.GetNote( aCellPos );
     if ( (!aTrackText.isEmpty()) || (pNote && !pNote->IsCaptionShown()) )
     {
         bool bNew = true;
@@ -193,7 +193,7 @@ bool ScGridWindow::ShowNoteMarker( SCCOL nPosX, SCROW nPosY, bool bKeyboard )
             aMapMode.SetOrigin( aOrigin );
 
             mpNoteMarker.reset(new ScNoteMarker(pLeft, pRight, pBottom, pDiagonal,
-                                                pDoc, aCellPos, aTrackText,
+                                                &rDoc, aCellPos, aTrackText,
                                                 aMapMode, bLeftEdge, bFast, bKeyboard));
         }
 
@@ -311,12 +311,12 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
                 aHelpText = SfxHelp::GetURLHelpText(
                     INetURLObject::decode(aUrl, INetURLObject::DecodeMechanism::Unambiguous));
 
-                ScDocument* pDoc = pViewData->GetDocument();
+                ScDocument& rDoc = pViewData->GetDocument();
                 SCCOL nPosX;
                 SCROW nPosY;
                 SCTAB       nTab = pViewData->GetTabNo();
                 pViewData->GetPosFromPixel( aPosPixel.X(), aPosPixel.Y(), eWhich, nPosX, nPosY );
-                const ScPatternAttr* pPattern = pDoc->GetPattern( nPosX, nPosY, nTab );
+                const ScPatternAttr* pPattern = rDoc.GetPattern( nPosX, nPosY, nTab );
 
                 // bForceToTop = sal_False, use the cell's real position
                 aPixRect = pViewData->GetEditArea( eWhich, nPosX, nPosY, this, pPattern, false );
@@ -360,7 +360,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
 bool ScGridWindow::IsMyModel(const SdrEditView* pSdrView)
 {
     return pSdrView &&
-            pSdrView->GetModel() == pViewData->GetDocument()->GetDrawLayer();
+            pSdrView->GetModel() == pViewData->GetDocument().GetDrawLayer();
 }
 
 void ScGridWindow::HideNoteMarker()

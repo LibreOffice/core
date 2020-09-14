@@ -343,7 +343,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
     bool bCopy = false;
     ScViewData& rViewData = rViewShell.GetViewData();
-    ScDocument* pDocument = rViewData.GetDocument();
+    ScDocument& rDocument = rViewData.GetDocument();
     SdrPageView* pPageView = ( pView ? pView->GetSdrPageView() : nullptr );
     SdrPage* pPage = ( pPageView ? pPageView->GetPage() : nullptr );
     ::std::vector< OUString > aExcludedChartNames;
@@ -360,7 +360,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 {
                     ScChartHelper::GetChartNames( aExcludedChartNames, pPage );
                 }
-                if ( pView && pDocument )
+                if ( pView )
                 {
                     const SdrMarkList& rSdrMarkList = pView->GetMarkedObjectList();
                     const size_t nMarkCount = rSdrMarkList.GetMarkCount();
@@ -370,7 +370,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                         pObj = ( pMark ? pMark->GetMarkedSdrObj() : nullptr );
                         if ( pObj )
                         {
-                            ScChartHelper::AddRangesIfProtectedChart( aProtectedChartRangesVector, pDocument, pObj );
+                            ScChartHelper::AddRangesIfProtectedChart( aProtectedChartRangesVector, &rDocument, pObj );
                         }
                     }
                 }
@@ -514,14 +514,14 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             rViewShell.GetViewData().GetDispatcher().
                 Execute(SID_OBJECT_SELECT, SfxCallMode::SLOT | SfxCallMode::RECORD);
 
-    if ( bCopy && pDocument && pPage )
+    if ( bCopy && pPage )
     {
         ScDocShell* pDocShell = rViewData.GetDocShell();
         ScModelObj* pModelObj = ( pDocShell ? comphelper::getUnoTunnelImplementation<ScModelObj>( pDocShell->GetModel() ) : nullptr );
         if ( pModelObj )
         {
             SCTAB nTab = rViewData.GetTabNo();
-            ScChartHelper::CreateProtectedChartListenersAndNotify( pDocument, pPage, pModelObj, nTab,
+            ScChartHelper::CreateProtectedChartListenersAndNotify( &rDocument, pPage, pModelObj, nTab,
                 aProtectedChartRangesVector, aExcludedChartNames );
         }
     }

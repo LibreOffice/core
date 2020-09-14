@@ -25,13 +25,13 @@ void ScDBFunc::UpdateCharts( bool bAllCharts )
 {
     sal_uInt16 nFound = 0;
     ScViewData& rViewData = GetViewData();
-    ScDocument* pDoc = rViewData.GetDocument();
+    ScDocument& rDoc = rViewData.GetDocument();
 
-    if ( pDoc->GetDrawLayer() )
+    if ( rDoc.GetDrawLayer() )
         nFound = DoUpdateCharts( ScAddress( rViewData.GetCurX(),
                                             rViewData.GetCurY(),
                                             rViewData.GetTabNo()),
-                                 pDoc,
+                                 &rDoc,
                                  bAllCharts );
 
     if ( !nFound && !bAllCharts )

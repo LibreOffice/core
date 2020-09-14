@@ -29,7 +29,7 @@ ScHighlightChgDlg::ScHighlightChgDlg(SfxBindings* pB, SfxChildWindow* pCW, weld:
                                      ScViewData* ptrViewData)
     : ScAnyRefDlgController(pB, pCW, pParent, "modules/scalc/ui/showchangesdialog.ui", "ShowChangesDialog")
     , pViewData(ptrViewData)
-    , pDoc(ptrViewData->GetDocument())
+    , rDoc(ptrViewData->GetDocument())
     , m_xHighlightBox(m_xBuilder->weld_check_button("showchanges"))
     , m_xCbAccept(m_xBuilder->weld_check_button("showaccepted"))
     , m_xCbReject(m_xBuilder->weld_check_button("showrejected"))
@@ -59,9 +59,9 @@ ScHighlightChgDlg::~ScHighlightChgDlg()
 
 void ScHighlightChgDlg::Init()
 {
-    OSL_ENSURE( pViewData && pDoc, "ViewData or Document not found!" );
+    OSL_ENSURE( pViewData, "ViewData or Document not found!" );
 
-    ScChangeTrack* pChanges=pDoc->GetChangeTrack();
+    ScChangeTrack* pChanges = rDoc.GetChangeTrack();
     if(pChanges!=nullptr)
     {
         aChangeViewSet.SetTheAuthorToShow(pChanges->GetUser());
@@ -71,7 +71,7 @@ void ScHighlightChgDlg::Init()
             m_xFilterCtr->InsertAuthor(rItem);
     }
 
-    ScChangeViewSettings* pViewSettings=pDoc->GetChangeViewSettings();
+    ScChangeViewSettings* pViewSettings = rDoc.GetChangeViewSettings();
 
     if(pViewSettings!=nullptr)
         aChangeViewSet=*pViewSettings;
@@ -116,7 +116,7 @@ void ScHighlightChgDlg::Init()
     if ( !aChangeViewSet.GetTheRangeList().empty() )
     {
         const ScRange & rRangeEntry = aChangeViewSet.GetTheRangeList().front();
-        OUString aRefStr(rRangeEntry.Format(*pDoc, ScRefFlags::RANGE_ABS_3D));
+        OUString aRefStr(rRangeEntry.Format(rDoc, ScRefFlags::RANGE_ABS_3D));
         m_xFilterCtr->SetRange(aRefStr);
     }
     m_xFilterCtr->Enable(true);
@@ -212,10 +212,10 @@ IMPL_LINK_NOARG(ScHighlightChgDlg, OKBtnHdl, weld::Button&, void)
     aChangeViewSet.SetHasComment(m_xFilterCtr->IsComment());
     aChangeViewSet.SetTheComment(m_xFilterCtr->GetComment());
     ScRangeList aLocalRangeList;
-    aLocalRangeList.Parse(m_xFilterCtr->GetRange(), *pDoc);
+    aLocalRangeList.Parse(m_xFilterCtr->GetRange(), rDoc);
     aChangeViewSet.SetTheRangeList(aLocalRangeList);
-    aChangeViewSet.AdjustDateMode( *pDoc );
-    pDoc->SetChangeViewSettings(aChangeViewSet);
+    aChangeViewSet.AdjustDateMode( rDoc );
+    rDoc.SetChangeViewSettings(aChangeViewSet);
     pViewData->GetDocShell()->PostPaintGridAll();
     response(RET_OK);
 }

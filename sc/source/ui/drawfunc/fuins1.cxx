@@ -172,7 +172,7 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
     Point aInsertPos = rViewSh.GetInsertPos();
 
     ScViewData& rData = rViewSh.GetViewData();
-    if ( rData.GetDocument()->IsNegativePage( rData.GetTabNo() ) )
+    if ( rData.GetDocument().IsNegativePage( rData.GetTabNo() ) )
         aInsertPos.AdjustX( -(aLogicSize.Width()) );       // move position to left edge
 
     ScLimitSizeOnDrawPage( aLogicSize, aInsertPos, pPage->GetSize() );
@@ -193,7 +193,7 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
     pObj->SetName(aName);
 
     if (aAnchorType == SCA_CELL || aAnchorType == SCA_CELL_RESIZE)
-        ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *(rData.GetDocument()), rData.GetTabNo(),
+        ScDrawLayer::SetCellAnchoredFromPosition(*pObj, rData.GetDocument(), rData.GetTabNo(),
                                                  aAnchorType == SCA_CELL_RESIZE);
 
     //  don't select if from (dispatch) API, to allow subsequent cell operations
@@ -229,7 +229,7 @@ static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,
 
     ScLimitSizeOnDrawPage( aSize, aInsertPos, pPage->GetSize() );
 
-    if( rData.GetDocument()->IsNegativePage( rData.GetTabNo() ) )
+    if( rData.GetDocument().IsNegativePage( rData.GetTabNo() ) )
         aInsertPos.AdjustX( -(aSize.Width()) );
 
     OUString realURL;
@@ -240,7 +240,7 @@ static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,
     else
     {
         uno::Reference<frame::XModel> const xModel(
-                rData.GetDocument()->GetDocumentShell()->GetModel());
+                rData.GetDocument().GetDocumentShell()->GetModel());
 #if HAVE_FEATURE_AVMEDIA
         bool const bRet = ::avmedia::EmbedMedia(xModel, rMediaURL, realURL);
         if (!bRet) { return; }
@@ -250,7 +250,7 @@ static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,
     }
 
     SdrMediaObj* pObj = new SdrMediaObj(
-        *rData.GetDocument()->GetDrawLayer(),
+        *rData.GetDocument().GetDrawLayer(),
         tools::Rectangle(aInsertPos, aSize));
 
     pObj->setURL( realURL, ""/*TODO?*/ );
