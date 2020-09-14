@@ -128,7 +128,7 @@ void WorksheetBuffer::convertSheetNameRef( OUString& sSheetNameRef ) const
     if (nSepPos < sSheetNameRef.getLength() - 1)
     {
         ScRange aRange;
-        if ((aRange.ParseAny( sSheetNameRef.copy( nSepPos + 1 ), &getScDocument(),
+        if ((aRange.ParseAny( sSheetNameRef.copy( nSepPos + 1 ), getScDocument(),
                         formula::FormulaGrammar::CONV_XL_R1C1) & ScRefFlags::VALID) == ScRefFlags::ZERO)
             sSheetNameRef = sSheetNameRef.replaceAt( nSepPos, 1, OUString( '.' ) );
     }

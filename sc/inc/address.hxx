@@ -557,7 +557,7 @@ public:
                                    const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = nullptr,
                                    const OUString* pErrRef = nullptr );
 
-    SC_DLLPUBLIC ScRefFlags ParseAny( const OUString&, const ScDocument*,
+    SC_DLLPUBLIC ScRefFlags ParseAny( const OUString&, const ScDocument&,
                                       const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
     SC_DLLPUBLIC ScRefFlags ParseCols( const ScDocument& rDoc,
                                        const OUString&,
