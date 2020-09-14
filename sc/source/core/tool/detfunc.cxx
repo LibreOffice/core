@@ -1605,17 +1605,22 @@ ScDetectiveObjType ScDetectiveFunc::GetDetectiveObjectType( SdrObject* pObject, 
                 if ( nObjColor == GetErrorColor() && nObjColor != GetArrowColor() )
                     rRedLine = true;
             }
-            // TODO: Detfunc enum misses SC_DETOBJ_RECT which marks the cells
-            // that hold precedent information.
-            // Now the eType of both rect and circle is circle.
-            else if ( dynamic_cast<const SdrRectObj*>( pObject) !=  nullptr )
+            else if (dynamic_cast<const SdrCircObj*>(pObject) != nullptr)
             {
-                if ( bValidStart )
+                if (bValidStart)
                 {
                     // cell position is returned in rPosition
-
                     rPosition = pData->maStart;
                     eType = SC_DETOBJ_CIRCLE;
+                }
+            }
+            else if (dynamic_cast<const SdrRectObj*>(pObject) != nullptr)
+            {
+                if (bValidStart)
+                {
+                    // cell position is returned in rPosition
+                    rPosition = pData->maStart;
+                    eType = SC_DETOBJ_RECTANGLE;
                 }
             }
         }
