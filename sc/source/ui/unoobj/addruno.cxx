@@ -65,7 +65,7 @@ bool ScAddressConversionObj::ParseUIString( const OUString& rUIString, ::formula
     bool bSuccess = false;
     if ( bIsRange )
     {
-        ScRefFlags nResult = aRange.ParseAny( rUIString, &rDoc, eConv );
+        ScRefFlags nResult = aRange.ParseAny( rUIString, rDoc, eConv );
         if ( nResult & ScRefFlags::VALID )
         {
             if ( ( nResult & ScRefFlags::TAB_3D ) == ScRefFlags::ZERO )

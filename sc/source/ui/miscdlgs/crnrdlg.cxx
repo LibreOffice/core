@@ -519,8 +519,8 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, AddBtnHdl, weld::Button&, void)
 
     const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
     ScRange aRange1, aRange2;
-    bool bOk1 = (aRange1.ParseAny( aNewArea, pDoc, eConv ) & ScRefFlags::VALID) == ScRefFlags::VALID;
-    if ( bOk1 && (aRange2.ParseAny( aNewData, pDoc, eConv ) & ScRefFlags::VALID) == ScRefFlags::VALID)
+    bool bOk1 = (aRange1.ParseAny( aNewArea, *pDoc, eConv ) & ScRefFlags::VALID) == ScRefFlags::VALID;
+    if ( bOk1 && (aRange2.ParseAny( aNewData, *pDoc, eConv ) & ScRefFlags::VALID) == ScRefFlags::VALID)
     {
         theCurArea = aRange1;
         AdjustColRowData( aRange2 );
@@ -693,7 +693,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1DataModifyHdl, formula::RefEdit&, v
     if (!aNewArea.isEmpty() && pDoc)
     {
         ScRange aRange;
-        if ( (aRange.ParseAny(aNewArea, pDoc, pDoc->GetAddressConvention() ) & ScRefFlags::VALID) == ScRefFlags::VALID)
+        if ( (aRange.ParseAny(aNewArea, *pDoc, pDoc->GetAddressConvention() ) & ScRefFlags::VALID) == ScRefFlags::VALID)
         {
             SetColRowData( aRange );
             bValid = true;
@@ -725,7 +725,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range2DataModifyHdl, formula::RefEdit&, v
     if ( !aNewData.isEmpty() )
     {
         ScRange aRange;
-        if ( (aRange.ParseAny(aNewData, pDoc, pDoc->GetAddressConvention() ) & ScRefFlags::VALID) == ScRefFlags::VALID)
+        if ( (aRange.ParseAny(aNewData, *pDoc, pDoc->GetAddressConvention() ) & ScRefFlags::VALID) == ScRefFlags::VALID)
         {
             AdjustColRowData( aRange );
             m_xBtnAdd->set_sensitive(true);

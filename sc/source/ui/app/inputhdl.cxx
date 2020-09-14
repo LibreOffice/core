@@ -381,7 +381,7 @@ handle_r1c1:
         {
             OUString aTest = rFormula.copy( nStart, nPos-nStart );
             const ScAddress::Details aAddrDetails( rDoc, aCursorPos );
-            ScRefFlags nFlags = aRange.ParseAny( aTest, &rDoc, aAddrDetails );
+            ScRefFlags nFlags = aRange.ParseAny( aTest, rDoc, aAddrDetails );
             if ( nFlags & ScRefFlags::VALID )
             {
                 //  Set tables if not specified

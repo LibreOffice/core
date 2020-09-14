@@ -211,7 +211,7 @@ bool ScAreaLink::FindExtRange( ScRange& rRange, const ScDocument& rSrcDoc, const
     if (!bFound)        // direct reference (range or cell)
     {
         ScAddress::Details aDetails(rSrcDoc.GetAddressConvention(), 0, 0);
-        if ( rRange.ParseAny( rAreaName, &rSrcDoc, aDetails ) & ScRefFlags::VALID )
+        if ( rRange.ParseAny( rAreaName, rSrcDoc, aDetails ) & ScRefFlags::VALID )
             bFound = true;
     }
     return bFound;

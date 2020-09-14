@@ -121,7 +121,7 @@ ScRefFlags ScRangeList::Parse( const OUString& rStr, const ScDocument& rDoc,
         {
             const OUString aOne = rStr.getToken( 0, cDelimiter, nPos );
             aRange.aStart.SetTab( nTab );   // default tab if not specified
-            ScRefFlags nRes = aRange.ParseAny( aOne, &rDoc, eConv );
+            ScRefFlags nRes = aRange.ParseAny( aOne, rDoc, eConv );
             ScRefFlags nEndRangeBits = ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID;
             ScRefFlags nTmp1 = nRes & ScRefFlags::BITS;
             ScRefFlags nTmp2 = nRes & nEndRangeBits;

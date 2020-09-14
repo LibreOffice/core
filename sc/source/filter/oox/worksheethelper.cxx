@@ -995,7 +995,7 @@ OUString WorksheetGlobals::getHyperlinkUrl( const HyperlinkModel& rHyperlink ) c
             {
                 ScRange aRange;
                 const ScDocumentImport& rDoc = getDocImport();
-                if ((aRange.ParseAny( aUrl.copy( nSepPos + 1 ), &rDoc.getDoc(),
+                if ((aRange.ParseAny( aUrl.copy( nSepPos + 1 ), rDoc.getDoc(),
                                 formula::FormulaGrammar::CONV_XL_R1C1)
                       & ScRefFlags::VALID) == ScRefFlags::ZERO)
                     aUrl = aUrl.replaceAt( nSepPos, 1, OUString( '.' ) );
