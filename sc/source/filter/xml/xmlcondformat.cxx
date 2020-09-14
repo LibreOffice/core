@@ -847,7 +847,7 @@ void setColorEntryType(const OUString& rType, ScColorScaleEntry* pEntry, const O
     {
         pEntry->SetType(COLORSCALE_FORMULA);
         //position does not matter, only table is important
-        pEntry->SetFormula(rFormula, rImport.GetDocument(), ScAddress(0,0,rImport.GetTables().GetCurrentSheet()), formula::FormulaGrammar::GRAM_ODFF);
+        pEntry->SetFormula(rFormula, *rImport.GetDocument(), ScAddress(0,0,rImport.GetTables().GetCurrentSheet()), formula::FormulaGrammar::GRAM_ODFF);
     }
     else if(rType == "auto-minimum")
         pEntry->SetType(COLORSCALE_AUTO);
