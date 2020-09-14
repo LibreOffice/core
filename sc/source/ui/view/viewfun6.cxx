@@ -248,7 +248,7 @@ void ScViewFunc::DetectiveMarkSucc()
         return;
 
     ScRangeList aDestRanges;
-    ScRefTokenHelper::getRangeListFromTokens(rView.GetDocument(), aDestRanges, aRefTokens, aCurPos);
+    ScRefTokenHelper::getRangeListFromTokens(&rView.GetDocument(), aDestRanges, aRefTokens, aCurPos);
     MarkAndJumpToRanges(aDestRanges);
 }
 

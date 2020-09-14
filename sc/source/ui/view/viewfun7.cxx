@@ -80,14 +80,14 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
     // MapMode at Outliner-RefDevice has to be right (as in FuText::MakeOutliner)
     //! merge with FuText::MakeOutliner?
     MapMode aOldMapMode;
-    OutputDevice* pRef = GetViewData().GetDocument()->GetDrawLayer()->GetRefDevice();
+    OutputDevice* pRef = GetViewData().GetDocument().GetDrawLayer()->GetRefDevice();
     if (pRef)
     {
         aOldMapMode = pRef->GetMapMode();
         pRef->SetMapMode( MapMode(MapUnit::Map100thMM) );
     }
 
-    bool bNegativePage = GetViewData().GetDocument()->IsNegativePage( GetViewData().GetTabNo() );
+    bool bNegativePage = GetViewData().GetDocument().IsNegativePage( GetViewData().GetTabNo() );
 
     SdrView* pDragEditView = nullptr;
     ScModule* pScMod = SC_MOD();
@@ -167,7 +167,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
                     pScDrawView->AddUndo(std::make_unique<SdrUndoInsertObj>( *pNewObj ));
 
                     if (ScDrawLayer::IsCellAnchored(*pNewObj))
-                        ScDrawLayer::SetCellAnchoredFromPosition(*pNewObj, *GetViewData().GetDocument(), nTab,
+                        ScDrawLayer::SetCellAnchoredFromPosition(*pNewObj, GetViewData().GetDocument(), nTab,
                                                                  ScDrawLayer::IsResizeWithCell(*pNewObj));
                 }
             }
@@ -175,13 +175,13 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
             if (bPasteIsMove)
                 pDragEditView->DeleteMarked();
 
-            ScDocument* pDocument = GetViewData().GetDocument();
+            ScDocument& rDocument = GetViewData().GetDocument();
             ScDocShell* pDocShell = GetViewData().GetDocShell();
             ScModelObj* pModelObj = ( pDocShell ? comphelper::getUnoTunnelImplementation<ScModelObj>( pDocShell->GetModel() ) : nullptr );
-            if ( pDocument && pDestPage && pModelObj && pDrawTrans )
+            if ( pDestPage && pModelObj && pDrawTrans )
             {
                 const ScRangeListVector& rProtectedChartRangesVector( pDrawTrans->GetProtectedChartRangesVector() );
-                ScChartHelper::CreateProtectedChartListenersAndNotify( pDocument, pDestPage, pModelObj, nTab,
+                ScChartHelper::CreateProtectedChartListenersAndNotify( &rDocument, pDestPage, pModelObj, nTab,
                     rProtectedChartRangesVector, aExcludedChartNames, bSameDoc );
             }
         }
@@ -215,12 +215,12 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         // #89247# Set flag for ScDocument::UpdateChartListeners() which is
         // called during paste.
         if ( !bSameDocClipboard )
-            GetViewData().GetDocument()->SetPastingDrawFromOtherDoc( true );
+            GetViewData().GetDocument().SetPastingDrawFromOtherDoc( true );
 
         pScDrawView->Paste(*pModel, aPos, nullptr, nOptions);
 
         if ( !bSameDocClipboard )
-            GetViewData().GetDocument()->SetPastingDrawFromOtherDoc( false );
+            GetViewData().GetDocument().SetPastingDrawFromOtherDoc( false );
 
         // Paste puts all objects on the active (front) layer
         // controls must be on SC_LAYER_CONTROLS
@@ -234,7 +234,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
                     pObject->NbcSetLayer(SC_LAYER_CONTROLS);
 
                 if (ScDrawLayer::IsCellAnchored(*pObject))
-                    ScDrawLayer::SetCellAnchoredFromPosition(*pObject, *GetViewData().GetDocument(), nTab,
+                    ScDrawLayer::SetCellAnchoredFromPosition(*pObject, GetViewData().GetDocument(), nTab,
                                                              ScDrawLayer::IsResizeWithCell(*pObject));
 
                 pObject = aIter.Next();
@@ -242,17 +242,17 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         }
 
         // all graphics objects must have names
-        GetViewData().GetDocument()->EnsureGraphicNames();
+        GetViewData().GetDocument().EnsureGraphicNames();
 
-        ScDocument* pDocument = GetViewData().GetDocument();
+        ScDocument& rDocument = GetViewData().GetDocument();
         ScDocShell* pDocShell = GetViewData().GetDocShell();
         ScModelObj* pModelObj = ( pDocShell ? comphelper::getUnoTunnelImplementation<ScModelObj>( pDocShell->GetModel() ) : nullptr );
         const ScDrawTransferObj* pTransferObj = ScDrawTransferObj::GetOwnClipboard(ScTabViewShell::GetClipData(GetViewData().GetActiveWin()));
-        if ( pDocument && pPage && pModelObj && ( pTransferObj || pDrawTrans ) )
+        if ( pPage && pModelObj && ( pTransferObj || pDrawTrans ) )
         {
             const ScRangeListVector& rProtectedChartRangesVector(
                 pTransferObj ? pTransferObj->GetProtectedChartRangesVector() : pDrawTrans->GetProtectedChartRangesVector() );
-            ScChartHelper::CreateProtectedChartListenersAndNotify( pDocument, pPage, pModelObj, nTab,
+            ScChartHelper::CreateProtectedChartListenersAndNotify( &rDocument, pPage, pModelObj, nTab,
                 rProtectedChartRangesVector, aExcludedChartNames, bSameDocClipboard );
         }
     }
@@ -342,7 +342,7 @@ bool ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embed::X
 
         // don't call AdjustInsertPos
         Point aInsPos = rPos;
-        if ( GetViewData().GetDocument()->IsNegativePage( GetViewData().GetTabNo() ) )
+        if ( GetViewData().GetDocument().IsNegativePage( GetViewData().GetTabNo() ) )
             aInsPos.AdjustX( -(aSize.Width()) );
         tools::Rectangle aRect( aInsPos, aSize );
 
@@ -425,7 +425,7 @@ bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
 
     Size aSize = pWin->LogicToLogic( rGraphic.GetPrefSize(), &aSourceMap, &aDestMap );
 
-    if ( GetViewData().GetDocument()->IsNegativePage( GetViewData().GetTabNo() ) )
+    if ( GetViewData().GetDocument().IsNegativePage( GetViewData().GetTabNo() ) )
         aPos.AdjustX( -(aSize.Width()) );
 
     GetViewData().GetViewShell()->SetDrawShell( true );

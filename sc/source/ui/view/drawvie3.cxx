@@ -36,10 +36,10 @@
 ScDrawView::ScDrawView(
     OutputDevice* pOut,
     ScViewData* pData )
-:   FmFormView(*pData->GetDocument()->GetDrawLayer(), pOut),
+:   FmFormView(*pData->GetDocument().GetDrawLayer(), pOut),
     pViewData( pData ),
     pDev( pOut ),
-    pDoc( pData->GetDocument() ),
+    rDoc( pData->GetDocument() ),
     nTab( pData->GetTabNo() ),
     pDropMarkObj( nullptr ),
     bInConstruct( true )
@@ -67,7 +67,7 @@ void ScDrawView::SetPageAnchored()
     for( size_t i=0; i<nCount; ++i )
     {
         SdrObject* pObj = pMark->GetMark(i)->GetMarkedSdrObj();
-        AddUndo (std::make_unique<ScUndoAnchorData>( pObj, pDoc, nTab ));
+        AddUndo (std::make_unique<ScUndoAnchorData>( pObj, &rDoc, nTab ));
         ScDrawLayer::SetPageAnchored( *pObj );
     }
     EndUndo();
@@ -82,9 +82,6 @@ void ScDrawView::SetPageAnchored()
 
 void ScDrawView::SetCellAnchored(bool bResizeWithCell)
 {
-    if (!pDoc)
-        return;
-
     if( !AreObjectsMarked() )
         return;
 
@@ -95,8 +92,8 @@ void ScDrawView::SetCellAnchored(bool bResizeWithCell)
     for( size_t i=0; i<nCount; ++i )
     {
         SdrObject* pObj = pMark->GetMark(i)->GetMarkedSdrObj();
-        AddUndo (std::make_unique<ScUndoAnchorData>( pObj, pDoc, nTab ));
-        ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *pDoc, nTab, bResizeWithCell);
+        AddUndo (std::make_unique<ScUndoAnchorData>( pObj, &rDoc, nTab ));
+        ScDrawLayer::SetCellAnchoredFromPosition(*pObj, rDoc, nTab, bResizeWithCell);
     }
     EndUndo();
 
@@ -180,7 +177,7 @@ void ScDrawView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     if (rHint.GetId() == SfxHintId::ThisIsAnSdrHint)
     {
         const SdrHint* pSdrHint = static_cast<const SdrHint*>( &rHint );
-        adjustAnchoredPosition(*pSdrHint, *pDoc, nTab);
+        adjustAnchoredPosition(*pSdrHint, rDoc, nTab);
         FmFormView::Notify( rBC,rHint );
     }
     else if (dynamic_cast<const ScTabDeletedHint*>(&rHint))                        // Sheet has been deleted

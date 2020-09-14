@@ -539,7 +539,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
 {
     bool bOle = GetViewFrame()->GetFrame().IsInPlace();
-    bool bTabProt = GetViewData().GetDocument()->IsTabProtected(GetViewData().GetTabNo());
+    bool bTabProt = GetViewData().GetDocument().IsTabProtected(GetViewData().GetTabNo());
     ScDocShell* pDocShell = GetViewData().GetDocShell();
     bool bShared = pDocShell && pDocShell->IsDocShared();
     SdrView* pSdrView = GetScDrawView();
@@ -598,11 +598,11 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
                     // if there is no marked area, check the current cell
                     bool bDisableInsertImage = true;
                     ScMarkData& rMark = GetViewData().GetMarkData();
-                    if (!rMark.GetMarkedRanges().empty() && GetViewData().GetDocument()->IsSelectionEditable(rMark))
+                    if (!rMark.GetMarkedRanges().empty() && GetViewData().GetDocument().IsSelectionEditable(rMark))
                         bDisableInsertImage = false;
                     else
                     {
-                        if (GetViewData().GetDocument()->IsBlockEditable
+                        if (GetViewData().GetDocument().IsBlockEditable
                             (GetViewData().GetTabNo(), GetViewData().GetCurX(), GetViewData().GetCurY(), GetViewData().GetCurX(), GetViewData().GetCurY()))
                         {
                             bDisableInsertImage = false;
@@ -616,7 +616,7 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
 
             case SID_LINKS:
                 {
-                    if (GetViewData().GetDocument()->GetLinkManager()->GetLinks().empty())
+                    if (GetViewData().GetDocument().GetLinkManager()->GetLinks().empty())
                         rSet.DisableItem( SID_LINKS );
                 }
                 break;

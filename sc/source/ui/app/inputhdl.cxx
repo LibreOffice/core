@@ -596,9 +596,9 @@ void ScInputHandler::UpdateRange( sal_uInt16 nIndex, const ScRange& rNew )
 
         ScRange aJustified = rNew;
         aJustified.PutInOrder(); // Always display Ref in the Formula the right way
-        ScDocument* pDoc = pDocView->GetViewData().GetDocument();
-        const ScAddress::Details aAddrDetails( *pDoc, aCursorPos );
-        OUString aNewStr(aJustified.Format(*pDoc, rData.nFlags, aAddrDetails));
+        ScDocument& rDoc = pDocView->GetViewData().GetDocument();
+        const ScAddress::Details aAddrDetails( rDoc, aCursorPos );
+        OUString aNewStr(aJustified.Format(rDoc, rData.nFlags, aAddrDetails));
         ESelection aOldSel( 0, nOldStart, 0, nOldEnd );
         SfxItemSet aSet( mpEditEngine->GetEmptyItemSet() );
 
@@ -850,7 +850,7 @@ void ScInputHandler::UpdateRefDevice()
         nCtrl &= ~EEControlBits::FORMAT100;   // when formatting for screen, use the actual MapMode
     mpEditEngine->SetControlWord( nCtrl );
     if ( bTextWysiwyg && pActiveViewSh )
-        mpEditEngine->SetRefDevice( pActiveViewSh->GetViewData().GetDocument()->GetPrinter() );
+        mpEditEngine->SetRefDevice( pActiveViewSh->GetViewData().GetDocument().GetPrinter() );
     else
         mpEditEngine->SetRefDevice( nullptr );
 
@@ -910,7 +910,7 @@ void ScInputHandler::UpdateSpellSettings( bool bFromStartTab )
         return;
 
     ScViewData& rViewData = pActiveViewSh->GetViewData();
-    bool bOnlineSpell = rViewData.GetDocument()->GetDocOptions().IsAutoSpell();
+    bool bOnlineSpell = rViewData.GetDocument().GetDocOptions().IsAutoSpell();
 
     //  SetDefaultLanguage is independent of the language attributes,
     //  ScGlobal::GetEditDefaultLanguage is always used.
@@ -937,10 +937,10 @@ void ScInputHandler::UpdateSpellSettings( bool bFromStartTab )
         if ( nCntrl != nOld )
             mpEditEngine->SetControlWord(nCntrl);
 
-        ScDocument* pDoc = rViewData.GetDocument();
-        pDoc->ApplyAsianEditSettings( *mpEditEngine );
+        ScDocument& rDoc = rViewData.GetDocument();
+        rDoc.ApplyAsianEditSettings( *mpEditEngine );
         mpEditEngine->SetDefaultHorizontalTextDirection(
-            pDoc->GetEditTextDirection( rViewData.GetTabNo() ) );
+            rDoc.GetEditTextDirection( rViewData.GetTabNo() ) );
         mpEditEngine->SetFirstWordCapitalization( false );
     }
 
@@ -2645,7 +2645,7 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
         }
         if (!bNeedGrow)
         {
-            bNeedGrow = rViewData.GetDocument()->IsLayoutRTL( rViewData.GetTabNo() );
+            bNeedGrow = rViewData.GetDocument().IsLayoutRTL( rViewData.GetTabNo() );
         }
         if (bNeedGrow)
         {
@@ -2946,12 +2946,12 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
     // Test if valid (always with simple string)
     if ( bModified && nValidation && pActiveViewSh )
     {
-        ScDocument* pDoc = pActiveViewSh->GetViewData().GetDocument();
-        const ScValidationData* pData = pDoc->GetValidationEntry( nValidation );
+        ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocument();
+        const ScValidationData* pData = rDoc.GetValidationEntry( nValidation );
         if (pData && pData->HasErrMsg())
         {
             // #i67990# don't use pLastPattern in EnterHandler
-            const ScPatternAttr* pPattern = pDoc->GetPattern( aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab() );
+            const ScPatternAttr* pPattern = rDoc.GetPattern( aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab() );
 
             bool bOk;
 
@@ -2995,8 +2995,8 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
     // Check for input into DataPilot table
     if ( bModified && pActiveViewSh && !bForget )
     {
-        ScDocument* pDoc = pActiveViewSh->GetViewData().GetDocument();
-        ScDPObject* pDPObj = pDoc->GetDPAtCursor( aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab() );
+        ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocument();
+        ScDPObject* pDPObj = rDoc.GetDPAtCursor( aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab() );
         if ( pDPObj )
         {
             // Any input within the DataPilot table is either a valid renaming
@@ -3015,12 +3015,12 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
         //  it still has to be treated as number, not EditEngine object.
         if ( pActiveViewSh )
         {
-            ScDocument* pDoc = pActiveViewSh->GetViewData().GetDocument();
+            ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocument();
             // #i67990# don't use pLastPattern in EnterHandler
-            const ScPatternAttr* pPattern = pDoc->GetPattern( aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab() );
+            const ScPatternAttr* pPattern = rDoc.GetPattern( aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab() );
             if (pPattern)
             {
-                SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+                SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
                 // without conditional format, as in ScColumn::SetString
                 sal_uInt32 nFormat = pPattern->GetNumberFormat( pFormatter );
                 double nVal;
@@ -3080,8 +3080,8 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
 
             if ( pCommonAttrs )
             {
-                ScDocument* pDoc = pActiveViewSh->GetViewData().GetDocument();
-                pCellAttrs = std::make_unique<ScPatternAttr>(pDoc->GetPool());
+                ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocument();
+                pCellAttrs = std::make_unique<ScPatternAttr>(rDoc.GetPool());
                 pCellAttrs->GetFromEditItemSet( pCommonAttrs.get() );
             }
         }
@@ -3312,7 +3312,7 @@ void ScInputHandler::CancelHandler()
     if (pExecuteSh)
         pExecuteSh->StopEditShell();
 
-    aCursorPos.Set(pExecuteSh->GetViewData().GetDocument()->MaxCol()+1,0,0); // Invalid flag
+    aCursorPos.Set(pExecuteSh->GetViewData().GetDocument().MaxCol()+1,0,0); // Invalid flag
     mpEditEngine->SetTextCurrentDefaults(OUString());
 
     if ( !pLastState && pExecuteSh )
@@ -3337,7 +3337,7 @@ bool ScInputHandler::IsModalMode( const SfxObjectShell* pDocSh )
 {
     // References to unnamed document; that doesn't work
     return bFormulaMode && pRefViewSh
-            && pRefViewSh->GetViewData().GetDocument()->GetDocumentShell() != pDocSh
+            && pRefViewSh->GetViewData().GetDocument().GetDocumentShell() != pDocSh
             && !pDocSh->HasName();
 }
 
@@ -3380,7 +3380,7 @@ void ScInputHandler::SetReference( const ScRange& rRef, const ScDocument& rDoc )
 
     const ScDocument* pThisDoc = nullptr;
     if (pRefViewSh)
-        pThisDoc = pRefViewSh->GetViewData().GetDocument();
+        pThisDoc = &pRefViewSh->GetViewData().GetDocument();
     bool bOtherDoc = (pThisDoc != &rDoc);
     if (bOtherDoc && !rDoc.GetDocumentShell()->HasName())
     {
@@ -4046,7 +4046,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                     // Is the range a name?
                     //! Find by Timer?
                     if ( pActiveViewSh )
-                        pActiveViewSh->GetViewData().GetDocument()->
+                        pActiveViewSh->GetViewData().GetDocument().
                             GetRangeAtBlock( ScRange( rSPos, rEPos ), &aPosStr );
 
                     if ( aPosStr.isEmpty() )           // Not a name -> format

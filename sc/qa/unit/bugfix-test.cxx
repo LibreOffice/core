@@ -169,12 +169,12 @@ void ScFiltersTest::testTdf91979()
     ScTabViewShell* pViewShell = xDocSh->GetBestViewShell(false);
     CPPUNIT_ASSERT(pViewShell != nullptr);
     auto& aViewData = pViewShell->GetViewData();
-    auto* pDoc = aViewData.GetDocument();
+    auto& rDoc = aViewData.GetDocument();
 
     // Check coordinates of a distant cell
     Point aPos = aViewData.GetScrPos(MAXCOL - 1, 10000, SC_SPLIT_TOPLEFT, true);
-    int nColWidth = ScViewData::ToPixel(pDoc->GetColWidth(0, 0), aViewData.GetPPTX());
-    int nRowHeight = ScViewData::ToPixel(pDoc->GetRowHeight(0, 0), aViewData.GetPPTY());
+    int nColWidth = ScViewData::ToPixel(rDoc.GetColWidth(0, 0), aViewData.GetPPTX());
+    int nRowHeight = ScViewData::ToPixel(rDoc.GetRowHeight(0, 0), aViewData.GetPPTY());
     CPPUNIT_ASSERT_EQUAL(static_cast<long>((MAXCOL - 1) * nColWidth), aPos.getX());
     CPPUNIT_ASSERT_EQUAL(static_cast<long>(10000 * nRowHeight), aPos.getY());
 }

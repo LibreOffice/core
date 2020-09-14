@@ -178,11 +178,11 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
 }
 void ScViewFunc::DoRefConversion()
 {
-    ScDocument* pDoc = GetViewData().GetDocument();
+    ScDocument& rDoc = GetViewData().GetDocument();
     ScMarkData& rMark = GetViewData().GetMarkData();
-    SCTAB nTabCount = pDoc->GetTableCount();
+    SCTAB nTabCount = rDoc.GetTableCount();
     bool bRecord = true;
-    if (!pDoc->IsUndoEnabled())
+    if (!rDoc.IsUndoEnabled())
         bRecord = false;
 
     ScRange aMarkRange;
@@ -197,7 +197,7 @@ void ScViewFunc::DoRefConversion()
         aMarkRange = ScRange( GetViewData().GetCurX(),
             GetViewData().GetCurY(), GetViewData().GetTabNo() );
     }
-    ScEditableTester aTester( pDoc, aMarkRange.aStart.Col(), aMarkRange.aStart.Row(),
+    ScEditableTester aTester( &rDoc, aMarkRange.aStart.Col(), aMarkRange.aStart.Row(),
                             aMarkRange.aEnd.Col(), aMarkRange.aEnd.Row(),rMark );
     if (!aTester.IsEditable())
     {
@@ -213,7 +213,7 @@ void ScViewFunc::DoRefConversion()
     {
         pUndoDoc.reset( new ScDocument( SCDOCMODE_UNDO ) );
         SCTAB nTab = aMarkRange.aStart.Tab();
-        pUndoDoc->InitUndo( pDoc, nTab, nTab );
+        pUndoDoc->InitUndo( &rDoc, nTab, nTab );
 
         if ( rMark.GetSelectCount() > 1 )
         {
@@ -224,7 +224,7 @@ void ScViewFunc::DoRefConversion()
         ScRange aCopyRange = aMarkRange;
         aCopyRange.aStart.SetTab(0);
         aCopyRange.aEnd.SetTab(nTabCount-1);
-        pDoc->CopyToDocument( aCopyRange, InsertDeleteFlags::ALL, bMulti, *pUndoDoc, &rMark );
+        rDoc.CopyToDocument( aCopyRange, InsertDeleteFlags::ALL, bMulti, *pUndoDoc, &rMark );
     }
 
     ScRangeListRef xRanges;
@@ -238,7 +238,7 @@ void ScViewFunc::DoRefConversion()
             ScRange aRange = (*xRanges)[j];
             aRange.aStart.SetTab(i);
             aRange.aEnd.SetTab(i);
-            ScCellIterator aIter( pDoc, aRange );
+            ScCellIterator aIter( &rDoc, aRange );
             for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
             {
                 if (aIter.getType() != CELLTYPE_FORMULA)
@@ -258,19 +258,19 @@ void ScViewFunc::DoRefConversion()
                     nLen -= 2;
                     aOld = aOld.copy( 1, nLen);
                 }
-                ScRefFinder aFinder( aOld, aIter.GetPos(), *pDoc, pDoc->GetAddressConvention() );
+                ScRefFinder aFinder( aOld, aIter.GetPos(), rDoc, rDoc.GetAddressConvention() );
                 aFinder.ToggleRel( 0, nLen );
                 if (aFinder.GetFound())
                 {
                     ScAddress aPos = pCell->aPos;
                     const OUString& aNew = aFinder.GetText();
-                    ScCompiler aComp( pDoc, aPos, pDoc->GetGrammar());
+                    ScCompiler aComp( &rDoc, aPos, rDoc.GetGrammar());
                     std::unique_ptr<ScTokenArray> pArr(aComp.CompileString(aNew));
                     ScFormulaCell* pNewCell =
                         new ScFormulaCell(
-                            pDoc, aPos, *pArr, formula::FormulaGrammar::GRAM_DEFAULT, eMatrixMode);
+                            &rDoc, aPos, *pArr, formula::FormulaGrammar::GRAM_DEFAULT, eMatrixMode);
 
-                    pDoc->SetFormulaCell(aPos, pNewCell);
+                    rDoc.SetFormulaCell(aPos, pNewCell);
                     bOk = true;
                 }
             }
@@ -280,7 +280,7 @@ void ScViewFunc::DoRefConversion()
     {
         ScDocumentUniquePtr pRedoDoc(new ScDocument( SCDOCMODE_UNDO ));
         SCTAB nTab = aMarkRange.aStart.Tab();
-        pRedoDoc->InitUndo( pDoc, nTab, nTab );
+        pRedoDoc->InitUndo( &rDoc, nTab, nTab );
 
         if ( rMark.GetSelectCount() > 1 )
         {
@@ -291,7 +291,7 @@ void ScViewFunc::DoRefConversion()
         ScRange aCopyRange = aMarkRange;
         aCopyRange.aStart.SetTab(0);
         aCopyRange.aEnd.SetTab(nTabCount-1);
-        pDoc->CopyToDocument( aCopyRange, InsertDeleteFlags::ALL, bMulti, *pRedoDoc, &rMark );
+        rDoc.CopyToDocument( aCopyRange, InsertDeleteFlags::ALL, bMulti, *pRedoDoc, &rMark );
 
         pDocSh->GetUndoManager()->AddUndoAction(
             std::make_unique<ScUndoRefConversion>( pDocSh,
@@ -648,7 +648,7 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
     if (bLink)                      // for bLink everything, which is not graphics, as URL
     {
         tools::Rectangle aRect( rPos, Size(0,0) );
-        ScRange aRange = GetViewData().GetDocument()->
+        ScRange aRange = GetViewData().GetDocument().
                             GetRange( GetViewData().GetTabNo(), aRect );
         SCCOL nPosX = aRange.aStart.Col();
         SCROW nPosY = aRange.aStart.Row();
@@ -714,18 +714,18 @@ void ScViewFunc::InsertBookmark( const OUString& rDescription, const OUString& r
 
     // insert into not edited cell
 
-    ScDocument* pDoc = GetViewData().GetDocument();
+    ScDocument& rDoc = GetViewData().GetDocument();
     SCTAB nTab = GetViewData().GetTabNo();
     ScAddress aCellPos( nPosX, nPosY, nTab );
-    EditEngine aEngine( pDoc->GetEnginePool() );
+    EditEngine aEngine( rDoc.GetEnginePool() );
 
-    const EditTextObject* pOld = pDoc->GetEditText(aCellPos);
+    const EditTextObject* pOld = rDoc.GetEditText(aCellPos);
     if (pOld)
         aEngine.SetText(*pOld);
     else
     {
         OUString aOld;
-        pDoc->GetInputString(nPosX, nPosY, nTab, aOld);
+        rDoc.GetInputString(nPosX, nPosY, nTab, aOld);
         if (!aOld.isEmpty())
             aEngine.SetText(aOld);
     }

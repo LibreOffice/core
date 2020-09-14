@@ -106,7 +106,7 @@ bool ScTabViewShell::GetFunction( OUString& rFuncStr, FormulaError nErrCode )
         }
         if (pGlobStrId)
         {
-            ScDocument* pDoc        = rViewData.GetDocument();
+            ScDocument& rDoc        = rViewData.GetDocument();
             SCCOL       nPosX       = rViewData.GetCurX();
             SCROW       nPosY       = rViewData.GetCurY();
             SCTAB       nTab        = rViewData.GetTabNo();
@@ -115,19 +115,19 @@ bool ScTabViewShell::GetFunction( OUString& rFuncStr, FormulaError nErrCode )
 
             ScAddress aCursor( nPosX, nPosY, nTab );
             double nVal;
-            if ( pDoc->GetSelectionFunction( eFunc, aCursor, rMark, nVal ) )
+            if ( rDoc.GetSelectionFunction( eFunc, aCursor, rMark, nVal ) )
             {
                 if ( nVal == 0.0 )
                     aStr += "0";
                 else
                 {
                     // Number in the standard format, the other on the cursor position
-                    SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+                    SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
                     sal_uInt32 nNumFmt = 0;
                     if ( eFunc != SUBTOTAL_FUNC_CNT && eFunc != SUBTOTAL_FUNC_CNT2 && eFunc != SUBTOTAL_FUNC_SELECTION_COUNT)
                     {
                         // number format from attributes or formula
-                        pDoc->GetNumberFormat( nPosX, nPosY, nTab, nNumFmt );
+                        rDoc.GetNumberFormat( nPosX, nPosY, nTab, nNumFmt );
                     }
 
                     OUString aValStr;
@@ -159,7 +159,7 @@ bool ScTabViewShell::GetFunction( OUString& rFuncStr, FormulaError nErrCode )
 void ScTabViewShell::GetState( SfxItemSet& rSet )
 {
     ScViewData& rViewData   = GetViewData();
-    ScDocument* pDoc        = rViewData.GetDocument();
+    ScDocument& rDoc        = rViewData.GetDocument();
     ScDocShell* pDocShell   = rViewData.GetDocShell();
     ScMarkData& rMark       = rViewData.GetMarkData();
     SCCOL       nPosX       = rViewData.GetCurX();
@@ -203,7 +203,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                 {
                     rSet.DisableItem( nWhich );
                 }
-                else if (pDoc->IsPrintEntireSheet(nTab))
+                else if (rDoc.IsPrintEntireSheet(nTab))
                     rSet.DisableItem(nWhich);
                 break;
 
@@ -236,7 +236,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
             case SID_CURRENTCELL:
                 {
                     ScAddress aScAddress( GetViewData().GetCurX(), GetViewData().GetCurY(), 0 );
-                    OUString  aAddr(aScAddress.Format(ScRefFlags::ADDR_ABS, nullptr, pDoc->GetAddressConvention()));
+                    OUString  aAddr(aScAddress.Format(ScRefFlags::ADDR_ABS, nullptr, rDoc.GetAddressConvention()));
                     SfxStringItem   aPosItem( SID_CURRENTCELL, aAddr );
 
                     rSet.Put( aPosItem );
@@ -267,7 +267,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                 break;
 
             case FID_DEL_MANUALBREAKS:
-                if (!pDoc->HasManualBreaks(nTab))
+                if (!rDoc.HasManualBreaks(nTab))
                     rSet.DisableItem( nWhich );
                 break;
 
@@ -275,8 +275,8 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                 {
                     // disable if already set to default
 
-                    OUString aStyleName = pDoc->GetPageStyle( nTab );
-                    ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
+                    OUString aStyleName = rDoc.GetPageStyle( nTab );
+                    ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
                     SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aStyleName,
                                                     SfxStyleFamily::Page );
                     OSL_ENSURE( pStyleSheet, "PageStyle not found" );
@@ -369,7 +369,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                     }
                     else
                     {
-                        rSet.Put( SfxBoolItem( nWhich, pDoc->IsDocProtected() ) );
+                        rSet.Put( SfxBoolItem( nWhich, rDoc.IsDocProtected() ) );
                     }
                 }
                 break;
@@ -382,14 +382,14 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                     }
                     else
                     {
-                        rSet.Put( SfxBoolItem( nWhich, pDoc->IsTabProtected( nTab ) ) );
+                        rSet.Put( SfxBoolItem( nWhich, rDoc.IsTabProtected( nTab ) ) );
                     }
                 }
                 break;
 
             case SID_AUTO_OUTLINE:
                 {
-                    if (pDoc->GetChangeTrack()!=nullptr || GetViewData().IsMultiMarked())
+                    if (rDoc.GetChangeTrack()!=nullptr || GetViewData().IsMultiMarked())
                     {
                         rSet.DisableItem( nWhich );
                     }
@@ -399,7 +399,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
             case SID_OUTLINE_DELETEALL:
                 {
                     SCTAB nOlTab = GetViewData().GetTabNo();
-                    ScOutlineTable* pOlTable = pDoc->GetOutlineTable( nOlTab );
+                    ScOutlineTable* pOlTable = rDoc.GetOutlineTable( nOlTab );
                     if (pOlTable == nullptr)
                         rSet.DisableItem( nWhich );
                 }
@@ -437,14 +437,14 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
 
             case FID_CHG_SHOW:
                 {
-                    if ( pDoc->GetChangeTrack() == nullptr || ( pDocShell && pDocShell->IsDocShared() ) )
+                    if ( rDoc.GetChangeTrack() == nullptr || ( pDocShell && pDocShell->IsDocShared() ) )
                         rSet.DisableItem( nWhich );
                 }
                 break;
             case FID_CHG_ACCEPT:
                 {
                     if(
-                       ( !pDoc->GetChangeTrack() &&  !pThisFrame->HasChildWindow(FID_CHG_ACCEPT) )
+                       ( !rDoc.GetChangeTrack() &&  !pThisFrame->HasChildWindow(FID_CHG_ACCEPT) )
                        ||
                        ( pDocShell && pDocShell->IsDocShared() )
                       )
@@ -486,7 +486,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
 
 void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName)
 {
-    ScDocument*             pDoc    = GetViewData().GetDocument();
+    ScDocument& rDoc = GetViewData().GetDocument();
 
     std::shared_ptr<SvxBoxItem> aLineOuter(std::make_shared<SvxBoxItem>(ATTR_BORDER));
     std::shared_ptr<SvxBoxInfoItem> aLineInner(std::make_shared<SvxBoxInfoItem>(ATTR_BORDER_INNER));
@@ -521,7 +521,7 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
     GetSelectionFrame( aLineOuter, aLineInner );
 
     //Fix border incorrect for RTL fdo#62399
-    if( pDoc->IsLayoutRTL( GetViewData().GetTabNo() ) )
+    if( rDoc.IsLayoutRTL( GetViewData().GetTabNo() ) )
     {
         std::unique_ptr<SvxBoxItem> aNewFrame(aLineOuter->Clone());
         std::unique_ptr<SvxBoxInfoItem> aTempInfo(aLineInner->Clone());
@@ -545,9 +545,9 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
 
     // Generate NumberFormat Value from Value and Language and box it.
     pOldSet->Put( SfxUInt32Item( ATTR_VALUE_FORMAT,
-        pOldAttrs->GetNumberFormat( pDoc->GetFormatTable() ) ) );
+        pOldAttrs->GetNumberFormat( rDoc.GetFormatTable() ) ) );
 
-    pNumberInfoItem = MakeNumberInfoItem(pDoc, &GetViewData());
+    pNumberInfoItem = MakeNumberInfoItem(&rDoc, &GetViewData());
 
     pOldSet->MergeRange( SID_ATTR_NUMBERFORMAT_INFO, SID_ATTR_NUMBERFORMAT_INFO );
     pOldSet->Put(*pNumberInfoItem );
@@ -602,17 +602,14 @@ bool ScTabViewShell::IsRefInputMode() const
                      ( aString[0] == '+' || aString[0] == '-' ) )
                 {
                     const ScViewData& rViewData = GetViewData();
-                    ScDocument* pDoc = rViewData.GetDocument();
-                    if ( pDoc )
+                    ScDocument& rDoc = rViewData.GetDocument();
+                    const ScAddress aPos( rViewData.GetCurPos() );
+                    ScCompiler aComp( &rDoc, aPos, rDoc.GetGrammar() );
+                    aComp.SetCloseBrackets( false );
+                    std::unique_ptr<ScTokenArray> pArr(aComp.CompileString(aString));
+                    if ( pArr && pArr->MayReferenceFollow() )
                     {
-                        const ScAddress aPos( rViewData.GetCurPos() );
-                        ScCompiler aComp( pDoc, aPos, pDoc->GetGrammar() );
-                        aComp.SetCloseBrackets( false );
-                        std::unique_ptr<ScTokenArray> pArr(aComp.CompileString(aString));
-                        if ( pArr && pArr->MayReferenceFollow() )
-                        {
-                            return true;
-                        }
+                        return true;
                     }
                 }
                 else
@@ -647,7 +644,7 @@ void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bSt
         OUString                aString;
         const EditTextObject*   pObject     = nullptr;
         ScViewData&             rViewData   = GetViewData();
-        ScDocument*             pDoc        = rViewData.GetDocument();
+        ScDocument&             rDoc        = rViewData.GetDocument();
         SCCOL                   nPosX       = rViewData.GetCurX();
         SCROW                   nPosY       = rViewData.GetCurY();
         SCTAB                   nTab        = rViewData.GetTabNo();
@@ -669,9 +666,9 @@ void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bSt
         bool bHideFormula = false;
         bool bHideAll     = false;
 
-        if (pDoc->IsTabProtected(nTab))
+        if (rDoc.IsTabProtected(nTab))
         {
-            const ScProtectionAttr* pProt = pDoc->GetAttr( nPosX,nPosY,nTab,
+            const ScProtectionAttr* pProt = rDoc.GetAttr( nPosX,nPosY,nTab,
                                                            ATTR_PROTECTION);
             bHideFormula = pProt->GetHideFormula();
             bHideAll     = pProt->GetHideCell();
@@ -679,7 +676,7 @@ void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bSt
 
         if (!bHideAll)
         {
-            ScRefCellValue rCell(*pDoc, aPos);
+            ScRefCellValue rCell(rDoc, aPos);
             if (rCell.meType == CELLTYPE_FORMULA)
             {
                 if (!bHideFormula)
@@ -691,10 +688,10 @@ void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bSt
             }
             else
             {
-                SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-                sal_uInt32 nNumFmt = pDoc->GetNumberFormat( aPos );
+                SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
+                sal_uInt32 nNumFmt = rDoc.GetNumberFormat( aPos );
 
-                ScCellFormat::GetInputString( rCell, nNumFmt, aString, *pFormatter, pDoc );
+                ScCellFormat::GetInputString( rCell, nNumFmt, aString, *pFormatter, &rDoc );
                 if (rCell.meType == CELLTYPE_STRING)
                 {
                     // Put a ' in front if necessary, so that the string is not

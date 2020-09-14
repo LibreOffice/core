@@ -59,7 +59,7 @@ ScStatisticsInputOutputDialog::ScStatisticsInputOutputDialog(
     , mxGroupByColumnsRadio(m_xBuilder->weld_radio_button("groupedby-columns-radio"))
     , mxGroupByRowsRadio(m_xBuilder->weld_radio_button("groupedby-rows-radio"))
     , mViewData(pViewData)
-    , mDocument(*pViewData->GetDocument())
+    , mDocument(pViewData->GetDocument())
     , mInputRange(ScAddress::INITIALIZE_INVALID)
     , mAddressDetails(mDocument.GetAddressConvention(), 0, 0)
     , mOutputAddress(ScAddress::INITIALIZE_INVALID)

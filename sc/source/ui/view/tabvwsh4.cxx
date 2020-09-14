@@ -157,7 +157,7 @@ void ScTabViewShell::Activate(bool bMDI)
             // bridge, it's done in ImplSetReallyVisible), there are problems if Window::Show
             // is called during the ViewShell ctor and reschedules asynchronous calls
             // (for example from the FmFormShell ctor).
-            ScExtDocOptions* pExtOpt = GetViewData().GetDocument()->GetExtDocOptions();
+            ScExtDocOptions* pExtOpt = GetViewData().GetDocument().GetExtDocOptions();
             if ( pExtOpt && pExtOpt->IsChanged() )
             {
                 GetViewData().ReadExtOptions(*pExtOpt);        // Excel view settings
@@ -213,9 +213,9 @@ void ScTabViewShell::Deactivate(bool bMDI)
 {
     HideTip();
 
-    ScDocument* pDoc=GetViewData().GetDocument();
+    ScDocument& rDoc = GetViewData().GetDocument();
 
-    ScChangeTrack* pChanges=pDoc->GetChangeTrack();
+    ScChangeTrack* pChanges = rDoc.GetChangeTrack();
 
     if(pChanges!=nullptr)
     {
@@ -418,14 +418,14 @@ void ScTabViewShell::QueryObjAreaPixel( tools::Rectangle& rRect ) const
     Size aLogicSize = pWin->PixelToLogic( aPixelSize );
 
     const ScViewData& rViewData = GetViewData();
-    ScDocument* pDoc = rViewData.GetDocument();
+    ScDocument& rDoc = rViewData.GetDocument();
     ScSplitPos ePos = rViewData.GetActivePart();
     SCCOL nCol = rViewData.GetPosX(WhichH(ePos));
     SCROW nRow = rViewData.GetPosY(WhichV(ePos));
     SCTAB nTab = rViewData.GetTabNo();
-    bool bNegativePage = pDoc->IsNegativePage( nTab );
+    bool bNegativePage = rDoc.IsNegativePage( nTab );
 
-    tools::Rectangle aLogicRect = pDoc->GetMMRect( nCol, nRow, nCol, nRow, nTab );
+    tools::Rectangle aLogicRect = rDoc.GetMMRect( nCol, nRow, nCol, nRow, nTab );
     if ( bNegativePage )
     {
         // use right edge of aLogicRect, and aLogicSize
@@ -1184,9 +1184,8 @@ bool ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
     if (bHideCursor)
         HideAllCursors();
 
-    ScDocument* pDoc = GetViewData().GetDocument();
-    if ( pDoc )
-        pDoc->KeyInput();    // TimerDelays etc.
+    ScDocument& rDoc = GetViewData().GetDocument();
+    rDoc.KeyInput();    // TimerDelays etc.
 
     if( bInPlace )
     {

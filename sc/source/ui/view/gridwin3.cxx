@@ -245,7 +245,7 @@ void ScGridWindow::DrawSdrGrid( const tools::Rectangle& rDrawingRect, OutputDevi
 
 MapMode ScGridWindow::GetDrawMapMode( bool bForce )
 {
-    ScDocument* pDoc = pViewData->GetDocument();
+    ScDocument& rDoc = pViewData->GetDocument();
 
     // FIXME this shouldn't be necessary once we change the entire Calc to
     // work in the logic coordinates (ideally 100ths of mm - so that it is
@@ -257,7 +257,7 @@ MapMode ScGridWindow::GetDrawMapMode( bool bForce )
     }
 
     SCTAB nTab = pViewData->GetTabNo();
-    bool bNegativePage = pDoc->IsNegativePage( nTab );
+    bool bNegativePage = rDoc.IsNegativePage( nTab );
 
     MapMode aDrawMode = pViewData->GetLogicMode();
 
@@ -272,10 +272,10 @@ MapMode ScGridWindow::GetDrawMapMode( bool bForce )
         {
             SCCOL nEndCol = 0;
             SCROW nEndRow = 0;
-            pDoc->GetTableArea( nTab, nEndCol, nEndRow );
+            rDoc.GetTableArea( nTab, nEndCol, nEndRow );
             if (nEndCol<20) nEndCol = 20;
             if (nEndRow<20) nEndRow = 1000;
-            ScDrawUtil::CalcScale( pDoc, nTab, 0,0, nEndCol,nEndRow, this,
+            ScDrawUtil::CalcScale( &rDoc, nTab, 0,0, nEndCol,nEndRow, this,
                                     pViewData->GetZoomX(),pViewData->GetZoomY(),
                                     pViewData->GetPPTX(),pViewData->GetPPTY(),
                                     aScaleX,aScaleY );
@@ -316,7 +316,7 @@ void ScGridWindow::CreateAnchorHandle(SdrHdlList& rHdl, const ScAddress& rAddres
         const ScViewOptions& rOpts = pViewData->GetOptions();
         if(rOpts.GetOption( VOPT_ANCHOR ))
         {
-            bool bNegativePage = pViewData->GetDocument()->IsNegativePage( pViewData->GetTabNo() );
+            bool bNegativePage = pViewData->GetDocument().IsNegativePage( pViewData->GetTabNo() );
             Point aPos = pViewData->GetScrPos( rAddress.Col(), rAddress.Row(), eWhich, true );
             aPos = PixelToLogic(aPos);
             rHdl.AddHdl(std::make_unique<SdrHdl>(aPos, bNegativePage ? SdrHdlKind::Anchor_TR : SdrHdlKind::Anchor));

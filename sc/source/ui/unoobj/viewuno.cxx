@@ -376,8 +376,8 @@ awt::Rectangle ScViewPaneBase::GetVisArea() const
                                 pViewShell->GetViewData().GetActivePart() :
                                 static_cast<ScSplitPos>(nPane);
         ScGridWindow* pWindow = static_cast<ScGridWindow*>(pViewShell->GetWindowByPos(eWhich));
-        ScDocument* pDoc = pViewShell->GetViewData().GetDocument();
-        if (pWindow && pDoc)
+        ScDocument& rDoc = pViewShell->GetViewData().GetDocument();
+        if (pWindow)
         {
             ScHSplitPos eWhichH = ((eWhich == SC_SPLIT_TOPLEFT) || (eWhich == SC_SPLIT_BOTTOMLEFT)) ?
                                     SC_SPLIT_LEFT : SC_SPLIT_RIGHT;
@@ -386,10 +386,10 @@ awt::Rectangle ScViewPaneBase::GetVisArea() const
             ScAddress aCell(pViewShell->GetViewData().GetPosX(eWhichH),
                 pViewShell->GetViewData().GetPosY(eWhichV),
                 pViewShell->GetViewData().GetTabNo());
-            tools::Rectangle aCellRect( pDoc->GetMMRect( aCell.Col(), aCell.Row(), aCell.Col(), aCell.Row(), aCell.Tab() ) );
+            tools::Rectangle aCellRect( rDoc.GetMMRect( aCell.Col(), aCell.Row(), aCell.Col(), aCell.Row(), aCell.Tab() ) );
             Size aVisSize( pWindow->PixelToLogic( pWindow->GetSizePixel(), pWindow->GetDrawMapMode( true ) ) );
             Point aVisPos( aCellRect.TopLeft() );
-            if ( pDoc->IsLayoutRTL( aCell.Tab() ) )
+            if ( rDoc.IsLayoutRTL( aCell.Tab() ) )
             {
                 aVisPos = aCellRect.TopRight();
                 aVisPos.AdjustX( -(aVisSize.Width()) );
@@ -1062,7 +1062,7 @@ void SAL_CALL ScTabViewObj::setActiveSheet( const uno::Reference<sheet::XSpreads
         if ( rRanges.size() == 1 )
         {
             SCTAB nNewTab = rRanges[ 0 ].aStart.Tab();
-            if ( pViewSh->GetViewData().GetDocument()->HasTable(nNewTab) )
+            if ( pViewSh->GetViewData().GetDocument().HasTable(nNewTab) )
                 pViewSh->SetTabNo( nNewTab );
         }
     }
@@ -1085,11 +1085,10 @@ uno::Reference< uno::XInterface > ScTabViewObj::GetClickedObject(const Point& rP
 
         xTarget.set(uno::Reference<table::XCell>(pCellObj), uno::UNO_QUERY);
 
-        ScDocument* pDoc = rData.GetDocument();
-        if (pDoc && pDoc->GetDrawLayer())
+        ScDocument& rDoc = rData.GetDocument();
+        if (ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer())
         {
             SdrPage* pDrawPage = nullptr;
-            ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
             if (pDrawLayer->HasObjects() && (pDrawLayer->GetPageCount() > nTab))
                 pDrawPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
 
@@ -1127,12 +1126,12 @@ bool ScTabViewObj::IsMouseListening() const
 
     // also include sheet events, because MousePressed must be called for them
     ScViewData& rViewData = GetViewShell()->GetViewData();
-    ScDocument* pDoc = rViewData.GetDocument();
+    ScDocument& rDoc = rViewData.GetDocument();
     SCTAB nTab = rViewData.GetTabNo();
     return
-        pDoc->HasSheetEventScript( nTab, ScSheetEventId::RIGHTCLICK, true ) ||
-        pDoc->HasSheetEventScript( nTab, ScSheetEventId::DOUBLECLICK, true ) ||
-        pDoc->HasSheetEventScript( nTab, ScSheetEventId::SELECT, true );
+        rDoc.HasSheetEventScript( nTab, ScSheetEventId::RIGHTCLICK, true ) ||
+        rDoc.HasSheetEventScript( nTab, ScSheetEventId::DOUBLECLICK, true ) ||
+        rDoc.HasSheetEventScript( nTab, ScSheetEventId::SELECT, true );
 
 }
 
@@ -1812,7 +1811,7 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
         return;
 
     rViewData.SetOptions( aNewOpt );
-    rViewData.GetDocument()->SetViewOptions( aNewOpt );
+    rViewData.GetDocument().SetViewOptions( aNewOpt );
     rViewData.GetDocShell()->SetDocumentModified();    //! really?
 
     pViewSh->UpdateFixPos();
@@ -2136,7 +2135,7 @@ uno::Sequence<sal_Int32> ScTabViewObj::getSelectedSheets()
 
     // #i95280# when printing from the shell, the view is never activated,
     // so Excel view settings must also be evaluated here.
-    ScExtDocOptions* pExtOpt = rViewData.GetDocument()->GetExtDocOptions();
+    ScExtDocOptions* pExtOpt = rViewData.GetDocument().GetExtDocOptions();
     if (pExtOpt && pExtOpt->IsChanged())
     {
         pViewSh->GetViewData().ReadExtOptions(*pExtOpt);        // Excel view settings

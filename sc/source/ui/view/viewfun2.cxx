@@ -476,7 +476,7 @@ static sal_Int8 GetSubTotal( const OpCode eCode )
 
 bool ScViewFunc::GetAutoSumArea( ScRangeList& rRangeList )
 {
-    ScDocument* pDoc = GetViewData().GetDocument();
+    ScDocument& rDoc = GetViewData().GetDocument();
     SCTAB nTab = GetViewData().GetTabNo();
 
     SCCOL nCol = GetViewData().GetCurX();
@@ -495,24 +495,24 @@ bool ScViewFunc::GetAutoSumArea( ScRangeList& rRangeList )
 
     ScAutoSum eSum;
     if ( nRow != 0
-            && ((eSum = lcl_IsAutoSumData( pDoc, nCol, nRow-1, nTab,
+            && ((eSum = lcl_IsAutoSumData( &rDoc, nCol, nRow-1, nTab,
                 DIR_TOP, nExtend /*out*/ )) == ScAutoSumData )
-            && ((eSum = lcl_IsAutoSumData( pDoc, nCol, nRow-1, nTab,
+            && ((eSum = lcl_IsAutoSumData( &rDoc, nCol, nRow-1, nTab,
                 DIR_LEFT, nExtend /*out*/ )) == ScAutoSumData )
         )
     {
         bRow = true;
         nSeekRow = nRow - 1;
     }
-    else if ( nCol != 0 && (eSum = lcl_IsAutoSumData( pDoc, nCol-1, nRow, nTab,
+    else if ( nCol != 0 && (eSum = lcl_IsAutoSumData( &rDoc, nCol-1, nRow, nTab,
             DIR_LEFT, nExtend /*out*/ )) == ScAutoSumData )
     {
         bCol = true;
         nSeekCol = nCol - 1;
     }
-    else if ( (eSum = lcl_SeekAutoSumData( pDoc, nCol, nSeekRow, nTab, DIR_TOP, nExtend /*out*/ )) != ScAutoSumNone )
+    else if ( (eSum = lcl_SeekAutoSumData( &rDoc, nCol, nSeekRow, nTab, DIR_TOP, nExtend /*out*/ )) != ScAutoSumNone )
         bRow = true;
-    else if (( eSum = lcl_SeekAutoSumData( pDoc, nSeekCol, nRow, nTab, DIR_LEFT, nExtend /*out*/ )) != ScAutoSumNone )
+    else if (( eSum = lcl_SeekAutoSumData( &rDoc, nSeekCol, nRow, nTab, DIR_LEFT, nExtend /*out*/ )) != ScAutoSumNone )
         bCol = true;
 
     if ( bCol || bRow )
@@ -540,13 +540,13 @@ bool ScViewFunc::GetAutoSumArea( ScRangeList& rRangeList )
             {
                 if ( bRow )
                 {
-                    while ( nStartRow != 0 && lcl_IsAutoSumData(    pDoc, nCol,
+                    while ( nStartRow != 0 && lcl_IsAutoSumData( &rDoc, nCol,
                             nStartRow-1, nTab, DIR_TOP, nExtend /*out*/ ) == eSum )
                         --nStartRow;
                 }
                 else
                 {
-                    while ( nStartCol != 0 && lcl_IsAutoSumData( pDoc, nStartCol-1,
+                    while ( nStartCol != 0 && lcl_IsAutoSumData( &rDoc, nStartCol-1,
                             nRow, nTab, DIR_LEFT, nExtend /*out*/ ) == eSum )
                         --nStartCol;
                 }
@@ -558,7 +558,7 @@ bool ScViewFunc::GetAutoSumArea( ScRangeList& rRangeList )
                 if ( bRow )
                 {
                     nEndRow = static_cast< SCROW >( nExtend );
-                    bContinue = lcl_FindNextSumEntryInColumn( pDoc, nCol, nEndRow /*inout*/, nTab, nExtend /*out*/, 0 );
+                    bContinue = lcl_FindNextSumEntryInColumn( &rDoc, nCol, nEndRow /*inout*/, nTab, nExtend /*out*/, 0 );
                     if ( bContinue )
                     {
                         nStartRow = nEndRow;
@@ -567,7 +567,7 @@ bool ScViewFunc::GetAutoSumArea( ScRangeList& rRangeList )
                 else
                 {
                     nEndCol = static_cast< SCCOL >( nExtend );
-                    bContinue = lcl_FindNextSumEntryInRow( pDoc, nEndCol /*inout*/, nRow, nTab, nExtend /*out*/, 0 );
+                    bContinue = lcl_FindNextSumEntryInRow( &rDoc, nEndCol /*inout*/, nRow, nTab, nExtend /*out*/, 0 );
                     if ( bContinue )
                     {
                         nStartCol = nEndCol;
@@ -588,7 +588,7 @@ void ScViewFunc::EnterAutoSum(const ScRangeList& rRangeList, bool bSubTotal, con
 
 bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor, bool bContinue , const OpCode eCode)
 {
-    ScDocument* pDoc = GetViewData().GetDocument();
+    ScDocument& rDoc = GetViewData().GetDocument();
     const SCTAB nTab = rRange.aStart.Tab();
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
@@ -602,7 +602,7 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
     {
         for ( SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol )
         {
-            if ( lcl_IsAutoSumData( pDoc, nCol, nRow, nTab, DIR_TOP, nExtend ) != ScAutoSumNone )
+            if ( lcl_IsAutoSumData( &rDoc, nCol, nRow, nTab, DIR_TOP, nExtend ) != ScAutoSumNone )
             {
                 bRowData = true;
                 break;
@@ -625,7 +625,7 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
     {
         for ( SCROW nRow = nStartRow; nRow <= nEndRow; ++nRow )
         {
-            if ( lcl_IsAutoSumData( pDoc, nCol, nRow, nTab, DIR_LEFT, nExtend ) != ScAutoSumNone )
+            if ( lcl_IsAutoSumData( &rDoc, nCol, nRow, nTab, DIR_LEFT, nExtend ) != ScAutoSumNone )
             {
                 bColData = true;
                 break;
@@ -642,8 +642,8 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
         return false;
     }
 
-    const bool bEndRowEmpty = pDoc->IsBlockEmpty( nTab, nStartCol, nEndRow, nEndCol, nEndRow );
-    const bool bEndColEmpty = pDoc->IsBlockEmpty( nTab, nEndCol, nStartRow, nEndCol, nEndRow );
+    const bool bEndRowEmpty = rDoc.IsBlockEmpty( nTab, nStartCol, nEndRow, nEndCol, nEndRow );
+    const bool bEndColEmpty = rDoc.IsBlockEmpty( nTab, nEndCol, nStartRow, nEndCol, nEndRow );
     bool bRow = ( nStartRow != nEndRow ) && ( bEndRowEmpty || !bEndColEmpty );
     bool bCol = ( nStartCol != nEndCol ) && ( bEndColEmpty || nStartRow == nEndRow );
 
@@ -651,12 +651,12 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
     SCROW nInsRow = nEndRow;
     if ( bRow && !bEndRowEmpty )
     {
-        if ( nInsRow < pDoc->MaxRow() )
+        if ( nInsRow < rDoc.MaxRow() )
         {
             ++nInsRow;
-            while ( !pDoc->IsBlockEmpty( nTab, nStartCol, nInsRow, nEndCol, nInsRow ) )
+            while ( !rDoc.IsBlockEmpty( nTab, nStartCol, nInsRow, nEndCol, nInsRow ) )
             {
-                if ( nInsRow < pDoc->MaxRow() )
+                if ( nInsRow < rDoc.MaxRow() )
                 {
                     ++nInsRow;
                 }
@@ -677,12 +677,12 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
     SCCOL nInsCol = nEndCol;
     if ( bCol && !bEndColEmpty )
     {
-        if ( nInsCol < pDoc->MaxCol() )
+        if ( nInsCol < rDoc.MaxCol() )
         {
             ++nInsCol;
-            while ( !pDoc->IsBlockEmpty( nTab, nInsCol, nStartRow, nInsCol, nEndRow ) )
+            while ( !rDoc.IsBlockEmpty( nTab, nInsCol, nStartRow, nInsCol, nEndRow ) )
             {
-                if ( nInsCol < pDoc->MaxCol() )
+                if ( nInsCol < rDoc.MaxCol() )
                 {
                     ++nInsCol;
                 }
@@ -732,12 +732,12 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
 
         for ( SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol )
         {
-            if ( !pDoc->IsBlockEmpty( nTab, nCol, nStartRow, nCol, nSumEndRow ) )
+            if ( !rDoc.IsBlockEmpty( nTab, nCol, nStartRow, nCol, nSumEndRow ) )
             {
                 ScRangeList aRangeList;
                 // Include the originally selected start row.
                 const ScRange aRange( nCol, rRange.aStart.Row(), nTab, nCol, nSumEndRow, nTab );
-                if ( (eSum = lcl_GetAutoSumForColumnRange( pDoc, aRangeList, aRange )) != ScAutoSumNone )
+                if ( (eSum = lcl_GetAutoSumForColumnRange( &rDoc, aRangeList, aRange )) != ScAutoSumNone )
                 {
                     if (++nRowSums == 1)
                         nRowSumsStartCol = aRangeList[0].aStart.Col();
@@ -769,12 +769,12 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
 
         for ( SCROW nRow = nStartRow; nRow <= nEndRow; ++nRow )
         {
-            if ( !pDoc->IsBlockEmpty( nTab, nStartCol, nRow, nSumEndCol, nRow ) )
+            if ( !rDoc.IsBlockEmpty( nTab, nStartCol, nRow, nSumEndCol, nRow ) )
             {
                 ScRangeList aRangeList;
                 // Include the originally selected start column.
                 const ScRange aRange( rRange.aStart.Col(), nRow, nTab, nSumEndCol, nRow, nTab );
-                if ( (eSum = lcl_GetAutoSumForRowRange( pDoc, aRangeList, aRange )) != ScAutoSumNone )
+                if ( (eSum = lcl_GetAutoSumForRowRange( &rDoc, aRangeList, aRange )) != ScAutoSumNone )
                 {
                     if (++nColSums == 1)
                         nColSumsStartRow = aRangeList[0].aStart.Row();
@@ -809,8 +809,8 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
 OUString ScViewFunc::GetAutoSumFormula( const ScRangeList& rRangeList, bool bSubTotal, const ScAddress& rAddr , const OpCode eCode)
 {
     ScViewData& rViewData = GetViewData();
-    ScDocument* pDoc = rViewData.GetDocument();
-    std::unique_ptr<ScTokenArray> pArray(new ScTokenArray(*pDoc));
+    ScDocument& rDoc = rViewData.GetDocument();
+    std::unique_ptr<ScTokenArray> pArray(new ScTokenArray(rDoc));
 
     pArray->AddOpCode(bSubTotal ? ocSubTotal : eCode);
     pArray->AddOpCode(ocOpen);
@@ -831,14 +831,14 @@ OUString ScViewFunc::GetAutoSumFormula( const ScRangeList& rRangeList, bool bSub
             if (i != 0)
                 pArray->AddOpCode(ocSep);
             ScComplexRefData aRef;
-            aRef.InitRangeRel(pDoc, r, rAddr);
+            aRef.InitRangeRel(&rDoc, r, rAddr);
             pArray->AddDoubleReference(aRef);
         }
     }
 
     pArray->AddOpCode(ocClose);
 
-    ScCompiler aComp(pDoc, rAddr, *pArray, pDoc->GetGrammar());
+    ScCompiler aComp(&rDoc, rAddr, *pArray, rDoc.GetGrammar());
     OUStringBuffer aBuf;
     aComp.CreateStringFromTokenArray(aBuf);
     OUString aFormula = aBuf.makeStringAndClear();
@@ -877,12 +877,12 @@ void ScViewFunc::EnterBlock( const OUString& rString, const EditTextObject* pDat
         return;
     }
 
-    ScDocument* pDoc = GetViewData().GetDocument();
+    ScDocument& rDoc = GetViewData().GetDocument();
     OUString aNewStr = rString;
     if ( pData )
     {
-        const ScPatternAttr* pOldPattern = pDoc->GetPattern( nCol, nRow, nTab );
-        ScTabEditEngine aEngine( *pOldPattern, pDoc->GetEnginePool(), pDoc );
+        const ScPatternAttr* pOldPattern = rDoc.GetPattern( nCol, nRow, nTab );
+        ScTabEditEngine aEngine( *pOldPattern, rDoc.GetEnginePool(), &rDoc );
         aEngine.SetTextCurrentDefaults(*pData);
 
         ScEditAttrTester aTester( &aEngine );
@@ -900,17 +900,17 @@ void ScViewFunc::EnterBlock( const OUString& rString, const EditTextObject* pDat
     ScAddress aPos( nCol, nRow, nTab );
 
     ScDocumentUniquePtr pInsDoc(new ScDocument( SCDOCMODE_CLIP ));
-    pInsDoc->ResetClip( pDoc, nTab );
+    pInsDoc->ResetClip( &rDoc, nTab );
 
     if (aNewStr[0] == '=')                      // Formula ?
     {
         //  SetString not possible, because in Clipboard-Documents nothing will be compiled!
-        pInsDoc->SetFormulaCell(aPos, new ScFormulaCell(pDoc, aPos, aNewStr));
+        pInsDoc->SetFormulaCell(aPos, new ScFormulaCell(&rDoc, aPos, aNewStr));
     }
     else if ( pData )
     {
         // A copy of pData will be stored.
-        pInsDoc->SetEditText(aPos, *pData, pDoc->GetEditPool());
+        pInsDoc->SetEditText(aPos, *pData, rDoc.GetEditPool());
     }
     else
         pInsDoc->SetString( nCol, nRow, nTab, aNewStr );
@@ -928,10 +928,10 @@ void ScViewFunc::EnterBlock( const OUString& rString, const EditTextObject* pDat
         // MarkData was already MarkToSimple'ed in PasteFromClip
         ScRange aRange;
         rMark.GetMarkArea( aRange );
-        std::unique_ptr<ScPatternAttr> pPattern(new ScPatternAttr( pDoc->GetPool() ));
+        std::unique_ptr<ScPatternAttr> pPattern(new ScPatternAttr( rDoc.GetPool() ));
         pPattern->GetItemSet().Put( *pItem );
-        SvNumFormatType nNewType = pDoc->GetFormatTable()->GetType( pItem->GetValue() );
-        pDoc->ApplyPatternIfNumberformatIncompatible( aRange, rMark,
+        SvNumFormatType nNewType = rDoc.GetFormatTable()->GetType( pItem->GetValue() );
+        rDoc.ApplyPatternIfNumberformatIncompatible( aRange, rMark,
             *pPattern, nNewType );
     }
 }
@@ -1271,8 +1271,8 @@ bool ScViewFunc::TestRemoveMerge()
     ScRange aRange;
     if (GetViewData().GetSimpleArea( aRange ) == SC_MARK_SIMPLE)
     {
-        ScDocument* pDoc = GetViewData().GetDocument();
-        if ( pDoc->HasAttrib( aRange, HasAttrFlags::Merged ) )
+        ScDocument& rDoc = GetViewData().GetDocument();
+        if ( rDoc.HasAttrib( aRange, HasAttrFlags::Merged ) )
             bMerged = true;
     }
     return bMerged;
@@ -1315,9 +1315,9 @@ bool ScViewFunc::RemoveMerge()
     }
     else if (GetViewData().GetSimpleArea( aRange ) == SC_MARK_SIMPLE)
     {
-        ScDocument* pDoc = GetViewData().GetDocument();
+        ScDocument& rDoc = GetViewData().GetDocument();
         ScRange aExtended( aRange );
-        pDoc->ExtendMerge( aExtended );
+        rDoc.ExtendMerge( aExtended );
         ScDocShell* pDocSh = GetViewData().GetDocShell();
         const ScMarkData& rMark = GetViewData().GetMarkData();
         ScCellMergeOption aOption(aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(), aRange.aEnd.Row());
@@ -1330,8 +1330,8 @@ bool ScViewFunc::RemoveMerge()
                 aOption.maTabs.insert(i);
                 aExtended.aStart.SetTab(i);
                 aExtended.aEnd.SetTab(i);
-                pDoc->ExtendMerge(aExtended);
-                pDoc->ExtendOverlapped(aExtended);
+                rDoc.ExtendMerge(aExtended);
+                rDoc.ExtendOverlapped(aExtended);
 
                 // Expand the current range to be inclusive of all merged
                 // areas on all sheets.
@@ -1699,22 +1699,22 @@ void ScViewFunc::FillCrossDblClick()
     SCCOL nEndX   = aRange.aEnd.Col();
     SCROW nEndY   = aRange.aEnd.Row();
 
-    ScDocument* pDoc = GetViewData().GetDocument();
+    ScDocument& rDoc = GetViewData().GetDocument();
 
-    if (nEndY >= pDoc->MaxRow())
+    if (nEndY >= rDoc.MaxRow())
         // Nothing to fill.
         return;
 
     // Make sure the selection is not empty
-    if ( pDoc->IsBlockEmpty( nTab, nStartX, nStartY, nEndX, nEndY ) )
+    if ( rDoc.IsBlockEmpty( nTab, nStartX, nStartY, nEndX, nEndY ) )
         return;
 
     // If there is data in all columns immediately below the selection then
     // switch to overwriting fill.
-    SCROW nOverWriteEndRow = pDoc->MaxRow();
+    SCROW nOverWriteEndRow = rDoc.MaxRow();
     for (SCCOL nCol = nStartX; nCol <= nEndX; ++nCol)
     {
-        if (pDoc->HasData( nCol, nEndY + 1, nTab))
+        if (rDoc.HasData( nCol, nEndY + 1, nTab))
         {
             // Determine the shortest data column to end the fill.
             SCROW nY = nEndY + 1;
@@ -1722,9 +1722,9 @@ void ScViewFunc::FillCrossDblClick()
             // the current row is the last row of a data block and an empty
             // cell follows. Somewhat unexpected behaviour...
             // So check beforehand if there is one non-empty cell following.
-            if (pDoc->HasData( nCol, nY + 1, nTab))
+            if (rDoc.HasData( nCol, nY + 1, nTab))
             {
-                pDoc->FindAreaPos( nCol, nY, nTab, SC_MOVE_DOWN);
+                rDoc.FindAreaPos( nCol, nY, nTab, SC_MOVE_DOWN);
                 if (nOverWriteEndRow > nY)
                     nOverWriteEndRow = nY;
             }
@@ -1749,7 +1749,7 @@ void ScViewFunc::FillCrossDblClick()
     // Non-overwriting fill follows.
 
     const bool bDataLeft = (nStartX > 0);
-    if (!bDataLeft && nEndX >= pDoc->MaxCol())
+    if (!bDataLeft && nEndX >= rDoc.MaxCol())
         // Absolutely no data left or right of selection.
         return;
 
@@ -1760,32 +1760,32 @@ void ScViewFunc::FillCrossDblClick()
 
     SCCOL nMovX = (bDataLeft ? nStartX - 1 : nEndX + 1);
     SCROW nMovY = nStartY;
-    bool bDataFound = (pDoc->HasData( nMovX, nStartY, nTab) && pDoc->HasData( nMovX, nStartY + 1, nTab));
-    if (!bDataFound && bDataLeft && nEndX < pDoc->MaxCol())
+    bool bDataFound = (rDoc.HasData( nMovX, nStartY, nTab) && rDoc.HasData( nMovX, nStartY + 1, nTab));
+    if (!bDataFound && bDataLeft && nEndX < rDoc.MaxCol())
     {
         nMovX = nEndX + 1;  // check right
-        bDataFound = (pDoc->HasData( nMovX, nStartY, nTab) && pDoc->HasData( nMovX, nStartY + 1, nTab));
+        bDataFound = (rDoc.HasData( nMovX, nStartY, nTab) && rDoc.HasData( nMovX, nStartY + 1, nTab));
     }
 
-    if (!(bDataFound && pDoc->IsBlockEmpty( nTab, nStartX, nEndY + 1, nEndX, nEndY + 1, true)))
+    if (!(bDataFound && rDoc.IsBlockEmpty( nTab, nStartX, nEndY + 1, nEndX, nEndY + 1, true)))
         return;
 
     // Get end of data left or right.
-    pDoc->FindAreaPos( nMovX, nMovY, nTab, SC_MOVE_DOWN);
+    rDoc.FindAreaPos( nMovX, nMovY, nTab, SC_MOVE_DOWN);
     // Find minimum end row of below empty area and data right.
     for (SCCOL nX = nStartX; nX <= nEndX; ++nX)
     {
         SCROW nY = nEndY + 1;
         // Get next row with data in this column.
-        pDoc->FindAreaPos( nX, nY, nTab, SC_MOVE_DOWN);
-        if (nMovY == pDoc->MaxRow() && nY == pDoc->MaxRow())
+        rDoc.FindAreaPos( nX, nY, nTab, SC_MOVE_DOWN);
+        if (nMovY == rDoc.MaxRow() && nY == rDoc.MaxRow())
         {
             // FindAreaPos() returns MAXROW also if there is no data at all
             // from the start, so check if that contains data if the nearby
             // (left or right) data ends there and increment if no data
             // here, pretending the next data would be thereafter so nMovY
             // will not be decremented.
-            if (!pDoc->HasData( nX, nY, nTab))
+            if (!rDoc.HasData( nX, nY, nTab))
                 ++nY;
         }
         if (nMovY > nY - 1)
@@ -1843,9 +1843,9 @@ ScAutoFormatData* ScViewFunc::CreateAutoFormatData()
     {
         if ( nEndCol-nStartCol >= 3 && nEndRow-nStartRow >= 3 )
         {
-            ScDocument* pDoc = GetViewData().GetDocument();
+            ScDocument& rDoc = GetViewData().GetDocument();
             pData = new ScAutoFormatData;
-            pDoc->GetAutoFormatData( nStartTab, nStartCol,nStartRow,nEndCol,nEndRow, *pData );
+            rDoc.GetAutoFormatData( nStartTab, nStartCol,nStartRow,nEndCol,nEndRow, *pData );
         }
     }
     return pData;
@@ -2165,16 +2165,13 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
 
 void ScViewFunc::Solve( const ScSolveParam& rParam )
 {
-    ScDocument* pDoc = GetViewData().GetDocument();
-
-    if ( !pDoc )
-        return;
+    ScDocument& rDoc = GetViewData().GetDocument();
 
     SCCOL nDestCol = rParam.aRefVariableCell.Col();
     SCROW nDestRow = rParam.aRefVariableCell.Row();
     SCTAB nDestTab = rParam.aRefVariableCell.Tab();
 
-    ScEditableTester aTester( pDoc, nDestTab, nDestCol,nDestRow, nDestCol,nDestRow );
+    ScEditableTester aTester( &rDoc, nDestTab, nDestCol,nDestRow, nDestCol,nDestRow );
     if (!aTester.IsEditable())
     {
         ErrorMessage(aTester.GetMessageId());
@@ -2192,7 +2189,7 @@ void ScViewFunc::Solve( const ScSolveParam& rParam )
     GetFrameWin()->EnterWait();
 
     bool    bExact =
-                pDoc->Solver(
+                rDoc.Solver(
                     rParam.aRefFormulaCell.Col(),
                     rParam.aRefFormulaCell.Row(),
                     rParam.aRefFormulaCell.Tab(),
@@ -2202,9 +2199,9 @@ void ScViewFunc::Solve( const ScSolveParam& rParam )
 
     GetFrameWin()->LeaveWait();
 
-    SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+    SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
     sal_uLong nFormat = 0;
-    const ScPatternAttr* pPattern = pDoc->GetPattern( nDestCol, nDestRow, nDestTab );
+    const ScPatternAttr* pPattern = rDoc.GetPattern( nDestCol, nDestRow, nDestTab );
     if ( pPattern )
         nFormat = pPattern->GetNumberFormat( pFormatter );
     const Color* p;
@@ -2281,8 +2278,8 @@ void ScViewFunc::ExtendScenario()
 
         //  Undo: apply attributes
 
-    ScDocument* pDoc = GetViewData().GetDocument();
-    ScPatternAttr aPattern( pDoc->GetPool() );
+    ScDocument& rDoc = GetViewData().GetDocument();
+    ScPatternAttr aPattern( rDoc.GetPool() );
     aPattern.GetItemSet().Put( ScMergeFlagAttr( ScMF::Scenario ) );
     aPattern.GetItemSet().Put( ScProtectionAttr( true ) );
     ApplySelectionPattern(aPattern);
@@ -2767,12 +2764,12 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
 void ScViewFunc::MoveTable(
     sal_uInt16 nDestDocNo, SCTAB nDestTab, bool bCopy, const OUString* pNewTabName )
 {
-    ScDocument* pDoc       = GetViewData().GetDocument();
+    ScDocument& rDoc       = GetViewData().GetDocument();
     ScDocShell* pDocShell  = GetViewData().GetDocShell();
     ScDocument* pDestDoc   = nullptr;
     ScDocShell* pDestShell = nullptr;
     ScTabViewShell* pDestViewSh = nullptr;
-    bool bUndo (pDoc->IsUndoEnabled());
+    bool bUndo (rDoc.IsUndoEnabled());
     bool bRename = pNewTabName && !pNewTabName->isEmpty();
 
     bool bNewDoc = (nDestDocNo == SC_DOC_NEW);
@@ -2821,7 +2818,7 @@ void ScViewFunc::MoveTable(
 
     pDestDoc = &pDestShell->GetDocument();
 
-    if (pDestDoc != pDoc)
+    if (pDestDoc != &rDoc)
     {
         if (bNewDoc)
         {
@@ -2830,7 +2827,7 @@ void ScViewFunc::MoveTable(
             pDestDoc->RenameTab( 0, "______42_____" );
         }
 
-        SCTAB       nTabCount   = pDoc->GetTableCount();
+        SCTAB       nTabCount   = rDoc.GetTableCount();
         SCTAB       nTabSelCount = rMark.GetSelectCount();
 
         vector<SCTAB> TheTabs;
@@ -2840,13 +2837,13 @@ void ScViewFunc::MoveTable(
             if(rMark.GetTableSelect(i))
             {
                 OUString aTabName;
-                pDoc->GetName( i, aTabName);
+                rDoc.GetName( i, aTabName);
                 TheTabs.push_back(i);
                 for(SCTAB j=i+1;j<nTabCount;j++)
                 {
-                    if((!pDoc->IsVisible(j)) && pDoc->IsScenario(j))
+                    if((!rDoc.IsVisible(j)) && rDoc.IsScenario(j))
                     {
-                        pDoc->GetName( j, aTabName);
+                        rDoc.GetName( j, aTabName);
                         TheTabs.push_back(j);
                         i=j;
                     }
@@ -2857,7 +2854,7 @@ void ScViewFunc::MoveTable(
 
         GetFrameWin()->EnterWait();
 
-        if (pDoc->GetDrawLayer())
+        if (rDoc.GetDrawLayer())
             pDestShell->MakeDrawLayer();
 
         if (!bNewDoc && bUndo)
@@ -2874,7 +2871,7 @@ void ScViewFunc::MoveTable(
             if (bRename)
                 aName = *pNewTabName;
             else
-                pDoc->GetName( TheTabs[j], aName );
+                rDoc.GetName( TheTabs[j], aName );
 
             pDestDoc->CreateValidTabName( aName );
             if ( !pDestDoc->InsertTab( nDestTab1, aName ) )
@@ -2882,10 +2879,10 @@ void ScViewFunc::MoveTable(
                 nErrVal = 0;        // total error
                 break;  // for
             }
-            ScRange aRange( 0, 0, TheTabs[j], pDoc->MaxCol(), pDoc->MaxRow(), TheTabs[j] );
+            ScRange aRange( 0, 0, TheTabs[j], rDoc.MaxCol(), rDoc.MaxRow(), TheTabs[j] );
             aParam.maRanges.push_back(aRange);
         }
-        pDoc->SetClipParam(aParam);
+        rDoc.SetClipParam(aParam);
         if ( nErrVal > 0 )
         {
             nDestTab1 = nDestTab;
@@ -2964,7 +2961,7 @@ void ScViewFunc::MoveTable(
 
                 pDestViewSh->TabChanged();      // pages on the drawing layer
             }
-            pDestShell->PostPaint( 0,0,0, pDoc->MaxCol(), pDoc->MaxRow(), MAXTAB,
+            pDestShell->PostPaint( 0,0,0, rDoc.MaxCol(), rDoc.MaxRow(), MAXTAB,
                                     PaintPartFlags::Grid | PaintPartFlags::Top | PaintPartFlags::Left |
                                     PaintPartFlags::Extras | PaintPartFlags::Size );
             //  PaintPartFlags::Size for outline
@@ -2984,7 +2981,7 @@ void ScViewFunc::MoveTable(
     else
     {
         // Move or copy within the same document.
-        SCTAB       nTabCount   = pDoc->GetTableCount();
+        SCTAB       nTabCount   = rDoc.GetTableCount();
 
         unique_ptr< vector<SCTAB> >    pSrcTabs(new vector<SCTAB>);
         unique_ptr< vector<SCTAB> >    pDestTabs(new vector<SCTAB>);
@@ -3000,14 +2997,14 @@ void ScViewFunc::MoveTable(
             if(rMark.GetTableSelect(i))
             {
                 OUString aTabName;
-                pDoc->GetName( i, aTabName);
+                rDoc.GetName( i, aTabName);
                 pTabNames->push_back(aTabName);
 
                 for(SCTAB j=i+1;j<nTabCount;j++)
                 {
-                    if((!pDoc->IsVisible(j)) && pDoc->IsScenario(j))
+                    if((!rDoc.IsVisible(j)) && rDoc.IsScenario(j))
                     {
-                        pDoc->GetName( j, aTabName);
+                        rDoc.GetName( j, aTabName);
                         pTabNames->push_back(aTabName);
                         i=j;
                     }
@@ -3017,45 +3014,45 @@ void ScViewFunc::MoveTable(
         }
 
         if (bCopy && bUndo)
-            pDoc->BeginDrawUndo();          // drawing layer must do its own undo actions
+            rDoc.BeginDrawUndo();          // drawing layer must do its own undo actions
 
-        pDoc->GetName( nDestTab, aDestName);
+        rDoc.GetName( nDestTab, aDestName);
         SCTAB nDestTab1=nDestTab;
         SCTAB nMovTab=0;
         for (size_t j = 0, n = pTabNames->size(); j < n; ++j)
         {
-            nTabCount   = pDoc->GetTableCount();
+            nTabCount   = rDoc.GetTableCount();
             const OUString& rStr = (*pTabNames)[j];
-            if(!pDoc->GetTable(rStr,nMovTab))
+            if(!rDoc.GetTable(rStr,nMovTab))
             {
                 nMovTab=nTabCount;
             }
-            if(!pDoc->GetTable(aDestName,nDestTab1))
+            if(!rDoc.GetTable(aDestName,nDestTab1))
             {
                 nDestTab1=nTabCount;
             }
             pDocShell->MoveTable( nMovTab, nDestTab1, bCopy, false );   // Undo is here
 
-            if(bCopy && pDoc->IsScenario(nMovTab))
+            if(bCopy && rDoc.IsScenario(nMovTab))
             {
                 OUString aComment;
                 Color  aColor;
                 ScScenarioFlags nFlags;
 
-                pDoc->GetScenarioData(nMovTab, aComment,aColor, nFlags);
-                pDoc->SetScenario(nDestTab1,true);
-                pDoc->SetScenarioData(nDestTab1,aComment,aColor,nFlags);
-                bool bActive = pDoc->IsActiveScenario(nMovTab );
-                pDoc->SetActiveScenario( nDestTab1, bActive );
-                bool bVisible=pDoc->IsVisible(nMovTab);
-                pDoc->SetVisible(nDestTab1,bVisible );
+                rDoc.GetScenarioData(nMovTab, aComment,aColor, nFlags);
+                rDoc.SetScenario(nDestTab1,true);
+                rDoc.SetScenarioData(nDestTab1,aComment,aColor,nFlags);
+                bool bActive = rDoc.IsActiveScenario(nMovTab );
+                rDoc.SetActiveScenario( nDestTab1, bActive );
+                bool bVisible=rDoc.IsVisible(nMovTab);
+                rDoc.SetVisible(nDestTab1,bVisible );
             }
 
             pSrcTabs->push_back(nMovTab);
 
             if(!bCopy)
             {
-                if(!pDoc->GetTable(rStr,nDestTab1))
+                if(!rDoc.GetTable(rStr,nDestTab1))
                 {
                     nDestTab1=nTabCount;
                 }
@@ -3074,9 +3071,9 @@ void ScViewFunc::MoveTable(
             {
                 SCTAB nRenameTab = (*pDestTabs)[j];
                 OUString aTabName = *pNewTabName;
-                pDoc->CreateValidTabName( aTabName );
+                rDoc.CreateValidTabName( aTabName );
                 pDestNames->push_back(aTabName);
-                pDoc->RenameTab(nRenameTab, aTabName);
+                rDoc.RenameTab(nRenameTab, aTabName);
             }
         }
         else
@@ -3103,7 +3100,7 @@ void ScViewFunc::MoveTable(
 
         SCTAB nNewTab = nDestTab;
         if (nNewTab == SC_TAB_APPEND)
-            nNewTab = pDoc->GetTableCount()-1;
+            nNewTab = rDoc.GetTableCount()-1;
         else if (!bCopy && nTab<nDestTab)
             nNewTab--;
 
@@ -3111,7 +3108,7 @@ void ScViewFunc::MoveTable(
 
         //#i29848# adjust references to data on the copied sheet
         if( bCopy )
-            ScChartHelper::AdjustRangesOfChartsOnDestinationPage( pDoc, pDestDoc, nTab, nNewTab );
+            ScChartHelper::AdjustRangesOfChartsOnDestinationPage( &rDoc, pDestDoc, nTab, nNewTab );
     }
 }
 
@@ -3216,11 +3213,11 @@ void ScViewFunc::InsertSpecialChar( const OUString& rStr, const vcl::Font& rFont
 
     //  if string contains WEAK characters, set all fonts
     SvtScriptType nScript;
-    ScDocument* pDoc = GetViewData().GetDocument();
-    if ( pDoc->HasStringWeakCharacters( rStr ) )
+    ScDocument& rDoc = GetViewData().GetDocument();
+    if ( rDoc.HasStringWeakCharacters( rStr ) )
         nScript = SvtScriptType::LATIN | SvtScriptType::ASIAN | SvtScriptType::COMPLEX;
     else
-        nScript = pDoc->GetStringScriptType( rStr );
+        nScript = rDoc.GetStringScriptType( rStr );
 
     SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONT, pViewShell->GetPool() );
     aSetItem.PutItemForScriptType( nScript, aFontItem );
@@ -3276,9 +3273,9 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
         return;
     }
 
-    ScDocument*             pDoc = GetViewData().GetDocument();
+    ScDocument& rDoc = GetViewData().GetDocument();
     ScMarkData aFuncMark( GetViewData().GetMarkData() );       // local copy for UnmarkFiltered
-    ScViewUtil::UnmarkFiltered( aFuncMark, pDoc );
+    ScViewUtil::UnmarkFiltered( aFuncMark, &rDoc );
     ScDocShell*             pDocSh = GetViewData().GetDocShell();
     const ScPatternAttr*    pSelAttrs = GetSelectionPattern();
     const SfxItemSet&       rSelItemSet = pSelAttrs->GetItemSet();
@@ -3300,11 +3297,11 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
     if( (eItemState != SfxItemState::DONTCARE) && (eTLBRState != SfxItemState::DONTCARE) && (eBLTRState != SfxItemState::DONTCARE) )
     {
         std::unique_ptr<SfxItemSet> pOldSet(new SfxItemSet(
-                                        *(pDoc->GetPool()),
+                                        *rDoc.GetPool(),
                                         svl::Items<ATTR_PATTERN_START,
                                         ATTR_PATTERN_END>{} ));
         std::unique_ptr<SfxItemSet> pNewSet(new SfxItemSet(
-                                        *(pDoc->GetPool()),
+                                        *rDoc.GetPool(),
                                         svl::Items<ATTR_PATTERN_START,
                                         ATTR_PATTERN_END>{} ));
 
@@ -3354,7 +3351,7 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
     else // if ( eItemState == SfxItemState::DONTCARE )
     {
         aFuncMark.MarkToMulti();
-        pDoc->ApplySelectionLineStyle( aFuncMark, pLine, bColorOnly );
+        rDoc.ApplySelectionLineStyle( aFuncMark, pLine, bColorOnly );
     }
 
     ScRange aMarkRange;
@@ -3377,8 +3374,8 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
 
 void ScViewFunc::SetValidation( const ScValidationData& rNew )
 {
-    ScDocument* pDoc = GetViewData().GetDocument();
-    sal_uLong nIndex = pDoc->AddValidationEntry(rNew);      // for it there is no Undo
+    ScDocument& rDoc = GetViewData().GetDocument();
+    sal_uLong nIndex = rDoc.AddValidationEntry(rNew);      // for it there is no Undo
     SfxUInt32Item aItem( ATTR_VALIDDATA, nIndex );
 
     ApplyAttr( aItem );         // with Paint and Undo...

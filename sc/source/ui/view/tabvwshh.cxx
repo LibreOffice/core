@@ -210,9 +210,8 @@ void ScTabViewShell::AddAccessibilityObject( SfxListener& rObject )
         pAccessibilityBroadcaster.reset( new SfxBroadcaster );
 
     rObject.StartListening( *pAccessibilityBroadcaster );
-    ScDocument* pDoc = GetViewData().GetDocument();
-    if (pDoc)
-        pDoc->AddUnoObject(rObject);
+    ScDocument& rDoc = GetViewData().GetDocument();
+    rDoc.AddUnoObject(rObject);
 }
 
 void ScTabViewShell::RemoveAccessibilityObject( SfxListener& rObject )
@@ -222,9 +221,8 @@ void ScTabViewShell::RemoveAccessibilityObject( SfxListener& rObject )
     if (pAccessibilityBroadcaster)
     {
         rObject.EndListening( *pAccessibilityBroadcaster );
-        ScDocument* pDoc = GetViewData().GetDocument();
-        if (pDoc)
-            pDoc->RemoveUnoObject(rObject);
+        ScDocument& rDoc = GetViewData().GetDocument();
+        rDoc.RemoveUnoObject(rObject);
     }
     else
     {
@@ -245,15 +243,15 @@ bool ScTabViewShell::HasAccessibilityObjects() const
 
 bool ScTabViewShell::ExecuteRetypePassDlg(ScPasswordHash eDesiredHash)
 {
-    ScDocument* pDoc = GetViewData().GetDocument();
+    ScDocument& rDoc = GetViewData().GetDocument();
 
     ScRetypePassDlg aDlg(GetFrameWeld());
-    aDlg.SetDataFromDocument(*pDoc);
+    aDlg.SetDataFromDocument(rDoc);
     aDlg.SetDesiredHash(eDesiredHash);
     if (aDlg.run() != RET_OK)
         return false;
 
-    aDlg.WriteNewDataToDocument(*pDoc);
+    aDlg.WriteNewDataToDocument(rDoc);
     return true;
 }
 

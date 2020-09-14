@@ -189,9 +189,9 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 break;
         }
 
-        ScDocument* pDoc = GetViewData().GetDocument();
-        if ( nNewTab >= pDoc->GetTableCount() )
-            nNewTab = pDoc->GetTableCount() - 1;
+        ScDocument& rDoc = GetViewData().GetDocument();
+        if ( nNewTab >= rDoc.GetTableCount() )
+            nNewTab = rDoc.GetTableCount() - 1;
 
         bool bForce = !bStayOnActiveTab;
         SetTabNo( nNewTab, bForce, false, bStayOnActiveTab );
@@ -241,8 +241,8 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
             case SfxHintId::DocChanged:
                 {
-                    ScDocument* pDoc = GetViewData().GetDocument();
-                    if (!pDoc->HasTable( GetViewData().GetTabNo() ))
+                    ScDocument& rDoc = GetViewData().GetDocument();
+                    if (!rDoc.HasTable( GetViewData().GetTabNo() ))
                     {
                         SetTabNo(0);
                     }

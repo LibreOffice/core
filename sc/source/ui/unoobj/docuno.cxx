@@ -594,7 +594,7 @@ int ScModelObj::getPart()
 OUString ScModelObj::getPartInfo( int nPart )
 {
     ScViewData* pViewData = ScDocShell::GetViewData();
-    const bool bIsVisible = pViewData->GetDocument()->IsVisible(nPart);
+    const bool bIsVisible = pViewData->GetDocument().IsVisible(nPart);
     //FIXME: Implement IsSelected().
     const bool bIsSelected = false; //pViewData->GetDocument()->IsSelected(nPart);
 
@@ -610,7 +610,7 @@ OUString ScModelObj::getPartName( int nPart )
 {
     OUString sTabName;
     ScViewData* pViewData = ScDocShell::GetViewData();
-    pViewData->GetDocument()->GetName(nPart, sTabName);
+    pViewData->GetDocument().GetName(nPart, sTabName);
     return sTabName;
 }
 
@@ -618,7 +618,7 @@ OUString ScModelObj::getPartHash( int nPart )
 {
     sal_Int64 nHashCode;
     ScViewData* pViewData = ScDocShell::GetViewData();
-    return (pViewData->GetDocument()->GetHashCode(nPart, nHashCode) ? OUString::number(nHashCode) : OUString());
+    return (pViewData->GetDocument().GetHashCode(nPart, nHashCode) ? OUString::number(nHashCode) : OUString());
 }
 
 VclPtr<vcl::Window> ScModelObj::getDocWindow()
