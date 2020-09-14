@@ -65,7 +65,7 @@ public:
                                   ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 );
 
     static bool IsAbsPos        ( const OUString& rPosStr,
-                                  const ScDocument* pDoc,
+                                  const ScDocument& rDoc,
                                   SCTAB     nTab,
                                   OUString*       pCompleteStr,
                                   ScRefAddress* pPosTripel   = nullptr,

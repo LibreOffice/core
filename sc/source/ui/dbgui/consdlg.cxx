@@ -303,7 +303,7 @@ bool ScConsolidateDlg::VerifyEdit( formula::RefEdit* pEd )
         OUString aPosStr;
 
         ScRangeUtil::CutPosString( pEd->GetText(), aPosStr );
-        bEditOk = ScRangeUtil::IsAbsPos( aPosStr, pDoc,
+        bEditOk = ScRangeUtil::IsAbsPos( aPosStr, *pDoc,
                                         nTab, &theCompleteStr, nullptr, eConv );
     }
 
@@ -339,7 +339,7 @@ IMPL_LINK_NOARG(ScConsolidateDlg, OkHdl, weld::Button&, void)
         OUString    aDestPosStr( m_xEdDestArea->GetText() );
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
-        if ( ScRangeUtil::IsAbsPos( aDestPosStr, pDoc, nTab, nullptr, &aDestAddress, eConv ) )
+        if ( ScRangeUtil::IsAbsPos( aDestPosStr, *pDoc, nTab, nullptr, &aDestAddress, eConv ) )
         {
             ScConsolidateParam  theOutParam( theConsData );
             std::unique_ptr<ScArea[]> pDataAreas(new ScArea[nDataAreaCount]);

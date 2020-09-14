@@ -208,7 +208,7 @@ bool ScRangeUtil::IsAbsArea( const OUString&  rAreaStr,
 }
 
 bool ScRangeUtil::IsAbsPos( const OUString&   rPosStr,
-                            const ScDocument* pDoc,
+                            const ScDocument& rDoc,
                             SCTAB           nTab,
                             OUString*       pCompleteStr,
                             ScRefAddress*   pPosTripel,
@@ -216,7 +216,7 @@ bool ScRangeUtil::IsAbsPos( const OUString&   rPosStr,
 {
     ScRefAddress    thePos;
 
-    bool bIsAbsPos = ConvertSingleRef( pDoc, rPosStr, nTab, thePos, rDetails );
+    bool bIsAbsPos = ConvertSingleRef( &rDoc, rPosStr, nTab, thePos, rDetails );
     thePos.SetRelCol( false );
     thePos.SetRelRow( false );
     thePos.SetRelTab( false );
@@ -226,7 +226,7 @@ bool ScRangeUtil::IsAbsPos( const OUString&   rPosStr,
         if ( pPosTripel )
             *pPosTripel = thePos;
         if ( pCompleteStr )
-            *pCompleteStr = thePos.GetRefString( pDoc, MAXTAB+1, rDetails );
+            *pCompleteStr = thePos.GetRefString( &rDoc, MAXTAB+1, rDetails );
     }
 
     return bIsAbsPos;
@@ -294,7 +294,7 @@ bool ScRangeUtil::MakeRangeFromName (
             {
                 CutPosString( aStrArea, aStrArea );
 
-                if ( IsAbsPos( aStrArea, &rDoc, nTable,
+                if ( IsAbsPos( aStrArea, rDoc, nTable,
                                           nullptr, &aStartPos, rDetails ) )
                 {
                     nTab       = aStartPos.Tab();
