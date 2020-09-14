@@ -1068,7 +1068,7 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(weld::Container* pPage, weld::DialogC
     m_xWidthMF->connect_value_changed(LINK(this, SvxNumOptionsTabPage, SizeHdl_Impl));
     m_xHeightMF->connect_value_changed(LINK(this, SvxNumOptionsTabPage, SizeHdl_Impl));
     m_xRatioCB->connect_toggled(LINK(this, SvxNumOptionsTabPage, RatioHdl_Impl));
-    m_xStartED->connect_changed(LINK(this, SvxNumOptionsTabPage, EditModifyHdl_Impl));
+    m_xStartED->connect_value_changed(LINK(this, SvxNumOptionsTabPage, SpinModifyHdl_Impl));
     m_xPrefixED->connect_changed(LINK(this, SvxNumOptionsTabPage, EditModifyHdl_Impl));
     m_xSuffixED->connect_changed(LINK(this, SvxNumOptionsTabPage, EditModifyHdl_Impl));
     m_xAllLevelNF->connect_value_changed(LINK(this,SvxNumOptionsTabPage, AllLevelHdl_Impl));
@@ -2086,6 +2086,11 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, CharFmtHdl_Impl, weld::ComboBox&, void)
 IMPL_LINK(SvxNumOptionsTabPage, EditModifyHdl_Impl, weld::Entry&, rEdit, void)
 {
     EditModifyHdl_Impl(&rEdit);
+}
+
+IMPL_LINK(SvxNumOptionsTabPage, SpinModifyHdl_Impl, weld::SpinButton&, rSpinButton, void)
+{
+    EditModifyHdl_Impl(&rSpinButton);
 }
 
 void SvxNumOptionsTabPage::EditModifyHdl_Impl(const weld::Entry* pEdit)
