@@ -508,8 +508,7 @@ void ScTable::FillFormula(
         }
     }
     pDocument->SetNoListening( false );
-    pDestCell->StartListeningTo( pDocument );
-
+    pDestCell->StartListeningTo( *pDocument );
 }
 
 void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,

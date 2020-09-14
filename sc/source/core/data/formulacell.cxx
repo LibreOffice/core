@@ -928,7 +928,7 @@ ScFormulaCell::ScFormulaCell(const ScFormulaCell& rCell, ScDocument& rDoc, const
     }
 
     if( nCloneFlags & ScCloneFlags::StartListening )
-        StartListeningTo( &rDoc );
+        StartListeningTo( rDoc );
 
     if (bSubTotal)
         pDocument->AddSubTotalCell(this);
@@ -1221,7 +1221,7 @@ void ScFormulaCell::CompileTokenArray( bool bNoListening )
             aResult.SetToken( nullptr);
             bCompile = false;
             if ( !bNoListening )
-                StartListeningTo( pDocument );
+                StartListeningTo( *pDocument );
         }
         if ( bWasInFormulaTree )
             pDocument->PutInFormulaTree( this );
@@ -1261,7 +1261,7 @@ void ScFormulaCell::CompileTokenArray( sc::CompileFormulaContext& rCxt, bool bNo
             aResult.SetToken( nullptr);
             bCompile = false;
             if ( !bNoListening )
-                StartListeningTo( pDocument );
+                StartListeningTo( *pDocument );
         }
         if ( bWasInFormulaTree )
             pDocument->PutInFormulaTree( this );
@@ -1276,7 +1276,7 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
     if ( cMatrixFlag == ScMatrixMode::Reference )
     {   // is already token code via ScDocFunc::EnterMatrix, ScDocument::InsertMatrixFormula
         // just establish listeners
-        StartListeningTo( pDocument );
+        StartListeningTo( *pDocument );
         return ;
     }
 
@@ -1443,7 +1443,7 @@ void ScFormulaCell::CalcAfterLoad( sc::CompileFormulaContext& rCxt, bool bStartL
     if( !bNewCompiled || pCode->GetCodeError() == FormulaError::NONE )
     {
         if (bStartListening)
-            StartListeningTo(pDocument);
+            StartListeningTo(*pDocument);
 
         if( !pCode->IsRecalcModeNormal() )
             bDirty = true;
@@ -2311,7 +2311,7 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
                     // The formula contains a volatile macro.
                     pCode->SetExclusiveRecalcModeAlways();
                     pDocument->PutInFormulaTree(this);
-                    StartListeningTo(pDocument);
+                    StartListeningTo(*pDocument);
                 break;
                 case ScInterpreter::NOT_VOLATILE:
                     if (pCode->IsRecalcModeAlways())
@@ -2364,7 +2364,7 @@ void ScFormulaCell::HandleStuffAfterParallelCalculation(ScInterpreter* pInterpre
             // The formula contains a volatile macro.
             pCode->SetExclusiveRecalcModeAlways();
             pDocument->PutInFormulaTree(this);
-            StartListeningTo(pDocument);
+            StartListeningTo(*pDocument);
         break;
         case ScInterpreter::NOT_VOLATILE:
             if (pCode->IsRecalcModeAlways())
@@ -2460,7 +2460,7 @@ void ScFormulaCell::Notify( const SfxHint& rHint )
             break;
             case sc::RefHint::StartListening:
             {
-                StartListeningTo( pDocument);
+                StartListeningTo(*pDocument);
             }
             break;
             case sc::RefHint::StopListening:
@@ -3493,7 +3493,7 @@ bool ScFormulaCell::UpdateReferenceOnMove(
         // InsertCol/InsertRow
         if ( bNewListening )
         {
-            StartListeningTo( pDocument );
+            StartListeningTo( *pDocument );
         }
     }
 
@@ -3863,7 +3863,7 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
         SetDirty();
     }
     else
-        StartListeningTo( pDocument ); // Listener as previous
+        StartListeningTo( *pDocument ); // Listener as previous
 }
 
 void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
@@ -3904,7 +3904,7 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
         SetDirty();
     }
     else
-        StartListeningTo( pDocument ); // Listener as previous
+        StartListeningTo( *pDocument ); // Listener as previous
 }
 
 // See also ScDocument::FindRangeNamesReferencingSheet()
@@ -5243,20 +5243,20 @@ void startListeningArea(
 
 }
 
-void ScFormulaCell::StartListeningTo( ScDocument* pDoc )
+void ScFormulaCell::StartListeningTo( ScDocument& rDoc )
 {
     if (mxGroup)
-        mxGroup->endAllGroupListening(*pDoc);
+        mxGroup->endAllGroupListening(rDoc);
 
-    if (pDoc->IsClipOrUndo() || pDoc->GetNoListening() || IsInChangeTrack())
+    if (rDoc.IsClipOrUndo() || rDoc.GetNoListening() || IsInChangeTrack())
         return;
 
-    pDoc->SetDetectiveDirty(true);  // It has changed something
+    rDoc.SetDetectiveDirty(true);  // It has changed something
 
     ScTokenArray* pArr = GetCode();
     if( pArr->IsRecalcModeAlways() )
     {
-        pDoc->StartListeningArea(BCA_LISTEN_ALWAYS, false, this);
+        rDoc.StartListeningArea(BCA_LISTEN_ALWAYS, false, this);
         SetNeedsListening( false);
         return;
     }
@@ -5271,11 +5271,11 @@ void ScFormulaCell::StartListeningTo( ScDocument* pDoc )
             {
                 ScAddress aCell =  t->GetSingleRef()->toAbs(*pDocument, aPos);
                 if (aCell.IsValid())
-                    pDoc->StartListeningCell(aCell, this);
+                    rDoc.StartListeningCell(aCell, this);
             }
             break;
             case svDoubleRef:
-                startListeningArea(this, *pDoc, aPos, *t);
+                startListeningArea(this, rDoc, aPos, *t);
             break;
             default:
                 ;   // nothing
