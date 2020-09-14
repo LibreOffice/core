@@ -2132,7 +2132,7 @@ void ScDocShell::Draw( OutputDevice* pDev, const JobSetup & /* rSetup */, sal_uI
     if ( nAspect == ASPECT_THUMBNAIL )
     {
         tools::Rectangle aBoundRect = GetVisArea( ASPECT_THUMBNAIL );
-        ScViewData aTmpData( this, nullptr );
+        ScViewData aTmpData( *this, nullptr );
         aTmpData.SetTabNo(nVisTab);
         SnapVisArea( aBoundRect );
         aTmpData.SetScreen( aBoundRect );
@@ -2142,7 +2142,7 @@ void ScDocShell::Draw( OutputDevice* pDev, const JobSetup & /* rSetup */, sal_uI
     {
         tools::Rectangle aOldArea = SfxObjectShell::GetVisArea();
         tools::Rectangle aNewArea = aOldArea;
-        ScViewData aTmpData( this, nullptr );
+        ScViewData aTmpData( *this, nullptr );
         aTmpData.SetTabNo(nVisTab);
         SnapVisArea( aNewArea );
         if ( aNewArea != aOldArea && (m_aDocument.GetPosLeft() > 0 || m_aDocument.GetPosTop() > 0) )

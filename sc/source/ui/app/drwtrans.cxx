@@ -730,7 +730,7 @@ void ScDrawTransferObj::InitDocShell()
     aViewOpt.SetOption( VOPT_GRID, false );
     rDestDoc.SetViewOptions( aViewOpt );
 
-    ScViewData aViewData( pDocSh, nullptr );
+    ScViewData aViewData( *pDocSh, nullptr );
     aViewData.SetTabNo( 0 );
     aViewData.SetScreen( aDestArea );
     aViewData.SetCurX( 0 );
