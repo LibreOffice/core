@@ -2081,7 +2081,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
         tools::Rectangle aBound( Point(), pDev->GetOutputSize());
 
         ScViewData aViewData(nullptr,nullptr);
-        aViewData.InitData( &rDoc );
+        aViewData.InitData( rDoc );
 
         aViewData.SetTabNo( aRange.aStart.Tab() );
         aViewData.SetScreen( aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(), aRange.aEnd.Row() );
