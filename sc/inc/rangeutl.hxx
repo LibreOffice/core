@@ -57,7 +57,7 @@ public:
                                   ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 );
 
     static bool IsAbsArea       ( const OUString& rAreaStr,
-                                  const ScDocument* pDoc,
+                                  const ScDocument& rDoc,
                                   SCTAB     nTab,
                                   OUString*     pCompleteStr,
                                   ScRefAddress* pStartPos    = nullptr,

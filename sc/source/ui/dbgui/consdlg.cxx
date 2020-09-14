@@ -295,7 +295,7 @@ bool ScConsolidateDlg::VerifyEdit( formula::RefEdit* pEd )
 
     if ( pEd == m_xEdDataArea.get() )
     {
-        bEditOk = ScRangeUtil::IsAbsArea( pEd->GetText(), pDoc,
+        bEditOk = ScRangeUtil::IsAbsArea( pEd->GetText(), *pDoc,
                                          nTab, &theCompleteStr, nullptr, nullptr, eConv );
     }
     else if ( pEd == m_xEdDestArea.get() )

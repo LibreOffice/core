@@ -169,7 +169,7 @@ bool ScRangeUtil::IsAbsTabArea( const OUString&   rAreaStr,
 }
 
 bool ScRangeUtil::IsAbsArea( const OUString&  rAreaStr,
-                             const ScDocument* pDoc,
+                             const ScDocument& rDoc,
                              SCTAB          nTab,
                              OUString*      pCompleteStr,
                              ScRefAddress*  pStartPos,
@@ -179,7 +179,7 @@ bool ScRangeUtil::IsAbsArea( const OUString&  rAreaStr,
     ScRefAddress    startPos;
     ScRefAddress    endPos;
 
-    bool bIsAbsArea = ConvertDoubleRef( pDoc, rAreaStr, nTab, startPos, endPos, rDetails );
+    bool bIsAbsArea = ConvertDoubleRef( &rDoc, rAreaStr, nTab, startPos, endPos, rDetails );
 
     if ( bIsAbsArea )
     {
@@ -192,9 +192,9 @@ bool ScRangeUtil::IsAbsArea( const OUString&  rAreaStr,
 
         if ( pCompleteStr )
         {
-            *pCompleteStr  = startPos.GetRefString( pDoc, MAXTAB+1, rDetails );
+            *pCompleteStr  = startPos.GetRefString( &rDoc, MAXTAB+1, rDetails );
             *pCompleteStr += ":";
-            *pCompleteStr += endPos  .GetRefString( pDoc, nTab, rDetails );
+            *pCompleteStr += endPos.GetRefString( &rDoc, nTab, rDetails );
         }
 
         if ( pStartPos && pEndPos )
@@ -280,7 +280,7 @@ bool ScRangeUtil::MakeRangeFromName (
 
             pData->GetSymbol( aStrArea );
 
-            if ( IsAbsArea( aStrArea, &rDoc, nTable,
+            if ( IsAbsArea( aStrArea, rDoc, nTable,
                             nullptr, &aStartPos, &aEndPos, rDetails ) )
             {
                 nTab       = aStartPos.Tab();
