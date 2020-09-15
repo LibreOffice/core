@@ -208,7 +208,7 @@ void SidebarDockingWindow::NotifyResize()
             SetLOKNotifier(pCurrentView);
         }
 
-        if (mpIdleNotify->GetLastLOKWindow() == 0)
+        if (!((SfxViewShell* )pCurrentView)->isLOKMobilePhone() && mpIdleNotify->GetLastLOKWindow() == 0)
         {
             mpIdleNotify->Start();
         }
