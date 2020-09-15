@@ -269,7 +269,7 @@ bool ScViewFunc::CopyToClipSingleRange( ScDocument* pClipDoc, const ScRangeList&
             SdrPage* pPage = pDrawLayer->GetPage( static_cast< sal_uInt16 >( nTab ) );
             if ( pPage )
             {
-                ScChartHelper::FillProtectedChartRangesVector( rRangesVector, &rDoc, pPage );
+                ScChartHelper::FillProtectedChartRangesVector( rRangesVector, rDoc, pPage );
             }
         }
     }
