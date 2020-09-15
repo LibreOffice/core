@@ -55,7 +55,7 @@ public:
     };
 
     explicit CachedTokenArray( ScDocument& rDoc ) :
-        maCxt(&rDoc, formula::FormulaGrammar::GRAM_OOXML) {}
+        maCxt(rDoc, formula::FormulaGrammar::GRAM_OOXML) {}
 
     Item* get( const ScAddress& rPos, const OUString& rFormula )
     {

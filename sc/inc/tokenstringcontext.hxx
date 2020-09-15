@@ -43,7 +43,7 @@ struct SC_DLLPUBLIC TokenStringContext
     std::vector<OUString> maExternalFileNames;
     IndexNamesMapType maExternalCachedTabNames;
 
-    TokenStringContext( const ScDocument* pDoc, formula::FormulaGrammar::Grammar eGram );
+    TokenStringContext( const ScDocument& rDoc, formula::FormulaGrammar::Grammar eGram );
 };
 
 class SC_DLLPUBLIC CompileFormulaContext

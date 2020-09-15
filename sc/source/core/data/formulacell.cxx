@@ -5522,7 +5522,7 @@ void ScFormulaCell::Dump() const
         cout << "    * shared calc state: " << mxGroup->meCalcState << endl;
     }
 
-    sc::TokenStringContext aCxt(&rDocument, rDocument.GetGrammar());
+    sc::TokenStringContext aCxt(rDocument, rDocument.GetGrammar());
     cout << "  * code: " << pCode->CreateString(aCxt, aPos) << endl;
 
     FormulaError nErrCode = pCode->GetCodeError();
