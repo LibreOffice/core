@@ -2360,7 +2360,7 @@ bool ScDocShell::DdeGetData( const OUString& rItem,
                                         aFmtByte.getLength() + 1 );
             return true;
         }
-        ScImportExport aObj( &m_aDocument, rItem );
+        ScImportExport aObj( m_aDocument, rItem );
         if ( !aObj.IsRef() )
             return false;                           // invalid range
 
