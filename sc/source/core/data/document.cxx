@@ -2244,19 +2244,16 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
     pClipDoc->ExtendMerge(aClipRange, true);
 }
 
-void ScDocument::CopyStaticToDocument(const ScRange& rSrcRange, SCTAB nDestTab, ScDocument* pDestDoc)
+void ScDocument::CopyStaticToDocument(const ScRange& rSrcRange, SCTAB nDestTab, ScDocument& rDestDoc)
 {
-    if (!pDestDoc)
-        return;
-
     ScTable* pSrcTab = rSrcRange.aStart.Tab() < static_cast<SCTAB>(maTabs.size()) ? maTabs[rSrcRange.aStart.Tab()].get() : nullptr;
-    ScTable* pDestTab = nDestTab < static_cast<SCTAB>(pDestDoc->maTabs.size()) ? pDestDoc->maTabs[nDestTab].get() : nullptr;
+    ScTable* pDestTab = nDestTab < static_cast<SCTAB>(rDestDoc.maTabs.size()) ? rDestDoc.maTabs[nDestTab].get() : nullptr;
 
     if (!pSrcTab || !pDestTab)
         return;
 
-    pDestDoc->GetFormatTable()->MergeFormatter(*GetFormatTable());
-    SvNumberFormatterMergeMap aMap = pDestDoc->GetFormatTable()->ConvertMergeTableToMap();
+    rDestDoc.GetFormatTable()->MergeFormatter(*GetFormatTable());
+    SvNumberFormatterMergeMap aMap = rDestDoc.GetFormatTable()->ConvertMergeTableToMap();
 
     pSrcTab->CopyStaticToDocument(
         rSrcRange.aStart.Col(), rSrcRange.aStart.Row(), rSrcRange.aEnd.Col(), rSrcRange.aEnd.Row(),

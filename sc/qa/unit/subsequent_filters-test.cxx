@@ -3416,7 +3416,7 @@ void ScFiltersTest::testCopyMergedNumberFormats()
 
     ScDocument aCopyDoc;
     aCopyDoc.InsertTab(0, "CopyHere");
-    rDoc.CopyStaticToDocument(ScRange(1,0,0,3,0,0), 0, &aCopyDoc);
+    rDoc.CopyStaticToDocument(ScRange(1,0,0,3,0,0), 0, aCopyDoc);
 
     // Make sure the date formats are copied to the new document.
     CPPUNIT_ASSERT_EQUAL(aStrB1, aCopyDoc.GetString(ScAddress(1,0,0)));

@@ -857,9 +857,9 @@ void Test::testCopyToDocument()
     pDestDoc->InsertTab(0, "src");
     pDestDoc->InitDrawLayer(xDocSh2.get());     // for note caption objects
 
-    m_pDoc->CopyStaticToDocument(ScRange(0,1,0,0,3,0), 0, pDestDoc); // Copy A2:A4
-    m_pDoc->CopyStaticToDocument(ScAddress(0,0,0), 0,     pDestDoc); // Copy A1
-    m_pDoc->CopyStaticToDocument(ScRange(0,4,0,0,7,0), 0, pDestDoc); // Copy A5:A8
+    m_pDoc->CopyStaticToDocument(ScRange(0,1,0,0,3,0), 0, *pDestDoc); // Copy A2:A4
+    m_pDoc->CopyStaticToDocument(ScAddress(0,0,0), 0,     *pDestDoc); // Copy A1
+    m_pDoc->CopyStaticToDocument(ScRange(0,4,0,0,7,0), 0, *pDestDoc); // Copy A5:A8
 
     CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(0,0,0), pDestDoc->GetString(0,0,0));
     CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(0,1,0), pDestDoc->GetString(0,1,0));
