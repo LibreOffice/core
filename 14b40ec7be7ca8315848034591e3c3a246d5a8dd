@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6f29ed31_943fb1d4",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 5456,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-15T06:07:39Z",
+      "side": 1,
+      "message": "Please don\u0027t add code that doesn\u0027t follow our coding style enforced by clang-format - even in files that are currently excluded (because re-formatting them would introduce noise). At least newly added code should not require following reformatting! Thanks.",
+      "range": {
+        "startLine": 5455,
+        "startChar": 4,
+        "endLine": 5456,
+        "endChar": 109
+      },
+      "revId": "14b40ec7be7ca8315848034591e3c3a246d5a8dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d036a56_25d77051",
+        "filename": "sc/source/filter/xcl97/xcl97rec.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 1286,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-15T06:07:39Z",
+      "side": 1,
+      "message": "And here.",
+      "range": {
+        "startLine": 1286,
+        "startChar": 8,
+        "endLine": 1286,
+        "endChar": 123
+      },
+      "revId": "14b40ec7be7ca8315848034591e3c3a246d5a8dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
