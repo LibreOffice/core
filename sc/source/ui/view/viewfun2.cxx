@@ -2171,7 +2171,7 @@ void ScViewFunc::Solve( const ScSolveParam& rParam )
     SCROW nDestRow = rParam.aRefVariableCell.Row();
     SCTAB nDestTab = rParam.aRefVariableCell.Tab();
 
-    ScEditableTester aTester( &rDoc, nDestTab, nDestCol,nDestRow, nDestCol,nDestRow );
+    ScEditableTester aTester( rDoc, nDestTab, nDestCol,nDestRow, nDestCol,nDestRow );
     if (!aTester.IsEditable())
     {
         ErrorMessage(aTester.GetMessageId());
