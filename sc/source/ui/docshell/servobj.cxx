@@ -87,7 +87,7 @@ ScServerObject::ScServerObject( ScDocShell* pShell, const OUString& rItem ) :
 
         // For DDE link, we always must parse references using OOO A1 convention.
 
-        if ( aRange.Parse( rItem, &rDoc, FormulaGrammar::CONV_OOO ) & ScRefFlags::VALID )
+        if ( aRange.Parse( rItem, rDoc, FormulaGrammar::CONV_OOO ) & ScRefFlags::VALID )
         {
             // area reference
         }

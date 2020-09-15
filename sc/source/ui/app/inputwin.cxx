@@ -2326,7 +2326,7 @@ static ScNameInputType lcl_GetInputType( const OUString& rText )
 
         if (rText == ScResId(STR_MANAGE_NAMES))
             eRet = SC_MANAGE_NAMES;
-        else if ( aRange.Parse( rText, &rDoc, eConv ) & ScRefFlags::VALID )
+        else if ( aRange.Parse( rText, rDoc, eConv ) & ScRefFlags::VALID )
             eRet = SC_NAME_INPUT_RANGE;
         else if ( aAddress.Parse( rText, &rDoc, eConv ) & ScRefFlags::VALID )
             eRet = SC_NAME_INPUT_CELL;

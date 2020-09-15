@@ -497,7 +497,7 @@ bool ScRangeStringConverter::GetRangeFromString(
                     aUIString[ nIndex + 1 ] == '.' )
                 aUIString = aUIString.replaceAt( nIndex + 1, 1, "" );
 
-            bResult = ((rRange.Parse(aUIString, &rDocument, eConv) & ScRefFlags::VALID) ==
+            bResult = ((rRange.Parse(aUIString, rDocument, eConv) & ScRefFlags::VALID) ==
                                                                                               ScRefFlags::VALID);
 
             // #i77703# chart ranges in the file format contain both sheet names, even for an external reference sheet.

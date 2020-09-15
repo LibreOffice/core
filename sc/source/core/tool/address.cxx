@@ -1524,7 +1524,7 @@ bool ConvertDoubleRef( const ScDocument& rDoc, const OUString& rRefString, SCTAB
     if (pExtInfo || (ScGlobal::FindUnquoted( rRefString, SC_COMPILER_FILE_TAB_SEP) == -1))
     {
         ScRange aRange( ScAddress( 0, 0, nDefTab));
-        ScRefFlags nRes = aRange.Parse( rRefString, &rDoc, rDetails, pExtInfo);
+        ScRefFlags nRes = aRange.Parse( rRefString, rDoc, rDetails, pExtInfo);
         if ( nRes & ScRefFlags::VALID )
         {
             rStartRefAddress.Set( aRange.aStart,
@@ -1735,7 +1735,7 @@ static ScRefFlags lcl_ScRange_Parse_OOo( ScRange& rRange,
     return nRes1;
 }
 
-ScRefFlags ScRange::Parse( const OUString& rString, const ScDocument* pDoc,
+ScRefFlags ScRange::Parse( const OUString& rString, const ScDocument& rDoc,
                            const ScAddress::Details& rDetails,
                            ScAddress::ExternalInfo* pExtInfo,
                            const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks,
@@ -1749,20 +1749,20 @@ ScRefFlags ScRange::Parse( const OUString& rString, const ScDocument* pDoc,
         case formula::FormulaGrammar::CONV_XL_A1:
         case formula::FormulaGrammar::CONV_XL_OOX:
         {
-            return lcl_ScRange_Parse_XL_A1( *this, rString.getStr(), pDoc, false, pExtInfo,
+            return lcl_ScRange_Parse_XL_A1( *this, rString.getStr(), &rDoc, false, pExtInfo,
                     (rDetails.eConv == formula::FormulaGrammar::CONV_XL_OOX ? pExternalLinks : nullptr),
                     nullptr, pErrRef );
         }
 
         case formula::FormulaGrammar::CONV_XL_R1C1:
         {
-            return lcl_ScRange_Parse_XL_R1C1( *this, rString.getStr(), pDoc, rDetails, false, pExtInfo, nullptr );
+            return lcl_ScRange_Parse_XL_R1C1( *this, rString.getStr(), &rDoc, rDetails, false, pExtInfo, nullptr );
         }
 
         default:
         case formula::FormulaGrammar::CONV_OOO:
         {
-            return lcl_ScRange_Parse_OOo( *this, rString, pDoc, pExtInfo, pErrRef );
+            return lcl_ScRange_Parse_OOo( *this, rString, &rDoc, pExtInfo, pErrRef );
         }
     }
 }
@@ -1771,7 +1771,7 @@ ScRefFlags ScRange::Parse( const OUString& rString, const ScDocument* pDoc,
 ScRefFlags ScRange::ParseAny( const OUString& rString, const ScDocument& rDoc,
                               const ScAddress::Details& rDetails )
 {
-    ScRefFlags nRet = Parse( rString, &rDoc, rDetails );
+    ScRefFlags nRet = Parse( rString, rDoc, rDetails );
     const ScRefFlags nValid = ScRefFlags::VALID | ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID;
 
     if ( (nRet & nValid) != nValid )
