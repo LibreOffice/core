@@ -3119,7 +3119,7 @@ void ScCellShell::ExecuteFillSingleEdit()
         {
             aInit = "=";
             const ScTokenArray* pCode = aCell.mpFormula->GetCode();
-            sc::TokenStringContext aCxt(&rDoc, rDoc.GetGrammar());
+            sc::TokenStringContext aCxt(rDoc, rDoc.GetGrammar());
             aInit += pCode->CreateString(aCxt, aCurPos);
         }
         else

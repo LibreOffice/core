@@ -174,7 +174,7 @@ void Test::testFormulaCreateStringFromTokens()
     };
     (void) aTests;
 
-    sc::TokenStringContext aCxt(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH);
+    sc::TokenStringContext aCxt(*m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH);
 
     // Artificially add external reference data after the context object is
     // initialized.
@@ -3682,7 +3682,7 @@ void Test::testFormulaRefUpdateNameDeleteRow()
     const ScRangeData* pName = m_pDoc->GetRangeName()->findByUpperName("MYRANGE");
     CPPUNIT_ASSERT(pName);
 
-    sc::TokenStringContext aCxt(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH);
+    sc::TokenStringContext aCxt(*m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH);
     const ScTokenArray* pCode = pName->GetCode();
     OUString aExpr = pCode->CreateString(aCxt, ScAddress(0,0,0));
     CPPUNIT_ASSERT_EQUAL(OUString("$B$2:$B$4"), aExpr);
@@ -3694,7 +3694,7 @@ void Test::testFormulaRefUpdateNameDeleteRow()
     const ScRangeData* pName2 = m_pDoc->GetRangeName()->findByUpperName("MYADDRESS");
     CPPUNIT_ASSERT(pName2);
 
-    sc::TokenStringContext aCxt2(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH);
+    sc::TokenStringContext aCxt2(*m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH);
     const ScTokenArray* pCode2 = pName2->GetCode();
     OUString aExpr2 = pCode2->CreateString(aCxt2, ScAddress(0,0,0));
     CPPUNIT_ASSERT_EQUAL(OUString("$B$3"), aExpr2);
@@ -4175,7 +4175,7 @@ void Test::testFormulaRefUpdateNameDelete()
 
     m_pDoc->DeleteCol(1, 0, 3, 0, 0, 1);
     const ScTokenArray* pCode = pName->GetCode();
-    sc::TokenStringContext aCxt(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH);
+    sc::TokenStringContext aCxt(*m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH);
     OUString aExpr = pCode->CreateString(aCxt, ScAddress(0,0,0));
     CPPUNIT_ASSERT_EQUAL(OUString("$Test.$B$1"), aExpr);
 
@@ -4312,7 +4312,7 @@ void Test::testTokenArrayRefUpdateMove()
 
     ScAddress aPos(0,0,0); // A1
 
-    sc::TokenStringContext aCxt(m_pDoc, m_pDoc->GetGrammar());
+    sc::TokenStringContext aCxt(*m_pDoc, m_pDoc->GetGrammar());
 
     // Emulate cell movement from Sheet1.C3 to Sheet2.C3.
     sc::RefUpdateContext aRefCxt(*m_pDoc);
@@ -8618,7 +8618,7 @@ void Test::testRefR1C1WholeCol()
     ScAddress aPos(1, 1, 1);
     ScCompiler aComp(m_pDoc, aPos, FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
     std::unique_ptr<ScTokenArray> pTokens(aComp.CompileString("=C[10]"));
-    sc::TokenStringContext aCxt(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH);
+    sc::TokenStringContext aCxt(*m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH);
     OUString aFormula = pTokens->CreateString(aCxt, aPos);
 
     CPPUNIT_ASSERT_EQUAL(OUString("L:L"), aFormula);
@@ -8633,7 +8633,7 @@ void Test::testRefR1C1WholeRow()
     ScAddress aPos(1, 1, 1);
     ScCompiler aComp(m_pDoc, aPos, FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
     std::unique_ptr<ScTokenArray> pTokens(aComp.CompileString("=R[3]"));
-    sc::TokenStringContext aCxt(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH);
+    sc::TokenStringContext aCxt(*m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH);
     OUString aFormula = pTokens->CreateString(aCxt, aPos);
 
     CPPUNIT_ASSERT_EQUAL(OUString("5:5"), aFormula);

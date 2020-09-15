@@ -3006,7 +3006,7 @@ void ScExportTest::testSharedFormulaExportXLS()
         {
             formula::FormulaGrammar::Grammar eGram = formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1;
             rDoc.SetGrammar(eGram);
-            sc::TokenStringContext aCxt(&rDoc, eGram);
+            sc::TokenStringContext aCxt(rDoc, eGram);
 
             // Check the title row.
 
