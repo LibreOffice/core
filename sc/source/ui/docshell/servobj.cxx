@@ -169,7 +169,7 @@ bool ScServerObject::GetData(
     SotClipboardFormatId eFormatId = SotExchange::GetFormatIdFromMimeType( rMimeType );
     if (SotClipboardFormatId::STRING == eFormatId || SotClipboardFormatId::STRING_TSVC == eFormatId)
     {
-        ScImportExport aObj( &rDoc, aRange );
+        ScImportExport aObj( rDoc, aRange );
         if( aDdeTextFmt[0] == 'F' )
             aObj.SetFormulas( true );
         if( aDdeTextFmt == "SYLK" || aDdeTextFmt == "FSYLK" )
@@ -191,7 +191,7 @@ bool ScServerObject::GetData(
         return aObj.ExportData( rMimeType, rData );
     }
 
-    ScImportExport aObj( &rDoc, aRange );
+    ScImportExport aObj( rDoc, aRange );
     aObj.SetExportTextOptions( ScExportTextOptions( ScExportTextOptions::ToSpace, ' ', false ) );
     if( aObj.IsRef() )
         return aObj.ExportData( rMimeType, rData );

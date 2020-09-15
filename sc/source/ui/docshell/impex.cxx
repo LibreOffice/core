@@ -99,9 +99,9 @@ enum class SylkVersion
 }
 
 // Whole document without Undo
-ScImportExport::ScImportExport( ScDocument* p )
-    : pDocSh( dynamic_cast< ScDocShell* >(p->GetDocumentShell()) ), pDoc( p ),
-      nSizeLimit( 0 ), nMaxImportRow(!utl::ConfigManager::IsFuzzing() ? pDoc->MaxRow() : SCROWS32K),
+ScImportExport::ScImportExport( ScDocument& r )
+    : pDocSh( dynamic_cast< ScDocShell* >(r.GetDocumentShell()) ), rDoc( r ),
+      nSizeLimit( 0 ), nMaxImportRow(!utl::ConfigManager::IsFuzzing() ? rDoc.MaxRow() : SCROWS32K),
       cSep( '\t' ), cStr( '"' ),
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( true ), bSingle( true ), bUndo( false ),
@@ -114,10 +114,10 @@ ScImportExport::ScImportExport( ScDocument* p )
 }
 
 // Insert am current cell without range(es)
-ScImportExport::ScImportExport( ScDocument* p, const ScAddress& rPt )
-    : pDocSh( dynamic_cast< ScDocShell* >(p->GetDocumentShell()) ), pDoc( p ),
+ScImportExport::ScImportExport( ScDocument& r, const ScAddress& rPt )
+    : pDocSh( dynamic_cast< ScDocShell* >(r.GetDocumentShell()) ), rDoc( r ),
       aRange( rPt ),
-      nSizeLimit( 0 ), nMaxImportRow(!utl::ConfigManager::IsFuzzing() ? pDoc->MaxRow() : SCROWS32K),
+      nSizeLimit( 0 ), nMaxImportRow(!utl::ConfigManager::IsFuzzing() ? rDoc.MaxRow() : SCROWS32K),
       cSep( '\t' ), cStr( '"' ),
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( false ), bSingle( true ), bUndo( pDocSh != nullptr ),
@@ -131,10 +131,10 @@ ScImportExport::ScImportExport( ScDocument* p, const ScAddress& rPt )
 
 //  ctor with a range is only used for export
 //! ctor with a string (and bSingle=true) is also used for DdeSetData
-ScImportExport::ScImportExport( ScDocument* p, const ScRange& r )
-    : pDocSh( dynamic_cast<ScDocShell* >(p->GetDocumentShell()) ), pDoc( p ),
-      aRange( r ),
-      nSizeLimit( 0 ), nMaxImportRow(!utl::ConfigManager::IsFuzzing() ? pDoc->MaxRow() : SCROWS32K),
+ScImportExport::ScImportExport( ScDocument& r, const ScRange& rRange )
+    : pDocSh( dynamic_cast<ScDocShell* >(r.GetDocumentShell()) ), rDoc( r ),
+      aRange( rRange ),
+      nSizeLimit( 0 ), nMaxImportRow(!utl::ConfigManager::IsFuzzing() ? rDoc.MaxRow() : SCROWS32K),
       cSep( '\t' ), cStr( '"' ),
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( false ), bSingle( false ), bUndo( pDocSh != nullptr ),
@@ -150,9 +150,9 @@ ScImportExport::ScImportExport( ScDocument* p, const ScRange& r )
 
 // Evaluate input string - either range, cell or the whole document (when error)
 // If a View exists, the TabNo of the view will be used.
-ScImportExport::ScImportExport( ScDocument* p, const OUString& rPos )
-    : pDocSh( dynamic_cast< ScDocShell* >(p->GetDocumentShell()) ), pDoc( p ),
-      nSizeLimit( 0 ), nMaxImportRow(!utl::ConfigManager::IsFuzzing() ? pDoc->MaxRow() : SCROWS32K),
+ScImportExport::ScImportExport( ScDocument& r, const OUString& rPos )
+    : pDocSh( dynamic_cast< ScDocShell* >(r.GetDocumentShell()) ), rDoc( r ),
+      nSizeLimit( 0 ), nMaxImportRow(!utl::ConfigManager::IsFuzzing() ? rDoc.MaxRow() : SCROWS32K),
       cSep( '\t' ), cStr( '"' ),
       bFormulas( false ), bIncludeFiltered( true ),
       bAll( false ), bSingle( true ), bUndo( pDocSh != nullptr ),
@@ -167,7 +167,7 @@ ScImportExport::ScImportExport( ScDocument* p, const OUString& rPos )
     aRange.aStart.SetTab( nTab );
     OUString aPos( rPos );
     // Named range?
-    ScRangeName* pRange = pDoc->GetRangeName();
+    ScRangeName* pRange = rDoc.GetRangeName();
     if (pRange)
     {
         const ScRangeData* pData = pRange->findByUpperName(ScGlobal::getCharClassPtr()->uppercase(aPos));
@@ -181,12 +181,12 @@ ScImportExport::ScImportExport( ScDocument* p, const OUString& rPos )
             }
         }
     }
-    formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
+    formula::FormulaGrammar::AddressConvention eConv = rDoc.GetAddressConvention();
     // Range?
-    if (aRange.Parse(aPos, pDoc, eConv) & ScRefFlags::VALID)
+    if (aRange.Parse(aPos, &rDoc, eConv) & ScRefFlags::VALID)
         bSingle = false;
     // Cell?
-    else if (aRange.aStart.Parse(aPos, pDoc, eConv) & ScRefFlags::VALID)
+    else if (aRange.aStart.Parse(aPos, &rDoc, eConv) & ScRefFlags::VALID)
         aRange.aEnd = aRange.aStart;
     else
         bAll = true;
@@ -232,7 +232,7 @@ bool ScImportExport::StartPaste()
 {
     if ( !bAll )
     {
-        ScEditableTester aTester( pDoc, aRange );
+        ScEditableTester aTester( &rDoc, aRange );
         if ( !aTester.IsEditable() )
         {
             vcl::Window* pWin = Application::GetDefDialogParent();
@@ -243,11 +243,11 @@ bool ScImportExport::StartPaste()
             return false;
         }
     }
-    if( bUndo && pDocSh && pDoc->IsUndoEnabled())
+    if( bUndo && pDocSh && rDoc.IsUndoEnabled())
     {
         pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
-        pUndoDoc->InitUndo( pDoc, aRange.aStart.Tab(), aRange.aEnd.Tab() );
-        pDoc->CopyToDocument(aRange, InsertDeleteFlags::ALL | InsertDeleteFlags::NOCAPTIONS, false, *pUndoDoc);
+        pUndoDoc->InitUndo( &rDoc, aRange.aStart.Tab(), aRange.aEnd.Tab() );
+        rDoc.CopyToDocument(aRange, InsertDeleteFlags::ALL | InsertDeleteFlags::NOCAPTIONS, false, *pUndoDoc);
     }
     return true;
 }
@@ -258,11 +258,11 @@ void ScImportExport::EndPaste(bool bAutoRowHeight)
     bool bHeight = bAutoRowHeight && pDocSh && pDocSh->AdjustRowHeight(
                     aRange.aStart.Row(), aRange.aEnd.Row(), aRange.aStart.Tab() );
 
-    if( pUndoDoc && pDoc->IsUndoEnabled() && pDocSh )
+    if( pUndoDoc && rDoc.IsUndoEnabled() && pDocSh )
     {
         ScDocumentUniquePtr pRedoDoc(new ScDocument( SCDOCMODE_UNDO ));
-        pRedoDoc->InitUndo( pDoc, aRange.aStart.Tab(), aRange.aEnd.Tab() );
-        pDoc->CopyToDocument(aRange, InsertDeleteFlags::ALL | InsertDeleteFlags::NOCAPTIONS, false, *pRedoDoc);
+        pRedoDoc->InitUndo( &rDoc, aRange.aStart.Tab(), aRange.aEnd.Tab() );
+        rDoc.CopyToDocument(aRange, InsertDeleteFlags::ALL | InsertDeleteFlags::NOCAPTIONS, false, *pRedoDoc);
         ScMarkData aDestMark(pRedoDoc->GetSheetLimits());
         aDestMark.SetMarkArea(aRange);
         pDocSh->GetUndoManager()->AddUndoAction(
@@ -437,11 +437,11 @@ bool ScImportExport::ExportStream( SvStream& rStrm, const OUString& rBaseURL, So
     if( nFmt == SotClipboardFormatId::LINK && !bAll )
     {
         OUString aDocName;
-        if ( pDoc->IsClipboard() )
+        if ( rDoc.IsClipboard() )
             aDocName = ScGlobal::GetClipDocName();
         else
         {
-            SfxObjectShell* pShell = pDoc->GetDocumentShell();
+            SfxObjectShell* pShell = rDoc.GetDocumentShell();
             if (pShell)
                 aDocName = pShell->GetTitle( SFX_TITLE_FULLNAME );
         }
@@ -453,12 +453,12 @@ bool ScImportExport::ExportStream( SvStream& rStrm, const OUString& rBaseURL, So
             OUString aRefName;
             ScRefFlags nFlags = ScRefFlags::VALID | ScRefFlags::TAB_3D;
             if( bSingle )
-                aRefName = aRange.aStart.Format(nFlags, pDoc, formula::FormulaGrammar::CONV_OOO);
+                aRefName = aRange.aStart.Format(nFlags, &rDoc, formula::FormulaGrammar::CONV_OOO);
             else
             {
                 if( aRange.aStart.Tab() != aRange.aEnd.Tab() )
                     nFlags |= ScRefFlags::TAB2_3D;
-                aRefName = aRange.Format(*pDoc, nFlags, formula::FormulaGrammar::CONV_OOO);
+                aRefName = aRange.Format(rDoc, nFlags, formula::FormulaGrammar::CONV_OOO);
             }
             OUString aAppName = Application::GetAppName();
 
@@ -913,7 +913,7 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
                 }
                 if (*p)
                     ++p;
-                if (pDoc->ValidCol(nCol) && pDoc->ValidRow(nRow) )
+                if (rDoc.ValidCol(nCol) && rDoc.ValidRow(nRow) )
                 {
                     if( bSingle )
                     {
@@ -921,13 +921,13 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
                         if (nRow>nEndRow) nEndRow = nRow;
                     }
                     if( bData && nCol <= nEndCol && nRow <= nEndRow )
-                        pDoc->SetString( nCol, nRow, aRange.aStart.Tab(), aCell, &aSetStringParam );
+                        rDoc.SetString( nCol, nRow, aRange.aStart.Tab(), aCell, &aSetStringParam );
                 }
                 else                            // too many columns/rows
                 {
-                    if (!pDoc->ValidRow(nRow))
+                    if (!rDoc.ValidRow(nRow))
                         bOverflowRow = true;    // display warning on import
-                    if (!pDoc->ValidCol(nCol))
+                    if (!rDoc.ValidCol(nCol))
                         bOverflowCol = true;    // display warning on import
                 }
                 ++nCol;
@@ -949,7 +949,7 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
     EndPaste();
     if (bOk && mbImportBroadcast)
     {
-        pDoc->BroadcastCells(aRange, SfxHintId::ScDataChanged);
+        rDoc.BroadcastCells(aRange, SfxHintId::ScDataChanged);
         pDocSh->PostDataChanged();
     }
 
@@ -965,9 +965,9 @@ static bool lcl_PutString(
     const ::utl::TransliterationWrapper& rTransliteration, CalendarWrapper& rCalendar,
     const ::utl::TransliterationWrapper* pSecondTransliteration, CalendarWrapper* pSecondCalendar )
 {
-    ScDocument* pDoc = &rDocImport.getDoc();
+    ScDocument& rDoc = rDocImport.getDoc();
     bool bMultiLine = false;
-    if ( nColFormat == SC_COL_SKIP || !pDoc->ValidCol(nCol) || !pDoc->ValidRow(nRow) )
+    if ( nColFormat == SC_COL_SKIP || !rDoc.ValidCol(nCol) || !rDoc.ValidRow(nRow) )
         return bMultiLine;
     if ( rStr.isEmpty() )
     {
@@ -976,7 +976,7 @@ static bool lcl_PutString(
             if ( bUseDocImport )
                 rDocImport.setAutoInput(ScAddress(nCol, nRow, nTab), rStr );
             else
-                pDoc->SetString( nCol, nRow, nTab, rStr );
+                rDoc.SetString( nCol, nRow, nTab, rStr );
         }
         return false;
     }
@@ -989,17 +989,16 @@ static bool lcl_PutString(
         {
             // Set the format of this cell to Text.
             sal_uInt32 nFormat = pFormatter->GetStandardFormat(SvNumFormatType::TEXT);
-            ScPatternAttr aNewAttrs(pDoc->GetPool());
+            ScPatternAttr aNewAttrs(rDoc.GetPool());
             SfxItemSet& rSet = aNewAttrs.GetItemSet();
             rSet.Put( SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat) );
-            pDoc->ApplyPattern(nCol, nRow, nTab, aNewAttrs);
-
+            rDoc.ApplyPattern(nCol, nRow, nTab, aNewAttrs);
         }
         if ( bUseDocImport )
         {
             if(ScStringUtil::isMultiline(rStr))
             {
-                ScFieldEditEngine& rEngine = pDoc->GetEditEngine();
+                ScFieldEditEngine& rEngine = rDoc.GetEditEngine();
                 rEngine.SetTextCurrentDefaults(rStr);
                 rDocImport.setEditCell(ScAddress(nCol, nRow, nTab), rEngine.CreateTextObject());
                 return true;
@@ -1011,7 +1010,7 @@ static bool lcl_PutString(
             }
         } else
         {
-            pDoc->SetTextCell(ScAddress(nCol, nRow, nTab), rStr);
+            rDoc.SetTextCell(ScAddress(nCol, nRow, nTab), rStr);
             return bMultiLine;
         }
     }
@@ -1020,7 +1019,7 @@ static bool lcl_PutString(
     {
         //! SetString with Extra-Flag ???
 
-        SvNumberFormatter* pDocFormatter = pDoc->GetFormatTable();
+        SvNumberFormatter* pDocFormatter = rDoc.GetFormatTable();
         sal_uInt32 nEnglish = pDocFormatter->GetStandardIndex(LANGUAGE_ENGLISH_US);
         double fVal;
         if ( pDocFormatter->IsNumberFormat( rStr, nEnglish, fVal ) )
@@ -1029,7 +1028,7 @@ static bool lcl_PutString(
             if ( bUseDocImport )
                 rDocImport.setNumericCell( ScAddress( nCol, nRow, nTab ), fVal );
             else
-                pDoc->SetValue( nCol, nRow, nTab, fVal );
+                rDoc.SetValue( nCol, nRow, nTab, fVal );
             return bMultiLine;
         }
         // else, continue with SetString
@@ -1161,7 +1160,7 @@ static bool lcl_PutString(
                 }
             }
 
-            SvNumberFormatter* pDocFormatter = pDoc->GetFormatTable();
+            SvNumberFormatter* pDocFormatter = rDoc.GetFormatTable();
             if ( nYear < 100 )
                 nYear = pDocFormatter->ExpandTwoDigitYear( nYear );
 
@@ -1208,7 +1207,7 @@ static bool lcl_PutString(
                     fDays -= fDiff;
 
                     LanguageType eLatin, eCjk, eCtl;
-                    pDoc->GetLanguage( eLatin, eCjk, eCtl );
+                    rDoc.GetLanguage( eLatin, eCjk, eCtl );
                     LanguageType eDocLang = eLatin;     //! which language for date formats?
 
                     SvNumFormatType nType = (nFound > 3 ? SvNumFormatType::DATETIME : SvNumFormatType::DATE);
@@ -1221,8 +1220,8 @@ static bool lcl_PutString(
                     if ( bUseDocImport )
                         rDocImport.setNumericCell(aPos, fDays);
                     else
-                        pDoc->SetValue( aPos, fDays );
-                    pDoc->SetNumberFormat(aPos, nFormat);
+                        rDoc.SetValue( aPos, fDays );
+                    rDoc.SetNumberFormat(aPos, nFormat);
 
                     return bMultiLine;     // success
                 }
@@ -1242,17 +1241,17 @@ static bool lcl_PutString(
         if ( bUseDocImport )
             rDocImport.setAutoInput(ScAddress(nCol, nRow, nTab), rStr, &aParam);
         else
-            pDoc->SetString( nCol, nRow, nTab, rStr, &aParam );
+            rDoc.SetString( nCol, nRow, nTab, rStr, &aParam );
     }
     else
     {
         bMultiLine = true;
-        ScFieldEditEngine& rEngine = pDoc->GetEditEngine();
+        ScFieldEditEngine& rEngine = rDoc.GetEditEngine();
         rEngine.SetTextCurrentDefaults(rStr);
         if ( bUseDocImport )
             rDocImport.setEditCell(ScAddress(nCol, nRow, nTab), rEngine.CreateTextObject());
         else
-            pDoc->SetEditText( ScAddress( nCol, nRow, nTab ), rEngine.CreateTextObject() );
+            rDoc.SetEditText( ScAddress( nCol, nRow, nTab ), rEngine.CreateTextObject() );
     }
     return bMultiLine;
 }
@@ -1375,7 +1374,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
 
     sal_uLong nOriginalStreamPos = rStrm.Tell();
 
-    ScDocumentImport aDocImport(*pDoc);
+    ScDocumentImport aDocImport(rDoc);
     do
     {
         for( ;; )
@@ -1386,7 +1385,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
 
             assert(pSeps == aSeps.getStr());
 
-            if ( nRow > pDoc->MaxRow() )
+            if ( nRow > rDoc.MaxRow() )
             {
                 bOverflowRow = true;    // display warning on import
                 break;  // for
@@ -1403,12 +1402,12 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
                 // overflow if there is really data following to be put behind
                 // the last column, which doesn't happen if info is
                 // SC_COL_SKIP.
-                for ( i=0; i<nInfoCount && nCol <= pDoc->MaxCol()+1; i++ )
+                for ( i=0; i<nInfoCount && nCol <= rDoc.MaxCol()+1; i++ )
                 {
                     sal_uInt8 nFmt = pColFormat[i];
                     if (nFmt != SC_COL_SKIP)        // otherwise don't increment nCol either
                     {
-                        if (nCol > pDoc->MaxCol())
+                        if (nCol > rDoc.MaxCol())
                             bOverflowCol = true;    // display warning on import
                         else if (!bDetermineRange)
                         {
@@ -1437,7 +1436,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
                 // overflow if there is really data following to be put behind
                 // the last column, which doesn't happen if info is
                 // SC_COL_SKIP.
-                while (*p && nCol <= pDoc->MaxCol()+1)
+                while (*p && nCol <= rDoc.MaxCol()+1)
                 {
                     bool bIsQuoted = false;
                     p = ScImportExport::ScanNextFieldFromString( p, aCell,
@@ -1455,7 +1454,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
                     }
                     if ( nFmt != SC_COL_SKIP )
                     {
-                        if (nCol > pDoc->MaxCol())
+                        if (nCol > rDoc.MaxCol())
                             bOverflowCol = true;    // display warning on import
                         else if (!bDetermineRange)
                         {
@@ -1488,7 +1487,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
         if (nRow > nStartRow)
             --nRow;
         if (nEndCol > nStartCol)
-            nEndCol = ::std::min( static_cast<SCCOL>(nEndCol - 1), pDoc->MaxCol());
+            nEndCol = ::std::min( static_cast<SCCOL>(nEndCol - 1), rDoc.MaxCol());
 
         if (bDetermineRange)
         {
@@ -1496,7 +1495,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
             aRange.aEnd.SetRow( nRow );
 
             if ( !mbApi && nStartCol != nEndCol &&
-                 !pDoc->IsBlockEmpty( nTab, nStartCol + 1, nStartRow, nEndCol, nRow ) )
+                 !rDoc.IsBlockEmpty( nTab, nStartCol + 1, nStartRow, nEndCol, nRow ) )
             {
                 ScReplaceWarnBox aBox(ScDocShell::GetActiveDialogParent());
                 if (aBox.run() != RET_YES)
@@ -1525,7 +1524,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
 
     if (mbImportBroadcast && !mbOverwriting)
     {
-        pDoc->BroadcastCells(aRange, SfxHintId::ScDataChanged);
+        rDoc.BroadcastCells(aRange, SfxHintId::ScDataChanged);
         pDocSh->PostDataChanged();
     }
     return true;
@@ -1659,8 +1658,8 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
     SCROW nEndRow = aRange.aEnd.Row();
     SCTAB nEndTab = aRange.aEnd.Tab();
 
-    if (!pDoc->GetClipParam().isMultiRange() && nStartTab == nEndTab)
-        if (!pDoc->ShrinkToDataArea( nStartTab, nStartCol, nStartRow, nEndCol, nEndRow ))
+    if (!rDoc.GetClipParam().isMultiRange() && nStartTab == nEndTab)
+        if (!rDoc.ShrinkToDataArea( nStartTab, nStartCol, nStartRow, nEndCol, nEndRow ))
             return false;
 
     OUString aCellStr;
@@ -1670,18 +1669,18 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
     // We need to cache sc::ColumnBlockPosition per each column, tab is always nStartTab.
     std::vector< sc::ColumnBlockPosition > blockPos( nEndCol - nStartCol + 1 );
     for( SCCOL i = nStartCol; i <= nEndCol; ++i )
-        pDoc->InitColumnBlockPosition( blockPos[ i - nStartCol ], nStartTab, i );
+        rDoc.InitColumnBlockPosition( blockPos[ i - nStartCol ], nStartTab, i );
     for (nRow = nStartRow; nRow <= nEndRow; nRow++)
     {
-        if (bIncludeFiltered || !pDoc->RowFiltered( nRow, nStartTab ))
+        if (bIncludeFiltered || !rDoc.RowFiltered( nRow, nStartTab ))
         {
             for (nCol = nStartCol; nCol <= nEndCol; nCol++)
             {
                 ScAddress aPos(nCol, nRow, nStartTab);
-                sal_uInt32 nNumFmt = pDoc->GetNumberFormat(aPos);
-                SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+                sal_uInt32 nNumFmt = rDoc.GetNumberFormat(aPos);
+                SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
 
-                ScRefCellValue aCell(*pDoc, aPos, blockPos[ nCol - nStartCol ]);
+                ScRefCellValue aCell(rDoc, aPos, blockPos[ nCol - nStartCol ]);
                 switch (aCell.meType)
                 {
                     case CELLTYPE_FORMULA:
@@ -1697,7 +1696,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                         else
                         {
                             const Color* pColor;
-                            ScCellFormat::GetString(aCell, nNumFmt, aCellStr, &pColor, *pFormatter, pDoc);
+                            ScCellFormat::GetString(aCell, nNumFmt, aCellStr, &pColor, *pFormatter, &rDoc);
 
                             bool bMultiLineText = ( aCellStr.indexOf( '\n' ) != -1 );
                             if( bMultiLineText )
@@ -1721,7 +1720,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                     case CELLTYPE_VALUE:
                     {
                         const Color* pColor;
-                        ScCellFormat::GetString(aCell, nNumFmt, aCellStr, &pColor, *pFormatter, pDoc);
+                        ScCellFormat::GetString(aCell, nNumFmt, aCellStr, &pColor, *pFormatter, &rDoc);
                         lcl_WriteSimpleString( rStrm, aCellStr );
                     }
                     break;
@@ -1730,7 +1729,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                     default:
                     {
                         const Color* pColor;
-                        ScCellFormat::GetString(aCell, nNumFmt, aCellStr, &pColor, *pFormatter, pDoc);
+                        ScCellFormat::GetString(aCell, nNumFmt, aCellStr, &pColor, *pFormatter, &rDoc);
 
                         bool bMultiLineText = ( aCellStr.indexOf( '\n' ) != -1 );
                         if( bMultiLineText )
@@ -1823,10 +1822,10 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                         {
                             bInvalidCol = false;
                             bool bFail = o3tl::checked_add<SCCOL>(OUString(p).toInt32(), nStartCol - 1, nCol);
-                            if (bFail || nCol < 0 || pDoc->MaxCol() < nCol)
+                            if (bFail || nCol < 0 || rDoc.MaxCol() < nCol)
                             {
                                 SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;X invalid nCol=" << nCol);
-                                nCol = std::max<SCCOL>(0, std::min<SCCOL>(nCol, pDoc->MaxCol()));
+                                nCol = std::max<SCCOL>(0, std::min<SCCOL>(nCol, rDoc.MaxCol()));
                                 bInvalidCol = bOverflowCol = true;
                             }
                             break;
@@ -1847,10 +1846,10 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                         {
                             bInvalidRefCol = false;
                             bool bFail = o3tl::checked_add<SCCOL>(OUString(p).toInt32(), nStartCol - 1, nRefCol);
-                            if (bFail || nRefCol < 0 || pDoc->MaxCol() < nRefCol)
+                            if (bFail || nRefCol < 0 || rDoc.MaxCol() < nRefCol)
                             {
                                 SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;C invalid nRefCol=" << nRefCol);
-                                nRefCol = std::max<SCCOL>(0, std::min<SCCOL>(nRefCol, pDoc->MaxCol()));
+                                nRefCol = std::max<SCCOL>(0, std::min<SCCOL>(nRefCol, rDoc.MaxCol()));
                                 bInvalidRefCol = bOverflowCol = true;
                             }
                             break;
@@ -1872,7 +1871,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                             if( !bSingle &&
                                     ( nCol < nStartCol || nCol > nEndCol
                                       || nRow < nStartRow || nRow > nEndRow
-                                      || nCol > pDoc->MaxCol() || nRow > nMaxImportRow
+                                      || nCol > rDoc.MaxCol() || nRow > nMaxImportRow
                                       || bInvalidCol || bInvalidRow ) )
                                 break;
                             if( !bData )
@@ -1899,8 +1898,8 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                             {   // don't ignore value
                                 if( bText )
                                 {
-                                    pDoc->EnsureTable(aRange.aStart.Tab());
-                                    pDoc->SetTextCell(
+                                    rDoc.EnsureTable(aRange.aStart.Tab());
+                                    rDoc.SetTextCell(
                                         ScAddress(nCol, nRow, aRange.aStart.Tab()), aText);
                                 }
                                 else
@@ -1908,7 +1907,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                                     double fVal = rtl_math_uStringToDouble( p,
                                             aLine.getStr() + aLine.getLength(),
                                             cDecSep, cGrpSep, nullptr, nullptr );
-                                    pDoc->SetValue( nCol, nRow, aRange.aStart.Tab(), fVal );
+                                    rDoc.SetValue( nCol, nRow, aRange.aStart.Tab(), fVal );
                                 }
                             }
                         }
@@ -1944,21 +1943,21 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                              * R1C1 is what Excel writes in SYLK, or even
                              * better GRAM_ENGLISH_XL_R1C1. */
                             const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_PODF_A1;
-                            ScCompiler aComp( pDoc, aPos, eGrammar);
+                            ScCompiler aComp( &rDoc, aPos, eGrammar);
                             std::unique_ptr<ScTokenArray> xCode(aComp.CompileString(aText)); // ctor/InsertMatrixFormula did copy TokenArray
-                            pDoc->CheckLinkFormulaNeedingCheck(*xCode);
+                            rDoc.CheckLinkFormulaNeedingCheck(*xCode);
                             if ( ch == 'M' )
                             {
-                                ScMarkData aMark(pDoc->GetSheetLimits());
+                                ScMarkData aMark(rDoc.GetSheetLimits());
                                 aMark.SelectTable( aPos.Tab(), true );
-                                pDoc->InsertMatrixFormula( nCol, nRow, nRefCol,
+                                rDoc.InsertMatrixFormula( nCol, nRow, nRefCol,
                                     nRefRow, aMark, EMPTY_OUSTRING, xCode.get() );
                             }
                             else
                             {
                                 ScFormulaCell* pFCell = new ScFormulaCell(
-                                        pDoc, aPos, *xCode, eGrammar, ScMatrixMode::NONE);
-                                pDoc->SetFormulaCell(aPos, pFCell);
+                                        &rDoc, aPos, *xCode, eGrammar, ScMatrixMode::NONE);
+                                rDoc.SetFormulaCell(aPos, pFCell);
                             }
                         }
                         break;
@@ -1984,10 +1983,10 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                         {
                             bInvalidCol = false;
                             bool bFail = o3tl::checked_add<SCCOL>(OUString(p).toInt32(), nStartCol - 1, nCol);
-                            if (bFail || nCol < 0 || pDoc->MaxCol() < nCol)
+                            if (bFail || nCol < 0 || rDoc.MaxCol() < nCol)
                             {
                                 SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;X invalid nCol=" << nCol);
-                                nCol = std::max<SCCOL>(0, std::min<SCCOL>(nCol, pDoc->MaxCol()));
+                                nCol = std::max<SCCOL>(0, std::min<SCCOL>(nCol, rDoc.MaxCol()));
                                 bInvalidCol = bOverflowCol = true;
                             }
                             break;
@@ -2033,7 +2032,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                 if ( 0 <= nFormat && nFormat < static_cast<sal_Int32>(aFormats.size()) && !bInvalidCol && !bInvalidRow )
                 {
                     sal_uInt32 nKey = aFormats[nFormat];
-                    pDoc->ApplyAttr( nCol, nRow, aRange.aStart.Tab(),
+                    rDoc.ApplyAttr( nCol, nRow, aRange.aStart.Tab(),
                             SfxUInt32Item( ATTR_VALUE_FORMAT, nKey ) );
                 }
             }
@@ -2058,7 +2057,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                         // get rid of Xcl escape characters
                         aCode = aCode.replaceAll("\x1b", "");
                         SvNumFormatType nType;
-                        pDoc->GetFormatTable()->PutandConvertEntry( aCode, nCheckPos, nType, nKey,
+                        rDoc.GetFormatTable()->PutandConvertEntry( aCode, nCheckPos, nType, nKey,
                                                                     LANGUAGE_ENGLISH_US, ScGlobal::eLnge, false);
                     }
 
@@ -2117,20 +2116,20 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
             bool bForm = false;
             SCROW r = nRow - nStartRow + 1;
             SCCOL c = nCol - nStartCol + 1;
-            ScRefCellValue aCell(*pDoc, ScAddress(nCol, nRow, aRange.aStart.Tab()));
+            ScRefCellValue aCell(rDoc, ScAddress(nCol, nRow, aRange.aStart.Tab()));
             CellType eType = aCell.meType;
             switch( eType )
             {
                 case CELLTYPE_FORMULA:
                     bForm = bFormulas;
-                    if( pDoc->HasValueData( nCol, nRow, aRange.aStart.Tab()) )
+                    if( rDoc.HasValueData( nCol, nRow, aRange.aStart.Tab()) )
                         goto hasvalue;
                     else
                         goto hasstring;
 
                 case CELLTYPE_VALUE:
                 hasvalue:
-                    pDoc->GetValue( nCol, nRow, aRange.aStart.Tab(), nVal );
+                    rDoc.GetValue( nCol, nRow, aRange.aStart.Tab(), nVal );
 
                     aValStr = ::rtl::math::doubleToUString( nVal,
                             rtl_math_StringFormat_Automatic,
@@ -2148,7 +2147,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                 case CELLTYPE_STRING:
                 case CELLTYPE_EDIT:
                 hasstring:
-                    aCellStr = pDoc->GetString(nCol, nRow, aRange.aStart.Tab());
+                    aCellStr = rDoc.GetString(nCol, nRow, aRange.aStart.Tab());
                     aCellStr = aCellStr.replaceAll("\n", SYLK_LF);
 
                     aBufStr = "C;X"
@@ -2206,7 +2205,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                             case ScMatrixMode::Reference :
                             {   // diff expression with 'I' M$-extension
                                 ScAddress aPos;
-                                (void)pFCell->GetMatrixOrigin( pDoc, aPos );
+                                (void)pFCell->GetMatrixOrigin( &rDoc, aPos );
                                 aPrefix = ";I;R"
                                         + OUString::number( aPos.Row() - nStartRow + 1 )
                                         + ";C"
@@ -2239,7 +2238,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
 bool ScImportExport::Doc2HTML( SvStream& rStrm, const OUString& rBaseURL )
 {
     // rtl_TextEncoding is ignored in ScExportHTML, read from Load/Save HTML options
-    ScFormatFilter::Get().ScExportHTML( rStrm, rBaseURL, pDoc, aRange, RTL_TEXTENCODING_DONTKNOW, bAll,
+    ScFormatFilter::Get().ScExportHTML( rStrm, rBaseURL, &rDoc, aRange, RTL_TEXTENCODING_DONTKNOW, bAll,
         aStreamPath, aNonConvertibleChars, maFilterOptions );
     return rStrm.GetError() == ERRCODE_NONE;
 }
@@ -2247,14 +2246,14 @@ bool ScImportExport::Doc2HTML( SvStream& rStrm, const OUString& rBaseURL )
 bool ScImportExport::Doc2RTF( SvStream& rStrm )
 {
     //  rtl_TextEncoding is ignored in ScExportRTF
-    ScFormatFilter::Get().ScExportRTF( rStrm, pDoc, aRange, RTL_TEXTENCODING_DONTKNOW );
+    ScFormatFilter::Get().ScExportRTF( rStrm, &rDoc, aRange, RTL_TEXTENCODING_DONTKNOW );
     return rStrm.GetError() == ERRCODE_NONE;
 }
 
 bool ScImportExport::Doc2Dif( SvStream& rStrm )
 {
     // for DIF in the clipboard, IBM_850 is always used
-    ScFormatFilter::Get().ScExportDif( rStrm, pDoc, aRange, RTL_TEXTENCODING_IBM_850 );
+    ScFormatFilter::Get().ScExportDif( rStrm, &rDoc, aRange, RTL_TEXTENCODING_IBM_850 );
     return true;
 }
 
@@ -2262,7 +2261,7 @@ bool ScImportExport::Dif2Doc( SvStream& rStrm )
 {
     SCTAB nTab = aRange.aStart.Tab();
     ScDocumentUniquePtr pImportDoc( new ScDocument( SCDOCMODE_UNDO ) );
-    pImportDoc->InitUndo( pDoc, nTab, nTab );
+    pImportDoc->InitUndo( &rDoc, nTab, nTab );
 
     // for DIF in the clipboard, IBM_850 is always used
     ScFormatFilter::Get().ScImportDif( rStrm, pImportDoc.get(), aRange.aStart, RTL_TEXTENCODING_IBM_850 );
@@ -2281,8 +2280,8 @@ bool ScImportExport::Dif2Doc( SvStream& rStrm )
     if (bOk)
     {
         InsertDeleteFlags nFlags = InsertDeleteFlags::ALL & ~InsertDeleteFlags::STYLES;
-        pDoc->DeleteAreaTab( aRange, nFlags );
-        pImportDoc->CopyToDocument(aRange, nFlags, false, *pDoc);
+        rDoc.DeleteAreaTab( aRange, nFlags );
+        pImportDoc->CopyToDocument(aRange, nFlags, false, rDoc);
         EndPaste();
     }
 
@@ -2291,7 +2290,7 @@ bool ScImportExport::Dif2Doc( SvStream& rStrm )
 
 bool ScImportExport::RTF2Doc( SvStream& rStrm, const OUString& rBaseURL )
 {
-    std::unique_ptr<ScEEAbsImport> pImp = ScFormatFilter::Get().CreateRTFImport( pDoc, aRange );
+    std::unique_ptr<ScEEAbsImport> pImp = ScFormatFilter::Get().CreateRTFImport( &rDoc, aRange );
     if (!pImp)
         return false;
     pImp->Read( rStrm, rBaseURL );
@@ -2301,7 +2300,7 @@ bool ScImportExport::RTF2Doc( SvStream& rStrm, const OUString& rBaseURL )
     if (bOk)
     {
         InsertDeleteFlags const nFlags = InsertDeleteFlags::ALL & ~InsertDeleteFlags::STYLES;
-        pDoc->DeleteAreaTab( aRange, nFlags );
+        rDoc.DeleteAreaTab( aRange, nFlags );
         pImp->WriteToDocument();
         EndPaste();
     }
@@ -2310,7 +2309,7 @@ bool ScImportExport::RTF2Doc( SvStream& rStrm, const OUString& rBaseURL )
 
 bool ScImportExport::HTML2Doc( SvStream& rStrm, const OUString& rBaseURL )
 {
-    std::unique_ptr<ScEEAbsImport> pImp = ScFormatFilter::Get().CreateHTMLImport( pDoc, rBaseURL, aRange);
+    std::unique_ptr<ScEEAbsImport> pImp = ScFormatFilter::Get().CreateHTMLImport( &rDoc, rBaseURL, aRange);
     if (!pImp)
         return false;
     pImp->Read( rStrm, rBaseURL );
@@ -2325,7 +2324,7 @@ bool ScImportExport::HTML2Doc( SvStream& rStrm, const OUString& rBaseURL )
             pDocSh->MakeDrawLayer();
 
         InsertDeleteFlags const nFlags = InsertDeleteFlags::ALL & ~InsertDeleteFlags::STYLES;
-        pDoc->DeleteAreaTab( aRange, nFlags );
+        rDoc.DeleteAreaTab( aRange, nFlags );
 
         if (pExtOptions)
         {
