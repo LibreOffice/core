@@ -44,20 +44,20 @@ public:
             /** @param  bNoMatrixAtAll
                         TRUE if there must not be any matrix, not even entirely
                         contained; for example in sorting. */
-            ScEditableTester( const ScDocument* pDoc, SCTAB nTab,
+            ScEditableTester( const ScDocument& rDoc, SCTAB nTab,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                         bool bNoMatrixAtAll = false );
 
             // calls TestSelectedBlock
-            ScEditableTester( const ScDocument* pDoc,
+            ScEditableTester( const ScDocument& rDoc,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                         const ScMarkData& rMark );
 
             // calls TestRange
-            ScEditableTester( const ScDocument* pDoc, const ScRange& rRange );
+            ScEditableTester( const ScDocument& rDoc, const ScRange& rRange );
 
             // calls TestSelection
-            ScEditableTester( const ScDocument* pDoc, const ScMarkData& rMark );
+            ScEditableTester( const ScDocument& rDoc, const ScMarkData& rMark );
 
             // calls TestView
             ScEditableTester( ScViewFunc* pView );
@@ -68,14 +68,14 @@ public:
 
             // Several calls to the Test... methods check if *all* of the ranges
             // are editable. For several independent checks, Reset() has to be used.
-    void    TestBlock( const ScDocument* pDoc, SCTAB nTab,
+    void    TestBlock( const ScDocument& rDoc, SCTAB nTab,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                         bool bNoMatrixAtAll = false );
-    void    TestSelectedBlock( const ScDocument* pDoc,
+    void    TestSelectedBlock( const ScDocument& rDoc,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                         const ScMarkData& rMark );
-    void    TestRange( const ScDocument* pDoc, const ScRange& rRange );
-    void    TestSelection( const ScDocument* pDoc, const ScMarkData& rMark );
+    void    TestRange( const ScDocument& rDoc, const ScRange& rRange );
+    void    TestSelection( const ScDocument& rDoc, const ScMarkData& rMark );
 
     void TestBlockForAction(
         const ScDocument& rDoc, sc::ColRowEditAction eAction, SCCOLROW nStart, SCCOLROW nEnd,

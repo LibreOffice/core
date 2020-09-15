@@ -446,7 +446,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
         return;
     }
 
-    ScEditableTester aTester( &rDoc, nTab, 0,rParam.nRow1+1, rDoc.MaxCol(),rDoc.MaxRow() );
+    ScEditableTester aTester( rDoc, nTab, 0,rParam.nRow1+1, rDoc.MaxCol(),rDoc.MaxRow() );
     if (!aTester.IsEditable())
     {
         ErrorMessage(aTester.GetMessageId());

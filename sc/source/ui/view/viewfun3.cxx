@@ -1194,7 +1194,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
 
         //  check cell-protection
 
-    ScEditableTester aTester( &rDoc, nStartTab, nStartCol,nStartRow, nUndoEndCol,nUndoEndRow );
+    ScEditableTester aTester( rDoc, nStartTab, nStartCol,nStartRow, nUndoEndCol,nUndoEndRow );
     if (!aTester.IsEditable())
     {
         ErrorMessage(aTester.GetMessageId());
