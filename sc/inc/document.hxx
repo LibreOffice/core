@@ -954,7 +954,7 @@ public:
     bool                        MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress = nullptr );
     bool                        CopyTab( SCTAB nOldPos, SCTAB nNewPos,
                                          const ScMarkData* pOnlyMarked = nullptr );
-    SC_DLLPUBLIC sal_uLong      TransferTab(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDestPos,
+    SC_DLLPUBLIC sal_uLong      TransferTab(ScDocument& rSrcDoc, SCTAB nSrcPos, SCTAB nDestPos,
                                             bool bInsertNew = true,
                                             bool bResultsOnly = false );
     SC_DLLPUBLIC void           TransferDrawPage(const ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDestPos);

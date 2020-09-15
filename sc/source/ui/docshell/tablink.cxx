@@ -280,7 +280,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
             }
 
             if (bFound)
-                rDoc.TransferTab( &rSrcDoc, nSrcTab, nTab, false,       // don't insert anew
+                rDoc.TransferTab( rSrcDoc, nSrcTab, nTab, false,       // don't insert anew
                                         (nMode == ScLinkMode::VALUE) );     // only values?
             else
             {

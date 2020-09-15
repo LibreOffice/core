@@ -864,7 +864,7 @@ sal_uLong ScDocShell::TransferTab( ScDocShell& rSrcDocShell, SCTAB nSrcPos,
     aParam.maRanges.push_back(aRange);
     rSrcDoc.SetClipParam(aParam);
 
-    sal_uLong nErrVal =  m_aDocument.TransferTab( &rSrcDoc, nSrcPos, nDestPos,
+    sal_uLong nErrVal =  m_aDocument.TransferTab( rSrcDoc, nSrcPos, nDestPos,
                     bInsertNew );       // no insert
 
     // TransferTab doesn't copy drawing objects with bInsertNew=FALSE

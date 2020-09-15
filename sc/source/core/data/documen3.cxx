@@ -577,7 +577,7 @@ bool ScDocument::LinkExternalTab( SCTAB& rTab, const OUString& aDocTab,
         }
         rTab = GetTableCount() - 1;
         // Don't insert anew, just the results
-        TransferTab( pSrcDoc, nSrcTab, rTab, false, true );
+        TransferTab( *pSrcDoc, nSrcTab, rTab, false, true );
     }
     else
         return false;
