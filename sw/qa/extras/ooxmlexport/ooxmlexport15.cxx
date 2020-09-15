@@ -573,7 +573,7 @@ DECLARE_OOXMLEXPORT_TEST(TestTdf135653, "tdf135653.docx")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("OLE bg color does not match!", aExpectedColor, aFillColor);
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf135665, "tdf135665.docx")
+DECLARE_OOXMLEXPORT_TEST(testTdf135665, "tdf135665.docx")
 {
     uno::Reference<beans::XPropertySet> xOLEProps1(getShape(1), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xOLEProps2(getShape(2), uno::UNO_QUERY_THROW);
