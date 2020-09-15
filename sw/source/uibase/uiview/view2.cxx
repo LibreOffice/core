@@ -1432,16 +1432,17 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 // number of pages, log. page number
                 sal_uInt16 nPage, nLogPage;
                 OUString sDisplay;
-                rShell.GetPageNumber( -1, rShell.IsCursorVisible(), nPage, nLogPage, sDisplay );
-                OUString sTemp( GetPageStr( nPage, nLogPage, sDisplay ) );
-                const SfxStringItem aTmp( FN_STAT_PAGE, sTemp );
-                GetViewFrame()->GetBindings().SetState( aTmp );
+                rShell.GetPageNumber(-1, rShell.IsCursorVisible(), nPage, nLogPage, sDisplay);
+                rSet.Put(SfxStringItem(FN_STAT_PAGE, GetPageStr( nPage, nLogPage, sDisplay)));
                 // Used to distinguish which tooltip to show
-                const SfxBoolItem bExtendedTooltip( FN_STAT_PAGE, !sDisplay.isEmpty() &&
-                                                    std::u16string_view(OUString::number( nPage ))
-                                                        != sDisplay &&
-                                                    nPage != nLogPage );
-                GetViewFrame()->GetBindings().SetState( bExtendedTooltip );
+                if (!comphelper::LibreOfficeKit::isActive())
+                {
+                    const SfxBoolItem bExtendedTooltip( FN_STAT_PAGE, !sDisplay.isEmpty() &&
+                                                        std::u16string_view(OUString::number( nPage ))
+                                                            != sDisplay &&
+                                                        nPage != nLogPage );
+                    GetViewFrame()->GetBindings().SetState( bExtendedTooltip );
+                }
                 //if existing page number is not equal to old page number, send out this event.
                 if (m_nOldPageNum != nLogPage )
                 {
