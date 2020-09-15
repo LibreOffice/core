@@ -802,6 +802,17 @@ DECLARE_OOXMLEXPORT_TEST(testMarginsFromStyle, "margins_from_style.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(600), getProperty<sal_Int32>(getParagraph(3), "ParaBottomMargin"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf134784, "tdf134784.docx")
+{
+    uno::Reference<text::XText> textbox(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(3, getParagraphs(textbox));
+    uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, textbox);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(212), getProperty<sal_Int32>(xParagraph, "ParaBottomMargin"));
+
+    // This wasn't zero (it was inherited from style of the previous paragraph in the main text)
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xParagraph, "ParaTopMargin"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf104348_contextMargin, "tdf104348_contextMargin.docx")
 {
     // tdf#104348 shows that ContextMargin belongs with Top/Bottom handling
