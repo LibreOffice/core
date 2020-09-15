@@ -309,10 +309,10 @@ OUString XclExpName::GetWithDefaultRangeSeparator( const OUString& rSymbol ) con
         // convert with validation
         ScRange aRange;
         ScAddress::Details detailsXL( ::formula::FormulaGrammar::CONV_XL_A1 );
-        ScRefFlags nRes = aRange.Parse( rSymbol.copy(0, nPos), &GetDoc(), detailsXL );
+        ScRefFlags nRes = aRange.Parse( rSymbol.copy(0, nPos), GetDoc(), detailsXL );
         if ( nRes & ScRefFlags::VALID )
         {
-            nRes = aRange.Parse( rSymbol.copy(nPos+1), &GetDoc(), detailsXL );
+            nRes = aRange.Parse( rSymbol.copy(nPos+1), GetDoc(), detailsXL );
             if ( nRes & ScRefFlags::VALID )
             {
                 return rSymbol.replaceFirst(";", ",");

@@ -4326,7 +4326,7 @@ void ScFiltersTest::testEmptyRowsXLSXML()
         };
 
         ScRange aDataRange;
-        aDataRange.Parse("A1:B9", &rDoc);
+        aDataRange.Parse("A1:B9", rDoc);
         bool bSuccess = checkOutput(&rDoc, aDataRange, aOutputCheck, "Expected output");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }

@@ -2459,7 +2459,7 @@ bool ScDocShell::DdeSetData( const OUString& rItem,
     // because the address item in a DDE entry is *not* normalized when saved
     // into ODF.
     ScRange aRange;
-    bool bValid = ( (aRange.Parse(aPos, &m_aDocument, formula::FormulaGrammar::CONV_OOO ) & ScRefFlags::VALID) ||
+    bool bValid = ( (aRange.Parse(aPos, m_aDocument, formula::FormulaGrammar::CONV_OOO ) & ScRefFlags::VALID) ||
                     (aRange.aStart.Parse(aPos, &m_aDocument, formula::FormulaGrammar::CONV_OOO) & ScRefFlags::VALID) );
 
     ScServerObject* pObj = nullptr;            // NULL = error

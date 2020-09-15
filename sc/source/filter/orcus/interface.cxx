@@ -188,7 +188,7 @@ os::src_range_t ScOrcusRefResolver::resolve_range(const char* p, size_t n)
     OUString aStr(p, n, mrGlobalSettings.getTextEncoding());
 
     ScRange aRange;
-    aRange.Parse(aStr, &mrGlobalSettings.getDoc().getDoc(),
+    aRange.Parse(aStr, mrGlobalSettings.getDoc().getDoc(),
         formula::FormulaGrammar::extractRefConvention(
             mrGlobalSettings.getCalcGrammar()));
 

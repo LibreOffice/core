@@ -451,7 +451,7 @@ void ScRangeData::MakeValidName( const ScDocument& rDoc, OUString& rName )
         ScAddress::Details details( static_cast<FormulaGrammar::AddressConvention>( nConv ) );
         // Don't check Parse on VALID, any partial only VALID may result in
         // #REF! during compile later!
-        while (aRange.Parse(rName, &rDoc, details) != ScRefFlags::ZERO ||
+        while (aRange.Parse(rName, rDoc, details) != ScRefFlags::ZERO ||
                 aAddr.Parse(rName, &rDoc, details) != ScRefFlags::ZERO)
         {
             // Range Parse is partially valid also with invalid sheet name,
@@ -487,7 +487,7 @@ ScRangeData::IsNameValidType ScRangeData::IsNameValid( const OUString& rName, co
         ScAddress::Details details( static_cast<FormulaGrammar::AddressConvention>( nConv ) );
         // Don't check Parse on VALID, any partial only VALID may result in
         // #REF! during compile later!
-        if (aRange.Parse(rName, &rDoc, details) != ScRefFlags::ZERO ||
+        if (aRange.Parse(rName, rDoc, details) != ScRefFlags::ZERO ||
              aAddr.Parse(rName, &rDoc, details) != ScRefFlags::ZERO )
         {
             return NAME_INVALID_CELL_REF;
