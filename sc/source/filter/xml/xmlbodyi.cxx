@@ -251,7 +251,7 @@ void SAL_CALL ScXMLBodyContext::endFastElement(sal_Int32 nElement)
     }
 
     if (pChangeTrackingImportHelper)
-        pChangeTrackingImportHelper->CreateChangeTrack(GetScImport().GetDocument());
+        pChangeTrackingImportHelper->CreateChangeTrack(pDoc);
 
     // #i37959# handle document protection after the sheet settings
     if (!bProtected)
