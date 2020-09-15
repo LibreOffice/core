@@ -1530,7 +1530,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         nPosY = GetViewData()->GetCurY();
                     }
                     ScAddress aCellPos(nPosX, nPosY, GetViewData()->GetTabNo());
-                    auto pObj = std::make_shared<ScImportExport>(&GetViewData()->GetDocument(), aCellPos);
+                    auto pObj = std::make_shared<ScImportExport>(GetViewData()->GetDocument(), aCellPos);
                     pObj->SetOverwriting(true);
                     if (pDlg->Execute()) {
                         ScAsciiOptions aOptions;

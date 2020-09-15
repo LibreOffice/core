@@ -967,7 +967,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 {
                     ScDocument& rDoc = pData->GetDocument();
 
-                    ScImportExport aExport( &rDoc, aRange );
+                    ScImportExport aExport( rDoc, aRange );
                     aExport.SetExportTextOptions( ScExportTextOptions( ScExportTextOptions::None, 0, false ) );
 
                     // #i87703# text to columns fails with tab separator
@@ -990,7 +990,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         OUString aUndo = ScResId( STR_UNDO_TEXTTOCOLUMNS );
                         pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, pData->GetViewShell()->GetViewShellId() );
 
-                        ScImportExport aImport( &rDoc, aRange.aStart );
+                        ScImportExport aImport( rDoc, aRange.aStart );
                         ScAsciiOptions aOptions;
                         pDlg->GetOptions( aOptions );
                         pDlg->SaveParameters();
