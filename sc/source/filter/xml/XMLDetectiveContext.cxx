@@ -108,7 +108,9 @@ ScXMLDetectiveHighlightedContext::ScXMLDetectiveHighlightedContext(
             {
                 sal_Int32 nOffset(0);
                 ScXMLImport::MutexGuard aGuard(GetScImport());
-                bValid = ScRangeStringConverter::GetRangeFromString( aDetectiveObj.aSourceRange, aIter.toString(), GetScImport().GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset );
+                ScDocument* pDoc = GetScImport().GetDocument();
+                assert(pDoc);
+                bValid = ScRangeStringConverter::GetRangeFromString( aDetectiveObj.aSourceRange, aIter.toString(), *pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset );
             }
             break;
             case XML_ELEMENT( TABLE, XML_DIRECTION ):

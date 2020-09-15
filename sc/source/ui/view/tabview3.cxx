@@ -2551,7 +2551,7 @@ void ScTabView::DoChartSelection(
         ScRangeList aRangeList;
         ScDocument& rDoc = aViewData.GetDocShell()->GetDocument();
         if( ScRangeStringConverter::GetRangeListFromString(
-                aRangeList, rHighlightedRange.RangeRepresentation, &rDoc, rDoc.GetAddressConvention(), sep ))
+                aRangeList, rHighlightedRange.RangeRepresentation, rDoc, rDoc.GetAddressConvention(), sep ))
         {
             size_t nListSize = aRangeList.size();
             nSize += nListSize;

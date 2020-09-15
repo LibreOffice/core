@@ -158,9 +158,10 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
                 case XML_ELEMENT( TABLE, XML_TARGET_RANGE_ADDRESS ):
                 {
                     ScDocument* pDoc = GetScImport().GetDocument();
+                    assert(pDoc);
                     sal_Int32 nOffset = 0;
                     if (!ScRangeStringConverter::GetRangeFromString(
-                        maRange, aIter.toString(), pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset))
+                        maRange, aIter.toString(), *pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset))
                         mbValidRange = false;
                 }
                 break;

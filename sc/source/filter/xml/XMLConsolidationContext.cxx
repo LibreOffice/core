@@ -89,10 +89,12 @@ void SAL_CALL ScXMLConsolidationContext::endFastElement( sal_Int32 /*nElement*/ 
         std::unique_ptr<ScArea[]> ppAreas(new ScArea[ nCount ]);
         sal_Int32 nOffset = 0;
         sal_uInt16 nIndex;
+        ScDocument* pDoc = GetScImport().GetDocument();
+        assert(pDoc);
         for( nIndex = 0; nIndex < nCount; ++nIndex )
         {
             if ( !ScRangeStringConverter::GetAreaFromString(
-                ppAreas[ nIndex ], sSourceList, GetScImport().GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset ) )
+                ppAreas[ nIndex ], sSourceList, *pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset ) )
             {
                 //! handle error
             }

@@ -193,7 +193,7 @@ void ExtConditionalFormattingContext::onEndElement()
         {
             ScRangeList aRange;
             ScDocument& rDoc = getScDocument();
-            bool bSuccess = ScRangeStringConverter::GetRangeListFromString(aRange, aChars, &rDoc, formula::FormulaGrammar::CONV_XL_OOX);
+            bool bSuccess = ScRangeStringConverter::GetRangeListFromString(aRange, aChars, rDoc, formula::FormulaGrammar::CONV_XL_OOX);
             if (!bSuccess || aRange.empty())
                 break;
 

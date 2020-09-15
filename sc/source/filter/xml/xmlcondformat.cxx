@@ -98,10 +98,12 @@ ScXMLConditionalFormatContext::ScXMLConditionalFormatContext( ScXMLImport& rImpo
     }
 
     ScRangeList aRangeList;
-    ScRangeStringConverter::GetRangeListFromString(aRangeList, sRange, GetScImport().GetDocument(),
+    ScDocument* pDoc = GetScImport().GetDocument();
+    assert(pDoc);
+    ScRangeStringConverter::GetRangeListFromString(aRangeList, sRange, *pDoc,
             formula::FormulaGrammar::CONV_ODF);
 
-    mxFormat.reset(new ScConditionalFormat(0, GetScImport().GetDocument()));
+    mxFormat.reset(new ScConditionalFormat(0, pDoc));
     mxFormat->SetRange(aRangeList);
 }
 

@@ -128,7 +128,7 @@ public:
     static bool     GetRangeFromString(
                             ScRange& rRange,
                             const OUString& rRangeStr,
-                            const ScDocument* pDocument,
+                            const ScDocument& rDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Int32& nOffset,
                             sal_Unicode cSeparator = ' ',
@@ -136,7 +136,7 @@ public:
     static bool     GetRangeListFromString(
                             ScRangeList& rRangeList,
                             const OUString& rRangeListStr,
-                            const ScDocument* pDocument,
+                            const ScDocument& rDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Unicode cSeparator = ' ',
                             sal_Unicode cQuote = '\'');
@@ -144,7 +144,7 @@ public:
     static bool     GetAreaFromString(
                             ScArea& rArea,
                             const OUString& rRangeStr,
-                            const ScDocument* pDocument,
+                            const ScDocument& rDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Int32& nOffset,
                             sal_Unicode cSeparator = ' ');
@@ -153,7 +153,7 @@ public:
     static bool     GetRangeFromString(
                             css::table::CellRangeAddress& rRange,
                             const OUString& rRangeStr,
-                            const ScDocument* pDocument,
+                            const ScDocument& rDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Int32& nOffset,
                             sal_Unicode cSeparator = ' ');

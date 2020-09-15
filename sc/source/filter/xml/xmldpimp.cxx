@@ -158,7 +158,8 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
             case XML_ELEMENT( TABLE, XML_TARGET_RANGE_ADDRESS ):
             {
                 sal_Int32 nOffset(0);
-                bTargetRangeAddress = ScRangeStringConverter::GetRangeFromString( aTargetRangeAddress, aIter.toString(), pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset );
+                assert(pDoc);
+                bTargetRangeAddress = ScRangeStringConverter::GetRangeFromString( aTargetRangeAddress, aIter.toString(), *pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset );
             }
             break;
             case XML_ELEMENT( TABLE, XML_BUTTONS ):
@@ -746,7 +747,9 @@ ScXMLSourceCellRangeContext::ScXMLSourceCellRangeContext( ScXMLImport& rImport,
             {
                 ScRange aSourceRangeAddress;
                 sal_Int32 nOffset(0);
-                if (ScRangeStringConverter::GetRangeFromString( aSourceRangeAddress, aIter.toString(), GetScImport().GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset ))
+                ScDocument* pDoc = GetScImport().GetDocument();
+                assert(pDoc);
+                if (ScRangeStringConverter::GetRangeFromString( aSourceRangeAddress, aIter.toString(), *pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset ))
                     pDataPilotTable->SetSourceCellRangeAddress(aSourceRangeAddress);
             }
             break;

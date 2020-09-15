@@ -71,9 +71,13 @@ ScXMLTableScenarioContext::ScXMLTableScenarioContext(
             bIsActive = IsXMLToken(aIter, XML_TRUE);
             break;
         case XML_ELEMENT( TABLE, XML_SCENARIO_RANGES ):
+        {
+            ScDocument* pDoc = GetScImport().GetDocument();
+            assert(pDoc);
             ScRangeStringConverter::GetRangeListFromString(
-                aScenarioRanges, aIter.toString(), GetScImport().GetDocument(), ::formula::FormulaGrammar::CONV_OOO );
+                aScenarioRanges, aIter.toString(), *pDoc, ::formula::FormulaGrammar::CONV_OOO );
             break;
+        }
         case XML_ELEMENT( TABLE, XML_COMMENT ):
             sComment = aIter.toString();
             break;
