@@ -780,8 +780,13 @@ uno::Sequence< style::TabStop > DomainMapper_Impl::GetCurrentTabStopAndClear()
 
 OUString DomainMapper_Impl::GetCurrentParaStyleName()
 {
+    OUString sName;
     // use saved currParaStyleName as a fallback, in case no particular para style name applied.
-    OUString sName = m_sCurrentParaStyleName;
+    // tdf#134784 except in the case of first paragraph of shapes to avoid bad fallback.
+    // TODO fix this "highly inaccurate" m_sCurrentParaStyleName
+    if ( !m_bIsFirstParaInShape )
+        sName = m_sCurrentParaStyleName;
+
     PropertyMapPtr pParaContext = GetTopContextOfType(CONTEXT_PARAGRAPH);
     if ( pParaContext && pParaContext->isSet(PROP_PARA_STYLE_NAME) )
         pParaContext->getProperty(PROP_PARA_STYLE_NAME)->second >>= sName;
