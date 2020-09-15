@@ -382,13 +382,13 @@ static void lcl_UnLockComment( ScDrawView* pView, const Point& rPos, const ScVie
 }
 
 static bool lcl_GetHyperlinkCell(
-    ScDocument* pDoc, SCCOL& rPosX, SCROW nPosY, SCTAB nTab, ScRefCellValue& rCell, OUString& rURL )
+    ScDocument& rDoc, SCCOL& rPosX, SCROW nPosY, SCTAB nTab, ScRefCellValue& rCell, OUString& rURL )
 {
     bool bFound = false;
     do
     {
         ScAddress aPos(rPosX, nPosY, nTab);
-        rCell.assign(*pDoc, aPos);
+        rCell.assign(rDoc, aPos);
         if (rCell.isEmpty())
         {
             if ( rPosX <= 0 )
@@ -398,7 +398,7 @@ static bool lcl_GetHyperlinkCell(
         }
         else
         {
-            const ScPatternAttr* pPattern = pDoc->GetPattern(aPos);
+            const ScPatternAttr* pPattern = rDoc.GetPattern(aPos);
             if ( !pPattern->GetItem(ATTR_HYPERLINK).GetValue().isEmpty() )
             {
                 rURL = pPattern->GetItem(ATTR_HYPERLINK).GetValue();
@@ -2328,7 +2328,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                 pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
                 OUString sURL;
                 ScRefCellValue aCell;
-                if (lcl_GetHyperlinkCell(&rDoc, nPosX, nPosY, nTab, aCell, sURL))
+                if (lcl_GetHyperlinkCell(rDoc, nPosX, nPosY, nTab, aCell, sURL))
                 {
                     ScAddress aCellPos( nPosX, nPosY, nTab );
                     uno::Reference< table::XCell > xCell( new ScCellObj( pViewData->GetDocShell(), aCellPos ) );
@@ -3482,21 +3482,21 @@ static bool lcl_TestScenarioRedliningDrop( const ScDocument* pDoc, const ScRange
     return bReturn;
 }
 
-static ScRange lcl_MakeDropRange( const ScDocument* pDoc, SCCOL nPosX, SCROW nPosY, SCTAB nTab, const ScRange& rSource )
+static ScRange lcl_MakeDropRange( const ScDocument& rDoc, SCCOL nPosX, SCROW nPosY, SCTAB nTab, const ScRange& rSource )
 {
     SCCOL nCol1 = nPosX;
     SCCOL nCol2 = nCol1 + ( rSource.aEnd.Col() - rSource.aStart.Col() );
-    if ( nCol2 > pDoc->MaxCol() )
+    if ( nCol2 > rDoc.MaxCol() )
     {
-        nCol1 -= nCol2 - pDoc->MaxCol();
-        nCol2 = pDoc->MaxCol();
+        nCol1 -= nCol2 - rDoc.MaxCol();
+        nCol2 = rDoc.MaxCol();
     }
     SCROW nRow1 = nPosY;
     SCROW nRow2 = nRow1 + ( rSource.aEnd.Row() - rSource.aStart.Row() );
-    if ( nRow2 > pDoc->MaxRow() )
+    if ( nRow2 > rDoc.MaxRow() )
     {
-        nRow1 -= nRow2 - pDoc->MaxRow();
-        nRow2 = pDoc->MaxRow();
+        nRow1 -= nRow2 - rDoc.MaxRow();
+        nRow2 = rDoc.MaxRow();
     }
 
     return ScRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab );
@@ -3579,7 +3579,7 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
 
         //  don't break scenario ranges, don't drop on filtered
         SCTAB nTab = pViewData->GetTabNo();
-        ScRange aDropRange = lcl_MakeDropRange( &rThisDoc, nNewDragX, nNewDragY, nTab, aSourceRange );
+        ScRange aDropRange = lcl_MakeDropRange( rThisDoc, nNewDragX, nNewDragY, nTab, aSourceRange );
         if ( lcl_TestScenarioRedliningDrop( &rThisDoc, aDropRange ) ||
              lcl_TestScenarioRedliningDrop( pSourceDoc, aSourceRange ) ||
              ScViewUtil::HasFiltered( aDropRange, &rThisDoc) )
@@ -5291,7 +5291,7 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
     ScDocument& rDoc = pDocSh->GetDocument();
     OUString sURL;
     ScRefCellValue aCell;
-    bool bFound = lcl_GetHyperlinkCell(&rDoc, nPosX, nPosY, nTab, aCell, sURL);
+    bool bFound = lcl_GetHyperlinkCell(rDoc, nPosX, nPosY, nTab, aCell, sURL);
     if( !bFound )
         return false;
 
