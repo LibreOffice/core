@@ -46,7 +46,7 @@ public:
             const css::uno::Sequence< OUString >& rRanges );
 
     static void AddRangesIfProtectedChart( ScRangeListVector& rRangesVector, const ScDocument* pDocument, SdrObject* pObject );
-    static void FillProtectedChartRangesVector( ScRangeListVector& rRangesVector, const ScDocument* pDocument, const SdrPage* pPage );
+    static void FillProtectedChartRangesVector( ScRangeListVector& rRangesVector, const ScDocument& rDocument, const SdrPage* pPage );
     static void GetChartNames( ::std::vector< OUString >& rChartNames, const SdrPage* pPage );
     static void CreateProtectedChartListenersAndNotify( ScDocument& rDoc, const SdrPage* pPage, ScModelObj* pModelObj, SCTAB nTab,
         const ScRangeListVector& rRangesVector, const ::std::vector< OUString >& rExcludedChartNames, bool bSameDoc = true );
