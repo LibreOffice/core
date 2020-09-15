@@ -1010,7 +1010,7 @@ sal_uLong ScDocument::TransferTab( ScDocument& rSrcDoc, SCTAB nSrcPos,
         //  copy Drawing
 
         if (bInsertNew)
-            TransferDrawPage( &rSrcDoc, nSrcPos, nDestPos );
+            TransferDrawPage( rSrcDoc, nSrcPos, nDestPos );
 
         maTabs[nDestPos]->SetPendingRowHeights( rSrcDoc.maTabs[nSrcPos]->IsPendingRowHeights() );
     }

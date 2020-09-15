@@ -242,7 +242,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
                 bFirst = false;
                 ScRange aRange(0,0,nTab,rDoc.MaxCol(),rDoc.MaxRow(),nTab);
                 rDoc.CopyToDocument(aRange, InsertDeleteFlags::ALL, false, *pUndoDoc);
-                pUndoDoc->TransferDrawPage( &rDoc, nTab, nTab );
+                pUndoDoc->TransferDrawPage( rDoc, nTab, nTab );
                 pUndoDoc->SetLink( nTab, nMode, aFileName, aFilterName,
                                    aOptions, aTabName, GetRefreshDelay() );
                 pUndoDoc->SetTabBgColor( nTab, rDoc.GetTabBgColor(nTab) );

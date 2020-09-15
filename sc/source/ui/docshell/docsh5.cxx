@@ -869,7 +869,7 @@ sal_uLong ScDocShell::TransferTab( ScDocShell& rSrcDocShell, SCTAB nSrcPos,
 
     // TransferTab doesn't copy drawing objects with bInsertNew=FALSE
     if ( nErrVal > 0 && !bInsertNew)
-        m_aDocument.TransferDrawPage( &rSrcDoc, nSrcPos, nDestPos );
+        m_aDocument.TransferDrawPage( rSrcDoc, nSrcPos, nDestPos );
 
     if(nErrVal>0 && rSrcDoc.IsScenario( nSrcPos ))
     {
