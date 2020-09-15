@@ -192,6 +192,7 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
         void SetResolved(bool resolved);
         void ToggleResolved();
         void ToggleResolvedForThread();
+        void DeleteThread();
         bool IsResolved() const;
         bool IsThreadResolved();
 
