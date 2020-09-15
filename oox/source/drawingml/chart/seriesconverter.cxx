@@ -108,8 +108,8 @@ void convertTextProperty(PropertySet& rPropSet, ObjectFormatter& rFormatter,
 }
 
 void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatter,
-                                const DataLabelModelBase& rDataLabel, const TypeGroupConverter& rTypeGroup,
-                                bool bDataSeriesLabel, bool bMSO2007Doc )
+                                DataLabelModelBase& rDataLabel, const TypeGroupConverter& rTypeGroup,
+                                bool bDataSeriesLabel, bool bHasInternalData, bool bMSO2007Doc )
 {
     const TypeGroupInfo& rTypeInfo = rTypeGroup.getTypeInfo();
 
@@ -133,6 +133,10 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
     bool bShowPercent = !rDataLabel.mbDeleted && rDataLabel.mobShowPercent.get( !bMSO2007Doc ) && (rTypeInfo.meTypeCategory == TYPECATEGORY_PIE);
     bool bShowCateg   = !rDataLabel.mbDeleted && rDataLabel.mobShowCatName.get( !bMSO2007Doc );
     bool bShowSymbol  = !rDataLabel.mbDeleted && rDataLabel.mobShowLegendKey.get( !bMSO2007Doc );
+
+    // tdf#132174, tdf#136650: the inner data table has no own cell number format.
+    if( bHasInternalData && bShowValue && !bShowPercent )
+        rDataLabel.maNumberFormat.mbSourceLinked = false;
 
     // type of attached label
     if( bHasAnyElement || rDataLabel.mbDeleted )
@@ -270,8 +274,11 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
     try
     {
         bool bMSO2007Doc = getFilter().isMSO2007Document();
+        bool bHasInternalData = getChartDocument()->hasInternalDataProvider();
         PropertySet aPropSet( rxDataSeries->getDataPointByIndex( mrModel.mnIndex ) );
-        lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, false, bMSO2007Doc );
+
+        lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, false, bHasInternalData, bMSO2007Doc );
+
         const TypeGroupInfo& rTypeInfo = rTypeGroup.getTypeInfo();
         bool bIsPie = rTypeInfo.meTypeCategory == TYPECATEGORY_PIE;
 
@@ -401,10 +408,9 @@ void DataLabelsConverter::convertFromModel( const Reference< XDataSeries >& rxDa
     if( !mrModel.mbDeleted )
     {
         bool bMSO2007Doc = getFilter().isMSO2007Document();
-        // tdf#132174: the inner data table has no own cell number format.
-        if( getChartDocument()->hasInternalDataProvider() && mrModel.mobShowVal.get(!bMSO2007Doc) )
-            mrModel.maNumberFormat.mbSourceLinked = false;
-        lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, true, bMSO2007Doc );
+        bool bHasInternalData = getChartDocument()->hasInternalDataProvider();
+
+        lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, true, bHasInternalData, bMSO2007Doc );
 
         if (mrModel.mxShapeProp)
         {
