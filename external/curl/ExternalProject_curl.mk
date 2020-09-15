@@ -81,7 +81,7 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 		nmake -f Makefile.vc \
 			mode=dll \
 			VC=12 \
-			$(if $(filter X86_64,$(CPUNAME)),MACHINE=x64,MACHINE=x86) \
+			MACHINE=$(gb_MSBUILD_PLATFORM) \
 			GEN_PDB=$(if $(call gb_Module__symbols_enabled,curl),yes,no) \
 			DEBUG=$(if $(MSVC_USE_DEBUG_RUNTIME),yes,no) \
 			ENABLE_IPV6=yes \
