@@ -95,14 +95,14 @@ ScColumn::~ScColumn() COVERITY_NOEXCEPT_FALSE
     FreeAll();
 }
 
-void ScColumn::Init(SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc, bool bEmptyAttrArray)
+void ScColumn::Init(SCCOL nNewCol, SCTAB nNewTab, ScDocument& rDoc, bool bEmptyAttrArray)
 {
     nCol = nNewCol;
     nTab = nNewTab;
     if ( bEmptyAttrArray )
-        pAttrArray.reset(new ScAttrArray( nCol, nTab, pDoc, nullptr ));
+        pAttrArray.reset(new ScAttrArray( nCol, nTab, &rDoc, nullptr ));
     else
-        pAttrArray.reset(new ScAttrArray( nCol, nTab, pDoc, &pDoc->maTabs[nTab]->aDefaultColAttrArray ));
+        pAttrArray.reset(new ScAttrArray( nCol, nTab, &rDoc, &rDoc.maTabs[nTab]->aDefaultColAttrArray ));
 }
 
 SCROW ScColumn::GetNextUnprotected( SCROW nRow, bool bUp ) const
