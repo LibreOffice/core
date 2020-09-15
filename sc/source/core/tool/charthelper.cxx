@@ -109,11 +109,9 @@ sal_uInt16 ScChartHelper::DoUpdateAllCharts( ScDocument* pDoc )
     return lcl_DoUpdateCharts( pDoc );
 }
 
-void ScChartHelper::AdjustRangesOfChartsOnDestinationPage( const ScDocument* pSrcDoc, ScDocument* pDestDoc, const SCTAB nSrcTab, const SCTAB nDestTab )
+void ScChartHelper::AdjustRangesOfChartsOnDestinationPage( const ScDocument& rSrcDoc, ScDocument& rDestDoc, const SCTAB nSrcTab, const SCTAB nDestTab )
 {
-    if( !pSrcDoc || !pDestDoc )
-        return;
-    ScDrawLayer* pDrawLayer = pDestDoc->GetDrawLayer();
+    ScDrawLayer* pDrawLayer = rDestDoc.GetDrawLayer();
     if( !pDrawLayer )
         return;
 
@@ -129,18 +127,18 @@ void ScChartHelper::AdjustRangesOfChartsOnDestinationPage( const ScDocument* pSr
         {
             OUString aChartName = static_cast<SdrOle2Obj*>(pObject)->GetPersistName();
 
-            Reference< chart2::XChartDocument > xChartDoc( pDestDoc->GetChartByName( aChartName ) );
+            Reference< chart2::XChartDocument > xChartDoc( rDestDoc.GetChartByName( aChartName ) );
             Reference< chart2::data::XDataReceiver > xReceiver( xChartDoc, uno::UNO_QUERY );
             if( xChartDoc.is() && xReceiver.is() && !xChartDoc->hasInternalDataProvider() )
             {
                 ::std::vector< ScRangeList > aRangesVector;
-                pDestDoc->GetChartRanges( aChartName, aRangesVector, *pSrcDoc );
+                rDestDoc.GetChartRanges( aChartName, aRangesVector, rSrcDoc );
 
                 for( ScRangeList& rScRangeList : aRangesVector )
                 {
-                    lcl_AdjustRanges( rScRangeList, nSrcTab, nDestTab, pDestDoc->GetTableCount() );
+                    lcl_AdjustRanges( rScRangeList, nSrcTab, nDestTab, rDestDoc.GetTableCount() );
                 }
-                pDestDoc->SetChartRanges( aChartName, aRangesVector );
+                rDestDoc.SetChartRanges( aChartName, aRangesVector );
             }
         }
         pObject = aIter.Next();
