@@ -27,13 +27,13 @@ namespace
 {
 
 /// Paste only if SfxClassificationHelper recommends so.
-bool lcl_checkClassification(ScDocument* pSourceDoc, const ScDocument* pDestinationDoc)
+bool lcl_checkClassification(ScDocument* pSourceDoc, const ScDocument& rDestinationDoc)
 {
-    if (!pSourceDoc || !pDestinationDoc)
+    if (!pSourceDoc)
         return true;
 
     ScClipOptions* pSourceOptions = pSourceDoc->GetClipOptions();
-    SfxObjectShell* pDestinationShell = pDestinationDoc->GetDocumentShell();
+    SfxObjectShell* pDestinationShell = rDestinationDoc.GetDocumentShell();
     if (!pSourceOptions || !pDestinationShell)
         return true;
 
@@ -84,7 +84,7 @@ void ScClipUtil::PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTab
                 // For multi-range paste, we paste values by default.
                 nFlags &= ~InsertDeleteFlags::FORMULA;
 
-            if (lcl_checkClassification(pClipDoc, &rThisDoc))
+            if (lcl_checkClassification(pClipDoc, rThisDoc))
                 pTabViewShell->PasteFromClip( nFlags, pClipDoc,
                         ScPasteFunc::NONE, false, false, false, INS_NONE, InsertDeleteFlags::NONE,
                         bShowDialog );      // allow warning dialog
