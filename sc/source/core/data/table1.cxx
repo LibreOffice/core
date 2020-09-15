@@ -305,7 +305,7 @@ ScTable::ScTable( ScDocument& rDoc, SCTAB nNewTab, const OUString& rNewName,
     }
 
     for (SCCOL k=0; k < aCol.size(); k++)
-        aCol[k].Init( k, nTab, &rDocument, true );
+        aCol[k].Init( k, nTab, rDocument, true );
 }
 
 ScTable::~ScTable() COVERITY_NOEXCEPT_FALSE
@@ -2619,6 +2619,6 @@ void ScTable::CreateColumnIfNotExistsImpl( const SCCOL nScCol ) const
     const SCCOL aOldColSize = aCol.size();
     aCol.resize( rDocument.GetSheetLimits(), static_cast< size_t >( nScCol + 1 ) );
     for (SCCOL i = aOldColSize; i <= nScCol; i++)
-        aCol[i].Init( i, nTab, &rDocument, false );
+        aCol[i].Init( i, nTab, rDocument, false );
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
