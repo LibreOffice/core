@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "09e94e18_d32b8ee4",
+        "filename": "sc/uiconfig/scalc/ui/standardfilterdialog.ui",
+        "patchSetId": 8
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-09-15T06:39:59Z",
+      "side": 1,
+      "message": "No need for duplication, you could use the same on all buttons. But no blocker too.",
+      "range": {
+        "startLine": 10,
+        "startChar": 31,
+        "endLine": 10,
+        "endChar": 37
+      },
+      "revId": "465098f481d8d6c4caac2874705466c7f2f7abcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
