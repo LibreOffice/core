@@ -393,8 +393,8 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
     {
         //  old and new range editable?
         ScEditableTester aTester;
-        aTester.TestBlock( &rDoc, nTab, rParam.nCol1,rParam.nRow1,rParam.nCol2,rParam.nRow2 );
-        aTester.TestBlock( &rDoc, nTab, rParam.nCol1,rParam.nRow1,nEndCol,nEndRow );
+        aTester.TestBlock( rDoc, nTab, rParam.nCol1,rParam.nRow1,rParam.nCol2,rParam.nRow2 );
+        aTester.TestBlock( rDoc, nTab, rParam.nCol1,rParam.nRow1,nEndCol,nEndRow );
         if ( !aTester.IsEditable() )
         {
             pErrStringId = aTester.GetMessageId();

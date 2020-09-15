@@ -579,7 +579,7 @@ bool ScDocFunc::DeleteContents(
     if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
 
-    ScEditableTester aTester( &rDoc, rMark );
+    ScEditableTester aTester( rDoc, rMark );
     if (!aTester.IsEditable())
     {
         if (!bApi)
@@ -666,7 +666,7 @@ bool ScDocFunc::DeleteCell(
     if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
 
-    ScEditableTester aTester(&rDoc, rPos.Col(), rPos.Row(), rPos.Col(), rPos.Row(), rMark);
+    ScEditableTester aTester(rDoc, rPos.Col(), rPos.Row(), rPos.Col(), rPos.Row(), rMark);
     if (!aTester.IsEditable())
     {
         rDocShell.ErrorMessage(aTester.GetMessageId());
@@ -733,7 +733,7 @@ bool ScDocFunc::TransliterateText( const ScMarkData& rMark, TransliterationFlags
     if (!rDoc.IsUndoEnabled())
         bRecord = false;
 
-    ScEditableTester aTester( &rDoc, rMark );
+    ScEditableTester aTester( rDoc, rMark );
     if (!aTester.IsEditable())
     {
         if (!bApi)
@@ -788,7 +788,7 @@ bool ScDocFunc::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, con
     ScDocument& rDoc = rDocShell.GetDocument();
 
     bool bUndo(rDoc.IsUndoEnabled());
-    ScEditableTester aTester( &rDoc, rPos.Tab(), rPos.Col(),rPos.Row(), rPos.Col(),rPos.Row() );
+    ScEditableTester aTester( rDoc, rPos.Tab(), rPos.Col(),rPos.Row(), rPos.Col(),rPos.Row() );
     if (!aTester.IsEditable())
     {
         if (!bApi)
@@ -1298,7 +1298,7 @@ void ScDocFunc::SetNoteText( const ScAddress& rPos, const OUString& rText, bool 
     ScDocShellModificator aModificator( rDocShell );
 
     ScDocument& rDoc = rDocShell.GetDocument();
-    ScEditableTester aTester( &rDoc, rPos.Tab(), rPos.Col(),rPos.Row(), rPos.Col(),rPos.Row() );
+    ScEditableTester aTester( rDoc, rPos.Tab(), rPos.Col(),rPos.Row(), rPos.Col(),rPos.Row() );
     if (!aTester.IsEditable())
     {
         if (!bApi)
@@ -1323,7 +1323,7 @@ void ScDocFunc::ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, c
 {
     ScDocShellModificator aModificator( rDocShell );
     ScDocument& rDoc = rDocShell.GetDocument();
-    ScEditableTester aTester( &rDoc, rPos.Tab(), rPos.Col(),rPos.Row(), rPos.Col(),rPos.Row() );
+    ScEditableTester aTester( rDoc, rPos.Tab(), rPos.Col(),rPos.Row(), rPos.Col(),rPos.Row() );
     if (aTester.IsEditable())
     {
         ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
@@ -1876,7 +1876,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             break;
         default:
             aTester = ScEditableTester(
-                &rDoc, nMergeTestStartCol, nMergeTestStartRow, nEditTestEndCol, nEditTestEndRow, aMark);
+                rDoc, nMergeTestStartCol, nMergeTestStartRow, nEditTestEndCol, nEditTestEndRow, aMark);
     }
 
     if (!aTester.IsEditable())
@@ -2370,7 +2370,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             break;
         default:
             aTester = ScEditableTester(
-                &rDoc, nUndoStartCol, nUndoStartRow, nEditTestEndX, nEditTestEndY, aMark);
+                rDoc, nUndoStartCol, nUndoStartRow, nEditTestEndX, nEditTestEndY, aMark);
     }
 
     if (!aTester.IsEditable())
@@ -2931,10 +2931,10 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
 
     ScEditableTester aTester;
     for (nTab=nDestTab; nTab<=nDestEndTab; nTab++)
-        aTester.TestBlock( &rDoc, nTab, nDestCol,nDestRow, nUndoEndCol,nUndoEndRow );
+        aTester.TestBlock( rDoc, nTab, nDestCol,nDestRow, nUndoEndCol,nUndoEndRow );
     if (bCut)
         for (nTab=nStartTab; nTab<=nEndTab; nTab++)
-            aTester.TestBlock( &rDoc, nTab, nStartCol,nStartRow, nEndCol,nEndRow );
+            aTester.TestBlock( rDoc, nTab, nStartCol,nStartRow, nEndCol,nEndRow );
 
     if (!aTester.IsEditable())
     {
@@ -4086,7 +4086,7 @@ void ScDocFunc::ClearItems( const ScMarkData& rMark, const sal_uInt16* pWhich, b
 
     ScDocument& rDoc = rDocShell.GetDocument();
     bool bUndo (rDoc.IsUndoEnabled());
-    ScEditableTester aTester( &rDoc, rMark );
+    ScEditableTester aTester( rDoc, rMark );
     if (!aTester.IsEditable())
     {
         if (!bApi)
@@ -4131,7 +4131,7 @@ bool ScDocFunc::ChangeIndent( const ScMarkData& rMark, bool bIncrement, bool bAp
 
     ScDocument& rDoc = rDocShell.GetDocument();
     bool bUndo(rDoc.IsUndoEnabled());
-    ScEditableTester aTester( &rDoc, rMark );
+    ScEditableTester aTester( rDoc, rMark );
     if (!aTester.IsEditable())
     {
         if (!bApi)
@@ -4221,7 +4221,7 @@ bool ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
     }
 
     ScAutoFormat* pAutoFormat = ScGlobal::GetOrCreateAutoFormat();
-    ScEditableTester aTester( &rDoc, nStartCol,nStartRow, nEndCol,nEndRow, aMark );
+    ScEditableTester aTester( rDoc, nStartCol,nStartRow, nEndCol,nEndRow, aMark );
     if ( nFormatNo < pAutoFormat->size() && aTester.IsEditable() )
     {
         weld::WaitObject aWait( ScDocShell::GetActiveDialogParent() );
@@ -4334,7 +4334,7 @@ bool ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
             aMark.SelectTable( nTab, true );
     }
 
-    ScEditableTester aTester( &rDoc, nStartCol,nStartRow, nEndCol,nEndRow, aMark );
+    ScEditableTester aTester( rDoc, nStartCol,nStartRow, nEndCol,nEndRow, aMark );
     if ( aTester.IsEditable() )
     {
         weld::WaitObject aWait( ScDocShell::GetActiveDialogParent() );
@@ -4421,7 +4421,7 @@ bool ScDocFunc::TabOp( const ScRange& rRange, const ScMarkData* pTabMark,
             aMark.SelectTable( nTab, true );
     }
 
-    ScEditableTester aTester( &rDoc, nStartCol,nStartRow, nEndCol,nEndRow, aMark );
+    ScEditableTester aTester( rDoc, nStartCol,nStartRow, nEndCol,nEndRow, aMark );
     if ( aTester.IsEditable() )
     {
         weld::WaitObject aWait( ScDocShell::GetActiveDialogParent() );
@@ -4565,7 +4565,7 @@ bool ScDocFunc::FillSimple( const ScRange& rRange, const ScMarkData* pTabMark,
             aMark.SelectTable( nTab, true );
     }
 
-    ScEditableTester aTester( &rDoc, nStartCol,nStartRow, nEndCol,nEndRow, aMark );
+    ScEditableTester aTester( rDoc, nStartCol,nStartRow, nEndCol,nEndRow, aMark );
     if ( aTester.IsEditable() )
     {
         weld::WaitObject aWait( ScDocShell::GetActiveDialogParent() );
@@ -4678,7 +4678,7 @@ bool ScDocFunc::FillSeries( const ScRange& rRange, const ScMarkData* pTabMark,
             aMark.SelectTable( nTab, true );
     }
 
-    ScEditableTester aTester( &rDoc, nStartCol,nStartRow, nEndCol,nEndRow, aMark );
+    ScEditableTester aTester( rDoc, nStartCol,nStartRow, nEndCol,nEndRow, aMark );
     if ( aTester.IsEditable() )
     {
         weld::WaitObject aWait( ScDocShell::GetActiveDialogParent() );
@@ -4847,7 +4847,7 @@ bool ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillDir e
     //!     Source range can be protected !!!
     //!     but can't contain matrix fragments !!!
 
-    ScEditableTester aTester( &rDoc, aDestArea );
+    ScEditableTester aTester( rDoc, aDestArea );
     if ( !aTester.IsEditable() )
     {
         if (!bApi)
@@ -4947,7 +4947,7 @@ bool ScDocFunc::MergeCells( const ScCellMergeOption& rOption, bool bContents, bo
 
     for (const auto& rTab : rOption.maTabs)
     {
-        ScEditableTester aTester( &rDoc, rTab, nStartCol, nStartRow, nEndCol, nEndRow );
+        ScEditableTester aTester( rDoc, rTab, nStartCol, nStartRow, nEndCol, nEndRow );
         if (!aTester.IsEditable())
         {
             if (!bApi)
@@ -5382,7 +5382,7 @@ bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, bool bApi )
         SCCOL nEndCol = nStartCol + 1;
         SCROW nEndRow = nStartRow + static_cast<SCROW>(nValidCount) - 1;
 
-        ScEditableTester aTester( &rDoc, nTab, nStartCol,nStartRow, nEndCol,nEndRow );
+        ScEditableTester aTester( rDoc, nTab, nStartCol,nStartRow, nEndCol,nEndRow );
         if (aTester.IsEditable())
         {
             ScDocumentUniquePtr pUndoDoc;
@@ -5722,7 +5722,7 @@ void ScDocFunc::ConvertFormulaToValue( const ScRange& rRange, bool bInteraction 
     if (!rDoc.IsUndoEnabled())
         bRecord = false;
 
-    ScEditableTester aTester(&rDoc, rRange);
+    ScEditableTester aTester(rDoc, rRange);
     if (!aTester.IsEditable())
     {
         if (bInteraction)

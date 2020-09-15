@@ -232,7 +232,7 @@ bool ScImportExport::StartPaste()
 {
     if ( !bAll )
     {
-        ScEditableTester aTester( &rDoc, aRange );
+        ScEditableTester aTester( rDoc, aRange );
         if ( !aTester.IsEditable() )
         {
             vcl::Window* pWin = Application::GetDefDialogParent();
