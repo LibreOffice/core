@@ -496,7 +496,7 @@ void ScOrcusFactory::finalize()
                 aRange.aEnd.IncCol(rToken.mnIndex1-1);
                 aRange.aEnd.IncRow(rToken.mnIndex2-1);
 
-                ScCompiler aComp(&maDoc.getDoc(), aRange.aStart, rToken.meGrammar);
+                ScCompiler aComp(maDoc.getDoc(), aRange.aStart, rToken.meGrammar);
                 std::unique_ptr<ScTokenArray> pArray(aComp.CompileString(rToken.maStr1));
                 if (!pArray)
                     break;
@@ -1010,7 +1010,7 @@ void ScOrcusFormula::commit()
             // topmost shared formula with new formula token.
 
             // Compile the formula expression into tokens.
-            ScCompiler aComp(&mrSheet.getDoc().getDoc(), aPos, meGrammar);
+            ScCompiler aComp(mrSheet.getDoc().getDoc(), aPos, meGrammar);
             std::unique_ptr<ScTokenArray> pArray = aComp.CompileString(maFormula);
             if (!pArray)
                 // Tokenization failed.

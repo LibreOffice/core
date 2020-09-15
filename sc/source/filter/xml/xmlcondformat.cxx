@@ -231,6 +231,7 @@ static bool HasOneSingleFullyRelativeReference( const ScTokenArray* pTokens, ScS
 void SAL_CALL ScXMLConditionalFormatContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     ScDocument* pDoc = GetScImport().GetDocument();
+    assert(pDoc);
 
     SCTAB nTab = GetScImport().GetTables().GetCurrentSheet();
     std::unique_ptr<ScConditionalFormat> pFormat(std::move(mxFormat));
@@ -256,7 +257,7 @@ void SAL_CALL ScXMLConditionalFormatContext::endFastElement( sal_Int32 /*nElemen
         OUString aSrcString = pCondFormatEntry->GetSrcString();
         if ( !aSrcString.isEmpty() )
             aSrcPos.Parse( aSrcString, pDoc );
-        ScCompiler aComp( pDoc, aSrcPos );
+        ScCompiler aComp( *pDoc, aSrcPos );
         aComp.SetGrammar( formula::FormulaGrammar::GRAM_ODFF );
         pTokens = aComp.CompileString( pCondFormatEntry->GetExpression(aSrcPos, 0), "" );
         if (HasRelRefIgnoringSheet0Relative( pDoc, pTokens.get() ))

@@ -836,7 +836,7 @@ Reference< XDataSequence > XclImpChSourceLink::CreateDataSequence( const OUStrin
     {
         if ( mxTokenArray )
         {
-            ScCompiler aComp( &GetDoc(), ScAddress(), *mxTokenArray, GetDoc().GetGrammar() );
+            ScCompiler aComp( GetDoc(), ScAddress(), *mxTokenArray, GetDoc().GetGrammar() );
             OUStringBuffer aRangeRep;
             aComp.CreateStringFromTokenArray( aRangeRep );
             try

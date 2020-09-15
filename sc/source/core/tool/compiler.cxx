@@ -1829,11 +1829,11 @@ ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, 
     SetGrammar(rCxt.getGrammar());
 }
 
-ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos, ScTokenArray& rArr,
+ScCompiler::ScCompiler( ScDocument& rDocument, const ScAddress& rPos, ScTokenArray& rArr,
                         formula::FormulaGrammar::Grammar eGrammar,
                         bool bComputeII, bool bMatrixFlag, const ScInterpreterContext* pContext )
     : FormulaCompiler(rArr, bComputeII, bMatrixFlag),
-        pDoc( pDocument ),
+        pDoc( &rDocument ),
         aPos( rPos ),
         mpFormatter(pContext ? pContext->GetFormatTable() : pDoc->GetFormatTable()),
         mpInterpreterContext(pContext),
@@ -1849,7 +1849,7 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos, ScTokenArr
         mbRewind( false )
 {
     SetGrammar( (eGrammar == formula::FormulaGrammar::GRAM_UNSPECIFIED) ?
-                pDocument->GetGrammar() :
+                rDocument.GetGrammar() :
                 eGrammar );
 }
 
@@ -1874,11 +1874,11 @@ ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos,
     SetGrammar(rCxt.getGrammar());
 }
 
-ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,
+ScCompiler::ScCompiler( ScDocument& rDocument, const ScAddress& rPos,
                         formula::FormulaGrammar::Grammar eGrammar,
                         bool bComputeII, bool bMatrixFlag, const ScInterpreterContext* pContext )
         : FormulaCompiler(bComputeII, bMatrixFlag),
-        pDoc( pDocument ),
+        pDoc( &rDocument ),
         aPos( rPos ),
         mpFormatter(pContext ? pContext->GetFormatTable() : pDoc ? pDoc->GetFormatTable() : nullptr),
         mpInterpreterContext(pContext),
@@ -1894,7 +1894,7 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,
         mbRewind( false )
 {
     SetGrammar( (eGrammar == formula::FormulaGrammar::GRAM_UNSPECIFIED) ?
-                (pDocument ? pDocument->GetGrammar() : formula::FormulaGrammar::GRAM_DEFAULT) :
+                rDocument.GetGrammar() :
                 eGrammar );
 }
 

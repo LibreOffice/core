@@ -4385,7 +4385,7 @@ CLInterpreterContext createCLInterpreterContext( const ScCalcConfig& rConfig,
 
 void genRPNTokens( ScDocument& rDoc, const ScAddress& rTopPos, ScTokenArray& rCode )
 {
-    ScCompiler aComp(&rDoc, rTopPos, rCode, rDoc.GetGrammar());
+    ScCompiler aComp(rDoc, rTopPos, rCode, rDoc.GetGrammar());
     // Disable special ordering for jump commands for the OpenCL interpreter.
     aComp.EnableJumpCommandReorder(false);
     aComp.CompileTokenArray(); // Regenerate RPN tokens.
