@@ -870,13 +870,13 @@ public:
 
 class CompileHybridFormulaHandler
 {
-    ScDocument* mpDoc;
+    ScDocument& mrDoc;
     sc::StartListeningContext& mrStartListenCxt;
     sc::CompileFormulaContext& mrCompileFormulaCxt;
 
 public:
-    CompileHybridFormulaHandler( ScDocument* pDoc, sc::StartListeningContext& rStartListenCxt, sc::CompileFormulaContext& rCompileCxt ) :
-        mpDoc(pDoc),
+    CompileHybridFormulaHandler(ScDocument& rDoc, sc::StartListeningContext& rStartListenCxt, sc::CompileFormulaContext& rCompileCxt ) :
+        mrDoc(rDoc),
         mrStartListenCxt(rStartListenCxt),
         mrCompileFormulaCxt(rCompileCxt) {}
 
@@ -896,7 +896,7 @@ public:
                 ScFormulaCellGroupRef xGroup = pTop->GetCellGroup();
                 assert(xGroup);
                 xGroup->setCode(std::move(pNewCode));
-                xGroup->compileCode(*mpDoc, pTop->aPos, mpDoc->GetGrammar());
+                xGroup->compileCode(mrDoc, pTop->aPos, mrDoc.GetGrammar());
 
                 // Propagate the new token array to all formula cells in the group.
                 ScFormulaCell** pp = rEntry.mpCells;
@@ -922,7 +922,7 @@ public:
                 std::unique_ptr<ScTokenArray> pNewCode = aComp.CompileString(aFormula);
 
                 // Generate RPN tokens.
-                ScCompiler aComp2(mpDoc, pCell->aPos, *pNewCode, formula::FormulaGrammar::GRAM_UNSPECIFIED,
+                ScCompiler aComp2(mrDoc, pCell->aPos, *pNewCode, formula::FormulaGrammar::GRAM_UNSPECIFIED,
                                   true, pCell->GetMatrixFlag() != ScMatrixMode::NONE);
                 aComp2.CompileTokenArray();
 
@@ -971,7 +971,7 @@ void ScColumn::CompileHybridFormula(
     // Collect all formula groups.
     std::vector<sc::FormulaGroupEntry> aGroups = GetFormulaGroupEntries();
 
-    CompileHybridFormulaHandler aFunc(&GetDoc(), rStartListenCxt, rCompileCxt);
+    CompileHybridFormulaHandler aFunc(GetDoc(), rStartListenCxt, rCompileCxt);
     std::for_each(aGroups.begin(), aGroups.end(), aFunc);
 }
 

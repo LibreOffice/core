@@ -877,7 +877,7 @@ protected:
                 if ( pUnoRangesBase )
                 {
                     ScRangeList aCellRanges = pUnoRangesBase->GetRangeList();
-                    ScCompiler aCompiler( &m_rDoc, aCellRanges.front().aStart, m_eGrammar );
+                    ScCompiler aCompiler( m_rDoc, aCellRanges.front().aStart, m_eGrammar );
                     // compile the string in the format passed in
                     std::unique_ptr<ScTokenArray> pArray(aCompiler.CompileString(sFormula));
                     // set desired convention to that of the document
@@ -920,7 +920,7 @@ public:
             pUnoRangesBase )
         {
             ScRangeList aCellRanges = pUnoRangesBase->GetRangeList();
-            ScCompiler aCompiler( &m_rDoc, aCellRanges.front().aStart, formula::FormulaGrammar::GRAM_DEFAULT );
+            ScCompiler aCompiler( m_rDoc, aCellRanges.front().aStart, formula::FormulaGrammar::GRAM_DEFAULT );
             std::unique_ptr<ScTokenArray> pArray(aCompiler.CompileString(sVal));
             // set desired convention
             aCompiler.SetGrammar( m_eGrammar );

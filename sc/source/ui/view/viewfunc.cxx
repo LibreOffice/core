@@ -405,7 +405,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
     {   // formula, compile with autoCorrection
         i = rMark.GetFirstSelected();
         ScAddress aPos( nCol, nRow, i );
-        ScCompiler aComp( &rDoc, aPos, rDoc.GetGrammar(), true, false );
+        ScCompiler aComp( rDoc, aPos, rDoc.GetGrammar(), true, false );
 //2do: enable/disable autoCorrection via calcoptions
         aComp.SetAutoCorrection( true );
         if ( rString[0] == '+' || rString[0] == '-' )

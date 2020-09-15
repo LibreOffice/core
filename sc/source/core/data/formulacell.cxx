@@ -562,7 +562,7 @@ void ScFormulaCellGroup::compileCode(
     if (mpCode->GetLen() && mpCode->GetCodeError() == FormulaError::NONE && !mpCode->GetCodeLen())
     {
         bool bMatrixFormula = mpTopCell->GetMatrixFlag() != ScMatrixMode::NONE;
-        ScCompiler aComp(&rDoc, rPos, *mpCode, eGram, true, bMatrixFormula);
+        ScCompiler aComp(rDoc, rPos, *mpCode, eGram, true, bMatrixFormula);
         mbSubTotal = aComp.CompileTokenArray();
         mnFormatType = aComp.GetNumFormatType();
     }
@@ -704,7 +704,7 @@ ScFormulaCell::ScFormulaCell(
     // Generate RPN token array.
     if (pCode->GetLen() && pCode->GetCodeError() == FormulaError::NONE && !pCode->GetCodeLen())
     {
-        ScCompiler aComp( &rDocument, aPos, *pCode, eTempGrammar, true, cMatrixFlag != ScMatrixMode::NONE );
+        ScCompiler aComp(rDocument, aPos, *pCode, eTempGrammar, true, cMatrixFlag != ScMatrixMode::NONE);
         bSubTotal = aComp.CompileTokenArray();
         nFormatType = aComp.GetNumFormatType();
     }
@@ -752,7 +752,7 @@ ScFormulaCell::ScFormulaCell(
     // RPN array generation
     if( pCode->GetLen() && pCode->GetCodeError() == FormulaError::NONE && !pCode->GetCodeLen() )
     {
-        ScCompiler aComp( &rDocument, aPos, *pCode, eTempGrammar, true, cMatrixFlag != ScMatrixMode::NONE );
+        ScCompiler aComp( rDocument, aPos, *pCode, eTempGrammar, true, cMatrixFlag != ScMatrixMode::NONE );
         bSubTotal = aComp.CompileTokenArray();
         nFormatType = aComp.GetNumFormatType();
     }
@@ -1002,7 +1002,7 @@ void ScFormulaCell::GetFormula( OUStringBuffer& rBuffer,
             }
             else
             {
-                ScCompiler aComp( &rDocument, aPos, *pCode, eGrammar, false, false, pContext );
+                ScCompiler aComp( rDocument, aPos, *pCode, eGrammar, false, false, pContext );
                 aComp.CreateStringFromTokenArray( rBuffer );
             }
         }
@@ -1013,7 +1013,7 @@ void ScFormulaCell::GetFormula( OUStringBuffer& rBuffer,
     }
     else
     {
-        ScCompiler aComp( &rDocument, aPos, *pCode, eGrammar, false, false, pContext );
+        ScCompiler aComp( rDocument, aPos, *pCode, eGrammar, false, false, pContext );
         aComp.CreateStringFromTokenArray( rBuffer );
     }
 
@@ -1134,7 +1134,7 @@ void ScFormulaCell::Compile( const OUString& rFormula, bool bNoListening,
     if ( pCode )
         pCode->Clear();
     ScTokenArray* pCodeOld = pCode;
-    ScCompiler aComp( &rDocument, aPos, eGrammar);
+    ScCompiler aComp( rDocument, aPos, eGrammar);
     pCode = aComp.CompileString( rFormula ).release();
     assert(!mxGroup);
     delete pCodeOld;
@@ -1212,7 +1212,7 @@ void ScFormulaCell::CompileTokenArray( bool bNoListening )
 
         if( !bNoListening && pCode->GetCodeLen() )
             EndListeningTo( rDocument );
-        ScCompiler aComp(&rDocument, aPos, *pCode, rDocument.GetGrammar(), true, cMatrixFlag != ScMatrixMode::NONE);
+        ScCompiler aComp(rDocument, aPos, *pCode, rDocument.GetGrammar(), true, cMatrixFlag != ScMatrixMode::NONE);
         bSubTotal = aComp.CompileTokenArray();
         if( pCode->GetCodeError() == FormulaError::NONE )
         {
@@ -5067,7 +5067,7 @@ bool ScFormulaCell::InterpretFormulaGroupOpenCL(sc::FormulaLogger::GroupScope& a
         ScTokenArray aCode(rDocument);
         ScGroupTokenConverter aConverter(aCode, rDocument, *this, xGroup->mpTopCell->aPos);
         // TODO avoid this extra compilation
-        ScCompiler aComp( &rDocument, xGroup->mpTopCell->aPos, *pCode, formula::FormulaGrammar::GRAM_UNSPECIFIED, true, cMatrixFlag != ScMatrixMode::NONE );
+        ScCompiler aComp( rDocument, xGroup->mpTopCell->aPos, *pCode, formula::FormulaGrammar::GRAM_UNSPECIFIED, true, cMatrixFlag != ScMatrixMode::NONE );
         aComp.CompileTokenArray();
         if (aComp.HasUnhandledPossibleImplicitIntersections() || !aConverter.convert(*pCode, aScope))
         {
@@ -5179,7 +5179,7 @@ bool ScFormulaCell::InterpretInvariantFormulaGroup()
             }
         }
 
-        ScCompiler aComp(&rDocument, aPos, aCode, rDocument.GetGrammar(), true, cMatrixFlag != ScMatrixMode::NONE);
+        ScCompiler aComp(rDocument, aPos, aCode, rDocument.GetGrammar(), true, cMatrixFlag != ScMatrixMode::NONE);
         aComp.CompileTokenArray(); // Create RPN token array.
         ScInterpreter aInterpreter(this, rDocument, rDocument.GetNonThreadedContext(), aPos, aCode);
         aInterpreter.Interpret();

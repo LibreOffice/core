@@ -343,7 +343,7 @@ void ScConditionEntry::Compile( const OUString& rExpr1, const OUString& rExpr2,
 {
     if ( !rExpr1.isEmpty() || !rExpr2.isEmpty() )
     {
-        ScCompiler aComp( mpDoc, aSrcPos );
+        ScCompiler aComp( *mpDoc, aSrcPos );
 
         if ( !rExpr1.isEmpty() )
         {
@@ -1246,7 +1246,7 @@ OUString ScConditionEntry::GetExpression( const ScAddress& rCursor, sal_uInt16 n
     {
         if ( pFormula1 )
         {
-            ScCompiler aComp(mpDoc, rCursor, *pFormula1, eGrammar);
+            ScCompiler aComp(*mpDoc, rCursor, *pFormula1, eGrammar);
             OUStringBuffer aBuffer;
             aComp.CreateStringFromTokenArray( aBuffer );
             aRet = aBuffer.makeStringAndClear();
@@ -1262,7 +1262,7 @@ OUString ScConditionEntry::GetExpression( const ScAddress& rCursor, sal_uInt16 n
     {
         if ( pFormula2 )
         {
-            ScCompiler aComp(mpDoc, rCursor, *pFormula2, eGrammar);
+            ScCompiler aComp(*mpDoc, rCursor, *pFormula2, eGrammar);
             OUStringBuffer aBuffer;
             aComp.CreateStringFromTokenArray( aBuffer );
             aRet = aBuffer.makeStringAndClear();

@@ -114,7 +114,7 @@ void  ScVbaName::setContent( const OUString& rContent, const formula::FormulaGra
     if (pOldData)
     {
         // Shorter way of doing this ?
-        ScCompiler aComp( &rDoc, pOldData->GetPos(), eGrammar );
+        ScCompiler aComp( rDoc, pOldData->GetPos(), eGrammar );
         std::unique_ptr<ScTokenArray> pArray(aComp.CompileString(sContent));
         pOldData->SetCode(*pArray);
     }

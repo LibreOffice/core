@@ -361,7 +361,7 @@ public:
     /** If eGrammar == GRAM_UNSPECIFIED then the grammar of pDocument is used,
         if pDocument==nullptr then GRAM_DEFAULT.
      */
-    ScCompiler( ScDocument* pDocument, const ScAddress&,
+    ScCompiler( ScDocument& rDocument, const ScAddress&,
             formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_UNSPECIFIED,
             bool bComputeII = false, bool bMatrixFlag = false, const ScInterpreterContext* pContext = nullptr );
 
@@ -371,7 +371,7 @@ public:
     /** If eGrammar == GRAM_UNSPECIFIED then the grammar of pDocument is used,
         if pDocument==nullptr then GRAM_DEFAULT.
      */
-    ScCompiler( ScDocument* pDocument, const ScAddress&, ScTokenArray& rArr,
+    ScCompiler( ScDocument& rDocument, const ScAddress&, ScTokenArray& rArr,
             formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_UNSPECIFIED,
             bool bComputeII = false, bool bMatrixFlag = false, const ScInterpreterContext* pContext = nullptr );
 
