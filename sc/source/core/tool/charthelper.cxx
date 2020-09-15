@@ -281,9 +281,9 @@ void ScChartHelper::SetChartRanges( const uno::Reference< chart2::XChartDocument
     xChartDoc->unlockControllers();
 }
 
-void ScChartHelper::AddRangesIfProtectedChart( ScRangeListVector& rRangesVector, const ScDocument* pDocument, SdrObject* pObject )
+void ScChartHelper::AddRangesIfProtectedChart( ScRangeListVector& rRangesVector, const ScDocument& rDocument, SdrObject* pObject )
 {
-    if ( !(pDocument && pObject && ( pObject->GetObjIdentifier() == OBJ_OLE2 )) )
+    if ( !(pObject && ( pObject->GetObjIdentifier() == OBJ_OLE2 )) )
         return;
 
     SdrOle2Obj* pSdrOle2Obj = dynamic_cast< SdrOle2Obj* >( pObject );
@@ -302,7 +302,7 @@ void ScChartHelper::AddRangesIfProtectedChart( ScRangeListVector& rRangesVector,
          ( xProps->getPropertyValue("DisableDataTableDialog") >>= bDisableDataTableDialog ) &&
          bDisableDataTableDialog )
     {
-        ScChartListenerCollection* pCollection = pDocument->GetChartListenerCollection();
+        ScChartListenerCollection* pCollection = rDocument.GetChartListenerCollection();
         if (pCollection)
         {
             const OUString& aChartName = pSdrOle2Obj->GetPersistName();
@@ -331,7 +331,7 @@ void ScChartHelper::FillProtectedChartRangesVector( ScRangeListVector& rRangesVe
         SdrObject* pObject = aIter.Next();
         while ( pObject )
         {
-            AddRangesIfProtectedChart( rRangesVector, &rDocument, pObject );
+            AddRangesIfProtectedChart( rRangesVector, rDocument, pObject );
             pObject = aIter.Next();
         }
     }

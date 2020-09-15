@@ -45,7 +45,7 @@ public:
     static void SetChartRanges( const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc,
             const css::uno::Sequence< OUString >& rRanges );
 
-    static void AddRangesIfProtectedChart( ScRangeListVector& rRangesVector, const ScDocument* pDocument, SdrObject* pObject );
+    static void AddRangesIfProtectedChart( ScRangeListVector& rRangesVector, const ScDocument& rDocument, SdrObject* pObject );
     static void FillProtectedChartRangesVector( ScRangeListVector& rRangesVector, const ScDocument& rDocument, const SdrPage* pPage );
     static void GetChartNames( ::std::vector< OUString >& rChartNames, const SdrPage* pPage );
     static void CreateProtectedChartListenersAndNotify( ScDocument& rDoc, const SdrPage* pPage, ScModelObj* pModelObj, SCTAB nTab,

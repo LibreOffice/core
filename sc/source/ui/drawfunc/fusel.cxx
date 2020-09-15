@@ -370,7 +370,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                         pObj = ( pMark ? pMark->GetMarkedSdrObj() : nullptr );
                         if ( pObj )
                         {
-                            ScChartHelper::AddRangesIfProtectedChart( aProtectedChartRangesVector, &rDocument, pObj );
+                            ScChartHelper::AddRangesIfProtectedChart( aProtectedChartRangesVector, rDocument, pObj );
                         }
                     }
                 }
