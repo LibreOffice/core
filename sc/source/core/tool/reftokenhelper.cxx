@@ -34,7 +34,7 @@ using namespace formula;
 using ::std::vector;
 
 void ScRefTokenHelper::compileRangeRepresentation(
-    vector<ScTokenRef>& rRefTokens, const OUString& rRangeStr, ScDocument* pDoc,
+    vector<ScTokenRef>& rRefTokens, const OUString& rRangeStr, ScDocument& rDoc,
     const sal_Unicode cSep, FormulaGrammar::Grammar eGrammar, bool bOnly3DRef)
 {
     // #i107275# ignore parentheses
@@ -51,7 +51,7 @@ void ScRefTokenHelper::compileRangeRepresentation(
         if (nOffset < 0)
             break;
 
-        ScCompiler aCompiler(pDoc, ScAddress(0,0,0), eGrammar);
+        ScCompiler aCompiler(&rDoc, ScAddress(0,0,0), eGrammar);
         std::unique_ptr<ScTokenArray> pArray(aCompiler.CompileString(aToken));
 
         // There MUST be exactly one reference per range token and nothing
@@ -77,7 +77,7 @@ void ScRefTokenHelper::compileRangeRepresentation(
             case svSingleRef:
                 {
                     const ScSingleRefData& rRef = *p->GetSingleRef();
-                    if (!rRef.Valid(pDoc))
+                    if (!rRef.Valid(&rDoc))
                         bFailure = true;
                     else if (bOnly3DRef && !rRef.IsFlag3D())
                         bFailure = true;
@@ -86,7 +86,7 @@ void ScRefTokenHelper::compileRangeRepresentation(
             case svDoubleRef:
                 {
                     const ScComplexRefData& rRef = *p->GetDoubleRef();
-                    if (!rRef.Valid(pDoc))
+                    if (!rRef.Valid(&rDoc))
                         bFailure = true;
                     else if (bOnly3DRef && !rRef.Ref1.IsFlag3D())
                         bFailure = true;
@@ -94,13 +94,13 @@ void ScRefTokenHelper::compileRangeRepresentation(
                 break;
             case svExternalSingleRef:
                 {
-                    if (!p->GetSingleRef()->ValidExternal(pDoc))
+                    if (!p->GetSingleRef()->ValidExternal(&rDoc))
                         bFailure = true;
                 }
                 break;
             case svExternalDoubleRef:
                 {
-                    if (!p->GetDoubleRef()->ValidExternal(pDoc))
+                    if (!p->GetDoubleRef()->ValidExternal(&rDoc))
                         bFailure = true;
                 }
                 break;
