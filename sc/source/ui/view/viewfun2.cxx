@@ -2766,7 +2766,6 @@ void ScViewFunc::MoveTable(
 {
     ScDocument& rDoc       = GetViewData().GetDocument();
     ScDocShell* pDocShell  = GetViewData().GetDocShell();
-    ScDocument* pDestDoc   = nullptr;
     ScDocShell* pDestShell = nullptr;
     ScTabViewShell* pDestViewSh = nullptr;
     bool bUndo (rDoc.IsUndoEnabled());
@@ -2816,15 +2815,15 @@ void ScViewFunc::MoveTable(
         return;
     }
 
-    pDestDoc = &pDestShell->GetDocument();
+    ScDocument& rDestDoc = pDestShell->GetDocument();
 
-    if (pDestDoc != &rDoc)
+    if (&rDestDoc != &rDoc)
     {
         if (bNewDoc)
         {
-            while (pDestDoc->GetTableCount() > 1)
-                pDestDoc->DeleteTab(0);
-            pDestDoc->RenameTab( 0, "______42_____" );
+            while (rDestDoc.GetTableCount() > 1)
+                rDestDoc.DeleteTab(0);
+            rDestDoc.RenameTab( 0, "______42_____" );
         }
 
         SCTAB       nTabCount   = rDoc.GetTableCount();
@@ -2858,11 +2857,11 @@ void ScViewFunc::MoveTable(
             pDestShell->MakeDrawLayer();
 
         if (!bNewDoc && bUndo)
-            pDestDoc->BeginDrawUndo();      // drawing layer must do its own undo actions
+            rDestDoc.BeginDrawUndo();      // drawing layer must do its own undo actions
 
         sal_uLong nErrVal =1;
         if(nDestTab==SC_TAB_APPEND)
-            nDestTab=pDestDoc->GetTableCount();
+            nDestTab=rDestDoc.GetTableCount();
         SCTAB nDestTab1=nDestTab;
         ScClipParam aParam;
         for( size_t j=0; j<TheTabs.size(); ++j, ++nDestTab1 )
@@ -2873,8 +2872,8 @@ void ScViewFunc::MoveTable(
             else
                 rDoc.GetName( TheTabs[j], aName );
 
-            pDestDoc->CreateValidTabName( aName );
-            if ( !pDestDoc->InsertTab( nDestTab1, aName ) )
+            rDestDoc.CreateValidTabName( aName );
+            if ( !rDestDoc.InsertTab( nDestTab1, aName ) )
             {
                 nErrVal = 0;        // total error
                 break;  // for
@@ -2895,7 +2894,7 @@ void ScViewFunc::MoveTable(
         OUString sName;
         if (!bNewDoc && bUndo)
         {
-            pDestDoc->GetName(nDestTab, sName);
+            rDestDoc.GetName(nDestTab, sName);
             pDestShell->GetUndoManager()->AddUndoAction(
                             std::make_unique<ScUndoImportTab>( pDestShell, nDestTab,
                                 static_cast<SCTAB>(TheTabs.size())));
@@ -2941,13 +2940,13 @@ void ScViewFunc::MoveTable(
         if (bNewDoc)
         {
             //  ChartListenerCollection must be updated before DeleteTab
-            if ( pDestDoc->IsChartListenerCollectionNeedsUpdate() )
-                pDestDoc->UpdateChartListenerCollection();
+            if ( rDestDoc.IsChartListenerCollectionNeedsUpdate() )
+                rDestDoc.UpdateChartListenerCollection();
 
             SCTAB nNumTabsInserted = static_cast<SCTAB>(TheTabs.size());
             pDestShell->Broadcast( ScTablesHint( SC_TABS_INSERTED, 0, nNumTabsInserted ) );
 
-            pDestDoc->DeleteTab( nNumTabsInserted );   // old first table
+            rDestDoc.DeleteTab( nNumTabsInserted );   // old first table
             pDestShell->Broadcast( ScTablesHint( SC_TAB_DELETED, nNumTabsInserted ) );
 
             if (pDestViewSh)
@@ -3108,7 +3107,7 @@ void ScViewFunc::MoveTable(
 
         //#i29848# adjust references to data on the copied sheet
         if( bCopy )
-            ScChartHelper::AdjustRangesOfChartsOnDestinationPage( &rDoc, pDestDoc, nTab, nNewTab );
+            ScChartHelper::AdjustRangesOfChartsOnDestinationPage( rDoc, rDestDoc, nTab, nNewTab );
     }
 }
 

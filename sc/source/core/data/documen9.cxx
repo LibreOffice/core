@@ -89,7 +89,7 @@ void ScDocument::TransferDrawPage(const ScDocument& rSrcDoc, SCTAB nSrcPos, SCTA
 
     //  make sure the data references of charts are adapted
     //  (this must be after InsertObject!)
-    ScChartHelper::AdjustRangesOfChartsOnDestinationPage( &rSrcDoc, this, nSrcPos, nDestPos );
+    ScChartHelper::AdjustRangesOfChartsOnDestinationPage( rSrcDoc, *this, nSrcPos, nDestPos );
     ScChartHelper::UpdateChartsOnDestinationPage(this, nDestPos);
 }
 

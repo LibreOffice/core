@@ -37,7 +37,7 @@ class ScChartHelper
 {
 public:
     static sal_uInt16 DoUpdateAllCharts( ScDocument* pDoc );
-    static void AdjustRangesOfChartsOnDestinationPage( const ScDocument* pSrcDoc, ScDocument* pDestDoc, const SCTAB nSrcTab, const SCTAB nDestTab );
+    static void AdjustRangesOfChartsOnDestinationPage( const ScDocument& rSrcDoc, ScDocument& rDestDoc, const SCTAB nSrcTab, const SCTAB nDestTab );
     static void UpdateChartsOnDestinationPage( ScDocument* pDestDoc, const SCTAB nDestTab );
     static css::uno::Reference< css::chart2::XChartDocument > GetChartFromSdrObject( const SdrObject* pObject );
     static void GetChartRanges( const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc,
