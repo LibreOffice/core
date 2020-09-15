@@ -1283,7 +1283,8 @@ void XclObjAny::SaveXml( XclExpXmlStream& rStrm )
         ScAddress       aPosition;
         ScRange         aSourceRange;
         bool            bRedLine;
-        ScDetectiveObjType eObjType = aDetFunc.GetDetectiveObjectType(pObject, mnScTab, aPosition, aSourceRange, bRedLine);
+        ScDetectiveObjType eObjType
+            = aDetFunc.GetDetectiveObjectType(pObject, mnScTab, aPosition, aSourceRange, bRedLine);
 
         if (eObjType != SC_DETOBJ_NONE)
             return;

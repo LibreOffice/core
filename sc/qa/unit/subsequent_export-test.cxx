@@ -5452,8 +5452,10 @@ void ScExportTest::testTdf133688_precedents()
     ScDocShellRef xShell = loadDoc("tdf133688_dont_save_precedents_to_xlsx.", FORMAT_ODS);
     CPPUNIT_ASSERT(xShell.is());
 
-    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
-    xmlDocUniquePtr pDrawing = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/drawing1.xml");
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+    xmlDocUniquePtr pDrawing
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/drawing1.xml");
     CPPUNIT_ASSERT(pDrawing);
 
     // We do not export any shapes.
