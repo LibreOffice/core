@@ -391,7 +391,7 @@ void ScCopyPasteTest::testTdf107394()
     CPPUNIT_ASSERT_EQUAL(nFirstRowHeight, nSecondRowHeight);
 
     // Import values to A1:A2.
-    ScImportExport aObj(&rDoc, ScAddress(0,0,0));
+    ScImportExport aObj(rDoc, ScAddress(0,0,0));
     aObj.SetImportBroadcast(true);
 
     OString aHTML("<pre>First\nVery long sentence.</pre>");

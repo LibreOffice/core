@@ -47,7 +47,7 @@ struct ScExportTextOptions
 class SC_DLLPUBLIC ScImportExport
 {
     ScDocShell* pDocSh;
-    ScDocument* pDoc;
+    ScDocument& rDoc;
     std::unique_ptr<ScDocument, o3tl::default_delete<ScDocument>> pUndoDoc;
     ScRange     aRange;
     OUString    aStreamPath;
@@ -89,10 +89,10 @@ class SC_DLLPUBLIC ScImportExport
     bool HTML2Doc( SvStream&, const OUString& rBaseURL );
 
 public:
-    ScImportExport( ScDocument* );                  // the whole document
-    ScImportExport( ScDocument*, const OUString& );   // Range/cell input
-    ScImportExport( ScDocument*, const ScAddress& );
-    ScImportExport( ScDocument*, const ScRange& );
+    ScImportExport( ScDocument& );                  // the whole document
+    ScImportExport( ScDocument&, const OUString& );   // Range/cell input
+    ScImportExport( ScDocument&, const ScAddress& );
+    ScImportExport( ScDocument&, const ScRange& );
    ~ScImportExport() COVERITY_NOEXCEPT_FALSE;
 
     void SetExtOptions( const ScAsciiOptions& rOpt );

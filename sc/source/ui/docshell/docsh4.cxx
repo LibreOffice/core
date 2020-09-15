@@ -2360,7 +2360,7 @@ bool ScDocShell::DdeGetData( const OUString& rItem,
                                         aFmtByte.getLength() + 1 );
             return true;
         }
-        ScImportExport aObj( &m_aDocument, rItem );
+        ScImportExport aObj( m_aDocument, rItem );
         if ( !aObj.IsRef() )
             return false;                           // invalid range
 
@@ -2388,7 +2388,7 @@ bool ScDocShell::DdeGetData( const OUString& rItem,
         return aObj.ExportData( rMimeType, rValue );
     }
 
-    ScImportExport aObj( &m_aDocument, rItem );
+    ScImportExport aObj( m_aDocument, rItem );
     aObj.SetExportTextOptions( ScExportTextOptions( ScExportTextOptions::ToSpace, 0, false ) );
     return aObj.IsRef() && aObj.ExportData( rMimeType, rValue );
 }
@@ -2409,7 +2409,7 @@ bool ScDocShell::DdeSetData( const OUString& rItem,
             }
             return false;
         }
-        ScImportExport aObj( &m_aDocument, rItem );
+        ScImportExport aObj( m_aDocument, rItem );
         if( m_aDdeTextFmt[0] == 'F' )
             aObj.SetFormulas( true );
         if( m_aDdeTextFmt == "SYLK" ||
@@ -2428,7 +2428,7 @@ bool ScDocShell::DdeSetData( const OUString& rItem,
         OSL_ENSURE( false, "Implementation is missing" );
         return false;
     }
-    /*ScImportExport aObj( &aDocument, rItem );
+    /*ScImportExport aObj( aDocument, rItem );
     return aObj.IsRef() && ScImportExport::ImportData( rMimeType, rValue );*/
     OSL_ENSURE( false, "Implementation is missing" );
     return false;

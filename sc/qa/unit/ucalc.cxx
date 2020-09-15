@@ -5960,7 +5960,7 @@ void Test::testImportStream()
     aOpt.SetFieldSeps(",");
 
     // Import values to A1:C1.
-    ScImportExport aObj(m_pDoc, ScAddress(0,0,0));
+    ScImportExport aObj(*m_pDoc, ScAddress(0,0,0));
     aObj.SetImportBroadcast(true);
     aObj.SetExtOptions(aOpt);
     aObj.ImportString("1,2,3", SotClipboardFormatId::STRING);
