@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "f164a0ac_a7aaf3f9",
+        "filename": "external/icu/ExternalProject_icu.mk",
+        "patchSetId": 15
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-09-15T13:17:09Z",
+      "side": 1,
+      "message": "Ah - no ; - seems I\u0027m blind today.",
+      "parentUuid": "379c8a39_a26004f7",
+      "revId": "315919306c7b6e95db6a280c4aa8d2203970e292",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "51afe759_173ca5f9",
         "filename": "external/icu/ExternalProject_icu.mk",
         "patchSetId": 15
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "This was fixing the specific problem that this was failing of warnings in the build (see https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/65716/consoleFull; search for \"configure: error: Python failed to run\"). Since this is enough to stop failing, I don\u0027t see a reason to make the value visible elsewhere.",
       "parentUuid": "51afe759_173ca5f9",
+      "revId": "315919306c7b6e95db6a280c4aa8d2203970e292",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca8cc740_ddaf613c",
+        "filename": "external/icu/ExternalProject_icu.mk",
+        "patchSetId": 15
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-09-15T13:17:09Z",
+      "side": 1,
+      "message": "Ok - just that the Win version covers configure and make and this one doesn\u0027t seemed strange.",
+      "parentUuid": "be00542d_bf648fb1",
       "revId": "315919306c7b6e95db6a280c4aa8d2203970e292",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
