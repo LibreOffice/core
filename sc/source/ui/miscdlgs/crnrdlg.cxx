@@ -369,7 +369,7 @@ void ScColRowNameRangesDlg::UpdateNames()
     if ( xColNameRanges->size() > 0 )
     {
         std::vector<const ScRangePair*> aSortArray(xColNameRanges->CreateNameSortedArray(
-               &rDoc ));
+               rDoc ));
         nCount = aSortArray.size();
         for ( j=0; j < nCount; j++ )
         {
@@ -408,7 +408,7 @@ void ScColRowNameRangesDlg::UpdateNames()
     if ( xRowNameRanges->size() > 0 )
     {
         std::vector<const ScRangePair*> aSortArray(xRowNameRanges->CreateNameSortedArray(
-               &rDoc ));
+               rDoc ));
         nCount = aSortArray.size();
         for ( j=0; j < nCount; j++ )
         {
