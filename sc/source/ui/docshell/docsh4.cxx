@@ -2360,7 +2360,7 @@ bool ScDocShell::DdeGetData( const OUString& rItem,
                                         aFmtByte.getLength() + 1 );
             return true;
         }
-        ScImportExport aObj( &m_aDocument, rItem );
+        ScImportExport aObj( m_aDocument, rItem );
         if ( !aObj.IsRef() )
             return false;                           // invalid range
 
@@ -2388,7 +2388,7 @@ bool ScDocShell::DdeGetData( const OUString& rItem,
         return aObj.ExportData( rMimeType, rValue );
     }
 
-    ScImportExport aObj( &m_aDocument, rItem );
+    ScImportExport aObj( m_aDocument, rItem );
     aObj.SetExportTextOptions( ScExportTextOptions( ScExportTextOptions::ToSpace, 0, false ) );
     return aObj.IsRef() && aObj.ExportData( rMimeType, rValue );
 }

@@ -156,7 +156,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
     {
         HideAllCursors();
         ScDocShell* pDocSh = GetViewData().GetDocShell();
-        ScImportExport aImpEx( &pDocSh->GetDocument(),
+        ScImportExport aImpEx( pDocSh->GetDocument(),
             ScAddress( nStartCol, nStartRow, GetViewData().GetTabNo() ) );
 
         OUString aStr;

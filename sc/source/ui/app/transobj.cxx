@@ -340,7 +340,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
 
             bool bIncludeFiltered = m_pDoc->IsCutMode() || m_bUsedForLink;
 
-            ScImportExport aObj( m_pDoc.get(), aReducedBlock );
+            ScImportExport aObj( *m_pDoc, aReducedBlock );
             // Plain text ("Unformatted text") may contain embedded tabs and
             // line breaks but is not enclosed in quotes. Which makes it
             // unsuitable for multiple cells, especially if one of them is

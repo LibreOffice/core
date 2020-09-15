@@ -93,7 +93,7 @@ OUString ScTabViewShell::GetSelectionText( bool bWholeWord )
                 }
             }
 
-            ScImportExport aObj( &rDoc, aRange );
+            ScImportExport aObj( rDoc, aRange );
             aObj.SetFormulas( GetViewData().GetOptions().GetOption( VOPT_FORMULAS ) );
             OUString aExportOUString;
             /* TODO: STRING_TSVC under some circumstances? */
