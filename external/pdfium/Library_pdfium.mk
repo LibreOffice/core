@@ -465,7 +465,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxge/cfx_renderdevice \
     UnpackedTarball/pdfium/core/fxge/cfx_substfont \
     UnpackedTarball/pdfium/core/fxge/cfx_unicodeencoding \
-    UnpackedTarball/pdfium/core/fxge/fx_ge_fontmap \
     UnpackedTarball/pdfium/core/fxge/cfx_glyphbitmap \
     UnpackedTarball/pdfium/core/fxge/scoped_font_transform \
     UnpackedTarball/pdfium/core/fxge/text_glyph_pos \
@@ -474,8 +473,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxge/dib/cfx_cmyk_to_srgb \
     UnpackedTarball/pdfium/core/fxge/text_char_pos \
     UnpackedTarball/pdfium/core/fxge/cfx_face \
-	UnpackedTarball/pdfium/core/fxge/cfx_fillrenderoptions \
-	UnpackedTarball/pdfium/core/fxge/cfx_textrenderoptions \
 ))
 
 # javascript, build with pdf_enable_v8 disabled.
