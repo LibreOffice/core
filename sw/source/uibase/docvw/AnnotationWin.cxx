@@ -277,6 +277,22 @@ void SwAnnotationWin::ToggleResolvedForThread()
     mrMgr.LayoutPostIts();
 }
 
+void SwAnnotationWin::DeleteThread()
+{
+    // Go to the top and delete each comment one by one
+    SwAnnotationWin *current, *topNote;
+    current = topNote = GetTopReplyNote();
+    SwAnnotationWin* next = mrMgr.GetNextPostIt(KEY_PAGEDOWN, current);
+
+    while(next && next->GetTopReplyNote() == topNote)
+    {
+        current->mnEventId = Application::PostUserEvent( LINK( current, SwAnnotationWin, DeleteHdl), nullptr, true );
+        current = next;
+        next = mrMgr.GetNextPostIt(KEY_PAGEDOWN, current);
+    }
+    current->mnEventId = Application::PostUserEvent( LINK( current, SwAnnotationWin, DeleteHdl), nullptr, true );
+}
+
 bool SwAnnotationWin::IsResolved() const
 {
     return static_cast<SwPostItField*>(mpFormatField->GetField())->GetResolved();

@@ -1087,6 +1087,7 @@ void SwAnnotationShell::NoteExec(SfxRequest const &rReq)
         case FN_REPLY:
         case FN_POSTIT:
         case FN_DELETE_COMMENT:
+        case FN_DELETE_COMMENT_THREAD:
         case FN_RESOLVE_NOTE:
         case FN_RESOLVE_NOTE_THREAD:
             if ( pPostItMgr->HasActiveSidebarWin() )
@@ -1139,6 +1140,7 @@ void SwAnnotationShell::GetNoteState(SfxItemSet &rSet)
         case FN_HIDE_NOTE:
         case FN_HIDE_ALL_NOTES:
         case FN_DELETE_COMMENT:
+        case FN_DELETE_COMMENT_THREAD:
             {
                 if( !pPostItMgr
                     || !pPostItMgr->HasActiveAnnotationWin() )
