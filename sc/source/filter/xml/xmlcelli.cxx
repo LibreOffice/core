@@ -1390,7 +1390,7 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
         }
     }
 
-    ScFormulaCell* pNewCell = new ScFormulaCell(pDoc, rCellPos, std::move(pCode), eGrammar, ScMatrixMode::NONE);
+    ScFormulaCell* pNewCell = new ScFormulaCell(*pDoc, rCellPos, std::move(pCode), eGrammar, ScMatrixMode::NONE);
     SetFormulaCell(pNewCell);
     rDocImport.setFormulaCell(rCellPos, pNewCell);
 }

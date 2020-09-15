@@ -343,7 +343,7 @@ void ScDocumentImport::setFormulaCell(const ScAddress& rPos, std::unique_ptr<ScT
         return;
 
     std::unique_ptr<ScFormulaCell> pFC =
-        std::make_unique<ScFormulaCell>(&mpImpl->mrDoc, rPos, std::move(pArray));
+        std::make_unique<ScFormulaCell>(mpImpl->mrDoc, rPos, std::move(pArray));
 
     mpImpl->mrDoc.CheckLinkFormulaNeedingCheck( *pFC->GetCode());
 
@@ -391,7 +391,7 @@ void ScDocumentImport::setMatrixCells(
     sc::CellStoreType& rCells = pTab->aCol[rBasePos.Col()].maCells;
 
     // Set the master cell.
-    ScFormulaCell* pCell = new ScFormulaCell(&mpImpl->mrDoc, rBasePos, rArray, eGram, ScMatrixMode::Formula);
+    ScFormulaCell* pCell = new ScFormulaCell(mpImpl->mrDoc, rBasePos, rArray, eGram, ScMatrixMode::Formula);
 
     mpImpl->mrDoc.CheckLinkFormulaNeedingCheck( *pCell->GetCode());
 
@@ -422,7 +422,7 @@ void ScDocumentImport::setMatrixCells(
         aRefData.SetAddress(mpImpl->mrDoc.GetSheetLimits(), rBasePos, aPos);
         *t->GetSingleRef() = aRefData;
         std::unique_ptr<ScTokenArray> pTokArr(aArr.Clone());
-        pCell = new ScFormulaCell(&mpImpl->mrDoc, aPos, *pTokArr, eGram, ScMatrixMode::Reference);
+        pCell = new ScFormulaCell(mpImpl->mrDoc, aPos, *pTokArr, eGram, ScMatrixMode::Reference);
         pBlockPos->miCellPos =
             rCells.set(pBlockPos->miCellPos, aPos.Row(), pCell);
     }
@@ -442,7 +442,7 @@ void ScDocumentImport::setMatrixCells(
             aRefData.SetAddress(mpImpl->mrDoc.GetSheetLimits(), rBasePos, aPos);
             *t->GetSingleRef() = aRefData;
             std::unique_ptr<ScTokenArray> pTokArr(aArr.Clone());
-            pCell = new ScFormulaCell(&mpImpl->mrDoc, aPos, *pTokArr, eGram, ScMatrixMode::Reference);
+            pCell = new ScFormulaCell(mpImpl->mrDoc, aPos, *pTokArr, eGram, ScMatrixMode::Reference);
             pBlockPos->miCellPos =
                 rColCells.set(pBlockPos->miCellPos, aPos.Row(), pCell);
         }

@@ -669,7 +669,7 @@ ScFormulaCell::ScFormulaCell( ScDocument& rDoc, const ScAddress& rPos,
 }
 
 ScFormulaCell::ScFormulaCell(
-    ScDocument* pDoc, const ScAddress& rPos, std::unique_ptr<ScTokenArray> pArray,
+    ScDocument& rDoc, const ScAddress& rPos, std::unique_ptr<ScTokenArray> pArray,
     const FormulaGrammar::Grammar eGrammar, ScMatrixMode cMatInd ) :
     bDirty( true ),
     bTableOpDirty( false ),
@@ -690,7 +690,7 @@ ScFormulaCell::ScFormulaCell(
     nFormatType ( SvNumFormatType::NUMBER ),
     eTempGrammar( eGrammar),
     pCode(pArray.release()),
-    pDocument( pDoc ),
+    pDocument( &rDoc ),
     pPrevious(nullptr),
     pNext(nullptr),
     pPreviousTrack(nullptr),
@@ -721,7 +721,7 @@ ScFormulaCell::ScFormulaCell(
 }
 
 ScFormulaCell::ScFormulaCell(
-    ScDocument* pDoc, const ScAddress& rPos, const ScTokenArray& rArray,
+    ScDocument& rDoc, const ScAddress& rPos, const ScTokenArray& rArray,
     const FormulaGrammar::Grammar eGrammar, ScMatrixMode cMatInd ) :
     bDirty( true ),
     bTableOpDirty( false ),
@@ -742,7 +742,7 @@ ScFormulaCell::ScFormulaCell(
     nFormatType ( SvNumFormatType::NUMBER ),
     eTempGrammar( eGrammar),
     pCode(new ScTokenArray(rArray)), // also implicitly does Finalize() on the array
-    pDocument( pDoc ),
+    pDocument( &rDoc ),
     pPrevious(nullptr),
     pNext(nullptr),
     pPreviousTrack(nullptr),
@@ -3247,7 +3247,7 @@ void setOldCodeToUndo(
 
     ScFormulaCell* pFCell =
         new ScFormulaCell(
-            &rUndoDoc, aUndoPos, pOldCode ? *pOldCode : ScTokenArray(rUndoDoc), eTempGrammar, cMatrixFlag);
+            rUndoDoc, aUndoPos, pOldCode ? *pOldCode : ScTokenArray(rUndoDoc), eTempGrammar, cMatrixFlag);
 
     pFCell->SetResultToken(nullptr);  // to recognize it as changed later (Cut/Paste!)
     rUndoDoc.SetFormulaCell(aUndoPos, pFCell);
@@ -3852,7 +3852,7 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
         if (pUndoDoc)
         {
             ScFormulaCell* pFCell = new ScFormulaCell(
-                    pUndoDoc, aPos, pOld ? *pOld : ScTokenArray(*pUndoDoc), eTempGrammar, cMatrixFlag);
+                    *pUndoDoc, aPos, pOld ? *pOld : ScTokenArray(*pUndoDoc), eTempGrammar, cMatrixFlag);
 
             pFCell->aResult.SetToken( nullptr);  // to recognize it as changed later (Cut/Paste!)
             pUndoDoc->SetFormulaCell(aPos, pFCell);

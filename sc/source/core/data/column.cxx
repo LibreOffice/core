@@ -1293,7 +1293,7 @@ class CopyAsLinkHandler
 
         ScTokenArray aArr(mrDestCol.GetDoc());
         aArr.AddSingleReference(aRef);
-        return new ScFormulaCell(&mrDestCol.GetDoc(), ScAddress(mrDestCol.GetCol(), nRow, mrDestCol.GetTab()), aArr);
+        return new ScFormulaCell(mrDestCol.GetDoc(), ScAddress(mrDestCol.GetCol(), nRow, mrDestCol.GetTab()), aArr);
     }
 
     void createRefBlock(const sc::CellStoreType::value_type& aNode, size_t nOffset, size_t nDataSize)
@@ -2325,7 +2325,7 @@ class UpdateRefOnNonCopy
 
         // Insert the old formula group into the undo document.
         ScAddress aUndoPos = rOldPos;
-        ScFormulaCell* pFC = new ScFormulaCell(mpUndoDoc, aUndoPos, rOldCode.Clone());
+        ScFormulaCell* pFC = new ScFormulaCell(*mpUndoDoc, aUndoPos, rOldCode.Clone());
 
         if (nLength == 1)
         {

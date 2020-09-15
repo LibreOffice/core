@@ -153,7 +153,7 @@ void OP_Formula(LotusContext &rContext, SvStream& r, sal_uInt16 /*n*/)
 
     if (rContext.rDoc.ValidColRow(nCol, nRow))
     {
-        ScFormulaCell* pCell = new ScFormulaCell(&rContext.rDoc, aAddress, std::move(pResult));
+        ScFormulaCell* pCell = new ScFormulaCell(rContext.rDoc, aAddress, std::move(pResult));
         pCell->AddRecalcMode( ScRecalcMode::ONLOAD_ONCE );
         rContext.rDoc.EnsureTable(0);
         rContext.rDoc.SetFormulaCell(ScAddress(nCol, nRow, 0), pCell);
@@ -411,7 +411,7 @@ void OP_Formula123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
 
     if (rContext.rDoc.ValidColRow(nCol, nRow) && nTab <= rContext.rDoc.GetMaxTableNumber())
     {
-        ScFormulaCell* pCell = new ScFormulaCell(&rContext.rDoc, aAddress, std::move(pResult));
+        ScFormulaCell* pCell = new ScFormulaCell(rContext.rDoc, aAddress, std::move(pResult));
         pCell->AddRecalcMode( ScRecalcMode::ONLOAD_ONCE );
         rContext.rDoc.EnsureTable(nTab);
         rContext.rDoc.SetFormulaCell(ScAddress(nCol,nRow,nTab), pCell);
