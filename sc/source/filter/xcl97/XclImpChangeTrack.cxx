@@ -59,7 +59,7 @@ XclImpChangeTrack::XclImpChangeTrack( const XclImpRoot& rRoot, const XclImpStrea
         xInStrm->Seek( STREAM_SEEK_TO_BEGIN );
         pStrm.reset( new XclImpStream( *xInStrm, GetRoot() ) );
         pStrm->CopyDecrypterFrom( rBookStrm );
-        pChangeTrack.reset(new ScChangeTrack( &GetDoc() ));
+        pChangeTrack.reset(new ScChangeTrack( GetDoc() ));
 
         sOldUsername = pChangeTrack->GetUser();
         pChangeTrack->SetUseFixDateTime( true );

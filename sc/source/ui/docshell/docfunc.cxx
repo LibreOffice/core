@@ -1238,7 +1238,7 @@ bool ScDocFunc::SetCellText(
             switch (aRes.meType)
             {
                 case ScInputStringType::Formula:
-                    bSet = SetFormulaCell(rPos, new ScFormulaCell(&rDoc, rPos, aRes.maText, eGrammar), !bApi);
+                    bSet = SetFormulaCell(rPos, new ScFormulaCell(rDoc, rPos, aRes.maText, eGrammar), !bApi);
                 break;
                 case ScInputStringType::Number:
                     bSet = SetValueCell(rPos, aRes.mfValue, !bApi);

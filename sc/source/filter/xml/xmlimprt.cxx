@@ -986,7 +986,7 @@ void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyVa
                     else
                     {
                         std::set<OUString> aUsers;
-                        std::unique_ptr<ScChangeTrack> pTrack( new ScChangeTrack(pDoc, aUsers) );
+                        std::unique_ptr<ScChangeTrack> pTrack( new ScChangeTrack(*pDoc, aUsers) );
                         pTrack->SetProtection(aPass);
                         pDoc->SetChangeTrack(std::move(pTrack));
                     }

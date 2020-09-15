@@ -2050,7 +2050,7 @@ void ScColumn::RestoreFromCache(SvStream& rStrm)
                     OUString aStr = OStringToOUString(aOStr, RTL_TEXTENCODING_UTF8);
                     for (sal_uInt64 i = 0; i < nFormulaGroupSize; ++i)
                     {
-                        aFormulaCells[nRow + i] = new ScFormulaCell(&rDocument, aAddr, aStr, eGrammar);
+                        aFormulaCells[nRow + i] = new ScFormulaCell(rDocument, aAddr, aStr, eGrammar);
                         aAddr.IncRow();
                     }
 

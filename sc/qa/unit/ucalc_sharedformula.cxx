@@ -1760,7 +1760,7 @@ void Test::testSharedFormulaUnshareAreaListeners()
                 // Directly set a different formula cell, which bypasses
                 // ScDocument::SetString(), mimicking formula input in view.
                 {
-                    ScFormulaCell* pCell = new ScFormulaCell( m_pDoc, aPos, "=B4");
+                    ScFormulaCell* pCell = new ScFormulaCell( *m_pDoc, aPos, "=B4");
                     ScDocFunc& rDocFunc = getDocShell().GetDocFunc();
                     rDocFunc.SetFormulaCell( aPos, pCell, false);
                 }
@@ -1783,7 +1783,7 @@ void Test::testSharedFormulaUnshareAreaListeners()
             case 6:
                 // Set formula cell vector.
                 {
-                    ScFormulaCell* pCell = new ScFormulaCell( m_pDoc, aPos, "=B4");
+                    ScFormulaCell* pCell = new ScFormulaCell( *m_pDoc, aPos, "=B4");
                     std::vector<ScFormulaCell*> aCells;
                     aCells.push_back(pCell);
                     m_pDoc->SetFormulaCells( aPos, aCells);
@@ -1847,10 +1847,10 @@ void Test::testSharedFormulaUnshareAreaListeners()
         // Add grouping formulas in A1:A2, keep A3:A7
         aPos = ScAddress(0,0,0);
         std::vector<ScFormulaCell*>().swap( aCells);
-        pCell = new ScFormulaCell( m_pDoc, aPos, "=SUM(B1:C1)");
+        pCell = new ScFormulaCell( *m_pDoc, aPos, "=SUM(B1:C1)");
         aCells.push_back(pCell);
         aPos.IncRow();
-        pCell = new ScFormulaCell( m_pDoc, aPos, "=SUM(B2:C2)");
+        pCell = new ScFormulaCell( *m_pDoc, aPos, "=SUM(B2:C2)");
         aCells.push_back(pCell);
         aPos.IncRow(-1);
         m_pDoc->SetFormulaCells( aPos, aCells);
@@ -1872,10 +1872,10 @@ void Test::testSharedFormulaUnshareAreaListeners()
         // Add formulas in A1:A2, keep A3:A7
         aPos = ScAddress(0,0,0);
         std::vector<ScFormulaCell*>().swap( aCells);
-        pCell = new ScFormulaCell( m_pDoc, aPos, "=B1+C1");
+        pCell = new ScFormulaCell( *m_pDoc, aPos, "=B1+C1");
         aCells.push_back(pCell);
         aPos.IncRow();
-        pCell = new ScFormulaCell( m_pDoc, aPos, "=B2+C2");
+        pCell = new ScFormulaCell( *m_pDoc, aPos, "=B2+C2");
         aCells.push_back(pCell);
         aPos.IncRow(-1);
         m_pDoc->SetFormulaCells( aPos, aCells);
@@ -1903,10 +1903,10 @@ void Test::testSharedFormulaUnshareAreaListeners()
         // Add formula in A2, overwrite A3, keep A4:A7
         aPos = ScAddress(0,1,0);
         std::vector<ScFormulaCell*>().swap( aCells);
-        pCell = new ScFormulaCell( m_pDoc, aPos, "=B2+C2");
+        pCell = new ScFormulaCell( *m_pDoc, aPos, "=B2+C2");
         aCells.push_back(pCell);
         aPos.IncRow();
-        pCell = new ScFormulaCell( m_pDoc, aPos, "=B3+C3");
+        pCell = new ScFormulaCell( *m_pDoc, aPos, "=B3+C3");
         aCells.push_back(pCell);
         aPos.IncRow(-1);
         m_pDoc->SetFormulaCells( aPos, aCells);
@@ -1934,10 +1934,10 @@ void Test::testSharedFormulaUnshareAreaListeners()
         // Overwrite A3:A4, keep A5:A7
         aPos = ScAddress(0,2,0);
         std::vector<ScFormulaCell*>().swap( aCells);
-        pCell = new ScFormulaCell( m_pDoc, aPos, "=B3+C3");
+        pCell = new ScFormulaCell( *m_pDoc, aPos, "=B3+C3");
         aCells.push_back(pCell);
         aPos.IncRow();
-        pCell = new ScFormulaCell( m_pDoc, aPos, "=B4+C4");
+        pCell = new ScFormulaCell( *m_pDoc, aPos, "=B4+C4");
         aCells.push_back(pCell);
         aPos.IncRow(-1);
         m_pDoc->SetFormulaCells( aPos, aCells);
@@ -1966,10 +1966,10 @@ void Test::testSharedFormulaUnshareAreaListeners()
         // Keep A3, overwrite A4:A5, keep A6:A7
         aPos = ScAddress(0,3,0);
         std::vector<ScFormulaCell*>().swap( aCells);
-        pCell = new ScFormulaCell( m_pDoc, aPos, "=B4+C4");
+        pCell = new ScFormulaCell( *m_pDoc, aPos, "=B4+C4");
         aCells.push_back(pCell);
         aPos.IncRow();
-        pCell = new ScFormulaCell( m_pDoc, aPos, "=B5+C5");
+        pCell = new ScFormulaCell( *m_pDoc, aPos, "=B5+C5");
         aCells.push_back(pCell);
         aPos.IncRow(-1);
         m_pDoc->SetFormulaCells( aPos, aCells);
@@ -2002,10 +2002,10 @@ void Test::testSharedFormulaUnshareAreaListeners()
         // Keep A3:A4, overwrite A5:A6, keep A7
         aPos = ScAddress(0,4,0);
         std::vector<ScFormulaCell*>().swap( aCells);
-        pCell = new ScFormulaCell( m_pDoc, aPos, "=B5+C5");
+        pCell = new ScFormulaCell( *m_pDoc, aPos, "=B5+C5");
         aCells.push_back(pCell);
         aPos.IncRow();
-        pCell = new ScFormulaCell( m_pDoc, aPos, "=B6+C6");
+        pCell = new ScFormulaCell( *m_pDoc, aPos, "=B6+C6");
         aCells.push_back(pCell);
         aPos.IncRow(-1);
         m_pDoc->SetFormulaCells( aPos, aCells);
@@ -2038,10 +2038,10 @@ void Test::testSharedFormulaUnshareAreaListeners()
         // Keep A3:A5, overwrite A6:A7
         aPos = ScAddress(0,5,0);
         std::vector<ScFormulaCell*>().swap( aCells);
-        pCell = new ScFormulaCell( m_pDoc, aPos, "=B6+C6");
+        pCell = new ScFormulaCell( *m_pDoc, aPos, "=B6+C6");
         aCells.push_back(pCell);
         aPos.IncRow();
-        pCell = new ScFormulaCell( m_pDoc, aPos, "=B7+C7");
+        pCell = new ScFormulaCell( *m_pDoc, aPos, "=B7+C7");
         aCells.push_back(pCell);
         aPos.IncRow(-1);
         m_pDoc->SetFormulaCells( aPos, aCells);
@@ -2070,10 +2070,10 @@ void Test::testSharedFormulaUnshareAreaListeners()
         // Keep A3:A6, overwrite A7, add A8
         aPos = ScAddress(0,6,0);
         std::vector<ScFormulaCell*>().swap( aCells);
-        pCell = new ScFormulaCell( m_pDoc, aPos, "=B7+C7");
+        pCell = new ScFormulaCell( *m_pDoc, aPos, "=B7+C7");
         aCells.push_back(pCell);
         aPos.IncRow();
-        pCell = new ScFormulaCell( m_pDoc, aPos, "=B8+C8");
+        pCell = new ScFormulaCell( *m_pDoc, aPos, "=B8+C8");
         aCells.push_back(pCell);
         aPos.IncRow(-1);
         m_pDoc->SetFormulaCells( aPos, aCells);
@@ -2102,10 +2102,10 @@ void Test::testSharedFormulaUnshareAreaListeners()
         // Keep A3:A7, add A8:A9
         aPos = ScAddress(0,7,0);
         std::vector<ScFormulaCell*>().swap( aCells);
-        pCell = new ScFormulaCell( m_pDoc, aPos, "=B8+C8");
+        pCell = new ScFormulaCell( *m_pDoc, aPos, "=B8+C8");
         aCells.push_back(pCell);
         aPos.IncRow();
-        pCell = new ScFormulaCell( m_pDoc, aPos, "=B9+C9");
+        pCell = new ScFormulaCell( *m_pDoc, aPos, "=B9+C9");
         aCells.push_back(pCell);
         aPos.IncRow(-1);
         m_pDoc->SetFormulaCells( aPos, aCells);
@@ -2134,10 +2134,10 @@ void Test::testSharedFormulaUnshareAreaListeners()
         // Keep A3:A7, add grouping formulas in A8:A9
         aPos = ScAddress(0,7,0);
         std::vector<ScFormulaCell*>().swap( aCells);
-        pCell = new ScFormulaCell( m_pDoc, aPos, "=SUM(B8:C8)");
+        pCell = new ScFormulaCell( *m_pDoc, aPos, "=SUM(B8:C8)");
         aCells.push_back(pCell);
         aPos.IncRow();
-        pCell = new ScFormulaCell( m_pDoc, aPos, "=SUM(B9:C9)");
+        pCell = new ScFormulaCell( *m_pDoc, aPos, "=SUM(B9:C9)");
         aCells.push_back(pCell);
         aPos.IncRow(-1);
         m_pDoc->SetFormulaCells( aPos, aCells);
@@ -2160,10 +2160,10 @@ void Test::testSharedFormulaUnshareAreaListeners()
         // Overwrite grouping formulas in A4:A5
         aPos = ScAddress(0,3,0);
         std::vector<ScFormulaCell*>().swap( aCells);
-        pCell = new ScFormulaCell( m_pDoc, aPos, "=SUM(B4:C4)");
+        pCell = new ScFormulaCell( *m_pDoc, aPos, "=SUM(B4:C4)");
         aCells.push_back(pCell);
         aPos.IncRow();
-        pCell = new ScFormulaCell( m_pDoc, aPos, "=SUM(B5:C5)");
+        pCell = new ScFormulaCell( *m_pDoc, aPos, "=SUM(B5:C5)");
         aCells.push_back(pCell);
         aPos.IncRow(-1);
         m_pDoc->SetFormulaCells( aPos, aCells);
