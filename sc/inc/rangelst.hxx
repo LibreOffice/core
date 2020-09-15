@@ -144,7 +144,7 @@ public:
     ScRangePair*        Find( const ScAddress& );
     ScRangePair*        Find( const ScRange& );
     std::vector<const ScRangePair*>
-                        CreateNameSortedArray( ScDocument* ) const;
+                        CreateNameSortedArray( ScDocument& ) const;
 
     void                Remove(size_t nPos);
     void                Remove(const ScRangePair & rAdr);
