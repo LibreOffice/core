@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "d4ca960a_8d5192c2",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 5456,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-09-15T08:43:14Z",
+      "side": 1,
+      "message": "Thanks for the nice VS trick, we can use that in the future!\n\nA logerrit push used to run some clang-format-check, suggesting running\n\n/opt/lo/bin/clang-format -i bad_file\n\nbut mostly for breaking lines of unit test files.",
+      "parentUuid": "933d7b98_0920fad9",
+      "range": {
+        "startLine": 5455,
+        "startChar": 4,
+        "endLine": 5456,
+        "endChar": 109
+      },
+      "revId": "14b40ec7be7ca8315848034591e3c3a246d5a8dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3d036a56_25d77051",
         "filename": "sc/source/filter/xcl97/xcl97rec.cxx",
         "patchSetId": 16
@@ -132,6 +156,30 @@
       "side": 1,
       "message": "Yes, we use a limit of 100 characters per line; you may see it also in the gerrit review here: everything longer than 100 characters is split.",
       "parentUuid": "3d15af98_40c21266",
+      "range": {
+        "startLine": 1286,
+        "startChar": 8,
+        "endLine": 1286,
+        "endChar": 123
+      },
+      "revId": "14b40ec7be7ca8315848034591e3c3a246d5a8dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52f4418d_8dfea2f0",
+        "filename": "sc/source/filter/xcl97/xcl97rec.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 1286,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-09-15T08:43:14Z",
+      "side": 1,
+      "message": "Thanks for the information. For new lines we will use this limit. It looks really better in gerrit, too.",
+      "parentUuid": "a8342a45_09be37b6",
       "range": {
         "startLine": 1286,
         "startChar": 8,
