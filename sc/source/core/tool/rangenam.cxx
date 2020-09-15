@@ -464,7 +464,7 @@ void ScRangeData::MakeValidName( const ScDocument& rDoc, OUString& rName )
     }
 }
 
-ScRangeData::IsNameValidType ScRangeData::IsNameValid( const OUString& rName, const ScDocument* pDoc )
+ScRangeData::IsNameValidType ScRangeData::IsNameValid( const OUString& rName, const ScDocument& rDoc )
 {
     /* XXX If changed, sc/source/filter/ftools/ftools.cxx
      * ScfTools::ConvertToScDefinedName needs to be changed too. */
@@ -487,8 +487,8 @@ ScRangeData::IsNameValidType ScRangeData::IsNameValid( const OUString& rName, co
         ScAddress::Details details( static_cast<FormulaGrammar::AddressConvention>( nConv ) );
         // Don't check Parse on VALID, any partial only VALID may result in
         // #REF! during compile later!
-        if (aRange.Parse(rName, pDoc, details) != ScRefFlags::ZERO ||
-             aAddr.Parse(rName, pDoc, details) != ScRefFlags::ZERO )
+        if (aRange.Parse(rName, &rDoc, details) != ScRefFlags::ZERO ||
+             aAddr.Parse(rName, &rDoc, details) != ScRefFlags::ZERO )
         {
             return NAME_INVALID_CELL_REF;
         }
