@@ -475,6 +475,7 @@ public:
     virtual FactoryFunction GetUITestFactory() const override;
 
     void updateLOKValListButton(bool bVisible, const ScAddress& rPos) const;
+    void updateLOKInputHelp(const OUString& title, const OUString& content) const;
 
 protected:
     void ImpCreateOverlayObjects();
