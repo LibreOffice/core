@@ -448,7 +448,7 @@ void ScDocShell::SetFormulaOptions( const ScFormulaOptions& rOpt, bool bForLoadi
             if (rOpt.GetUseEnglishFuncName())
             {
                 // switch native symbols to English.
-                ScCompiler aComp(nullptr, ScAddress());
+                formula::FormulaCompiler aComp;
                 ScCompiler::OpCodeMapPtr xMap = aComp.GetOpCodeMap(css::sheet::FormulaLanguage::ENGLISH);
                 ScCompiler::SetNativeSymbols(xMap);
             }

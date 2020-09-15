@@ -394,7 +394,7 @@ public:
     sal_Unicode GetNativeAddressSymbol( Convention::SpecialSymbolType eType ) const;
 
     // Check if it is a valid english function name
-    bool IsEnglishSymbol( const OUString& rName );
+    static bool IsEnglishSymbol( const OUString& rName );
 
     bool IsErrorConstant( const OUString& ) const;
     bool IsTableRefItem( const OUString& ) const;

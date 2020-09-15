@@ -181,7 +181,8 @@ bool ScCompiler::IsEnglishSymbol( const OUString& rName )
     OUString aUpper = ScGlobal::getCharClassPtr()->uppercase(rName);
 
     // 1. built-in function name
-    OpCode eOp = ScCompiler::GetEnglishOpCode( aUpper );
+    formula::FormulaCompiler aCompiler;
+    OpCode eOp = aCompiler.GetEnglishOpCode( aUpper );
     if ( eOp != ocNone )
     {
         return true;
