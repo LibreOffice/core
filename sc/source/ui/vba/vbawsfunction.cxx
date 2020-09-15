@@ -136,7 +136,7 @@ ScVbaWSFunction::invoke(const OUString& FunctionName, const uno::Sequence< uno::
     bool bAsArray = true;
 
     // special handing for some functions that don't work correctly in FunctionAccess
-    ScCompiler aCompiler( nullptr, ScAddress() );
+    formula::FormulaCompiler aCompiler;
     OpCode eOpCode = aCompiler.GetEnglishOpCode( FunctionName.toAsciiUpperCase() );
     switch( eOpCode )
     {
@@ -251,11 +251,10 @@ ScVbaWSFunction::hasMethod(const OUString& Name)
     bool bIsFound = false;
     try
     {
-    // the function name contained in the com.sun.star.sheet.FunctionDescription service is alwayse localized.
+        // the function name contained in the com.sun.star.sheet.FunctionDescription service is alwayse localized.
         // but the function name used in WorksheetFunction is a programmatic name (seems English).
         // So m_xNameAccess->hasByName( Name ) may fail to find name when a function name has a localized name.
-        ScCompiler aCompiler( nullptr, ScAddress() );
-        if( aCompiler.IsEnglishSymbol( Name ) )
+        if( ScCompiler::IsEnglishSymbol( Name ) )
             bIsFound = true;
     }
     catch( uno::Exception& /*e*/ )
