@@ -204,6 +204,7 @@ class SwPostItMgr: public SfxListener
         void Delete(const OUString& aAuthor);
         void Delete(sal_uInt32 nPostItId);
         void Delete();
+        void DeleteCommentThread(sal_uInt32 nPostItId);
         void ToggleResolved(sal_uInt32 nPostItId);
         void ToggleResolvedForThread(sal_uInt32 nPostItId);
 
