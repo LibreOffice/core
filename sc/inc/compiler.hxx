@@ -266,7 +266,7 @@ private:
     } g_aAddInMap[];
     static size_t GetAddInMapCount();
 
-    ScDocument* pDoc;
+    ScDocument& rDoc;
     ScAddress   aPos;
 
     SvNumberFormatter* mpFormatter;
@@ -358,8 +358,7 @@ public:
     ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos,
             bool bComputeII = false, bool bMatrixFlag = false, const ScInterpreterContext* pContext = nullptr );
 
-    /** If eGrammar == GRAM_UNSPECIFIED then the grammar of pDocument is used,
-        if pDocument==nullptr then GRAM_DEFAULT.
+    /** If eGrammar == GRAM_UNSPECIFIED then the grammar of rDocument is used,
      */
     ScCompiler( ScDocument& rDocument, const ScAddress&,
             formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_UNSPECIFIED,
@@ -368,8 +367,7 @@ public:
     ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, ScTokenArray& rArr,
             bool bComputeII = false, bool bMatrixFlag = false, const ScInterpreterContext* pContext = nullptr );
 
-    /** If eGrammar == GRAM_UNSPECIFIED then the grammar of pDocument is used,
-        if pDocument==nullptr then GRAM_DEFAULT.
+    /** If eGrammar == GRAM_UNSPECIFIED then the grammar of rDocument is used,
      */
     ScCompiler( ScDocument& rDocument, const ScAddress&, ScTokenArray& rArr,
             formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_UNSPECIFIED,
