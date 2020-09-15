@@ -88,7 +88,7 @@ class ScAttrArray
 private:
     SCCOL           nCol;
     SCTAB           nTab;
-    ScDocument* const     pDocument;
+    ScDocument&     rDocument;
 
     std::vector<ScAttrEntry> mvData;
 
@@ -110,10 +110,10 @@ friend class ScHorizontalAttrIterator;
     ScAttrArray& operator=(const ScAttrArray&) = delete;
 
 public:
-            ScAttrArray( SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc, ScAttrArray* pNextColAttrArray );
+            ScAttrArray( SCCOL nNewCol, SCTAB nNewTab, ScDocument& rDoc, ScAttrArray* pNextColAttrArray );
             ~ScAttrArray();
 
-    ScDocument* GetDoc() { return pDocument; }
+    ScDocument& GetDoc() { return rDocument; }
     void    SetTab(SCTAB nNewTab)   { nTab = nNewTab; }
     void    SetCol(SCCOL nNewCol)   { nCol = nNewCol; }
 #if DEBUG_SC_TESTATTRARRAY

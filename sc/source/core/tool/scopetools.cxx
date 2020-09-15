@@ -75,13 +75,13 @@ void DelayFormulaGroupingSwitch::reset()
 }
 
 DelayStartListeningFormulaCells::DelayStartListeningFormulaCells(ScColumn& column, bool delay)
-    : mColumn(column), mbOldValue(column.GetDoc()->IsEnabledDelayStartListeningFormulaCells(&column))
+    : mColumn(column), mbOldValue(column.GetDoc().IsEnabledDelayStartListeningFormulaCells(&column))
 {
-    column.GetDoc()->EnableDelayStartListeningFormulaCells(&column, delay);
+    column.GetDoc().EnableDelayStartListeningFormulaCells(&column, delay);
 }
 
 DelayStartListeningFormulaCells::DelayStartListeningFormulaCells(ScColumn& column)
-    : mColumn(column), mbOldValue(column.GetDoc()->IsEnabledDelayStartListeningFormulaCells(&column))
+    : mColumn(column), mbOldValue(column.GetDoc().IsEnabledDelayStartListeningFormulaCells(&column))
 {
 }
 
@@ -90,20 +90,20 @@ DelayStartListeningFormulaCells::~DelayStartListeningFormulaCells()
 #if defined(__COVERITY__)
     try
     {
-        mColumn.GetDoc()->EnableDelayStartListeningFormulaCells(&mColumn, mbOldValue);
+        mColumn.GetDoc().EnableDelayStartListeningFormulaCells(&mColumn, mbOldValue);
     }
     catch (...)
     {
         std::abort();
     }
 #else
-    mColumn.GetDoc()->EnableDelayStartListeningFormulaCells(&mColumn, mbOldValue);
+    mColumn.GetDoc().EnableDelayStartListeningFormulaCells(&mColumn, mbOldValue);
 #endif
 }
 
 void DelayStartListeningFormulaCells::set()
 {
-    mColumn.GetDoc()->EnableDelayStartListeningFormulaCells(&mColumn, true);
+    mColumn.GetDoc().EnableDelayStartListeningFormulaCells(&mColumn, true);
 }
 
 }

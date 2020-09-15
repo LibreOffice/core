@@ -137,7 +137,7 @@ void setSuffixCell(
     ScColumn& rColumn, SCROW nRow, sal_Int32 nValue, sal_uInt16 nDigits, const OUString& rSuffix,
     CellType eCellType, bool bIsOrdinalSuffix )
 {
-    ScDocument& rDoc = *rColumn.GetDoc();
+    ScDocument& rDoc = rColumn.GetDoc();
     OUString aValue = lcl_ValueString(nValue, nDigits);
     if (!bIsOrdinalSuffix)
     {

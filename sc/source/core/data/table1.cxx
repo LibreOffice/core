@@ -271,7 +271,7 @@ ScTable::ScTable( ScDocument& rDoc, SCTAB nNewTab, const OUString& rNewName,
     bActiveScenario(false),
     mbPageBreaksValid(false),
     mbForceBreaks(false),
-    aDefaultColAttrArray(static_cast<SCCOL>(-1), nNewTab, &rDoc, nullptr)
+    aDefaultColAttrArray(static_cast<SCCOL>(-1), nNewTab, rDoc, nullptr)
 {
     if (bColInfo)
     {

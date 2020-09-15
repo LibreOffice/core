@@ -115,7 +115,7 @@ void commitToColumn( const ScCellValue& rCell, ScColumn& rColumn, SCROW nRow )
             rColumn.SetRawString(nRow, *rCell.mpString);
         break;
         case CELLTYPE_EDIT:
-            rColumn.SetEditText(nRow, ScEditUtil::Clone(*rCell.mpEditText, *rColumn.GetDoc()));
+            rColumn.SetEditText(nRow, ScEditUtil::Clone(*rCell.mpEditText, rColumn.GetDoc()));
         break;
         case CELLTYPE_VALUE:
             rColumn.SetValue(nRow, rCell.mfValue);
@@ -123,7 +123,7 @@ void commitToColumn( const ScCellValue& rCell, ScColumn& rColumn, SCROW nRow )
         case CELLTYPE_FORMULA:
         {
             ScAddress aDestPos(rColumn.GetCol(), nRow, rColumn.GetTab());
-            rColumn.SetFormulaCell(nRow, new ScFormulaCell(*rCell.mpFormula, *rColumn.GetDoc(), aDestPos));
+            rColumn.SetFormulaCell(nRow, new ScFormulaCell(*rCell.mpFormula, rColumn.GetDoc(), aDestPos));
         }
         break;
         default:
