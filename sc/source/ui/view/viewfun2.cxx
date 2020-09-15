@@ -259,10 +259,10 @@ enum ScAutoSum
 
 }
 
-static ScAutoSum lcl_IsAutoSumData( ScDocument* pDoc, SCCOL nCol, SCROW nRow,
+static ScAutoSum lcl_IsAutoSumData( ScDocument& rDoc, SCCOL nCol, SCROW nRow,
         SCTAB nTab, ScDirection eDir, SCCOLROW& nExtend )
 {
-    ScRefCellValue aCell(*pDoc, ScAddress(nCol, nRow, nTab));
+    ScRefCellValue aCell(rDoc, ScAddress(nCol, nRow, nTab));
     if (aCell.hasNumeric())
     {
         if (aCell.meType == CELLTYPE_FORMULA)
@@ -298,7 +298,7 @@ static ScAutoSum lcl_IsAutoSumData( ScDocument* pDoc, SCCOL nCol, SCROW nRow,
 
 #define SC_AUTOSUM_MAXCOUNT     20
 
-static ScAutoSum lcl_SeekAutoSumData( ScDocument* pDoc, SCCOL& nCol, SCROW& nRow,
+static ScAutoSum lcl_SeekAutoSumData( ScDocument& rDoc, SCCOL& nCol, SCROW& nRow,
         SCTAB nTab, ScDirection eDir, SCCOLROW& nExtend )
 {
     sal_uInt16 nCount = 0;
@@ -320,7 +320,7 @@ static ScAutoSum lcl_SeekAutoSumData( ScDocument* pDoc, SCCOL& nCol, SCROW& nRow
         }
         ScAutoSum eSum;
         if ( (eSum = lcl_IsAutoSumData(
-                pDoc, nCol, nRow, nTab, eDir, nExtend )) != ScAutoSumNone )
+                rDoc, nCol, nRow, nTab, eDir, nExtend )) != ScAutoSumNone )
             return eSum;
         ++nCount;
     }
@@ -329,14 +329,14 @@ static ScAutoSum lcl_SeekAutoSumData( ScDocument* pDoc, SCCOL& nCol, SCROW& nRow
 
 #undef SC_AUTOSUM_MAXCOUNT
 
-static bool lcl_FindNextSumEntryInColumn( ScDocument* pDoc, SCCOL nCol, SCROW& nRow,
+static bool lcl_FindNextSumEntryInColumn( ScDocument& rDoc, SCCOL nCol, SCROW& nRow,
                                    SCTAB nTab, SCCOLROW& nExtend, SCROW nMinRow )
 {
     const SCROW nTmp = nRow;
     ScAutoSum eSkip = ScAutoSumNone;
     for (;;)
     {
-        eSkip = lcl_IsAutoSumData( pDoc, nCol, nRow, nTab, DIR_TOP, nExtend );
+        eSkip = lcl_IsAutoSumData( rDoc, nCol, nRow, nTab, DIR_TOP, nExtend );
         if (eSkip != ScAutoSumData || nRow <= nMinRow )
             break;
         --nRow;
@@ -344,14 +344,14 @@ static bool lcl_FindNextSumEntryInColumn( ScDocument* pDoc, SCCOL nCol, SCROW& n
     return eSkip >= ScAutoSumSum && nRow < nTmp;
 }
 
-static bool lcl_FindNextSumEntryInRow( ScDocument* pDoc, SCCOL& nCol, SCROW nRow,
+static bool lcl_FindNextSumEntryInRow( ScDocument& rDoc, SCCOL& nCol, SCROW nRow,
                                 SCTAB nTab, SCCOLROW& nExtend, SCCOL nMinCol )
 {
     const SCCOL nTmp = nCol;
     ScAutoSum eSkip = ScAutoSumNone;
     for (;;)
     {
-        eSkip = lcl_IsAutoSumData( pDoc, nCol, nRow, nTab, DIR_LEFT, nExtend );
+        eSkip = lcl_IsAutoSumData( rDoc, nCol, nRow, nTab, DIR_LEFT, nExtend );
         if (eSkip != ScAutoSumData || nCol <= nMinCol )
             break;
         --nCol;
@@ -359,7 +359,7 @@ static bool lcl_FindNextSumEntryInRow( ScDocument* pDoc, SCCOL& nCol, SCROW nRow
     return eSkip >= ScAutoSumSum && nCol < nTmp;
 }
 
-static ScAutoSum lcl_GetAutoSumForColumnRange( ScDocument* pDoc, ScRangeList& rRangeList, const ScRange& rRange )
+static ScAutoSum lcl_GetAutoSumForColumnRange( ScDocument& rDoc, ScRangeList& rRangeList, const ScRange& rRange )
 {
     const ScAddress aStart = rRange.aStart;
     const ScAddress aEnd = rRange.aEnd;
@@ -373,7 +373,7 @@ static ScAutoSum lcl_GetAutoSumForColumnRange( ScDocument* pDoc, ScRangeList& rR
     SCROW nEndRow = aEnd.Row();
     SCROW nStartRow = nEndRow;
     SCCOLROW nExtend = 0;
-    ScAutoSum eSum = lcl_IsAutoSumData( pDoc, nCol, nEndRow, nTab, DIR_TOP, nExtend /*out*/ );
+    ScAutoSum eSum = lcl_IsAutoSumData( rDoc, nCol, nEndRow, nTab, DIR_TOP, nExtend /*out*/ );
 
     if ( eSum >= ScAutoSumSum )
     {
@@ -382,7 +382,7 @@ static ScAutoSum lcl_GetAutoSumForColumnRange( ScDocument* pDoc, ScRangeList& rR
         {
             rRangeList.push_back( ScRange( nCol, nStartRow, nTab, nCol, nEndRow, nTab ) );
             nEndRow = static_cast< SCROW >( nExtend );
-            bContinue = lcl_FindNextSumEntryInColumn( pDoc, nCol, nEndRow /*inout*/, nTab, nExtend /*out*/, aStart.Row() );
+            bContinue = lcl_FindNextSumEntryInColumn( rDoc, nCol, nEndRow /*inout*/, nTab, nExtend /*out*/, aStart.Row() );
             if ( bContinue )
             {
                 nStartRow = nEndRow;
@@ -393,7 +393,7 @@ static ScAutoSum lcl_GetAutoSumForColumnRange( ScDocument* pDoc, ScRangeList& rR
     {
         while ( nStartRow > aStart.Row() )
         {
-            eSum = lcl_IsAutoSumData( pDoc, nCol, nStartRow-1, nTab, DIR_TOP, nExtend /*out*/ );
+            eSum = lcl_IsAutoSumData( rDoc, nCol, nStartRow-1, nTab, DIR_TOP, nExtend /*out*/ );
             if (eSum >= ScAutoSumSum )
                 break;
             --nStartRow;
@@ -406,7 +406,7 @@ static ScAutoSum lcl_GetAutoSumForColumnRange( ScDocument* pDoc, ScRangeList& rR
     return eSum;
 }
 
-static ScAutoSum lcl_GetAutoSumForRowRange( ScDocument* pDoc, ScRangeList& rRangeList, const ScRange& rRange )
+static ScAutoSum lcl_GetAutoSumForRowRange( ScDocument& rDoc, ScRangeList& rRangeList, const ScRange& rRange )
 {
     const ScAddress aStart = rRange.aStart;
     const ScAddress aEnd = rRange.aEnd;
@@ -420,7 +420,7 @@ static ScAutoSum lcl_GetAutoSumForRowRange( ScDocument* pDoc, ScRangeList& rRang
     SCCOL nEndCol = aEnd.Col();
     SCCOL nStartCol = nEndCol;
     SCCOLROW nExtend = 0;
-    ScAutoSum eSum = lcl_IsAutoSumData( pDoc, nEndCol, nRow, nTab, DIR_LEFT, nExtend /*out*/ );
+    ScAutoSum eSum = lcl_IsAutoSumData( rDoc, nEndCol, nRow, nTab, DIR_LEFT, nExtend /*out*/ );
 
     if ( eSum >= ScAutoSumSum )
     {
@@ -429,7 +429,7 @@ static ScAutoSum lcl_GetAutoSumForRowRange( ScDocument* pDoc, ScRangeList& rRang
         {
             rRangeList.push_back( ScRange( nStartCol, nRow, nTab, nEndCol, nRow, nTab ) );
             nEndCol = static_cast< SCCOL >( nExtend );
-            bContinue = lcl_FindNextSumEntryInRow( pDoc, nEndCol /*inout*/, nRow, nTab, nExtend /*out*/, aStart.Col() );
+            bContinue = lcl_FindNextSumEntryInRow( rDoc, nEndCol /*inout*/, nRow, nTab, nExtend /*out*/, aStart.Col() );
             if ( bContinue )
             {
                 nStartCol = nEndCol;
@@ -440,7 +440,7 @@ static ScAutoSum lcl_GetAutoSumForRowRange( ScDocument* pDoc, ScRangeList& rRang
     {
         while ( nStartCol > aStart.Col() )
         {
-            eSum = lcl_IsAutoSumData( pDoc, nStartCol-1, nRow, nTab, DIR_LEFT, nExtend /*out*/ );
+            eSum = lcl_IsAutoSumData( rDoc, nStartCol-1, nRow, nTab, DIR_LEFT, nExtend /*out*/ );
             if (eSum >= ScAutoSumSum )
                 break;
             --nStartCol;
@@ -495,24 +495,24 @@ bool ScViewFunc::GetAutoSumArea( ScRangeList& rRangeList )
 
     ScAutoSum eSum;
     if ( nRow != 0
-            && ((eSum = lcl_IsAutoSumData( &rDoc, nCol, nRow-1, nTab,
+            && ((eSum = lcl_IsAutoSumData( rDoc, nCol, nRow-1, nTab,
                 DIR_TOP, nExtend /*out*/ )) == ScAutoSumData )
-            && ((eSum = lcl_IsAutoSumData( &rDoc, nCol, nRow-1, nTab,
+            && ((eSum = lcl_IsAutoSumData( rDoc, nCol, nRow-1, nTab,
                 DIR_LEFT, nExtend /*out*/ )) == ScAutoSumData )
         )
     {
         bRow = true;
         nSeekRow = nRow - 1;
     }
-    else if ( nCol != 0 && (eSum = lcl_IsAutoSumData( &rDoc, nCol-1, nRow, nTab,
+    else if ( nCol != 0 && (eSum = lcl_IsAutoSumData( rDoc, nCol-1, nRow, nTab,
             DIR_LEFT, nExtend /*out*/ )) == ScAutoSumData )
     {
         bCol = true;
         nSeekCol = nCol - 1;
     }
-    else if ( (eSum = lcl_SeekAutoSumData( &rDoc, nCol, nSeekRow, nTab, DIR_TOP, nExtend /*out*/ )) != ScAutoSumNone )
+    else if ( (eSum = lcl_SeekAutoSumData( rDoc, nCol, nSeekRow, nTab, DIR_TOP, nExtend /*out*/ )) != ScAutoSumNone )
         bRow = true;
-    else if (( eSum = lcl_SeekAutoSumData( &rDoc, nSeekCol, nRow, nTab, DIR_LEFT, nExtend /*out*/ )) != ScAutoSumNone )
+    else if (( eSum = lcl_SeekAutoSumData( rDoc, nSeekCol, nRow, nTab, DIR_LEFT, nExtend /*out*/ )) != ScAutoSumNone )
         bCol = true;
 
     if ( bCol || bRow )
@@ -540,13 +540,13 @@ bool ScViewFunc::GetAutoSumArea( ScRangeList& rRangeList )
             {
                 if ( bRow )
                 {
-                    while ( nStartRow != 0 && lcl_IsAutoSumData( &rDoc, nCol,
+                    while ( nStartRow != 0 && lcl_IsAutoSumData( rDoc, nCol,
                             nStartRow-1, nTab, DIR_TOP, nExtend /*out*/ ) == eSum )
                         --nStartRow;
                 }
                 else
                 {
-                    while ( nStartCol != 0 && lcl_IsAutoSumData( &rDoc, nStartCol-1,
+                    while ( nStartCol != 0 && lcl_IsAutoSumData( rDoc, nStartCol-1,
                             nRow, nTab, DIR_LEFT, nExtend /*out*/ ) == eSum )
                         --nStartCol;
                 }
@@ -558,7 +558,7 @@ bool ScViewFunc::GetAutoSumArea( ScRangeList& rRangeList )
                 if ( bRow )
                 {
                     nEndRow = static_cast< SCROW >( nExtend );
-                    bContinue = lcl_FindNextSumEntryInColumn( &rDoc, nCol, nEndRow /*inout*/, nTab, nExtend /*out*/, 0 );
+                    bContinue = lcl_FindNextSumEntryInColumn( rDoc, nCol, nEndRow /*inout*/, nTab, nExtend /*out*/, 0 );
                     if ( bContinue )
                     {
                         nStartRow = nEndRow;
@@ -567,7 +567,7 @@ bool ScViewFunc::GetAutoSumArea( ScRangeList& rRangeList )
                 else
                 {
                     nEndCol = static_cast< SCCOL >( nExtend );
-                    bContinue = lcl_FindNextSumEntryInRow( &rDoc, nEndCol /*inout*/, nRow, nTab, nExtend /*out*/, 0 );
+                    bContinue = lcl_FindNextSumEntryInRow( rDoc, nEndCol /*inout*/, nRow, nTab, nExtend /*out*/, 0 );
                     if ( bContinue )
                     {
                         nStartCol = nEndCol;
@@ -602,7 +602,7 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
     {
         for ( SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol )
         {
-            if ( lcl_IsAutoSumData( &rDoc, nCol, nRow, nTab, DIR_TOP, nExtend ) != ScAutoSumNone )
+            if ( lcl_IsAutoSumData( rDoc, nCol, nRow, nTab, DIR_TOP, nExtend ) != ScAutoSumNone )
             {
                 bRowData = true;
                 break;
@@ -625,7 +625,7 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
     {
         for ( SCROW nRow = nStartRow; nRow <= nEndRow; ++nRow )
         {
-            if ( lcl_IsAutoSumData( &rDoc, nCol, nRow, nTab, DIR_LEFT, nExtend ) != ScAutoSumNone )
+            if ( lcl_IsAutoSumData( rDoc, nCol, nRow, nTab, DIR_LEFT, nExtend ) != ScAutoSumNone )
             {
                 bColData = true;
                 break;
@@ -737,7 +737,7 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
                 ScRangeList aRangeList;
                 // Include the originally selected start row.
                 const ScRange aRange( nCol, rRange.aStart.Row(), nTab, nCol, nSumEndRow, nTab );
-                if ( (eSum = lcl_GetAutoSumForColumnRange( &rDoc, aRangeList, aRange )) != ScAutoSumNone )
+                if ( (eSum = lcl_GetAutoSumForColumnRange( rDoc, aRangeList, aRange )) != ScAutoSumNone )
                 {
                     if (++nRowSums == 1)
                         nRowSumsStartCol = aRangeList[0].aStart.Col();
@@ -774,7 +774,7 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
                 ScRangeList aRangeList;
                 // Include the originally selected start column.
                 const ScRange aRange( rRange.aStart.Col(), nRow, nTab, nSumEndCol, nRow, nTab );
-                if ( (eSum = lcl_GetAutoSumForRowRange( &rDoc, aRangeList, aRange )) != ScAutoSumNone )
+                if ( (eSum = lcl_GetAutoSumForRowRange( rDoc, aRangeList, aRange )) != ScAutoSumNone )
                 {
                     if (++nColSums == 1)
                         nColSumsStartRow = aRangeList[0].aStart.Row();
