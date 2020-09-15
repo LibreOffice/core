@@ -2173,7 +2173,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
             aArr.AddOpCode( ocClose );
             aArr.AddOpCode( ocStop );
             ScFormulaCell* pCell = new ScFormulaCell(
-                &rDocument, ScAddress(nResCols[nResult], rRowEntry.nDestRow, nTab), aArr);
+                rDocument, ScAddress(nResCols[nResult], rRowEntry.nDestRow, nTab), aArr);
             if ( rParam.bIncludePattern )
                 pCell->SetNeedNumberFormat(true);
 

@@ -1956,7 +1956,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                             else
                             {
                                 ScFormulaCell* pFCell = new ScFormulaCell(
-                                        &rDoc, aPos, *xCode, eGrammar, ScMatrixMode::NONE);
+                                        rDoc, aPos, *xCode, eGrammar, ScMatrixMode::NONE);
                                 rDoc.SetFormulaCell(aPos, pFCell);
                             }
                         }

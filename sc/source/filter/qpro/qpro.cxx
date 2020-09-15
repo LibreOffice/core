@@ -113,7 +113,7 @@ ErrCode ScQProReader::readSheet( SCTAB nTab, ScDocument& rDoc, ScQProStyle *pSty
                     eRet = SCERR_IMPORT_FORMAT;
                 else
                 {
-                    ScFormulaCell* pFormula = new ScFormulaCell(&rDoc, aAddr, std::move(pArray));
+                    ScFormulaCell* pFormula = new ScFormulaCell(rDoc, aAddr, std::move(pArray));
                     nStyle = nStyle >> 3;
                     pFormula->AddRecalcMode( ScRecalcMode::ONLOAD_ONCE );
                     pStyle->SetFormat( &rDoc, nCol, nRow, nTab, nStyle );

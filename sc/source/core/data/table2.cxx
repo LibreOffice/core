@@ -815,7 +815,7 @@ class TransClipHandler
 
         ScTokenArray aArr(mrClipTab.GetDoc());
         aArr.AddSingleReference(aRef);
-        return new ScFormulaCell(&mrClipTab.GetDoc(), rDestPos, aArr);
+        return new ScFormulaCell(mrClipTab.GetDoc(), rDestPos, aArr);
     }
 
     void setLink(size_t nRow)
@@ -917,7 +917,7 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
                 pTransClip->SetFormulaCell(
                     static_cast<SCCOL>(nRow-nRow1), static_cast<SCROW>(nCol-nCol1),
-                    new ScFormulaCell(&rDestDoc, aDestPos, aArr));
+                    new ScFormulaCell(rDestDoc, aDestPos, aArr));
             }
         }
         else

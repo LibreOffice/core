@@ -410,7 +410,7 @@ void ScOrcusFactory::finalize()
         if (!pArray)
             return std::unique_ptr<ScFormulaCell>();
 
-        return std::make_unique<ScFormulaCell>(&maDoc.getDoc(), rToken.maPos, *pArray);
+        return std::make_unique<ScFormulaCell>(maDoc.getDoc(), rToken.maPos, *pArray);
     };
 
     int nCellCount = 0;

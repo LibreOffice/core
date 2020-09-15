@@ -595,7 +595,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
         // GRAM_API doesn't really matter for the token array but fits with
         // other API compatibility grammars.
         ScFormulaCell* pFormula = new ScFormulaCell(
-            pDoc, aFormulaPos, aTokenArr, formula::FormulaGrammar::GRAM_API,
+            *pDoc, aFormulaPos, aTokenArr, formula::FormulaGrammar::GRAM_API,
             mbArray ? ScMatrixMode::Formula : ScMatrixMode::NONE );
         pFormula = pDoc->SetFormulaCell(aFormulaPos, pFormula);
         if (mbArray && pFormula)

@@ -148,9 +148,9 @@ void applySharedFormulas(
             // (while editing) will mess things up. Pass the cloned array as a
             // pointer and not as reference to avoid any further allocation.
             if (rOrigin.Col() != aPos.Col())
-                pCell = new ScFormulaCell(&rDoc.getDoc(), aPos, pArray->Clone());
+                pCell = new ScFormulaCell(rDoc.getDoc(), aPos, pArray->Clone());
             else
-                pCell = new ScFormulaCell(&rDoc.getDoc(), aPos, *pArray);
+                pCell = new ScFormulaCell(rDoc.getDoc(), aPos, *pArray);
 
             rDoc.setFormulaCell(aPos, pCell);
             if (rDesc.maCellValue.isEmpty())
@@ -224,7 +224,7 @@ void applyCellFormulas(
                 pCell = new ScFormulaCell(rDoc.getDoc(), aPos, xGroup);
             }
             else
-                pCell = new ScFormulaCell(&rDoc.getDoc(), aPos, p->mpCell->GetCode()->Clone());
+                pCell = new ScFormulaCell(rDoc.getDoc(), aPos, p->mpCell->GetCode()->Clone());
 
             rDoc.setFormulaCell(aPos, pCell);
 
@@ -243,7 +243,7 @@ void applyCellFormulas(
 
         aCompiler.CompileTokenArray(); // Generate RPN tokens.
 
-        ScFormulaCell* pCell = new ScFormulaCell(&rDoc.getDoc(), aPos, std::move(pCode));
+        ScFormulaCell* pCell = new ScFormulaCell(rDoc.getDoc(), aPos, std::move(pCode));
         rDoc.setFormulaCell(aPos, pCell);
         rCache.store(aPos, pCell);
     }

@@ -506,7 +506,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             }
         }
 
-        ScFormulaCell aCell(&rDoc, aPos, std::move( pArr ), formula::FormulaGrammar::GRAM_DEFAULT, ScMatrixMode::NONE);
+        ScFormulaCell aCell(rDoc, aPos, std::move( pArr ), formula::FormulaGrammar::GRAM_DEFAULT, ScMatrixMode::NONE);
 
         SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
         for (const auto& rTab : rMark)
