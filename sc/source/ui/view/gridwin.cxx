@@ -4704,6 +4704,17 @@ void ScGridWindow::UpdateAutoFillMark(bool bMarked, const ScRange& rMarkRange)
     }
 }
 
+void ScGridWindow::updateLOKInputHelp(const Point& pos, const OUString& title, const OUString& content) const
+{
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+    OUString help = "{ title: \"" + title + "\"" + ", content: \"" +  content + "\"";
+    std::string position = ", position: { X: " + std::to_string(pos.getX()) + ", Y: " + std::to_string(pos.getY()) + " }";
+    std::string result = help.toUtf8().getStr();
+    result += position + " }";
+
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_VALIDITY_LIST_BUTTON, result.c_str());
+}
+
 void ScGridWindow::updateLOKValListButton( bool bVisible, const ScAddress& rPos ) const
 {
     SCCOL nX = rPos.Col();

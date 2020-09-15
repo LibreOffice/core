@@ -816,6 +816,7 @@ void ScTabView::TestHintWindow()
                     if (pWindow == pWin)
                     {
                         xOverlayManager->add(*pOverlay);
+                        pWindow->updateLOKInputHelp(aPos, aTitle, aMessage);
                     }
                     else
                     {
