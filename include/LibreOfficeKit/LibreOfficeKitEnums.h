@@ -747,6 +747,13 @@ typedef enum
      * }
      */
     LOK_CALLBACK_FORM_FIELD_BUTTON = 49,
+
+    /**
+     * When for the current cell is defined an input help text.
+     *
+     * The payload format is JSON: { "title": "title text", "content": "content text" }
+     */
+    LOK_CALLBACK_VALIDITY_INPUT_HELP = 51,
 }
 LibreOfficeKitCallbackType;
 
@@ -851,6 +858,8 @@ static inline const char* lokCallbackTypeToString(int nType)
         return "LOK_CALLBACK_WINDOW";
     case LOK_CALLBACK_VALIDITY_LIST_BUTTON:
         return "LOK_CALLBACK_VALIDITY_LIST_BUTTON";
+    case LOK_CALLBACK_VALIDITY_INPUT_HELP:
+        return "LOK_CALLBACK_VALIDITY_INPUT_HELP";
     case LOK_CALLBACK_CLIPBOARD_CHANGED:
         return "LOK_CALLBACK_CLIPBOARD_CHANGED";
     case LOK_CALLBACK_CONTEXT_CHANGED:
