@@ -199,7 +199,7 @@ private:
     mutable SCROW nTableAreaY;
 
     SCTAB           nTab;
-    ScDocument*     pDocument;
+    ScDocument&     rDocument;
     std::unique_ptr<utl::TextSearch> pSearchText;
 
     mutable OUString aUpperName;             // #i62977# filled only on demand, reset in SetName
@@ -266,14 +266,14 @@ friend class sc::EditTextIterator;
 friend class sc::FormulaGroupAreaListener;
 
 public:
-                ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
+                ScTable( ScDocument& rDoc, SCTAB nNewTab, const OUString& rNewName,
                          bool bColInfo = true, bool bRowInfo = true );
                 ~ScTable() COVERITY_NOEXCEPT_FALSE;
                 ScTable(const ScTable&) = delete;
     ScTable&    operator=(const ScTable&) = delete;
 
-    ScDocument& GetDoc() { return *pDocument;}
-    const ScDocument& GetDoc() const { return *pDocument;}
+    ScDocument& GetDoc() { return rDocument;}
+    const ScDocument& GetDoc() const { return rDocument;}
     SCTAB GetTab() const { return nTab; }
 
     ScOutlineTable* GetOutlineTable()               { return pOutlineTable.get(); }
