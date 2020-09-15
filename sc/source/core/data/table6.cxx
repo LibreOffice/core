@@ -88,9 +88,9 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, sc::Colum
         case SvxSearchCellType::FORMULA:
         {
             if ( eCellType == CELLTYPE_FORMULA )
-                aCell.mpFormula->GetFormula(aString, pDocument->GetGrammar());
+                aCell.mpFormula->GetFormula(aString, rDocument.GetGrammar());
             else if ( eCellType == CELLTYPE_EDIT )
-                bMultiLine = lcl_GetTextWithBreaks(*aCell.mpEditText, pDocument, aString);
+                bMultiLine = lcl_GetTextWithBreaks(*aCell.mpEditText, &rDocument, aString);
             else
             {
                 if( !bSearchFormatted )
@@ -102,7 +102,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, sc::Colum
         }
         case SvxSearchCellType::VALUE:
             if ( eCellType == CELLTYPE_EDIT )
-                bMultiLine = lcl_GetTextWithBreaks(*aCell.mpEditText, pDocument, aString);
+                bMultiLine = lcl_GetTextWithBreaks(*aCell.mpEditText, &rDocument, aString);
             else
             {
                 if( !bSearchFormatted )
@@ -256,8 +256,8 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, sc::Colum
                 aString = aString.copy( 1 );
         }
         ScAddress aAdr( nCol, nRow, nTab );
-        ScFormulaCell* pFCell = new ScFormulaCell( pDocument, aAdr,
-            aString, pDocument->GetGrammar(), cMatrixFlag );
+        ScFormulaCell* pFCell = new ScFormulaCell( &rDocument, aAdr,
+            aString, rDocument.GetGrammar(), cMatrixFlag );
         SCCOL nMatCols;
         SCROW nMatRows;
         aCell.mpFormula->GetMatColsRows(nMatCols, nMatRows);
@@ -266,12 +266,12 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, sc::Colum
     }
     else if ( bMultiLine && aString.indexOf('\n') != -1 )
     {
-        ScFieldEditEngine& rEngine = pDocument->GetEditEngine();
+        ScFieldEditEngine& rEngine = rDocument.GetEditEngine();
         rEngine.SetTextCurrentDefaults(aString);
         SetEditText(nCol, nRow, rEngine.CreateTextObject());
     }
     else
-        aCol[nCol].SetString(nRow, nTab, aString, pDocument->GetAddressConvention());
+        aCol[nCol].SetString(nRow, nTab, aString, rDocument.GetAddressConvention());
     // pCell is invalid now (deleted)
     aCol[nCol].InitBlockPosition( rBlockPos ); // invalidate also the cached position
 
@@ -344,7 +344,7 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
         aCol[ i ].InitBlockPosition( blockPos[ i ] );
     if (!bAll && rSearchItem.GetBackward())
     {
-        SCROW nLastNonFilteredRow = pDocument->MaxRow() + 1;
+        SCROW nLastNonFilteredRow = rDocument.MaxRow() + 1;
         if (rSearchItem.GetRowDirection())
         {
             nCol--;
@@ -418,7 +418,7 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                     // Not found in this column.  Move to the next column.
                     bool bIsEmpty;
                     nRow = nLastRow;
-                    nLastNonFilteredRow = pDocument->MaxRow() + 1;
+                    nLastNonFilteredRow = rDocument.MaxRow() + 1;
                     do
                     {
                         nCol--;
@@ -489,7 +489,7 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                         else
                         {
                             if (!aCol[nCol].GetNextDataPos(nRow))
-                                nRow = pDocument->MaxRow() + 1;
+                                nRow = rDocument.MaxRow() + 1;
                         }
                     }
                 }
@@ -615,7 +615,7 @@ bool ScTable::SearchStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& 
                           const ScMarkData& rMark)
 {
     const ScStyleSheet* pSearchStyle = static_cast<const ScStyleSheet*>(
-                                        pDocument->GetStyleSheetPool()->Find(
+                                        rDocument.GetStyleSheetPool()->Find(
                                         rSearchItem.GetSearchString(), SfxStyleFamily::Para ));
 
     SCCOL nCol = rCol;
@@ -640,7 +640,7 @@ bool ScTable::SearchStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& 
             SCROW nNextRow = aCol[nCol].SearchStyle( nRow, pSearchStyle, bBack, bSelect, rMark );
             if (!ValidRow(nNextRow))
             {
-                nRow = bBack ? pDocument->MaxRow() : 0;
+                nRow = bBack ? rDocument.MaxRow() : 0;
                 nCol = sal::static_int_cast<SCCOL>( nCol + nAdd );
             }
             else
@@ -682,7 +682,7 @@ bool ScTable::SearchStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& 
         }
         else                                // forwards
         {
-            nRow = pDocument->MaxRow()+1;
+            nRow = rDocument.MaxRow()+1;
             for (i=0; i < aColSize; ++i)
                 if (nNextRows[i]<nRow)
                 {
@@ -714,7 +714,7 @@ bool ScTable::ReplaceStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW&
     if (bRet)
     {
         const ScStyleSheet* pReplaceStyle = static_cast<const ScStyleSheet*>(
-                                        pDocument->GetStyleSheetPool()->Find(
+                                        rDocument.GetStyleSheetPool()->Find(
                                         rSearchItem.GetReplaceString(), SfxStyleFamily::Para ));
 
         if (pReplaceStyle)
@@ -732,7 +732,7 @@ bool ScTable::SearchAllStyle(
     const SvxSearchItem& rSearchItem, const ScMarkData& rMark, ScRangeList& rMatchedRanges)
 {
     const ScStyleSheet* pSearchStyle = static_cast<const ScStyleSheet*>(
-                                        pDocument->GetStyleSheetPool()->Find(
+                                        rDocument.GetStyleSheetPool()->Find(
                                         rSearchItem.GetSearchString(), SfxStyleFamily::Para ));
     bool bSelect = rSearchItem.GetSelection();
     bool bBack = rSearchItem.GetBackward();
@@ -743,7 +743,7 @@ bool ScTable::SearchAllStyle(
         bool bFound = true;
         SCROW nRow = 0;
         SCROW nEndRow;
-        while (bFound && nRow <= pDocument->MaxRow())
+        while (bFound && nRow <= rDocument.MaxRow())
         {
             bFound = aCol[i].SearchStyleRange( nRow, nEndRow, pSearchStyle, bBack, bSelect, rMark );
             if (bFound)
@@ -772,13 +772,13 @@ bool ScTable::ReplaceAllStyle(
     if (bRet)
     {
         const ScStyleSheet* pReplaceStyle = static_cast<const ScStyleSheet*>(
-                                        pDocument->GetStyleSheetPool()->Find(
+                                        rDocument.GetStyleSheetPool()->Find(
                                         rSearchItem.GetReplaceString(), SfxStyleFamily::Para ));
 
         if (pReplaceStyle)
         {
             if (pUndoDoc)
-                pDocument->CopyToDocument(0, 0 ,nTab, pDocument->MaxCol(),pDocument->MaxRow(),nTab,
+                rDocument.CopyToDocument(0, 0 ,nTab, rDocument.MaxCol(),rDocument.MaxRow(),nTab,
                                           InsertDeleteFlags::ATTRIB, true, *pUndoDoc, &rMark);
             ApplySelectionStyle( *pReplaceStyle, rMark );
         }
@@ -968,7 +968,7 @@ bool ScTable::SearchRangeForEmptyCell(
         if (rSearchItem.GetRowDirection())
         {
             // row direction.
-            SCROW nLastNonFilteredRow = pDocument->MaxRow() + 1;
+            SCROW nLastNonFilteredRow = rDocument.MaxRow() + 1;
             SCROW nBeginRow = std::min(rRange.aEnd.Row(), rRow);
             for (SCROW nRow = nBeginRow; nRow >= rRange.aStart.Row(); --nRow)
             {
@@ -995,7 +995,7 @@ bool ScTable::SearchRangeForEmptyCell(
             SCCOL nBeginCol = std::min(rRange.aEnd.Col(), rCol);
             for (SCCOL nCol = nBeginCol; nCol >= rRange.aStart.Col(); --nCol)
             {
-                SCROW nLastNonFilteredRow = pDocument->MaxRow() + 1;
+                SCROW nLastNonFilteredRow = rDocument.MaxRow() + 1;
                 SCROW nBeginRow = rRange.aEnd.Row();
                 if (nCol == rCol && nBeginRow >= rRow)
                     // always start from one cell before the cursor.

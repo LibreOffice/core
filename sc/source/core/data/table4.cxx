@@ -252,7 +252,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     {
         double fVal;
         sal_uInt32 nFormat = GetAttr(nCol,nRow,ATTR_VALUE_FORMAT)->GetValue();
-        const SvNumFormatType nFormatType = pDocument->GetFormatTable()->GetType(nFormat);
+        const SvNumFormatType nFormatType = rDocument.GetFormatTable()->GetType(nFormat);
         bool bDate = (nFormatType  == SvNumFormatType::DATE );
         bool bBooleanCell = (!bDate && nFormatType == SvNumFormatType::LOGICAL);
         if (bDate)
@@ -260,7 +260,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             if (nCount > 1)
             {
                 double nVal;
-                Date aNullDate = pDocument->GetFormatTable()->GetNullDate();
+                Date aNullDate = rDocument.GetFormatTable()->GetNullDate();
                 Date aDate1 = aNullDate;
                 nVal = aFirstCell.mfValue;
                 aDate1.AddDays(nVal);
@@ -359,7 +359,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         if ( !::rtl::math::approxEqual( nDiff, rInc, 13 ) )
                             bVal = false;
                         else if ((nVal2 == 0.0 || nVal2 == 1.0) &&
-                                (pDocument->GetFormatTable()->GetType(GetNumberFormat(nCol,nRow)) ==
+                                (rDocument.GetFormatTable()->GetType(GetNumberFormat(nCol,nRow)) ==
                                  SvNumFormatType::LOGICAL))
                             bVal = false;
                         nVal1 = nVal2;
@@ -438,7 +438,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         CellType eType = aCell.meType;
                         if ( eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT )
                         {
-                            aStr = aCell.getString(pDocument);
+                            aStr = aCell.getString(&rDocument);
                             nFlag2 = lcl_DecompValueString( aStr, nVal2, &rMinDigits );
                             if ( nFlag1 == nFlag2 )
                             {
@@ -473,9 +473,9 @@ void ScTable::FillFormula(
     const ScFormulaCell* pSrcCell, SCCOL nDestCol, SCROW nDestRow, bool bLast )
 {
 
-    pDocument->SetNoListening( true );  // still the wrong reference
+    rDocument.SetNoListening( true );  // still the wrong reference
     ScAddress aAddr( nDestCol, nDestRow, nTab );
-    ScFormulaCell* pDestCell = new ScFormulaCell( *pSrcCell, *pDocument, aAddr );
+    ScFormulaCell* pDestCell = new ScFormulaCell( *pSrcCell, rDocument, aAddr );
     aCol[nDestCol].SetFormulaCell(nDestRow, pDestCell);
 
     if ( bLast && pDestCell->GetMatrixFlag() != ScMatrixMode::NONE )
@@ -485,7 +485,7 @@ void ScTable::FillFormula(
         {
             if ( nDestCol >= aOrg.Col() && nDestRow >= aOrg.Row() )
             {
-                ScFormulaCell* pOrgCell = pDocument->GetFormulaCell(aOrg);
+                ScFormulaCell* pOrgCell = rDocument.GetFormulaCell(aOrg);
                 if (pOrgCell && pOrgCell->GetMatrixFlag() == ScMatrixMode::Formula)
                 {
                     pOrgCell->SetMatColsRows(
@@ -507,8 +507,8 @@ void ScTable::FillFormula(
             OSL_FAIL( "FillFormula: no MatrixOrigin" );
         }
     }
-    pDocument->SetNoListening( false );
-    pDestCell->StartListeningTo( *pDocument );
+    rDocument.SetNoListening( false );
+    pDestCell->StartListeningTo( rDocument );
 }
 
 void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
@@ -659,7 +659,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 if ( bVertical && nISrcStart == nISrcEnd && !bHasFiltered )
                 {
                     //  set all attributes at once (en bloc)
-                    if (pNewPattern || pSrcPattern != pDocument->GetDefPattern())
+                    if (pNewPattern || pSrcPattern != rDocument.GetDefPattern())
                     {
                         //  Default is already present (DeleteArea)
                         SCROW nY1 = static_cast<SCROW>(std::min( nIStart, nIEnd ));
@@ -939,7 +939,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
                     case CELLTYPE_STRING:
                     case CELLTYPE_EDIT:
                     {
-                        aValue = aCell.getString(pDocument);
+                        aValue = aCell.getString(&rDocument);
 
                         if ( !(nScFillModeMouseModifier & KEY_MOD1) )
                         {
@@ -973,7 +973,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
                         double nVal = aCell.mfValue;
                         if ( !(nScFillModeMouseModifier & KEY_MOD1) )
                         {
-                            const SvNumFormatType nFormatType = pDocument->GetFormatTable()->GetType(nNumFmt);
+                            const SvNumFormatType nFormatType = rDocument.GetFormatTable()->GetType(nNumFmt);
                             bool bPercentCell = (nFormatType == SvNumFormatType::PERCENT);
                             if (bPercentCell)
                             {
@@ -993,7 +993,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
                         }
 
                         const Color* pColor;
-                        pDocument->GetFormatTable()->GetOutputString( nVal, nNumFmt, aValue, &pColor );
+                        rDocument.GetFormatTable()->GetOutputString( nVal, nNumFmt, aValue, &pColor );
                     }
                     break;
                     //  not for formulas
@@ -1019,7 +1019,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
                     case CELLTYPE_STRING:
                     case CELLTYPE_EDIT:
                     {
-                        aValue = aCell.getString(pDocument);
+                        aValue = aCell.getString(&rDocument);
                         nHeadNoneTail = lcl_DecompValueString( aValue, nVal );
                         if ( nHeadNoneTail )
                             nStart = static_cast<double>(nVal);
@@ -1081,7 +1081,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
                     //TODO: get number format according to Index?
                     const Color* pColor;
                     sal_uInt32 nNumFmt = GetNumberFormat( nCol1, nRow1 );
-                    pDocument->GetFormatTable()->GetOutputString( nStart, nNumFmt, aValue, &pColor );
+                    rDocument.GetFormatTable()->GetOutputString( nStart, nNumFmt, aValue, &pColor );
                 }
             }
         }
@@ -1107,7 +1107,7 @@ void ScTable::IncDate(double& rVal, sal_uInt16& nDayOfMonth, double nStep, FillD
     const sal_uInt16 nMaxYear = 9956;
 
     long nInc = static_cast<long>(nStep);       // upper/lower limits ?
-    Date aNullDate = pDocument->GetFormatTable()->GetNullDate();
+    Date aNullDate = rDocument.GetFormatTable()->GetNullDate();
     Date aDate = aNullDate;
     aDate.AddDays(rVal);
     switch (eCmd)
@@ -1263,9 +1263,9 @@ void ScTable::FillFormulaVertical(
     aCol[nCol].DeleteRanges(aSpans, InsertDeleteFlags::VALUE | InsertDeleteFlags::DATETIME | InsertDeleteFlags::STRING | InsertDeleteFlags::FORMULA | InsertDeleteFlags::OUTLINE);
     aCol[nCol].CloneFormulaCell(rSrcCell, sc::CellTextAttr(), aSpans);
 
-    auto pSet = std::make_shared<sc::ColumnBlockPositionSet>(*pDocument);
-    sc::StartListeningContext aStartCxt(*pDocument, pSet);
-    sc::EndListeningContext aEndCxt(*pDocument, pSet);
+    auto pSet = std::make_shared<sc::ColumnBlockPositionSet>(rDocument);
+    sc::StartListeningContext aStartCxt(rDocument, pSet);
+    sc::EndListeningContext aEndCxt(rDocument, pSet);
 
     SCROW nStartRow = aSpans.front().mnRow1;
     SCROW nEndRow = aSpans.back().mnRow2;
@@ -1409,8 +1409,8 @@ void ScTable::FillAutoSimple(
                         FillFormulaVertical(*aSrcCell.mpFormula, rInner, rCol, nIStart, nIEnd, pProgress, rProgress);
                         return;
                     }
-                    const SvNumFormatType nFormatType = pDocument->GetFormatTable()->GetType(
-                                aCol[rCol].GetNumberFormat( pDocument->GetNonThreadedContext(), nSource));
+                    const SvNumFormatType nFormatType = rDocument.GetFormatTable()->GetType(
+                                aCol[rCol].GetNumberFormat( rDocument.GetNonThreadedContext(), nSource));
                     bBooleanCell = (nFormatType == SvNumFormatType::LOGICAL);
                     bPercentCell = (nFormatType == SvNumFormatType::PERCENT);
 
@@ -1418,8 +1418,8 @@ void ScTable::FillAutoSimple(
                 else                // rInner&:=nCol, rOuter&:=nRow
                 {
                     aSrcCell = aCol[nSource].GetCellValue(rRow);
-                    const SvNumFormatType nFormatType = pDocument->GetFormatTable()->GetType(
-                                aCol[nSource].GetNumberFormat( pDocument->GetNonThreadedContext(), rRow));
+                    const SvNumFormatType nFormatType = rDocument.GetFormatTable()->GetType(
+                                aCol[nSource].GetNumberFormat( rDocument.GetNonThreadedContext(), rRow));
                     bBooleanCell = (nFormatType == SvNumFormatType::LOGICAL);
                     bPercentCell = (nFormatType == SvNumFormatType::PERCENT);
                 }
@@ -1434,7 +1434,7 @@ void ScTable::FillAutoSimple(
                             if (aSrcCell.meType == CELLTYPE_STRING)
                                 aValue = aSrcCell.mpString->getString();
                             else
-                                aValue = ScEditUtil::GetString(*aSrcCell.mpEditText, pDocument);
+                                aValue = ScEditUtil::GetString(*aSrcCell.mpEditText, &rDocument);
                             if ( !(nScFillModeMouseModifier & KEY_MOD1) && !bHasFiltered )
                             {
                                 nCellDigits = 0;    // look at each source cell individually
@@ -1934,7 +1934,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 if (eCellType == CELLTYPE_STRING)
                     aValue = aSrcCell.mpString->getString();
                 else
-                    aValue = ScEditUtil::GetString(*aSrcCell.mpEditText, pDocument);
+                    aValue = ScEditUtil::GetString(*aSrcCell.mpEditText, &rDocument);
                 sal_Int32 nStringValue;
                 sal_uInt16 nMinDigits = nArgMinDigits;
                 short nHeadNoneTail = lcl_DecompValueString( aValue, nStringValue, &nMinDigits );
@@ -2071,8 +2071,8 @@ void ScTable::AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW
     std::unique_ptr<ScPatternAttr> pPatternAttrs[16];
     for (sal_uInt8 i = 0; i < 16; ++i)
     {
-        pPatternAttrs[i].reset(new ScPatternAttr(pDocument->GetPool()));
-        pData->FillToItemSet(i, pPatternAttrs[i]->GetItemSet(), *pDocument);
+        pPatternAttrs[i].reset(new ScPatternAttr(rDocument.GetPool()));
+        pData->FillToItemSet(i, pPatternAttrs[i]->GetItemSet(), rDocument);
     }
 
     SCCOL nCol = nStartCol;
@@ -2196,7 +2196,7 @@ void ScTable::AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW
 void ScTable::GetAutoFormatAttr(SCCOL nCol, SCROW nRow, sal_uInt16 nIndex, ScAutoFormatData& rData)
 {
     sal_uInt32 nFormatIndex = GetNumberFormat( nCol, nRow );
-    ScNumFormatAbbrev   aNumFormat( nFormatIndex, *pDocument->GetFormatTable() );
+    ScNumFormatAbbrev   aNumFormat( nFormatIndex, *rDocument.GetFormatTable() );
     rData.GetFromItemSet( nIndex, GetPattern( nCol, nRow )->GetItemSet(), aNumFormat );
 }
 
@@ -2353,7 +2353,7 @@ void ScTable::UpdateInsertTabAbs(SCTAB nTable)
 bool ScTable::GetNextSpellingCell(SCCOL& rCol, SCROW& rRow, bool bInSel,
                                     const ScMarkData& rMark) const
 {
-    if (rRow == pDocument->MaxRow()+2)                       // end of table
+    if (rRow == rDocument.MaxRow()+2)                       // end of table
     {
         rRow = 0;
         rCol = 0;
@@ -2361,13 +2361,13 @@ bool ScTable::GetNextSpellingCell(SCCOL& rCol, SCROW& rRow, bool bInSel,
     else
     {
         rRow++;
-        if (rRow == pDocument->MaxRow()+1)
+        if (rRow == rDocument.MaxRow()+1)
         {
             rCol++;
             rRow = 0;
         }
     }
-    if (rCol == pDocument->MaxCol()+1)
+    if (rCol == rDocument.MaxCol()+1)
         return true;
     for (;;)
     {
@@ -2377,7 +2377,7 @@ bool ScTable::GetNextSpellingCell(SCCOL& rCol, SCROW& rRow, bool bInSel,
             return true;
         if (aCol[rCol].GetNextSpellingCell(rRow, bInSel, rMark))
             return true;
-         /*else (rRow == pDocument->MaxRow()+1) */
+         /*else (rRow == rDocument.MaxRow()+1) */
         rCol++;
         rRow = 0;
     }

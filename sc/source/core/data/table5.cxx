@@ -48,7 +48,7 @@ using ::std::set;
 
 void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
 {
-    if ( pDocument->IsImportingXML() )
+    if ( rDocument.IsImportingXML() )
         return;
 
     // pUserArea != NULL -> print area is specified.  We need to force-update
@@ -64,7 +64,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
             return;
     }
 
-    SfxStyleSheetBase* pStyle = pDocument->GetStyleSheetPool()->
+    SfxStyleSheetBase* pStyle = rDocument.GetStyleSheetPool()->
                                     Find( aPageStyle, SfxStyleFamily::Page );
     if ( !pStyle )
     {
@@ -76,8 +76,8 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
 
     SCCOL nStartCol = 0;
     SCROW nStartRow = 0;
-    SCCOL nEndCol = pDocument->MaxCol();
-    SCROW nEndRow = pDocument->MaxRow();
+    SCCOL nEndCol = rDocument.MaxCol();
+    SCROW nEndRow = rDocument.MaxRow();
     if (pUserArea)
     {
         nStartCol = pUserArea->aStart.Col();
@@ -92,10 +92,10 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
         {
             // Show nothing, when multiple ranges
 
-            for (SCCOL nX : GetColumnsRange(0, pDocument->MaxCol()))
+            for (SCCOL nX : GetColumnsRange(0, rDocument.MaxCol()))
                 RemoveColBreak(nX, true, false);
 
-            RemoveRowPageBreaks(0, pDocument->MaxRow()-1);
+            RemoveRowPageBreaks(0, rDocument.MaxRow()-1);
 
             return;
         }
@@ -283,17 +283,17 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
 
         //  End: Remove Break
 
-    if (nEndCol < pDocument->MaxCol())
+    if (nEndCol < rDocument.MaxCol())
     {
         SetColBreak(nEndCol+1, true, false);  // AREABREAK
-        for (SCCOL nCol : GetColumnsRange(nEndCol + 2, pDocument->MaxCol()))
+        for (SCCOL nCol : GetColumnsRange(nEndCol + 2, rDocument.MaxCol()))
             RemoveColBreak(nCol, true, false);
     }
-    if (nEndRow < pDocument->MaxRow())
+    if (nEndRow < rDocument.MaxRow())
     {
         SetRowBreak(nEndRow+1, true, false);  // AREABREAK
-        if (nEndRow+2 <= pDocument->MaxRow())
-            RemoveRowPageBreaks(nEndRow+2, pDocument->MaxRow());
+        if (nEndRow+2 <= rDocument.MaxRow())
+            RemoveRowPageBreaks(nEndRow+2, rDocument.MaxRow());
     }
     mbPageBreaksValid = !pUserArea;     // #i116881# the valid flag can only apply to the "no user area" case
 }
@@ -584,7 +584,7 @@ bool ScTable::SetRowHidden(SCROW nStartRow, SCROW nEndRow, bool bHidden)
         bChanged = mpHiddenRows->setFalse(nStartRow, nEndRow);
 
     std::vector<SdrObject*> aRowDrawObjects;
-    ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
+    ScDrawLayer* pDrawLayer = rDocument.GetDrawLayer();
     if (pDrawLayer) {
         aRowDrawObjects = pDrawLayer->GetObjectsAnchoredToRows(GetTab(), nStartRow, nEndRow);
         for (auto aObj : aRowDrawObjects)
@@ -602,7 +602,7 @@ bool ScTable::SetRowHidden(SCROW nStartRow, SCROW nEndRow, bool bHidden)
             // SfxHintId::ScHiddenRowsChanged, leaving the bulk will track
             // those and broadcast SfxHintId::ScDataChanged to notify all
             // dependents.
-            ScBulkBroadcast aBulkBroadcast( pDocument->GetBASM(), SfxHintId::ScDataChanged);
+            ScBulkBroadcast aBulkBroadcast( rDocument.GetBASM(), SfxHintId::ScDataChanged);
             for (SCCOL i = 0; i < aCol.size(); i++)
             {
                 aCol[i].BroadcastRows(nStartRow, nEndRow, SfxHintId::ScHiddenRowsChanged);
@@ -770,7 +770,7 @@ SCCOLROW ScTable::LastHiddenColRow(SCCOLROW nPos, bool bCol) const
         SCCOL nCol = static_cast<SCCOL>(nPos);
         if (ColHidden(nCol))
         {
-            for (SCCOL i = nCol+1; i <= pDocument->MaxCol(); ++i)
+            for (SCCOL i = nCol+1; i <= rDocument.MaxCol(); ++i)
             {
                 if (!ColHidden(i))
                     return i - 1;
@@ -1009,8 +1009,8 @@ void ScTable::SyncColRowFlags()
     CRFlags nManualBreakComplement = ~CRFlags::ManualBreak;
 
     // Manual breaks.
-    pRowFlags->AndValue(0, pDocument->MaxRow(), nManualBreakComplement);
-    mpColFlags->AndValue(0, pDocument->MaxCol()+1, nManualBreakComplement);
+    pRowFlags->AndValue(0, rDocument.MaxRow(), nManualBreakComplement);
+    mpColFlags->AndValue(0, rDocument.MaxCol()+1, nManualBreakComplement);
 
     for (const auto& rBreakPos : maRowManualBreaks)
         pRowFlags->OrValue(rBreakPos, CRFlags::ManualBreak);
@@ -1019,8 +1019,8 @@ void ScTable::SyncColRowFlags()
         mpColFlags->OrValue(rBreakPos, CRFlags::ManualBreak);
 
     // Hidden flags.
-    lcl_syncFlags(pDocument, *mpHiddenCols, *mpHiddenRows, mpColFlags.get(), pRowFlags.get(), CRFlags::Hidden);
-    lcl_syncFlags(pDocument, *mpFilteredCols, *mpFilteredRows, mpColFlags.get(), pRowFlags.get(), CRFlags::Filtered);
+    lcl_syncFlags(&rDocument, *mpHiddenCols, *mpHiddenRows, mpColFlags.get(), pRowFlags.get(), CRFlags::Hidden);
+    lcl_syncFlags(&rDocument, *mpFilteredCols, *mpFilteredRows, mpColFlags.get(), pRowFlags.get(), CRFlags::Filtered);
 }
 
 void ScTable::SetPageSize( const Size& rSize )
@@ -1116,7 +1116,7 @@ void ScTable::SetPageStyle( const OUString& rName )
         return;
 
     OUString           aStrNew    = rName;
-    SfxStyleSheetBasePool*  pStylePool = pDocument->GetStyleSheetPool();
+    SfxStyleSheetBasePool*  pStylePool = rDocument.GetStyleSheetPool();
     SfxStyleSheetBase*      pNewStyle  = pStylePool->Find( aStrNew, SfxStyleFamily::Page );
 
     if ( !pNewStyle )
@@ -1200,7 +1200,7 @@ void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* p
     const SCCOL nCol1 = pAdrFrom ? pAdrFrom->Col() : 0;
     const SCROW nRow1 = pAdrFrom ? pAdrFrom->Row() : 0;
     const SCCOL nCol2 = pAdrTo   ? pAdrTo->Col()   : aCol.size() - 1;
-    const SCROW nRow2 = pAdrTo   ? pAdrTo->Row()   : pDocument->MaxRow();
+    const SCROW nRow2 = pAdrTo   ? pAdrTo->Row()   : rDocument.MaxRow();
 
     for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
     {
