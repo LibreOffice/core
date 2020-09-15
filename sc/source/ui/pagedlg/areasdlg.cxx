@@ -332,7 +332,7 @@ bool ScPrintAreasDlg::Impl_CheckRefStrings()
         for ( sal_Int32 nIdx = 0; nIdx >= 0; )
         {
             const OUString aOne = aStrPrintArea.getToken(0, sep, nIdx);
-            ScRefFlags nResult = aRange.Parse( aOne, pDoc, eConv );
+            ScRefFlags nResult = aRange.Parse( aOne, *pDoc, eConv );
             if ((nResult & nValidRange) != nValidRange)
             {
                 ScRefFlags nAddrResult = aAddr.Parse( aOne, pDoc, eConv );

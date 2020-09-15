@@ -287,7 +287,7 @@ IMPL_LINK(ScSpecialFilterDlg, EndDlgHdl, weld::Button&, rBtn, void)
 
         if ( bEditInputOk )
         {
-            ScRefFlags nResult = ScRange().Parse( theAreaStr, pDoc, eConv );
+            ScRefFlags nResult = ScRange().Parse( theAreaStr, *pDoc, eConv );
 
             if ( (nResult & ScRefFlags::VALID) == ScRefFlags::ZERO )
             {
@@ -304,7 +304,7 @@ IMPL_LINK(ScSpecialFilterDlg, EndDlgHdl, weld::Button&, rBtn, void)
              * a ScQueryParam from the filter area:
              */
 
-            ScRefFlags  nResult = theFilterArea.Parse( theAreaStr, pDoc, eConv );
+            ScRefFlags  nResult = theFilterArea.Parse( theAreaStr, *pDoc, eConv );
 
             if ( (nResult & ScRefFlags::VALID) == ScRefFlags::VALID )
             {
@@ -413,7 +413,7 @@ IMPL_LINK( ScSpecialFilterDlg, FilterAreaModHdl, formula::RefEdit&, rEd, void )
     if ( pDoc && pViewData )
     {
         OUString  theCurAreaStr = rEd.GetText();
-        ScRefFlags  nResult = ScRange().Parse( theCurAreaStr, pDoc );
+        ScRefFlags  nResult = ScRange().Parse( theCurAreaStr, *pDoc );
 
         if ( (nResult & ScRefFlags::VALID) == ScRefFlags::VALID )
         {
