@@ -1382,11 +1382,14 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 OUString sTemp( GetPageStr( nPage, nLogPage, sDisplay ) );
                 const SfxStringItem aTmp( FN_STAT_PAGE, sTemp );
                 GetViewFrame()->GetBindings().SetState( aTmp );
-                // Used to distinguish which tooltip to show
-                const SfxBoolItem bExtendedTooltip( FN_STAT_PAGE, !sDisplay.isEmpty() &&
+                if (!comphelper::LibreOfficeKit::isActive())
+                {
+                    // Used to distinguish which tooltip to show
+                    const SfxBoolItem bExtendedTooltip( FN_STAT_PAGE, !sDisplay.isEmpty() &&
                                                     OUString::number( nPage ) != sDisplay &&
                                                     nPage != nLogPage );
-                GetViewFrame()->GetBindings().SetState( bExtendedTooltip );
+                    GetViewFrame()->GetBindings().SetState( bExtendedTooltip );
+                }
                 //if existing page number is not equal to old page number, send out this event.
                 if (m_nOldPageNum != nLogPage )
                 {
