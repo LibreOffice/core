@@ -177,13 +177,13 @@ void ScDocument::MakeTable( SCTAB nTab,bool _bNeedsNameCheck )
         CreateValidTabName( aString );  // no doubles
     if (nTab < static_cast<SCTAB>(maTabs.size()))
     {
-        maTabs[nTab].reset( new ScTable(this, nTab, aString) );
+        maTabs[nTab].reset( new ScTable(*this, nTab, aString) );
     }
     else
     {
         while(nTab > static_cast<SCTAB>(maTabs.size()))
             maTabs.push_back(nullptr);
-        maTabs.emplace_back( new ScTable(this, nTab, aString) );
+        maTabs.emplace_back( new ScTable(*this, nTab, aString) );
     }
     maTabs[nTab]->SetLoadingMedium(bLoadingMedium);
 }
@@ -478,7 +478,7 @@ void ScDocument::AppendTabOnLoad(const OUString& rName)
 
     OUString aName = rName;
     CreateValidTabName(aName);
-    maTabs.emplace_back( new ScTable(this, nTabCount, aName) );
+    maTabs.emplace_back( new ScTable(*this, nTabCount, aName) );
 }
 
 void ScDocument::SetTabNameOnLoad(SCTAB nTab, const OUString& rName)
@@ -513,7 +513,7 @@ bool ScDocument::InsertTab(
         if (nPos == SC_TAB_APPEND || nPos >= nTabCount)
         {
             nPos = maTabs.size();
-            maTabs.emplace_back( new ScTable(this, nTabCount, rName) );
+            maTabs.emplace_back( new ScTable(*this, nTabCount, rName) );
             if ( bExternalDocument )
                 maTabs[nTabCount]->SetVisible( false );
         }
@@ -544,7 +544,7 @@ bool ScDocument::InsertTab(
                     if (a)
                         a->UpdateInsertTab(aCxt);
                 }
-                maTabs.emplace(maTabs.begin() + nPos, new ScTable(this, nPos, rName));
+                maTabs.emplace(maTabs.begin() + nPos, new ScTable(*this, nPos, rName));
 
                 // UpdateBroadcastAreas must be called between UpdateInsertTab,
                 // which ends listening, and StartAllListeners, to not modify
@@ -602,7 +602,7 @@ bool ScDocument::InsertTabs( SCTAB nPos, const std::vector<OUString>& rNames,
         {
             for ( SCTAB i = 0; i < nNewSheets; ++i )
             {
-                maTabs.emplace_back( new ScTable(this, nTabCount + i, rNames.at(i)) );
+                maTabs.emplace_back( new ScTable(*this, nTabCount + i, rNames.at(i)) );
             }
         }
         else
@@ -633,7 +633,7 @@ bool ScDocument::InsertTabs( SCTAB nPos, const std::vector<OUString>& rNames,
                 }
                 for (SCTAB i = 0; i < nNewSheets; ++i)
                 {
-                    maTabs.emplace(maTabs.begin() + nPos + i, new ScTable(this, nPos + i, rNames.at(i)) );
+                    maTabs.emplace(maTabs.begin() + nPos + i, new ScTable(*this, nPos + i, rNames.at(i)) );
                 }
 
                 // UpdateBroadcastAreas must be called between UpdateInsertTab,
@@ -1987,7 +1987,7 @@ void ScDocument::InitUndoSelected( const ScDocument* pSrcDoc, const ScMarkData& 
         for (SCTAB nTab = 0; nTab <= rTabSelection.GetLastSelected(); nTab++)
             if ( rTabSelection.GetTableSelect( nTab ) )
             {
-                ScTableUniquePtr pTable(new ScTable(this, nTab, OUString(), bColInfo, bRowInfo));
+                ScTableUniquePtr pTable(new ScTable(*this, nTab, OUString(), bColInfo, bRowInfo));
                 if (nTab < static_cast<SCTAB>(maTabs.size()))
                     maTabs[nTab] = std::move(pTable);
                 else
@@ -2028,7 +2028,7 @@ void ScDocument::InitUndo( const ScDocument* pSrcDoc, SCTAB nTab1, SCTAB nTab2,
         maTabs.resize(nTab2 + 1);
     for (SCTAB nTab = nTab1; nTab <= nTab2; nTab++)
     {
-        maTabs[nTab].reset(new ScTable(this, nTab, OUString(), bColInfo, bRowInfo));
+        maTabs[nTab].reset(new ScTable(*this, nTab, OUString(), bColInfo, bRowInfo));
     }
 }
 
@@ -2048,7 +2048,7 @@ void ScDocument::AddUndoTab( SCTAB nTab1, SCTAB nTab2, bool bColInfo, bool bRowI
     for (SCTAB nTab = nTab1; nTab <= nTab2; nTab++)
         if (!maTabs[nTab])
         {
-            maTabs[nTab].reset( new ScTable(this, nTab, OUString(), bColInfo, bRowInfo) );
+            maTabs[nTab].reset( new ScTable(*this, nTab, OUString(), bColInfo, bRowInfo) );
         }
 }
 

@@ -957,12 +957,12 @@ void ScTable::SortReorderByColumn(
         // Get all area listeners that listen on one column within the range
         // and end their listening.
         ScRange aMoveRange( nStart, nRow1, nTab, nLast, nRow2, nTab);
-        std::vector<sc::AreaListener> aAreaListeners = pDocument->GetBASM()->GetAllListeners(
+        std::vector<sc::AreaListener> aAreaListeners = rDocument.GetBASM()->GetAllListeners(
                 aMoveRange, sc::AreaOverlapType::OneColumnInside);
         {
             for (auto& rAreaListener : aAreaListeners)
             {
-                pDocument->EndListeningArea(rAreaListener.maArea, rAreaListener.mbGroupListening, rAreaListener.mpListener);
+                rDocument.EndListeningArea(rAreaListener.maArea, rAreaListener.mbGroupListening, rAreaListener.mpListener);
                 aListeners.push_back( rAreaListener.mpListener);
             }
         }
@@ -986,7 +986,7 @@ void ScTable::SortReorderByColumn(
                     aNewRange.aStart.SetCol( itCol->second);
                     aNewRange.aEnd.SetCol( itCol->second);
                 }
-                pDocument->StartListeningArea(aNewRange, rAreaListener.mbGroupListening, rAreaListener.mpListener);
+                rDocument.StartListeningArea(aNewRange, rAreaListener.mbGroupListening, rAreaListener.mpListener);
             }
         }
     }
@@ -1005,7 +1005,7 @@ void ScTable::SortReorderByColumn(
         sc::CellStoreType& rCells = aCol[nCol].maCells;
         sc::CellStoreType::position_type aPos = rCells.position(nRow1);
         sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
-        if (nRow2 < pDocument->MaxRow())
+        if (nRow2 < rDocument.MaxRow())
         {
             aPos = rCells.position(aPos.first, nRow2+1);
             sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
@@ -1031,7 +1031,7 @@ void ScTable::SortReorderByRow(
     // cells in the sorted range before reordering, and re-start them
     // afterward.
     {
-        sc::EndListeningContext aCxt(*pDocument);
+        sc::EndListeningContext aCxt(rDocument);
         DetachFormulaCells(aCxt, nCol1, nRow1, nCol2, nRow2);
     }
 
@@ -1106,13 +1106,13 @@ void ScTable::SortReorderByRow(
             for (const auto& rSpan : aSpans)
             {
                 assert(rSpan.mpPattern); // should never be NULL.
-                pDocument->GetPool()->Put(*rSpan.mpPattern);
+                rDocument.GetPool()->Put(*rSpan.mpPattern);
             }
 
             for (const auto& rSpan : aSpans)
             {
                 aCol[nThisCol].SetPatternArea(rSpan.mnRow1, rSpan.mnRow2, *rSpan.mpPattern);
-                pDocument->GetPool()->Remove(*rSpan.mpPattern);
+                rDocument.GetPool()->Remove(*rSpan.mpPattern);
             }
         }
 
@@ -1152,7 +1152,7 @@ void ScTable::SortReorderByRow(
         aCol[i].RegroupFormulaCells();
 
     {
-        sc::StartListeningContext aCxt(*pDocument);
+        sc::StartListeningContext aCxt(rDocument);
         AttachFormulaCells(aCxt, nCol1, nRow1, nCol2, nRow2);
     }
 }
@@ -1175,7 +1175,7 @@ void ScTable::SortReorderByRowRefUpdate(
         // Get the range of formula group listeners within sorted range (if any).
         sc::QueryRange aQuery;
 
-        ScBroadcastAreaSlotMachine* pBASM = pDocument->GetBASM();
+        ScBroadcastAreaSlotMachine* pBASM = rDocument.GetBASM();
         std::vector<sc::AreaListener> aGrpListeners =
             pBASM->GetAllListeners(
                 aMoveRange, sc::AreaOverlapType::InsideOrOverlap, sc::ListenerGroupType::Group);
@@ -1186,7 +1186,7 @@ void ScTable::SortReorderByRowRefUpdate(
                 assert(rGrpListener.mbGroupListening);
                 SvtListener* pGrpLis = rGrpListener.mpListener;
                 pGrpLis->Query(aQuery);
-                pDocument->EndListeningArea(rGrpListener.maArea, rGrpListener.mbGroupListening, pGrpLis);
+                rDocument.EndListeningArea(rGrpListener.maArea, rGrpListener.mbGroupListening, pGrpLis);
             }
         }
 
@@ -1303,13 +1303,13 @@ void ScTable::SortReorderByRowRefUpdate(
             for (const auto& rSpan : aSpans)
             {
                 assert(rSpan.mpPattern); // should never be NULL.
-                pDocument->GetPool()->Put(*rSpan.mpPattern);
+                rDocument.GetPool()->Put(*rSpan.mpPattern);
             }
 
             for (const auto& rSpan : aSpans)
             {
                 aCol[nThisCol].SetPatternArea(rSpan.mnRow1, rSpan.mnRow2, *rSpan.mpPattern);
-                pDocument->GetPool()->Remove(*rSpan.mpPattern);
+                rDocument.GetPool()->Remove(*rSpan.mpPattern);
             }
         }
 
@@ -1356,12 +1356,12 @@ void ScTable::SortReorderByRowRefUpdate(
 
     // Get all area listeners that listen on one row within the range and end
     // their listening.
-    std::vector<sc::AreaListener> aAreaListeners = pDocument->GetBASM()->GetAllListeners(
+    std::vector<sc::AreaListener> aAreaListeners = rDocument.GetBASM()->GetAllListeners(
             aMoveRange, sc::AreaOverlapType::OneRowInside);
     {
         for (auto& rAreaListener : aAreaListeners)
         {
-            pDocument->EndListeningArea(rAreaListener.maArea, rAreaListener.mbGroupListening, rAreaListener.mpListener);
+            rDocument.EndListeningArea(rAreaListener.maArea, rAreaListener.mbGroupListening, rAreaListener.mpListener);
             aListeners.push_back( rAreaListener.mpListener);
         }
     }
@@ -1371,7 +1371,7 @@ void ScTable::SortReorderByRowRefUpdate(
 
         std::vector<ScFormulaCell*> aFCells;
         FormulaCellCollectAction aAction(aFCells);
-        aGrpListenerRanges.executeColumnAction(*pDocument, aAction);
+        aGrpListenerRanges.executeColumnAction(rDocument, aAction);
 
         aListeners.insert( aListeners.end(), aFCells.begin(), aFCells.end() );
     }
@@ -1393,7 +1393,7 @@ void ScTable::SortReorderByRowRefUpdate(
         for (const auto& [nCol, rCol] : rCols)
         {
             std::vector<SCROW> aBounds(rCol);
-            pDocument->UnshareFormulaCells(rTab, nCol, aBounds);
+            rDocument.UnshareFormulaCells(rTab, nCol, aBounds);
         }
     }
 
@@ -1405,7 +1405,7 @@ void ScTable::SortReorderByRowRefUpdate(
     for (const auto& [rTab, rCols] : rGroupTabs)
     {
         for (const auto& rEntry : rCols)
-            pDocument->RegroupFormulaCells(rTab, rEntry.first);
+            rDocument.RegroupFormulaCells(rTab, rEntry.first);
     }
 
     // Re-start area listeners on the reordered rows.
@@ -1418,7 +1418,7 @@ void ScTable::SortReorderByRowRefUpdate(
             aNewRange.aStart.SetRow( itRow->second);
             aNewRange.aEnd.SetRow( itRow->second);
         }
-        pDocument->StartListeningArea(aNewRange, rAreaListener.mbGroupListening, rAreaListener.mpListener);
+        rDocument.StartListeningArea(aNewRange, rAreaListener.mbGroupListening, rAreaListener.mpListener);
     }
 
     // Re-group columns in the sorted range too.
@@ -1427,8 +1427,8 @@ void ScTable::SortReorderByRowRefUpdate(
 
     {
         // Re-start area listeners on the old group listener ranges.
-        ListenerStartAction aAction(*pDocument);
-        aGrpListenerRanges.executeColumnAction(*pDocument, aAction);
+        ListenerStartAction aAction(rDocument);
+        aGrpListenerRanges.executeColumnAction(rDocument, aAction);
     }
 }
 
@@ -1876,7 +1876,7 @@ void ScTable::RemoveSubTotals( ScSubTotalParam& rParam )
 
     std::for_each(aRows.rbegin(), aRows.rend(), [this](const SCROW nRow) {
             RemoveRowBreak(nRow+1, false, true);
-            pDocument->DeleteRow(0, nTab, pDocument->MaxCol(), nTab, nRow, 1);
+            rDocument.DeleteRow(0, nTab, rDocument.MaxCol(), nTab, nRow, 1);
         });
 
     rParam.nRow2 -= aRows.size();
@@ -1946,7 +1946,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
     sal_uInt16 i;
 
     //  Remove empty rows at the end
-    //  so that all exceeding (pDocument->MaxRow()) can be found by InsertRow (#35180#)
+    //  so that all exceeding (rDocument.MaxRow()) can be found by InsertRow (#35180#)
     //  If sorted, all empty rows are at the end.
     SCSIZE nEmpty = GetEmptyLinesInBlock( nStartCol, nStartRow, nEndCol, nEndRow, DIR_BOTTOM );
     nEndRow -= nEmpty;
@@ -1977,7 +1977,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
 
                                 //TODO: sort?
 
-    ScStyleSheet* pStyle = static_cast<ScStyleSheet*>(pDocument->GetStyleSheetPool()->Find(
+    ScStyleSheet* pStyle = static_cast<ScStyleSheet*>(rDocument.GetStyleSheetPool()->Find(
                                 ScResId(STR_STYLENAME_RESULT), SfxStyleFamily::Para ));
 
     bool bSpaceLeft = true;                                         // Success when inserting?
@@ -2042,10 +2042,10 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                     aRowEntry.nFuncStart = aRowEntry.nSubStartRow;
                     aRowEntry.nFuncEnd   = nRow-1;
 
-                    bSpaceLeft = pDocument->InsertRow( 0, nTab, pDocument->MaxCol(), nTab,
+                    bSpaceLeft = rDocument.InsertRow( 0, nTab, rDocument.MaxCol(), nTab,
                             aRowEntry.nDestRow, 1 );
                     DBShowRow( aRowEntry.nDestRow, bBlockVis );
-                    if ( rParam.bPagebreak && nRow < pDocument->MaxRow() &&
+                    if ( rParam.bPagebreak && nRow < rDocument.MaxRow() &&
                             aRowEntry.nSubStartRow != nStartRow && nLevel == 0)
                         SetRowBreak(aRowEntry.nSubStartRow, false, true);
 
@@ -2131,7 +2131,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
             // increment row
             nGlobalEndFunc++;
 
-            bSpaceLeft = pDocument->InsertRow(0, nTab, pDocument->MaxCol(), nTab, aRowEntry.nDestRow, 1);
+            bSpaceLeft = rDocument.InsertRow(0, nTab, rDocument.MaxCol(), nTab, aRowEntry.nDestRow, 1);
 
             if (bSpaceLeft)
             {
@@ -2164,7 +2164,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
             aRef.Ref2.SetAbsCol(nResCols[nResult]);
             aRef.Ref2.SetAbsRow(rRowEntry.nFuncEnd);
 
-            ScTokenArray aArr(*pDocument);
+            ScTokenArray aArr(rDocument);
             aArr.AddOpCode( ocSubTotal );
             aArr.AddOpCode( ocOpen );
             aArr.AddDouble( static_cast<double>(pResFunc[nResult]) );
@@ -2173,7 +2173,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
             aArr.AddOpCode( ocClose );
             aArr.AddOpCode( ocStop );
             ScFormulaCell* pCell = new ScFormulaCell(
-                pDocument, ScAddress(nResCols[nResult], rRowEntry.nDestRow, nTab), aArr);
+                &rDocument, ScAddress(nResCols[nResult], rRowEntry.nDestRow, nTab), aArr);
             if ( rParam.bIncludePattern )
                 pCell->SetNeedNumberFormat(true);
 
@@ -2749,7 +2749,7 @@ bool ScTable::ValidQuery(
     bool* pTest = ( nEntryCount <= nFixedBools ? &aTest[0] : new bool[nEntryCount] );
 
     long    nPos = -1;
-    QueryEvaluator aEval(*pDocument, *this, rParam, pbTestEqualCondition != nullptr);
+    QueryEvaluator aEval(rDocument, *this, rParam, pbTestEqualCondition != nullptr);
     ScQueryParam::const_iterator it, itBeg = rParam.begin(), itEnd = rParam.end();
     for (it = itBeg; it != itEnd && (*it)->bDoQuery; ++it)
     {
@@ -3068,7 +3068,7 @@ SCSIZE ScTable::Query(const ScQueryParam& rParamOrg, bool bKeepSub)
     SCROW nOutRow   = 0;
     SCROW nHeader   = aParam.bHasHeader ? 1 : 0;
 
-    lcl_PrepareQuery(pDocument, this, aParam);
+    lcl_PrepareQuery(&rDocument, this, aParam);
 
     if (!aParam.bInplace)
     {
@@ -3178,7 +3178,7 @@ bool ScTable::CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
             if ( nTab == nDBTab )
                 GetUpperCellString(i, nDBRow1, aCellStr);
             else
-                pDocument->GetUpperCellString(i, nDBRow1, nDBTab, aCellStr);
+                rDocument.GetUpperCellString(i, nDBRow1, nDBTab, aCellStr);
             bFound = (aCellStr == aQueryStr);
             if (!bFound) i++;
         }
@@ -3205,7 +3205,7 @@ bool ScTable::CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
 
         SCSIZE nIndex = 0;
         SCROW nRow = nRow1 + 1;
-        svl::SharedStringPool& rPool = pDocument->GetSharedStringPool();
+        svl::SharedStringPool& rPool = rDocument.GetSharedStringPool();
         while (nRow <= nRow2)
         {
             nCol = nCol1;
@@ -3259,7 +3259,7 @@ bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
 
     SCSIZE nNewEntries = static_cast<SCSIZE>(nRow2-nRow1+1);
     rQueryParam.Resize( nNewEntries );
-    svl::SharedStringPool& rPool = pDocument->GetSharedStringPool();
+    svl::SharedStringPool& rPool = rDocument.GetSharedStringPool();
 
     do
     {
@@ -3292,7 +3292,7 @@ bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
                 if ( nTab == nDBTab )
                     GetUpperCellString(i, nDBRow1, aFieldStr);
                 else
-                    pDocument->GetUpperCellString(i, nDBRow1, nDBTab, aFieldStr);
+                    rDocument.GetUpperCellString(i, nDBRow1, nDBTab, aFieldStr);
                 bFound = (aCellStr == aFieldStr);
                 if (bFound)
                 {
@@ -3358,7 +3358,7 @@ bool ScTable::CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
     if (!bValid)
         bValid = CreateExcelQuery(nCol1, nRow1, nCol2, nRow2, rQueryParam);
 
-    SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
+    SvNumberFormatter* pFormatter = rDocument.GetFormatTable();
     nCount = rQueryParam.GetEntryCount();
 
     if (bValid)
@@ -3474,7 +3474,7 @@ void ScTable::GetFilteredFilterEntries(
     ScQueryParam aParam( rParam );
     aParam.RemoveEntryByField(nCol);
 
-    lcl_PrepareQuery(pDocument, this, aParam);
+    lcl_PrepareQuery(&rDocument, this, aParam);
     for ( SCROW j = nRow1; j <= nRow2; ++j )
     {
         if (ValidQuery(j, aParam))
@@ -3560,7 +3560,7 @@ void ScTable::UpdateSelectionFunction( ScFunctionData& rData, const ScMarkData& 
     {
         assert(!"ScTable::UpdateSelectionFunction - called without anything marked");
         aMarkArea.aStart.SetCol(0);
-        aMarkArea.aEnd.SetCol(pDocument->MaxCol());
+        aMarkArea.aEnd.SetCol(rDocument.MaxCol());
     }
     const SCCOL nStartCol = aMarkArea.aStart.Col();
     const SCCOL nEndCol = ClampToAllocatedColumns(aMarkArea.aEnd.Col());
