@@ -24,7 +24,7 @@
 #include <global.hxx>
 #include <viewdata.hxx>
 
-void ScDrawUtil::CalcScale( const ScDocument* pDoc, SCTAB nTab,
+void ScDrawUtil::CalcScale( const ScDocument& rDoc, SCTAB nTab,
                             SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                             const OutputDevice* pDev,
                             const Fraction& rZoomX, const Fraction& rZoomY,
@@ -37,7 +37,7 @@ void ScDrawUtil::CalcScale( const ScDocument* pDoc, SCTAB nTab,
     long nTwipsY = 0;
     for (SCCOL i=nStartCol; i<nEndCol; i++)
     {
-        sal_uInt16 nWidth = pDoc->GetColWidth(i,nTab);
+        sal_uInt16 nWidth = rDoc.GetColWidth(i,nTab);
         nTwipsX += static_cast<long>(nWidth);
         nPixelX += ScViewData::ToPixel( nWidth, nPPTX );
     }
@@ -45,13 +45,13 @@ void ScDrawUtil::CalcScale( const ScDocument* pDoc, SCTAB nTab,
     for (SCROW nRow = nStartRow; nRow <= nEndRow-1; ++nRow)
     {
         SCROW nLastRow = nRow;
-        if (pDoc->RowHidden(nRow, nTab, nullptr, &nLastRow))
+        if (rDoc.RowHidden(nRow, nTab, nullptr, &nLastRow))
         {
             nRow = nLastRow;
             continue;
         }
 
-        sal_uInt16 nHeight = pDoc->GetRowHeight(nRow, nTab);
+        sal_uInt16 nHeight = rDoc.GetRowHeight(nRow, nTab);
         nTwipsY += static_cast<long>(nHeight);
         nPixelY += ScViewData::ToPixel(nHeight, nPPTY);
     }

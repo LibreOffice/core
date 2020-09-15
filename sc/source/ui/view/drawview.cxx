@@ -325,7 +325,7 @@ void ScDrawView::RecalcScale()
         nEndRow = 20;
 
     ScDrawUtil::CalcScale(
-        &rDoc, nTab, 0, 0, nEndCol, nEndRow, pDev, aZoomX, aZoomY, nPPTX, nPPTY,
+        rDoc, nTab, 0, 0, nEndCol, nEndRow, pDev, aZoomX, aZoomY, nPPTX, nPPTY,
         aScaleX, aScaleY);
 
     // clear all evtl existing GridOffset vectors
