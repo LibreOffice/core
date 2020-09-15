@@ -3869,7 +3869,7 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
                     SCTAB nTab = pViewData->GetTabNo();
                     ScDocument& rDoc = pViewData->GetDocument();
 
-                    ScEditableTester aTester( &rDoc, nTab, nPosX,nPosY, nPosX,nPosY );
+                    ScEditableTester aTester( rDoc, nTab, nPosX,nPosY, nPosX,nPosY );
                     if ( !aTester.IsFormatEditable() )
                         nRet = DND_ACTION_NONE;             // forbidden
                 }

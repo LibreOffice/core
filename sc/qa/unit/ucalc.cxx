@@ -2026,7 +2026,7 @@ void Test::testMatrixEditable()
 
     // Check to make sure A3:A4 combined is editable.
     ScEditableTester aTester;
-    aTester.TestSelection(m_pDoc, aMark);
+    aTester.TestSelection(*m_pDoc, aMark);
     CPPUNIT_ASSERT(aTester.IsEditable());
 
     m_pDoc->DeleteTab(0);
