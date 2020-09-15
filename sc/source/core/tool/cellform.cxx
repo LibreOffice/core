@@ -68,8 +68,8 @@ void ScCellFormat::GetString( const ScRefCellValue& rCell, sal_uInt32 nFormat, O
                 // cells are already being interpreted.
                 // IdleCalc generally doesn't trigger further interpretation,
                 // as not to get Err522 (circular).
-                if ( pFCell->GetDocument()->IsInInterpreter() &&
-                        (!pFCell->GetDocument()->GetMacroInterpretLevel()
+                if ( pFCell->GetDocument().IsInInterpreter() &&
+                        (!pFCell->GetDocument().GetMacroInterpretLevel()
                         || pFCell->IsRunning()) )
                 {
                     rString = "...";

@@ -131,7 +131,7 @@ private:
     // If this cell is in a cell group (mxGroup!=nullptr), then this pCode is a not-owning pointer
     // to the mxGroup's mpCode, which owns the array. If the cell is not in a group, this is an owning pointer.
     ScTokenArray*   pCode;              // The token array
-    ScDocument*     pDocument;
+    ScDocument&     rDocument;
     ScFormulaCell*  pPrevious;
     ScFormulaCell*  pNext;
     ScFormulaCell*  pPreviousTrack;
@@ -230,7 +230,7 @@ public:
 
     bool IsDirtyOrInTableOpDirty() const
     {
-        return bDirty || (bTableOpDirty && pDocument->IsInInterpreterTableOp());
+        return bDirty || (bTableOpDirty && rDocument.IsInInterpreterTableOp());
     }
 
     bool GetDirty() const { return bDirty; }
@@ -363,7 +363,7 @@ public:
     virtual void Query( SvtListener::QueryBase& rQuery ) const override;
 
     void SetCompile( bool bVal );
-    ScDocument* GetDocument() const { return pDocument;}
+    ScDocument& GetDocument() const { return rDocument;}
     void            SetMatColsRows( SCCOL nCols, SCROW nRows );
     void            GetMatColsRows( SCCOL& nCols, SCROW& nRows ) const;
 
@@ -434,14 +434,14 @@ public:
         if (!IsDirtyOrInTableOpDirty())
             return false;
 
-        return (pDocument->GetAutoCalc() || (cMatrixFlag != ScMatrixMode::NONE));
+        return (rDocument.GetAutoCalc() || (cMatrixFlag != ScMatrixMode::NONE));
     }
 
     bool MaybeInterpret()
     {
         if (NeedsInterpret())
         {
-            assert(!pDocument->IsThreadedGroupCalcInProgress());
+            assert(!rDocument.IsThreadedGroupCalcInProgress());
             Interpret();
             return true;
         }
