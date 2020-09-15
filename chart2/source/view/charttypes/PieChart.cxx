@@ -32,6 +32,7 @@
 
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
@@ -382,15 +383,51 @@ void PieChart::createTextLabelShape(
 
     aPieLabelInfo.xLabelGroupShape.set( xChild->getParent(), uno::UNO_QUERY );
 
+    if (bMovementAllowed && !m_bUseRings)
+    {
+        /** Handle the placement of the label in the best fit case.
+         *  First off the routine try to place the label inside the related pie slice,
+         *  if this is not possible the label is placed outside.
+         */
+        if (!performLabelBestFitInnerPlacement(rParam, aPieLabelInfo)
+            && m_aAvailableOuterRect.getWidth())
+        {
+            double fAngleDegree
+                = rParam.mfUnitCircleStartAngleDegree + rParam.mfUnitCircleWidthAngleDegree / 2.0;
+            while (fAngleDegree > 360.0)
+                fAngleDegree -= 360.0;
+            while (fAngleDegree < 0.0)
+                fAngleDegree += 360.0;
+
+            if (fAngleDegree < 67.5 || fAngleDegree >= 292.5)
+                fTextMaximumFrameWidth
+                    = 0.8 * (m_aAvailableOuterRect.getMaxX() - aPieLabelInfo.aFirstPosition.getX());
+            else if (fAngleDegree < 112.5 || fAngleDegree >= 247.5)
+                fTextMaximumFrameWidth = 0.8 * m_aAvailableOuterRect.getWidth();
+            else
+                fTextMaximumFrameWidth
+                    = 0.8 * (aPieLabelInfo.aFirstPosition.getX() - m_aAvailableOuterRect.getMinX());
+
+            nTextMaximumFrameWidth = ceil(fTextMaximumFrameWidth);
+            uno::Reference<drawing::XShapes> xShapes(xChild->getParent(), uno::UNO_QUERY);
+            xShapes->remove(aPieLabelInfo.xTextShape);
+            aPieLabelInfo.xTextShape
+                = createDataLabel(xTextTarget, rSeries, nPointIndex, nVal, rParam.mfLogicYSum,
+                                  aScreenPosition2D, eAlignment, 0, nTextMaximumFrameWidth);
+            xChild.clear();
+            xChild.set(uno::Reference<container::XChild>(aPieLabelInfo.xTextShape, uno::UNO_QUERY));
+            if (!xChild.is())
+                return;
+
+            aPieLabelInfo.xLabelGroupShape.set(xChild->getParent(), uno::UNO_QUERY);
+            performLabelBestFitOuterPlacement(rParam, aPieLabelInfo);
+        }
+    }
+
     aPieLabelInfo.fValue = nVal;
     aPieLabelInfo.bMovementAllowed = bMovementAllowed;
-    aPieLabelInfo.bMoved= false;
+    aPieLabelInfo.bMoved = false;
     aPieLabelInfo.xTextTarget = xTextTarget;
-
-    if (bMovementAllowed)
-    {
-        performLabelBestFit(rParam, aPieLabelInfo);
-    }
 
     m_aLabelInfoList.push_back(aPieLabelInfo);
 }
@@ -1571,25 +1608,16 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
     return true;
 }
 
-/** Handle the placement of the label in the best fit case.
- *  First off the routine try to place the label inside the related pie slice,
- *  if this is not possible the label is placed outside.
- */
-void PieChart::performLabelBestFit(ShapeParam& rShapeParam, PieLabelInfo const & rPieLabelInfo)
+void PieChart::performLabelBestFitOuterPlacement(ShapeParam& rShapeParam,
+                                                 PieLabelInfo const& rPieLabelInfo)
 {
-    if( m_bUseRings )
-        return;
-
-    if( performLabelBestFitInnerPlacement(rShapeParam, rPieLabelInfo) )
-        return;
-
-    // If it does not fit inside, let's put it outside
     awt::Point aOldPos(rPieLabelInfo.xLabelGroupShape->getPosition());
     basegfx::B2IVector aTranslationVector = rPieLabelInfo.aFirstPosition - rPieLabelInfo.aOrigin;
     awt::Point aScreenPosition2D(aOldPos.X + aTranslationVector.getX(),
-        aOldPos.Y + aTranslationVector.getY());
+                                 aOldPos.Y + aTranslationVector.getY());
 
-    double fAngleDegree = rShapeParam.mfUnitCircleStartAngleDegree + rShapeParam.mfUnitCircleWidthAngleDegree / 2.0;
+    double fAngleDegree
+        = rShapeParam.mfUnitCircleStartAngleDegree + rShapeParam.mfUnitCircleWidthAngleDegree / 2.0;
     ::basegfx::B2IRectangle aBb(lcl_getRect(rPieLabelInfo.xLabelGroupShape));
     double fLabelWidth = aBb.getWidth();
     double fLabelHeight = aBb.getHeight();

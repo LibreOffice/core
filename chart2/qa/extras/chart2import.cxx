@@ -165,6 +165,7 @@ public:
     void testTdf136105();
     void testTdf91250();
     void testTdf134111();
+    void testTdf136752();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -278,6 +279,7 @@ public:
     CPPUNIT_TEST(testTdf136105);
     CPPUNIT_TEST(testTdf91250);
     CPPUNIT_TEST(testTdf134111);
+    CPPUNIT_TEST(testTdf136752);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2550,8 +2552,8 @@ void Chart2ImportTest::testTdf133376()
     CPPUNIT_ASSERT(xDataPointLabel.is());
     // Check the position of the 3rd data point label, which is out from the pie slice
     awt::Point aLabelPosition = xDataPointLabel->getPosition();
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(482, aLabelPosition.X, 30);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(5427, aLabelPosition.Y, 30);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(349, aLabelPosition.X, 30);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(5480, aLabelPosition.Y, 30);
 }
 
 void Chart2ImportTest::testTdf134225()
@@ -2656,6 +2658,25 @@ void Chart2ImportTest::testTdf134111()
     xAxisProp->getPropertyValue("TextBreak") >>= bTextBreak;
     // Expected value of 'TextBreak' is true
     CPPUNIT_ASSERT(bTextBreak);
+}
+
+void Chart2ImportTest::testTdf136752()
+{
+    load("/chart2/qa/extras/data/xlsx/", "tdf136752.xlsx");
+    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
+                                               UNO_QUERY_THROW);
+
+    Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
+    Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
+    Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
+    Reference<drawing::XShape> xDataPointLabel(getShapeByName(xShapes,
+        "CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=0"), UNO_SET_THROW);
+
+    CPPUNIT_ASSERT(xDataPointLabel.is());
+    // Check the position of the 1st data point label, which is out from the pie slice
+    awt::Point aLabelPosition = xDataPointLabel->getPosition();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(8675, aLabelPosition.X, 500);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1458, aLabelPosition.Y, 500);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
