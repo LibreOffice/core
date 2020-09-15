@@ -32,7 +32,7 @@ void insertAllNames( TokenStringContext::IndexNameMapType& rMap, const ScRangeNa
 
 }
 
-TokenStringContext::TokenStringContext( const ScDocument* pDoc, formula::FormulaGrammar::Grammar eGram ) :
+TokenStringContext::TokenStringContext( const ScDocument& rDoc, formula::FormulaGrammar::Grammar eGram ) :
     meGram(eGram),
     mpRefConv(ScCompiler::GetRefConvention(formula::FormulaGrammar::extractRefConvention(eGram)))
 {
@@ -46,25 +46,22 @@ TokenStringContext::TokenStringContext( const ScDocument* pDoc, formula::Formula
         maErrRef = ScResId(STR_NO_REF_TABLE);
     }
 
-    if (!pDoc)
-        return;
-
     // Fetch all sheet names.
-    maTabNames = pDoc->GetAllTableNames();
+    maTabNames = rDoc.GetAllTableNames();
     {
         for (auto& rTabName : maTabNames)
             ScCompiler::CheckTabQuotes(rTabName, formula::FormulaGrammar::extractRefConvention(eGram));
     }
 
     // Fetch all named range names.
-    const ScRangeName* pNames = pDoc->GetRangeName();
+    const ScRangeName* pNames = rDoc.GetRangeName();
     if (pNames)
         // global names
         insertAllNames(maGlobalRangeNames, *pNames);
 
     {
         ScRangeName::TabNameCopyMap aTabRangeNames;
-        pDoc->GetAllTabRangeNames(aTabRangeNames);
+        rDoc.GetAllTabRangeNames(aTabRangeNames);
         for (const auto& [nTab, pSheetNames] : aTabRangeNames)
         {
             if (!pSheetNames)
@@ -77,7 +74,7 @@ TokenStringContext::TokenStringContext( const ScDocument* pDoc, formula::Formula
     }
 
     // Fetch all named database ranges names.
-    const ScDBCollection* pDBs = pDoc->GetDBCollection();
+    const ScDBCollection* pDBs = rDoc.GetDBCollection();
     if (pDBs)
     {
         const ScDBCollection::NamedDBs& rNamedDBs = pDBs->getNamedDBs();
@@ -89,10 +86,10 @@ TokenStringContext::TokenStringContext( const ScDocument* pDoc, formula::Formula
     }
 
     // Fetch all relevant bits for external references.
-    if (!pDoc->HasExternalRefManager())
+    if (!rDoc.HasExternalRefManager())
         return;
 
-    const ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
+    const ScExternalRefManager* pRefMgr = rDoc.GetExternalRefManager();
     maExternalFileNames = pRefMgr->getAllCachedExternalFileNames();
     for (size_t i = 0, n = maExternalFileNames.size(); i < n; ++i)
     {
