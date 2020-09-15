@@ -137,6 +137,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <vector>
+#include <boost/property_tree/json_parser.hpp>
 
 using namespace css;
 using namespace css::uno;
@@ -4728,6 +4729,19 @@ void ScGridWindow::UpdateAutoFillMark(bool bMarked, const ScRange& rMarkRange)
 
         UpdateAutoFillOverlay();
     }
+}
+
+void ScGridWindow::updateLOKInputHelp(const OUString& title, const OUString& content) const
+{
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+
+    boost::property_tree::ptree aTree;
+    aTree.put("title", title);
+    aTree.put("content", content);
+
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_VALIDITY_INPUT_HELP, aStream.str().c_str());
 }
 
 void ScGridWindow::updateLOKValListButton( bool bVisible, const ScAddress& rPos ) const
