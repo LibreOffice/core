@@ -7278,6 +7278,23 @@ SfxVoidItem DeleteComment FN_DELETE_COMMENT
     GroupId = SfxGroupId::Edit;
 ]
 
+SfxVoidItem DeleteCommentThread FN_DELETE_COMMENT_THREAD
+(SvxPostItIdItem Id SID_ATTR_POSTIT_ID)
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Edit;
+]
+
 SfxVoidItem ResolveComment FN_RESOLVE_NOTE
 (SvxPostItIdItem Id SID_ATTR_POSTIT_ID)
 [

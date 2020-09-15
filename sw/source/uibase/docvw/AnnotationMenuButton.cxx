@@ -82,6 +82,8 @@ void AnnotationMenuButton::Select()
         mrSidebarWin.ExecuteCommand(FN_RESOLVE_NOTE_THREAD);
     else if (sIdent == "delete")
         mrSidebarWin.ExecuteCommand(FN_DELETE_COMMENT);
+    else if (sIdent == "deletethread")
+        mrSidebarWin.ExecuteCommand(FN_DELETE_COMMENT_THREAD);
     else if (sIdent == "deleteby")
         mrSidebarWin.ExecuteCommand(FN_DELETE_NOTE_AUTHOR);
     else if (sIdent == "deleteall")
@@ -101,6 +103,7 @@ void AnnotationMenuButton::MouseButtonDown( const MouseEvent& rMEvt )
         pButtonPopup->EnableItem(pButtonPopup->GetItemId("resolvethread"), false);
         pButtonPopup->EnableItem(pButtonPopup->GetItemId("unresolvethread"), false);
         pButtonPopup->EnableItem(pButtonPopup->GetItemId("delete"), false );
+        pButtonPopup->EnableItem(pButtonPopup->GetItemId("deletethread"), false );
         pButtonPopup->EnableItem(pButtonPopup->GetItemId("deleteby"), false );
         pButtonPopup->EnableItem(pButtonPopup->GetItemId("deleteall"), false );
         pButtonPopup->EnableItem(pButtonPopup->GetItemId("formatall"), false );
@@ -112,6 +115,7 @@ void AnnotationMenuButton::MouseButtonDown( const MouseEvent& rMEvt )
         pButtonPopup->EnableItem(pButtonPopup->GetItemId("resolvethread"), !mrSidebarWin.IsThreadResolved());
         pButtonPopup->EnableItem(pButtonPopup->GetItemId("unresolvethread"), mrSidebarWin.IsThreadResolved());
         pButtonPopup->EnableItem(pButtonPopup->GetItemId("delete"), !mrSidebarWin.IsProtected());
+        pButtonPopup->EnableItem(pButtonPopup->GetItemId("deletethread"));
         pButtonPopup->EnableItem(pButtonPopup->GetItemId("deleteby"));
         pButtonPopup->EnableItem(pButtonPopup->GetItemId("deleteall"));
         pButtonPopup->EnableItem(pButtonPopup->GetItemId("formatall"));
