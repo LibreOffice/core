@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5b88fea8_29af7dc2",
+        "filename": "external/icu/ExternalProject_icu.mk",
+        "patchSetId": 15
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-09-15T12:55:41Z",
+      "side": 1,
+      "message": "This isn\u0027t visible after the next \u0026\u0026 AKA next line, without an export, so basically it does nothing.",
+      "revId": "315919306c7b6e95db6a280c4aa8d2203970e292",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51afe759_173ca5f9",
+        "filename": "external/icu/ExternalProject_icu.mk",
+        "patchSetId": 15
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-09-15T12:55:41Z",
+      "side": 1,
+      "message": "Same as above. Did you just want this to be visible for configure intentionally?",
+      "revId": "315919306c7b6e95db6a280c4aa8d2203970e292",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
