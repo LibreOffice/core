@@ -164,7 +164,7 @@ uno::Reference< chart2::XChartDocument > ScDocument::GetChartByName( const OUStr
     return xReturn;
 }
 
-void ScDocument::GetChartRanges( const OUString& rChartName, ::std::vector< ScRangeList >& rRangesVector, const ScDocument* pSheetNameDoc )
+void ScDocument::GetChartRanges( const OUString& rChartName, ::std::vector< ScRangeList >& rRangesVector, const ScDocument& rSheetNameDoc )
 {
     rRangesVector.clear();
     uno::Reference< chart2::XChartDocument > xChartDoc( GetChartByName( rChartName ) );
@@ -175,7 +175,7 @@ void ScDocument::GetChartRanges( const OUString& rChartName, ::std::vector< ScRa
         for(const OUString & aRangeString : aRangeStrings)
         {
             ScRangeList aRanges;
-            aRanges.Parse( aRangeString, *pSheetNameDoc, pSheetNameDoc->GetAddressConvention() );
+            aRanges.Parse( aRangeString, rSheetNameDoc, rSheetNameDoc.GetAddressConvention() );
             rRangesVector.push_back(aRanges);
         }
     }

@@ -1751,7 +1751,7 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
                     {
                         OUString aChartName = static_cast<SdrOle2Obj*>(pNewObject)->GetPersistName();
                         ::std::vector< ScRangeList > aRangesVector;
-                        pDoc->GetChartRanges( aChartName, aRangesVector, pDoc );
+                        pDoc->GetChartRanges( aChartName, aRangesVector, *pDoc );
                         if( !aRangesVector.empty() )
                         {
                             bool bInSourceRange = false;
