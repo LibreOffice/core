@@ -201,7 +201,7 @@ ScDrawTransferObj::ScDrawTransferObj( std::unique_ptr<SdrModel> pClipModel, ScDo
         ScDocument& rDoc = pContainerShell->GetDocument();
         if ( pPage )
         {
-            ScChartHelper::FillProtectedChartRangesVector( m_aProtectedChartRangesVector, &rDoc, pPage );
+            ScChartHelper::FillProtectedChartRangesVector( m_aProtectedChartRangesVector, rDoc, pPage );
         }
     }
 }

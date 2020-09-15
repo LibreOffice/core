@@ -323,15 +323,15 @@ void ScChartHelper::AddRangesIfProtectedChart( ScRangeListVector& rRangesVector,
     }
 }
 
-void ScChartHelper::FillProtectedChartRangesVector( ScRangeListVector& rRangesVector, const ScDocument* pDocument, const SdrPage* pPage )
+void ScChartHelper::FillProtectedChartRangesVector( ScRangeListVector& rRangesVector, const ScDocument& rDocument, const SdrPage* pPage )
 {
-    if ( pDocument && pPage )
+    if ( pPage )
     {
         SdrObjListIter aIter( pPage, SdrIterMode::DeepNoGroups );
         SdrObject* pObject = aIter.Next();
         while ( pObject )
         {
-            AddRangesIfProtectedChart( rRangesVector, pDocument, pObject );
+            AddRangesIfProtectedChart( rRangesVector, &rDocument, pObject );
             pObject = aIter.Next();
         }
     }
