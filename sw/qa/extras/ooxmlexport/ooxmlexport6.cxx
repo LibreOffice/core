@@ -789,9 +789,10 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testShapeThemePreservation, "shape-theme-pre
     assertXPath(pXmlDocument,
             "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:solidFill/a:schemeClr",
             "val", "accent6");
+    // check whether theme color has been converted into native color
     assertXPath(pXmlDocument,
-            "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:solidFill/a:schemeClr",
-            "val", "accent3");
+            "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:solidFill/a:srgbClr",
+            "val", "9bbb59");
 
     // check color transformations applied to theme colors have been preserved
     assertXPath(pXmlDocument,
@@ -801,7 +802,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testShapeThemePreservation, "shape-theme-pre
             "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:solidFill/a:schemeClr/a:lumOff",
             "val", "60000");
     assertXPath(pXmlDocument,
-            "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:solidFill/a:schemeClr/a:lumMod",
+            "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:solidFill/a:srgbClr/a:lumMod",
             "val", "50000");
 
     // check direct color assignments have been preserved
