@@ -179,7 +179,7 @@ public:
 
     void        Init(SCCOL nNewCol, SCTAB nNewTab, ScDocument& rDoc, bool bEmptyAttrArray);
 
-    ScDocument* GetDoc() const { return pAttrArray->GetDoc(); }
+    ScDocument& GetDoc() const { return pAttrArray->GetDoc(); }
     SCTAB GetTab() const { return nTab; }
     SCCOL GetCol() const { return nCol; }
     sc::CellStoreType& GetCellStore() { return maCells; }

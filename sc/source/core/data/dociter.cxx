@@ -951,9 +951,9 @@ bool ScCellIterator::getCurrent()
         SCROW nLastRow;
         // Skip all filtered or hidden rows, depending on mSubTotalFlags
         if ( ( ( mnSubTotalFlags & SubtotalFlags::IgnoreFiltered ) &&
-               pCol->GetDoc()->RowFiltered(maCurPos.Row(), maCurPos.Tab(), nullptr, &nLastRow) ) ||
+               pCol->GetDoc().RowFiltered(maCurPos.Row(), maCurPos.Tab(), nullptr, &nLastRow) ) ||
              ( ( mnSubTotalFlags & SubtotalFlags::IgnoreHidden ) &&
-               pCol->GetDoc()->RowHidden(maCurPos.Row(), maCurPos.Tab(), nullptr, &nLastRow) ) )
+               pCol->GetDoc().RowHidden(maCurPos.Row(), maCurPos.Tab(), nullptr, &nLastRow) ) )
         {
             setPos(nLastRow+1);
             continue;
