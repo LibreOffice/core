@@ -37,7 +37,7 @@ namespace ScRefTokenHelper
      * The source range may consist of multiple ranges separated by ';'s.
      */
     void compileRangeRepresentation(
-        ::std::vector<ScTokenRef>& rRefTokens, const OUString& rRangeStr, ScDocument* pDoc,
+        ::std::vector<ScTokenRef>& rRefTokens, const OUString& rRangeStr, ScDocument& rDoc,
         const sal_Unicode cSep, ::formula::FormulaGrammar::Grammar eGrammar, bool bOnly3DRef = false);
 
     bool getRangeFromToken(const ScDocument* pDoc, ScRange& rRange, const ScTokenRef& pToken, const ScAddress& rPos, bool bExternal = false);
