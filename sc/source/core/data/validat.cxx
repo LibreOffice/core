@@ -686,7 +686,7 @@ bool ScValidationData::GetSelectionFromFormula(
         return false;
 
     ScFormulaCell aValidationSrc(
-        pDocument, rPos, rTokArr, formula::FormulaGrammar::GRAM_DEFAULT, ScMatrixMode::Formula);
+        *pDocument, rPos, rTokArr, formula::FormulaGrammar::GRAM_DEFAULT, ScMatrixMode::Formula);
 
     // Make sure the formula gets interpreted and a result is delivered,
     // regardless of the AutoCalc setting.

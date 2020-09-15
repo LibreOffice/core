@@ -123,7 +123,7 @@ protected:
                 if (!pArray)
                     break;
 
-                mrCellValue.set(new ScFormulaCell(&rDoc, mrPos, std::move(pArray)));
+                mrCellValue.set(new ScFormulaCell(rDoc, mrPos, std::move(pArray)));
             }
             break;
             default:

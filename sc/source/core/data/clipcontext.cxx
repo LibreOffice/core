@@ -154,7 +154,7 @@ void CopyFromClipContext::setSingleCell( const ScAddress& rSrcPos, const ScColum
 
         ScTokenArray aArr(*mpClipDoc);
         aArr.AddSingleReference(aRef);
-        rSrcCell.set(new ScFormulaCell(mpClipDoc, rSrcPos, aArr));
+        rSrcCell.set(new ScFormulaCell(*mpClipDoc, rSrcPos, aArr));
         return;
     }
 

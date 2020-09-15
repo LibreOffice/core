@@ -185,11 +185,11 @@ public:
      * formula cell being constructed.  The caller <i>must not</i> pass a NULL
      * token array pointer.
      */
-    ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos, std::unique_ptr<ScTokenArray> pArray,
+    ScFormulaCell( ScDocument& rDoc, const ScAddress& rPos, std::unique_ptr<ScTokenArray> pArray,
                    const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT,
                    ScMatrixMode cMatInd = ScMatrixMode::NONE );
 
-    ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos, const ScTokenArray& rArray,
+    ScFormulaCell( ScDocument& rDoc, const ScAddress& rPos, const ScTokenArray& rArray,
                    const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT,
                    ScMatrixMode cMatInd = ScMatrixMode::NONE );
 
