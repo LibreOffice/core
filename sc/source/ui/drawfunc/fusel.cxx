@@ -521,7 +521,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
         if ( pModelObj )
         {
             SCTAB nTab = rViewData.GetTabNo();
-            ScChartHelper::CreateProtectedChartListenersAndNotify( &rDocument, pPage, pModelObj, nTab,
+            ScChartHelper::CreateProtectedChartListenersAndNotify( rDocument, pPage, pModelObj, nTab,
                 aProtectedChartRangesVector, aExcludedChartNames );
         }
     }

@@ -1457,7 +1457,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         {
             bool bSameDoc = ( rClipParam.getSourceDocID() == rDoc.GetDocumentID() );
             const ScRangeListVector& rProtectedChartRangesVector( rClipParam.maProtectedChartRangesVector );
-            ScChartHelper::CreateProtectedChartListenersAndNotify( &rDoc, pPage, pModelObj, nStartTab,
+            ScChartHelper::CreateProtectedChartListenersAndNotify( rDoc, pPage, pModelObj, nStartTab,
                 rProtectedChartRangesVector, aExcludedChartNames, bSameDoc );
         }
     }
