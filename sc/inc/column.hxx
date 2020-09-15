@@ -177,7 +177,7 @@ public:
     ScColumn(ScSheetLimits const &);
     ~ScColumn() COVERITY_NOEXCEPT_FALSE;
 
-    void        Init(SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc, bool bEmptyAttrArray);
+    void        Init(SCCOL nNewCol, SCTAB nNewTab, ScDocument& rDoc, bool bEmptyAttrArray);
 
     ScDocument* GetDoc() const { return pAttrArray->GetDoc(); }
     SCTAB GetTab() const { return nTab; }
