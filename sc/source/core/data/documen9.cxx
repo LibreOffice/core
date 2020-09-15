@@ -61,11 +61,11 @@ void ScDocument::BeginDrawUndo()
         mpDrawLayer->BeginCalcUndo(false);
 }
 
-void ScDocument::TransferDrawPage(const ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDestPos)
+void ScDocument::TransferDrawPage(const ScDocument& rSrcDoc, SCTAB nSrcPos, SCTAB nDestPos)
 {
-    if (mpDrawLayer && pSrcDoc->mpDrawLayer)
+    if (mpDrawLayer && rSrcDoc.mpDrawLayer)
     {
-        SdrPage* pOldPage = pSrcDoc->mpDrawLayer->GetPage(static_cast<sal_uInt16>(nSrcPos));
+        SdrPage* pOldPage = rSrcDoc.mpDrawLayer->GetPage(static_cast<sal_uInt16>(nSrcPos));
         SdrPage* pNewPage = mpDrawLayer->GetPage(static_cast<sal_uInt16>(nDestPos));
 
         if (pOldPage && pNewPage)
@@ -89,7 +89,7 @@ void ScDocument::TransferDrawPage(const ScDocument* pSrcDoc, SCTAB nSrcPos, SCTA
 
     //  make sure the data references of charts are adapted
     //  (this must be after InsertObject!)
-    ScChartHelper::AdjustRangesOfChartsOnDestinationPage( pSrcDoc, this, nSrcPos, nDestPos );
+    ScChartHelper::AdjustRangesOfChartsOnDestinationPage( &rSrcDoc, this, nSrcPos, nDestPos );
     ScChartHelper::UpdateChartsOnDestinationPage(this, nDestPos);
 }
 

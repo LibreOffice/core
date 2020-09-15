@@ -2503,7 +2503,7 @@ bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, bool bRecord )
                 pUndoDoc->SetTabProtection(nTab, rDoc.GetTabProtection(nTab));
 
             //  Drawing-Layer is responsible for its Undo  !!!
-            //      pUndoDoc->TransferDrawPage(pDoc, nTab,nTab);
+            //      pUndoDoc->TransferDrawPage(rDoc, nTab,nTab);
         }
 
         pUndoDoc->AddUndoTab( 0, nCount-1 );            //  all Tabs for references
