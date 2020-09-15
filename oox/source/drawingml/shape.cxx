@@ -1279,6 +1279,9 @@ Reference< XShape > const & Shape::createAndInsert(
             if( !aLineProperties.maLineFill.maFillColor.isPlaceHolder() && !sLnColorFillScheme.isEmpty() )
             {
                 aProperties.push_back(comphelper::makePropertyValue("SpPrLnSolidFillSchemeClr", sLnColorFillScheme));
+                auto aResolvedSchemeClr = aLineProperties.maLineFill.maFillColor;
+                aResolvedSchemeClr.clearTransformations();
+                aProperties.push_back(comphelper::makePropertyValue("SpPrLnSolidFillResolvedSchemeClr", aResolvedSchemeClr.getColor(rGraphicHelper, nFillPhClr)));
                 aProperties.push_back(comphelper::makePropertyValue("SpPrLnSolidFillSchemeClrTransformations", aLineProperties.maLineFill.maFillColor.getTransformations()));
             }
             putPropertiesToGrabBag(comphelper::containerToSequence(aProperties));

@@ -273,25 +273,35 @@ bool DrawingML::GetPropertyAndState( const Reference< XPropertySet >& rXProperty
     return false;
 }
 
-void DrawingML::WriteColor( ::Color nColor, sal_Int32 nAlpha )
+namespace
+{
+/// Gets hexa value of color on string format.
+OString getColorStr(const ::Color nColor)
 {
     // Transparency is a separate element.
-    OString sColor = OString::number(  sal_uInt32(nColor) & 0x00FFFFFF, 16 );
-    if( sColor.getLength() < 6 )
+    OString sColor = OString::number(sal_uInt32(nColor) & 0x00FFFFFF, 16);
+    if (sColor.getLength() < 6)
     {
-        OStringBuffer sBuf( "0" );
+        OStringBuffer sBuf("0");
         int remains = 5 - sColor.getLength();
 
-        while( remains > 0 )
+        while (remains > 0)
         {
-            sBuf.append( "0" );
+            sBuf.append("0");
             remains--;
         }
 
-        sBuf.append( sColor );
+        sBuf.append(sColor);
 
         sColor = sBuf.getStr();
     }
+    return sColor;
+}
+}
+
+void DrawingML::WriteColor( ::Color nColor, sal_Int32 nAlpha )
+{
+    const auto sColor = getColorStr(nColor);
     if( nAlpha < MAX_PERCENT )
     {
         mpFS->startElementNS(XML_a, XML_srgbClr, XML_val, sColor);
@@ -329,6 +339,27 @@ void DrawingML::WriteColor( const OUString& sColorSchemeName, const Sequence< Pr
     }
 }
 
+void DrawingML::WriteColor( const ::Color nColor, const Sequence< PropertyValue >& aTransformations, sal_Int32 nAlpha )
+{
+    const auto sColor = getColorStr(nColor);
+    if( aTransformations.hasElements() )
+    {
+        mpFS->startElementNS(XML_a, XML_srgbClr, XML_val, sColor);
+        WriteColorTransformations(aTransformations, nAlpha);
+        mpFS->endElementNS(XML_a, XML_srgbClr);
+    }
+    else if(nAlpha < MAX_PERCENT)
+    {
+        mpFS->startElementNS(XML_a, XML_srgbClr, XML_val, sColor);
+        mpFS->singleElementNS(XML_a, XML_alpha, XML_val, OString::number(nAlpha));
+        mpFS->endElementNS(XML_a, XML_srgbClr);
+    }
+    else
+    {
+        mpFS->singleElementNS(XML_a, XML_srgbClr, XML_val, sColor);
+    }
+}
+
 void DrawingML::WriteColorTransformations( const Sequence< PropertyValue >& aTransformations, sal_Int32 nAlpha )
 {
     for( const auto& rTransformation : aTransformations )
@@ -361,6 +392,13 @@ void DrawingML::WriteSolidFill( const OUString& sSchemeName, const Sequence< Pro
     mpFS->startElementNS(XML_a, XML_solidFill);
     WriteColor( sSchemeName, aTransformations, nAlpha );
     mpFS->endElementNS( XML_a, XML_solidFill );
+}
+
+void DrawingML::WriteSolidFill( const ::Color nColor, const Sequence< PropertyValue >& aTransformations, sal_Int32 nAlpha )
+{
+    mpFS->startElementNS(XML_a, XML_solidFill);
+    WriteColor(nColor, aTransformations, nAlpha);
+    mpFS->endElementNS(XML_a, XML_solidFill);
 }
 
 void DrawingML::WriteSolidFill( const Reference< XPropertySet >& rXPropSet )
@@ -778,6 +816,7 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
 
     // get InteropGrabBag and search the relevant attributes
     OUString sColorFillScheme;
+    ::Color aResolvedColorFillScheme;
 
     ::Color nOriginalColor;
     ::Color nStyleColor;
@@ -798,6 +837,8 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
         {
             if( rProp.Name == "SpPrLnSolidFillSchemeClr" )
                 rProp.Value >>= sColorFillScheme;
+            if( rProp.Name == "SpPrLnSolidFillResolvedSchemeClr" )
+                rProp.Value >>= aResolvedColorFillScheme;
             else if( rProp.Name == "OriginalLnSolidFillClr" )
                 rProp.Value >>= nOriginalColor;
             else if( rProp.Name == "StyleLnRef" )
@@ -900,7 +941,7 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
         else if( !sColorFillScheme.isEmpty() )
         {
             // the line had a scheme color and the user didn't change it
-            WriteSolidFill( sColorFillScheme, aTransformations );
+            WriteSolidFill( aResolvedColorFillScheme, aTransformations );
         }
         else
         {
