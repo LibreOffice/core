@@ -272,26 +272,26 @@ public:
 
 class CopyRangeData
 {
-    ScDocument* mpSrc;
-    ScDocument* mpDest;
+    ScDocument& mrSrc;
+    ScDocument& mrDest;
 public:
-    CopyRangeData(ScDocument* pSrc, ScDocument* pDest) : mpSrc(pSrc), mpDest(pDest) {}
+    CopyRangeData(ScDocument& rSrc, ScDocument& rDest) : mrSrc(rSrc), mrDest(rDest) {}
 
     void operator() (const ScRange& rRange)
     {
         OUString aTabName;
-        mpSrc->GetName(rRange.aStart.Tab(), aTabName);
+        mrSrc.GetName(rRange.aStart.Tab(), aTabName);
 
         SCTAB nTab;
-        if (!mpDest->GetTable(aTabName, nTab))
+        if (!mrDest.GetTable(aTabName, nTab))
             // Sheet by this name doesn't exist.
             return;
 
-        mpSrc->CopyStaticToDocument(rRange, nTab, mpDest);
+        mrSrc.CopyStaticToDocument(rRange, nTab, &mrDest);
     }
 };
 
-void copyChartRefDataToClipDoc(ScDocument* pSrcDoc, ScDocument* pClipDoc, const std::vector<ScRange>& rRanges)
+void copyChartRefDataToClipDoc(ScDocument& rSrcDoc, ScDocument& rClipDoc, const std::vector<ScRange>& rRanges)
 {
     // Get a list of referenced table indices.
     std::vector<SCTAB> aTabs;
@@ -306,20 +306,20 @@ void copyChartRefDataToClipDoc(ScDocument* pSrcDoc, ScDocument* pClipDoc, const 
     // Create sheets only for referenced source sheets.
     OUString aName;
     std::vector<SCTAB>::const_iterator it = aTabs.begin(), itEnd = aTabs.end();
-    if (!pSrcDoc->GetName(*it, aName))
+    if (!rSrcDoc.GetName(*it, aName))
         return;
 
-    pClipDoc->SetTabNameOnLoad(0, aName); // document initially has one sheet.
+    rClipDoc.SetTabNameOnLoad(0, aName); // document initially has one sheet.
 
     for (++it; it != itEnd; ++it)
     {
-        if (!pSrcDoc->GetName(*it, aName))
+        if (!rSrcDoc.GetName(*it, aName))
             return;
 
-        pClipDoc->AppendTabOnLoad(aName);
+        rClipDoc.AppendTabOnLoad(aName);
     }
 
-    std::for_each(rRanges.begin(), rRanges.end(), CopyRangeData(pSrcDoc, pClipDoc));
+    std::for_each(rRanges.begin(), rRanges.end(), CopyRangeData(rSrcDoc, rClipDoc));
 }
 
 }
@@ -344,7 +344,7 @@ void ScDrawView::DoCopy()
         // document. We need to do this before CreateMarkedObjModel() below.
         ScDocShellRef xDocSh = ScGlobal::xDrawClipDocShellRef;
         ScDocument& rClipDoc = xDocSh->GetDocument();
-        copyChartRefDataToClipDoc(&rDoc, &rClipDoc, aRanges);
+        copyChartRefDataToClipDoc(rDoc, rClipDoc, aRanges);
     }
     std::unique_ptr<SdrModel> pModel(CreateMarkedObjModel());
     ScDrawLayer::SetGlobalDrawPersist(nullptr);
