@@ -507,7 +507,7 @@ void Test::testCondCopyPasteSheetBetweenDoc()
     m_pDoc->AddCondFormat(std::move(pFormat), 0);
 
     ScDocument aDoc;
-    aDoc.TransferTab(m_pDoc, 0, 0);
+    aDoc.TransferTab(*m_pDoc, 0, 0);
 
     ScConditionalFormatList* pList = aDoc.GetCondFormList(0);
     CPPUNIT_ASSERT_EQUAL(size_t(1), pList->size());

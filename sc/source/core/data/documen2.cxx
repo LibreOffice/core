@@ -903,7 +903,7 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
     return bValid;
 }
 
-sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
+sal_uLong ScDocument::TransferTab( ScDocument& rSrcDoc, SCTAB nSrcPos,
                                 SCTAB nDestPos, bool bInsertNew,
                                 bool bResultsOnly )
 {
@@ -911,29 +911,29 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                                             // 3 => NameBox
                                             // 4 => both
 
-    if (pSrcDoc->mpShell->GetMedium())
+    if (rSrcDoc.mpShell->GetMedium())
     {
-        pSrcDoc->maFileURL = pSrcDoc->mpShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
+        rSrcDoc.maFileURL = rSrcDoc.mpShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
         // for unsaved files use the title name and adjust during save of file
-        if (pSrcDoc->maFileURL.isEmpty())
-            pSrcDoc->maFileURL = pSrcDoc->mpShell->GetName();
+        if (rSrcDoc.maFileURL.isEmpty())
+            rSrcDoc.maFileURL = rSrcDoc.mpShell->GetName();
     }
     else
     {
-        pSrcDoc->maFileURL = pSrcDoc->mpShell->GetName();
+        rSrcDoc.maFileURL = rSrcDoc.mpShell->GetName();
     }
 
     bool bValid = true;
     if (bInsertNew)             // re-insert
     {
         OUString aName;
-        pSrcDoc->GetName(nSrcPos, aName);
+        rSrcDoc.GetName(nSrcPos, aName);
         CreateValidTabName(aName);
         bValid = InsertTab(nDestPos, aName);
 
         // Copy the RTL settings
-        maTabs[nDestPos]->SetLayoutRTL(pSrcDoc->maTabs[nSrcPos]->IsLayoutRTL());
-        maTabs[nDestPos]->SetLoadingRTL(pSrcDoc->maTabs[nSrcPos]->IsLoadingRTL());
+        maTabs[nDestPos]->SetLayoutRTL(rSrcDoc.maTabs[nSrcPos]->IsLayoutRTL());
+        maTabs[nDestPos]->SetLoadingRTL(rSrcDoc.maTabs[nSrcPos]->IsLoadingRTL());
     }
     else                        // replace existing tables
     {
@@ -953,12 +953,12 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
         SetNoListening( true );
         if ( bResultsOnly )
         {
-            bOldAutoCalcSrc = pSrcDoc->GetAutoCalc();
-            pSrcDoc->SetAutoCalc( true );   // in case something needs calculation
+            bOldAutoCalcSrc = rSrcDoc.GetAutoCalc();
+            rSrcDoc.SetAutoCalc( true );   // in case something needs calculation
         }
 
         {
-            NumFmtMergeHandler aNumFmtMergeHdl(this, pSrcDoc);
+            NumFmtMergeHandler aNumFmtMergeHdl(this, &rSrcDoc);
 
             sc::CopyToDocContext aCxt(*this);
             nDestPos = std::min(nDestPos, static_cast<SCTAB>(GetTableCount() - 1));
@@ -967,19 +967,19 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                 if (!bResultsOnly)
                 {
                     const bool bGlobalNamesToLocal = false;
-                    const ScRangeName* pNames = pSrcDoc->GetRangeName( nSrcPos);
+                    const ScRangeName* pNames = rSrcDoc.GetRangeName( nSrcPos);
                     if (pNames)
-                        pNames->CopyUsedNames( nSrcPos, nSrcPos, nDestPos, *pSrcDoc, *this, bGlobalNamesToLocal);
-                    pSrcDoc->GetRangeName()->CopyUsedNames( -1, nSrcPos, nDestPos, *pSrcDoc, *this, bGlobalNamesToLocal);
+                        pNames->CopyUsedNames( nSrcPos, nSrcPos, nDestPos, rSrcDoc, *this, bGlobalNamesToLocal);
+                    rSrcDoc.GetRangeName()->CopyUsedNames( -1, nSrcPos, nDestPos, rSrcDoc, *this, bGlobalNamesToLocal);
                 }
-                pSrcDoc->maTabs[nSrcPos]->CopyToTable(aCxt, 0, 0, MaxCol(), MaxRow(),
+                rSrcDoc.maTabs[nSrcPos]->CopyToTable(aCxt, 0, 0, MaxCol(), MaxRow(),
                         ( bResultsOnly ? InsertDeleteFlags::ALL & ~InsertDeleteFlags::FORMULA : InsertDeleteFlags::ALL),
                         false, maTabs[nDestPos].get(), /*pMarkData*/nullptr, /*bAsLink*/false, /*bColRowFlags*/true,
                         /*bGlobalNamesToLocal*/false, /*bCopyCaptions*/true );
             }
         }
         maTabs[nDestPos]->SetTabNo(nDestPos);
-        maTabs[nDestPos]->SetTabBgColor(pSrcDoc->maTabs[nSrcPos]->GetTabBgColor());
+        maTabs[nDestPos]->SetTabBgColor(rSrcDoc.maTabs[nSrcPos]->GetTabBgColor());
 
         if ( !bResultsOnly )
         {
@@ -1004,15 +1004,15 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
         SetDirty( ScRange( 0, 0, nDestPos, MaxCol(), MaxRow(), nDestPos), false);
 
         if ( bResultsOnly )
-            pSrcDoc->SetAutoCalc( bOldAutoCalcSrc );
+            rSrcDoc.SetAutoCalc( bOldAutoCalcSrc );
         SetAutoCalc( bOldAutoCalc );
 
         //  copy Drawing
 
         if (bInsertNew)
-            TransferDrawPage( pSrcDoc, nSrcPos, nDestPos );
+            TransferDrawPage( &rSrcDoc, nSrcPos, nDestPos );
 
-        maTabs[nDestPos]->SetPendingRowHeights( pSrcDoc->maTabs[nSrcPos]->IsPendingRowHeights() );
+        maTabs[nDestPos]->SetPendingRowHeights( rSrcDoc.maTabs[nSrcPos]->IsPendingRowHeights() );
     }
     if (!bValid)
         nRetVal = 0;
@@ -1020,7 +1020,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
 
     if ( bVbaEnabled  )
     {
-        SfxObjectShell* pSrcShell = pSrcDoc->GetDocumentShell();
+        SfxObjectShell* pSrcShell = rSrcDoc.GetDocumentShell();
         if ( pSrcShell )
         {
             OUString aLibName("Standard");
@@ -1041,7 +1041,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
             if( xLib.is() )
             {
                 OUString sSrcCodeName;
-                pSrcDoc->GetCodeName( nSrcPos, sSrcCodeName );
+                rSrcDoc.GetCodeName( nSrcPos, sSrcCodeName );
                 OUString sRTLSource;
                 xLib->getByName( sSrcCodeName ) >>= sRTLSource;
                 sSource = sRTLSource;
