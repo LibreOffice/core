@@ -1318,7 +1318,7 @@ namespace {
 class ScRangePairList_sortNameCompare
 {
 public:
-    ScRangePairList_sortNameCompare(ScDocument *pDoc) : mpDoc(pDoc) {}
+    ScRangePairList_sortNameCompare(ScDocument& rDoc) : mrDoc(rDoc) {}
 
     bool operator()( const ScRangePair *ps1, const ScRangePair* ps2 ) const
     {
@@ -1330,8 +1330,8 @@ public:
             nComp = 0;
         else
         {
-            mpDoc->GetName( rStartPos1.Tab(), aStr1 );
-            mpDoc->GetName( rStartPos2.Tab(), aStr2 );
+            mrDoc.GetName( rStartPos1.Tab(), aStr1 );
+            mrDoc.GetName( rStartPos2.Tab(), aStr2 );
             nComp = ScGlobal::GetCollator()->compareString( aStr1, aStr2 );
         }
         if (nComp < 0)
@@ -1361,8 +1361,8 @@ public:
             nComp = 0;
         else
         {
-            mpDoc->GetName( rEndPos1.Tab(), aStr1 );
-            mpDoc->GetName( rEndPos2.Tab(), aStr2 );
+            mrDoc.GetName( rEndPos1.Tab(), aStr1 );
+            mrDoc.GetName( rEndPos2.Tab(), aStr2 );
             nComp = ScGlobal::GetCollator()->compareString( aStr1, aStr2 );
         }
         if (nComp < 0)
@@ -1388,7 +1388,7 @@ public:
         return false;
     }
 private:
-    ScDocument *mpDoc;
+    ScDocument& mrDoc;
 };
 
 }
@@ -1522,7 +1522,7 @@ Label_RangePair_Join:
         Append( r );
 }
 
-std::vector<const ScRangePair*> ScRangePairList::CreateNameSortedArray( ScDocument* pDoc ) const
+std::vector<const ScRangePair*> ScRangePairList::CreateNameSortedArray( ScDocument& rDoc ) const
 {
     std::vector<const ScRangePair*> aSortedVec(maPairs.size());
     size_t i = 0;
@@ -1531,7 +1531,7 @@ std::vector<const ScRangePair*> ScRangePairList::CreateNameSortedArray( ScDocume
         aSortedVec[i++] = &rPair;
     }
 
-    std::sort( aSortedVec.begin(), aSortedVec.end(), ScRangePairList_sortNameCompare(pDoc) );
+    std::sort( aSortedVec.begin(), aSortedVec.end(), ScRangePairList_sortNameCompare(rDoc) );
 
     return aSortedVec;
 }
