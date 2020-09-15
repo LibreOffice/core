@@ -163,7 +163,7 @@ bool ScDocumentImport::appendSheet(const OUString& rName)
     if (!ValidTab(nTabCount))
         return false;
 
-    mpImpl->mrDoc.maTabs.emplace_back(new ScTable(&mpImpl->mrDoc, nTabCount, rName));
+    mpImpl->mrDoc.maTabs.emplace_back(new ScTable(mpImpl->mrDoc, nTabCount, rName));
     return true;
 }
 
