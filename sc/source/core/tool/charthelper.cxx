@@ -358,10 +358,10 @@ void ScChartHelper::GetChartNames( ::std::vector< OUString >& rChartNames, const
     }
 }
 
-void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument* pDoc, const SdrPage* pPage, ScModelObj* pModelObj, SCTAB nTab,
+void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument& rDoc, const SdrPage* pPage, ScModelObj* pModelObj, SCTAB nTab,
     const ScRangeListVector& rRangesVector, const ::std::vector< OUString >& rExcludedChartNames, bool bSameDoc )
 {
-    if ( !(pDoc && pPage && pModelObj) )
+    if ( !(pPage && pModelObj) )
         return;
 
     size_t nRangeListCount = rRangesVector.size();
@@ -392,12 +392,12 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument* pDoc, co
                         {
                             if ( bSameDoc )
                             {
-                                ScChartListenerCollection* pCollection = pDoc->GetChartListenerCollection();
+                                ScChartListenerCollection* pCollection = rDoc.GetChartListenerCollection();
                                 if (pCollection && !pCollection->findByName(aChartName))
                                 {
                                     ScRangeList aRangeList( rRangesVector[ nRangeList++ ] );
                                     ScRangeListRef rRangeList( new ScRangeList( aRangeList ) );
-                                    ScChartListener* pChartListener = new ScChartListener( aChartName, pDoc, rRangeList );
+                                    ScChartListener* pChartListener = new ScChartListener( aChartName, &rDoc, rRangeList );
                                     pCollection->insert( pChartListener );
                                     pChartListener->StartListeningTo();
                                 }
@@ -415,7 +415,7 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument* pDoc, co
                     if (pModelObj->HasChangesListeners())
                     {
                         tools::Rectangle aRectangle = pSdrOle2Obj->GetSnapRect();
-                        ScRange aRange( pDoc->GetRange( nTab, aRectangle ) );
+                        ScRange aRange( rDoc.GetRange( nTab, aRectangle ) );
                         ScRangeList aChangeRanges( aRange );
 
                         uno::Sequence< beans::PropertyValue > aProperties( 1 );
