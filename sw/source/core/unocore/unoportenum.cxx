@@ -177,43 +177,24 @@ namespace
 
         const SwNodeIndex nOwnNode = rUnoCursor.GetPoint()->nNode;
         SwTextNode* pTextNode = nOwnNode.GetNode().GetTextNode();
-        if (!pTextNode)
+        assert(pTextNode);
+        // A text node already knows its marks via its SwIndexes.
+        o3tl::sorted_vector<const sw::mark::IMark*> aSeenMarks;
+        for (const SwIndex* pIndex = pTextNode->GetFirstIndex(); pIndex; pIndex = pIndex->GetNext())
         {
-            // no need to consider marks starting after aEndOfPara
-            SwPosition aEndOfPara(*rUnoCursor.GetPoint());
-            aEndOfPara.nContent = aEndOfPara.nNode.GetNode().GetTextNode()->Len();
-            const IDocumentMarkAccess::const_iterator_t pCandidatesEnd =
-                pMarkAccess->findFirstBookmarkStartsAfter(aEndOfPara);
-
-            // search for all bookmarks that start or end in this paragraph
-            for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getBookmarksBegin();
-                ppMark != pCandidatesEnd;
-                ++ppMark)
-            {
-                ::sw::mark::IMark* const pBkmk = *ppMark;
-                lcl_FillBookmark(pBkmk, nOwnNode, rDoc, rBkmArr);
-            }
-        }
-        else
-        {
-            // A text node already knows its marks via its SwIndexes.
-            o3tl::sorted_vector<const sw::mark::IMark*> aSeenMarks;
-            for (const SwIndex* pIndex = pTextNode->GetFirstIndex(); pIndex; pIndex = pIndex->GetNext())
-            {
-                // Need a non-cost mark here, as we'll create a UNO wrapper around it.
-                sw::mark::IMark* pBkmk = const_cast<sw::mark::IMark*>(pIndex->GetMark());
-                if (!pBkmk)
-                    continue;
-                IDocumentMarkAccess::MarkType eType = IDocumentMarkAccess::GetType(*pBkmk);
-                // These are the types stored in the container otherwise accessible via getBookmarks*()
-                if (eType != IDocumentMarkAccess::MarkType::BOOKMARK && eType != IDocumentMarkAccess::MarkType::CROSSREF_NUMITEM_BOOKMARK &&
-                    eType != IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK)
-                    continue;
-                // Only handle bookmarks once, if they start and end at this node as well.
-                if (!aSeenMarks.insert(pBkmk).second)
-                    continue;
-                lcl_FillBookmark(pBkmk, nOwnNode, rDoc, rBkmArr);
-            }
+            // Need a non-cost mark here, as we'll create a UNO wrapper around it.
+            sw::mark::IMark* pBkmk = const_cast<sw::mark::IMark*>(pIndex->GetMark());
+            if (!pBkmk)
+                continue;
+            IDocumentMarkAccess::MarkType eType = IDocumentMarkAccess::GetType(*pBkmk);
+            // These are the types stored in the container otherwise accessible via getBookmarks*()
+            if (eType != IDocumentMarkAccess::MarkType::BOOKMARK && eType != IDocumentMarkAccess::MarkType::CROSSREF_NUMITEM_BOOKMARK &&
+                eType != IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK)
+                continue;
+            // Only handle bookmarks once, if they start and end at this node as well.
+            if (!aSeenMarks.insert(pBkmk).second)
+                continue;
+            lcl_FillBookmark(pBkmk, nOwnNode, rDoc, rBkmArr);
         }
     }
 
