@@ -149,18 +149,18 @@ void AddressWalker::push(SCCOL aRelativeCol, SCROW aRelativeRow, SCTAB aRelative
     mAddressStack.push_back(mCurrentAddress);
 }
 
-AddressWalkerWriter::AddressWalkerWriter(const ScAddress& aInitialAddress, ScDocShell* pDocShell, ScDocument* pDocument,
+AddressWalkerWriter::AddressWalkerWriter(const ScAddress& aInitialAddress, ScDocShell* pDocShell, ScDocument& rDocument,
         formula::FormulaGrammar::Grammar eGrammar ) :
     AddressWalker(aInitialAddress),
     mpDocShell(pDocShell),
-    mpDocument(pDocument),
+    mrDocument(rDocument),
     meGrammar(eGrammar)
 {}
 
 void AddressWalkerWriter::writeFormula(const OUString& aFormula)
 {
     mpDocShell->GetDocFunc().SetFormulaCell(mCurrentAddress,
-            new ScFormulaCell(mpDocument, mCurrentAddress, aFormula, meGrammar), true);
+            new ScFormulaCell(mrDocument, mCurrentAddress, aFormula, meGrammar), true);
 }
 
 void AddressWalkerWriter::writeFormulas(const std::vector<OUString>& rFormulas)
@@ -178,7 +178,7 @@ void AddressWalkerWriter::writeFormulas(const std::vector<OUString>& rFormulas)
     ScAddress aAddr(mCurrentAddress);
     for (size_t nIdx = 0; nIdx < nLength; ++nIdx)
     {
-        aFormulaCells[nIdx] = new ScFormulaCell(mpDocument, aAddr, rFormulas[nIdx], meGrammar);
+        aFormulaCells[nIdx] = new ScFormulaCell(mrDocument, aAddr, rFormulas[nIdx], meGrammar);
         aAddr.IncRow(1);
     }
 
@@ -209,7 +209,7 @@ void AddressWalkerWriter::writeString(const char* aCharArray)
 
 void AddressWalkerWriter::writeBoldString(const OUString& aString)
 {
-    ScFieldEditEngine& rEngine = mpDocument->GetEditEngine();
+    ScFieldEditEngine& rEngine = mrDocument.GetEditEngine();
     rEngine.SetTextCurrentDefaults(aString);
     SfxItemSet aItemSet = rEngine.GetEmptyItemSet();
     SvxWeightItem aWeight(WEIGHT_BOLD, EE_CHAR_WEIGHT);

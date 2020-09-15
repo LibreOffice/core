@@ -48,7 +48,7 @@ ScMyCellInfo::ScMyCellInfo(
 
 ScMyCellInfo::~ScMyCellInfo() {}
 
-const ScCellValue& ScMyCellInfo::CreateCell( ScDocument* pDoc )
+const ScCellValue& ScMyCellInfo::CreateCell(ScDocument& rDoc)
 {
     if (!maCell.isEmpty())
         return maCell;
@@ -57,9 +57,9 @@ const ScCellValue& ScMyCellInfo::CreateCell( ScDocument* pDoc )
     {
         ScAddress aPos;
         sal_Int32 nOffset(0);
-        ScRangeStringConverter::GetAddressFromString(aPos, sFormulaAddress, pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset);
+        ScRangeStringConverter::GetAddressFromString(aPos, sFormulaAddress, &rDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset);
         maCell.meType = CELLTYPE_FORMULA;
-        maCell.mpFormula = new ScFormulaCell(pDoc, aPos, sFormula, eGrammar, nMatrixFlag);
+        maCell.mpFormula = new ScFormulaCell(rDoc, aPos, sFormula, eGrammar, nMatrixFlag);
         maCell.mpFormula->SetMatColsRows(static_cast<SCCOL>(nMatrixCols), static_cast<SCROW>(nMatrixRows));
     }
 
@@ -67,10 +67,10 @@ const ScCellValue& ScMyCellInfo::CreateCell( ScDocument* pDoc )
     {
         sal_uInt32 nFormat(0);
         if (nType == css::util::NumberFormat::DATE)
-            nFormat = pDoc->GetFormatTable()->GetStandardFormat( SvNumFormatType::DATE, ScGlobal::eLnge );
+            nFormat = rDoc.GetFormatTable()->GetStandardFormat( SvNumFormatType::DATE, ScGlobal::eLnge );
         else if (nType == css::util::NumberFormat::TIME)
-            nFormat = pDoc->GetFormatTable()->GetStandardFormat( SvNumFormatType::TIME, ScGlobal::eLnge );
-        pDoc->GetFormatTable()->GetInputLineString(fValue, nFormat, sInputString);
+            nFormat = rDoc.GetFormatTable()->GetStandardFormat( SvNumFormatType::TIME, ScGlobal::eLnge );
+        rDoc.GetFormatTable()->GetInputLineString(fValue, nFormat, sInputString);
     }
 
     return maCell;
@@ -142,7 +142,6 @@ ScMyRejAction::~ScMyRejAction()
 
 ScXMLChangeTrackingImportHelper::ScXMLChangeTrackingImportHelper() :
     aActions(),
-    pDoc(nullptr),
     pTrack(nullptr),
     nMultiSpanned(0),
     nMultiSpannedSlaveCount(0)
@@ -458,13 +457,13 @@ std::unique_ptr<ScChangeAction> ScXMLChangeTrackingImportHelper::CreateRejection
         pAction->aBigRange, aUser, aDateTime, sComment);
 }
 
-std::unique_ptr<ScChangeAction> ScXMLChangeTrackingImportHelper::CreateContentAction(const ScMyContentAction* pAction)
+std::unique_ptr<ScChangeAction> ScXMLChangeTrackingImportHelper::CreateContentAction(const ScMyContentAction* pAction, ScDocument& rDoc)
 {
     ScCellValue aCell;
     OUString sInputString;
     if (pAction->pCellInfo)
     {
-        aCell = pAction->pCellInfo->CreateCell(pDoc);
+        aCell = pAction->pCellInfo->CreateCell(rDoc);
         sInputString = pAction->pCellInfo->sInputString;
     }
 
@@ -475,10 +474,10 @@ std::unique_ptr<ScChangeAction> ScXMLChangeTrackingImportHelper::CreateContentAc
     OUString sComment (pAction->aInfo.sComment);
 
     return std::make_unique<ScChangeActionContent>(pAction->nActionNumber, pAction->nActionState, pAction->nRejectingNumber,
-        pAction->aBigRange, aUser, aDateTime, sComment, aCell, pDoc, sInputString);
+        pAction->aBigRange, aUser, aDateTime, sComment, aCell, &rDoc, sInputString);
 }
 
-void ScXMLChangeTrackingImportHelper::CreateGeneratedActions(std::vector<ScMyGenerated>& rList)
+void ScXMLChangeTrackingImportHelper::CreateGeneratedActions(std::vector<ScMyGenerated>& rList, ScDocument& rDoc)
 {
     for (ScMyGenerated & rGenerated : rList)
     {
@@ -486,7 +485,7 @@ void ScXMLChangeTrackingImportHelper::CreateGeneratedActions(std::vector<ScMyGen
         {
             ScCellValue aCell;
             if (rGenerated.pCellInfo)
-                aCell = rGenerated.pCellInfo->CreateCell(pDoc);
+                aCell = rGenerated.pCellInfo->CreateCell(rDoc);
 
             if (!aCell.isEmpty())
             {
@@ -575,7 +574,7 @@ void ScXMLChangeTrackingImportHelper::SetMovementDependencies(ScMyMoveAction* pA
     }
 }
 
-void ScXMLChangeTrackingImportHelper::SetContentDependencies(const ScMyContentAction* pAction, ScChangeActionContent* pActContent)
+void ScXMLChangeTrackingImportHelper::SetContentDependencies(const ScMyContentAction* pAction, ScChangeActionContent* pActContent, ScDocument& rDoc)
 {
     if (!pActContent || !pAction->nPreviousAction)
         return;
@@ -593,10 +592,10 @@ void ScXMLChangeTrackingImportHelper::SetContentDependencies(const ScMyContentAc
     if (rOldCell.isEmpty())
         return;
 
-    pPrevActContent->SetNewCell(rOldCell, pDoc, EMPTY_OUSTRING);
+    pPrevActContent->SetNewCell(rOldCell, &rDoc, EMPTY_OUSTRING);
 }
 
-void ScXMLChangeTrackingImportHelper::SetDependencies(ScMyBaseAction* pAction)
+void ScXMLChangeTrackingImportHelper::SetDependencies(ScMyBaseAction* pAction, ScDocument& rDoc)
 {
     ScChangeAction* pAct = pTrack->GetAction(pAction->nActionNumber);
     if (pAct)
@@ -619,12 +618,12 @@ void ScXMLChangeTrackingImportHelper::SetDependencies(ScMyBaseAction* pAction)
                     ScChangeActionContent* pContentAct = static_cast<ScChangeActionContent*>(pDeletedAct);
                     if (rDeleted.pCellInfo)
                     {
-                        const ScCellValue& rCell = rDeleted.pCellInfo->CreateCell(pDoc);
+                        const ScCellValue& rCell = rDeleted.pCellInfo->CreateCell(rDoc);
                         if (!rCell.equalsWithoutFormat(pContentAct->GetNewCell()))
                         {
                             // #i40704# Don't overwrite SetNewCell result by calling SetNewValue,
                             // instead pass the input string to SetNewCell.
-                            pContentAct->SetNewCell(rCell, pDoc, rDeleted.pCellInfo->sInputString);
+                            pContentAct->SetNewCell(rCell, &rDoc, rDeleted.pCellInfo->sInputString);
                         }
                     }
                 }
@@ -637,7 +636,7 @@ void ScXMLChangeTrackingImportHelper::SetDependencies(ScMyBaseAction* pAction)
         else if (pAction->nActionType == SC_CAT_MOVE)
             SetMovementDependencies(static_cast<ScMyMoveAction*>(pAction), static_cast<ScChangeActionMove*>(pAct));
         else if (pAction->nActionType == SC_CAT_CONTENT)
-            SetContentDependencies(static_cast<ScMyContentAction*>(pAction), static_cast<ScChangeActionContent*>(pAct));
+            SetContentDependencies(static_cast<ScMyContentAction*>(pAction), static_cast<ScChangeActionContent*>(pAct), rDoc);
     }
     else
     {
@@ -645,7 +644,7 @@ void ScXMLChangeTrackingImportHelper::SetDependencies(ScMyBaseAction* pAction)
     }
 }
 
-void ScXMLChangeTrackingImportHelper::SetNewCell(const ScMyContentAction* pAction)
+void ScXMLChangeTrackingImportHelper::SetNewCell(const ScMyContentAction* pAction, ScDocument& rDoc)
 {
     ScChangeAction* pChangeAction = pTrack->GetAction(pAction->nActionNumber);
     if (!pChangeAction)
@@ -658,23 +657,23 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(const ScMyContentAction* pActio
 
     sal_Int32 nCol, nRow, nTab, nCol2, nRow2, nTab2;
     pAction->aBigRange.GetVars(nCol, nRow, nTab, nCol2, nRow2, nTab2);
-    if ((nCol >= 0) && (nCol <= pDoc->MaxCol()) &&
-        (nRow >= 0) && (nRow <= pDoc->MaxRow()) &&
+    if ((nCol >= 0) && (nCol <= rDoc.MaxCol()) &&
+        (nRow >= 0) && (nRow <= rDoc.MaxRow()) &&
         (nTab >= 0) && (nTab <= MAXTAB))
     {
         ScAddress aAddress (static_cast<SCCOL>(nCol),
                             static_cast<SCROW>(nRow),
                             static_cast<SCTAB>(nTab));
         ScCellValue aCell;
-        aCell.assign(*pDoc, aAddress);
+        aCell.assign(rDoc, aAddress);
         if (!aCell.isEmpty())
         {
             ScCellValue aNewCell;
             if (aCell.meType != CELLTYPE_FORMULA)
             {
                 aNewCell = aCell;
-                pChangeActionContent->SetNewCell(aNewCell, pDoc, EMPTY_OUSTRING);
-                pChangeActionContent->SetNewValue(aCell, pDoc);
+                pChangeActionContent->SetNewCell(aNewCell, &rDoc, EMPTY_OUSTRING);
+                pChangeActionContent->SetNewValue(aCell, &rDoc);
             }
             else
             {
@@ -700,7 +699,7 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(const ScMyContentAction* pActio
                 }
 
                 aNewCell.meType = CELLTYPE_FORMULA;
-                aNewCell.mpFormula = new ScFormulaCell(pDoc, aAddress, sFormula2,formula::FormulaGrammar::GRAM_ODFF, nMatrixFlag);
+                aNewCell.mpFormula = new ScFormulaCell(rDoc, aAddress, sFormula2,formula::FormulaGrammar::GRAM_ODFF, nMatrixFlag);
                 if (nMatrixFlag == ScMatrixMode::Formula)
                 {
                     SCCOL nCols;
@@ -709,7 +708,7 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(const ScMyContentAction* pActio
                     aNewCell.mpFormula->SetMatColsRows(nCols, nRows);
                 }
                 aNewCell.mpFormula->SetInChangeTrack(true);
-                pChangeActionContent->SetNewCell(aNewCell, pDoc, EMPTY_OUSTRING);
+                pChangeActionContent->SetNewCell(aNewCell, &rDoc, EMPTY_OUSTRING);
                 // #i40704# don't overwrite the formula string via SetNewValue()
             }
         }
@@ -720,13 +719,12 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(const ScMyContentAction* pActio
     }
 }
 
-void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
+void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pDoc)
 {
-    pDoc = pTempDoc;
     if (!pDoc)
         return;
 
-    pTrack = new ScChangeTrack(pDoc, aUsers);
+    pTrack = new ScChangeTrack(*pDoc, aUsers);
     // old files didn't store nanoseconds, disable until encountered
     pTrack->SetTimeNanoSeconds( false );
 
@@ -749,19 +747,19 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
             {
                 ScMyDelAction* pDelAct = static_cast<ScMyDelAction*>(rAction.get());
                 pAction = CreateDeleteAction(pDelAct);
-                CreateGeneratedActions(pDelAct->aGeneratedList);
+                CreateGeneratedActions(pDelAct->aGeneratedList, *pDoc);
             }
             break;
             case SC_CAT_MOVE:
             {
                 ScMyMoveAction* pMovAct = static_cast<ScMyMoveAction*>(rAction.get());
                 pAction = CreateMoveAction(pMovAct);
-                CreateGeneratedActions(pMovAct->aGeneratedList);
+                CreateGeneratedActions(pMovAct->aGeneratedList, *pDoc);
             }
             break;
             case SC_CAT_CONTENT:
             {
-                pAction = CreateContentAction(static_cast<ScMyContentAction*>(rAction.get()));
+                pAction = CreateContentAction(static_cast<ScMyContentAction*>(rAction.get()), *pDoc);
             }
             break;
             case SC_CAT_REJECT:
@@ -788,7 +786,7 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
     auto aItr = aActions.begin();
     while (aItr != aActions.end())
     {
-        SetDependencies(aItr->get());
+        SetDependencies(aItr->get(), *pDoc);
 
         if ((*aItr)->nActionType == SC_CAT_CONTENT)
             ++aItr;
@@ -799,7 +797,7 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
     for (const auto& rxAction : aActions)
     {
         OSL_ENSURE(rxAction->nActionType == SC_CAT_CONTENT, "wrong action type");
-        SetNewCell(static_cast<ScMyContentAction*>(rxAction.get()));
+        SetNewCell(static_cast<ScMyContentAction*>(rxAction.get()), *pDoc);
     }
     aActions.clear();
     if (aProtect.hasElements())

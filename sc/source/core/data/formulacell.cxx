@@ -632,7 +632,7 @@ ScFormulaCell::ScFormulaCell( ScDocument& rDoc, const ScAddress& rPos ) :
 {
 }
 
-ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
+ScFormulaCell::ScFormulaCell( ScDocument& rDoc, const ScAddress& rPos,
                               const OUString& rFormula,
                               const FormulaGrammar::Grammar eGrammar,
                               ScMatrixMode cMatInd ) :
@@ -655,7 +655,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     nFormatType ( SvNumFormatType::NUMBER ),
     eTempGrammar( eGrammar),
     pCode( nullptr ),
-    pDocument( pDoc ),
+    pDocument( &rDoc ),
     pPrevious(nullptr),
     pNext(nullptr),
     pPreviousTrack(nullptr),
@@ -665,7 +665,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     Compile( rFormula, true, eGrammar );    // bNoListening, Insert does that
     if (!pCode)
         // We need to have a non-NULL token array instance at all times.
-        pCode = new ScTokenArray(*pDoc);
+        pCode = new ScTokenArray(rDoc);
 }
 
 ScFormulaCell::ScFormulaCell(

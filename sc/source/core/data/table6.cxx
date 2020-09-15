@@ -256,7 +256,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, sc::Colum
                 aString = aString.copy( 1 );
         }
         ScAddress aAdr( nCol, nRow, nTab );
-        ScFormulaCell* pFCell = new ScFormulaCell( &rDocument, aAdr,
+        ScFormulaCell* pFCell = new ScFormulaCell( rDocument, aAdr,
             aString, rDocument.GetGrammar(), cMatrixFlag );
         SCCOL nMatCols;
         SCROW nMatRows;

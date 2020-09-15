@@ -911,8 +911,8 @@ void Test::testFormulaTokenEquality()
     formula::FormulaGrammar::Grammar eGram = formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1;
     for (size_t i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
     {
-        ScFormulaCell aCell1(m_pDoc, ScAddress(), OUString::createFromAscii(aTests[i].mpFormula1), eGram);
-        ScFormulaCell aCell2(m_pDoc, ScAddress(), OUString::createFromAscii(aTests[i].mpFormula2), eGram);
+        ScFormulaCell aCell1(*m_pDoc, ScAddress(), OUString::createFromAscii(aTests[i].mpFormula1), eGram);
+        ScFormulaCell aCell2(*m_pDoc, ScAddress(), OUString::createFromAscii(aTests[i].mpFormula2), eGram);
 
         ScFormulaCell::CompareState eComp = aCell1.CompareByTokenArray(aCell2);
         if (aTests[i].mbEqual)
@@ -9142,7 +9142,7 @@ void Test::testInsertColCellStoreEventSwap()
     // ScDocument::SetString() can't be used as it doesn't expose the behavior
     // in question, use ScDocFunc::SetFormulaCell() instead which actually is
     // also called when editing a cell and creating a formula cell.
-    ScFormulaCell* pCell = new ScFormulaCell( m_pDoc, aPos, "=A1+1");
+    ScFormulaCell* pCell = new ScFormulaCell(*m_pDoc, aPos, "=A1+1");
     ScDocFunc& rDocFunc = getDocShell().GetDocFunc();
     rDocFunc.SetFormulaCell( aPos, pCell, false);   // C1, change formula
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Initial calculation failed", 2.0, m_pDoc->GetValue(aPos));

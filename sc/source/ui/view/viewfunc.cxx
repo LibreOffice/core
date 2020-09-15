@@ -769,7 +769,7 @@ void ScViewFunc::EnterMatrix( const OUString& rString, ::formula::FormulaGrammar
 
         ScDocument& rDoc = rData.GetDocument();
         SCTAB nTab = rData.GetTabNo();
-        ScFormulaCell aFormCell( &rDoc, ScAddress(nCol,nRow,nTab), rString, eGram, ScMatrixMode::Formula );
+        ScFormulaCell aFormCell( rDoc, ScAddress(nCol,nRow,nTab), rString, eGram, ScMatrixMode::Formula );
 
         SCSIZE nSizeX;
         SCSIZE nSizeY;

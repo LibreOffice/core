@@ -905,7 +905,7 @@ void ScViewFunc::EnterBlock( const OUString& rString, const EditTextObject* pDat
     if (aNewStr[0] == '=')                      // Formula ?
     {
         //  SetString not possible, because in Clipboard-Documents nothing will be compiled!
-        pInsDoc->SetFormulaCell(aPos, new ScFormulaCell(&rDoc, aPos, aNewStr));
+        pInsDoc->SetFormulaCell(aPos, new ScFormulaCell(rDoc, aPos, aNewStr));
     }
     else if ( pData )
     {
