@@ -275,10 +275,10 @@ MapMode ScGridWindow::GetDrawMapMode( bool bForce )
             rDoc.GetTableArea( nTab, nEndCol, nEndRow );
             if (nEndCol<20) nEndCol = 20;
             if (nEndRow<20) nEndRow = 1000;
-            ScDrawUtil::CalcScale( &rDoc, nTab, 0,0, nEndCol,nEndRow, this,
-                                    pViewData->GetZoomX(),pViewData->GetZoomY(),
-                                    pViewData->GetPPTX(),pViewData->GetPPTY(),
-                                    aScaleX,aScaleY );
+            ScDrawUtil::CalcScale( rDoc, nTab, 0,0, nEndCol,nEndRow, this,
+                                   pViewData->GetZoomX(),pViewData->GetZoomY(),
+                                   pViewData->GetPPTX(),pViewData->GetPPTY(),
+                                   aScaleX,aScaleY );
         }
         aDrawMode.SetScaleX(aScaleX);
         aDrawMode.SetScaleY(aScaleY);

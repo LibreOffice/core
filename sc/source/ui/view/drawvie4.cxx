@@ -425,8 +425,8 @@ void ScDrawView::CalcNormScale( Fraction& rFractX, Fraction& rFractY ) const
         nEndRow = 1000;
 
     Fraction aZoom(1,1);
-    ScDrawUtil::CalcScale( &rDoc, nTab, 0,0, nEndCol,nEndRow, pDev, aZoom,aZoom,
-                            nPPTX, nPPTY, rFractX,rFractY );
+    ScDrawUtil::CalcScale( rDoc, nTab, 0,0, nEndCol,nEndRow, pDev, aZoom,aZoom,
+                           nPPTX, nPPTY, rFractX,rFractY );
 }
 
 void ScDrawView::SetMarkedOriginalSize()
