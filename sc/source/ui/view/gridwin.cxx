@@ -4704,6 +4704,15 @@ void ScGridWindow::UpdateAutoFillMark(bool bMarked, const ScRange& rMarkRange)
     }
 }
 
+void ScGridWindow::updateLOKInputHelp(const OUString& title, const OUString& content) const
+{
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+    OUString title_ = title.replaceAll("\\", "\\\\").replaceAll("\"", "\\\"");
+    OUString content_ = content.replaceAll("\\", "\\\\").replaceAll("\"", "\\\"");
+    OUString result = "{ \"title\": \"" + title_ + "\"" + ", \"content\": \"" +  content_ + "\" }";
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_VALIDITY_INPUT_HELP, result.toUtf8().getStr());
+}
+
 void ScGridWindow::updateLOKValListButton( bool bVisible, const ScAddress& rPos ) const
 {
     SCCOL nX = rPos.Col();
