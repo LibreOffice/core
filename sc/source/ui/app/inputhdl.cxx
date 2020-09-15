@@ -2329,10 +2329,10 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
         const ScMarkData& rMark = pActiveViewSh->GetViewData().GetMarkData();
         ScEditableTester aTester;
         if ( rMark.IsMarked() || rMark.IsMultiMarked() )
-            aTester.TestSelection( &rDoc, rMark );
+            aTester.TestSelection( rDoc, rMark );
         else
             aTester.TestSelectedBlock(
-                &rDoc, aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Col(), aCursorPos.Row(), rMark );
+                rDoc, aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Col(), aCursorPos.Row(), rMark );
 
         bool bStartInputMode = true;
 
