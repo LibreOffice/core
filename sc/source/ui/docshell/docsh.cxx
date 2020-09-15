@@ -1291,7 +1291,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
 
             if( ! rMedium.IsStorage() )
             {
-                ScImportExport  aImpEx( &m_aDocument );
+                ScImportExport  aImpEx( m_aDocument );
                 aImpEx.SetExtOptions( aOptions );
 
                 SvStream* pInStream = rMedium.GetInStream();
@@ -1427,7 +1427,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             bOverflowRow = bOverflowCol = bOverflowCell = false;
             if( !rMedium.IsStorage() )
             {
-                ScImportExport aImpEx( &m_aDocument );
+                ScImportExport aImpEx( m_aDocument );
 
                 SvStream* pInStream = rMedium.GetInStream();
                 if (pInStream)
@@ -2536,7 +2536,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             m_aDocument.GetCellArea( 0, nEndCol, nEndRow );
             ScRange aRange( 0,0,0, nEndCol,nEndRow,0 );
 
-            ScImportExport aImExport( &m_aDocument, aRange );
+            ScImportExport aImExport( m_aDocument, aRange );
             aImExport.SetFormulas( true );
             bRet = aImExport.ExportStream( *pStream, rMed.GetBaseURL( true ), SotClipboardFormatId::SYLK );
         }
@@ -2554,7 +2554,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
                 sFilterOptions = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
             weld::WaitObject aWait(GetActiveDialogParent());
-            ScImportExport aImExport(&m_aDocument);
+            ScImportExport aImExport(m_aDocument);
             aImExport.SetStreamPath(rMed.GetName());
             aImExport.SetFilterOptions(sFilterOptions);
             bRet = aImExport.ExportStream(*pStream, rMed.GetBaseURL(true), SotClipboardFormatId::HTML);
@@ -3281,7 +3281,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportSLK(SvStream &rStream)
     aDocument.SetInsertingFromOtherDoc(true);
     aDocument.SetImportingXML(true);
 
-    ScImportExport aImpEx(&aDocument);
+    ScImportExport aImpEx(aDocument);
     return aImpEx.ImportStream(rStream, OUString(), SotClipboardFormatId::SYLK);
 }
 
