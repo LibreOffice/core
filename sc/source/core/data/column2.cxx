@@ -1661,9 +1661,9 @@ namespace {
 
 struct ColumnStorageDumper
 {
-    const ScDocument* mpDoc;
+    const ScDocument& mrDoc;
 
-    ColumnStorageDumper( const ScDocument* pDoc ) : mpDoc(pDoc) {}
+    ColumnStorageDumper( const ScDocument& rDoc ) : mrDoc(rDoc) {}
 
     void operator() (const sc::CellStoreType::value_type& rNode) const
     {
@@ -1732,7 +1732,7 @@ struct ColumnStorageDumper
 
     void printFormula(const ScFormulaCell* pCell) const
     {
-        sc::TokenStringContext aCxt(mpDoc, mpDoc->GetGrammar());
+        sc::TokenStringContext aCxt(&mrDoc, mrDoc.GetGrammar());
         OUString aFormula = pCell->GetCode()->CreateString(aCxt, pCell->aPos);
         cout << "      * formula: " << aFormula << endl;
     }
@@ -1773,7 +1773,7 @@ struct ColumnStorageDumper
 void ScColumn::DumpColumnStorage() const
 {
     cout << "-- table: " << nTab << "; column: " << nCol << endl;
-    std::for_each(maCells.begin(), maCells.end(), ColumnStorageDumper(&GetDoc()));
+    std::for_each(maCells.begin(), maCells.end(), ColumnStorageDumper(GetDoc()));
     cout << "--" << endl;
 }
 #endif
