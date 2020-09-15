@@ -30,20 +30,12 @@ ifeq ($(OS),WNT)
 
 # TODO: using Debug configuration and related mangling of pyconfig.h
 
-python3_WIN_PLATFORM_MSBUILD := $(strip \
-	$(if $(filter INTEL,$(CPUNAME)),Win32) \
-	$(if $(filter X86_64,$(CPUNAME)),x64) \
-	$(if $(filter ARM64,$(CPUNAME)),arm64) \
-	)
-
 # at least for MSVC 2008 it is necessary to clear MAKEFLAGS because
 # nmake is invoked
 $(call gb_ExternalProject_get_state_target,python3,build) :
 	$(call gb_Trace_StartRange,python3,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build \
-			/p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
-			/p:Platform=$(python3_WIN_PLATFORM_MSBUILD) \
+		MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build $(gb_MSBUILD_CONFIG_AND_PLATFORM) \
 			/p:opensslIncludeDir=$(call gb_UnpackedTarball_get_dir,openssl)/include \
 			/p:opensslOutDir=$(call gb_UnpackedTarball_get_dir,openssl) \
 			/p:zlibDir=$(call gb_UnpackedTarball_get_dir,zlib) \

@@ -14,7 +14,7 @@ $(eval $(call gb_ExternalPackage_use_external_project,curl,curl))
 ifneq ($(DISABLE_DYNLOADING),TRUE)
 
 ifeq ($(COM),MSC)
-$(eval $(call gb_ExternalPackage_add_file,curl,$(LIBO_LIB_FOLDER)/libcurl$(if $(MSVC_USE_DEBUG_RUNTIME),_debug).dll,builds/libcurl-vc12-$(if $(filter X86_64,$(CPUNAME)),x64,x86)-$(if $(MSVC_USE_DEBUG_RUNTIME),debug,release)-dll-ipv6-sspi-winssl/bin/libcurl$(if $(MSVC_USE_DEBUG_RUNTIME),_debug).dll))
+$(eval $(call gb_ExternalPackage_add_file,curl,$(LIBO_LIB_FOLDER)/libcurl$(if $(MSVC_USE_DEBUG_RUNTIME),_debug).dll,builds/libcurl-vc12-$(gb_MSBUILD_PLATFORM)-$(gb_MSBUILD_CONFIG)-dll-ipv6-sspi-winssl/bin/libcurl$(if $(MSVC_USE_DEBUG_RUNTIME),_debug).dll))
 else ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_file,curl,$(LIBO_LIB_FOLDER)/libcurl.4.dylib,lib/.libs/libcurl.4.dylib))
 else ifeq ($(OS),AIX)
