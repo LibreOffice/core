@@ -432,7 +432,7 @@ void ScDBFunc::HideAutoFilter()
 bool ScDBFunc::ImportData( const ScImportParam& rParam )
 {
     ScDocument& rDoc = GetViewData().GetDocument();
-    ScEditableTester aTester( &rDoc, GetViewData().GetTabNo(), rParam.nCol1,rParam.nRow1,
+    ScEditableTester aTester( rDoc, GetViewData().GetTabNo(), rParam.nCol1,rParam.nRow1,
                                                             rParam.nCol2,rParam.nRow2 );
     if ( !aTester.IsEditable() )
     {

@@ -197,7 +197,7 @@ void ScSpellDialogChildWindow::Init()
         case SC_SELECTTYPE_SHEET:
         {
             // test if there is something editable
-            ScEditableTester aTester( mpDoc, rMarkData );
+            ScEditableTester aTester( *mpDoc, rMarkData );
             if( !aTester.IsEditable() )
             {
                 // #i85751# Don't show an ErrorMessage here, because the vcl
