@@ -134,7 +134,7 @@ void ScChartHelper::AdjustRangesOfChartsOnDestinationPage( const ScDocument* pSr
             if( xChartDoc.is() && xReceiver.is() && !xChartDoc->hasInternalDataProvider() )
             {
                 ::std::vector< ScRangeList > aRangesVector;
-                pDestDoc->GetChartRanges( aChartName, aRangesVector, pSrcDoc );
+                pDestDoc->GetChartRanges( aChartName, aRangesVector, *pSrcDoc );
 
                 for( ScRangeList& rScRangeList : aRangesVector )
                 {

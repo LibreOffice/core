@@ -840,7 +840,7 @@ public:
 
     css::uno::Reference< css::chart2::XChartDocument > GetChartByName( const OUString& rChartName );
 
-    SC_DLLPUBLIC void GetChartRanges( const OUString& rChartName, std::vector< ScRangeList >& rRanges, const ScDocument* pSheetNameDoc );
+    SC_DLLPUBLIC void GetChartRanges( const OUString& rChartName, std::vector< ScRangeList >& rRanges, const ScDocument& rSheetNameDoc );
     void              SetChartRanges( const OUString& rChartName, const std::vector< ScRangeList >& rRanges );
 
     void              UpdateChartArea( const OUString& rChartName, const ScRange& rNewArea,
