@@ -459,7 +459,7 @@ bool ScRangeStringConverter::GetAddressFromString(
 bool ScRangeStringConverter::GetRangeFromString(
         ScRange& rRange,
         const OUString& rRangeStr,
-        const ScDocument* pDocument,
+        const ScDocument& rDocument,
         FormulaGrammar::AddressConvention eConv,
         sal_Int32& nOffset,
         sal_Unicode cSeparator,
@@ -477,11 +477,11 @@ bool ScRangeStringConverter::GetRangeFromString(
         {
             if ( aUIString[0] == '.' )
                 aUIString = aUIString.copy( 1 );
-            bResult = (rRange.aStart.Parse( aUIString, pDocument, eConv) & ScRefFlags::VALID) ==
+            bResult = (rRange.aStart.Parse( aUIString, &rDocument, eConv) & ScRefFlags::VALID) ==
                                                                                                      ScRefFlags::VALID;
-            ::formula::FormulaGrammar::AddressConvention eConvUI = pDocument->GetAddressConvention();
+            ::formula::FormulaGrammar::AddressConvention eConvUI = rDocument.GetAddressConvention();
             if (!bResult && eConv != eConvUI)
-                bResult = (rRange.aStart.Parse(aUIString, pDocument, eConvUI) & ScRefFlags::VALID) ==
+                bResult = (rRange.aStart.Parse(aUIString, &rDocument, eConvUI) & ScRefFlags::VALID) ==
                                                                                                          ScRefFlags::VALID;
             rRange.aEnd = rRange.aStart;
         }
@@ -497,26 +497,26 @@ bool ScRangeStringConverter::GetRangeFromString(
                     aUIString[ nIndex + 1 ] == '.' )
                 aUIString = aUIString.replaceAt( nIndex + 1, 1, "" );
 
-            bResult = ((rRange.Parse(aUIString, pDocument, eConv) & ScRefFlags::VALID) ==
+            bResult = ((rRange.Parse(aUIString, &rDocument, eConv) & ScRefFlags::VALID) ==
                                                                                               ScRefFlags::VALID);
 
             // #i77703# chart ranges in the file format contain both sheet names, even for an external reference sheet.
             // This isn't parsed by ScRange, so try to parse the two Addresses then.
             if (!bResult)
             {
-                bResult = ((rRange.aStart.Parse( aUIString.copy(0, nIndex), pDocument, eConv)
+                bResult = ((rRange.aStart.Parse( aUIString.copy(0, nIndex), &rDocument, eConv)
                                & ScRefFlags::VALID) == ScRefFlags::VALID)
                           &&
-                          ((rRange.aEnd.Parse( aUIString.copy(nIndex+1), pDocument, eConv)
+                          ((rRange.aEnd.Parse( aUIString.copy(nIndex+1), &rDocument, eConv)
                                & ScRefFlags::VALID) == ScRefFlags::VALID);
 
-                ::formula::FormulaGrammar::AddressConvention eConvUI = pDocument->GetAddressConvention();
+                ::formula::FormulaGrammar::AddressConvention eConvUI = rDocument.GetAddressConvention();
                 if (!bResult && eConv != eConvUI)
                 {
-                    bResult = ((rRange.aStart.Parse( aUIString.copy(0, nIndex), pDocument, eConvUI)
+                    bResult = ((rRange.aStart.Parse( aUIString.copy(0, nIndex), &rDocument, eConvUI)
                                    & ScRefFlags::VALID) == ScRefFlags::VALID)
                               &&
-                              ((rRange.aEnd.Parse( aUIString.copy(nIndex+1), pDocument, eConvUI)
+                              ((rRange.aEnd.Parse( aUIString.copy(nIndex+1), &rDocument, eConvUI)
                                    & ScRefFlags::VALID) == ScRefFlags::VALID);
                 }
             }
@@ -528,7 +528,7 @@ bool ScRangeStringConverter::GetRangeFromString(
 bool ScRangeStringConverter::GetRangeListFromString(
         ScRangeList& rRangeList,
         const OUString& rRangeListStr,
-        const ScDocument* pDocument,
+        const ScDocument& rDocument,
         FormulaGrammar::AddressConvention eConv,
         sal_Unicode cSeparator,
         sal_Unicode cQuote )
@@ -540,7 +540,7 @@ bool ScRangeStringConverter::GetRangeListFromString(
     {
         ScRange aRange;
         if (
-             GetRangeFromString( aRange, rRangeListStr, pDocument, eConv, nOffset, cSeparator, cQuote ) &&
+             GetRangeFromString( aRange, rRangeListStr, rDocument, eConv, nOffset, cSeparator, cQuote ) &&
              (nOffset >= 0)
            )
         {
@@ -555,14 +555,14 @@ bool ScRangeStringConverter::GetRangeListFromString(
 bool ScRangeStringConverter::GetAreaFromString(
         ScArea& rArea,
         const OUString& rRangeStr,
-        const ScDocument* pDocument,
+        const ScDocument& rDocument,
         FormulaGrammar::AddressConvention eConv,
         sal_Int32& nOffset,
         sal_Unicode cSeparator )
 {
     ScRange aScRange;
     bool bResult(false);
-    if( GetRangeFromString( aScRange, rRangeStr, pDocument, eConv, nOffset, cSeparator ) && (nOffset >= 0) )
+    if( GetRangeFromString( aScRange, rRangeStr, rDocument, eConv, nOffset, cSeparator ) && (nOffset >= 0) )
     {
         rArea.nTab = aScRange.aStart.Tab();
         rArea.nColStart = aScRange.aStart.Col();
@@ -577,14 +577,14 @@ bool ScRangeStringConverter::GetAreaFromString(
 bool ScRangeStringConverter::GetRangeFromString(
         table::CellRangeAddress& rRange,
         const OUString& rRangeStr,
-        const ScDocument* pDocument,
+        const ScDocument& rDocument,
         FormulaGrammar::AddressConvention eConv,
         sal_Int32& nOffset,
         sal_Unicode cSeparator )
 {
     ScRange aScRange;
     bool bResult(false);
-    if( GetRangeFromString( aScRange, rRangeStr, pDocument, eConv, nOffset, cSeparator ) && (nOffset >= 0) )
+    if( GetRangeFromString( aScRange, rRangeStr, rDocument, eConv, nOffset, cSeparator ) && (nOffset >= 0) )
     {
         ScUnoConversion::FillApiRange( rRange, aScRange );
         bResult = true;

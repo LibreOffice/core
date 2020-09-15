@@ -356,7 +356,7 @@ void SAL_CALL ScXMLTableContext::endFastElement(sal_Int32 /*nElement*/)
     if (!sPrintRanges.isEmpty())
     {
         ScRangeList aRangeList;
-        ScRangeStringConverter::GetRangeListFromString( aRangeList, sPrintRanges, pDoc, ::formula::FormulaGrammar::CONV_OOO );
+        ScRangeStringConverter::GetRangeListFromString( aRangeList, sPrintRanges, *pDoc, ::formula::FormulaGrammar::CONV_OOO );
         size_t nCount = aRangeList.size();
         for (size_t i=0; i< nCount; i++ )
         {

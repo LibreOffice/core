@@ -907,7 +907,7 @@ void ScXMLImport::SetChangeTrackingViewSettings(const css::uno::Sequence<css::be
             {
                 ScRangeList aRangeList;
                 ScRangeStringConverter::GetRangeListFromString(
-                    aRangeList, sRanges, GetDocument(), FormulaGrammar::CONV_OOO);
+                    aRangeList, sRanges, *pDoc, FormulaGrammar::CONV_OOO);
                 pViewSettings->SetTheRangeList(aRangeList);
             }
         }
@@ -1458,8 +1458,9 @@ void ScXMLImport::SetLabelRanges()
         sal_Int32 nOffset2(0);
         FormulaGrammar::AddressConvention eConv = FormulaGrammar::CONV_OOO;
 
-        if (ScRangeStringConverter::GetRangeFromString( aLabelRange, rxLabelRange->sLabelRangeStr, GetDocument(), eConv, nOffset1 ) &&
-            ScRangeStringConverter::GetRangeFromString( aDataRange, rxLabelRange->sDataRangeStr, GetDocument(), eConv, nOffset2 ))
+        assert(pDoc);
+        if (ScRangeStringConverter::GetRangeFromString( aLabelRange, rxLabelRange->sLabelRangeStr, *pDoc, eConv, nOffset1 ) &&
+            ScRangeStringConverter::GetRangeFromString( aDataRange, rxLabelRange->sDataRangeStr, *pDoc, eConv, nOffset2 ))
         {
             if ( rxLabelRange->bColumnOrientation )
                 xColRanges->addNew( aLabelRange, aDataRange );

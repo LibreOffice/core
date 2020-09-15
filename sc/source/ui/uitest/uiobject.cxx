@@ -46,7 +46,7 @@ ScRange get_range_from_string(const ScDocument& rDoc, const OUString& rStr)
 {
     ScRange aRange;
     sal_Int32 nOffset = 0;
-    ScRangeStringConverter::GetRangeFromString(aRange, rStr, &rDoc, formula::FormulaGrammar::CONV_OOO, nOffset);
+    ScRangeStringConverter::GetRangeFromString(aRange, rStr, rDoc, formula::FormulaGrammar::CONV_OOO, nOffset);
 
     return aRange;
 }

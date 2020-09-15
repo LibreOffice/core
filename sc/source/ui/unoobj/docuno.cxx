@@ -3817,7 +3817,7 @@ uno::Sequence < uno::Reference< table::XCellRange > > SAL_CALL ScTableSheetsObj:
 
     ScRangeList aRangeList;
     ScDocument& rDoc = pDocShell->GetDocument();
-    if (!ScRangeStringConverter::GetRangeListFromString( aRangeList, aRange, &rDoc, ::formula::FormulaGrammar::CONV_OOO, ';' ))
+    if (!ScRangeStringConverter::GetRangeListFromString( aRangeList, aRange, rDoc, ::formula::FormulaGrammar::CONV_OOO, ';' ))
         throw lang::IllegalArgumentException();
 
     size_t nCount = aRangeList.size();

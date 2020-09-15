@@ -60,7 +60,9 @@ ScXMLSortContext::ScXMLSortContext( ScXMLImport& rImport,
             {
                 ScRange aScRange;
                 sal_Int32 nOffset(0);
-                if (ScRangeStringConverter::GetRangeFromString( aScRange, aIter.toString(), GetScImport().GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset ))
+                ScDocument* pDoc = GetScImport().GetDocument();
+                assert(pDoc);
+                if (ScRangeStringConverter::GetRangeFromString( aScRange, aIter.toString(), *pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset ))
                 {
                     ScUnoConversion::FillApiAddress( aOutputPosition, aScRange.aStart );
                     bCopyOutputData = true;

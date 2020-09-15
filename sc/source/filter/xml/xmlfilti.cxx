@@ -49,6 +49,7 @@ ScXMLFilterContext::ScXMLFilterContext( ScXMLImport& rImport,
     bConditionSourceRange(false)
 {
     ScDocument* pDoc(GetScImport().GetDocument());
+    assert(pDoc);
 
     if ( !rAttrList.is() )
         return;
@@ -61,7 +62,7 @@ ScXMLFilterContext::ScXMLFilterContext( ScXMLImport& rImport,
             {
                 ScRange aScRange;
                 sal_Int32 nOffset(0);
-                if (ScRangeStringConverter::GetRangeFromString( aScRange, aIter.toString(), pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset ))
+                if (ScRangeStringConverter::GetRangeFromString( aScRange, aIter.toString(), *pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset ))
                 {
                     aOutputPosition = aScRange.aStart;
                     bCopyOutputData = true;
@@ -71,7 +72,7 @@ ScXMLFilterContext::ScXMLFilterContext( ScXMLImport& rImport,
             case XML_ELEMENT( TABLE, XML_CONDITION_SOURCE_RANGE_ADDRESS ):
             {
                 sal_Int32 nOffset(0);
-                if (ScRangeStringConverter::GetRangeFromString( aConditionSourceRangeAddress, aIter.toString(), pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset ) )
+                if (ScRangeStringConverter::GetRangeFromString( aConditionSourceRangeAddress, aIter.toString(), *pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset ) )
                     bConditionSourceRange = true;
             }
             break;
