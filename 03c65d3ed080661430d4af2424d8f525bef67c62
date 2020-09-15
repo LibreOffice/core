@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e70d1b9f_aaac97d4",
+        "filename": "solenv/bin/image-sort.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-15T08:32:40Z",
+      "side": 1,
+      "message": "This now produces these:\n\n\u003e Exception ignored in: \u003c_io.FileIO name\u003d\u0027C:/lo/src/core/postprocess/packimages/image-sort.lst\u0027 mode\u003d\u0027rb\u0027 closefd\u003dTrue\u003e\n\u003e ResourceWarning: unclosed file \u003c_io.TextIOWrapper name\u003d\u0027C:/lo/src/core/postprocess/packimages/image-sort.lst\u0027 mode\u003d\u0027r\u0027 encoding\u003d\u0027cp1251\u0027\u003e",
+      "range": {
+        "startLine": 123,
+        "startChar": 62,
+        "endLine": 123,
+        "endChar": 71
+      },
+      "revId": "03c65d3ed080661430d4af2424d8f525bef67c62",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
