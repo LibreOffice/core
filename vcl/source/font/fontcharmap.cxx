@@ -151,6 +151,10 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
             continue;
 
         int nTmpOffset = GetUInt( p+4 );
+
+        if (nTmpOffset + 2 > nLength)
+            continue;
+
         int nTmpFormat = GetUShort( pCmap + nTmpOffset );
         if( nTmpFormat == 12 )                  // 32bit code -> glyph map format
             nValue += 3;
