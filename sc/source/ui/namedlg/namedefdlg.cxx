@@ -139,7 +139,7 @@ bool ScNameDefDlg::IsNameValid()
         m_xFtInfo->set_label(maStrInfoDefault);
         return false;
     }
-    else if ((eType = ScRangeData::IsNameValid( aName, &mrDoc )) != ScRangeData::NAME_VALID)
+    else if ((eType = ScRangeData::IsNameValid( aName, mrDoc )) != ScRangeData::NAME_VALID)
     {
         m_xFtInfo->set_label_type(weld::LabelType::Error);
         if (eType == ScRangeData::NAME_INVALID_BAD_STRING)
