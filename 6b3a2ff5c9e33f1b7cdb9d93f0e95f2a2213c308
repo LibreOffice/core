@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0c384fc4_5755d428",
+        "filename": "sw/source/core/unocore/unoportenum.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-09-15T12:20:10Z",
+      "side": 1,
+      "message": "this should be BkmType::StartEnd i believe",
+      "range": {
+        "startLine": 160,
+        "startChar": 39,
+        "endLine": 160,
+        "endChar": 51
+      },
+      "revId": "6b3a2ff5c9e33f1b7cdb9d93f0e95f2a2213c308",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
