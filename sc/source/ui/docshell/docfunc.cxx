@@ -4367,7 +4367,7 @@ bool ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
         }
         else if (bEnglish)
         {
-            ScCompiler aComp( &rDoc, rRange.aStart, eGrammar);
+            ScCompiler aComp( rDoc, rRange.aStart, eGrammar);
             std::unique_ptr<ScTokenArray> pCode = aComp.CompileString( rString );
             rDoc.InsertMatrixFormula( nStartCol, nStartRow, nEndCol, nEndRow,
                     aMark, EMPTY_OUSTRING, pCode.get(), eGrammar);

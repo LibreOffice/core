@@ -2147,7 +2147,7 @@ class UpdateRefOnNonCopy
         // We need to re-compile the token array when a range name is
         // modified, to correctly reflect the new references in the
         // name.
-        ScCompiler aComp(&mpCxt->mrDoc, rTopCell.aPos, *rTopCell.GetCode(), mpCxt->mrDoc.GetGrammar(),
+        ScCompiler aComp(mpCxt->mrDoc, rTopCell.aPos, *rTopCell.GetCode(), mpCxt->mrDoc.GetGrammar(),
                          true, rTopCell.GetMatrixFlag() != ScMatrixMode::NONE);
         aComp.CompileTokenArray();
     }

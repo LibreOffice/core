@@ -1350,7 +1350,7 @@ void SAL_CALL ScXMLImport::setTargetDocument( const css::uno::Reference< css::la
         throw lang::IllegalArgumentException();
 
     mpDocImport.reset(new ScDocumentImport(*pDoc));
-    mpComp.reset(new ScCompiler(pDoc, ScAddress(), formula::FormulaGrammar::GRAM_ODFF));
+    mpComp.reset(new ScCompiler(*pDoc, ScAddress(), formula::FormulaGrammar::GRAM_ODFF));
 
     uno::Reference<document::XActionLockable> xActionLockable(xDoc, uno::UNO_QUERY);
     if (xActionLockable.is())

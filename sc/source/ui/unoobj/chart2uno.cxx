@@ -824,7 +824,7 @@ public:
 
     void operator() (const ScTokenRef& rToken)
     {
-        ScCompiler aCompiler(mpDoc, ScAddress(0,0,0), meGrammar);
+        ScCompiler aCompiler(*mpDoc, ScAddress(0,0,0), meGrammar);
         OUString aStr;
         aCompiler.CreateStringFromToken(aStr, rToken.get());
         if (mbFirst)
@@ -877,7 +877,7 @@ public:
         OSL_ENSURE(bValidToken, "invalid token");
         if (!bValidToken)
             return;
-        ScCompiler aCompiler(mpDoc, ScAddress(0,0,0), FormulaGrammar::GRAM_ENGLISH);
+        ScCompiler aCompiler(*mpDoc, ScAddress(0,0,0), FormulaGrammar::GRAM_ENGLISH);
         {
             OUString aStr;
             aCompiler.CreateStringFromToken(aStr, aStart.get());
