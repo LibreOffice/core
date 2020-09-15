@@ -120,7 +120,7 @@ def chew_controlfile(ifile):
 
 parser = argparse.ArgumentParser()
 # where the control file lives
-parser.add_argument('control_file', metavar='image-sort.lst', type=open,
+parser.add_argument('control_file', metavar='image-sort.lst',
                     help='the sort control file')
 # where the uiconfigs live
 parser.add_argument('base_path', metavar='directory',
@@ -138,7 +138,8 @@ else:
     args.output = sys.stdout
     close_output = False
 
-chew_controlfile(args.control_file)
+with open(args.control_file) as cf:
+    chew_controlfile(cf)
 
 for icon in global_list:
     if not icon.startswith('sc_'):
