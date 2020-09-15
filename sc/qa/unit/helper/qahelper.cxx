@@ -396,7 +396,7 @@ ScRangeList getChartRanges(ScDocument& rDoc, const SdrOle2Obj& rChartObj)
     for (size_t i = 0, n = aRangeReps.size(); i < n; ++i)
     {
         ScRange aRange;
-        ScRefFlags nRes = aRange.Parse(aRangeReps[i], &rDoc, rDoc.GetAddressConvention());
+        ScRefFlags nRes = aRange.Parse(aRangeReps[i], rDoc, rDoc.GetAddressConvention());
         if (nRes & ScRefFlags::VALID)
             // This is a range address.
             aRanges.push_back(aRange);

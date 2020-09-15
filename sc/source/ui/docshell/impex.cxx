@@ -183,7 +183,7 @@ ScImportExport::ScImportExport( ScDocument& r, const OUString& rPos )
     }
     formula::FormulaGrammar::AddressConvention eConv = rDoc.GetAddressConvention();
     // Range?
-    if (aRange.Parse(aPos, &rDoc, eConv) & ScRefFlags::VALID)
+    if (aRange.Parse(aPos, rDoc, eConv) & ScRefFlags::VALID)
         bSingle = false;
     // Cell?
     else if (aRange.aStart.Parse(aPos, &rDoc, eConv) & ScRefFlags::VALID)

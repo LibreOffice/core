@@ -410,7 +410,7 @@ void RevisionLogFragment::importRrc( const AttributeList& rAttribs )
         return;
 
     OUString aRefStr = rAttribs.getString(XML_ref, OUString());
-    mpImpl->maRange.Parse(aRefStr, &getScDocument(), formula::FormulaGrammar::CONV_XL_OOX);
+    mpImpl->maRange.Parse(aRefStr, getScDocument(), formula::FormulaGrammar::CONV_XL_OOX);
     if (!mpImpl->maRange.IsValid())
         return;
 

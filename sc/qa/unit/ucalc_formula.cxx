@@ -317,47 +317,47 @@ void Test::testFormulaParseReference()
     ScRange aRange;
 
     aRange.aStart.SetTab(0);
-    nRes = aRange.Parse(":B", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    nRes = aRange.Parse(":B", *m_pDoc, formula::FormulaGrammar::CONV_OOO);
     CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
 
     aRange.aStart.SetTab(0);
-    nRes = aRange.Parse("B:", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    nRes = aRange.Parse("B:", *m_pDoc, formula::FormulaGrammar::CONV_OOO);
     CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
 
     aRange.aStart.SetTab(0);
-    nRes = aRange.Parse(":B2", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    nRes = aRange.Parse(":B2", *m_pDoc, formula::FormulaGrammar::CONV_OOO);
     CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
 
     aRange.aStart.SetTab(0);
-    nRes = aRange.Parse("B2:", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    nRes = aRange.Parse("B2:", *m_pDoc, formula::FormulaGrammar::CONV_OOO);
     CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
 
     aRange.aStart.SetTab(0);
-    nRes = aRange.Parse(":2", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    nRes = aRange.Parse(":2", *m_pDoc, formula::FormulaGrammar::CONV_OOO);
     CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
 
     aRange.aStart.SetTab(0);
-    nRes = aRange.Parse("2:", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    nRes = aRange.Parse("2:", *m_pDoc, formula::FormulaGrammar::CONV_OOO);
     CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
 
     aRange.aStart.SetTab(0);
-    nRes = aRange.Parse(":2B", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    nRes = aRange.Parse(":2B", *m_pDoc, formula::FormulaGrammar::CONV_OOO);
     CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
 
     aRange.aStart.SetTab(0);
-    nRes = aRange.Parse("2B:", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    nRes = aRange.Parse("2B:", *m_pDoc, formula::FormulaGrammar::CONV_OOO);
     CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
 
     aRange.aStart.SetTab(0);
-    nRes = aRange.Parse("abc_foo:abc_bar", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    nRes = aRange.Parse("abc_foo:abc_bar", *m_pDoc, formula::FormulaGrammar::CONV_OOO);
     CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
 
     aRange.aStart.SetTab(0);
-    nRes = aRange.Parse("B1:B2~C1", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    nRes = aRange.Parse("B1:B2~C1", *m_pDoc, formula::FormulaGrammar::CONV_OOO);
     CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
 
     aRange.aStart.SetTab(0);
-    nRes = aRange.Parse("B:B", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    nRes = aRange.Parse("B:B", *m_pDoc, formula::FormulaGrammar::CONV_OOO);
     CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScRefFlags::VALID));
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aStart.Tab());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(1), aRange.aStart.Col());
@@ -375,7 +375,7 @@ void Test::testFormulaParseReference()
                          static_cast<sal_uInt16>(nRes & (ScRefFlags::ROW_ABS | ScRefFlags::ROW2_ABS)));
 
     aRange.aStart.SetTab(0);
-    nRes = aRange.Parse("2:2", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    nRes = aRange.Parse("2:2", *m_pDoc, formula::FormulaGrammar::CONV_OOO);
     CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScRefFlags::VALID));
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aStart.Tab());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(0), aRange.aStart.Col());
@@ -392,7 +392,7 @@ void Test::testFormulaParseReference()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(ScRefFlags::COL_ABS | ScRefFlags::COL2_ABS),
                          static_cast<sal_uInt16>(nRes & (ScRefFlags::COL_ABS | ScRefFlags::COL2_ABS)));
 
-    nRes = aRange.Parse("NoQuote.B:C", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    nRes = aRange.Parse("NoQuote.B:C", *m_pDoc, formula::FormulaGrammar::CONV_OOO);
     CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScRefFlags::VALID));
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(4), aRange.aStart.Tab());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(1), aRange.aStart.Col());
@@ -411,7 +411,7 @@ void Test::testFormulaParseReference()
 
     // Both rows at sheet bounds and relative => convert to absolute => entire column reference.
     aRange.aStart.SetTab(0);
-    nRes = aRange.Parse("B1:B1048576", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    nRes = aRange.Parse("B1:B1048576", *m_pDoc, formula::FormulaGrammar::CONV_OOO);
     CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScRefFlags::VALID));
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aStart.Tab());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(1), aRange.aStart.Col());
@@ -430,7 +430,7 @@ void Test::testFormulaParseReference()
 
     // Both columns at sheet bounds and relative => convert to absolute => entire row reference.
     aRange.aStart.SetTab(0);
-    nRes = aRange.Parse("A2:AMJ2", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    nRes = aRange.Parse("A2:AMJ2", *m_pDoc, formula::FormulaGrammar::CONV_OOO);
     CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScRefFlags::VALID));
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aStart.Tab());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(0), aRange.aStart.Col());

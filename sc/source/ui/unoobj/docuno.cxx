@@ -1397,7 +1397,7 @@ static bool lcl_ParseTarget( const OUString& rTarget, ScRange& rTargetRange, too
     bool bRangeValid = false;
     bool bRectValid = false;
 
-    if ( rTargetRange.Parse( rTarget, &rDoc ) & ScRefFlags::VALID )
+    if ( rTargetRange.Parse( rTarget, rDoc ) & ScRefFlags::VALID )
     {
         bRangeValid = true;             // range reference
     }
