@@ -60,6 +60,14 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="deletethread">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes" context="annotationmenu|deletethread">Delete _Comment Thread</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="deleteby">
         <property name="visible">True</property>
         <property name="can_focus">False</property>

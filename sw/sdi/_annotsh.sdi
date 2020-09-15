@@ -24,6 +24,12 @@ interface _Annotation
         StateMethod = GetNoteState ;
     ]
 
+    FN_DELETE_COMMENT_THREAD
+    [
+        ExecMethod = NoteExec ;
+        StateMethod = GetNoteState ;
+    ]
+
     FN_DELETE_NOTE_AUTHOR
     [
         ExecMethod = NoteExec ;
