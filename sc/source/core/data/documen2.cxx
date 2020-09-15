@@ -261,7 +261,7 @@ sal_uInt32 ScDocument::GetDocumentID() const
 void ScDocument::StartChangeTracking()
 {
     if (!pChangeTrack)
-        pChangeTrack.reset( new ScChangeTrack( this ) );
+        pChangeTrack.reset( new ScChangeTrack( *this ) );
 }
 
 void ScDocument::EndChangeTracking()
@@ -271,8 +271,8 @@ void ScDocument::EndChangeTracking()
 
 void ScDocument::SetChangeTrack( std::unique_ptr<ScChangeTrack> pTrack )
 {
-    OSL_ENSURE( pTrack->GetDocument() == this, "SetChangeTrack: different documents" );
-    if ( !pTrack || pTrack == pChangeTrack || pTrack->GetDocument() != this )
+    OSL_ENSURE( &pTrack->GetDocument() == this, "SetChangeTrack: different documents" );
+    if ( !pTrack || pTrack == pChangeTrack || &pTrack->GetDocument() != this )
         return ;
     EndChangeTracking();
     pChangeTrack = std::move(pTrack);

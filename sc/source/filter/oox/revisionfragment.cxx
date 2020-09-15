@@ -245,7 +245,7 @@ void RevisionHeadersFragment::onEndElement()
 void RevisionHeadersFragment::finalizeImport()
 {
     ScDocument& rDoc = getScDocument();
-    std::unique_ptr<ScChangeTrack> pCT(new ScChangeTrack(&rDoc));
+    std::unique_ptr<ScChangeTrack> pCT(new ScChangeTrack(rDoc));
     OUString aSelfUser = pCT->GetUser(); // owner of this document.
     pCT->SetUseFixDateTime(true);
 

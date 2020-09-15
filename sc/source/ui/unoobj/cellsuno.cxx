@@ -5986,7 +5986,7 @@ void ScCellObj::InputEnglishString( const OUString& rText )
         case ScInputStringType::Formula:
             rFunc.SetFormulaCell(
                 aCellPos,
-                new ScFormulaCell(&rDoc, aCellPos, aRes.maText, formula::FormulaGrammar::GRAM_API),
+                new ScFormulaCell(rDoc, aCellPos, aRes.maText, formula::FormulaGrammar::GRAM_API),
                 false);
         break;
         case ScInputStringType::Number:

@@ -55,7 +55,7 @@ struct ScMyCellInfo
         const sal_Int32 nMatrixCols, const sal_Int32 nMatrixRows );
     ~ScMyCellInfo();
 
-    const ScCellValue& CreateCell( ScDocument* pDoc );
+    const ScCellValue& CreateCell( ScDocument& rDoc );
 };
 
 struct ScMyDeleted
@@ -165,7 +165,6 @@ class ScXMLChangeTrackingImportHelper
     std::set<OUString>  aUsers;
     std::vector<std::unique_ptr<ScMyBaseAction>> aActions;
     css::uno::Sequence<sal_Int8> aProtect;
-    ScDocument*         pDoc;
     ScChangeTrack*      pTrack;
     std::unique_ptr<ScMyBaseAction> pCurrentAction;
     sal_Int16           nMultiSpanned;
@@ -177,9 +176,9 @@ private:
     std::unique_ptr<ScChangeAction> CreateDeleteAction(const ScMyDelAction* pAction);
     std::unique_ptr<ScChangeAction> CreateMoveAction(const ScMyMoveAction* pAction);
     std::unique_ptr<ScChangeAction> CreateRejectionAction(const ScMyRejAction* pAction);
-    std::unique_ptr<ScChangeAction> CreateContentAction(const ScMyContentAction* pAction);
+    std::unique_ptr<ScChangeAction> CreateContentAction(const ScMyContentAction* pAction, ScDocument& rDoc);
 
-    void CreateGeneratedActions(std::vector<ScMyGenerated>& rList);
+    void CreateGeneratedActions(std::vector<ScMyGenerated>& rList, ScDocument& rDoc);
 
 public:
     ScXMLChangeTrackingImportHelper();
@@ -211,10 +210,10 @@ public:
 
     void SetDeletionDependencies(ScMyDelAction* pAction, ScChangeActionDel* pDelAct);
     void SetMovementDependencies(ScMyMoveAction* pAction, ScChangeActionMove* pMoveAct);
-    void SetContentDependencies(const ScMyContentAction* pAction, ScChangeActionContent* pActContent);
-    void SetDependencies(ScMyBaseAction* pAction);
+    void SetContentDependencies(const ScMyContentAction* pAction, ScChangeActionContent* pActContent, ScDocument& rDoc);
+    void SetDependencies(ScMyBaseAction* pAction, ScDocument& rDoc);
 
-    void SetNewCell(const ScMyContentAction* pAction);
+    void SetNewCell(const ScMyContentAction* pAction, ScDocument& rDoc);
 
     void CreateChangeTrack(ScDocument* pDoc);
 };

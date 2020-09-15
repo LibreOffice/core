@@ -2002,7 +2002,7 @@ bool ScColumn::ParseString(
         else // = Formula
         {
             ScFormulaCell* pFormulaCell = new ScFormulaCell(
-                    &GetDoc(), ScAddress(nCol, nRow, nTabP), rString,
+                    GetDoc(), ScAddress(nCol, nRow, nTabP), rString,
                     formula::FormulaGrammar::mergeToGrammar(formula::FormulaGrammar::GRAM_DEFAULT, eConv),
                     ScMatrixMode::NONE);
             if (aParam.mbCheckLinkFormula)
@@ -2293,7 +2293,7 @@ void ScColumn::SetFormula( SCROW nRow, const OUString& rFormula, formula::Formul
 
     std::vector<SCROW> aNewSharedRows;
     sc::CellStoreType::iterator it = GetPositionToInsert(nRow, aNewSharedRows, true);
-    ScFormulaCell* pCell = new ScFormulaCell(&GetDoc(), aPos, rFormula, eGram);
+    ScFormulaCell* pCell = new ScFormulaCell(GetDoc(), aPos, rFormula, eGram);
     sal_uInt32 nCellFormat = GetNumberFormat(GetDoc().GetNonThreadedContext(), nRow);
     if( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
         pCell->SetNeedNumberFormat(true);

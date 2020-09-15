@@ -281,7 +281,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
     if (pArr)
         pCell = new ScFormulaCell(this, aPos, *pArr, eGram, ScMatrixMode::Formula);
     else
-        pCell = new ScFormulaCell( this, aPos, rFormula, eGram, ScMatrixMode::Formula );
+        pCell = new ScFormulaCell(*this, aPos, rFormula, eGram, ScMatrixMode::Formula);
     pCell->SetMatColsRows( nCol2 - nCol1 + 1, nRow2 - nRow1 + 1 );
     SCTAB nMax = static_cast<SCTAB>(maTabs.size());
     for (const auto& rTab : rMark)
@@ -434,7 +434,7 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,  // multiple (repeate
     }
     aForString.append(ScCompiler::GetNativeSymbol( ocClose ));
 
-    ScFormulaCell aRefCell( this, ScAddress( nCol1, nRow1, nTab1 ), aForString.makeStringAndClear(),
+    ScFormulaCell aRefCell( *this, ScAddress( nCol1, nRow1, nTab1 ), aForString.makeStringAndClear(),
            formula::FormulaGrammar::GRAM_NATIVE, ScMatrixMode::NONE );
     for( j = nCol1; j <= nCol2; j++ )
         for( k = nRow1; k <= nRow2; k++ )
