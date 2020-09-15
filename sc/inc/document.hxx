@@ -1577,9 +1577,9 @@ public:
      *
      * @param rSrcRange source range in the source document
      * @param nDestTab table in the clip document to copy to.
-     * @param pDestDoc document to copy to
+     * @param rDestDoc document to copy to
      */
-    SC_DLLPUBLIC void CopyStaticToDocument(const ScRange& rSrcRange, SCTAB nDestTab, ScDocument* pDestDoc);
+    SC_DLLPUBLIC void CopyStaticToDocument(const ScRange& rSrcRange, SCTAB nDestTab, ScDocument& rDestDoc);
 
     /**
      * Copy only cell, nothing but cell to another document.

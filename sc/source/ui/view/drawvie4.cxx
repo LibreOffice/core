@@ -287,7 +287,7 @@ public:
             // Sheet by this name doesn't exist.
             return;
 
-        mrSrc.CopyStaticToDocument(rRange, nTab, &mrDest);
+        mrSrc.CopyStaticToDocument(rRange, nTab, mrDest);
     }
 };
 
