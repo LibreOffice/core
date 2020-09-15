@@ -1551,6 +1551,30 @@ void SwPostItMgr::Delete(sal_uInt32 nPostItId)
     LayoutPostIts();
 }
 
+void SwPostItMgr::DeleteCommentThread(sal_uInt32 nPostItId)
+{
+    mpWrtShell->StartAllAction();
+
+    SwRewriter aRewriter;
+    aRewriter.AddRule(UndoArg1, SwResId(STR_CONTENT_TYPE_SINGLE_POSTIT));
+
+    // We have no undo ID at the moment.
+
+    IsPostitFieldWithPostitId aFilter(nPostItId);
+    FieldDocWatchingStack aStack(mvPostItFields, *mpView->GetDocShell(), aFilter);
+    const SwFormatField* pField = aStack.pop();
+    // pField now contains our AnnotationWin object
+    if (pField) {
+        SwAnnotationWin* pWin = GetSidebarWin(pField);
+        pWin->DeleteThread();
+    }
+    PrepareView();
+    mpWrtShell->EndAllAction();
+    mbLayout = true;
+    CalcRects();
+    LayoutPostIts();
+}
+
 void SwPostItMgr::ToggleResolved(sal_uInt32 nPostItId)
 {
     mpWrtShell->StartAllAction();

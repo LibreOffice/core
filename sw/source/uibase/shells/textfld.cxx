@@ -325,8 +325,22 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             {
                 GetView().GetPostItMgr()->DeleteActiveSidebarWin();
             }
+            break;
         }
-        break;
+        case FN_DELETE_COMMENT_THREAD:
+        {
+            const SvxPostItIdItem* pIdItem = rReq.GetArg<SvxPostItIdItem>(SID_ATTR_POSTIT_ID);
+            if (pIdItem && !pIdItem->GetValue().isEmpty() && GetView().GetPostItMgr())
+            {
+                GetView().GetPostItMgr()->DeleteCommentThread(pIdItem->GetValue().toUInt32());
+            }
+            else if ( GetView().GetPostItMgr() &&
+                        GetView().GetPostItMgr()->HasActiveSidebarWin() )
+            {
+                GetView().GetPostItMgr()->DeleteActiveSidebarWin();
+            }
+            break;
+        }
         case FN_RESOLVE_NOTE:
         {
             const SvxPostItIdItem* pIdItem = rReq.GetArg<SvxPostItIdItem>(SID_ATTR_POSTIT_ID);
