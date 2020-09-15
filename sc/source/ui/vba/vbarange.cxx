@@ -855,10 +855,10 @@ namespace {
 class CellFormulaValueSetter : public CellValueSetter
 {
 private:
-    ScDocument*  m_pDoc;
+    ScDocument& m_rDoc;
     formula::FormulaGrammar::Grammar m_eGrammar;
 public:
-    CellFormulaValueSetter( const uno::Any& aValue, ScDocument* pDoc, formula::FormulaGrammar::Grammar eGram ):CellValueSetter( aValue ),  m_pDoc( pDoc ), m_eGrammar( eGram ){}
+    CellFormulaValueSetter( const uno::Any& aValue, ScDocument& rDoc, formula::FormulaGrammar::Grammar eGram ):CellValueSetter( aValue ),  m_rDoc( rDoc ), m_eGrammar( eGram ){}
 protected:
     bool processValue( const uno::Any& aValue, const uno::Reference< table::XCell >& xCell ) override
     {
@@ -877,7 +877,7 @@ protected:
                 if ( pUnoRangesBase )
                 {
                     ScRangeList aCellRanges = pUnoRangesBase->GetRangeList();
-                    ScCompiler aCompiler( m_pDoc, aCellRanges.front().aStart, m_eGrammar );
+                    ScCompiler aCompiler( &m_rDoc, aCellRanges.front().aStart, m_eGrammar );
                     // compile the string in the format passed in
                     std::unique_ptr<ScTokenArray> pArray(aCompiler.CompileString(sFormula));
                     // set desired convention to that of the document
@@ -904,10 +904,10 @@ protected:
 class CellFormulaValueGetter : public CellValueGetter
 {
 private:
-    ScDocument*  m_pDoc;
+    ScDocument& m_rDoc;
     formula::FormulaGrammar::Grammar m_eGrammar;
 public:
-    CellFormulaValueGetter(ScDocument* pDoc, formula::FormulaGrammar::Grammar eGram ) : CellValueGetter( ), m_pDoc( pDoc ), m_eGrammar( eGram ) {}
+    CellFormulaValueGetter(ScDocument& rDoc, formula::FormulaGrammar::Grammar eGram ) : CellValueGetter( ), m_rDoc( rDoc ), m_eGrammar( eGram ) {}
     virtual void visitNode( sal_Int32 /*x*/, sal_Int32 /*y*/, const uno::Reference< table::XCell >& xCell ) override
     {
         uno::Any aValue;
@@ -920,7 +920,7 @@ public:
             pUnoRangesBase )
         {
             ScRangeList aCellRanges = pUnoRangesBase->GetRangeList();
-            ScCompiler aCompiler( m_pDoc, aCellRanges.front().aStart, formula::FormulaGrammar::GRAM_DEFAULT );
+            ScCompiler aCompiler( &m_rDoc, aCellRanges.front().aStart, formula::FormulaGrammar::GRAM_DEFAULT );
             std::unique_ptr<ScTokenArray> pArray(aCompiler.CompileString(sVal));
             // set desired convention
             aCompiler.SetGrammar( m_eGrammar );
@@ -1647,7 +1647,7 @@ ScVbaRange::setFormulaValue( const uno::Any& rFormula, formula::FormulaGrammar::
         aVisitor.visit( valueProcessor );
         return;
     }
-    CellFormulaValueSetter formulaValueSetter( rFormula, &getScDocument(), eGram );
+    CellFormulaValueSetter formulaValueSetter( rFormula, getScDocument(), eGram );
     setValue( rFormula, formulaValueSetter );
 }
 
@@ -1663,7 +1663,7 @@ ScVbaRange::getFormulaValue( formula::FormulaGrammar::Grammar eGram )
         uno::Reference< excel::XRange > xRange( getArea( 0 ), uno::UNO_SET_THROW );
         return xRange->getFormula();
     }
-    CellFormulaValueGetter valueGetter( &getScDocument(), eGram );
+    CellFormulaValueGetter valueGetter( getScDocument(), eGram );
     return getValue( valueGetter );
 
 }

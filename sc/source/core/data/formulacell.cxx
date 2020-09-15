@@ -429,13 +429,13 @@ bool lcl_isReference(const FormulaToken& rToken)
         rToken.GetType() == svDoubleRef;
 }
 
-void adjustRangeName(formula::FormulaToken* pToken, ScDocument& rNewDoc, const ScDocument* pOldDoc,
+void adjustRangeName(formula::FormulaToken* pToken, ScDocument& rNewDoc, const ScDocument& rOldDoc,
         const ScAddress& rNewPos, const ScAddress& rOldPos, bool bGlobalNamesToLocal)
 {
     ScRangeData* pRangeData = nullptr;
     SCTAB nSheet = pToken->GetSheet();
     sal_uInt16 nIndex = pToken->GetIndex();
-    if (!pOldDoc->CopyAdjustRangeName( nSheet, nIndex, pRangeData, rNewDoc, rNewPos, rOldPos, bGlobalNamesToLocal, true))
+    if (!rOldDoc.CopyAdjustRangeName( nSheet, nIndex, pRangeData, rNewDoc, rNewPos, rOldPos, bGlobalNamesToLocal, true))
         return; // nothing to do
 
     if (!pRangeData)
@@ -450,9 +450,9 @@ void adjustRangeName(formula::FormulaToken* pToken, ScDocument& rNewDoc, const S
     pToken->SetSheet(nSheet);
 }
 
-void adjustDBRange(formula::FormulaToken* pToken, ScDocument& rNewDoc, const ScDocument* pOldDoc)
+void adjustDBRange(formula::FormulaToken* pToken, ScDocument& rNewDoc, const ScDocument& rOldDoc)
 {
-    ScDBCollection* pOldDBCollection = pOldDoc->GetDBCollection();
+    ScDBCollection* pOldDBCollection = rOldDoc.GetDBCollection();
     if (!pOldDBCollection)
         return;//strange error case, don't do anything
     ScDBCollection::NamedDBs& aOldNamedDBs = pOldDBCollection->getNamedDBs();
@@ -856,19 +856,19 @@ ScFormulaCell::ScFormulaCell(const ScFormulaCell& rCell, ScDocument& rDoc, const
             {
                 OpCode eOpCode = pToken->GetOpCode();
                 if (eOpCode == ocName)
-                    adjustRangeName(pToken, rDoc, &rCell.rDocument, aPos, rCell.aPos, bGlobalNamesToLocal);
+                    adjustRangeName(pToken, rDoc, rCell.rDocument, aPos, rCell.aPos, bGlobalNamesToLocal);
                 else if (eOpCode == ocDBArea || eOpCode == ocTableRef)
-                    adjustDBRange(pToken, rDoc, &rCell.rDocument);
+                    adjustDBRange(pToken, rDoc, rCell.rDocument);
             }
         }
 
         bool bCopyBetweenDocs = rDocument.GetPool() != rCell.rDocument.GetPool();
         if (bCopyBetweenDocs && !(nCloneFlags & ScCloneFlags::NoMakeAbsExternal))
         {
-            pCode->ReadjustAbsolute3DReferences( &rCell.rDocument, &rDoc, rCell.aPos);
+            pCode->ReadjustAbsolute3DReferences(rCell.rDocument, rDoc, rCell.aPos);
         }
 
-        pCode->AdjustAbsoluteRefs( &rCell.rDocument, rCell.aPos, aPos, bCopyBetweenDocs );
+        pCode->AdjustAbsoluteRefs( rCell.rDocument, rCell.aPos, aPos, bCopyBetweenDocs );
     }
 
     if (!rDocument.IsClipOrUndo())
@@ -3908,7 +3908,7 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
 }
 
 // See also ScDocument::FindRangeNamesReferencingSheet()
-static void lcl_FindRangeNamesInUse(sc::UpdatedRangeNames& rIndexes, const ScTokenArray* pCode, const ScDocument* pDoc,
+static void lcl_FindRangeNamesInUse(sc::UpdatedRangeNames& rIndexes, const ScTokenArray* pCode, const ScDocument& rDoc,
         int nRecursion)
 {
     FormulaTokenArrayPlainIterator aIter(*pCode);
@@ -3922,9 +3922,9 @@ static void lcl_FindRangeNamesInUse(sc::UpdatedRangeNames& rIndexes, const ScTok
 
             if (nRecursion < 126)   // whatever... 42*3
             {
-                ScRangeData* pSubName = pDoc->FindRangeNameBySheetAndIndex( nTab, nTokenIndex);
+                ScRangeData* pSubName = rDoc.FindRangeNameBySheetAndIndex( nTab, nTokenIndex);
                 if (pSubName)
-                    lcl_FindRangeNamesInUse(rIndexes, pSubName->GetCode(), pDoc, nRecursion+1);
+                    lcl_FindRangeNamesInUse(rIndexes, pSubName->GetCode(), rDoc, nRecursion+1);
             }
         }
     }
@@ -3932,7 +3932,7 @@ static void lcl_FindRangeNamesInUse(sc::UpdatedRangeNames& rIndexes, const ScTok
 
 void ScFormulaCell::FindRangeNamesInUse(sc::UpdatedRangeNames& rIndexes) const
 {
-    lcl_FindRangeNamesInUse( rIndexes, pCode, &rDocument, 0);
+    lcl_FindRangeNamesInUse( rIndexes, pCode, rDocument, 0);
 }
 
 void ScFormulaCell::SetChanged(bool b)

@@ -813,9 +813,9 @@ void Chart2Positioner::createPositionMap()
 class Tokens2RangeString
 {
 public:
-    Tokens2RangeString(ScDocument* pDoc, FormulaGrammar::Grammar eGram, sal_Unicode cRangeSep) :
+    Tokens2RangeString(ScDocument& rDoc, FormulaGrammar::Grammar eGram, sal_Unicode cRangeSep) :
         mpRangeStr(std::make_shared<OUStringBuffer>()),
-        mpDoc(pDoc),
+        mpDoc(&rDoc),
         meGrammar(eGram),
         mcRangeSep(cRangeSep),
         mbFirst(true)
@@ -858,9 +858,9 @@ private:
 class Tokens2RangeStringXML
 {
 public:
-    explicit Tokens2RangeStringXML(ScDocument* pDoc) :
+    explicit Tokens2RangeStringXML(ScDocument& rDoc) :
         mpRangeStr(std::make_shared<OUStringBuffer>()),
-        mpDoc(pDoc),
+        mpDoc(&rDoc),
         mbFirst(true)
     {
     }
@@ -873,7 +873,7 @@ public:
             mpRangeStr->append(mcRangeSep);
 
         ScTokenRef aStart, aEnd;
-        bool bValidToken = splitRangeToken(mpDoc, rToken, aStart, aEnd);
+        bool bValidToken = splitRangeToken(*mpDoc, rToken, aStart, aEnd);
         OSL_ENSURE(bValidToken, "invalid token");
         if (!bValidToken)
             return;
@@ -897,7 +897,7 @@ public:
     }
 
 private:
-    static bool splitRangeToken(const ScDocument* pDoc, const ScTokenRef& pToken, ScTokenRef& rStart, ScTokenRef& rEnd)
+    static bool splitRangeToken(const ScDocument& rDoc, const ScTokenRef& pToken, ScTokenRef& rStart, ScTokenRef& rEnd)
     {
         ScComplexRefData aData;
         bool bIsRefToken = ScRefTokenHelper::getDoubleRefDataFromToken(aData, pToken);
@@ -921,12 +921,12 @@ private:
         if (bExternal)
             rStart.reset(new ScExternalSingleRefToken(nFileId, aTabName, aData.Ref1));
         else
-            rStart.reset(new ScSingleRefToken(pDoc->GetSheetLimits(), aData.Ref1));
+            rStart.reset(new ScSingleRefToken(rDoc.GetSheetLimits(), aData.Ref1));
 
         if (bExternal)
             rEnd.reset(new ScExternalSingleRefToken(nFileId, aTabName, aData.Ref2));
         else
-            rEnd.reset(new ScSingleRefToken(pDoc->GetSheetLimits(), aData.Ref2));
+            rEnd.reset(new ScSingleRefToken(rDoc.GetSheetLimits(), aData.Ref2));
         return true;
     }
 
@@ -945,11 +945,11 @@ private:
     bool                        mbFirst;
 };
 
-void lcl_convertTokensToString(OUString& rStr, const vector<ScTokenRef>& rTokens, ScDocument* pDoc)
+void lcl_convertTokensToString(OUString& rStr, const vector<ScTokenRef>& rTokens, ScDocument& rDoc)
 {
     const sal_Unicode cRangeSep = ScCompiler::GetNativeSymbolChar(ocSep);
-    FormulaGrammar::Grammar eGrammar = pDoc->GetGrammar();
-    Tokens2RangeString func(pDoc, eGrammar, cRangeSep);
+    FormulaGrammar::Grammar eGrammar = rDoc.GetGrammar();
+    Tokens2RangeString func(rDoc, eGrammar, cRangeSep);
     func = ::std::for_each(rTokens.begin(), rTokens.end(), func);
     func.getString(rStr);
 }
@@ -1895,7 +1895,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
     }
 
     // Get range string.
-    lcl_convertTokensToString(sRangeRep, aAllTokens, m_pDocument);
+    lcl_convertTokensToString(sRangeRep, aAllTokens, *m_pDocument);
 
     // add cell range property
     aResult.emplace_back( "CellRangeRepresentation", -1,
@@ -2168,7 +2168,7 @@ OUString SAL_CALL ScChart2DataProvider::convertRangeToXML( const OUString& sRang
     if (aRefTokens.empty())
         throw lang::IllegalArgumentException();
 
-    Tokens2RangeStringXML converter(m_pDocument);
+    Tokens2RangeStringXML converter(*m_pDocument);
     converter = ::std::for_each(aRefTokens.begin(), aRefTokens.end(), converter);
     converter.getString(aRet);
 
@@ -2962,7 +2962,7 @@ OUString SAL_CALL ScChart2DataSequence::getSourceRangeRepresentation()
     OUString aStr;
     OSL_ENSURE( m_pDocument, "No Document -> no SourceRangeRepresentation" );
     if (m_pDocument)
-        lcl_convertTokensToString(aStr, m_aTokens, m_pDocument);
+        lcl_convertTokensToString(aStr, m_aTokens, *m_pDocument);
 
     return aStr;
 }
