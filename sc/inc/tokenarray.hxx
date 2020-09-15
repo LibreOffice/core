@@ -135,18 +135,18 @@ public:
     /**
      * Make all absolute references external references pointing to the old document
      *
-     * @param pOldDoc old document
-     * @param pNewDoc new document
+     * @param rOldDoc old document
+     * @param rNewDoc new document
      * @param rPos position of the cell to determine if the reference is in the copied area
      * @param bRangeName set for range names, range names have special handling for absolute sheet ref + relative col/row ref
      */
-    void ReadjustAbsolute3DReferences( const ScDocument* pOldDoc, ScDocument* pNewDoc, const ScAddress& rPos, bool bRangeName = false );
+    void ReadjustAbsolute3DReferences( const ScDocument& rOldDoc, ScDocument& rNewDoc, const ScAddress& rPos, bool bRangeName = false );
 
     /**
      * Make all absolute references pointing to the copied range if the range is copied too
      * @param bCheckCopyArea should reference pointing into the copy area be adjusted independently from being absolute, should be true only for copy&paste between documents
      */
-    void AdjustAbsoluteRefs( const ScDocument* pOldDoc, const ScAddress& rOldPos, const ScAddress& rNewPos, bool bCheckCopyArea );
+    void AdjustAbsoluteRefs( const ScDocument& rOldDoc, const ScAddress& rOldPos, const ScAddress& rNewPos, bool bCheckCopyArea );
 
     /** When copying a sheet-local named expression, move sheet references that
         point to the originating sheet to point to the new sheet instead.

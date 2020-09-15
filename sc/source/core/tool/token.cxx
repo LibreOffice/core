@@ -2418,11 +2418,11 @@ bool IsInCopyRange( const ScRange& rRange, const ScDocument* pClipDoc )
     return rClipParam.maRanges.In(rRange);
 }
 
-bool SkipReference(formula::FormulaToken* pToken, const ScAddress& rPos, const ScDocument* pOldDoc, bool bRangeName, bool bCheckCopyArea)
+bool SkipReference(formula::FormulaToken* pToken, const ScAddress& rPos, const ScDocument& rOldDoc, bool bRangeName, bool bCheckCopyArea)
 {
     ScRange aRange;
 
-    if (!ScRefTokenHelper::getRangeFromToken(pOldDoc, aRange, pToken, rPos))
+    if (!ScRefTokenHelper::getRangeFromToken(&rOldDoc, aRange, pToken, rPos))
         return true;
 
     if (bRangeName && aRange.aStart.Tab() == rPos.Tab())
@@ -2448,7 +2448,7 @@ bool SkipReference(formula::FormulaToken* pToken, const ScAddress& rPos, const S
         }
     }
 
-    if (bCheckCopyArea && IsInCopyRange(aRange, pOldDoc))
+    if (bCheckCopyArea && IsInCopyRange(aRange, &rOldDoc))
         return true;
 
     return false;
@@ -2472,7 +2472,7 @@ void AdjustSingleRefData( ScSingleRefData& rRef, const ScAddress& rOldPos, const
 
 }
 
-void ScTokenArray::ReadjustAbsolute3DReferences( const ScDocument* pOldDoc, ScDocument* pNewDoc, const ScAddress& rPos, bool bRangeName )
+void ScTokenArray::ReadjustAbsolute3DReferences( const ScDocument& rOldDoc, ScDocument& rNewDoc, const ScAddress& rPos, bool bRangeName )
 {
     for ( sal_uInt16 j=0; j<nLen; ++j )
     {
@@ -2480,7 +2480,7 @@ void ScTokenArray::ReadjustAbsolute3DReferences( const ScDocument* pOldDoc, ScDo
         {
             case svDoubleRef :
             {
-                if (SkipReference(pCode[j], rPos, pOldDoc, bRangeName, true))
+                if (SkipReference(pCode[j], rPos, rOldDoc, bRangeName, true))
                     continue;
 
                 ScComplexRefData& rRef = *pCode[j]->GetDoubleRef();
@@ -2491,16 +2491,16 @@ void ScTokenArray::ReadjustAbsolute3DReferences( const ScDocument* pOldDoc, ScDo
                 {
                     OUString aTabName;
                     sal_uInt16 nFileId;
-                    GetExternalTableData(pOldDoc, pNewDoc, rRef1.Tab(), aTabName, nFileId);
+                    GetExternalTableData(&rOldDoc, &rNewDoc, rRef1.Tab(), aTabName, nFileId);
                     ReplaceToken( j, new ScExternalDoubleRefToken( nFileId,
-                                pNewDoc->GetSharedStringPool().intern( aTabName), rRef), CODE_AND_RPN);
+                                rNewDoc.GetSharedStringPool().intern( aTabName), rRef), CODE_AND_RPN);
                     // ATTENTION: rRef can't be used after this point
                 }
             }
             break;
             case svSingleRef :
             {
-                if (SkipReference(pCode[j], rPos, pOldDoc, bRangeName, true))
+                if (SkipReference(pCode[j], rPos, rOldDoc, bRangeName, true))
                     continue;
 
                 ScSingleRefData& rRef = *pCode[j]->GetSingleRef();
@@ -2509,9 +2509,9 @@ void ScTokenArray::ReadjustAbsolute3DReferences( const ScDocument* pOldDoc, ScDo
                 {
                     OUString aTabName;
                     sal_uInt16 nFileId;
-                    GetExternalTableData(pOldDoc, pNewDoc, rRef.Tab(), aTabName, nFileId);
+                    GetExternalTableData(&rOldDoc, &rNewDoc, rRef.Tab(), aTabName, nFileId);
                     ReplaceToken( j, new ScExternalSingleRefToken( nFileId,
-                                pNewDoc->GetSharedStringPool().intern( aTabName), rRef), CODE_AND_RPN);
+                                rNewDoc.GetSharedStringPool().intern( aTabName), rRef), CODE_AND_RPN);
                     // ATTENTION: rRef can't be used after this point
                 }
             }
@@ -2524,7 +2524,7 @@ void ScTokenArray::ReadjustAbsolute3DReferences( const ScDocument* pOldDoc, ScDo
     }
 }
 
-void ScTokenArray::AdjustAbsoluteRefs( const ScDocument* pOldDoc, const ScAddress& rOldPos, const ScAddress& rNewPos,
+void ScTokenArray::AdjustAbsoluteRefs( const ScDocument& rOldDoc, const ScAddress& rOldPos, const ScAddress& rNewPos,
         bool bCheckCopyRange)
 {
     TokenPointers aPtrs( pCode.get(), nLen, pRPN, nRPN, true);
@@ -2542,7 +2542,7 @@ void ScTokenArray::AdjustAbsoluteRefs( const ScDocument* pOldDoc, const ScAddres
             {
                 case svDoubleRef :
                     {
-                        if (!SkipReference(p, rOldPos, pOldDoc, false, bCheckCopyRange))
+                        if (!SkipReference(p, rOldPos, rOldDoc, false, bCheckCopyRange))
                             continue;
 
                         ScComplexRefData& rRef = *p->GetDoubleRef();
@@ -2555,7 +2555,7 @@ void ScTokenArray::AdjustAbsoluteRefs( const ScDocument* pOldDoc, const ScAddres
                     break;
                 case svSingleRef :
                     {
-                        if (!SkipReference(p, rOldPos, pOldDoc, false, bCheckCopyRange))
+                        if (!SkipReference(p, rOldPos, rOldDoc, false, bCheckCopyRange))
                             continue;
 
                         ScSingleRefData& rRef = *p->GetSingleRef();

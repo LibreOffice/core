@@ -83,7 +83,7 @@ public:
                             SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
     void        AddName( const OUString& rName );
 
-    void        OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow, SCTAB nTab );
+    void        OutputToDocument( ScDocument& rDestDoc, SCCOL nCol, SCROW nRow, SCTAB nTab );
 
     void        GetSize( SCCOL& rCols, SCROW& rRows ) const;
     SCROW       GetInsertCount() const;

@@ -627,7 +627,7 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, bool bRecord )
         pDestData->SetHeader( rParam.bByRow );
     }
 
-    aData.OutputToDocument( &m_aDocument, rParam.nCol, rParam.nRow, rParam.nTab );
+    aData.OutputToDocument( m_aDocument, rParam.nCol, rParam.nRow, rParam.nTab );
 
     SCCOL nPaintStartCol = rParam.nCol;
     SCROW nPaintStartRow = rParam.nRow;
