@@ -1303,23 +1303,46 @@ void Chart2ImportTest::testNumberFormatsXLSX()
 void Chart2ImportTest::testNumberFormatsDOCX()
 {
     load("/chart2/qa/extras/data/docx/", "tdf132174.docx");
-    uno::Reference< chart2::XChartDocument > xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xChartDoc.is());
+    {
+        uno::Reference< chart2::XChartDocument > xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xChartDoc.is());
 
-    css::uno::Reference<chart2::XDiagram> xDiagram(xChartDoc->getFirstDiagram(), UNO_SET_THROW);
-    Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
-    uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries, uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xPropertySet.is());
+        css::uno::Reference<chart2::XDiagram> xDiagram(xChartDoc->getFirstDiagram(), UNO_SET_THROW);
+        Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
+        uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries, uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT(xPropertySet.is());
 
-    sal_Int32 nNumberFormat;
-    bool bLinkNumberFormatToSource = true;
-    const sal_Int32 nChartDataNumberFormat = getNumberFormat(xChartDoc, "0%");
-    xPropertySet->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormat;
-    CPPUNIT_ASSERT_EQUAL(nChartDataNumberFormat, nNumberFormat);
-    xPropertySet->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bLinkNumberFormatToSource;
-    // LinkNumberFormatToSource should be set to false even if the OOXML contain a true value,
-    // because the inner data table of charts have no own number format!
-    CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to false.", !bLinkNumberFormatToSource);
+        sal_Int32 nNumberFormat;
+        bool bLinkNumberFormatToSource = true;
+        const sal_Int32 nChartDataNumberFormat = getNumberFormat(xChartDoc, "0%");
+        xPropertySet->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormat;
+        CPPUNIT_ASSERT_EQUAL(nChartDataNumberFormat, nNumberFormat);
+        xPropertySet->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bLinkNumberFormatToSource;
+        // LinkNumberFormatToSource should be set to false even if the original OOXML contain a true value,
+        // because the inner data table of charts have no own number format!
+        CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to false.", !bLinkNumberFormatToSource);
+    }
+
+    load("/chart2/qa/extras/data/docx/", "tdf136650.docx");
+    {
+        uno::Reference< chart2::XChartDocument > xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xChartDoc.is());
+
+        css::uno::Reference<chart2::XDiagram> xDiagram(xChartDoc->getFirstDiagram(), UNO_SET_THROW);
+        Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
+        CPPUNIT_ASSERT(xDataSeries.is());
+        Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(1), uno::UNO_SET_THROW);
+
+        sal_Int32 nNumberFormat;
+        bool bLinkNumberFormatToSource = true;
+        const sal_Int32 nChartDataNumberFormat = getNumberFormat(xChartDoc, "0%");
+        xPropertySet->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormat;
+        CPPUNIT_ASSERT_EQUAL(nChartDataNumberFormat, nNumberFormat);
+        xPropertySet->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bLinkNumberFormatToSource;
+        // LinkNumberFormatToSource should be set to false even if the original OOXML file contain a true value,
+        // because the inner data table of charts have no own number format!
+        CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to false.", !bLinkNumberFormatToSource);
+    }
 }
 
 void Chart2ImportTest::testPercentageNumberFormatsDOCX()
