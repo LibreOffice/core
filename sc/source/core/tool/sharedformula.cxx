@@ -85,7 +85,7 @@ bool SharedFormulaUtil::splitFormulaCellGroup(const CellStoreType::position_type
         if (pCxt)
             rPrevTop.EndListeningTo(*pCxt);
         else
-            rPrevTop.EndListeningTo( *rPrevTop.GetDocument(), nullptr, ScAddress( ScAddress::UNINITIALIZED));
+            rPrevTop.EndListeningTo( rPrevTop.GetDocument(), nullptr, ScAddress( ScAddress::UNINITIALIZED));
         rPrevTop.SetNeedsListening(true);
 
         // The new group or remaining single cell needs a new listening.
@@ -155,10 +155,10 @@ bool SharedFormulaUtil::splitFormulaCellGroups(const ScDocument* pDoc, CellStore
 bool SharedFormulaUtil::joinFormulaCells(
     const CellStoreType::position_type& rPos, ScFormulaCell& rCell1, ScFormulaCell& rCell2 )
 {
-    if( rCell1.GetDocument()->IsDelayedFormulaGrouping())
+    if( rCell1.GetDocument().IsDelayedFormulaGrouping())
     {
-        rCell1.GetDocument()->AddDelayedFormulaGroupingCell( &rCell1 );
-        rCell1.GetDocument()->AddDelayedFormulaGroupingCell( &rCell2 );
+        rCell1.GetDocument().AddDelayedFormulaGroupingCell( &rCell1 );
+        rCell1.GetDocument().AddDelayedFormulaGroupingCell( &rCell2 );
         return false;
     }
 
