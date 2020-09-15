@@ -23,6 +23,7 @@
   <menu:menuitem menu:id=".uno:ResolveCommentThread"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:DeleteComment"/>
+  <menu:menuitem menu:id=".uno:DeleteCommentThread"/>
   <menu:menuitem menu:id=".uno:DeleteAuthor"/>
   <menu:menuitem menu:id=".uno:DeleteAllNotes"/>
   <menu:menuitem menu:id=".uno:FormatAllNotes"/>
