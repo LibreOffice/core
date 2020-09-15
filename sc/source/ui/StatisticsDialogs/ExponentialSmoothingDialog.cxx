@@ -43,7 +43,7 @@ const char* ScExponentialSmoothingDialog::GetUndoNameId()
 
 ScRange ScExponentialSmoothingDialog::ApplyOutput(ScDocShell* pDocShell)
 {
-    AddressWalkerWriter output(mOutputAddress, pDocShell, &mDocument,
+    AddressWalkerWriter output(mOutputAddress, pDocShell, mDocument,
             formula::FormulaGrammar::mergeToGrammar( formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
     FormulaTemplate aTemplate(&mDocument);
 

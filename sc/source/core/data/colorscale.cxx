@@ -205,7 +205,7 @@ ScColorScaleEntry::~ScColorScaleEntry() COVERITY_NOEXCEPT_FALSE
 
 void ScColorScaleEntry::SetFormula( const OUString& rFormula, ScDocument& rDoc, const ScAddress& rAddr, formula::FormulaGrammar::Grammar eGrammar )
 {
-    mpCell.reset(new ScFormulaCell( &rDoc, rAddr, rFormula, eGrammar ));
+    mpCell.reset(new ScFormulaCell( rDoc, rAddr, rFormula, eGrammar ));
     mpCell->StartListeningTo( rDoc );
     mpListener.reset(new ScFormulaListener(mpCell.get()));
     if (mpFormat)

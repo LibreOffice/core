@@ -851,7 +851,7 @@ class SAL_DLLPUBLIC_RTTI ScChangeTrack : public utl::ConfigurationListener
     ScChangeActionLinkEntry*    pLinkInsertTab;
     ScChangeActionLinkEntry*    pLinkMove;
     std::optional<ScChangeTrackMsgInfo> xBlockModifyMsg;
-    ScDocument*             pDoc;
+    ScDocument&             rDoc;
     sal_uLong               nActionMax;
     sal_uLong               nGeneratedMin;
     sal_uLong               nMarkLastSaved;
@@ -950,8 +950,8 @@ public:
 
     SCSIZE              ComputeContentSlot( sal_Int32 nRow ) const;
 
-    SC_DLLPUBLIC ScChangeTrack( ScDocument* );
-    ScChangeTrack(ScDocument* pDocP, const std::set<OUString>& aTempUserCollection); // only to use in the XML import
+    SC_DLLPUBLIC ScChangeTrack( ScDocument& );
+    ScChangeTrack(ScDocument& rDocP, const std::set<OUString>& aTempUserCollection); // only to use in the XML import
     SC_DLLPUBLIC virtual ~ScChangeTrack() override;
     void Clear();
 
@@ -977,7 +977,7 @@ public:
     SC_DLLPUBLIC void SetUser( const OUString& rUser );
     const OUString& GetUser() const { return maUser;}
     const std::set<OUString>& GetUserCollection() const { return maUserCollection;}
-    ScDocument*         GetDocument() const { return pDoc; }
+    ScDocument&         GetDocument() const { return rDoc; }
                         // for import filter
     const DateTime&     GetFixDateTime() const { return aFixDateTime; }
 
