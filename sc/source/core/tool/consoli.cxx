@@ -390,7 +390,7 @@ SCROW ScConsData::GetInsertCount() const
 // store completed data to document
 //TODO: optimize on columns?
 
-void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow, SCTAB nTab )
+void ScConsData::OutputToDocument( ScDocument& rDestDoc, SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     OpCode eOpCode = eOpCodeTable[eFunction];
 
@@ -400,7 +400,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
     // left top corner
 
     if ( bColByName && bRowByName && !aCornerText.isEmpty() )
-        pDestDoc->SetString( nCol, nRow, nTab, aCornerText );
+        rDestDoc.SetString( nCol, nRow, nTab, aCornerText );
 
     // title
 
@@ -411,10 +411,10 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
 
     if (bColByName)
         for (SCSIZE i=0; i<nColCount; i++)
-            pDestDoc->SetString( sal::static_int_cast<SCCOL>(nStartCol+i), nRow, nTab, maColHeaders[i] );
+            rDestDoc.SetString( sal::static_int_cast<SCCOL>(nStartCol+i), nRow, nTab, maColHeaders[i] );
     if (bRowByName)
         for (SCSIZE j=0; j<nRowCount; j++)
-            pDestDoc->SetString( nCol, sal::static_int_cast<SCROW>(nStartRow+j), nTab, maRowHeaders[j] );
+            rDestDoc.SetString( nCol, sal::static_int_cast<SCROW>(nStartRow+j), nTab, maRowHeaders[j] );
 
     nCol = nStartCol;
     nRow = nStartRow;
@@ -429,11 +429,11 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                 {
                     double fVal = ppFunctionData[nArrX][nArrY].getResult();
                     if (ppFunctionData[nArrX][nArrY].getError())
-                        pDestDoc->SetError( sal::static_int_cast<SCCOL>(nCol+nArrX),
-                                            sal::static_int_cast<SCROW>(nRow+nArrY), nTab, FormulaError::NoValue );
+                        rDestDoc.SetError( sal::static_int_cast<SCCOL>(nCol+nArrX),
+                                           sal::static_int_cast<SCROW>(nRow+nArrY), nTab, FormulaError::NoValue );
                     else
-                        pDestDoc->SetValue( sal::static_int_cast<SCCOL>(nCol+nArrX),
-                                            sal::static_int_cast<SCROW>(nRow+nArrY), nTab, fVal );
+                        rDestDoc.SetValue( sal::static_int_cast<SCCOL>(nCol+nArrX),
+                                           sal::static_int_cast<SCROW>(nRow+nArrY), nTab, fVal );
                 }
     }
 
@@ -460,7 +460,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
 
         if (nNeeded)
         {
-            pDestDoc->InsertRow( 0,nTab, pDestDoc->MaxCol(),nTab, nRow+nArrY, nNeeded );
+            rDestDoc.InsertRow( 0,nTab, rDestDoc.MaxCol(),nTab, nRow+nArrY, nNeeded );
 
             for (nArrX=0; nArrX<nColCount; nArrX++)
                 if (ppUsed[nArrX][nArrY])
@@ -475,15 +475,15 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                             {
                                 // insert reference (absolute, 3d)
 
-                                aSRef.SetAddress(pDestDoc->GetSheetLimits(), ScAddress(aRef.nCol,aRef.nRow,aRef.nTab), ScAddress());
+                                aSRef.SetAddress(rDestDoc.GetSheetLimits(), ScAddress(aRef.nCol,aRef.nRow,aRef.nTab), ScAddress());
 
-                                ScTokenArray aRefArr(*pDestDoc);
+                                ScTokenArray aRefArr(rDestDoc);
                                 aRefArr.AddSingleReference(aSRef);
                                 aRefArr.AddOpCode(ocStop);
                                 ScAddress aDest( sal::static_int_cast<SCCOL>(nCol+nArrX),
                                                  sal::static_int_cast<SCROW>(nRow+nArrY+nPos), nTab );
-                                ScFormulaCell* pCell = new ScFormulaCell(*pDestDoc, aDest, aRefArr);
-                                pDestDoc->SetFormulaCell(aDest, pCell);
+                                ScFormulaCell* pCell = new ScFormulaCell(rDestDoc, aDest, aRefArr);
+                                rDestDoc.SetFormulaCell(aDest, pCell);
                             }
                         }
 
@@ -494,30 +494,30 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
 
                         ScRange aRange(sal::static_int_cast<SCCOL>(nCol+nArrX), nRow+nArrY, nTab);
                         aRange.aEnd.SetRow(nRow+nArrY+nNeeded-1);
-                        aCRef.SetRange(pDestDoc->GetSheetLimits(), aRange, aDest);
+                        aCRef.SetRange(rDestDoc.GetSheetLimits(), aRange, aDest);
 
-                        ScTokenArray aArr(*pDestDoc);
+                        ScTokenArray aArr(rDestDoc);
                         aArr.AddOpCode(eOpCode);            // selected function
                         aArr.AddOpCode(ocOpen);
                         aArr.AddDoubleReference(aCRef);
                         aArr.AddOpCode(ocClose);
                         aArr.AddOpCode(ocStop);
-                        ScFormulaCell* pCell = new ScFormulaCell(*pDestDoc, aDest, aArr);
-                        pDestDoc->SetFormulaCell(aDest, pCell);
+                        ScFormulaCell* pCell = new ScFormulaCell(rDestDoc, aDest, aArr);
+                        rDestDoc.SetFormulaCell(aDest, pCell);
                     }
                 }
 
             // insert outline
 
-            ScOutlineArray& rOutArr = pDestDoc->GetOutlineTable( nTab, true )->GetRowArray();
+            ScOutlineArray& rOutArr = rDestDoc.GetOutlineTable( nTab, true )->GetRowArray();
             SCROW nOutStart = nRow+nArrY;
             SCROW nOutEnd = nRow+nArrY+nNeeded-1;
             bool bSize = false;
             rOutArr.Insert( nOutStart, nOutEnd, bSize );
             for (SCROW nOutRow=nOutStart; nOutRow<=nOutEnd; nOutRow++)
-                pDestDoc->ShowRow( nOutRow, nTab, false );
-            pDestDoc->SetDrawPageSize(nTab);
-            pDestDoc->UpdateOutlineRow( nOutStart, nOutEnd, nTab, false );
+                rDestDoc.ShowRow( nOutRow, nTab, false );
+            rDestDoc.SetDrawPageSize(nTab);
+            rDestDoc.UpdateOutlineRow( nOutStart, nOutEnd, nTab, false );
 
             // sub title
 
@@ -533,7 +533,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                     if ( bDo && nTPos < nNeeded )
                     {
                         aString = maRowHeaders[nArrY] + " / " + maTitles[nPos];
-                        pDestDoc->SetString( nCol-1, nRow+nArrY+nTPos, nTab, aString );
+                        rDestDoc.SetString( nCol-1, nRow+nArrY+nTPos, nTab, aString );
                     }
                 }
             }

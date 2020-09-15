@@ -666,7 +666,7 @@ MightReferenceSheet mightRangeNameReferenceSheet( ScRangeData* pData, SCTAB nRef
         MightReferenceSheet::CODE : MightReferenceSheet::NONE;
 }
 
-ScRangeData* copyRangeName( const ScRangeData* pOldRangeData, ScDocument& rNewDoc, const ScDocument* pOldDoc,
+ScRangeData* copyRangeName( const ScRangeData* pOldRangeData, ScDocument& rNewDoc, const ScDocument& rOldDoc,
         const ScAddress& rNewPos, const ScAddress& rOldPos, bool bGlobalNamesToLocal,
         SCTAB nOldSheet, const SCTAB nNewSheet, bool bSameDoc)
 {
@@ -689,8 +689,8 @@ ScRangeData* copyRangeName( const ScRangeData* pOldRangeData, ScDocument& rNewDo
     }
     if (!bSameDoc)
     {
-        pRangeNameToken->ReadjustAbsolute3DReferences(pOldDoc, &rNewDoc, pRangeData->GetPos(), true);
-        pRangeNameToken->AdjustAbsoluteRefs(pOldDoc, rOldPos, rNewPos, true);
+        pRangeNameToken->ReadjustAbsolute3DReferences(rOldDoc, rNewDoc, pRangeData->GetPos(), true);
+        pRangeNameToken->AdjustAbsoluteRefs(rOldDoc, rOldPos, rNewPos, true);
     }
 
     bool bInserted;
@@ -722,12 +722,12 @@ typedef std::map< SheetIndex, SheetIndex > SheetIndexMap;
 
 ScRangeData* copyRangeNames( SheetIndexMap& rSheetIndexMap, std::vector<ScRangeData*>& rRangeDataVec,
         const sc::UpdatedRangeNames& rReferencingNames, SCTAB nTab,
-        const ScRangeData* pOldRangeData, ScDocument& rNewDoc, const ScDocument* pOldDoc,
+        const ScRangeData* pOldRangeData, ScDocument& rNewDoc, const ScDocument& rOldDoc,
         const ScAddress& rNewPos, const ScAddress& rOldPos, bool bGlobalNamesToLocal,
         const SCTAB nOldSheet, const SCTAB nNewSheet, bool bSameDoc)
 {
     ScRangeData* pRangeData = nullptr;
-    const ScRangeName* pOldRangeName = (nTab < 0 ? pOldDoc->GetRangeName() : pOldDoc->GetRangeName(nTab));
+    const ScRangeName* pOldRangeName = (nTab < 0 ? rOldDoc.GetRangeName() : rOldDoc.GetRangeName(nTab));
     if (pOldRangeName)
     {
         const ScRangeName* pNewRangeName = (nNewSheet < 0 ? rNewDoc.GetRangeName() : rNewDoc.GetRangeName(nNewSheet));
@@ -743,7 +743,7 @@ ScRangeData* copyRangeNames( SheetIndexMap& rSheetIndexMap, std::vector<ScRangeD
                 // none.
                 if (pCopyData == pOldRangeData)
                 {
-                    pRangeData = copyRangeName( pCopyData, rNewDoc, pOldDoc, rNewPos, rOldPos,
+                    pRangeData = copyRangeName( pCopyData, rNewDoc, rOldDoc, rNewPos, rOldPos,
                             bGlobalNamesToLocal, nOldSheet, nNewSheet, bSameDoc);
                     if (pRangeData)
                     {
@@ -764,7 +764,7 @@ ScRangeData* copyRangeNames( SheetIndexMap& rSheetIndexMap, std::vector<ScRangeD
                     }
                     else
                     {
-                        ScRangeData* pTmpData = copyRangeName( pCopyData, rNewDoc, pOldDoc, rNewPos, rOldPos,
+                        ScRangeData* pTmpData = copyRangeName( pCopyData, rNewDoc, rOldDoc, rNewPos, rOldPos,
                                 bGlobalNamesToLocal, nOldSheet, nNewSheet, bSameDoc);
                         if (pTmpData)
                         {
@@ -883,7 +883,7 @@ bool ScDocument::CopyAdjustRangeName( SCTAB& rSheet, sal_uInt16& rIndex, ScRange
                 const SCTAB nTmpOldSheet = (nOldSheet < 0 ? nOldTab : nOldSheet);
                 nNewSheet = rNewPos.Tab();
                 rpRangeData = copyRangeNames( aSheetIndexMap, aRangeDataVec, aReferencingNames, nOldTab,
-                        pOldRangeData, rNewDoc, this, rNewPos, rOldPos,
+                        pOldRangeData, rNewDoc, *this, rNewPos, rOldPos,
                         bGlobalNamesToLocal, nTmpOldSheet, nNewSheet, bSameDoc);
             }
             if ((bGlobalNamesToLocal || !bSameDoc) && !aReferencingNames.isEmpty(-1))
@@ -891,7 +891,7 @@ bool ScDocument::CopyAdjustRangeName( SCTAB& rSheet, sal_uInt16& rIndex, ScRange
                 const SCTAB nTmpOldSheet = -1;
                 const SCTAB nTmpNewSheet = (bGlobalNamesToLocal ? rNewPos.Tab() : -1);
                 ScRangeData* pTmpData = copyRangeNames( aSheetIndexMap, aRangeDataVec, aReferencingNames, -1,
-                        pOldRangeData, rNewDoc, this, rNewPos, rOldPos,
+                        pOldRangeData, rNewDoc, *this, rNewPos, rOldPos,
                         bGlobalNamesToLocal, nTmpOldSheet, nTmpNewSheet, bSameDoc);
                 if (!rpRangeData)
                 {
@@ -930,7 +930,7 @@ bool ScDocument::CopyAdjustRangeName( SCTAB& rSheet, sal_uInt16& rIndex, ScRange
         else
         {
             nNewSheet = ((nOldSheet < 0 && !bGlobalNamesToLocal) ? -1 : rNewPos.Tab());
-            rpRangeData = copyRangeName( pOldRangeData, rNewDoc, this, rNewPos, rOldPos, bGlobalNamesToLocal,
+            rpRangeData = copyRangeName( pOldRangeData, rNewDoc, *this, rNewPos, rOldPos, bGlobalNamesToLocal,
                     nOldSheet, nNewSheet, bSameDoc);
         }
 
