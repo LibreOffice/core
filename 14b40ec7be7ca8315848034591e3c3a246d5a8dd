@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "933d7b98_0920fad9",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 5456,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-15T07:46:33Z",
+      "side": 1,
+      "message": "When working with Visual Studio (and possibly in VS Code this could work, too), I use its ability to use clang-format rules defined in our .clang-format: I select the new text, then press Ctrl+K Ctrl+F, and it formats the selection, without touching unselected code.\n\nI had been told that other IDEs have similar tools, too, but I am not familiar with them, nor do I know how to use clang-format to re-format only newly added parts in a file.",
+      "parentUuid": "3bbc72ba_00d9f018",
+      "range": {
+        "startLine": 5455,
+        "startChar": 4,
+        "endLine": 5456,
+        "endChar": 109
+      },
+      "revId": "14b40ec7be7ca8315848034591e3c3a246d5a8dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3d036a56_25d77051",
         "filename": "sc/source/filter/xcl97/xcl97rec.cxx",
         "patchSetId": 16
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "Mike: I\u0027m sorry, it\u0027s not obvious what is the problem here. Jenkins didn\u0027t report any issue here. Do you think of the length of the line?",
       "parentUuid": "3d036a56_25d77051",
+      "range": {
+        "startLine": 1286,
+        "startChar": 8,
+        "endLine": 1286,
+        "endChar": 123
+      },
+      "revId": "14b40ec7be7ca8315848034591e3c3a246d5a8dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8342a45_09be37b6",
+        "filename": "sc/source/filter/xcl97/xcl97rec.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 1286,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-15T07:46:33Z",
+      "side": 1,
+      "message": "Yes, we use a limit of 100 characters per line; you may see it also in the gerrit review here: everything longer than 100 characters is split.",
+      "parentUuid": "3d15af98_40c21266",
       "range": {
         "startLine": 1286,
         "startChar": 8,
