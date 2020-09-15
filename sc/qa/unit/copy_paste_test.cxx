@@ -90,7 +90,7 @@ void ScCopyPasteTest::testCopyPasteXLS()
 
     // 2. Highlight B2:C5
     ScRange aSrcRange;
-    ScRefFlags nRes = aSrcRange.Parse("B2:C5", &rDoc, rDoc.GetAddressConvention());
+    ScRefFlags nRes = aSrcRange.Parse("B2:C5", rDoc, rDoc.GetAddressConvention());
     CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScRefFlags::VALID));
 
     ScMarkData aMark(rDoc.GetSheetLimits());
@@ -150,7 +150,7 @@ void lcl_copy( const OUString& rSrcRange, const OUString& rDstRange, ScDocument&
 
     // 1. Copy
     ScRange aSrcRange;
-    ScRefFlags nRes = aSrcRange.Parse(rSrcRange, &rDoc, rDoc.GetAddressConvention());
+    ScRefFlags nRes = aSrcRange.Parse(rSrcRange, rDoc, rDoc.GetAddressConvention());
     CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScRefFlags::VALID));
     pViewShell->GetViewData().GetMarkData().SetMarkArea(aSrcRange);
     pViewShell->GetViewData().GetMarkData().SetSelectedTabs(TabsInRange(aSrcRange));
@@ -158,7 +158,7 @@ void lcl_copy( const OUString& rSrcRange, const OUString& rDstRange, ScDocument&
 
     // 2. Paste
     ScRange aDstRange;
-    nRes = aDstRange.Parse(rDstRange, &rDoc, rDoc.GetAddressConvention());
+    nRes = aDstRange.Parse(rDstRange, rDoc, rDoc.GetAddressConvention());
     CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScRefFlags::VALID));
     pViewShell->GetViewData().GetMarkData().SetMarkArea(aDstRange);
     pViewShell->GetViewData().GetMarkData().SetSelectedTabs(TabsInRange(aDstRange));

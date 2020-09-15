@@ -267,13 +267,13 @@ void ScAnchorTest::testCopyColumnWithImages()
     {
         // 1. Copy source range
         ScRange aSrcRange;
-        aSrcRange.Parse("A1:A11", pDoc, pDoc->GetAddressConvention());
+        aSrcRange.Parse("A1:A11", *pDoc, pDoc->GetAddressConvention());
         pViewShell->GetViewData().GetMarkData().SetMarkArea(aSrcRange);
         pViewShell->GetViewData().GetView()->CopyToClip(&aClipDoc, false, false, true, false);
 
         // 2. Paste to target range
         ScRange aDstRange;
-        aDstRange.Parse("D1:D11", pDoc, pDoc->GetAddressConvention());
+        aDstRange.Parse("D1:D11", *pDoc, pDoc->GetAddressConvention());
         pViewShell->GetViewData().GetMarkData().SetMarkArea(aDstRange);
         pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
 
@@ -290,13 +290,13 @@ void ScAnchorTest::testCopyColumnWithImages()
     {
         // 1. Copy source cells
         ScRange aSrcRange;
-        aSrcRange.Parse("A3:B3", pDoc, pDoc->GetAddressConvention());
+        aSrcRange.Parse("A3:B3", *pDoc, pDoc->GetAddressConvention());
         pViewShell->GetViewData().GetMarkData().SetMarkArea(aSrcRange);
         pViewShell->GetViewData().GetView()->CopyToClip(&aClipDoc, false, false, true, false);
 
         // 2. Paste to target cells
         ScRange aDstRange;
-        aDstRange.Parse("G3:H3", pDoc, pDoc->GetAddressConvention());
+        aDstRange.Parse("G3:H3", *pDoc, pDoc->GetAddressConvention());
         pViewShell->GetViewData().GetMarkData().SetMarkArea(aDstRange);
         pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
 
@@ -337,7 +337,7 @@ void ScAnchorTest::testCutWithImages()
     {
         // Cut source range
         ScRange aSrcRange;
-        aSrcRange.Parse("A1:A11", pDoc, pDoc->GetAddressConvention());
+        aSrcRange.Parse("A1:A11", *pDoc, pDoc->GetAddressConvention());
         pViewShell->GetViewData().GetMarkData().SetMarkArea(aSrcRange);
         pViewShell->GetViewData().GetView()->CutToClip();
 
@@ -355,7 +355,7 @@ void ScAnchorTest::testCutWithImages()
     {
         // Cut source cells
         ScRange aSrcRange;
-        aSrcRange.Parse("A3:B3", pDoc, pDoc->GetAddressConvention());
+        aSrcRange.Parse("A3:B3", *pDoc, pDoc->GetAddressConvention());
         pViewShell->GetViewData().GetMarkData().SetMarkArea(aSrcRange);
         pViewShell->GetViewData().GetView()->CutToClip();
 

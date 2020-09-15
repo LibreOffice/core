@@ -82,7 +82,7 @@ void ScRangeTest::testRangeParsing()
 {
     ScRange aRange;
     ScDocument& rDoc = m_xDocShRef->GetDocument();
-    ScRefFlags nRes = aRange.Parse(":1", &rDoc, formula::FormulaGrammar::CONV_OOO);
+    ScRefFlags nRes = aRange.Parse(":1", rDoc, formula::FormulaGrammar::CONV_OOO);
     CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
 }
 

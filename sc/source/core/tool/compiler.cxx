@@ -3190,7 +3190,7 @@ bool ScCompiler::IsDoubleReference( const OUString& rName, const OUString* pErrR
     ScRange aRange( aPos, aPos );
     const ScAddress::Details aDetails( pConv->meConv, aPos );
     ScAddress::ExternalInfo aExtInfo;
-    ScRefFlags nFlags = aRange.Parse( rName, &rDoc, aDetails, &aExtInfo, &maExternalLinks, pErrRef );
+    ScRefFlags nFlags = aRange.Parse( rName, rDoc, aDetails, &aExtInfo, &maExternalLinks, pErrRef );
     if( nFlags & ScRefFlags::VALID )
     {
         ScComplexRefData aRef;

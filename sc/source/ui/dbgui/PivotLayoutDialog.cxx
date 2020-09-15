@@ -407,7 +407,7 @@ void ScPivotLayoutDialog::UpdateSourceRange()
     {
         OUString aSourceString = mxSourceEdit->GetText();
         ScRange aSourceRange;
-        ScRefFlags nResult = aSourceRange.Parse(aSourceString, &mrDocument, maAddressDetails);
+        ScRefFlags nResult = aSourceRange.Parse(aSourceString, mrDocument, maAddressDetails);
 
         bool bIsValid = (nResult & ScRefFlags::VALID) == ScRefFlags::VALID; // aSourceString is valid
 

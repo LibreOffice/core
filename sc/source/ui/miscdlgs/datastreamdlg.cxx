@@ -106,7 +106,7 @@ ScRange DataStreamDlg::GetStartRange()
     OUString aStr = m_xEdRange->get_text();
     ScDocument& rDoc = m_pDocShell->GetDocument();
     ScRange aRange;
-    ScRefFlags nRes = aRange.Parse(aStr, &rDoc, rDoc.GetAddressConvention());
+    ScRefFlags nRes = aRange.Parse(aStr, rDoc, rDoc.GetAddressConvention());
     if ( ((nRes & ScRefFlags::VALID) == ScRefFlags::ZERO) || !aRange.IsValid())
     {
         // Invalid range.
