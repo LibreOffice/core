@@ -1258,6 +1258,9 @@ void SwAnnotationWin::ExecuteCommand(sal_uInt16 nSlot)
             //Delete(); // do not kill the parent of our open popup menu
             mnEventId = Application::PostUserEvent( LINK( this, SwAnnotationWin, DeleteHdl), nullptr, true );
             break;
+        case FN_DELETE_COMMENT_THREAD:
+            DeleteThread();
+            break;
         case FN_RESOLVE_NOTE:
             ToggleResolved();
             DoResize();
