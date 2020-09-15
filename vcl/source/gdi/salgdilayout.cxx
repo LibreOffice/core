@@ -954,7 +954,7 @@ bool SalGraphics::CreateTTFfontSubset(vcl::AbstractTrueTypeFont& rTTF, const OSt
     //   Also the much more complex PrintFontManager variant has this limit.
     //   Also the very first implementation has the limit in
     //   commit 8789ed701e98031f2a1657ea0dfd6f7a0b050992
-    // - Why doesn't the PrintFontManager care about the fake glpyh? It
+    // - Why doesn't the PrintFontManager care about the fake glyph? It
     //   is used on all unx platforms to create the subset font.
     // - Should the SAL_WARN actually be asserts, like on MacOS?
     if (nOrigGlyphCount > 256)
