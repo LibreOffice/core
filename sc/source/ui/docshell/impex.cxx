@@ -1943,7 +1943,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                              * R1C1 is what Excel writes in SYLK, or even
                              * better GRAM_ENGLISH_XL_R1C1. */
                             const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_PODF_A1;
-                            ScCompiler aComp( &rDoc, aPos, eGrammar);
+                            ScCompiler aComp(rDoc, aPos, eGrammar);
                             std::unique_ptr<ScTokenArray> xCode(aComp.CompileString(aText)); // ctor/InsertMatrixFormula did copy TokenArray
                             rDoc.CheckLinkFormulaNeedingCheck(*xCode);
                             if ( ch == 'M' )

@@ -363,7 +363,7 @@ bool ScFormulaDlg::calculateValue( const OUString& rStrExp, OUString& rStrResult
 std::shared_ptr<formula::FormulaCompiler> ScFormulaDlg::getCompiler() const
 {
     if (!m_xCompiler)
-        m_xCompiler = std::make_shared<ScCompiler>( m_pDoc, m_CursorPos, m_pDoc->GetGrammar());
+        m_xCompiler = std::make_shared<ScCompiler>(*m_pDoc, m_CursorPos, m_pDoc->GetGrammar());
     return m_xCompiler;
 }
 
@@ -373,7 +373,7 @@ std::unique_ptr<formula::FormulaCompiler> ScFormulaDlg::createCompiler( formula:
     ScTokenArray* pArr = dynamic_cast<ScTokenArray*>(&rArray);
     assert(pArr);   // violation of contract and not created using convertToTokenArray()?
     if (pArr)
-        pCompiler = new ScCompiler( m_pDoc, m_CursorPos, *pArr, m_pDoc->GetGrammar());
+        pCompiler = new ScCompiler(*m_pDoc, m_CursorPos, *pArr, m_pDoc->GetGrammar());
     return std::unique_ptr<formula::FormulaCompiler>(pCompiler);
 }
 
@@ -464,7 +464,7 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument& rRefDoc )
             aArray.AddSingleReference(aRefData.Ref1);
         else
             aArray.AddDoubleReference(aRefData);
-        ScCompiler aComp(m_pDoc, m_CursorPos, aArray, m_pDoc->GetGrammar());
+        ScCompiler aComp(*m_pDoc, m_CursorPos, aArray, m_pDoc->GetGrammar());
         OUStringBuffer aBuf;
         aComp.CreateStringFromTokenArray(aBuf);
         aRefStr = aBuf.makeStringAndClear();

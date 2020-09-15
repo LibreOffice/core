@@ -135,7 +135,7 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScFormulaParserObj::parseFormula(
 
         ScAddress aRefPos( ScAddress::UNINITIALIZED );
         ScUnoConversion::FillScAddress( aRefPos, rReferencePos );
-        ScCompiler aCompiler( &rDoc, aRefPos, rDoc.GetGrammar());
+        ScCompiler aCompiler( rDoc, aRefPos, rDoc.GetGrammar());
         SetCompilerFlags( aCompiler );
 
         std::unique_ptr<ScTokenArray> pCode = aCompiler.CompileString( aFormula );
@@ -158,7 +158,7 @@ OUString SAL_CALL ScFormulaParserObj::printFormula(
         (void)ScTokenConversion::ConvertToTokenArray( rDoc, aCode, aTokens );
         ScAddress aRefPos( ScAddress::UNINITIALIZED );
         ScUnoConversion::FillScAddress( aRefPos, rReferencePos );
-        ScCompiler aCompiler( &rDoc, aRefPos, aCode, rDoc.GetGrammar());
+        ScCompiler aCompiler(rDoc, aRefPos, aCode, rDoc.GetGrammar());
         SetCompilerFlags( aCompiler );
 
         OUStringBuffer aBuffer;
@@ -198,7 +198,7 @@ void SAL_CALL ScFormulaParserObj::setPropertyValue(
         if (mxOpCodeMap && mbEnglish != bOldEnglish)
         {
             ScDocument& rDoc = mpDocShell->GetDocument();
-            ScCompiler aCompiler( &rDoc, ScAddress(), rDoc.GetGrammar());
+            ScCompiler aCompiler( rDoc, ScAddress(), rDoc.GetGrammar());
             mxOpCodeMap = formula::FormulaCompiler::CreateOpCodeMap( maOpCodeMapping, mbEnglish);
         }
 
@@ -217,7 +217,7 @@ void SAL_CALL ScFormulaParserObj::setPropertyValue(
             throw lang::IllegalArgumentException();
 
         ScDocument& rDoc = mpDocShell->GetDocument();
-        ScCompiler aCompiler( &rDoc, ScAddress(), rDoc.GetGrammar());
+        ScCompiler aCompiler(rDoc, ScAddress(), rDoc.GetGrammar());
         mxOpCodeMap = formula::FormulaCompiler::CreateOpCodeMap( maOpCodeMapping, mbEnglish);
 
     }

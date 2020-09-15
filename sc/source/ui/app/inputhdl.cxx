@@ -107,7 +107,7 @@ const sal_Unicode cParenthesesReplacement = 0x0001;
 
 sal_Unicode lcl_getSheetSeparator(ScDocument* pDoc)
 {
-    ScCompiler aComp(pDoc, ScAddress(), pDoc->GetGrammar());
+    ScCompiler aComp(*pDoc, ScAddress(), pDoc->GetGrammar());
     return aComp.GetNativeAddressSymbol(ScCompiler::Convention::SHEET_SEPARATOR);
 }
 

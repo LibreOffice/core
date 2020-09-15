@@ -266,7 +266,7 @@ bool ScNameDlg::IsNameValid()
 
 bool ScNameDlg::IsFormulaValid()
 {
-    ScCompiler aComp( &mrDoc, maCursorPos, mrDoc.GetGrammar());
+    ScCompiler aComp(mrDoc, maCursorPos, mrDoc.GetGrammar());
     std::unique_ptr<ScTokenArray> pCode = aComp.CompileString(m_xEdAssign->GetText());
     if (pCode->GetCodeError() != FormulaError::NONE)
     {
