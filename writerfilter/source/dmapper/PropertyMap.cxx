@@ -477,6 +477,7 @@ uno::Reference< beans::XPropertySet > SectionPropertyMap::GetPageStyle( DomainMa
         {
             if ( m_sFirstPageStyleName.isEmpty() && xPageStyles.is() )
             {
+                assert( !rDM_Impl.IsInFootOrEndnote() && "Don't create useless page styles" );
                 m_sFirstPageStyleName = rDM_Impl.GetUnusedPageStyleName();
                 m_aFirstPageStyle.set( xTextFactory->createInstance( "com.sun.star.style.PageStyle" ),
                     uno::UNO_QUERY );
@@ -503,6 +504,7 @@ uno::Reference< beans::XPropertySet > SectionPropertyMap::GetPageStyle( DomainMa
         {
             if ( m_sFollowPageStyleName.isEmpty() && xPageStyles.is() )
             {
+                assert( !rDM_Impl.IsInFootOrEndnote() && "Don't create useless page styles" );
                 m_sFollowPageStyleName = rDM_Impl.GetUnusedPageStyleName();
                 m_aFollowPageStyle.set( xTextFactory->createInstance( "com.sun.star.style.PageStyle" ),
                     uno::UNO_QUERY );
@@ -1646,9 +1648,14 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         ApplyProtectionProperties( xSection, rDM_Impl );
 
         //get the properties and create appropriate page styles
-        uno::Reference< beans::XPropertySet > xFollowPageStyle = GetPageStyle( rDM_Impl, false );
+        uno::Reference< beans::XPropertySet > xFollowPageStyle;
+        //This part certainly is not needed for footnotes, so don't create unused page styles.
+        if ( !rDM_Impl.IsInFootOrEndnote() )
+        {
+            xFollowPageStyle.set( GetPageStyle( rDM_Impl, false ) );
 
-        HandleMarginsHeaderFooter(/*bFirstPage=*/false, rDM_Impl );
+            HandleMarginsHeaderFooter(/*bFirstPage=*/false, rDM_Impl );
+        }
 
         if ( rDM_Impl.GetSettingsTable()->GetMirrorMarginSettings() )
         {
@@ -1662,7 +1669,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                 xSection = rDM_Impl.appendTextSectionAfter( m_xStartingRange );
             if ( xSection.is() )
                 ApplyColumnProperties( xSection, rDM_Impl );
-            else
+            else if ( xFollowPageStyle.is() )
                 xColumns = ApplyColumnProperties( xFollowPageStyle, rDM_Impl );
         }
 
@@ -1757,7 +1764,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         Insert( PROP_GRID_BASE_WIDTH, uno::makeAny( nCharWidth ) );
         Insert( PROP_GRID_RUBY_HEIGHT, uno::makeAny( sal_Int32( 0 ) ) );
 
-        if ( rDM_Impl.IsNewDoc() )
+        if ( rDM_Impl.IsNewDoc() && xFollowPageStyle.is() )
             ApplyProperties_( xFollowPageStyle );
 
         //todo: creating a "First Page" style depends on HasTitlePage and _fFacingPage_

@@ -575,6 +575,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123262_textFootnoteSeparators, "tdf123262_textFo
     // Ensure that paragraph markers are not lost.
     xFootnoteText.set(xFootnotes->getByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of paragraphs in second footnote", 2, getParagraphs(xFootnoteText) );
+
+
+    // tdf#136706: Two useless page styles were created for each of the four footnotes.
+    CPPUNIT_ASSERT( !getStyles("PageStyles")->hasByName("Converted8") );
+    CPPUNIT_ASSERT( !getStyles("PageStyles")->hasByName("Converted1") );
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo79668,"fdo79668.docx")
