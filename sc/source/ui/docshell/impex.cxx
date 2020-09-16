@@ -186,7 +186,7 @@ ScImportExport::ScImportExport( ScDocument& r, const OUString& rPos )
     if (aRange.Parse(aPos, rDoc, eConv) & ScRefFlags::VALID)
         bSingle = false;
     // Cell?
-    else if (aRange.aStart.Parse(aPos, &rDoc, eConv) & ScRefFlags::VALID)
+    else if (aRange.aStart.Parse(aPos, rDoc, eConv) & ScRefFlags::VALID)
         aRange.aEnd = aRange.aStart;
     else
         bAll = true;

@@ -746,7 +746,7 @@ DeactivateRC ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSetP )
             thePos.SetTab( pViewData->GetTabNo() );
         }
 
-        ScRefFlags nResult = thePos.Parse( thePosStr, pDoc, pDoc->GetAddressConvention() );
+        ScRefFlags nResult = thePos.Parse( thePosStr, *pDoc, pDoc->GetAddressConvention() );
 
         bPosInputOk = (nResult & ScRefFlags::VALID) == ScRefFlags::VALID;
 
@@ -848,7 +848,7 @@ IMPL_LINK_NOARG(ScTabPageSortOptions, SortDirHdl, weld::ToggleButton&, void)
 void ScTabPageSortOptions::EdOutPosModHdl()
 {
     OUString  theCurPosStr = m_xEdOutPos->get_text();
-    ScRefFlags  nResult = ScAddress().Parse( theCurPosStr, pDoc, pDoc->GetAddressConvention() );
+    ScRefFlags  nResult = ScAddress().Parse( theCurPosStr, *pDoc, pDoc->GetAddressConvention() );
 
     if ( (nResult & ScRefFlags::VALID) != ScRefFlags::VALID )
         return;

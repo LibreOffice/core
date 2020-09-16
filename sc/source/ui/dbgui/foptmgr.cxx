@@ -192,7 +192,7 @@ bool ScFilterOptionsMgr::VerifyPosStr( const OUString& rPosStr ) const
     if ( -1 != nColonPos )
         aPosStr = aPosStr.copy( 0, nColonPos );
 
-    ScRefFlags nResult = ScAddress().Parse( aPosStr, pDoc, pDoc->GetAddressConvention() );
+    ScRefFlags nResult = ScAddress().Parse( aPosStr, *pDoc, pDoc->GetAddressConvention() );
 
     return (nResult & ScRefFlags::VALID) == ScRefFlags::VALID;
 }
@@ -219,7 +219,7 @@ IMPL_LINK( ScFilterOptionsMgr, EdAreaModifyHdl, formula::RefEdit&, rEd, void )
         return;
 
     OUString  theCurPosStr = rEd.GetText();
-    ScRefFlags  nResult = ScAddress().Parse( theCurPosStr, pDoc, pDoc->GetAddressConvention() );
+    ScRefFlags  nResult = ScAddress().Parse( theCurPosStr, *pDoc, pDoc->GetAddressConvention() );
 
     if ( (nResult & ScRefFlags::VALID) == ScRefFlags::VALID)
     {

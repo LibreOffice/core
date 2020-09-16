@@ -286,28 +286,28 @@ void Test::testFormulaParseReference()
 
     ScAddress aPos;
     ScAddress::ExternalInfo aExtInfo;
-    ScRefFlags nRes = aPos.Parse("'90''s Music'.D10", m_pDoc, formula::FormulaGrammar::CONV_OOO, &aExtInfo);
+    ScRefFlags nRes = aPos.Parse("'90''s Music'.D10", *m_pDoc, formula::FormulaGrammar::CONV_OOO, &aExtInfo);
     CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScRefFlags::VALID));
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(1), aPos.Tab());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(3), aPos.Col());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(9), aPos.Row());
     CPPUNIT_ASSERT_MESSAGE("This is not an external address.", !aExtInfo.mbExternal);
 
-    nRes = aPos.Parse("'90''s and 70''s'.C100", m_pDoc, formula::FormulaGrammar::CONV_OOO, &aExtInfo);
+    nRes = aPos.Parse("'90''s and 70''s'.C100", *m_pDoc, formula::FormulaGrammar::CONV_OOO, &aExtInfo);
     CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScRefFlags::VALID));
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(2), aPos.Tab());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(2), aPos.Col());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(99), aPos.Row());
     CPPUNIT_ASSERT_MESSAGE("This is not an external address.", !aExtInfo.mbExternal);
 
-    nRes = aPos.Parse("'All Others'.B3", m_pDoc, formula::FormulaGrammar::CONV_OOO, &aExtInfo);
+    nRes = aPos.Parse("'All Others'.B3", *m_pDoc, formula::FormulaGrammar::CONV_OOO, &aExtInfo);
     CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScRefFlags::VALID));
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(3), aPos.Tab());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(1), aPos.Col());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), aPos.Row());
     CPPUNIT_ASSERT_MESSAGE("This is not an external address.", !aExtInfo.mbExternal);
 
-    nRes = aPos.Parse("NoQuote.E13", m_pDoc, formula::FormulaGrammar::CONV_OOO, &aExtInfo);
+    nRes = aPos.Parse("NoQuote.E13", *m_pDoc, formula::FormulaGrammar::CONV_OOO, &aExtInfo);
     CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScRefFlags::VALID));
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(4), aPos.Tab());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(4), aPos.Col());

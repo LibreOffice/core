@@ -40,7 +40,7 @@ void ScAddressTest::testAddressParsing()
 {
     ScAddress aAddr;
     ScDocument& rDoc = m_xDocShRef->GetDocument();
-    ScRefFlags nRes = aAddr.Parse("1", &rDoc, formula::FormulaGrammar::CONV_OOO);
+    ScRefFlags nRes = aAddr.Parse("1", rDoc, formula::FormulaGrammar::CONV_OOO);
     CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
 }
 

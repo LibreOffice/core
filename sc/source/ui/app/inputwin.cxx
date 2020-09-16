@@ -2328,7 +2328,7 @@ static ScNameInputType lcl_GetInputType( const OUString& rText )
             eRet = SC_MANAGE_NAMES;
         else if ( aRange.Parse( rText, rDoc, eConv ) & ScRefFlags::VALID )
             eRet = SC_NAME_INPUT_RANGE;
-        else if ( aAddress.Parse( rText, &rDoc, eConv ) & ScRefFlags::VALID )
+        else if ( aAddress.Parse( rText, rDoc, eConv ) & ScRefFlags::VALID )
             eRet = SC_NAME_INPUT_CELL;
         else if ( ScRangeUtil::MakeRangeFromName( rText, rDoc, nTab, aRange, RUTL_NAMES, eConv ) )
             eRet = SC_NAME_INPUT_NAMEDRANGE;

@@ -324,7 +324,7 @@ public:
                 resulting reference is fully valid or not.
      */
     SC_DLLPUBLIC ScRefFlags Parse(
-                    const OUString&, const ScDocument* = nullptr,
+                    const OUString&, const ScDocument&,
                     const Details& rDetails = detailsOOOa1,
                     ExternalInfo* pExtInfo = nullptr,
                     const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = nullptr,

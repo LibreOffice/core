@@ -2284,7 +2284,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             {
                 ScAddress aTempAddr;
                 ScAddress::ExternalInfo aExtInfo;
-                ScRefFlags nRes = aTempAddr.Parse(aUrl, &rDoc, rDoc.GetAddressConvention(), &aExtInfo);
+                ScRefFlags nRes = aTempAddr.Parse(aUrl, rDoc, rDoc.GetAddressConvention(), &aExtInfo);
                 if (!(nRes & ScRefFlags::VALID))
                 {
                     // Not a reference string. Pass it through unmodified.

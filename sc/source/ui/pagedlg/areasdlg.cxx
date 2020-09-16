@@ -335,7 +335,7 @@ bool ScPrintAreasDlg::Impl_CheckRefStrings()
             ScRefFlags nResult = aRange.Parse( aOne, *pDoc, eConv );
             if ((nResult & nValidRange) != nValidRange)
             {
-                ScRefFlags nAddrResult = aAddr.Parse( aOne, pDoc, eConv );
+                ScRefFlags nAddrResult = aAddr.Parse( aOne, *pDoc, eConv );
                 if ((nAddrResult & nValidAddr) != nValidAddr)
                 {
                     bPrintAreaOk = false;
