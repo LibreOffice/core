@@ -477,7 +477,7 @@ static bool lcl_parseExternalName(
         OUString& rFile,
         OUString& rName,
         const sal_Unicode cSep,
-        const ScDocument* pDoc,
+        const ScDocument& rDoc,
         const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks )
 {
     /* TODO: future versions will have to support sheet-local names too, thus
@@ -496,7 +496,7 @@ static bool lcl_parseExternalName(
         ScRange aRange;
         OUString aStartTabName, aEndTabName;
         ScRefFlags nFlags = ScRefFlags::ZERO;
-        p = aRange.Parse_XL_Header( p, pDoc, aTmpFile, aStartTabName,
+        p = aRange.Parse_XL_Header( p, rDoc, aTmpFile, aStartTabName,
                 aEndTabName, nFlags, true, pExternalLinks );
         if (!p || p == pStart)
             return false;
@@ -901,10 +901,10 @@ struct ConventionOOO_A1 : public Convention_A1
     }
 
     virtual bool parseExternalName( const OUString& rSymbol, OUString& rFile, OUString& rName,
-            const ScDocument* pDoc,
+            const ScDocument& rDoc,
             const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks ) const override
     {
-        return lcl_parseExternalName(rSymbol, rFile, rName, '#', pDoc, pExternalLinks);
+        return lcl_parseExternalName(rSymbol, rFile, rName, '#', rDoc, pExternalLinks);
     }
 
     virtual OUString makeExternalNameStr( sal_uInt16 /*nFileId*/, const OUString& rFile,
@@ -1148,10 +1148,10 @@ struct ConventionXL
     }
 
     static bool parseExternalName( const OUString& rSymbol, OUString& rFile, OUString& rName,
-            const ScDocument* pDoc,
+            const ScDocument& rDoc,
             const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks )
     {
-        return lcl_parseExternalName( rSymbol, rFile, rName, '!', pDoc, pExternalLinks);
+        return lcl_parseExternalName( rSymbol, rFile, rName, '!', rDoc, pExternalLinks);
     }
 
     static OUString makeExternalNameStr( const OUString& rFile, const OUString& rName )
@@ -1367,10 +1367,10 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
     }
 
     virtual bool parseExternalName( const OUString& rSymbol, OUString& rFile, OUString& rName,
-            const ScDocument* pDoc,
+            const ScDocument& rDoc,
             const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks ) const override
     {
-        return ConventionXL::parseExternalName( rSymbol, rFile, rName, pDoc, pExternalLinks);
+        return ConventionXL::parseExternalName( rSymbol, rFile, rName, rDoc, pExternalLinks);
     }
 
     virtual OUString makeExternalNameStr( sal_uInt16 /*nFileId*/, const OUString& rFile,
@@ -1712,10 +1712,10 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
     }
 
     virtual bool parseExternalName( const OUString& rSymbol, OUString& rFile, OUString& rName,
-            const ScDocument* pDoc,
+            const ScDocument& rDoc,
             const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks ) const override
     {
-        return ConventionXL::parseExternalName( rSymbol, rFile, rName, pDoc, pExternalLinks);
+        return ConventionXL::parseExternalName( rSymbol, rFile, rName, rDoc, pExternalLinks);
     }
 
     virtual OUString makeExternalNameStr( sal_uInt16 /*nFileId*/, const OUString& rFile,
@@ -3519,7 +3519,7 @@ bool ScCompiler::IsExternalNamedRange( const OUString& rSymbol, bool& rbInvalidE
         return false;
 
     OUString aFile, aName;
-    if (!pConv->parseExternalName( rSymbol, aFile, aName, &rDoc, &maExternalLinks))
+    if (!pConv->parseExternalName( rSymbol, aFile, aName, rDoc, &maExternalLinks))
         return false;
 
     if (aFile.getLength() > MAXSTRLEN || aName.getLength() > MAXSTRLEN)
