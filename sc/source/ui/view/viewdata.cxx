@@ -813,11 +813,6 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh ) :
                      static_cast<long>( ScGlobal::nStdRowHeight * PIXEL_PER_TWIPS * OLE_STD_CELLS_Y ) );
     maTabData.emplace_back( new ScViewDataTable(nullptr) );
     pThisTab = maTabData[nTabNo].get();
-    for (sal_uInt16 j=0; j<4; j++)
-    {
-        pEditView[j] = nullptr;
-        bEditActive[j] = false;
-    }
 
     nEditEndCol = nEditStartCol = nEditCol = 0;
     nEditEndRow = nEditRow = 0;
