@@ -118,13 +118,13 @@ OUString ScCellFormat::GetString(
 }
 
 void ScCellFormat::GetInputString(
-    const ScRefCellValue& rCell, sal_uInt32 nFormat, OUString& rString, SvNumberFormatter& rFormatter, const ScDocument* pDoc )
+    const ScRefCellValue& rCell, sal_uInt32 nFormat, OUString& rString, SvNumberFormatter& rFormatter, const ScDocument& rDoc )
 {
     switch (rCell.meType)
     {
         case CELLTYPE_STRING:
         case CELLTYPE_EDIT:
-            rString = rCell.getString(pDoc);
+            rString = rCell.getString(&rDoc);
         break;
         case CELLTYPE_VALUE:
             rFormatter.GetInputLineString(rCell.mfValue, nFormat, rString );

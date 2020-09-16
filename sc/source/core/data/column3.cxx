@@ -2420,7 +2420,7 @@ class FilterEntriesHandler
         SvNumberFormatter* pFormatter = mrColumn.GetDoc().GetFormatTable();
         OUString aStr;
         sal_uLong nFormat = mrColumn.GetNumberFormat(mrColumn.GetDoc().GetNonThreadedContext(), nRow);
-        ScCellFormat::GetInputString(rCell, nFormat, aStr, *pFormatter, &mrColumn.GetDoc());
+        ScCellFormat::GetInputString(rCell, nFormat, aStr, *pFormatter, mrColumn.GetDoc());
 
         if (rCell.hasString())
         {
@@ -2938,7 +2938,7 @@ double* ScColumn::GetValueCell( SCROW nRow )
 void ScColumn::GetInputString( const ScRefCellValue& aCell, SCROW nRow, OUString& rString ) const
 {
     sal_uLong nFormat = GetNumberFormat(GetDoc().GetNonThreadedContext(), nRow);
-    ScCellFormat::GetInputString(aCell, nFormat, rString, *(GetDoc().GetFormatTable()), &GetDoc());
+    ScCellFormat::GetInputString(aCell, nFormat, rString, *(GetDoc().GetFormatTable()), GetDoc());
 }
 
 double ScColumn::GetValue( SCROW nRow ) const
@@ -3256,7 +3256,7 @@ class MaxNumStringLenHandler
         if (nFormat % SV_COUNTRY_LANGUAGE_OFFSET)
         {
             aSep = mpFormatter->GetFormatDecimalSep(nFormat);
-            ScCellFormat::GetInputString(rCell, nFormat, aString, *mpFormatter, &mrColumn.GetDoc());
+            ScCellFormat::GetInputString(rCell, nFormat, aString, *mpFormatter, mrColumn.GetDoc());
             const SvNumberformat* pEntry = mpFormatter->GetEntry(nFormat);
             if (pEntry)
             {

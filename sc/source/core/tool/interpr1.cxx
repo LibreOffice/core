@@ -5053,7 +5053,7 @@ void ScInterpreter::ScMatch()
             rParam.bByRow = false;
             rParam.nRow2 = nRow1;
             rEntry.nField = nCol1;
-            ScQueryCellIterator aCellIter(&mrDoc, mrContext, nTab1, rParam, false);
+            ScQueryCellIterator aCellIter(mrDoc, mrContext, nTab1, rParam, false);
             // Advance Entry.nField in Iterator if column changed
             aCellIter.SetAdvanceQueryParamEntryField( true );
             if (fTyp == 0.0)
@@ -5551,7 +5551,7 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
             }
             else
             {
-                ScQueryCellIterator aCellIter(&mrDoc, mrContext, nTab1, rParam, false);
+                ScQueryCellIterator aCellIter(mrDoc, mrContext, nTab1, rParam, false);
                 // Increment Entry.nField in iterator when switching to next column.
                 aCellIter.SetAdvanceQueryParamEntryField( true );
                 if ( aCellIter.GetFirst() )
@@ -6170,7 +6170,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
             }
             else
             {
-                ScQueryCellIterator aCellIter(&mrDoc, mrContext, nTab1, rParam, false);
+                ScQueryCellIterator aCellIter(mrDoc, mrContext, nTab1, rParam, false);
                 // Increment Entry.nField in iterator when switching to next column.
                 aCellIter.SetAdvanceQueryParamEntryField( true );
                 if ( aCellIter.GetFirst() )
@@ -7081,7 +7081,7 @@ void ScInterpreter::ScLookup()
     if (rItem.meType == ScQueryEntry::ByString)
         aParam.eSearchType = DetectSearchType(rItem.maString.getString(), mrDoc);
 
-    ScQueryCellIterator aCellIter(&mrDoc, mrContext, nTab1, aParam, false);
+    ScQueryCellIterator aCellIter(mrDoc, mrContext, nTab1, aParam, false);
     SCCOL nC;
     SCROW nR;
     // Advance Entry.nField in iterator upon switching columns if
@@ -7428,7 +7428,7 @@ void ScInterpreter::CalculateLookup(bool bHLookup)
             rEntry.eOp = SC_LESS_EQUAL;
         if ( bHLookup )
         {
-            ScQueryCellIterator aCellIter(&mrDoc, mrContext, nTab1, aParam, false);
+            ScQueryCellIterator aCellIter(mrDoc, mrContext, nTab1, aParam, false);
             // advance Entry.nField in Iterator upon switching columns
             aCellIter.SetAdvanceQueryParamEntryField( true );
             if ( bSorted )
@@ -7908,7 +7908,7 @@ void ScInterpreter::ScDBCount()
             // so the source range has to be restricted, like before the introduction
             // of ScDBQueryParamBase.
             p->nCol1 = p->nCol2 = p->mnField;
-            ScQueryCellIterator aCellIter( &mrDoc, mrContext, nTab, *p, true);
+            ScQueryCellIterator aCellIter(mrDoc, mrContext, nTab, *p, true);
             if ( aCellIter.GetFirst() )
             {
                 do
@@ -9926,11 +9926,11 @@ utl::SearchParam::SearchType ScInterpreter::DetectSearchType( const OUString& rS
     return utl::SearchParam::SearchType::Normal;
 }
 
-static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument * pDoc, const ScInterpreterContext& rContext,
+static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument& rDoc, const ScInterpreterContext& rContext,
         const ScQueryParam & rParam, const ScQueryEntry & rEntry )
 {
     bool bFound = false;
-    ScQueryCellIterator aCellIter( pDoc, rContext, rParam.nTab, rParam, false);
+    ScQueryCellIterator aCellIter( rDoc, rContext, rParam.nTab, rParam, false);
     if (rEntry.eOp != SC_EQUAL)
     {
         // range lookup <= or >=
@@ -10005,7 +10005,7 @@ bool ScInterpreter::LookupQueryWithCache( ScAddress & o_rResultPos,
      * direct lookups here. We could even further attribute volatility per
      * parameter so it would affect only the lookup range parameter. */
     if (!bColumnsMatch || GetVolatileType() != NOT_VOLATILE)
-        bFound = lcl_LookupQuery( o_rResultPos, &mrDoc, mrContext, rParam, rEntry);
+        bFound = lcl_LookupQuery( o_rResultPos, mrDoc, mrContext, rParam, rEntry);
     else
     {
         ScRange aLookupRange( rParam.nCol1, rParam.nRow1, rParam.nTab,
@@ -10036,7 +10036,7 @@ bool ScInterpreter::LookupQueryWithCache( ScAddress & o_rResultPos,
         {
             case ScLookupCache::NOT_CACHED :
             case ScLookupCache::CRITERIA_DIFFERENT :
-                bFound = lcl_LookupQuery( o_rResultPos, &mrDoc, mrContext, rParam, rEntry);
+                bFound = lcl_LookupQuery( o_rResultPos, mrDoc, mrContext, rParam, rEntry);
                 if (eCacheResult == ScLookupCache::NOT_CACHED)
                     rCache.insert( o_rResultPos, aCriteria, aPos, bFound);
                 break;

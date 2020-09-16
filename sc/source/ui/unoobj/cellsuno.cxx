@@ -1366,7 +1366,7 @@ static OUString lcl_GetInputString( ScDocument& rDoc, const ScAddress& rPos, boo
         }
     }
     else
-        ScCellFormat::GetInputString(aCell, nNumFmt, aVal, *pFormatter, &rDoc);
+        ScCellFormat::GetInputString(aCell, nNumFmt, aVal, *pFormatter, rDoc);
 
     //  if applicable, prepend ' like in ScTabViewShell::UpdateInputHandler
     if ( eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT )

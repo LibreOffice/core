@@ -2095,7 +2095,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                         }
                         else
                         {
-                            ScCellFormat::GetInputString(*pCell, nFormat, aString, rFormatter, &m_aDocument);
+                            ScCellFormat::GetInputString(*pCell, nFormat, aString, rFormatter, m_aDocument);
                             bString = bForceQuotes = !bSaveNumberAsSuch;
                         }
                     }
@@ -2145,7 +2145,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                     }
                     else
                     {
-                        ScCellFormat::GetInputString(*pCell, nFormat, aString, rFormatter, &m_aDocument);
+                        ScCellFormat::GetInputString(*pCell, nFormat, aString, rFormatter, m_aDocument);
                         bString = bForceQuotes = !bSaveNumberAsSuch;
                     }
                 }

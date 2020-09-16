@@ -373,7 +373,7 @@ void ScViewFunc::DoThesaurus()
     if (aOldText.meType == CELLTYPE_EDIT)
         pThesaurusEngine->SetTextCurrentDefaults(*aOldText.mpEditText);
     else
-        pThesaurusEngine->SetTextCurrentDefaults(aOldText.getString(&rDoc));
+        pThesaurusEngine->SetTextCurrentDefaults(aOldText.getString(rDoc));
 
     pEditView = GetViewData().GetEditView(GetViewData().GetActivePart());
     if (pEditSel)

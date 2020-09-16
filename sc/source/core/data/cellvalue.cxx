@@ -491,9 +491,9 @@ void ScCellValue::release( ScColumn& rColumn, SCROW nRow, sc::StartListeningType
     mfValue = 0.0;
 }
 
-OUString ScCellValue::getString( const ScDocument* pDoc ) const
+OUString ScCellValue::getString( const ScDocument& rDoc ) const
 {
-    return getStringImpl(*this, pDoc);
+    return getStringImpl(*this, &rDoc);
 }
 
 bool ScCellValue::isEmpty() const

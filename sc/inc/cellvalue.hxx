@@ -82,7 +82,7 @@ struct SC_DLLPUBLIC ScCellValue
 
     void release( ScColumn& rColumn, SCROW nRow, sc::StartListeningType eListenType = sc::SingleCellListening );
 
-    OUString getString( const ScDocument* pDoc ) const;
+    OUString getString( const ScDocument& rDoc ) const;
 
     bool isEmpty() const;
 
