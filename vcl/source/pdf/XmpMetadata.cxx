@@ -143,6 +143,21 @@ void XmpMetadata::write()
             }
             aXmlWriter.endElement();
         }
+
+        aXmlWriter.startElement("rdf:Description");
+        aXmlWriter.attribute("rdf:about", OString(""));
+        aXmlWriter.attribute("xmlns:xmp", OString("http://ns.adobe.com/xap/1.0/"));
+        if (!m_sCreatorTool.isEmpty())
+        {
+            aXmlWriter.startElement("xmp:CreatorTool");
+            aXmlWriter.content(m_sCreatorTool);
+            aXmlWriter.endElement();
+        }
+        aXmlWriter.startElement("xmp:CreateDate");
+        aXmlWriter.content(m_sCreateDate);
+        aXmlWriter.endElement();
+        aXmlWriter.endElement();
+
         aXmlWriter.endElement();
         aXmlWriter.endElement();
         aXmlWriter.endDocument();
