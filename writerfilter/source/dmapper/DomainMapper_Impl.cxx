@@ -1155,6 +1155,11 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
 
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_WIDTH_TYPE), bAutoWidth ?  text::SizeType::MIN : text::SizeType::FIX));
 
+            if (const std::optional<sal_Int16> nDirection = PopFrameDirection())
+            {
+                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_FRM_DIRECTION), *nDirection));
+            }
+
             sal_Int16 nHoriOrient = sal_Int16(
                 rAppendContext.pLastParagraphProperties->GetxAlign() >= 0 ?
                     rAppendContext.pLastParagraphProperties->GetxAlign() :
@@ -1537,7 +1542,6 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
     // tell TableManager to reset the bottom margin if it determines that this is the cell's last paragraph.
     if ( hasTableManager() && getTableManager().isInCell() )
         getTableManager().setCellLastParaAfterAutospacing( bApplyAutospacing );
-
 
     if (xTextAppend.is() && pParaContext && hasTableManager() && !getTableManager().isIgnore())
     {

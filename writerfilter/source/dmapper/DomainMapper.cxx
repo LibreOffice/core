@@ -1501,6 +1501,35 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         }
         break;
     case NS_ooxml::LN_CT_PPrBase_textDirection:
+        {
+            switch (nIntValue)
+            {
+                case NS_ooxml::LN_Value_ST_TextDirection_tbRl:
+                {
+                    m_pImpl->SetFrameDirection(text::WritingMode2::TB_RL);
+                    break;
+                }
+                case NS_ooxml::LN_Value_ST_TextDirection_btLr:
+                {
+                    m_pImpl->SetFrameDirection(text::WritingMode2::BT_LR);
+                    break;
+                }
+                case NS_ooxml::LN_Value_ST_TextDirection_lrTbV:
+                {
+                    m_pImpl->SetFrameDirection(text::WritingMode2::LR_TB);
+                    break;
+                }
+                case NS_ooxml::LN_Value_ST_TextDirection_tbRlV:
+                {
+                    m_pImpl->SetFrameDirection(text::WritingMode2::TB_RL);
+                    break;
+                }
+                case NS_ooxml::LN_Value_ST_TextDirection_lrTb:
+                case NS_ooxml::LN_Value_ST_TextDirection_tbLrV:
+                default:
+                    SAL_WARN("writerfilter", "DomainMapper::sprmWithProps: unhandled textDirection");
+            }
+        }
         break;
     case NS_ooxml::LN_CT_PPrBase_outlineLvl:
         {
@@ -2088,6 +2117,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         {
             //TODO: What about style sheet import of frame properties
         }
+        m_pImpl->NewFrameDirection();
         resolveSprmProps(*this, rSprm);
     }
     break;
