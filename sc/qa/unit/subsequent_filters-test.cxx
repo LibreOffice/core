@@ -279,6 +279,7 @@ public:
     void testPreviewMissingObjLink();
     void testShapeRotationImport();
     void testShapeDisplacementOnRotationImport();
+    void testTextBoxBodyUpright();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -448,6 +449,7 @@ public:
     CPPUNIT_TEST(testPreviewMissingObjLink);
     CPPUNIT_TEST(testShapeRotationImport);
     CPPUNIT_TEST(testShapeDisplacementOnRotationImport);
+    CPPUNIT_TEST(testTextBoxBodyUpright);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -4908,6 +4910,49 @@ void ScFiltersTest::testShapeDisplacementOnRotationImport()
     awt::Rectangle aRectangle = aRectProp.get<awt::Rectangle>();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aRectangle.X);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aRectangle.Y);
+}
+
+void ScFiltersTest::testTextBoxBodyUpright()
+{
+    // tdf#106197 We should import the "upright" attribute of txBody.
+    ScDocShellRef xDocSh = loadDoc("tdf106197_import_upright.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load testTextBoxBodyUpright.xlsx", xDocSh.is());
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocSh->GetModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY_THROW);
+
+    // Check that we imported "Upright".
+    bool isUpright = false;
+    if (xShapeProperties->getPropertySetInfo()->hasPropertyByName("InteropGrabBag"))
+    {
+        uno::Sequence<beans::PropertyValue> aGrabBag;
+        xShapeProperties->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+        for (auto& aProp : aGrabBag)
+        {
+            if (aProp.Name == "Upright")
+            {
+                aProp.Value >>= isUpright;
+                break;
+            }
+        }
+    }
+    CPPUNIT_ASSERT_EQUAL(true, isUpright);
+
+    // Check the new textRotateAngle.
+    sal_Int32 nAngle;
+    uno::Any aGeom = xShapeProperties->getPropertyValue("CustomShapeGeometry");
+    auto aGeomSeq = aGeom.get<Sequence<beans::PropertyValue>>();
+    for (const auto& aProp : std::as_const(aGeomSeq))
+    {
+        if (aProp.Name == "TextPreRotateAngle")
+        {
+            aProp.Value >>= nAngle;
+            break;
+        }
+    }
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(90), nAngle);
 }
 
 ScFiltersTest::ScFiltersTest()
