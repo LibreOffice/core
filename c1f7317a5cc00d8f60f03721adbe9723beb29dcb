@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6f3a1837_0bf44969",
+        "filename": "sc/source/ui/attrdlg/scdlgfact.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-09-16T15:40:47Z",
+      "side": 0,
+      "message": "In the other \"make it async\" cases like e.g. AbstractScCondFormatManagerDlg_Impl the pattern is to have an ::StartExecuteAsync, Seems unusual for this one to end up looking different.",
+      "revId": "c1f7317a5cc00d8f60f03721adbe9723beb29dcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
