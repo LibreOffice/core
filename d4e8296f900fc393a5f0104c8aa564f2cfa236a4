@@ -16,6 +16,24 @@
       "revId": "d4e8296f900fc393a5f0104c8aa564f2cfa236a4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8616096f_e02a5d7e",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport5.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-09-16T12:29:43Z",
+      "side": 1,
+      "message": "Yeah, good point. I have a bit of a blind spot regarding unit tests.",
+      "parentUuid": "38ff07d2_dd97daa1",
+      "revId": "d4e8296f900fc393a5f0104c8aa564f2cfa236a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
