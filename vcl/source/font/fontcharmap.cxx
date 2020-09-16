@@ -184,6 +184,12 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
     {
         int nSegCountX2 = GetUShort( pCmap + nOffset + 6 );
         nRangeCount = nSegCountX2/2 - 1;
+        if (nRangeCount < 0)
+        {
+            SAL_WARN("vcl.gdi", "negative RangeCount");
+            nRangeCount = 0;
+        }
+
         pCodePairs = new sal_UCS4[ nRangeCount * 2 ];
         pStartGlyphs = new int[ nRangeCount ];
         const unsigned char* pLimitBase = pCmap + nOffset + 14;
