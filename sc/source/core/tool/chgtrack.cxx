@@ -2768,21 +2768,21 @@ void ScChangeTrack::AppendContentRange( const ScRange& rRange,
     }
 }
 
-void ScChangeTrack::AppendContentsIfInRefDoc( ScDocument* pRefDoc,
+void ScChangeTrack::AppendContentsIfInRefDoc( ScDocument& rRefDoc,
             sal_uLong& nStartAction, sal_uLong& nEndAction )
 {
-    ScCellIterator aIter(pRefDoc, ScRange(0,0,0,rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB));
+    ScCellIterator aIter(&rRefDoc, ScRange(0,0,0,rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB));
     if (aIter.first())
     {
         nStartAction = GetActionMax() + 1;
         StartBlockModify( ScChangeTrackMsgType::Append, nStartAction );
-        SvNumberFormatter* pFormatter = pRefDoc->GetFormatTable();
+        SvNumberFormatter* pFormatter = rRefDoc.GetFormatTable();
         do
         {
             const ScAddress& rPos = aIter.GetPos();
-            const ScPatternAttr* pPat = pRefDoc->GetPattern(rPos);
+            const ScPatternAttr* pPat = rRefDoc.GetPattern(rPos);
             AppendContent(
-                rPos, aIter.getCellValue(), pPat->GetNumberFormat(pFormatter), pRefDoc);
+                rPos, aIter.getCellValue(), pPat->GetNumberFormat(pFormatter), &rRefDoc);
         }
         while (aIter.next());
 

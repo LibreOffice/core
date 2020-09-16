@@ -940,7 +940,7 @@ void ScUndoReplace::SetChangeTrack()
         if ( pUndoDoc )
         {   //! UndoDoc includes only the changed cells,
             // that is why an Iterator can be used
-            pChangeTrack->AppendContentsIfInRefDoc( pUndoDoc.get(),
+            pChangeTrack->AppendContentsIfInRefDoc( *pUndoDoc,
                 nStartChangeAction, nEndChangeAction );
         }
         else
@@ -1193,7 +1193,7 @@ void ScUndoConversion::SetChangeTrack()
     if ( pChangeTrack )
     {
         if ( pUndoDoc )
-            pChangeTrack->AppendContentsIfInRefDoc( pUndoDoc.get(),
+            pChangeTrack->AppendContentsIfInRefDoc( *pUndoDoc,
                 nStartChangeAction, nEndChangeAction );
         else
         {
@@ -1285,6 +1285,7 @@ pRedoDoc    ( std::move(pNewRedoDoc) ),
 aRange      ( aMarkRange ),
 bMulti      ( bNewMulti )
 {
+    assert(pUndoDoc && pUndoDoc);
     SetChangeTrack();
 }
 
@@ -1303,7 +1304,7 @@ void ScUndoRefConversion::SetChangeTrack()
 {
     ScChangeTrack* pChangeTrack = pDocShell->GetDocument().GetChangeTrack();
     if ( pChangeTrack )
-        pChangeTrack->AppendContentsIfInRefDoc( pUndoDoc.get(),
+        pChangeTrack->AppendContentsIfInRefDoc( *pUndoDoc,
             nStartChangeAction, nEndChangeAction );
     else
         nStartChangeAction = nEndChangeAction = 0;
