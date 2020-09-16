@@ -1409,10 +1409,26 @@ Reference< XShape > const & Shape::createAndInsert(
                 sal_Int32 nTextRotateAngle = static_cast< sal_Int32 >( getTextBody()->getTextProperties().moRotation.get( 0 ) );
 
                 nTextRotateAngle -= mnDiagramRotation;
-                /* OOX measures text rotation clockwise in 1/60000th degrees,
-                   relative to the containing shape. setTextRotateAngle wants
-                   degrees anticlockwise. */
-                mpCustomShapePropertiesPtr->setTextRotateAngle( -1 * nTextRotateAngle / 60000 );
+
+                bool isUpright = getTextBody()->getTextProperties().moUpright;
+                if (isUpright)
+                {
+                    // When upright is set, we want the text without any rotation.
+                    // But if we set 0 here, the text is still rotated if the
+                    // shape containing it is rotated.
+                    // Hence, we rotate the text into the the opposite direction of
+                    // the rotation of the shape, by as much as the shape was rotated.
+                    mpCustomShapePropertiesPtr->setTextRotateAngle(mnRotation / 60000);
+                    // Also put this away in a Gabbag.
+                    putPropertyToGrabBag("Upright", Any(isUpright));
+                }
+                else
+                {
+                    /* OOX measures text rotation clockwise in 1/60000th degrees,
+                       relative to the containing shape. setTextRotateAngle wants
+                       degrees anticlockwise. */
+                    mpCustomShapePropertiesPtr->setTextRotateAngle(-1 * nTextRotateAngle / 60000);
+                }
             }
 
             // Note that the script oox/source/drawingml/customshapes/generatePresetsData.pl looks
