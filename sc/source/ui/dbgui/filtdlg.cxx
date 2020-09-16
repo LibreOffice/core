@@ -579,7 +579,7 @@ ScQueryItem* ScFilterDlg::GetOutputItem()
     if ( m_xBtnCopyResult->get_active() )
     {
         ScRefFlags nResult = theCopyPos.Parse(
-            m_xEdCopyArea->GetText(), pDoc, pDoc->GetAddressConvention());
+            m_xEdCopyArea->GetText(), *pDoc, pDoc->GetAddressConvention());
         bCopyPosOk = (nResult & ScRefFlags::VALID) == ScRefFlags::VALID;
     }
 

@@ -224,7 +224,7 @@ IMPL_LINK_NOARG( SearchResultsDlg, ListSelectHdl, weld::TreeView&, void )
         return;
 
     ScAddress aPos;
-    ScRefFlags nRes = aPos.Parse(aPosStr, mpDoc, mpDoc->GetAddressConvention());
+    ScRefFlags nRes = aPos.Parse(aPosStr, *mpDoc, mpDoc->GetAddressConvention());
     if (!(nRes & ScRefFlags::VALID))
         // Invalid address string.
         return;

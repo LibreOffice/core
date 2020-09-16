@@ -198,8 +198,8 @@ IMPL_LINK(ScSolverDlg, BtnHdl, weld::Button&, rBtn, void)
         // 3. has a valid target value been entered?
 
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
-        ScRefFlags  nRes1 = theFormulaCell .Parse( m_xEdFormulaCell->GetText(),  pDoc, eConv );
-        ScRefFlags  nRes2 = theVariableCell.Parse( m_xEdVariableCell->GetText(), pDoc, eConv );
+        ScRefFlags  nRes1 = theFormulaCell .Parse( m_xEdFormulaCell->GetText(),  *pDoc, eConv );
+        ScRefFlags  nRes2 = theVariableCell.Parse( m_xEdVariableCell->GetText(), *pDoc, eConv );
 
         if ( (nRes1 & ScRefFlags::VALID) == ScRefFlags::VALID )
         {

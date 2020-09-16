@@ -439,7 +439,7 @@ void ScConditionEntry::CompileXML()
         ScAddress aNew;
         /* XML is always in OOo:A1 format, although R1C1 would be more amenable
          * to compression */
-        if ( aNew.Parse( aSrcString, mpDoc ) & ScRefFlags::VALID )
+        if ( aNew.Parse( aSrcString, *mpDoc ) & ScRefFlags::VALID )
             aSrcPos = aNew;
         // if the position is invalid, there isn't much we can do at this time
         aSrcString.clear();
