@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a133fd9_20330f65",
+        "filename": "reportdesign/uiconfig/dbreport/menubar/menubar.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-09-16T14:23:39Z",
+      "side": 1,
+      "message": "Remove the commands list, and change to menu:menuitem.",
+      "revId": "6176049a95230c6e21fd1e54ac8aeed84686f0f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6eb04b0_5501e7e5",
+        "filename": "reportdesign/uiconfig/dbreport/popupmenu/report.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-09-16T14:23:39Z",
+      "side": 1,
+      "message": "Remove the commands list, and change to menu:menuitem.",
+      "revId": "6176049a95230c6e21fd1e54ac8aeed84686f0f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
