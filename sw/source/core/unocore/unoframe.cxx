@@ -1402,6 +1402,23 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
 {
     SolarMutexGuard aGuard;
     SwFrameFormat* pFormat = GetFrameFormat();
+
+    // Hack to support hidden property to transfer textDirection
+    if(rPropertyName == "FRMDirection")
+    {
+        if (pFormat)
+        {
+            SvxFrameDirectionItem aItem(SvxFrameDirection::Environment, RES_FRAMEDIR);
+            aItem.PutValue(_rValue, 0);
+            GetFrameFormat()->SetFormatAttr(aItem);
+        }
+        else if(IsDescriptor())
+        {
+            m_pProps->SetProperty(static_cast<sal_uInt16>(RES_FRAMEDIR), 0, _rValue);
+        }
+        return;
+    }
+
     const ::SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
 
     if (!pEntry)

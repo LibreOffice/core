@@ -14,6 +14,8 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/style/BreakType.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 
 using namespace ::com::sun::star;
 
@@ -103,6 +105,25 @@ CPPUNIT_TEST_FIXTURE(Test, testNumberingRestartStyleParent)
     CPPUNIT_ASSERT_EQUAL(OUString("1."), xPara->getPropertyValue(aProp).get<OUString>());
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("2."), xPara->getPropertyValue(aProp).get<OUString>());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFrameDirection)
+{
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "frame-direction.docx";
+    getComponent() = loadFromDesktop(aURL);
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<beans::XPropertySet> xFrame0(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame1(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame2(xDrawPage->getByIndex(2), uno::UNO_QUERY);
+    // Without the accompanying fix in place, all of the following values would be text::WritingMode2::CONTEXT
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::CONTEXT,
+                         xFrame0->getPropertyValue("WritingMode").get<sal_Int16>());
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::BT_LR,
+                         xFrame1->getPropertyValue("WritingMode").get<sal_Int16>());
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::TB_RL,
+                         xFrame2->getPropertyValue("WritingMode").get<sal_Int16>());
 }
 }
 
