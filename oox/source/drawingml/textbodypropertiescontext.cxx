@@ -94,7 +94,10 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper cons
     // ST_PositiveCoordinate
 //   sal_Int32 nSpcCol = rAttribs.getInteger( XML_spcCol, 0 );
 //   bool bSpcFirstLastPara = rAttribs.getBool( XML_spcFirstLastPara, 0 );
-//   bool bUpRight = rAttribs.getBool( XML_upright, 0 );
+
+    bool bUpright = rAttribs.getBool(XML_upright, false);
+    if (bUpright)
+        mrTextBodyProp.moUpright = true;
 
     // ST_TextVerticalType
     if( rAttribs.hasAttribute( XML_vert ) ) {
