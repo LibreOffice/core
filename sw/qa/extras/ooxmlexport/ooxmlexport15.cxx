@@ -302,6 +302,58 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123355, "tdf123355.docx")
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc[4]/w:p/w:r[2]/w:instrText", " =SUM(LEFT)");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf123382, "tdf123382.docx")
+{
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    // Tests conversion of range IDs ABOVE, BELOW, LEFT and RIGHT
+    uno::Reference<text::XTextField> xEnumerationAccess1(xFields->nextElement(), uno::UNO_QUERY);
+    // Note: range ends at B4 here, which is a cell with text content
+    CPPUNIT_ASSERT_EQUAL(OUString("MAX(<B1:D1>)"), xEnumerationAccess1->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("12"), xEnumerationAccess1->getPresentation(false).trim());
+
+    // range ends at the end of the empty cells
+    uno::Reference<text::XTextField> xEnumerationAccess6(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("MAX(<C4:D4>)"), xEnumerationAccess6->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("9"), xEnumerationAccess6->getPresentation(false).trim());
+
+    // range starts at the first cell above D5
+    uno::Reference<text::XTextField> xEnumerationAccess2(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("SUM(<B3:D3>)"), xEnumerationAccess2->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("30"), xEnumerationAccess2->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess3(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("MAX(<C2:A2>)"), xEnumerationAccess3->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("7"), xEnumerationAccess3->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess4(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("MAX(<B2:D2>)"), xEnumerationAccess4->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("7"), xEnumerationAccess4->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess5(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("MAX(<D2:D4>)"), xEnumerationAccess5->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("12"), xEnumerationAccess5->getPresentation(false).trim());
+
+    uno::Reference<text::XTextField> xEnumerationAccess7(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("MAX(<B2:B4>)"), xEnumerationAccess7->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(OUString("10"), xEnumerationAccess7->getPresentation(false).trim());
+
+    xmlDocUniquePtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+
+    // keep original formula IDs
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p/w:r[2]/w:instrText", " =MAX(RIGHT)");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:p/w:r[2]/w:instrText", " =MAX(RIGHT)");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc[1]/w:p/w:r[2]/w:instrText", " =SUM(RIGHT)");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[2]/w:p/w:r[2]/w:instrText", " =MAX(BELOW)");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc[2]/w:p/w:r[2]/w:instrText", " =MAX(RIGHT)");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[4]/w:p/w:r[2]/w:instrText", " =MAX(BELOW)");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[4]/w:p/w:r[2]/w:instrText", " =MAX(LEFT)");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf98000_changePageStyle, "tdf98000_changePageStyle.odt")
 {
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);

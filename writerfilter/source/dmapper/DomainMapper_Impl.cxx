@@ -4334,7 +4334,7 @@ void DomainMapper_Impl::handleFieldFormula
     xFieldProperties->setPropertyValue("IsShowFormula", uno::makeAny(false));
 
     // grab-bag the original and converted formula
-    if (getTableManager().isInTable())
+    if (hasTableManager())
     {
         TablePropertyMapPtr pPropMap(new TablePropertyMap());
         pPropMap->Insert(PROP_CELL_FORMULA, uno::makeAny(command.copy(1)), true, CELL_GRAB_BAG);

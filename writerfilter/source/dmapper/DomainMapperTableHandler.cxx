@@ -75,6 +75,9 @@ using namespace ::std;
 #define CNF_LAST_ROW_FIRST_COLUMN   0x001
 #define CNF_ALL                     0xFFF
 
+// total number of table columns
+#define MAXTABLECELLS 63
+
 DomainMapperTableHandler::DomainMapperTableHandler(
             css::uno::Reference<css::text::XTextAppendAndConvert> const& xText,
             DomainMapper_Impl& rDMapper_Impl)
@@ -1229,8 +1232,7 @@ static void lcl_convertFormulaRanges(const uno::Reference<text::XTextTable> & xT
     sal_Int32 nRows = xTableRows->getCount();
     for (sal_Int32 nRow = 0; nRow < nRows; ++nRow)
     {
-        sal_Int16 nCol = 0;
-        while (++nCol)
+        for (sal_Int16 nCol = 0; nCol < MAXTABLECELLS; ++nCol)
         {
             try
             {
