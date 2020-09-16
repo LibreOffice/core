@@ -691,7 +691,7 @@ void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bSt
                 SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
                 sal_uInt32 nNumFmt = rDoc.GetNumberFormat( aPos );
 
-                ScCellFormat::GetInputString( rCell, nNumFmt, aString, *pFormatter, &rDoc );
+                ScCellFormat::GetInputString( rCell, nNumFmt, aString, *pFormatter, rDoc );
                 if (rCell.meType == CELLTYPE_STRING)
                 {
                     // Put a ' in front if necessary, so that the string is not

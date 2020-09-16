@@ -2439,7 +2439,7 @@ public:
                     mrTab.GetNumberFormat( static_cast<SCCOL>(rEntry.nField), nRow );
                 OUString aStr;
                 SvNumberFormatter* pFormatter = pContext ? pContext->GetFormatTable() : mrDoc.GetFormatTable();
-                ScCellFormat::GetInputString(rCell, nFormat, aStr, *pFormatter, &mrDoc);
+                ScCellFormat::GetInputString(rCell, nFormat, aStr, *pFormatter, mrDoc);
                 return compareByStringComparator(rEntry, rItem, nullptr, &aStr);
             }
         }

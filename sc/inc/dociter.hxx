@@ -271,7 +271,7 @@ class ScQueryCellIterator           // walk through all non-empty cells in an ar
     PositionType maCurPos;
 
     ScQueryParam    maParam;
-    ScDocument*     pDoc;
+    ScDocument&     rDoc;
     const ScInterpreterContext& mrContext;
     SCTAB           nTab;
     SCCOL           nCol;
@@ -299,7 +299,7 @@ class ScQueryCellIterator           // walk through all non-empty cells in an ar
     bool BinarySearch();
 
 public:
-                    ScQueryCellIterator(ScDocument* pDocument, const ScInterpreterContext& rContext, SCTAB nTable,
+                    ScQueryCellIterator(ScDocument& rDocument, const ScInterpreterContext& rContext, SCTAB nTable,
                                         const ScQueryParam& aParam, bool bMod);
                                         // when !bMod, the QueryParam has to be filled
                                         // (bIsString)
