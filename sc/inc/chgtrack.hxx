@@ -1025,7 +1025,7 @@ public:
                         // after new values were set in the document,
                         // old values from RefDoc/UndoDoc.
                         // All contents with a cell in RefDoc
-    void                AppendContentsIfInRefDoc( ScDocument* pRefDoc,
+    void                AppendContentsIfInRefDoc( ScDocument& rRefDoc,
                             sal_uLong& nStartAction, sal_uLong& nEndAction );
 
                         // Meant for import filter, creates and inserts
