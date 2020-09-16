@@ -42,16 +42,16 @@ void ScNavigatorControllerItem::StateChanged( sal_uInt16 /* nSID */, SfxItemStat
         case SID_CURRENTCELL:
             if ( pItem )
             {
+                ScViewData* pViewData = rNavigatorDlg.GetViewData();
                 const SfxStringItem* pCellPosItem = dynamic_cast<const SfxStringItem*>( pItem );
 
                 OSL_ENSURE( pCellPosItem, "SfxStringItem expected!" );
 
-                if ( pCellPosItem )
+                if (pCellPosItem && pViewData)
                 {
                     const OUString&  aAddress( pCellPosItem->GetValue() );
                     ScAddress aScAddress;
-                    ScViewData* pViewData = rNavigatorDlg.GetViewData();
-                    aScAddress.Parse(aAddress, pViewData ? &pViewData->GetDocument() : nullptr);
+                    aScAddress.Parse(aAddress, &pViewData->GetDocument());
 
                     SCCOL nCol = aScAddress.Col()+1;
                     SCROW nRow = aScAddress.Row()+1;
