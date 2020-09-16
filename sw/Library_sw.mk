@@ -87,6 +87,7 @@ $(eval $(call gb_Library_use_libraries,sw,\
 
 $(eval $(call gb_Library_use_externals,sw,\
 	boost_headers \
+	icui18n \
 	icuuc \
 	icu_headers \
 	libxml2 \
