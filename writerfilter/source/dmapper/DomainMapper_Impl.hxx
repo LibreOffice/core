@@ -490,6 +490,8 @@ private:
     //each context needs a stack of currently used attributes
     std::stack<PropertyMapPtr>  m_aPropertyStacks[NUMBER_OF_CONTEXTS];
     std::stack<ContextType> m_aContextStack;
+    std::queue<std::optional<sal_Int16>> m_aFrameDirectionQueue;
+    bool                    m_bFrameDirectionSet;
     FontTablePtr            m_pFontTable;
     ListsManager::Pointer   m_pListTable;
     std::deque< css::uno::Reference<css::drawing::XShape> > m_aPendingShapes;
@@ -952,6 +954,25 @@ public:
 
     css::uno::Reference<css::text::XTextAppend> GetCurrentXText() {
         return m_aTextAppendStack.empty() ? nullptr : m_aTextAppendStack.top().xTextAppend;
+    }
+
+    void NewFrameDirection() {
+        m_aFrameDirectionQueue.push(std::nullopt);
+        m_bFrameDirectionSet = false;
+    }
+    void SetFrameDirection(sal_Int16 nDirection) {
+        if (!m_bFrameDirectionSet) {
+            assert(!m_aFrameDirectionQueue.empty());
+            m_aFrameDirectionQueue.back() = nDirection;
+            m_bFrameDirectionSet = true;
+        }
+    }
+    std::optional<sal_Int16> PopFrameDirection() {
+        if (m_aFrameDirectionQueue.empty())
+            return {};
+        const std::optional<sal_Int16> nDirection = m_aFrameDirectionQueue.front();
+        m_aFrameDirectionQueue.pop();
+        return nDirection;
     }
 
     SectionPropertyMap * GetSectionContext();
