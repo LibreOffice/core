@@ -77,6 +77,9 @@ void SwView::SetZoom( SvxZoomType eZoomType, short nFactor, bool bViewOnly )
     if (bCursorIsVisible)
         m_pWrtShell->ShowCursor();
 
+    Invalidate(SID_ZOOM_IN);
+    Invalidate(SID_ZOOM_OUT);
+
     collectUIInformation(OUString::number(nFactor));
 }
 
