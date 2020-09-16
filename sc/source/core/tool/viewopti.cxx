@@ -126,19 +126,7 @@ Color const & ScViewOptions::GetGridColor( OUString* pStrName ) const
     return aGridCol;
 }
 
-ScViewOptions& ScViewOptions::operator=( const ScViewOptions& rCpy )
-{
-    sal_uInt16 i;
-
-    for ( i=0; i<MAX_OPT; i++ )  aOptArr [i] = rCpy.aOptArr[i];
-    for ( i=0; i<MAX_TYPE; i++ ) aModeArr[i] = rCpy.aModeArr[i];
-
-    aGridCol        = rCpy.aGridCol;
-    aGridColName    = rCpy.aGridColName;
-    aGridOpt        = rCpy.aGridOpt;
-
-    return *this;
-}
+ScViewOptions& ScViewOptions::operator=(const ScViewOptions& rCpy) = default;
 
 bool ScViewOptions::operator==( const ScViewOptions& rOpt ) const
 {
