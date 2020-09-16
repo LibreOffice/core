@@ -1620,6 +1620,18 @@ DECLARE_ODFEXPORT_TEST(testBtlrFrame, "btlr-frame.odt")
     CPPUNIT_ASSERT(!pFlyFrame->IsVertLRBT());
 }
 
+DECLARE_ODFEXPORT_TEST(testTdf129520, "tdf129520.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    CPPUNIT_ASSERT_EQUAL(OUString("M"), getParagraph(1)->getString());
+
+    // Without this fix in place, this test would have failed with
+    // - Expected: Ma
+    // - Actual  :
+    CPPUNIT_ASSERT_EQUAL(OUString("Ma"), getParagraph(2)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("1815"), getParagraph(3)->getString());
+}
+
 DECLARE_ODFEXPORT_TEST(testFdo86963, "fdo86963.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
