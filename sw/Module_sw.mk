@@ -97,6 +97,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_odfexport \
     CppunitTest_sw_odfimport \
     CppunitTest_sw_txtexport \
+    CppunitTest_sw_txtimport \
     $(if $(filter-out MACOSX,$(OS)), \
         CppunitTest_sw_uiwriter \
     ) \
