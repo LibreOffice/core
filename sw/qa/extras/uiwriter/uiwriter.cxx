@@ -1020,7 +1020,7 @@ void SwUiWriterTest::testExportRTF()
     pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 3, /*bBasicCall=*/false);
 
     // Create the clipboard document.
-    std::shared_ptr<SwDoc> xClpDoc(new SwDoc, o3tl::default_delete<SwDoc>());
+    rtl::Reference<SwDoc> xClpDoc(new SwDoc());
     xClpDoc->SetClipBoard(true);
     pWrtShell->Copy(xClpDoc.get());
 
@@ -1309,8 +1309,16 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf134250)
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:Copy", {});
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    // .uno:Copy without touching shared clipboard
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
+    xTransfer->Copy();
+
+    // .uno:Paste without touching shared clipboard
+    TransferableDataHelper aHelper(xTransfer.get());
+    SwTransferable::Paste(*pWrtShell, aHelper);
+
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
