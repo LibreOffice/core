@@ -322,7 +322,7 @@ private:
     ScSplitPos          eEditActivePart;            // the part that was active when edit mode was started
     ScFillMode          nFillMode;
     SvxAdjust           eEditAdjust;
-    bool                bEditActive[4];             // Active?
+    bool                bEditActive[4] = {};        // Active?
     bool                bActive:1;                  // Active Window ?
     bool                bIsRefMode:1;               // Reference input
     bool                bDelMarkValid:1;            // Only valid at SC_REFTYPE_FILL
