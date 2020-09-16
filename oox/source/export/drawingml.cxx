@@ -441,36 +441,10 @@ void DrawingML::WriteSolidFill( const Reference< XPropertySet >& rXPropSet )
         // the shape had a scheme color and the user didn't change it
         WriteSolidFill( sColorFillScheme, aTransformations, nAlpha );
     }
-    else if ( aStyleProperties.hasElements() )
-    {
-        sal_uInt32 nThemeColor = 0;
-        sal_Int32 nThemeAlpha = MAX_PERCENT;
-        for( const auto& rStyleProp : std::as_const(aStyleProperties) )
-        {
-            if( rStyleProp.Name == "Color" )
-            {
-                rStyleProp.Value >>= nThemeColor;
-            }
-            else if(rStyleProp.Name == "Transformations" )
-            {
-                Sequence< PropertyValue > aStyleTransformations;
-                rStyleProp.Value >>= aStyleTransformations;
-                auto pProp = std::find_if(std::cbegin(aStyleTransformations), std::cend(aStyleTransformations),
-                    [](const PropertyValue& rProp) { return rProp.Name == "alpha"; });
-                if (pProp != std::cend(aStyleTransformations))
-                    pProp->Value >>= nThemeAlpha;
-            }
-        }
-        if ( nFillColor != nThemeColor || nAlpha != nThemeAlpha )
-            // the shape contains a theme but it wasn't being used
-            WriteSolidFill( ::Color(nFillColor & 0xffffff), nAlpha );
-
-        // in case the shape used the style color and the user didn't change it,
-        // we must not write a <a: solidFill> tag.
-    }
     else
     {
         // the shape had a custom color and the user didn't change it
+        // tdf#124013
         WriteSolidFill( ::Color(nFillColor & 0xffffff), nAlpha );
     }
 }
