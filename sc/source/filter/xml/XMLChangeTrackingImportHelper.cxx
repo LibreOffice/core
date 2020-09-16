@@ -57,7 +57,7 @@ const ScCellValue& ScMyCellInfo::CreateCell(ScDocument& rDoc)
     {
         ScAddress aPos;
         sal_Int32 nOffset(0);
-        ScRangeStringConverter::GetAddressFromString(aPos, sFormulaAddress, &rDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset);
+        ScRangeStringConverter::GetAddressFromString(aPos, sFormulaAddress, rDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset);
         maCell.meType = CELLTYPE_FORMULA;
         maCell.mpFormula = new ScFormulaCell(rDoc, aPos, sFormula, eGrammar, nMatrixFlag);
         maCell.mpFormula->SetMatColsRows(static_cast<SCCOL>(nMatrixCols), static_cast<SCROW>(nMatrixRows));

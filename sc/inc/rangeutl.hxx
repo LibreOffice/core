@@ -120,7 +120,7 @@ public:
     static bool     GetAddressFromString(
                             ScAddress& rAddress,
                             const OUString& rAddressStr,
-                            const ScDocument* pDocument,
+                            const ScDocument& rDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Int32& nOffset,
                             sal_Unicode cSeparator = ' ',

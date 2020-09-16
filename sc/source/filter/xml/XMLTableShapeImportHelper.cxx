@@ -110,7 +110,9 @@ void XMLTableShapeImportHelper::finishShape(
                     if (IsXMLToken(aLocalName, XML_END_CELL_ADDRESS))
                     {
                         sal_Int32 nOffset(0);
-                        ScRangeStringConverter::GetAddressFromString(aAnchor.maEnd, rValue, static_cast<ScXMLImport&>(mrImporter).GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset);
+                        ScDocument* pDoc = static_cast<ScXMLImport&>(mrImporter).GetDocument();
+                        assert(pDoc);
+                        ScRangeStringConverter::GetAddressFromString(aAnchor.maEnd, rValue, *pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset);
                         // When the cell end address is set, we let the shape resize with the cell
                         aAnchor.mbResizeWithCell = true;
                     }
