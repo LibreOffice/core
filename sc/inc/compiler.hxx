@@ -212,7 +212,7 @@ public:
          * @return true on successful parse, or false otherwise.
          */
         virtual bool parseExternalName( const OUString& rSymbol, OUString& rFile, OUString& rName,
-                const ScDocument* pDoc,
+                const ScDocument& rDoc,
                 const css::uno::Sequence< css::sheet::ExternalLinkInfo>* pExternalLinks ) const = 0;
 
         virtual OUString makeExternalNameStr( sal_uInt16 nFileId, const OUString& rFile,
