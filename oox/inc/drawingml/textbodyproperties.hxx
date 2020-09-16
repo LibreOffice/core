@@ -35,6 +35,7 @@ struct TextBodyProperties
     OptValue< sal_Int32 >                           moRotation;
     bool                                            mbAnchorCtr;
     OptValue< sal_Int32 >                           moVert;
+    bool                                            moUpright = false;
     std::optional< sal_Int32 >                    moInsets[4];
     std::optional< sal_Int32 >                    moTextOffUpper;
     std::optional< sal_Int32 >                    moTextOffLeft;
