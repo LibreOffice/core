@@ -64,7 +64,9 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_uwriter, \
 
 $(eval $(call gb_CppunitTest_use_externals,sw_uwriter,\
 	boost_headers \
+	icui18n \
 	icuuc \
+	icu_headers \
 	libxml2 \
 ))
 
