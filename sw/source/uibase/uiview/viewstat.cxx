@@ -69,6 +69,17 @@ void SwView::GetState(SfxItemSet &rSet)
     {
         switch(nWhich)
         {
+            case SID_ZOOM_IN:
+            case SID_ZOOM_OUT:
+            {
+                long nFact = m_pWrtShell->GetViewOptions()->GetZoom();
+                if ((SID_ZOOM_OUT == nWhich && nFact >= long(600)) ||
+                        (SID_ZOOM_IN == nWhich && nFact <= long(20)))
+                {
+                    rSet.DisableItem(nWhich);
+                }
+            }
+            break;
             case FN_TOGGLE_OUTLINE_CONTENT_VISIBILITY:
             {
                 bool bDisable(true);

@@ -18,6 +18,16 @@
 
 interface BaseTextEditView
 {
+    SID_ZOOM_IN
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_ZOOM_OUT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
     FN_TOGGLE_OUTLINE_CONTENT_VISIBILITY
     [
         ExecMethod = Execute ;
