@@ -1401,7 +1401,7 @@ static bool lcl_ParseTarget( const OUString& rTarget, ScRange& rTargetRange, too
     {
         bRangeValid = true;             // range reference
     }
-    else if ( aAddress.Parse( rTarget, &rDoc ) & ScRefFlags::VALID )
+    else if ( aAddress.Parse( rTarget, rDoc ) & ScRefFlags::VALID )
     {
         rTargetRange = aAddress;
         bRangeValid = true;             // cell reference

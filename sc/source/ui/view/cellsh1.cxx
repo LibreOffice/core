@@ -818,7 +818,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         ScAddress aScAddress;
                         OUString aArg = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
-                        if( aScAddress.Parse( aArg, &rDoc, rDoc.GetAddressConvention() ) & ScRefFlags::VALID )
+                        if( aScAddress.Parse( aArg, rDoc, rDoc.GetAddressConvention() ) & ScRefFlags::VALID )
                         {
                             nFillRow = aScAddress.Row();
                             nFillCol = aScAddress.Col();

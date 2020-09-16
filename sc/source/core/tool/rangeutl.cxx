@@ -447,11 +447,11 @@ bool ScRangeStringConverter::GetAddressFromString(
     GetTokenByOffset( sToken, rAddressStr, nOffset, cSeparator, cQuote );
     if( nOffset >= 0 )
     {
-        if ((rAddress.Parse( sToken, &rDocument, eConv ) & ScRefFlags::VALID) == ScRefFlags::VALID)
+        if ((rAddress.Parse( sToken, rDocument, eConv ) & ScRefFlags::VALID) == ScRefFlags::VALID)
             return true;
         ::formula::FormulaGrammar::AddressConvention eConvUI = rDocument.GetAddressConvention();
         if (eConv != eConvUI)
-            return ((rAddress.Parse(sToken, &rDocument, eConvUI) & ScRefFlags::VALID) == ScRefFlags::VALID);
+            return ((rAddress.Parse(sToken, rDocument, eConvUI) & ScRefFlags::VALID) == ScRefFlags::VALID);
     }
     return false;
 }
@@ -477,11 +477,11 @@ bool ScRangeStringConverter::GetRangeFromString(
         {
             if ( aUIString[0] == '.' )
                 aUIString = aUIString.copy( 1 );
-            bResult = (rRange.aStart.Parse( aUIString, &rDocument, eConv) & ScRefFlags::VALID) ==
+            bResult = (rRange.aStart.Parse( aUIString, rDocument, eConv) & ScRefFlags::VALID) ==
                                                                                                      ScRefFlags::VALID;
             ::formula::FormulaGrammar::AddressConvention eConvUI = rDocument.GetAddressConvention();
             if (!bResult && eConv != eConvUI)
-                bResult = (rRange.aStart.Parse(aUIString, &rDocument, eConvUI) & ScRefFlags::VALID) ==
+                bResult = (rRange.aStart.Parse(aUIString, rDocument, eConvUI) & ScRefFlags::VALID) ==
                                                                                                          ScRefFlags::VALID;
             rRange.aEnd = rRange.aStart;
         }
@@ -504,19 +504,19 @@ bool ScRangeStringConverter::GetRangeFromString(
             // This isn't parsed by ScRange, so try to parse the two Addresses then.
             if (!bResult)
             {
-                bResult = ((rRange.aStart.Parse( aUIString.copy(0, nIndex), &rDocument, eConv)
+                bResult = ((rRange.aStart.Parse( aUIString.copy(0, nIndex), rDocument, eConv)
                                & ScRefFlags::VALID) == ScRefFlags::VALID)
                           &&
-                          ((rRange.aEnd.Parse( aUIString.copy(nIndex+1), &rDocument, eConv)
+                          ((rRange.aEnd.Parse( aUIString.copy(nIndex+1), rDocument, eConv)
                                & ScRefFlags::VALID) == ScRefFlags::VALID);
 
                 ::formula::FormulaGrammar::AddressConvention eConvUI = rDocument.GetAddressConvention();
                 if (!bResult && eConv != eConvUI)
                 {
-                    bResult = ((rRange.aStart.Parse( aUIString.copy(0, nIndex), &rDocument, eConvUI)
+                    bResult = ((rRange.aStart.Parse( aUIString.copy(0, nIndex), rDocument, eConvUI)
                                    & ScRefFlags::VALID) == ScRefFlags::VALID)
                               &&
-                              ((rRange.aEnd.Parse( aUIString.copy(nIndex+1), &rDocument, eConvUI)
+                              ((rRange.aEnd.Parse( aUIString.copy(nIndex+1), rDocument, eConvUI)
                                    & ScRefFlags::VALID) == ScRefFlags::VALID);
                 }
             }
@@ -830,27 +830,27 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
 
             ScAddress::ExternalInfo aExtInfo1, aExtInfo2;
             ScAddress aCell1, aCell2;
-            ScRefFlags nRet = aCell1.Parse(aBeginCell, &rDoc, FormulaGrammar::CONV_OOO, &aExtInfo1);
+            ScRefFlags nRet = aCell1.Parse(aBeginCell, rDoc, FormulaGrammar::CONV_OOO, &aExtInfo1);
             if ((nRet & ScRefFlags::VALID) == ScRefFlags::ZERO)
             {
                 // first cell is invalid.
                 if (eConv == FormulaGrammar::CONV_OOO)
                     continue;
 
-                nRet = aCell1.Parse(aBeginCell, &rDoc, eConv, &aExtInfo1);
+                nRet = aCell1.Parse(aBeginCell, rDoc, eConv, &aExtInfo1);
                 if ((nRet & ScRefFlags::VALID) == ScRefFlags::ZERO)
                     // first cell is really invalid.
                     continue;
             }
 
-            nRet = aCell2.Parse(aEndCell, &rDoc, FormulaGrammar::CONV_OOO, &aExtInfo2);
+            nRet = aCell2.Parse(aEndCell, rDoc, FormulaGrammar::CONV_OOO, &aExtInfo2);
             if ((nRet & ScRefFlags::VALID) == ScRefFlags::ZERO)
             {
                 // second cell is invalid.
                 if (eConv == FormulaGrammar::CONV_OOO)
                     continue;
 
-                nRet = aCell2.Parse(aEndCell, &rDoc, eConv, &aExtInfo2);
+                nRet = aCell2.Parse(aEndCell, rDoc, eConv, &aExtInfo2);
                 if ((nRet & ScRefFlags::VALID) == ScRefFlags::ZERO)
                     // second cell is really invalid.
                     continue;
@@ -874,10 +874,10 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
             // Chart always saves ranges using CONV_OOO convention.
             ScAddress::ExternalInfo aExtInfo;
             ScAddress aCell;
-            ScRefFlags nRet = aCell.Parse(aToken, &rDoc, ::formula::FormulaGrammar::CONV_OOO, &aExtInfo);
+            ScRefFlags nRet = aCell.Parse(aToken, rDoc, ::formula::FormulaGrammar::CONV_OOO, &aExtInfo);
             if ((nRet & ScRefFlags::VALID) == ScRefFlags::ZERO )
             {
-                nRet = aCell.Parse(aToken, &rDoc, eConv, &aExtInfo);
+                nRet = aCell.Parse(aToken, rDoc, eConv, &aExtInfo);
                 if ((nRet & ScRefFlags::VALID) == ScRefFlags::ZERO)
                     continue;
             }

@@ -559,7 +559,7 @@ void ScXMLSourceDlg::RefEditModified()
 
     // Check if the address is valid.
     ScAddress aLinkedPos;
-    ScRefFlags nRes = aLinkedPos.Parse(aRefStr, mpDoc, mpDoc->GetAddressConvention());
+    ScRefFlags nRes = aLinkedPos.Parse(aRefStr, *mpDoc, mpDoc->GetAddressConvention());
     bool bValid = ( (nRes & ScRefFlags::VALID) == ScRefFlags::VALID );
 
     // TODO: For some unknown reason, setting the ref invalid will hide the text altogether.

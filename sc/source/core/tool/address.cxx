@@ -1502,7 +1502,7 @@ bool ConvertSingleRef( const ScDocument& rDoc, const OUString& rRefString,
     if (pExtInfo || (ScGlobal::FindUnquoted( rRefString, SC_COMPILER_FILE_TAB_SEP) == -1))
     {
         ScAddress aAddr( 0, 0, nDefTab );
-        ScRefFlags nRes = aAddr.Parse( rRefString, &rDoc, rDetails, pExtInfo);
+        ScRefFlags nRes = aAddr.Parse( rRefString, rDoc, rDetails, pExtInfo);
         if ( nRes & ScRefFlags::VALID )
         {
             rRefAddress.Set( aAddr,
@@ -1541,14 +1541,14 @@ bool ConvertDoubleRef( const ScDocument& rDoc, const OUString& rRefString, SCTAB
     return bRet;
 }
 
-ScRefFlags ScAddress::Parse( const OUString& r, const ScDocument* pDoc,
+ScRefFlags ScAddress::Parse( const OUString& r, const ScDocument& rDoc,
                              const Details& rDetails,
                              ExternalInfo* pExtInfo,
                              const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks,
                              sal_Int32* pSheetEndPos,
                              const OUString* pErrRef )
 {
-    return lcl_ScAddress_Parse( r.getStr(), pDoc, *this, rDetails, pExtInfo, pExternalLinks, pSheetEndPos, pErrRef);
+    return lcl_ScAddress_Parse( r.getStr(), &rDoc, *this, rDetails, pExtInfo, pExternalLinks, pSheetEndPos, pErrRef);
 }
 
 bool ScRange::Intersects( const ScRange& rRange ) const
@@ -1777,7 +1777,7 @@ ScRefFlags ScRange::ParseAny( const OUString& rString, const ScDocument& rDoc,
     if ( (nRet & nValid) != nValid )
     {
         ScAddress aAdr(aStart);//initialize with currentPos as fallback for table number
-        nRet = aAdr.Parse( rString, &rDoc, rDetails );
+        nRet = aAdr.Parse( rString, rDoc, rDetails );
         if ( nRet & ScRefFlags::VALID )
             aStart = aEnd = aAdr;
     }

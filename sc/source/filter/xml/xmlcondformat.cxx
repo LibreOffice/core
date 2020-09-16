@@ -258,7 +258,7 @@ void SAL_CALL ScXMLConditionalFormatContext::endFastElement( sal_Int32 /*nElemen
         ScAddress aSrcPos;
         OUString aSrcString = pCondFormatEntry->GetSrcString();
         if ( !aSrcString.isEmpty() )
-            aSrcPos.Parse( aSrcString, pDoc );
+            aSrcPos.Parse( aSrcString, *pDoc );
         ScCompiler aComp( *pDoc, aSrcPos );
         aComp.SetGrammar( formula::FormulaGrammar::GRAM_ODFF );
         pTokens = aComp.CompileString( pCondFormatEntry->GetExpression(aSrcPos, 0), "" );

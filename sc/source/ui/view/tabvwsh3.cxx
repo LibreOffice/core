@@ -99,7 +99,7 @@ namespace
             return aRet;
         }
 
-        aRet.nResult = rScAddress.Parse(aAddress, &rDoc, eConv);
+        aRet.nResult = rScAddress.Parse(aAddress, rDoc, eConv);
         if (aRet.nResult & ScRefFlags::VALID)
         {
             aRet.eDetected = DetectFlags::ADDRESS;
@@ -114,7 +114,7 @@ namespace
             return aRet;
         }
 
-        aRet.nResult = rScAddress.Parse(aAddress, &rDoc);
+        aRet.nResult = rScAddress.Parse(aAddress, rDoc);
         if (aRet.nResult & ScRefFlags::VALID)
         {
             aRet.eDetected = DetectFlags::ADDRESS;
@@ -130,7 +130,7 @@ namespace
         }
 
         // try the Excel A1 address convention
-        aRet.nResult = rScAddress.Parse(aAddress, &rDoc, formula::FormulaGrammar::CONV_XL_A1);
+        aRet.nResult = rScAddress.Parse(aAddress, rDoc, formula::FormulaGrammar::CONV_XL_A1);
         if (aRet.nResult & ScRefFlags::VALID)
         {
             aRet.eDetected = DetectFlags::ADDRESS;
@@ -145,7 +145,7 @@ namespace
             return aRet;
         }
 
-        aRet.nResult = rScAddress.Parse(aAddress, &rDoc, formula::FormulaGrammar::CONV_XL_R1C1);
+        aRet.nResult = rScAddress.Parse(aAddress, rDoc, formula::FormulaGrammar::CONV_XL_R1C1);
         if (aRet.nResult & ScRefFlags::VALID)
         {
             aRet.eDetected = DetectFlags::ADDRESS;

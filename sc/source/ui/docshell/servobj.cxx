@@ -91,7 +91,7 @@ ScServerObject::ScServerObject( ScDocShell* pShell, const OUString& rItem ) :
         {
             // area reference
         }
-        else if ( aRange.aStart.Parse( rItem, &rDoc, FormulaGrammar::CONV_OOO ) & ScRefFlags::VALID )
+        else if ( aRange.aStart.Parse( rItem, rDoc, FormulaGrammar::CONV_OOO ) & ScRefFlags::VALID )
         {
             // cell reference
             aRange.aEnd = aRange.aStart;

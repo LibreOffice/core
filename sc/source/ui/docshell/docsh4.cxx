@@ -265,7 +265,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     if ( !pDBColl || !pDBColl->getNamedDBs().findByUpperName(ScGlobal::getCharClassPtr()->uppercase(sTarget)) )
                     {
                         ScAddress aPos;
-                        if ( aPos.Parse( sTarget, &m_aDocument, m_aDocument.GetAddressConvention() ) & ScRefFlags::VALID )
+                        if ( aPos.Parse( sTarget, m_aDocument, m_aDocument.GetAddressConvention() ) & ScRefFlags::VALID )
                         {
                             bMakeArea = true;
                             if (bUndo)
@@ -2460,7 +2460,7 @@ bool ScDocShell::DdeSetData( const OUString& rItem,
     // into ODF.
     ScRange aRange;
     bool bValid = ( (aRange.Parse(aPos, m_aDocument, formula::FormulaGrammar::CONV_OOO ) & ScRefFlags::VALID) ||
-                    (aRange.aStart.Parse(aPos, &m_aDocument, formula::FormulaGrammar::CONV_OOO) & ScRefFlags::VALID) );
+                    (aRange.aStart.Parse(aPos, m_aDocument, formula::FormulaGrammar::CONV_OOO) & ScRefFlags::VALID) );
 
     ScServerObject* pObj = nullptr;            // NULL = error
     if ( bValid )
