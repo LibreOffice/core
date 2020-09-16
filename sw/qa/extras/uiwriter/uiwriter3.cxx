@@ -48,11 +48,19 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf129382)
 
     CPPUNIT_ASSERT_EQUAL(8, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
+
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:Cut", {});
+
+    SwDoc aClipboard;
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Copy(&aClipboard);
+    pWrtShell->Delete();
+
     CPPUNIT_ASSERT_EQUAL(3, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    pWrtShell->Paste(&aClipboard);
+
     CPPUNIT_ASSERT_EQUAL(8, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     dispatchCommand(mxComponent, ".uno:Undo", {});
@@ -74,10 +82,18 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135412)
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
     uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("X"), xShape->getString());
+
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:Cut", {});
+
+    SwDoc aClipboard;
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Copy(&aClipboard);
+    pWrtShell->Delete();
+
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    pWrtShell->Paste(&aClipboard);
+
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
 
     // Without the fix in place, the text in the shape wouldn't be pasted
@@ -107,18 +123,24 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132911)
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:Cut", {});
+
+    SwDoc aClipboard;
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Copy(&aClipboard);
+    pWrtShell->Delete();
     Scheduler::ProcessEventsToIdle();
+
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    pWrtShell->Paste(&aClipboard);
     Scheduler::ProcessEventsToIdle();
+
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
 
     // Without the fix in place, it would have crashed here
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    pWrtShell->Paste(&aClipboard);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(8, getShapes());
@@ -133,12 +155,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132911)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    pWrtShell->Paste(&aClipboard);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    pWrtShell->Paste(&aClipboard);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(8, getShapes());
@@ -263,18 +285,26 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126626)
     CPPUNIT_ASSERT(pTextDoc);
 
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
+
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:Copy", {});
+
+    SwDoc aClipboard;
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Copy(&aClipboard);
+
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    pWrtShell->Paste(&aClipboard);
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    pWrtShell->Paste(&aClipboard);
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
+
     dispatchCommand(mxComponent, ".uno:Undo", {});
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
     // without the fix, it crashes
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    pWrtShell->Paste(&aClipboard);
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
 }
 
@@ -314,13 +344,18 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132187)
     CPPUNIT_ASSERT(pTextDoc);
 
     CPPUNIT_ASSERT_EQUAL(1, getPages());
+
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:Copy", {});
+
+    SwDoc aClipboard;
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Copy(&aClipboard);
+
     dispatchCommand(mxComponent, ".uno:GoToEndOfDoc", {});
 
     for (sal_Int32 i = 0; i < 10; ++i)
     {
-        dispatchCommand(mxComponent, ".uno:Paste", {});
+        pWrtShell->Paste(&aClipboard);
         Scheduler::ProcessEventsToIdle();
     }
 
@@ -339,11 +374,19 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf128739)
     CPPUNIT_ASSERT(pTextDoc);
 
     CPPUNIT_ASSERT_EQUAL(OUString("Fehler: Verweis nicht gefunden"), getParagraph(1)->getString());
+
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:Cut", {});
+
+    SwDoc aClipboard;
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Copy(&aClipboard);
+    pWrtShell->Delete();
+
     CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    pWrtShell->Paste(&aClipboard);
     CPPUNIT_ASSERT_EQUAL(OUString("Fehler: Verweis nicht gefunden"), getParagraph(1)->getString());
+
     // without the fix, it crashes
     dispatchCommand(mxComponent, ".uno:Undo", {});
     CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
@@ -357,11 +400,18 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf124722)
     CPPUNIT_ASSERT(pTextDoc);
 
     CPPUNIT_ASSERT_EQUAL(22, getPages());
+
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:Copy", {});
+
+    SwDoc aClipboard;
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Copy(&aClipboard);
+
     CPPUNIT_ASSERT_EQUAL(22, getPages());
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    pWrtShell->Paste(&aClipboard);
     CPPUNIT_ASSERT_EQUAL(43, getPages());
+
     dispatchCommand(mxComponent, ".uno:Undo", {});
     CPPUNIT_ASSERT_EQUAL(22, getPages());
 }
@@ -429,11 +479,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126504)
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    dispatchCommand(mxComponent, ".uno:Copy", {});
+    SwDoc aClipboard;
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Copy(&aClipboard);
+
     dispatchCommand(mxComponent, ".uno:GoToEndOfPage", {});
     Scheduler::ProcessEventsToIdle();
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    pWrtShell->Paste(&aClipboard);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xIndexAccess->getCount());
@@ -477,10 +530,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133982)
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
     //Without the fix in place, it would have crashed here
-    dispatchCommand(mxComponent, ".uno:Cut", {});
+    SwDoc aClipboard;
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Copy(&aClipboard);
+    pWrtShell->Delete();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    pWrtShell->Paste(&aClipboard);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
 }
 
@@ -502,8 +558,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134253)
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    dispatchCommand(mxComponent, ".uno:Copy", {});
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    SwDoc aClipboard;
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Copy(&aClipboard);
+    pWrtShell->Paste(&aClipboard);
 
     //Without the fix in place, it would have crashed here
     dispatchCommand(mxComponent, ".uno:Undo", {});
@@ -690,11 +748,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf107975)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:Copy", {});
+
+    SwDoc aClipboard;
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Copy(&aClipboard);
 
     //Position the mouse cursor (caret) after "ABC" below the blue image
     dispatchCommand(mxComponent, ".uno:GoRight", {});
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    pWrtShell->Paste(&aClipboard);
 
     // without the fix, it crashes
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
@@ -722,11 +783,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf107975)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:Copy", {});
+
+    pWrtShell->Copy(&aClipboard);
 
     //Position the mouse cursor (caret) after "ABC" below the blue image
     dispatchCommand(mxComponent, ".uno:GoRight", {});
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    pWrtShell->Paste(&aClipboard);
 
     // without the fix, it crashes
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
@@ -817,8 +879,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf129805)
 
     CPPUNIT_ASSERT_EQUAL(OUString("x"), getParagraph(1)->getString());
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
     // without the fix in place, it would crash here
-    dispatchCommand(mxComponent, ".uno:Cut", {});
+    SwDoc aClipboard;
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Copy(&aClipboard);
+    pWrtShell->Delete();
     CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
@@ -834,12 +900,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130685)
 
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:Cut", {});
+
+    SwDoc aClipboard;
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Copy(&aClipboard);
+    pWrtShell->Delete();
     Scheduler::ProcessEventsToIdle();
+
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    pWrtShell->Paste(&aClipboard);
+    pWrtShell->Paste(&aClipboard);
 
     // Without fix in place, this test would have failed with:
     //- Expected: 2
@@ -892,14 +963,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134931)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:Copy", {});
+
+    SwDoc aClipboard;
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Copy(&aClipboard);
     Scheduler::ProcessEventsToIdle();
 
     dispatchCommand(mxComponent, ".uno:GoDown", {});
 
     for (sal_Int32 i = 0; i < 10; ++i)
     {
-        dispatchCommand(mxComponent, ".uno:Paste", {});
+        pWrtShell->Paste(&aClipboard);
         Scheduler::ProcessEventsToIdle();
     }
 
@@ -927,13 +1001,20 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130680)
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
+    SwDoc aClipboard;
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Copy(&aClipboard);
     // without the fix, it crashes
-    dispatchCommand(mxComponent, ".uno:Cut", {});
+    pWrtShell->Delete();
+
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    pWrtShell->Paste(&aClipboard);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+
     dispatchCommand(mxComponent, ".uno:Undo", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
+
     dispatchCommand(mxComponent, ".uno:Undo", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(23), xIndexAccess->getCount());
 }
@@ -955,13 +1036,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf131684)
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    dispatchCommand(mxComponent, ".uno:Cut", {});
+    SwDoc aClipboard;
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Copy(&aClipboard);
+    pWrtShell->Delete();
+    Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    pWrtShell->Paste(&aClipboard);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 
     // without the fix, it crashes
@@ -1013,12 +1098,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132744)
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
     Scheduler::ProcessEventsToIdle();
 
-    dispatchCommand(mxComponent, ".uno:Cut", {});
+    SwDoc aClipboard;
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Copy(&aClipboard);
+    pWrtShell->Delete();
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    pWrtShell->Paste(&aClipboard);
     Scheduler::ProcessEventsToIdle();
 
     //Without the fix in place, the image wouldn't be pasted
@@ -1383,17 +1471,21 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133490)
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:Cut", {});
+
+    SwDoc aClipboard;
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Copy(&aClipboard);
+    pWrtShell->Delete();
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    pWrtShell->Paste(&aClipboard);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    pWrtShell->Paste(&aClipboard);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(2, getShapes());

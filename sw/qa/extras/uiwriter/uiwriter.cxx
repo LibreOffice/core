@@ -1308,8 +1308,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf134250)
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:Copy", {});
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    SwDoc aClipboard;
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Copy(&aClipboard);
+    pWrtShell->Paste(&aClipboard);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
