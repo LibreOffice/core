@@ -60,7 +60,8 @@ void ContextChangeBroadcaster::Deactivate (const css::uno::Reference<css::frame:
         BroadcastContextChange(
             rxFrame,
             GetModuleName(rxFrame),
-            vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Default));
+            (comphelper::LibreOfficeKit::isActive() ? msContextName:
+             vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Default)));
     }
 }
 
