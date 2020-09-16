@@ -587,7 +587,7 @@ public:
             Or NULL if a 3D sheet header could be parsed but
             bOnlyAcceptSingle==true was given.
      */
-    const sal_Unicode* Parse_XL_Header( const sal_Unicode* pString, const ScDocument* pDocument,
+    const sal_Unicode* Parse_XL_Header( const sal_Unicode* pString, const ScDocument& rDocument,
                                         OUString& rExternDocName, OUString& rStartTabName,
                                         OUString& rEndTabName, ScRefFlags& nFlags,
                                         bool bOnlyAcceptSingle,
@@ -598,8 +598,8 @@ public:
         according to provided address convention.
         @param nFlags
             Cell reference flags
-        @param pDocument
-            Pointer to document which is used for example to get tab names.
+        @param rDocument
+            Reference to document which is used for example to get tab names.
         @param rDetails
             Provide information about required address convention.
             Supported address conventions are:
