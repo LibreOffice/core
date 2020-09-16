@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5ae6e8c2_892972d9",
+        "filename": "reportdesign/uiconfig/dbreport/menubar/menubar.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-09-16T17:47:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a133fd9_20330f65",
+      "revId": "6176049a95230c6e21fd1e54ac8aeed84686f0f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e6eb04b0_5501e7e5",
         "filename": "reportdesign/uiconfig/dbreport/popupmenu/report.xml",
         "patchSetId": 9
@@ -33,6 +51,24 @@
       "revId": "6176049a95230c6e21fd1e54ac8aeed84686f0f3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88263198_e5199fc4",
+        "filename": "reportdesign/uiconfig/dbreport/popupmenu/report.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-09-16T17:47:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e6eb04b0_5501e7e5",
+      "revId": "6176049a95230c6e21fd1e54ac8aeed84686f0f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
