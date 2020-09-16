@@ -203,7 +203,7 @@ bool ScDocFunc::DetectiveAddPred(const ScAddress& rPos)
 
     if (bUndo)
         pModel->BeginCalcUndo(false);
-    bool bDone = ScDetectiveFunc( &rDoc,nTab ).ShowPred( nCol, nRow );
+    bool bDone = ScDetectiveFunc(rDoc, nTab).ShowPred( nCol, nRow );
     std::unique_ptr<SdrUndoGroup> pUndo;
     if (bUndo)
         pUndo = pModel->GetCalcUndo();
@@ -242,7 +242,7 @@ bool ScDocFunc::DetectiveDelPred(const ScAddress& rPos)
 
     if (bUndo)
         pModel->BeginCalcUndo(false);
-    bool bDone = ScDetectiveFunc( &rDoc,nTab ).DeletePred( nCol, nRow );
+    bool bDone = ScDetectiveFunc(rDoc, nTab).DeletePred( nCol, nRow );
     std::unique_ptr<SdrUndoGroup> pUndo;
     if (bUndo)
         pUndo = pModel->GetCalcUndo();
@@ -279,7 +279,7 @@ bool ScDocFunc::DetectiveAddSucc(const ScAddress& rPos)
 
     if (bUndo)
         pModel->BeginCalcUndo(false);
-    bool bDone = ScDetectiveFunc( &rDoc,nTab ).ShowSucc( nCol, nRow );
+    bool bDone = ScDetectiveFunc(rDoc, nTab).ShowSucc( nCol, nRow );
     std::unique_ptr<SdrUndoGroup> pUndo;
     if (bUndo)
         pUndo = pModel->GetCalcUndo();
@@ -318,7 +318,7 @@ bool ScDocFunc::DetectiveDelSucc(const ScAddress& rPos)
 
     if (bUndo)
         pModel->BeginCalcUndo(false);
-    bool bDone = ScDetectiveFunc( &rDoc,nTab ).DeleteSucc( nCol, nRow );
+    bool bDone = ScDetectiveFunc(rDoc, nTab).DeleteSucc( nCol, nRow );
     std::unique_ptr<SdrUndoGroup> pUndo;
     if (bUndo)
         pUndo = pModel->GetCalcUndo();
@@ -355,7 +355,7 @@ bool ScDocFunc::DetectiveAddError(const ScAddress& rPos)
 
     if (bUndo)
         pModel->BeginCalcUndo(false);
-    bool bDone = ScDetectiveFunc( &rDoc,nTab ).ShowError( nCol, nRow );
+    bool bDone = ScDetectiveFunc(rDoc, nTab).ShowError( nCol, nRow );
     std::unique_ptr<SdrUndoGroup> pUndo;
     if (bUndo)
         pUndo = pModel->GetCalcUndo();
@@ -391,7 +391,7 @@ bool ScDocFunc::DetectiveMarkInvalid(SCTAB nTab)
     if (bUndo)
         pModel->BeginCalcUndo(false);
     bool bOverflow;
-    bool bDone = ScDetectiveFunc( &rDoc,nTab ).MarkInvalid( bOverflow );
+    bool bDone = ScDetectiveFunc(rDoc, nTab).MarkInvalid( bOverflow );
     std::unique_ptr<SdrUndoGroup> pUndo;
     if (bUndo)
         pUndo = pModel->GetCalcUndo();
@@ -429,7 +429,7 @@ bool ScDocFunc::DetectiveDelAll(SCTAB nTab)
 
     if (bUndo)
         pModel->BeginCalcUndo(false);
-    bool bDone = ScDetectiveFunc( &rDoc,nTab ).DeleteAll( ScDetectiveDelete::Detective );
+    bool bDone = ScDetectiveFunc(rDoc, nTab).DeleteAll( ScDetectiveDelete::Detective );
     std::unique_ptr<SdrUndoGroup> pUndo;
     if (bUndo)
         pUndo = pModel->GetCalcUndo();
@@ -474,7 +474,7 @@ bool ScDocFunc::DetectiveRefresh( bool bAutomatic )
 
         SCTAB nTabCount = rDoc.GetTableCount();
         for (SCTAB nTab=0; nTab<nTabCount; nTab++)
-            ScDetectiveFunc( &rDoc,nTab ).DeleteAll( ScDetectiveDelete::Arrows );    // don't remove circles
+            ScDetectiveFunc( rDoc,nTab ).DeleteAll( ScDetectiveDelete::Arrows );    // don't remove circles
 
         //  repeat
 
@@ -483,7 +483,7 @@ bool ScDocFunc::DetectiveRefresh( bool bAutomatic )
         {
             const ScDetOpData& rData = pList->GetObject(i);
             const ScAddress& aPos = rData.GetPos();
-            ScDetectiveFunc aFunc( &rDoc, aPos.Tab() );
+            ScDetectiveFunc aFunc( rDoc, aPos.Tab() );
             SCCOL nCol = aPos.Col();
             SCROW nRow = aPos.Row();
             switch (rData.GetOperation())
@@ -535,7 +535,7 @@ static void lcl_collectAllPredOrSuccRanges(
     if (rSrcRanges.empty())
         return;
     ScRange const & rFrontRange = rSrcRanges.front();
-    ScDetectiveFunc aDetFunc(&rDoc, rFrontRange.aStart.Tab());
+    ScDetectiveFunc aDetFunc(rDoc, rFrontRange.aStart.Tab());
     for (size_t i = 0, n = rSrcRanges.size(); i < n; ++i)
     {
         ScRange const & r = rSrcRanges[i];
@@ -1955,7 +1955,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             SCROW nTestRow1 = -1;
             SCROW nTestRow2 = -1;
 
-            ScDocAttrIterator aTestIter( &rDoc, i, nMergeTestStartCol, nMergeTestStartRow, nMergeTestEndCol, nMergeTestEndRow );
+            ScDocAttrIterator aTestIter( rDoc, i, nMergeTestStartCol, nMergeTestStartRow, nMergeTestEndCol, nMergeTestEndRow );
             ScRange aExtendRange( nMergeTestStartCol, nMergeTestStartRow, i, nMergeTestEndCol, nMergeTestEndRow, i );
             const ScPatternAttr* pPattern = nullptr;
             while ( ( pPattern = aTestIter.GetNext( nTestCol, nTestRow1, nTestRow2 ) ) != nullptr )
@@ -2437,7 +2437,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             SCROW nTestRow1 = -1;
             SCROW nTestRow2 = -1;
 
-            ScDocAttrIterator aTestIter( &rDoc, i, nUndoStartCol, nUndoStartRow, nMergeTestEndCol, nMergeTestEndRow );
+            ScDocAttrIterator aTestIter( rDoc, i, nUndoStartCol, nUndoStartRow, nMergeTestEndCol, nMergeTestEndRow );
             ScRange aExtendRange( nUndoStartCol, nUndoStartRow, i, nMergeTestEndCol, nMergeTestEndRow, i );
             const ScPatternAttr* pPattern = nullptr;
             while ( ( pPattern = aTestIter.GetNext( nTestCol, nTestRow1, nTestRow2 ) ) != nullptr )

@@ -1279,7 +1279,7 @@ void XclObjAny::SaveXml( XclExpXmlStream& rStrm )
     if (pObject)
     {
         ScDocument& rDoc = rStrm.GetRoot().GetDoc();
-        ScDetectiveFunc aDetFunc(&rDoc, mnScTab);
+        ScDetectiveFunc aDetFunc(rDoc, mnScTab);
         ScAddress       aPosition;
         ScRange         aSourceRange;
         bool            bRedLine;

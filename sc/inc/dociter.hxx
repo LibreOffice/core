@@ -209,7 +209,7 @@ class ScCellIterator
 {
     typedef std::pair<sc::CellStoreType::const_iterator, size_t> PositionType;
 
-    ScDocument*   mpDoc;
+    ScDocument&   mrDoc;
     ScAddress     maStartPos;
     ScAddress     maEndPos;
     ScAddress     maCurPos;
@@ -229,7 +229,7 @@ class ScCellIterator
     bool getCurrent();
 
 public:
-    ScCellIterator( ScDocument* pDoc, const ScRange& rRange, SubtotalFlags nSubTotalFlags = SubtotalFlags::NONE );
+    ScCellIterator( ScDocument& rDoc, const ScRange& rRange, SubtotalFlags nSubTotalFlags = SubtotalFlags::NONE );
 
     const ScAddress& GetPos() const { return maCurPos; }
 
@@ -395,7 +395,7 @@ public:
 class ScDocAttrIterator             // all attribute areas
 {
 private:
-    ScDocument*     pDoc;
+    ScDocument&     rDoc;
     SCTAB           nTab;
     SCCOL           nEndCol;
     SCROW           nStartRow;
@@ -405,7 +405,7 @@ private:
                     pColIter;
 
 public:
-                    ScDocAttrIterator(ScDocument* pDocument, SCTAB nTable,
+                    ScDocAttrIterator(ScDocument& rDocument, SCTAB nTable,
                                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
                     ~ScDocAttrIterator();
 

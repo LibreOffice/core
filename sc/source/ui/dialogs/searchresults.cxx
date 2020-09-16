@@ -92,10 +92,10 @@ namespace
     };
 }
 
-void SearchResultsDlg::FillResults( ScDocument* pDoc, const ScRangeList &rMatchedRanges, bool bCellNotes )
+void SearchResultsDlg::FillResults( ScDocument& rDoc, const ScRangeList &rMatchedRanges, bool bCellNotes )
 {
     ListWrapper aList(*mxList);
-    std::vector<OUString> aTabNames = pDoc->GetAllTableNames();
+    std::vector<OUString> aTabNames = rDoc.GetAllTableNames();
     SCTAB nTabCount = aTabNames.size();
 
     // tdf#92160 - too many results blow the widget's mind
@@ -122,10 +122,10 @@ void SearchResultsDlg::FillResults( ScDocument* pDoc, const ScRangeList &rMatche
                 {
                     for (aPos.SetRow( rRange.aStart.Row()); aPos.Row() <= rRange.aEnd.Row(); aPos.IncRow())
                     {
-                        const ScPostIt* pNote = pDoc->GetNote( aPos);
+                        const ScPostIt* pNote = rDoc.GetNote( aPos);
                         if (pNote)
                             aList.Insert(aTabNames[aPos.Tab()], aPos,
-                                         pDoc->GetAddressConvention(),
+                                         rDoc.GetAddressConvention(),
                                          pNote->GetText());
                     }
                 }
@@ -136,7 +136,7 @@ void SearchResultsDlg::FillResults( ScDocument* pDoc, const ScRangeList &rMatche
     {
         for (size_t i = 0, n = nMatchMax; i < n; ++i)
         {
-            ScCellIterator aIter(pDoc, rMatchedRanges[i]);
+            ScCellIterator aIter(rDoc, rMatchedRanges[i]);
             for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
             {
                 const ScAddress& aPos = aIter.GetPos();
@@ -145,8 +145,8 @@ void SearchResultsDlg::FillResults( ScDocument* pDoc, const ScRangeList &rMatche
                     continue;
 
                 aList.Insert(aTabNames[aPos.Tab()], aPos,
-                             pDoc->GetAddressConvention(),
-                             pDoc->GetString(aPos));
+                             rDoc.GetAddressConvention(),
+                             rDoc.GetString(aPos));
             }
         }
     }
@@ -157,7 +157,7 @@ void SearchResultsDlg::FillResults( ScDocument* pDoc, const ScRangeList &rMatche
         aSearchResults += " " + ScGlobal::ReplaceOrAppend( aSkipped, "%1", OUString::number( ListWrapper::mnMaximum ) );
     mxSearchResults->set_label(aSearchResults);
 
-    mpDoc = pDoc;
+    mpDoc = &rDoc;
 }
 
 void SearchResultsDlg::Close()

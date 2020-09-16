@@ -3978,7 +3978,7 @@ void ScDocument::CompileXML()
 
     // set AutoNameCache to speed up automatic name lookup
     OSL_ENSURE( !pAutoNameCache, "AutoNameCache already set" );
-    pAutoNameCache.reset( new ScAutoNameCache( this ) );
+    pAutoNameCache.reset( new ScAutoNameCache( *this ) );
 
     if (pRangeName)
         pRangeName->CompileUnresolvedXML(aCxt);
@@ -4653,7 +4653,7 @@ SCROW ScDocument::GetNextDifferentChangedRow( SCTAB nTab, SCROW nStart) const
 void ScDocument::GetColDefault( SCTAB nTab, SCCOL nCol, SCROW nLastRow, SCROW& nDefault)
 {
     nDefault = 0;
-    ScDocAttrIterator aDocAttrItr(this, nTab, nCol, 0, nCol, nLastRow);
+    ScDocAttrIterator aDocAttrItr(*this, nTab, nCol, 0, nCol, nLastRow);
     SCCOL nColumn;
     SCROW nStartRow;
     SCROW nEndRow;
@@ -6407,9 +6407,9 @@ void ScDocument::RemoveSubTotalCell(ScFormulaCell* pCell)
 
 namespace {
 
-bool lcl_hasDirtyRange(const ScDocument* pDoc, ScFormulaCell* pCell, const ScRange& rDirtyRange)
+bool lcl_hasDirtyRange(const ScDocument& rDoc, ScFormulaCell* pCell, const ScRange& rDirtyRange)
 {
-    ScDetectiveRefIter aRefIter(pDoc, pCell);
+    ScDetectiveRefIter aRefIter(rDoc, pCell);
     ScRange aRange;
     while (aRefIter.GetNextRef(aRange))
     {
@@ -6433,7 +6433,7 @@ void ScDocument::SetSubTotalCellsDirty(const ScRange& rDirtyRange)
         if (pCell->IsSubTotal())
         {
             aNewSet.insert(pCell);
-            if (lcl_hasDirtyRange(this, pCell, rDirtyRange))
+            if (lcl_hasDirtyRange(*this, pCell, rDirtyRange))
                 pCell->SetDirty();
         }
     }

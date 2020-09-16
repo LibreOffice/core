@@ -1214,7 +1214,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
     if (bClipOver)
         if (lcl_SelHasAttrib( &rDoc, nStartCol,nStartRow, nUndoEndCol,nUndoEndRow, aFilteredMark, HasAttrFlags::Overlapped ))
         {       // "Cell merge not possible if cells already merged"
-            ScDocAttrIterator aIter( &rDoc, nStartTab, nStartCol, nStartRow, nUndoEndCol, nUndoEndRow );
+            ScDocAttrIterator aIter( rDoc, nStartTab, nStartCol, nStartRow, nUndoEndCol, nUndoEndRow );
             const ScPatternAttr* pPattern = nullptr;
             SCCOL nCol = -1;
             SCROW nRow1 = -1;

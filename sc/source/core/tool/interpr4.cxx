@@ -2796,7 +2796,7 @@ void ScInterpreter::ScExternal()
                             {
                                 ScRange aRange;
                                 PopDoubleRef( aRange );
-                                if (!ScRangeToSequence::FillLongArray( aParam, &mrDoc, aRange ))
+                                if (!ScRangeToSequence::FillLongArray( aParam, mrDoc, aRange ))
                                     SetError(FormulaError::IllegalParameter);
                             }
                             break;
@@ -2827,7 +2827,7 @@ void ScInterpreter::ScExternal()
                             {
                                 ScRange aRange;
                                 PopDoubleRef( aRange );
-                                if (!ScRangeToSequence::FillDoubleArray( aParam, &mrDoc, aRange ))
+                                if (!ScRangeToSequence::FillDoubleArray( aParam, mrDoc, aRange ))
                                     SetError(FormulaError::IllegalParameter);
                             }
                             break;
@@ -2858,7 +2858,7 @@ void ScInterpreter::ScExternal()
                             {
                                 ScRange aRange;
                                 PopDoubleRef( aRange );
-                                if (!ScRangeToSequence::FillStringArray( aParam, &mrDoc, aRange ))
+                                if (!ScRangeToSequence::FillStringArray( aParam, mrDoc, aRange ))
                                     SetError(FormulaError::IllegalParameter);
                             }
                             break;
@@ -2909,7 +2909,7 @@ void ScInterpreter::ScExternal()
                             {
                                 ScRange aRange;
                                 PopDoubleRef( aRange );
-                                if (!ScRangeToSequence::FillMixedArray( aParam, &mrDoc, aRange ))
+                                if (!ScRangeToSequence::FillMixedArray( aParam, mrDoc, aRange ))
                                     SetError(FormulaError::IllegalParameter);
                             }
                             break;
@@ -2953,7 +2953,7 @@ void ScInterpreter::ScExternal()
                             {
                                 ScRange aRange;
                                 PopDoubleRef( aRange );
-                                if (!ScRangeToSequence::FillMixedArray( aParam, &mrDoc, aRange ))
+                                if (!ScRangeToSequence::FillMixedArray( aParam, mrDoc, aRange ))
                                     SetError(FormulaError::IllegalParameter);
                             }
                             break;

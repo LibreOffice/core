@@ -759,7 +759,7 @@ void ScXMLExportDataPilot::WriteDataPilots()
         ScRange aOutRange((*pDPs)[i].GetOutRange());
         OUString sTargetRangeAddress;
         ScRangeStringConverter::GetStringFromRange( sTargetRangeAddress, aOutRange, pDoc, ::formula::FormulaGrammar::CONV_OOO );
-        ScDocAttrIterator aAttrItr(pDoc, aOutRange.aStart.Tab(),
+        ScDocAttrIterator aAttrItr(*pDoc, aOutRange.aStart.Tab(),
             aOutRange.aStart.Col(), aOutRange.aStart.Row(),
             aOutRange.aEnd.Col(), aOutRange.aEnd.Row());
         SCCOL nCol;

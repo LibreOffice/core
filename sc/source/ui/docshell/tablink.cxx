@@ -294,14 +294,14 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
 
                     ScRangeList aErrorCells;        // cells on the linked sheets that need error values
 
-                    ScCellIterator aIter(&rDoc, ScRange(0,0,0,rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB));          // all sheets
+                    ScCellIterator aIter(rDoc, ScRange(0,0,0,rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB));          // all sheets
                     for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
                     {
                         if (aIter.getType() != CELLTYPE_FORMULA)
                             continue;
 
                         ScFormulaCell* pCell = aIter.getFormulaCell();
-                        ScDetectiveRefIter aRefIter(&rDoc, pCell);
+                        ScDetectiveRefIter aRefIter(rDoc, pCell);
                         ScRange aRefRange;
                         while ( aRefIter.GetNextRef( aRefRange ) )
                         {

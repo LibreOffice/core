@@ -38,7 +38,7 @@ public:
 
     virtual void Close() override;
 
-    void FillResults( ScDocument* pDoc, const ScRangeList& rMatchedRanges, bool bCellNotes );
+    void FillResults( ScDocument& rDoc, const ScRangeList& rMatchedRanges, bool bCellNotes );
 };
 
 class SearchResultsDlgWrapper : public SfxChildWindow

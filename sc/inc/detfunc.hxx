@@ -53,7 +53,7 @@ class SC_DLLPUBLIC ScDetectiveFunc
     static Color     nCommentColor;
     static bool      bColorsInitialized;
 
-    ScDocument*     pDoc;
+    ScDocument&     rDoc;
     SCTAB           nTab;
 
     enum class DrawPosMode
@@ -117,7 +117,7 @@ class SC_DLLPUBLIC ScDetectiveFunc
     void        Modified();
 
 public:
-                ScDetectiveFunc(ScDocument* pDocument, SCTAB nTable) : pDoc(pDocument),nTab(nTable) {}
+                ScDetectiveFunc(ScDocument& rDocument, SCTAB nTable) : rDoc(rDocument),nTab(nTable) {}
 
     bool        ShowSucc( SCCOL nCol, SCROW nRow );
     bool        ShowPred( SCCOL nCol, SCROW nRow );

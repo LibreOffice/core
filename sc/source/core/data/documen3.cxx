@@ -762,7 +762,7 @@ bool ScDocument::DoSubTotals( SCTAB nTab, ScSubTotalParam& rParam )
 
 bool ScDocument::HasSubTotalCells( const ScRange& rRange )
 {
-    ScCellIterator aIter( this, rRange );
+    ScCellIterator aIter(*this, rRange);
     for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
     {
         if (aIter.getType() != CELLTYPE_FORMULA)
@@ -1655,7 +1655,7 @@ void ScDocument::GetFormulaEntries( ScTypedCaseStrSet& rStrings )
         {
             const ScRangePair & rPair = (*pList)[i];
             const ScRange & rRange = rPair.GetRange(0);
-            ScCellIterator aIter( this, rRange );
+            ScCellIterator aIter( *this, rRange );
             for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
             {
                 if (!aIter.hasString())

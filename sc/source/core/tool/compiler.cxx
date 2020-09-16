@@ -3579,7 +3579,7 @@ bool ScCompiler::IsColRowName( const OUString& rName )
                 if ( jThisTab && (rNameRange.aStart.Tab() > nThisTab ||
                         nThisTab > rNameRange.aEnd.Tab()) )
                     continue;   // for
-                ScCellIterator aIter( &rDoc, rNameRange );
+                ScCellIterator aIter( rDoc, rNameRange );
                 for (bool bHas = aIter.first(); bHas && !bInList; bHas = aIter.next())
                 {
                     // Don't crash if cell (via CompileNameFormula) encounters
@@ -3687,7 +3687,7 @@ bool ScCompiler::IsColRowName( const OUString& rName )
         }
         else
         {
-            ScCellIterator aIter( &rDoc, ScRange( aOne, aTwo ) );
+            ScCellIterator aIter( rDoc, ScRange( aOne, aTwo ) );
             for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
             {
                 if ( bFound )
@@ -3942,7 +3942,7 @@ bool ScCompiler::IsTableRefColumn( const OUString& rName ) const
     if (pDBData->HasHeader())
     {
         // Quite similar to IsColRowName() but limited to one row of headers.
-        ScCellIterator aIter( &rDoc, aRange);
+        ScCellIterator aIter( rDoc, aRange);
         for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
         {
             CellType eType = aIter.getType();

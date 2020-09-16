@@ -387,14 +387,14 @@ void ScAccessibleCell::FillDependents(utl::AccessibleRelationSetHelper* pRelatio
         return;
 
     ScRange aRange(0, 0, maCellAddress.Tab(), mpDoc->MaxCol(), mpDoc->MaxRow(), maCellAddress.Tab());
-    ScCellIterator aCellIter(mpDoc, aRange);
+    ScCellIterator aCellIter(*mpDoc, aRange);
 
     for (bool bHasCell = aCellIter.first(); bHasCell; bHasCell = aCellIter.next())
     {
         if (aCellIter.getType() == CELLTYPE_FORMULA)
         {
             bool bFound = false;
-            ScDetectiveRefIter aIter(mpDoc, aCellIter.getFormulaCell());
+            ScDetectiveRefIter aIter(*mpDoc, aCellIter.getFormulaCell());
             ScRange aRef;
             while ( !bFound && aIter.GetNextRef( aRef ) )
             {
@@ -416,7 +416,7 @@ void ScAccessibleCell::FillPrecedents(utl::AccessibleRelationSetHelper* pRelatio
     if (aCell.meType == CELLTYPE_FORMULA)
     {
         ScFormulaCell* pCell = aCell.mpFormula;
-        ScDetectiveRefIter aIter(mpDoc, pCell);
+        ScDetectiveRefIter aIter(*mpDoc, pCell);
         ScRange aRef;
         while ( aIter.GetNextRef( aRef ) )
         {
