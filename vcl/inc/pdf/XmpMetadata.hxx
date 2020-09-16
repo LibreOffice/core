@@ -29,6 +29,9 @@ public:
     OString msSubject;
     OString msProducer;
     OString msKeywords;
+    OString m_sCreatorTool;
+    OString m_sCreateDate;
+
     sal_Int32 mnPDF_A;
     bool mbPDF_UA;
 

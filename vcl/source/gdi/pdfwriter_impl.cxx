@@ -5223,6 +5223,16 @@ static void escapeStringXML( const OUString& rStr, OUString &rValue)
     }
 }
 
+static void lcl_assignMeta(const OUString& aValue, OString& aMeta)
+{
+    if (!aValue.isEmpty())
+    {
+        OUString aTempString;
+        escapeStringXML(aValue, aTempString);
+        aMeta = OUStringToOString(aTempString, RTL_TEXTENCODING_UTF8);
+    }
+}
+
 // emits the document metadata
 sal_Int32 PDFWriterImpl::emitDocumentMetadata()
 {
@@ -5245,36 +5255,13 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
 
         aMetadata.mbPDF_UA = m_bIsPDF_UA;
 
-        if (!m_aContext.DocumentInfo.Title.isEmpty())
-        {
-            OUString aTempString;
-            escapeStringXML(m_aContext.DocumentInfo.Title, aTempString);
-            aMetadata.msTitle = OUStringToOString(aTempString, RTL_TEXTENCODING_UTF8);
-        }
-        if (!m_aContext.DocumentInfo.Author.isEmpty())
-        {
-            OUString aTempString;
-            escapeStringXML(m_aContext.DocumentInfo.Author, aTempString);
-            aMetadata.msAuthor = OUStringToOString(aTempString, RTL_TEXTENCODING_UTF8);
-        }
-        if (!m_aContext.DocumentInfo.Subject.isEmpty())
-        {
-            OUString aTempString;
-            escapeStringXML(m_aContext.DocumentInfo.Subject, aTempString);
-            aMetadata.msSubject = OUStringToOString(aTempString, RTL_TEXTENCODING_UTF8);
-        }
-        if (!m_aContext.DocumentInfo.Producer.isEmpty())
-        {
-            OUString aTempString;
-            escapeStringXML(m_aContext.DocumentInfo.Producer, aTempString);
-            aMetadata.msProducer = OUStringToOString(aTempString, RTL_TEXTENCODING_UTF8);
-        }
-        if (!m_aContext.DocumentInfo.Keywords.isEmpty())
-        {
-            OUString aTempString;
-            escapeStringXML(m_aContext.DocumentInfo.Keywords, aTempString);
-            aMetadata.msKeywords = OUStringToOString(aTempString, RTL_TEXTENCODING_UTF8);
-        }
+        lcl_assignMeta(m_aContext.DocumentInfo.Title, aMetadata.msTitle);
+        lcl_assignMeta(m_aContext.DocumentInfo.Author, aMetadata.msAuthor);
+        lcl_assignMeta(m_aContext.DocumentInfo.Subject, aMetadata.msSubject);
+        lcl_assignMeta(m_aContext.DocumentInfo.Producer, aMetadata.msProducer);
+        lcl_assignMeta(m_aContext.DocumentInfo.Keywords, aMetadata.msKeywords);
+        lcl_assignMeta(m_aContext.DocumentInfo.Creator, aMetadata.m_sCreatorTool);
+        aMetadata.m_sCreateDate = m_aCreationMetaDateString;
 
         OStringBuffer aMetadataObj( 1024 );
 
