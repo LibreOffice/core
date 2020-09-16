@@ -404,7 +404,7 @@ ScRangeList getChartRanges(ScDocument& rDoc, const SdrOle2Obj& rChartObj)
         {
             // Parse it as a single cell address.
             ScAddress aAddr;
-            nRes = aAddr.Parse(aRangeReps[i], &rDoc, rDoc.GetAddressConvention());
+            nRes = aAddr.Parse(aRangeReps[i], rDoc, rDoc.GetAddressConvention());
             CPPUNIT_ASSERT_MESSAGE("Failed to parse a range representation.", (nRes & ScRefFlags::VALID));
             aRanges.push_back(aAddr);
         }

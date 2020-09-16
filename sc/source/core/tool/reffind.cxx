@@ -269,7 +269,7 @@ void ScRefFinder::ToggleRel( sal_Int32 nStartPos, sal_Int32 nEndPos )
         // Check the validity of the expression, and toggle the relative flag.
         ScAddress::Details aDetails(meConv, maPos.Row(), maPos.Col());
         ScAddress::ExternalInfo aExtInfo;
-        ScRefFlags nResult = aAddr.Parse(aExpr, &mrDoc, aDetails, &aExtInfo);
+        ScRefFlags nResult = aAddr.Parse(aExpr, mrDoc, aDetails, &aExtInfo);
         if ( nResult & ScRefFlags::VALID )
         {
             ScRefFlags nFlags;
@@ -292,7 +292,7 @@ void ScRefFinder::ToggleRel( sal_Int32 nStartPos, sal_Int32 nEndPos )
                 {
                     OUString aRef = aExpr.copy(nSep+1);
                     OUString aExtDocNameTabName = aExpr.copy(0, nSep+1);
-                    nResult = aAddr.Parse(aRef, &mrDoc, aDetails);
+                    nResult = aAddr.Parse(aRef, mrDoc, aDetails);
                     aAddr.SetTab(0); // force to first tab to avoid error on checking
                     nFlags = lcl_NextFlags( nResult );
                     aExpr = aExtDocNameTabName + aAddr.Format(nFlags, &mrDoc, aDetails);

@@ -280,7 +280,7 @@ void testCeilingFloor_Impl( ScDocument& rDoc )
     // Sheet1.K1 has =AND(K3:K81) to evaluate all results.
     const char pORef[] = "Sheet1.K1";
     ScAddress aPos;
-    aPos.Parse(pORef, &rDoc);
+    aPos.Parse(pORef, rDoc);
     ASSERT_FORMULA_EQUAL(rDoc, aPos, "AND(K3:K81)", "Wrong formula.");
     CPPUNIT_ASSERT_MESSAGE( OString( pORef + OStringLiteral(" result is error.")).getStr(),
             isFormulaWithoutError( rDoc, aPos));

@@ -272,7 +272,7 @@ IMPL_LINK(ScSpecialFilterDlg, EndDlgHdl, weld::Button&, rBtn, void)
             if ( -1 != nColonPos )
                 theCopyStr = theCopyStr.copy( 0, nColonPos );
 
-            ScRefFlags nResult = theAdrCopy.Parse( theCopyStr, pDoc, eConv );
+            ScRefFlags nResult = theAdrCopy.Parse( theCopyStr, *pDoc, eConv );
 
             if ( (nResult & ScRefFlags::VALID) == ScRefFlags::ZERO )
             {

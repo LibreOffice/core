@@ -1193,26 +1193,26 @@ ScRefFlags parseRange(const OUString& rString, ScRange& rRange, const ScDocument
     return rRange.Parse(rString, rDoc, formula::FormulaGrammar::CONV_XL_R1C1);
 }
 
-ScRefFlags parseAddress(const OUString& rString, ScAddress& rAddress, const ScDocument* pDoc)
+ScRefFlags parseAddress(const OUString& rString, ScAddress& rAddress, const ScDocument& rDoc)
 {
     // start with the address convention set in the document
-    formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
-    ScRefFlags nResult = rAddress.Parse(rString, pDoc, eConv);
+    formula::FormulaGrammar::AddressConvention eConv = rDoc.GetAddressConvention();
+    ScRefFlags nResult = rAddress.Parse(rString, rDoc, eConv);
     if ( nResult & ScRefFlags::VALID )
         return nResult;
 
     // try the default calc address convention
-    nResult = rAddress.Parse(rString, pDoc);
+    nResult = rAddress.Parse(rString, rDoc);
     if ( nResult & ScRefFlags::VALID )
         return nResult;
 
     // try excel a1
-    nResult = rAddress.Parse(rString, pDoc, formula::FormulaGrammar::CONV_XL_A1);
+    nResult = rAddress.Parse(rString, rDoc, formula::FormulaGrammar::CONV_XL_A1);
     if ( nResult & ScRefFlags::VALID )
         return nResult;
 
     // try r1c1
-    return rAddress.Parse(rString, pDoc, formula::FormulaGrammar::CONV_XL_R1C1);
+    return rAddress.Parse(rString, rDoc, formula::FormulaGrammar::CONV_XL_R1C1);
 }
 
 void transformURL(const OUString& rOldURL, OUString& rNewURL, const ScDocument& rDoc)
@@ -1235,7 +1235,7 @@ void transformURL(const OUString& rOldURL, OUString& rNewURL, const ScDocument& 
         }
         else
         {
-            nResult = parseAddress(aAddressString, aAddress, &rDoc);
+            nResult = parseAddress(aAddressString, aAddress, rDoc);
             if( nResult & ScRefFlags::VALID )
             {
                 OUString aString = aAddress.Format(nResult, &rDoc, formula::FormulaGrammar::CONV_XL_OOX);

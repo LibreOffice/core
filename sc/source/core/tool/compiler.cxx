@@ -3232,7 +3232,7 @@ bool ScCompiler::IsSingleReference( const OUString& rName, const OUString* pErrR
     ScAddress aAddr( aPos );
     const ScAddress::Details aDetails( pConv->meConv, aPos );
     ScAddress::ExternalInfo aExtInfo;
-    ScRefFlags nFlags = aAddr.Parse( rName, &rDoc, aDetails,
+    ScRefFlags nFlags = aAddr.Parse( rName, rDoc, aDetails,
             &aExtInfo, &maExternalLinks, &mnCurrentSheetEndPos, pErrRef);
     // Something must be valid in order to recognize Sheet1.blah or blah.a1
     // as a (wrong) reference.
@@ -4154,7 +4154,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
                 {
                     bChanged = true;
                     ScAddress aAdr;
-                    bOk &= ((aAdr.Parse( aRef[j], &rDoc, aDetails ) & nMask) == nMask);
+                    bOk &= ((aAdr.Parse( aRef[j], rDoc, aDetails ) & nMask) == nMask);
                 }
             }
             if ( bChanged && bOk )

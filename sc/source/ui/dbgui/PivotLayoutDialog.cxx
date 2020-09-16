@@ -590,7 +590,7 @@ bool ScPivotLayoutDialog::GetDestination(ScRange& aDestinationRange, bool& bToNe
     else if (mxDestinationRadioSelection->get_active())
     {
         ScAddress aAddress;
-        aAddress.Parse(mxDestinationEdit->GetText(), &mrDocument, maAddressDetails);
+        aAddress.Parse(mxDestinationEdit->GetText(), mrDocument, maAddressDetails);
         aDestinationRange = ScRange(aAddress);
     }
     else

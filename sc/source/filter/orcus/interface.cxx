@@ -164,7 +164,7 @@ os::src_address_t ScOrcusRefResolver::resolve_address(const char* p, size_t n)
     OUString aStr(p, n, mrGlobalSettings.getTextEncoding());
 
     ScAddress aAddr;
-    aAddr.Parse(aStr, &mrGlobalSettings.getDoc().getDoc(),
+    aAddr.Parse(aStr, mrGlobalSettings.getDoc().getDoc(),
         formula::FormulaGrammar::extractRefConvention(
             mrGlobalSettings.getCalcGrammar()));
 

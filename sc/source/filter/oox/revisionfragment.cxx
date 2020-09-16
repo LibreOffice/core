@@ -164,7 +164,7 @@ private:
         OUString aRefStr = rAttribs.getString(XML_r, OUString());
         if (!aRefStr.isEmpty())
         {
-            mrPos.Parse(aRefStr, &getScDocument(), formula::FormulaGrammar::CONV_XL_OOX);
+            mrPos.Parse(aRefStr, getScDocument(), formula::FormulaGrammar::CONV_XL_OOX);
             if (mnSheetIndex != -1)
                 mrPos.SetTab(mnSheetIndex-1);
         }

@@ -4332,7 +4332,7 @@ void ScFiltersTest::testEmptyRowsXLSXML()
     }
 
     ScAddress aPos;
-    aPos.Parse("B9", &rDoc);
+    aPos.Parse("B9", rDoc);
     ASSERT_FORMULA_EQUAL(rDoc, aPos, "SUM(B4:B8)", nullptr);
 
     xDocSh->DoClose();
