@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2e01debd_7e714ac5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-16T19:36:10Z",
+      "side": 1,
+      "message": "looks like a typo - should it end with 9?",
+      "range": {
+        "startLine": 7,
+        "startChar": 8,
+        "endLine": 7,
+        "endChar": 9
+      },
+      "revId": "3a7087f62e68728359665cb2da0c31b569d75afe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0a4b70e_53dddc62",
+        "filename": "sw/source/uibase/uiview/view2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1422,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-16T19:36:10Z",
+      "side": 1,
+      "message": "Since this will be the new code from the PoV of version control, please make it formatted according to the current project rules (100 char per line, no spaces between ( and text, and between text and ), etc), rather than simply return to previous formatting, which would still be attributed to the newer commit in git log :-)",
+      "range": {
+        "startLine": 1421,
+        "startChar": 16,
+        "endLine": 1422,
+        "endChar": 70
+      },
+      "revId": "3a7087f62e68728359665cb2da0c31b569d75afe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
