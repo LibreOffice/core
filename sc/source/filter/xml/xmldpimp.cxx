@@ -330,7 +330,7 @@ void ScXMLDataPilotTableContext::SetButtons(ScDPObject* pDPObject)
         {
             ScAddress aScAddress;
             sal_Int32 nAddrOffset(0);
-            if (pDoc && ScRangeStringConverter::GetAddressFromString( aScAddress, sAddress, pDoc, ::formula::FormulaGrammar::CONV_OOO, nAddrOffset ))
+            if (pDoc && ScRangeStringConverter::GetAddressFromString( aScAddress, sAddress, *pDoc, ::formula::FormulaGrammar::CONV_OOO, nAddrOffset ))
             {
                 std::pair<ScDPOutputGeometry::FieldType, size_t> aBtnType = aGeometry.getFieldButtonType(aScAddress);
                 const ScDPSaveDimension* pDim = getDimension(

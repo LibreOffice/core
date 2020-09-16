@@ -38,7 +38,7 @@ ScAddress get_address_from_string(const ScDocument& rDoc, const OUString& rStr)
 {
     ScAddress aAddr;
     sal_Int32 nOffset = 0;
-    ScRangeStringConverter::GetAddressFromString(aAddr, rStr, &rDoc, formula::FormulaGrammar::CONV_OOO, nOffset);
+    ScRangeStringConverter::GetAddressFromString(aAddr, rStr, rDoc, formula::FormulaGrammar::CONV_OOO, nOffset);
     return aAddr;
 }
 

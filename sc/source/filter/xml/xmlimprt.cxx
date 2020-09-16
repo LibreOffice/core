@@ -1476,12 +1476,12 @@ namespace {
 
 class RangeNameInserter
 {
-    ScDocument*  mpDoc;
+    ScDocument&  mrDoc;
     ScRangeName& mrRangeName;
 
 public:
-    RangeNameInserter(ScDocument* pDoc, ScRangeName& rRangeName) :
-        mpDoc(pDoc), mrRangeName(rRangeName) {}
+    RangeNameInserter(ScDocument& rDoc, ScRangeName& rRangeName) :
+        mrDoc(rDoc), mrRangeName(rRangeName) {}
 
     void operator() (const std::unique_ptr<ScMyNamedExpression>& p) const
     {
@@ -1496,14 +1496,11 @@ public:
         if ( nUnoType & sheet::NamedRangeFlag::COLUMN_HEADER )      nNewType |= ScRangeData::Type::ColHeader;
         if ( nUnoType & sheet::NamedRangeFlag::ROW_HEADER )         nNewType |= ScRangeData::Type::RowHeader;
 
-        if (!mpDoc)
-            return;
-
         // Insert a new name.
         ScAddress aPos;
         sal_Int32 nOffset = 0;
         bool bSuccess = ScRangeStringConverter::GetAddressFromString(
-            aPos, p->sBaseCellAddress, mpDoc, FormulaGrammar::CONV_OOO, nOffset);
+            aPos, p->sBaseCellAddress, mrDoc, FormulaGrammar::CONV_OOO, nOffset);
 
         if (bSuccess)
         {
@@ -1512,7 +1509,7 @@ public:
                 ScXMLConverter::ConvertCellRangeAddress(aContent);
 
             ScRangeData* pData = new ScRangeData(
-                *mpDoc, p->sName, aContent, aPos, nNewType, p->eGrammar);
+                mrDoc, p->sName, aContent, aPos, nNewType, p->eGrammar);
             mrRangeName.insert(pData);
         }
     }
@@ -1530,7 +1527,7 @@ void ScXMLImport::SetNamedRanges()
 
     // Insert the namedRanges
     ScRangeName* pRangeNames = pDoc->GetRangeName();
-    ::std::for_each(m_pMyNamedExpressions->begin(), m_pMyNamedExpressions->end(), RangeNameInserter(pDoc, *pRangeNames));
+    ::std::for_each(m_pMyNamedExpressions->begin(), m_pMyNamedExpressions->end(), RangeNameInserter(*pDoc, *pRangeNames));
 }
 
 void ScXMLImport::SetSheetNamedRanges()
@@ -1546,7 +1543,7 @@ void ScXMLImport::SetSheetNamedRanges()
             continue;
 
         const ScMyNamedExpressions& rNames = *itr.second;
-        ::std::for_each(rNames.begin(), rNames.end(), RangeNameInserter(pDoc, *pRangeNames));
+        ::std::for_each(rNames.begin(), rNames.end(), RangeNameInserter(*pDoc, *pRangeNames));
     }
 }
 

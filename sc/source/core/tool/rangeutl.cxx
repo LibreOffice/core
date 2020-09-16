@@ -437,7 +437,7 @@ sal_Int32 ScRangeStringConverter::GetTokenCount( const OUString& rString, sal_Un
 bool ScRangeStringConverter::GetAddressFromString(
         ScAddress& rAddress,
         const OUString& rAddressStr,
-        const ScDocument* pDocument,
+        const ScDocument& rDocument,
         FormulaGrammar::AddressConvention eConv,
         sal_Int32& nOffset,
         sal_Unicode cSeparator,
@@ -447,11 +447,11 @@ bool ScRangeStringConverter::GetAddressFromString(
     GetTokenByOffset( sToken, rAddressStr, nOffset, cSeparator, cQuote );
     if( nOffset >= 0 )
     {
-        if ((rAddress.Parse( sToken, pDocument, eConv ) & ScRefFlags::VALID) == ScRefFlags::VALID)
+        if ((rAddress.Parse( sToken, &rDocument, eConv ) & ScRefFlags::VALID) == ScRefFlags::VALID)
             return true;
-        ::formula::FormulaGrammar::AddressConvention eConvUI = pDocument->GetAddressConvention();
+        ::formula::FormulaGrammar::AddressConvention eConvUI = rDocument.GetAddressConvention();
         if (eConv != eConvUI)
-            return ((rAddress.Parse(sToken, pDocument, eConvUI) & ScRefFlags::VALID) == ScRefFlags::VALID);
+            return ((rAddress.Parse(sToken, &rDocument, eConvUI) & ScRefFlags::VALID) == ScRefFlags::VALID);
     }
     return false;
 }

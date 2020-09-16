@@ -53,8 +53,10 @@ ScXMLConsolidationContext::ScXMLConsolidationContext(
             case XML_ELEMENT( TABLE, XML_TARGET_CELL_ADDRESS ):
                 {
                     sal_Int32 nOffset(0);
+                    ScDocument* pDoc = GetScImport().GetDocument();
+                    assert(pDoc);
                     bTargetAddr = ScRangeStringConverter::GetAddressFromString(
-                        aTargetAddr, aIter.toString(), GetScImport().GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset );
+                        aTargetAddr, aIter.toString(), *pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset );
                 }
                 break;
             case XML_ELEMENT( TABLE, XML_USE_LABEL ):
