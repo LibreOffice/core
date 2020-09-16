@@ -28,6 +28,8 @@
 #include <sfx2/docfile.hxx>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
+#include <unicode/ucsdet.h>
+#include <unicode/uclean.h>
 
 using namespace ::com::sun::star;
 
@@ -266,6 +268,31 @@ bool SwIoSystem::IsDetectableText(const char* pBuf, sal_uLong &rLen,
         }
         pBuf+=nHead;
         rLen-=nHead;
+    }
+    /*See unicode type again without BOM*/
+    if (rLen >= 1 && eCharSet == RTL_TEXTENCODING_DONTKNOW)
+    {
+        UErrorCode uerr = U_ZERO_ERROR;
+        UCharsetDetector* ucd = ucsdet_open(&uerr);
+        ucsdet_setText(ucd, pBuf, rLen, &uerr);
+        const UCharsetMatch* match = ucsdet_detect(ucd, &uerr);
+        const char* pEncodingName = ucsdet_getName(match, &uerr);
+
+        if (U_SUCCESS(uerr) && !strcmp("UTF-8", pEncodingName))
+        {
+            eCharSet = RTL_TEXTENCODING_UTF8; // UTF-8
+        }
+        else if (U_SUCCESS(uerr) && !strcmp("UTF-16BE", pEncodingName))
+        {
+            eCharSet = RTL_TEXTENCODING_UCS2; // UTF-16BE
+            bLE = false;
+        }
+        else if (U_SUCCESS(uerr) && !strcmp("UTF-16LE", pEncodingName))
+        {
+            eCharSet = RTL_TEXTENCODING_UCS2; // UTF-16LE
+        }
+
+        ucsdet_close(ucd);
     }
 
     bool bCR = false, bLF = false, bIsBareUnicode = false;
