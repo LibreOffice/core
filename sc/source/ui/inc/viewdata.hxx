@@ -274,14 +274,13 @@ private:
     double              nPPTX, nPPTY;               // Scaling factors
 
     ::std::vector<std::unique_ptr<ScViewDataTable>> maTabData;
-    std::unique_ptr<ScMarkData> mpMarkData;
+    ScMarkData          maMarkData;
     ScViewDataTable*    pThisTab;                   // Data of the displayed sheet
     ScDocShell*         pDocShell;
-    ScDocument*         pDoc;
-    ScDBFunc*           pView;
-    ScTabViewShell*     pViewShell;
+    ScDocument&         mrDoc;
+    ScTabViewShell*     pView;
     std::unique_ptr<EditView> pEditView[4];               // Belongs to the window
-    std::unique_ptr<ScViewOptions> pOptions;
+    ScViewOptions       maOptions;
     EditView*           pSpellingView;
 
     Size                aScenButSize;
@@ -345,8 +344,7 @@ private:
     SAL_DLLPRIVATE void          EnsureTabDataSize(size_t nSize);
     SAL_DLLPRIVATE void          UpdateCurrentTab();
 
-    ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh );
-    void            InitData(ScDocument& rDocument);
+    ScViewData(ScDocument* pDoc, ScDocShell* pDocSh, ScTabViewShell* pViewSh);
 
 public:
     ScViewData( ScDocShell& rDocSh, ScTabViewShell* pViewSh );
@@ -355,8 +353,8 @@ public:
 
     ScDocShell*     GetDocShell() const     { return pDocShell; }
     ScDocFunc&      GetDocFunc() const;
-    ScDBFunc*       GetView() const         { return pView; }
-    ScTabViewShell* GetViewShell() const    { return pViewShell; }
+    ScDBFunc*       GetView() const;
+    ScTabViewShell* GetViewShell() const    { return pView; }
     SfxObjectShell* GetSfxDocShell() const  { return pDocShell; }
     SfxBindings&    GetBindings();          // from ViewShell's ViewFrame
     SfxDispatcher&  GetDispatcher();        // from ViewShell's ViewFrame
@@ -379,7 +377,7 @@ public:
     void            WriteUserDataSequence(css::uno::Sequence <css::beans::PropertyValue>& rSettings) const;
     void            ReadUserDataSequence(const css::uno::Sequence <css::beans::PropertyValue>& rSettings);
 
-    ScDocument&     GetDocument() const;
+    ScDocument&     GetDocument() const { return mrDoc; }
 
     bool            IsActive() const            { return bActive; }
     void            Activate(bool bActivate)    { bActive = bActivate; }
@@ -395,8 +393,8 @@ public:
     void            SetRefTabNo( SCTAB nNewTab )            { nRefTabNo = nNewTab; }
 
     SCTAB           GetTabNo() const                        { return nTabNo; }
-    SCCOL           MaxCol() const                          { return pDoc->MaxCol(); }
-    SCROW           MaxRow() const                          { return pDoc->MaxRow(); }
+    SCCOL           MaxCol() const                          { return mrDoc.MaxCol(); }
+    SCROW           MaxRow() const                          { return mrDoc.MaxRow(); }
     ScSplitPos      GetActivePart() const                   { return pThisTab->eWhichActive; }
     SCCOL           GetPosX( ScHSplitPos eWhich, SCTAB nForTab = -1 ) const;
     SCROW           GetPosY( ScVSplitPos eWhich, SCTAB nForTab = -1 ) const;
@@ -536,23 +534,23 @@ public:
 
     inline void     GetMoveCursor( SCCOL& rCurX, SCROW& rCurY );
 
-    const ScViewOptions&    GetOptions() const { return *pOptions; }
+    const ScViewOptions&    GetOptions() const { return maOptions; }
     void                    SetOptions( const ScViewOptions& rOpt );
 
-    bool    IsGridMode      () const            { return pOptions->GetOption( VOPT_GRID ); }
-    void    SetGridMode     ( bool bNewMode )   { pOptions->SetOption( VOPT_GRID, bNewMode ); }
-    bool    IsSyntaxMode    () const            { return pOptions->GetOption( VOPT_SYNTAX ); }
-    void    SetSyntaxMode   ( bool bNewMode )   { pOptions->SetOption( VOPT_SYNTAX, bNewMode ); }
-    bool    IsHeaderMode    () const            { return pOptions->GetOption( VOPT_HEADER ); }
-    void    SetHeaderMode   ( bool bNewMode )   { pOptions->SetOption( VOPT_HEADER, bNewMode ); }
-    bool    IsTabMode       () const            { return pOptions->GetOption( VOPT_TABCONTROLS ); }
-    void    SetTabMode      ( bool bNewMode )   { pOptions->SetOption( VOPT_TABCONTROLS, bNewMode ); }
-    bool    IsVScrollMode   () const            { return pOptions->GetOption( VOPT_VSCROLL ); }
-    void    SetVScrollMode  ( bool bNewMode )   { pOptions->SetOption( VOPT_VSCROLL, bNewMode ); }
-    bool    IsHScrollMode   () const            { return pOptions->GetOption( VOPT_HSCROLL ); }
-    void    SetHScrollMode  ( bool bNewMode )   { pOptions->SetOption( VOPT_HSCROLL, bNewMode ); }
-    bool    IsOutlineMode   () const            { return pOptions->GetOption( VOPT_OUTLINER ); }
-    void    SetOutlineMode  ( bool bNewMode )   { pOptions->SetOption( VOPT_OUTLINER, bNewMode ); }
+    bool    IsGridMode      () const            { return maOptions.GetOption(VOPT_GRID); }
+    void    SetGridMode     ( bool bNewMode )   { maOptions.SetOption(VOPT_GRID, bNewMode); }
+    bool    IsSyntaxMode    () const            { return maOptions.GetOption(VOPT_SYNTAX); }
+    void    SetSyntaxMode   ( bool bNewMode )   { maOptions.SetOption(VOPT_SYNTAX, bNewMode); }
+    bool    IsHeaderMode    () const            { return maOptions.GetOption(VOPT_HEADER); }
+    void    SetHeaderMode   ( bool bNewMode )   { maOptions.SetOption(VOPT_HEADER, bNewMode); }
+    bool    IsTabMode       () const            { return maOptions.GetOption(VOPT_TABCONTROLS); }
+    void    SetTabMode      ( bool bNewMode )   { maOptions.SetOption(VOPT_TABCONTROLS, bNewMode); }
+    bool    IsVScrollMode   () const            { return maOptions.GetOption(VOPT_VSCROLL); }
+    void    SetVScrollMode  ( bool bNewMode )   { maOptions.SetOption(VOPT_VSCROLL, bNewMode); }
+    bool    IsHScrollMode   () const            { return maOptions.GetOption(VOPT_HSCROLL); }
+    void    SetHScrollMode  ( bool bNewMode )   { maOptions.SetOption(VOPT_HSCROLL, bNewMode); }
+    bool    IsOutlineMode   () const            { return maOptions.GetOption(VOPT_OUTLINER); }
+    void    SetOutlineMode  ( bool bNewMode )   { maOptions.SetOption(VOPT_OUTLINER, bNewMode); }
 
     /// Force page size for PgUp/PgDown to overwrite the computation based on m_aVisArea.
     void ForcePageUpDownOffset(long nTwips) { m_nLOKPageUpDownOffset = nTwips; }
