@@ -780,7 +780,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testShapeThemePreservation, "shape-theme-pre
     // check shape style hasn't been overwritten
     assertXPath(pXmlDocument,
             "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:solidFill",
-            0);
+            1);
     assertXPath(pXmlDocument,
             "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:solidFill",
             1);
