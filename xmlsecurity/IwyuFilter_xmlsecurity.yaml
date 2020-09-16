@@ -130,3 +130,5 @@ excludelist:
     xmlsecurity/qa/unit/signing/signing.cxx:
     # Don't replace URE header with impl. detail
     - osl/thread.hxx
+    xmlsecurity/workben/pdfverify.cxx:
+    - comphelper/scopeguard.hxx
