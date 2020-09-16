@@ -71,6 +71,7 @@ SwBookmarkControl::SwBookmarkControl( sal_uInt16 _nSlotId,
                                       StatusBar& rStb ) :
     SfxStatusBarControl( _nSlotId, _nId, rStb )
 {
+    GetStatusBar().SetQuickHelpText(GetId(), SwResId(STR_BOOKCTRL_HINT));
 }
 
 SwBookmarkControl::~SwBookmarkControl()
@@ -81,7 +82,10 @@ void SwBookmarkControl::StateChanged(
     sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
     if( eState != SfxItemState::DEFAULT || pState->IsVoidItem() )
+    {
         GetStatusBar().SetItemText( GetId(), OUString() );
+        GetStatusBar().SetQuickHelpText(GetId(), OUString());
+    }
     else if (const SfxStringItem* pStringItem = dynamic_cast<const SfxStringItem*>(pState))
     {
         sPageNumber = pStringItem->GetValue();
