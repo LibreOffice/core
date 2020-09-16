@@ -1382,18 +1382,22 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133490)
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:Cut", {});
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+
+    SwDoc aClipboard;
+    pWrtShell->SelAll();
+    pWrtShell->Cut(&aClipboard);
+    pWrtShell->Delete();
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    pWrtShell->Paste(&aClipboard);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    pWrtShell->Paste(&aClipboard);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
