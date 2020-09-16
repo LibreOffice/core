@@ -1140,9 +1140,9 @@ void ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
 
 namespace {
 
-bool lcl_EmptyExcept( ScDocument* pDoc, const ScRange& rRange, const ScRange& rExcept )
+bool lcl_EmptyExcept( ScDocument& rDoc, const ScRange& rRange, const ScRange& rExcept )
 {
-    ScCellIterator aIter( pDoc, rRange );
+    ScCellIterator aIter( rDoc, rRange );
     for (bool bHasCell = aIter.first(); bHasCell; bHasCell = aIter.next())
     {
         if (!aIter.isEmpty())      // real content?
@@ -1303,7 +1303,7 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
     if (!bApi)
     {
         // OutRange of pOldObj (pDestObj) is still old area
-        if (!lcl_EmptyExcept(&rDoc, aNewOut, pOldObj->GetOutRange()))
+        if (!lcl_EmptyExcept(rDoc, aNewOut, pOldObj->GetOutRange()))
         {
             std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(ScDocShell::GetActiveDialogParent(),
                                                            VclMessageType::Question, VclButtonsType::YesNo,
@@ -1572,7 +1572,7 @@ bool ScDBDocFunc::UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     //  test if new output area is empty except for old area
     if (!bApi)
     {
-        if (!lcl_EmptyExcept(&rDoc, aNewOut, rDPObj.GetOutRange()))
+        if (!lcl_EmptyExcept(rDoc, aNewOut, rDPObj.GetOutRange()))
         {
             std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(ScDocShell::GetActiveDialogParent(),
                                                            VclMessageType::Question, VclButtonsType::YesNo,

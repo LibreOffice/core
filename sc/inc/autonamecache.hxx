@@ -32,11 +32,11 @@ typedef std::unordered_map< OUString, ScAutoNameAddresses > ScAutoNameHashMap;
 class SC_DLLPUBLIC ScAutoNameCache
 {
     ScAutoNameHashMap   aNames;
-    ScDocument*         pDoc;
+    ScDocument&         rDoc;
     SCTAB               nCurrentTab;
 
 public:
-            ScAutoNameCache( ScDocument* pD );
+            ScAutoNameCache( ScDocument& pD );
             ~ScAutoNameCache();
 
     const ScAutoNameAddresses& GetNameOccurrences( const OUString& rName, SCTAB nTab );

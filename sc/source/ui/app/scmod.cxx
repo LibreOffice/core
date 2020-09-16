@@ -200,7 +200,7 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, Configura
                     {
                         ScDocShell* pDocSh = static_cast<ScDocShell*>(pObjSh);
                         if ( bArrows )
-                            ScDetectiveFunc( &pDocSh->GetDocument(), 0 ).UpdateAllArrowColors();
+                            ScDetectiveFunc( pDocSh->GetDocument(), 0 ).UpdateAllArrowColors();
                         if ( bComments )
                             ScDetectiveFunc::UpdateAllComments( pDocSh->GetDocument() );
                     }

@@ -3389,7 +3389,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryEmptyCel
         {
             ScRange const & rRange = aRanges[ i ];
 
-            ScCellIterator aIter( &rDoc, rRange );
+            ScCellIterator aIter(rDoc, rRange);
             for (bool bHasCell = aIter.first(); bHasCell; bHasCell = aIter.next())
             {
                 //  notes count as non-empty
@@ -3424,7 +3424,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryContentC
         {
             ScRange const & rRange = aRanges[ i ];
 
-            ScCellIterator aIter( &rDoc, rRange );
+            ScCellIterator aIter(rDoc, rRange);
             for (bool bHasCell = aIter.first(); bHasCell; bHasCell = aIter.next())
             {
                 bool bAdd = false;
@@ -3513,7 +3513,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryFormulaC
         {
             ScRange const & rRange = aRanges[ i ];
 
-            ScCellIterator aIter( &rDoc, rRange );
+            ScCellIterator aIter(rDoc, rRange);
             for (bool bHasCell = aIter.first(); bHasCell; bHasCell = aIter.next())
             {
                 if (aIter.getType() == CELLTYPE_FORMULA)
@@ -3573,7 +3573,7 @@ uno::Reference<sheet::XSheetCellRanges> ScCellRangesBase::QueryDifferences_Impl(
             aCmpRange = ScRange( 0,nCmpPos,nTab, rDoc.MaxCol(),nCmpPos,nTab );
         else
             aCmpRange = ScRange( static_cast<SCCOL>(nCmpPos),0,nTab, static_cast<SCCOL>(nCmpPos),rDoc.MaxRow(),nTab );
-        ScCellIterator aCmpIter( &rDoc, aCmpRange );
+        ScCellIterator aCmpIter(rDoc, aCmpRange);
         for (bool bHasCell = aCmpIter.first(); bHasCell; bHasCell = aCmpIter.next())
         {
             SCCOLROW nCellPos = bColumnDiff ? static_cast<SCCOLROW>(aCmpIter.GetPos().Col()) : static_cast<SCCOLROW>(aCmpIter.GetPos().Row());
@@ -3611,7 +3611,7 @@ uno::Reference<sheet::XSheetCellRanges> ScCellRangesBase::QueryDifferences_Impl(
         {
             ScRange const & rRange = aRanges[ i ];
 
-            ScCellIterator aIter( &rDoc, rRange );
+            ScCellIterator aIter( rDoc, rRange );
             for (bool bHasCell = aIter.first(); bHasCell; bHasCell = aIter.next())
             {
                 if (bColumnDiff)
@@ -3697,13 +3697,13 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryPreceden
             for (size_t nR = 0, nCount = aNewRanges.size(); nR<nCount; ++nR)
             {
                 ScRange const & rRange = aNewRanges[ nR];
-                ScCellIterator aIter( &rDoc, rRange );
+                ScCellIterator aIter(rDoc, rRange);
                 for (bool bHasCell = aIter.first(); bHasCell; bHasCell = aIter.next())
                 {
                     if (aIter.getType() != CELLTYPE_FORMULA)
                         continue;
 
-                    ScDetectiveRefIter aRefIter(&rDoc, aIter.getFormulaCell());
+                    ScDetectiveRefIter aRefIter(rDoc, aIter.getFormulaCell());
                     ScRange aRefRange;
                     while ( aRefIter.GetNextRef( aRefRange) )
                     {
@@ -3745,14 +3745,14 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryDependen
 
             SCTAB nTab = lcl_FirstTab(aNewRanges);              //! all tables
 
-            ScCellIterator aCellIter( &rDoc, ScRange(0, 0, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab) );
+            ScCellIterator aCellIter( rDoc, ScRange(0, 0, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab) );
             for (bool bHasCell = aCellIter.first(); bHasCell; bHasCell = aCellIter.next())
             {
                 if (aCellIter.getType() != CELLTYPE_FORMULA)
                     continue;
 
                 bool bMark = false;
-                ScDetectiveRefIter aIter(&rDoc, aCellIter.getFormulaCell());
+                ScDetectiveRefIter aIter(rDoc, aCellIter.getFormulaCell());
                 ScRange aRefRange;
                 while ( aIter.GetNextRef( aRefRange) && !bMark )
                 {
@@ -4986,7 +4986,7 @@ uno::Sequence< uno::Sequence<uno::Any> > SAL_CALL ScCellRangeObj::getDataArray()
     {
         uno::Any aAny;
         // bAllowNV = TRUE: errors as void
-        if ( ScRangeToSequence::FillMixedArray( aAny, &pDocSh->GetDocument(), aRange, true ) )
+        if ( ScRangeToSequence::FillMixedArray( aAny, pDocSh->GetDocument(), aRange, true ) )
         {
             uno::Sequence< uno::Sequence<uno::Any> > aSeq;
             if ( aAny >>= aSeq )

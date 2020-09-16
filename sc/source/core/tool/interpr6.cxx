@@ -810,7 +810,7 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                 }
                 if( eFunc == ifCOUNT2 )
                 {
-                    ScCellIterator aIter( &mrDoc, aRange, mnSubTotalFlags );
+                    ScCellIterator aIter( mrDoc, aRange, mnSubTotalFlags );
                     for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
                     {
                         if ( !aIter.isEmpty() )

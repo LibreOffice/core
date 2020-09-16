@@ -34,19 +34,19 @@ class ScRangeToSequence
 {
 public:
     static bool FillLongArray( css::uno::Any& rAny,
-                                ScDocument* pDoc, const ScRange& rRange );
+                                ScDocument& rDoc, const ScRange& rRange );
     static bool FillLongArray( css::uno::Any& rAny,
                                 const ScMatrix* pMatrix );
     static bool FillDoubleArray( css::uno::Any& rAny,
-                                ScDocument* pDoc, const ScRange& rRange );
+                                ScDocument& rDoc, const ScRange& rRange );
     static bool FillDoubleArray( css::uno::Any& rAny,
                                 const ScMatrix* pMatrix );
     static bool FillStringArray( css::uno::Any& rAny,
-                                ScDocument* pDoc, const ScRange& rRange );
+                                ScDocument& rDoc, const ScRange& rRange );
     static bool FillStringArray( css::uno::Any& rAny,
                                 const ScMatrix* pMatrix, SvNumberFormatter* pFormatter );
     static bool FillMixedArray( css::uno::Any& rAny,
-                                ScDocument* pDoc, const ScRange& rRange,
+                                ScDocument& rDoc, const ScRange& rRange,
                                 bool bAllowNV = false );
 
     /** @param bDataTypes

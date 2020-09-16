@@ -5156,7 +5156,7 @@ void ScInterpreter::ScCountEmptyCells()
                     static_cast<sal_uLong>(aRange.aEnd.Col() - aRange.aStart.Col() + 1) *
                     static_cast<sal_uLong>(aRange.aEnd.Tab() - aRange.aStart.Tab() + 1);
 
-                ScCellIterator aIter( &mrDoc, aRange, mnSubTotalFlags);
+                ScCellIterator aIter( mrDoc, aRange, mnSubTotalFlags);
                 for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
                 {
                     const ScRefCellValue& rCell = aIter.getRefCellValue();

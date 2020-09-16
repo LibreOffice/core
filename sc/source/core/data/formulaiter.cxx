@@ -26,8 +26,8 @@
 
 using namespace formula;
 
-ScDetectiveRefIter::ScDetectiveRefIter( const ScDocument* pDoc, ScFormulaCell* pCell ) :
-    mpDoc(pDoc),
+ScDetectiveRefIter::ScDetectiveRefIter( const ScDocument& rDoc, ScFormulaCell* pCell ) :
+    mrDoc(rDoc),
     maIter(*pCell->GetCode()),
     aPos(pCell->aPos)
 {
@@ -56,8 +56,8 @@ bool ScDetectiveRefIter::GetNextRef( ScRange& rRange )
     if( p )
     {
         SingleDoubleRefProvider aProv( *p );
-        rRange.aStart = aProv.Ref1.toAbs(*mpDoc, aPos);
-        rRange.aEnd = aProv.Ref2.toAbs(*mpDoc, aPos);
+        rRange.aStart = aProv.Ref1.toAbs(mrDoc, aPos);
+        rRange.aEnd = aProv.Ref2.toAbs(mrDoc, aPos);
         bRet = true;
     }
 
@@ -67,7 +67,7 @@ bool ScDetectiveRefIter::GetNextRef( ScRange& rRange )
 formula::FormulaToken* ScDetectiveRefIter::GetNextRefToken()
 {
     formula::FormulaToken* p = maIter.GetNextReferenceRPN();
-    while (p && lcl_ScDetectiveRefIter_SkipRef(*mpDoc, p, aPos))
+    while (p && lcl_ScDetectiveRefIter_SkipRef(mrDoc, p, aPos))
     {
         p = maIter.GetNextReferenceRPN();
     }

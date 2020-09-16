@@ -372,7 +372,7 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
         SCROW nThisRow = nRow2;
         SCCOL nThisCol = nCol1 - 1;
 
-        ScCellIterator aCellIter( &mrDoc, ScRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2));
+        ScCellIterator aCellIter( mrDoc, ScRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2));
         for (bool bHas = aCellIter.first(); bHas; bHas = aCellIter.next())
         {
             nThisCol = aCellIter.GetPos().Col();

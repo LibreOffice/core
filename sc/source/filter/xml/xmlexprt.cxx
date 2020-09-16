@@ -2690,7 +2690,7 @@ void ScXMLExport::CollectInternalShape( uno::Reference< drawing::XShape > const 
     // other objects from internal layer only (detective)
     else if( pObject->GetLayer() == SC_LAYER_INTERN )
     {
-        ScDetectiveFunc aDetFunc( pDoc, static_cast<SCTAB>(nCurrentTable) );
+        ScDetectiveFunc aDetFunc( *pDoc, static_cast<SCTAB>(nCurrentTable) );
         ScAddress       aPosition;
         ScRange         aSourceRange;
         bool            bRedLine;

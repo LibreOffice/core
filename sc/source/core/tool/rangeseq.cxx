@@ -33,10 +33,10 @@
 
 using namespace com::sun::star;
 
-static bool lcl_HasErrors( ScDocument* pDoc, const ScRange& rRange )
+static bool lcl_HasErrors( ScDocument& rDoc, const ScRange& rRange )
 {
     // no need to look at empty cells - just use ScCellIterator
-    ScCellIterator aIter( pDoc, rRange );
+    ScCellIterator aIter( rDoc, rRange );
     for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
     {
         if (aIter.getType() != CELLTYPE_FORMULA)
@@ -59,7 +59,7 @@ static long lcl_DoubleToLong( double fVal )
         return 0;       // out of range
 }
 
-bool ScRangeToSequence::FillLongArray( uno::Any& rAny, ScDocument* pDoc, const ScRange& rRange )
+bool ScRangeToSequence::FillLongArray( uno::Any& rAny, ScDocument& rDoc, const ScRange& rRange )
 {
     SCTAB nTab = rRange.aStart.Tab();
     SCCOL nStartCol = rRange.aStart.Col();
@@ -74,14 +74,14 @@ bool ScRangeToSequence::FillLongArray( uno::Any& rAny, ScDocument* pDoc, const S
         uno::Sequence<sal_Int32> aColSeq( nColCount );
         sal_Int32* pColAry = aColSeq.getArray();
         for (long nCol = 0; nCol < nColCount; nCol++)
-            pColAry[nCol] = lcl_DoubleToLong( pDoc->GetValue(
+            pColAry[nCol] = lcl_DoubleToLong( rDoc.GetValue(
                 ScAddress( static_cast<SCCOL>(nStartCol+nCol), static_cast<SCROW>(nStartRow+nRow), nTab ) ) );
 
         pRowAry[nRow] = aColSeq;
     }
 
     rAny <<= aRowSeq;
-    return !lcl_HasErrors( pDoc, rRange );
+    return !lcl_HasErrors( rDoc, rRange );
 }
 
 bool ScRangeToSequence::FillLongArray( uno::Any& rAny, const ScMatrix* pMatrix )
@@ -112,7 +112,7 @@ bool ScRangeToSequence::FillLongArray( uno::Any& rAny, const ScMatrix* pMatrix )
     return true;
 }
 
-bool ScRangeToSequence::FillDoubleArray( uno::Any& rAny, ScDocument* pDoc, const ScRange& rRange )
+bool ScRangeToSequence::FillDoubleArray( uno::Any& rAny, ScDocument& rDoc, const ScRange& rRange )
 {
     SCTAB nTab = rRange.aStart.Tab();
     SCCOL nStartCol = rRange.aStart.Col();
@@ -127,14 +127,14 @@ bool ScRangeToSequence::FillDoubleArray( uno::Any& rAny, ScDocument* pDoc, const
         uno::Sequence<double> aColSeq( nColCount );
         double* pColAry = aColSeq.getArray();
         for (long nCol = 0; nCol < nColCount; nCol++)
-            pColAry[nCol] = pDoc->GetValue(
+            pColAry[nCol] = rDoc.GetValue(
                 ScAddress( static_cast<SCCOL>(nStartCol+nCol), static_cast<SCROW>(nStartRow+nRow), nTab ) );
 
         pRowAry[nRow] = aColSeq;
     }
 
     rAny <<= aRowSeq;
-    return !lcl_HasErrors( pDoc, rRange );
+    return !lcl_HasErrors( rDoc, rRange );
 }
 
 bool ScRangeToSequence::FillDoubleArray( uno::Any& rAny, const ScMatrix* pMatrix )
@@ -165,7 +165,7 @@ bool ScRangeToSequence::FillDoubleArray( uno::Any& rAny, const ScMatrix* pMatrix
     return true;
 }
 
-bool ScRangeToSequence::FillStringArray( uno::Any& rAny, ScDocument* pDoc, const ScRange& rRange )
+bool ScRangeToSequence::FillStringArray( uno::Any& rAny, ScDocument& rDoc, const ScRange& rRange )
 {
     SCTAB nTab = rRange.aStart.Tab();
     SCCOL nStartCol = rRange.aStart.Col();
@@ -183,7 +183,7 @@ bool ScRangeToSequence::FillStringArray( uno::Any& rAny, ScDocument* pDoc, const
         OUString* pColAry = aColSeq.getArray();
         for (long nCol = 0; nCol < nColCount; nCol++)
         {
-            FormulaError nErrCode = pDoc->GetStringForFormula(
+            FormulaError nErrCode = rDoc.GetStringForFormula(
                         ScAddress(static_cast<SCCOL>(nStartCol+nCol), static_cast<SCROW>(nStartRow+nRow), nTab),
                         pColAry[nCol] );
             if ( nErrCode != FormulaError::NONE )
@@ -236,7 +236,7 @@ bool ScRangeToSequence::FillStringArray( uno::Any& rAny, const ScMatrix* pMatrix
     return true;
 }
 
-bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, ScDocument* pDoc, const ScRange& rRange,
+bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, ScDocument& rDoc, const ScRange& rRange,
                                         bool bAllowNV )
 {
     SCTAB nTab = rRange.aStart.Tab();
@@ -258,7 +258,7 @@ bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, ScDocument* pDoc, const 
             uno::Any& rElement = pColAry[nCol];
 
             ScAddress aPos( static_cast<SCCOL>(nStartCol+nCol), static_cast<SCROW>(nStartRow+nRow), nTab );
-            ScRefCellValue aCell(*pDoc, aPos);
+            ScRefCellValue aCell(rDoc, aPos);
 
             if (aCell.isEmpty())
             {
@@ -274,7 +274,7 @@ bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, ScDocument* pDoc, const 
             else if (aCell.hasNumeric())
                 rElement <<= aCell.getValue();
             else
-                rElement <<= aCell.getString(pDoc);
+                rElement <<= aCell.getString(&rDoc);
         }
         pRowAry[nRow] = aColSeq;
     }

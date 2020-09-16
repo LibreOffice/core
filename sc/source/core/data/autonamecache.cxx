@@ -24,8 +24,8 @@
 #include <formulacell.hxx>
 #include <editutil.hxx>
 
-ScAutoNameCache::ScAutoNameCache( ScDocument* pD ) :
-    pDoc( pD ),
+ScAutoNameCache::ScAutoNameCache( ScDocument& rD ) :
+    rDoc( rD ),
     nCurrentTab( 0 )    // doesn't matter - aNames is empty
 {
 }
@@ -49,7 +49,7 @@ const ScAutoNameAddresses& ScAutoNameCache::GetNameOccurrences( const OUString& 
 
     ScAutoNameAddresses& rAddresses = aNames[rName];
 
-    ScCellIterator aIter( pDoc, ScRange( 0, 0, nCurrentTab, pDoc->MaxCol(), pDoc->MaxRow(), nCurrentTab ) );
+    ScCellIterator aIter( rDoc, ScRange( 0, 0, nCurrentTab, rDoc.MaxCol(), rDoc.MaxRow(), nCurrentTab ) );
     for (bool bHasCell = aIter.first(); bHasCell; bHasCell = aIter.next())
     {
         // don't check code length here, always use the stored result

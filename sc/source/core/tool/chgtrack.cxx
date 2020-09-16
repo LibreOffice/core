@@ -2555,7 +2555,7 @@ void ScChangeTrack::LookUpContents( const ScRange& rOrgRange,
 
     ScAddress aPos;
     ScBigAddress aBigPos;
-    ScCellIterator aIter( pRefDoc, rOrgRange );
+    ScCellIterator aIter( *pRefDoc, rOrgRange );
     for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
     {
         if (!ScChangeActionContent::GetContentCellType(aIter.getRefCellValue()))
@@ -2771,7 +2771,7 @@ void ScChangeTrack::AppendContentRange( const ScRange& rRange,
 void ScChangeTrack::AppendContentsIfInRefDoc( ScDocument& rRefDoc,
             sal_uLong& nStartAction, sal_uLong& nEndAction )
 {
-    ScCellIterator aIter(&rRefDoc, ScRange(0,0,0,rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB));
+    ScCellIterator aIter(rRefDoc, ScRange(0,0,0,rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB));
     if (aIter.first())
     {
         nStartAction = GetActionMax() + 1;

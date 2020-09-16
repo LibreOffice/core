@@ -238,7 +238,7 @@ void ScViewFunc::DoRefConversion()
             ScRange aRange = (*xRanges)[j];
             aRange.aStart.SetTab(i);
             aRange.aEnd.SetTab(i);
-            ScCellIterator aIter( &rDoc, aRange );
+            ScCellIterator aIter( rDoc, aRange );
             for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
             {
                 if (aIter.getType() != CELLTYPE_FORMULA)

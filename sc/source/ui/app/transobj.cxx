@@ -855,7 +855,7 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
 
     ScRange aRef;
 
-    ScCellIterator aIter( pDoc, ScRange(nStartX, nStartY, nSrcTab, nEndX, nEndY, nSrcTab) );
+    ScCellIterator aIter( *pDoc, ScRange(nStartX, nStartY, nSrcTab, nEndX, nEndY, nSrcTab) );
     for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
     {
         if (aIter.getType() != CELLTYPE_FORMULA)
@@ -863,7 +863,7 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
 
         ScFormulaCell* pFCell = aIter.getFormulaCell();
         bool bOut = false;
-        ScDetectiveRefIter aRefIter( pDoc, pFCell );
+        ScDetectiveRefIter aRefIter( *pDoc, pFCell );
         while ( !bOut && aRefIter.GetNextRef( aRef ) )
         {
             if ( aRef.aStart.Tab() != nSrcTab || aRef.aEnd.Tab() != nSrcTab ||

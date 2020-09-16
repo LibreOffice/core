@@ -2239,7 +2239,7 @@ void ScTable::FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCC
         if (!ColHidden(nCol))
         {
             SCSIZE nArrY = 0;
-            ScDocAttrIterator aIter( &rDocument, nTab, nCol, nY1, nCol, nY2 );
+            ScDocAttrIterator aIter( rDocument, nTab, nCol, nY1, nCol, nY2 );
             SCCOL nAttrCol;
             SCROW nAttrRow1, nAttrRow2;
             const ScPatternAttr* pPattern = aIter.GetNext( nAttrCol, nAttrRow1, nAttrRow2 );

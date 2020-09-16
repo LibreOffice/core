@@ -32,11 +32,11 @@ class ScFormulaCell;
 class ScDetectiveRefIter
 {
 private:
-    const ScDocument* mpDoc;
+    const ScDocument& mrDoc;
     formula::FormulaTokenArrayPlainIterator maIter;
     ScAddress aPos;
 public:
-                ScDetectiveRefIter( const ScDocument* pDoc, ScFormulaCell* pCell );
+                ScDetectiveRefIter( const ScDocument& rDoc, ScFormulaCell* pCell );
     bool        GetNextRef( ScRange& rRange );
     formula::FormulaToken* GetNextRefToken();
 };
