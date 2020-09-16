@@ -23,9 +23,6 @@
 #include <com/sun/star/bridge/BridgeFactory.hpp>
 #include <com/sun/star/connection/Acceptor.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <comphelper/processfactory.hxx>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>

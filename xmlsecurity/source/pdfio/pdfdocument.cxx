@@ -23,7 +23,6 @@
 #include <svl/sigstruct.hxx>
 #include <svl/cryptosign.hxx>
 #include <vcl/filter/pdfdocument.hxx>
-#include <vcl/bitmap.hxx>
 
 using namespace com::sun::star;
 

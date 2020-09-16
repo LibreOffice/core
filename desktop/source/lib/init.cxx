@@ -92,7 +92,6 @@
 
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker.hpp>
-#include <com/sun/star/i18n/Calendar2.hpp>
 #include <com/sun/star/i18n/LocaleCalendar2.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -136,7 +135,6 @@
 #include <vcl/ITiledRenderable.hxx>
 #include <vcl/dialoghelper.hxx>
 #include <unicode/uchar.h>
-#include <unotools/configmgr.hxx>
 #include <unotools/confignode.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <unotools/mediadescriptor.hxx>

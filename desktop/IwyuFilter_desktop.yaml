@@ -10,6 +10,7 @@ excludelist:
     desktop/qa/desktop_lib/test_desktop_lib.cxx:
     # Actually used
     - comphelper/scopeguard.hxx
+    - rtl/math.hxx
     desktop/source/app/app.cxx:
     # Needed on WIN32
     - o3tl/char16_t2wchar_t.hxx
