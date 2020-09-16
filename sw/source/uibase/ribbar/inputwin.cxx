@@ -333,6 +333,18 @@ void SwInputWindow::Click( )
 
 void  SwInputWindow::ApplyFormula()
 {
+    // in case it was created while loading the document, the active view
+    // wasn't initialised at that time, so ShowWin() didn't initialise anything
+    // either - nothing to do
+    if (!pView)
+    {
+        // presumably there must be an active view now since the event arrived
+        SwView *const pActiveView = ::GetActiveView();
+        // this just makes the input window go away, so that the next time it works
+        pActiveView->GetViewFrame()->GetDispatcher()->Execute(FN_EDIT_FORMULA, SfxCallMode::ASYNCHRON);
+        return;
+    }
+
     pView->GetViewFrame()->GetDispatcher()->Lock(false);
     pView->GetEditWin().LockKeyInput(false);
     CleanupUglyHackWithUndo();
@@ -354,8 +366,17 @@ void  SwInputWindow::ApplyFormula()
 
 void  SwInputWindow::CancelFormula()
 {
-    if(!pView)
+    // in case it was created while loading the document, the active view
+    // wasn't initialised at that time, so ShowWin() didn't initialise anything
+    // either - nothing to do
+    if (!pView)
+    {
+        // presumably there must be an active view now since the event arrived
+        SwView *const pActiveView = ::GetActiveView();
+        // this just makes the input window go away, so that the next time it works
+        pActiveView->GetViewFrame()->GetDispatcher()->Execute(FN_EDIT_FORMULA, SfxCallMode::ASYNCHRON);
         return;
+    }
 
     pView->GetViewFrame()->GetDispatcher()->Lock( false );
     pView->GetEditWin().LockKeyInput(false);
