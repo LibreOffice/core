@@ -141,6 +141,8 @@
 #include <memory>
 #include <string_view>
 
+#include <basegfx/utils/zoomtools.hxx>
+
 const char sStatusDelim[] = " : ";
 
 using namespace sfx2;
@@ -579,6 +581,17 @@ void SwView::Execute(SfxRequest &rReq)
                                                 aVis != GetVisArea()));
             //#i42732# - notify the edit window that from now on we do not use the input language
             rTmpWin.SetUseInputLanguage( false );
+        }
+        break;
+        case SID_ZOOM_IN:
+        case SID_ZOOM_OUT:
+        {
+            long nFact = m_pWrtShell->GetViewOptions()->GetZoom();
+            if (SID_ZOOM_OUT == nSlot)
+                nFact = basegfx::zoomtools::zoomIn(nFact);
+            else
+                nFact = basegfx::zoomtools::zoomOut(nFact);
+            SetZoom(SvxZoomType::PERCENT, nFact);
         }
         break;
         case FN_TO_PREV_PAGE:
