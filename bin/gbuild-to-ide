@@ -548,8 +548,8 @@ class VimIntegrationGenerator(IdeIntegrationGenerator):
                 entry = {'directory': lib.location, 'file': filePath, 'command': self.generateCommand(lib, filePath)}
                 entries.append(entry)
             global_list.extend(entries)
-        export_file = open('compile_commands.json', 'w')
-        json.dump(global_list, export_file)
+        with open('compile_commands.json', 'w') as export_file:
+            json.dump(global_list, export_file)
 
     def generateCommand(self, lib, file):
         command = 'clang++ -Wall'
