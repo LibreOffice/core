@@ -66,13 +66,13 @@ private:
                                 QStyle::SubControl subControl);
     static QRect subElementRect(QStyle::SubElement element, const QStyleOption* option);
 
-    void draw(QStyle::ControlElement element, QStyleOption* option, QImage* image,
+    void draw(QStyle::ControlElement element, QStyleOption& rOption, QImage* image,
               const Color& rBackgroundColor, QStyle::State const state = QStyle::State_None,
               QRect rect = QRect());
-    void draw(QStyle::PrimitiveElement element, QStyleOption* option, QImage* image,
+    void draw(QStyle::PrimitiveElement element, QStyleOption& rOption, QImage* image,
               const Color& rBackgroundColor, QStyle::State const state = QStyle::State_None,
               QRect rect = QRect());
-    void draw(QStyle::ComplexControl element, QStyleOptionComplex* option, QImage* image,
+    void draw(QStyle::ComplexControl element, QStyleOptionComplex& rOption, QImage* image,
               const Color& rBackgroundColor, QStyle::State const state = QStyle::State_None);
     void drawFrame(QStyle::PrimitiveElement element, QImage* image, const Color& rBackGroundColor,
                    QStyle::State const& state, bool bClip = true,
