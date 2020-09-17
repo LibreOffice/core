@@ -293,7 +293,8 @@ void PieChart::createTextLabelShape(
 
     double nVal = rSeries.getYValue(nPointIndex);
     //AVOID_OVERLAP is in fact "Best fit" in the UI.
-    bool bMovementAllowed = ( nLabelPlacement == css::chart::DataLabelPlacement::AVOID_OVERLAP );
+    bool bMovementAllowed = nLabelPlacement == css::chart::DataLabelPlacement::AVOID_OVERLAP
+                            || nLabelPlacement == css::chart::DataLabelPlacement::CUSTOM;
     if( bMovementAllowed )
         nLabelPlacement = css::chart::DataLabelPlacement::CENTER;
 
@@ -389,7 +390,9 @@ void PieChart::createTextLabelShape(
          *  First off the routine try to place the label inside the related pie slice,
          *  if this is not possible the label is placed outside.
          */
-        if (!performLabelBestFitInnerPlacement(rParam, aPieLabelInfo))
+        if (rSeries.getLabelPlacement(nPointIndex, m_xChartTypeModel, m_pPosHelper->isSwapXAndY())
+                == css::chart::DataLabelPlacement::CUSTOM
+            || !performLabelBestFitInnerPlacement(rParam, aPieLabelInfo))
         {
             if (m_aAvailableOuterRect.getWidth())
             {

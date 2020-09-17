@@ -3297,6 +3297,7 @@ const char* toOOXMLPlacement( sal_Int32 nPlacement )
         case css::chart::DataLabelPlacement::BOTTOM:        return "b";
         case css::chart::DataLabelPlacement::LEFT:          return "l";
         case css::chart::DataLabelPlacement::RIGHT:         return "r";
+        case css::chart::DataLabelPlacement::CUSTOM:
         case css::chart::DataLabelPlacement::AVOID_OVERLAP: return "bestFit";
         default:
             ;
