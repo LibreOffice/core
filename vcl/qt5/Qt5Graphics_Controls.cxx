@@ -63,14 +63,14 @@ static QStyle::State vclStateValue2StateFlag(ControlState nControlState,
     return nState;
 }
 
-static void lcl_ApplyBackgroundColorToStyleOption(QStyleOption* pOption,
+static void lcl_ApplyBackgroundColorToStyleOption(QStyleOption& rOption,
                                                   const Color& rBackgroundColor)
 {
     if (rBackgroundColor != COL_AUTO)
     {
         QColor aColor = toQColor(rBackgroundColor);
         for (QPalette::ColorRole role : { QPalette::Window, QPalette::Button, QPalette::Base })
-            pOption->palette.setColor(role, aColor);
+            rOption.palette.setColor(role, aColor);
     }
 }
 
@@ -154,49 +154,49 @@ inline QRect Qt5Graphics_Controls::subElementRect(QStyle::SubElement element,
     return QApplication::style()->subElementRect(element, option);
 }
 
-void Qt5Graphics_Controls::draw(QStyle::ControlElement element, QStyleOption* option, QImage* image,
-                                const Color& rBackgroundColor, QStyle::State const state,
-                                QRect rect)
-{
-    const QRect& targetRect = !rect.isNull() ? rect : image->rect();
-
-    option->state |= state;
-    option->rect = downscale(targetRect);
-
-    lcl_ApplyBackgroundColorToStyleOption(option, rBackgroundColor);
-
-    QPainter painter(image);
-    QApplication::style()->drawControl(element, option, &painter);
-}
-
-void Qt5Graphics_Controls::draw(QStyle::PrimitiveElement element, QStyleOption* option,
+void Qt5Graphics_Controls::draw(QStyle::ControlElement element, QStyleOption& rOption,
                                 QImage* image, const Color& rBackgroundColor,
                                 QStyle::State const state, QRect rect)
 {
     const QRect& targetRect = !rect.isNull() ? rect : image->rect();
 
-    option->state |= state;
-    option->rect = downscale(targetRect);
+    rOption.state |= state;
+    rOption.rect = downscale(targetRect);
 
-    lcl_ApplyBackgroundColorToStyleOption(option, rBackgroundColor);
+    lcl_ApplyBackgroundColorToStyleOption(rOption, rBackgroundColor);
 
     QPainter painter(image);
-    QApplication::style()->drawPrimitive(element, option, &painter);
+    QApplication::style()->drawControl(element, &rOption, &painter);
 }
 
-void Qt5Graphics_Controls::draw(QStyle::ComplexControl element, QStyleOptionComplex* option,
+void Qt5Graphics_Controls::draw(QStyle::PrimitiveElement element, QStyleOption& rOption,
+                                QImage* image, const Color& rBackgroundColor,
+                                QStyle::State const state, QRect rect)
+{
+    const QRect& targetRect = !rect.isNull() ? rect : image->rect();
+
+    rOption.state |= state;
+    rOption.rect = downscale(targetRect);
+
+    lcl_ApplyBackgroundColorToStyleOption(rOption, rBackgroundColor);
+
+    QPainter painter(image);
+    QApplication::style()->drawPrimitive(element, &rOption, &painter);
+}
+
+void Qt5Graphics_Controls::draw(QStyle::ComplexControl element, QStyleOptionComplex& rOption,
                                 QImage* image, const Color& rBackgroundColor,
                                 QStyle::State const state)
 {
     const QRect& targetRect = image->rect();
 
-    option->state |= state;
-    option->rect = downscale(targetRect);
+    rOption.state |= state;
+    rOption.rect = downscale(targetRect);
 
-    lcl_ApplyBackgroundColorToStyleOption(option, rBackgroundColor);
+    lcl_ApplyBackgroundColorToStyleOption(rOption, rBackgroundColor);
 
     QPainter painter(image);
-    QApplication::style()->drawComplexControl(element, option, &painter);
+    QApplication::style()->drawComplexControl(element, &rOption, &painter);
 }
 
 void Qt5Graphics_Controls::drawFrame(QStyle::PrimitiveElement element, QImage* image,
@@ -212,7 +212,7 @@ void Qt5Graphics_Controls::drawFrame(QStyle::PrimitiveElement element, QImage* i
     QRect aRect = downscale(image->rect());
     option.rect = aRect;
 
-    lcl_ApplyBackgroundColorToStyleOption(&option, rBackgroundColor);
+    lcl_ApplyBackgroundColorToStyleOption(option, rBackgroundColor);
 
     QPainter painter(image);
     if (bClip)
@@ -308,7 +308,7 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
     {
         assert(part == ControlPart::Entire);
         QStyleOptionButton option;
-        draw(QStyle::CE_PushButton, &option, m_image.get(), rBackgroundColor,
+        draw(QStyle::CE_PushButton, option, m_image.get(), rBackgroundColor,
              vclStateValue2StateFlag(nControlState, value));
     }
     else if (type == ControlType::Menubar)
@@ -325,12 +325,12 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
                 & ControlState::SELECTED) // Passing State_Sunken is currently not documented.
                 option.state |= QStyle::State_Sunken; // But some kinds of QStyle interpret it.
 
-            draw(QStyle::CE_MenuBarItem, &option, m_image.get(), rBackgroundColor);
+            draw(QStyle::CE_MenuBarItem, option, m_image.get(), rBackgroundColor);
         }
         else if (part == ControlPart::Entire)
         {
             QStyleOptionMenuItem option;
-            draw(QStyle::CE_MenuBarEmptyArea, &option, m_image.get(), rBackgroundColor,
+            draw(QStyle::CE_MenuBarEmptyArea, option, m_image.get(), rBackgroundColor,
                  vclStateValue2StateFlag(nControlState, value));
         }
         else
@@ -345,7 +345,7 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
         if (part == ControlPart::MenuItem)
         {
             QStyleOptionMenuItem option;
-            draw(QStyle::CE_MenuItem, &option, m_image.get(), rBackgroundColor,
+            draw(QStyle::CE_MenuItem, option, m_image.get(), rBackgroundColor,
                  vclStateValue2StateFlag(nControlState, value));
             // HACK: LO core first paints the entire popup and only then it paints menu items,
             // but QMenu::paintEvent() paints popup frame after all items. That means highlighted
@@ -355,7 +355,7 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
             QRect framerect(m_lastPopupRect.topLeft() - widgetRect.topLeft(),
                             widgetRect.size().expandedTo(m_lastPopupRect.size()));
             QStyleOptionFrame frame;
-            draw(QStyle::PE_FrameMenu, &frame, m_image.get(), rBackgroundColor,
+            draw(QStyle::PE_FrameMenu, frame, m_image.get(), rBackgroundColor,
                  vclStateValue2StateFlag(nControlState, value), framerect);
         }
         else if (part == ControlPart::Separator)
@@ -399,18 +399,18 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
             // checkboxes are always displayed next to images in menus, so are never centered
             const int focus_size = pixelMetric(QStyle::PM_FocusFrameHMargin);
             rect.moveTo(-focus_size, rect.y());
-            draw(QStyle::CE_MenuItem, &option, m_image.get(), rBackgroundColor,
+            draw(QStyle::CE_MenuItem, option, m_image.get(), rBackgroundColor,
                  vclStateValue2StateFlag(nControlState & ~ControlState::PRESSED, value), rect);
         }
         else if (part == ControlPart::Entire)
         {
             QStyleOptionMenuItem option;
             option.state = vclStateValue2StateFlag(nControlState, value);
-            draw(QStyle::PE_PanelMenu, &option, m_image.get(), rBackgroundColor);
+            draw(QStyle::PE_PanelMenu, option, m_image.get(), rBackgroundColor);
             // Try hard to get any frame!
             QStyleOptionFrame frame;
-            draw(QStyle::PE_FrameMenu, &frame, m_image.get(), rBackgroundColor);
-            draw(QStyle::PE_FrameWindow, &frame, m_image.get(), rBackgroundColor);
+            draw(QStyle::PE_FrameMenu, frame, m_image.get(), rBackgroundColor);
+            draw(QStyle::PE_FrameWindow, frame, m_image.get(), rBackgroundColor);
             m_lastPopupRect = widgetRect;
         }
         else
@@ -425,12 +425,12 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
         option.state = vclStateValue2StateFlag(nControlState, value);
         option.state |= QStyle::State_Raised | QStyle::State_Enabled | QStyle::State_AutoRaise;
 
-        draw(QStyle::CC_ToolButton, &option, m_image.get(), rBackgroundColor);
+        draw(QStyle::CC_ToolButton, option, m_image.get(), rBackgroundColor);
     }
     else if ((type == ControlType::Toolbar) && (part == ControlPart::Entire))
     {
         QStyleOptionToolBar option;
-        draw(QStyle::CE_ToolBar, &option, m_image.get(), rBackgroundColor,
+        draw(QStyle::CE_ToolBar, option, m_image.get(), rBackgroundColor,
              vclStateValue2StateFlag(nControlState, value));
     }
     else if ((type == ControlType::Toolbar)
@@ -447,7 +447,7 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
         }
         else
             aRect.setHeight(handleExtend);
-        draw(QStyle::PE_IndicatorToolBarHandle, &option, m_image.get(), rBackgroundColor,
+        draw(QStyle::PE_IndicatorToolBarHandle, option, m_image.get(), rBackgroundColor,
              vclStateValue2StateFlag(nControlState, value), aRect);
     }
     else if (type == ControlType::Editbox || type == ControlType::MultilineEditbox)
@@ -459,7 +459,7 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
     {
         QStyleOptionComboBox option;
         option.editable = true;
-        draw(QStyle::CC_ComboBox, &option, m_image.get(), rBackgroundColor,
+        draw(QStyle::CC_ComboBox, option, m_image.get(), rBackgroundColor,
              vclStateValue2StateFlag(nControlState, value));
     }
     else if (type == ControlType::Listbox)
@@ -474,16 +474,16 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
                           QStyle::PM_ComboBoxFrameWidth);
                 break;
             case ControlPart::SubEdit:
-                draw(QStyle::CE_ComboBoxLabel, &option, m_image.get(), rBackgroundColor,
+                draw(QStyle::CE_ComboBoxLabel, option, m_image.get(), rBackgroundColor,
                      vclStateValue2StateFlag(nControlState, value));
                 break;
             case ControlPart::Entire:
-                draw(QStyle::CC_ComboBox, &option, m_image.get(), rBackgroundColor,
+                draw(QStyle::CC_ComboBox, option, m_image.get(), rBackgroundColor,
                      vclStateValue2StateFlag(nControlState, value));
                 break;
             case ControlPart::ButtonDown:
                 option.subControls = QStyle::SC_ComboBoxArrow;
-                draw(QStyle::CC_ComboBox, &option, m_image.get(), rBackgroundColor,
+                draw(QStyle::CC_ComboBox, option, m_image.get(), rBackgroundColor,
                      vclStateValue2StateFlag(nControlState, value));
                 break;
             default:
@@ -500,12 +500,12 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
         if (value.getTristateVal() == ButtonValue::On)
             option.state |= QStyle::State_Open;
 
-        draw(QStyle::PE_IndicatorBranch, &option, m_image.get(), rBackgroundColor);
+        draw(QStyle::PE_IndicatorBranch, option, m_image.get(), rBackgroundColor);
     }
     else if (type == ControlType::ListHeader)
     {
         QStyleOptionHeader option;
-        draw(QStyle::CE_HeaderSection, &option, m_image.get(), rBackgroundColor,
+        draw(QStyle::CE_HeaderSection, option, m_image.get(), rBackgroundColor,
              vclStateValue2StateFlag(nControlState, value));
     }
     else if (type == ControlType::Checkbox)
@@ -515,13 +515,13 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
             QStyleOptionButton option;
             // clear FOCUSED bit, focus is drawn separately
             nControlState &= ~ControlState::FOCUSED;
-            draw(QStyle::CE_CheckBox, &option, m_image.get(), rBackgroundColor,
+            draw(QStyle::CE_CheckBox, option, m_image.get(), rBackgroundColor,
                  vclStateValue2StateFlag(nControlState, value));
         }
         else if (part == ControlPart::Focus)
         {
             QStyleOptionFocusRect option;
-            draw(QStyle::PE_FrameFocusRect, &option, m_image.get(), rBackgroundColor,
+            draw(QStyle::PE_FrameFocusRect, option, m_image.get(), rBackgroundColor,
                  vclStateValue2StateFlag(nControlState, value));
         }
     }
@@ -564,7 +564,7 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
             if (sbVal->mnThumbState & ControlState::ROLLOVER)
                 option.activeSubControls = QStyle::SC_ScrollBarSlider;
 
-            draw(QStyle::CC_ScrollBar, &option, m_image.get(), rBackgroundColor,
+            draw(QStyle::CC_ScrollBar, option, m_image.get(), rBackgroundColor,
                  vclStateValue2StateFlag(nControlState, value));
         }
         else
@@ -595,7 +595,7 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
                 option.state = QStyle::State_MouseOver;
         }
 
-        draw(QStyle::CC_SpinBox, &option, m_image.get(), rBackgroundColor,
+        draw(QStyle::CC_SpinBox, option, m_image.get(), rBackgroundColor,
              vclStateValue2StateFlag(nControlState, value));
     }
     else if (type == ControlType::Radiobutton)
@@ -605,20 +605,20 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
             QStyleOptionButton option;
             // clear FOCUSED bit, focus is drawn separately
             nControlState &= ~ControlState::FOCUSED;
-            draw(QStyle::CE_RadioButton, &option, m_image.get(), rBackgroundColor,
+            draw(QStyle::CE_RadioButton, option, m_image.get(), rBackgroundColor,
                  vclStateValue2StateFlag(nControlState, value));
         }
         else if (part == ControlPart::Focus)
         {
             QStyleOptionFocusRect option;
-            draw(QStyle::PE_FrameFocusRect, &option, m_image.get(), rBackgroundColor,
+            draw(QStyle::PE_FrameFocusRect, option, m_image.get(), rBackgroundColor,
                  vclStateValue2StateFlag(nControlState, value));
         }
     }
     else if (type == ControlType::Tooltip)
     {
         QStyleOption option;
-        draw(QStyle::PE_PanelTipLabel, &option, m_image.get(), rBackgroundColor,
+        draw(QStyle::PE_PanelTipLabel, option, m_image.get(), rBackgroundColor,
              vclStateValue2StateFlag(nControlState, value));
     }
     else if (type == ControlType::Frame)
@@ -637,7 +637,7 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
         option.state = vclStateValue2StateFlag(nControlState, value);
         option.state |= QStyle::State_Item;
 
-        draw(QStyle::CE_MenuItem, &option, m_image.get(), rBackgroundColor);
+        draw(QStyle::CE_MenuItem, option, m_image.get(), rBackgroundColor);
     }
     else if (type == ControlType::Slider
              && (part == ControlPart::TrackHorzArea || part == ControlPart::TrackVertArea))
@@ -655,7 +655,7 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
         if (horizontal)
             option.state |= QStyle::State_Horizontal;
 
-        draw(QStyle::CC_Slider, &option, m_image.get(), rBackgroundColor);
+        draw(QStyle::CC_Slider, option, m_image.get(), rBackgroundColor);
     }
     else if (type == ControlType::Progress && part == ControlPart::Entire)
     {
@@ -666,14 +666,14 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
         option.maximum = widgetRect.width();
         option.progress = value.getNumericVal();
 
-        draw(QStyle::CE_ProgressBar, &option, m_image.get(), rBackgroundColor,
+        draw(QStyle::CE_ProgressBar, option, m_image.get(), rBackgroundColor,
              vclStateValue2StateFlag(nControlState, value));
     }
     else if (type == ControlType::TabItem && part == ControlPart::Entire)
     {
         QStyleOptionTab sot;
         fillQStyleOptionTab(value, sot);
-        draw(QStyle::CE_TabBarTabShape, &sot, m_image.get(), rBackgroundColor,
+        draw(QStyle::CE_TabBarTabShape, sot, m_image.get(), rBackgroundColor,
              vclStateValue2StateFlag(nControlState, value));
     }
     else if (type == ControlType::TabPane && part == ControlPart::Entire)
@@ -693,7 +693,7 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
         option.tabBarSize = toQSize(rValue.m_aTabHeaderRect.GetSize());
         option.rect = m_image->rect();
         QRect aRect = subElementRect(QStyle::SE_TabWidgetTabPane, &option);
-        draw(QStyle::PE_FrameTabWidget, &option, m_image.get(), rBackgroundColor,
+        draw(QStyle::PE_FrameTabWidget, option, m_image.get(), rBackgroundColor,
              vclStateValue2StateFlag(nControlState, value), aRect);
     }
     else
