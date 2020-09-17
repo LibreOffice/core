@@ -1421,6 +1421,7 @@ Reference< XShape > const & Shape::createAndInsert(
                     mpCustomShapePropertiesPtr->setTextRotateAngle(mnRotation / 60000);
                     // Also put this away in a GrabBag.
                     putPropertyToGrabBag("Upright", Any(isUpright));
+                    putPropertyToGrabBag("nRotationAtImport", Any(mnRotation / 60000));
                 }
                 else
                 {
