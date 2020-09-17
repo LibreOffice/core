@@ -7,11 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include "xmlimp.hxx"
+
 #include <sal/config.h>
 
 #include <string_view>
-
-#include "xmlimp.hxx"
 
 #include <initializer_list>
 #include <unordered_map>
