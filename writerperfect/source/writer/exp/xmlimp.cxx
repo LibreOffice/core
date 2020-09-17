@@ -7,9 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "xmlimp.hxx"
-
 #include <sal/config.h>
+
+#include "xmlimp.hxx"
 
 #include <string_view>
 
