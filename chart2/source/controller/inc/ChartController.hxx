@@ -497,6 +497,7 @@ private:
 
     void executeDispatch_LOKSetTextSelection(int nType, int nX, int nY);
     void executeDispatch_LOKPieSegmentDragging(int nOffset);
+    void executeDispatch_FillColor(sal_uInt32 nColor);
 
     void sendPopupRequest(OUString const & rCID, tools::Rectangle aRectangle);
 
