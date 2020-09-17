@@ -252,12 +252,13 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedLabelPlacements( const 
 
         if(!bDonut)
         {
-            aRet.realloc(4);
+            aRet.realloc(5);
             sal_Int32* pSeq = aRet.getArray();
             *pSeq++ = css::chart::DataLabelPlacement::AVOID_OVERLAP;
             *pSeq++ = css::chart::DataLabelPlacement::OUTSIDE;
             *pSeq++ = css::chart::DataLabelPlacement::INSIDE;
             *pSeq++ = css::chart::DataLabelPlacement::CENTER;
+            *pSeq++ = css::chart::DataLabelPlacement::CUSTOM;
         }
         else
         {
