@@ -144,6 +144,7 @@ void XmpMetadata::write()
             aXmlWriter.endElement();
         }
 
+        // XMP Basic schema
         aXmlWriter.startElement("rdf:Description");
         aXmlWriter.attribute("rdf:about", OString(""));
         aXmlWriter.attribute("xmlns:xmp", OString("http://ns.adobe.com/xap/1.0/"));
