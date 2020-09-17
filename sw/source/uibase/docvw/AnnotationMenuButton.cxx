@@ -67,6 +67,13 @@ void AnnotationMenuButton::dispose()
 void AnnotationMenuButton::Select()
 {
     OString sIdent = GetCurItemIdent();
+    if (sIdent.isEmpty())
+        return;
+
+    // tdf#136682 ensure this is the currently active sidebar win so the command
+    // operates in an active sidebar context
+    mrSidebarWin.SetActiveSidebarWin();
+
     if (sIdent == "reply")
         mrSidebarWin.ExecuteCommand(FN_REPLY);
     if (sIdent == "resolve" || sIdent == "unresolve")
