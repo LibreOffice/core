@@ -174,7 +174,7 @@ public:
     void                SetViewOptions  ( const ScViewOptions& rOpt );
     SC_DLLPUBLIC void   SetDocOptions   ( const ScDocOptions& rOpt );
     SC_DLLPUBLIC void   SetAppOptions   ( const ScAppOptions& rOpt );
-    void                SetDefaultsOptions ( const ScDefaultsOptions& rOpt );
+    SC_DLLPUBLIC void   SetDefaultsOptions ( const ScDefaultsOptions& rOpt );
     SC_DLLPUBLIC void   SetFormulaOptions ( const ScFormulaOptions& rOpt );
     SC_DLLPUBLIC void   SetInputOptions ( const ScInputOptions& rOpt );
     void                SetPrintOptions ( const ScPrintOptions& rOpt );
