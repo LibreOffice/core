@@ -124,7 +124,8 @@ else
 			$(if $(value gb_CppunitTest_postprocess), \
 				rm -fr $@.core && mkdir $@.core && cd $@.core &&)) \
 		{ \
-		$(if $(gb_CppunitTest_localized),for l in $(WITH_LANG_LIST) ; do LO_TEST_LOCALE="$$l" ) \
+		$(if $(gb_CppunitTest_localized),for l in $(WITH_LANG_LIST) ; do \
+			printf 'LO_TEST_LOCALE=%s\n' "$$l" && LO_TEST_LOCALE="$$l" ) \
 		$(if $(gb_CppunitTest_PREGDBTRACE),$(gb_CppunitTest_PREGDBTRACE) &&) \
 		$(if $(gb_CppunitTest__vcl_no_svp), \
 			$(filter-out SAL_USE_VCLPLUGIN=svp,$(gb_TEST_ENV_VARS)),$(gb_TEST_ENV_VARS)) \
