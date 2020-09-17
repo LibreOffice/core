@@ -22,6 +22,30 @@
       "revId": "f532087b4787ac0b6564cd3a002e59c8709082c6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30a048ce_b017d9cd",
+        "filename": "sw/source/uibase/sidebar/TableEditPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2020-09-17T13:16:10Z",
+      "side": 1,
+      "message": "good catch! mistake when porting...",
+      "parentUuid": "798555fa_90aca901",
+      "range": {
+        "startLine": 140,
+        "startChar": 56,
+        "endLine": 140,
+        "endChar": 60
+      },
+      "revId": "f532087b4787ac0b6564cd3a002e59c8709082c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
