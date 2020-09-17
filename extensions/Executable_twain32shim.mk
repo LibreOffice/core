@@ -13,6 +13,16 @@ $(eval $(call gb_Executable_set_targettype_gui,twain32shim,YES))
 
 $(eval $(call gb_Executable_set_x86,twain32shim,YES))
 
+# when building with link-time optimisation on, we need to turn it off for the helper
+ifeq ($(ENABLE_LTO),TRUE)
+$(eval $(call gb_Executable_add_cxxflags,twain32shim,\
+	-GL- \
+))
+$(eval $(call gb_Executable_add_ldflags,twain32shim,\
+	-LTCG:OFF \
+))
+endif
+
 $(eval $(call gb_Executable_use_externals,twain32shim,\
     sane_headers \
 ))

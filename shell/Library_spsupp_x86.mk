@@ -11,6 +11,16 @@ $(eval $(call gb_Library_Library,spsupp_x86))
 
 $(eval $(call gb_Library_set_x86,spsupp_x86,YES))
 
+# when building with link-time optimisation on, we need to turn it off for the helper
+ifeq ($(ENABLE_LTO),TRUE)
+$(eval $(call gb_Library_add_cxxflags,spsupp_x86,\
+	-GL- \
+))
+$(eval $(call gb_Library_add_ldflags,spsupp_x86,\
+	-LTCG:OFF \
+))
+endif
+
 $(eval $(call gb_Library_use_custom_headers,spsupp_x86,\
 	shell/source/win32/spsupp/idl \
 ))

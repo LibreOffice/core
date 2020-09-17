@@ -24,6 +24,7 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <oox/token/tokens.hxx>
+#include <oox/dllapi.h>
 #include <rtl/instance.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
@@ -32,7 +33,7 @@
 namespace oox {
 
 
-class TokenMap
+class OOX_DLLPUBLIC TokenMap
 {
 public:
     explicit            TokenMap();
