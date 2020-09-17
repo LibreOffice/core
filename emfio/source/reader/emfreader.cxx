@@ -24,6 +24,8 @@
 #include <o3tl/safeint.hxx>
 #include <tools/stream.hxx>
 #include <memory>
+#include <vcl/graph.hxx>
+#include <vcl/pdfread.hxx>
 
 #ifdef DBG_UTIL
 #include <vcl/pngwrite.hxx>
@@ -162,6 +164,8 @@ using namespace std;
 #define EMR_GRADIENTFILL               118
 #define EMR_SETLINKEDUFIS              119
 #define EMR_SETTEXTJUSTIFICATION       120
+
+#define PDF_SIGNATURE 0x50444620 // "PDF "
 
 namespace
 {
@@ -381,16 +385,13 @@ namespace emfio
     {
     }
 
-#if OSL_DEBUG_LEVEL > 0
     const sal_uInt32 EMR_COMMENT_BEGINGROUP = 0x00000002;
     const sal_uInt32 EMR_COMMENT_ENDGROUP = 0x00000003;
     const sal_uInt32 EMR_COMMENT_MULTIFORMATS = 0x40000004;
     const sal_uInt32 EMR_COMMENT_WINDOWS_METAFILE = 0x80000001;
-#endif
 
     void EmfReader::ReadGDIComment(sal_uInt32 nCommentId)
     {
-#if OSL_DEBUG_LEVEL > 0
         sal_uInt32 nPublicCommentIdentifier;
         mpInputStream->ReadUInt32(nPublicCommentIdentifier);
 
@@ -433,7 +434,7 @@ namespace emfio
                 break;
 
             case EMR_COMMENT_MULTIFORMATS:
-                SAL_WARN("emfio", "\t\tEMR_COMMENT_MULTIFORMATS not implemented");
+                ReadMultiformatsComment();
                 break;
 
             case EMR_COMMENT_WINDOWS_METAFILE:
@@ -444,9 +445,78 @@ namespace emfio
                 SAL_WARN("emfio", "\t\tEMR_COMMENT_PUBLIC not implemented, id: 0x" << std::hex << nCommentId << std::dec);
                 break;
         }
-#else
-        (void) nCommentId;
-#endif
+    }
+
+    void EmfReader::ReadMultiformatsComment()
+    {
+        tools::Rectangle aOutputRect = EmfReader::ReadRectangle();
+
+        sal_uInt32 nCountFormats;
+        mpInputStream->ReadUInt32(nCountFormats);
+        if (nCountFormats < 1)
+        {
+            return;
+        }
+
+        // Read the first EmrFormat.
+        sal_uInt32 nSignature;
+        mpInputStream->ReadUInt32(nSignature);
+        if (nSignature != PDF_SIGNATURE)
+        {
+            return;
+        }
+
+        sal_uInt32 nVersion;
+        mpInputStream->ReadUInt32(nVersion);
+        if (nVersion != 1)
+        {
+            return;
+        }
+
+        sal_uInt32 nSizeData;
+        mpInputStream->ReadUInt32(nSizeData);
+        if (!nSizeData || nSizeData > mpInputStream->remainingSize())
+        {
+            return;
+        }
+
+        sal_uInt32 nOffData;
+        mpInputStream->ReadUInt32(nOffData);
+        if (!nOffData)
+        {
+            return;
+        }
+
+        std::vector<char> aPdfData(nSizeData);
+        mpInputStream->ReadBytes(aPdfData.data(), aPdfData.size());
+        if (!mpInputStream->good())
+        {
+            return;
+        }
+
+        SvMemoryStream aPdfStream;
+        aPdfStream.WriteBytes(aPdfData.data(), aPdfData.size());
+        aPdfStream.Seek(0);
+        Graphic aGraphic;
+        if (!vcl::ImportPDF(aPdfStream, aGraphic))
+        {
+            return;
+        }
+
+        maBmpSaveList.emplace_back(new BSaveStruct(aGraphic.GetBitmapEx(), aOutputRect, SRCCOPY));
+        const std::shared_ptr<VectorGraphicData> pVectorGraphicData
+            = aGraphic.getVectorGraphicData();
+        if (!pVectorGraphicData)
+        {
+            return;
+        }
+
+        if (pVectorGraphicData->getVectorGraphicDataType() != VectorGraphicDataType::Pdf)
+        {
+            return;
+        }
+
+        mbReadOtherGraphicFormat = true;
     }
 
     void EmfReader::ReadEMFPlusComment(sal_uInt32 length, bool& bHaveDC)
@@ -728,7 +798,7 @@ namespace emfio
 
         SAL_INFO("emfio", "EMF_PLUS_DISABLE is " << (bEnableEMFPlus ? "enabled" : "disabled"));
 
-        while( bStatus && mnRecordCount-- && mpInputStream->good())
+        while (bStatus && mnRecordCount-- && mpInputStream->good() && !mbReadOtherGraphicFormat)
         {
             sal_uInt32  nRecType(0), nRecSize(0);
             mpInputStream->ReadUInt32(nRecType).ReadUInt32(nRecSize);
