@@ -14,14 +14,14 @@
 // expected-no-diagnostics
 #else
 
-#include <rtl/ustring.hxx>
+#include <string_view>
 
 namespace something
 {
 // expected-error@+1 {{write [loplugin:unusedvarsglobal]}}
-extern const OUStringLiteral literal1;
+extern const std::u16string_view literal1;
 }
-const OUStringLiteral something::literal1(u"xxx");
+const std::u16string_view something::literal1(u"xxx");
 
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
