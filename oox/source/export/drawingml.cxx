@@ -2923,6 +2923,8 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
     else if( bVertical && eHorizontalAlignment == TextHorizontalAdjust_LEFT )
         sVerticalAlignment = "b";
 
+    // Upright is an xml attribute of xdr:txBody/a:bodyPr. It is set when
+    // in a textbox menu we choose: do not rotate this element.
     bool isUpright = false;
     if (GetProperty(rXPropSet, "InteropGrabBag"))
     {
@@ -2935,6 +2937,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
                 if (aProp.Name == "Upright")
                 {
                     aProp.Value >>= isUpright;
+                    nTextPreRotateAngle = 0;
                     break;
                 }
             }
