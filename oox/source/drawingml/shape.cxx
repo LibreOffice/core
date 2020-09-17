@@ -1410,8 +1410,7 @@ Reference< XShape > const & Shape::createAndInsert(
 
                 nTextRotateAngle -= mnDiagramRotation;
 
-                bool isUpright = getTextBody()->getTextProperties().moUpright;
-                if (isUpright)
+                if (getTextBody()->getTextProperties().moUpright)
                 {
                     // When upright is set, we want the text without any rotation.
                     // But if we set 0 here, the text is still rotated if the
@@ -1419,8 +1418,10 @@ Reference< XShape > const & Shape::createAndInsert(
                     // Hence, we rotate the text into the opposite direction of
                     // the rotation of the shape, by as much as the shape was rotated.
                     mpCustomShapePropertiesPtr->setTextRotateAngle(mnRotation / 60000);
-                    // Also put this away in a GrabBag.
-                    putPropertyToGrabBag("Upright", Any(isUpright));
+                    // Also put the initial angles away in a GrabBag.
+                    putPropertyToGrabBag("Upright", Any(true));
+                    putPropertyToGrabBag("nShapeRotationAtImport", Any(mnRotation / 60000));
+                    putPropertyToGrabBag("nTextRotationAtImport", Any(mnRotation / 60000));
                 }
                 else
                 {
