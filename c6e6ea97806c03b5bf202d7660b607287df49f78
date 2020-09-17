@@ -22,6 +22,30 @@
       "revId": "c6e6ea97806c03b5bf202d7660b607287df49f78",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3544c71_5431871a",
+        "filename": "sd/uiconfig/sdraw/toolbar/drawingobjectbar.xml",
+        "patchSetId": 10
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-09-17T07:36:01Z",
+      "side": 0,
+      "message": "No, this submenu expands to all eight distribution options (see distributebar.xml). But yes, the previous dialog has been removed.",
+      "parentUuid": "1c11c183_3bab48ef",
+      "range": {
+        "startLine": 59,
+        "startChar": 1,
+        "endLine": 60,
+        "endChar": 28
+      },
+      "revId": "c6e6ea97806c03b5bf202d7660b607287df49f78",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
