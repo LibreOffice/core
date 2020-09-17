@@ -174,6 +174,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_indexenumeration_tablerowsenumeration \
 	CppunitTest_sc_indexenumeration_textfieldenumeration \
 	CppunitTest_sc_importdescriptorbaseobj \
+	CppunitTest_sc_jumbosheets_test \
 	CppunitTest_sc_labelrangeobj \
 	CppunitTest_sc_labelrangesobj \
 	CppunitTest_sc_macros_test \
