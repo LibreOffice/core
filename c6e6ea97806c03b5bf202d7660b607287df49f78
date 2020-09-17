@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1c11c183_3bab48ef",
+        "filename": "sd/uiconfig/sdraw/toolbar/drawingobjectbar.xml",
+        "patchSetId": 10
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1001872
+      },
+      "writtenOn": "2020-09-17T07:21:51Z",
+      "side": 0,
+      "message": "does this mean the distribution functionality will disappear from the Draw and Impress standard toolbar?",
+      "range": {
+        "startLine": 59,
+        "startChar": 1,
+        "endLine": 60,
+        "endChar": 28
+      },
+      "revId": "c6e6ea97806c03b5bf202d7660b607287df49f78",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
