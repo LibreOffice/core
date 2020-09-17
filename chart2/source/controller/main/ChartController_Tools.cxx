@@ -920,6 +920,26 @@ void ChartController::executeDispatch_ToggleGridVertical()
     aUndoGuard.commit();
 }
 
+void ChartController::executeDispatch_FillColor(sal_uInt32 nColor)
+{
+    try
+    {
+        OUString aCID( m_aSelection.getSelectedCID() );
+        const uno::Reference< frame::XModel >& xChartModel = getModel();
+        if( xChartModel.is() )
+        {
+            Reference< beans::XPropertySet > xPointProperties(
+                ObjectIdentifier::getObjectPropertySet( aCID, xChartModel ) );
+            if( xPointProperties.is() )
+                xPointProperties->setPropertyValue( "FillColor", uno::Any( nColor ) );
+        }
+    }
+    catch( const uno::Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION( "chart2" );
+    }
+}
+
 void ChartController::executeDispatch_LOKSetTextSelection(int nType, int nX, int nY)
 {
     if (!m_pDrawViewWrapper)

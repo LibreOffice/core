@@ -1104,6 +1104,15 @@ void SAL_CALL ChartController::dispatch(
             this->executeDispatch_PositionAndSize(&rArgs);
         }
     }
+    else if(aCommand == "FillColor")
+    {
+        if (rArgs.getLength() > 0)
+        {
+            sal_uInt32 nColor;
+            rArgs[0].Value >>= nColor;
+            this->executeDispatch_FillColor(nColor);
+        }
+    }
     else if(aCommand == "Paste")
         this->executeDispatch_Paste();
     else if(aCommand == "Copy" )
