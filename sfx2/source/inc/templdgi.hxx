@@ -125,8 +125,6 @@ protected:
     bool m_bWantHierarchical :1;
     bool bBindingUpdate :1;
 
-    void FmtSelect(weld::TreeView* pTreeView, bool bIsCallback);
-
     DECL_LINK(FilterSelectHdl, weld::ComboBox&, void );
     DECL_LINK(FmtSelectHdl, weld::TreeView&, void);
     DECL_LINK(TreeListApplyHdl, weld::TreeView&, bool);
@@ -185,6 +183,7 @@ protected:
     bool IsSafeForWaterCan() const;
 
     void SelectStyle(const OUString& rStyle, bool bIsCallback);
+    void UpdateStyleDependents();
     bool HasSelectedStyle() const;
     void GetSelectedStyle() const;
     void FillTreeBox();
