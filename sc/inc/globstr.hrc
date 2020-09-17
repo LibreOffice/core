@@ -430,7 +430,7 @@
 #define STR_MULTI_SELECT                        NC_("STR_MULTI_SELECT", "(multiple)")
 #define STR_GLOBAL_SCOPE                        NC_("STR_GLOBAL_SCOPE", "Document (Global)")
 #define STR_ERR_NAME_EXISTS                     NC_("STR_ERR_NAME_EXISTS", "Invalid name. Already in use for the selected scope.")
-#define STR_ERR_NAME_INVALID                    NC_("STR_ERR_NAME_INVALID", "Invalid name. Only use letters, numbers and underscore.")
+#define STR_ERR_NAME_INVALID                    NC_("STR_ERR_NAME_INVALID", "Invalid name. Start with a letter, use only letters, numbers and underscore.")
 #define STR_UNSAVED_EXT_REF                     NC_("STR_UNSAVED_EXT_REF", "This Document contains external references to unsaved documents.\n\nDo you want to continue?")
 #define STR_CLOSE_WITH_UNSAVED_REFS             NC_("STR_CLOSE_WITH_UNSAVED_REFS", "This Document is referenced by another document and not yet saved. Closing it without saving will result in data loss.")
 #define STR_COND_CONDITION                      NC_("STR_COND_CONDITION", "Cell value")
