@@ -2913,11 +2913,16 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
                 pWrap = "square";
         }
 
+        // Start handling upright here.
+        sal_Int32 nRotateAngle;
+        if (GetProperty(rXPropSet, "RotateAngle"))
+            nRotateAngle = rXPropSet->getPropertyValue("RotateAngle").get<sal_Int32>();
         bool isUpright = false;
         if (GetProperty(rXPropSet, "InteropGrabBag"))
         {
             if (rXPropSet->getPropertySetInfo()->hasPropertyByName("InteropGrabBag"))
             {
+                sal_Int32 nOldRotation = 0;
                 uno::Sequence<beans::PropertyValue> aGrabBag;
                 rXPropSet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
                 for (auto& aProp : aGrabBag)
@@ -2928,6 +2933,30 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
                         break;
                     }
                 }
+                if (isUpright)
+                {
+                    for (auto& aProp : aGrabBag)
+                    {
+                        if (aProp.Name == "nRotationAtImport")
+                        {
+                            aProp.Value >>= nOldRotation;
+                            nOldRotation *= 300;
+                            if (nOldRotation > 36000)
+                                nOldRotation -= 36000;
+                            break;
+                        }
+                    }
+                }
+                // So our shape with the textbox in it was not rotated.
+                // Keep upright and make the preRotateAngle 0, it is an attribute
+                // of textBodyPr and must be 0 when upright is true, otherwise
+                // bad rotation happens in MSO.
+                if (nOldRotation == nRotateAngle)
+                    nTextPreRotateAngle = 0;
+                // So we rotated the shape, in this case lose upright and do
+                // as LO normally does.
+                else
+                    isUpright = false;
             }
         }
 
