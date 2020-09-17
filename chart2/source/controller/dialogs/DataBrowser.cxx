@@ -102,9 +102,6 @@ public:
 
     bool HasFocus() const { return m_xControl->has_focus(); }
 
-    void Hide() { m_xControl->hide(); }
-    void Show() { m_xControl->show(); }
-
     void set_size_request(int nWidth, int nHeight) { m_xControl->set_size_request(nWidth, nHeight); }
     void set_margin_left(int nLeft) { m_xControl->set_margin_left(nLeft); }
 
@@ -296,23 +293,18 @@ void SeriesHeader::SetPos()
     m_spSymbol->set_size_request(aSize.Width(), aSize.Height());
 
     // series name edit field
-    aSize.setWidth(nSymbolDistance);
+    m_spSeriesName->set_margin_left(2);
+
+    aSize.setWidth(nSymbolHeight);
+    aSize.setHeight(12);
     aSize = m_xDevice->LogicToPixel(aSize, MapMode(MapUnit::MapAppFont));
-    m_spSeriesName->set_margin_left(aSize.Width() + 2);
-    aSize.setWidth( m_nWidth - nSymbolHeight - nSymbolDistance );
-    sal_Int32 nHeight = 12;
-    aSize.setHeight( nHeight );
-    aSize = m_xDevice->LogicToPixel(aSize, MapMode(MapUnit::MapAppFont));
+    aSize.setWidth(m_nWidth - aSize.Width() - 2);
     m_spSeriesName->set_size_request(aSize.Width(), aSize.Height());
 
     // color bar
-    aSize.setWidth(1);
+    aSize.setHeight(3);
     aSize = m_xDevice->LogicToPixel(aSize, MapMode(MapUnit::MapAppFont));
-    m_spColorBar->set_margin_left(aSize.Width() + 2);
-    nHeight = 3;
-    aSize.setWidth( m_nWidth - 1 );
-    aSize.setHeight( nHeight );
-    aSize = m_xDevice->LogicToPixel(aSize, MapMode(MapUnit::MapAppFont));
+    aSize.setWidth(m_nWidth);
     m_spColorBar->set_size_request(aSize.Width(), aSize.Height());
 
     auto xVirDev(m_spColorBar->create_virtual_device());
@@ -331,7 +323,7 @@ void SeriesHeader::SetWidth( sal_Int32 nWidth )
 
 void SeriesHeader::SetPixelWidth( sal_Int32 nWidth )
 {
-    SetWidth( m_xDevice->PixelToLogic(Size(nWidth, 0), MapMode(MapUnit::MapAppFont)).getWidth());
+    SetWidth(nWidth);
 }
 
 void SeriesHeader::SetChartType(
@@ -356,16 +348,14 @@ void SeriesHeader::SetRange( sal_Int32 nStartCol, sal_Int32 nEndCol )
 
 void SeriesHeader::Show()
 {
-    m_spSymbol->show();
-    m_spSeriesName->Show();
-    m_spColorBar->show();
+    m_xContainer1->show();
+    m_xContainer2->show();
 }
 
 void SeriesHeader::Hide()
 {
-    m_spSymbol->hide();
-    m_spSeriesName->Hide();
-    m_spColorBar->hide();
+    m_xContainer1->hide();
+    m_xContainer2->hide();
 }
 
 void SeriesHeader::SetEditChangedHdl( const Link<SeriesHeaderEdit&,void> & rLink )
@@ -1346,7 +1336,7 @@ void DataBrowser::ImplAdjustHeaderControls()
         {
             if( nStartPos < nMaxPos )
             {
-                (*aIt)->SetPixelWidth( nCurrentPos - nStartPos - 3 );
+                (*aIt)->SetPixelWidth( nCurrentPos - nStartPos );
                 (*aIt)->Show();
 
                 if (pWin)
