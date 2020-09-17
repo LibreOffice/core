@@ -435,8 +435,13 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
                                                          const bool bCheckBottom ) const
 {
     SwTwips nAdjustedRelPosY = nProposedRelPosY;
-    if (SwAnchoredObject::IsDraggingOffPageAllowed(FindFrameFormat(&mrDrawObj)))
+    // TODO: Replace the following condition with the correction
+    // of the implementation of option FollowTextFlow.
+    if ( SwAnchoredObject::IsDraggingOffPageAllowed(FindFrameFormat(&mrDrawObj)) &&
+        !(GetAnchorFrame().IsInTab() && DoesObjFollowsTextFlow()) )
+    {
         return nAdjustedRelPosY;
+    }
 
     const Size aObjSize(GetAnchoredObj().GetObjRect().SSize());
     // determine the area of 'page' alignment frame, to which the vertical
