@@ -41,7 +41,7 @@ import com.sun.star.xml.sax.XDocumentHandler;
 
 /**
  * Test for object which is represented by service
- * <code>com.sun.star.comp.Draw.XMLSettingsExporter</code>. <p>
+ * <code>com.sun.star.comp.Draw.XMLOasisSettingsExporter</code>. <p>
  * Object implements the following interfaces :
  * <ul>
  *  <li><code>com::sun::star::lang::XInitialization</code></li>
@@ -118,7 +118,7 @@ public class XMLSettingsExporter extends TestCase {
         Any arg = new Any(new Type(XDocumentHandler.class),filter);
 
         oObj = (XInterface) xMSF.createInstanceWithArguments(
-            "com.sun.star.comp.Draw.XMLSettingsExporter",
+            "com.sun.star.comp.Draw.XMLOasisSettingsExporter",
             new Object[] {arg});
         XExporter xEx = UnoRuntime.queryInterface(XExporter.class, oObj);
         xEx.setSourceDocument(xDrawDoc);

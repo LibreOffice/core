@@ -83,10 +83,6 @@
     constructor="com_sun_star_comp_Draw_XMLOasisMetaExporter_get_implementation">
     <service name="com.sun.star.comp.Draw.XMLOasisMetaExporter"/>
   </implementation>
-  <implementation name="XMLDrawSettingsExportOOO"
-    constructor="com_sun_star_comp_Draw_XMLSettingsExporter_get_implementation">
-    <service name="com.sun.star.comp.Draw.XMLSettingsExporter"/>
-  </implementation>
   <implementation name="XMLDrawSettingsExportOasis"
     constructor="com_sun_star_comp_Draw_XMLOasisSettingsExporter_get_implementation">
     <service name="com.sun.star.comp.Draw.XMLOasisSettingsExporter"/>
