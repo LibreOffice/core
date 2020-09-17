@@ -137,7 +137,7 @@ TableEditPanel::TableEditPanel(vcl::Window* pParent,
     InitColumnWidthToolitem();
 
     if (comphelper::LibreOfficeKit::isActive())
-        m_xMisc->set_item_visible(".uno:InsertFormula", true);
+        m_xMisc->set_item_visible(".uno:InsertFormula", false);
 }
 
 TableEditPanel::~TableEditPanel() { disposeOnce(); }
