@@ -1332,12 +1332,19 @@ IMPL_LINK( SwAnnotationWin, WindowEventListener, VclWindowEvent&, rEvent, void )
     else if ( rEvent.GetId() == VclEventId::WindowActivate &&
               rEvent.GetWindow() == mpSidebarTextControl )
     {
-        const bool bLockView = mrView.GetWrtShell().IsViewLocked();
-        mrView.GetWrtShell().LockView( true );
-        mrMgr.SetActiveSidebarWin( this );
-        mrView.GetWrtShell().LockView( bLockView );
+        SetActiveSidebarWin();
         mrMgr.MakeVisible( this );
     }
+}
+
+void SwAnnotationWin::SetActiveSidebarWin()
+{
+    if (mrMgr.GetActiveSidebarWin() == this)
+        return;
+    const bool bLockView = mrView.GetWrtShell().IsViewLocked();
+    mrView.GetWrtShell().LockView( true );
+    mrMgr.SetActiveSidebarWin(this);
+    mrView.GetWrtShell().LockView( bLockView );
 }
 
 IMPL_LINK(SwAnnotationWin, ScrollHdl, ScrollBar*, pScroll, void)
