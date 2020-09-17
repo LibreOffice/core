@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5bc44dd3_4ca4b9c9",
+        "filename": "writerperfect/source/writer/exp/xmlimp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-17T09:09:40Z",
+      "side": 1,
+      "message": "I was under impression that there\u0027s a convention that this one must be the first?",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 23
+      },
+      "revId": "fb4c53a1bbe57de93a92abc04736c0afdfd16170",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
