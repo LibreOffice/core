@@ -351,6 +351,32 @@ void fillUnoException(uno_Any * pUnoExc, uno_Mapping * pCpp2Uno)
         return;
     }
 
+    // Very bad HACK to find out whether we run against a libcxxabi that has a new
+    // __cxa_exception::reserved member at the start, introduced with LLVM 10
+    // <https://github.com/llvm/llvm-project/commit/674ec1eb16678b8addc02a4b0534ab383d22fa77>
+    // "[libcxxabi] Insert padding in __cxa_exception struct for compatibility".  The layout of the
+    // start of __cxa_exception is
+    //
+    //  [8 byte  void *reserve]
+    //   8 byte  size_t referenceCount
+    //
+    // where the (bad, hacky) assumption is that reserve (if present) is null
+    // (__cxa_allocate_exception in at least LLVM 11 zero-fills the object, and nothing actively
+    // sets reserve) while referenceCount is non-null (__cxa_throw sets it to 1, and
+    // __cxa_decrement_exception_refcount destroys the exception as soon as it drops to 0; for a
+    // __cxa_dependent_exception, the referenceCount member is rather
+    //
+    //   8 byte  void* primaryException
+    //
+    // but which also will always be set to a non-null value in __cxa_rethrow_primary_exception).
+    // As described in the definition of __cxa_exception
+    // (bridges/source/cpp_uno/gcc3_macosx_x86-64/share.hxx), this hack (together with the "#if 0"
+    // there) can be dropped once we can be sure that we only run against new libcxxabi that has the
+    // reserve member:
+    if (*reinterpret_cast<void **>(header) == nullptr) {
+        header = reinterpret_cast<__cxa_exception *>(reinterpret_cast<void **>(header) + 1);
+    }
+
     std::type_info *exceptionType = __cxxabiv1::__cxa_current_exception_type();
 
     typelib_TypeDescription * pExcTypeDescr = nullptr;
