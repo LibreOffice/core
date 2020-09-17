@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "798555fa_90aca901",
+        "filename": "sw/source/uibase/sidebar/TableEditPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-17T12:45:55Z",
+      "side": 1,
+      "message": "It seems odd that the change looks as if it *shows* it for comphelper::LibreOfficeKit::isActive() case?",
+      "range": {
+        "startLine": 140,
+        "startChar": 56,
+        "endLine": 140,
+        "endChar": 60
+      },
+      "revId": "f532087b4787ac0b6564cd3a002e59c8709082c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
