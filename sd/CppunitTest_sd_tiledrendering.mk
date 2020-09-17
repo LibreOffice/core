@@ -58,4 +58,9 @@ $(eval $(call gb_CppunitTest_use_rdb,sd_tiledrendering,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,sd_tiledrendering))
 
+$(eval $(call gb_CppunitTest_use_uiconfigs,sd_tiledrendering, \
+    modules/simpress \
+    svx \
+))
+
 # vim: set noet sw=4 ts=4:
