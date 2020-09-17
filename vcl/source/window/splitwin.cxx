@@ -181,6 +181,10 @@ void SplitWindow::ImplDrawBorder(vcl::RenderContext& rRenderContext)
     switch (meAlign)
     {
     case WindowAlign::Bottom:
+        rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+        rRenderContext.DrawLine(Point(0, 0), Point(nDX - 1, 0));
+        rRenderContext.DrawLine(Point(0, nDY - 2), Point(nDX - 1, nDY - 2));
+
         rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
         rRenderContext.DrawLine(Point(0, 1), Point(nDX - 1, 1));
         rRenderContext.DrawLine(Point(0, nDY - 1), Point(nDX - 1, nDY - 1));
