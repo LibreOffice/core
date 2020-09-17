@@ -541,6 +541,8 @@ void ValueSet::RemoveItem( sal_uInt16 nItemId )
 
 void ValueSet::TurnOffScrollBar()
 {
+    if (mxScrolledWindow->get_vpolicy() == VclPolicyType::NEVER)
+        return;
     mxScrolledWindow->set_vpolicy(VclPolicyType::NEVER);
     weld::DrawingArea* pDrawingArea = GetDrawingArea();
     Size aPrefSize(pDrawingArea->get_preferred_size());
@@ -549,6 +551,8 @@ void ValueSet::TurnOffScrollBar()
 
 void ValueSet::TurnOnScrollBar()
 {
+    if (mxScrolledWindow->get_vpolicy() == VclPolicyType::ALWAYS)
+        return;
     mxScrolledWindow->set_vpolicy(VclPolicyType::ALWAYS);
     weld::DrawingArea* pDrawingArea = GetDrawingArea();
     Size aPrefSize(pDrawingArea->get_preferred_size());
