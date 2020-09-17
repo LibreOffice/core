@@ -471,7 +471,6 @@ core_constructor_list = [
     "com_sun_star_comp_Impress_XMLOasisSettingsImporter_get_implementation",
     "com_sun_star_comp_Impress_XMLExporter_get_implementation",
     "com_sun_star_comp_Draw_XMLExporter_get_implementation",
-    "com_sun_star_comp_Draw_XMLSettingsExporter_get_implementation",
     "com_sun_star_comp_Draw_XMLOasisSettingsExporter_get_implementation",
     "com_sun_star_comp_Draw_XMLOasisMetaExporter_get_implementation",
     "com_sun_star_comp_Draw_XMLOasisContentExporter_get_implementation",
