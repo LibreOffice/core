@@ -2913,21 +2913,52 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
                 pWrap = "square";
         }
 
-        bool isUpright = false;
+        // Start handling upright here.
+        sal_Int32 nRotateAngle = 0;
+        if (GetProperty(rXPropSet, "RotateAngle"))
+            nRotateAngle = rXPropSet->getPropertyValue("RotateAngle").get<sal_Int32>();
+        std::optional<OString> isUpright;
         if (GetProperty(rXPropSet, "InteropGrabBag"))
         {
             if (rXPropSet->getPropertySetInfo()->hasPropertyByName("InteropGrabBag"))
             {
+                sal_Int32 nOldRotation = 0;
                 uno::Sequence<beans::PropertyValue> aGrabBag;
                 rXPropSet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
                 for (auto& aProp : aGrabBag)
                 {
                     if (aProp.Name == "Upright")
                     {
-                        aProp.Value >>= isUpright;
+                        bool bUpright;
+                        aProp.Value >>= bUpright;
+                        isUpright = OString(bUpright ? "1" : "0");
                         break;
                     }
                 }
+                if (isUpright.has_value() && isUpright.value() == "1")
+                {
+                    for (auto& aProp : aGrabBag)
+                    {
+                        if (aProp.Name == "nRotationAtImport")
+                        {
+                            aProp.Value >>= nOldRotation;
+                            nOldRotation *= 300;
+                            if (nOldRotation > 36000)
+                                nOldRotation -= 36000;
+                            break;
+                        }
+                    }
+                }
+                // So our shape with the textbox in it was not rotated.
+                // Keep upright and make the preRotateAngle 0, it is an attribute
+                // of textBodyPr and must be 0 when upright is true, otherwise
+                // bad rotation happens in MSO.
+                if (nOldRotation == nRotateAngle)
+                    nTextPreRotateAngle = 0;
+                // So we rotated the shape, in this case lose upright and do
+                // as LO normally does.
+                else
+                    isUpright.reset();
             }
         }
 
@@ -2941,7 +2972,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
                                XML_anchor, sVerticalAlignment,
                                XML_anchorCtr, sax_fastparser::UseIf("1", bHorizontalCenter),
                                XML_vert, sWritingMode,
-                               XML_upright, isUpright ? "1" : "0",
+                               XML_upright, isUpright,
                                XML_rot, sax_fastparser::UseIf(oox::drawingml::calcRotationValue((nTextPreRotateAngle + nTextRotateAngle) * 100), (nTextPreRotateAngle + nTextRotateAngle) != 0));
         if (bIsFontworkShape)
         {
