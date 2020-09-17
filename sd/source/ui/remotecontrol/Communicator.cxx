@@ -75,19 +75,18 @@ void Communicator::execute()
         if ( xPresentation.is() && xPresentation->isRunning() )
         {
             presentationStarted( xPresentation->getController() );
+            OString aBuffer =
+                "slideshow_info\n" +
+                OUStringToOString( ::comphelper::DocumentInfo::getDocumentTitle( xFrame->getController()->getModel() ), RTL_TEXTENCODING_UTF8 ) +
+                "\n\n";
+
+            pTransmitter->addMessage( aBuffer.getStr(), Transmitter::PRIORITY_LOW );
         }
         else
         {
             pTransmitter->addMessage( "slideshow_finished\n\n",
                                       Transmitter::PRIORITY_HIGH );
         }
-
-        OString aBuffer =
-            "slideshow_info\n" +
-            OUStringToOString( ::comphelper::DocumentInfo::getDocumentTitle( xFrame->getController()->getModel() ), RTL_TEXTENCODING_UTF8 ) +
-            "\n\n";
-
-        pTransmitter->addMessage( aBuffer.getStr(), Transmitter::PRIORITY_LOW );
     }
     catch (uno::RuntimeException &)
     {
