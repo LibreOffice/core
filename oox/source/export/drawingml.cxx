@@ -2835,20 +2835,73 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
                 pWrap = "square";
         }
 
+<<<<<<< HEAD   (989d8f tdf#107893 sw: fix broken "Add Text Box" after Undo)
         bool isUpright = false;
+=======
+        std::optional<OUString> sHorzOverflow;
+        std::optional<OUString> sVertOverflow;
+        sal_Int32 nShapeRotateAngle = 0;
+        if (GetProperty(rXPropSet, "RotateAngle"))
+            nShapeRotateAngle = rXPropSet->getPropertyValue("RotateAngle").get<sal_Int32>() / 300;
+        Reference< XPropertySet > xTextSet(xXText, UNO_QUERY);
+        sal_Int32 nShapeTextRotateAngle = 0;
+        if (GetProperty(xTextSet, "RotateAngle"))
+            nShapeTextRotateAngle = rXPropSet->getPropertyValue("RotateAngle").get<sal_Int32>() / 300;
+        std::optional<OString> isUpright;
+>>>>>>> CHANGE (ff5ca4 tdf#137000 XLSX shape export: fix upright)
         if (GetProperty(rXPropSet, "InteropGrabBag"))
         {
             if (rXPropSet->getPropertySetInfo()->hasPropertyByName("InteropGrabBag"))
             {
+                bool bUpright = false;
+                sal_Int32 nOldShapeRotation = 0;
+                sal_Int32 nOldTextRotation = 0;
                 uno::Sequence<beans::PropertyValue> aGrabBag;
                 rXPropSet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
                 for (auto& aProp : aGrabBag)
                 {
                     if (aProp.Name == "Upright")
                     {
+<<<<<<< HEAD   (989d8f tdf#107893 sw: fix broken "Add Text Box" after Undo)
                         aProp.Value >>= isUpright;
                         break;
+=======
+                        aProp.Value >>= bUpright;
+                        isUpright = OString(bUpright ? "1" : "0");
                     }
+                    else if (aProp.Name == "horzOverflow")
+                    {
+                        OUString sValue;
+                        aProp.Value >>= sValue;
+                        sHorzOverflow = sValue;
+                    }
+                    else if (aProp.Name == "vertOverflow")
+                    {
+                        OUString sValue;
+                        aProp.Value >>= sValue;
+                        sVertOverflow = sValue;
+>>>>>>> CHANGE (ff5ca4 tdf#137000 XLSX shape export: fix upright)
+                    }
+                }
+                if (bUpright)
+                {
+                    for (auto& aProp : aGrabBag)
+                    {
+                        if (aProp.Name == "nShapeRotationAtImport")
+                            aProp.Value >>= nOldShapeRotation;
+                        else if (aProp.Name == "nTextRotationAtImport")
+                            aProp.Value >>= nOldTextRotation;
+                    }
+                    // So our shape with the textbox in it was not rotated.
+                    // Keep upright and make the preRotateAngle 0, it is an attribute
+                    // of textBodyPr and must be 0 when upright is true, otherwise
+                    // bad rotation happens in MSO.
+                    if (nShapeRotateAngle == nOldShapeRotation && nShapeTextRotateAngle == nOldTextRotation)
+                        nTextPreRotateAngle = 0;
+                    // So we rotated the shape, in this case lose upright and do
+                    // as LO normally does.
+                    else
+                        isUpright.reset();
                 }
             }
         }
@@ -2863,8 +2916,13 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
                                XML_anchor, sVerticalAlignment,
                                XML_anchorCtr, bHorizontalCenter ? "1" : nullptr,
                                XML_vert, sWritingMode,
+<<<<<<< HEAD   (989d8f tdf#107893 sw: fix broken "Add Text Box" after Undo)
                                XML_upright, isUpright ? "1" : "0",
                                XML_rot, ((nTextPreRotateAngle + nTextRotateAngle) != 0) ? oox::drawingml::calcRotationValue( (nTextPreRotateAngle + nTextRotateAngle) * 100 ).getStr() : nullptr );
+=======
+                               XML_upright, isUpright,
+                               XML_rot, sax_fastparser::UseIf(oox::drawingml::calcRotationValue((nTextPreRotateAngle + nTextRotateAngle) * 100), (nTextPreRotateAngle + nTextRotateAngle) != 0));
+>>>>>>> CHANGE (ff5ca4 tdf#137000 XLSX shape export: fix upright)
         if (bIsFontworkShape)
         {
             if (aAdjustmentSeq.hasElements())
