@@ -105,7 +105,19 @@ ContextHandlerRef Transform2DContext::onCreateContext( sal_Int32 aElementToken, 
         mrShape.setChildPosition( awt::Point( rAttribs.getString( XML_x ).get().toInt32(), rAttribs.getString( XML_y ).get().toInt32() ) );
         break;
     case A_TOKEN( chExt ):  // horz/vert size of children
-        mrShape.setChildSize( awt::Size( rAttribs.getString( XML_cx ).get().toInt32(), rAttribs.getString( XML_cy ).get().toInt32() ) );
+        {
+            sal_Int32 nChExtCx = rAttribs.getString(XML_cx).get().toInt32();
+
+            if(nChExtCx == 0)
+                nChExtCx = mrShape.getSize().Width;
+
+            sal_Int32 nChExtCy = rAttribs.getString(XML_cy).get().toInt32();
+
+            if(nChExtCy == 0)
+                nChExtCy = mrShape.getSize().Height;
+
+            mrShape.setChildSize(awt::Size(nChExtCx, nChExtCy));
+        }
         break;
     }
 
