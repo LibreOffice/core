@@ -181,10 +181,6 @@ void SplitWindow::ImplDrawBorder(vcl::RenderContext& rRenderContext)
     switch (meAlign)
     {
     case WindowAlign::Bottom:
-        rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
-        rRenderContext.DrawLine(Point(0, 0), Point(nDX - 1, 0));
-        rRenderContext.DrawLine(Point(0, nDY - 2), Point(nDX - 1, nDY - 2));
-
         rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
         rRenderContext.DrawLine(Point(0, 1), Point(nDX - 1, 1));
         rRenderContext.DrawLine(Point(0, nDY - 1), Point(nDX - 1, nDY - 1));
@@ -211,14 +207,8 @@ void SplitWindow::ImplDrawBorder(vcl::RenderContext& rRenderContext)
         break;
     default:
         rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
-        rRenderContext.DrawLine(Point(0, 0), Point( 0, nDY - 2));
-        rRenderContext.DrawLine(Point(0, 0), Point( nDX - 1, 0));
-        rRenderContext.DrawLine(Point(0, nDY - 2), Point(nDX - 1, nDY - 2));
-
-        rRenderContext.SetLineColor( rStyleSettings.GetLightColor());
-        rRenderContext.DrawLine(Point(1, 1), Point(1, nDY - 3));
-        rRenderContext.DrawLine(Point(1, 1), Point(nDX - 1, 1));
-        rRenderContext.DrawLine(Point(0, nDY - 1), Point(nDX - 1, nDY - 1));
+        rRenderContext.DrawLine(Point(0, 0), Point( 0, nDY));
+        rRenderContext.DrawLine(Point(0, nDY), Point(nDX, nDY));
     }
 }
 
@@ -241,11 +231,6 @@ void SplitWindow::ImplDrawBorderLine(vcl::RenderContext& rRenderContext)
         rRenderContext.DrawLine( Point( nDX-SPLITWIN_SPLITSIZEEXLN, 1 ), Point( nDX-SPLITWIN_SPLITSIZEEXLN, nDY-3 ) );
         break;
     case WindowAlign::Right:
-        rRenderContext.SetLineColor( rStyleSettings.GetShadowColor() );
-        rRenderContext.DrawLine( Point( SPLITWIN_SPLITSIZEEXLN-1, 0 ), Point( SPLITWIN_SPLITSIZEEXLN-1, nDY-2 ) );
-
-        rRenderContext.SetLineColor( rStyleSettings.GetLightColor() );
-        rRenderContext.DrawLine( Point( SPLITWIN_SPLITSIZEEXLN, 1 ), Point( SPLITWIN_SPLITSIZEEXLN, nDY-3 ) );
         break;
     case WindowAlign::Top:
         rRenderContext.SetLineColor( rStyleSettings.GetShadowColor() );
