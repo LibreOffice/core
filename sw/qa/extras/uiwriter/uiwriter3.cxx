@@ -288,7 +288,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf126626)
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    Scheduler::ProcessEventsToIdle();
 
     SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
