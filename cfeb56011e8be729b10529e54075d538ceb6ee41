@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "615a861d_322c3e40",
+        "filename": "sc/source/ui/attrdlg/scdlgfact.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-09-17T14:23:28Z",
+      "side": 1,
+      "message": "if it was std::shared_ptr\u003cScGroupDlg\u003e I imagine it would still work, and the dynamic_cast then wouldn\u0027t be needed.",
+      "revId": "cfeb56011e8be729b10529e54075d538ceb6ee41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
