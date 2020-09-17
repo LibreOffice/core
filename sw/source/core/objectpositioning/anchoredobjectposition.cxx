@@ -435,7 +435,8 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
                                                          const bool bCheckBottom ) const
 {
     SwTwips nAdjustedRelPosY = nProposedRelPosY;
-    if (SwAnchoredObject::IsDraggingOffPageAllowed(FindFrameFormat(&mrDrawObj)))
+    if (SwAnchoredObject::IsDraggingOffPageAllowed(FindFrameFormat(&mrDrawObj)) &&
+        !(GetAnchorFrame().IsInTab() && DoesObjFollowsTextFlow()))
         return nAdjustedRelPosY;
 
     const Size aObjSize(GetAnchoredObj().GetObjRect().SSize());
