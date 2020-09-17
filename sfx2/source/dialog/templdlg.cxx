@@ -911,8 +911,8 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const OUString &rStr, bool bIsCal
 
     if (!bIsCallback)
     {
-        // tdf#134598 call FmtSelect to update watercan
-        FmtSelect(nullptr, false);
+        // tdf#134598 call UpdateStyleDependents to update watercan
+        UpdateStyleDependents();
     }
 }
 
@@ -1949,41 +1949,32 @@ IMPL_LINK_NOARG(SfxCommonTemplateDialog_Impl, PreviewHdl, weld::Button&, void)
 // Selection of a template during the Watercan-Status
 IMPL_LINK(SfxCommonTemplateDialog_Impl, FmtSelectHdl, weld::TreeView&, rListBox, void)
 {
-    FmtSelect(&rListBox, true);
-}
-
-void SfxCommonTemplateDialog_Impl::FmtSelect(weld::TreeView* pListBox, bool bIsCallback)
-{
-    std::unique_ptr<weld::TreeIter> xHdlEntry;
-    if (pListBox)
-    {
-        xHdlEntry = pListBox->make_iterator();
-        if (!pListBox->get_cursor(xHdlEntry.get()))
-            return;
-    }
-
-    // Trigger Help PI, if this is permitted of call handlers and field
-    if (!pListBox || pListBox->is_selected(*xHdlEntry))
-    {
-        // Only when the watercan is on
-        if ( IsInitialized() &&
-             IsCheckedItem("watercan") &&
-             // only if that region is allowed
-             nullptr != pFamilyState[nActFamily-1] && (mxTreeBox || mxFmtLb->count_selected_rows() <= 1) )
-        {
-            Execute_Impl(SID_STYLE_WATERCAN,
-                         "", "", 0);
-            Execute_Impl(SID_STYLE_WATERCAN,
-                         GetSelectedEntry(), "",
-                         static_cast<sal_uInt16>(GetFamilyItem_Impl()->GetFamily()));
-        }
-        EnableItem("watercan", !bWaterDisabled);
-        EnableDelete();
-    }
-    if( !pListBox )
+    std::unique_ptr<weld::TreeIter> xHdlEntry = rListBox.make_iterator();
+    if (!rListBox.get_cursor(xHdlEntry.get()))
         return;
 
-    SelectStyle(pListBox->get_text(*xHdlEntry), bIsCallback);
+    if (rListBox.is_selected(*xHdlEntry))
+        UpdateStyleDependents();
+
+    SelectStyle(rListBox.get_text(*xHdlEntry), true);
+}
+
+void SfxCommonTemplateDialog_Impl::UpdateStyleDependents()
+{
+    // Trigger Help PI. Only when the watercan is on
+    if ( IsInitialized() &&
+         IsCheckedItem("watercan") &&
+         // only if that region is allowed
+         nullptr != pFamilyState[nActFamily-1] && (mxTreeBox || mxFmtLb->count_selected_rows() <= 1) )
+    {
+        Execute_Impl(SID_STYLE_WATERCAN,
+                     "", "", 0);
+        Execute_Impl(SID_STYLE_WATERCAN,
+                     GetSelectedEntry(), "",
+                     static_cast<sal_uInt16>(GetFamilyItem_Impl()->GetFamily()));
+    }
+    EnableItem("watercan", !bWaterDisabled);
+    EnableDelete();
 }
 
 void SfxCommonTemplateDialog_Impl::MenuSelect(const OString& rIdent)
