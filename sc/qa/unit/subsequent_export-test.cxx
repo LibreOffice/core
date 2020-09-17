@@ -270,6 +270,8 @@ public:
     void testTdf123353();
     void testTdf133688_precedents();
     void testTdf91251_missingOverflowRoundtrip();
+    void testTdf137000_handle_upright();
+
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -434,6 +436,7 @@ public:
     CPPUNIT_TEST(testTdf123353);
     CPPUNIT_TEST(testTdf133688_precedents);
     CPPUNIT_TEST(testTdf91251_missingOverflowRoundtrip);
+    CPPUNIT_TEST(testTdf137000_handle_upright);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5481,6 +5484,25 @@ void ScExportTest::testTdf91251_missingOverflowRoundtrip()
 
     assertXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:txBody/a:bodyPr", "horzOverflow", "clip");
     assertXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:txBody/a:bodyPr", "horzOverflow", "clip");
+}
+
+void ScExportTest::testTdf137000_handle_upright()
+{
+    // tdf#106197 When exporting the "upright" attribute, we must set
+    // TextPreRotateAngle to 0.
+    // (Upright is an xml attribute of xdr:txBody/a:bodyPr. It is set when
+    // in a textbox menu we choose: do not rotate this element.)
+    ScDocShellRef xShell = loadDoc("tdf137000_export_upright.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+    xmlDocUniquePtr pDrawing
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/drawing1.xml");
+    CPPUNIT_ASSERT(pDrawing);
+
+    assertXPathNoAttribute(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:txBody/a:bodyPr",
+                           "rot");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
