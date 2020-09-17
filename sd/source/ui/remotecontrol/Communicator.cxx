@@ -76,13 +76,6 @@ void Communicator::execute()
         if ( xPresentation.is() && xPresentation->isRunning() )
         {
             presentationStarted( xPresentation->getController() );
-        }
-        else
-        {
-            pTransmitter->addMessage( "slideshow_finished\n\n",
-                                      Transmitter::PRIORITY_HIGH );
-        }
-
         OStringBuffer aBuffer;
         aBuffer
           .append( "slideshow_info\n" )
@@ -90,6 +83,13 @@ void Communicator::execute()
           .append("\n\n");
 
         pTransmitter->addMessage( aBuffer.makeStringAndClear(), Transmitter::PRIORITY_LOW );
+        }
+        else
+        {
+            pTransmitter->addMessage( "slideshow_finished\n\n",
+                                      Transmitter::PRIORITY_HIGH );
+        }
+
     }
     catch (uno::RuntimeException &)
     {
