@@ -478,6 +478,37 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf134272)
     assertXPath(pXmlDoc, "/root/page[1]/header/txt[2]/infos/bounds", "bottom", "2819");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf136613)
+{
+    SwDoc* pDoc = createDoc("tdf136613.docx");
+    CPPUNIT_ASSERT(pDoc);
+
+    //get the flys and the root frame
+    const auto vFlyFormats = pDoc->GetFlyFrameFormats(FLYCNTTYPE_ALL, true);
+    const auto vFrames = pDoc->GetAllLayouts();
+
+    CPPUNIT_ASSERT(!vFrames.empty());
+    CPPUNIT_ASSERT(!vFlyFormats.empty());
+
+    //get the page frame from the root
+    SwFrame* pPageFrame = vFrames[0]->Lower();
+    CPPUNIT_ASSERT(pPageFrame);
+
+    //get the rectangle of the page
+    const SwRect& rPageRect = pPageFrame->getFrameArea();
+
+    //check the flys and...
+    for (auto pFlyFormat : vFlyFormats)
+    {
+        //...the rectangle of the fly location...
+        const SwRect& rRect = pFlyFormat->FindLayoutRect();
+        CPPUNIT_ASSERT(!rRect.IsEmpty());
+
+        //...if it is on the page. This will fail if not.
+        CPPUNIT_ASSERT_MESSAGE("The pictures are outside the page!", rPageRect.IsInside(rRect));
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf88496)
 {
     SwDoc* pDoc = createDoc("tdf88496.docx");
