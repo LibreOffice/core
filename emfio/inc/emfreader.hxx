@@ -32,7 +32,7 @@ namespace emfio
         bool        mbRecordPath : 1;
         bool        mbEMFPlus : 1;
         bool        mbEMFPlusDualMode : 1;
-        /// An other format is read already, can ignore actual EMF data.
+        /// Another format is read already, can ignore actual EMF data.
         bool mbReadOtherGraphicFormat = false;
 
         bool        ReadHeader();
