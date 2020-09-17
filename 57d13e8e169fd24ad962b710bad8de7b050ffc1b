@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "35a16d73_936c2cf3",
+        "filename": "cui/source/customize/cfgutil.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 1153,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-09-17T23:04:14Z",
+      "side": 1,
+      "message": "Please drop the m_ prefix. It\u0027s used for class members, not for local vars.",
+      "range": {
+        "startLine": 1153,
+        "startChar": 20,
+        "endLine": 1153,
+        "endChar": 22
+      },
+      "revId": "57d13e8e169fd24ad962b710bad8de7b050ffc1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b495b5c4_85e76f13",
+        "filename": "cui/source/inc/cfgutil.hxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-09-17T23:04:14Z",
+      "side": 1,
+      "message": "I guess this (and related code) is no longer needed, as the context menu callback is defined in the dialog?",
+      "revId": "57d13e8e169fd24ad962b710bad8de7b050ffc1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
