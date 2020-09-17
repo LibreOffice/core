@@ -867,7 +867,7 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const OUString &rStr, bool bIsCal
                     {
                         mxTreeBox->scroll_to_row(*xEntry);
                         mxTreeBox->select(*xEntry);
-                        return;
+                        break;
                     }
                     bEntry = mxTreeBox->iter_next(*xEntry);
                 }
@@ -893,7 +893,6 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const OUString &rStr, bool bIsCal
                         mxFmtLb->unselect_all();
                         mxFmtLb->scroll_to_row(*xEntry);
                         mxFmtLb->select(*xEntry);
-                        FmtSelect(nullptr, bIsCallback);
                     }
                 }
             }
@@ -909,6 +908,12 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const OUString &rStr, bool bIsCal
     }
 
     bWaterDisabled = !IsSafeForWaterCan();
+
+    if (!bIsCallback)
+    {
+        // tdf#134598 call FmtSelect to update watercan
+        FmtSelect(nullptr, false);
+    }
 }
 
 OUString SfxCommonTemplateDialog_Impl::GetSelectedEntry() const
