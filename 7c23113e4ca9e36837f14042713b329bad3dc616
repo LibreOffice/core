@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "900fac99_dfb1a9f9",
+        "filename": "offapi/com/sun/star/datatransfer/clipboard/RenderingCapabilities.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-09-17T08:32:23Z",
+      "side": 1,
+      "message": "\"use\", not \"user\"",
+      "range": {
+        "startLine": 39,
+        "startChar": 41,
+        "endLine": 39,
+        "endChar": 42
+      },
+      "revId": "7c23113e4ca9e36837f14042713b329bad3dc616",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
