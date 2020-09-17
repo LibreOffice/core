@@ -3736,7 +3736,7 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned long
         if (!bIsWeldedDialog)
         {
             WindowUIObject aUIObject(pWindow);
-            std::unique_ptr<UIObject> pUIWindow(aUIObject.get_child(aMap["id"]));
+            std::unique_ptr<UIObject> pUIWindow(aUIObject.get_visible_child(aMap["id"]));
             if (pUIWindow) {
                 bool bIsClickAction = false;
 
