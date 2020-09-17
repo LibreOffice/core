@@ -67,13 +67,15 @@ private:
     static QRect subElementRect(QStyle::SubElement element, const QStyleOption* option);
 
     void draw(QStyle::ControlElement element, QStyleOption* option, QImage* image,
-              QStyle::State const state = QStyle::State_None, QRect rect = QRect());
+              const Color& rBackgroundColor, QStyle::State const state = QStyle::State_None,
+              QRect rect = QRect());
     void draw(QStyle::PrimitiveElement element, QStyleOption* option, QImage* image,
-              QStyle::State const state = QStyle::State_None, QRect rect = QRect());
+              const Color& rBackgroundColor, QStyle::State const state = QStyle::State_None,
+              QRect rect = QRect());
     void draw(QStyle::ComplexControl element, QStyleOptionComplex* option, QImage* image,
-              QStyle::State const state = QStyle::State_None);
-    void drawFrame(QStyle::PrimitiveElement element, QImage* image, QStyle::State const& state,
-                   bool bClip = true,
+              const Color& rBackgroundColor, QStyle::State const state = QStyle::State_None);
+    void drawFrame(QStyle::PrimitiveElement element, QImage* image, const Color& rBackGroundColor,
+                   QStyle::State const& state, bool bClip = true,
                    QStyle::PixelMetric eLineMetric = QStyle::PM_DefaultFrameWidth);
 
     static void fillQStyleOptionTab(const ImplControlValue& value, QStyleOptionTab& sot);
