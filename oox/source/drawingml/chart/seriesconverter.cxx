@@ -283,10 +283,14 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
         const TypeGroupInfo& rTypeInfo = rTypeGroup.getTypeInfo();
         bool bIsPie = rTypeInfo.meTypeCategory == TYPECATEGORY_PIE;
 
-        if( mrModel.mxLayout && !mrModel.mxLayout->mbAutoLayout && !bIsPie )
+        if( mrModel.mxLayout && !mrModel.mxLayout->mbAutoLayout )
         {
             RelativePosition aPos(mrModel.mxLayout->mfX, mrModel.mxLayout->mfY, css::drawing::Alignment_TOP_LEFT);
             aPropSet.setProperty(PROP_CustomLabelPosition, aPos);
+            sal_Int32 nPlacement = -1;
+            if (bIsPie && aPropSet.getProperty(nPlacement, PROP_LabelPlacement)
+                && nPlacement == css::chart::DataLabelPlacement::AVOID_OVERLAP)
+                aPropSet.setProperty(PROP_LabelPlacement, css::chart::DataLabelPlacement::CUSTOM);
         }
 
         if (mrModel.mxShapeProp)
