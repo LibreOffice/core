@@ -2925,6 +2925,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
                     if (aProp.Name == "Upright")
                     {
                         aProp.Value >>= isUpright;
+                        nTextPreRotateAngle = 0;
                         break;
                     }
                 }
