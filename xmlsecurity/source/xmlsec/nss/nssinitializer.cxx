@@ -419,12 +419,17 @@ bool nsscrypto_initialize(css::uno::Reference<css::uno::XComponentContext> const
 #ifdef XMLSEC_CRYPTO_NSS
     bool return_value = true;
 
-#if defined SYSTEM_NSS
+#if defined SYSTEM_NSS || defined IOS // The statically linked nss on iOS acts as a "system" nss in this regards
     if (!SECMOD_HasRootCerts())
 #endif
     {
         deleteRootsModule();
 
+#ifdef IOS // Use statically linked NSS
+        OUString rootModulePath("NSSCKBI");
+
+        if (true)
+#else
 #if defined SYSTEM_NSS
         OUString rootModule("libnssckbi" SAL_DLLEXTENSION);
 #else
@@ -434,6 +439,7 @@ bool nsscrypto_initialize(css::uno::Reference<css::uno::XComponentContext> const
 
         OUString rootModulePath;
         if (::osl::File::E_None == ::osl::File::getSystemPathFromFileURL(rootModule, rootModulePath))
+#endif
         {
             OString ospath = OUStringToOString(rootModulePath, osl_getThreadTextEncoding());
             OString aStr = "name=\"" ROOT_CERTS "\" library=\"" + ospath + "\"";
