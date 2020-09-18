@@ -239,7 +239,9 @@ private:
     std::unique_ptr<weld::TreeIter> mxScratchIter;
     std::unique_ptr<weld::Entry> mxEdSearch;
     std::unique_ptr<weld::Widget> mxBox;
-    std::unique_ptr<weld::TreeView> mxChecks;
+    std::unique_ptr<weld::TreeView> mxListChecks;
+    std::unique_ptr<weld::TreeView> mxTreeChecks;
+    weld::TreeView* mpChecks;
 
     std::unique_ptr<weld::CheckButton> mxChkToggleAll;
     std::unique_ptr<weld::Button> mxBtnSelectSingle;

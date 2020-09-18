@@ -9246,11 +9246,138 @@ bool separator_function(GtkTreePath* path, const std::vector<std::unique_ptr<Gtk
     return bFound;
 }
 
+void tree_store_set(GtkTreeModel* pTreeModel, GtkTreeIter *pIter, ...)
+{
+    va_list args;
+
+    va_start(args, pIter);
+    gtk_tree_store_set_valist(GTK_TREE_STORE(pTreeModel), pIter, args);
+    va_end(args);
+}
+
+void list_store_set(GtkTreeModel* pTreeModel, GtkTreeIter *pIter, ...)
+{
+    va_list args;
+
+    va_start(args, pIter);
+    gtk_list_store_set_valist(GTK_LIST_STORE(pTreeModel), pIter, args);
+    va_end(args);
+}
+
+void tree_store_insert_with_values(GtkTreeModel* pTreeModel, GtkTreeIter *pIter, GtkTreeIter *pParent, gint nPos,
+                                   gint nTextCol, const gchar* pText,
+                                   gint nIdCol, const gchar* pId)
+{
+    gtk_tree_store_insert_with_values(GTK_TREE_STORE(pTreeModel), pIter, pParent, nPos,
+                                      nTextCol, pText, nIdCol, pId, -1);
+}
+
+void list_store_insert_with_values(GtkTreeModel* pTreeModel, GtkTreeIter *pIter, GtkTreeIter *pParent, gint nPos,
+                                   gint nTextCol, const gchar* pText,
+                                   gint nIdCol, const gchar* pId)
+{
+    assert(!pParent); (void)pParent;
+    gtk_list_store_insert_with_values(GTK_LIST_STORE(pTreeModel), pIter, nPos,
+                                      nTextCol, pText, nIdCol, pId, -1);
+}
+
+void tree_store_prepend(GtkTreeModel* pTreeModel, GtkTreeIter *pIter, GtkTreeIter *pParent)
+{
+    gtk_tree_store_prepend(GTK_TREE_STORE(pTreeModel), pIter, pParent);
+}
+
+void list_store_prepend(GtkTreeModel* pTreeModel, GtkTreeIter *pIter, GtkTreeIter *pParent)
+{
+    assert(!pParent); (void)pParent;
+    gtk_list_store_prepend(GTK_LIST_STORE(pTreeModel), pIter);
+}
+
+void tree_store_insert(GtkTreeModel* pTreeModel, GtkTreeIter *pIter, GtkTreeIter *pParent, gint nPosition)
+{
+    gtk_tree_store_insert(GTK_TREE_STORE(pTreeModel), pIter, pParent, nPosition);
+}
+
+void list_store_insert(GtkTreeModel* pTreeModel, GtkTreeIter *pIter, GtkTreeIter *pParent, gint nPosition)
+{
+    assert(!pParent); (void)pParent;
+    gtk_list_store_insert(GTK_LIST_STORE(pTreeModel), pIter, nPosition);
+}
+
+void tree_store_clear(GtkTreeModel* pTreeModel)
+{
+    gtk_tree_store_clear(GTK_TREE_STORE(pTreeModel));
+}
+
+void list_store_clear(GtkTreeModel* pTreeModel)
+{
+    gtk_list_store_clear(GTK_LIST_STORE(pTreeModel));
+}
+
+void tree_store_remove(GtkTreeModel* pTreeModel, GtkTreeIter *pIter)
+{
+    gtk_tree_store_remove(GTK_TREE_STORE(pTreeModel), pIter);
+}
+
+void list_store_remove(GtkTreeModel* pTreeModel, GtkTreeIter *pIter)
+{
+    gtk_list_store_remove(GTK_LIST_STORE(pTreeModel), pIter);
+}
+
+void tree_store_swap(GtkTreeModel* pTreeModel, GtkTreeIter* pIter1, GtkTreeIter* pIter2)
+{
+    gtk_tree_store_swap(GTK_TREE_STORE(pTreeModel), pIter1, pIter2);
+}
+
+void list_store_swap(GtkTreeModel* pTreeModel, GtkTreeIter* pIter1, GtkTreeIter* pIter2)
+{
+    gtk_list_store_swap(GTK_LIST_STORE(pTreeModel), pIter1, pIter2);
+}
+
+void tree_store_set_value(GtkTreeModel* pTreeModel, GtkTreeIter* pIter, gint nColumn, GValue* pValue)
+{
+    gtk_tree_store_set_value(GTK_TREE_STORE(pTreeModel), pIter, nColumn, pValue);
+}
+
+void list_store_set_value(GtkTreeModel* pTreeModel, GtkTreeIter* pIter, gint nColumn, GValue* pValue)
+{
+    gtk_list_store_set_value(GTK_LIST_STORE(pTreeModel), pIter, nColumn, pValue);
+}
+
+int promote_arg(bool bArg)
+{
+    return static_cast<int>(bArg);
+}
+
 class GtkInstanceTreeView : public GtkInstanceContainer, public virtual weld::TreeView
 {
 private:
     GtkTreeView* m_pTreeView;
-    GtkTreeStore* m_pTreeStore;
+    GtkTreeModel* m_pTreeModel;
+
+    typedef void(*setterFnc)(GtkTreeModel*, GtkTreeIter*, ...);
+    setterFnc m_Setter;
+
+    typedef void(*insertWithValuesFnc)(GtkTreeModel*, GtkTreeIter*, GtkTreeIter*, gint, gint, const gchar*, gint, const gchar*);
+    insertWithValuesFnc m_InsertWithValues;
+
+    typedef void(*insertFnc)(GtkTreeModel*, GtkTreeIter*, GtkTreeIter*, gint);
+    insertFnc m_Insert;
+
+    typedef void(*prependFnc)(GtkTreeModel*, GtkTreeIter*, GtkTreeIter*);
+    prependFnc m_Prepend;
+
+    typedef void(*clearFnc)(GtkTreeModel*);
+    clearFnc m_Clear;
+
+    typedef void(*removeFnc)(GtkTreeModel*, GtkTreeIter*);
+    removeFnc m_Remove;
+
+    typedef void(*swapFnc)(GtkTreeModel*, GtkTreeIter*, GtkTreeIter*);
+    swapFnc m_Swap;
+
+    typedef void(*setValueFnc)(GtkTreeModel*, GtkTreeIter*, gint, GValue*);
+    setValueFnc m_SetValue;
+
     std::unique_ptr<comphelper::string::NaturalStringSorter> m_xSorter;
     GList *m_pColumns;
     std::vector<gulong> m_aColumnSignalIds;
@@ -9323,7 +9450,7 @@ private:
         GtkInstanceTreeIter aIter(nullptr);
         if (!get_cursor(&aIter))
             return;
-        if (gtk_tree_model_iter_has_child(GTK_TREE_MODEL(m_pTreeStore), &aIter.iter))
+        if (gtk_tree_model_iter_has_child(m_pTreeModel, &aIter.iter))
             get_row_expanded(aIter) ? collapse_row(aIter) : expand_row(aIter);
     }
 
@@ -9342,14 +9469,14 @@ private:
     void insert_row(GtkTreeIter& iter, const GtkTreeIter* parent, int pos, const OUString* pId, const OUString* pText,
                     const OUString* pIconName, const VirtualDevice* pDevice)
     {
-        gtk_tree_store_insert_with_values(m_pTreeStore, &iter, const_cast<GtkTreeIter*>(parent), pos,
-                                          m_nTextCol, !pText ? nullptr : OUStringToOString(*pText, RTL_TEXTENCODING_UTF8).getStr(),
-                                          m_nIdCol, !pId ? nullptr : OUStringToOString(*pId, RTL_TEXTENCODING_UTF8).getStr(),
-                                          -1);
+        m_InsertWithValues(m_pTreeModel, &iter, const_cast<GtkTreeIter*>(parent), pos,
+                           m_nTextCol, !pText ? nullptr : OUStringToOString(*pText, RTL_TEXTENCODING_UTF8).getStr(),
+                           m_nIdCol, !pId ? nullptr : OUStringToOString(*pId, RTL_TEXTENCODING_UTF8).getStr());
+
         if (pIconName)
         {
             GdkPixbuf* pixbuf = getPixbuf(*pIconName);
-            gtk_tree_store_set(m_pTreeStore, &iter, m_nImageCol, pixbuf, -1);
+            m_Setter(m_pTreeModel, &iter, m_nImageCol, pixbuf, -1);
             if (pixbuf)
                 g_object_unref(pixbuf);
         }
@@ -9368,7 +9495,7 @@ private:
             cairo_paint(cr);
             cairo_destroy(cr);
 
-            gtk_tree_store_set(m_pTreeStore, &iter, m_nImageCol, target, -1);
+            m_Setter(m_pTreeModel, &iter, m_nImageCol, target, -1);
             cairo_surface_destroy(target);
         }
     }
@@ -9389,9 +9516,8 @@ private:
 
     OUString get(const GtkTreeIter& iter, int col) const
     {
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         gchar* pStr;
-        gtk_tree_model_get(pModel, const_cast<GtkTreeIter*>(&iter), col, &pStr, -1);
+        gtk_tree_model_get(m_pTreeModel, const_cast<GtkTreeIter*>(&iter), col, &pStr, -1);
         OUString sRet(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
         g_free(pStr);
         return sRet;
@@ -9400,9 +9526,8 @@ private:
     OUString get(int pos, int col) const
     {
         OUString sRet;
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreeIter iter;
-        if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
+        if (gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, pos))
             sRet = get(iter, col);
         return sRet;
     }
@@ -9410,36 +9535,32 @@ private:
     gint get_int(const GtkTreeIter& iter, int col) const
     {
         gint nRet(-1);
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
-        gtk_tree_model_get(pModel, const_cast<GtkTreeIter*>(&iter), col, &nRet, -1);
+        gtk_tree_model_get(m_pTreeModel, const_cast<GtkTreeIter*>(&iter), col, &nRet, -1);
         return nRet;
     }
 
     gint get_int(int pos, int col) const
     {
         gint nRet(-1);
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreeIter iter;
-        if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
+        if (gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, pos))
             nRet = get_int(iter, col);
-        gtk_tree_model_get(pModel, &iter, col, &nRet, -1);
+        gtk_tree_model_get(m_pTreeModel, &iter, col, &nRet, -1);
         return nRet;
     }
 
     bool get_bool(const GtkTreeIter& iter, int col) const
     {
         gboolean bRet(false);
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
-        gtk_tree_model_get(pModel, const_cast<GtkTreeIter*>(&iter), col, &bRet, -1);
+        gtk_tree_model_get(m_pTreeModel, const_cast<GtkTreeIter*>(&iter), col, &bRet, -1);
         return bRet;
     }
 
     bool get_bool(int pos, int col) const
     {
         bool bRet(false);
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreeIter iter;
-        if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
+        if (gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, pos))
             bRet = get_bool(iter, col);
         return bRet;
     }
@@ -9453,71 +9574,67 @@ private:
 
         if (eState == TRISTATE_INDET)
         {
-            gtk_tree_store_set(m_pTreeStore, const_cast<GtkTreeIter*>(&iter),
-                m_aToggleVisMap[col], true, // checkbuttons are invisible until toggled on or off
-                m_aToggleTriStateMap[col], true, // tristate on
-                -1);
+            m_Setter(m_pTreeModel, const_cast<GtkTreeIter*>(&iter),
+                     m_aToggleVisMap[col], promote_arg(true), // checkbuttons are invisible until toggled on or off
+                     m_aToggleTriStateMap[col], promote_arg(true), // tristate on
+                     -1);
         }
         else
         {
-            gtk_tree_store_set(m_pTreeStore, const_cast<GtkTreeIter*>(&iter),
-                m_aToggleVisMap[col], true, // checkbuttons are invisible until toggled on or off
-                m_aToggleTriStateMap[col], false, // tristate off
-                col, eState == TRISTATE_TRUE, // set toggle state
-                -1);
+            m_Setter(m_pTreeModel, const_cast<GtkTreeIter*>(&iter),
+                     m_aToggleVisMap[col], promote_arg(true), // checkbuttons are invisible until toggled on or off
+                     m_aToggleTriStateMap[col], promote_arg(false), // tristate off
+                     col, promote_arg(eState == TRISTATE_TRUE), // set toggle state
+                     -1);
         }
     }
 
     void set(const GtkTreeIter& iter, int col, const OUString& rText)
     {
         OString aStr(OUStringToOString(rText, RTL_TEXTENCODING_UTF8));
-        gtk_tree_store_set(m_pTreeStore, const_cast<GtkTreeIter*>(&iter), col, aStr.getStr(), -1);
+        m_Setter(m_pTreeModel, const_cast<GtkTreeIter*>(&iter), col, aStr.getStr(), -1);
     }
 
     void set(int pos, int col, const OUString& rText)
     {
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreeIter iter;
-        if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
+        if (gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, pos))
             set(iter, col, rText);
     }
 
     void set(const GtkTreeIter& iter, int col, bool bOn)
     {
-        gtk_tree_store_set(m_pTreeStore, const_cast<GtkTreeIter*>(&iter), col, bOn, -1);
+        m_Setter(m_pTreeModel, const_cast<GtkTreeIter*>(&iter), col, promote_arg(bOn), -1);
     }
 
     void set(int pos, int col, bool bOn)
     {
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreeIter iter;
-        if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
+        if (gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, pos))
             set(iter, col, bOn);
     }
 
     void set(const GtkTreeIter& iter, int col, gint bInt)
     {
-        gtk_tree_store_set(m_pTreeStore, const_cast<GtkTreeIter*>(&iter), col, bInt, -1);
+        m_Setter(m_pTreeModel, const_cast<GtkTreeIter*>(&iter), col, bInt, -1);
     }
 
     void set(int pos, int col, gint bInt)
     {
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreeIter iter;
-        if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
+        if (gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, pos))
             set(iter, col, bInt);
     }
 
     void set(const GtkTreeIter& iter, int col, double fValue)
     {
-        gtk_tree_store_set(m_pTreeStore, const_cast<GtkTreeIter*>(&iter), col, fValue, -1);
+        m_Setter(m_pTreeModel, const_cast<GtkTreeIter*>(&iter), col, fValue, -1);
     }
 
     void set(int pos, int col, double fValue)
     {
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreeIter iter;
-        if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
+        if (gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, pos))
             set(iter, col, fValue);
     }
 
@@ -9535,9 +9652,7 @@ private:
 
     bool child_is_placeholder(GtkInstanceTreeIter& rGtkIter) const
     {
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
-
-        GtkTreePath* pPath = gtk_tree_model_get_path(pModel, &rGtkIter.iter);
+        GtkTreePath* pPath = gtk_tree_model_get_path(m_pTreeModel, &rGtkIter.iter);
         bool bExpanding = m_aExpandingPlaceHolderParents.count(pPath);
         gtk_tree_path_free(pPath);
         if (bExpanding)
@@ -9545,7 +9660,7 @@ private:
 
         bool bPlaceHolder = false;
         GtkTreeIter tmp;
-        if (gtk_tree_model_iter_children(pModel, &tmp, &rGtkIter.iter))
+        if (gtk_tree_model_iter_children(m_pTreeModel, &tmp, &rGtkIter.iter))
         {
             rGtkIter.iter = tmp;
             if (get_text(rGtkIter, -1) == "<dummy>")
@@ -9567,10 +9682,9 @@ private:
         bool bPlaceHolder = child_is_placeholder(aIter);
         if (bPlaceHolder)
         {
-            gtk_tree_store_remove(m_pTreeStore, &aIter.iter);
+            m_Remove(m_pTreeModel, &aIter.iter);
 
-            GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
-            pPlaceHolderPath = gtk_tree_model_get_path(pModel, &iter);
+            pPlaceHolderPath = gtk_tree_model_get_path(m_pTreeModel, &iter);
             m_aExpandingPlaceHolderParents.insert(pPlaceHolderPath);
         }
 
@@ -9619,14 +9733,13 @@ private:
         // additionally set the cursor into the row the toggled element is in
         gtk_tree_view_set_cursor(m_pTreeView, tree_path, nullptr, false);
 
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreeIter iter;
-        gtk_tree_model_get_iter(pModel, &iter, tree_path);
+        gtk_tree_model_get_iter(m_pTreeModel, &iter, tree_path);
 
         gboolean bRet(false);
-        gtk_tree_model_get(pModel, &iter, nCol, &bRet, -1);
+        gtk_tree_model_get(m_pTreeModel, &iter, nCol, &bRet, -1);
         bRet = !bRet;
-        gtk_tree_store_set(m_pTreeStore, &iter, nCol, bRet, -1);
+        m_Setter(m_pTreeModel, &iter, nCol, bRet, -1);
 
         set(iter, m_aToggleTriStateMap[nCol], false);
 
@@ -9648,9 +9761,8 @@ private:
     {
         GtkTreePath *tree_path = gtk_tree_path_new_from_string(path);
 
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkInstanceTreeIter aGtkIter(nullptr);
-        gtk_tree_model_get_iter(pModel, &aGtkIter.iter, tree_path);
+        gtk_tree_model_get_iter(m_pTreeModel, &aGtkIter.iter, tree_path);
         gtk_tree_path_free(tree_path);
 
         return signal_editing_started(aGtkIter);
@@ -9675,9 +9787,8 @@ private:
     {
         GtkTreePath *tree_path = gtk_tree_path_new_from_string(path);
 
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkInstanceTreeIter aGtkIter(nullptr);
-        gtk_tree_model_get_iter(pModel, &aGtkIter.iter, tree_path);
+        gtk_tree_model_get_iter(m_pTreeModel, &aGtkIter.iter, tree_path);
         gtk_tree_path_free(tree_path);
 
         OUString sText(pNewText, pNewText ? strlen(pNewText) : 0, RTL_TEXTENCODING_UTF8);
@@ -9800,7 +9911,7 @@ private:
         if (!get_cursor(&aIter))
             return false;
 
-        bool bHasChild = gtk_tree_model_iter_has_child(GTK_TREE_MODEL(m_pTreeStore), &aIter.iter);
+        bool bHasChild = gtk_tree_model_iter_has_child(m_pTreeModel, &aIter.iter);
 
         if (pEvent->keyval == GDK_KEY_Right)
         {
@@ -9885,11 +9996,11 @@ private:
     void set_font_color(const GtkTreeIter& iter, const Color& rColor)
     {
         if (rColor == COL_AUTO)
-            gtk_tree_store_set(m_pTreeStore, const_cast<GtkTreeIter*>(&iter), m_nIdCol + 1, nullptr, -1);
+            m_Setter(m_pTreeModel, const_cast<GtkTreeIter*>(&iter), m_nIdCol + 1, nullptr, -1);
         else
         {
             GdkRGBA aColor{rColor.GetRed()/255.0, rColor.GetGreen()/255.0, rColor.GetBlue()/255.0, 0};
-            gtk_tree_store_set(m_pTreeStore, const_cast<GtkTreeIter*>(&iter), m_nIdCol + 1, &aColor, -1);
+            m_Setter(m_pTreeModel, const_cast<GtkTreeIter*>(&iter), m_nIdCol + 1, &aColor, -1);
         }
     }
 
@@ -9927,11 +10038,10 @@ private:
     bool iter_next(weld::TreeIter& rIter, bool bOnlyExpanded) const
     {
         GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreeIter tmp;
         GtkTreeIter iter = rGtkIter.iter;
 
-        bool ret = gtk_tree_model_iter_children(pModel, &tmp, &iter);
+        bool ret = gtk_tree_model_iter_children(m_pTreeModel, &tmp, &iter);
         if (ret && bOnlyExpanded && !get_row_expanded(rGtkIter))
             ret = false;
         rGtkIter.iter = tmp;
@@ -9944,7 +10054,7 @@ private:
         }
 
         tmp = iter;
-        if (gtk_tree_model_iter_next(pModel, &tmp))
+        if (gtk_tree_model_iter_next(m_pTreeModel, &tmp))
         {
             rGtkIter.iter = tmp;
             //on-demand dummy entry doesn't count
@@ -9953,10 +10063,10 @@ private:
             return true;
         }
         // Move up level(s) until we find the level where the next node exists.
-        while (gtk_tree_model_iter_parent(pModel, &tmp, &iter))
+        while (gtk_tree_model_iter_parent(m_pTreeModel, &tmp, &iter))
         {
             iter = tmp;
-            if (gtk_tree_model_iter_next(pModel, &tmp))
+            if (gtk_tree_model_iter_next(m_pTreeModel, &tmp))
             {
                 rGtkIter.iter = tmp;
                 //on-demand dummy entry doesn't count
@@ -9972,7 +10082,7 @@ public:
     GtkInstanceTreeView(GtkTreeView* pTreeView, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pTreeView), pBuilder, bTakeOwnership)
         , m_pTreeView(pTreeView)
-        , m_pTreeStore(GTK_TREE_STORE(gtk_tree_view_get_model(m_pTreeView)))
+        , m_pTreeModel(gtk_tree_view_get_model(m_pTreeView))
         , m_bWorkAroundBadDragRegion(false)
         , m_bInDrag(false)
         , m_nTextCol(-1)
@@ -9993,6 +10103,34 @@ public:
         , m_pVAdjustment(gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(pTreeView)))
         , m_pChangeEvent(nullptr)
     {
+        if (GTK_IS_TREE_STORE(m_pTreeModel))
+        {
+            m_Setter = tree_store_set;
+            m_InsertWithValues = tree_store_insert_with_values;
+            m_Insert = tree_store_insert;
+            m_Prepend = tree_store_prepend;
+            m_Remove = tree_store_remove;
+            m_Swap = tree_store_swap;
+            m_SetValue = tree_store_set_value;
+            m_Clear = tree_store_clear;
+        }
+        else
+        {
+            /*
+               tdf#136559 see: https://gitlab.gnome.org/GNOME/gtk/-/issues/2693
+               If we only need a list and not a tree we can get a performance boost from using a ListStore
+             */
+            assert(!gtk_tree_view_get_show_expanders(m_pTreeView) && "a liststore can only be used if no tree structure is needed");
+            m_Setter = list_store_set;
+            m_InsertWithValues = list_store_insert_with_values;
+            m_Insert = list_store_insert;
+            m_Prepend = list_store_prepend;
+            m_Remove = list_store_remove;
+            m_Swap = list_store_swap;
+            m_SetValue = list_store_set_value;
+            m_Clear = list_store_clear;
+        }
+
         /* The outside concept of a column maps to a gtk CellRenderer, rather than
            a TreeViewColumn. If the first TreeViewColumn has a leading Toggle Renderer
            and/or a leading Image Renderer, those are considered special expander
@@ -10065,9 +10203,8 @@ public:
 
         ensure_drag_begin_end();
 
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
-        m_nRowDeletedSignalId = g_signal_connect(pModel, "row-deleted", G_CALLBACK(signalRowDeleted), this);
-        m_nRowInsertedSignalId = g_signal_connect(pModel, "row-inserted", G_CALLBACK(signalRowInserted), this);
+        m_nRowDeletedSignalId = g_signal_connect(m_pTreeModel, "row-deleted", G_CALLBACK(signalRowDeleted), this);
+        m_nRowInsertedSignalId = g_signal_connect(m_pTreeModel, "row-inserted", G_CALLBACK(signalRowInserted), this);
     }
 
     virtual void connect_query_tooltip(const Link<const weld::TreeIter&, OUString>& rLink) override
@@ -10276,9 +10413,8 @@ public:
         if (!gtk_tree_view_get_row_separator_func(m_pTreeView))
             gtk_tree_view_set_row_separator_func(m_pTreeView, separatorFunction, this, nullptr);
         insert_row(iter, nullptr, pos, &rId, nullptr, nullptr, nullptr);
-        GtkTreeModel* pTreeModel = GTK_TREE_MODEL(m_pTreeStore);
-        GtkTreePath* pPath = gtk_tree_model_get_path(pTreeModel, &iter);
-        m_aSeparatorRows.emplace_back(gtk_tree_row_reference_new(pTreeModel, pPath));
+        GtkTreePath* pPath = gtk_tree_model_get_path(m_pTreeModel, &iter);
+        m_aSeparatorRows.emplace_back(gtk_tree_row_reference_new(m_pTreeModel, pPath));
         gtk_tree_path_free(pPath);
         enable_notify_events();
     }
@@ -10286,7 +10422,7 @@ public:
     virtual void set_font_color(int pos, const Color& rColor) override
     {
         GtkTreeIter iter;
-        gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(m_pTreeStore), &iter, nullptr, pos);
+        gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, pos);
         set_font_color(iter, rColor);
     }
 
@@ -10300,22 +10436,22 @@ public:
     {
         disable_notify_events();
         GtkTreeIter iter;
-        gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(m_pTreeStore), &iter, nullptr, pos);
-        gtk_tree_store_remove(m_pTreeStore, &iter);
+        gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, pos);
+        m_Remove(m_pTreeModel, &iter);
         enable_notify_events();
     }
 
     virtual int find_text(const OUString& rText) const override
     {
         Search aSearch(rText, m_nTextCol);
-        gtk_tree_model_foreach(GTK_TREE_MODEL(m_pTreeStore), foreach_find, &aSearch);
+        gtk_tree_model_foreach(m_pTreeModel, foreach_find, &aSearch);
         return aSearch.index;
     }
 
     virtual int find_id(const OUString& rId) const override
     {
         Search aSearch(rId, m_nIdCol);
-        gtk_tree_model_foreach(GTK_TREE_MODEL(m_pTreeStore), foreach_find, &aSearch);
+        gtk_tree_model_foreach(m_pTreeModel, foreach_find, &aSearch);
         return aSearch.index;
     }
 
@@ -10332,7 +10468,7 @@ public:
         while (nSourceCount)
         {
             // tdf#125241 inserting backwards is massively faster
-            gtk_tree_store_prepend(m_pTreeStore, &aGtkIter.iter, nullptr);
+            m_Prepend(m_pTreeModel, &aGtkIter.iter, nullptr);
             func(aGtkIter, --nSourceCount);
         }
 
@@ -10343,15 +10479,13 @@ public:
     {
         disable_notify_events();
 
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
-
         GtkTreeIter iter1;
-        gtk_tree_model_iter_nth_child(pModel, &iter1, nullptr, pos1);
+        gtk_tree_model_iter_nth_child(m_pTreeModel, &iter1, nullptr, pos1);
 
         GtkTreeIter iter2;
-        gtk_tree_model_iter_nth_child(pModel, &iter2, nullptr, pos2);
+        gtk_tree_model_iter_nth_child(m_pTreeModel, &iter2, nullptr, pos2);
 
-        gtk_tree_store_swap(m_pTreeStore, &iter1, &iter2);
+        m_Swap(m_pTreeModel, &iter1, &iter2);
 
         enable_notify_events();
     }
@@ -10361,7 +10495,7 @@ public:
         disable_notify_events();
         gtk_tree_view_set_row_separator_func(m_pTreeView, nullptr, nullptr, nullptr);
         m_aSeparatorRows.clear();
-        gtk_tree_store_clear(m_pTreeStore);
+        m_Clear(m_pTreeModel);
         enable_notify_events();
     }
 
@@ -10372,7 +10506,7 @@ public:
         m_xSorter.reset(new comphelper::string::NaturalStringSorter(
                             ::comphelper::getProcessComponentContext(),
                             Application::GetSettings().GetUILanguageTag().getLocale()));
-        GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeStore);
+        GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeModel);
         gtk_tree_sortable_set_sort_func(pSortable, m_nTextCol, sortFunc, this, nullptr);
         gtk_tree_sortable_set_sort_column_id(pSortable, m_nTextCol, GTK_SORT_ASCENDING);
     }
@@ -10382,7 +10516,7 @@ public:
         m_xSorter.reset();
         int nSortColumn;
         GtkSortType eSortType;
-        GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeStore);
+        GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeModel);
         gtk_tree_sortable_get_sort_column_id(pSortable, &nSortColumn, &eSortType);
         gtk_tree_sortable_set_sort_column_id(pSortable, GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, eSortType);
     }
@@ -10392,7 +10526,7 @@ public:
         GtkSortType eSortType = bAscending ? GTK_SORT_ASCENDING : GTK_SORT_DESCENDING;
 
         gint sort_column_id(0);
-        GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeStore);
+        GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeModel);
         gtk_tree_sortable_get_sort_column_id(pSortable, &sort_column_id, nullptr);
         gtk_tree_sortable_set_sort_column_id(pSortable, sort_column_id, eSortType);
     }
@@ -10402,7 +10536,7 @@ public:
         int nSortColumn;
         GtkSortType eSortType;
 
-        GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeStore);
+        GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeModel);
         gtk_tree_sortable_get_sort_column_id(pSortable, &nSortColumn, &eSortType);
         return nSortColumn != GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID && eSortType == GTK_SORT_ASCENDING;
     }
@@ -10435,7 +10569,7 @@ public:
 
     virtual int get_sort_column() const override
     {
-        GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeStore);
+        GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeModel);
         gint sort_column_id(0);
         if (!gtk_tree_sortable_get_sort_column_id(pSortable, &sort_column_id, nullptr))
             return -1;
@@ -10450,7 +10584,7 @@ public:
             return;
         }
         GtkSortType eSortType;
-        GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeStore);
+        GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeModel);
         gtk_tree_sortable_get_sort_column_id(pSortable, nullptr, &eSortType);
         int nSortCol = to_internal_model(nColumn);
         gtk_tree_sortable_set_sort_func(pSortable, nSortCol, sortFunc, this, nullptr);
@@ -10460,19 +10594,19 @@ public:
     virtual void set_sort_func(const std::function<int(const weld::TreeIter&, const weld::TreeIter&)>& func) override
     {
         weld::TreeView::set_sort_func(func);
-        GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeStore);
+        GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeModel);
         gtk_tree_sortable_sort_column_changed(pSortable);
     }
 
     virtual int n_children() const override
     {
-        return gtk_tree_model_iter_n_children(GTK_TREE_MODEL(m_pTreeStore), nullptr);
+        return gtk_tree_model_iter_n_children(m_pTreeModel, nullptr);
     }
 
     virtual int iter_n_children(const weld::TreeIter& rIter) const override
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
-        return gtk_tree_model_iter_n_children(GTK_TREE_MODEL(m_pTreeStore), const_cast<GtkTreeIter*>(&rGtkIter.iter));
+        return gtk_tree_model_iter_n_children(m_pTreeModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
     }
 
     virtual void select(int pos) override
@@ -10517,7 +10651,7 @@ public:
     virtual bool is_selected(int pos) const override
     {
         GtkTreeIter iter;
-        gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(m_pTreeStore), &iter, nullptr, pos);
+        gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, pos);
         return gtk_tree_selection_iter_is_selected(gtk_tree_view_get_selection(m_pTreeView), &iter);
     }
 
@@ -10596,14 +10730,13 @@ public:
             return;
 
         GtkInstanceTreeIter aGtkIter(nullptr);
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
-        gtk_tree_model_get_iter(pModel, &aGtkIter.iter, start_path);
+        gtk_tree_model_get_iter(m_pTreeModel, &aGtkIter.iter, start_path);
 
         do
         {
             if (func(aGtkIter))
                 break;
-            GtkTreePath* path = gtk_tree_model_get_path(pModel, &aGtkIter.iter);
+            GtkTreePath* path = gtk_tree_model_get_path(m_pTreeModel, &aGtkIter.iter);
             bool bContinue = gtk_tree_path_compare(path, end_path) != 0;
             gtk_tree_path_free(path);
             if (!bContinue)
@@ -10683,9 +10816,8 @@ public:
 
     virtual void set_toggle(int pos, TriState eState, int col) override
     {
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreeIter iter;
-        if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
+        if (gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, pos))
             set_toggle(iter, eState, col);
     }
 
@@ -10779,16 +10911,15 @@ public:
             col = m_nExpanderImageCol;
         else
             col = to_internal_model(col);
-        gtk_tree_store_set(m_pTreeStore, const_cast<GtkTreeIter*>(&iter), col, pixbuf, -1);
+        m_Setter(m_pTreeModel, const_cast<GtkTreeIter*>(&iter), col, pixbuf, -1);
         if (pixbuf)
             g_object_unref(pixbuf);
     }
 
     void set_image(int pos, GdkPixbuf* pixbuf, int col)
     {
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreeIter iter;
-        if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
+        if (gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, pos))
         {
             set_image(iter, col, pixbuf);
         }
@@ -10841,8 +10972,7 @@ public:
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
 
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
-        GtkTreePath* path = gtk_tree_model_get_path(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
+        GtkTreePath* path = gtk_tree_model_get_path(m_pTreeModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
 
         gint depth;
         gint* indices = gtk_tree_path_get_indices_with_depth(path, &depth);
@@ -10858,9 +10988,8 @@ public:
         const GtkInstanceTreeIter& rGtkIterA = static_cast<const GtkInstanceTreeIter&>(a);
         const GtkInstanceTreeIter& rGtkIterB = static_cast<const GtkInstanceTreeIter&>(b);
 
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
-        GtkTreePath* pathA = gtk_tree_model_get_path(pModel, const_cast<GtkTreeIter*>(&rGtkIterA.iter));
-        GtkTreePath* pathB = gtk_tree_model_get_path(pModel, const_cast<GtkTreeIter*>(&rGtkIterB.iter));
+        GtkTreePath* pathA = gtk_tree_model_get_path(m_pTreeModel, const_cast<GtkTreeIter*>(&rGtkIterA.iter));
+        GtkTreePath* pathB = gtk_tree_model_get_path(m_pTreeModel, const_cast<GtkTreeIter*>(&rGtkIterB.iter));
 
         int nRet = gtk_tree_path_compare(pathA, pathB);
 
@@ -10873,33 +11002,31 @@ public:
     // by copy and delete of old copy
     void move_subtree(GtkTreeIter& rFromIter, GtkTreeIter* pGtkParentIter, int nIndexInNewParent)
     {
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
-
-        int nCols = gtk_tree_model_get_n_columns(pModel);
+        int nCols = gtk_tree_model_get_n_columns(m_pTreeModel);
         GValue value;
 
         GtkTreeIter toiter;
-        gtk_tree_store_insert(m_pTreeStore, &toiter, pGtkParentIter, nIndexInNewParent);
+        m_Insert(m_pTreeModel, &toiter, pGtkParentIter, nIndexInNewParent);
 
         for (int i = 0; i < nCols; ++i)
         {
             memset(&value,  0, sizeof(GValue));
-            gtk_tree_model_get_value(pModel, &rFromIter, i, &value);
-            gtk_tree_store_set_value(m_pTreeStore, &toiter, i, &value);
+            gtk_tree_model_get_value(m_pTreeModel, &rFromIter, i, &value);
+            m_SetValue(m_pTreeModel, &toiter, i, &value);
             g_value_unset(&value);
         }
 
         GtkTreeIter tmpfromiter;
-        if (gtk_tree_model_iter_children(pModel, &tmpfromiter, &rFromIter))
+        if (gtk_tree_model_iter_children(m_pTreeModel, &tmpfromiter, &rFromIter))
         {
             int j = 0;
             do
             {
                 move_subtree(tmpfromiter, &toiter, j++);
-            } while (gtk_tree_model_iter_next(pModel, &tmpfromiter));
+            } while (gtk_tree_model_iter_next(m_pTreeModel, &tmpfromiter));
         }
 
-        gtk_tree_store_remove(m_pTreeStore, &rFromIter);
+        m_Remove(m_pTreeModel, &rFromIter);
     }
 
     virtual void move_subtree(weld::TreeIter& rNode, const weld::TreeIter* pNewParent, int nIndexInNewParent) override
@@ -11006,8 +11133,7 @@ public:
         gtk_tree_view_get_cursor(m_pTreeView, &path, nullptr);
         if (pGtkIter && path)
         {
-            GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
-            gtk_tree_model_get_iter(pModel, &pGtkIter->iter, path);
+            gtk_tree_model_get_iter(m_pTreeModel, &pGtkIter->iter, path);
         }
         if (!path)
             return false;
@@ -11036,16 +11162,15 @@ public:
     {
         disable_notify_events();
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreeIter Iter;
-        if (gtk_tree_model_iter_parent(pModel, &Iter, const_cast<GtkTreeIter*>(&rGtkIter.iter)))
+        if (gtk_tree_model_iter_parent(m_pTreeModel, &Iter, const_cast<GtkTreeIter*>(&rGtkIter.iter)))
         {
-            GtkTreePath* path = gtk_tree_model_get_path(pModel, &Iter);
+            GtkTreePath* path = gtk_tree_model_get_path(m_pTreeModel, &Iter);
             if (!gtk_tree_view_row_expanded(m_pTreeView, path))
                 gtk_tree_view_expand_to_path(m_pTreeView, path);
             gtk_tree_path_free(path);
         }
-        GtkTreePath* path = gtk_tree_model_get_path(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
+        GtkTreePath* path = gtk_tree_model_get_path(m_pTreeModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
         gtk_tree_view_scroll_to_cell(m_pTreeView, path, nullptr, false, 0, 0);
         gtk_tree_view_set_cursor(m_pTreeView, path, nullptr, false);
         gtk_tree_path_free(path);
@@ -11055,22 +11180,19 @@ public:
     virtual bool get_iter_first(weld::TreeIter& rIter) const override
     {
         GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
-        return gtk_tree_model_get_iter_first(pModel, &rGtkIter.iter);
+        return gtk_tree_model_get_iter_first(m_pTreeModel, &rGtkIter.iter);
     }
 
     virtual bool iter_next_sibling(weld::TreeIter& rIter) const override
     {
         GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
-        return gtk_tree_model_iter_next(pModel, &rGtkIter.iter);
+        return gtk_tree_model_iter_next(m_pTreeModel, &rGtkIter.iter);
     }
 
     virtual bool iter_previous_sibling(weld::TreeIter& rIter) const override
     {
         GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
-        return gtk_tree_model_iter_previous(pModel, &rGtkIter.iter);
+        return gtk_tree_model_iter_previous(m_pTreeModel, &rGtkIter.iter);
     }
 
     virtual bool iter_next(weld::TreeIter& rIter) const override
@@ -11082,23 +11204,22 @@ public:
     {
         bool ret = false;
         GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreeIter iter = rGtkIter.iter;
         GtkTreeIter tmp = iter;
-        if (gtk_tree_model_iter_previous(pModel, &tmp))
+        if (gtk_tree_model_iter_previous(m_pTreeModel, &tmp))
         {
             // Move down level(s) until we find the level where the last node exists.
-            int nChildren = gtk_tree_model_iter_n_children(pModel, &tmp);
+            int nChildren = gtk_tree_model_iter_n_children(m_pTreeModel, &tmp);
             if (!nChildren)
                 rGtkIter.iter = tmp;
             else
-                last_child(pModel, &rGtkIter.iter, &tmp, nChildren);
+                last_child(m_pTreeModel, &rGtkIter.iter, &tmp, nChildren);
             ret = true;
         }
         else
         {
             // Move up level
-            if (gtk_tree_model_iter_parent(pModel, &tmp, &iter))
+            if (gtk_tree_model_iter_parent(m_pTreeModel, &tmp, &iter))
             {
                 rGtkIter.iter = tmp;
                 ret = true;
@@ -11119,9 +11240,8 @@ public:
     virtual bool iter_children(weld::TreeIter& rIter) const override
     {
         GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreeIter tmp;
-        bool ret = gtk_tree_model_iter_children(pModel, &tmp, &rGtkIter.iter);
+        bool ret = gtk_tree_model_iter_children(m_pTreeModel, &tmp, &rGtkIter.iter);
         rGtkIter.iter = tmp;
         if (ret)
         {
@@ -11134,9 +11254,8 @@ public:
     virtual bool iter_parent(weld::TreeIter& rIter) const override
     {
         GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
         GtkTreeIter tmp;
-        auto ret = gtk_tree_model_iter_parent(pModel, &tmp, &rGtkIter.iter);
+        auto ret = gtk_tree_model_iter_parent(m_pTreeModel, &tmp, &rGtkIter.iter);
         rGtkIter.iter = tmp;
         return ret;
     }
@@ -11145,7 +11264,7 @@ public:
     {
         disable_notify_events();
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
-        gtk_tree_store_remove(m_pTreeStore, const_cast<GtkTreeIter*>(&rGtkIter.iter));
+        m_Remove(m_pTreeModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
         enable_notify_events();
     }
 
@@ -11165,7 +11284,7 @@ public:
         g_list_free_full(pList, reinterpret_cast<GDestroyNotify>(gtk_tree_path_free));
 
         for (auto& iter : aIters)
-            gtk_tree_store_remove(m_pTreeStore, &iter);
+            m_Remove(m_pTreeModel, &iter);
 
         enable_notify_events();
     }
@@ -11184,8 +11303,7 @@ public:
         assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
         disable_notify_events();
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
-        GtkTreePath* path = gtk_tree_model_get_path(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
+        GtkTreePath* path = gtk_tree_model_get_path(m_pTreeModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
         gtk_tree_view_expand_to_path(m_pTreeView, path);
         gtk_tree_view_scroll_to_cell(m_pTreeView, path, nullptr, false, 0, 0);
         gtk_tree_path_free(path);
@@ -11204,8 +11322,7 @@ public:
     virtual int get_iter_depth(const weld::TreeIter& rIter) const override
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
-        GtkTreePath* path = gtk_tree_model_get_path(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
+        GtkTreePath* path = gtk_tree_model_get_path(m_pTreeModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
         int ret = gtk_tree_path_get_depth(path) - 1;
         gtk_tree_path_free(path);
         return ret;
@@ -11224,8 +11341,7 @@ public:
     virtual bool get_row_expanded(const weld::TreeIter& rIter) const override
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
-        GtkTreePath* path = gtk_tree_model_get_path(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
+        GtkTreePath* path = gtk_tree_model_get_path(m_pTreeModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
         bool ret = gtk_tree_view_row_expanded(m_pTreeView, path);
         gtk_tree_path_free(path);
         return ret;
@@ -11264,8 +11380,7 @@ public:
         assert(gtk_tree_view_get_model(m_pTreeView) && "don't expand when frozen");
 
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
-        GtkTreePath* path = gtk_tree_model_get_path(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
+        GtkTreePath* path = gtk_tree_model_get_path(m_pTreeModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
         if (!gtk_tree_view_row_expanded(m_pTreeView, path))
             gtk_tree_view_expand_to_path(m_pTreeView, path);
         gtk_tree_path_free(path);
@@ -11274,8 +11389,7 @@ public:
     virtual void collapse_row(const weld::TreeIter& rIter) override
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
-        GtkTreePath* path = gtk_tree_model_get_path(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
+        GtkTreePath* path = gtk_tree_model_get_path(m_pTreeModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
         if (gtk_tree_view_row_expanded(m_pTreeView, path))
             gtk_tree_view_collapse_row(m_pTreeView, path);
         gtk_tree_path_free(path);
@@ -11316,14 +11430,14 @@ public:
     virtual void freeze() override
     {
         disable_notify_events();
-        g_object_ref(m_pTreeStore);
+        g_object_ref(m_pTreeModel);
         GtkInstanceContainer::freeze();
         gtk_tree_view_set_model(m_pTreeView, nullptr);
         if (m_xSorter)
         {
             int nSortColumn;
             GtkSortType eSortType;
-            GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeStore);
+            GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeModel);
             gtk_tree_sortable_get_sort_column_id(pSortable, &nSortColumn, &eSortType);
             gtk_tree_sortable_set_sort_column_id(pSortable, GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, eSortType);
 
@@ -11338,14 +11452,14 @@ public:
         disable_notify_events();
         if (m_xSorter)
         {
-            GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeStore);
+            GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeModel);
             gtk_tree_sortable_set_sort_column_id(pSortable, m_aSavedSortColumns.back(), m_aSavedSortTypes.back());
             m_aSavedSortTypes.pop_back();
             m_aSavedSortColumns.pop_back();
         }
-        gtk_tree_view_set_model(m_pTreeView, GTK_TREE_MODEL(m_pTreeStore));
+        gtk_tree_view_set_model(m_pTreeView, GTK_TREE_MODEL(m_pTreeModel));
         GtkInstanceContainer::thaw();
-        g_object_unref(m_pTreeStore);
+        g_object_unref(m_pTreeModel);
         enable_notify_events();
     }
 
@@ -11425,7 +11539,7 @@ public:
 
     int starts_with(const OUString& rStr, int nStartRow, bool bCaseSensitive)
     {
-        return ::starts_with(GTK_TREE_MODEL(m_pTreeStore), rStr, m_nTextCol, nStartRow, bCaseSensitive);
+        return ::starts_with(m_pTreeModel, rStr, m_nTextCol, nStartRow, bCaseSensitive);
     }
 
     virtual void disable_notify_events() override
@@ -11433,9 +11547,8 @@ public:
         g_signal_handler_block(gtk_tree_view_get_selection(m_pTreeView), m_nChangedSignalId);
         g_signal_handler_block(m_pTreeView, m_nRowActivatedSignalId);
 
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
-        g_signal_handler_block(pModel, m_nRowDeletedSignalId);
-        g_signal_handler_block(pModel, m_nRowInsertedSignalId);
+        g_signal_handler_block(m_pTreeModel, m_nRowDeletedSignalId);
+        g_signal_handler_block(m_pTreeModel, m_nRowInsertedSignalId);
 
         GtkInstanceContainer::disable_notify_events();
     }
@@ -11444,9 +11557,8 @@ public:
     {
         GtkInstanceContainer::enable_notify_events();
 
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
-        g_signal_handler_unblock(pModel, m_nRowDeletedSignalId);
-        g_signal_handler_unblock(pModel, m_nRowInsertedSignalId);
+        g_signal_handler_unblock(m_pTreeModel, m_nRowDeletedSignalId);
+        g_signal_handler_unblock(m_pTreeModel, m_nRowInsertedSignalId);
 
         g_signal_handler_unblock(m_pTreeView, m_nRowActivatedSignalId);
         g_signal_handler_unblock(gtk_tree_view_get_selection(m_pTreeView), m_nChangedSignalId);
@@ -11484,8 +11596,7 @@ public:
                                                      &path, &gtkpos);
 
         // find the last entry in the model for comparison
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
-        GtkTreePath *lastpath = get_path_of_last_entry(pModel);
+        GtkTreePath *lastpath = get_path_of_last_entry(m_pTreeModel);
 
         if (!ret)
         {
@@ -11511,7 +11622,7 @@ public:
         if (ret && pResult)
         {
             GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(*pResult);
-            gtk_tree_model_get_iter(pModel, &rGtkIter.iter, path);
+            gtk_tree_model_get_iter(m_pTreeModel, &rGtkIter.iter, path);
         }
 
         if (m_bInDrag && bDnDMode)
@@ -11559,8 +11670,7 @@ public:
     virtual tools::Rectangle get_row_area(const weld::TreeIter& rIter) const override
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
-        GtkTreeModel* pModel = GTK_TREE_MODEL(m_pTreeStore);
-        GtkTreePath* pPath = gtk_tree_model_get_path(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
+        GtkTreePath* pPath = gtk_tree_model_get_path(m_pTreeModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
         tools::Rectangle aRet = ::get_row_area(m_pTreeView, m_pColumns, pPath);
         gtk_tree_path_free(pPath);
         return aRet;
@@ -11572,8 +11682,7 @@ public:
         assert(pColumn && "wrong column");
 
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
-        GtkTreePath* path = gtk_tree_model_get_path(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
+        GtkTreePath* path = gtk_tree_model_get_path(m_pTreeModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
 
         // allow editing of cells which are not usually editable, so we can have double click
         // do its usual row-activate but if we explicitly want to edit (remote files dialog)
@@ -11721,9 +11830,8 @@ public:
             g_signal_handler_disconnect(m_pTreeView, m_nQueryTooltipSignalId);
         g_signal_handler_disconnect(m_pTreeView, m_nKeyPressSignalId);
         g_signal_handler_disconnect(m_pTreeView, m_nPopupMenuSignalId);
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
-        g_signal_handler_disconnect(pModel, m_nRowDeletedSignalId);
-        g_signal_handler_disconnect(pModel, m_nRowInsertedSignalId);
+        g_signal_handler_disconnect(m_pTreeModel, m_nRowDeletedSignalId);
+        g_signal_handler_disconnect(m_pTreeModel, m_nRowInsertedSignalId);
 
         if (m_nVAdjustmentChangedSignalId)
         {
