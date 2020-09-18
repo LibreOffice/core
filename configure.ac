@@ -9780,10 +9780,6 @@ if test "$with_system_curl" = "yes"; then
     fi
 
     ENABLE_CURL=TRUE
-elif test $_os = iOS; then
-    # Let's see if we need curl, I think not?
-    AC_MSG_RESULT([none])
-    ENABLE_CURL=
 else
     AC_MSG_RESULT([internal])
     SYSTEM_CURL=
@@ -9926,7 +9922,7 @@ AC_SUBST(SYSTEM_OPENLDAP)
 dnl ===================================================================
 dnl Check for system NSS
 dnl ===================================================================
-if test $_os != iOS -a "$enable_fuzzers" != "yes"; then
+if test "$enable_fuzzers" != "yes"; then
     libo_CHECK_SYSTEM_MODULE([nss],[NSS],[nss >= 3.9.3 nspr >= 4.8])
     AC_DEFINE(HAVE_FEATURE_NSS)
     ENABLE_NSS="TRUE"
