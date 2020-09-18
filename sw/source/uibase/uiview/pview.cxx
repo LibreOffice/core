@@ -27,7 +27,7 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <svl/whiter.hxx>
-#include <svl/stritem.hxx>
+#include <svl/slstitm.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/bindings.hxx>
@@ -966,8 +966,10 @@ void  SwPagePreview::GetState( SfxItemSet& rSet )
 
         case FN_STAT_PAGE:
             {
-                OUString aStr = m_sPageStr + m_pViewWin->GetStatusStr( mnPageCount );
-                rSet.Put( SfxStringItem( nWhich, aStr) );
+                std::vector<OUString> aStringList;
+                aStringList.push_back(m_sPageStr + m_pViewWin->GetStatusStr(mnPageCount));
+                aStringList.push_back(OUString());
+                rSet.Put(SfxStringListItem(FN_STAT_PAGE, &aStringList));
             }
             break;
 
@@ -1263,7 +1265,6 @@ bool SwPagePreview::ChgPage( int eMvMode, bool bUpdateScrollbar )
     if( bChg )
     {
         // Update statusbar
-        OUString aStr = m_sPageStr + m_pViewWin->GetStatusStr( mnPageCount );
         SfxBindings& rBindings = GetViewFrame()->GetBindings();
 
         if( bUpdateScrollbar )
@@ -1277,7 +1278,10 @@ bool SwPagePreview::ChgPage( int eMvMode, bool bUpdateScrollbar )
             };
             rBindings.Invalidate( aInval );
         }
-        rBindings.SetState( SfxStringItem( FN_STAT_PAGE, aStr ) );
+        std::vector<OUString> aStringList;
+        aStringList.push_back(m_sPageStr + m_pViewWin->GetStatusStr(mnPageCount));
+        aStringList.push_back(OUString());
+        rBindings.SetState(SfxStringListItem(FN_STAT_PAGE, &aStringList));
     }
     return bChg;
 }
