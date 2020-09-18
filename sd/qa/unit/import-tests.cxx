@@ -59,6 +59,7 @@
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/XGluePointsSupplier.hpp>
 #include <com/sun/star/drawing/GluePoint2.hpp>
+#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/container/XIdentifierAccess.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/animations/XAnimationNode.hpp>
@@ -221,6 +222,7 @@ public:
     void testTdf127964();
     void testTdf106638();
     void testTdf113198();
+    void testShapeTextAlignment();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -325,6 +327,7 @@ public:
     CPPUNIT_TEST(testTdf106638);
     CPPUNIT_TEST(testTdf128684);
     CPPUNIT_TEST(testTdf113198);
+    CPPUNIT_TEST(testShapeTextAlignment);
     CPPUNIT_TEST(testTdf119187);
 
     CPPUNIT_TEST_SUITE_END();
@@ -3083,9 +3086,25 @@ void SdImportTest::testTdf113198()
         = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf113198.pptx"), PPTX);
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
+    drawing::TextHorizontalAdjust eAdjust;
+    xShape->getPropertyValue("TextHorizontalAdjust") >>= eAdjust;
+    CPPUNIT_ASSERT_EQUAL(drawing::TextHorizontalAdjust_CENTER, eAdjust);
+}
+
+void SdImportTest::testShapeTextAlignment()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/shape-text-alignment.pptx"), PPTX);
+
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
     sal_Int16 nParaAdjust = -1;
     xShape->getPropertyValue("ParaAdjust") >>= nParaAdjust;
-    CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(nParaAdjust));
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 3
+    // i.e. text which is meant to be left-aligned was centered at a paragraph level.
+    CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_LEFT,
+                         static_cast<style::ParagraphAdjust>(nParaAdjust));
 }
 
 void SdImportTest::testTdf119187()
