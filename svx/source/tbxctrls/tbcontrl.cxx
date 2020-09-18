@@ -2847,7 +2847,7 @@ struct SvxStyleToolBoxControl::Impl
 {
     OUString                     aClearForm;
     OUString                     aMore;
-    ::std::vector< OUString >    aDefaultStyles;
+    ::std::vector< std::pair< OUString, OUString > >    aDefaultStyles;
     bool                     bSpecModeWriter;
     bool                     bSpecModeCalc;
 
@@ -2893,7 +2893,8 @@ struct SvxStyleToolBoxControl::Impl
                         OUString sName;
                         xStyle->getPropertyValue("DisplayName") >>= sName;
                         if( !sName.isEmpty() )
-                            aDefaultStyles.push_back(sName);
+                            aDefaultStyles.push_back(
+                                std::pair<OUString, OUString>(aStyle, sName) );
                     }
                     catch( const uno::Exception& )
                     {}
@@ -2924,7 +2925,8 @@ struct SvxStyleToolBoxControl::Impl
                             OUString sName;
                             xStyle->getPropertyValue("DisplayName") >>= sName;
                             if( !sName.isEmpty() )
-                                aDefaultStyles.push_back(sName);
+                                aDefaultStyles.push_back(
+                                    std::pair<OUString, OUString>(sStyleName, sName) );
                         }
                     }
                     catch( const uno::Exception& )
@@ -3100,7 +3102,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
                         OUString aName( pStyle->GetName() );
                         for( auto const & _i: pImpl->aDefaultStyles )
                         {
-                            if( _i == aName )
+                            if( _i.first == aName || _i.second == aName )
                             {
                                 bInsert = false;
                                 break;
@@ -3133,7 +3135,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
                 sal_uInt16 nPos = 1;
                 for( auto const & _i: pImpl->aDefaultStyles )
                 {
-                    pBox->InsertEntry( _i, nPos );
+                    pBox->InsertEntry( _i.second, nPos );
                     ++nPos;
                 }
 
@@ -3169,8 +3171,17 @@ void SvxStyleToolBoxControl::SelectStyle( const OUString& rStyleName )
 
         if ( !rStyleName.isEmpty() )
         {
-            if ( rStyleName != aStrSel )
-                pBox->SetText( rStyleName );
+            OUString aNewStyle = rStyleName;
+
+            auto aFound = std::find_if(pImpl->aDefaultStyles.begin(), pImpl->aDefaultStyles.end(),
+                [rStyleName] (auto it) { return it.first == rStyleName || it.second == rStyleName; }
+            );
+
+            if (aFound != pImpl->aDefaultStyles.end())
+                aNewStyle = aFound->second;
+
+            if ( aNewStyle != aStrSel )
+                pBox->SetText( aNewStyle );
         }
         else
             pBox->SetNoSelection();
@@ -3304,7 +3315,7 @@ VclPtr<vcl::Window> SvxStyleToolBoxControl::CreateItemWindow( vcl::Window *pPare
                                            pImpl->aMore,
                                            pImpl->bSpecModeWriter || pImpl->bSpecModeCalc );
     if( !pImpl->aDefaultStyles.empty())
-        pBox->SetDefaultStyle( pImpl->aDefaultStyles[0] );
+        pBox->SetDefaultStyle( pImpl->aDefaultStyles[0].second );
     // Set visibility listener to bind/unbind controller
     pBox->SetVisibilityListener( LINK( this, SvxStyleToolBoxControl, VisibilityNotification ));
 
