@@ -30,6 +30,7 @@
 #include <libxml/xmlwriter.h>
 #include <svx/svdmodel.hxx>
 #include <svx/svdtrans.hxx>
+#include <svx/xbtmpit.hxx>
 
 namespace sdr::properties
 {
@@ -155,6 +156,21 @@ namespace sdr::properties
 
         void DefaultProperties::SetObjectItemSet(const SfxItemSet& rSet)
         {
+            if (rSet.HasItem(XATTR_FILLBITMAP))
+            {
+                const XFillBitmapItem* pItem = rSet.GetItem(XATTR_FILLBITMAP);
+                const std::shared_ptr<VectorGraphicData>& pVectorData
+                    = pItem->GetGraphicObject().GetGraphic().getVectorGraphicData();
+                if (pVectorData)
+                {
+                    // Shape is filled by a vector graphic: tell it our size as a hint.
+                    basegfx::B2DTuple aSizeHint;
+                    aSizeHint.setX(GetSdrObject().GetSnapRect().getWidth());
+                    aSizeHint.setY(GetSdrObject().GetSnapRect().getHeight());
+                    pVectorData->setSizeHint(aSizeHint);
+                }
+            }
+
             SfxWhichIter aWhichIter(rSet);
             sal_uInt16 nWhich(aWhichIter.FirstWhich());
             const SfxPoolItem *pPoolItem;

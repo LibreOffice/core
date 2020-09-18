@@ -20,6 +20,7 @@
 #ifndef __com_sun_star_graphic_XEmfParser_idl__
 #define __com_sun_star_graphic_XEmfParser_idl__
 
+#include <com/sun/star/geometry/RealPoint2D.idl>
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/io/XInputStream.idl>
 
@@ -51,6 +52,13 @@ interface XEmfParser : ::com::sun::star::uno::XInterface
         [in] io::XInputStream xEmfStream,
         [in] string aAbsolutePath,
         [in] ::com::sun::star::beans::PropertyValues Properties);
+
+    /** Sets a size hint on this object.
+
+        @param Size
+            the size in 100/th mm
+     */
+    void setSizeHint([in] com::sun::star::geometry::RealPoint2D Size);
 };
 
 }; }; }; };

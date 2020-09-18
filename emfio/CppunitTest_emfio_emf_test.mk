@@ -38,20 +38,7 @@ $(eval $(call gb_CppunitTest_use_libraries,emfio_emf,\
 $(eval $(call gb_CppunitTest_use_ure,emfio_emf))
 $(eval $(call gb_CppunitTest_use_vcl,emfio_emf))
 
-$(eval $(call gb_CppunitTest_use_components,emfio_emf,\
-    configmgr/source/configmgr \
-    dtrans/util/mcnttype \
-    emfio/emfio \
-    framework/util/fwk \
-    i18npool/util/i18npool \
-    package/source/xstor/xstor \
-    package/util/package2 \
-    toolkit/util/tk \
-    sfx2/util/sfx \
-    ucb/source/core/ucb1 \
-    ucb/source/ucp/file/ucpfile1 \
-    unotools/util/utl \
-))
+$(eval $(call gb_CppunitTest_use_rdb,emfio_emf,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,emfio_emf))
 
