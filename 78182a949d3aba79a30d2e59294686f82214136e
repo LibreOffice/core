@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a6a4f832_e7d9a438",
+        "filename": "sw/source/core/layout/fly.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2571,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-09-18T11:46:55Z",
+      "side": 1,
+      "message": "long lines should have a maximum of 100 characters",
+      "range": {
+        "startLine": 2561,
+        "startChar": 0,
+        "endLine": 2571,
+        "endChar": 5
+      },
+      "revId": "78182a949d3aba79a30d2e59294686f82214136e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
