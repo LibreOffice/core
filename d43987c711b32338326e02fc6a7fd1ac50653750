@@ -22,6 +22,30 @@
       "revId": "d43987c711b32338326e02fc6a7fd1ac50653750",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec093867_3e37817b",
+        "filename": "sc/inc/globstr.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1001965
+      },
+      "writtenOn": "2020-09-18T05:53:38Z",
+      "side": 1,
+      "message": "May be so - \"Invalid name. Start with a letter, use [Aa..Zz,0..9,_]\", because we still can use small letters. But what about locale letters like Щ or И? In your variant we say users use only latine symbols...",
+      "parentUuid": "b319cc4a_2e4dcbb8",
+      "range": {
+        "startLine": 433,
+        "startChar": 77,
+        "endLine": 433,
+        "endChar": 153
+      },
+      "revId": "d43987c711b32338326e02fc6a7fd1ac50653750",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
