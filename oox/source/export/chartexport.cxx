@@ -3213,6 +3213,8 @@ void writeLabelProperties( const FSHelperPtr& pFS, ChartExport* pChartExport,
         pFS->endElement(FSNS(XML_c, XML_spPr));
     }
 
+    pChartExport->exportTextProps(xPropSet);
+
     if (aCustomLabelFields.hasElements())
         writeCustomLabel(pFS, pChartExport, aCustomLabelFields);
 
@@ -3363,12 +3365,10 @@ void ChartExport::exportDataLabels(
         }
 
         // Individual label property that overwrites the baseline.
-        exportTextProps( xLabelPropSet );
         writeLabelProperties(pFS, this, xLabelPropSet, aParam);
         pFS->endElement(FSNS(XML_c, XML_dLbl));
     }
 
-    exportTextProps( xPropSet );
     // Baseline label properties for all labels.
     writeLabelProperties(pFS, this, xPropSet, aParam);
 
