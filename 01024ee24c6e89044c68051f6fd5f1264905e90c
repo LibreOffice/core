@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e383ae7d_513a5528",
+        "filename": "offapi/com/sun/star/graphic/XEmfParser.idl",
+        "patchSetId": 4
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-09-18T20:55:14Z",
+      "side": 1,
+      "message": "maybe add a @since tag",
+      "revId": "01024ee24c6e89044c68051f6fd5f1264905e90c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
