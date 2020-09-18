@@ -2559,7 +2559,7 @@ static SwTwips lcl_CalcAutoWidth( const SwLayoutFrame& rFrame )
     }
 
     // tdf#124423 In Microsoft compatibility mode: widen the frame to max (PrintArea of the frame it anchored to) if it contains at least 2 paragraphs,
-    // or 1 paragraph wider then its parent area.
+    // or 1 paragraph wider than its parent area.
     if (rFrame.GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::FRAME_AUTOWIDTH_WITH_MORE_PARA))
     {
         const SwFrame* pFrameRect = rFrame.IsFlyFrame() ? static_cast<const SwFlyFrame*>(&rFrame)->GetAnchorFrame() : rFrame.Lower()->FindPageFrame();
