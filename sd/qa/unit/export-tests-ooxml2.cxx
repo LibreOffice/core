@@ -185,6 +185,7 @@ public:
     void testTdf125360_1();
     void testTdf125360_2();
     void testTdf125551();
+    void testTdf136830();
     void testTdf126234();
     void testTdf126741();
     void testTdf127372();
@@ -302,6 +303,7 @@ public:
     CPPUNIT_TEST(testTdf125360_1);
     CPPUNIT_TEST(testTdf125360_2);
     CPPUNIT_TEST(testTdf125551);
+    CPPUNIT_TEST(testTdf136830);
     CPPUNIT_TEST(testTdf126234);
     CPPUNIT_TEST(testTdf126741);
     CPPUNIT_TEST(testTdf127372);
@@ -2567,6 +2569,28 @@ void SdOOXMLExportTest2::testTdf125551()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(576), xShapeBg->getPosition().Y);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(10815), xShapeBg->getSize().Width);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8587), xShapeBg->getSize().Height);
+}
+
+void SdOOXMLExportTest2::testTdf136830()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf136830.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    // Without the fix in place, the X position of the shapes would have been 0
+    uno::Reference<drawing::XShapes> xGroupShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+
+    uno::Reference<drawing::XShape> xShape1(xGroupShape->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(14134), xShape1->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-5321), xShape1->getPosition().Y);
+
+    uno::Reference<drawing::XShape> xShape2(xGroupShape->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8085), xShape2->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8085), xShape2->getPosition().Y);
+
+    uno::Reference<drawing::XShape> xShape3(xGroupShape->getByIndex(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8283), xShape3->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4620), xShape3->getPosition().Y);
 }
 
 void SdOOXMLExportTest2::testTdf100348_convert_Fontwork2TextWarp()
