@@ -3407,27 +3407,46 @@ void writeLabelProperties( const FSHelperPtr& pFS, ChartExport* pChartExport,
     Sequence<Reference<chart2::XDataPointCustomLabelField>> aCustomLabelFields;
     sal_Int32 nLabelBorderWidth = 0;
     sal_Int32 nLabelBorderColor = 0x00FFFFFF;
+    sal_Int32 nLabelFillColor = -1;
 
     xPropSet->getPropertyValue("Label") >>= aLabel;
     xPropSet->getPropertyValue("CustomLabelFields") >>= aCustomLabelFields;
     xPropSet->getPropertyValue("LabelBorderWidth") >>= nLabelBorderWidth;
     xPropSet->getPropertyValue("LabelBorderColor") >>= nLabelBorderColor;
+    xPropSet->getPropertyValue("LabelFillColor") >>= nLabelFillColor;
 
-    if (nLabelBorderWidth > 0)
+    if (nLabelBorderWidth > 0 || nLabelFillColor != -1)
     {
         pFS->startElement(FSNS(XML_c, XML_spPr));
-        pFS->startElement(FSNS(XML_a, XML_ln), XML_w,
-                          OString::number(convertHmmToEmu(nLabelBorderWidth)));
-        if (nLabelBorderColor != -1)
+
+        if (nLabelFillColor != -1)
         {
             pFS->startElement(FSNS(XML_a, XML_solidFill));
 
-            OString aStr = OString::number(nLabelBorderColor, 16).toAsciiUpperCase();
+            OString aStr = OString::number(nLabelFillColor, 16).toAsciiUpperCase();
             pFS->singleElement(FSNS(XML_a, XML_srgbClr), XML_val, aStr);
 
             pFS->endElement(FSNS(XML_a, XML_solidFill));
         }
-        pFS->endElement(FSNS(XML_a, XML_ln));
+
+        if (nLabelBorderWidth > 0)
+        {
+            pFS->startElement(FSNS(XML_a, XML_ln), XML_w,
+                              OString::number(convertHmmToEmu(nLabelBorderWidth)));
+
+            if (nLabelBorderColor != -1)
+            {
+                pFS->startElement(FSNS(XML_a, XML_solidFill));
+
+                OString aStr = OString::number(nLabelBorderColor, 16).toAsciiUpperCase();
+                pFS->singleElement(FSNS(XML_a, XML_srgbClr), XML_val, aStr);
+
+                pFS->endElement(FSNS(XML_a, XML_solidFill));
+            }
+
+            pFS->endElement(FSNS(XML_a, XML_ln));
+        }
+
         pFS->endElement(FSNS(XML_c, XML_spPr));
     }
 

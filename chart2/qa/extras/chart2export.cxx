@@ -107,6 +107,7 @@ public:
     void testAxisNumberFormatXLSX();
     void testDataPointLabelNumberFormatXLSX();
     void testDataLabelDefaultValuesXLSX();
+    void testDataLabelFillColor();
     void testTitleOverlayXLSX();
     void testInvertIfNegativeXLSX();
     void testBubble3DXLSX();
@@ -248,6 +249,7 @@ public:
     CPPUNIT_TEST(testAxisNumberFormatXLSX);
     CPPUNIT_TEST(testDataPointLabelNumberFormatXLSX);
     CPPUNIT_TEST(testDataLabelDefaultValuesXLSX);
+    CPPUNIT_TEST(testDataLabelFillColor);
     CPPUNIT_TEST(testTitleOverlayXLSX);
     CPPUNIT_TEST(testInvertIfNegativeXLSX);
     CPPUNIT_TEST(testBubble3DXLSX);
@@ -1737,6 +1739,21 @@ void Chart2ExportTest::testDataLabelDefaultValuesXLSX()
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:showVal", "val", "1");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:dLblPos", "val", "outEnd");
+}
+
+void Chart2ExportTest::testDataLabelFillColor()
+{
+    load("/chart2/qa/extras/data/xlsx/", "data_labels_fill_color.xlsx");
+    Reference< chart2::XChartDocument> xDoc = getChartDocFromSheet(0, mxComponent);
+    Reference<chart2::XDataSeries> xSeries = getDataSeriesFromDoc(xDoc, 0);
+    Reference<beans::XPropertySet> xPropSet(xSeries, uno::UNO_QUERY_THROW);
+    uno::Any aAny = xPropSet->getPropertyValue("LabelFillColor");
+    sal_Int32 nLabelFillColor;
+    CPPUNIT_ASSERT(aAny >>= nLabelFillColor);
+
+    xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:spPr/a:solidFill/a:srgbClr", "val", "F79646");
 }
 
 void Chart2ExportTest::testTitleOverlayXLSX()
