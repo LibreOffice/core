@@ -846,9 +846,13 @@ void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat
 
     const SwFormatHoriOrient& rHoriOri = rFrameFormat.GetHoriOrient();
     const SwFormatVertOrient& rVertOri = rFrameFormat.GetVertOrient();
+    SwFormatSurround const& rSurround(rFrameFormat.GetSurround());
+
+    std::unique_ptr<sax_fastparser::FastAttributeList> pAttrList(
+        docx::SurroundToVMLWrap(rSurround));
     m_pImpl->getExport().VMLExporter().AddSdrObject(
         *sdrObj, rHoriOri.GetHoriOrient(), rVertOri.GetVertOrient(), rHoriOri.GetRelationOrient(),
-        rVertOri.GetRelationOrient(), true);
+        rVertOri.GetRelationOrient(), std::move(pAttrList), true);
     m_pImpl->getSerializer()->endElementNS(XML_w, XML_pict);
 }
 
