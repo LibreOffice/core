@@ -503,6 +503,10 @@ namespace emfio
             return;
         }
 
+        // aGraphic will be the only output of the EMF parser, so its size hint can be the same as
+        // ours.
+        aGraphic.getVectorGraphicData()->setSizeHint(maSizeHint);
+
         maBmpSaveList.emplace_back(new BSaveStruct(aGraphic.GetBitmapEx(), aOutputRect, SRCCOPY));
         const std::shared_ptr<VectorGraphicData> pVectorGraphicData
             = aGraphic.getVectorGraphicData();

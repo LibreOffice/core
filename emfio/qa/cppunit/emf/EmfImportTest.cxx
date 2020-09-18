@@ -12,6 +12,12 @@
 
 #include <test/bootstrapfixture.hxx>
 #include <test/xmltesttools.hxx>
+#include <unotest/macros_test.hxx>
+
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
@@ -26,14 +32,17 @@
 namespace
 {
 
+using namespace css;
 using namespace css::uno;
 using namespace css::io;
 using namespace css::graphic;
 using drawinglayer::primitive2d::Primitive2DSequence;
 using drawinglayer::primitive2d::Primitive2DContainer;
 
-class Test : public test::BootstrapFixture, public XmlTestTools
+class Test : public test::BootstrapFixture, public XmlTestTools, public unotest::MacrosTest
 {
+    uno::Reference<lang::XComponent> mxComponent;
+
     void checkRectPrimitive(Primitive2DSequence const & rPrimitive);
 
     void testWorking();
@@ -41,18 +50,39 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void TestDrawStringTransparent();
     void TestDrawLine();
     void TestLinearGradient();
+    void TestPdfInEmf();
 
     Primitive2DSequence parseEmf(const OUString& aSource);
 
 public:
+    void setUp() override;
+    void tearDown() override;
+    uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
+
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testWorking);
     CPPUNIT_TEST(TestDrawString);
     CPPUNIT_TEST(TestDrawStringTransparent);
     CPPUNIT_TEST(TestDrawLine);
     CPPUNIT_TEST(TestLinearGradient);
+    CPPUNIT_TEST(TestPdfInEmf);
     CPPUNIT_TEST_SUITE_END();
 };
+
+void Test::setUp()
+{
+    test::BootstrapFixture::setUp();
+
+    mxDesktop.set(frame::Desktop::create(mxComponentContext));
+}
+
+void Test::tearDown()
+{
+    if (mxComponent.is())
+        mxComponent->dispose();
+
+    test::BootstrapFixture::tearDown();
+}
 
 Primitive2DSequence Test::parseEmf(const OUString& aSource)
 {
@@ -188,6 +218,31 @@ void Test::TestLinearGradient()
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/svglineargradient[2]", "endy", "-1");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/svglineargradient[2]", "opacity", "1");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/svglineargradient[2]/polypolygon", "path", "m7615.75822989746 0.216110019646294h7615.75822989746v7610.21611001965h-7615.75822989746z");
+}
+
+void Test::TestPdfInEmf()
+{
+    // Load a PPTX file, which has a shape, with a bitmap fill, which is an EMF, containing a PDF.
+    OUString aURL = m_directories.getURLFromSrc("emfio/qa/cppunit/emf/data/pdf-in-emf.pptx");
+    getComponent() = loadFromDesktop(aURL);
+
+    // Get the EMF.
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<graphic::XGraphic> xGraphic;
+    xShape->getPropertyValue("FillBitmap") >>= xGraphic;
+    Graphic aGraphic(xGraphic);
+
+    // Check the size hint of the EMF, which influences the bitmap generated from the PDF.
+    const std::shared_ptr<VectorGraphicData>& pVectorGraphicData = aGraphic.getVectorGraphicData();
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 14321
+    // - Actual  : 0
+    // i.e. there was no size hint, the shape with 14cm height had a bitmap-from-PDF fill, the PDF
+    // height was only 5cm, so it looked blurry.
+    CPPUNIT_ASSERT_EQUAL(14321.0, pVectorGraphicData->getSizeHint().getY());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
