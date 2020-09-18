@@ -13,6 +13,7 @@
 #include <vector>
 #include <tools/gen.hxx>
 #include <tools/stream.hxx>
+#include <basegfx/tuple/b2dtuple.hxx>
 
 namespace com::sun::star::uno
 {
@@ -26,7 +27,7 @@ namespace vcl
 /// Fills the rBitmaps vector with rendered pages.
 VCL_DLLPUBLIC size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<Bitmap>& rBitmaps,
                                       size_t nFirstPage = 0, int nPages = 1,
-                                      double fResolutionDPI = 96.);
+                                      const basegfx::B2DTuple* pSizeHint = nullptr);
 
 /// Imports a PDF stream into rGraphic as VectorGraphicData.
 VCL_DLLPUBLIC bool ImportPDF(SvStream& rStream, Graphic& rGraphic);
