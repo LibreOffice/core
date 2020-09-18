@@ -20,6 +20,11 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATECHECK_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATECHECK_HXX
 
+#include <sal/config.h>
+
+#include <condition_variable>
+#include <mutex>
+
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -118,6 +123,10 @@ public:
     void resume() override;
     void closeAfterFailure() override;
 
+    void notifyUpdateCheckFinished();
+
+    void waitForUpdateCheckFinished();
+
 private:
 
     // Schedules or cancels next automatic check for updates
@@ -153,9 +162,10 @@ private:
     State m_eState;
     UpdateState m_eUpdateState;
 
-    mutable osl::Mutex m_aMutex;
+    mutable std::recursive_mutex m_aMutex;
     WorkerThread *m_pThread;
     osl::Condition m_aCondition;
+    osl::Condition m_NotInWaitState;
 
     UpdateInfo m_aUpdateInfo;
     OUString m_aImageName;
@@ -165,6 +175,9 @@ private:
     rtl::Reference<UpdateHandler> m_aUpdateHandler;
     css::uno::Reference<css::beans::XPropertySet> m_xMenuBarUI;
     css::uno::Reference<css::uno::XComponentContext> m_xContext;
+
+    bool m_updateCheckRunning = false;
+    std::condition_variable_any m_updateCheckFinished;
 
     friend class UpdateCheckInitData;
 };

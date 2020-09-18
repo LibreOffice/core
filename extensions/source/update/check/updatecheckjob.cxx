@@ -25,6 +25,9 @@
 #include "updateprotocol.hxx"
 
 #include <memory>
+#include <mutex>
+#include <utility>
+
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -60,6 +63,9 @@ private:
     uno::Sequence<beans::NamedValue> m_xParameters;
     bool m_bShowDialog;
     bool m_bTerminating;
+
+    std::mutex m_mutex;
+    rtl::Reference<UpdateCheck> m_controller;
 };
 
 class UpdateCheckJob :
@@ -125,6 +131,16 @@ void SAL_CALL InitUpdateCheckJobThread::run()
 
     try {
         rtl::Reference< UpdateCheck > aController( UpdateCheck::get() );
+        // At least for the automatic ("onFirstVisibleTask", i.e., !m_bShowDialog) check, wait for
+        // m_controller during setTerminating, to prevent m_controller from still having threads
+        // running during exit (ideally, we would make sure that all threads are joined before exit,
+        // but the UpdateCheck logic is rather convoluted, so play it safe for now and only address
+        // the automatic update check that is known to cause issues during `make check`, not the
+        // manually triggered update check scenario):
+        if (!m_bShowDialog) {
+            std::scoped_lock l(m_mutex);
+            m_controller = aController;
+        }
         aController->initialize( m_xParameters, m_xContext );
 
         if ( m_bShowDialog )
@@ -132,12 +148,24 @@ void SAL_CALL InitUpdateCheckJobThread::run()
     } catch (const uno::Exception &) {
         // fdo#64962 - don't bring the app down on some unexpected exception.
         TOOLS_WARN_EXCEPTION("extensions.update", "Caught init update exception, thread terminated" );
+        {
+            std::scoped_lock l(m_mutex);
+            m_controller.clear();
+        }
     }
 }
 
 void InitUpdateCheckJobThread::setTerminating() {
     m_bTerminating = true;
     m_aCondition.set();
+    rtl::Reference<UpdateCheck> controller;
+    {
+        std::scoped_lock l(m_mutex);
+        std::swap(controller, m_controller);
+    }
+    if (controller.is()) {
+        controller->waitForUpdateCheckFinished();
+    }
 }
 
 UpdateCheckJob::~UpdateCheckJob()
