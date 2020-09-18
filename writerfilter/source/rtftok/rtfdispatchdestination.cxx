@@ -335,7 +335,19 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             case RTF_ANNOTATION:
                 if (!m_pSuperstream)
                 {
-                    resolveSubstream(m_nGroupStartPos - 1, NS_ooxml::LN_annotation);
+                    if (!m_aStates.top().getCurrentBuffer())
+                    {
+                        resolveSubstream(m_nGroupStartPos - 1, NS_ooxml::LN_annotation);
+                    }
+                    else
+                    {
+                        RTFSprms aAttributes;
+                        aAttributes.set(Id(0), new RTFValue(m_nGroupStartPos - 1));
+                        aAttributes.set(Id(1), new RTFValue(NS_ooxml::LN_annotation));
+                        aAttributes.set(Id(2), new RTFValue(OUString()));
+                        m_aStates.top().getCurrentBuffer()->push_back(
+                            Buf_t(BUFFER_RESOLVESUBSTREAM, new RTFValue(aAttributes), nullptr));
+                    }
                     m_aStates.top().setDestination(Destination::SKIP);
                 }
                 else

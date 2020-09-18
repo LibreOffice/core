@@ -2725,7 +2725,15 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
                 aAttributes.set(NS_ooxml::LN_EG_RangeMarkupElements_commentRangeEnd, pValue);
             writerfilter::Reference<Properties>::Pointer_t pProperties
                 = new RTFReferenceProperties(aAttributes);
-            Mapper().props(pProperties);
+            if (!m_aStates.top().getCurrentBuffer())
+            {
+                Mapper().props(pProperties);
+            }
+            else
+            {
+                auto const pValue2 = new RTFValue(aAttributes, RTFSprms());
+                bufferProperties(*m_aStates.top().getCurrentBuffer(), pValue2, nullptr);
+            }
         }
         break;
         case Destination::ANNOTATIONREFERENCE:
