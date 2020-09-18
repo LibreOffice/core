@@ -190,12 +190,23 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
             nRangeCount = 0;
         }
 
-        pCodePairs = new sal_UCS4[ nRangeCount * 2 ];
-        pStartGlyphs = new int[ nRangeCount ];
         const unsigned char* pLimitBase = pCmap + nOffset + 14;
         const unsigned char* pBeginBase = pLimitBase + nSegCountX2 + 2;
         const unsigned char* pDeltaBase = pBeginBase + nSegCountX2;
         const unsigned char* pOffsetBase = pDeltaBase + nSegCountX2;
+
+        const int nOffsetBaseStart = pOffsetBase - pCmap;
+        const int nRemainingLen = nLength - nOffsetBaseStart;
+        const int nMaxPossibleRangeOffsets = nRemainingLen / 2;
+        if (nRangeCount > nMaxPossibleRangeOffsets)
+        {
+            SAL_WARN("vcl.gdi", "more range offsets requested then space available");
+            nRangeCount = std::max(0, nMaxPossibleRangeOffsets);
+        }
+
+        pCodePairs = new sal_UCS4[ nRangeCount * 2 ];
+        pStartGlyphs = new int[ nRangeCount ];
+
         sal_UCS4* pCP = pCodePairs;
         for( int i = 0; i < nRangeCount; ++i )
         {
@@ -255,7 +266,7 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
         if (nRangeCount > nMaxPossiblePairs)
         {
             SAL_WARN("vcl.gdi", "more code pairs requested then space available");
-            nRangeCount = nMaxPossiblePairs;
+            nRangeCount = std::max(0, nMaxPossiblePairs);
         }
 
         pCodePairs = new sal_UCS4[ nRangeCount * 2 ];
