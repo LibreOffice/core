@@ -140,6 +140,7 @@
 
 #include <memory>
 #include <string_view>
+#include <svl/slstitm.hxx>
 
 #include <basegfx/utils/zoomtools.hxx>
 
@@ -1366,21 +1367,10 @@ bool SwView::IsConditionalFastCall( const SfxRequest &rReq )
 }
 
 /// invalidate page numbering field
-void SwView::UpdatePageNums(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const OUString& rPgStr)
+void SwView::UpdatePageNums()
 {
-    OUString sTemp(GetPageStr( nPhyNum, nVirtNum, rPgStr ));
-    const SfxStringItem aTmp( FN_STAT_PAGE, sTemp );
-    // Used to distinguish which tooltip to show
-    const SfxBoolItem bExtendedTooltip( FN_STAT_PAGE,
-                                        !rPgStr.isEmpty()
-                                        && std::u16string_view(OUString::number(nPhyNum)) != rPgStr
-                                        && nPhyNum != nVirtNum );
-
     SfxBindings &rBnd = GetViewFrame()->GetBindings();
-    rBnd.SetState( aTmp );
-    rBnd.Update( FN_STAT_PAGE );
-    rBnd.SetState( bExtendedTooltip );
-    rBnd.Update( FN_STAT_PAGE );
+    rBnd.Invalidate(FN_STAT_PAGE);
 }
 
 void SwView::UpdateDocStats()
@@ -1430,15 +1420,15 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 sal_uInt16 nPage, nLogPage;
                 OUString sDisplay;
                 rShell.GetPageNumber( -1, rShell.IsCursorVisible(), nPage, nLogPage, sDisplay );
-                OUString sTemp( GetPageStr( nPage, nLogPage, sDisplay ) );
-                const SfxStringItem aTmp( FN_STAT_PAGE, sTemp );
-                GetViewFrame()->GetBindings().SetState( aTmp );
-                // Used to distinguish which tooltip to show
-                const SfxBoolItem bExtendedTooltip( FN_STAT_PAGE, !sDisplay.isEmpty() &&
-                                                    std::u16string_view(OUString::number( nPage ))
-                                                        != sDisplay &&
-                                                    nPage != nLogPage );
-                GetViewFrame()->GetBindings().SetState( bExtendedTooltip );
+                std::vector<OUString> aStringList;
+                aStringList.push_back(GetPageStr(nPage, nLogPage, sDisplay));
+                bool bExtendedTooltip(!sDisplay.isEmpty() &&
+                                      std::u16string_view(OUString::number(nPage)) != sDisplay &&
+                                      nPage != nLogPage);
+                OUString aTooltip = bExtendedTooltip ? SwResId(STR_BOOKCTRL_HINT_EXTENDED)
+                                                     : SwResId(STR_BOOKCTRL_HINT);
+                aStringList.push_back(aTooltip);
+                rSet.Put(SfxStringListItem(FN_STAT_PAGE, &aStringList));
                 //if existing page number is not equal to old page number, send out this event.
                 if (m_nOldPageNum != nLogPage )
                 {
