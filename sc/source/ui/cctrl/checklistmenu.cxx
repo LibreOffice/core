@@ -416,7 +416,7 @@ ScCheckListMenuControl::ScCheckListMenuControl(ScCheckListMenuWindow* pParent, v
                                                ScDocument* pDoc, bool bCanHaveSubMenu,
                                                bool bHasDates, int nWidth)
     : mxFrame(pParent)
-    , mxBuilder(Application::CreateInterimBuilder(pContainer, "modules/scalc/ui/filterdropdown.ui", false))
+    , mxBuilder(Application::CreateInterimBuilder(pContainer, "modules/scalc/ui/filterdropdown.ui"))
     , mxContainer(mxBuilder->weld_container("FilterDropDown"))
     , mxMenu(mxBuilder->weld_tree_view("menu"))
     , mxScratchIter(mxMenu->make_iterator())
@@ -424,6 +424,7 @@ ScCheckListMenuControl::ScCheckListMenuControl(ScCheckListMenuWindow* pParent, v
     , mxBox(mxBuilder->weld_widget("box"))
     , mxListChecks(mxBuilder->weld_tree_view("check_list_box"))
     , mxTreeChecks(mxBuilder->weld_tree_view("check_tree_box"))
+    , mpChecks(mxTreeChecks.get())
     , mxChkToggleAll(mxBuilder->weld_check_button("toggle_all"))
     , mxBtnSelectSingle(mxBuilder->weld_button("select_current"))
     , mxBtnUnselectSingle(mxBuilder->weld_button("unselect_current"))
