@@ -59,6 +59,47 @@ ANDROID)
 iOS)
     oslibs="$WORKDIR/UnpackedTarball/icu/source/stubdata/*.a"
     oslibs="$oslibs $WORKDIR/UnpackedTarball/cppunit/src/cppunit/.libs/*.a"
+
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nspr/out/lib/ds/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nspr/out/lib/libc/src/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nspr/out/pr/src/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/base/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/certdb/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/certhigh/out/*.a"
+
+	# Yes, individual object files here, these are not in any .a
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/ckfw/builtins/out/*.o"
+
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/ckfw/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/cryptohi/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/dev/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/freebl/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/freebl/out/Darwin_SINGLE_SHLIB/*.o"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/freebl/out/Darwin_SINGLE_SHLIB/deprecated/*.o"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/libpkix/pkix/certsel/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/libpkix/pkix/checker/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/libpkix/pkix/crlsel/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/libpkix/pkix/params/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/libpkix/pkix/results/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/libpkix/pkix/store/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/libpkix/pkix/top/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/libpkix/pkix/util/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/libpkix/pkix_pl_nss/module/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/libpkix/pkix_pl_nss/pki/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/libpkix/pkix_pl_nss/system/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/nss/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/pk11wrap/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/pkcs12/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/pkcs7/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/pki/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/smime/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/softoken/out/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/nss/nss/lib/util/out/*.a"
+
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/curl/lib/.libs/*.a"
+
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/xmlsec/src/nss/.libs/*.a"
+	oslibs="$oslibs $WORKDIR/UnpackedTarball/xmlsec/src/.libs/*.a"
     ;;
 *)
     oslibs=
