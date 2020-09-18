@@ -691,6 +691,39 @@ public:
     }
 };
 
+/// Tables are not allowed being in headers.
+class TableHeadingCheck : public NodeCheck
+{
+private:
+    // Static set of tables checked to avoid throwing warnings on each node.
+    std::set<const SwTableNode*> m_tables;
+
+public:
+    TableHeadingCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
+        : NodeCheck(rIssueCollection)
+        , m_tables{}
+    {
+    }
+
+    void check(SwNode* pCurrent) override
+    {
+        const SwTextNode* textNode = pCurrent->GetTextNode();
+
+        if (textNode && textNode->GetAttrOutlineLevel() != 0)
+        {
+            const SwTableNode* parentTable = pCurrent->FindTableNode();
+
+            if (parentTable && m_tables.find(parentTable) == m_tables.end())
+            {
+                m_tables.insert(parentTable);
+                lclAddIssue(m_rIssueCollection, SwResId(STR_HEADING_IN_TABLE));
+            }
+        }
+    }
+
+    void clearTablesSet() { m_tables.clear(); }
+};
+
 class DocumentCheck : public BaseCheck
 {
 public:
@@ -843,6 +876,7 @@ void AccessibilityCheck::check()
     aNodeChecks.push_back(std::make_unique<TextFormattingCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<NonInteractiveFormCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<FloatingTextCheck>(m_aIssueCollection));
+    aNodeChecks.push_back(std::make_unique<TableHeadingCheck>(m_aIssueCollection));
 
     auto const& pNodes = m_pDoc->GetNodes();
     SwNode* pNode = nullptr;
