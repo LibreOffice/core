@@ -34,10 +34,7 @@ extern bool IsScrollMDI(SwViewShell const * pVwSh, const SwRect &);
 extern void SizeNotify(SwViewShell const * pVwSh, const Size &);
 
 // Update of status bar during an action.
-extern void PageNumNotify( SwViewShell const * pVwSh,
-                            sal_uInt16 nPhyNum,
-                            sal_uInt16 nVirtNum,
-                           const OUString& rPg );
+extern void PageNumNotify(SwViewShell const * pVwSh);
 
 enum FlyMode { FLY_DRAG_START, FLY_DRAG, FLY_DRAG_END };
 extern void FrameNotify( SwViewShell* pVwSh, FlyMode eMode = FLY_DRAG );

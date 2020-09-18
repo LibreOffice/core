@@ -21,7 +21,7 @@
 #include <strings.hrc>
 
 #include <svl/intitem.hxx>
-#include <svl/stritem.hxx>
+#include <svl/slstitm.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -36,7 +36,7 @@
 #include <bookctrl.hxx>
 #include <map>
 
-SFX_IMPL_STATUSBAR_CONTROL( SwBookmarkControl, SfxStringItem );
+SFX_IMPL_STATUSBAR_CONTROL(SwBookmarkControl, SfxStringListItem);
 
 namespace {
 
@@ -81,20 +81,16 @@ void SwBookmarkControl::StateChanged(
     sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
     if( eState != SfxItemState::DEFAULT || pState->IsVoidItem() )
-        GetStatusBar().SetItemText( GetId(), OUString() );
-    else if (const SfxStringItem* pStringItem = dynamic_cast<const SfxStringItem*>(pState))
     {
-        sPageNumber = pStringItem->GetValue();
-        GetStatusBar().SetItemText(GetId(), sPageNumber);
+        GetStatusBar().SetItemText(GetId(), OUString());
+        GetStatusBar().SetQuickHelpText(GetId(), OUString());
     }
-    else if (const SfxBoolItem* pBoolItem = dynamic_cast<const SfxBoolItem*>(pState))
+    else if (auto pStringListItem = dynamic_cast<const SfxStringListItem*>(pState))
     {
-        if (pBoolItem->GetValue()) // Indicates whether to show extended tooltip
-            GetStatusBar().SetQuickHelpText(GetId(), SwResId(STR_BOOKCTRL_HINT_EXTENDED));
-        else
-            GetStatusBar().SetQuickHelpText(GetId(), SwResId(STR_BOOKCTRL_HINT));
+        const std::vector<OUString>& rStringList(pStringListItem->GetList());
+        GetStatusBar().SetItemText(GetId(), rStringList[0]);
+        GetStatusBar().SetQuickHelpText(GetId(), rStringList[1]);
     }
-
 }
 
 void SwBookmarkControl::Paint( const UserDrawEvent&  )

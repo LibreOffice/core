@@ -547,7 +547,7 @@ public:
     void            InsertCaption(const InsCaptionOpt *pOpt);
 
     // Async call by Core
-    void        UpdatePageNums(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const OUString& rPgStr);
+    void UpdatePageNums();
 
     OUString    GetPageStr(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const OUString& rPgStr);
 

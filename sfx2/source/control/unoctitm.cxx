@@ -1211,7 +1211,6 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
              aEvent.FeatureURL.Path == "RowColSelCount" ||
              aEvent.FeatureURL.Path == "StatusPageStyle" ||
              aEvent.FeatureURL.Path == "StateTableCell" ||
-             aEvent.FeatureURL.Path == "StatePageNumber" ||
              aEvent.FeatureURL.Path == "StateWordCount" ||
              aEvent.FeatureURL.Path == "PageStyleName" ||
              aEvent.FeatureURL.Path == "PageStatus" ||
@@ -1271,7 +1270,8 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
             aBuffer.append(OUString::number(aSize.Width)).append(" x ").append(OUString::number(aSize.Height));
         }
     }
-    else if (aEvent.FeatureURL.Path == "LanguageStatus")
+    else if (aEvent.FeatureURL.Path == "LanguageStatus" ||
+             aEvent.FeatureURL.Path == "StatePageNumber")
     {
         css::uno::Sequence< OUString > aSeq;
 

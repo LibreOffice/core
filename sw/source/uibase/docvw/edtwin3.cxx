@@ -64,15 +64,14 @@ void SizeNotify(SwViewShell const * pVwSh, const Size &rSize)
 }
 
 // Notify for page number update
-void PageNumNotify( SwViewShell const * pVwSh, sal_uInt16 nPhyNum, sal_uInt16 nVirtNum,
-                                                    const OUString& rPgStr)
+void PageNumNotify(SwViewShell const * pVwSh)
 {
     SfxViewShell *pSfxViewShell = pVwSh->GetSfxViewShell();
 
     if (SwView* pSwView = dynamic_cast<SwView *>(pSfxViewShell))
     {
         if (pSwView->GetCurShell())
-            pSwView->UpdatePageNums(nPhyNum, nVirtNum, rPgStr);
+            pSwView->UpdatePageNums();
     }
 }
 
