@@ -29,7 +29,7 @@ class Timer;
 class UNLESS_MERGELIBS(SVT_DLLPUBLIC) FileChangedChecker
 {
 private:
-    Idle                    mIdle;
+    Timer                    mTimer;
     OUString                 mFileName;
     TimeValue                mLastModTime;
     ::std::function<void ()> mpCallback;
