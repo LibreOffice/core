@@ -215,11 +215,14 @@ class UpdateCheckThread : public WorkerThread
 
 public:
     UpdateCheckThread( osl::Condition& rCondition,
-        const uno::Reference<uno::XComponentContext>& xContext );
+        const uno::Reference<uno::XComponentContext>& xContext,
+        rtl::Reference<UpdateCheck> const & controller );
 
     virtual void SAL_CALL join() override;
     virtual void SAL_CALL terminate() override;
     virtual void cancel() override;
+
+    void cancelAsSoonAsPossible();
 
 protected:
     virtual ~UpdateCheckThread() override;
@@ -266,6 +269,8 @@ protected:
 private:
     const uno::Reference<uno::XComponentContext> m_xContext;
     uno::Reference<deployment::XUpdateInformationProvider> m_xProvider;
+    rtl::Reference<UpdateCheck> m_controller;
+    bool m_cancelAsSoonAsPossible;
 };
 
 
@@ -273,7 +278,7 @@ class ManualUpdateCheckThread : public UpdateCheckThread
 {
 public:
     ManualUpdateCheckThread( osl::Condition& rCondition, const uno::Reference<uno::XComponentContext>& xContext ) :
-        UpdateCheckThread(rCondition, xContext) {};
+        UpdateCheckThread(rCondition, xContext, {}) {};
 
     virtual void SAL_CALL run() override;
 };
@@ -334,9 +339,12 @@ private:
 
 
 UpdateCheckThread::UpdateCheckThread( osl::Condition& rCondition,
-                                      const uno::Reference<uno::XComponentContext>& xContext ) :
+                                      const uno::Reference<uno::XComponentContext>& xContext,
+                                      rtl::Reference<UpdateCheck> const & controller ) :
     m_aCondition(rCondition),
-    m_xContext(xContext)
+    m_xContext(xContext),
+    m_controller(controller),
+    m_cancelAsSoonAsPossible(false)
 {
     createSuspended();
 
@@ -382,6 +390,13 @@ UpdateCheckThread::cancel()
         xProvider->cancel();
 }
 
+void UpdateCheckThread::cancelAsSoonAsPossible() {
+    {
+        osl::MutexGuard g(m_aMutex);
+        m_cancelAsSoonAsPossible = true;
+    }
+    m_aCondition.set();
+}
 
 bool
 UpdateCheckThread::runCheck( bool & rbExtensionsChecked )
@@ -442,6 +457,12 @@ UpdateCheckThread::run()
 
     // Initial wait to avoid doing further time consuming tasks during start-up
     aResult = m_aCondition.wait(&tv);
+    {
+        osl::MutexGuard g(m_aMutex);
+        if (m_cancelAsSoonAsPossible) {
+            goto done;
+        }
+    }
 
     try {
         bool bExtensionsChecked = false;
@@ -494,6 +515,12 @@ UpdateCheckThread::run()
                     // This can not be > 32 Bit for now ..
                     tv.Seconds = static_cast< sal_Int32 > (next - systime.Seconds);
                     aResult = m_aCondition.wait(&tv);
+                    {
+                        osl::MutexGuard g(m_aMutex);
+                        if (m_cancelAsSoonAsPossible) {
+                            goto done;
+                        }
+                    }
                     continue;
                 }
             }
@@ -516,6 +543,12 @@ UpdateCheckThread::run()
 
                 tv.Seconds = nRetryInterval[n-1];
                 aResult = m_aCondition.wait(&tv);
+                {
+                    osl::MutexGuard g(m_aMutex);
+                    if (m_cancelAsSoonAsPossible) {
+                        goto done;
+                    }
+                }
             }
             else // reset retry counter
             {
@@ -528,6 +561,11 @@ UpdateCheckThread::run()
     catch(const uno::Exception&) {
         // Silently catch all errors
         TOOLS_WARN_EXCEPTION("extensions.update", "Caught exception, thread terminated" );
+    }
+
+done:
+    if (m_controller.is()) {
+        m_controller->notifyUpdateCheckFinished();
     }
 }
 
@@ -705,6 +743,7 @@ UpdateCheck::UpdateCheck()
     , m_pThread(nullptr)
     , m_bHasExtensionUpdate(false)
     , m_bShowExtUpdDlg(false)
+    , m_updateCheckRunning(false)
 {
 }
 
@@ -714,7 +753,7 @@ void
 UpdateCheck::initialize(const uno::Sequence< beans::NamedValue >& rValues,
                         const uno::Reference<uno::XComponentContext>& xContext)
 {
-    osl::MutexGuard aGuard(m_aMutex);
+    std::scoped_lock aGuard(m_aMutex);
 
     if( NOT_INITIALIZED == m_eState )
     {
@@ -812,12 +851,12 @@ UpdateCheck::initialize(const uno::Sequence< beans::NamedValue >& rValues,
 void
 UpdateCheck::cancel()
 {
-    osl::ClearableMutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     WorkerThread *pThread = m_pThread;
     UpdateState eUIState = getUIState(m_aUpdateInfo);
 
-    aGuard.clear();
+    aGuard.unlock();
 
     if( nullptr != pThread )
         pThread->cancel();
@@ -829,10 +868,10 @@ UpdateCheck::cancel()
 void
 UpdateCheck::download()
 {
-    osl::ClearableMutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
     UpdateInfo aInfo(m_aUpdateInfo);
     State eState = m_eState;
-    aGuard.clear();
+    aGuard.unlock();
 
     if (aInfo.Sources.empty())
     {
@@ -848,7 +887,7 @@ UpdateCheck::download()
             shutdownThread(true);
 
             {
-                osl::MutexGuard aGuard2(m_aMutex);
+                std::scoped_lock aGuard2(m_aMutex);
                 enableDownload(true);
             }
             setUIState(UPDATESTATE_DOWNLOADING);
@@ -864,7 +903,7 @@ UpdateCheck::download()
 void
 UpdateCheck::install()
 {
-    osl::MutexGuard aGuard(m_aMutex);
+    std::scoped_lock aGuard(m_aMutex);
 
     const uno::Reference< c3s::XSystemShellExecute > xShellExecute = c3s::SystemShellExecute::create( m_xContext );
 
@@ -908,13 +947,13 @@ UpdateCheck::install()
 void
 UpdateCheck::pause()
 {
-    osl::ClearableMutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     if( nullptr != m_pThread )
         m_pThread->suspend();
 
     rtl::Reference< UpdateCheckConfig > rModel = UpdateCheckConfig::get(m_xContext);
-    aGuard.clear();
+    aGuard.unlock();
 
     rModel->storeDownloadPaused(true);
     setUIState(UPDATESTATE_DOWNLOAD_PAUSED);
@@ -924,13 +963,13 @@ UpdateCheck::pause()
 void
 UpdateCheck::resume()
 {
-    osl::ClearableMutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     if( nullptr != m_pThread )
         m_pThread->resume();
 
     rtl::Reference< UpdateCheckConfig > rModel = UpdateCheckConfig::get(m_xContext);
-    aGuard.clear();
+    aGuard.unlock();
 
     rModel->storeDownloadPaused(false);
     setUIState(UPDATESTATE_DOWNLOADING);
@@ -940,26 +979,49 @@ UpdateCheck::resume()
 void
 UpdateCheck::closeAfterFailure()
 {
-    osl::ClearableMutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     if ( ( m_eState == DISABLED ) || ( m_eState == CHECK_SCHEDULED ) )
     {
         const UpdateState eUIState = getUIState( m_aUpdateInfo );
-        aGuard.clear();
+        aGuard.unlock();
         setUIState( eUIState, true );
     }
 }
 
+void UpdateCheck::notifyUpdateCheckFinished() {
+    std::scoped_lock l(m_aMutex);
+    m_updateCheckRunning = false;
+    m_updateCheckFinished.notify_all();
+}
+
+void UpdateCheck::waitForUpdateCheckFinished() {
+    UpdateCheckThread * thread;
+    {
+        std::scoped_lock l(m_aMutex);
+        thread = dynamic_cast<UpdateCheckThread *>(m_pThread);
+    }
+    if (thread != nullptr) {
+        thread->cancelAsSoonAsPossible();
+    }
+    for (;;) {
+        std::unique_lock lock(m_aMutex);
+        if (!m_updateCheckRunning) {
+            return;
+        }
+        m_updateCheckFinished.wait(lock);
+    }
+}
 
 void
 UpdateCheck::shutdownThread(bool join)
 {
-    osl::ClearableMutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     // copy thread object pointer to stack
     osl::Thread *pThread = m_pThread;
     m_pThread = nullptr;
-    aGuard.clear();
+    aGuard.unlock();
 
     if( nullptr != pThread )
     {
@@ -978,7 +1040,10 @@ void
 UpdateCheck::enableAutoCheck(bool enable)
 {
     if( enable )
-        m_pThread = new UpdateCheckThread(m_aCondition, m_xContext);
+    {
+        m_updateCheckRunning = true;
+        m_pThread = new UpdateCheckThread(m_aCondition, m_xContext, this);
+    }
 
     m_eState = enable ? CHECK_SCHEDULED : DISABLED;
 }
@@ -1013,7 +1078,7 @@ UpdateCheck::enableDownload(bool enable, bool paused)
 bool
 UpdateCheck::downloadTargetExists(const OUString& rFileName)
 {
-    osl::ClearableMutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     rtl::Reference< UpdateHandler > aUpdateHandler(getUpdateHandler());
     UpdateState eUIState = UPDATESTATE_DOWNLOADING;
@@ -1045,7 +1110,7 @@ UpdateCheck::downloadTargetExists(const OUString& rFileName)
         shutdownThread(false);
         enableDownload(false);
 
-        aGuard.clear();
+        aGuard.unlock();
         setUIState(eUIState);
     }
 
@@ -1055,7 +1120,7 @@ UpdateCheck::downloadTargetExists(const OUString& rFileName)
 
 bool UpdateCheck::checkDownloadDestination( const OUString& rFileName )
 {
-    osl::MutexGuard aGuard(m_aMutex);
+    std::scoped_lock aGuard(m_aMutex);
 
     rtl::Reference< UpdateHandler > aUpdateHandler( getUpdateHandler() );
 
@@ -1073,9 +1138,9 @@ bool UpdateCheck::checkDownloadDestination( const OUString& rFileName )
 void
 UpdateCheck::downloadStalled(const OUString& rErrorMessage)
 {
-    osl::ClearableMutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
     rtl::Reference< UpdateHandler > aUpdateHandler(getUpdateHandler());
-    aGuard.clear();
+    aGuard.unlock();
 
     aUpdateHandler->setErrorMessage(rErrorMessage);
     setUIState(UPDATESTATE_ERROR_DOWNLOADING);
@@ -1085,9 +1150,9 @@ UpdateCheck::downloadStalled(const OUString& rErrorMessage)
 void
 UpdateCheck::downloadProgressAt(sal_Int8 nPercent)
 {
-    osl::ClearableMutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
     rtl::Reference< UpdateHandler > aUpdateHandler(getUpdateHandler());
-    aGuard.clear();
+    aGuard.unlock();
 
     aUpdateHandler->setProgress(nPercent);
     setUIState(UPDATESTATE_DOWNLOADING);
@@ -1099,7 +1164,7 @@ UpdateCheck::downloadStarted(const OUString& rLocalFileName, sal_Int64 nFileSize
 {
     if ( nFileSize > 0 )
     {
-        osl::MutexGuard aGuard(m_aMutex);
+        std::scoped_lock aGuard(m_aMutex);
 
         rtl::Reference< UpdateCheckConfig > aModel(UpdateCheckConfig::get(m_xContext));
         aModel->storeLocalFileName(rLocalFileName, nFileSize);
@@ -1115,7 +1180,7 @@ UpdateCheck::downloadStarted(const OUString& rLocalFileName, sal_Int64 nFileSize
 void
 UpdateCheck::downloadFinished(const OUString& rLocalFileName)
 {
-    osl::ClearableMutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     // no more retries
     m_pThread->terminate();
@@ -1123,7 +1188,7 @@ UpdateCheck::downloadFinished(const OUString& rLocalFileName)
     m_aImageName = getImageFromFileName(rLocalFileName);
     UpdateInfo aUpdateInfo(m_aUpdateInfo);
 
-    aGuard.clear();
+    aGuard.unlock();
     setUIState(UPDATESTATE_DOWNLOAD_AVAIL);
 
     // Bring-up release note for position 2 ..
@@ -1139,7 +1204,7 @@ UpdateCheck::cancelDownload()
 {
     shutdownThread(true);
 
-    osl::MutexGuard aGuard(m_aMutex);
+    std::scoped_lock aGuard(m_aMutex);
     enableDownload(false);
 
     rtl::Reference< UpdateCheckConfig > rModel = UpdateCheckConfig::get(m_xContext);
@@ -1163,7 +1228,7 @@ UpdateCheck::cancelDownload()
 void
 UpdateCheck::showDialog(bool forceCheck)
 {
-    osl::ResettableMutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     bool update_found = !m_aUpdateInfo.BuildId.isEmpty();
     bool bSetUIState = ! m_aUpdateHandler.is();
@@ -1200,9 +1265,9 @@ UpdateCheck::showDialog(bool forceCheck)
 
     if( bSetUIState )
     {
-        aGuard.clear();
+        aGuard.unlock();
         setUIState(eDialogState, true); // suppress bubble as Dialog will be visible soon
-        aGuard.reset();
+        aGuard.lock();
     }
 
     getUpdateHandler()->setVisible();
@@ -1224,7 +1289,7 @@ UpdateCheck::showDialog(bool forceCheck)
 void
 UpdateCheck::setUpdateInfo(const UpdateInfo& aInfo)
 {
-    osl::ClearableMutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     bool bSuppressBubble = aInfo.BuildId == m_aUpdateInfo.BuildId;
     m_aUpdateInfo = aInfo;
@@ -1287,7 +1352,7 @@ UpdateCheck::setUpdateInfo(const UpdateInfo& aInfo)
         rModel->clearUpdateFound();
     }
 
-    aGuard.clear();
+    aGuard.unlock();
     setUIState(eUIState, bSuppressBubble);
 }
 
@@ -1336,7 +1401,7 @@ void UpdateCheck::handleMenuBarUI( const rtl::Reference< UpdateHandler >& rUpdat
 
 void UpdateCheck::setUIState(UpdateState eState, bool suppressBubble)
 {
-    osl::ClearableMutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     if( ! m_xMenuBarUI.is() &&
         (DISABLED != m_eState) &&
@@ -1360,7 +1425,7 @@ void UpdateCheck::setUIState(UpdateState eState, bool suppressBubble)
     UpdateInfo aUpdateInfo(m_aUpdateInfo);
     OUString aImageName(m_aImageName);
 
-    aGuard.clear();
+    aGuard.unlock();
 
     handleMenuBarUI( aUpdateHandler, eState, suppressBubble );
 
@@ -1485,7 +1550,7 @@ void UpdateCheck::showExtensionDialog()
 rtl::Reference<UpdateHandler>
 UpdateCheck::getUpdateHandler()
 {
-    osl::MutexGuard aGuard(m_aMutex);
+    std::scoped_lock aGuard(m_aMutex);
 
     if( ! m_aUpdateHandler.is() )
         m_aUpdateHandler = new UpdateHandler(m_xContext, this);
@@ -1497,7 +1562,7 @@ UpdateCheck::getUpdateHandler()
 uno::Reference< task::XInteractionHandler >
 UpdateCheck::getInteractionHandler() const
 {
-    osl::MutexGuard aGuard(m_aMutex);
+    std::scoped_lock aGuard(m_aMutex);
 
     uno::Reference< task::XInteractionHandler > xHandler;
 
@@ -1511,7 +1576,7 @@ UpdateCheck::getInteractionHandler() const
 bool
 UpdateCheck::isDialogShowing() const
 {
-    osl::MutexGuard aGuard(m_aMutex);
+    std::scoped_lock aGuard(m_aMutex);
     return m_aUpdateHandler.is() && m_aUpdateHandler->isVisible();
 };
 
@@ -1519,7 +1584,7 @@ UpdateCheck::isDialogShowing() const
 void
 UpdateCheck::autoCheckStatusChanged(bool enabled)
 {
-    osl::ClearableMutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     if( (CHECK_SCHEDULED == m_eState) && !enabled )
         shutdownThread(false);
@@ -1528,7 +1593,7 @@ UpdateCheck::autoCheckStatusChanged(bool enabled)
     {
         enableAutoCheck(enabled);
         UpdateState eState = getUIState(m_aUpdateInfo);
-        aGuard.clear();
+        aGuard.unlock();
         setUIState(eState);
     }
 };
