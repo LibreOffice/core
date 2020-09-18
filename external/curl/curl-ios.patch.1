@@ -1,0 +1,17 @@
+# -*- Mode: Diff -*-
+#
+# We don't want curl's configure script to add a -mmacosx-version-min
+# option when it is for iOS we are building. In that case already $CC
+# contains a -miphoneos-version-min option.
+
+--- curl/configure
++++ curl/configure
+@@ -18976,7 +18976,7 @@
+     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for *version-min in CFLAGS" >&5
+ $as_echo_n "checking for *version-min in CFLAGS... " >&6; }
+     min=""
+-    if test -z "$(echo $CFLAGS | grep m.*os.*-version-min)"; then
++    if test -z "$(echo $CC $CFLAGS | grep m.*os.*-version-min)"; then
+       min="-mmacosx-version-min=10.8"
+       CFLAGS="$CFLAGS $min"
+     fi
