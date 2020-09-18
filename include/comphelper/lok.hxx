@@ -26,16 +26,6 @@ namespace comphelper::LibreOfficeKit
 
 COMPHELPER_DLLPUBLIC void setActive(bool bActive = true);
 
-// Call either setMobilePhone() or setTablet() for a view, and at most once. (If neither is called,
-// the view is assumed to be on a desktop browser.) In the future, this will possibly be changed
-// into using an enum for the kind of the view, that can be DESKTOP, MOBILEPHONE, or TABLET.
-
-// Tell that LOK view is on a mobile phone (regardless what its pixel resolution is, whether its form factor is "phablet" or not)
-COMPHELPER_DLLPUBLIC void setMobilePhone(int nViewId);
-
-// Tell that LOK view is on a tablet
-COMPHELPER_DLLPUBLIC void setTablet(int nViewId);
-
 enum class statusIndicatorCallbackType { Start, SetValue, Finish };
 
 COMPHELPER_DLLPUBLIC void setStatusIndicatorCallback(void (*callback)(void *data, statusIndicatorCallbackType type, int percent), void *data);
