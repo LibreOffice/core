@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cc386cd7_aa483fd0",
+        "filename": "sc/CppunitTest_sc_jumbosheets_test.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-09-18T07:28:09Z",
+      "side": 1,
+      "message": "You can remove these one by one, touch the .cxx file and try to run the test. If you get no link errors, then it\u0027s fine to remove the line.",
+      "revId": "5dda76618585176fe9df7970d99e5c0b4d5949de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "993c4acc_1cd8db10",
+        "filename": "sc/CppunitTest_sc_jumbosheets_test.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-09-18T07:28:09Z",
+      "side": 1,
+      "message": "Listing components individually is a minefield, I would say. If a component is missing, the behavior is up to the calling code, i.e. how it handles the error. Most of the code does not expect components to be missing, and fails with no or misleading error messages. Use:\n\n $(eval $(call gb_CppunitTest_use_rdb,sc_jumobsheets_test,services))\n\ninstead. Last time I talked about this with Michael S, he shared this view.",
+      "revId": "5dda76618585176fe9df7970d99e5c0b4d5949de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
