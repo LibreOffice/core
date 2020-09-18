@@ -144,7 +144,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		) \
 		$(foreach file,$(UNPACKED_FIX_EOL),$(call gb_UnpackedTarball_CONVERTTODOS,$(file)) && ) \
 		$(foreach confdir,$(UNPACKED_CONFIG_DIRS),\
-			cp -f $(gb_UnpackedTarball_CONFIGDIR)/config.guess $(gb_UnpackedTarball_CONFIGDIR)/config.sub $(confdir) && \
+			cp -f $(SRCDIR)/config.guess $(SRCDIR)/config.sub $(confdir) && \
 		) \
 		$(if $(UNPACKED_POST_ACTION),\
 			$(UNPACKED_POST_ACTION) && \
