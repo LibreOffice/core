@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "35e9eb99_2ddaf0a3",
+        "filename": "vcl/skia/gdiimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 907,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-09-18T11:37:08Z",
+      "side": 1,
+      "message": "this is O(n^2), which gets nasty when we import things like PDFs, which can generate absurdly large polygons\n\nMaybe faster to \n    bool doesSharePoint()\n    {\n        o3tl::sorted_vector\u003cB2DPoint\u003e testSet;\n        testSet.reserve(poly1.count());\n        for (... : poly1)\n            testSet.insert(...)\n        for (... : poly2)\n           if (testSet.contains())\n               return true;\n         return false;\n    }\n\nwhich is O(n log n) (I think)",
+      "revId": "c2b87bda85d7f5ad9f3b554cb5fdd68475fb0133",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
