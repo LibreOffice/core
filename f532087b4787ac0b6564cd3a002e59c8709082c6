@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a983a1d_79cebc96",
+        "filename": "sc/source/core/data/validat.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 600,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-09-18T12:10:54Z",
+      "side": 0,
+      "message": "not intended deletion of this empty line?",
+      "revId": "f532087b4787ac0b6564cd3a002e59c8709082c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fe19338_03e82f18",
+        "filename": "sc/source/core/data/validat.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-09-18T12:10:54Z",
+      "side": 1,
+      "message": "123.4, 123.4% works well. The string conversion 1234.00 -\u003e \"1234\" is interesting, but we could fix it later, if needed based on the competitive analysis. It\u0027s enough to mention the difference in the commit description, if exists.",
+      "range": {
+        "startLine": 601,
+        "startChar": 14,
+        "endLine": 603,
+        "endChar": 49
+      },
+      "revId": "a7809e403cb529070bf72c1a8db778b66eb6ea4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
