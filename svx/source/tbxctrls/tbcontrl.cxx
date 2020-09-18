@@ -2517,7 +2517,7 @@ struct SvxStyleToolBoxControl::Impl
 {
     OUString                     aClearForm;
     OUString                     aMore;
-    ::std::vector< OUString >    aDefaultStyles;
+    ::std::vector< std::pair< OUString, OUString > >    aDefaultStyles;
     bool                     bSpecModeWriter;
     bool                     bSpecModeCalc;
 
@@ -2572,7 +2572,8 @@ struct SvxStyleToolBoxControl::Impl
                         OUString sName;
                         xStyle->getPropertyValue("DisplayName") >>= sName;
                         if( !sName.isEmpty() )
-                            aDefaultStyles.push_back(sName);
+                            aDefaultStyles.push_back(
+                                std::pair<OUString, OUString>(aStyle, sName) );
                     }
                     catch( const uno::Exception& )
                     {}
@@ -2603,7 +2604,8 @@ struct SvxStyleToolBoxControl::Impl
                             OUString sName;
                             xStyle->getPropertyValue("DisplayName") >>= sName;
                             if( !sName.isEmpty() )
-                                aDefaultStyles.push_back(sName);
+                                aDefaultStyles.push_back(
+                                    std::pair<OUString, OUString>(sStyleName, sName) );
                         }
                     }
                     catch( const uno::Exception& )
@@ -2811,7 +2813,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
                 OUString aName( pStyle->GetName() );
                 for( auto const & _i: pImpl->aDefaultStyles )
                 {
-                    if( _i == aName )
+                    if( _i.first == aName || _i.second == aName )
                     {
                         bInsert = false;
                         break;
@@ -2840,7 +2842,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
 
         // insert default styles
         for (const auto &rStyle : pImpl->aDefaultStyles)
-            pBox->append_text(rStyle);
+            pBox->append_text(rStyle.second);
     }
 
     std::sort(aStyles.begin(), aStyles.end());
@@ -2868,8 +2870,17 @@ void SvxStyleToolBoxControl::SelectStyle( const OUString& rStyleName )
 
     if ( !rStyleName.isEmpty() )
     {
-        if ( rStyleName != aStrSel )
-            pBox->set_active_or_entry_text( rStyleName );
+        OUString aNewStyle = rStyleName;
+
+        auto aFound = std::find_if(pImpl->aDefaultStyles.begin(), pImpl->aDefaultStyles.end(),
+            [rStyleName] (auto it) { return it.first == rStyleName || it.second == rStyleName; }
+        );
+
+        if (aFound != pImpl->aDefaultStyles.end())
+            aNewStyle = aFound->second;
+
+        if ( aNewStyle != aStrSel )
+            pBox->set_active_or_entry_text( aNewStyle );
     }
     else
         pBox->set_active(-1);
@@ -2989,7 +3000,7 @@ css::uno::Reference<css::awt::XWindow> SvxStyleToolBoxControl::createItemWindow(
     }
 
     if (pImpl->m_pBox && !pImpl->aDefaultStyles.empty())
-        pImpl->m_pBox->SetDefaultStyle(pImpl->aDefaultStyles[0]);
+        pImpl->m_pBox->SetDefaultStyle(pImpl->aDefaultStyles[0].second);
 
     return xItemWindow;
 }
