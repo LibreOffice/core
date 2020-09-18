@@ -77,8 +77,9 @@ class OOX_DLLPUBLIC VMLExport : public EscherEx
     /// Parent exporter, used for text callback.
     VMLTextExport* m_pTextExport;
 
-    /// Anchoring.
+    /// Anchoring - Writer specific properties
     sal_Int16 m_eHOri, m_eVOri, m_eHRel, m_eVRel;
+    std::unique_ptr<sax_fastparser::FastAttributeList> m_pWrapAttrList;
     bool m_bInline; // css::text::TextContentAnchorType_AS_CHARACTER
 
     /// The object we're exporting.
@@ -136,7 +137,9 @@ public:
     /// Call this when you need to export the object as VML.
     OString const & AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri = -1,
             sal_Int16 eVOri = -1, sal_Int16 eHRel = -1,
-            sal_Int16 eVRel = -1, const bool bOOxmlExport = false );
+            sal_Int16 eVRel = -1,
+            std::unique_ptr<sax_fastparser::FastAttributeList> m_pWrapAttrList = nullptr,
+            const bool bOOxmlExport = false );
     OString const & AddInlineSdrObject( const SdrObject& rObj, const bool bOOxmlExport );
     virtual void  AddSdrObjectVMLObject( const SdrObject& rObj) override;
     static bool IsWaterMarkShape(const OUString& rStr);

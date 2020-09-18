@@ -421,11 +421,15 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                         case ESCHER_WrapSquare:
                         case ESCHER_WrapByPoints:  pWrapType = "square"; break; // these two are equivalent according to the docu
                         case ESCHER_WrapNone:      pWrapType = "none"; break;
-                        case ESCHER_WrapTopBottom: pWrapType = "topAndBottom"; break;
-                        case ESCHER_WrapThrough:   pWrapType = "through"; break;
+                        case ESCHER_WrapTopBottom:
+                        case ESCHER_WrapThrough:
+                            break; // last two are *undefined* in MS-ODRAW, don't exist in VML
                     }
                     if ( pWrapType )
-                        m_pSerializer->singleElementNS(XML_w10, XML_wrap, XML_type, pWrapType);
+                    {
+                        m_ShapeStyle.append(";mso-wrap-style:");
+                        m_ShapeStyle.append(pWrapType);
+                    }
                 }
                 bAlreadyWritten[ ESCHER_Prop_WrapText ] = true;
                 break;
@@ -1484,17 +1488,26 @@ void VMLExport::EndShape( sal_Int32 nShapeElement )
         m_pSerializer->endElementNS(XML_v, XML_textbox);
     }
 
+    if (m_pWrapAttrList)
+    {
+        sax_fastparser::XFastAttributeListRef const pWrapAttrList(m_pWrapAttrList.release());
+        m_pSerializer->singleElementNS(XML_w10, XML_wrap, pWrapAttrList);
+    }
+
     // end of the shape
     m_pSerializer->endElementNS( XML_v, nShapeElement );
 }
 
-OString const & VMLExport::AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri, sal_Int16 eVOri, sal_Int16 eHRel, sal_Int16 eVRel, const bool bOOxmlExport )
+OString const & VMLExport::AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri, sal_Int16 eVOri, sal_Int16 eHRel, sal_Int16 eVRel,
+        std::unique_ptr<FastAttributeList> pWrapAttrList,
+        const bool bOOxmlExport )
 {
     m_pSdrObject = &rObj;
     m_eHOri = eHOri;
     m_eVOri = eVOri;
     m_eHRel = eHRel;
     m_eVRel = eVRel;
+    m_pWrapAttrList = std::move(pWrapAttrList);
     m_bInline = false;
     EscherEx::AddSdrObject(rObj, bOOxmlExport);
     return m_sShapeId;
@@ -1507,6 +1520,7 @@ OString const & VMLExport::AddInlineSdrObject( const SdrObject& rObj, const bool
     m_eVOri = -1;
     m_eHRel = -1;
     m_eVRel = -1;
+    m_pWrapAttrList.reset();
     m_bInline = true;
     EscherEx::AddSdrObject(rObj, bOOxmlExport);
     return m_sShapeId;

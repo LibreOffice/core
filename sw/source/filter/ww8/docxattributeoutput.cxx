@@ -5446,10 +5446,14 @@ void DocxAttributeOutput::WriteActiveXControl(const SdrObject* pObject, const Sw
     {
         const SwFormatHoriOrient& rHoriOri = rFrameFormat.GetHoriOrient();
         const SwFormatVertOrient& rVertOri = rFrameFormat.GetVertOrient();
+        SwFormatSurround const& rSurround(rFrameFormat.GetSurround());
+        std::unique_ptr<sax_fastparser::FastAttributeList> pAttrList(docx::SurroundToVMLWrap(rSurround));
         sShapeId = m_rExport.VMLExporter().AddSdrObject(*pObject,
             rHoriOri.GetHoriOrient(), rVertOri.GetVertOrient(),
             rHoriOri.GetRelationOrient(),
-            rVertOri.GetRelationOrient(), true);
+            rVertOri.GetRelationOrient(),
+            std::move(pAttrList),
+            true);
     }
     // Restore default values
     m_rExport.VMLExporter().SetSkipwzName(false);
@@ -8816,43 +8820,64 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
     }
 }
 
+namespace docx {
+
+std::unique_ptr<FastAttributeList> SurroundToVMLWrap(SwFormatSurround const& rSurround)
+{
+    FastAttributeList * pAttrList(nullptr);
+    OString sType;
+    OString sSide;
+    switch (rSurround.GetSurround())
+    {
+        case css::text::WrapTextMode_NONE:
+            sType = "topAndBottom";
+            break;
+        case css::text::WrapTextMode_PARALLEL:
+            sType = "square";
+            break;
+        case css::text::WrapTextMode_DYNAMIC:
+            sType = "square";
+            sSide = "largest";
+            break;
+        case css::text::WrapTextMode_LEFT:
+            sType = "square";
+            sSide = "left";
+            break;
+        case css::text::WrapTextMode_RIGHT:
+            sType = "square";
+            sSide = "right";
+            break;
+        case css::text::WrapTextMode_THROUGH:
+            /* empty type and side means through */
+        default:
+            sType = "none";
+            break;
+    }
+    if (!sType.isEmpty() || !sSide.isEmpty())
+    {
+        pAttrList = FastSerializerHelper::createAttrList();
+        if (!sType.isEmpty())
+        {
+            pAttrList->add(XML_type, sType);
+        }
+        if (!sSide.isEmpty())
+        {
+            pAttrList->add(XML_side, sSide);
+        }
+    }
+    return std::unique_ptr<FastAttributeList>(pAttrList);
+}
+
+} // namespace docx
+
 void DocxAttributeOutput::FormatSurround( const SwFormatSurround& rSurround )
 {
     if (m_rExport.SdrExporter().getTextFrameSyntax())
     {
-        OString sType, sSide;
-        switch (rSurround.GetSurround())
+        std::unique_ptr<FastAttributeList> pAttrList(docx::SurroundToVMLWrap(rSurround));
+        if (pAttrList)
         {
-            case css::text::WrapTextMode_NONE:
-                sType = "topAndBottom";
-                break;
-            case css::text::WrapTextMode_PARALLEL:
-                sType = "square";
-                break;
-            case css::text::WrapTextMode_DYNAMIC:
-                sType = "square";
-                sSide = "largest";
-                break;
-            case css::text::WrapTextMode_LEFT:
-                sType = "square";
-                sSide = "left";
-                break;
-            case css::text::WrapTextMode_RIGHT:
-                sType = "square";
-                sSide = "right";
-                break;
-            case css::text::WrapTextMode_THROUGH:
-                /* empty type and side means through */
-            default:
-                break;
-        }
-        if (!sType.isEmpty() || !sSide.isEmpty())
-        {
-            m_rExport.SdrExporter().setFlyWrapAttrList(FastSerializerHelper::createAttrList());
-            if (!sType.isEmpty())
-                m_rExport.SdrExporter().getFlyWrapAttrList()->add(XML_type, sType);
-            if (!sSide.isEmpty())
-                m_rExport.SdrExporter().getFlyWrapAttrList()->add(XML_side, sSide);
+            m_rExport.SdrExporter().setFlyWrapAttrList(pAttrList.release());
         }
     }
     else if (m_rExport.SdrExporter().getDMLTextFrameSyntax())

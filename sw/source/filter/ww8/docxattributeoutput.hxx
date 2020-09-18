@@ -1054,6 +1054,12 @@ struct DocxTableExportContext
     ~DocxTableExportContext() { m_rOutput.popFromTableExportContext(*this); }
 };
 
+namespace docx {
+
+std::unique_ptr<sax_fastparser::FastAttributeList> SurroundToVMLWrap(SwFormatSurround const& rSurround);
+
+}
+
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_DOCXATTRIBUTEOUTPUT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
