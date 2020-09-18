@@ -24,6 +24,7 @@
 #include <unotools/datetime.hxx>
 
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <sal/log.hxx>
 
 using namespace com::sun::star;
 
@@ -147,9 +148,10 @@ VectorGraphicDataArray createVectorGraphicDataArray(SvStream& rStream)
 namespace vcl
 {
 size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<Bitmap>& rBitmaps,
-                        const size_t nFirstPage, int nPages, const double fResolutionDPI)
+                        const size_t nFirstPage, int nPages, const basegfx::B2DTuple* pSizeHint)
 {
 #if HAVE_FEATURE_PDFIUM
+    const double fResolutionDPI = 96;
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
 
     // Load the buffer using pdfium.
@@ -168,9 +170,19 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<Bitmap>& rBi
         if (!pPdfPage)
             break;
 
+        // Calculate the bitmap size in points.
+        size_t nPageWidthPoints = FPDF_GetPageWidth(pPdfPage);
+        size_t nPageHeightPoints = FPDF_GetPageHeight(pPdfPage);
+        if (pSizeHint && pSizeHint->getX() && pSizeHint->getY())
+        {
+            // Have a size hint, prefer that over the logic size from the PDF.
+            nPageWidthPoints = convertMm100ToTwip(pSizeHint->getX()) / 20;
+            nPageHeightPoints = convertMm100ToTwip(pSizeHint->getY()) / 20;
+        }
+
         // Returned unit is points, convert that to pixel.
-        const size_t nPageWidth = pointToPixel(FPDF_GetPageWidth(pPdfPage), fResolutionDPI);
-        const size_t nPageHeight = pointToPixel(FPDF_GetPageHeight(pPdfPage), fResolutionDPI);
+        const size_t nPageWidth = pointToPixel(nPageWidthPoints, fResolutionDPI);
+        const size_t nPageHeight = pointToPixel(nPageHeightPoints, fResolutionDPI);
         FPDF_BITMAP pPdfBitmap = FPDFBitmap_Create(nPageWidth, nPageHeight, /*alpha=*/1);
         if (!pPdfBitmap)
             break;
@@ -217,7 +229,10 @@ bool ImportPDF(SvStream& rStream, Graphic& rGraphic)
 {
     VectorGraphicDataArray aPdfDataArray = createVectorGraphicDataArray(rStream);
     if (!aPdfDataArray.hasElements())
+    {
+        SAL_WARN("vcl.filter", "ImportPDF: empty PDF data array");
         return false;
+    }
 
     auto aVectorGraphicDataPtr = std::make_shared<VectorGraphicData>(aPdfDataArray, OUString(),
                                                                      VectorGraphicDataType::Pdf);
