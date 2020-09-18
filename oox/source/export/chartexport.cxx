@@ -3517,14 +3517,14 @@ void ChartExport::exportDataLabels(
         }
 
         // Individual label property that overwrites the baseline.
-        exportTextProps( xLabelPropSet );
         writeLabelProperties(pFS, this, xLabelPropSet, aParam);
+        exportTextProps( xLabelPropSet );
         pFS->endElement(FSNS(XML_c, XML_dLbl));
     }
 
-    exportTextProps( xPropSet );
     // Baseline label properties for all labels.
     writeLabelProperties(pFS, this, xPropSet, aParam);
+    exportTextProps( xPropSet );
 
     pFS->singleElement(FSNS(XML_c, XML_showLeaderLines), XML_val, "0");
 
