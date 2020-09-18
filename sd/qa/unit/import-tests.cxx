@@ -63,6 +63,7 @@
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/XGluePointsSupplier.hpp>
 #include <com/sun/star/drawing/GluePoint2.hpp>
+#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/container/XIdentifierAccess.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/animations/XAnimationNode.hpp>
@@ -3145,9 +3146,9 @@ void SdImportTest::testTdf113198()
         = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf113198.pptx"), PPTX);
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
-    sal_Int16 nParaAdjust = -1;
-    xShape->getPropertyValue("ParaAdjust") >>= nParaAdjust;
-    CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(nParaAdjust));
+    drawing::TextHorizontalAdjust eAdjust;
+    xShape->getPropertyValue("TextHorizontalAdjust") >>= eAdjust;
+    CPPUNIT_ASSERT_EQUAL(drawing::TextHorizontalAdjust_CENTER, eAdjust);
 }
 
 void SdImportTest::testTdf119187()

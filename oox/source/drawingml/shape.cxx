@@ -210,7 +210,8 @@ void Shape::setDefaults(bool bHeight)
     if (bHeight)
         maDefaultShapeProperties.setProperty(PROP_CharHeight, static_cast< float >( 18.0 ));
     maDefaultShapeProperties.setProperty(PROP_TextVerticalAdjust, TextVerticalAdjust_TOP);
-    maDefaultShapeProperties.setProperty(PROP_ParaAdjust, static_cast< sal_Int16 >( ParagraphAdjust_CENTER ));
+    maDefaultShapeProperties.setProperty(PROP_ParaAdjust,
+                                         static_cast<sal_Int16>(ParagraphAdjust_LEFT));
 }
 
 ::oox::vml::OleObjectInfo& Shape::setOleObjectType()

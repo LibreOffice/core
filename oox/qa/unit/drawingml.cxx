@@ -24,6 +24,7 @@
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
@@ -224,6 +225,25 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testGradientMultiStepTransparency)
     // i.e. the end transparency was not 100%, but was 21%, leading to an unexpected visible line on
     // the right of this shape.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xffffff), aTransparence.EndColor);
+}
+
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testShapeTextAlignment)
+{
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "shape-text-alignment.pptx";
+    load(aURL);
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    sal_Int16 nParaAdjust = -1;
+    CPPUNIT_ASSERT(xShape->getPropertyValue("ParaAdjust") >>= nParaAdjust);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 3
+    // i.e. text which is meant to be left-aligned was centered at a paragraph level.
+    CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_LEFT,
+                         static_cast<style::ParagraphAdjust>(nParaAdjust));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
