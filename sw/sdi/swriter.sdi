@@ -5785,7 +5785,7 @@ SfxVoidItem StateBookmark FN_STAT_BOOKMARK
     GroupId = SfxGroupId::Intern;
 ]
 
-SfxStringItem StatePageNumber FN_STAT_PAGE
+SfxStringListItem StatePageNumber FN_STAT_PAGE
 
 [
     AutoUpdate = FALSE,
