@@ -147,6 +147,7 @@ private:
     static ScNavigatorSettings* GetNavigatorSettings();
     ScViewData*             GetViewData();
 
+    void    UpdateSheetLimits();
 
     void    UpdateColumn    ( const SCCOL* pCol = nullptr );
     void    UpdateRow       ( const SCROW* pRow = nullptr );

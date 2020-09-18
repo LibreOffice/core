@@ -346,15 +346,11 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, vcl::Window* pParent)
 {
     set_id("NavigatorPanelParent"); // for uitests
 
-    GetViewData();
-    ScDocument& rDoc = pViewData->GetDocument();
-    m_xEdRow->set_range(1, SCNAV_MAXROW(rDoc.GetSheetLimits()));
+    UpdateSheetLimits();
     m_xEdRow->set_width_chars(5);
     //max rows is 1,000,000, which is too long for typical use
     m_xEdRow->connect_activate(LINK(this, ScNavigatorDlg, ExecuteRowHdl));
 
-    m_xEdCol->set_range(1, SCNAV_MAXCOL(rDoc.GetSheetLimits()));
-    m_xEdCol->set_width_chars(SCNAV_COLDIGITS(rDoc.GetSheetLimits()));   // 1...256...18278 or A...IV...ZZZ
     m_xEdCol->connect_activate(LINK(this, ScNavigatorDlg, ExecuteColHdl));
     m_xEdCol->connect_output(LINK(this, ScNavigatorDlg, FormatRowOutputHdl));
     m_xEdCol->connect_input(LINK(this, ScNavigatorDlg, ParseRowInputHdl));
@@ -423,6 +419,17 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, vcl::Window* pParent)
     aExpandedSize = GetOptimalSize();
 }
 
+void ScNavigatorDlg::UpdateSheetLimits()
+{
+    if (ScViewData* pData = GetViewData())
+    {
+        ScDocument& rDoc = pData->GetDocument();
+        m_xEdRow->set_range(1, SCNAV_MAXROW(rDoc.GetSheetLimits()));
+        m_xEdCol->set_range(1, SCNAV_MAXCOL(rDoc.GetSheetLimits()));
+        m_xEdCol->set_width_chars(SCNAV_COLDIGITS(rDoc.GetSheetLimits()));   // 1...256...18278 or A...IV...ZZZ
+    }
+}
+
 void ScNavigatorDlg::StateChanged(StateChangedType nStateChange)
 {
     PanelLayout::StateChanged(nStateChange);
@@ -474,6 +481,7 @@ void ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
     {
         if (pHint->GetEventId() == SfxEventHintId::ActivateDoc)
         {
+            UpdateSheetLimits();
             m_xLbEntries->ActiveDocChanged();
             UpdateAll();
         }
