@@ -35,9 +35,6 @@ public:
 
     SwBookmarkControl(sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar& rStb);
     virtual ~SwBookmarkControl() override;
-
-private:
-    OUString sPageNumber;
 };
 
 #endif
