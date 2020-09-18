@@ -41,6 +41,7 @@ public:
     void testTdf107394();
     void testTdf53431_fillOnAutofilter();
     void testTdf40993_fillMergedCells();
+    void testTdf43958_clickSelectOnMergedCells();
 
     CPPUNIT_TEST_SUITE(ScCopyPasteTest);
     CPPUNIT_TEST(testCopyPasteXLS);
@@ -50,6 +51,7 @@ public:
     CPPUNIT_TEST(testTdf107394);
     CPPUNIT_TEST(testTdf53431_fillOnAutofilter);
     CPPUNIT_TEST(testTdf40993_fillMergedCells);
+    CPPUNIT_TEST(testTdf43958_clickSelectOnMergedCells);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -586,6 +588,36 @@ void ScCopyPasteTest::testTdf40993_fillMergedCells()
     CPPUNIT_ASSERT_EQUAL(lcl_getMergeSizeOfCell(rDoc, 0, 5, 0), ScAddress(1, 2, 0));
     CPPUNIT_ASSERT_EQUAL(lcl_getMergeSizeOfCell(rDoc, 4, 6, 0), ScAddress(1, 2, 0));
     CPPUNIT_ASSERT_EQUAL(lcl_getMergeSizeOfCell(rDoc, 3, 5, 0), ScAddress(2, 1, 0));
+}
+
+static void lcl_clickAndCheckCurrentArea(SCCOL nCol, SCROW nRow, SCCOL nCol2, SCROW nRow2)
+{
+    ScRange aRange;
+    ScDocShell::GetViewData()->SetCurX(nCol);
+    ScDocShell::GetViewData()->SetCurY(nRow);
+    ScDocShell::GetViewData()->GetSimpleArea(aRange);
+    CPPUNIT_ASSERT_EQUAL(aRange, ScRange(nCol, nRow, 0, nCol2, nRow2, 0));
+}
+
+void ScCopyPasteTest::testTdf43958_clickSelectOnMergedCells()
+{
+    loadDocAndSetupModelViewController("tdf40993_fillMergedCells.", FORMAT_ODS, true);
+
+    // select cell (e.g. by clicking on it) and check what is selected [but not marked]:
+    // if it is the top left cell of a merged area, the selection is enlarged to the area
+    lcl_clickAndCheckCurrentArea(1, 5, 2, 8);    // B6 -> B6:C9
+    lcl_clickAndCheckCurrentArea(0, 5, 0, 6);    // A6 -> A6:A7
+    lcl_clickAndCheckCurrentArea(3, 5, 4, 5);    // D6 -> D6:E6
+    lcl_clickAndCheckCurrentArea(4, 6, 4, 7);    // D7 -> D6:D7
+    lcl_clickAndCheckCurrentArea(7, 10, 8, 10);  // H11 -> H11:I11
+    lcl_clickAndCheckCurrentArea(7, 13, 8, 13);  // H14 -> H14:I14
+
+    // otherwise it remains the same
+    lcl_clickAndCheckCurrentArea(0, 7, 0, 7);    // A8
+    lcl_clickAndCheckCurrentArea(0, 8, 0, 8);    // A9
+    lcl_clickAndCheckCurrentArea(2, 6, 2, 6);    // C7
+    lcl_clickAndCheckCurrentArea(2, 7, 2, 7);    // C8
+    lcl_clickAndCheckCurrentArea(2, 8, 2, 8);    // C9
 }
 
 ScCopyPasteTest::ScCopyPasteTest()
