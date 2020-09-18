@@ -691,6 +691,40 @@ public:
     }
 };
 
+/// Heading paragraphs (with outline levels > 0) are not allowed in tables
+class TableHeadingCheck : public NodeCheck
+{
+private:
+    // Boolean indicaing if heading-in-table warning is already triggered.
+    bool bPrevPassed;
+
+public:
+    TableHeadingCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
+        : NodeCheck(rIssueCollection)
+        , bPrevPassed(true)
+    {
+    }
+
+    void check(SwNode* pCurrent) override
+    {
+        if (!bPrevPassed)
+            return;
+
+        const SwTextNode* textNode = pCurrent->GetTextNode();
+
+        if (textNode && textNode->GetAttrOutlineLevel() != 0)
+        {
+            const SwTableNode* parentTable = pCurrent->FindTableNode();
+
+            if (parentTable)
+            {
+                bPrevPassed = false;
+                lclAddIssue(m_rIssueCollection, SwResId(STR_HEADING_IN_TABLE));
+            }
+        }
+    }
+};
+
 class DocumentCheck : public BaseCheck
 {
 public:
@@ -843,6 +877,7 @@ void AccessibilityCheck::check()
     aNodeChecks.push_back(std::make_unique<TextFormattingCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<NonInteractiveFormCheck>(m_aIssueCollection));
     aNodeChecks.push_back(std::make_unique<FloatingTextCheck>(m_aIssueCollection));
+    aNodeChecks.push_back(std::make_unique<TableHeadingCheck>(m_aIssueCollection));
 
     auto const& pNodes = m_pDoc->GetNodes();
     SwNode* pNode = nullptr;
