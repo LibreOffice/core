@@ -179,7 +179,6 @@ private:
     void exportSeriesValues(
         const css::uno::Reference< css::chart2::data::XDataSequence >& xValueSeq, sal_Int32 nValueType = XML_val );
     void exportShapeProps( const css::uno::Reference< css::beans::XPropertySet >& xPropSet );
-    void exportTextProps(const css::uno::Reference< css::beans::XPropertySet >& xPropSet);
     void exportDataPoints(
         const css::uno::Reference< css::beans::XPropertySet >& xSeriesProperties,
         sal_Int32 nSeriesLength, sal_Int32 eChartType );
@@ -224,6 +223,7 @@ public:
     const css::uno::Reference< css::frame::XModel >& getModel() const { return mxChartModel; }
 
     void WriteChartObj( const css::uno::Reference< css::drawing::XShape >& xShape, sal_Int32 nID, sal_Int32 nChartCount );
+    void exportTextProps(const css::uno::Reference< css::beans::XPropertySet >& xPropSet);
 
     void ExportContent();
     void InitRangeSegmentationProperties(
