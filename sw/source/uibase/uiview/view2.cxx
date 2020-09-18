@@ -140,6 +140,7 @@
 
 #include <memory>
 #include <string_view>
+#include <svl/slstitm.hxx>
 
 const char sStatusDelim[] = " : ";
 
@@ -1358,19 +1359,16 @@ bool SwView::IsConditionalFastCall( const SfxRequest &rReq )
 /// invalidate page numbering field
 void SwView::UpdatePageNums(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const OUString& rPgStr)
 {
-    OUString sTemp(GetPageStr( nPhyNum, nVirtNum, rPgStr ));
-    const SfxStringItem aTmp( FN_STAT_PAGE, sTemp );
-    // Used to distinguish which tooltip to show
-    const SfxBoolItem bExtendedTooltip( FN_STAT_PAGE,
-                                        !rPgStr.isEmpty()
-                                        && std::u16string_view(OUString::number(nPhyNum)) != rPgStr
-                                        && nPhyNum != nVirtNum );
-
+    std::vector<OUString> aStringList;
+    aStringList.push_back(GetPageStr(nPhyNum, nVirtNum, rPgStr));
+    bool bExtendedTooltip(!rPgStr.isEmpty() &&
+                          std::u16string_view(OUString::number(nPhyNum)) != rPgStr &&
+                          nPhyNum != nVirtNum);
+    OUString aTooltip = bExtendedTooltip ? SwResId(STR_BOOKCTRL_HINT_EXTENDED)
+                                         : SwResId(STR_BOOKCTRL_HINT);
+    aStringList.push_back(aTooltip);
     SfxBindings &rBnd = GetViewFrame()->GetBindings();
-    rBnd.SetState( aTmp );
-    rBnd.Update( FN_STAT_PAGE );
-    rBnd.SetState( bExtendedTooltip );
-    rBnd.Update( FN_STAT_PAGE );
+    rBnd.SetState(SfxStringListItem(FN_STAT_PAGE, &aStringList));
 }
 
 void SwView::UpdateDocStats()
@@ -1420,15 +1418,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 sal_uInt16 nPage, nLogPage;
                 OUString sDisplay;
                 rShell.GetPageNumber( -1, rShell.IsCursorVisible(), nPage, nLogPage, sDisplay );
-                OUString sTemp( GetPageStr( nPage, nLogPage, sDisplay ) );
-                const SfxStringItem aTmp( FN_STAT_PAGE, sTemp );
-                GetViewFrame()->GetBindings().SetState( aTmp );
-                // Used to distinguish which tooltip to show
-                const SfxBoolItem bExtendedTooltip( FN_STAT_PAGE, !sDisplay.isEmpty() &&
-                                                    std::u16string_view(OUString::number( nPage ))
-                                                        != sDisplay &&
-                                                    nPage != nLogPage );
-                GetViewFrame()->GetBindings().SetState( bExtendedTooltip );
+                UpdatePageNums(nPage, nLogPage, sDisplay);
                 //if existing page number is not equal to old page number, send out this event.
                 if (m_nOldPageNum != nLogPage )
                 {
