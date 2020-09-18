@@ -667,7 +667,7 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                     // to the internal representation
                     // JP 17.06.96: internal representation on all formulas
                     //              (reference to other table!!!)
-                    pField->BoxNmToPtr( pUpdateField->m_pTable );
+                    pField->BoxNmToPtr( &pTableNd->GetTable() );
                     break;
                 case TBL_RELBOXNAME:
                     // is this the wanted table?

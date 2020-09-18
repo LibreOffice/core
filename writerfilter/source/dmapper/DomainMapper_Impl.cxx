@@ -4285,7 +4285,9 @@ OUString DomainMapper_Impl::convertFieldFormula(const OUString& input) {
     icu::RegexMatcher rmatch2("\\b([A-Z]{1,3}[0-9]+)\\b(?![(])", usInput, rMatcherFlags, status);
     usInput = rmatch2.replaceAll(icu::UnicodeString("<$1>"), status);
 
-    /* Cell references must be upper case */
+    /* Cell references must be upper case
+     * TODO: convert reference to other tables, e.g. SUM(Table1 A1:B2), where "Table1" is a bookmark of the table,
+     * TODO: also column range A:A */
     icu::RegexMatcher rmatch3("(<[a-z]{1,3}[0-9]+>|\\b(above|below|left|right)\\b)", usInput, rMatcherFlags, status);
     icu::UnicodeString replacedCellRefs;
     while (rmatch3.find(status) && status.isSuccess()) {
