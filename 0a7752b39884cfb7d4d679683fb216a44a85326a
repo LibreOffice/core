@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4f6cdcf2_27df2caf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-09-18T14:30:05Z",
+      "side": 1,
+      "message": "Turns out it was caused by Package_postprocess_images not having been built yet, so\n\n  diff --git a/sd/CppunitTest_sd_tiledrendering.mk b/sd/CppunitTest_sd_tiledrendering.mk\n  index 3c5e12e2b265..5006acd89301 100644\n  --- a/sd/CppunitTest_sd_tiledrendering.mk\n  +++ b/sd/CppunitTest_sd_tiledrendering.mk\n  @@ -63,4 +63,7 @@ $(eval $(call gb_CppunitTest_use_uiconfigs,sd_tiledrendering, \\\n       svx \\\n   ))\n   \n  +$(call gb_CppunitTest_get_target,sd_tiledrendering): \\\n  +    $(call gb_Package_get_target,postprocess_images)\n  +\n   # vim: set noet sw\u003d4 ts\u003d4:\n\nwould have been an alternative fix.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 42
+      },
+      "revId": "0a7752b39884cfb7d4d679683fb216a44a85326a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
