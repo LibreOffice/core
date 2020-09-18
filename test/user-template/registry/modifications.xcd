@@ -38,6 +38,15 @@
     </node>
   </node>
  </oor:component-data>
+ <oor:component-data oor:name="Jobs" oor:package="org.openoffice.Office">
+  <node oor:name="Events">
+   <node oor:name="onFirstVisibleTask" oor:op="fuse">
+    <node oor:name="JobList">
+     <node oor:name="UpdateCheck" oor:op="remove"/>
+    </node>
+   </node>
+  </node>
+ </oor:component-data>
  <oor:component-data oor:name="Paths" oor:package="org.openoffice.Office">
   <node oor:name="Paths">
    <node oor:name="UIConfig" oor:op="replace">
