@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b319cc4a_2e4dcbb8",
+        "filename": "sc/inc/globstr.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-09-18T05:18:58Z",
+      "side": 1,
+      "message": "How about \"Invalid name; use [A..Z,0..9,_] and start with a letter.\"",
+      "range": {
+        "startLine": 433,
+        "startChar": 77,
+        "endLine": 433,
+        "endChar": 153
+      },
+      "revId": "d43987c711b32338326e02fc6a7fd1ac50653750",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
