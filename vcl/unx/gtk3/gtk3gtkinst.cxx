@@ -9444,6 +9444,30 @@ private:
         return bRet;
     }
 
+    void set_toggle(const GtkTreeIter& iter, TriState eState, int col)
+    {
+        if (col == -1)
+            col = m_nExpanderToggleCol;
+        else
+            col = to_internal_model(col);
+
+        if (eState == TRISTATE_INDET)
+        {
+            gtk_tree_store_set(m_pTreeStore, const_cast<GtkTreeIter*>(&iter),
+                m_aToggleVisMap[col], true, // checkbuttons are invisible until toggled on or off
+                m_aToggleTriStateMap[col], true, // tristate on
+                -1);
+        }
+        else
+        {
+            gtk_tree_store_set(m_pTreeStore, const_cast<GtkTreeIter*>(&iter),
+                m_aToggleVisMap[col], true, // checkbuttons are invisible until toggled on or off
+                m_aToggleTriStateMap[col], false, // tristate off
+                col, eState == TRISTATE_TRUE, // set toggle state
+                -1);
+        }
+    }
+
     void set(const GtkTreeIter& iter, int col, const OUString& rText)
     {
         OString aStr(OUStringToOString(rText, RTL_TEXTENCODING_UTF8));
@@ -10651,42 +10675,18 @@ public:
         return get_bool(rGtkIter.iter, col) ? TRISTATE_TRUE : TRISTATE_FALSE;
     }
 
-    virtual void set_toggle(int pos, TriState eState, int col) override
-    {
-        if (col == -1)
-            col = m_nExpanderToggleCol;
-        else
-            col = to_internal_model(col);
-
-        // checkbuttons are invisible until toggled on or off
-        set(pos, m_aToggleVisMap[col], true);
-        if (eState == TRISTATE_INDET)
-            set(pos, m_aToggleTriStateMap[col], true);
-        else
-        {
-            set(pos, m_aToggleTriStateMap[col], false);
-            set(pos, col, eState == TRISTATE_TRUE);
-        }
-    }
-
     virtual void set_toggle(const weld::TreeIter& rIter, TriState eState, int col) override
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+        set_toggle(rGtkIter.iter, eState, col);
+    }
 
-        if (col == -1)
-            col = m_nExpanderToggleCol;
-        else
-            col = to_internal_model(col);
-
-        // checkbuttons are invisible until toggled on or off
-        set(rGtkIter.iter, m_aToggleVisMap[col], true);
-        if (eState == TRISTATE_INDET)
-            set(rGtkIter.iter, m_aToggleTriStateMap[col], true);
-        else
-        {
-            set(rGtkIter.iter, m_aToggleTriStateMap[col], false);
-            set(rGtkIter.iter, col, eState == TRISTATE_TRUE);
-        }
+    virtual void set_toggle(int pos, TriState eState, int col) override
+    {
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreeIter iter;
+        if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
+            set_toggle(iter, eState, col);
     }
 
     virtual void enable_toggle_buttons(weld::ColumnToggleType eType) override
