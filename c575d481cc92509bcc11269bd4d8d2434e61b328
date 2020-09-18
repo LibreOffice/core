@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "71faa33d_9af2aa5c",
+        "filename": "sw/source/uibase/uiview/view2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1383,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2020-09-18T11:29:21Z",
+      "side": 1,
+      "message": "What is this \u0027-\u0027?",
+      "range": {
+        "startLine": 1383,
+        "startChar": 0,
+        "endLine": 1383,
+        "endChar": 1
+      },
+      "revId": "c575d481cc92509bcc11269bd4d8d2434e61b328",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
