@@ -163,6 +163,7 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, SelectionChangedHdl, weld::TreeView&, void)
         m_xInsertBtn->set_sensitive(false);
         m_xGotoBtn->set_sensitive(nSelectedRows == 1);
         m_xRenameBtn->set_sensitive(nSelectedRows == 1 && !m_bAreProtected);
+        m_xDeleteBtn->set_sensitive(!m_bAreProtected);
         m_xEditBox->set_text(sEditBoxText.makeStringAndClear());
     }
     else
