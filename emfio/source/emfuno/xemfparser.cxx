@@ -32,6 +32,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
+#include <sal/log.hxx>
 
 #include <wmfreader.hxx>
 #include <emfreader.hxx>
@@ -46,6 +47,7 @@ namespace emfio::emfreader
         {
         private:
             uno::Reference< uno::XComponentContext > context_;
+            basegfx::B2DTuple maSizeHint;
 
         public:
             explicit XEmfParser(
@@ -58,6 +60,7 @@ namespace emfio::emfreader
                 const uno::Reference< ::io::XInputStream >& xEmfStream,
                 const OUString& aAbsolutePath,
                 const uno::Sequence< ::beans::PropertyValue >& rProperties) override;
+            void SAL_CALL setSizeHint(const geometry::RealPoint2D& rSize) override;
 
             // XServiceInfo
             virtual OUString SAL_CALL getImplementationName() override;
@@ -105,7 +108,9 @@ namespace emfio::emfreader
                     if (nMetaType == 0x464d4520)
                     {
                         // read and get possible failure/error, ReadEnhWMF returns success
-                        bReadError = !emfio::EmfReader(*pStream, aMtf).ReadEnhWMF();
+                        emfio::EmfReader aReader(*pStream, aMtf);
+                        aReader.SetSizeHint(maSizeHint);
+                        bReadError = !aReader.ReadEnhWMF();
                     }
                     else
                     {
@@ -175,10 +180,16 @@ namespace emfio::emfreader
             }
             else
             {
-                OSL_ENSURE(false, "Invalid stream (!)");
+                SAL_WARN("emfio", "Invalid stream (!)");
             }
 
             return comphelper::containerToSequence(aRetval);
+        }
+
+        void XEmfParser::setSizeHint(const geometry::RealPoint2D& rSize)
+        {
+            maSizeHint.setX(rSize.X);
+            maSizeHint.setY(rSize.Y);
         }
 
         OUString SAL_CALL XEmfParser::getImplementationName()

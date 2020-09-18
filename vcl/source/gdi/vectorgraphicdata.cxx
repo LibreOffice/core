@@ -150,7 +150,9 @@ void VectorGraphicData::ensurePdfReplacement()
     sal_Int32 nUsePageIndex = 0;
     if (mnPageIndex >= 0)
         nUsePageIndex = mnPageIndex;
-    vcl::RenderPDFBitmaps(maVectorGraphicDataArray.getConstArray(), maVectorGraphicDataArray.getLength(), aBitmaps, nUsePageIndex, 1/*, fResolutionDPI*/);
+    vcl::RenderPDFBitmaps(maVectorGraphicDataArray.getConstArray(),
+                          maVectorGraphicDataArray.getLength(), aBitmaps, nUsePageIndex, 1,
+                          &maSizeHint);
     if (!aBitmaps.empty())
         maReplacement = aBitmaps[0];
 }
@@ -212,7 +214,15 @@ void VectorGraphicData::ensureSequenceAndRange()
             }
 
             if (myInputStream.is())
+            {
+                // Pass the size hint of the graphic to the EMF parser.
+                geometry::RealPoint2D aSizeHint;
+                aSizeHint.X = maSizeHint.getX();
+                aSizeHint.Y = maSizeHint.getY();
+                xEmfParser->setSizeHint(aSizeHint);
+
                 maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xEmfParser->getDecomposition(myInputStream, maPath, aSequence));
+            }
 
             break;
         }
