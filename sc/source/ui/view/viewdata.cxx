@@ -1165,7 +1165,25 @@ ScMarkType ScViewData::GetSimpleArea( ScRange & rRange, ScMarkData & rNewMark ) 
     {
         if (eMarkType == SC_MARK_NONE)
             eMarkType = SC_MARK_SIMPLE;
-        rRange = ScRange( GetCurX(), GetCurY(), GetTabNo() );
+        const ScPatternAttr* pMarkPattern = pDoc->GetPattern(GetCurX(), GetCurY(), GetTabNo());
+        if (pMarkPattern->GetItemSet().GetItemState(ATTR_MERGE, false) == SfxItemState::SET)
+        {
+            SCROW rows = pMarkPattern->GetItem(ATTR_MERGE).GetRowMerge();
+            SCCOL cols = pMarkPattern->GetItem(ATTR_MERGE).GetColMerge();
+            if (rows < 1 || cols < 1)
+            {
+                // This kind of cells do exist. Not sure if that is intended, or bug.
+                rRange = ScRange(GetCurX(), GetCurY(), GetTabNo());
+            }
+            else
+            {
+                rRange = ScRange(GetCurX(), GetCurY(), GetTabNo(), GetCurX() + cols - 1, GetCurY() + rows - 1, GetTabNo());
+                if (ScViewUtil::HasFiltered(rRange, GetDocument()))
+                    eMarkType = SC_MARK_SIMPLE_FILTERED;
+            }
+        }
+        else
+            rRange = ScRange(GetCurX(), GetCurY(), GetTabNo());
     }
     return eMarkType;
 }

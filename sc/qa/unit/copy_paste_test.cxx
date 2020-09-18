@@ -44,6 +44,7 @@ public:
     void testTdf107394();
     void testTdf53431_fillOnAutofilter();
     void testTdf40993_fillMergedCells();
+    void testTdf43958_clickSelectOnMergedCells();
 
     CPPUNIT_TEST_SUITE(ScCopyPasteTest);
     CPPUNIT_TEST(testCopyPasteXLS);
@@ -53,6 +54,7 @@ public:
     CPPUNIT_TEST(testTdf107394);
     CPPUNIT_TEST(testTdf53431_fillOnAutofilter);
     CPPUNIT_TEST(testTdf40993_fillMergedCells);
+    CPPUNIT_TEST(testTdf43958_clickSelectOnMergedCells);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -560,6 +562,34 @@ void ScCopyPasteTest::testTdf40993_fillMergedCells()
     CPPUNIT_ASSERT_EQUAL(lcl_getMergeSizeOfCell(rDoc, 0, 5, 0), ScAddress(1, 2, 0));
     CPPUNIT_ASSERT_EQUAL(lcl_getMergeSizeOfCell(rDoc, 4, 6, 0), ScAddress(1, 2, 0));
     CPPUNIT_ASSERT_EQUAL(lcl_getMergeSizeOfCell(rDoc, 3, 5, 0), ScAddress(2, 1, 0));
+}
+
+static void lcl_clickAndCheckCurentArea(SCCOL nCol, SCROW nRow, SCCOL nCol2, SCROW nRow2)
+{
+    ScRange aRange;
+    ScDocShell::GetViewData()->SetCurX(nCol);
+    ScDocShell::GetViewData()->SetCurY(nRow);
+    ScDocShell::GetViewData()->GetSimpleArea(aRange);
+    CPPUNIT_ASSERT_EQUAL(aRange, ScRange(nCol, nRow, 0, nCol2, nRow2, 0));
+}
+
+void ScCopyPasteTest::testTdf43958_clickSelectOnMergedCells()
+{
+    loadDocAndSetupModelViewController("tdf40993_fillMergedCells.", FORMAT_ODS, true);
+
+    //select cell (like simple click) and check what is selected [but not marked]
+    lcl_clickAndCheckCurentArea(1, 5, 2, 8);
+    lcl_clickAndCheckCurentArea(0, 5, 0, 6);
+    lcl_clickAndCheckCurentArea(3, 5, 4, 5);
+    lcl_clickAndCheckCurentArea(4, 6, 4, 7);
+    lcl_clickAndCheckCurentArea(7, 10, 8, 10);
+    lcl_clickAndCheckCurentArea(7, 13, 8, 13);
+
+    lcl_clickAndCheckCurentArea(0, 7, 0, 7);
+    lcl_clickAndCheckCurentArea(0, 8, 0, 8);
+    lcl_clickAndCheckCurentArea(2, 6, 2, 6);
+    lcl_clickAndCheckCurentArea(2, 7, 2, 7);
+    lcl_clickAndCheckCurentArea(2, 8, 2, 8);
 }
 
 ScCopyPasteTest::ScCopyPasteTest()
