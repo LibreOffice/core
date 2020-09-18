@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d70cd55a_4630d9ad",
+        "filename": "svtools/source/misc/filechangedchecker.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-09-18T11:41:06Z",
+      "side": 1,
+      "message": "1000ms is pretty long, 100ms should be fine, the check is pretty quick",
+      "revId": "e2c7609b6a4214b1c05dc6554ab5822bc850d011",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
