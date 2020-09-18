@@ -877,6 +877,9 @@ bool SkiaSalGraphicsImpl::delayDrawPolyPolygon(const basegfx::B2DPolyPolygon& aP
     // so they do not need joining.
     if (aPolyPolygon.count() != 1)
         return false;
+    // If the polygon is not closed, it doesn't mark an area to be filled.
+    if (!aPolyPolygon.isClosed())
+        return false;
     // If a polygon does not contain a straight line, i.e. it's all curves, then do not merge.
     // First of all that's even more expensive, and second it's very unlikely that it's a polygon
     // split into more polygons.
@@ -888,6 +891,22 @@ bool SkiaSalGraphicsImpl::delayDrawPolyPolygon(const basegfx::B2DPolyPolygon& aP
             || !mLastPolyPolygonInfo.bounds.overlaps(aPolyPolygon.getB2DRange())))
     {
         checkPendingDrawing(); // Cannot be parts of the same larger polygon, draw the last and reset.
+    }
+    if (!mLastPolyPolygonInfo.polygons.empty())
+    {
+        assert(aPolyPolygon.count() == 1);
+        assert(mLastPolyPolygonInfo.polygons.back().count() == 1);
+        // Check if the new and the previous polygon share at least one point. If not, then they
+        // cannot be adjacent polygons, so there's no point in trying to merge them.
+        bool sharePoint = false;
+        const basegfx::B2DPolygon& poly1 = aPolyPolygon.getB2DPolygon(0);
+        const basegfx::B2DPolygon& poly2 = mLastPolyPolygonInfo.polygons.back().getB2DPolygon(0);
+        for (sal_uInt32 i = 0; i < poly1.count() && !sharePoint; ++i)
+            for (sal_uInt32 j = 0; j < poly2.count() && !sharePoint; ++j)
+                if (poly1.getB2DPoint(i) == poly2.getB2DPoint(j))
+                    sharePoint = true;
+        if (!sharePoint)
+            checkPendingDrawing(); // Draw the previous one and reset.
     }
     // Collect the polygons that can be possibly merged. Do the merging only once at the end,
     // because it's not a cheap operation.
@@ -908,6 +927,8 @@ void SkiaSalGraphicsImpl::checkPendingDrawing()
         if (polygons.size() == 1)
             performDrawPolyPolygon(polygons.front(), transparency, true);
         else
+            // TODO: tdf#136222 shows that basegfx::utils::mergeToSinglePolyPolygon() is unreliable
+            // in corner cases, possibly either a bug or rounding errors somewhere.
             performDrawPolyPolygon(basegfx::utils::mergeToSinglePolyPolygon(polygons), transparency,
                                    true);
     }
