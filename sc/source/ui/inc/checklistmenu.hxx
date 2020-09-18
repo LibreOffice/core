@@ -181,12 +181,12 @@ private:
 
     std::unique_ptr<weld::TreeIter> ShowCheckEntry(const OUString& sName, ScCheckListMember& rMember, bool bShow = true, bool bCheck = true);
     void CheckEntry(const OUString& sName, const weld::TreeIter* pParent, bool bCheck);
-    void CheckEntry(const weld::TreeIter* pEntry, bool bCheck);
+    void CheckEntry(const weld::TreeIter& rEntry, bool bCheck);
     void GetRecursiveChecked(const weld::TreeIter* pEntry, std::unordered_set<OUString>& vOut, OUString& rLabel);
     std::unordered_set<OUString> GetAllChecked();
     bool IsChecked(const OUString& sName, const weld::TreeIter* pParent);
     int GetCheckedEntryCount() const;
-    void CheckAllChildren(const weld::TreeIter* pEntry, bool bCheck);
+    void CheckAllChildren(const weld::TreeIter& rEntry, bool bCheck);
 
     void setSelectedMenuItem(size_t nPos, bool bSubMenuTimer);
 

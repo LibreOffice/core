@@ -579,7 +579,12 @@ void ScCheckListMenuControl::prepWindow()
 
 void ScCheckListMenuControl::setAllMemberState(bool bSet)
 {
-    CheckAllChildren(nullptr, bSet);
+    mxChecks->freeze();
+    mxChecks->all_foreach([this, bSet](weld::TreeIter& rEntry){
+        mxChecks->set_toggle(rEntry, bSet ? TRISTATE_TRUE : TRISTATE_FALSE);
+        return false;
+    });
+    mxChecks->thaw();
 
     if (!maConfig.mbAllowEmptySet)
     {
@@ -747,7 +752,7 @@ IMPL_LINK( ScCheckListMenuControl, CheckHdl, const weld::TreeView::iter_col&, rR
 void ScCheckListMenuControl::Check(const weld::TreeIter* pEntry)
 {
     if (pEntry)
-        CheckEntry(pEntry,  mxChecks->get_toggle(*pEntry) == TRISTATE_TRUE);
+        CheckEntry(*pEntry, mxChecks->get_toggle(*pEntry) == TRISTATE_TRUE);
     size_t nNumChecked = GetCheckedEntryCount();
     if (nNumChecked == maMembers.size())
         // all members visible
@@ -987,33 +992,32 @@ void ScCheckListMenuControl::CheckEntry(const OUString& sName, const weld::TreeI
 {
     std::unique_ptr<weld::TreeIter> xEntry = FindEntry(pParent, sName);
     if (xEntry)
-        CheckEntry(xEntry.get(), bCheck);
+        CheckEntry(*xEntry, bCheck);
 }
 
-// Recursively check all children of pParent
-void ScCheckListMenuControl::CheckAllChildren(const weld::TreeIter* pParent, bool bCheck)
+// Recursively check all children of rParent
+void ScCheckListMenuControl::CheckAllChildren(const weld::TreeIter& rParent, bool bCheck)
 {
-    if (pParent)
-        mxChecks->set_toggle(*pParent, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE);
-    std::unique_ptr<weld::TreeIter> xEntry = mxChecks->make_iterator(pParent);
-    bool bEntry = pParent ? mxChecks->iter_children(*xEntry) : mxChecks->get_iter_first(*xEntry);
+    mxChecks->set_toggle(rParent, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE);
+    std::unique_ptr<weld::TreeIter> xEntry = mxChecks->make_iterator(&rParent);
+    bool bEntry = mxChecks->iter_children(*xEntry);
     while (bEntry)
     {
-        CheckAllChildren(xEntry.get(), bCheck);
+        CheckAllChildren(*xEntry, bCheck);
         bEntry = mxChecks->iter_next_sibling(*xEntry);
     }
 }
 
-void ScCheckListMenuControl::CheckEntry(const weld::TreeIter* pParent, bool bCheck)
+void ScCheckListMenuControl::CheckEntry(const weld::TreeIter& rParent, bool bCheck)
 {
-    // recursively check all items below pParent
-    CheckAllChildren(pParent, bCheck);
-    // checking pParent can affect ancestors, e.g. if ancestor is unchecked and pParent is
+    // recursively check all items below rParent
+    CheckAllChildren(rParent, bCheck);
+    // checking rParent can affect ancestors, e.g. if ancestor is unchecked and rParent is
     // now checked then the ancestor needs to be checked also
-    if (!(pParent && mxChecks->get_iter_depth(*pParent)))
+    if (!mxChecks->get_iter_depth(rParent))
         return;
 
-    std::unique_ptr<weld::TreeIter> xAncestor(mxChecks->make_iterator(pParent));
+    std::unique_ptr<weld::TreeIter> xAncestor(mxChecks->make_iterator(&rParent));
     bool bAncestor = mxChecks->iter_parent(*xAncestor);
     while (bAncestor)
     {
@@ -1086,7 +1090,7 @@ std::unique_ptr<weld::TreeIter> ScCheckListMenuControl::ShowCheckEntry(const OUS
             mxChecks->set_text(*xEntry, sName, 0);
         }
         else
-            CheckEntry(xEntry.get(), bCheck);
+            CheckEntry(*xEntry, bCheck);
     }
     else if (xEntry)
     {
@@ -1130,7 +1134,7 @@ IMPL_LINK(ScCheckListMenuControl, KeyInputHdl, const KeyEvent&, rKEvt, bool)
         if (bEntry)
         {
             bool bOldCheck = mxChecks->get_toggle(*xEntry) == TRISTATE_TRUE;
-            CheckEntry(xEntry.get(), !bOldCheck);
+            CheckEntry(*xEntry, !bOldCheck);
             bool bNewCheck = mxChecks->get_toggle(*xEntry) == TRISTATE_TRUE;
             if (bOldCheck != bNewCheck)
                 Check(xEntry.get());
@@ -1193,7 +1197,7 @@ size_t ScCheckListMenuControl::initMembers(int nMaxMemberWidth)
             {
                 CheckEntry(maMembers[i].maName, maMembers[i].mxParent.get(), maMembers[i].mbVisible);
                 // Expand first node of checked dates
-                if (!maMembers[i].mxParent && IsChecked(maMembers[i].maName,  maMembers[i].mxParent.get()))
+                if (!maMembers[i].mxParent && IsChecked(maMembers[i].maName, maMembers[i].mxParent.get()))
                 {
                     std::unique_ptr<weld::TreeIter> xDateEntry = FindEntry(nullptr, maMembers[i].maName);
                     if (xDateEntry)
