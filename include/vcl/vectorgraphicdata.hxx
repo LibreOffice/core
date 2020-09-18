@@ -74,6 +74,9 @@ private:
     // If the vector format has more pages this denotes which page to render
     sal_Int32 mnPageIndex;
 
+    /// Useful for PDF, which is vector-based, but still rendered to a bitmap.
+    basegfx::B2DTuple maSizeHint;
+
     // on demand creators
     void ensurePdfReplacement();
     void ensureReplacement();
@@ -117,6 +120,13 @@ public:
     {
         mnPageIndex = nPageIndex;
     }
+
+    void setSizeHint(const basegfx::B2DTuple& rSizeHint)
+    {
+        maSizeHint = rSizeHint;
+    }
+
+    const basegfx::B2DTuple& getSizeHint() const { return maSizeHint; }
 
     bool isPrimitiveSequenceCreated() const { return mbSequenceCreated; }
 };
