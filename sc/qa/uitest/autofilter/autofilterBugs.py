@@ -134,7 +134,7 @@ class autofilter(UITestCase):
 
         xGridWindow.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
         xFloatWindow = self.xUITest.getFloatWindow()
-        xTreeList = xFloatWindow.getChild("check_list_box")
+        xTreeList = xFloatWindow.getChild("check_tree_box")
         xFirstEntry = xTreeList.getChild("0")
         self.assertEqual(get_state_as_dict(xFirstEntry)["Text"], "2014")
 

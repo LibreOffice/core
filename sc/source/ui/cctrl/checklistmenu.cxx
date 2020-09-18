@@ -420,7 +420,9 @@ ScCheckListMenuControl::ScCheckListMenuControl(ScCheckListMenuWindow* pParent, v
     , mxScratchIter(mxMenu->make_iterator())
     , mxEdSearch(mxBuilder->weld_entry("search_edit"))
     , mxBox(mxBuilder->weld_widget("box"))
-    , mxChecks(mxBuilder->weld_tree_view("check_list_box"))
+    , mxListChecks(mxBuilder->weld_tree_view("check_list_box"))
+    , mxTreeChecks(mxBuilder->weld_tree_view("check_tree_box"))
+    , mpChecks(mxTreeChecks.get())
     , mxChkToggleAll(mxBuilder->weld_check_button("toggle_all"))
     , mxBtnSelectSingle(mxBuilder->weld_button("select_current"))
     , mxBtnUnselectSingle(mxBuilder->weld_button("unselect_current"))
@@ -441,11 +443,12 @@ ScCheckListMenuControl::ScCheckListMenuControl(ScCheckListMenuWindow* pParent, v
 {
     bool bIsSubMenu = pParent->GetParentMenu();
 
-    int nChecksHeight = mxChecks->get_height_rows(9);
+    int nChecksHeight = mxTreeChecks->get_height_rows(9);
     if (!bIsSubMenu && nWidth != -1)
     {
         mnCheckWidthReq = nWidth - mxFrame->get_border_width() * 2 - 4;
-        mxChecks->set_size_request(mnCheckWidthReq, nChecksHeight);
+        mxTreeChecks->set_size_request(mnCheckWidthReq, nChecksHeight);
+        mxListChecks->set_size_request(mnCheckWidthReq, nChecksHeight);
     }
 
     // sort ok/cancel into native order, if this was a dialog they would be auto-sorted, but this
@@ -454,7 +457,8 @@ ScCheckListMenuControl::ScCheckListMenuControl(ScCheckListMenuWindow* pParent, v
 
     if (!bIsSubMenu)
     {
-        mxChecks->enable_toggle_buttons(weld::ColumnToggleType::Check);
+        mxTreeChecks->enable_toggle_buttons(weld::ColumnToggleType::Check);
+        mxListChecks->enable_toggle_buttons(weld::ColumnToggleType::Check);
 
         mxBox->show();
         mxEdSearch->show();
@@ -472,8 +476,10 @@ ScCheckListMenuControl::ScCheckListMenuControl(ScCheckListMenuWindow* pParent, v
         mxBtnCancel->connect_clicked(LINK(this, ScCheckListMenuControl, ButtonHdl));
         mxEdSearch->connect_changed(LINK(this, ScCheckListMenuControl, EdModifyHdl));
         mxEdSearch->connect_activate(LINK(this, ScCheckListMenuControl, EdActivateHdl));
-        mxChecks->connect_toggled(LINK(this, ScCheckListMenuControl, CheckHdl));
-        mxChecks->connect_key_press(LINK(this, ScCheckListMenuControl, KeyInputHdl));
+        mxTreeChecks->connect_toggled(LINK(this, ScCheckListMenuControl, CheckHdl));
+        mxTreeChecks->connect_key_press(LINK(this, ScCheckListMenuControl, KeyInputHdl));
+        mxListChecks->connect_toggled(LINK(this, ScCheckListMenuControl, CheckHdl));
+        mxListChecks->connect_key_press(LINK(this, ScCheckListMenuControl, KeyInputHdl));
         mxChkToggleAll->connect_toggled(LINK(this, ScCheckListMenuControl, TriStateHdl));
         mxBtnSelectSingle->connect_clicked(LINK(this, ScCheckListMenuControl, ButtonHdl));
         mxBtnUnselectSingle->connect_clicked(LINK(this, ScCheckListMenuControl, ButtonHdl));
@@ -491,7 +497,8 @@ ScCheckListMenuControl::ScCheckListMenuControl(ScCheckListMenuWindow* pParent, v
         mnCheckWidthReq = mxContainer->get_preferred_size().Width();
         // make that size fixed now, we can now use mnCheckWidthReq to speed up
         // bulk_insert_for_each
-        mxChecks->set_size_request(mnCheckWidthReq, nChecksHeight);
+        mxTreeChecks->set_size_request(mnCheckWidthReq, nChecksHeight);
+        mxListChecks->set_size_request(mnCheckWidthReq, nChecksHeight);
     }
 }
 
@@ -579,12 +586,10 @@ void ScCheckListMenuControl::prepWindow()
 
 void ScCheckListMenuControl::setAllMemberState(bool bSet)
 {
-    mxChecks->freeze();
-    mxChecks->all_foreach([this, bSet](weld::TreeIter& rEntry){
-        mxChecks->set_toggle(rEntry, bSet ? TRISTATE_TRUE : TRISTATE_FALSE);
+    mpChecks->all_foreach([this, bSet](weld::TreeIter& rEntry){
+        mpChecks->set_toggle(rEntry, bSet ? TRISTATE_TRUE : TRISTATE_FALSE);
         return false;
     });
-    mxChecks->thaw();
 
     if (!maConfig.mbAllowEmptySet)
     {
@@ -596,10 +601,10 @@ void ScCheckListMenuControl::setAllMemberState(bool bSet)
 void ScCheckListMenuControl::selectCurrentMemberOnly(bool bSet)
 {
     setAllMemberState(!bSet);
-    std::unique_ptr<weld::TreeIter> xEntry = mxChecks->make_iterator();
-    if (!mxChecks->get_cursor(xEntry.get()))
+    std::unique_ptr<weld::TreeIter> xEntry = mpChecks->make_iterator();
+    if (!mpChecks->get_cursor(xEntry.get()))
         return;
-    mxChecks->set_toggle(*xEntry, bSet ? TRISTATE_TRUE : TRISTATE_FALSE);
+    mpChecks->set_toggle(*xEntry, bSet ? TRISTATE_TRUE : TRISTATE_FALSE);
 }
 
 IMPL_LINK(ScCheckListMenuControl, ButtonHdl, weld::Button&, rBtn, void)
@@ -611,8 +616,8 @@ IMPL_LINK(ScCheckListMenuControl, ButtonHdl, weld::Button&, rBtn, void)
     else if (&rBtn == mxBtnSelectSingle.get() || &rBtn == mxBtnUnselectSingle.get())
     {
         selectCurrentMemberOnly(&rBtn == mxBtnSelectSingle.get());
-        std::unique_ptr<weld::TreeIter> xEntry = mxChecks->make_iterator();
-        if (!mxChecks->get_cursor(xEntry.get()))
+        std::unique_ptr<weld::TreeIter> xEntry = mpChecks->make_iterator();
+        if (!mpChecks->get_cursor(xEntry.get()))
             xEntry.reset();
         Check(xEntry.get());
     }
@@ -649,12 +654,12 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, EdModifyHdl, weld::Entry&, void)
     size_t nSelCount = 0;
     bool bSomeDateDeletes = false;
 
-    mxChecks->freeze();
+    mpChecks->freeze();
 
     if (bSearchTextEmpty && !mbHasDates)
     {
         // when there are a lot of rows, it is cheaper to simply clear the tree and re-initialise
-        mxChecks->clear();
+        mpChecks->clear();
         nSelCount = initMembers();
     }
     else
@@ -717,7 +722,7 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, EdModifyHdl, weld::Entry&, void)
         }
     }
 
-    mxChecks->thaw();
+    mpChecks->thaw();
 
     if ( nSelCount == n )
         mxChkToggleAll->set_state( TRISTATE_TRUE );
@@ -729,7 +734,7 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, EdModifyHdl, weld::Entry&, void)
     if ( !maConfig.mbAllowEmptySet )
     {
         const bool bEmptySet( nSelCount == 0 );
-        mxChecks->set_sensitive(!bEmptySet);
+        mpChecks->set_sensitive(!bEmptySet);
         mxChkToggleAll->set_sensitive(!bEmptySet);
         mxBtnSelectSingle->set_sensitive(!bEmptySet);
         mxBtnUnselectSingle->set_sensitive(!bEmptySet);
@@ -752,7 +757,7 @@ IMPL_LINK( ScCheckListMenuControl, CheckHdl, const weld::TreeView::iter_col&, rR
 void ScCheckListMenuControl::Check(const weld::TreeIter* pEntry)
 {
     if (pEntry)
-        CheckEntry(*pEntry, mxChecks->get_toggle(*pEntry) == TRISTATE_TRUE);
+        CheckEntry(*pEntry, mpChecks->get_toggle(*pEntry) == TRISTATE_TRUE);
     size_t nNumChecked = GetCheckedEntryCount();
     if (nNumChecked == maMembers.size())
         // all members visible
@@ -782,13 +787,13 @@ void ScCheckListMenuControl::updateMemberParents(const weld::TreeIter* pLeaf, si
     if ( pLeaf )
     {
         std::unique_ptr<weld::TreeIter> xYearEntry;
-        std::unique_ptr<weld::TreeIter> xMonthEntry = mxChecks->make_iterator(pLeaf);
-        if (!mxChecks->iter_parent(*xMonthEntry))
+        std::unique_ptr<weld::TreeIter> xMonthEntry = mpChecks->make_iterator(pLeaf);
+        if (!mpChecks->iter_parent(*xMonthEntry))
             xMonthEntry.reset();
         else
         {
-            xYearEntry = mxChecks->make_iterator(xMonthEntry.get());
-            if (!mxChecks->iter_parent(*xYearEntry))
+            xYearEntry = mpChecks->make_iterator(xMonthEntry.get());
+            if (!mpChecks->iter_parent(*xYearEntry))
                 xYearEntry.reset();
         }
 
@@ -843,15 +848,15 @@ void ScCheckListMenuControl::addDateMember(const OUString& rsName, double nVal, 
     if ( aDayName.getLength() == 1 )
         aDayName = "0" + aDayName;
 
-    mxChecks->freeze();
+    mpChecks->freeze();
 
     std::unique_ptr<weld::TreeIter> xYearEntry = FindEntry(nullptr, aYearName);
     if (!xYearEntry)
     {
-        xYearEntry = mxChecks->make_iterator();
-        mxChecks->insert(nullptr, -1, nullptr, nullptr, nullptr, nullptr, false, xYearEntry.get());
-        mxChecks->set_toggle(*xYearEntry, TRISTATE_FALSE);
-        mxChecks->set_text(*xYearEntry, aYearName, 0);
+        xYearEntry = mpChecks->make_iterator();
+        mpChecks->insert(nullptr, -1, nullptr, nullptr, nullptr, nullptr, false, xYearEntry.get());
+        mpChecks->set_toggle(*xYearEntry, TRISTATE_FALSE);
+        mpChecks->set_text(*xYearEntry, aYearName, 0);
         ScCheckListMember aMemYear;
         aMemYear.maName = aYearName;
         aMemYear.maRealName = rsName;
@@ -866,10 +871,10 @@ void ScCheckListMenuControl::addDateMember(const OUString& rsName, double nVal, 
     std::unique_ptr<weld::TreeIter> xMonthEntry = FindEntry(xYearEntry.get(), aMonthName);
     if (!xMonthEntry)
     {
-        xMonthEntry = mxChecks->make_iterator();
-        mxChecks->insert(xYearEntry.get(), -1, nullptr, nullptr, nullptr, nullptr, false, xMonthEntry.get());
-        mxChecks->set_toggle(*xMonthEntry, TRISTATE_FALSE);
-        mxChecks->set_text(*xMonthEntry, aMonthName, 0);
+        xMonthEntry = mpChecks->make_iterator();
+        mpChecks->insert(xYearEntry.get(), -1, nullptr, nullptr, nullptr, nullptr, false, xMonthEntry.get());
+        mpChecks->set_toggle(*xMonthEntry, TRISTATE_FALSE);
+        mpChecks->set_text(*xMonthEntry, aMonthName, 0);
         ScCheckListMember aMemMonth;
         aMemMonth.maName = aMonthName;
         aMemMonth.maRealName = rsName;
@@ -885,10 +890,10 @@ void ScCheckListMenuControl::addDateMember(const OUString& rsName, double nVal, 
     std::unique_ptr<weld::TreeIter> xDayEntry = FindEntry(xMonthEntry.get(), aDayName);
     if (!xDayEntry)
     {
-        xDayEntry = mxChecks->make_iterator();
-        mxChecks->insert(xMonthEntry.get(), -1, nullptr, nullptr, nullptr, nullptr, false, xDayEntry.get());
-        mxChecks->set_toggle(*xDayEntry, TRISTATE_FALSE);
-        mxChecks->set_text(*xDayEntry, aDayName, 0);
+        xDayEntry = mpChecks->make_iterator();
+        mpChecks->insert(xMonthEntry.get(), -1, nullptr, nullptr, nullptr, nullptr, false, xDayEntry.get());
+        mpChecks->set_toggle(*xDayEntry, TRISTATE_FALSE);
+        mpChecks->set_text(*xDayEntry, aDayName, 0);
         ScCheckListMember aMemDay;
         aMemDay.maName = aDayName;
         aMemDay.maRealName = rsName;
@@ -903,7 +908,7 @@ void ScCheckListMenuControl::addDateMember(const OUString& rsName, double nVal, 
         maMembers.emplace_back(std::move(aMemDay));
     }
 
-    mxChecks->thaw();
+    mpChecks->thaw();
 }
 
 void ScCheckListMenuControl::addMember(const OUString& rName, bool bVisible)
@@ -919,13 +924,13 @@ void ScCheckListMenuControl::addMember(const OUString& rName, bool bVisible)
 
 std::unique_ptr<weld::TreeIter> ScCheckListMenuControl::FindEntry(const weld::TreeIter* pParent, const OUString& sNode)
 {
-    std::unique_ptr<weld::TreeIter> xEntry = mxChecks->make_iterator(pParent);
-    bool bEntry = pParent ? mxChecks->iter_children(*xEntry) : mxChecks->get_iter_first(*xEntry);
+    std::unique_ptr<weld::TreeIter> xEntry = mpChecks->make_iterator(pParent);
+    bool bEntry = pParent ? mpChecks->iter_children(*xEntry) : mpChecks->get_iter_first(*xEntry);
     while (bEntry)
     {
-        if (sNode == mxChecks->get_text(*xEntry, 0))
+        if (sNode == mpChecks->get_text(*xEntry, 0))
             return xEntry;
-        bEntry = mxChecks->iter_next_sibling(*xEntry);
+        bEntry = mpChecks->iter_next_sibling(*xEntry);
     }
     return nullptr;
 }
@@ -933,32 +938,32 @@ std::unique_ptr<weld::TreeIter> ScCheckListMenuControl::FindEntry(const weld::Tr
 void ScCheckListMenuControl::GetRecursiveChecked(const weld::TreeIter* pEntry, std::unordered_set<OUString>& vOut,
                                                  OUString& rLabel)
 {
-    if (mxChecks->get_toggle(*pEntry) != TRISTATE_TRUE)
+    if (mpChecks->get_toggle(*pEntry) != TRISTATE_TRUE)
         return;
 
     // We have to hash parents and children together.
     // Per convention for easy access in getResult()
     // "child;parent;grandparent" while descending.
     if (rLabel.isEmpty())
-        rLabel = mxChecks->get_text(*pEntry, 0);
+        rLabel = mpChecks->get_text(*pEntry, 0);
     else
-        rLabel = mxChecks->get_text(*pEntry, 0) + ";" + rLabel;
+        rLabel = mpChecks->get_text(*pEntry, 0) + ";" + rLabel;
 
     // Prerequisite: the selection mechanism guarantees that if a child is
     // selected then also the parent is selected, so we only have to
     // inspect the children in case the parent is selected.
-    if (!mxChecks->iter_has_child(*pEntry))
+    if (!mpChecks->iter_has_child(*pEntry))
         return;
 
-    std::unique_ptr<weld::TreeIter> xChild(mxChecks->make_iterator(pEntry));
-    bool bChild = mxChecks->iter_children(*xChild);
+    std::unique_ptr<weld::TreeIter> xChild(mpChecks->make_iterator(pEntry));
+    bool bChild = mpChecks->iter_children(*xChild);
     while (bChild)
     {
         OUString aLabel = rLabel;
         GetRecursiveChecked(xChild.get(), vOut, aLabel);
         if (!aLabel.isEmpty() && aLabel != rLabel)
             vOut.insert(aLabel);
-        bChild = mxChecks->iter_next_sibling(*xChild);
+        bChild = mpChecks->iter_next_sibling(*xChild);
     }
     // Let the caller not add the parent alone.
     rLabel.clear();
@@ -968,15 +973,15 @@ std::unordered_set<OUString> ScCheckListMenuControl::GetAllChecked()
 {
     std::unordered_set<OUString> vResults(0);
 
-    std::unique_ptr<weld::TreeIter> xEntry = mxChecks->make_iterator();
-    bool bEntry = mxChecks->get_iter_first(*xEntry);
+    std::unique_ptr<weld::TreeIter> xEntry = mpChecks->make_iterator();
+    bool bEntry = mpChecks->get_iter_first(*xEntry);
     while (bEntry)
     {
         OUString aLabel;
         GetRecursiveChecked(xEntry.get(), vResults, aLabel);
         if (!aLabel.isEmpty())
             vResults.insert(aLabel);
-        bEntry = mxChecks->iter_next_sibling(*xEntry);
+        bEntry = mpChecks->iter_next_sibling(*xEntry);
     }
 
     return vResults;
@@ -985,7 +990,7 @@ std::unordered_set<OUString> ScCheckListMenuControl::GetAllChecked()
 bool ScCheckListMenuControl::IsChecked(const OUString& sName, const weld::TreeIter* pParent)
 {
     std::unique_ptr<weld::TreeIter> xEntry = FindEntry(pParent, sName);
-    return xEntry && mxChecks->get_toggle(*xEntry) == TRISTATE_TRUE;
+    return xEntry && mpChecks->get_toggle(*xEntry) == TRISTATE_TRUE;
 }
 
 void ScCheckListMenuControl::CheckEntry(const OUString& sName, const weld::TreeIter* pParent, bool bCheck)
@@ -998,13 +1003,13 @@ void ScCheckListMenuControl::CheckEntry(const OUString& sName, const weld::TreeI
 // Recursively check all children of rParent
 void ScCheckListMenuControl::CheckAllChildren(const weld::TreeIter& rParent, bool bCheck)
 {
-    mxChecks->set_toggle(rParent, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE);
-    std::unique_ptr<weld::TreeIter> xEntry = mxChecks->make_iterator(&rParent);
-    bool bEntry = mxChecks->iter_children(*xEntry);
+    mpChecks->set_toggle(rParent, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE);
+    std::unique_ptr<weld::TreeIter> xEntry = mpChecks->make_iterator(&rParent);
+    bool bEntry = mpChecks->iter_children(*xEntry);
     while (bEntry)
     {
         CheckAllChildren(*xEntry, bCheck);
-        bEntry = mxChecks->iter_next_sibling(*xEntry);
+        bEntry = mpChecks->iter_next_sibling(*xEntry);
     }
 }
 
@@ -1014,31 +1019,31 @@ void ScCheckListMenuControl::CheckEntry(const weld::TreeIter& rParent, bool bChe
     CheckAllChildren(rParent, bCheck);
     // checking rParent can affect ancestors, e.g. if ancestor is unchecked and rParent is
     // now checked then the ancestor needs to be checked also
-    if (!mxChecks->get_iter_depth(rParent))
+    if (!mpChecks->get_iter_depth(rParent))
         return;
 
-    std::unique_ptr<weld::TreeIter> xAncestor(mxChecks->make_iterator(&rParent));
-    bool bAncestor = mxChecks->iter_parent(*xAncestor);
+    std::unique_ptr<weld::TreeIter> xAncestor(mpChecks->make_iterator(&rParent));
+    bool bAncestor = mpChecks->iter_parent(*xAncestor);
     while (bAncestor)
     {
         // if any first level children checked then ancestor
         // needs to be checked, similarly if no first level children
         // checked then ancestor needs to be unchecked
-        std::unique_ptr<weld::TreeIter> xChild(mxChecks->make_iterator(xAncestor.get()));
-        bool bChild = mxChecks->iter_children(*xChild);
+        std::unique_ptr<weld::TreeIter> xChild(mpChecks->make_iterator(xAncestor.get()));
+        bool bChild = mpChecks->iter_children(*xChild);
         bool bChildChecked = false;
 
         while (bChild)
         {
-            if (mxChecks->get_toggle(*xChild) == TRISTATE_TRUE)
+            if (mpChecks->get_toggle(*xChild) == TRISTATE_TRUE)
             {
                 bChildChecked = true;
                 break;
             }
-            bChild = mxChecks->iter_next_sibling(*xChild);
+            bChild = mpChecks->iter_next_sibling(*xChild);
         }
-        mxChecks->set_toggle(*xAncestor, bChildChecked ? TRISTATE_TRUE : TRISTATE_FALSE);
-        bAncestor = mxChecks->iter_parent(*xAncestor);
+        mpChecks->set_toggle(*xAncestor, bChildChecked ? TRISTATE_TRUE : TRISTATE_FALSE);
+        bAncestor = mpChecks->iter_parent(*xAncestor);
     }
 }
 
@@ -1060,50 +1065,50 @@ std::unique_ptr<weld::TreeIter> ScCheckListMenuControl::ShowCheckEntry(const OUS
                 std::unique_ptr<weld::TreeIter> xYearEntry = FindEntry(nullptr, rMember.maDateParts[0]);
                 if (!xYearEntry)
                 {
-                    xYearEntry = mxChecks->make_iterator();
-                    mxChecks->insert(nullptr, -1, nullptr, nullptr, nullptr, nullptr, false, xYearEntry.get());
-                    mxChecks->set_toggle(*xYearEntry, TRISTATE_FALSE);
-                    mxChecks->set_text(*xYearEntry, rMember.maDateParts[0], 0);
+                    xYearEntry = mpChecks->make_iterator();
+                    mpChecks->insert(nullptr, -1, nullptr, nullptr, nullptr, nullptr, false, xYearEntry.get());
+                    mpChecks->set_toggle(*xYearEntry, TRISTATE_FALSE);
+                    mpChecks->set_text(*xYearEntry, rMember.maDateParts[0], 0);
                 }
                 std::unique_ptr<weld::TreeIter> xMonthEntry = FindEntry(xYearEntry.get(), rMember.maDateParts[1]);
                 if (!xMonthEntry)
                 {
-                    xMonthEntry = mxChecks->make_iterator();
-                    mxChecks->insert(xYearEntry.get(), -1, nullptr, nullptr, nullptr, nullptr, false, xMonthEntry.get());
-                    mxChecks->set_toggle(*xMonthEntry, TRISTATE_FALSE);
-                    mxChecks->set_text(*xMonthEntry, rMember.maDateParts[1], 0);
+                    xMonthEntry = mpChecks->make_iterator();
+                    mpChecks->insert(xYearEntry.get(), -1, nullptr, nullptr, nullptr, nullptr, false, xMonthEntry.get());
+                    mpChecks->set_toggle(*xMonthEntry, TRISTATE_FALSE);
+                    mpChecks->set_text(*xMonthEntry, rMember.maDateParts[1], 0);
                 }
                 std::unique_ptr<weld::TreeIter> xDayEntry = FindEntry(xMonthEntry.get(), rMember.maName);
                 if (!xDayEntry)
                 {
-                    xDayEntry = mxChecks->make_iterator();
-                    mxChecks->insert(xMonthEntry.get(), -1, nullptr, nullptr, nullptr, nullptr, false, xDayEntry.get());
-                    mxChecks->set_toggle(*xDayEntry, TRISTATE_FALSE);
-                    mxChecks->set_text(*xDayEntry, rMember.maName, 0);
+                    xDayEntry = mpChecks->make_iterator();
+                    mpChecks->insert(xMonthEntry.get(), -1, nullptr, nullptr, nullptr, nullptr, false, xDayEntry.get());
+                    mpChecks->set_toggle(*xDayEntry, TRISTATE_FALSE);
+                    mpChecks->set_text(*xDayEntry, rMember.maName, 0);
                 }
                 return xDayEntry; // Return leaf node
             }
 
-            xEntry = mxChecks->make_iterator();
-            mxChecks->append(xEntry.get());
-            mxChecks->set_toggle(*xEntry, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE);
-            mxChecks->set_text(*xEntry, sName, 0);
+            xEntry = mpChecks->make_iterator();
+            mpChecks->append(xEntry.get());
+            mpChecks->set_toggle(*xEntry, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE);
+            mpChecks->set_text(*xEntry, sName, 0);
         }
         else
             CheckEntry(*xEntry, bCheck);
     }
     else if (xEntry)
     {
-        mxChecks->remove(*xEntry);
+        mpChecks->remove(*xEntry);
         if (rMember.mxParent)
         {
-            std::unique_ptr<weld::TreeIter> xParent(mxChecks->make_iterator(rMember.mxParent.get()));
-            while (xParent && !mxChecks->iter_has_child(*xParent))
+            std::unique_ptr<weld::TreeIter> xParent(mpChecks->make_iterator(rMember.mxParent.get()));
+            while (xParent && !mpChecks->iter_has_child(*xParent))
             {
-                std::unique_ptr<weld::TreeIter> xTmp(mxChecks->make_iterator(xParent.get()));
-                if (!mxChecks->iter_parent(*xParent))
+                std::unique_ptr<weld::TreeIter> xTmp(mpChecks->make_iterator(xParent.get()));
+                if (!mpChecks->iter_parent(*xParent))
                     xParent.reset();
-                mxChecks->remove(*xTmp);
+                mpChecks->remove(*xTmp);
             }
         }
     }
@@ -1114,8 +1119,8 @@ int ScCheckListMenuControl::GetCheckedEntryCount() const
 {
     int nRet = 0;
 
-    mxChecks->all_foreach([this, &nRet](weld::TreeIter& rEntry){
-        if (mxChecks->get_toggle(rEntry) == TRISTATE_TRUE)
+    mpChecks->all_foreach([this, &nRet](weld::TreeIter& rEntry){
+        if (mpChecks->get_toggle(rEntry) == TRISTATE_TRUE)
             ++nRet;
         return false;
     });
@@ -1129,13 +1134,13 @@ IMPL_LINK(ScCheckListMenuControl, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 
     if ( rKey.GetCode() == KEY_RETURN || rKey.GetCode() == KEY_SPACE )
     {
-        std::unique_ptr<weld::TreeIter> xEntry = mxChecks->make_iterator();
-        bool bEntry = mxChecks->get_cursor(xEntry.get());
+        std::unique_ptr<weld::TreeIter> xEntry = mpChecks->make_iterator();
+        bool bEntry = mpChecks->get_cursor(xEntry.get());
         if (bEntry)
         {
-            bool bOldCheck = mxChecks->get_toggle(*xEntry) == TRISTATE_TRUE;
+            bool bOldCheck = mpChecks->get_toggle(*xEntry) == TRISTATE_TRUE;
             CheckEntry(*xEntry, !bOldCheck);
-            bool bNewCheck = mxChecks->get_toggle(*xEntry) == TRISTATE_TRUE;
+            bool bNewCheck = mpChecks->get_toggle(*xEntry) == TRISTATE_TRUE;
             if (bOldCheck != bNewCheck)
                 Check(xEntry.get());
         }
@@ -1148,7 +1153,19 @@ IMPL_LINK(ScCheckListMenuControl, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 void ScCheckListMenuControl::setHasDates(bool bHasDates)
 {
     mbHasDates = bHasDates;
-    mxChecks->set_show_expanders(mbHasDates);
+
+    /*
+       tdf#136559 If we have no dates we don't need a tree
+       structure, just a list. GtkListStore can be then
+       used which is much faster than a GtkTreeStore, so
+       with no dates switch to the treeview which uses the
+       faster GtkListStore
+    */
+    assert(!mpChecks->n_children());
+    mpChecks->hide();
+    mpChecks = bHasDates ? mxTreeChecks.get() : mxListChecks.get();
+    mpChecks->show();
+    assert(!mpChecks->n_children());
 }
 
 namespace
@@ -1171,24 +1188,24 @@ size_t ScCheckListMenuControl::initMembers(int nMaxMemberWidth)
     if (nMaxMemberWidth == -1)
         nMaxMemberWidth = mnCheckWidthReq;
 
-    if (!mxChecks->n_children() && !mbHasDates)
+    if (!mpChecks->n_children() && !mbHasDates)
     {
         std::vector<int> aFixedWidths { nMaxMemberWidth };
         // tdf#134038 insert in the fastest order, this might be backwards so only do it for
         // the !mbHasDates case where no entry depends on another to exist before getting
         // inserted. We cannot retain pre-existing treeview content, only clear and fill it.
-        mxChecks->bulk_insert_for_each(n, [this, &nVisMemCount](weld::TreeIter& rIter, int i) {
+        mpChecks->bulk_insert_for_each(n, [this, &nVisMemCount](weld::TreeIter& rIter, int i) {
             assert(!maMembers[i].mbDate);
-            insertMember(*mxChecks, rIter, maMembers[i]);
+            insertMember(*mpChecks, rIter, maMembers[i]);
             if (maMembers[i].mbVisible)
                 ++nVisMemCount;
         }, &aFixedWidths);
     }
     else
     {
-        mxChecks->freeze();
+        mpChecks->freeze();
 
-        std::unique_ptr<weld::TreeIter> xEntry = mxChecks->make_iterator();
+        std::unique_ptr<weld::TreeIter> xEntry = mpChecks->make_iterator();
         std::vector<std::unique_ptr<weld::TreeIter>> aExpandRows;
 
         for (size_t i = 0; i < n; ++i)
@@ -1206,18 +1223,18 @@ size_t ScCheckListMenuControl::initMembers(int nMaxMemberWidth)
             }
             else
             {
-                mxChecks->append(xEntry.get());
-                insertMember(*mxChecks, *xEntry, maMembers[i]);
+                mpChecks->append(xEntry.get());
+                insertMember(*mpChecks, *xEntry, maMembers[i]);
             }
 
             if (maMembers[i].mbVisible)
                 ++nVisMemCount;
         }
 
-        mxChecks->thaw();
+        mpChecks->thaw();
 
         for (auto& rRow : aExpandRows)
-            mxChecks->expand_row(*rRow);
+            mpChecks->expand_row(*rRow);
     }
 
     if (nVisMemCount == n)
@@ -1239,7 +1256,7 @@ size_t ScCheckListMenuControl::initMembers(int nMaxMemberWidth)
     }
 
     if (nVisMemCount)
-        mxChecks->select(0);
+        mpChecks->select(0);
 
     return nVisMemCount;
 }
@@ -1272,12 +1289,12 @@ void ScCheckListMenuControl::getResult(ResultType& rResult)
             // Checked labels are in the form "child;parent;grandparent".
             if (maMembers[i].mxParent)
             {
-                std::unique_ptr<weld::TreeIter> xIter(mxChecks->make_iterator(maMembers[i].mxParent.get()));
+                std::unique_ptr<weld::TreeIter> xIter(mpChecks->make_iterator(maMembers[i].mxParent.get()));
                 do
                 {
-                    aLabel.append(";").append(mxChecks->get_text(*xIter));
+                    aLabel.append(";").append(mpChecks->get_text(*xIter));
                 }
-                while (mxChecks->iter_parent(*xIter));
+                while (mpChecks->iter_parent(*xIter));
             }
 
             bool bState = vCheckeds.find(aLabel.makeStringAndClear()) != vCheckeds.end();
@@ -1367,8 +1384,8 @@ int ScCheckListMenuControl::IncreaseWindowWidthToFitText(int nMaxTextWidth)
     if (nNewWidth > mnCheckWidthReq)
     {
         mnCheckWidthReq = nNewWidth;
-        int nChecksHeight = mxChecks->get_height_rows(9);
-        mxChecks->set_size_request(mnCheckWidthReq, nChecksHeight);
+        int nChecksHeight = mpChecks->get_height_rows(9);
+        mpChecks->set_size_request(mnCheckWidthReq, nChecksHeight);
     }
     return mnCheckWidthReq + nBorder;
 }

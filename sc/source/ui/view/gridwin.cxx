@@ -660,6 +660,11 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     // Estimate the width (in pixels) of the longest text in the list
     ScFilterEntries aFilterEntries;
     rDoc.GetFilterEntries(nCol, nRow, nTab, aFilterEntries);
+
+    // Set this early so the list or tree widget is selected for use before we might
+    // use IncreaseWindowWidthToFitText to change its width
+    rControl.setHasDates(aFilterEntries.mbHasDates);
+
     int nMaxTextWidth = 0;
     if (aFilterEntries.size() <= 10)
     {
@@ -740,8 +745,6 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     }
 
     // Populate the check box list.
-
-    rControl.setHasDates(aFilterEntries.mbHasDates);
     rControl.setMemberSize(aFilterEntries.size());
     for (const auto& rEntry : aFilterEntries)
     {
