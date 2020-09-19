@@ -16,6 +16,24 @@
       "revId": "db074e968b7dc4bc1f81d30d6b21736c303539bb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "362520fa_d9cb0c6a",
+        "filename": "vcl/source/font/fontcharmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-09-19T10:49:34Z",
+      "side": 1,
+      "message": "Maybe. I didn\u0027t check, if the variable is used for other calculations and could overflow. Looking at the code again, your suggestion seems the better fix, but then I probably get un-/signed comparison warnings. The whole code reads unsigned data into signed variables, but then it\u0027s most times shorts into ints. Guess I\u0027m just too lazy today...",
+      "parentUuid": "5b8f4f40_f301854d",
+      "revId": "db074e968b7dc4bc1f81d30d6b21736c303539bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
