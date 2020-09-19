@@ -243,15 +243,18 @@ SwFormat::~SwFormat()
 
 void SwFormat::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
 {
-    bool bContinue = true; // true = pass on to dependent ones
-
-    sal_uInt16 nWhich = pOldValue ? pOldValue->Which() :
-                    pNewValue ? pNewValue->Which() : 0 ;
+    std::unique_ptr<SwAttrSetChg> pOldClientChg, pNewClientChg;
+    auto aDependArgs = std::pair<const SfxPoolItem*, const SfxPoolItem*>(pOldValue, pNewValue);
+    bool bPassToDepends = true;
+    const sal_uInt16 nWhich = pOldValue ? pOldValue->Which()
+            : pNewValue ? pNewValue->Which()
+            : 0;
     switch( nWhich )
     {
     case 0:     break;          // Which-Id of 0?
 
     case RES_OBJECTDYING:
+        // NB: this still notifies depends even if pNewValue is nullptr, which seems non-obvious
         if (pNewValue)
         {
             // If the dying object is the parent format of this format so
@@ -277,18 +280,20 @@ void SwFormat::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValu
         }
         break;
     case RES_ATTRSET_CHG:
+        // NB: this still notifies depends even if this condition is not met, whoch seems non-obvious
         if (pOldValue && pNewValue && static_cast<const SwAttrSetChg*>(pOldValue)->GetTheChgdSet() != &m_aSet)
         {
-            // pass only those that are not set
-            SwAttrSetChg aOld( *static_cast<const SwAttrSetChg*>(pOldValue) );
-            SwAttrSetChg aNew( *static_cast<const SwAttrSetChg*>(pNewValue) );
-
-            aOld.GetChgSet()->Differentiate( m_aSet );
-            aNew.GetChgSet()->Differentiate( m_aSet );
-
-            if( aNew.Count() )
-                NotifyClients( &aOld, &aNew );
-            bContinue = false;
+            // pass only those that are not set ...
+            pNewClientChg.reset( new SwAttrSetChg(*static_cast<const SwAttrSetChg*>(pNewValue)) );
+            pNewClientChg->GetChgSet()->Differentiate( m_aSet );
+            if(pNewClientChg->Count()) // ... if any
+            {
+                pOldClientChg.reset( new SwAttrSetChg(*static_cast<const SwAttrSetChg*>(pOldValue)) );
+                pOldClientChg->GetChgSet()->Differentiate( m_aSet );
+                aDependArgs = std::pair<const SfxPoolItem*, const SfxPoolItem*>(pOldClientChg.get(), pNewClientChg.get());
+            }
+            else
+                bPassToDepends = false;
         }
         break;
     case RES_FMT_CHG:
@@ -296,6 +301,7 @@ void SwFormat::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValu
         // the new one
 
         // skip my own Modify
+        // NB: this still notifies depends even if this condition is not met, whoch seems non-obvious
         if ( pOldValue && pNewValue &&
             static_cast<const SwFormatChg*>(pOldValue)->pChangedFormat != this &&
             static_cast<const SwFormatChg*>(pNewValue)->pChangedFormat == GetRegisteredIn() )
@@ -311,16 +317,12 @@ void SwFormat::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValu
             {
                 // DropCaps might come into this block
                 OSL_ENSURE( RES_PARATR_DROP == nWhich, "Modify was sent without sender" );
-                bContinue = false;
+                bPassToDepends = false;
             }
         }
     }
-
-    if( bContinue )
-    {
-        // walk over all dependent formats
-        NotifyClients( pOldValue, pNewValue );
-    }
+    if(bPassToDepends)
+        NotifyClients(aDependArgs.first, aDependArgs.second);
 }
 
 bool SwFormat::SetDerivedFrom(SwFormat *pDerFrom)
