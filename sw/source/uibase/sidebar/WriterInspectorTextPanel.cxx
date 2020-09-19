@@ -425,25 +425,35 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
     svx::sidebar::TreeNode aDFNode;
     svx::sidebar::TreeNode aCharNode;
     svx::sidebar::TreeNode aParaNode;
+    svx::sidebar::TreeNode aParaDFNode;
 
     aDFNode.sNodeName = "Direct Formatting";
     aCharNode.sNodeName = "Character Styles";
     aParaNode.sNodeName = "Paragraph Styles";
+    aParaDFNode.sNodeName = "Paragraph Direct Formatting";
     aDFNode.NodeType = svx::sidebar::TreeNode::Category;
     aCharNode.NodeType = svx::sidebar::TreeNode::Category;
     aParaNode.NodeType = svx::sidebar::TreeNode::Category;
+    aParaDFNode.NodeType = svx::sidebar::TreeNode::Category;
 
     uno::Reference<text::XTextRange> xRange(
         SwXTextRange::CreateXTextRange(*pDoc, *pCursor->GetPoint(), nullptr));
     uno::Reference<beans::XPropertySet> xPropertiesSet(xRange, uno::UNO_QUERY_THROW);
     std::unordered_map<OUString, bool> aIsDefined;
 
-    InsertValues(xRange, aIsDefined, aDFNode, false,
-                 { UNO_NAME_RSID, UNO_NAME_PARA_IS_NUMBERING_RESTART, UNO_NAME_PARA_STYLE_NAME,
-                   UNO_NAME_PARA_CONDITIONAL_STYLE_NAME, UNO_NAME_PAGE_STYLE_NAME,
-                   UNO_NAME_NUMBERING_START_VALUE, UNO_NAME_NUMBERING_IS_NUMBER,
-                   UNO_NAME_PARA_CONTINUEING_PREVIOUS_SUB_TREE, UNO_NAME_CHAR_STYLE_NAME,
-                   UNO_NAME_NUMBERING_LEVEL });
+    const std::vector<OUString> aHiddenProperties{ UNO_NAME_RSID,
+                                                   UNO_NAME_PARA_IS_NUMBERING_RESTART,
+                                                   UNO_NAME_PARA_STYLE_NAME,
+                                                   UNO_NAME_PARA_CONDITIONAL_STYLE_NAME,
+                                                   UNO_NAME_PAGE_STYLE_NAME,
+                                                   UNO_NAME_NUMBERING_START_VALUE,
+                                                   UNO_NAME_NUMBERING_IS_NUMBER,
+                                                   UNO_NAME_PARA_CONTINUEING_PREVIOUS_SUB_TREE,
+                                                   UNO_NAME_CHAR_STYLE_NAME,
+                                                   UNO_NAME_NUMBERING_LEVEL,
+                                                   UNO_NAME_PARRSID };
+
+    InsertValues(xRange, aIsDefined, aDFNode, false, aHiddenProperties);
 
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(pDocSh->GetBaseModel(),
                                                                          uno::UNO_QUERY);
@@ -468,6 +478,13 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
 
         aCharNode.children.push_back(aCurrentChild);
     }
+
+    // Collect paragraph direct formatting
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xRange, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xThisParagraphRange(xParaEnum->nextElement(),
+                                                         uno::UNO_QUERY_THROW);
+    InsertValues(xThisParagraphRange, aIsDefined, aParaDFNode, false, aHiddenProperties);
 
     xStyleFamily.set(xStyleFamilies->getByName("ParagraphStyles"), uno::UNO_QUERY_THROW);
 
@@ -494,10 +511,12 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
     /*
     Display Order :-
     PARAGRAPH STYLE
+    PARAGRAPH DIRECT FORMATTING
     CHARACTER STYLE
     DIRECT FORMATTING
     */
     aStore.push_back(aParaNode);
+    aStore.push_back(aParaDFNode);
     aStore.push_back(aCharNode);
     aStore.push_back(aDFNode);
 }
