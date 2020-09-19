@@ -220,7 +220,7 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<Bitmap>& rBi
     (void)rBitmaps;
     (void)nFirstPage;
     (void)nPages;
-    (void)fResolutionDPI;
+    (void)pSizeHint;
     return 0;
 #endif // HAVE_FEATURE_PDFIUM
 }
