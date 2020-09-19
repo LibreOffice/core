@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5b8f4f40_f301854d",
+        "filename": "vcl/source/font/fontcharmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-09-19T10:37:55Z",
+      "side": 1,
+      "message": "looks like the bug is that this should be \"unsigned\" not \"int\", based on the signature of GetUInt",
+      "revId": "db074e968b7dc4bc1f81d30d6b21736c303539bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
