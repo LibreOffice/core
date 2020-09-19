@@ -41,6 +41,8 @@
 
 namespace sw::sidebar
 {
+static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& aStore);
+
 VclPtr<vcl::Window> WriterInspectorTextPanel::Create(vcl::Window* pParent,
                                                      const uno::Reference<frame::XFrame>& rxFrame)
 {
@@ -65,6 +67,12 @@ WriterInspectorTextPanel::WriterInspectorTextPanel(vcl::Window* pParent,
         m_oldLink = m_pShell->GetChgLnk();
         m_pShell->SetChgLnk(LINK(this, WriterInspectorTextPanel, AttrChangedNotify));
     }
+
+    // Update panel on start
+    std::vector<svx::sidebar::TreeNode> aStore;
+    if (pDocSh->GetDoc()->GetEditShell()->GetCursor()->GetNode().GetTextNode())
+        UpdateTree(pDocSh, aStore);
+    updateEntries(aStore);
 }
 
 WriterInspectorTextPanel::~WriterInspectorTextPanel() { disposeOnce(); }
