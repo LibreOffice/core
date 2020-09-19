@@ -34,6 +34,24 @@
       "revId": "db074e968b7dc4bc1f81d30d6b21736c303539bb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfac5e86_fb93fbe9",
+        "filename": "vcl/source/font/fontcharmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-09-19T11:26:32Z",
+      "side": 1,
+      "message": "I think its easier to just continue with it signed, at least for the now.",
+      "parentUuid": "362520fa_d9cb0c6a",
+      "revId": "db074e968b7dc4bc1f81d30d6b21736c303539bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
