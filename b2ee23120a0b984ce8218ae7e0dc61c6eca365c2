@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a63b9ba_34b29e90",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-19T11:19:00Z",
+      "side": 1,
+      "message": "This is tdf#136596. Please split the change into the two.",
+      "range": {
+        "startLine": 345,
+        "startChar": 30,
+        "endLine": 345,
+        "endChar": 46
+      },
+      "revId": "b2ee23120a0b984ce8218ae7e0dc61c6eca365c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a168ce0a_08f7cbf7",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-19T11:19:00Z",
+      "side": 1,
+      "message": "\"Parent\" might be misleading (possibly better call this \"xThisParagraphRange\"?).",
+      "range": {
+        "startLine": 495,
+        "startChar": 38,
+        "endLine": 495,
+        "endChar": 44
+      },
+      "revId": "b2ee23120a0b984ce8218ae7e0dc61c6eca365c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a54ca38_8094e2b7",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-19T11:19:00Z",
+      "side": 1,
+      "message": "No, the direct formatting should not be inside paragraph style, it should be on the top level, between paragraph styles and character styles - so between lines 529 and 530 below.",
+      "range": {
+        "startLine": 521,
+        "startChar": 8,
+        "endLine": 521,
+        "endChar": 50
+      },
+      "revId": "b2ee23120a0b984ce8218ae7e0dc61c6eca365c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
