@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "53104f8d_7857760e",
+        "filename": "sw/source/core/access/AccessibilityCheck.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 694,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-19T13:31:08Z",
+      "side": 1,
+      "message": "Rather the other way round: heading paragraphs (with outline levels \u003e 0) are not allowed in tables.",
+      "range": {
+        "startLine": 694,
+        "startChar": 4,
+        "endLine": 694,
+        "endChar": 44
+      },
+      "revId": "15d560effef306330b682d7afc69e6fd97dae826",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5f82f34_b7b3e743",
+        "filename": "sw/source/core/access/AccessibilityCheck.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-19T13:31:08Z",
+      "side": 1,
+      "message": "Why \"static\"? it\u0027s normal, non-static, member.\nI\u0027d just use a boolean member - do we need several warnings for a single test (even if for different tables)? But maybe yes... ?",
+      "range": {
+        "startLine": 698,
+        "startChar": 7,
+        "endLine": 698,
+        "endChar": 14
+      },
+      "revId": "15d560effef306330b682d7afc69e6fd97dae826",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0cc3bb2_092b9602",
+        "filename": "sw/source/core/access/AccessibilityCheck.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 704,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-19T13:31:08Z",
+      "side": 1,
+      "message": "This is the default ctor, no need to use it explicitly (it\u0027s just a code bloat).",
+      "range": {
+        "startLine": 704,
+        "startChar": 10,
+        "endLine": 704,
+        "endChar": 20
+      },
+      "revId": "15d560effef306330b682d7afc69e6fd97dae826",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
