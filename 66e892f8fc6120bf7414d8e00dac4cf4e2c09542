@@ -69,6 +69,29 @@
       "revId": "66e892f8fc6120bf7414d8e00dac4cf4e2c09542",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "079c02c4_11afa1b7",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-19T15:04:30Z",
+      "side": 1,
+      "message": "Oh, seems I\u0027m very bad reviewer. I tend to notice things only after I have sent previous note.\n\nHere we need to add respective line into the \"Display Order\" comment :-)",
+      "range": {
+        "startLine": 512,
+        "startChar": 4,
+        "endLine": 512,
+        "endChar": 19
+      },
+      "revId": "66e892f8fc6120bf7414d8e00dac4cf4e2c09542",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
