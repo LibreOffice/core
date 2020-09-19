@@ -152,7 +152,7 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
 
         int nTmpOffset = GetUInt( p+4 );
 
-        if (nTmpOffset + 2 > nLength)
+        if (nTmpOffset + 2 > nLength || nTmpOffset < 0)
             continue;
 
         int nTmpFormat = GetUShort( pCmap + nTmpOffset );
