@@ -22,6 +22,30 @@
       "revId": "a7809e403cb529070bf72c1a8db778b66eb6ea4c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65840f8d_074e1de9",
+        "filename": "sc/source/core/data/validat.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-09-19T22:16:43Z",
+      "side": 1,
+      "message": "There won\u0027t be a proper \"fix\" for 1234.00 as for numeric always the possible input string is checked, in which trailing 0 decimals are superfluous. 1234.00 could only be a display format.\nIn fact such trailing 0 decimals are also discarded during input validation, so 1.345 and 1.34500 both match a text length of 5, see comment in IsDataValid().\n\nHowever, date and time input does not work, e.g. text length 10 and input 1999-11-23 is valid, but not for the detective. The raw numeric value can\u0027t be simply converted to string.\n\nRather directly use the same GetInputLineString() mechanism as in IsDataValid() with the numeric value instead of this conversion to string, so both validity and detective do the same check. Actually the\n\n if (SC_VALID_TEXTLEN \u003d\u003d eDataMode)\n     ...\n\nblock could be made a subroutine called by both.",
+      "parentUuid": "3fe19338_03e82f18",
+      "range": {
+        "startLine": 601,
+        "startChar": 14,
+        "endLine": 603,
+        "endChar": 49
+      },
+      "revId": "a7809e403cb529070bf72c1a8db778b66eb6ea4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
