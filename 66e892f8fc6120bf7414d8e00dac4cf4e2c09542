@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "21212367_7c6a6322",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-19T14:14:12Z",
+      "side": 1,
+      "message": "We should use UNO_QUERY_THROW here, to be sure that the next line works with valid reference...",
+      "range": {
+        "startLine": 483,
+        "startChar": 79,
+        "endLine": 483,
+        "endChar": 88
+      },
+      "revId": "66e892f8fc6120bf7414d8e00dac4cf4e2c09542",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
