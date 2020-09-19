@@ -448,28 +448,24 @@ void SdImportTest::testN759180()
 
     const SdrPage *pPage = GetPage( 1, xDocShRef );
 
-    //sal_uIntPtr nObjs = pPage->GetObjCount();
-    //for (sal_uIntPtr i = 0; i < nObjs; i++)
+    // Get the object
+    SdrObject *pObj = pPage->GetObj(0);
+    SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pObj );
+    CPPUNIT_ASSERT(pTxtObj);
+    std::vector<EECharAttrib> rLst;
+    const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
+    const SvxULSpaceItem *pULSpace = aEdit.GetParaAttribs(0).GetItem(EE_PARA_ULSPACE);
+    CPPUNIT_ASSERT(pULSpace);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Para bottom spacing is wrong!", static_cast<sal_uInt16>(0), pULSpace->GetLower());
+    aEdit.GetCharAttribs(1, rLst);
+    auto it = std::find_if(rLst.rbegin(), rLst.rend(),
+        [](const EECharAttrib& rCharAttr) { return dynamic_cast<const SvxFontHeightItem *>(rCharAttr.pAttr) != nullptr; });
+    if (it != rLst.rend())
     {
-        // Get the object
-        SdrObject *pObj = pPage->GetObj(0);
-        SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pObj );
-        CPPUNIT_ASSERT(pTxtObj);
-        std::vector<EECharAttrib> rLst;
-        const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
-        const SvxULSpaceItem *pULSpace = aEdit.GetParaAttribs(0).GetItem(EE_PARA_ULSPACE);
-        CPPUNIT_ASSERT(pULSpace);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Para bottom spacing is wrong!", static_cast<sal_uInt16>(0), pULSpace->GetLower());
-        aEdit.GetCharAttribs(1, rLst);
-        auto it = std::find_if(rLst.rbegin(), rLst.rend(),
-            [](const EECharAttrib& rCharAttr) { return dynamic_cast<const SvxFontHeightItem *>(rCharAttr.pAttr) != nullptr; });
-        if (it != rLst.rend())
-        {
-            const SvxFontHeightItem * pFontHeight = dynamic_cast<const SvxFontHeightItem *>((*it).pAttr);
-            // nStart == 9
-            // font height = 5 => 5*2540/72
-            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Font height is wrong", static_cast<sal_uInt32>(176), pFontHeight->GetHeight() );
-        }
+        const SvxFontHeightItem * pFontHeight = dynamic_cast<const SvxFontHeightItem *>((*it).pAttr);
+        // nStart == 9
+        // font height = 5 => 5*2540/72
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Font height is wrong", static_cast<sal_uInt32>(176), pFontHeight->GetHeight() );
     }
 
     xDocShRef->DoClose();
