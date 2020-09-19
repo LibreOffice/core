@@ -45,6 +45,30 @@
       "revId": "66e892f8fc6120bf7414d8e00dac4cf4e2c09542",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc8c7ce0_458046ca",
+        "filename": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-19T15:02:46Z",
+      "side": 1,
+      "message": "Just to avoid confusion: I meant that all three lines 483-485 need that.",
+      "parentUuid": "21212367_7c6a6322",
+      "range": {
+        "startLine": 483,
+        "startChar": 79,
+        "endLine": 483,
+        "endChar": 88
+      },
+      "revId": "66e892f8fc6120bf7414d8e00dac4cf4e2c09542",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
