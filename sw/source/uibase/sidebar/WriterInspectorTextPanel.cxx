@@ -350,6 +350,20 @@ static svx::sidebar::TreeNode BorderToTreeNode(const OUString& rName, const css:
     return aCurNode;
 }
 
+static svx::sidebar::TreeNode LocaleToTreeNode(const OUString& rName, const css::uno::Any& rVal)
+{
+    svx::sidebar::TreeNode aCurNode;
+    aCurNode.sNodeName = PropertyNametoRID(rName);
+    lang::Locale aLocale;
+    rVal >>= aLocale;
+    OUString aLocaleText(aLocale.Language + "-" + aLocale.Country);
+    if (!aLocale.Variant.isEmpty())
+        aLocaleText += " (" + aLocale.Variant + ")";
+    aCurNode.aValue <<= aLocaleText;
+
+    return aCurNode;
+}
+
 static svx::sidebar::TreeNode
 PropertyToTreeNode(const css::beans::Property& rProperty,
                    const uno::Reference<beans::XPropertySet>& xPropertiesSet, const bool& rIsGrey)
@@ -366,6 +380,10 @@ PropertyToTreeNode(const css::beans::Property& rProperty,
         || rPropName == "RightBorder")
     {
         aCurNode = BorderToTreeNode(rPropName, aAny);
+    }
+    else if (rPropName == "CharLocale")
+    {
+        aCurNode = LocaleToTreeNode(rPropName, aAny);
     }
     else
         aCurNode = SimplePropToTreeNode(rPropName, aAny);
