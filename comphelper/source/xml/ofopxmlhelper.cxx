@@ -196,12 +196,12 @@ void WriteContentSequence(
 
     xWriter->setOutputStream( xOutStream );
 
-    static const OUStringLiteral aTypesElement(u"Types");
-    static const OUStringLiteral aDefaultElement(u"Default");
-    static const OUStringLiteral aOverrideElement(u"Override");
-    static const OUStringLiteral aContentTypeAttr(u"ContentType");
-    static const OUStringLiteral aCDATAString(u"CDATA");
-    static const OUStringLiteral aWhiteSpace(u" ");
+    static constexpr OUStringLiteral aTypesElement(u"Types");
+    static constexpr OUStringLiteral aDefaultElement(u"Default");
+    static constexpr OUStringLiteral aOverrideElement(u"Override");
+    static constexpr OUStringLiteral aContentTypeAttr(u"ContentType");
+    static constexpr OUStringLiteral aCDATAString(u"CDATA");
+    static constexpr OUStringLiteral aWhiteSpace(u" ");
 
     // write the namespace
     AttributeList* pRootAttrList = new AttributeList;
@@ -269,20 +269,20 @@ uno::Sequence< uno::Sequence< beans::StringPair > > ReadSequence_Impl(
 } // namespace OFOPXMLHelper
 
 // Relations info related strings
-OUStringLiteral const g_aRelListElement(u"Relationships");
-OUStringLiteral const g_aRelElement( u"Relationship" );
-OUStringLiteral const g_aIDAttr( u"Id" );
-OUStringLiteral const g_aTypeAttr( u"Type" );
-OUStringLiteral const g_aTargetModeAttr( u"TargetMode" );
-OUStringLiteral const g_aTargetAttr( u"Target" );
+constexpr OUStringLiteral g_aRelListElement(u"Relationships");
+constexpr OUStringLiteral g_aRelElement( u"Relationship" );
+constexpr OUStringLiteral g_aIDAttr( u"Id" );
+constexpr OUStringLiteral g_aTypeAttr( u"Type" );
+constexpr OUStringLiteral g_aTargetModeAttr( u"TargetMode" );
+constexpr OUStringLiteral g_aTargetAttr( u"Target" );
 
 // ContentType related strings
-OUStringLiteral const g_aTypesElement( u"Types" );
-OUStringLiteral const g_aDefaultElement( u"Default" );
-OUStringLiteral const g_aOverrideElement( u"Override" );
-OUStringLiteral const g_aExtensionAttr( u"Extension" );
-OUStringLiteral const g_aPartNameAttr( u"PartName" );
-OUStringLiteral const g_aContentTypeAttr( u"ContentType" );
+constexpr OUStringLiteral g_aTypesElement( u"Types" );
+constexpr OUStringLiteral g_aDefaultElement( u"Default" );
+constexpr OUStringLiteral g_aOverrideElement( u"Override" );
+constexpr OUStringLiteral g_aExtensionAttr( u"Extension" );
+constexpr OUStringLiteral g_aPartNameAttr( u"PartName" );
+constexpr OUStringLiteral g_aContentTypeAttr( u"ContentType" );
 
 OFOPXMLHelper_Impl::OFOPXMLHelper_Impl( sal_uInt16 nFormat )
 : m_nFormat( nFormat )

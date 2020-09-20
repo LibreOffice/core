@@ -33,10 +33,10 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
 
-const OUStringLiteral gsEventType(u"EventType");
-const OUStringLiteral gsLibrary(u"Library");
-const OUStringLiteral gsMacroName(u"MacroName");
-const OUStringLiteral gsStarBasic(u"StarBasic");
+constexpr OUStringLiteral gsEventType(u"EventType");
+constexpr OUStringLiteral gsLibrary(u"Library");
+constexpr OUStringLiteral gsMacroName(u"MacroName");
+constexpr OUStringLiteral gsStarBasic(u"StarBasic");
 
 XMLStarBasicContextFactory::XMLStarBasicContextFactory()
 {

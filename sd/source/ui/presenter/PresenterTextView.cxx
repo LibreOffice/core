@@ -43,15 +43,15 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-const OUStringLiteral gsTextPropertyName(u"Text");
-const OUStringLiteral gsBitmapPropertyName(u"Bitmap");
-const OUStringLiteral gsSizePropertyName(u"Size");
-const OUStringLiteral gsBackgroundColorPropertyName(u"BackgroundColor");
-const OUStringLiteral gsTextColorPropertyName(u"TextColor");
-const OUStringLiteral gsFontDescriptorPropertyName(u"FontDescriptor");
-const OUStringLiteral gsTopPropertyName(u"Top");
-const OUStringLiteral gsTopRelativePropertyName(u"RelativeTop");
-const OUStringLiteral gsTotalHeightPropertyName(u"TotalHeight");
+constexpr OUStringLiteral gsTextPropertyName(u"Text");
+constexpr OUStringLiteral gsBitmapPropertyName(u"Bitmap");
+constexpr OUStringLiteral gsSizePropertyName(u"Size");
+constexpr OUStringLiteral gsBackgroundColorPropertyName(u"BackgroundColor");
+constexpr OUStringLiteral gsTextColorPropertyName(u"TextColor");
+constexpr OUStringLiteral gsFontDescriptorPropertyName(u"FontDescriptor");
+constexpr OUStringLiteral gsTopPropertyName(u"Top");
+constexpr OUStringLiteral gsTopRelativePropertyName(u"RelativeTop");
+constexpr OUStringLiteral gsTotalHeightPropertyName(u"TotalHeight");
 
 namespace sd::presenter {
 

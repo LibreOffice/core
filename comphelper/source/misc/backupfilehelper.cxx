@@ -353,7 +353,7 @@ namespace
 
     typedef std::vector< ExtensionInfoEntry > ExtensionInfoEntryVector;
 
-    const OUStringLiteral gaRegPath { u"/registry/com.sun.star.comp.deployment.bundle.PackageRegistryBackend/backenddb.xml" };
+    constexpr OUStringLiteral gaRegPath { u"/registry/com.sun.star.comp.deployment.bundle.PackageRegistryBackend/backenddb.xml" };
 
     class ExtensionInfo
     {

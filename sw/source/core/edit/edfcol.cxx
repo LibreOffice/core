@@ -99,20 +99,20 @@
 
 namespace
 {
-const OUStringLiteral MetaFilename(u"tscp/bails.rdf");
-const OUStringLiteral MetaNS(u"urn:bails");
-const OUStringLiteral ParagraphSignatureRDFNamespace = u"urn:bails:loext:paragraph:signature:";
-const OUStringLiteral ParagraphSignatureIdRDFName = u"urn:bails:loext:paragraph:signature:id";
-const OUStringLiteral ParagraphSignatureDigestRDFName = u":digest";
-const OUStringLiteral ParagraphSignatureDateRDFName = u":date";
-const OUStringLiteral ParagraphSignatureUsageRDFName = u":usage";
-const OUStringLiteral ParagraphSignatureLastIdRDFName = u"urn:bails:loext:paragraph:signature:lastid";
-const OUStringLiteral ParagraphClassificationNameRDFName = u"urn:bails:loext:paragraph:classification:name";
-const OUStringLiteral ParagraphClassificationValueRDFName = u"urn:bails:loext:paragraph:classification:value";
-const OUStringLiteral ParagraphClassificationAbbrRDFName = u"urn:bails:loext:paragraph:classification:abbreviation";
-const OUStringLiteral ParagraphClassificationFieldNamesRDFName = u"urn:bails:loext:paragraph:classification:fields";
-const OUStringLiteral MetadataFieldServiceName = u"com.sun.star.text.textfield.MetadataField";
-const OUStringLiteral DocInfoServiceName = u"com.sun.star.text.TextField.DocInfo.Custom";
+constexpr OUStringLiteral MetaFilename(u"tscp/bails.rdf");
+constexpr OUStringLiteral MetaNS(u"urn:bails");
+constexpr OUStringLiteral ParagraphSignatureRDFNamespace = u"urn:bails:loext:paragraph:signature:";
+constexpr OUStringLiteral ParagraphSignatureIdRDFName = u"urn:bails:loext:paragraph:signature:id";
+constexpr OUStringLiteral ParagraphSignatureDigestRDFName = u":digest";
+constexpr OUStringLiteral ParagraphSignatureDateRDFName = u":date";
+constexpr OUStringLiteral ParagraphSignatureUsageRDFName = u":usage";
+constexpr OUStringLiteral ParagraphSignatureLastIdRDFName = u"urn:bails:loext:paragraph:signature:lastid";
+constexpr OUStringLiteral ParagraphClassificationNameRDFName = u"urn:bails:loext:paragraph:classification:name";
+constexpr OUStringLiteral ParagraphClassificationValueRDFName = u"urn:bails:loext:paragraph:classification:value";
+constexpr OUStringLiteral ParagraphClassificationAbbrRDFName = u"urn:bails:loext:paragraph:classification:abbreviation";
+constexpr OUStringLiteral ParagraphClassificationFieldNamesRDFName = u"urn:bails:loext:paragraph:classification:fields";
+constexpr OUStringLiteral MetadataFieldServiceName = u"com.sun.star.text.textfield.MetadataField";
+constexpr OUStringLiteral DocInfoServiceName = u"com.sun.star.text.TextField.DocInfo.Custom";
 
 /// Find all page styles which are currently used in the document.
 std::vector<OUString> lcl_getUsedPageStyles(SwViewShell const * pShell)
@@ -1922,7 +1922,7 @@ void SwEditShell::RestoreMetadataFieldsAndValidateParagraphSignatures()
     if (!xParagraphs.is())
         return;
 
-    static const OUStringLiteral sBlank(u"");
+    static constexpr OUStringLiteral sBlank(u"");
     const sfx::ClassificationKeyCreator aKeyCreator(SfxClassificationHelper::getPolicyType());
     const css::uno::Sequence<css::uno::Reference<rdf::XURI>> aGraphNames = SwRDFHelper::getGraphNames(xModel, MetaNS);
 

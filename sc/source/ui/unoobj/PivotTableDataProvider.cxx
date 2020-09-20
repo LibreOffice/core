@@ -55,9 +55,9 @@ namespace sc
 {
 namespace
 {
-const OUStringLiteral constIdCategories(u"categories");
-const OUStringLiteral constIdLabel(u"label");
-const OUStringLiteral constIdData(u"data");
+constexpr OUStringLiteral constIdCategories(u"categories");
+constexpr OUStringLiteral constIdLabel(u"label");
+constexpr OUStringLiteral constIdData(u"data");
 
 const SfxItemPropertyMapEntry* lcl_GetDataProviderPropertyMap()
 {

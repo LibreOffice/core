@@ -72,11 +72,11 @@ using namespace ::com::sun::star::uno;
  * Location within the .odb that an embedded .fdb will be stored.
  * Only relevant for embedded dbs.
  */
-const OUStringLiteral our_sFDBLocation( u"firebird.fdb" );
+constexpr OUStringLiteral our_sFDBLocation( u"firebird.fdb" );
 /**
  * Older version of LO may store the database in a .fdb file
  */
-const OUStringLiteral our_sFBKLocation( u"firebird.fbk" );
+constexpr OUStringLiteral our_sFBKLocation( u"firebird.fbk" );
 
 Connection::Connection()
     : Connection_BASE(m_aMutex)

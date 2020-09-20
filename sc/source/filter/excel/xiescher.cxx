@@ -468,7 +468,7 @@ SdrObjectUniquePtr XclImpDrawObjBase::CreateSdrObject( XclImpDffConverter& rDffC
             {
                 const Reference< XControlModel >& xCtrlModel = pSdrUnoObj->GetUnoControlModel();
                 Reference< XPropertySet > xPropSet(xCtrlModel,UNO_QUERY);
-                const static OUStringLiteral sPropertyName(u"ControlTypeinMSO");
+                static constexpr OUStringLiteral sPropertyName(u"ControlTypeinMSO");
 
                 enum { eCreateFromOffice = 0, eCreateFromMSTBXControl, eCreateFromMSOCXControl };
 
@@ -488,7 +488,7 @@ SdrObjectUniquePtr XclImpDrawObjBase::CreateSdrObject( XclImpDffConverter& rDffC
                 if( mnObjType == 8 )//OCX
                 {
                     //Need summary type for export
-                    const static OUStringLiteral sObjIdPropertyName(u"ObjIDinMSO");
+                    static constexpr OUStringLiteral sObjIdPropertyName(u"ObjIDinMSO");
                     const XclImpPictureObj* const pObj = dynamic_cast< const XclImpPictureObj* const >(this);
                     if( pObj != nullptr && pObj->IsOcxControl() )
                     {
@@ -3299,7 +3299,7 @@ XclImpDffConverter::XclImpDffConvData::XclImpDffConvData(
 {
 }
 
-const OUStringLiteral gaStdFormName( u"Standard" ); /// Standard name of control forms.
+constexpr OUStringLiteral gaStdFormName( u"Standard" ); /// Standard name of control forms.
 
 XclImpDffConverter::XclImpDffConverter( const XclImpRoot& rRoot, SvStream& rDffStrm ) :
     XclImpSimpleDffConverter( rRoot, rDffStrm ),

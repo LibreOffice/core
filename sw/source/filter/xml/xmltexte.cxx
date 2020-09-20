@@ -80,7 +80,7 @@ SwNoTextNode *SwXMLTextParagraphExport::GetNoTextNode(
     return  pNdIdx->GetNodes()[pNdIdx->GetIndex() + 1]->GetNoTextNode();
 }
 
-const OUStringLiteral gsEmbeddedObjectProtocol( u"vnd.sun.star.EmbeddedObject:" );
+constexpr OUStringLiteral gsEmbeddedObjectProtocol( u"vnd.sun.star.EmbeddedObject:" );
 
 SwXMLTextParagraphExport::SwXMLTextParagraphExport(
         SwXMLExport& rExp,

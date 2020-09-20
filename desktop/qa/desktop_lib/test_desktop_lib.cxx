@@ -2739,7 +2739,7 @@ void DesktopLOKTest::testComplexSelection()
 {
     // Start with a blank text file and add contents.
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    static const OStringLiteral aText("hello world");
+    static constexpr OStringLiteral aText("hello world");
 
     // Certainly not complex.
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(LOK_SELTYPE_NONE), pDocument->pClass->getSelectionType(pDocument));
@@ -2821,7 +2821,7 @@ void DesktopLOKTest::testCalcSaveAs()
 
 void DesktopLOKTest::testSpellcheckerMultiView()
 {
-    static const OUStringLiteral aLangISO(u"en-US");
+    static constexpr OUStringLiteral aLangISO(u"en-US");
     SvtSysLocaleOptions aSysLocaleOptions;
     aSysLocaleOptions.SetLocaleConfigString(aLangISO);
     aSysLocaleOptions.SetUILocaleConfigString(aLangISO);

@@ -535,7 +535,7 @@ void XMLTextFieldImportContext::ForceUpdate(
 // XMLSenderFieldImportContext
 
 
-const OUStringLiteral gsPropertyFieldSubType(u"UserDataType");
+constexpr OUStringLiteral gsPropertyFieldSubType(u"UserDataType");
 
 XMLSenderFieldImportContext::XMLSenderFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
@@ -654,7 +654,7 @@ void XMLSenderFieldImportContext::PrepareField(
 
 // XMLAuthorFieldImportContext
 
-const OUStringLiteral gsPropertyAuthorFullName(u"FullName");
+constexpr OUStringLiteral gsPropertyAuthorFullName(u"FullName");
 
 XMLAuthorFieldImportContext::XMLAuthorFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
@@ -727,7 +727,7 @@ SvXMLEnumMapEntry<PageNumberType> const lcl_aSelectPageAttrMap[] =
     { XML_TOKEN_INVALID, PageNumberType(0) },
 };
 
-const OUStringLiteral gsPropertyUserText(u"UserText");
+constexpr OUStringLiteral gsPropertyUserText(u"UserText");
 
 XMLPageContinuationImportContext::XMLPageContinuationImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp, sal_uInt16 nPrfx,
@@ -878,8 +878,8 @@ void XMLPageNumberImportContext::PrepareField(
 // Placeholder
 
 
-const OUStringLiteral gsPropertyPlaceholderType(u"PlaceHolderType");
-const OUStringLiteral gsPropertyPlaceholder(u"PlaceHolder");
+constexpr OUStringLiteral gsPropertyPlaceholderType(u"PlaceHolderType");
+constexpr OUStringLiteral gsPropertyPlaceholder(u"PlaceHolder");
 
 XMLPlaceholderFieldImportContext::XMLPlaceholderFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
@@ -960,7 +960,7 @@ void XMLPlaceholderFieldImportContext::PrepareField(
 
 // time field
 
-const OUStringLiteral gsPropertyAdjust(u"Adjust");
+constexpr OUStringLiteral gsPropertyAdjust(u"Adjust");
 
 XMLTimeFieldImportContext::XMLTimeFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
@@ -1136,11 +1136,11 @@ void XMLDateFieldImportContext::ProcessAttribute(
 // database field superclass
 
 
-const OUStringLiteral gsPropertyDataBaseName(u"DataBaseName");
-const OUStringLiteral gsPropertyDataBaseURL(u"DataBaseURL");
-const OUStringLiteral gsPropertyTableName(u"DataTableName");
-const OUStringLiteral gsPropertyDataCommandType(u"DataCommandType");
-const OUStringLiteral gsPropertyIsVisible(u"IsVisible");
+constexpr OUStringLiteral gsPropertyDataBaseName(u"DataBaseName");
+constexpr OUStringLiteral gsPropertyDataBaseURL(u"DataBaseURL");
+constexpr OUStringLiteral gsPropertyTableName(u"DataTableName");
+constexpr OUStringLiteral gsPropertyDataCommandType(u"DataCommandType");
+constexpr OUStringLiteral gsPropertyIsVisible(u"IsVisible");
 
 XMLDatabaseFieldImportContext::XMLDatabaseFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
@@ -1604,7 +1604,7 @@ const char* XMLSimpleDocInfoImportContext::MapTokenToServiceName(
 
 // revision field
 
-const OUStringLiteral sPropertyRevision(u"Revision");
+constexpr OUStringLiteral sPropertyRevision(u"Revision");
 
 XMLRevisionDocInfoImportContext::XMLRevisionDocInfoImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp, sal_uInt16 nPrfx,
@@ -1874,9 +1874,9 @@ void XMLHiddenParagraphImportContext::PrepareField(
 
 // import conditional text (<text:conditional-text>)
 
-const OUStringLiteral gsPropertyTrueContent(u"TrueContent");
-const OUStringLiteral gsPropertyFalseContent(u"FalseContent");
-const OUStringLiteral gsPropertyIsConditionTrue(u"IsConditionTrue");
+constexpr OUStringLiteral gsPropertyTrueContent(u"TrueContent");
+constexpr OUStringLiteral gsPropertyFalseContent(u"FalseContent");
+constexpr OUStringLiteral gsPropertyIsConditionTrue(u"IsConditionTrue");
 
 XMLConditionalTextImportContext::XMLConditionalTextImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
@@ -2159,8 +2159,8 @@ const SvXMLEnumMapEntry<sal_uInt16> aChapterDisplayMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-const OUStringLiteral gsPropertyChapterFormat(u"ChapterFormat");
-const OUStringLiteral gsPropertyLevel(u"Level");
+constexpr OUStringLiteral gsPropertyChapterFormat(u"ChapterFormat");
+constexpr OUStringLiteral gsPropertyLevel(u"Level");
 
 XMLChapterImportContext::XMLChapterImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,

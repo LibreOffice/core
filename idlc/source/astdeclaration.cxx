@@ -22,7 +22,7 @@
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
 
-const OStringLiteral sGlobal("::");
+constexpr OStringLiteral sGlobal("::");
 
 static OString convertName(const OString& name)
 {

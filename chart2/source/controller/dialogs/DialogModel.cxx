@@ -54,7 +54,7 @@ using ::com::sun::star::uno::Sequence;
 
 namespace
 {
-const OUStringLiteral lcl_aLabelRole( u"label" );
+constexpr OUStringLiteral lcl_aLabelRole( u"label" );
 
 struct lcl_ChartTypeToSeriesCnt
 {

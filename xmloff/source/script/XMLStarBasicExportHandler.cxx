@@ -32,11 +32,11 @@ using namespace ::xmloff::token;
 using ::com::sun::star::beans::PropertyValue;
 
 
-const OUStringLiteral gsStarBasic(u"StarBasic");
-const OUStringLiteral gsLibrary(u"Library");
-const OUStringLiteral gsMacroName(u"MacroName");
-const OUStringLiteral gsStarOffice(u"StarOffice");
-const OUStringLiteral gsApplication(u"application");
+constexpr OUStringLiteral gsStarBasic(u"StarBasic");
+constexpr OUStringLiteral gsLibrary(u"Library");
+constexpr OUStringLiteral gsMacroName(u"MacroName");
+constexpr OUStringLiteral gsStarOffice(u"StarOffice");
+constexpr OUStringLiteral gsApplication(u"application");
 
 XMLStarBasicExportHandler::XMLStarBasicExportHandler()
 {

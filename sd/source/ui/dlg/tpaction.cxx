@@ -64,7 +64,7 @@ using namespace com::sun::star::lang;
 #define DOCUMENT_TOKEN '#'
 
 // XML content stream
-const OUStringLiteral pStarDrawXMLContent( u"content.xml" );
+constexpr OUStringLiteral pStarDrawXMLContent( u"content.xml" );
 
 /**
  * Constructor of the Tab dialog: appends the pages to the dialog

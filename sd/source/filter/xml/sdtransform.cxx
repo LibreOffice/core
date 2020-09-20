@@ -81,9 +81,9 @@ void TransformOOo2xDocument( SdDrawDocument* pDocument )
     }
 }
 
-const OUStringLiteral gsEnableNumbering( u"enable-numbering" );
-const OUStringLiteral gsTextNamespace( u"urn:oasis:names:tc:opendocument:xmlns:text:1.0" );
-const OUStringLiteral gsTrue( u"true" );
+constexpr OUStringLiteral gsEnableNumbering( u"enable-numbering" );
+constexpr OUStringLiteral gsTextNamespace( u"urn:oasis:names:tc:opendocument:xmlns:text:1.0" );
+constexpr OUStringLiteral gsTrue( u"true" );
 
 SdTransformOOo2xDocument::SdTransformOOo2xDocument( SdDrawDocument& rDocument )
 : mrDocument( rDocument )

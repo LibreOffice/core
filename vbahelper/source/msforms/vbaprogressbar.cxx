@@ -22,7 +22,7 @@ using namespace com::sun::star;
 using namespace ooo::vba;
 
 // uno servicename com.sun.star.awt.UnoControlProgressBarMode
-const OUStringLiteral SVALUE( u"ProgressValue" );
+constexpr OUStringLiteral SVALUE( u"ProgressValue" );
 
 ScVbaProgressBar::ScVbaProgressBar( const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper )
     : ProgressBarImpl_BASE( xParent, xContext, xControl, xModel, std::move(pGeomHelper) )

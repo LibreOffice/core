@@ -81,9 +81,9 @@ using namespace ::com::sun::star::uno;
 using ::sd::framework::FrameworkHelper;
 
 // PowerPoint-Filter
-const OUStringLiteral pFilterPowerPoint97( u"MS PowerPoint 97" );
-const OUStringLiteral pFilterPowerPoint97Template( u"MS PowerPoint 97 Vorlage" );
-const OUStringLiteral pFilterPowerPoint97AutoPlay( u"MS PowerPoint 97 AutoPlay" );
+constexpr OUStringLiteral pFilterPowerPoint97( u"MS PowerPoint 97" );
+constexpr OUStringLiteral pFilterPowerPoint97Template( u"MS PowerPoint 97 Vorlage" );
+constexpr OUStringLiteral pFilterPowerPoint97AutoPlay( u"MS PowerPoint 97 AutoPlay" );
 
 namespace sd {
 

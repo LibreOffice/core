@@ -36,7 +36,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::svt;
 
-const OStringLiteral aGroupIdent("dBase III");
+constexpr OStringLiteral aGroupIdent("dBase III");
 
 
 ODbaseIndexDialog::ODbaseIndexDialog(weld::Window * pParent, const OUString& aDataSrcName)

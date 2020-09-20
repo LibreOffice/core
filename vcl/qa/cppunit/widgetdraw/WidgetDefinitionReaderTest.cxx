@@ -16,7 +16,7 @@
 
 namespace
 {
-OUStringLiteral const gaDataUrl(u"/vcl/qa/cppunit/widgetdraw/data/");
+constexpr OUStringLiteral gaDataUrl(u"/vcl/qa/cppunit/widgetdraw/data/");
 
 class WidgetDefinitionReaderTest : public test::BootstrapFixtureBase
 {

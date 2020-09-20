@@ -48,23 +48,23 @@ using namespace ::ooo::vba::excel::XlRowCol;
 using namespace ::ooo::vba::excel::XlAxisType;
 using namespace ::ooo::vba::excel::XlAxisGroup;
 
-const OUStringLiteral CHART_NAME(u"Name");
+constexpr OUStringLiteral CHART_NAME(u"Name");
 // #TODO move this constant to vbaseries.[ch]xx ( when it exists )
-const OUStringLiteral DEFAULTSERIESPREFIX(u"Series");
-const OUStringLiteral DATAROWSOURCE(u"DataRowSource");
-const OUStringLiteral UPDOWN(u"UpDown");
-const OUStringLiteral VOLUME(u"Volume");
-const OUStringLiteral LINES(u"Lines");
-const OUStringLiteral SPLINETYPE(u"SplineType");
-const OUStringLiteral SYMBOLTYPE(u"SymbolType");
-const OUStringLiteral DEEP(u"Deep");
-const OUStringLiteral SOLIDTYPE(u"SolidType");
-const OUStringLiteral VERTICAL(u"Vertical");
-const OUStringLiteral PERCENT(u"Percent");
-const OUStringLiteral STACKED(u"Stacked");
-const OUStringLiteral DIM3D(u"Dim3D");
-const OUStringLiteral HASMAINTITLE(u"HasMainTitle");
-const OUStringLiteral HASLEGEND(u"HasLegend");
+constexpr OUStringLiteral DEFAULTSERIESPREFIX(u"Series");
+constexpr OUStringLiteral DATAROWSOURCE(u"DataRowSource");
+constexpr OUStringLiteral UPDOWN(u"UpDown");
+constexpr OUStringLiteral VOLUME(u"Volume");
+constexpr OUStringLiteral LINES(u"Lines");
+constexpr OUStringLiteral SPLINETYPE(u"SplineType");
+constexpr OUStringLiteral SYMBOLTYPE(u"SymbolType");
+constexpr OUStringLiteral DEEP(u"Deep");
+constexpr OUStringLiteral SOLIDTYPE(u"SolidType");
+constexpr OUStringLiteral VERTICAL(u"Vertical");
+constexpr OUStringLiteral PERCENT(u"Percent");
+constexpr OUStringLiteral STACKED(u"Stacked");
+constexpr OUStringLiteral DIM3D(u"Dim3D");
+constexpr OUStringLiteral HASMAINTITLE(u"HasMainTitle");
+constexpr OUStringLiteral HASLEGEND(u"HasLegend");
 
 ScVbaChart::ScVbaChart( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const css::uno::Reference< css::lang::XComponent >& _xChartComponent, const css::uno::Reference< css::table::XTableChart >& _xTableChart ) : ChartImpl_BASE( _xParent, _xContext ), mxTableChart( _xTableChart )
 {

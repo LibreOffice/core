@@ -39,8 +39,8 @@ using namespace rtl;
 namespace
 {
 
-const OStringLiteral sSampleString               ("This is a sample sentence, which we use to check some crypto functions in sal.");
-const OStringLiteral sSampleString_only_one_diff ("This is a sample sentence. which we use to check some crypto functions in sal.");
+constexpr OStringLiteral sSampleString               ("This is a sample sentence, which we use to check some crypto functions in sal.");
+constexpr OStringLiteral sSampleString_only_one_diff ("This is a sample sentence. which we use to check some crypto functions in sal.");
 
 const rtlDigestAlgorithm constDigestAlgorithms[] =
 {

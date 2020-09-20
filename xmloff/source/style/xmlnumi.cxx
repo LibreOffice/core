@@ -226,8 +226,8 @@ public:
     }
 };
 
-const OUStringLiteral gsStarBats( u"StarBats"  );
-const OUStringLiteral gsStarMath( u"StarMath"  );
+constexpr OUStringLiteral gsStarBats( u"StarBats"  );
+constexpr OUStringLiteral gsStarMath( u"StarMath"  );
 
 SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
         SvXMLImport& rImport, sal_Int32 nElement,
@@ -913,9 +913,9 @@ void SvxXMLListStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
     }
 }
 
-const OUStringLiteral sIsPhysical( u"IsPhysical"  );
-const OUStringLiteral sNumberingRules( u"NumberingRules"  );
-const OUStringLiteral sIsContinuousNumbering( u"IsContinuousNumbering"  );
+constexpr OUStringLiteral sIsPhysical( u"IsPhysical"  );
+constexpr OUStringLiteral sNumberingRules( u"NumberingRules"  );
+constexpr OUStringLiteral sIsContinuousNumbering( u"IsContinuousNumbering"  );
 
 SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
         bool bOutl )
