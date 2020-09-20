@@ -338,30 +338,39 @@ static void lcl_ModifyBoxes( SwTableBoxes &rBoxes, const long nOld,
     }
 }
 
-void SwTable::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
+void SwTable::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
+    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
+    if(!pLegacy)
+        return;
     // catch SSize changes, to adjust the lines/boxes
-    const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0 ;
+    const sal_uInt16 nWhich = pLegacy->m_pOld ? pLegacy->m_pOld->Which() : pLegacy->m_pNew ? pLegacy->m_pNew->Which() : 0;
     const SwFormatFrameSize* pNewSize = nullptr, *pOldSize = nullptr;
-
-    if( RES_ATTRSET_CHG == nWhich )
+    switch(nWhich)
     {
-        if (pOld && pNew && SfxItemState::SET == static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState(
-            RES_FRM_SIZE, false, reinterpret_cast<const SfxPoolItem**>(&pNewSize)))
+        case RES_ATTRSET_CHG:
         {
-            pOldSize = &static_cast<const SwAttrSetChg*>(pOld)->GetChgSet()->GetFrameSize();
+            if (pLegacy->m_pOld && pLegacy->m_pNew
+                    && SfxItemState::SET == static_cast<const SwAttrSetChg*>(pLegacy->m_pNew)->GetChgSet()->GetItemState(
+                            RES_FRM_SIZE,
+                            false,
+                            reinterpret_cast<const SfxPoolItem**>(&pNewSize)))
+            {
+                pOldSize = &static_cast<const SwAttrSetChg*>(pLegacy->m_pOld)->GetChgSet()->GetFrameSize();
+            }
         }
+        break;
+        case RES_FRM_SIZE:
+        {
+            pOldSize = static_cast<const SwFormatFrameSize*>(pLegacy->m_pOld);
+            pNewSize = static_cast<const SwFormatFrameSize*>(pLegacy->m_pNew);
+        }
+        break;
+        default:
+            CheckRegistration(pLegacy->m_pOld);
     }
-    else if( RES_FRM_SIZE == nWhich )
-    {
-        pOldSize = static_cast<const SwFormatFrameSize*>(pOld);
-        pNewSize = static_cast<const SwFormatFrameSize*>(pNew);
-    }
-    else
-        CheckRegistration( pOld );
-
     if (pOldSize && pNewSize && !m_bModifyLocked)
-        AdjustWidths( pOldSize->GetWidth(), pNewSize->GetWidth() );
+        AdjustWidths(pOldSize->GetWidth(), pNewSize->GetWidth());
 }
 
 void SwTable::AdjustWidths( const long nOld, const long nNew )
