@@ -1020,6 +1020,8 @@ bool SalGraphics::CreateCFFfontSubset(const unsigned char* pFontBytes, int nByte
                                       int nGlyphCount, FontSubsetInfo& rInfo)
 {
     FILE* pOutFile = fopen(rSysPath.getStr(), "wb");
+    if (!pOutFile)
+        return false;
     rInfo.LoadFont(FontType::CFF_FONT, pFontBytes, nByteLength);
     bool bRet = rInfo.CreateFontSubset(FontType::TYPE1_PFB, pOutFile, nullptr, pGlyphIds, pEncoding,
                                        nGlyphCount, pGlyphWidths);
