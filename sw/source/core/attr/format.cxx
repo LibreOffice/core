@@ -280,10 +280,10 @@ void SwFormat::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValu
         }
         break;
     case RES_ATTRSET_CHG:
-        // NB: this still notifies depends even if this condition is not met, whoch seems non-obvious
+        // NB: this still notifies depends even if this condition is not met, which seems non-obvious
         if (pOldValue && pNewValue && static_cast<const SwAttrSetChg*>(pOldValue)->GetTheChgdSet() != &m_aSet)
         {
-            // pass only those that are not set ...
+            // pass only those that are not set...
             pNewClientChg.reset( new SwAttrSetChg(*static_cast<const SwAttrSetChg*>(pNewValue)) );
             pNewClientChg->GetChgSet()->Differentiate( m_aSet );
             if(pNewClientChg->Count()) // ... if any
@@ -301,7 +301,7 @@ void SwFormat::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValu
         // the new one
 
         // skip my own Modify
-        // NB: this still notifies depends even if this condition is not met, whoch seems non-obvious
+        // NB: this still notifies depends even if this condition is not met, which seems non-obvious
         if ( pOldValue && pNewValue &&
             static_cast<const SwFormatChg*>(pOldValue)->pChangedFormat != this &&
             static_cast<const SwFormatChg*>(pNewValue)->pChangedFormat == GetRegisteredIn() )
