@@ -2826,8 +2826,13 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
         MapWrapIntoFlyFormat(pRecord, pRetFrameFormat);
 
     // Set frame name with object name
-    if( pRetFrameFormat /*#i52825# */ && !aObjName.isEmpty() )
-        pRetFrameFormat->SetName( aObjName );
+    if (pRetFrameFormat /*#i52825# */)
+    {
+        if (!aObjName.isEmpty())
+            pRetFrameFormat->SetName( aObjName );
+        if (pRetFrameFormat->GetName().isEmpty())
+            pRetFrameFormat->SetName(m_rDoc.GetUniqueDrawObjectName());
+    }
     return AddAutoAnchor(pRetFrameFormat);
 }
 
