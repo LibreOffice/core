@@ -626,7 +626,7 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
     bool bHasCategories = true;
     uno::Sequence< sal_Int32 > aSequenceMapping;
 
-    DataSourceHelper::detectRangeSegmentation(
+    (void)DataSourceHelper::detectRangeSegmentation(
         xChartDoc,
         aRangeString, aSequenceMapping, bUseColumns, bFirstCellAsLabel, bHasCategories );
 
