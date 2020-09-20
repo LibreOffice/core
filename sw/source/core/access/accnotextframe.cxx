@@ -89,7 +89,7 @@ void SwAccessibleNoTextFrame::Notify(const SfxHint& rHint)
         EndListeningAll();
     else if(auto pLegacyModifyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
     {
-        const sal_uInt16 nWhich = pLegacyModifyHint->m_pOld ? pLegacyModifyHint->m_pOld->Which() : pLegacyModifyHint->m_pNew ? pLegacyModifyHint->m_pNew->Which() : 0;
+        const sal_uInt16 nWhich = pLegacyModifyHint->GetWhich();
         if (nWhich != RES_TITLE_CHANGED && nWhich != RES_DESCRIPTION_CHANGED)
             return;
         const SwNoTextNode* pNd = GetNoTextNode();

@@ -24,6 +24,7 @@
 
 #include <svl/hint.hxx>
 #include <svl/broadcast.hxx>
+#include <svl/poolitem.hxx>
 #include "swdllapi.h"
 #include "ring.hxx"
 #include <type_traits>
@@ -63,6 +64,7 @@ namespace sw
     struct LegacyModifyHint final: SfxHint
     {
         LegacyModifyHint(const SfxPoolItem* pOld, const SfxPoolItem* pNew) : m_pOld(pOld), m_pNew(pNew) {};
+        sal_uInt16 GetWhich() const { return m_pOld ? m_pOld->Which() : m_pNew ? m_pNew->Which() : 0; };
         virtual ~LegacyModifyHint() override;
         const SfxPoolItem* m_pOld;
         const SfxPoolItem* m_pNew;
