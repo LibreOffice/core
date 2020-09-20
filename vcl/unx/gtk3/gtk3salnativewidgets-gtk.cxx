@@ -3380,6 +3380,12 @@ bool GtkSalGraphics::isNativeControlSupported( ControlType nType, ControlPart nP
     switch(nType)
     {
         case ControlType::Pushbutton:
+            if (nPart==ControlPart::Entire
+                || nPart == ControlPart::HasFlatButtonCustomLabelColor
+                || nPart == ControlPart::HasRegularButtonCustomLabelColor
+                || nPart == ControlPart::Focus)
+                return true;
+            break;
         case ControlType::Radiobutton:
         case ControlType::Checkbox:
         case ControlType::Progress:

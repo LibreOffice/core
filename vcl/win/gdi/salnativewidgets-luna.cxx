@@ -237,6 +237,11 @@ bool WinSalGraphics::isNativeControlSupported( ControlType nType, ControlPart nP
     switch( nType )
     {
         case ControlType::Pushbutton:
+            if (nPart == ControlPart::Entire
+                || nPart == ControlPart::HasFlatButtonCustomLabelColor
+                || nPart == ControlPart::HasRegularButtonCustomLabelColor)
+                hTheme = getThemeHandle( mhWnd, L"Button");
+            break;
         case ControlType::Radiobutton:
         case ControlType::Checkbox:
             if( nPart == ControlPart::Entire )

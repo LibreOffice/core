@@ -751,12 +751,7 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice *pDev, DrawFlags nDrawFl
 
     if (nDrawFlags & DrawFlags::Mono)
         aColor = COL_BLACK;
-
-    // Custom foreground color is reasonable on stock controls only. Stock controls are used if a custom background has been set
-    // (and thus no native controls are able to be used) or no native controls are available.
-
-    else if (IsControlForeground()
-             && (IsControlBackground() || !IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Entire)))
+    else if (IsControlForeground())
         aColor = GetControlForeground();
 
     // Button types with possibly different text coloring are flat buttons and regular buttons. Regular buttons may be action
@@ -768,6 +763,8 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice *pDev, DrawFlags nDrawFl
             aColor = rStyleSettings.GetFlatButtonPressedRolloverTextColor();
         else if (nButtonFlags & DrawButtonFlags::Highlight)
             aColor = rStyleSettings.GetFlatButtonRolloverTextColor();
+        else if (IsControlForeground())
+            aColor = GetControlForeground();
         else
             aColor = rStyleSettings.GetFlatButtonTextColor();
     else
@@ -963,8 +960,20 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
         if (!bRollOver && !HasFocus())
             bDrawMenuSep = false;
     }
-    // tdf#123175 if there is a custom control bg set, draw the button without outsourcing to the NWF
-    bNativeOK = !IsControlBackground() && rRenderContext.IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Entire);
+
+    // To render custom foreground and background colors capable controls have to be used. If native controls are not appropriate
+    // stock controls are used.
+
+    bNativeOK = (!IsControlForeground()
+                 || (GetStyle() & WB_FLATBUTTON
+                     && rRenderContext.IsNativeControlSupported(ControlType::Pushbutton,
+                                                                ControlPart::HasFlatButtonCustomLabelColor))
+                 || (!(GetStyle() & WB_FLATBUTTON)
+                     && rRenderContext.IsNativeControlSupported(ControlType::Pushbutton,
+                                                                ControlPart::HasRegularButtonCustomLabelColor)))
+                && !IsControlBackground()
+                && rRenderContext.IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Entire);
+
     if (bNativeOK)
     {
         PushButtonValue aControlValue;

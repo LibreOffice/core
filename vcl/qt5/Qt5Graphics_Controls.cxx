@@ -92,7 +92,9 @@ bool Qt5Graphics_Controls::isNativeControlSupported(ControlType type, ControlPar
         case ControlType::Checkbox:
             return (part == ControlPart::Entire) || (part == ControlPart::Focus);
         case ControlType::Pushbutton:
-            return (part == ControlPart::Entire);
+            return (part == ControlPart::Entire
+                    || part == ControlPart::HasFlatButtonCustomLabelColor
+                    || part == ControlPart::HasRegularButtonCustomLabelColor);
 
         case ControlType::ListHeader:
             return (part == ControlPart::Button);

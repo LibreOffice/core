@@ -130,6 +130,9 @@ bool AquaSalGraphics::isNativeControlSupported(ControlType nType, ControlPart nP
     switch (nType)
     {
         case ControlType::Pushbutton:
+            if (nPart == ControlPart::Entire || nPart == ControlPart::HasFlatButtonCustomLabelColor)
+                return true;
+            break;
         case ControlType::Radiobutton:
         case ControlType::Checkbox:
         case ControlType::ListNode:

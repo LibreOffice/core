@@ -181,6 +181,11 @@ enum class ControlPart
 // eg, listboxes or comboboxes or spinbuttons
     HasBackgroundTexture    = 4000,
 
+// Ability to render text labels using a custom color
+
+    HasFlatButtonCustomLabelColor    = 4001,
+    HasRegularButtonCustomLabelColor = 4002,
+
 // For scrollbars that have 3 buttons (most KDE themes)
     HasThreeButtons         = 5000,
 
