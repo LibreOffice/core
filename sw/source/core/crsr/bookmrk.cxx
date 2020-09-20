@@ -340,10 +340,11 @@ namespace sw::mark
         }
     }
 
-    void MarkBase::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew )
+    void MarkBase::SwClientNotify(const SwModify&, const SfxHint& rHint)
     {
-        NotifyClients(pOld, pNew);
-        if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
+        CallSwClientNotify(rHint);
+        auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
+        if(pLegacy && RES_REMOVE_UNO_OBJECT == pLegacy->GetWhich())
         {   // invalidate cached uno object
             SetXBookmark(uno::Reference<text::XTextContent>(nullptr));
         }

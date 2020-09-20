@@ -105,7 +105,7 @@ namespace sw::mark {
 
         protected:
             // SwClient
-            virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) override;
+            virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
             MarkBase(const SwPaM& rPaM, const OUString& rName);
             std::unique_ptr<SwPosition> m_pPos1;
