@@ -693,7 +693,7 @@ bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
             aArgs.Put(aDdeConnect);
             Reference<XComponent> xComp = SfxObjectShell::CreateAndLoadComponent(aArgs);
             pFndShell = SfxObjectShell::GetShellFromComponent(xComp);
-            if (xComp.is() && pFndShell)
+            if (xComp.is() && pFndShell && pLinkMgr)
             {
                 pLinkMgr->InsertCachedComp(xComp);
                 sfx2::LinkManager::LinkServerShell(sItem, *pFndShell, *pLink);
