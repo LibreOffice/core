@@ -33,7 +33,7 @@ using namespace ooo::vba;
 
 // special key to return the Application
 const char sAppService[] = "ooo.vba.Application";
-const OUStringLiteral gsApplication( u"Application" );
+constexpr OUStringLiteral gsApplication( u"Application" );
 
 VbaGlobalsBase::VbaGlobalsBase(
 const uno::Reference< ov::XHelperInterface >& xParent,

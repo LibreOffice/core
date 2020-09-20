@@ -368,7 +368,7 @@ ImpXMLAutoLayoutInfo::ImpXMLAutoLayoutInfo(sal_uInt16 nTyp, ImpXMLEXPPageMasterI
     maPresRect.SetSize(aLayoutSize);
 }
 
-const OUStringLiteral gsPageLayoutNames( u"PageLayoutNames" );
+constexpr OUStringLiteral gsPageLayoutNames( u"PageLayoutNames" );
 
 SdXMLExport::SdXMLExport(
     const css::uno::Reference< css::uno::XComponentContext >& xContext,

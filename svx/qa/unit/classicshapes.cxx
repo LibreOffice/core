@@ -24,7 +24,7 @@ using namespace ::com::sun::star;
 
 namespace
 {
-const OUStringLiteral sDataDirectory(u"svx/qa/unit/data/");
+constexpr OUStringLiteral sDataDirectory(u"svx/qa/unit/data/");
 
 /// Tests not about special features of custom shapes, but about shapes in general.
 class ClassicshapesTest : public test::BootstrapFixture, public unotest::MacrosTest

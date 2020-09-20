@@ -146,26 +146,26 @@ bool supportsText(XmlShapeType eShapeType)
 
 }
 
-const OUStringLiteral gsZIndex( u"ZOrder" );
-const OUStringLiteral gsPrintable( u"Printable" );
-const OUStringLiteral gsVisible( u"Visible" );
-const OUStringLiteral gsModel( u"Model" );
-const OUStringLiteral gsStartShape( u"StartShape" );
-const OUStringLiteral gsEndShape( u"EndShape" );
-const OUStringLiteral gsOnClick( u"OnClick" );
-const OUStringLiteral gsEventType( u"EventType" );
-const OUStringLiteral gsPresentation( u"Presentation" );
-const OUStringLiteral gsMacroName( u"MacroName" );
-const OUStringLiteral gsScript( u"Script" );
-const OUStringLiteral gsLibrary( u"Library" );
-const OUStringLiteral gsClickAction( u"ClickAction" );
-const OUStringLiteral gsBookmark( u"Bookmark" );
-const OUStringLiteral gsEffect( u"Effect" );
-const OUStringLiteral gsPlayFull( u"PlayFull" );
-const OUStringLiteral gsVerb( u"Verb" );
-const OUStringLiteral gsSoundURL( u"SoundURL" );
-const OUStringLiteral gsSpeed( u"Speed" );
-const OUStringLiteral gsStarBasic( u"StarBasic" );
+constexpr OUStringLiteral gsZIndex( u"ZOrder" );
+constexpr OUStringLiteral gsPrintable( u"Printable" );
+constexpr OUStringLiteral gsVisible( u"Visible" );
+constexpr OUStringLiteral gsModel( u"Model" );
+constexpr OUStringLiteral gsStartShape( u"StartShape" );
+constexpr OUStringLiteral gsEndShape( u"EndShape" );
+constexpr OUStringLiteral gsOnClick( u"OnClick" );
+constexpr OUStringLiteral gsEventType( u"EventType" );
+constexpr OUStringLiteral gsPresentation( u"Presentation" );
+constexpr OUStringLiteral gsMacroName( u"MacroName" );
+constexpr OUStringLiteral gsScript( u"Script" );
+constexpr OUStringLiteral gsLibrary( u"Library" );
+constexpr OUStringLiteral gsClickAction( u"ClickAction" );
+constexpr OUStringLiteral gsBookmark( u"Bookmark" );
+constexpr OUStringLiteral gsEffect( u"Effect" );
+constexpr OUStringLiteral gsPlayFull( u"PlayFull" );
+constexpr OUStringLiteral gsVerb( u"Verb" );
+constexpr OUStringLiteral gsSoundURL( u"SoundURL" );
+constexpr OUStringLiteral gsSpeed( u"Speed" );
+constexpr OUStringLiteral gsStarBasic( u"StarBasic" );
 
 XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
                                 SvXMLExportPropertyMapper *pExtMapper )

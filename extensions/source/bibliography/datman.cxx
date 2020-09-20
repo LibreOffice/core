@@ -524,7 +524,7 @@ void SAL_CALL BibInterceptorHelper::setMasterDispatchProvider( const css::uno::R
 }
 
 
-OUStringLiteral const gGridName(u"theGrid");
+constexpr OUStringLiteral gGridName(u"theGrid");
 
 BibDataManager::BibDataManager()
     :BibDataManager_Base( GetMutex() )

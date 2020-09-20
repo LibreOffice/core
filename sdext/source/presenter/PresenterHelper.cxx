@@ -28,7 +28,7 @@ using namespace ::com::sun::star::presentation;
 
 namespace sdext::presenter {
 
-const OUStringLiteral msPaneURLPrefix( u"private:resource/pane/");
+constexpr OUStringLiteral msPaneURLPrefix( u"private:resource/pane/");
 const OUString PresenterHelper::msFullScreenPaneURL( msPaneURLPrefix + "FullScreenPane");
 
 Reference<presentation::XSlideShowController> PresenterHelper::GetSlideShowController (

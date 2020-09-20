@@ -82,9 +82,9 @@ namespace svxform
         OUString m_sInstance_UI;
         OUString m_sNone_UI;
 
-        static constexpr OUStringLiteral const m_sDoc_API = u"all";
-        static constexpr OUStringLiteral const m_sInstance_API = u"instance";
-        static constexpr OUStringLiteral const m_sNone_API = u"none";
+        static constexpr OUStringLiteral m_sDoc_API = u"all";
+        static constexpr OUStringLiteral m_sInstance_API = u"instance";
+        static constexpr OUStringLiteral m_sNone_API = u"none";
 
         ReplaceString( const ReplaceString& ) = delete;
 

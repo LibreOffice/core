@@ -3669,8 +3669,8 @@ void FmXFormShell::smartControlReset( const Reference< XIndexAccess >& _rxModels
         return;
     }
 
-    static const OUStringLiteral sClassIdPropertyName = u"" FM_PROP_CLASSID;
-    static const OUStringLiteral sBoundFieldPropertyName = u"" FM_PROP_BOUNDFIELD;
+    static constexpr OUStringLiteral sClassIdPropertyName = u"" FM_PROP_CLASSID;
+    static constexpr OUStringLiteral sBoundFieldPropertyName = u"" FM_PROP_BOUNDFIELD;
     sal_Int32 nCount = _rxModels->getCount();
     Reference< XPropertySet > xCurrent;
     Reference< XPropertySetInfo > xCurrentInfo;

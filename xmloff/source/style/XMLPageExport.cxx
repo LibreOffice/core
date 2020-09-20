@@ -41,8 +41,8 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::xmloff::token;
 
-const OUStringLiteral gsIsPhysical( u"IsPhysical" );
-const OUStringLiteral gsFollowStyle( u"FollowStyle" );
+constexpr OUStringLiteral gsIsPhysical( u"IsPhysical" );
+constexpr OUStringLiteral gsFollowStyle( u"FollowStyle" );
 
 namespace {
 

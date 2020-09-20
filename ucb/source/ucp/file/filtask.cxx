@@ -116,21 +116,21 @@ TaskManager::MyProperty::MyProperty( bool                               theisNat
 
         // Default properties
 
-const OUStringLiteral Title( u"Title" );
-const OUStringLiteral CasePreservingURL( u"CasePreservingURL" );
-const OUStringLiteral IsDocument( u"IsDocument" );
-const OUStringLiteral IsFolder( u"IsFolder" );
-const OUStringLiteral DateModified( u"DateModified" );
-const OUStringLiteral Size( u"Size" );
-const OUStringLiteral IsVolume( u"IsVolume" );
-const OUStringLiteral IsRemoveable( u"IsRemoveable" );
-const OUStringLiteral IsRemote( u"IsRemote" );
-const OUStringLiteral IsCompactDisc( u"IsCompactDisc" );
-const OUStringLiteral IsFloppy( u"IsFloppy" );
-const OUStringLiteral IsHidden( u"IsHidden" );
-const OUStringLiteral ContentType( u"ContentType" );
-const OUStringLiteral IsReadOnly( u"IsReadOnly" );
-const OUStringLiteral CreatableContentsInfo( u"CreatableContentsInfo" );
+constexpr OUStringLiteral Title( u"Title" );
+constexpr OUStringLiteral CasePreservingURL( u"CasePreservingURL" );
+constexpr OUStringLiteral IsDocument( u"IsDocument" );
+constexpr OUStringLiteral IsFolder( u"IsFolder" );
+constexpr OUStringLiteral DateModified( u"DateModified" );
+constexpr OUStringLiteral Size( u"Size" );
+constexpr OUStringLiteral IsVolume( u"IsVolume" );
+constexpr OUStringLiteral IsRemoveable( u"IsRemoveable" );
+constexpr OUStringLiteral IsRemote( u"IsRemote" );
+constexpr OUStringLiteral IsCompactDisc( u"IsCompactDisc" );
+constexpr OUStringLiteral IsFloppy( u"IsFloppy" );
+constexpr OUStringLiteral IsHidden( u"IsHidden" );
+constexpr OUStringLiteral ContentType( u"ContentType" );
+constexpr OUStringLiteral IsReadOnly( u"IsReadOnly" );
+constexpr OUStringLiteral CreatableContentsInfo( u"CreatableContentsInfo" );
 
 TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxContext,
               FileProvider* pProvider, bool bWithConfig )

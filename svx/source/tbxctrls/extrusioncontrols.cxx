@@ -326,8 +326,8 @@ double ExtrusionDepthDialog::getDepth() const
 double const aDepthListInch[] = { 0, 1270,2540,5080,10160 };
 double const aDepthListMM[] = { 0, 1000, 2500, 5000, 10000 };
 
-const OUStringLiteral gsExtrusionDepth( u".uno:ExtrusionDepth" );
-const OUStringLiteral gsMetricUnit(     u".uno:MetricUnit"     );
+constexpr OUStringLiteral gsExtrusionDepth( u".uno:ExtrusionDepth" );
+constexpr OUStringLiteral gsMetricUnit(     u".uno:MetricUnit"     );
 
 ExtrusionDepthWindow::ExtrusionDepthWindow(svt::PopupWindowController* pControl, weld::Widget* pParent)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/depthwindow.ui", "DepthWindow")

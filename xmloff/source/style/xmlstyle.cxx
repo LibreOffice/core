@@ -59,8 +59,8 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::style;
 using namespace ::xmloff::token;
 
-const OUStringLiteral gsParaStyleServiceName( u"com.sun.star.style.ParagraphStyle" );
-const OUStringLiteral gsTextStyleServiceName( u"com.sun.star.style.CharacterStyle" );
+constexpr OUStringLiteral gsParaStyleServiceName( u"com.sun.star.style.ParagraphStyle" );
+constexpr OUStringLiteral gsTextStyleServiceName( u"com.sun.star.style.CharacterStyle" );
 
 void SvXMLStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
                                       const OUString& rLocalName,

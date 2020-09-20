@@ -389,7 +389,7 @@ private:
     bool                mbHasDefWidth;      /// True = default column width is set from defaultColWidth attribute.
 };
 
-const OUStringLiteral gaSheetCellRanges( u"com.sun.star.sheet.SheetCellRanges" ); /// Service name for a SheetCellRanges object.
+constexpr OUStringLiteral gaSheetCellRanges( u"com.sun.star.sheet.SheetCellRanges" ); /// Service name for a SheetCellRanges object.
 
 WorksheetGlobals::WorksheetGlobals( const WorkbookHelper& rHelper, const ISegmentProgressBarRef& rxProgressBar, WorksheetType eSheetType, SCTAB nSheet ) :
     WorkbookHelper( rHelper ),

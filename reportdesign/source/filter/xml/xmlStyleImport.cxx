@@ -141,10 +141,10 @@ void OControlStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
 }
 
 
-const OUStringLiteral g_sTableStyleFamilyName( u"" XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME );
-const OUStringLiteral g_sColumnStyleFamilyName( u"" XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME );
-const OUStringLiteral g_sRowStyleFamilyName( u"" XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME );
-const OUStringLiteral g_sCellStyleFamilyName( u"" XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME );
+constexpr OUStringLiteral g_sTableStyleFamilyName( u"" XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME );
+constexpr OUStringLiteral g_sColumnStyleFamilyName( u"" XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME );
+constexpr OUStringLiteral g_sRowStyleFamilyName( u"" XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME );
+constexpr OUStringLiteral g_sCellStyleFamilyName( u"" XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME );
 
 OReportStylesContext::OReportStylesContext( ORptFilter& rImport,
         const bool bTempAutoStyles ) :

@@ -657,10 +657,10 @@ SvXMLStyleContext *XMLTableStylesContext::CreateDefaultStyleStyleChildContext(
     return pStyle;
 }
 
-const OUStringLiteral gsCellStyleServiceName(u"com.sun.star.style.CellStyle");
-const OUStringLiteral gsColumnStyleServiceName(u"" XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME);
-const OUStringLiteral gsRowStyleServiceName(u"" XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME);
-const OUStringLiteral gsTableStyleServiceName(u"" XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME);
+constexpr OUStringLiteral gsCellStyleServiceName(u"com.sun.star.style.CellStyle");
+constexpr OUStringLiteral gsColumnStyleServiceName(u"" XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME);
+constexpr OUStringLiteral gsRowStyleServiceName(u"" XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME);
+constexpr OUStringLiteral gsTableStyleServiceName(u"" XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME);
 
 XMLTableStylesContext::XMLTableStylesContext( SvXMLImport& rImport,
         const bool bTempAutoStyles )
