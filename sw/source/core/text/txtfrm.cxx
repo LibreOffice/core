@@ -1967,10 +1967,12 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
     sw::RedlineDelText const* pRedlineDelText(nullptr);
     sw::RedlineUnDelText const* pRedlineUnDelText(nullptr);
 
+    sal_uInt16 nWhich = 0;
     if (auto const pHint = dynamic_cast<sw::LegacyModifyHint const*>(&rHint))
     {
         pOld = pHint->m_pOld;
         pNew = pHint->m_pNew;
+        nWhich = pHint->GetWhich();
     }
     else if (auto const pHt = dynamic_cast<sw::MoveText const*>(&rHint))
     {
@@ -1995,7 +1997,6 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
     }
 
     SwTextNode const& rNode(static_cast<SwTextNode const&>(rModify));
-    const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
 
     // modifications concerning frame attributes are processed by the base class
     if( IsInRange( aFrameFormatSetRange, nWhich ) || RES_FMT_CHG == nWhich )

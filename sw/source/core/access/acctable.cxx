@@ -641,7 +641,7 @@ void SwAccessibleTable::Notify(const SfxHint& rHint)
     }
     else if(auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
     {
-        sal_uInt16 nWhich = pLegacyHint->m_pOld ? pLegacyHint->m_pOld->Which() : pLegacyHint->m_pNew ? pLegacyHint->m_pNew->Which() : 0;
+        const sal_uInt16 nWhich = pLegacyHint->GetWhich();
         const SwTabFrame* pTabFrame = static_cast<const SwTabFrame*>(GetFrame());
         if(nWhich == RES_NAME_CHANGED && pTabFrame)
         {

@@ -344,7 +344,7 @@ void SwTable::SwClientNotify(const SwModify&, const SfxHint& rHint)
     if(!pLegacy)
         return;
     // catch SSize changes, to adjust the lines/boxes
-    const sal_uInt16 nWhich = pLegacy->m_pOld ? pLegacy->m_pOld->Which() : pLegacy->m_pNew ? pLegacy->m_pNew->Which() : 0;
+    const sal_uInt16 nWhich = pLegacy->GetWhich();
     const SwFormatFrameSize* pNewSize = nullptr, *pOldSize = nullptr;
     switch(nWhich)
     {
