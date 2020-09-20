@@ -2887,10 +2887,12 @@ public:
     virtual void freeze() override
     {
         gtk_widget_freeze_child_notify(m_pWidget);
+        g_object_freeze_notify(G_OBJECT(m_pWidget));
     }
 
     virtual void thaw() override
     {
+        g_object_thaw_notify(G_OBJECT(m_pWidget));
         gtk_widget_thaw_child_notify(m_pWidget);
     }
 
@@ -10694,6 +10696,8 @@ public:
 
     virtual void all_foreach(const std::function<bool(weld::TreeIter&)>& func) override
     {
+        g_object_freeze_notify(G_OBJECT(m_pTreeModel));
+
         GtkInstanceTreeIter aGtkIter(nullptr);
         if (get_iter_first(aGtkIter))
         {
@@ -10703,10 +10707,14 @@ public:
                     break;
             } while (iter_next(aGtkIter));
         }
+
+        g_object_thaw_notify(G_OBJECT(m_pTreeModel));
     }
 
     virtual void selected_foreach(const std::function<bool(weld::TreeIter&)>& func) override
     {
+        g_object_freeze_notify(G_OBJECT(m_pTreeModel));
+
         GtkInstanceTreeIter aGtkIter(nullptr);
 
         GtkTreeModel* pModel;
@@ -10719,10 +10727,14 @@ public:
                 break;
         }
         g_list_free_full(pList, reinterpret_cast<GDestroyNotify>(gtk_tree_path_free));
+
+        g_object_thaw_notify(G_OBJECT(m_pTreeModel));
     }
 
     virtual void visible_foreach(const std::function<bool(weld::TreeIter&)>& func) override
     {
+        g_object_freeze_notify(G_OBJECT(m_pTreeModel));
+
         GtkTreePath* start_path;
         GtkTreePath* end_path;
 
@@ -10747,6 +10759,8 @@ public:
 
         gtk_tree_path_free(start_path);
         gtk_tree_path_free(end_path);
+
+        g_object_thaw_notify(G_OBJECT(m_pTreeModel));
     }
 
     virtual void connect_visible_range_changed(const Link<weld::TreeView&, void>& rLink) override
@@ -11430,9 +11444,10 @@ public:
     virtual void freeze() override
     {
         disable_notify_events();
-        g_object_ref(m_pTreeModel);
         GtkInstanceContainer::freeze();
+        g_object_ref(m_pTreeModel);
         gtk_tree_view_set_model(m_pTreeView, nullptr);
+        g_object_freeze_notify(G_OBJECT(m_pTreeModel));
         if (m_xSorter)
         {
             int nSortColumn;
@@ -11457,9 +11472,10 @@ public:
             m_aSavedSortTypes.pop_back();
             m_aSavedSortColumns.pop_back();
         }
+        g_object_thaw_notify(G_OBJECT(m_pTreeModel));
         gtk_tree_view_set_model(m_pTreeView, GTK_TREE_MODEL(m_pTreeModel));
-        GtkInstanceContainer::thaw();
         g_object_unref(m_pTreeModel);
+        GtkInstanceContainer::thaw();
         enable_notify_events();
     }
 
@@ -12036,18 +12052,20 @@ public:
     virtual void freeze() override
     {
         disable_notify_events();
-        g_object_ref(m_pTreeStore);
         GtkInstanceContainer::freeze();
+        g_object_ref(m_pTreeStore);
         gtk_icon_view_set_model(m_pIconView, nullptr);
+        g_object_freeze_notify(G_OBJECT(m_pTreeStore));
         enable_notify_events();
     }
 
     virtual void thaw() override
     {
         disable_notify_events();
+        g_object_thaw_notify(G_OBJECT(m_pTreeStore));
         gtk_icon_view_set_model(m_pIconView, GTK_TREE_MODEL(m_pTreeStore));
-        GtkInstanceContainer::thaw();
         g_object_unref(m_pTreeStore);
+        GtkInstanceContainer::thaw();
         enable_notify_events();
     }
 
@@ -14926,9 +14944,10 @@ public:
     virtual void freeze() override
     {
         disable_notify_events();
-        g_object_ref(m_pTreeModel);
         GtkInstanceContainer::freeze();
+        g_object_ref(m_pTreeModel);
         gtk_tree_view_set_model(m_pTreeView, nullptr);
+        g_object_freeze_notify(G_OBJECT(m_pTreeModel));
         if (m_xSorter)
         {
             GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeModel);
@@ -14945,10 +14964,11 @@ public:
             GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeModel);
             gtk_tree_sortable_set_sort_column_id(pSortable, m_nTextCol, GTK_SORT_ASCENDING);
         }
+        g_object_thaw_notify(G_OBJECT(m_pTreeModel));
         gtk_tree_view_set_model(m_pTreeView, m_pTreeModel);
+        g_object_unref(m_pTreeModel);
 
         GtkInstanceContainer::thaw();
-        g_object_unref(m_pTreeModel);
         enable_notify_events();
     }
 
