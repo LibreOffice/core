@@ -32,10 +32,11 @@ $(eval $(call gb_CppunitTest_add_exception_objects,tools_test, \
     tools/qa/cppunit/test_xmlwalker \
     tools/qa/cppunit/test_GenericTypeSerializer \
     tools/qa/cppunit/test_cpuid \
+    tools/qa/cppunit/test_cpu_runtime_detection_AVX2 \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,tools_test,\
-    tools/qa/cppunit/test_cpu_runtime_detection_AVX2, $(CXXFLAGS_INTRINSICS_AVX2) \
+    tools/qa/cppunit/test_cpu_runtime_detection_AVX2_check, $(CXXFLAGS_INTRINSICS_AVX2) \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,tools_test,\
