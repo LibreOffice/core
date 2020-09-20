@@ -136,7 +136,7 @@ protected:
     bool        m_bModifyLocked   :1;
     bool        m_bNewModel       :1; // false: old SubTableModel; true: new RowSpanModel
 
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
 public:
     enum SearchType
