@@ -347,19 +347,6 @@
         <menu:menuitem menu:id=".uno:ChangeCaseToKatakana"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menu menu:id=".uno:FormatSpacingMenu">
-        <menu:menupopup>
-        <menu:menuitem menu:id=".uno:SpacePara1"/>
-        <menu:menuitem menu:id=".uno:SpacePara15"/>
-        <menu:menuitem menu:id=".uno:SpacePara2"/>
-        <menu:menuseparator/>
-        <menu:menuitem menu:id=".uno:ParaspaceIncrease"/>
-        <menu:menuitem menu:id=".uno:ParaspaceDecrease"/>
-        <menu:menuseparator/>
-        <menu:menuitem menu:id=".uno:IncrementIndent"/>
-        <menu:menuitem menu:id=".uno:DecrementIndent"/>
-        </menu:menupopup>
-      </menu:menu>
       <menu:menu menu:id=".uno:TextAlign">
         <menu:menupopup>
         <menu:menuitem menu:id=".uno:CommonAlignLeft" menu:style="radio"/>
