@@ -74,7 +74,7 @@ inline Sequence< E >::Sequence(
 }
 
 #if defined(__COVERITY__)
-extern "C" void __coverity_tainted_data_sanitize__(void *);
+extern "C" void __coverity_tainted_data_sanitize__(const void *);
 #endif
 
 template< class E >
