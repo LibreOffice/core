@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f92c9a1_38930343",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 682,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-09-20T12:54:35Z",
+      "side": 1,
+      "message": "crashtesting shows this assert triggering on re-export of http://bugs.documentfoundation.org/attachment.cgi?id\u003d68205 to docx (bugdoc of https://bugs.documentfoundation.org/show_bug.cgi?id\u003d55725)\n\nhttps://dev-builds.libreoffice.org/crashtest/cb15d181b6446003ddc5a13eff9dfb14fc5a8179/backtraces/task802-core.backtrace.txt",
+      "revId": "df2f2c8bf1004d00dd6cdff0e3edb9bf5777ffbd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
