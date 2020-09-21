@@ -57,6 +57,8 @@ interface XEmfParser : ::com::sun::star::uno::XInterface
 
         @param Size
             the size in 100/th mm
+
+        @since LibreOffice 7.1
      */
     void setSizeHint([in] com::sun::star::geometry::RealPoint2D Size);
 };
