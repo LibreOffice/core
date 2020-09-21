@@ -92,7 +92,6 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_win,\
     vcl/win/dtrans/targetdragcontext \
     vcl/win/dtrans/targetdropcontext \
     vcl/win/dtrans/TxtCnvtHlp \
-    vcl/win/dtrans/WinClipbImpl \
     vcl/win/dtrans/WinClipboard \
     vcl/win/dtrans/XNotifyingDataObject \
     vcl/win/dtrans/XTDataObject \
