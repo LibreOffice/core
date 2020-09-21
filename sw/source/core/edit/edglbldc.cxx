@@ -358,27 +358,27 @@ void SwEditShell::GotoGlobalDocContent( const SwGlblDocContent& rPos )
 
 SwGlblDocContent::SwGlblDocContent( sal_uLong nPos )
 {
-    eType = GLBLDOC_UNKNOWN;
-    PTR.pTOX = nullptr;
-    nDocPos = nPos;
+    m_eType = GLBLDOC_UNKNOWN;
+    m_PTR.pTOX = nullptr;
+    m_nDocPos = nPos;
 }
 
 SwGlblDocContent::SwGlblDocContent( const SwTOXBaseSection* pTOX )
 {
-    eType = GLBLDOC_TOXBASE;
-    PTR.pTOX = pTOX;
+    m_eType = GLBLDOC_TOXBASE;
+    m_PTR.pTOX = pTOX;
 
     const SwSectionNode* pSectNd = pTOX->GetFormat()->GetSectionNode();
-    nDocPos = pSectNd ? pSectNd->GetIndex() : 0;
+    m_nDocPos = pSectNd ? pSectNd->GetIndex() : 0;
 }
 
 SwGlblDocContent::SwGlblDocContent( const SwSection* pSect )
 {
-    eType = GLBLDOC_SECTION;
-    PTR.pSect = pSect;
+    m_eType = GLBLDOC_SECTION;
+    m_PTR.pSect = pSect;
 
     const SwSectionNode* pSectNd = pSect->GetFormat()->GetSectionNode();
-    nDocPos = pSectNd ? pSectNd->GetIndex() : 0;
+    m_nDocPos = pSectNd ? pSectNd->GetIndex() : 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

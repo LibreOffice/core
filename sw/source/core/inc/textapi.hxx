@@ -29,7 +29,7 @@ class SwDoc;
 struct SwTextAPIEditSource_Impl;
 class SwTextAPIEditSource : public SvxEditSource
 {
-    SwTextAPIEditSource_Impl* pImpl;
+    SwTextAPIEditSource_Impl* m_pImpl;
 
     virtual std::unique_ptr<SvxEditSource> Clone() const override;
     virtual SvxTextForwarder*   GetTextForwarder() override;

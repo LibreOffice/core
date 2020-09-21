@@ -45,11 +45,12 @@ namespace {
 
 class SwIntrnlRefLink : public SwBaseLink
 {
-    SwDDEFieldType& rFieldType;
+    SwDDEFieldType& m_rFieldType;
+
 public:
-    SwIntrnlRefLink( SwDDEFieldType& rType, SfxLinkUpdateMode nUpdateType )
-        : SwBaseLink( nUpdateType, SotClipboardFormatId::STRING ),
-        rFieldType( rType )
+    SwIntrnlRefLink(SwDDEFieldType& rType, SfxLinkUpdateMode nUpdateType)
+        : SwBaseLink(nUpdateType, SotClipboardFormatId::STRING)
+        , m_rFieldType(rType)
     {}
 
     virtual void Closed() override;
@@ -87,9 +88,9 @@ public:
             if( bDel )
                 sStr = sStr.copy( 0, n );
 
-            rFieldType.SetExpansion( sStr );
+            m_rFieldType.SetExpansion(sStr);
             // set Expansion first! (otherwise this flag will be deleted)
-            rFieldType.SetCRLFDelFlag( bDel );
+            m_rFieldType.SetCRLFDelFlag(bDel);
         }
         break;
 
@@ -98,20 +99,20 @@ public:
         return SUCCESS;
     }
 
-    OSL_ENSURE( rFieldType.GetDoc(), "no pDoc" );
+    OSL_ENSURE(m_rFieldType.GetDoc(), "no pDoc");
 
     // no dependencies left?
-    if( rFieldType.HasWriterListeners() && !rFieldType.IsModifyLocked() && !ChkNoDataFlag() )
+    if (m_rFieldType.HasWriterListeners() && !m_rFieldType.IsModifyLocked() && !ChkNoDataFlag())
     {
-        SwViewShell* pSh = rFieldType.GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
-        SwEditShell* pESh = rFieldType.GetDoc()->GetEditShell();
+        SwViewShell* pSh = m_rFieldType.GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+        SwEditShell* pESh = m_rFieldType.GetDoc()->GetEditShell();
 
         // Search for fields. If no valid found, disconnect.
         SwMsgPoolItem aUpdateDDE( RES_UPDATEDDETBL );
-        rFieldType.LockModify();
+        m_rFieldType.LockModify();
 
         std::vector<SwFormatField*> vFields;
-        rFieldType.GatherFields(vFields, false);
+        m_rFieldType.GatherFields(vFields, false);
         if(vFields.size())
         {
             if(pESh)
@@ -127,7 +128,7 @@ public:
                 pFormatField->UpdateTextNode( nullptr, &aUpdateDDE );
         }
 
-        rFieldType.UnlockModify();
+        m_rFieldType.UnlockModify();
 
         if(vFields.size())
         {
@@ -146,15 +147,15 @@ public:
 
 void SwIntrnlRefLink::Closed()
 {
-    if( rFieldType.GetDoc() && !rFieldType.GetDoc()->IsInDtor() )
+    if (m_rFieldType.GetDoc() && !m_rFieldType.GetDoc()->IsInDtor())
     {
         // advise goes, convert all fields into text?
-        SwViewShell* pSh = rFieldType.GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
-        SwEditShell* pESh = rFieldType.GetDoc()->GetEditShell();
+        SwViewShell* pSh = m_rFieldType.GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+        SwEditShell* pESh = m_rFieldType.GetDoc()->GetEditShell();
         if( pESh )
         {
             pESh->StartAllAction();
-            pESh->FieldToText( &rFieldType );
+            pESh->FieldToText(&m_rFieldType);
             pESh->EndAllAction();
         }
         else
@@ -173,15 +174,15 @@ const SwNode* SwIntrnlRefLink::GetAnchor() const
 {
     // here, any anchor of the normal NodesArray should be sufficient
     const SwNode* pNd = nullptr;
-    rFieldType.CallSwClientNotify(sw::LinkAnchorSearchHint(rFieldType.GetDoc()->GetNodes(), pNd));
+    m_rFieldType.CallSwClientNotify(
+        sw::LinkAnchorSearchHint(m_rFieldType.GetDoc()->GetNodes(), pNd));
     return pNd;
 }
 
 bool SwIntrnlRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd ) const
 {
     bool bInRange = false;
-    rFieldType.CallSwClientNotify(sw::InRangeSearchHint(
-        nSttNd, nEndNd, bInRange));
+    m_rFieldType.CallSwClientNotify(sw::InRangeSearchHint(nSttNd, nEndNd, bInRange));
     return bInRange;
 }
 

@@ -1720,7 +1720,7 @@ std::unique_ptr<SwFieldType> SwPostItFieldType::Copy() const
 
 // PostIt field
 
-sal_uInt32 SwPostItField::m_nLastPostItId = 1;
+sal_uInt32 SwPostItField::s_nLastPostItId = 1;
 
 SwPostItField::SwPostItField( SwPostItFieldType* pT,
         const OUString& rAuthor,
@@ -1739,7 +1739,7 @@ SwPostItField::SwPostItField( SwPostItFieldType* pT,
     , m_aDateTime( rDateTime )
     , m_bResolved( bResolved )
 {
-    m_nPostItId = nPostItId == 0 ? m_nLastPostItId++ : nPostItId;
+    m_nPostItId = nPostItId == 0 ? s_nLastPostItId++ : nPostItId;
 }
 
 SwPostItField::~SwPostItField()
