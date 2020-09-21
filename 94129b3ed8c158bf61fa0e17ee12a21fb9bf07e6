@@ -22,6 +22,30 @@
       "revId": "94129b3ed8c158bf61fa0e17ee12a21fb9bf07e6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4b7c025_583a76ea",
+        "filename": "vcl/skia/x11/textrender.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2020-09-21T14:38:57Z",
+      "side": 1,
+      "message": "Order of evaluation is irrelevant here, the division will always be floating-point because of * and / being of the same precedence and left-associative. See the second paragraph in https://en.cppreference.com/w/cpp/language/eval_order .",
+      "parentUuid": "3c27555b_7a6d1bde",
+      "range": {
+        "startLine": 52,
+        "startChar": 19,
+        "endLine": 52,
+        "endChar": 41
+      },
+      "revId": "94129b3ed8c158bf61fa0e17ee12a21fb9bf07e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
