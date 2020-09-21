@@ -36,6 +36,8 @@ i18npool_COTXTS := \
         ne_charset.txt) \
     $(call gb_Helper_optional_locale,sid, \
         sid_charset.txt) \
+    $(call gb_Helper_optional_locale,vro, \
+        vro_alphanumeric.txt) \
     $(call gb_Helper_optional_locale,zh, \
         zh_charset.txt \
         zh_pinyin.txt \

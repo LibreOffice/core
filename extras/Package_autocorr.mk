@@ -55,6 +55,7 @@ $(eval $(call gb_Package_add_files,extras_autocorr,$(LIBO_SHARE_FOLDER)/autocorr
 	acor_sv-SE.dat \
 	acor_tr-TR.dat \
 	acor_vi-VN.dat \
+	acor_vro-EE.dat \
 	acor_zh-CN.dat \
 	acor_zh-TW.dat \
 ))

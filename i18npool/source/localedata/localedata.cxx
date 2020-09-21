@@ -148,6 +148,7 @@ const struct {
     { "tr_TR",  lcl_DATA_EURO },
     { "tt_RU",  lcl_DATA_EURO },
     { "et_EE",  lcl_DATA_EURO },
+    { "vro_EE", lcl_DATA_EURO },
     { "lb_LU",  lcl_DATA_EURO },
     { "lt_LT",  lcl_DATA_EURO },
     { "lv_LV",  lcl_DATA_EURO },

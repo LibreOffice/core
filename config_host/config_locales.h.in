@@ -49,6 +49,7 @@
 #define WITH_LOCALE_th 0
 #define WITH_LOCALE_tr 0
 #define WITH_LOCALE_uk 0
+#define WITH_LOCALE_vro 0
 #define WITH_LOCALE_zh 0
 
 #define WITH_LOCALE_FOR_SCRIPT_Cyrl 0
