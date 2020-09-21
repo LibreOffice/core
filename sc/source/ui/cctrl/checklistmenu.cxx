@@ -167,7 +167,8 @@ ScCheckListMenuWindow* ScCheckListMenuControl::addSubMenuItem(const OUString& rT
     MenuItemData aItem;
     aItem.mbEnabled = bEnabled;
     vcl::Window *pContainer = mxFrame->GetWindow(GetWindowType::FirstChild);
-    aItem.mxSubMenuWin.reset(VclPtr<ScCheckListMenuWindow>::Create(pContainer, mpDoc, false, -1, mxFrame.get()));
+    aItem.mxSubMenuWin.reset(VclPtr<ScCheckListMenuWindow>::Create(pContainer, mpDoc, false,
+                                                                   false, -1, mxFrame.get()));
     maMenuItems.emplace_back(std::move(aItem));
 
     mxMenu->append_text(rText);
@@ -412,7 +413,8 @@ ScCheckListMember::ScCheckListMember()
 }
 
 ScCheckListMenuControl::ScCheckListMenuControl(ScCheckListMenuWindow* pParent, vcl::Window* pContainer,
-                                               ScDocument* pDoc, bool bCanHaveSubMenu, int nWidth)
+                                               ScDocument* pDoc, bool bCanHaveSubMenu,
+                                               bool bHasDates, int nWidth)
     : mxFrame(pParent)
     , mxBuilder(Application::CreateInterimBuilder(pContainer, "modules/scalc/ui/filterdropdown.ui", false))
     , mxContainer(mxBuilder->weld_container("FilterDropDown"))
@@ -422,7 +424,6 @@ ScCheckListMenuControl::ScCheckListMenuControl(ScCheckListMenuWindow* pParent, v
     , mxBox(mxBuilder->weld_widget("box"))
     , mxListChecks(mxBuilder->weld_tree_view("check_list_box"))
     , mxTreeChecks(mxBuilder->weld_tree_view("check_tree_box"))
-    , mpChecks(mxTreeChecks.get())
     , mxChkToggleAll(mxBuilder->weld_check_button("toggle_all"))
     , mxBtnSelectSingle(mxBuilder->weld_button("select_current"))
     , mxBtnUnselectSingle(mxBuilder->weld_button("unselect_current"))
@@ -436,11 +437,27 @@ ScCheckListMenuControl::ScCheckListMenuControl(ScCheckListMenuWindow* pParent, v
     , mnSelectedMenu(MENU_NOT_SELECTED)
     , mpDoc(pDoc)
     , mnAsyncPostPopdownId(nullptr)
-    , mbHasDates(false)
+    , mbHasDates(bHasDates)
     , mbCanHaveSubMenu(bCanHaveSubMenu)
     , maOpenTimer(this)
     , maCloseTimer(this)
 {
+    /*
+       tdf#136559 If we have no dates we don't need a tree
+       structure, just a list. GtkListStore can be then
+       used which is much faster than a GtkTreeStore, so
+       with no dates switch to the treeview which uses the
+       faster GtkListStore
+    */
+    if (mbHasDates)
+        mpChecks = mxTreeChecks.get();
+    else
+    {
+        mxTreeChecks->hide();
+        mxListChecks->show();
+        mpChecks = mxListChecks.get();
+    }
+
     bool bIsSubMenu = pParent->GetParentMenu();
 
     int nChecksHeight = mxTreeChecks->get_height_rows(9);
@@ -531,13 +548,13 @@ ScCheckListMenuControl::~ScCheckListMenuControl()
 }
 
 ScCheckListMenuWindow::ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* pDoc, bool bCanHaveSubMenu,
-                                             int nWidth, ScCheckListMenuWindow* pParentMenu)
+                                             bool bTreeMode, int nWidth, ScCheckListMenuWindow* pParentMenu)
     : DockingWindow(pParent, "InterimDockParent", "svx/ui/interimdockparent.ui")
     , mxParentMenu(pParentMenu)
     , mxBox(get("box"))
 {
     setDeferredProperties();
-    mxControl.reset(new ScCheckListMenuControl(this, mxBox.get(), pDoc, bCanHaveSubMenu, nWidth));
+    mxControl.reset(new ScCheckListMenuControl(this, mxBox.get(), pDoc, bCanHaveSubMenu, bTreeMode, nWidth));
     SetBackground(Application::GetSettings().GetStyleSettings().GetMenuColor());
     set_id("check_list_menu");
 }
@@ -1148,24 +1165,6 @@ IMPL_LINK(ScCheckListMenuControl, KeyInputHdl, const KeyEvent&, rKEvt, bool)
     }
 
     return false;
-}
-
-void ScCheckListMenuControl::setHasDates(bool bHasDates)
-{
-    mbHasDates = bHasDates;
-
-    /*
-       tdf#136559 If we have no dates we don't need a tree
-       structure, just a list. GtkListStore can be then
-       used which is much faster than a GtkTreeStore, so
-       with no dates switch to the treeview which uses the
-       faster GtkListStore
-    */
-    assert(!mpChecks->n_children());
-    mpChecks->hide();
-    mpChecks = bHasDates ? mxTreeChecks.get() : mxListChecks.get();
-    mpChecks->show();
-    assert(!mpChecks->n_children());
 }
 
 namespace

@@ -115,8 +115,8 @@ public:
         Config();
     };
 
-    explicit ScCheckListMenuControl(ScCheckListMenuWindow* pParent, vcl::Window* pContainer, ScDocument* pDoc,
-                                    bool bCanHaveSubMenu, int nWidth);
+    ScCheckListMenuControl(ScCheckListMenuWindow* pParent, vcl::Window* pContainer, ScDocument* pDoc,
+                           bool bCanHaveSubMenu, bool bTreeMode, int nWidth);
     ~ScCheckListMenuControl();
 
     void addMenuItem(const OUString& rText, Action* pAction);
@@ -163,7 +163,6 @@ public:
     void setOKAction(Action* p);
     void setPopupEndAction(Action* p);
 
-    void setHasDates(bool bHasDates);
     int GetTextWidth(const OUString& rsName) const;
     int IncreaseWindowWidthToFitText(int nMaxTextWidth);
 
@@ -301,7 +300,8 @@ private:
 class ScCheckListMenuWindow : public DockingWindow
 {
 public:
-    explicit ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* pDoc, bool bCanHaveSubMenu, int nWidth = -1,
+    explicit ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* pDoc,
+                                   bool bCanHaveSubMenu, bool bTreeMode, int nWidth = -1,
                                    ScCheckListMenuWindow* pParentMenu = nullptr);
     virtual void dispose() override;
     virtual ~ScCheckListMenuWindow() override;
