@@ -254,9 +254,14 @@ public:
         // call the initialize methods of the CppUnitTestPlugIns that
         // we statically link to the app executable.
 #else
-        CppUnit::PlugInManager manager;
+        // The PlugInManager instance is deliberately leaked, so that the dynamic libraries it loads
+        // are never unloaded (which could make e.g. pointers from other libraries' static data
+        // structures to const data in those libraries, like some static OUString cache pointing at
+        // a const OUStringLiteral, become dangling by the time those static data structures are
+        // destroyed during exit):
+        auto manager = new CppUnit::PlugInManager;
         try {
-            manager.load(testlib, args);
+            manager->load(testlib, args);
         } catch (const CppUnit::DynamicLibraryManagerException &e) {
             std::cerr << "DynamicLibraryManagerException: \"" << e.what() << "\"\n";
 #ifdef _WIN32
