@@ -617,7 +617,10 @@ static bool lcl_IsNoEndTextAttrAtPos(SwRootFrame const& rLayout,
                 if( SVX_NUM_BITMAP != rNumFormat.GetNumberingType() )
                 {
                     if ( SVX_NUM_CHAR_SPECIAL == rNumFormat.GetNumberingType() )
-                        sExp = OUString(rNumFormat.GetBulletChar());
+                    {
+                        sal_UCS4 cBullet = rNumFormat.GetBulletChar();
+                        sExp = OUString(&cBullet, 1);
+                    }
                     else
                         sExp = pPropsNode->GetNumString(true, MAXLEVEL, &rLayout);
                 }

@@ -143,7 +143,7 @@ public:
 class SwBulletPortion : public SwNumberPortion
 {
 public:
-    SwBulletPortion( const sal_Unicode cCh,
+    SwBulletPortion( const sal_UCS4 cCh,
                      const OUString& rBulletFollowedBy,
                      std::unique_ptr<SwFont> pFnt,
                      const bool bLeft,

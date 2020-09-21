@@ -840,7 +840,8 @@ static long lcl_DrawBullet(vcl::RenderContext* pVDev, const SwNumFormat& rFormat
         aBulletColor.Invert();
     aFont.SetColor(aBulletColor);
     pVDev->SetFont( aFont );
-    OUString aText(rFormat.GetBulletChar());
+    sal_UCS4 cBullet = rFormat.GetBulletChar();
+    OUString aText(&cBullet, 1);
     long nY = nYStart;
     nY -= ((aTmpSize.Height() - rSize.Height())/ 2);
     pVDev->DrawText( Point(nXStart, nY), aText );

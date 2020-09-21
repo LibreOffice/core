@@ -30,6 +30,7 @@
 #include <unotools/fontcvt.hxx>
 #include <editeng/editengdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
+#include <vcl/vclenum.hxx>
 #include <memory>
 #include <optional>
 #include <algorithm>
@@ -113,7 +114,7 @@ private:
     sal_uInt8           nInclUpperLevels;   // Take over numbers from the previous level.
     sal_uInt16          nStart;             // Start of counting
 
-    sal_Unicode         cBullet;            // Symbol
+    sal_UCS4            cBullet;            // Symbol
     sal_uInt16          nBulletRelSize;     // percentage size of bullets
     Color               nBulletColor;       // Bullet color
 
@@ -180,8 +181,8 @@ public:
 
     void            SetBulletFont(const vcl::Font* pFont);
     const vcl::Font* GetBulletFont() const {return pBulletFont.get();}
-    void            SetBulletChar(sal_Unicode cSet){cBullet = cSet;}
-    sal_Unicode     GetBulletChar()const {return cBullet;}
+    void            SetBulletChar(sal_UCS4 cSet){cBullet = cSet;}
+    sal_UCS4        GetBulletChar()const {return cBullet;}
     void            SetBulletRelSize(sal_uInt16 nSet) {nBulletRelSize = std::max(nSet,sal_uInt16(SVX_NUM_REL_SIZE_MIN));}
     sal_uInt16      GetBulletRelSize() const { return nBulletRelSize;}
     void            SetBulletColor(Color nSet){nBulletColor = nSet;}

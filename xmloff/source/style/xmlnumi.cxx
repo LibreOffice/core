@@ -45,6 +45,8 @@
 
 #include <sax/tools/converter.hxx>
 
+#include <vcl/vclenum.hxx>
+
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
@@ -152,7 +154,7 @@ class SvxXMLListLevelStyleContext_Impl : public SvXMLImportContext
     rtl_TextEncoding    eBulletFontEncoding;
     sal_Int16           eImageVertOrient;
 
-    sal_Unicode         cBullet;
+    sal_UCS4            cBullet;
 
     sal_Int16           nRelSize;
     Color               m_nColor;
@@ -292,7 +294,10 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
             break;
         case XML_ELEMENT(TEXT, XML_BULLET_CHAR):
             if (!sValue.isEmpty())
-                cBullet = sValue[0];
+            {
+                sal_Int32 nIndexUtf16 = 0;
+                cBullet = sValue.iterateCodePoints(&nIndexUtf16);
+            }
             break;
         case XML_ELEMENT(XLINK, XML_HREF):
             if( bImage )
@@ -490,7 +495,7 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties()
             // Must append 'cBullet' even if it is zero
             // if 'bBullet' is true and 'cBullet' is zero - BulletChar property must be 0.
             pProps[nPos].Name = "BulletChar";
-            pProps[nPos++].Value <<= OUString( cBullet );
+            pProps[nPos++].Value <<= OUString(&cBullet, 1);
 
             pProps[nPos].Name = "BulletFont";
             pProps[nPos++].Value <<= aFDesc;
