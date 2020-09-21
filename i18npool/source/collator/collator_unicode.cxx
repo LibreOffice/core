@@ -80,6 +80,7 @@ const sal_uInt8* get_collator_data_ln_charset();
 const sal_uInt8* get_collator_data_my_dictionary();
 const sal_uInt8* get_collator_data_ne_charset();
 const sal_uInt8* get_collator_data_sid_charset();
+const sal_uInt8* get_collator_data_vro_alphanumeric();
 const sal_uInt8* get_collator_data_zh_TW_charset();
 const sal_uInt8* get_collator_data_zh_TW_radical();
 const sal_uInt8* get_collator_data_zh_TW_stroke();
@@ -102,6 +103,7 @@ size_t get_collator_data_ln_charset_length();
 size_t get_collator_data_my_dictionary_length();
 size_t get_collator_data_ne_charset_length();
 size_t get_collator_data_sid_charset_length();
+size_t get_collator_data_vro_alphanumeric_length();
 size_t get_collator_data_zh_TW_charset_length();
 size_t get_collator_data_zh_TW_radical_length();
 size_t get_collator_data_zh_TW_stroke_length();
@@ -298,6 +300,14 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                 {
                     func = get_collator_data_sid_charset;
                     funclen = get_collator_data_sid_charset_length;
+                }
+#endif
+#if WITH_LOCALE_ALL || WITH_LOCALE_vro
+            } else if ( rLocale.Language == "vro" ) {
+                if ( rAlgorithm == "alphanumeric" )
+                {
+                    func = get_collator_data_vro_alphanumeric;
+                    funclen = get_collator_data_vro_alphanumeric_length;
                 }
 #endif
 #if WITH_LOCALE_ALL || WITH_LOCALE_zh
