@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-05-06 11:57:12 using:
+ Generated on 2020-09-21 15:21:21 using:
  ./bin/update_pch external/pdfium pdfium --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -267,6 +267,7 @@
 #include <core/fxcodec/jpx/cjpx_decoder.h>
 #include <core/fxcodec/jpx/jpx_decode_utils.h>
 #include <core/fxcodec/scanlinedecoder.h>
+#include <core/fxcrt/autonuller.h>
 #include <core/fxcrt/autorestorer.h>
 #include <core/fxcrt/bytestring.h>
 #include <core/fxcrt/cfx_binarybuf.h>
@@ -368,7 +369,6 @@
 #include <core/fxge/fx_dib.h>
 #include <core/fxge/fx_font.h>
 #include <core/fxge/fx_freetype.h>
-#include <core/fxge/render_defines.h>
 #include <core/fxge/renderdevicedriver_iface.h>
 #include <core/fxge/scoped_font_transform.h>
 #include <core/fxge/systemfontinfo_iface.h>
