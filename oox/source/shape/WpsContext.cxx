@@ -160,6 +160,11 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                             xTextBoxPropertySet->setPropertyValue("CharColor", xCharColor);
                     }
                 }
+
+                auto nWrappingType = rAttribs.getToken(XML_wrap, XML_square);
+                xPropertySet->setPropertyValue("TextWordWrap",
+                                               uno::makeAny(nWrappingType == XML_square));
+
                 return this;
             }
             break;
