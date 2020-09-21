@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8d8ca7c7_60b25e13",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport15.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-09-21T12:37:41Z",
+      "side": 1,
+      "message": "The comment says 4 and the XPath says 5, maybe tweak the comment? I assume that the page break is meant to be between page 4 and 5, but just guessing.",
+      "revId": "5752659753df3325283d1208f946da5fa8c8dc85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7edd0dbb_a285aa1b",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2730,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-09-21T12:37:41Z",
+      "side": 1,
+      "message": "Can we have a situation where we still need a section break here, because the current node specifies a \"break after\" page break?",
+      "revId": "5752659753df3325283d1208f946da5fa8c8dc85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
