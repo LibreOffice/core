@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c27555b_7a6d1bde",
+        "filename": "vcl/skia/x11/textrender.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-21T14:04:07Z",
+      "side": 1,
+      "message": "I might be wrong, but I think that the order of evaluation here is implementation-dependent, so integral division might be ordered prior to floating-point multiplication, resulting in unexpected result?",
+      "range": {
+        "startLine": 52,
+        "startChar": 19,
+        "endLine": 52,
+        "endChar": 41
+      },
+      "revId": "94129b3ed8c158bf61fa0e17ee12a21fb9bf07e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
