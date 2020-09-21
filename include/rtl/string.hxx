@@ -24,6 +24,7 @@
 
 #include <cassert>
 #include <cstddef>
+#include <cstdlib>
 #include <limits>
 #include <new>
 #include <ostream>
@@ -32,6 +33,7 @@
 
 #if defined LIBO_INTERNAL_ONLY
 #include <string_view>
+#include <type_traits>
 #endif
 
 #include "rtl/textenc.h"
@@ -114,12 +116,31 @@ public:
 
     constexpr char const * getStr() const SAL_RETURNS_NONNULL { return buffer; }
 
+    // offsetof needs a complete type, so do not have these static_asserts as class template
+    // members, but postpone their instantiation to the later non-member static_assert that calls
+    // detail_assertLayout:
+    static constexpr bool detail_assertLayout() {
+        static_assert(offsetof(OStringLiteral, refCount) == offsetof(rtl_String, refCount));
+        static_assert(
+            std::is_same_v<decltype(refCount), decltype(rtl_String::refCount)>);
+        static_assert(offsetof(OStringLiteral, length) == offsetof(rtl_String, length));
+        static_assert(std::is_same_v<decltype(length), decltype(rtl_String::length)>);
+        static_assert(offsetof(OStringLiteral, buffer) == offsetof(rtl_String, buffer));
+        static_assert(
+            std::is_same_v<
+                std::remove_extent_t<decltype(buffer)>,
+                std::remove_extent_t<decltype(rtl_String::buffer)>>);
+        return true;
+    }
+
 private:
     // Same layout as rtl_String (include/rtl/string.h):
     oslInterlockedCount refCount = 0x40000000; // SAL_STRING_STATIC_FLAG (sal/rtl/strimp.hxx)
     sal_Int32 length = N - 1;
     char buffer[N] = {}; //TODO: drop initialization for C++20 (P1331R2)
 };
+
+static_assert(OStringLiteral<1>::detail_assertLayout());
 #endif
 
 /* ======================================================================= */

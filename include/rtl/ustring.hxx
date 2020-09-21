@@ -24,6 +24,7 @@
 
 #include <cassert>
 #include <cstddef>
+#include <cstdlib>
 #include <limits>
 #include <new>
 #include <ostream>
@@ -31,6 +32,7 @@
 
 #if defined LIBO_INTERNAL_ONLY
 #include <string_view>
+#include <type_traits>
 #endif
 
 #include "rtl/ustring.h"
@@ -98,12 +100,30 @@ public:
 
     constexpr operator std::u16string_view() const { return {buffer, sal_uInt32(length)}; }
 
+    // offsetof needs a complete type, so do not have these static_asserts as class template
+    // members, but postpone their instantiation to the later non-member static_assert that calls
+    // detail_assertLayout:
+    static constexpr bool detail_assertLayout() {
+        static_assert(offsetof(OUStringLiteral, refCount) == offsetof(rtl_uString, refCount));
+        static_assert(std::is_same_v<decltype(refCount), decltype(rtl_uString::refCount)>);
+        static_assert(offsetof(OUStringLiteral, length) == offsetof(rtl_uString, length));
+        static_assert(std::is_same_v<decltype(length), decltype(rtl_uString::length)>);
+        static_assert(offsetof(OUStringLiteral, buffer) == offsetof(rtl_uString, buffer));
+        static_assert(
+            std::is_same_v<
+                std::remove_extent_t<decltype(buffer)>,
+                std::remove_extent_t<decltype(rtl_uString::buffer)>>);
+        return true;
+    }
+
 private:
     // Same layout as rtl_uString (include/rtl/ustring.h):
     oslInterlockedCount refCount = 0x40000000; // SAL_STRING_STATIC_FLAG (sal/rtl/strimp.hxx)
     sal_Int32 length = N - 1;
     sal_Unicode buffer[N] = {}; //TODO: drop initialization for C++20 (P1331R2)
 };
+
+static_assert(OUStringLiteral<1>::detail_assertLayout());
 
 #if defined RTL_STRING_UNITTEST
 namespace libreoffice_internal {
