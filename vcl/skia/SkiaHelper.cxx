@@ -125,8 +125,9 @@ static bool isVulkanBlacklisted(const VkPhysicalDeviceProperties& props)
                                     << ", vendor: " << vendorIdStr << " ("
                                     << vendorAsString(vendorId) << "), device: " << deviceIdStr
                                     << ", type: " << deviceType << ", name: " << props.deviceName);
-    bool blacklisted = DriverBlocklist::IsDeviceBlocked(getBlacklistFile(), driverVersionString,
-                                                        vendorIdStr, deviceIdStr);
+    bool blacklisted
+        = DriverBlocklist::IsDeviceBlocked(getBlacklistFile(), DriverBlocklist::VersionType::Vulkan,
+                                           driverVersionString, vendorIdStr, deviceIdStr);
     writeToLog(logFile, "Blacklisted", blacklisted ? "yes" : "no");
     return blacklisted;
 }
