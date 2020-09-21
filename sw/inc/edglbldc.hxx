@@ -34,12 +34,12 @@ enum GlobalDocContentType {
 
 class SwGlblDocContent
 {
-    GlobalDocContentType eType;
-    sal_uLong nDocPos;
+    GlobalDocContentType m_eType;
+    sal_uLong m_nDocPos;
     union {
         const SwTOXBase* pTOX;
         const SwSection* pSect;
-    } PTR;
+    } m_PTR;
 
 public:
     SwGlblDocContent( sal_uLong nPos );
@@ -47,12 +47,12 @@ public:
     SwGlblDocContent( const SwSection* pSect );
 
     /// Query contents.
-    GlobalDocContentType GetType() const { return eType; }
+    GlobalDocContentType GetType() const { return m_eType; }
     const SwSection* GetSection() const
-                            { return GLBLDOC_SECTION == eType ? PTR.pSect : nullptr; }
+                            { return GLBLDOC_SECTION == m_eType ? m_PTR.pSect : nullptr; }
     const SwTOXBase* GetTOX() const
-                            { return GLBLDOC_TOXBASE == eType ? PTR.pTOX : nullptr; }
-    sal_uLong GetDocPos() const { return nDocPos; }
+                            { return GLBLDOC_TOXBASE == m_eType ? m_PTR.pTOX : nullptr; }
+    sal_uLong GetDocPos() const { return m_nDocPos; }
 
     /// For sorting.
     bool operator==( const SwGlblDocContent& rCmp ) const

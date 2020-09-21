@@ -451,7 +451,7 @@ class SW_DLLPUBLIC SwPostItField final : public SwField
     sal_uInt32 m_nPostItId;
 
 public:
-    static sal_uInt32 m_nLastPostItId;
+    static sal_uInt32 s_nLastPostItId;
 
     SwPostItField( SwPostItFieldType*,
                    const OUString& rAuthor,

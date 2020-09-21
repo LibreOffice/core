@@ -84,8 +84,8 @@ SwTextAPIEditSource::SwTextAPIEditSource( const SwTextAPIEditSource& rSource )
 : SvxEditSource( *this )
 {
     // shallow copy; uses internal refcounting
-    pImpl = rSource.pImpl;
-    pImpl->mnRef++;
+    m_pImpl = rSource.m_pImpl;
+    m_pImpl->mnRef++;
 }
 
 std::unique_ptr<SvxEditSource> SwTextAPIEditSource::Clone() const
@@ -99,93 +99,93 @@ void SwTextAPIEditSource::UpdateData()
 }
 
 SwTextAPIEditSource::SwTextAPIEditSource(SwDoc* pDoc)
-: pImpl(new SwTextAPIEditSource_Impl)
+: m_pImpl(new SwTextAPIEditSource_Impl)
 {
-    pImpl->mpPool = &pDoc->GetDocShell()->GetPool();
-    pImpl->mpDoc = pDoc;
-    pImpl->mnRef = 1;
+    m_pImpl->mpPool = &pDoc->GetDocShell()->GetPool();
+    m_pImpl->mpDoc = pDoc;
+    m_pImpl->mnRef = 1;
 }
 
 SwTextAPIEditSource::~SwTextAPIEditSource()
 {
-    if (!--pImpl->mnRef)
-        delete pImpl;
+    if (!--m_pImpl->mnRef)
+        delete m_pImpl;
 }
 
 void SwTextAPIEditSource::Dispose()
 {
-    pImpl->mpPool=nullptr;
-    pImpl->mpDoc=nullptr;
-    pImpl->mpTextForwarder.reset();
-    pImpl->mpOutliner.reset();
+    m_pImpl->mpPool=nullptr;
+    m_pImpl->mpDoc=nullptr;
+    m_pImpl->mpTextForwarder.reset();
+    m_pImpl->mpOutliner.reset();
 }
 
 SvxTextForwarder* SwTextAPIEditSource::GetTextForwarder()
 {
-    if( !pImpl->mpPool )
+    if( !m_pImpl->mpPool )
         return nullptr; // mpPool == 0 can be used to flag this as disposed
 
-    if( !pImpl->mpOutliner )
+    if( !m_pImpl->mpOutliner )
     {
         //init draw model first
-        pImpl->mpDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
-        pImpl->mpOutliner.reset(new Outliner(pImpl->mpPool, OutlinerMode::TextObject));
-        pImpl->mpDoc->SetCalcFieldValueHdl(pImpl->mpOutliner.get());
+        m_pImpl->mpDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
+        m_pImpl->mpOutliner.reset(new Outliner(m_pImpl->mpPool, OutlinerMode::TextObject));
+        m_pImpl->mpDoc->SetCalcFieldValueHdl(m_pImpl->mpOutliner.get());
     }
 
-    if( !pImpl->mpTextForwarder )
+    if( !m_pImpl->mpTextForwarder )
     {
-        pImpl->mpTextForwarder.reset(new SvxOutlinerForwarder(*pImpl->mpOutliner, false));
+        m_pImpl->mpTextForwarder.reset(new SvxOutlinerForwarder(*m_pImpl->mpOutliner, false));
     }
 
-    return pImpl->mpTextForwarder.get();
+    return m_pImpl->mpTextForwarder.get();
 }
 
 void SwTextAPIEditSource::SetText( OutlinerParaObject const & rText )
 {
-    if ( pImpl->mpPool )
+    if ( m_pImpl->mpPool )
     {
-        if( !pImpl->mpOutliner )
+        if( !m_pImpl->mpOutliner )
         {
             //init draw model first
-            pImpl->mpDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
-            pImpl->mpOutliner.reset(new Outliner(pImpl->mpPool, OutlinerMode::TextObject));
-            pImpl->mpDoc->SetCalcFieldValueHdl(pImpl->mpOutliner.get());
+            m_pImpl->mpDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
+            m_pImpl->mpOutliner.reset(new Outliner(m_pImpl->mpPool, OutlinerMode::TextObject));
+            m_pImpl->mpDoc->SetCalcFieldValueHdl(m_pImpl->mpOutliner.get());
         }
 
-        pImpl->mpOutliner->SetText( rText );
+        m_pImpl->mpOutliner->SetText( rText );
     }
 }
 
 void SwTextAPIEditSource::SetString( const OUString& rText )
 {
-    if ( !pImpl->mpPool )
+    if ( !m_pImpl->mpPool )
         return;
 
-    if( !pImpl->mpOutliner )
+    if( !m_pImpl->mpOutliner )
     {
         //init draw model first
-        pImpl->mpDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
-        pImpl->mpOutliner.reset(new Outliner(pImpl->mpPool, OutlinerMode::TextObject));
-        pImpl->mpDoc->SetCalcFieldValueHdl(pImpl->mpOutliner.get());
+        m_pImpl->mpDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
+        m_pImpl->mpOutliner.reset(new Outliner(m_pImpl->mpPool, OutlinerMode::TextObject));
+        m_pImpl->mpDoc->SetCalcFieldValueHdl(m_pImpl->mpOutliner.get());
     }
     else
-        pImpl->mpOutliner->Clear();
-    pImpl->mpOutliner->Insert( rText );
+        m_pImpl->mpOutliner->Clear();
+    m_pImpl->mpOutliner->Insert( rText );
 }
 
 std::unique_ptr<OutlinerParaObject> SwTextAPIEditSource::CreateText()
 {
-    if ( pImpl->mpPool && pImpl->mpOutliner )
-        return pImpl->mpOutliner->CreateParaObject();
+    if ( m_pImpl->mpPool && m_pImpl->mpOutliner )
+        return m_pImpl->mpOutliner->CreateParaObject();
     else
         return nullptr;
 }
 
 OUString SwTextAPIEditSource::GetText() const
 {
-    if ( pImpl->mpPool && pImpl->mpOutliner )
-        return pImpl->mpOutliner->GetEditEngine().GetText();
+    if ( m_pImpl->mpPool && m_pImpl->mpOutliner )
+        return m_pImpl->mpOutliner->GetEditEngine().GetText();
     else
         return OUString();
 }
