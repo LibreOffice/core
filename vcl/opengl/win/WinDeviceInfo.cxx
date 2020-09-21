@@ -176,7 +176,8 @@ static OUString getDenylistFile()
 
 bool WinOpenGLDeviceInfo::FindBlocklistedDeviceInList()
 {
-    return DriverBlocklist::IsDeviceBlocked( getDenylistFile(), maDriverVersion, maAdapterVendorID, maAdapterDeviceID);
+    return DriverBlocklist::IsDeviceBlocked( getDenylistFile(), DriverBlocklist::VersionType::OpenGL,
+        maDriverVersion, maAdapterVendorID, maAdapterDeviceID);
 }
 
 namespace {
