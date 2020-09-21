@@ -27,10 +27,12 @@ class BlocklistParserTest : public test::BootstrapFixtureBase
 {
     void testParse();
     void testEvaluate();
+    void testVulkan();
 
     CPPUNIT_TEST_SUITE(BlocklistParserTest);
     CPPUNIT_TEST(testParse);
     CPPUNIT_TEST(testEvaluate);
+    CPPUNIT_TEST(testVulkan);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -133,6 +135,25 @@ void BlocklistParserTest::testEvaluate()
                                     aDriveInfos, VersionType::OpenGL, "9.17.10.4229", vendorIntel, "all", DRIVER_OS_WINDOWS_7));
 
 
+}
+
+void BlocklistParserTest::testVulkan()
+{
+    std::vector<DriverInfo> aDriveInfos;
+
+    Parser aBlocklistParser(m_directories.getURLFromSrc("vcl/qa/cppunit/") + "test_blocklist_vulkan.xml",
+        aDriveInfos, VersionType::Vulkan);
+    aBlocklistParser.parse();
+
+    OUString vendorAMD = GetVendorId(VendorAMD);
+
+    // Check Versions
+    CPPUNIT_ASSERT_EQUAL(false, FindBlocklistedDeviceInList(
+                                    aDriveInfos, VersionType::Vulkan, "1.2.3", vendorAMD, "all", DRIVER_OS_ALL));
+    CPPUNIT_ASSERT_EQUAL(true, FindBlocklistedDeviceInList(
+                                    aDriveInfos, VersionType::Vulkan, "1.2.2", vendorAMD, "all", DRIVER_OS_ALL));
+    CPPUNIT_ASSERT_EQUAL(false, FindBlocklistedDeviceInList(
+                                    aDriveInfos, VersionType::Vulkan, "1.2.20", vendorAMD, "all", DRIVER_OS_ALL));
 }
 
 } // namespace
