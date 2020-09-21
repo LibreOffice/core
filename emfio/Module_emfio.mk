@@ -23,8 +23,8 @@ $(eval $(call gb_Module_add_targets,emfio,\
 ))
 
 $(eval $(call gb_Module_add_check_targets,emfio,\
-    CppunitTest_emfio_emf_test \
-	$(if $(MERGELIBS),,CppunitTest_emfio_wmf_test) \
+    CppunitTest_emfio_emf \
+	$(if $(MERGELIBS),,CppunitTest_emfio_wmf) \
 ))
 
 # vim: set noet ts=4 sw=4:
