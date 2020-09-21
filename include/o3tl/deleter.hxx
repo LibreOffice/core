@@ -32,7 +32,7 @@ template<typename T> struct default_delete
         {
             delete p;
         }
-        catch (const css::uno::Exception&)
+        catch (const css::uno::Exception& ex)
         {
             SAL_WARN("vcl.app", "Fatal exception: " << exceptionToString(ex));
             std::terminate();
