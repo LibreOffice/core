@@ -1,0 +1,73 @@
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# Võro sort order
+
+# There is notable inconsistency between publications/users concerning:
+# palatalisation marker:
+#   a) acute above (or slightly after) the letter (preferred)
+#   b) apostrophe (or non-combining acute) after the letter
+#   c) nothing
+# glottal stop letter:
+#   a) q
+#   b) apostrophe
+#   c) nothing
+#   d) in dictionaries also ˀ or ʔ (usually superscripted to look like ˀ)
+
+# Some typographical notes
+#
+# Several letters don't have precomposed glyphs: B́, D́, F́, H́, T́, V́.
+# The online Võro-Estonian dictionary uses a font where dot-above is
+# rendered as acute for b, f, h; combining acute accent is used for v.
+#
+# Lowercase ď, ľ, ť and uppercase Ľ are in principle composed with
+# caron, not acute, however those forms are used more than d́, ĺ, t́, Ĺ
+# (uppercase Ď and Ť with obvious caron are not used, but are included
+# here for case insensitivity's sake).
+#
+# Non-combining acute accent ´ (\u00b4) after the letter makes the text
+# look jagged, so those combinations are not included in the collation
+# rules below - instead, we provide autocorrect rules to replace them
+# with precomposed glyphs (if available) or with letter plus combining
+# acute accent.
+
+# Palatalized consonants
+#
+# Precomposed letter (with either acute or dot-above (see notes above),
+# or in case of L, with acute and caron (see notes above);
+# with combining acute accent  ́ (\u0301) if there's no precomposed glyph;
+# with apostrophe ' (straight/ASCII; \u0027; NB: has to be escaped: '');
+# with right single quotation mark ’ (typographic apostrophe; \u2019).
+
+& b << ḃ = b́ = b'' = b’ <<< B << Ḃ = B́ = B'' = B’
+& d << ď = d́ = d'' = d’ <<< D << Ď = D́ = D'' = D’
+& f << ḟ = f́ = f'' = f’ <<< F << Ḟ = F́ = F'' = F’
+& g <<   ǵ   = g'' = g’ <<< G <<   Ǵ   = G'' = G’
+& h << ḣ = h́ = h'' = h’ <<< H << Ḣ = H́ = H'' = H’
+& k <<   ḱ   = k'' = k’ <<< K <<   Ḱ   = K'' = K’
+& l << ĺ = ľ = l'' = l’ <<< L << Ĺ = Ľ = L'' = L’
+& m <<   ḿ   = m'' = m’ <<< M <<   Ḿ   = M'' = M’
+& n <<   ń   = n'' = n’ <<< N <<   Ń   = N'' = N’
+& p <<   ṕ   = p'' = p’ <<< P <<   Ṕ   = P'' = P’
+& r <<   ŕ   = r'' = r’ <<< R <<   Ŕ   = R'' = R’
+& s <<   ś   = s'' = s’ <<< S <<   Ś   = S'' = S’ < š <<< Š
+& t << ť = t́ = t'' = t’ <<< T << Ť = T́ = T'' = T’
+& v <<   v́   = v'' = v’ <<< V <<   V́   = V'' = V’
+
+# Glottal stop
+#
+# After a vowel, apostrophe is used as a glottal stop marker, as is Q.
+# NB: straight/ASCII apostrophe has to be escaped: ''
+
+& q = ˀ = a|'' = a|’ = e|'' = e|’ = i|'' = i|’ = o|'' = o|’ = u|'' = u|’ = õ|'' = õ|’ = ä|'' = ä|’ = ö|'' = ö|’ = ü|'' = ü|’ = y|'' = y|’ <<< Q = ʔ = A|'' = A|’ = E|'' = E|’ = I|'' = I|’ = O|'' = O|’ = U|'' = U|’ = Õ|'' = Õ|’ = Ä|'' = Ä|’ = Ö|'' = Ö|’ = Ü|'' = Ü|’ = Y|'' = Y|’
+
+# Final letters of the alphabet
+#
+# Just like in Estonian (et), except that Z & Ž are at the very end
+
+& W < õ <<< Õ < ä <<< Ä < ö <<< Ö < ü <<< Ü
+& Z < ž <<< Ž
