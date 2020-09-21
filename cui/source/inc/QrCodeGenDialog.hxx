@@ -9,6 +9,8 @@
 #ifndef INCLUDED_CUI_INC_QRCODEGENDIALOG_HXX
 #define INCLUDED_CUI_INC_QRCODEGENDIALOG_HXX
 
+#include <config_qrcodegen.h>
+
 #include <vcl/weld.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>
@@ -32,7 +34,9 @@ private:
     std::unique_ptr<weld::Entry> m_xEdittext;
     std::unique_ptr<weld::RadioButton> m_xECC[4];
     std::unique_ptr<weld::SpinButton> m_xSpinBorder;
+#if ENABLE_QRCODEGEN
     weld::Widget* mpParent;
+#endif
 
     css::uno::Reference<css::beans::XPropertySet> m_xExistingShapeProperties;
 
