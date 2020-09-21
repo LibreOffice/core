@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fcba4116_64795a42",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport15.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-09-21T16:37:55Z",
+      "side": 1,
+      "message": "This goes together with the prior comment(s). Currently the page layout is a bit messed up, so the comments are just to alert someone making changes affecting the page that it is on that they are free to adjust the page number.  When you look at the ODT, it is a break between 3-4. In DOCX, it ends up being a break between 4-5. It actually ends up being on page 6 by the end of the patch series...",
+      "parentUuid": "8d8ca7c7_60b25e13",
+      "revId": "5752659753df3325283d1208f946da5fa8c8dc85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7edd0dbb_a285aa1b",
         "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
         "patchSetId": 6
@@ -30,6 +48,24 @@
       "writtenOn": "2020-09-21T12:37:41Z",
       "side": 1,
       "message": "Can we have a situation where we still need a section break here, because the current node specifies a \"break after\" page break?",
+      "revId": "5752659753df3325283d1208f946da5fa8c8dc85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9440ed3_d5b2f347",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2730,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-09-21T16:37:55Z",
+      "side": 1,
+      "message": "A page-after break can\u0027t contain a RES_PAGEDESC, so that will be quite a different example document. But yes, it looks like it isn\u0027t handled well either, so that can be a separate patch added to the series.",
+      "parentUuid": "7edd0dbb_a285aa1b",
       "revId": "5752659753df3325283d1208f946da5fa8c8dc85",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
