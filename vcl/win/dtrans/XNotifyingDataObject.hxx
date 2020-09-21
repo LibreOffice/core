@@ -36,7 +36,7 @@
 ----------------------------------------------------------------------------*/
 
 // forward
-class CWinClipbImpl;
+class CWinClipboard;
 
 class CXNotifyingDataObject : public IDataObject
 {
@@ -45,7 +45,7 @@ public:
         const IDataObjectPtr& aIDataObject,
         const css::uno::Reference< css::datatransfer::XTransferable >& aXTransferable,
         const css::uno::Reference< css::datatransfer::clipboard::XClipboardOwner >& aXClipOwner,
-        CWinClipbImpl* theWinClipImpl );
+        CWinClipboard* theWinClipoard);
 
     virtual ~CXNotifyingDataObject() {}
 
@@ -77,9 +77,9 @@ private:
     IDataObjectPtr                                                                m_aIDataObject;
     const css::uno::Reference< css::datatransfer::XTransferable >                 m_XTransferable;
     const css::uno::Reference< css::datatransfer::clipboard::XClipboardOwner >    m_XClipboardOwner;
-    CWinClipbImpl*                                                                m_pWinClipImpl;
+    CWinClipboard* m_pWinClipImpl;
 
-    friend class CWinClipbImpl;
+    friend class CWinClipboard;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
