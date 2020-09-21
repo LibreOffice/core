@@ -1179,7 +1179,7 @@ namespace cairocanvas
 
             int nPixelWidth = std::round(rSize.Width * aMatrix.xx);
             int nPixelHeight = std::round(rSize.Height * aMatrix.yy);
-            if (nPixelWidth > 0 && nPixelHeight > 0)
+            if (std::abs(nPixelWidth) > 0 && std::abs(nPixelHeight) > 0)
             {
                 // Only render the image if it's at least 1x1 px sized.
                 if (bModulateColors)
