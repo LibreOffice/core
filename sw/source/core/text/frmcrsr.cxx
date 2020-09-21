@@ -719,7 +719,7 @@ bool SwTextFrame::RightMargin(SwPaM *pPam, bool bAPI) const
         aLine.CharCursorToLine(MapModelToViewPos(*pPam->GetPoint()));
         nRightMargin = aLine.GetStart() + aLine.GetCurr()->GetLen();
 
-        // We skip hard line brakes
+        // We skip hard line breaks
         if( aLine.GetCurr()->GetLen() &&
             CH_BREAK == aInf.GetText()[sal_Int32(nRightMargin) - 1])
             --nRightMargin;
