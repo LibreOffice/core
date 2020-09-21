@@ -21,6 +21,7 @@
 #include <rtl/textenc.h>
 #include <sal/log.hxx>
 
+#include <algorithm>
 #include <vector>
 #include <set>
 
