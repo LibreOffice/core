@@ -1086,6 +1086,16 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf131420, "tdf131420.docx")
     assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:pPr/w:pBdr[2]");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf80526_word_wrap, "tdf80526_word_wrap.docx")
+{
+    // tdf#80526: check whether the "wrap" property has been set
+    // TODO: fix export too
+    if (mbExported)
+        return;
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xShape, "TextWordWrap"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
