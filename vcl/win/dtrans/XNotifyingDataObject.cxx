@@ -19,7 +19,6 @@
 
 #include <osl/diagnose.h>
 #include "XNotifyingDataObject.hxx"
-#include "WinClipbImpl.hxx"
 #include "WinClipboard.hxx"
 
 using namespace com::sun::star::datatransfer;
@@ -31,12 +30,12 @@ CXNotifyingDataObject::CXNotifyingDataObject(
     const IDataObjectPtr& aIDataObject,
     const Reference< XTransferable >& aXTransferable,
     const Reference< XClipboardOwner >& aXClipOwner,
-    CWinClipbImpl* theWinClipImpl ) :
+    CWinClipboard* const theWinClipoard) :
     m_nRefCnt( 0 ),
     m_aIDataObject( aIDataObject ),
     m_XTransferable( aXTransferable ),
     m_XClipboardOwner( aXClipOwner ),
-    m_pWinClipImpl( theWinClipImpl )
+    m_pWinClipImpl( theWinClipoard )
 {
 }
 
@@ -138,7 +137,7 @@ void CXNotifyingDataObject::lostOwnership( )
     {
         if (m_XClipboardOwner.is())
             m_XClipboardOwner->lostOwnership(
-                static_cast<XClipboardEx*>(m_pWinClipImpl->m_pWinClipboard ), m_XTransferable);
+                static_cast<XClipboardEx*>(m_pWinClipImpl), m_XTransferable);
     }
     catch(RuntimeException&)
     {

@@ -33,10 +33,9 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <osl/conditn.hxx>
 
-#include <memory>
+#include "MtaOleClipb.hxx"
 
-// forward
-class CWinClipbImpl;
+class CXNotifyingDataObject;
 
 // implements the XClipboard[Ex] ... interfaces
 // for the clipboard viewer mechanism we need a static callback function
@@ -53,68 +52,67 @@ class CWinClipbImpl;
 class CWinClipboardDummy
 {
 protected:
-    osl::Mutex      m_aMutex;
-    osl::Mutex      m_aCbListenerMutex;
+    osl::Mutex m_aMutex;
+    osl::Mutex m_aCbListenerMutex;
 };
 
-class CWinClipboard :
-    public CWinClipboardDummy,
-    public cppu::WeakComponentImplHelper<
-        css::datatransfer::clipboard::XSystemClipboard,
-        css::datatransfer::clipboard::XFlushableClipboard,
-        css::lang::XServiceInfo >
+class CWinClipboard final
+    : public CWinClipboardDummy,
+      public cppu::WeakComponentImplHelper<css::datatransfer::clipboard::XSystemClipboard,
+                                           css::datatransfer::clipboard::XFlushableClipboard,
+                                           css::lang::XServiceInfo>
 {
+    friend STDMETHODIMP_(ULONG) CXNotifyingDataObject::Release();
+
+    css::uno::Reference<css::uno::XComponentContext> m_xContext;
+    const OUString m_itsName;
+    CMtaOleClipboard m_MtaOleClipboard;
+    CXNotifyingDataObject* m_pCurrentClipContent;
+    com::sun::star::uno::Reference<com::sun::star::datatransfer::XTransferable> m_foreignContent;
+    osl::Mutex m_ClipContentMutex;
+
+    static osl::Mutex s_aMutex;
+    static CWinClipboard* s_pCWinClipbImpl;
+
+    void notifyAllClipboardListener();
+    void onReleaseDataObject(CXNotifyingDataObject* theCaller);
+
+    void registerClipboardViewer();
+    void unregisterClipboardViewer();
+
+    static void WINAPI onClipboardContentChanged();
+
 public:
-    CWinClipboard( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                   const OUString& aClipboardName );
+    CWinClipboard(const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+                  const OUString& aClipboardName);
+    virtual ~CWinClipboard() override;
 
     // XClipboard
-
-    virtual css::uno::Reference< css::datatransfer::XTransferable > SAL_CALL getContents(  ) override;
-
+    virtual css::uno::Reference<css::datatransfer::XTransferable> SAL_CALL getContents() override;
     virtual void SAL_CALL setContents(
-        const css::uno::Reference< css::datatransfer::XTransferable >& xTransferable,
-        const css::uno::Reference< css::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner ) override;
-
-    virtual OUString SAL_CALL getName(  ) override;
+        const css::uno::Reference<css::datatransfer::XTransferable>& xTransferable,
+        const css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner>& xClipboardOwner)
+        override;
+    virtual OUString SAL_CALL getName() override;
 
     // XFlushableClipboard
-
-    virtual void SAL_CALL flushClipboard( ) override;
+    virtual void SAL_CALL flushClipboard() override;
 
     // XClipboardEx
-
-    virtual sal_Int8 SAL_CALL getRenderingCapabilities(  ) override;
+    virtual sal_Int8 SAL_CALL getRenderingCapabilities() override;
 
     // XClipboardNotifier
-
     virtual void SAL_CALL addClipboardListener(
-        const css::uno::Reference< css::datatransfer::clipboard::XClipboardListener >& listener ) override;
-
+        const css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>& listener)
+        override;
     virtual void SAL_CALL removeClipboardListener(
-        const css::uno::Reference< css::datatransfer::clipboard::XClipboardListener >& listener ) override;
-
-    // overwrite base class method, which is called
-    // by base class dispose function
-
-    virtual void SAL_CALL disposing() override;
+        const css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>& listener)
+        override;
 
     // XServiceInfo
-
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
-
-private:
-    void notifyAllClipboardListener( );
-
-private:
-    std::unique_ptr< CWinClipbImpl >                  m_pImpl;
-    css::uno::Reference< css::uno::XComponentContext >  m_xContext;
-
-    friend class CWinClipbImpl;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
