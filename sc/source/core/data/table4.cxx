@@ -208,7 +208,8 @@ double approxDiff( double a, double b )
     // tdf#129606: Limit precision to the 16th significant digit of the least precise argument.
     // Cf. mnMaxGeneralPrecision in sc/source/core/data/column3.cxx.
     const int nExpArg = static_cast<int>(floor(log10(std::max(aa, ab)))) - 15;
-    return rtl::math::round(c, -std::max(nExp, nExpArg));
+    // Round the mean of the two subtractions
+    return rtl::math::round((c + d) / 2, -std::max(nExp, nExpArg));
 }
 }
 
