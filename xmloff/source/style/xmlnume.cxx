@@ -50,7 +50,7 @@
 #include <xmloff/xmlnume.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <tools/fontenum.hxx>
-
+#include <vcl/vclenum.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -90,7 +90,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
 
     sal_Int16 nStartValue = 1, nDisplayLevels = 1, nBullRelSize = 0;
 
-    sal_Unicode cBullet = 0xf095;
+    sal_UCS4 cBullet = 0xf095;
     OUString sBulletFontName, sBulletFontStyleName ;
     FontFamily eBulletFontFamily = FAMILY_DONTKNOW;
     FontPitch eBulletFontPitch = PITCH_DONTKNOW;
@@ -127,7 +127,8 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
             rProp.Value >>= sValue;
             if( !sValue.isEmpty() )
             {
-                cBullet = sValue[0];
+                sal_Int32 nIndexUtf16 = 0;
+                cBullet = sValue.iterateCodePoints(&nIndexUtf16);
             }
         }
         else if( rProp.Name == "BulletRelSize" )
@@ -278,7 +279,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
                 cBullet = 0xF000 + 149;
             }
             // text:bullet-char="..."
-            sTmp.append( cBullet );
+            sTmp.append(OUString(&cBullet, 1));
             GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_BULLET_CHAR,
                           sTmp.makeStringAndClear() );
         }

@@ -1928,7 +1928,7 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, BulletHdl_Impl, weld::Button&, void)
     sal_uInt16 nMask = 1;
     const vcl::Font* pFmtFont = nullptr;
     bool bSameBullet = true;
-    sal_Unicode cBullet = 0;
+    sal_UCS4 cBullet = 0;
     bool bFirst = true;
     for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
     {
@@ -1971,7 +1971,7 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, BulletHdl_Impl, weld::Button&, void)
         {
             SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
             aNumFmt.SetBulletFont(&aActBulletFont);
-            aNumFmt.SetBulletChar( static_cast<sal_Unicode>(aMap.GetChar()) );
+            aNumFmt.SetBulletChar(aMap.GetChar());
             pActNum->SetLevel(i, aNumFmt);
         }
         _nMask <<= 1;
@@ -2164,7 +2164,8 @@ static long lcl_DrawBullet(VirtualDevice* pVDev,
         aBulletColor.Invert();
     aFont.SetColor(aBulletColor);
     pVDev->SetFont( aFont );
-    OUString aText(rFmt.GetBulletChar());
+    sal_UCS4 cChar = rFmt.GetBulletChar();
+    OUString aText(&cChar, 1);
     long nY = nYStart;
     nY -= ((aTmpSize.Height() - rSize.Height())/ 2);
     pVDev->DrawText( Point(nXStart, nY), aText );

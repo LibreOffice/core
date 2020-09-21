@@ -962,7 +962,7 @@ IMPL_LINK_NOARG(SvxBulletAndPositionDlg, BulletHdl_Impl, weld::Button&, void)
         {
             SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
             aNumFmt.SetBulletFont(&aActBulletFont);
-            aNumFmt.SetBulletChar(static_cast<sal_Unicode>(aMap.GetChar()));
+            aNumFmt.SetBulletChar(aMap.GetChar());
             pActNum->SetLevel(i, aNumFmt);
         }
         _nMask <<= 1;

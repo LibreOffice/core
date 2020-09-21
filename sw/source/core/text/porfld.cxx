@@ -734,14 +734,14 @@ void SwNumberPortion::Paint( const SwTextPaintInfo &rInf ) const
     }
 }
 
-SwBulletPortion::SwBulletPortion( const sal_Unicode cBullet,
+SwBulletPortion::SwBulletPortion( const sal_UCS4 cBullet,
                                   const OUString& rBulletFollowedBy,
                                   std::unique_ptr<SwFont> pFont,
                                   const bool bLft,
                                   const bool bCntr,
                                   const sal_uInt16 nMinDst,
                                   const bool bLabelAlignmentPosAndSpaceModeActive )
-    : SwNumberPortion( OUStringChar(cBullet) + rBulletFollowedBy,
+    : SwNumberPortion( OUString(&cBullet, 1) + rBulletFollowedBy,
                        std::move(pFont), bLft, bCntr, nMinDst,
                        bLabelAlignmentPosAndSpaceModeActive )
 {

@@ -1839,7 +1839,8 @@ void Outliner::ImplCalcBulletText( sal_Int32 nPara, bool bRecalcLevel, bool bRec
             aBulletText += pFmt->GetPrefix();
             if( pFmt->GetNumberingType() == SVX_NUM_CHAR_SPECIAL )
             {
-                aBulletText += OUStringChar(pFmt->GetBulletChar());
+                sal_UCS4 cChar = pFmt->GetBulletChar();
+                aBulletText += OUString(&cChar, 1);
             }
             else if( pFmt->GetNumberingType() != SVX_NUM_NUMBER_NONE )
             {

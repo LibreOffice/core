@@ -1411,14 +1411,16 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFormat
     {
         if(SVX_NUM_CHAR_SPECIAL == rFormat.GetNumberingType())
         {
+            sal_UCS4 cBullet = rFormat.GetBulletChar();
+
             //BulletId
-            nINT16 = rFormat.GetBulletChar();
+            nINT16 = cBullet;
             aPropertyValues.push_back(comphelper::makePropertyValue("BulletId", nINT16));
 
             const vcl::Font* pFont = rFormat.GetBulletFont();
 
             //BulletChar
-            aUString = OUString(rFormat.GetBulletChar());
+            aUString = OUString(&cBullet, 1);
             aPropertyValues.push_back(comphelper::makePropertyValue("BulletChar", aUString));
 
             //BulletFontName
@@ -1790,18 +1792,19 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
         {
             OUString aChar;
             rProp.Value >>= aChar;
-            if(aChar.getLength() == 1)
-            {
-                aFormat.SetBulletChar(aChar.toChar());
-            }
-            else if(aChar.isEmpty())
+            if (aChar.isEmpty())
             {
                 // If w:lvlText's value is null - set bullet char to zero
                 aFormat.SetBulletChar(u'\0');
             }
             else
             {
-                bWrongArg = true;
+                sal_Int32 nIndexUtf16 = 0;
+                sal_UCS4 cBullet = aChar.iterateCodePoints(&nIndexUtf16);
+                if (aChar.getLength() == nIndexUtf16)
+                    aFormat.SetBulletChar(cBullet);
+                else
+                    bWrongArg = true;
             }
         }
         else if (rProp.Name == UNO_NAME_GRAPHIC)
