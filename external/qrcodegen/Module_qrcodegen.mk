@@ -13,8 +13,12 @@ $(eval $(call gb_Module_add_targets,qrcodegen,\
 	UnpackedTarball_qrcodegen \
 ))
 
+ifeq ($(ENABLE_QRCODEGEN),TRUE)
+
 $(eval $(call gb_Module_add_targets,qrcodegen,\
 	StaticLibrary_qrcodegen \
 ))
+
+endif
 
 # vim: set noet sw=4 ts=4:
