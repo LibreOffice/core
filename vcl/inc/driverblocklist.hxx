@@ -18,8 +18,16 @@
 
 namespace DriverBlocklist
 {
-VCL_DLLPUBLIC bool IsDeviceBlocked(const OUString& blocklistURL, const OUString& driverVersion,
-                                   const OUString& vendorId, const OUString& deviceId);
+// Details of how to treat a version number.
+enum class VersionType
+{
+    OpenGL, // a.b.c.d, 1.98 > 1.978
+    Vulkan // a.b.c , 1.98 < 1.978
+};
+
+VCL_DLLPUBLIC bool IsDeviceBlocked(const OUString& blocklistURL, VersionType versionType,
+                                   const OUString& driverVersion, const OUString& vendorId,
+                                   const OUString& deviceId);
 
 #ifdef _WIN32
 VCL_DLLPUBLIC int32_t GetWindowsVersion();
@@ -103,7 +111,7 @@ struct DriverInfo
 class VCL_DLLPUBLIC Parser
 {
 public:
-    Parser(const OUString& rURL, std::vector<DriverInfo>& rDriverList);
+    Parser(const OUString& rURL, std::vector<DriverInfo>& rDriverList, VersionType versionType);
     bool parse();
 
 private:
@@ -111,6 +119,7 @@ private:
     void handleList(xmlreader::XmlReader& rReader);
     void handleContent(xmlreader::XmlReader& rReader);
     static void handleDevices(DriverInfo& rDriver, xmlreader::XmlReader& rReader);
+    uint64_t getVersion(const OString& rString);
 
     enum class BlockType
     {
@@ -122,21 +131,20 @@ private:
     BlockType meBlockType;
     std::vector<DriverInfo>& mrDriverList;
     OUString maURL;
+    const VersionType mVersionType;
 };
 
 OUString VCL_DLLPUBLIC GetVendorId(DeviceVendor id);
 
-bool VCL_DLLPUBLIC FindBlocklistedDeviceInList(std::vector<DriverInfo>& aDeviceInfos,
-                                               OUString const& sDriverVersion,
-                                               OUString const& sAdapterVendorID,
-                                               OUString const& sAdapterDeviceID,
-                                               OperatingSystem system,
-                                               const OUString& blocklistURL = OUString());
+bool VCL_DLLPUBLIC FindBlocklistedDeviceInList(
+    std::vector<DriverInfo>& aDeviceInfos, VersionType versionType, OUString const& sDriverVersion,
+    OUString const& sAdapterVendorID, OUString const& sAdapterDeviceID, OperatingSystem system,
+    const OUString& blocklistURL = OUString());
 
 #define GFX_DRIVER_VERSION(a, b, c, d)                                                             \
     ((uint64_t(a) << 48) | (uint64_t(b) << 32) | (uint64_t(c) << 16) | uint64_t(d))
 
-inline uint64_t V(uint32_t a, uint32_t b, uint32_t c, uint32_t d)
+inline uint64_t OpenGLVersion(uint32_t a, uint32_t b, uint32_t c, uint32_t d)
 {
     // We make sure every driver number is padded by 0s, this will allow us the
     // easiest 'compare as if decimals' approach. See ParseDriverVersion for a

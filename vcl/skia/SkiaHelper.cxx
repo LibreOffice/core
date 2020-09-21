@@ -128,8 +128,9 @@ static bool isVulkanDenylisted(const VkPhysicalDeviceProperties& props)
                                     << ", vendor: " << vendorIdStr << " ("
                                     << vendorAsString(vendorId) << "), device: " << deviceIdStr
                                     << ", type: " << deviceType << ", name: " << props.deviceName);
-    bool denylisted = DriverBlocklist::IsDeviceBlocked(getDenylistFile(), driverVersionString,
-                                                       vendorIdStr, deviceIdStr);
+    bool denylisted
+        = DriverBlocklist::IsDeviceBlocked(getDenylistFile(), DriverBlocklist::VersionType::Vulkan,
+                                           driverVersionString, vendorIdStr, deviceIdStr);
     writeToLog(logFile, "Denylisted", denylisted ? "yes" : "no");
     return denylisted;
 }

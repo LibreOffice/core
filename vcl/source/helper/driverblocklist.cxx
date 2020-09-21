@@ -174,10 +174,11 @@ std::string_view GetVendorNameFromId(uint32_t id)
     }
 }
 
-Parser::Parser(const OUString& rURL, std::vector<DriverInfo>& rDriverList)
+Parser::Parser(const OUString& rURL, std::vector<DriverInfo>& rDriverList, VersionType versionType)
     : meBlockType(BlockType::UNKNOWN)
     , mrDriverList(rDriverList)
     , maURL(rURL)
+    , mVersionType(versionType)
 {
 }
 
@@ -219,7 +220,7 @@ static void PadDriverDecimal(char* aString)
 
 // All destination string storage needs to have at least 5 bytes available.
 static bool SplitDriverVersion(const char* aSource, char* aAStr, char* aBStr, char* aCStr,
-                               char* aDStr)
+                               char* aDStr, VersionType versionType)
 {
     // sscanf doesn't do what we want here to we parse this manually.
     int len = strlen(aSource);
@@ -256,7 +257,7 @@ static bool SplitDriverVersion(const char* aSource, char* aAStr, char* aBStr, ch
     dest[destIdx][destPos] = 0;
 
     // Vulkan version numbers have only 3 fields.
-    if (destIdx == SAL_N_ELEMENTS(dest) - 2)
+    if (versionType == VersionType::Vulkan && destIdx == SAL_N_ELEMENTS(dest) - 2)
         dest[++destIdx][0] = '\0';
     if (destIdx != SAL_N_ELEMENTS(dest) - 1)
     {
@@ -265,7 +266,8 @@ static bool SplitDriverVersion(const char* aSource, char* aAStr, char* aBStr, ch
     return true;
 }
 
-static bool ParseDriverVersion(const OUString& aVersion, uint64_t& rNumericVersion)
+static bool ParseDriverVersion(const OUString& aVersion, uint64_t& rNumericVersion,
+                               VersionType versionType)
 {
     rNumericVersion = 0;
 
@@ -273,17 +275,23 @@ static bool ParseDriverVersion(const OUString& aVersion, uint64_t& rNumericVersi
     char aStr[8], bStr[8], cStr[8], dStr[8];
     /* honestly, why do I even bother */
     OString aOVersion = OUStringToOString(aVersion, RTL_TEXTENCODING_UTF8);
-    if (!SplitDriverVersion(aOVersion.getStr(), aStr, bStr, cStr, dStr))
+    if (!SplitDriverVersion(aOVersion.getStr(), aStr, bStr, cStr, dStr, versionType))
         return false;
 
-    PadDriverDecimal(bStr);
-    PadDriverDecimal(cStr);
-    PadDriverDecimal(dStr);
+    if (versionType == VersionType::OpenGL)
+    {
+        PadDriverDecimal(bStr);
+        PadDriverDecimal(cStr);
+        PadDriverDecimal(dStr);
+    }
 
     a = atoi(aStr);
     b = atoi(bStr);
     c = atoi(cStr);
     d = atoi(dStr);
+
+    if (versionType == VersionType::Vulkan)
+        assert(d == 0);
 
     if (a < 0 || a > 0xffff)
         return false;
@@ -298,11 +306,11 @@ static bool ParseDriverVersion(const OUString& aVersion, uint64_t& rNumericVersi
     return true;
 }
 
-static uint64_t getVersion(const OString& rString)
+uint64_t Parser::getVersion(const OString& rString)
 {
     OUString aString = OStringToOUString(rString, RTL_TEXTENCODING_UTF8);
     uint64_t nVersion;
-    bool bResult = ParseDriverVersion(aString, nVersion);
+    bool bResult = ParseDriverVersion(aString, nVersion, mVersionType);
 
     if (!bResult)
     {
@@ -583,13 +591,13 @@ DriverInfo::DriverInfo(OperatingSystem os, const OUString& vendor, VersionCompar
         maSuggestedVersion = OStringToOUString(OString(suggestedVersion), RTL_TEXTENCODING_UTF8);
 }
 
-bool FindBlocklistedDeviceInList(std::vector<DriverInfo>& aDeviceInfos,
+bool FindBlocklistedDeviceInList(std::vector<DriverInfo>& aDeviceInfos, VersionType versionType,
                                  OUString const& sDriverVersion, OUString const& sAdapterVendorID,
                                  OUString const& sAdapterDeviceID, OperatingSystem system,
                                  const OUString& blocklistURL)
 {
     uint64_t driverVersion;
-    ParseDriverVersion(sDriverVersion, driverVersion);
+    ParseDriverVersion(sDriverVersion, driverVersion, versionType);
 
     bool match = false;
     for (std::vector<DriverInfo>::size_type i = 0; i < aDeviceInfos.size(); i++)
@@ -677,17 +685,18 @@ bool FindBlocklistedDeviceInList(std::vector<DriverInfo>& aDeviceInfos,
     return match;
 }
 
-bool IsDeviceBlocked(const OUString& blocklistURL, const OUString& driverVersion,
-                     const OUString& vendorId, const OUString& deviceId)
+bool IsDeviceBlocked(const OUString& blocklistURL, VersionType versionType,
+                     const OUString& driverVersion, const OUString& vendorId,
+                     const OUString& deviceId)
 {
     std::vector<DriverInfo> driverList;
-    Parser parser(blocklistURL, driverList);
+    Parser parser(blocklistURL, driverList, versionType);
     if (!parser.parse())
     {
         SAL_WARN("vcl.driver", "error parsing denylist " << blocklistURL);
         return false;
     }
-    return FindBlocklistedDeviceInList(driverList, driverVersion, vendorId, deviceId,
+    return FindBlocklistedDeviceInList(driverList, versionType, driverVersion, vendorId, deviceId,
                                        getOperatingSystem(), blocklistURL);
 }
 
