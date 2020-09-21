@@ -653,17 +653,15 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     bool bLOKActive = comphelper::LibreOfficeKit::isActive();
 
     mpAutoFilterPopup.disposeAndClear();
-    int nColWidth = ScViewData::ToPixel(rDoc.GetColWidth(nCol, nTab), pViewData->GetPPTX());
-    mpAutoFilterPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, &rDoc, false, nColWidth));
-    ScCheckListMenuControl& rControl = mpAutoFilterPopup->get_widget();
 
     // Estimate the width (in pixels) of the longest text in the list
     ScFilterEntries aFilterEntries;
     rDoc.GetFilterEntries(nCol, nRow, nTab, aFilterEntries);
 
-    // Set this early so the list or tree widget is selected for use before we might
-    // use IncreaseWindowWidthToFitText to change its width
-    rControl.setHasDates(aFilterEntries.mbHasDates);
+    int nColWidth = ScViewData::ToPixel(rDoc.GetColWidth(nCol, nTab), pViewData->GetPPTX());
+    mpAutoFilterPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, &rDoc, false,
+                                                                  aFilterEntries.mbHasDates, nColWidth));
+    ScCheckListMenuControl& rControl = mpAutoFilterPopup->get_widget();
 
     int nMaxTextWidth = 0;
     if (aFilterEntries.size() <= 10)
