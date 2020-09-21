@@ -16,6 +16,24 @@
       "revId": "01024ee24c6e89044c68051f6fd5f1264905e90c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9745cab1_b81ddb6d",
+        "filename": "offapi/com/sun/star/graphic/XEmfParser.idl",
+        "patchSetId": 4
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-09-21T06:19:03Z",
+      "side": 1,
+      "message": "Done in \u003chttps://gerrit.libreoffice.org/c/core/+/103082\u003e. If the fix gets backported to release branches, then I\u0027ll update it later. (API CHANGE from my point of view, but it\u0027s a \"fix blurry rendering\" from a user\u0027s point of view.)",
+      "parentUuid": "e383ae7d_513a5528",
+      "revId": "01024ee24c6e89044c68051f6fd5f1264905e90c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
