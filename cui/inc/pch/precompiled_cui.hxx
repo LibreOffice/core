@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-09-03 20:50:42 using:
+ Generated on 2020-09-21 15:20:53 using:
  ./bin/update_pch cui cui --cutoff=8 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -320,7 +320,6 @@
 #include <svx/DiagramDataInterface.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dlgutil.hxx>
-#include <svx/galleryobjectstorage.hxx>
 #include <svx/ipolypolygoneditorcontroller.hxx>
 #include <svx/itextprovider.hxx>
 #include <svx/langbox.hxx>

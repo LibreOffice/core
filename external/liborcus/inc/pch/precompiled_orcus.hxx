@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-01 12:22:35 using:
+ Generated on 2020-09-21 15:21:19 using:
  ./bin/update_pch external/liborcus orcus --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -98,6 +98,7 @@
 #include <orcus/tokens.hpp>
 #include <orcus/xml_namespace.hpp>
 #include <orcus/xml_structure_tree.hpp>
+#include <orcus/xml_writer.hpp>
 #include <orcus/yaml_document_tree.hpp>
 #include <orcus/yaml_parser.hpp>
 #include <orcus/zip_archive.hpp>
