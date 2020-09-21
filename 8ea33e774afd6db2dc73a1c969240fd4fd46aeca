@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "20cb79af_e0e4d0e7",
+        "filename": "oox/source/shape/WpsContext.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-09-21T10:30:31Z",
+      "side": 1,
+      "message": "b or is, see https://wiki.documentfoundation.org/Development/GeneralProgrammingGuidelines",
+      "range": {
+        "startLine": 99,
+        "startChar": 25,
+        "endLine": 99,
+        "endChar": 26
+      },
+      "revId": "8ea33e774afd6db2dc73a1c969240fd4fd46aeca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3bcd1e7_088ecc33",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport3.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1148,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-09-21T10:30:31Z",
+      "side": 1,
+      "message": "grab-bag attribute upright to keep text upright regardless of shape rotation",
+      "range": {
+        "startLine": 1147,
+        "startChar": 18,
+        "endLine": 1148,
+        "endChar": 68
+      },
+      "revId": "8ea33e774afd6db2dc73a1c969240fd4fd46aeca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
