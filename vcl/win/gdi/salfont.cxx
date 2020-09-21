@@ -65,8 +65,6 @@
 
 using namespace vcl;
 
-const int MAXFONTHEIGHT = 2048;
-
 static FIXED FixedFromDouble( double d )
 {
     const long l = static_cast<long>( d * 65536. );
@@ -846,7 +844,6 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
 
 HFONT WinSalGraphics::ImplDoSetFont(FontSelectPattern const & i_rFont,
                                     const PhysicalFontFace * i_pFontFace,
-                                    float& o_rFontScale,
                                     HFONT& o_rOldFont)
 {
     HFONT hNewFont = nullptr;
@@ -854,25 +851,6 @@ HFONT WinSalGraphics::ImplDoSetFont(FontSelectPattern const & i_rFont,
     LOGFONTW aLogFont;
     ImplGetLogFontFromFontSelect( getHDC(), i_rFont, i_pFontFace, aLogFont );
 
-    // #i47675# limit font requests to MAXFONTHEIGHT
-    // TODO: share MAXFONTHEIGHT font instance
-    if( (-aLogFont.lfHeight <= MAXFONTHEIGHT)
-    &&  (+aLogFont.lfWidth <= MAXFONTHEIGHT) )
-    {
-        o_rFontScale = 1.0;
-    }
-    else if( -aLogFont.lfHeight >= +aLogFont.lfWidth )
-    {
-        o_rFontScale = -aLogFont.lfHeight / float(MAXFONTHEIGHT);
-        aLogFont.lfHeight = -MAXFONTHEIGHT;
-        aLogFont.lfWidth = FRound( aLogFont.lfWidth / o_rFontScale );
-    }
-    else // #i95867# also limit font widths
-    {
-        o_rFontScale = +aLogFont.lfWidth / float(MAXFONTHEIGHT);
-        aLogFont.lfWidth = +MAXFONTHEIGHT;
-        aLogFont.lfHeight = FRound( aLogFont.lfHeight / o_rFontScale );
-    }
     hNewFont = ::CreateFontIndirectW( &aLogFont );
 
     HDC hdcScreen = nullptr;
@@ -1580,9 +1558,8 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
 
     // TODO: much better solution: move SetFont and restoration of old font to caller
     ScopedFont aOldFont(*this);
-    float fScale = 1.0;
     HFONT hOldFont = nullptr;
-    ImplDoSetFont(aIFSD, pFont, fScale, hOldFont);
+    ImplDoSetFont(aIFSD, pFont, hOldFont);
 
     WinFontFace const * pWinFontData = static_cast<WinFontFace const *>(pFont);
 
@@ -1646,9 +1623,8 @@ const void* WinSalGraphics::GetEmbedFontData(const PhysicalFontFace* pFont, long
 
     ScopedFont aOldFont(*this);
 
-    float fScale = 0.0;
     HFONT hOldFont = nullptr;
-    ImplDoSetFont(aIFSD, pFont, fScale, hOldFont);
+    ImplDoSetFont(aIFSD, pFont, hOldFont);
 
     // get the raw font file data
     RawFontData aRawFontData( getHDC() );
@@ -1677,9 +1653,8 @@ void WinSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
     // TODO: much better solution: move SetFont and restoration of old font to caller
     ScopedFont aOldFont(*this);
 
-    float fScale = 0.0;
     HFONT hOldFont = nullptr;
-    ImplDoSetFont(aIFSD, pFont, fScale, hOldFont);
+    ImplDoSetFont(aIFSD, pFont, hOldFont);
 
     // get raw font file data
     const RawFontData xRawFontData( getHDC() );

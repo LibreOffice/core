@@ -184,7 +184,7 @@ private:
     bool DrawCachedGlyphs(const GenericSalLayout& rLayout);
 
 public:
-    HFONT ImplDoSetFont(FontSelectPattern const & i_rFont, const PhysicalFontFace * i_pFontFace, float& o_rFontScale, HFONT& o_rOldFont);
+    HFONT ImplDoSetFont(FontSelectPattern const & i_rFont, const PhysicalFontFace * i_pFontFace, HFONT& o_rOldFont);
 
     HDC getHDC() const { return mhLocalDC; }
     void setHDC(HDC aNew) { mhLocalDC = aNew; }
