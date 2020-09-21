@@ -125,10 +125,18 @@ static bool isVulkanBlacklisted(const VkPhysicalDeviceProperties& props)
                                     << ", vendor: " << vendorIdStr << " ("
                                     << vendorAsString(vendorId) << "), device: " << deviceIdStr
                                     << ", type: " << deviceType << ", name: " << props.deviceName);
+<<<<<<< HEAD   (e60e70 Related tdf#100492 Detect click into empty field)
     bool blacklisted = DriverBlocklist::IsDeviceBlocked(getBlacklistFile(), driverVersionString,
                                                         vendorIdStr, deviceIdStr);
     writeToLog(logFile, "Blacklisted", blacklisted ? "yes" : "no");
     return blacklisted;
+=======
+    bool denylisted
+        = DriverBlocklist::IsDeviceBlocked(getDenylistFile(), DriverBlocklist::VersionType::Vulkan,
+                                           driverVersionString, vendorIdStr, deviceIdStr);
+    writeToLog(logFile, "Denylisted", denylisted ? "yes" : "no");
+    return denylisted;
+>>>>>>> CHANGE (bf62a8 fix parsing of Vulkan version numbers)
 }
 
 static void writeSkiaRasterInfo()

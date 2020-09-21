@@ -176,7 +176,12 @@ static OUString getBlacklistFile()
 
 bool WinOpenGLDeviceInfo::FindBlocklistedDeviceInList()
 {
+<<<<<<< HEAD   (e60e70 Related tdf#100492 Detect click into empty field)
     return DriverBlocklist::IsDeviceBlocked( getBlacklistFile(), maDriverVersion, maAdapterVendorID, maAdapterDeviceID);
+=======
+    return DriverBlocklist::IsDeviceBlocked( getDenylistFile(), DriverBlocklist::VersionType::OpenGL,
+        maDriverVersion, maAdapterVendorID, maAdapterDeviceID);
+>>>>>>> CHANGE (bf62a8 fix parsing of Vulkan version numbers)
 }
 
 namespace {
