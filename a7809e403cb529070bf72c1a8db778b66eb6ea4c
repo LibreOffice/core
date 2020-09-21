@@ -46,6 +46,30 @@
       "revId": "a7809e403cb529070bf72c1a8db778b66eb6ea4c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "530435e5_37467cdb",
+        "filename": "sc/source/core/data/validat.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-09-21T07:31:40Z",
+      "side": 1,
+      "message": "Eike, you are right, it would be fine to harmonize data validation at least within in Calc.\n\nBy the way, data validation of Excel handles date and time as numbers, i.e. 1999-11-23 is 5 characters and 12:00 is 17 characters. In Calc, LENGTH() gives also 5 for date, 17 for \"12:01\", but 3 for \"12:00\". Fortunately, it seems for me, these differences are only theoretical question, because we have date conditions for validation instead of the character length.",
+      "parentUuid": "65840f8d_074e1de9",
+      "range": {
+        "startLine": 601,
+        "startChar": 14,
+        "endLine": 603,
+        "endChar": 49
+      },
+      "revId": "a7809e403cb529070bf72c1a8db778b66eb6ea4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
