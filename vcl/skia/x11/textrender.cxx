@@ -49,6 +49,7 @@ void SkiaTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalGr
     sk_sp<SkTypeface> typeface
         = SkFontMgr_createTypefaceFromFcPattern(fontManager, rFont.GetFontOptions()->GetPattern());
     SkFont font(typeface, nHeight);
+    font.setScaleX(1.0 * nWidth / nHeight);
     // TODO are these correct?
     if (rFont.NeedsArtificialItalic())
         font.setSkewX(-0x6000L / 0x10000L);
