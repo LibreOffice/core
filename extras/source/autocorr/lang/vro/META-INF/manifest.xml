@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest:manifest>
+ <manifest:file-entry manifest:full-path="/" manifest:media-type=""/>
+ <manifest:file-entry manifest:full-path="DocumentList.xml" manifest:media-type="text/xml"/>
+</manifest:manifest>
