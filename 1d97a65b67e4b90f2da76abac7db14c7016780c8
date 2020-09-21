@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f7a6b02_7fcdad21",
+        "filename": "sw/source/core/objectpositioning/anchoredobjectposition.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2020-09-21T14:34:10Z",
+      "side": 1,
+      "message": "Please add a TODO here, if it is just a workaround.",
+      "range": {
+        "startLine": 439,
+        "startChar": 8,
+        "endLine": 439,
+        "endChar": 65
+      },
+      "revId": "1d97a65b67e4b90f2da76abac7db14c7016780c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
