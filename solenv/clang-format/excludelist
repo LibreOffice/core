@@ -17381,10 +17381,6 @@ vcl/win/dtrans/target.hxx
 vcl/win/dtrans/TxtCnvtHlp.cxx
 vcl/win/dtrans/TxtCnvtHlp.hxx
 vcl/win/dtrans/wcbentry.cxx
-vcl/win/dtrans/WinClipbImpl.cxx
-vcl/win/dtrans/WinClipbImpl.hxx
-vcl/win/dtrans/WinClipboard.cxx
-vcl/win/dtrans/WinClipboard.hxx
 vcl/win/dtrans/XNotifyingDataObject.cxx
 vcl/win/dtrans/XNotifyingDataObject.hxx
 vcl/win/dtrans/XTDataObject.cxx
