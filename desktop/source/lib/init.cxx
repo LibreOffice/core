@@ -3986,7 +3986,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     bool bResult = false;
     LokChartHelper aChartHelper(SfxViewShell::Current());
 
-    if (aChartHelper.GetWindow() )
+    if (aChartHelper.GetWindow() && aCommand != ".uno:Save" )
     {
         util::URL aCommandURL;
         aCommandURL.Path = aCommand.copy(5);
