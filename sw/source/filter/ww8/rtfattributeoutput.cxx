@@ -3038,7 +3038,10 @@ void RtfAttributeOutput::ParaNumRule_Impl(const SwTextNode* pTextNd, sal_Int32 n
         OUString sText;
         if (SVX_NUM_CHAR_SPECIAL == pFormat->GetNumberingType()
             || SVX_NUM_BITMAP == pFormat->GetNumberingType())
-            sText = OUString(pFormat->GetBulletChar());
+        {
+            sal_UCS4 cBullet = pFormat->GetBulletChar();
+            sText = OUString(&cBullet, 1);
+        }
         else
             sText = pTextNd->GetNumString();
 

@@ -209,7 +209,8 @@ void SvxCharacterMap::SetChar( sal_UCS4 c )
 
 sal_UCS4 SvxCharacterMap::GetChar() const
 {
-   return m_aShowChar.GetText().toChar();
+    sal_Int32 nIndexUtf16 = 0;
+    return m_aShowChar.GetText().iterateCodePoints(&nIndexUtf16);
 }
 
 void SvxCharacterMap::DisableFontSelection()

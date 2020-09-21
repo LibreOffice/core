@@ -484,7 +484,8 @@ void MSWordExportBase::NumberingLevel(
         SVX_NUM_BITMAP == rFormat.GetNumberingType())
     {
         // Use bullet
-        sNumStr = OUString(rFormat.GetBulletChar());
+        sal_UCS4 cBullet = rFormat.GetBulletChar();
+        sNumStr = OUString(&cBullet, 1);
     }
     else
     {

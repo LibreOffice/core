@@ -1411,14 +1411,16 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFormat
     {
         if(SVX_NUM_CHAR_SPECIAL == rFormat.GetNumberingType())
         {
+            sal_UCS4 cBullet = rFormat.GetBulletChar();
+
             //BulletId
-            nINT16 = rFormat.GetBulletChar();
+            nINT16 = cBullet;
             aPropertyValues.push_back(comphelper::makePropertyValue("BulletId", nINT16));
 
             const vcl::Font* pFont = rFormat.GetBulletFont();
 
             //BulletChar
-            aUString = OUString(rFormat.GetBulletChar());
+            aUString = OUString(&cBullet, 1);
             aPropertyValues.push_back(comphelper::makePropertyValue("BulletChar", aUString));
 
             //BulletFontName
@@ -1744,11 +1746,13 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
         }
         else if (rProp.Name == UNO_NAME_BULLET_ID)
         {
+#if 0
             sal_Int16 nSet = 0;
             if( rProp.Value >>= nSet )
                 aFormat.SetBulletChar(nSet);
             else
                 bWrongArg = true;
+#endif
         }
         else if (rProp.Name == UNO_NAME_BULLET_FONT)
         {
@@ -1792,7 +1796,9 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
             rProp.Value >>= aChar;
             if(aChar.getLength() == 1)
             {
-                aFormat.SetBulletChar(aChar.toChar());
+                sal_Int32 nIndexUtf16 = 0;
+                sal_UCS4 cBullet = aChar.iterateCodePoints(&nIndexUtf16);
+                aFormat.SetBulletChar(cBullet);
             }
             else if(aChar.isEmpty())
             {
