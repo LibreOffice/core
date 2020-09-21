@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5bd8ed32_4b8c2a6c",
+        "filename": "chart2/qa/extras/chart2import.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1763,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2020-09-21T12:32:04Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 1763,
+        "startChar": 69,
+        "endLine": 1763,
+        "endChar": 77
+      },
+      "revId": "138b7edba16ccbd8a02dba291be77a293abf1572",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
