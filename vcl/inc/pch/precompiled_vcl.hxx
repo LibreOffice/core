@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-09-01 15:31:50 using:
+ Generated on 2020-09-21 15:27:01 using:
  ./bin/update_pch vcl vcl --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -264,6 +264,7 @@
 #include <salusereventlist.hxx>
 #include <salvd.hxx>
 #include <salvtables.hxx>
+#include <sft.hxx>
 #include <svdata.hxx>
 #include <vcl/BitmapFilter.hxx>
 #include <vcl/BitmapTools.hxx>
