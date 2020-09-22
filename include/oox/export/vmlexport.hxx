@@ -138,7 +138,7 @@ public:
     OString const & AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri = -1,
             sal_Int16 eVOri = -1, sal_Int16 eHRel = -1,
             sal_Int16 eVRel = -1,
-            std::unique_ptr<sax_fastparser::FastAttributeList> m_pWrapAttrList = nullptr,
+            std::unique_ptr<sax_fastparser::FastAttributeList> m_pWrapAttrList = {},
             const bool bOOxmlExport = false );
     OString const & AddInlineSdrObject( const SdrObject& rObj, const bool bOOxmlExport );
     virtual void  AddSdrObjectVMLObject( const SdrObject& rObj) override;
