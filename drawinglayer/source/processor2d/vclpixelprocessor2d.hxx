@@ -48,9 +48,30 @@ namespace drawinglayer { namespace primitive2d {
 
 namespace drawinglayer
 {
+<<<<<<< HEAD   (3de1b0 fix Graphic duplication in import and add GraphicMapper)
     namespace processor2d
     {
         /** VclPixelProcessor2D class
+=======
+class PolyPolygonColorPrimitive2D;
+class PolygonHairlinePrimitive2D;
+class PolygonStrokePrimitive2D;
+class WrongSpellPrimitive2D;
+class TextSimplePortionPrimitive;
+class BitmapPrimitive2D;
+class PolyPolygonGradientPrimitive2D;
+class UnifiedTransparencePrimitive2D;
+class ControlPrimitive2D;
+class PolygonStrokePrimitive2D;
+class FillHatchPrimitive2D;
+class BackgroundColorPrimitive2D;
+class BorderLinePrimitive2D;
+class GlowPrimitive2D;
+class ShadowPrimitive2D;
+class SoftEdgePrimitive2D;
+class FillGradientPrimitive2D;
+}
+>>>>>>> CHANGE (20c09d use vcl lin. gradient drawing in drawinglayer + cairo impl.)
 
             This processor derived from VclProcessor2D is the base class for rendering
             all feeded primitives to a VCL Window. It is the currently used renderer
@@ -87,6 +108,7 @@ namespace drawinglayer
             void processInvertPrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
             void processMetaFilePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
 
+<<<<<<< HEAD   (3de1b0 fix Graphic duplication in import and add GraphicMapper)
         public:
             /// constructor/destructor
             VclPixelProcessor2D(
@@ -96,6 +118,37 @@ namespace drawinglayer
         };
     } // end of namespace processor2d
 } // end of namespace drawinglayer
+=======
+    void
+    processWrongSpellPrimitive2D(const primitive2d::WrongSpellPrimitive2D& rWrongSpellPrimitive);
+    void processTextSimplePortionPrimitive2D(
+        const primitive2d::TextSimplePortionPrimitive2D& rCandidate);
+    void processTextDecoratedPortionPrimitive2D(
+        const primitive2d::TextSimplePortionPrimitive2D& rCandidate);
+    void processPolygonHairlinePrimitive2D(
+        const primitive2d::PolygonHairlinePrimitive2D& rPolygonHairlinePrimitive2D);
+    void processBitmapPrimitive2D(const primitive2d::BitmapPrimitive2D& rBitmapCandidate);
+    void processPolyPolygonGradientPrimitive2D(
+        const primitive2d::PolyPolygonGradientPrimitive2D& rPolygonCandidate);
+    void processPolyPolygonColorPrimitive2D(
+        const primitive2d::PolyPolygonColorPrimitive2D& rPolyPolygonColorPrimitive2D);
+    void processUnifiedTransparencePrimitive2D(
+        const primitive2d::UnifiedTransparencePrimitive2D& rUniTransparenceCandidate);
+    void processControlPrimitive2D(const primitive2d::ControlPrimitive2D& rControlPrimitive);
+    void processPolygonStrokePrimitive2D(
+        const primitive2d::PolygonStrokePrimitive2D& rPolygonStrokePrimitive2D);
+    void processFillHatchPrimitive2D(const primitive2d::FillHatchPrimitive2D& rFillHatchPrimitive);
+    void
+    processBackgroundColorPrimitive2D(const primitive2d::BackgroundColorPrimitive2D& rPrimitive);
+    void
+    processBorderLinePrimitive2D(const drawinglayer::primitive2d::BorderLinePrimitive2D& rBorder);
+    void processInvertPrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
+    void processMetaFilePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
+    void processGlowPrimitive2D(const primitive2d::GlowPrimitive2D& rCandidate);
+    void processSoftEdgePrimitive2D(const primitive2d::SoftEdgePrimitive2D& rCandidate);
+    void processShadowPrimitive2D(const primitive2d::ShadowPrimitive2D& rCandidate);
+    void processFillGradientPrimitive2D(const primitive2d::FillGradientPrimitive2D& rPrimitive);
+>>>>>>> CHANGE (20c09d use vcl lin. gradient drawing in drawinglayer + cairo impl.)
 
 
 #endif // INCLUDED_DRAWINGLAYER_SOURCE_PROCESSOR2D_VCLPIXELPROCESSOR2D_HXX
