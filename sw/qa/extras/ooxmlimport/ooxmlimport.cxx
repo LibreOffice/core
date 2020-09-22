@@ -1706,6 +1706,18 @@ DECLARE_OOXMLIMPORT_TEST(testTdf108714, "tdf108714.docx")
     CPPUNIT_ASSERT_EQUAL(style::BreakType_PAGE_BEFORE, breakType);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf136952_pgBreak3, "tdf136952_pgBreak3.docx")
+{
+    // The original 6 page ODT was designed to visually exaggerate the problems
+    // of emulating LO's followed-by-page-style into MSWord's sections.
+    // While much has been improved, there are extra pages present, which still need fixing.
+    xmlDocUniquePtr pDump = parseLayoutDump();
+
+    //Do not lose the page::breakAfter. (This SHOULD be on page 4, but sadly it is not.)
+    CPPUNIT_ASSERT(getXPath(pDump, "//page[6]/body/txt[1]/Text[1]", "Portion").startsWith("Lorem ipsum"));
+}
+
+
 DECLARE_OOXMLIMPORT_TEST(testImageLazyRead, "image-lazy-read.docx")
 {
     auto xGraphic = getProperty<uno::Reference<graphic::XGraphic>>(getShape(1), "Graphic");
