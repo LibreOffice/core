@@ -2938,8 +2938,29 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
             if (xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.drawing.TextShape"))
                 pWrap = "square";
         }
+
+        OUString sHorzOverflow = "";
+        OUString sVertOverflow = "";
+        if (GetProperty(rXPropSet, "InteropGrabBag"))
+        {
+            if (rXPropSet->getPropertySetInfo()->hasPropertyByName("InteropGrabBag"))
+            {
+                uno::Sequence<beans::PropertyValue> aGrabBag;
+                rXPropSet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+                for (auto& aProp : aGrabBag)
+                {
+                    if (aProp.Name == "horzOverflow")
+                        aProp.Value >>= sHorzOverflow;
+                    else if (aProp.Name == "vertOverflow")
+                        aProp.Value >>= sVertOverflow;;
+                }
+            }
+        }
+
         mpFS->startElementNS( (nXmlNamespace ? nXmlNamespace : XML_a), XML_bodyPr,
                                XML_wrap, pWrap,
+                               XML_horzOverflow, sHorzOverflow,
+                               XML_vertOverflow, sVertOverflow,
                                XML_fromWordArt, sax_fastparser::UseIf("1", bFromWordArt),
                                XML_lIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nLeft)), nLeft != DEFLRINS),
                                XML_rIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nRight)), nRight != DEFLRINS),
