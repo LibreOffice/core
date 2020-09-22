@@ -31,6 +31,7 @@
 #include <vcl/cursor.hxx>
 #include <vcl/errcode.hxx>
 #include <editeng/editstat.hxx>
+#include <editeng/flditem.hxx>
 #include <svl/languageoptions.hxx>
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
 #include <editeng/editdata.hxx>
@@ -270,6 +271,9 @@ public:
     const SvxFieldItem* GetField( const Point& rPos, sal_Int32* pnPara = nullptr, sal_Int32* pnPos = nullptr ) const;
 
     const SvxFieldItem* GetFieldAtSelection() const;
+    /// Select and return the field at the current cursor position
+    const SvxFieldData* GetFieldAtCursor() const;
+    void SelectFieldAtCursor();
 
     void            SetInvalidateMore( sal_uInt16 nPixel );
     sal_uInt16      GetInvalidateMore() const;

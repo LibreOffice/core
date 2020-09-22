@@ -55,6 +55,7 @@
 #include <svl/whiter.hxx>
 #include <sot/formats.hxx>
 #include <vcl/transfer.hxx>
+#include <vcl/unohelp2.hxx>
 #include <svl/stritem.hxx>
 #include <editeng/colritem.hxx>
 
@@ -614,15 +615,34 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     }
                 }
             }
-            break;
+        break;
 
-            case SID_OPEN_HYPERLINK:
+        case SID_OPEN_HYPERLINK:
+            {
+                const SvxURLField* pURLField = GetURLField();
+                if ( pURLField )
+                    ScGlobal::OpenURL( pURLField->GetURL(), pURLField->GetTargetFrame(), /*BypassCtrlClickSecurity:*/ true );
+                return;
+            }
+        break;
+        case SID_COPY_HYPERLINK_LOCATION:
+        {
+                const SvxFieldData* pField = pEditView->GetFieldAtCursor();
+                if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
                 {
-                    const SvxURLField* pURLField = GetURLField();
-                    if ( pURLField )
-                        ScGlobal::OpenURL( pURLField->GetURL(), pURLField->GetTargetFrame(), /*BypassCtrlClickSecurity:*/ true );
-                    return;
+                    uno::Reference<datatransfer::clipboard::XClipboard> xClipboard
+                        = pEditView->GetWindow()->GetClipboard();
+
+                    if (comphelper::LibreOfficeKit::isActive())
+                    {
+                        std::function<void (int, const char*)> callback = [&] (int callbackType, const char* text) { pViewData->GetViewShell()->libreOfficeKitViewCallback(callbackType, text); } ;
+                        vcl::unohelper::TextDataObject::CopyStringTo(pURLField->GetURL(), xClipboard, &callback);
+                    }
+                    else
+                        vcl::unohelper::TextDataObject::CopyStringTo(pURLField->GetURL(), xClipboard, nullptr);
                 }
+            }
+        break;
 
         case FN_INSERT_SOFT_HYPHEN:
             lclInsertCharacter( pTableView, pTopView, CHAR_SHY );
@@ -745,6 +765,7 @@ void ScEditShell::GetState( SfxItemSet& rSet )
                 break;
 
             case SID_OPEN_HYPERLINK:
+            case SID_COPY_HYPERLINK_LOCATION:
                 {
                     if ( !GetURLField() )
                         rSet.DisableItem( nWhich );
