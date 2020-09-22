@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a3033348_c0d27eb8",
+        "filename": "vcl/source/font/fontcharmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-09-22T18:36:51Z",
+      "side": 1,
+      "message": "its clamped to the max possible amount of ranges in the next block",
+      "parentUuid": "87373d48_10f69735",
+      "revId": "a8107a0a8edc6e76badc7c82b8f0bc3eaeb8dd52",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4df62ef3_7dfec7f3",
         "filename": "vcl/source/font/fontcharmap.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2020-09-22T16:18:50Z",
       "side": 1,
       "message": "this should probably be checked for \u003c 0",
+      "revId": "a8107a0a8edc6e76badc7c82b8f0bc3eaeb8dd52",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4aa6d6a5_28118ea9",
+        "filename": "vcl/source/font/fontcharmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-09-22T18:36:51Z",
+      "side": 1,
+      "message": "the block at line 622 appears to consume these numbers and has some explicit management of negative numbers that indicates negative numbers are legal\n\n    const int nStartIndex \u003d mpImplFontCharMap-\u003empStartGlyphs[ nRange/2 ];\n    if( nStartIndex \u003e\u003d 0 ) {\n        // the glyph index can be calculated\n        nGlyphIndex +\u003d nStartIndex;\n    } else {\n        // the glyphid array has the glyph index\n        nGlyphIndex \u003d mpImplFontCharMap-\u003empGlyphIds[ nGlyphIndex - nStartIndex];\n    }",
+      "parentUuid": "4df62ef3_7dfec7f3",
       "revId": "a8107a0a8edc6e76badc7c82b8f0bc3eaeb8dd52",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
