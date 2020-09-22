@@ -344,8 +344,7 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
         Insert( aGuess.ReleaseHangingPortion() );
     }
     // breakPos >= index
-    else if (aGuess.BreakPos() >= rInf.GetIdx() && aGuess.BreakPos() != TextFrameIndex(COMPLETE_STRING)
-        && rInf.GetFont()->GetCaseMap() != SvxCaseMap::SmallCaps )
+    else if (aGuess.BreakPos() >= rInf.GetIdx() && aGuess.BreakPos() != TextFrameIndex(COMPLETE_STRING))
     {
         // case B1
         if( aGuess.HyphWord().is() && aGuess.BreakPos() > rInf.GetLineStart()
