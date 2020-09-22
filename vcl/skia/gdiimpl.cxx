@@ -421,7 +421,7 @@ void SkiaSalGraphicsImpl::checkSurface()
 {
     if (!mSurface)
     {
-        recreateSurface();
+        createSurface();
         SAL_INFO("vcl.skia.trace",
                  "create(" << this << "): " << Size(mSurface->width(), mSurface->height()));
     }
