@@ -407,7 +407,7 @@ bool SkiaSalBitmap::ConvertToGreyscale()
         mBitCount = 8;
         ComputeScanlineSize();
         mPalette = Bitmap::GetGreyPalette(256);
-        ResetToSkImage(surface->makeImageSnapshot());
+        ResetToSkImage(SkiaHelper::makeCheckedImageSnapshot(surface));
         SAL_INFO("vcl.skia.trace", "converttogreyscale(" << this << ")");
         return true;
     }
@@ -613,7 +613,7 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetSkImage() const
         assert(surface);
         surface->getCanvas()->clear(toSkColor(mEraseColor));
         SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
-        thisPtr->mImage = surface->makeImageSnapshot();
+        thisPtr->mImage = SkiaHelper::makeCheckedImageSnapshot(surface);
         SAL_INFO("vcl.skia.trace", "getskimage(" << this << ") from erase color " << mEraseColor);
         return mImage;
     }
@@ -653,7 +653,7 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetSkImage() const
                                                      << "->" << mSize << ":"
                                                      << static_cast<int>(mScaleQuality));
             SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
-            thisPtr->mImage = surface->makeImageSnapshot();
+            thisPtr->mImage = SkiaHelper::makeCheckedImageSnapshot(surface);
         }
         return mImage;
     }
@@ -685,7 +685,7 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
         assert(surface);
         surface->getCanvas()->clear(fromEraseColorToAlphaImageColor(mEraseColor));
         SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
-        thisPtr->mAlphaImage = surface->makeImageSnapshot();
+        thisPtr->mAlphaImage = SkiaHelper::makeCheckedImageSnapshot(surface);
         SAL_INFO("vcl.skia.trace",
                  "getalphaskimage(" << this << ") from erase color " << mEraseColor);
         return mAlphaImage;
@@ -730,7 +730,7 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
         // generally only happen with the separate-alpha-outdev hack, and those bitmaps should
         // be temporary.
         SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
-        thisPtr->mAlphaImage = surface->makeImageSnapshot();
+        thisPtr->mAlphaImage = SkiaHelper::makeCheckedImageSnapshot(surface);
         return mAlphaImage;
     }
     SkiaZone zone;
@@ -769,7 +769,7 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
         paint.setColorFilter(SkColorFilters::Matrix(redToAlpha));
         surface->getCanvas()->drawBitmap(GetAsSkBitmap(), 0, 0, &paint);
         SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
-        thisPtr->mAlphaImage = surface->makeImageSnapshot();
+        thisPtr->mAlphaImage = SkiaHelper::makeCheckedImageSnapshot(surface);
     }
     // The data is now stored both in the SkImage and in our mBuffer, so drop the buffer
     // if conserving memory and the conversion back would be simple (it'll be converted back

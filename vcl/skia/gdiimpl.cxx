@@ -308,7 +308,7 @@ void SkiaSalGraphicsImpl::createWindowSurface(bool forceRaster)
                 destroySurface(); // destroys also WindowContext
                 return createWindowSurface(true); // try again
             case SkiaHelper::RenderRaster:
-                abort(); // this should not really happen
+                abort(); // This should not really happen, do not even try to cope with it.
         }
     }
     mIsGPU = mSurface->getCanvas()->getGrContext() != nullptr;
@@ -438,7 +438,7 @@ void SkiaSalGraphicsImpl::checkSurface()
             if (!isOffscreen())
             {
                 flushDrawing();
-                snapshot = mSurface->makeImageSnapshot();
+                snapshot = SkiaHelper::makeCheckedImageSnapshot(mSurface);
             }
             recreateSurface();
             if (snapshot)
@@ -595,7 +595,7 @@ void SkiaSalGraphicsImpl::applyXor()
     SkPaint paint;
     paint.setBlendMode(SkBlendMode::kSrc); // copy as is
     SkCanvas canvas(surfaceBitmap);
-    canvas.drawImageRect(mSurface->makeImageSnapshot(), mXorRegion.getBounds(),
+    canvas.drawImageRect(SkiaHelper::makeCheckedImageSnapshot(mSurface), mXorRegion.getBounds(),
                          SkRect::Make(mXorRegion.getBounds()), &paint);
     // xor to surfaceBitmap
     assert(surfaceBitmap.info().alphaType() == kUnpremul_SkAlphaType);
@@ -1110,7 +1110,7 @@ static void copyArea(SkCanvas* canvas, sk_sp<SkSurface> surface, long nDestX, lo
     {
         SkPaint paint;
         paint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
-        canvas->drawImageRect(surface->makeImageSnapshot(),
+        canvas->drawImageRect(SkiaHelper::makeCheckedImageSnapshot(surface),
                               SkIRect::MakeXYWH(nSrcX, nSrcY, nSrcWidth, nSrcHeight),
                               SkRect::MakeXYWH(nDestX, nDestY, nSrcWidth, nSrcHeight), &paint);
         return;
@@ -1178,7 +1178,7 @@ void SkiaSalGraphicsImpl::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcG
     {
         SAL_INFO("vcl.skia.trace", "copybits(" << this << "): (" << src << "): " << rPosAry);
         // Do not use makeImageSnapshot(rect), as that one may make a needless data copy.
-        sk_sp<SkImage> image = src->mSurface->makeImageSnapshot();
+        sk_sp<SkImage> image = SkiaHelper::makeCheckedImageSnapshot(src->mSurface);
         SkPaint paint;
         paint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
         if (rPosAry.mnSrcWidth != rPosAry.mnDestWidth
@@ -1305,7 +1305,8 @@ std::shared_ptr<SalBitmap> SkiaSalGraphicsImpl::getBitmap(long nX, long nY, long
     // TODO makeImageSnapshot(rect) may copy the data, which may be a waste if this is used
     // e.g. for VirtualDevice's lame alpha blending, in which case the image will eventually end up
     // in blendAlphaBitmap(), where we could simply use the proper rect of the image.
-    sk_sp<SkImage> image = mSurface->makeImageSnapshot(SkIRect::MakeXYWH(nX, nY, nWidth, nHeight));
+    sk_sp<SkImage> image = SkiaHelper::makeCheckedImageSnapshot(
+        mSurface, SkIRect::MakeXYWH(nX, nY, nWidth, nHeight));
     return std::make_shared<SkiaSalBitmap>(image);
 }
 
@@ -1364,10 +1365,12 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
             SkPaint copy;
             copy.setBlendMode(SkBlendMode::kSrc);
             flushDrawing();
-            surface->getCanvas()->drawImageRect(mSurface->makeImageSnapshot(), area, size, &copy);
+            surface->getCanvas()->drawImageRect(SkiaHelper::makeCheckedImageSnapshot(mSurface),
+                                                area, size, &copy);
             aPath.offset(-area.x(), -area.y());
             surface->getCanvas()->drawPath(aPath, aPaint);
-            getDrawCanvas()->drawImageRect(surface->makeImageSnapshot(), size, area, &copy);
+            getDrawCanvas()->drawImageRect(SkiaHelper::makeCheckedImageSnapshot(surface), size,
+                                           area, &copy);
         }
     }
     else
@@ -1412,10 +1415,12 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
             SkPaint copy;
             copy.setBlendMode(SkBlendMode::kSrc);
             flushDrawing();
-            surface->getCanvas()->drawImageRect(mSurface->makeImageSnapshot(), area, size, &copy);
+            surface->getCanvas()->drawImageRect(SkiaHelper::makeCheckedImageSnapshot(mSurface),
+                                                area, size, &copy);
             aPath.offset(-area.x(), -area.y());
             surface->getCanvas()->drawPath(aPath, aPaint);
-            getDrawCanvas()->drawImageRect(surface->makeImageSnapshot(), size, area, &copy);
+            getDrawCanvas()->drawImageRect(SkiaHelper::makeCheckedImageSnapshot(surface), size,
+                                           area, &copy);
         }
         addXorRegion(aPath.getBounds());
     }
@@ -1537,7 +1542,7 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
     }
     else
         canvas->drawImage(bitmap.GetSkImage(), 0, 0, &paint);
-    image = tmpSurface->makeImageSnapshot();
+    image = SkiaHelper::makeCheckedImageSnapshot(tmpSurface);
     SkiaHelper::addCachedImage(key, image);
     return image;
 }
