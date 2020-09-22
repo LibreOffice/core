@@ -1059,6 +1059,8 @@ void SkiaSalBitmap::EnsureBitmapUniqueData()
 void SkiaSalBitmap::ResetCachedData()
 {
     SkiaZone zone;
+    // This should never be called to drop mImage if that's the only data we have.
+    assert(mBuffer || !mImage);
     mImage.reset();
     mAlphaImage.reset();
 }
