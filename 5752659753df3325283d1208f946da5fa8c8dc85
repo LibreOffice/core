@@ -69,6 +69,24 @@
       "revId": "5752659753df3325283d1208f946da5fa8c8dc85",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42f8b3b8_4375195d",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2730,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-09-22T11:33:26Z",
+      "side": 1,
+      "message": "A total hack that fixes it is to set m_pCurrentPageDesc \u003d m_pCurrentPageDesc.GetFollow().\nOtherwise there is specific bCheckForFollowPageDesc that gets in the way of exporting the msword::PageBreak.\n\nI\u0027ll probably get into enough regression trouble with these patches as it is. I\u0027m not eager to add another one that is certainly going to be very messy.",
+      "parentUuid": "a9440ed3_d5b2f347",
+      "revId": "5752659753df3325283d1208f946da5fa8c8dc85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
