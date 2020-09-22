@@ -72,8 +72,9 @@ void SwFieldPortion::TakeNextOffset( const SwFieldPortion* pField )
     m_bFollow = true;
 }
 
-SwFieldPortion::SwFieldPortion( const OUString &rExpand, std::unique_ptr<SwFont> pFont, bool bPlaceHold )
-    : m_aExpand(rExpand), m_pFont(std::move(pFont)), m_nNextOffset(0), m_nNextScriptChg(COMPLETE_STRING), m_nViewWidth(0)
+SwFieldPortion::SwFieldPortion(const OUString &rExpand, std::unique_ptr<SwFont> pFont, bool bPlaceHold, TextFrameIndex const nFieldLen)
+    : m_aExpand(rExpand), m_pFont(std::move(pFont)), m_nNextOffset(0)
+    , m_nNextScriptChg(COMPLETE_STRING), m_nFieldLen(nFieldLen), m_nViewWidth(0)
     , m_bFollow( false ), m_bLeft( false), m_bHide( false)
     , m_bCenter (false), m_bHasFollow( false )
     , m_bAnimated( false), m_bNoPaint( false)
@@ -89,6 +90,7 @@ SwFieldPortion::SwFieldPortion( const SwFieldPortion& rField )
     , m_aExpand( rField.GetExp() )
     , m_nNextOffset( rField.GetNextOffset() )
     , m_nNextScriptChg( rField.m_nNextScriptChg )
+    , m_nFieldLen(rField.m_nFieldLen)
     , m_nViewWidth( rField.m_nViewWidth )
     , m_bFollow( rField.IsFollow() )
     , m_bLeft( rField.IsLeft() )
@@ -175,7 +177,8 @@ SwFieldSlot::SwFieldSlot( const SwTextFormatInfo* pNew, const SwFieldPortion *pP
     }
     else if (nIdx < TextFrameIndex(pOldText->getLength()))
     {
-        aText = (*pOldText).replaceAt(sal_Int32(nIdx), 1, aText);
+        sal_Int32 const nFieldLen(pPor->GetFieldLen());
+        aText = (*pOldText).replaceAt(sal_Int32(nIdx), nFieldLen, aText);
     }
     pInf->SetText( aText );
 }
@@ -229,7 +232,7 @@ void SwFieldPortion::CheckScript( const SwTextSizeInfo &rInf )
     // #i98418#
     const sal_uInt8 nFieldDir = (IsNumberPortion() || IsFootnoteNumPortion())
         ? rSI.GetDefaultDir()
-        : rSI.DirType(IsFollow() ? rInf.GetIdx() - TextFrameIndex(1) : rInf.GetIdx());
+        : rSI.DirType(IsFollow() ? rInf.GetIdx() - m_nFieldLen : rInf.GetIdx());
 
     {
         UErrorCode nError = U_ZERO_ERROR;
@@ -326,7 +329,7 @@ bool SwFieldPortion::Format( SwTextFormatInfo &rInf )
         // and passed along in nRest. Or else the old length would be
         // retained and be used for nRest!
         SetLen(TextFrameIndex(0));
-        TextFrameIndex const nFollow(IsFollow() ? 0 : 1);
+        TextFrameIndex const nFollow(IsFollow() ? TextFrameIndex(0) : m_nFieldLen);
 
         // As odd is may seem: the query for GetLen() must return false due
         // to the ExpandPortions _after_ aDiffText (see SoftHyphs), caused
@@ -429,7 +432,7 @@ void SwFieldPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     SwFontSave aSave( rInf, m_pFont.get() );
 
-    OSL_ENSURE(GetLen() <= TextFrameIndex(1), "SwFieldPortion::Paint: rest-portion pollution?");
+//    OSL_ENSURE(GetLen() <= TextFrameIndex(1), "SwFieldPortion::Paint: rest-portion pollution?");
     if( Width() && ( !m_bPlaceHolder || rInf.GetOpt().IsShowPlaceHolderFields() ) )
     {
         // A very liberal use of the background

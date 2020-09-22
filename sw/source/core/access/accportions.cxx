@@ -353,7 +353,7 @@ TextFrameIndex SwAccessiblePortionData::GetCoreViewPosition(sal_Int32 const nPos
     // return the portion start
     if( ! IsSpecialPortion( nPortionNo ) )
     {
-        // 'wide' portions have to be of the same width
+        // text portions have to be of the same width
         OSL_ENSURE( sal_Int32(m_ViewPositions[nPortionNo+1] - nStartPos) ==
                     ( m_aAccessiblePositions[nPortionNo+1] -
                       m_aAccessiblePositions[nPortionNo] ),
@@ -518,9 +518,9 @@ sal_Int32 SwAccessiblePortionData::GetAccessiblePosition(TextFrameIndex const nP
     // else return that position
     TextFrameIndex nStartPos = m_ViewPositions[nPortionNo];
     TextFrameIndex nEndPos = m_ViewPositions[nPortionNo+1];
-    if ((nEndPos - nStartPos) > TextFrameIndex(1))
+    if (!IsSpecialPortion(nPortionNo))
     {
-        // 'wide' portions have to be of the same width
+        // text portions have to be of the same width
         OSL_ENSURE( sal_Int32(nEndPos - nStartPos) ==
                     ( m_aAccessiblePositions[nPortionNo+1] -
                       m_aAccessiblePositions[nPortionNo] ),
@@ -574,10 +574,9 @@ TextFrameIndex SwAccessiblePortionData::FillSpecialPos(
                     "portion with core-representation expected" );
 
         // if we have anything except plain text, compute nExtend + nRefPos
-        if ((nCoreEndPos - nCorePos == TextFrameIndex(1)) &&
-            (m_pTextFrame->GetText()[sal_Int32(nCorePos)] != m_sAccessibleString[nPos]))
+        if (IsSpecialPortion(nCorePortionNo))
         {
-            // case 1: a one-character, non-text portion
+            // case 1: a non-text portion
             // reference position is the first accessibility for our
             // core portion
             nRefPos = m_aAccessiblePositions[ nCorePortionNo ];
@@ -731,7 +730,7 @@ bool SwAccessiblePortionData::IsInGrayPortion( sal_Int32 nPos )
                              PORATTR_GRAY );
 }
 
-sal_Int32 SwAccessiblePortionData::GetFieldIndex(sal_Int32 nPos)
+sal_Int32 SwAccessiblePortionData::GetFieldIndex(sal_Int32 nPos) const
 {
     sal_Int32 nIndex = -1;
     if( m_aFieldPosition.size() >= 2 )

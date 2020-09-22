@@ -1677,7 +1677,7 @@ bool SwCursor::ExpandToSentenceBorders(SwRootFrame const*const pLayout)
 
 bool SwTableCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 /*nMode*/,
     bool /*bVisualAllowed*/, bool /*bSkipHidden*/, bool /*bInsertCursor*/,
-    SwRootFrame const*)
+    SwRootFrame const*, bool /*isFieldNames*/)
 {
     return bLeft ? GoPrevCell( nCnt )
                  : GoNextCell( nCnt );
@@ -1743,7 +1743,7 @@ SwCursor::DoSetBidiLevelLeftRight(
 
 bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
                           bool bVisualAllowed,bool bSkipHidden, bool bInsertCursor,
-                          SwRootFrame const*const pLayout)
+                          SwRootFrame const*const pLayout, bool isFieldNames)
 {
     // calculate cursor bidi level
     SwNode& rNode = GetPoint()->nNode.GetNode();
@@ -1810,6 +1810,18 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
                 // assume iteration is stable & returns the same frame
                 assert(!pFrame->IsAnFollow(pNewFrame) && !pNewFrame->IsAnFollow(pFrame));
                 pFrame = pNewFrame;
+            }
+        }
+
+        if (isFieldNames)
+        {
+            SwTextNode const*const pNode(GetPoint()->nNode.GetNode().GetTextNode());
+            assert(pNode);
+            SwTextAttr const*const pInputField(pNode->GetTextAttrAt(
+                GetPoint()->nContent.GetIndex(), RES_TXTATR_INPUTFIELD, SwTextNode::PARENT));
+            if (pInputField)
+            {
+                continue; // skip over input fields
             }
         }
 

@@ -1495,7 +1495,7 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
         }
         return nCurrStart;
     }
-    if (TextFrameIndex(1) == nLength)
+    if (TextFrameIndex(1) == nLength || pPor->InFieldGrp())
     {
         if ( nWidth )
         {
@@ -1519,7 +1519,16 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
                     if( nWidth - nHeight/2 <= nX &&
                         ( ! pPor->InFieldGrp() ||
                           !static_cast<SwFieldPortion*>(pPor)->HasFollow() ) )
-                        ++nCurrStart;
+                    {
+                        if (pPor->InFieldGrp())
+                        {
+                            nCurrStart += static_cast<SwFieldPortion*>(pPor)->GetFieldLen();
+                        }
+                        else
+                        {
+                            ++nCurrStart;
+                        }
+                    }
                 }
                 else if ( ( !pPor->IsFlyPortion() || ( pPor->GetNextPortion() &&
                     !pPor->GetNextPortion()->IsMarginPortion() &&
@@ -1549,7 +1558,9 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
             if ( pPor->InFieldGrp() )
             {
                 if( bRightOver && !static_cast<SwFieldPortion*>(pPor)->HasFollow() )
-                    ++nCurrStart;
+                {
+                    nCurrStart += static_cast<SwFieldPortion*>(pPor)->GetFieldLen();
+                }
                 return nCurrStart;
             }
         }

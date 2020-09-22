@@ -115,7 +115,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
     {
         case FN_EDIT_FIELD:
         {
-            SwField* pField = rSh.GetCurField();
+            SwField* pField = rSh.GetCurField(true);
             if( pField )
             {
                 switch ( pField->GetTypeId() )
@@ -810,7 +810,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
             {
                 if( !bGetField )
                 {
-                    pField = rSh.GetCurField();
+                    pField = rSh.GetCurField(true);
                     bGetField = true;
                 }
 
