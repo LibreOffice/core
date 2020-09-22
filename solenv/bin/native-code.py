@@ -119,8 +119,6 @@ core_constructor_list = [
     "com_sun_star_comp_dba_ORowSet_get_implementation",
 # drawinglayer/drawinglayer.component
     "drawinglayer_XPrimitive2DRenderer",
-# dtrans/util/mcnttype.component
-    "dtrans_CMimeContentTypeFactory_get_implementation",
 # embeddedobj/util/embobj.component
     "embeddedobj_UNOEmbeddedObjectCreator_get_implementation",
     "embeddedobj_OOoEmbeddedObjectFactory_get_implementation",
@@ -423,6 +421,7 @@ core_constructor_list = [
     "com_sun_star_comp_uui_UUIInteractionHandler_get_implementation",
     "com_sun_star_comp_uui_UUIInteractionRequestStringResolver_get_implementation",
 # vcl/*.component
+    "dtrans_CMimeContentTypeFactory_get_implementation",
     "vcl_SystemClipboard_get_implementation",
 # xmloff/source/transform/xof.component
     "xmloff_XMLCalcContentImportOOO_get_implementation",

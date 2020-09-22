@@ -43,7 +43,6 @@ merged_libs = { \
     ,"i18nutil" \
     ,"lng" \
     ,"localebe1" \
-    ,"mcnttype" \
     ,"msfilter" \
     ,"mtfrenderer" \
     ,"opencl" \

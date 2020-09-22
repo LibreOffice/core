@@ -75,7 +75,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	chart2/source/chartcore \
 	cui/util/cui \
 	desktop/source/deployment/deployment \
-	dtrans/util/mcnttype \
 	embeddedobj/util/embobj \
 	eventattacher/source/evtatt \
 	filter/source/msfilter/msfilter \

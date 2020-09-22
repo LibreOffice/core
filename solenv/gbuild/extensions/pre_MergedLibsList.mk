@@ -54,7 +54,6 @@ MERGE_LIBRARY_LIST := \
 	lng \
 	lnth \
 	localebe1 \
-	mcnttype \
 	msfilter \
 	mtfrenderer \
 	numbertext \

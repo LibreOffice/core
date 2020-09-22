@@ -74,7 +74,6 @@ $(eval $(call gb_CppunitTest_use_components,chart2_export,\
     chart2/source/chartcore \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
-    dtrans/util/mcnttype \
     dbaccess/util/dba \
     embeddedobj/util/embobj \
     emfio/emfio \
