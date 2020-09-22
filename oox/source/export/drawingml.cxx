@@ -2955,18 +2955,31 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
         }
 
         bool isUpright = false;
+        std::optional<OUString> sHorzOverflow;
+        std::optional<OUString> sVertOverflow;
         if (GetProperty(rXPropSet, "InteropGrabBag"))
         {
             if (rXPropSet->getPropertySetInfo()->hasPropertyByName("InteropGrabBag"))
             {
                 uno::Sequence<beans::PropertyValue> aGrabBag;
                 rXPropSet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
-                for (auto& aProp : aGrabBag)
+                for (const auto& aProp : std::as_const(aGrabBag))
                 {
                     if (aProp.Name == "Upright")
                     {
                         aProp.Value >>= isUpright;
-                        break;
+                    }
+                    else if (aProp.Name == "horzOverflow")
+                    {
+                        OUString sValue;
+                        aProp.Value >>= sValue;
+                        sHorzOverflow = sValue;
+                    }
+                    else if (aProp.Name == "vertOverflow")
+                    {
+                        OUString sValue;
+                        aProp.Value >>= sValue;
+                        sVertOverflow = sValue;
                     }
                 }
             }
@@ -2974,6 +2987,8 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
 
         mpFS->startElementNS( (nXmlNamespace ? nXmlNamespace : XML_a), XML_bodyPr,
                                XML_wrap, pWrap,
+                               XML_horzOverflow, sHorzOverflow,
+                               XML_vertOverflow, sVertOverflow,
                                XML_fromWordArt, sax_fastparser::UseIf("1", bFromWordArt),
                                XML_lIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nLeft)), nLeft != DEFLRINS),
                                XML_rIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nRight)), nRight != DEFLRINS),
