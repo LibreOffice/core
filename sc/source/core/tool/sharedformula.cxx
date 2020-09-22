@@ -120,7 +120,7 @@ bool SharedFormulaUtil::splitFormulaCellGroup(const CellStoreType::position_type
     return true;
 }
 
-bool SharedFormulaUtil::splitFormulaCellGroups(const ScDocument* pDoc, CellStoreType& rCells, std::vector<SCROW>& rBounds)
+bool SharedFormulaUtil::splitFormulaCellGroups(const ScDocument& rDoc, CellStoreType& rCells, std::vector<SCROW>& rBounds)
 {
     if (rBounds.empty())
         return false;
@@ -141,7 +141,7 @@ bool SharedFormulaUtil::splitFormulaCellGroups(const ScDocument* pDoc, CellStore
     for (++it; it != itEnd; ++it)
     {
         nRow = *it;
-        if (pDoc->ValidRow(nRow))
+        if (rDoc.ValidRow(nRow))
         {
             aPos = rCells.position(aPos.first, nRow);
             if (aPos.first == rCells.end())
@@ -354,7 +354,7 @@ void SharedFormulaUtil::unshareFormulaCell(const CellStoreType::position_type& a
     rCell.SetCellGroup(xNone);
 }
 
-void SharedFormulaUtil::unshareFormulaCells(const ScDocument* pDoc, CellStoreType& rCells, std::vector<SCROW>& rRows)
+void SharedFormulaUtil::unshareFormulaCells(const ScDocument& rDoc, CellStoreType& rCells, std::vector<SCROW>& rRows)
 {
     if (rRows.empty())
         return;
@@ -367,19 +367,19 @@ void SharedFormulaUtil::unshareFormulaCells(const ScDocument* pDoc, CellStoreTyp
     std::vector<SCROW> aRows2;
     for (const auto& rRow : rRows)
     {
-        if (rRow > pDoc->MaxRow())
+        if (rRow > rDoc.MaxRow())
             break;
 
         aRows2.push_back(rRow);
 
-        if (rRow < pDoc->MaxRow())
+        if (rRow < rDoc.MaxRow())
             aRows2.push_back(rRow+1);
     }
 
     // Remove duplicates again (the vector should still be sorted).
     aRows2.erase(std::unique(aRows2.begin(), aRows2.end()), aRows2.end());
 
-    splitFormulaCellGroups(pDoc, rCells, aRows2);
+    splitFormulaCellGroups(rDoc, rCells, aRows2);
 }
 
 void SharedFormulaUtil::startListeningAsGroup( sc::StartListeningContext& rCxt, ScFormulaCell** ppSharedTop )

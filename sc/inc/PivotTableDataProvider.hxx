@@ -48,7 +48,7 @@ class PivotTableDataProvider final : public PivotTableDataProvider_Base, public 
 {
 public:
 
-    explicit PivotTableDataProvider(ScDocument* pDoc);
+    explicit PivotTableDataProvider(ScDocument& rDoc);
     virtual ~PivotTableDataProvider() override;
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 

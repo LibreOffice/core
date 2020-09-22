@@ -2525,7 +2525,7 @@ bool ScColumn::UpdateReference( sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc
     }
 
     // Do the actual splitting.
-    const bool bSplit = sc::SharedFormulaUtil::splitFormulaCellGroups(&GetDoc(), maCells, aBounds);
+    const bool bSplit = sc::SharedFormulaUtil::splitFormulaCellGroups(GetDoc(), maCells, aBounds);
 
     // Collect all formula groups.
     std::vector<sc::FormulaGroupEntry> aGroups = GetFormulaGroupEntries();

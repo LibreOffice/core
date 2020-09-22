@@ -441,7 +441,7 @@ void ScColumn::ConvertFormulaToValue(
         aBounds.push_back(nRow2+1);
 
     // Split formula cell groups at top and bottom boundaries (if applicable).
-    sc::SharedFormulaUtil::splitFormulaCellGroups(&GetDoc(), maCells, aBounds);
+    sc::SharedFormulaUtil::splitFormulaCellGroups(GetDoc(), maCells, aBounds);
 
     // Parse all formulas within the range and store their results into temporary storage.
     ConvertFormulaToValueHandler aFunc(GetDoc().GetSheetLimits());
@@ -502,7 +502,7 @@ void ScColumn::SwapNonEmpty(
         aBounds.push_back(rRange.aEnd.Row()+1);
 
     // Split formula cell groups at top and bottom boundaries (if applicable).
-    sc::SharedFormulaUtil::splitFormulaCellGroups(&GetDoc(), maCells, aBounds);
+    sc::SharedFormulaUtil::splitFormulaCellGroups(GetDoc(), maCells, aBounds);
     std::vector<sc::CellValueSpan> aSpans = rValues.getNonEmptySpans(nTab, nCol);
 
     // Detach formula cells within the spans (if any).
@@ -1200,13 +1200,13 @@ void ScColumn::SplitFormulaGroupByRelativeRef( const ScRange& rBoundRange )
     aBounds.push_back(rBoundRange.aStart.Row());
     if (rBoundRange.aEnd.Row() < GetDoc().MaxRow())
         aBounds.push_back(rBoundRange.aEnd.Row()+1);
-    sc::SharedFormulaUtil::splitFormulaCellGroups(&GetDoc(), maCells, aBounds);
+    sc::SharedFormulaUtil::splitFormulaCellGroups(GetDoc(), maCells, aBounds);
 
     RelativeRefBoundChecker aFunc(rBoundRange);
     sc::ProcessFormula(
         maCells.begin(), maCells, rBoundRange.aStart.Row(), rBoundRange.aEnd.Row(), aFunc);
     aFunc.swapBounds(aBounds);
-    sc::SharedFormulaUtil::splitFormulaCellGroups(&GetDoc(), maCells, aBounds);
+    sc::SharedFormulaUtil::splitFormulaCellGroups(GetDoc(), maCells, aBounds);
 }
 
 namespace {
