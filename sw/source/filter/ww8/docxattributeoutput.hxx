@@ -950,8 +950,12 @@ private:
 
     bool m_setFootnote;
 
-    /// RelId <-> Graphic* cache, so that in case of alternate content, the same graphic only gets written once.
-    std::stack< std::map<const Graphic*, OString> > m_aRelIdCache;
+    OString getExistingGraphicRelId(BitmapChecksum aChecksum);
+    void cacheGraphicRelId(BitmapChecksum nChecksum, OString const & rRelId);
+
+    /// RelId <-> BitmapChecksum cache, so that in case of alternate content, the same graphic only gets written once.
+    std::stack< std::map<BitmapChecksum, OString> > m_aRelIdCache;
+
     /// RelId <-> BitmapChecksum cache, similar to m_aRelIdCache, but used for non-Writer graphics, handled in oox.
     std::stack< std::map<BitmapChecksum, OUString> > m_aSdrRelIdCache;
 
