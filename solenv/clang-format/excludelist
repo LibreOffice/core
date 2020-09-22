@@ -3762,12 +3762,6 @@ drawinglayer/source/tools/emfpstringformat.cxx
 drawinglayer/source/tools/emfpstringformat.hxx
 drawinglayer/source/tools/primitive2dxmldump.cxx
 drawinglayer/source/tools/wmfemfhelper.cxx
-dtrans/source/cnttype/mcnttfactory.cxx
-dtrans/source/cnttype/mcnttfactory.hxx
-dtrans/source/cnttype/mcnttype.cxx
-dtrans/source/cnttype/mcnttype.hxx
-dtrans/source/cnttype/mctfentry.cxx
-dtrans/source/cnttype/wbench/testcnttype.cxx
 editeng/inc/AccessibleStringWrap.hxx
 editeng/inc/editattr.hxx
 editeng/inc/editdoc.hxx
@@ -16911,6 +16905,11 @@ vcl/source/bitmap/bitmap.cxx
 vcl/source/bitmap/bitmapfilter.cxx
 vcl/source/bitmap/checksum.cxx
 vcl/source/bitmap/salbmp.cxx
+vcl/source/cnttype/mcnttfactory.cxx
+vcl/source/cnttype/mcnttfactory.hxx
+vcl/source/cnttype/mcnttype.cxx
+vcl/source/cnttype/mcnttype.hxx
+vcl/source/cnttype/mctfentry.cxx
 vcl/source/components/dtranscomp.cxx
 vcl/source/components/factory.cxx
 vcl/source/components/fontident.cxx
@@ -17409,6 +17408,7 @@ vcl/win/window/salobj.cxx
 vcl/workben/602fuzzer.cxx
 vcl/workben/bmpfuzzer.cxx
 vcl/workben/cgmfuzzer.cxx
+vcl/workben/cnttype/testcnttype.cxx
 vcl/workben/commonfuzzer.hxx
 vcl/workben/docxfuzzer.cxx
 vcl/workben/dtrans/test_dtrans.cxx

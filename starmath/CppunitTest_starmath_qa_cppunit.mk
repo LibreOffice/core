@@ -66,7 +66,6 @@ $(eval $(call gb_CppunitTest_use_vcl,starmath_qa_cppunit))
 
 $(eval $(call gb_CppunitTest_use_components,starmath_qa_cppunit,\
     configmgr/source/configmgr \
-    dtrans/util/mcnttype \
     framework/util/fwk \
     i18npool/util/i18npool \
     package/source/xstor/xstor \
