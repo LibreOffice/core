@@ -605,7 +605,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	localedata_es \
 	localedata_euro \
 	localedata_others \
-	mcnttype \
 	$(if $(ENABLE_JAVA), \
 		$(if $(filter $(OS),MACOSX),,officebean) \
 	) \

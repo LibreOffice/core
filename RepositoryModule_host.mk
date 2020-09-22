@@ -47,7 +47,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	dbaccess \
 	desktop \
 	$(call gb_Helper_optional,DICTIONARIES,dictionaries) \
-	dtrans \
 	drawinglayer \
 	editeng \
 	embeddedobj \

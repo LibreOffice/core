@@ -271,7 +271,6 @@ class Parser:
             "dbaccess" : 1,
             "desktop" : 1,
             "drawinglayer" : 1,
-            "dtrans" : 1,
             "editeng" : 1,
             "embeddedobj" : 1,
             "embedserv" : 1,

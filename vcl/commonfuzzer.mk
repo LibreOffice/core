@@ -65,7 +65,6 @@ fuzzer_core_libraries = \
     i18nutil \
     lng \
     localebe1 \
-    mcnttype \
     msfilter \
     package2 \
     sax \
