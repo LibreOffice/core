@@ -390,11 +390,15 @@ sk_sp<SkSurface> createSkSurface(int width, int height, SkColorType type)
                 surface = SkSurface::MakeRenderTarget(
                     grContext, SkBudgeted::kNo,
                     SkImageInfo::Make(width, height, type, kPremul_SkAlphaType));
-                assert(surface);
+                if (surface)
+                {
 #ifdef DBG_UTIL
-                prefillSurface(surface);
+                    prefillSurface(surface);
 #endif
-                return surface;
+                    return surface;
+                }
+                SAL_WARN("vcl.skia",
+                         "cannot create Vulkan GPU offscreen surface, falling back to Raster");
             }
             break;
         }
@@ -420,6 +424,7 @@ sk_sp<SkImage> createSkImage(const SkBitmap& bitmap)
         {
             if (GrContext* grContext = getSharedGrContext())
             {
+<<<<<<< HEAD   (79b29b fix parsing of Vulkan version numbers)
                 sk_sp<SkSurface> surface = SkSurface::MakeRenderTarget(
                     grContext, SkBudgeted::kNo, bitmap.info().makeAlphaType(kPremul_SkAlphaType));
                 assert(surface);
@@ -427,6 +432,21 @@ sk_sp<SkImage> createSkImage(const SkBitmap& bitmap)
                 paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
                 surface->getCanvas()->drawBitmap(bitmap, 0, 0, &paint);
                 return surface->makeImageSnapshot();
+=======
+                sk_sp<SkSurface> surface
+                    = SkSurface::MakeRenderTarget(grDirectContext, SkBudgeted::kNo,
+                                                  bitmap.info().makeAlphaType(kPremul_SkAlphaType));
+                if (surface)
+                {
+                    SkPaint paint;
+                    paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
+                    surface->getCanvas()->drawBitmap(bitmap, 0, 0, &paint);
+                    return surface->makeImageSnapshot();
+                }
+                // Try to fall back in non-debug builds.
+                SAL_WARN("vcl.skia",
+                         "cannot create Vulkan GPU offscreen surface, falling back to Raster");
+>>>>>>> CHANGE (19365e if allocating Vulkan surface fails, fall back to Skia raster)
             }
             break;
         }
