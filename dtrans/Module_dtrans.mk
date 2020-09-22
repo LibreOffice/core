@@ -23,14 +23,4 @@ $(eval $(call gb_Module_add_targets,dtrans,\
 	Library_mcnttype \
 ))
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_Module_add_targets,dtrans,\
-	Library_dnd \
-	Library_dtrans \
-	Library_ftransl \
-	Library_sysdtrans \
-	StaticLibrary_dtobj \
-))
-endif
-
 # vim: set noet sw=4 ts=4:

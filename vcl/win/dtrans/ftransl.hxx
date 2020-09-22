@@ -26,7 +26,7 @@
 #include <com/sun/star/datatransfer/XDataFormatTranslator.hpp>
 #include <com/sun/star/datatransfer/XMimeContentTypeFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <WinClip.hxx>
+#include "WinClip.hxx"
 
 #include <vector>
 

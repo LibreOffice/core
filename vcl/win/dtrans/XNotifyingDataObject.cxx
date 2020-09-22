@@ -19,8 +19,8 @@
 
 #include <osl/diagnose.h>
 #include "XNotifyingDataObject.hxx"
-#include "../clipb/WinClipbImpl.hxx"
-#include "../clipb/WinClipboard.hxx"
+#include "WinClipbImpl.hxx"
+#include "WinClipboard.hxx"
 
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::clipboard;

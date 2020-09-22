@@ -615,7 +615,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	sdbc2 \
 	sofficeapp \
 	srtrs1 \
-	$(if $(filter $(OS),WNT),sysdtrans) \
 	textconv_dict \
 	ucb1 \
 	ucbhelper \
@@ -634,10 +633,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 		macabdrv1 \
 	) \
 	$(if $(filter WNT,$(OS)), \
-		dnd \
-		dtrans \
 		fps \
-		ftransl \
 		inprocserv \
 		UAccCOM \
 		winaccessibility \

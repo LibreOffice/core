@@ -61,7 +61,10 @@ $(eval $(call gb_Rdb_add_components,services,\
 	$(if $(DISABLE_GUI),vcl/vcl.headless) \
 	$(if $(filter iOS,$(OS)),vcl/vcl.ios) \
 	$(if $(filter MACOSX,$(OS)),vcl/vcl.macosx) \
-	$(if $(filter WNT,$(OS)),vcl/vcl.windows) \
+	$(if $(filter WNT,$(OS)),\
+		vcl/vcl.windows \
+		vcl/vclplug_win \
+	) \
 ))
 
 ifeq ($(gb_Side),host)
@@ -158,10 +161,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	) \
 	$(if $(filter WNT,$(OS)), \
 		avmedia/source/win/avmediawin \
-		dtrans/source/generic/dtrans \
-		dtrans/util/dnd \
-		dtrans/util/ftransl \
-		dtrans/util/sysdtrans \
 		fpicker/source/win32/fps \
 		shell/source/backends/wininetbe/wininetbe1 \
 		shell/source/win32/simplemail/smplmail \

@@ -19,6 +19,8 @@
 
 $(eval $(call gb_Library_Library,vclplug_win))
 
+$(eval $(call gb_Library_set_componentfile,vclplug_win,vcl/vclplug_win))
+
 $(eval $(call gb_Library_set_include,vclplug_win,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
@@ -43,6 +45,7 @@ $(eval $(call gb_Library_use_libraries,vclplug_win,\
     basegfx \
     comphelper \
     cppu \
+    cppuhelper \
     i18nlangtag \
     i18nutil \
     sal \
@@ -68,19 +71,44 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_win,\
     vcl/win/app/salinst \
     vcl/win/app/salshl \
     vcl/win/app/saltimer \
+    vcl/win/dtrans/APNDataObject \
+    vcl/win/dtrans/clipboardmanager \
+    vcl/win/dtrans/DataFmtTransl \
+    vcl/win/dtrans/DOTransferable \
+    vcl/win/dtrans/DtObjFactory \
+    vcl/win/dtrans/DTransHelper \
+    vcl/win/dtrans/Fetc \
+    vcl/win/dtrans/FetcList \
+    vcl/win/dtrans/FmtFilter \
+    vcl/win/dtrans/ftransl \
+    vcl/win/dtrans/generic_clipboard \
+    vcl/win/dtrans/globals \
+    vcl/win/dtrans/idroptarget \
+    vcl/win/dtrans/ImplHelper \
+    vcl/win/dtrans/MtaOleClipb \
+    vcl/win/dtrans/source \
+    vcl/win/dtrans/sourcecontext \
+    vcl/win/dtrans/target \
+    vcl/win/dtrans/targetdragcontext \
+    vcl/win/dtrans/targetdropcontext \
+    vcl/win/dtrans/TxtCnvtHlp \
+    vcl/win/dtrans/WinClipbImpl \
+    vcl/win/dtrans/WinClipboard \
+    vcl/win/dtrans/XNotifyingDataObject \
+    vcl/win/dtrans/XTDataObject \
     vcl/win/gdi/gdiimpl \
     vcl/win/gdi/salbmp \
+    vcl/win/gdi/salfont \
     vcl/win/gdi/salgdi \
     vcl/win/gdi/salgdi2 \
-    vcl/win/gdi/salfont \
     vcl/win/gdi/salgdi_gdiplus \
     vcl/win/gdi/salnativewidgets-luna \
     vcl/win/gdi/salprn \
     vcl/win/gdi/salvd \
     vcl/win/gdi/winlayout \
     vcl/win/gdi/DWriteTextRenderer \
-    vcl/win/window/salframe \
     vcl/win/window/keynames \
+    vcl/win/window/salframe \
     vcl/win/window/salmenu \
     vcl/win/window/salobj \
     $(if $(filter SKIA,$(BUILD_TYPE)), \
@@ -88,14 +116,17 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_win,\
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,vclplug_win,\
+    advapi32 \
     d2d1 \
     dwrite \
     gdi32 \
     gdiplus \
     imm32 \
     ole32 \
+    oleaut32 \
     shell32 \
     shlwapi \
+    uuid \
     version \
     winspool \
 ))

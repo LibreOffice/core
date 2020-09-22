@@ -23,8 +23,8 @@
 #include <sal/log.hxx>
 
 #include "DOTransferable.hxx"
-#include "../misc/ImplHelper.hxx"
-#include <WinClip.hxx>
+#include "ImplHelper.hxx"
+#include "WinClip.hxx"
 #include "DTransHelper.hxx"
 #include "TxtCnvtHlp.hxx"
 #include "MimeAttrib.hxx"
