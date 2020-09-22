@@ -232,7 +232,8 @@ public:
                                                    const sal_uInt32* pPoints,
                                                    const SalPoint* const* pPtAry,
                                                    const PolyFlags* const* pFlgAry ) override;
-    virtual bool            drawGradient( const tools::PolyPolygon&, const Gradient& ) override { return false; };
+
+    virtual bool drawGradient(tools::PolyPolygon const & rPolyPolygon, Gradient const & rGradient) override;
 
     virtual bool implDrawGradient(basegfx::B2DPolyPolygon const & rPolyPolygon, SalGradient const & rGradient) override;
 
