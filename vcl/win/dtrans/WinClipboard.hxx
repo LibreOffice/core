@@ -32,6 +32,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <osl/conditn.hxx>
+#include <vcl/Idle.hxx>
 
 #include "MtaOleClipb.hxx"
 
@@ -70,6 +71,7 @@ class CWinClipboard final
     CXNotifyingDataObject* m_pCurrentClipContent;
     com::sun::star::uno::Reference<com::sun::star::datatransfer::XTransferable> m_foreignContent;
     osl::Mutex m_ClipContentMutex;
+    Idle m_aNotifyClipboardChangeIdle;
 
     static osl::Mutex s_aMutex;
     static CWinClipboard* s_pCWinClipbImpl;
@@ -80,7 +82,8 @@ class CWinClipboard final
     void registerClipboardViewer();
     void unregisterClipboardViewer();
 
-    static void WINAPI onClipboardContentChanged();
+    static void WINAPI onWM_CLIPBOARDUPDATE();
+    DECL_DLLPRIVATE_LINK(ClipboardContentChangedHdl, Timer*, void);
 
 public:
     CWinClipboard(const css::uno::Reference<css::uno::XComponentContext>& rxContext,
