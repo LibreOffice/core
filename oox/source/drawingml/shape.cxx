@@ -1413,6 +1413,13 @@ Reference< XShape > const & Shape::createAndInsert(
                    relative to the containing shape. setTextRotateAngle wants
                    degrees anticlockwise. */
                 mpCustomShapePropertiesPtr->setTextRotateAngle( -1 * nTextRotateAngle / 60000 );
+
+                auto sHorzOverflow = getTextBody()->getTextProperties().msHorzOverflow;
+                if (!sHorzOverflow.isEmpty())
+                    putPropertyToGrabBag("horzOverflow", uno::makeAny(getTextBody()->getTextProperties().msHorzOverflow));
+                auto nVertOverflow = getTextBody()->getTextProperties().msVertOverflow;
+                if (!nVertOverflow.isEmpty())
+                    putPropertyToGrabBag("vertOverflow", uno::makeAny(getTextBody()->getTextProperties().msVertOverflow));
             }
 
             // Note that the script oox/source/drawingml/customshapes/generatePresetsData.pl looks
