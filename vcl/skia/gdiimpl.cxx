@@ -289,13 +289,13 @@ void SkiaSalGraphicsImpl::createSurface()
     mFlush->SetPriority(TaskPriority::POST_PAINT);
 }
 
-void SkiaSalGraphicsImpl::createWindowSurface()
+void SkiaSalGraphicsImpl::createWindowSurface(bool forceRaster)
 {
     SkiaZone zone;
     assert(!isOffscreen());
     assert(!mSurface);
     assert(!mWindowContext);
-    createWindowContext();
+    createWindowContext(forceRaster);
     if (mWindowContext)
         mSurface = mWindowContext->getBackbufferSurface();
     if (!mSurface)
@@ -303,16 +303,15 @@ void SkiaSalGraphicsImpl::createWindowSurface()
         switch (SkiaHelper::renderMethodToUse())
         {
             case SkiaHelper::RenderVulkan:
-                SAL_WARN("vcl.skia", "cannot create Vulkan GPU window surface, disabling Vulkan");
-                // fall back to raster
-                SkiaHelper::disableRenderMethod(SkiaHelper::RenderVulkan);
+                SAL_WARN("vcl.skia",
+                         "cannot create Vulkan GPU window surface, falling back to Raster");
                 destroySurface(); // destroys also WindowContext
-                return createWindowSurface(); // try again
+                return createWindowSurface(true); // try again
             case SkiaHelper::RenderRaster:
                 abort(); // this should not really happen
         }
     }
-    assert((mSurface->getCanvas()->getGrContext() != nullptr) == mIsGPU);
+    mIsGPU = mSurface->getCanvas()->getGrContext() != nullptr;
 #ifdef DBG_UTIL
     SkiaHelper::prefillSurface(mSurface);
 #endif
@@ -335,13 +334,12 @@ void SkiaSalGraphicsImpl::createOffscreenSurface()
             if (SkiaHelper::getSharedGrDirectContext())
             {
                 mSurface = SkiaHelper::createSkSurface(width, height);
-                assert(mSurface);
-                assert(mSurface->getCanvas()->getGrContext()); // is GPU-backed
-                mIsGPU = true;
-                return;
+                if (mSurface)
+                {
+                    mIsGPU = mSurface->getCanvas()->getGrContext() != nullptr;
+                    return;
+                }
             }
-            SAL_WARN("vcl.skia", "cannot create Vulkan offscreen GPU surface, disabling Vulkan");
-            SkiaHelper::disableRenderMethod(SkiaHelper::RenderVulkan);
             break;
         }
         default:
@@ -1098,7 +1096,8 @@ bool SkiaSalGraphicsImpl::drawPolyPolygonBezier(sal_uInt32, const sal_uInt32*,
 }
 
 static void copyArea(SkCanvas* canvas, sk_sp<SkSurface> surface, long nDestX, long nDestY,
-                     long nSrcX, long nSrcY, long nSrcWidth, long nSrcHeight, bool srcIsRaster)
+                     long nSrcX, long nSrcY, long nSrcWidth, long nSrcHeight, bool srcIsRaster,
+                     bool destIsRaster)
 {
     // Using SkSurface::draw() should be more efficient than SkSurface::makeImageSnapshot(),
     // because it may detect copying to itself and avoid some needless copies.
@@ -1106,7 +1105,8 @@ static void copyArea(SkCanvas* canvas, sk_sp<SkSurface> surface, long nDestX, lo
     // (https://groups.google.com/forum/#!topic/skia-discuss/6yiuw24jv0I) and also
     // raster surfaces do not avoid a copy of the source
     // (https://groups.google.com/forum/#!topic/skia-discuss/S3FMpCi82k0).
-    if (canvas == surface->getCanvas() || srcIsRaster)
+    // Finally, there's not much point if one of them is raster and the other is not (chrome/m86 even crashes).
+    if (canvas == surface->getCanvas() || srcIsRaster || (srcIsRaster != destIsRaster))
     {
         SkPaint paint;
         paint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
@@ -1135,7 +1135,7 @@ void SkiaSalGraphicsImpl::copyArea(long nDestX, long nDestY, long nSrcX, long nS
                                    << SkIRect::MakeXYWH(nDestX, nDestY, nSrcWidth, nSrcHeight));
     assert(!mXorMode);
     ::copyArea(getDrawCanvas(), mSurface, nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight,
-               !isGPU());
+               !isGPU(), !isGPU());
     addXorRegion(SkRect::MakeXYWH(nDestX, nDestY, nSrcWidth, nSrcHeight));
     postDraw();
 }
@@ -1171,7 +1171,8 @@ void SkiaSalGraphicsImpl::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcG
         SAL_INFO("vcl.skia.trace",
                  "copybits(" << this << "): " << srcDebug() << " copy area: " << rPosAry);
         ::copyArea(getDrawCanvas(), src->mSurface, rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnSrcX,
-                   rPosAry.mnSrcY, rPosAry.mnDestWidth, rPosAry.mnDestHeight, !src->isGPU());
+                   rPosAry.mnSrcY, rPosAry.mnDestWidth, rPosAry.mnDestHeight, !src->isGPU(),
+                   !isGPU());
     }
     else
     {

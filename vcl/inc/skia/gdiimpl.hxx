@@ -235,8 +235,8 @@ protected:
     void destroySurface();
     // Reimplemented for X11.
     virtual bool avoidRecreateByResize() const { return false; }
-    void createWindowSurface();
-    virtual void createWindowContext() = 0;
+    void createWindowSurface(bool forceRaster = false);
+    virtual void createWindowContext(bool forceRaster = false) = 0;
     void createOffscreenSurface();
 
     void privateDrawAlphaRect(long nX, long nY, long nWidth, long nHeight, double nTransparency,
