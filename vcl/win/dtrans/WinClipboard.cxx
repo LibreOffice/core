@@ -27,6 +27,8 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
+#include <tools/debug.hxx>
+#include <vcl/svapp.hxx>
 
 #include <com/sun/star/datatransfer/clipboard/RenderingCapabilities.hpp>
 #include "XNotifyingDataObject.hxx"
@@ -63,12 +65,18 @@ CWinClipboard::CWinClipboard(const uno::Reference<uno::XComponentContext>& rxCon
     // the static callback function
     s_pCWinClipbImpl = this;
     registerClipboardViewer();
+
+    m_aNotifyClipboardChangeIdle.SetDebugName("CWinClipboard::m_aNotifyClipboardChangeIdle");
+    m_aNotifyClipboardChangeIdle.SetPriority(TaskPriority::HIGH_IDLE);
+    m_aNotifyClipboardChangeIdle.SetInvokeHandler(
+        LINK(this, CWinClipboard, ClipboardContentChangedHdl));
 }
 
 CWinClipboard::~CWinClipboard()
 {
     {
         osl::MutexGuard aGuard(s_aMutex);
+        m_aNotifyClipboardChangeIdle.Stop();
         s_pCWinClipbImpl = nullptr;
     }
 
@@ -236,8 +244,12 @@ void SAL_CALL CWinClipboard::removeClipboardListener(
     rBHelper.aLC.removeInterface(cppu::UnoType<decltype(listener)>::get(), listener);
 }
 
-void CWinClipboard::notifyAllClipboardListener()
+IMPL_LINK_NOARG(CWinClipboard, ClipboardContentChangedHdl, Timer*, void)
 {
+    DBG_TESTSOLARMUTEX();
+
+    m_foreignContent.clear();
+
     if (rBHelper.bDisposed)
         return;
 
@@ -323,21 +335,20 @@ void CWinClipboard::onReleaseDataObject(CXNotifyingDataObject* theCaller)
 
 void CWinClipboard::registerClipboardViewer()
 {
-    m_MtaOleClipboard.registerClipViewer(CWinClipboard::onClipboardContentChanged);
+    m_MtaOleClipboard.registerClipViewer(CWinClipboard::onWM_CLIPBOARDUPDATE);
 }
 
 void CWinClipboard::unregisterClipboardViewer() { m_MtaOleClipboard.registerClipViewer(nullptr); }
 
-void WINAPI CWinClipboard::onClipboardContentChanged()
+void WINAPI CWinClipboard::onWM_CLIPBOARDUPDATE()
 {
     osl::MutexGuard aGuard(s_aMutex);
 
-    // reassociation to instance through static member
-    if (nullptr != s_pCWinClipbImpl)
-    {
-        s_pCWinClipbImpl->m_foreignContent.clear();
-        s_pCWinClipbImpl->notifyAllClipboardListener();
-    }
+    if (!s_pCWinClipbImpl)
+        return;
+
+    if (!s_pCWinClipbImpl->m_aNotifyClipboardChangeIdle.IsActive())
+        s_pCWinClipbImpl->m_aNotifyClipboardChangeIdle.Start();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

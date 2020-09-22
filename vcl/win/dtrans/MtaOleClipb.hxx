@@ -20,7 +20,6 @@
 #pragma once
 
 #include <sal/types.h>
-#include <osl/mutex.hxx>
 
 #include <objidl.h>
 
@@ -30,6 +29,9 @@
 // the class is not thread-safe because it will be used
 // only from within the clipboard service and the methods
 // of the clipboard service are already synchronized
+
+// Its thread creates a hidden window which serves as a request target; so we
+// guarantee synchronization.
 
 class CMtaOleClipboard
 {
@@ -55,10 +57,6 @@ public:
 private:
     unsigned int run( );
 
-    // create a hidden window which serves as a request target; so we
-    // guarantee synchronization
-    void createMtaOleReqWnd( );
-
     // message support
     bool     postMessage( UINT msg, WPARAM wParam = 0, LPARAM lParam = 0 );
     LRESULT  sendMessage( UINT msg, WPARAM wParam = 0, LPARAM lParam = 0 );
@@ -77,8 +75,6 @@ private:
     static LRESULT CALLBACK mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
     static unsigned int WINAPI oleThreadProc( LPVOID pParam );
 
-    static unsigned int WINAPI clipboardChangedNotifierThreadProc( LPVOID pParam );
-
     bool WaitForThreadReady( ) const;
 
 private:
@@ -87,19 +83,8 @@ private:
     HANDLE                      m_hEvtThrdReady;
     HWND                        m_hwndMtaOleReqWnd;
     HANDLE                      m_hEvtWndDisposed;
-    ATOM                        m_MtaOleReqWndClassAtom;
     LPFNC_CLIPVIEWER_CALLBACK_t m_pfncClipViewerCallback;
     bool                        m_bInRegisterClipViewer;
-
-    bool                        m_bRunClipboardNotifierThread;
-    HANDLE                      m_hClipboardChangedNotifierThread;
-    HANDLE                      m_hClipboardChangedNotifierEvents[2];
-    HANDLE&                     m_hClipboardChangedEvent;
-    HANDLE&                     m_hTerminateClipboardChangedNotifierEvent;
-    osl::Mutex                  m_ClipboardChangedEventCountMutex;
-    sal_Int32                   m_ClipboardChangedEventCount;
-
-    osl::Mutex                  m_pfncClipViewerCallbackMutex;
 
     static CMtaOleClipboard*    s_theMtaOleClipboardInst;
 
