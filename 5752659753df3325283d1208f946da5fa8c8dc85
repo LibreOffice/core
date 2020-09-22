@@ -87,6 +87,24 @@
       "revId": "5752659753df3325283d1208f946da5fa8c8dc85",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6965714d_d4c8e0ab",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2730,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-09-22T12:16:28Z",
+      "side": 1,
+      "message": "Fair enough. :-)",
+      "parentUuid": "42f8b3b8_4375195d",
+      "revId": "5752659753df3325283d1208f946da5fa8c8dc85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
