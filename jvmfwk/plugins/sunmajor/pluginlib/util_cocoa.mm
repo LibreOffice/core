@@ -21,40 +21,16 @@ bool JvmfwkUtil_isLoadableJVM( OUString const & aURL )
         NSString *pString = [NSString stringWithCharacters:reinterpret_cast<unichar const *>(aURL.getStr()) length:aURL.getLength()];
         if ( pString )
         {
-            NSURL *pURL = nil;
-
             // Ignore all but Oracle's JDK as loading Apple's Java and Oracle's
             // JRE will cause macOS's JavaVM framework to display a dialog and
             // invoke exit() when loaded via JNI on macOS 10.10
-            NSURL *pTmpURL = [NSURL URLWithString:pString];
-            if ( pTmpURL )
-                pTmpURL = [pTmpURL filePathURL];
-            if ( pTmpURL )
-                pTmpURL = [pTmpURL URLByStandardizingPath];
-            if ( pTmpURL )
-                pTmpURL = [pTmpURL URLByResolvingSymlinksInPath];
-            if ( pTmpURL )
-            {
-                NSURL *pJVMsDirURL = [NSURL URLWithString:@"file:///Library/Java/JavaVirtualMachines/"];
-                if ( pJVMsDirURL )
-                    pJVMsDirURL= [pJVMsDirURL filePathURL];
-                if ( pJVMsDirURL )
-                    pJVMsDirURL = [pJVMsDirURL URLByStandardizingPath];
-                // The JVM directory must not contain softlinks or the JavaVM
-                // framework bug will occur so don't resolve softlinks in the
-                // JVM directory
-                if ( pJVMsDirURL )
-                {
-                    NSString *pTmpURLString = [pTmpURL absoluteString];
-                    NSString *pJVMsDirURLString = [pJVMsDirURL absoluteString];
-                    if ( pTmpURLString && pJVMsDirURLString && [pJVMsDirURLString length] )
-                    {
-                        NSRange aJVMsDirURLRange = [pTmpURLString rangeOfString:pJVMsDirURLString];
-                        if ( !aJVMsDirURLRange.location && aJVMsDirURLRange.length )
-                            pURL = pTmpURL;
-                    }
-                }
-            }
+            NSURL *pURL = [NSURL URLWithString:pString];
+            if ( pURL )
+                pURL = [pURL filePathURL];
+            if ( pURL )
+                pURL = [pURL URLByStandardizingPath];
+            if ( pURL )
+                pURL = [pURL URLByResolvingSymlinksInPath];
 
             while ( pURL )
             {
