@@ -395,11 +395,15 @@ sk_sp<SkSurface> createSkSurface(int width, int height, SkColorType type)
                 surface = SkSurface::MakeRenderTarget(
                     grDirectContext, SkBudgeted::kNo,
                     SkImageInfo::Make(width, height, type, kPremul_SkAlphaType));
-                assert(surface);
+                if (surface)
+                {
 #ifdef DBG_UTIL
-                prefillSurface(surface);
+                    prefillSurface(surface);
 #endif
-                return surface;
+                    return surface;
+                }
+                SAL_WARN("vcl.skia",
+                         "cannot create Vulkan GPU offscreen surface, falling back to Raster");
             }
             break;
         }
@@ -428,11 +432,16 @@ sk_sp<SkImage> createSkImage(const SkBitmap& bitmap)
                 sk_sp<SkSurface> surface
                     = SkSurface::MakeRenderTarget(grDirectContext, SkBudgeted::kNo,
                                                   bitmap.info().makeAlphaType(kPremul_SkAlphaType));
-                assert(surface);
-                SkPaint paint;
-                paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
-                surface->getCanvas()->drawBitmap(bitmap, 0, 0, &paint);
-                return surface->makeImageSnapshot();
+                if (surface)
+                {
+                    SkPaint paint;
+                    paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
+                    surface->getCanvas()->drawBitmap(bitmap, 0, 0, &paint);
+                    return surface->makeImageSnapshot();
+                }
+                // Try to fall back in non-debug builds.
+                SAL_WARN("vcl.skia",
+                         "cannot create Vulkan GPU offscreen surface, falling back to Raster");
             }
             break;
         }

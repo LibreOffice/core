@@ -40,16 +40,13 @@ void X11SkiaSalGraphicsImpl::Init()
     SkiaSalGraphicsImpl::Init();
 }
 
-void X11SkiaSalGraphicsImpl::createWindowContext()
+void X11SkiaSalGraphicsImpl::createWindowContext(bool forceRaster)
 {
     assert(mX11Parent.GetDrawable() != None);
-    mWindowContext = createWindowContext(mX11Parent.GetXDisplay(), mX11Parent.GetDrawable(),
-                                         &mX11Parent.GetVisual(), GetWidth(), GetHeight(),
-                                         SkiaHelper::renderMethodToUse(), false);
-    if (mWindowContext && SkiaHelper::renderMethodToUse() == SkiaHelper::RenderVulkan)
-        mIsGPU = true;
-    else
-        mIsGPU = false;
+    mWindowContext = createWindowContext(
+        mX11Parent.GetXDisplay(), mX11Parent.GetDrawable(), &mX11Parent.GetVisual(), GetWidth(),
+        GetHeight(), forceRaster ? SkiaHelper::RenderRaster : SkiaHelper::renderMethodToUse(),
+        false);
 }
 
 std::unique_ptr<sk_app::WindowContext>
