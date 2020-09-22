@@ -192,9 +192,9 @@ bool ScRangeUtil::IsAbsArea( const OUString&  rAreaStr,
 
         if ( pCompleteStr )
         {
-            *pCompleteStr  = startPos.GetRefString( &rDoc, MAXTAB+1, rDetails );
+            *pCompleteStr  = startPos.GetRefString( rDoc, MAXTAB+1, rDetails );
             *pCompleteStr += ":";
-            *pCompleteStr += endPos.GetRefString( &rDoc, nTab, rDetails );
+            *pCompleteStr += endPos.GetRefString( rDoc, nTab, rDetails );
         }
 
         if ( pStartPos && pEndPos )
@@ -226,7 +226,7 @@ bool ScRangeUtil::IsAbsPos( const OUString&   rPosStr,
         if ( pPosTripel )
             *pPosTripel = thePos;
         if ( pCompleteStr )
-            *pCompleteStr = thePos.GetRefString( &rDoc, MAXTAB+1, rDetails );
+            *pCompleteStr = thePos.GetRefString( rDoc, MAXTAB+1, rDetails );
     }
 
     return bIsAbsPos;

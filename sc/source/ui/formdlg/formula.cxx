@@ -442,7 +442,7 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument& rRefDoc )
         // position.
         ScTokenArray aArray(rRefDoc);
         ScComplexRefData aRefData;
-        aRefData.InitRangeRel(&rRefDoc, rRef, m_CursorPos);
+        aRefData.InitRangeRel(rRefDoc, rRef, m_CursorPos);
         if ((eRangeFlags & eColFlags) == eColFlags)
         {
             aRefData.Ref1.SetAbsCol( rRef.aStart.Col() );

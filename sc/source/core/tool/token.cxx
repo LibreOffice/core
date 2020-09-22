@@ -334,14 +334,14 @@ void ScRawToken::SetExternal( const OUString& rStr )
     maExternalName = rStr;
 }
 
-bool ScRawToken::IsValidReference(const ScDocument* pDoc) const
+bool ScRawToken::IsValidReference(const ScDocument& rDoc) const
 {
     switch (eType)
     {
         case svSingleRef:
-            return aRef.Ref1.Valid(pDoc);
+            return aRef.Ref1.Valid(&rDoc);
         case svDoubleRef:
-            return aRef.Valid(pDoc);
+            return aRef.Valid(&rDoc);
         case svExternalSingleRef:
         case svExternalDoubleRef:
             return true;

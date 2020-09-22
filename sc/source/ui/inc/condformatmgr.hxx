@@ -25,11 +25,11 @@ private:
     void setColSizes();
 
     weld::TreeView& mrTreeView;
-    ScDocument*     mpDoc;
+    ScDocument&     mrDoc;
     ScConditionalFormatList* mpFormatList;
 
 public:
-    ScCondFormatManagerWindow(weld::TreeView& rTreeView, ScDocument* pDoc, ScConditionalFormatList* pFormatList);
+    ScCondFormatManagerWindow(weld::TreeView& rTreeView, ScDocument& rDoc, ScConditionalFormatList* pFormatList);
 
     void DeleteSelection();
     ScConditionalFormat* GetSelection();
@@ -38,7 +38,7 @@ public:
 class ScCondFormatManagerDlg : public weld::GenericDialogController
 {
 public:
-    ScCondFormatManagerDlg(weld::Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList);
+    ScCondFormatManagerDlg(weld::Window* pParent, ScDocument& rDoc, const ScConditionalFormatList* pFormatList);
     virtual ~ScCondFormatManagerDlg() override;
 
     std::unique_ptr<ScConditionalFormatList> GetConditionalFormatList();

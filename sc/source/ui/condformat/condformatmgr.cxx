@@ -16,9 +16,9 @@
 #include <conditio.hxx>
 
 ScCondFormatManagerWindow::ScCondFormatManagerWindow(weld::TreeView& rTreeView,
-    ScDocument* pDoc, ScConditionalFormatList* pFormatList)
+    ScDocument& rDoc, ScConditionalFormatList* pFormatList)
     : mrTreeView(rTreeView)
-    , mpDoc(pDoc)
+    , mrDoc(rDoc)
     , mpFormatList(pFormatList)
 {
     mrTreeView.set_size_request(mrTreeView.get_approximate_digit_width() * 70,
@@ -41,7 +41,7 @@ void ScCondFormatManagerWindow::Init()
         for(const auto& rItem : *mpFormatList)
         {
             const ScRangeList& aRange = rItem->GetRange();
-            aRange.Format(sRangeStr, ScRefFlags::VALID, *mpDoc, mpDoc->GetAddressConvention());
+            aRange.Format(sRangeStr, ScRefFlags::VALID, mrDoc, mrDoc.GetAddressConvention());
             mrTreeView.append(OUString::number(rItem->GetKey()), sRangeStr);
             mrTreeView.set_text(nRow, ScCondFormatHelper::GetExpression(*rItem, aRange.GetTopLeftCorner()), 1);
             ++nRow;
@@ -83,7 +83,7 @@ void ScCondFormatManagerWindow::setColSizes()
     mrTreeView.set_column_fixed_widths(aWidths);
 }
 
-ScCondFormatManagerDlg::ScCondFormatManagerDlg(weld::Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList)
+ScCondFormatManagerDlg::ScCondFormatManagerDlg(weld::Window* pParent, ScDocument& rDoc, const ScConditionalFormatList* pFormatList)
     : GenericDialogController(pParent, "modules/scalc/ui/condformatmanager.ui", "CondFormatManager")
     , m_bModified(false)
     , m_xFormatList( pFormatList ? new ScConditionalFormatList(*pFormatList) : nullptr)
@@ -91,7 +91,7 @@ ScCondFormatManagerDlg::ScCondFormatManagerDlg(weld::Window* pParent, ScDocument
     , m_xBtnRemove(m_xBuilder->weld_button("remove"))
     , m_xBtnEdit(m_xBuilder->weld_button("edit"))
     , m_xTreeView(m_xBuilder->weld_tree_view("CONTAINER"))
-    , m_xCtrlManager(new ScCondFormatManagerWindow(*m_xTreeView, pDoc, m_xFormatList.get()))
+    , m_xCtrlManager(new ScCondFormatManagerWindow(*m_xTreeView, rDoc, m_xFormatList.get()))
 {
     m_xBtnRemove->connect_clicked(LINK(this, ScCondFormatManagerDlg, RemoveBtnHdl));
     m_xBtnEdit->connect_clicked(LINK(this, ScCondFormatManagerDlg, EditBtnClickHdl));

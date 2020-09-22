@@ -1827,7 +1827,7 @@ void ScTable::UpdateReference(
         mpCondFormatList->UpdateReference(rCxt);
 
     if (pTabProtection)
-        pTabProtection->updateReference( eUpdateRefMode, &rDocument, rCxt.maRange, nDx, nDy, nDz);
+        pTabProtection->updateReference( eUpdateRefMode, rDocument, rCxt.maRange, nDx, nDy, nDz);
 }
 
 void ScTable::UpdateTranspose( const ScRange& rSource, const ScAddress& rDest,
@@ -1862,7 +1862,7 @@ void ScTable::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
         mpCondFormatList->UpdateInsertTab(rCxt);
 
     if (pTabProtection)
-        pTabProtection->updateReference( URM_INSDEL, &rDocument,
+        pTabProtection->updateReference( URM_INSDEL, rDocument,
                 ScRange( 0, 0, rCxt.mnInsertPos, rDocument.MaxCol(), rDocument.MaxRow(), MAXTAB),
                 0, 0, rCxt.mnSheets);
 
@@ -1891,7 +1891,7 @@ void ScTable::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
         mpCondFormatList->UpdateDeleteTab(rCxt);
 
     if (pTabProtection)
-        pTabProtection->updateReference( URM_INSDEL, &rDocument,
+        pTabProtection->updateReference( URM_INSDEL, rDocument,
                 ScRange( 0, 0, rCxt.mnDeletePos, rDocument.MaxCol(), rDocument.MaxRow(), MAXTAB),
                 0, 0, -rCxt.mnSheets);
 
@@ -1915,7 +1915,7 @@ void ScTable::UpdateMoveTab(
         mpCondFormatList->UpdateMoveTab(rCxt);
 
     if (pTabProtection)
-        pTabProtection->updateReference( URM_REORDER, &rDocument,
+        pTabProtection->updateReference( URM_REORDER, rDocument,
                 ScRange( 0, 0, rCxt.mnOldPos, rDocument.MaxCol(), rDocument.MaxRow(), MAXTAB),
                 0, 0, rCxt.mnNewPos - rCxt.mnOldPos);
 
@@ -2012,7 +2012,7 @@ void ScTable::ExtendPrintArea( OutputDevice* pDev,
         for (SCCOL nDataCol = nCol; 0 <= nDataCol && nDataCol >= aColData.mnCol1; --nDataCol)
         {
             SCCOL nPrintCol = nDataCol;
-            VisibleDataCellIterator aIter(&rDocument, *mpHiddenRows, aCol[nDataCol]);
+            VisibleDataCellIterator aIter(rDocument, *mpHiddenRows, aCol[nDataCol]);
             ScRefCellValue aCell = aIter.reset(nStartRow);
             if (aCell.isEmpty())
                 // No visible cells found in this column.  Skip it.
@@ -2239,8 +2239,8 @@ void ScTable::RestorePrintRanges( const ScPrintSaverTab& rSaveTab )
     UpdatePageBreaks(nullptr);
 }
 
-ScTable::VisibleDataCellIterator::VisibleDataCellIterator(const ScDocument* pDoc, ScFlatBoolRowSegments& rRowSegs, ScColumn& rColumn) :
-    mpDocument(pDoc),
+ScTable::VisibleDataCellIterator::VisibleDataCellIterator(const ScDocument& rDoc, ScFlatBoolRowSegments& rRowSegs, ScColumn& rColumn) :
+    mrDocument(rDoc),
     mrRowSegs(rRowSegs),
     mrColumn(rColumn),
     mnCurRow(ROW_NOT_FOUND),
@@ -2254,7 +2254,7 @@ ScTable::VisibleDataCellIterator::~VisibleDataCellIterator()
 
 ScRefCellValue ScTable::VisibleDataCellIterator::reset(SCROW nRow)
 {
-    if (nRow > mpDocument->MaxRow())
+    if (nRow > mrDocument.MaxRow())
     {
         mnCurRow = ROW_NOT_FOUND;
         return ScRefCellValue();
@@ -2279,7 +2279,7 @@ ScRefCellValue ScTable::VisibleDataCellIterator::reset(SCROW nRow)
         // the next segment.
         mnCurRow = aData.mnRow2 + 1;
         mnUBound = mnCurRow; // get range data on the next iteration.
-        if (mnCurRow > mpDocument->MaxRow())
+        if (mnCurRow > mrDocument.MaxRow())
         {
             // Make sure the row doesn't exceed our current limit.
             mnCurRow = ROW_NOT_FOUND;

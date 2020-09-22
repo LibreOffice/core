@@ -1860,7 +1860,7 @@ void ScInterpreter::PushSingleRef( const ScRefAddress& rRef )
     if (!IfErrorPushError())
     {
         ScSingleRefData aRef;
-        aRef.InitFromRefAddress( &mrDoc, rRef, aPos);
+        aRef.InitFromRefAddress( mrDoc, rRef, aPos);
         PushTempTokenWithoutError( new ScSingleRefToken( mrDoc.GetSheetLimits(), aRef ) );
     }
 }
@@ -1870,7 +1870,7 @@ void ScInterpreter::PushDoubleRef( const ScRefAddress& rRef1, const ScRefAddress
     if (!IfErrorPushError())
     {
         ScComplexRefData aRef;
-        aRef.InitFromRefAddresses( &mrDoc, rRef1, rRef2, aPos);
+        aRef.InitFromRefAddresses( mrDoc, rRef1, rRef2, aPos);
         PushTempTokenWithoutError( new ScDoubleRefToken( mrDoc.GetSheetLimits(), aRef ) );
     }
 }

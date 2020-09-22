@@ -971,7 +971,7 @@ void Test::testFormulaRefData()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong end position of extended range.", ScAddress(6,5,0), aTest.aEnd);
 
     ScComplexRefData aDoubleRef2;
-    aDoubleRef2.InitRangeRel(pDoc.get(), ScRange(1,2,0,8,6,0), ScAddress(5,5,0));
+    aDoubleRef2.InitRangeRel(*pDoc, ScRange(1,2,0,8,6,0), ScAddress(5,5,0));
     aDoubleRef.Extend(pDoc->GetSheetLimits(), aDoubleRef2, ScAddress(5,5,0));
     aTest = aDoubleRef.toAbs(*pDoc, ScAddress(5,5,0));
 

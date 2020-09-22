@@ -37,23 +37,23 @@ void ScSingleRefData::InitAddress( SCCOL nColP, SCROW nRowP, SCTAB nTabP )
     mnTab = nTabP;
 }
 
-void ScSingleRefData::InitAddressRel( const ScDocument* pDoc, const ScAddress& rAdr, const ScAddress& rPos )
+void ScSingleRefData::InitAddressRel( const ScDocument& rDoc, const ScAddress& rAdr, const ScAddress& rPos )
 {
     InitFlags();
     SetColRel(true);
     SetRowRel(true);
     SetTabRel(true);
-    SetAddress(pDoc->GetSheetLimits(), rAdr, rPos);
+    SetAddress(rDoc.GetSheetLimits(), rAdr, rPos);
 }
 
-void ScSingleRefData::InitFromRefAddress( const ScDocument* pDoc, const ScRefAddress& rRef, const ScAddress& rPos )
+void ScSingleRefData::InitFromRefAddress( const ScDocument& rDoc, const ScRefAddress& rRef, const ScAddress& rPos )
 {
     InitFlags();
     SetColRel( rRef.IsRelCol());
     SetRowRel( rRef.IsRelRow());
     SetTabRel( rRef.IsRelTab());
     SetFlag3D( rRef.Tab() != rPos.Tab());
-    SetAddress( pDoc->GetSheetLimits(), rRef.GetAddress(), rPos);
+    SetAddress( rDoc.GetSheetLimits(), rRef.GetAddress(), rPos);
 }
 
 void ScSingleRefData::SetAbsCol( SCCOL nVal )
@@ -377,7 +377,7 @@ void ScSingleRefData::Dump( int nIndent ) const
 }
 #endif
 
-void ScComplexRefData::InitFromRefAddresses( const ScDocument* pDoc, const ScRefAddress& rRef1, const ScRefAddress& rRef2, const ScAddress& rPos )
+void ScComplexRefData::InitFromRefAddresses( const ScDocument& rDoc, const ScRefAddress& rRef1, const ScRefAddress& rRef2, const ScAddress& rPos )
 {
     InitFlags();
     Ref1.SetColRel( rRef1.IsRelCol());
@@ -388,7 +388,7 @@ void ScComplexRefData::InitFromRefAddresses( const ScDocument* pDoc, const ScRef
     Ref2.SetRowRel( rRef2.IsRelRow());
     Ref2.SetTabRel( rRef2.IsRelTab());
     Ref2.SetFlag3D( rRef1.Tab() != rRef2.Tab());
-    SetRange( pDoc->GetSheetLimits(), ScRange( rRef1.GetAddress(), rRef2.GetAddress()), rPos);
+    SetRange( rDoc.GetSheetLimits(), ScRange( rRef1.GetAddress(), rRef2.GetAddress()), rPos);
 }
 
 ScComplexRefData& ScComplexRefData::Extend( ScSheetLimits& rLimits, const ScSingleRefData & rRef, const ScAddress & rPos )
