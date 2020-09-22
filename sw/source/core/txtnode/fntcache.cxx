@@ -2536,6 +2536,13 @@ TextFrameIndex SwFont::GetTextBreak(SwDrawTextInfo const & rInf, long nTextWidth
             ? TextFrameIndex(COMPLETE_STRING)
             : nTextBreak;
 
+    // tdf112290 tdf136588 Break the line correctly only if there is an image inline,
+    // and the image wider than the line...
+    if (GetCaseMap() == SvxCaseMap::SmallCaps && TextFrameIndex(COMPLETE_STRING) == nTextBreak2 &&
+        ! bCompress && nTextWidth == 0)
+        // If nTextWidth == 0 means the line is full, we have to break it
+        nTextBreak2 = TextFrameIndex(1);
+
     if ( ! bCompress )
         return nTextBreak2;
 
