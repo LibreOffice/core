@@ -3181,7 +3181,7 @@ void SdImportTest::testTdf49856()
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     const SvxNumBulletItem *pNumFmt = aEdit.GetParaAttribs(2).GetItem(EE_PARA_NUMBULLET);
     CPPUNIT_ASSERT(pNumFmt);
-    const sal_Unicode aBullet = pNumFmt->GetNumRule()->GetLevel(0).GetBulletChar();
+    const sal_UCS4 aBullet = pNumFmt->GetNumRule()->GetLevel(0).GetBulletChar();
     CPPUNIT_ASSERT_EQUAL(OUString("More level 2"), aEdit.GetText(2));
     CPPUNIT_ASSERT_EQUAL(u'\x2022', aBullet);
 

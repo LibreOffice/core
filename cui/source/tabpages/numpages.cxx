@@ -688,8 +688,9 @@ IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
             else
                 aFmt.SetBulletFont( &rActBulletFont );
 
+            sal_Int32 nIndexUtf16 = 0;
             aFmt.SetBulletChar( !pLevelSettings->sBulletChar.isEmpty()
-                                    ? pLevelSettings->sBulletChar[0]
+                                    ? pLevelSettings->sBulletChar.iterateCodePoints(&nIndexUtf16)
                                     : 0 );
             aFmt.SetCharFormatName( sBulletCharFormatName );
             aFmt.SetBulletRelSize(45);
