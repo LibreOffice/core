@@ -425,28 +425,31 @@ bool ScChildrenShapes::ReplaceChild (::accessibility::AccessibleShape* pCurrentC
         ::accessibility::AccessibleShapeInfo ( _rxShape, pCurrentChild->getAccessibleParent(), this ),
         _rShapeTreeInfo
     ));
-    if ( pReplacement.is() )
-        pReplacement->Init();
 
     bool bResult(false);
     if (pReplacement.is())
     {
         OSL_ENSURE(pCurrentChild->GetXShape().get() == pReplacement->GetXShape().get(), "XShape changes and should be inserted sorted");
         auto it = maShapesMap.find(pCurrentChild->GetXShape());
+        if (it != maShapesMap.end() && it->second->pAccShape.is())
+        {
+            OSL_ENSURE(it->second->pAccShape == pCurrentChild, "wrong child found");
+            AccessibleEventObject aEvent;
+            aEvent.EventId = AccessibleEventId::CHILD;
+            aEvent.Source = uno::Reference< XAccessibleContext >(mpAccessibleDocument);
+            aEvent.OldValue <<= uno::Reference<XAccessible>(pCurrentChild);
+
+            mpAccessibleDocument->CommitChange(aEvent); // child is gone - event
+
+            pCurrentChild->dispose();
+        }
+
+        // Init after above possible pCurrentChild->dispose so we don't trigger the assert
+        // ScDrawModelBroadcaster::addShapeEventListener of duplicate listeners
+        pReplacement->Init();
+
         if (it != maShapesMap.end())
         {
-            if (it->second->pAccShape.is())
-            {
-                OSL_ENSURE(it->second->pAccShape == pCurrentChild, "wrong child found");
-                AccessibleEventObject aEvent;
-                aEvent.EventId = AccessibleEventId::CHILD;
-                aEvent.Source = uno::Reference< XAccessibleContext >(mpAccessibleDocument);
-                aEvent.OldValue <<= uno::Reference<XAccessible>(pCurrentChild);
-
-                mpAccessibleDocument->CommitChange(aEvent); // child is gone - event
-
-                pCurrentChild->dispose();
-            }
             it->second->pAccShape = pReplacement;
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::CHILD;
