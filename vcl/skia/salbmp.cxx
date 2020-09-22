@@ -378,7 +378,7 @@ bool SkiaSalBitmap::ConvertToGreyscale()
         surface->getCanvas()->drawImage(mImage, 0, 0, &paint);
         mBitCount = 8;
         mPalette = Bitmap::GetGreyPalette(256);
-        ResetToSkImage(surface->makeImageSnapshot());
+        ResetToSkImage(SkiaHelper::makeCheckedImageSnapshot(surface));
         SAL_INFO("vcl.skia.trace", "converttogreyscale(" << this << ")");
         return true;
     }
@@ -492,6 +492,20 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetSkImage() const
 #ifdef DBG_UTIL
     assert(mWriteAccessCount == 0);
 #endif
+<<<<<<< HEAD   (79b29b fix parsing of Vulkan version numbers)
+=======
+    if (mEraseColorSet)
+    {
+        SkiaZone zone;
+        sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(mSize);
+        assert(surface);
+        surface->getCanvas()->clear(toSkColor(mEraseColor));
+        SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
+        thisPtr->mImage = SkiaHelper::makeCheckedImageSnapshot(surface);
+        SAL_INFO("vcl.skia.trace", "getskimage(" << this << ") from erase color " << mEraseColor);
+        return mImage;
+    }
+>>>>>>> CHANGE (797315 detect and fail immediately on failed Skia allocations (tdf#)
     if (mPixelsSize != mSize && !mImage
         && SkiaHelper::renderMethodToUse() != SkiaHelper::RenderRaster)
     {
@@ -528,7 +542,7 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetSkImage() const
                                                      << "->" << mSize << ":"
                                                      << static_cast<int>(mScaleQuality));
             SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
-            thisPtr->mImage = surface->makeImageSnapshot();
+            thisPtr->mImage = SkiaHelper::makeCheckedImageSnapshot(surface);
         }
         return mImage;
     }
@@ -545,6 +559,21 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
 #ifdef DBG_UTIL
     assert(mWriteAccessCount == 0);
 #endif
+<<<<<<< HEAD   (79b29b fix parsing of Vulkan version numbers)
+=======
+    if (mEraseColorSet)
+    {
+        SkiaZone zone;
+        sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(mSize, kAlpha_8_SkColorType);
+        assert(surface);
+        surface->getCanvas()->clear(fromEraseColorToAlphaImageColor(mEraseColor));
+        SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
+        thisPtr->mAlphaImage = SkiaHelper::makeCheckedImageSnapshot(surface);
+        SAL_INFO("vcl.skia.trace",
+                 "getalphaskimage(" << this << ") from erase color " << mEraseColor);
+        return mAlphaImage;
+    }
+>>>>>>> CHANGE (797315 detect and fail immediately on failed Skia allocations (tdf#)
     if (mAlphaImage)
     {
         assert(mSize == mPixelsSize); // data has already been scaled if needed
@@ -582,7 +611,7 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
         else
             SAL_INFO("vcl.skia.trace", "getalphaskimage(" << this << ") from image");
         SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
-        thisPtr->mAlphaImage = surface->makeImageSnapshot();
+        thisPtr->mAlphaImage = SkiaHelper::makeCheckedImageSnapshot(surface);
         return mAlphaImage;
     }
     SkiaZone zone;
@@ -621,7 +650,7 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
         paint.setColorFilter(SkColorFilters::Matrix(redToAlpha));
         surface->getCanvas()->drawBitmap(GetAsSkBitmap(), 0, 0, &paint);
         SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
-        thisPtr->mAlphaImage = surface->makeImageSnapshot();
+        thisPtr->mAlphaImage = SkiaHelper::makeCheckedImageSnapshot(surface);
     }
     SAL_INFO("vcl.skia.trace", "getalphaskimage(" << this << ")");
     return mAlphaImage;
