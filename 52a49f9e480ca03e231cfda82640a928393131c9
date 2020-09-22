@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "17ecf41d_a85f62f1",
+        "filename": "include/rtl/string.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-22T06:29:47Z",
+      "side": 1,
+      "message": "Does this mean that it can\u0027t be used e.g. in a ctor? I imagined that we could use a private default ctor used in the public ctors, which would include those asserts, thus testing it for the instantiated type ... I realize that it doesn\u0027t matter in practice, just curious if that was possible in theory - or would having these static asserts in non-static member function (ctor) fail?",
+      "range": {
+        "startLine": 119,
+        "startChar": 7,
+        "endLine": 119,
+        "endChar": 37
+      },
+      "revId": "52a49f9e480ca03e231cfda82640a928393131c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
