@@ -890,7 +890,28 @@ SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
     }
     else if ( GetFnt()->IsInputField() )
     {
-        pPor = new SwTextInputFieldPortion();
+        if (rInf.GetOpt().IsFieldName())
+        {
+            OUString aFieldName = SwFieldType::GetTypeStr(SwFieldTypesEnum::Input);
+            // assume this is only the *first* portion and follows will be created elsewhere => input field must start at Idx
+            assert(rInf.GetText()[sal_Int32(rInf.GetIdx())] == CH_TXT_ATR_INPUTFIELDSTART);
+            TextFrameIndex nFieldLen(-1);
+            for (TextFrameIndex i = rInf.GetIdx() + TextFrameIndex(1); ; ++i)
+            {
+                assert(rInf.GetText()[sal_Int32(i)] != CH_TXT_ATR_INPUTFIELDSTART); // can't nest
+                if (rInf.GetText()[sal_Int32(i)] == CH_TXT_ATR_INPUTFIELDEND)
+                {
+                    nFieldLen = i + TextFrameIndex(1) - rInf.GetIdx();
+                    break;
+                }
+            }
+            assert(2 <= sal_Int32(nFieldLen));
+            pPor = new SwFieldPortion(aFieldName, nullptr, false, nFieldLen);
+        }
+        else
+        {
+            pPor = new SwTextInputFieldPortion();
+        }
     }
     else
     {

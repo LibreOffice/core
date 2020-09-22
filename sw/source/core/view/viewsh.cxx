@@ -2185,6 +2185,7 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
     // ( - SwEndPortion must _no_ longer be generated. )
     // - Of course, the screen is something completely different than the printer ...
     bReformat = bReformat || mpOpt->IsFieldName() != rOpt.IsFieldName();
+    bool const isEnableFieldNames(mpOpt->IsFieldName() != rOpt.IsFieldName() && rOpt.IsFieldName());
 
     // The map mode is changed, minima/maxima will be attended by UI
     if( mpOpt->GetZoom() != rOpt.GetZoom() && !IsPreview() )
@@ -2270,6 +2271,20 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
         StartAction();
         Reformat();
         EndAction();
+    }
+
+    if (isEnableFieldNames)
+    {
+        for(SwViewShell& rSh : GetRingContainer())
+        {
+            if (SwCursorShell *const pSh = dynamic_cast<SwCursorShell *>(&rSh))
+            {
+                if (pSh->CursorInsideInputField())
+                {   // move cursor out of input field
+                    pSh->Left(1, CRSR_SKIP_CHARS);
+                }
+            }
+        }
     }
 
     if( !bOnlineSpellChgd )
