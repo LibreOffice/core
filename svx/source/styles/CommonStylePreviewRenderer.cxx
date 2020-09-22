@@ -20,6 +20,7 @@
 #include <svx/xdef.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/charreliefitem.hxx>
@@ -47,6 +48,7 @@ CommonStylePreviewRenderer::CommonStylePreviewRenderer(
     : StylePreviewRenderer(rShell, rOutputDev, pStyle, nMaxHeight)
     , m_pFont()
     , maFontColor(COL_AUTO)
+    , maHighlightColor(COL_AUTO)
     , maBackgroundColor(COL_AUTO)
     , maPixelSize()
     , maStyleName(mpStyle->GetName())
@@ -111,6 +113,10 @@ bool CommonStylePreviewRenderer::recalculate()
     if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_COLOR)) != nullptr)
     {
         maFontColor = static_cast<const SvxColorItem*>(pItem)->GetValue();
+    }
+    if ((pItem = pItemSet->GetItem(SID_ATTR_BRUSH_CHAR)) != nullptr)
+    {
+        maHighlightColor = static_cast<const SvxBrushItem*>(pItem)->GetColor();
     }
 
     if (mpStyle->GetFamily() == SfxStyleFamily::Para)
@@ -188,9 +194,7 @@ bool CommonStylePreviewRenderer::render(const tools::Rectangle& aRectangle, Rend
     const OUString& rText = maStyleName;
 
     // setup the device & draw
-    vcl::Font aOldFont(mrOutputDev.GetFont());
-    Color aOldColor(mrOutputDev.GetTextColor());
-    Color aOldFillColor(mrOutputDev.GetFillColor());
+    mrOutputDev.Push(PushFlags::FONT | PushFlags::TEXTCOLOR | PushFlags::FILLCOLOR | PushFlags::TEXTFILLCOLOR);
 
     if (maBackgroundColor != COL_AUTO)
     {
@@ -199,11 +203,13 @@ bool CommonStylePreviewRenderer::render(const tools::Rectangle& aRectangle, Rend
     }
 
     if (m_pFont)
-    {
         mrOutputDev.SetFont(*m_pFont);
-    }
+
     if (maFontColor != COL_AUTO)
         mrOutputDev.SetTextColor(maFontColor);
+
+    if (maHighlightColor != COL_AUTO)
+        mrOutputDev.SetTextFillColor(maHighlightColor);
 
     Size aPixelSize(m_pFont ? maPixelSize : mrOutputDev.GetFont().GetFontSize());
 
@@ -216,9 +222,7 @@ bool CommonStylePreviewRenderer::render(const tools::Rectangle& aRectangle, Rend
 
     mrOutputDev.DrawText(aFontDrawPosition, rText);
 
-    mrOutputDev.SetFillColor(aOldFillColor);
-    mrOutputDev.SetTextColor(aOldColor);
-    mrOutputDev.SetFont(aOldFont);
+    mrOutputDev.Pop();
 
     return true;
 }
