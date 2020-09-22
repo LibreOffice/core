@@ -65,6 +65,7 @@
 #include <flddropdown.hxx>
 #include <strings.hrc>
 #include <tox.hxx>
+#include <viewopt.hxx>
 #include <unotools/useroptions.hxx>
 
 using namespace com::sun::star::uno;
@@ -1491,8 +1492,9 @@ bool SwFieldMgr::InsertField(
         pCurShell->Push();
 
         // start dialog, not before the field is inserted tdf#99529
-        pCurShell->Left(CRSR_SKIP_CHARS,
-                false, (INP_VAR == (nSubType & 0xff)) ? 1 : 2, false );
+        pCurShell->Left(CRSR_SKIP_CHARS, false,
+            (INP_VAR == (nSubType & 0xff) || pCurShell->GetViewOptions()->IsFieldName()) ? 1 : 2,
+            false);
         pCurShell->StartInputFieldDlg(pField.get(), false, true, rData.m_pParent);
 
         pCurShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
