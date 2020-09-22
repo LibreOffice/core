@@ -46,6 +46,30 @@
       "revId": "52a49f9e480ca03e231cfda82640a928393131c9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae56d863_fd66e8b8",
+        "filename": "include/rtl/string.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-09-22T07:28:37Z",
+      "side": 1,
+      "message": "\u003chttps://gerrit.libreoffice.org/c/core/+/103138\u003e \"Simplify those assertLayout checks\"",
+      "parentUuid": "babc46ac_2ad1a4ad",
+      "range": {
+        "startLine": 119,
+        "startChar": 7,
+        "endLine": 119,
+        "endChar": 37
+      },
+      "revId": "52a49f9e480ca03e231cfda82640a928393131c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
