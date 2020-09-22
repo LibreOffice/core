@@ -378,7 +378,7 @@ bool SkiaSalBitmap::ConvertToGreyscale()
         surface->getCanvas()->drawImage(mImage, 0, 0, &paint);
         mBitCount = 8;
         mPalette = Bitmap::GetGreyPalette(256);
-        ResetToSkImage(surface->makeImageSnapshot());
+        ResetToSkImage(SkiaHelper::makeCheckedImageSnapshot(surface));
         SAL_INFO("vcl.skia.trace", "converttogreyscale(" << this << ")");
         return true;
     }
@@ -528,7 +528,7 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetSkImage() const
                                                      << "->" << mSize << ":"
                                                      << static_cast<int>(mScaleQuality));
             SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
-            thisPtr->mImage = surface->makeImageSnapshot();
+            thisPtr->mImage = SkiaHelper::makeCheckedImageSnapshot(surface);
         }
         return mImage;
     }
@@ -582,7 +582,7 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
         else
             SAL_INFO("vcl.skia.trace", "getalphaskimage(" << this << ") from image");
         SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
-        thisPtr->mAlphaImage = surface->makeImageSnapshot();
+        thisPtr->mAlphaImage = SkiaHelper::makeCheckedImageSnapshot(surface);
         return mAlphaImage;
     }
     SkiaZone zone;
@@ -621,7 +621,7 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
         paint.setColorFilter(SkColorFilters::Matrix(redToAlpha));
         surface->getCanvas()->drawBitmap(GetAsSkBitmap(), 0, 0, &paint);
         SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
-        thisPtr->mAlphaImage = surface->makeImageSnapshot();
+        thisPtr->mAlphaImage = SkiaHelper::makeCheckedImageSnapshot(surface);
     }
     SAL_INFO("vcl.skia.trace", "getalphaskimage(" << this << ")");
     return mAlphaImage;
