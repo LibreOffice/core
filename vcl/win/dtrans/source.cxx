@@ -30,7 +30,8 @@
 #include "source.hxx"
 #include "globals.hxx"
 #include "sourcecontext.hxx"
-#include "../../inc/DtObjFactory.hxx"
+#include "DtObjFactory.hxx"
+
 #include <rtl/ustring.h>
 #include <osl/thread.h>
 #include <winuser.h>

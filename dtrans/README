@@ -1,1 +1,3 @@
-Clipboard abstraction - data transfer.
+Used to be a module for data transfer, but just contained Windows code.
+Now it just contains the MimeContentTypeFactory, which probably should move to
+vcl too, since it's just used there.

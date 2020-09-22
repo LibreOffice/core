@@ -140,15 +140,12 @@ $(eval $(call gb_Rdb_add_components,services,\
 	) \
 	$(if $(filter WNT,$(OS)), \
 		avmedia/source/win/avmediawin \
-		dtrans/source/generic/dtrans \
-		dtrans/util/dnd \
-		dtrans/util/ftransl \
-		dtrans/util/sysdtrans \
 		fpicker/source/win32/fps \
 		shell/source/backends/wininetbe/wininetbe1 \
 		shell/source/win32/simplemail/smplmail \
 		shell/source/win32/syssh \
 		vcl/vcl.windows \
+		vcl/vclplug_win \
 	) \
 	$(if $(DISABLE_GUI), \
 		vcl/vcl.headless \

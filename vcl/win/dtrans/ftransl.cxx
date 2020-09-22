@@ -27,7 +27,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
-#include "../misc/ImplHelper.hxx"
+#include "ImplHelper.hxx"
 
 #include <shlobj.h>
 

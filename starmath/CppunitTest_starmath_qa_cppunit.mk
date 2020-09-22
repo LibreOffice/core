@@ -76,14 +76,8 @@ $(eval $(call gb_CppunitTest_use_components,starmath_qa_cppunit,\
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
     unotools/util/utl \
+    vcl/vcl.common \
 ))
-
-ifeq ($(strip $(OS)),WNT)
-$(eval $(call gb_CppunitTest_use_components,starmath_qa_cppunit,\
-    dtrans/util/ftransl \
-    dtrans/util/sysdtrans \
-))
-endif
 
 $(eval $(call gb_CppunitTest_use_configuration,starmath_qa_cppunit))
 

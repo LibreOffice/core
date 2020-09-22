@@ -25,7 +25,7 @@
 #endif
 #include <windows.h>
 #include <objidl.h>
-#include <WinClip.hxx>
+#include "WinClip.hxx"
 
 #define AUTO_INIT                 TRUE
 
