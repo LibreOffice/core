@@ -100,7 +100,7 @@ public:
     bool FillBoundaryIFDateField( css::i18n::Boundary& rBound, const sal_Int32 nPos );
     bool IsIndexInFootnode(sal_Int32 nIndex);
     bool IsInGrayPortion( sal_Int32 nPos );
-    sal_Int32 GetFieldIndex(sal_Int32 nPos);
+    sal_Int32 GetFieldIndex(sal_Int32 nPos) const;
 
     bool IsZeroCorePositionData();
 

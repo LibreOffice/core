@@ -3325,7 +3325,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         bool bFootnote = false;
 
                         if( !bIsDocReadOnly &&
-                            ( nullptr != ( pField = rSh.GetCurField() ) ||
+                            (nullptr != (pField = rSh.GetCurField(true)) ||
                               ( bFootnote = rSh.GetCurFootnote() )        ) )
                         {
                             RstMBDownFlags();

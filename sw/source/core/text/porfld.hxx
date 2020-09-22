@@ -35,6 +35,8 @@ protected:
     std::unique_ptr<SwFont> m_pFont;  // For multi-line fields
     TextFrameIndex m_nNextOffset;  // Offset of the follow in the original string
     TextFrameIndex m_nNextScriptChg;
+    TextFrameIndex m_nFieldLen; //< Length of field text, 1 for normal fields, any number for input fields
+    // TODO ^ do we need this as member or is base class len enough?
     sal_uInt16  m_nViewWidth;     // Screen width for empty fields
     bool m_bFollow : 1;           // 2nd or later part of a field
     bool m_bLeft : 1;             // Used by SwNumberPortion
@@ -53,7 +55,7 @@ protected:
 
 public:
     SwFieldPortion( const SwFieldPortion& rField );
-    SwFieldPortion( const OUString &rExpand, std::unique_ptr<SwFont> pFnt = nullptr, bool bPlaceHolder = false );
+    SwFieldPortion(const OUString &rExpand, std::unique_ptr<SwFont> pFnt = nullptr, bool bPlaceHolder = false, TextFrameIndex nLen = TextFrameIndex(1));
     virtual ~SwFieldPortion() override;
 
     sal_uInt16 m_nAttrFieldType;
@@ -90,6 +92,8 @@ public:
 
     TextFrameIndex GetNextOffset() const { return m_nNextOffset; }
     void SetNextOffset(TextFrameIndex nNew) { m_nNextOffset = nNew; }
+
+    TextFrameIndex GetFieldLen() const { return m_nFieldLen; }
 
     // Field cloner for SplitGlue
     virtual SwFieldPortion *Clone( const OUString &rExpand ) const;
