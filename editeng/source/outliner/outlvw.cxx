@@ -1349,6 +1349,16 @@ const SvxFieldItem* OutlinerView::GetFieldAtSelection() const
     return pEditView->GetFieldAtSelection();
 }
 
+const SvxFieldData* OutlinerView::GetFieldAtCursor() const
+{
+    return pEditView->GetFieldAtCursor();
+}
+
+void OutlinerView::SelectFieldAtCursor()
+{
+    pEditView->SelectFieldAtCursor();
+}
+
 void OutlinerView::SetInvalidateMore( sal_uInt16 nPixel )
 {
     pEditView->SetInvalidateMore( nPixel );

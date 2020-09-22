@@ -994,6 +994,8 @@ class SfxStringItem;
 
 #define SID_TOGGLE_RESOLVED_NOTES                       ( SID_SVX_START + 1189 )
 
+#define SID_COPY_HYPERLINK_LOCATION                     ( SID_SVX_START + 1193 )
+
 // #define SID_SHOW_SIDEBAR                                ( SID_SVX_START + 1190 ) -> sfxsids.hrc
 // #define SID_HIDE_SIDEBAR                                ( SID_SVX_START + 1191 ) -> sfxsids.hrc
 

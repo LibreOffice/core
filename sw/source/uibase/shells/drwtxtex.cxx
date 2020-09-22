@@ -45,6 +45,7 @@
 #include <editeng/contouritem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <editeng/urlfieldhelper.hxx>
 #include <svx/svdoutl.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/whiter.hxx>
@@ -70,6 +71,7 @@
 #include <vcl/window.hxx>
 #include <editeng/editview.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/unohelp2.hxx>
 #include <editeng/hyphenzoneitem.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -521,6 +523,18 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         }
         break;
 
+        case SID_COPY_HYPERLINK_LOCATION:
+        {
+            const SvxFieldData* pField = pOLV->GetFieldAtCursor();
+            if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
+            {
+                uno::Reference<datatransfer::clipboard::XClipboard> xClipboard
+                    = GetView().GetEditWin().GetClipboard();
+                vcl::unohelper::TextDataObject::CopyStringTo(pURLField->GetURL(), xClipboard);
+            }
+        }
+        break;
+
         case SID_TEXTDIRECTION_LEFT_TO_RIGHT:
         case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
             // Shell switch!
@@ -909,6 +923,11 @@ ASK_ESCAPE:
                 rSet.DisableItem(nWhich);
         }
         break;
+        case SID_COPY_HYPERLINK_LOCATION:
+        {
+            if (!URLFieldHelper::IsCursorAtURLField(pOLV))
+                rSet.DisableItem(nWhich);
+        }
         default:
             nSlotId = 0;                // don't know this slot
             break;

@@ -1293,6 +1293,40 @@ const SvxFieldItem* EditView::GetFieldAtSelection() const
     return nullptr;
 }
 
+void EditView::SelectFieldAtCursor()
+{
+    const SvxFieldItem* pFieldItem = GetFieldAtSelection();
+    if (pFieldItem)
+    {
+        // Make sure the whole field is selected
+        ESelection aSel = GetSelection();
+        if (aSel.nStartPos == aSel.nEndPos)
+        {
+            aSel.nEndPos++;
+            SetSelection(aSel);
+        }
+    }
+    if (!pFieldItem)
+    {
+        // Cursor probably behind the field - extend selection to select the field
+        ESelection aSel = GetSelection();
+        if (aSel.nStartPos > 0 && aSel.nStartPos == aSel.nEndPos)
+        {
+            aSel.nStartPos--;
+            SetSelection(aSel);
+        }
+    }
+}
+
+const SvxFieldData* EditView::GetFieldAtCursor() const
+{
+    const SvxFieldItem* pFieldItem = GetFieldUnderMousePointer();
+    if (!pFieldItem)
+        pFieldItem = GetFieldAtSelection();
+
+    return pFieldItem ? pFieldItem->GetField() : nullptr;
+}
+
 void EditView::SetInvalidateMore( sal_uInt16 nPixel )
 {
     pImpEditView->SetInvalidateMore( nPixel );

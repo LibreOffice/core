@@ -441,11 +441,6 @@
           <value xml:lang="en-US">Remove Hyperlink</value>
         </prop>
       </node>
-      <node oor:name=".uno:CopyHyperlinkLocation" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Copy Hyperlink Location</value>
-        </prop>
-      </node>
       <node oor:name=".uno:InsertBookmark" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Bookmar~k...</value>
