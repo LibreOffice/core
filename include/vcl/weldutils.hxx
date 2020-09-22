@@ -159,8 +159,13 @@ public:
     }
 };
 
-class VCL_DLLPUBLIC WidgetStatusListener final
+// don't export to avoid duplicate WeakImplHelper definitions with MSVC
+class SAL_DLLPUBLIC_TEMPLATE WidgetStatusListener_Base
     : public cppu::WeakImplHelper<css::frame::XStatusListener>
+{
+};
+
+class VCL_DLLPUBLIC WidgetStatusListener final : public WidgetStatusListener_Base
 {
 public:
     WidgetStatusListener(weld::Widget* widget, const OUString& rCommand);
