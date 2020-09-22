@@ -212,7 +212,6 @@ public:
     void testTdf77747();
     void testTdf116266();
     void testTdf128684();
-    void testTdf119187();
     void testShapeGlowEffectPPTXImpoer();
     void testShapeBlurPPTXImport();
 
@@ -337,7 +336,6 @@ public:
     CPPUNIT_TEST(testTdf106638);
     CPPUNIT_TEST(testTdf128684);
     CPPUNIT_TEST(testTdf113198);
-    CPPUNIT_TEST(testTdf119187);
     CPPUNIT_TEST(testTdf49856);
     CPPUNIT_TEST(testShapeGlowEffectPPTXImpoer);
     CPPUNIT_TEST(testShapeBlurPPTXImport);
@@ -3147,30 +3145,6 @@ void SdImportTest::testTdf113198()
     CPPUNIT_ASSERT_EQUAL(drawing::TextHorizontalAdjust_CENTER, eAdjust);
 }
 
-void SdImportTest::testTdf119187()
-{
-    std::vector< sd::DrawDocShellRef > xDocShRef;
-    // load document
-    xDocShRef.push_back(loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf119187.pptx"), PPTX));
-    // load resaved document
-    xDocShRef.push_back(saveAndReload( xDocShRef.at(0).get(), PPTX ));
-
-    // check documents
-    for (const sd::DrawDocShellRef& xDoc : xDocShRef)
-    {
-        // get shape properties
-        const SdrPage* pPage = GetPage(1, xDoc);
-        CPPUNIT_ASSERT(pPage);
-        SdrObject* pObj = pPage->GetObj(0);
-        CPPUNIT_ASSERT(pObj);
-        const sdr::properties::BaseProperties & rProperties = pObj->GetProperties();
-
-        // check text vertical alignment
-        const SdrTextVertAdjustItem& rSdrTextVertAdjustItem = rProperties.GetItem(SDRATTR_TEXT_VERTADJUST);
-        const SdrTextVertAdjust eTVA = rSdrTextVertAdjustItem.GetValue();
-        CPPUNIT_ASSERT_EQUAL(SDRTEXTVERTADJUST_TOP, eTVA);
-    }
-}
 
 void SdImportTest::testTdf49856()
 {
