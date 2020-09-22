@@ -313,7 +313,7 @@ sk_sp<SkImage> SkiaCompatibleDC::getAsImage() const
                            SkRect::MakeXYWH(0, 0, maRects.mnSrcWidth, maRects.mnSrcHeight),
                            SkRect::MakeXYWH(0, 0, maRects.mnSrcWidth, maRects.mnSrcHeight), &paint);
     canvas->restore();
-    return surface->makeImageSnapshot();
+    return SkiaHelper::makeCheckedImageSnapshot(surface);
 }
 
 sk_sp<SkImage> SkiaCompatibleDC::getAsImageDiff(const SkiaCompatibleDC& white) const
@@ -362,7 +362,7 @@ sk_sp<SkImage> SkiaCompatibleDC::getAsImageDiff(const SkiaCompatibleDC& white) c
     canvas->concat(matrix);
     canvas->drawBitmap(tmpBitmap, 0, 0, &paint);
     canvas->restore();
-    return surface->makeImageSnapshot();
+    return SkiaHelper::makeCheckedImageSnapshot(surface);
 }
 
 SkiaControlsCache::SkiaControlsCache()
