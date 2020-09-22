@@ -920,7 +920,7 @@ IMPL_LINK_NOARG(SvxBulletAndPositionDlg, BulletHdl_Impl, weld::Button&, void)
     sal_uInt16 nMask = 1;
     const vcl::Font* pFmtFont = nullptr;
     bool bSameBullet = true;
-    sal_Unicode cBullet = 0;
+    sal_UCS4 cBullet = 0;
     bool bFirst = true;
     for (sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
     {

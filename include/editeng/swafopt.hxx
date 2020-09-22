@@ -26,6 +26,7 @@
 #include <o3tl/sorted_vector.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/font.hxx>
+#include <vcl/vclenum.hxx>
 
 class SmartTagMgr;
 
@@ -81,8 +82,8 @@ struct EDITENG_DLLPUBLIC SvxSwAutoFormatFlags
     const editeng::SortedAutoCompleteStrings * m_pAutoCompleteList;
     SmartTagMgr* pSmartTagMgr;
 
-    sal_Unicode cBullet;
-    sal_Unicode cByInputBullet;
+    sal_UCS4 cBullet;
+    sal_UCS4 cByInputBullet;
 
     sal_uInt16 nAutoCmpltWordLen, nAutoCmpltListLen;
     sal_uInt16 nAutoCmpltExpandKey;
