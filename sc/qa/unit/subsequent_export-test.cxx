@@ -269,6 +269,7 @@ public:
     void testTdf135828_Shape_Rect();
     void testTdf123353();
     void testTdf133688_precedents();
+    void testTdf91251_missingOverflowRoundtrip();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -432,6 +433,7 @@ public:
     CPPUNIT_TEST(testTdf135828_Shape_Rect);
     CPPUNIT_TEST(testTdf123353);
     CPPUNIT_TEST(testTdf133688_precedents);
+    CPPUNIT_TEST(testTdf91251_missingOverflowRoundtrip);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5460,6 +5462,25 @@ void ScExportTest::testTdf133688_precedents()
 
     // We do not export any shapes.
     assertXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor[1]", 0);
+}
+
+void ScExportTest::testTdf91251_missingOverflowRoundtrip()
+{
+    // tdf#91251 check whether textBox overflow property (horzOverflow and vertOverflow) is
+    // getting preserved after roundtrip
+    ScDocShellRef xShell = loadDoc("tdf91251_missingOverflowRoundtrip.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+
+    xmlDocUniquePtr pDrawing = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/drawing1.xml");
+    CPPUNIT_ASSERT(pDrawing);
+
+    assertXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:txBody/a:bodyPr", "horzOverflow", "clip");
+    assertXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:txBody/a:bodyPr", "horzOverflow", "clip");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
