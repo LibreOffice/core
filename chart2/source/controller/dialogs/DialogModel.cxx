@@ -677,9 +677,11 @@ void DialogModel::detectArguments(
 
         // Note: unused data is currently not supported in being passed to detectRangeSegmentation
         if( m_xChartDocument.is())
-            DataSourceHelper::detectRangeSegmentation(
+        {
+            (void)DataSourceHelper::detectRangeSegmentation(
                 Reference< frame::XModel >( m_xChartDocument, uno::UNO_QUERY_THROW ),
                 rOutRangeString, aSequenceMapping, rOutUseColumns, rOutFirstCellAsLabel, rOutHasCategories );
+        }
     }
     catch( const uno::Exception & )
     {
