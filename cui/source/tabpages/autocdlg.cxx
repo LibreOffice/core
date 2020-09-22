@@ -534,10 +534,10 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet* )
     const ACFlags nFlags = pAutoCorrect->GetFlags();
 
     aBulletFont = pOpt->aBulletFont;
-    sBulletChar = OUString(pOpt->cBullet);
+    sBulletChar = OUString(&pOpt->cBullet, 1);
 
     aByInputBulletFont = pOpt->aByInputBulletFont;
-    sByInputBulletChar = OUString( pOpt->cByInputBullet );
+    sByInputBulletChar = OUString(&pOpt->cByInputBullet, 1);
 
     nPercent = pOpt->nRightMargin;
     sMargin = unicode::formatPercent(nPercent, Application::GetSettings().GetUILanguageTag());
