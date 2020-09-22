@@ -126,8 +126,13 @@ bool PDFSignatureHelper::ReadAndVerifySignature(
     }
 
     std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
+    return ReadAndVerifySignatureSvStream(*pStream);
+}
+
+bool PDFSignatureHelper::ReadAndVerifySignatureSvStream(SvStream& rStream)
+{
     vcl::filter::PDFDocument aDocument;
-    if (!aDocument.Read(*pStream))
+    if (!aDocument.Read(rStream))
     {
         SAL_WARN("xmlsecurity.helper", "failed to read the document");
         return false;
@@ -143,7 +148,7 @@ bool PDFSignatureHelper::ReadAndVerifySignature(
     {
         SignatureInformation aInfo(i);
 
-        if (!xmlsecurity::pdfio::ValidateSignature(*pStream, aSignatures[i], aInfo, aDocument))
+        if (!xmlsecurity::pdfio::ValidateSignature(rStream, aSignatures[i], aInfo, aDocument))
             SAL_WARN("xmlsecurity.helper", "failed to determine digest match");
 
         m_aSignatureInfos.push_back(aInfo);

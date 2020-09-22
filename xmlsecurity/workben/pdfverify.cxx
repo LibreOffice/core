@@ -24,10 +24,9 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/filter/pdfdocument.hxx>
 #include <comphelper/scopeguard.hxx>
-
-#include <pdfio/pdfdocument.hxx>
-
 #include <svl/sigstruct.hxx>
+
+#include <pdfsignaturehelper.hxx>
 
 using namespace com::sun::star;
 
@@ -114,6 +113,32 @@ int pdfVerify(int nArgc, char** pArgv)
         bRemoveSignature = true;
 
     SvFileStream aStream(aInURL, StreamMode::READ);
+    if (aOutURL.isEmpty() && !bRemoveSignature)
+    {
+        std::cerr << "verifying signatures" << std::endl;
+        PDFSignatureHelper aHelper;
+        aStream.Seek(0);
+        aHelper.ReadAndVerifySignatureSvStream(aStream);
+        if (aHelper.GetSignatureInformations().empty())
+            std::cerr << "found no signatures" << std::endl;
+        else
+        {
+            std::cerr << "found " << aHelper.GetSignatureInformations().size() << " signatures"
+                      << std::endl;
+            for (size_t i = 0; i < aHelper.GetSignatureInformations().size(); ++i)
+            {
+                const SignatureInformation& rInfo = aHelper.GetSignatureInformations()[i];
+                bool bSuccess
+                    = rInfo.nStatus == xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
+                std::cerr << "signature #" << i << ": digest match? " << bSuccess << std::endl;
+                std::cerr << "signature #" << i << ": partial? " << rInfo.bPartialDocumentSignature
+                          << std::endl;
+            }
+        }
+
+        return 0;
+    }
+
     vcl::filter::PDFDocument aDocument;
     if (!aDocument.Read(aStream))
     {
@@ -143,36 +168,6 @@ int pdfVerify(int nArgc, char** pArgv)
         {
             SAL_WARN("xmlsecurity.pdfio", "failed to write the document");
             return 1;
-        }
-
-        return 0;
-    }
-
-    if (aOutURL.isEmpty())
-    {
-        std::cerr << "verifying signatures" << std::endl;
-        std::vector<vcl::filter::PDFObjectElement*> aSignatures = aDocument.GetSignatureWidgets();
-        if (aSignatures.empty())
-            std::cerr << "found no signatures" << std::endl;
-        else
-        {
-            std::cerr << "found " << aSignatures.size() << " signatures" << std::endl;
-            for (size_t i = 0; i < aSignatures.size(); ++i)
-            {
-                SignatureInformation aInfo(i);
-                if (!xmlsecurity::pdfio::ValidateSignature(aStream, aSignatures[i], aInfo,
-                                                           aDocument))
-                {
-                    SAL_WARN("xmlsecurity.pdfio", "failed to determine digest match");
-                    return 1;
-                }
-
-                bool bSuccess
-                    = aInfo.nStatus == xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
-                std::cerr << "signature #" << i << ": digest match? " << bSuccess << std::endl;
-                std::cerr << "signature #" << i << ": partial? " << aInfo.bPartialDocumentSignature
-                          << std::endl;
-            }
         }
 
         return 0;
