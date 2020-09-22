@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b613cd47_d0331518",
+        "filename": "chart2/source/view/charttypes/PieChart.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2020-09-22T06:37:24Z",
+      "side": 1,
+      "message": "Is not better to use one if() here, instead of two separated?",
+      "range": {
+        "startLine": 392,
+        "startChar": 8,
+        "endLine": 394,
+        "endChar": 49
+      },
+      "revId": "a7fedfc81b548b5919c1db9cbbb93ca141c7d80c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
