@@ -1566,7 +1566,7 @@ bool SkiaSalGraphicsImpl::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBi
     if (image)
         drawImage(imagePosAry, image);
     else if (rSkiaAlphaBitmap.IsFullyOpaqueAsAlpha()) // alpha can be ignored
-        drawShader(rPosAry, rSkiaSourceBitmap.GetSkShader());
+        drawBitmap(rPosAry, rSkiaSourceBitmap);
     else
         drawShader(rPosAry,
                    SkShaders::Blend(SkBlendMode::kDstOut, // VCL alpha is one-minus-alpha.
