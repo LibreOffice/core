@@ -2039,12 +2039,11 @@ void SwContentTree::Display( bool bActive )
     {
         std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->make_iterator();
         std::unique_ptr<weld::TreeIter> xSelEntry;
+        std::vector<std::unique_ptr<weld::TreeIter>> aNodesToExpand;
         // all content navigation view
         if(m_nRootType == ContentTypeId::UNKNOWN)
         {
             m_xTreeView->freeze();
-
-            std::vector<std::unique_ptr<weld::TreeIter>> aNodesToExpand;
 
             for( ContentTypeId nCntType : o3tl::enumrange<ContentTypeId>() )
             {
@@ -2054,11 +2053,10 @@ void SwContentTree::Display( bool bActive )
                 if(!rpContentT)
                     rpContentT.reset(new SwContentType(pShell, nCntType, m_nOutlineLevel ));
 
-                OUString sEntry = rpContentT->GetName();
                 OUString aImage(GetImageIdForContentTypeId(nCntType));
                 bool bChOnDemand = 0 != rpContentT->GetMemberCount();
                 OUString sId(OUString::number(reinterpret_cast<sal_Int64>(rpContentT.get())));
-                insert(nullptr, sEntry, sId, bChOnDemand, xEntry.get());
+                insert(nullptr, rpContentT->GetName(), sId, bChOnDemand, xEntry.get());
                 m_xTreeView->set_image(*xEntry, aImage);
 
                 m_xTreeView->set_sensitive(*xEntry, bChOnDemand);
@@ -2169,7 +2167,8 @@ void SwContentTree::Display( bool bActive )
             }
             else
             {
-                RequestingChildren(*xEntry);
+                // fill contents of to-be expanded entries while frozen
+                Expand(*xEntry, &aNodesToExpand);
                 m_xTreeView->set_children_on_demand(*xEntry, false);
             }
 
@@ -2177,7 +2176,14 @@ void SwContentTree::Display( bool bActive )
 
             m_xTreeView->thaw();
 
-            m_xTreeView->expand_row(*xEntry);
+            if (bChOnDemand)
+            {
+                // restore visual expanded tree state
+                for (const auto& rNode : aNodesToExpand)
+                    m_xTreeView->expand_row(*rNode);
+            }
+            else
+                m_xTreeView->expand_row(*xEntry);
 
             // reselect the entry
             if (nEntryRelPos)
