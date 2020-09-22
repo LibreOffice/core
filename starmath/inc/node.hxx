@@ -318,9 +318,9 @@ public:
     sal_uInt16 GetRow() const { return sal::static_int_cast<sal_uInt16>(maNodeToken.nRow); }
 
     /**
-     * Gets the colum of the line in the text where the node is located.
+     * Gets the column of the line in the text where the node is located.
      * It is used to do the visual <-> text correspondence.
-     * @return colum
+     * @return column
      */
     sal_uInt16 GetColumn() const { return sal::static_int_cast<sal_uInt16>(maNodeToken.nCol); }
 
@@ -464,7 +464,7 @@ public:
     void ClearSubNodes();
 
     /**
-     * Sets subnodes, used for opperators.
+     * Sets subnodes, used for operators.
      * @param pFirst
      * @param pSecond
      * @param pThird
@@ -695,8 +695,8 @@ public:
     SmTextNode(const SmToken &rNodeToken, sal_uInt16 nFontDescP );
 
     /**
-     * Returns the font type being used (text, variabla, symbol, ...).
-     * @retutn font type
+     * Returns the font type being used (text, variable, symbol, ...).
+     * @return font type
      */
     sal_uInt16 GetFontDesc() const { return mnFontDesc; }
 
@@ -1328,7 +1328,7 @@ public:
     void Accept(SmVisitor* pVisitor) override;
 
     /**
-     * Returns the node containing the data of the binary opperator.
+     * Returns the node containing the data of the binary operator.
      * @return symbol data
      */
     const SmNode* Symbol() const { return const_cast<SmBinHorNode *>(this)->Symbol(); }
@@ -1514,7 +1514,7 @@ public:
 
     /**
      * Checks if it is going to be used for a limit.
-     * Example lim from { x towar 0 } { {sin x}over x } = 1
+     * Example lim from { x toward 0 } { {sin x}over x } = 1
      * @return is a limit
      */
     bool  IsUseLimits() const { return mbUseLimits; };
@@ -1755,15 +1755,15 @@ public:
         : SmStructureNode(SmNodeType::Oper, rNodeToken, 2) { }
 
     /**
-     * Returns the node with the opperator data
-     * @return opperator data
+     * Returns the node with the operator data
+     * @return operator data
      */
     const SmNode * GetSymbol() const { return const_cast<SmOperNode *>(this)->GetSymbol(); }
           SmNode * GetSymbol();
 
     /**
      * Returns the height of the node in base to the symbol
-     * ( rSymbol contains the opperator data )
+     * ( rSymbol contains the operator data )
      * and the font format ( rFormat ).
      * @param rSymbol
      * @param rFormat
