@@ -831,7 +831,7 @@ OUString ScViewFunc::GetAutoSumFormula( const ScRangeList& rRangeList, bool bSub
             if (i != 0)
                 pArray->AddOpCode(ocSep);
             ScComplexRefData aRef;
-            aRef.InitRangeRel(&rDoc, r, rAddr);
+            aRef.InitRangeRel(rDoc, r, rAddr);
             pArray->AddDoubleReference(aRef);
         }
     }

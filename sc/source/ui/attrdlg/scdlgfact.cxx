@@ -973,9 +973,9 @@ VclPtr<AbstractScSortWarningDlg> ScAbstractDialogFactory_Impl::CreateScSortWarni
     return VclPtr<AbstractScSortWarningDlg_Impl>::Create(std::make_unique<ScSortWarningDlg>(pParent, rExtendText, rCurrentText));
 }
 
-VclPtr<AbstractScCondFormatManagerDlg> ScAbstractDialogFactory_Impl::CreateScCondFormatMgrDlg(weld::Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList )
+VclPtr<AbstractScCondFormatManagerDlg> ScAbstractDialogFactory_Impl::CreateScCondFormatMgrDlg(weld::Window* pParent, ScDocument& rDoc, const ScConditionalFormatList* pFormatList )
 {
-    return VclPtr<AbstractScCondFormatManagerDlg_Impl>::Create(std::make_shared<ScCondFormatManagerDlg>(pParent, pDoc, pFormatList));
+    return VclPtr<AbstractScCondFormatManagerDlg_Impl>::Create(std::make_shared<ScCondFormatManagerDlg>(pParent, rDoc, pFormatList));
 }
 
 VclPtr<AbstractScDataPilotDatabaseDlg> ScAbstractDialogFactory_Impl::CreateScDataPilotDatabaseDlg(weld::Window* pParent)

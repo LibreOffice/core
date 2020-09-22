@@ -57,9 +57,9 @@ public:
     void InitAddress( const ScAddress& rAdr );
     void InitAddress( SCCOL nCol, SCROW nRow, SCTAB nTab );
     /// InitAddressRel: InitFlags and set address, everything relative to rPos
-    void InitAddressRel( const ScDocument* pDoc, const ScAddress& rAdr, const ScAddress& rPos );
+    void InitAddressRel( const ScDocument& rDoc, const ScAddress& rAdr, const ScAddress& rPos );
     /// InitFlags and set address, relative to rPos if rRef says so.
-    void InitFromRefAddress( const ScDocument* pDoc, const ScRefAddress& rRef, const ScAddress& rPos );
+    void InitFromRefAddress( const ScDocument& rDoc, const ScRefAddress& rRef, const ScAddress& rPos );
     sal_uInt8 FlagValue() const { return mnFlagValue;}
 
     void SetColRel( bool bVal ) { Flags.bColRel = bVal; }
@@ -132,10 +132,10 @@ struct ScComplexRefData
             Ref1.InitAddress( rRange.aStart );
             Ref2.InitAddress( rRange.aEnd );
         }
-    void InitRangeRel( const ScDocument* pDoc, const ScRange& rRange, const ScAddress& rPos )
+    void InitRangeRel( const ScDocument& rDoc, const ScRange& rRange, const ScAddress& rPos )
         {
-            Ref1.InitAddressRel( pDoc, rRange.aStart, rPos );
-            Ref2.InitAddressRel( pDoc, rRange.aEnd, rPos );
+            Ref1.InitAddressRel( rDoc, rRange.aStart, rPos );
+            Ref2.InitAddressRel( rDoc, rRange.aEnd, rPos );
         }
     void InitRange( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             SCCOL nCol2, SCROW nRow2, SCTAB nTab2 )
@@ -145,7 +145,7 @@ struct ScComplexRefData
         }
 
     /// InitFlags and set range, relative to rPos if rRef1 and rRef2 say so.
-    void InitFromRefAddresses( const ScDocument* pDoc, const ScRefAddress& rRef1, const ScRefAddress& rRef2, const ScAddress& rPos );
+    void InitFromRefAddresses( const ScDocument& rDoc, const ScRefAddress& rRef1, const ScRefAddress& rRef2, const ScAddress& rPos );
 
     bool Valid(const ScDocument* pDoc) const;
 

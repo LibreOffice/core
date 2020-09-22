@@ -1272,7 +1272,7 @@ private:
         static constexpr SCROW ROW_NOT_FOUND = -1;
 
     public:
-        explicit VisibleDataCellIterator(const ScDocument* pDoc, ScFlatBoolRowSegments& rRowSegs, ScColumn& rColumn);
+        explicit VisibleDataCellIterator(const ScDocument& rDoc, ScFlatBoolRowSegments& rRowSegs, ScColumn& rColumn);
         ~VisibleDataCellIterator();
 
         /**
@@ -1300,7 +1300,7 @@ private:
         SCROW getRow() const { return mnCurRow;}
 
     private:
-        const ScDocument* mpDocument;
+        const ScDocument& mrDocument;
         ScFlatBoolRowSegments& mrRowSegs;
         ScColumn& mrColumn;
         ScRefCellValue maCell;

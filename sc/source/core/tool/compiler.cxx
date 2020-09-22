@@ -4371,7 +4371,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
             // If a syntactically correct reference was recognized but invalid
             // e.g. because of non-existing sheet name => entire reference
             // ocBad to preserve input instead of #REF!.A1
-            if (!maRawToken.IsValidReference(&rDoc))
+            if (!maRawToken.IsValidReference(rDoc))
             {
                 aUpper = aOrg;          // ensure for ocBad
                 break;                  // do; create ocBad token or set error.

@@ -637,8 +637,8 @@ public:
     [[nodiscard]] SC_DLLPUBLIC bool MoveSticky( const ScDocument& rDoc, SCCOL aDeltaX, SCROW aDeltaY, SCTAB aDeltaZ,
             ScRange& rErrorRange );
 
-    SC_DLLPUBLIC void IncColIfNotLessThan(const ScDocument* pDoc, SCCOL nStartCol, SCCOL nOffset);
-    SC_DLLPUBLIC void IncRowIfNotLessThan(const ScDocument* pDoc, SCROW nStartRow, SCROW nOffset);
+    SC_DLLPUBLIC void IncColIfNotLessThan(const ScDocument& rDoc, SCCOL nStartCol, SCCOL nOffset);
+    SC_DLLPUBLIC void IncRowIfNotLessThan(const ScDocument& rDoc, SCROW nStartRow, SCROW nOffset);
 
     SC_DLLPUBLIC void ExtendTo( const ScRange& rRange );
     SC_DLLPUBLIC bool Intersects( const ScRange& rRange ) const;    // do two ranges intersect?
@@ -905,7 +905,7 @@ public:
 
     inline bool operator == ( const ScRefAddress& r ) const;
 
-    OUString  GetRefString( const ScDocument* pDocument, SCTAB nActTab,
+    OUString  GetRefString( const ScDocument& rDocument, SCTAB nActTab,
                             const ScAddress::Details& rDetails = ScAddress::detailsOOOa1) const;
 };
 

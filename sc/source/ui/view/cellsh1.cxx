@@ -2614,7 +2614,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     pList = rDoc.GetCondFormList( aPos.Tab() );
 
                 VclPtr<AbstractScCondFormatManagerDlg> pDlg(pFact->CreateScCondFormatMgrDlg(
-                    pTabViewShell->GetFrameWeld(), &rDoc, pList));
+                    pTabViewShell->GetFrameWeld(), rDoc, pList));
 
                 if (pDlgItem)
                     pDlg->SetModified();

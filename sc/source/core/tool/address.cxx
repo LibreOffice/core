@@ -2404,43 +2404,43 @@ bool ScRange::MoveSticky( const ScDocument& rDoc, SCCOL dx, SCROW dy, SCTAB dz, 
     return b1 && b2;
 }
 
-void ScRange::IncColIfNotLessThan(const ScDocument* pDoc, SCCOL nStartCol, SCCOL nOffset)
+void ScRange::IncColIfNotLessThan(const ScDocument& rDoc, SCCOL nStartCol, SCCOL nOffset)
 {
     if (aStart.Col() >= nStartCol)
     {
         aStart.IncCol(nOffset);
         if (aStart.Col() < 0)
             aStart.SetCol(0);
-        else if(aStart.Col() > (pDoc ? pDoc->MaxCol() : MAXCOL))
-            aStart.SetCol(pDoc ? pDoc->MaxCol() : MAXCOL);
+        else if(aStart.Col() > rDoc.MaxCol())
+            aStart.SetCol(rDoc.MaxCol());
     }
     if (aEnd.Col() >= nStartCol)
     {
         aEnd.IncCol(nOffset);
         if (aEnd.Col() < 0)
             aEnd.SetCol(0);
-        else if(aEnd.Col() > (pDoc ? pDoc->MaxCol() : MAXCOL))
-            aEnd.SetCol(pDoc ? pDoc->MaxCol() : MAXCOL);
+        else if(aEnd.Col() > rDoc.MaxCol())
+            aEnd.SetCol(rDoc.MaxCol());
     }
 }
 
-void ScRange::IncRowIfNotLessThan(const ScDocument* pDoc, SCROW nStartRow, SCROW nOffset)
+void ScRange::IncRowIfNotLessThan(const ScDocument& rDoc, SCROW nStartRow, SCROW nOffset)
 {
     if (aStart.Row() >= nStartRow)
     {
         aStart.IncRow(nOffset);
         if (aStart.Row() < 0)
             aStart.SetRow(0);
-        else if(aStart.Row() > pDoc->MaxRow())
-            aStart.SetRow(pDoc->MaxRow());
+        else if(aStart.Row() > rDoc.MaxRow())
+            aStart.SetRow(rDoc.MaxRow());
     }
     if (aEnd.Row() >= nStartRow)
     {
         aEnd.IncRow(nOffset);
         if (aEnd.Row() < 0)
             aEnd.SetRow(0);
-        else if(aEnd.Row() > pDoc->MaxRow())
-            aEnd.SetRow(pDoc->MaxRow());
+        else if(aEnd.Row() > rDoc.MaxRow())
+            aEnd.SetRow(rDoc.MaxRow());
     }
 }
 
@@ -2508,12 +2508,10 @@ OUString ScAddress::GetColRowString() const
     return aString.makeStringAndClear();
 }
 
-OUString ScRefAddress::GetRefString( const ScDocument* pDoc, SCTAB nActTab,
-                                   const ScAddress::Details& rDetails ) const
+OUString ScRefAddress::GetRefString( const ScDocument& rDoc, SCTAB nActTab,
+                                     const ScAddress::Details& rDetails ) const
 {
-    if ( !pDoc )
-        return EMPTY_OUSTRING;
-    if ( Tab()+1 > pDoc->GetTableCount() )
+    if ( Tab()+1 > rDoc.GetTableCount() )
         return ScCompiler::GetNativeSymbol(ocErrRef);
 
     ScRefFlags nFlags = ScRefFlags::VALID;
@@ -2528,7 +2526,7 @@ OUString ScRefAddress::GetRefString( const ScDocument* pDoc, SCTAB nActTab,
     if ( !bRelRow )
         nFlags |= ScRefFlags::ROW_ABS;
 
-    return aAdr.Format(nFlags, pDoc, rDetails);
+    return aAdr.Format(nFlags, &rDoc, rDetails);
 }
 
 bool AlphaToCol(const ScDocument& rDoc, SCCOL& rCol, const OUString& rStr)

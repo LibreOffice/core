@@ -417,7 +417,7 @@ public:
 
     virtual VclPtr<AbstractScSortWarningDlg> CreateScSortWarningDlg(weld::Window* pParent, const OUString& rExtendText, const OUString& rCurrentText ) = 0;
 
-    virtual VclPtr<AbstractScCondFormatManagerDlg> CreateScCondFormatMgrDlg(weld::Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList ) = 0;
+    virtual VclPtr<AbstractScCondFormatManagerDlg> CreateScCondFormatMgrDlg(weld::Window* pParent, ScDocument& rDoc, const ScConditionalFormatList* pFormatList ) = 0;
 
     virtual VclPtr<AbstractScDataPilotDatabaseDlg> CreateScDataPilotDatabaseDlg(weld::Window* pParent) = 0;
 

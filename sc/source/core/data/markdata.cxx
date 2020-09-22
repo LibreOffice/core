@@ -648,31 +648,30 @@ void ScMarkData::DeleteTab( SCTAB nTab )
     maTabMarked.swap(tabMarked);
 }
 
-void ScMarkData::ShiftCols(const ScDocument* pDoc, SCCOL nStartCol, long nColOffset)
+void ScMarkData::ShiftCols(const ScDocument& rDoc, SCCOL nStartCol, long nColOffset)
 {
     if (bMarked)
     {
-        aMarkRange.IncColIfNotLessThan(pDoc, nStartCol, nColOffset);
+        aMarkRange.IncColIfNotLessThan(rDoc, nStartCol, nColOffset);
     }
     else if (bMultiMarked)
     {
         aMultiSel.ShiftCols(nStartCol, nColOffset);
-        aMultiRange.IncColIfNotLessThan(pDoc, nStartCol, nColOffset);
+        aMultiRange.IncColIfNotLessThan(rDoc, nStartCol, nColOffset);
     }
 }
 
-void ScMarkData::ShiftRows(const ScDocument* pDoc, SCROW nStartRow, long nRowOffset)
+void ScMarkData::ShiftRows(const ScDocument& rDoc, SCROW nStartRow, long nRowOffset)
 {
     if (bMarked)
     {
-        aMarkRange.IncRowIfNotLessThan(pDoc, nStartRow, nRowOffset);
+        aMarkRange.IncRowIfNotLessThan(rDoc, nStartRow, nRowOffset);
     }
     else if (bMultiMarked)
     {
         aMultiSel.ShiftRows(nStartRow, nRowOffset);
-        aMultiRange.IncRowIfNotLessThan(pDoc, nStartRow, nRowOffset);
+        aMultiRange.IncRowIfNotLessThan(rDoc, nStartRow, nRowOffset);
     }
-
 }
 
 static void lcl_AddRanges(ScRange& rRangeDest, const ScRange& rNewRange )

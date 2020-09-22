@@ -168,7 +168,7 @@ public:
         false. Used only in ScCompiler::NextNewToken() to preserve non-existing
         sheet names in otherwise valid references.
      */
-    bool IsValidReference(const ScDocument* pDoc) const;
+    bool IsValidReference(const ScDocument& rDoc) const;
 
     formula::FormulaToken* CreateToken(ScSheetLimits& rLimits) const;   // create typified token
 };
