@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f4bb333a_20d6b264",
+        "filename": "desktop/source/app/app.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1202,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-09-22T19:13:16Z",
+      "side": 1,
+      "message": "would probably make sense to guard against exceptions here, like css::loader::CannotActivateFactoryException potentially thrown from css::loader::XImplementationLoader.activate",
+      "revId": "e0ba5895fdbb491542983e935a938e237564aaae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2f72cec_875784ed",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 7
+      },
+      "lineNbr": 5827,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-09-22T19:13:16Z",
+      "side": 1,
+      "message": "Better spell the name as \"Preload\" rather than \"PreLoad\"?  Appears to commonly be used as one word, at least in computer-related jargon.",
+      "range": {
+        "startLine": 5827,
+        "startChar": 22,
+        "endLine": 5827,
+        "endChar": 29
+      },
+      "revId": "e0ba5895fdbb491542983e935a938e237564aaae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
