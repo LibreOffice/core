@@ -285,7 +285,7 @@ bool SwAnnotationWin::IsResolved() const
 bool SwAnnotationWin::IsThreadResolved()
 {
     /// First Get the top note
-    // then itereate downwards checking resolved status
+    // then iterate downwards checking resolved status
     SwAnnotationWin *pTopNote, *TopNote;
     pTopNote = TopNote = GetTopReplyNote();
     if (!pTopNote->IsResolved())
