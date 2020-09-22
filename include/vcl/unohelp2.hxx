@@ -25,6 +25,9 @@
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/dllapi.h>
+#include <comphelper/lok.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <boost/property_tree/json_parser.hpp>
 
 namespace com::sun::star::datatransfer::clipboard {
     class XClipboard;
@@ -56,7 +59,8 @@ namespace vcl::unohelper {
         /// copies a given string to a given clipboard
         static  void    CopyStringTo(
             const OUString& rContent,
-            const css::uno::Reference< css::datatransfer::clipboard::XClipboard >& rxClipboard
+            const css::uno::Reference< css::datatransfer::clipboard::XClipboard >& rxClipboard,
+            std::function<void (int, const char*)> *callback = nullptr
         );
     };
 
