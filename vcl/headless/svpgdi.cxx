@@ -1910,6 +1910,55 @@ bool SvpSalGraphics::drawPolyPolygon(
     return true;
 }
 
+bool SvpSalGraphics::drawGradient(const tools::PolyPolygon& rPolyPolygon, const Gradient& rGradient)
+{
+    cairo_t* cr = getCairoContext(true);
+    clipRegion(cr);
+
+    basegfx::B2DPolyPolygon aB2DPolyPolygon(rPolyPolygon.getB2DPolyPolygon());
+
+    for (auto const & rPolygon : aB2DPolyPolygon)
+    {
+        basegfx::B2DHomMatrix rObjectToDevice;
+        AddPolygonToPath(cr, rPolygon, rObjectToDevice, !getAntiAliasB2DDraw(), false);
+    }
+
+    Gradient aGradient(rGradient);
+
+    tools::Rectangle aInputRect(rPolyPolygon.GetBoundRect());
+    tools::Rectangle aBoundRect;
+    Point aCenter;
+
+    aGradient.SetAngle(aGradient.GetAngle() + 2700);
+    aGradient.GetBoundRect(aInputRect, aBoundRect, aCenter);
+
+    tools::Polygon aPoly(aBoundRect);
+    aPoly.Rotate(aCenter, aGradient.GetAngle() % 3600);
+
+    cairo_pattern_t* pattern;
+    pattern = cairo_pattern_create_linear(aPoly[0].X(), aPoly[0].Y(), aPoly[1].X(), aPoly[1].Y());
+
+    cairo_pattern_add_color_stop_rgba(pattern, aGradient.GetBorder() / 100.0,
+                                                    aGradient.GetStartColor().GetRed()   / 255.0,
+                                                    aGradient.GetStartColor().GetGreen() / 255.0,
+                                                    aGradient.GetStartColor().GetBlue()  / 255.0,
+                                                    1.0);
+
+    cairo_pattern_add_color_stop_rgba(pattern, 1.0,
+                                                    aGradient.GetEndColor().GetRed()   / 255.0,
+                                                    aGradient.GetEndColor().GetGreen() / 255.0,
+                                                    aGradient.GetEndColor().GetBlue()  / 255.0,
+                                                    1.0);
+    cairo_set_source(cr, pattern);
+
+    basegfx::B2DRange extents = getClippedFillDamage(cr);
+    cairo_fill_preserve(cr);
+
+    releaseCairoContext(cr, true, extents);
+
+    return true;
+}
+
 bool SvpSalGraphics::implDrawGradient(basegfx::B2DPolyPolygon const & rPolyPolygon, SalGradient const & rGradient)
 {
     cairo_t* cr = getCairoContext(true);
