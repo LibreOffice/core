@@ -59,16 +59,8 @@ xmlDocUniquePtr XmlTestTools::parseXmlStream(SvStream* pStream)
     return xmlDocUniquePtr(xmlParseDoc(pCharBuffer));
 }
 
-xmlDocUniquePtr XmlTestTools::dumpAndParse(MetafileXmlDump& rDumper, const GDIMetaFile& rGDIMetaFile, const OUString& rStreamName)
+xmlDocUniquePtr XmlTestTools::dumpAndParse(MetafileXmlDump& rDumper, const GDIMetaFile& rGDIMetaFile)
 {
-    if (!rStreamName.isEmpty())
-    {
-        SvStream *pStream = new SvFileStream(rStreamName, StreamMode::STD_READWRITE | StreamMode::TRUNC);
-        rDumper.dump(rGDIMetaFile, *pStream);
-        pStream->Seek(STREAM_SEEK_TO_BEGIN);
-        return XmlTestTools::parseXmlStream(pStream);
-    }
-
     SvMemoryStream aStream;
     rDumper.dump(rGDIMetaFile, aStream);
     aStream.Seek(STREAM_SEEK_TO_BEGIN);
