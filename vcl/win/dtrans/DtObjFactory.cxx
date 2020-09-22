@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
  * This file is part of the LibreOffice project.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -15,16 +15,19 @@
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
- -->
+ */
 
-<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.datatransfer.ClipboardManager"
-	constructor="dtrans_ClipboardManager_get_implementation">
-    <service name="com.sun.star.datatransfer.clipboard.ClipboardManager"/>
-  </implementation>
-  <implementation name="com.sun.star.comp.datatransfer.clipboard.GenericClipboard"
-	constructor="dtrans_GenericClipboard_get_implementation">
-    <service name="com.sun.star.datatransfer.clipboard.GenericClipboard"/>
-  </implementation>
-</component>
+#include "DtObjFactory.hxx"
+#include "XTDataObject.hxx"
+
+using namespace com::sun::star::uno;
+using namespace com::sun::star::datatransfer;
+using namespace com::sun::star::lang;
+
+IDataObjectPtr CDTransObjFactory::createDataObjFromTransferable(const Reference<XComponentContext>& rxContext,
+                                                                       const Reference< XTransferable >& refXTransferable)
+{
+    return (IDataObjectPtr(new CXTDataObject(rxContext, refXTransferable)));
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

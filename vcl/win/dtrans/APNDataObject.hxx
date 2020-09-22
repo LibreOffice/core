@@ -19,6 +19,13 @@
 
 #pragma once
 
+#if !defined WIN32_LEAN_AND_MEAN
+# define WIN32_LEAN_AND_MEAN
+#endif
+#include <objidl.h>
+
+#include <systools/win32/comtools.hxx>
+
 /*
     an APartment Neutral dataobject wrapper; this wrapper of an IDataObject
     pointer can be used from any apartment without RPC_E_WRONG_THREAD
@@ -29,26 +36,26 @@
 class CAPNDataObject : public IDataObject
 {
 public:
-    CAPNDataObject( IDataObjectPtr rIDataObject );
-    ~CAPNDataObject( );
+    explicit CAPNDataObject(IDataObjectPtr rIDataObject);
+    virtual ~CAPNDataObject();
 
     //IUnknown interface methods
 
-    STDMETHODIMP           QueryInterface(REFIID iid, LPVOID* ppvObject);
-    STDMETHODIMP_( ULONG ) AddRef( );
-    STDMETHODIMP_( ULONG ) Release( );
+    STDMETHODIMP           QueryInterface(REFIID iid, void** ppvObject) override;
+    STDMETHODIMP_( ULONG ) AddRef( ) override;
+    STDMETHODIMP_( ULONG ) Release( ) override;
 
     // IDataObject interface methods
 
-    STDMETHODIMP GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium );
-    STDMETHODIMP GetDataHere( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium );
-    STDMETHODIMP QueryGetData( LPFORMATETC pFormatetc );
-    STDMETHODIMP GetCanonicalFormatEtc( LPFORMATETC pFormatectIn, LPFORMATETC pFormatetcOut );
-    STDMETHODIMP SetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium, BOOL fRelease );
-    STDMETHODIMP EnumFormatEtc( DWORD dwDirection, IEnumFORMATETC** ppenumFormatetc );
-    STDMETHODIMP DAdvise( LPFORMATETC pFormatetc, DWORD advf, LPADVISESINK pAdvSink, DWORD* pdwConnection );
-    STDMETHODIMP DUnadvise( DWORD dwConnection );
-    STDMETHODIMP EnumDAdvise( LPENUMSTATDATA* ppenumAdvise );
+    STDMETHODIMP GetData( FORMATETC * pFormatetc, STGMEDIUM * pmedium ) override;
+    STDMETHODIMP GetDataHere( FORMATETC * pFormatetc, STGMEDIUM * pmedium ) override;
+    STDMETHODIMP QueryGetData( FORMATETC * pFormatetc ) override;
+    STDMETHODIMP GetCanonicalFormatEtc( FORMATETC * pFormatectIn, FORMATETC * pFormatetcOut ) override;
+    STDMETHODIMP SetData( FORMATETC * pFormatetc, STGMEDIUM * pmedium, BOOL fRelease ) override;
+    STDMETHODIMP EnumFormatEtc( DWORD dwDirection, IEnumFORMATETC** ppenumFormatetc ) override;
+    STDMETHODIMP DAdvise( FORMATETC * pFormatetc, DWORD advf, IAdviseSink * pAdvSink, DWORD* pdwConnection ) override;
+    STDMETHODIMP DUnadvise( DWORD dwConnection ) override;
+    STDMETHODIMP EnumDAdvise( IEnumSTATDATA** ppenumAdvise ) override;
 
     operator IDataObject*( );
 

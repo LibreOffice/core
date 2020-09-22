@@ -23,7 +23,7 @@
 
 #include "XTDataObject.hxx"
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
-#include "../misc/ImplHelper.hxx"
+#include "ImplHelper.hxx"
 #include "DTransHelper.hxx"
 #include "TxtCnvtHlp.hxx"
 #include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
