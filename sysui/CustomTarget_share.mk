@@ -194,7 +194,7 @@ ifneq ($(INTROSPECTION_SCANNER),)
 $(share_WORKDIR)/%/LOKDocView-0.1.gir: \
 		$(call gb_Library_get_target,libreofficekitgtk)
 	mkdir -p $(dir $@)
-	g-ir-scanner "${SRCDIR}/include/LibreOfficeKit/LibreOfficeKitGtk.h" \
+	PYTHONWARNINGS=default g-ir-scanner "${SRCDIR}/include/LibreOfficeKit/LibreOfficeKitGtk.h" \
 				 "${SRCDIR}/libreofficekit/source/gtk/lokdocview.cxx" \
                  `${PKG_CONFIG} --cflags gobject-introspection-1.0 gtk+-3.0` \
 				 -I"${SRCDIR}/include/" \
