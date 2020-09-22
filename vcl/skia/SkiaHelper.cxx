@@ -413,10 +413,16 @@ sk_sp<SkSurface> createSkSurface(int width, int height, SkColorType type)
     // Create raster surface as a fallback.
     surface = SkSurface::MakeRaster(SkImageInfo::Make(width, height, type, kPremul_SkAlphaType));
     assert(surface);
+    if (surface)
+    {
 #ifdef DBG_UTIL
-    prefillSurface(surface);
+        prefillSurface(surface);
 #endif
-    return surface;
+        return surface;
+    }
+    // In non-debug builds we could return SkSurface::MakeNull() and try to cope with the situation,
+    // but that can lead to unnoticed data loss, so better fail clearly.
+    abort();
 }
 
 sk_sp<SkImage> createSkImage(const SkBitmap& bitmap)
@@ -437,7 +443,7 @@ sk_sp<SkImage> createSkImage(const SkBitmap& bitmap)
                     SkPaint paint;
                     paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
                     surface->getCanvas()->drawBitmap(bitmap, 0, 0, &paint);
-                    return surface->makeImageSnapshot();
+                    return makeCheckedImageSnapshot(surface);
                 }
                 // Try to fall back in non-debug builds.
                 SAL_WARN("vcl.skia",
@@ -452,6 +458,24 @@ sk_sp<SkImage> createSkImage(const SkBitmap& bitmap)
     sk_sp<SkImage> image = SkImage::MakeFromBitmap(bitmap);
     assert(image);
     return image;
+}
+
+sk_sp<SkImage> makeCheckedImageSnapshot(sk_sp<SkSurface> surface)
+{
+    sk_sp<SkImage> ret = surface->makeImageSnapshot();
+    assert(ret);
+    if (ret)
+        return ret;
+    abort();
+}
+
+sk_sp<SkImage> makeCheckedImageSnapshot(sk_sp<SkSurface> surface, const SkIRect& bounds)
+{
+    sk_sp<SkImage> ret = surface->makeImageSnapshot(bounds);
+    assert(ret);
+    if (ret)
+        return ret;
+    abort();
 }
 
 namespace
@@ -573,7 +597,7 @@ void dump(const SkBitmap& bitmap, const char* file) { dump(SkImage::MakeFromBitm
 void dump(const sk_sp<SkSurface>& surface, const char* file)
 {
     surface->getCanvas()->flush();
-    dump(surface->makeImageSnapshot(), file);
+    dump(makeCheckedImageSnapshot(surface), file);
 }
 
 void dump(const sk_sp<SkImage>& image, const char* file)
