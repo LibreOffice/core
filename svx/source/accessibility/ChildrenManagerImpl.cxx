@@ -294,7 +294,7 @@ void ChildrenManagerImpl::CreateListOfVisibleShapes (
     }
 
     // Add the visible shapes for which only the XShapes exist.
-    if (mxShapeList.is())
+    if (mxShapeList.is() && mxShapeList->hasElements())
     {
         sal_Int32 nShapeCount = mxShapeList->getCount();
         raDescriptorList.reserve( nShapeCount );
@@ -320,7 +320,6 @@ void ChildrenManagerImpl::CreateListOfVisibleShapes (
         }
     }
 }
-
 
 void ChildrenManagerImpl::RemoveNonVisibleChildren (
     const ChildDescriptorListType& rNewChildList,
