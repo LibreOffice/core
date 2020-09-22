@@ -35,7 +35,7 @@ public:
     /// Return xmlDocPtr representation of the XML stream read from pStream.
     static xmlDocUniquePtr parseXmlStream(SvStream* pStream);
 
-    static xmlDocUniquePtr dumpAndParse(MetafileXmlDump& rDumper, const GDIMetaFile& rGDIMetaFile, const OUString& rStreamName = OUString());
+    static xmlDocUniquePtr dumpAndParse(MetafileXmlDump& rDumper, const GDIMetaFile& rGDIMetaFile);
 
 protected:
     XmlTestTools();

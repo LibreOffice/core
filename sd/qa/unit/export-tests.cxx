@@ -18,16 +18,13 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdomedia.hxx>
 #include <unotools/mediadescriptor.hxx>
-#include <unotools/streamwrap.hxx>
 #include <rtl/ustring.hxx>
-#include <comphelper/propertysequence.hxx>
 
 #include <vcl/opengl/OpenGLWrapper.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
 
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
@@ -80,7 +77,6 @@ public:
     void testGlow();
     void testSoftEdges();
     void testShadowBlur();
-    void testTdf115753();
     void testRhbz1870501();
 
     CPPUNIT_TEST_SUITE(SdExportTest);
@@ -119,7 +115,6 @@ public:
     CPPUNIT_TEST(testGlow);
     CPPUNIT_TEST(testSoftEdges);
     CPPUNIT_TEST(testShadowBlur);
-    CPPUNIT_TEST(testTdf115753);
     CPPUNIT_TEST(testRhbz1870501);
 
     CPPUNIT_TEST_SUITE_END();
@@ -553,46 +548,6 @@ void SdExportTest::testBnc480256()
     xCell->getPropertyValue("BottomBorder") >>= aBorderLine;
     CPPUNIT_ASSERT_EQUAL(util::Color(COL_AUTO), aBorderLine.Color);
 
-    xDocShRef->DoClose();
-}
-
-void SdExportTest::testTdf115753()
-{
-    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf115753.pptx"), PPTX);
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
-    uno::Reference< drawing::XDrawPagesSupplier > xDoc(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);
-    uno::Reference< drawing::XDrawPage > xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW);
-    uno::Reference< drawing::XShape > xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
-
-    // Save the first shape to a metafile.
-    uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter = drawing::GraphicExportFilter::create(comphelper::getProcessComponentContext());
-    uno::Reference<lang::XComponent> xSourceDoc(xShape, uno::UNO_QUERY);
-    xGraphicExporter->setSourceDocument(xSourceDoc);
-
-    SvMemoryStream aStream;
-    uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
-    uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence({
-            { "OutputStream", uno::Any(xOutputStream) },
-            { "FilterName", uno::Any(OUString("SVM")) }
-        }));
-    xGraphicExporter->filter(aDescriptor);
-    aStream.Seek(STREAM_SEEK_TO_BEGIN);
-
-    // Read it back and dump it as an XML file.
-    Graphic aGraphic;
-    ReadGraphic(aStream, aGraphic);
-    const GDIMetaFile& rMetaFile = aGraphic.GetGDIMetaFile();
-    MetafileXmlDump dumper;
-
-    xmlDocUniquePtr pXmlDoc = XmlTestTools::dumpAndParse(dumper, rMetaFile);
-    CPPUNIT_ASSERT(pXmlDoc);
-    // Without the fix in place, it will print:
-    // - Expected: 21180
-    // - Actual  : 12714
-    // because without the fix, one of the border lines is missing,
-    // and the value, which is where the line ends, will be shorter
-    // than it should be.
-    assertXPath(pXmlDoc, "/metafile/push[6]/polyline/point[2]", "x", "21180");
     xDocShRef->DoClose();
 }
 
