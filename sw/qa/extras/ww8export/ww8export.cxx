@@ -896,6 +896,23 @@ DECLARE_WW8EXPORT_TEST(testFdo45724, "fdo45724.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("xxx"), xComponent->getCurrentValue().get<OUString>());
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf136620, "tdf136620.odt")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5636), xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1826), xShape->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6630), xShape->getSize().Height);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 5853
+    // - Actual  : 850
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5853), xShape->getSize().Width);
+}
+
 DECLARE_WW8EXPORT_TEST(testFdo46020, "fdo46020.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
