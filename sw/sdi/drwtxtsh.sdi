@@ -540,6 +540,14 @@ interface TextDrawText
     [
         StateMethod = StateInsert ;
     ]
+
+    SID_COPY_HYPERLINK_LOCATION
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
     SID_TRANSLITERATE_SENTENCE_CASE
     [
         ExecMethod = ExecTransliteration;
