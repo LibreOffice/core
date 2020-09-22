@@ -686,6 +686,31 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/win/app/salinfo \
     vcl/win/app/salinst \
     vcl/win/app/salshl \
+    vcl/win/dtrans/APNDataObject \
+    vcl/win/dtrans/clipboardmanager \
+    vcl/win/dtrans/DataFmtTransl \
+    vcl/win/dtrans/DOTransferable \
+    vcl/win/dtrans/DtObjFactory \
+    vcl/win/dtrans/DTransHelper \
+    vcl/win/dtrans/Fetc \
+    vcl/win/dtrans/FetcList \
+    vcl/win/dtrans/FmtFilter \
+    vcl/win/dtrans/ftransl \
+    vcl/win/dtrans/generic_clipboard \
+    vcl/win/dtrans/globals \
+    vcl/win/dtrans/idroptarget \
+    vcl/win/dtrans/ImplHelper \
+    vcl/win/dtrans/MtaOleClipb \
+    vcl/win/dtrans/source \
+    vcl/win/dtrans/sourcecontext \
+    vcl/win/dtrans/target \
+    vcl/win/dtrans/targetdragcontext \
+    vcl/win/dtrans/targetdropcontext \
+    vcl/win/dtrans/TxtCnvtHlp \
+    vcl/win/dtrans/WinClipbImpl \
+    vcl/win/dtrans/WinClipboard \
+    vcl/win/dtrans/XNotifyingDataObject \
+    vcl/win/dtrans/XTDataObject \
     vcl/win/app/saltimer \
     vcl/win/gdi/gdiimpl \
     vcl/win/gdi/salbmp \
@@ -711,6 +736,7 @@ $(eval $(call gb_Library_use_system_win32_libs,vcl,\
 	imm32 \
 	mpr \
 	ole32 \
+	oleaut32 \
 	shell32 \
 	usp10 \
 	uuid \

@@ -27,7 +27,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
-#include "../misc/ImplHelper.hxx"
+#include "ImplHelper.hxx"
 
 #if defined _MSC_VER
 #pragma warning(push,1)

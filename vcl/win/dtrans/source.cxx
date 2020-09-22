@@ -30,7 +30,8 @@
 #include "source.hxx"
 #include "globals.hxx"
 #include "sourcecontext.hxx"
-#include "../../inc/DtObjFactory.hxx"
+#include "DtObjFactory.hxx"
+
 #include <rtl/ustring.h>
 #include <osl/thread.h>
 #include <winuser.h>
@@ -86,7 +87,7 @@ void DragSource::StartDragImpl(
     // has been released and if it was the right one then the drop
     // occurs when the right button has been released. If the event is not
     // set then we assume that the left button is pressed.
-    MouseEvent evtMouse;
+    com::sun::star::awt::MouseEvent evtMouse;
     trigger.Event >>= evtMouse;
     m_MouseButton= evtMouse.Buttons;
 

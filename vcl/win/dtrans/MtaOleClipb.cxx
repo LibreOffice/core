@@ -43,6 +43,10 @@
 #include <sal/log.hxx>
 
 #include "MtaOleClipb.hxx"
+
+#include <svsys.h>
+#include <win/saldata.hxx>
+
 #include <osl/thread.h>
 
 #include <wchar.h>
@@ -57,8 +61,7 @@ using osl::ClearableMutexGuard;
 
 namespace /* private */
 {
-    wchar_t CLIPSRV_DLL_NAME[] = L"sysdtrans.dll";
-    wchar_t g_szWndClsName[]   = L"MtaOleReqWnd###";
+    const wchar_t g_szWndClsName[] = L"MtaOleReqWnd###";
 
     // messages constants
 
@@ -675,8 +678,8 @@ void CMtaOleClipboard::createMtaOleReqWnd( )
 {
     WNDCLASSEXW  wcex;
 
-    HINSTANCE hInst = GetModuleHandleW( CLIPSRV_DLL_NAME );
-    OSL_ENSURE( nullptr != hInst, "The name of the clipboard service dll must have changed" );
+    SalData* pSalData = GetSalData();
+    OSL_ASSERT(nullptr != pSalData->mhInst);
 
     ZeroMemory( &wcex, sizeof(wcex) );
 
@@ -685,7 +688,7 @@ void CMtaOleClipboard::createMtaOleReqWnd( )
     wcex.lpfnWndProc    = static_cast< WNDPROC >( CMtaOleClipboard::mtaOleReqWndProc );
     wcex.cbClsExtra     = 0;
     wcex.cbWndExtra     = 0;
-    wcex.hInstance      = hInst;
+    wcex.hInstance      = pSalData->mhInst;
     wcex.hIcon          = nullptr;
     wcex.hCursor        = nullptr;
     wcex.hbrBackground  = nullptr;
@@ -697,7 +700,7 @@ void CMtaOleClipboard::createMtaOleReqWnd( )
 
     if ( 0 != m_MtaOleReqWndClassAtom )
         m_hwndMtaOleReqWnd = CreateWindowW(
-            g_szWndClsName, nullptr, 0, 0, 0, 0, 0, nullptr, nullptr, hInst, nullptr );
+            g_szWndClsName, nullptr, 0, 0, 0, 0, 0, nullptr, nullptr, pSalData->mhInst, nullptr );
 }
 
 unsigned int CMtaOleClipboard::run( )

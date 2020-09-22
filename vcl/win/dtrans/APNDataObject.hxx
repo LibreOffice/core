@@ -20,6 +20,11 @@
 #ifndef INCLUDED_DTRANS_SOURCE_WIN32_DTOBJ_APNDATAOBJECT_HXX
 #define INCLUDED_DTRANS_SOURCE_WIN32_DTOBJ_APNDATAOBJECT_HXX
 
+#if !defined WIN32_LEAN_AND_MEAN
+# define WIN32_LEAN_AND_MEAN
+#endif
+#include <objidl.h>
+
 #include <systools/win32/comtools.hxx>
 
 /*

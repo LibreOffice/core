@@ -31,7 +31,7 @@
 #include <rtl/ustring.h>
 #include <osl/thread.h>
 
-#include "../dtobj/DOTransferable.hxx"
+#include "DOTransferable.hxx"
 
 using namespace cppu;
 using namespace osl;

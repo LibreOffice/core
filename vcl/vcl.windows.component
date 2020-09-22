@@ -19,6 +19,30 @@
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     prefix="vcl" xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.datatransfer.DataFormatTranslator"
+        constructor="dtrans_CDataFormatTranslatorUNO_get_implementation">
+    <service name="com.sun.star.datatransfer.DataFormatTranslator"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.datatransfer.dnd.OleDragSource_V1"
+        constructor="dtrans_DragSource_get_implementation">
+    <service name="com.sun.star.datatransfer.dnd.OleDragSource"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1"
+        constructor="dtrans_DropTarget_get_implementation">
+    <service name="com.sun.star.datatransfer.dnd.OleDropTarget"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.datatransfer.ClipboardManager"
+        constructor="dtrans_ClipboardManager_get_implementation">
+    <service name="com.sun.star.datatransfer.clipboard.ClipboardManager"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.datatransfer.clipboard.GenericClipboard"
+        constructor="dtrans_GenericClipboard_get_implementation">
+    <service name="com.sun.star.datatransfer.clipboard.GenericClipboard"/>
+  </implementation>
+  <implementation name="com.sun.star.datatransfer.clipboard.ClipboardW32"
+        constructor="dtrans_CWinClipboard_get_implementation">
+    <service name="com.sun.star.datatransfer.clipboard.SystemClipboard"/>
+  </implementation>
   <implementation name="com.sun.star.frame.VCLSessionManagerClient">
     <service name="com.sun.star.frame.SessionManagerClient"/>
   </implementation>

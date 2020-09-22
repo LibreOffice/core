@@ -27,7 +27,7 @@
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
-#include <WinClip.hxx>
+#include "WinClip.hxx"
 
 #define AUTO_INIT                 TRUE
 

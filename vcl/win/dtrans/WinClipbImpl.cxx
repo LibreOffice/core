@@ -21,12 +21,12 @@
 #include "WinClipbImpl.hxx"
 
 #include <systools/win32/comtools.hxx>
-#include "../../inc/DtObjFactory.hxx"
-#include "../dtobj/APNDataObject.hxx"
-#include "../dtobj/DOTransferable.hxx"
+#include "DtObjFactory.hxx"
+#include "APNDataObject.hxx"
+#include "DOTransferable.hxx"
 #include "WinClipboard.hxx"
 #include <com/sun/star/datatransfer/clipboard/RenderingCapabilities.hpp>
-#include "../dtobj/XNotifyingDataObject.hxx"
+#include "XNotifyingDataObject.hxx"
 
 #if defined _MSC_VER
 #pragma warning(push,1)

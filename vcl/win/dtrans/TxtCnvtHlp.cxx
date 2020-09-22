@@ -18,9 +18,10 @@
  */
 
 #include <osl/diagnose.h>
+
 #include "TxtCnvtHlp.hxx"
 #include "DTransHelper.hxx"
-#include "../misc/ImplHelper.hxx"
+#include "ImplHelper.hxx"
 
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::uno;
