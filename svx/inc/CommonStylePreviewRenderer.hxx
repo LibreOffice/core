@@ -27,6 +27,7 @@ class CommonStylePreviewRenderer final : public sfx2::StylePreviewRenderer
 {
     std::unique_ptr<SvxFont> m_pFont;
     Color maFontColor;
+    Color maHighlightColor;
     Color maBackgroundColor;
     Size maPixelSize;
     OUString maStyleName;
