@@ -773,6 +773,13 @@ typedef enum
      * The payload format is JSON: { "title": "title text", "content": "content text" }
      */
     LOK_CALLBACK_VALIDITY_INPUT_HELP = 51,
+
+     /**
+     * When user fires copy-hyperlink action.
+     *
+     * The payload format is JSON: { "url": "url text"}
+     */
+    LOK_CALLBACK_HYPERLINK_LOCATION = 52,
 }
 LibreOfficeKitCallbackType;
 
@@ -879,6 +886,8 @@ static inline const char* lokCallbackTypeToString(int nType)
         return "LOK_CALLBACK_VALIDITY_LIST_BUTTON";
     case LOK_CALLBACK_VALIDITY_INPUT_HELP:
         return "LOK_CALLBACK_VALIDITY_INPUT_HELP";
+    case LOK_CALLBACK_HYPERLINK_LOCATION:
+        return "LOK_CALLBACK_HYPERLINK_LOCATION";
     case LOK_CALLBACK_CLIPBOARD_CHANGED:
         return "LOK_CALLBACK_CLIPBOARD_CHANGED";
     case LOK_CALLBACK_CONTEXT_CHANGED:
