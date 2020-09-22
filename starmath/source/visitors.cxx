@@ -2435,7 +2435,7 @@ void SmNodeToTextVisitor::Visit( SmGlyphSpecialNode* pNode )
     Append( pNode->GetToken( ).aText );
 }
 
-//TODO to improve this it is requiered to improve mathmlimport.
+//TODO to improve this it is required to improve mathmlimport.
 void SmNodeToTextVisitor::Visit( SmMathSymbolNode* pNode )
 {
     sal_Unicode cChar = pNode->GetToken().cMathChar;
