@@ -71,7 +71,7 @@ public:
     static void prepareSkia();
 
 protected:
-    virtual void createWindowContext() override;
+    virtual void createWindowContext(bool forceRaster = false) override;
     virtual void performFlush() override;
     sk_sp<SkTypeface> createDirectWriteTypeface(const LOGFONTW& logFont);
     SkFont::Edging getFontEdging();
