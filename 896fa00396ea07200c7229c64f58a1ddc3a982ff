@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "4dc9b221_f77f2e20",
+        "filename": "sw/source/filter/ww8/rtfattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3043,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-09-22T10:38:22Z",
+      "side": 1,
+      "message": "That the arg of \"1\" should be \"2\" or \"4\" ?\n\nThe ctor this targets is the \"Create a new string from an array of Unicode code points\" one. i.e. OUString(sal_uInt32 const * codePoints, sal_Int32 codePointCount)",
+      "parentUuid": "59540b69_17ffcade",
+      "revId": "896fa00396ea07200c7229c64f58a1ddc3a982ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4be33f3d_d53fc386",
         "filename": "sw/source/filter/ww8/wrtw8num.cxx",
         "patchSetId": 1
