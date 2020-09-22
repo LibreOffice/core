@@ -192,6 +192,17 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFootnotes)
     CheckRedlineFootnotesHidden();
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf136588)
+{
+    load(DATA_DIRECTORY, "tdf136588.docx");
+    auto pXMLLayoutDump = parseLayoutDump();
+    CPPUNIT_ASSERT(pXMLLayoutDump);
+
+    //there was a bad line break before, the correct break layout is this:
+    assertXPath(pXMLLayoutDump, "/root/page/body/txt[2]/LineBreak[2]", "Line",
+                "effectively by modern-day small to ");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
 {
     loadURL("private:factory/swriter", nullptr);
