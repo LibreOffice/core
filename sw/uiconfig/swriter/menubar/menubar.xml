@@ -214,6 +214,7 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Marks" menu:style="text"/>
       <menu:menuitem menu:id=".uno:Fieldnames" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:ShowHiddenParagraphs"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Sidebar"/>
       <menu:menuitem menu:id=".uno:ViewSidebarStyles"/>
