@@ -129,6 +129,7 @@
 #include <bookmrk.hxx>
 #include <linguistic/misc.hxx>
 #include <editeng/splwrap.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::beans;
@@ -1358,10 +1359,20 @@ void SwTextShell::Execute(SfxRequest &rReq)
             const SwFormatINetFormat& rINetFormat = dynamic_cast<const SwFormatINetFormat&>( aSet.Get(RES_TXTATR_INETFMT) );
             if( nSlot == SID_COPY_HYPERLINK_LOCATION )
             {
+                OUString hyperlinkLocation = rINetFormat.GetValue();
                 ::uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = GetView().GetEditWin().GetClipboard();
                 vcl::unohelper::TextDataObject::CopyStringTo(
-                        rINetFormat.GetValue(),
+                        hyperlinkLocation,
                         xClipboard );
+                if (comphelper::LibreOfficeKit::isActive())
+                {
+                    boost::property_tree::ptree aTree;
+                    aTree.put("content", hyperlinkLocation);
+                    aTree.put("mimeType", "string");
+                    std::stringstream aStream;
+                    boost::property_tree::write_json(aStream, aTree);
+                    GetView().libreOfficeKitViewCallback(LOK_CALLBACK_CLIPBOARD_CHANGED, aStream.str().c_str());
+                }
             }
             else
                 rWrtSh.ClickToINetAttr(rINetFormat);
