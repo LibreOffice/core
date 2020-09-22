@@ -44,6 +44,7 @@ namespace drawinglayer { namespace primitive2d {
     class FillHatchPrimitive2D;
     class BackgroundColorPrimitive2D;
     class BorderLinePrimitive2D;
+    class FillGradientPrimitive2D;
 }}
 
 namespace drawinglayer
@@ -86,6 +87,7 @@ namespace drawinglayer
             void processBorderLinePrimitive2D(const drawinglayer::primitive2d::BorderLinePrimitive2D& rBorder);
             void processInvertPrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
             void processMetaFilePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
+            void processFillGradientPrimitive2D(const primitive2d::FillGradientPrimitive2D& rPrimitive);
 
         public:
             /// constructor/destructor

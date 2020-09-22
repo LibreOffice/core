@@ -36,6 +36,7 @@
 #include <drawinglayer/primitive2d/controlprimitive2d.hxx>
 #include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
 #include <com/sun/star/awt/XWindow2.hpp>
+#include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #include "helperwrongspellrenderer.hxx"
@@ -53,6 +54,13 @@
 #include <drawinglayer/primitive2d/epsprimitive2d.hxx>
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
 #include <vcl/window.hxx>
+#include <svtools/borderhelper.hxx>
+#include <editeng/borderline.hxx>
+
+#include <com/sun/star/table/BorderLineStyle.hpp>
+
+#include <vcl/window.hxx>
+#include <vcl/gradient.hxx>
 #include <svtools/borderhelper.hxx>
 #include <editeng/borderline.hxx>
 
@@ -213,6 +221,30 @@ namespace drawinglayer
                 /* false bBypassAACheck, default*/);
         }
 
+namespace
+{
+GradientStyle convertGradientStyle(drawinglayer::attribute::GradientStyle eGradientStyle)
+{
+    switch (eGradientStyle)
+    {
+        case drawinglayer::attribute::GradientStyle::Axial:
+            return GradientStyle::Axial;
+        case drawinglayer::attribute::GradientStyle::Radial:
+            return GradientStyle::Radial;
+        case drawinglayer::attribute::GradientStyle::Elliptical:
+            return GradientStyle::Elliptical;
+        case drawinglayer::attribute::GradientStyle::Square:
+            return GradientStyle::Square;
+        case drawinglayer::attribute::GradientStyle::Rect:
+            return GradientStyle::Rect;
+        case drawinglayer::attribute::GradientStyle::Linear:
+        default:
+            return GradientStyle::Linear;
+    }
+}
+
+} // end anonymous namespace
+
         void VclPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
         {
             switch(rCandidate.getPrimitive2DID())
@@ -371,6 +403,12 @@ namespace drawinglayer
                 case PRIMITIVE2D_ID_BORDERLINEPRIMITIVE2D:
                 {
                     processBorderLinePrimitive2D(static_cast<const drawinglayer::primitive2d::BorderLinePrimitive2D&>(rCandidate));
+                    break;
+                }
+                case PRIMITIVE2D_ID_FILLGRADIENTPRIMITIVE2D:
+                {
+                    processFillGradientPrimitive2D(
+                        static_cast<const drawinglayer::primitive2d::FillGradientPrimitive2D&>(rCandidate));
                     break;
                 }
                 default :
@@ -857,6 +895,40 @@ namespace drawinglayer
                 mpOutputDevice->SetAntialiasing(nOldAntiAliase);
             }
         }
+
+        void VclPixelProcessor2D::processFillGradientPrimitive2D(
+            const primitive2d::FillGradientPrimitive2D& rPrimitive)
+        {
+            const attribute::FillGradientAttribute& rFillGradient = rPrimitive.getFillGradient();
+
+            if (rFillGradient.getSteps() > 0
+                || rFillGradient.getStyle() != drawinglayer::attribute::GradientStyle::Linear)
+            {
+                process(rPrimitive);
+                return;
+            }
+
+            GradientStyle eGradientStyle = convertGradientStyle(rFillGradient.getStyle());
+
+            basegfx::B2DRange aRange(rPrimitive.getOutputRange());
+            aRange.transform(maCurrentTransformation);
+
+            const tools::Rectangle aRectangle(
+                sal_Int32(std::floor(aRange.getMinX())), sal_Int32(std::floor(aRange.getMinY())),
+                sal_Int32(std::ceil(aRange.getMaxX())), sal_Int32(std::ceil(aRange.getMaxY())));
+
+            Gradient aGradient(eGradientStyle, Color(rFillGradient.getStartColor()),
+                               Color(rFillGradient.getEndColor()));
+
+            aGradient.SetAngle(rFillGradient.getAngle() / F_PI1800);
+            aGradient.SetBorder(rFillGradient.getBorder() * 100);
+            aGradient.SetOfsX(rFillGradient.getOffsetX() * 100.0);
+            aGradient.SetOfsY(rFillGradient.getOffsetY() * 100.0);
+            aGradient.SetSteps(rFillGradient.getSteps());
+
+            mpOutputDevice->DrawGradient(aRectangle, aGradient);
+        }
+
     } // end of namespace processor2d
 } // end of namespace drawinglayer
 
