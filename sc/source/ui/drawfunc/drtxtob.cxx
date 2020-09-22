@@ -60,6 +60,7 @@
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <vcl/EnumContext.hxx>
+#include <vcl/unohelp2.hxx>
 
 #include <sc.hrc>
 #include <globstr.hrc>
@@ -323,6 +324,18 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
             }
             break;
 
+        case SID_COPY_HYPERLINK_LOCATION:
+            {
+                const SvxFieldData* pField = pOutView->GetFieldAtCursor();
+                if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
+                {
+                    uno::Reference<datatransfer::clipboard::XClipboard> xClipboard
+                        = pOutView->GetWindow()->GetClipboard();
+                    vcl::unohelper::TextDataObject::CopyStringTo(pURLField->GetURL(), xClipboard);
+                }
+            }
+            break;
+
         case SID_ENABLE_HYPHENATION:
         case SID_TEXTDIRECTION_LEFT_TO_RIGHT:
         case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
@@ -401,7 +414,8 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
         rSet.Put(aHLinkItem);
     }
 
-    if ( rSet.GetItemState( SID_OPEN_HYPERLINK ) != SfxItemState::UNKNOWN )
+    if ( rSet.GetItemState( SID_OPEN_HYPERLINK ) != SfxItemState::UNKNOWN
+        || rSet.GetItemState(SID_COPY_HYPERLINK_LOCATION) != SfxItemState::UNKNOWN)
     {
         SdrView* pView = pViewData->GetScDrawView();
         OutlinerView* pOutView = pView->GetTextEditOutlinerView();
@@ -416,7 +430,10 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
             }
         }
         if( !bEnable )
+        {
             rSet.DisableItem( SID_OPEN_HYPERLINK );
+            rSet.DisableItem( SID_COPY_HYPERLINK_LOCATION );
+        }
     }
 
     if( rSet.GetItemState( SID_TRANSLITERATE_HALFWIDTH ) != SfxItemState::UNKNOWN )
