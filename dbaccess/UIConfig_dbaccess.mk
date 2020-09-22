@@ -54,6 +54,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/ldapconnectionpage \
     dbaccess/uiconfig/ui/ldappage \
     dbaccess/uiconfig/ui/limitbox \
+    dbaccess/uiconfig/ui/migrwarndlg \
     dbaccess/uiconfig/ui/mysqlnativepage \
     dbaccess/uiconfig/ui/mysqlnativesettings \
     dbaccess/uiconfig/ui/namematchingpage \
@@ -89,7 +90,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/useradmindialog \
     dbaccess/uiconfig/ui/useradminpage \
     dbaccess/uiconfig/ui/userdetailspage \
-    dbaccess/uiconfig/ui/migrwarndlg \
+    dbaccess/uiconfig/ui/windowtitle \
 ))
 
 # vim: set noet sw=4 ts=4:

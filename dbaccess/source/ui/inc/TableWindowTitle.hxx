@@ -18,31 +18,42 @@
  */
 #pragma once
 
-#include <vcl/fixed.hxx>
+#include <vcl/InterimItemWindow.hxx>
+#include <vcl/weld.hxx>
 
 namespace dbaui
 {
     class OTableWindow;
-    class OTableWindowTitle : public FixedText
+    class OTableWindowTitle final : public InterimItemWindow
     {
         VclPtr<OTableWindow> m_pTabWin;
+        std::unique_ptr<weld::Label> m_xLabel;
 
+        DECL_LINK(MouseButtonDownHdl, const MouseEvent&, bool);
+
+#if 0
     protected:
         virtual void Command(const CommandEvent& rEvt) override;
         //  virtual void Paint( const Rectangle& rRect );
-        virtual void MouseButtonDown( const MouseEvent& rEvt ) override;
         virtual void KeyInput( const KeyEvent& rEvt ) override;
-        virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
+#endif
 
     public:
         OTableWindowTitle( OTableWindow* pParent );
         virtual ~OTableWindowTitle() override;
         virtual void dispose() override;
+
+        OUString get_label() const { return m_xLabel->get_label(); }
+        void set_label(const OUString& rLabel) const { m_xLabel->set_label(rLabel); }
+        void set_tooltip_text(const OUString& rText) const { m_xLabel->set_tooltip_text(rText); }
+
+        vcl::Font get_font() const { return m_xLabel->get_font(); }
+        void set_font(const vcl::Font& rFont) { m_xLabel->set_font(rFont); }
+
+#if 0
         virtual void LoseFocus() override;
         virtual void GetFocus() override;
-        virtual void RequestHelp( const HelpEvent& rHEvt ) override;
-        // window override
-        virtual void StateChanged( StateChangedType nStateChange ) override;
+#endif
     };
 }
 

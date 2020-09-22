@@ -26,6 +26,7 @@
 #include "TableWindowListBox.hxx"
 #include <vector>
 #include <vcl/window.hxx>
+#include <vcl/fixed.hxx>
 
 #include <comphelper/containermultiplexer.hxx>
 #include <cppuhelper/basemutex.hxx>
