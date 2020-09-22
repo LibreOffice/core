@@ -4889,8 +4889,8 @@ void DocxAttributeOutput::PopRelIdCache()
 
 void DocxAttributeOutput::PushRelIdCache()
 {
-    m_aRelIdCache.push(std::map<const Graphic*, OString>());
-    m_aSdrRelIdCache.push(std::map<BitmapChecksum, OUString>());
+    m_aRelIdCache.emplace();
+    m_aSdrRelIdCache.emplace();
 }
 
 OUString DocxAttributeOutput::FindRelId(BitmapChecksum nChecksum)
@@ -4907,6 +4907,29 @@ void DocxAttributeOutput::CacheRelId(BitmapChecksum nChecksum, const OUString& r
 {
     if (!m_aSdrRelIdCache.empty())
         m_aSdrRelIdCache.top()[nChecksum] = rRelId;
+}
+
+OString DocxAttributeOutput::getExistingGraphicRelId(BitmapChecksum nChecksum)
+{
+    OString aResult;
+
+    if (m_aRelIdCache.empty())
+        return aResult;
+
+    auto pIterator = m_aRelIdCache.top().find(nChecksum);
+
+    if (pIterator != m_aRelIdCache.top().end())
+    {
+        aResult = pIterator->second;
+    }
+
+    return aResult;
+}
+
+void DocxAttributeOutput::cacheGraphicRelId(BitmapChecksum nChecksum, OString const & rRelId)
+{
+    if (!m_aRelIdCache.empty())
+        m_aRelIdCache.top().emplace(nChecksum, rRelId);
 }
 
 void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size& rSize, const SwFlyFrameFormat* pOLEFrameFormat, SwOLENode* pOLENode, const SdrObject* pSdrObj )
@@ -4948,25 +4971,24 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     else
     {
         // inline, we also have to write the image itself
-        const Graphic* pGraphic = nullptr;
+        Graphic aGraphic;
         if (pGrfNode)
-            pGraphic = &pGrfNode->GetGrf();
+            aGraphic = pGrfNode->GetGrf();
         else
-            pGraphic = pOLENode->GetGraphic();
+            aGraphic = *pOLENode->GetGraphic();
 
-        if (!m_aRelIdCache.empty() && m_aRelIdCache.top().find(pGraphic) != m_aRelIdCache.top().end())
-            // We already have a RelId for this Graphic.
-            aRelId = m_aRelIdCache.top()[pGraphic];
-        else
+        BitmapChecksum aChecksum = aGraphic.GetChecksum();
+        aRelId = getExistingGraphicRelId(aChecksum);
+
+        if (aRelId.isEmpty())
         {
             // Not in cache, then need to write it.
             m_rDrawingML.SetFS( m_pSerializer ); // to be sure that we write to the right stream
 
-            OUString aImageId = m_rDrawingML.WriteImage( *pGraphic );
+            OUString aImageId = m_rDrawingML.WriteImage(aGraphic);
 
             aRelId = OUStringToOString( aImageId, RTL_TEXTENCODING_UTF8 );
-            if (!m_aRelIdCache.empty())
-                m_aRelIdCache.top()[pGraphic] = aRelId;
+            cacheGraphicRelId(aChecksum, aRelId);
         }
 
         nImageType = XML_embed;
