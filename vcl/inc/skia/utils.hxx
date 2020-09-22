@@ -47,6 +47,10 @@ inline sk_sp<SkSurface> createSkSurface(const Size& size, SkColorType type = kN3
 // Create SkImage, GPU-backed if possible.
 VCL_DLLPUBLIC sk_sp<SkImage> createSkImage(const SkBitmap& bitmap);
 
+// Call surface->makeImageSnapshot() and abort on failure.
+sk_sp<SkImage> makeCheckedImageSnapshot(sk_sp<SkSurface> surface);
+sk_sp<SkImage> makeCheckedImageSnapshot(sk_sp<SkSurface> surface, const SkIRect& bounds);
+
 // Must be called in any VCL backend before any Skia functionality is used.
 // If not set, Skia will be disabled.
 VCL_DLLPUBLIC void
