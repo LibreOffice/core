@@ -399,6 +399,24 @@ void SkiaSalGraphicsImpl::postDraw()
         mPendingOperationsToFlush = 0;
     }
     SkiaZone::leave(); // matched in preDraw()
+    // If there's a problem with the GPU context, abort.
+    if (GrContext* context = mSurface->getCanvas()->getGrContext())
+    {
+        // Running out of memory on the GPU technically could be possibly recoverable,
+        // but we don't know the exact status of the surface (and what has or has not been drawn to it),
+        // so in practice this is unrecoverable without possible data loss.
+        if (context->oomed())
+        {
+            SAL_WARN("vcl.skia", "GPU context has run out of memory, aborting.");
+            abort();
+        }
+        // Unrecoverable problem.
+        if (context->abandoned())
+        {
+            SAL_WARN("vcl.skia", "GPU context has been abandoned, aborting.");
+            abort();
+        }
+    }
 }
 
 void SkiaSalGraphicsImpl::scheduleFlush()
