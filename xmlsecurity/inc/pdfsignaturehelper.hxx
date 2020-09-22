@@ -38,6 +38,7 @@ namespace xml::crypto
 class XSecurityEnvironment;
 }
 }
+class SvStream;
 
 /// Handles signatures of a PDF file.
 class XMLSECURITY_DLLPUBLIC PDFSignatureHelper
@@ -50,6 +51,7 @@ class XMLSECURITY_DLLPUBLIC PDFSignatureHelper
 public:
     PDFSignatureHelper();
     bool ReadAndVerifySignature(const css::uno::Reference<css::io::XInputStream>& xInputStream);
+    bool ReadAndVerifySignatureSvStream(SvStream& rStream);
     css::uno::Sequence<css::security::DocumentSignatureInformation>
     GetDocumentSignatureInformations(
         const css::uno::Reference<css::xml::crypto::XSecurityEnvironment>& xSecEnv) const;
