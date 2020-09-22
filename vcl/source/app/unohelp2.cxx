@@ -40,7 +40,8 @@ namespace vcl::unohelper {
     }
 
     void TextDataObject::CopyStringTo( const OUString& rContent,
-        const uno::Reference< datatransfer::clipboard::XClipboard >& rxClipboard )
+        const uno::Reference< datatransfer::clipboard::XClipboard >& rxClipboard,
+        std::function<void (int, const char*)> *callback)
     {
         SAL_WARN_IF( !rxClipboard.is(), "vcl", "TextDataObject::CopyStringTo: invalid clipboard!" );
         if ( !rxClipboard.is() )
@@ -56,6 +57,16 @@ namespace vcl::unohelper {
             uno::Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( rxClipboard, uno::UNO_QUERY );
             if( xFlushableClipboard.is() )
                 xFlushableClipboard->flushClipboard();
+
+            if (callback != nullptr && comphelper::LibreOfficeKit::isActive())
+            {
+                boost::property_tree::ptree aTree;
+                aTree.put("content", rContent);
+                aTree.put("mimeType", "text/plain");
+                std::stringstream aStream;
+                boost::property_tree::write_json(aStream, aTree);
+                (*callback)(LOK_CALLBACK_CLIPBOARD_CHANGED, aStream.str().c_str());
+            }
         }
         catch( const uno::Exception& )
         {
