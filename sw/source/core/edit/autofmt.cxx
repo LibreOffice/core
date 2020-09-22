@@ -1527,7 +1527,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                 if( !aRule.GetNumFormat( nLvl ) )
                 {
                     int nBulletPos = pFndBulletChr - pBulletChar;
-                    sal_Unicode cBullChar;
+                    sal_UCS4 cBullChar;
                     const vcl::Font* pBullFnt( nullptr );
                     if( nBulletPos < cnPosEnDash )
                     {
@@ -1726,7 +1726,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
         {
             OUString sChgStr('\t');
             if( bChgBullet )
-                sChgStr = OUStringChar( m_aFlags.cBullet ) + sChgStr;
+                sChgStr = OUString(&m_aFlags.cBullet, 1) + sChgStr;
             m_pDoc->getIDocumentContentOperations().InsertString( m_aDelPam, sChgStr );
 
             SfxItemSet aSet( m_pDoc->GetAttrPool(), aTextNodeSetRange );

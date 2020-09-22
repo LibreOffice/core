@@ -622,7 +622,7 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
     sal_uInt8       aBits1(0);
     SvxNumType      nType(SVX_NUM_ARABIC);
     SvxAdjust       eAdj;               // Alignment (Left/right/centered)
-    sal_Unicode     cBullet(0x2190);    // default safe bullet
+    sal_UCS4        cBullet(0x2190);    // default safe bullet
 
     sal_Unicode     cGrfBulletCP(USHRT_MAX);
 
@@ -832,7 +832,8 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
 
     if (style::NumberingType::CHAR_SPECIAL == nType)
     {
-        cBullet = !sNumString.isEmpty() ? sNumString[0] : 0x2190;
+        sal_Int32 nIndexUtf16 = 0;
+        cBullet = !sNumString.isEmpty() ? sNumString.iterateCodePoints(&nIndexUtf16) : 0x2190;
 
         if (!cBullet)  // unsave control code?
             cBullet = 0x2190;
