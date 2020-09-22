@@ -25,5 +25,7 @@
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:ThesaurusFromContext"/>
   <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:CopyHyperlinkLocation"/>
+  <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:ResetAttributes"/>
 </menu:menupopup>
