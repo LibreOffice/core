@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "87373d48_10f69735",
+        "filename": "vcl/source/font/fontcharmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-09-22T16:18:50Z",
+      "side": 1,
+      "message": "this should probably be clamped to some reasonable max size, out we will get OOM just below",
+      "revId": "a8107a0a8edc6e76badc7c82b8f0bc3eaeb8dd52",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4df62ef3_7dfec7f3",
+        "filename": "vcl/source/font/fontcharmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-09-22T16:18:50Z",
+      "side": 1,
+      "message": "this should probably be checked for \u003c 0",
+      "revId": "a8107a0a8edc6e76badc7c82b8f0bc3eaeb8dd52",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
