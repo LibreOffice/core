@@ -34,7 +34,7 @@ public:
     static void prepareSkia();
 
 private:
-    virtual void createWindowContext() override;
+    virtual void createWindowContext(bool forceRaster = false) override;
     virtual void performFlush() override;
     virtual bool avoidRecreateByResize() const override;
     static std::unique_ptr<sk_app::WindowContext>

@@ -35,21 +35,19 @@ WinSkiaSalGraphicsImpl::WinSkiaSalGraphicsImpl(WinSalGraphics& rGraphics,
 {
 }
 
-void WinSkiaSalGraphicsImpl::createWindowContext()
+void WinSkiaSalGraphicsImpl::createWindowContext(bool forceRaster)
 {
     SkiaZone zone;
     sk_app::DisplayParams displayParams;
-    switch (SkiaHelper::renderMethodToUse())
+    switch (forceRaster ? SkiaHelper::RenderRaster : SkiaHelper::renderMethodToUse())
     {
         case SkiaHelper::RenderRaster:
             mWindowContext = sk_app::window_context_factory::MakeRasterForWin(mWinParent.gethWnd(),
                                                                               displayParams);
-            mIsGPU = false;
             break;
         case SkiaHelper::RenderVulkan:
             mWindowContext = sk_app::window_context_factory::MakeVulkanForWin(mWinParent.gethWnd(),
                                                                               displayParams);
-            mIsGPU = true;
             break;
     }
 }
