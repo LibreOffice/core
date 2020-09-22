@@ -5024,7 +5024,8 @@ if test "$cross_compiling" = "yes"; then
     # converts BUILD_TYPE and PERMITTED_BUILD_TARGETS into non-whitespace,
     # newlined lists, to use grep as a filter
     PERMITTED_BUILD_TARGETS=$(echo "$PERMITTED_BUILD_TARGETS" | sed -e '/^ *$/d' -e 's/ *//')
-    BUILD_TARGETS="$(sed -ne '/^export BUILD_TYPE=/ { s/.*=// ; s/ /\n/gp }' config_host.mk)"
+    BUILD_TARGETS="$(sed -n -e '/^export BUILD_TYPE=/ s/.*=//p' config_host.mk | sed -e 's/ /\
+/')"
     BUILD_TARGETS="$(echo "$BUILD_TARGETS" | grep -F "$PERMITTED_BUILD_TARGETS" | tr '\n' ' ')"
     sed -i -e "s/ BUILD_TYPE=.*$/ BUILD_TYPE=$BUILD_TARGETS/" config_host.mk
 
