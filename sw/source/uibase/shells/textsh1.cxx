@@ -127,6 +127,7 @@
 #include <bookmrk.hxx>
 #include <linguistic/misc.hxx>
 #include <editeng/splwrap.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::beans;
@@ -1327,7 +1328,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
     }
     break;
     case SID_OPEN_HYPERLINK:
-    case FN_COPY_HYPERLINK_LOCATION:
+    case SID_COPY_HYPERLINK_LOCATION:
     {
         SfxItemSet aSet(GetPool(),
                         svl::Items<RES_TXTATR_INETFMT,
@@ -1336,12 +1337,18 @@ void SwTextShell::Execute(SfxRequest &rReq)
         if(SfxItemState::SET <= aSet.GetItemState( RES_TXTATR_INETFMT ))
         {
             const SwFormatINetFormat& rINetFormat = dynamic_cast<const SwFormatINetFormat&>( aSet.Get(RES_TXTATR_INETFMT) );
-            if( nSlot == FN_COPY_HYPERLINK_LOCATION )
+            if( nSlot == SID_COPY_HYPERLINK_LOCATION )
             {
+                OUString hyperlinkLocation = rINetFormat.GetValue();
                 ::uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = GetView().GetEditWin().GetClipboard();
-                vcl::unohelper::TextDataObject::CopyStringTo(
-                        rINetFormat.GetValue(),
-                        xClipboard );
+
+                if (comphelper::LibreOfficeKit::isActive())
+                {
+                    std::function<void (int, const char*)> callback = [&] (int callbackType, const char* text) { GetView().libreOfficeKitViewCallback(callbackType, text); } ;
+                    vcl::unohelper::TextDataObject::CopyStringTo(hyperlinkLocation, xClipboard, &callback );
+                }
+                else
+                    vcl::unohelper::TextDataObject::CopyStringTo(hyperlinkLocation, xClipboard, nullptr );
             }
             else
                 rWrtSh.ClickToINetAttr(rINetFormat);
@@ -1939,7 +1946,18 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                     rSet.Put(SfxBoolItem( nWhich, nullptr != GetView().GetViewFrame()->GetChildWindow( nWhich ) ));
                 }
                 break;
-
+            case SID_COPY_HYPERLINK_LOCATION:
+                {
+                    SfxItemSet aSet(GetPool(),
+                        svl::Items<RES_TXTATR_INETFMT,
+                        RES_TXTATR_INETFMT>{});
+                    rSh.GetCurAttr(aSet);
+                    if(SfxItemState::SET > aSet.GetItemState( RES_TXTATR_INETFMT ) || rSh.HasReadonlySel())
+                    {
+                        rSet.DisableItem(nWhich);
+                    }
+                }
+            break;
             case FN_EDIT_HYPERLINK:
             case FN_COPY_HYPERLINK_LOCATION:
                 {
