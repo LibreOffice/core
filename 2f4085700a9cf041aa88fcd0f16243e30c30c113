@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e6dedcdd_73bb077a",
+        "filename": "sw/source/uibase/utlui/bookctrl.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-09-22T23:32:42Z",
+      "side": 1,
+      "message": "This can be a reference.",
+      "range": {
+        "startLine": 90,
+        "startChar": 8,
+        "endLine": 90,
+        "endChar": 29
+      },
+      "revId": "2f4085700a9cf041aa88fcd0f16243e30c30c113",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
