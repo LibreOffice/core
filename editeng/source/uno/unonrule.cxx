@@ -206,7 +206,7 @@ Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex(sal
 
     if(SVX_NUM_CHAR_SPECIAL == rFmt.GetNumberingType())
     {
-        sal_Unicode nCode = rFmt.GetBulletChar();
+        sal_UCS4 nCode = rFmt.GetBulletChar();
         OUString aStr( &nCode, 1 );
         aVal <<= aStr;
         beans::PropertyValue aBulletProp( "BulletChar", -1, aVal, beans::PropertyState_DIRECT_VALUE);
@@ -324,7 +324,8 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex(const Sequence<beans::Propert
             {
                 if(!aStr.isEmpty())
                 {
-                    aFmt.SetBulletChar(aStr[0]);
+                    sal_Int32 nIndexUtf16 = 0;
+                    aFmt.SetBulletChar(aStr.iterateCodePoints(&nIndexUtf16));
                 }
                 else
                 {

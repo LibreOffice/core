@@ -669,7 +669,10 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFormat &rNum, WW8_ANLV const &rAV,
 
                 // take only the very first character
                 if (rAV.cbTextBefore || rAV.cbTextAfter)
-                    rNum.SetBulletChar( sText[ 0 ] );
+                {
+                    sal_Int32 nIndexUtf16 = 0;
+                    rNum.SetBulletChar(sText.toString().iterateCodePoints(&nIndexUtf16));
+                }
                 else
                     rNum.SetBulletChar( 0x2190 );
             }
