@@ -82,7 +82,8 @@ bool OQueryTableWindow::Init()
     SetAliasName(sAliasName);
         // SetAliasName passes it as WinName, hence it uses the base class
     // reset the title
-    m_xTitle->SetText( pWinData->GetWinName() );
+    m_xTitle->set_label(pWinData->GetWinName());
+    m_xTitle->set_tooltip_text(GetComposedName());
     m_xTitle->Show();
 
     getTableView()->getDesignView()->getController().InvalidateFeature(ID_BROWSER_QUERY_EXECUTE);

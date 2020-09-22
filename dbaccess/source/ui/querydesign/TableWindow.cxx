@@ -96,7 +96,6 @@ OTableWindow::OTableWindow( vcl::Window* pParent, const TTableWindowData::value_
           ,m_nMoveIncrement(1)
           ,m_nSizingFlags( SizingFlags::NONE )
 {
-
     // Set position and size
     if( GetData()->HasPosition() )
         SetPosPixel( GetData()->GetPosition() );
@@ -294,7 +293,8 @@ bool OTableWindow::Init()
     }
 
     // Set the title
-    m_xTitle->SetText( m_pData->GetWinName() );
+    m_xTitle->set_label(m_pData->GetWinName());
+    m_xTitle->set_tooltip_text(GetComposedName());
     m_xTitle->Show();
 
     m_xListBox->Show();
@@ -459,10 +459,9 @@ void OTableWindow::Resize()
 
 void OTableWindow::SetBoldTitle( bool bBold )
 {
-    vcl::Font aFont = m_xTitle->GetFont();
-    aFont.SetWeight( bBold?WEIGHT_BOLD:WEIGHT_NORMAL );
-    m_xTitle->SetFont( aFont );
-    m_xTitle->Invalidate();
+    vcl::Font aFont = m_xTitle->get_font();
+    aFont.SetWeight(bBold ? WEIGHT_BOLD : WEIGHT_NORMAL);
+    m_xTitle->set_font(aFont);
 }
 
 void OTableWindow::GetFocus()
@@ -708,7 +707,7 @@ bool OTableWindow::PreNotify(NotifyEvent& rNEvt)
 
 OUString OTableWindow::getTitle() const
 {
-    return m_xTitle->GetText();
+    return m_xTitle->get_label();
 }
 
 void OTableWindow::_elementInserted( const container::ContainerEvent& /*_rEvent*/ )
