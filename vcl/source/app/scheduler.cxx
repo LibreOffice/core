@@ -462,6 +462,7 @@ bool Scheduler::ProcessTaskScheduling()
         */
         try
         {
+            SAL_WARN_IF(pTask->GetDebugName() && (0 == strcmp(pTask->GetDebugName(), "CWinClipboard::m_aNotifyClipboardChangeIdle")), "vcl.schedule", "Invoke clipboard notify");
             pTask->Invoke();
         }
         catch (css::uno::Exception&)

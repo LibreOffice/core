@@ -466,7 +466,7 @@ bool ImplSalYield(const bool bWait, const bool bHandleAllCurrentEvents)
                 // should we std::abort() / SalAbort here?
                 break;
             case 0:
-                SAL_INFO("vcl.schedule", "Received WM_QUIT while waiting in GetMessageW");
+                SAL_WARN("vcl.schedule", "Received WM_QUIT while waiting in GetMessageW");
                 break;
             default:
                 bWasMsg = true;
