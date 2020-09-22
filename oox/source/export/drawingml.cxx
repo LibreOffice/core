@@ -2836,18 +2836,31 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
         }
 
         bool isUpright = false;
+        std::optional<OUString> sHorzOverflow;
+        std::optional<OUString> sVertOverflow;
         if (GetProperty(rXPropSet, "InteropGrabBag"))
         {
             if (rXPropSet->getPropertySetInfo()->hasPropertyByName("InteropGrabBag"))
             {
                 uno::Sequence<beans::PropertyValue> aGrabBag;
                 rXPropSet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
-                for (auto& aProp : aGrabBag)
+                for (const auto& aProp : std::as_const(aGrabBag))
                 {
                     if (aProp.Name == "Upright")
                     {
                         aProp.Value >>= isUpright;
-                        break;
+                    }
+                    else if (aProp.Name == "horzOverflow")
+                    {
+                        OUString sValue;
+                        aProp.Value >>= sValue;
+                        sHorzOverflow = sValue;
+                    }
+                    else if (aProp.Name == "vertOverflow")
+                    {
+                        OUString sValue;
+                        aProp.Value >>= sValue;
+                        sVertOverflow = sValue;
                     }
                 }
             }
@@ -2855,11 +2868,21 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
 
         mpFS->startElementNS( (nXmlNamespace ? nXmlNamespace : XML_a), XML_bodyPr,
                                XML_wrap, pWrap,
+<<<<<<< HEAD   (8c7c45 tdf#108059 Introduce compatibility key for pie chart orienta)
                                XML_fromWordArt, bFromWordArt ? "1" : nullptr,
                                XML_lIns, (nLeft != DEFLRINS) ? OString::number(oox::drawingml::convertHmmToEmu(nLeft)).getStr() : nullptr,
                                XML_rIns, (nRight != DEFLRINS) ? OString::number(oox::drawingml::convertHmmToEmu(nRight)).getStr() : nullptr,
                                XML_tIns, (nTop != DEFTBINS) ? OString::number(oox::drawingml::convertHmmToEmu(nTop)).getStr() : nullptr,
                                XML_bIns, (nBottom != DEFTBINS) ? OString::number(oox::drawingml::convertHmmToEmu(nBottom)).getStr() : nullptr,
+=======
+                               XML_horzOverflow, sHorzOverflow,
+                               XML_vertOverflow, sVertOverflow,
+                               XML_fromWordArt, sax_fastparser::UseIf("1", bFromWordArt),
+                               XML_lIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nLeft)), nLeft != DEFLRINS),
+                               XML_rIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nRight)), nRight != DEFLRINS),
+                               XML_tIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nTop)), nTop != DEFTBINS),
+                               XML_bIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nBottom)), nBottom != DEFTBINS),
+>>>>>>> CHANGE (79737c tdf#91251 XLSX textbox export: fix missing overflow properti)
                                XML_anchor, sVerticalAlignment,
                                XML_anchorCtr, bHorizontalCenter ? "1" : nullptr,
                                XML_vert, sWritingMode,
