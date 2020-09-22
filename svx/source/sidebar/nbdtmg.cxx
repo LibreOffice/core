@@ -282,7 +282,7 @@ sal_uInt16 BulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLe
         return sal_uInt16(0xFFFF);
 
     const SvxNumberFormat& aFmt(aNum.GetLevel(nActLv));
-    sal_Unicode cChar = aFmt.GetBulletChar();
+    sal_UCS4 cChar = aFmt.GetBulletChar();
     for(sal_uInt16 i = nFromIndex; i < DEFAULT_BULLET_TYPES; i++)
     {
         if ( (cChar == pActualBullets[i]->cBulletChar) ||
@@ -310,7 +310,7 @@ void BulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uI
         return;
 
     SvxNumberFormat aFmt(aNum.GetLevel(nActLv));
-    sal_Unicode cChar = aFmt.GetBulletChar();
+    sal_UCS4 cChar = aFmt.GetBulletChar();
     const vcl::Font* pFont = aFmt.GetBulletFont();
     if ( nIndex >= DEFAULT_BULLET_TYPES )
         return;
@@ -325,7 +325,7 @@ void BulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
 {
     if ( nIndex >= DEFAULT_BULLET_TYPES )
         return;
-    sal_Unicode cChar = pActualBullets[nIndex]->cBulletChar;
+    sal_UCS4 cChar = pActualBullets[nIndex]->cBulletChar;
     const vcl::Font& rActBulletFont = pActualBullets[nIndex]->aFont;
 
     sal_uInt16 nMask = 1;
@@ -337,7 +337,7 @@ void BulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
             SvxNumberFormat aFmt(aNum.GetLevel(i));
             aFmt.SetNumberingType( SVX_NUM_CHAR_SPECIAL );
             aFmt.SetBulletFont(&rActBulletFont);
-            aFmt.SetBulletChar(cChar );
+            aFmt.SetBulletChar(cChar);
             aFmt.SetCharFormatName(sBulletCharFormatName);
             aFmt.SetPrefix( "" );
             aFmt.SetSuffix( "" );
@@ -648,8 +648,11 @@ sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 /*m
             sal_Int16 eNumType = aFmt.GetNumberingType();
             if( eNumType == SVX_NUM_CHAR_SPECIAL)
             {
-                sal_Unicode cChar = aFmt.GetBulletChar();
-                sal_Unicode ccChar = _pSet->sBulletChar[0];
+                sal_UCS4 cChar = aFmt.GetBulletChar();
+
+                sal_Int32 nIndexUtf16 = 0;
+                sal_UCS4 ccChar = _pSet->sBulletChar.iterateCodePoints(&nIndexUtf16);
+
                 if ( !((cChar == ccChar) &&
                     _pSet->eLabelFollowedBy == aFmt.GetLabelFollowedBy() &&
                     _pSet->nTabValue == aFmt.GetListtabPos() &&
@@ -726,8 +729,8 @@ void OutlineTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uI
 
         if( eNumType == SVX_NUM_CHAR_SPECIAL)
         {
-            sal_Unicode cChar = aFmt.GetBulletChar();
-            OUString sChar(cChar);
+            sal_UCS4 cChar = aFmt.GetBulletChar();
+            OUString sChar(&cChar, 1);
             _pSet->sBulletChar = sChar;
             if ( aFmt.GetBulletFont() )
                 _pSet->sBulletFont = aFmt.GetBulletFont()->GetFamilyName();
@@ -822,9 +825,12 @@ void OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
             }else
                 aFmt.SetBulletFont( &rActBulletFont );
 
-            sal_Unicode cChar = 0;
+            sal_UCS4 cChar = 0;
             if( !pLevelSettings->sBulletChar.isEmpty() )
-                cChar = pLevelSettings->sBulletChar[0];
+            {
+                sal_Int32 nIndexUtf16 = 0;
+                cChar = pLevelSettings->sBulletChar.iterateCodePoints(&nIndexUtf16);
+            }
             if( AllSettings::GetLayoutRTL() )
             {
                 if( 0 == i && cChar == BulletsTypeMgr::aDynamicBulletTypes[5] )
