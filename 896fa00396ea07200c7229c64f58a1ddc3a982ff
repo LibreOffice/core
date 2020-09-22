@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "59540b69_17ffcade",
+        "filename": "sw/source/filter/ww8/rtfattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3043,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-09-22T06:46:22Z",
+      "side": 1,
+      "message": "this seems wrong? It should be either 2 or 4, depending on which constructor it hits?",
+      "revId": "896fa00396ea07200c7229c64f58a1ddc3a982ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4be33f3d_d53fc386",
+        "filename": "sw/source/filter/ww8/wrtw8num.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-09-22T06:46:22Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "896fa00396ea07200c7229c64f58a1ddc3a982ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84652e0b_cf5aec0c",
+        "filename": "sw/source/ui/misc/outline.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 844,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-09-22T06:46:22Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "896fa00396ea07200c7229c64f58a1ddc3a982ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a737ca6f_24efc142",
+        "filename": "xmloff/source/style/xmlnume.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-09-22T06:46:22Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "896fa00396ea07200c7229c64f58a1ddc3a982ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fef3b10d_bdb8b41e",
+        "filename": "xmloff/source/style/xmlnumi.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-09-22T06:46:22Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "896fa00396ea07200c7229c64f58a1ddc3a982ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
