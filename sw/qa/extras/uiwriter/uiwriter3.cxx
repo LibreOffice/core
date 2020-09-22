@@ -73,6 +73,37 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf129382)
     CPPUNIT_ASSERT_EQUAL(8, getShapes());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134227)
+{
+    load(DATA_DIRECTORY, "tdf134227.docx");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    // Without the fix in place, it would have crashed here
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
+    xTransfer->Cut();
+
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+
+    TransferableDataHelper aHelper(xTransfer.get());
+    SwTransferable::Paste(*pWrtShell, aHelper);
+
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135412)
 {
     load(DATA_DIRECTORY, "tdf135412.docx");
