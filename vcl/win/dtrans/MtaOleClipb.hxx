@@ -77,8 +77,6 @@ private:
     static LRESULT CALLBACK mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
     static unsigned int WINAPI oleThreadProc( LPVOID pParam );
 
-    static unsigned int WINAPI clipboardChangedNotifierThreadProc( LPVOID pParam );
-
     bool WaitForThreadReady( ) const;
 
 private:
@@ -90,14 +88,6 @@ private:
     ATOM                        m_MtaOleReqWndClassAtom;
     LPFNC_CLIPVIEWER_CALLBACK_t m_pfncClipViewerCallback;
     bool                        m_bInRegisterClipViewer;
-
-    bool                        m_bRunClipboardNotifierThread;
-    HANDLE                      m_hClipboardChangedNotifierThread;
-    HANDLE                      m_hClipboardChangedNotifierEvents[2];
-    HANDLE&                     m_hClipboardChangedEvent;
-    HANDLE&                     m_hTerminateClipboardChangedNotifierEvent;
-    osl::Mutex                  m_ClipboardChangedEventCountMutex;
-    sal_Int32                   m_ClipboardChangedEventCount;
 
     osl::Mutex                  m_pfncClipViewerCallbackMutex;
 

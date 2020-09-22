@@ -63,6 +63,10 @@ CWinClipboard::CWinClipboard(const uno::Reference<uno::XComponentContext>& rxCon
     // the static callback function
     s_pCWinClipbImpl = this;
     registerClipboardViewer();
+
+    m_aNotifyChangeIdle.SetDebugName("CWinClipboard::m_aNotifyChangeIdle");
+    m_aNotifyChangeIdle.SetPriority(TaskPriority::HIGH_IDLE);
+    m_aNotifyChangeIdle.SetInvokeHandler(LINK(this, CWinClipboard, ClipboardContentChangedHdl));
 }
 
 CWinClipboard::~CWinClipboard()
@@ -236,8 +240,10 @@ void SAL_CALL CWinClipboard::removeClipboardListener(
     rBHelper.aLC.removeInterface(cppu::UnoType<decltype(listener)>::get(), listener);
 }
 
-void CWinClipboard::notifyAllClipboardListener()
+IMPL_LINK_NOARG(CWinClipboard, ClipboardContentChangedHdl, Timer *, void)
 {
+    m_foreignContent.clear();
+
     if (rBHelper.bDisposed)
         return;
 
@@ -323,21 +329,20 @@ void CWinClipboard::onReleaseDataObject(CXNotifyingDataObject* theCaller)
 
 void CWinClipboard::registerClipboardViewer()
 {
-    m_MtaOleClipboard.registerClipViewer(CWinClipboard::onClipboardContentChanged);
+    m_MtaOleClipboard.registerClipViewer(CWinClipboard::onWM_CLIPBOARDUPDATE);
 }
 
 void CWinClipboard::unregisterClipboardViewer() { m_MtaOleClipboard.registerClipViewer(nullptr); }
 
-void WINAPI CWinClipboard::onClipboardContentChanged()
+void WINAPI CWinClipboard::onWM_CLIPBOARDUPDATE()
 {
     osl::MutexGuard aGuard(s_aMutex);
 
-    // reassociation to instance through static member
-    if (nullptr != s_pCWinClipbImpl)
-    {
-        s_pCWinClipbImpl->m_foreignContent.clear();
-        s_pCWinClipbImpl->notifyAllClipboardListener();
-    }
+    if (!s_pCWinClipbImpl)
+        return;
+
+    if (!s_pCWinClipbImpl->m_aNotifyChangeIdle.IsActive())
+        s_pCWinClipbImpl->m_aNotifyChangeIdle.Start();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
