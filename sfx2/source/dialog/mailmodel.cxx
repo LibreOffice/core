@@ -68,6 +68,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::system;
 
+// The implementation of cppu::WeakImplHelper<css::frame::XStatusListener> is instantiated in vcl
+template class SAL_DLLPUBLIC_IMPORT ::cppu::WeakImplHelper<css::frame::XStatusListener>;
+
 namespace {
 
 // - class PrepareListener_Impl ------------------------------------------

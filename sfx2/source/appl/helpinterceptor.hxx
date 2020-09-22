@@ -99,6 +99,8 @@ public:
 
 // HelpListener_Impl -----------------------------------------------------
 
+// The implementation of cppu::WeakImplHelper<css::frame::XStatusListener> is instantiated in vcl
+template class SAL_DLLPUBLIC_IMPORT ::cppu::WeakImplHelper<css::frame::XStatusListener>;
 class HelpListener_Impl : public ::cppu::WeakImplHelper< css::frame::XStatusListener >
 {
 private:

@@ -34,6 +34,8 @@
 
 class SfxControllerItem;
 class SfxDispatcher;
+// The implementation of cppu::WeakImplHelper<css::frame::XStatusListener> is instantiated in vcl
+template class SAL_DLLPUBLIC_IMPORT ::cppu::WeakImplHelper<css::frame::XStatusListener>;
 class BindDispatch_Impl :   public ::cppu::WeakImplHelper< css::frame::XStatusListener >
 {
 friend class SfxStateCache;
