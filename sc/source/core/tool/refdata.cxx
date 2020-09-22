@@ -506,7 +506,7 @@ void ScComplexRefData::PutInOrder( const ScAddress& rPos )
     ScSingleRefData::PutInOrder( Ref1, Ref2, rPos);
 }
 
-bool ScComplexRefData::IncEndColSticky( const ScDocument* pDoc, SCCOL nDelta, const ScAddress& rPos )
+bool ScComplexRefData::IncEndColSticky( const ScDocument& rDoc, SCCOL nDelta, const ScAddress& rPos )
 {
     SCCOL nCol1 = Ref1.IsColRel() ? Ref1.Col() + rPos.Col() : Ref1.Col();
     SCCOL nCol2 = Ref2.IsColRel() ? Ref2.Col() + rPos.Col() : Ref2.Col();
@@ -517,25 +517,25 @@ bool ScComplexRefData::IncEndColSticky( const ScDocument* pDoc, SCCOL nDelta, co
         return true;
     }
 
-    if (nCol2 == pDoc->MaxCol())
+    if (nCol2 == rDoc.MaxCol())
         // already sticky
         return false;
 
-    if (nCol2 < pDoc->MaxCol())
+    if (nCol2 < rDoc.MaxCol())
     {
-        SCCOL nCol = ::std::min( static_cast<SCCOL>(nCol2 + nDelta), pDoc->MaxCol());
+        SCCOL nCol = ::std::min( static_cast<SCCOL>(nCol2 + nDelta), rDoc.MaxCol());
         if (Ref2.IsColRel())
             Ref2.SetRelCol( nCol - rPos.Col());
         else
             Ref2.SetAbsCol( nCol);
     }
     else
-        Ref2.IncCol( nDelta);   // was greater than pDoc->.MaxCol(), caller should know...
+        Ref2.IncCol( nDelta);   // was greater than rDoc.MaxCol(), caller should know...
 
     return true;
 }
 
-bool ScComplexRefData::IncEndRowSticky( const ScDocument* pDoc, SCROW nDelta, const ScAddress& rPos )
+bool ScComplexRefData::IncEndRowSticky( const ScDocument& rDoc, SCROW nDelta, const ScAddress& rPos )
 {
     SCROW nRow1 = Ref1.IsRowRel() ? Ref1.Row() + rPos.Row() : Ref1.Row();
     SCROW nRow2 = Ref2.IsRowRel() ? Ref2.Row() + rPos.Row() : Ref2.Row();
@@ -546,20 +546,20 @@ bool ScComplexRefData::IncEndRowSticky( const ScDocument* pDoc, SCROW nDelta, co
         return true;
     }
 
-    if (nRow2 == pDoc->MaxRow())
+    if (nRow2 == rDoc.MaxRow())
         // already sticky
         return false;
 
-    if (nRow2 < pDoc->MaxRow())
+    if (nRow2 < rDoc.MaxRow())
     {
-        SCROW nRow = ::std::min( static_cast<SCROW>(nRow2 + nDelta), pDoc->MaxRow());
+        SCROW nRow = ::std::min( static_cast<SCROW>(nRow2 + nDelta), rDoc.MaxRow());
         if (Ref2.IsRowRel())
             Ref2.SetRelRow( nRow - rPos.Row());
         else
             Ref2.SetAbsRow( nRow);
     }
     else
-        Ref2.IncRow( nDelta);   // was greater than pDoc->.MaxRow(), caller should know...
+        Ref2.IncRow( nDelta);   // was greater than rDoc.MaxRow(), caller should know...
 
     return true;
 }

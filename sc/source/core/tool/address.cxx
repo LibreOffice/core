@@ -2444,7 +2444,7 @@ void ScRange::IncRowIfNotLessThan(const ScDocument* pDoc, SCROW nStartRow, SCROW
     }
 }
 
-void ScRange::IncEndColSticky( const ScDocument* pDoc, SCCOL nDelta )
+void ScRange::IncEndColSticky( const ScDocument& rDoc, SCCOL nDelta )
 {
     SCCOL nCol = aEnd.Col();
     if (aStart.Col() >= nCol)
@@ -2454,7 +2454,7 @@ void ScRange::IncEndColSticky( const ScDocument* pDoc, SCCOL nDelta )
         return;
     }
 
-    const SCCOL nMaxCol = (pDoc ? pDoc->MaxCol() : MAXCOL);
+    const SCCOL nMaxCol = rDoc.MaxCol();
     if (nCol == nMaxCol)
         // already sticky
         return;
@@ -2465,7 +2465,7 @@ void ScRange::IncEndColSticky( const ScDocument* pDoc, SCCOL nDelta )
         aEnd.IncCol( nDelta);   // was greater than nMaxCol, caller should know...
 }
 
-void ScRange::IncEndRowSticky( const ScDocument* pDoc, SCROW nDelta )
+void ScRange::IncEndRowSticky( const ScDocument& rDoc, SCROW nDelta )
 {
     SCROW nRow = aEnd.Row();
     if (aStart.Row() >= nRow)
@@ -2475,14 +2475,14 @@ void ScRange::IncEndRowSticky( const ScDocument* pDoc, SCROW nDelta )
         return;
     }
 
-    if (nRow == pDoc->MaxRow())
+    if (nRow == rDoc.MaxRow())
         // already sticky
         return;
 
-    if (nRow < pDoc->MaxRow())
-        aEnd.SetRow( ::std::min( static_cast<SCROW>(nRow + nDelta), pDoc->MaxRow()));
+    if (nRow < rDoc.MaxRow())
+        aEnd.SetRow( ::std::min( static_cast<SCROW>(nRow + nDelta), rDoc.MaxRow()));
     else
-        aEnd.IncRow( nDelta);   // was greater than pDoc->MaxRow(), caller should know...
+        aEnd.IncRow( nDelta);   // was greater than rDoc.MaxRow(), caller should know...
 }
 
 OUString ScAddress::GetColRowString() const

@@ -134,15 +134,14 @@ SC_SIMPLE_SERVICE_INFO(PivotTableDataProvider, "PivotTableDataProvider", SC_SERV
 
 // DataProvider ==============================================================
 
-PivotTableDataProvider::PivotTableDataProvider(ScDocument* pDoc)
-    : m_pDocument(pDoc)
+PivotTableDataProvider::PivotTableDataProvider(ScDocument& rDoc)
+    : m_pDocument(&rDoc)
     , m_aPropSet(lcl_GetDataProviderPropertyMap())
     , m_bIncludeHiddenCells(true)
     , m_bNeedsUpdate(true)
     , m_xContext(comphelper::getProcessComponentContext())
 {
-    if (m_pDocument)
-        m_pDocument->AddUnoObject(*this);
+    rDoc.AddUnoObject(*this);
 }
 
 PivotTableDataProvider::~PivotTableDataProvider()

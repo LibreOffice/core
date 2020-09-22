@@ -547,7 +547,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             break;
         case Type::CHART_PIVOTTABLE_DATAPROVIDER:
             if (pDocShell)
-                xRet = *new sc::PivotTableDataProvider(&pDocShell->GetDocument());
+                xRet = *new sc::PivotTableDataProvider(pDocShell->GetDocument());
             break;
         case Type::FORMULAPARS:
             if (pDocShell)

@@ -85,7 +85,7 @@ public:
      * @return TRUE if there indeed was a split, else FALSE (e.g. split
      *         positions were only top or bottom cells or no formula group).
      */
-    static bool splitFormulaCellGroups(const ScDocument* pDoc, CellStoreType& rCells, std::vector<SCROW>& rBounds);
+    static bool splitFormulaCellGroups(const ScDocument& rDoc, CellStoreType& rCells, std::vector<SCROW>& rBounds);
 
     /**
      * See if two specified adjacent formula cells can be merged, and if they
@@ -128,7 +128,7 @@ public:
      * @param rCells cell storage container
      * @param rRows row positions at which to unshare formula cells.
      */
-    static void unshareFormulaCells(const ScDocument* pDoc, CellStoreType& rCells, std::vector<SCROW>& rRows);
+    static void unshareFormulaCells(const ScDocument& rDoc, CellStoreType& rCells, std::vector<SCROW>& rRows);
 
     /**
      * Have all formula cells belonging to a group start listening to their

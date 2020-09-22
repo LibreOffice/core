@@ -189,12 +189,12 @@ struct ScComplexRefData
     /** Increment or decrement end column unless or until sticky.
         @see ScRange::IncEndColSticky()
         @return TRUE if changed. */
-    bool IncEndColSticky( const ScDocument* pDoc, SCCOL nDelta, const ScAddress& rPos );
+    bool IncEndColSticky( const ScDocument& rDoc, SCCOL nDelta, const ScAddress& rPos );
 
     /** Increment or decrement end row unless or until sticky.
         @see ScRange::IncEndRowSticky()
         @return TRUE if changed. */
-    bool IncEndRowSticky( const ScDocument* pDoc, SCROW nDelta, const ScAddress& rPos );
+    bool IncEndRowSticky( const ScDocument& rDoc, SCROW nDelta, const ScAddress& rPos );
 
     bool IsDeleted() const;
 

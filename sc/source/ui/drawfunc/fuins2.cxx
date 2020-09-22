@@ -131,7 +131,7 @@ void lcl_ChartInit(const uno::Reference <embed::XEmbeddedObject>& xObj, ScViewDa
     uno::Reference<chart2::data::XDataProvider> xDataProvider;
     if (bRangeIsPivotTable)
     {
-        std::unique_ptr<sc::PivotTableDataProvider> pPivotTableDataProvider(new sc::PivotTableDataProvider(&rScDoc));
+        std::unique_ptr<sc::PivotTableDataProvider> pPivotTableDataProvider(new sc::PivotTableDataProvider(rScDoc));
         pPivotTableDataProvider->setPivotTableName(aRangeString);
         xDataProvider.set(pPivotTableDataProvider.release());
     }
