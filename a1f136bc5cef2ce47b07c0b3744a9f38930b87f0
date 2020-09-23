@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cf27e228_ec328188",
+        "filename": "sw/source/core/txtnode/fntcache.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2541,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2020-09-23T10:31:02Z",
+      "side": 1,
+      "message": "Are you sure you need the first (\"SmallCaps\") part of this condition?",
+      "revId": "a1f136bc5cef2ce47b07c0b3744a9f38930b87f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
