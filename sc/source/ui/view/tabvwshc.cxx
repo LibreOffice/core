@@ -315,7 +315,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
                                      SCITEM_QUERYDATA>{} );
 
             ScDBData* pDBData = GetDBData(false, SC_DB_MAKE, ScGetDBSelection::RowDown);
-            pDBData->ExtendDataArea(&rDoc);
+            pDBData->ExtendDataArea(rDoc);
             pDBData->GetQueryParam( aQueryParam );
 
             ScRange aArea;
@@ -340,7 +340,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
                                      SCITEM_QUERYDATA>{} );
 
             ScDBData* pDBData = GetDBData(false, SC_DB_MAKE, ScGetDBSelection::RowDown);
-            pDBData->ExtendDataArea(&rDoc);
+            pDBData->ExtendDataArea(rDoc);
             pDBData->GetQueryParam( aQueryParam );
 
             ScRange aArea;

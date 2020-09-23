@@ -720,7 +720,7 @@ sal_uLong ScDocument::AddValidationEntry( const ScValidationData& rNew )
 
     if (!pValidationList)
     {
-        ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
+        ScMutationGuard aGuard(*this, ScMutationGuardFlags::CORE);
         pValidationList.reset(new ScValidationDataList);
     }
 
@@ -740,7 +740,7 @@ sal_uLong ScDocument::AddValidationEntry( const ScValidationData& rNew )
     sal_uLong nNewKey = nMax + 1;
     std::unique_ptr<ScValidationData> pInsert(rNew.Clone(this));
     pInsert->SetKey( nNewKey );
-    ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
+    ScMutationGuard aGuard(*this, ScMutationGuardFlags::CORE);
     pValidationList->InsertNew( std::move(pInsert) );
     return nNewKey;
 }

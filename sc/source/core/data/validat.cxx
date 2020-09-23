@@ -978,14 +978,14 @@ ScValidationDataList::ScValidationDataList(const ScValidationDataList& rList)
     //TODO: faster insert for sorted entries from rList ???
 }
 
-ScValidationDataList::ScValidationDataList(ScDocument* pNewDoc,
+ScValidationDataList::ScValidationDataList(ScDocument& rNewDoc,
                                             const ScValidationDataList& rList)
 {
     //  for new documents - real copy with new tokens!
 
     for (const auto& rxItem : rList)
     {
-        InsertNew( std::unique_ptr<ScValidationData>(rxItem->Clone(pNewDoc)) );
+        InsertNew( std::unique_ptr<ScValidationData>(rxItem->Clone(&rNewDoc)) );
     }
 
     //TODO: faster insert for sorted entries from rList ???

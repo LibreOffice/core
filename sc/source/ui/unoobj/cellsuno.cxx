@@ -3251,7 +3251,7 @@ void SAL_CALL ScCellRangesBase::addChartDataChangeEventListener( const uno::Refe
         // failed to create unique name.
         return;
 
-    ScChartListener* pListener = new ScChartListener( aName, &rDoc, aRangesRef );
+    ScChartListener* pListener = new ScChartListener( aName, rDoc, aRangesRef );
     pListener->SetUno( aListener, this );
     pColl->insert( pListener );
     pListener->StartListeningTo();

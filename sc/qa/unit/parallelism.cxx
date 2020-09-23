@@ -113,7 +113,7 @@ ScUndoCut* ScParallelismTest::cutToClip(ScDocShell& rDocSh, const ScRange& rRang
     if (bCreateUndo)
     {
         pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
-        pUndoDoc->InitUndoSelected( pSrcDoc, aMark );
+        pUndoDoc->InitUndoSelected( *pSrcDoc, aMark );
         // all sheets - CopyToDocument skips those that don't exist in pUndoDoc
         ScRange aCopyRange = rRange;
         aCopyRange.aStart.SetTab(0);

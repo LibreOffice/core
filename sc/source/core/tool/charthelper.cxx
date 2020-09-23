@@ -145,11 +145,9 @@ void ScChartHelper::AdjustRangesOfChartsOnDestinationPage( const ScDocument& rSr
     }
 }
 
-void ScChartHelper::UpdateChartsOnDestinationPage( ScDocument* pDestDoc, const SCTAB nDestTab )
+void ScChartHelper::UpdateChartsOnDestinationPage( ScDocument& rDestDoc, const SCTAB nDestTab )
 {
-    if( !pDestDoc )
-        return;
-    ScDrawLayer* pDrawLayer = pDestDoc->GetDrawLayer();
+    ScDrawLayer* pDrawLayer = rDestDoc.GetDrawLayer();
     if( !pDrawLayer )
         return;
 
@@ -164,7 +162,7 @@ void ScChartHelper::UpdateChartsOnDestinationPage( ScDocument* pDestDoc, const S
         if( pObject->GetObjIdentifier() == OBJ_OLE2 && static_cast<SdrOle2Obj*>(pObject)->IsChart() )
         {
             OUString aChartName = static_cast<SdrOle2Obj*>(pObject)->GetPersistName();
-            Reference< chart2::XChartDocument > xChartDoc( pDestDoc->GetChartByName( aChartName ) );
+            Reference< chart2::XChartDocument > xChartDoc( rDestDoc.GetChartByName( aChartName ) );
             Reference< util::XModifiable > xModif(xChartDoc, uno::UNO_QUERY_THROW);
             xModif->setModified( true);
         }
@@ -395,7 +393,7 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument& rDoc, co
                                 {
                                     ScRangeList aRangeList( rRangesVector[ nRangeList++ ] );
                                     ScRangeListRef rRangeList( new ScRangeList( aRangeList ) );
-                                    ScChartListener* pChartListener = new ScChartListener( aChartName, &rDoc, rRangeList );
+                                    ScChartListener* pChartListener = new ScChartListener( aChartName, rDoc, rRangeList );
                                     pCollection->insert( pChartListener );
                                     pChartListener->StartListeningTo();
                                 }

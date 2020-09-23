@@ -199,7 +199,7 @@ std::set<Color> ScDocument::GetDocColors()
 
 void ScDocument::SetCalcConfig( const ScCalcConfig& rConfig )
 {
-    ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
+    ScMutationGuard aGuard(*this, ScMutationGuardFlags::CORE);
     maCalcConfig = rConfig;
 }
 
@@ -326,7 +326,7 @@ void ScDocument::CompileHybridFormula()
 
 void ScDocument::SharePooledResources( const ScDocument* pSrcDoc )
 {
-    ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
+    ScMutationGuard aGuard(*this, ScMutationGuardFlags::CORE);
     mxPoolHelper = pSrcDoc->mxPoolHelper;
     mpCellStringPool = pSrcDoc->mpCellStringPool;
 }
@@ -1002,7 +1002,7 @@ bool ScDocument::EnsureFormulaCellResults( const ScRange& rRange, bool bSkipRunn
 sc::ExternalDataMapper& ScDocument::GetExternalDataMapper()
 {
     if (!mpDataMapper)
-        mpDataMapper.reset(new sc::ExternalDataMapper(this));
+        mpDataMapper.reset(new sc::ExternalDataMapper(*this));
 
     return *mpDataMapper;
 }

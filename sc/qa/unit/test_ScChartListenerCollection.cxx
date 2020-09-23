@@ -56,7 +56,8 @@ struct MockedHiddenRangeListener : public ScChartHiddenRangeListener {
 
 void ChartListenerCollectionTest::ListenerGetsNotifiedWhenItsRangeIsSetDirty() {
     MockedHiddenRangeListener listener;
-    ScChartListenerCollection sut(nullptr);
+    ScDocument aDoc;
+    ScChartListenerCollection sut(aDoc);
 
     sut.StartListeningHiddenRange(RANGE_1, &listener);
     sut.SetRangeDirty(RANGE_INTERSECTING_1_AND_2);
@@ -66,7 +67,8 @@ void ChartListenerCollectionTest::ListenerGetsNotifiedWhenItsRangeIsSetDirty() {
 
 void ChartListenerCollectionTest::ListenerGetsNotifiedTwiceWhenRegisteredTwoTimes() {
     MockedHiddenRangeListener listener;
-    ScChartListenerCollection sut(nullptr);
+    ScDocument aDoc;
+    ScChartListenerCollection sut(aDoc);
 
     sut.StartListeningHiddenRange(RANGE_1, &listener);
     sut.StartListeningHiddenRange(RANGE_2, &listener);
@@ -77,7 +79,8 @@ void ChartListenerCollectionTest::ListenerGetsNotifiedTwiceWhenRegisteredTwoTime
 
 void ChartListenerCollectionTest::ListenerDoesNotGetNotifiedWhenListeningStops() {
     MockedHiddenRangeListener listener;
-    ScChartListenerCollection sut(nullptr);
+    ScDocument aDoc;
+    ScChartListenerCollection sut(aDoc);
     sut.StartListeningHiddenRange(RANGE_1, &listener);
 
     sut.EndListeningHiddenRange(&listener);
@@ -89,7 +92,8 @@ void ChartListenerCollectionTest::ListenerDoesNotGetNotifiedWhenListeningStops()
 
 void ChartListenerCollectionTest::ListenerStopsListeningForAllRanges() {
     MockedHiddenRangeListener listener;
-    ScChartListenerCollection sut(nullptr);
+    ScDocument aDoc;
+    ScChartListenerCollection sut(aDoc);
     sut.StartListeningHiddenRange(RANGE_1, &listener);
     sut.StartListeningHiddenRange(RANGE_2, &listener);
 
@@ -102,8 +106,9 @@ void ChartListenerCollectionTest::ListenerStopsListeningForAllRanges() {
 void ChartListenerCollectionTest::ListenersStopListeningIndependently() {
     MockedHiddenRangeListener listener1;
     MockedHiddenRangeListener listener2;
+    ScDocument aDoc;
 
-    ScChartListenerCollection sut(nullptr);
+    ScChartListenerCollection sut(aDoc);
     sut.StartListeningHiddenRange(RANGE_1, &listener1);
     sut.StartListeningHiddenRange(RANGE_2, &listener2);
 

@@ -3972,7 +3972,7 @@ void Test::testCutPasteGroupRefUndo()
     ScRange aPasteRange(1,4,0, 1,6,0);
     aMark.SetMarkArea(aPasteRange);
     ScDocument* pPasteUndoDoc = new ScDocument(SCDOCMODE_UNDO);
-    pPasteUndoDoc->InitUndoSelected( m_pDoc, aMark);
+    pPasteUndoDoc->InitUndoSelected( *m_pDoc, aMark);
     std::unique_ptr<ScUndoPaste> pUndoPaste( createUndoPaste( getDocShell(), aPasteRange, ScDocumentUniquePtr(pPasteUndoDoc)));
     m_pDoc->CopyFromClip( aPasteRange, aMark, InsertDeleteFlags::ALL, pPasteUndoDoc, &aClipDoc);
 
@@ -6328,7 +6328,7 @@ void Test::testMixData()
 
     // Paste A1:B1 to A2:B2 and perform addition.
     pasteFromClip(m_pDoc, ScRange(0,1,0,1,1,0), &aClipDoc);
-    m_pDoc->MixDocument(ScRange(0,1,0,1,1,0), ScPasteFunc::ADD, false, &aMixDoc);
+    m_pDoc->MixDocument(ScRange(0,1,0,1,1,0), ScPasteFunc::ADD, false, aMixDoc);
 
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(0,1,0)); // A2
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(1,1,0)); // B2
@@ -6354,7 +6354,7 @@ void Test::testMixData()
     CPPUNIT_ASSERT_EQUAL(m_pDoc->GetValue(ScAddress(1,1,0)), aMixDoc.GetValue(ScAddress(1,1,0)));
 
     pasteFromClip(m_pDoc, ScRange(1,0,0,1,1,0), &aClipDoc);
-    m_pDoc->MixDocument(ScRange(1,0,0,1,1,0), ScPasteFunc::SUB, false, &aMixDoc);
+    m_pDoc->MixDocument(ScRange(1,0,0,1,1,0), ScPasteFunc::SUB, false, aMixDoc);
 
     CPPUNIT_ASSERT_EQUAL( -3.0, m_pDoc->GetValue(ScAddress(1,0,0))); // 12 - 15
     CPPUNIT_ASSERT_EQUAL(-16.0, m_pDoc->GetValue(ScAddress(1,1,0))); //  0 - 16
@@ -6737,7 +6737,7 @@ ScUndoCut* Test::cutToClip(ScDocShell& rDocSh, const ScRange& rRange, ScDocument
     if (bCreateUndo)
     {
         pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
-        pUndoDoc->InitUndoSelected( pSrcDoc, aMark );
+        pUndoDoc->InitUndoSelected( *pSrcDoc, aMark );
         // all sheets - CopyToDocument skips those that don't exist in pUndoDoc
         ScRange aCopyRange = rRange;
         aCopyRange.aStart.SetTab(0);
