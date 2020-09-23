@@ -187,6 +187,8 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
                     for (auto& rRow : aRows)
                         rRow.resize(aRowSizeBytes, 0);
 
+                    auto const alphaFirst = (eFormat == ScanlineFormat::N32BitTcAbgr
+                                             || eFormat == ScanlineFormat::N32BitTcArgb);
                     for (int pass = 0; pass < nNumberOfPasses; pass++)
                     {
                         for (png_uint_32 y = 0; y < height; y++)
@@ -198,10 +200,17 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
                             for (size_t i = 0; i < aRowSizeBytes; i += 4)
                             {
                                 sal_Int8 alpha = pRow[i + 3];
+                                if (alphaFirst)
+                                {
+                                    pScanline[iColor++] = alpha;
+                                }
                                 pScanline[iColor++] = vcl::bitmap::premultiply(pRow[i + 0], alpha);
                                 pScanline[iColor++] = vcl::bitmap::premultiply(pRow[i + 1], alpha);
                                 pScanline[iColor++] = vcl::bitmap::premultiply(pRow[i + 2], alpha);
-                                pScanline[iColor++] = alpha;
+                                if (!alphaFirst)
+                                {
+                                    pScanline[iColor++] = alpha;
+                                }
                             }
                         }
                     }
