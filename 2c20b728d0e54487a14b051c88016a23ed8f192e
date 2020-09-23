@@ -16,6 +16,24 @@
       "revId": "2c20b728d0e54487a14b051c88016a23ed8f192e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8cf6926a_78a8b242",
+        "filename": "vcl/win/app/salinst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-09-23T16:01:29Z",
+      "side": 1,
+      "message": "Ah, yeah, I see.  Will address that.",
+      "parentUuid": "d6304872_10e75387",
+      "revId": "2c20b728d0e54487a14b051c88016a23ed8f192e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
