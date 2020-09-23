@@ -627,7 +627,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         GetPostItMgr()->SetSpellChecking();
 
     if (nSlot == FN_SHOW_OUTLINECONTENTVISIBILITYBUTTON)
-        GetEditWin().SetOutlineContentVisiblityButtons();
+        GetEditWin().SetOutlineContentVisibilityButtons();
 
     const bool bLockedView = rSh.IsViewLocked();
     rSh.LockView( true );    //lock visible section

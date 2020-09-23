@@ -293,7 +293,7 @@ public:
     const SwFrame* GetSavedOutlineFrame() { return m_pSavedOutlineFrame; }
     void SetSavedOutlineFrame(SwFrame* pFrame) { m_pSavedOutlineFrame = pFrame; }
 
-    void SetOutlineContentVisiblityButtons();
+    void SetOutlineContentVisibilityButtons();
 
     virtual FactoryFunction GetUITestFactory() const override;
 };
