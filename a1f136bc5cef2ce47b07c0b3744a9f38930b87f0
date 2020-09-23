@@ -34,6 +34,24 @@
       "revId": "a1f136bc5cef2ce47b07c0b3744a9f38930b87f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91e4ad5e_782f79b5",
+        "filename": "sw/source/core/txtnode/fntcache.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2541,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2020-09-23T11:02:11Z",
+      "side": 1,
+      "message": "Fair enough.",
+      "parentUuid": "26989095_cfa3cf34",
+      "revId": "a1f136bc5cef2ce47b07c0b3744a9f38930b87f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
