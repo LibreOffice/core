@@ -59,6 +59,12 @@ public:
 
     ::Color getSchemeColor( sal_Int32 nToken ) const;
 
+
+    void setGraphicMapper(css::uno::Reference<css::graphic::XGraphicMapper> const & rxGraphicMapper)
+    {
+        mxGraphicMapper = rxGraphicMapper;
+    }
+
 private:
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const override;
     virtual OUString SAL_CALL getImplementationName() override;
@@ -66,6 +72,7 @@ private:
 
     std::shared_ptr< ::oox::drawingml::chart::ChartConverter > mxChartConv;
     ::oox::drawingml::ThemePtr mpTheme;
+    css::uno::Reference<css::graphic::XGraphicMapper> mxGraphicMapper;
 };
 
 } // namespace shape
