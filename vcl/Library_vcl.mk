@@ -330,6 +330,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/graphic/grfattr \
     vcl/source/graphic/Manager \
     vcl/source/graphic/UnoGraphic \
+    vcl/source/graphic/UnoGraphicMapper \
     vcl/source/graphic/UnoGraphicDescriptor \
     vcl/source/graphic/UnoGraphicObject \
     vcl/source/graphic/UnoGraphicProvider \
