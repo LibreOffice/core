@@ -1972,6 +1972,11 @@ bool X11SalGraphicsImpl::drawGradient(const tools::PolyPolygon& /*rPolygon*/, co
     return false;
 }
 
+bool X11SalGraphicsImpl::implDrawGradient(basegfx::B2DPolyPolygon const & /*rPolyPolygon*/, SalGradient const & /*rGradient*/)
+{
+    return false;
+}
+
 bool X11SalGraphicsImpl::supportsOperation(OutDevSupportType eType) const
 {
     bool bRet = false;

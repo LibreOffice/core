@@ -2188,6 +2188,12 @@ bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
     return true;
 }
 
+bool OpenGLSalGraphicsImpl::implDrawGradient(basegfx::B2DPolyPolygon const & /*rPolyPolygon*/,
+    SalGradient const & /*rGradient*/)
+{
+    return false;
+}
+
 void OpenGLSalGraphicsImpl::flush()
 {
     FlushDeferredDrawing();
