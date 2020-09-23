@@ -173,7 +173,6 @@ public:
     void testTdf93097();
     void testTdf62255();
     void testTdf93124();
-    void testTdf104722();
     void testTdf99729();
     void testTdf89927();
     void testTdf93868();
@@ -285,7 +284,6 @@ public:
     CPPUNIT_TEST(testTdf93097);
     CPPUNIT_TEST(testTdf62255);
     CPPUNIT_TEST(testTdf93124);
-    CPPUNIT_TEST(testTdf104722);
     CPPUNIT_TEST(testTdf99729);
     CPPUNIT_TEST(testTdf89927);
     CPPUNIT_TEST(testTdf93868);
@@ -1611,74 +1609,6 @@ void SdImportTest::testTdf93124()
             }
         }
         CPPUNIT_ASSERT_MESSAGE("Tdf93124: vertical alignment of text is incorrect!", nNonWhiteCount>50);
-    }
-    xDocShRef->DoClose();
-}
-
-void SdImportTest::testTdf104722()
-{
-    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf104722.pptx"), PPTX);
-    uno::Reference < uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-    uno::Reference< drawing::XGraphicExportFilter > xGraphicExporter = drawing::GraphicExportFilter::create(xContext);
-
-    uno::Sequence< beans::PropertyValue > aFilterData(2);
-    aFilterData[0].Name = "PixelWidth";
-    aFilterData[0].Value <<= sal_Int32(320);
-    aFilterData[1].Name = "PixelHeight";
-    aFilterData[1].Value <<= sal_Int32(180);
-
-    utl::TempFile aTempFile;
-    aTempFile.EnableKillingFile();
-
-    uno::Sequence< beans::PropertyValue > aDescriptor(3);
-    aDescriptor[0].Name = "URL";
-    aDescriptor[0].Value <<= aTempFile.GetURL();
-    aDescriptor[1].Name = "FilterName";
-    aDescriptor[1].Value <<= OUString("PNG");
-    aDescriptor[2].Name = "FilterData";
-    aDescriptor[2].Value <<= aFilterData;
-
-    uno::Reference< lang::XComponent > xPage(getPage(0, xDocShRef), uno::UNO_QUERY);
-    xGraphicExporter->setSourceDocument(xPage);
-    xGraphicExporter->filter(aDescriptor);
-
-    SvFileStream aFileStream(aTempFile.GetURL(), StreamMode::READ);
-    vcl::PNGReader aPNGReader(aFileStream);
-    BitmapEx aBMPEx = aPNGReader.Read();
-
-    // make sure the bitmap is not empty and correct size (PNG export->import was successful)
-    CPPUNIT_ASSERT_EQUAL(Size(320, 180), aBMPEx.GetSizePixel());
-    Bitmap aBMP = aBMPEx.GetBitmap();
-    Bitmap::ScopedReadAccess pReadAccess(aBMP);
-
-    {
-        int nNonWhiteCount = 0;
-        // Check the left part of the document has text. 0,45 to 80,90
-        for (long nY = 45; nY < 90; ++nY)
-        {
-            for (long nX = 0; nX < 80; ++nX)
-            {
-                const Color aColor = pReadAccess->GetColor(nY, nX);
-                if ((aColor.GetRed() != 0xff) || (aColor.GetGreen() != 0xff) || (aColor.GetBlue() != 0xff))
-                    ++nNonWhiteCount;
-            }
-        }
-        CPPUNIT_ASSERT_MESSAGE("Tdf104722: horizontal alignment of text is incorrect!", nNonWhiteCount > 300);
-    }
-    {
-        int nNonWhiteCount = 0;
-        // Check the right part of the document has text. 240,45 to 320,90
-        for (long nY = 45; nY < 90; ++nY)
-        {
-            for (long nX = 240; nX < 320; ++nX)
-            {
-                const Color aColor = pReadAccess->GetColor(nY, nX);
-                if ((aColor.GetRed() != 0xff) || (aColor.GetGreen() != 0xff) || (aColor.GetBlue() != 0xff))
-                    ++nNonWhiteCount;
-            }
-        }
-        // Without the fix in place, this test would have failed here as the text would have been shifted to the left
-        CPPUNIT_ASSERT_MESSAGE("Tdf104722: horizontal alignment of text is incorrect!", nNonWhiteCount > 300);
     }
     xDocShRef->DoClose();
 }
