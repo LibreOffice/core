@@ -68,7 +68,7 @@ struct Data {
 
     rtl::Reference< Node > resolvePathRepresentation(
         OUString const & pathRepresentation,
-        OUString * canonicRepresenation, std::vector<OUString> * path, int * finalizedLayer)
+        OUString * canonicRepresentation, std::vector<OUString> * path, int * finalizedLayer)
         const;
 
     rtl::Reference< Node > getTemplate(
