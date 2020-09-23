@@ -12,7 +12,6 @@
 #include <cppunit/Protector.h>
 #include <sal/types.h>
 #include <sal/log.hxx>
-#include <vcl/svapp.hxx>
 #include <comphelper/threadpool.hxx>
 #include "setupvcl.hxx"
 
@@ -29,7 +28,7 @@ private:
 #if defined(__COVERITY__)
         try {
 #endif
-            DeInitVCL();
+            test::tearDownVcl();
             // for the 6 tests that use it
             comphelper::ThreadPool::getSharedOptimalPool().shutdown();
 #if defined(__COVERITY__)

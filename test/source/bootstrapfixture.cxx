@@ -94,7 +94,7 @@ SAL_DLLPUBLIC_EXPORT void test_init(lang::XMultiServiceFactory *pFactory)
 // this is called from pyuno
 SAL_DLLPUBLIC_EXPORT void test_deinit()
 {
-    DeInitVCL();
+    test::tearDownVcl();
 }
 
 } // extern "C"
