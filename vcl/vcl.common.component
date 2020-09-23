@@ -27,6 +27,10 @@
       constructor="com_sun_star_graphic_GraphicObject_get_implementation">
     <service name="com.sun.star.graphic.GraphicObject"/>
   </implementation>
+  <implementation name="com.sun.star.comp.graphic.GraphicMapper"
+      constructor="com_sun_star_comp_graphic_GraphicMapper_get_implementation">
+    <service name="com.sun.star.graphic.GraphicMapper"/>
+  </implementation>
   <implementation name="com.sun.star.datatransfer.MimeCntTypeFactory"
     constructor="dtrans_CMimeContentTypeFactory_get_implementation">
     <service name="com.sun.star.datatransfer.MimeContentTypeFactory"/>

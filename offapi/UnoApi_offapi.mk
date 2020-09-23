@@ -210,6 +210,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/frame,\
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/graphic,\
 	GraphicObject \
 	GraphicProvider \
+	GraphicMapper \
 	Primitive2DTools \
 	SvgTools \
 	EmfTools \
@@ -2719,6 +2720,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/graphic,\
 	XGraphicRasterizer \
 	XGraphicRenderer \
 	XGraphicTransformer \
+	XGraphicMapper \
 	XPrimitive2D \
 	XPrimitive2DRenderer \
 	XPrimitive3D \
