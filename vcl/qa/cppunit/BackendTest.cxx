@@ -516,8 +516,6 @@ public:
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
-    // vcl::test::OutputDeviceTestGradient does not verify anything, cannot test here
-
     void testErase()
     {
         {
@@ -581,6 +579,86 @@ public:
             CPPUNIT_ASSERT_EQUAL(sal_uInt8(255), device->GetPixel(Point(9, 9)).GetTransparency());
             CPPUNIT_ASSERT_EQUAL(sal_uInt8(255), device->GetPixel(Point(5, 5)).GetTransparency());
         }
+    }
+
+    void testLinearGradient()
+    {
+        vcl::test::OutputDeviceTestGradient aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupLinearGradient();
+        auto eResult = vcl::test::OutputDeviceTestGradient::checkLinearGradient(aBitmap);
+        exportImage("13-01_linear_gradient_test.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testLinearGradientAngled()
+    {
+        vcl::test::OutputDeviceTestGradient aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupLinearGradientAngled();
+        auto eResult = vcl::test::OutputDeviceTestGradient::checkLinearGradientAngled(aBitmap);
+        exportImage("13-02_linear_gradient_angled_test.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testLinearGradientBorder()
+    {
+        vcl::test::OutputDeviceTestGradient aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupLinearGradientBorder();
+        auto eResult = vcl::test::OutputDeviceTestGradient::checkLinearGradientBorder(aBitmap);
+        exportImage("13-03_linear_gradient_border_test.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testLinearGradientIntensity()
+    {
+        vcl::test::OutputDeviceTestGradient aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupLinearGradientIntensity();
+        auto eResult = vcl::test::OutputDeviceTestGradient::checkLinearGradientIntensity(aBitmap);
+        exportImage("13-04_linear_gradient_intensity_test.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testLinearGradientSteps()
+    {
+        vcl::test::OutputDeviceTestGradient aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupLinearGradientSteps();
+        auto eResult = vcl::test::OutputDeviceTestGradient::checkLinearGradientSteps(aBitmap);
+        exportImage("13-05_linear_gradient_steps_test.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testAxialGradient()
+    {
+        vcl::test::OutputDeviceTestGradient aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupAxialGradient();
+        auto eResult = vcl::test::OutputDeviceTestGradient::checkAxialGradient(aBitmap);
+        exportImage("13-06_axial_gradient_test.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testRadialGradient()
+    {
+        vcl::test::OutputDeviceTestGradient aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupRadialGradient();
+        auto eResult = vcl::test::OutputDeviceTestGradient::checkRadialGradient(aBitmap);
+        exportImage("13-07_radial_gradient_test.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testRadialGradientOfs()
+    {
+        vcl::test::OutputDeviceTestGradient aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupRadialGradientOfs();
+        auto eResult = vcl::test::OutputDeviceTestGradient::checkRadialGradientOfs(aBitmap);
+        exportImage("13-08_radial_gradient_ofs_test.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
     // Test SalGraphics::blendBitmap() and blendAlphaBitmap() calls.
@@ -743,6 +821,15 @@ public:
     CPPUNIT_TEST(testDashedLine);
 
     CPPUNIT_TEST(testErase);
+
+    CPPUNIT_TEST(testLinearGradient);
+    CPPUNIT_TEST(testLinearGradientAngled);
+    CPPUNIT_TEST(testLinearGradientBorder);
+    CPPUNIT_TEST(testLinearGradientIntensity);
+    CPPUNIT_TEST(testLinearGradientSteps);
+    CPPUNIT_TEST(testAxialGradient);
+    CPPUNIT_TEST(testRadialGradient);
+    CPPUNIT_TEST(testRadialGradientOfs);
 
     CPPUNIT_TEST(testDrawBlendExtended);
 
