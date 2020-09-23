@@ -41,8 +41,6 @@
 #include <ole2.h>
 #include <objidl.h>
 
-#include "WinClipboard.hxx"
-
 using namespace com::sun::star;
 
 // definition of static members
