@@ -40,9 +40,9 @@ using ::com::sun::star::uno::Reference;
 namespace
 {
 
-sal_uInt16 lcl_DoUpdateCharts( ScDocument* pDoc )
+sal_uInt16 lcl_DoUpdateCharts( ScDocument& rDoc )
 {
-    ScDrawLayer* pModel = pDoc->GetDrawLayer();
+    ScDrawLayer* pModel = rDoc.GetDrawLayer();
     if (!pModel)
         return 0;
 
@@ -61,7 +61,7 @@ sal_uInt16 lcl_DoUpdateCharts( ScDocument* pDoc )
             if ( pObject->GetObjIdentifier() == OBJ_OLE2 && ScDocument::IsChart( pObject ) )
             {
                 OUString aName = static_cast<SdrOle2Obj*>(pObject)->GetPersistName();
-                pDoc->UpdateChart( aName );
+                rDoc.UpdateChart( aName );
                 ++nFound;
             }
             pObject = aIter.Next();
@@ -104,9 +104,9 @@ bool lcl_AdjustRanges( ScRangeList& rRanges, SCTAB nSourceTab, SCTAB nDestTab, S
 
 // ScChartHelper
 //static
-sal_uInt16 ScChartHelper::DoUpdateAllCharts( ScDocument* pDoc )
+sal_uInt16 ScChartHelper::DoUpdateAllCharts( ScDocument& rDoc )
 {
-    return lcl_DoUpdateCharts( pDoc );
+    return lcl_DoUpdateCharts( rDoc );
 }
 
 void ScChartHelper::AdjustRangesOfChartsOnDestinationPage( const ScDocument& rSrcDoc, ScDocument& rDestDoc, const SCTAB nSrcTab, const SCTAB nDestTab )

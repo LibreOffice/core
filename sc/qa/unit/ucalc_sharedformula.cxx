@@ -1312,7 +1312,7 @@ void Test::testSharedFormulasCopyPaste()
 
     ScRange aRange(1,0,0,1,9,0); // B1:B10
     ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
-    pUndoDoc->InitUndo(m_pDoc, 0, 0, true, true);
+    pUndoDoc->InitUndo(*m_pDoc, 0, 0, true, true);
     m_pDoc->CopyToDocument(aRange, InsertDeleteFlags::CONTENTS, false, *pUndoDoc);
     std::unique_ptr<ScUndoPaste> pUndo(createUndoPaste(getDocShell(), aRange, ScDocumentUniquePtr(pUndoDoc)));
 
@@ -2271,7 +2271,7 @@ void Test::testSharedFormulaUpdateOnReplacement()
     aMark.SelectOneTable(0);
     aMark.SetMultiMarkArea(aUndoRange);
     ScDocumentUniquePtr pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
-    pUndoDoc->InitUndo(m_pDoc, 0, 0);
+    pUndoDoc->InitUndo(*m_pDoc, 0, 0);
     m_pDoc->CopyToDocument(aUndoRange, InsertDeleteFlags::CONTENTS, false, *pUndoDoc, &aMark);
     ScUndoDeleteContents aUndo(&getDocShell(), aMark, aUndoRange, std::move(pUndoDoc), false, InsertDeleteFlags::CONTENTS, true);
 

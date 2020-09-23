@@ -27,9 +27,9 @@
 
 using namespace com::sun::star;
 
-sal_uInt16 ScDBFunc::DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, bool bAllCharts )
+sal_uInt16 ScDBFunc::DoUpdateCharts( const ScAddress& rPos, ScDocument& rDoc, bool bAllCharts )
 {
-    ScDrawLayer* pModel = pDoc->GetDrawLayer();
+    ScDrawLayer* pModel = rDoc.GetDrawLayer();
     if (!pModel)
         return 0;
 
@@ -54,12 +54,12 @@ sal_uInt16 ScDBFunc::DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, bo
                     ScRangeList aRanges;
                     bool bColHeaders = false;
                     bool bRowHeaders = false;
-                    pDoc->GetOldChartParameters( aName, aRanges, bColHeaders, bRowHeaders );
+                    rDoc.GetOldChartParameters( aName, aRanges, bColHeaders, bRowHeaders );
                     bHit = aRanges.In( rPos );
                 }
                 if ( bHit )
                 {
-                    pDoc->UpdateChart( aName );
+                    rDoc.UpdateChart( aName );
                     ++nFound;
                 }
             }

@@ -1230,7 +1230,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         if ( pViewSh )
             pViewSh->UpdateCharts( true );
         else
-            ScDBFunc::DoUpdateCharts( ScAddress(), pDoc, true );
+            ScDBFunc::DoUpdateCharts( ScAddress(), *pDoc, true );
         if (pBindings)
             pBindings->Invalidate( SID_ATTR_SIZE ); //SvxPosSize StatusControl Update
     }

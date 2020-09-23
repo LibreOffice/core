@@ -136,7 +136,7 @@ public:
                                         SCCOL nStartCol, SCCOL nEndCol,
                                         SCTAB nPrintTab, Size const & aDocSize);
 
-    void calculate(ScDocument* pDoc, bool bSkipEmpty, bool bPrintArea,
+    void calculate(ScDocument& rDoc, bool bSkipEmpty, bool bPrintArea,
                    SCROW nStartRow, SCROW nEndRow, SCCOL nStartCol, SCCOL nEndCol,
                    SCTAB nPrintTab, Size const & aDocSize);
 };
@@ -190,7 +190,7 @@ class ScPrintFunc
 {
 private:
     ScDocShell*         pDocShell;
-    ScDocument*         pDoc;
+    ScDocument&         rDoc;
     VclPtr<SfxPrinter>   pPrinter;
     VclPtr<OutputDevice> pDev;
     FmFormView*         pDrawView;
@@ -296,8 +296,8 @@ public:
 
                     ~ScPrintFunc();
 
-    static void     DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double nPrintFactor,
-                                const tools::Rectangle& rBound, ScViewData* pViewData, bool bMetaFile );
+    static void     DrawToDev( ScDocument* rDoc, OutputDevice* pDev, double nPrintFactor,
+                               const tools::Rectangle& rBound, ScViewData* pViewData, bool bMetaFile );
 
     void            SetDrawView( FmFormView* pNew );
 

@@ -131,7 +131,7 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScFormulaParserObj::parseFormula(
     if (mpDocShell)
     {
         ScDocument& rDoc = mpDocShell->GetDocument();
-        ScExternalRefManager::ApiGuard aExtRefGuard(&rDoc);
+        ScExternalRefManager::ApiGuard aExtRefGuard(rDoc);
 
         ScAddress aRefPos( ScAddress::UNINITIALIZED );
         ScUnoConversion::FillScAddress( aRefPos, rReferencePos );

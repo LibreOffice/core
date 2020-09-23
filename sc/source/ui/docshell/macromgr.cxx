@@ -89,9 +89,9 @@ private:
     ModuleCellMap maCells;
 };
 
-ScMacroManager::ScMacroManager(ScDocument* pDoc) :
+ScMacroManager::ScMacroManager(ScDocument& rDoc) :
     mpDepTracker(new ScUserMacroDepTracker),
-    mpDoc(pDoc)
+    mrDoc(rDoc)
 {
 }
 
@@ -133,7 +133,7 @@ void ScMacroManager::InitUserFuncData()
     OUString sProjectName("Standard");
 
     Reference< container::XContainer > xModuleContainer;
-    SfxObjectShell* pShell = mpDoc->GetDocumentShell();
+    SfxObjectShell* pShell = mrDoc.GetDocumentShell();
     if (!pShell)
         return;
     if (!pShell->GetBasicManager()->GetName().isEmpty())
@@ -186,11 +186,11 @@ void ScMacroManager::BroadcastModuleUpdate(const OUString& aModuleName)
     mpDepTracker->getCellsByModule(aModuleName, aCells);
     for (ScFormulaCell* pCell : aCells)
     {
-        mpDoc->PutInFormulaTree(pCell); // for F9 recalc
+        mrDoc.PutInFormulaTree(pCell); // for F9 recalc
 
         // for recalc on cell value change.  If the cell is not volatile, the
         // cell stops listening right away after it gets re-interpreted.
-        mpDoc->StartListeningArea(BCA_LISTEN_ALWAYS, false, pCell);
+        mrDoc.StartListeningArea(BCA_LISTEN_ALWAYS, false, pCell);
     }
 }
 

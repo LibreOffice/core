@@ -1473,7 +1473,7 @@ void ScExternalRefLink::SetDoRefresh(bool b)
     mbDoRefresh = b;
 }
 
-static FormulaToken* convertToToken( ScDocument* pHostDoc, const ScDocument* pSrcDoc, ScRefCellValue& rCell )
+static FormulaToken* convertToToken( ScDocument& rHostDoc, const ScDocument& rSrcDoc, ScRefCellValue& rCell )
 {
     if (rCell.hasEmptyValue())
     {
@@ -1486,8 +1486,8 @@ static FormulaToken* convertToToken( ScDocument* pHostDoc, const ScDocument* pSr
         case CELLTYPE_EDIT:
         case CELLTYPE_STRING:
         {
-            OUString aStr = rCell.getString(pSrcDoc);
-            svl::SharedString aSS = pHostDoc->GetSharedStringPool().intern(aStr);
+            OUString aStr = rCell.getString(&rSrcDoc);
+            svl::SharedString aSS = rHostDoc.GetSharedStringPool().intern(aStr);
             return new formula::FormulaStringToken(aSS);
         }
         case CELLTYPE_VALUE:
@@ -1505,7 +1505,7 @@ static FormulaToken* convertToToken( ScDocument* pHostDoc, const ScDocument* pSr
             }
             else
             {
-                svl::SharedString aSS = pHostDoc->GetSharedStringPool().intern( pFCell->GetString().getString());
+                svl::SharedString aSS = rHostDoc.GetSharedStringPool().intern( pFCell->GetString().getString());
                 return new formula::FormulaStringToken(aSS);
             }
         }
@@ -1517,7 +1517,7 @@ static FormulaToken* convertToToken( ScDocument* pHostDoc, const ScDocument* pSr
 }
 
 static std::unique_ptr<ScTokenArray> convertToTokenArray(
-    ScDocument* pHostDoc, const ScDocument& rSrcDoc, ScRange& rRange, vector<ScExternalRefCache::SingleRangeData>& rCacheData )
+    ScDocument& rHostDoc, const ScDocument& rSrcDoc, ScRange& rRange, vector<ScExternalRefCache::SingleRangeData>& rCacheData )
 {
     ScAddress& s = rRange.aStart;
     ScAddress& e = rRange.aEnd;
@@ -1573,7 +1573,7 @@ static std::unique_ptr<ScTokenArray> convertToTokenArray(
         xMat->GetDimensions( nMatCols, nMatRows);
         if (nMatCols == nMatrixColumns && nMatRows == nMatrixRows)
         {
-            rSrcDoc.FillMatrix(*xMat, nTab, nCol1, nRow1, nCol2, nRow2, &pHostDoc->GetSharedStringPool());
+            rSrcDoc.FillMatrix(*xMat, nTab, nCol1, nRow1, nCol2, nRow2, &rHostDoc.GetSharedStringPool());
         }
         else if ((nCol1 == 0 && nCol2 == MAXCOL) || (nRow1 == 0 && nRow2 == MAXROW))
         {
@@ -1585,7 +1585,7 @@ static std::unique_ptr<ScTokenArray> convertToTokenArray(
                 xMat = new ScMatrix( nMatrixColumns, nMatrixRows);
                 xMat->GetDimensions( nMatCols, nMatRows);
                 if (nMatCols == nMatrixColumns && nMatRows == nMatrixRows)
-                    rSrcDoc.FillMatrix(*xMat, nTab, nDataCol1, nDataRow1, nDataCol2, nDataRow2, &pHostDoc->GetSharedStringPool());
+                    rSrcDoc.FillMatrix(*xMat, nTab, nDataCol1, nDataRow1, nDataCol2, nDataRow2, &rHostDoc.GetSharedStringPool());
             }
         }
 
@@ -1634,8 +1634,8 @@ bool isLinkUpdateAllowedInDoc(const ScDocument& rDoc)
 }
 }
 
-ScExternalRefManager::ScExternalRefManager(ScDocument* pDoc) :
-    mpDoc(pDoc),
+ScExternalRefManager::ScExternalRefManager(ScDocument& rDoc) :
+    mrDoc(rDoc),
     mbInReferenceMarking(false),
     mbUserInteractionEnabled(true),
     mbDocTimerEnabled(true)
@@ -1674,8 +1674,8 @@ ScExternalRefManager::LinkListener::~LinkListener()
 {
 }
 
-ScExternalRefManager::ApiGuard::ApiGuard(const ScDocument* pDoc) :
-    mpMgr(pDoc->GetExternalRefManager()),
+ScExternalRefManager::ApiGuard::ApiGuard(const ScDocument& rDoc) :
+    mpMgr(rDoc.GetExternalRefManager()),
     mbOldInteractionEnabled(mpMgr->mbUserInteractionEnabled)
 {
     // We don't want user interaction handled in the API.
@@ -1901,7 +1901,7 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
 
         ScExternalRefCache::TokenRef pToken =
             getSingleRefTokenFromSrcDoc(
-                nFileId, pSrcDoc, ScAddress(rCell.Col(),rCell.Row(),nTab), pFmt);
+                nFileId, *pSrcDoc, ScAddress(rCell.Col(),rCell.Row(),nTab), pFmt);
 
         putCellDataIntoCache(maRefCache, pToken, nFileId, rTabName, rCell, pFmt);
         return pToken;
@@ -1923,7 +1923,7 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
     if (!pSrcDoc)
     {
         // Source document not reachable.
-        if (!isLinkUpdateAllowedInDoc(*mpDoc))
+        if (!isLinkUpdateAllowedInDoc(mrDoc))
         {
             // Indicate with specific error.
             pToken.reset(new FormulaErrorToken(FormulaError::LinkFormulaNeedingCheck));
@@ -1965,7 +1965,7 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
     }
 
     pToken = getSingleRefTokenFromSrcDoc(
-        nFileId, pSrcDoc, ScAddress(rCell.Col(),rCell.Row(),nTab), pFmt);
+        nFileId, *pSrcDoc, ScAddress(rCell.Col(),rCell.Row(),nTab), pFmt);
 
     putCellDataIntoCache(maRefCache, pToken, nFileId, rTabName, rCell, pFmt);
     return pToken;
@@ -2156,7 +2156,7 @@ void ScExternalRefManager::insertRefCell(sal_uInt16 nFileId, const ScAddress& rC
         itr = r.first;
     }
 
-    insertRefCellByIterator(itr, mpDoc->GetFormulaCell(rCell));
+    insertRefCellByIterator(itr, mrDoc.GetFormulaCell(rCell));
 }
 
 void ScExternalRefManager::insertRefCellFromTemplate( ScFormulaCell* pTemplateCell, ScFormulaCell* pCell )
@@ -2173,7 +2173,7 @@ void ScExternalRefManager::insertRefCellFromTemplate( ScFormulaCell* pTemplateCe
 
 bool ScExternalRefManager::hasCellExternalReference(const ScAddress& rCell)
 {
-    ScFormulaCell* pCell = mpDoc->GetFormulaCell(rCell);
+    ScFormulaCell* pCell = mrDoc.GetFormulaCell(rCell);
 
     if (pCell)
         return std::any_of(maRefCells.begin(), maRefCells.end(),
@@ -2207,7 +2207,7 @@ void ScExternalRefManager::fillCellFormat(sal_uLong nFmtIndex, ScExternalRefCach
     if (!pFmt)
         return;
 
-    SvNumFormatType nFmtType = mpDoc->GetFormatTable()->GetType(nFmtIndex);
+    SvNumFormatType nFmtType = mrDoc.GetFormatTable()->GetType(nFmtIndex);
     if (nFmtType != SvNumFormatType::UNDEFINED)
     {
         pFmt->mbIsSet = true;
@@ -2217,12 +2217,12 @@ void ScExternalRefManager::fillCellFormat(sal_uLong nFmtIndex, ScExternalRefCach
 }
 
 ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefTokenFromSrcDoc(
-    sal_uInt16 nFileId, ScDocument* pSrcDoc, const ScAddress& rPos,
+    sal_uInt16 nFileId, ScDocument& rSrcDoc, const ScAddress& rPos,
     ScExternalRefCache::CellFormat* pFmt)
 {
     // Get the cell from src doc, and convert it into a token.
-    ScRefCellValue aCell(*pSrcDoc, rPos);
-    ScExternalRefCache::TokenRef pToken(convertToToken(mpDoc, pSrcDoc, aCell));
+    ScRefCellValue aCell(rSrcDoc, rPos);
+    ScExternalRefCache::TokenRef pToken(convertToToken(mrDoc, rSrcDoc, aCell));
 
     if (!pToken)
     {
@@ -2232,8 +2232,8 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefTokenFromSrcDoc(
 
     // Get number format information.
     sal_uInt32 nFmtIndex = 0;
-    pSrcDoc->GetNumberFormat(rPos.Col(), rPos.Row(), rPos.Tab(), nFmtIndex);
-    nFmtIndex = getMappedNumberFormat(nFileId, nFmtIndex, pSrcDoc);
+    rSrcDoc.GetNumberFormat(rPos.Col(), rPos.Row(), rPos.Tab(), nFmtIndex);
+    nFmtIndex = getMappedNumberFormat(nFileId, nFmtIndex, rSrcDoc);
     fillCellFormat(nFmtIndex, pFmt);
     return pToken;
 }
@@ -2276,7 +2276,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokensFromSr
     aRange.aStart.SetTab(nTab1);
     aRange.aEnd.SetTab(nTab1 + nTabSpan);
 
-    pArray = convertToTokenArray(mpDoc, rSrcDoc, aRange, aCacheData);
+    pArray = convertToTokenArray(mrDoc, rSrcDoc, aRange, aCacheData);
     rRange = aRange;
     rCacheData.swap(aCacheData);
     return pArray;
@@ -2346,7 +2346,7 @@ ScDocument* ScExternalRefManager::getInMemorySrcDocument(sal_uInt16 nFileId)
         return nullptr;
 
     // Do not load document until it was allowed.
-    if (!isLinkUpdateAllowedInDoc(*mpDoc))
+    if (!isLinkUpdateAllowedInDoc(mrDoc))
         return nullptr;
 
     ScDocument* pSrcDoc = nullptr;
@@ -2388,7 +2388,7 @@ ScDocument* ScExternalRefManager::getInMemorySrcDocument(sal_uInt16 nFileId)
 
 ScDocument* ScExternalRefManager::getSrcDocument(sal_uInt16 nFileId)
 {
-    if (!mpDoc->IsExecuteLinkEnabled())
+    if (!mrDoc.IsExecuteLinkEnabled())
         return nullptr;
 
     DocShellMap::iterator itrEnd = maDocShells.end();
@@ -2440,7 +2440,7 @@ ScDocument* ScExternalRefManager::getSrcDocument(sal_uInt16 nFileId)
 SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUString& rFilter)
 {
     // Do not load document until it was allowed.
-    if (!isLinkUpdateAllowedInDoc(*mpDoc))
+    if (!isLinkUpdateAllowedInDoc(mrDoc))
         return nullptr;
 
     const SrcFileData* pFileData = getExternalFileData(nFileId);
@@ -2492,7 +2492,7 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
     // to update as well. When loading the document ScDocShell::Load() will
     // check through ScDocShell::GetLinkUpdateModeState() if its location is
     // trusted.
-    SfxObjectShell* pShell = mpDoc->GetDocumentShell();
+    SfxObjectShell* pShell = mrDoc.GetDocumentShell();
     if (pShell)
     {
         SfxMedium* pMedium = pShell->GetMedium();
@@ -2518,7 +2518,7 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
     SfxObjectShellRef aRef = pNewShell;
 
     // increment the recursive link count of the source document.
-    ScExtDocOptions* pExtOpt = mpDoc->GetExtDocOptions();
+    ScExtDocOptions* pExtOpt = mrDoc.GetExtDocOptions();
     sal_uInt32 nLinkCount = pExtOpt ? pExtOpt->GetDocSettings().mnLinkCnt : 0;
     ScDocument& rSrcDoc = pNewShell->GetDocument();
     rSrcDoc.EnableExecuteLink(false); // to prevent circular access of external references.
@@ -2606,7 +2606,7 @@ void ScExternalRefManager::maybeLinkExternalFile( sal_uInt16 nFileId, bool bDefe
 
     // Filter detection may access external links; defer it until we are allowed.
     if (!bDeferFilterDetection)
-        bDeferFilterDetection = !isLinkUpdateAllowedInDoc(*mpDoc);
+        bDeferFilterDetection = !isLinkUpdateAllowedInDoc(mrDoc);
 
     // If a filter was already set (for example, loading the cached table),
     // don't call GetFilterName which has to access the source file.
@@ -2614,13 +2614,13 @@ void ScExternalRefManager::maybeLinkExternalFile( sal_uInt16 nFileId, bool bDefe
     // will update SrcFileData filter name.
     if (aFilter.isEmpty() && !bDeferFilterDetection)
         ScDocumentLoader::GetFilterName(*pFileName, aFilter, aOptions, true, false);
-    sfx2::LinkManager* pLinkMgr = mpDoc->GetLinkManager();
+    sfx2::LinkManager* pLinkMgr = mrDoc.GetLinkManager();
     if (!pLinkMgr)
     {
         SAL_WARN( "sc.ui", "ScExternalRefManager::maybeLinkExternalFile: pLinkMgr==NULL");
         return;
     }
-    ScExternalRefLink* pLink = new ScExternalRefLink(mpDoc, nFileId);
+    ScExternalRefLink* pLink = new ScExternalRefLink(&mrDoc, nFileId);
     OSL_ENSURE(pFileName, "ScExternalRefManager::maybeLinkExternalFile: file name pointer is NULL");
     pLinkMgr->InsertFileLink(*pLink, sfx2::SvBaseLinkObjectType::ClientFile, *pFileName,
             (aFilter.isEmpty() && bDeferFilterDetection ? nullptr : &aFilter));
@@ -2675,7 +2675,7 @@ OUString ScExternalRefManager::getOwnDocumentName() const
     if (utl::ConfigManager::IsFuzzing())
         return "file:///tmp/document";
 
-    SfxObjectShell* pShell = mpDoc->GetDocumentShell();
+    SfxObjectShell* pShell = mrDoc.GetDocumentShell();
     if (!pShell)
         // This should not happen!
         return OUString();
@@ -2704,7 +2704,7 @@ void ScExternalRefManager::convertToAbsName(OUString& rFile) const
         pShell = static_cast<ScDocShell*>(SfxObjectShell::GetNext(*pShell, checkSfxObjectShell<ScDocShell>, false));
     }
 
-    SfxObjectShell* pDocShell = mpDoc->GetDocumentShell();
+    SfxObjectShell* pDocShell = mrDoc.GetDocumentShell();
     rFile = ScGlobal::GetAbsDocName(rFile, pDocShell);
 }
 
@@ -2909,7 +2909,7 @@ bool ScExternalRefManager::refreshSrcDocument(sal_uInt16 nFileId)
     // Clear the existing cache, and refill it.  Make sure we keep the
     // existing cache table instances here.
     maRefCache.clearCacheTables(nFileId);
-    RefCacheFiller aAction(mpDoc->GetSharedStringPool(), maRefCache, nFileId);
+    RefCacheFiller aAction(mrDoc.GetSharedStringPool(), maRefCache, nFileId);
     aCachedArea.executeColumnAction(rSrcDoc, aAction);
 
     DocShellMap::iterator it = maDocShells.find(nFileId);
@@ -2945,21 +2945,21 @@ void ScExternalRefManager::breakLink(sal_uInt16 nFileId)
         // Make a copy because removing the formula cells below will modify
         // the original container.
         RefCellSet aSet = itrRefs->second;
-        for_each(aSet.begin(), aSet.end(), ConvertFormulaToStatic(mpDoc));
+        for_each(aSet.begin(), aSet.end(), ConvertFormulaToStatic(&mrDoc));
         maRefCells.erase(nFileId);
     }
 
     // Remove all named ranges that reference this document.
 
     // Global named ranges.
-    ScRangeName* pRanges = mpDoc->GetRangeName();
+    ScRangeName* pRanges = mrDoc.GetRangeName();
     if (pRanges)
         removeRangeNamesBySrcDoc(*pRanges, nFileId);
 
     // Sheet-local named ranges.
-    for (SCTAB i = 0, n = mpDoc->GetTableCount(); i < n; ++i)
+    for (SCTAB i = 0, n = mrDoc.GetTableCount(); i < n; ++i)
     {
-        pRanges = mpDoc->GetRangeName(i);
+        pRanges = mrDoc.GetRangeName(i);
         if (pRanges)
             removeRangeNamesBySrcDoc(*pRanges, nFileId);
     }
@@ -3126,7 +3126,7 @@ void ScExternalRefManager::purgeStaleSrcDocument(sal_Int32 nTimeOut)
         maSrcDocTimer.Stop();
 }
 
-sal_uInt32 ScExternalRefManager::getMappedNumberFormat(sal_uInt16 nFileId, sal_uInt32 nNumFmt, const ScDocument* pSrcDoc)
+sal_uInt32 ScExternalRefManager::getMappedNumberFormat(sal_uInt16 nFileId, sal_uInt32 nNumFmt, const ScDocument& rSrcDoc)
 {
     NumFmtMap::iterator itr = maNumFormatMap.find(nFileId);
     if (itr == maNumFormatMap.end())
@@ -3140,8 +3140,8 @@ sal_uInt32 ScExternalRefManager::getMappedNumberFormat(sal_uInt16 nFileId, sal_u
             return nNumFmt;
 
         itr = r.first;
-        mpDoc->GetFormatTable()->MergeFormatter( *pSrcDoc->GetFormatTable());
-        SvNumberFormatterMergeMap aMap = mpDoc->GetFormatTable()->ConvertMergeTableToMap();
+        mrDoc.GetFormatTable()->MergeFormatter(*rSrcDoc.GetFormatTable());
+        SvNumberFormatterMergeMap aMap = mrDoc.GetFormatTable()->ConvertMergeTableToMap();
         itr->second.swap(aMap);
     }
     const SvNumberFormatterMergeMap& rMap = itr->second;

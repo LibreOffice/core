@@ -503,12 +503,12 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
             pTable->GetColArray().GetRange( nOutStartCol, nOutEndCol );
             pTable->GetRowArray().GetRange( nOutStartRow, nOutEndRow );
 
-            pUndoDoc->InitUndo( &rDoc, nTab, nTab, true, true );
+            pUndoDoc->InitUndo( rDoc, nTab, nTab, true, true );
             rDoc.CopyToDocument( static_cast<SCCOL>(nOutStartCol), 0, nTab, static_cast<SCCOL>(nOutEndCol), rDoc.MaxRow(), nTab, InsertDeleteFlags::NONE, false, *pUndoDoc );
             rDoc.CopyToDocument( 0, nOutStartRow, nTab, rDoc.MaxCol(), nOutEndRow, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc );
         }
         else
-            pUndoDoc->InitUndo( &rDoc, nTab, nTab, false, bOldFilter );
+            pUndoDoc->InitUndo( rDoc, nTab, nTab, false, bOldFilter );
 
         // record data range - including filter results
         rDoc.CopyToDocument( 0,rParam.nRow1+1,nTab, rDoc.MaxCol(),rParam.nRow2,nTab,
@@ -2178,12 +2178,12 @@ void ScDBFunc::RepeatDB( bool bRecord )
                 pTable->GetColArray().GetRange( nOutStartCol, nOutEndCol );
                 pTable->GetRowArray().GetRange( nOutStartRow, nOutEndRow );
 
-                pUndoDoc->InitUndo( &rDoc, nTab, nTab, true, true );
+                pUndoDoc->InitUndo( rDoc, nTab, nTab, true, true );
                 rDoc.CopyToDocument( static_cast<SCCOL>(nOutStartCol), 0, nTab, static_cast<SCCOL>(nOutEndCol), rDoc.MaxRow(), nTab, InsertDeleteFlags::NONE, false, *pUndoDoc );
                 rDoc.CopyToDocument( 0, nOutStartRow, nTab, rDoc.MaxCol(), nOutEndRow, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc );
             }
             else
-                pUndoDoc->InitUndo( &rDoc, nTab, nTab, false, true );
+                pUndoDoc->InitUndo( rDoc, nTab, nTab, false, true );
 
             // Record data range - including filter results
             rDoc.CopyToDocument( 0,nStartRow,nTab, rDoc.MaxCol(),nEndRow,nTab, InsertDeleteFlags::ALL, false, *pUndoDoc );

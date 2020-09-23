@@ -371,7 +371,7 @@ void FormulaBuffer::finalizeImport()
 
     ScDocumentImport& rDoc = getDocImport();
     rDoc.getDoc().SetAutoNameCache(std::make_unique<ScAutoNameCache>(rDoc.getDoc()));
-    ScExternalRefManager::ApiGuard aExtRefGuard(&rDoc.getDoc());
+    ScExternalRefManager::ApiGuard aExtRefGuard(rDoc.getDoc());
 
     SCTAB nTabCount = rDoc.getDoc().GetTableCount();
 

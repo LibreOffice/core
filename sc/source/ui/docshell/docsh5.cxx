@@ -577,7 +577,7 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, bool bRecord )
             std::unique_ptr<ScOutlineTable> pUndoTab(pTable ? new ScOutlineTable( *pTable ) : nullptr);
 
             ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
-            pUndoDoc->InitUndo( &m_aDocument, 0, nTabCount-1, false, true );
+            pUndoDoc->InitUndo( m_aDocument, 0, nTabCount-1, false, true );
 
             // row state
             m_aDocument.CopyToDocument(0, 0, nDestTab, m_aDocument.MaxCol(), m_aDocument.MaxRow(), nDestTab,
@@ -603,7 +603,7 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, bool bRecord )
         else
         {
             ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
-            pUndoDoc->InitUndo( &m_aDocument, aDestArea.nTab, aDestArea.nTab );
+            pUndoDoc->InitUndo( m_aDocument, aDestArea.nTab, aDestArea.nTab );
 
             m_aDocument.CopyToDocument(aDestArea.nColStart, aDestArea.nRowStart, aDestArea.nTab,
                                      aDestArea.nColEnd, aDestArea.nRowEnd, aDestArea.nTab,
@@ -692,7 +692,7 @@ void ScDocShell::UseScenario( SCTAB nTab, const OUString& rName, bool bRecord )
                 if (bRecord)
                 {
                     ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
-                    pUndoDoc->InitUndo( &m_aDocument, nTab,nEndTab );             // also all scenarios
+                    pUndoDoc->InitUndo( m_aDocument, nTab,nEndTab );             // also all scenarios
                     //  shown table:
                     m_aDocument.CopyToDocument(nStartCol, nStartRow, nTab,
                                              nEndCol, nEndRow, nTab, InsertDeleteFlags::ALL,

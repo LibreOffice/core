@@ -35,7 +35,7 @@ public:
 
     static void GetString(
         const ScRefCellValue& rCell, sal_uInt32 nFormat, OUString& rString,
-        const Color** ppColor, SvNumberFormatter& rFormatter, const ScDocument* pDoc, bool bNullVals = true,
+        const Color** ppColor, SvNumberFormatter& rFormatter, const ScDocument& rDoc, bool bNullVals = true,
         bool bFormula  = false, bool bUseStarFormat = false );
 
     static OUString GetString(

@@ -246,7 +246,7 @@ bool ScImportExport::StartPaste()
     if( bUndo && pDocSh && rDoc.IsUndoEnabled())
     {
         pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
-        pUndoDoc->InitUndo( &rDoc, aRange.aStart.Tab(), aRange.aEnd.Tab() );
+        pUndoDoc->InitUndo( rDoc, aRange.aStart.Tab(), aRange.aEnd.Tab() );
         rDoc.CopyToDocument(aRange, InsertDeleteFlags::ALL | InsertDeleteFlags::NOCAPTIONS, false, *pUndoDoc);
     }
     return true;
@@ -261,7 +261,7 @@ void ScImportExport::EndPaste(bool bAutoRowHeight)
     if( pUndoDoc && rDoc.IsUndoEnabled() && pDocSh )
     {
         ScDocumentUniquePtr pRedoDoc(new ScDocument( SCDOCMODE_UNDO ));
-        pRedoDoc->InitUndo( &rDoc, aRange.aStart.Tab(), aRange.aEnd.Tab() );
+        pRedoDoc->InitUndo( rDoc, aRange.aStart.Tab(), aRange.aEnd.Tab() );
         rDoc.CopyToDocument(aRange, InsertDeleteFlags::ALL | InsertDeleteFlags::NOCAPTIONS, false, *pRedoDoc);
         ScMarkData aDestMark(pRedoDoc->GetSheetLimits());
         aDestMark.SetMarkArea(aRange);
@@ -1696,7 +1696,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                         else
                         {
                             const Color* pColor;
-                            ScCellFormat::GetString(aCell, nNumFmt, aCellStr, &pColor, *pFormatter, &rDoc);
+                            ScCellFormat::GetString(aCell, nNumFmt, aCellStr, &pColor, *pFormatter, rDoc);
 
                             bool bMultiLineText = ( aCellStr.indexOf( '\n' ) != -1 );
                             if( bMultiLineText )
@@ -1720,7 +1720,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                     case CELLTYPE_VALUE:
                     {
                         const Color* pColor;
-                        ScCellFormat::GetString(aCell, nNumFmt, aCellStr, &pColor, *pFormatter, &rDoc);
+                        ScCellFormat::GetString(aCell, nNumFmt, aCellStr, &pColor, *pFormatter, rDoc);
                         lcl_WriteSimpleString( rStrm, aCellStr );
                     }
                     break;
@@ -1729,7 +1729,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                     default:
                     {
                         const Color* pColor;
-                        ScCellFormat::GetString(aCell, nNumFmt, aCellStr, &pColor, *pFormatter, &rDoc);
+                        ScCellFormat::GetString(aCell, nNumFmt, aCellStr, &pColor, *pFormatter, rDoc);
 
                         bool bMultiLineText = ( aCellStr.indexOf( '\n' ) != -1 );
                         if( bMultiLineText )
@@ -2261,7 +2261,7 @@ bool ScImportExport::Dif2Doc( SvStream& rStrm )
 {
     SCTAB nTab = aRange.aStart.Tab();
     ScDocumentUniquePtr pImportDoc( new ScDocument( SCDOCMODE_UNDO ) );
-    pImportDoc->InitUndo( &rDoc, nTab, nTab );
+    pImportDoc->InitUndo( rDoc, nTab, nTab );
 
     // for DIF in the clipboard, IBM_850 is always used
     ScFormatFilter::Get().ScImportDif( rStrm, pImportDoc.get(), aRange.aStart, RTL_TEXTENCODING_IBM_850 );

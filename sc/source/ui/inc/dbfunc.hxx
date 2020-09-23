@@ -111,7 +111,7 @@ public:
 
     void            UpdateCharts(bool bAllCharts);      // Default: at the Cursor
 
-    static sal_uInt16   DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, bool bAllCharts );
+    static sal_uInt16   DoUpdateCharts( const ScAddress& rPos, ScDocument& rDoc, bool bAllCharts );
 
     void            OnLOKShowHideColRow(bool bColumns, SCCOLROW nStartRow);
 };
