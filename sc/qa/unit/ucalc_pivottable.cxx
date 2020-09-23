@@ -773,8 +773,8 @@ void Test::testPivotTableCache()
     ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
-    ScDPCache aCache(m_pDoc);
-    aCache.InitFromDoc(m_pDoc, aDataRange);
+    ScDPCache aCache(*m_pDoc);
+    aCache.InitFromDoc(*m_pDoc, aDataRange);
     long nDimCount = aCache.GetColumnCount();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong dimension count.", 3L, nDimCount);
     OUString aDimName = aCache.GetDimensionName(0);

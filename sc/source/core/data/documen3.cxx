@@ -346,7 +346,7 @@ bool ScDocument::HasPivotTable() const
 ScDPCollection* ScDocument::GetDPCollection()
 {
     if (!pDPCollection)
-        pDPCollection.reset( new ScDPCollection(this) );
+        pDPCollection.reset( new ScDPCollection(*this) );
     return pDPCollection.get();
 }
 
