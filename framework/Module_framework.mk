@@ -27,6 +27,7 @@ $(eval $(call gb_Module_add_targets,framework,\
 
 $(eval $(call gb_Module_add_slowcheck_targets,framework,\
     CppunitTest_framework_dispatch \
+    CppunitTest_framework_services \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,framework,\
