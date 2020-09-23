@@ -62,6 +62,10 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityEntry
             MsWordTrailingBlanks,
             SubtractFlysAnchoredAtFlys,
             EmptyDbFieldHidesPara,
+            /// special entry: optcomp.cxx converts the other values to
+            /// integers but not this one because it doesn't have its own
+            /// checkbox, so keep it at the end!
+            AddTableLineSpacing,
 
             /* Should be at the end. Do not remove it. */
             INVALID

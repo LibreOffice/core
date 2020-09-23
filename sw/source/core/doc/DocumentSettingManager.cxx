@@ -117,7 +117,7 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
         mbAddExternalLeading                = !aOptions.GetDefault( SvtCompatibilityEntry::Index::NoExtLeading );
         mbOldLineSpacing                    = aOptions.GetDefault( SvtCompatibilityEntry::Index::UseLineSpacing );
         mbAddParaSpacingToTableCells        = aOptions.GetDefault( SvtCompatibilityEntry::Index::AddTableSpacing );
-        mbAddParaLineSpacingToTableCells    = aOptions.GetDefault( SvtCompatibilityEntry::Index::AddTableSpacing ); // FIXME? separate UI?
+        mbAddParaLineSpacingToTableCells    = aOptions.GetDefault( SvtCompatibilityEntry::Index::AddTableLineSpacing );
         mbUseFormerObjectPos                = aOptions.GetDefault( SvtCompatibilityEntry::Index::UseObjectPositioning );
         mbUseFormerTextWrapping             = aOptions.GetDefault( SvtCompatibilityEntry::Index::UseOurTextWrapping );
         mbConsiderWrapOnObjPos              = aOptions.GetDefault( SvtCompatibilityEntry::Index::ConsiderWrappingStyle );
