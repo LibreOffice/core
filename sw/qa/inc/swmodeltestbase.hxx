@@ -341,6 +341,7 @@ protected:
     void header()
     {
         std::cout << "File tested,Execution Time (ms)" << std::endl;
+        std::cout << "######################### " << getTestName() << " #########################" << std::endl;
     }
 
     void load(const OUString& pDir, const char* pName, const char* pPassword = nullptr)
