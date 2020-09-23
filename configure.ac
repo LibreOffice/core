@@ -10538,7 +10538,7 @@ dnl ===================================================================
 dnl Check for system qrcodegen
 dnl ===================================================================
 AC_MSG_CHECKING([whether to use libqrcodegen])
-if test "$enable_libqrcodegen" = "no"; then
+if test "$enable_qrcodegen" = "no"; then
     AC_MSG_RESULT([no])
     ENABLE_QRCODEGEN=
     SYSTEM_QRCODEGEN=
