@@ -549,7 +549,8 @@ void SfxPoolItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     OUString rText;
     IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());
     if (GetPresentation( SfxItemPresentation::Complete, MapUnit::Map100thMM, MapUnit::Map100thMM, rText, aIntlWrapper))
-        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"), BAD_CAST(rText.getStr()));
+        xmlTextWriterWriteAttribute(
+            pWriter, BAD_CAST("presentation"), BAD_CAST(rText.toUtf8().getStr()));
     xmlTextWriterEndElement(pWriter);
 }
 
