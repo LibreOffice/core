@@ -166,7 +166,7 @@ private:
     static strings_vr applyPatterns(const strings_v& vSet, const strings_v& vPatterns);
     static css::uno::Reference< css::container::XNameAccess > getConfigAccess(const char* path, bool rw=false);
 
-    std::vector< MigrationModuleInfo > dectectUIChangesForAllModules() const;
+    std::vector< MigrationModuleInfo > detectUIChangesForAllModules() const;
     void compareOldAndNewConfig(const OUString& sParentNodeName,
         const css::uno::Reference< css::container::XIndexContainer >& xOldIndexContainer,
         const css::uno::Reference< css::container::XIndexContainer >& xNewIndexContainer,

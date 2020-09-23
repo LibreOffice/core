@@ -184,7 +184,7 @@ bool MigrationImpl::doMigration()
     bool result = false;
     try {
         NewVersionUIInfo aNewVersionUIInfo;
-        std::vector< MigrationModuleInfo > vModulesInfo = dectectUIChangesForAllModules();
+        std::vector< MigrationModuleInfo > vModulesInfo = detectUIChangesForAllModules();
         aNewVersionUIInfo.init(vModulesInfo);
 
         copyFiles();
@@ -800,7 +800,7 @@ void MigrationImpl::runServices()
     }
 }
 
-std::vector< MigrationModuleInfo > MigrationImpl::dectectUIChangesForAllModules() const
+std::vector< MigrationModuleInfo > MigrationImpl::detectUIChangesForAllModules() const
 {
     std::vector< MigrationModuleInfo > vModulesInfo;
     const OUString MENUBAR("menubar");
