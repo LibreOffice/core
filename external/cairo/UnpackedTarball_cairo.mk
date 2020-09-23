@@ -15,6 +15,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,cairo,\
 	external/cairo/cairo/cairo-1.10.2.patch \
 	external/cairo/cairo/cairo.oldfreetypecentos6.patch \
 	external/cairo/cairo/cairo-libtool-rpath.patch.1 \
+	external/cairo/cairo/cairo.oldfreetype.patch \
 ))
 
 ifeq ($(OS),iOS)
