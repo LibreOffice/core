@@ -1263,11 +1263,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testOO106020, "ooo106020-1.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testNonBMPChar, "nonbmpchar.docx")
 {
-    sal_uInt32  nCh = 0x24b62;
-    OUString aExpected( &nCh, 1);
     // Assert that UTF8 encoded non-BMP Unicode character is correct
     uno::Reference<text::XTextRange> xTextRange1 = getRun(getParagraph(1), 1);
-    CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange1->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\U00024b62"), xTextRange1->getString());
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSpacingGroupShapeText, "tdf131775_SpacingGroupShapeText.docx")

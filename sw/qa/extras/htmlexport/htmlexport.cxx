@@ -350,8 +350,7 @@ DECLARE_HTMLEXPORT_TEST(testTdf83890, "tdf83890.odt")
 
 DECLARE_HTMLEXPORT_TEST(testExtbChars, "extb.html")
 {
-    sal_uInt32  nCh = 0x24b62;
-    OUString aExpected( &nCh, 1);
+    OUString aExpected( u"\U00024b62");
     // Assert that UTF8 encoded non-BMP Unicode character is correct
     uno::Reference<text::XTextRange> xTextRange1 = getRun(getParagraph(1), 1);
     CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange1->getString());
