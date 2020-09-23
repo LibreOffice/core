@@ -1899,6 +1899,7 @@ void SwWW8ImplReader::ImportDop()
     // #i25901# - set new compatibility option
     //      'Add paragraph and table spacing at bottom of table cells'
     m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS, true);
+    m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::ADD_PARA_LINE_SPACING_TO_TABLE_CELLS, true);
 
     // #i11860# - set new compatibility option
     //      'Use former object positioning' to <false>

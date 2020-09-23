@@ -158,6 +158,7 @@ class DocumentSettingManager :
     bool mbPropLineSpacingShrinksFirstLine; // fdo#79602
     bool mbSubtractFlys; // tdf#86578
     bool mApplyParagraphMarkFormatToNumbering;
+    bool mbAddParaLineSpacingToTableCells; // tdf#125300 tdf#134782
 
     bool mbLastBrowseMode                           : 1;
     bool mbDisableOffPagePositioning; // tdf#112443
