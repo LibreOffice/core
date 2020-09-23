@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "77121594_93026889",
+        "filename": "vcl/source/font/fontcharmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-09-23T10:53:39Z",
+      "side": 1,
+      "message": "going to need the same exit condition for this loop? or you can still get bad data if cmin is, for example, SAL_MAX_UINT16 - 1",
+      "revId": "ae1778fbeb8df8b7b5b4679e09d5888c19689ef2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
