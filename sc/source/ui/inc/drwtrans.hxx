@@ -51,7 +51,7 @@ private:
     bool                            m_bGrIsBit;
     bool                            m_bOleObj;
                                     // source information for drag&drop:
-                                    // (view is needed to handle drawing obejcts)
+                                    // (view is needed to handle drawing objects)
     std::unique_ptr<SdrView>        m_pDragSourceView;
     ScDragSrc                       m_nDragSourceFlags;
     bool                            m_bDragWasInternal;

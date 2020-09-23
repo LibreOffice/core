@@ -313,7 +313,7 @@ namespace
     };
 
     /// A function object to act as a predicate comparing the ordering numbers
-    /// of two drawing obejcts in a WW8Export.
+    /// of two drawing objects in a WW8Export.
     class CompareDrawObjs
     {
     private:
