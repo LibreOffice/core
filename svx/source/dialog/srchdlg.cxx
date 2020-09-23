@@ -2140,7 +2140,13 @@ OUString& SvxSearchDialog::BuildAttrText_Impl( OUString& rStr,
         {
             OUString aStr;
             rPool.GetPresentation(*rItem.pItem, eMapUnit, aStr, aIntlWrapper);
-            rStr += aStr;
+            if (aStr.isEmpty())
+            {
+                if (rStr.endsWith(", "))
+                    rStr = rStr.copy(0, rStr.lastIndexOf(","));
+            }
+            else
+                rStr += aStr;
         }
         else if ( rItem.nSlot == SID_ATTR_BRUSH_CHAR )
         {
