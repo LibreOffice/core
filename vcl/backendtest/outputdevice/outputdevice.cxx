@@ -49,6 +49,19 @@ Bitmap OutputDeviceTestAnotherOutDev::setupXOR()
     mpVirtualDevice->SetFillColor(constFillColor);
     mpVirtualDevice->DrawRect(aDrawRectangle);
 
+    mpVirtualDevice->SetRasterOp(RasterOp::Xor);
+    mpVirtualDevice->SetLineColor(constFillColor);
+    mpVirtualDevice->SetFillColor();
+    // Rectangle drawn twice is a no-op.
+    aDrawRectangle = maVDRectangle;
+    mpVirtualDevice->DrawRect(aDrawRectangle);
+    mpVirtualDevice->DrawRect(aDrawRectangle);
+    // Rectangle drawn three times is like drawing once.
+    aDrawRectangle.shrink(1);
+    mpVirtualDevice->DrawRect(aDrawRectangle);
+    mpVirtualDevice->DrawRect(aDrawRectangle);
+    mpVirtualDevice->DrawRect(aDrawRectangle);
+
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
 
@@ -64,9 +77,12 @@ TestResult OutputDeviceTestAnotherOutDev::checkDrawOutDev(Bitmap& rBitmap)
 
 TestResult OutputDeviceTestAnotherOutDev::checkXOR(Bitmap& rBitmap)
 {
+    Color xorColor( constBackgroundColor.GetRed() ^ constFillColor.GetRed(),
+                    constBackgroundColor.GetGreen() ^ constFillColor.GetGreen(),
+                    constBackgroundColor.GetBlue() ^ constFillColor.GetBlue());
     std::vector<Color> aExpected
     {
-        constBackgroundColor, constBackgroundColor,
+        constBackgroundColor, xorColor,
         constBackgroundColor, constBackgroundColor,
         constFillColor, constFillColor,
         constFillColor

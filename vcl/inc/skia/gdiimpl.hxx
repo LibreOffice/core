@@ -263,12 +263,19 @@ protected:
 
     SkCanvas* getXorCanvas();
     void applyXor();
+    // NOTE: This must be called before the operation does any drawing.
     void addXorRegion(const SkRect& rect)
     {
         if (mXorMode)
         {
             // Make slightly larger, just in case (rounding, antialiasing,...).
-            mXorRegion.op(rect.makeOutset(2, 2).round(), SkRegion::kUnion_Op);
+            SkIRect addedRect = rect.makeOutset(2, 2).round();
+            // Two xor operations should cancel each other out. We batch xor operations,
+            // but if they can overlap, apply xor now, since applyXor() does the operation
+            // just once.
+            if (mXorRegion.intersects(addedRect))
+                applyXor();
+            mXorRegion.op(addedRect, SkRegion::kUnion_Op);
         }
     }
     static void setCanvasClipRegion(SkCanvas* canvas, const vcl::Region& region);

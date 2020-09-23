@@ -604,7 +604,7 @@ void SkiaSalGraphicsImpl::applyXor()
     // in each operation by extending mXorRegion with the area that should be
     // updated.
     assert(mXorMode);
-    if (!mSurface
+    if (!mSurface || !mXorCanvas
         || !mXorRegion.op(SkIRect::MakeXYWH(0, 0, mSurface->width(), mSurface->height()),
                           SkRegion::kIntersect_Op))
     {
@@ -695,12 +695,12 @@ void SkiaSalGraphicsImpl::drawPixel(long nX, long nY, Color nColor)
         return;
     preDraw();
     SAL_INFO("vcl.skia.trace", "drawpixel(" << this << "): " << Point(nX, nY) << ":" << nColor);
+    addXorRegion(SkRect::MakeXYWH(nX, nY, 1, 1));
     SkPaint paint;
     paint.setColor(toSkColor(nColor));
     // Apparently drawPixel() is actually expected to set the pixel and not draw it.
     paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
     getDrawCanvas()->drawPoint(toSkX(nX), toSkY(nY), paint);
-    addXorRegion(SkRect::MakeXYWH(nX, nY, 1, 1));
     postDraw();
 }
 
@@ -711,11 +711,11 @@ void SkiaSalGraphicsImpl::drawLine(long nX1, long nY1, long nX2, long nY2)
     preDraw();
     SAL_INFO("vcl.skia.trace", "drawline(" << this << "): " << Point(nX1, nY1) << "->"
                                            << Point(nX2, nY2) << ":" << mLineColor);
+    addXorRegion(SkRect::MakeLTRB(nX1, nY1, nX2, nY2).makeSorted());
     SkPaint paint;
     paint.setColor(toSkColor(mLineColor));
     paint.setAntiAlias(mParent.getAntiAliasB2DDraw());
     getDrawCanvas()->drawLine(toSkX(nX1), toSkY(nY1), toSkX(nX2), toSkY(nY2), paint);
-    addXorRegion(SkRect::MakeLTRB(nX1, nY1, nX2 + 1, nY2 + 1));
     postDraw();
 }
 
@@ -726,6 +726,7 @@ void SkiaSalGraphicsImpl::privateDrawAlphaRect(long nX, long nY, long nWidth, lo
     SAL_INFO("vcl.skia.trace",
              "privatedrawrect(" << this << "): " << SkIRect::MakeXYWH(nX, nY, nWidth, nHeight)
                                 << ":" << mLineColor << ":" << mFillColor << ":" << fTransparency);
+    addXorRegion(SkRect::MakeXYWH(nX, nY, nWidth, nHeight));
     SkCanvas* canvas = getDrawCanvas();
     SkPaint paint;
     paint.setAntiAlias(!blockAA && mParent.getAntiAliasB2DDraw());
@@ -749,7 +750,6 @@ void SkiaSalGraphicsImpl::privateDrawAlphaRect(long nX, long nY, long nWidth, lo
         canvas->drawIRect(
             SkIRect::MakeXYWH(nX, nY, std::max(1L, nWidth - 1), std::max(1L, nHeight - 1)), paint);
     }
-    addXorRegion(SkRect::MakeXYWH(nX, nY, nWidth, nHeight));
     postDraw();
 }
 
@@ -834,9 +834,10 @@ void SkiaSalGraphicsImpl::performDrawPolyPolygon(const basegfx::B2DPolyPolygon& 
 {
     preDraw();
 
-    SkPath aPath;
-    addPolyPolygonToPath(aPolyPolygon, aPath);
-    aPath.setFillType(SkPathFillType::kEvenOdd);
+    SkPath polygonPath;
+    addPolyPolygonToPath(aPolyPolygon, polygonPath);
+    polygonPath.setFillType(SkPathFillType::kEvenOdd);
+    addXorRegion(polygonPath.getBounds());
 
     SkPaint aPaint;
     aPaint.setAntiAlias(useAA);
@@ -847,23 +848,24 @@ void SkiaSalGraphicsImpl::performDrawPolyPolygon(const basegfx::B2DPolyPolygon& 
     const SkScalar posFix = useAA ? toSkXYFix : 0;
     if (mFillColor != SALCOLOR_NONE)
     {
-        aPath.offset(toSkX(0) + posFix, toSkY(0) + posFix, nullptr);
+        SkPath path;
+        polygonPath.offset(toSkX(0) + posFix, toSkY(0) + posFix, &path);
         aPaint.setColor(toSkColorWithTransparency(mFillColor, fTransparency));
         aPaint.setStyle(SkPaint::kFill_Style);
         // HACK: If the polygon is just a line, it still should be drawn. But when filling
         // Skia doesn't draw empty polygons, so in that case ensure the line is drawn.
-        if (mLineColor == SALCOLOR_NONE && aPath.getBounds().isEmpty())
+        if (mLineColor == SALCOLOR_NONE && path.getBounds().isEmpty())
             aPaint.setStyle(SkPaint::kStroke_Style);
-        getDrawCanvas()->drawPath(aPath, aPaint);
+        getDrawCanvas()->drawPath(path, aPaint);
     }
     if (mLineColor != SALCOLOR_NONE)
     {
-        aPath.offset(toSkX(0) + posFix, toSkY(0) + posFix, nullptr);
+        SkPath path;
+        polygonPath.offset(toSkX(0) + posFix, toSkY(0) + posFix, &path);
         aPaint.setColor(toSkColorWithTransparency(mLineColor, fTransparency));
         aPaint.setStyle(SkPaint::kStroke_Style);
-        getDrawCanvas()->drawPath(aPath, aPaint);
+        getDrawCanvas()->drawPath(path, aPaint);
     }
-    addXorRegion(aPath.getBounds());
     postDraw();
 #if defined LINUX
     // WORKAROUND: The logo in the about dialog has drawing errors. This seems to happen
@@ -1073,8 +1075,8 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
         for (sal_uInt32 a(0); a < aPolyPolygonLine.count(); a++)
             addPolygonToPath(aPolyPolygonLine.getB2DPolygon(a), aPath);
         aPath.offset(toSkX(0) + posFix, toSkY(0) + posFix, nullptr);
-        getDrawCanvas()->drawPath(aPath, aPaint);
         addXorRegion(aPath.getBounds());
+        getDrawCanvas()->drawPath(aPath, aPaint);
     }
     else
     {
@@ -1094,8 +1096,8 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
                              rPolygon.getB2DPoint(index2).getY());
 
                 aPath.offset(toSkX(0) + posFix, toSkY(0) + posFix, nullptr);
-                getDrawCanvas()->drawPath(aPath, aPaint);
                 addXorRegion(aPath.getBounds());
+                getDrawCanvas()->drawPath(aPath, aPaint);
             }
         }
     }
@@ -1162,7 +1164,6 @@ void SkiaSalGraphicsImpl::copyArea(long nDestX, long nDestY, long nSrcX, long nS
     assert(!mXorMode);
     ::copyArea(getDrawCanvas(), mSurface, nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight,
                !isGPU(), !isGPU());
-    addXorRegion(SkRect::MakeXYWH(nDestX, nDestY, nSrcWidth, nSrcHeight));
     postDraw();
 }
 
@@ -1217,8 +1218,7 @@ void SkiaSalGraphicsImpl::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcG
                                                         rPosAry.mnDestWidth, rPosAry.mnDestHeight),
                                        &paint);
     }
-    addXorRegion(SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,
-                                  rPosAry.mnDestHeight));
+    assert(!mXorMode);
     postDraw();
 }
 
@@ -1448,7 +1448,6 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
             getDrawCanvas()->drawImageRect(SkiaHelper::makeCheckedImageSnapshot(surface), size,
                                            area, &copy);
         }
-        addXorRegion(aPath.getBounds());
     }
     postDraw();
 }
@@ -1632,8 +1631,8 @@ void SkiaSalGraphicsImpl::drawImage(const SalTwoRect& rPosAry, const sk_sp<SkIma
     preDraw();
     SAL_INFO("vcl.skia.trace",
              "drawimage(" << this << "): " << rPosAry << ":" << SkBlendMode_Name(eBlendMode));
-    getDrawCanvas()->drawImageRect(aImage, aSourceRect, aDestinationRect, &aPaint);
     addXorRegion(aDestinationRect);
+    getDrawCanvas()->drawImageRect(aImage, aSourceRect, aDestinationRect, &aPaint);
     ++mPendingOperationsToFlush; // tdf#136369
     postDraw();
 }
@@ -1647,6 +1646,7 @@ void SkiaSalGraphicsImpl::drawShader(const SalTwoRect& rPosAry, const sk_sp<SkSh
     SAL_INFO("vcl.skia.trace", "drawshader(" << this << "): " << rPosAry);
     SkRect destinationRect = SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,
                                               rPosAry.mnDestHeight);
+    addXorRegion(destinationRect);
     SkPaint paint;
     paint.setBlendMode(blendMode);
     paint.setShader(shader);
@@ -1664,7 +1664,6 @@ void SkiaSalGraphicsImpl::drawShader(const SalTwoRect& rPosAry, const sk_sp<SkSh
     matrix.set(SkMatrix::kMTransY, rPosAry.mnDestY - rPosAry.mnSrcY);
     canvas->concat(matrix);
     canvas->drawPaint(paint);
-    addXorRegion(destinationRect);
     postDraw();
 }
 
@@ -1692,6 +1691,7 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
     SAL_INFO("vcl.skia.trace", "drawtransformedbitmap(" << this << "): " << rSourceBitmap.GetSize()
                                                         << " " << rNull << ":" << rX << ":" << rY);
 
+    addXorRegion(SkRect::MakeWH(GetWidth(), GetHeight())); // can't tell, use whole area
     // In raster mode scaling and alpha blending is still somewhat expensive if done repeatedly,
     // so use mergeCacheBitmaps(), which will cache the result if useful.
     // It is better to use SkShader if in GPU mode, if the operation is simple or if the temporary
@@ -1754,7 +1754,6 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
             canvas->drawImage(rSkiaBitmap.GetSkImage(), 0, 0, &paint);
         }
     }
-    addXorRegion(SkRect::MakeWH(GetWidth(), GetHeight())); // can't tell, use whole area
     postDraw();
     return true;
 }
@@ -1900,10 +1899,10 @@ void SkiaSalGraphicsImpl::drawGenericLayout(const GenericSalLayout& layout, Colo
     preDraw();
     SAL_INFO("vcl.skia.trace",
              "drawtextblob(" << this << "): " << textBlob->bounds() << ":" << textColor);
+    addXorRegion(textBlob->bounds());
     SkPaint paint;
     paint.setColor(toSkColor(textColor));
     getDrawCanvas()->drawTextBlob(textBlob, 0, 0, paint);
-    addXorRegion(textBlob->bounds());
     postDraw();
 }
 
