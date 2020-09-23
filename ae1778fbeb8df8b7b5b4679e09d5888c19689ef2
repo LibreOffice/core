@@ -16,6 +16,24 @@
       "revId": "ae1778fbeb8df8b7b5b4679e09d5888c19689ef2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b308f05_2fb78405",
+        "filename": "vcl/source/font/fontcharmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-09-23T11:31:31Z",
+      "side": 1,
+      "message": "loop ends when j hits NINSIZE which is nice and small at 64 so there isn\u0027t an ~infinite loop which is all that really matters here",
+      "parentUuid": "77121594_93026889",
+      "revId": "ae1778fbeb8df8b7b5b4679e09d5888c19689ef2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
