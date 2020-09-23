@@ -311,6 +311,7 @@ public:
                 if (!added)
                 {
                     std::cerr << "\nFatal error: CPPUNIT_TEST_NAME contains no valid tests\n";
+                    // coverity[leaked_storage] - `manager` leaked on purpose
                     return false;
                 }
             }
