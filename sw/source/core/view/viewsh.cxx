@@ -822,10 +822,13 @@ void SwViewShell::SetUseVirDev( bool bNewVirtual )
 void SwViewShell::SetAddParaSpacingToTableCells( bool _bAddParaSpacingToTableCells )
 {
     IDocumentSettingAccess& rIDSA = getIDocumentSettingAccess();
-    if ( rIDSA.get(DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS) != _bAddParaSpacingToTableCells )
+    if (rIDSA.get(DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS) != _bAddParaSpacingToTableCells
+        || rIDSA.get(DocumentSettingId::ADD_PARA_LINE_SPACING_TO_TABLE_CELLS) != _bAddParaSpacingToTableCells)
     {
         SwWait aWait( *GetDoc()->GetDocShell(), true );
         rIDSA.set(DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS, _bAddParaSpacingToTableCells );
+        // note: the dialog can't change the value to indeterminate, so only false/false and true/true
+        rIDSA.set(DocumentSettingId::ADD_PARA_LINE_SPACING_TO_TABLE_CELLS, _bAddParaSpacingToTableCells );
         const SwInvalidateFlags nInv = SwInvalidateFlags::PrtArea;
         lcl_InvalidateAllContent( *this, nInv );
     }

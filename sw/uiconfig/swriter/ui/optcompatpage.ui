@@ -200,6 +200,7 @@
                               <attributes>
                                 <attribute name="visible">3</attribute>
                                 <attribute name="active">0</attribute>
+                                <attribute name="inconsistent">4</attribute>
                               </attributes>
                             </child>
                           </object>
