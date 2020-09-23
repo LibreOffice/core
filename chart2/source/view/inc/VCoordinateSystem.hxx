@@ -110,7 +110,7 @@ public:
         getModel() const { return m_xCooSysModel;}
 
     /**
-     * Create "view" axis obejcts 'VAxis' from the coordinate system model.
+     * Create "view" axis objects 'VAxis' from the coordinate system model.
      */
     virtual void createVAxisList(
             const css::uno::Reference< css::chart2::XChartDocument> & xChartDoc
