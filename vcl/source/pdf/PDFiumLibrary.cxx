@@ -12,6 +12,8 @@
 
 #if HAVE_FEATURE_PDFIUM
 
+#include <cassert>
+
 #include <vcl/filter/PDFiumLibrary.hxx>
 #include <fpdf_annot.h>
 #include <fpdf_edit.h>
@@ -224,13 +226,17 @@ OUString PDFiumPageObject::getText(std::unique_ptr<PDFiumTextPage> const& pTextP
 {
     OUString sReturnText;
 
-    const int nBytes = FPDFTextObj_GetText(mpPageObject, pTextPage->getPointer(), nullptr, 0);
+    int nBytes = FPDFTextObj_GetText(mpPageObject, pTextPage->getPointer(), nullptr, 0);
+    assert(nBytes % 2 == 0);
+    nBytes /= 2;
 
     std::unique_ptr<sal_Unicode[]> pText(new sal_Unicode[nBytes]);
 
-    const int nActualBytes
-        = FPDFTextObj_GetText(mpPageObject, pTextPage->getPointer(), pText.get(), nBytes);
-    if (nActualBytes > 2)
+    int nActualBytes
+        = FPDFTextObj_GetText(mpPageObject, pTextPage->getPointer(), pText.get(), nBytes * 2);
+    assert(nActualBytes % 2 == 0);
+    nActualBytes /= 2;
+    if (nActualBytes > 1)
         sReturnText = OUString(pText.get());
 
     return sReturnText;
@@ -416,11 +422,15 @@ OUString PDFiumAnnotation::getString(OString const& rKey)
 {
     OUString rString;
     unsigned long nSize = FPDFAnnot_GetStringValue(mpAnnotation, rKey.getStr(), nullptr, 0);
-    if (nSize > 2)
+    assert(nSize % 2 == 0);
+    nSize /= 2;
+    if (nSize > 1)
     {
         std::unique_ptr<sal_Unicode[]> pText(new sal_Unicode[nSize]);
         unsigned long nStringSize = FPDFAnnot_GetStringValue(
-            mpAnnotation, rKey.getStr(), reinterpret_cast<FPDF_WCHAR*>(pText.get()), nSize);
+            mpAnnotation, rKey.getStr(), reinterpret_cast<FPDF_WCHAR*>(pText.get()), nSize * 2);
+        assert(nStringSize % 2 == 0);
+        nStringSize /= 2;
         if (nStringSize > 0)
             rString = OUString(pText.get());
     }
