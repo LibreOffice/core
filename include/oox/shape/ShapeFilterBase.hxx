@@ -25,6 +25,7 @@
 #include <oox/vml/vmldrawing.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
+#include <com/sun/star/graphic/XGraphicMapper.hpp>
 
 namespace oox::drawingml::table {
 
@@ -66,6 +67,11 @@ public:
 
     void importTheme();
 
+    void setGraphicMapper(css::uno::Reference<css::graphic::XGraphicMapper> const & rxGraphicMapper)
+    {
+        mxGraphicMapper = rxGraphicMapper;
+    }
+
 private:
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const override;
     virtual OUString SAL_CALL getImplementationName() override;
@@ -73,6 +79,7 @@ private:
 
     std::shared_ptr< ::oox::drawingml::chart::ChartConverter > mxChartConv;
     ::oox::drawingml::ThemePtr mpTheme;
+    css::uno::Reference<css::graphic::XGraphicMapper> mxGraphicMapper;
 };
 
 } // namespace oox::shape
