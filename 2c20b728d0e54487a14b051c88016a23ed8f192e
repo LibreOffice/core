@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d6304872_10e75387",
+        "filename": "vcl/win/app/salinst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-09-23T15:23:41Z",
+      "side": 1,
+      "message": "The three lines above aren\u0027t needed anymore. Calling SolarMutex::doAquire will be enough, as this was just handling the special case for the tryToAcquire loop.",
+      "revId": "2c20b728d0e54487a14b051c88016a23ed8f192e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
