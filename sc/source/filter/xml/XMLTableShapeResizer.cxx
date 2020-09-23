@@ -53,30 +53,26 @@ bool ScMyOLEFixer::IsOLE(const uno::Reference< drawing::XShape >& rShape)
     return rShape->getShapeType() == "com.sun.star.drawing.OLE2Shape";
 }
 
-void ScMyOLEFixer::CreateChartListener(ScDocument* pDoc,
+void ScMyOLEFixer::CreateChartListener(ScDocument& rDoc,
     const OUString& rName,
     const OUString& rRangeList)
 {
-    // This is the minimum required.
-    if (!pDoc)
-        return;
-
     if (rRangeList.isEmpty())
     {
-        pDoc->AddOLEObjectToCollection(rName);
+        rDoc.AddOLEObjectToCollection(rName);
         return;
     }
 
     OUString aRangeStr;
-    ScRangeStringConverter::GetStringFromXMLRangeString(aRangeStr, rRangeList, *pDoc);
+    ScRangeStringConverter::GetStringFromXMLRangeString(aRangeStr, rRangeList, rDoc);
     if (aRangeStr.isEmpty())
     {
-        pDoc->AddOLEObjectToCollection(rName);
+        rDoc.AddOLEObjectToCollection(rName);
         return;
     }
 
     if (!pCollection)
-        pCollection = pDoc->GetChartListenerCollection();
+        pCollection = rDoc.GetChartListenerCollection();
 
     if (!pCollection)
         return;
@@ -84,11 +80,11 @@ void ScMyOLEFixer::CreateChartListener(ScDocument* pDoc,
     unique_ptr< vector<ScTokenRef> > pRefTokens(new vector<ScTokenRef>);
     const sal_Unicode cSep = ScCompiler::GetNativeSymbolChar(ocSep);
     ScRefTokenHelper::compileRangeRepresentation(
-        *pRefTokens, aRangeStr, *pDoc, cSep, pDoc->GetGrammar());
+        *pRefTokens, aRangeStr, rDoc, cSep, rDoc.GetGrammar());
     if (pRefTokens->empty())
         return;
 
-    ScChartListener* pCL(new ScChartListener(rName, pDoc, std::move(pRefTokens)));
+    ScChartListener* pCL(new ScChartListener(rName, &rDoc, std::move(pRefTokens)));
 
     //for loading binary files e.g.
     //if we have the flat filter we need to set the dirty flag thus the visible charts get repainted
@@ -99,7 +95,7 @@ void ScMyOLEFixer::CreateChartListener(ScDocument* pDoc,
     {
         // #i104899# If a formula cell is already dirty, further changes aren't propagated.
         // This can happen easily now that row heights aren't updated for all sheets.
-        pDoc->InterpretDirtyCells( *pCL->GetRangeList() );
+        rDoc.InterpretDirtyCells( *pCL->GetRangeList() );
     }
 
     pCollection->insert( pCL );
@@ -139,7 +135,7 @@ void ScMyOLEFixer::FixupOLEs()
             OUString sName;
             if (pDoc && xShapeProps.is() && xShapeInfo.is() && xShapeInfo->hasPropertyByName(sPersistName) &&
                 (xShapeProps->getPropertyValue(sPersistName) >>= sName))
-                CreateChartListener(pDoc, sName, shape.sRangeList);
+                CreateChartListener(*pDoc, sName, shape.sRangeList);
         }
     }
     aShapes.clear();
