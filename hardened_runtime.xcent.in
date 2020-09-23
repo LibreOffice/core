@@ -6,7 +6,7 @@
         <key>com.apple.security.automation.apple-events</key>
         <true/>
         <!-- Needed for our runtime machine code generation -->
-        <key>com.apple.security.cs.allow-jit</key>
+        <key>com.apple.security.cs.disable-executable-page-protection</key>
         <true/>
         <!-- allow use of third-party plugins/frameworks (aka Java) -->
         <key>com.apple.security.cs.disable-library-validation</key>
