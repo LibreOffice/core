@@ -156,7 +156,7 @@ void Theme::UpdateTheme()
         // UX says this should be a little brighter, but that looks off when compared to the other windows.
         //aBaseBackgroundColor.IncreaseLuminance(7);
         Color aBorderColor (aBaseBackgroundColor);
-        aBorderColor.DecreaseLuminance(15);
+        //aBorderColor.DecreaseLuminance(15);
         Color aSecondColor (aBaseBackgroundColor);
         aSecondColor.DecreaseLuminance(15);
 
