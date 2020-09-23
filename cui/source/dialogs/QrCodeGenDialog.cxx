@@ -17,8 +17,6 @@
 #include <utility>
 #include <vcl/svapp.hxx>
 
-#include <config_qrcodegen.h>
-
 #if ENABLE_QRCODEGEN
 #if defined(SYSTEM_QRCODEGEN)
 #include <qrcodegen/QrCode.hpp>
@@ -74,7 +72,9 @@ QrCodeGenDialog::QrCodeGenDialog(weld::Widget* pParent, Reference<XModel> xModel
               m_xBuilder->weld_radio_button("button_quartile"),
               m_xBuilder->weld_radio_button("button_high") }
     , m_xSpinBorder(m_xBuilder->weld_spin_button("edit_border"))
+#if ENABLE_QRCODEGEN
     , mpParent(pParent)
+#endif
 {
     if (!bEditExisting)
     {
